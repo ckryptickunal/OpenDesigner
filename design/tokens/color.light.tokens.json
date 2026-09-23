@@ -1,0 +1,323 @@
+{
+ "color": {
+  "$type": "color",
+  "$description": "Semantic color roles, light mapping. Names never change across modes; only values do (DC-L01-11, DC-L01-18, S-L07-112).",
+  "$extensions": {
+   "dev.dsbuilder": {
+    "mode": "light",
+    "grammar": "property.role.emphasis.state (DC-L01-11, DC-L01-12)",
+    "sources": [
+     "DC-L01-11",
+     "DC-L01-12",
+     "DC-L01-13",
+     "DC-L01-14",
+     "DC-L01-15",
+     "DC-L01-16",
+     "DC-L01-17",
+     "DC-L01-18",
+     "DC-L01-19",
+     "DC-L04-12",
+     "DC-L04-18"
+    ]
+   }
+  },
+  "surface": {
+   "sunken": {
+    "$value": "{color.neutral.light.2}",
+    "$description": "Wells, code blocks, page gutters."
+   },
+   "base": {
+    "$value": "{color.neutral.light.1}",
+    "$description": "The page background."
+   },
+   "raised": {
+    "$value": "{color.white}",
+    "$description": "Cards and panels that sit on the page."
+   },
+   "overlay": {
+    "$value": "{color.white}",
+    "$description": "Menus, popovers, dialogs (always with a shadow)."
+   }
+  },
+  "text": {
+   "primary": {
+    "$value": "{color.neutral.light.12}",
+    "$description": "Body copy, headings, labels."
+   },
+   "secondary": {
+    "$value": "{color.neutral.light.11}",
+    "$description": "Supporting text, descriptions, table meta."
+   },
+   "tertiary": {
+    "$value": "{color.neutral.light.9}",
+    "$description": "Placeholders and captions on surfaces only (not on component fills)."
+   },
+   "disabled": {
+    "$value": "{color.neutral.light.8}",
+    "$description": "Disabled labels. Exempt from contrast minimums (WCAG 1.4.3, S-L08-071)."
+   },
+   "inverse": {
+    "$value": "{color.white}",
+    "$description": "Text on bg.inverse (tooltips, toasts)."
+   },
+   "accent": {
+    "$value": "{color.accent.light.11}",
+    "$description": "Links and accent text."
+   },
+   "onAccent": {
+    "$value": "{color.white}",
+    "$description": "Text and icons on bg.accent.bold* fills."
+   },
+   "success": {
+    "$value": "{color.success.light.11}",
+    "$description": "Success text and icons; always paired with an icon or label (DC-L01-15)."
+   },
+   "onSuccess": {
+    "$value": "{color.white}",
+    "$description": "Text on bg.success.bold* fills."
+   },
+   "warning": {
+    "$value": "{color.warning.light.11}",
+    "$description": "Warning text and icons; always paired with an icon or label (DC-L01-15)."
+   },
+   "onWarning": {
+    "$value": "{color.white}",
+    "$description": "Text on bg.warning.bold* fills."
+   },
+   "danger": {
+    "$value": "{color.danger.light.11}",
+    "$description": "Danger text and icons; always paired with an icon or label (DC-L01-15)."
+   },
+   "onDanger": {
+    "$value": "{color.white}",
+    "$description": "Text on bg.danger.bold* fills."
+   },
+   "info": {
+    "$value": "{color.info.light.11}",
+    "$description": "Info text and icons; always paired with an icon or label (DC-L01-15)."
+   },
+   "onInfo": {
+    "$value": "{color.white}",
+    "$description": "Text on bg.info.bold* fills."
+   }
+  },
+  "bg": {
+   "neutral": {
+    "subtle": {
+     "$value": "{color.neutral.light.3}",
+     "$description": "Secondary button, chips, hovered rows."
+    },
+    "subtleHover": {
+     "$value": "{color.neutral.light.4}",
+     "$description": "Hover on neutral subtle fills (+1 step, DC-L01-17)."
+    },
+    "subtlePressed": {
+     "$value": "{color.neutral.light.5}",
+     "$description": "Pressed or selected neutral fills (+2 steps, DC-L01-17)."
+    }
+   },
+   "accent": {
+    "subtle": {
+     "$value": "{color.accent.light.3}",
+     "$description": "Selected rows, accent badges, focus-within wells."
+    },
+    "bold": {
+     "$value": "{color.accent.light.9}",
+     "$description": "Primary action fill. One per view (DC-L15-03, L15 P08)."
+    },
+    "boldHover": {
+     "$value": "{color.accent.light.10}",
+     "$description": "Primary action hover (+1 step)."
+    },
+    "boldPressed": {
+     "$value": "{color.accent.light.11}",
+     "$description": "Primary action pressed (+2 steps)."
+    }
+   },
+   "disabled": {
+    "$value": "{color.neutral.light.3}",
+    "$description": "Disabled control fill."
+   },
+   "inverse": {
+    "$value": "{color.neutral.light.12}",
+    "$description": "Tooltips and toasts: the inverted surface."
+   },
+   "success": {
+    "subtle": {
+     "$value": "{color.success.light.3}",
+     "$description": "Success banner and badge background."
+    },
+    "bold": {
+     "$value": "{color.success.light.9}",
+     "$description": "Success solid fill."
+    },
+    "boldHover": {
+     "$value": "{color.success.light.10}",
+     "$description": "Success solid hover."
+    },
+    "boldPressed": {
+     "$value": "{color.success.light.11}",
+     "$description": "Success solid pressed."
+    }
+   },
+   "warning": {
+    "subtle": {
+     "$value": "{color.warning.light.3}",
+     "$description": "Warning banner and badge background."
+    },
+    "bold": {
+     "$value": "{color.warning.light.9}",
+     "$description": "Warning solid fill."
+    },
+    "boldHover": {
+     "$value": "{color.warning.light.10}",
+     "$description": "Warning solid hover."
+    },
+    "boldPressed": {
+     "$value": "{color.warning.light.11}",
+     "$description": "Warning solid pressed."
+    }
+   },
+   "danger": {
+    "subtle": {
+     "$value": "{color.danger.light.3}",
+     "$description": "Danger banner and badge background."
+    },
+    "bold": {
+     "$value": "{color.danger.light.9}",
+     "$description": "Danger solid fill."
+    },
+    "boldHover": {
+     "$value": "{color.danger.light.10}",
+     "$description": "Danger solid hover."
+    },
+    "boldPressed": {
+     "$value": "{color.danger.light.11}",
+     "$description": "Danger solid pressed."
+    }
+   },
+   "info": {
+    "subtle": {
+     "$value": "{color.info.light.3}",
+     "$description": "Info banner and badge background."
+    },
+    "bold": {
+     "$value": "{color.info.light.9}",
+     "$description": "Info solid fill."
+    },
+    "boldHover": {
+     "$value": "{color.info.light.10}",
+     "$description": "Info solid hover."
+    },
+    "boldPressed": {
+     "$value": "{color.info.light.11}",
+     "$description": "Info solid pressed."
+    }
+   }
+  },
+  "border": {
+   "subtle": {
+    "$value": "{color.neutral.light.6}",
+    "$description": "Dividers, card edges, decorative lines."
+   },
+   "default": {
+    "$value": "{color.neutral.light.7}",
+    "$description": "Outline buttons, table grid (decorative; text carries the meaning)."
+   },
+   "strong": {
+    "$value": "{color.neutral.light.8}",
+    "$description": "Input and checkbox borders: the only boundary, so 3:1 (DC-L01-16)."
+   },
+   "focus": {
+    "$value": "{color.accent.light.9}",
+    "$description": "Focus ring: 3:1 against every surface (DC-L04-09, DC-L08-11)."
+   },
+   "accent": {
+    "$value": "{color.accent.light.8}",
+    "$description": "Selected card or accent outline."
+   },
+   "success": {
+    "$value": "{color.success.light.8}",
+    "$description": "Success outline (for example an invalid field)."
+   },
+   "warning": {
+    "$value": "{color.warning.light.8}",
+    "$description": "Warning outline (for example an invalid field)."
+   },
+   "danger": {
+    "$value": "{color.danger.light.8}",
+    "$description": "Danger outline (for example an invalid field)."
+   },
+   "info": {
+    "$value": "{color.info.light.8}",
+    "$description": "Info outline (for example an invalid field)."
+   }
+  },
+  "icon": {
+   "default": {
+    "$value": "{color.neutral.light.11}",
+    "$description": "Icons beside text; aliases secondary text (DC-L05-08)."
+   },
+   "accent": {
+    "$value": "{color.accent.light.11}",
+    "$description": "Selected and interactive icons."
+   }
+  },
+  "overlay": {
+   "scrim": {
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.1333,
+      0.1412,
+      0.1608
+     ],
+     "hex": "#222429",
+     "alpha": 0.45
+    },
+    "$description": "Modal backdrop: 45% (light) / 60% (dark) of the tinted near-black (DC-L04-18)."
+   }
+  },
+  "shadow": {
+   "soft": {
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.1333,
+      0.1412,
+      0.1608
+     ],
+     "hex": "#222429",
+     "alpha": 0.08
+    },
+    "$description": "Contact and raised shadow color; alpha doubles in dark (DC-L04-12)."
+   },
+   "strong": {
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.1333,
+      0.1412,
+      0.1608
+     ],
+     "hex": "#222429",
+     "alpha": 0.16
+    },
+    "$description": "Ambient shadow for overlays; alpha doubles in dark (DC-L04-12)."
+   },
+   "ring": {
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.902,
+      0.9059,
+      0.9176
+     ],
+     "hex": "#e6e7ea",
+     "alpha": 0.0
+    },
+    "$description": "1px edge ring for overlays: alpha 0 in light, 12% in dark (Primer/Atlassian pattern, DC-L04-12)."
+   }
+  }
+ }
+}

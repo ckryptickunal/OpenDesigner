@@ -1006,7 +1006,7 @@
   "depends on": "body type size and line height (L02); icon artboard sizes (L05); target platform density (Android dp, iOS pt, web px/rem).",
   "affects": "every spacing token, control heights, icon sizes, grid gutters and margins, radius steps (L04), line-height rounding (L02).",
   "token encoding": "a primitive `dimension` token, e.g. `space.base = {value: 8, unit: \"px\"}`; scale steps alias or multiply it. Tailwind exposes the base as one variable and derives utilities with calc() [S-L03-015].",
-  "platform notes": "Android uses dp and iOS uses pt; DTCG says `px` is the equivalent of dp/pt and translators SHOULD convert [S-L03-038]. On web, rem makes spacing follow the user's font-size preference (see DC-L03-27).",
+  "platform notes": "Android uses dp and iOS uses pt; DTCG says `px` is the equivalent of dp/pt and translators SHOULD convert [S-L03-038]. On web, rem makes spacing follow the user's font-size preference (see DC-L03-26).",
   "accessibility constraints": "none directly; the base must allow 24px (WCAG 2.5.8) and 44/48 targets (Apple/Material) to be built from whole steps [S-L03-035, S-L03-033, S-L03-029].",
   "default": "(default + heuristic) Default to **4 as the grid, 8 as the rhythm**: name the scale on an 8 base but keep 2, 4, 6 (and 12) available for component internals. This is exactly what Material 3, Atlassian and Spectrum ship [S-L03-030, S-L03-003, S-L03-044]. Pick a pure 4 base for dense, data-heavy tools; pick 8 (or 16/rem) for marketing and content sites where fewer, larger steps keep rhythm obvious [inferred].",
   "evidence": "[S-L03-001, S-L03-002, S-L03-003, S-L03-005, S-L03-009, S-L03-010, S-L03-017, S-L03-020, S-L03-030, S-L03-039, S-L03-044]"
@@ -1024,7 +1024,7 @@
   "depends on": "DC-L03-01 base unit; product type (marketing needs large section steps; enterprise needs more small steps).",
   "affects": "semantic spacing aliases (DC-L03-04), density modes (DC-L03-11), grid gutters, section rhythm (DC-L03-25).",
   "token encoding": "primitives `space.0` ... `space.1000` (`dimension`); only semantic/component tokens should be used in components (L07 owns tier rules).",
-  "platform notes": "identical numbers work on all platforms when expressed as px/dp/pt; on web decide rem vs px (DC-L03-27).",
+  "platform notes": "identical numbers work on all platforms when expressed as px/dp/pt; on web decide rem vs px (DC-L03-26).",
   "accessibility constraints": "none directly; ensure steps exist that compose 24, 44 and 48 target sizes.",
   "default": "(default + heuristic) Ship a hybrid scale of about 12-15 steps: 0, 2, 4, 6, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80 (Atlassian's exact set [S-L03-003]). Rule of thumb: adjacent steps should differ by at least about 25% above 8px so the difference is visible; below 8px, 2px steps are fine for component internals [inferred from the shape shared by Carbon, Atlassian, Spectrum, Material].",
   "evidence": "[S-L03-001, S-L03-002, S-L03-003, S-L03-009, S-L03-010, S-L03-015, S-L03-020, S-L03-030, S-L03-039, S-L03-044]"

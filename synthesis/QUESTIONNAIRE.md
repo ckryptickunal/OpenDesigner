@@ -2,7 +2,7 @@
 
 This is the question flow at the core of the design-system builder. L11 found that no competitor walks a person through the decisions: tools generate a theme from a few inputs, host an existing system, or extract one [DC-L11-01; S-L11-071, S-L11-073]. This file lists every question the builder asks, in order, with the options, what each option does visually, and what it changes downstream.
 
-`synthesis/questionnaire.json` holds the same content in machine-readable form. It is generated from this file by `tools`-free parsing (see "How to read an entry"), so edit this file first.
+`synthesis/questionnaire.json` holds the same content in machine-readable form. It is generated from this file by a small parser that reads the entry format below, so edit this file first and regenerate the JSON.
 
 ## How the flow is built
 
@@ -21,9 +21,24 @@ Every question is tagged with the lowest mode that asks it. A `Quick` question i
 | **Standard** | Quick + Standard questions | An engineer setting up a real product system | Expert questions take defaults and stay editable later. |
 | **Expert** | Everything | Design-system leads, multi-platform or multi-brand systems | Nothing is auto-decided; defaults are still pre-filled. |
 
-**Quick mode, in order:** Q-aud-01 (who uses it), Q-brand-01 (personality sliders), Q-plat-01 (platforms), Q-tool-01 (where the system lives), Q-color-01 (brand color input), Q-color-03 (where brand color appears), Q-type-01 (typeface posture), Q-shape-01 (corner softness), Q-depth-01 (how surfaces separate), Q-motion-01 (motion feel).
+**Quick mode, in order:** Q-aud-01 (who uses it), Q-brand-01 (personality sliders), Q-plat-01 (platforms), Q-tool-01 (where the system lives), Q-color-01 (brand color input), Q-color-02 (where brand color appears), Q-type-01 (typeface posture), Q-shape-01 (corner softness), Q-depth-01 (how surfaces separate), Q-motion-01 (motion feel).
 
 Why these ten: they combine the highest fan-out step-0 decisions in the graph (personality DC-L06-02 fans out to 15 decisions, platforms DC-L10-01 to 12, source of truth DC-L16-02 to 8) with the L09 divergence points that change the look most (shape, depth, surface color, density, typeface, color generation, motion) [L09 A2; DC-L09-01 to DC-L09-08]. Everything L09 found nearly every system shares is pre-filled instead of asked: a 3-tier token model, a 4px spacing base, neutral surfaces plus one accent plus status colors, 12-step ramps, 100-300 ms ease-out motion, light and dark modes, WCAG 2.2 AA [L09 A1 rows 1-12]. Platform posture (DC-L10-02, fan-out 9) is derived in Quick mode from the personality slider "Bold vs deferential" and shown as a confirm chip [inferred].
+
+## How a model runs this interview
+
+The builder's interface is an LLM (Claude, ChatGPT, Codex or another capable model) interviewing the person, visually where the host allows (artifacts, canvases, Figma or Paper through MCP) and in plain text otherwise [BRIEF requirements 6-7]. `questionnaire.json` carries the same steps under `interview_protocol`.
+
+1. Agree the mode (Quick, Standard, Expert) and say roughly how many questions it means. Offer the reference panel (Q-ref-01) up front and keep it open.
+2. Walk the stages in order. Open each with one sentence on what the stage decides, then render its Preview if the host can show visuals; otherwise describe the Example in words.
+3. Ask each question whose mode is included and whose "Show if" holds, using its **Ask** line. Spend time by **Time weight**: for `high`, explain why, show two or three options with their visual effect and a real system, recommend the default with its source, and state what it changes downstream before moving on; for `medium`, ask with the recommended default and the main alternatives; for `low`, state the default in one line and ask to confirm or change it.
+4. For asset hooks, ask "do you have this?", accept the listed formats, and if the answer is no, offer the listed paths with their caveats. Never pretend a generated placeholder is a finished brand asset.
+5. Record every answer as {question id, option value, how it was set: chosen, confirmed default, auto default, or from reference}. Questions outside the mode take their default and stay editable.
+6. When an answer conflicts with an earlier one (the cycles named in stage headers), show the conflict and settle it with the ranked principles from Q-brand-07; do not average silently [L06 section 4.2].
+7. After each stage, summarize the decisions in plain sentences a teammate could read, and append them to the decision log so a later session or another model can continue coherently [BRIEF requirements 9-11].
+8. Only offer option values that appear in the question. If the person wants something else, record it as a custom value with their reason.
+
+**Time weight rule** [inferred from `decision-graph.json`]: `high` when a decided card constrains 5 or more others (fan-out 5+) or the question is in Quick mode; `medium` when fan-out is 2-4, or the question is an asset hook, an input question or the reference panel; `low` otherwise. Each question shows its weight and the fan-out it came from.
 
 ## How to read an entry
 
@@ -64,14 +79,14 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 |---|---|---|
 | Logo, brand mark, favicon | Q-brand-03 | 03 |
 | Fixed brand colors | Q-color-01 (locked hex input) | 08 |
-| Brand typeface files and license | Q-type-02 | 11 |
-| Custom icon set | Q-icon-01 | 18 |
-| App icon | Q-icon-06 | 18 |
-| Photography | Q-img-01 | 19 |
-| Illustration, characters, mascot | Q-img-04 | 19 |
-| Animated assets (Lottie, 3D, animated icons) | Q-img-06 | 19 |
-| UI sounds or sonic logo | Q-motion-08 | 17 |
-| Existing voice and tone guide | Q-voice-01 | 21 |
+| Brand typeface files and license | Q-type-02 | 10 |
+| Custom icon set | Q-icon-01 | 17 |
+| App icon | Q-icon-06 | 17 |
+| Photography | Q-img-01 | 18 |
+| Illustration, characters, mascot | Q-img-04 | 18 |
+| Animated assets (Lottie, 3D, animated icons) | Q-img-06 | 18 |
+| UI sounds or sonic logo | Q-motion-08 | 16 |
+| Existing voice and tone guide | Q-voice-01 | 19 |
 
 ---
 
@@ -92,7 +107,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Default:** none. *Source:* [inferred].
 - **Decides:** none directly (input)
 - **Changes:** pre-fills answers only; no card is decided without confirmation
-- **Pre-answers:** Q-scope-02 (an existing product becomes the audit), Q-brand-01 and Q-brand-02 (reference placed on the personality map), Q-plat-01, Q-color-01 to Q-color-06, Q-color-10, Q-type-01, Q-type-03, Q-type-06, Q-space-01, Q-space-02, Q-space-04, Q-layout-01, Q-shape-01, Q-shape-02, Q-depth-01, Q-depth-02, Q-motion-01, Q-motion-02, Q-icon-02, Q-icon-03, Q-comp-01, Q-state-01, Q-form-01 [inferred mapping from what each reference type exposes].
+- **Pre-answers:** Q-scope-02 (an existing product becomes the audit), Q-brand-01 and Q-brand-02 (reference placed on the personality map), Q-plat-01, Q-color-01 to Q-color-06, Q-color-09, Q-color-14, Q-type-01, Q-type-03, Q-type-06, Q-space-01, Q-space-02, Q-space-04, Q-layout-01, Q-shape-01, Q-shape-02, Q-depth-01, Q-depth-02, Q-motion-01, Q-motion-02, Q-icon-02, Q-icon-03, Q-comp-01, Q-state-01, Q-form-01 [inferred mapping from what each reference type exposes].
 - **Preview:** an "extracted from reference" card listing each found value next to the question it would answer, with Accept, Adjust and Ignore buttons.
 - **Use / avoid:** use a reference to copy structure and quality (spacing rhythm, type ratios, density, depth model); avoid copying another brand's identity: its logo, brand color, proprietary typeface or illustration are never carried over, and a "competitor" reference is used only to flag shared tropes [BRIEF requirement 4; S-L06-027].
 - **Skip:** yes; always optional.
@@ -202,7 +217,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Changes:** DC-L15-04, DC-L08-13, DC-L02-08, DC-L03-07, DC-L03-10, DC-L15-09 · blocks: Foundations > Typography + Space > Density preset
 - **Preview:** the same table-plus-form screen at the three densities side by side; hovering a row shows its height, padding and text size.
 - **Use / avoid:** use dense for tables, dashboards and editors people work in all day; avoid dense on touch-first, occasional or public surfaces, where it hurts legibility and forces the targets out of step with the visuals [DC-L09-04, DC-L15-04].
-- **Skip:** yes, defaults to regular. Target sizes do not shrink with density; they follow input precision (Stage 07, DC-L14-03).
+- **Skip:** yes, defaults to regular. Target sizes do not shrink with density; they follow input precision (Q-space-03, DC-L14-03).
 - **Evidence:** DC-L09-04, DC-L15-04; S-L09-403, S-L09-540
 - **Merges:** B1 (audience half), K1.1 (users of the product, not of the system)
 
@@ -378,23 +393,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Skip:** yes.
 - **Evidence:** DC-L02-11; S-L02-006, S-L02-011, S-L02-012, S-L02-015, S-L02-041
 
-### Q-brand-07 · How closely should interactions follow familiar conventions? · Standard
-- **Why:** Native behavior feels trustworthy but generic; novelty is distinctive but costs learnability (Jakob's law) [DC-L13-17].
-- **Ask:** "Should interactions follow familiar conventions, get a custom look, or be novel where it matters?"
-- **Example:** Show a standard dropdown beside a custom one.
-- **Control:** single choice
-- **Options:**
-  - `native` Platform-native: follow HIG, Material or Fluent behavior and look; instantly usable, generic [DC-L13-17].
-  - `custom-skin` Conventional behavior with a custom skin: brand visuals, standard interaction [DC-L13-17].
-  - `novel-core` Novel interaction for the core differentiator only, tested [DC-L13-17; S-L13-006].
-- **Default:** custom-skin. *Source:* card heuristic; don't override standard shortcuts [DC-L13-17; S-L13-036, S-L13-030].
-- **Decides:** DC-L13-17
-- **Changes:** DC-L10-02 default posture, DC-L08-03 · blocks: Principles > Familiarity
-- **Preview:** a standard dropdown and a custom one next to each other, both keyboard-operable.
-- **Skip:** yes.
-- **Evidence:** DC-L13-17; S-L13-006, S-L13-030, S-L13-036, S-L13-055
-
-### Q-brand-08 · What are your 3-5 design principles, and which one wins a tie? · Standard
+### Q-brand-07 · What are your 3-5 design principles, and which one wins a tie? · Standard
 - **Why:** Principles break ties between sliders that pull the same lever in opposite directions [DC-L06-15; L06 section 4.2].
 - **Ask:** "What 3-5 principles should break ties, and which one wins? I can draft some from your sliders."
 - **Example:** Show GOV.UK-style imperatives and a do/don't pair per principle.
@@ -411,7 +410,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** each principle shown with a do/don't pair generated from the current draft.
 - **Skip:** yes.
 - **Evidence:** DC-L06-15, DC-L11-05; S-L06-044, S-L06-077, S-L11-008
-- **Merges:** K3.2, B12
+- **Merges:** K3.2, B12, K1.2 (interview themes become principle inputs)
 
 ---
 
@@ -514,6 +513,23 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Skip:** yes.
 - **Evidence:** DC-L10-02, DC-L06-14; S-L10-009, S-L10-038, S-L10-075, S-L10-076, S-L06-043
 - **Merges:** P3
+
+
+### Q-plat-10 · How closely should interactions follow familiar conventions? · Standard
+- **Why:** Native behavior feels trustworthy but generic; novelty is distinctive but costs learnability (Jakob's law); the default follows the posture chosen in Q-plat-05 [DC-L13-17; graph-overrides.json edge DC-L10-02 to DC-L13-17].
+- **Ask:** "Should interactions follow familiar conventions, get a custom look, or be novel where it matters?"
+- **Example:** Show a standard dropdown beside a custom one.
+- **Control:** single choice
+- **Options:**
+  - `native` Platform-native: follow HIG, Material or Fluent behavior and look; instantly usable, generic [DC-L13-17].
+  - `custom-skin` Conventional behavior with a custom skin: brand visuals, standard interaction [DC-L13-17].
+  - `novel-core` Novel interaction for the core differentiator only, tested [DC-L13-17; S-L13-006].
+- **Default:** custom-skin. *Source:* card heuristic; don't override standard shortcuts [DC-L13-17; S-L13-036, S-L13-030].
+- **Decides:** DC-L13-17
+- **Changes:** DC-L08-03, DC-L10-13 · blocks: Principles > Familiarity
+- **Preview:** a standard dropdown and a custom one next to each other, both keyboard-operable.
+- **Skip:** yes.
+- **Evidence:** DC-L13-17; S-L13-006, S-L13-030, S-L13-036, S-L13-055
 
 ### Q-plat-06 · On native platforms, use system controls or custom-branded ones? · Expert
 - **Show if:** Q-plat-01 includes ios, android or desktop
@@ -1443,7 +1459,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
   - `brand-mono` Brand mono (IBM Plex Mono code-01 12/16; Atlassian Mono) [S-L02-011, S-L02-015].
   - `numeric-face` A dedicated numeric or metric style for KPIs (Fluent Bahnschrift; Atlassian `font.metric.large` 28/32) [S-L02-008, S-L02-015].
 - **Default:** system mono stack plus `tabular-nums` on numeric table cells; a metric style only if the product has dashboards. *Source:* card heuristic [DC-L02-05].
-- **Decides:** DC-L02-05
+- **Decides:** DC-L02-05, DC-L02-26
 - **Changes:** DC-L02-26, DC-L05-24 · blocks: Foundations > Typography > Typeface > Monospace / numeric
 - **Preview:** a code block, a table column and a live counter with proportional vs tabular figures.
 - **Use / avoid:** use tabular figures in tables, clocks and anything that updates; avoid mono for body text [DC-L02-05; S-L02-052].
@@ -1837,3 +1853,1944 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Skip:** yes.
 - **Evidence:** DC-L03-08; S-L03-044, S-L03-059, S-L03-062, S-L03-063
 
+---
+
+## Stage 13 · Layout, navigation and app shell
+> Screen: how pages reorganize across widths, shown on a resizable frame the person can drag from phone to wide desktop. Graph step 0-4. Safe areas and edge insets (DC-L03-20, DC-L14-10) are not asked; they are platform rules applied by construction (see "Auto-applied rules").
+
+### Q-layout-01 · At which widths should layouts reorganize? · Standard
+- **Why:** Each breakpoint is a moment where panes appear, navigation swaps and columns double [DC-L03-14].
+- **Ask:** "Which breakpoint set should layouts use? Material's five work across web and Android."
+- **Example:** Drag the frame across 600, 840 and 1200; show navigation swapping from bar to rail.
+- **Control:** single choice + editable values
+- **Options:**
+  - `material` Material width breakpoints 600 / 840 / 1200 / 1600dp plus height classes 480 / 900 (Android and web) [S-L03-025, S-L03-021].
+  - `tailwind` Tailwind 640 / 768 / 1024 / 1280 / 1536 (web-only products) [S-L03-016].
+  - `bootstrap` Bootstrap 576 / 768 / 992 / 1200 / 1400 [S-L03-018].
+  - `apple-size-classes` Apple size classes, compact or regular per axis, set by the system [S-L03-032].
+- **Default:** material for cross-platform products, tailwind for web-only; web values in rem; design compact first. *Source:* card heuristic [DC-L03-14]; BOARD L03 note (Material renamed window size classes to breakpoints, May 2026).
+- **Decides:** DC-L03-14
+- **Changes:** DC-L03-15, DC-L03-16, DC-L03-17, DC-L03-18, DC-L03-19, DC-L07-28 · blocks: Foundations > Layout > Breakpoints
+- **Preview:** the resizable frame with breakpoint ticks; the layout snaps at each one.
+- **Use / avoid:** decide layout by window size, never by device type or orientation [DC-L10-10; S-L10-013]; avoid breakpoints that only nudge padding.
+- **Skip:** yes.
+- **Evidence:** DC-L03-14; S-L03-016, S-L03-018, S-L03-021, S-L03-025, S-L03-032
+
+### Q-layout-02 · Should layouts stretch fluidly, switch between fixed designs, or both? · Expert
+- **Why:** Responsive layouts feel continuous; adaptive layouts feel native per device (different navigation, pane counts) [DC-L03-22, DC-L10-10].
+- **Ask:** "Stretch within a layout, switch layouts at breakpoints, or both?"
+- **Example:** Show a list-detail screen stretching, then becoming two panes at 840dp.
+- **Control:** single choice
+- **Options:**
+  - `responsive` Responsive: one fluid layout (Fluent, Material definitions) [S-L03-010, S-L03-071].
+  - `adaptive` Adaptive: distinct layouts per size (show-and-hide, levitate, reflow) [S-L03-071].
+  - `both` Responsive inside panes, adaptive between breakpoints; window size classes on Apple, Material breakpoints elsewhere [DC-L03-22, DC-L10-10].
+- **Default:** both, with a list-detail template that becomes two panes at expanded. *Source:* card heuristics [DC-L03-22, DC-L10-10].
+- **Decides:** DC-L03-22, DC-L10-10
+- **Changes:** DC-L10-09, DC-L03-18, DC-L03-21 · blocks: Foundations > Layout > Adaptation strategy
+- **Preview:** the resizable frame; pane boundaries highlight when they change.
+- **Use / avoid:** use adaptive changes for pane count and navigation; avoid device-type checks that break in split view and resizable windows [S-L10-013].
+- **Skip:** yes.
+- **Evidence:** DC-L03-22, DC-L10-10; S-L03-010, S-L03-071, S-L10-013, S-L10-022, S-L10-025
+- **Merges:** P11
+
+### Q-layout-03 · Are your pages mostly for reading, working, or data? · Standard
+- **Why:** The page type decides container width and pane templates: reading pages feel like documents, working pages like tools, data pages use every pixel [DC-L03-16, DC-L03-18].
+- **Ask:** "Are most pages for reading, for working in, or for scanning data?"
+- **Example:** Show a centered article, a sidebar app page and a full-width dashboard.
+- **Control:** multi-select (page types) + single choice (default pane template)
+- **Options:**
+  - `reading` Reading: centered, max about 1280px, text measure 40-80 characters (Primer full pages 1280; Carbon editorial model) [S-L03-008, S-L03-074].
+  - `working` Working: left navigation plus left-aligned content with a max width [DC-L03-16].
+  - `data` Data: fluid, full width (Carbon high-density model) [S-L03-074].
+  - `feed` / `list-detail` / `supporting-pane` Material canonical layouts; never more than three panes [S-L03-027, S-L03-026].
+- **Default:** working + list-detail; one pane below 840dp, two from 840dp, three only at 1600dp+. *Source:* card heuristics [DC-L03-16, DC-L03-18].
+- **Decides:** DC-L03-16, DC-L03-18
+- **Changes:** DC-L02-17, DC-L03-15 · blocks: Foundations > Layout > Containers; Patterns > Layout > Canonical layouts
+- **Preview:** the three page types in the resizable frame.
+- **Use / avoid:** use fluid width for tables and dashboards; avoid full-width paragraphs [DC-L03-16, DC-L02-17].
+- **Skip:** yes.
+- **Evidence:** DC-L03-16, DC-L03-18; S-L03-008, S-L03-025, S-L03-026, S-L03-027, S-L03-074
+
+### Q-layout-04 · How should top-level navigation work at each size? · Standard
+- **Why:** The navigation container is the most recognizable part of the app's silhouette: tab bar, rail, sidebar or menu bar [DC-L14-05, DC-L08-19].
+- **Ask:** "How many top-level destinations, and should navigation be a bottom bar, rail, sidebar or top bar?"
+- **Example:** Ask for the list of main sections; show them as a bottom bar on phone, rail on tablet, sidebar on desktop.
+- **Control:** number (destinations) + single choice (pattern)
+- **Options:**
+  - `adaptive-bar-rail-sidebar` Bottom bar on phones (3-5), rail from 600dp, sidebar on desktop (Material; iOS floating tab bar; iPad sidebar-adaptable) [S-L08-083, S-L10-014, S-L10-025].
+  - `sidebar` Sidebar at every size above compact, with groups for 7+ destinations (Carbon UI shell, Primer NavList, shadcn Sidebar) [S-L08-009, S-L08-012].
+  - `top-nav` Top navigation (marketing sites) [DC-L08-19].
+  - `hidden` Hidden in a hamburger or drawer: looks clean, hides scope [DC-L13-02].
+- **Default:** adaptive-bar-rail-sidebar; primary navigation visible whenever width allows; at most two disclosure levels; no seven-item cap. *Source:* card heuristics [DC-L08-19, DC-L13-02, DC-L10-09]; L13 E2 (Miller's 7 does not limit menus).
+- **Decides:** DC-L08-19, DC-L13-02, DC-L10-09, DC-L14-05, DC-L03-19
+- **Changes:** DC-L10-11, DC-L03-20 · blocks: Patterns > Navigation; Patterns > Layout > App shell
+- **Preview:** the person's own destination names in each container across the frame widths.
+- **Use / avoid:** keep destinations identical across devices and swap only the container; avoid hiding primary navigation on wide layouts [DC-L14-05; S-L13-097].
+- **Skip:** yes.
+- **Evidence:** DC-L08-19, DC-L13-02, DC-L10-09, DC-L14-05, DC-L03-19; S-L08-083, S-L10-014, S-L13-048, S-L13-063, S-L03-025
+- **Merges:** P10, K8.3 (navigation part)
+
+### Q-layout-05 · Which column grid and composition style? · Expert
+- **Why:** 16 columns allow asymmetric, editorial layouts; 12 give symmetric splits; bento layouts feel curated with a clear hero [DC-L03-15, DC-L15-07].
+- **Ask:** "Which grid, and should marketing sections use a column, modular or bento composition?"
+- **Example:** Show a feature section as columns and as a bento grid.
+- **Control:** single choice (grid) + single choice (composition)
+- **Options:**
+  - `4-8-12` 4 / 8 / 12 columns (compact / medium / expanded), gutter 16-24, margin 16 then 24 (Material) [S-L03-026].
+  - `2x-grid` 4 / 8 / 16 columns, 32px gutter with wide/narrow/condensed modes (Carbon) [S-L03-002, S-L03-054].
+  - `12-always` 12 columns everywhere, 1.5rem gutters (Bootstrap) [S-L03-066].
+  - `bento` Hierarchical or bento composition for marketing; free composition only for expressive pages [DC-L15-07].
+- **Default:** 4 / 8 / 12 columns; column grid for app surfaces, hierarchical or bento for marketing feature sections; only layout spacing (margins, pane gaps) changes with breakpoint. *Source:* card heuristics [DC-L03-15, DC-L15-07, DC-L03-17].
+- **Decides:** DC-L03-15, DC-L15-07, DC-L03-17
+- **Changes:** DC-L07-28 · blocks: Foundations > Layout > Grid; Composition model; Space > Responsive spacing
+- **Preview:** grid overlay toggle on the frame.
+- **Use / avoid:** make every grid break nameable ("this hero breaks the grid to signal X"); avoid changing component spacing by breakpoint [DC-L15-07, DC-L03-17].
+- **Skip:** yes.
+- **Evidence:** DC-L03-15, DC-L15-07, DC-L03-17; S-L03-002, S-L03-026, S-L03-054, S-L15-062
+
+### Q-layout-06 · Should components respond to their container or to the window? · Expert
+- **Show if:** Q-plat-01 includes web
+- **Why:** Container-aware components look right in any slot, such as a sidebar card vs a main-column card [DC-L03-21].
+- **Ask:** "Should components adapt to the space they sit in (container queries) or to the window width?"
+- **Example:** Show the same card in a sidebar and in the main column.
+- **Control:** single choice
+- **Options:**
+  - `viewport` Viewport media queries keyed to the breakpoints [S-L03-016].
+  - `container` Container queries (Baseline since 2025-08-14; Tailwind v4 ships 13 container sizes) [S-L03-056, S-L03-016].
+- **Default:** page layout by viewport, components by container queries once multi-pane layouts exist. *Source:* card heuristic [DC-L03-21].
+- **Decides:** DC-L03-21
+- **Changes:** DC-L10-18 · blocks: Foundations > Layout > Responsive mechanism
+- **Preview:** the card dragged between slots.
+- **Use / avoid:** use container queries for reusable components; avoid viewport queries inside components placed in panes [DC-L03-21].
+- **Skip:** yes.
+- **Evidence:** DC-L03-21; S-L03-016, S-L03-055, S-L03-056
+
+---
+
+## Stage 14 · Shape
+> Screen: corner radius, on a live component sheet (button, input, card, dialog, menu, avatar, image). Graph step 1-5. The signature-shape question comes first because brand shape language drives the roundness dial (graph-overrides.json edge DC-L06-09 to DC-L04-02). Nested radii follow the concentric rule automatically (DC-L04-05, see "Auto-applied rules").
+
+### Q-shape-05 · Should a signature shape from your brand appear in the UI? · Expert
+- **Why:** Curves read friendlier; sharp angles raise threat perception; a shape that breaks the pattern draws attention [DC-L06-09; S-L06-073].
+- **Ask:** "Is there a shape in your logo or brand we should echo in the UI?"
+- **Example:** Show Slack's speech-bubble lozenge used as a graphic element.
+- **Control:** single choice (+ upload of the logo for curvature)
+- **Options:**
+  - `logo-derived` Logo-derived shapes as graphic elements and icon basis (Slack, Dropbox) [S-L06-030, S-L06-024].
+  - `softened` Brand geometry softened for UI (Atlassian) [S-L06-088].
+  - `curved` Curved, soft UI (Airbnb 2025) [S-L06-062].
+  - `variety` Mixed shapes for tension, shape morph (M3 Expressive, 35 shapes) [S-L06-009].
+  - `rectilinear` Strict rectilinear (IBM) [S-L06-003].
+- **Default:** one radius family derived from the logo's curvature; shape variety only in hero moments. *Source:* card heuristic [DC-L06-09].
+- **Decides:** DC-L06-09
+- **Changes:** DC-L06-13, DC-L06-11 · blocks: Foundations > Shape > Brand shape language
+- **Preview:** the logo curvature overlaid on the button radius.
+- **Use / avoid:** use shape variety only in hero moments; avoid shrinking essential actions into small shapes ("smaller shapes can result in essential actions looking less important") [S-L06-009].
+- **Skip:** yes.
+- **Evidence:** DC-L06-09; S-L06-003, S-L06-009, S-L06-030, S-L06-073, S-L06-088
+
+
+### Q-shape-01 · How soft should corners feel? · Quick
+- **Why:** Corner radius is the largest visible difference between systems (L09 divergence 1), and every 2025-2026 revision got rounder [DC-L09-01; L09 A2].
+- **Ask:** "How soft should corners feel: square, slightly rounded, rounded, or pill?"
+- **Example:** Show a button, input, card and dialog at 0, 6, 12px and pill side by side.
+- **Control:** single choice + radius factor slider (0, 0.75, 1, 1.5, full)
+- **Options:**
+  - `square` 0-2px: official, engineered (GOV.UK, Carbon v11 buttons) [DC-L09-01, DC-L04-02].
+  - `subtle` 4-6px: businesslike (Fluent 4, Primer and Atlassian 6) [S-L04-007, S-L04-024, S-L04-016].
+  - `soft` 8-12px: friendly, modern (Polaris, Paste, Blade, Mantine v9 8px; Airbnb 12px) [DC-L09-01].
+  - `pill` Pill: consumer, playful, touch-first (Material 3, Spectrum 2, SLDS Cosmos; iOS 26 capsule controls) [DC-L09-01; S-L04-038].
+  - `rule-based` Size-dependent (Spectrum 6-10 by size) or concentric with the container (Apple) [DC-L09-01; S-L04-035].
+- **Default:** 6px controls, 8-12px containers. *Source:* L09 shared default row 7 (16 of 23 control defaults at 4-8px, median 6) [L09 A1; DC-L09-01]; a radius factor slider as Radix offers [S-L09-559].
+- **Decides:** DC-L09-01, DC-L04-02
+- **Changes:** DC-L04-01, DC-L04-03, DC-L04-04, DC-L04-06, DC-L04-19, DC-L04-09, DC-L05-18 · blocks: Foundations > Shape > Radius scale and default; Shape personality
+- **Preview:** the component sheet morphing as the slider moves; the focus ring follows the radius.
+- **Use / avoid:** use sharp corners when density and precision are brand values (data, developer tools) and pill when the brand is consumer and touch-first; avoid pill on dense, short controls, which need taller heights [DC-L04-02, DC-L09-01].
+- **Skip:** yes, 6px.
+- **Evidence:** DC-L09-01, DC-L04-02; S-L09-101, S-L09-559, S-L04-005, S-L04-029, S-L04-038
+- **Merges:** K7.4 (shape)
+
+### Q-shape-02 · Which radius steps should exist? · Expert
+- **Why:** A short scale gives a tighter, more uniform look; a long scale lets large surfaces curve more [DC-L04-01].
+- **Ask:** "Which radius steps should the scale have?"
+- **Example:** Show the steps with a component named under each one.
+- **Control:** editable step list
+- **Options:**
+  - `minimal` 3-4 steps + full (Primer 3/6/12/full) [S-L04-024].
+  - `medium` 6-8 steps + full (Atlassian 2-16/full; Carbon v12 0/2/4/8/16/24/max) [S-L04-016, S-L04-030].
+  - `large` 9-11 steps + full (Material 0-48; Fluent 0-40) [S-L04-003, S-L04-006].
+  - `derived` No scale; radii derived from the container through concentricity (Apple) [S-L04-035].
+- **Default:** 0, 2, 4, 8, 12, 16, 24, full. *Source:* card heuristic [DC-L04-01]; L09 preset 0, 2, 4, 6, 8, 12, 16, 24, full [L09 A1 row 7].
+- **Decides:** DC-L04-01
+- **Changes:** DC-L04-03, DC-L04-05, DC-L04-09, DC-L15-10 · blocks: Foundations > Shape > Corner radius scale
+- **Preview:** each step with the components that use it; unused steps are flagged for deletion.
+- **Use / avoid:** grow radius with component size; delete any step you cannot name a component for [DC-L04-01].
+- **Skip:** yes.
+- **Evidence:** DC-L04-01; S-L04-003, S-L04-016, S-L04-024, S-L04-030
+
+### Q-shape-03 · Which components get which radius? · Expert
+- **Why:** Scaling radius with element size keeps curvature proportional; reserving full circles for people makes circles carry meaning [DC-L04-03].
+- **Ask:** "Should radius step up with component size, and should full circles be reserved for avatars?"
+- **Example:** Show Atlassian's mapping: badge 2, tag 4, button 6, card 8, modal 12, avatar full.
+- **Control:** mapping table
+- **Options:**
+  - `atlassian-roles` Role by component family: xsmall 2 badges, small 4 tags, medium 6 buttons and inputs, large 8 cards, xlarge 12 modals, full for avatars [S-L04-016, S-L04-018].
+  - `fluent-roles` None for nav and tab bars, small 2px for badges, medium, large, circular for people (Fluent 2) [S-L04-007].
+  - `four-roles` Four roles: detail 2-4, control 4-8 or full, container 8-12, overlay 12-16+, person full [DC-L04-03].
+- **Default:** four-roles; the radius steps up one level each time the element's height roughly doubles. *Source:* card heuristic [DC-L04-03].
+- **Decides:** DC-L04-03
+- **Changes:** DC-L04-05, DC-L07-04 · blocks: Foundations > Shape > Radius roles
+- **Preview:** the component sheet with each component's role labeled.
+- **Use / avoid:** use full radius for people and pills; avoid giving small badges and large dialogs the same radius [DC-L04-03].
+- **Skip:** yes.
+- **Evidence:** DC-L04-03; S-L04-007, S-L04-016, S-L04-018, S-L04-035
+
+### Q-shape-04 · Circular corners, or Apple-style continuous corners? · Expert
+- **Why:** Continuous curves blend into edges and read softer and more "Apple" at the same nominal radius [DC-L04-04].
+- **Ask:** "Keep standard circular corners, or use continuous (squircle) corners where supported?"
+- **Example:** Show a 24px card with a circular arc and with 60% corner smoothing, magnified.
+- **Control:** single choice
+- **Options:**
+  - `circular` Circular arc (CSS `border-radius`; every web system) [DC-L04-04].
+  - `continuous` Continuous curvature: SwiftUI `.continuous`, Figma corner smoothing (iOS preset 60%) [S-L04-036, S-L04-055].
+  - `squircle-enhance` CSS `corner-shape: squircle` as progressive enhancement (experimental, not Baseline as of 2026-08-27) [DC-L04-04].
+- **Default:** circular on the web; continuous on iOS-targeted components. *Source:* card heuristic [DC-L04-04].
+- **Decides:** DC-L04-04
+- **Changes:** DC-L07-13 · blocks: Foundations > Shape > Corner geometry
+- **Preview:** magnified corner comparison.
+- **Use / avoid:** use continuous corners only where brand parity with iOS matters; avoid relying on `corner-shape` for anything functional [DC-L04-04].
+- **Skip:** yes.
+- **Evidence:** DC-L04-04; S-L04-036, S-L04-054, S-L04-055
+
+---
+
+## Stage 15 · Depth, borders and materials
+> Screen: how surfaces separate and float, on a live stack (page, card, menu, dialog, sheet over a photo) in light and dark. Graph step 0-4. Cycle kept together: DC-L10-11 + DC-L10-12 (edge-to-edge content under the system bars decides the bar material, and the material decides how bars treat content beneath them). Layer order (z-index) and opaque fallbacks for translucency are applied by construction (see "Auto-applied rules").
+
+### Q-depth-01 · How should surfaces separate from each other? · Quick
+- **Why:** The depth model is the second-largest visual difference between systems (L09 divergence 2): shadows feel tactile, tonal feels calm, borders feel technical, glass feels premium [DC-L09-02].
+- **Ask:** "How should cards and panels separate from the page: shadows, color steps, lines, or translucent material?"
+- **Example:** Show the same card stack with shadow, tonal, border and ring-plus-shadow treatments.
+- **Control:** single choice (pre-filled from Q-dir-01 and Q-dir-04)
+- **Options:**
+  - `shadow` Shadow ladder: tactile, layered (Fluent dual shadows, Polaris 7 levels, Tailwind 7) [DC-L09-02; S-L04-008, S-L04-022].
+  - `tonal` Tonal layers: flat, calm, color-forward (Carbon layers, Material surface containers, Linear) [DC-L09-02; S-L04-058].
+  - `borders` Borders only: dense, technical (GOV.UK, Primer) [DC-L09-02].
+  - `ring-shadow` 1px ring plus soft shadow (Radix, Geist, Chakra, Airbnb) [DC-L09-02].
+  - `glass` Materials and glass: premium, content-first (Apple Liquid Glass, Airbnb) [DC-L09-02; S-L04-032].
+- **Default:** in-page containers flat with a border or tinted fill; shadows only for things that float (menus, popovers, dialogs, drag states); in light mode a 1px ring plus soft shadow, in dark mode a lighter surface per level. *Source:* card heuristics [DC-L04-10, DC-L08-15]; L09 shared pattern row 12.
+- **Decides:** DC-L09-02, DC-L04-10, DC-L08-15
+- **Changes:** DC-L04-11, DC-L04-12, DC-L04-13, DC-L04-15, DC-L07-13 · blocks: Foundations > Elevation > Depth strategy; Components > Card
+- **Preview:** the live stack re-rendered per option, light and dark.
+- **Use / avoid:** use tonal or borders for data-dense tools; avoid shadows on static in-page cards when the same color steps would do [DC-L09-02, DC-L04-10].
+- **Skip:** yes.
+- **Evidence:** DC-L09-02, DC-L04-10, DC-L08-15; S-L09-104, S-L09-559, S-L04-008, S-L04-017, S-L04-058
+
+### Q-depth-02 · How many elevation levels, and how do they look in dark mode? · Expert
+- **Why:** More levels allow fine hierarchy but muddy it; most products visibly use three: resting, raised, overlay [DC-L04-11].
+- **Ask:** "How many elevation levels do you need? Four named levels is typical."
+- **Example:** Show sunken, default, raised and overlay surfaces in dark mode with their hex steps.
+- **Control:** number + mapping table
+- **Options:**
+  - `4-semantic` 4 semantic levels (sunken, default, raised, overlay) with hover and pressed variants (Atlassian) [S-L04-017, S-L04-018].
+  - `6-levels` 6 levels (Material 3, Fluent) [S-L04-003, S-L04-006].
+  - `7-levels` 7 levels plus special or inset (Polaris, Primer) [S-L04-022, S-L04-024].
+- **Default:** 4 semantic levels backed by 4-6 shadow primitives; dark mode steps surfaces 3-5% lighter per level (Atlassian #18191A, #1F1F21, #242528, #2B2C2F). *Source:* card heuristics [DC-L04-11, DC-L04-13].
+- **Decides:** DC-L04-11, DC-L04-13
+- **Changes:** DC-L07-13, DC-L04-14 · blocks: Foundations > Elevation > Elevation scale; Surface roles
+- **Preview:** the stack with each level labeled in both modes.
+- **Use / avoid:** components at the same level never overlap each other; avoid pure-black shadows as the only dark-mode depth cue [DC-L04-11, DC-L04-13].
+- **Skip:** yes.
+- **Evidence:** DC-L04-11, DC-L04-13; S-L04-003, S-L04-017, S-L04-018, S-L04-022
+
+### Q-depth-03 · What should shadows look like? · Expert
+- **Show if:** Q-depth-01 is shadow or ring-shadow
+- **Why:** Single hard shadows look dated; layered soft shadows look realistic; tinted shadows avoid a "dirty grey" on colored surfaces [DC-L04-12].
+- **Ask:** "Soft layered shadows, a key-plus-ambient pair, or tucked-under shadows?"
+- **Example:** Show a menu with each recipe over a white and a tinted background.
+- **Control:** single choice + alpha slider
+- **Options:**
+  - `key-ambient` Key plus ambient, 2 layers (Fluent) [S-L04-008].
+  - `multi-layer` Multi-layer realistic (Primer floating.medium, 5 layers) [S-L04-024].
+  - `negative-spread` Tucked under with negative spread (Polaris `0 8px 16px -4px`) [S-L04-022].
+  - `tinted` Neutral-tinted shadow color instead of black (Polaris rgba(26,26,26), Atlassian #1E1F21) [S-L04-022, S-L04-018].
+- **Default:** 2 layers (1px contact shadow plus a soft blur scaled to elevation), neutral-tinted, alpha 8-24% in light mode; in dark mode double the alpha and add a 1px light edge ring on overlays. *Source:* card heuristic [DC-L04-12].
+- **Decides:** DC-L04-12
+- **Changes:** DC-L07-13 · blocks: Foundations > Elevation > Shadow recipe
+- **Preview:** shadows on the live stack with the alpha slider.
+- **Use / avoid:** use one light source for every shadow; avoid single hard shadows [DC-L04-12; L15 P62].
+- **Skip:** yes.
+- **Evidence:** DC-L04-12; S-L04-008, S-L04-018, S-L04-022, S-L04-024
+
+### Q-depth-04 · Should any surfaces be translucent (glass, blur)? · Standard
+- **Why:** Translucency reads premium and OS-native in 2025-26 and keeps context visible, at the cost of lower, variable contrast [DC-L04-15, DC-L10-12].
+- **Ask:** "Should navigation or overlays be translucent glass, or stay solid?"
+- **Example:** Show a toolbar over a photo: solid, regular glass, and clear glass with the 35% dimming layer.
+- **Control:** single choice + per-platform chrome table
+- **Options:**
+  - `none` Opaque surfaces: most legible and cheapest [DC-L04-15].
+  - `control-layer` Glass on navigation and controls only, never on content (Apple Liquid Glass: regular for text-heavy parts, clear over media with a 35% dim) [S-L04-032, S-L10-008].
+  - `transient` Translucent menus and flyouts only; Mica for the window base (Fluent Acrylic) [S-L04-011, S-L04-012].
+  - `decorative` Decorative glassmorphism on cards: flagged for legibility (NN/g) [DC-L04-15].
+- **Default:** platform material for native chrome (glass on Apple, Mica on Windows, tonal surfaces on Android); opaque on web with optional blur plus an opaque fallback; content edge-to-edge under the bars with inset-aware components. *Source:* platform convention [DC-L10-12, DC-L10-11, DC-L04-15].
+- **Decides:** DC-L04-15, DC-L10-12, DC-L10-11
+- **Changes:** DC-L04-16, DC-L10-16, DC-L05-16 · blocks: Foundations > Materials > Translucency; Depth > Materials (platform); Layout > Safe areas and insets
+- **Preview:** the toolbar and a sheet over a busy photo with live contrast readouts; the opaque fallback shown beside it.
+- **Use / avoid:** use glass on the functional layer (bars, controls, sheets) only; avoid glass on reading surfaces and any translucent token without an opaque twin [S-L10-008; DC-L04-16].
+- **Skip:** yes.
+- **Evidence:** DC-L04-15, DC-L10-12, DC-L10-11; S-L04-011, S-L04-032, S-L10-008, S-L10-023, S-L10-075
+- **Merges:** P12, P13
+
+### Q-depth-05 · How thick are borders, and when do dividers appear? · Expert
+- **Why:** 1px borders read light and precise; 2px read bolder and more accessible; more lines read more "spreadsheet" [DC-L04-07, DC-L04-08].
+- **Ask:** "Which border widths, and should lists be separated by lines, space or surface shifts?"
+- **Example:** Show a list separated by lines, by space and by alternating surfaces.
+- **Control:** editable width list + single choice (divider policy)
+- **Options:**
+  - `1-2-4` 1 / 2 / 4px with 1 default, 2 for focus and selection (Primer, Spectrum) [S-L03-009, S-L03-044].
+  - `1-2-3-4` 1 / 2 / 3 / 4px (Fluent web) [S-L04-006].
+  - `inset-shadow-borders` Inset box-shadow borders for states that change width, so layout does not jump (Primer) [S-L04-024].
+  - `dividers-space-first` Dividers: space first, then a surface change, then 1px subtle lines (Atlassian, Apple `separator`) [S-L04-017, S-L04-032].
+- **Default:** 1 / 2 / 4 with inset-shadow borders for state changes; space first, lines in dense data views. *Source:* card heuristics [DC-L04-07, DC-L03-09, DC-L04-08].
+- **Decides:** DC-L04-07, DC-L03-09, DC-L04-08
+- **Changes:** DC-L04-09, DC-L07-13 · blocks: Foundations > Borders > Stroke width scale; Dividers
+- **Preview:** an input switching from default to error without shifting layout.
+- **Use / avoid:** use lines in dense tables; avoid stacking dividers and card borders on the same edge [DC-L04-08; L15 P64].
+- **Skip:** yes.
+- **Evidence:** DC-L04-07, DC-L03-09, DC-L04-08; S-L03-009, S-L04-006, S-L04-017, S-L04-024
+
+### Q-depth-06 · How dark should modal backdrops be, and how strong are state overlays? · Expert
+- **Why:** Darker scrims focus attention hard; lighter scrims keep context for non-blocking sheets [DC-L04-18]. Overlay strengths set hover, press and disabled looks for every color [DC-L04-17].
+- **Ask:** "How dark should the backdrop behind dialogs be, and should we use Material's standard state-overlay strengths?"
+- **Example:** Show a dialog over the page at 30%, 45% and 60% scrim.
+- **Control:** slider (scrim) + number set (overlays)
+- **Options:**
+  - `scrim-fluent` Black 40% light / 50% dark (Fluent) [S-L04-071].
+  - `scrim-atlassian` Blue-black about 46% light / 60% dark (Atlassian `color.blanket`) [S-L04-070].
+  - `overlays-material` State overlays hover 0.08, focus 0.10, pressed 0.10, dragged 0.16, disabled 0.38 (Material 3) [S-L04-003].
+  - `overlays-atlassian` Stronger overlays in dark mode (Atlassian hovered 16%/pressed 32% light, 20%/36% dark) [S-L04-070].
+- **Default:** scrim 40-50% near-black in light, 50-60% in dark, tinted toward the neutral hue; Material overlay numbers, raised in dark mode. *Source:* card heuristics [DC-L04-18, DC-L04-17].
+- **Decides:** DC-L04-18, DC-L04-17
+- **Changes:** DC-L08-20, DC-L08-09 · blocks: Foundations > Opacity > Scrims; State layers
+- **Preview:** a dialog and a bottom sheet over the page with the slider live.
+- **Use / avoid:** use lighter scrims for non-blocking sheets; avoid scrims so light that the dialog's modality is unclear [DC-L04-18].
+- **Skip:** yes.
+- **Evidence:** DC-L04-18, DC-L04-17; S-L04-003, S-L04-069, S-L04-070, S-L04-071
+
+---
+
+## Stage 16 · Motion, haptics and sound
+> Screen: motion feel on live interactions the person can trigger (open a menu, navigate, toggle, dismiss a sheet), with a reduced-motion toggle. Graph step 0-6.
+
+### Q-motion-01 · Should motion feel quick and invisible, or physical and playful? · Quick
+- **Why:** Motion is L09 divergence 7: short beziers feel efficient, springs with bounce feel alive, no motion feels static but calm [DC-L09-06].
+- **Ask:** "Should motion be quick and invisible, calm with a few expressive moments, or physical and bouncy?"
+- **Example:** Open the same menu and page transition with each setting.
+- **Control:** single choice + bounce slider (Expert)
+- **Options:**
+  - `none` Minimal motion (GOV.UK) [DC-L09-06].
+  - `productive` Productive beziers: fast, competent, no bounce (Carbon productive `cubic-bezier(0.2, 0, 0.38, 0.9)`) [S-L06-002].
+  - `two-mode` Productive for most interactions, expressive for 1-3 hero moments per flow (Carbon expressive; Material standard vs expressive schemes) [S-L04-075, DC-L04-19].
+  - `springs` Springs throughout: alive, physical, interruptible (Material spring tokens, Apple duration + bounce, Airbnb) [DC-L09-06; S-L10-024].
+- **Default:** two-mode: 7 durations 50-500ms, ease-out to enter, ease-in to exit, springs only for spatial moves in the expressive mode, bounce at or below 0.2. *Source:* L09 shared default row 5 (all 16 systems with motion tokens stay in 100-300ms) and card heuristics [DC-L09-06, DC-L04-19]; capped at productive when Q-aud-02 is high-trust.
+- **Decides:** DC-L09-06, DC-L04-19, DC-L06-10
+- **Changes:** DC-L04-20, DC-L04-21, DC-L04-22, DC-L04-23, DC-L10-14 · blocks: Foundations > Motion; Motion personality
+- **Preview:** the live interactions replay on every change, with a slow-motion button.
+- **Use / avoid:** use expressive motion for page transitions, the primary action and alerts; avoid bounce on everyday controls and in high-trust products [DC-L06-10, DC-L04-19].
+- **Skip:** yes.
+- **Evidence:** DC-L09-06, DC-L04-19, DC-L06-10; S-L09-105, S-L06-002, S-L04-075, S-L10-024
+- **Merges:** K7.4 (motion personality)
+
+### Q-motion-02 · Which durations should exist, and should exits be faster? · Expert
+- **Why:** Past about 500ms UI starts to feel slow; fast, interruptible exits respect the user's time [DC-L04-20, DC-L04-24].
+- **Ask:** "Keep the standard duration ladder, with exits shorter than entrances?"
+- **Example:** Show a modal entering at 250ms and exiting at 200ms (Atlassian).
+- **Control:** editable duration list + toggle (interruptible)
+- **Options:**
+  - `4-semantic` 4 steps: micro, short, medium, long (Primer) [S-L04-024].
+  - `6-steps` 6 steps: instant 0, micro 100, short 150-200, medium 250-300, long 400-500, extra 700 [DC-L04-20].
+  - `16-steps` 16 steps (Material 3) [S-L04-003].
+  - `asymmetric` Exits 20-35% shorter than entrances (Atlassian modal 250/200; Primer 300/200) [S-L04-018, S-L04-024].
+- **Default:** 6 steps; exits about 70-80% of the entrance; motion is interruptible and never blocks input longer than about 100ms. *Source:* card heuristics [DC-L04-20, DC-L04-24]; Apple: "don't make people wait for an animation to complete" [S-L04-033].
+- **Decides:** DC-L04-20, DC-L04-24
+- **Changes:** DC-L07-14, DC-L13-01 · blocks: Foundations > Motion > Duration scale; Interruptibility
+- **Preview:** a timeline of each transition with its duration; clicking mid-animation shows retargeting.
+- **Use / avoid:** scale duration with distance travelled; avoid standard transitions over 500ms [DC-L04-20; L13 E1].
+- **Skip:** yes.
+- **Evidence:** DC-L04-20, DC-L04-24; S-L04-003, S-L04-018, S-L04-024, S-L04-033
+
+### Q-motion-03 · Which easing curves? · Expert
+- **Why:** Strong decelerate curves make entrances feel fast and "arriving"; role-based sets are easiest to apply consistently [DC-L04-21].
+- **Ask:** "Use role-based curves: standard, enter, exit, linear?"
+- **Example:** Plot the four curves and animate a card with each.
+- **Control:** single choice (structure) + curve editor
+- **Options:**
+  - `role-based` Standard / enter / exit (Carbon, Primer, Windows) [S-L04-014, S-L04-024, S-L04-013].
+  - `intensity-based` Min / mid / max intensity (Fluent) [S-L04-006].
+  - `personality-based` Practical vs bold (Atlassian); productive vs expressive (Carbon) [S-L04-018, S-L04-014].
+- **Default:** standard (0.2, 0, 0, 1), enter (0, 0, 0, 1) or (0.05, 0.7, 0.1, 1), exit (0.3, 0, 1, 1), linear only for spinners and progress. *Source:* card heuristic [DC-L04-21]; L09 shared default row 5.
+- **Decides:** DC-L04-21
+- **Changes:** DC-L07-14 · blocks: Foundations > Motion > Easing curves
+- **Preview:** the curve editor with a live card.
+- **Use / avoid:** use linear only for continuous indicators; avoid ease-in for entrances [DC-L04-21].
+- **Skip:** yes.
+- **Evidence:** DC-L04-21; S-L04-003, S-L04-006, S-L04-013, S-L04-014, S-L04-018
+
+### Q-motion-04 · How should springs be defined and exported? · Expert
+- **Show if:** Q-motion-01 is two-mode or springs
+- **Why:** Springs keep velocity when interrupted and settle naturally; DTCG has no spring type, so the storage format matters [DC-L04-22; BOARD L04/L07 note].
+- **Ask:** "Store springs as damping and stiffness, with Apple and CSS versions derived?"
+- **Example:** Show one spring as (dampingRatio 0.8, stiffness) and as Apple (duration, bounce) and a CSS `linear()` curve.
+- **Control:** single choice
+- **Options:**
+  - `durations-only` Duration + easing only (Carbon, Fluent, Polaris, Primer) [S-L04-014, S-L04-006].
+  - `spatial-effects` Springs split into spatial (may overshoot) and effects (critically damped, for color and opacity) (Material fast/default/slow) [S-L04-060, S-L10-024].
+  - `apple-bounce` Duration + bounce 0 / 0.15 / 0.3 (Apple) [DC-L09-06].
+- **Default:** (dampingRatio, stiffness) plus derived (duration, bounce) for Apple and pre-sampled `linear()` for CSS; critically damped springs for effects. *Source:* card heuristic [DC-L04-22].
+- **Decides:** DC-L04-22
+- **Changes:** DC-L07-14, DC-L04-28, DC-L04-06 · blocks: Foundations > Motion > Physics
+- **Preview:** a switch and a sheet driven by the spring, dragged and released mid-flight.
+- **Use / avoid:** use springs for spatial moves; avoid overshoot on color and opacity [DC-L04-22; S-L10-024].
+- **Skip:** yes.
+- **Evidence:** DC-L04-22; S-L04-060, S-L04-064, S-L10-024, S-L09-105
+
+### Q-motion-05 · Should shapes morph or use an expressive shape library? · Expert
+- **Show if:** Q-shape-01 is pill or Q-motion-01 is springs
+- **Why:** Pills read tappable and friendly; expressive shapes (cookies, bursts, clovers) add playfulness, best kept to avatars and hero moments [DC-L04-06].
+- **Ask:** "Keep a simple full-round token, or add expressive shapes and morphing for a few signature moments?"
+- **Example:** Show a toggle morphing from round to square when selected (M3 Expressive).
+- **Control:** single choice
+- **Options:**
+  - `full-token` `radius.full` token only (Atlassian, Polaris, Primer, Fluent, Carbon v12) [S-L04-006, S-L04-018].
+  - `people-status` Pill reserved for people and status (Atlassian; Carbon v12 moved tags away from pill) [S-L04-016, S-L04-031].
+  - `expressive-library` An expressive shape library with morphing (M3 Expressive `MaterialShapes`) [S-L04-005].
+- **Default:** full-token; expressive shapes only for playful brands targeting Material, limited to 1-3 signature uses. *Source:* card heuristic [DC-L04-06].
+- **Decides:** DC-L04-06
+- **Changes:** DC-L05-18 · blocks: Foundations > Shape > Full round and expressive shapes
+- **Preview:** an avatar, a FAB and a toggle with and without morphing.
+- **Use / avoid:** use expressive shapes on avatars and hero moments; avoid them on dense controls [DC-L04-06].
+- **Skip:** yes.
+- **Evidence:** DC-L04-06; S-L04-005, S-L04-016, S-L04-031
+
+### Q-motion-06 · Which named transitions and stagger should the system ship? · Expert
+- **Why:** Consistent transitions make navigation legible (you can feel whether you went deeper or sideways) [DC-L04-23].
+- **Ask:** "Ship the four standard transitions: fade, fade-through, shared axis, container transform?"
+- **Example:** Show a list item expanding into a detail page (container transform) and tabs switching (fade through).
+- **Control:** multi-select + number (stagger)
+- **Options:**
+  - `fade` Fade for in-screen enter and exit (dialogs, menus) [DC-L04-23].
+  - `fade-through` Fade through for unrelated destinations such as tabs [DC-L04-23].
+  - `shared-axis` Shared axis x, y or z for spatial relationships (onboarding x, stepper y, parent-child z) [DC-L04-23].
+  - `container-transform` Container transform for element-to-page transitions [DC-L04-23].
+  - `stagger` A stagger token of 20-50ms, total at most 500ms [DC-L04-23].
+- **Default:** all four plus stagger. *Source:* card heuristic, Material's four patterns [DC-L04-23].
+- **Decides:** DC-L04-23
+- **Changes:** DC-L07-14 · blocks: Patterns > Motion > Transitions and choreography
+- **Preview:** each transition playable on the preview.
+- **Use / avoid:** use OS-owned navigation transitions on native platforms; avoid custom page transitions that fight the back gesture [DC-L10-14].
+- **Skip:** yes.
+- **Evidence:** DC-L04-23; S-L04-009, S-L04-014, S-L04-018, S-L04-033
+
+### Q-motion-07 · What happens when users ask for reduced motion, and how much motion does each device allow? · Standard
+- **Why:** A good reduced mode still feels polished (crossfades) rather than broken (jumps); motion budgets shrink as attention narrows (none in cars) [DC-L04-25, DC-L14-08].
+- **Ask:** "When someone turns on reduced motion, should movement become gentle fades or stop entirely?"
+- **Example:** Toggle reduced motion on the preview; a sliding panel becomes a crossfade.
+- **Control:** single choice + per-device table
+- **Options:**
+  - `replace` Replace spatial motion with opacity and color changes (MDN; WCAG's motion definition excludes color, blur and opacity) [S-L04-067, S-L04-049].
+  - `remove` Remove all non-essential motion (WCAG 2.3.3 AAA, technique C39) [DC-L04-25].
+  - `per-device` Per device: system transitions plus brand micro-motion on phone and desktop; subtle focus scale on TV; minimal on watch; none in cars; slow and grounded in headsets [DC-L14-08; S-L14-032].
+- **Default:** replace, built as a token mode; 2.3.3 treated as a requirement although it is AAA; per-device budgets applied. *Source:* accessibility rule and card heuristics [DC-L04-25, DC-L14-08].
+- **Decides:** DC-L04-25, DC-L14-08
+- **Changes:** DC-L07-15, DC-L07-14 · blocks: Foundations > Motion > Accessibility; Motion > Device policy
+- **Preview:** the reduced-motion toggle on every live interaction.
+- **Use / avoid:** keep feedback (color, opacity) and remove travel (translate, scale, parallax); avoid removing feedback entirely [DC-L04-25].
+- **Skip:** yes.
+- **Evidence:** DC-L04-25, DC-L14-08; S-L04-049, S-L04-067, S-L04-075, S-L14-032
+- **Merges:** B15 (reduced motion)
+
+### Q-motion-08 · Do you have UI sounds or a sonic logo? · Standard
+- **Why:** Sound is a block the builder cannot compose well; it adds confirmation but annoys in shared spaces [DC-L04-27; BRIEF requirement 2].
+- **Ask:** "Do you have UI sounds or a sonic logo you want in the product? Most web and productivity apps stay silent."
+- **Example:** Play one confirmation sound and show the mute option beside it.
+- **Control:** single choice + file upload
+- **Options:**
+  - `silent` Silent by default (most web systems; tvOS plays no alert sounds) [S-L04-074].
+  - `rare-events` Sounds for rare, meaningful events, always behind mute and silent mode [S-L04-074].
+  - `sound-forward` Sound-forward (games, spatial computing) [DC-L04-27].
+- **Default:** silent on web and productivity apps. *Source:* card heuristic [DC-L04-27].
+- **Decides:** DC-L04-27
+- **Changes:** DC-L04-26 · blocks: Foundations > Sound > UI sounds
+- **Hook:** Accepts short audio files (WAV master plus compressed AAC or CAF for apps) [inferred formats]. If no: (1) stay silent, which is the norm for web and productivity apps; (2) use system sounds on native platforms; (3) commission a sound designer for a sonic logo, with the caveat that repeated identical sounds feel mechanical [S-L04-074].
+- **Preview:** the event list with a play button per sound and the mute state.
+- **Use / avoid:** use sound only for rare, meaningful events that honor silent mode; avoid sounds on web and in shared-space products [DC-L04-27].
+- **Skip:** yes, silent.
+- **Evidence:** DC-L04-27; S-L04-043, S-L04-072, S-L04-074
+- **Merges:** B7 (sonic logo)
+
+### Q-motion-09 · On native platforms, whose transitions, back behavior and haptics? · Expert
+- **Show if:** Q-plat-01 includes ios or android
+- **Why:** OS-owned back gestures and transitions feel native (Android predictive back peeks behind); custom haptics feel cheap when overused [DC-L10-14, DC-L04-26].
+- **Ask:** "Use the platform's own navigation transitions and haptics, with brand motion only inside content?"
+- **Example:** Show Android predictive back and an iOS swipe-back on the preview.
+- **Control:** single choice (motion) + single choice (haptics)
+- **Options:**
+  - `os-nav-brand-micro` OS navigation transitions and back behavior, brand micro-motion as springs in content [DC-L10-14].
+  - `one-language` One brand motion language everywhere [DC-L10-14].
+  - `haptics-system` System haptics only (standard controls already play them) [S-L04-043].
+  - `haptics-semantic` A semantic haptic map of about 6 events (success, warning, error, selection, toggle, light impact) [S-L04-044, S-L04-047].
+- **Default:** os-nav-brand-micro and haptics-system; a semantic map only for products with frequent confirmations. *Source:* card heuristics [DC-L10-14, DC-L04-26].
+- **Decides:** DC-L10-14, DC-L04-26
+- **Changes:** DC-L07-14 · blocks: Foundations > Motion > Platform motion; Haptics > Semantic haptic map
+- **Preview:** the event list with each haptic's platform mapping.
+- **Use / avoid:** use haptics sparingly ("less is more"); avoid long "buzzy" vibrations [S-L04-046; DC-L04-26].
+- **Skip:** yes.
+- **Evidence:** DC-L10-14, DC-L04-26; S-L04-043, S-L04-044, S-L04-046, S-L10-020, S-L10-024
+- **Merges:** P15
+
+### Q-motion-10 · Which OS accessibility settings must the system honor? · Expert
+- **Why:** Honoring settings changes the look for that user: thicker borders in high contrast, opaque bars under reduced transparency [DC-L10-16].
+- **Ask:** "Honor every OS accessibility setting: screen readers, text size, contrast, reduced transparency, reduced motion, bold text, forced colors?"
+- **Example:** Show the preview under Increase Contrast and Reduce Transparency together.
+- **Control:** multi-select
+- **Options:**
+  - `screen-readers` VoiceOver, TalkBack and ARIA labels on every icon-only control [S-L10-075, S-L10-072].
+  - `text-size` Dynamic Type, Android font scale, browser font size [DC-L10-07].
+  - `contrast` Increase Contrast and forced colors [S-L10-031].
+  - `transparency` Reduce Transparency [S-L10-008].
+  - `motion` Reduce Motion [DC-L04-25].
+  - `bold-text` Bold Text [DC-L10-16].
+- **Default:** all, with high contrast and reduced transparency as token modes. *Source:* platform convention [DC-L10-16; L10 baked-in rules 9-10].
+- **Decides:** DC-L10-16
+- **Changes:** DC-L07-15, DC-L04-09 · blocks: Foundations > Accessibility > Platform settings
+- **Preview:** a settings simulator panel with each toggle applied live.
+- **Use / avoid:** never convey a boundary or focus state with shadow or translucency alone; avoid app-level switches that override these settings [DC-L10-16].
+- **Skip:** yes.
+- **Evidence:** DC-L10-16; S-L10-008, S-L10-031, S-L10-072, S-L10-075
+- **Merges:** P17, K4.4
+
+---
+
+## Stage 17 · Icons, app icon and logo use
+> Screen: an icon sheet in the product's own buttons, tabs and lists, next to body text at each size. Graph step 0-4. Two asset hooks live here: the icon set (Q-icon-01) and the app icon (Q-icon-06).
+
+### Q-icon-01 · Do you have a custom icon set, or should the system adopt a library? · Standard
+- **Why:** Icons are a block the builder should not draw from scratch; native sets feel "of the platform", open sets are free and consistent, custom sets carry personality [DC-L05-01; BRIEF requirement 2].
+- **Ask:** "Do you already have icons? If not, I'd adopt a library that matches your type and corners."
+- **Example:** Show the same toolbar in Lucide, Phosphor, Material Symbols and SF Symbols.
+- **Control:** single choice + file upload
+- **Options:**
+  - `platform-native` Platform-native sets: SF Symbols (7,000+, weight-matched to SF, 20+ scripts) and Material Symbols (variable font, 2,500+) [S-L05-006, S-L05-002].
+  - `open-source` An open-source set: Lucide (ISC), Heroicons (MIT, 316), Phosphor (MIT, 1,248, 6 weights), Tabler (6,220), Fluent System Icons (MIT) [S-L05-029, S-L05-032, S-L05-031, S-L05-033, S-L05-014].
+  - `custom` Your own brand set (IBM, Atlassian 1.5px at 16px, Octicons) [S-L05-017, S-L05-021, S-L05-024].
+  - `extend` A library extended with custom domain icons drawn on its template (Material 24dp keyline template; Apple symbol template) [S-L05-001, S-L05-010].
+- **Default:** platform-native on native apps, one open-source set on web; platform glyphs for system actions (share, back, close, more, search, settings), brand icons for product concepts. *Source:* card heuristics [DC-L05-01, DC-L10-25].
+- **Decides:** DC-L05-01, DC-L10-25
+- **Changes:** DC-L05-02, DC-L05-03, DC-L05-05, DC-L05-10 · blocks: Foundations > Iconography > Icon library source; Platform mapping
+- **Hook:** Accepts one SVG per icon on a 16 or 24px master (outlined strokes, no text), or a Figma icon library; icon fonts are accepted but converted, since fonts blur and flash (GitHub moved Octicons to SVG for this reason) [S-L05-038]. If no: (1) adopt an open-source set whose stroke and corners match the type (the default); (2) commission a designer only for domain icons the library lacks, drawn on the library's template; (3) use AI icon generators only as sketches, with the caveat that stroke, keylines and optical size rarely match across a set [inferred]. Apple's terms forbid SF Symbols or look-alikes in app icons and logos [S-L05-010].
+- **Preview:** the icon sheet in context; swapping libraries updates every icon.
+- **Use / avoid:** use one icon family per product; avoid mixing two libraries' strokes in one toolbar [DC-L05-01, inferred].
+- **Skip:** yes; the default library is applied.
+- **Evidence:** DC-L05-01, DC-L10-25; S-L05-002, S-L05-006, S-L05-010, S-L05-029, S-L05-038
+- **Merges:** K7.5 (icons), P26
+
+### Q-icon-02 · Outlined or filled icons, rounded or sharp? · Standard
+- **Why:** Outline reads lighter and blends with text; filled reads bolder and is easier to spot at small sizes; icons are where the brand's shape and stroke translate into UI (Atlassian matched icon stroke to its type) [DC-L05-02, DC-L06-13].
+- **Ask:** "Outlined or filled icons, and should their corners match your rounded or sharp UI?"
+- **Example:** Show a tab bar outlined at rest and filled when selected.
+- **Control:** single choice (style) + single choice (corners)
+- **Options:**
+  - `outlined` Outlined: light, clean, good in dense UIs (Material, Apple toolbars, Fluent Regular) [S-L05-003, S-L05-010, S-L05-014].
+  - `filled` Filled: more emphasis (Apple iOS tab bars and swipe actions) [S-L05-010].
+  - `duotone` Duotone or two-tone: decorative [DC-L05-02].
+  - `rounded` / `sharp` Corners matched to the radius family: pill UIs with rounded icons, 0-2px UIs with sharp icons [DC-L05-02].
+- **Default:** outlined at rest, filled plus accent color when selected (two cues that survive color blindness); corners follow Q-shape-01. *Source:* card heuristics [DC-L05-02, DC-L05-06].
+- **Decides:** DC-L05-02, DC-L05-06, DC-L06-13
+- **Changes:** DC-L05-03 · blocks: Foundations > Iconography > Style; States; Brand match
+- **Preview:** the tab bar and toolbar with style and corner toggles.
+- **Use / avoid:** keep hover and pressed feedback on the container, not the glyph; avoid color-only selected states [DC-L05-06].
+- **Skip:** yes.
+- **Evidence:** DC-L05-02, DC-L05-06; S-L05-003, S-L05-010, S-L05-014
+
+### Q-icon-03 · How heavy should icon strokes be? · Expert
+- **Why:** Thin strokes look elegant but get fragile below 20px; icons should match the stem weight of the text beside them (Atlassian dropped 2px for 1.5px because 2px felt "too heavy") [DC-L05-03, DC-L06-13].
+- **Ask:** "Match icon stroke to your body text weight: about 1.5px at 16px, 2px at 24px?"
+- **Example:** Show an icon next to a label at 1.5px and 2px strokes.
+- **Control:** slider (stroke) + single choice (terminals)
+- **Options:**
+  - `2-at-24` 2px at 24 (Material weight 400, Lucide) [S-L05-001, S-L05-029].
+  - `1.5-at-24` 1.5px at 24 (Heroicons) [S-L05-032].
+  - `1.5-at-16` 1.5px at 16 (Atlassian, Octicons) [S-L05-021, S-L05-024].
+  - `variable` Variable weight matched to text (Material wght 100-700; SF Symbols 9 weights) [S-L05-003, S-L05-010].
+- **Default:** stroke visually equal to body text weight at the paired size: about 1.5px for 14-16px text, 2px at 24px. *Source:* card heuristics [DC-L05-03, DC-L06-13].
+- **Decides:** DC-L05-03
+- **Changes:** DC-L15-10 · blocks: Foundations > Iconography > Stroke and corner metrics
+- **Preview:** icon-label pairs at each text size with the stroke slider.
+- **Use / avoid:** use heavier strokes on busy or photographic backgrounds; avoid sub-1.5px strokes below 20px [DC-L05-03].
+- **Skip:** yes.
+- **Evidence:** DC-L05-03, DC-L06-13 (context); S-L05-001, S-L05-003, S-L05-021, S-L05-032, S-L06-088
+
+### Q-icon-04 · Which icon sizes, and on which construction grid? · Expert
+- **Why:** Keylines make a circle icon and a square icon look the same size; pixel-hinted sizes stay crisp [DC-L05-04, DC-L05-05].
+- **Ask:** "Ship 16, 20 and 24px icons on a standard 24/20/2 grid?"
+- **Example:** Show a circle and a square icon on the keyline grid.
+- **Control:** editable size list + single choice (grid)
+- **Options:**
+  - `material-grid` 24dp master, 20dp live area, 2dp padding; opsz 20-48 thins large icons (Material) [S-L05-001, S-L05-003].
+  - `carbon` 16px default, 20/24/32 also, tuned to 14 and 16px text (Carbon; IBM 32px master scaled down) [S-L05-016, S-L05-017].
+  - `fluent` 12, 16, 20, 24, 28, 32, 48 [S-L05-014].
+- **Default:** 16, 20, 24 (plus 12 and 32 if needed), sized to the adjacent text line height; Material construction unless the master is 16 or 32. *Source:* card heuristics [DC-L05-05, DC-L05-04].
+- **Decides:** DC-L05-05, DC-L05-04
+- **Changes:** DC-L03-08 · blocks: Foundations > Iconography > Sizes; Construction grid
+- **Preview:** the icon sheet at each size, magnified to show pixel alignment.
+- **Use / avoid:** pixel-align at the smallest shipped size; avoid 12px icons for anything interactive [DC-L05-04, DC-L05-05].
+- **Skip:** yes.
+- **Evidence:** DC-L05-04, DC-L05-05; S-L05-001, S-L05-003, S-L05-014, S-L05-016
+
+### Q-icon-05 · When do icons need labels, and what color are they? · Expert
+- **Why:** Labelled icons read calmer and clearer; icon-only toolbars read expert but ambiguous; only a handful of icons are near-universal [DC-L05-07, DC-L05-08].
+- **Ask:** "Label icons in navigation, and allow icon-only buttons just for universal actions like search and close?"
+- **Example:** Show an icon-only toolbar vs the same toolbar with labels.
+- **Control:** single choice (labels) + single choice (color)
+- **Options:**
+  - `labels-default` Labels by default (Material navigation, Atlassian, Polaris) [S-L05-003, S-L05-021, S-L05-027].
+  - `universal-only` Icon-only for about a dozen universal actions (search, close, more, add, delete, edit, share, settings), with a tooltip and accessible name [DC-L05-07].
+  - `mono` Monochrome icons matching text color (Carbon 4.5:1, Fluent solid) [S-L05-016, S-L05-014].
+  - `semantic-tone` Semantic tones on status icons (Polaris `tone`) [S-L05-027].
+- **Default:** labels-default plus universal-only; one neutral icon color aliased to secondary text, semantic colors only on status icons. *Source:* card heuristics [DC-L05-07, DC-L05-08].
+- **Decides:** DC-L05-07, DC-L05-08
+- **Changes:** DC-L08-08 · blocks: Foundations > Iconography > Icon with text; Color
+- **Preview:** toolbar variants with a label toggle; hover shows the tooltip.
+- **Use / avoid:** give every icon-only control an accessible label; avoid decorative multicolor icons in UI chrome [DC-L05-07, DC-L05-08; L10 baked-in rule 9].
+- **Skip:** yes.
+- **Evidence:** DC-L05-07, DC-L05-08; S-L05-003, S-L05-014, S-L05-016, S-L05-021, S-L05-027
+
+### Q-icon-06 · Do you have an app icon? · Standard
+- **Show if:** Q-plat-01 includes ios, android or desktop, or the web app is installable
+- **Why:** The app icon is a designer-made block; on Apple it is layered and lit by Liquid Glass, on Android it is adaptive and themed [DC-L05-12; BRIEF requirement 2].
+- **Ask:** "Do you have an app icon? If so, share the layered source; if not, I can make a clearly-marked placeholder from your logo."
+- **Example:** Show the icon in default, dark, clear and tinted looks on an iOS home screen and as an Android themed icon.
+- **Control:** single choice + file upload
+- **Options:**
+  - `yes-layered` Yes, layered source (background + foreground layers) [DC-L05-12].
+  - `yes-flat` Yes, a flat 1024px image only [DC-L05-12].
+  - `no` No: see the Hook line.
+- **Default:** one glyph of 1-3 filled shapes on a solid or gradient background, exported as Apple layers, Android foreground/background/monochrome and PWA icons. *Source:* card heuristic [DC-L05-12].
+- **Decides:** DC-L05-12
+- **Changes:** DC-L10-05 (icon looks follow the user) · blocks: Brand in product > App icon
+- **Hook:** Accepts layered SVG or PNG layers at 1024x1024 (watchOS 1088x1088) for Apple's Icon Composer, which applies Liquid Glass and generates default, dark, clear and tinted looks; Android adaptive foreground, background and monochrome layers; PWA maskable 512px [DC-L05-12; S-L05-042]. If no: (1) the builder generates a placeholder from the logo glyph and labels it "placeholder"; (2) commission a designer, the recommended path for a shipped app; photos, fine lines, text and baked-in effects render poorly under system lighting [DC-L05-12]. SF Symbols may not be used in app icons [S-L05-010].
+- **Preview:** a home-screen mock per platform with all appearances.
+- **Use / avoid:** use simple filled overlapping shapes; avoid photos, fine lines, text and baked-in shadows [DC-L05-12].
+- **Skip:** yes; a placeholder is generated.
+- **Evidence:** DC-L05-12; S-L05-007, S-L05-008, S-L05-011, S-L05-042, S-L05-010
+
+### Q-icon-07 · How should icons be named and shipped? · Expert
+- **Why:** SVG and native symbols render crisp at every size; icon fonts blur and flash; literal names keep one icon reusable across meanings [DC-L05-10, DC-L05-09].
+- **Ask:** "Ship icons as SVG with per-framework components, named by shape with function aliases?"
+- **Example:** Show `shield_24_regular.svg` aliased as `action.security`.
+- **Control:** single choice (delivery) + single choice (naming)
+- **Options:**
+  - `svg-components` SVG source of truth generating per-framework components and native packages (Octicons, Heroicons) [S-L05-022, S-L05-038].
+  - `icon-font` Icon font or variable font (Material Symbols) [S-L05-002].
+  - `name-by-shape` Name by shape ("Shield, not security": Fluent; SF Symbols) [S-L05-014, S-L05-012].
+  - `function-alias` Plus a function-alias layer in the component API [DC-L05-09].
+- **Default:** SVG source, files named `<name>_<size>_<style>`, size and color as props; name by shape with a function-alias layer; RTL behavior recorded per icon. *Source:* card heuristics [DC-L05-10, DC-L05-09].
+- **Decides:** DC-L05-10, DC-L05-09
+- **Changes:** DC-L07-09, DC-L16-12 · blocks: Foundations > Iconography > Delivery; Metaphor, naming, localization
+- **Preview:** the exported icon package tree.
+- **Use / avoid:** mirror directional icons in RTL; avoid mirroring icons that depict real objects (clocks, checkmarks) [DC-L05-09, inferred].
+- **Skip:** yes.
+- **Evidence:** DC-L05-10, DC-L05-09; S-L05-012, S-L05-014, S-L05-022, S-L05-038
+
+### Q-icon-08 · How should the logo appear inside the product? · Expert
+- **Why:** A small symbol keeps chrome quiet and product-led; a full lockup reads marketing-led; a brand-colored logo competes with primary actions [DC-L05-13].
+- **Ask:** "Symbol-only logo in the app bar and the full lockup on sign-in?"
+- **Example:** Show the app bar with the symbol at 24px and the sign-in page with the lockup.
+- **Control:** single choice (placement) + single choice (appearance)
+- **Options:**
+  - `symbol-app-bar` Symbol only at 24-32px in the app bar, lockup on sign-in and marketing [DC-L05-13].
+  - `lockup-everywhere` Full lockup everywhere [DC-L05-13].
+  - `appearance` Appearance brand, neutral or inverse (Atlassian Logo component) [S-L05-044].
+- **Default:** symbol-app-bar with neutral appearance inside dense tools; favicon set from one SVG master. *Source:* card heuristic [DC-L05-13].
+- **Decides:** DC-L05-13
+- **Changes:** DC-L08-01 (Logo component) · blocks: Brand in product > Logo usage; Favicon
+- **Preview:** the app bar and sign-in page.
+- **Use / avoid:** give a logo that acts as a link an accessible name; avoid repeating the logo throughout the UI (Apple) [DC-L05-13; S-L10-009].
+- **Skip:** yes.
+- **Evidence:** DC-L05-13; S-L05-014, S-L05-042, S-L05-044
+
+---
+
+## Stage 18 · Imagery, illustration and charts
+> Screen: an empty state, onboarding card, hero and dashboard, with the person's own assets dropped in where they exist. Graph step 0-3. Three asset hooks live here: photography (Q-img-01), illustration (Q-img-04) and animated assets (Q-img-06). Image placeholders, chart anatomy tokens and chart accessibility are applied by construction (see "Auto-applied rules").
+
+### Q-img-01 · Does the product use photography, and do you have photos or a photo brief? · Standard
+- **Why:** Photography is a block the builder cannot make honestly; natural light and ungraded color read factual and trustworthy, graded cinematic images read emotional [DC-L05-14; BRIEF requirement 2].
+- **Ask:** "Will the product show photos? If so, do you have a library or a photo brief?"
+- **Example:** Show a hero with a documentary-style photo and one with a studio product shot.
+- **Control:** single choice (style) + file upload
+- **Options:**
+  - `none` No photography [DC-L05-14].
+  - `documentary` Documentary: "frames from a film" (IBM lifestyle photography) [S-L05-046].
+  - `portraiture` Portraiture with equal stature for every subject (IBM "democratic"; Dropbox People) [S-L05-046, S-L05-057].
+  - `still-life` Still life, product or content imagery [S-L05-046].
+- **Default:** none for tools; for consumer products, a one-paragraph photo brief (subject types, perspective, light, color treatment, casting) before commissioning or buying. *Source:* card heuristic [DC-L05-14].
+- **Decides:** DC-L05-14
+- **Changes:** DC-L05-15, DC-L05-16, DC-L05-17 · blocks: Foundations > Imagery > Photography style
+- **Hook:** Accepts JPEG, WebP or AVIF exports and a written brief; masters in RAW or TIFF are kept outside the system. If no: (1) the builder drafts the photo brief from the personality sliders for you to edit; (2) commission a photographer (best for recognizability); (3) license stock against the brief; (4) AI-generated images only for placeholders, with the caveat that they can misrepresent people and products [inferred]. Neutral placeholders are used until real images arrive.
+- **Preview:** image slots in the hero, cards and avatars with the uploaded photos, or labeled placeholders.
+- **Use / avoid:** use real product and people photos where trust matters; avoid stock that contradicts the brief's casting and light [DC-L05-14].
+- **Skip:** yes.
+- **Evidence:** DC-L05-14; S-L05-046, S-L05-057, S-L05-011
+- **Merges:** K7.5 (imagery)
+
+### Q-img-02 · Which aspect ratios, and can text sit on images? · Expert
+- **Why:** A small ratio set gives grids a calm rhythm; text beside images reads clean and keeps photos honest, scrims read cinematic but darken them [DC-L05-15, DC-L05-16].
+- **Ask:** "Limit images to a few ratios like 16:9, 3:2 and 1:1, and keep text beside images rather than on them?"
+- **Example:** Show a card grid with mixed ratios vs a fixed ratio set, and a hero with and without a scrim.
+- **Control:** multi-select (ratios) + single choice (text on images)
+- **Options:**
+  - `ibm-set` 16:9, 4:3, 3:2, 2:1, 1:1 aligned to the grid (IBM) [S-L05-047].
+  - `per-component` One ratio per component slot (16:9 hero, 3:2 card, 1:1 avatar) [DC-L05-15].
+  - `text-beside` Text beside images (IBM avoids overlays on photos) [S-L05-047].
+  - `scrim` A scrim token under text on heroes, contrast-tested against the worst-case region [S-L05-072].
+- **Default:** 3-5 ratios, one per slot; text beside images, a scrim token only for heroes. *Source:* card heuristics [DC-L05-15, DC-L05-16].
+- **Decides:** DC-L05-15, DC-L05-16
+- **Changes:** DC-L04-18 · blocks: Foundations > Imagery > Aspect ratios; Text on images
+- **Preview:** the card grid and hero with live contrast readout.
+- **Use / avoid:** use art-directed crops per breakpoint for heroes; avoid text over busy image regions without a scrim [DC-L05-15, DC-L05-16].
+- **Skip:** yes.
+- **Evidence:** DC-L05-15, DC-L05-16; S-L05-047, S-L05-072, S-L05-083
+
+### Q-img-03 · Which avatar shapes should mean what? · Expert
+- **Why:** Circles read personal, squares institutional; a distinct shape makes AI actors instantly recognizable [DC-L05-18].
+- **Ask:** "Circle for people, square for teams, and a third shape for AI agents?"
+- **Example:** Show a comment thread with a person, a team and an AI agent.
+- **Control:** single choice
+- **Options:**
+  - `circle-square` Circle = person, square = team or org (Primer, Fluent, Atlassian) [S-L05-066, S-L05-067, S-L05-069].
+  - `agent-shape` Plus a distinct shape for AI agents (Primer treats bots and agents as square) [S-L05-069].
+- **Default:** circle-square plus an agent shape if the product mixes human and AI actors; sizes 16-64 on a 4/8 rhythm with initials fallback. *Source:* card heuristic [DC-L05-18].
+- **Decides:** DC-L05-18
+- **Changes:** DC-L08-22 · blocks: Components > Avatar
+- **Preview:** the comment thread with fallbacks (initials, placeholder) and presence dots.
+- **Use / avoid:** keep shape meaning consistent everywhere; avoid using the person circle for bots [DC-L05-18].
+- **Skip:** yes.
+- **Evidence:** DC-L05-18; S-L05-066, S-L05-067, S-L05-069
+
+### Q-img-04 · Do you have illustrations or a mascot, and where should illustration appear? · Standard
+- **Why:** Illustration is a designer-made block; characters and hand-drawn styles add warmth and let the UI stay neutral, but overuse adds cognitive load [DC-L06-12, DC-L05-19, DC-L05-20].
+- **Ask:** "Do you have illustrations or a mascot? If not, should empty and error states use simple icons and text instead?"
+- **Example:** Show an empty state with a neutral spot illustration, a mascot, and icon-plus-text.
+- **Control:** single choice (style) + multi-select (where) + file upload
+- **Options:**
+  - `none` None: empty states use an icon and text [DC-L05-20, inferred].
+  - `line` Line style: precise, calm, technical (IBM: 4px grid, at most 4 line weights, 15-degree angles) [S-L05-048, S-L05-049].
+  - `flat` Flat: bold and energetic (IBM) [S-L05-049].
+  - `hand-drawn` Hand-drawn gestural line (Notion) [S-L06-092].
+  - `mascot` A mascot in loading, error and empty states (Mailchimp Freddie, Duolingo Duo) [S-L06-028, S-L06-026].
+  - `where` Where: spot illustrations for empty, error, celebration; low-fidelity UI for onboarding; hero and collage only on marketing (Atlassian, Dropbox) [S-L05-050, S-L05-057].
+- **Default:** one style derived from the icon stroke, corner radius and palette; neutral spots for routine empty states, colorful spots only for first run and celebration; no humor in errors. *Source:* card heuristics [DC-L05-19, DC-L05-20, DC-L06-12].
+- **Decides:** DC-L05-19, DC-L06-12, DC-L05-20
+- **Changes:** DC-L05-11, DC-L13-10, DC-L13-11 · blocks: Foundations > Illustration > Style; Brand style and characters; Types and usage
+- **Hook:** Accepts SVG (preferred), PNG at 2x, Lottie JSON for animated pieces, plus any illustration guidelines. If no: (1) ship icon-plus-text empty states, which is honest and cheap; (2) commission an illustrator with a brief derived from the icon stroke and palette; (3) use AI generation for drafts only, with the caveat that style drifts from piece to piece unless one artist or a strict style guide owns it [inferred].
+- **Preview:** the empty, error and success states with the uploaded art or the fallback.
+- **Use / avoid:** use illustration only where it has a job (IBM: "have a job to do"); avoid real screenshots in onboarding illustrations and jokes in error states [S-L05-049, S-L05-050; DC-L06-12].
+- **Skip:** yes.
+- **Evidence:** DC-L05-19, DC-L06-12, DC-L05-20; S-L05-048, S-L05-049, S-L05-050, S-L06-026, S-L06-028
+- **Merges:** K7.5 (illustration), B7 (illustration, mascot)
+
+### Q-img-05 · Do you need pictograms between UI icons and illustrations? · Expert
+- **Show if:** Q-scope-01 includes marketing
+- **Why:** A pictogram tier bridges austere UI icons and full illustration, so feature grids look richer [DC-L05-11].
+- **Ask:** "Add larger pictograms for feature grids and onboarding, drawn with the icon stroke logic?"
+- **Example:** Show a 24px UI icon, a 64px pictogram and a 120px spot icon of the same concept.
+- **Control:** single choice
+- **Options:**
+  - `three-tiers` UI icons 24, pictograms 64, spot icons 120 (Dropbox) [S-L05-058].
+  - `ui-pictograms` UI icons plus a pictogram library (IBM) [S-L05-049].
+  - `ui-only` UI icons only; illustrations cover larger needs (Atlassian) [S-L05-050].
+- **Default:** a pictogram tier only with marketing surfaces, drawn with the UI icon's stroke logic scaled up. *Source:* card heuristic [DC-L05-11].
+- **Decides:** DC-L05-11
+- **Changes:** none downstream in the graph · blocks: Foundations > Iconography > Tiers
+- **Preview:** a feature grid with each tier.
+- **Use / avoid:** use pictograms on marketing and onboarding; avoid them inside dense product UI [DC-L05-11].
+- **Skip:** yes.
+- **Evidence:** DC-L05-11; S-L05-049, S-L05-050, S-L05-058
+
+### Q-img-06 · Do you have animated icons, Lottie files, 3D assets or custom emoji? · Expert
+- **Why:** Animated symbols confirm actions in little space; 3D and Lottie make a product feel alive but belong to onboarding and celebration [DC-L05-21].
+- **Ask:** "Any animated or 3D assets to include? Otherwise I'll animate icons only to confirm actions or show status."
+- **Example:** Show an SF Symbols bounce on a saved state and a Lottie celebration on first success.
+- **Control:** multi-select + file upload
+- **Options:**
+  - `symbol-animation` Built-in symbol animation (SF Symbols Appear, Bounce, Pulse, Replace, Draw) [S-L05-010, S-L05-006].
+  - `lottie` Lottie or animated illustration for onboarding and celebration [DC-L05-21].
+  - `3d` 3D assets [DC-L05-21].
+  - `emoji-stickers` Custom emoji or stickers [DC-L05-21].
+- **Default:** symbol animation only, to confirm an action or show ongoing status; 3D and Lottie kept for onboarding, celebration and marketing. *Source:* card heuristic [DC-L05-21].
+- **Decides:** DC-L05-21
+- **Changes:** DC-L04-25 (every animation needs a reduced-motion version) · blocks: Foundations > Rich media
+- **Hook:** Accepts Lottie JSON or dotLottie, animated SVG, GLB or USDZ for 3D, PNG or SVG for emoji [inferred formats]. If no: use built-in symbol animation; commission a motion designer for celebration moments.
+- **Preview:** each asset playing in its slot, with the reduced-motion alternative.
+- **Use / avoid:** use animated assets for rare moments; avoid looping animation near reading content [DC-L05-21; DC-L04-25].
+- **Skip:** yes.
+- **Evidence:** DC-L05-21; S-L05-006, S-L05-010, S-L05-062, S-L05-063
+
+### Q-img-07 · Where may brand graphic devices and motifs appear? · Expert
+- **Why:** Graphic devices add recognizability and warmth; overused they clutter and compete with content [DC-L06-11].
+- **Ask:** "Should brand shapes or motifs appear only on marketing, onboarding and empty states?"
+- **Example:** Show Slack-style logo shapes on an onboarding card and absent from the product table.
+- **Control:** single choice
+- **Options:**
+  - `none` None in product (Carbon product UI) [S-L06-001].
+  - `expressive-only` Only on expressive surfaces: marketing, onboarding, empty states, hero moments [DC-L06-11].
+  - `logo-shapes` Logo shapes as devices throughout (Slack) [S-L06-030].
+- **Default:** expressive-only. *Source:* card heuristic [DC-L06-11].
+- **Decides:** DC-L06-11
+- **Changes:** DC-L13-10, DC-L13-11 · blocks: Foundations > Brand > Graphic devices
+- **Preview:** onboarding and a product screen with the motif on and off.
+- **Use / avoid:** let branding defer to content in task screens (Apple) [S-L06-008]; avoid devices behind text.
+- **Skip:** yes.
+- **Evidence:** DC-L06-11; S-L06-001, S-L06-008, S-L06-024, S-L06-030
+
+### Q-viz-01 · Which chart types and chart library? · Standard
+- **Show if:** Q-color-19 is not none
+- **Why:** Fewer chart types make dashboards consistent and learnable; exotic types look impressive but need more reading [DC-L05-22].
+- **Ask:** "Which charts do you need? I'd start with bar, line, area, stacked bar, donut and scatter, themed on an existing library."
+- **Example:** Ask for one real dashboard question ("sales by region this quarter") and show the recommended chart.
+- **Control:** multi-select (types) + text (library)
+- **Options:**
+  - `core-6` Bar, line, area, stacked bar, donut or meter, scatter, plus a KPI big number [DC-L05-22].
+  - `by-purpose` Guidance grouped by question: comparisons, trends, part-to-whole, correlations, connections, geospatial (Carbon) [S-L05-075].
+  - `theme-library` Theme an existing chart library rather than building one [DC-L05-22].
+- **Default:** core-6 on a themed existing library; chart chrome mapped to text and border tokens; every chart gets an insight title, direct labels, a text summary and a "view as table" option. *Source:* card heuristics [DC-L05-22, DC-L05-24, DC-L05-25].
+- **Decides:** DC-L05-22
+- **Changes:** DC-L05-24, DC-L05-25 · blocks: Foundations > Data visualization > Chart types and library
+- **Preview:** a dashboard with the chosen types in the product's palette.
+- **Use / avoid:** use bars for comparison and lines for trends; avoid pie charts with more than a few slices and 3D charts [DC-L05-22, inferred].
+- **Skip:** yes.
+- **Evidence:** DC-L05-22; S-L05-075, S-L05-076, S-L05-077, S-L05-083
+
+---
+
+## Stage 19 · Content and voice
+> Screen: the product's own buttons, errors, empty states and a success message, rewritten live as voice and tone settings change. Graph step 1-3. Voice comes before components because every component ships its microcopy rules (L06: "voice is a foundation, not a docs appendix") [DC-L06-18]. One asset hook: an existing voice guide (Q-voice-01).
+
+### Q-voice-01 · Do you have a voice and tone guide? If not, what 3-4 traits describe how the product talks? · Standard
+- **Why:** Voice is constant while tone shifts by situation; the product's words and visuals must agree [DC-L06-18; S-L06-013].
+- **Ask:** "Do you have a voice guide? If not, give me 3-4 traits in 'X, but not Y' form and I'll draft copy examples."
+- **Example:** Show Mailchimp's "plainspoken, genuine" and Atlassian's "Bold, Optimistic, Practical with a wink" beside the same error message.
+- **Control:** single choice + file upload or text (traits)
+- **Options:**
+  - `upload` Upload an existing guide [DC-L06-18].
+  - `plainspoken` Plainspoken and genuine, dry humor (Mailchimp) [S-L06-014].
+  - `warm-crisp` Warm and relaxed, crisp and clear, ready to lend a hand (Microsoft) [S-L06-046].
+  - `bold-optimistic` Bold, optimistic, practical with a wink (Atlassian) [S-L06-060].
+  - `custom` Custom traits on NN/g's four tone dimensions with anti-tone words [S-L06-013].
+- **Default:** drafted from the personality sliders: 3-4 traits with "but not", 3 copy examples per trait. *Source:* card heuristic [DC-L06-18; S-L06-070].
+- **Decides:** DC-L06-18
+- **Changes:** DC-L06-19, DC-L06-20, DC-L06-21, DC-L06-22, DC-L06-23 · blocks: Content > Voice
+- **Hook:** Accepts a PDF, Markdown file or URL of an existing style guide. If no: (1) the builder drafts traits and examples from the sliders for review; (2) have a content designer review them (22% of teams have none) [S-L11-030]; the draft is labeled as a draft until someone owns it [inferred].
+- **Preview:** the error, empty state and success message rewritten in the chosen voice.
+- **Use / avoid:** use the traits to decide copy disputes; avoid traits every product could claim ("simple", "friendly") without a "but not" [DC-L06-18; DC-L11-05].
+- **Skip:** yes.
+- **Evidence:** DC-L06-18; S-L06-013, S-L06-014, S-L06-046, S-L06-060, S-L06-070
+- **Merges:** K3.6, B13 (voice)
+
+### Q-voice-02 · How should tone change for errors, success and first use? · Standard
+- **Why:** Errors need calm visuals and plain words; success can carry illustration, motion and a wink; a joke once may amuse but a dozen times annoys [DC-L06-19; S-L06-060].
+- **Ask:** "How should tone shift: serious for errors, warmer for success, gentler for new users?"
+- **Example:** Show one error and one success message at three tone settings.
+- **Control:** tone matrix (situation x dial)
+- **Options:**
+  - `emotion-dial` By user emotion: less bold for new or anxious users, a wink for success (Atlassian) [S-L06-060].
+  - `situation` By situation: straightforward for serious events, congratulatory for goals (Apple) [S-L06-052].
+  - `nng-profile` An NN/g four-dimension profile per content type [S-L06-013].
+- **Default:** errors serious, respectful, matter-of-fact; success as warm as the brand allows; clarity beats entertainment. *Source:* card heuristic [DC-L06-19; S-L06-014].
+- **Decides:** DC-L06-19
+- **Changes:** DC-L13-07, DC-L13-10 · blocks: Content > Tone
+- **Preview:** the tone matrix with each cell's example message.
+- **Use / avoid:** use warmth after trust is earned (success, completion); avoid humor in errors and in high-trust categories [DC-L06-19; S-L06-060].
+- **Skip:** yes.
+- **Evidence:** DC-L06-19; S-L06-013, S-L06-014, S-L06-052, S-L06-060
+- **Merges:** B13 (tone)
+
+### Q-voice-03 · Sentence case or title case? · Standard
+- **Why:** Title case reads formal and lengthens the visual texture of labels; sentence case reads casual and localizes cleanly [DC-L06-20; S-L06-052].
+- **Ask:** "Sentence case everywhere, or title case for headings and navigation?"
+- **Example:** Show a nav, heading and button in "Create new project" vs "Create New Project".
+- **Control:** single choice
+- **Options:**
+  - `sentence` Sentence case everywhere (Microsoft, Atlassian, Fluent) [S-L06-047, S-L06-056, S-L06-098].
+  - `title-headings` Title case for headings and global nav, sentence case for buttons (Mailchimp) [S-L06-051].
+  - `per-element` Per-element choice applied consistently (Apple) [S-L06-052].
+- **Default:** sentence case everywhere; all caps only on 11-12px labels with extra tracking. *Source:* card heuristics [DC-L06-20, DC-L02-18].
+- **Decides:** DC-L06-20
+- **Changes:** DC-L06-22 · blocks: Content > Mechanics > Capitalization
+- **Preview:** the product screen's labels re-cased live.
+- **Use / avoid:** use one rule per element type everywhere; avoid all caps for sentences [DC-L06-20, DC-L02-18].
+- **Skip:** yes.
+- **Evidence:** DC-L06-20; S-L06-047, S-L06-051, S-L06-052, S-L06-056
+
+### Q-voice-04 · What reading level and label length should copy target? · Standard
+- **Why:** Shorter strings shrink components, truncate less and read faster; even experts prefer plain language [DC-L13-13; S-L13-091].
+- **Ask:** "Plain language for everyone, around a 6th-8th grade level, or 10th-12th for specialist tools?"
+- **Example:** Show one help text at grade 7 and grade 12.
+- **Control:** single choice + number (max words per button)
+- **Options:**
+  - `grade-6-8` 6th-8th grade for general audiences [S-L13-091].
+  - `grade-10-12` 10th-12th grade for specialists [S-L13-091].
+  - `labels-2-4` Command labels of 2-4 words, verb first, describing the resulting state [S-L13-036].
+- **Default:** 6th-8th for consumer products, 10th-12th for expert tools; button labels 2-4 words, verb first; readability over target is a lint warning. *Source:* card heuristic [DC-L13-13].
+- **Decides:** DC-L13-13
+- **Changes:** DC-L13-07, DC-L13-16 · blocks: Foundations > Content > Readability
+- **Preview:** a readability score beside each sample string.
+- **Use / avoid:** use verbs that name the result ("Save changes"); avoid branded or clever button labels [DC-L13-13, DC-L06-22].
+- **Skip:** yes.
+- **Evidence:** DC-L13-13; S-L13-036, S-L13-091
+
+### Q-voice-05 · Which grammar and punctuation rules? · Expert
+- **Why:** Contractions, "we" and occasional emoji read friendlier; no negative contractions and no exclamation marks read more formal and precise [DC-L06-21].
+- **Ask:** "Contractions yes, 'you' for the user, 'we' sparingly, and no exclamation marks in errors?"
+- **Example:** Show "We couldn't save your file!" vs "Your file wasn't saved. Try again."
+- **Control:** toggles
+- **Options:**
+  - `contractions` Contractions, except negative ones in high-stakes flows (GOV.UK writes "cannot") [S-L06-048].
+  - `pronouns` "You" for the user, "we" sparingly (Apple avoids "we") [S-L06-052].
+  - `exclamations` No exclamation marks in errors [S-L06-049].
+  - `numbers` Numerals for counts, "to" for ranges [DC-L06-21].
+- **Default:** all four as listed. *Source:* card heuristic [DC-L06-21].
+- **Decides:** DC-L06-21
+- **Changes:** DC-L06-22 · blocks: Content > Mechanics
+- **Preview:** sample strings updating per toggle.
+- **Use / avoid:** keep mechanics identical across products; avoid mixing date and number formats (see Q-voice-06) [DC-L06-21].
+- **Skip:** yes.
+- **Evidence:** DC-L06-21; S-L06-046, S-L06-048, S-L06-049, S-L06-052, S-L06-056
+
+### Q-voice-06 · Which microcopy patterns and word list should components ship with? · Expert
+- **Why:** Verb labels shorten buttons and clarify hierarchy; consistent terms make navigation and empty states predictable [DC-L06-22, DC-L06-23].
+- **Ask:** "Start a 20-50 term glossary and ship microcopy rules with every component?"
+- **Example:** Ask for 5 terms users see often ("workspace" or "project"?) and show them in the nav and an empty state.
+- **Control:** text list (glossary) + toggles (patterns)
+- **Options:**
+  - `verb-first` Verb-first buttons, descriptive links (not "Click here"), blame-free fix-it errors, empty states with a next step [S-L06-052, S-L06-051].
+  - `flow-vocab` Consistent flow vocabulary: Get started, Continue/Next, Done [S-L06-052].
+  - `word-list` A maintained A-Z word list (Mailchimp, Microsoft) [S-L06-014, S-L06-047].
+  - `inclusive` Bias-free rules: role nouns, singular they, people's own pronouns (Microsoft; Atlassian inclusive-language page) [S-L06-102, S-L06-054].
+- **Default:** all four; a 20-50 term glossary on day one, linted in copy; locale formats and any regulated copy recorded as fixed patterns. *Source:* card heuristics [DC-L06-22, DC-L06-23]; K5.3 and K5.5 [inferred].
+- **Decides:** DC-L06-22, DC-L06-23
+- **Changes:** DC-L11-18 · blocks: Content > Microcopy; Content > Terminology
+- **Preview:** each component with its microcopy rule and an example.
+- **Use / avoid:** use the glossary term everywhere; avoid synonyms for the same object [DC-L06-23].
+- **Skip:** yes.
+- **Evidence:** DC-L06-22, DC-L06-23; S-L06-014, S-L06-047, S-L06-051, S-L06-052, S-L06-102
+- **Merges:** K5.3, K5.4, K5.5
+
+---
+
+## Stage 20 · Component base and inventory
+> Screen: the component catalog, rendered with every foundation chosen so far; each component opens to a detail card (anatomy, states, when to use, when not to use). Graph step 0-3.
+
+### Q-comp-01 · What should your components be built on? · Standard
+- **Why:** Headless primitives leave every visual choice to your tokens; styled forks inherit the source's look until re-themed; native controls inherit the platform look [DC-L08-03]. Adopting a whole system makes you look like it ("websites made with shadcn/ui famously look the same") [DC-L11-01; S-L11-073].
+- **Ask:** "Build on headless primitives, a copy-in styled layer like shadcn, web components, native controls, or adopt a full system as-is?"
+- **Example:** Show the same dialog built on Base UI with your tokens vs stock Material.
+- **Control:** single choice per platform (pre-filled from Q-plat-08 and Q-tool-02)
+- **Options:**
+  - `headless` Headless primitives: Radix, Base UI (v1 stable Dec 2025), React Aria, Ark UI [S-L08-030, S-L08-026, S-L08-032, S-L08-031].
+  - `copy-in-styled` Copy-in styled layer: shadcn/ui on Base UI (its default since July 2026), Radix or React Aria [S-L08-020; BOARD L08 note].
+  - `web-components` Web components (Polaris, Fluent UI Web Components v3) [S-L08-022, S-L08-010].
+  - `native` Native controls themed with your tokens (SwiftUI/UIKit, Compose Material 3) [S-L08-103, S-L08-105].
+  - `adopt` Adopt a system as-is (Material, Carbon, Fluent, Untitled UI) [S-L11-078; DC-L11-01].
+- **Default:** React web: shadcn on Base UI or React Aria; multi-framework: Ark UI or web components; mobile: native controls; small teams adapt an accessible base and invest in tokens and docs. *Source:* card heuristics [DC-L08-03, DC-L11-01; S-L11-006, S-L11-030].
+- **Decides:** DC-L08-03, DC-L11-01
+- **Changes:** DC-L08-04, DC-L11-20 · blocks: Components > Implementation > Base library; Strategy > Starting point
+- **Preview:** the catalog re-rendered per base; a keyboard-test strip shows focus order and ARIA roles inherited.
+- **Use / avoid:** use accessible primitives so keyboard and ARIA behavior come for free; avoid assuming re-themed colors inherit contrast (they don't) [DC-L11-01].
+- **Skip:** yes.
+- **Evidence:** DC-L08-03, DC-L11-01; S-L08-020, S-L08-026, S-L08-030, S-L11-006, S-L11-073
+- **Merges:** K0.5, K2.6
+
+### Q-comp-02 · Which components are in version 1? · Standard
+- **Why:** Completeness is the top adoption factor (79%), but a large inventory raises maintenance cost [DC-L08-01; S-L11-030].
+- **Ask:** "Start with the 25 core components most systems share, and add others when two products need them?"
+- **Example:** Show the core 25 as a grid; ask which screens of their product need something missing.
+- **Control:** multi-select (catalog, core pre-checked)
+- **Options:**
+  - `core-25` Core (about 25, in 8-10 of 10 benchmark systems): Button, Text field, Textarea, Select, Checkbox, Radio, Switch, Slider, Tabs, Tooltip, Popover, Dialog, Menu, Progress bar, Spinner, Alert/banner, Badge, Avatar, Card, List, Table, Link, Breadcrumbs, Side navigation, Accordion [DC-L08-01].
+  - `extended` Extended (about 25 more): combobox, multi-select, date picker, file upload, toast, skeleton, empty state, drawer/sheet, pagination and others [DC-L08-01].
+  - `logo-ai` Brand and AI extras: Logo, AI label and AI button (see Q-icon-08, Q-ai-01).
+- **Default:** core-25; extended components when two or more products ask for them. *Source:* card heuristic [DC-L08-01].
+- **Decides:** DC-L08-01
+- **Changes:** DC-L11-18 · blocks: Components > Inventory
+- **Preview:** the catalog grid with a count and a "used by" tag per component.
+- **Use / avoid:** use the audit (Q-scope-02) and pilot to pick extras; avoid building components no product has asked for [DC-L08-01, DC-L11-07].
+- **Skip:** yes.
+- **Evidence:** DC-L08-01; S-L08-001, S-L08-008, S-L08-009, S-L11-030
+- **Merges:** K8.1
+
+### Q-comp-03 · Configuration props or composable parts? · Expert
+- **Why:** Configuration keeps screens uniform; composition allows richer layouts with more variance; Figma slots let instances vary without detaching [DC-L08-04, DC-L07-22].
+- **Ask:** "Props for small components like Button, composable parts for containers like Dialog and Card?"
+- **Example:** Show `<Button variant="primary">` vs `<Dialog.Root><Dialog.Title/>...</Dialog.Root>`, and a Figma card with a slot.
+- **Control:** single choice (code) + single choice (Figma)
+- **Options:**
+  - `config` Props-only configuration (Carbon, Primer, Polaris) [S-L08-064, S-L08-068].
+  - `compound` Compound parts, asChild/Slot, render props (Base UI, Radix, React Aria) [S-L08-087, S-L08-088, S-L08-089].
+  - `figma-api` Figma: variants for state, size and type; booleans for optional icons; text props for labels; instance swap for single icons; slots for repeating or freeform content [S-L07-021, S-L07-022].
+- **Default:** configuration for leaf components, compound parts for containers; the Figma mapping as listed. *Source:* card heuristics [DC-L08-04, DC-L07-22].
+- **Decides:** DC-L08-04, DC-L07-22
+- **Changes:** DC-L11-18 · blocks: Components > API; Components > Figma component API
+- **Preview:** generated code and the Figma component panel for one component.
+- **Use / avoid:** use slots for cards, modals and lists so instances keep receiving updates; avoid variant explosions for optional content [DC-L07-22].
+- **Skip:** yes.
+- **Evidence:** DC-L08-04, DC-L07-22; S-L07-021, S-L07-022, S-L08-064, S-L08-088
+
+### Q-comp-04 · How should components be grouped and named? · Expert
+- **Why:** The hierarchy affects findability and consistent naming across Figma and code [DC-L08-02].
+- **Ask:** "Group as tokens, primitives, components, patterns and templates, with an alias table for other systems' names?"
+- **Example:** Show "Sheet / Drawer / Side panel" mapped to one name.
+- **Control:** single choice
+- **Options:**
+  - `atomic` Atomic design (atoms to pages) [S-L08-054].
+  - `primitives-components-patterns` Primitives / components / patterns (Atlassian, Radix) [S-L08-011, S-L08-021].
+  - `foundations-components-patterns` Foundations / components / patterns (Carbon, HIG) [S-L08-009, S-L08-086].
+  - `purpose` Purpose categories: action, containment, communication, navigation, selection, text input (M3) [S-L08-008].
+- **Default:** tokens > primitives > components > patterns > templates, with an alias table. *Source:* card heuristic [DC-L08-02].
+- **Decides:** DC-L08-02
+- **Changes:** DC-L11-18 · blocks: Components > Taxonomy
+- **Preview:** the catalog's sidebar regrouped per option.
+- **Use / avoid:** use one canonical name with aliases; avoid two components for one job [DC-L08-02].
+- **Skip:** yes.
+- **Evidence:** DC-L08-02; S-L08-008, S-L08-011, S-L08-054, S-L08-086
+- **Merges:** K8.2
+
+### Q-comp-05 · One component set for every device, or separate sets? · Expert
+- **Show if:** Q-plat-02 marks watch, TV or car as first-class or works
+- **Why:** One set keeps the brand identical and cheap but risks phone-shaped components on a watch or TV [DC-L14-02].
+- **Ask:** "One set with device modes for phone, tablet and desktop, plus small separate libraries for watch and TV?"
+- **Example:** Show a phone list row next to the TV focus-row version.
+- **Control:** single choice
+- **Options:**
+  - `one-set-modes` One set, tokens vary by mode (Spectrum desktop/mobile values; Carbon AI presence mode) [S-L03-044, S-L14-058].
+  - `separate-libraries` Shared foundations, separate libraries per device (Wear Compose Material 3, TV Material) [S-L10-026, S-L14-025].
+  - `templates` Template adapters, no custom components (car) [S-L14-010].
+- **Default:** one set for phone, tablet, desktop and web with context modes; separate small libraries for watch and TV; templates for car. *Source:* card heuristic [DC-L14-02].
+- **Decides:** DC-L14-02
+- **Changes:** none downstream in the graph · blocks: Components > Architecture > Device variants
+- **Preview:** one component across device classes.
+- **Use / avoid:** split a library when the input model changes (focus, crown, templates); avoid stretching phone components onto TV [DC-L14-02].
+- **Skip:** yes.
+- **Evidence:** DC-L14-02; S-L03-044, S-L10-026, S-L14-010, S-L14-025
+
+---
+
+## Stage 21 · Actions, states and focus
+> Screen: a live component sheet where every control can be hovered, pressed, focused with the keyboard, disabled and set to loading. Graph step 0-7. The microinteraction spec (DC-L13-12) is generated for every component (see "Auto-applied rules").
+
+### Q-state-01 · How many button emphasis levels, and how many primary actions per view? · Standard
+- **Why:** Three levels read calm and strict; five or six allow dense toolbars; several filled buttons flatten hierarchy and look like ads [DC-L08-05, DC-L13-18].
+- **Ask:** "Four button levels plus danger, with one primary action per region?"
+- **Example:** Show a form footer with primary, secondary, tertiary and ghost buttons, then the same with two primaries flagged.
+- **Control:** single choice + toggle (one primary per region)
+- **Options:**
+  - `three` Solid, outline, text [DC-L08-05].
+  - `four-danger` Primary, secondary, tertiary/outline, ghost/text, plus danger (Carbon, Fluent) [S-L08-061, S-L08-066].
+  - `five-plus` 5-7 levels including tonal, elevated, discovery or AI variants (M3 5; Atlassian 7 incl. Rovo) [S-L08-033, S-L08-063].
+- **Default:** four-danger; at most one high-emphasis action per region, placed after the last field in reading order; a destructive button never takes the primary role. *Source:* card heuristics [DC-L08-05, DC-L13-18; S-L13-054, S-L08-039].
+- **Decides:** DC-L08-05, DC-L13-18
+- **Changes:** DC-L08-06, DC-L08-14, DC-L13-15 · blocks: Components > Button > Variants; Components > Actions > Emphasis hierarchy
+- **Preview:** the button sheet in every state, plus a form footer.
+- **Use / avoid:** use style, not size, to mark the preferred choice (Apple); avoid two primary buttons in one group [S-L08-039; L13 E1].
+- **Skip:** yes.
+- **Evidence:** DC-L08-05, DC-L13-18; S-L08-033, S-L08-061, S-L08-063, S-L13-014, S-L13-054
+
+### Q-state-02 · How obvious should clickable things be? · Standard
+- **Why:** Minimal signifiers look sleek but cost 22% more time and 25% more fixations to find targets (NN/g) [DC-L15-09; S-L15-004].
+- **Ask:** "Strong, balanced or minimal signals that something is clickable?"
+- **Example:** Show the same card with a filled button and underlined link vs flat text-only actions.
+- **Control:** single choice (pre-filled from Q-dir-02)
+- **Options:**
+  - `strong` Strong: filled or slightly raised buttons, colored underlined links, bordered inputs, color reserved for interactive elements [S-L15-004].
+  - `balanced` Balanced: filled primary, outline secondary, link-style tertiary, links underlined on hover [S-L15-038].
+  - `minimal` Minimal: flat, text-only actions [DC-L15-09].
+- **Default:** balanced, with strong signifiers forced on primary actions; minimal only when density is low and layouts are conventional. *Source:* card heuristic [DC-L15-09].
+- **Decides:** DC-L15-09
+- **Changes:** DC-L08-09, DC-L08-16 · blocks: Foundations > Visual language > Signifiers
+- **Preview:** a click-test overlay highlighting everything interactive.
+- **Use / avoid:** use stronger signifiers as density rises; avoid minimal signifiers in dense layouts [DC-L15-09; S-L15-004].
+- **Skip:** yes.
+- **Evidence:** DC-L15-09; S-L15-004, S-L15-006, S-L15-038, S-L15-054
+
+### Q-state-03 · What should the keyboard focus ring look like? · Standard
+- **Why:** Thicker, offset rings are unmistakable but louder; inner rings keep dense grids tight but can fail contrast on filled controls [DC-L04-09, DC-L08-11].
+- **Ask:** "A 2px ring with a 2px gap that follows each component's corners, in a color that shows on every surface?"
+- **Example:** Tab through a button, input and table row with each ring style.
+- **Control:** single choice + width/offset numbers
+- **Options:**
+  - `outer-2-2` 2px solid ring, 2px offset, radius = component radius + offset (Atlassian `radius.focus`, Primer 2px) [S-L04-016, S-L04-024].
+  - `material-3` 3px ring, 2px outer offset, -3px inner offset where outside rings would clip (Material 3) [S-L04-003].
+  - `inset` Inset border for dense grids (Carbon `$focus` + `$focus-inset`) [S-L08-062].
+  - `two-tone` Two-tone ring (inner white, outer dark) that is 3:1 on every surface [DC-L08-11].
+- **Default:** outer-2-2 in a high-contrast brand or neutral color with light and dark values, plus a forced-colors fallback (an outline, not a box-shadow alone). *Source:* card heuristics and accessibility rule [DC-L04-09, DC-L08-11; S-L10-031].
+- **Decides:** DC-L04-09, DC-L08-11
+- **Changes:** DC-L07-13 · blocks: Foundations > Borders > Focus ring; Components > States > Focus-visible
+- **Preview:** keyboard tab-through of the preview screen with the ring on every stop.
+- **Use / avoid:** show focus only for keyboard (`:focus-visible`); avoid rings that the element's own fill hides [DC-L08-11, DC-L04-09].
+- **Skip:** yes.
+- **Evidence:** DC-L04-09, DC-L08-11; S-L04-003, S-L04-016, S-L04-024, S-L08-062, S-L08-069
+
+### Q-state-04 · Which states get their own styling, per input type? · Expert
+- **Why:** Overlays give automatic states for any color; explicit tokens allow tuned brand states; TV focus is large and animated while a desktop ring is thin and static [DC-L08-09, DC-L14-06].
+- **Ask:** "Style enabled, hover, focus, pressed, selected, disabled, loading and error, with each device rendering the states its inputs can trigger?"
+- **Example:** Show a card's states on desktop vs its focused state on TV.
+- **Control:** multi-select (states) + single choice (method)
+- **Options:**
+  - `overlays` Overlays for hover and press (Material state layers) [S-L01-005, S-L08-095].
+  - `explicit` Explicit tokens per state and variant (Carbon) [S-L08-062].
+  - `per-input` Per input context: desktop rest/hover/focus-visible/pressed/selected/disabled; TV focused with scale and elevation; tablet pointer lift [S-L14-013, S-L14-071].
+- **Default:** style all eight states; overlays for hover and press, explicit tokens for selected and error; define states once, render the subset each context can trigger. *Source:* card heuristics [DC-L08-09, DC-L14-06].
+- **Decides:** DC-L08-09, DC-L14-06
+- **Changes:** DC-L07-02 · blocks: Components > States; Foundations > Interaction > States
+- **Preview:** the state matrix for every component.
+- **Use / avoid:** make hover content dismissible and persistent (WCAG 1.4.13); avoid hover-only affordances on touch [DC-L14-06].
+- **Skip:** yes.
+- **Evidence:** DC-L08-09, DC-L14-06; S-L01-005, S-L08-062, S-L14-013, S-L14-070, S-L14-071
+
+### Q-state-05 · How should selected and active items look? · Expert
+- **Why:** Brand-colored selection is lively; neutral selection keeps brand color meaning "action" only [DC-L08-14].
+- **Ask:** "Show selection with an indicator plus color, and keep brand color for actions?"
+- **Example:** Show a tab bar with a pill indicator, an underline and a neutral fill.
+- **Control:** single choice
+- **Options:**
+  - `pill-indicator` Pill-shaped indicator behind the icon (M3 navigation) [S-L08-083].
+  - `underline` Underline indicator (Primer UnderlineNav) [S-L08-012].
+  - `neutral` Neutral, non-brand selected treatment (Atlassian) [S-L08-085].
+  - `morph` Shape morph round to square (M3 Expressive toggles) [S-L08-034].
+- **Default:** an indicator plus color, never color alone; brand primary reserved for actions in action-dense products. *Source:* card heuristic [DC-L08-14].
+- **Decides:** DC-L08-14
+- **Changes:** none downstream in the graph · blocks: Components > States > Selected
+- **Preview:** tabs, nav rail and segmented control selected.
+- **Use / avoid:** use two cues for selection; avoid selection states that look like primary buttons [DC-L08-14].
+- **Skip:** yes.
+- **Evidence:** DC-L08-14; S-L08-012, S-L08-034, S-L08-083, S-L08-085
+
+### Q-state-06 · How should destructive actions look? · Expert
+- **Why:** Solid red draws the eye and invites mis-clicks on main screens; subtle red keeps lists calm [DC-L08-06].
+- **Ask:** "Subtle red in context, solid red only in the confirmation step?"
+- **Example:** Show a table row's delete action and the confirmation dialog.
+- **Control:** single choice
+- **Options:**
+  - `solid-danger` Solid red danger button (Carbon, Primer, shadcn destructive) [S-L08-061, S-L08-064, S-L08-065].
+  - `danger-levels` Danger at several emphasis levels (Carbon danger primary/tertiary/ghost) [S-L08-061].
+  - `warning-vs-danger` Separate warning (significant change) and danger (final irreversible step) (Atlassian) [S-L08-063].
+- **Default:** subtle danger in context, solid danger only in the confirmation step. *Source:* card heuristic [DC-L08-06].
+- **Decides:** DC-L08-06
+- **Changes:** DC-L13-08 · blocks: Components > Button > Danger
+- **Preview:** a list with delete actions and the confirm step.
+- **Use / avoid:** use undo instead of confirmation for reversible actions (Q-form-05); avoid solid red buttons in dense lists [DC-L08-06].
+- **Skip:** yes.
+- **Evidence:** DC-L08-06; S-L08-061, S-L08-063, S-L08-064, S-L08-075
+
+### Q-state-07 · Where do icons go inside buttons? · Expert
+- **Why:** Leading icons aid scanning; a trailing icon with a left label gives Carbon's editorial look; icon-only buttons need labels [DC-L08-08].
+- **Ask:** "Optional leading icons on buttons, with sentence-case verb labels?"
+- **Example:** Show "Download" with a leading icon and Carbon-style trailing icon.
+- **Control:** single choice
+- **Options:**
+  - `leading` Optional leading icon (M3, 20dp) [S-L08-033].
+  - `trailing` Label left, icon right (Carbon, 16px icon) [S-L08-061, S-L08-062].
+  - `both-slots` Both slots (Atlassian iconBefore/iconAfter; Primer leadingVisual/trailingVisual) [S-L08-063, S-L08-064].
+- **Default:** optional leading icon, sentence-case verb labels. *Source:* card heuristic [DC-L08-08].
+- **Decides:** DC-L08-08
+- **Changes:** none downstream in the graph · blocks: Components > Button > Content
+- **Preview:** the button sheet with icons.
+- **Use / avoid:** use trailing icons for direction (next, external); avoid icon-only buttons without an accessible name [DC-L08-08].
+- **Skip:** yes.
+- **Evidence:** DC-L08-08; S-L08-033, S-L08-061, S-L08-063, S-L08-064
+
+### Q-state-08 · How should the product show that it is working? · Standard
+- **Why:** Skeletons make pages feel structured and faster; spinners feel generic and give no duration; response-time thresholds decide which to use [DC-L13-01, DC-L08-12].
+- **Ask:** "Nothing under a second, skeletons for page loads, spinners for single actions, progress bars past ten seconds?"
+- **Example:** Simulate a 0.5 s, 3 s and 12 s load on the preview.
+- **Control:** single choice + threshold numbers
+- **Options:**
+  - `nng-ladder` No indicator under 1 s, looped indicator 2-10 s, percent-done over 10 s (NN/g) [S-L13-032, S-L13-031].
+  - `skeleton-first` Skeletons for page or region loads, spinners for modules (Carbon skeletons only on containers) [S-L13-033, S-L05-071].
+  - `inline-button` Spinner inside the triggering button, which keeps focus (S2 pending after 1 s; Carbon inline loading) [S-L08-067, S-L08-061].
+- **Default:** acknowledge within 50ms; the NN/g ladder with skeletons for first page load and in-button pending states that stay focusable. *Source:* card heuristics [DC-L13-01, DC-L08-12]; BOARD L13 note (timing ladder).
+- **Decides:** DC-L13-01, DC-L08-12
+- **Changes:** DC-L07-14 · blocks: Patterns > Feedback > Loading; Components > States > Loading
+- **Preview:** the three simulated waits.
+- **Use / avoid:** use optimistic UI only when failure is rare and reversible; avoid spinners for waits under a second [DC-L13-01].
+- **Skip:** yes.
+- **Evidence:** DC-L13-01, DC-L08-12; S-L13-031, S-L13-032, S-L13-033, S-L08-067, S-L08-074
+
+---
+
+## Stage 22 · Forms, validation and feedback
+> Screen: a live sign-up form and a list with delete actions; the person fills fields, triggers errors and deletes items to feel each option. Graph step 0-6. Cycles kept together: DC-L08-10 + DC-L08-17 (whether submit can be disabled depends on when validation runs, and vice versa), DC-L13-06 + DC-L13-07 (timing and error message pattern), DC-L13-08 + DC-L13-09 (undo needs a channel such as a toast; the channel set depends on whether undo exists).
+
+### Q-form-01 · What style should form fields have, and where do labels go? · Standard
+- **Why:** Filled fields feel soft and app-like, outlined feel crisp and form-heavy; placeholder-only labels cause seven known problems [DC-L08-16, DC-L13-05; S-L13-066].
+- **Ask:** "Outlined or filled fields, with labels always visible above them?"
+- **Example:** Show one field outlined, filled and underline-only, each filled in and in error.
+- **Control:** single choice (style) + single choice (label) + single choice (marking)
+- **Options:**
+  - `outlined` Outlined fields (M3 outlined; Carbon) [S-L08-105, S-L08-106].
+  - `filled` Filled fields (M3 filled) [S-L08-105].
+  - `label-top` Persistent label above, hint under the label [S-L13-066].
+  - `placeholder-label` Placeholder as label: rejected (memory strain, no way to check entries) [S-L13-066].
+  - `mark-minority` Mark whichever of required/optional is rarer, "(optional)" or "(required)" [S-L08-106].
+- **Default:** outlined, top labels of 1-3 words without colons, hint under the label, the rarer of required/optional marked, `autocomplete` on personal-data fields. *Source:* card heuristics [DC-L08-16, DC-L13-05].
+- **Decides:** DC-L08-16, DC-L13-05
+- **Changes:** DC-L08-17 · blocks: Components > Text field; Patterns > Forms > Field anatomy
+- **Preview:** the sign-up form in each style, typed into live.
+- **Use / avoid:** use a visible label on every field; avoid placeholder-only labels (a lint warning) [DC-L13-05; L13 E1].
+- **Skip:** yes.
+- **Evidence:** DC-L08-16, DC-L13-05; S-L08-105, S-L08-106, S-L13-066, S-L13-068
+
+### Q-form-02 · When should forms show errors, and should the submit button ever be disabled? · Standard
+- **Why:** Premature errors feel hostile; on-submit keeps forms calm; disabled buttons hide why an action can't run [DC-L13-06, DC-L08-17, DC-L08-10].
+- **Ask:** "Check fields when people leave them, show a summary on submit, and never disable the submit button?"
+- **Example:** Let them type a bad email and tab away, then submit with an empty field.
+- **Control:** single choice (timing) + single choice (disabled policy)
+- **Options:**
+  - `on-submit-summary` On submit with an error summary that takes focus, "Error:" prefix, inline messages (GOV.UK) [S-L08-077].
+  - `on-blur` On blur ("reward early, punish late"): clear the error on the keystroke that fixes it; validate at complete length for ZIP and phone [S-L13-065, S-L13-100].
+  - `disable-short-forms` Disable submit on short forms until valid, never on long ones (Carbon) [S-L08-106].
+  - `never-disable` Never disable submit; explain instead (Atlassian) [S-L08-085].
+- **Default:** on-blur for format checks, on submit otherwise, summary plus inline for forms over about 5 fields; never-disable, with `aria-disabled` and helper text when an action truly cannot run. *Source:* card heuristics [DC-L13-06, DC-L08-17, DC-L08-10]; systems disagree (see Disagreements).
+- **Decides:** DC-L13-06, DC-L08-17, DC-L08-10
+- **Changes:** DC-L13-07 · blocks: Patterns > Forms > Validation; Components > States > Disabled
+- **Preview:** the live form with timing toggles.
+- **Use / avoid:** use on-blur validation for format checks; avoid flagging a field before the person has finished typing [DC-L13-06].
+- **Skip:** yes.
+- **Evidence:** DC-L13-06, DC-L08-17, DC-L08-10; S-L08-077, S-L08-085, S-L08-106, S-L13-065, S-L13-100
+
+### Q-form-03 · How should error messages be shown and written? · Expert
+- **Why:** Inline errors keep context; banners signal system problems; dialogs interrupt; prominence should match severity [DC-L13-07; S-L13-064].
+- **Ask:** "Errors next to their cause, a banner only for system-level problems, a dialog only when work would be lost?"
+- **Example:** Show a field error, a page banner and a blocking dialog for three severities.
+- **Control:** mapping (severity to pattern)
+- **Options:**
+  - `inline` Inline field error next to the source [DC-L13-07].
+  - `summary` Error summary at the top of the form [DC-L13-07].
+  - `banner` Section or page banner [DC-L13-07].
+  - `dialog` Blocking dialog [DC-L13-07].
+  - `error-page` Full error page for catastrophic failures [DC-L13-07].
+- **Default:** NN/g's 13 error-message guidelines: close to the source, visible without color alone, plain words that say what happened and how to fix it. *Source:* card heuristic [DC-L13-07; S-L13-064, S-L13-030].
+- **Decides:** DC-L13-07
+- **Changes:** DC-L11-18 · blocks: Patterns > Feedback > Errors
+- **Preview:** the three severities on the form.
+- **Use / avoid:** use a fix-it sentence in every error; avoid blame and jargon codes [DC-L13-07, DC-L06-22].
+- **Skip:** yes.
+- **Evidence:** DC-L13-07; S-L13-030, S-L13-037, S-L13-064
+
+### Q-form-04 · Where should confirmations and notifications appear: inline, toast, banner or dialog? · Standard
+- **Why:** Toasts keep layouts still but flash and vanish; banners persist and are findable; systems disagree on whether toasts belong at all [DC-L08-18, DC-L13-09].
+- **Ask:** "Inline or banner by default, toasts only for low-stakes confirmations with undo?"
+- **Example:** Save a record and show the confirmation as inline text, a toast and a banner.
+- **Control:** single choice + per-status table
+- **Options:**
+  - `inline-banner` Inline or banner by default; toasts only for low-stakes confirmations with undo, never auto-dismissing toasts that contain actions (Carbon matrix of 4 statuses x 7 types) [S-L08-079; DC-L13-09].
+  - `no-toasts` No toasts; banners and dialogs only (Primer) [S-L08-098, S-L08-012].
+  - `toasts-widely` Toasts and flags widely (M3 snackbar, Atlassian flags) [S-L08-008, S-L08-011].
+- **Default:** inline-banner; the message goes where the cause is. *Source:* card heuristics [DC-L08-18, DC-L13-09]; systems disagree (see Disagreements).
+- **Decides:** DC-L08-18, DC-L13-09
+- **Changes:** DC-L13-08 · blocks: Patterns > Notifications; Patterns > Feedback > Messaging
+- **Preview:** the save action with each channel.
+- **Use / avoid:** use toasts only for reversible, low-stakes results; avoid a toast as the only record of an error [DC-L13-09].
+- **Skip:** yes.
+- **Evidence:** DC-L08-18, DC-L13-09; S-L08-008, S-L08-011, S-L08-079, S-L08-098, S-L13-064
+
+### Q-form-05 · For destructive actions, undo or confirm? · Standard
+- **Why:** Undo keeps flow fast and calm; frequent confirmations feel bureaucratic and stop being read [DC-L13-08; S-L13-067].
+- **Ask:** "Offer undo for anything reversible, and confirm only irreversible or costly actions?"
+- **Example:** Delete a list item: show the undo toast, then an irreversible delete with a "Delete file / Keep file" dialog.
+- **Control:** single choice
+- **Options:**
+  - `undo-first` Undo with soft delete or trash for reversible actions (NN/g calls undo superior; Shneiderman rule 6) [S-L13-067, S-L13-037].
+  - `confirm` Confirmation dialog with specific verb labels, Cancel as the safe default [S-L13-067; DC-L13-08].
+  - `both` Undo for reversible, confirm for irreversible and costly [DC-L13-08].
+- **Default:** both. *Source:* card heuristic [DC-L13-08].
+- **Decides:** DC-L13-08
+- **Changes:** DC-L13-09 · blocks: Patterns > Error prevention > Destructive actions
+- **Preview:** the list delete flow per option.
+- **Use / avoid:** use verb labels on confirmations; avoid "Are you sure?" dialogs for reversible actions [DC-L13-08].
+- **Skip:** yes.
+- **Evidence:** DC-L13-08; S-L13-037, S-L13-067, S-L08-012, S-L08-039
+
+---
+
+## Stage 23 · Patterns and AI surfaces
+> Screen: small flows the person can click through: open a dialog and a side sheet, page through a table, reach an empty state, meet a consent prompt, and see AI-generated content. Graph step 0-2. Content hierarchy for scanning (DC-L13-04) is applied by construction.
+
+### Q-pattern-01 · When should the product use a dialog, a sheet or a popover? · Standard
+- **Why:** Centered dialogs interrupt strongly; side sheets keep context visible; popovers feel lightweight [DC-L08-20].
+- **Ask:** "Dialogs for short decisions, side sheets for editing with context, bottom sheets on phones?"
+- **Example:** Edit a record in a dialog vs a side sheet on the preview.
+- **Control:** mapping (task type to overlay)
+- **Options:**
+  - `hig` Modal only with a clear benefit; sheets and popovers for scoped tasks; full-screen for immersive multi-step tasks (HIG) [S-L08-086].
+  - `sheets` Bottom and side sheets, drawers and panels (M3, Fluent, Atlassian) [S-L08-008, S-L08-010, S-L08-011].
+  - `levitate` Layered "levitate" panes for focused tasks (M3) [S-L08-096].
+- **Default:** dialog for short decisions, side sheet for editing with context, bottom sheet on phones; each platform's button order. *Source:* card heuristic [DC-L08-20].
+- **Decides:** DC-L08-20
+- **Changes:** DC-L04-18 · blocks: Patterns > Modality; Components > Dialog, Sheet, Popover
+- **Preview:** the same edit task in each overlay.
+- **Use / avoid:** use a dismiss path on every dialog (missing one is a lint error); avoid stacking modals [DC-L08-20; L13 E1].
+- **Skip:** yes.
+- **Evidence:** DC-L08-20; S-L08-008, S-L08-040, S-L08-086, S-L08-096
+
+### Q-pattern-02 · How should long lists load: pages, "load more", or infinite scroll? · Expert
+- **Why:** Pagination gives landmarks; infinite scroll feels endless; "Load more" keeps the footer reachable [DC-L08-21].
+- **Ask:** "Pagination for tables, load more for results, infinite scroll only for feeds?"
+- **Example:** Show a table with pagination and a feed with infinite scroll.
+- **Control:** mapping (collection type to pattern)
+- **Options:**
+  - `pagination` Pagination (Carbon, Atlassian, Primer, shadcn) [DC-L08-21].
+  - `load-more` Load more [S-L08-073].
+  - `infinite` Infinite scroll for homogeneous feeds [S-L08-073].
+- **Default:** pagination for tables and goal-directed search, load more for result lists, infinite scroll only for feeds. *Source:* card heuristic [DC-L08-21].
+- **Decides:** DC-L08-21
+- **Changes:** none downstream in the graph · blocks: Patterns > Collections
+- **Preview:** each collection type on the preview.
+- **Use / avoid:** use pagination where people need to return to a position; avoid infinite scroll above a footer people need [DC-L08-21].
+- **Skip:** yes.
+- **Evidence:** DC-L08-21; S-L08-017, S-L08-041, S-L08-073
+
+### Q-pattern-03 · How much should be visible up front, and how much behind "more"? · Expert
+- **Why:** Progressive disclosure gives calmer, shorter screens; everything-visible reads powerful but dense [DC-L13-03].
+- **Ask:** "Show primary options up front and advanced ones behind a clearly labeled trigger, at most two levels deep?"
+- **Example:** Show a settings page with an "Advanced" section collapsed and expanded.
+- **Control:** single choice
+- **Options:**
+  - `all-visible` Everything visible [DC-L13-03].
+  - `progressive` Progressive disclosure, at most two levels, trigger label says what is behind it [S-L13-063].
+  - `staged` Staged disclosure (wizard or stepper), for independent steps only [S-L13-063].
+  - `contextual` Contextual reveal on hover or selection [DC-L13-03].
+- **Default:** progressive. *Source:* card heuristic [DC-L13-03].
+- **Decides:** DC-L13-03
+- **Changes:** none downstream in the graph · blocks: Patterns > Information density > Disclosure
+- **Preview:** the settings page per option.
+- **Use / avoid:** use steppers that show position and total; avoid more than two disclosure levels (a lint warning) [DC-L13-03; L13 E1].
+- **Skip:** yes.
+- **Evidence:** DC-L13-03; S-L13-019, S-L13-030, S-L13-063
+
+### Q-pattern-04 · How should empty states and first-time use work? · Standard
+- **Why:** A designed empty state teaches and invites; a blank area looks broken; forced tours add friction up front [DC-L13-10, DC-L13-11].
+- **Ask:** "Designed empty states with a next step, and contextual tips instead of a forced tour?"
+- **Example:** Show a first-use empty project list, a no-results search and a tour with a skip button.
+- **Control:** single choice (onboarding) + checklist (empty-state kinds)
+- **Options:**
+  - `empty-kinds` Empty states for first use, user-cleared, no results, no permission or error (Primer Blankslate, Spectrum IllustratedMessage, shadcn Empty) [DC-L13-10; S-L08-012, S-L08-015, S-L08-018].
+  - `onboarding-none` No onboarding: a self-evident UI (NN/g's first recommendation) [S-L13-070].
+  - `onboarding-contextual` Contextual help and empty-state guidance at the moment of need [S-L13-070].
+  - `walkthrough` Interactive walkthrough, only for genuinely new, complex interfaces [S-L13-070].
+- **Default:** every collection gets empty variants that state status, help learning and give a direct action; contextual onboarding; everything skippable. *Source:* card heuristics [DC-L13-10, DC-L13-11; S-L13-069, S-L13-070].
+- **Decides:** DC-L13-10, DC-L13-11
+- **Changes:** none downstream in the graph · blocks: Patterns > States > Empty; Patterns > Guidance > Onboarding
+- **Preview:** each empty-state kind with the illustration choice from Q-img-04.
+- **Use / avoid:** use an empty state on every collection (missing one is a lint warning); avoid tours without a skip control [DC-L13-10, DC-L13-11; L13 E1].
+- **Skip:** yes.
+- **Evidence:** DC-L13-10, DC-L13-11; S-L13-069, S-L13-070, S-L08-012, S-L08-015
+
+### Q-pattern-05 · Which deceptive patterns should the builder block? · Standard
+- **Why:** Ethical defaults give accept and decline equal visual weight, leave opt-ins unchecked and keep decline copy neutral [DC-L13-15].
+- **Ask:** "Block the deceptive patterns a machine can detect, like pre-checked marketing boxes and consent buttons with unequal emphasis?"
+- **Example:** Show a consent dialog with equal buttons vs a "confirmshaming" one, flagged.
+- **Control:** single choice
+- **Options:**
+  - `none` No policy [DC-L13-15].
+  - `documented` Documented policy against the 16 types at deceptive.design (sneaking, forced action, hard to cancel, preselection, fake urgency, confirmshaming ...) [S-L13-071].
+  - `enforced` Documented and enforced where detectable: pre-checked consent or marketing boxes and unequal accept/reject emphasis are lint errors; re-prompting after dismissal is flagged [S-L13-071, S-L13-108].
+- **Default:** enforced. *Source:* card heuristic [DC-L13-15]; L13 E1 lint errors.
+- **Decides:** DC-L13-15
+- **Changes:** DC-L13-16 · blocks: Principles > Ethics > Deceptive patterns
+- **Preview:** a consent dialog and a cancellation flow checked live.
+- **Use / avoid:** use equal emphasis for accept and reject; avoid nagging and fake urgency (the Zeigarnik effect does not justify nags) [DC-L13-15; L13 E2].
+- **Skip:** yes.
+- **Evidence:** DC-L13-15; S-L13-071, S-L13-108, S-L13-110
+
+### Q-pattern-06 · What should appear on glanceable surfaces (widgets, tiles, complications)? · Expert
+- **Show if:** Q-plat-02 marks watch or car first-class, or the product ships widgets
+- **Why:** Glance surfaces look like data, not UI: big numerals, one metric, a status color, almost no chrome [DC-L14-07].
+- **Ask:** "What single number or status should people see without opening the app?"
+- **Example:** Ask for the one metric; show it as a watch complication and a home-screen widget.
+- **Control:** text (metric) + single choice (surfaces)
+- **Options:**
+  - `priority-matrix` Complication = one datum, notification = urgent event, tile = one or two items, app = everything (Google) [S-L14-015].
+  - `apple-surfaces` Complications, Smart Stack, Live Activities, CarPlay widgets [S-L14-001, S-L14-047].
+- **Default:** design the complication or tile first, then the app; one number or status per glance. *Source:* card heuristic [DC-L14-07].
+- **Decides:** DC-L14-07
+- **Changes:** none downstream in the graph · blocks: Patterns > Surfaces > Glanceable
+- **Preview:** the metric on each glance surface.
+- **Use / avoid:** use tiles that are "immediate, predictable, relevant"; avoid shrinking app screens into widgets [S-L14-020; DC-L14-07].
+- **Skip:** yes.
+- **Evidence:** DC-L14-07; S-L14-001, S-L14-015, S-L14-020, S-L14-047
+- **Merges:** D5
+
+### Q-ai-01 · Does the product have AI features, and how should AI content be marked? · Standard
+- **Why:** Clear AI identifiers and distinct citation styling make output read as "assistive, check me"; a distinct AI accent can compete with the primary action color [DC-L13-16, DC-L08-22].
+- **Ask:** "Does the product generate content or act with AI? If so, how should AI content be labeled and corrected?"
+- **Example:** Show an AI-generated summary with a label, citations, and Edit / Undo / Retry.
+- **Control:** single choice + multi-select (surfaces)
+- **Options:**
+  - `none` No AI features.
+  - `label-button` AI label plus an AI button variant (Carbon AI label; S2 `genai`; Atlassian Rovo) [S-L08-009, S-L08-067, S-L08-063].
+  - `presence-mode` AI presence as a mode on normal components: label, explainability popover, glow tokens, revert (Carbon) [S-L14-058].
+  - `chat` Chat components for conversational products (shadcn Message, Bubble; Carbon AI chat) [S-L08-018, S-L14-058].
+  - `voice` Voice-only turns: one breath, 2-5 options (Alexa) [S-L14-065].
+- **Default:** label-button as an optional module, chat only for conversational products; label AI content, place citations next to claims, express uncertainty in high-stakes contexts, and pair every generated output with Edit, Undo and Retry. *Source:* card heuristics [DC-L08-22, DC-L13-16, DC-L14-12; S-L13-089, S-L14-011].
+- **Decides:** DC-L08-22, DC-L13-16, DC-L14-12
+- **Changes:** DC-L05-18 (agent avatars) · blocks: Components > AI; Patterns > AI; Patterns > Conversational
+- **Preview:** AI output in a table cell, a side panel and a chat thread.
+- **Use / avoid:** use AI styling only on AI-generated content (Carbon warns against decoration); avoid human-sounding anthropomorphic framing and reasoning traces presented as explanations [DC-L14-12, DC-L13-16].
+- **Skip:** yes, none.
+- **Evidence:** DC-L08-22, DC-L13-16, DC-L14-12; S-L08-009, S-L08-067, S-L13-089, S-L14-011, S-L14-058
+- **Merges:** D6
+
+---
+
+## Stage 24 · Tokens and encoding
+> Screen: a token browser beside the product preview; clicking any element shows its token chain (component, semantic, primitive) and the exported code for each platform. Graph step 0-5. Asked after the visual stages because nothing visual depends on it in the graph; everything here changes how the look is stored and shipped [inferred from the graph].
+
+### Q-token-01 · How many token layers should sit between raw values and components? · Standard
+- **Why:** A semantic layer lets the look change (rebrand, new mode) without touching components; 24 of 25 benchmarked systems have one [DC-L07-01; L09 A1 row 1].
+- **Ask:** "Raw values, then semantic tokens, with component tokens only where a component must differ?"
+- **Example:** Show `blue.600` -> `color.bg.accent` -> `button.primary.bg`, and which layer a rebrand edits.
+- **Control:** single choice
+- **Options:**
+  - `one` One tier: palette and scales used directly (Tailwind); theming means find-and-replace [DC-L07-01].
+  - `two-plus` Primitive -> semantic, component tokens only when needed (Atlassian, Polaris; Fluent global + alias) [S-L07-107, S-L07-125, S-L01-033].
+  - `three-full` Primitive -> semantic -> component for every component (Material 3 comp tokens; Primer base/functional/component) [S-L07-102, S-L01-027].
+- **Default:** two-plus: primitives private, semantics public, component tokens only for components a brand must restyle or values shared by 3+ components; typography as primitives, semantic composites `text.{role}.{size}` and optional component aliases. *Source:* card heuristics [DC-L07-01, DC-L07-02, DC-L01-26, DC-L02-27]; L09 counts this as its 3-tier default with the component tier optional.
+- **Decides:** DC-L07-01, DC-L07-02, DC-L01-26, DC-L02-27
+- **Changes:** DC-L07-04, DC-L07-18, DC-L07-19 · blocks: Tokens > Architecture > Tiers; Component tokens
+- **Preview:** the token chain inspector on the preview.
+- **Use / avoid:** use semantic tokens in every component; avoid components referencing a raw hex or px (L09: 24 of 25 systems forbid it) [L09 A1 row 1].
+- **Skip:** yes.
+- **Evidence:** DC-L07-01, DC-L07-02, DC-L01-26, DC-L02-27; S-L07-003, S-L07-036, S-L07-108, S-L01-027
+- **Merges:** K7.6 (tiers)
+
+### Q-token-02 · How should tokens be named? · Expert
+- **Why:** Names are the shared vocabulary for humans and agents; only include the levels needed to tell tokens apart [DC-L07-04; S-L07-036].
+- **Ask:** "Use `namespace.category.property.variant.state` for semantic tokens, hue plus step for colors, and a short prefix only in code output?"
+- **Example:** Show `ds.color.bg.accent.hover`, `space.200`, and `--ds-color-bg-accent-hover` in CSS.
+- **Control:** grammar builder + text (prefix)
+- **Options:**
+  - `grammar` Semantic grammar `[namespace].category.property.concept?.variant?.state?`; component grammar `[namespace].component.element?.property.variant?.state?` [DC-L07-04].
+  - `primitives` Primitives: hue + numeric step (50-950 or bounded 0-100); descriptive names only for brand colors [DC-L07-03].
+  - `spacing-names` Spacing primitives as percent of base (`space.200` = 16px, Atlassian, Material), semantic spacing by role [S-L03-003, S-L03-030].
+  - `prefix` A 2-4 letter prefix in platform output only (`--ds-`, `--cds-`, `--md-`); theme and brand never in names [S-L07-036, S-L07-108].
+  - `casing` Lowercase JSON segments; kebab for CSS, camel for JS/Swift/Kotlin, snake for Android XML [S-L07-158].
+- **Default:** all five as listed. *Source:* card heuristics [DC-L07-03, DC-L07-04, DC-L07-05, DC-L07-06, DC-L03-03].
+- **Decides:** DC-L07-03, DC-L07-04, DC-L07-05, DC-L07-06, DC-L03-03
+- **Changes:** DC-L07-20 · blocks: Tokens > Naming
+- **Preview:** a name linter that shows each token's name in JSON, CSS, Swift and Kotlin.
+- **Use / avoid:** use role names at the semantic tier; avoid `padding` or `margin` in primitive names and ordinal scales that look proportional but aren't [DC-L03-03].
+- **Skip:** yes.
+- **Evidence:** DC-L07-03, DC-L07-04, DC-L07-05, DC-L07-06, DC-L03-03; S-L07-003, S-L07-036, S-L07-158
+- **Merges:** K7.6
+
+### Q-token-03 · Which properties become tokens? · Expert
+- **Why:** Anything left untokenized drifts and cannot be linted or themed [DC-L07-07].
+- **Ask:** "Tokenize every property Figma can bind and lint, plus motion and focus?"
+- **Example:** Show the coverage list with counts per category.
+- **Control:** single choice + checklist
+- **Options:**
+  - `minimal` Color, type, space [DC-L07-07].
+  - `standard` Plus radius, border width, shadow/elevation, opacity, motion [DC-L07-07].
+  - `extended` Plus z-index, breakpoints, icon sizes, touch targets, data-viz palettes [DC-L07-07; S-L07-036].
+- **Default:** extended; one-off illustration values stay untokenized. *Source:* card heuristic [DC-L07-07].
+- **Decides:** DC-L07-07
+- **Changes:** none downstream in the graph · blocks: Tokens > Scope > Coverage
+- **Preview:** a coverage bar per category.
+- **Use / avoid:** use tokens for anything a lint rule should check; avoid tokenizing one-off art values [DC-L07-07].
+- **Skip:** yes.
+- **Evidence:** DC-L07-07; S-L07-002, S-L07-036, S-L07-108
+
+### Q-token-04 · Which units should the source use? · Expert
+- **Why:** px maps cleanly to pt, dp and Figma; rem respects browser zoom; unitless numbers translate 1:1 across platforms [DC-L07-11, DC-L10-08].
+- **Ask:** "Store plain px-style numbers and convert to rem for web text?"
+- **Example:** Show `16` becoming `1rem`, `16pt`, `16dp` and `16px`.
+- **Control:** single choice + toggle (spacing scales with text)
+- **Options:**
+  - `px-to-rem` px in source, rem at the web transform (DTCG allows px and rem only; Figma imports px) [S-L07-002, S-L07-011, S-L03-037].
+  - `unitless` Unitless 4-based numbers emitted 1:1 as pt/dp/epx/px, rem for web font sizes (Fluent's ramp) [S-L10-039].
+  - `rem-source` rem in source, converted down to dp/sp/CGFloat by transforms [DC-L10-08].
+- **Default:** px-to-rem (equivalently unitless numbers), rem for web type and breakpoints; "spacing scales with text size" is an explicit toggle, off by default; line height unitless. *Source:* card heuristics [DC-L07-11, DC-L10-08, DC-L03-26].
+- **Decides:** DC-L07-11, DC-L10-08, DC-L03-26
+- **Changes:** DC-L10-22 · blocks: Tokens > Types > Dimension; Encoding > Units per platform
+- **Preview:** one value converted per platform.
+- **Use / avoid:** question any value not divisible by 4 (except 2, 6, 10 for icon nudges); avoid sp or rem for spacing that must not scale with text on Android [DC-L10-08; L10 baked-in rule 4].
+- **Skip:** yes.
+- **Evidence:** DC-L07-11, DC-L10-08, DC-L03-26; S-L03-037, S-L03-038, S-L07-002, S-L10-039, S-L10-070
+- **Merges:** P9
+
+### Q-token-05 · How should composite values (type, shadows, motion) be encoded? · Expert
+- **Why:** Composites keep a style whole for code; bound variables let styles switch with modes in Figma; DTCG has no spring type [DC-L07-12, DC-L07-13, DC-L07-14, DC-L04-28].
+- **Ask:** "Atomic primitives plus semantic composites, Figma styles bound to variables, and springs stored as extensions?"
+- **Example:** Show a `typography` composite in JSON and the Figma text style bound to its variables.
+- **Control:** single choice per type
+- **Options:**
+  - `type` Typography: atomic primitives + semantic `typography` composites; Figma text styles with fields bound to variables (bind if more than one brand or platform) [S-L07-013, S-L07-019, S-L02-036].
+  - `shadow` Shadows and borders: DTCG `shadow` and `border` composites; Figma effect styles with bound color and offsets [S-L07-002, S-L07-020].
+  - `motion` Motion: DTCG `duration`, `cubicBezier`, `transition`; Figma timing and easing variables with a reduced-motion mode; springs as `{dampingRatio, stiffness}` in `$extensions` with a bezier fallback [S-L07-033, S-L04-052].
+- **Default:** all three as listed. *Source:* card heuristics [DC-L07-12, DC-L07-13, DC-L07-14, DC-L04-28, DC-L02-28].
+- **Decides:** DC-L07-12, DC-L07-13, DC-L07-14, DC-L04-28, DC-L02-28
+- **Changes:** DC-L07-25 · blocks: Tokens > Types
+- **Preview:** JSON and Figma views of one token of each type.
+- **Use / avoid:** use variables for single values that change by mode and styles for bundles; avoid hard-coded style values [DC-L07-21].
+- **Skip:** yes.
+- **Evidence:** DC-L07-12, DC-L07-13, DC-L07-14, DC-L04-28, DC-L02-28; S-L07-002, S-L07-013, S-L07-019, S-L07-033
+
+### Q-token-06 · How should themes and modes be structured so combinations don't explode? · Expert
+- **Why:** Each axis multiplies QA; if two axes set the same token they should be one axis [DC-L07-17].
+- **Ask:** "At most three independent axes, with high contrast as a layered override, and one Figma collection per axis?"
+- **Example:** Show 2 schemes x 2 contrasts x 2 densities as additive collections instead of 8 flattened modes.
+- **Control:** single choice
+- **Options:**
+  - `flatten` Flatten into one axis (the DTCG resolver example: light, lightHighContrast, dark, darkHighContrast) [S-L07-004].
+  - `orthogonal` Orthogonal axes, each touching a disjoint set of tokens [DC-L07-17].
+  - `collections` Figma: Primitives (hidden) + Semantic color + Semantic dimension (density or breakpoint) + Motion with a reduced mode [DC-L07-18].
+  - `breakpoint-collection` A Breakpoint collection with 3 modes driving layout variables; grid auto layout for multi-column components [DC-L07-28; S-L07-024].
+- **Default:** orthogonal with at most 3 axes plus collections and a breakpoint collection. *Source:* card heuristics [DC-L07-17, DC-L07-18, DC-L07-28].
+- **Decides:** DC-L07-17, DC-L07-18, DC-L07-28
+- **Changes:** none downstream in the graph · blocks: Tokens > Theming > Combinations; Figma > Variables > Collections; Tokens > Layout
+- **Preview:** the combination count and the Figma mode budget from Q-tool-03.
+- **Use / avoid:** use additive collections to stay within the plan's mode limit; avoid putting brand and scheme in one flattened axis [DC-L07-18, DC-L07-27].
+- **Skip:** yes.
+- **Evidence:** DC-L07-17, DC-L07-18, DC-L07-28; S-L07-004, S-L07-011, S-L07-014, S-L07-024
+
+### Q-token-07 · How should the Figma library be kept clean? · Expert
+- **Show if:** Q-tool-03 is a Figma plan
+- **Why:** Hidden primitives and precise scopes keep designers on semantic tokens; generated code syntax keeps Figma and code names identical [DC-L07-19, DC-L07-20].
+- **Ask:** "Hide primitives, scope every variable to its property, and generate code names automatically?"
+- **Example:** Show a text-color variable offered only in text fill pickers.
+- **Control:** toggles
+- **Options:**
+  - `hide-scope` Hide primitives from publishing; scope each semantic variable to the properties its name says [S-L07-018, S-L07-025].
+  - `code-syntax` Generate Web, Android and iOS code syntax from the pipeline's name transform [S-L07-018].
+  - `vars-styles` Variables for values, styles for bundles [S-L07-019].
+  - `check-designs` Run Check designs before "Ready for dev" and review library analytics quarterly (Org/Enterprise; the builder lints on Professional) [S-L07-025, S-L07-029].
+- **Default:** all four. *Source:* card heuristics [DC-L07-19, DC-L07-20, DC-L07-21, DC-L07-26].
+- **Decides:** DC-L07-19, DC-L07-20, DC-L07-21, DC-L07-26
+- **Changes:** DC-L07-23 · blocks: Figma > Variables > Scope; Code syntax; Styles vs Variables; Governance > Tooling
+- **Preview:** the Figma variable panel as a designer would see it.
+- **Use / avoid:** use scopes so a spacing token cannot be picked for a color; avoid "show in all" scopes [DC-L07-19].
+- **Skip:** yes.
+- **Evidence:** DC-L07-19, DC-L07-20, DC-L07-21, DC-L07-26; S-L07-018, S-L07-019, S-L07-025, S-L07-029
+
+### Q-token-08 · Which file format and build pipeline should produce platform code? · Expert
+- **Why:** The pipeline decides whether tokens arrive in each codebase in the idiom it already uses [DC-L07-25, DC-L10-22].
+- **Ask:** "Export DTCG 2025.10 files with a resolver, built with Terrazzo for web or Style Dictionary for native?"
+- **Example:** Show the output tree: CSS variables, Tailwind theme, Swift, Compose.
+- **Control:** single choice (pipeline) + multi-select (outputs)
+- **Options:**
+  - `dtcg-resolver` DTCG 2025.10 + Resolver, one file per tier and mode (stable since 28 Oct 2025) [S-L07-002, S-L07-004].
+  - `terrazzo` Terrazzo 2.x: full DTCG including resolvers, web-strong [S-L07-179].
+  - `style-dictionary` Style Dictionary v5: widest native coverage (Compose, Android XML, Swift, Flutter), no resolver support, so one build per combination [S-L07-151, S-L07-162, S-L10-056].
+  - `tokens-studio` Tokens Studio + sd-transforms, when designers author in the plugin [DC-L07-25].
+  - `web-delivery` Web: CSS custom properties for semantics, media queries for preferences, container queries for components [S-L10-052, S-L10-031].
+- **Default:** dtcg-resolver as the canonical export; Terrazzo for web-only teams, Style Dictionary v5 when native outputs are needed; web-delivery on the web. *Source:* card heuristics [DC-L07-09, DC-L07-25, DC-L10-22, DC-L10-18].
+- **Decides:** DC-L07-09, DC-L07-25, DC-L10-22, DC-L10-18
+- **Changes:** DC-L16-12 · blocks: Tokens > Architecture > File format; Tooling > Token pipeline; Tokens > Delivery
+- **Preview:** the generated file tree with one file open.
+- **Use / avoid:** use one canonical export and generate everything else from it; avoid hand-edited platform files [DC-L07-25].
+- **Skip:** yes.
+- **Evidence:** DC-L07-09, DC-L07-25, DC-L10-22, DC-L10-18; S-L07-002, S-L07-004, S-L07-155, S-L07-179, S-L10-056
+- **Merges:** P19, P23
+
+### Q-token-09 · How should tokens be described and retired? · Expert
+- **Why:** Descriptions tell people and agents what a token is for; deprecating before deleting protects consumers [DC-L07-23].
+- **Ask:** "Give every semantic token a one-line description, and deprecate for one release before deleting?"
+- **Example:** Show `$deprecated: "Use color.bg.accent instead"` in JSON and the warning in Figma.
+- **Control:** toggles
+- **Options:**
+  - `descriptions` `$description` on every semantic token [S-L07-002].
+  - `deprecate` `$deprecated: true` or "Use X instead", one release before removal [S-L07-002].
+  - `usage-check` Check library analytics before removal (Org/Enterprise) [S-L07-029].
+- **Default:** all three. *Source:* card heuristic [DC-L07-23].
+- **Decides:** DC-L07-23
+- **Changes:** DC-L11-15 · blocks: Tokens > Governance > Lifecycle
+- **Preview:** a token's detail card with description and status.
+- **Use / avoid:** use descriptions written for agents as well as people; avoid deleting tokens without a replacement [DC-L07-23].
+- **Skip:** yes.
+- **Evidence:** DC-L07-23; S-L07-002, S-L07-029, S-L07-031, S-L07-042
+
+### Q-token-10 · What may white-label clients customize? · Expert
+- **Show if:** Q-theme-03 is white-label
+- **Why:** White-label customization almost always centers on color and typography; every knob added needs previews and validation [DC-L06-17; S-L06-053].
+- **Ask:** "Let clients set brand color and logo, and allow font and radius only with previews and validation?"
+- **Example:** Show a client admin panel with a color picker, logo upload and a live contrast check.
+- **Control:** multi-select (knobs) + single choice (surface)
+- **Options:**
+  - `code-one-color` One brand color in code (Blade `createTheme({brandColor})`) [S-L06-094].
+  - `admin-ui` Admin UI "clicks, not code" for colors, logos, images and curated accents (Salesforce SLDS 2) [S-L06-068].
+  - `user-builder` A user-facing theme builder (Linear base/accent/contrast) [S-L06-012].
+  - `cms` CMS-editable overrides [S-L06-053].
+- **Default:** brand color + logo; font and radius only with previews and validation. *Source:* card heuristic [DC-L06-17].
+- **Decides:** DC-L06-17
+- **Changes:** none downstream in the graph · blocks: Tokens > Theming > White-label controls
+- **Preview:** the client panel re-skinning the preview with contrast re-checked.
+- **Use / avoid:** use generated on-colors so client colors keep contrast; avoid exposing raw token editing to clients [DC-L06-17, DC-L06-16].
+- **Skip:** yes.
+- **Evidence:** DC-L06-17; S-L06-012, S-L06-053, S-L06-068, S-L06-094
+
+---
+
+## Stage 25 · Team, governance and change
+> Screen: a governance plan generated from earlier answers (team size, scope, platforms), shown as a one-page operating model the person edits. Graph step 1-7. Mostly Expert: these decisions change how the system evolves, not how it looks.
+
+### Q-gov-01 · How strict should the system be: can product teams override or extend it? · Standard
+- **Why:** Strict systems stay consistent but feel rigid; loose ones allow experiments but drift; a strict core with loose edges is the practical middle [DC-L11-03].
+- **Ask:** "Strict core (tokens, primitives, accessibility), with product teams free to build their own patterns on top?"
+- **Example:** Show which layers are locked and which are open under each option.
+- **Control:** single choice
+- **Options:**
+  - `strict` Strict: comprehensive docs, design and code fully synced, little deviation [S-L11-018, S-L11-019].
+  - `loose` Loose: a framework with room to experiment [S-L11-019].
+  - `canon-expanded` Strict canon plus product-owned "expanded universe" extensions (Dan Mall) [S-L11-014].
+- **Default:** strict core (tokens, primitives, accessibility behavior), loose edges (patterns, marketing). *Source:* card heuristic [DC-L11-03].
+- **Decides:** DC-L11-03
+- **Changes:** DC-L11-11, DC-L11-12, DC-L11-24 (lint strictness) · blocks: Strategy > Posture
+- **Preview:** a layer diagram with lock icons per layer.
+- **Use / avoid:** use a snowflake path for one-off needs; avoid forcing every product-specific component into the core [DC-L11-03, DC-L11-12].
+- **Skip:** yes.
+- **Evidence:** DC-L11-03; S-L11-014, S-L11-018, S-L11-019
+- **Merges:** K6.5, K8.4
+
+### Q-gov-02 · In what order will you build, pilot and roll out? · Expert
+- **Why:** Foundations-first is tidy but abstract; pilot-driven work keeps components real; a big-bang launch creates a moment but risks pilot bias [DC-L11-06, DC-L11-07, DC-L11-08].
+- **Ask:** "Minimal foundations first, then components proven in one pilot product, rolled out incrementally?"
+- **Example:** Show Dan Mall's 8-criteria pilot scorecard filled for two candidate products.
+- **Control:** single choice (order) + scorecard (pilot) + single choice (rollout)
+- **Options:**
+  - `foundations-first` Foundations first: spacing, color, type, elevation, icons, then components (Figma course order) [S-L11-009].
+  - `pilot-driven` Pilot-driven: extract components from a real product, apply to the next [S-L11-014].
+  - `pilot-scorecard` Score pilots on common components, common patterns, high-value elements, feasibility, a champion, a 3-4 week scope, independence from legacy, marketing potential [S-L11-105].
+  - `rollout-incremental` Incremental rollout led by pain points; big-bang only with a rebrand [S-L11-105].
+- **Default:** minimal foundations first, then pilot-driven components, incremental rollout. *Source:* card heuristics [DC-L11-06, DC-L11-07, DC-L11-08].
+- **Decides:** DC-L11-06, DC-L11-07, DC-L11-08
+- **Changes:** DC-L11-01, DC-L11-22 · blocks: Process > Build order; Process > Pilot; Adoption > Rollout
+- **Preview:** a timeline of the plan.
+- **Use / avoid:** use a second pilot from a different product family to reduce bias; avoid building components no pilot needs [DC-L11-07].
+- **Skip:** yes.
+- **Evidence:** DC-L11-06, DC-L11-07, DC-L11-08; S-L11-009, S-L11-014, S-L11-105, S-L11-107
+- **Merges:** K2.7, K2.8, K13.1
+
+### Q-gov-03 · Who can contribute, and how are decisions made and recorded? · Expert
+- **Why:** Only 36% of teams are satisfied with their contribution process; decision records explain why things are the way they are [DC-L11-11, DC-L11-12; S-L11-030].
+- **Ask:** "A fast lane for fixes and icons, a proposal lane for new components, and every foundation decision logged as a decision record?"
+- **Example:** Show a decision record generated from one of this session's answers.
+- **Control:** single choice (contribution) + toggle (decision records)
+- **Options:**
+  - `closed` Closed or narrow: fixes and small enhancements only (Atlassian) [S-L11-024].
+  - `criteria-gated` Open but gated: proposals must be useful and unique; publication must be usable, consistent, versatile (GOV.UK) [S-L11-021].
+  - `two-lanes` A fast lane for fixes, icons and docs; an RFC lane for new components [S-L11-020, S-L11-021].
+  - `frost-flow` Brad Frost's 10-step governance flow with a snowflake path [S-L11-003].
+  - `adrs` Decision records (ADRs) from day one; this questionnaire's answers map to them [S-L11-095; inferred].
+- **Default:** two-lanes, frost-flow and adrs. *Source:* card heuristics [DC-L11-11, DC-L11-12].
+- **Decides:** DC-L11-11, DC-L11-12
+- **Changes:** DC-L11-13 · blocks: Governance > Contribution; Governance > Process
+- **Preview:** the generated decision log.
+- **Use / avoid:** record why an option was chosen and what it beat; avoid undocumented overrides [DC-L11-12].
+- **Skip:** yes.
+- **Evidence:** DC-L11-11, DC-L11-12; S-L11-003, S-L11-020, S-L11-021, S-L11-024, S-L11-095
+- **Merges:** K9.4, K9.5, K9.6, K9.7
+
+### Q-gov-04 · How are components labeled, versioned and retired? · Expert
+- **Why:** Predictable status and versioning protect consumers; breaking changes without notice erode trust [DC-L11-13, DC-L11-14, DC-L11-15].
+- **Ask:** "Three statuses (experimental, ready, deprecated), one semver for the library, and deprecations removed only in the next major with a migration guide?"
+- **Example:** Show a changelog entry with a deprecation and its codemod.
+- **Control:** single choice per item
+- **Options:**
+  - `status-3` Experimental > Ready > Deprecated (Primer simplified from five to three) [S-L11-025, S-L11-026].
+  - `semver-library` One SemVer for the whole library while small; per-package once multi-platform [S-L11-106, S-L11-028].
+  - `per-component` Per-component versions (Atlassian, Paste) [S-L11-028].
+  - `deprecation-polaris` Deprecate in a minor, announce with `@deprecated` and warnings, ship codemods, remove in the next major (Polaris) [S-L11-100].
+- **Default:** status-3, semver-library, deprecation-polaris with at least one release cycle of notice; release notes every release (the most common ritual, 56%). *Source:* card heuristics [DC-L11-13, DC-L11-14, DC-L11-15; S-L11-030].
+- **Decides:** DC-L11-13, DC-L11-14, DC-L11-15
+- **Changes:** DC-L11-22 · blocks: Governance > Component status; Change > Versioning; Change > Deprecation
+- **Preview:** status badges in the catalog and a sample changelog.
+- **Use / avoid:** pair every removal with a migration path; avoid breaking changes in minor releases [DC-L11-14, DC-L11-15].
+- **Skip:** yes.
+- **Evidence:** DC-L11-13, DC-L11-14, DC-L11-15; S-L11-025, S-L11-028, S-L11-100, S-L11-106
+- **Merges:** K8.5, K10.2, K10.3, K10.4
+
+### Q-gov-05 · What problem is the system solving, and how will you know it worked? · Expert
+- **Why:** The problem sets the success metric; most teams measure adoption, but only 5% measure ROI [DC-L11-20; S-L11-030].
+- **Ask:** "What hurts most today, and should we track design adoption, code adoption and a quarterly satisfaction survey?"
+- **Example:** Show an adoption dashboard mock with the three starting metrics.
+- **Control:** multi-select (pain) + multi-select (metrics)
+- **Options:**
+  - `pain` Pain: inconsistency, speed, accessibility, rebrand, AI output drift, multi-platform parity [S-L11-083].
+  - `adoption` Design adoption (Figma analytics) and code adoption (a scanner such as Omlet or react-scanner) [S-L11-035, S-L11-037, S-L11-039].
+  - `satisfaction` A quarterly satisfaction survey [S-L11-030].
+  - `maturity` Maturity stage: building v1, growing adoption, surviving the teenage years, evolving (Sparkbox) [S-L11-033].
+- **Default:** design adoption, code adoption and a quarterly survey; most builder users are at stage 1. *Source:* card heuristics [DC-L11-20, DC-L11-21].
+- **Decides:** DC-L11-20, DC-L11-21
+- **Changes:** none downstream in the graph · blocks: Measurement > Metrics; Measurement > Maturity
+- **Preview:** the metrics dashboard mock.
+- **Use / avoid:** add speed or ROI studies only when leadership asks; avoid vanity counts of components [DC-L11-20].
+- **Skip:** yes.
+- **Evidence:** DC-L11-20, DC-L11-21; S-L11-030, S-L11-033, S-L11-035, S-L11-037, S-L11-083
+- **Merges:** K0.1, K0.2, K0.3, K1.3, K12.1, K12.2, K12.3, K12.4
+
+### Q-gov-06 · How will you announce the system and communicate changes? · Expert
+- **Why:** Only 39% of teams are satisfied with how design-system changes are communicated [DC-L11-22; S-L11-030].
+- **Ask:** "Release notes every release, a public roadmap and a support channel to start?"
+- **Example:** Show a release-note template filled from a recent change.
+- **Control:** multi-select
+- **Options:**
+  - `release-notes` Release notes (56% of teams) [S-L11-030].
+  - `roadmap` Roadmap (48%) [S-L11-030].
+  - `office-hours` Office hours (33%) [S-L11-030].
+  - `training` Training, pairing, success stories (Frost) [S-L11-002].
+- **Default:** release notes, a public roadmap and a support channel. *Source:* card heuristic [DC-L11-22].
+- **Decides:** DC-L11-22
+- **Changes:** none downstream in the graph · blocks: Adoption > Communication
+- **Preview:** the release-note template.
+- **Use / avoid:** use changelogs that name the migration; avoid silent releases [DC-L11-22].
+- **Skip:** yes.
+- **Evidence:** DC-L11-22; S-L11-002, S-L11-030, S-L11-105
+- **Merges:** K0.4, K13.3, K13.4
+
+### Q-gov-07 · Which assistive technologies must be tested on each device class, and who owns accessibility? · Expert
+- **Why:** Automated tools find only about 30% of issues; if a device class is first-class, its assistive technology is too [DC-L14-14; S-L11-093].
+- **Ask:** "Test one screen reader, one motor alternative and the largest text size on each device class you ship?"
+- **Example:** Show the generated test matrix for the chosen platforms.
+- **Control:** matrix (device class x assistive tech) + text (owner)
+- **Options:**
+  - `screen-readers` VoiceOver on Apple, TalkBack on Android phone, Wear and TV, NVDA/JAWS on web [S-L14-080, S-L10-072].
+  - `motor` Switch Control, Voice Control, Full Keyboard Access, Dwell Control [S-L14-079, S-L14-007].
+  - `text-scale` Largest text: Dynamic Type AX5, Android 200%, watch 140% [S-L10-011, S-L10-071].
+- **Default:** one screen reader, one motor alternative and the largest text size per shipped device class; a named accessibility owner (44% of teams lack a specialist). *Source:* card heuristic [DC-L14-14; S-L11-030].
+- **Decides:** DC-L14-14
+- **Changes:** none downstream in the graph · blocks: Governance > Accessibility > Device test matrix
+- **Preview:** the test matrix with pass/untested status per cell.
+- **Use / avoid:** use manual assistive-technology testing on every release candidate; avoid treating automated scans as compliance [DC-L11-19, DC-L14-14].
+- **Skip:** yes.
+- **Evidence:** DC-L14-14; S-L10-072, S-L11-093, S-L14-007, S-L14-079, S-L14-080
+- **Merges:** K4.3, K4.5, D7
+
+---
+
+## Stage 26 · Output, documentation and AI channels
+> Screen: the export menu and a preview of every file the builder will produce: tokens, code, docs pages, DESIGN.md, lint rules. Graph step 2-4. These outputs are what keep the system coherent in later sessions and explainable to a team (BRIEF requirements 9 and 10).
+
+### Q-dist-01 · How should the system leave the builder? · Standard
+- **Why:** Engineers need the output in the form they already use: a snippet, a CLI install, a token file, a pull request, or a design file [DC-L16-12].
+- **Ask:** "Export as CSS, a CLI install URL, DTCG files, a pull request, and a push to Figma or Paper?"
+- **Example:** Show the export menu with one command per channel (for example `npx shadcn@latest add <url>`).
+- **Control:** multi-select
+- **Options:**
+  - `copy-css` Copy snippets (Radix "Copy Theme", Utopia CSS) [S-L16-323, S-L16-341].
+  - `cli-url` CLI install from a URL (tweakcn via shadcn) [S-L16-333, S-L16-328].
+  - `dtcg` Token files (Leonardo "Copy Tokens") [S-L16-338].
+  - `pr` A pull request to the repository [DC-L16-12].
+  - `design-push` Push to Figma or Paper through MCP [S-L16-002, S-L16-020].
+  - `mcp-tool` Expose the builder's generator as an MCP tool (Leonardo's example) [S-L16-338].
+- **Default:** all six from one menu. *Source:* card heuristic [DC-L16-12].
+- **Decides:** DC-L16-12
+- **Changes:** none downstream in the graph · blocks: Builder > Output > Channels
+- **Preview:** the export menu and file tree.
+- **Use / avoid:** use one canonical source for every channel (Q-tool-01); avoid channels that fork the source [DC-L16-02].
+- **Skip:** yes.
+- **Evidence:** DC-L16-12; S-L16-002, S-L16-323, S-L16-333, S-L16-338
+
+### Q-dist-02 · How should AI coding tools read the system? · Standard
+- **Why:** 59% of teams report UI bypassing their design system; agent channels make generated UI follow it [DC-L11-23; S-L11-031].
+- **Ask:** "Ship an MCP server plus a DESIGN.md and token files, so Claude, ChatGPT, Codex or Cursor build with your system?"
+- **Example:** Show a DESIGN.md excerpt and an agent's generated button using the tokens.
+- **Control:** multi-select
+- **Options:**
+  - `mcp` An MCP server (Figma MCP at mcp.figma.com; Storybook MCP; shadcn MCP) [S-L11-041, S-L11-044, S-L11-045].
+  - `design-md` DESIGN.md plus DTCG files [S-L11-047].
+  - `llms-txt` llms.txt and Markdown twins of docs (Cloudscape, Geist) [S-L11-048; L09 A1 row 10].
+  - `rules` Agent rules files (from Figma's `create_design_system_rules`) [S-L11-041].
+  - `registry` A component registry (shadcn) [S-L11-045].
+- **Default:** at least one live channel (MCP) and one file channel (DESIGN.md + DTCG), guidelines as many short structured files. *Source:* card heuristic [DC-L11-23]; L09 shared pattern row 10 (12 of 25 systems).
+- **Decides:** DC-L11-23
+- **Changes:** DC-L11-24 · blocks: Distribution > Agent context
+- **Preview:** the agent-facing files and a sample agent answer.
+- **Use / avoid:** use evals to check agents follow the files; avoid assuming docs changes alone steer agents [DC-L11-23; S-L11-108].
+- **Skip:** yes.
+- **Evidence:** DC-L11-23; S-L11-031, S-L11-041, S-L11-045, S-L11-047, S-L11-108
+- **Merges:** K11.4, K11.5
+
+### Q-dist-03 · How should the system check that people and agents follow it? · Standard
+- **Why:** Linting and structured docs cut accessibility violations per iteration from 5.1 to 0.6 when agents built with a design system (Sanity evals) [DC-L11-24; L13 E3].
+- **Ask:** "Export lint rules with the tokens, so every generated screen is checked against the system?"
+- **Example:** Show a lint result: "raw hex #3b82f6, use color.bg.accent".
+- **Control:** multi-select (pre-filled from Q-gov-01 and Q-pref-01)
+- **Options:**
+  - `lint-rules` Lint rules exported alongside tokens, including the behavior rules (target size, labels, one primary) [DC-L11-24; L13 E3].
+  - `adherence-scan` Adherence scanning for raw colors and custom components (Lovable) [S-L11-053].
+  - `drift-audit` Drift detection at the docs layer (zeroheight MCP) [S-L11-104].
+  - `evals` Evals that measure agent conformance [S-L11-108].
+- **Default:** lint-rules plus evals. *Source:* card heuristic [DC-L11-24].
+- **Decides:** DC-L11-24
+- **Changes:** none downstream in the graph · blocks: Governance > AI guardrails
+- **Preview:** the lint report for the preview screen.
+- **Use / avoid:** use lint errors for Tier A rules and warnings for context-dependent ones (L13 E1); avoid automating the misapplied laws in L13 E2 (no seven-item caps) [L13 E1, E2].
+- **Skip:** yes.
+- **Evidence:** DC-L11-24; S-L11-053, S-L11-104, S-L11-108, S-L00-036
+- **Merges:** K11.6
+
+### Q-dist-04 · Where do docs live, and what goes on each component page? · Expert
+- **Why:** Docs are how teams learn when and when not to use each piece; the shared core is usage guidance, live examples, API and accessibility [DC-L11-17, DC-L11-18; L09 A1 row 9].
+- **Ask:** "Generate a docs site with a page per component (usage, when not to use, live example, props, accessibility, changelog), plus a machine-readable twin?"
+- **Example:** Show the generated Button page.
+- **Control:** single choice (platform) + template editor
+- **Options:**
+  - `figma-storybook` Figma plus Storybook (69% and 61% of teams) [S-L11-030].
+  - `docs-platform` A docs platform (zeroheight, Supernova) when non-engineers author [S-L11-088].
+  - `custom-site` A custom site (Material, Carbon) [S-L11-088].
+  - `carbon-template` Page template: live demo, accessibility status, when to use and not, anatomy, content rules, behaviors, per-variant guidance (Carbon Usage tab; M3 Overview/Specs/Guidelines/Accessibility) [S-L11-090, S-L08-033].
+- **Default:** a generated site with the Carbon-style template plus "when not to use" and a changelog, and an llms.txt or MCP twin; docs complete is part of "done". *Source:* card heuristics [DC-L11-17, DC-L11-18, DC-L08-23].
+- **Decides:** DC-L11-17, DC-L11-18, DC-L08-23
+- **Changes:** none downstream in the graph · blocks: Docs > Platform; Docs > Component page
+- **Preview:** a generated component page.
+- **Use / avoid:** use generated "use it for / avoid it for" notes from this questionnaire on every page; avoid docs that repeat props without guidance [DC-L11-18].
+- **Skip:** yes.
+- **Evidence:** DC-L11-17, DC-L11-18, DC-L08-23; S-L11-030, S-L11-088, S-L11-090, S-L08-033
+- **Merges:** K11.1, K11.2, K11.3
+
+---
+
+## Stage 27 · Builder preferences
+> Screen: how the builder (or the interviewing model) behaves while the person keeps editing. Graph step 0-5. Can be changed at any time.
+
+### Q-pref-01 · How strict should the builder's critique be? · Standard
+- **Why:** Messages that name the principle teach the vocabulary; strict mode blocks export on hard failures [DC-L15-11; S-L15-070].
+- **Ask:** "Should I coach with inline tips, stay silent, or block export on hard failures like contrast?"
+- **Example:** Show one coach message: "Two primary buttons in this group; make one secondary."
+- **Control:** single choice
+- **Options:**
+  - `silent` Silent: only automatic rules apply [DC-L15-11].
+  - `coach` Coach: inline messages tied to a goal, each with a one-click fix (NN/g goal-linked critique) [S-L15-075].
+  - `strict` Strict: block export on contrast, multiple primaries and undersized targets; warn on the rest [DC-L15-11].
+  - `metrics` Plus a metrics panel (complexity and colorfulness scores) [S-L15-047].
+- **Default:** coach for engineers exploring; strict for teams shipping to production. *Source:* card heuristic [DC-L15-11].
+- **Decides:** DC-L15-11
+- **Changes:** DC-L11-24 lint severity · blocks: Builder > Guidance > Feedback mode
+- **Preview:** the preview screen with messages at each level.
+- **Use / avoid:** accessibility failures are at least warnings in every mode; avoid silent mode for production exports [DC-L15-11].
+- **Skip:** yes.
+- **Evidence:** DC-L15-11; S-L15-047, S-L15-070, S-L15-075, S-L15-080
+
+### Q-pref-02 · How should AI edits and variations work? · Expert
+- **Why:** Deterministic human edits keep control; agent edits as reviewable patches keep trust; lock-and-shuffle explores without losing what you like [DC-L16-04, DC-L16-05].
+- **Ask:** "Apply your edits instantly, show my suggestions as before/after patches, and let you lock values and shuffle the rest?"
+- **Example:** Show a "show 6 variations" grid with two locked parameters.
+- **Control:** toggles
+- **Options:**
+  - `patches` Agent edits arrive as reviewable patches with before/after previews [DC-L16-04].
+  - `staged` Direct edits staged and committed together (Figma Make) [S-L16-026].
+  - `lock-shuffle` Lock + Shuffle on every parameter (shadcn create, Realtime Colors) [S-L16-327, S-L16-335].
+  - `show-6` A "show 6" grid of variants rendered on the same specimen [DC-L16-05].
+- **Default:** patches, lock-shuffle and show-6; vary only what is not locked. *Source:* card heuristics [DC-L16-04, DC-L16-05].
+- **Decides:** DC-L16-04, DC-L16-05
+- **Changes:** none downstream in the graph · blocks: Builder > AI > Edit model; Builder > Exploration > Variation
+- **Preview:** the variation grid.
+- **Use / avoid:** use variations for open, taste-driven questions (color, type, radius); avoid shuffling locked or accessibility-bound values [DC-L16-05].
+- **Skip:** yes.
+- **Evidence:** DC-L16-04, DC-L16-05; S-L16-026, S-L16-031, S-L16-327, S-L16-335
+
+### Q-pref-03 · Should the builder apply optical corrections automatically? · Expert
+- **Why:** Geometric values can look wrong (a circle looks smaller than a square of the same box); known corrections have formulas [DC-L15-10; S-L15-058].
+- **Ask:** "Auto-correct known optical cases like icon sizing and nested corners, and only suggest fixes for custom assets?"
+- **Example:** Show a circle icon at 100% vs 112.84% of a square's box.
+- **Control:** single choice
+- **Options:**
+  - `geometric` Geometric only: exact values [DC-L15-10].
+  - `auto-known` Auto-correct known cases: area-matched shapes (circle 112.84%), Material keylines, centroid centering, concentric nested radii [S-L15-058, S-L15-059].
+  - `suggest` Suggest only [DC-L15-10].
+- **Default:** auto-known for generated assets, suggest for custom assets. *Source:* card heuristic [DC-L15-10].
+- **Decides:** DC-L15-10
+- **Changes:** none downstream in the graph · blocks: Foundations > Visual language > Polish
+- **Preview:** before/after pairs for each correction.
+- **Use / avoid:** use formulas where they exist; avoid correcting brand assets without approval [DC-L15-10].
+- **Skip:** yes.
+- **Evidence:** DC-L15-10; S-L15-055, S-L15-058, S-L15-059
+
+---
+
+## Auto-applied rules (decided by construction, never asked)
+
+These cards have one defensible answer backed by a platform rule, an accessibility rule or strong evidence, so the builder applies them and shows them as locked rules with a reason (L13 E1 level "Default"; L15 "Automate" stance). Each can be overridden in Expert mode with a written rationale.
+
+| Card | Rule the builder applies | Evidence |
+|---|---|---|
+| DC-L03-20 | Backgrounds edge-to-edge; interactive content inside platform insets plus the layout margin; nothing on a foldable hinge | S-L03-032, S-L03-052, S-L03-071 |
+| DC-L14-10 | Safe zones per device: nothing to read or select in the outer 5% on TV; percentage margins on round watches; car targets 24dp from edges | S-L14-023, S-L14-026, S-L14-017, S-L14-032 |
+| DC-L04-05 | Nested radius: inner = max(outer - padding, smallest non-zero radius); warn on equal nested radii | S-L04-057, S-L04-035 |
+| DC-L04-14, DC-L03-23 | Layer order as named layers spaced by 100: base < sticky < dropdown < overlay/scrim < modal < popover/tooltip < toast < skip link; no hard-coded z-index | S-L04-024, S-L03-040 |
+| DC-L04-16 | Every translucent token ships with an opaque twin, honoring Reduce Transparency and `prefers-reduced-transparency` | S-L04-011, S-L04-065 |
+| DC-L05-17 | Images always reserve their final box; neutral placeholder fill; skeletons only on container components | S-L05-068, S-L05-071 |
+| DC-L05-24 | Chart chrome (titles, ticks, gridlines, legends) maps to existing text and border tokens; chart-specific tokens only for marks and interaction | S-L05-077, S-L05-083 |
+| DC-L05-25 | Every chart gets an insight title, direct labels or shape-coded legend, a text summary and "view as table" | S-L05-036, S-L05-077, S-L05-083 |
+| DC-L13-04 | Docs and generated pages use a heading per section, front-loaded paragraphs, bullets for 3+ items | S-L13-062 |
+| DC-L13-12 | Each interactive component documents trigger, rules, feedback, loops and modes plus its state list | S-L13-079, S-L13-106 |
+| DC-L02-22 | Text survives WCAG 1.4.12 overrides (line height 1.5x, paragraph 2x, letter 0.12x, word 0.16x); no fixed-height text boxes | S-L02-027 |
+| DC-L02-23 | Every text style is contrast-checked in every mode; below 18.5px bold / 24px regular it needs 4.5:1 | S-L02-007, S-L02-052 |
+
+## Not asked: builder product decisions
+
+These L16 cards describe how the builder itself should work (for the builder spec, S2), not choices a person makes about their design system. They shaped the Preview lines in this file.
+
+| Card | What it decides for the builder |
+|---|---|
+| DC-L16-01 | Primary interaction model (canvas, panels, conversation) |
+| DC-L16-03 | Canvas rendering substrate |
+| DC-L16-06 | Preview surface: real components on the person's own screens, not only swatches |
+| DC-L16-07 | Feedback latency budget for live previews |
+| DC-L16-08 | State, undo, versioning and sharing of builder sessions |
+| DC-L16-09 | Review and visual diff |
+| DC-L16-10 | Keyboard-first operation and command palette |
+| DC-L16-11 | Multiplayer and agent presence |
+| DC-L16-14 | Control widgets for foundation parameters (sliders, pickers) |
+| DC-L16-15 | Guardrails inside the editing loop |
+
+## Merge log
+
+All 125 source questions were placed; none was dropped outright. The table lists where each went; the notes after it cover the judgment calls.
+
+<!-- MERGE_TABLE -->
+
+Judgment calls:
+- **Folded into generated outputs rather than asked:** K4.2 (what the system guarantees vs product teams) becomes a responsibility statement the builder writes under Q-aud-03, as GOV.UK publishes one [S-L11-092]. K1.4 (who attends the kickoff) and K9.1 (makers and users) are folded into team questions because they do not change the system's output [inferred].
+- **Split across several questions:** B7 (existing brand assets) became one asset hook per asset (logo, colors, typeface, sounds, illustration) to meet the brief's "do you have this?" rule. K3.3 (feel and reference products) became the reference-intake panel plus Q-brand-01 and Q-brand-02. K7.1-K7.6 (L11's pointers into the foundation lanes) were replaced by the detailed foundation stages.
+- **Merged because two lanes asked the same thing:** L10 P3 and L06's deference level (DC-L10-02 + DC-L06-14) are one question (Q-plat-05); S1c's graph overrides confirm they are one decision. L09's eight benchmark cards were merged into the matching lane questions (for example DC-L09-01 with DC-L04-02 in Q-shape-01).
+- **Moved later than the source asked:** L06 suggests starting with its 15 brand questions; this flow asks scope and audience first because they set the ceilings the personality sliders must respect (category trust, density), then brand [L06 cross-lane note; inferred]. K2.5 (source of truth) stays early (Stage 05) because every preview depends on the output target.
+
+## Where lanes or systems disagree (present these as options, not a single answer)
+
+| Question | The disagreement | What the builder should present |
+|---|---|---|
+| Q-plat-01 | Default platforms: L10 recommends web + iOS + Android phones with large-screen layouts [DC-L10-01]; survey data shows 94% of systems support web and about a third support native [S-L11-030]; L09 finds web-only most common [L09 A2 row 10]. | Default to web, and show the native options with what each adds (chrome, units, targets). |
+| Q-tool-01 | Source of truth: L16 and L11 favor the builder's own model [DC-L16-02, DC-L11-16]; L07 favors DTCG JSON in git [DC-L07-08]; the 2026 practitioner majority says code [COMMUNITY-SIGNAL via DC-L11-16]. | All four options with the drift trade-off; default builder model compiled to DTCG and code. |
+| Q-form-02 | Disabled submit: Carbon disables on short forms [S-L08-106]; Atlassian never disables [S-L08-085]; Material's disabled components are not focusable [S-L08-095]. BOARD also flags tooltips on disabled controls as contested. | Offer both policies; default never-disable with `aria-disabled` and helper text. |
+| Q-form-04 | Toasts: Primer ships none [S-L08-098]; Carbon, Atlassian and Material ship them [S-L08-079, S-L08-011, S-L08-008]. | Three options; default toasts only for low-stakes results with undo. |
+| Q-form-02 | Validation timing: GOV.UK validates on submit [S-L08-077]; NN/g research favors on-blur for most inputs [S-L13-100]. | On-blur for format checks, on submit for the rest, with the summary pattern. |
+| Q-motion-01 | Motion default: Material's expressive spring scheme is its default for most products [DC-L10-14; S-L10-024]; Carbon and L04 default to productive motion with bounce at or below 0.2 [DC-L04-19]. | Two-mode default; springs as an explicit choice; productive cap for high-trust products. |
+| Q-state-03 | Focus ring: Material uses 3px [S-L04-003]; Atlassian and Primer use 2px [S-L04-016, S-L04-024]; BOARD's L13 note flags a Figma article's 3px claim as contradicting WCAG, pending the V1 verification pass. | 2px default with an offset, 3px as an option; both must meet 3:1. |
+| Q-type-01 | Typeface default: L02 says the system stack for productivity tools [DC-L02-01]; L09 says Inter or the system stack [DC-L09-05]. | System stack by default for tools, open-neutral (Inter) as the one-click alternative. |
+| Q-type-08, Q-aud-01 | Body size: L02's web default is 14px UI text [DC-L02-08]; L09's regular preset is 16px [L09 A1 row 8]. They agree once density is known. | Tie body size to the density answer instead of one fixed default. |
+| Q-token-01 | Tiers: L07 says two tiers with component tokens only when needed [DC-L07-01]; L09 and L01 say three tiers with the component tier optional [L09 A1 row 1; DC-L01-26]. Same structure, different counting. | Present it as "primitive -> semantic, component tokens on demand". |
+| Q-color-17 | Contrast method: WCAG 2.2 is the enforceable standard; Radix and Geist use APCA; WCAG 3 is still a draft [DC-L01-22; BOARD L01 note]. | Enforce WCAG 2.2, show APCA as advisory. |
+| Q-color-06 | Dynamic color: Material pushes dynamic color [DC-L01-21]; brand-led consumer apps keep fixed brand color, and iOS has no equivalent [DC-L10-05]. | Per-platform choice; brand-critical and status colors always fixed. |
+| Q-space-01 | Base unit: 8 (Carbon, Atlassian, Material, Spectrum naming) vs 4 (Fluent, Polaris, Primer, Tailwind) [DC-L03-01]. | "4 as the grid, 8 as the rhythm" as a reconciling default. |
+| Q-shape-03 | Pills: Material and Spectrum 2 use pills widely [DC-L09-01]; Carbon v12 moved tags away from pills [S-L04-031]; Atlassian reserves full radius for people [S-L04-016]. | Pill as an option per component role; people = full circle by default. |
+| Q-voice-03 | Capitalization: sentence case everywhere (Microsoft, Atlassian) vs title-case headings (Mailchimp) vs per element (Apple) [DC-L06-20]. | Three options; sentence case by default. |
+
+## Confidence and gaps
+
+- **Confirmed from files:** every option value, system name and default comes from a card in `synthesis/cards.json` (refreshed 2026-09-23, 325 cards) or from L09's shared-pattern and divergence tables; card and source ids are cited inline. The ordering was validated against `synthesis/decision-graph.json` including S1c's `graph-overrides.json` (see `questionnaire.json` meta for the counts).
+- **Inferred (tagged in place):** the Quick-mode selection and the choice to derive posture from slider G; the stage grouping of cards without graph links; accepted file formats in some asset hooks (sounds, animated assets); the time-weight rule; the Ask and Example prompts.
+- **Not yet reconciled:** L17's block classification (`research/L17-how-systems-get-made.md`) was not written when this file was produced; when it lands, check that every block it marks "cannot generate" has an asset hook here.

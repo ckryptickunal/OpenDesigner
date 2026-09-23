@@ -1,0 +1,130 @@
+{
+ "elevation": {
+  "$description": "Hybrid depth: in-page containers are flat with a 1px border; shadows only for things that float. Dark mode raises surface lightness; shadow colors swap per theme (DC-L04-10, DC-L04-11, DC-L04-12, L09 A1 row 12).",
+  "$extensions": {
+   "dev.dsbuilder": {
+    "levels": {
+     "sunken": "color.surface.sunken, no shadow",
+     "base": "color.surface.base, no shadow",
+     "raised": "color.surface.raised + border.subtle + shadow.raised",
+     "overlay": "color.surface.overlay + shadow.overlay"
+    },
+    "sources": [
+     "DC-L04-10",
+     "DC-L04-11",
+     "DC-L04-12",
+     "DC-L04-13",
+     "L09-A1.12"
+    ]
+   }
+  },
+  "shadow": {
+   "$type": "shadow",
+   "raised": {
+    "$value": [
+     {
+      "color": "{color.shadow.soft}",
+      "offsetX": {
+       "value": 0,
+       "unit": "px"
+      },
+      "offsetY": {
+       "value": 1,
+       "unit": "px"
+      },
+      "blur": {
+       "value": 2,
+       "unit": "px"
+      },
+      "spread": {
+       "value": 0,
+       "unit": "px"
+      }
+     },
+     {
+      "color": "{color.shadow.soft}",
+      "offsetX": {
+       "value": 0,
+       "unit": "px"
+      },
+      "offsetY": {
+       "value": 2,
+       "unit": "px"
+      },
+      "blur": {
+       "value": 8,
+       "unit": "px"
+      },
+      "spread": {
+       "value": 0,
+       "unit": "px"
+      }
+     }
+    ],
+    "$description": "Cards, sticky headers, dragged rows. 1px contact + soft blur."
+   },
+   "overlay": {
+    "$value": [
+     {
+      "color": "{color.shadow.soft}",
+      "offsetX": {
+       "value": 0,
+       "unit": "px"
+      },
+      "offsetY": {
+       "value": 1,
+       "unit": "px"
+      },
+      "blur": {
+       "value": 2,
+       "unit": "px"
+      },
+      "spread": {
+       "value": 0,
+       "unit": "px"
+      }
+     },
+     {
+      "color": "{color.shadow.strong}",
+      "offsetX": {
+       "value": 0,
+       "unit": "px"
+      },
+      "offsetY": {
+       "value": 8,
+       "unit": "px"
+      },
+      "blur": {
+       "value": 24,
+       "unit": "px"
+      },
+      "spread": {
+       "value": -4,
+       "unit": "px"
+      }
+     },
+     {
+      "color": "{color.shadow.ring}",
+      "offsetX": {
+       "value": 0,
+       "unit": "px"
+      },
+      "offsetY": {
+       "value": 0,
+       "unit": "px"
+      },
+      "blur": {
+       "value": 0,
+       "unit": "px"
+      },
+      "spread": {
+       "value": 1,
+       "unit": "px"
+      }
+     }
+    ],
+    "$description": "Menus, popovers, dialogs. Negative spread tucks the ambient layer; the ring shows only in dark."
+   }
+  }
+ }
+}

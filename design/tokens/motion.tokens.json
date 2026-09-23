@@ -1,0 +1,119 @@
+{
+ "motion": {
+  "duration": {
+   "$type": "duration",
+   "$description": "Duration ladder in the 100-300ms band (L09 A1 row 5, DC-L04-20).",
+   "0": {
+    "$value": {
+     "value": 0,
+     "unit": "ms"
+    }
+   },
+   "50": {
+    "$value": {
+     "value": 50,
+     "unit": "ms"
+    }
+   },
+   "100": {
+    "$value": {
+     "value": 100,
+     "unit": "ms"
+    }
+   },
+   "150": {
+    "$value": {
+     "value": 150,
+     "unit": "ms"
+    }
+   },
+   "200": {
+    "$value": {
+     "value": 200,
+     "unit": "ms"
+    }
+   },
+   "300": {
+    "$value": {
+     "value": 300,
+     "unit": "ms"
+    }
+   },
+   "400": {
+    "$value": {
+     "value": 400,
+     "unit": "ms"
+    }
+   },
+   "500": {
+    "$value": {
+     "value": 500,
+     "unit": "ms"
+    }
+   },
+   "instant": {
+    "$value": "{motion.duration.0}"
+   },
+   "micro": {
+    "$value": "{motion.duration.100}",
+    "$description": "Hover, press feedback, color changes."
+   },
+   "short": {
+    "$value": "{motion.duration.150}",
+    "$description": "Exits, tooltips (exit ~75% of enter, DC-L04-24)."
+   },
+   "medium": {
+    "$value": "{motion.duration.200}",
+    "$description": "Menus and popovers entering."
+   },
+   "long": {
+    "$value": "{motion.duration.300}",
+    "$description": "Dialogs and side panels entering."
+   },
+   "xlong": {
+    "$value": "{motion.duration.400}",
+    "$description": "Full-screen transitions only."
+   }
+  },
+  "easing": {
+   "$type": "cubicBezier",
+   "$description": "Four curves (DC-L04-21). Linear only for spinners and progress.",
+   "standard": {
+    "$value": [
+     0.2,
+     0,
+     0,
+     1
+    ],
+    "$description": "Moving and morphing on screen."
+   },
+   "enter": {
+    "$value": [
+     0,
+     0,
+     0,
+     1
+    ],
+    "$description": "Entering: strong decelerate."
+   },
+   "exit": {
+    "$value": [
+     0.3,
+     0,
+     1,
+     1
+    ],
+    "$description": "Leaving: accelerate out of the way."
+   },
+   "linear": {
+    "$value": [
+     0,
+     0,
+     1,
+     1
+    ],
+    "$description": "Spinners and progress only."
+   }
+  }
+ }
+}

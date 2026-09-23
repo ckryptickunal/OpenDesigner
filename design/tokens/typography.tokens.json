@@ -1,0 +1,511 @@
+{
+ "font": {
+  "family": {
+   "$type": "fontFamily",
+   "$description": "One UI family plus one mono (DC-L02-03); open-source neutral face (L09 A2 row 5, DC-L02-01).",
+   "sans": {
+    "$value": [
+     "Inter",
+     "system-ui",
+     "-apple-system",
+     "Segoe UI",
+     "Roboto",
+     "sans-serif"
+    ]
+   },
+   "mono": {
+    "$value": [
+     "JetBrains Mono",
+     "SF Mono",
+     "ui-monospace",
+     "Menlo",
+     "Consolas",
+     "monospace"
+    ]
+   }
+  },
+  "weight": {
+   "$type": "fontWeight",
+   "$description": "Three weights: 400 body, 500 labels, 600 headings (DC-L02-15, L15 P03).",
+   "regular": {
+    "$value": 400
+   },
+   "medium": {
+    "$value": 500
+   },
+   "semibold": {
+    "$value": 600
+   }
+  },
+  "size": {
+   "$type": "dimension",
+   "$description": "9 sizes: ratio 1.2 from a 14px base, rounded to even px and hand-adjusted (DC-L02-08, DC-L02-09, DC-L02-10). Adjacent steps differ by >= 10%.",
+   "12": {
+    "$value": {
+     "value": 12,
+     "unit": "px"
+    }
+   },
+   "14": {
+    "$value": {
+     "value": 14,
+     "unit": "px"
+    }
+   },
+   "16": {
+    "$value": {
+     "value": 16,
+     "unit": "px"
+    }
+   },
+   "20": {
+    "$value": {
+     "value": 20,
+     "unit": "px"
+    }
+   },
+   "24": {
+    "$value": {
+     "value": 24,
+     "unit": "px"
+    }
+   },
+   "28": {
+    "$value": {
+     "value": 28,
+     "unit": "px"
+    }
+   },
+   "32": {
+    "$value": {
+     "value": 32,
+     "unit": "px"
+    }
+   },
+   "40": {
+    "$value": {
+     "value": 40,
+     "unit": "px"
+    }
+   },
+   "48": {
+    "$value": {
+     "value": 48,
+     "unit": "px"
+    }
+   }
+  },
+  "lineHeight": {
+   "$type": "dimension",
+   "$description": "Line heights snapped to 4px: ~1.5 at 12-16px, ~1.4 at 20-24px, ~1.25 at 28-40px, ~1.1 at 48px (DC-L02-13).",
+   "16": {
+    "$value": {
+     "value": 16,
+     "unit": "px"
+    }
+   },
+   "20": {
+    "$value": {
+     "value": 20,
+     "unit": "px"
+    }
+   },
+   "24": {
+    "$value": {
+     "value": 24,
+     "unit": "px"
+    }
+   },
+   "28": {
+    "$value": {
+     "value": 28,
+     "unit": "px"
+    }
+   },
+   "32": {
+    "$value": {
+     "value": 32,
+     "unit": "px"
+    }
+   },
+   "36": {
+    "$value": {
+     "value": 36,
+     "unit": "px"
+    }
+   },
+   "40": {
+    "$value": {
+     "value": 40,
+     "unit": "px"
+    }
+   },
+   "52": {
+    "$value": {
+     "value": 52,
+     "unit": "px"
+    }
+   }
+  }
+ },
+ "text": {
+  "$type": "typography",
+  "$description": "15 semantic styles: role x size (DC-L02-07, L09 A1 row 8). lineHeight is a unitless multiplier as DTCG requires; the px value is in $extensions for Figma.",
+  "$extensions": {
+   "dev.dsbuilder": {
+    "sources": [
+     "DC-L02-07",
+     "DC-L02-08",
+     "DC-L02-09",
+     "DC-L02-10",
+     "DC-L02-13",
+     "DC-L02-14",
+     "DC-L02-15",
+     "DC-L02-18",
+     "L09-A1.8"
+    ]
+   }
+  },
+  "display": {
+   "$value": {
+    "fontFamily": "{font.family.sans}",
+    "fontSize": "{font.size.48}",
+    "fontWeight": "{font.weight.semibold}",
+    "letterSpacing": {
+     "value": -0.96,
+     "unit": "px"
+    },
+    "lineHeight": 1.0833
+   },
+   "$extensions": {
+    "dev.dsbuilder": {
+     "lineHeightPx": 52,
+     "letterSpacingEm": -0.02,
+     "use": "One hero line per page: marketing, empty-state headline.",
+     "avoid": "App chrome, cards, anything repeated.",
+     "fontSizeRef": "font.size.48",
+     "lineHeightRef": "font.lineHeight.52"
+    }
+   }
+  },
+  "headline": {
+   "lg": {
+    "$value": {
+     "fontFamily": "{font.family.sans}",
+     "fontSize": "{font.size.32}",
+     "fontWeight": "{font.weight.semibold}",
+     "letterSpacing": {
+      "value": -0.32,
+      "unit": "px"
+     },
+     "lineHeight": 1.25
+    },
+    "$extensions": {
+     "dev.dsbuilder": {
+      "lineHeightPx": 40,
+      "letterSpacingEm": -0.01,
+      "use": "Page titles.",
+      "avoid": "Section titles inside a page.",
+      "fontSizeRef": "font.size.32",
+      "lineHeightRef": "font.lineHeight.40"
+     }
+    }
+   },
+   "md": {
+    "$value": {
+     "fontFamily": "{font.family.sans}",
+     "fontSize": "{font.size.28}",
+     "fontWeight": "{font.weight.semibold}",
+     "letterSpacing": {
+      "value": -0.28,
+      "unit": "px"
+     },
+     "lineHeight": 1.2857
+    },
+    "$extensions": {
+     "dev.dsbuilder": {
+      "lineHeightPx": 36,
+      "letterSpacingEm": -0.01,
+      "use": "Dialog and settings page titles.",
+      "avoid": "Card titles.",
+      "fontSizeRef": "font.size.28",
+      "lineHeightRef": "font.lineHeight.36"
+     }
+    }
+   },
+   "sm": {
+    "$value": {
+     "fontFamily": "{font.family.sans}",
+     "fontSize": "{font.size.24}",
+     "fontWeight": "{font.weight.semibold}",
+     "letterSpacing": {
+      "value": 0.0,
+      "unit": "px"
+     },
+     "lineHeight": 1.3333
+    },
+    "$extensions": {
+     "dev.dsbuilder": {
+      "lineHeightPx": 32,
+      "letterSpacingEm": 0.0,
+      "use": "Top-level section titles.",
+      "avoid": "Dense tables and toolbars.",
+      "fontSizeRef": "font.size.24",
+      "lineHeightRef": "font.lineHeight.32"
+     }
+    }
+   }
+  },
+  "title": {
+   "lg": {
+    "$value": {
+     "fontFamily": "{font.family.sans}",
+     "fontSize": "{font.size.20}",
+     "fontWeight": "{font.weight.semibold}",
+     "letterSpacing": {
+      "value": 0.0,
+      "unit": "px"
+     },
+     "lineHeight": 1.4
+    },
+    "$extensions": {
+     "dev.dsbuilder": {
+      "lineHeightPx": 28,
+      "letterSpacingEm": 0.0,
+      "use": "Card and panel titles.",
+      "avoid": "Body emphasis.",
+      "fontSizeRef": "font.size.20",
+      "lineHeightRef": "font.lineHeight.28"
+     }
+    }
+   },
+   "md": {
+    "$value": {
+     "fontFamily": "{font.family.sans}",
+     "fontSize": "{font.size.16}",
+     "fontWeight": "{font.weight.semibold}",
+     "letterSpacing": {
+      "value": 0.0,
+      "unit": "px"
+     },
+     "lineHeight": 1.5
+    },
+    "$extensions": {
+     "dev.dsbuilder": {
+      "lineHeightPx": 24,
+      "letterSpacingEm": 0.0,
+      "use": "Group titles, list headers.",
+      "avoid": "Buttons (use label.lg).",
+      "fontSizeRef": "font.size.16",
+      "lineHeightRef": "font.lineHeight.24"
+     }
+    }
+   },
+   "sm": {
+    "$value": {
+     "fontFamily": "{font.family.sans}",
+     "fontSize": "{font.size.14}",
+     "fontWeight": "{font.weight.semibold}",
+     "letterSpacing": {
+      "value": 0.0,
+      "unit": "px"
+     },
+     "lineHeight": 1.4286
+    },
+    "$extensions": {
+     "dev.dsbuilder": {
+      "lineHeightPx": 20,
+      "letterSpacingEm": 0.0,
+      "use": "Table headers, field-group titles.",
+      "avoid": "Paragraph emphasis (use weight in body).",
+      "fontSizeRef": "font.size.14",
+      "lineHeightRef": "font.lineHeight.20"
+     }
+    }
+   }
+  },
+  "body": {
+   "lg": {
+    "$value": {
+     "fontFamily": "{font.family.sans}",
+     "fontSize": "{font.size.16}",
+     "fontWeight": "{font.weight.regular}",
+     "letterSpacing": {
+      "value": 0.0,
+      "unit": "px"
+     },
+     "lineHeight": 1.5
+    },
+    "$extensions": {
+     "dev.dsbuilder": {
+      "lineHeightPx": 24,
+      "letterSpacingEm": 0.0,
+      "use": "Long-form reading, docs, onboarding copy.",
+      "avoid": "Dense tables and forms.",
+      "fontSizeRef": "font.size.16",
+      "lineHeightRef": "font.lineHeight.24"
+     }
+    }
+   },
+   "md": {
+    "$value": {
+     "fontFamily": "{font.family.sans}",
+     "fontSize": "{font.size.14}",
+     "fontWeight": "{font.weight.regular}",
+     "letterSpacing": {
+      "value": 0.0,
+      "unit": "px"
+     },
+     "lineHeight": 1.4286
+    },
+    "$extensions": {
+     "dev.dsbuilder": {
+      "lineHeightPx": 20,
+      "letterSpacingEm": 0.0,
+      "use": "Default UI text: forms, tables, descriptions.",
+      "avoid": "Long articles (use body.lg).",
+      "fontSizeRef": "font.size.14",
+      "lineHeightRef": "font.lineHeight.20"
+     }
+    }
+   },
+   "sm": {
+    "$value": {
+     "fontFamily": "{font.family.sans}",
+     "fontSize": "{font.size.12}",
+     "fontWeight": "{font.weight.regular}",
+     "letterSpacing": {
+      "value": 0.0,
+      "unit": "px"
+     },
+     "lineHeight": 1.3333
+    },
+    "$extensions": {
+     "dev.dsbuilder": {
+      "lineHeightPx": 16,
+      "letterSpacingEm": 0.0,
+      "use": "Helper text, timestamps, captions.",
+      "avoid": "Anything people must read at length.",
+      "fontSizeRef": "font.size.12",
+      "lineHeightRef": "font.lineHeight.16"
+     }
+    }
+   }
+  },
+  "label": {
+   "lg": {
+    "$value": {
+     "fontFamily": "{font.family.sans}",
+     "fontSize": "{font.size.14}",
+     "fontWeight": "{font.weight.medium}",
+     "letterSpacing": {
+      "value": 0.0,
+      "unit": "px"
+     },
+     "lineHeight": 1.4286
+    },
+    "$extensions": {
+     "dev.dsbuilder": {
+      "lineHeightPx": 20,
+      "letterSpacingEm": 0.0,
+      "use": "Button and control labels (md, lg).",
+      "avoid": "Headings.",
+      "fontSizeRef": "font.size.14",
+      "lineHeightRef": "font.lineHeight.20"
+     }
+    }
+   },
+   "md": {
+    "$value": {
+     "fontFamily": "{font.family.sans}",
+     "fontSize": "{font.size.12}",
+     "fontWeight": "{font.weight.medium}",
+     "letterSpacing": {
+      "value": 0.0,
+      "unit": "px"
+     },
+     "lineHeight": 1.3333
+    },
+    "$extensions": {
+     "dev.dsbuilder": {
+      "lineHeightPx": 16,
+      "letterSpacingEm": 0.0,
+      "use": "Small control labels, badges, tabs in dense bars.",
+      "avoid": "Body text.",
+      "fontSizeRef": "font.size.12",
+      "lineHeightRef": "font.lineHeight.16"
+     }
+    }
+   },
+   "sm": {
+    "$value": {
+     "fontFamily": "{font.family.sans}",
+     "fontSize": "{font.size.12}",
+     "fontWeight": "{font.weight.medium}",
+     "letterSpacing": {
+      "value": 0.48,
+      "unit": "px"
+     },
+     "lineHeight": 1.3333
+    },
+    "$extensions": {
+     "dev.dsbuilder": {
+      "lineHeightPx": 16,
+      "letterSpacingEm": 0.04,
+      "use": "Overlines in all caps with +0.04em tracking (DC-L02-18).",
+      "avoid": "Sentences; all caps below 11px.",
+      "fontSizeRef": "font.size.12",
+      "lineHeightRef": "font.lineHeight.16",
+      "textTransform": "uppercase"
+     }
+    }
+   }
+  },
+  "code": {
+   "md": {
+    "$value": {
+     "fontFamily": "{font.family.mono}",
+     "fontSize": "{font.size.14}",
+     "fontWeight": "{font.weight.regular}",
+     "letterSpacing": {
+      "value": 0.0,
+      "unit": "px"
+     },
+     "lineHeight": 1.4286
+    },
+    "$extensions": {
+     "dev.dsbuilder": {
+      "lineHeightPx": 20,
+      "letterSpacingEm": 0.0,
+      "use": "Token names, code in docs.",
+      "avoid": "UI labels.",
+      "fontSizeRef": "font.size.14",
+      "lineHeightRef": "font.lineHeight.20"
+     }
+    }
+   },
+   "sm": {
+    "$value": {
+     "fontFamily": "{font.family.mono}",
+     "fontSize": "{font.size.12}",
+     "fontWeight": "{font.weight.regular}",
+     "letterSpacing": {
+      "value": 0.0,
+      "unit": "px"
+     },
+     "lineHeight": 1.3333
+    },
+    "$extensions": {
+     "dev.dsbuilder": {
+      "lineHeightPx": 16,
+      "letterSpacingEm": 0.0,
+      "use": "Inline values, code syntax rows.",
+      "avoid": "Paragraphs.",
+      "fontSizeRef": "font.size.12",
+      "lineHeightRef": "font.lineHeight.16"
+     }
+    }
+   }
+  }
+ }
+}

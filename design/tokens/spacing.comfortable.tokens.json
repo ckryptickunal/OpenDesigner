@@ -1,0 +1,61 @@
+{
+ "space": {
+  "$type": "dimension",
+  "$description": "Semantic spacing, comfortable density. Parents own spacing (padding + gap); children never set outer margins (DC-L03-04).",
+  "$extensions": {
+   "dev.dsbuilder": {
+    "density": "comfortable",
+    "sources": [
+     "DC-L03-04",
+     "DC-L03-10",
+     "DC-L03-11",
+     "DC-L03-24"
+    ]
+   }
+  },
+  "inset": {
+   "xs": {
+    "$value": "{space.050}",
+    "$description": "Tag and badge padding."
+   },
+   "sm": {
+    "$value": "{space.100}",
+    "$description": "Compact chip padding, icon-button inset."
+   },
+   "md": {
+    "$value": "{space.150}",
+    "$description": "Small control padding, list-row block padding."
+   },
+   "lg": {
+    "$value": "{space.200}",
+    "$description": "Default control and card padding."
+   },
+   "xl": {
+    "$value": "{space.300}",
+    "$description": "Dialog and panel padding."
+   }
+  },
+  "gap": {
+   "xs": {
+    "$value": "{space.050}",
+    "$description": "Icon to label inside a control."
+   },
+   "sm": {
+    "$value": "{space.100}",
+    "$description": "Between related controls (DC-L03-13: 8px desktop)."
+   },
+   "md": {
+    "$value": "{space.150}",
+    "$description": "Form field stack, label to field group."
+   },
+   "lg": {
+    "$value": "{space.200}",
+    "$description": "Between groups inside a card."
+   },
+   "xl": {
+    "$value": "{space.300}",
+    "$description": "Between cards (outer gap: at least 2x the inner gap, DC-L03-24)."
+   }
+  }
+ }
+}

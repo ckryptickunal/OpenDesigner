@@ -1,6 +1,6 @@
 # Design-system ontology (S1a)
 
-This file is the map of every building block of a design system, arranged in layers. The design-system builder uses it as its internal structure: each node is a place where the builder stores values, asks questions, or runs checks. It was synthesized on 2026-09-23 from research lanes L00 to L16. `synthesis/ontology.json` holds the same tree in machine-readable form, and both files are generated from one source, so they cannot drift apart.
+This file is the map of every building block of a design system, arranged in layers. The design-system builder uses it as its internal structure: each node is a place where the builder stores values, asks questions, or runs checks. It was synthesized on 2026-09-23 from research lanes L00 to L16. `synthesis/ontology.json` holds the same tree in machine-readable form. Both files come from one build over the same data, so they agree; treat `ontology.json` as the canonical copy when editing.
 
 ## Overview (top two levels)
 
@@ -8,16 +8,16 @@ Arrows show the main direction of influence: context decides principles, princip
 
 ```mermaid
 flowchart TB
-  ctx["Context and inputs<br/><small>Starting point and system posture · Scope: products, audience and stack · Existing UI inventory (audit) · Target platforms · Brand inputs · Hard constraints</small>"]
-  prin["Principles<br/><small>Design principles · UX behavior rules · Visual design principles</small>"]
-  found["Foundations<br/><small>Color · Typography · Space, sizing and density · Layout · Interaction and input · Shape and borders · Elevation, materials and opacity · Motion · Sound and haptics · Iconography · Imagery, illustration and brand marks · Data visualization · Content and voice · Accessibility</small>"]
-  tok["Tokens<br/><small>Token tiers · Token naming · Token coverage · Token value types and encoding · Modes and theming axes · Themes and brands · Platform delivery of tokens</small>"]
-  comp["Components<br/><small>Component inventory scope · Hierarchy model and naming · Build strategy and technology · Component API (code and Figma) · Device variants of components · System controls versus custom controls · Interaction states · Microinteraction specification · Action components · Input components · Selection components · Navigation components · Feedback components · Overlay components · Containment components · Data display components · Media components · Layout primitives and utilities</small>"]
-  pat["Patterns and templates<br/><small>Forms and field anatomy · Feedback patterns · Destructive actions: undo versus confirm · Global navigation · Modality and overlays · Long collections · Progressive disclosure · Empty states · Onboarding · AI and conversational patterns · Glanceable surfaces · Layout archetypes · Transitions and choreography · Other product patterns · Page templates</small>"]
-  guard["Guardrails and validation<br/><small>Rule enforcement and exported lint · Check catalog · Visual critique strictness · Safety and distraction limits · Accessibility test matrix by device</small>"]
-  deliver["Delivery and tooling<br/><small>Source of truth and round-trip direction · Interchange format and file layout · Token build pipeline · Distribution model · Export and handoff channels · Agent-readable distribution · Design-tool interop</small>"]
-  gov["Governance, docs and adoption<br/><small>Build order and pilot · Team model and roles · Contribution model · Governance flow and decision records · Component status labels · Versioning · Documentation platform · Rollout and communication · Metrics and maturity · Governance tooling in Figma</small>"]
-  builder["Builder surface (meta layer)<br/><small>Primary interaction model · Canvas rendering substrate · Preview surface and latency · Controls for foundation parameters · AI editing and generative variation · State, undo, versions and sharing · Review and visual diff · Keyboard-first operation · Multiplayer and agent presence · Reference intake · Designer hooks and resource requests</small>"]
+  ctx["Context and inputs<br/><small>strategy · scope · inventory · platforms · brand · constraints</small>"]
+  prin["Principles<br/><small>design · ux · visual</small>"]
+  found["Foundations<br/><small>color · type · space · layout · interaction · shape · elevation · motion · sensory · icon · imagery · dataviz · content · a11y</small>"]
+  tok["Tokens<br/><small>tiers · naming · coverage · types · modes · themes · delivery</small>"]
+  comp["Components<br/><small>inventory · taxonomy · implementation · api · device-variants · platform-rendering · states · behavior · action · input · selection · navigation · feedback · overlay · containment · data · media · layout</small>"]
+  pat["Patterns and templates<br/><small>forms · feedback · destructive · navigation · overlay · collections · disclosure · empty · onboarding · ai · glanceable · layout · motion · other · templates</small>"]
+  guard["Guardrails and validation<br/><small>enforcement · checks · critique · safety · testing</small>"]
+  deliver["Delivery and tooling<br/><small>source-of-truth · interchange · pipeline · packaging · channels · ai · interop</small>"]
+  gov["Governance, docs and adoption<br/><small>process · team · contribution · decisions · lifecycle · change · docs · adoption · measure · tooling</small>"]
+  builder["Builder surface (meta layer)<br/><small>interaction · canvas · preview · controls · ai · state · review · input · collab · intake · hooks</small>"]
   ctx -->|bounds| prin
   prin -->|constrain| found
   found -->|stored as| tok
@@ -2488,3 +2488,84 @@ Computed by the build script over `synthesis/cards.json` (325 cards) and the 271
 - Double-mapped cards: 0
 - Nodes per layer: ctx 15, prin 18, found 123, tok 19, comp 27, pat 23, guard 6, deliver 15, gov 13, builder 12; total 271
 
+### How the coverage was resolved
+
+Every card was assigned by hand to one owning node; the build script then counts owners per card and fails loudly on an unknown, missing or duplicate assignment. Where two or more lanes decided the same thing, all their cards sit on one node (for example the three source-of-truth cards on `deliver.source-of-truth`). Where a card also shapes a second node, the second node lists it under "Also shaped by", which does not count as a mapping. The final count is 325 of 325 cards mapped exactly once, including L16's 15 cards; `synthesis/cards.json` was refreshed with `python3 tools/jev_nav.py export` before the final build.
+
+## Block-path naming conflicts normalized
+
+Lanes used different block paths for the same decision, and in one case the same name for different decisions. The table lists the conflicts and the node each was normalized to.
+
+| Concept | How lanes named it (card) | Normalized node |
+|---|---|---|
+| Native versus brand posture | L10 "Platforms > Strategy > Native vs brand posture" (DC-L10-02); L06 "Foundations > Brand > Platform deference" (DC-L06-14) | `ctx.platforms.posture` |
+| Design principles | L06 "Governance > Principles" (DC-L06-15); L11 "Foundations > Principles" (DC-L11-05) | `prin.design` |
+| Theming axes | L07 "Tokens > Theming > Modes" (DC-L07-15); L11 "Foundations > Theming scope" (DC-L11-25); L03 "Space > Density > Modes" (DC-L03-11) | `tok.modes` |
+| Multi-brand | L06 "Tokens > Theming > Brand layers" (DC-L06-16); L07 "Tokens > Theming > Brands" (DC-L07-16); L09 "Theming > Brands and modes" (DC-L09-07) | `tok.themes.brands` |
+| Source of truth | L07 "Tokens > Architecture" (DC-L07-08); L11 "Change > Source of truth" (DC-L11-16); L16 "Builder > Data" (DC-L16-02) | `deliver.source-of-truth` |
+| Focus indicator | L04 "Borders > Focus ring" (DC-L04-09); L08 "Components > States > Focus-visible" (DC-L08-11); L01 focus color (DC-L01-16) | `found.interaction.focus` (geometry); `found.color.roles.border` (color) |
+| Stacking order | L03 "Layout > Layers" (DC-L03-23); L04 "Elevation > Stacking layers" (DC-L04-14) | `found.elevation.stacking` |
+| Border widths | L03 "Sizing > Border widths" (DC-L03-09); L04 "Borders > Stroke width scale" (DC-L04-07) | `found.shape.border` |
+| Control sizes | L03 "Sizing > Control heights" (DC-L03-07); L08 "Components > Sizing" (DC-L08-07) | `found.space.sizing.controls` |
+| Density | L03 (DC-L03-10); L08 "Components > Density" (DC-L08-13); L09 "Typography + Space > Density preset" (DC-L09-04); L14 "Space > Density by context" (DC-L14-13); L15 "Visual language > Density voice" (DC-L15-04) | `found.space.density` and its three children |
+| Motion personality | L04 (DC-L04-19); L06 "Motion > Personality" (DC-L06-10); L09 "Foundations > Motion" (DC-L09-06) | `found.motion.personality` |
+| Shape personality and radius | L04 "Shape personality" (DC-L04-02); L06 "Brand shape language" (DC-L06-09); L09 "Radius scale and default" (DC-L09-01) with L04 (DC-L04-01) | `found.shape.personality`, `found.shape.radius` |
+| Depth and materials | L04 "Elevation > Depth strategy" (DC-L04-10); L09 "Foundations > Elevation" (DC-L09-02); L10 "Foundations > Depth > Materials (platform)" (DC-L10-12) with L04 "Materials" (DC-L04-15) | `found.elevation.depth-model`, `found.elevation.materials` |
+| Typeface choice | L02 sourcing (DC-L02-01); L06 "Typography > Brand typeface" (DC-L06-07); L09 "Typeface posture" (DC-L09-05); L10 "Typeface > Platform mapping" (DC-L10-06) | `found.type.typeface.sourcing` |
+| "Scheme strategy" (same name, different decisions) | L06 "Color > Scheme strategy" means scheme source and colorfulness (DC-L06-05); L15 "Color > Scheme strategy" means accent proportion (DC-L15-06) | `found.color.character` and `found.color.brand` respectively |
+| Brand color | L01 "Brand vs UI color" (DC-L01-08, 09); L06 "Brand color role" (DC-L06-04); L10 "Brand accent > Platform application" (DC-L10-04) | `found.color.brand` |
+| Appearance modes | L01 "Modes" (DC-L01-18 to 20); L10 "Appearance modes (platform)" (DC-L10-17); L14 "Appearance by device" (DC-L14-09) | `found.color.modes` and children |
+| Personalized color | L01 "Modes > Dynamic color" (DC-L01-21); L10 "Personalization policy" (DC-L10-05) | `found.color.personalization` |
+| Data-visualization color | L01 "Color > Data visualization" (DC-L01-24); L05 "Color > Data visualization palettes" (DC-L05-23) | `found.dataviz.color` (moved out of color) |
+| Text scaling | L02 "Accessibility > Text scaling" (DC-L02-21); L10 "Scaling > Platform text scaling" (DC-L10-07) | `found.type.scaling` |
+| Token encoding filed under foundations | L01 "Color > Tokens" (DC-L01-26); L02 "Typography > Tokens" (DC-L02-27, 28); L03 "Foundations > Tokens > Dimension encoding" (DC-L03-26); L10 "Tokens > Encoding > Units" (DC-L10-08) | `tok.types.color`, `tok.types.typography`, `tok.types.dimension` |
+| Targets and input | L03 "Sizing > Targets" (DC-L03-12); L14 "Targets > By input" (DC-L14-03); L10 "Interaction > Input modality and targets" (DC-L10-15) | `found.interaction.targets`, `found.interaction.modalities` |
+| Interaction states | L08 "Components > States" (DC-L08-09); L14 "Foundations > Interaction > States" (DC-L14-06) | `comp.states` (color method stays at `found.color.states`) |
+| Navigation | L08 "Patterns > Navigation" (DC-L08-19); L10 "Top-level navigation" (DC-L10-09); L13 "Global navigation" (DC-L13-02); L14 "Device containers" (DC-L14-05) | `pat.navigation`, `pat.navigation.containers` |
+| Validation | L08 "Forms > Validation" (DC-L08-17); L13 "Forms > Validation" (DC-L13-06) | `pat.forms.validation` |
+| Feedback channels | L08 "Notifications; Toast, Banner, Alert" (DC-L08-18); L13 "Feedback > Messaging" (DC-L13-09) | `pat.feedback.messaging` |
+| Destructive actions | L08 "Button > Danger; Destructive confirmation" (DC-L08-06); L13 "Error prevention > Destructive actions" (DC-L13-08) | visual treatment at `comp.action.button`, undo-versus-confirm at `pat.destructive` |
+| Component doc page | L08 "Documentation > Component page" (DC-L08-23); L11 "Docs > Component page" (DC-L11-18) | `gov.docs.component-page` |
+| AI surfaces | L08 "Components > AI" (DC-L08-22); L13 "Patterns > AI" (DC-L13-16); L14 "Patterns > Conversational" (DC-L14-12) | `comp.feedback.ai`, `pat.ai` |
+| Deprecation | L07 "Tokens > Governance > Lifecycle" (DC-L07-23); L11 "Change > Deprecation" (DC-L11-15) | `gov.change.deprecation` |
+| Figma structure | L07 "Figma > Variables", "Figma > Styles vs Variables", "Tooling > Design-code bridge" (DC-L07-18 to 21, 24) | `deliver.interop.figma` and children |
+| Avatar and brand marks | L05 "Components > Avatar" (DC-L05-18); L05 "Brand in product" (DC-L05-12, 13) | `comp.data.avatar`; `found.imagery.brand-marks` |
+| Top-level labels | L11 "Strategy", "Process", "Change", "Docs", "Measurement", "Adoption", "Distribution"; L09 "Theming", "Delivery"; L06 "Content"; L13 "Principles"; L14 and L15 "Builder" and "Governance > Linting" | the ten layers of this file |
+
+Two overlaps were kept as separate, cross-linked nodes because they decide different values: surface tiers as color (`found.color.roles.surface`, DC-L01-13) versus as depth steps (`found.elevation.surfaces`, DC-L04-13); and whitespace ratios (`found.space.whitespace`, DC-L03-24) versus grouping strategy (`prin.visual.grouping`, DC-L15-05). The same holds for paragraph spacing (DC-L02-16) versus vertical rhythm (DC-L03-25).
+
+## Contradictions between lanes
+
+| # | Contradiction | Evidence | Resolution in this ontology |
+|---|---|---|---|
+| 1 | Validation timing: L08 validates on submit and on blur only for format checks; L13 validates on blur or at complete input length. | DC-L08-17 versus DC-L13-06 | Not resolved by evidence; both defaults are recorded on `pat.forms.validation` and it should be a questionnaire item. Both agree on no validation while typing and on submit-time validation for long one-thing-per-page forms. A merged default (format and complete-length checks on blur, everything else on submit) is [inferred]. |
+| 2 | Figma easing: L04 says Figma variables cannot hold cubic-beziers; L07 verified that Figma added timing and easing variables (Bezier or spring) with Figma Motion in 2026. | DC-L04-28 (marked [inferred] in the card) versus L07 A6 [S-L07-013, S-L07-017], DC-L07-14 | L07 is newer and verified on 2026-09-23, so `tok.types.motion` follows DC-L07-14. The easing-variable part of DC-L04-28 is stale; its spring encoding still stands. |
+| 3 | Units in the source of truth: L10 stores unitless 4-based numbers; L07 and L03 store px. | DC-L10-08 versus DC-L07-11, DC-L03-26 | px, because DTCG `dimension` requires a px or rem unit [S-L07-002] and Figma imports px only [S-L07-011]. |
+| 4 | Radius scale: L04's default scale has no 6px step, while L09's default control radius is 6 (the median of 22 systems). | DC-L04-01 versus DC-L09-01, L09-A1.7 | Include 6 in the scale, following the benchmark median [inferred]. |
+| 5 | Spacing scale endpoints: L03 includes 6 and stops at 80; L09 omits 6 and adds 96. | DC-L03-02 versus L09-A1.2 | Use the union 0, 2, 4, 6, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96 [inferred]. |
+| 6 | Motion ladder and exit curve: L04 tops out at 700ms and uses exit (0.3, 0, 1, 1); L09 tops out at 500ms with a 50ms step and exit (0.4, 0, 1, 1). | DC-L04-20, DC-L04-21 versus DC-L09-06, L09-A1.5 | Both stay recorded; they differ only at the ends. Treat 700ms as the full-screen and dimming step and pick one exit curve per preset [inferred]. |
+| 7 | Tier count wording: L07 says two tiers plus optional component tokens; L01, L02 and L09 say three tiers with the component tier optional. | DC-L07-01 versus DC-L01-26, DC-L02-27, L09-A1.1 | Same architecture counted differently; normalized on `tok.tiers` as two required tiers plus an optional component tier. |
+| 8 | Watch dark mode: L01 says watchOS has no Dark Mode support; L10 says watches are dark-only. | DC-L01-19 versus DC-L10-17 | Not a real conflict: watchOS has no Dark Mode setting because it is always dark; visionOS has neither (L14 Table A, [S-L10-089]). Worded that way on `found.color.modes.dark`. |
+| 9 | Source of truth: L07, L11 and L16 make the builder's model or a DTCG repo canonical; the community pulse says practitioners treat code as the source of truth. | DC-L07-08, DC-L11-16, DC-L16-02 versus BOARD note from L00 | Compatible for a builder: the model serializes to DTCG in git and generates code. For mature systems that graduate into a repo, L16 recommends code-canonical review loops (L16 G2 option 3). |
+
+Cross-system disagreements that are design choices rather than lane errors (disabled submit buttons, tooltips on disabled controls, toasts) are recorded on `comp.states.disabled` and `pat.feedback.messaging` (BOARD note from L08).
+
+## Structural decisions
+
+1. **Ten layers, the tenth a meta layer.** The design system occupies layers 0 to 8. L16's cards about the tool itself (canvas, preview, undo, review, multiplayer) sit in `builder`, so every card has a home without mixing tool design into the system's structure.
+2. **Foundations hold values and intent; the token layer holds encoding.** Encoding cards filed under foundations (DC-L01-26, DC-L02-27, DC-L02-28, DC-L03-26, DC-L04-28, DC-L10-08) moved to `tok.types`, and Figma-specific cards moved to `deliver.interop.figma`.
+3. **Cross-cutting concepts get one home.** Density (six cards from five lanes), focus, stacking order, source of truth, brand color and navigation containers were each consolidated into one node, with related cards cross-linked rather than duplicated.
+4. **Two new structural nodes the lanes implied but did not name.** `found.interaction` (input modalities, targets, focus), following L14's finding that targets follow input precision rather than device; and a behavior-rule sub-layer (`prin.ux`) whose enforcement lives separately in `guard`, following L13 Part E.
+5. **Device context is separate from platform.** `ctx.platforms.devices` and a resolver `context` modifier sit beside `platform`, following DC-L14-01 and the L14 cross-lane note, because one OS spans several device classes.
+
+Catalogs are grouped, not exploded: the 64 L08 components are members of ten category nodes, and the 72 L15 principles are members of the principle and foundation nodes they inform.
+
+## Provenance summary
+
+Every node carries a `provenance` value requested in `_coordination/BRIEF.md`: generatable (formula from a few inputs), extractable (readable from a reference), designer-owned (needs a human creator, or a decision only the team can make), or tool-assisted (an engineer can make it with a named tool). The note beside each value cites a card or source, or is tagged [inferred]. Most generatable foundation and token nodes can also be read from a reference site or Figma file; the notes say so rather than adding a second value. Designer-owned nodes include the brand-mark, illustration, photography, motif, custom-icon construction, pictogram, voice, tone and terminology nodes, plus the team-decision nodes in context, principles and governance. Lane L17 (`research/L17-how-systems-get-made.md`) is classifying this in parallel and was not available when this file was built; its findings should replace the [inferred] values.
+
+## Open gaps
+
+- No Decision Card covers how the builder extracts values from a reference website or screenshot (BRIEF.md requirement 4); `builder.intake` records only the Figma read path [inferred].
+- Search and filtering, authentication, data tables and settings patterns have no Decision Cards (`pat.other`).
+- DTCG has no types for springs, assets, aspect ratios, breakpoints, blur or behavior rules; `tok.types.extensions` collects these, but the builder's extension schema is still to be designed (L07 A5).

@@ -1,0 +1,134 @@
+{
+ "radius": {
+  "$type": "dimension",
+  "$description": "Radius scale (L09 A1 row 7: 0-24 plus full; median control radius 6). Semantic roles below (DC-L04-03).",
+  "$extensions": {
+   "dev.dsbuilder": {
+    "sources": [
+     "L09-A1.7",
+     "DC-L04-01",
+     "DC-L04-02",
+     "DC-L04-03",
+     "DC-L04-05"
+    ]
+   }
+  },
+  "0": {
+   "$value": {
+    "value": 0,
+    "unit": "px"
+   }
+  },
+  "2": {
+   "$value": {
+    "value": 2,
+    "unit": "px"
+   }
+  },
+  "4": {
+   "$value": {
+    "value": 4,
+    "unit": "px"
+   }
+  },
+  "6": {
+   "$value": {
+    "value": 6,
+    "unit": "px"
+   }
+  },
+  "8": {
+   "$value": {
+    "value": 8,
+    "unit": "px"
+   }
+  },
+  "12": {
+   "$value": {
+    "value": 12,
+    "unit": "px"
+   }
+  },
+  "16": {
+   "$value": {
+    "value": 16,
+    "unit": "px"
+   }
+  },
+  "24": {
+   "$value": {
+    "value": 24,
+    "unit": "px"
+   }
+  },
+  "full": {
+   "$value": {
+    "value": 9999,
+    "unit": "px"
+   },
+   "$description": "Pills and avatars (person = full, DC-L04-03)."
+  },
+  "detail": {
+   "$value": "{radius.4}",
+   "$description": "Checkboxes, tags, small badges."
+  },
+  "control": {
+   "$value": "{radius.6}",
+   "$description": "Buttons, inputs, selects (L09 median 6px)."
+  },
+  "container": {
+   "$value": "{radius.12}",
+   "$description": "Cards and panels. Nested radius = outer - padding (DC-L04-05)."
+  },
+  "overlay": {
+   "$value": "{radius.16}",
+   "$description": "Dialogs, sheets, popovers."
+  }
+ },
+ "border": {
+  "$type": "dimension",
+  "width": {
+   "$description": "Border widths 1/2/4 (DC-L03-09, DC-L04-07).",
+   "1": {
+    "$value": {
+     "value": 1,
+     "unit": "px"
+    }
+   },
+   "2": {
+    "$value": {
+     "value": 2,
+     "unit": "px"
+    }
+   },
+   "4": {
+    "$value": {
+     "value": 4,
+     "unit": "px"
+    }
+   },
+   "default": {
+    "$value": "{border.width.1}"
+   },
+   "selected": {
+    "$value": "{border.width.2}",
+    "$description": "Use an inset shadow so layout does not jump (DC-L04-07)."
+   }
+  }
+ },
+ "focus": {
+  "$type": "dimension",
+  "$description": "Focus indicator: 2px solid ring, 2px offset, color border.focus (DC-L04-09, DC-L08-11; WCAG 2.4.7, 2.4.13).",
+  "ring": {
+   "width": {
+    "$value": "{border.width.2}"
+   },
+   "offset": {
+    "$value": {
+     "value": 2,
+     "unit": "px"
+    }
+   }
+  }
+ }
+}
