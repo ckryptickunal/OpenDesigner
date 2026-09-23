@@ -184,7 +184,7 @@ H3's synthesis, condensed. Rules marked [inferred] are this lane's reading, not 
 
 ## Part G. Keeping harmony across sessions and models
 
-Ranked by strength of evidence (H3) [S-L18-3xx as cited]:
+Ranked by strength of evidence (H3); each item cites its own sources:
 1. **A closed, structured token source referenced by name.** DTCG 2025.10 is a stable W3C Community Group format with `$description` for intent and `$deprecated` instead of deletion [S-L18-324, S-L18-325]. In Sanity's eval of its own design-system docs (Aug 2026), JSON-structured docs plus 3 MCP tools took Sonnet 4.6 from 20% to 90% task success; retrievable code examples helped most, lint less [S-L18-332]. Anthropic reports models overwrite JSON less often than Markdown [S-L18-327]. Single-vendor eval, so treat the numbers as indicative.
 2. **Retrievable component docs and code examples** (Storybook MCP, Figma Code Connect, shadcn registry) [S-L18-344, S-L18-337, S-L18-338].
 3. **Deterministic gates, not advice.** DESIGN.md lint (broken refs, contrast, orphan tokens), stylelint strict-value, an audit script that exits 1, Claude Code hooks; Anthropic: CLAUDE.md is "context, not enforced configuration" [S-L18-323, S-L18-339, S-L18-334, S-L18-329].

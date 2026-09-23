@@ -44,6 +44,21 @@ Phase 2 (`server/`, a stateless MCP server with MCP Apps views reusing the templ
 | R4 | subagent | `docs/SPONSORSHIP.md` (verified funding options) |
 | D1 | orchestrator | writes `design/` artifacts into Paper (and Figma after sign-in) |
 
+## Engine contract (R2 implements, R3's skills call it)
+Run from the user's project; state lives in `./opendesigner/` unless `--dir` is given.
+```
+python3 <skill>/scripts/engine.py init [--dir D] [--from examples/<name>/state.json]   create state.json with defaults
+python3 <skill>/scripts/engine.py set <dotted.path> <json-value>                       record one decision (appends to decisions.md with --why "reason")
+python3 <skill>/scripts/engine.py generate                                           state.json + levers.json -> tokens/ (DTCG 2025.10 + resolver)
+python3 <skill>/scripts/engine.py validate [--json]                                  contrast, targets, lint; exit 1 on errors; report cites the rule
+python3 <skill>/scripts/engine.py export --format css|tailwind|figma|paper|swift|compose|dtcg
+python3 <skill>/scripts/engine.py design-md                                          render DESIGN.md from state + tokens + decisions
+python3 <skill>/scripts/engine.py preview [--open]                                   render preview.html (specimen of every token and a few components)
+```
+`state.json` holds the person's answers keyed by questionnaire question id, the dial values (0-100), raw inputs (brand color, typefaces, base sizes, platforms, devices), and asset-hook status (have / commissioning / using tool / skipped). The engine reads `levers.json` from the skill's own `references/` folder so the skill works offline and self-contained.
+
+`FUNDING.yml` is owned by R4 (not R1).
+
 ## Shared conventions
 - Python 3.10+, standard library only, no network in anything that ships inside `skills/`.
 - Every value the engine produces traces to `synthesis/levers.json` or a Decision Card; keep `[inferred]` honesty in docs.

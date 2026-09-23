@@ -808,7 +808,8 @@ def top_bar():
              D("display:flex;align-items:center;gap:8px", S(ty("body.md") + f";color:{T3}", "Foundations"), icon("chevron", T3, 14),
                S(ty("body.md") + f";color:{T1}", "Spacing")),
              D("display:flex;align-items:center;gap:8px", button("ghost", size="sm", label="History"),
-               button("secondary", size="sm", label="Export"), button("primary", size="sm", label="Commit 3 changes")))
+               button("secondary", size="sm", label="Export"), button("primary", size="sm", label="Commit 3 changes")),
+             data_subgroup="04.1a-topbar")
 
 
 RAIL = [
@@ -844,7 +845,8 @@ def rail():
              D("display:flex;flex-direction:column;gap:2px", *items),
              D(f"margin-top:auto;padding:12px;border-radius:8px;background:{SUNK};display:flex;flex-direction:column;gap:4px",
                S(ty("label.md") + f";color:{T1}", "Nothing missed"),
-               S(ty("body.sm") + f";color:{T2}", "24 blocks left. Next up: Layout, which depends on the spacing you set here.")))
+               S(ty("body.sm") + f";color:{T2}", "24 blocks left. Next up: Layout, which depends on the spacing you set here.")),
+             data_subgroup="04.1b-rail")
 
 
 def mini_ui(mode, highlight=True):
@@ -905,7 +907,8 @@ def center():
                      for tok, chg, eff in (("space.inset.lg", "12 → 16px", "14 components, both modes; contrast unaffected"),
                                            ("space.gap.md", "8 → 12px", "Form stacks and card groups"),
                                            ("density default", "compact → comfortable", "Compact stays available per user"))])
-    return D(f"flex:1;min-width:0;background:{SUNK};padding:24px;display:flex;flex-direction:column;gap:16px", head, ruler, preview, changes)
+    return D(f"flex:1;min-width:0;background:{SUNK};padding:24px;display:flex;flex-direction:column;gap:16px", head, ruler, preview, changes,
+             data_subgroup="04.1c-editor")
 
 
 def panel_block(n, title, right, *kids):
@@ -960,12 +963,13 @@ def right_panel():
                        S(ty("label.md") + f";color:{col('color.text.accent')};width:76px;text-align:right", action)))
     hook_block = panel_block("6", "Do you have these?", mono("2 open", T3), *hooks,
                              S(ty("body.sm") + f";color:{T3}", "No logo yet? Commission a designer, use a placeholder wordmark, or try a tool, with honest caveats."))
-    return D(f"width:360px;flex:none;background:{CARD};border-left:1px solid {BORDER};display:flex;flex-direction:column", detail, refs, hook_block)
+    return D(f"width:360px;flex:none;background:{CARD};border-left:1px solid {BORDER};display:flex;flex-direction:column", detail, refs, hook_block,
+             data_subgroup="04.1d-inspector")
 
 
 def app_window():
     return E("section", f"display:flex;flex-direction:column;width:1440px;background:{CARD};border-bottom:1px solid {BORDER}",
-             top_bar(), D("display:flex;align-items:stretch", rail(), center(), right_panel()), data_group="04.1-app")
+             top_bar(), D("display:flex;align-items:stretch", rail(), center(), right_panel(), data_subgroup="04.1-body"), data_group="04.1-app")
 
 
 def annotations():
