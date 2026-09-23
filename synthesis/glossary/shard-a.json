@@ -8,10 +8,10 @@
   ],
   "plain": "A slider for how much the app shows off, from quiet and plain to bold and loud.",
   "designer": "Productive (0) keeps attention on the task; expressive (100) adds emphasis: a bigger type scale, more weights, hero moments, brand-colored chrome, visible containers and motion throughout.",
-  "engineer": "Posture dial 0-100, default 50 (levers.json). Drives type.ratio 1.2/1.25/1.333, type.weightCount 2-4, emphasis.heroMoments, color.brandRole, layout.containment and motion.expressiveScope.",
+  "engineer": "Posture dial 0-100, default 50. Drives type.ratio 1.2/1.25/1.333, type.weightCount 2-4, emphasis.heroMoments, layout.containment, brand color role and expressive motion scope (resolve params).",
   "designer_says": "productive to expressive",
   "code_name": "dials.expression",
-  "example": "Material's 15 emphasized type styles switch on above 66.",
+  "example": "Above 66, Material-style emphasized type is requested; it is not generated yet.",
   "source": [
    "synthesis/levers.json#dials",
    "synthesis/LEVERS.md A1",
@@ -29,10 +29,10 @@
   ],
   "plain": "A slider for how much the app looks like your brand, or like the phone it runs on.",
   "designer": "Native (0): system font and components, brand only in accents. Brand-led (100): custom face, brand color on large surfaces, custom components. Navigation, back and sheets always stay native.",
-  "engineer": "Posture dial 0-100, default 50. Drives type.faceSuggestion, color.brandPlacement, components.nativeShare (1.0 at 0, 0.8 at 50, 0 at 100) and content.voiceGuidance; behavior.navigationNative stays true.",
+  "engineer": "Posture dial, default 50. Sets guidance params type.faceSuggestion, brand color placement, nativeShare (1.0 at 0, 0.8 at 50, 0 at 100) and content.voiceGuidance; behavior.navigationNative stays true.",
   "designer_says": "native to brand-led",
   "code_name": "dials.brandPresence",
-  "example": "Fluent reuses native patterns about 80% of the time.",
+  "example": "Fluent's 80/20 guidance: reuse native components most of the time.",
   "source": [
    "synthesis/levers.json#dials",
    "synthesis/LEVERS.md A2",
@@ -49,7 +49,7 @@
   ],
   "plain": "A slider for how much fits on one screen, from roomy and calm to tight and packed.",
   "designer": "Spacious (0) reads calm: 16px+ body, 48px controls. Compact (100) reads serious and efficient: 14px body (13 at 90+), 32px controls. Hit areas never shrink.",
-  "engineer": "Posture dial 0-100. Drives type.baseSize.web (19 to 13), control.height.md (48/40/32), icon.defaultSize (24/20/16) and space.densityMode; target.min never changes.",
+  "engineer": "Posture dial 0-100. Drives type.baseSize.web (19-13), size.control.md (48/40/32), size.icon.default (24/20/16) and density context; size.target.min never changes.",
   "designer_says": "spacious to compact",
   "code_name": "dials.density",
   "example": "GOV.UK's 19px body sits near 0; Polaris's 13px near 90.",
@@ -70,7 +70,7 @@
   ],
   "plain": "A slider for how lively the app feels, from calm to bouncy and bright.",
   "designer": "Calm (0) uses no-overshoot springs, shorter durations (0.8x), lighter headings and recessive navigation; energetic (100) adds bounce, 1.2x longer medium moves, more saturation and heavier headings.",
-  "engineer": "Character dial 0-100, default 50. Drives motion.spring.spatial.dampingRatio (1.0 to 0.6), stiffness (700 to 380), motion.easing.standard and motion.durationMultiplier (0.8 to 1.2).",
+  "engineer": "Character dial 0-100, default 50. Sets spatial spring damping ratio (1.0-0.6) and stiffness (700-380) in motion.spring.spatial.*, motion.easing.standard and a duration multiplier (0.8-1.2).",
   "designer_says": "calm to energetic motion",
   "code_name": "dials.energy",
   "example": "Material 3's standard spring damps at 0.9; its expressive one at 0.8.",
@@ -91,7 +91,7 @@
   ],
   "plain": "A slider for how round the corners are, from sharp boxes to soft pill shapes.",
   "designer": "Sets the default control radius and everything derived from it: container and overlay radii, nested radii, focus-ring radius, icon corners and caps. Benchmark median is 6px.",
-  "engineer": "Character dial 0-100, default 50. radius.control bands: 0, 2, 4, 6, 8, 12, 16px, full (pill) at 93+. Also drives icon.cornerStyle and icon.caps.",
+  "engineer": "Character dial 0-100, default 50. radius.control bands: 0, 2, 4, 6, 8, 12, 16px, full (pill) at 93+. Sets icon corner style and cap shape (resolve params).",
   "designer_says": "corner softness, sharp to pill",
   "code_name": "dials.roundness",
   "example": "Carbon sits at 0px corners; Material 3 uses full pill buttons.",
@@ -111,7 +111,7 @@
   ],
   "plain": "A slider for how much parts seem to lift off the page, from flat to deep.",
   "designer": "Each band is a different model: borders only, ring plus faint shadow, tonal layers, shadow ladder, then glass materials with a solid fallback. Dark mode lifts raised surfaces by lightness.",
-  "engineer": "Character dial 0-100, default 40. elevation.model breaks at 15, 35, 55 and 80; elevation.shadowAlpha.light scales 0.08 to 0.24; elevation.darkMode = lighter-raised-surfaces in every band.",
+  "engineer": "Character dial 0-100, default 40. The elevation model breaks at 15, 35, 55 and 80; light shadow alpha (color.shadow.key) runs 0.08-0.24; dark mode lifts raised surfaces.",
   "designer_says": "depth model, flat to glass",
   "code_name": "dials.depth",
   "example": "GOV.UK uses borders only; Apple's Liquid Glass sits at the deep end.",
@@ -131,8 +131,8 @@
    "monochrome to vivid"
   ],
   "plain": "A slider for how much color the app uses, from all gray to bright and bold.",
-  "designer": "Low keeps the palette near gray with one accent; high raises accent chroma, adds secondary and tertiary accents above 60 and tints surfaces. Spend strong color on small, meaningful elements.",
-  "engineer": "Character dial 0-100, default 50. Drives color.accentChroma.hct (0, 10, 34, 48, max), color.schemeVariant (monochrome, neutral, tonalSpot, expressive, vibrant) and color.accentCount (1, or 3 from 60).",
+  "designer": "Low keeps the palette near gray with one accent; high raises accent chroma, adds secondary and tertiary accents from 60 and tints surfaces. Spend strong color on small, meaningful elements.",
+  "engineer": "Character dial 0-100, default 50. Accent chroma for color.accent.* (HCT 0, 10, 34, 48, max), scheme variant (monochrome to vibrant) and accent count (1, or 3 from 60).",
   "designer_says": "near-gray to vibrant palette",
   "code_name": "dials.colorfulness",
   "example": "Material's scheme variants run from Monochrome to Vibrant along this dial.",
@@ -153,7 +153,7 @@
   ],
   "plain": "A slider for how cool and formal or warm and friendly the grays and the wording feel.",
   "designer": "Cool tints neutrals blue (slate) with title case and firmer borders; warm tints them toward stone or taupe, softens borders, uses sentence case and contractions. Brand hue never moves.",
-  "engineer": "Character dial 0-100. color.neutral.tint.oklch (chroma, hue): slate (0.046, 257) at 0, pure gray at 50, taupe (0.021, 43) at 100; plus border and casing rules.",
+  "engineer": "Character dial 0-100. OKLCH neutral tint (chroma, hue) of color.neutral.*: slate (0.046, 257) at 0, gray at 50, taupe (0.021, 43) at 100; plus border and casing rules.",
   "designer_says": "cool slate to warm taupe neutrals",
   "code_name": "dials.warmth",
   "example": "Cool end: GOV.UK writes \"cannot\". Warm end: \"can't\" and \"we\".",
@@ -168,7 +168,7 @@
   "term": "design system",
   "plain": "The shared rules and parts that make all the screens of an app look and work the same.",
   "designer": "Foundations, tokens, components, patterns and the guidance and governance around them, so every team ships consistent, accessible screens without re-deciding color, type and spacing each time.",
-  "engineer": "In OpenDesigner: opendesigner/state.json plus generated DTCG 2025.10 tokens, component docs, lint rules and DESIGN.md. Ontology layers: context, principles, foundations, tokens, components, patterns, guardrails, delivery, governance.",
+  "engineer": "OpenDesigner: opendesigner/state.json plus generated DTCG 2025.10 tokens, exports and DESIGN.md; component docs and lint rules are planned. Layers: context, principles, foundations, tokens, components, patterns, guardrails, delivery, governance.",
   "designer_says": "foundations, components, patterns and governance",
   "code_name": "opendesigner/state.json plus generated tokens",
   "source": [
@@ -203,9 +203,9 @@
   ],
   "plain": "A raw value with a plain name, like \"blue 500\", that says what it is, not what it is for.",
   "designer": "The raw palette and scales (blue.500, space.200) with no meaning attached. Designers pick from semantic tokens instead; primitives are the ingredients those tokens point to.",
-  "engineer": "Bottom tier: single-valued tokens such as color.blue.500 (an OKLCH color object) or space.200 (dimension). Values never change per mode; semantic tokens alias them. File: primitives.tokens.json.",
+  "engineer": "Bottom tier: single-valued tokens such as color.accent.light.9 (OKLCH color object) or space.16 (dimension). Values never change per mode; semantic tokens alias them. File: primitives.tokens.json.",
   "designer_says": "raw palette and scales",
-  "code_name": "color.blue.500 in primitives.tokens.json",
+  "code_name": "color.accent.light.9 in primitives.tokens.json",
   "example": "blue.500 is a primitive; it knows its color but not its job.",
   "source": [
    "research/L07-tokens-figma.md DC-L07-01",
@@ -222,9 +222,9 @@
   ],
   "plain": "A value named for its job, like \"page background\", that points to a raw value below it.",
   "designer": "Named by role, not by look: color.bg.accent, color.text.subtle. Themes, dark mode and rebrands re-point these names, so designs stay correct without touching every screen.",
-  "engineer": "Tier 2: a token whose $value is a reference, color.bg.accent = \"{color.blue.500}\". Modes live on this tier; each resolver context re-points it.",
+  "engineer": "Tier 2: $value is a reference, color.bg.accent.bold = \"{color.accent.light.9}\". Modes live here; each resolver context re-points it (dark: {color.accent.dark.9}).",
   "designer_says": "named by role, not look",
-  "code_name": "color.bg.accent = {color.blue.500}",
+  "code_name": "color.bg.accent.bold = {color.accent.light.9}",
   "example": "Page background is white in light mode and near-black in dark.",
   "source": [
    "research/L07-tokens-figma.md DC-L07-01",
@@ -239,9 +239,9 @@
   ],
   "plain": "A saved value for one part only, like the color of the main button.",
   "designer": "Lets one component be restyled on its own (button.primary.bg) without changing every accent in the product. Add them only when a brand must tune that component separately.",
-  "engineer": "Tier 3, scoped to one component: button.primary.bg = \"{color.bg.accent}\". Added only for components restyled independently or values shared by three or more; file component.tokens.json.",
+  "engineer": "Planned tier 3, not generated yet: button.primary.bg (proposed) = \"{color.bg.action.primary}\" in component.tokens.json, only for components restyled independently or values shared by three or more.",
   "designer_says": "component-specific override",
-  "code_name": "button.primary.bg in component.tokens.json",
+  "code_name": "button.primary.bg (proposed) in component.tokens.json",
   "source": [
    "research/L07-tokens-figma.md DC-L07-01",
    "DC-L07-02",
@@ -257,9 +257,9 @@
   ],
   "plain": "A name that points to another choice instead of holding a value of its own.",
   "designer": "A token that borrows another token's value, so one change flows down the chain. It is how semantic and component tokens stay linked to the palette.",
-  "engineer": "In DTCG 2025.10, $value \"{color.blue.500}\" targets a whole token; {\"$ref\": JSON Pointer} reaches inside values. Chains are allowed; circular references are errors. Figma variables alias within one type.",
+  "engineer": "DTCG 2025.10: $value \"{color.accent.light.9}\" targets a whole token; {\"$ref\": JSON Pointer} reaches inside values. Chains are allowed; circular references are errors. Figma variables alias within one type.",
   "designer_says": "linked token or reference",
-  "code_name": "$value: {color.blue.500}",
+  "code_name": "$value: {color.accent.light.9}",
   "source": [
    "research/L07-tokens-figma.md A2",
    "research/L07-tokens-figma.md A6"
@@ -343,9 +343,9 @@
   ],
   "plain": "A row of shades of one color, from very light to very dark.",
   "designer": "Evenly stepped shades of one hue, usually 11 or 12 steps, so backgrounds, borders, hovers and text come from a set, not by eye.",
-  "engineer": "Ordered primitives such as color.blue.50 to color.blue.950 (Tailwind's 11 steps), generated in OKLCH as DTCG color objects with hex fallback; semantic tokens alias into it.",
+  "engineer": "Ordered primitives like color.accent.light.1 to .12 plus a dark ramp: 12 steps generated in OKLCH as DTCG color objects with hex fallback; semantic tokens alias into them.",
   "designer_says": "tonal scale, 11-12 steps",
-  "code_name": "color.blue.50 to color.blue.950",
+  "code_name": "color.accent.light.1 to .12",
   "example": "Light blue for backgrounds, dark blue for text on them.",
   "source": [
    "research/L01-color.md DC-L01-02",
@@ -361,9 +361,9 @@
   ],
   "plain": "The grays for text, backgrounds and lines, at times with a faint hint of color.",
   "designer": "Pure gray reads neutral and tool-like, suiting photo and data apps; a slight tint toward the brand, warm or cool sets the product's temperature.",
-  "engineer": "A 12-13 step ramp such as color.neutral.50 to 950. Tinted ramps keep OKLCH chroma about 0.01-0.03 mid-ramp and 0-0.008 at the ends.",
+  "engineer": "A 12-step ramp per theme: color.neutral.light.1 to .12 and color.neutral.dark.*. Tinted ramps keep OKLCH chroma about 0.01-0.03 mid-ramp, 0-0.008 at the ends.",
   "designer_says": "grays, pure or tinted",
-  "code_name": "color.neutral.50 to 950",
+  "code_name": "color.neutral.light.1 to .12",
   "source": [
    "research/L01-color.md DC-L01-06",
    "DC-L01-02"
@@ -378,7 +378,7 @@
   ],
   "plain": "The one strong color used for main buttons and for things you pick.",
   "designer": "One accent keeps a calm, focused feel and makes color mean \"you can act here\". Add a second accent only when it has a job, not for decoration.",
-  "engineer": "Roles such as color.bg.accent and color.focus.ring alias one brand ramp step. Accent text must pass 4.5:1 and accent boundaries 3:1 in every mode.",
+  "engineer": "Roles like color.bg.accent.bold, color.text.accent and color.border.focus alias color.accent.* steps. Accent text passes 4.5:1 and accent boundaries 3:1 in every mode.",
   "designer_says": "primary or brand accent",
   "code_name": "color.bg.accent",
   "source": [
@@ -396,9 +396,9 @@
   ],
   "plain": "Colors that tell you how things went, like green for good and red for a problem.",
   "designer": "Success, warning, error and info, each with subtle and bold levels. Never rely on color alone: pair with an icon and text, and put dark text on yellow fills.",
-  "engineer": "color.{bg|text|border|icon}.{success|warning|danger|info}.{subtle|bold}. Status text needs 4.5:1; status icons and borders 3:1. Color-only meaning is a lint error.",
+  "engineer": "color.bg.<status>.subtle, .bold, .boldHover; color.text.<status>, color.border.<status>; icons use color.text.<status>. Text 4.5:1, icons and borders 3:1. Color-only meaning: planned lint error.",
   "designer_says": "success, warning, error, info",
-  "code_name": "color.{role}.{status}.{subtle|bold}",
+  "code_name": "color.bg.success.subtle, color.text.success",
   "source": [
    "research/L01-color.md DC-L01-15",
    "synthesis/OPENDESIGNER-SPEC.md 6.4"
@@ -412,7 +412,7 @@
   ],
   "plain": "A score for how much text stands out from what is behind it; higher is easier to read.",
   "designer": "WCAG 2.2 AA: 4.5:1 for body text, 3:1 for large text, icons and control borders, 7:1 in high-contrast themes. Test colors as pairs, never alone.",
-  "engineer": "engine.py validate checks every foreground and background pair in every mode with no rounding (4.499:1 fails); APCA Lc 75 on body is an advisory warning.",
+  "engineer": "engine.py validate checks every foreground and background pair in every mode with no rounding (4.499:1 fails); APCA Lc 75 on body text is reported as an advisory note.",
   "designer_says": "contrast, 4.5:1 for body text",
   "code_name": "engine.py validate contrast check",
   "example": "4.5:1 passes; 4.499:1 fails, because nothing is rounded.",
@@ -483,9 +483,9 @@
   ],
   "plain": "A background layer that things sit on, like a card on a page.",
   "designer": "Stacked background levels (sunken, base, raised, overlay) that separate page, cards and popovers. Light mode separates them with subtle tone plus shadow or border; dark mode with lighter tones.",
-  "engineer": "4-5 role-named color tokens mapped per mode, e.g. Atlassian elevation.surface, .sunken, .raised, .overlay; Material 3 surface-container-lowest to -highest; Carbon $layer-01 to 03.",
+  "engineer": "Role-named color tokens re-pointed per theme: color.surface.sunken, .base, .raised, .overlay, plus .nav and .tinted. Compare Material 3 surface-container-lowest to -highest and Carbon $layer-01 to 03.",
   "designer_says": "background levels, sunken to overlay",
-  "code_name": "elevation.surface, .sunken, .raised, .overlay",
+  "code_name": "color.surface.sunken, .base, .raised, .overlay",
   "source": [
    "research/L01-color.md DC-L01-13"
   ]
@@ -519,7 +519,7 @@
   ],
   "plain": "The short list of text sizes an app uses, from small labels to big titles.",
   "designer": "Sizes grown from a base by a ratio: 1.125-1.2 feels calm and dense, 1.25 suits product plus marketing, 1.333+ feels editorial. Use three sizes or fewer per view.",
-  "engineer": "size(n) = base x ratio^n, rounded to even pixels; stored as dimension primitives (font.size.*). Expression sets type.ratio 1.2/1.25/1.333; Density caps it at 1.2.",
+  "engineer": "size(n) = base x ratio^n, rounded to whole pixels; stored as font.size.* dimension primitives. Expression sets type.ratio 1.2/1.25/1.333; Density above 66 caps it at 1.2.",
   "designer_says": "modular scale by ratio",
   "code_name": "font.size.* from type.ratio",
   "example": "Base 16 at ratio 1.25 gives 16, 20, 25, 31, 39.",
@@ -586,11 +586,11 @@
    "spacing ladder"
   ],
   "plain": "A short list of gap sizes the whole app picks from, like marks on a ruler.",
-  "designer": "A 4px grid with an 8px rhythm, about 14 steps from 0 to 80. Steps differ enough that tight-within, loose-between grouping reads at a glance.",
-  "engineer": "Dimension primitives space.0 to space.1000 in px (rem on web export); components use semantic aliases like space.inset.md = \"{space.200}\", never raw steps.",
+  "designer": "A 4px grid with an 8px rhythm, about 15 steps from 0 to 96. Steps differ enough that tight-within, loose-between grouping reads at a glance.",
+  "engineer": "Dimension primitives space.0 to space.96 in px, named by value (space.16 = 16px); components use semantic aliases like space.inset.md = \"{space.12}\", never raw steps.",
   "designer_says": "4-point grid, 8-point rhythm",
-  "code_name": "space.0 to space.1000",
-  "example": "0, 2, 4, 6, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80.",
+  "code_name": "space.0 to space.96",
+  "example": "0, 2, 4, 6, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96.",
   "source": [
    "research/L03-space-layout.md DC-L03-01",
    "DC-L03-02",
@@ -605,7 +605,7 @@
   ],
   "plain": "The empty space inside a box, between its edge and what is in it.",
   "designer": "Inner breathing room of buttons, cards and fields. Keep it smaller than the space between groups so related things read together; parents own spacing, children never add outer margins.",
-  "engineer": "CSS padding, fed by semantic inset tokens such as space.inset.md = \"{space.200}\" (dimension). Density modes shrink insets one scale step; Material uses padding and gap before margins.",
+  "engineer": "CSS padding, fed by semantic inset tokens such as space.inset.md = \"{space.12}\" (dimension). Density modes shrink insets one scale step; Material uses padding and gap before margins.",
   "designer_says": "inner padding or inset",
   "code_name": "space.inset.md, CSS padding",
   "source": [
@@ -622,9 +622,9 @@
   ],
   "plain": "The empty space outside a box that keeps it away from the things next to it.",
   "designer": "Space around an element or page edge. Prefer padding on the parent and gap between siblings; keep margins for page edges and layout sections so spacing stays predictable.",
-  "engineer": "CSS margin. OpenDesigner keeps it to layout tokens such as layout.margin.compact = 16 (Material's page margin, 24 above compact); components set no outer margin.",
+  "engineer": "CSS margin. Components set no outer margin; space.section.* spaces groups. Material's page margin is 16 compact, 24 above; page-margin tokens like layout.margin.compact (proposed) are not generated.",
   "designer_says": "outer margin at page edges",
-  "code_name": "layout.margin.compact, CSS margin",
+  "code_name": "CSS margin; space.section.* between groups",
   "source": [
    "research/L03-space-layout.md DC-L03-04",
    "DC-L03-15"
@@ -639,9 +639,9 @@
   ],
   "plain": "The empty space between things lined up in a row, a column or a grid.",
   "designer": "Even spacing between siblings set once on the container, so every list, toolbar and form keeps the same rhythm without per-item margins.",
-  "engineer": "CSS gap on flex and grid containers, from semantic dimension tokens like space.gap.control = \"{space.100}\" or space.stack.lg. Figma: number variables scoped to gap.",
+  "engineer": "CSS gap on flex and grid containers, from semantic dimension tokens like space.inline.sm = \"{space.8}\" or space.stack.lg. Figma: number variables scoped to gap.",
   "designer_says": "gap, auto layout spacing",
-  "code_name": "space.gap.control, CSS gap",
+  "code_name": "space.inline.*, space.stack.*, CSS gap",
   "source": [
    "research/L03-space-layout.md DC-L03-04",
    "research/L07-tokens-figma.md A6"
@@ -656,9 +656,9 @@
   ],
   "plain": "Columns you can't see that help line things up across a page.",
   "designer": "Columns, gutters and margins that align content. 4, 8 and 12 columns suit most products; 16 suits editorial or wide dashboards. Type never hangs into the gutter; containers may.",
-  "engineer": "CSS grid-template-columns driven by grid.columns (number) and grid.gutter and grid.margin (dimension) per breakpoint: 4, 8, 12 columns; 16-24px gutters.",
+  "engineer": "Not generated yet: grid.columns (proposed) as a number, grid.gutter and grid.margin (proposed) as dimensions per breakpoint, driving CSS grid-template-columns: 4, 8, 12 columns; 16-24px gutters.",
   "designer_says": "columns, gutters and margins",
-  "code_name": "grid.columns, grid.gutter, grid.margin",
+  "code_name": "grid.columns, grid.gutter, grid.margin (proposed)",
   "source": [
    "research/L03-space-layout.md DC-L03-15"
   ]
@@ -671,9 +671,9 @@
   ],
   "plain": "A screen width where the page changes its layout, like going to one column on a phone.",
   "designer": "Each one is a moment the layout visibly reorganizes: panes appear, navigation moves from bar to rail. Fewer breakpoints mean bigger shifts; design mobile first.",
-  "engineer": "Material 600/840/1200/1600dp width breakpoints (Tailwind's set for web-only), written as rem media queries; DTCG has no breakpoint type, so they sit in $extensions.opendesigner.",
+  "engineer": "Material 600/840/1200/1600dp width breakpoints (Tailwind's set for web-only), written as rem media queries. DTCG has no breakpoint type, and OpenDesigner does not generate breakpoints yet.",
   "designer_says": "layout breakpoint, mobile first",
-  "code_name": "rem media query in $extensions.opendesigner",
+  "code_name": "rem media query (not generated yet)",
   "source": [
    "research/L03-space-layout.md DC-L03-14",
    "synthesis/OPENDESIGNER-SPEC.md 7.4"
@@ -705,7 +705,7 @@
   ],
   "plain": "The area you can tap to press a button, which can be bigger than what you see.",
   "designer": "Minimum hit area: 24 by 24 CSS px on web (WCAG 2.2 AA), 44pt on Apple, 48dp on Android. Visuals may shrink with density; hit areas never do.",
-  "engineer": "size.target.min, fixed across density modes: 24 CSS px web, 44pt iOS, 48dp Android. Targets under 24x24 without a spacing exception fail lint.",
+  "engineer": "size.target.min, fixed across density modes: 24 CSS px web, 44pt iOS, 48dp Android. engine.py validate errors when a target token falls below its floor.",
   "designer_says": "tap or hit area",
   "code_name": "size.target.min",
   "source": [
@@ -723,7 +723,7 @@
   ],
   "plain": "How round the corners of a box or button are, from sharp to fully round.",
   "designer": "The most varied visible lever across systems, from 0px to pill (median 6px). Radius should grow with component size, and nested corners stay concentric.",
-  "engineer": "CSS border-radius from dimension tokens; default scale 0, 2, 4, 8, 12, 16, 24 and full. The Roundness dial picks radius.control; focus-ring radius = component radius + offset.",
+  "engineer": "CSS border-radius from tokens radius.0 to radius.32 (0, 2, 4, 6, 8, 12, 16, 20, 24, 28, 32) plus radius.full; the Roundness dial picks radius.control.",
   "designer_says": "corner radius, sharp to pill",
   "code_name": "radius.control, CSS border-radius",
   "source": [
@@ -742,9 +742,9 @@
   ],
   "plain": "How high a part of the screen seems to float above the part below it.",
   "designer": "Shows stacking order: most products visibly use three levels (resting, raised, overlay). Depending on the depth model it shows as shadow, lighter tone, border or glass.",
-  "engineer": "Semantic elevation.sunken, .default, .raised, .overlay backed by 4-6 shadow primitives (shadow.100 to 600, DTCG shadow arrays); in dark mode raised surfaces also step lighter.",
+  "engineer": "Semantic elevation.raised, .floating and .overlay: DTCG shadow arrays colored {color.shadow.key} and {color.shadow.ambient}, set by the depth model; in dark mode raised surfaces also step lighter.",
   "designer_says": "resting, raised and overlay levels",
-  "code_name": "elevation.sunken to elevation.overlay",
+  "code_name": "elevation.raised to elevation.overlay",
   "source": [
    "research/L04-shape-depth-motion.md DC-L04-11",
    "DC-L04-10",
@@ -777,7 +777,7 @@
   ],
   "plain": "How long a move on screen lasts, most of the time well under a second.",
   "designer": "Most UI motion runs 100-300ms: short feels snappy, long feels smooth, past about 500ms it drags. Make exits 20-35% shorter than entrances.",
-  "engineer": "DTCG duration {\"value\": 200, \"unit\": \"ms\"}; semantic steps instant 0, micro 100, short 150-200, medium 250-300, long 400-500. CSS transition-duration; Energy scales by 0.8-1.2.",
+  "engineer": "DTCG duration tokens. At Energy 50: motion.duration.instant 0, micro 100, short 150, medium 250, long 400, extra 700ms; Energy scales medium and longer by 0.8-1.2.",
   "designer_says": "timing, snappy to smooth",
   "code_name": "motion.duration.short, CSS transition-duration",
   "source": [
@@ -830,7 +830,7 @@
   ],
   "plain": "A setting on your phone or computer that asks apps to move less, for people who get dizzy.",
   "designer": "Keep feedback (color and opacity changes, crossfades) and remove travel: sliding, scaling, parallax and bounce. A good reduced mode still feels polished, not broken.",
-  "engineer": "Web @media (prefers-reduced-motion: reduce); iOS Reduce Motion, Android Remove animations. OpenDesigner ships it as a motion mode (motion.reduced.tokens.json): shorter durations, critically damped springs, no translate or scale.",
+  "engineer": "Web @media (prefers-reduced-motion: reduce); iOS Reduce Motion, Android Remove animations. OpenDesigner's motion mode (motion.reduced.tokens.json): short fades, movement at 0ms, no translate or scale.",
   "designer_says": "reduced motion, no travel",
   "code_name": "prefers-reduced-motion, motion.reduced.tokens.json",
   "source": [
@@ -847,7 +847,7 @@
   ],
   "plain": "The outline that shows which button or box you are on when you use the keyboard.",
   "designer": "Must show on every background: a 2px ring, 2px offset, following the control's corner, in a color with 3:1 contrast. Never remove it.",
-  "engineer": "CSS outline on :focus-visible from focus.ring.width, focus.ring.offset and focus.ring.color (per mode), radius = component radius + offset; forced-colors falls back to Highlight. WCAG 2.4.7 AA.",
+  "engineer": "CSS outline on :focus-visible from focus.ring.width, focus.ring.offset and color.border.focus (per mode); radius.focus = radius.control + offset; forced-colors uses Highlight. WCAG 2.4.7 AA.",
   "designer_says": "focus indicator",
   "code_name": "focus.ring.* on :focus-visible",
   "source": [
@@ -865,9 +865,9 @@
   ],
   "plain": "A small picture that stands for an action or thing, like a trash can for delete.",
   "designer": "One library, stroke matched to body text weight, corners matched to Roundness. Label key actions; a meaningful icon standing alone needs a text alternative and 3:1 contrast.",
-  "engineer": "SVG components on the library's grid, sized by dimension tokens icon.size.sm/md/lg = 16/20/24px; icon.stroke.width about 1.5px beside 14-16px text.",
+  "engineer": "SVG on the library grid; size.icon.sm/md/lg = 16/20/24px; icon.stroke.sm/md/lg = 1.5/2/2.5px, scaled by size and label weight.",
   "designer_says": "one icon set, matched stroke",
-  "code_name": "icon.size.md, icon.stroke.width",
+  "code_name": "size.icon.md, icon.stroke.md",
   "source": [
    "research/L05-icons-imagery-dataviz.md DC-L05-01",
    "DC-L05-03",
@@ -884,9 +884,9 @@
   ],
   "plain": "A ready piece of the screen, like a button, that you can use again and again.",
   "designer": "A reusable part with defined anatomy, variants, sizes and states, styled only by tokens. OpenDesigner's catalog lists 64 canonical components in 10 categories, from Button to App shell.",
-  "engineer": "A Figma main component with properties (variant, boolean, instance swap, text, slot) mirrored by a code component with props; Code Connect links them; docs land in opendesigner/components/<name>.md.",
+  "engineer": "A Figma component with properties (variant, boolean, instance swap, text, slot) mirrored by a code component with props; Code Connect links them. Docs in opendesigner/components/<name>.md are planned.",
   "designer_says": "reusable component with variants",
-  "code_name": "opendesigner/components/<name>.md",
+  "code_name": "code component with props",
   "source": [
    "research/L08-components-patterns.md",
    "research/L08-component-catalog.md",
@@ -902,8 +902,8 @@
    "emphasis level"
   ],
   "plain": "Another look for the same part, like a bold main button and a plain second one.",
-  "designer": "Styled versions of one component that signal emphasis or purpose: primary, secondary, tertiary, destructive. Keep one primary per view; more than one is a lint warning.",
-  "engineer": "A Figma variant property plus a code prop (variant=\"primary\"), styled by tokens such as button.primary.bg that alias semantic roles. Variants multiply with size and state.",
+  "designer": "Styled versions of one component that signal emphasis or purpose: primary, secondary, tertiary, destructive. Keep one primary per view; a lint warning for more is planned.",
+  "engineer": "A Figma variant property plus code prop (variant=\"primary\"), styled by roles like color.bg.action.primary, not yet by button.primary.bg (proposed). Variants multiply with size and state.",
   "designer_says": "primary, secondary, tertiary, destructive",
   "code_name": "variant=\"primary\" prop",
   "source": [
@@ -919,7 +919,7 @@
   ],
   "plain": "How a part looks at a moment, like when you point at it, press it, or it is off.",
   "designer": "Style enabled, hover, focus-visible, pressed, selected, disabled, loading and error. States that carry meaning need 3:1 against neighbors; touch screens have no hover, so never hide essentials there.",
-  "engineer": "CSS :hover, :focus-visible, :active, :disabled plus aria-* attributes. Hover and press use a state-layer overlay (M3: 8% and 10%); selected and error get explicit color tokens.",
+  "engineer": "CSS :hover, :focus-visible, :active, :disabled plus aria-*. Hover and press shift one and two ramp steps (color.bg.accent.boldHover, boldPressed); opacity.state.hover covers unknown colors.",
   "designer_says": "hover, pressed, focus, disabled",
   "code_name": ":hover, :focus-visible, :active, :disabled",
   "source": [
@@ -935,9 +935,9 @@
   ],
   "plain": "The small pieces a part is built from, like the box, the words and the icon of a button.",
   "designer": "The numbered parts of a component (container, label, icon) shown in its spec, so designers and engineers use the same names when discussing spacing, color and states.",
-  "engineer": "Named parts map to Figma layers or slots and to code sub-elements; component tokens follow them, e.g. button.primary.container.color. EightShapes generates anatomy diagrams from layers.",
+  "engineer": "Named parts map to Figma layers or slots and to code sub-elements; planned component tokens name them: button.primary.container.color (proposed). EightShapes generates anatomy diagrams from layers.",
   "designer_says": "labeled component parts",
-  "code_name": "part in token path: button.primary.container",
+  "code_name": "part in token path: button.primary.container (proposed)",
   "source": [
    "research/L08-components-patterns.md",
    "research/L07-tokens-figma.md DC-L07-02"
@@ -1036,7 +1036,7 @@
   "designer": "Figma's version of tokens: color, number, string, boolean, timing and easing values in collections with modes, aliasable across collections and scoped to the right property pickers.",
   "engineer": "Modes: 10 per collection on Professional, 20 on Organization. Native DTCG import takes one file per mode (sRGB/HSL colors, px, seconds); composites like typography do not import.",
   "designer_says": "Figma variables, collections and modes",
-  "code_name": "figma/variables.json, one file per mode",
+  "code_name": "build/figma/import/, one file per mode",
   "source": [
    "research/L07-tokens-figma.md A6",
    "research/L07-tokens-figma.md A7"
@@ -1100,7 +1100,7 @@
   ],
   "plain": "Looking at a site you like to learn how it is built, without copying its name or logo.",
   "designer": "Carries structure and quality, never identity: no name, logo, photos, copy or proprietary fonts. A reference's brand color lends its role and strength, not its hex.",
-  "engineer": "The opendesigner-extract skill reads a URL, screenshot, Figma file, repo CSS or brand book, runs the LEVERS formulas backwards to dial values, and tags each pre-filled token $extensions.opendesigner.source.",
+  "engineer": "The opendesigner-extract skill reads a URL, screenshot, Figma file, repo CSS or brand book; engine.py intake runs the LEVERS formulas backwards to proposed dials, accepted with --set-by reference --source-ref.",
   "designer_says": "reference for structure, not identity",
   "code_name": "opendesigner-extract skill",
   "source": [
@@ -1236,10 +1236,10 @@
    "automated check"
   ],
   "plain": "A check that runs by itself and flags a mistake, like too many text sizes.",
-  "designer": "Accessibility breaks are errors that block export; taste rules such as more than three type sizes or two primary buttons in a view are warnings you may override.",
-  "engineer": "Deterministic checks run before model critique; errors block export, warnings carry ids and waivers. Exported to opendesigner/lint/ as a stylelint strict-value config plus behavior and anti-generic rules for CI.",
+  "designer": "Accessibility breaks are errors to fix before export; taste rules, such as more than 10 type sizes or bounce above 0.2, are warnings you may waive with a reason.",
+  "engineer": "engine.py validate runs deterministic checks and exits 1 on errors; findings cite their rule; waivers sit in state.json. A stylelint config in opendesigner/lint/ is planned (spec 7.12).",
   "designer_says": "design lint: errors and warnings",
-  "code_name": "opendesigner/lint/ stylelint config",
+  "code_name": "engine.py validate; lint/ folder planned",
   "source": [
    "research/L15-visual-design-principles.md",
    "synthesis/OPENDESIGNER-SPEC.md 6.4",
@@ -1254,7 +1254,7 @@
   ],
   "plain": "The order your eye sees things on a screen, set by size, boldness, color and place.",
   "designer": "Guide attention by importance: one dominant element, three distinct levels, no more than three type sizes and one primary action per view. If everything looks the same, nothing stands out.",
-  "engineer": "Countable levers: type.ratio from Expression, emphasis.maxPrimaryPerView = 1, and a warning above 3 type sizes per view. Role tokens are decoupled from HTML heading tags.",
+  "engineer": "Levers: type.ratio from Expression and emphasis.maxPrimaryPerView = 1 (recorded, not checked yet); a warning above 3 type sizes per view is planned. Role tokens stay decoupled from HTML headings.",
   "designer_says": "hierarchy and emphasis",
   "code_name": "type.ratio, emphasis.maxPrimaryPerView",
   "source": [
@@ -1274,9 +1274,9 @@
   ],
   "plain": "We see things that sit close together, or inside the same box, as one group.",
   "designer": "The best-evidenced visual principle, with a strength order: a shared boundary beats proximity, and proximity beats similarity. Keep space within groups clearly smaller than space between them.",
-  "engineer": "Enforced by construction: inner spacing tokens always resolve below outer ones (space.innerOuterRatio 2 to 3.5 by Density). Critique flags containers nested more than two deep (\"boxes in boxes\").",
+  "engineer": "Enforced by construction: inner spacing tokens resolve below outer ones (innerOuterRatio 2 to 3.5 by density, in the space group's $extensions.opendesigner). Planned critique: flag containers nested over two deep.",
   "designer_says": "common region, proximity, similarity",
-  "code_name": "space.innerOuterRatio",
+  "code_name": "innerOuterRatio in space $extensions",
   "source": [
    "research/L15-visual-design-principles.md 1.3",
    "synthesis/levers.json#dials",
@@ -1307,9 +1307,9 @@
   ],
   "plain": "The more choices you see, the longer it takes to pick, unless they are in groups or you can search.",
   "designer": "Holds when choices are known and equally likely; newcomers scan lists one by one. Group, label, order and add search, and default one option. Never cut items to satisfy it.",
-  "engineer": "RT = a + b·log2(n) (Hick and Hyman 1952). Lint warns on flat, ungrouped lists above roughly 10-12 items with no search, sections or typeahead (threshold inferred).",
+  "engineer": "RT = a + b·log2(n) (Hick and Hyman 1952). Planned lint: warn on flat, ungrouped lists above roughly 10-12 items with no search, sections or typeahead (threshold inferred).",
   "designer_says": "group and label choices",
-  "code_name": "flat-list lint warning above 10-12 items",
+  "code_name": "planned flat-list warning above 10-12 items",
   "source": [
    "research/L13-ux-laws-heuristics.md"
   ]
@@ -1340,7 +1340,7 @@
   ],
   "plain": "The way a phone or computer expects things like menus and going back to work.",
   "designer": "Share what users perceive as the brand (color, type personality, illustration, voice); adopt the platform's version of how the device works: navigation, back, sheets, pickers, text fields, system icons.",
-  "engineer": "behavior.navigationNative is true at every Brand presence value. Native-first maps semantic tokens to platform semantics, e.g. color.text.primary to iOS label and Android onSurface.",
+  "engineer": "The behavior.navigationNative param is true at every Brand presence value. Mapping tokens to platform colors, such as color.text.primary to iOS label, is planned; exports emit literal values.",
   "designer_says": "native behaviors, shared brand",
   "code_name": "behavior.navigationNative = true",
   "source": [
@@ -1357,7 +1357,7 @@
   ],
   "plain": "Making an app look at home on your phone by using the phone's own buttons and letters.",
   "designer": "System fonts and components almost everywhere, brand only in accents, content and voice. Feels at home and inherits OS updates like Liquid Glass, but looks more like other apps.",
-  "engineer": "The low end of the Brand presence dial: 0-25 suggests the system font per platform, components.nativeShare near 1.0, and platform shape and materials override brand radii below 50.",
+  "engineer": "At the low end, Brand presence 0-25 suggests the system font per platform and nativeShare near 1.0; below 50, a native lead platform keeps its own body size.",
   "designer_says": "native, system look",
   "code_name": "dials.brandPresence 0-25, nativeShare near 1.0",
   "source": [

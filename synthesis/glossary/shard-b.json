@@ -8,9 +8,9 @@
   ],
   "plain": "The facts you gather first: who it is for, where it runs, how the brand feels, and what limits apply.",
   "designer": "The brief behind every visual choice: purpose, audience, platforms, devices, brand personality and hard limits. Settle these first, because they constrain more later decisions than any other input.",
-  "engineer": "Step-0 and step-1 inputs in the decision graph, stored as builder metadata, not tokens. The brand personality card alone constrains 15 later decisions.",
+  "engineer": "Step-0 and step-1 inputs in the decision graph, kept in state.json (context.*, raw.*, answers), not tokens. The brand personality card alone constrains 15 later decisions.",
   "designer_says": "the brief: purpose, audience, platforms",
-  "code_name": "ctx.* inputs in builder metadata",
+  "code_name": "state.json: context.*, raw.*, answers",
   "example": "A calm banking app for the web, iPhone and Android.",
   "source": [
    "ctx",
@@ -29,9 +29,9 @@
   ],
   "plain": "The choice to use a ready-made kit, change one to fit, or build your own, and how strict to be.",
   "designer": "Decide whether to adopt an existing system, adapt a themeable base, or create your own, and how strict, modular and centralized it will be.",
-  "engineer": "Builder metadata, not tokens: system.origin = adopt | adapt | create, system.base, and governance.posture {rules: strict | loose, parts: modular | integrated, org: centralized | distributed}.",
+  "engineer": "Not tokens: answers.Q-scope-05 (adopt, adapt or create) and answers.Q-gov-01 (strict or loose) in state.json; components.base names a base library. Nothing acts on them yet.",
   "designer_says": "adopt, adapt or create",
-  "code_name": "system.origin, governance.posture",
+  "code_name": "answers.Q-scope-05, answers.Q-gov-01, components.base",
   "example": "A small team adapts a headless base and puts its effort into tokens and docs.",
   "source": [
    "ctx.strategy",
@@ -44,9 +44,9 @@
   "term": "Scope: products, audience and stack",
   "plain": "The list of which apps and people your first version will serve, and which ones it will leave out.",
   "designer": "Name the products, audiences and technologies version 1 serves, and what it will not serve. Scope to the pilot; add platforms only when a real product needs them.",
-  "engineer": "Stored as metadata system.platforms, for example [\"web\", \"ios\", \"android\"], and system.frameworks. These fields decide which exporters run: CSS variables, Swift, Compose or Tailwind.",
+  "engineer": "Stored in state.json as raw.platforms, for example [\"web\", \"ios\"], and context.scope {in, out}. Today build writes every export (CSS, Tailwind, Figma, Paper, Swift, Compose, DTCG) regardless.",
   "designer_says": "scope: products, audiences, technologies",
-  "code_name": "system.platforms, system.frameworks",
+  "code_name": "raw.platforms, context.scope",
   "source": [
    "ctx.scope",
    "DC-L11-02"
@@ -61,9 +61,9 @@
   ],
   "plain": "A look through your screens today to list every button, color and size you use.",
   "designer": "Screenshot every unique pattern and audit colors, type and spacing in current products. Its main value is shared vocabulary and buy-in, so do it by hand even with automated data.",
-  "engineer": "Stored as audit.findings[] with counts; frequent hex values can be clustered into ramps to seed candidate primitives. Run one inventory per platform, since names differ: sheet, modal, dialog.",
+  "engineer": "Not stored; audit.findings[] is proposed. css_scan.py counts declared colors, sizes and radii; engine.py review lists hard-coded values. Inventory per platform: sheet, modal and dialog differ.",
   "designer_says": "UI inventory or interface audit",
-  "code_name": "audit.findings[]",
+  "code_name": "css_scan.py, engine.py review",
   "example": "Finding many slightly different grays across your products.",
   "source": [
    "ctx.inventory",
@@ -74,10 +74,10 @@
   "id": "ctx.platforms",
   "term": "Target platforms",
   "plain": "The places your app must run, like the web, iPhones or Android phones.",
-  "designer": "The operating systems the system serves. Platform choice drives units, native type, target sizes, materials and navigation. Default: web plus iOS and Android phones, with large-screen layouts from day one.",
-  "engineer": "No DTCG Format type; modeled as a platform modifier in the Resolver (web | ios | android | windows). Tokens that vary by platform include font.family.*, size.target.min and radius.control.",
+  "designer": "The operating systems served. Platform choice drives units, native type, target sizes, materials and navigation. OpenDesigner defaults to web only; research suggests adding iOS and Android phones from day one.",
+  "engineer": "Stored as raw.platforms; no DTCG type. A platform resolver modifier is planned, not generated; today each platform gets its own export, and pointer media queries set size.target.min.",
   "designer_says": "target platforms",
-  "code_name": "platform modifier: web | ios | android | windows",
+  "code_name": "raw.platforms; size.target.min",
   "source": [
    "ctx.platforms",
    "DC-L10-01"
@@ -91,9 +91,9 @@
   ],
   "plain": "How much your app should look like each phone's own style, or look the same on all of them.",
   "designer": "Native-first, brand-first or coherent hybrid. Default hybrid: share what users see as the brand (accent, headline type, icons, voice) and use each platform's own navigation, sheets, pickers and fields.",
-  "engineer": "A system-level setting, not a token; it decides which semantic tokens get platform overrides. Native-first maps color.text.primary to label on iOS and onSurface on Android; brand-first emits literals.",
+  "engineer": "Not a token: answers.Q-plat-05 and the Brand presence dial; below 50, native platforms keep their body size. Exports emit literal colors; mapping to label or onSurface is planned.",
   "designer_says": "native-first, brand-first or hybrid",
-  "code_name": "platform overrides on semantic tokens",
+  "code_name": "answers.Q-plat-05, dials.brandPresence",
   "example": "Brand-blue buttons, but the phone's own back gesture and date picker.",
   "source": [
    "ctx.platforms.posture",
@@ -106,9 +106,9 @@
   "term": "What is shared across platforms",
   "plain": "Which parts stay the same on every device, like brand colors and names, and which parts change.",
   "designer": "Choose whether platforms share tokens, component specs or only principles. Default: share the what (brand hue, role names, spacing numbers, voice); adapt the how (materials, target minimums, navigation containers).",
-  "engineer": "Primitives and most semantic tokens are shared; platform overrides live at the semantic or component tier. Component specs (anatomy, variants, states, content rules) are shared; accessibility notes are per platform.",
+  "engineer": "Recorded as answers.Q-plat-07. Every export shares one token set with the same names; only target sizes vary by input. Per-platform overrides and shared component specs are planned.",
   "designer_says": "share the what, adapt the how",
-  "code_name": "shared primitives, per-platform semantic overrides",
+  "code_name": "answers.Q-plat-07; one token set, same names",
   "source": [
    "ctx.platforms.sharing",
    "DC-L10-03"
@@ -123,9 +123,9 @@
   ],
   "plain": "Which kinds of screens get full care, like phones and laptops, and which get only the basics.",
   "designer": "Pick which device classes get full design (phone, tablet and foldable, desktop) and which get foundations only. A class is first-class when a core task happens there.",
-  "engineer": "A resolver context modifier (handheld | wrist | desk | lean-back | vehicle | spatial | kiosk), kept separate from platform because one OS spans several classes: Android runs on phones, Wear, TV and Auto.",
+  "engineer": "Planned, not generated: a device-class resolver modifier (handheld, wrist, desk, lean-back, vehicle, spatial), separate from platform since Android spans phones, Wear, TV and Auto. Recorded as answers.Q-plat-02.",
   "designer_says": "device classes: phone, tablet, desktop",
-  "code_name": "resolver device-class modifier",
+  "code_name": "device-class modifier (planned); answers.Q-plat-02",
   "source": [
    "ctx.platforms.devices",
    "DC-L14-01",
@@ -137,9 +137,9 @@
   "term": "Implementation stack",
   "plain": "The coding tools your team builds the app with, which decide what form the design files take.",
   "designer": "The toolkits products are built with. Native toolkits get new OS looks first; Flutter or Compose Multiplatform suit brand-first products that accept a lag behind OS visual changes.",
-  "engineer": "Decides output formats: SwiftUI and Compose natively, JS/TS objects for React Native, flutter/class.dart for Flutter, compose/object for Compose Multiplatform.",
+  "engineer": "Recorded as answers.Q-plat-08; it does not change exports yet. build writes SwiftUI, Compose, CSS and Tailwind files; React Native objects and flutter/class.dart are not generated.",
   "designer_says": "tech stack or toolkit",
-  "code_name": "output formats: SwiftUI, Compose, flutter/class.dart",
+  "code_name": "answers.Q-plat-08; SwiftUI and Compose exports",
   "source": [
    "ctx.platforms.stack",
    "DC-L10-20",
@@ -151,9 +151,9 @@
   "term": "OS version floor",
   "plain": "The oldest phone or computer software your app still has to work on.",
   "designer": "The oldest OS versions supported and the design-language generation targeted. Default: support current and previous major versions, design for the current language, let older ones fall back to native.",
-  "engineer": "Version-gated token values are rare; prefer runtime fallbacks, for example dynamic color falling back to the brand scheme below Android 12.",
+  "engineer": "Recorded as answers.Q-plat-09; OpenDesigner emits no version-gated values. Prefer runtime fallbacks, for example dynamic color falling back to the brand scheme below Android 12.",
   "designer_says": "oldest OS and design-language generation",
-  "code_name": "runtime fallbacks, not version-gated tokens",
+  "code_name": "answers.Q-plat-09; runtime fallbacks",
   "source": [
    "ctx.platforms.os-floor",
    "DC-L10-23"
@@ -164,9 +164,9 @@
   "term": "Brand inputs",
   "plain": "What the brand brings: how it feels, how it ties to its ads, and how bold the app may be.",
   "designer": "What the brand brings: its personality, how the expressive identity (logo, campaign color, display type) relates to the productive product UI, and how much expression the product allows.",
-  "engineer": "A group of designer-owned inputs: ctx.brand.personality, ctx.brand.layering and ctx.brand.expression. Mostly metadata; expressive and productive variants become a mode axis, not duplicate tokens.",
+  "engineer": "Not tokens: answers.Q-brand-01 sliders become macros that offset dials, answers.Q-brand-04 records expressiveness, and raw.marketingSurfaces widens display type. An expressive mode axis is planned.",
   "designer_says": "brand personality, layering and expression",
-  "code_name": "ctx.brand.* designer-owned metadata",
+  "code_name": "macros, answers.Q-brand-04, raw.marketingSurfaces",
   "source": [
    "ctx.brand",
    "DC-L06-01",
@@ -181,10 +181,10 @@
    "brand sliders"
   ],
   "plain": "A few sliders for how the brand feels, like fun or serious, that guide most later choices.",
-  "designer": "Brand traits as 4-7 slider positions, such as playful to serious. The most influential input: each adjective pair maps to concrete foundation settings. Offer 2-3 style tiles.",
-  "engineer": "Not a design token. Stored as metadata, for example $extensions.brand.personality = { playful: 70, minimal: 40 }; the lever matrix reads it to set foundation defaults.",
-  "designer_says": "brand personality sliders and style tiles",
-  "code_name": "$extensions.brand.personality",
+  "designer": "Brand traits as slider positions, such as playful to serious; OpenDesigner uses seven. The most influential input: each pair nudges concrete foundation dials. The style screen then shows directions.",
+  "engineer": "Not a design token. answers.Q-brand-01 stores seven slider positions; six become macros in state.json, such as {id: playful, strength: 0.4}, that offset the dials; one sets Energy.",
+  "designer_says": "brand personality sliders",
+  "code_name": "answers.Q-brand-01, macros",
   "source": [
    "ctx.brand.personality",
    "DC-L06-02"
@@ -196,11 +196,11 @@
   "aka": [
    "expressive versus productive"
   ],
-  "plain": "Whether ads and the app share one set of design rules or each keep their own.",
+  "plain": "Whether the pages that sell the app and the app itself share one set of design rules.",
   "designer": "Whether marketing (expressive) and product (productive) surfaces share one system or run separately. Default: one system, productive by default, expressive opt-in; split only when separate teams own separate surfaces.",
-  "engineer": "A layer mode axis, not duplicate tokens. Carbon-style easing: motion.easing.productive.standard = [0.2, 0, 0.38, 0.9], expressive = [0.4, 0.14, 0.3, 1], both $type cubicBezier.",
+  "engineer": "Planned, not generated yet: a layer mode axis (productive | expressive), not duplicate tokens. Today Energy picks Carbon productive (0-33) or expressive (67+) curves for motion.easing.enter and .exit.",
   "designer_says": "expressive marketing, productive product",
-  "code_name": "layer mode axis: productive | expressive",
+  "code_name": "layer mode axis (planned): productive | expressive",
   "source": [
    "ctx.brand.layering",
    "DC-L06-01"
@@ -214,9 +214,9 @@
   ],
   "plain": "How bold the brand may get in the app, and how many showy moments it is allowed.",
   "designer": "How much brand expression the product allows. Default, Material's rule: productive everywhere plus one or two hero moments with expressive type, shape or motion, kept for key interactions.",
-  "engineer": "Expressive variants as a mode or parallel set: font.display.emphasized (typography), shape.corner.expressive.* (dimension), motion.spring.expressive.* (extension). These names are illustrative, from DC-L06-03.",
+  "engineer": "Planned, not generated yet: expressive variants as a mode or parallel set, such as font.display.emphasized (proposed), shape.corner.expressive.* (proposed), motion.spring.expressive.* (proposed), from DC-L06-03.",
   "designer_says": "hero moments, expressive budget",
-  "code_name": "font.display.emphasized, motion.spring.expressive.*",
+  "code_name": "font.display.emphasized (proposed), motion.spring.expressive.* (proposed)",
   "example": "A bold, springy success screen after payment; calm screens everywhere else.",
   "source": [
    "ctx.brand.expression",
@@ -228,9 +228,9 @@
   "term": "Hard constraints",
   "plain": "Limits you do not get to pick, such as the law, your design app plan, and which languages you need.",
   "designer": "Limits that are not taste: the design tool plan, the legal accessibility target, supported locales and scripts. Ask for the Figma plan first; it caps modes per collection.",
-  "engineer": "Not tokens. Figma caps modes per collection (Professional 10, Organization 20); the builder greys out architectures that exceed them, such as 4 brands with light, dark and high contrast.",
+  "engineer": "Not tokens: context.constraints lists limits and exports.figmaPlan the Figma plan. Figma caps modes per collection (Professional 10, Organization 20); validate warns and the Figma export splits bigger collections.",
   "designer_says": "hard limits: tool plan, legal, locales",
-  "code_name": "state.json: context.constraints",
+  "code_name": "context.constraints, exports.figmaPlan",
   "source": [
    "ctx.constraints",
    "DC-L07-27"
@@ -241,7 +241,7 @@
   "term": "Principles",
   "plain": "The rules that say what good means, before anyone picks a color or a size.",
   "designer": "Defines what good means before any value is picked: team design principles, UX behavior rules from laws and heuristics, and visual principles. It decides whether the product works.",
-  "engineer": "Parent of prin.design, prin.ux and prin.visual. Content is rules and records, not tokens; rules reference token paths and feed the checks in the guard layer.",
+  "engineer": "Parent of prin.design, prin.ux and prin.visual. Not tokens: principles in state.json holds ranked statements; UX and visual rules live in the formulas or engine.py validate.",
   "designer_says": "principles: what good means",
   "code_name": "prin.design, prin.ux, prin.visual",
   "source": [
@@ -253,9 +253,9 @@
   "term": "Design principles",
   "plain": "A short, ranked list of beliefs a team uses to settle ties when two good ideas clash.",
   "designer": "3-5 ranked statements that break ties when good options conflict, each naming the value it outranks. Avoid words every product claims, like simple; test each: would this screen pass?",
-  "engineer": "Not tokens. Stored as ordered records, principles[] {name, statement, doExample, dontExample}, with beats relationships for ranking; keywords can map to suggested token presets.",
+  "engineer": "Not tokens: principles in state.json is an ordered list of statements; order is rank, and DESIGN.md and PRODUCT.md print them as tie-breakers.",
   "designer_says": "ranked design principles",
-  "code_name": "principles[] {name, statement, doExample, dontExample}",
+  "code_name": "principles: ordered strings in state.json",
   "example": "Clarity over density: when unsure, show fewer items per screen.",
   "source": [
    "prin.design",
@@ -271,9 +271,9 @@
   ],
   "plain": "What we know about how people use apps, made into rules the tool can check.",
   "designer": "Laws and heuristics turned into checkable rules: Fitts's law, for example, becomes no target below 24x24 CSS px, applied at the token, component or flow level.",
-  "engineer": "No DTCG type. Rules get their own model that references tokens, kept in $extensions or a sibling file; each rule's scope is token, component, pattern, content or flow.",
+  "engineer": "No DTCG type. Today the rules sit in engine.py: formulas set target floors and contrast; validate checks them. A rule model scoped to token, component or flow is planned.",
   "designer_says": "UX laws as checkable rules",
-  "code_name": "rule model in $extensions or sibling file",
+  "code_name": "engine.py validate; rule model (planned)",
   "example": "Fitts's law becomes: no tap target smaller than 24 by 24 pixels.",
   "source": [
    "prin.ux"
@@ -284,7 +284,7 @@
   "term": "Laws of UX catalog",
   "plain": "A list of 30 well-known rules about how people use screens, each graded by how strong the proof is.",
   "designer": "The 30 laws on lawsofux.com, each graded for evidence. Zeigarnik and choice overload are weak, and Miller's 7 plus or minus 2 does not limit menu length.",
-  "engineer": "Each law carries an evidence grade: R (research-backed), R- (extrapolated to UI), C (contested), H (heuristic) or P (pop analogy). The UI shows the grade beside every rule.",
+  "engineer": "Each law carries an evidence grade: R (research-backed), R- (extrapolated to UI), C (contested), H (heuristic) or P (pop analogy). Showing the grade beside each rule is planned.",
   "designer_says": "Laws of UX, graded for evidence",
   "code_name": "evidence grade R, R-, C, H, P",
   "source": [
@@ -299,9 +299,9 @@
   ],
   "plain": "Eight rules of thumb that the top experts agree on, like showing people what is going on.",
   "designer": "Eight principles where Nielsen, Norman, Shneiderman, Tognazzini and Laws of UX agree: status and feedback, consistency, error prevention, user control, recognition over recall, plain language, minimalism, expert efficiency.",
-  "engineer": "Most are partly machine-checkable and map to rules in the prin.ux.rules model, such as a dismiss path required on every dialog.",
+  "engineer": "Most are partly machine-checkable, such as a dismiss path on every dialog. Today guardrails.md states them as rules for the agent; automated checks are planned.",
   "designer_says": "usability heuristics consensus",
-  "code_name": "prin.ux.rules checks",
+  "code_name": "guardrails.md rules; checks planned",
   "source": [
    "prin.ux.heuristics"
   ]
@@ -311,10 +311,10 @@
   "term": "Behavior-rule model and automation boundary",
   "plain": "How each rule is written down, and if the tool sets it, flags it, or leaves it to a person.",
   "designer": "Sets how hard each rule bites: a built-in default, a blocking error, a warning, or human judgment. Some rules, like a seven-item menu cap, must never be automated.",
-  "engineer": "Record fields: id, principle, evidence grade, scope, check kind, severity, override policy, exceptions, sources. Checks reference token paths such as {size.target.min}.",
+  "engineer": "Planned record: id, principle, evidence grade, scope, check kind, severity, override policy, exceptions. Today validate --json reports each finding as {rule, severity, where, measured, threshold, evidence, fix}.",
   "designer_says": "rule strictness: error, warning, judgment",
-  "code_name": "rule record: severity, check kind, override",
-  "example": "An unlabeled form field blocks publishing unless someone writes a reason.",
+  "code_name": "validate --json finding; rule record (planned)",
+  "example": "An unlabeled form field would be an error, waived only with a written reason.",
   "source": [
    "prin.ux.rules"
   ]
@@ -327,9 +327,9 @@
   ],
   "plain": "How fast the screen must answer you, from a blink that feels instant to a wait that loses you.",
   "designer": "How fast the interface must respond, each band with its feedback: acknowledge within 50 ms, no loader under about 1 s, skeletons to 10 s, then progress.",
-  "engineer": "16 ms frame, 50 ms acknowledge, 100 ms instant, 200 ms INP, 400 ms Doherty, 1 s, 10 s. Ships as duration tokens like feedback.acknowledge.max = 50ms.",
+  "engineer": "16 ms frame, 50 ms acknowledge, 100 ms instant, 200 ms INP, 400 ms Doherty, 1 s, 10 s. Tokens like feedback.acknowledge.max (proposed) = 50ms are not generated.",
   "designer_says": "response times and feedback bands",
-  "code_name": "feedback.acknowledge.max = 50ms",
+  "code_name": "feedback.acknowledge.max (proposed) = 50ms",
   "source": [
    "prin.ux.timing",
    "DC-L13-01"
@@ -343,9 +343,9 @@
   ],
   "plain": "How much the app works the way people already expect, versus trying new ways of doing things.",
   "designer": "How far the product follows platform and industry conventions. Default: conventional behavior with a custom skin; be novel only where it differentiates, test it, and never override standard shortcuts.",
-  "engineer": "No token; expressed through platform presets that select each platform's native behaviors. It matches heuristic H4, consistency and standards.",
+  "engineer": "No token. Recorded as answers.Q-plat-10; DESIGN.md keeps navigation, back, sheets and pickers native on every platform. Matches heuristic H4, consistency and standards.",
   "designer_says": "conventional behavior, custom skin",
-  "code_name": "platform presets, heuristic H4",
+  "code_name": "answers.Q-plat-10; heuristic H4",
   "source": [
    "prin.ux.familiarity",
    "DC-L13-17"
@@ -355,10 +355,10 @@
   "id": "prin.ux.inclusion",
   "term": "Inclusive design stance",
   "plain": "Making the app work for all kinds of people, like those who are older, see poorly or use one hand.",
-  "designer": "The accessibility floor, WCAG 2.2 AA by default, plus constraints you design for, such as older users, low vision or one-handed use, which turn on larger targets or captions.",
-  "engineer": "Accessibility modes as resolver contexts for contrast, density and motion. OS settings such as Dynamic Type, font scale, Reduce Motion and Increase Contrast must flow into those tokens.",
+  "designer": "The accessibility floor, WCAG 2.2 AA by default, plus constraints you design for, such as older users, low vision or one-handed use, which call for larger targets or captions.",
+  "engineer": "Resolver contexts cover density and reduced motion, not contrast; raw.contrastTarget AAA gives 7:1 text everywhere. CSS follows prefers-reduced-motion and uses rem type for text zoom.",
   "designer_says": "inclusive design, accessibility floor",
-  "code_name": "accessibility resolver contexts: contrast, density, motion",
+  "code_name": "density and motion contexts, raw.contrastTarget",
   "source": [
    "prin.ux.inclusion",
    "DC-L13-14"
@@ -370,11 +370,11 @@
   "aka": [
    "dark patterns policy"
   ],
-  "plain": "The list of sneaky tricks the app must never use to push people, and which ones get caught for you.",
-  "designer": "Which manipulative patterns are banned, and which the builder detects: pre-checked consent boxes, unequal accept and reject emphasis, nagging after dismissal, fake countdowns, hard-to-cancel flows.",
-  "engineer": "No token. Lint rules live in $extensions or config, such as flagging a pre-checked consent box or a cancel flow longer than signup. The rest goes to human review.",
+  "plain": "The sneaky tricks the app must never use to push people. A computer can spot some of them.",
+  "designer": "Which manipulative patterns are banned, and which can be checked automatically: pre-checked consent boxes, unequal accept and reject emphasis, nagging after dismissal, fake countdowns, hard-to-cancel flows.",
+  "engineer": "No token. Recorded as answers.Q-pattern-05; guardrails.md forbids pre-checked consent. Planned lint would flag pre-checked boxes or cancel flows longer than signup; the rest needs human review.",
   "designer_says": "banned deceptive or dark patterns",
-  "code_name": "deceptive-pattern lint rules in config",
+  "code_name": "answers.Q-pattern-05; deceptive-pattern lint (planned)",
   "source": [
    "prin.ux.ethics",
    "DC-L13-15"
@@ -384,8 +384,8 @@
   "id": "prin.visual",
   "term": "Visual design principles",
   "plain": "A set of 72 rules about what makes a screen look clear and well put together.",
-  "designer": "72 visual principles, from hierarchy and Gestalt to type pairing and polish, each graded for evidence. Strong one-answer principles are automated; personality ones become controls; the rest become warnings.",
-  "engineer": "Principles P01 to P72, each with an evidence grade and a builder stance: automate by construction, guide with warnings, or expose as a user control.",
+  "designer": "72 visual principles, from hierarchy and Gestalt to type pairing and polish, each graded for evidence. The stance: automate strong one-answer principles, make personality ones controls, warn on the rest.",
+  "engineer": "Catalog P01 to P72, each graded and given a stance: automate, warn or expose as a dial. The engine implements some, such as nested radii and text tiers.",
   "designer_says": "hierarchy, Gestalt, type pairing, polish",
   "code_name": "principles P01 to P72",
   "source": [
@@ -399,10 +399,10 @@
    "style preset"
   ],
   "plain": "The overall look, such as flat, glassy or bold, which sets many small details at once.",
-  "designer": "An overall style (flat, tonal, glass, soft, neo-brutalist, maximal) that sets shadows, borders and radius together. Default: Flat 2.0 with strong signifiers; keep fashionable styles for marketing.",
-  "engineer": "Not a DTCG type. Builder metadata $extensions.builder.stylePreset (flat2, tonal, glass, neobrutal, soft, maximal) writes primitives like shadow.raised and border.width.default.",
+  "designer": "An overall style (flat, tonal, glass, soft, neo-brutalist, maximal) that sets shadows, borders and radius together. Recommended: Flat 2.0; with no choice, no preset applies and dials stay at defaults.",
+  "engineer": "Not a DTCG type: preset (flat2, tonal, glass, neobrutal, soft, maximal) in state.json sets dial positions, which generate shadows, borders and radius.",
   "designer_says": "visual style: flat, tonal, glass",
-  "code_name": "$extensions.builder.stylePreset",
+  "code_name": "preset in state.json",
   "source": [
    "prin.visual.style",
    "DC-L15-01"
@@ -416,10 +416,10 @@
    "visual hierarchy"
   ],
   "plain": "How much bigger and bolder the key things look, and how many things may shout at once.",
-  "designer": "How dramatic contrast between levels is, and how many elements may claim top emphasis. Default: 1.25 size ratio, two weights, three text colors, one primary action per view.",
-  "engineer": "$extensions.builder.hierarchy {ratio: 1.25, weights: [400, 600], textTiers: 3} feeds font.size.*, font.weight.* and color.text.*. The budget is lint config: maxPrimaryPerView 1.",
+  "designer": "How dramatic contrast between levels is, and how many elements may claim top emphasis. At Expression 50: 1.25 size ratio, three weights, three text colors, one primary action per view.",
+  "engineer": "Expression sets type.ratio (1.25 at 50) and type.weightCount, feeding font.size.* and font.weight.*; validate warns above three text tiers. A one-primary-per-view lint is planned (spec 6.4).",
   "designer_says": "emphasis budget, one primary action",
-  "code_name": "$extensions.builder.hierarchy, maxPrimaryPerView",
+  "code_name": "type.ratio, type.weightCount, emphasis.maxPrimaryPerView",
   "example": "One filled Save button per screen; everything else is quieter.",
   "source": [
    "prin.visual.hierarchy",
@@ -431,10 +431,10 @@
   "id": "prin.visual.grouping",
   "term": "Grouping strategy",
   "plain": "How you show that things go together: by space, by boxes around them, or by lines.",
-  "designer": "Group related items by space, containers or lines; common region beats proximity, which beats similarity. Default: space first, containers when content mixes, lines for long lists.",
-  "engineer": "space.inset.* and space.stack.inner/outer (dimension), color.surface.container (color), border.width.divider (dimension); inner to outer spacing at 1:2 or more.",
+  "designer": "Group related items by space, containers or lines; usually a shared boundary beats proximity, which beats similarity. Default: space first, containers when content mixes, lines for long lists.",
+  "engineer": "space.inset.* and space.stack.* (dimension), color.surface.raised for containers, color.border.subtle with border.width.default for dividers; inner spacing at most half the outer.",
   "designer_says": "group by space, containers or lines",
-  "code_name": "space.stack.inner/outer, border.width.divider",
+  "code_name": "space.stack.*, color.border.subtle",
   "source": [
    "prin.visual.grouping",
    "DC-L15-05"
@@ -445,9 +445,9 @@
   "term": "Composition, balance and alignment",
   "plain": "How things are laid out and lined up on a screen, like on a grid of columns.",
   "designer": "The layout model and default alignment. Column grid for app surfaces, hierarchical or bento for marketing; start-aligned everywhere, centered only for single-focus moments with short text.",
-  "engineer": "grid.columns.* (number), grid.gutter.* and grid.margin.* (dimension). Alignment and bento spans are component props (align: start | center), using logical start and end so RTL mirrors.",
+  "engineer": "Not generated: grid.columns.* (proposed), grid.gutter.* (proposed) and grid.margin.* (proposed); sections use space.section.*. Alignment is a component prop using logical start and end, so RTL mirrors.",
   "designer_says": "column grid, start-aligned layout",
-  "code_name": "grid.columns.*, align: start | center",
+  "code_name": "grid.columns.* (proposed), align: start | center",
   "source": [
    "prin.visual.composition",
    "DC-L15-07",
@@ -462,9 +462,9 @@
   ],
   "plain": "How clearly buttons and links show that you can tap or click them.",
   "designer": "How clearly clickable things look clickable, via fills, underlines, borders or depth. Default: balanced, with strong signifiers forced for primary actions; minimal only in sparse, conventional layouts.",
-  "engineer": "Component tokens such as button.primary.background (color), link.text-decoration (a string, no DTCG type) and input.border.width (dimension).",
+  "engineer": "Today signifiers use color.bg.action.primary, color.text.link, color.border.input. Planned component tokens: button.primary.background (proposed), link.text-decoration (proposed; no DTCG type), input.border.width (proposed).",
   "designer_says": "signifiers: clickable looks clickable",
-  "code_name": "button.primary.background, link.text-decoration",
+  "code_name": "color.text.link, button.primary.background (proposed)",
   "source": [
    "prin.visual.signifiers",
    "DC-L15-09"
@@ -477,10 +477,10 @@
    "optical correction"
   ],
   "plain": "Tiny fixes that fool the eye into seeing things as even, so the screen feels done.",
-  "designer": "Optical fixes that make a UI feel finished: optical centering, overshoot, icon optical size, nested radii, one light source, fewer borders. Auto-correct known cases; suggest fixes for custom assets.",
-  "engineer": "Icon keylines as icon.keyline.square and icon.keyline.circle (dimension); nested radius computed as radius.inner = radius.outer minus space.inset.",
+  "designer": "Optical fixes that make a UI feel finished: optical centering, overshoot, icon optical size, nested radii, one light source. OpenDesigner computes nested radii and icon strokes; optical centering stays manual.",
+  "engineer": "radius.nested = max(radius.container - space.inset.lg, smallest step), checked by engine.py validate. Icon keylines are guidance; icon.keyline.* (proposed) is not generated.",
   "designer_says": "optical correction, nested radii",
-  "code_name": "radius.inner = radius.outer minus space.inset",
+  "code_name": "radius.nested = max(outer - padding, smallest step)",
   "example": "A play icon nudged right so it looks centered in its circle.",
   "source": [
    "prin.visual.polish",
@@ -492,9 +492,9 @@
   "term": "Aesthetics and complexity readouts",
   "plain": "What makes a screen look good: we judge it in a blink, and a middle amount of detail works best.",
   "designer": "Research on appeal: judgments form in 17-50 ms, and appeal peaks at moderate complexity and colorfulness. Beauty multiplies usability rather than replacing it, so keep a restrained default.",
-  "engineer": "An optional complexity and colorfulness readout computed from screenshots. It is never used as a usability signal or a pass or fail check.",
+  "engineer": "Planned, not built: an optional complexity and colorfulness readout from screenshots (the metrics option of answers.Q-pref-01). It is never a usability signal or a pass or fail check.",
   "designer_says": "aesthetic appeal, moderate complexity",
-  "code_name": "optional complexity and colorfulness readout",
+  "code_name": "complexity and colorfulness readout (planned)",
   "source": [
    "prin.visual.aesthetics",
    "DC-L15-11"
@@ -508,7 +508,7 @@
   ],
   "plain": "Saved, named choices, like a brand blue, that design apps and code can share.",
   "designer": "Named values that store every foundation decision, such as color.bg.accent instead of a hex code. Change one token and every design and screen that uses it follows.",
-  "engineer": "The data layer: tiers, naming, coverage, value types, modes, themes and delivery. Round-trips losslessly to DTCG 2025.10 plus its Resolver, with extensions for string, boolean and spring.",
+  "engineer": "The data layer: tiers, naming, coverage, types, modes, themes and delivery. engine.py generate writes DTCG 2025.10 files plus a Resolver; springs and P3 colors ride in $extensions.opendesigner.",
   "designer_says": "design tokens",
   "code_name": "DTCG 2025.10 plus Resolver",
   "source": [
@@ -522,11 +522,11 @@
    "token layers"
   ],
   "plain": "Layers of names, from raw values like a blue shade up to names that say what the blue is for.",
-  "designer": "Primitives hold raw values; semantic tokens say what a value is for and are where theming happens; optional component tokens let one component restyle on its own.",
-  "engineer": "Semantic color.bg.accent aliases primitive color.blue.600 as \"{color.blue.600}\"; button.primary.bg may alias that. Aliases must share a type and never cycle.",
+  "designer": "Primitives hold raw values; semantic tokens say what a value is for and are where theming happens; optional component tokens, not generated yet, let one component restyle on its own.",
+  "engineer": "Semantic color.bg.accent.bold = \"{color.accent.light.9}\", a primitive; planned component token button.primary.bg (proposed) would alias it. Aliases must share a type and never cycle.",
   "designer_says": "primitive, semantic, component tiers",
-  "code_name": "color.bg.accent = {color.blue.600}",
-  "example": "Blue 600, then accent background, then primary button background.",
+  "code_name": "color.bg.accent.bold = {color.accent.light.9}",
+  "example": "Accent shade 9, then accent background, then a primary button background.",
   "source": [
    "tok.tiers",
    "DC-L07-01",
@@ -537,10 +537,10 @@
   "id": "tok.naming",
   "term": "Token naming",
   "plain": "The rules for how saved choices get their names, so you can guess a name and find it.",
-  "designer": "The grammar that makes token names predictable: category, property, concept, variant, state. Theme and brand never appear in names, because they are modes.",
-  "engineer": "[namespace].category.property.concept?.variant?.state?, as in ds.color.bg.accent.hover. The pipeline emits kebab (CSS), camel (JS, Swift, Kotlin) and snake (Android XML).",
+  "designer": "The grammar that makes token names predictable: category, property, concept, variant, state. Theme and brand never appear in semantic names, because they are modes.",
+  "engineer": "category.property.concept.variant, state appended in camelCase: color.bg.accent.boldHover. The export prefix (default ds) namespaces it: CSS --ds-color-bg-accent-bold-hover; Swift and Compose use camelCase.",
   "designer_says": "token naming convention",
-  "code_name": "category.property.concept.variant.state",
+  "code_name": "category.property.concept.variant(State)",
   "source": [
    "tok.naming",
    "DC-L07-04",
@@ -551,11 +551,11 @@
  {
   "id": "tok.naming.primitives",
   "term": "Primitive naming",
-  "plain": "How raw values get named, like blue 600 for a shade or small and large for sizes.",
-  "designer": "Hue plus a numeric step for color, a percent-of-base scale for space, and t-shirt sizes only for component sizes. Descriptive names are for brand colors only.",
-  "engineer": "color.blue.600 ($type color), space.100 and space.150 (dimension). Avoid ordinal scales where spacing-200 means 12px. Transforms prefix names that start with a digit.",
-  "designer_says": "hue and numeric step",
-  "code_name": "color.blue.600, space.100",
+  "plain": "How the basic values get named, like accent 9 for a shade or space 16 for a 16 pixel gap.",
+  "designer": "Research favors hue plus a numeric step for color. OpenDesigner names ramps by role and step (accent 9), space by pixel value (16), and keeps t-shirt sizes for semantic tokens.",
+  "engineer": "Emitted: color.accent.light.9 (color: role, mode, step) and space.16 (dimension, named by px). Hue names such as color.blue.600 (proposed) are not generated. Avoid ordinal scales.",
+  "designer_says": "role and numeric step",
+  "code_name": "color.accent.light.9, space.16",
   "source": [
    "tok.naming.primitives",
    "DC-L07-03",
@@ -567,7 +567,7 @@
   "term": "Token coverage",
   "plain": "Which choices get a saved name, and which stay as one-off numbers.",
   "designer": "Which properties become tokens. Default: everything Figma variables can bind and Check designs can lint, plus motion and focus; one-off illustration values stay out.",
-  "engineer": "One DTCG group per category: color, font, space, size, radius, border, shadow, opacity, motion, z, breakpoint. z-index and breakpoints are web-centric; native uses elevation and size classes.",
+  "engineer": "Emitted DTCG groups: color, font, text, space, size, radius, border, elevation, opacity, motion, focus and icon. Shadow, z-index and breakpoint groups are not generated; native uses elevation and size classes.",
   "designer_says": "what gets tokenized",
   "code_name": "one DTCG group per category",
   "source": [
@@ -607,7 +607,7 @@
   "term": "Dimension units",
   "plain": "What unit sizes are saved in, like pixels, and how they change for each kind of screen.",
   "designer": "Which unit sizes are stored in, and how they become pt on iOS, dp on Android, epx on Windows and rem on the web. Storing px keeps Figma import lossless.",
-  "engineer": "$type dimension as {value: 16, unit: \"px\"}; DTCG allows only px and rem. Export 1:1 as pt and dp, and convert to rem only at the web transform step.",
+  "engineer": "$type dimension {value: 16, unit: \"px\"}; DTCG allows only px and rem. OpenDesigner exports px 1:1 as pt and dp, and CSS font sizes as rem.",
   "designer_says": "units: px, pt, dp, rem",
   "code_name": "$type dimension {value, unit}",
   "source": [
@@ -622,9 +622,9 @@
   "term": "Typography encoding",
   "plain": "How text settings like font, size and weight are saved: as one bundle, as single parts, or both.",
   "designer": "Whether type is stored as bundled styles, separate values, or both. Default both: atomic font values plus role-based composites, mirrored in Figma as text styles bound to variables.",
-  "engineer": "Atomic fontFamily, dimension, fontWeight and number primitives plus typography composites such as typography.body.md. Figma has no composite variable type, so composites become bound text styles.",
+  "engineer": "Atomic fontFamily, fontWeight and dimension tokens (line heights in px) plus composites like text.body.md. Figma lacks composite variables, so composites become text styles bound to variables.",
   "designer_says": "text styles bound to variables",
-  "code_name": "typography.body.md composite",
+  "code_name": "text.body.md typography composite",
   "source": [
    "tok.types.typography",
    "DC-L07-12",
@@ -640,9 +640,9 @@
   ],
   "plain": "How shadows and outlines are saved so both design tools and code draw them the same.",
   "designer": "How shadows, borders and elevation are stored so design and code match. Figma effect styles bind color and offset to variables, so dark mode can swap the shadow color.",
-  "engineer": "DTCG shadow and border composites plus strokeStyle; elevation.2 is an array of shadow layers colored {color.shadow.key}. Android elevation and iOS shadows need custom transforms.",
+  "engineer": "elevation.floating is a DTCG shadow array of ring, key and ambient layers. Borders are border.width.* dimensions, not border or strokeStyle composites. Android and iOS shadows need custom transforms.",
   "designer_says": "effect styles and strokes",
-  "code_name": "DTCG shadow and border composites",
+  "code_name": "elevation.* shadow arrays, border.width.*",
   "source": [
    "tok.types.shadow-border",
    "DC-L07-13"
@@ -652,7 +652,7 @@
   "id": "tok.types.motion",
   "term": "Motion encoding",
   "plain": "How the speed and feel of movement on screen is saved, like how long a slide takes.",
-  "designer": "How durations, easings and springs are stored. Default: 3-5 durations and 3-4 easings, mirrored as Figma timing and easing variables with a reduced-motion mode.",
+  "designer": "How durations, easings and springs are stored. OpenDesigner emits eight durations and four easings, mirrored as Figma timing and easing variables with a reduced-motion mode. Research suggests 3-5 durations.",
   "engineer": "DTCG duration, cubicBezier and transition, such as motion.duration.short = {value: 150, unit: \"ms\"}; springs stay in $extensions until DTCG adds a type.",
   "designer_says": "durations, easings and springs",
   "code_name": "motion.duration.short, cubicBezier, transition",
@@ -665,10 +665,10 @@
   "id": "tok.types.layout",
   "term": "Layout and breakpoint encoding",
   "plain": "How screen widths and column grids are saved, so the layout changes as the screen grows.",
-  "designer": "How breakpoints, grids and layout guides are stored. Default: a breakpoint collection with three modes driving spacing and layout guides, plus grid auto layout for multi-column components.",
-  "engineer": "No DTCG breakpoint or media-query type: layout.grid.columns (number, 4, 8 or 12 by mode), layout.gutter and layout.margin (dimension). Figma grid auto layout maps to CSS grid.",
+  "designer": "How breakpoints, grids and layout guides are stored. Research default: a three-mode breakpoint collection driving spacing and guides, plus grid auto layout. OpenDesigner does not generate breakpoints yet.",
+  "engineer": "No DTCG breakpoint type. Not generated: layout.grid.columns (proposed; 4, 8 or 12), layout.gutter (proposed), layout.margin (proposed). Figma grid auto layout maps to CSS grid.",
   "designer_says": "breakpoints, grids and layout guides",
-  "code_name": "layout.grid.columns, layout.gutter, layout.margin",
+  "code_name": "layout.grid.columns (proposed), layout.gutter (proposed)",
   "source": [
    "tok.types.layout",
    "DC-L07-28"
@@ -677,11 +677,11 @@
  {
   "id": "tok.types.extensions",
   "term": "Builder extension types",
-  "plain": "Extra things the shared file has no slot for, like bouncy motion or brand mood, kept in side notes.",
-  "designer": "Values the standard format cannot hold: springs, text and yes-or-no values, icon and font references, aspect ratios, behavior rules, and builder settings like style preset and brand personality.",
-  "engineer": "No DTCG type; stored under $extensions, for example com.figma.type for booleans, or in sibling files. Covers string, boolean, spring, assets, aspect ratios, rules and builder metadata.",
+  "plain": "Extra things the shared file has no slot for, like bouncy motion or very bright colors, kept in side notes.",
+  "designer": "Values the standard format cannot hold: springs, text and yes-or-no values, icon and font references, aspect ratios and rules. OpenDesigner keeps builder settings like preset in state.json.",
+  "engineer": "Today $extensions.opendesigner holds springs, P3 values, provenance and evidence; builder settings (preset, macros) live in state.json and opendesigner.meta.json. String and boolean extensions are not generated.",
   "designer_says": "values beyond the standard format",
-  "code_name": "$extensions or sibling files",
+  "code_name": "$extensions.opendesigner, state.json",
   "source": [
    "tok.types.extensions"
   ]
@@ -693,9 +693,9 @@
    "theming axes"
   ],
   "plain": "The switches that change values in one go, like light and dark, or roomy and tight.",
-  "designer": "The axes along which values switch, such as color scheme, contrast, density or brand. Default: light and dark plus contrast; add density or brand only for a real need.",
-  "engineer": "DTCG Resolver modifiers with contexts; in Figma, collections and modes. Outputs equal the product of contexts, so keep axes orthogonal. Semantic tokens re-point per mode; primitives stay single-valued.",
-  "designer_says": "modes: light, dark, contrast",
+  "designer": "The axes along which values switch, such as color scheme, contrast, density or brand. OpenDesigner generates light and dark, three densities and reduced motion; no contrast or brand modes yet.",
+  "engineer": "DTCG Resolver modifiers with contexts (theme, density, motion); Figma collections and modes. Outputs multiply, so keep axes few, and orthogonal so no two set the same token. Primitives stay single-valued.",
+  "designer_says": "modes: light, dark, density, motion",
   "code_name": "resolver modifiers, Figma collection modes",
   "example": "Page background is white in light mode and near-black in dark mode.",
   "source": [
@@ -711,7 +711,7 @@
   "term": "Themes and brands",
   "plain": "How one design gets a new look, for a new brand or a customer, without being rebuilt.",
   "designer": "How the system is re-skinned: a few inputs generate a theme, several brands share one system, and white-label customers change a limited set of values.",
-  "engineer": "Parent of tok.themes.generator, tok.themes.brands and tok.themes.whitelabel. Themes remap semantic token values through resolver modifiers; token names and roles never change.",
+  "engineer": "Parent of tok.themes.generator, .brands and .whitelabel. Today inputs such as raw.brandColor generate the theme; a re-skin overrides primitives through state.json overrides. Semantic names never change.",
   "designer_says": "theming, multi-brand, white-label",
   "code_name": "tok.themes.generator, .brands, .whitelabel",
   "source": [
@@ -724,9 +724,9 @@
   "term": "Theme-generator inputs",
   "plain": "A few brand choices, like the main color, from which a whole look is worked out for you.",
   "designer": "The few brand knobs a whole theme is computed from. Default three: brand or accent color, neutral base or temperature, and contrast. A warmer gray alone shifts personality.",
-  "engineer": "Inputs theme.input.accent, theme.input.base and theme.input.contrast are builder metadata; derived semantic tokens are generated in a perceptual space such as OKLCH.",
+  "engineer": "Inputs are raw.brandColor, raw.neutralBase and raw.contrastTarget in state.json, with the Warmth dial; engine.py generate derives the color.accent.* and color.neutral.* ramps in OKLCH.",
   "designer_says": "theme seed: accent, base, contrast",
-  "code_name": "theme.input.accent, .base, .contrast",
+  "code_name": "raw.brandColor, raw.neutralBase, raw.contrastTarget",
   "source": [
    "tok.themes.generator",
    "DC-L06-06"
@@ -740,9 +740,9 @@
   ],
   "plain": "How a few brands share one set of parts: they work the same, but colors and fonts change.",
   "designer": "Fixed across brands: anatomy, behavior, semantic names, status meanings. Flexible: brand color, typeface, logo, imagery. Radius, density and motion flex with care. Build as if a second brand will come.",
-  "engineer": "A brand axis, as a resolver modifier or Figma extended collection, overriding a named brandable set: brand.accent = {color.violet.600} or {color.teal.600}, aliased by color.bg.accent.",
+  "engineer": "Planned, not generated yet: a brand resolver modifier or Figma extended collection whose contexts re-point a brandable set, such as color.accent.* and font.family.display; semantic names stay fixed.",
   "designer_says": "multi-brand theming",
-  "code_name": "brand modifier: brand.accent = {color.violet.600}",
+  "code_name": "brand modifier (planned) re-pointing color.accent.*",
   "source": [
    "tok.themes.brands",
    "DC-L06-16",
@@ -758,9 +758,9 @@
   ],
   "plain": "The short list of things other companies may change to make the app their own, like logo and color.",
   "designer": "What external customers may change in a white-label product. Default: brand color and logo; font and radius only with previews and validation. Everything else is derived.",
-  "engineer": "Exposed inputs only, such as tenant.color.brand, tenant.logo and optionally tenant.font.display; all other color, fontFamily and dimension tokens derive from them.",
+  "engineer": "Today the accent ramps derive from one input, raw.brandColor. Proposed tenant inputs: tenant.color.brand (proposed), tenant.logo (proposed), optionally tenant.font.display (proposed); all else derives.",
   "designer_says": "white-label brand color and logo",
-  "code_name": "tenant.color.brand, tenant.logo",
+  "code_name": "tenant.color.brand (proposed), tenant.logo (proposed)",
   "source": [
    "tok.themes.whitelabel",
    "DC-L06-17"
@@ -771,10 +771,10 @@
   "term": "Platform delivery of tokens",
   "plain": "The form design values take inside each kind of app code, like a web page or a phone app.",
   "designer": "The form tokens take in each platform's code. On the web: CSS custom properties, media queries for user preferences, container queries for components, viewport breakpoints only for page layout.",
-  "engineer": "Formats css/variables, compose/object, ios-swift/class.swift, flutter/class.dart. Web modes switch via [data-theme] or @media (prefers-color-scheme); type uses rem.",
+  "engineer": "OpenDesigner writes build/css/tokens.css, tailwind/theme.css, swift/DesignTokens.swift and compose/DesignTokens.kt. Web themes follow prefers-color-scheme with a [data-theme] override; type uses rem. No Flutter output.",
   "designer_says": "tokens in platform code",
-  "code_name": "css/variables, compose/object, ios-swift/class.swift",
-  "example": "--color-text-primary in CSS, a theme object in Compose.",
+  "code_name": "build/css/tokens.css, DesignTokens.swift, DesignTokens.kt",
+  "example": "--ds-color-text-primary in CSS, a DsColors class in Compose.",
   "source": [
    "tok.delivery",
    "DC-L10-18"
@@ -789,9 +789,9 @@
   ],
   "plain": "The checks that keep work made by people and AI inside the rules.",
   "designer": "The checks that keep human and agent work inside the rules: which rules run, where (editor, export, CI), how strict they are, and which device safety and accessibility tests apply.",
-  "engineer": "The enforcement layer for rules from prin.ux.rules, visual principles and foundation constraints. No DTCG type for rules; lint configuration ships beside the tokens.",
+  "engineer": "The enforcement layer for prin.ux.rules, visual principles and foundation constraints. Today engine.py validate checks tokens and engine.py review scans code; exported lint configs are planned.",
   "designer_says": "guardrails and design linting",
-  "code_name": "lint configuration beside the tokens",
+  "code_name": "engine.py validate, engine.py review",
   "source": [
    "guard",
    "DC-L11-24"
@@ -801,10 +801,10 @@
   "id": "guard.enforcement",
   "term": "Rule enforcement and exported lint",
   "plain": "How rules hold: you can only break one on purpose, and AI helpers must obey the same rules.",
-  "designer": "Rules bind people and agents alike: raw values only through an explicit detach, agents limited to the same scopes as humans, and lint rules shipped with every generated system.",
-  "engineer": "Exported stylelint and eslint rules beside the DTCG files, such as no-raw-color, no-unknown-token and contrast-min. Per-token scopes and allowed-token lists apply to agents too.",
+  "designer": "Rules bind people and agents alike: raw values only through an explicit detach, agents limited to the same scopes as humans, and lint rules planned for every generated system.",
+  "engineer": "Planned: a lint/ folder with a stylelint strict-value config (spec 7.12). Today engine.py review flags hard-coded values and validate checks contrast; Figma export scopes semantic variables.",
   "designer_says": "same rules for people and agents",
-  "code_name": "no-raw-color, no-unknown-token, contrast-min",
+  "code_name": "engine.py review, validate; lint/ (planned)",
   "source": [
    "guard.enforcement",
    "DC-L11-24",
@@ -815,10 +815,10 @@
   "id": "guard.checks",
   "term": "Check catalog",
   "plain": "The full list of tests the tool runs, like checking text is easy to read on its background.",
-  "designer": "Every check the builder runs: contrast on every color pair in every mode, target size, labels, color-only meaning, dismiss paths, deceptive patterns, hierarchy counts and Figma limits.",
-  "engineer": "Checks reference token paths: aliases share a type with no cycles, at most 5,000 variables per Figma collection, mode caps of 10, 20 or 40, and orthogonal modifiers.",
+  "designer": "What engine.py validate checks: contrast pairs in every mode, target sizes, focus, reduced motion, hierarchy counts and Figma mode limits. Label, dismiss and deceptive-pattern checks are planned.",
+  "engineer": "validate resolves every alias without cycles, requires a $type, keeps modifiers orthogonal and warns past the Figma plan's mode cap. The Figma export warns above 5,000 variables.",
   "designer_says": "contrast, target, label and limit checks",
-  "code_name": "alias, cycle and Figma limit checks",
+  "code_name": "engine.py validate: contrast, targets, aliases, limits",
   "source": [
    "guard.checks",
    "DC-L07-17",
@@ -830,10 +830,10 @@
   "id": "guard.critique",
   "term": "Visual critique strictness",
   "plain": "How tough the tool is when it reviews your look: a gentle coach, a strict gate, or a score sheet.",
-  "designer": "How strongly the builder critiques visual choices: coaching by default, strict blocking for production teams, or an advanced metrics panel. Every message names its principle, so users learn the vocabulary.",
-  "engineer": "Builder config, not tokens: $extensions.builder.feedback = \"coach\", \"strict\" or a metrics panel. Strict blocks export on hard failures such as contrast or a second primary action.",
+  "designer": "How strongly the builder critiques visual choices: coaching by default; strict blocking and a metrics panel are planned. Every validate message names its rule, so users learn the vocabulary.",
+  "engineer": "Not tokens: answers.Q-pref-01 records silent, coach, strict or metrics, but nothing acts on it yet. validate reports errors; review --strict fails on hard-coded values or stale DESIGN.md.",
   "designer_says": "design critique: coach or strict",
-  "code_name": "$extensions.builder.feedback: coach | strict",
+  "code_name": "answers.Q-pref-01: coach | strict (planned)",
   "source": [
    "guard.critique",
    "DC-L15-11"
@@ -843,10 +843,10 @@
   "id": "guard.safety",
   "term": "Safety and distraction limits",
   "plain": "Hard rules for places where a screen could put people at risk, like while they drive a car.",
-  "designer": "Hard rules where a design can endanger people, such as driving or headsets. In a vehicle context they are errors, not warnings: a screen that needs a second glance fails.",
-  "engineer": "Validator rules keyed to the context modifier, such as vehicle.animation = false and vehicle.maxTaskScreens = 5. Driving limits: 2 s glance, 12 s task, 76dp targets.",
+  "designer": "Hard rules where a design can endanger people, such as driving or headsets. In a vehicle context they should be errors, not warnings; OpenDesigner enforces 76 px targets today.",
+  "engineer": "With car in raw.platforms or vehicle in raw.inputs, validate enforces a 76 px target. vehicle.animation (proposed) is planned; driving limits: 2 s glance, 12 s task.",
   "designer_says": "safety and driver distraction limits",
-  "code_name": "vehicle.animation = false, vehicle.maxTaskScreens",
+  "code_name": "vehicle.animation (proposed); 76 px vehicle target",
   "source": [
    "guard.safety",
    "DC-L14-11"
@@ -857,9 +857,9 @@
   "term": "Accessibility test matrix by device",
   "plain": "The smallest set of tests with helper tools, like screen readers, done on each kind of device.",
   "designer": "The minimum assistive-technology tests per shipped device class: one screen reader, one motor alternative and the largest text size. A first-class device means first-class assistive tech.",
-  "engineer": "Not tokens; a per-context checklist attached to each component. On visionOS, custom gestures lose hand input under VoiceOver, so each needs a standard alternative.",
+  "engineer": "Not tokens. DESIGN.md's Accessibility section lists the test matrix: keyboard, a screen reader per platform, 200% zoom, forced colors and reduced motion. Per-component checklists are planned.",
   "designer_says": "assistive tech test matrix",
-  "code_name": "per-context accessibility checklist",
+  "code_name": "DESIGN.md Accessibility test matrix",
   "source": [
    "guard.testing",
    "DC-L14-14"
@@ -870,7 +870,7 @@
   "term": "Delivery and tooling",
   "plain": "How the finished design leaves the tool and stays in step with design apps and code.",
   "designer": "How the system leaves the builder and stays in sync: source of truth, interchange file, build pipeline, packaging, export channels, agent-readable outputs, and the round trip with design tools.",
-  "engineer": "Parent of the deliver.* nodes. The canonical model serializes to DTCG 2025.10 plus a resolver, then transforms into CSS, Swift, Kotlin and other platform code.",
+  "engineer": "Parent of the deliver.* nodes. engine.py generate turns state.json into DTCG 2025.10 plus a resolver; export turns that into CSS, Tailwind, Swift, Compose, Figma, Paper and DTCG.",
   "designer_says": "handoff and tooling",
   "code_name": "DTCG plus resolver, then platform code",
   "source": [
@@ -884,10 +884,10 @@
    "canonical source"
   ],
   "plain": "The one main copy that all other copies follow, and which way changes flow.",
-  "designer": "Which copy of the system wins and which way changes flow. Default: the builder's model is canonical; Figma and Paper are mirrors that send changes back only for review.",
-  "engineer": "The model compiles to DTCG 2025.10 plus resolver and code in one step, and every token carries its code syntax. JSON-first keeps OKLCH and P3 values Figma import drops.",
+  "designer": "Which copy wins and how changes flow. In OpenDesigner, state.json and the DTCG files it generates are canonical; Figma and Paper are mirrors whose edits return as recorded decisions.",
+  "engineer": "engine.py build compiles state.json to DTCG 2025.10 plus resolver and code; Figma variables carry matching code syntax. JSON-first keeps OKLCH and P3 values Figma import drops.",
   "designer_says": "canonical source, design tools mirror",
-  "code_name": "builder model to DTCG plus resolver",
+  "code_name": "state.json to tokens/ (DTCG plus resolver)",
   "source": [
    "deliver.source-of-truth",
    "DC-L07-08",
@@ -900,9 +900,9 @@
   "term": "Interchange format and file layout",
   "plain": "The shared file type that tools use to pass your choices back and forth, and how it is split.",
   "designer": "The standard file format tokens travel in, and how the files split. Default: DTCG 2025.10, one file per tier and mode, which maps directly onto Figma's one-file-per-mode import.",
-  "engineer": "One file per tier and mode, like semantic.dark.tokens.json, plus a resolver file with sets and modifiers. DTCG 2025.10 is stable but not a W3C Standard.",
+  "engineer": "One file per tier and mode (semantic.color.dark.tokens.json), plus opendesigner.resolver.json with sets and modifiers. DTCG 2025.10 is stable but not a W3C Standard.",
   "designer_says": "token file format and layout",
-  "code_name": "semantic.dark.tokens.json plus resolver file",
+  "code_name": "semantic.color.dark.tokens.json, resolver file",
   "source": [
    "deliver.interchange",
    "DC-L07-09"
@@ -916,7 +916,7 @@
   ],
   "plain": "A tool that turns one design file into code that web and phone apps can use right away.",
   "designer": "The build tool that turns one token source into platform code. Default: Terrazzo for web-only teams, Style Dictionary v5 when native iOS or Android outputs are needed.",
-  "engineer": "Consumes DTCG 2025.10 plus resolver. Terrazzo 2.x supports resolvers; Style Dictionary v5 does not, so pre-expand each mode combination. SwiftUI and Compose ColorScheme need custom formats.",
+  "engineer": "Consumes DTCG 2025.10 plus resolver: Terrazzo 2.x supports resolvers; Style Dictionary v5 needs each mode pre-expanded. engine.py export writes CSS, Swift and Compose; pipeline configs are planned.",
   "designer_says": "token build pipeline",
   "code_name": "Terrazzo or Style Dictionary v5",
   "source": [
@@ -930,9 +930,9 @@
   "term": "Distribution model",
   "plain": "How coders get the kit into their app, like adding a package or pasting in the code.",
   "designer": "How engineers consume the system: an npm library, copy-in source like shadcn, a CDN runtime, CSS and HTML only, headless primitives, or utilities like Tailwind.",
-  "engineer": "Generate DTCG JSON first, then emit CSS variables, Tailwind @theme and the shadcn variable contract, where generated systems land today. Web components work across frameworks.",
+  "engineer": "Generate DTCG JSON first, then emit CSS variables and a Tailwind @theme, which OpenDesigner does today. Web components work across frameworks.",
   "designer_says": "npm library, copy-in or Tailwind",
-  "code_name": "CSS variables, Tailwind @theme, shadcn contract",
+  "code_name": "CSS variables, Tailwind @theme",
   "source": [
    "deliver.packaging",
    "DC-L09-08"
@@ -942,10 +942,10 @@
   "id": "deliver.channels",
   "term": "Export and handoff channels",
   "plain": "The ways to send your design out of the tool, like copying code or sending it to a design app.",
-  "designer": "How a builder state leaves the tool. Default: one menu, five exports: copy CSS, a CLI or registry URL, a DTCG file, a pull request, or a push to Figma.",
-  "engineer": "Outputs: DTCG (canonical), CSS custom properties, Tailwind v4 @theme, a shadcn registry item, Swift and Kotlin. The builder's generator is also exposed as an MCP tool.",
-  "designer_says": "export menu: CSS, CLI, DTCG, PR, Figma",
-  "code_name": "DTCG, CSS, Tailwind @theme, shadcn registry item",
+  "designer": "How a system leaves the tool. OpenDesigner writes export files and pushes to Figma or Paper through their MCP; a CLI URL and pull requests are not built.",
+  "engineer": "Today: DTCG (canonical), CSS custom properties, Tailwind v4 @theme, Swift, Compose, and Figma and Paper payloads. An MCP server is planned (spec Phase 2).",
+  "designer_says": "exports: CSS, DTCG, native code, Figma",
+  "code_name": "export --format all",
   "source": [
    "deliver.channels",
    "DC-L16-12"
@@ -959,9 +959,9 @@
   ],
   "plain": "The files and links that let AI helpers read your design and follow it.",
   "designer": "How AI agents read the system: MCP servers, llms.txt, DESIGN.md and Markdown twins of docs. Ship one live channel and one file channel, and test with evals.",
-  "engineer": "Emit DTCG with $description on every token, DESIGN.md, a shadcn-compatible registry (registry.json plus r/{name}.json) and an llms.txt index; an MCP server is the live channel.",
+  "engineer": "Today: DTCG files with $description text, DESIGN.md with a For Agents section, and an AGENTS.md snippet. An MCP server is planned (spec Phase 2).",
   "designer_says": "AI-readable docs and MCP",
-  "code_name": "llms.txt, DESIGN.md, MCP server",
+  "code_name": "DESIGN.md, AGENTS-snippet.md; MCP server (planned)",
   "source": [
    "deliver.ai",
    "DC-L11-23",
@@ -973,7 +973,7 @@
   "term": "Design-tool interop",
   "plain": "How the tool sends your design to drawing apps like Figma and gets changes back.",
   "designer": "How the builder mirrors the system into design tools and captures changes back. No tool found does deterministic two-way token sync, so Figma and Paper are treated as mirrors.",
-  "engineer": "Figma: the remote MCP use_figma with a Full seat, otherwise one DTCG file per mode for native import. Paper: its local MCP. Penpot: DTCG sets and themes.",
+  "engineer": "Figma: the remote MCP use_figma with a Full seat, else build/figma/import, one DTCG file per collection and mode. Paper: its local MCP. Penpot: imports the DTCG files.",
   "designer_says": "Figma and Paper as mirrors",
   "code_name": "use_figma MCP or DTCG per mode",
   "source": [
@@ -998,7 +998,7 @@
   "term": "Collections, modes, scopes and publishing",
   "plain": "How Figma groups your saved choices, and hides the raw ones so no one picks them by mistake.",
   "designer": "How tiers map to Figma collections and modes. Hide all primitives and scope each semantic variable to the properties its name says, so designers only see the right choices.",
-  "engineer": "Collections: Primitives (hidden), Semantic color (light, dark, optional high contrast), Semantic dimension, Motion. REST scopes such as TEXT_FILL; hiddenFromPublishing: true; 5,000 variables per collection.",
+  "engineer": "Collections: Primitives (hidden), Color (Light, Dark), Density (Spacious, Comfortable, Compact), Motion (Standard, Reduced), Tokens. REST scopes such as TEXT_FILL; hiddenFromPublishing: true; 5,000 variables per collection.",
   "designer_says": "variable collections, modes and scopes",
   "code_name": "hiddenFromPublishing, scopes like TEXT_FILL",
   "source": [
@@ -1012,7 +1012,7 @@
   "term": "Code syntax",
   "plain": "The code name Figma shows next to each value, so designers and coders call it the same thing.",
   "designer": "The code name Figma's Dev Mode shows beside each variable for Web, Android and iOS. It is the join key between canvas and code, so both sides use one name.",
-  "engineer": "REST codeSyntax {WEB, ANDROID, iOS}, generated from the pipeline's name transform: color/bg/surface becomes var(--ds-color-bg-surface) on web. There is no Flutter or React Native slot.",
+  "engineer": "REST codeSyntax {WEB, ANDROID, iOS}, from the CSS export's name transform: color/surface/base becomes var(--ds-color-surface-base), DS.Colors.surfaceBase on iOS. No Flutter or React Native slot.",
   "designer_says": "code syntax in Dev Mode",
   "code_name": "codeSyntax {WEB, ANDROID, iOS}",
   "source": [
@@ -1025,9 +1025,9 @@
   "term": "Styles versus variables",
   "plain": "Which choices Figma keeps as one setting and which as a bundle, like a text style.",
   "designer": "Which values live as Figma variables and which as styles. Rule: variables for values, styles for bundles; any single value that changes by mode must be a variable.",
-  "engineer": "Colors, spacing, radius, sizes, opacity and motion become variables. Typography, shadows, gradients and layout grids, the DTCG composites, become styles bound to variables.",
+  "engineer": "Colors, spacing, radius, sizes, opacity and motion become variables. OpenDesigner writes text styles bound to size, weight and family variables, and effect styles for elevation; no gradients or grids.",
   "designer_says": "variables for values, styles for bundles",
-  "code_name": "composites as bound Figma styles",
+  "code_name": "text and effect styles, not variables",
   "source": [
    "deliver.interop.figma.styles",
    "DC-L07-21"
@@ -1038,7 +1038,7 @@
   "term": "Code Connect and AI readiness",
   "plain": "Links from each drawn part in Figma to the real code part, with notes that help AI helpers.",
   "designer": "Links from Figma components to real code components, plus descriptions and examples Figma's AI tools read. Start with the top 20 components; describe every component and semantic variable.",
-  "engineer": "Code Connect needs an Organization or Enterprise plan. Descriptions go in $description; get_variable_defs returns code syntax with values. The remote MCP needs a frame or layer link.",
+  "engineer": "Code Connect needs an Organization or Enterprise plan. Descriptions go in $description; get_variable_defs returns variable names and values. The remote MCP needs a frame or layer link.",
   "designer_says": "Code Connect links to code",
   "code_name": "Code Connect, get_variable_defs, $description",
   "source": [
@@ -1049,7 +1049,7 @@
  {
   "id": "deliver.interop.paper",
   "term": "Paper",
-  "plain": "Paper is a design app built from web pages; it takes your colors but has no dark mode yet.",
+  "plain": "Paper is a design app made of web pages; it takes your colors, but light and dark need two sets.",
   "designer": "An HTML and CSS design canvas that agents can write to. Its tokens have no modes or libraries, so use it for specimens, not as the source of truth.",
   "engineer": "A local MCP server with 34 tools, including write_html and create_tokens. Tokens are CSS variables with no modes or DTCG, so light and dark need separate sets.",
   "designer_says": "Paper canvas for specimens",
@@ -1079,9 +1079,9 @@
   ],
   "plain": "How the kit is run over time: who looks after it, how it grows, and how it changes.",
   "designer": "How the system runs as a product over time: build order and pilots, team, contribution, decisions, status labels, versioning, deprecation, documentation, rollout and measurement.",
-  "engineer": "Parent of the gov.* nodes. No tokens; stored as builder metadata and records such as governance.teamModel, decisions[], component.status and package.version.",
+  "engineer": "Parent of the gov.* nodes. No tokens: team notes in context.team, the decision log in decisions.md, the component list in components.inventory; status and versioning fields are proposed.",
   "designer_says": "governance and adoption",
-  "code_name": "governance.teamModel, decisions[], component.status",
+  "code_name": "context.team, decisions.md, components.inventory",
   "source": [
    "gov"
   ]
@@ -1094,9 +1094,9 @@
   ],
   "plain": "The order you build things in, and which real app tries the kit first.",
   "designer": "The build order and which product pilots the system. Default: minimal foundations (color roles, type, spacing, radius), then components the pilot needs, then back-fill foundations as gaps appear.",
-  "engineer": "No tokens. Pilots are stored as pilots[] {product, score, champion, window}; score 2-3 candidates on Dan Mall's 8 criteria and pick one with a champion.",
+  "engineer": "No tokens. Recorded as answers.Q-gov-02; pilots[] {product, score, champion, window} is proposed. Score 2-3 candidates on Dan Mall's 8 criteria and pick one with a champion.",
   "designer_says": "pilot product and build order",
-  "code_name": "pilots[] {product, score, champion, window}",
+  "code_name": "answers.Q-gov-02; pilots[] (proposed)",
   "source": [
    "gov.process",
    "DC-L11-06",
@@ -1108,9 +1108,9 @@
   "term": "Team model and roles",
   "plain": "Who looks after the kit, one central team or people spread across teams, and what jobs they do.",
   "designer": "Who owns the system (centralized, federated or hybrid) and which roles staff it. Default: start centralized with a named owner, even at 1-2 people; add federated contributors later.",
-  "engineer": "Stored as governance.teamModel = solitary | centralized | federated | hybrid, governance.owner and team.roles[] {role, person, allocation}. Native platforms need iOS and Android engineers.",
+  "engineer": "Recorded as answers.Q-scope-04 (size and model) and context.team, printed in PRODUCT.md; team.roles[] is proposed. Native platforms need iOS and Android engineers.",
   "designer_says": "centralized, federated or hybrid team",
-  "code_name": "governance.teamModel, governance.owner, team.roles[]",
+  "code_name": "answers.Q-scope-04, context.team",
   "source": [
    "gov.team",
    "DC-L11-09",
@@ -1122,9 +1122,9 @@
   "term": "Contribution model",
   "plain": "How people outside the core team can suggest or add new parts to the kit.",
   "designer": "How outsiders add to the system. Default: a fast lane for fixes, icons and docs, and a proposal lane for new components, gated by useful and unique.",
-  "engineer": "Stored as governance.contribution = {who, types: [fix, enhancement, new], criteria}. Proposals must pass the useful-and-unique gate before any build work starts.",
+  "engineer": "Recorded as answers.Q-gov-03 (two-lanes by default); governance.contribution {who, types, criteria} is proposed. Proposals must pass the useful-and-unique gate before any build work starts.",
   "designer_says": "fast lane and proposal lane",
-  "code_name": "governance.contribution {who, types, criteria}",
+  "code_name": "answers.Q-gov-03; governance.contribution (proposed)",
   "source": [
    "gov.contribution",
    "DC-L11-11"
@@ -1138,10 +1138,10 @@
    "ADR"
   ],
   "plain": "The steps a change goes through, and how each choice and its reason are written down.",
-  "designer": "The steps a change goes through and how decisions are recorded. Adopt Brad Frost's 10-step flow and log every foundation decision as an architecture decision record from day one.",
-  "engineer": "decisions[] {id, type: rfc | adr, status: proposed | accepted | rejected | superseded, date, links}. OpenDesigner's Decision Cards map to ADRs, recording why each token choice was made.",
+  "designer": "The steps a change goes through and how decisions are recorded. Adopt Brad Frost's 10-step flow and log every foundation decision as an architecture decision record, as OpenDesigner does.",
+  "engineer": "opendesigner/decisions.md is append-only and ADR-style: each D-0001 entry records path = value, set_by, locked, date, supersedes, source_ref and reason. RFC records and status fields are proposed.",
   "designer_says": "decision records (ADRs)",
-  "code_name": "decisions[] {type: rfc | adr, status}",
+  "code_name": "decisions.md entries D-0001 onward",
   "source": [
    "gov.decisions",
    "DC-L11-12"
@@ -1155,9 +1155,9 @@
   ],
   "plain": "Labels that show if a part is still being tried, ready to use, or on its way out.",
   "designer": "The states a component can be in. Default three, experimental, ready and deprecated, which is enough for most teams; Primer itself simplified from five to three.",
-  "engineer": "component.status = experimental | ready | deprecated (optionally alpha | beta), plus component.since and component.replacedBy. Status can differ per platform package.",
+  "engineer": "Recorded as answers.Q-gov-04. DESIGN.md shows each component's status from components.notes, default \"planned (tokens ready)\"; component.status (proposed) = experimental | ready | deprecated.",
   "designer_says": "experimental, ready, deprecated",
-  "code_name": "component.status",
+  "code_name": "components.notes; component.status (proposed)",
   "source": [
    "gov.lifecycle",
    "DC-L11-13"
@@ -1171,9 +1171,9 @@
   ],
   "plain": "How each new release is numbered and when releases come out.",
   "designer": "How releases are numbered and scheduled. Default: one semantic version for the whole library while small, per-package versions once there is more than one platform, on a predictable cadence.",
-  "engineer": "package.version per artifact: tokens, components-web, components-ios, figma-library. Native ships through SPM or Gradle while Figma publishes separately, so aligning versions needs automation.",
+  "engineer": "No release version is stored yet. package.version (proposed) per artifact: tokens, components-web, components-ios, figma-library. Native ships via SPM or Gradle while Figma publishes separately, so aligning versions needs automation.",
   "designer_says": "semantic versioning and release cadence",
-  "code_name": "package.version per artifact",
+  "code_name": "package.version (proposed) per artifact",
   "source": [
    "gov.change",
    "DC-L11-14"
@@ -1184,9 +1184,9 @@
   "term": "Deprecation and migration",
   "plain": "How old parts are phased out with warning, and how teams get help moving to new ones.",
   "designer": "Deprecate in a minor release, remove in the next major, give at least one release cycle of notice, and pair every removal with a codemod or migration guide.",
-  "engineer": "DTCG $deprecated (boolean or string, such as \"Use color.bg.accent (v4)\") plus $description; component.deprecated {since, removeIn, replacement}. Figma variables have no native deprecated flag.",
+  "engineer": "DTCG $deprecated (boolean or string, \"Use color.bg.accent (v4)\") plus $description, not emitted yet; component.deprecated {since, removeIn, replacement} is proposed. Figma variables have no deprecated flag.",
   "designer_says": "deprecate, then remove next major",
-  "code_name": "$deprecated plus component.deprecated",
+  "code_name": "$deprecated; component.deprecated (proposed)",
   "source": [
    "gov.change.deprecation",
    "DC-L11-15",
@@ -1198,9 +1198,9 @@
   "term": "Documentation platform",
   "plain": "Where the how-to guides for the kit live, and who is allowed to write them.",
   "designer": "Where documentation lives and who writes it. Small teams document in Figma plus Storybook, add a docs platform when non-engineers author, and always publish a machine-readable export.",
-  "engineer": "Docs pages generate from the same data model as the tokens, plus llms.txt or an MCP server. Storybook's component manifest supports React, Angular (Vite) and Vue 3 (Vite).",
+  "engineer": "OpenDesigner generates DESIGN.md from the same data; component pages (spec 7.8) are planned. Storybook's component manifest supports React, Angular (Vite) and Vue 3 (Vite).",
   "designer_says": "Figma plus Storybook docs",
-  "code_name": "generated docs plus llms.txt",
+  "code_name": "DESIGN.md; component pages (planned)",
   "source": [
    "gov.docs",
    "DC-L11-17"
@@ -1211,9 +1211,9 @@
   "term": "Component documentation page",
   "plain": "The fixed layout of the help page for each part, like when to use it and how.",
   "designer": "The template for each component's page: usage, when not to use, anatomy, variants, states, content, accessibility, code and changelog. Docs complete is part of the definition of done.",
-  "engineer": "component.docs = {whenToUse[], whenNotToUse[], anatomy[], variants[], states[], content[], a11y{}, code{props[], examples[]}, changelog[]}; the specs section generates from component tokens.",
+  "engineer": "Planned (spec 7.8), not generated: opendesigner/components/<name>.md with when to use, when not, anatomy, variants, states, content, accessibility, code and changelog.",
   "designer_says": "component usage guidelines page",
-  "code_name": "component.docs {whenToUse, anatomy, variants, states}",
+  "code_name": "opendesigner/components/<name>.md (planned)",
   "source": [
    "gov.docs.component-page",
    "DC-L08-23",
@@ -1228,9 +1228,9 @@
   ],
   "plain": "How the kit is brought to product teams, step by step, and how they are kept up to date.",
   "designer": "How the system reaches product teams and keeps them informed. Default: incremental rollout led by pain points, plus release notes, a public roadmap and a support channel.",
-  "engineer": "No tokens. The builder can emit a migration checklist and generate release notes from token and component diffs. Native apps roll out through app releases, so migration is slower.",
+  "engineer": "opendesigner-extend ends each change with a change note: what, why, affects, validation, decision id. Release notes from token diffs and a migration checklist are not built. Native apps migrate slower.",
   "designer_says": "rollout, release notes, roadmap",
-  "code_name": "migration checklist, release notes from diffs",
+  "code_name": "extend change note; release notes (not built)",
   "source": [
    "gov.adoption",
    "DC-L11-08",
@@ -1242,9 +1242,9 @@
   "term": "Metrics and maturity",
   "plain": "How you tell if teams use the kit and like it, and how grown-up the kit is.",
   "designer": "How adoption and value are measured and which maturity stage you target. Start with design adoption from Figma analytics, code adoption from a scanner, and a quarterly satisfaction survey.",
-  "engineer": "metrics[] {name, definition, source: figma | code | survey, target} and system.maturityStage = 1..4, after Sparkbox's four stages. Native code usage needs its own scanners.",
+  "engineer": "Recorded as answers.Q-gov-05; metrics[] {name, source, target} (proposed) and system.maturityStage (proposed), 1-4 after Sparkbox's four stages, are not stored. Native code usage needs its own scanners.",
   "designer_says": "adoption metrics and maturity",
-  "code_name": "metrics[], system.maturityStage",
+  "code_name": "answers.Q-gov-05; system.maturityStage (proposed)",
   "source": [
    "gov.measure",
    "DC-L11-20",
@@ -1256,7 +1256,7 @@
   "term": "Governance tooling in Figma",
   "plain": "Tools in Figma that keep things tidy: a checker, counts of what is used, and side copies for trying changes.",
   "designer": "Figma's built-in governance: the Check designs linter, library analytics and branching. On Organization or Enterprise, run Check designs before Ready for dev and review analytics quarterly.",
-  "engineer": "Check designs lints one page at a time, caps at 25K layers and ranks suggestions partly by variable naming. On Professional the builder supplies lint and analytics itself.",
+  "engineer": "Check designs lints one page at a time, caps at 25K layers and ranks partly by variable naming. OpenDesigner's validate and review lint tokens and code; no analytics.",
   "designer_says": "Check designs, library analytics, branching",
   "code_name": "Figma Check designs linter",
   "source": [
@@ -1271,8 +1271,8 @@
    "builder surface"
   ],
   "plain": "Choices about the tool you use to make the kit, not about the kit itself.",
-  "designer": "Decisions about the OpenDesigner tool rather than the system it makes: how you edit, preview, explore, review and collaborate. The builder aims to be the visual tool itself.",
-  "engineer": "A meta layer for decisions about the tool. The research recommends it render real HTML and CSS components from its own model, so the builder is the visual tool itself.",
+  "designer": "Decisions about the OpenDesigner tool rather than the system it makes: how you edit, preview, explore, review and collaborate. Today that is a chat interview with visual templates.",
+  "engineer": "A meta layer for decisions about the tool. Today OpenDesigner is skills, an engine script and HTML templates in the host; a standalone canvas is optional phase 3.",
   "designer_says": "the builder tool itself",
   "code_name": "builder.* meta layer",
   "source": [
@@ -1283,10 +1283,10 @@
   "id": "builder.interaction",
   "term": "Primary interaction model",
   "plain": "Your main way of working in the tool: sliders with a live view, a drawing space, a chat, or code.",
-  "designer": "Panels with live preview for foundations and tokens, a canvas for composing screens, and the agent as an accelerator in both, never the only path. Code stays one click away.",
-  "engineer": "Each control binds to one token path or one generator parameter that derives many tokens, such as a Radix accent seed or a Leonardo contrast target.",
-  "designer_says": "panels, live preview, canvas",
-  "code_name": "control bound to token path or generator",
+  "designer": "Research default: panels with live preview, a canvas for screens, and the agent as an accelerator, never the only path. Today OpenDesigner is agent-led: chat, visual templates and OD: lines.",
+  "engineer": "Each control binds to one path: a dial or raw input that derives many tokens (raw.brandColor), a question id, or a token path. Templates return OD:set lines.",
+  "designer_says": "interaction model: chat, panels or canvas",
+  "code_name": "OD:set <path>=<value>",
   "source": [
    "builder.interaction",
    "DC-L16-01"
@@ -1297,7 +1297,7 @@
   "term": "Canvas rendering substrate",
   "plain": "What the work area shows: real, working web parts, a flat picture, or a scene from a design app.",
   "designer": "What the canvas renders: real HTML and CSS components, a flat image, or a design-tool scene graph. Default: real HTML and CSS, ideally the actual component library.",
-  "engineer": "On an HTML and CSS canvas, tokens are CSS custom properties and modes are selectors or @media blocks. SwiftUI and Compose stay compiled outputs with their own preview images.",
+  "engineer": "preview.html is real HTML and CSS: tokens are CSS custom properties and modes are [data-theme] selectors or @media blocks. SwiftUI and Compose outputs get no preview yet.",
   "designer_says": "real HTML and CSS canvas",
   "code_name": "CSS custom properties, modes as selectors",
   "source": [
@@ -1309,10 +1309,10 @@
   "id": "builder.preview",
   "term": "Preview surface and latency",
   "plain": "What you see as you decide, like light and dark sample screens side by side, and how fast it updates.",
-  "designer": "What you see while deciding: specimens and graphs for a scale, a component matrix, 2-4 sample screens, every mode side by side. Controls re-render within one frame while dragging.",
-  "engineer": "Previews bind to semantic tokens only, so mode or brand swaps re-render without code changes. Anything slower than a few hundred milliseconds shows progress and never blocks editing.",
+  "designer": "What you see while deciding: specimens for each scale, a component sheet and every mode side by side (engine.py preview). Live re-rendering while you drag a control is planned.",
+  "engineer": "preview.html binds components to semantic CSS variables, so each [data-theme] block shows a mode without code changes. The page is static; progress indicators for slow updates are planned.",
   "designer_says": "live specimens, all modes side by side",
-  "code_name": "previews bound to semantic tokens",
+  "code_name": "preview.html bound to semantic variables",
   "source": [
    "builder.preview",
    "DC-L16-06",
@@ -1323,10 +1323,10 @@
   "id": "builder.controls",
   "term": "Controls for foundation parameters",
   "plain": "The knobs and sliders you use to set the basics, like picking one starting color.",
-  "designer": "The widgets that edit foundations. Default generator-first: a seed color and contrast targets for color, min and max keyframes for type and space; raw editing only through an explicit detach.",
-  "engineer": "Generator parameters (seed, targets, ratios) are stored as the source and generated values as derived tokens, with provenance in $extensions. P3 and OKLCH need sRGB fallbacks for Figma.",
+  "designer": "The widgets that edit foundations. OpenDesigner is generator-first: seed color and contrast target, base size and ratio, space unit; raw values only through an explicit detach.",
+  "engineer": "Dials and raw inputs in state.json are the source; tokens are derived, with provenance in $extensions.opendesigner.source (formula or person). OKLCH values carry hex fallbacks for Figma.",
   "designer_says": "generator controls: seed and targets",
-  "code_name": "generator params with $extensions provenance",
+  "code_name": "state.json inputs; $extensions.opendesigner.source",
   "source": [
    "builder.controls",
    "DC-L16-14"
@@ -1336,11 +1336,11 @@
   "id": "builder.ai",
   "term": "AI editing and generative variation",
   "plain": "How the AI helper suggests changes you can check first, and how it shows you other options.",
-  "designer": "Human edits are instant; agent edits arrive as reviewable patches with before and after previews. Lock, shuffle and a show-6 grid of real specimens explore alternatives.",
-  "engineer": "Agent proposals are patches {op, path, from, to, rationale, provenance}. A variant stores {seed, locked[], params}, so any option regenerates exactly; shuffle varies only unlocked parameters.",
+  "designer": "Planned: agent edits as reviewable before-and-after patches, and shuffle. Today the agent shows old and new values before a change, locks protect decisions, and option-gallery compares directions.",
+  "engineer": "Planned: patches {op, path, from, to, rationale} and variants {seed, locked[], params}. Today each change is engine.py set with --why, logged in decisions.md; locks sit in state.json.",
   "designer_says": "reviewable agent patches, lock and shuffle",
-  "code_name": "patch {op, path, from, to, rationale}",
-  "example": "Lock the brand color, shuffle everything else, and compare six versions.",
+  "code_name": "engine.py set --why; locks; patches (planned)",
+  "example": "Lock the brand color so later changes cannot move it.",
   "source": [
    "builder.ai",
    "DC-L16-04",
@@ -1350,11 +1350,11 @@
  {
   "id": "builder.state",
   "term": "State, undo, versions and sharing",
-  "plain": "How the tool keeps your steps, lets you undo, saves versions, and shares your work by link.",
-  "designer": "How the builder keeps history and shares work: unlimited undo, a URL that always encodes the current state, named versions, and experiments as branches merged through a diff view.",
-  "engineer": "A compact, versioned encoding of the model or its generator parameters, following the shadcn preset pattern, plus a full DTCG snapshot per saved version. Undo steps coalesce.",
+  "plain": "How the tool keeps your steps and saves versions, and whether you can undo or share work by a link.",
+  "designer": "How the tool keeps history and shares work. Today: state.json and an append-only decisions.md in your repo; git gives versions and branches. Undo and state URLs are planned.",
+  "engineer": "state.json (schema_version 1) holds the inputs; decisions.md logs every change, and a later entry supersedes an earlier one. A compact URL encoding and coalesced undo are planned.",
   "designer_says": "undo, versions, shareable URL",
-  "code_name": "URL-encoded state plus DTCG snapshot",
+  "code_name": "state.json plus decisions.md; URL state (planned)",
   "source": [
    "builder.state",
    "DC-L16-08"
@@ -1363,11 +1363,11 @@
  {
   "id": "builder.review",
   "term": "Review and visual diff",
-  "plain": "How changes get checked before they go out, with before and after views side by side.",
-  "designer": "Every change set gets a visual diff page showing affected components before and after, in each mode, plus the code diff, exported as a pull request.",
-  "engineer": "A change set lists changed tokens, then walks the alias dependency graph to find affected components and screens. Per-platform renders appear when platform outputs differ.",
+  "plain": "How changes get checked before they go out, ideally with before and after views side by side.",
+  "designer": "Planned: a visual diff page per change set, before and after in each mode, exported as a pull request. Today opendesigner-extend shows old and new values and git diff --stat.",
+  "engineer": "Planned: list changed tokens, walk the alias graph to find affected components. Today graph.json names the decisions a change moves, and engine.py review flags stale DESIGN.md sections.",
   "designer_says": "visual diff, before and after",
-  "code_name": "changed tokens walked through alias graph",
+  "code_name": "graph.json edges; visual diff (planned)",
   "source": [
    "builder.review",
    "DC-L16-09"
@@ -1380,10 +1380,10 @@
    "command palette"
   ],
   "plain": "Being able to do every task in the tool with the keyboard, no mouse needed.",
-  "designer": "Keyboard access to every action and token: a Cmd+K palette, single keys for view toggles like light and dark, and arrow-key nudging, with Shift for big steps.",
-  "engineer": "The palette indexes every action and token path. Modifiers follow platform convention, Cmd on macOS and Ctrl elsewhere; arrow keys nudge perceptual values.",
+  "designer": "Planned for a canvas: a Cmd+K palette, single keys for toggles like light and dark, arrow-key nudging with Shift for big steps. Today everything runs by typing in chat.",
+  "engineer": "Planned: a palette indexing every action and token path; Cmd on macOS, Ctrl elsewhere; arrows nudge perceptual values. Today OD: lines and engine commands are the keyboard path.",
   "designer_says": "Cmd+K palette, keyboard-first",
-  "code_name": "palette indexing actions and token paths",
+  "code_name": "command palette (planned); OD: lines",
   "source": [
    "builder.input",
    "DC-L16-10"
@@ -1396,10 +1396,10 @@
    "multiplayer"
   ],
   "plain": "Whether a few people and AI helpers can work on one design at once, and how you see them.",
-  "designer": "Whether people and agents edit together, and how presence shows. Version 1 is single-user and local-first; agent presence comes first, since agents are the most frequent co-editors.",
-  "engineer": "Version 1 keeps state in the URL and git. Later, edits become operations (CRDT or operational transform), which also give undo and history.",
+  "designer": "Whether people and agents edit together, and how presence shows. Version 1 is single-user and local-first; agent presence is planned first, since agents are the most frequent co-editors.",
+  "engineer": "Version 1 keeps state in files in your repo (state.json, decisions.md), so git gives history. Planned: edits as operations (CRDT or operational transform), which also give undo.",
   "designer_says": "multiplayer and agent presence",
-  "code_name": "URL and git, later CRDT operations",
+  "code_name": "state.json and git; CRDT operations (planned)",
   "source": [
    "builder.collab",
    "DC-L16-11"
@@ -1412,10 +1412,10 @@
    "reference import"
   ],
   "plain": "Adding a sample site or picture so the AI can learn from how it is made, without copying its brand.",
-  "designer": "Add a website, screenshot or Figma file at any time; the AI reads its color, type, spacing, radius, motion and components, and builds on its structure, never its brand.",
-  "engineer": "Figma references are read through MCP read tools get_variable_defs and get_design_context, which work on every plan. Node provenance values mark what a reference can supply.",
+  "designer": "Add a website, screenshot or Figma file at any time; the AI reads its color, type, spacing, radius, motion and components, and builds on its structure, never another brand's identity.",
+  "engineer": "css_scan.py or Figma's get_variable_defs and get_design_context measure values; engine.py intake fits them to dials with confidence levels, pending in state.json references.",
   "designer_says": "reference: structure, never brand",
-  "code_name": "get_variable_defs, get_design_context",
+  "code_name": "css_scan.py, engine.py intake",
   "source": [
    "builder.intake"
   ]
@@ -1425,9 +1425,9 @@
   "term": "Designer hooks and resource requests",
   "plain": "If the tool cannot make something well, like a logo, it asks whether you have one or can get one.",
   "designer": "For what AI cannot make well, like logos, custom icons, illustration, photography or a brand typeface, the builder asks for yours, or suggests a designer or a named tool.",
-  "engineer": "Hook points are nodes whose provenance is designer-owned or tool-assisted. A placeholder renders in previews until the real resource arrives.",
+  "engineer": "state.json hooks.H-logo and 13 others store {status, files, note}; status is pending, have, commissioning, tool, open-library, placeholder or not-needed. DESIGN.md lists open ones under Open Items.",
   "designer_says": "designer hooks for human-made assets",
-  "code_name": "designer-owned or tool-assisted provenance nodes",
+  "code_name": "hooks.<H-id>.status in state.json",
   "source": [
    "builder.hooks"
   ]

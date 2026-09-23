@@ -29,6 +29,7 @@ LAYER_NAMES = {"core": "Everyday terms", "use": "Using OpenDesigner", "dials": "
 
 
 TOKENS_FILE = G / "engine-token-paths.txt"
+TRUTH_FILE = G / "engine-truth.json"   # state keys, $extensions paths, resolver modifiers, engine commands and flags
 ENGINE = ROOT / "skills/opendesigner/scripts/engine.py"
 # Dotted names starting with these roots are treated as token paths and must match what the engine generates.
 TOKEN_ROOTS = ("color", "space", "radius", "font", "text", "motion", "elevation", "size", "opacity", "border", "focus",
@@ -37,25 +38,81 @@ TOKEN_RE = re.compile(r"\b(?:%s)(?:\.[A-Za-z0-9*]+)+" % "|".join(TOKEN_ROOTS))
 
 
 def refresh_tokens():
-    """Generate a default system in a temp dir and record every token path it produces."""
+    """Union of every token path the engine generates across the shipped examples, the default system,
+    and each dial at 0 and 100, so tokens that appear only under some settings count as real."""
     import subprocess, tempfile
-    with tempfile.TemporaryDirectory() as tmp:
-        d = Path(tmp) / "opendesigner"
-        for args in (["init", "--name", "Glossary check"], ["generate"]):
-            subprocess.run([sys.executable, str(ENGINE), "--dir", str(d), *args], check=True, capture_output=True)
-        paths = set()
-        def walk(node, prefix):
-            if isinstance(node, dict):
-                if "$value" in node:
-                    paths.add(".".join(prefix))
-                    return
-                for k, v in node.items():
-                    if not k.startswith("$"):
-                        walk(v, prefix + [k])
-        for f in (d / "tokens").rglob("*.json"):
+    dials = [d["id"] for d in json.loads((ROOT / "synthesis/levers.json").read_text())["dials"]]
+    runs = [[]] + [[["set", f"dials.{d}", str(v), "--no-doc"]] for d in dials for v in (0, 100)]
+    paths = set()
+
+    def walk(node, prefix):
+        if isinstance(node, dict):
+            if "$value" in node:
+                paths.add(".".join(prefix))
+                return
+            for k, v in node.items():
+                if not k.startswith("$"):
+                    walk(v, prefix + [k])
+
+    def collect(tokens_dir):
+        for f in Path(tokens_dir).rglob("*.json"):
             walk(json.loads(f.read_text()), [])
+
+    state_keys, ext, modifiers = set(), set(), set()
+
+    def state_walk(node, prefix):
+        if isinstance(node, dict):
+            for k, v in node.items():
+                state_keys.add(".".join(prefix + [k]))
+                if k != "answers":
+                    state_walk(v, prefix + [k])
+
+    def ext_walk(node, prefix):
+        if isinstance(node, dict):
+            for k, v in node.items():
+                ext.add(".".join(prefix + [k]))
+                ext_walk(v, prefix + [k])
+
+    def meta(folder):
+        folder = Path(folder)
+        if (folder / "state.json").exists():
+            state_walk(json.loads((folder / "state.json").read_text()), [])
+        for f in (folder / "tokens").rglob("*.json"):
+            data = json.loads(f.read_text())
+            if "modifiers" in data:
+                for name, m in data["modifiers"].items():
+                    modifiers.add(name)
+                    modifiers.update(m.get("contexts", {}))
+            stack = [data]
+            while stack:
+                n = stack.pop()
+                if isinstance(n, dict):
+                    for k, v in n.items():
+                        if k == "$extensions" and isinstance(v, dict):
+                            ext_walk(v, ["$extensions"])
+                        else:
+                            stack.append(v)
+
+    for example in sorted((ROOT / "examples").glob("*/tokens")):
+        collect(example)
+        meta(example.parent)
+    with tempfile.TemporaryDirectory() as tmp:
+        for i, steps in enumerate(runs):
+            d = Path(tmp) / f"run{i}" / "opendesigner"
+            for args in (["init", "--name", "Glossary check"], *steps, ["generate"]):
+                subprocess.run([sys.executable, str(ENGINE), "--dir", str(d), *args], check=True, capture_output=True)
+            collect(d / "tokens")
+            meta(d)
+    help_out = subprocess.run([sys.executable, str(ENGINE), "--help"], capture_output=True, text=True).stdout
+    commands = sorted(set(re.search(r"\{([a-z,-]+)\}", help_out).group(1).split(",")))
+    flags = set(re.findall(r"(--[a-z][a-z-]+)", help_out))
+    for c in commands:
+        flags |= set(re.findall(r"(--[a-z][a-z-]+)", subprocess.run([sys.executable, str(ENGINE), c, "--help"],
+                                                                        capture_output=True, text=True).stdout))
+    TRUTH_FILE.write_text(json.dumps(dict(state_keys=sorted(state_keys), extensions=sorted(ext), modifiers=sorted(modifiers),
+                                          commands=commands, flags=sorted(flags)), indent=1) + "\n")
     TOKENS_FILE.write_text("\n".join(sorted(paths)) + "\n")
-    print(f"{len(paths)} token paths -> {TOKENS_FILE.relative_to(ROOT)}")
+    print(f"{len(paths)} token paths from {len(runs)} generated systems and the examples -> {TOKENS_FILE.relative_to(ROOT)}")
 
 
 def unknown_tokens(e, real):
@@ -66,7 +123,8 @@ def unknown_tokens(e, real):
         text = e.get(field, "")
         for m in TOKEN_RE.finditer(text):
             name = m.group(0).rstrip(".")
-            if name.endswith(("json", ".md", ".py")) or ".tokens" in name:  # file names, not token paths
+            if ".tokens" in name or re.search(r"\.(json|py|svg|html|css|txt|png)$", name) or \
+                    (name.endswith(".md") and (re.search(r"[A-Z]", name) or name.count(".") == 1)):  # file names
                 continue
             base = name[:-2] if name.endswith(".*") else name
             if name in real or base in prefixes or base in real:
@@ -74,6 +132,42 @@ def unknown_tokens(e, real):
             if "(proposed)" in text[m.end():m.end() + 14]:
                 continue
             bad.append(f"{field}: {name}")
+    return bad
+
+
+STATE_RE = re.compile(r"\b(?:raw|dials|answers|hooks|context|profile|zoom|locks|overrides|principles|components|references|"
+                      r"taste|macros|preset|system|exports|blocks|summary)(?:\.[A-Za-z0-9_*-]+)+")
+EXT_RE = re.compile(r"\$extensions(?:\.[A-Za-z0-9_*]+)+")
+CMD_RE = re.compile(r"engine\.py\s+([a-z][a-z-]*)")
+FLAG_RE = re.compile(r"(?<![\w-])(--[a-z][a-z-]+)")
+
+
+def unknown_config(e, truth):
+    """State keys, $extensions paths, engine commands and flags that do not exist, unless marked (proposed) or planned."""
+    bad = []
+    keys, ext = set(truth["state_keys"]), set(truth["extensions"])
+    key_prefixes = {".".join(k.split(".")[:i]) for k in keys for i in range(1, k.count(".") + 2)}
+    for field in ("engineer", "code_name", "designer"):
+        text = e.get(field, "")
+        def excused(m):
+            around = text[max(0, m.start() - 40):m.end() + 14].lower()
+            return "(proposed)" in around or "planned" in around or "not generated" in around
+        for m in STATE_RE.finditer(text):
+            name = m.group(0).rstrip(".*").rstrip(".")
+            if name.startswith("answers.") or name in key_prefixes or excused(m) or re.search(r"\.(json|md|py)$", name):
+                continue
+            bad.append(f"{field}: state key {name}")
+        for m in EXT_RE.finditer(text):
+            name = m.group(0).rstrip(".*").rstrip(".")
+            if name in ext or excused(m):
+                continue
+            bad.append(f"{field}: {name}")
+        for m in CMD_RE.finditer(text):
+            if m.group(1) not in truth["commands"] and not excused(m):
+                bad.append(f"{field}: engine command {m.group(1)}")
+        for m in FLAG_RE.finditer(text):
+            if m.group(1) not in truth["flags"] and "engine" in text and not excused(m):
+                bad.append(f"{field}: flag {m.group(1)}")
     return bad
 
 
@@ -102,6 +196,7 @@ def check_entries(entries, label):
     errors, warnings, grades = [], [], []
     seen = set()
     real = set(TOKENS_FILE.read_text().split()) if TOKENS_FILE.exists() else set()
+    truth = json.loads(TRUTH_FILE.read_text()) if TRUTH_FILE.exists() else None
     for e in entries:
         tag = f"{label}:{e.get('id', '?')}"
         for field in ("id", "term", "plain", "designer", "engineer", "source"):
@@ -124,6 +219,9 @@ def check_entries(entries, label):
         if real:
             for u in unknown_tokens(e, real):
                 errors.append(f"{tag} names a token the engine does not generate ({u}); use the real name or add (proposed)")
+        if truth:
+            for u in unknown_config(e, truth):
+                errors.append(f"{tag} names something the engine does not have ({u}); use the real name or mark it (proposed)/planned")
         if plain and (plain == e.get("designer") or plain == e.get("engineer")):
             errors.append(f"{tag} voices must differ")
         if plain:

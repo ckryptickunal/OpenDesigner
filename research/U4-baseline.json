@@ -1,0 +1,618 @@
+[
+ {
+  "file": "AGENTS.md",
+  "sentences": 48,
+  "words": 500,
+  "grade": 7.3,
+  "avg_words": 10.4,
+  "long": 0
+ },
+ {
+  "file": "README.md",
+  "sentences": 78,
+  "words": 1331,
+  "grade": 9.8,
+  "avg_words": 17.1,
+  "long": 16
+ },
+ {
+  "file": "chatgpt-project/instructions.md",
+  "sentences": 73,
+  "words": 926,
+  "grade": 7.7,
+  "avg_words": 12.7,
+  "long": 8
+ },
+ {
+  "file": "docs/FAQ.md",
+  "sentences": 90,
+  "words": 1776,
+  "grade": 10.0,
+  "avg_words": 19.7,
+  "long": 26
+ },
+ {
+  "file": "docs/GITHUB-SETTINGS.md",
+  "sentences": 35,
+  "words": 517,
+  "grade": 7.2,
+  "avg_words": 14.8,
+  "long": 3
+ },
+ {
+  "file": "docs/HOW-IT-WORKS.md",
+  "sentences": 79,
+  "words": 1512,
+  "grade": 10.6,
+  "avg_words": 19.1,
+  "long": 23
+ },
+ {
+  "file": "docs/RESEARCH.md",
+  "sentences": 23,
+  "words": 364,
+  "grade": 7.5,
+  "avg_words": 15.8,
+  "long": 3
+ },
+ {
+  "file": "docs/SEED-ISSUES.md",
+  "sentences": 105,
+  "words": 1713,
+  "grade": 10.4,
+  "avg_words": 16.3,
+  "long": 20
+ },
+ {
+  "file": "docs/SPEC.md",
+  "sentences": 412,
+  "words": 10783,
+  "grade": 13.0,
+  "avg_words": 26.2,
+  "long": 177
+ },
+ {
+  "file": "docs/SPONSORSHIP.md",
+  "sentences": 92,
+  "words": 1191,
+  "grade": 7.9,
+  "avg_words": 12.9,
+  "long": 6
+ },
+ {
+  "file": "skills/opendesigner/SKILL.md",
+  "sentences": 106,
+  "words": 1060,
+  "grade": 6.2,
+  "avg_words": 10.0,
+  "long": 4
+ },
+ {
+  "file": "skills/opendesigner/assets/output/AGENTS-snippet.md",
+  "sentences": 17,
+  "words": 173,
+  "grade": 5.8,
+  "avg_words": 10.2,
+  "long": 0
+ },
+ {
+  "file": "skills/opendesigner/assets/output/DESIGN.md",
+  "sentences": 16,
+  "words": 147,
+  "grade": 5.8,
+  "avg_words": 9.2,
+  "long": 0
+ },
+ {
+  "file": "skills/opendesigner/assets/output/RATIONALE.md",
+  "sentences": 13,
+  "words": 164,
+  "grade": 8.6,
+  "avg_words": 12.6,
+  "long": 1
+ },
+ {
+  "file": "skills/opendesigner/assets/output/decisions.md",
+  "sentences": 10,
+  "words": 97,
+  "grade": 7.5,
+  "avg_words": 9.7,
+  "long": 0
+ },
+ {
+  "file": "skills/opendesigner/references/guardrails.md",
+  "sentences": 47,
+  "words": 668,
+  "grade": 9.9,
+  "avg_words": 14.2,
+  "long": 2
+ },
+ {
+  "file": "skills/opendesigner/references/hooks.md",
+  "sentences": 17,
+  "words": 291,
+  "grade": 10.8,
+  "avg_words": 17.1,
+  "long": 5
+ },
+ {
+  "file": "skills/opendesigner/references/improve.md",
+  "sentences": 31,
+  "words": 285,
+  "grade": 4.9,
+  "avg_words": 9.2,
+  "long": 0
+ },
+ {
+  "file": "skills/opendesigner/references/rules.md",
+  "sentences": 88,
+  "words": 1293,
+  "grade": 7.9,
+  "avg_words": 14.7,
+  "long": 9
+ },
+ {
+  "file": "skills/opendesigner/references/stages/00-reference-intake.md",
+  "sentences": 19,
+  "words": 311,
+  "grade": 9.3,
+  "avg_words": 16.4,
+  "long": 3
+ },
+ {
+  "file": "skills/opendesigner/references/stages/01-scope-and-team.detailed.md",
+  "sentences": 28,
+  "words": 345,
+  "grade": 7.8,
+  "avg_words": 12.3,
+  "long": 1
+ },
+ {
+  "file": "skills/opendesigner/references/stages/01-scope-and-team.md",
+  "sentences": 43,
+  "words": 766,
+  "grade": 9.3,
+  "avg_words": 17.8,
+  "long": 7
+ },
+ {
+  "file": "skills/opendesigner/references/stages/02-audience-and-commitments.md",
+  "sentences": 50,
+  "words": 840,
+  "grade": 8.9,
+  "avg_words": 16.8,
+  "long": 7
+ },
+ {
+  "file": "skills/opendesigner/references/stages/03-brand-personality-and-principles.detailed.md",
+  "sentences": 15,
+  "words": 233,
+  "grade": 9.1,
+  "avg_words": 15.5,
+  "long": 4
+ },
+ {
+  "file": "skills/opendesigner/references/stages/03-brand-personality-and-principles.md",
+  "sentences": 103,
+  "words": 1743,
+  "grade": 9.6,
+  "avg_words": 16.9,
+  "long": 13
+ },
+ {
+  "file": "skills/opendesigner/references/stages/04-platforms-and-devices.detailed.md",
+  "sentences": 34,
+  "words": 466,
+  "grade": 8.3,
+  "avg_words": 13.7,
+  "long": 2
+ },
+ {
+  "file": "skills/opendesigner/references/stages/04-platforms-and-devices.md",
+  "sentences": 81,
+  "words": 1262,
+  "grade": 7.9,
+  "avg_words": 15.6,
+  "long": 9
+ },
+ {
+  "file": "skills/opendesigner/references/stages/05-where-the-system-lives.detailed.md",
+  "sentences": 15,
+  "words": 181,
+  "grade": 7.5,
+  "avg_words": 12.1,
+  "long": 0
+ },
+ {
+  "file": "skills/opendesigner/references/stages/05-where-the-system-lives.md",
+  "sentences": 44,
+  "words": 636,
+  "grade": 8.5,
+  "avg_words": 14.5,
+  "long": 4
+ },
+ {
+  "file": "skills/opendesigner/references/stages/06-visual-direction.detailed.md",
+  "sentences": 14,
+  "words": 166,
+  "grade": 8.5,
+  "avg_words": 11.9,
+  "long": 0
+ },
+ {
+  "file": "skills/opendesigner/references/stages/06-visual-direction.md",
+  "sentences": 50,
+  "words": 920,
+  "grade": 10.3,
+  "avg_words": 18.4,
+  "long": 9
+ },
+ {
+  "file": "skills/opendesigner/references/stages/07-themes-and-modes.detailed.md",
+  "sentences": 26,
+  "words": 352,
+  "grade": 7.8,
+  "avg_words": 13.5,
+  "long": 0
+ },
+ {
+  "file": "skills/opendesigner/references/stages/07-themes-and-modes.md",
+  "sentences": 27,
+  "words": 419,
+  "grade": 7.9,
+  "avg_words": 15.5,
+  "long": 3
+ },
+ {
+  "file": "skills/opendesigner/references/stages/08-color-system.detailed.md",
+  "sentences": 94,
+  "words": 1479,
+  "grade": 8.8,
+  "avg_words": 15.7,
+  "long": 11
+ },
+ {
+  "file": "skills/opendesigner/references/stages/08-color-system.md",
+  "sentences": 116,
+  "words": 2128,
+  "grade": 10.1,
+  "avg_words": 18.3,
+  "long": 21
+ },
+ {
+  "file": "skills/opendesigner/references/stages/09-color-details-and-accessibility-modes.detailed.md",
+  "sentences": 54,
+  "words": 795,
+  "grade": 9.4,
+  "avg_words": 14.7,
+  "long": 6
+ },
+ {
+  "file": "skills/opendesigner/references/stages/09-color-details-and-accessibility-modes.md",
+  "sentences": 28,
+  "words": 429,
+  "grade": 7.3,
+  "avg_words": 15.3,
+  "long": 3
+ },
+ {
+  "file": "skills/opendesigner/references/stages/10-typeface.detailed.md",
+  "sentences": 33,
+  "words": 502,
+  "grade": 8.2,
+  "avg_words": 15.2,
+  "long": 2
+ },
+ {
+  "file": "skills/opendesigner/references/stages/10-typeface.md",
+  "sentences": 58,
+  "words": 1049,
+  "grade": 9.6,
+  "avg_words": 18.1,
+  "long": 12
+ },
+ {
+  "file": "skills/opendesigner/references/stages/11-type-scale-and-text.detailed.md",
+  "sentences": 87,
+  "words": 1473,
+  "grade": 8.0,
+  "avg_words": 16.9,
+  "long": 12
+ },
+ {
+  "file": "skills/opendesigner/references/stages/11-type-scale-and-text.md",
+  "sentences": 29,
+  "words": 451,
+  "grade": 7.2,
+  "avg_words": 15.6,
+  "long": 4
+ },
+ {
+  "file": "skills/opendesigner/references/stages/12-space-sizing-and-density.detailed.md",
+  "sentences": 54,
+  "words": 822,
+  "grade": 9.0,
+  "avg_words": 15.2,
+  "long": 5
+ },
+ {
+  "file": "skills/opendesigner/references/stages/12-space-sizing-and-density.md",
+  "sentences": 56,
+  "words": 1000,
+  "grade": 7.8,
+  "avg_words": 17.9,
+  "long": 9
+ },
+ {
+  "file": "skills/opendesigner/references/stages/13-layout-navigation-and-app-shell.detailed.md",
+  "sentences": 33,
+  "words": 488,
+  "grade": 8.7,
+  "avg_words": 14.8,
+  "long": 2
+ },
+ {
+  "file": "skills/opendesigner/references/stages/13-layout-navigation-and-app-shell.md",
+  "sentences": 39,
+  "words": 606,
+  "grade": 8.4,
+  "avg_words": 15.5,
+  "long": 6
+ },
+ {
+  "file": "skills/opendesigner/references/stages/14-shape.detailed.md",
+  "sentences": 44,
+  "words": 632,
+  "grade": 8.4,
+  "avg_words": 14.4,
+  "long": 2
+ },
+ {
+  "file": "skills/opendesigner/references/stages/14-shape.md",
+  "sentences": 21,
+  "words": 334,
+  "grade": 8.0,
+  "avg_words": 15.9,
+  "long": 3
+ },
+ {
+  "file": "skills/opendesigner/references/stages/15-depth-borders-and-materials.detailed.md",
+  "sentences": 47,
+  "words": 713,
+  "grade": 7.9,
+  "avg_words": 15.2,
+  "long": 6
+ },
+ {
+  "file": "skills/opendesigner/references/stages/15-depth-borders-and-materials.md",
+  "sentences": 30,
+  "words": 549,
+  "grade": 9.5,
+  "avg_words": 18.3,
+  "long": 7
+ },
+ {
+  "file": "skills/opendesigner/references/stages/16-motion-haptics-and-sound.detailed.md",
+  "sentences": 78,
+  "words": 1122,
+  "grade": 8.9,
+  "avg_words": 14.4,
+  "long": 4
+ },
+ {
+  "file": "skills/opendesigner/references/stages/16-motion-haptics-and-sound.md",
+  "sentences": 38,
+  "words": 688,
+  "grade": 9.9,
+  "avg_words": 18.1,
+  "long": 6
+ },
+ {
+  "file": "skills/opendesigner/references/stages/17-icons-app-icon-and-logo-use.detailed.md",
+  "sentences": 53,
+  "words": 853,
+  "grade": 8.9,
+  "avg_words": 16.1,
+  "long": 8
+ },
+ {
+  "file": "skills/opendesigner/references/stages/17-icons-app-icon-and-logo-use.md",
+  "sentences": 46,
+  "words": 854,
+  "grade": 9.2,
+  "avg_words": 18.6,
+  "long": 8
+ },
+ {
+  "file": "skills/opendesigner/references/stages/18-imagery-illustration-and-charts.detailed.md",
+  "sentences": 55,
+  "words": 843,
+  "grade": 8.9,
+  "avg_words": 15.3,
+  "long": 6
+ },
+ {
+  "file": "skills/opendesigner/references/stages/18-imagery-illustration-and-charts.md",
+  "sentences": 48,
+  "words": 877,
+  "grade": 10.4,
+  "avg_words": 18.3,
+  "long": 9
+ },
+ {
+  "file": "skills/opendesigner/references/stages/19-content-and-voice.detailed.md",
+  "sentences": 25,
+  "words": 339,
+  "grade": 8.8,
+  "avg_words": 13.6,
+  "long": 1
+ },
+ {
+  "file": "skills/opendesigner/references/stages/19-content-and-voice.md",
+  "sentences": 49,
+  "words": 729,
+  "grade": 8.4,
+  "avg_words": 14.9,
+  "long": 4
+ },
+ {
+  "file": "skills/opendesigner/references/stages/20-component-base-and-inventory.detailed.md",
+  "sentences": 34,
+  "words": 472,
+  "grade": 10.2,
+  "avg_words": 13.9,
+  "long": 2
+ },
+ {
+  "file": "skills/opendesigner/references/stages/20-component-base-and-inventory.md",
+  "sentences": 28,
+  "words": 492,
+  "grade": 9.5,
+  "avg_words": 17.6,
+  "long": 5
+ },
+ {
+  "file": "skills/opendesigner/references/stages/21-actions-states-and-focus.detailed.md",
+  "sentences": 42,
+  "words": 566,
+  "grade": 10.2,
+  "avg_words": 13.5,
+  "long": 2
+ },
+ {
+  "file": "skills/opendesigner/references/stages/21-actions-states-and-focus.md",
+  "sentences": 45,
+  "words": 735,
+  "grade": 9.7,
+  "avg_words": 16.3,
+  "long": 6
+ },
+ {
+  "file": "skills/opendesigner/references/stages/22-forms-validation-and-feedback.detailed.md",
+  "sentences": 16,
+  "words": 201,
+  "grade": 6.4,
+  "avg_words": 12.6,
+  "long": 1
+ },
+ {
+  "file": "skills/opendesigner/references/stages/22-forms-validation-and-feedback.md",
+  "sentences": 47,
+  "words": 747,
+  "grade": 9.2,
+  "avg_words": 15.9,
+  "long": 6
+ },
+ {
+  "file": "skills/opendesigner/references/stages/23-patterns-and-ai-surfaces.detailed.md",
+  "sentences": 32,
+  "words": 412,
+  "grade": 8.4,
+  "avg_words": 12.9,
+  "long": 0
+ },
+ {
+  "file": "skills/opendesigner/references/stages/23-patterns-and-ai-surfaces.md",
+  "sentences": 49,
+  "words": 774,
+  "grade": 9.4,
+  "avg_words": 15.8,
+  "long": 7
+ },
+ {
+  "file": "skills/opendesigner/references/stages/24-tokens-and-encoding.detailed.md",
+  "sentences": 96,
+  "words": 1586,
+  "grade": 9.5,
+  "avg_words": 16.5,
+  "long": 11
+ },
+ {
+  "file": "skills/opendesigner/references/stages/24-tokens-and-encoding.md",
+  "sentences": 17,
+  "words": 311,
+  "grade": 10.4,
+  "avg_words": 18.3,
+  "long": 4
+ },
+ {
+  "file": "skills/opendesigner/references/stages/25-team-governance-and-change.detailed.md",
+  "sentences": 64,
+  "words": 950,
+  "grade": 9.7,
+  "avg_words": 14.8,
+  "long": 4
+ },
+ {
+  "file": "skills/opendesigner/references/stages/25-team-governance-and-change.md",
+  "sentences": 17,
+  "words": 220,
+  "grade": 8.2,
+  "avg_words": 12.9,
+  "long": 1
+ },
+ {
+  "file": "skills/opendesigner/references/stages/26-output-documentation-and-ai-channels.detailed.md",
+  "sentences": 15,
+  "words": 256,
+  "grade": 9.7,
+  "avg_words": 17.1,
+  "long": 4
+ },
+ {
+  "file": "skills/opendesigner/references/stages/26-output-documentation-and-ai-channels.md",
+  "sentences": 41,
+  "words": 565,
+  "grade": 7.8,
+  "avg_words": 13.8,
+  "long": 4
+ },
+ {
+  "file": "skills/opendesigner/references/stages/27-builder-preferences.detailed.md",
+  "sentences": 24,
+  "words": 328,
+  "grade": 8.8,
+  "avg_words": 13.7,
+  "long": 1
+ },
+ {
+  "file": "skills/opendesigner/references/stages/27-builder-preferences.md",
+  "sentences": 18,
+  "words": 218,
+  "grade": 7.4,
+  "avg_words": 12.1,
+  "long": 0
+ },
+ {
+  "file": "skills/opendesigner/references/zoom.md",
+  "sentences": 58,
+  "words": 617,
+  "grade": 5.1,
+  "avg_words": 10.6,
+  "long": 3
+ },
+ {
+  "file": "skills/opendesigner-export/SKILL.md",
+  "sentences": 38,
+  "words": 539,
+  "grade": 8.4,
+  "avg_words": 14.2,
+  "long": 1
+ },
+ {
+  "file": "skills/opendesigner-extend/SKILL.md",
+  "sentences": 47,
+  "words": 462,
+  "grade": 5.9,
+  "avg_words": 9.8,
+  "long": 0
+ },
+ {
+  "file": "skills/opendesigner-extract/SKILL.md",
+  "sentences": 43,
+  "words": 697,
+  "grade": 9.9,
+  "avg_words": 16.2,
+  "long": 6
+ }
+]

@@ -21,7 +21,7 @@ Designers: primary or brand accent · Code: `color.bg.accent`
 
 **Designer:** One accent keeps a calm, focused feel and makes color mean "you can act here". Add a second accent only when it has a job, not for decoration.
 
-**Engineer:** Roles such as color.bg.accent and color.focus.ring alias one brand ramp step. Accent text must pass 4.5:1 and accent boundaries 3:1 in every mode.
+**Engineer:** Roles like color.bg.accent.bold, color.text.accent and color.border.focus alias color.accent.* steps. Accent text passes 4.5:1 and accent boundaries 3:1 in every mode.
 
 **Also called:** brand color, primary color
 
@@ -30,13 +30,13 @@ Designers: primary or brand accent · Code: `color.bg.accent`
 ### alias
 
 A name that points to another choice instead of holding a value of its own.  
-Designers: linked token or reference · Code: `$value: {color.blue.500}`
+Designers: linked token or reference · Code: `$value: {color.accent.light.9}`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** A token that borrows another token's value, so one change flows down the chain. It is how semantic and component tokens stay linked to the palette.
 
-**Engineer:** In DTCG 2025.10, $value "{color.blue.500}" targets a whole token; {"$ref": JSON Pointer} reaches inside values. Chains are allowed; circular references are errors. Figma variables alias within one type.
+**Engineer:** DTCG 2025.10: $value "{color.accent.light.9}" targets a whole token; {"$ref": JSON Pointer} reaches inside values. Chains are allowed; circular references are errors. Figma variables alias within one type.
 
 **Also called:** reference, token reference
 
@@ -45,13 +45,13 @@ Designers: linked token or reference · Code: `$value: {color.blue.500}`
 ### anatomy
 
 The small pieces a part is built from, like the box, the words and the icon of a button.  
-Designers: labeled component parts · Code: `part in token path: button.primary.container`
+Designers: labeled component parts · Code: `part in token path: button.primary.container (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** The numbered parts of a component (container, label, icon) shown in its spec, so designers and engineers use the same names when discussing spacing, color and states.
 
-**Engineer:** Named parts map to Figma layers or slots and to code sub-elements; component tokens follow them, e.g. button.primary.container.color. EightShapes generates anatomy diagrams from layers.
+**Engineer:** Named parts map to Figma layers or slots and to code sub-elements; planned component tokens name them: button.primary.container.color (proposed). EightShapes generates anatomy diagrams from layers.
 
 **Also called:** component anatomy, parts
 
@@ -75,13 +75,13 @@ Designers: asset request: do you have this? · Code: `data/hooks.json asset rows
 ### breakpoint
 
 A screen width where the page changes its layout, like going to one column on a phone.  
-Designers: layout breakpoint, mobile first · Code: `rem media query in $extensions.opendesigner`
+Designers: layout breakpoint, mobile first · Code: `rem media query (not generated yet)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Each one is a moment the layout visibly reorganizes: panes appear, navigation moves from bar to rail. Fewer breakpoints mean bigger shifts; design mobile first.
 
-**Engineer:** Material 600/840/1200/1600dp width breakpoints (Tailwind's set for web-only), written as rem media queries; DTCG has no breakpoint type, so they sit in $extensions.opendesigner.
+**Engineer:** Material 600/840/1200/1600dp width breakpoints (Tailwind's set for web-only), written as rem media queries. DTCG has no breakpoint type, and OpenDesigner does not generate breakpoints yet.
 
 **Also called:** window size class
 
@@ -90,13 +90,13 @@ Designers: layout breakpoint, mobile first · Code: `rem media query in $extensi
 ### color ramp
 
 A row of shades of one color, from very light to very dark.  
-Designers: tonal scale, 11-12 steps · Code: `color.blue.50 to color.blue.950`
+Designers: tonal scale, 11-12 steps · Code: `color.accent.light.1 to .12`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Evenly stepped shades of one hue, usually 11 or 12 steps, so backgrounds, borders, hovers and text come from a set, not by eye.
 
-**Engineer:** Ordered primitives such as color.blue.50 to color.blue.950 (Tailwind's 11 steps), generated in OKLCH as DTCG color objects with hex fallback; semantic tokens alias into it.
+**Engineer:** Ordered primitives like color.accent.light.1 to .12 plus a dark ramp: 12 steps generated in OKLCH as DTCG color objects with hex fallback; semantic tokens alias into them.
 
 **Example:** Light blue for backgrounds, dark blue for text on them.
 
@@ -107,13 +107,13 @@ Designers: tonal scale, 11-12 steps · Code: `color.blue.50 to color.blue.950`
 ### component
 
 A ready piece of the screen, like a button, that you can use again and again.  
-Designers: reusable component with variants · Code: `opendesigner/components/<name>.md`
+Designers: reusable component with variants · Code: `code component with props`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** A reusable part with defined anatomy, variants, sizes and states, styled only by tokens. OpenDesigner's catalog lists 64 canonical components in 10 categories, from Button to App shell.
 
-**Engineer:** A Figma main component with properties (variant, boolean, instance swap, text, slot) mirrored by a code component with props; Code Connect links them; docs land in opendesigner/components/<name>.md.
+**Engineer:** A Figma component with properties (variant, boolean, instance swap, text, slot) mirrored by a code component with props; Code Connect links them. Docs in opendesigner/components/<name>.md are planned.
 
 **Also called:** UI component, building block
 
@@ -122,13 +122,13 @@ Designers: reusable component with variants · Code: `opendesigner/components/<n
 ### component token
 
 A saved value for one part only, like the color of the main button.  
-Designers: component-specific override · Code: `button.primary.bg in component.tokens.json`
+Designers: component-specific override · Code: `button.primary.bg (proposed) in component.tokens.json`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Lets one component be restyled on its own (button.primary.bg) without changing every accent in the product. Add them only when a brand must tune that component separately.
 
-**Engineer:** Tier 3, scoped to one component: button.primary.bg = "{color.bg.accent}". Added only for components restyled independently or values shared by three or more; file component.tokens.json.
+**Engineer:** Planned tier 3, not generated yet: button.primary.bg (proposed) = "{color.bg.action.primary}" in component.tokens.json, only for components restyled independently or values shared by three or more.
 
 **Also called:** component-level token
 
@@ -143,7 +143,7 @@ Designers: contrast, 4.5:1 for body text · Code: `engine.py validate contrast c
 
 **Designer:** WCAG 2.2 AA: 4.5:1 for body text, 3:1 for large text, icons and control borders, 7:1 in high-contrast themes. Test colors as pairs, never alone.
 
-**Engineer:** engine.py validate checks every foreground and background pair in every mode with no rounding (4.499:1 fails); APCA Lc 75 on body is an advisory warning.
+**Engineer:** engine.py validate checks every foreground and background pair in every mode with no rounding (4.499:1 fails); APCA Lc 75 on body text is reported as an advisory note.
 
 **Example:** 4.5:1 passes; 4.499:1 fails, because nothing is rounded.
 
@@ -160,7 +160,7 @@ Designers: corner radius, sharp to pill · Code: `radius.control, CSS border-rad
 
 **Designer:** The most varied visible lever across systems, from 0px to pill (median 6px). Radius should grow with component size, and nested corners stay concentric.
 
-**Engineer:** CSS border-radius from dimension tokens; default scale 0, 2, 4, 8, 12, 16, 24 and full. The Roundness dial picks radius.control; focus-ring radius = component radius + offset.
+**Engineer:** CSS border-radius from tokens radius.0 to radius.32 (0, 2, 4, 6, 8, 12, 16, 20, 24, 28, 32) plus radius.full; the Roundness dial picks radius.control.
 
 **Also called:** border radius, rounding
 
@@ -220,7 +220,7 @@ Designers: foundations, components, patterns and governance · Code: `opendesign
 
 **Designer:** Foundations, tokens, components, patterns and the guidance and governance around them, so every team ships consistent, accessible screens without re-deciding color, type and spacing each time.
 
-**Engineer:** In OpenDesigner: opendesigner/state.json plus generated DTCG 2025.10 tokens, component docs, lint rules and DESIGN.md. Ontology layers: context, principles, foundations, tokens, components, patterns, guardrails, delivery, governance.
+**Engineer:** OpenDesigner: opendesigner/state.json plus generated DTCG 2025.10 tokens, exports and DESIGN.md; component docs and lint rules are planned. Layers: context, principles, foundations, tokens, components, patterns, guardrails, delivery, governance.
 
 </details>
 
@@ -304,13 +304,13 @@ Designers: easing: decelerate in, accelerate out · Code: `DTCG cubicBezier, CSS
 ### elevation
 
 How high a part of the screen seems to float above the part below it.  
-Designers: resting, raised and overlay levels · Code: `elevation.sunken to elevation.overlay`
+Designers: resting, raised and overlay levels · Code: `elevation.raised to elevation.overlay`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Shows stacking order: most products visibly use three levels (resting, raised, overlay). Depending on the depth model it shows as shadow, lighter tone, border or glass.
 
-**Engineer:** Semantic elevation.sunken, .default, .raised, .overlay backed by 4-6 shadow primitives (shadow.100 to 600, DTCG shadow arrays); in dark mode raised surfaces also step lighter.
+**Engineer:** Semantic elevation.raised, .floating and .overlay: DTCG shadow arrays colored {color.shadow.key} and {color.shadow.ambient}, set by the depth model; in dark mode raised surfaces also step lighter.
 
 **Also called:** depth, z-depth
 
@@ -334,7 +334,7 @@ Designers: taken from your existing brand · Code: `class E, value with provenan
 ### Figma variables
 
 Named colors and sizes kept in Figma, a design app, that can switch to dark mode.  
-Designers: Figma variables, collections and modes · Code: `figma/variables.json, one file per mode`
+Designers: Figma variables, collections and modes · Code: `build/figma/import/, one file per mode`
 
 <details><summary>Designer and engineer</summary>
 
@@ -370,7 +370,7 @@ Designers: focus indicator · Code: `focus.ring.* on :focus-visible`
 
 **Designer:** Must show on every background: a 2px ring, 2px offset, following the control's corner, in a color with 3:1 contrast. Never remove it.
 
-**Engineer:** CSS outline on :focus-visible from focus.ring.width, focus.ring.offset and focus.ring.color (per mode), radius = component radius + offset; forced-colors falls back to Highlight. WCAG 2.4.7 AA.
+**Engineer:** CSS outline on :focus-visible from focus.ring.width, focus.ring.offset and color.border.focus (per mode); radius.focus = radius.control + offset; forced-colors uses Highlight. WCAG 2.4.7 AA.
 
 **Also called:** focus indicator, focus outline
 
@@ -394,13 +394,13 @@ Designers: two to four weights · Code: `fontWeight 100-900, CSS font-weight`
 ### gap
 
 The empty space between things lined up in a row, a column or a grid.  
-Designers: gap, auto layout spacing · Code: `space.gap.control, CSS gap`
+Designers: gap, auto layout spacing · Code: `space.inline.*, space.stack.*, CSS gap`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Even spacing between siblings set once on the container, so every list, toolbar and form keeps the same rhythm without per-item margins.
 
-**Engineer:** CSS gap on flex and grid containers, from semantic dimension tokens like space.gap.control = "{space.100}" or space.stack.lg. Figma: number variables scoped to gap.
+**Engineer:** CSS gap on flex and grid containers, from semantic dimension tokens like space.inline.sm = "{space.8}" or space.stack.lg. Figma: number variables scoped to gap.
 
 **Also called:** stack spacing, inline spacing
 
@@ -424,13 +424,13 @@ Designers: sensible defaults to adjust · Code: `class G, from levers.json formu
 ### Gestalt grouping
 
 We see things that sit close together, or inside the same box, as one group.  
-Designers: common region, proximity, similarity · Code: `space.innerOuterRatio`
+Designers: common region, proximity, similarity · Code: `innerOuterRatio in space $extensions`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** The best-evidenced visual principle, with a strength order: a shared boundary beats proximity, and proximity beats similarity. Keep space within groups clearly smaller than space between them.
 
-**Engineer:** Enforced by construction: inner spacing tokens always resolve below outer ones (space.innerOuterRatio 2 to 3.5 by Density). Critique flags containers nested more than two deep ("boxes in boxes").
+**Engineer:** Enforced by construction: inner spacing tokens resolve below outer ones (innerOuterRatio 2 to 3.5 by density, in the space group's $extensions.opendesigner). Planned critique: flag containers nested over two deep.
 
 **Also called:** proximity, common region, similarity
 
@@ -439,13 +439,13 @@ Designers: common region, proximity, similarity · Code: `space.innerOuterRatio`
 ### grid
 
 Columns you can't see that help line things up across a page.  
-Designers: columns, gutters and margins · Code: `grid.columns, grid.gutter, grid.margin`
+Designers: columns, gutters and margins · Code: `grid.columns, grid.gutter, grid.margin (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Columns, gutters and margins that align content. 4, 8 and 12 columns suit most products; 16 suits editorial or wide dashboards. Type never hangs into the gutter; containers may.
 
-**Engineer:** CSS grid-template-columns driven by grid.columns (number) and grid.gutter and grid.margin (dimension) per breakpoint: 4, 8, 12 columns; 16-24px gutters.
+**Engineer:** Not generated yet: grid.columns (proposed) as a number, grid.gutter and grid.margin (proposed) as dimensions per breakpoint, driving CSS grid-template-columns: 4, 8, 12 columns; 16-24px gutters.
 
 **Also called:** column grid, layout grid
 
@@ -454,13 +454,13 @@ Designers: columns, gutters and margins · Code: `grid.columns, grid.gutter, gri
 ### Hick's law
 
 The more choices you see, the longer it takes to pick, unless they are in groups or you can search.  
-Designers: group and label choices · Code: `flat-list lint warning above 10-12 items`
+Designers: group and label choices · Code: `planned flat-list warning above 10-12 items`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Holds when choices are known and equally likely; newcomers scan lists one by one. Group, label, order and add search, and default one option. Never cut items to satisfy it.
 
-**Engineer:** RT = a + b·log2(n) (Hick and Hyman 1952). Lint warns on flat, ungrouped lists above roughly 10-12 items with no search, sections or typeahead (threshold inferred).
+**Engineer:** RT = a + b·log2(n) (Hick and Hyman 1952). Planned lint: warn on flat, ungrouped lists above roughly 10-12 items with no search, sections or typeahead (threshold inferred).
 
 **Also called:** Hick-Hyman law
 
@@ -469,13 +469,13 @@ Designers: group and label choices · Code: `flat-list lint warning above 10-12 
 ### icon
 
 A small picture that stands for an action or thing, like a trash can for delete.  
-Designers: one icon set, matched stroke · Code: `icon.size.md, icon.stroke.width`
+Designers: one icon set, matched stroke · Code: `size.icon.md, icon.stroke.md`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** One library, stroke matched to body text weight, corners matched to Roundness. Label key actions; a meaningful icon standing alone needs a text alternative and 3:1 contrast.
 
-**Engineer:** SVG components on the library's grid, sized by dimension tokens icon.size.sm/md/lg = 16/20/24px; icon.stroke.width about 1.5px beside 14-16px text.
+**Engineer:** SVG on the library grid; size.icon.sm/md/lg = 16/20/24px; icon.stroke.sm/md/lg = 1.5/2/2.5px, scaled by size and label weight.
 
 **Also called:** glyph, symbol
 
@@ -514,13 +514,13 @@ Designers: leading · Code: `line-height (DTCG lineHeight)`
 ### lint rule
 
 A check that runs by itself and flags a mistake, like too many text sizes.  
-Designers: design lint: errors and warnings · Code: `opendesigner/lint/ stylelint config`
+Designers: design lint: errors and warnings · Code: `engine.py validate; lint/ folder planned`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Accessibility breaks are errors that block export; taste rules such as more than three type sizes or two primary buttons in a view are warnings you may override.
+**Designer:** Accessibility breaks are errors to fix before export; taste rules, such as more than 10 type sizes or bounce above 0.2, are warnings you may waive with a reason.
 
-**Engineer:** Deterministic checks run before model critique; errors block export, warnings carry ids and waivers. Exported to opendesigner/lint/ as a stylelint strict-value config plus behavior and anti-generic rules for CI.
+**Engineer:** engine.py validate runs deterministic checks and exits 1 on errors; findings cite their rule; waivers sit in state.json. A stylelint config in opendesigner/lint/ is planned (spec 7.12).
 
 **Also called:** lint check, automated check
 
@@ -529,13 +529,13 @@ Designers: design lint: errors and warnings · Code: `opendesigner/lint/ styleli
 ### margin
 
 The empty space outside a box that keeps it away from the things next to it.  
-Designers: outer margin at page edges · Code: `layout.margin.compact, CSS margin`
+Designers: outer margin at page edges · Code: `CSS margin; space.section.* between groups`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Space around an element or page edge. Prefer padding on the parent and gap between siblings; keep margins for page edges and layout sections so spacing stays predictable.
 
-**Engineer:** CSS margin. OpenDesigner keeps it to layout tokens such as layout.margin.compact = 16 (Material's page margin, 24 above compact); components set no outer margin.
+**Engineer:** CSS margin. Components set no outer margin; space.section.* spaces groups. Material's page margin is 16 compact, 24 above; page-margin tokens like layout.margin.compact (proposed) are not generated.
 
 **Also called:** outer spacing
 
@@ -580,7 +580,7 @@ Designers: timing, snappy to smooth · Code: `motion.duration.short, CSS transit
 
 **Designer:** Most UI motion runs 100-300ms: short feels snappy, long feels smooth, past about 500ms it drags. Make exits 20-35% shorter than entrances.
 
-**Engineer:** DTCG duration {"value": 200, "unit": "ms"}; semantic steps instant 0, micro 100, short 150-200, medium 250-300, long 400-500. CSS transition-duration; Energy scales by 0.8-1.2.
+**Engineer:** DTCG duration tokens. At Energy 50: motion.duration.instant 0, micro 100, short 150, medium 250, long 400, extra 700ms; Energy scales medium and longer by 0.8-1.2.
 
 **Also called:** animation duration, timing
 
@@ -595,7 +595,7 @@ Designers: native, system look · Code: `dials.brandPresence 0-25, nativeShare n
 
 **Designer:** System fonts and components almost everywhere, brand only in accents, content and voice. Feels at home and inherits OS updates like Liquid Glass, but looks more like other apps.
 
-**Engineer:** The low end of the Brand presence dial: 0-25 suggests the system font per platform, components.nativeShare near 1.0, and platform shape and materials override brand radii below 50.
+**Engineer:** At the low end, Brand presence 0-25 suggests the system font per platform and nativeShare near 1.0; below 50, a native lead platform keeps its own body size.
 
 **Also called:** native-first, system look
 
@@ -604,13 +604,13 @@ Designers: native, system look · Code: `dials.brandPresence 0-25, nativeShare n
 ### neutral
 
 The grays for text, backgrounds and lines, at times with a faint hint of color.  
-Designers: grays, pure or tinted · Code: `color.neutral.50 to 950`
+Designers: grays, pure or tinted · Code: `color.neutral.light.1 to .12`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Pure gray reads neutral and tool-like, suiting photo and data apps; a slight tint toward the brand, warm or cool sets the product's temperature.
 
-**Engineer:** A 12-13 step ramp such as color.neutral.50 to 950. Tinted ramps keep OKLCH chroma about 0.01-0.03 mid-ramp and 0-0.008 at the ends.
+**Engineer:** A 12-step ramp per theme: color.neutral.light.1 to .12 and color.neutral.dark.*. Tinted ramps keep OKLCH chroma about 0.01-0.03 mid-ramp, 0-0.008 at the ends.
 
 **Also called:** gray ramp, neutrals
 
@@ -655,7 +655,7 @@ Designers: inner padding or inset · Code: `space.inset.md, CSS padding`
 
 **Designer:** Inner breathing room of buttons, cards and fields. Keep it smaller than the space between groups so related things read together; parents own spacing, children never add outer margins.
 
-**Engineer:** CSS padding, fed by semantic inset tokens such as space.inset.md = "{space.200}" (dimension). Density modes shrink insets one scale step; Material uses padding and gap before margins.
+**Engineer:** CSS padding, fed by semantic inset tokens such as space.inset.md = "{space.12}" (dimension). Density modes shrink insets one scale step; Material uses padding and gap before margins.
 
 **Also called:** inset
 
@@ -685,7 +685,7 @@ Designers: native behaviors, shared brand · Code: `behavior.navigationNative = 
 
 **Designer:** Share what users perceive as the brand (color, type personality, illustration, voice); adopt the platform's version of how the device works: navigation, back, sheets, pickers, text fields, system icons.
 
-**Engineer:** behavior.navigationNative is true at every Brand presence value. Native-first maps semantic tokens to platform semantics, e.g. color.text.primary to iOS label and Android onSurface.
+**Engineer:** The behavior.navigationNative param is true at every Brand presence value. Mapping tokens to platform colors, such as color.text.primary to iOS label, is planned; exports emit literal values.
 
 **Also called:** platform guidelines
 
@@ -694,13 +694,13 @@ Designers: native behaviors, shared brand · Code: `behavior.navigationNative = 
 ### primitive token
 
 A raw value with a plain name, like "blue 500", that says what it is, not what it is for.  
-Designers: raw palette and scales · Code: `color.blue.500 in primitives.tokens.json`
+Designers: raw palette and scales · Code: `color.accent.light.9 in primitives.tokens.json`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** The raw palette and scales (blue.500, space.200) with no meaning attached. Designers pick from semantic tokens instead; primitives are the ingredients those tokens point to.
 
-**Engineer:** Bottom tier: single-valued tokens such as color.blue.500 (an OKLCH color object) or space.200 (dimension). Values never change per mode; semantic tokens alias them. File: primitives.tokens.json.
+**Engineer:** Bottom tier: single-valued tokens such as color.accent.light.9 (OKLCH color object) or space.16 (dimension). Values never change per mode; semantic tokens alias them. File: primitives.tokens.json.
 
 **Example:** blue.500 is a primitive; it knows its color but not its job.
 
@@ -732,7 +732,7 @@ Designers: reduced motion, no travel · Code: `prefers-reduced-motion, motion.re
 
 **Designer:** Keep feedback (color and opacity changes, crossfades) and remove travel: sliding, scaling, parallax and bounce. A good reduced mode still feels polished, not broken.
 
-**Engineer:** Web @media (prefers-reduced-motion: reduce); iOS Reduce Motion, Android Remove animations. OpenDesigner ships it as a motion mode (motion.reduced.tokens.json): shorter durations, critically damped springs, no translate or scale.
+**Engineer:** Web @media (prefers-reduced-motion: reduce); iOS Reduce Motion, Android Remove animations. OpenDesigner's motion mode (motion.reduced.tokens.json): short fades, movement at 0ms, no translate or scale.
 
 **Also called:** prefers-reduced-motion, Reduce Motion
 
@@ -747,7 +747,7 @@ Designers: reference for structure, not identity · Code: `opendesigner-extract 
 
 **Designer:** Carries structure and quality, never identity: no name, logo, photos, copy or proprietary fonts. A reference's brand color lends its role and strength, not its hex.
 
-**Engineer:** The opendesigner-extract skill reads a URL, screenshot, Figma file, repo CSS or brand book, runs the LEVERS formulas backwards to dial values, and tags each pre-filled token $extensions.opendesigner.source.
+**Engineer:** The opendesigner-extract skill reads a URL, screenshot, Figma file, repo CSS or brand book; engine.py intake runs the LEVERS formulas backwards to proposed dials, accepted with --set-by reference --source-ref.
 
 **Also called:** reference extraction
 
@@ -771,13 +771,13 @@ Designers: the recipe behind themes · Code: `opendesigner.resolver.json`
 ### semantic token
 
 A value named for its job, like "page background", that points to a raw value below it.  
-Designers: named by role, not look · Code: `color.bg.accent = {color.blue.500}`
+Designers: named by role, not look · Code: `color.bg.accent.bold = {color.accent.light.9}`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Named by role, not by look: color.bg.accent, color.text.subtle. Themes, dark mode and rebrands re-point these names, so designs stay correct without touching every screen.
 
-**Engineer:** Tier 2: a token whose $value is a reference, color.bg.accent = "{color.blue.500}". Modes live on this tier; each resolver context re-points it.
+**Engineer:** Tier 2: $value is a reference, color.bg.accent.bold = "{color.accent.light.9}". Modes live here; each resolver context re-points it (dark: {color.accent.dark.9}).
 
 **Example:** Page background is white in light mode and near-black in dark.
 
@@ -848,15 +848,15 @@ Designers: single source of truth · Code: `opendesigner/state.json plus DTCG to
 ### spacing scale
 
 A short list of gap sizes the whole app picks from, like marks on a ruler.  
-Designers: 4-point grid, 8-point rhythm · Code: `space.0 to space.1000`
+Designers: 4-point grid, 8-point rhythm · Code: `space.0 to space.96`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** A 4px grid with an 8px rhythm, about 14 steps from 0 to 80. Steps differ enough that tight-within, loose-between grouping reads at a glance.
+**Designer:** A 4px grid with an 8px rhythm, about 15 steps from 0 to 96. Steps differ enough that tight-within, loose-between grouping reads at a glance.
 
-**Engineer:** Dimension primitives space.0 to space.1000 in px (rem on web export); components use semantic aliases like space.inset.md = "{space.200}", never raw steps.
+**Engineer:** Dimension primitives space.0 to space.96 in px, named by value (space.16 = 16px); components use semantic aliases like space.inset.md = "{space.12}", never raw steps.
 
-**Example:** 0, 2, 4, 6, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80.
+**Example:** 0, 2, 4, 6, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96.
 
 **Also called:** space scale, spacing ladder
 
@@ -886,7 +886,7 @@ Designers: hover, pressed, focus, disabled · Code: `:hover, :focus-visible, :ac
 
 **Designer:** Style enabled, hover, focus-visible, pressed, selected, disabled, loading and error. States that carry meaning need 3:1 against neighbors; touch screens have no hover, so never hide essentials there.
 
-**Engineer:** CSS :hover, :focus-visible, :active, :disabled plus aria-* attributes. Hover and press use a state-layer overlay (M3: 8% and 10%); selected and error get explicit color tokens.
+**Engineer:** CSS :hover, :focus-visible, :active, :disabled plus aria-*. Hover and press shift one and two ramp steps (color.bg.accent.boldHover, boldPressed); opacity.state.hover covers unknown colors.
 
 **Also called:** interaction state
 
@@ -895,13 +895,13 @@ Designers: hover, pressed, focus, disabled · Code: `:hover, :focus-visible, :ac
 ### status colors
 
 Colors that tell you how things went, like green for good and red for a problem.  
-Designers: success, warning, error, info · Code: `color.{role}.{status}.{subtle|bold}`
+Designers: success, warning, error, info · Code: `color.bg.success.subtle, color.text.success`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Success, warning, error and info, each with subtle and bold levels. Never rely on color alone: pair with an icon and text, and put dark text on yellow fills.
 
-**Engineer:** color.{bg|text|border|icon}.{success|warning|danger|info}.{subtle|bold}. Status text needs 4.5:1; status icons and borders 3:1. Color-only meaning is a lint error.
+**Engineer:** color.bg.<status>.subtle, .bold, .boldHover; color.text.<status>, color.border.<status>; icons use color.text.<status>. Text 4.5:1, icons and borders 3:1. Color-only meaning: planned lint error.
 
 **Also called:** feedback colors, semantic colors
 
@@ -910,13 +910,13 @@ Designers: success, warning, error, info · Code: `color.{role}.{status}.{subtle
 ### surface
 
 A background layer that things sit on, like a card on a page.  
-Designers: background levels, sunken to overlay · Code: `elevation.surface, .sunken, .raised, .overlay`
+Designers: background levels, sunken to overlay · Code: `color.surface.sunken, .base, .raised, .overlay`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Stacked background levels (sunken, base, raised, overlay) that separate page, cards and popovers. Light mode separates them with subtle tone plus shadow or border; dark mode with lighter tones.
 
-**Engineer:** 4-5 role-named color tokens mapped per mode, e.g. Atlassian elevation.surface, .sunken, .raised, .overlay; Material 3 surface-container-lowest to -highest; Carbon $layer-01 to 03.
+**Engineer:** Role-named color tokens re-pointed per theme: color.surface.sunken, .base, .raised, .overlay, plus .nav and .tinted. Compare Material 3 surface-container-lowest to -highest and Carbon $layer-01 to 03.
 
 **Also called:** layer, background level
 
@@ -976,7 +976,7 @@ Designers: tap or hit area · Code: `size.target.min`
 
 **Designer:** Minimum hit area: 24 by 24 CSS px on web (WCAG 2.2 AA), 44pt on Apple, 48dp on Android. Visuals may shrink with density; hit areas never do.
 
-**Engineer:** size.target.min, fixed across density modes: 24 CSS px web, 44pt iOS, 48dp Android. Targets under 24x24 without a spacing exception fail lint.
+**Engineer:** size.target.min, fixed across density modes: 24 CSS px web, 44pt iOS, 48dp Android. engine.py validate errors when a target token falls below its floor.
 
 **Also called:** hit area, tap target
 
@@ -991,7 +991,7 @@ Designers: modular scale by ratio · Code: `font.size.* from type.ratio`
 
 **Designer:** Sizes grown from a base by a ratio: 1.125-1.2 feels calm and dense, 1.25 suits product plus marketing, 1.333+ feels editorial. Use three sizes or fewer per view.
 
-**Engineer:** size(n) = base x ratio^n, rounded to even pixels; stored as dimension primitives (font.size.*). Expression sets type.ratio 1.2/1.25/1.333; Density caps it at 1.2.
+**Engineer:** size(n) = base x ratio^n, rounded to whole pixels; stored as font.size.* dimension primitives. Expression sets type.ratio 1.2/1.25/1.333; Density above 66 caps it at 1.2.
 
 **Example:** Base 16 at ratio 1.25 gives 16, 20, 25, 31, 39.
 
@@ -1023,9 +1023,9 @@ Designers: primary, secondary, tertiary, destructive · Code: `variant="primary"
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Styled versions of one component that signal emphasis or purpose: primary, secondary, tertiary, destructive. Keep one primary per view; more than one is a lint warning.
+**Designer:** Styled versions of one component that signal emphasis or purpose: primary, secondary, tertiary, destructive. Keep one primary per view; a lint warning for more is planned.
 
-**Engineer:** A Figma variant property plus a code prop (variant="primary"), styled by tokens such as button.primary.bg that alias semantic roles. Variants multiply with size and state.
+**Engineer:** A Figma variant property plus code prop (variant="primary"), styled by roles like color.bg.action.primary, not yet by button.primary.bg (proposed). Variants multiply with size and state.
 
 **Also called:** style variant, emphasis level
 
@@ -1040,7 +1040,7 @@ Designers: hierarchy and emphasis · Code: `type.ratio, emphasis.maxPrimaryPerVi
 
 **Designer:** Guide attention by importance: one dominant element, three distinct levels, no more than three type sizes and one primary action per view. If everything looks the same, nothing stands out.
 
-**Engineer:** Countable levers: type.ratio from Expression, emphasis.maxPrimaryPerView = 1, and a warning above 3 type sizes per view. Role tokens are decoupled from HTML heading tags.
+**Engineer:** Levers: type.ratio from Expression and emphasis.maxPrimaryPerView = 1 (recorded, not checked yet); a warning above 3 type sizes per view is planned. Role tokens stay decoupled from HTML headings.
 
 **Also called:** emphasis order
 
@@ -1147,7 +1147,7 @@ Designers: rebuild all values · Code: `engine.py generate`
 
 **Designer:** Rebuilds every design value from your decisions, including light and dark, density and reduced motion. Run it after each step that changes values.
 
-**Engineer:** engine.py generate writes opendesigner/tokens/: DTCG 2025.10 files per tier and mode (primitives, semantic.color.light and dark, density, motion) plus opendesigner.resolver.json and opendesigner.meta.json.
+**Engineer:** Writes opendesigner/tokens/: DTCG 2025.10 files per tier and mode (primitives, semantic, semantic.color.light.tokens.json and .dark, density, motion), opendesigner.resolver.json and opendesigner.meta.json.
 
 **Example:** Change the brand color, then generate to see new shades.
 
@@ -1269,7 +1269,7 @@ Designers: reviewer checks: contrast, targets, naming · Code: `engine.py valida
 
 **Designer:** Runs the checks a careful reviewer would: text contrast, target sizes, naming and unused values. Fix every error before showing results; warnings are worth a look.
 
-**Engineer:** engine.py validate [--json] checks contrast in every resolver permutation, 24px targets, DTCG structure and lint. Exits 1 on errors, 0 with warnings; findings cite their rule.
+**Engineer:** engine.py validate [--json] checks contrast pairs per theme, that every resolver permutation resolves, target floors, DTCG structure and lint. Exits 1 on errors, 0 with warnings; findings cite rules.
 
 **Example:** Gray text on a gray card fails and must be fixed.
 
@@ -1502,7 +1502,7 @@ Designers: choice as a one-line command · Code: `OD:set Q-id=value --why`
 
 **Engineer:** A line starting OD: (set, lock, unlock, accept, ignore, remix), such as OD:set Q-shape-01="subtle" --why "dense tool", applied with engine.py set or lock.
 
-**Example:** OD:set dials.roundness=45 means a bit softer corners.
+**Example:** OD:set dials.roundness=65 means softer corners (12px).
 
 **Also called:** copy-back line
 
@@ -1562,7 +1562,7 @@ Designers: untouched sourced default · Code: `set_by: auto_default`
 
 **Designer:** A sourced default that stands because the question was never reached, or had one right answer. It goes in the stage summary so someone can revisit it.
 
-**Engineer:** set_by: auto_default. Unreached or mechanical questions need no command; the levers.json default stands. init logs D-0001 this way; logged ones appear in DESIGN.md Open Items.
+**Engineer:** set_by: auto_default; unreached or mechanical questions need no command. init logs D-0001 this way; auto_default decisions logged with a value appear in DESIGN.md Open Items.
 
 **Example:** You stopped early, so the icon size kept its default.
 
@@ -1635,7 +1635,7 @@ Designers: taken from a shared reference · Code: `set_by: reference --source-re
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** The value came from a reference you shared, measured for structure and quality only. Identity, such as logos, exact brand hues or typefaces, is never copied.
+**Designer:** The value came from a reference you shared, measured for structure and quality only. Another brand's logo, exact hue or proprietary typeface is not copied.
 
 **Engineer:** set_by: reference, with --source-ref <ref-id>; written by engine.py intake --accept or set --set-by reference. The ref id points into state.json references.
 
@@ -1714,7 +1714,7 @@ Designers: one screen per foundation · Code: `zoom.<area> = broad`
 
 **Designer:** Zoom level 1: one short screen per foundation (style, density, color use, text, corners, depth, motion, where files live). About 8 questions and 8 minutes.
 
-**Engineer:** Zoom level 1, the eight questions in questions.json zoom1. Stored as state.json zoom.<area> = "broad", or inferred from 1-2 decisions in the area.
+**Engineer:** Zoom level 1: the eight questions in pacing.json zoom1. Stored as state.json zoom.<area> = "broad", or inferred from 1-2 decisions in the area.
 
 **Example:** One screen picks corners, the next picks depth.
 
@@ -1767,9 +1767,9 @@ Designers: native to brand-led · Code: `dials.brandPresence`
 
 **Designer:** Native (0): system font and components, brand only in accents. Brand-led (100): custom face, brand color on large surfaces, custom components. Navigation, back and sheets always stay native.
 
-**Engineer:** Posture dial 0-100, default 50. Drives type.faceSuggestion, color.brandPlacement, components.nativeShare (1.0 at 0, 0.8 at 50, 0 at 100) and content.voiceGuidance; behavior.navigationNative stays true.
+**Engineer:** Posture dial, default 50. Sets guidance params type.faceSuggestion, brand color placement, nativeShare (1.0 at 0, 0.8 at 50, 0 at 100) and content.voiceGuidance; behavior.navigationNative stays true.
 
-**Example:** Fluent reuses native patterns about 80% of the time.
+**Example:** Fluent's 80/20 guidance: reuse native components most of the time.
 
 **Also called:** Brand presence, native to brand-led
 
@@ -1782,9 +1782,9 @@ Designers: near-gray to vibrant palette · Code: `dials.colorfulness`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Low keeps the palette near gray with one accent; high raises accent chroma, adds secondary and tertiary accents above 60 and tints surfaces. Spend strong color on small, meaningful elements.
+**Designer:** Low keeps the palette near gray with one accent; high raises accent chroma, adds secondary and tertiary accents from 60 and tints surfaces. Spend strong color on small, meaningful elements.
 
-**Engineer:** Character dial 0-100, default 50. Drives color.accentChroma.hct (0, 10, 34, 48, max), color.schemeVariant (monochrome, neutral, tonalSpot, expressive, vibrant) and color.accentCount (1, or 3 from 60).
+**Engineer:** Character dial 0-100, default 50. Accent chroma for color.accent.* (HCT 0, 10, 34, 48, max), scheme variant (monochrome to vibrant) and accent count (1, or 3 from 60).
 
 **Example:** Material's scheme variants run from Monochrome to Vibrant along this dial.
 
@@ -1801,7 +1801,7 @@ Designers: spacious to compact · Code: `dials.density`
 
 **Designer:** Spacious (0) reads calm: 16px+ body, 48px controls. Compact (100) reads serious and efficient: 14px body (13 at 90+), 32px controls. Hit areas never shrink.
 
-**Engineer:** Posture dial 0-100. Drives type.baseSize.web (19 to 13), control.height.md (48/40/32), icon.defaultSize (24/20/16) and space.densityMode; target.min never changes.
+**Engineer:** Posture dial 0-100. Drives type.baseSize.web (19-13), size.control.md (48/40/32), size.icon.default (24/20/16) and density context; size.target.min never changes.
 
 **Example:** GOV.UK's 19px body sits near 0; Polaris's 13px near 90.
 
@@ -1818,7 +1818,7 @@ Designers: depth model, flat to glass · Code: `dials.depth`
 
 **Designer:** Each band is a different model: borders only, ring plus faint shadow, tonal layers, shadow ladder, then glass materials with a solid fallback. Dark mode lifts raised surfaces by lightness.
 
-**Engineer:** Character dial 0-100, default 40. elevation.model breaks at 15, 35, 55 and 80; elevation.shadowAlpha.light scales 0.08 to 0.24; elevation.darkMode = lighter-raised-surfaces in every band.
+**Engineer:** Character dial 0-100, default 40. The elevation model breaks at 15, 35, 55 and 80; light shadow alpha (color.shadow.key) runs 0.08-0.24; dark mode lifts raised surfaces.
 
 **Example:** GOV.UK uses borders only; Apple's Liquid Glass sits at the deep end.
 
@@ -1835,7 +1835,7 @@ Designers: calm to energetic motion · Code: `dials.energy`
 
 **Designer:** Calm (0) uses no-overshoot springs, shorter durations (0.8x), lighter headings and recessive navigation; energetic (100) adds bounce, 1.2x longer medium moves, more saturation and heavier headings.
 
-**Engineer:** Character dial 0-100, default 50. Drives motion.spring.spatial.dampingRatio (1.0 to 0.6), stiffness (700 to 380), motion.easing.standard and motion.durationMultiplier (0.8 to 1.2).
+**Engineer:** Character dial 0-100, default 50. Sets spatial spring damping ratio (1.0-0.6) and stiffness (700-380) in motion.spring.spatial.*, motion.easing.standard and a duration multiplier (0.8-1.2).
 
 **Example:** Material 3's standard spring damps at 0.9; its expressive one at 0.8.
 
@@ -1852,9 +1852,9 @@ Designers: productive to expressive · Code: `dials.expression`
 
 **Designer:** Productive (0) keeps attention on the task; expressive (100) adds emphasis: a bigger type scale, more weights, hero moments, brand-colored chrome, visible containers and motion throughout.
 
-**Engineer:** Posture dial 0-100, default 50 (levers.json). Drives type.ratio 1.2/1.25/1.333, type.weightCount 2-4, emphasis.heroMoments, color.brandRole, layout.containment and motion.expressiveScope.
+**Engineer:** Posture dial 0-100, default 50. Drives type.ratio 1.2/1.25/1.333, type.weightCount 2-4, emphasis.heroMoments, layout.containment, brand color role and expressive motion scope (resolve params).
 
-**Example:** Material's 15 emphasized type styles switch on above 66.
+**Example:** Above 66, Material-style emphasized type is requested; it is not generated yet.
 
 **Also called:** Expression, productive to expressive
 
@@ -1869,7 +1869,7 @@ Designers: corner softness, sharp to pill · Code: `dials.roundness`
 
 **Designer:** Sets the default control radius and everything derived from it: container and overlay radii, nested radii, focus-ring radius, icon corners and caps. Benchmark median is 6px.
 
-**Engineer:** Character dial 0-100, default 50. radius.control bands: 0, 2, 4, 6, 8, 12, 16px, full (pill) at 93+. Also drives icon.cornerStyle and icon.caps.
+**Engineer:** Character dial 0-100, default 50. radius.control bands: 0, 2, 4, 6, 8, 12, 16px, full (pill) at 93+. Sets icon corner style and cap shape (resolve params).
 
 **Example:** Carbon sits at 0px corners; Material 3 uses full pill buttons.
 
@@ -1886,7 +1886,7 @@ Designers: cool slate to warm taupe neutrals · Code: `dials.warmth`
 
 **Designer:** Cool tints neutrals blue (slate) with title case and firmer borders; warm tints them toward stone or taupe, softens borders, uses sentence case and contractions. Brand hue never moves.
 
-**Engineer:** Character dial 0-100. color.neutral.tint.oklch (chroma, hue): slate (0.046, 257) at 0, pure gray at 50, taupe (0.021, 43) at 100; plus border and casing rules.
+**Engineer:** Character dial 0-100. OKLCH neutral tint (chroma, hue) of color.neutral.*: slate (0.046, 257) at 0, gray at 50, taupe (0.021, 43) at 100; plus border and casing rules.
 
 **Example:** Cool end: GOV.UK writes "cannot". Warm end: "can't" and "we".
 
@@ -1899,13 +1899,13 @@ Designers: cool slate to warm taupe neutrals · Code: `dials.warmth`
 ### Context and inputs
 
 The facts you gather first: who it is for, where it runs, how the brand feels, and what limits apply.  
-Designers: the brief: purpose, audience, platforms · Code: `ctx.* inputs in builder metadata`
+Designers: the brief: purpose, audience, platforms · Code: `state.json: context.*, raw.*, answers`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** The brief behind every visual choice: purpose, audience, platforms, devices, brand personality and hard limits. Settle these first, because they constrain more later decisions than any other input.
 
-**Engineer:** Step-0 and step-1 inputs in the decision graph, stored as builder metadata, not tokens. The brand personality card alone constrains 15 later decisions.
+**Engineer:** Step-0 and step-1 inputs in the decision graph, kept in state.json (context.*, raw.*, answers), not tokens. The brand personality card alone constrains 15 later decisions.
 
 **Example:** A calm banking app for the web, iPhone and Android.
 
@@ -1916,26 +1916,26 @@ Designers: the brief: purpose, audience, platforms · Code: `ctx.* inputs in bui
 ### Brand inputs
 
 What the brand brings: how it feels, how it ties to its ads, and how bold the app may be.  
-Designers: brand personality, layering and expression · Code: `ctx.brand.* designer-owned metadata`
+Designers: brand personality, layering and expression · Code: `macros, answers.Q-brand-04, raw.marketingSurfaces`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** What the brand brings: its personality, how the expressive identity (logo, campaign color, display type) relates to the productive product UI, and how much expression the product allows.
 
-**Engineer:** A group of designer-owned inputs: ctx.brand.personality, ctx.brand.layering and ctx.brand.expression. Mostly metadata; expressive and productive variants become a mode axis, not duplicate tokens.
+**Engineer:** Not tokens: answers.Q-brand-01 sliders become macros that offset dials, answers.Q-brand-04 records expressiveness, and raw.marketingSurfaces widens display type. An expressive mode axis is planned.
 
 </details>
 
 ### Expressiveness level and hero-moment budget
 
 How bold the brand may get in the app, and how many showy moments it is allowed.  
-Designers: hero moments, expressive budget · Code: `font.display.emphasized, motion.spring.expressive.*`
+Designers: hero moments, expressive budget · Code: `font.display.emphasized (proposed), motion.spring.expressive.* (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** How much brand expression the product allows. Default, Material's rule: productive everywhere plus one or two hero moments with expressive type, shape or motion, kept for key interactions.
 
-**Engineer:** Expressive variants as a mode or parallel set: font.display.emphasized (typography), shape.corner.expressive.* (dimension), motion.spring.expressive.* (extension). These names are illustrative, from DC-L06-03.
+**Engineer:** Planned, not generated yet: expressive variants as a mode or parallel set, such as font.display.emphasized (proposed), shape.corner.expressive.* (proposed), motion.spring.expressive.* (proposed), from DC-L06-03.
 
 **Example:** A bold, springy success screen after payment; calm screens everywhere else.
 
@@ -1945,14 +1945,14 @@ Designers: hero moments, expressive budget · Code: `font.display.emphasized, mo
 
 ### Brand-to-product layering
 
-Whether ads and the app share one set of design rules or each keep their own.  
-Designers: expressive marketing, productive product · Code: `layer mode axis: productive | expressive`
+Whether the pages that sell the app and the app itself share one set of design rules.  
+Designers: expressive marketing, productive product · Code: `layer mode axis (planned): productive | expressive`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Whether marketing (expressive) and product (productive) surfaces share one system or run separately. Default: one system, productive by default, expressive opt-in; split only when separate teams own separate surfaces.
 
-**Engineer:** A layer mode axis, not duplicate tokens. Carbon-style easing: motion.easing.productive.standard = [0.2, 0, 0.38, 0.9], expressive = [0.4, 0.14, 0.3, 1], both $type cubicBezier.
+**Engineer:** Planned, not generated yet: a layer mode axis (productive | expressive), not duplicate tokens. Today Energy picks Carbon productive (0-33) or expressive (67+) curves for motion.easing.enter and .exit.
 
 **Also called:** expressive versus productive
 
@@ -1961,13 +1961,13 @@ Designers: expressive marketing, productive product · Code: `layer mode axis: p
 ### Brand personality profile
 
 A few sliders for how the brand feels, like fun or serious, that guide most later choices.  
-Designers: brand personality sliders and style tiles · Code: `$extensions.brand.personality`
+Designers: brand personality sliders · Code: `answers.Q-brand-01, macros`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Brand traits as 4-7 slider positions, such as playful to serious. The most influential input: each adjective pair maps to concrete foundation settings. Offer 2-3 style tiles.
+**Designer:** Brand traits as slider positions, such as playful to serious; OpenDesigner uses seven. The most influential input: each pair nudges concrete foundation dials. The style screen then shows directions.
 
-**Engineer:** Not a design token. Stored as metadata, for example $extensions.brand.personality = { playful: 70, minimal: 40 }; the lever matrix reads it to set foundation defaults.
+**Engineer:** Not a design token. answers.Q-brand-01 stores seven slider positions; six become macros in state.json, such as {id: playful, strength: 0.4}, that offset the dials; one sets Energy.
 
 **Also called:** brand sliders
 
@@ -1976,26 +1976,26 @@ Designers: brand personality sliders and style tiles · Code: `$extensions.brand
 ### Hard constraints
 
 Limits you do not get to pick, such as the law, your design app plan, and which languages you need.  
-Designers: hard limits: tool plan, legal, locales · Code: `state.json: context.constraints`
+Designers: hard limits: tool plan, legal, locales · Code: `context.constraints, exports.figmaPlan`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Limits that are not taste: the design tool plan, the legal accessibility target, supported locales and scripts. Ask for the Figma plan first; it caps modes per collection.
 
-**Engineer:** Not tokens. Figma caps modes per collection (Professional 10, Organization 20); the builder greys out architectures that exceed them, such as 4 brands with light, dark and high contrast.
+**Engineer:** Not tokens: context.constraints lists limits and exports.figmaPlan the Figma plan. Figma caps modes per collection (Professional 10, Organization 20); validate warns and the Figma export splits bigger collections.
 
 </details>
 
 ### Existing UI inventory (audit)
 
 A look through your screens today to list every button, color and size you use.  
-Designers: UI inventory or interface audit · Code: `audit.findings[]`
+Designers: UI inventory or interface audit · Code: `css_scan.py, engine.py review`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Screenshot every unique pattern and audit colors, type and spacing in current products. Its main value is shared vocabulary and buy-in, so do it by hand even with automated data.
 
-**Engineer:** Stored as audit.findings[] with counts; frequent hex values can be clustered into ramps to seed candidate primitives. Run one inventory per platform, since names differ: sheet, modal, dialog.
+**Engineer:** Not stored; audit.findings[] is proposed. css_scan.py counts declared colors, sizes and radii; engine.py review lists hard-coded values. Inventory per platform: sheet, modal and dialog differ.
 
 **Example:** Finding many slightly different grays across your products.
 
@@ -2006,26 +2006,26 @@ Designers: UI inventory or interface audit · Code: `audit.findings[]`
 ### Target platforms
 
 The places your app must run, like the web, iPhones or Android phones.  
-Designers: target platforms · Code: `platform modifier: web | ios | android | windows`
+Designers: target platforms · Code: `raw.platforms; size.target.min`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** The operating systems the system serves. Platform choice drives units, native type, target sizes, materials and navigation. Default: web plus iOS and Android phones, with large-screen layouts from day one.
+**Designer:** The operating systems served. Platform choice drives units, native type, target sizes, materials and navigation. OpenDesigner defaults to web only; research suggests adding iOS and Android phones from day one.
 
-**Engineer:** No DTCG Format type; modeled as a platform modifier in the Resolver (web | ios | android | windows). Tokens that vary by platform include font.family.*, size.target.min and radius.control.
+**Engineer:** Stored as raw.platforms; no DTCG type. A platform resolver modifier is planned, not generated; today each platform gets its own export, and pointer media queries set size.target.min.
 
 </details>
 
 ### Device classes in scope
 
 Which kinds of screens get full care, like phones and laptops, and which get only the basics.  
-Designers: device classes: phone, tablet, desktop · Code: `resolver device-class modifier`
+Designers: device classes: phone, tablet, desktop · Code: `device-class modifier (planned); answers.Q-plat-02`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Pick which device classes get full design (phone, tablet and foldable, desktop) and which get foundations only. A class is first-class when a core task happens there.
 
-**Engineer:** A resolver context modifier (handheld | wrist | desk | lean-back | vehicle | spatial | kiosk), kept separate from platform because one OS spans several classes: Android runs on phones, Wear, TV and Auto.
+**Engineer:** Planned, not generated: a device-class resolver modifier (handheld, wrist, desk, lean-back, vehicle, spatial), separate from platform since Android spans phones, Wear, TV and Auto. Recorded as answers.Q-plat-02.
 
 **Also called:** form factors, device classes
 
@@ -2034,26 +2034,26 @@ Designers: device classes: phone, tablet, desktop · Code: `resolver device-clas
 ### OS version floor
 
 The oldest phone or computer software your app still has to work on.  
-Designers: oldest OS and design-language generation · Code: `runtime fallbacks, not version-gated tokens`
+Designers: oldest OS and design-language generation · Code: `answers.Q-plat-09; runtime fallbacks`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** The oldest OS versions supported and the design-language generation targeted. Default: support current and previous major versions, design for the current language, let older ones fall back to native.
 
-**Engineer:** Version-gated token values are rare; prefer runtime fallbacks, for example dynamic color falling back to the brand scheme below Android 12.
+**Engineer:** Recorded as answers.Q-plat-09; OpenDesigner emits no version-gated values. Prefer runtime fallbacks, for example dynamic color falling back to the brand scheme below Android 12.
 
 </details>
 
 ### Platform posture (native-first, brand-first or hybrid)
 
 How much your app should look like each phone's own style, or look the same on all of them.  
-Designers: native-first, brand-first or hybrid · Code: `platform overrides on semantic tokens`
+Designers: native-first, brand-first or hybrid · Code: `answers.Q-plat-05, dials.brandPresence`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Native-first, brand-first or coherent hybrid. Default hybrid: share what users see as the brand (accent, headline type, icons, voice) and use each platform's own navigation, sheets, pickers and fields.
 
-**Engineer:** A system-level setting, not a token; it decides which semantic tokens get platform overrides. Native-first maps color.text.primary to label on iOS and onSurface on Android; brand-first emits literals.
+**Engineer:** Not a token: answers.Q-plat-05 and the Brand presence dial; below 50, native platforms keep their body size. Exports emit literal colors; mapping to label or onSurface is planned.
 
 **Example:** Brand-blue buttons, but the phone's own back gesture and date picker.
 
@@ -2064,52 +2064,52 @@ Designers: native-first, brand-first or hybrid · Code: `platform overrides on s
 ### What is shared across platforms
 
 Which parts stay the same on every device, like brand colors and names, and which parts change.  
-Designers: share the what, adapt the how · Code: `shared primitives, per-platform semantic overrides`
+Designers: share the what, adapt the how · Code: `answers.Q-plat-07; one token set, same names`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Choose whether platforms share tokens, component specs or only principles. Default: share the what (brand hue, role names, spacing numbers, voice); adapt the how (materials, target minimums, navigation containers).
 
-**Engineer:** Primitives and most semantic tokens are shared; platform overrides live at the semantic or component tier. Component specs (anatomy, variants, states, content rules) are shared; accessibility notes are per platform.
+**Engineer:** Recorded as answers.Q-plat-07. Every export shares one token set with the same names; only target sizes vary by input. Per-platform overrides and shared component specs are planned.
 
 </details>
 
 ### Implementation stack
 
 The coding tools your team builds the app with, which decide what form the design files take.  
-Designers: tech stack or toolkit · Code: `output formats: SwiftUI, Compose, flutter/class.dart`
+Designers: tech stack or toolkit · Code: `answers.Q-plat-08; SwiftUI and Compose exports`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** The toolkits products are built with. Native toolkits get new OS looks first; Flutter or Compose Multiplatform suit brand-first products that accept a lag behind OS visual changes.
 
-**Engineer:** Decides output formats: SwiftUI and Compose natively, JS/TS objects for React Native, flutter/class.dart for Flutter, compose/object for Compose Multiplatform.
+**Engineer:** Recorded as answers.Q-plat-08; it does not change exports yet. build writes SwiftUI, Compose, CSS and Tailwind files; React Native objects and flutter/class.dart are not generated.
 
 </details>
 
 ### Scope: products, audience and stack
 
 The list of which apps and people your first version will serve, and which ones it will leave out.  
-Designers: scope: products, audiences, technologies · Code: `system.platforms, system.frameworks`
+Designers: scope: products, audiences, technologies · Code: `raw.platforms, context.scope`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Name the products, audiences and technologies version 1 serves, and what it will not serve. Scope to the pilot; add platforms only when a real product needs them.
 
-**Engineer:** Stored as metadata system.platforms, for example ["web", "ios", "android"], and system.frameworks. These fields decide which exporters run: CSS variables, Swift, Compose or Tailwind.
+**Engineer:** Stored in state.json as raw.platforms, for example ["web", "ios"], and context.scope {in, out}. Today build writes every export (CSS, Tailwind, Figma, Paper, Swift, Compose, DTCG) regardless.
 
 </details>
 
 ### Starting point and system posture
 
 The choice to use a ready-made kit, change one to fit, or build your own, and how strict to be.  
-Designers: adopt, adapt or create · Code: `system.origin, governance.posture`
+Designers: adopt, adapt or create · Code: `answers.Q-scope-05, answers.Q-gov-01, components.base`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Decide whether to adopt an existing system, adapt a themeable base, or create your own, and how strict, modular and centralized it will be.
 
-**Engineer:** Builder metadata, not tokens: system.origin = adopt | adapt | create, system.base, and governance.posture {rules: strict | loose, parts: modular | integrated, org: centralized | distributed}.
+**Engineer:** Not tokens: answers.Q-scope-05 (adopt, adapt or create) and answers.Q-gov-01 (strict or loose) in state.json; components.base names a base library. Nothing acts on them yet.
 
 **Example:** A small team adapts a headless base and puts its effort into tokens and docs.
 
@@ -2128,20 +2128,20 @@ Designers: principles: what good means · Code: `prin.design, prin.ux, prin.visu
 
 **Designer:** Defines what good means before any value is picked: team design principles, UX behavior rules from laws and heuristics, and visual principles. It decides whether the product works.
 
-**Engineer:** Parent of prin.design, prin.ux and prin.visual. Content is rules and records, not tokens; rules reference token paths and feed the checks in the guard layer.
+**Engineer:** Parent of prin.design, prin.ux and prin.visual. Not tokens: principles in state.json holds ranked statements; UX and visual rules live in the formulas or engine.py validate.
 
 </details>
 
 ### Design principles
 
 A short, ranked list of beliefs a team uses to settle ties when two good ideas clash.  
-Designers: ranked design principles · Code: `principles[] {name, statement, doExample, dontExample}`
+Designers: ranked design principles · Code: `principles: ordered strings in state.json`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** 3-5 ranked statements that break ties when good options conflict, each naming the value it outranks. Avoid words every product claims, like simple; test each: would this screen pass?
 
-**Engineer:** Not tokens. Stored as ordered records, principles[] {name, statement, doExample, dontExample}, with beats relationships for ranking; keywords can map to suggested token presets.
+**Engineer:** Not tokens: principles in state.json is an ordered list of statements; order is rank, and DESIGN.md and PRODUCT.md print them as tie-breakers.
 
 **Example:** Clarity over density: when unsure, show fewer items per screen.
 
@@ -2150,13 +2150,13 @@ Designers: ranked design principles · Code: `principles[] {name, statement, doE
 ### UX behavior rules
 
 What we know about how people use apps, made into rules the tool can check.  
-Designers: UX laws as checkable rules · Code: `rule model in $extensions or sibling file`
+Designers: UX laws as checkable rules · Code: `engine.py validate; rule model (planned)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Laws and heuristics turned into checkable rules: Fitts's law, for example, becomes no target below 24x24 CSS px, applied at the token, component or flow level.
 
-**Engineer:** No DTCG type. Rules get their own model that references tokens, kept in $extensions or a sibling file; each rule's scope is token, component, pattern, content or flow.
+**Engineer:** No DTCG type. Today the rules sit in engine.py: formulas set target floors and contrast; validate checks them. A rule model scoped to token, component or flow is planned.
 
 **Example:** Fitts's law becomes: no tap target smaller than 24 by 24 pixels.
 
@@ -2166,14 +2166,14 @@ Designers: UX laws as checkable rules · Code: `rule model in $extensions or sib
 
 ### Deceptive-pattern policy
 
-The list of sneaky tricks the app must never use to push people, and which ones get caught for you.  
-Designers: banned deceptive or dark patterns · Code: `deceptive-pattern lint rules in config`
+The sneaky tricks the app must never use to push people. A computer can spot some of them.  
+Designers: banned deceptive or dark patterns · Code: `answers.Q-pattern-05; deceptive-pattern lint (planned)`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Which manipulative patterns are banned, and which the builder detects: pre-checked consent boxes, unequal accept and reject emphasis, nagging after dismissal, fake countdowns, hard-to-cancel flows.
+**Designer:** Which manipulative patterns are banned, and which can be checked automatically: pre-checked consent boxes, unequal accept and reject emphasis, nagging after dismissal, fake countdowns, hard-to-cancel flows.
 
-**Engineer:** No token. Lint rules live in $extensions or config, such as flagging a pre-checked consent box or a cancel flow longer than signup. The rest goes to human review.
+**Engineer:** No token. Recorded as answers.Q-pattern-05; guardrails.md forbids pre-checked consent. Planned lint would flag pre-checked boxes or cancel flows longer than signup; the rest needs human review.
 
 **Also called:** dark patterns policy
 
@@ -2182,13 +2182,13 @@ Designers: banned deceptive or dark patterns · Code: `deceptive-pattern lint ru
 ### Convention versus novelty
 
 How much the app works the way people already expect, versus trying new ways of doing things.  
-Designers: conventional behavior, custom skin · Code: `platform presets, heuristic H4`
+Designers: conventional behavior, custom skin · Code: `answers.Q-plat-10; heuristic H4`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** How far the product follows platform and industry conventions. Default: conventional behavior with a custom skin; be novel only where it differentiates, test it, and never override standard shortcuts.
 
-**Engineer:** No token; expressed through platform presets that select each platform's native behaviors. It matches heuristic H4, consistency and standards.
+**Engineer:** No token. Recorded as answers.Q-plat-10; DESIGN.md keeps navigation, back, sheets and pickers native on every platform. Matches heuristic H4, consistency and standards.
 
 **Also called:** Jakob's law
 
@@ -2197,13 +2197,13 @@ Designers: conventional behavior, custom skin · Code: `platform presets, heuris
 ### Heuristic consensus set
 
 Eight rules of thumb that the top experts agree on, like showing people what is going on.  
-Designers: usability heuristics consensus · Code: `prin.ux.rules checks`
+Designers: usability heuristics consensus · Code: `guardrails.md rules; checks planned`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Eight principles where Nielsen, Norman, Shneiderman, Tognazzini and Laws of UX agree: status and feedback, consistency, error prevention, user control, recognition over recall, plain language, minimalism, expert efficiency.
 
-**Engineer:** Most are partly machine-checkable and map to rules in the prin.ux.rules model, such as a dismiss path required on every dialog.
+**Engineer:** Most are partly machine-checkable, such as a dismiss path on every dialog. Today guardrails.md states them as rules for the agent; automated checks are planned.
 
 **Also called:** usability heuristics
 
@@ -2212,13 +2212,13 @@ Designers: usability heuristics consensus · Code: `prin.ux.rules checks`
 ### Inclusive design stance
 
 Making the app work for all kinds of people, like those who are older, see poorly or use one hand.  
-Designers: inclusive design, accessibility floor · Code: `accessibility resolver contexts: contrast, density, motion`
+Designers: inclusive design, accessibility floor · Code: `density and motion contexts, raw.contrastTarget`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** The accessibility floor, WCAG 2.2 AA by default, plus constraints you design for, such as older users, low vision or one-handed use, which turn on larger targets or captions.
+**Designer:** The accessibility floor, WCAG 2.2 AA by default, plus constraints you design for, such as older users, low vision or one-handed use, which call for larger targets or captions.
 
-**Engineer:** Accessibility modes as resolver contexts for contrast, density and motion. OS settings such as Dynamic Type, font scale, Reduce Motion and Increase Contrast must flow into those tokens.
+**Engineer:** Resolver contexts cover density and reduced motion, not contrast; raw.contrastTarget AAA gives 7:1 text everywhere. CSS follows prefers-reduced-motion and uses rem type for text zoom.
 
 </details>
 
@@ -2231,35 +2231,35 @@ Designers: Laws of UX, graded for evidence · Code: `evidence grade R, R-, C, H,
 
 **Designer:** The 30 laws on lawsofux.com, each graded for evidence. Zeigarnik and choice overload are weak, and Miller's 7 plus or minus 2 does not limit menu length.
 
-**Engineer:** Each law carries an evidence grade: R (research-backed), R- (extrapolated to UI), C (contested), H (heuristic) or P (pop analogy). The UI shows the grade beside every rule.
+**Engineer:** Each law carries an evidence grade: R (research-backed), R- (extrapolated to UI), C (contested), H (heuristic) or P (pop analogy). Showing the grade beside each rule is planned.
 
 </details>
 
 ### Behavior-rule model and automation boundary
 
 How each rule is written down, and if the tool sets it, flags it, or leaves it to a person.  
-Designers: rule strictness: error, warning, judgment · Code: `rule record: severity, check kind, override`
+Designers: rule strictness: error, warning, judgment · Code: `validate --json finding; rule record (planned)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Sets how hard each rule bites: a built-in default, a blocking error, a warning, or human judgment. Some rules, like a seven-item menu cap, must never be automated.
 
-**Engineer:** Record fields: id, principle, evidence grade, scope, check kind, severity, override policy, exceptions, sources. Checks reference token paths such as {size.target.min}.
+**Engineer:** Planned record: id, principle, evidence grade, scope, check kind, severity, override policy, exceptions. Today validate --json reports each finding as {rule, severity, where, measured, threshold, evidence, fix}.
 
-**Example:** An unlabeled form field blocks publishing unless someone writes a reason.
+**Example:** An unlabeled form field would be an error, waived only with a written reason.
 
 </details>
 
 ### Response-time ladder
 
 How fast the screen must answer you, from a blink that feels instant to a wait that loses you.  
-Designers: response times and feedback bands · Code: `feedback.acknowledge.max = 50ms`
+Designers: response times and feedback bands · Code: `feedback.acknowledge.max (proposed) = 50ms`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** How fast the interface must respond, each band with its feedback: acknowledge within 50 ms, no loader under about 1 s, skeletons to 10 s, then progress.
 
-**Engineer:** 16 ms frame, 50 ms acknowledge, 100 ms instant, 200 ms INP, 400 ms Doherty, 1 s, 10 s. Ships as duration tokens like feedback.acknowledge.max = 50ms.
+**Engineer:** 16 ms frame, 50 ms acknowledge, 100 ms instant, 200 ms INP, 400 ms Doherty, 1 s, 10 s. Tokens like feedback.acknowledge.max (proposed) = 50ms are not generated.
 
 **Also called:** response-time thresholds
 
@@ -2272,61 +2272,61 @@ Designers: hierarchy, Gestalt, type pairing, polish · Code: `principles P01 to 
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** 72 visual principles, from hierarchy and Gestalt to type pairing and polish, each graded for evidence. Strong one-answer principles are automated; personality ones become controls; the rest become warnings.
+**Designer:** 72 visual principles, from hierarchy and Gestalt to type pairing and polish, each graded for evidence. The stance: automate strong one-answer principles, make personality ones controls, warn on the rest.
 
-**Engineer:** Principles P01 to P72, each with an evidence grade and a builder stance: automate by construction, guide with warnings, or expose as a user control.
+**Engineer:** Catalog P01 to P72, each graded and given a stance: automate, warn or expose as a dial. The engine implements some, such as nested radii and text tiers.
 
 </details>
 
 ### Aesthetics and complexity readouts
 
 What makes a screen look good: we judge it in a blink, and a middle amount of detail works best.  
-Designers: aesthetic appeal, moderate complexity · Code: `optional complexity and colorfulness readout`
+Designers: aesthetic appeal, moderate complexity · Code: `complexity and colorfulness readout (planned)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Research on appeal: judgments form in 17-50 ms, and appeal peaks at moderate complexity and colorfulness. Beauty multiplies usability rather than replacing it, so keep a restrained default.
 
-**Engineer:** An optional complexity and colorfulness readout computed from screenshots. It is never used as a usability signal or a pass or fail check.
+**Engineer:** Planned, not built: an optional complexity and colorfulness readout from screenshots (the metrics option of answers.Q-pref-01). It is never a usability signal or a pass or fail check.
 
 </details>
 
 ### Composition, balance and alignment
 
 How things are laid out and lined up on a screen, like on a grid of columns.  
-Designers: column grid, start-aligned layout · Code: `grid.columns.*, align: start | center`
+Designers: column grid, start-aligned layout · Code: `grid.columns.* (proposed), align: start | center`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** The layout model and default alignment. Column grid for app surfaces, hierarchical or bento for marketing; start-aligned everywhere, centered only for single-focus moments with short text.
 
-**Engineer:** grid.columns.* (number), grid.gutter.* and grid.margin.* (dimension). Alignment and bento spans are component props (align: start | center), using logical start and end so RTL mirrors.
+**Engineer:** Not generated: grid.columns.* (proposed), grid.gutter.* (proposed) and grid.margin.* (proposed); sections use space.section.*. Alignment is a component prop using logical start and end, so RTL mirrors.
 
 </details>
 
 ### Grouping strategy
 
 How you show that things go together: by space, by boxes around them, or by lines.  
-Designers: group by space, containers or lines · Code: `space.stack.inner/outer, border.width.divider`
+Designers: group by space, containers or lines · Code: `space.stack.*, color.border.subtle`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Group related items by space, containers or lines; common region beats proximity, which beats similarity. Default: space first, containers when content mixes, lines for long lists.
+**Designer:** Group related items by space, containers or lines; usually a shared boundary beats proximity, which beats similarity. Default: space first, containers when content mixes, lines for long lists.
 
-**Engineer:** space.inset.* and space.stack.inner/outer (dimension), color.surface.container (color), border.width.divider (dimension); inner to outer spacing at 1:2 or more.
+**Engineer:** space.inset.* and space.stack.* (dimension), color.surface.raised for containers, color.border.subtle with border.width.default for dividers; inner spacing at most half the outer.
 
 </details>
 
 ### Hierarchy strength and emphasis budget
 
 How much bigger and bolder the key things look, and how many things may shout at once.  
-Designers: emphasis budget, one primary action · Code: `$extensions.builder.hierarchy, maxPrimaryPerView`
+Designers: emphasis budget, one primary action · Code: `type.ratio, type.weightCount, emphasis.maxPrimaryPerView`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** How dramatic contrast between levels is, and how many elements may claim top emphasis. Default: 1.25 size ratio, two weights, three text colors, one primary action per view.
+**Designer:** How dramatic contrast between levels is, and how many elements may claim top emphasis. At Expression 50: 1.25 size ratio, three weights, three text colors, one primary action per view.
 
-**Engineer:** $extensions.builder.hierarchy {ratio: 1.25, weights: [400, 600], textTiers: 3} feeds font.size.*, font.weight.* and color.text.*. The budget is lint config: maxPrimaryPerView 1.
+**Engineer:** Expression sets type.ratio (1.25 at 50) and type.weightCount, feeding font.size.* and font.weight.*; validate warns above three text tiers. A one-primary-per-view lint is planned (spec 6.4).
 
 **Example:** One filled Save button per screen; everything else is quieter.
 
@@ -2337,13 +2337,13 @@ Designers: emphasis budget, one primary action · Code: `$extensions.builder.hie
 ### Optical correction and polish
 
 Tiny fixes that fool the eye into seeing things as even, so the screen feels done.  
-Designers: optical correction, nested radii · Code: `radius.inner = radius.outer minus space.inset`
+Designers: optical correction, nested radii · Code: `radius.nested = max(outer - padding, smallest step)`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Optical fixes that make a UI feel finished: optical centering, overshoot, icon optical size, nested radii, one light source, fewer borders. Auto-correct known cases; suggest fixes for custom assets.
+**Designer:** Optical fixes that make a UI feel finished: optical centering, overshoot, icon optical size, nested radii, one light source. OpenDesigner computes nested radii and icon strokes; optical centering stays manual.
 
-**Engineer:** Icon keylines as icon.keyline.square and icon.keyline.circle (dimension); nested radius computed as radius.inner = radius.outer minus space.inset.
+**Engineer:** radius.nested = max(radius.container - space.inset.lg, smallest step), checked by engine.py validate. Icon keylines are guidance; icon.keyline.* (proposed) is not generated.
 
 **Example:** A play icon nudged right so it looks centered in its circle.
 
@@ -2354,13 +2354,13 @@ Designers: optical correction, nested radii · Code: `radius.inner = radius.oute
 ### Interactive signifier strength
 
 How clearly buttons and links show that you can tap or click them.  
-Designers: signifiers: clickable looks clickable · Code: `button.primary.background, link.text-decoration`
+Designers: signifiers: clickable looks clickable · Code: `color.text.link, button.primary.background (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** How clearly clickable things look clickable, via fills, underlines, borders or depth. Default: balanced, with strong signifiers forced for primary actions; minimal only in sparse, conventional layouts.
 
-**Engineer:** Component tokens such as button.primary.background (color), link.text-decoration (a string, no DTCG type) and input.border.width (dimension).
+**Engineer:** Today signifiers use color.bg.action.primary, color.text.link, color.border.input. Planned component tokens: button.primary.background (proposed), link.text-decoration (proposed; no DTCG type), input.border.width (proposed).
 
 **Also called:** affordance cues
 
@@ -2369,13 +2369,13 @@ Designers: signifiers: clickable looks clickable · Code: `button.primary.backgr
 ### Visual style direction
 
 The overall look, such as flat, glassy or bold, which sets many small details at once.  
-Designers: visual style: flat, tonal, glass · Code: `$extensions.builder.stylePreset`
+Designers: visual style: flat, tonal, glass · Code: `preset in state.json`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** An overall style (flat, tonal, glass, soft, neo-brutalist, maximal) that sets shadows, borders and radius together. Default: Flat 2.0 with strong signifiers; keep fashionable styles for marketing.
+**Designer:** An overall style (flat, tonal, glass, soft, neo-brutalist, maximal) that sets shadows, borders and radius together. Recommended: Flat 2.0; with no choice, no preset applies and dials stay at defaults.
 
-**Engineer:** Not a DTCG type. Builder metadata $extensions.builder.stylePreset (flat2, tonal, glass, neobrutal, soft, maximal) writes primitives like shadow.raised and border.width.default.
+**Engineer:** Not a DTCG type: preset (flat2, tonal, glass, neobrutal, soft, maximal) in state.json sets dial positions, which generate shadows, borders and radius.
 
 **Also called:** style preset
 
@@ -2403,13 +2403,13 @@ Designers: foundations: the scales and roles · Code: `DTCG color, dimension and
 ### Accessibility
 
 Making the app work for all people, even those who can't see well, can't hear, or can't use a mouse.  
-Designers: WCAG 2.2 AA target · Code: `system.a11yTarget`
+Designers: WCAG 2.2 AA target · Code: `raw.contrastTarget`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Target WCAG 2.2 AA. The system guarantees component behavior and contrast-safe color pairs; product teams own page-level criteria and content. Detailed rules live with each foundation they bound.
 
-**Engineer:** system.a11yTarget = WCAG 2.2 AA; the builder checks token pairs against it (4.5:1 text, 3:1 non-text). Accessibility settings become resolver contexts for contrast, motion and transparency.
+**Engineer:** raw.contrastTarget (AA by default, or AAA) sets text minimums; validate checks each listed color pair per theme. Of accessibility settings, only reduced motion is a resolver context today.
 
 **Also called:** a11y, WCAG conformance
 
@@ -2418,13 +2418,13 @@ Designers: WCAG 2.2 AA target · Code: `system.a11yTarget`
 ### Platform accessibility settings
 
 The phone settings people pick, like big text or less motion, which the app has to follow.  
-Designers: honor OS accessibility settings · Code: `prefers-contrast, forced-colors, prefers-reduced-motion`
+Designers: honor OS accessibility settings · Code: `motion modifier, prefers-reduced-motion, forced-colors`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Honor text size, bold text, increased contrast, reduced transparency, reduced motion, forced colors and screen readers. Never show a boundary or focus state by shadow or translucency alone.
 
-**Engineer:** Token modes contrast (standard, more), transparency (full, reduced) and motion (full, reduced), plus a forced-colors map to CSS system colors. Web reads prefers-contrast, forced-colors and prefers-reduced-motion.
+**Engineer:** The resolver's motion modifier (standard, reduced) follows prefers-reduced-motion, and forced-colors maps the focus ring to Highlight. Contrast and transparency modes are not generated yet.
 
 **Example:** With forced colors on, cards keep a border because shadows disappear.
 
@@ -2435,13 +2435,13 @@ Designers: honor OS accessibility settings · Code: `prefers-contrast, forced-co
 ### Color
 
 Which colors an app uses, what job each one does, and how they switch for dark mode.  
-Designers: color system: ramps and roles · Code: `color.blue.500, color.bg.accent`
+Designers: color system: ramps and roles · Code: `color.accent.light.9, color.bg.accent.bold`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** The full color system: how ramps are generated, which roles exist (surface, text, border, status), how light, dark and high-contrast modes remap them, and how contrast is guaranteed.
 
-**Engineer:** DTCG color tokens in two tiers: primitive ramps (color.blue.500) and semantic roles (color.bg.accent) that alias them and resolve per mode through the Resolver module.
+**Engineer:** Two tiers of DTCG color tokens: primitive ramps (color.accent.light.9) and semantic roles (color.bg.accent.bold) that alias them per theme through the resolver.
 
 **Example:** Blue buttons, gray text and a white page that turns dark at night.
 
@@ -2452,13 +2452,13 @@ Designers: color system: ramps and roles · Code: `color.blue.500, color.bg.acce
 ### Transparent (alpha) colors
 
 Colors you can partly see through, so they look right on any background.  
-Designers: semi-transparent fills · Code: `color.neutral.200A`
+Designers: semi-transparent fills · Code: `color.neutralAlpha.*`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Semi-transparent fills that adapt to whatever sits beneath, ideal for hover fills, borders and scrims on varied backgrounds. Use solid colors for text, where contrast must be certified.
 
-**Engineer:** A DTCG color value with an alpha field ("alpha": 0.016), named color.neutral.200A or color.blue.a3. Default: 4-5 alpha neutrals for hover, borders and scrims.
+**Engineer:** A DTCG color value with an alpha field: color.neutralAlpha.light.2 to .12 and dark twins match solid neutral steps over the page; color.overlay.scrim carries alpha too.
 
 **Example:** A light gray hover shade that works on white and on blue.
 
@@ -2469,13 +2469,13 @@ Designers: semi-transparent fills · Code: `color.neutral.200A`
 ### Brand and accent color
 
 The one color that makes an app feel like its brand, often on its main button.  
-Designers: brand or accent color · Code: `color.brand.raw, color.bg.brand`
+Designers: brand or accent color · Code: `color.bg.brand, color.text.onBrand`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Decides how many accents exist and what the brand color does: reserved accent, signature surface or whole fields. Default is neutrals plus one accent; adapt the brand hex for contrast.
 
-**Engineer:** Keep color.brand.raw (exact hex, for logos) apart from UI roles such as color.bg.brand, which alias the ramp step giving 4.5:1 with its text.
+**Engineer:** The brand hex, if given, is kept exactly as a seed primitive for logos; UI roles like color.bg.brand alias an accent step, 4.5:1 with color.text.onBrand.
 
 **Example:** The exact logo blue, moved one shade darker so white button text stays readable.
 
@@ -2486,13 +2486,13 @@ Designers: brand or accent color · Code: `color.brand.raw, color.bg.brand`
 ### Palette character (chroma and scheme variant)
 
 How bold or how soft and calm the colors feel as a whole.  
-Designers: palette saturation, muted to vivid · Code: `$extensions.generator.chroma`
+Designers: palette saturation, muted to vivid · Code: `params in opendesigner.meta.json`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Overall palette saturation, muted to vivid, plus the scheme variant shaping it (Material's TonalSpot, Fidelity or Vibrant). Keep large surfaces calm; spend color on small, meaningful elements.
 
-**Engineer:** No DTCG type of its own: stored as generator metadata, such as $extensions.generator.chroma = 'tonal' and $extensions.scheme.variant = 'tonalSpot', which feed the ramp generator.
+**Engineer:** No DTCG type of its own: the engine records parameters in opendesigner.meta.json, such as the scheme variant tonalSpot and the accent's HCT chroma, which feed the ramp generator.
 
 **Example:** A calm banking app next to a loud, colorful game.
 
@@ -2503,13 +2503,13 @@ Designers: palette saturation, muted to vivid · Code: `$extensions.generator.ch
 ### Contrast and color independence
 
 Text must stand out from what is behind it, and color must never be the only clue.  
-Designers: WCAG AA contrast, never color alone · Code: `$extensions.contrast`
+Designers: WCAG AA contrast, never color alone · Code: `contrastPairs in opendesigner.meta.json`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** WCAG 2.2 AA is the floor: 4.5:1 for text, 3:1 for large text and control boundaries. Meaning never depends on color alone; add an icon, label or underline.
 
-**Engineer:** No DTCG contrast field; record intended pairs, $extensions.contrast = { against: '{color.bg.default}', min: 4.5 }, and test every pair in every Resolver mode at build time. APCA is advisory.
+**Engineer:** No DTCG contrast field: opendesigner.meta.json lists intended pairs, such as color.text.primary on color.surface.base at 4.5:1, and engine.py validate checks each per theme.
 
 **Example:** An error field shows a red border plus an icon and message, not red alone.
 
@@ -2537,13 +2537,13 @@ Designers: brand gradients and campaign colors · Code: `$type: gradient`
 ### Color modes and appearance
 
 Full swaps of an app's colors, like light, dark, or a sharper set that is easier to see.  
-Designers: light, dark and high-contrast modes · Code: `Resolver theme modifier, light-dark()`
+Designers: light, dark and high-contrast modes · Code: `Resolver theme modifier, [data-theme]`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** The alternative color mappings a system ships: light, dark, dimmed, high contrast and colorblind-safe, and how each platform picks one. Dark mode is a separate mapping, never an inversion.
 
-**Engineer:** Modes live in the DTCG Resolver module: a theme modifier whose light and dark contexts point semantic tokens at different sources. On web, light-dark() with color-scheme.
+**Engineer:** The DTCG Resolver module's theme modifier: light and dark contexts point semantic tokens at different files. Web CSS uses prefers-color-scheme with a [data-theme] override.
 
 **Example:** Your phone switches to dark at night and the app follows.
 
@@ -2554,13 +2554,13 @@ Designers: light, dark and high-contrast modes · Code: `Resolver theme modifier
 ### Appearance modes by platform and device
 
 Which light or dark looks each kind of device uses, and who gets to switch between them.  
-Designers: appearance by device: system or override · Code: `wrist: [dark], vehicle: [day, night]`
+Designers: appearance by device: system or override · Code: `sketch --theme, [data-theme]`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Which appearances each device class gets and who switches: system setting, in-app override or ambient light. Phones and desktops follow the system; watches stay dark; cars switch day and night.
 
-**Engineer:** An appearance mode on the semantic tier with per-context availability, such as wrist: [dark] and vehicle: [day, night]. Offer an in-app override only on web, alongside system-follow.
+**Engineer:** sketch --theme (system-light-dark, light-dark-toggle, light-only, dark-only) sets which theme contexts exist; web CSS adds a [data-theme] override. Per-device availability, such as wrist dark only, is not generated yet.
 
 **Example:** A watch app that is always dark, even at noon.
 
@@ -2571,13 +2571,13 @@ Designers: appearance by device: system or override · Code: `wrist: [dark], veh
 ### Accessibility color themes
 
 Extra color sets for people who need text to stand out more, or who mix up colors.  
-Designers: high-contrast and colorblind-safe themes · Code: `contrast: high, vision: protan-deutan`
+Designers: high-contrast and colorblind-safe themes · Code: `contrast and vision modifiers (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Themes for users who need more contrast or hue separation: contrast levels, high contrast, forced colors, colorblind-safe palettes. Back fills with borders or icons so they survive forced colors.
 
-**Engineer:** Extra Resolver modifiers combined with theme, such as contrast: standard|high and vision: default|protan-deutan|tritan. Material offers three contrast levels; web forced-colors mode swaps in system colors.
+**Engineer:** Not generated yet: extra resolver modifiers beside theme, such as contrast (standard, high) and vision (protan-deutan, tritan). Material offers three contrast levels; web forced-colors mode swaps in system colors.
 
 **Example:** Primer's colorblind theme shows success in blue instead of green.
 
@@ -2592,9 +2592,9 @@ Designers: dark theme, mapped by role · Code: `prefers-color-scheme: dark`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Each role gets its own dark value, mapped by role rather than by flipping. The base surface is near-black (about #121212), slightly tinted; accents go lighter and less saturated.
+**Designer:** Each role gets its own dark value, mapped by role, not flipped. The default dark base is neutral step 2, untinted at Warmth 50; accents go lighter.
 
-**Engineer:** Semantic tokens resolve per Resolver context (light, dark, optionally dark-dimmed); for each role choose the dark step giving the same contrast relationship as light. Web: prefers-color-scheme or light-dark().
+**Engineer:** Semantic tokens resolve per Resolver context (light, dark); each role takes the dark step giving the same contrast relationship as in light. Web: prefers-color-scheme with a [data-theme] override.
 
 **Example:** White text on a near-black page, with the blue lightened a step.
 
@@ -2605,13 +2605,13 @@ Designers: dark theme, mapped by role · Code: `prefers-color-scheme: dark`
 ### Neutral ramp
 
 The set of grays, from white to near black, used for most backgrounds, lines and text.  
-Designers: gray scale, tinted or pure · Code: `color.neutral.*`
+Designers: gray scale, tinted or pure · Code: `color.neutral.*, color.neutralAlpha.*`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** The gray scale behind most surfaces, borders and text. A slight tint toward the accent hue feels branded; pure gray suits image and data tools.
 
-**Engineer:** Primitives color.neutral.0 to color.neutral.13 plus 4-5 alpha steps (color.neutral.100A). Semantic tokens point at a gray alias so the tint swaps once.
+**Engineer:** Primitives color.neutral.light.1 to .12 and a dark twin, tinted by the Warmth dial, plus alpha twins color.neutralAlpha.light.2 to .12. Semantic roles alias them.
 
 **Example:** Near-white for the page, mid gray for borders, dark gray for text.
 
@@ -2639,13 +2639,13 @@ Designers: dynamic color or fixed brand palette · Code: `DynamicColors`
 ### Ramp generation and step meaning
 
 A row of shades of one color, from light to dark, where each step has a job.  
-Designers: color ramp or tonal scale · Code: `color.blue.500`
+Designers: color ramp or tonal scale · Code: `color.accent.light.*`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** What a step promises differs by system: Tailwind lightness varies by hue, Spectrum keeps equal contrast per step, Material uses HCT tone. Radix gives each step a job.
 
-**Engineer:** Primitive color tokens grouped by hue, such as color.blue.500; default 12 steps, exportable to a 50-950 scale, generated from a seed in OKLCH with contrast-checked steps.
+**Engineer:** Primitive color tokens per ramp and theme, such as color.accent.light.1 to .12: 12 contrast-indexed steps generated in OKLCH from a seed color.
 
 **Example:** Pale blue for a background, deep blue for the text on it.
 
@@ -2656,13 +2656,13 @@ Designers: color ramp or tonal scale · Code: `color.blue.500`
 ### Semantic color roles
 
 Color names that say the job, like page background or warning text, not the shade.  
-Designers: color roles by job and emphasis · Code: `color.bg.accent.emphasis`
+Designers: color roles by job and emphasis · Code: `color.bg.accent.bold`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Named jobs such as background, text, border and icon, crossed with roles like accent, neutral or danger and emphasis levels (subtle, default, bold). Components use roles, never raw values.
 
-**Engineer:** Semantic tier with a property, role, emphasis, state grammar: color.bg.accent.emphasis aliases {color.blue.5}. Bold fills get on-colors such as fg.onEmphasis or color.text.inverse.
+**Engineer:** Semantic tier named property, role, emphasis, state: color.bg.accent.bold aliases {color.accent.light.9}, with .boldHover and .boldPressed. Bold fills pair with on-colors such as color.text.onAccent.
 
 **Example:** Change the danger color once and every error message updates.
 
@@ -2673,13 +2673,13 @@ Designers: color roles by job and emphasis · Code: `color.bg.accent.emphasis`
 ### Border, outline and focus colors
 
 Colors for lines around things, and for the ring that shows where the keyboard is.  
-Designers: border strengths and focus color · Code: `color.border.*, color.focus.ring`
+Designers: border strengths and focus color · Code: `color.border.*, color.border.focus`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Subtle, default and strong border strengths plus one focus color per mode. Interactive borders and focus rings need 3:1 against adjacent colors; decorative dividers do not.
 
-**Engineer:** color.border.{subtle|default|strong|interactive|focused}, color.divider, color.focus.ring and color.focus.inset. In forced-colors mode browsers replace border and outline colors with system colors.
+**Engineer:** color.border.subtle (dividers), .default, .strong, .input, .focus (the focus ring), .accent and one per status. In forced-colors mode browsers replace border and outline colors with system colors.
 
 **Example:** A soft gray line between list rows, a blue ring on the active field.
 
@@ -2707,13 +2707,13 @@ Designers: text and icon colors by emphasis · Code: `color.text.*, color.icon.*
 ### Status and feedback colors
 
 Colors that show how things went, like green for success and red for an error.  
-Designers: success, warning, danger, info colors · Code: `color.*.{success|warning|danger|info}`
+Designers: success, warning, danger, info colors · Code: `color.bg.success.*, color.text.success`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Success, warning, danger and info, each subtle and bold, for fills, text and icons. Always pair with an icon or words; yellow fills need dark text.
 
-**Engineer:** color.{bg|text|border|icon}.{success|warning|danger|info}.{subtle|bold}. Status text needs 4.5:1 against its background; status icons and borders need 3:1.
+**Engineer:** color.bg.success.subtle, .bold and .boldHover, color.text.success, color.border.success and color.text.onSuccess; the same for warning, danger, info. Status icons take the text token.
 
 **Example:** A green check beside 'Saved', a red icon beside 'Payment failed'.
 
@@ -2730,7 +2730,7 @@ Designers: background tiers: base, raised, overlay · Code: `color.surface.*`
 
 **Designer:** Background tiers (base, raised, overlay, sunken) that show layering. In light mode, shadow or border plus a subtle tone separates them; in dark mode, lighter tones do.
 
-**Engineer:** color.surface.{base|raised|overlay|sunken}, or color.surface.container.{lowest..highest}, aliasing neutral primitives with separate light and dark values; default 4-5 tiers.
+**Engineer:** color.surface.base, .raised, .sunken, .overlay and .nav, plus .tinted at Colorfulness 50 and up, aliasing neutral or accent steps with separate light and dark values.
 
 **Example:** A white card sitting on a light gray page.
 
@@ -2747,7 +2747,7 @@ Designers: perceptual color space, like OKLCH · Code: `colorSpace: oklch`
 
 **Designer:** Perceptual spaces such as OKLCH or HCT make equal steps look equally heavy across hues, so hierarchy survives color swaps. Gamut decides whether vivid Display P3 accents are allowed.
 
-**Engineer:** DTCG color values set colorSpace ('oklch', 'srgb', 'display-p3') with an optional hex fallback. Default: OKLCH ramps for web, HCT for Material, sRGB hex with P3 accent overrides.
+**Engineer:** DTCG color values set colorSpace ('oklch', 'srgb', 'display-p3') with a hex fallback. OpenDesigner writes OKLCH ramps with hex fallbacks and P3 variants in $extensions.opendesigner.p3.
 
 **Example:** Blue and green buttons at the same step look equally strong.
 
@@ -2758,13 +2758,13 @@ Designers: perceptual color space, like OKLCH · Code: `colorSpace: oklch`
 ### Interaction state colors
 
 How a button's color shifts when you point at it, press it, pick it, or can't use it.  
-Designers: hover, pressed, selected, disabled colors · Code: `color.*.hovered or state.hover.opacity`
+Designers: hover, pressed, selected, disabled colors · Code: `color.bg.accent.boldHover, opacity.state.hover`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Hover, pressed, selected and disabled colors derived from the resting color by stepping along the ramp or overlaying a translucent state layer. Selected needs a non-color cue too.
+**Designer:** Hover, pressed, selected and disabled colors come from stepping along the ramp; a translucent state layer covers colors unknown at design time. Selected needs a non-color cue.
 
-**Engineer:** Either per-role tokens like color.bg.brand.bold.hovered (hover one ramp step, pressed two) or an overlay token, state.hover.opacity = 0.08 ($type number), applied on the on-color.
+**Engineer:** Ramp steps per role, such as color.bg.accent.boldHover (+1 step) and .boldPressed (+2), and state-layer numbers such as opacity.state.hover = 0.08 for colors unknown at design time.
 
 **Example:** A blue button turns one shade darker under the mouse.
 
@@ -2781,7 +2781,7 @@ Designers: content: voice, tone, microcopy · Code: `DESIGN.md Content and Voice
 
 **Designer:** The words layer: voice, tone by situation, mechanics, component microcopy, terminology, localization, readability and scannable structure. Voice stays the same across platforms; platform feature terms adapt.
 
-**Engineer:** No DTCG type: content rules are text records and lint configuration, like content.readingGrade.max. Strings ship as i18n keys; DESIGN.md holds a Content and Voice section.
+**Engineer:** No DTCG type: content rules are text records; lint settings such as content.readingGrade.max (proposed) are not built yet. DESIGN.md has a Content and Voice section.
 
 **Also called:** content design, UX writing
 
@@ -2790,13 +2790,13 @@ Designers: content: voice, tone, microcopy · Code: `DESIGN.md Content and Voice
 ### Localization readiness
 
 Rules so the app works in other languages, where words get longer or go right to left.  
-Designers: text expansion and RTL readiness · Code: `per-script font.family and line-height modes`
+Designers: text expansion and RTL readiness · Code: `:lang() line-height scale, CLDR formatting`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Never fix a label width to English length; budget 2-3x for labels under 10 characters. Plan right-to-left layouts, per-script line heights and local date and number formats early.
 
-**Engineer:** Per-script font.family and line-height modes ($type fontFamily, number), CLDR locale formatting and flexible widths. Test the brand face against the OS fallback fonts for each script.
+**Engineer:** CSS export scales line height per listed script via :lang(); per-script font.family modes are not generated. Use CLDR locale formatting and test the brand face against OS fallbacks.
 
 **Example:** A short English label may need three times the room once translated.
 
@@ -2824,13 +2824,13 @@ Designers: sentence case and grammar rules · Code: `CLDR locale formatters`
 ### Component microcopy
 
 The short bits of text that come with each part, like button words and error notes.  
-Designers: microcopy: verb-first labels · Code: `button.submit.label i18n key`
+Designers: microcopy: verb-first labels · Code: `button.submit.label (proposed) i18n key`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Each component spec ships its wording rules with examples: verb-first button labels, useful empty states, constructive errors and confirmations that name the action.
 
-**Engineer:** Default strings are i18n keys such as button.submit.label, not design tokens; each component doc lists content rules. Platform labels (Cancel, OK, Done) follow OS conventions.
+**Engineer:** Default strings would be i18n keys such as button.submit.label (proposed), not design tokens; none are generated yet. Platform labels (Cancel, OK, Done) follow OS conventions.
 
 **Example:** The delete dialog's button says Delete file, not OK.
 
@@ -2841,13 +2841,13 @@ Designers: microcopy: verb-first labels · Code: `button.submit.label i18n key`
 ### Readability and plain language
 
 Keeping the words short and plain so that most people can read them fast.  
-Designers: plain language, grade 6-8 · Code: `content.readingGrade.max`
+Designers: plain language, grade 6-8 · Code: `content.readingGrade.max (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Aim for grade 6-8 reading level in consumer products and 10-12 in expert tools. Button labels are 2-4 words, verb first. Plain language helps everyone, experts included.
 
-**Engineer:** Lint configuration, not tokens: content.readingGrade.max and button.label.maxWords = 4. The builder flags strings over the reading target, overlong labels and terms from the internal-jargon list.
+**Engineer:** Proposed lint, not built: content.readingGrade.max (proposed) and button.label.maxWords (proposed) = 4. Spec 6.4 plans a warning for button labels over 4 words; no string lint exists yet.
 
 **Example:** Save draft, not Persist current document state.
 
@@ -2864,7 +2864,7 @@ Designers: scannable headings and structure · Code: `h1-h6 heading elements`
 
 **Designer:** A heading for every section, key points in the first two paragraphs, sparing bold, bullets for three or more items. Unformatted walls of text push readers into the F-pattern.
 
-**Engineer:** Real heading structure (WCAG 1.3.1, 2.4.6) using type role tokens. The builder lints skipped heading levels, long paragraphs without a heading and link text like click here.
+**Engineer:** Real heading structure (WCAG 1.3.1, 2.4.6) using type role tokens. Linting for skipped heading levels, long unheaded paragraphs and link text like click here is not built yet.
 
 **Example:** A help page where each heading answers one question.
 
@@ -2881,7 +2881,7 @@ Designers: preferred and banned terms · Code: `glossary term list`
 
 **Designer:** A glossary of preferred and banned terms plus inclusive-language rules, started at 20-50 terms on day one. Consistent terms make navigation labels, headings and empty states predictable.
 
-**Engineer:** Glossary data, not tokens: a term list the builder lints copy against, flagging banned terms and internal jargon. Shared strings avoid input-specific verbs such as tap versus click.
+**Engineer:** Glossary data, not tokens: a term list. Linting copy against it for banned terms and internal jargon is not built yet. Shared strings avoid input-specific verbs like tap or click.
 
 **Example:** Pick sign in and use it everywhere, never mixed with log in.
 
@@ -2892,7 +2892,7 @@ Designers: preferred and banned terms · Code: `glossary term list`
 ### Tone by situation
 
 How the app's words change with the moment: calm for mistakes, warmer for good news.  
-Designers: tone shifts by message type · Code: `DESIGN.md: voice and tone section`
+Designers: tone shifts by message type · Code: `tone matrix, a content rule`
 
 <details><summary>Designer and engineer</summary>
 
@@ -2909,13 +2909,13 @@ Designers: tone shifts by message type · Code: `DESIGN.md: voice and tone secti
 ### Voice
 
 The way the app sounds in words, the same each time, like a friend you know by their voice.  
-Designers: brand voice: 3-4 traits with but-nots · Code: `DESIGN.md Content and Voice section`
+Designers: brand voice: 3-4 traits with but-nots · Code: `voice guide (H-voice), DESIGN.md Content and Voice`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** The brand's lasting personality in words, set as 3-4 traits, each with a but-not and three copy examples, such as authoritative but not pedantic. Tone flexes; voice stays.
 
-**Engineer:** Not a design token: a content guideline record of traits, anti-traits and examples, written to the Content and Voice section of DESIGN.md for writers and agents to read.
+**Engineer:** Not a design token: traits, anti-traits and examples belong in a voice guide (hook H-voice). DESIGN.md's Content and Voice section records the guidance level, casing and contractions.
 
 **Example:** Practical, but not dull, with three sample lines for each trait.
 
@@ -2926,13 +2926,13 @@ Designers: brand voice: 3-4 traits with but-nots · Code: `DESIGN.md Content and
 ### Data visualization
 
 Charts that match the rest of the app, with set colors, parts and rules so all can read them.  
-Designers: data viz, themed to the system · Code: `color.chart.*`
+Designers: data viz, themed to the system · Code: `color.chart.* (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Charts as part of the system: a small set of chart types, palettes, shared anatomy and accessibility rules, so charts look native to the product rather than pasted in.
 
-**Engineer:** Palettes are color tokens, and chart chrome reuses text, border and dimension tokens. DTCG has no chart-specific types; the system themes an existing chart library.
+**Engineer:** Planned via the H-dataviz hook: chart palettes as color tokens, with chrome reusing text, border and dimension tokens; no chart tokens are generated yet. DTCG has no chart-specific types.
 
 **Also called:** charts, dataviz
 
@@ -2958,13 +2958,13 @@ Designers: insight title, labels, table view · Code: `figcaption, aria-describe
 ### Chart anatomy and tokens
 
 The parts of a chart, like its grid lines, labels, color key and pop-up notes, and how each looks.  
-Designers: axes, gridlines, labels, legends · Code: `chart.gridline.color, chart.tick.label.color`
+Designers: axes, gridlines, labels, legends · Code: `chart.gridline.color (proposed), color.border.subtle`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Axes, gridlines, labels, legends and tooltips reuse the UI's text and border styles to match the product. Faint gridlines keep focus on data; direct labels read cleaner than legends.
 
-**Engineer:** Component-tier aliases such as chart.gridline.color = {color.border} and chart.tick.label.color = {color.text.subtle}. Chart-specific tokens only for marks and interaction states, like chart.series.dimmed.opacity.
+**Engineer:** Not generated yet: component aliases such as chart.gridline.color (proposed) = {color.border.subtle} and chart.tick.label.color (proposed) = {color.text.secondary}; chart-only tokens just for marks and states.
 
 **Example:** Grid lines use the same faint grey as table borders.
 
@@ -2975,13 +2975,13 @@ Designers: axes, gridlines, labels, legends · Code: `chart.gridline.color, char
 ### Data-visualization palettes
 
 Chart colors: one per group, light to dark for how much, and two-way for above or below the middle.  
-Designers: categorical, sequential, diverging palettes · Code: `color.chart.categorical, .sequential, .diverging`
+Designers: categorical, sequential, diverging palettes · Code: `color.chart.categorical (proposed), .sequential, .diverging`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** One brand chart color plus grey by default; 6-8 categorical colors in fixed order for neighbor contrast; one sequential ramp per primary hue and one diverging ramp, per mode.
 
-**Engineer:** Color tokens per mode: color.chart.categorical.1..n, color.chart.sequential.<hue>.<step>, color.chart.diverging.<pair>.<step>, plus brand, neutral and status sets.
+**Engineer:** Not generated yet: per-mode color tokens color.chart.categorical.1 (proposed) onward, color.chart.sequential (proposed) and color.chart.diverging (proposed) ramps, plus brand, neutral and status sets.
 
 **Example:** This year in brand blue, last year in grey for context.
 
@@ -2992,13 +2992,13 @@ Designers: categorical, sequential, diverging palettes · Code: `color.chart.cat
 ### Chart scope and library
 
 Which kinds of charts the app has, like bars and lines, and which ready-made chart kit it styles.  
-Designers: 5-6 chart types plus KPI number · Code: `color.chart.*`
+Designers: 5-6 chart types plus KPI number · Code: `color.chart.* (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Start with 5-6 types (bar, line, area, stacked bar, donut or meter, scatter) plus a KPI big number. Fewer types stay consistent; theme a library rather than build one.
 
-**Engineer:** Not a token: a scope decision the builder records. Components of the themed chart library consume color.chart.* and chrome tokens; native apps theme platform chart frameworks with them.
+**Engineer:** Not a token: the Q-viz-01 scope answer in state.json. The themed chart library would consume color.chart.* (proposed) and existing chrome tokens, as would native chart frameworks.
 
 **Example:** A dashboard with bars, lines and one big number, all from one library.
 
@@ -3015,7 +3015,7 @@ Designers: depth: shadows, surfaces, materials · Code: `DTCG shadow, surface an
 
 **Designer:** The depth family: depth model, levels, shadow recipe, surface tiers, stacking order, translucent materials, and opacity for states and scrims. Together they decide what looks flat and what floats.
 
-**Engineer:** DTCG shadow composites (color, offsetX, offsetY, blur, spread, inset), surface color tokens, and number tokens for opacity and layer order. Blur and materials have no DTCG type.
+**Engineer:** DTCG shadow composites (color, offsetX, offsetY, blur, spread, inset), surface color tokens and opacity number tokens; layer order is not tokenized yet. Blur and materials have no DTCG type.
 
 **Also called:** depth, layering
 
@@ -3024,13 +3024,13 @@ Designers: depth: shadows, surfaces, materials · Code: `DTCG shadow, surface an
 ### Depth model
 
 The main way the app shows layers: with lines, shadows, shades of color, or frosted glass.  
-Designers: flat, shadowed, tonal or glass · Code: `elevation.model`
+Designers: flat, shadowed, tonal or glass · Code: `$extensions.opendesigner.model`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Pick flat with borders, shadows, tonal steps or translucent material. Default hybrid: borders for in-page containers, shadows only for floating menus and dialogs, lighter surfaces in dark mode.
+**Designer:** Pick flat with borders, shadows, tonal steps or translucent material. OpenDesigner's default (Depth 40) is tonal: surface steps for in-page containers, shadows only for floating menus and dialogs.
 
-**Engineer:** Stored as elevation.model: borders, ring+faint-shadow, tonal, shadow-ladder or materials. The engine uses it to decide which shadow ($type shadow) and surface color tokens to emit.
+**Engineer:** The Depth dial picks a model (borders, ring+faint-shadow, tonal, shadow-ladder, materials), stored in the elevation group's $extensions.opendesigner.model; it decides which shadow and surface tokens are emitted.
 
 **Example:** GOV.UK uses borders only; Material uses tonal color steps.
 
@@ -3047,7 +3047,7 @@ Designers: glass, blur and vibrancy · Code: `material.glass.*, backdrop-filter`
 
 **Designer:** Glass, blur and vibrancy feel premium and keep context visible but cut contrast. Use them only for floating navigation and overlays, never reading surfaces; each needs an opaque fallback.
 
-**Engineer:** No DTCG material type: group material.glass.background, .blur and .saturate, with a reduced-transparency mode that swaps in opaque color. Web uses backdrop-filter; iOS glassEffect; Windows Mica and Acrylic.
+**Engineer:** No DTCG material type. The materials depth model adds material.glass.blur, a glass surface color and a solid fallback for reduced transparency. Web: backdrop-filter; iOS: glassEffect; Windows: Mica, Acrylic.
 
 **Example:** A frosted tab bar turns solid when Reduce Transparency is on.
 
@@ -3062,7 +3062,7 @@ Designers: state layers and scrims · Code: `opacity.state.hover, color.overlay.
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** State layers tint any color the same way: Material's 0.08 hover, 0.10 focus and press, 0.16 drag, 0.38 disabled. Scrims dim the page behind modals, stronger in dark mode.
+**Designer:** Material's state layers: 0.08 hover, 0.10 focus and press, 0.16 drag, 0.38 disabled. OpenDesigner steps the ramp first and uses these only for unknown colors. Scrims dim pages behind modals.
 
 **Engineer:** DTCG number tokens (0-1): opacity.state.hover, opacity.disabled.content. Scrim: color.overlay.scrim, a color with alpha, 40-50% in light mode and 50-60% in dark.
 
@@ -3081,7 +3081,7 @@ Designers: elevation levels: sunken to overlay · Code: `elevation.raised, eleva
 
 **Designer:** Four levels (sunken, default, raised, overlay) cover most products; more levels muddy the order. Two parts at the same level should never overlap each other.
 
-**Engineer:** Semantic shadow tokens elevation.raised and elevation.overlay alias a 4-6 step primitive ladder (elevation.shadow.1 upward). Android elevation in dp drives shadows and tonal color.
+**Engineer:** Semantic shadow tokens elevation.raised, .floating and .overlay. The shadow-ladder and materials models alias a six-step primitive ladder; the tonal default writes its shadows inline.
 
 **Example:** Code wells sunken, pages default, hover cards raised, dialogs overlay.
 
@@ -3109,13 +3109,13 @@ Designers: two-layer soft shadow · Code: `shadow array; color.shadow.key, .ambi
 ### Stacking order (z-index layers)
 
 A set order for what goes on top when things pile up, so pop-ups never hide.  
-Designers: layer order, z-index stack · Code: `layer.modal, z-index`
+Designers: layer order, z-index stack · Code: `layer.modal (proposed), z-index`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** A named layer order: base, sticky, dropdown, scrim, modal, popover or tooltip, toast, skip link. It keeps tooltips above modals and toasts above everything.
 
-**Engineer:** DTCG number tokens like layer.modal, named by role, spaced by 100 so new layers fit. Never hard-code z-index; the web top layer (popover, dialog) cuts the need.
+**Engineer:** Not generated yet: number tokens like layer.modal (proposed), named by role, spaced by 100. Avoid hard-coded z-index; the web top layer (popover, dialog) cuts the need.
 
 **Example:** A tooltip opened inside a dialog still shows on top.
 
@@ -3132,7 +3132,7 @@ Designers: surface tiers, lighter in dark mode · Code: `color.surface.sunken, .
 
 **Designer:** Four surface tiers (sunken, default, raised, overlay). In dark mode each higher tier is 3-5% lighter, as if lit from the front, because shadows barely show on dark backgrounds.
 
-**Engineer:** Role-named color tokens color.surface.sunken, .base, .raised and .overlay, with light and dark values. Shadows are separate tokens; the same tiers appear in found.color.roles.surface.
+**Engineer:** Role-named color tokens color.surface.sunken, .base, .raised, .overlay and .nav, with light and dark values. Shadows are separate elevation.* tokens; the same tiers appear under Surface roles.
 
 **Example:** In dark mode a menu sits on a slightly lighter grey than the page.
 
@@ -3143,13 +3143,13 @@ Designers: surface tiers, lighter in dark mode · Code: `color.surface.sunken, .
 ### Iconography
 
 Small signs for actions and things, like a trash can for delete, and the rules for how they look.  
-Designers: icon system: style, sizes, color · Code: `SVG manifest, size.icon.*, color.icon.*`
+Designers: icon system: style, sizes, color · Code: `size.icon.*, icon.stroke.*, color.icon.*`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** The UI icon system: source, style, construction, sizes, states, color, labels, naming, larger tiers, delivery and platform symbols. Consistent icons make rows look even and actions easy to recognize.
 
-**Engineer:** No DTCG icon type: glyphs are SVG assets listed in a manifest, while size (size.icon.*), stroke (icon.stroke.*) and color (color.icon.*) are tokens. Packages generate per platform.
+**Engineer:** No DTCG icon type: glyphs are SVG assets, with custom ones from hook H-icons (a manifest is proposed); size.icon.*, icon.stroke.* and color.icon.* are tokens.
 
 **Also called:** icon system, icons
 
@@ -3162,9 +3162,9 @@ Designers: one neutral icon color · Code: `color.icon.default, fill=currentColo
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** One neutral icon color matched to secondary text, status colors only on status icons, no decorative multicolor in chrome. Icons need 3:1 contrast, 4.5:1 beside body text.
+**Designer:** One neutral icon color matched to secondary text, status colors only on status icons, no decorative multicolor. Meaningful icons need 3:1 (WCAG); Carbon asks 4.5:1 beside body text.
 
-**Engineer:** Color tokens color.icon.default (aliasing secondary text), color.icon.subtle and status tokens such as color.icon.danger. Inline SVG on the web uses fill=currentColor to inherit color.
+**Engineer:** color.icon.default (same neutral step as color.text.secondary, not an alias), .subtle, .accent and .onAccent; status icons use color.text.danger and its siblings. Web SVG: fill=currentColor.
 
 **Example:** Grey icons in the toolbar, and a red one only beside an error.
 
@@ -3209,13 +3209,13 @@ Designers: one SVG master for every platform · Code: `<name>_<size>_<style>`
 ### Icons with labels
 
 When an icon needs words beside it, and how the icon and the words line up.  
-Designers: labeled icons; icon-only with tooltip · Code: `space.icon.gap, aria-hidden`
+Designers: labeled icons; icon-only with tooltip · Code: `space.icon.gap (proposed), aria-hidden`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Label everything in navigation. Icon-only suits about a dozen universal actions (search, close, more, add, delete, edit, share, settings), each with a tooltip. Center icons on the text line.
 
-**Engineer:** The gap is a dimension token, space.icon.gap: 4px at 16px icons, 8px at 24px. Icon-only controls need an accessible name; decorative icons get aria-hidden.
+**Engineer:** space.icon.gap (proposed), 4px at 16px icons, is not generated; use space.inline.xs or .sm. Icon-only controls need an accessible name; decorative icons get aria-hidden.
 
 **Example:** A bare magnifier for search, while Settings in the sidebar keeps its label.
 
@@ -3226,13 +3226,13 @@ Designers: labeled icons; icon-only with tooltip · Code: `space.icon.gap, aria-
 ### Icon metaphors, naming and localization
 
 How icons get names, what each one means, and which ones flip for writing that goes right to left.  
-Designers: name icons by shape, not meaning · Code: `icon manifest: name, aliases, directionType`
+Designers: name icons by shape, not meaning · Code: `icon manifest (proposed): name, aliases, directionType`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Name icons by shape (shield, not security) so one glyph serves many meanings, add function aliases in the component API, note mirroring per icon, test metaphors per market.
 
-**Engineer:** An asset manifest in JSON: name, aliases, directionType (unique or mirror, as Fluent does) and categories per icon. Not a style token; components expose the function-alias layer.
+**Engineer:** Proposed, not generated yet: an icon manifest in JSON with name, aliases, directionType (unique or mirror, as Fluent does) and categories per icon. Components expose the function-alias layer.
 
 **Example:** The back arrow points right in Arabic and Hebrew layouts.
 
@@ -3243,13 +3243,13 @@ Designers: name icons by shape, not meaning · Code: `icon manifest: name, alias
 ### Icons across platforms
 
 Using the phone's own icons for common jobs like share and back, and the brand's icons for the rest.  
-Designers: platform-standard system glyphs · Code: `icon.share: { ios, android, web }`
+Designers: platform-standard system glyphs · Code: `icon.share (proposed): { ios, android, web }`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Use platform-standard glyphs for system actions (share, back, close, more, search, settings), since people know their own platform's version. The brand set covers product-specific ideas.
 
-**Engineer:** A semantic icon maps to per-platform assets, e.g. icon.share = {ios: square.and.arrow.up, android: a Material name, web: an SVG}. Size tokens follow text styles on Apple.
+**Engineer:** A semantic icon maps to per-platform assets, such as icon.share (proposed) = {ios: square.and.arrow.up, android: a Material name, web: an SVG}; no icon map is generated yet.
 
 **Example:** Share shows Apple's box-and-arrow on iPhone and the Android share glyph elsewhere.
 
@@ -3277,13 +3277,13 @@ Designers: icon sizes 16, 20, 24px · Code: `size.icon.sm, .md, .lg`
 ### Icon library strategy
 
 Whether to use a ready-made set of icons, add to one, or draw your own from scratch.  
-Designers: native, open-source or custom set · Code: `icon.library`
+Designers: native, open-source or custom set · Code: `icon.library (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Native sets feel at home, open-source sets look neutral, custom sets carry the most brand but cost the most. Default: native on apps, one open-source set on web.
 
-**Engineer:** A system setting, not a token: icon.library is sf-symbols, material-symbols-rounded, lucide or custom. Custom additions use the library's own template so stroke, radius and keylines match.
+**Engineer:** A system setting, not a token: icon.library (proposed) would name sf-symbols, material-symbols-rounded, lucide or custom. Custom additions use the library's own template so stroke, radius and keylines match.
 
 **Example:** SF Symbols on iPhone, one open-source set on the web.
 
@@ -3294,13 +3294,13 @@ Designers: native, open-source or custom set · Code: `icon.library`
 ### Icon states
 
 How an icon changes when you pick it, press it, or can't use it.  
-Designers: outline at rest, filled plus accent · Code: `icon.fill.selected, color.icon.selected`
+Designers: outline at rest, filled plus accent · Code: `color.icon.accent, icon.fill.selected (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Outline at rest, filled plus accent color when selected: two cues, so it still works for color-blind people. Hover and pressed feedback go on the container, not the glyph.
 
-**Engineer:** Number tokens icon.fill.selected = 1 and icon.grade.emphasis = 200 drive variable-font axes; color tokens color.icon.default, .selected and .disabled set the color per state.
+**Engineer:** Not generated yet: icon.fill.selected (proposed) = 1 and icon.grade.emphasis (proposed) = 200 for variable-font axes. Color is generated: color.icon.default at rest, color.icon.accent when selected.
 
 **Example:** The active tab icon is filled and blue; the rest are grey outlines.
 
@@ -3311,13 +3311,13 @@ Designers: outline at rest, filled plus accent · Code: `icon.fill.selected, col
 ### Icon style and brand match
 
 Whether icons are drawn as lines or filled in, with round or sharp corners, to fit the brand.  
-Designers: outlined at rest, filled when selected · Code: `icon.style.default, icon.style.selected`
+Designers: outlined at rest, filled when selected · Code: `rest style param, icon.fill.selected (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Outlined at rest, filled when selected. Match corners to the radius family (rounded icons with pill buttons, sharp icons with 0-2px corners) and stroke to body text weight.
 
-**Engineer:** icon.style.default = outlined and icon.style.selected = filled. With Material Symbols, the FILL axis becomes number tokens icon.fill.rest = 0 and icon.fill.selected = 1.
+**Engineer:** Not tokens: the rest style, outline by default, is a param in opendesigner.meta.json. With Material Symbols, icon.fill.selected (proposed) = 1 would drive the FILL axis.
 
 **Example:** A home tab icon is an outline, then fills in when tapped.
 
@@ -3328,13 +3328,13 @@ Designers: outlined at rest, filled when selected · Code: `icon.style.default, 
 ### Icon tiers beyond UI icons
 
 Big icons with more detail for welcome screens and ads, in the same style as the small ones.  
-Designers: pictograms and spot icons · Code: `icon.size.pictogram, icon.size.spot`
+Designers: pictograms and spot icons · Code: `icon.size.pictogram (proposed), icon.size.spot (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Pictograms and spot icons bridge UI icons and full illustration in feature grids and onboarding. Add them only with marketing surfaces, drawn with the UI icon's stroke logic scaled up.
 
-**Engineer:** Larger dimension tokens such as icon.size.pictogram = 64px and icon.size.spot = 120px. The drawings ship as SVG assets next to the UI set.
+**Engineer:** Not generated yet: larger dimension tokens such as icon.size.pictogram (proposed) = 64px and icon.size.spot (proposed) = 120px. The drawings are SVG assets beside the UI set.
 
 **Example:** A 64px pictogram above each item in a feature grid.
 
@@ -3345,13 +3345,13 @@ Designers: pictograms and spot icons · Code: `icon.size.pictogram, icon.size.sp
 ### Imagery, illustration and brand marks
 
 Rules for the photos, drawings, logo and app icon you see in the app.  
-Designers: imagery, illustration and brand marks · Code: `asset manifest`
+Designers: imagery, illustration and brand marks · Code: `asset manifest (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** The picture layer: photo direction, aspect ratios, text on images, loading, illustration, rich media, graphic motifs and brand marks. It sets mood and brand without competing with content.
 
-**Engineer:** No DTCG type for images or aspect ratios, so assets live in a manifest that components reference. Overlays, placeholders and ratios become color, number or dimension tokens.
+**Engineer:** No DTCG type for images or aspect ratios. An asset manifest (proposed) would list files for components; none is generated. Of the related tokens, only color.overlay.scrim exists today.
 
 **Also called:** imagery, visual assets
 
@@ -3360,13 +3360,13 @@ Designers: imagery, illustration and brand marks · Code: `asset manifest`
 ### App icon, logo and favicon
 
 The app's icon on your home screen, its logo inside, and the tiny icon on a web page tab.  
-Designers: app icon, logo and favicon · Code: `icon.svg, favicon.ico`
+Designers: app icon, logo and favicon · Code: `SVG master, favicon.ico`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** App icon: 1-3 filled shapes, checked in tinted and monochrome first. In product, a 24-32px symbol-only logo in the app bar; the full lockup on sign-in.
 
-**Engineer:** Assets, not tokens: Apple layered icons, Android adaptive foreground, background and monochrome layers, a maskable PWA icon, and favicons from one SVG master (icon.svg plus favicon.ico).
+**Engineer:** Assets, not tokens: Apple layered icons, Android adaptive foreground, background and monochrome layers, a maskable PWA icon, and favicons from one SVG master (an SVG favicon plus favicon.ico).
 
 **Example:** A 32px symbol in the app bar, the full wordmark on sign-in.
 
@@ -3377,13 +3377,13 @@ Designers: app icon, logo and favicon · Code: `icon.svg, favicon.ico`
 ### Illustration style and tiers
 
 How the app's drawings look, and where they show up, like on an empty page or a welcome screen.  
-Designers: illustration style and tiers · Code: `illustration.color.*, illustration.size.spot`
+Designers: illustration style and tiers · Code: `illustration.color.* (proposed), illustration.size.spot (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** One style drawn from icon stroke, radius and palette, used in empty, error, success and onboarding states. Neutral spots for routine states, colorful for first run; little humor in errors.
 
-**Engineer:** Mostly guidance. Reusable parts are tokens: illustration.color.* aliasing brand primitives, illustration.stroke.width, and size slots like illustration.size.spot (dimension). Drawings ship as SVG assets.
+**Engineer:** Mostly guidance; no illustration tokens are generated yet: illustration.color.* (proposed) aliasing brand primitives, illustration.stroke.width (proposed), illustration.size.spot (proposed). Drawings come through the H-illus hook.
 
 **Example:** A calm grey drawing on an empty inbox, a colorful one after sign-up.
 
@@ -3394,13 +3394,13 @@ Designers: illustration style and tiers · Code: `illustration.color.*, illustra
 ### Image loading and placeholders
 
 What you see while a picture is still loading or fails to load, so the page does not jump.  
-Designers: reserved box, neutral placeholder · Code: `aspect-ratio, duration.skeleton.pulse`
+Designers: reserved box, neutral placeholder · Code: `aspect-ratio, duration.skeleton.pulse (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Always reserve the final box so layout stays still. Use a neutral placeholder fill for images, skeletons only for container components, and a fallback image when the source fails.
 
-**Engineer:** Reserve space with width and height or CSS aspect-ratio so CLS stays at or below 0.1 for 75% of visits. Placeholder fill: a color token; pulse: duration.skeleton.pulse.
+**Engineer:** Reserve space with width and height or CSS aspect-ratio so CLS stays at or below 0.1 for 75% of visits. Placeholder fill: a color token; pulse: duration.skeleton.pulse (proposed).
 
 **Example:** A grey box the size of the photo holds its place until it loads.
 
@@ -3428,13 +3428,13 @@ Designers: brand motifs and graphic devices · Code: `SVG assets, $type: gradien
 ### Photography art direction
 
 Rules for which photos to use: who is in them, the angle, the light, and the colors.  
-Designers: photo art direction brief · Code: `image.overlay.color, image.overlay.opacity`
+Designers: photo art direction brief · Code: `image.overlay.color (proposed), image.overlay.opacity (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** A one-paragraph brief (subjects, perspective, light, color treatment, casting) written before shooting or buying stock. Natural light reads factual; warm, graded color reads aspirational.
 
-**Engineer:** Mostly guidance, not tokens. A color treatment becomes image.overlay.color and image.overlay.opacity (color, number). Apple platforms take JPEG or HEIC with an embedded color profile.
+**Engineer:** Mostly guidance, not tokens. A color treatment would become image.overlay.color (proposed) and image.overlay.opacity (proposed). Apple platforms take JPEG or HEIC with an embedded color profile.
 
 **Example:** Real customers at eye level in natural light, with ungraded color.
 
@@ -3445,13 +3445,13 @@ Designers: photo art direction brief · Code: `image.overlay.color, image.overla
 ### Aspect ratios and cropping
 
 A short list of photo shapes, like wide or square, and where on the screen each one goes.  
-Designers: aspect ratios and cropping · Code: `aspect-ratio, aspect.video`
+Designers: aspect ratios and cropping · Code: `aspect-ratio, aspect.video (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Allow 3-5 ratios (16:9, 3:2, 4:3, 1:1, optionally 2:1), one per component slot. A small set keeps grids calm; wide feels cinematic, square product-focused.
 
-**Engineer:** No DTCG ratio type: store a number (aspect.video = 1.7778) or a 16 / 9 string in $extensions for CSS aspect-ratio. iOS bitmaps need @2x and @3x.
+**Engineer:** No DTCG ratio type: store a number (aspect.video (proposed) = 1.7778) or a 16 / 9 string in $extensions for CSS aspect-ratio. iOS bitmaps need @2x and @3x.
 
 **Example:** 16:9 for heroes, 4:3 for card media, 1:1 for avatars.
 
@@ -3468,7 +3468,7 @@ Designers: Lottie, 3D and animated icons · Code: `dotLottie, duration and cubic
 
 **Designer:** Animate icons only to confirm an action or show ongoing status. Keep 3D and Lottie for onboarding, celebration and marketing; they feel alive but are heavy and can distract.
 
-**Engineer:** Timing uses motion tokens (duration, cubicBezier) and obeys reduced motion; assets come from a manifest. dotLottie v2.0 packs animations, themes and state machines into one file.
+**Engineer:** Timing uses motion tokens (duration, cubicBezier) and obeys reduced motion; the files themselves are assets, not tokens. dotLottie v2.0 packs animations, themes and state machines into one file.
 
 **Example:** A checkmark that draws itself once when an upload finishes.
 
@@ -3479,13 +3479,13 @@ Designers: Lottie, 3D and animated icons · Code: `dotLottie, duration and cubic
 ### Text and UI on images
 
 Ways to keep words easy to read when they sit on a photo, like a dark fade behind them.  
-Designers: scrim or protection gradient · Code: `color.overlay.scrim, gradient.scrim.bottom`
+Designers: scrim or protection gradient · Code: `color.overlay.scrim, gradient.scrim.bottom (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Put text beside images by default. When a hero needs text on top, add a scrim or protection gradient and test contrast against the image's worst-case region.
 
-**Engineer:** Scrim tokens: color.overlay.scrim (color with alpha) or gradient.scrim.bottom ($type gradient). Text must keep 4.5:1, or 3:1 when large, over the lightest region behind it.
+**Engineer:** Scrim tokens: color.overlay.scrim (color with alpha), or gradient.scrim.bottom (proposed). Text must keep 4.5:1, or 3:1 when large, over the lightest region behind it.
 
 **Example:** A white headline on a beach photo gets a dark fade at the bottom.
 
@@ -3519,7 +3519,7 @@ Designers: focus ring, 2px at 2px offset · Code: `focus.ring.*, :focus-visible`
 
 **Designer:** The visible ring showing keyboard, remote or switch focus. Default: 2px solid ring at 2px offset, following the component's radius, with 3:1 contrast against every surface.
 
-**Engineer:** focus.ring.width and focus.ring.offset (dimension), focus.ring.color (color), or a border composite; DTCG has no outline type. Web: :focus-visible with outline and outline-offset.
+**Engineer:** focus.ring.width and focus.ring.offset (dimension), color.border.focus (color) and radius.focus (control radius + offset); DTCG has no outline type. Web: :focus-visible with outline and outline-offset.
 
 **Example:** Pressing Tab puts a ring around the next link.
 
@@ -3530,13 +3530,13 @@ Designers: focus ring, 2px at 2px offset · Code: `focus.ring.*, :focus-visible`
 ### Input modalities
 
 Which ways of using the app each screen must handle, like tap, click or type.  
-Designers: touch, pointer, keyboard, remote input · Code: `density: touch | pointer`
+Designers: touch, pointer, keyboard, remote input · Code: `size.target.min, .pointer, .touch`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Which inputs each surface must support, and how density and targets switch between them. Default: touch-size targets on mobile and web, a pointer density mode for desktop.
 
-**Engineer:** size.target.min per platform (44 iOS, 48 Android, 24/44 web, 28 macOS, 66 tvOS, 60 visionOS) and a density mode keyed by input, density = touch | pointer.
+**Engineer:** size.target.min matches the main input, from size.target.pointer or .touch. Floors: 44 iOS, 48 Android, 24 or 44 web, 28 macOS, 66 tvOS, 60 visionOS.
 
 **Example:** A web app uses 44px targets for touch, even though 24px passes.
 
@@ -3564,13 +3564,13 @@ Designers: minimum hit area and target spacing · Code: `size.target.min, space.
 ### Layout
 
 How a screen is split into areas, and how those areas move when the screen size changes.  
-Designers: grids, breakpoints and max widths · Code: `grid.*, layout.*, breakpoint.*`
+Designers: grids, breakpoints and max widths · Code: `grid.*, layout.*, breakpoint.* (all proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** How screens divide and adapt: breakpoints, column grids, containers and maximum widths, reflowing and switching layouts, and safe areas. App shells and canonical layouts live with patterns.
 
-**Engineer:** Dimension and number tokens for grids, margins and max widths. DTCG has no breakpoint or media-condition type, so breakpoints compile to build-time variables or resolver contexts.
+**Engineer:** Not generated yet: dimension and number tokens for grids, margins and max widths. DTCG has no breakpoint or media-condition type, so breakpoints compile to build-time variables or resolver contexts.
 
 **Example:** One column on a phone, a sidebar and content on a laptop.
 
@@ -3587,7 +3587,7 @@ Designers: responsive reflow, adaptive layout switch · Code: `@media and @conta
 
 **Designer:** Responsive means reflowing within a layout; adaptive means switching layouts at breakpoints, such as pane count or navigation type. Default: responsive inside panes, adaptive between breakpoints.
 
-**Engineer:** Page layout uses viewport media queries; components use CSS container queries, with sizes like container.sm = {value: 24, unit: 'rem'}. Variant switching lives in code, not tokens.
+**Engineer:** Page layout uses viewport media queries; components use CSS container queries, with sizes like container.sm (proposed) = 24rem. Variant switching lives in code, not tokens.
 
 **Example:** A list becomes a list plus detail view on a wide tablet.
 
@@ -3598,13 +3598,13 @@ Designers: responsive reflow, adaptive layout switch · Code: `@media and @conta
 ### Breakpoints
 
 The window widths where the layout switches, like when a phone view turns into a tablet view.  
-Designers: width breakpoints, mobile first · Code: `breakpoint.md, WindowSizeClass`
+Designers: width breakpoints, mobile first · Code: `breakpoint.md (proposed), WindowSizeClass`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Window widths where the layout changes. Adopt Material's five width breakpoints for cross-platform work or Tailwind's set for web-only; design mobile first, then reveal, divide, resize, reposition or swap.
 
-**Engineer:** Dimension tokens in rem: breakpoint.md = {value: 48, unit: 'rem'}. CSS media queries cannot read custom properties, so compile them at build time. Android: WindowSizeClass; iOS: size classes.
+**Engineer:** Dimension tokens such as breakpoint.md (proposed) = 48rem are not generated yet. Media queries cannot read custom properties, so compile at build time. Android: WindowSizeClass; iOS: size classes.
 
 **Example:** At 48rem the single column splits into two.
 
@@ -3615,13 +3615,13 @@ Designers: width breakpoints, mobile first · Code: `breakpoint.md, WindowSizeCl
 ### Containers and maximum content width
 
 How wide the main content may get, so lines of text don't stretch across a huge screen.  
-Designers: max content width and reading column · Code: `layout.container.max`
+Designers: max content width and reading column · Code: `layout.container.max (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** How content is framed: centered reading columns (max about 1280px, text 40-80 characters), navigation plus left-aligned content, or fluid data surfaces. Ask: reading, working or monitoring?
 
-**Engineer:** Dimension tokens like layout.container.max = {value: 80, unit: 'rem'}. A 65ch measure is not a valid DTCG dimension (px or rem only); keep it in CSS.
+**Engineer:** A dimension token, layout.container.max (proposed) = 80rem, not generated yet. 65ch is not a valid DTCG dimension (px or rem only), so keep it in CSS.
 
 **Example:** A blog post stays in a centered column even on a wide monitor.
 
@@ -3632,13 +3632,13 @@ Designers: max content width and reading column · Code: `layout.container.max`
 ### Column grid
 
 Hidden columns that line things up on a page, like the lines on graph paper.  
-Designers: column grid: columns, gutters, margins · Code: `grid.columns, grid.gutter, grid.margin`
+Designers: column grid: columns, gutters, margins · Code: `grid.columns, .gutter, .margin (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Columns, gutters and margins: 4, 8 or 12 columns as width grows, 16-24px gutters, 16px margins on compact, 24px above. Type never hangs into the gutter.
 
-**Engineer:** grid.columns.* as number tokens; grid.gutter.* and grid.margin.* as dimension tokens, one value per breakpoint. Native mobile uses panes and layout guides instead.
+**Engineer:** Not generated yet: grid.columns.* (proposed) as number tokens, grid.gutter.* and grid.margin.* (proposed) as dimensions, one value per breakpoint. Native mobile uses panes and layout guides.
 
 **Example:** Cards spanning 4 of 12 columns, three to a row.
 
@@ -3655,7 +3655,7 @@ Designers: safe areas and edge-to-edge · Code: `viewport-fit=cover, env(safe-ar
 
 **Designer:** Backgrounds run edge to edge; interactive content stays inside the safe area, clear of notches, system bars and hinges. TVs keep the outer 5% clear.
 
-**Engineer:** Insets are runtime values from the platform, not tokens; tokens add padding on top, such as layout.safe.extra = 16. Web needs viewport-fit=cover plus env(safe-area-inset-*).
+**Engineer:** Insets are runtime values from the platform, not tokens; tokens add padding on top, such as layout.safe.extra (proposed) = 16. Web needs viewport-fit=cover plus env(safe-area-inset-*).
 
 **Example:** A video fills the whole screen, but its buttons stay clear of the notch.
 
@@ -3687,7 +3687,7 @@ Designers: duration ladder, 100 to 300ms core · Code: `motion.duration.short`
 
 **Designer:** Steps: instant 0, micro 100, short 150-200, medium 250-300, long 400-500, extra 700ms. Exits are 20-35% shorter; much past 500ms feels sluggish.
 
-**Engineer:** DTCG duration tokens with value and unit, e.g. 200 ms. Primitive duration.200, semantic motion.duration.short, component modal.enter.duration. Figma variables import seconds only.
+**Engineer:** DTCG duration tokens such as motion.duration.short = 150ms, on a ladder from .instant to .extra plus shorter exit steps. Figma variables import seconds only.
 
 **Example:** A hover color changes in 100ms; full-screen dimming takes 700ms.
 
@@ -3732,13 +3732,13 @@ Designers: shorter exits, interruptible transitions · Code: `motion.transition.
 ### Motion personality and model
 
 Whether things move in a quick, calm way or a bouncy, fun way, and where fun is allowed.  
-Designers: productive or expressive motion · Code: `MotionScheme: standard | expressive`
+Designers: productive or expressive motion · Code: `Energy dial, motion.spring.*`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Productive motion (short, strong ease-out, no overshoot) for about 90% of interactions; expressive motion for 1-3 hero moments per flow. Keep bounce at or below 0.2.
 
-**Engineer:** A motion-scheme mode (standard or expressive) swaps semantic motion aliases, as Material 3's MotionScheme does. Bounce at or below 0.2 equals a spring damping ratio of 0.8 or higher.
+**Engineer:** No motion-scheme mode: the Energy dial scales durations and springs, unlike Material 3's MotionScheme (standard, expressive). Bounce at or below 0.2 equals a damping ratio of 0.8 or higher.
 
 **Example:** Menus fade in quickly; only the success screen gets a small bounce.
 
@@ -3749,13 +3749,13 @@ Designers: productive or expressive motion · Code: `MotionScheme: standard | ex
 ### Motion by platform and device class
 
 The phone runs its own screen changes, the brand styles small moves, and cars and watches move less.  
-Designers: motion budget by device class · Code: `motion context modifier, duration multipliers`
+Designers: motion budget by device class · Code: `motion context modifier (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** The OS owns screen transitions, back and sheets; the brand owns how things inside a screen react. The motion budget shrinks as attention narrows, to little or none in cars.
 
-**Engineer:** OS transitions (navigation, back, sheets) are not tokenized. A motion context modifier in the resolver maps device classes, such as handheld full, wrist minimal, vehicle none, to duration multipliers.
+**Engineer:** OS transitions (navigation, back, sheets) are not tokenized. Not generated yet: a motion context modifier mapping device classes, such as handheld full, wrist minimal, vehicle none, to duration multipliers.
 
 **Example:** Back swipes use the phone's own slide; the brand animates only in-screen controls.
 
@@ -3800,13 +3800,13 @@ Designers: spring physics, critically damped · Code: `dampingRatio, stiffness i
 ### Sound and haptics
 
 Feedback you feel or hear instead of see, like a small buzz or a soft click.  
-Designers: haptics and UI sounds (earcons) · Code: `haptic.feedback.*, sound asset references`
+Designers: haptics and UI sounds (earcons) · Code: `haptics.intensity param, H-sound, H-haptic hooks`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Non-visual feedback: haptic patterns and UI sounds (earcons). Used sparingly, they confirm actions and make the UI feel physical; overused, they annoy and feel cheap.
 
-**Engineer:** No DTCG type for haptics or sound. Haptics are semantic string tokens mapped to platform APIs in $extensions; sounds are asset references with a volume number.
+**Engineer:** No DTCG type for haptics or sound, and none generated: OpenDesigner records the haptics.intensity parameter and sends sounds and custom haptics to the H-sound and H-haptic hooks.
 
 **Example:** A light tap on the wrist when a payment goes through.
 
@@ -3817,13 +3817,13 @@ Designers: haptics and UI sounds (earcons) · Code: `haptic.feedback.*, sound as
 ### Haptic vocabulary
 
 A small set of buzzes the phone makes for things like a win, a warning, or flipping a switch.  
-Designers: haptic vocabulary: success, warning, selection · Code: `haptic.feedback.success`
+Designers: haptic vocabulary: success, warning, selection · Code: `haptic.feedback.success (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** About six semantic events (success, warning, error, selection, toggle, impact), used sparingly. Crisp, short haptics feel premium; long buzzy vibrations feel cheap. Standard controls already play their own.
 
-**Engineer:** String tokens such as haptic.feedback.success, mapped in $extensions to iOS UIFeedbackGenerator .success and Android HapticFeedbackConstants.CONFIRM. Never store raw vibration durations.
+**Engineer:** Not generated yet: string tokens such as haptic.feedback.success (proposed), mapped to iOS UIFeedbackGenerator .success and Android HapticFeedbackConstants.CONFIRM. Only haptics.intensity exists. Never store raw vibration durations.
 
 **Example:** A crisp tick each time a picker wheel moves to the next item.
 
@@ -3834,13 +3834,13 @@ Designers: haptic vocabulary: success, warning, selection · Code: `haptic.feedb
 ### UI sounds
 
 Whether the app makes little sounds when things happen, like a chime when a message is sent.  
-Designers: earcons, silent by default · Code: `asset token: file reference, volume`
+Designers: earcons, silent by default · Code: `H-sound hook; file reference (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Silent by default on web and productivity apps. Earcons only for rare, meaningful events on mobile, games or spatial platforms, always with a mute option, never as the only signal.
 
-**Engineer:** No DTCG type: sounds are asset tokens (file reference strings) plus a volume number. On iOS, pick the right audio session category so the app respects the silent switch.
+**Engineer:** No DTCG type and none generated: sounds would be file references plus a volume (proposed), requested through hook H-sound. On iOS, the audio session category should respect the silent switch.
 
 **Example:** A payment app plays one short sound on success and stays silent otherwise.
 
@@ -3851,13 +3851,13 @@ Designers: earcons, silent by default · Code: `asset token: file reference, vol
 ### Shape and borders
 
 How round the corners are, and the lines that outline and split things on screen.  
-Designers: corner radius and borders · Code: `radius.*, DTCG border composite`
+Designers: corner radius and borders · Code: `radius.*, border.width.*`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Corner radius (scale, personality, per-component roles, nesting, expressive shapes) plus borders, strokes and dividers. Radius is where systems diverge most, from square to pill; every 2025-2026 revision got rounder.
 
-**Engineer:** Radius tokens are DTCG dimensions (radius.100 = 4px), aliased by semantic radius.control, radius.container and radius.full. Strokes use the border composite: color, width and style.
+**Engineer:** Radius primitives are DTCG dimensions (radius.4 = 4px, radius.full), aliased by roles such as radius.control and radius.container. Strokes use border.width.* and color.border.*.
 
 **Example:** A card with 12px corners and a thin gray outline.
 
@@ -3902,13 +3902,13 @@ Designers: pills and signature shapes · Code: `radius.full, RoundedPolygon, cli
 ### Corner geometry and nesting
 
 The kind of curve a corner has, and how a box inside a box gets corners that fit.  
-Designers: squircle corners, concentric nesting · Code: `radius.nested, corner-shape: squircle`
+Designers: squircle corners, concentric nesting · Code: `radius.nested`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Circular arcs or continuous squircle corners, which look softer and more Apple-like. Nested shapes stay concentric: inner radius is outer radius minus padding, so the gap stays even.
 
-**Engineer:** Inner radius is computed, not stored: max(outer - padding, smallest step), as radius.nested or CSS calc(). Smoothing has no DTCG type; web adds corner-shape: squircle over a border-radius fallback.
+**Engineer:** Inner radius is computed at generation, max(outer - padding, smallest step), and emitted as radius.nested. The engine emits circular arcs; web corner-shape: squircle is an optional enhancement, not generated.
 
 **Example:** Card 16px, padding 8px, so the photo inside gets 8px corners.
 
@@ -3919,13 +3919,13 @@ Designers: squircle corners, concentric nesting · Code: `radius.nested, corner-
 ### Roundness and brand shape language
 
 How round the corners are all over the app, from sharp and serious to soft and friendly.  
-Designers: roundness: sharp, subtle, rounded, pill · Code: `shape-theme mode on radius.*`
+Designers: roundness: sharp, subtle, rounded, pill · Code: `Roundness dial, radius.control`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** One dial (sharp, subtle, rounded, pill) sets every corner radius. Sharp reads technical, round reads friendly. Subtle is the safe default; the logo's curves can suggest a signature shape.
+**Designer:** One dial (sharp, subtle, rounded, pill) sets every corner radius. Sharp reads technical, round reads friendly. Research favors subtle; OpenDesigner starts at 8px (Roundness 50). Logo curves inspire shapes.
 
-**Engineer:** A shape-theme mode swaps semantic radius aliases, so radius.control resolves to a small step or to {radius.full}. Values are DTCG dimension tokens; signature shapes ship as SVG assets.
+**Engineer:** The Roundness dial picks, at generation, which primitive radius.control aliases, from a small step to {radius.full}; there is no shape-theme mode. Signature shapes are SVG assets.
 
 **Example:** Sharp corners for a data tool, pill buttons for a playful consumer app.
 
@@ -3936,15 +3936,15 @@ Designers: roundness: sharp, subtle, rounded, pill · Code: `shape-theme mode on
 ### Radius scale and default control radius
 
 A short list of how round corners can be, and the usual roundness for buttons.  
-Designers: corner radius scale, 6px controls · Code: `radius.control, radius.container, border-radius`
+Designers: corner radius scale, 8px default controls · Code: `radius.control, radius.container, border-radius`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Allowed corner radii plus the control default. Builder scale: 0, 2, 4, 6, 8, 12, 16, 24, full; 6px controls, 8-12px containers. Radius grows with component size.
+**Designer:** Allowed corner radii plus the control default. Research default: 6px controls; OpenDesigner defaults to 8px controls, 12px containers at Roundness 50. Radius grows with size.
 
-**Engineer:** DTCG dimension tokens, {value: 8, unit: 'px'}: primitive radius.100 = 4px, semantic radius.control and radius.container, component button.radius. CSS border-radius; Compose RoundedCornerShape; iOS continuous corners.
+**Engineer:** DTCG dimension tokens: primitives radius.0 to radius.32 plus radius.full; roles radius.control, .container, .nested and .focus. CSS border-radius; Compose RoundedCornerShape; iOS continuous corners.
 
-**Example:** Buttons with 6px corners inside cards with 12px corners.
+**Example:** Buttons with 8px corners inside cards with 12px corners.
 
 **Also called:** border radius, corner radius scale
 
@@ -3976,7 +3976,7 @@ Designers: spacing, sizing and density · Code: `space.*, size.control.*, size.i
 
 **Designer:** The spacing scale and its named uses, the size ladders for controls and media, and density: how tightly the whole UI packs. Values converge; base unit and naming differ.
 
-**Engineer:** DTCG dimension tokens in px or rem (dp and pt map to px): space.* steps, semantic inset, gap and layout aliases, size.control.* and size.icon.*, and density resolver contexts.
+**Engineer:** DTCG dimension tokens in px or rem (dp and pt map to px): space.* steps, semantic space.inset.*, .stack.*, .inline.* and .section.*, size.control.*, size.icon.*, and density resolver contexts.
 
 **Example:** The same 16px padding inside every card.
 
@@ -3987,13 +3987,13 @@ Designers: spacing, sizing and density · Code: `space.*, size.control.*, size.i
 ### Base spacing unit
 
 The one small step that every gap and size is counted in, like the marks on a ruler.  
-Designers: base unit: 4px grid, 8px rhythm · Code: `space.base`
+Designers: base unit: 4px grid, 8px rhythm · Code: `raw.spaceUnit (default 4)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** The unit every spacing and sizing value multiplies. Default: 4 as the grid, 8 as the rhythm. A pure 4 base suits dense tools; 8 suits marketing and content sites.
 
-**Engineer:** A primitive dimension token, space.base = {value: 8, unit: 'px'}, that scale steps alias or multiply. On the web, rem units make spacing follow the user's font-size setting.
+**Engineer:** Not a token: the unit, raw.spaceUnit (4 by default), is recorded in the space group's $extensions.opendesigner; the ladder multiplies it, so space.8 is 8px.
 
 **Example:** Gaps of 4, 8, 16 and 24 pixels, all built from 4.
 
@@ -4004,13 +4004,13 @@ Designers: base unit: 4px grid, 8px rhythm · Code: `space.base`
 ### Density
 
 How much fits on the screen at once, packed tight or spread out, and who gets to choose.  
-Designers: density: how tightly the UI packs · Code: `density: compact | default`
+Designers: density: how tightly the UI packs · Code: `density: compact, comfortable, spacious`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** How much content fits in an area and who controls it. Density changes layout, not only padding: body size, control height and row height.
 
-**Engineer:** Dimension and typography values per density resolver context, such as density: compact | default swapping size.control.md 32 and 40. Target minimums are fixed tokens that density never overrides.
+**Engineer:** Dimension values per density resolver context (compact, comfortable, spacious), such as size.control.md at 32, 40 and 48. size.target.min sits outside the modifier and never changes.
 
 **Example:** A spreadsheet packs rows tight; a shop page spreads things out.
 
@@ -4021,13 +4021,13 @@ Designers: density: how tightly the UI packs · Code: `density: compact | defaul
 ### Density by device class
 
 How much to show at once depends on how far away you are, not how big the screen is.  
-Designers: density by viewing distance · Code: `context modifier: desk, handheld, leanback, wrist`
+Designers: density by viewing distance · Code: `context modifier: desk, handheld, wrist (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Density follows viewing distance and input, not pixel count. A 65-inch TV is a far-away phone: phone-level density. Watches, cars and headsets stay sparse; desks can go compact.
 
-**Engineer:** Density keyed to a context resolver modifier, not screen size: {desk: compact, handheld: comfortable, leanback: comfortable, wrist: sparse, vehicle: sparse, spatial: sparse}.
+**Engineer:** Not generated yet: density keyed to a context resolver modifier, not screen size, such as desk compact, handheld and leanback comfortable, wrist, vehicle and spatial sparse.
 
 **Example:** A TV app shows about as much as a phone app, not a laptop.
 
@@ -4038,13 +4038,13 @@ Designers: density by viewing distance · Code: `context modifier: desk, handhel
 ### Density strategy and modes
 
 Who picks how tight things are packed, the app or you, and which parts can pack tighter.  
-Designers: who sets density; compact modes · Code: `spacing collection mode: compact | default`
+Designers: who sets density; compact modes · Code: `density modifier: compact, comfortable, spacious`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Who sets density (system, product or user) and which components get a compact mode. Consumer products stay comfortable; data tools offer a compact mode for tables, lists, menus and trees.
 
-**Engineer:** A density mode on the spacing collection (compact | default); compact shrinks insets, stacks and row heights one scale step, about 4px, never taking targets below platform minimums.
+**Engineer:** The resolver's density modifier: compact, comfortable (default) or spacious. Compact drops insets, stacks and control heights about one scale step; size.target.min never changes.
 
 **Example:** A 'Compact' option that makes table rows shorter so more fit.
 
@@ -4055,13 +4055,13 @@ Designers: who sets density; compact modes · Code: `spacing collection mode: co
 ### Density voice and base size
 
 Whether the whole app feels tight, cozy or roomy, and how big its text and buttons are.  
-Designers: compact, comfortable or spacious · Code: `density mode swapping font.body.size`
+Designers: compact, comfortable or spacious · Code: `density modifier: size.control.md, space.inset.*`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** The product-wide density personality: compact, comfortable or spacious, with the body size and control height that come with it. Comfortable suits apps, spacious suits marketing, compact suits data tools.
 
-**Engineer:** A density mode on the semantic spacing layer swapping size.control.md and font.body.size. Default: 14px / 32px for business tools, 16px / 40px otherwise.
+**Engineer:** The resolver's density modifier (compact, comfortable, spacious) swaps size.control.md and space.inset.*; the body size is set by the Density dial at generation, not per mode.
 
 **Example:** An admin tool with 14px text and 32px buttons.
 
@@ -4072,13 +4072,13 @@ Designers: compact, comfortable or spacious · Code: `density mode swapping font
 ### Responsive spacing
 
 Whether the gaps get bigger when the window gets wider.  
-Designers: layout spacing grows with window · Code: `layout.margin breakpoint modes`
+Designers: layout spacing grows with window · Code: `layout.margin (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Only layout spacing (page margins, pane spacers, section gaps) grows with window size. Component spacing changes only with density, never with breakpoint, so controls feel the same everywhere.
 
-**Engineer:** Layout tokens get breakpoint modes, such as layout.margin = 16 / 24 / 24; component tokens get none. Native platforms take margins from system layout guides and window size classes.
+**Engineer:** Not generated yet: layout tokens with breakpoint modes, such as layout.margin (proposed) = 16 / 24 / 24; component tokens get none. Native platforms use system layout guides and window size classes.
 
 **Example:** Page margins grow from 16px in narrow windows to 24px in wider ones.
 
@@ -4106,13 +4106,13 @@ Designers: vertical rhythm on a 4px grid · Code: `lineHeight on 4px steps; text
 ### Spacing scale
 
 The short list of gap sizes you may use, so spacing never has to be guessed.  
-Designers: spacing scale, 0 to 80 · Code: `space.0 to space.1000`
+Designers: spacing scale, 0 to 96 · Code: `space.0 to space.96`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** The ordered set of allowed gaps: 12-15 steps from 0 to 80 (Atlassian's set). 2px steps serve component internals; above 8px, steps differ by 25% or more.
+**Designer:** The ordered set of allowed gaps: about 15 steps from 0 to 96. 2px steps serve component internals; above 8px, aim for steps about 25% apart.
 
-**Engineer:** Primitive dimension tokens space.0 to space.1000, used only through semantic or component tokens. Negatives like space.negative.100 = {value: -8, unit: 'px'} mirror positive steps up to 32.
+**Engineer:** Primitive dimension tokens named by pixel value, space.0 to space.96 (unit x 0 to 24), used through space.inset.*, .stack.*, .inline.* and .section.*. No negative steps.
 
 **Example:** Padding of 16 and a gap of 8, never 15 or 7.
 
@@ -4129,7 +4129,7 @@ Designers: inset, gap and layout spacing · Code: `space.inset.md, space.stack.l
 
 **Designer:** Three named jobs: inset (padding inside a component), gap (between siblings in a stack or row), and layout (margins, pane spacers, sections). Insets can be square, squished or stretched.
 
-**Engineer:** Semantic dimension aliases: space.inset.md, space.stack.lg, layout.spacer.pane. A squish inset is two tokens, .block and .inline; DTCG 2025.10 has no padding composite.
+**Engineer:** Semantic dimension aliases space.inset.*, .stack.*, .inline.* and .section.*, swapped per density. A squish inset would need separate block and inline tokens; DTCG 2025.10 has no padding composite.
 
 **Example:** A pill button has less padding above and below than on its sides.
 
@@ -4140,13 +4140,13 @@ Designers: inset, gap and layout spacing · Code: `space.inset.md, space.stack.l
 ### Size scales
 
 A few set sizes for buttons and icons, so things placed in a row line up.  
-Designers: shared size ladders · Code: `size.control.*, size.icon.*, size.avatar.*`
+Designers: shared size ladders · Code: `size.control.*, size.icon.*`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Shared size ladders for interactive controls and for icons and avatars, so a button, input and icon placed side by side align on the same heights.
 
-**Engineer:** Dimension tokens on the spacing grid: size.control.sm/md/lg, size.icon.sm/md/lg and size.avatar.xs..xl, aliased by component tokens such as button.height.md.
+**Engineer:** Dimension tokens size.control.sm to .lg and size.icon.sm to .lg plus .default. Avatar sizes like size.avatar.xs (proposed) and component tokens are not generated yet.
 
 **Example:** A 40px button and a 40px input side by side.
 
@@ -4163,7 +4163,7 @@ Designers: control heights: 32, 40, 48 · Code: `size.control.sm/md/lg`
 
 **Designer:** Small, medium and large heights shared by buttons, inputs and selects: 32, 40, 48 for touch-inclusive products, 24, 32, 40 for pointer-first desktop tools. Don't mix sizes in one group.
 
-**Engineer:** Dimension tokens size.control.sm/md/lg, aliased by button.height.md and input.height.md. Hit areas stay 44pt (iOS) and 48dp (Android) when controls shrink.
+**Engineer:** Dimension tokens size.control.sm, .md and .lg; component tokens like button.height.md (proposed) are not generated yet. Hit areas keep 44pt iOS and 48dp Android minimums.
 
 **Example:** A search box and its button, both 40px tall.
 
@@ -4174,13 +4174,13 @@ Designers: control heights: 32, 40, 48 · Code: `size.control.sm/md/lg`
 ### Icon and avatar size scales
 
 A few set sizes for icons and the small round photos of people.  
-Designers: icon and avatar size ladders · Code: `size.icon.*, size.avatar.*`
+Designers: icon and avatar size ladders · Code: `size.icon.*, size.avatar.* (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Fixed ladders so icons and avatars stay consistent: icons 16, 20, 24, 32; avatars 16 to 64 (Primer's set). Icon size equals the body line height minus 0-4px.
 
-**Engineer:** Dimension tokens size.icon.sm = 16, size.icon.md = 20, size.icon.lg = 24 and size.avatar.xs to .xl. SF Symbols and Material Symbols can instead scale with text.
+**Engineer:** Dimension tokens size.icon.sm = 16, .md = 20 and .lg = 24; avatar sizes like size.avatar.xs (proposed) are not generated yet. SF and Material Symbols can scale with text.
 
 **Example:** A 16px icon in a small button, a 40px avatar beside a comment.
 
@@ -4197,7 +4197,7 @@ Designers: whitespace: airy or tight grouping · Code: `space.section.sm, .md, .
 
 **Designer:** Airy or tight feel, set by the ratio of space inside a group to space between groups: at least 1:2, or 1:3 to 1:4 for airy brands.
 
-**Engineer:** Layout-tier tokens space.section.sm, .md and .lg plus inner and outer semantic spacing pairs, chosen so the inner-to-outer ratio holds, with inner at most half of outer.
+**Engineer:** Semantic space.section.sm, .md and .lg set outer gaps and space.stack.* inner ones; engine.py validate errors when inner exceeds half the outer in any density.
 
 **Example:** A label sits close to its field and far from the next one.
 
@@ -4225,13 +4225,13 @@ Designers: type system: faces, scale, roles · Code: `DTCG typography composite`
 ### Scripts, fallbacks and script metrics
 
 Making words in Hindi, Arabic and more look right, with backup fonts and room to fit.  
-Designers: script coverage and fallback stacks · Code: `font.family.body per locale mode`
+Designers: script coverage and fallback stacks · Code: `font.family.text, :lang() line heights`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Scripts to cover, a fallback stack for each, and script tweaks: taller line height for Indic and CJK, no italics or all caps outside Latin, right-to-left direction.
 
-**Engineer:** fontFamily fallback arrays per locale mode, such as font.family.body in hi-IN = ['Brand Sans', 'Noto Sans Devanagari', ...]. Web subsets with unicode-range and normalizes x-height via font-size-adjust.
+**Engineer:** Per-locale fontFamily fallback arrays, such as font.family.text for hi-IN, are not generated yet; the CSS export sets line heights for listed scripts through :lang() rules.
 
 **Example:** Hindi text falls back to Noto Sans Devanagari with a taller line height.
 
@@ -4276,13 +4276,13 @@ Designers: tabular and proportional lining figures · Code: `font-variant-numeri
 ### Responsive and device-distance type
 
 How text size changes on phones, watches and TVs, so it looks right from where you sit.  
-Designers: fixed body, fluid display type · Code: `font.size.* modes per breakpoint`
+Designers: fixed body, fluid display type · Code: `font.size.* per breakpoint (not generated)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Body text stays fixed; display styles may go fluid on web. Farther screens need bigger numbers: body is 17pt on phone, 29pt on TV.
 
-**Engineer:** DTCG has no fluid value such as clamp(), so use one mode per breakpoint or distance class. Units: pt on Apple, sp on Android, epx on Windows, rem on web.
+**Engineer:** DTCG has no fluid value like clamp(), so responsive type needs modes per breakpoint (not generated yet). Units: pt on Apple, sp on Android, epx on Windows, rem on web.
 
 **Example:** Body text is 17 points on iPhone and 29 points on Apple TV.
 
@@ -4293,13 +4293,13 @@ Designers: fixed body, fluid display type · Code: `font.size.* modes per breakp
 ### Type roles and emphasis
 
 Set text styles for each job, like big titles, reading text and small button words.  
-Designers: type styles: display, headline, body, label · Code: `text.body.medium`
+Designers: type styles: display, headline, body, label · Code: `text.body.md`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Named styles by job (display, headline, title, body, label, code), most in large, medium and small, with one emphasized weight per style. Emphasis uses weight first, color second.
 
-**Engineer:** Semantic composites of $type typography, such as text.body.medium, over numeric primitives (font.size.200, font.weight.semibold). Emphasis is a parallel style, text.body.medium.emphasized.
+**Engineer:** Typography composites by job and size, such as text.body.md, over primitives such as font.size.14 and font.weight.body. Emphasized variants are not generated yet.
 
 **Example:** Headline Large for a page title, Body Medium for paragraphs, Label Small for tags.
 
@@ -4310,13 +4310,13 @@ Designers: type styles: display, headline, body, label · Code: `text.body.mediu
 ### Type scale
 
 The fixed list of text sizes an app may use, from tiny labels to big headings.  
-Designers: type scale: base size and ratio · Code: `font.size.100`
+Designers: type scale: base size and ratio · Code: `font.size.14`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Body size and the ratio that generates the rest. Body runs 14px for tools, 16px for reading; ratios run 1.125-1.2 for dense apps, 1.333+ for editorial.
 
-**Engineer:** Primitive dimension tokens in rem or px, such as font.size.100; default 8-10 sizes under 12-15 semantic styles. Base, ratio and rounding are stored as metadata.
+**Engineer:** Primitive dimension tokens named by pixel size, such as font.size.14, from round(base x ratio^n); base and ratio sit in the group's $extensions.opendesigner.
 
 **Example:** Every heading picks from the same few sizes instead of a random one.
 
@@ -4344,13 +4344,13 @@ Designers: Dynamic Type and text-size support · Code: `rem, sp, UIFont.TextStyl
 ### Text layout (measure, alignment, casing, truncation)
 
 How long lines of text get, which side they line up on, and what happens when words don't fit.  
-Designers: line length, alignment, casing, truncation · Code: `size.measure.prose: 65ch`
+Designers: line length, alignment, casing, truncation · Code: `size.measure.prose (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Keep prose near 65-70 characters per line (35-40 for CJK). Default to start alignment and sentence case; wrap first, then ellipsis with access to the full text.
 
-**Engineer:** No DTCG type for measure, case or truncation. Measure uses CSS ch (size.measure.prose = 65ch), kept in $extensions or converted to rem; text-transform lives in component tokens.
+**Engineer:** No DTCG type for measure, case or truncation. DTCG dimensions allow only px and rem, so size.measure.prose (proposed) would keep 65ch in $extensions; casing stays in CSS.
 
 **Example:** A help article capped at about 70 characters per line.
 
@@ -4367,7 +4367,7 @@ Designers: typeface or font family · Code: `font.family.*`
 
 **Designer:** Which font families the system uses and why: where they come from, the personality they project, how many there are, their variable axes, and how they load.
 
-**Engineer:** DTCG fontFamily tokens, a string or fallback array: primitive font.family.brand and font.family.mono, aliased by semantic roles such as font.family.body.
+**Engineer:** DTCG fontFamily tokens, a string or fallback array: font.family.text for UI and body, font.family.display for headings (aliases text by default) and font.family.mono.
 
 **Example:** Inter for the whole app, plus a code font for snippets.
 
@@ -4401,7 +4401,7 @@ Designers: font licensing and loading budget · Code: `@font-face, font-display:
 
 **Designer:** How fonts are licensed, packaged and loaded, and what that costs in speed. Each web family adds download time, so budget two families and show a fallback first.
 
-**Engineer:** Not tokenized beyond the fontFamily fallback array; the builder outputs @font-face CSS. Default: WOFF2, one variable file per family, font-display: swap, a metric-adjusted fallback and per-script subsets.
+**Engineer:** Not tokenized beyond the fontFamily fallback array; @font-face CSS is not generated yet. Default advice: WOFF2, one variable file per family, font-display: swap, a metric-adjusted fallback and per-script subsets.
 
 **Example:** Text appears at once in a system font, then swaps to the brand font.
 
@@ -4412,13 +4412,13 @@ Designers: font licensing and loading budget · Code: `@font-face, font-display:
 ### Families, pairing and monospace
 
 How many fonts an app uses, which ones pair well, and a font for code.  
-Designers: one UI family plus monospace · Code: `font.family.sans, .serif, .mono`
+Designers: one UI family plus monospace · Code: `font.family.text, .display, .mono`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Default to one UI family plus one monospace, adding a serif or display face only for marketing. Pair siblings that share x-height, contrast and width; tabular figures handle data.
 
-**Engineer:** Primitives font.family.sans, .serif and .mono; semantic font.family.heading, .body and .code; composite text.code.block (Primer: 13px / 1.5); numeric cells get font-variant-numeric: tabular-nums.
+**Engineer:** font.family.text, .display and .mono ($type fontFamily); the composites text.code.sm and text.code.md use mono. Numeric cells get font-variant-numeric: tabular-nums.
 
 **Example:** One sans-serif for the app and a monospace font for code samples.
 
@@ -4429,13 +4429,13 @@ Designers: one UI family plus monospace · Code: `font.family.sans, .serif, .mon
 ### Typeface classification and personality
 
 The mood a font's letter shapes give, such as friendly, serious, new or old.  
-Designers: type class, like neo-grotesque or humanist · Code: `$extensions.classification`
+Designers: type class, like neo-grotesque or humanist · Code: `type.faceSuggestion.classification`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** The type class (neo-grotesque, humanist, geometric, serif, rounded) chosen from brand adjectives, then vetoed if letters get confused at 12-14px or scripts are missing.
 
-**Engineer:** Not a token itself: it selects the value of font.family.*, and the builder stores it as metadata, such as $extensions.classification: 'neo-grotesque', to drive recommendations.
+**Engineer:** Not a token itself: it guides the value of font.family.*. The engine records the param type.faceSuggestion.classification, such as neutral-sans, in opendesigner.meta.json to drive recommendations.
 
 **Example:** A rounded font feels playful; a serif leans toward heritage.
 
@@ -4446,13 +4446,13 @@ Designers: type class, like neo-grotesque or humanist · Code: `$extensions.clas
 ### Typeface sourcing and platform mapping
 
 Whether an app uses the font that came with your device, a free font, or its own.  
-Designers: system, open or custom brand face · Code: `font.family.text: { ios, android, web }`
+Designers: system, open or custom brand face · Code: `font.family.text fallback array`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** System stack, open neutral face (Inter, Roboto) or custom brand face, and which roles get which on each platform. Common split: brand for display and headlines, system for body.
 
-**Engineer:** fontFamily tokens with platform values such as font.family.text = { ios: 'system', android: 'Roboto', web: 'system-ui', windows: 'Segoe UI Variable' }. Apple's SF is system-only; custom faces must be bundled.
+**Engineer:** font.family.text holds one fallback array, such as system-ui, -apple-system, Segoe UI, Roboto, so each platform picks its system face. Apple's SF is system-only; custom faces must be bundled.
 
 **Example:** SF Pro on iPhone, Roboto on Android, the brand font for headlines.
 
@@ -4471,7 +4471,7 @@ Designers: design tokens · Code: `DTCG 2025.10 plus Resolver`
 
 **Designer:** Named values that store every foundation decision, such as color.bg.accent instead of a hex code. Change one token and every design and screen that uses it follows.
 
-**Engineer:** The data layer: tiers, naming, coverage, value types, modes, themes and delivery. Round-trips losslessly to DTCG 2025.10 plus its Resolver, with extensions for string, boolean and spring.
+**Engineer:** The data layer: tiers, naming, coverage, types, modes, themes and delivery. engine.py generate writes DTCG 2025.10 files plus a Resolver; springs and P3 colors ride in $extensions.opendesigner.
 
 **Also called:** design tokens
 
@@ -4486,35 +4486,35 @@ Designers: what gets tokenized · Code: `one DTCG group per category`
 
 **Designer:** Which properties become tokens. Default: everything Figma variables can bind and Check designs can lint, plus motion and focus; one-off illustration values stay out.
 
-**Engineer:** One DTCG group per category: color, font, space, size, radius, border, shadow, opacity, motion, z, breakpoint. z-index and breakpoints are web-centric; native uses elevation and size classes.
+**Engineer:** Emitted DTCG groups: color, font, text, space, size, radius, border, elevation, opacity, motion, focus and icon. Shadow, z-index and breakpoint groups are not generated; native uses elevation and size classes.
 
 </details>
 
 ### Platform delivery of tokens
 
 The form design values take inside each kind of app code, like a web page or a phone app.  
-Designers: tokens in platform code · Code: `css/variables, compose/object, ios-swift/class.swift`
+Designers: tokens in platform code · Code: `build/css/tokens.css, DesignTokens.swift, DesignTokens.kt`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** The form tokens take in each platform's code. On the web: CSS custom properties, media queries for user preferences, container queries for components, viewport breakpoints only for page layout.
 
-**Engineer:** Formats css/variables, compose/object, ios-swift/class.swift, flutter/class.dart. Web modes switch via [data-theme] or @media (prefers-color-scheme); type uses rem.
+**Engineer:** OpenDesigner writes build/css/tokens.css, tailwind/theme.css, swift/DesignTokens.swift and compose/DesignTokens.kt. Web themes follow prefers-color-scheme with a [data-theme] override; type uses rem. No Flutter output.
 
-**Example:** --color-text-primary in CSS, a theme object in Compose.
+**Example:** --ds-color-text-primary in CSS, a DsColors class in Compose.
 
 </details>
 
 ### Modes and theming axes
 
 The switches that change values in one go, like light and dark, or roomy and tight.  
-Designers: modes: light, dark, contrast · Code: `resolver modifiers, Figma collection modes`
+Designers: modes: light, dark, density, motion · Code: `resolver modifiers, Figma collection modes`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** The axes along which values switch, such as color scheme, contrast, density or brand. Default: light and dark plus contrast; add density or brand only for a real need.
+**Designer:** The axes along which values switch, such as color scheme, contrast, density or brand. OpenDesigner generates light and dark, three densities and reduced motion; no contrast or brand modes yet.
 
-**Engineer:** DTCG Resolver modifiers with contexts; in Figma, collections and modes. Outputs equal the product of contexts, so keep axes orthogonal. Semantic tokens re-point per mode; primitives stay single-valued.
+**Engineer:** DTCG Resolver modifiers with contexts (theme, density, motion); Figma collections and modes. Outputs multiply, so keep axes few, and orthogonal so no two set the same token. Primitives stay single-valued.
 
 **Example:** Page background is white in light mode and near-black in dark mode.
 
@@ -4525,26 +4525,26 @@ Designers: modes: light, dark, contrast · Code: `resolver modifiers, Figma coll
 ### Token naming
 
 The rules for how saved choices get their names, so you can guess a name and find it.  
-Designers: token naming convention · Code: `category.property.concept.variant.state`
+Designers: token naming convention · Code: `category.property.concept.variant(State)`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** The grammar that makes token names predictable: category, property, concept, variant, state. Theme and brand never appear in names, because they are modes.
+**Designer:** The grammar that makes token names predictable: category, property, concept, variant, state. Theme and brand never appear in semantic names, because they are modes.
 
-**Engineer:** [namespace].category.property.concept?.variant?.state?, as in ds.color.bg.accent.hover. The pipeline emits kebab (CSS), camel (JS, Swift, Kotlin) and snake (Android XML).
+**Engineer:** category.property.concept.variant, state appended in camelCase: color.bg.accent.boldHover. The export prefix (default ds) namespaces it: CSS --ds-color-bg-accent-bold-hover; Swift and Compose use camelCase.
 
 </details>
 
 ### Primitive naming
 
-How raw values get named, like blue 600 for a shade or small and large for sizes.  
-Designers: hue and numeric step · Code: `color.blue.600, space.100`
+How the basic values get named, like accent 9 for a shade or space 16 for a 16 pixel gap.  
+Designers: role and numeric step · Code: `color.accent.light.9, space.16`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Hue plus a numeric step for color, a percent-of-base scale for space, and t-shirt sizes only for component sizes. Descriptive names are for brand colors only.
+**Designer:** Research favors hue plus a numeric step for color. OpenDesigner names ramps by role and step (accent 9), space by pixel value (16), and keeps t-shirt sizes for semantic tokens.
 
-**Engineer:** color.blue.600 ($type color), space.100 and space.150 (dimension). Avoid ordinal scales where spacing-200 means 12px. Transforms prefix names that start with a digit.
+**Engineer:** Emitted: color.accent.light.9 (color: role, mode, step) and space.16 (dimension, named by px). Hue names such as color.blue.600 (proposed) are not generated. Avoid ordinal scales.
 
 </details>
 
@@ -4557,20 +4557,20 @@ Designers: theming, multi-brand, white-label · Code: `tok.themes.generator, .br
 
 **Designer:** How the system is re-skinned: a few inputs generate a theme, several brands share one system, and white-label customers change a limited set of values.
 
-**Engineer:** Parent of tok.themes.generator, tok.themes.brands and tok.themes.whitelabel. Themes remap semantic token values through resolver modifiers; token names and roles never change.
+**Engineer:** Parent of tok.themes.generator, .brands and .whitelabel. Today inputs such as raw.brandColor generate the theme; a re-skin overrides primitives through state.json overrides. Semantic names never change.
 
 </details>
 
 ### Multi-brand architecture
 
 How a few brands share one set of parts: they work the same, but colors and fonts change.  
-Designers: multi-brand theming · Code: `brand modifier: brand.accent = {color.violet.600}`
+Designers: multi-brand theming · Code: `brand modifier (planned) re-pointing color.accent.*`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Fixed across brands: anatomy, behavior, semantic names, status meanings. Flexible: brand color, typeface, logo, imagery. Radius, density and motion flex with care. Build as if a second brand will come.
 
-**Engineer:** A brand axis, as a resolver modifier or Figma extended collection, overriding a named brandable set: brand.accent = {color.violet.600} or {color.teal.600}, aliased by color.bg.accent.
+**Engineer:** Planned, not generated yet: a brand resolver modifier or Figma extended collection whose contexts re-point a brandable set, such as color.accent.* and font.family.display; semantic names stay fixed.
 
 **Also called:** multi-brand
 
@@ -4579,26 +4579,26 @@ Designers: multi-brand theming · Code: `brand modifier: brand.accent = {color.v
 ### Theme-generator inputs
 
 A few brand choices, like the main color, from which a whole look is worked out for you.  
-Designers: theme seed: accent, base, contrast · Code: `theme.input.accent, .base, .contrast`
+Designers: theme seed: accent, base, contrast · Code: `raw.brandColor, raw.neutralBase, raw.contrastTarget`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** The few brand knobs a whole theme is computed from. Default three: brand or accent color, neutral base or temperature, and contrast. A warmer gray alone shifts personality.
 
-**Engineer:** Inputs theme.input.accent, theme.input.base and theme.input.contrast are builder metadata; derived semantic tokens are generated in a perceptual space such as OKLCH.
+**Engineer:** Inputs are raw.brandColor, raw.neutralBase and raw.contrastTarget in state.json, with the Warmth dial; engine.py generate derives the color.accent.* and color.neutral.* ramps in OKLCH.
 
 </details>
 
 ### White-label customization surface
 
 The short list of things other companies may change to make the app their own, like logo and color.  
-Designers: white-label brand color and logo · Code: `tenant.color.brand, tenant.logo`
+Designers: white-label brand color and logo · Code: `tenant.color.brand (proposed), tenant.logo (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** What external customers may change in a white-label product. Default: brand color and logo; font and radius only with previews and validation. Everything else is derived.
 
-**Engineer:** Exposed inputs only, such as tenant.color.brand, tenant.logo and optionally tenant.font.display; all other color, fontFamily and dimension tokens derive from them.
+**Engineer:** Today the accent ramps derive from one input, raw.brandColor. Proposed tenant inputs: tenant.color.brand (proposed), tenant.logo (proposed), optionally tenant.font.display (proposed); all else derives.
 
 **Also called:** tenant theming
 
@@ -4607,15 +4607,15 @@ Designers: white-label brand color and logo · Code: `tenant.color.brand, tenant
 ### Token tiers
 
 Layers of names, from raw values like a blue shade up to names that say what the blue is for.  
-Designers: primitive, semantic, component tiers · Code: `color.bg.accent = {color.blue.600}`
+Designers: primitive, semantic, component tiers · Code: `color.bg.accent.bold = {color.accent.light.9}`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Primitives hold raw values; semantic tokens say what a value is for and are where theming happens; optional component tokens let one component restyle on its own.
+**Designer:** Primitives hold raw values; semantic tokens say what a value is for and are where theming happens; optional component tokens, not generated yet, let one component restyle on its own.
 
-**Engineer:** Semantic color.bg.accent aliases primitive color.blue.600 as "{color.blue.600}"; button.primary.bg may alias that. Aliases must share a type and never cycle.
+**Engineer:** Semantic color.bg.accent.bold = "{color.accent.light.9}", a primitive; planned component token button.primary.bg (proposed) would alias it. Aliases must share a type and never cycle.
 
-**Example:** Blue 600, then accent background, then primary button background.
+**Example:** Accent shade 9, then accent background, then a primary button background.
 
 **Also called:** token layers
 
@@ -4656,33 +4656,33 @@ Designers: units: px, pt, dp, rem · Code: `$type dimension {value, unit}`
 
 **Designer:** Which unit sizes are stored in, and how they become pt on iOS, dp on Android, epx on Windows and rem on the web. Storing px keeps Figma import lossless.
 
-**Engineer:** $type dimension as {value: 16, unit: "px"}; DTCG allows only px and rem. Export 1:1 as pt and dp, and convert to rem only at the web transform step.
+**Engineer:** $type dimension {value: 16, unit: "px"}; DTCG allows only px and rem. OpenDesigner exports px 1:1 as pt and dp, and CSS font sizes as rem.
 
 </details>
 
 ### Builder extension types
 
-Extra things the shared file has no slot for, like bouncy motion or brand mood, kept in side notes.  
-Designers: values beyond the standard format · Code: `$extensions or sibling files`
+Extra things the shared file has no slot for, like bouncy motion or very bright colors, kept in side notes.  
+Designers: values beyond the standard format · Code: `$extensions.opendesigner, state.json`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Values the standard format cannot hold: springs, text and yes-or-no values, icon and font references, aspect ratios, behavior rules, and builder settings like style preset and brand personality.
+**Designer:** Values the standard format cannot hold: springs, text and yes-or-no values, icon and font references, aspect ratios and rules. OpenDesigner keeps builder settings like preset in state.json.
 
-**Engineer:** No DTCG type; stored under $extensions, for example com.figma.type for booleans, or in sibling files. Covers string, boolean, spring, assets, aspect ratios, rules and builder metadata.
+**Engineer:** Today $extensions.opendesigner holds springs, P3 values, provenance and evidence; builder settings (preset, macros) live in state.json and opendesigner.meta.json. String and boolean extensions are not generated.
 
 </details>
 
 ### Layout and breakpoint encoding
 
 How screen widths and column grids are saved, so the layout changes as the screen grows.  
-Designers: breakpoints, grids and layout guides · Code: `layout.grid.columns, layout.gutter, layout.margin`
+Designers: breakpoints, grids and layout guides · Code: `layout.grid.columns (proposed), layout.gutter (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** How breakpoints, grids and layout guides are stored. Default: a breakpoint collection with three modes driving spacing and layout guides, plus grid auto layout for multi-column components.
+**Designer:** How breakpoints, grids and layout guides are stored. Research default: a three-mode breakpoint collection driving spacing and guides, plus grid auto layout. OpenDesigner does not generate breakpoints yet.
 
-**Engineer:** No DTCG breakpoint or media-query type: layout.grid.columns (number, 4, 8 or 12 by mode), layout.gutter and layout.margin (dimension). Figma grid auto layout maps to CSS grid.
+**Engineer:** No DTCG breakpoint type. Not generated: layout.grid.columns (proposed; 4, 8 or 12), layout.gutter (proposed), layout.margin (proposed). Figma grid auto layout maps to CSS grid.
 
 </details>
 
@@ -4693,7 +4693,7 @@ Designers: durations, easings and springs · Code: `motion.duration.short, cubic
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** How durations, easings and springs are stored. Default: 3-5 durations and 3-4 easings, mirrored as Figma timing and easing variables with a reduced-motion mode.
+**Designer:** How durations, easings and springs are stored. OpenDesigner emits eight durations and four easings, mirrored as Figma timing and easing variables with a reduced-motion mode. Research suggests 3-5 durations.
 
 **Engineer:** DTCG duration, cubicBezier and transition, such as motion.duration.short = {value: 150, unit: "ms"}; springs stay in $extensions until DTCG adds a type.
 
@@ -4702,13 +4702,13 @@ Designers: durations, easings and springs · Code: `motion.duration.short, cubic
 ### Shadow, border and elevation encoding
 
 How shadows and outlines are saved so both design tools and code draw them the same.  
-Designers: effect styles and strokes · Code: `DTCG shadow and border composites`
+Designers: effect styles and strokes · Code: `elevation.* shadow arrays, border.width.*`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** How shadows, borders and elevation are stored so design and code match. Figma effect styles bind color and offset to variables, so dark mode can swap the shadow color.
 
-**Engineer:** DTCG shadow and border composites plus strokeStyle; elevation.2 is an array of shadow layers colored {color.shadow.key}. Android elevation and iOS shadows need custom transforms.
+**Engineer:** elevation.floating is a DTCG shadow array of ring, key and ambient layers. Borders are border.width.* dimensions, not border or strokeStyle composites. Android and iOS shadows need custom transforms.
 
 **Also called:** elevation tokens
 
@@ -4717,13 +4717,13 @@ Designers: effect styles and strokes · Code: `DTCG shadow and border composites
 ### Typography encoding
 
 How text settings like font, size and weight are saved: as one bundle, as single parts, or both.  
-Designers: text styles bound to variables · Code: `typography.body.md composite`
+Designers: text styles bound to variables · Code: `text.body.md typography composite`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Whether type is stored as bundled styles, separate values, or both. Default both: atomic font values plus role-based composites, mirrored in Figma as text styles bound to variables.
 
-**Engineer:** Atomic fontFamily, dimension, fontWeight and number primitives plus typography composites such as typography.body.md. Figma has no composite variable type, so composites become bound text styles.
+**Engineer:** Atomic fontFamily, fontWeight and dimension tokens (line heights in px) plus composites like text.body.md. Figma lacks composite variables, so composites become text styles bound to variables.
 
 </details>
 
@@ -4732,13 +4732,13 @@ Designers: text styles bound to variables · Code: `typography.body.md composite
 ### Components
 
 The parts an app is made of, like buttons and menus, built once and used again.  
-Designers: components: anatomy, variants, states · Code: `comp.* (catalog C01-C64)`
+Designers: components: anatomy, variants, states · Code: `catalog C01-C64`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Reusable UI elements with defined anatomy, variants and states, styled from the system's tokens. OpenDesigner's catalog lists 64 canonical components in ten categories, benchmarked across 10 systems.
 
-**Engineer:** Catalog entries C01-C64 list anatomy, props, states, the APG pattern and consumed token families. Component tokens optionally alias semantic tokens; DTCG has no component model.
+**Engineer:** Catalog entries C01-C64 list anatomy, props, states, the APG pattern and token families used. No component tokens are generated yet; components use semantic tokens directly.
 
 **Example:** A Button, a Dialog and a Card are three components.
 
@@ -4766,13 +4766,13 @@ Designers: buttons and action components · Code: `APG Button, Menu Button, Tool
 ### Button hierarchy, content and destructive treatment
 
 How many kinds of button there are, which one stands out, and how a Delete button looks.  
-Designers: button hierarchy: primary to danger · Code: `button.primary.container.color, button.danger`
+Designers: button hierarchy: primary to danger · Code: `color.bg.action.primary, color.bg.danger.bold`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Four emphasis levels plus danger, one primary per view, placed after the last field. Sentence-case verb labels with an optional leading icon; solid danger only in the confirmation step.
 
-**Engineer:** Component tokens alias semantic ones: color.action.primary.bg feeds button.primary.container.color, color.feedback.danger feeds button.danger. APG Button; SwiftUI confirmationDialog with a destructive role.
+**Engineer:** Semantic tokens color.bg.action.primary with color.text.onAction, and color.bg.danger.bold for destructive; button component tokens are not generated yet. APG Button; SwiftUI destructive role.
 
 **Example:** One filled Save button beside a plain-text Cancel button.
 
@@ -4834,13 +4834,13 @@ Designers: cards, accordions, dividers, carousels · Code: `APG Accordion, Discl
 ### Card and panel separation
 
 How a card stands apart from the page: a light fill, a thin border, or a shadow.  
-Designers: fill, outline or shadow card · Code: `surface.container.*, border.subtle, elevation.level1`
+Designers: fill, outline or shadow card · Code: `color.surface.raised, color.border.subtle, elevation.raised`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Tinted fill feels soft and works in dark mode, outline feels crisp and flat, shadow adds depth. Use fill or outline for static cards, elevation only for floating things.
 
-**Engineer:** Tokens: surface.container.* color roles, border.subtle, and elevation.level1 as a DTCG shadow. Interactive cards bounded only by a border need 3:1 contrast (WCAG 1.4.11).
+**Engineer:** Tokens: color.surface.raised, color.border.subtle, radius.container and elevation.raised. Interactive cards bounded only by a border need 3:1 contrast (WCAG 1.4.11).
 
 **Example:** Cards on a pale gray page, each with a thin outline.
 
@@ -4868,13 +4868,13 @@ Designers: lists, tables and avatars · Code: `APG Table, Grid, Treegrid, Listbo
 ### Avatars
 
 A small picture or letters that stand for a person, team or AI helper.  
-Designers: circle for people, square for teams · Code: `avatar.size.*, avatar.radius.person`
+Designers: circle for people, square for teams · Code: `radius.person, avatar.size.* (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Sizes from 16 to 64 on a 4/8 rhythm. Circle means person, square means team or organization, and a third shape marks AI agents when humans and AI mix.
 
-**Engineer:** avatar.size.* from 16 to 64 (DTCG dimension), avatar.radius.person = 9999px. Alt text when no name sits beside it; text for presence badges at 32px or less.
+**Engineer:** radius.person aliases radius.full (9999px); avatar sizes 16 to 64, avatar.size.* (proposed), are not generated yet. Add alt text when no name sits beside it.
 
 **Example:** A round photo for a person, a square logo for a team.
 
@@ -4885,13 +4885,13 @@ Designers: circle for people, square for teams · Code: `avatar.size.*, avatar.r
 ### Device variants of components
 
 If one set of parts fits phones and laptops, or if watches and TVs get their own.  
-Designers: one component set, context modes · Code: `button.primary.bg per context modifier`
+Designers: one component set, context modes · Code: `context modifier (proposed), color.bg.action.primary`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** One component set covers phone, tablet, desktop and web through context modes; watch and TV get small separate libraries because their input changes, not only their size.
 
-**Engineer:** Shared semantic names like button.primary.bg resolve per context modifier in the DTCG resolver; device-only components get their own namespace, wrist.tile.* or leanback.card.*. Car uses system templates.
+**Engineer:** Not generated yet: a context modifier so shared names like color.bg.action.primary resolve per device, and namespaces like wrist.tile.* (proposed) for device-only parts. Car uses system templates.
 
 **Example:** Google ships separate Compose libraries for Wear and TV.
 
@@ -4902,13 +4902,13 @@ Designers: one component set, context modes · Code: `button.primary.bg per cont
 ### Feedback components
 
 Parts that tell you what is going on, like a warning box, a loading bar or a red dot.  
-Designers: alerts, toasts, progress, empty states · Code: `color.feedback.*, role=alert`
+Designers: alerts, toasts, progress, empty states · Code: `color.bg.danger.subtle, role=alert`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Components that report status, progress or results: alert or banner, toast, progress bar, spinner, skeleton, empty state, badge and AI indicators. Four status colors map info, success, warning and error.
 
-**Engineer:** APG Alert (role alert, no focus move); toasts have no APG pattern and use a status live region. Tokens: color.feedback.{info,success,warning,error}.{bg,fg}. Native: Compose Snackbar.
+**Engineer:** APG Alert (role alert, no focus move); toasts use a status live region on color.bg.inverse. Status: color.bg.danger.subtle, color.text.danger, likewise info, success, warning.
 
 **Example:** A green banner saying your changes were saved.
 
@@ -4919,13 +4919,13 @@ Designers: alerts, toasts, progress, empty states · Code: `color.feedback.*, ro
 ### AI surfaces module
 
 Extra parts for AI features, like a label that says AI made this, and chat bubbles.  
-Designers: AI label and AI accent · Code: `color.ai.*`
+Designers: AI label and AI accent · Code: `color.ai.* (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** An optional module: AI label and AI button variant first, chat components only for conversational products. A distinct AI accent aids recognition but can compete with the primary color.
 
-**Engineer:** Accent or gradient tokens under color.ai.*. Examples: Carbon AI label, Spectrum 2 genai variant, shadcn Message and Bubble. Stream text into polite live regions.
+**Engineer:** Not generated yet: color.ai.* (proposed) accent or gradient tokens. Examples: Carbon AI label, Spectrum 2 genai variant, shadcn Message. Stream text into polite live regions.
 
 **Example:** A small AI tag next to a summary the app wrote.
 
@@ -4942,7 +4942,7 @@ Designers: headless, styled or native base · Code: `shadcn/ui, Base UI, React A
 
 **Designer:** Picks the base under your components. Headless libraries leave every visual choice to your tokens, styled libraries arrive with a look to re-theme, and native controls inherit the platform's look.
 
-**Engineer:** Default for React web: shadcn/ui on Base UI or React Aria; multi-framework: Ark UI or web components; mobile: SwiftUI and Compose controls themed with tokens.
+**Engineer:** Suggested for React web: shadcn/ui on Base UI or React Aria; multi-framework: Ark UI or web components; mobile: SwiftUI and Compose controls themed with tokens. Recorded in components.base.
 
 **Example:** A React app styling shadcn/ui components with its own tokens.
 
@@ -4970,13 +4970,13 @@ Designers: form inputs and text fields · Code: `aria-describedby, aria-invalid,
 ### Form field style and label placement
 
 How a text box looks, with a full border, a shaded fill or a line, and where its name sits.  
-Designers: outlined field, top label · Code: `input.border.color, input.label.typography`
+Designers: outlined field, top label · Code: `color.border.input, text.label.md`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Outlined reads crisp, filled reads soft and app-like, underlined is minimal but low in affordance. Default: outlined fields with top labels; mark whichever of required or optional is rarer.
 
-**Engineer:** Tokens: input.container.color, input.border.color.{default,hover,focus,error}, input.label.typography. Every input needs a programmatic label; placeholders are not labels; borders need 3:1 contrast.
+**Engineer:** Tokens: color.border.input (3:1), color.border.focus, color.border.danger, text.label.* for labels; input component tokens are not generated yet. Every input needs a programmatic label.
 
 **Example:** A box with a border and its label, Email, sitting above it.
 
@@ -4987,13 +4987,13 @@ Designers: outlined field, top label · Code: `input.border.color, input.label.t
 ### Component inventory scope
 
 Choosing which parts to make first, and when to add more later.  
-Designers: core set of about 25 components · Code: `per-component namespace like button.*`
+Designers: core set of about 25 components · Code: `button.* (proposed), APG pattern`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** How large version 1's library is. The default ships about 25 core components and adds extended ones, such as date pickers, when two or more products ask.
+**Designer:** Version 1's library size. The default is about 25 core components (the engine starts with 22); extended ones, such as date pickers, come when two or more products ask.
 
-**Engineer:** Each included component gets a token namespace such as button.* and must implement its APG pattern. For scale, Radix ships 30 primitives and shadcn/ui 64.
+**Engineer:** The list lives in components.inventory in state.json; each included component must implement its APG pattern. Per-component token namespaces such as button.* (proposed) are not generated yet.
 
 **Example:** Buttons and checkboxes in version 1; a color picker later.
 
@@ -5027,7 +5027,7 @@ Designers: icons and images on system scales · Code: `C60 Icon, C61 Image`
 
 **Designer:** Components that render icons and images, such as thumbnails. They keep icon sizes, image corners and aspect ratios on the system's scales instead of hand-set values.
 
-**Engineer:** C60 Icon consumes icon size and color tokens; C61 Image consumes radius, aspect-ratio and placeholder surface tokens. Radix ships Accessible Icon and Aspect Ratio.
+**Engineer:** C60 Icon consumes icon size, stroke and color tokens; C61 Image consumes radius and surface tokens plus CSS aspect-ratio. Radix ships Accessible Icon and Aspect Ratio.
 
 **Example:** A trash-can icon and a square product photo.
 
@@ -5106,13 +5106,13 @@ Designers: checkbox, radio, switch, slider, chip · Code: `APG Checkbox, Radio G
 ### Interaction states
 
 How a part looks when you point at it, press it, pick it, or it cannot be used.  
-Designers: hover, focus, pressed, selected, disabled · Code: `button.primary.container.color.hover`
+Designers: hover, focus, pressed, selected, disabled · Code: `color.bg.action.primaryHover`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** The looks each component defines: enabled, hover, focus-visible, pressed, selected, disabled, loading and error. Hover and press use overlays; selected and error get explicit colors. Touch screens never show hover.
+**Designer:** Each component's looks: enabled, hover, focus-visible, pressed, selected, disabled, loading, error. Hover and press step one or two shades along the ramp; selected and error get explicit colors.
 
-**Engineer:** DTCG has no state semantics; states become a name segment such as button.primary.container.color.hover. Define all states once; each context renders the subset its inputs trigger.
+**Engineer:** DTCG has no state semantics; states become a name suffix such as color.bg.action.primaryHover or .primaryPressed. Define all states once; each context renders the subset its inputs trigger.
 
 **Example:** A button shows a ring around it when reached with the Tab key.
 
@@ -5127,9 +5127,9 @@ Designers: disabled or unavailable state · Code: `aria-disabled`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Faded controls signal 'not now' but can hide why. The default never disables submit buttons: it validates on submit, explains, and adds helper text when an action truly cannot run.
+**Designer:** Faded controls signal 'not now' but can hide why. The default never disables submit: it checks fields on blur, summarizes errors on submit, and explains when an action cannot run.
 
-**Engineer:** Use aria-disabled, as APG recommends; it stays focusable, while disabled controls leave the tab order. Tokens: color.text.disabled or state.disabled.opacity. WCAG exempts them from contrast.
+**Engineer:** Use aria-disabled, as APG recommends; it stays focusable, while disabled controls leave the tab order. Tokens: color.text.disabled, or opacity.disabled.content and .container. WCAG exempts them from contrast.
 
 **Example:** A Save button that stays clickable and says what is missing.
 
@@ -5140,13 +5140,13 @@ Designers: disabled or unavailable state · Code: `aria-disabled`
 ### Loading state
 
 How a part shows it is busy, like a spinning wheel or gray boxes where things will load.  
-Designers: spinner, skeleton or loading button · Code: `loading.delay = 1000ms`
+Designers: spinner, skeleton or loading button · Code: `loading.delay (proposed) = 1000ms`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Choose a spinner, a skeleton that previews the layout, or a loading button. Delay spinners about 1 s, use skeletons for first page loads, and keep loading buttons focusable.
 
-**Engineer:** A delay token such as loading.delay = 1000ms (DTCG duration); announce state through a 4.1.3 status message. Natives: UIKit UIActivityIndicatorView, Compose LoadingIndicator. S2 isPending keeps focus.
+**Engineer:** A delay token such as loading.delay (proposed) = 1000ms (DTCG duration); announce state through a 4.1.3 status message. Natives: UIKit UIActivityIndicatorView, Compose LoadingIndicator. S2 isPending keeps focus.
 
 **Example:** A Save button showing a small spinner while it saves.
 
@@ -5163,7 +5163,7 @@ Designers: selected indicator plus color · Code: `aria-selected, aria-current, 
 
 **Designer:** Mark the chosen tab, row, chip or navigation item with an indicator plus color, never color alone. In action-dense products, save brand primary for actions.
 
-**Engineer:** Expose aria-selected, aria-current or aria-pressed depending on the pattern. Tokens: color.selected.bg, color.selected.fg and indicator.shape; the indicator needs 3:1 contrast where it conveys state.
+**Engineer:** Expose aria-selected, aria-current or aria-pressed per pattern. Tokens: color.bg.accent.subtle, color.text.accent and border.width.selected; the indicator needs 3:1 contrast where it conveys state.
 
 **Example:** A pill shape behind the icon of the current tab.
 
@@ -5174,13 +5174,13 @@ Designers: selected indicator plus color · Code: `aria-selected, aria-current, 
 ### Hierarchy model and naming
 
 How the parts are sorted from smallest to biggest, and what each one is called.  
-Designers: atomic design levels and naming · Code: `comp.button, pattern.form`
+Designers: atomic design levels and naming · Code: `comp.button (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** The five levels: tokens, primitives, components, patterns and templates, with Brad Frost's atomic names kept as aliases. An alias table resolves collisions, such as Tag meaning chip in Carbon.
 
-**Engineer:** Not a token; the chosen level and component names become token path segments such as comp.button or pattern.form. Each catalog entry's Names line feeds the cross-system alias table.
+**Engineer:** Not a token; the chosen level and component names would become token path segments such as comp.button (proposed). Each catalog entry's Names line feeds the cross-system alias table.
 
 **Example:** A Tag in one system is called a Chip in another.
 
@@ -5193,13 +5193,13 @@ Designers: atomic design levels and naming · Code: `comp.button, pattern.form`
 ### Patterns and templates
 
 Common ways to join parts to do a job, like a sign-up form, plus whole pages.  
-Designers: UX patterns and page templates · Code: `pattern.* with lint checks`
+Designers: UX patterns and page templates · Code: `planned lint rules (spec 6.4)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Recurring solutions that combine components around a user goal: forms, feedback, navigation, disclosure, empty states, plus page templates and layout archetypes. Most UX behavior rules apply here.
 
-**Engineer:** No DTCG type exists for patterns; they compose components and reference tokens. The builder encodes their behavior rules as lint checks, like warning on a collection with no empty state.
+**Engineer:** No DTCG type exists for patterns; they compose components and reference tokens. Behavior-rule lint, such as a dialog with no dismiss path, is planned (spec 6.4, 7.12), not built.
 
 **Example:** A sign-up form: fields, labels, a button and error messages together.
 
@@ -5210,13 +5210,13 @@ Designers: UX patterns and page templates · Code: `pattern.* with lint checks`
 ### AI and conversational patterns
 
 Rules for AI tools: say what AI made, show where facts come from, and let people fix it.  
-Designers: AI labels, citations, edit and retry · Code: `color.ai.*, icon.ai`
+Designers: AI labels, citations, edit and retry · Code: `color.ai.* (proposed), icon.ai (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Label AI content, place distinctly styled citations next to claims, express uncertainty, and pair every generated result with Edit, Undo and Retry. Never autoscroll streamed answers.
 
-**Engineer:** Tokens: color.ai.* or an ai accent role, icon.ai, and streaming motion. Announce streamed text at completion or in chunks. Carbon switches components into an AI presence mode.
+**Engineer:** Not generated yet: color.ai.* (proposed) or an AI accent role, and an icon.ai (proposed) glyph; streaming reuses motion tokens. Announce streamed text at completion or in chunks.
 
 **Example:** A chat answer with numbered sources and a Retry button.
 
@@ -5250,7 +5250,7 @@ Designers: undo versus confirm · Code: `APG Alert Dialog`
 
 **Designer:** Reversible actions get undo and no confirmation; irreversible or costly ones get a dialog with verb labels like Delete file, and Cancel as the safe default. Overused confirmations breed habituation.
 
-**Engineer:** APG Alert Dialog (role alertdialog), focus returned to the invoker. Undo toast timing is a DTCG duration and must be pausable. Lint warns on delete without undo or confirm.
+**Engineer:** APG Alert Dialog (role alertdialog), focus returned to the invoker. Undo toast timing is a DTCG duration and must be pausable. Planned warning: delete with neither undo nor confirm.
 
 **Example:** Deleting an email shows Undo; deleting an account asks first.
 
@@ -5284,7 +5284,7 @@ Designers: empty states: first use, no results · Code: `Primer Blankslate, shad
 
 **Designer:** Cover first use, user-cleared and no-results cases. Each communicates status, teaches the feature, and offers a direct next step with a call to action. Loading is not an empty state.
 
-**Engineer:** Reuses illustration, spacing and type tokens. Status must be real text, not only an image. Lint warns on a collection with no empty variant. Examples: Primer Blankslate, shadcn Empty.
+**Engineer:** Reuses spacing and type tokens plus illustration assets. Status must be real text, not only an image. Lint for a missing empty variant: proposed, not built. Example: Primer Blankslate.
 
 **Example:** No projects yet, with a Create project button.
 
@@ -5301,7 +5301,7 @@ Designers: loading, messages and errors · Code: `aria-live regions`
 
 **Designer:** How the system reports waiting, results and errors: the loading ladder, the choice of message channel, and the error message pattern. They implement the heuristic of visible status and feedback.
 
-**Engineer:** Composes alerts, toasts, progress bars, spinners, skeletons and empty states. Announce changes through live regions (WCAG 4.1.3) without stealing focus. Duration thresholds are DTCG duration tokens.
+**Engineer:** Composes alerts, toasts, progress bars, spinners, skeletons and empty states. Announce changes through live regions (WCAG 4.1.3) without stealing focus. Duration threshold tokens are not generated yet.
 
 **Example:** A spinner while saving, then a Saved message.
 
@@ -5312,13 +5312,13 @@ Designers: loading, messages and errors · Code: `aria-live regions`
 ### Error messages
 
 Telling people what went wrong and how to fix it, in plain words, right next to the problem.  
-Designers: what happened, then how to fix · Code: `color.feedback.error.*, icon.status.error`
+Designers: what happened, then how to fix · Code: `color.text.danger, color.border.danger`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Follow NN/g's 13 guidelines: shown near the source, visible without relying on color, precise, constructive and blame-free, input kept. Template: what happened, then how to fix it.
 
-**Engineer:** Tokens color.feedback.error.{fg,bg,border} and icon.status.error, plus a {problem}{cause?}{remedy} template in $extensions. Lint: no remedy, raw error code, color-only error state.
+**Engineer:** Tokens: color.text.danger, color.bg.danger.subtle, color.border.danger; a status icon glyph is not generated. Message template {problem}{cause?}{remedy}. Planned lint: color-only error state (spec 6.4).
 
 **Example:** That email is already in use. Sign in instead?
 
@@ -5329,13 +5329,13 @@ Designers: what happened, then how to fix · Code: `color.feedback.error.*, icon
 ### Loading and wait feedback
 
 What the app shows while you wait: nothing for a blink, a filling bar for a long wait.  
-Designers: loading ladder: skeleton, then progress · Code: `feedback.indicator.delay, aria-busy`
+Designers: loading ladder: skeleton, then progress · Code: `feedback.indicator.delay (proposed), aria-busy`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Acknowledge within 50 ms, show nothing under about 1 s, use a skeleton for 1 to 10 s page loads, and past 10 s show determinate progress with cancel.
 
-**Engineer:** DTCG duration tokens: feedback.acknowledge.max = 50ms, feedback.indicator.delay = 1000ms, rules in $extensions. Pair aria-busy with a polite live region; every indicator carries a text label.
+**Engineer:** Not generated yet: DTCG duration tokens feedback.acknowledge.max (proposed) = 50ms and feedback.indicator.delay (proposed) = 1000ms. Pair aria-busy with a polite live region; indicators carry text labels.
 
 **Example:** A page shows gray outlines of its content while it loads.
 
@@ -5346,13 +5346,13 @@ Designers: loading ladder: skeleton, then progress · Code: `feedback.indicator.
 ### Message channel selection
 
 Choosing where a message shows up: beside the cause, in a bar up top, or in a quick pop-up.  
-Designers: inline, banner, toast or dialog · Code: `color.feedback.{info,success,warning,error}`
+Designers: inline, banner, toast or dialog · Code: `color.bg.<status>.subtle, color.text.<status>`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Put the message where the cause is, inline or in a banner by default. Toasts only for low-stakes confirmations with undo; Primer ships none. Dialogs only for blocking decisions.
 
-**Engineer:** Four status roles: color.feedback.{info,success,warning,error}. Use live regions (WCAG 4.1.3) without moving focus; never auto-dismiss a toast that holds an action (2.2.1).
+**Engineer:** Four status roles, such as color.bg.danger.subtle and color.text.danger. Use live regions (WCAG 4.1.3) without moving focus; never auto-dismiss a toast holding an action.
 
 **Example:** A Deleted, Undo toast after removing an email.
 
@@ -5363,13 +5363,13 @@ Designers: inline, banner, toast or dialog · Code: `color.feedback.{info,succes
 ### Forms and field anatomy
 
 How a form is set up: a name above each box, a tip, and a star on must-fill boxes.  
-Designers: labels above fields, hints below · Code: `autocomplete, space.field.label-gap`
+Designers: labels above fields, hints below · Code: `autocomplete, space.stack.*`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** A visible label above every field, a hint under the label, an asterisk at the label start with a legend, and autofill on standard inputs. Placeholder-only labels are a warning.
+**Designer:** A visible label above every field, a hint below it, an asterisk at the label start with a legend, and autofill on standard inputs. Placeholder-only labels are a planned warning.
 
-**Engineer:** Set autocomplete attributes on personal-data inputs and expose the required state to assistive tech, not only an asterisk. Lint error: field with no programmatic label. Tokens: space.field.label-gap.
+**Engineer:** Set autocomplete on personal-data inputs and expose required state to assistive tech, not only an asterisk. Unlabeled fields are a planned lint error. Label gap: a space.stack.* step.
 
 **Example:** Email, with a star and the hint We never share it.
 
@@ -5397,13 +5397,13 @@ Designers: inline validation and error summary · Code: `validateOn: blur | subm
 ### Glanceable surfaces
 
 Tiny views you read in a blink without opening the app, like a watch face.  
-Designers: widgets, complications, tiles, Live Activities · Code: `type.numeral.lg, ambient mode`
+Designers: widgets, complications, tiles, Live Activities · Code: `type.numeral.lg (proposed), ambient mode`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Widgets, complications, tiles, notifications and Live Activities. Design the complication or tile first, then the app, with one number or one status per surface. Always On dims them.
 
-**Engineer:** Numeral type styles such as type.numeral.lg, compact spacing, and an ambient mode that dims secondary content. Content descriptions must match exactly what is shown.
+**Engineer:** Not generated yet: numeral type styles such as type.numeral.lg (proposed), compact spacing and an ambient mode that dims secondary content. Content descriptions must match exactly what is shown.
 
 **Example:** A watch face showing the next meeting time.
 
@@ -5420,7 +5420,7 @@ Designers: layout archetypes: list-detail, feed, shell · Code: `NavigationSplit
 
 **Designer:** Named screen structures that recur across products: canonical pane layouts such as list-detail, supporting pane and feed, and the app shell that holds navigation, header and content.
 
-**Engineer:** Compose ships canonical layout scaffolds; SwiftUI has NavigationSplitView and UIKit UISplitViewController. Pane and rail widths are DTCG dimension tokens. Landmarks follow pane order.
+**Engineer:** Compose ships canonical layout scaffolds; SwiftUI has NavigationSplitView and UIKit UISplitViewController. Pane and rail width tokens are not generated yet. Landmarks follow pane order.
 
 **Example:** An email app: folder list, message list and open message.
 
@@ -5431,13 +5431,13 @@ Designers: layout archetypes: list-detail, feed, shell · Code: `NavigationSplit
 ### Canonical layouts and panes
 
 Ways to split a screen into one, two or three parts side by side, based on how wide it is.  
-Designers: list-detail, supporting pane, feed · Code: `layout.pane.supporting.ratio`
+Designers: list-detail, supporting pane, feed · Code: `layout.pane.supporting.ratio (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Material's list-detail, supporting pane and feed layouts. One pane below 840dp, two from 840dp, three only at 1600dp and up, with the supporting pane about a third.
 
-**Engineer:** Tokens: layout.pane.fixed.expanded = 360dp, layout.pane.fixed.large = 412dp, layout.pane.supporting.ratio = 0.333 (DTCG number). Compose ships canonical layout scaffolds and Navigation 3.
+**Engineer:** Not generated yet: layout.pane.fixed.expanded (proposed) = 360 (dp; exported as px), layout.pane.fixed.large (proposed) = 412, layout.pane.supporting.ratio (proposed) = 0.333, a DTCG number.
 
 **Example:** On a tablet, the inbox list and the open email side by side.
 
@@ -5448,13 +5448,13 @@ Designers: list-detail, supporting pane, feed · Code: `layout.pane.supporting.r
 ### App shell regions
 
 The parts of an app that stay put, like the menu and top bar, while the main content changes.  
-Designers: app shell: nav, header, content · Code: `layout.sidebar.width, layout.header.height`
+Designers: app shell: nav, header, content · Code: `layout.sidebar.width (proposed), layout.header.height (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** The persistent regions: navigation, header, content and supporting areas. Compact screens use a bottom bar with 3 to 5 destinations, medium a collapsed rail, expanded a rail or sidebar.
 
-**Engineer:** Tokens: layout.rail.width.collapsed, layout.sidebar.width, layout.header.height (DTCG dimension). Swap only functionally equivalent components. Examples: Carbon UI shell, SwiftUI NavigationSplitView, Compose Scaffold.
+**Engineer:** Not generated yet: layout.rail.width.collapsed (proposed), layout.sidebar.width (proposed), layout.header.height (proposed), DTCG dimensions. Swap only functionally equivalent components. Examples: Carbon UI shell, SwiftUI NavigationSplitView.
 
 **Example:** A sidebar and header that stay while pages change in the middle.
 
@@ -5465,13 +5465,13 @@ Designers: app shell: nav, header, content · Code: `layout.sidebar.width, layou
 ### Transitions and choreography
 
 How the screen moves as you go to the next one, and the order things show up in.  
-Designers: container transform, shared axis, fade through · Code: `$type: transition; View Transitions`
+Designers: container transform, shared axis, fade through · Code: `motion.transition.*`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Fade, fade through, shared axis and container transform, which visibly links an element to what it opens. Stagger items 20 to 50 ms apart, at most 500 ms total.
 
-**Engineer:** Each pattern is a DTCG transition composite {duration, delay, timingFunction}; no choreography type exists. Web uses View Transitions; reduced motion swaps spatial transitions for a fade.
+**Engineer:** Transitions are named by role as DTCG transition composites: motion.transition.feedback, enter, exit, move, expand. No named patterns or stagger tokens exist; reduced motion swaps movement for a fade.
 
 **Example:** A card grows into the detail page when you tap it.
 
@@ -5482,13 +5482,13 @@ Designers: container transform, shared axis, fade through · Code: `$type: trans
 ### Global navigation
 
 How an app's main menu works: how many places, how deep it goes, and if it stays in view.  
-Designers: global navigation, always visible · Code: `nav.visibleItems.compact`
+Designers: global navigation, always visible · Code: `nav.visibleItems.compact (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Keep primary navigation visible whenever width allows. Do not cap items at seven, a misuse of Miller's law; group long lists and test labels with a tree test.
 
-**Engineer:** A pattern config rather than a token, for example nav.visibleItems.compact = 5. Expose the nav landmark and aria-current; keep placement consistent (WCAG 3.2.3). Information architecture stays designer-owned.
+**Engineer:** A pattern setting rather than a token, such as nav.visibleItems.compact (proposed) = 5, not generated yet. Expose the nav landmark and aria-current; keep placement consistent (WCAG 3.2.3).
 
 **Example:** Five tabs that stay visible at the bottom of a phone app.
 
@@ -5499,13 +5499,13 @@ Designers: global navigation, always visible · Code: `nav.visibleItems.compact`
 ### Navigation containers by size, platform and device
 
 The same places to go, shown as a bottom bar on phones and a side list on laptops.  
-Designers: bottom bar, rail or sidebar · Code: `nav.bar.height, nav.rail.width.collapsed`
+Designers: bottom bar, rail or sidebar · Code: `nav.bar.height (proposed), NavigationRail`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** 3 to 5 destinations: bottom bar on phone, rail on tablet, sidebar on desktop; more than 7 go in a grouped sidebar. Keep destinations identical and swap only the container.
 
-**Engineer:** A rule table from context and breakpoint to container, with tokens like nav.bar.height and nav.rail.width.collapsed. Natives: SwiftUI sidebarAdaptable tab views, Compose NavigationBar and NavigationRail.
+**Engineer:** A rule table from context and breakpoint to container; tokens like nav.bar.height (proposed) and nav.rail.width.collapsed (proposed) are not generated yet. Natives: SwiftUI sidebarAdaptable, Compose NavigationRail.
 
 **Example:** Tabs on the phone become a sidebar on the iPad.
 
@@ -5522,7 +5522,7 @@ Designers: skippable, contextual onboarding · Code: `Tooltip or Popover coachma
 
 **Designer:** No forced tour. Use contextual help and empty states that teach, and make everything skippable. Deck-of-cards tutorials make the interface look more complicated than it is.
 
-**Engineer:** No tokens. Coachmarks reuse Tooltip or Popover and need dialog-style focus management, keyboard access and a dismiss control. Lint warns on a tour with no skip control.
+**Engineer:** No tokens. Coachmarks reuse Tooltip or Popover and need dialog-style focus management, keyboard access and a dismiss control. Lint for a tour with no skip control: proposed, not built.
 
 **Example:** A tip that appears the first time you open the editor.
 
@@ -5549,14 +5549,14 @@ Designers: search, filters, sign-in, settings · Code: `Search field, Combobox, 
 
 ### Modality and overlays
 
-Which pop-up to use: a box in the middle, a panel that slides in, or a small note.  
+Which pop-up to use: a center box, a panel that slides in, or a small box next to a button.  
 Designers: dialog, sheet or popover choice · Code: `APG Dialog (Modal), UISheetPresentationController`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Dialog for short decisions, side sheet for editing with context, bottom sheet on phones, popover for small scoped tasks. Follow each platform's button order, and always give a way out.
 
-**Engineer:** APG Dialog (Modal): focus trapped and returned, Escape closes, aria-modal. iOS sheets use detents and a grabber (UISheetPresentationController). A dialog with no dismiss path is a lint error.
+**Engineer:** APG Dialog (Modal): focus trapped and returned, Escape closes, aria-modal. iOS sheets use detents and a grabber (UISheetPresentationController). A dialog with no dismiss path is a planned lint error.
 
 **Example:** A bottom sheet with share options on a phone.
 
@@ -5586,13 +5586,13 @@ Designers: page templates: dashboard, detail, settings · Code: `Primer PageLayo
 ### Guardrails and validation
 
 The checks that keep work made by people and AI inside the rules.  
-Designers: guardrails and design linting · Code: `lint configuration beside the tokens`
+Designers: guardrails and design linting · Code: `engine.py validate, engine.py review`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** The checks that keep human and agent work inside the rules: which rules run, where (editor, export, CI), how strict they are, and which device safety and accessibility tests apply.
 
-**Engineer:** The enforcement layer for rules from prin.ux.rules, visual principles and foundation constraints. No DTCG type for rules; lint configuration ships beside the tokens.
+**Engineer:** The enforcement layer for prin.ux.rules, visual principles and foundation constraints. Today engine.py validate checks tokens and engine.py review scans code; exported lint configs are planned.
 
 **Also called:** guardrails, validation
 
@@ -5601,65 +5601,65 @@ Designers: guardrails and design linting · Code: `lint configuration beside the
 ### Check catalog
 
 The full list of tests the tool runs, like checking text is easy to read on its background.  
-Designers: contrast, target, label and limit checks · Code: `alias, cycle and Figma limit checks`
+Designers: contrast, target, label and limit checks · Code: `engine.py validate: contrast, targets, aliases, limits`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Every check the builder runs: contrast on every color pair in every mode, target size, labels, color-only meaning, dismiss paths, deceptive patterns, hierarchy counts and Figma limits.
+**Designer:** What engine.py validate checks: contrast pairs in every mode, target sizes, focus, reduced motion, hierarchy counts and Figma mode limits. Label, dismiss and deceptive-pattern checks are planned.
 
-**Engineer:** Checks reference token paths: aliases share a type with no cycles, at most 5,000 variables per Figma collection, mode caps of 10, 20 or 40, and orthogonal modifiers.
+**Engineer:** validate resolves every alias without cycles, requires a $type, keeps modifiers orthogonal and warns past the Figma plan's mode cap. The Figma export warns above 5,000 variables.
 
 </details>
 
 ### Visual critique strictness
 
 How tough the tool is when it reviews your look: a gentle coach, a strict gate, or a score sheet.  
-Designers: design critique: coach or strict · Code: `$extensions.builder.feedback: coach | strict`
+Designers: design critique: coach or strict · Code: `answers.Q-pref-01: coach | strict (planned)`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** How strongly the builder critiques visual choices: coaching by default, strict blocking for production teams, or an advanced metrics panel. Every message names its principle, so users learn the vocabulary.
+**Designer:** How strongly the builder critiques visual choices: coaching by default; strict blocking and a metrics panel are planned. Every validate message names its rule, so users learn the vocabulary.
 
-**Engineer:** Builder config, not tokens: $extensions.builder.feedback = "coach", "strict" or a metrics panel. Strict blocks export on hard failures such as contrast or a second primary action.
+**Engineer:** Not tokens: answers.Q-pref-01 records silent, coach, strict or metrics, but nothing acts on it yet. validate reports errors; review --strict fails on hard-coded values or stale DESIGN.md.
 
 </details>
 
 ### Rule enforcement and exported lint
 
 How rules hold: you can only break one on purpose, and AI helpers must obey the same rules.  
-Designers: same rules for people and agents · Code: `no-raw-color, no-unknown-token, contrast-min`
+Designers: same rules for people and agents · Code: `engine.py review, validate; lint/ (planned)`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Rules bind people and agents alike: raw values only through an explicit detach, agents limited to the same scopes as humans, and lint rules shipped with every generated system.
+**Designer:** Rules bind people and agents alike: raw values only through an explicit detach, agents limited to the same scopes as humans, and lint rules planned for every generated system.
 
-**Engineer:** Exported stylelint and eslint rules beside the DTCG files, such as no-raw-color, no-unknown-token and contrast-min. Per-token scopes and allowed-token lists apply to agents too.
+**Engineer:** Planned: a lint/ folder with a stylelint strict-value config (spec 7.12). Today engine.py review flags hard-coded values and validate checks contrast; Figma export scopes semantic variables.
 
 </details>
 
 ### Safety and distraction limits
 
 Hard rules for places where a screen could put people at risk, like while they drive a car.  
-Designers: safety and driver distraction limits · Code: `vehicle.animation = false, vehicle.maxTaskScreens`
+Designers: safety and driver distraction limits · Code: `vehicle.animation (proposed); 76 px vehicle target`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Hard rules where a design can endanger people, such as driving or headsets. In a vehicle context they are errors, not warnings: a screen that needs a second glance fails.
+**Designer:** Hard rules where a design can endanger people, such as driving or headsets. In a vehicle context they should be errors, not warnings; OpenDesigner enforces 76 px targets today.
 
-**Engineer:** Validator rules keyed to the context modifier, such as vehicle.animation = false and vehicle.maxTaskScreens = 5. Driving limits: 2 s glance, 12 s task, 76dp targets.
+**Engineer:** With car in raw.platforms or vehicle in raw.inputs, validate enforces a 76 px target. vehicle.animation (proposed) is planned; driving limits: 2 s glance, 12 s task.
 
 </details>
 
 ### Accessibility test matrix by device
 
 The smallest set of tests with helper tools, like screen readers, done on each kind of device.  
-Designers: assistive tech test matrix · Code: `per-context accessibility checklist`
+Designers: assistive tech test matrix · Code: `DESIGN.md Accessibility test matrix`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** The minimum assistive-technology tests per shipped device class: one screen reader, one motor alternative and the largest text size. A first-class device means first-class assistive tech.
 
-**Engineer:** Not tokens; a per-context checklist attached to each component. On visionOS, custom gestures lose hand input under VoiceOver, so each needs a standard alternative.
+**Engineer:** Not tokens. DESIGN.md's Accessibility section lists the test matrix: keyboard, a screen reader per platform, 200% zoom, forced colors and reduced motion. Per-component checklists are planned.
 
 </details>
 
@@ -5674,20 +5674,20 @@ Designers: handoff and tooling · Code: `DTCG plus resolver, then platform code`
 
 **Designer:** How the system leaves the builder and stays in sync: source of truth, interchange file, build pipeline, packaging, export channels, agent-readable outputs, and the round trip with design tools.
 
-**Engineer:** Parent of the deliver.* nodes. The canonical model serializes to DTCG 2025.10 plus a resolver, then transforms into CSS, Swift, Kotlin and other platform code.
+**Engineer:** Parent of the deliver.* nodes. engine.py generate turns state.json into DTCG 2025.10 plus a resolver; export turns that into CSS, Tailwind, Swift, Compose, Figma, Paper and DTCG.
 
 </details>
 
 ### Agent-readable distribution
 
 The files and links that let AI helpers read your design and follow it.  
-Designers: AI-readable docs and MCP · Code: `llms.txt, DESIGN.md, MCP server`
+Designers: AI-readable docs and MCP · Code: `DESIGN.md, AGENTS-snippet.md; MCP server (planned)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** How AI agents read the system: MCP servers, llms.txt, DESIGN.md and Markdown twins of docs. Ship one live channel and one file channel, and test with evals.
 
-**Engineer:** Emit DTCG with $description on every token, DESIGN.md, a shadcn-compatible registry (registry.json plus r/{name}.json) and an llms.txt index; an MCP server is the live channel.
+**Engineer:** Today: DTCG files with $description text, DESIGN.md with a For Agents section, and an AGENTS.md snippet. An MCP server is planned (spec Phase 2).
 
 **Also called:** agent-readable docs
 
@@ -5696,26 +5696,26 @@ Designers: AI-readable docs and MCP · Code: `llms.txt, DESIGN.md, MCP server`
 ### Export and handoff channels
 
 The ways to send your design out of the tool, like copying code or sending it to a design app.  
-Designers: export menu: CSS, CLI, DTCG, PR, Figma · Code: `DTCG, CSS, Tailwind @theme, shadcn registry item`
+Designers: exports: CSS, DTCG, native code, Figma · Code: `export --format all`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** How a builder state leaves the tool. Default: one menu, five exports: copy CSS, a CLI or registry URL, a DTCG file, a pull request, or a push to Figma.
+**Designer:** How a system leaves the tool. OpenDesigner writes export files and pushes to Figma or Paper through their MCP; a CLI URL and pull requests are not built.
 
-**Engineer:** Outputs: DTCG (canonical), CSS custom properties, Tailwind v4 @theme, a shadcn registry item, Swift and Kotlin. The builder's generator is also exposed as an MCP tool.
+**Engineer:** Today: DTCG (canonical), CSS custom properties, Tailwind v4 @theme, Swift, Compose, and Figma and Paper payloads. An MCP server is planned (spec Phase 2).
 
 </details>
 
 ### Interchange format and file layout
 
 The shared file type that tools use to pass your choices back and forth, and how it is split.  
-Designers: token file format and layout · Code: `semantic.dark.tokens.json plus resolver file`
+Designers: token file format and layout · Code: `semantic.color.dark.tokens.json, resolver file`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** The standard file format tokens travel in, and how the files split. Default: DTCG 2025.10, one file per tier and mode, which maps directly onto Figma's one-file-per-mode import.
 
-**Engineer:** One file per tier and mode, like semantic.dark.tokens.json, plus a resolver file with sets and modifiers. DTCG 2025.10 is stable but not a W3C Standard.
+**Engineer:** One file per tier and mode (semantic.color.dark.tokens.json), plus opendesigner.resolver.json with sets and modifiers. DTCG 2025.10 is stable but not a W3C Standard.
 
 </details>
 
@@ -5728,7 +5728,7 @@ Designers: Figma and Paper as mirrors · Code: `use_figma MCP or DTCG per mode`
 
 **Designer:** How the builder mirrors the system into design tools and captures changes back. No tool found does deterministic two-way token sync, so Figma and Paper are treated as mirrors.
 
-**Engineer:** Figma: the remote MCP use_figma with a Full seat, otherwise one DTCG file per mode for native import. Paper: its local MCP. Penpot: DTCG sets and themes.
+**Engineer:** Figma: the remote MCP use_figma with a Full seat, else build/figma/import, one DTCG file per collection and mode. Paper: its local MCP. Penpot: imports the DTCG files.
 
 </details>
 
@@ -5754,7 +5754,7 @@ Designers: Code Connect links to code · Code: `Code Connect, get_variable_defs,
 
 **Designer:** Links from Figma components to real code components, plus descriptions and examples Figma's AI tools read. Start with the top 20 components; describe every component and semantic variable.
 
-**Engineer:** Code Connect needs an Organization or Enterprise plan. Descriptions go in $description; get_variable_defs returns code syntax with values. The remote MCP needs a frame or layer link.
+**Engineer:** Code Connect needs an Organization or Enterprise plan. Descriptions go in $description; get_variable_defs returns variable names and values. The remote MCP needs a frame or layer link.
 
 </details>
 
@@ -5767,20 +5767,20 @@ Designers: code syntax in Dev Mode · Code: `codeSyntax {WEB, ANDROID, iOS}`
 
 **Designer:** The code name Figma's Dev Mode shows beside each variable for Web, Android and iOS. It is the join key between canvas and code, so both sides use one name.
 
-**Engineer:** REST codeSyntax {WEB, ANDROID, iOS}, generated from the pipeline's name transform: color/bg/surface becomes var(--ds-color-bg-surface) on web. There is no Flutter or React Native slot.
+**Engineer:** REST codeSyntax {WEB, ANDROID, iOS}, from the CSS export's name transform: color/surface/base becomes var(--ds-color-surface-base), DS.Colors.surfaceBase on iOS. No Flutter or React Native slot.
 
 </details>
 
 ### Styles versus variables
 
 Which choices Figma keeps as one setting and which as a bundle, like a text style.  
-Designers: variables for values, styles for bundles · Code: `composites as bound Figma styles`
+Designers: variables for values, styles for bundles · Code: `text and effect styles, not variables`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Which values live as Figma variables and which as styles. Rule: variables for values, styles for bundles; any single value that changes by mode must be a variable.
 
-**Engineer:** Colors, spacing, radius, sizes, opacity and motion become variables. Typography, shadows, gradients and layout grids, the DTCG composites, become styles bound to variables.
+**Engineer:** Colors, spacing, radius, sizes, opacity and motion become variables. OpenDesigner writes text styles bound to size, weight and family variables, and effect styles for elevation; no gradients or grids.
 
 </details>
 
@@ -5793,13 +5793,13 @@ Designers: variable collections, modes and scopes · Code: `hiddenFromPublishing
 
 **Designer:** How tiers map to Figma collections and modes. Hide all primitives and scope each semantic variable to the properties its name says, so designers only see the right choices.
 
-**Engineer:** Collections: Primitives (hidden), Semantic color (light, dark, optional high contrast), Semantic dimension, Motion. REST scopes such as TEXT_FILL; hiddenFromPublishing: true; 5,000 variables per collection.
+**Engineer:** Collections: Primitives (hidden), Color (Light, Dark), Density (Spacious, Comfortable, Compact), Motion (Standard, Reduced), Tokens. REST scopes such as TEXT_FILL; hiddenFromPublishing: true; 5,000 variables per collection.
 
 </details>
 
 ### Paper
 
-Paper is a design app built from web pages; it takes your colors but has no dark mode yet.  
+Paper is a design app made of web pages; it takes your colors, but light and dark need two sets.  
 Designers: Paper canvas for specimens · Code: `Paper MCP write_html, create_tokens`
 
 <details><summary>Designer and engineer</summary>
@@ -5826,13 +5826,13 @@ Designers: open-source design tool, native DTCG · Code: `$themes.json and $meta
 ### Distribution model
 
 How coders get the kit into their app, like adding a package or pasting in the code.  
-Designers: npm library, copy-in or Tailwind · Code: `CSS variables, Tailwind @theme, shadcn contract`
+Designers: npm library, copy-in or Tailwind · Code: `CSS variables, Tailwind @theme`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** How engineers consume the system: an npm library, copy-in source like shadcn, a CDN runtime, CSS and HTML only, headless primitives, or utilities like Tailwind.
 
-**Engineer:** Generate DTCG JSON first, then emit CSS variables, Tailwind @theme and the shadcn variable contract, where generated systems land today. Web components work across frameworks.
+**Engineer:** Generate DTCG JSON first, then emit CSS variables and a Tailwind @theme, which OpenDesigner does today. Web components work across frameworks.
 
 </details>
 
@@ -5845,7 +5845,7 @@ Designers: token build pipeline · Code: `Terrazzo or Style Dictionary v5`
 
 **Designer:** The build tool that turns one token source into platform code. Default: Terrazzo for web-only teams, Style Dictionary v5 when native iOS or Android outputs are needed.
 
-**Engineer:** Consumes DTCG 2025.10 plus resolver. Terrazzo 2.x supports resolvers; Style Dictionary v5 does not, so pre-expand each mode combination. SwiftUI and Compose ColorScheme need custom formats.
+**Engineer:** Consumes DTCG 2025.10 plus resolver: Terrazzo 2.x supports resolvers; Style Dictionary v5 needs each mode pre-expanded. engine.py export writes CSS, Swift and Compose; pipeline configs are planned.
 
 **Also called:** token transformer
 
@@ -5854,13 +5854,13 @@ Designers: token build pipeline · Code: `Terrazzo or Style Dictionary v5`
 ### Source of truth and round-trip direction
 
 The one main copy that all other copies follow, and which way changes flow.  
-Designers: canonical source, design tools mirror · Code: `builder model to DTCG plus resolver`
+Designers: canonical source, design tools mirror · Code: `state.json to tokens/ (DTCG plus resolver)`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Which copy of the system wins and which way changes flow. Default: the builder's model is canonical; Figma and Paper are mirrors that send changes back only for review.
+**Designer:** Which copy wins and how changes flow. In OpenDesigner, state.json and the DTCG files it generates are canonical; Figma and Paper are mirrors whose edits return as recorded decisions.
 
-**Engineer:** The model compiles to DTCG 2025.10 plus resolver and code in one step, and every token carries its code syntax. JSON-first keeps OKLCH and P3 values Figma import drops.
+**Engineer:** engine.py build compiles state.json to DTCG 2025.10 plus resolver and code; Figma variables carry matching code syntax. JSON-first keeps OKLCH and P3 values Figma import drops.
 
 **Also called:** canonical source
 
@@ -5871,13 +5871,13 @@ Designers: canonical source, design tools mirror · Code: `builder model to DTCG
 ### Governance, docs and adoption
 
 How the kit is run over time: who looks after it, how it grows, and how it changes.  
-Designers: governance and adoption · Code: `governance.teamModel, decisions[], component.status`
+Designers: governance and adoption · Code: `context.team, decisions.md, components.inventory`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** How the system runs as a product over time: build order and pilots, team, contribution, decisions, status labels, versioning, deprecation, documentation, rollout and measurement.
 
-**Engineer:** Parent of the gov.* nodes. No tokens; stored as builder metadata and records such as governance.teamModel, decisions[], component.status and package.version.
+**Engineer:** Parent of the gov.* nodes. No tokens: team notes in context.team, the decision log in decisions.md, the component list in components.inventory; status and versioning fields are proposed.
 
 **Also called:** governance
 
@@ -5886,13 +5886,13 @@ Designers: governance and adoption · Code: `governance.teamModel, decisions[], 
 ### Rollout and communication
 
 How the kit is brought to product teams, step by step, and how they are kept up to date.  
-Designers: rollout, release notes, roadmap · Code: `migration checklist, release notes from diffs`
+Designers: rollout, release notes, roadmap · Code: `extend change note; release notes (not built)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** How the system reaches product teams and keeps them informed. Default: incremental rollout led by pain points, plus release notes, a public roadmap and a support channel.
 
-**Engineer:** No tokens. The builder can emit a migration checklist and generate release notes from token and component diffs. Native apps roll out through app releases, so migration is slower.
+**Engineer:** opendesigner-extend ends each change with a change note: what, why, affects, validation, decision id. Release notes from token diffs and a migration checklist are not built. Native apps migrate slower.
 
 **Also called:** rollout
 
@@ -5901,13 +5901,13 @@ Designers: rollout, release notes, roadmap · Code: `migration checklist, releas
 ### Versioning
 
 How each new release is numbered and when releases come out.  
-Designers: semantic versioning and release cadence · Code: `package.version per artifact`
+Designers: semantic versioning and release cadence · Code: `package.version (proposed) per artifact`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** How releases are numbered and scheduled. Default: one semantic version for the whole library while small, per-package versions once there is more than one platform, on a predictable cadence.
 
-**Engineer:** package.version per artifact: tokens, components-web, components-ios, figma-library. Native ships through SPM or Gradle while Figma publishes separately, so aligning versions needs automation.
+**Engineer:** No release version is stored yet. package.version (proposed) per artifact: tokens, components-web, components-ios, figma-library. Native ships via SPM or Gradle while Figma publishes separately, so aligning versions needs automation.
 
 **Also called:** semver
 
@@ -5916,39 +5916,39 @@ Designers: semantic versioning and release cadence · Code: `package.version per
 ### Deprecation and migration
 
 How old parts are phased out with warning, and how teams get help moving to new ones.  
-Designers: deprecate, then remove next major · Code: `$deprecated plus component.deprecated`
+Designers: deprecate, then remove next major · Code: `$deprecated; component.deprecated (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Deprecate in a minor release, remove in the next major, give at least one release cycle of notice, and pair every removal with a codemod or migration guide.
 
-**Engineer:** DTCG $deprecated (boolean or string, such as "Use color.bg.accent (v4)") plus $description; component.deprecated {since, removeIn, replacement}. Figma variables have no native deprecated flag.
+**Engineer:** DTCG $deprecated (boolean or string, "Use color.bg.accent (v4)") plus $description, not emitted yet; component.deprecated {since, removeIn, replacement} is proposed. Figma variables have no deprecated flag.
 
 </details>
 
 ### Contribution model
 
 How people outside the core team can suggest or add new parts to the kit.  
-Designers: fast lane and proposal lane · Code: `governance.contribution {who, types, criteria}`
+Designers: fast lane and proposal lane · Code: `answers.Q-gov-03; governance.contribution (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** How outsiders add to the system. Default: a fast lane for fixes, icons and docs, and a proposal lane for new components, gated by useful and unique.
 
-**Engineer:** Stored as governance.contribution = {who, types: [fix, enhancement, new], criteria}. Proposals must pass the useful-and-unique gate before any build work starts.
+**Engineer:** Recorded as answers.Q-gov-03 (two-lanes by default); governance.contribution {who, types, criteria} is proposed. Proposals must pass the useful-and-unique gate before any build work starts.
 
 </details>
 
 ### Governance flow and decision records
 
 The steps a change goes through, and how each choice and its reason are written down.  
-Designers: decision records (ADRs) · Code: `decisions[] {type: rfc | adr, status}`
+Designers: decision records (ADRs) · Code: `decisions.md entries D-0001 onward`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** The steps a change goes through and how decisions are recorded. Adopt Brad Frost's 10-step flow and log every foundation decision as an architecture decision record from day one.
+**Designer:** The steps a change goes through and how decisions are recorded. Adopt Brad Frost's 10-step flow and log every foundation decision as an architecture decision record, as OpenDesigner does.
 
-**Engineer:** decisions[] {id, type: rfc | adr, status: proposed | accepted | rejected | superseded, date, links}. OpenDesigner's Decision Cards map to ADRs, recording why each token choice was made.
+**Engineer:** opendesigner/decisions.md is append-only and ADR-style: each D-0001 entry records path = value, set_by, locked, date, supersedes, source_ref and reason. RFC records and status fields are proposed.
 
 **Also called:** decision records, ADR
 
@@ -5957,39 +5957,39 @@ Designers: decision records (ADRs) · Code: `decisions[] {type: rfc | adr, statu
 ### Documentation platform
 
 Where the how-to guides for the kit live, and who is allowed to write them.  
-Designers: Figma plus Storybook docs · Code: `generated docs plus llms.txt`
+Designers: Figma plus Storybook docs · Code: `DESIGN.md; component pages (planned)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Where documentation lives and who writes it. Small teams document in Figma plus Storybook, add a docs platform when non-engineers author, and always publish a machine-readable export.
 
-**Engineer:** Docs pages generate from the same data model as the tokens, plus llms.txt or an MCP server. Storybook's component manifest supports React, Angular (Vite) and Vue 3 (Vite).
+**Engineer:** OpenDesigner generates DESIGN.md from the same data; component pages (spec 7.8) are planned. Storybook's component manifest supports React, Angular (Vite) and Vue 3 (Vite).
 
 </details>
 
 ### Component documentation page
 
 The fixed layout of the help page for each part, like when to use it and how.  
-Designers: component usage guidelines page · Code: `component.docs {whenToUse, anatomy, variants, states}`
+Designers: component usage guidelines page · Code: `opendesigner/components/<name>.md (planned)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** The template for each component's page: usage, when not to use, anatomy, variants, states, content, accessibility, code and changelog. Docs complete is part of the definition of done.
 
-**Engineer:** component.docs = {whenToUse[], whenNotToUse[], anatomy[], variants[], states[], content[], a11y{}, code{props[], examples[]}, changelog[]}; the specs section generates from component tokens.
+**Engineer:** Planned (spec 7.8), not generated: opendesigner/components/<name>.md with when to use, when not, anatomy, variants, states, content, accessibility, code and changelog.
 
 </details>
 
 ### Component status labels
 
 Labels that show if a part is still being tried, ready to use, or on its way out.  
-Designers: experimental, ready, deprecated · Code: `component.status`
+Designers: experimental, ready, deprecated · Code: `components.notes; component.status (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** The states a component can be in. Default three, experimental, ready and deprecated, which is enough for most teams; Primer itself simplified from five to three.
 
-**Engineer:** component.status = experimental | ready | deprecated (optionally alpha | beta), plus component.since and component.replacedBy. Status can differ per platform package.
+**Engineer:** Recorded as answers.Q-gov-04. DESIGN.md shows each component's status from components.notes, default "planned (tokens ready)"; component.status (proposed) = experimental | ready | deprecated.
 
 **Also called:** status labels
 
@@ -5998,26 +5998,26 @@ Designers: experimental, ready, deprecated · Code: `component.status`
 ### Metrics and maturity
 
 How you tell if teams use the kit and like it, and how grown-up the kit is.  
-Designers: adoption metrics and maturity · Code: `metrics[], system.maturityStage`
+Designers: adoption metrics and maturity · Code: `answers.Q-gov-05; system.maturityStage (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** How adoption and value are measured and which maturity stage you target. Start with design adoption from Figma analytics, code adoption from a scanner, and a quarterly satisfaction survey.
 
-**Engineer:** metrics[] {name, definition, source: figma | code | survey, target} and system.maturityStage = 1..4, after Sparkbox's four stages. Native code usage needs its own scanners.
+**Engineer:** Recorded as answers.Q-gov-05; metrics[] {name, source, target} (proposed) and system.maturityStage (proposed), 1-4 after Sparkbox's four stages, are not stored. Native code usage needs its own scanners.
 
 </details>
 
 ### Build order and pilot
 
 The order you build things in, and which real app tries the kit first.  
-Designers: pilot product and build order · Code: `pilots[] {product, score, champion, window}`
+Designers: pilot product and build order · Code: `answers.Q-gov-02; pilots[] (proposed)`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** The build order and which product pilots the system. Default: minimal foundations (color roles, type, spacing, radius), then components the pilot needs, then back-fill foundations as gaps appear.
 
-**Engineer:** No tokens. Pilots are stored as pilots[] {product, score, champion, window}; score 2-3 candidates on Dan Mall's 8 criteria and pick one with a champion.
+**Engineer:** No tokens. Recorded as answers.Q-gov-02; pilots[] {product, score, champion, window} is proposed. Score 2-3 candidates on Dan Mall's 8 criteria and pick one with a champion.
 
 **Also called:** pilot
 
@@ -6026,13 +6026,13 @@ Designers: pilot product and build order · Code: `pilots[] {product, score, cha
 ### Team model and roles
 
 Who looks after the kit, one central team or people spread across teams, and what jobs they do.  
-Designers: centralized, federated or hybrid team · Code: `governance.teamModel, governance.owner, team.roles[]`
+Designers: centralized, federated or hybrid team · Code: `answers.Q-scope-04, context.team`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Who owns the system (centralized, federated or hybrid) and which roles staff it. Default: start centralized with a named owner, even at 1-2 people; add federated contributors later.
 
-**Engineer:** Stored as governance.teamModel = solitary | centralized | federated | hybrid, governance.owner and team.roles[] {role, person, allocation}. Native platforms need iOS and Android engineers.
+**Engineer:** Recorded as answers.Q-scope-04 (size and model) and context.team, printed in PRODUCT.md; team.roles[] is proposed. Native platforms need iOS and Android engineers.
 
 </details>
 
@@ -6045,7 +6045,7 @@ Designers: Check designs, library analytics, branching · Code: `Figma Check des
 
 **Designer:** Figma's built-in governance: the Check designs linter, library analytics and branching. On Organization or Enterprise, run Check designs before Ready for dev and review analytics quarterly.
 
-**Engineer:** Check designs lints one page at a time, caps at 25K layers and ranks suggestions partly by variable naming. On Professional the builder supplies lint and analytics itself.
+**Engineer:** Check designs lints one page at a time, caps at 25K layers and ranks partly by variable naming. OpenDesigner's validate and review lint tokens and code; no analytics.
 
 </details>
 
@@ -6058,9 +6058,9 @@ Designers: the builder tool itself · Code: `builder.* meta layer`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Decisions about the OpenDesigner tool rather than the system it makes: how you edit, preview, explore, review and collaborate. The builder aims to be the visual tool itself.
+**Designer:** Decisions about the OpenDesigner tool rather than the system it makes: how you edit, preview, explore, review and collaborate. Today that is a chat interview with visual templates.
 
-**Engineer:** A meta layer for decisions about the tool. The research recommends it render real HTML and CSS components from its own model, so the builder is the visual tool itself.
+**Engineer:** A meta layer for decisions about the tool. Today OpenDesigner is skills, an engine script and HTML templates in the host; a standalone canvas is optional phase 3.
 
 **Also called:** builder surface
 
@@ -6069,15 +6069,15 @@ Designers: the builder tool itself · Code: `builder.* meta layer`
 ### AI editing and generative variation
 
 How the AI helper suggests changes you can check first, and how it shows you other options.  
-Designers: reviewable agent patches, lock and shuffle · Code: `patch {op, path, from, to, rationale}`
+Designers: reviewable agent patches, lock and shuffle · Code: `engine.py set --why; locks; patches (planned)`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Human edits are instant; agent edits arrive as reviewable patches with before and after previews. Lock, shuffle and a show-6 grid of real specimens explore alternatives.
+**Designer:** Planned: agent edits as reviewable before-and-after patches, and shuffle. Today the agent shows old and new values before a change, locks protect decisions, and option-gallery compares directions.
 
-**Engineer:** Agent proposals are patches {op, path, from, to, rationale, provenance}. A variant stores {seed, locked[], params}, so any option regenerates exactly; shuffle varies only unlocked parameters.
+**Engineer:** Planned: patches {op, path, from, to, rationale} and variants {seed, locked[], params}. Today each change is engine.py set with --why, logged in decisions.md; locks sit in state.json.
 
-**Example:** Lock the brand color, shuffle everything else, and compare six versions.
+**Example:** Lock the brand color so later changes cannot move it.
 
 </details>
 
@@ -6090,20 +6090,20 @@ Designers: real HTML and CSS canvas · Code: `CSS custom properties, modes as se
 
 **Designer:** What the canvas renders: real HTML and CSS components, a flat image, or a design-tool scene graph. Default: real HTML and CSS, ideally the actual component library.
 
-**Engineer:** On an HTML and CSS canvas, tokens are CSS custom properties and modes are selectors or @media blocks. SwiftUI and Compose stay compiled outputs with their own preview images.
+**Engineer:** preview.html is real HTML and CSS: tokens are CSS custom properties and modes are [data-theme] selectors or @media blocks. SwiftUI and Compose outputs get no preview yet.
 
 </details>
 
 ### Multiplayer and agent presence
 
 Whether a few people and AI helpers can work on one design at once, and how you see them.  
-Designers: multiplayer and agent presence · Code: `URL and git, later CRDT operations`
+Designers: multiplayer and agent presence · Code: `state.json and git; CRDT operations (planned)`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Whether people and agents edit together, and how presence shows. Version 1 is single-user and local-first; agent presence comes first, since agents are the most frequent co-editors.
+**Designer:** Whether people and agents edit together, and how presence shows. Version 1 is single-user and local-first; agent presence is planned first, since agents are the most frequent co-editors.
 
-**Engineer:** Version 1 keeps state in the URL and git. Later, edits become operations (CRDT or operational transform), which also give undo and history.
+**Engineer:** Version 1 keeps state in files in your repo (state.json, decisions.md), so git gives history. Planned: edits as operations (CRDT or operational transform), which also give undo.
 
 **Also called:** multiplayer
 
@@ -6112,39 +6112,39 @@ Designers: multiplayer and agent presence · Code: `URL and git, later CRDT oper
 ### Controls for foundation parameters
 
 The knobs and sliders you use to set the basics, like picking one starting color.  
-Designers: generator controls: seed and targets · Code: `generator params with $extensions provenance`
+Designers: generator controls: seed and targets · Code: `state.json inputs; $extensions.opendesigner.source`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** The widgets that edit foundations. Default generator-first: a seed color and contrast targets for color, min and max keyframes for type and space; raw editing only through an explicit detach.
+**Designer:** The widgets that edit foundations. OpenDesigner is generator-first: seed color and contrast target, base size and ratio, space unit; raw values only through an explicit detach.
 
-**Engineer:** Generator parameters (seed, targets, ratios) are stored as the source and generated values as derived tokens, with provenance in $extensions. P3 and OKLCH need sRGB fallbacks for Figma.
+**Engineer:** Dials and raw inputs in state.json are the source; tokens are derived, with provenance in $extensions.opendesigner.source (formula or person). OKLCH values carry hex fallbacks for Figma.
 
 </details>
 
 ### Designer hooks and resource requests
 
 If the tool cannot make something well, like a logo, it asks whether you have one or can get one.  
-Designers: designer hooks for human-made assets · Code: `designer-owned or tool-assisted provenance nodes`
+Designers: designer hooks for human-made assets · Code: `hooks.<H-id>.status in state.json`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** For what AI cannot make well, like logos, custom icons, illustration, photography or a brand typeface, the builder asks for yours, or suggests a designer or a named tool.
 
-**Engineer:** Hook points are nodes whose provenance is designer-owned or tool-assisted. A placeholder renders in previews until the real resource arrives.
+**Engineer:** state.json hooks.H-logo and 13 others store {status, files, note}; status is pending, have, commissioning, tool, open-library, placeholder or not-needed. DESIGN.md lists open ones under Open Items.
 
 </details>
 
 ### Keyboard-first operation
 
 Being able to do every task in the tool with the keyboard, no mouse needed.  
-Designers: Cmd+K palette, keyboard-first · Code: `palette indexing actions and token paths`
+Designers: Cmd+K palette, keyboard-first · Code: `command palette (planned); OD: lines`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Keyboard access to every action and token: a Cmd+K palette, single keys for view toggles like light and dark, and arrow-key nudging, with Shift for big steps.
+**Designer:** Planned for a canvas: a Cmd+K palette, single keys for toggles like light and dark, arrow-key nudging with Shift for big steps. Today everything runs by typing in chat.
 
-**Engineer:** The palette indexes every action and token path. Modifiers follow platform convention, Cmd on macOS and Ctrl elsewhere; arrow keys nudge perceptual values.
+**Engineer:** Planned: a palette indexing every action and token path; Cmd on macOS, Ctrl elsewhere; arrows nudge perceptual values. Today OD: lines and engine commands are the keyboard path.
 
 **Also called:** command palette
 
@@ -6153,13 +6153,13 @@ Designers: Cmd+K palette, keyboard-first · Code: `palette indexing actions and 
 ### Reference intake
 
 Adding a sample site or picture so the AI can learn from how it is made, without copying its brand.  
-Designers: reference: structure, never brand · Code: `get_variable_defs, get_design_context`
+Designers: reference: structure, never brand · Code: `css_scan.py, engine.py intake`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Add a website, screenshot or Figma file at any time; the AI reads its color, type, spacing, radius, motion and components, and builds on its structure, never its brand.
+**Designer:** Add a website, screenshot or Figma file at any time; the AI reads its color, type, spacing, radius, motion and components, and builds on its structure, never another brand's identity.
 
-**Engineer:** Figma references are read through MCP read tools get_variable_defs and get_design_context, which work on every plan. Node provenance values mark what a reference can supply.
+**Engineer:** css_scan.py or Figma's get_variable_defs and get_design_context measure values; engine.py intake fits them to dials with confidence levels, pending in state.json references.
 
 **Also called:** reference import
 
@@ -6168,51 +6168,51 @@ Designers: reference: structure, never brand · Code: `get_variable_defs, get_de
 ### Primary interaction model
 
 Your main way of working in the tool: sliders with a live view, a drawing space, a chat, or code.  
-Designers: panels, live preview, canvas · Code: `control bound to token path or generator`
+Designers: interaction model: chat, panels or canvas · Code: `OD:set <path>=<value>`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Panels with live preview for foundations and tokens, a canvas for composing screens, and the agent as an accelerator in both, never the only path. Code stays one click away.
+**Designer:** Research default: panels with live preview, a canvas for screens, and the agent as an accelerator, never the only path. Today OpenDesigner is agent-led: chat, visual templates and OD: lines.
 
-**Engineer:** Each control binds to one token path or one generator parameter that derives many tokens, such as a Radix accent seed or a Leonardo contrast target.
+**Engineer:** Each control binds to one path: a dial or raw input that derives many tokens (raw.brandColor), a question id, or a token path. Templates return OD:set lines.
 
 </details>
 
 ### Preview surface and latency
 
 What you see as you decide, like light and dark sample screens side by side, and how fast it updates.  
-Designers: live specimens, all modes side by side · Code: `previews bound to semantic tokens`
+Designers: live specimens, all modes side by side · Code: `preview.html bound to semantic variables`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** What you see while deciding: specimens and graphs for a scale, a component matrix, 2-4 sample screens, every mode side by side. Controls re-render within one frame while dragging.
+**Designer:** What you see while deciding: specimens for each scale, a component sheet and every mode side by side (engine.py preview). Live re-rendering while you drag a control is planned.
 
-**Engineer:** Previews bind to semantic tokens only, so mode or brand swaps re-render without code changes. Anything slower than a few hundred milliseconds shows progress and never blocks editing.
+**Engineer:** preview.html binds components to semantic CSS variables, so each [data-theme] block shows a mode without code changes. The page is static; progress indicators for slow updates are planned.
 
 </details>
 
 ### Review and visual diff
 
-How changes get checked before they go out, with before and after views side by side.  
-Designers: visual diff, before and after · Code: `changed tokens walked through alias graph`
+How changes get checked before they go out, ideally with before and after views side by side.  
+Designers: visual diff, before and after · Code: `graph.json edges; visual diff (planned)`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Every change set gets a visual diff page showing affected components before and after, in each mode, plus the code diff, exported as a pull request.
+**Designer:** Planned: a visual diff page per change set, before and after in each mode, exported as a pull request. Today opendesigner-extend shows old and new values and git diff --stat.
 
-**Engineer:** A change set lists changed tokens, then walks the alias dependency graph to find affected components and screens. Per-platform renders appear when platform outputs differ.
+**Engineer:** Planned: list changed tokens, walk the alias graph to find affected components. Today graph.json names the decisions a change moves, and engine.py review flags stale DESIGN.md sections.
 
 </details>
 
 ### State, undo, versions and sharing
 
-How the tool keeps your steps, lets you undo, saves versions, and shares your work by link.  
-Designers: undo, versions, shareable URL · Code: `URL-encoded state plus DTCG snapshot`
+How the tool keeps your steps and saves versions, and whether you can undo or share work by a link.  
+Designers: undo, versions, shareable URL · Code: `state.json plus decisions.md; URL state (planned)`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** How the builder keeps history and shares work: unlimited undo, a URL that always encodes the current state, named versions, and experiments as branches merged through a diff view.
+**Designer:** How the tool keeps history and shares work. Today: state.json and an append-only decisions.md in your repo; git gives versions and branches. Undo and state URLs are planned.
 
-**Engineer:** A compact, versioned encoding of the model or its generator parameters, following the shadcn preset pattern, plus a full DTCG snapshot per saved version. Undo steps coalesce.
+**Engineer:** state.json (schema_version 1) holds the inputs; decisions.md logs every change, and a later entry supersedes an earlier one. A compact URL encoding and coalesced undo are planned.
 
 </details>

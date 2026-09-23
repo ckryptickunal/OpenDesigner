@@ -242,7 +242,11 @@ def parse_hook_tables():
     for row in re.findall(r"^\| \*\*(H-[a-z0-9]+)\*\*(.*)$", h3, re.M):
         cells = [c.strip() for c in row[1].split(" | ")]
         cells[-1] = cells[-1].rstrip("|").strip()
-        hooks.append({"id": row[0], "kind": "tool", "blocks": cells[0], "ask": cells[1].strip('"'),
+        if cells and cells[0] == "":  # the Hook cell holds only the id, so the row text starts with " | "
+            cells = cells[1:]
+        hooks.append({"id": row[0], "kind": "tool", "blocks": cells[0],
+                      "ask": re.sub(r'"?\s*\((?:Q-[a-z]+-\d+[, ]*)+\)\s*$', "", cells[1]).strip('"'),
+                      "questions": sorted(set(re.findall(r"Q-[a-z]+-\d+", cells[1]))),
                       "tools": cells[2], "caveat": cells[3], "checks": cells[4],
                       "evidence": cells[5] if len(cells) > 5 else ""})
     return hooks

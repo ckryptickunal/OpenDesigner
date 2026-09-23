@@ -93,7 +93,7 @@ OD:remix <dimension>=<option-value>             option gallery only: take color,
 ```
 - Values are JSON: strings in double quotes (`"subtle"`, `"#167874"`), numbers bare (`45`). The engine also accepts a bare word.
 - Parse defensively: ignore text outside `OD:` lines, apply lines in order, and if a value is not a listed option, confirm it as a custom value before recording it.
-- Examples: `OD:set Q-depth-01="ring-shadow"` · `OD:set dials.roundness=45 --why "a bit softer"` · `OD:lock raw.brandColor` · `OD:remix color="soft"`.
+- Examples: `OD:set Q-depth-01="ring-shadow"` · `OD:set dials.roundness=65 --why "a bit softer"` · `OD:lock raw.brandColor` · `OD:remix color="soft"`.
 
 ## 10. Avoiding the generic AI look
 Vendors and NN/g have documented that AI-made interfaces converge on the same few looks (L17 finding 4). Flag it once when a choice lands there; do not ban anything.
