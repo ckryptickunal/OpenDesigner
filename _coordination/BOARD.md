@@ -40,9 +40,9 @@ Status values: `open` (unclaimed), `claimed by <who>`, `done`, `blocked (<why>)`
 | U5 | Three-persona usability test (student, designer, engineer) | `research/U5-usability.md` | open after U2-U4 |
 | S1 | Synthesis: ontology (S1a), questionnaire (S1b), levers + decision graph (S1c), spec (S1d) | `synthesis/*` | done (S1d: 14 sections, 19 decisions, 32 contradictions settled; draft-b kept as non-canonical) |
 | S2 | Synthesis follow-ups from S1d: map 27 L17/L18 cards into the ontology; refresh DECISION-GRAPH prose counts; add a surface-mode question (Persuade/Operate/Read/Experience) to the questionnaire | `synthesis/*` | open |
-| A1 | Funding application packets (private, outside repo: ~/Desktop/SPonsorMe/OpenDesigner-applications/) | private | claimed by orchestrator subagent |
-| A2 | Sponsor outreach Gmail drafts with resume (drafts only) | private | claimed by orchestrator subagent |
-| H1 | Handover document for Kunal's teammate: every funding option, full project context, step-by-step, FAQs (private) | private | orchestrator, after A1 and A2 |
+| A1 | Funding application packets (private, outside repo) | private | done (17 packets, index, tracking.csv) |
+| A2 | Sponsor outreach Gmail drafts (drafts only) | private | done (5 drafts; resume must be attached by hand) |
+| H1 | Handover document for Kunal's teammate | private (`~/Desktop/SPonsorMe/OpenDesigner-applications/HANDOVER.md`) | done |
 | V1 | Verification: fresh-context verifier agents re-check claims and values against live sources | `synthesis/VERIFICATION.md` | waits for S1 |
 
 ## Cross-lane notes
