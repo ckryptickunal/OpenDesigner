@@ -12,12 +12,12 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 Zoom 3 detailed · weight low · changes 0 decisions · class T · cards DC-L07-24
 - **Show if:** Q-tool-03 is figma-org or figma-ent
 - **Ask:** "Should Figma components be linked to code for AI tools?"
-- **Why:** Linked components make generated UI match the real system instead of generic React + Tailwind [DC-L07-24].
+- **Why:** Linked components let AI build screens from your real system, not generic React + Tailwind [DC-L07-24].
 - **Options:**
-  - `cc-ui` Code Connect UI inside Figma, several frameworks per component.
-  - `cc-cli` Code Connect CLI with repo templates and property mappings.
+  - `cc-ui` Code Connect set up in Figma, with many frameworks for each component.
+  - `cc-cli` Code Connect from the command line, with repo templates and prop maps.
   - `none` None: the MCP emits generic React + Tailwind.
-  - `readiness` AI-readiness content only: meaningful names, descriptions, an Examples page (up to 200 examples).
+  - `readiness` Only clear names and notes for AI: meaningful names, descriptions, an Examples page (up to 200 examples).
 - **Default:** `cc-ui`: cc-ui for the top 20 components, plus descriptions on every component and semantic variable and an Examples page *Source:* card heuristic [DC-L07-24].
 - **Show:** a sample MCP response for one component, with and without linkage.
 - **Skip:** yes.

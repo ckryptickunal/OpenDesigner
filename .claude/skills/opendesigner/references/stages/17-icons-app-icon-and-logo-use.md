@@ -12,13 +12,13 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 
 ## Q-icon-01 · Do you have a custom icon set, or should the system adopt a library?
 Zoom 2 defined · weight medium · changes 3 decisions · class T · cards DC-L05-01, DC-L10-25
-- **Ask:** "Do you already have icons? If not, I'd adopt a library that matches your type and corners."
-- **Why:** Icons are a block the builder should not draw from scratch; native sets feel "of the platform", open sets are free and consistent, custom sets carry personality [DC-L05-01; BRIEF requirement 2].
+- **Ask:** "Do you have your own icons, or should we start from a ready-made set?"
+- **Why:** Your own icons add character, the platform's icons feel at home, and free open sets stay the same across the app. The builder should not draw icons from scratch [DC-L05-01; BRIEF requirement 2].
 - **Options:**
-  - `platform-native` Platform-native sets: SF Symbols (7,000+, weight-matched to SF, 20+ scripts) and Material Symbols (variable font, 2,500+).
+  - `platform-native` The platform's own sets: SF Symbols (7,000+, weight-matched to SF, 20+ scripts) and Material Symbols (variable font, 2,500+).
   - `open-source` An open-source set: Lucide (ISC), Heroicons (MIT, 316), Phosphor (MIT, 1,248, 6 weights), Tabler (6,220), Fluent System Icons (MIT).
   - `custom` Your own brand set (IBM, Atlassian 1.5px at 16px, Octicons).
-  - `extend` A library extended with custom domain icons drawn on its template (Material 24dp keyline template; Apple symbol template).
+  - `extend` A ready-made set plus your own icons on its template (Material 24dp keyline template; Apple symbol template).
 - **Default:** `platform-native`: platform-native on native apps, one open-source set on web; platform glyphs for system actions (share, back, close, more, search, settings), brand icons for product concepts *Source:* card heuristics [DC-L05-01, DC-L10-25].
 - **Show:** the icon sheet in context; swapping libraries updates every icon.
 - **Use / avoid:** use one icon family per product; avoid mixing two libraries' strokes in one toolbar [DC-L05-01, inferred].
@@ -27,13 +27,13 @@ Zoom 2 defined · weight medium · changes 3 decisions · class T · cards DC-L0
 
 ## Q-icon-02 · Outlined or filled icons, rounded or sharp?
 Zoom 2 defined · weight medium · changes 3 decisions · class G · cards DC-L05-02, DC-L05-06, DC-L06-13
-- **Ask:** "Outlined or filled icons, and should their corners match your rounded or sharp UI?"
-- **Why:** Outline reads lighter and blends with text; filled reads bolder and is easier to spot at small sizes; icons are where the brand's shape and stroke translate into UI (Atlassian matched icon stroke to its type) [DC-L05-02, DC-L06-13].
+- **Ask:** "Should icons be outlines or solid shapes, with round or sharp corners?"
+- **Why:** Outline icons look lighter and sit well with text; filled icons look bolder and are easier to spot when small. Icons bring the brand's shapes and line weight into the app (Atlassian matched its icon lines to its type) [DC-L05-02, DC-L06-13].
 - **Options:**
   - `outlined` Outlined: light, clean, good in dense UIs (Material, Apple toolbars, Fluent Regular).
   - `filled` Filled: more emphasis (Apple iOS tab bars and swipe actions).
-  - `duotone` Duotone or two-tone: decorative [DC-L05-02].
-  - `rounded|sharp` Corners matched to the radius family: pill UIs with rounded icons, 0-2px UIs with sharp icons [DC-L05-02].
+  - `duotone` Two-tone (duotone): decorative [DC-L05-02].
+  - `rounded|sharp` Corners that match the rest of the app: pill UIs with rounded icons, 0-2px UIs with sharp icons [DC-L05-02].
 - **Default:** `outlined`: outlined at rest, filled plus accent color when selected (two cues that survive color blindness); corners follow Q-shape-01 *Source:* card heuristics [DC-L05-02, DC-L05-06].
 - **Show:** the tab bar and toolbar with style and corner toggles.
 - **Use / avoid:** keep hover and pressed feedback on the container, not the glyph; avoid color-only selected states [DC-L05-06].
@@ -42,10 +42,10 @@ Zoom 2 defined · weight medium · changes 3 decisions · class G · cards DC-L0
 ## Q-icon-06 · Do you have an app icon?
 Zoom 2 defined · weight medium · changes 1 decisions · class D · cards DC-L05-12
 - **Show if:** Q-plat-01 includes ios, android or desktop, or the web app is installable
-- **Ask:** "Do you have an app icon? If so, share the layered source; if not, I can make a clearly-marked placeholder from your logo."
-- **Why:** The app icon is a designer-made block; on Apple it is layered and lit by Liquid Glass, on Android it is adaptive and themed [DC-L05-12; BRIEF requirement 2].
+- **Ask:** "Do you have an app icon? If not, I can make a stand-in from your logo, clearly marked."
+- **Why:** A designer should make the app icon. On Apple it is layered and lit by Liquid Glass; on Android it is adaptive and themed [DC-L05-12; BRIEF requirement 2].
 - **Options:**
-  - `yes-layered` Yes, layered source (background + foreground layers) [DC-L05-12].
+  - `yes-layered` Yes, a file with background and foreground layers [DC-L05-12].
   - `yes-flat` Yes, a flat 1024px image only [DC-L05-12].
   - `no` No: see the Hook line.
 - **Default:** one glyph of 1-3 filled shapes on a solid or gradient background, exported as Apple layers, Android foreground/background/monochrome and PWA icons *Source:* card heuristic [DC-L05-12].

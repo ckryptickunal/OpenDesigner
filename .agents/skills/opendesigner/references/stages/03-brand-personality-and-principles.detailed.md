@@ -8,15 +8,15 @@ Read the main stage file first; these questions refine it.
 
 Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
 
-## Q-brand-06 · Should marketing and editorial pages get their own, more dramatic type set?
+## Q-brand-06 · Should marketing and article pages get their own, bolder set of text styles?
 Zoom 3 detailed · weight high · changes 5 decisions · class G · cards DC-L02-11
-- **Ask:** "Do marketing pages need their own dramatic heading styles?"
-- **Why:** One productive scale keeps apps calm; an expressive set gives editorial pages big size jumps that "would be distracting if used in product" [DC-L02-11].
+- **Ask:** "Do marketing and article pages need their own set of bigger headings?"
+- **Why:** One product type scale keeps apps calm. A second, expressive set gives article pages big size jumps. Those "would be distracting if used in product" [DC-L02-11].
 - **Options:**
   - `two-sets` Two sets: productive base 14px with fixed headings, expressive base 16px with fluid headings (Carbon display from 42px to 156px across breakpoints).
-  - `emphasized` One scale plus emphasized variants: 15 baseline + 15 heavier styles for actions and headlines (M3 Expressive).
-  - `brand-face` One scale plus a separate brand typeface for brand moments (Atlassian Charlie Sans).
-  - `productive-only` Single productive scale (Polaris, Primer) [DC-L02-11].
+  - `emphasized` One scale plus heavier styles: 15 baseline + 15 heavier styles for actions and headlines (M3 Expressive).
+  - `brand-face` One scale plus a brand font for brand moments (Atlassian Charlie Sans).
+  - `productive-only` One product scale only (Polaris, Primer) [DC-L02-11].
 - **Default:** one productive scale plus 3-4 expressive display styles; a full second set if more than a third of pages are marketing or editorial *Source:* card heuristic [DC-L02-11].
 - **Show:** a heading ladder at productive and expressive settings, across three breakpoints.
 - **Use / avoid:** use fluid, expressive display styles on marketing and editorial pages; avoid them inside product containers (Carbon: "Do not use these styles inside a container").

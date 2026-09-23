@@ -13,13 +13,13 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 ## Q-shape-01 · How soft should corners feel?
 Zoom 1 broad · weight high · changes 4 decisions · class G · cards DC-L09-01, DC-L04-02
 - **Ask:** "How soft should corners feel: square, slightly rounded, rounded, or pill?"
-- **Why:** Corner radius tops L09's (inferred) ranking of visual differences between systems (divergence 1), and every 2025-2026 revision got rounder [DC-L09-01; L09 A2].
+- **Why:** In L09's (inferred) ranking, corner radius is what differs most in how systems look (divergence 1). Every 2025-2026 update got rounder [DC-L09-01; L09 A2].
 - **Options:**
   - `square` 0-2px: official, engineered (GOV.UK, Carbon v11 buttons) [DC-L09-01, DC-L04-02].
   - `subtle` 4-6px: businesslike (Fluent 4, Primer and Atlassian 6).
   - `soft` 8-12px: friendly, modern (Polaris, Paste, Blade, Mantine v9 8px; Airbnb 12px) [DC-L09-01].
   - `pill` Pill: consumer, playful, touch-first (Material 3, Spectrum 2, SLDS Cosmos; iOS 26 capsule controls) [DC-L09-01].
-  - `rule-based` Size-dependent (Spectrum 6-10 by size) or concentric with the container (Apple) [DC-L09-01].
+  - `rule-based` Set by size (Spectrum 6-10 by size) or matched to the container's corners (Apple) [DC-L09-01].
 - **Default:** 6px controls, 8-12px containers *Source:* L09 shared default row 7 (16 of 23 control defaults at 4-8px, median 6) [L09 A1; DC-L09-01]; a radius factor slider as Radix offers.
 - **Show:** the component sheet morphing as the slider moves; the focus ring follows the radius.
 - **Use / avoid:** use sharp corners when density and precision are brand values (data, developer tools) and pill when the brand is consumer and touch-first; avoid pill on dense, short controls, which need taller heights [DC-L04-02, DC-L09-01].

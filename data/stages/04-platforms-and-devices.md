@@ -12,13 +12,13 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 
 ## Q-plat-01 · Which platforms ship in the first release?
 Zoom 0 sketch · weight high · changes 12 decisions · class I · cards DC-L10-01
-- **Ask:** "Which platforms ship first: web, iOS, Android, desktop?"
-- **Why:** Each platform adds conventions the brand must coexist with, plus units, target minimums and exporters [DC-L10-01].
+- **Ask:** "Where will it run first: web, iOS, Android or desktop?"
+- **Why:** Each platform brings habits your brand must live with. It also has its own units, smallest target sizes and export files [DC-L10-01].
 - **Options:**
   - `web` Web: one delivery layer (CSS custom properties); the brand can show in every pixel (Polaris calls Shopify's platform "the web platform").
   - `ios` iOS/iPadOS: Liquid Glass chrome, pt units, Dynamic Type; bars, controls and sheets are styled by the OS.
   - `android` Android: Material 3 conventions, dp/sp units, large-screen layouts mandatory at 600dp+.
-  - `desktop` Desktop app (macOS, Windows, or a web-tech shell) [DC-L10-24].
+  - `desktop` Desktop app (macOS, Windows, or built with web tech) [DC-L10-24].
   - `secondary` Watch, TV, car or headset: see Q-plat-02 [DC-L10-24].
 - **Default:** `web`: web *Source:* survey, 94% of systems support web, 35% iOS, 34% Android [DC-L11-01]. L10's own default for consumer products is web + iOS + Android phones with large-screen layouts [DC-L10-01] (see Disagreements).
 - **Show:** the same screen rendered in each platform's chrome (browser, iOS glass bars, Material top bar), side by side.
@@ -28,23 +28,23 @@ Zoom 0 sketch · weight high · changes 12 decisions · class I · cards DC-L10-
 Zoom 2 defined · weight high · changes 11 decisions · class I · cards DC-L10-02, DC-L06-14
 - **Show if:** Q-plat-01 includes ios, android or desktop. In Quick mode it is derived from slider G and shown as a confirm chip.
 - **Ask:** "Should your iOS and Android apps look like the platform, like your brand, or a mix?"
-- **Why:** Native apps feel at home and inherit OS updates for free; brand-first apps look identical everywhere but must re-implement every OS change [DC-L10-02].
+- **Why:** Apps that look like the platform feel at home and get OS updates for free. Brand-first apps look the same everywhere but must redo every OS change [DC-L10-02].
 - **Options:**
-  - `hybrid` Coherent hybrid: shared brand foundations and signature moments, native navigation and controls (Fluent reuses native patterns 80% of the time).
-  - `native-first` Native-first: system components almost everywhere; brand shows in content, accents, imagery and voice (Apple: "Express your brand with familiar components").
-  - `brand-first` Brand-first: identical custom UI on every platform (CRED NeoPOP); can feel foreign and must rebuild accessibility [DC-L06-14].
+  - `hybrid` A mix of both: shared brand foundations and signature moments, native navigation and controls (Fluent reuses native patterns 80% of the time).
+  - `native-first` Like the platform: system components almost everywhere; brand shows in content, accents, imagery and voice (Apple: "Express your brand with familiar components").
+  - `brand-first` Like your brand: identical custom UI on every platform (CRED NeoPOP); can feel foreign and must rebuild accessibility [DC-L06-14].
 - **Default:** `hybrid`: hybrid *Source:* card heuristic, share what users perceive as the brand, adopt the platform's version of "how the phone works" [DC-L10-02, DC-L06-14].
 - **Show:** one screen as native-first, hybrid and brand-first on iOS and Android.
 - **Skip:** yes.
 
-## Q-plat-10 · How closely should interactions follow familiar conventions?
+## Q-plat-10 · How closely should things work the way people already expect?
 Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L13-17
-- **Ask:** "Should interactions follow familiar conventions, get a custom look, or be novel where it matters?"
-- **Why:** Native behavior feels trustworthy but generic; novelty is distinctive but costs learnability (Jakob's law); the default follows the posture chosen in Q-plat-05 [DC-L13-17; graph-overrides.json edge DC-L10-02 to DC-L13-17].
+- **Ask:** "Should it look and work the usual way, work the usual way with your own look, or try something new?"
+- **Why:** Usual behavior feels trusted but plain. New behavior stands out but is harder to learn (Jakob's law). The default follows the look you chose in Q-plat-05 [DC-L13-17; graph-overrides.json edge DC-L10-02 to DC-L13-17].
 - **Options:**
-  - `custom-skin` Conventional behavior with a custom skin: brand visuals, standard interaction [DC-L13-17].
-  - `native` Platform-native: follow HIG, Material or Fluent behavior and look; instantly usable, generic [DC-L13-17].
-  - `novel-core` Novel interaction for the core differentiator only, tested [DC-L13-17].
+  - `custom-skin` Usual behavior, your own look: brand visuals, standard interaction [DC-L13-17].
+  - `native` Like the platform: follow HIG, Material or Fluent behavior and look; instantly usable, generic [DC-L13-17].
+  - `novel-core` Something new only for what sets you apart, tested [DC-L13-17].
 - **Default:** `custom-skin`: custom-skin *Source:* card heuristic; don't override standard shortcuts [DC-L13-17].
 - **Show:** a standard dropdown and a custom one next to each other, both keyboard-operable.
 - **Skip:** yes.
@@ -52,7 +52,7 @@ Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L13-1
 ## Q-plat-08 · What will you build the UI with?
 Zoom 2 defined · weight medium · changes 3 decisions · class I · cards DC-L10-21, DC-L10-20, DC-L10-19
 - **Ask:** "What will you build the UI with?"
-- **Why:** The stack decides the code the builder generates and how fast OS visual changes reach users [DC-L10-21, DC-L10-20, DC-L10-19].
+- **Why:** The tools you build with decide what code the builder writes and how fast new OS looks reach your users [DC-L10-21, DC-L10-20, DC-L10-19].
 - **Options:**
   - `react` React (72% of systems), `vue`, `angular` (28%), `svelte`: framework components [DC-L10-19].
   - `web-components` Web components: framework-agnostic, CDN-delivered (Polaris moved in 2025; Salesforce LWC).
@@ -63,10 +63,10 @@ Zoom 2 defined · weight medium · changes 3 decisions · class I · cards DC-L1
 - **Show:** a code tab showing a generated Button in each selected stack.
 - **Skip:** yes.
 
-## Q-plat-02 · Which device classes must work great on day one, which only need to work, and which are out?
+## Q-plat-02 · Which devices must work great on day one, which only need to work, and which are out?
 Zoom 2 defined · weight high · changes 10 decisions · class I · cards DC-L14-01, DC-L10-24
-- **Ask:** "Which devices must work great on day one, which just need to work, and which are out?"
-- **Why:** Each first-class device class adds a visibly different silhouette; "adapted only" classes look stretched, which Google now penalizes on large screens [DC-L14-01].
+- **Ask:** "Which devices must work great on day one, which only need to work, and which are out?"
+- **Why:** Each device you fully design for adds a visibly different layout shape. Devices you only adapt look stretched. Google now penalizes that on large screens [DC-L14-01].
 - **Options:**
   - `phone` Phone [DC-L14-01].
   - `tablet-foldable` Tablet and foldable: rails, sidebars, 2-3 panes; Android ignores orientation locks at 600dp+.
@@ -82,12 +82,12 @@ Zoom 2 defined · weight high · changes 10 decisions · class I · cards DC-L14
 ## Q-plat-03 · What do people touch or press with?
 Zoom 2 defined · weight medium · changes 0 decisions · class I · cards DC-L10-15
 - **Ask:** "What will people touch or press with: fingers, mouse, keyboard, remote, eyes and hands?"
-- **Why:** Input precision sets target sizes: the visible control can be small, the hit area can't [DC-L10-15].
+- **Why:** How precise people's input is sets target sizes. A control can look small, but the area that responds to a tap or click can't be [DC-L10-15].
 - **Options:**
   - `touch` Touch: 44x44pt iOS, 48x48dp Android; airier layouts, larger rows.
   - `pointer` Mouse or trackpad: macOS 28pt default (20 minimum); denser layouts with hover states.
   - `keyboard` Keyboard: visible focus everywhere (DC-L08-11) [DC-L10-15].
-  - `remote` Remote or focus: tvOS 66pt, focus highlights and expands items.
+  - `remote` A remote that moves focus: tvOS 66pt, focus highlights and expands items.
   - `spatial` Eyes and hands: visionOS 60pt, centers 60pt apart.
 - **Default:** `touch`: touch + pointer + keyboard; 44 CSS px targets on web even though AA requires 24, plus a pointer density mode for desktop *Source:* platform convention [DC-L10-15].
 - **Show:** a button row with its hit area outlined for each input.
@@ -98,7 +98,7 @@ Zoom 2 defined · weight medium · changes 0 decisions · class I · cards DC-L1
 Zoom 2 defined · weight medium · changes 0 decisions · class I · cards DC-L14-11
 - **Show if:** Q-plat-02 marks car, watch or spatial as first-class or works
 - **Ask:** "Will anyone use this while driving, walking, or in a headset?"
-- **Why:** In a vehicle context, distraction limits become hard errors, not warnings [DC-L14-11].
+- **Why:** In a car, rules against distraction become hard errors, not warnings [DC-L14-11].
 - **Options:**
   - `none` None.
   - `driving` Driving: glances at most 2 s and 12 s per task (NHTSA), no animation or auto-scroll, 76dp targets, at most 120 characters per text item.

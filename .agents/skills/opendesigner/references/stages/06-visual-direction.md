@@ -12,15 +12,15 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 
 ## Q-dir-01 · Which overall visual style fits the product?
 Zoom 1 broad · weight high · changes 12 decisions · class G · cards DC-L15-01
-- **Ask:** "Which overall style fits: flat, tonal, glass, neo-brutalist, soft, or maximal?"
-- **Why:** The style preset moves depth, materials, radius, borders and chroma together (fan-out 12) [DC-L15-01].
+- **Ask:** "Which overall look fits: flat, tonal, glass, neo-brutalist, soft, or bold and busy?"
+- **Why:** The style preset sets depth, glass effects, corner radius, borders and color strength all at once. It steers 12 other choices (fan-out 12) [DC-L15-01].
 - **Options:**
   - `flat2` Flat 2.0: mostly flat surfaces, subtle shadows or tonal steps, clear signifiers; neutral, efficient, timeless (Carbon, Primer, Polaris, Fluent).
   - `tonal` Material tonal: tonal surface steps and dynamic color; friendly and systematic (M3; Expressive adds shapes and springs) [DC-L15-01].
-  - `glass` Glass or material: translucent controls and navigation only, 35% dimming under clear glass; premium and native on Apple, can obscure content (Liquid Glass, Fluent Acrylic).
+  - `glass` Glass: translucent controls and navigation only, 35% dimming under clear glass; premium and native on Apple, can obscure content (Liquid Glass, Fluent Acrylic).
   - `neo-brutalist` Neo-brutalist: thick borders, solid 4px offset shadow, 2-3 bold colors, quirky display face; bold, indie, irreverent (Figma and Gumroad brands).
-  - `soft` Soft or neumorphic: extruded same-color surfaces with paired soft shadows; tactile but vague; offered only with a contrast warning.
-  - `maximal` Expressive or maximal: vibrant palettes, overlapping visuals, bold type; energetic but busy; marketing surfaces only.
+  - `soft` Soft 3D (neumorphic): extruded same-color surfaces with paired soft shadows; tactile but vague; offered only with a contrast warning.
+  - `maximal` Loud and busy (maximal): vibrant palettes, overlapping visuals, bold type; energetic but busy; marketing surfaces only.
 - **Default:** `flat2`: flat2 with strong signifiers *Source:* card heuristic; keep the app on a durable base and reserve fashionable styles for marketing [DC-L15-01].
 - **Show:** one product screen (nav, card, form, table) rendered in each style, with contrast warnings on soft and glass.
 - **Use / avoid:** use flat 2.0 or tonal for app surfaces people use daily; use glass only on the functional layer (bars, controls, sheets) and never on reading surfaces; keep neo-brutalist and maximal for marketing or indie products; avoid soft/neumorphic for anything interactive unless borders are added to reach 3:1 [DC-L15-01; via DC-L10-12].
@@ -29,12 +29,12 @@ Zoom 1 broad · weight high · changes 12 decisions · class G · cards DC-L15-0
 ## Q-dir-02 · How much should fit on a screen?
 Zoom 1 broad · weight high · changes 8 decisions · class G · cards DC-L15-04, DC-L08-13
 - **Ask:** "How much should fit on a screen: compact, comfortable, or spacious?"
-- **Why:** Spacious layouts look confident but slow repeat users; compact layouts look efficient but need strong grouping and signifiers [DC-L15-04].
+- **Why:** Spacious screens look confident but slow down people who come back often. Compact screens look efficient but need strong grouping and clear signs of what you can click [DC-L15-04].
 - **Options:**
   - `comfortable` Comfortable: calmer, touch-friendly, consumer feel [DC-L08-13].
   - `compact` Compact: serious, efficient, expert; more data per screen (Carbon table rows from 24px) [DC-L15-04].
   - `spacious` Spacious: calm, premium, focused message [DC-L15-04].
-  - `user-selectable` User-selectable: default plus a compact mode (Atlassian `spacing="compact"`, Salesforce comfy/compact) [DC-L03-10].
+  - `user-selectable` Let people choose: default plus a compact mode (Atlassian `spacing="compact"`, Salesforce comfy/compact) [DC-L03-10].
 - **Default:** `comfortable`: comfortable for app surfaces, spacious for marketing, compact as a user option for data-heavy components (tables, lists, menus, trees) *Source:* card heuristic [DC-L15-04, DC-L08-13].
 - **Show:** a data table and a settings form at each density, with the target-size floor drawn so it visibly does not shrink [DC-L15-04].
 - **Use / avoid:** use compact for data-heavy components (tables, lists, menus, trees); use spacious for marketing and focused tasks; avoid shrinking targets with density; they stay at the floor in every mode [DC-L15-04, DC-L08-13].
@@ -42,8 +42,8 @@ Zoom 1 broad · weight high · changes 8 decisions · class G · cards DC-L15-04
 
 ## Q-dir-03 · How dramatic should the difference between headings and body text be?
 Zoom 2 defined · weight medium · changes 4 decisions · class G · cards DC-L15-02
-- **Ask:** "How dramatic should headings be compared with body text?"
-- **Why:** Hierarchy strength sets the type ratio, weights and text-color tiers; too subtle makes levels "almost match", too dramatic leaves few usable steps [DC-L15-02].
+- **Ask:** "How much should headings stand out from body text?"
+- **Why:** This sets the size step between text levels, the font weights and the number of text colors. If too subtle, levels "almost match"; if too dramatic, few steps are left to use [DC-L15-02].
 - **Options:**
   - `balanced` Balanced: ratio 1.25 (16, 20, 25, 31, 39px), weights 400/600/700 [DC-L15-02].
   - `subtle` Subtle: ratio 1.125-1.2 (16, 18, 20, 23px), weights 400 and 600; calm, dense, professional (Carbon productive) [DC-L15-02].
@@ -56,10 +56,10 @@ Zoom 2 defined · weight medium · changes 4 decisions · class G · cards DC-L1
 ## Q-dir-04 · How should related things be grouped?
 Zoom 2 defined · weight medium · changes 3 decisions · class G · cards DC-L15-05
 - **Ask:** "Should related things be grouped by space, cards, or lines?"
-- **Why:** Grouping sets whether surfaces use space, cards or lines, which drives surface colors, dividers and whitespace [DC-L15-05].
+- **Why:** This decides if screens group things with space, cards or lines. It drives surface colors, divider lines and white space [DC-L15-05].
 - **Options:**
   - `space` Space first: proximity only, outer gaps larger than inner; lighter, calmer, modern (Refactoring UI "Use fewer borders"; Carbon, Fluent) [DC-L03-24].
-  - `containers` Containers first: cards and tinted panels; structured, "enterprise"; "boxes in boxes" when overused.
+  - `containers` Cards and panels first: cards and tinted panels; structured, "enterprise"; "boxes in boxes" when overused.
   - `lines` Lines first: rules and separators; orderly, editorial, busy if lines multiply.
 - **Default:** `space`: space first; containers when content types mix or items sit in a grid; lines for long lists; inner:outer spacing at 1:2 or more *Source:* card heuristic [DC-L15-05; DC-L03-24].
 - **Show:** a settings page grouped each way.

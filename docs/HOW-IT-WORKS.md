@@ -13,7 +13,7 @@ This page is the easy-to-read version. The full product specification is [SPEC.m
 
 ## The process at a glance
 
-The diagram shows the full process from the specification: ten phases, three of which end at a gate where you approve before the model moves on. In practice, the skill starts with a 5-question sketch (section 2). Then, for each area you zoom into, it asks questions in this order.
+The diagram shows the full process from the specification: ten phases. Three of them end at a gate, where you approve before the model moves on. In practice, the skill starts with a 5-question sketch (section 2). Then, for each area you zoom into, it asks questions in this order.
 
 ```mermaid
 flowchart TD
@@ -39,17 +39,18 @@ Each phase groups screens of the interview in [`synthesis/QUESTIONNAIRE.md`](../
 
 ## 1. Define the building blocks first
 
-The model works from a map of everything a design system contains. The map has ten layers: context, principles, foundations, tokens, components, patterns, guardrails, delivery, governance, and the builder surface itself. It is [`synthesis/ontology.json`](../synthesis/ontology.json) (271 nodes), with a readable version in [`synthesis/ONTOLOGY.md`](../synthesis/ONTOLOGY.md).
+The model works from a map of everything a design system contains. The map has ten layers: context, principles, foundations, tokens, components, patterns, guardrails, delivery, governance, and the builder surface itself. It is [`synthesis/ontology.json`](../synthesis/ontology.json) (275 nodes), with a readable version in [`synthesis/ONTOLOGY.md`](../synthesis/ONTOLOGY.md).
 
-Each of the 207 design-system blocks is tagged with who or what should make it:
+The map has 211 building blocks outside the builder layer. Each one is tagged with who or what should make it [S-V1b-091]:
 
 | Class | Blocks | What the model does |
 |---|---|---|
-| **Generatable** | 135 | Works it out from your inputs and the dials, shows it visually, lets you adjust |
-| **Tool-assisted** | 31 | Recommends a named tool or library with its caveat (license, plan, platform) |
-| **Owner input** | 29 | Asks you, because only your team can decide it (scope, platforms, governance); never invents an answer |
-| **Designer-owned** | 7 | Opens an asset hook (below) |
-| **Extractable** | 5 | Reads it from your existing product or files, and asks you to confirm |
+| **Generatable** | 156 | Works it out from your inputs and the dials, shows it visually, lets you adjust |
+| **Designer-owned** | 30 | Needs a person. For an asset such as a logo, it opens an asset hook (below). For a choice only your team can make (scope, platforms, governance), it asks you and never invents an answer |
+| **Tool-assisted** | 23 | Recommends a named tool or library with its caveat (license, plan, platform) |
+| **Extractable** | 2 | Reads it from your existing product or files, and asks you to confirm |
+
+These counts come from `ontology.json`. The L17 research sorted an earlier map of 207 blocks into five classes, with owner input as a class of its own. Its counts were 135 generatable, 31 tool-assisted, 29 owner input, 7 designer-owned and 5 extractable. The maintainer has not yet chosen which sorting is canonical [S-V1b-091].
 
 Every block always shows a status: pending, default, decided, not applicable, awaiting asset, or assumed. Some blocks don't apply, like haptics for a web-only product. These are marked "not applicable" with a reason. The coverage check then counts them as decided, not missing.
 
@@ -64,7 +65,7 @@ You start with a rough version of the whole system. Then you zoom in only where 
 | 2 | defined | One area at a time, for example Color: ramps, roles, contrast | 1 to 15 questions per area |
 | 3 | detailed | Components, patterns and the fine print of each area | the rest |
 
-You can stop at any level. Every level leaves working files, and `DESIGN.md` shows how far each area has been zoomed. Each of the 192 questions has a zoom level. The questionnaire also keeps its earlier Quick, Standard and Expert tags (10, 92 and 191 questions).
+You can stop at any level. Every level leaves working files, and `DESIGN.md` shows how far each area has been zoomed. Each of the 192 questions has a zoom level, except the reference panel (Q-ref-01), which is open at every level. The questionnaire also keeps its earlier Quick, Standard and Expert tags (10, 92 and 191 questions).
 
 Every term is explained in three voices. Plain words come first, so a school student can follow. The designer's word and the code name sit on one line below. The [glossary](GLOSSARY.md) lists them all.
 
@@ -78,7 +79,7 @@ For a high-impact question, the model:
 
 For a low-impact gap, it takes the default and labels it as an assumption instead of asking. It asks one question per message.
 
-Every answer is recorded with how it was set, for example chosen, confirmed default, automatic default, delegated ("you decide"), assumed, or from a reference. A recommendation you did not answer is never recorded as your decision.
+Every answer is recorded with how it was set. For example: chosen, confirmed default, automatic default, delegated ("you decide"), assumed, or from a reference. A recommendation you did not answer is never recorded as your decision.
 
 ## 3. Asset hooks: ask, don't fake
 
@@ -109,7 +110,7 @@ A dial is a slider from 0 to 100, and 50 is a sensible default. Eight dials, plu
 
 Brand words such as "playful" or "premium" move several dials at once. Style presets (flat, tonal, glass, neo-brutalist) are named dial settings.
 
-The dials were tested against 13 real systems: Material 3 Expressive, Apple HIG, Carbon, Fluent 2, Polaris, Atlassian, Primer, GOV.UK, shadcn/ui, Linear, Geist, Blade and Airbnb. Dials plus raw inputs reproduce the signature look of 6 of them outright. The other 7 need one or two overrides or a signature asset. The dial values were set by reading the same benchmark. So this shows the mapping is consistent, not that it predicts systems it has not seen.
+The dials were tested against 13 real systems. They are Material 3 Expressive, Apple HIG, Carbon, Fluent 2, Polaris, Atlassian, Primer, GOV.UK, shadcn/ui, Linear, Geist, Blade and Airbnb. Dials plus raw inputs reproduce the signature look of 6 of them outright. The other 7 need one or two overrides or a signature asset. The dial values were set by reading the same benchmark. So this shows the mapping is consistent, not that it predicts systems it has not seen.
 
 Formulas, recipes and their weak spots are in [`synthesis/LEVERS.md`](../synthesis/LEVERS.md). The engine uses the machine-readable version, [`synthesis/levers.json`](../synthesis/levers.json).
 
@@ -194,3 +195,9 @@ The engine gives the same result every time: the same `state.json` makes the sam
 The model may find a gap, a bug or a confusing step while it works in your project. If so, it writes it down with `engine.py feedback`. That saves the note in `opendesigner/feedback.md` and prepares a ready-to-file issue link for this repository. Nothing is posted unless you submit it.
 
 Inside this repository, fixes go straight into the source files, then get checked and synced. See [CONTRIBUTING.md](../CONTRIBUTING.md#the-self-improvement-loop).
+
+## 11. Your steps and your privacy
+
+If you say yes, the model keeps a private log of your steps on your computer. It notes which questions came up, how long they took, and where you got stuck. A report from it shows where the questions can get shorter. Details: [JOURNEY-TRACKER.md](JOURNEY-TRACKER.md).
+
+Sending an anonymous summary to the maintainers is a separate yes. It never includes your answers, names, files or anything you typed. No server collects reports yet. Details: [PRIVACY.md](PRIVACY.md).

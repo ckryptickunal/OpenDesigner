@@ -10,12 +10,12 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 
 ## Q-pattern-02 · How should long lists load: pages, "load more", or infinite scroll?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L08-21
-- **Ask:** "Pagination for tables, load more for results, infinite scroll only for feeds?"
-- **Why:** Pagination gives landmarks; infinite scroll feels endless; "Load more" keeps the footer reachable [DC-L08-21].
+- **Ask:** "How should long lists load: in pages, with a 'Load more' button, or by scrolling on and on?"
+- **Why:** Numbered pages help people find their place again. Infinite scroll feels endless, and a "Load more" button keeps the footer in reach [DC-L08-21].
 - **Options:**
-  - `pagination` Pagination (Carbon, Atlassian, Primer, shadcn) [DC-L08-21].
+  - `pagination` Page numbers (Carbon, Atlassian, Primer, shadcn) [DC-L08-21].
   - `load-more` Load more.
-  - `infinite` Infinite scroll for homogeneous feeds.
+  - `infinite` Infinite scroll, for feeds of same-kind items.
 - **Default:** `pagination`: pagination for tables and goal-directed search, load more for result lists, infinite scroll only for feeds *Source:* card heuristic [DC-L08-21].
 - **Show:** each collection type on the preview.
 - **Use / avoid:** use pagination where people need to return to a position; avoid infinite scroll above a footer people need [DC-L08-21].
@@ -23,25 +23,25 @@ Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L08-
 
 ## Q-pattern-03 · How much should be visible up front, and how much behind "more"?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L13-03
-- **Ask:** "Show primary options up front and advanced ones behind a clearly labeled trigger, at most two levels deep?"
-- **Why:** Progressive disclosure gives calmer, shorter screens; everything-visible reads powerful but dense [DC-L13-03].
+- **Ask:** "Should people see every option at once, or the main ones first with the rest tucked away?"
+- **Why:** Keeping extras one step away (progressive disclosure) makes screens calm and short. Showing it all at once feels strong, but busy [DC-L13-03].
 - **Options:**
-  - `progressive` Progressive disclosure, at most two levels, trigger label says what is behind it.
-  - `all-visible` Everything visible [DC-L13-03].
-  - `staged` Staged disclosure (wizard or stepper), for independent steps only.
-  - `contextual` Contextual reveal on hover or selection [DC-L13-03].
+  - `progressive` Main options first, extras behind a clearly named button, two levels at most.
+  - `all-visible` Show everything at once [DC-L13-03].
+  - `staged` One step at a time (a wizard), only when steps stand alone.
+  - `contextual` Show extras on hover or when something is picked [DC-L13-03].
 - **Default:** `progressive`: progressive *Source:* card heuristic [DC-L13-03].
 - **Show:** the settings page per option.
 - **Use / avoid:** use steppers that show position and total; avoid more than two disclosure levels (a lint warning) [DC-L13-03; L13 E1].
 - **Skip:** yes.
 
-## Q-pattern-06 · What should appear on glanceable surfaces (widgets, tiles, complications)?
+## Q-pattern-06 · What should small glance views show, like widgets, tiles and watch complications?
 Zoom 3 detailed · weight medium · changes 0 decisions · class I · cards DC-L14-07
 - **Show if:** Q-plat-02 marks watch or car first-class, or the product ships widgets
-- **Ask:** "What single number or status should people see without opening the app?"
-- **Why:** Glance surfaces look like data, not UI: big numerals, one metric, a status color, almost no chrome [DC-L14-07].
+- **Ask:** "What one number or status should people see without opening the app?"
+- **Why:** Glance views should look like data, not app screens: big numbers, one metric, a status color and almost no frame around them [DC-L14-07].
 - **Options:**
-  - `priority-matrix` Complication = one datum, notification = urgent event, tile = one or two items, app = everything (Google).
+  - `priority-matrix` One fact per complication, one or two per tile, alerts when urgent, all in the app (Google).
   - `apple-surfaces` Complications, Smart Stack, Live Activities, CarPlay widgets.
 - **Default:** design the complication or tile first, then the app; one number or status per glance *Source:* card heuristic [DC-L14-07].
 - **Show:** the metric on each glance surface.

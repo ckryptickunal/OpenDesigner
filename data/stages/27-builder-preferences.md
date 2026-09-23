@@ -12,13 +12,13 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 
 ## Q-pref-01 · How strict should the builder's critique be?
 Zoom 2 defined · weight medium · changes 0 decisions · class I · cards DC-L15-11
-- **Ask:** "Should I coach with inline tips, stay silent, or block export on hard failures like contrast?"
-- **Why:** Messages that name the principle teach the vocabulary; strict mode blocks export on hard failures [DC-L15-11].
+- **Ask:** "Should I give tips as you go, stay quiet, or block export on serious problems like contrast?"
+- **Why:** Tips that name the design principle teach people the words for it. Strict mode stops export when something fails badly [DC-L15-11].
 - **Options:**
   - `coach` Coach: inline messages tied to a goal, each with a one-click fix (NN/g goal-linked critique).
   - `silent` Silent: only automatic rules apply [DC-L15-11].
   - `strict` Strict: block export on contrast, multiple primaries and undersized targets; warn on the rest [DC-L15-11].
-  - `metrics` Plus a metrics panel (complexity and colorfulness scores).
+  - `metrics` Plus a panel that scores how complex and colorful it is.
 - **Default:** `coach`: coach for engineers exploring; strict for teams shipping to production *Source:* card heuristic [DC-L15-11].
 - **Show:** the preview screen with messages at each level.
 - **Use / avoid:** accessibility failures are at least warnings in every mode; avoid silent mode for production exports [DC-L15-11].

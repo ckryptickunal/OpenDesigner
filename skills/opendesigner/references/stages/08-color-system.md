@@ -12,13 +12,13 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 
 ## Q-color-01 · Do you have fixed brand colors, or should the builder generate the palette from one color?
 Zoom 0 sketch · weight high · changes 3 decisions · class E · cards DC-L09-03, DC-L01-09
-- **Ask:** "Do you have fixed brand colors, or should I generate the palette from one color?"
-- **Why:** Hand-picked hexes keep brand nuance; a seed algorithm gives even ramps; contrast targets give predictable legibility across hues (L09 divergence 6) [DC-L09-03].
+- **Ask:** "Do you have fixed brand colors, or should I build the palette from one color?"
+- **Why:** Hand-picked colors keep the brand's exact feel; a seed color gives even shades. Contrast targets make text on every color easy to read, in a way you can predict [L09 divergence 6; DC-L09-03].
 - **Options:**
-  - `keep-hex` Keep exact brand hexes and hand-tune ramps around them (Carbon, Primer, Atlassian, GOV.UK) [DC-L09-03].
+  - `keep-hex` Keep your exact brand colors and tune the shades by hand (Carbon, Primer, Atlassian, GOV.UK) [DC-L09-03].
   - `seed` Generate from one seed color (Material HCT, Ant, Blade `createTheme`, Fluent brand ramp) [DC-L09-03].
   - `seed-3` Generate from three inputs: brand color, neutral base and contrast (Linear replaced 98 per-theme variables with 3) [DC-L06-06].
-  - `contrast-targets` Generate by contrast targets so each step has a known ratio (Spectrum Leonardo, USWDS grades, Radix APCA steps) [DC-L09-03].
+  - `contrast-targets` Set each step by a contrast goal (Spectrum Leonardo, USWDS grades, Radix APCA steps) [DC-L09-03].
 - **Default:** seed-3 in OKLCH with contrast-checked steps; locked brand hexes are pinned to the nearest step, and the UI fill uses the step that reaches 4.5:1 with its text *Source:* card heuristics [DC-L09-03, DC-L06-06, DC-L01-09].
 - **Show:** the seed becomes ramps live; locked hexes show a pin on their step; a light brand color (yellow, cyan, lime) visibly switches its button text to dark (Spectrum does this) [S-L01-036].
 - **Use / avoid:** use the brand hex as a ramp anchor and pick UI steps by contrast; avoid using a brand color whose ratio with white is below 3:1 for small text; use it as a fill with dark text or as a tint [DC-L01-09].
@@ -27,14 +27,14 @@ Zoom 0 sketch · weight high · changes 3 decisions · class E · cards DC-L09-0
 
 ## Q-color-02 · Where should your brand color appear?
 Zoom 1 broad · weight high · changes 3 decisions · class G · cards DC-L06-04, DC-L10-04
-- **Ask:** "Where should your brand color appear: only on key actions, on one signature area, or across the chrome?"
-- **Why:** Brand color placement is third on L09's (inferred) ranking of visual differences: actions only, containers, or whole surfaces (L09 divergence 3) [DC-L06-04].
+- **Ask:** "Where should your brand color show: only on key actions, in one standout area, or on the bars and menus?"
+- **Why:** Where brand color goes (on actions only, on containers, or on whole surfaces) shapes the look. It is third on L09's (inferred) ranking of visual differences [L09 divergence 3; DC-L06-04].
 - **Options:**
-  - `accent` Reserved accent on primary actions, links, status, selected tab: calm, content-first (Apple HIG, Carbon).
-  - `signature-surface` One signature surface carries the brand: instantly recognizable silhouette (Slack aubergine sidebar).
-  - `flooded-chrome` Brand-flooded chrome, colored app bars and FABs: playful, louder (M2 style, rated more playful).
-  - `content-layer` Brand in the content layer, scrolling beneath glass controls: modern, dynamic (Apple 2026).
-  - `neutral-first` Neutral first with a restrained chrome tint (Linear limited how much blue chrome it used).
+  - `accent` Only on main actions, links, status and the selected tab: calm, content-first (Apple HIG, Carbon).
+  - `signature-surface` One standout area carries the brand: instantly recognizable silhouette (Slack aubergine sidebar).
+  - `flooded-chrome` Brand color on the app bars and floating buttons: playful, louder (M2 style, rated more playful).
+  - `content-layer` Brand color in the content, scrolling under glass controls: modern, dynamic (Apple 2026).
+  - `neutral-first` Mostly gray, with a faint brand tint on bars and menus (Linear limited its blue there).
 - **Default:** `accent`: accent, with signature-surface optional; on Apple glass platforms brand color moves into content, on Android a brand seed, freer on web *Source:* card heuristics [DC-L06-04, DC-L10-04]; L09 shared pattern row 3 (neutral surfaces + one accent in all but one of 24 systems).
 - **Show:** the preview screen re-renders per option; on iOS, a tinted nav bar is flagged as "fighting the glass" [S-L10-009, S-L10-010].
 - **Use / avoid:** use brand color on the one element per view that matters most; avoid tinting several control backgrounds at once ("Using your brand color too broadly can overwhelm your interface").
@@ -42,13 +42,13 @@ Zoom 1 broad · weight high · changes 3 decisions · class G · cards DC-L06-04
 
 ## Q-color-03 · How colorful should the palette be?
 Zoom 2 defined · weight high · changes 5 decisions · class G · cards DC-L01-10, DC-L06-05
-- **Ask:** "How colorful should the palette be, from monochrome to vivid?"
-- **Why:** Chroma sets how calm or energetic the product reads; high chroma weakens status colors because everything shouts [DC-L01-10].
+- **Ask:** "How colorful should the palette be, from all gray to vivid?"
+- **Why:** Color strength (chroma) sets how calm or lively the product feels. If all colors are strong, status colors lose their punch, because everything shouts [DC-L01-10].
 - **Options:**
-  - `tonal` Tonal, low to medium colorfulness: friendly, balanced (Material TonalSpot, primary chroma 32-36).
-  - `monochrome` Monochrome or neutral: calm, premium, technical (Material Monochrome and Neutral variants, chroma 0 and 8-12; Polaris black brand).
+  - `tonal` Tonal, low to medium color: friendly, balanced (Material TonalSpot, primary chroma 32-36).
+  - `monochrome` All gray or nearly gray: calm, premium, technical (Material Monochrome and Neutral variants, chroma 0 and 8-12; Polaris black brand).
   - `vivid` Vivid: energetic, consumer-grade (Material Vibrant; Tailwind v4 P3-leaning OKLCH, blue-500 chroma 0.214).
-  - `expressive` Expressive, hue-rotated away from the source color (Material Expressive).
+  - `expressive` Hues turned away from the source color (Material Expressive).
   - `fidelity` Fidelity: the brand hue stays exact in containers; for hues that are a legal or recognition asset [DC-L06-05].
 - **Default:** `tonal`: tonal for productivity products, vivid for consumer and marketing *Source:* card heuristic [DC-L01-10, DC-L06-05].
 - **Show:** a chroma slider under the five named stops; surfaces, accent and status chips update together.
@@ -57,28 +57,28 @@ Zoom 2 defined · weight high · changes 5 decisions · class G · cards DC-L01-
 
 ## Q-color-04 · How many accent colors does the product need?
 Zoom 2 defined · weight medium · changes 4 decisions · class G · cards DC-L01-08, DC-L15-06
-- **Ask:** "How many accent colors does the product need? One is usual."
-- **Why:** One accent makes every colored element read as actionable; three accents feel expressive but need discipline [DC-L01-08].
+- **Ask:** "How many accent colors does the product need?"
+- **Why:** With one accent color, anything in color looks like you can click it. Three accents feel more expressive but need discipline [DC-L01-08].
 - **Options:**
-  - `one` One accent plus neutrals and status: focused, calm (Carbon core blue; Apple one app accent; Linear, Notion) [; DC-L15-06].
-  - `analogous` One accent with analogous tints for surfaces and illustration: harmonious, soft.
-  - `contrasting` A contrasting accent on analogous neutrals: the strongest "pop" for primary actions.
-  - `three` Primary, secondary and tertiary (Material 3: tertiary for contrasting accents such as badges).
-  - `multi` Multi-accent: playful (Mailchimp), needs strict role rules [DC-L15-06].
+  - `one` One accent plus grays and status colors: focused, calm (Carbon core blue; Apple one app accent; Linear, Notion) [; DC-L15-06].
+  - `analogous` One accent with nearby hues for backgrounds and drawings: harmonious, soft.
+  - `contrasting` An opposite-hue accent on grays tinted to match: the strongest "pop" for primary actions.
+  - `three` Main, second and third accents (Material 3: tertiary for contrasting accents such as badges).
+  - `multi` Many accents: playful (Mailchimp), needs strict role rules [DC-L15-06].
 - **Default:** `one`: one accent plus neutrals plus status, analogous tints for surfaces *Source:* card heuristics, "harmonize the large areas, contrast the small important ones" [DC-L01-08, DC-L15-06]; L09 shared pattern row 3.
 - **Show:** the product screen with each accent's jobs highlighted (actions, discovery, categories).
 - **Use / avoid:** add an accent only when it has a job (a second action tier, discovery, categories); avoid adding one for decoration or picking wheel presets (triadic, complementary) as a palette [DC-L01-08].
 - **Skip:** yes.
 
-## Q-color-06 · Should colors follow the user's wallpaper or system accent?
+## Q-color-06 · Should colors change to match the user's wallpaper or device accent?
 Zoom 2 defined · weight high · changes 5 decisions · class T · cards DC-L10-05, DC-L01-21
 - **Show if:** Q-plat-01 includes android, ios or desktop
-- **Ask:** "Should colors follow the user's wallpaper or system accent?"
-- **Why:** Following the OS feels personal and native but weakens brand recall and makes screenshots differ per user [DC-L10-05].
+- **Ask:** "Should colors match the user's wallpaper or the accent color on their device?"
+- **Why:** Taking colors from the device feels personal and native. But people remember the brand less, and screenshots look different for each user [DC-L10-05].
 - **Options:**
-  - `static` Fixed brand color everywhere (Material static baseline; advised for enterprise and iOS).
-  - `dynamic-optional` Static by default, Android dynamic color behind a user setting (API 31+) [DC-L01-21].
-  - `follow-os` Follow the OS: Android dynamic color, Wear OS watch-face color, macOS accent.
+  - `static` Fixed brand color (Material static baseline; best for work apps and iOS).
+  - `dynamic-optional` Fixed, but people can turn on Android dynamic color (API 31+) [DC-L01-21].
+  - `follow-os` Follow the device: Android dynamic color, Wear OS watch-face color, macOS accent.
 - **Default:** dynamic on Android for utility apps, fixed brand for brand-led consumer apps; brand-critical and status colors stay fixed; on Apple, design icon layers for all four icon looks *Source:* card heuristics [DC-L10-05, DC-L01-21].
 - **Show:** the Android preview recolored with three sample wallpapers; brand-critical colors stay put.
 - **Use / avoid:** let dynamic color own surfaces and secondary accents; avoid letting it change error and brand-critical colors [DC-L01-21].
@@ -87,7 +87,7 @@ Zoom 2 defined · weight high · changes 5 decisions · class T · cards DC-L10-
 ## Q-color-09 · Should grays be pure, or tinted warm or cool?
 Zoom 2 defined · weight medium · changes 3 decisions · class G · cards DC-L01-06
 - **Ask:** "Should grays be pure, cool, warm, or tinted toward your brand?"
-- **Why:** Neutrals cover most of the screen, so their temperature is a personality lever (Linear moved to "a warmer gray" in 2026) [DC-L01-06].
+- **Why:** Grays fill most of the screen, so warm or cool grays change how the product feels. Linear moved to "a warmer gray" in 2026 [DC-L01-06].
 - **Options:**
   - `hue-matched` Slight tint toward the accent hue (OKLCH chroma about 0.01-0.03 at mid steps) [DC-L01-06].
   - `pure` Pure gray (chroma 0): neutral, technical, never competes with content (Tailwind neutral, Radix gray, Spectrum for image workflows).
@@ -100,13 +100,13 @@ Zoom 2 defined · weight medium · changes 3 decisions · class G · cards DC-L0
 
 ## Q-color-14 · How should surfaces be layered?
 Zoom 2 defined · weight high · changes 5 decisions · class G · cards DC-L01-13
-- **Ask:** "How should surfaces stack: tone steps, alternating layers, or elevation names?"
-- **Why:** The surface model decides whether depth comes from tone steps, alternating layers, or elevation names, and how dark mode shows depth [DC-L01-13].
+- **Ask:** "How should stacked layers, like a card on a page, be shaded and named?"
+- **Why:** This decides how the page, cards and pop-ups stand apart: by shade steps, alternating layers or names by height. It also sets how dark mode shows depth [DC-L01-13].
 - **Options:**
-  - `role-tiers` 4-5 tiers named by role (base, raised, overlay, sunken), mapped separately per mode [DC-L01-13].
-  - `container-tiers` Named container tiers not tied to elevation: flat, calm, modern (Material 3 `surface-container-lowest` to `-highest`).
+  - `role-tiers` 4-5 layers named by job (base, raised, overlay, sunken), with their own colors in each mode [DC-L01-13].
+  - `container-tiers` Named layers, not tied to shadow height: flat, calm, modern (Material 3 `surface-container-lowest` to `-highest`).
   - `alternating` Alternating layers in light, stepping lighter in dark: crisp, grid-like enterprise (Carbon White/Gray 10, then Gray 100/90/80).
-  - `elevation-named` Elevation-named surfaces (Atlassian).
+  - `elevation-named` Layers named by height (Atlassian).
 - **Default:** `role-tiers`: role-tiers; light mode separates with shadow or border plus a subtle tone, dark mode with lighter tones *Source:* card heuristic [DC-L01-13]; L09 shared pattern row 12.
 - **Show:** a page, card, popover and dialog stack in light and dark, with the tier of each labeled.
 - **Use / avoid:** use lighter-when-higher surfaces in dark mode; avoid separating interactive surfaces by tone alone when the edge carries meaning (needs 3:1) [DC-L01-13].
@@ -115,7 +115,7 @@ Zoom 2 defined · weight high · changes 5 decisions · class G · cards DC-L01-
 ## Q-color-15 · Which status colors do you need?
 Zoom 2 defined · weight medium · changes 3 decisions · class G · cards DC-L01-15
 - **Ask:** "Which status colors do you need beyond success, warning, danger and info?"
-- **Why:** Few statuses keep alerts unmistakable; many make dense developer UIs scannable but cost learning [DC-L01-15].
+- **Why:** A few status colors keep alerts impossible to miss. Many make busy developer tools easy to scan, but people must learn them [DC-L01-15].
 - **Options:**
   - `classic-4` Success, warning, danger, info (Radix hue suggestions; Carbon Red 60, Yellow 30, Green 60).
   - `discovery` Discovery for new things (Atlassian purple).
@@ -127,12 +127,12 @@ Zoom 2 defined · weight medium · changes 3 decisions · class G · cards DC-L0
 
 ## Q-color-17 · Which contrast rule should the builder enforce on every color pair?
 Zoom 2 defined · weight high · changes 5 decisions · class G · cards DC-L01-22
-- **Ask:** "Which contrast rule should I enforce on every color pair?"
-- **Why:** AA allows mid-gray secondary text and softer tints; AAA forces darker text and deeper accents [DC-L01-22].
+- **Ask:** "Which contrast rule should every color pair pass?"
+- **Why:** AA allows mid-gray text for less important words and softer tints. AAA forces darker text and deeper accent colors [DC-L01-22].
 - **Options:**
   - `aa` WCAG 2.2 AA: text 4.5:1, large text 3:1, UI parts 3:1; no rounding (4.499:1 fails).
   - `aaa` WCAG 2.2 AAA: text 7:1, large text 4.5:1 (target for high-contrast themes: Primer, Material).
-  - `aa-apca` AA enforced plus APCA as an advisory second opinion on body text (Radix and Geist use APCA) [DC-L01-22; L09 A1 row 11].
+  - `aa-apca` AA must pass, plus APCA as advice on body text (Radix and Geist use it) [DC-L01-22; L09 A1 row 11].
 - **Default:** aa-apca: AA on all pairs in every mode, AAA for high-contrast modes, APCA advisory *Source:* accessibility rule [DC-L01-22]; WCAG 3 is still a draft [BOARD L01 note].
 - **Show:** the contrast matrix of all role pairs, pass/fail per mode, with the nearest passing step suggested for failures.
 - **Use / avoid:** test tokens as pairs, in every mode, at build time; avoid judging a single color by eye [DC-L01-22].
@@ -140,13 +140,13 @@ Zoom 2 defined · weight high · changes 5 decisions · class G · cards DC-L01-
 
 ## Q-color-19 · Does the product show charts, and which chart colors does it need?
 Zoom 2 defined · weight medium · changes 3 decisions · class I · cards DC-L01-24, DC-L05-23
-- **Ask:** "Does the product show charts? Which chart colors?"
-- **Why:** Chart palettes drawn from UI ramps look native; separate high-chroma palettes pop but can clash; long categorical lists become illegible [DC-L01-24].
+- **Ask:** "If the product shows charts, which chart colors does it need?"
+- **Why:** Chart colors taken from the app's own shades look at home. Separate bright chart colors pop but can clash, and long lists of group colors get hard to read [DC-L01-24].
 - **Options:**
   - `brand-gray` One brand chart color plus gray: calm, branded, focused [DC-L05-23].
   - `none` No charts.
-  - `categorical-6-8` A 6-8 color categorical sequence in fixed order plus one sequential ramp; diverging only for above/below-target data (Atlassian `color.chart.categorical.1-8`) [DC-L05-23].
-  - `carbon-14` A long ordered sequence (Carbon's 14 colors, starting Purple 70 #6929c4, Cyan 50 #1192e8).
+  - `categorical-6-8` 6-8 group colors in set order, plus one light-to-dark ramp. Two-way only for above or below target (Atlassian) [DC-L05-23].
+  - `carbon-14` A long list in set order (Carbon's 14 colors, starting Purple 70 #6929c4, Cyan 50 #1192e8).
 - **Default:** `brand-gray`: brand-gray by default, categorical-6-8 for dashboards *Source:* card heuristics [DC-L05-23, DC-L01-24].
 - **Show:** a bar chart, line chart and heatmap in light and dark, with the 3:1 check against the surface.
 - **Use / avoid:** use direct labels or grouping beyond 8 categories; avoid adding more hues [DC-L01-24].

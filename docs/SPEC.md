@@ -6,7 +6,7 @@ Synthesis S1d, written 2026-09-23. This is the definitive description of what Op
 
 **How to read the tags.** `DC-Lxx-nn` is a Decision Card (full text in `synthesis/cards.json`, or search with `python3 tools/jev_nav.py find`). `S-Lxx-nnn` is a source in `traces/Lxx-trace.md`. `Q-...` is a question in `synthesis/QUESTIONNAIRE.md` (machine copy `questionnaire.json`). References such as LEVERS B6 or L17 H2 point into `synthesis/LEVERS.md` or a research file. `[inferred]` marks a decision or reading made by this spec: treat it as a default to test, not a finding. Card text is not copied here; look it up by id. Product decisions made here are logged in `_coordination/DECISIONS.md` under "S1d spec (B)" (and three earlier entries under "S1d spec" at 19:01) and summarized in section 11. A first S1d instance wrote an alternative draft, `synthesis/OPENDESIGNER-SPEC.s1d-draft-b.md`; its useful content is merged here and it is not canonical.
 
-**Counts used throughout** (read from the files on 2026-09-23): the ontology has 271 nodes in 10 layers, 207 of them design-system blocks outside the builder meta layer (ONTOLOGY; L17 G1); `decision-graph.json` has 352 decisions, 465 edges and 12 cycles (DECISION-GRAPH.md prose still says 325 and 431; the JSON wins); the questionnaire has 28 stages and 192 questions, of which Quick asks 10, Standard 92 and Expert 191, with 30 high, 82 medium and 80 low time weights (`questionnaire.json`).
+**Counts used throughout** (read from the files on 2026-09-23): the ontology has 271 nodes in 10 layers, 207 of them design-system blocks outside the builder meta layer (ONTOLOGY; L17 G1; dated: on 2026-09-24 `ontology.json` has 275 nodes and 211 blocks outside the builder layer, and which block classification is canonical is still open [S-V1b-091]); `decision-graph.json` has 352 decisions, 465 edges and 12 cycles (DECISION-GRAPH.md prose still says 325 and 431; the JSON wins); the questionnaire has 28 stages and 192 questions, of which Quick asks 10, Standard 92 and Expert 191, with 30 high, 82 medium and 80 low time weights (`questionnaire.json`).
 
 **How the brief's requirements are met** (`_coordination/BRIEF.md`):
 
@@ -179,7 +179,7 @@ Claude Design is a hand-off target (it can import the DESIGN.md and tokens), not
 | Claude app, web and desktop | custom visuals (a click sends a follow-up prompt) [S-L18-041]; artifacts for multi-panel screens [S-L18-027] | MCP Apps views [S-L18-013] | follow-up prompt; widget message; typed or pasted `OD:` line |
 | Claude app, mobile | text, and artifacts where the app shows them [inferred] (custom visuals are not on mobile [S-L18-041]) | MCP Apps views [S-L18-013] | typed; widget message |
 | Claude Code CLI | local `preview.html`; Claude Code artifacts with "copy as prompt" [S-L18-043]; AskUserQuestion [S-L18-304] | none: the CLI does not render MCP Apps [S-L18-044] | pasted `OD:` line; structured answer |
-| Claude desktop Code tab | as the CLI | MCP App widgets since 2026-09-02 [S-L18-045] | widget message |
+| Claude desktop Code tab | as the CLI | MCP App widgets (date not documented for the standard app) [S-V1a-022] | widget message |
 | ChatGPT web and mobile | code-block HTML preview with no channel back [S-L18-128]; text | MCP Apps through a plugin or developer mode [S-L18-055] [S-L18-119] | typed; widget message |
 | ChatGPT desktop and Codex app | the built-in browser renders local HTML and takes element comments [S-L18-115] | MCP App panels [S-L18-109] | element comments; widget |
 | Codex CLI and IDE | local HTML; `request_user_input` | none; image input only [S-L18-137] | pasted `OD:` line |
@@ -232,7 +232,7 @@ From L17 A3 (gstack is Tier C: concrete, versioned methods, used as opinion [S-L
 
 ### 4.1 The five classes
 
-Every one of the 207 design-system blocks carries one primary class (how OpenDesigner gets a good value when the person supplies nothing), optional `also` classes (other routes that work) and, for D and T blocks, a `hook` (DC-L17-01; per-block table in L17 G3, copied into `data/` by `tools/build_data.py`). ONTOLOGY.md's own provenance field uses "designer-owned" for team decisions too; the five classes replace it (section 11).
+Every one of the 207 design-system blocks (L17's count; `ontology.json` now has 211 [S-V1b-091]) carries one primary class (how OpenDesigner gets a good value when the person supplies nothing), optional `also` classes (other routes that work) and, for D and T blocks, a `hook` (DC-L17-01; per-block table in L17 G3, copied into `data/` by `tools/build_data.py`). ONTOLOGY.md's own provenance field uses "designer-owned" for team decisions too; the five classes replace it (section 11).
 
 | Class | Blocks | Meaning | What the model does | Decision kind (3.3) | In Quick mode |
 |---|---|---|---|---|---|

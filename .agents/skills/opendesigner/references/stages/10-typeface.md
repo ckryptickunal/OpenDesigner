@@ -12,14 +12,14 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 
 ## Q-type-01 · Should the product use the platform's font, a neutral open font, or your own brand typeface?
 Zoom 1 broad · weight high · changes 6 decisions · class T · cards DC-L09-05, DC-L02-01, DC-L06-07, DC-L10-06
-- **Ask:** "Platform font, a neutral open font like Inter, or your own brand typeface?"
-- **Why:** L09 infers the typeface is the largest brand lever after color; system fonts feel native and invisible, a custom face gives instant recognition (L09 divergence 5) [DC-L09-05].
+- **Ask:** "Should it use the device's built-in font, a free plain font like Inter, or your brand font?"
+- **Why:** After color, the typeface may shape your brand's look the most; L09 infers this (L09 divergence 5). A system font feels native and fades away; a custom font is recognized at once [DC-L09-05].
 - **Options:**
-  - `system` Platform system fonts: SF Pro, Roboto, Segoe UI Variable; native, content leads (Apple, Fluent, Ant, Radix, Mantine, SLDS) [; DC-L09-05].
-  - `open-neutral` A neutral open font: the neutral SaaS look (Inter: Polaris, Chakra, Paste, Linear; Roboto: Material) [DC-L09-05].
-  - `open-custom` An open font with character: IBM Plex, Geist, Public Sans, Mona Sans [DC-L09-05].
-  - `brand-display` Brand face for headlines, system font for body (Apple's recommendation).
-  - `brand-everywhere` Proprietary brand face everywhere: Uber Move, Adobe Clean, Cereal, Spotify Mix [DC-L09-05].
+  - `system` The device's built-in font: SF Pro, Roboto, Segoe UI Variable; native, content leads (Apple, Fluent, Ant, Radix, Mantine, SLDS) [; DC-L09-05].
+  - `open-neutral` A free, plain font: the neutral SaaS look (Inter: Polaris, Chakra, Paste, Linear; Roboto: Material) [DC-L09-05].
+  - `open-custom` A free font with character: IBM Plex, Geist, Public Sans, Mona Sans [DC-L09-05].
+  - `brand-display` Brand font for headlines, system font for body (Apple's advice).
+  - `brand-everywhere` Your own brand font everywhere: Uber Move, Adobe Clean, Cereal, Spotify Mix [DC-L09-05].
 - **Default:** `system`: system for productivity and internal tools; on native platforms any brand face goes in display roles only *Source:* card heuristics [DC-L02-01, DC-L10-06]; L09 suggests Inter or the system stack for a neutral start [DC-L09-05].
 - **Show:** the same screen set in each option, side by side with the OS chrome, so the "foreign next to OS chrome" effect is visible [DC-L02-01].
 - **Use / avoid:** use system fonts when the product lives inside another OS's chrome; use a brand face when recognition is a stated goal; avoid a brand face in body text if it needs size bumps to match system legibility at 13pt [DC-L02-01, DC-L10-06].
@@ -29,10 +29,10 @@ Zoom 1 broad · weight high · changes 6 decisions · class T · cards DC-L09-05
 Zoom 2 defined · weight medium · changes 1 decisions · class T · cards DC-L02-06
 - **Show if:** Q-type-01 is brand-display or brand-everywhere
 - **Ask:** "Do you have the brand font files and a license for web and apps?"
-- **Why:** A brand typeface is a block the builder cannot create; its license and files decide where it may be used and how it loads [DC-L02-06; BRIEF requirement 2].
+- **Why:** The builder cannot make a brand typeface. Its license and files decide where it may be used and how it loads [DC-L02-06; BRIEF requirement 2].
 - **Options:**
   - `yes` Yes: files and license in hand.
-  - `license-only` Licensed but files not yet supplied.
+  - `license-only` Licensed, but no files yet.
   - `no` No: see the Hook line.
 - **Default:** WOFF2, one variable file per family, `font-display: swap` with a metric-adjusted fallback, subsets per script *Source:* card heuristic [DC-L02-06].
 - **Show:** the loaded font in the specimen, with a first-load simulation showing `swap` reflow vs `optional` stability [S-L02-042].
@@ -40,17 +40,17 @@ Zoom 2 defined · weight medium · changes 1 decisions · class T · cards DC-L0
 - **Hook:** accepts WOFF2 for web, OTF or TTF for native apps, variable files preferred; the builder reads axes (wght, opsz) and Unicode coverage from the file. OS system fonts must not be embedded (Apple) If no: (1) pick an open-source face under the SIL OFL with a similar personality (Inter, Roboto Flex, Noto, Google Sans Flex, IBM Plex) ; (2) license a commercial face, noting per-domain, per-app or per-pageview terms [inferred]; (3) commission a custom face from a type foundry, with the caveat that it is slow and costly (Google needed three iterations to make one brand face work at small sizes).
 - **Skip:** yes; the system stack stands in until files arrive.
 
-## Q-type-03 · Which kind of typeface fits the personality?
+## Q-type-03 · Which style of font fits the product's feel?
 Zoom 2 defined · weight medium · changes 3 decisions · class G · cards DC-L02-02, DC-L06-08
-- **Ask:** "Which kind of typeface fits: neutral grotesque, geometric, humanist, serif, slab or rounded?"
-- **Why:** Classification carries personality: neutral, friendly, warm, editorial or technical [DC-L02-02, DC-L06-08].
+- **Ask:** "Which font style fits best: plain, geometric, warm, serif, slab serif, or rounded?"
+- **Why:** The kind of typeface sets the product's mood: neutral, friendly, warm, like a magazine, or technical [DC-L02-02, DC-L06-08].
 - **Options:**
-  - `neo-grotesque` Neo-grotesque sans: neutral, efficient, "invisible" (Inter, SF Pro, Roboto; Apple, Material, Polaris) [DC-L02-02].
+  - `neo-grotesque` Plain, neutral sans: neutral, efficient, "invisible" (Inter, SF Pro, Roboto; Apple, Material, Polaris) [DC-L02-02].
   - `geometric` Geometric sans: modern, friendly, fashionable, weaker in long text (DM Sans, Poppins; Google Sans lineage).
-  - `humanist` Humanist sans: warm, approachable, very legible small (Segoe, IBM Plex Sans often grouped here).
+  - `humanist` Warm, humanist sans: warm, approachable, very legible small (Segoe, IBM Plex Sans often grouped here).
   - `serif` Serif: editorial, heritage (Cooper for Mailchimp's sincerity).
   - `slab` Slab serif: publishing heritage, "friendly slab".
-  - `rounded` Rounded terminals: "personal, playful" (Google Sans Flex ROND axis).
+  - `rounded` Rounded letter ends: "personal, playful" (Google Sans Flex ROND axis).
 - **Default:** `neo-grotesque`: neo-grotesque or humanist sans with a large x-height *Source:* card heuristic [DC-L02-02]; slider mapping [DC-L06-08].
 - **Show:** a specimen with the confusable-pairs test (Il1, O0, rn/m) at 12-14px for each candidate.
 - **Use / avoid:** use geometric faces for headlines, humanist or neo-grotesque for body; avoid any face that fails the confusable-pairs test at 12-14px or lacks your scripts [DC-L02-02].
@@ -58,8 +58,8 @@ Zoom 2 defined · weight medium · changes 3 decisions · class G · cards DC-L0
 
 ## Q-type-04 · Which languages and scripts must the product support, now and within two years?
 Zoom 2 defined · weight medium · changes 4 decisions · class I · cards DC-L02-24, DC-L06-24
-- **Ask:** "Which languages and scripts must work now and within two years? Any right-to-left?"
-- **Why:** Scripts veto typefaces: without a matched fallback, Hindi next to a brand Latin face looks a different size and sits off the baseline; labels need room to grow [DC-L02-24, DC-L06-24].
+- **Ask:** "Which languages and writing systems must work now and in two years, including right to left?"
+- **Why:** Your languages can rule out a typeface, and labels need room to grow. Without a matching backup font, Hindi next to a Latin brand font looks the wrong size and sits off the baseline [DC-L02-24, DC-L06-24].
 - **Options:**
   - `latin` Latin (plus Vietnamese and extended Latin; Spotify Mix began here).
   - `indic` Indic scripts (Devanagari, Bangla, Tamil, Telugu, Gujarati): Noto Sans per script, Kohinoor on Apple, Nirmala UI on Windows.

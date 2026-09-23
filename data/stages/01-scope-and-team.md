@@ -10,45 +10,45 @@ Zoom 3 (detailed) questions: `01-scope-and-team.detailed.md`.
 
 Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
 
-## Q-scope-01 · Which products and surfaces will this system serve, and which will it explicitly not serve?
+## Q-scope-01 · Which products and pages should this system cover, and which should it leave out?
 Zoom 0 sketch · weight high · changes 8 decisions · class I · cards DC-L11-02
-- **Ask:** "What will this system style: just your app, or also a marketing site, docs, emails or internal tools?"
-- **Why:** Scope sets how abstract components must be and how many token layers you need [DC-L11-02].
+- **Ask:** "Is this only for your app, or also your marketing site, docs, emails or in-house tools?"
+- **Why:** What the system covers sets how general your components must be. It also sets how many layers of design tokens you need [DC-L11-02].
 - **Options:**
   - `product-app` Product app: tight, opinionated visuals are possible when this is the only surface [DC-L11-02, inferred].
   - `marketing` Marketing site: adds an expressive layer next to the productive one (Carbon splits productive and expressive type and motion) [DC-L06-01].
   - `internal-tools` Internal or admin tools: usually dense (see Q-aud-01) [inferred].
   - `docs-content` Docs or content site: long-form reading pushes line length and paragraph rules (DC-L02-17) [inferred].
   - `email` Email: a constrained rendering target the token pipeline must also output [DC-L11-02 options].
-  - `partner-embed` Embedded or partner surfaces: need scoped, context-agnostic components ("card", not "product card").
+  - `partner-embed` Inside partner sites or apps: need scoped, context-agnostic components ("card", not "product card").
 - **Default:** `product-app`: product-app only *Source:* card heuristic, scope v1 to what the pilot touches [DC-L11-02].
 - **Show:** a strip with one sample screen per selected surface, all rendered from the same draft tokens.
 - **Skip:** yes, defaults to a single product app.
 
-## Q-scope-02 · Is there existing UI to consolidate, or is this a new product?
+## Q-scope-02 · Is there existing UI to clean up and merge, or is this a new product?
 Zoom 2 defined · weight medium · changes 2 decisions · class I · cards DC-L11-04
-- **Ask:** "Is there existing UI we should consolidate, or are we starting fresh?"
-- **Why:** An audit sets how much the system must consolidate, for example 40 grays merged into one 10-step ramp [DC-L11-04, inferred].
+- **Ask:** "Do you have screens already that we should clean up and merge, or are we starting fresh?"
+- **Why:** Checking the screens you have (an audit) shows how much to merge. For example, 40 grays can merge into one 10-step color ramp [DC-L11-04, inferred].
 - **Options:**
   - `greenfield` New product: skip the audit and go straight to visual language.
-  - `manual-inventory` Existing UI, run an interface inventory: screenshots across 16 categories, then keep/merge/kill decisions (Brad Frost).
-  - `automated-audit` Existing UI, import an automated audit: unique colors and declarations (CSS Stats), component and prop usage (Omlet, react-scanner), Figma library analytics.
+  - `manual-inventory` Existing screens, sorted by hand: screenshots across 16 categories, then keep/merge/kill decisions (Brad Frost).
+  - `automated-audit` Existing screens, counted by a tool: unique colors and declarations (CSS Stats), component and prop usage (Omlet, react-scanner), Figma library analytics.
   - `both` Both: automated counts plus the manual inventory for shared vocabulary [DC-L11-04 default].
 - **Default:** `greenfield`: greenfield; if existing UI, `both` *Source:* card heuristic, the manual inventory's main value is shared vocabulary and buy-in [DC-L11-04].
 - **Show:** an inventory board: counts of unique colors, type styles and button variants found, with the proposed consolidated ramp beside them.
 - **Skip:** yes, defaults to greenfield.
 
-## Q-scope-05 · How are you starting: from an existing product, a UI kit or library, a reference you admire, or just a brief?
+## Q-scope-05 · What are you starting from: a product you have, a UI kit, a site you like, or only a brief?
 Zoom 2 defined · weight medium · changes 2 decisions · class I · cards DC-L17-02, DC-L11-01, DC-L17-03
-- **Ask:** "Where are we starting from: your existing product, a UI kit or component library, a site you admire, or a blank page with a brief?"
-- **Why:** Kit-first systems look like the kit; reference-first systems inherit its rhythm; brief-first systems vary most but need the most decisions; adopting, adapting or creating sets the cost [DC-L17-02, DC-L11-01].
+- **Ask:** "Where do we start: your product, a UI kit, a site you admire, or a blank page and a brief?"
+- **Why:** A kit makes your system look like the kit, and a reference passes on its rhythm. A brief gives the widest range of looks but needs the most choices. Using a system as is, adapting one or making your own sets the cost [DC-L17-02, DC-L11-01].
 - **Options:**
   - `existing-product` From an existing product: audit and extract, then consolidate (the interface inventory; see Q-scope-02) [DC-L17-02; DC-L11-04].
   - `ui-kit` From a UI kit or library (Untitled UI, Material 3 kit, shadcn): fast, but the kit's defaults become the look unless changed (the M3 kit shipped 6 versions in 12 months) [DC-L17-02].
   - `reference` From a reference you admire: carry structure and quality, never identity (gstack and Stitch support this) [DC-L17-02].
   - `brief` From a brief only: interview, then generate directions [DC-L17-02].
-  - `adopt|adapt|create` Build posture: adopt a system as-is (Material, Carbon, Fluent), adapt a themeable base (shadcn create, Radix Themes), or create your own; NN/g ranks their cost lowest to highest [DC-L11-01].
-  - `reinterpret|replicate-swap|flag-only` Reference fidelity: reinterpret the lessons (default), replicate structure with every identity element swapped (only for "our version of this"), or read a competitor only to list shared tropes; copying identity is never offered [DC-L17-03].
+  - `adopt|adapt|create` Use as is, adapt, or build your own: adopt a system as-is (Material, Carbon, Fluent), adapt a themeable base (shadcn create, Radix Themes), or create your own; NN/g ranks their cost lowest to highest [DC-L11-01].
+  - `reinterpret|replicate-swap|flag-only` How close to stay to the reference: reinterpret the lessons (default), replicate structure with every identity element swapped (only for "our version of this"), or read a competitor only to list shared tropes; copying identity is never offered [DC-L17-03].
 - **Default:** existing product: audit first; otherwise brief first with an optional reference, a kit only as a component base (Q-comp-01), not as the visual direction; small teams adapt an accessible base; references reinterpreted *Source:* card heuristics [DC-L17-02, DC-L11-01, DC-L17-03].
 - **Show:** the three starting points side by side on one screen, with "carried from reference" and "swapped" labels on each element.
 - **Use / avoid:** use a kit for components and a reference for structure; avoid letting either become the brand ("websites made with shadcn/ui famously look the same") [DC-L11-01].

@@ -9,7 +9,7 @@ How to run the OpenDesigner interview. Sources: `research/L18-ai-first-distribut
   > First: what are you making?
 - **One idea and one question per message.** Short sentences. No walls of text, and no long lists unless asked.
 - **Plain words first.** Every term gets its plain meaning the first time (section 2). Skip jargon where a plain word works.
-- **Details on request.** Sources, real systems and trade-offs come when the person says "why?" or "tell me more". Don't volunteer them all at once.
+- **Details on request.** Give sources, real systems and trade-offs when the person says "why?" or "tell me more". Don't volunteer them all at once.
 - **Show, then ask.** When the host can show a visual, the visual carries the detail and the message stays short.
 - **Never repeat an offer** the person declined.
 
@@ -27,10 +27,10 @@ Search `glossary.json` for each term (one term per line; match the term or one o
 
 ## 3. The rules, in the order they matter
 1. **Look before you ask.** Read the repo, CSS, tokens, brand files and any reference first. Ask only about taste, trade-offs and facts no file holds. If there are several candidates (two blues in the CSS), list them and recommend one.
-2. **Every question must change the system, lock an assumption, or pick a trade-off.** For low-impact gaps, assume and label the assumption instead of asking.
+2. **Every question must do one of three things:** change the system, lock an assumption, or pick a trade-off. For small gaps, don't ask: assume, and label the assumption.
 3. **Zoom, don't march** (`zoom.md`).
 4. **Order by downstream reach.** Product truth first (what it is, who it's for, where it runs, how it feels), then foundations, then components.
-5. **Offer 2 to 4 real options.** Recommend one with a short reason, and always allow a free answer. The stage files list real systems that use each option; show them when asked "why?" or when the designer voice leads. At the style screen (Q-dir-01), give 2 or 3 **safe choices** and at least 2 **risks**, each with what it gains and what it costs. Directions must differ in type, palette and shape.
+5. **Offer 2 to 4 real options.** Recommend one with a short reason, and always allow a free answer. The stage files list real systems that use each option. Show them when asked "why?" or when the designer voice leads. At the style screen (Q-dir-01), give 2 or 3 **safe choices** and at least 2 **risks**. Say what each one gains and what it costs. Directions must differ in type, palette and shape.
 6. **Ask for examples, including one they dislike.** Do this once, when they zoom into direction, color, type, corners or motion.
 7. **Word questions neutrally.** The recommendation lives in the options, not in the question.
 8. **Record honestly.** A recommendation you made is not an answer you received (section 5).
@@ -70,21 +70,21 @@ A value outside the listed options is recorded as given, with the person's reaso
 
 ## 6. Sorting decisions
 - **Mechanical:** one right answer, given earlier choices or a rule (nested radius, on-color text, contrast steps). Decide silently with the default, and mention it in the stage summary.
-- **Taste:** reasonable people disagree. Ask with a recommendation. If delegated, decide and flag it at the next gate.
+- **Taste:** people can fairly disagree. Ask with a recommendation. If delegated, decide and flag it at the next gate.
 - **User challenge:** your recommendation would override something the person said. Never decide it. Present what they said, what you suggest, why, what you might be missing, and the cost if you are wrong. Their answer wins.
-- A coherence clash after an override (for example a brutalist direction with bouncy motion) is flagged once, never blocked.
+- If an override makes two choices clash (for example a brutalist direction with bouncy motion), flag it once. Never block it.
 
 ## 7. When answers are vague, skipped or conflicting
-- **Vague taste words** ("clean", "modern", "premium"): turn them into 3 to 5 precise visual keywords, and confirm before generating. For example, "clean" becomes "neutral surfaces, one accent, 1 px borders, generous whitespace".
+- **Vague taste words** ("clean", "modern", "premium"): turn them into 3 to 5 precise visual keywords, and confirm before generating. For example, "clean" could become "gray surfaces, one accent color, thin 1 px borders, lots of space".
 - **"You decide" / "skip":** take the default and record `delegated`. For a high fan-out owner input (scope, platforms, audience), push back once: ask only the one or two parts that matter most. If they decline again, respect it and mark it `assumed`.
-- **Conflicting answers** inside one cycle: show both answers and the conflict. Settle it with their ranked principles (Q-brand-07). Never average silently.
+- **Conflicting answers** inside one cycle: show both answers and the conflict. Settle it with their ranked principles (Q-brand-07). Never quietly split the difference.
 - **Changing an earlier decision:** re-run `generate` and name the downstream decisions that moved (`graph.json` → edges).
 
 ## 8. Summaries and the offer after each level
-After each level or area, write 2 to 4 plain sentences a teammate could read. For example: "We chose slightly rounded 6 px corners because the app is a busy work tool; cards use 8 px." The engine logs each `set` with its `--why` in `opendesigner/decisions.md`. Then make the offer (`zoom.md`): stop here, or zoom into at most 3 named areas.
+After each level or area, write 2 to 4 plain sentences a teammate could read. For example: "We chose slightly rounded 6 px corners, because the app is a busy work tool. Cards use 8 px." The engine logs each `set` with its `--why` in `opendesigner/decisions.md`. Then make the offer (`zoom.md`): stop here, or zoom into at most 3 named areas.
 
 ## 9. `OD:` lines (spec 3.7, DC-L18-07)
-One line per decision. The line is the same whether it comes from a template button, a widget, a click or a typed reply, and each maps to one engine command:
+One line per decision. A line looks the same whether it comes from a template button, a widget, a click or a typed reply. Each line maps to one engine command:
 | Line | Run |
 |---|---|
 | `OD:set <path>=<json-value> [--why "reason"]` | `engine.py set '<path>=<json-value>' --why "reason"`. The path is a question id (Q-shape-01, which records an answer), `dials.<name>`, `raw.<input>`, `hooks.<H-id>.status`, or a token path |
@@ -99,7 +99,19 @@ One line per decision. The line is the same whether it comes from a template but
 
 ## 10. Avoiding the generic AI look
 Vendors and NN/g have documented that AI-made interfaces converge on the same few looks (L17 finding 4). Flag it once when a choice lands there. Don't ban anything.
-- Common tells: purple or blue-to-purple gradients; three-column icon-in-a-circle feature grids; everything centered; one bubbly radius on every element; decorative blobs and wavy dividers; emoji as decoration; a colored left border on every card; system-ui as the only voice on an expressive brand; glowing zero-offset shadows.
-- Three recurring "default directions": cream background with a serif display and terracotta accent; near-black with one neon accent; newspaper hairlines with italic serif and tiny tracked mono. Each is fine when the brief asks for it.
+- Common tells:
+  - purple or blue-to-purple gradients
+  - three-column feature grids with an icon in a circle
+  - everything centered
+  - one bubbly radius on every element
+  - decorative blobs and wavy dividers
+  - emoji as decoration
+  - a colored left border on every card
+  - system-ui as the only voice on an expressive brand
+  - glowing shadows with no offset
+- Three "default directions" keep coming back. Each is fine when the brief asks for it:
+  - a cream background with a serif display and a terracotta accent
+  - near-black with one neon accent
+  - newspaper hairlines with an italic serif and tiny tracked mono
 - Spend boldness in one place: one signature element (a color, a typeface, a shape or a motion moment). Tie it to the memorable thing (Q-brand-02), and let everything else stay quiet.
 - The fix for sameness is explicit decisions and the person's own assets, not a longer prompt.

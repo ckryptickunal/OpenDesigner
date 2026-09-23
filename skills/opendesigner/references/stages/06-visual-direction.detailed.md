@@ -8,14 +8,14 @@ Read the main stage file first; these questions refine it.
 
 Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
 
-## Q-dir-05 · Should layouts be start-aligned or centered?
+## Q-dir-05 · Should layouts line up on the side where reading starts, or be centered?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L15-08
-- **Ask:** "Start-aligned layouts, or centered?"
-- **Why:** Alignment sets the text alignment defaults and where centered layouts are allowed [DC-L15-08].
+- **Ask:** "Should things line up on the side where reading starts, or sit in the center?"
+- **Why:** This sets which side text lines up on by default, and where centered layouts are allowed [DC-L15-08].
 - **Options:**
-  - `start` Start-aligned, asymmetric: efficient, modern, scannable (Apple's "top and leading side").
-  - `centered` Centered, symmetric: calm, ceremonial, "landing page"; long centered text reads poorly [inferred].
-  - `radial` Radial: rare in UI (gauges, radial menus).
+  - `start` Lined up at the start side: efficient, modern, scannable (Apple's "top and leading side").
+  - `centered` Centered, the same on both sides: calm, ceremonial, "landing page"; long centered text reads poorly [inferred].
+  - `radial` In a circle (radial): rare in UI (gauges, radial menus).
 - **Default:** `start`: start-aligned everywhere; center only single-focus moments with short text (empty states, dialogs, sign-in) *Source:* card heuristic [DC-L15-08].
 - **Show:** an empty state and a form in each alignment.
 - **Use / avoid:** use centered layouts for single-focus moments with short text (empty states, dialogs, sign-in); avoid centering multi-line body text [DC-L15-08].

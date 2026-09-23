@@ -10,12 +10,12 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 
 ## Q-state-04 · Which states get their own styling, per input type?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L08-09, DC-L14-06
-- **Ask:** "Style enabled, hover, focus, pressed, selected, disabled, loading and error, with each device rendering the states its inputs can trigger?"
-- **Why:** Overlays give automatic states for any color; explicit tokens allow tuned brand states; TV focus is large and animated while a desktop ring is thin and static [DC-L08-09, DC-L14-06].
+- **Ask:** "How should states like hover, pressed and disabled get their look, and does it change by device?"
+- **Why:** A see-through tint gives any color its states for free; a token for each state lets you tune them to the brand. On TV, focus is large and moving; on desktop, the ring is thin and still [DC-L08-09, DC-L14-06].
 - **Options:**
-  - `overlays` Overlays for hover and press (Material state layers).
-  - `explicit` Explicit tokens per state and variant (Carbon).
-  - `per-input` Per input context: desktop rest/hover/focus-visible/pressed/selected/disabled; TV focused with scale and elevation; tablet pointer lift.
+  - `overlays` A see-through tint on hover and press (Material state layers).
+  - `explicit` Its own token for each state and variant (Carbon).
+  - `per-input` By how people use each device: desktop rest/hover/focus-visible/pressed/selected/disabled; TV focused with scale and elevation; tablet pointer lift.
 - **Default:** style all eight states; overlays for hover and press, explicit tokens for selected and error; define states once, render the subset each context can trigger *Source:* card heuristics [DC-L08-09, DC-L14-06].
 - **Show:** the state matrix for every component.
 - **Use / avoid:** make hover content dismissible and persistent (WCAG 1.4.13); avoid hover-only affordances on touch [DC-L14-06].
@@ -23,13 +23,13 @@ Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L08-
 
 ## Q-state-05 · How should selected and active items look?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L08-14
-- **Ask:** "Show selection with an indicator plus color, and keep brand color for actions?"
-- **Why:** Brand-colored selection is lively; neutral selection keeps brand color meaning "action" only [DC-L08-14].
+- **Ask:** "How should the app show which tab or item is picked?"
+- **Why:** Showing picked items in brand color feels lively. A neutral look keeps brand color meaning "action" and nothing else [DC-L08-14].
 - **Options:**
-  - `pill-indicator` Pill-shaped indicator behind the icon (M3 navigation).
-  - `underline` Underline indicator (Primer UnderlineNav).
-  - `neutral` Neutral, non-brand selected treatment (Atlassian).
-  - `morph` Shape morph round to square (M3 Expressive toggles).
+  - `pill-indicator` A pill shape behind the icon (M3 navigation).
+  - `underline` A line under it (Primer UnderlineNav).
+  - `neutral` A plain look, not the brand color (Atlassian).
+  - `morph` Shape changes from round to square (M3 Expressive toggles).
 - **Default:** an indicator plus color, never color alone; brand primary reserved for actions in action-dense products *Source:* card heuristic [DC-L08-14].
 - **Show:** tabs, nav rail and segmented control selected.
 - **Use / avoid:** use two cues for selection; avoid selection states that look like primary buttons [DC-L08-14].
@@ -37,12 +37,12 @@ Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L08-
 
 ## Q-state-06 · How should destructive actions look?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L08-06
-- **Ask:** "Subtle red in context, solid red only in the confirmation step?"
+- **Ask:** "How should delete buttons and other risky actions look?"
 - **Why:** Solid red draws the eye and invites mis-clicks on main screens; subtle red keeps lists calm [DC-L08-06].
 - **Options:**
   - `solid-danger` Solid red danger button (Carbon, Primer, shadcn destructive).
-  - `danger-levels` Danger at several emphasis levels (Carbon danger primary/tertiary/ghost).
-  - `warning-vs-danger` Separate warning (significant change) and danger (final irreversible step) (Atlassian).
+  - `danger-levels` Danger in several button styles (Carbon danger primary/tertiary/ghost).
+  - `warning-vs-danger` Warning for big changes, danger for the final step you can't undo (Atlassian).
 - **Default:** subtle danger in context, solid danger only in the confirmation step *Source:* card heuristic [DC-L08-06].
 - **Show:** a list with delete actions and the confirm step.
 - **Use / avoid:** use undo instead of confirmation for reversible actions (Q-form-05); avoid solid red buttons in dense lists [DC-L08-06].
@@ -50,12 +50,12 @@ Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L08-
 
 ## Q-state-07 · Where do icons go inside buttons?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L08-08
-- **Ask:** "Optional leading icons on buttons, with sentence-case verb labels?"
-- **Why:** Leading icons aid scanning; a trailing icon with a left label gives Carbon's editorial look; icon-only buttons need labels [DC-L08-08].
+- **Ask:** "Where should icons go inside buttons: before the words, after, or both?"
+- **Why:** An icon before the words helps people scan; words left and an icon right give Carbon's editorial look. Buttons with only an icon need labels [DC-L08-08].
 - **Options:**
-  - `leading` Optional leading icon (M3, 20dp).
+  - `leading` Icon before the words, if wanted (M3, 20dp).
   - `trailing` Label left, icon right (Carbon, 16px icon).
-  - `both-slots` Both slots (Atlassian iconBefore/iconAfter; Primer leadingVisual/trailingVisual).
+  - `both-slots` Icon spots on both sides (Atlassian iconBefore/iconAfter; Primer leadingVisual/trailingVisual).
 - **Default:** optional leading icon, sentence-case verb labels *Source:* card heuristic [DC-L08-08].
 - **Show:** the button sheet with icons.
 - **Use / avoid:** use trailing icons for direction (next, external); avoid icon-only buttons without an accessible name [DC-L08-08].

@@ -1,6 +1,6 @@
 # Journey tracker
 
-**In plain words:** while OpenDesigner helps you build a design system, it can keep a private diary of the steps you took: which questions you saw, how you answered, where you got stuck, and where you stopped. The diary stays on your computer. It shows where the process is slower than it needs to be, so it can get shorter.
+**In plain words:** while OpenDesigner helps you build a design system, it can keep a private diary of your steps. It notes which questions you saw, how you answered, where you got stuck, and where you stopped. The diary stays on your computer. It shows where the process is slower than it needs to be, so it can get shorter.
 
 - **Designers:** a funnel and friction log for the design-system interview, with drop-off points and time per step.
 - **Engineers:** an append-only JSONL event log (`opendesigner/journey/events.jsonl`) plus a report generator; stdlib Python, no network unless you opt in to sharing.
@@ -15,7 +15,7 @@ Nothing is logged until you say yes. The first time, the AI asks one line:
 Your answer is saved as `profile.tracking` in `opendesigner/state.json` (`on` or `off`). If it is missing, the tracker logs nothing and prints that question for the AI to ask.
 
 ## What it records
-Each line of `events.jsonl` is one event with a time, a session (S001, S002 and so on), the step (a question id such as `Q-shape-01`, a stage id, or an engine command), the zoom level, the area and a few details.
+Each line of `events.jsonl` is one event. It has a time and a session (S001, S002 and so on). The step is a question id such as `Q-shape-01`, a stage id, or an engine command. Each event also has the zoom level, the area and a few details.
 
 | Event | What it means |
 |---|---|
@@ -78,13 +78,19 @@ Most frustrating: Q-color-02 (Where should your brand color appear: only on...),
 Top speed-up: Q-color-02: 2 frustration signals: reword it, split it, or show a visual.
 ```
 JOURNEY.md then has these sections:
-- **Funnel by level** and **by area:** how many steps were reached, answered, skipped and dropped at each zoom level and in each area, and whether the level finished.
+- **Funnel by level** and **by area:** how many steps were reached, answered, skipped and dropped, at each zoom level and in each area. It also shows whether the level finished.
 - **Steps taken / shortest:** steps taken counts every time a step was shown, plus extra back-and-forth (from `--turns`, or one per help request). The shortest path is one message per question reached. A question asked in the same message as another (Q-brand-03 with Q-color-01) is not a separate step. **Planned questions** and **minutes** come from `references/pacing.json`.
 - **Where it stopped:** a drop-off is a step still on screen when a session ended without `session_end` and without finishing a level. The session you are in now is not counted until it has been quiet for 30 minutes.
 - **Frustration** and **help hotspots:** the steps with the most signals or help requests.
 - **Changed answers.**
-- **Speed-ups to try:** frustration (2 or more signals: reword or split it), help (2 or more: put the explanation in the question), drop-offs, and defaults. A question whose default was kept at least 80% of the time (accepted, delegated or skipped) is a candidate to auto-apply when its impact is low or medium; high-impact ones stay as questions with the default as a one-tap yes.
-- **Default kept, per question**, **slowest steps** (against the planned 60, 30 or 15 seconds for high, medium and low impact), and everything else: errors, exports, reviews, feedback and requests to go faster.
+- **Speed-ups to try**, from four signals:
+  - frustration: 2 or more signals, so reword or split it;
+  - help: 2 or more requests, so put the explanation in the question;
+  - drop-offs;
+  - defaults: a low- or medium-impact question is a candidate to auto-apply if its default was kept at least 80% of the time. Kept means accepted, delegated or skipped. High-impact ones stay as questions, with the default as a one-tap yes.
+- **Default kept, per question.**
+- **Slowest steps**, against the planned 60, 30 or 15 seconds for high, medium and low impact.
+- Everything else: errors, exports, reviews, feedback and requests to go faster.
 
 ## For maintainers: many reports into one
 People who choose to share send an anonymous report (see [PRIVACY.md](PRIVACY.md)); anyone can also attach one to an issue with `journey.py export --anon`. To merge many:
@@ -93,4 +99,4 @@ python3 <skill>/scripts/journey.py aggregate reports/ more.json --out journeys.m
 python3 <skill>/scripts/journey.py aggregate reports/ --out journeys.json            merged numbers
 python3 server/telemetry/aggregate_reports.py reports.json --out journeys.md         from the report server's export
 ```
-It reads report files, lists of them, the report server's database export, folders, or raw `events.jsonl` logs (turned into anonymous reports first). Every report is checked against `references/report.schema.json`; reports that fail are skipped and counted, and a report that appears twice counts once. In the merged report, counts are per report, and a speed-up needs at least 3 answers.
+It reads report files, lists of them, folders, and the report server's database export. It also reads raw `events.jsonl` logs, which it turns into anonymous reports first. Every report is checked against `references/report.schema.json`; reports that fail are skipped and counted, and a report that appears twice counts once. In the merged report, counts are per report, and a speed-up needs at least 3 answers.

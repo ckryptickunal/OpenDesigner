@@ -13,7 +13,7 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 ## Q-tool-03 · Which design tool does your team use, and on which plan?
 Zoom 2 defined · weight medium · changes 3 decisions · class I · cards DC-L07-27
 - **Ask:** "Do you use a design tool? If Figma, which plan?"
-- **Why:** The plan caps modes per collection, so it bounds which theming architectures fit [DC-L07-27].
+- **Why:** Your Figma plan caps how many modes each collection can have. That caps which theme setups fit [DC-L07-27].
 - **Options:**
   - `none` No design tool: the builder is the visual surface [inferred].
   - `figma-starter` Figma Starter: variables but no extra modes, no published libraries.
@@ -29,26 +29,26 @@ Zoom 2 defined · weight medium · changes 3 decisions · class I · cards DC-L0
 ## Q-tool-01 · Where should the master copy of the system live?
 Zoom 1 broad · weight high · changes 9 decisions · class I · cards DC-L16-02, DC-L07-08, DC-L11-16, DC-L16-13
 - **Ask:** "Where should the master copy live: here, a token file in git, your code, or Figma?"
-- **Why:** Whichever side is not the source of truth drifts unless sync runs automatically; 60% of teams have no token automation [DC-L07-08].
+- **Why:** Any copy that is not the master (the source of truth) drifts out of date unless it syncs on its own. 60% of teams have no token automation [DC-L07-08].
 - **Options:**
-  - `builder` The builder's own model, compiled to DTCG, CSS, native code and design files in one step; design tools are push targets [DC-L16-02, DC-L11-16].
-  - `token-file` A token file in git (DTCG JSON plus a Resolver); code and Figma are generated from it (Tokens Studio, Penpot write DTCG) [DC-L07-08].
+  - `builder` In the builder. It makes DTCG, CSS, native code and design files at once, and sends to design tools [DC-L16-02, DC-L11-16].
+  - `token-file` Git token file (DTCG plus Resolver). It feeds code and Figma (Tokens Studio, Penpot write DTCG) [DC-L07-08].
   - `code` Code: tokens and components in code, design tools mirror it; the 2026 practitioner majority ("code is the source of truth") [DC-L11-16; COMMUNITY-SIGNAL].
-  - `design-file` Design file (Figma variables): designers own tokens; fits a single web platform [DC-L07-08].
+  - `design-file` In Figma, as variables: designers own tokens; fits a single web platform [DC-L07-08].
 - **Default:** `builder`: builder; design tools are mirrors: write to Figma through its remote MCP when a Full seat exists, otherwise emit one DTCG file per mode Figma imports natively; write to Paper through its MCP *Source:* card heuristics of L16 and L11 [DC-L16-02, DC-L11-16, DC-L16-13]; L07 prefers token-file (see Disagreements).
 - **Show:** a round-trip diagram: which targets are generated, which only mirror, and which direction sync runs.
 - **Skip:** yes, builder.
 
-## Q-tool-02 · How will engineers consume the system?
+## Q-tool-02 · How will engineers get and use the system?
 Zoom 2 defined · weight medium · changes 0 decisions · class I · cards DC-L09-08
-- **Ask:** "How will engineers consume it: npm package, copy-in source, CSS only, tokens only?"
-- **Why:** Copy-in source drifts per product, CDN runtimes stay uniform, headless layers leave the look to you [DC-L09-08].
+- **Ask:** "How will your engineers use it: an npm package, code copied in, only CSS, or only tokens?"
+- **Why:** Copied-in code drifts apart in each product, while a CDN runtime keeps them all the same. Headless layers leave the look to you [DC-L09-08].
 - **Options:**
-  - `npm` Versioned npm component library (Carbon, Fluent, Ant, Chakra, Mantine) [DC-L09-08].
+  - `npm` An npm package of components, with versions (Carbon, Fluent, Ant, Chakra, Mantine) [DC-L09-08].
   - `copy-in` Copy-in source through a CLI and registry (shadcn).
-  - `cdn` CDN runtime with a stable channel (Polaris).
+  - `cdn` Loaded from a CDN, with a stable channel (Polaris).
   - `css-html` CSS and HTML only (GOV.UK, USWDS) [DC-L09-08].
-  - `headless` Headless primitives plus your styles (Radix, Base UI) [DC-L09-08].
+  - `headless` Unstyled building blocks plus your styles (Radix, Base UI) [DC-L09-08].
   - `utilities` Utility classes (Tailwind `@theme`).
   - `tokens-only` Tokens only [inferred].
 - **Default:** tokens in DTCG JSON, emitted as CSS variables, Tailwind `@theme` and the shadcn contract *Source:* card heuristic, "where generated systems land today" [DC-L09-08].

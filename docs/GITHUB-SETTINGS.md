@@ -1,14 +1,22 @@
 # GitHub settings for the public launch
 
-Everything here is for the maintainer to apply. GitHub's search reads the repository name, the About description and the topics, so these are worth getting right. All commands use the [GitHub CLI](https://cli.github.com/) and assume:
+Everything here is for the maintainer to apply. GitHub's search reads the repository name, the About description and the topics, so these are worth getting right.
+
+**Status on 2026-09-24 (checked with the GitHub API):**
+- The repository is public, with 0 stars [S-V1b-001].
+- Applied on 2026-09-23: the About description, the 20 topics, Discussions on, wiki and projects off, the 22 labels, and the 21 seed issues.
+- Still to do: private vulnerability reporting, secret scanning, push protection and Dependabot alerts (all off). The merge settings and the `main` ruleset are not applied yet either.
+- GitHub Actions is disabled at the account level, so CI has never run. Kunal has to turn it back on in his GitHub account settings, or ask GitHub Support.
+
+All commands use the [GitHub CLI](https://cli.github.com/) and assume:
 
 ```bash
 REPO=ckryptickunal/OpenDesigner
 ```
 
-## Before making the repository public
+## Security clean-up from before launch
 
-1. **Revoke the keys that were once committed.** `_coordination/DECISIONS.md` (2026-09-23 18:45 IST) records that `.env` with two API keys was in the first commit. History was rewritten, but the keys must be revoked at their providers, and GitHub Support should be asked to purge the orphaned commit `1ac2ebe`, which GitHub still serves by SHA.
+1. **Revoke the keys that were once committed.** `_coordination/DECISIONS.md` (2026-09-23 18:45 IST) records that `.env` with two API keys was in the first commit. History was rewritten, and both keys were then revoked (19:01 IST). GitHub Support ticket #4786185 asks GitHub to purge the orphaned commits `1ac2ebe`, `276b90f`, `f857aa0` and `91ec51d`. On 2026-09-24 GitHub still served `1ac2ebe` by SHA.
 2. **Decide the licenses.** The defaults are MIT for code, skills and data, and CC BY 4.0 for written research and docs (`LICENSE`, `LICENSE-CONTENT`). Change them now if you want something else; it is much harder after outside contributions arrive.
 3. **Check for other secrets** once more: `git log -p | grep -iE "api[_-]?key|secret|token" | head`.
 
@@ -18,7 +26,7 @@ REPO=ckryptickunal/OpenDesigner
 Open-source AI design system builder. Load it into Claude, ChatGPT, Codex or Cursor: it interviews you, recommends sourced defaults and writes DTCG design tokens, CSS, Tailwind, Figma variables, DESIGN.md and a decision log, with WCAG 2.2 checks. Built on 352 cited Decision Cards and 25 benchmarked design systems.
 ```
 
-It leads with the phrase people search for, names the hosts and formats people filter by, and ends with the proof. Update the card count when the research grows (`python3 tools/jev_nav.py check` prints it).
+It leads with the phrase people search for. It names the hosts and formats people filter by, and ends with the proof. Update the card count when the research grows (`python3 tools/jev_nav.py check` prints it).
 
 ## Topics (20, the maximum)
 
@@ -30,7 +38,7 @@ tailwindcss, shadcn-ui, accessibility, wcag, ui-design, theming
 
 ## Homepage
 
-Leave it empty until there is a site. A good first site is GitHub Pages serving `docs/` at `https://ckryptickunal.github.io/OpenDesigner/`; once it exists, set it with `gh repo edit "$REPO" --homepage <url>`. Do not point the homepage at the repo itself; it adds nothing.
+Leave it empty until there is a site. A good first site is GitHub Pages serving `docs/` at `https://ckryptickunal.github.io/OpenDesigner/`. Once it exists, set it with `gh repo edit "$REPO" --homepage <url>`. Do not point the homepage at the repo itself; it adds nothing.
 
 ## Social preview image
 
@@ -53,7 +61,7 @@ gh repo edit "$REPO" \
 # private vulnerability reporting (SECURITY.md and CODE_OF_CONDUCT.md point people here)
 gh api -X PUT "repos/$REPO/private-vulnerability-reporting"
 
-# secret scanning, then push protection (free on public repositories; run after going public)
+# secret scanning, then push protection (free on public repositories; the repo is public now)
 gh repo edit "$REPO" --enable-secret-scanning
 gh repo edit "$REPO" --enable-secret-scanning-push-protection
 
@@ -63,7 +71,7 @@ gh api -X PUT "repos/$REPO/vulnerability-alerts"
 
 ## Discussions categories
 
-Enabling Discussions creates GitHub's defaults: Announcements, General, Ideas, Polls, Q&A and Show and tell. The issue forms link to **Q&A** (`/discussions/categories/q-a`) and **Show and tell** (`/discussions/categories/show-and-tell`), so keep those names. GitHub has no API for creating categories; add these two by hand under **Discussions > Categories**:
+Enabling Discussions creates GitHub's defaults: Announcements, General, Ideas, Polls, Q&A and Show and tell. The issue forms link to **Q&A** (`/discussions/categories/q-a`) and **Show and tell** (`/discussions/categories/show-and-tell`), so keep those names. GitHub has no API for creating categories. Add these two by hand under **Discussions > Categories**:
 
 | Category | Format | Description |
 |---|---|---|
@@ -105,7 +113,7 @@ GitHub's default labels (`documentation`, `duplicate`, `invalid`, `wontfix`) can
 
 ## Protect main
 
-After the first green CI run, require it on `main`:
+After the first green CI run, require it on `main`. CI can't run until GitHub Actions is turned back on (see the status above).
 
 ```bash
 gh api -X POST "repos/$REPO/rulesets" --input - <<'JSON'
@@ -118,20 +126,21 @@ gh api -X POST "repos/$REPO/rulesets" --input - <<'JSON'
 JSON
 ```
 
-The coordination tool (`tools/od.py sync`) pushes straight to `main` from maintainer sessions. If that should keep working, add a bypass for the maintainer role in the ruleset, or have sessions open pull requests instead.
+The coordination tool (`tools/od.py sync`) pushes straight to `main` from maintainer sessions. To keep that working, add a bypass for the maintainer role in the ruleset. Or have sessions open pull requests instead.
 
 ## Seed issues
 
-`docs/SEED-ISSUES.md` holds 21 ready issues. Create them after the labels exist.
+`docs/SEED-ISSUES.md` holds 21 ready issues. They were filed on 2026-09-23 as issues #1 to #21, after the labels.
 
 ## Discovery beyond GitHub
 
-GitHub search ranks on name, description, topics and README; Google needs links from other sites; AI assistants read `llms.txt`, the README and `AGENTS.md`. After launch:
+GitHub search ranks on name, description, topics and README. Google needs links from other sites. AI assistants read `llms.txt`, the README and `AGENTS.md`. After launch:
 
-- Submit the Claude plugin to the official marketplace (`claude-plugins-official`, by pull request) and list the skill on agentskills.io, once the manifests are in the repo.
-- Post a Show and tell with a real before and after, and link the repo from the places people ask "how do I create a design system": design-system communities, the DTCG community group's implementations list, and relevant awesome lists.
+- Submit the Claude plugin to the official marketplace (`claude-plugins-official`, by pull request). List the skill on agentskills.io. The manifests are in the repo now, so both can go.
+- Post a Show and tell with a real before and after.
+- Link the repo from the places people ask "how do I create a design system". These include design-system communities, the DTCG community group's implementations list, and relevant awesome lists.
 - Keep the README answering the literal questions people type (see `docs/FAQ.md`), and keep `llms.txt` current when files move.
 
 ## A note on license detection
 
-GitHub detects the license from root files named `LICENSE*`. With both `LICENSE` (MIT) and `LICENSE-CONTENT` (CC BY 4.0) at the root, the sidebar may list both, and the API may report the repository license as "Other". If you want the `license:mit` search filter to match, check the repository page after pushing, and if it shows "Other", move `LICENSE-CONTENT` to `docs/LICENSE-CONTENT` and update the links in `README.md`, `CONTRIBUTING.md` and `docs/FAQ.md`.
+GitHub detects the license from root files named `LICENSE*`. Both `LICENSE` (MIT) and `LICENSE-CONTENT` (CC BY 4.0) are at the root. So the sidebar may list both, and the API may report the repository license as "Other". On 2026-09-24 the API reported MIT. You may want the `license:mit` search filter to match. If so, check the repository page after pushing. If it shows "Other", move `LICENSE-CONTENT` to `docs/LICENSE-CONTENT` and update the links in `README.md`, `CONTRIBUTING.md` and `docs/FAQ.md`.

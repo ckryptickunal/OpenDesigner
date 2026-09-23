@@ -10,26 +10,26 @@ Zoom 3 (detailed) questions: `16-motion-haptics-and-sound.detailed.md`.
 
 Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
 
-## Q-motion-01 · Should motion feel quick and invisible, or physical and playful?
+## Q-motion-01 · Should motion feel quick and quiet, or physical and playful?
 Zoom 1 broad · weight high · changes 5 decisions · class G · cards DC-L09-06, DC-L04-19, DC-L06-10
-- **Ask:** "Should motion be quick and invisible, calm with a few expressive moments, or physical and bouncy?"
-- **Why:** Motion is L09 divergence 7: short beziers feel efficient, springs with bounce feel alive, no motion feels static but calm [DC-L09-06].
+- **Ask:** "Should motion be quick and barely seen, calm with a few bold moments, or physical and bouncy?"
+- **Why:** Motion sets how lively the product feels (L09 divergence 7). Short, smooth moves feel efficient, bouncy springs feel alive, and no motion feels still but calm [DC-L09-06].
 - **Options:**
-  - `two-mode` Productive for most interactions, expressive for 1-3 hero moments per flow (Carbon expressive; Material standard vs expressive schemes) [DC-L04-19].
+  - `two-mode` Plain for most actions, bold for 1-3 key moments per flow (Carbon expressive; Material standard vs expressive schemes) [DC-L04-19].
   - `none` Minimal motion (GOV.UK) [DC-L09-06].
-  - `productive` Productive beziers: fast, competent, no bounce (Carbon productive `cubic-bezier(0.2, 0, 0.38, 0.9)`).
+  - `productive` Quick, plain curves: fast, competent, no bounce (Carbon productive `cubic-bezier(0.2, 0, 0.38, 0.9)`).
   - `springs` Springs throughout: alive, physical, interruptible (Material spring tokens, Apple duration + bounce, Airbnb) [DC-L09-06].
 - **Default:** `two-mode`: two-mode: 7 durations 50-500ms, ease-out to enter, ease-in to exit, springs only for spatial moves in the expressive mode, bounce at or below 0.2 *Source:* L09 shared default row 5 (all 16 systems with motion tokens stay in 100-300ms) and card heuristics [DC-L09-06, DC-L04-19]; capped at productive when Q-aud-02 is high-trust.
 - **Show:** the live interactions replay on every change, with a slow-motion button.
 - **Use / avoid:** use expressive motion for page transitions, the primary action and alerts; avoid bounce on everyday controls and in high-trust products [DC-L06-10, DC-L04-19].
 - **Skip:** yes.
 
-## Q-motion-07 · What happens when users ask for reduced motion, and how much motion does each device allow?
+## Q-motion-07 · What happens when people ask for reduced motion, and how much motion fits each device?
 Zoom 2 defined · weight low · changes 0 decisions · class G · cards DC-L04-25, DC-L14-08
-- **Ask:** "When someone turns on reduced motion, should movement become gentle fades or stop entirely?"
-- **Why:** A good reduced mode still feels polished (crossfades) rather than broken (jumps); motion budgets shrink as attention narrows (none in cars) [DC-L04-25, DC-L14-08].
+- **Ask:** "When someone turns on reduced motion, should things fade gently or stop moving?"
+- **Why:** A good reduced motion mode still feels polished, with crossfades instead of jumps. Where people have less attention to spare, motion shrinks, down to none in cars [DC-L04-25, DC-L14-08].
 - **Options:**
-  - `replace` Replace spatial motion with opacity and color changes (MDN; WCAG's motion definition excludes color, blur and opacity).
+  - `replace` Replace movement with fades and color changes (MDN; WCAG's motion rule leaves out color, blur and opacity).
   - `remove` Remove all non-essential motion (WCAG 2.3.3 AAA, technique C39) [DC-L04-25].
   - `per-device` Per device: system transitions plus brand micro-motion on phone and desktop; subtle focus scale on TV; minimal on watch; none in cars; slow and grounded in headsets [DC-L14-08].
 - **Default:** `replace`: replace, built as a token mode; 2.3.3 treated as a requirement although it is AAA; per-device budgets applied *Source:* accessibility rule and card heuristics [DC-L04-25, DC-L14-08].
@@ -39,12 +39,12 @@ Zoom 2 defined · weight low · changes 0 decisions · class G · cards DC-L04-2
 
 ## Q-motion-08 · Do you have UI sounds or a sonic logo?
 Zoom 2 defined · weight medium · changes 0 decisions · class D · cards DC-L04-27
-- **Ask:** "Do you have UI sounds or a sonic logo you want in the product? Most web and productivity apps stay silent."
-- **Why:** Sound is a block the builder cannot compose well; it adds confirmation but annoys in shared spaces [DC-L04-27; BRIEF requirement 2].
+- **Ask:** "Do you have app sounds or a sonic logo (a short brand sound) you want to use?"
+- **Why:** Sound confirms actions but annoys people in shared spaces. The builder cannot compose it well [DC-L04-27; BRIEF requirement 2].
 - **Options:**
   - `silent` Silent by default (most web systems; tvOS plays no alert sounds).
   - `rare-events` Sounds for rare, meaningful events, always behind mute and silent mode.
-  - `sound-forward` Sound-forward (games, spatial computing) [DC-L04-27].
+  - `sound-forward` Lots of sound (games, spatial computing) [DC-L04-27].
 - **Default:** `silent`: silent on web and productivity apps *Source:* card heuristic [DC-L04-27].
 - **Show:** the event list with a play button per sound and the mute state.
 - **Use / avoid:** use sound only for rare, meaningful events that honor silent mode; avoid sounds on web and in shared-space products [DC-L04-27].

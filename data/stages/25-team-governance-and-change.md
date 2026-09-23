@@ -12,12 +12,12 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 
 ## Q-gov-01 · How strict should the system be: can product teams override or extend it?
 Zoom 2 defined · weight medium · changes 3 decisions · class I · cards DC-L11-03
-- **Ask:** "Strict core (tokens, primitives, accessibility), with product teams free to build their own patterns on top?"
-- **Why:** Strict systems stay consistent but feel rigid; loose ones allow experiments but drift; a strict core with loose edges is the practical middle [DC-L11-03].
+- **Ask:** "How strict should the system be, and can product teams change it or add their own parts?"
+- **Why:** A strict system stays consistent but feels rigid, and a loose one allows experiments but drifts. A strict core with loose edges is the practical middle [DC-L11-03].
 - **Options:**
   - `strict` Strict: comprehensive docs, design and code fully synced, little deviation.
   - `loose` Loose: a framework with room to experiment.
-  - `canon-expanded` Strict canon plus product-owned "expanded universe" extensions (Dan Mall).
+  - `canon-expanded` A strict core, plus team-owned add-ons, the "expanded universe" (Dan Mall).
 - **Default:** `strict`: strict core (tokens, primitives, accessibility behavior), loose edges (patterns, marketing) *Source:* card heuristic [DC-L11-03].
 - **Show:** a layer diagram with lock icons per layer.
 - **Use / avoid:** use a snowflake path for one-off needs; avoid forcing every product-specific component into the core [DC-L11-03, DC-L11-12].

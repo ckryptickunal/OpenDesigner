@@ -10,28 +10,28 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 
 ## Q-space-09 · Who controls density, and how is it stored?
 Zoom 3 detailed · weight medium · changes 3 decisions · class G · cards DC-L03-10, DC-L03-11, DC-L14-13
-- **Ask:** "Who controls density, and how is it stored?"
-- **Why:** User-selectable density can change layout, not just padding (Salesforce compact moves labels inline) [DC-L03-10].
+- **Ask:** "Who decides how packed or roomy the screens are, and how is that choice saved?"
+- **Why:** Letting users pick density can change the layout, not just the padding. In Salesforce's compact mode, labels move beside their fields [DC-L03-10].
 - **Options:**
   - `fixed` Fixed density, no setting (most consumer and marketing systems) [DC-L03-10].
-  - `size-props` Component size props chosen by designers (Carbon, Fluent, Primer).
-  - `user-global` User-selectable global density (Salesforce comfy/cozy/compact, Gmail).
-  - `semantic-mode` Stored as a semantic-layer mode, separate from breakpoints and color themes; primitives and target minimums untouched [DC-L03-11].
+  - `size-props` Designers pick a size for each component (Carbon, Fluent, Primer).
+  - `user-global` Each person picks a density for the whole app (Salesforce comfy/cozy/compact, Gmail).
+  - `semantic-mode` Stored as its own token mode, apart from screen sizes and color themes. Base values and minimum targets stay the same [DC-L03-11].
   - `per-device` Density follows viewing distance and input per device class ("a 65-inch TV is a far-away phone") [DC-L14-13].
 - **Default:** consumer: fixed comfortable; enterprise and data: size props plus a user compact mode that shrinks insets, stacks and row heights by one step (about 4px); stored as a semantic mode *Source:* card heuristics [DC-L03-10, DC-L03-11, DC-L14-13].
 - **Show:** a data table toggled between modes; target outlines stay fixed while padding shrinks.
 - **Use / avoid:** use a compact mode for tables, lists, menus and trees; avoid a type-only density mode that leaves oversized padding [DC-L03-11].
 - **Skip:** yes.
 
-## Q-space-06 · How should spacing tokens be organized by purpose?
+## Q-space-06 · How should spacing be grouped by what it is used for?
 Zoom 3 detailed · weight medium · changes 2 decisions · class G · cards DC-L03-04, DC-L03-05
-- **Ask:** "How should spacing tokens be organized by purpose?"
-- **Why:** Semantic roles make the same inset appear in every card and the same stack between every field, which reads as rhythm [DC-L03-04].
+- **Ask:** "How should spacing values be grouped by their job?"
+- **Why:** Naming spacing by its job puts the same padding in every card and the same gap between every field. That repeat reads as rhythm [DC-L03-04].
 - **Options:**
   - `curtis` Inset, squish inset, stretch inset, stack, inline, grid (EightShapes).
   - `material` Padding, gap, margin; "use padding and gaps before margins" (Material 3).
-  - `layout-component` Separate component spacing from layout spacing (Carbon).
-  - `insets` Inset shapes: square for cards and dialogs, squish (vertical about half of horizontal) for buttons and rows, stretch for inputs [; DC-L03-05].
+  - `layout-component` Keep spacing inside parts separate from page spacing (Carbon).
+  - `insets` Padding shapes: square for cards and dialogs, squish (vertical about half of horizontal) for buttons and rows, stretch for inputs [; DC-L03-05].
 - **Default:** three families (inset, gap, layout); parents own spacing and children never set outer margins; squish for pill-like controls, stretch for inputs only *Source:* card heuristics [DC-L03-04, DC-L03-05].
 - **Show:** a card, button and input with each inset shape overlaid.
 - **Use / avoid:** use padding and gap on parents; avoid margins on reusable components [DC-L03-04].
@@ -39,24 +39,24 @@ Zoom 3 detailed · weight medium · changes 2 decisions · class G · cards DC-L
 
 ## Q-space-07 · Do you need tiny nudges and negative spacing?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L03-06
-- **Ask:** "Do you need tiny nudges and negative spacing?"
-- **Why:** Nudges fix optical misalignment (icons that look off-center); negatives create overlaps such as avatar stacks [DC-L03-06].
+- **Ask:** "Do you need tiny steps for small fixes, and negative spacing for overlaps?"
+- **Why:** Tiny steps fix things that look out of line, like icons that seem off-center. Negative spacing lets things overlap, like a stack of avatars [DC-L03-06].
 - **Options:**
   - `nudges` Nudge steps 2, 6, 10 (Fluent; Material nested units).
   - `hairline` 1px step (Spectrum `spacing-25`, Polaris `space-025`).
-  - `negatives` Negative tokens -2 to -32 (Atlassian, Primer).
+  - `negatives` Negative steps -2 to -32 (Atlassian, Primer).
 - **Default:** 2, 4, 6 (10 only if the icon set needs it), negatives mirroring positives up to 32; 1px reserved for borders, not spacing *Source:* card heuristic [DC-L03-06].
 - **Show:** an icon-label pair and an avatar stack with and without nudges.
 - **Use / avoid:** use negatives for deliberate overlaps; avoid using nudges to patch layout bugs [DC-L03-06, inferred].
 - **Skip:** yes.
 
-## Q-space-08 · How should vertical rhythm be kept?
+## Q-space-08 · How should spacing above and below text stay even?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L03-25
-- **Ask:** "How should vertical rhythm be kept?"
-- **Why:** Stray line-height space makes padding look uneven (top bigger than bottom) [DC-L03-25].
+- **Ask:** "How should we keep spacing above and below text looking even?"
+- **Why:** Extra space inside the line height can make padding look uneven, with more at the top than the bottom [DC-L03-25].
 - **Options:**
   - `box-based` Measure spacing from the text box; spacers snap to the text box (Carbon).
-  - `baseline` A baseline grid for multi-column content (Fluent).
+  - `baseline` A baseline grid (lines all text sits on) for multi-column pages (Fluent).
   - `trim` Trim line-height with CSS `text-box` as progressive enhancement.
 - **Default:** snap line heights and spacing to 4px, measure from the text box, `text-box` trim as enhancement; content must survive WCAG 1.4.12 text-spacing overrides *Source:* card heuristic [DC-L03-25]; accessibility rule [DC-L02-22].
 - **Show:** a button and card with the top and bottom padding measured, trim on and off.
@@ -66,10 +66,10 @@ Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L03-
 ## Q-space-10 · Which icon and avatar sizes should exist?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L03-08
 - **Ask:** "Which icon and avatar sizes should exist?"
-- **Why:** Icons sized to the text line height sit level with labels; oversized icons shift the personality toward friendly and consumer [DC-L03-08].
+- **Why:** Icons sized to the line height sit level with their labels. Bigger icons make the product feel friendlier and more like a consumer app [DC-L03-08].
 - **Options:**
   - `icons-16-32` Icons 16/20/24/32 (Carbon: 16 and 20 pair with 14 and 16px text).
-  - `platform-scaled` Platform-scaled icon sizes (Spectrum desktop 14-26, mobile 16-30).
+  - `platform-scaled` Icon sizes per platform (Spectrum desktop 14-26, mobile 16-30).
   - `button-sized` Icon sized to the button size (Material Expressive 20-40dp for XS-XL).
   - `avatars` Avatars 16/20/24/32/40/48/64 (Primer).
 - **Default:** icons 16/20/24/32, avatars 16-64 as Primer; icon size = body line height minus 0-4px *Source:* card heuristic [DC-L03-08].

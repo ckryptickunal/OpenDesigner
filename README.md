@@ -2,19 +2,20 @@
 
 **Make your app look good and stay consistent, with the AI you already use.**
 
-OpenDesigner is a free, open-source helper for AI tools like Claude, ChatGPT and Codex. It helps you make a **design system**: the rules for how your app looks, such as colors, text sizes, spacing, corners and buttons. It asks simple questions, shows you choices you can see, and writes the rules into files.
+OpenDesigner is a free, open-source helper for AI tools like Claude, ChatGPT and Codex. It helps you make a **design system**: the rules for how your app looks, such as colors, text sizes, spacing, corners and buttons. It asks simple questions one at a time, shows you choices you can see, and explains new words in plain language.
 
-- **New to design?** Answer about 5 plain questions and you get a complete, working set of rules. New words come with a plain meaning.
-- **Designer?** It does the repetitive system work: scales, tokens, states and accessibility checks. It asks you for the parts only you should make, like the logo.
-- **Engineer?** Each decision becomes DTCG design tokens, CSS variables, a Tailwind theme and a `DESIGN.md` that your code and AI agents can follow.
+**What you get:** your rules saved as files in your project, a `DESIGN.md` page that explains them, and a preview page. About 5 questions give you a complete set that works. Go deeper only where you want to.
 
 **To start:** add OpenDesigner to your AI tool ([Quickstart](#quickstart)), then say **"Create a design system for this project."**
+
+- **Designers:** it does the repetitive system work: scales, tokens, states and accessibility checks. It asks you for the parts only you should make, like the logo.
+- **Engineers:** each decision becomes DTCG design tokens, CSS variables, a Tailwind theme and a `DESIGN.md` that your code and AI agents can follow.
 
 [![CI](https://github.com/ckryptickunal/OpenDesigner/actions/workflows/ci.yml/badge.svg)](https://github.com/ckryptickunal/OpenDesigner/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 ![OpenDesigner: build a real design system with the AI you already use](docs/assets/social-preview.png)
 
-[Quickstart](#quickstart) · [How it works](docs/HOW-IT-WORKS.md) · [Glossary](docs/GLOSSARY.md) · [FAQ](docs/FAQ.md) · [The research](docs/RESEARCH.md) · [Report a problem](#report-a-problem-or-suggest-an-improvement) · [Contributing](CONTRIBUTING.md)
+[Quickstart](#quickstart) · [How it works](docs/HOW-IT-WORKS.md) · [Glossary](docs/GLOSSARY.md) · [FAQ](docs/FAQ.md) · [The research](docs/RESEARCH.md) · [Privacy](docs/PRIVACY.md) · [Report a problem](#report-a-problem-or-suggest-an-improvement) · [Contributing](CONTRIBUTING.md)
 
 ## Quickstart
 
@@ -53,17 +54,22 @@ Then say: **"Create a design system for this project."**
 
 ## Start small, zoom in when you need to
 
-1. **Sketch.** Answer about 5 questions. You already get a complete, working system.
-2. **Zoom in.** Pick any area (color, text, spacing, buttons, motion) and go deeper. Each choice is shown, explained and recommended.
-3. **Stop whenever it's enough.** Every level leaves you with files that work.
+There are four zoom levels. Nobody picks a mode: everyone starts with the sketch.
 
-New words come in three voices: plain words first, then the designer's word and the code name on one line. They are all in the [glossary](docs/GLOSSARY.md).
+1. **Sketch.** About 5 questions, in about 3 minutes. You already get a complete, working system.
+2. **Broad.** One short screen for each main area: 8 questions, about 8 minutes.
+3. **Defined.** Pick one area, such as color, text, spacing, buttons or motion, and set it with real values.
+4. **Detailed.** Components, patterns and the fine print of each area.
+
+Stop whenever it's enough. Every level leaves you with files that work. Each choice is shown, explained and comes with a recommendation.
+
+New words come in three voices: plain words first, then the designer's word and the code name on one line. All 393 terms are in the [glossary](docs/GLOSSARY.md).
 
 ## What it does
 
 Most AI tools can make one screen look fine. Keeping a whole product consistent needs a design system. That means a spacing scale, a type scale, colors with clear roles, corner radius, shadows and motion. It also means button and form states, accessibility rules, and the reason behind each one.
 
-OpenDesigner is an open-source AI design system generator that walks you through building one. It comes as Agent Skills: a Claude skill that also runs in Codex, ChatGPT, Cursor and other agents.
+OpenDesigner is an open-source AI design system generator that walks you through building one. It comes as Agent Skills: folders of instructions an AI tool reads. The same Claude skill also runs in Codex, ChatGPT, Cursor and other agents.
 
 - **It makes what can be made well:** spacing, type, color ramps, corner radius, elevation, motion and states.
 - **It asks you for what can't be:** a logo, custom icons, illustration, photography or a brand typeface. It never fakes these.
@@ -71,6 +77,8 @@ OpenDesigner is an open-source AI design system generator that walks you through
 - **Its advice comes from research you can check.** The research has 352 Decision Cards across 18 research lanes and 2,740 logged sources. It also tears down 25 public design systems (Material, Apple HIG, Carbon, Fluent, Polaris, Primer, shadcn/ui and more).
 - **Code checks the result before you see it:** contrast (WCAG 2.2), touch-target sizes and scales.
 - **Every decision is written down with its reason.** Your team and the next AI session can extend the system without breaking it.
+- **A private log of your steps, if you say yes.** It stays on your computer and shows where the questions slow you down ([journey tracker](docs/JOURNEY-TRACKER.md)).
+- **Sharing is a separate yes.** Only then does it send the maintainers an anonymous summary. It never sends your answers, names or files ([privacy](docs/PRIVACY.md)).
 
 ## What a session looks like
 
@@ -97,12 +105,12 @@ Model:  Logo checked: outlined text, readable at 16 px on light and dark.
 ## How it works
 
 1. **Read first.** The model looks at your repo, CSS, existing tokens and any `DESIGN.md` before it asks anything.
-2. **Work from a full map.** Every building block of a design system is on one map (271 nodes in 10 layers). Each block is tagged as generatable, extractable, designer-owned, tool-assisted or owner input ([glossary](docs/GLOSSARY.md)).
+2. **Work from a full map.** Every part of a design system is on one map: 275 nodes in 10 layers. Its 211 building blocks are each tagged as generatable, extractable, tool-assisted or designer-owned ([glossary](docs/GLOSSARY.md)) [S-V1b-091]. Designer-owned also covers choices only your team can make, such as who the product is for.
 3. **Ask for what needs a person.** 14 kinds of assets need a human maker: logo, app icon, icons, illustration, photography, brand typeface, sound and more. For each one, the model asks "do you have this?" and checks what you give it. If you don't have it, it writes a designer brief or points to named open libraries with their licenses.
 4. **Direction, then foundations.** Personality and platforms come first, because they shape the most. Then color, type, space, shape, depth and motion, one block at a time. Each block shows a live preview, where to use it and where not to.
 5. **Learn from references at any step.** Add a website, screenshot, Figma file or brand book. Its values are pre-filled with their source, and you accept or ignore each one.
 6. **Check the result.** WCAG 2.2 contrast, target sizes, focus rings and reduced motion are built in, so every generated system meets them. Lint rules and a coverage check follow. Nothing is silently skipped.
-7. **Export and extend.** Tokens and docs land in your repo. Later sessions read the decision log before they change anything.
+7. **Export and extend.** Tokens and docs land in your repo. Later sessions read the decision log before they change anything. At the end of each build, `engine.py review` finds values in your code that skip the tokens, and parts of `DESIGN.md` that are out of date.
 
 The full walkthrough, with a diagram, is in [docs/HOW-IT-WORKS.md](docs/HOW-IT-WORKS.md). The complete product specification is [docs/SPEC.md](docs/SPEC.md).
 
@@ -158,14 +166,20 @@ Three complete systems for made-up products, made only with the engine's own com
 | ![Devtool Dense preview](docs/assets/examples/devtool-dense.png) | ![Consumer Playful preview](docs/assets/examples/consumer-playful.png) | ![Public Service Accessible preview](docs/assets/examples/public-service-accessible.png) |
 | Calm, compact, sharp: a CI console | Expressive, rounded, colorful: a habit app | Plain, high contrast, no motion: a benefits service |
 
-Try the engine on its own, with no AI (Python 3.10+, nothing to install):
+Try the engine on its own, with no AI (Python 3.10+, nothing to install). This makes a sketch from a name and two feeling words:
+
+```bash
+python3 path/to/OpenDesigner/skills/opendesigner/scripts/engine.py sketch --name "Acme" --feel friendly,minimal
+```
+
+To use only the sourced defaults, run `init` and then `build` instead:
 
 ```bash
 python3 path/to/OpenDesigner/skills/opendesigner/scripts/engine.py init --name "Acme"
 python3 path/to/OpenDesigner/skills/opendesigner/scripts/engine.py build
 ```
 
-This writes `DESIGN.md`, `PRODUCT.md` and an `opendesigner/` folder with tokens, exports and a preview, using sourced defaults.
+Either way, it writes `DESIGN.md`, `PRODUCT.md` and an `opendesigner/` folder with tokens, exports and a preview.
 
 ## The research behind it
 
@@ -175,9 +189,10 @@ OpenDesigner's defaults are not taste. They come from this repo's research, whic
 |---|---|
 | Research lanes finished | **18** (color, typography, space and layout, shape and motion, icons and data viz, brand and voice, tokens and Figma, components, benchmark, platforms, process and governance, UX laws, device classes, visual principles, tooling, how systems get made, AI distribution, community signal) |
 | Decision Cards | **352**, each with options, visual effect, dependencies, token encoding, platform notes, accessibility limits and a default |
-| Sources logged | **2,740**, every one opened with its URL, publisher, date, tier and verdict, including the rejected ones |
+| Sources logged | **2,740** by the research lanes (3,225 in all, with the sponsorship research and the verification pass). Each was opened and logged with its URL, publisher, date, tier and verdict, including the rejected ones |
 | Design systems benchmarked | **25**, with real values in 12 dimension tables |
 | Interview | **192** questions on 27 screens, ordered by a decision graph of 352 decisions and 465 dependencies |
+| Independent check | **161** claims re-checked against live sources: 134 confirmed, 19 partly right, 5 wrong, 3 unverifiable. Fixes are in [`synthesis/VERIFICATION.md`](synthesis/VERIFICATION.md) |
 
 Start with [docs/RESEARCH.md](docs/RESEARCH.md). Every claim cites a source id or says `[inferred]`. Running `python3 tools/jev_nav.py check` confirms that every cited source is logged.
 
@@ -199,12 +214,14 @@ OpenDesigner gets better each time someone says what went wrong.
 | Piece | Status |
 |---|---|
 | Research base (18 lanes), synthesis (ontology, interview, dials, decision graph) and [product specification](docs/SPEC.md) | Done |
+| Independent verification of the research (V1) | Done: 161 claims checked, 49 corrections applied in the first pass ([`synthesis/VERIFICATION.md`](synthesis/VERIFICATION.md)) |
 | Four skills (`opendesigner`, `-extract`, `-extend`, `-export`), knowledge files and 8 visual templates | First version in [`skills/`](skills/) |
 | Host packaging: Claude plugin and marketplace, Agent Plugins `plugin.json`, claude.ai zips, ChatGPT Project bundle | In the repo; Claude manifests pass `claude plugin validate` |
-| Engine: generate, validate, export (DTCG, CSS, Tailwind, Figma, Paper, Swift, Compose) | Works: [`engine.py`](skills/opendesigner/scripts/engine.py) `build` writes every format; 25 tests pass |
+| Engine: generate, validate, export (DTCG, CSS, Tailwind, Figma, Paper, Swift, Compose) | Works: [`engine.py`](skills/opendesigner/scripts/engine.py) `build` writes every format; 25 engine tests pass |
 | Zoom levels (a 5-question sketch first), the three-voice glossary (393 terms), and `engine.py feedback` for reporting gaps | Works: `engine.py sketch`, `review` and `feedback`; glossary in [docs/GLOSSARY.md](docs/GLOSSARY.md) |
+| Journey tracker (a private step log) and opt-in anonymous sharing | First part works: [`journey.py`](skills/opendesigner/scripts/journey.py), 23 tests. No server collects reports yet ([privacy](docs/PRIVACY.md)) |
 | Worked examples | 3 in [`examples/`](examples/) |
-| Figma hands-on research (L12) and independent verification of the research (V1) | Open, [help wanted](docs/SEED-ISSUES.md) |
+| Figma hands-on research (L12) | Open, [help wanted](docs/SEED-ISSUES.md) |
 | Figma and Paper round-trip writers | Planned, last step of phase 1 |
 | Phase 2: a stateless MCP server with MCP Apps views, so choices can be clicked inside Claude, ChatGPT, VS Code and Cursor | Planned |
 | Phase 3 (optional): a standalone visual canvas | Idea |

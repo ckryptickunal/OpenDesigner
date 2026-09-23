@@ -1,6 +1,6 @@
 # Privacy: the journey log and shared reports
 
-**In plain words:** OpenDesigner can keep a private diary of the steps you take (the journey log). That diary never leaves your computer. Separately, and only if you say yes, it can send the OpenDesigner team a small anonymous report: which questions came up, how long they took and where people got stuck. It never sends your answers, your brand, your files or anything you typed. You can see the exact report before it goes, and you can say no or change your mind at any time.
+**In plain words:** OpenDesigner can keep a private diary of the steps you take (the journey log). That diary never leaves your computer. Separately, and only if you say yes, it can send the OpenDesigner team a small anonymous report. The report says which questions came up, how long they took and where people got stuck. It never sends your answers, your brand, your files or anything you typed. You can see the exact report before it goes, and you can say no or change your mind at any time.
 
 - **Designers:** opt-in, anonymous usage analytics about the interview flow, never about your design.
 - **Engineers:** two consents in `opendesigner/state.json` (`profile.tracking`, `profile.share_reports`); an allowlisted JSON payload validated against `skills/opendesigner/references/report.schema.json`; HTTPS POST only after consent; no persistent identifier.
@@ -33,10 +33,14 @@ The AI shows this text word for word (`journey.py share-consent` prints it):
 - **Ask me each time** (`ask`): the AI asks before each report and sends it only after your yes.
 - **Don't share** (`never`): nothing is sent, and reports that were waiting to be sent are deleted.
 
-To see exactly what would be sent, before or after you choose: `python3 <skill>/scripts/journey.py share --dry-run`. The report that is sent afterwards has exactly that content, unless new steps were logged in between (then run it again to see the new one).
+To see exactly what would be sent, before or after you choose: `python3 <skill>/scripts/journey.py share --dry-run`. The report that is sent afterwards has exactly that content. If new steps were logged in between, run it again to see the new one.
 
 ## Exactly what is sent
-Nothing outside this list can be sent. The list is enforced twice: `journey.py` builds the report from an allowlist and checks it against `report.schema.json`, and the receiver refuses anything that does not match the same schema. Every object in the schema is closed, every piece of text is a fixed word or a fixed pattern, and every number has limits.
+Nothing outside this list can be sent. The list is enforced twice:
+- `journey.py` builds the report from an allowlist and checks it against `report.schema.json`;
+- the receiver refuses anything that does not match the same schema.
+
+Every object in the schema is closed. Every piece of text is a fixed word or a fixed pattern, and every number has limits.
 
 | Field | Example | What it is |
 |---|---|---|
@@ -54,23 +58,23 @@ Nothing outside this list can be sent. The list is enforced twice: `journey.py` 
 ## Never sent
 Your answers or the values you chose. Names of people, products, companies or projects. Brand facts, colors, fonts or logos. File names, folders or paths. Links, including the reference sites you shared. Notes, including the short frustration notes in your local log. Code. Anything you typed. Your timezone, the exact date or time. Session ids, or any id that stays the same between reports.
 
-A step that is not a public question id (for example a name typed by mistake into a step) is dropped from the report, not sent.
+A step that is not a public question id is dropped from the report, not sent. An example is a name typed by mistake into a step.
 
 ## How it is sent, and where it goes
 - Sending uses a plain HTTPS request with a 5-second timeout, to the address in the `OPENDESIGNER_REPORTS_URL` environment variable or `profile.reports_url` in `state.json`.
-- **Right now no server is collecting reports.** Until the maintainers set one up and publish its address here, a report you agree to share is saved in `opendesigner/journey/outbox/` and nothing leaves your computer. `journey.py share` says so plainly.
+- **Right now no server is collecting reports.** Until the maintainers set one up and publish its address here, nothing leaves your computer. A report you agree to share is saved in `opendesigner/journey/outbox/`, and `journey.py share` says so plainly.
 - If the server can't be reached, the report waits in the outbox and goes with the next one. Nothing is retried in the background.
 - Reports are never filed as GitHub issues, because an issue is posted under your GitHub account and would show who you are.
 
 ## What the server keeps
 The reference receiver in `server/telemetry/` (a Cloudflare Worker, not deployed yet) is built to keep as little as possible:
 - It stores the report and the week it arrived. Nothing else.
-- Every web request carries your IP address; that is how the internet works. The receiver uses it only as a counter key, held for one minute by the rate limiter to stop floods, and never stores it. It does not read or store the user agent, other headers or the exact time.
+- Every web request carries your IP address; that is how the internet works. The receiver uses it only as a counter key to stop floods. The rate limiter holds it for one minute, and it is never stored. It does not read or store the user agent, other headers or the exact time.
 - Request logging (Cloudflare Workers Logs) is turned off in the example configuration.
 - The hosting provider handles the connection under its own policies. OpenDesigner does not add any tracking of its own.
 
 ## How long reports are kept
-Raw reports are kept for 12 months, then deleted automatically (a weekly cleanup in the receiver). Totals made from them (the aggregate journey report: counts, rates and averages per question) are kept and may be published, because they can't be traced to anyone.
+Raw reports are kept for 12 months, then deleted automatically (a weekly cleanup in the receiver). Totals made from them are kept and may be published, because they can't be traced to anyone. These totals are the aggregate journey report: counts, rates and averages per question.
 
 ## Changing your mind
 - Stop sharing: `python3 <skill>/scripts/journey.py share-consent never`. Reports still waiting in the outbox are deleted.

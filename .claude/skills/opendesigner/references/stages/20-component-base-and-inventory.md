@@ -12,13 +12,13 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 
 ## Q-comp-01 · What should your components be built on?
 Zoom 2 defined · weight low · changes 1 decisions · class T · cards DC-L08-03
-- **Ask:** "Build on headless primitives, a copy-in styled layer like shadcn, web components, native controls, or adopt a full system as-is?"
-- **Why:** Headless primitives leave every visual choice to your tokens; styled forks inherit the source's look until re-themed; native controls inherit the platform look [DC-L08-03]. Adopting a whole system makes you look like it ("websites made with shadcn/ui famously look the same") [DC-L11-01].
+- **Ask:** "Should your components start from bare parts, a kit you copy in, native controls, or a full system?"
+- **Why:** Bare parts take their look from your tokens, a copied kit looks like its source until changed, and native controls look like the platform [DC-L08-03]. Take a whole system as it is, and you look like it ("websites made with shadcn/ui famously look the same") [DC-L11-01].
 - **Options:**
-  - `headless` Headless primitives: Radix, Base UI (v1 stable Dec 2025), React Aria, Ark UI.
-  - `copy-in-styled` Copy-in styled layer: shadcn/ui on Base UI (its default since July 2026), Radix or React Aria [BOARD L08 note].
+  - `headless` Bare parts you style yourself (headless): Radix, Base UI (v1 stable Dec 2025), React Aria, Ark UI.
+  - `copy-in-styled` Styled parts you copy into your code: shadcn/ui on Base UI (its default since July 2026), Radix or React Aria [BOARD L08 note].
   - `web-components` Web components (Polaris, Fluent UI Web Components v3).
-  - `native` Native controls themed with your tokens (SwiftUI/UIKit, Compose Material 3).
+  - `native` The platform's own controls, styled with your tokens (SwiftUI/UIKit, Compose Material 3).
   - `adopt` Adopt a system as-is (Material, Carbon, Fluent, Untitled UI) [DC-L11-01].
 - **Default:** React web: shadcn on Base UI or React Aria; multi-framework: Ark UI or web components; mobile: native controls; small teams adapt an accessible base and invest in tokens and docs *Source:* card heuristics [DC-L08-03, DC-L11-01].
 - **Show:** the catalog re-rendered per base; a keyboard-test strip shows focus order and ARIA roles inherited.
@@ -27,10 +27,10 @@ Zoom 2 defined · weight low · changes 1 decisions · class T · cards DC-L08-0
 
 ## Q-comp-02 · Which components are in version 1?
 Zoom 2 defined · weight medium · changes 1 decisions · class I · cards DC-L08-01
-- **Ask:** "Start with the 25 core components most systems share, and add others when two products need them?"
-- **Why:** Completeness is the top adoption factor (79%), but a large inventory raises maintenance cost [DC-L08-01].
+- **Ask:** "Which components should the first version have, and when should more be added?"
+- **Why:** Teams most often pick a system because it has every part they need (79%), but more parts cost more to keep up [DC-L08-01].
 - **Options:**
-  - `core-25` Core (about 25, in 8-10 of 10 benchmark systems): Button, Text field, Textarea, Select, Checkbox, Radio, Switch, Slider, Tabs, Tooltip, Popover, Dialog, Menu, Progress bar, Spinner, Alert/banner, Badge, Avatar, Card, List, Table, Link, Breadcrumbs, Side navigation, Accordion [DC-L08-01].
+  - `core-25` The core set (about 25, in 8-10 of the 10 systems we studied): Button, Text field, Textarea, Select, Checkbox, Radio, Switch, Slider, Tabs, Tooltip, Popover, Dialog, Menu, Progress bar, Spinner, Alert/banner, Badge, Avatar, Card, List, Table, Link, Breadcrumbs, Side navigation, Accordion [DC-L08-01].
   - `extended` Extended (about 25 more): combobox, multi-select, date picker, file upload, toast, skeleton, empty state, drawer/sheet, pagination and others [DC-L08-01].
   - `logo-ai` Brand and AI extras: Logo, AI label and AI button (see Q-icon-08, Q-ai-01).
 - **Default:** `core-25`: core-25; extended components when two or more products ask for them *Source:* card heuristic [DC-L08-01].

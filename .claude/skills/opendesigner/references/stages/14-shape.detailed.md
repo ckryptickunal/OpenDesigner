@@ -11,13 +11,13 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 ## Q-shape-05 · Should a signature shape from your brand appear in the UI?
 Zoom 3 detailed · weight medium · changes 2 decisions · class D · cards DC-L06-09
 - **Ask:** "Is there a shape in your logo or brand we should echo in the UI?"
-- **Why:** Curves read friendlier; sharp angles raise threat perception; a shape that breaks the pattern draws attention [DC-L06-09].
+- **Why:** Curves feel friendlier, and sharp angles make people sense more threat. A shape that breaks the pattern draws the eye [DC-L06-09].
 - **Options:**
-  - `logo-derived` Logo-derived shapes as graphic elements and icon basis (Slack, Dropbox).
-  - `softened` Brand geometry softened for UI (Atlassian).
+  - `logo-derived` Shapes from the logo, used as graphics and as the base for icons (Slack, Dropbox).
+  - `softened` Brand shapes, softened for the UI (Atlassian).
   - `curved` Curved, soft UI (Airbnb 2025).
-  - `variety` Mixed shapes for tension, shape morph (M3 Expressive, 35 shapes).
-  - `rectilinear` Strict rectilinear (IBM).
+  - `variety` Mixed shapes that morph, for tension (M3 Expressive, 35 shapes).
+  - `rectilinear` Strict straight lines and right angles (IBM).
 - **Default:** one radius family derived from the logo's curvature; shape variety only in hero moments *Source:* card heuristic [DC-L06-09].
 - **Show:** the logo curvature overlaid on the button radius.
 - **Use / avoid:** use shape variety only in hero moments; avoid shrinking essential actions into small shapes ("smaller shapes can result in essential actions looking less important").
@@ -25,13 +25,13 @@ Zoom 3 detailed · weight medium · changes 2 decisions · class D · cards DC-L
 
 ## Q-shape-02 · Which radius steps should exist?
 Zoom 3 detailed · weight medium · changes 4 decisions · class G · cards DC-L04-01
-- **Ask:** "Which radius steps should the scale have?"
-- **Why:** A short scale gives a tighter, more uniform look; a long scale lets large surfaces curve more [DC-L04-01].
+- **Ask:** "How many corner radius steps should the scale have?"
+- **Why:** Few radius steps give a tight, even look. More steps let large surfaces get rounder corners [DC-L04-01].
 - **Options:**
   - `minimal` 3-4 steps + full (Primer 3/6/12/full).
   - `medium` 6-8 steps + full (Atlassian 2-16/full; Carbon v12 0/2/4/8/16/24/max).
   - `large` 9-11 steps + full (Material 0-48; Fluent 0-40).
-  - `derived` No scale; radii derived from the container through concentricity (Apple).
+  - `derived` No scale; each corner follows its container's corner (Apple).
 - **Default:** 0, 2, 4, 8, 12, 16, 24, full *Source:* card heuristic [DC-L04-01]; L09 preset 0, 2, 4, 6, 8, 12, 16, 24, full [L09 A1 row 7].
 - **Show:** each step with the components that use it; unused steps are flagged for deletion.
 - **Use / avoid:** grow radius with component size; delete any step you cannot name a component for [DC-L04-01].
@@ -39,21 +39,21 @@ Zoom 3 detailed · weight medium · changes 4 decisions · class G · cards DC-L
 
 ## Q-shape-03 · Which components get which radius?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L04-03
-- **Ask:** "Should radius step up with component size, and should full circles be reserved for avatars?"
-- **Why:** Scaling radius with element size keeps curvature proportional; reserving full circles for people makes circles carry meaning [DC-L04-03].
+- **Ask:** "Should corners get rounder on bigger parts, and should full circles be kept for profile pictures?"
+- **Why:** Rounder corners on bigger parts keep curves in proportion. Keeping full circles for people gives circles a meaning [DC-L04-03].
 - **Options:**
   - `four-roles` Four roles: detail 2-4, control 4-8 or full, container 8-12, overlay 12-16+, person full [DC-L04-03].
-  - `atlassian-roles` Role by component family: xsmall 2 badges, small 4 tags, medium 6 buttons and inputs, large 8 cards, xlarge 12 modals, full for avatars.
+  - `atlassian-roles` By component type: xsmall 2 badges, small 4 tags, medium 6 buttons and inputs, large 8 cards, xlarge 12 modals, full for avatars.
   - `fluent-roles` None for nav and tab bars, small 2px for badges, medium, large, circular for people (Fluent 2).
 - **Default:** `four-roles`: four-roles; the radius steps up one level each time the element's height roughly doubles *Source:* card heuristic [DC-L04-03].
 - **Show:** the component sheet with each component's role labeled.
 - **Use / avoid:** use full radius for people and pills; avoid giving small badges and large dialogs the same radius [DC-L04-03].
 - **Skip:** yes.
 
-## Q-shape-04 · Circular corners, or Apple-style continuous corners?
+## Q-shape-04 · Plain round corners, or smooth Apple-style corners?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L04-04
-- **Ask:** "Keep standard circular corners, or use continuous (squircle) corners where supported?"
-- **Why:** Continuous curves blend into edges and read softer and more "Apple" at the same nominal radius [DC-L04-04].
+- **Ask:** "Use standard round corners, or smooth Apple-style squircle corners where they work?"
+- **Why:** Smooth (continuous) corners blend into the edges. At the same radius they look softer and more "Apple" [DC-L04-04].
 - **Options:**
   - `circular` Circular arc (CSS `border-radius`; every web system) [DC-L04-04].
   - `continuous` Continuous curvature: SwiftUI `.continuous`, Figma corner smoothing (iOS preset 60%).

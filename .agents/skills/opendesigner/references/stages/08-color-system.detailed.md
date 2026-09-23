@@ -11,7 +11,7 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 ## Q-color-05 · How much of a screen may use accent color and emphasis?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L15-03
 - **Ask:** "How much of a screen may use accent color?"
-- **Why:** Raising emphasis without a budget makes screens louder, not clearer [DC-L15-03].
+- **Why:** Making more things stand out, with no limit, makes screens louder, not clearer [DC-L15-03].
 - **Options:**
   - `strict` Strict: one dominant element and one primary action per view; accent only on primary actions, selection, status (Apple).
   - `moderate` Moderate: one primary plus one highlighted secondary; accent on links and active navigation.
@@ -23,14 +23,14 @@ Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L15-
 
 ## Q-color-07 · How should color ramps be built?
 Zoom 3 detailed · weight high · changes 6 decisions · class G · cards DC-L01-01, DC-L01-03, DC-L01-04
-- **Ask:** "How should ramps be built: perceptual, tone-based, contrast-based, hand-tuned or a preset?"
-- **Why:** In HSL, yellow at the same lightness looks lighter than blue; perceptual or contrast-indexed ramps keep every hue's steps equally heavy [DC-L01-01].
+- **Ask:** "How should each color ramp (its shades from light to dark) be built?"
+- **Why:** In HSL, yellow at the same lightness looks lighter than blue. Perceptual or contrast-indexed ramps keep each step just as heavy in every color [DC-L01-01].
 - **Options:**
   - `oklch` OKLCH, perceptual (Tailwind v4 moved its palette to oklch in Jan 2025; CSS `oklch()` Baseline since May 2023).
-  - `hct` HCT, tone-indexed: same tone gives the same brightness across hues (Material; tones 50 vs 98 give 3:1).
-  - `contrast-indexed` Contrast-indexed steps: every step has the same ratio across hues (Spectrum: every 700 is 3.01:1).
-  - `hand-tuned` Hand-tuned per hue: more character, less predictable (Tailwind 500 steps range L 62-77%).
-  - `preset` Adopt a preset palette (Tailwind default, Radix Colors): a recognizable stock look.
+  - `hct` HCT, numbered by tone: same tone gives the same brightness across hues (Material; tones 50 vs 98 give 3:1).
+  - `contrast-indexed` Steps set by contrast: every step has the same ratio across hues (Spectrum: every 700 is 3.01:1).
+  - `hand-tuned` Tuned by hand for each color: more character, less predictable (Tailwind 500 steps range L 62-77%).
+  - `preset` Use a stock palette (Tailwind default, Radix Colors): a recognizable stock look.
   - `lab-hsl` CIELAB/LCH or HSL: Lab was Stripe's 2019 fix; HSL is the legacy default that washes out yellows.
 - **Default:** `oklch`: OKLCH with contrast-indexed steps; HCT when the system must feed Material dynamic color *Source:* card heuristics [DC-L01-01, DC-L01-03, DC-L01-04].
 - **Show:** two accents side by side at the same step; switching the method shows whether they stay equally heavy, with the contrast of each step printed.
@@ -40,7 +40,7 @@ Zoom 3 detailed · weight high · changes 6 decisions · class G · cards DC-L01
 ## Q-color-08 · How many steps should each ramp have, and how are they numbered?
 Zoom 3 detailed · weight medium · changes 2 decisions · class G · cards DC-L01-02
 - **Ask:** "How many steps per ramp, and how should they be numbered?"
-- **Why:** More steps allow quieter, layered UIs; fewer steps force bolder jumps [DC-L01-02].
+- **Why:** More steps allow quieter, layered screens. Fewer steps force bolder jumps [DC-L01-02].
 - **Options:**
   - `tailwind-11` 11 steps, 50-950 (Tailwind).
   - `radix-12` 12 steps, 1-12, each with a fixed job (Radix).
@@ -55,24 +55,24 @@ Zoom 3 detailed · weight medium · changes 2 decisions · class G · cards DC-L
 ## Q-color-10 · How many gray steps, and should there be transparent grays?
 Zoom 3 detailed · weight medium · changes 3 decisions · class G · cards DC-L01-07
 - **Ask:** "How many gray steps, and do you want transparent grays for overlays?"
-- **Why:** More near-white steps let cards, sidebars and wells separate without borders [DC-L01-07].
+- **Why:** More near-white grays let cards, side bars and sunken areas (wells) stand apart with no borders [DC-L01-07].
 - **Options:**
-  - `bands` Solid neutrals with fixed usage bands (Primer 0-13: 0-5 backgrounds, 7-8 borders, 9-10 text).
-  - `separate-dark` Separate light and dark neutral ramps (Atlassian Neutral and DarkNeutral).
-  - `alpha` Add alpha neutrals for overlays on any surface (Radix alpha scales).
+  - `bands` Solid grays in fixed bands by use (Primer 0-13: 0-5 backgrounds, 7-8 borders, 9-10 text).
+  - `separate-dark` Separate gray ramps for light and dark (Atlassian Neutral and DarkNeutral).
+  - `alpha` Add see-through grays to lay over any surface (Radix alpha scales).
 - **Default:** 12-13 solid neutrals plus 4-5 alpha neutrals, with bands documented; at least three near-white steps in light mode and four dark steps in dark mode *Source:* card heuristic [DC-L01-07].
 - **Show:** the neutral ramp with bands shaded (backgrounds, borders, text) and a card stack using them.
 - **Use / avoid:** use alpha neutrals for hover fills and overlays that must work on any surface; avoid using alpha for text [inferred].
 - **Skip:** yes.
 
-## Q-color-11 · Which color gamut should the system target?
+## Q-color-11 · How wide a range of colors (gamut) should the system use?
 Zoom 3 detailed · weight medium · changes 2 decisions · class G · cards DC-L01-05, DC-L07-10
-- **Ask:** "sRGB only, or richer Display P3 colors where screens support them?"
-- **Why:** Display P3 gives richer reds, greens and oranges on modern screens; sRGB is simplest and accurate on most displays [DC-L01-05].
+- **Ask:** "Should the system use sRGB only, or richer Display P3 colors where screens allow?"
+- **Why:** Display P3 gives richer reds, greens and oranges on modern screens. sRGB is the simplest and shows true colors on most displays [DC-L01-05].
 - **Options:**
   - `srgb` sRGB hex only.
   - `p3-enhance` sRGB with P3 overrides behind `@media (color-gamut: p3)` (Radix ships each scale twice).
-  - `oklch-wide` OKLCH values that may exceed sRGB, gamut-mapped by browsers (Tailwind v4).
+  - `oklch-wide` OKLCH values that may go past sRGB, fitted to the screen by browsers (Tailwind v4).
   - `native-p3` Native P3 assets on Apple platforms [DC-L01-05].
 - **Default:** `srgb`: sRGB hex primitives with optional P3 overrides for accents only; every token keeps a hex fallback (DTCG 2025.10 supports 14 color spaces plus a hex fallback) *Source:* card heuristics [DC-L01-05, DC-L07-10].
 - **Show:** accent chips in sRGB and P3 next to each other (visible only on a P3 display; otherwise a note).
@@ -82,7 +82,7 @@ Zoom 3 detailed · weight medium · changes 2 decisions · class G · cards DC-L
 ## Q-color-12 · How should color roles be named?
 Zoom 3 detailed · weight medium · changes 3 decisions · class G · cards DC-L01-11
 - **Ask:** "How should color roles be named?"
-- **Why:** Property-first grammars make it hard to put a border color on text; pairing grammars guarantee legible pairs [DC-L01-11].
+- **Why:** Names that start with where a color goes (background, border, text) make it hard to put a border color on text. Names built as pairs guarantee readable pairs [DC-L01-11].
 - **Options:**
   - `property-role` Property x role x emphasis x state (`bgColor-accent-muted`, `fgColor-onEmphasis`: Primer, Atlassian).
   - `material-pairs` Role plus container/on pairs, 26 roles (`primary`, `on-primary`, `surface-container-high`: Material 3).
@@ -94,11 +94,11 @@ Zoom 3 detailed · weight medium · changes 3 decisions · class G · cards DC-L
 
 ## Q-color-13 · How many emphasis levels should each color role have?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L01-12
-- **Ask:** "How many emphasis levels per color role?"
-- **Why:** More levels allow soft tinted status panels and quiet selection; two levels look punchier [DC-L01-12].
+- **Ask:** "How many levels of strength should each color role have?"
+- **Why:** More levels let you use soft, tinted status panels and quiet selected states. Two levels look punchier [DC-L01-12].
 - **Options:**
-  - `three` Subtle, default, bold plus an on-bold foreground [DC-L01-12].
-  - `two` Muted and emphasis (Primer).
+  - `three` Subtle, default and bold, plus a text and icon color for bold fills [DC-L01-12].
+  - `two` Muted and strong (Primer).
   - `container` Base and container (Material `primary` tone 40, `primary-container` tone 90).
   - `six` Subtlest to boldest (Atlassian, up to six).
 - **Default:** `three`: three levels plus on-bold *Source:* card heuristic [DC-L01-12].
@@ -110,9 +110,9 @@ Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L01-
 Zoom 3 detailed · weight high · changes 5 decisions · class G · cards DC-L01-18
 - **Show if:** Q-theme-01 includes dark
 - **Ask:** "How should dark mode be derived from light?"
-- **Why:** Mirrored mappings keep hierarchy identical across modes; separate hand-tuned dark ramps look richer but drift [DC-L01-18].
+- **Why:** A mirrored mapping keeps what looks most important the same in every mode. Separate hand-tuned dark ramps look richer but drift [DC-L01-18].
 - **Options:**
-  - `tone-reassign` Same palettes, different tones per role (Material: primary 40 becomes 80, surface 98 becomes 6).
+  - `tone-reassign` Same colors, a new shade for each job (Material: primary 40 becomes 80, surface 98 becomes 6).
   - `mirrored` Mirrored ramp ("700 in light is 400 in dark") with separate dark neutrals (Atlassian).
   - `separate` Separate dark scales with the same step jobs (Radix, Primer, Spectrum).
 - **Default:** shared hue ramps with a mirrored mapping plus separate dark neutral ramps; map by role, not by value *Source:* card heuristic [DC-L01-18].
@@ -122,12 +122,12 @@ Zoom 3 detailed · weight high · changes 5 decisions · class G · cards DC-L01
 
 ## Q-color-18 · How should meaning survive when color can't be seen?
 Zoom 3 detailed · weight medium · changes 2 decisions · class G · cards DC-L01-23
-- **Ask:** "How should meaning survive for color-blind users: underlined links, icons, special themes?"
-- **Why:** About 1 in 12 men have a color vision deficiency; WCAG 1.4.1 (Level A) forbids color as the only cue [DC-L01-23].
+- **Ask:** "If someone can't tell colors apart, how should the meaning still come through?"
+- **Why:** About 1 in 12 men can't tell some colors apart (color vision deficiency). WCAG 1.4.1 (Level A) forbids color as the only clue [DC-L01-23].
 - **Options:**
   - `underline-always` Underline links in body text: robust, more document-like [DC-L01-23].
-  - `underline-hover` Color-only links at 3:1 against surrounding text plus a non-color cue on hover and focus (technique G183).
-  - `cvd-themes` Add color-blind themes (Primer protanopia-deuteranopia and tritanopia variants).
+  - `underline-hover` Links in color only (3:1 to nearby text), with one more cue on hover and focus (G183).
+  - `cvd-themes` Add themes for people who mix up red and green, or blue and yellow (Primer).
 - **Default:** `underline-always`: underline-always; every color-coded meaning also gets an icon, text or shape *Source:* accessibility rule [DC-L01-23].
 - **Show:** the preview screen under red-green and blue-yellow simulation.
 - **Use / avoid:** use a second channel whenever two meanings differ only in hue; avoid red/green-only status pairs [DC-L01-23].

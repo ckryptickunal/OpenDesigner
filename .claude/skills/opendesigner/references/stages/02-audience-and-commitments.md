@@ -10,12 +10,12 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 
 ## Q-aud-01 · Who uses the product, and how often?
 Zoom 0 sketch · weight high · changes 0 decisions · class I · cards DC-L09-04
-- **Ask:** "Who uses the product and how often: all day in data-heavy work, regularly, or occasionally on the go?"
-- **Why:** Audience sets density and base text size, fourth on L09's list of the biggest visual differences between systems (an inferred ranking; body text ranges 13-19px) [DC-L09-04; L09 A2 row 4].
+- **Ask:** "Who uses it, and how often: all day for work, often, or now and then on the go?"
+- **Why:** Who uses it sets density (how packed the screen is) and base text size. Across systems, body text runs 13-19px. Our L09 study puts this fourth on its list of ways systems look most different (an inferred ranking) [DC-L09-04; L09 A2 row 4].
 - **Options:**
-  - `regular` Regular users of a general app: body 16px, controls 36-40px (Radix, shadcn, Mantine, Chakra) [DC-L09-04; L09 A3 density].
-  - `dense` People working all day in data-heavy tools: body 13-14px, controls 28-32px; compact and utilitarian (Polaris 13px, SLDS 13px, Carbon, Atlassian, Primer, Ant 14px) [DC-L09-04].
-  - `large` Occasional, mobile or public users: body 17px or more, controls and targets 44-48px (iOS 17pt, GOV.UK 19px, Material, USWDS 48px targets) [DC-L09-04].
+  - `regular` Often, in an everyday app: body 16px, controls 36-40px (Radix, shadcn, Mantine, Chakra) [DC-L09-04; L09 A3 density].
+  - `dense` All day, in tools full of data: body 13-14px, controls 28-32px; compact and utilitarian (Polaris 13px, SLDS 13px, Carbon, Atlassian, Primer, Ant 14px) [DC-L09-04].
+  - `large` Now and then, on a phone or in public: body 17px or more, controls and targets 44-48px (iOS 17pt, GOV.UK 19px, Material, USWDS 48px targets) [DC-L09-04].
 - **Default:** `regular`: regular *Source:* L09 shared default row 8 (body 16px general, 14px tools) [L09 A1].
 - **Show:** the same table-plus-form screen at the three densities side by side; hovering a row shows its height, padding and text size.
 - **Use / avoid:** use dense for tables, dashboards and editors people work in all day; avoid dense on touch-first, occasional or public surfaces, where it hurts legibility and forces the targets out of step with the visuals [DC-L09-04, DC-L15-04].
@@ -23,25 +23,25 @@ Zoom 0 sketch · weight high · changes 0 decisions · class I · cards DC-L09-0
 
 ## Q-aud-02 · What is at stake for users, and what state are they usually in?
 Zoom 2 defined · weight medium · changes 0 decisions · class I
-- **Ask:** "What's at stake for your users, and what state are they usually in when they use it?"
-- **Why:** The category sets a ceiling on expressiveness; Google found expressive design may not suit banking. User state drives tone [DC-L06-19].
+- **Ask:** "What's at stake for your users, and how do they usually feel when they use it?"
+- **Why:** What's at stake caps how lively the product can be. Google found expressive design may not suit banking. How users feel sets the tone [DC-L06-19].
 - **Options:**
-  - `work` Productivity or B2B: productive defaults (Carbon, Atlassian, Primer quadrant) [L09 A3].
+  - `work` Work or business tools: productive defaults (Carbon, Atlassian, Primer quadrant) [L09 A3].
   - `high-trust` Money, health or government: caps expressiveness and playful motion; calm, formal defaults.
-  - `consumer` Consumer lifestyle: room for brand color and hero moments [DC-L06-03].
-  - `play` Play, entertainment, learning: characters and springs are acceptable (Duolingo, Mailchimp).
-  - `state-*` States (multi): anxious, rushed, curious, celebrating; each shifts the tone matrix (Atlassian tones by emotion).
+  - `consumer` Apps for everyday life: room for brand color and hero moments [DC-L06-03].
+  - `play` Games, fun or learning: characters and springs are acceptable (Duolingo, Mailchimp).
+  - `state-*` How they feel (pick any): anxious, rushed, curious, celebrating; each shifts the tone matrix (Atlassian tones by emotion).
 - **Default:** `work`: work, states "rushed" *Source:* [inferred]; matches the L09 productive quadrant most benchmarked systems occupy [L09 A3].
 - **Show:** a pre-filled position on the personality sliders of Stage 03, with a note where the category caps them.
 - **Skip:** yes.
 
-## Q-aud-03 · What accessibility standard must the system meet?
+## Q-aud-03 · Which set of accessibility rules do you need to meet?
 Zoom 2 defined · weight medium · changes 1 decisions · class I · cards DC-L11-19
-- **Ask:** "Which accessibility standard must you meet? WCAG 2.2 AA is the usual floor."
-- **Why:** The target bounds color, type size, focus ring and target-size options in every later stage [DC-L11-19].
+- **Ask:** "How strict do your accessibility rules need to be? WCAG 2.2 has levels A, AA and AAA."
+- **Why:** The level you pick sets limits on color, text size, focus rings and target sizes in each later stage [DC-L11-19].
 - **Options:**
   - `wcag22-aa` WCAG 2.2 AA: 4.5:1 text, 3:1 large text and UI parts, 24px target floor (GOV.UK commits to 2.2 AA) [L09 A1 row 11; DC-L03-12].
-  - `wcag22-aa-plus` AA plus chosen AAA rules, for example 7:1 body text or larger targets: stricter palettes, fewer mid-tone text colors [DC-L01-22, inferred].
+  - `wcag22-aa-plus` AA plus some AAA rules, like 7:1 body text or bigger targets: stricter palettes, fewer mid-tone text colors [DC-L01-22, inferred].
   - `wcag22-a` Level A only: not recommended; no benchmarked system states a target below AA [L09 A1 row 11].
 - **Default:** `wcag22-aa`: WCAG 2.2 AA *Source:* accessibility rule; all 11 benchmarked systems that state a target use AA; WCAG 3 is still a draft, so 2.2 is the enforceable target [L09 A1 row 11; BOARD L01 note].
 - **Show:** a guardrail strip listing which later options will be blocked or flagged at this level.
@@ -49,14 +49,14 @@ Zoom 2 defined · weight medium · changes 1 decisions · class I · cards DC-L1
 
 ## Q-aud-04 · Which settings should users be able to adjust, and which situations must you design for?
 Zoom 2 defined · weight medium · changes 1 decisions · class I · cards DC-L13-14
-- **Ask:** "Which settings should users be able to change: text size, density, contrast, reduced motion?"
-- **Why:** Inclusive defaults ("solve for one, extend to many") switch on extra modes and larger targets [DC-L13-14].
+- **Ask:** "Which settings should people be able to change: text size, roomy or compact layout, contrast, or less motion?"
+- **Why:** These choices turn on extra modes and larger targets. This follows the inclusive design rule "solve for one, extend to many" [DC-L13-14].
 - **Options:**
   - `text-size` Text size: layouts must reflow at large sizes (DC-L02-21).
-  - `density` Density switch: adds a compact/comfortable token mode (DC-L03-11).
+  - `density` Compact or roomy switch: adds a compact/comfortable token mode (DC-L03-11).
   - `contrast` Contrast themes: adds a high-contrast mode (DC-L01-20).
   - `reduced-motion` Reduced motion: swaps movement for fades (DC-L04-25).
-  - `situational` Situational limits (one hand busy, bright light, older users): larger targets and higher contrast by default; reads calmer and more legible [DC-L13-14].
+  - `situational` Tough conditions (one hand busy, bright light, older users): larger targets and higher contrast by default; reads calmer and more legible [DC-L13-14].
 - **Default:** `text-size`: text-size + reduced-motion *Source:* accessibility rule (WCAG 2.2 AA as the floor; text resize and motion preferences are OS settings the system should honor) [DC-L13-14, DC-L10-16].
 - **Show:** a mode switcher on the preview screen that gains one toggle per checked setting.
 - **Skip:** yes.

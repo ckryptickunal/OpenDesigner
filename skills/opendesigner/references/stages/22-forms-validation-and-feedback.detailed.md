@@ -10,13 +10,13 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 
 ## Q-form-03 · How should error messages be shown and written?
 Zoom 3 detailed · weight medium · changes 2 decisions · class G · cards DC-L13-07
-- **Ask:** "Errors next to their cause, a banner only for system-level problems, a dialog only when work would be lost?"
-- **Why:** Inline errors keep context; banners signal system problems; dialogs interrupt; prominence should match severity [DC-L13-07].
+- **Ask:** "Where should error messages show up, and how should they be worded?"
+- **Why:** An error by its field shows the problem where it is; banners flag system problems; dialogs stop what you are doing. How loud an error looks should match how serious it is [DC-L13-07].
 - **Options:**
-  - `inline` Inline field error next to the source [DC-L13-07].
+  - `inline` Error next to the field it is about [DC-L13-07].
   - `summary` Error summary at the top of the form [DC-L13-07].
   - `banner` Section or page banner [DC-L13-07].
-  - `dialog` Blocking dialog [DC-L13-07].
+  - `dialog` A pop-up box that blocks the page [DC-L13-07].
   - `error-page` Full error page for catastrophic failures [DC-L13-07].
 - **Default:** NN/g's 13 error-message guidelines: close to the source, visible without color alone, plain words that say what happened and how to fix it *Source:* card heuristic [DC-L13-07].
 - **Show:** the three severities on the form.

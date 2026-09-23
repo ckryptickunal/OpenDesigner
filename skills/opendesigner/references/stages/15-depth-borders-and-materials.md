@@ -12,8 +12,8 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 
 ## Q-depth-01 · How should surfaces separate from each other?
 Zoom 1 broad · weight high · changes 5 decisions · class G · cards DC-L09-02, DC-L04-10, DC-L08-15
-- **Ask:** "How should cards and panels separate from the page: shadows, color steps, lines, or translucent material?"
-- **Why:** The depth model is second on L09's (inferred) ranking of visual differences (divergence 2): shadows feel tactile, tonal feels calm, borders feel technical, glass feels premium [DC-L09-02].
+- **Ask:** "How should cards and panels stand out from the page: shadows, color steps, lines, or glass?"
+- **Why:** Shadows feel real to the touch, color steps feel calm, borders feel technical, and glass feels premium. In L09's (inferred) ranking, this is the second biggest way systems differ in look (divergence 2) [DC-L09-02].
 - **Options:**
   - `shadow` Shadow ladder: tactile, layered (Fluent dual shadows, Polaris 7 levels, Tailwind 7) [DC-L09-02].
   - `tonal` Tonal layers: flat, calm, color-forward (Carbon layers, Material surface containers, Linear) [DC-L09-02].
@@ -27,13 +27,13 @@ Zoom 1 broad · weight high · changes 5 decisions · class G · cards DC-L09-02
 
 ## Q-depth-04 · Should any surfaces be translucent (glass, blur)?
 Zoom 2 defined · weight medium · changes 2 decisions · class T · cards DC-L04-15, DC-L10-12, DC-L10-11
-- **Ask:** "Should navigation or overlays be translucent glass, or stay solid?"
-- **Why:** Translucency reads premium and OS-native in 2025-26 and keeps context visible, at the cost of lower, variable contrast [DC-L04-15, DC-L10-12].
+- **Ask:** "Should menus, bars and pop-ups be see-through glass, or stay solid?"
+- **Why:** Glass looks premium and matches 2025-26 operating systems, and keeps what is behind in view. The cost is lower contrast that shifts with the background [DC-L04-15, DC-L10-12].
 - **Options:**
   - `none` Opaque surfaces: most legible and cheapest [DC-L04-15].
   - `control-layer` Glass on navigation and controls only, never on content (Apple Liquid Glass: regular for text-heavy parts, clear over media with a 35% dim).
-  - `transient` Translucent menus and flyouts only; Mica for the window base (Fluent Acrylic).
-  - `decorative` Decorative glassmorphism on cards: flagged for legibility (NN/g) [DC-L04-15].
+  - `transient` See-through menus and flyouts only; Mica for the window base (Fluent Acrylic).
+  - `decorative` Decorative glass effect on cards: flagged for legibility (NN/g) [DC-L04-15].
 - **Default:** platform material for native chrome (glass on Apple, Mica on Windows, tonal surfaces on Android); opaque on web with optional blur plus an opaque fallback; content edge-to-edge under the bars with inset-aware components *Source:* platform convention [DC-L10-12, DC-L10-11, DC-L04-15].
 - **Show:** the toolbar and a sheet over a busy photo with live contrast readouts; the opaque fallback shown beside it.
 - **Use / avoid:** use glass on the functional layer (bars, controls, sheets) only; avoid glass on reading surfaces and any translucent token without an opaque twin [DC-L04-16].

@@ -74,7 +74,7 @@ input[type=radio],input[type=checkbox]{accent-color:var(--c-strong);width:18px;h
 <script type="application/json" id="od-data">
 {
  "title": "Corner radius",
- "subtitle": "Sample data. Pick a preset or drag the Roundness dial; the dial maps to control radius through the bands in levers.json (roundness → radius.control), containers use 1.5 × control snapped to the scale.",
+ "subtitle": "Sample data. Pick a style, or drag the Roundness dial. The dial sets the corners of buttons and fields (radius.control). Cards and panels get about 1.5 times that, snapped to the scale.",
  "question": "Q-shape-01",
  "recommended": "subtle",
  "options": [
@@ -222,7 +222,7 @@ OD.onPick=()=>{touched=false};
 OD.draw=()=>{const r=radii(),c=r.control,k=r.container,pad=12,inner=Math.max(k-pad,k?2:0);$('#dv').textContent=(touched?'dial '+dial.value+' → ':'')+'control '+(c>=9999?'full':c+' px')+', container '+k+' px';
  const m=mode(),S=D.surface||{light:['#ffffff','#1b1b1f'],dark:['#1b1b1f','#ececef']};const el=$('#rs');el.style.setProperty('--s-bg',S[m][0]);el.style.setProperty('--s-fg',S[m][1]);
  el.innerHTML='<div class="grid"><div class="cmp"><h2>Controls '+(c>=9999?'full':c)+'</h2><span class="btn" style="border-radius:'+c+'px">Save changes</span><span class="inp" style="border-radius:'+Math.min(c,20)+'px">Email address</span><span class="chip2" style="border-radius:'+(c>=9999?c:Math.max(2,c/2))+'px">Filter · 3</span></div>'
- +'<div class="cmp"><h2>Card '+k+', nested '+inner+'</h2><div class="box" style="border-radius:'+k+'px;padding:'+pad+'px"><div class="img" style="border-radius:'+inner+'px" role="img" aria-label="image placeholder"></div><strong>Nested radius = outer minus padding</strong><span class="btn" style="border-radius:'+c+'px">Open</span></div></div>'
+ +'<div class="cmp"><h2>Card '+k+', nested '+inner+'</h2><div class="box" style="border-radius:'+k+'px;padding:'+pad+'px"><div class="img" style="border-radius:'+inner+'px" role="img" aria-label="image placeholder"></div><strong>Inner corner = outer corner minus padding</strong><span class="btn" style="border-radius:'+c+'px">Open</span></div></div>'
  +'<div class="cmp"><h2>Dialog and avatar</h2><div class="box" style="border-radius:'+Math.min(32,snap(k*1.5))+'px"><strong>Delete project?</strong><span class="kv" style="color:inherit">This cannot be undone.</span><span class="btn" style="border-radius:'+c+'px">Delete</span></div><div class="row"><span class="av" role="img" aria-label="avatar, always round"></span><span class="kv" style="color:inherit">people stay round</span></div></div></div>'};
 mountOptions(o=>o.radii?'<span class="kv">control '+(o.radii.control>=9999?'full':o.radii.control)+' · container '+o.radii.container+'</span>':'');boot();
 </script>

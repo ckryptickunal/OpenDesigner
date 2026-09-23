@@ -12,14 +12,14 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 
 ## Q-voice-01 · Do you have a voice and tone guide? If not, what 3-4 traits describe how the product talks?
 Zoom 2 defined · weight high · changes 5 decisions · class T · cards DC-L06-18
-- **Ask:** "Do you have a voice guide? If not, give me 3-4 traits in 'X, but not Y' form and I'll draft copy examples."
-- **Why:** Voice is constant while tone shifts by situation; the product's words and visuals must agree [DC-L06-18].
+- **Ask:** "Do you have a voice guide? If not, name 3-4 traits in the form 'X, but not Y'."
+- **Why:** Your voice stays the same everywhere, while tone changes with the moment. The product's words and its look must match [DC-L06-18].
 - **Options:**
   - `upload` Upload an existing guide [DC-L06-18].
   - `plainspoken` Plainspoken and genuine, dry humor (Mailchimp).
   - `warm-crisp` Warm and relaxed, crisp and clear, ready to lend a hand (Microsoft).
   - `bold-optimistic` Bold, optimistic, practical with a wink (Atlassian).
-  - `custom` Custom traits on NN/g's four tone dimensions with anti-tone words.
+  - `custom` Your own traits, set on NN/g's four tone scales, with words to avoid.
 - **Default:** drafted from the personality sliders: 3-4 traits with "but not", 3 copy examples per trait *Source:* card heuristic [DC-L06-18].
 - **Show:** the error, empty state and success message rewritten in the chosen voice.
 - **Use / avoid:** use the traits to decide copy disputes; avoid traits every product could claim ("simple", "friendly") without a "but not" [DC-L06-18; DC-L11-05].
@@ -28,12 +28,12 @@ Zoom 2 defined · weight high · changes 5 decisions · class T · cards DC-L06-
 
 ## Q-voice-02 · How should tone change for errors, success and first use?
 Zoom 2 defined · weight low · changes 0 decisions · class G · cards DC-L06-19
-- **Ask:** "How should tone shift: serious for errors, warmer for success, gentler for new users?"
-- **Why:** Errors need calm visuals and plain words; success can carry illustration, motion and a wink; a joke once may amuse but a dozen times annoys [DC-L06-19].
+- **Ask:** "How should the tone of the words change for errors, success and first use?"
+- **Why:** Errors need a calm look and plain words, while success can have drawings, motion and a wink. A joke may amuse once but annoys after a dozen times [DC-L06-19].
 - **Options:**
-  - `emotion-dial` By user emotion: less bold for new or anxious users, a wink for success (Atlassian).
+  - `emotion-dial` By how the person feels: less bold for new or anxious users, a wink for success (Atlassian).
   - `situation` By situation: straightforward for serious events, congratulatory for goals (Apple).
-  - `nng-profile` An NN/g four-dimension profile per content type.
+  - `nng-profile` An NN/g four-part tone profile for each kind of content.
 - **Default:** errors serious, respectful, matter-of-fact; success as warm as the brand allows; clarity beats entertainment *Source:* card heuristic [DC-L06-19].
 - **Show:** the tone matrix with each cell's example message.
 - **Use / avoid:** use warmth after trust is earned (success, completion); avoid humor in errors and in high-trust categories [DC-L06-19].
@@ -41,25 +41,25 @@ Zoom 2 defined · weight low · changes 0 decisions · class G · cards DC-L06-1
 
 ## Q-voice-03 · Sentence case or title case?
 Zoom 2 defined · weight low · changes 0 decisions · class G · cards DC-L06-20
-- **Ask:** "Sentence case everywhere, or title case for headings and navigation?"
-- **Why:** Title case reads formal and lengthens the visual texture of labels; sentence case reads casual and localizes cleanly [DC-L06-20].
+- **Ask:** "Capital letter only on the first word (sentence case), or on most words (title case)?"
+- **Why:** Title case looks formal and busy; sentence case looks relaxed and translates well [DC-L06-20].
 - **Options:**
   - `sentence` Sentence case everywhere (Microsoft, Atlassian, Fluent).
-  - `title-headings` Title case for headings and global nav, sentence case for buttons (Mailchimp).
-  - `per-element` Per-element choice applied consistently (Apple).
+  - `title-headings` Title case for headings and main menus, sentence case for buttons (Mailchimp).
+  - `per-element` Chosen for each kind of text, then used the same way (Apple).
 - **Default:** `sentence`: sentence case everywhere; all caps only on 11-12px labels with extra tracking *Source:* card heuristics [DC-L06-20, DC-L02-18].
 - **Show:** the product screen's labels re-cased live.
 - **Use / avoid:** use one rule per element type everywhere; avoid all caps for sentences [DC-L06-20, DC-L02-18].
 - **Skip:** yes.
 
-## Q-voice-04 · What reading level and label length should copy target?
+## Q-voice-04 · How easy to read should the words be, and how long should labels be?
 Zoom 2 defined · weight medium · changes 2 decisions · class G · cards DC-L13-13
-- **Ask:** "Plain language for everyone, around a 6th-8th grade level, or 10th-12th for specialist tools?"
-- **Why:** Shorter strings shrink components, truncate less and read faster; even experts prefer plain language [DC-L13-13].
+- **Ask:** "What school grade should the words suit: 6th-8th for everyone, or 10th-12th for experts?"
+- **Why:** Shorter text keeps components small, gets cut off less and reads faster. Even experts prefer plain language [DC-L13-13].
 - **Options:**
   - `grade-6-8` 6th-8th grade for general audiences.
   - `grade-10-12` 10th-12th grade for specialists.
-  - `labels-2-4` Command labels of 2-4 words, verb first, describing the resulting state.
+  - `labels-2-4` Button and menu labels of 2-4 words, verb first, naming the result.
 - **Default:** 6th-8th for consumer products, 10th-12th for expert tools; button labels 2-4 words, verb first; readability over target is a lint warning *Source:* card heuristic [DC-L13-13].
 - **Show:** a readability score beside each sample string.
 - **Use / avoid:** use verbs that name the result ("Save changes"); avoid branded or clever button labels [DC-L13-13, DC-L06-22].

@@ -10,11 +10,11 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 
 ## Q-dist-04 · Where do docs live, and what goes on each component page?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L11-17, DC-L11-18, DC-L08-23
-- **Ask:** "Generate a docs site with a page per component (usage, when not to use, live example, props, accessibility, changelog), plus a machine-readable twin?"
-- **Why:** Docs are how teams learn when and when not to use each piece; the shared core is usage guidance, live examples, API and accessibility [DC-L11-17, DC-L11-18; L09 A1 row 9].
+- **Ask:** "Where should the docs live, and what should each component's page show?"
+- **Why:** Docs are how teams learn when to use each piece, and when not to. The core that systems share is usage advice, live examples, API and accessibility [DC-L11-17, DC-L11-18; L09 A1 row 9].
 - **Options:**
   - `figma-storybook` Figma plus Storybook (69% and 61% of teams).
-  - `docs-platform` A docs platform (zeroheight, Supernova) when non-engineers author.
+  - `docs-platform` A docs tool (zeroheight, Supernova), when people who don't code write the docs.
   - `custom-site` A custom site (Material, Carbon).
   - `carbon-template` Page template: live demo, accessibility status, when to use and not, anatomy, content rules, behaviors, per-variant guidance (Carbon Usage tab; M3 Overview/Specs/Guidelines/Accessibility).
 - **Default:** a generated site with the Carbon-style template plus "when not to use" and a changelog, and an llms.txt or MCP twin; docs complete is part of "done" *Source:* card heuristics [DC-L11-17, DC-L11-18, DC-L08-23].

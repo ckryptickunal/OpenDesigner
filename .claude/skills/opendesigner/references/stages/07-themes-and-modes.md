@@ -12,11 +12,11 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 
 ## Q-theme-01 · Which appearance modes does the product support?
 Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L10-17, DC-L14-09
-- **Ask:** "Light and dark following the system, or one mode only?"
-- **Why:** Dark mode is a separate mapping, not an inversion, so each mode doubles color decisions and contrast checks [DC-L10-17].
+- **Ask:** "Should the app have light and dark modes that follow the device, or just one mode?"
+- **Why:** Each extra mode doubles the color choices and contrast checks. Dark mode is its own set of picks, not light mode flipped [DC-L10-17].
 - **Options:**
-  - `system-light-dark` Light and dark, following the system setting: blends with the OS at night (Apple expects apps to respect the preference).
-  - `light-dark-toggle` Light and dark plus an in-app override: web only, in addition to system-follow [DC-L10-17].
+  - `system-light-dark` Light and dark, matching the device setting: blends with the OS at night (Apple expects apps to respect the preference).
+  - `light-dark-toggle` Light and dark, plus a switch in the app: web only, in addition to system-follow [DC-L10-17].
   - `light-only` Light only [DC-L07-15].
   - `dark-only` Dark only: brand colors glow, fewer and brighter accents (watch, TV, car at night) [DC-L14-09].
 - **Default:** `system-light-dark`: system-light-dark on phone, tablet, desktop and web; dark-only on watch; day/night auto in cars *Source:* L09 shared default row 6 (21 of 25 systems) and platform convention [L09 A1; DC-L10-17, DC-L14-09].
@@ -26,12 +26,12 @@ Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L10-1
 
 ## Q-theme-03 · Will other brands, products or clients re-skin this system?
 Zoom 2 defined · weight medium · changes 0 decisions · class I · cards DC-L09-07
-- **Ask:** "Will other brands, products or clients re-skin this system?"
-- **Why:** Locked systems look consistent; generator systems keep structure and vary hue; theme-swap systems can change shape and depth too [DC-L09-07].
+- **Ask:** "Will other brands, products or clients put their own look on this system?"
+- **Why:** Locked systems look the same everywhere. Generator systems keep the structure but change the hue, and theme-swap systems can also change shape and depth [DC-L09-07].
 - **Options:**
-  - `generator-ready` One brand now, built generator-ready: semantic tier + brand-color generator + contrast check [DC-L09-07].
+  - `generator-ready` One brand now, built so more can be added: semantic tier + brand-color generator + contrast check [DC-L09-07].
   - `locked` One brand, locked (Carbon, Primer, Geist) [DC-L09-07].
-  - `brand-themes` Several internal brands over one core: shared anatomy and behavior, different color, type, imagery (Brad Frost core + brand + sub-brand layers; Swiggy > Instamart).
+  - `brand-themes` Several of our own brands on one shared base: shared anatomy and behavior, different color, type, imagery (Brad Frost core + brand + sub-brand layers; Swiggy > Instamart).
   - `white-label` White-label clients: one brand color in, full theme out (Blade `createTheme({brandColor})`, Fluent 16-step ramp, Paste overrides) [DC-L09-07].
 - **Default:** `generator-ready`: generator-ready *Source:* card heuristic "build every system as if a second brand will come" [DC-L09-07]; 63% of systems theme by brand.
 - **Show:** the draft screen re-skinned with two sample brand colors, contrast re-checked live.

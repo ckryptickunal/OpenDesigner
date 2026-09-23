@@ -10,8 +10,8 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 
 ## Q-depth-02 · How many elevation levels, and how do they look in dark mode?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L04-11, DC-L04-13
-- **Ask:** "How many elevation levels do you need? Four named levels is typical."
-- **Why:** More levels allow fine hierarchy but muddy it; most products visibly use three: resting, raised, overlay [DC-L04-11].
+- **Ask:** "How many height levels should surfaces have, from sunken to floating on top?"
+- **Why:** More elevation levels let you show finer order, but they can muddy it. Most products show only three: resting, raised and overlay [DC-L04-11].
 - **Options:**
   - `4-semantic` 4 semantic levels (sunken, default, raised, overlay) with hover and pressed variants (Atlassian).
   - `6-levels` 6 levels (Material 3, Fluent).
@@ -24,11 +24,11 @@ Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L04-
 ## Q-depth-03 · What should shadows look like?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L04-12
 - **Show if:** Q-depth-01 is shadow or ring-shadow
-- **Ask:** "Soft layered shadows, a key-plus-ambient pair, or tucked-under shadows?"
-- **Why:** Single hard shadows look dated; layered soft shadows look realistic; tinted shadows avoid a "dirty grey" on colored surfaces [DC-L04-12].
+- **Ask:** "What should shadows look like: many soft layers, a two-layer pair, or tucked under?"
+- **Why:** One hard shadow looks dated; layered soft shadows look real. Tinted shadows avoid a "dirty grey" look on top of color [DC-L04-12].
 - **Options:**
-  - `key-ambient` Key plus ambient, 2 layers (Fluent).
-  - `multi-layer` Multi-layer realistic (Primer floating.medium, 5 layers).
+  - `key-ambient` A main shadow plus a soft all-around one, 2 layers (Fluent).
+  - `multi-layer` Many realistic layers (Primer floating.medium, 5 layers).
   - `negative-spread` Tucked under with negative spread (Polaris `0 8px 16px -4px`).
   - `tinted` Neutral-tinted shadow color instead of black (Polaris rgba(26,26,26), Atlassian #1E1F21).
 - **Default:** 2 layers (1px contact shadow plus a soft blur scaled to elevation), neutral-tinted, alpha 8-24% in light mode; in dark mode double the alpha and add a 1px light edge ring on overlays *Source:* card heuristic [DC-L04-12].
@@ -38,8 +38,8 @@ Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L04-
 
 ## Q-depth-05 · How thick are borders, and when do dividers appear?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L04-07, DC-L03-09, DC-L04-08
-- **Ask:** "Which border widths, and should lists be separated by lines, space or surface shifts?"
-- **Why:** 1px borders read light and precise; 2px read bolder and more accessible; more lines read more "spreadsheet" [DC-L04-07, DC-L04-08].
+- **Ask:** "How thick should borders be, and should list items be split by lines, space or background?"
+- **Why:** 1px borders look light and precise; 2px look bolder and more accessible. More lines make screens feel like a "spreadsheet" [DC-L04-07, DC-L04-08].
 - **Options:**
   - `1-2-4` 1 / 2 / 4px with 1 default, 2 for focus and selection (Primer, Spectrum).
   - `1-2-3-4` 1 / 2 / 3 / 4px (Fluent web).
@@ -52,13 +52,13 @@ Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L04-
 
 ## Q-depth-06 · How dark should modal backdrops be, and how strong are state overlays?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L04-18, DC-L04-17
-- **Ask:** "How dark should the backdrop behind dialogs be, and should we use Material's standard state-overlay strengths?"
-- **Why:** Darker scrims focus attention hard; lighter scrims keep context for non-blocking sheets [DC-L04-18]. Overlay strengths set hover, press and disabled looks for every color [DC-L04-17].
+- **Ask:** "How dark should the shade behind dialogs be, and how strong are hover and press tints?"
+- **Why:** A darker shade behind a dialog (scrim) pulls focus hard; a lighter one keeps the page in view for sheets that don't block it [DC-L04-18]. Overlay strengths set how every color looks on hover, press and when disabled [DC-L04-17].
 - **Options:**
   - `scrim-fluent` Black 40% light / 50% dark (Fluent).
   - `scrim-atlassian` Blue-black about 46% light / 60% dark (Atlassian `color.blanket`).
-  - `overlays-material` State overlays hover 0.08, focus 0.10, pressed 0.10, dragged 0.16, disabled 0.38 (Material 3).
-  - `overlays-atlassian` Stronger overlays in dark mode (Atlassian hovered 16%/pressed 32% light, 20%/36% dark).
+  - `overlays-material` Tints for hover 0.08, focus 0.10, pressed 0.10, dragged 0.16, disabled 0.38 (Material 3).
+  - `overlays-atlassian` Stronger tints in dark mode (Atlassian hovered 16%/pressed 32% light, 20%/36% dark).
 - **Default:** scrim 40-50% near-black in light, 50-60% in dark, tinted toward the neutral hue; Material overlay numbers, raised in dark mode *Source:* card heuristics [DC-L04-18, DC-L04-17].
 - **Show:** a dialog and a bottom sheet over the page with the slider live.
 - **Use / avoid:** use lighter scrims for non-blocking sheets; avoid scrims so light that the dialog's modality is unclear [DC-L04-18].

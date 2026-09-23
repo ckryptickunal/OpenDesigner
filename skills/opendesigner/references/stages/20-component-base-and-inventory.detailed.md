@@ -8,13 +8,13 @@ Read the main stage file first; these questions refine it.
 
 Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
 
-## Q-comp-03 · Configuration props or composable parts?
+## Q-comp-03 · Should components use settings, or be built from smaller pieces?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L08-04, DC-L07-22
-- **Ask:** "Props for small components like Button, composable parts for containers like Dialog and Card?"
-- **Why:** Configuration keeps screens uniform; composition allows richer layouts with more variance; Figma slots let instances vary without detaching [DC-L08-04, DC-L07-22].
+- **Ask:** "Should components be set up with a list of settings, or built from smaller pieces?"
+- **Why:** Settings keep screens alike, while smaller pieces allow richer layouts that vary more. Figma slots let each copy of a component change without breaking its link [DC-L08-04, DC-L07-22].
 - **Options:**
-  - `config` Props-only configuration (Carbon, Primer, Polaris).
-  - `compound` Compound parts, asChild/Slot, render props (Base UI, Radix, React Aria).
+  - `config` Only settings, called props (Carbon, Primer, Polaris).
+  - `compound` Smaller parts you combine, with asChild/Slot and render props (Base UI, Radix, React Aria).
   - `figma-api` Figma: variants for state, size and type; booleans for optional icons; text props for labels; instance swap for single icons; slots for repeating or freeform content.
 - **Default:** configuration for leaf components, compound parts for containers; the Figma mapping as listed *Source:* card heuristics [DC-L08-04, DC-L07-22].
 - **Show:** generated code and the Figma component panel for one component.
@@ -23,27 +23,27 @@ Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L08-
 
 ## Q-comp-04 · How should components be grouped and named?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L08-02
-- **Ask:** "Group as tokens, primitives, components, patterns and templates, with an alias table for other systems' names?"
-- **Why:** The hierarchy affects findability and consistent naming across Figma and code [DC-L08-02].
+- **Ask:** "How should components be sorted into groups, and what should each group be called?"
+- **Why:** How you group components decides how easy they are to find and whether names match in Figma and code [DC-L08-02].
 - **Options:**
   - `atomic` Atomic design (atoms to pages).
   - `primitives-components-patterns` Primitives / components / patterns (Atlassian, Radix).
   - `foundations-components-patterns` Foundations / components / patterns (Carbon, HIG).
-  - `purpose` Purpose categories: action, containment, communication, navigation, selection, text input (M3).
+  - `purpose` Groups by job: action, containment, communication, navigation, selection, text input (M3).
 - **Default:** tokens > primitives > components > patterns > templates, with an alias table *Source:* card heuristic [DC-L08-02].
 - **Show:** the catalog's sidebar regrouped per option.
 - **Use / avoid:** use one canonical name with aliases; avoid two components for one job [DC-L08-02].
 - **Skip:** yes.
 
-## Q-comp-05 · One component set for every device, or separate sets?
+## Q-comp-05 · One component set for all devices, or one per device?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L14-02
 - **Show if:** Q-plat-02 marks watch, TV or car as first-class or works
-- **Ask:** "One set with device modes for phone, tablet and desktop, plus small separate libraries for watch and TV?"
-- **Why:** One set keeps the brand identical and cheap but risks phone-shaped components on a watch or TV [DC-L14-02].
+- **Ask:** "Should every device share one set of components, or should some devices get their own?"
+- **Why:** One set keeps the brand the same everywhere and costs less, but can leave phone-shaped components on a watch or TV [DC-L14-02].
 - **Options:**
-  - `one-set-modes` One set, tokens vary by mode (Spectrum desktop/mobile values; Carbon AI presence mode).
-  - `separate-libraries` Shared foundations, separate libraries per device (Wear Compose Material 3, TV Material).
-  - `templates` Template adapters, no custom components (car).
+  - `one-set-modes` One set whose tokens change by mode (Spectrum desktop/mobile values; Carbon AI presence mode).
+  - `separate-libraries` Shared basics, with a separate set for each device (Wear Compose Material 3, TV Material).
+  - `templates` Use the car's own templates, no custom components.
 - **Default:** one set for phone, tablet, desktop and web with context modes; separate small libraries for watch and TV; templates for car *Source:* card heuristic [DC-L14-02].
 - **Show:** one component across device classes.
 - **Use / avoid:** split a library when the input model changes (focus, crown, templates); avoid stretching phone components onto TV [DC-L14-02].

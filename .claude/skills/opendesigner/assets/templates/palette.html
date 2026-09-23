@@ -63,8 +63,8 @@ input[type=radio],input[type=checkbox]{accent-color:var(--c-strong);width:18px;h
 <header class="od-h"><div><h1 id="t"></h1><p class="sub" id="st"></p></div><div class="seg" id="theme" role="group" aria-label="Color mode"></div></header>
 <main>
 <fieldset class="opts" id="opts"></fieldset>
-<section aria-labelledby="h-r"><h2 id="h-r">Ramps <span class="kv" id="ml"></span></h2><div id="ramps" class="specimen" data-label="your palette"></div></section>
-<section aria-labelledby="h-p"><h2 id="h-p">Contrast checks (WCAG 2, not rounded)</h2>
+<section aria-labelledby="h-r"><h2 id="h-r">Shades (color ramps) <span class="kv" id="ml"></span></h2><div id="ramps" class="specimen" data-label="your palette"></div></section>
+<section aria-labelledby="h-p"><h2 id="h-p">Easy to read? Contrast checks (WCAG 2, never rounded up)</h2>
 <table class="tbl" id="pairs"><thead><tr><th scope="col">Pair</th><th scope="col">Sample</th><th scope="col" class="num">Ratio</th><th scope="col" class="num">Needs</th><th scope="col">Result</th></tr></thead><tbody></tbody></table></section>
 <section id="cs" aria-labelledby="h-c" hidden><h2 id="h-c">Your own color</h2>
 <div class="row"><label class="row">Brand color <input type="color" id="cc"></label><input type="text" id="ct" size="9" aria-label="Hex value" placeholder="#RRGGBB"><button type="button" id="cu">Use this color</button><span class="kv" id="ci"></span></div></section>
@@ -79,7 +79,7 @@ input[type=radio],input[type=checkbox]{accent-color:var(--c-strong);width:18px;h
 <script type="application/json" id="od-data">
 {
  "title": "Brand color and palette",
- "subtitle": "Sample data. Three seed candidates weighted by the personality sliders; ramps come from the engine (12 steps, OKLCH). Numbers under each swatch are contrast against step 1.",
+ "subtitle": "Sample data. Three starting colors that fit the feel you picked. The engine turns each into 12 shades (OKLCH). The number under each shade is its contrast with step 1.",
  "question": "Q-color-01",
  "recommended": "teal",
  "options": [
@@ -386,7 +386,7 @@ function boot(){$('#t').textContent=D.title||document.title;$('#st').textContent
  $('#copy').onclick=copy;$('#lock').onchange=update;$('#note').oninput=update;update()}
 function res(ref,m){if(ref&&typeof ref==='object')ref=ref[m]||ref.light;if(/^#/.test(ref))return ref;const [n,s]=String(ref).split('.');const r=((OD.sel||{}).ramps||[]).find(x=>x.name===n);return r?(r[m]||r.light)[+s-1]:null}
 OD.draw=()=>{const m=mode(),o=OD.sel;$('#ml').textContent='('+m+')';const box=$('#ramps');
- if(!o||!o.ramps){box.innerHTML='<p class="kv">Custom color: the engine generates its ramps after you paste the line.</p>'}
+ if(!o||!o.ramps){box.innerHTML='<p class="kv">Your own color: the engine makes its shades after you paste the line back.</p>'}
  else box.innerHTML=o.ramps.map(r=>{const st=r[m]||r.light,bg=st[0];return '<div class="ramp"><div class="ramp-n">'+esc(r.name)+'</div><ol class="sw">'+st.map((h,i)=>{const c=ratio(h,bg);
   return '<li><span class="chip" style="background:'+h+'" role="img" aria-label="'+esc(r.name)+' step '+(i+1)+', '+h+', '+fix(c)+' to 1 on step 1"></span><span class="kv">'+(i+1)+'</span><span class="kv">'+h+'</span><span class="kv">'+fix(c)+'</span></li>'}).join('')+'</ol></div>'}).join('');
  const n=(o&&o.ramps&&o.ramps.find(r=>r.name==='neutral'))||null;box.style.setProperty('--s-bg',n?(n[m]||n.light)[0]:'');box.style.setProperty('--s-fg',n?(n[m]||n.light)[11]:'');

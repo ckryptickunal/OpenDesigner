@@ -11,11 +11,11 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 ## Q-type-15 · Should text sizes change with screen width?
 Zoom 3 detailed · weight medium · changes 2 decisions · class G · cards DC-L02-19
 - **Ask:** "Should text sizes change with screen width?"
-- **Why:** Fixed sizes look consistent and app-like; fluid display type fills wide heroes smoothly [DC-L02-19].
+- **Why:** Fixed sizes look steady and app-like. Big headings that grow with the screen fill wide hero banners smoothly [DC-L02-19].
 - **Options:**
   - `fixed` Fixed everywhere; rely on the OS text-size setting (Carbon productive, Windows, iOS).
-  - `stepped` Per-breakpoint steps (Carbon expressive at md, lg, xlg, max).
-  - `fluid` Fluid display sizes with `clamp()` within the 2.5x zoom rule [DC-L02-19].
+  - `stepped` Steps up at set screen widths (Carbon expressive at md, lg, xlg, max).
+  - `fluid` Fluid headline sizes using clamp(), within the 2.5x zoom rule [DC-L02-19].
 - **Default:** `fixed`: fixed body and UI text; fluid or stepped only for display and headline styles on the web *Source:* card heuristic [DC-L02-19].
 - **Show:** a hero and a card heading as the preview width is dragged.
 - **Use / avoid:** use fluid type for marketing heroes; avoid fluid styles inside cards, tables or forms [DC-L02-19].
@@ -23,8 +23,8 @@ Zoom 3 detailed · weight medium · changes 2 decisions · class G · cards DC-L
 
 ## Q-type-09 · Which ratio should generate the size scale?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L02-09
-- **Ask:** "Which ratio should generate the size scale?"
-- **Why:** The ratio sets how many usable steps exist and how strongly they differ [DC-L02-09].
+- **Ask:** "How much bigger should each text size be than the one below it?"
+- **Why:** The ratio decides how many text sizes you can use and how much they differ [DC-L02-09].
 - **Options:**
   - `1.125` 1.125 major second: 16, 18, 20, 23, 26, 29 (Material: "Major Second type scale with 14 as its key base size").
   - `1.2` 1.2 minor third: 16, 19, 23, 28, 33, 40 [DC-L02-09].
@@ -39,7 +39,7 @@ Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L02-
 ## Q-type-10 · How many text styles, and how are they named?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L02-07, DC-L02-10
 - **Ask:** "How many text styles, and how should they be named?"
-- **Why:** Purpose-named roles make people pick by job and stop ad-hoc sizes; too many steps blur hierarchy [DC-L02-07, DC-L02-10].
+- **Why:** Styles named for their job help people pick by purpose and stop one-off sizes. Too many sizes blur what matters most [DC-L02-07, DC-L02-10].
 - **Options:**
   - `role-size` Role x size matrix: display, headline, title, body, label x large, medium, small (Material 15 styles).
   - `named` Named semantic styles (Apple's 11: Large Title... Caption 2; Primer).
@@ -51,13 +51,13 @@ Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L02-
 
 ## Q-type-11 · How should line heights be set?
 Zoom 3 detailed · weight medium · changes 3 decisions · class G · cards DC-L02-13, DC-L02-25
-- **Ask:** "How should line heights be set, including for other scripts?"
-- **Why:** Tight leading makes headings solid; 1.4-1.6 makes paragraphs easy to track; Latin line heights clip Indic and Telugu marks [DC-L02-13, DC-L02-25].
+- **Ask:** "How should line height, the space between lines, be set for each writing system?"
+- **Why:** Tight line height makes headings look solid, and 1.4-1.6 keeps paragraphs easy to follow. Line heights set for Latin clip the marks of Indic and Telugu text [DC-L02-13, DC-L02-25].
 - **Options:**
   - `4pt` Fixed values snapped to 4pt (Material Body Large 16/24; Atlassian; Polaris).
   - `2pt` Fixed values on a 2pt grid (Fluent, Carbon).
-  - `ratios` Named unitless ratios (Primer tight 1.25 to loose 1.75) [DC-L02-13].
-  - `script-heights` Plus language height categories: Medium about +7% (Arabic, Hindi, CJK, Thai), Large +30% (Telugu, Burmese), Extra large +100% (Nastaliq) (Material 3).
+  - `ratios` Named ratios of the font size (Primer tight 1.25 to loose 1.75) [DC-L02-13].
+  - `script-heights` Plus extra height for taller scripts: Medium about +7% (Arabic, Hindi, CJK, Thai), Large +30% (Telugu, Burmese), Extra large +100% (Nastaliq) (Material 3).
 - **Default:** ratio-derived and rounded to 4px: about 1.5 for 12-16px, 1.4 for 18-24px, 1.25 for 28-40px, 1.1-1.15 for 48px+; Medium height for Indic and CJK, Large for Telugu and Burmese; no italics or all caps for non-Latin scripts *Source:* card heuristics [DC-L02-13, DC-L02-25].
 - **Show:** a paragraph and a two-line button label in Latin and each chosen script, with clipping flagged.
 - **Use / avoid:** use smaller ratios as text gets larger; avoid fixed-height components that hold text [DC-L02-13, DC-L02-25].
@@ -65,13 +65,13 @@ Zoom 3 detailed · weight medium · changes 3 decisions · class G · cards DC-L
 
 ## Q-type-12 · Which font weights, and how is emphasis shown?
 Zoom 3 detailed · weight medium · changes 3 decisions · class G · cards DC-L02-15, DC-L02-12
-- **Ask:** "Which font weights, and how is emphasis shown?"
-- **Why:** Size-led hierarchy with regular headings looks elegant and editorial; weight-led hierarchy with bold headings looks sturdy and product-like [DC-L02-15].
+- **Ask:** "Which font weights, and how should important text stand out?"
+- **Why:** Headings that stand out by size, in regular weight, look elegant and editorial. Headings that stand out by being bold look sturdy and product-like [DC-L02-15].
 - **Options:**
   - `two` Two weights: Regular and Semibold (Windows 11).
   - `three` Three weights (Carbon 300/400/600; Material 400/500/700; Atlassian Regular/Medium/Bold).
   - `four` Four weights (Fluent 400-700; Primer 300-600).
-  - `emphasized-twin` One emphasized twin per style (Material Expressive 400 to 500, 500 to 700).
+  - `emphasized-twin` One bolder twin per style (Material Expressive 400 to 500, 500 to 700).
   - `strong-stronger` Strong and Stronger variants (Fluent Body 1 400/600/700).
 - **Default:** 3 weights (400 body, 500-600 labels, 600-700 headings) and one emphasized weight per style *Source:* card heuristics [DC-L02-15, DC-L02-12]; BOARD L15 note (2 weights per view).
 - **Show:** headings and a selected chip in each weight set.
@@ -80,24 +80,24 @@ Zoom 3 detailed · weight medium · changes 3 decisions · class G · cards DC-L
 
 ## Q-type-13 · Should letter spacing change with size?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L02-14
-- **Ask:** "Should letter spacing tighten for big text and loosen for small text?"
-- **Why:** Negative tracking makes headlines confident; positive tracking helps small text and all-caps labels [DC-L02-14].
+- **Ask:** "Should letter spacing change with text size, or stay as the font sets it?"
+- **Why:** Tighter letter spacing makes headlines look strong and sure. Looser spacing helps small text and all-caps labels [DC-L02-14].
 - **Options:**
   - `size-table` A size-specific table (SF Pro: +41/1000 em at 6pt, 0 at 12pt, -26/1000 em at 17pt), applied automatically by the OS.
   - `per-style` Per-style tracking tokens (Material: Display Large -0.2sp, Body Large 0.5sp).
-  - `zero` No tracking beyond the font's defaults [DC-L02-14].
+  - `zero` No extra letter spacing beyond the font's defaults [DC-L02-14].
 - **Default:** 0 at body sizes, +0.02 to +0.05em at 11-12px and all caps, -0.01 to -0.02em from about 32px, in em units *Source:* card heuristic [DC-L02-14].
 - **Show:** a headline and an all-caps label with tracking on and off.
 - **Use / avoid:** use em-based tracking so it scales; let optical-size fonts do most of the work; avoid tracking non-Latin scripts [DC-L02-14, DC-L02-25].
 - **Skip:** yes.
 
-## Q-type-14 · How should running text be laid out: line length, alignment, truncation and paragraph spacing?
+## Q-type-14 · How should body text be laid out: line length, alignment, cut-off text and spacing?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L02-17, DC-L02-18, DC-L02-16
 - **Ask:** "How wide can paragraphs get, and how should long text be cut off?"
-- **Why:** Lines that are too wide make readers lose their place; centered or justified text slows reading [DC-L02-17, DC-L02-18].
+- **Why:** Very long lines make readers lose their place. Centered or justified text (stretched to both edges) slows reading [DC-L02-17, DC-L02-18].
 - **Options:**
   - `measure-45-75` 45-75 characters (Bringhurst) or 50-60 (Windows); WCAG 1.4.8 AAA caps at 80, 40 for CJK.
-  - `wrap-then-ellipsis` Wrap first, then ellipsis with access to the full text [DC-L02-18].
+  - `wrap-then-ellipsis` Wrap first, then cut off with an ellipsis (...) and a way to read it all [DC-L02-18].
   - `para-1x` Paragraph spacing equal to the body size (Atlassian body 12px, body large 16px) [DC-L02-16].
   - `text-box-trim` Trim half-leading so spacing measures from cap height (CSS `text-box: trim-both`) [DC-L02-16].
 - **Default:** max prose width about 65-70ch (35-40 characters CJK), start-aligned, wrap then ellipsis, paragraph spacing 1x body size with twice as much space above a heading as below it *Source:* card heuristics [DC-L02-17, DC-L02-18, DC-L02-16].
@@ -108,13 +108,13 @@ Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L02-
 ## Q-type-16 · Should type sizes differ by platform or viewing distance?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L02-20, DC-L14-04
 - **Show if:** more than one platform or device class
-- **Ask:** "Should sizes differ by platform or viewing distance?"
-- **Why:** Mobile type about 1.2x desktop compensates for touch and distance; TVs and cars need distance-scaled type [DC-L02-20, DC-L14-04].
+- **Ask:** "Should text sizes change by device or by how far away people sit?"
+- **Why:** Phone text about 1.2x the desktop size makes up for touch and distance. TVs and cars need text scaled to how far away people sit [DC-L02-20, DC-L14-04].
 - **Options:**
   - `platform-modes` One semantic scale with platform modes (Spectrum 2: 14px desktop, 17px mobile).
   - `per-platform` Per-platform ramps (Fluent: web Body 1 14/20, iOS 17/22, Android 16/24, macOS 13/16).
-  - `native-units` One scale in native units (Material) [DC-L02-20].
-  - `distance-modes` Distance modes seeded from native defaults (Apple watch 16, phone 17, Mac 13, TV 29 pt).
+  - `native-units` One scale in each platform's own units (Material) [DC-L02-20].
+  - `distance-modes` Sizes by viewing distance, from native defaults (Apple watch 16, phone 17, Mac 13, TV 29 pt).
 - **Default:** one semantic scale with platform modes, mobile about 1.15-1.2x desktop, plus distance modes for TV, car and spatial *Source:* card heuristics [DC-L02-20, DC-L14-04].
 - **Show:** the same screen at phone, desktop and TV with type scaled to a similar visual angle.
 - **Use / avoid:** keep roles and roughly the visual angle when moving to a farther device; avoid reusing desktop sizes on phones [DC-L14-04, DC-L02-20].

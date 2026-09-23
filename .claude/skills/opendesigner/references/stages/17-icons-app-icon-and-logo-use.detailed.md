@@ -8,28 +8,28 @@ Read the main stage file first; these questions refine it.
 
 Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
 
-## Q-icon-03 · How heavy should icon strokes be?
+## Q-icon-03 · How thick should icon lines be?
 Zoom 3 detailed · weight medium · changes 3 decisions · class G · cards DC-L05-03
-- **Ask:** "Match icon stroke to your body text weight: about 1.5px at 16px, 2px at 24px?"
-- **Why:** Thin strokes look elegant but get fragile below 20px; icons should match the stem weight of the text beside them (Atlassian dropped 2px for 1.5px because 2px felt "too heavy") [DC-L05-03, DC-L06-13].
+- **Ask:** "How thick should the lines in your icons be?"
+- **Why:** Thin lines look elegant but get weak below 20px, so icon lines should match the letters beside them. Atlassian went from 2px to 1.5px because 2px felt "too heavy" [DC-L05-03, DC-L06-13].
 - **Options:**
-  - `2-at-24` 2px at 24 (Material weight 400, Lucide).
-  - `1.5-at-24` 1.5px at 24 (Heroicons).
-  - `1.5-at-16` 1.5px at 16 (Atlassian, Octicons).
-  - `variable` Variable weight matched to text (Material wght 100-700; SF Symbols 9 weights).
+  - `2-at-24` 2px lines on a 24px icon (Material weight 400, Lucide).
+  - `1.5-at-24` 1.5px lines on a 24px icon (Heroicons).
+  - `1.5-at-16` 1.5px lines on a 16px icon (Atlassian, Octicons).
+  - `variable` Line weight that changes to match the text (Material wght 100-700; SF Symbols 9 weights).
 - **Default:** stroke visually equal to body text weight at the paired size: about 1.5px for 14-16px text, 2px at 24px *Source:* card heuristics [DC-L05-03, DC-L06-13].
 - **Show:** icon-label pairs at each text size with the stroke slider.
 - **Use / avoid:** use heavier strokes on busy or photographic backgrounds; avoid sub-1.5px strokes below 20px [DC-L05-03].
 - **Skip:** yes.
 
-## Q-icon-04 · Which icon sizes, and on which construction grid?
+## Q-icon-04 · Which icon sizes, and what drawing grid?
 Zoom 3 detailed · weight medium · changes 3 decisions · class G · cards DC-L05-05, DC-L05-04
-- **Ask:** "Ship 16, 20 and 24px icons on a standard 24/20/2 grid?"
-- **Why:** Keylines make a circle icon and a square icon look the same size; pixel-hinted sizes stay crisp [DC-L05-04, DC-L05-05].
+- **Ask:** "Which icon sizes do you need, and which drawing grid should they follow?"
+- **Why:** Guide shapes on the grid (keylines) make a round icon and a square icon look the same size. Sizes tuned to whole pixels stay sharp [DC-L05-04, DC-L05-05].
 - **Options:**
-  - `material-grid` 24dp master, 20dp live area, 2dp padding; opsz 20-48 thins large icons (Material).
+  - `material-grid` 24dp icon, 20dp art area, 2dp padding; opsz 20-48 thins large icons (Material).
   - `carbon` 16px default, 20/24/32 also, tuned to 14 and 16px text (Carbon; IBM 32px master scaled down).
-  - `fluent` 12, 16, 20, 24, 28, 32, 48.
+  - `fluent` Sizes 12, 16, 20, 24, 28, 32 and 48 (Fluent).
 - **Default:** 16, 20, 24 (plus 12 and 32 if needed), sized to the adjacent text line height; Material construction unless the master is 16 or 32 *Source:* card heuristics [DC-L05-05, DC-L05-04].
 - **Show:** the icon sheet at each size, magnified to show pixel alignment.
 - **Use / avoid:** pixel-align at the smallest shipped size; avoid 12px icons for anything interactive [DC-L05-04, DC-L05-05].
@@ -37,13 +37,13 @@ Zoom 3 detailed · weight medium · changes 3 decisions · class G · cards DC-L
 
 ## Q-icon-05 · When do icons need labels, and what color are they?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L05-07, DC-L05-08
-- **Ask:** "Label icons in navigation, and allow icon-only buttons just for universal actions like search and close?"
-- **Why:** Labelled icons read calmer and clearer; icon-only toolbars read expert but ambiguous; only a handful of icons are near-universal [DC-L05-07, DC-L05-08].
+- **Ask:** "When should icons have words next to them, and what color should icons be?"
+- **Why:** Icons with words feel calmer and clearer; rows of icons alone feel expert but can confuse. Only a few icons mean the same thing to almost everyone [DC-L05-07, DC-L05-08].
 - **Options:**
   - `labels-default` Labels by default (Material navigation, Atlassian, Polaris).
-  - `universal-only` Icon-only for about a dozen universal actions (search, close, more, add, delete, edit, share, settings), with a tooltip and accessible name [DC-L05-07].
-  - `mono` Monochrome icons matching text color (Carbon 4.5:1, Fluent solid).
-  - `semantic-tone` Semantic tones on status icons (Polaris `tone`).
+  - `universal-only` Icon-only for about a dozen well-known actions (search, close, more, add, delete, edit, share, settings), with a tooltip and screen-reader name [DC-L05-07].
+  - `mono` One color, the same as the text (Carbon 4.5:1, Fluent solid).
+  - `semantic-tone` Status colors on status icons (Polaris tone).
 - **Default:** `labels-default`: labels-default plus universal-only; one neutral icon color aliased to secondary text, semantic colors only on status icons *Source:* card heuristics [DC-L05-07, DC-L05-08].
 - **Show:** toolbar variants with a label toggle; hover shows the tooltip.
 - **Use / avoid:** give every icon-only control an accessible label; avoid decorative multicolor icons in UI chrome [DC-L05-07, DC-L05-08; L10 baked-in rule 9].
@@ -51,13 +51,13 @@ Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L05-
 
 ## Q-icon-07 · How should icons be named and shipped?
 Zoom 3 detailed · weight low · changes 0 decisions · class T · cards DC-L05-10, DC-L05-09
-- **Ask:** "Ship icons as SVG with per-framework components, named by shape with function aliases?"
-- **Why:** SVG and native symbols render crisp at every size; icon fonts blur and flash; literal names keep one icon reusable across meanings [DC-L05-10, DC-L05-09].
+- **Ask:** "Should icons ship as SVG files or an icon font, and be named by shape or by job?"
+- **Why:** SVG files and the platform's own symbols stay sharp at every size, while icon fonts blur and flash. Naming icons by what they show lets one icon serve many meanings [DC-L05-10, DC-L05-09].
 - **Options:**
-  - `svg-components` SVG source of truth generating per-framework components and native packages (Octicons, Heroicons).
+  - `svg-components` SVG files as the source, turned into ready code for each framework and app (Octicons, Heroicons).
   - `icon-font` Icon font or variable font (Material Symbols).
   - `name-by-shape` Name by shape ("Shield, not security": Fluent; SF Symbols).
-  - `function-alias` Plus a function-alias layer in the component API [DC-L05-09].
+  - `function-alias` Plus extra names that say what each icon is for, in the code [DC-L05-09].
 - **Default:** SVG source, files named `<name>_<size>_<style>`, size and color as props; name by shape with a function-alias layer; RTL behavior recorded per icon *Source:* card heuristics [DC-L05-10, DC-L05-09].
 - **Show:** the exported icon package tree.
 - **Use / avoid:** mirror directional icons in RTL; avoid mirroring icons that depict real objects (clocks, checkmarks) [DC-L05-09, inferred].
@@ -65,12 +65,12 @@ Zoom 3 detailed · weight low · changes 0 decisions · class T · cards DC-L05-
 
 ## Q-icon-08 · How should the logo appear inside the product?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L05-13
-- **Ask:** "Symbol-only logo in the app bar and the full lockup on sign-in?"
-- **Why:** A small symbol keeps chrome quiet and product-led; a full lockup reads marketing-led; a brand-colored logo competes with primary actions [DC-L05-13].
+- **Ask:** "Inside the app, should the logo be the symbol alone or the full logo with its name?"
+- **Why:** A small symbol keeps the app's frame quiet and puts the product first; the full logo with its name feels like marketing. A logo in brand color competes with the main buttons [DC-L05-13].
 - **Options:**
-  - `symbol-app-bar` Symbol only at 24-32px in the app bar, lockup on sign-in and marketing [DC-L05-13].
-  - `lockup-everywhere` Full lockup everywhere [DC-L05-13].
-  - `appearance` Appearance brand, neutral or inverse (Atlassian Logo component).
+  - `symbol-app-bar` Symbol alone at 24-32px in the top bar, full logo on sign-in and marketing [DC-L05-13].
+  - `lockup-everywhere` Full logo with its name everywhere [DC-L05-13].
+  - `appearance` Logo in brand color, neutral or inverse (Atlassian Logo component).
 - **Default:** `symbol-app-bar`: symbol-app-bar with neutral appearance inside dense tools; favicon set from one SVG master *Source:* card heuristic [DC-L05-13].
 - **Show:** the app bar and sign-in page.
 - **Use / avoid:** give a logo that acts as a link an accessible name; avoid repeating the logo throughout the UI (Apple) [DC-L05-13].

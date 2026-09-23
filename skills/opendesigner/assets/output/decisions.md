@@ -10,7 +10,7 @@ One entry per decision, newest last. Superseded decisions stay; a later entry re
 
 <!-- The interviewing model adds a plain-language summary after each stage, for teammates: -->
 ## Stage {{NN}} summary · {{YYYY-MM-DD}} · {{stage title}}
-{{2 to 5 sentences: what we chose, why, what we rejected and why. References used: what was taken and what was substituted.}}
+{{2 to 5 plain sentences: what we chose and why, and what we turned down and why. For each reference: what we took and what we swapped.}}
 
 <!-- And at the end of the interview: -->
 ## Open items · {{YYYY-MM-DD}}

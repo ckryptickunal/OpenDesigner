@@ -1,8 +1,8 @@
 # The research behind OpenDesigner
 
-Every default, formula and question in OpenDesigner traces back to a cited research base in this repo. This page is the map: what each research lane covers, where the combined outputs live, and how to find an answer quickly.
+Every default, formula and question in OpenDesigner traces back to a cited research base in this repo. This page is the map. It shows what each research lane covers, where the combined outputs live, and how to find an answer quickly.
 
-Counts on this page were computed from the files on 2026-09-23 with `python3 tools/jev_nav.py status` and `python3 tools/jev_nav.py check`. Run those commands for the current numbers.
+Counts on this page were read from the files on 2026-09-24, with `python3 tools/jev_nav.py status` and `python3 tools/jev_nav.py check`. Run those commands for the current numbers.
 
 ## At a glance
 
@@ -10,18 +10,19 @@ Counts on this page were computed from the files on 2026-09-23 with `python3 too
 |---|---|---|
 | Research lanes finished | 18 | L00 to L18 on `_coordination/BOARD.md`; L12 is still open |
 | Decision Cards | 352 | `### DC-` headings across `research/` and `benchmarks/` |
-| Sources logged | 2,740 | distinct source ids in `traces/`, including sources that were opened and rejected |
+| Sources logged | 2,740 | distinct source ids in the research lanes' traces (`traces/L*-trace.md`), including sources that were opened and rejected. With the sponsorship research (R4) and the verification pass (V1), `traces/` holds 3,225 |
 | Design systems benchmarked | 25 | files in `benchmarks/systems/` |
-| Ontology nodes | 271 | `synthesis/ontology.json` |
+| Ontology nodes | 275, of which 211 are building blocks outside the builder layer | `synthesis/ontology.json` [S-V1b-091] |
 | Questions in the interview | 192 | `synthesis/questionnaire.json` (27 screens plus a reference panel) |
 | Decision graph | 352 decisions, 465 edges, 12 cycles | `synthesis/decision-graph.json` |
+| Claims re-checked (V1) | 161: 134 confirmed, 19 partly right, 5 wrong, 3 unverifiable | [`synthesis/VERIFICATION.md`](../synthesis/VERIFICATION.md) |
 
 ## How to read a claim
 
-- `DC-L04-02` is a **Decision Card**: one decision, its options, what each option looks like, what it depends on and affects, how to encode it as tokens, platform notes, accessibility limits, a default, and evidence. The format is in [`_coordination/SCHEMA.md`](../_coordination/SCHEMA.md).
+- `DC-L04-02` is a **Decision Card**: one decision and its options, with what each option looks like. It also records what the decision depends on and affects, how to encode it as tokens, platform notes, accessibility limits, a default, and evidence. The format is in [`_coordination/SCHEMA.md`](../_coordination/SCHEMA.md).
 - `[S-L04-012]` is a **source id**. Look it up in `traces/L04-trace.md` for the URL, publisher, date, tier and what was taken from it.
 - `[inferred]` means the lane concluded it rather than read it. Treat it as a default to test, not a finding.
-- **Tiers:** A is primary (a system's own docs, source code, W3C specs), B is a recognized practitioner (NN/g, a design team's engineering blog), C is community opinion and is used only with corroboration.
+- **Tiers:** A is primary: a system's own docs, source code, W3C specs. B is a recognized practitioner, such as NN/g or a design team's engineering blog. C is community opinion, used only with corroboration.
 
 ## The lanes
 
@@ -44,7 +45,7 @@ Counts on this page were computed from the files on 2026-09-23 with `python3 too
 | L14 | Device classes: phone, tablet, desktop, watch, TV, car, spatial, voice and AI; 14 invariants and a device matrix | [`research/L14-device-practices.md`](../research/L14-device-practices.md) | 14 | 90 |
 | L15 | Visual design principles: hierarchy, Gestalt, color theory, polish, styles; what to automate, guide or expose | [`research/L15-visual-design-principles.md`](../research/L15-visual-design-principles.md) | 11 | 84 |
 | L16 | Visual tooling for engineers and the design-to-code round trip: Figma MCP, Paper MCP, Penpot, theme playgrounds, 43 tools | [`research/L16-visual-tooling-for-engineers.md`](../research/L16-visual-tooling-for-engineers.md) | 15 | 324 |
-| L17 | How design systems get made today, by hand and with AI; building-block classification (207 blocks) and 14 designer hooks | [`research/L17-how-systems-get-made.md`](../research/L17-how-systems-get-made.md) | 13 | 304 |
+| L17 | How design systems get made today, by hand and with AI; building-block classification (207 blocks on the 23 Sep map; `ontology.json` now has 211 [S-V1b-091]) and 14 designer hooks | [`research/L17-how-systems-get-made.md`](../research/L17-how-systems-get-made.md) | 13 | 304 |
 | L18 | AI-first distribution: Agent Skills, AGENTS.md, MCP, MCP Apps and visual UI in Claude, ChatGPT and Codex; the host capability matrix; the recommended repo architecture | [`research/L18-ai-first-distribution.md`](../research/L18-ai-first-distribution.md) | 14 | 228 |
 
 "Sources logged" counts rows in each lane's trace file, including rejected sources. Every lane file ends with **Open questions / gaps** and **Confidence** sections: the fastest way to find useful research work (see [SEED-ISSUES.md](SEED-ISSUES.md)).
@@ -53,14 +54,14 @@ Counts on this page were computed from the files on 2026-09-23 with `python3 too
 
 | File | What it is |
 |---|---|
-| [`synthesis/ONTOLOGY.md`](../synthesis/ONTOLOGY.md) + `ontology.json` | Every building block of a design system in 10 layers (271 nodes), each mapped to the cards that decide it |
-| [`synthesis/QUESTIONNAIRE.md`](../synthesis/QUESTIONNAIRE.md) + `questionnaire.json` | The guided interview: 27 screens, Quick, Standard and Expert modes, every question with options, visual effect and downstream effect |
+| [`synthesis/ONTOLOGY.md`](../synthesis/ONTOLOGY.md) + `ontology.json` | Every building block of a design system in 10 layers (275 nodes), each mapped to the cards that decide it |
+| [`synthesis/QUESTIONNAIRE.md`](../synthesis/QUESTIONNAIRE.md) + `questionnaire.json` | The guided interview: 27 screens and every question with its options, visual effect and downstream effect. It keeps the earlier Quick, Standard and Expert tags. `tools/build_data.py` sets the skill's four zoom levels from those tags and two short hand-picked lists (sketch and broad) |
 | [`synthesis/LEVERS.md`](../synthesis/LEVERS.md) + `levers.json` | The eight dials, the formulas from dials and raw inputs to tokens, 13 famous systems as dial recipes, and the guardrails |
 | [`synthesis/DECISION-GRAPH.md`](../synthesis/DECISION-GRAPH.md) + `decision-graph.json` | What drives what: dependency steps, cycles that must be decided together, and fan-out (which decisions shape the most) |
 | `synthesis/cards.json` | Every Decision Card split into its fields, for tools and models |
 | `synthesis/graph-overrides.json` | Hand corrections to the generated graph, kept explicit so they survive regeneration |
 
-The product spec that turns all of this into the builder is being written in `synthesis/OPENDESIGNER-SPEC.md`.
+The product spec that turns all of this into the builder is `synthesis/OPENDESIGNER-SPEC.md`. A copy for readers is [SPEC.md](SPEC.md).
 
 ## Navigating with `tools/jev_nav.py`
 
@@ -73,12 +74,13 @@ python3 tools/jev_nav.py export                     # rebuilds synthesis/cards.j
 python3 tools/jev_nav.py graph                      # rebuilds synthesis/decision-graph.json
 ```
 
-`find` gathers candidate cards by keyword across all lanes, then, if `JEV_API_KEY` is set in your environment or a local git-ignored `.env`, asks TypeSafe's Jev model to rank them for your question. Without a key it falls back to keyword ranking, which needs no network.
+`find` gathers candidate cards by keyword across all lanes. If `JEV_API_KEY` is set in your environment or a local git-ignored `.env`, it then asks TypeSafe's Jev model to rank them for your question. Without a key it falls back to keyword ranking, which needs no network.
 
 Open [`navigator.html`](../navigator.html) in a browser for a clickable map of lanes and cards.
 
-## What is not verified yet
+## What has been checked, and what has not
 
+- **V1 (verification) is done.** Two fresh-context verifiers re-checked 161 claims against live official sources on 2026-09-24. 134 held, 19 were partly right, 5 were wrong and 3 could not be verified. Each fix, with its source id and status, is in [`synthesis/VERIFICATION.md`](../synthesis/VERIFICATION.md).
+- **L09's own verifier pass** re-checked 32 benchmark claims: 28 held and 3 were fixed.
 - **L12 (Figma hands-on)** has not started. Figma behavior in the research comes from Figma's docs, not from inspecting real files.
-- **V1 (verification)** is waiting on the synthesis: fresh-context agents will re-check claims and values against live sources and write `synthesis/VERIFICATION.md`. L09's own verifier pass re-checked 32 benchmark claims: 28 held and 3 were fixed.
-- Many lanes hit search limits and name the pages they could not read. Those gaps are listed at the end of each lane file and turned into issues in [SEED-ISSUES.md](SEED-ISSUES.md).
+- **Many lanes hit search limits** and name the pages they could not read. Those gaps are listed at the end of each lane file and turned into issues in [SEED-ISSUES.md](SEED-ISSUES.md).

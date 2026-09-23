@@ -2241,8 +2241,8 @@ def validate_files(files, state, rep):
             rep.add(lvl, "contrast", f"{pr['mode']}: {pr['fg']} ({fg}) on {pr['bg']} ({bg}) is {ratio:.2f}:1, needs {pr['min']}:1",
                     pr["rule"], "DC-L01-22, S-L01-022, S-L01-023", f"{pr['mode']}:{pr['fg']} on {pr['bg']}",
                     measured=rnd(ratio, 3), threshold=pr["min"],
-                    fix="Point the role at a step further from the background (steps 11-12 for text, 8+ for boundaries), "
-                        "or remove the override that detached it; generated steps meet this by construction.")
+                    fix="Point the role at a step further from the background: steps 11-12 for text, 8 or higher for edges. "
+                        "Or remove the override that detached it. Generated steps always pass.")
     rep.stats["contrastPairs"] = n_pairs
     rep.stats["lowest"] = {f"{m} {k}": f"{r:.2f}:1 ({fg} on {bg})" for (m, k), (r, fg, bg) in sorted(lows.items())}
     for mode in modes:
@@ -2252,7 +2252,7 @@ def validate_files(files, state, rep):
                 if fg in toks and bg in toks:
                     lc = abs(apca_lc(hex_of(toks[fg]["resolved"]), hex_of(toks[bg]["resolved"])))
                     if lc < need:
-                        rep.add("advisory", "apca", f"in {mode} mode, {words_of(fg)} on the {words_of(bg)} scores APCA Lc {lc:.0f}; the advice is {need} or more",
+                        rep.add("advisory", "apca", f"in {mode} mode, {words_of(fg)} on the {words_of(bg)} scores Lc {lc:.0f} on APCA, a newer reading-contrast score. {need} or more is advised",
                                 "APCA advisory only; WCAG 3 contrast is undetermined", "S-L01-026, S-L01-021")
 
     # ---- targets (L14 device floors; density never shrinks hit areas)
@@ -2267,18 +2267,18 @@ def validate_files(files, state, rep):
               "vehicle": (76, "Design for Driving 76dp", "S-L14-037")}
     for k, (floor, rule, src) in floors.items():
         if k in tg and tg[k] < floor:
-            rep.add("error", "targets", f"size.target.{k} is {tg[k]:g}px, below the {floor}px floor", rule, f"DC-L14-03, {src}",
+            rep.add("error", "targets", f"size.target.{k} is {tg[k]:g}px, below the {floor}px minimum", rule, f"DC-L14-03, {src}",
                     f"size.target.{k}", measured=tg[k], threshold=floor, fix=f"Set size.target.{k} to at least {floor}px.")
     for key, t2 in resolved.items():
         for k, v in t2.items():
             if k.startswith("size.target.") and _px(v["resolved"]) != tg.get(k.split(".")[-1]):
-                rep.add("error", "targets", f"{k} changes with {dict(key)}; density must never change hit areas", "L14 I-1", "DC-L03-11")
+                rep.add("error", "targets", f"{k} changes with {dict(key)}. Density must never change tap areas", "L14 I-1", "DC-L03-11")
                 break
     ctl_min = min(_px(t2[k]["resolved"]) for t2 in resolved.values() for k in t2 if k.startswith("size.control."))
     if ctl_min < 24 and tg.get("min", 0) < 24:
-        rep.add("error", "targets", f"smallest control is {ctl_min:g}px with no 24px hit-area token", "target < 24x24 CSS px (lint error)", "L13-E1-level2, S-L03-035")
+        rep.add("error", "targets", f"the smallest control is {ctl_min:g}px, and there is no 24px tap-area token", "target < 24x24 CSS px (lint error)", "L13-E1-level2, S-L03-035")
     elif tg.get("min") and ctl_min < tg["min"]:
-        rep.add("advisory", "targets", f"the smallest control is {ctl_min:g}px tall; give it a {tg['min']:g}px {term('hit area')} with padding "
+        rep.add("advisory", "targets", f"the smallest control is {ctl_min:g}px tall. Give it a {tg['min']:g}px {term('hit area')} with padding "
                 "(size.target.min), never a smaller one", "L14 I-1", "DC-L03-12, S-L03-029")
     rep.stats["targets"] = tg
 
@@ -2286,25 +2286,25 @@ def validate_files(files, state, rep):
     sizes = sorted({_px(v["resolved"]) for k, v in toks.items() if k.startswith("font.size.")})
     rep.stats["typeSizes"] = sizes
     if len(sizes) > 10:
-        rep.add("warning", "lint", f"{len(sizes)} type sizes; 8-10 is the working range", "Type scale size count", "DC-L02-10")
+        rep.add("warning", "lint", f"{len(sizes)} text sizes; 8 to 10 is the usual range", "Type scale size count", "DC-L02-10")
     if sizes and sizes[0] < 11:
-        rep.add("warning", "lint", f"smallest type size {sizes[0]:g}px is under 11px", "Minimum legible size 11pt/sp", "S-L02-001, S-L02-005")
+        rep.add("warning", "lint", f"the smallest text size, {sizes[0]:g}px, is under 11px", "Minimum legible size 11pt/sp", "S-L02-001, S-L02-005")
     styles = {k: v["resolved"] for k, v in toks.items() if k.startswith("text.") and v["type"] == "typography"}
     if len(styles) > 15:
-        rep.add("warning", "lint", f"{len(styles)} text styles; 12-15 is the working range", "Type style count", "DC-L02-10")
+        rep.add("warning", "lint", f"{len(styles)} text styles; 12 to 15 is the usual range", "Type style count", "DC-L02-10")
     body_weights = {v["fontWeight"] for k, v in styles.items() if not k.startswith("text.display")}
     if len(body_weights) > 3:
-        rep.add("warning", "lint", f"{len(body_weights)} weights outside display styles ({sorted(body_weights)}); two or three read as distinct",
+        rep.add("warning", "lint", f"{len(body_weights)} font weights outside display styles ({sorted(body_weights)}). Only two or three look different",
                 "Hierarchy tiers: weights 2-3", "L15-P03, S-L15-038")
     heads = sorted(((_px(v["fontSize"]), v["fontWeight"], k) for k, v in styles.items()
                     if k.split(".")[1] in ("title", "headline", "display")), key=lambda x: (x[0], x[1]))
     for (s1, w1, k1), (s2, w2, k2) in zip(heads, heads[1:]):
         if s2 / s1 - 1 < 0.1 and abs(w2 - w1) < 200 and not (s1 == s2 and w1 == w2):
-            rep.add("warning", "lint", f"{k1} ({s1:g}px/{w1}) and {k2} ({s2:g}px/{w2}) differ by under 10% in size and under 200 in weight",
+            rep.add("warning", "lint", f"{k1} ({s1:g}px/{w1}) and {k2} ({s2:g}px/{w2}) look almost the same: under 10% apart in size and under 200 in weight",
                     "Adjacent hierarchy levels must differ visibly", "DC-L15-02 (200 [inferred])")
     text_tiers = [k for k in toks if re.fullmatch(r"color\.text\.(primary|secondary|tertiary|quaternary|muted|subtle)", k)]
     if len(text_tiers) > 3:
-        rep.add("warning", "lint", f"{len(text_tiers)} neutral text tiers; three is the ceiling", "Hierarchy tiers: 3 text colors", "L15-P04, S-L15-038")
+        rep.add("warning", "lint", f"{len(text_tiers)} gray text colors; three is the most that stay distinct", "Hierarchy tiers: 3 text colors", "L15-P04, S-L15-038")
 
     # ---- lint: motion
     if "motion" not in res.get("modifiers", {}) or "reduced" not in res["modifiers"]["motion"]["contexts"]:
@@ -2313,41 +2313,41 @@ def validate_files(files, state, rep):
         red = pick(motion="reduced")
         mv = red.get("motion.transition.move")
         if not mv or mv["resolved"]["duration"]["value"] != 0:
-            rep.add("error", "lint", "reduced motion keeps travel: motion.transition.move must be 0ms in the reduced context",
+            rep.add("error", "lint", "reduced motion still moves things: motion.transition.move must be 0ms in the reduced context",
                     "Reduced motion: travel to opacity, travel durations 0", "DC-L04-25, S-L09-458")
     std = pick(motion="standard")
     for k, v in std.items():
         if k.startswith("motion.transition."):
             dms = v["resolved"]["duration"]["value"] * (1000 if v["resolved"]["duration"]["unit"] == "s" else 1)
             if dms > 500:
-                rep.add("warning", "lint", f"{k} takes {dms}ms, over 500ms: it will feel slow", "transition-over 500ms", "L13-E1 [inferred link]")
+                rep.add("warning", "lint", f"{k} takes {dms}ms. Over 500ms feels slow", "transition-over 500ms", "L13-E1 [inferred link]")
             elif dms > 400:
-                rep.add("advisory", "lint", f"{k} takes {dms}ms; transitions feel instant up to 400ms", "Doherty threshold 400ms", "L13-B5, DC-L04-20")
+                rep.add("advisory", "lint", f"{k} takes {dms}ms. Changes feel instant only up to 400ms", "Doherty threshold 400ms", "L13-B5, DC-L04-20")
     macros = [m if isinstance(m, str) else m.get("id") for m in (meta.get("macros") or [])]
     for k, v in toks.items():
         if k.startswith("motion.spring.") and v["type"] == "transition":
             sp = (v.get("$extensions") or {}).get(NS, {}).get("spring")
             if sp and 1 - sp["dampingRatio"] > 0.2 and "playful" not in macros:
-                rep.add("warning", "lint", f"{k} bounce {1 - sp['dampingRatio']:.2f} exceeds 0.2 without the playful macro",
+                rep.add("warning", "lint", f"{k} bounces {1 - sp['dampingRatio']:.2f}, over 0.2, but the playful feel is not chosen",
                         "Bounce cap", "DC-L04-19")
     # ---- lint: focus
     if "color.border.focus" not in toks or "focus.ring.width" not in toks:
-        rep.add("error", "lint", "missing focus tokens (color.border.focus, focus.ring.width)", "Visible focus (WCAG 2.4.7, 2.4.13)", "DC-L04-09")
+        rep.add("error", "lint", "the focus outline tokens are missing (color.border.focus, focus.ring.width)", "Visible focus (WCAG 2.4.7, 2.4.13)", "DC-L04-09")
     elif _px(toks["focus.ring.width"]["resolved"]) < 2:
-        rep.add("error", "lint", "focus ring thinner than 2px", "Focus ring 2px + 2px offset", "DC-L04-09, L14-I-5")
+        rep.add("error", "lint", "the focus ring is thinner than 2px", "Focus ring 2px + 2px offset", "DC-L04-09, L14-I-5")
     # ---- lint: shape
     rc = toks.get("radius.control")
     rcont = toks.get("radius.container")
     if rc and rcont:
         a_, b_ = _px(rc["resolved"]), _px(rcont["resolved"])
         if a_ == b_ and 0 < a_ < FULL:
-            rep.add("warning", "lint", f"radius.control and radius.container are both {a_:g}px", "Equal nested radii read as uneven", "DC-L04-05")
+            rep.add("warning", "lint", f"radius.control and radius.container are both {a_:g}px; nested corners will look uneven", "Equal nested radii read as uneven", "DC-L04-05")
         nst = toks.get("radius.nested")
         if nst and b_ > 0 and _px(nst["resolved"]) >= b_:
             rep.add("error", "lint", "radius.nested is not smaller than radius.container", "Nested radius = outer - padding", "DC-L04-05, S-L04-057")
     # ---- lint: materials
     if any(k == "color.surface.glass" for k in toks) and "color.surface.glassFallback" not in toks:
-        rep.add("error", "lint", "glass surface without a solid fallback", "Materials emit a solid twin (Reduce Transparency)", "DC-L04-16")
+        rep.add("error", "lint", "a glass surface has no solid fallback for people who turn off transparency", "Materials emit a solid twin (Reduce Transparency)", "DC-L04-16")
     # ---- lint: spacing (inner < outer, per density)
     if "density" in res.get("modifiers", {}):
         for dname in res["modifiers"]["density"]["contexts"]:
@@ -2355,42 +2355,42 @@ def validate_files(files, state, rep):
             inner = _px(t2["space.stack.md"]["resolved"])
             outer = _px(t2["space.section.sm"]["resolved"])
             if not (inner < outer and inner <= outer / 2):
-                rep.add("error", "lint", f"{dname}: inner gap {inner:g}px vs outer {outer:g}px breaks inner < outer",
+                rep.add("error", "lint", f"{dname}: the inner gap ({inner:g}px) must be at most half the outer gap ({outer:g}px)",
                         "Proximity: inner <= half the outer gap", "L15-P16, DC-L03-24")
     ladder = {_px(v["resolved"]) for k, v in toks.items() if re.fullmatch(r"space\.\d+", k)}
     for k, v in toks.items():
         if re.match(r"space\.(inset|stack|inline|section)\.", k) and _px(v["resolved"]) not in ladder:
-            rep.add("warning", "lint", f"{k} = {_px(v['resolved']):g}px is off the spacing ladder", "Spacing on scale", "DC-L03-02")
+            rep.add("warning", "lint", f"{k} = {_px(v['resolved']):g}px is not on the spacing scale", "Spacing on scale", "DC-L03-02")
     # ---- lint: dial combinations
     if dials:
         if dials.get("colorfulness", 0) > 75 and dials.get("density", 0) > 66:
-            rep.add("warning", "lint", "vivid color on a dense layout", "vivid-and-dense", "S-L15-047")
+            rep.add("warning", "lint", "vivid color on a dense layout can feel noisy", "vivid-and-dense", "S-L15-047")
         if params.get("signifier.minStrength") == "minimal-allowed" and dials.get("density", 0) > 33:
-            rep.add("warning", "lint", "minimal signifiers on a non-spacious layout", "minimal-signifiers-dense", "S-L15-004")
+            rep.add("warning", "lint", "buttons and links barely look clickable on a layout that is not roomy", "minimal-signifiers-dense", "S-L15-004")
         if dials.get("expression", 0) > 66 and (state.get("raw", {}).get("domain") or "").lower() in ("finance", "banking", "fintech"):
-            rep.add("warning", "lint", "expressive UI in a finance product", "expressive-finance", "S-L06-010")
+            rep.add("warning", "lint", "a very expressive look in a finance product can cost trust", "expressive-finance", "S-L06-010")
     if (state.get("preset") or meta.get("preset")) == "soft":
-        rep.add("warning", "lint", "soft/neumorphic preset fails 3:1 non-text contrast by design", "neumorphic-preset", "S-L15-060")
+        rep.add("warning", "lint", "the soft (neumorphic) look fails 3:1 edge contrast by design", "neumorphic-preset", "S-L15-060")
     for c in meta.get("macroConflicts") or []:
-        rep.add("warning", "lint", f"macros {', '.join(c['macros'])} push {c['dial']} in opposite directions; decide explicitly",
+        rep.add("warning", "lint", f"the feel words {', '.join(c['macros'])} pull {c['dial']} in opposite directions. Pick which one wins",
                 "Macro conflict", "L06 4.2 usage note")
     if (meta.get("color") or {}).get("placeholderBrand") and dials.get("colorfulness", 0) > 10:
-        rep.add("warning", "lint", "no brand color given; the accent uses a placeholder blue hue", "Brand color is a raw input", "DC-L06-06")
+        rep.add("warning", "lint", "no brand color yet, so the accent uses a stand-in blue", "Brand color is a raw input", "DC-L06-06")
     # ---- modes and tool limits
     flags = state.get("raw", {}).get("flags", {})
     if flags.get("darkMode", True) and len(modes) < 2:
-        rep.add("error", "lint", "flags.darkMode is on but there is no dark theme context", "Dark mode is a separate mapping", "DC-L01-18")
+        rep.add("error", "lint", "dark mode is on (flags.darkMode), but there is no dark theme", "Dark mode is a separate mapping", "DC-L01-18")
     plan = (state.get("exports") or {}).get("figmaPlan", "professional")
     limit = FIGMA_MODE_LIMITS.get(plan, 10)
     biggest = max([len(m["contexts"]) for m in res.get("modifiers", {}).values()] or [1])
     if biggest > limit:
-        rep.add("warning", "export", f"Figma {plan} allows {limit} mode(s) per collection; the largest modifier has {biggest}. "
-                "The Figma export splits modes into separate collections.", "Figma plan limits", "S-L07-014, S-L07-038")
+        rep.add("warning", "export", f"Figma {plan} allows {limit} mode(s) per collection, and the largest modifier has {biggest}. "
+                "The Figma export splits them into separate collections.", "Figma plan limits", "S-L07-014, S-L07-038")
     # ---- scale monotonicity (spec 6.3)
     def mono(vals, name, strict=True):
         bad_ = [(a, b) for a, b in zip(vals, vals[1:]) if (b <= a if strict else b < a)]
         if bad_:
-            rep.add("error", "lint", f"{name} is not monotonic: {bad_[0][0]:g} then {bad_[0][1]:g}", "Scales increase step by step",
+            rep.add("error", "lint", f"{name} does not grow step by step: {bad_[0][0]:g} then {bad_[0][1]:g}", "Scales increase step by step",
                     "DC-L02-09, DC-L03-02, DC-L04-20", name)
     mono(sizes, "font.size scale")
     mono(sorted(ladder), "space ladder")
@@ -2405,7 +2405,7 @@ def validate_files(files, state, rep):
             seg = [ys[i] for i in list(range(0, 8)) + [10, 11]]  # steps 1-8 and 11-12; 9-10 may be light fills
             ok = all(b <= a for a, b in zip(seg, seg[1:])) if mode == "light" else all(b >= a for a, b in zip(seg, seg[1:]))
             if not ok:
-                rep.add("error", "lint", f"color.{rname}.{mode} luminance is not monotonic across steps 1-8 and 11-12",
+                rep.add("error", "lint", f"color.{rname}.{mode} shades are out of order (steps 1-8 and 11-12 must get steadily darker or lighter)",
                         "Ramp steps are ordered by contrast", "DC-L01-03", f"color.{rname}.{mode}")
     # ---- orphans: primitives no semantic token uses (info only; ramps keep spare steps on purpose)
     used = set()
@@ -2418,8 +2418,8 @@ def validate_files(files, state, rep):
         orphans = sorted(p for p in pp - used if re.match(r"(space|radius|font\.size|border\.width|motion\.(duration|easing))\.", p))
         rep.stats["orphans"] = orphans
         if orphans:
-            rep.add("advisory", "lint", f"{len(orphans)} scale steps are not used by any named value (for example {', '.join(orphans[:3])}); "
-                    "fine if you plan to use them", "Orphan tokens", "spec 6.3")
+            rep.add("advisory", "lint", f"{len(orphans)} scale steps are not used by any named value yet (for example {', '.join(orphans[:3])}). "
+                    "That is fine if you plan to use them", "Orphan tokens", "spec 6.3")
     # ---- coverage (block statuses from the interview)
     blocks = state.get("blocks") or {}
     if blocks:
@@ -2429,12 +2429,12 @@ def validate_files(files, state, rep):
             counts[st] = counts.get(st, 0) + 1
         rep.stats["coverage"] = counts
         if counts.get("pending"):
-            rep.add("advisory", "coverage", f"{counts['pending']} blocks still pending: " + ", ".join(sorted(k for k, v in blocks.items()
+            rep.add("advisory", "coverage", f"{counts['pending']} building blocks still pending: " + ", ".join(sorted(k for k, v in blocks.items()
                     if (v.get("status") if isinstance(v, dict) else v) == "pending")[:12]), "Nothing missed", "BRIEF req. 5")
     # ---- designer-owned assets (coverage, never an error)
     open_hooks = [h for h, v in (state.get("hooks") or {}).items() if (v or {}).get("status", "pending") in ("pending", "unknown")]
     if open_hooks:
-        rep.add("advisory", "hooks", f"{len(open_hooks)} designer-owned assets not yet asked about: {', '.join(open_hooks)}",
+        rep.add("advisory", "hooks", f"{len(open_hooks)} assets a person must make, not asked about yet: {', '.join(open_hooks)}",
                 "Designer hooks, not designer replacement", "BRIEF req. 2, Q-brand-08")
 
 
@@ -2444,12 +2444,12 @@ def validate_dir(d, write_state_hash=True):
     state = merge_defaults(read_json(state_path)) if os.path.exists(state_path) else default_state()
     tokdir = os.path.join(d, "tokens")
     if not os.path.isdir(tokdir):
-        rep.add("error", "setup", "no tokens/ folder; run `engine.py generate` first", "", "")
+        rep.add("error", "setup", "there is no tokens/ folder yet. Run `engine.py generate` first", "", "")
         return rep
     files = load_token_dir(tokdir)
     meta = files.get("opendesigner.meta.json") or {}
     if os.path.exists(state_path) and meta.get("stateHash") and meta["stateHash"] != state_hash(read_json(state_path)):
-        rep.add("warning", "setup", "tokens are older than state.json; run `engine.py generate`", "", "")
+        rep.add("warning", "setup", "the tokens are older than state.json. Run `engine.py generate`", "", "")
     validate_files(files, state, rep)
     return rep
 
@@ -2518,11 +2518,11 @@ def plain_of(it):
     if cat == "targets" and m is not None:
         return f"{words_of(where) or where} is too small to tap or click: {m:g}px, needs {th:g}px."
     if cat == "dtcg":
-        return "The token files break the DTCG format: " + it["message"]
+        return "The token files break the DTCG file format: " + it["message"]
     if cat == "apca":
         return "Advice only: " + it["message"]
     if cat == "hooks":
-        return "Not asked yet (designer assets): " + it["message"].split(": ", 1)[-1]
+        return "Not asked yet (assets a person must make): " + it["message"].split(": ", 1)[-1]
     return it["message"][:1].upper() + it["message"][1:]
 
 
@@ -2535,7 +2535,7 @@ def print_report(rep, d, as_json=False):
         return
     label = {"error": "ERROR", "warn": "WARN ", "info": "NOTE "}
     ne, nw, ni = rep.count("error"), rep.count("warning"), rep.count("advisory")
-    head = "Passes: no errors." if not ne else f"Fails: {ne} error{'s' if ne != 1 else ''} to fix before export."
+    head = "Passes: no errors." if not ne else f"Fails: {ne} error{'s' if ne != 1 else ''} to fix before you export."
     print(f"{head} {nw} warning{'s' if nw != 1 else ''}, {ni} note{'s' if ni != 1 else ''}.  ({d})")
     for sev in ("error", "warn", "info"):
         for it in rep.items:
@@ -2546,7 +2546,7 @@ def print_report(rep, d, as_json=False):
             if it.get("fix") and sev != "info":
                 print(f"      Fix: {it['fix']}")
     st = rep.stats
-    print(f"Checked {st.get('contrastPairs', 0)} color pairs in every mode, {st.get('permutations', 0)} mode combinations, "
+    print(f"Checked {st.get('contrastPairs', 0)} color pairs in every mode, {st.get('permutations', 0)} mode combinations and "
           f"{st.get('tokens', 0)} tokens.")
 
 
@@ -2736,10 +2736,10 @@ def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, loc
     if set_by not in SET_BY:
         raise SystemExit(f"--set-by must be one of {', '.join(SET_BY)}")
     if is_locked(state, path) and not force:
-        raise SystemExit(f"{path} is locked; ask before changing it, then `engine.py unlock {path}` (or pass --force)")
+        raise SystemExit(f"{path} is locked. Ask the owner before changing it, then run `engine.py unlock {path}` (or pass --force).")
     if path.startswith("dials."):
         if value is not None and not (isinstance(value, (int, float)) and 0 <= value <= 100):
-            raise SystemExit("dial values are 0-100, or null to follow coupling")
+            raise SystemExit("A dial takes a number from 0 to 100, or null to follow the other dials.")
     if path.startswith("zoom."):
         if isinstance(value, int) and 0 <= value < len(ZOOM_LEVELS):
             value = ZOOM_LEVELS[value]
@@ -3776,7 +3776,7 @@ def render_design_md(d, files, meta, state, existing=""):
         zk = ztitle.get(title)
         if zk:
             z = zoom[zk]
-            nxt = f" Zoom in next with {', '.join(z['next'])}." if z["level"] != "detailed" and z["next"] else ""
+            nxt = f" To zoom in, answer {', '.join(z['next'])}." if z["level"] != "detailed" and z["next"] else ""
             li = ZOOM_LEVELS.index(z["level"])
             parts += [f"<!-- od:zoom area={zk} level={li} -->",
                       f"> Zoom: {z['level']} ({li} of 3), {z['decisions']} decision{'s' if z['decisions'] != 1 else ''} in this area.{nxt}", ""]
@@ -3827,9 +3827,9 @@ def render_design_md(d, files, meta, state, existing=""):
            "  card:", '    backgroundColor: "{colors.surface-raised}"', '    textColor: "{colors.on-surface}"',
            '    rounded: "{rounded.container}"', f"    padding: {dflt['inset']['xl']}px", "---", ""]
     out = ["\n".join(fm), f"# {state.get('name') or 'Design system'}", "",
-           f"> Generated by the OpenDesigner engine {ENGINE_VERSION} from `state.json`, the tokens and `decisions.md`. Do not edit it as a source: "
-           "run `engine.py set ...` then `engine.py generate` and `engine.py design-md`. Hand-written notes survive only inside "
-           "`<!-- od:keep -->` ... `<!-- /od:keep -->` blocks at the end of a section. The DTCG files in `tokens/` are canonical.", ""]
+           f"> Generated by the OpenDesigner engine {ENGINE_VERSION} from `state.json`, the tokens and `decisions.md`. Don't edit this file to change the system. "
+           "Run `engine.py set ...`, then `engine.py generate` and `engine.py design-md`. Hand-written notes survive only inside "
+           "`<!-- od:keep -->` ... `<!-- /od:keep -->` blocks at the end of a section. The DTCG files in `tokens/` are the source of truth.", ""]
 
     # 1 Overview
     principles = state.get("principles") or []
@@ -3843,12 +3843,12 @@ def render_design_md(d, files, meta, state, existing=""):
             f"- Platforms: {', '.join(raw.get('platforms') or [])}; inputs: {', '.join(raw.get('inputs') or [])}",
             f"- Direction: {('preset ' + state['preset']) if state.get('preset') else 'no named preset'}"
             + (f"; brand macros {', '.join((m if isinstance(m, str) else m['id'] + ' x' + str(m.get('strength', 1))) for m in state['macros'])}" if state.get("macros") else ""),
-            "", "**Principles (ranked).**", pl, "", "**Dial positions.** Three posture dials set the overall stance; five character dials tune it.", ""]
+            "", "**Principles (ranked).**", pl, "", "**Dial positions.** Three posture dials set the overall stance. Five character dials fine-tune it.", ""]
     body += [f"- {dial_words(k, dials[k], params)}" for k in DIALS]
-    body += ["", "**Zoom by area** (sketch, broad, defined, detailed; stop at any level, each one works):", "",
+    body += ["", "**Zoom by area** (sketch, broad, defined, detailed). You can stop at any level; each one works.", "",
              _md_table(["Area", "Zoom", "Next questions"], [(t, zoom[k]["level"], ", ".join(zoom[k]["next"]) if zoom[k]["level"] != "detailed" else "-")
                                                            for k, t in ZOOM_AREAS if k != "overview"])]
-    body += ["", "Tokens in `tokens/` (DTCG 2025.10 with `opendesigner.resolver.json`) are canonical; this file is a generated view."]
+    body += ["", "The tokens in `tokens/` (DTCG 2025.10 with `opendesigner.resolver.json`) are the source of truth. This file is a generated view."]
     out.append(section("Overview", "\n".join(body)))
 
     # 2 Colors
@@ -3875,9 +3875,9 @@ def render_design_md(d, files, meta, state, existing=""):
                if brand and not ci.get("pinnedStep") else "")
             + (" The exact hex cannot carry text at the contrast target, so it stays in `color.brand.seed` for logos and marketing."
                if ci.get("brandPinFailed") else ""),
-            "", "**How ramps are built.** Twelve steps per hue in OKLCH, contrast-indexed: step 8 is solved to at least 3:1 (boundaries and focus), "
-            "step 10 and 11 to the text minimum on backgrounds 1-4, step 12 to at least 7:1; steps 2-6 are spaced evenly in lightness "
-            "between step 1 and step 7. Light and dark ramps are solved separately; dark solids are lighter and carry dark text "
+            "", "**How ramps are built.** Each hue gets twelve steps in OKLCH, placed by contrast. Step 8 reaches at least 3:1 (edges and focus). "
+            "Steps 10 and 11 reach the text minimum on backgrounds 1-4. Step 12 reaches at least 7:1. Steps 2-6 are spaced evenly in lightness "
+            "between step 1 and step 7. Light and dark ramps are solved separately. Dark solids are lighter and carry dark text "
             f"(dark mode is a separate mapping, never an inversion). Text minimum: {ci['textMin']}:1 "
             f"({'WCAG 2.2 AAA' if ci['textMin'] > 4.5 else 'WCAG 2.2 AA'}).",
             "", _md_table(["Ramp", "Light steps 1-12", "Solid carries"], ramp_rows),
@@ -3889,7 +3889,7 @@ def render_design_md(d, files, meta, state, existing=""):
             "", "**Use / avoid.**", "- Use one solid accent fill per view for the primary action; spend chroma on small, meaningful elements.",
             "- Avoid gray text on colored fills; use the matching `text.on*` role.",
             "- Avoid color as the only signal: pair status colors with an icon or label.",
-            "- Charts: no chart palette is generated yet; derive categorical colors from the status and accent hues and validate them separately."]
+            "- Charts: no chart palette is generated yet. Take chart colors from the status and accent hues, and check them separately."]
     out.append(section("Colors", "\n".join(body)))
 
     # 3 Typography
@@ -3908,8 +3908,8 @@ def render_design_md(d, files, meta, state, existing=""):
             "", f"- Text face: {', '.join(fam) if isinstance(fam, list) else fam}. Licence status (hook H-type): **{h_type}**."
             + (" A system font needs no licence; it must not be embedded in apps." if raw.get("textFace") in (None, "system") else ""),
             f"- Weights: {', '.join(f'{k} {v}' for k, v in tinfo['weights'].items())} (two or three distinct weights per view).",
-            "- Line heights snap to a 4px grid: 1.5 up to 17px, 1.4 to 26px, 1.25 to 44px, 1.12 above; tracking +0.02em at 11-12px, "
-            "-0.01em from 32px, -0.02em from 48px.",
+            "- Line heights snap to a 4px grid: 1.5 up to 17px, 1.4 to 26px, 1.25 to 44px, 1.12 above.",
+            "- Letter spacing: +0.02em at 11-12px, -0.01em from 32px, -0.02em from 48px.",
             "- Text scaling: CSS sizes are rem, line heights unitless, so text scales to 200% (WCAG 1.4.4); containers must grow with it.",
             "- Scripts: " + (", ".join(f"{k}: line height x{v.get('lineHeightFactor')}" + (", tracking 0" if v.get("zeroTracking") else "")
                                       for k, v in scripts.items()) if scripts else "Latin only; add scripts in raw.scripts to get per-script line heights (DC-L02-25)."),
@@ -3926,7 +3926,7 @@ def render_design_md(d, files, meta, state, existing=""):
                       " / ".join(str(info["section"][k]) for k in ("sm", "md", "lg")),
                       " / ".join(str(info["control"][k]) for k in ("sm", "md", "lg")), info["ratio"]))
     body = [f"**Intent.** Everything sits on a {sinfo['unit']}px unit: ladder {', '.join(str(x) for x in sinfo['ladder'])}. "
-            f"Density is a mode on the semantic layer (default **{params['space.densityMode']}**); primitives and hit-area minimums never change.",
+            f"Density is a mode on the semantic layer (default **{params['space.densityMode']}**). Primitives and minimum tap areas never change.",
             "", _md_table(["Density", "inset xs/sm/md/lg/xl", "section sm/md/lg", "control sm/md/lg", "outer:inner"], drows),
             "", "- Target sizes: " + ", ".join(f"{k} {v}px" for k, v in sinfo["targets"].items())
             + f"; `size.target.min` is the floor for the primary input, and `space.target.gap` separates adjacent targets.",
@@ -3960,8 +3960,8 @@ def render_design_md(d, files, meta, state, existing=""):
     # 6 Shapes
     body = [f"**Intent.** Roundness {dials['roundness']}/100 gives controls a **{shp['control']}** radius; details {shp['detail']}px, containers "
             f"{shp['container']}px, overlays {shp['overlay']}px, people full. Controls under 32px tall use `radius.controlSm` ({shp['controlSm'] if shp['controlSm'] < FULL else 'full'}).",
-            "", f"- Nested radius: inner = max(outer - padding, smallest step), here {shp['nested']}px inside a container with `space.inset.lg` "
-            "padding; equal radii on nested shapes look uneven (DC-L04-05).",
+            "", f"- Nested radius: inner = max(outer - padding, smallest step). Here it is {shp['nested']}px inside a container with `space.inset.lg` "
+            "padding. Equal radii on nested shapes look uneven (DC-L04-05).",
             f"- Focus ring: {shp['focusWidth']}px, 2px offset, radius = control radius + offset ({shp['focusRadius'] if shp['focusRadius'] < FULL else 'full'}).",
             f"- Icons: {shp['iconCorners']} corners, {shp['iconCaps']} caps. On iOS, use continuous corners (DC-L04-04).",
             "- Signature shapes: none generated; a brand shape library is a designer asset (hook H-motif)."]
@@ -3987,10 +3987,13 @@ def render_design_md(d, files, meta, state, existing=""):
     vr = Report()
     validate_files(files, state, vr)
     warns = [i for i in vr.items if i["severity"] in ("error", "warn")]
-    body = ["**Enforced by construction** (the generator cannot produce a violation): text contrast "
-            f"{ci['textMin']}:1 and 3:1 for boundaries in every mode; on-color text picked automatically; hit areas "
-            + ", ".join(f"{k} {v}px" for k, v in sinfo["targets"].items()) + "; focus ring 2px with 2px offset; reduced-motion mode; "
-            "inner spacing below outer; three text colors; nested radii.",
+    body = ["**Enforced by construction.** The generator cannot break these:",
+            f"- text contrast {ci['textMin']}:1, and 3:1 for edges, in every mode",
+            "- text on colored fills picked automatically",
+            "- tap areas " + ", ".join(f"{k} {v}px" for k, v in sinfo["targets"].items()),
+            "- a 2px focus ring with a 2px offset",
+            "- a reduced-motion mode",
+            "- inner spacing smaller than outer spacing, three text colors, and nested radii",
             "", "**Do**", "- Use semantic tokens; never raw hex, px or ms values in components.",
             "- Keep one primary action per view and at most three type sizes per view.",
             "- Pair every status color with an icon or label; underline links in running text.",
@@ -4037,7 +4040,7 @@ def render_design_md(d, files, meta, state, existing=""):
                                                        ("App icon", "H-appicon", hs("H-appicon")), ("Custom icons", "H-icons", hs("H-icons")),
                                                        ("Illustration", "H-illus", hs("H-illus")), ("Photography", "H-photo", hs("H-photo")),
                                                        ("Motifs and brand shapes", "H-motif", hs("H-motif"))]),
-            "", "- Placeholders are labelled as placeholders; a generated stand-in is never presented as a finished brand asset.",
+            "", "- Placeholders are labelled as placeholders. A generated stand-in is never shown as a finished brand asset.",
             "- Icon-only buttons need an accessible name and a hit area of `size.target.min`."]
     out.append(section("Iconography and Imagery", "\n".join(body)))
 
@@ -4053,12 +4056,13 @@ def render_design_md(d, files, meta, state, existing=""):
 
     # 13 Accessibility
     body = [f"**Intent.** Standard: WCAG 2.2 {'AAA for text' if ci['textMin'] > 4.5 else 'AA'}. APCA is reported as advice only.",
-            "", "**The system guarantees:** text and boundary contrast in every mode, visible focus (2px ring, 2px offset, 3:1), target floors by input, "
-            "a reduced-motion mode, rem-based type for 200% text scaling, and on-color text chosen automatically.",
-            "", "**Product teams own:** accessible names and labels, alt text, reading and focus order, not using color alone, error "
-            "identification, dismissible dialogs, no pre-checked consent, and captions for media.",
-            "", "**Test matrix:** keyboard only and a screen reader (VoiceOver, NVDA or TalkBack) per platform; 200% zoom; forced colors "
-            "(Windows High Contrast); reduced motion; touch on a phone for every surface that allows touch."]
+            "", "**The system guarantees:**", "- text and edge contrast in every mode", "- visible focus (2px ring, 2px offset, 3:1)",
+            "- minimum target sizes for each kind of input", "- a reduced-motion mode", "- rem-based type, so text scales to 200%",
+            "- text on colored fills chosen automatically",
+            "", "**Product teams own:** accessible names and labels, alt text, reading and focus order, and never using color alone. "
+            "Also: clear error messages, dialogs that can be closed, no pre-checked consent boxes, and captions for media.",
+            "", "**Test on each platform:**", "- keyboard only", "- a screen reader (VoiceOver, NVDA or TalkBack)", "- 200% zoom",
+            "- forced colors (Windows High Contrast)", "- reduced motion", "- touch on a phone, for every surface that allows touch"]
     out.append(section("Accessibility", "\n".join(body)))
 
     # 14 Platforms and Devices
@@ -4091,7 +4095,7 @@ def render_design_md(d, files, meta, state, existing=""):
             f"`{prefix.capitalize()}Theme` in Compose.",
             "3. Do not change a locked decision without asking the owner.",
             "4. To change the system: `engine.py set <path> <value> --why \"...\"`, then `engine.py generate`, `engine.py validate`, `engine.py design-md`.",
-            "5. To extend: add a decision (never hand-edit tokens or this file), keep semantic names stable across modes, and deprecate instead of deleting."]
+            "5. To extend: add a decision (never hand-edit tokens or this file). Keep semantic names the same across modes. Deprecate instead of deleting."]
     out.append(section("For Agents", "\n".join(body)))
     return "\n".join(out).rstrip() + "\n"
 
@@ -4109,7 +4113,7 @@ def render_product_md(state, existing=""):
     surf = ctx.get("surfaces") or []
     sc = ctx.get("scope") or {}
     out = [f"# {state.get('name') or 'Product'}: product truth", "",
-           "> Generated by the OpenDesigner engine from `state.json`; kept apart from DESIGN.md because it changes at a different rate. "
+           "> Generated by the OpenDesigner engine from `state.json`. It is kept apart from DESIGN.md because it changes at a different pace. "
            "Hand-written notes survive only inside `<!-- od:keep -->` blocks.", ""]
     out.append(sec("Product", ctx.get("product") or state.get("summary") or "Not recorded yet (Stage 01)."))
     out.append(sec("Audience", ctx.get("audience") or "Not recorded yet (Q-aud-01)."))
@@ -4740,13 +4744,13 @@ def cmd_sketch(d, name=None, brand=None, audience=None, platforms=None, feel=Non
         known = {m["id"] for m in levers()["macros"]}
         bad = [m for m in macros if m not in known]
         if bad:
-            raise SystemExit(f"unknown feel {bad}; choose from {', '.join(sorted(known))}")
+            raise SystemExit(f"Unknown feel word {bad}. Choose from: {', '.join(sorted(known))}.")
         cmd_set(d, "macros", macros, why, quiet=True)
     if theme:
         cmd_set(d, "answers.Q-theme-01", theme, why, quiet=True)
     code = cmd_build(d) if not quiet else 0
     if not quiet:
-        print("This is a sketch: every area works, and each can be zoomed in later (see the Zoom lines in DESIGN.md).")
+        print("This is a sketch: every part works, and most choices are still defaults. Zoom into any area later (see the Zoom lines in DESIGN.md).")
     return code
 
 
@@ -4876,20 +4880,20 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
         total = len(findings)
         print(f"Review of {project}: {scanned} files scanned.")
         if total:
-            print(f"{total} hard-coded value{'s' if total != 1 else ''} bypass the tokens: "
+            print(f"{total} hard-coded value{'s' if total != 1 else ''} skip the tokens: "
                   + ", ".join(f"{n} {k}{'s' if n != 1 else ''}" for k, n in sorted(by.items())) + ".")
             for f_ in findings[:limit]:
                 print(f"  {f_['file']}:{f_['line']}  {f_['value']}  ->  {f_['fix']}")
             if total > limit:
                 print(f"  ... and {total - limit} more (use --json for all).")
-            print("  Keep a raw value on purpose by adding the comment od-ignore on that line.")
+            print("  To keep a raw value on purpose, add the comment od-ignore on that line.")
         else:
             print("No hard-coded colors, sizes or radii found: the code uses the tokens.")
         if missing == ["DESIGN.md"]:
-            print("DESIGN.md is missing: run `engine.py design-md`.")
+            print("DESIGN.md is missing. Run `engine.py design-md`.")
         elif stale:
             print(f"DESIGN.md is out of date in {len(stale)} section{'s' if len(stale) != 1 else ''}: {', '.join(stale)}. "
-                  "Fix: run `engine.py design-md` (hand notes inside od:keep blocks are kept).")
+                  "Fix: run `engine.py design-md`. Notes inside od:keep blocks are kept.")
         else:
             print("DESIGN.md matches state.json.")
     return 1 if strict and (findings or stale or missing) else 0
@@ -4906,11 +4910,11 @@ def cmd_feedback(d, text, kind="idea", quiet=False, area=None, question=None):
         raise SystemExit(f"--kind must be one of {', '.join(FEEDBACK_KINDS)}")
     text = " ".join(str(text).split())
     if not text:
-        raise SystemExit("give the feedback text")
+        raise SystemExit("Add the feedback text, in quotes.")
     fp = os.path.join(d, "feedback.md")
     if not os.path.exists(fp):
         write_text(fp, "# Feedback\n\nGaps, bugs, confusing steps and ideas found while using OpenDesigner. Each entry has a ready-to-file "
-                       "issue link; nothing is posted unless you open the link and submit it yourself.\n")
+                       "issue link. Nothing is posted unless you open the link and submit it yourself.\n")
     title = f"[{kind}]" + (f"[{area}]" if area else "") + f" {text[:70]}" + ("..." if len(text) > 70 else "")
     where = ", ".join(x for x in (f"area {area}" if area else "", f"question {question}" if question else "") if x)
     body = (f"**Kind:** {kind}\n\n" + (f"**Where:** {where}\n\n" if where else "") + f"**What happened or what is missing:**\n{text}\n\n"

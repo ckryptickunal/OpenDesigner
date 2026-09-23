@@ -10,13 +10,13 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 
 ## Q-type-05 · One type family, or a pair?
 Zoom 3 detailed · weight medium · changes 2 decisions · class G · cards DC-L02-03
-- **Ask:** "One type family, or a pair?"
-- **Why:** One family feels calm and coherent; a serif or display partner adds editorial contrast [DC-L02-03].
+- **Ask:** "Use one font family for everything, or pair two fonts?"
+- **Why:** One font family feels calm and unified. A serif or headline font as a partner adds contrast, like in a magazine [DC-L02-03].
 - **Options:**
   - `one` One family for everything; weights and optical sizes create contrast (Windows, Apple, Fluent, Polaris guidance).
   - `superfamily` One family with display and text cuts (Google Sans + Google Sans Text; Inter Display + Inter at Linear).
   - `sans-serif` Sans for UI plus a serif (Carbon: Plex Sans and Plex Serif).
-  - `display-face` A distinct display face for brand moments [DC-L02-03].
+  - `display-face` A separate headline font for brand moments [DC-L02-03].
 - **Default:** 1 UI family + 1 mono, with an optional serif or display face for marketing *Source:* card heuristic [DC-L02-03].
 - **Show:** a marketing hero and a product panel with each pairing.
 - **Use / avoid:** add a second face only for a change of job (display vs text, code); avoid near-identical pairs that read as a mistake [DC-L02-03; L15 P49].
@@ -24,25 +24,25 @@ Zoom 3 detailed · weight medium · changes 2 decisions · class G · cards DC-L
 
 ## Q-type-06 · Which font for code and numbers?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L02-05, DC-L02-26
-- **Ask:** "Which font for code and numbers, and should table numbers be tabular?"
-- **Why:** Mono reads technical; tabular figures stop numbers jittering in tables and live values [DC-L02-05].
+- **Ask:** "Which font for code and numbers, and should table digits all be the same width?"
+- **Why:** A code font (mono) looks technical. Digits that are all the same width (tabular figures) keep numbers still in tables and live values [DC-L02-05].
 - **Options:**
   - `system-mono` System mono stack (`ui-monospace, SFMono-Regular,...`: Primer, Polaris).
-  - `brand-mono` Brand mono (IBM Plex Mono code-01 12/16; Atlassian Mono).
-  - `numeric-face` A dedicated numeric or metric style for KPIs (Fluent Bahnschrift; Atlassian `font.metric.large` 28/32).
+  - `brand-mono` A brand code font (IBM Plex Mono code-01 12/16; Atlassian Mono).
+  - `numeric-face` A style just for key numbers (Fluent Bahnschrift; Atlassian font.metric.large 28/32).
 - **Default:** system mono stack plus `tabular-nums` on numeric table cells; a metric style only if the product has dashboards *Source:* card heuristic [DC-L02-05].
 - **Show:** a code block, a table column and a live counter with proportional vs tabular figures.
 - **Use / avoid:** use tabular figures in tables, clocks and anything that updates; avoid mono for body text [DC-L02-05].
 - **Skip:** yes.
 
-## Q-type-07 · Should the font use variable weights and automatic optical sizing?
+## Q-type-07 · Should the font use in-between weights and reshape letters for each size?
 Zoom 3 detailed · weight high · changes 5 decisions · class G · cards DC-L02-04
-- **Ask:** "Use variable weights and automatic optical sizing where the font supports it?"
-- **Why:** Optical sizing makes small text sturdier and large text sleeker; without it, display text in a text cut looks clunky [DC-L02-04].
+- **Ask:** "If the font allows, should it use in-between weights and reshape letters for each size?"
+- **Why:** Optical sizing makes small text sturdier and large text sleeker. Without it, big headings set in the body version of a font look clunky [DC-L02-04].
 - **Options:**
   - `variable-opsz` Variable weight plus optical size tied to font size (SF Pro, Segoe UI Variable 8-36pt, Inter opsz 14-32; Material sets opsz = font size).
-  - `static` Static fonts, discrete weights (Roboto as applied by M3 components).
-  - `variable-wght` Variable weight axis, including in-between weights (Polaris 450/550/650).
+  - `static` Static fonts, set weights only (Roboto as applied by M3 components).
+  - `variable-wght` Variable weight, with in-between weights (Polaris 450/550/650).
 - **Default:** `variable-opsz`: variable-opsz when the face has it; otherwise separate display tracking and line-height values above about 24px *Source:* card heuristic [DC-L02-04].
 - **Show:** a size ramp from 11px to 64px with opsz on and off.
 - **Use / avoid:** use opsz tied to size; avoid setting display sizes in a text cut without tracking adjustments [DC-L02-04, DC-L02-14].

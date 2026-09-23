@@ -12,12 +12,12 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 
 ## Q-color-20 · How should hover and pressed states change color?
 Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L01-17
-- **Ask:** "Should hover and pressed states use an overlay or a step darker?"
-- **Why:** Overlays give soft, consistent feedback on any color, including dynamic ones; step shifts give crisper, exact changes per theme [DC-L01-17].
+- **Ask:** "On hover and press, should colors change with a see-through layer or a step along the shades?"
+- **Why:** Overlays give soft, steady feedback on any color, even colors set by the device. Step shifts give crisper, exact changes in each theme [DC-L01-17].
 - **Options:**
-  - `hybrid` Step shift by default with an overlay fallback for dynamic or user colors [DC-L01-17].
-  - `overlay` State layers: an overlay of the content color, hover +8%, focus +10%, press +10%, drag +16% (Material 3).
-  - `step-shift` Step shift on the ramp: hover one step, pressed two steps toward more contrast (Carbon half steps) [DC-L01-17].
+  - `hybrid` Shade steps by default, with a see-through layer for colors the user or device picks [DC-L01-17].
+  - `overlay` See-through state layers: an overlay of the content color, hover +8%, focus +10%, press +10%, drag +16% (Material 3).
+  - `step-shift` Step along the shades: hover one step, pressed two steps toward more contrast (Carbon half steps) [DC-L01-17].
 - **Default:** `hybrid`: hybrid *Source:* card heuristic, overlays only where the color is unknown at design time [DC-L01-17].
 - **Show:** a button, list row and chip you can hover and press on the preview, with the resulting token value shown.
 - **Use / avoid:** use overlays for components that sit on user or dynamic colors; avoid state changes that rely on a hue shift alone [DC-L01-17, DC-L01-23].
@@ -27,7 +27,7 @@ Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L01-1
 Zoom 2 defined · weight low · changes 0 decisions · class G · cards DC-L01-19
 - **Show if:** Q-theme-01 includes dark
 - **Ask:** "How dark should dark mode be: pure black, near-black, or charcoal?"
-- **Why:** Pure black is dramatic but smears on OLED when scrolling; near-black looks sleek; charcoal is softer for long reading [DC-L01-19].
+- **Why:** Pure black looks dramatic but smears on OLED screens when you scroll. Near-black looks sleek, and charcoal is softer for long reading [DC-L01-19].
 - **Options:**
   - `black` Pure black #000: cinematic, halation and smear on OLED.
   - `near-black` Near-black #0D1117 to #161616: sleek, modern (Primer, Carbon Gray 100, Material tone 4).

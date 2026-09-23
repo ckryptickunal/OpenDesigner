@@ -10,11 +10,11 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 
 ## Q-color-22 · How many text colors, and are they solid or transparent?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L01-14
-- **Ask:** "How many text colors, solid or transparent?"
-- **Why:** Solid text tokens stay crisp over any background; opacity-based text blends with tinted surfaces but is less predictable [DC-L01-14].
+- **Ask:** "How many text colors, and should they be solid or see-through?"
+- **Why:** Solid text colors stay crisp on any background. See-through text blends with tinted surfaces but is harder to predict [DC-L01-14].
 - **Options:**
   - `solid-levels` Solid tokens per level (Carbon `$text-primary`/`$text-secondary`; Fluent `colorNeutralForeground1`).
-  - `opacity-levels` Opacity levels (Material 2 dark: 87%, 60%, 38% white).
+  - `opacity-levels` See-through levels (Material 2 dark: 87%, 60%, 38% white).
   - `on-colors` Plus an on-color for every bold fill (Material `on-primary`, Primer `fgColor-onEmphasis`).
 - **Default:** solid primary, secondary, tertiary/placeholder, disabled, inverse, plus an on-color per bold fill; secondary text passes 4.5:1 on the lowest surface it appears on *Source:* card heuristic [DC-L01-14]; BOARD L15 note (2-3 text colors per view).
 - **Show:** a text ladder on every surface tier, each with its ratio.
@@ -24,7 +24,7 @@ Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L01-
 ## Q-color-23 · How strong should borders be, and what color is the focus ring?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L01-16
 - **Ask:** "How strong should borders be, and what color is the focus ring?"
-- **Why:** Strong outlines feel explicit and form-heavy; subtle borders plus tonal fills feel softer; a brand focus ring feels branded, a black/white ring always works [DC-L01-16].
+- **Why:** Strong outlines feel clear and heavy, like a form; light borders with tinted fills feel softer. A brand-colored focus ring feels branded; a black/white ring always works [DC-L01-16].
 - **Options:**
   - `two-tier` Two tiers: `outline` for fields, `outline-variant` for dividers (Material).
   - `by-purpose` Border steps by purpose: decorative, field, control (Spectrum 200-300, 400, 600; Radix steps 6, 7, 8).
@@ -35,16 +35,16 @@ Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L01-
 - **Use / avoid:** use the 3:1 border token whenever an input's only boundary is its border; avoid decorative borders to mark interactive boundaries [DC-L01-16].
 - **Skip:** yes.
 
-## Q-color-24 · Which accessibility color themes should ship?
+## Q-color-24 · What color themes should we ship to help with accessibility?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L01-20
-- **Ask:** "Which accessibility color themes should ship: high contrast, color-blind, forced colors?"
-- **Why:** High-contrast modes trade brand nuance for legibility; forced colors reduce the UI to the user's palette, so meaning carried only by fills or shadows disappears [DC-L01-20].
+- **Ask:** "Which extra themes do you need: high contrast, color-blind, or forced colors?"
+- **Why:** High-contrast modes give up some brand feel to be easier to read. Forced colors swap in the user's own colors, so meaning shown only by fills or shadows is lost [DC-L01-20].
 - **Options:**
-  - `forced-colors` A forced-colors-safe component layer: borders, not only fills or shadows [DC-L01-20].
-  - `contrast-levels` Contrast levels standard, medium (3:1 minimum) and high (7:1) in both modes (Material).
-  - `increased` Increased-contrast variant of every custom color (Apple).
+  - `forced-colors` Parts that still work in forced colors: borders, not only fills or shadows [DC-L01-20].
+  - `contrast-levels` Standard, medium (3:1 minimum) and high (7:1) contrast in light and dark (Material).
+  - `increased` A version of each custom color with more contrast (Apple).
   - `high-contrast` High-contrast themes at 7:1 (Primer).
-  - `cvd` Color-blind themes (Primer protanopia-deuteranopia, tritanopia).
+  - `cvd` Themes for people who mix up red and green, or blue and yellow (Primer).
 - **Default:** `forced-colors`: forced-colors-safe layer always; high contrast as the first extra mode; color-blind themes for data-dense or status-heavy products *Source:* card heuristic [DC-L01-20].
 - **Show:** the preview screen in each checked theme, including a simulated forced-colors rendering.
 - **Use / avoid:** use a border or icon wherever status or selection is conveyed by fill; avoid focus rings drawn only with box-shadow (forced colors removes shadows) [DC-L01-20].
@@ -53,24 +53,24 @@ Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L01-
 ## Q-color-25 · Where are gradients allowed?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L01-25
 - **Ask:** "Where are gradients allowed?"
-- **Why:** Gradients add energy and brand warmth but reduce clarity in dense UIs and compete with status color [DC-L01-25].
+- **Why:** Gradients add energy and brand warmth. But they make busy screens less clear and compete with status colors [DC-L01-25].
 - **Options:**
-  - `brand-only` Brand and marketing surfaces only, interpolated in OKLab (Tailwind v4 default).
+  - `brand-only` Brand and marketing only, blended in OKLab (Tailwind v4 default).
   - `none` No gradients anywhere [DC-L01-25].
-  - `components` Gradients on components too (consumer, AI and creative products) [DC-L01-25, inferred].
+  - `components` Gradients on UI parts too (consumer, AI and creative products) [DC-L01-25, inferred].
 - **Default:** `brand-only`: brand-only; never on interactive components *Source:* card heuristic [DC-L01-25].
 - **Show:** a hero banner with gradients interpolated in sRGB and OKLab (the sRGB one shows a gray "dead zone").
 - **Use / avoid:** use a sequential palette, not a gradient, when color carries data meaning (Carbon) ; avoid P3 gradients without an sRGB variant.
 - **Skip:** yes.
 
-## Q-color-26 · Should the system include transparent colors?
+## Q-color-26 · Should the system have see-through colors?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L01-27
-- **Ask:** "Should the system include transparent colors?"
-- **Why:** Alpha colors let hover, selection and borders pick up the surface beneath, so they look integrated on tinted surfaces and photos [DC-L01-27].
+- **Ask:** "Which see-through (transparent) colors should the system have?"
+- **Why:** See-through (alpha) colors let hover, selection and borders pick up the color below. They then blend in on tinted surfaces and photos [DC-L01-27].
 - **Options:**
-  - `alpha-neutrals` Alpha neutrals only (Atlassian Neutral100A-500A).
+  - `alpha-neutrals` See-through grays only (Atlassian Neutral100A-500A).
   - `alpha-ramps` Alpha ramps mirroring every solid ramp (Radix `--blue-a1..a12`, blackA, whiteA).
-  - `media-set` Transparent white/black for use over media (Spectrum's 8 values).
+  - `media-set` See-through white and black for use over photos and video (Spectrum's 8 values).
   - `runtime` Runtime opacity via `color-mix()` (Tailwind `bg-blue-500/50`) [DC-L01-27].
 - **Default:** `alpha-neutrals`: alpha-neutrals (4-5 steps) for hover, borders and scrims; solid colors for text *Source:* card heuristic [DC-L01-27].
 - **Show:** a hover state over a white card, a tinted panel and a photo, solid vs alpha.

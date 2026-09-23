@@ -12,14 +12,14 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 
 ## Q-form-01 · What style should form fields have, and where do labels go?
 Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L08-16, DC-L13-05
-- **Ask:** "Outlined or filled fields, with labels always visible above them?"
-- **Why:** Filled fields feel soft and app-like, outlined feel crisp and form-heavy; placeholder-only labels cause seven known problems [DC-L08-16, DC-L13-05].
+- **Ask:** "Should text boxes have a border or a shaded fill, and where should their labels go?"
+- **Why:** Filled fields feel soft and app-like, while outlined fields feel crisp and form-like. Using hint text inside the box as the only label causes seven known problems [DC-L08-16, DC-L13-05].
 - **Options:**
-  - `outlined` Outlined fields (M3 outlined; Carbon).
-  - `filled` Filled fields (M3 filled).
-  - `label-top` Persistent label above, hint under the label.
-  - `placeholder-label` Placeholder as label: rejected (memory strain, no way to check entries).
-  - `mark-minority` Mark whichever of required/optional is rarer, "(optional)" or "(required)".
+  - `outlined` Fields with a border (M3 outlined; Carbon).
+  - `filled` Fields with a shaded fill (M3 filled).
+  - `label-top` Label always above, hint under the label.
+  - `placeholder-label` Hint text inside the box as the label: rejected (memory strain, no way to check entries).
+  - `mark-minority` Mark only the rarer of required or optional, "(optional)" or "(required)".
 - **Default:** `outlined`: outlined, top labels of 1-3 words without colons, hint under the label, the rarer of required/optional marked, `autocomplete` on personal-data fields *Source:* card heuristics [DC-L08-16, DC-L13-05].
 - **Show:** the sign-up form in each style, typed into live.
 - **Use / avoid:** use a visible label on every field; avoid placeholder-only labels (a lint warning) [DC-L13-05; L13 E1].
@@ -27,39 +27,39 @@ Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L08-1
 
 ## Q-form-02 · When should forms show errors, and should the submit button ever be disabled?
 Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L13-06, DC-L08-17, DC-L08-10
-- **Ask:** "Check fields when people leave them, show a summary on submit, and never disable the submit button?"
-- **Why:** Premature errors feel hostile; on-submit keeps forms calm; disabled buttons hide why an action can't run [DC-L13-06, DC-L08-17, DC-L08-10].
+- **Ask:** "When should a form check answers, and can the submit button ever be turned off?"
+- **Why:** Errors that show too early feel hostile, and checking on submit keeps forms calm. A disabled button hides why the action can't run [DC-L13-06, DC-L08-17, DC-L08-10].
 - **Options:**
-  - `on-blur` On blur ("reward early, punish late"): clear the error on the keystroke that fixes it; validate at complete length for ZIP and phone.
-  - `on-submit-summary` On submit with an error summary that takes focus, "Error:" prefix, inline messages (GOV.UK).
-  - `disable-short-forms` Disable submit on short forms until valid, never on long ones (Carbon).
-  - `never-disable` Never disable submit; explain instead (Atlassian).
+  - `on-blur` When you leave a field ("reward early, punish late"): clear the error on the keystroke that fixes it; validate at complete length for ZIP and phone.
+  - `on-submit-summary` On submit, a list of errors at the top that takes focus, "Error:" prefix, notes by each field (GOV.UK).
+  - `disable-short-forms` Turn off submit on short forms until all is right, never on long ones (Carbon).
+  - `never-disable` Never turn off submit; explain the problem instead (Atlassian).
 - **Default:** `on-blur`: on-blur for format checks, on submit otherwise, summary plus inline for forms over about 5 fields; never-disable, with `aria-disabled` and helper text when an action truly cannot run *Source:* card heuristics [DC-L13-06, DC-L08-17, DC-L08-10]; systems disagree (see Disagreements).
 - **Show:** the live form with timing toggles.
 - **Use / avoid:** use on-blur validation for format checks; avoid flagging a field before the person has finished typing [DC-L13-06].
 - **Skip:** yes.
 
-## Q-form-04 · Where should confirmations and notifications appear: inline, toast, banner or dialog?
+## Q-form-04 · Where should messages like 'Saved' show: in place, a toast, a banner or a pop-up?
 Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L08-18, DC-L13-09
-- **Ask:** "Inline or banner by default, toasts only for low-stakes confirmations with undo?"
-- **Why:** Toasts keep layouts still but flash and vanish; banners persist and are findable; systems disagree on whether toasts belong at all [DC-L08-18, DC-L13-09].
+- **Ask:** "Where should messages like 'Saved' appear: in place, in a banner, or in a toast that fades?"
+- **Why:** Toasts keep the layout still but flash by and vanish, while banners stay put and are easy to find. Systems disagree on whether toasts belong at all [DC-L08-18, DC-L13-09].
 - **Options:**
   - `inline-banner` Inline or banner by default; toasts only for low-stakes confirmations with undo, never auto-dismissing toasts that contain actions (Carbon matrix of 4 statuses x 7 types) [DC-L13-09].
   - `no-toasts` No toasts; banners and dialogs only (Primer).
-  - `toasts-widely` Toasts and flags widely (M3 snackbar, Atlassian flags).
+  - `toasts-widely` Toasts and flags used widely (M3 snackbar, Atlassian flags).
 - **Default:** `inline-banner`: inline-banner; the message goes where the cause is *Source:* card heuristics [DC-L08-18, DC-L13-09]; systems disagree (see Disagreements).
 - **Show:** the save action with each channel.
 - **Use / avoid:** use toasts only for reversible, low-stakes results; avoid a toast as the only record of an error [DC-L13-09].
 - **Skip:** yes.
 
-## Q-form-05 · For destructive actions, undo or confirm?
+## Q-form-05 · For deletes and other risky steps, offer undo or ask first?
 Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L13-08
-- **Ask:** "Offer undo for anything reversible, and confirm only irreversible or costly actions?"
-- **Why:** Undo keeps flow fast and calm; frequent confirmations feel bureaucratic and stop being read [DC-L13-08].
+- **Ask:** "When people delete something, should they get an undo button, an 'Are you sure?' step, or both?"
+- **Why:** Undo keeps work fast and calm. Asking "Are you sure?" too often feels like red tape, and people stop reading it [DC-L13-08].
 - **Options:**
-  - `both` Undo for reversible, confirm for irreversible and costly [DC-L13-08].
-  - `undo-first` Undo with soft delete or trash for reversible actions (NN/g calls undo superior; Shneiderman rule 6).
-  - `confirm` Confirmation dialog with specific verb labels, Cancel as the safe default [DC-L13-08].
+  - `both` Undo when it can be undone, ask first when it can't or costs a lot [DC-L13-08].
+  - `undo-first` Undo with trash or soft delete for actions you can reverse (NN/g calls undo superior; Shneiderman rule 6).
+  - `confirm` An 'Are you sure?' box with clear verb buttons, and Cancel as the safe choice [DC-L13-08].
 - **Default:** `both`: both *Source:* card heuristic [DC-L13-08].
 - **Show:** the list delete flow per option.
 - **Use / avoid:** use verb labels on confirmations; avoid "Are you sure?" dialogs for reversible actions [DC-L13-08].

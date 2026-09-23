@@ -1,14 +1,14 @@
 # Sponsor button for OpenDesigner. Owner: R4 (see docs/SPONSORSHIP.md).
-# Checked 2026-09-23. Kunal has no account on any funding platform yet, so every platform line
-# is commented out. Uncomment a line only after the account exists and has been approved.
+# Checked 2026-09-24. GitHub Sponsors is live (public listing verified via the GitHub API).
+# Other platform lines stay commented out until their accounts exist and are approved.
 # The button appears once the repo is public and "Sponsorships" is ticked in Settings > General > Features.
 
 # Works now, no account needed. Points to the "For sponsors" section of docs/SPONSORSHIP.md.
 custom: ["https://github.com/ckryptickunal/OpenDesigner/blob/main/docs/SPONSORSHIP.md#for-sponsors"]
 
 # 1. GitHub Sponsors: India is a supported region, and GitHub takes no fee on sponsorships from personal accounts.
-#    Needs: github.com/sponsors/accounts > Join, bank + W-8BEN tax info, 2FA, then GitHub reviews the profile.
-# github: ckryptickunal
+#    Live since 2026-09-24.
+github: ckryptickunal
 
 # 2. Open Collective, through Open Source Collective (10% host fee). Needs: the repo moved to a GitHub
 #    organization, visible activity or usage, then an application. Replace "opendesigner" with the real slug.

@@ -12,13 +12,13 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 
 ## Q-layout-01 · At which widths should layouts reorganize?
 Zoom 2 defined · weight high · changes 5 decisions · class G · cards DC-L03-14
-- **Ask:** "Which breakpoint set should layouts use? Material's five work across web and Android."
-- **Why:** Each breakpoint is a moment where panes appear, navigation swaps and columns double [DC-L03-14].
+- **Ask:** "Which breakpoints, the screen widths where the layout changes, should you use?"
+- **Why:** At each breakpoint the layout changes: panes appear, the menu swaps and columns double [DC-L03-14].
 - **Options:**
   - `material` Material width breakpoints 600 / 840 / 1200 / 1600dp plus height classes 480 / 900 (Android and web).
   - `tailwind` Tailwind 640 / 768 / 1024 / 1280 / 1536 (web-only products).
   - `bootstrap` Bootstrap 576 / 768 / 992 / 1200 / 1400.
-  - `apple-size-classes` Apple size classes, compact or regular per axis, set by the system.
+  - `apple-size-classes` Apple size classes, compact or regular for width and height, set by the system.
 - **Default:** `material`: material for cross-platform products, tailwind for web-only; web values in rem; design compact first *Source:* card heuristic [DC-L03-14]; BOARD L03 note (Material renamed window size classes to breakpoints, May 2026).
 - **Show:** the resizable frame with breakpoint ticks; the layout snaps at each one.
 - **Use / avoid:** decide layout by window size, never by device type or orientation [DC-L10-10]; avoid breakpoints that only nudge padding.
@@ -26,11 +26,11 @@ Zoom 2 defined · weight high · changes 5 decisions · class G · cards DC-L03-
 
 ## Q-layout-04 · How should top-level navigation work at each size?
 Zoom 2 defined · weight medium · changes 2 decisions · class G · cards DC-L08-19, DC-L13-02, DC-L10-09, DC-L14-05, DC-L03-19
-- **Ask:** "How many top-level destinations, and should navigation be a bottom bar, rail, sidebar or top bar?"
-- **Why:** The navigation container is the most recognizable part of the app's silhouette: tab bar, rail, sidebar or menu bar [DC-L14-05, DC-L08-19].
+- **Ask:** "How many main sections are there, and should the menu sit at the bottom, side or top?"
+- **Why:** Where the main menu sits is the part of the app's shape people know best: tab bar, rail, sidebar or menu bar [DC-L14-05, DC-L08-19].
 - **Options:**
   - `adaptive-bar-rail-sidebar` Bottom bar on phones (3-5), rail from 600dp, sidebar on desktop (Material; iOS floating tab bar; iPad sidebar-adaptable).
-  - `sidebar` Sidebar at every size above compact, with groups for 7+ destinations (Carbon UI shell, Primer NavList, shadcn Sidebar).
+  - `sidebar` Sidebar on all but the smallest screens, grouped for 7+ sections (Carbon UI shell, Primer NavList, shadcn Sidebar).
   - `top-nav` Top navigation (marketing sites) [DC-L08-19].
   - `hidden` Hidden in a hamburger or drawer: looks clean, hides scope [DC-L13-02].
 - **Default:** `adaptive-bar-rail-sidebar`: adaptive-bar-rail-sidebar; primary navigation visible whenever width allows; at most two disclosure levels; no seven-item cap *Source:* card heuristics [DC-L08-19, DC-L13-02, DC-L10-09]; L13 E2 (Miller's 7 does not limit menus).
@@ -41,12 +41,12 @@ Zoom 2 defined · weight medium · changes 2 decisions · class G · cards DC-L0
 ## Q-layout-03 · Are your pages mostly for reading, working, or data?
 Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L03-16, DC-L03-18
 - **Ask:** "Are most pages for reading, for working in, or for scanning data?"
-- **Why:** The page type decides container width and pane templates: reading pages feel like documents, working pages like tools, data pages use every pixel [DC-L03-16, DC-L03-18].
+- **Why:** The page type decides how wide content gets and how panes are laid out. A reading page feels like a document, a work page like a tool, and a data page uses every pixel [DC-L03-16, DC-L03-18].
 - **Options:**
   - `working` Working: left navigation plus left-aligned content with a max width [DC-L03-16].
   - `reading` Reading: centered, max about 1280px, text measure 40-80 characters (Primer full pages 1280; Carbon editorial model).
   - `data` Data: fluid, full width (Carbon high-density model).
-  - `feed|list-detail|supporting-pane` Material canonical layouts; never more than three panes.
+  - `feed|list-detail|supporting-pane` Material's standard layouts; never more than three panes.
 - **Default:** `working`: working + list-detail; one pane below 840dp, two from 840dp, three only at 1600dp+ *Source:* card heuristics [DC-L03-16, DC-L03-18].
 - **Show:** the three page types in the resizable frame.
 - **Use / avoid:** use fluid width for tables and dashboards; avoid full-width paragraphs [DC-L03-16, DC-L02-17].

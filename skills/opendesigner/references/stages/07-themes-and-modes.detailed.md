@@ -8,15 +8,15 @@ Read the main stage file first; these questions refine it.
 
 Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
 
-## Q-theme-02 · Which other theme axes should exist?
+## Q-theme-02 · Besides light and dark, which other theme switches should exist?
 Zoom 3 detailed · weight medium · changes 3 decisions · class G · cards DC-L07-15, DC-L11-25
-- **Ask:** "Besides light and dark, which other theme variations do you need?"
-- **Why:** Each extra axis multiplies the values to check: 2 modes x 3 brands = 6 palettes to contrast-test [DC-L11-25, DC-L07-15].
+- **Ask:** "Besides light and dark, what other theme switches do you need?"
+- **Why:** Each extra theme switch multiplies what must be checked. For example, 2 modes x 3 brands = 6 palettes to test for contrast [DC-L11-25, DC-L07-15].
 - **Options:**
   - `contrast` Contrast: standard and high (Material standard/medium/high; Atlassian increased contrast; Primer 14 theme files incl. color-blind variants).
-  - `density` Density or scale: compact/comfortable (Radix scaling 90-110%).
+  - `density` Density or size: compact/comfortable (Radix scaling 90-110%).
   - `brand` Brand: see Q-theme-03 [DC-L07-16].
-  - `breakpoint` Breakpoint values (38% of systems).
+  - `breakpoint` Screen-size values (38% of systems).
   - `platform` Platform values (24% of systems).
 - **Default:** color scheme + contrast; density only with data-dense screens; brand only with a real second brand *Source:* card heuristic [DC-L07-15, DC-L11-25].
 - **Show:** a mode-combination grid with the count of palettes to test, and the Figma mode budget from Q-tool-03.
@@ -26,12 +26,12 @@ Zoom 3 detailed · weight medium · changes 3 decisions · class G · cards DC-L
 Zoom 3 detailed · weight medium · changes 4 decisions · class G · cards DC-L07-16, DC-L06-16
 - **Show if:** Q-theme-03 is brand-themes or white-label
 - **Ask:** "What may differ between brands, and how should brands be stored?"
-- **Why:** If brands differ in more than about 20% of semantic tokens, they are separate themes, not brands [DC-L07-16].
+- **Why:** Brands share one base of semantic tokens (values named for their job). If more than about 20% differ, they are separate themes, not brands [DC-L07-16].
 - **Options:**
-  - `flex-color-type-imagery` Flex brand color, typeface, logo, imagery; fix anatomy, behavior, semantic names, status meanings [DC-L06-16].
-  - `flex-with-care` Also flex radius, density and motion ("flex with care") [DC-L06-16].
+  - `flex-color-type-imagery` Change color, font, logo and images; keep parts, how they work, names and status meanings [DC-L06-16].
+  - `flex-with-care` Also change corner radius, density and motion, with care [DC-L06-16].
   - `store-mode` Brand as a mode: simple, capped by the plan's mode limit (Pro 10, Org 20).
-  - `store-axis` Brand as its own axis (collection or DTCG resolver modifier): additive, 3 brands + 2 schemes = 5 modes [DC-L07-16].
+  - `store-axis` Brand as its own switch (a collection or DTCG resolver modifier): additive, 3 brands + 2 schemes = 5 modes [DC-L07-16].
   - `store-extended` Figma extended collections (Enterprise): brands override only what differs.
 - **Default:** flex color, typeface, logo, imagery; store as its own axis (extended collections on Enterprise) *Source:* card heuristics [DC-L07-16, DC-L06-16].
 - **Show:** a table of brandable tokens with each brand's values.

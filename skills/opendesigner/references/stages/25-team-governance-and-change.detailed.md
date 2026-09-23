@@ -10,13 +10,13 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 
 ## Q-gov-02 · In what order will you build, pilot and roll out?
 Zoom 3 detailed · weight medium · changes 3 decisions · class I · cards DC-L11-06, DC-L11-07, DC-L11-08
-- **Ask:** "Minimal foundations first, then components proven in one pilot product, rolled out incrementally?"
-- **Why:** Foundations-first is tidy but abstract; pilot-driven work keeps components real; a big-bang launch creates a moment but risks pilot bias [DC-L11-06, DC-L11-07, DC-L11-08].
+- **Ask:** "In what order will you build the system, try it in one product, and roll it out?"
+- **Why:** Foundations first is tidy but abstract. A pilot product keeps components real. Launching all at once draws attention but risks bias toward that pilot [DC-L11-06, DC-L11-07, DC-L11-08].
 - **Options:**
   - `foundations-first` Foundations first: spacing, color, type, elevation, icons, then components (Figma course order).
-  - `pilot-driven` Pilot-driven: extract components from a real product, apply to the next.
-  - `pilot-scorecard` Score pilots on common components, common patterns, high-value elements, feasibility, a champion, a 3-4 week scope, independence from legacy, marketing potential.
-  - `rollout-incremental` Incremental rollout led by pain points; big-bang only with a rebrand.
+  - `pilot-driven` Start with a pilot product: extract components from a real product, apply to the next.
+  - `pilot-scorecard` Pick the pilot by 8 tests, like shared parts, a champion, a 3-4 week scope and few ties to old code.
+  - `rollout-incremental` Roll out step by step, worst problems first; all at once only with a rebrand.
 - **Default:** minimal foundations first, then pilot-driven components, incremental rollout *Source:* card heuristics [DC-L11-06, DC-L11-07, DC-L11-08].
 - **Show:** a timeline of the plan.
 - **Use / avoid:** use a second pilot from a different product family to reduce bias; avoid building components no pilot needs [DC-L11-07].
@@ -24,28 +24,28 @@ Zoom 3 detailed · weight medium · changes 3 decisions · class I · cards DC-L
 
 ## Q-gov-03 · Who can contribute, and how are decisions made and recorded?
 Zoom 3 detailed · weight medium · changes 2 decisions · class I · cards DC-L11-11, DC-L11-12
-- **Ask:** "A fast lane for fixes and icons, a proposal lane for new components, and every foundation decision logged as a decision record?"
-- **Why:** Only 36% of teams are satisfied with their contribution process; decision records explain why things are the way they are [DC-L11-11, DC-L11-12].
+- **Ask:** "Who can add to the system, and how will decisions be made and written down?"
+- **Why:** Only 36% of teams are happy with how people add to their system. Decision records explain why things are the way they are [DC-L11-11, DC-L11-12].
 - **Options:**
-  - `two-lanes` A fast lane for fixes, icons and docs; an RFC lane for new components.
+  - `two-lanes` A fast lane for fixes, icons and docs; a proposal (RFC) lane for new components.
   - `closed` Closed or narrow: fixes and small enhancements only (Atlassian).
-  - `criteria-gated` Open but gated: proposals must be useful and unique; publication must be usable, consistent, versatile (GOV.UK).
-  - `frost-flow` Brad Frost's 10-step governance flow with a snowflake path.
-  - `adrs` Decision records (ADRs) from day one; this questionnaire's answers map to them [inferred].
+  - `criteria-gated` Open, with checks: proposals must be useful and unique; publication must be usable, consistent, versatile (GOV.UK).
+  - `frost-flow` Brad Frost's 10-step flow, with a path for one-off needs.
+  - `adrs` Decision records (ADRs) from day one, made from your answers here [inferred].
 - **Default:** `two-lanes`: two-lanes, frost-flow and adrs *Source:* card heuristics [DC-L11-11, DC-L11-12].
 - **Show:** the generated decision log.
 - **Use / avoid:** record why an option was chosen and what it beat; avoid undocumented overrides [DC-L11-12].
 - **Skip:** yes.
 
-## Q-gov-04 · How are components labeled, versioned and retired?
+## Q-gov-04 · How should each part get a status, a version number, and a way to retire?
 Zoom 3 detailed · weight medium · changes 2 decisions · class I · cards DC-L11-13, DC-L11-14, DC-L11-15
-- **Ask:** "Three statuses (experimental, ready, deprecated), one semver for the library, and deprecations removed only in the next major with a migration guide?"
-- **Why:** Predictable status and versioning protect consumers; breaking changes without notice erode trust [DC-L11-13, DC-L11-14, DC-L11-15].
+- **Ask:** "How should you mark each component's status, number its versions, and retire old ones?"
+- **Why:** Clear status labels and version numbers protect the teams that use your components. Breaking changes without warning wear away their trust [DC-L11-13, DC-L11-14, DC-L11-15].
 - **Options:**
-  - `status-3` Experimental > Ready > Deprecated (Primer simplified from five to three).
-  - `semver-library` One SemVer for the whole library while small; per-package once multi-platform.
-  - `per-component` Per-component versions (Atlassian, Paste).
-  - `deprecation-polaris` Deprecate in a minor, announce with `@deprecated` and warnings, ship codemods, remove in the next major (Polaris).
+  - `status-3` Experimental, then Ready, then Deprecated (Primer cut five to three).
+  - `semver-library` One SemVer for the whole library while small; one per package on many platforms.
+  - `per-component` A version number for each component (Atlassian, Paste).
+  - `deprecation-polaris` Warn with @deprecated in a minor release, ship codemods, drop it in the next major (Polaris).
 - **Default:** `status-3`: status-3, semver-library, deprecation-polaris with at least one release cycle of notice; release notes every release (the most common ritual, 56%) *Source:* card heuristics [DC-L11-13, DC-L11-14, DC-L11-15].
 - **Show:** status badges in the catalog and a sample changelog.
 - **Use / avoid:** pair every removal with a migration path; avoid breaking changes in minor releases [DC-L11-14, DC-L11-15].
@@ -53,13 +53,13 @@ Zoom 3 detailed · weight medium · changes 2 decisions · class I · cards DC-L
 
 ## Q-gov-05 · What problem is the system solving, and how will you know it worked?
 Zoom 3 detailed · weight medium · changes 1 decisions · class I · cards DC-L11-20, DC-L11-21
-- **Ask:** "What hurts most today, and should we track design adoption, code adoption and a quarterly satisfaction survey?"
-- **Why:** The problem sets the success metric; most teams measure adoption, but only 5% measure ROI [DC-L11-20].
+- **Ask:** "What problem hurts most today, and how will you measure whether the system helped?"
+- **Why:** The problem you are solving sets how you measure success. Most teams measure how much the system is used, but only 5% measure return on investment (ROI) [DC-L11-20].
 - **Options:**
-  - `pain` Pain: inconsistency, speed, accessibility, rebrand, AI output drift, multi-platform parity.
-  - `adoption` Design adoption (Figma analytics) and code adoption (a scanner such as Omlet or react-scanner).
-  - `satisfaction` A quarterly satisfaction survey.
-  - `maturity` Maturity stage: building v1, growing adoption, surviving the teenage years, evolving (Sparkbox).
+  - `pain` Biggest problem: inconsistency, speed, accessibility, rebrand, AI output drift, multi-platform parity.
+  - `adoption` Design use and code use (Figma analytics; a scanner like Omlet or react-scanner).
+  - `satisfaction` A survey every quarter on how happy people are with it.
+  - `maturity` Stage of growth: building v1, growing adoption, surviving the teenage years, evolving (Sparkbox).
 - **Default:** design adoption, code adoption and a quarterly survey; most builder users are at stage 1 *Source:* card heuristics [DC-L11-20, DC-L11-21].
 - **Show:** the metrics dashboard mock.
 - **Use / avoid:** add speed or ROI studies only when leadership asks; avoid vanity counts of components [DC-L11-20].
@@ -67,8 +67,8 @@ Zoom 3 detailed · weight medium · changes 1 decisions · class I · cards DC-L
 
 ## Q-gov-06 · How will you announce the system and communicate changes?
 Zoom 3 detailed · weight medium · changes 0 decisions · class I · cards DC-L11-22
-- **Ask:** "Release notes every release, a public roadmap and a support channel to start?"
-- **Why:** Only 39% of teams are satisfied with how design-system changes are communicated [DC-L11-22].
+- **Ask:** "How will you tell people about the system and about each change?"
+- **Why:** How you share changes matters: only 39% of teams are happy with how changes to their design system are shared [DC-L11-22].
 - **Options:**
   - `release-notes` Release notes (56% of teams).
   - `roadmap` Roadmap (48%).
@@ -79,10 +79,10 @@ Zoom 3 detailed · weight medium · changes 0 decisions · class I · cards DC-L
 - **Use / avoid:** use changelogs that name the migration; avoid silent releases [DC-L11-22].
 - **Skip:** yes.
 
-## Q-gov-07 · Which assistive technologies must be tested on each device class, and who owns accessibility?
+## Q-gov-07 · Which assistive tools must you test on each device, and who owns accessibility?
 Zoom 3 detailed · weight low · changes 0 decisions · class T · cards DC-L14-14
-- **Ask:** "Test one screen reader, one motor alternative and the largest text size on each device class you ship?"
-- **Why:** Automated tools find only about 30% of issues; if a device class is first-class, its assistive technology is too [DC-L14-14].
+- **Ask:** "On each kind of device you ship, which screen readers, control tools and text sizes will you test?"
+- **Why:** Automated checks find only about 30% of issues. If a kind of device gets full support, its assistive tools need full support too [DC-L14-14].
 - **Options:**
   - `screen-readers` VoiceOver on Apple, TalkBack on Android phone, Wear and TV, NVDA/JAWS on web.
   - `motor` Switch Control, Voice Control, Full Keyboard Access, Dwell Control.

@@ -12,8 +12,8 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 
 ## Q-space-01 · What should the base spacing unit be?
 Zoom 2 defined · weight high · changes 5 decisions · class G · cards DC-L03-01
-- **Ask:** "What base unit should spacing use? 4 as the grid and 8 as the rhythm is common."
-- **Why:** The base sets the smallest perceptible difference between spacings; 8 gives chunky, calm steps, 4 gives finer control [DC-L03-01].
+- **Ask:** "What base unit should all spacing be built from, like 4 or 8 pixels?"
+- **Why:** The base unit sets the smallest step you can see between two spacings. 8 gives chunky, calm steps; 4 gives finer control [DC-L03-01].
 - **Options:**
   - `4-grid-8-rhythm` 4 as the grid, 8 as the rhythm: named on an 8 base with 2, 4, 6, 12 kept for internals (Material 3, Atlassian, Spectrum).
   - `4` 4 throughout (Fluent 2, Polaris, Primer, Tailwind `--spacing: 0.25rem`).
@@ -26,11 +26,11 @@ Zoom 2 defined · weight high · changes 5 decisions · class G · cards DC-L03-
 
 ## Q-space-02 · How should spacing steps grow?
 Zoom 2 defined · weight high · changes 5 decisions · class G · cards DC-L03-02
-- **Ask:** "How should spacing steps grow: fine then coarse, linear, or doubling?"
-- **Why:** Hybrid and geometric scales make levels of separation read instantly; linear scales with close steps get used inconsistently [DC-L03-02].
+- **Ask:** "How should spacing steps grow: small then big jumps, even steps, or doubling?"
+- **Why:** Steps that grow in bigger jumps (hybrid or doubling) make levels of spacing easy to see at a glance. Even steps that sit close together get used in mixed-up ways [DC-L03-02].
 - **Options:**
   - `hybrid` Fine at the bottom, coarse at the top: 0, 2, 4, 6, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80 (Atlassian's exact set; Carbon similar to 160).
-  - `linear` Linear 4px increments (Tailwind open-ended, Fluent to 56, Primer to 48).
+  - `linear` Even 4px steps (Tailwind open-ended, Fluent to 56, Primer to 48).
   - `geometric` Doubling: 2, 4, 8, 16, 32, 64 (Curtis: linear offers "too many choices too close together").
 - **Default:** `hybrid`: hybrid, 12-15 steps *Source:* card heuristic [DC-L03-02]; L09 shared default row 2 (0, 2, 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96).
 - **Show:** the scale as bars; dragging a step shows where it is used on the component sheet.
@@ -40,7 +40,7 @@ Zoom 2 defined · weight high · changes 5 decisions · class G · cards DC-L03-
 ## Q-space-03 · How big must tap and click targets be?
 Zoom 2 defined · weight medium · changes 2 decisions · class G · cards DC-L03-12, DC-L14-03, DC-L03-13
 - **Ask:** "How big must tap and click targets be?"
-- **Why:** Target size is an accessibility floor (WCAG 2.5.8) and sets how far apart controls sit; the visual may shrink with density, the hit area never does [DC-L03-12].
+- **Why:** Touch target size is a floor for accessibility (WCAG 2.5.8), and it sets how far apart controls sit. A control may look smaller when dense, but its tap area never shrinks [DC-L03-12].
 - **Options:**
   - `web-24-44` Web: 24px visual minimum, 44px hit area on touch (`pointer: coarse`) [DC-L03-12].
   - `ios-44` iOS 44x44pt (visionOS 60, tvOS 66, macOS 28).
@@ -54,7 +54,7 @@ Zoom 2 defined · weight medium · changes 2 decisions · class G · cards DC-L0
 ## Q-space-04 · How tall should buttons and inputs be?
 Zoom 2 defined · weight medium · changes 2 decisions · class G · cards DC-L03-07, DC-L08-07
 - **Ask:** "How tall should buttons and inputs be?"
-- **Why:** 32px defaults read as desktop productivity; 40-48px read as touch-friendly; 56dp+ read as expressive [DC-L03-07].
+- **Why:** Control height sets the feel: 32px reads as a desktop work tool, 40-48px as touch-friendly, and 56dp+ as expressive [DC-L03-07].
 - **Options:**
   - `touch-32-40-48` sm 32, md 40, lg 48: touch-inclusive (Carbon S/M/L; "large 48px is the most common button size in software products").
   - `pointer-24-32-40` sm 24, md 32, lg 40: pointer-first desktop tools (Fluent inputs 24/32/40, 32 default).
@@ -67,7 +67,7 @@ Zoom 2 defined · weight medium · changes 2 decisions · class G · cards DC-L0
 ## Q-space-05 · How much breathing room between groups versus inside them?
 Zoom 2 defined · weight low · changes 0 decisions · class G · cards DC-L03-24
 - **Ask:** "How much more space between groups than inside them?"
-- **Why:** A high inner-to-outer ratio (8px inside, 32px between) reads clear and premium; a low ratio reads cramped and ambiguous [DC-L03-24].
+- **Why:** Much more space between groups than inside them (8px inside, 32px between) looks clear and premium. Too little difference looks cramped and unclear [DC-L03-24].
 - **Options:**
   - `1:2` 1:2, the minimum for clear grouping [DC-L03-24, DC-L15-05].
   - `1:3-1:4` 1:3 to 1:4: airy brands, generous margins ("spacious layouts feel calm and open", Material).

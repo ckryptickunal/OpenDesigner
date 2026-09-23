@@ -10,10 +10,10 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 
 ## Q-voice-05 · Which grammar and punctuation rules?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L06-21
-- **Ask:** "Contractions yes, 'you' for the user, 'we' sparingly, and no exclamation marks in errors?"
-- **Why:** Contractions, "we" and occasional emoji read friendlier; no negative contractions and no exclamation marks read more formal and precise [DC-L06-21].
+- **Ask:** "Which writing rules should the words follow, like 'don't', 'you', 'we' and exclamation marks?"
+- **Why:** Short forms like "you'll", the word "we" and an emoji now and then sound friendlier. Skipping "can't" and exclamation marks sounds more formal and exact [DC-L06-21].
 - **Options:**
-  - `contractions` Contractions, except negative ones in high-stakes flows (GOV.UK writes "cannot").
+  - `contractions` Contractions, but not negative ones like 'can't' in serious steps (GOV.UK writes "cannot").
   - `pronouns` "You" for the user, "we" sparingly (Apple avoids "we").
   - `exclamations` No exclamation marks in errors.
   - `numbers` Numerals for counts, "to" for ranges [DC-L06-21].
@@ -22,13 +22,13 @@ Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L06-
 - **Use / avoid:** keep mechanics identical across products; avoid mixing date and number formats (see Q-voice-06) [DC-L06-21].
 - **Skip:** yes.
 
-## Q-voice-06 · Which microcopy patterns and word list should components ship with?
+## Q-voice-06 · Which short text rules and word list should each component come with?
 Zoom 3 detailed · weight medium · changes 0 decisions · class I · cards DC-L06-22, DC-L06-23
-- **Ask:** "Start a 20-50 term glossary and ship microcopy rules with every component?"
-- **Why:** Verb labels shorten buttons and clarify hierarchy; consistent terms make navigation and empty states predictable [DC-L06-22, DC-L06-23].
+- **Ask:** "Which writing rules and word lists should come with each component?"
+- **Why:** Buttons that start with a verb are shorter and make clear what matters most. Using the same words each time makes it easy to find your way and know what empty screens mean [DC-L06-22, DC-L06-23].
 - **Options:**
-  - `verb-first` Verb-first buttons, descriptive links (not "Click here"), blame-free fix-it errors, empty states with a next step.
-  - `flow-vocab` Consistent flow vocabulary: Get started, Continue/Next, Done.
+  - `verb-first` Verb-first buttons, clear links (not "Click here"), kind fix-it errors, empty states with a next step.
+  - `flow-vocab` The same step words everywhere: Get started, Continue/Next, Done.
   - `word-list` A maintained A-Z word list (Mailchimp, Microsoft).
   - `inclusive` Bias-free rules: role nouns, singular they, people's own pronouns (Microsoft; Atlassian inclusive-language page).
 - **Default:** all four; a 20-50 term glossary on day one, linted in copy; locale formats and any regulated copy recorded as fixed patterns *Source:* card heuristics [DC-L06-22, DC-L06-23]; K5.3 and K5.5 [inferred].

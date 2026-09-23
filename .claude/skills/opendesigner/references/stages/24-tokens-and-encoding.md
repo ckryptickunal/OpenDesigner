@@ -12,12 +12,12 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 
 ## Q-token-01 · How many token layers should sit between raw values and components?
 Zoom 2 defined · weight medium · changes 4 decisions · class G · cards DC-L07-01, DC-L07-02, DC-L01-26, DC-L02-27
-- **Ask:** "Raw values, then semantic tokens, with component tokens only where a component must differ?"
-- **Why:** A semantic layer lets the look change (rebrand, new mode) without touching components; 24 of 25 benchmarked systems have one [DC-L07-01; L09 A1 row 1].
+- **Ask:** "Should buttons and cards use raw colors and sizes, or go through layers of named values?"
+- **Why:** A layer of role names (semantic tokens) lets you change the look, like a rebrand or a new mode, without touching components. 24 of the 25 systems we studied have one [DC-L07-01; L09 A1 row 1].
 - **Options:**
-  - `two-plus` Primitive -> semantic, component tokens only when needed (Atlassian, Polaris; Fluent global + alias).
-  - `one` One tier: palette and scales used directly (Tailwind); theming means find-and-replace [DC-L07-01].
-  - `three-full` Primitive -> semantic -> component for every component (Material 3 comp tokens; Primer base/functional/component).
+  - `two-plus` Two layers, raw then role, plus component tokens when needed (Atlassian, Polaris; Fluent global + alias).
+  - `one` One layer: palette and scales used directly (Tailwind); theming means find-and-replace [DC-L07-01].
+  - `three-full` Three layers for every part, raw, role, then part (Material 3; Primer base, functional, component).
 - **Default:** `two-plus`: two-plus: primitives private, semantics public, component tokens only for components a brand must restyle or values shared by 3+ components; typography as primitives, semantic composites `text.{role}.{size}` and optional component aliases *Source:* card heuristics [DC-L07-01, DC-L07-02, DC-L01-26, DC-L02-27]; L09 counts this as its 3-tier default with the component tier optional.
 - **Show:** the token chain inspector on the preview.
 - **Use / avoid:** use semantic tokens in every component; avoid components referencing a raw hex or px (L09: 24 of 25 systems forbid it) [L09 A1 row 1].

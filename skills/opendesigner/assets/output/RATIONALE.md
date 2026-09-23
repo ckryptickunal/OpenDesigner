@@ -1,14 +1,14 @@
 # Why {{name}} looks the way it does
 
-<!-- One page for teammates, managers and designers who will not read decisions.md. Written by the model
-from the decision log at the end of the interview, refreshed after each extend session. Plain language;
-question ids and D-numbers only in the footnotes. -->
+<!-- One page for teammates, managers and designers who will not read decisions.md. The model writes it
+from the decision log at the end of the interview, and refreshes it after each extend session.
+Plain language. Question ids and D-numbers go only in the footnotes. -->
 
 ## What we built
 {{One paragraph: the product, who it is for, the direction in one line, and the one thing people should remember.}}
 
 ## The five choices that shape everything
-1. **{{Personality}}:** we chose {{X}} because {{Y}}; the main alternative was {{Z}}, which would have meant {{W}}.
+1. **{{Personality}}:** we chose {{X}} because {{Y}}. The main alternative was {{Z}}. It would have meant {{W}}.
 2. **{{Platforms}}:** ...
 3. **{{Visual direction}}:** ...
 4. **{{Density}}:** ...
@@ -26,10 +26,10 @@ question ids and D-numbers only in the footnotes. -->
 - Warnings waived, with reasons: {{list}}
 
 ## How to ask for a change
-{{Who approves design-system changes.}} Ask your agent to use the opendesigner-extend skill; it reads this system first, shows what a change would move, and records the new decision in `opendesigner/decisions.md`.
+{{Who approves design-system changes.}} Ask your agent to use the opendesigner-extend skill. It reads this system first, shows what a change would move, and records the new decision in `opendesigner/decisions.md`.
 
 ## For designers
-{{The briefs for missing assets and what is yours to own: logo, illustration, photography, custom icons, motion signature.}}
+{{What is yours to make, with a brief for each missing asset: logo, illustration, photography, custom icons, signature motion.}}
 
 ---
 Footnotes: {{Q-ids and D-numbers for each choice above}}

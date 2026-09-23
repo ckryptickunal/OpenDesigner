@@ -12,12 +12,12 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 
 ## Q-pattern-01 · When should the product use a dialog, a sheet or a popover?
 Zoom 2 defined · weight low · changes 0 decisions · class G · cards DC-L08-20
-- **Ask:** "Dialogs for short decisions, side sheets for editing with context, bottom sheets on phones?"
-- **Why:** Centered dialogs interrupt strongly; side sheets keep context visible; popovers feel lightweight [DC-L08-20].
+- **Ask:** "Which tasks should open in a box in the middle, a panel that slides in, or a small pop-up?"
+- **Why:** A centered dialog stops people in their tracks. A side sheet keeps the page in view, and a popover feels light [DC-L08-20].
 - **Options:**
-  - `hig` Modal only with a clear benefit; sheets and popovers for scoped tasks; full-screen for immersive multi-step tasks (HIG).
-  - `sheets` Bottom and side sheets, drawers and panels (M3, Fluent, Atlassian).
-  - `levitate` Layered "levitate" panes for focused tasks (M3).
+  - `hig` Block the page only if it clearly helps; panels and pop-ups for small tasks; full screen for big flows (HIG).
+  - `sheets` Panels that slide in from the bottom or side (M3, Fluent, Atlassian).
+  - `levitate` Floating "levitate" panes for focused tasks (M3).
 - **Default:** dialog for short decisions, side sheet for editing with context, bottom sheet on phones; each platform's button order *Source:* card heuristic [DC-L08-20].
 - **Show:** the same edit task in each overlay.
 - **Use / avoid:** use a dismiss path on every dialog (missing one is a lint error); avoid stacking modals [DC-L08-20; L13 E1].
@@ -25,13 +25,13 @@ Zoom 2 defined · weight low · changes 0 decisions · class G · cards DC-L08-2
 
 ## Q-pattern-04 · How should empty states and first-time use work?
 Zoom 2 defined · weight low · changes 0 decisions · class G · cards DC-L13-10, DC-L13-11
-- **Ask:** "Designed empty states with a next step, and contextual tips instead of a forced tour?"
-- **Why:** A designed empty state teaches and invites; a blank area looks broken; forced tours add friction up front [DC-L13-10, DC-L13-11].
+- **Ask:** "What should an empty screen show, and how should first-time users learn the product?"
+- **Why:** A well-made empty state teaches and invites people in. A blank area looks broken, and forced tours slow people down at the start [DC-L13-10, DC-L13-11].
 - **Options:**
   - `empty-kinds` Empty states for first use, user-cleared, no results, no permission or error (Primer Blankslate, Spectrum IllustratedMessage, shadcn Empty) [DC-L13-10].
   - `onboarding-none` No onboarding: a self-evident UI (NN/g's first recommendation).
-  - `onboarding-contextual` Contextual help and empty-state guidance at the moment of need.
-  - `walkthrough` Interactive walkthrough, only for genuinely new, complex interfaces.
+  - `onboarding-contextual` Tips and empty-screen hints right when people need them.
+  - `walkthrough` A guided tour, only for truly new and complex screens.
 - **Default:** every collection gets empty variants that state status, help learning and give a direct action; contextual onboarding; everything skippable *Source:* card heuristics [DC-L13-10, DC-L13-11].
 - **Show:** each empty-state kind with the illustration choice from Q-img-04.
 - **Use / avoid:** use an empty state on every collection (missing one is a lint warning); avoid tours without a skip control [DC-L13-10, DC-L13-11; L13 E1].
@@ -39,12 +39,12 @@ Zoom 2 defined · weight low · changes 0 decisions · class G · cards DC-L13-1
 
 ## Q-pattern-05 · Which deceptive patterns should the builder block?
 Zoom 2 defined · weight medium · changes 1 decisions · class I · cards DC-L13-15
-- **Ask:** "Block the deceptive patterns a machine can detect, like pre-checked marketing boxes and consent buttons with unequal emphasis?"
-- **Why:** Ethical defaults give accept and decline equal visual weight, leave opt-ins unchecked and keep decline copy neutral [DC-L13-15].
+- **Ask:** "How firmly should we stop design tricks, like boxes ticked for you or a louder 'Yes' button?"
+- **Why:** Fair defaults make 'Accept' and 'Decline' look equal and leave opt-in boxes unticked. They also word 'Decline' without guilt [DC-L13-15].
 - **Options:**
-  - `enforced` Documented and enforced where detectable: pre-checked consent or marketing boxes and unequal accept/reject emphasis are lint errors; re-prompting after dismissal is flagged.
+  - `enforced` Written down, and blocked where a tool can spot it: pre-checked consent or marketing boxes and unequal accept/reject emphasis are lint errors; re-prompting after dismissal is flagged.
   - `none` No policy [DC-L13-15].
-  - `documented` Documented policy against the 16 types at deceptive.design (sneaking, forced action, hard to cancel, preselection, fake urgency, confirmshaming...).
+  - `documented` A written ban on the 16 tricks at deceptive.design, like sneaking and fake urgency.
 - **Default:** `enforced`: enforced *Source:* card heuristic [DC-L13-15]; L13 E1 lint errors.
 - **Show:** a consent dialog and a cancellation flow checked live.
 - **Use / avoid:** use equal emphasis for accept and reject; avoid nagging and fake urgency (the Zeigarnik effect does not justify nags) [DC-L13-15; L13 E2].
@@ -52,13 +52,13 @@ Zoom 2 defined · weight medium · changes 1 decisions · class I · cards DC-L1
 
 ## Q-ai-01 · Does the product have AI features, and how should AI content be marked?
 Zoom 2 defined · weight medium · changes 0 decisions · class I · cards DC-L08-22, DC-L13-16, DC-L14-12
-- **Ask:** "Does the product generate content or act with AI? If so, how should AI content be labeled and corrected?"
-- **Why:** Clear AI identifiers and distinct citation styling make output read as "assistive, check me"; a distinct AI accent can compete with the primary action color [DC-L13-16, DC-L08-22].
+- **Ask:** "Does your product use AI, and if so, how should people spot and fix its work?"
+- **Why:** Clear AI labels and sources shown apart make AI output read as "assistive, check me". A separate AI accent color can compete with your main action color [DC-L13-16, DC-L08-22].
 - **Options:**
-  - `label-button` AI label plus an AI button variant (Carbon AI label; S2 `genai`; Atlassian Rovo).
+  - `label-button` An AI tag and an AI button (Carbon AI label; S2 genai; Atlassian Rovo).
   - `none` No AI features.
-  - `presence-mode` AI presence as a mode on normal components: label, explainability popover, glow tokens, revert (Carbon).
-  - `chat` Chat components for conversational products (shadcn Message, Bubble; Carbon AI chat).
+  - `presence-mode` An AI mode that normal parts can switch on: label, explainability popover, glow tokens, revert (Carbon).
+  - `chat` Chat components for products people talk to (shadcn Message, Bubble; Carbon AI chat).
   - `voice` Voice-only turns: one breath, 2-5 options (Alexa).
 - **Default:** `label-button`: label-button as an optional module, chat only for conversational products; label AI content, place citations next to claims, express uncertainty in high-stakes contexts, and pair every generated output with Edit, Undo and Retry *Source:* card heuristics [DC-L08-22, DC-L13-16, DC-L14-12].
 - **Show:** AI output in a table cell, a side panel and a chat thread.

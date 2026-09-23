@@ -13,11 +13,11 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 ## Q-img-01 · Does the product use photography, and do you have photos or a photo brief?
 Zoom 2 defined · weight medium · changes 3 decisions · class D · cards DC-L05-14
 - **Ask:** "Will the product show photos? If so, do you have a library or a photo brief?"
-- **Why:** Photography is a block the builder cannot make honestly; natural light and ungraded color read factual and trustworthy, graded cinematic images read emotional [DC-L05-14; BRIEF requirement 2].
+- **Why:** Photos in natural light with true color feel real and worth trusting; film-like color grading plays on feelings. The builder cannot make photos honestly [DC-L05-14; BRIEF requirement 2].
 - **Options:**
   - `none` No photography [DC-L05-14].
   - `documentary` Documentary: "frames from a film" (IBM lifestyle photography).
-  - `portraiture` Portraiture with equal stature for every subject (IBM "democratic"; Dropbox People).
+  - `portraiture` Portraits that treat every person as equal (IBM "democratic"; Dropbox People).
   - `still-life` Still life, product or content imagery.
 - **Default:** `none`: none for tools; for consumer products, a one-paragraph photo brief (subject types, perspective, light, color treatment, casting) before commissioning or buying *Source:* card heuristic [DC-L05-14].
 - **Show:** image slots in the hero, cards and avatars with the uploaded photos, or labeled placeholders.
@@ -25,17 +25,17 @@ Zoom 2 defined · weight medium · changes 3 decisions · class D · cards DC-L0
 - **Hook:** accepts JPEG, WebP or AVIF exports and a written brief; masters in RAW or TIFF are kept outside the system If no: (1) the builder drafts the photo brief from the personality sliders for you to edit; (2) commission a photographer (best for recognizability); (3) stock against the brief: Unsplash (free commercial, no competing service) or Pexels (no implied endorsement); (4) AI images with ownership and uniqueness caveats per tool, marked as synthetic under EU AI Act Art. 50; NN/g found AI images close to stock but failing on visible artifacts and stereotypes. Neutral placeholders are used until real images arrive.
 - **Skip:** yes.
 
-## Q-img-04 · Do you have illustrations or a mascot, and where should illustration appear?
+## Q-img-04 · Do you have illustrations or a mascot, and where should they go?
 Zoom 2 defined · weight medium · changes 3 decisions · class D · cards DC-L05-19, DC-L06-12, DC-L05-20
-- **Ask:** "Do you have illustrations or a mascot? If not, should empty and error states use simple icons and text instead?"
-- **Why:** Illustration is a designer-made block; characters and hand-drawn styles add warmth and let the UI stay neutral, but overuse adds cognitive load [DC-L06-12, DC-L05-19, DC-L05-20].
+- **Ask:** "Do you have illustrations or a mascot, or should we pick a drawing style and where it goes?"
+- **Why:** Characters and hand-drawn art add warmth and let the rest of the app stay plain, but too much makes screens harder to take in. A designer should make the illustrations [DC-L06-12, DC-L05-19, DC-L05-20].
 - **Options:**
   - `none` None: empty states use an icon and text [DC-L05-20, inferred].
   - `line` Line style: precise, calm, technical (IBM: 4px grid, at most 4 line weights, 15-degree angles).
   - `flat` Flat: bold and energetic (IBM).
-  - `hand-drawn` Hand-drawn gestural line (Notion).
+  - `hand-drawn` Loose, hand-drawn lines (Notion).
   - `mascot` A mascot in loading, error and empty states (Mailchimp Freddie, Duolingo Duo).
-  - `where` Where: spot illustrations for empty, error, celebration; low-fidelity UI for onboarding; hero and collage only on marketing (Atlassian, Dropbox).
+  - `where` Where drawings go: spot illustrations for empty, error, celebration; low-fidelity UI for onboarding; hero and collage only on marketing (Atlassian, Dropbox).
 - **Default:** one style derived from the icon stroke, corner radius and palette; neutral spots for routine empty states, colorful spots only for first run and celebration; no humor in errors *Source:* card heuristics [DC-L05-19, DC-L05-20, DC-L06-12].
 - **Show:** the empty, error and success states with the uploaded art or the fallback.
 - **Use / avoid:** use illustration only where it has a job (IBM: "have a job to do"); avoid real screenshots in onboarding illustrations and jokes in error states [; DC-L06-12].
@@ -45,12 +45,12 @@ Zoom 2 defined · weight medium · changes 3 decisions · class D · cards DC-L0
 ## Q-viz-01 · Which chart types and chart library?
 Zoom 2 defined · weight low · changes 1 decisions · class T · cards DC-L05-22
 - **Show if:** Q-color-19 is not none
-- **Ask:** "Which charts do you need? I'd start with bar, line, area, stacked bar, donut and scatter, themed on an existing library."
-- **Why:** Fewer chart types make dashboards consistent and learnable; exotic types look impressive but need more reading [DC-L05-22].
+- **Ask:** "Which kinds of charts do you need, and which chart kit, if any, should draw them?"
+- **Why:** Fewer kinds of charts make dashboards consistent and easy to learn. Unusual charts look impressive but take longer to read [DC-L05-22].
 - **Options:**
   - `core-6` Bar, line, area, stacked bar, donut or meter, scatter, plus a KPI big number [DC-L05-22].
-  - `by-purpose` Guidance grouped by question: comparisons, trends, part-to-whole, correlations, connections, geospatial (Carbon).
-  - `theme-library` Theme an existing chart library rather than building one [DC-L05-22].
+  - `by-purpose` Chart advice grouped by the question it answers: comparisons, trends, part-to-whole, correlations, connections, geospatial (Carbon).
+  - `theme-library` Style a ready-made chart kit instead of building one [DC-L05-22].
 - **Default:** `core-6`: core-6 on a themed existing library; chart chrome mapped to text and border tokens; every chart gets an insight title, direct labels, a text summary and a "view as table" option *Source:* card heuristics [DC-L05-22, DC-L05-24, DC-L05-25].
 - **Show:** a dashboard with the chosen types in the product's palette.
 - **Use / avoid:** use bars for comparison and lines for trends; avoid pie charts with more than a few slices and 3D charts [DC-L05-22, inferred].

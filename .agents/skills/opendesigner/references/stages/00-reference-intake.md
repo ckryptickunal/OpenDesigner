@@ -8,15 +8,15 @@ Not a step in the sequence. The panel sits beside every stage; anything added he
 
 Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
 
-## Q-ref-01 · Do you have an example website, screenshot, Figma file or other resource the builder should learn from?
+## Q-ref-01 · Do you have a website, screenshot, Figma file or other example to learn from?
 Zoom any · weight medium · changes 0 decisions · class E
-- **Ask:** "Before we start, is there a site, screenshot or Figma file whose structure or quality you like? I'll read it and suggest answers."
-- **Why:** Tools already extract design systems from references (Google Stitch extracts from a URL; Polymet extracts tokens from a URL); the builder uses the same idea to pre-answer questions instead of starting blank.
+- **Ask:** "Is there a site, screenshot or Figma file whose structure or quality you like? I'll read it and suggest answers."
+- **Why:** A reference lets the builder suggest answers, so you don't start from a blank page. Tools do this now: Google Stitch reads a design system from a URL, and Polymet pulls tokens from one.
 - **Options:**
   - `url` A live website URL: the builder reads computed colors, type, spacing, radius, shadows, motion and components [inferred].
   - `screenshot` Screenshots or images: color, type size ratios, density, radius and depth are estimated from pixels; values are marked as estimates [inferred].
   - `figma` A Figma file or library: variables, styles and components are read through the Figma MCP (`get_variable_defs`, `get_design_context`, `get_screenshot`) [DC-L11-23].
-  - `code` A repository, CSS file or token JSON: exact values, including DTCG files [DC-L07-08].
+  - `code` Your code, a CSS file or a token JSON file: exact values, including DTCG files [DC-L07-08].
   - `doc` A brand book, voice guide or PDF: brand colors, typefaces, voice traits [inferred].
 - **Default:** none *Source:* [inferred].
 - **Show:** an "extracted from reference" card listing each found value next to the question it would answer, with Accept, Adjust and Ignore buttons.

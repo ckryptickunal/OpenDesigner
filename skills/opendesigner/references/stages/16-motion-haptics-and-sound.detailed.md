@@ -11,11 +11,11 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 ## Q-motion-04 · How should springs be defined and exported?
 Zoom 3 detailed · weight medium · changes 2 decisions · class G · cards DC-L04-22
 - **Show if:** Q-motion-01 is two-mode or springs
-- **Ask:** "Store springs as damping and stiffness, with Apple and CSS versions derived?"
-- **Why:** Springs keep velocity when interrupted and settle naturally; DTCG has no spring type, so the storage format matters [DC-L04-22; BOARD L04/L07 note].
+- **Ask:** "How should springy motion be set up: time and easing only, spring physics, or Apple's bounce?"
+- **Why:** Spring animations keep their speed when cut off and come to rest in a natural way. The DTCG format has no spring type, so how you store them matters [DC-L04-22; BOARD L04/L07 note].
 - **Options:**
   - `durations-only` Duration + easing only (Carbon, Fluent, Polaris, Primer).
-  - `spatial-effects` Springs split into spatial (may overshoot) and effects (critically damped, for color and opacity) (Material fast/default/slow).
+  - `spatial-effects` Two kinds of spring. Moves may overshoot; color and fade effects never do (Material fast/default/slow).
   - `apple-bounce` Duration + bounce 0 / 0.15 / 0.3 (Apple) [DC-L09-06].
 - **Default:** (dampingRatio, stiffness) plus derived (duration, bounce) for Apple and pre-sampled `linear()` for CSS; critically damped springs for effects *Source:* card heuristic [DC-L04-22].
 - **Show:** a switch and a sheet driven by the spring, dragged and released mid-flight.
@@ -24,8 +24,8 @@ Zoom 3 detailed · weight medium · changes 2 decisions · class G · cards DC-L
 
 ## Q-motion-02 · Which durations should exist, and should exits be faster?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L04-20, DC-L04-24
-- **Ask:** "Keep the standard duration ladder, with exits shorter than entrances?"
-- **Why:** Past about 500ms UI starts to feel slow; fast, interruptible exits respect the user's time [DC-L04-20, DC-L04-24].
+- **Ask:** "How many animation lengths should there be, and should things leave faster than they arrive?"
+- **Why:** Past about 500ms, motion starts to feel slow. Quick exits that people can cut short respect their time [DC-L04-20, DC-L04-24].
 - **Options:**
   - `6-steps` 6 steps: instant 0, micro 100, short 150-200, medium 250-300, long 400-500, extra 700 [DC-L04-20].
   - `4-semantic` 4 steps: micro, short, medium, long (Primer).
@@ -38,8 +38,8 @@ Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L04-
 
 ## Q-motion-03 · Which easing curves?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L04-21
-- **Ask:** "Use role-based curves: standard, enter, exit, linear?"
-- **Why:** Strong decelerate curves make entrances feel fast and "arriving"; role-based sets are easiest to apply consistently [DC-L04-21].
+- **Ask:** "How should speed-up and slow-down curves be grouped: by job, strength or mood?"
+- **Why:** Easing curves that slow down hard make things feel fast as they arrive. Curves named by job are the easiest to use the same way everywhere [DC-L04-21].
 - **Options:**
   - `role-based` Standard / enter / exit (Carbon, Primer, Windows).
   - `intensity-based` Min / mid / max intensity (Fluent).
@@ -52,8 +52,8 @@ Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L04-
 ## Q-motion-05 · Should shapes morph or use an expressive shape library?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L04-06
 - **Show if:** Q-shape-01 is pill or Q-motion-01 is springs
-- **Ask:** "Keep a simple full-round token, or add expressive shapes and morphing for a few signature moments?"
-- **Why:** Pills read tappable and friendly; expressive shapes (cookies, bursts, clovers) add playfulness, best kept to avatars and hero moments [DC-L04-06].
+- **Ask:** "Keep one simple full-round shape, or add playful shapes that morph at a few key moments?"
+- **Why:** Pill shapes look tappable and friendly. Playful shapes (cookies, bursts, clovers) add fun, but work best on avatars and hero moments [DC-L04-06].
 - **Options:**
   - `full-token` `radius.full` token only (Atlassian, Polaris, Primer, Fluent, Carbon v12).
   - `people-status` Pill reserved for people and status (Atlassian; Carbon v12 moved tags away from pill).
@@ -65,39 +65,39 @@ Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L04-
 
 ## Q-motion-06 · Which named transitions and stagger should the system ship?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L04-23
-- **Ask:** "Ship the four standard transitions: fade, fade-through, shared axis, container transform?"
-- **Why:** Consistent transitions make navigation legible (you can feel whether you went deeper or sideways) [DC-L04-23].
+- **Ask:** "Which of the four standard ways to change screens should we use, and should list items show up one by one?"
+- **Why:** Using the same screen transitions every time helps people follow the app. They can feel whether they went deeper or sideways [DC-L04-23].
 - **Options:**
   - `fade` Fade for in-screen enter and exit (dialogs, menus) [DC-L04-23].
   - `fade-through` Fade through for unrelated destinations such as tabs [DC-L04-23].
-  - `shared-axis` Shared axis x, y or z for spatial relationships (onboarding x, stepper y, parent-child z) [DC-L04-23].
-  - `container-transform` Container transform for element-to-page transitions [DC-L04-23].
-  - `stagger` A stagger token of 20-50ms, total at most 500ms [DC-L04-23].
+  - `shared-axis` Shared axis x, y or z to show where screens sit (onboarding x, stepper y, parent-child z) [DC-L04-23].
+  - `container-transform` Container transform, where an item grows into a full page [DC-L04-23].
+  - `stagger` A stagger (small delay between items) of 20-50ms, total at most 500ms [DC-L04-23].
 - **Default:** all four plus stagger *Source:* card heuristic, Material's four patterns [DC-L04-23].
 - **Show:** each transition playable on the preview.
 - **Use / avoid:** use OS-owned navigation transitions on native platforms; avoid custom page transitions that fight the back gesture [DC-L10-14].
 - **Skip:** yes.
 
-## Q-motion-09 · On native platforms, whose transitions, back behavior and haptics?
+## Q-motion-09 · On iOS and Android, who owns screen changes, the back gesture and vibrations?
 Zoom 3 detailed · weight medium · changes 0 decisions · class T · cards DC-L10-14, DC-L04-26
 - **Show if:** Q-plat-01 includes ios or android
-- **Ask:** "Use the platform's own navigation transitions and haptics, with brand motion only inside content?"
-- **Why:** OS-owned back gestures and transitions feel native (Android predictive back peeks behind); custom haptics feel cheap when overused [DC-L10-14, DC-L04-26].
+- **Ask:** "On iOS and Android, should screen changes and vibrations follow the system or your brand?"
+- **Why:** When the system owns back gestures and transitions, the app feels native; Android's predictive back peeks at the screen behind. Custom vibrations (haptics) feel cheap if you use too many [DC-L10-14, DC-L04-26].
 - **Options:**
-  - `os-nav-brand-micro` OS navigation transitions and back behavior, brand micro-motion as springs in content [DC-L10-14].
+  - `os-nav-brand-micro` System screen changes and back gesture, with small brand springs inside content [DC-L10-14].
   - `one-language` One brand motion language everywhere [DC-L10-14].
   - `haptics-system` System haptics only (standard controls already play them).
-  - `haptics-semantic` A semantic haptic map of about 6 events (success, warning, error, selection, toggle, light impact).
+  - `haptics-semantic` About 6 named vibrations (success, warning, error, selection, toggle, light impact).
 - **Default:** `os-nav-brand-micro`: os-nav-brand-micro and haptics-system; a semantic map only for products with frequent confirmations *Source:* card heuristics [DC-L10-14, DC-L04-26].
 - **Show:** the event list with each haptic's platform mapping.
 - **Use / avoid:** use haptics sparingly ("less is more"); avoid long "buzzy" vibrations [DC-L04-26].
 - **Hook:** accepts Custom haptics accept Apple AHAP (.ahap JSON, intensity and sharpness 0-1) and Android `VibrationEffect` compositions If no: system patterns first (Apple notification, impact, selection; Android `HapticFeedbackConstants`).
 - **Skip:** yes.
 
-## Q-motion-10 · Which OS accessibility settings must the system honor?
+## Q-motion-10 · Which accessibility settings on the device must the system follow?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L10-16
-- **Ask:** "Honor every OS accessibility setting: screen readers, text size, contrast, reduced transparency, reduced motion, bold text, forced colors?"
-- **Why:** Honoring settings changes the look for that user: thicker borders in high contrast, opaque bars under reduced transparency [DC-L10-16].
+- **Ask:** "Which device settings should the design follow, like screen readers, bigger text or less motion?"
+- **Why:** Following these settings changes the look for that person. With high contrast on, borders get thicker; with reduced transparency on, bars turn solid [DC-L10-16].
 - **Options:**
   - `screen-readers` VoiceOver, TalkBack and ARIA labels on every icon-only control.
   - `text-size` Dynamic Type, Android font scale, browser font size [DC-L10-07].

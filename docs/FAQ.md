@@ -71,7 +71,7 @@ OpenDesigner uses DTCG 2025.10 as its canonical token format and generates every
 
 ### Can Figma import DTCG tokens?
 
-Partly. The L07 research found that Figma imports DTCG with limits: one mode per file, sRGB or HSL colors, px units, and no composite tokens. That is why the engine also writes Figma variables directly (`engine.py export --format figma`), with one import file per mode. Check the lane for the current details.
+Partly. The L07 research found that Figma imports DTCG with limits. It takes one mode per file, sRGB or HSL colors, px units, and no composite tokens. That is why the engine also writes Figma variables directly (`engine.py export --format figma`), with one import file per mode. Check the lane for the current details.
 
 ## Tools and hosts
 
@@ -121,7 +121,9 @@ The interview asks for your platforms early, because that decision directly shap
 
 ### Does it send my code or data anywhere?
 
-The skills and engine run on your machine. They use the Python standard library only and make no network calls. Your conversation still goes to whichever AI provider you use, as it would for any prompt. Reference intake only fetches a URL after you confirm it.
+The skills and engine run on your machine. They use the Python standard library only, and the engine makes no network calls. Your conversation still goes to whichever AI provider you use, as it would for any prompt. Reference intake only fetches a URL after you confirm it.
+
+There is one opt-in exception. If you say yes, the journey tracker keeps a private log of your steps, and that log stays on your computer. Sending an anonymous summary to the maintainers is a second, separate yes. It never includes your answers, names, files or anything you typed. See [PRIVACY.md](PRIVACY.md).
 
 ## How it compares
 
@@ -143,13 +145,13 @@ Figma Make builds apps and prototypes by chat, with a live preview. A Make kit p
 
 ### How is this different from tweakcn or other theme generators?
 
-tweakcn is an open-source visual editor for shadcn/ui themes. It has about 40 token inputs, AI generation from text or an image, CSS variables for Tailwind v3 and v4, and a contrast checker. It is a good tool for tuning a shadcn theme.
+tweakcn is an open-source visual editor for shadcn/ui themes. It has about 46 controls [S-V1a-067]: 32 color inputs, 3 font pickers and 11 sliders. It also has AI generation from text or an image, CSS variables for Tailwind v3 and v4, and a contrast checker. It is a good tool for tuning a shadcn theme.
 
 The L11 and L17 research looked at theme generators: tweakcn, shadcn create, Radix, Realtime Colors and Material Theme Builder. They produce color, type, radius and shadow. None asks about audience, platforms, accessibility targets, component policies or governance. That is the gap OpenDesigner fills. Its output is framework-neutral DTCG, with Tailwind and CSS exports.
 
 ### How is this different from asking an AI to "make it look good"?
 
-AI output with no guidance tends toward one look. NN/g's study of 10 AI design tools found a similar generic look, with weak spacing, grouping, contrast and hierarchy. Vendors now ship their own guidance against that generic look ([`research/L17-how-systems-get-made.md`](../research/L17-how-systems-get-made.md) Part B).
+AI output with no guidance tends toward one look. NN/g's evaluation of AI prototyping tools (14 tested) [S-V1a-069] found a similar generic look, with weak spacing, grouping, contrast and hierarchy. Vendors now ship their own guidance against that generic look ([`research/L17-how-systems-get-made.md`](../research/L17-how-systems-get-made.md) Part B).
 
 OpenDesigner asks for the one thing people should recognize and proposes distinct directions. It labels which choices are safe and which are risks. It checks the result against rules before calling it done.
 

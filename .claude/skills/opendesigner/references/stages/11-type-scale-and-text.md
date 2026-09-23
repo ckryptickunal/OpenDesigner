@@ -13,7 +13,7 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 ## Q-type-08 · What size should body text be?
 Zoom 2 defined · weight medium · changes 3 decisions · class G · cards DC-L02-08
 - **Ask:** "What size should body text be?"
-- **Why:** Base size is the density dial for text: 13-14px reads dense and "pro tool", 16-17 comfortable and reading-friendly [DC-L02-08].
+- **Why:** Body text size sets how packed the text feels. 13-14px reads dense, like a "pro tool"; 16-17 reads comfortable and easy [DC-L02-08].
 - **Options:**
   - `13` 13px (Polaris text-body-md 13/20).
   - `14` 14px (Material Body Medium 14/20, Fluent, Carbon productive, Atlassian, Primer).
@@ -27,10 +27,10 @@ Zoom 2 defined · weight medium · changes 3 decisions · class G · cards DC-L0
 
 ## Q-type-17 · How far must layouts support users' larger-text settings?
 Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L02-21, DC-L10-07
-- **Ask:** "How far must layouts support users' larger-text settings?"
-- **Why:** At the largest sizes hierarchy compresses (iOS AX5 Body 53pt vs Large Title 60pt) and layouts must restack [DC-L02-21].
+- **Ask:** "When people turn up text size on their device, how far should layouts grow with it?"
+- **Why:** At the largest text settings, sizes bunch together and layouts must restack. On iOS at AX5, Body is 53pt and Large Title only 60pt [DC-L02-21].
 - **Options:**
-  - `capped-chrome` Full for content, capped at about 1.5x for fixed chrome like tab labels [DC-L10-07].
+  - `capped-chrome` Full for content, capped at about 1.5x for fixed parts like tab labels [DC-L10-07].
   - `full` Full scaling, no cap on body text: iOS AX1-AX5, Android nonlinear to 200%, web rem.
   - `none` No scaling support: fails platform guidance (Apple asks for at least 200%).
 - **Default:** `capped-chrome`: capped-chrome, with every text token in scalable units and no fixed-height text containers *Source:* platform convention and accessibility rule [DC-L10-07, DC-L02-21].

@@ -4,9 +4,9 @@ Owner: R4. Every program below was checked against its own official page on **20
 
 ## For sponsors
 
-OpenDesigner is a free, open-source set of skills and knowledge. It lets Claude, ChatGPT, Codex, Cursor and other agents interview a person and build a real design system: design tokens, CSS, Tailwind config, Figma variables and a DESIGN.md that the next session can read. It is maintained by Kunal Bairwa ([github.com/ckryptickunal](https://github.com/ckryptickunal)).
+OpenDesigner is a free, open-source set of skills and knowledge. It lets Claude, ChatGPT, Codex, Cursor and other agents interview a person and build a real design system. The result is design tokens, CSS, Tailwind config, Figma variables and a DESIGN.md that the next session can read. It is maintained by Kunal Bairwa ([github.com/ckryptickunal](https://github.com/ckryptickunal)).
 
-Sponsorship pays for maintenance time, model credits for testing the skills across AI hosts, and hosting for the planned MCP server. Sponsors get visibility, not influence. What OpenDesigner recommends inside an interview (tools, defaults, designers to hire) stays neutral, and we may decline sponsors whose products don't suit the project. GitHub Sponsors is being set up. Until the Sponsor button works, contact Kunal through his GitHub profile.
+Sponsorship pays for maintenance time, model credits for testing the skills across AI hosts, and hosting for the planned MCP server. Sponsors get visibility, not influence. What OpenDesigner recommends inside an interview (tools, defaults, designers to hire) stays neutral. We may decline sponsors whose products don't suit the project. GitHub Sponsors is being set up. Until the Sponsor button works, contact Kunal through his GitHub profile.
 
 ---
 
@@ -14,13 +14,13 @@ The rest of this page is Kunal's working plan.
 
 ## The short answer
 
-OpenDesigner is not sponsorable in any serious way today. The repo is private, has 0 stars, and Kunal has no account on any funding platform yet [S-R4-601, S-R4-647]. Most funds with real money want proof that people use the project. FLOSS/fund says outright that "very new projects or projects with minimal usage are not considered" [S-R4-620], and FOSS United says "we do not fund ideas" [S-R4-648]. So the order is:
+OpenDesigner is not sponsorable in any serious way today. The repo is public but has 0 stars [S-V1b-001]. GitHub Sponsors is live since 2026-09-24 (github.com/sponsors/ckryptickunal); other platforms have no account yet. Most funds with real money want proof that people use the project. FLOSS/fund says outright that "very new projects or projects with minimal usage are not considered" [S-R4-620]. FOSS United says "we do not fund ideas" [S-R4-648]. So the order is:
 1. Set up the payment rails.
 2. Launch and get the project listed in the AI-tool directories.
 3. Apply to the few programs that take new projects.
 4. Approach companies once there are numbers to show them.
 
-Your Marc Lou teardown (`~/Desktop/SPonsorMe/TEARDOWN.md`) already settled one question: a sponsor auction only works when you already have a large audience. That campaign kept $103k, but it ran on 390k followers on X and a post that had gone viral the day before, and the buyers were companies paying to reach his audience. It is not an option until OpenDesigner has an audience of its own. Two lessons from it do carry over:
+Your Marc Lou teardown (`~/Desktop/SPonsorMe/TEARDOWN.md`) already settled one question: a sponsor auction only works when you already have a large audience. That campaign kept $103k. But it ran on 390k followers on X and a post that had gone viral the day before. The buyers were companies paying to reach his audience. It is not an option until OpenDesigner has an audience of its own. Two lessons from it do carry over:
 - **Never show an empty sponsor wall.** List in-kind supporters, such as companies that give credits.
 - **Publish your numbers openly.**
 
@@ -28,7 +28,7 @@ Your Marc Lou teardown (`~/Desktop/SPonsorMe/TEARDOWN.md`) already settled one q
 
 | # | Option | When | Effort | Likely value | Why it ranks here |
 |---|---|---|---|---|---|
-| 1 | **GitHub Sponsors** | Now | About 2 hours, then GitHub reviews it | Small at first. It is the payment route most other funders use. | India is a supported region. GitHub charges no fee on sponsorships from personal accounts and up to 6% from organizations. Money is paid by Stripe Connect to an Indian bank account [S-R4-602, S-R4-605]. Microsoft's FOSS Fund prefers it, and Open Source Pledge companies pay through it [S-R4-637, S-R4-147]. |
+| 1 | **GitHub Sponsors** | Now | About 2 hours, then GitHub reviews it | Small at first. It is the payment route most other funders use. | India is a supported region. GitHub charges no fee on sponsorships from personal accounts and up to 6% from organizations. Money is paid by Stripe Connect to an Indian bank account [S-R4-602, S-R4-605]. The first payout comes 60 days after the first sponsorship, and Stripe Connect pays out on the 22nd whatever the balance [S-V1b-057]. Microsoft's FOSS Fund prefers it, and Open Source Pledge companies pay through it [S-R4-637, S-R4-147]. |
 | 2 | **FOSS United** fellowship or project grant | Week 3, after launch, with first users | About 1 day: a funding.json file and a form | ₹1.8L to ₹7L is realistic | The only large fund that favours Indian individuals. Project grants go up to ₹15L, with a typical grant of ₹3–7L paid over a year. In 2026 it gave a ₹1.8L fellowship for "improving design across the open source ecosystem" [S-R4-648, S-R4-112]. It looks at the person first but asks how many users the project has, so apply after launch. |
 | 3 | **AI-tool credits:** Cline open-source grant, then OpenAI Codex for Open Source | Week 2 | 1–2 hours each | Cline: $1k–$10k in credits. OpenAI: 6 months of ChatGPT Pro plus possible API credits. | Both take applications on a rolling basis [S-R4-652, S-R4-639]. The credits pay for testing the skills across models, which this project needs. OpenAI looks for widely used projects but says "apply anyway and explain why" [S-R4-639], so odds are low until there is usage. |
 | 4 | **Vercel Open Source Program** (next window) | When it reopens | About 2 hours | $3,600 in credits over 3 years, a starter pack of third-party credits, and a mention in the cohort blog post | Closed now [S-R4-650]. Windows open four times a year, and the Spring 2026 cohort included agent-skill repos [S-R4-305]. Vercel also employs the creator of shadcn/ui [S-R4-309]. |
@@ -47,7 +47,7 @@ Fit is my judgement for OpenDesigner as it is today [inferred]. All rows were ch
 
 | Option | India / individuals | Fees and terms | Status | Fit | Src |
 |---|---|---|---|---|---|
-| [GitHub Sponsors](https://docs.github.com/en/sponsors/getting-started-with-github-sponsors/about-github-sponsors) | Yes. Stripe Connect to an Indian bank; country of residence and bank must match. Needs a W-8BEN tax form and two-factor login. | 0% from personal accounts; up to 6% from organizations (3% saved if they pay by invoice). Paid out within 30 days after month end. | Open | **High** | 602, 605, 006 |
+| [GitHub Sponsors](https://docs.github.com/en/sponsors/getting-started-with-github-sponsors/about-github-sponsors) | Yes. Stripe Connect to an Indian bank; country of residence and bank must match. Needs a W-8BEN tax form and two-factor login. | 0% from personal accounts; up to 6% from organizations (3% saved if they pay by invoice). Paid out within 30 days after month end. The first payout comes 60 days after the first sponsorship; Stripe Connect pays on the 22nd whatever the balance [S-V1b-057]. | Open | **High** | 602, 605, 006 |
 | [Open Source Collective](https://docs.oscollective.org/getting-started/acceptance-criteria) | Yes, paid by Wise or PayPal (PayPal capped at $600) | 10% host fee. Needs an organization repo, an OSI-style license, and activity or usage. | Open (2,698 projects hosted) | Later | 609, 610, 012, 018 |
 | India-based fiscal host on Open Collective | None credible: 7 India hosts, none for software; FOSS United is not on Open Collective | n/a | n/a | None | 018, 019 |
 | [Polar](https://polar.sh/legal/acceptable-use-policy) | Payouts to India are supported | Its policy (effective 2026-03-25) **prohibits donations and sponsorship**. As a seller of paid products it charges 5% + 50¢. | Open, for selling only | Later, for paid products | 021, 022, 024 |
@@ -59,7 +59,7 @@ Fit is my judgement for OpenDesigner as it is today [inferred]. All rows were ch
 | [Razorpay](https://razorpay.com/docs/payments/international-payments/) | Registered Indian businesses only; individuals must use PayPal for foreign payments | n/a | n/a | Low | 052, 053 |
 
 India notes:
-- PayPal India needs an RBI purpose code before you can withdraw to your bank, and describes its service as receiving payment for exports [S-R4-033, S-R4-034].
+- PayPal India needs an RBI purpose code before you can withdraw to your bank. It describes its service as receiving payment for exports [S-R4-033, S-R4-034].
 - Stripe is invite-only for new Indian accounts and needs a PAN [S-R4-036, S-R4-037].
 - Sponsorship money is income. Ask a chartered accountant how to report it [inferred].
 
@@ -147,8 +147,8 @@ For comparison, what similar projects receive:
 
 ### Payment setup (Kunal)
 1. **GitHub Sponsors.** Go to github.com/sponsors, join, and fill in the profile. You need Stripe Connect with your PAN and an Indian bank account, the W-8BEN tax form and two-factor login [S-R4-037]. Choose bank or fiscal host at signup; it is hard to change later [S-R4-605]. Then uncomment `github:` in `.github/FUNDING.yml`.
-2. **Sponsor button.** After the repo is public, tick Settings > General > Features > Sponsorships, then "Set up sponsor button" [S-R4-604]. Until GitHub Sponsors is approved, `FUNDING.yml` holds only a `custom:` link to this page's "For sponsors" section.
-3. **funding.json.** Publish a [funding.json](https://fundingjson.org/) file (schema v1.1.0) describing the project, the funding channel (GitHub Sponsors) and your plans. If the file's address has a different hostname from the project address, add `.well-known/funding-manifest-urls` [S-R4-621]. Submit its address to FOSS United (fossunited.org/grants/projects/apply) and later to FLOSS/fund (dir.floss.fund/submit) [S-R4-616, S-R4-619]. Neither R4 nor R1 owns this file yet; add it at the repo root.
+2. **Sponsor button.** The repo is public now [S-V1b-001]. Tick Settings > General > Features > Sponsorships, then "Set up sponsor button" [S-R4-604]. Until GitHub Sponsors is approved, `FUNDING.yml` holds only a `custom:` link to this page's "For sponsors" section.
+3. **funding.json.** Publish a [funding.json](https://fundingjson.org/) file (schema v1.1.0) describing the project, the funding channel (GitHub Sponsors) and your plans. If the file's address has a different hostname from the project address, add `.well-known/funding-manifest-urls` [S-R4-621]. Submit its address to FOSS United (fossunited.org/grants/projects/apply) [S-R4-616]. Later, submit it to FLOSS/fund (dir.floss.fund/submit) [S-R4-619]. R1 added it at the repo root ([`funding.json`](../funding.json)). Its `entity.email` is still empty: fill it with a public contact email before you submit.
 4. **Decide on a GitHub organization.** Open Source Collective requires one [S-R4-609]. Moving the repo before launch is cheaper than after, but it changes the plugin and marketplace names other lanes use. This is your call.
 
 ### Sponsor tiers (monthly, on GitHub Sponsors)
@@ -161,7 +161,7 @@ For comparison, what similar projects receive:
 | Partner | $500 | Large logo at the top of the README; a line in each release note; a quarterly 30-minute call to hear their feedback (input, not control) |
 | One-time | $100 or $1,000 | Same listing as the matching monthly tier, for 12 months |
 
-These prices sit between Storybook's ($2 and $100 a month) and shadcn/ui's ($20 a month, $1,000 one-time) [S-R4-303, S-R4-301]. The policy stays the same at every tier: sponsors never buy influence over recommendations. Storybook's sponsor list shows why you should reserve the right to decline sponsors: it includes spam such as "Buy Google Reviews" [S-R4-303].
+These prices sit between Storybook's ($2 and $100 a month) and shadcn/ui's ($20 a month, $1,000 one-time) [S-R4-303, S-R4-301]. The policy stays the same at every tier: sponsors never buy influence over recommendations. Storybook's sponsor list shows why you should keep the right to decline sponsors. It includes spam such as "Buy Google Reviews" [S-R4-303].
 
 ### Sponsor wall (for R1 to add to the README)
 ```md
@@ -219,16 +219,23 @@ Kunal
 
 | Week | Actions |
 |---|---|
-| 1 (Sep 24–30) | Join GitHub Sponsors; review takes a few days. Decide on the GitHub organization question. Publish funding.json. Go public and tick Sponsorships. Submit to the Claude plugin directory (through Console). Make sure R3's manifests meet the Gemini CLI gallery rules (topic plus `gemini-extension.json`). Submit to the OpenAI plugin directory, Cursor marketplace and Kilo marketplace. If you can, attend IndiaFOSS (26–27 Sep, Bengaluru) and meet the FOSS United grants team. |
+| 1 (Sep 24–30) | Join GitHub Sponsors; review takes a few days. Decide on the GitHub organization question. Publish funding.json. The repo is already public, so tick Sponsorships. Submit to the Claude plugin directory (through Console). Make sure R3's manifests meet the Gemini CLI gallery rules (topic plus `gemini-extension.json`). Submit to the OpenAI plugin directory, Cursor marketplace and Kilo marketplace. If you can, attend IndiaFOSS (26–27 Sep, Bengaluru) and meet the FOSS United grants team. |
 | 2 (Oct 1–7) | Launch posts. Start the weekly numbers log. Apply to the Cline open-source grant, OpenAI Codex for Open Source ("apply anyway") and Factory's open-source program. Once approved, uncomment `github:` in FUNDING.yml and put in-kind supporters on the sponsor wall. |
 | 3 (Oct 8–14) | Apply to FOSS United (a fellowship or project grant, with launch numbers). Apply to Emergent Ventures, choosing India in the region menu. Write the one-page brief. |
 | 4 (Oct 15–23) | Send five outreach emails: Penpot, Paper, Tokens Studio, Chromatic, and Vercel devrel (ask about the next program window). Review the numbers. Set reminders: Vercel's next window, the Nagarathna grant (January 2027), FLOSS/fund once there is usage, Claude for Open Source once you have 20 outside contributors, and the Sequoia fellowship once there is adoption. |
 
-Accounts Kunal has to create or use: GitHub Sponsors (with Stripe Connect), an Anthropic Console account (for the plugin directory, if you're not in a Claude Team org), a ChatGPT account plus OpenAI identity verification, a Cursor marketplace publisher, a FOSS United platform login, and later Open Collective. Optional: Buy Me a Coffee as a tip jar.
+Accounts Kunal has to create or use:
+- GitHub Sponsors (with Stripe Connect);
+- an Anthropic Console account, for the plugin directory, if you're not in a Claude Team org;
+- a ChatGPT account plus OpenAI identity verification;
+- a Cursor marketplace publisher;
+- a FOSS United platform login;
+- later, Open Collective;
+- optional: Buy Me a Coffee as a tip jar.
 
 ## What could not be verified
 - Whether GitHub requires an active Sponsors profile before the `github:` key works. The docs imply it [S-R4-005].
-- GitHub Sponsors' minimum payout, and India-specific paperwork (purpose code, foreign remittance certificate).
+- India-specific paperwork for GitHub Sponsors payouts (purpose code, foreign remittance certificate).
 - Whether Open Source Collective accepts CC BY 4.0 content alongside MIT code.
 - Mozilla Technology Fund status (its page returns 403) [S-R4-631].
 - Cloudflare Project Alexandria status (403).
@@ -237,5 +244,8 @@ Accounts Kunal has to create or use: GitHub Sponsors (with Stripe Connect), an A
 - Chromatic's free-plan limits.
 - The size of an Emergent Ventures grant.
 - Config 2027's call for speakers, and Clarity, Smashing and Design Systems London dates.
-- The Cline grant's reported preference for solo developers. A helper reported it; the lead's spot-check only confirmed the amounts and rolling review [S-R4-652].
 - "Zero sponsorships" on a company's GitHub account shows only public sponsorships; companies may pay privately or by invoice.
+
+Resolved by the V1 check on 2026-09-24:
+- GitHub Sponsors' minimum payout: Stripe Connect has none (GitHub Sponsors Additional Terms 3.3) [S-V1b-057].
+- The Cline grant's preference for solo developers: Cline's announcement names solo developers and small teams among the projects it wants [S-V1b-063]. The lead's earlier spot-check had confirmed only the amounts and rolling review [S-R4-652].

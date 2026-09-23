@@ -8,33 +8,33 @@ Read the main stage file first; these questions refine it.
 
 Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
 
-## Q-scope-03 · Who will consume the system?
+## Q-scope-03 · Who will use the system itself?
 Zoom 3 detailed · weight high · changes 8 decisions · class I · cards DC-L11-02
-- **Ask:** "Who will use the system itself: engineers, designers, content people, partners, AI coding agents?"
-- **Why:** Each audience needs different docs and export formats; AI agents need machine-readable exports [DC-L11-02].
+- **Ask:** "Who will work with the system: engineers, designers, writers, partners, or AI tools that write code?"
+- **Why:** Each group that uses the system needs its own docs and file formats. AI coding agents need files a machine can read [DC-L11-02].
 - **Options:**
   - `engineers` Engineers: component API docs and code packages (DC-L11-18).
   - `designers` Designers: a design-tool library (DC-L16-13).
-  - `content-pm` Content, PM, marketing: usage and voice guidance (DC-L06-18).
+  - `content-pm` Writers and people in product or marketing: usage and voice guidance (DC-L06-18).
   - `partners` External partners: public docs and stricter versioning (DC-L11-14).
   - `ai-agents` AI coding agents: MCP server, DESIGN.md, llms.txt (12 of 25 benchmarked systems ship one) [L09 A1 row 10; DC-L11-23].
 - **Default:** `engineers`: engineers + designers + ai-agents *Source:* L09 shared pattern row 10 (agent-readable exports in 12 of 25 systems) [inferred choice].
 - **Show:** a list of the output files the builder will generate for each checked audience.
 - **Skip:** yes.
 
-## Q-scope-04 · How many people will build and maintain the system, and how are they organized?
+## Q-scope-04 · How many people will build and look after the system, and how do they work together?
 Zoom 3 detailed · weight medium · changes 3 decisions · class I · cards DC-L11-09, DC-L11-10
-- **Ask:** "How many people will build and maintain this, and are they one team or spread across product teams?"
-- **Why:** Small teams should adapt an existing accessible base rather than build from scratch; team size sets how much the builder must automate [DC-L11-01, DC-L11-10].
+- **Ask:** "How many people will build and look after this, and are they one team or spread across product teams?"
+- **Why:** Team size sets how much the builder must do for you. Small teams should adapt an accessible base that exists, not build from scratch [DC-L11-01, DC-L11-10].
 - **Options:**
   - `size-1-2` 1-2 people (28% of teams).
   - `size-3-5` 3-5 people (33%).
   - `size-6-10` 6-10 people (25%).
   - `size-10plus` 10+ people (8%).
-  - `model-solitary` Solitary: one team makes it for itself and shares it (Curtis).
-  - `model-centralized` Centralized: a dedicated team serves product teams.
-  - `model-federated` Federated: designers from several product teams decide together.
-  - `model-hybrid` Hybrid: central librarian team plus federated contributors (Salesforce).
+  - `model-solitary` One team, for itself: one team makes it for itself and shares it (Curtis).
+  - `model-centralized` One central team: a dedicated team serves product teams.
+  - `model-federated` Shared by several teams: designers from several product teams decide together.
+  - `model-hybrid` Central team plus helpers: central librarian team plus federated contributors (Salesforce).
 - **Default:** 1-2 people, centralized with a named owner *Source:* card heuristic [DC-L11-09].
 - **Show:** none visual; shows which governance defaults (contribution flow, review gates) the builder will switch on.
 - **Skip:** yes.

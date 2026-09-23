@@ -12,8 +12,8 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 
 ## Q-brand-01 · Where does your brand sit on these scales?
 Zoom 0 sketch · weight high · changes 15 decisions · class I · cards DC-L06-02
-- **Ask:** "Place your brand on these scales; drag each slider toward the end that sounds like you."
-- **Why:** The sliders set defaults for color saturation, radius, type, weight, motion, illustration and voice through the L06 lever matrix [DC-L06-02].
+- **Ask:** "Where does your brand sit on each scale? Drag each slider toward the end that sounds like you."
+- **Why:** The sliders set starting values for color strength, corner radius and type. They also set font weight, motion, illustration and voice, through the L06 lever matrix [DC-L06-02].
 - **Options:**
   - `A playful-serious` Playful: saturated brand color on chrome, large radii and pills, springs with overshoot, characters. Serious: neutral or monochrome scheme, small radii, ease-out without bounce, pictograms (M3 Expressive vs Carbon).
   - `B friendly-authoritative` Friendly: warm neutrals, softer borders, rounded corners, sentence case, contractions. Authoritative: cool greys and deep blues or black, tighter radii, strong rules (Linear 2026 warm gray, Airbnb 2025 curves vs Uber black, IBM grid).
@@ -29,21 +29,21 @@ Zoom 0 sketch · weight high · changes 15 decisions · class I · cards DC-L06-
 ## Q-brand-02 · Which products should yours feel like, and what one thing should people recognize it by?
 Zoom 2 defined · weight medium · changes 0 decisions · class I
 - **Ask:** "Which products should yours feel like, and what one thing should people recognize it by?"
-- **Why:** References align taste fast (a 20-second gut test), and the "cover the logo" test names the signature lever to invest in.
+- **Why:** Naming products you like agrees on taste fast, in a 20-second gut test. The "cover the logo" test then shows the one signature thing worth investing in.
 - **Options:**
-  - `sig-color` One hero color (brand-led systems spend personality on one signature color) [L09 A3].
-  - `sig-typeface` Signature typeface (Uber Move, Spotify Mix, IBM Plex) [L09 A3].
-  - `sig-device` A graphic device or shape (Slack shapes, M3 shape library).
-  - `sig-character` A character or illustration style (Mailchimp Freddie, Duolingo Duo).
-  - `competitors` Competitors (text): the builder flags tropes they share so you can avoid them (Collins positioned Mailchimp to "break from SaaS visual tropes").
+  - `sig-color` One hero color (brand-led systems show their style through one color) [L09 A3].
+  - `sig-typeface` A signature font (Uber Move, Spotify Mix, IBM Plex) [L09 A3].
+  - `sig-device` A shape or graphic mark (Slack shapes, M3 shape library).
+  - `sig-character` A character or drawing style (Mailchimp Freddie, Duolingo Duo).
+  - `competitors` Your competitors (type their names): the builder flags tropes they share so you can avoid them (Collins positioned Mailchimp to "break from SaaS visual tropes").
 - **Default:** `sig-color`: sig-color *Source:* L09 personality map, brand-led systems keep chrome restrained and spend personality on typeface, one color and imagery [L09 A3, inferred ranking].
 - **Show:** reference thumbnails placed on the L09 personality map (productive to expressive, neutral to brand-led) with the person's current position.
 - **Skip:** yes.
 
 ## Q-brand-08 · Which of these assets do you already have?
 Zoom 2 defined · weight medium · changes 0 decisions · class D
-- **Ask:** "Tick what you already have: logo, brand colors, brand font files, icons, app icon, photos, illustrations, animations, sounds, voice guide, brand book."
-- **Why:** Designer-owned blocks are asked once as a grouped checklist so gaps surface early; each "yes" opens its hook, each "no" gets a fallback and a briefed placeholder slot [DC-L17-04; BRIEF requirement 2].
+- **Ask:** "Which of these do you already have? Tick all that apply."
+- **Why:** Asking once for everything a designer must make shows the gaps early. Each "yes" opens its asset hook, and each "no" gets a fallback and a placeholder with a written brief [DC-L17-04; BRIEF requirement 2].
 - **Options:**
   - `logo` Logo and brand mark: opens Q-brand-03 [DC-L05-13].
   - `brand-colors` Exact brand colors: opens the locked-hex input in Q-color-01 [DC-L01-09].
@@ -66,11 +66,11 @@ Zoom 2 defined · weight medium · changes 0 decisions · class D
 ## Q-brand-03 · Do you have a logo and brand mark?
 Zoom 0 sketch · weight medium · changes 0 decisions · class D
 - **Ask:** "Do you have a logo or brand mark? If so, share the SVG."
-- **Why:** A logo is a block the builder cannot generate well; it feeds the logo component, favicons and app icons [DC-L05-13; BRIEF requirement 2].
+- **Why:** Your logo shows up in the logo component, the favicons and app icons. The builder cannot make a good logo itself [DC-L05-13; BRIEF requirement 2].
 - **Options:**
   - `no` Not yet: see the Hook line.
-  - `yes-full` Yes, symbol and wordmark: the builder makes a Logo component with Icon and Lockup variants (Atlassian sizes 16-48px, appearances brand, neutral, inverse).
-  - `yes-wordmark` Wordmark only: used on sign-in and marketing; the nav uses the name set in the brand typeface [DC-L05-13, inferred].
+  - `yes-full` Yes, a symbol plus the name: the builder makes a Logo component with Icon and Lockup variants (Atlassian sizes 16-48px, appearances brand, neutral, inverse).
+  - `yes-wordmark` Only the name as a logo (wordmark): used on sign-in and marketing; the nav uses the name set in the brand typeface [DC-L05-13, inferred].
 - **Default:** `no`: no, with a text wordmark placeholder *Source:* [inferred].
 - **Show:** the logo placed in an app bar at 24-32px, on a sign-in screen as a lockup, and as a browser-tab favicon, in light and dark.
 - **Use / avoid:** use the symbol-only mark at 24-32px in dense app chrome and the full lockup on sign-in and marketing; avoid recoloring fixed-color product marks (Fluent never recolors launch icons) and avoid relying on inherited color.
@@ -79,12 +79,12 @@ Zoom 0 sketch · weight medium · changes 0 decisions · class D
 
 ## Q-brand-04 · How expressive should the product be?
 Zoom 2 defined · weight high · changes 5 decisions · class G · cards DC-L06-03
-- **Ask:** "How expressive should the product be: calm and productive, calm with one or two big moments, or expressive throughout?"
-- **Why:** Expressive design raised perceived modernity by 34% and made key elements up to 4x faster to spot in Google's tests, but overdone it hurts usability and a strong minority prefers calm [DC-L06-03].
+- **Ask:** "How lively should it feel: calm and steady, calm with one or two big moments, or lively all through?"
+- **Why:** In Google's tests, expressive design made products seem 34% more modern and key parts up to 4x faster to spot. Too much of it hurts ease of use, and a strong minority prefers calm [DC-L06-03].
 - **Options:**
-  - `hero-moments` Productive plus 1-2 hero moments: expressive motion and type only at significant moments such as opening a page or the primary action (Carbon expressive motion; Material's own budget).
-  - `productive` Productive only: calm, dense, efficient (Carbon product UI, Linear 2026 "calmer interface").
-  - `expressive` Expressive throughout: varied shapes, rich color, emphasized type, fluid motion (M3 Expressive's seven tactics).
+  - `hero-moments` Calm, plus 1-2 big moments: expressive motion and type only at significant moments such as opening a page or the primary action (Carbon expressive motion; Material's own budget).
+  - `productive` Calm and steady only: calm, dense, efficient (Carbon product UI, Linear 2026 "calmer interface").
+  - `expressive` Lively throughout: varied shapes, rich color, emphasized type, fluid motion (M3 Expressive's seven tactics).
 - **Default:** `hero-moments`: hero-moments *Source:* card heuristic, Material's "one or two hero moments" rule [DC-L06-03]. Capped at productive when Q-aud-02 = high-trust.
 - **Show:** one screen shown in all three settings, with the hero moment (for example a success state) animated.
 - **Skip:** yes.
@@ -93,12 +93,12 @@ Zoom 2 defined · weight high · changes 5 decisions · class G · cards DC-L06-
 Zoom 2 defined · weight medium · changes 1 decisions · class I · cards DC-L06-01
 - **Show if:** Q-scope-01 includes `marketing`
 - **Ask:** "How should the marketing site relate to the product: one system with two moods, or separate?"
-- **Why:** The layering model decides whether marketing and app look visibly related or drift apart [DC-L06-01].
+- **Why:** How you layer brand and product sets whether your marketing site and app look alike or drift apart [DC-L06-01].
 - **Options:**
-  - `one-system-two-sets` One system with productive and expressive value sets: same type family and color logic, app denser (Carbon type sets -01/-02).
-  - `brand-above` Brand language above, product system below, marketing beside it: more marketing freedom, more drift risk (IBM Brand Center / Carbon / Carbon for IBM.com).
-  - `family` Family of systems on one foundation: platforms differ in components, tokens keep one brand (Spotify Encore, Netflix Hawkins).
-  - `single` Single product system, brand only in logo and color (most startups) [inferred].
+  - `one-system-two-sets` One system, with a calm set and a lively set: same type family and color logic, app denser (Carbon type sets -01/-02).
+  - `brand-above` Brand rules on top, the product system below, and marketing beside it: more marketing freedom, more drift risk (IBM Brand Center / Carbon / Carbon for IBM.com).
+  - `family` A family of systems on one shared base: platforms differ in components, tokens keep one brand (Spotify Encore, Netflix Hawkins).
+  - `single` One product system. The brand is only in the logo and color (most startups) [inferred].
 - **Default:** `one-system-two-sets`: one-system-two-sets *Source:* card heuristic [DC-L06-01].
 - **Show:** a marketing hero and a product table side by side, rendered from the chosen layering.
 - **Skip:** yes.
@@ -106,12 +106,12 @@ Zoom 2 defined · weight medium · changes 1 decisions · class I · cards DC-L0
 ## Q-brand-07 · What are your 3-5 design principles, and which one wins a tie?
 Zoom 2 defined · weight medium · changes 0 decisions · class I · cards DC-L06-15, DC-L11-05
 - **Ask:** "What 3-5 principles should break ties, and which one wins? I can draft some from your sliders."
-- **Why:** Principles break ties between sliders that pull the same lever in opposite directions [DC-L06-15; L06 section 4.2].
+- **Why:** When two sliders pull the same setting in opposite ways, your ranked principles break the tie [DC-L06-15; L06 section 4.2].
 - **Options:**
   - `generate` Let the builder draft principles from the sliders, for you to edit [inferred].
   - `checklist` Question checklists (IBM).
   - `pairs` Functional and emotional pairs (Fluent).
-  - `imperatives` Imperatives that name their sacrifice (GOV.UK, 11 principles, updated 2 Apr 2025).
+  - `imperatives` Commands that say what they give up (GOV.UK, 11 principles, updated 2 Apr 2025).
   - `value-words` Short value words (Carbon system principles).
 - **Default:** `generate`: generate, 3-5 principles, each naming what it outranks, with one making accessibility non-negotiable *Source:* card heuristic [DC-L06-15].
 - **Show:** each principle shown with a do/don't pair generated from the current draft.

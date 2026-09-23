@@ -10,14 +10,14 @@ Zoom 3 (detailed) questions: `21-actions-states-and-focus.detailed.md`.
 
 Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
 
-## Q-state-01 · How many button emphasis levels, and how many primary actions per view?
+## Q-state-01 · How many button styles, and how many main buttons in each area?
 Zoom 2 defined · weight medium · changes 2 decisions · class G · cards DC-L08-05, DC-L13-18
-- **Ask:** "Four button levels plus danger, with one primary action per region?"
-- **Why:** Three levels read calm and strict; five or six allow dense toolbars; several filled buttons flatten hierarchy and look like ads [DC-L08-05, DC-L13-18].
+- **Ask:** "How many button styles do you need, and how many main buttons can each area have?"
+- **Why:** Three button styles feel calm and strict, while five or six fit busy toolbars. Several filled buttons together make nothing stand out and look like ads [DC-L08-05, DC-L13-18].
 - **Options:**
   - `four-danger` Primary, secondary, tertiary/outline, ghost/text, plus danger (Carbon, Fluent).
   - `three` Solid, outline, text [DC-L08-05].
-  - `five-plus` 5-7 levels including tonal, elevated, discovery or AI variants (M3 5; Atlassian 7 incl. Rovo).
+  - `five-plus` 5-7 styles, adding tonal, raised, discovery or AI buttons (M3 5; Atlassian 7 incl. Rovo).
 - **Default:** `four-danger`: four-danger; at most one high-emphasis action per region, placed after the last field in reading order; a destructive button never takes the primary role *Source:* card heuristics [DC-L08-05, DC-L13-18].
 - **Show:** the button sheet in every state, plus a form footer.
 - **Use / avoid:** use style, not size, to mark the preferred choice (Apple); avoid two primary buttons in one group [L13 E1].
@@ -25,8 +25,8 @@ Zoom 2 defined · weight medium · changes 2 decisions · class G · cards DC-L0
 
 ## Q-state-02 · How obvious should clickable things be?
 Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L15-09
-- **Ask:** "Strong, balanced or minimal signals that something is clickable?"
-- **Why:** Minimal signifiers look sleek but cost 22% more time and 25% more fixations to find targets (NN/g) [DC-L15-09].
+- **Ask:** "How clearly should buttons and links show they can be tapped or clicked?"
+- **Why:** Faint clues look sleek, but people take 22% more time and 25% more eye stops to find what to click (NN/g) [DC-L15-09].
 - **Options:**
   - `balanced` Balanced: filled primary, outline secondary, link-style tertiary, links underlined on hover.
   - `strong` Strong: filled or slightly raised buttons, colored underlined links, bordered inputs, color reserved for interactive elements.
@@ -38,12 +38,12 @@ Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L15-0
 
 ## Q-state-03 · What should the keyboard focus ring look like?
 Zoom 2 defined · weight low · changes 0 decisions · class G · cards DC-L04-09, DC-L08-11
-- **Ask:** "A 2px ring with a 2px gap that follows each component's corners, in a color that shows on every surface?"
-- **Why:** Thicker, offset rings are unmistakable but louder; inner rings keep dense grids tight but can fail contrast on filled controls [DC-L04-09, DC-L08-11].
+- **Ask:** "What should the focus ring look like, the outline that shows where the keyboard is?"
+- **Why:** A thicker focus ring with a gap is impossible to miss but louder. A ring drawn inside keeps tight grids neat but can fail contrast on filled controls [DC-L04-09, DC-L08-11].
 - **Options:**
-  - `outer-2-2` 2px solid ring, 2px offset, radius = component radius + offset (Atlassian `radius.focus`, Primer 2px).
-  - `material-3` 3px ring, 2px outer offset, -3px inner offset where outside rings would clip (Material 3).
-  - `inset` Inset border for dense grids (Carbon `$focus` + `$focus-inset`).
+  - `outer-2-2` 2px ring, 2px gap, corners = the part's radius + the gap (Atlassian radius.focus, Primer 2px).
+  - `material-3` 3px ring, 2px gap outside, or -3px inside where an outer ring would be cut off (Material 3).
+  - `inset` Border drawn inside, for tight grids (Carbon $focus + $focus-inset).
   - `two-tone` Two-tone ring (inner white, outer dark) that is 3:1 on every surface [DC-L08-11].
 - **Default:** `outer-2-2`: outer-2-2 in a high-contrast brand or neutral color with light and dark values, plus a forced-colors fallback (an outline, not a box-shadow alone) *Source:* card heuristics and accessibility rule [DC-L04-09, DC-L08-11].
 - **Show:** keyboard tab-through of the preview screen with the ring on every stop.
@@ -52,12 +52,12 @@ Zoom 2 defined · weight low · changes 0 decisions · class G · cards DC-L04-0
 
 ## Q-state-08 · How should the product show that it is working?
 Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L13-01, DC-L08-12
-- **Ask:** "Nothing under a second, skeletons for page loads, spinners for single actions, progress bars past ten seconds?"
-- **Why:** Skeletons make pages feel structured and faster; spinners feel generic and give no duration; response-time thresholds decide which to use [DC-L13-01, DC-L08-12].
+- **Ask:** "What should people see while they wait, for short waits and long ones?"
+- **Why:** Skeletons, gray boxes where things will load, make pages feel ordered and faster; spinners feel plain and don't say how long. How long the wait is decides which to use [DC-L13-01, DC-L08-12].
 - **Options:**
-  - `nng-ladder` No indicator under 1 s, looped indicator 2-10 s, percent-done over 10 s (NN/g).
-  - `skeleton-first` Skeletons for page or region loads, spinners for modules (Carbon skeletons only on containers).
-  - `inline-button` Spinner inside the triggering button, which keeps focus (S2 pending after 1 s; Carbon inline loading).
+  - `nng-ladder` Nothing under 1 s, a looping sign for 2-10 s, a percent-done bar over 10 s (NN/g).
+  - `skeleton-first` Skeletons (gray boxes) for page or area loads, spinners for smaller parts (Carbon skeletons only on containers).
+  - `inline-button` Spinner inside the button you pressed, which keeps focus (S2 pending after 1 s; Carbon inline loading).
 - **Default:** acknowledge within 50ms; the NN/g ladder with skeletons for first page load and in-button pending states that stay focusable *Source:* card heuristics [DC-L13-01, DC-L08-12]; BOARD L13 note (timing ladder).
 - **Show:** the three simulated waits.
 - **Use / avoid:** use optimistic UI only when failure is rare and reversible; avoid spinners for waits under a second [DC-L13-01].

@@ -10,10 +10,10 @@ Ask only the questions at or below the zoom level being worked, in this order, a
 
 ## Q-layout-02 · Should layouts stretch fluidly, switch between fixed designs, or both?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L03-22, DC-L10-10
-- **Ask:** "Stretch within a layout, switch layouts at breakpoints, or both?"
-- **Why:** Responsive layouts feel continuous; adaptive layouts feel native per device (different navigation, pane counts) [DC-L03-22, DC-L10-10].
+- **Ask:** "Should the layout stretch to fit, switch to a new layout at set widths, or both?"
+- **Why:** Layouts that stretch feel smooth and continuous. Layouts that switch feel native on each device, with different navigation and pane counts [DC-L03-22, DC-L10-10].
 - **Options:**
-  - `both` Responsive inside panes, adaptive between breakpoints; window size classes on Apple, Material breakpoints elsewhere [DC-L03-22, DC-L10-10].
+  - `both` Stretch inside panes, switch layouts at breakpoints (Apple size classes, Material breakpoints elsewhere) [DC-L03-22, DC-L10-10].
   - `responsive` Responsive: one fluid layout (Fluent, Material definitions).
   - `adaptive` Adaptive: distinct layouts per size (show-and-hide, levitate, reflow).
 - **Default:** `both`: both, with a list-detail template that becomes two panes at expanded *Source:* card heuristics [DC-L03-22, DC-L10-10].
@@ -21,15 +21,15 @@ Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L03-
 - **Use / avoid:** use adaptive changes for pane count and navigation; avoid device-type checks that break in split view and resizable windows.
 - **Skip:** yes.
 
-## Q-layout-05 · Which column grid and composition style?
+## Q-layout-05 · Which column grid, and how should sections be arranged?
 Zoom 3 detailed · weight medium · changes 2 decisions · class G · cards DC-L03-15, DC-L15-07, DC-L03-17
-- **Ask:** "Which grid, and should marketing sections use a column, modular or bento composition?"
-- **Why:** 16 columns allow asymmetric, editorial layouts; 12 give symmetric splits; bento layouts feel curated with a clear hero [DC-L03-15, DC-L15-07].
+- **Ask:** "Which grid, and should marketing sections use columns, blocks or bento tiles?"
+- **Why:** 16 columns allow uneven layouts, like a magazine; 12 split things evenly. Bento layouts of mixed tiles feel curated, with a clear hero [DC-L03-15, DC-L15-07].
 - **Options:**
   - `4-8-12` 4 / 8 / 12 columns (compact / medium / expanded), gutter 16-24, margin 16 then 24 (Material).
   - `2x-grid` 4 / 8 / 16 columns, 32px gutter with wide/narrow/condensed modes (Carbon).
   - `12-always` 12 columns everywhere, 1.5rem gutters (Bootstrap).
-  - `bento` Hierarchical or bento composition for marketing; free composition only for expressive pages [DC-L15-07].
+  - `bento` Clear size order or bento tiles for marketing; free layout only for bold pages [DC-L15-07].
 - **Default:** 4 / 8 / 12 columns; column grid for app surfaces, hierarchical or bento for marketing feature sections; only layout spacing (margins, pane gaps) changes with breakpoint *Source:* card heuristics [DC-L03-15, DC-L15-07, DC-L03-17].
 - **Show:** grid overlay toggle on the frame.
 - **Use / avoid:** make every grid break nameable ("this hero breaks the grid to signal X"); avoid changing component spacing by breakpoint [DC-L15-07, DC-L03-17].
@@ -39,9 +39,9 @@ Zoom 3 detailed · weight medium · changes 2 decisions · class G · cards DC-L
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L03-21
 - **Show if:** Q-plat-01 includes web
 - **Ask:** "Should components adapt to the space they sit in (container queries) or to the window width?"
-- **Why:** Container-aware components look right in any slot, such as a sidebar card vs a main-column card [DC-L03-21].
+- **Why:** Parts that adapt to the space they sit in look right anywhere, like the same card in a sidebar or the main column [DC-L03-21].
 - **Options:**
-  - `viewport` Viewport media queries keyed to the breakpoints.
+  - `viewport` Follow the window width at each breakpoint (media queries).
   - `container` Container queries (Baseline since 2025-08-14; Tailwind v4 ships 13 container sizes).
 - **Default:** page layout by viewport, components by container queries once multi-pane layouts exist *Source:* card heuristic [DC-L03-21].
 - **Show:** the card dragged between slots.

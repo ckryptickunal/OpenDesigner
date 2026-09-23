@@ -8,14 +8,14 @@ Read the main stage file first; these questions refine it.
 
 Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
 
-## Q-plat-06 · On native platforms, use system controls or custom-branded ones?
+## Q-plat-06 · In your iOS, Android or desktop apps, use built-in controls or your own?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L10-13
 - **Show if:** Q-plat-01 includes ios, android or desktop
-- **Ask:** "On native platforms, keep the system's controls or restyle them?"
-- **Why:** System controls update with the OS (rounder, capsule-like on iOS 26+); custom controls keep brand shape but must supply their own accessibility [DC-L10-13].
+- **Ask:** "In your iOS, Android or desktop apps, keep the built-in controls or restyle them?"
+- **Why:** System controls change with each OS update, like the rounder, capsule-like ones on iOS 26+. Custom controls keep your brand shape but must bring their own accessibility [DC-L10-13].
 - **Options:**
-  - `system` System controls tinted with the accent: native feel, Liquid Glass and Material behavior for free.
-  - `restyled` Restyled system controls: brand color and label, familiar size, placement and behavior (Apple permits this).
+  - `system` System controls in your accent color: native feel, Liquid Glass and Material behavior for free.
+  - `restyled` System controls, restyled for your brand: brand color and label, familiar size, placement and behavior (Apple permits this).
   - `custom` Fully custom controls: brand shapes such as square buttons; can look out of place next to system UI [DC-L10-13].
 - **Default:** `system`: system on native, custom on web *Source:* platform convention [DC-L10-13].
 - **Show:** switch, slider and segmented control in each style on iOS.
@@ -24,12 +24,12 @@ Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L10-
 ## Q-plat-07 · What do the platforms share?
 Zoom 3 detailed · weight high · changes 5 decisions · class I · cards DC-L10-03
 - **Show if:** more than one platform in Q-plat-01
-- **Ask:** "What should platforms share: principles, tokens, component specs, or code?"
-- **Why:** The more is shared, the more identical the product looks across platforms and the less native [DC-L10-03].
+- **Ask:** "What should your platforms share: only ideas, colors and sizes, component plans, or code?"
+- **Why:** The more you share, the more your product looks the same on every platform, and the less it feels native [DC-L10-03].
 - **Options:**
-  - `tokens` Foundation tokens, platform component libraries: same palette and rhythm, platform-shaped components (Spotify Encore, Fluent).
+  - `tokens` Same tokens, own components on each platform: same palette and rhythm, platform-shaped components (Spotify Encore, Fluent).
   - `principles` Principles only: loosest alignment (Fluent's four principles).
-  - `specs` Shared component specs, per-platform code: one spec for 7 stacks including screen-reader specs (Uber Base).
+  - `specs` Same component plans, own code per platform: one spec for 7 stacks including screen-reader specs (Uber Base).
   - `code` Shared component code: identical components everywhere [DC-L10-03].
 - **Default:** `tokens`: tokens + shared specs, per-platform implementation *Source:* card heuristic [DC-L10-03].
 - **Show:** a diagram of which layers are shared, with the same card component rendered per platform.
@@ -38,13 +38,13 @@ Zoom 3 detailed · weight high · changes 5 decisions · class I · cards DC-L10
 ## Q-plat-09 · Which OS versions do you support?
 Zoom 3 detailed · weight medium · changes 4 decisions · class I · cards DC-L10-23
 - **Show if:** Q-plat-01 includes ios or android
-- **Ask:** "Which OS versions must you support?"
-- **Why:** A floor at the newest OS lets the system assume glass chrome, dynamic color and edge-to-edge; a lower floor forces dual designs [DC-L10-23].
+- **Ask:** "Which versions of iOS, Android and other systems must you support?"
+- **Why:** If you support only the newest OS, you can count on glass bars, dynamic color and edge-to-edge screens. Supporting older versions too means two designs [DC-L10-23].
 - **Options:**
-  - `current-prev` Current and previous major: design for the current language, older versions fall back to their native look [DC-L10-23].
+  - `current-prev` The current and last major version: design for the current language, older versions fall back to their native look [DC-L10-23].
   - `apple-26` Apple 26+: Liquid Glass everywhere; apps built with the 27 SDKs cannot keep the old look.
   - `android-12` Android 12+: dynamic color available ; 14+ nonlinear font scaling to 200% ; 15+ edge-to-edge enforced ; 16+ predictive back.
-  - `older` Older floors: conservative, dual-design choices [DC-L10-23].
+  - `older` Older versions too: conservative, dual-design choices [DC-L10-23].
 - **Default:** `current-prev`: current-prev *Source:* card heuristic, design for the OS users will have when you ship [DC-L10-23].
 - **Show:** a matrix of which platform features (glass, dynamic color, edge-to-edge, predictive back) are assumed.
 - **Skip:** yes.
