@@ -1,0 +1,76 @@
+# Label set for OpenDesigner. Format: name, color (hex without #), description.
+# Apply with the gh commands in docs/GITHUB-SETTINGS.md, or with a label-sync action.
+
+# Entry points for new contributors
+- name: good first issue
+  color: "7057ff"
+  description: Small, well-scoped, with the files and sources named
+- name: help wanted
+  color: "008672"
+  description: Maintainers would welcome a contribution here
+
+# Areas
+- name: research
+  color: "1d76db"
+  description: Lanes, Decision Cards, sources and traces
+- name: building-block
+  color: "0e8a16"
+  description: The ontology of design-system building blocks
+- name: skill
+  color: "5319e7"
+  description: Agent Skills and the interview flow
+- name: engine
+  color: "b60205"
+  description: engine.py, generation, validation and exports
+- name: host-support
+  color: "fbca04"
+  description: Making OpenDesigner work in another AI tool
+- name: accessibility
+  color: "006b75"
+  description: WCAG, contrast, focus, targets, motion and assistive tech
+- name: design
+  color: "d93f0b"
+  description: Visual templates, previews, examples and artboards
+- name: docs
+  color: "0075ca"
+  description: README, docs/ and community files
+- name: tokens
+  color: "c5def5"
+  description: DTCG tokens, naming, modes and exports
+- name: figma
+  color: "f9d0c4"
+  description: Figma and Paper round trip
+- name: translation
+  color: "bfdadc"
+  description: Translating docs or the interview
+- name: example
+  color: "c2e0c6"
+  description: Worked example design systems
+- name: ci
+  color: "ededed"
+  description: Workflows, checks and repo tooling
+
+# Research status
+- name: needs-source
+  color: "e99695"
+  description: A claim needs a Tier A or B source
+- name: disputed
+  color: "d876e3"
+  description: Sources disagree; settle with evidence (see GOVERNANCE.md)
+- name: verification
+  color: "fef2c0"
+  description: Re-check a claim or value against a live source
+
+# Type and triage
+- name: bug
+  color: "d73a4a"
+  description: Something does not work as documented
+- name: enhancement
+  color: "a2eeef"
+  description: A new capability or an improvement
+- name: question
+  color: "cc317c"
+  description: A question; Discussions is usually faster
+- name: triage
+  color: "ffffff"
+  description: New; a maintainer has not looked at it yet

@@ -9,3 +9,6 @@
 __pycache__/
 *.pyc
 node_modules/
+
+# Release zips (tools/build_dist.py)
+dist/

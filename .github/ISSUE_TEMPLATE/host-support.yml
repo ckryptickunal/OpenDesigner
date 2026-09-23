@@ -1,0 +1,42 @@
+name: Host support request (a new AI tool)
+description: Ask for OpenDesigner to work in an AI tool or agent it does not support yet, or report that a host's install path changed.
+title: "Host: "
+labels: ["host-support", "triage"]
+body:
+  - type: input
+    id: host
+    attributes:
+      label: Host name and version
+      placeholder: "Zed 0.x, JetBrains Junie, Google AI Studio"
+    validations:
+      required: true
+  - type: checkboxes
+    id: capabilities
+    attributes:
+      label: What the host can load (tick what you have confirmed)
+      options:
+        - label: Agent Skills (SKILL.md folders), and from which path
+        - label: AGENTS.md or another instruction file
+        - label: Agent Plugins (plugin.json) or its own plugin format
+        - label: Local MCP servers (stdio)
+        - label: Remote MCP servers
+        - label: Interactive UI in chat (MCP Apps, canvases, artifacts)
+        - label: File or repo access
+  - type: textarea
+    id: docs
+    attributes:
+      label: The host's documentation
+      description: Links to the official pages for each capability above, with dates.
+    validations:
+      required: true
+  - type: textarea
+    id: tried
+    attributes:
+      label: What you tried and what happened
+      description: Install steps you ran, and whether the interview started.
+  - type: checkboxes
+    id: pr
+    attributes:
+      label: Contribution
+      options:
+        - label: I can test install steps in this host and send a PR to the README and docs.

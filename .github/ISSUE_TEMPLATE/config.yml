@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Ask a question in Discussions
+    url: https://github.com/ckryptickunal/OpenDesigner/discussions/categories/q-a
+    about: Questions about using OpenDesigner, design systems or the research get the fastest answers here.
+  - name: Share what you built
+    url: https://github.com/ckryptickunal/OpenDesigner/discussions/categories/show-and-tell
+    about: Post a design system or product you made with OpenDesigner.
+  - name: Report a security or conduct problem privately
+    url: https://github.com/ckryptickunal/OpenDesigner/security/advisories/new
+    about: Use GitHub private reporting. Only maintainers can see it.

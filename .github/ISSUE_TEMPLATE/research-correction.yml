@@ -1,0 +1,59 @@
+name: Research correction or disputed source
+description: A value, claim or source in research/, benchmarks/ or synthesis/ is wrong, outdated or disputed.
+title: "Research: "
+labels: ["research", "needs-source", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        OpenDesigner's recommendations come from this research, so corrections matter. Disputes are settled by sources, not votes (see GOVERNANCE.md). A Tier A source (the system's own docs, source code or a W3C spec) is the fastest way to a fix.
+  - type: input
+    id: location
+    attributes:
+      label: Where is it?
+      description: File and card id or line, for example `research/L04-shape-depth-motion.md`, DC-L04-02.
+    validations:
+      required: true
+  - type: textarea
+    id: current
+    attributes:
+      label: What it says now
+    validations:
+      required: true
+  - type: textarea
+    id: correct
+    attributes:
+      label: What it should say
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Your sources
+      description: URL, publisher, the page's published or updated date, and the exact passage or value. Tier A sources first.
+    validations:
+      required: true
+  - type: dropdown
+    id: tier
+    attributes:
+      label: Best source tier you have
+      options:
+        - "Tier A: primary (official docs, source code, spec)"
+        - "Tier B: recognized practitioner (NN/g, a design team's blog)"
+        - "Tier C: community (forum, blog, video)"
+    validations:
+      required: true
+  - type: dropdown
+    id: impact
+    attributes:
+      label: Does it change what OpenDesigner recommends?
+      options:
+        - "Yes: a default, formula or question changes"
+        - "No: it corrects the evidence only"
+        - "Not sure"
+  - type: checkboxes
+    id: pr
+    attributes:
+      label: Contribution
+      options:
+        - label: I can open a PR with the fix and the trace rows for my sources.

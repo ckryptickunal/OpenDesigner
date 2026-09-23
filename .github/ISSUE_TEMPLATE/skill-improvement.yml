@@ -1,0 +1,46 @@
+name: Skill or interview improvement
+description: The interview asked the wrong thing, went too fast or too slow, missed a building block, or produced a weak result.
+title: "Interview: "
+labels: ["skill", "triage"]
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What kind of problem?
+      options:
+        - A question was confusing or badly worded
+        - It asked something it could have read from my files
+        - It rushed a decision that mattered
+        - It spent too long on something trivial
+        - It skipped a building block
+        - A recommendation was wrong for my product
+        - The visual preview was missing, broken or unclear
+        - The output files (DESIGN.md, tokens, decisions) were incomplete
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: host
+    attributes:
+      label: AI host, model and depth mode
+      placeholder: "Claude Code, Opus, Standard mode"
+    validations:
+      required: true
+  - type: textarea
+    id: transcript
+    attributes:
+      label: The relevant part of the conversation
+      description: Paste the turns, or attach screenshots. Remove anything private.
+    validations:
+      required: true
+  - type: textarea
+    id: better
+    attributes:
+      label: What would have been better
+    validations:
+      required: true
+  - type: input
+    id: question
+    attributes:
+      label: Question or stage id, if you know it
+      description: For example Q-color-02 or stage S08 (see synthesis/QUESTIONNAIRE.md).

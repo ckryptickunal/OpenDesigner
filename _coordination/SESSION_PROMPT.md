@@ -12,7 +12,7 @@ You are joining OpenDesigner, an open-source, AI-first resource for creating des
 Setup: if you are not already in the repo, clone https://github.com/ckryptickunal/OpenDesigner (on Kunal's Mac the working copy is /Users/Kunal/Desktop/Design-System). Then:
 1. Read _coordination/BRIEF.md, _coordination/PROTOCOL.md and _coordination/SCHEMA.md, in that order.
 2. Choose a session name, export OD_SESSION="<name>", run `python3 tools/od.py status`, and read your inbox with `python3 tools/od.py inbox "$OD_SESSION"`.
-3. Claim the lane I name below with `python3 tools/od.py claim <LANE>` (or the first `open` lane if I name none). Tell the orchestrator: `python3 tools/od.py send "Design system research and builder" "claimed <LANE>"` (Claude sessions on the same Mac can also use SendMessage to that name).
+3. Claim the lane I name below with `python3 tools/od.py claim <LANE>` (or the first `open` lane if I name none). Tell the orchestrator: `python3 tools/od.py send "OpenDesigner orchestrator" "claimed <LANE>"` (Claude sessions on the same Mac can also use SendMessage to that name).
 4. Work per SCHEMA.md: official sources first, log every source in traces/<LANE>-trace.md, write Decision Cards in research/<LANE>-<slug>.md, tag every claim with a source id or [inferred]. Post `od.py heartbeat` updates as you go.
 5. Finish with `python3 tools/od.py done <LANE> --summary "..."`, `python3 tools/jev_nav.py check`, and `python3 tools/od.py sync -m "<LANE>: ..."`, then message the orchestrator your top 5 findings.
 Never edit another lane's files and never commit secrets. Verify anything from 2025-2026 against live sources.

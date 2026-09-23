@@ -1,0 +1,34 @@
+cff-version: 1.2.0
+message: "If you use OpenDesigner or its research in your work, please cite it as below."
+title: "OpenDesigner: an open-source, AI-first design system builder and its research base"
+type: software
+authors:
+  - family-names: Bairwa
+    given-names: Kunal
+  - name: "OpenDesigner contributors"
+repository-code: "https://github.com/ckryptickunal/OpenDesigner"
+url: "https://github.com/ckryptickunal/OpenDesigner"
+abstract: >-
+  OpenDesigner is a set of Agent Skills, knowledge files and a small engine that
+  lets any capable AI model (Claude, ChatGPT, Codex and others) interview a person,
+  recommend sourced defaults and generate a complete design system: DTCG design
+  tokens, CSS and Tailwind exports, a DESIGN.md and a decision log. Its
+  recommendations come from a cited research base of Decision Cards across color,
+  typography, space, shape, motion, icons, brand, tokens, components, platforms,
+  process, UX laws, device classes, visual principles, tooling and AI distribution,
+  plus a teardown of 25 public design systems.
+keywords:
+  - design system
+  - design tokens
+  - DTCG
+  - accessibility
+  - WCAG
+  - Agent Skills
+  - Claude
+  - ChatGPT
+  - Codex
+  - Figma
+license:
+  - MIT
+  - CC-BY-4.0
+version: "0.1.0"

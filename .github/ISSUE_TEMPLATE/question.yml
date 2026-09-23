@@ -1,0 +1,20 @@
+name: Question
+description: Ask a question about OpenDesigner. Discussions is usually faster; use this if you think the docs should answer it.
+title: "Question: "
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Most questions get a faster answer in [Discussions Q&A](https://github.com/ckryptickunal/OpenDesigner/discussions/categories/q-a). Check [docs/FAQ.md](https://github.com/ckryptickunal/OpenDesigner/blob/main/docs/FAQ.md) first.
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: What you are building, which AI tool you use, what you already read.

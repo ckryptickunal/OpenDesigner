@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Checks (Python 3.11, no network)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+
+      - name: Every JSON file parses
+        run: |
+          python3 - <<'PY'
+          import json, pathlib, sys
+          bad = []
+          files = [p for p in pathlib.Path(".").rglob("*.json") if ".git" not in p.parts]
+          for p in files:
+              try:
+                  json.loads(p.read_text(encoding="utf-8"))
+              except Exception as e:
+                  bad.append(f"{p}: {e}")
+          print("\n".join(bad))
+          print(f"{len(files)} JSON files, {len(bad)} invalid")
+          sys.exit(1 if bad else 0)
+          PY
+
+      - name: Research citation integrity (tools/jev_nav.py check)
+        run: |
+          python3 tools/jev_nav.py check | tee check.txt
+          grep -q "; 0 files with dangling references" check.txt
+
+      - name: Engine tests
+        run: |
+          if [ -f skills/opendesigner/scripts/test_engine.py ]; then
+            python3 skills/opendesigner/scripts/test_engine.py
+          else
+            echo "skills/opendesigner/scripts/test_engine.py not present yet; skipping"
+          fi
+
+      - name: Generated skill copies match skills/
+        run: |
+          if [ -f tools/sync_skills.py ]; then
+            python3 tools/sync_skills.py --check
+          else
+            echo "tools/sync_skills.py not present yet; skipping"
+          fi
+
+      - name: Relative Markdown links resolve (offline)
+        run: python3 tools/check_links.py

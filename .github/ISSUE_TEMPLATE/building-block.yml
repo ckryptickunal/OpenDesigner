@@ -1,0 +1,56 @@
+name: New building block or Decision Card
+description: Propose a design-system building block, decision or option the ontology or questionnaire is missing.
+title: "Block: "
+labels: ["building-block", "research", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A building block is anything a design system needs (a token group, a component, a pattern, an asset, a rule). A Decision Card records one decision about it. The card format is in `_coordination/SCHEMA.md`.
+  - type: input
+    id: path
+    attributes:
+      label: Block path
+      description: Where it sits in the ontology, for example "Foundations > Color > Data-viz palettes".
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: What is missing and why it matters
+      description: Which products or teams need it, and what goes wrong without it.
+    validations:
+      required: true
+  - type: textarea
+    id: questions
+    attributes:
+      label: Questions the person answers
+      description: One to four plain-language questions.
+  - type: textarea
+    id: options
+    attributes:
+      label: Options, with systems that use each
+      description: Real values where they are public, for example "Carbon 0px, Primer 6px, Material pill".
+  - type: textarea
+    id: links
+    attributes:
+      label: Depends on and affects
+      description: Upstream decisions that constrain it, downstream tokens or components it changes.
+  - type: dropdown
+    id: class
+    attributes:
+      label: Who or what should produce it?
+      options:
+        - "Generatable: derived from inputs and dials"
+        - "Extractable: read from the person's existing product or files"
+        - "Designer-owned: needs a human creator (a designer hook)"
+        - "Tool-assisted: an engineer can make it with a named tool"
+        - "Owner input: a business decision only the team can make"
+        - "Not sure"
+  - type: textarea
+    id: sources
+    attributes:
+      label: Sources
+      description: URLs with publisher and date. Tier A first.
+    validations:
+      required: true

@@ -5,7 +5,7 @@ Any number of agents can work here at once: Claude sessions on this Mac, Claude 
 ## 1. Start of every session
 1. `git pull --rebase` (skip if you are working in the orchestrator's working copy on Kunal's Mac).
 2. Read `_coordination/BRIEF.md` (what we are building and why), this file, and `_coordination/SCHEMA.md` (source tiers, Decision Card format).
-3. Pick a session name and keep it for the whole session. Export it: `export OD_SESSION="Your session name"`.
+3. Pick a session name and keep it for the whole session. Export it: `export OD_SESSION="Your session name"`. Names must be unique: if your session is a fork, restart or second window of another session, add a suffix (for example "Orchestrator (copy B)"), and check `_coordination/sessions/` for a recent heartbeat under the name you want. Two sessions under one name cannot message each other (the instant tier delivers to yourself) and their heartbeats and decisions become indistinguishable.
 4. Run `python3 tools/od.py status` to see lanes, active sessions and unread messages, then `python3 tools/od.py inbox "$OD_SESSION"`.
 
 ## 2. Claiming and finishing work
@@ -16,7 +16,7 @@ Any number of agents can work here at once: Claude sessions on this Mac, Claude 
 ## 3. Talking to other sessions (use the first tier that works)
 | Tier | Who | How |
 |---|---|---|
-| 1. Instant | Claude sessions on the same Mac | `SendMessage` to the session's name (find it with `ListAgents`). The orchestrator is **"Design system research and builder"**. Reply to a message by using its `from` value. |
+| 1. Instant | Claude sessions on the same Mac | `SendMessage` to the session's name (find it with `ListAgents`). The orchestrator is **"OpenDesigner orchestrator"**. Reply to a message by using its `from` value. |
 | 2. Durable | Any agent that can read and write this repo, on any machine, any model | `python3 tools/od.py send "Session name" "message"`; the recipient reads it with `od.py inbox`. Messages are files in `_coordination/inbox/<recipient>/`, delivered between machines by `od.py sync`. Check your inbox at start, at each milestone, and before you finish. |
 | 3. Human relay | Agents with no repo access (for example a chat-only ChatGPT) | Kunal pastes a prompt from `_coordination/lanes/` or `_coordination/SESSION_PROMPT.md`, and pastes the result back into `research/`. |
 

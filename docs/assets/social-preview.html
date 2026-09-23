@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>OpenDesigner social preview</title>
+<!--
+  Source for docs/assets/social-preview.png (1280x640).
+  Render: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless \
+    --screenshot=docs/assets/social-preview.png --window-size=1280,640 \
+    --hide-scrollbars --force-device-scale-factor=1 docs/assets/social-preview.html
+  Uses system fonts only, so it renders offline. Headless Chrome may keep running after it
+  writes the file; stop it once the PNG exists.
+-->
+<style>
+  :root {
+    --paper: #f5f4f0;
+    --ink: #121212;
+    --ink-2: #4a4a47;
+    --ink-3: #8a8983;
+    --rule: #dcdad3;
+    --card: #ffffff;
+    --accent: #e4572e;
+    --sans: -apple-system, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1280px; height: 640px; overflow: hidden; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+  }
+  /* faint 32px grid, a quiet nod to spacing tokens */
+  body::before {
+    content: ""; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(18,18,18,.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(18,18,18,.035) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+  .frame { position: absolute; inset: 64px 72px 56px 72px; display: grid; grid-template-rows: auto 1fr auto; }
+
+  .eyebrow { font: 500 17px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); display: flex; gap: 14px; align-items: center; }
+  .eyebrow i { width: 10px; height: 10px; background: var(--accent); border-radius: 2px; display: inline-block; }
+
+  h1 { margin-top: 26px; font-weight: 700; font-size: 116px; line-height: .92; letter-spacing: -0.045em; }
+  .promise { margin-top: 24px; font-size: 36px; line-height: 1.2; letter-spacing: -0.015em; color: var(--ink); max-width: 600px; }
+  .promise b { font-weight: 600; box-shadow: inset 0 -0.16em 0 rgba(228,87,46,.28); }
+
+  /* building-block specimens, right column */
+  .blocks { position: absolute; top: 0; right: 0; width: 392px; display: grid; gap: 14px; }
+  .card { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: 14px 16px 16px; }
+  .label { font: 500 13px/1 var(--mono); color: var(--ink-3); letter-spacing: .02em; margin-bottom: 12px; display: flex; justify-content: space-between; }
+  .ramp { display: grid; grid-template-columns: repeat(10, 1fr); height: 34px; border-radius: 5px; overflow: hidden; }
+  .type { display: flex; align-items: baseline; gap: 14px; color: var(--ink); font-weight: 600; letter-spacing: -0.02em; }
+  .space { display: flex; align-items: flex-end; gap: 10px; height: 34px; }
+  .space span { display: block; height: 10px; background: var(--ink); border-radius: 1px; }
+  .shape { display: flex; gap: 14px; align-items: center; }
+  .shape span { width: 38px; height: 38px; border: 2px solid var(--ink); }
+  .dials { display: grid; grid-template-columns: repeat(8, 1fr); gap: 8px; align-items: end; }
+  .dial { display: grid; justify-items: center; gap: 7px; }
+  .dial .track { width: 4px; height: 52px; background: var(--rule); border-radius: 2px; position: relative; }
+  .dial .knob { position: absolute; left: 50%; width: 14px; height: 14px; margin-left: -7px; border-radius: 50%; background: var(--card); border: 2px solid var(--ink); }
+  .dial.on .knob { background: var(--accent); border-color: var(--accent); }
+  .dial small { font: 500 11px/1 var(--mono); color: var(--ink-3); }
+
+  .footer { display: flex; justify-content: space-between; align-items: end; font: 500 18px/1.3 var(--mono); color: var(--ink-2); max-width: 700px; }
+  .hosts { display: flex; gap: 10px; flex-wrap: wrap; }
+  .hosts span { border: 1px solid var(--rule); background: var(--card); padding: 7px 11px; border-radius: 999px; font-size: 15px; color: var(--ink); }
+  .out { margin-top: 14px; font-size: 16px; color: var(--ink-3); }
+</style>
+</head>
+<body>
+  <div class="frame">
+    <div>
+      <div class="eyebrow"><i></i>Open source · AI-first design systems</div>
+      <h1>OpenDesigner</h1>
+      <p class="promise">Build a <b>real design system</b> with the AI you already use. It asks, explains and checks as it goes.</p>
+    </div>
+
+    <div></div>
+
+    <div class="footer">
+      <div>
+        <div class="hosts"><span>Claude</span><span>ChatGPT</span><span>Codex</span><span>Cursor</span><span>any agent via AGENTS.md</span></div>
+        <div class="out">DTCG tokens · CSS · Tailwind · DESIGN.md · WCAG 2.2 checks</div>
+      </div>
+    </div>
+
+    <div class="blocks">
+      <div class="card">
+        <div class="label"><span>color.ramp</span><span>10 steps</span></div>
+        <div class="ramp">
+          <i style="background:#f3f2ee"></i><i style="background:#e4e3de"></i><i style="background:#cfcdc6"></i><i style="background:#b1afa7"></i><i style="background:#8f8d85"></i>
+          <i style="background:#6f6d66"></i><i style="background:#53524c"></i><i style="background:#3a3935"></i><i style="background:#232320"></i><i style="background:var(--accent)"></i>
+        </div>
+      </div>
+      <div class="card">
+        <div class="label"><span>type.scale</span><span>1.25</span></div>
+        <div class="type"><span style="font-size:14px">Aa</span><span style="font-size:18px">Aa</span><span style="font-size:22px">Aa</span><span style="font-size:28px">Aa</span><span style="font-size:35px">Aa</span><span style="font-size:44px">Aa</span></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="card">
+          <div class="label"><span>space</span><span>4px</span></div>
+          <div class="space"><span style="width:4px"></span><span style="width:8px"></span><span style="width:12px"></span><span style="width:16px"></span><span style="width:24px"></span><span style="width:32px"></span></div>
+        </div>
+        <div class="card">
+          <div class="label"><span>radius</span></div>
+          <div class="shape"><span style="border-radius:0"></span><span style="border-radius:6px"></span><span style="border-radius:12px"></span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="label"><span>eight dials</span><span>0-100</span></div>
+        <div class="dials">
+          <div class="dial on"><div class="track"><div class="knob" style="bottom:28px"></div></div><small>Exp</small></div>
+          <div class="dial"><div class="track"><div class="knob" style="bottom:18px"></div></div><small>Brd</small></div>
+          <div class="dial"><div class="track"><div class="knob" style="bottom:32px"></div></div><small>Den</small></div>
+          <div class="dial"><div class="track"><div class="knob" style="bottom:12px"></div></div><small>Enr</small></div>
+          <div class="dial"><div class="track"><div class="knob" style="bottom:24px"></div></div><small>Rnd</small></div>
+          <div class="dial"><div class="track"><div class="knob" style="bottom:8px"></div></div><small>Dep</small></div>
+          <div class="dial"><div class="track"><div class="knob" style="bottom:16px"></div></div><small>Col</small></div>
+          <div class="dial"><div class="track"><div class="knob" style="bottom:22px"></div></div><small>Wrm</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
