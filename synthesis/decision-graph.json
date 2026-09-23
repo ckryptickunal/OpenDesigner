@@ -1942,7 +1942,7 @@
    "title": "Starting point (adopt, adapt, or create)",
    "block": "Strategy > Starting point",
    "step": 3,
-   "fan_out": 1
+   "fan_out": 2
   },
   {
    "id": "DC-L11-02",
@@ -2126,7 +2126,7 @@
    "title": "AI guardrails (enforcement, linting, evals)",
    "block": "Governance > AI guardrails",
    "step": 4,
-   "fan_out": 0
+   "fan_out": 1
   },
   {
    "id": "DC-L11-25",
@@ -2494,7 +2494,7 @@
    "title": "Source of truth and round-trip direction",
    "block": "Builder > Data > Source of truth",
    "step": 0,
-   "fan_out": 8
+   "fan_out": 9
   },
   {
    "id": "DC-L16-03",
@@ -2582,7 +2582,7 @@
    "title": "Design-tool interop strategy",
    "block": "Builder > Interop > Design tools",
    "step": 1,
-   "fan_out": 0
+   "fan_out": 1
   },
   {
    "id": "DC-L16-14",
@@ -2599,6 +2599,222 @@
    "block": "Builder > Governance > Guardrails",
    "step": 3,
    "fan_out": 1
+  },
+  {
+   "id": "DC-L17-01",
+   "lane": "L17",
+   "title": "Block classification scheme (who or what produces each block)",
+   "block": "Builder > Guidance > Block classification (applies to every ontology node)",
+   "step": 0,
+   "fan_out": 3
+  },
+  {
+   "id": "DC-L17-02",
+   "lane": "L17",
+   "title": "Entry path (how a new system starts)",
+   "block": "Context > Starting point > Entry path",
+   "step": 4,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L17-03",
+   "lane": "L17",
+   "title": "Reference intake: fidelity and the identity firewall",
+   "block": "Builder > Input > Reference intake",
+   "step": 5,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L17-04",
+   "lane": "L17",
+   "title": "Designer-hook policy (ask, accept, fall back)",
+   "block": "Builder > Guidance > Designer hooks",
+   "step": 1,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L17-05",
+   "lane": "L17",
+   "title": "Variant generation (how \"show me options\" works)",
+   "block": "Builder > Exploration > Variants",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L17-06",
+   "lane": "L17",
+   "title": "Proposal framing (safe choices versus risks)",
+   "block": "Builder > Guidance > Proposal framing",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L17-07",
+   "lane": "L17",
+   "title": "Anti-generic guardrails",
+   "block": "Guardrails > Checks > Genericness",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L17-08",
+   "lane": "L17",
+   "title": "Pacing (where the model slows down)",
+   "block": "Builder > Guidance > Pacing",
+   "step": 1,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L17-09",
+   "lane": "L17",
+   "title": "Coverage check and completeness scoring",
+   "block": "Guardrails > Coverage",
+   "step": 1,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L17-10",
+   "lane": "L17",
+   "title": "What the process records (for harmony and team communication)",
+   "block": "Delivery > Records",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L17-11",
+   "lane": "L17",
+   "title": "Preview substrate during the process",
+   "block": "Builder > Preview",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L17-12",
+   "lane": "L17",
+   "title": "Approval gates",
+   "block": "Builder > Governance > Approval gates",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L17-13",
+   "lane": "L17",
+   "title": "The per-block detail panel (how the builder teaches while editing)",
+   "block": "Builder > Guidance > Block detail panel (every G block; component pages extend DC-L08-23)",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L18-01",
+   "lane": "L18",
+   "title": "Primary delivery unit",
+   "block": "Distribution > Packaging > Core unit",
+   "step": 0,
+   "fan_out": 5
+  },
+  {
+   "id": "DC-L18-02",
+   "lane": "L18",
+   "title": "Repo layout for multi-host discovery",
+   "block": "Distribution > Packaging > Discovery paths",
+   "step": 1,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L18-03",
+   "lane": "L18",
+   "title": "Plugin manifests and distribution channels",
+   "block": "Distribution > Channels",
+   "step": 3,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L18-04",
+   "lane": "L18",
+   "title": "Knowledge format and chunking",
+   "block": "Distribution > Knowledge > Format",
+   "step": 1,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L18-05",
+   "lane": "L18",
+   "title": "MCP server scope, hosting and auth",
+   "block": "Distribution > Live layer > MCP server",
+   "step": 2,
+   "fan_out": 3
+  },
+  {
+   "id": "DC-L18-06",
+   "lane": "L18",
+   "title": "Visual surface ladder and capability detection",
+   "block": "Interview > Surface",
+   "step": 3,
+   "fan_out": 2
+  },
+  {
+   "id": "DC-L18-07",
+   "lane": "L18",
+   "title": "How a visual choice returns to the model",
+   "block": "Interview > Return channel",
+   "step": 4,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L18-08",
+   "lane": "L18",
+   "title": "Interview pacing (where the time goes)",
+   "block": "Interview > Pacing",
+   "step": 0,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L18-09",
+   "lane": "L18",
+   "title": "Question format",
+   "block": "Interview > Question anatomy",
+   "step": 4,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L18-10",
+   "lane": "L18",
+   "title": "Durable outputs written to the user's repo",
+   "block": "Harmony > Outputs",
+   "step": 5,
+   "fan_out": 3
+  },
+  {
+   "id": "DC-L18-11",
+   "lane": "L18",
+   "title": "Enforcement shipped with the system",
+   "block": "Harmony > Guardrails",
+   "step": 6,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L18-12",
+   "lane": "L18",
+   "title": "The \"extend\" session protocol",
+   "block": "Harmony > Later sessions",
+   "step": 7,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L18-13",
+   "lane": "L18",
+   "title": "Design-tool round trip and designer hooks inside AI hosts",
+   "block": "Distribution > Round trip",
+   "step": 6,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L18-14",
+   "lane": "L18",
+   "title": "Trust and safety of the package",
+   "block": "Distribution > Security",
+   "step": 3,
+   "fan_out": 0
   }
  ],
  "edges": [
@@ -3887,6 +4103,10 @@
    "target": "DC-L11-20"
   },
   {
+   "source": "DC-L11-01",
+   "target": "DC-L17-02"
+  },
+  {
    "source": "DC-L11-02",
    "target": "DC-L11-01"
   },
@@ -4021,6 +4241,10 @@
   {
    "source": "DC-L11-23",
    "target": "DC-L11-24"
+  },
+  {
+   "source": "DC-L11-24",
+   "target": "DC-L18-11"
   },
   {
    "source": "DC-L13-01",
@@ -4319,6 +4543,10 @@
    "target": "DC-L16-15"
   },
   {
+   "source": "DC-L16-02",
+   "target": "DC-L18-13"
+  },
+  {
    "source": "DC-L16-03",
    "target": "DC-L16-06"
   },
@@ -4355,8 +4583,100 @@
    "target": "DC-L11-12"
   },
   {
+   "source": "DC-L16-13",
+   "target": "DC-L18-13"
+  },
+  {
    "source": "DC-L16-15",
    "target": "DC-L11-24"
+  },
+  {
+   "source": "DC-L17-01",
+   "target": "DC-L17-04"
+  },
+  {
+   "source": "DC-L17-01",
+   "target": "DC-L17-08"
+  },
+  {
+   "source": "DC-L17-01",
+   "target": "DC-L17-09"
+  },
+  {
+   "source": "DC-L17-02",
+   "target": "DC-L17-03"
+  },
+  {
+   "source": "DC-L18-01",
+   "target": "DC-L18-02"
+  },
+  {
+   "source": "DC-L18-01",
+   "target": "DC-L18-03"
+  },
+  {
+   "source": "DC-L18-01",
+   "target": "DC-L18-04"
+  },
+  {
+   "source": "DC-L18-01",
+   "target": "DC-L18-05"
+  },
+  {
+   "source": "DC-L18-01",
+   "target": "DC-L18-14"
+  },
+  {
+   "source": "DC-L18-02",
+   "target": "DC-L18-03"
+  },
+  {
+   "source": "DC-L18-04",
+   "target": "DC-L18-05"
+  },
+  {
+   "source": "DC-L18-05",
+   "target": "DC-L18-03"
+  },
+  {
+   "source": "DC-L18-05",
+   "target": "DC-L18-06"
+  },
+  {
+   "source": "DC-L18-05",
+   "target": "DC-L18-14"
+  },
+  {
+   "source": "DC-L18-06",
+   "target": "DC-L18-07"
+  },
+  {
+   "source": "DC-L18-06",
+   "target": "DC-L18-09"
+  },
+  {
+   "source": "DC-L18-08",
+   "target": "DC-L18-09"
+  },
+  {
+   "source": "DC-L18-09",
+   "target": "DC-L18-10"
+  },
+  {
+   "source": "DC-L18-10",
+   "target": "DC-L18-11"
+  },
+  {
+   "source": "DC-L18-10",
+   "target": "DC-L18-12"
+  },
+  {
+   "source": "DC-L18-10",
+   "target": "DC-L18-13"
+  },
+  {
+   "source": "DC-L18-11",
+   "target": "DC-L18-12"
   }
  ],
  "cycles": [
@@ -4404,12 +4724,12 @@
    "DC-L02-24"
   ],
   [
-   "DC-L06-07",
-   "DC-L06-24"
-  ],
-  [
    "DC-L15-01",
    "DC-L15-04"
+  ],
+  [
+   "DC-L06-07",
+   "DC-L06-24"
   ],
   [
    "DC-L08-10",
