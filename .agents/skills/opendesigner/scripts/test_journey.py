@@ -387,5 +387,33 @@ class Aggregate(Project):
         self.assertIn("skipped 1", printed)
 
 
+class ConsentTexts(unittest.TestCase):
+    """The consent texts are word for word the same in journey.py, the skill and the docs (BRIEF requirements 18-19)."""
+    REPO = os.path.abspath(os.path.join(j.SKILL_ROOT, "..", ".."))
+
+    def read(self, where, rel):
+        path = os.path.join(j.SKILL_ROOT if where == "skill" else self.REPO, rel)
+        if not os.path.exists(path):
+            self.skipTest(f"{rel} is not beside this copy of the skill")
+        with open(path, encoding="utf-8") as f:
+            return f.read()
+
+    def quoted_block(self, text, lines):
+        quoted = [x[2:] for x in text.splitlines() if x.startswith("> ")]
+        return any(quoted[i:i + len(lines)] == lines for i in range(len(quoted)))
+
+    def test_log_question(self):
+        for where, rel in (("skill", "SKILL.md"), ("skill", "references/rules.md"), ("repo", "docs/JOURNEY-TRACKER.md")):
+            self.assertIn(j.CONSENT_QUESTION, self.read(where, rel), rel)
+
+    def test_share_text(self):
+        lines = j.SHARE_CONSENT.splitlines()
+        for where, rel in (("skill", "references/rules.md"), ("repo", "docs/PRIVACY.md")):
+            self.assertTrue(self.quoted_block(self.read(where, rel), lines), f"{rel}: the sharing text drifted from journey.py")
+        self.assertIn(j.SHARE_ASK, self.read("skill", "references/rules.md"))
+        for label in j.SHARE_CHOICES.values():
+            self.assertIn(label, lines[-1])
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -19,9 +19,10 @@ ALLOWED = {"name", "description", "license", "compatibility", "metadata", "allow
 IGNORE = {"__pycache__", ".DS_Store"}
 # claude.ai installs each uploaded skill on its own, so the sub-skills' zips carry the engine and the data it
 # reads (spec 8.2). In the repo and in plugin installs they use the sibling opendesigner skill instead.
-BUNDLE = {p: p for p in ("scripts/engine.py", "references/levers.json", "references/hooks.json",
-                          "references/graph.json", "references/questions.json", "references/rules.md",
-                          "references/zoom.md", "references/improve.md")}
+BUNDLE = {p: p for p in ("scripts/engine.py", "scripts/journey.py", "references/levers.json", "references/hooks.json",
+                          "references/graph.json", "references/questions.json", "references/pacing.json",
+                          "references/report.schema.json", "references/rules.md", "references/zoom.md",
+                          "references/improve.md")}  # engine.py imports journey.py, which reads pacing and the report schema
 
 
 def check(skill):

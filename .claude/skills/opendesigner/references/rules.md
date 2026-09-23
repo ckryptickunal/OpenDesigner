@@ -7,6 +7,7 @@ How to run the OpenDesigner interview. Sources: `research/L18-ai-first-distribut
   > I'll help you set up your design system: the colors, text, spacing and parts your app uses.
   > We start with 5 quick questions, and you get a complete first version. You can go deeper anywhere later.
   > First: what are you making?
+- **The first time only,** the first message asks about the journey log instead (section 11). Its last line is the log question. The first sketch question comes in the next message.
 - **One idea and one question per message.** Short sentences. No walls of text, and no long lists unless asked.
 - **Plain words first.** Every term gets its plain meaning the first time (section 2). Skip jargon where a plain word works.
 - **Details on request.** Give sources, real systems and trade-offs when the person says "why?" or "tell me more". Don't volunteer them all at once.
@@ -115,3 +116,49 @@ Vendors and NN/g have documented that AI-made interfaces converge on the same fe
   - newspaper hairlines with an italic serif and tiny tracked mono
 - Spend boldness in one place: one signature element (a color, a typeface, a shape or a motion moment). Tie it to the memorable thing (Q-brand-02), and let everything else stay quiet.
 - The fix for sameness is explicit decisions and the person's own assets, not a longer prompt.
+
+## 11. The journey log and sharing (BRIEF requirements 18 and 19)
+The journey log is a private diary of the person's steps, kept on their computer (`docs/JOURNEY-TRACKER.md`). Sending an anonymous report to the OpenDesigner team is a separate yes (`docs/PRIVACY.md`). Every command here is `python3 <skill>/scripts/journey.py ...`. If you can't run scripts, skip this whole section.
+
+**Asking about the log.** Ask once, in the first message, when `profile.tracking` in `state.json` is not set. Use this line word for word:
+> I keep a private log of your steps on this computer so I can make this faster for you. OK?
+
+Record the answer with `consent on` or `consent off`. Never log anything before a yes.
+
+**What to log.** Only when the log is on, and quietly: never mention it in normal messages.
+- You show a question or a screen: `log step_shown --step <Q-id>`.
+- The engine logs answers given through `pick`, `set` and `sketch`, changed answers, the finished sketch, errors, exports, reviews and feedback. Don't log those again.
+- An answer that doesn't go through the engine: `log step_answered --step <Q-id> --how default|option|free|delegated|reference`. A skip: `log step_skipped --step <Q-id> --reason person|rule|known|speed|later`.
+- They ask for help: `log help --kind explain|voice_switch|glossary|example`. Explain means "what does this mean?". Voice switch means "say it like a designer" or "like an engineer".
+- They say "faster", "skip the rest" or "just do it": `log speed_mode`.
+- A level other than the sketch finishes: `log level_complete --level broad|defined|detailed`.
+- They stop, or the Finish steps run: `log session_end`.
+
+**Signs of frustration.** Log `log frustration --signal <signal>` once per moment, not once per sentence:
+- `said`: they say it is annoying, confusing or too much.
+- `repeat_question`: they ask the same thing a second time.
+- `undo`: they take back a choice they just made.
+- `rage_skip`: they skip 3 or more steps in a row, within about a minute.
+- `just_do_it`: "just pick", "whatever", "just do it". Also log `speed_mode`, then use the defaults with `--set-by delegated`.
+- `error_loop`: the same validation error comes back after a fix.
+- `slow`: they say it is slow or taking too long.
+
+A `--note` is optional: 12 words at most, about the step, never about the person. Never put names, answers, colors, links or anything they typed in a note.
+
+**Asking about sharing.** Ask once, after the first finished level (usually the sketch), in the message after the result and the offer. Never ask in the first message or in the middle of a question. Never ask again once they answer. Don't ask when the log is off. Show this text word for word, as one question with three choices (the host's question tool can carry them):
+> Can I send the OpenDesigner team an anonymous report of this session? It shows where people get stuck, so the steps get faster for everyone.
+> What is sent: which questions came up, how long each took (to 5 seconds), how you answered (kept the default, picked an option and so on), skips, stops and help requests, plus the OpenDesigner version, the AI tool and the week.
+> Never sent: your answers, names, colors, brand, files, paths, links, notes or anything you typed. No ID ties reports to you or this computer.
+> Where it goes: a small server run by the OpenDesigner maintainers. Until it is set up, reports wait on this computer.
+> How long: reports are kept 12 months; after that only the totals stay.
+> You can see the exact report first: say "show me".
+> Choose: share every time · ask me each time · don't share. You can change your mind any time.
+
+- "Show me": run `share --dry-run`, show the JSON, then ask again.
+- Record the answer with `share-consent always` (share every time), `share-consent ask` (ask me each time) or `share-consent never` (don't share).
+- "Stop sharing", at any time: run `share-consent never`, then confirm in one line.
+
+**Sending.** At `session_end`, and after each later finished level:
+- `always`: run `share`. If it says reports aren't being collected yet, tell them once per session, in one line.
+- `ask`: ask this line word for word: "Send this session's anonymous report? Say "show me" to see it first." After a yes, run `share --yes`.
+- `never`, or not asked yet: do nothing.

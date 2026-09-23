@@ -62,12 +62,16 @@ python3 <skill>/scripts/journey.py log frustration --signal repeat_question --no
 python3 <skill>/scripts/journey.py log speed_mode
 python3 <skill>/scripts/journey.py events                  every event and value, in plain words
 ```
+The engine logs its own steps: answers and changed answers from `pick`, `set` and `sketch`, the finished sketch, errors, exports, reviews and feedback. It never logs the values. The AI logs what only it can see: what it showed, help, frustration, requests to go faster and the end of a session.
+
 The level and area are filled in from `references/questions.json` when the step is a question id. `help`, `frustration` and `speed_mode` without `--step` attach to the step on screen. If the engine and the AI both log the same answer within two minutes, it counts once.
 
 ## Reading the report
 ```
 python3 <skill>/scripts/journey.py report          writes opendesigner/journey/JOURNEY.md, prints the short version
 python3 <skill>/scripts/journey.py report --json   all the numbers
+python3 <skill>/scripts/journey.py level-line sketch     one line for the offer after a level, only when 3 or more steps could have been saved
+python3 <skill>/scripts/engine.py feedback --from-journey   a feedback note with the hotspots: question ids and counts only
 ```
 The short version looks like this (a synthetic test run):
 ```
@@ -79,7 +83,7 @@ Top speed-up: Q-color-02: 2 frustration signals: reword it, split it, or show a 
 ```
 JOURNEY.md then has these sections:
 - **Funnel by level** and **by area:** how many steps were reached, answered, skipped and dropped, at each zoom level and in each area. It also shows whether the level finished.
-- **Steps taken / shortest:** steps taken counts every time a step was shown, plus extra back-and-forth (from `--turns`, or one per help request). The shortest path is one message per question reached. A question asked in the same message as another (Q-brand-03 with Q-color-01) is not a separate step. **Planned questions** and **minutes** come from `references/pacing.json`.
+- **Steps taken / shortest:** steps taken counts every time a step was shown, plus extra back-and-forth (from `--turns`, or one per help request). The shortest path is one message per question reached. A question asked in the same message as another (Q-scope-06 with Q-scope-01, Q-brand-03 with Q-color-01) is not a separate step. **Planned questions** and **minutes** come from `references/pacing.json`.
 - **Where it stopped:** a drop-off is a step still on screen when a session ended without `session_end` and without finishing a level. The session you are in now is not counted until it has been quiet for 30 minutes.
 - **Frustration** and **help hotspots:** the steps with the most signals or help requests.
 - **Changed answers.**

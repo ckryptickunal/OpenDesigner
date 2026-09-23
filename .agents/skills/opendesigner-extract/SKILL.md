@@ -89,4 +89,6 @@ What I learned from example.com (inspiration: lessons, not looks) · measured in
 
 If something was missing, wrong or confusing, record it with `engine.py feedback "..." --kind gap|bug|confusing|idea`, and follow `references/improve.md` in the opendesigner skill. Nothing is posted without the person's OK.
 
+If `profile.tracking` is `on`, log the steps as `references/rules.md` section 11 in the opendesigner skill says. Never put a reference's URL or content in a note.
+
 The engine is `scripts/engine.py` in this skill when it was installed from a release zip. Otherwise it is the sibling `opendesigner` skill's `scripts/engine.py`. If neither is present, give the accepted values as a list, and say the engine is needed to generate tokens.

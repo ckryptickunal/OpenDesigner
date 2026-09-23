@@ -6,7 +6,7 @@
 import schema from "../../skills/opendesigner/references/report.schema.json" with { type: "json" };
 import { validate } from "./validate.js";
 
-const MAX_BYTES = 16384;  // journey.py MAX_REPORT_BYTES; a full detailed run of all 192 questions is about 14 KB
+const MAX_BYTES = 16384;  // journey.py MAX_REPORT_BYTES; a run through all 187 askable questions is about 13.5 KB
 const KEEP_WEEKS = 52;    // raw reports are deleted after 12 months
 
 export default {

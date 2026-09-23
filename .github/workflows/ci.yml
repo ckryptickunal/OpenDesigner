@@ -54,6 +54,9 @@ jobs:
             echo "skills/opendesigner/scripts/test_engine.py not present yet; skipping"
           fi
 
+      - name: Journey tracker tests (local log, anonymous report, consent texts)
+        run: python3 skills/opendesigner/scripts/test_journey.py
+
       - name: Generated skill copies match skills/
         run: |
           if [ -f tools/sync_skills.py ]; then

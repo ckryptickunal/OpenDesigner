@@ -10,7 +10,7 @@ The first public version: the research base, the synthesis that turns it into an
 
 - **Research base:** 18 finished research lanes (L00 to L18, with L12 still open) written as 352 Decision Cards, with 2,740 sources logged in `traces/`, including rejected ones.
 - **Benchmark:** 25 public design systems compared with real values in `benchmarks/`.
-- **Synthesis:** the building-block ontology (271 nodes in 10 layers), the guided interview (192 questions on 27 screens, with Quick, Standard and Expert modes), the eight dials with generation formulas and 13 famous systems as dial recipes, and the decision graph (352 decisions, 465 dependencies, 12 cycles).
+- **Synthesis:** the building-block ontology (271 nodes in 10 layers), the guided interview (193 questions on 27 screens, 6 of them planned and skipped until built, with Quick, Standard and Expert modes), the eight dials with generation formulas and 13 famous systems as dial recipes, and the decision graph (352 decisions, 465 dependencies, 12 cycles).
 - **Starter design artifacts** in `design/`: a DTCG 2025.10 token set with 126 contrast-checked pairs, and four HTML artboards.
 - **Coordination system** for parallel human and AI sessions: `tools/od.py`, `_coordination/PROTOCOL.md`, the board, heartbeats, inbox and decision log.
 - **Research tools:** `tools/jev_nav.py` (status, search, citation check, card export, decision graph) and `tools/check_links.py` (offline Markdown link check).

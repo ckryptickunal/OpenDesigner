@@ -22,8 +22,12 @@ Commands (run from the user's project; state lives in ./opendesigner/ unless --d
     engine.py preview [--open]            preview.html (every token plus a few components, light and dark)
     engine.py intake <measurements.json> [--accept] [--json]   reference values -> proposed dials (LEVERS E)
     engine.py review [--project P] [--strict] [--json]         hard-coded values that bypass tokens; stale DESIGN.md
-    engine.py feedback "text" --kind gap|bug|confusing|idea    local note + a pre-filled issue link (never posts)
+    engine.py feedback "text" --kind gap|bug|confusing|idea [--from-journey]   local note + a pre-filled issue link (never posts)
     engine.py build                       generate + export all + design-md + preview + validate
+
+When the person said yes to the private journey log (profile.tracking "on", see journey.py), the engine logs its own
+steps there: answers and changed answers from set/pick/sketch, the finished sketch, validation errors, exports, reviews
+and feedback. It never logs values, and it logs nothing without that yes.
 
 Output layout inside the state directory (spec 7.1):
     state.json, decisions.md, feedback.md, preview.html,
@@ -51,6 +55,21 @@ REFERENCES = os.path.join(SKILL_ROOT, "references")
 NS = "opendesigner"  # $extensions key fixed by the spec (7.4, 5.6); DTCG recommends, not requires, reverse-domain keys
 STATE_SCHEMA = "opendesigner-state/1"
 DEFAULT_DIR = "opendesigner"
+
+try:
+    import journey  # scripts/journey.py: the private journey log (BRIEF requirement 18); optional
+except ImportError:
+    journey = None
+
+
+def track(d, event, **kw):
+    """Log a step to the journey log if the person said yes. Silent, and never stops design work."""
+    if journey:
+        journey.record(d, event, **kw)
+
+
+# Paths that answer a sketch question without being answers.<Q-id> (zoom.md, level 0), and how a chosen value was given
+ANSWER_PATHS = {"context.product": ("Q-scope-01", "free"), "raw.brandColor": ("Q-color-01", "free"), "macros": ("Q-brand-01", "option")}
 
 
 # =============================================================================================
@@ -2881,6 +2900,11 @@ def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, loc
             extra.append(f"also set: {epath} = {json.dumps(evalue, ensure_ascii=False)} (from {qid})")
     dump_json(sp, state)
     log_decision(d, path, value, why, set_by, lock, source_ref, extra)
+    qid, how = (path.split(".", 1)[1], None) if path.startswith("answers.") else ANSWER_PATHS.get(path, (None, None))
+    if qid and journey:
+        if prev not in (None, "", [], {}) and prev != value:
+            track(d, "step_changed", step=qid)
+        track(d, "step_answered", step=qid, how=how if how and set_by == "chosen" else journey.how_for(qid, value, set_by))
     if not quiet:
         print(f"{did} set {path} = {json.dumps(value, ensure_ascii=False)} ({set_by}{', locked' if lock else ''})")
         for e in extra:
@@ -4739,6 +4763,7 @@ def cmd_build(d, force=False):
     rep = validate_dir(d)
     errors = rep.count("error")
     if errors and not force:
+        track(d, "error", step="build", count=errors)
         print_report(rep, d)
         print(f"Stopped after tokens/: nothing was exported, and DESIGN.md and preview.html were not refreshed. "
               f"Fix the error{'s' if errors != 1 else ''} above and run build again (--force exports anyway).")
@@ -4746,6 +4771,7 @@ def cmd_build(d, force=False):
     cmd_export(d, "all", files, meta, quiet=True)
     cmd_design_md(d, files=files, meta=meta, quiet=True)
     cmd_preview(d, files=files, meta=meta, quiet=True)
+    track(d, "export", kind="all")
     print(f"built {d}: tokens, build/ (css, tailwind, figma, paper, swift, compose, dtcg), DESIGN.md, PRODUCT.md, preview.html"
           + (" (exported with errors because of --force)" if errors else ""))
     print_report(rep, d)
@@ -4807,8 +4833,10 @@ def main(argv=None):
     p.add_argument("--strict", action="store_true", help="exit 1 when anything is found")
     p.add_argument("--json", action="store_true")
     p = sub.add_parser("feedback", parents=[common], help="record a gap, bug, confusing step or idea and print an issue link")
-    p.add_argument("text")
-    p.add_argument("--kind", default="idea", choices=list(FEEDBACK_KINDS))
+    p.add_argument("text", nargs="?", default="")
+    p.add_argument("--kind", default=None, choices=list(FEEDBACK_KINDS), help="default: idea (confusing with --from-journey)")
+    p.add_argument("--from-journey", dest="from_journey", action="store_true",
+                   help="add the hotspots from the journey log: question ids and counts only, never notes")
     p.add_argument("--area", default=None)
     p.add_argument("--question", default=None)
     a = ap.parse_args(argv)
@@ -4837,9 +4865,12 @@ def main(argv=None):
     elif a.cmd == "validate":
         rep = validate_dir(d)
         print_report(rep, d, a.json)
+        if rep.count("error"):
+            track(d, "error", step="validate", count=rep.count("error"))
         return 1 if rep.count("error") else 0
     elif a.cmd == "export":
         cmd_export(d, a.format)
+        track(d, "export", kind=a.format)
     elif a.cmd == "design-md":
         cmd_design_md(d, a.out)
     elif a.cmd == "preview":
@@ -4854,7 +4885,13 @@ def main(argv=None):
         return cmd_review(d, a.project, a.strict, a.json)
     elif a.cmd == "feedback":
         os.makedirs(d, exist_ok=True)
-        cmd_feedback(d, a.text, a.kind, area=a.area, question=a.question)
+        text = a.text
+        if a.from_journey:
+            hot = journey.feedback_text(d) if journey else ""
+            if not hot:
+                raise SystemExit("There is no journey log yet, so there are no hotspots to add.")
+            text = f"{text} {hot}".strip()
+        cmd_feedback(d, text, a.kind or ("confusing" if a.from_journey else "idea"), area=a.area, question=a.question)
     return 0
 
 
@@ -4911,6 +4948,11 @@ def cmd_sketch(d, name=None, brand=None, audience=None, platforms=None, feel=Non
     code = cmd_build(d) if not quiet else 0
     if not quiet:
         print("This is a sketch: every part works, and most choices are still defaults. Zoom into any area later (see the Zoom lines in DESIGN.md).")
+        if code == 0:
+            track(d, "level_complete", level="sketch")
+            line = journey.level_line(d, "sketch") if journey else ""
+            if line:
+                print(line)
     return code
 
 
@@ -5115,6 +5157,7 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
                   "Fix: run `engine.py design-md`. Notes inside od:keep blocks are kept.")
         else:
             print("DESIGN.md matches state.json.")
+    track(d, "review")
     return 1 if strict and (findings or stale or missing) else 0
 
 
@@ -5145,6 +5188,7 @@ def cmd_feedback(d, text, kind="idea", quiet=False, area=None, question=None):
     with open(fp, "a", encoding="utf-8", newline="\n") as f:
         f.write(f"\n## F-{n + 1:03d} · {_dt.date.today().isoformat()} · {kind}" + (f" · {where}" if where else "")
                 + f"\n{text}\n\n[File this as an issue]({url})\n")
+    track(d, "feedback_filed", kind=kind, step=question)
     if not quiet:
         print(f"Saved to {fp}.")
         print("To report it, open this link, check it, and submit it yourself (nothing was posted):")

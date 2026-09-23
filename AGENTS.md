@@ -23,10 +23,11 @@ Load the **`opendesigner`** skill and follow it: `skills/opendesigner/SKILL.md`.
 |---|---|
 | `skills/opendesigner/references/zoom.md` | Zoom levels: 0 sketch (5 questions), 1 broad, 2 defined, 3 detailed. Stop at any level |
 | `skills/opendesigner/references/stages/` | 28 stage files (zoom 0-2) plus `*.detailed.md` (zoom 3). Questions in order, with options, visual effects, real systems, defaults and skip rules |
-| `skills/opendesigner/references/*.json` | `questions` (192, each with a zoom level and area), `levers` (8 dials and formulas), `graph` (decision fan-out), `ontology-slim` (271 building blocks), `hooks`, `pacing` (areas, questions per level, minutes), `glossary` (terms in plain, designer and engineer voices, when shipped), `cards/` (Decision Cards, slim) |
+| `skills/opendesigner/references/*.json` | `questions` (193, each with an area and, except the reference panel, a zoom level; 6 are planned and skipped until built), `levers` (8 dials and formulas), `graph` (decision fan-out), `ontology-slim` (271 building blocks), `hooks`, `pacing` (areas, questions per level, minutes), `glossary` (terms in plain, designer and engineer voices, when shipped), `cards/` (Decision Cards, slim) |
 | `skills/opendesigner/references/rules.md`, `hooks.md`, `guardrails.md`, `improve.md` | Message style and three voices, asset hooks, hard rules, the self-improvement loop |
 | `skills/opendesigner/assets/templates/` | 8 visual templates (palette, type scale, spacing ruler, radius, elevation, motion, component sheet, option gallery). Each is JSON-fed, and its "Copy my choice" button produces `OD:` lines |
 | `skills/opendesigner/scripts/engine.py` | State, ramps, scales, contrast, validation and exports. Python 3.10+, standard library, no network |
+| `skills/opendesigner/scripts/journey.py` | The private journey log (asked first), its report, and opt-in anonymous sharing ([docs/PRIVACY.md](docs/PRIVACY.md)) |
 | `data/` | The same JSON and stage files, for tools that are not skills |
 | `synthesis/`, `research/` | The full sources, if a reference file is not enough |
 

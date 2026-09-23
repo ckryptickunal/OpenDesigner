@@ -83,6 +83,9 @@ python3 tools/jev_nav.py check
 # engine tests (once they are in the repo)
 python3 skills/opendesigner/scripts/test_engine.py
 
+# journey tracker tests: the private log, the anonymous report and the consent texts
+python3 skills/opendesigner/scripts/test_journey.py
+
 # generated skill copies match skills/, and skill frontmatter stays portable
 python3 tools/sync_skills.py --check
 python3 tools/build_dist.py --check

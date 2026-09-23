@@ -508,5 +508,60 @@ class ReviewAndFeedback(unittest.TestCase):
                 e.cmd_feedback(t, "x", "rant")
 
 
+class JourneyTracking(unittest.TestCase):
+    """The engine logs its own steps to the private journey log, and only after the person's yes (journey.py)."""
+
+    def events(self, d):
+        return [(x["event"], x["step"], x["data"]) for x in e.journey.read_events(e.journey.jpath(d, "events.jsonl"))]
+
+    def test_nothing_is_logged_without_a_yes(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="Quiet")
+            quiet(e.main, ["--dir", d, "pick", "Q-shape-01", "soft", "--no-doc"])
+            self.assertEqual(self.events(d), [])
+
+    def test_engine_logs_its_own_steps(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="Tracked")
+            e.journey.set_tracking(d, True)
+            quiet(e.cmd_set, d, "context.product", "a recipe app for families", "their words")
+            quiet(e.cmd_sketch, d, "Tracked", None, "regular", "web", "friendly")
+            got = self.events(d)
+            answered = {s: x.get("how") for ev, s, x in got if ev == "step_answered"}
+            self.assertEqual(answered, {"Q-scope-01": "free", "Q-aud-01": "option", "Q-plat-01": "option", "Q-brand-01": "option"})
+            self.assertIn(("export", None, {"kind": "all"}), got)
+            self.assertEqual(got[-1][:2], ("level_complete", None))
+            quiet(e.main, ["--dir", d, "pick", "Q-shape-01", "soft", "--no-doc"])
+            quiet(e.main, ["--dir", d, "pick", "Q-shape-01", "subtle", "--set-by", "delegated", "--no-doc"])
+            self.assertEqual(self.events(d)[-3:], [("step_answered", "Q-shape-01", {"how": "option"}),
+                                                   ("step_changed", "Q-shape-01", {}),
+                                                   ("step_answered", "Q-shape-01", {"how": "delegated"})])
+            quiet(e.cmd_set, d, "size.target.pointer", {"value": 20, "unit": "px"}, "too small on purpose")
+            quiet(e.main, ["--dir", d, "generate"])
+            self.assertEqual(quiet(e.main, ["--dir", d, "validate"]), 1)
+            self.assertEqual(self.events(d)[-1][:2], ("error", "validate"))
+            self.assertEqual(json.dumps(self.events(d)).count("recipe"), 0)   # never the answer itself
+
+    def test_feedback_from_journey_adds_hotspots(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="Hot")
+            with self.assertRaises(SystemExit):
+                quiet(e.main, ["--dir", d, "feedback", "--from-journey"])
+            e.journey.set_tracking(d, True)
+            e.journey.log(d, "step_shown", step="Q-color-02")
+            e.journey.log(d, "frustration", signal="said", note="Priya hates teal")
+            e.journey.log(d, "frustration", signal="repeat_question")
+            quiet(e.main, ["--dir", d, "feedback", "--from-journey"])
+            with open(os.path.join(d, "feedback.md"), encoding="utf-8") as f:
+                text = f.read()
+            self.assertIn("confusing", text)
+            self.assertIn("Frustration: Q-color-02 (2)", text)
+            self.assertNotIn("Priya", text)
+            self.assertEqual(self.events(d)[-1], ("feedback_filed", None, {"kind": "confusing"}))
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=1)

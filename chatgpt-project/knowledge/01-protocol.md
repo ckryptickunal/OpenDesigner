@@ -24,6 +24,7 @@ Take facts from `references/`, not from memory. Use `scripts/engine.py` for all 
 | `references/hooks.md`, `hooks.json` | Whenever an asset comes up: logo, fonts, icons, photos and so on |
 | `references/guardrails.md` | Before writing files, before reading a reference, and whenever you are unsure |
 | `references/improve.md` | When something is missing, wrong or confusing |
+| `scripts/journey.py`, `references/report.schema.json` | The private journey log and the optional anonymous report (`rules.md` section 11) |
 | `references/questions.json`, `graph.json`, `cards/Lxx.json`, `levers.json`, `ontology-slim.json` | Machine index; what a choice changes; "why?" sources; dials and formulas; the full block map |
 | `assets/templates/*.html` | Visual steps |
 | `assets/output/*` | The shape of the files the person keeps |
@@ -31,7 +32,9 @@ Take facts from `references/`, not from memory. Use `scripts/engine.py` for all 
 ## Start
 1. **Look before you ask.** Check for `opendesigner/`, `DESIGN.md`, `PRODUCT.md`, token files, `tailwind.config.*`, CSS custom properties, `package.json`, and logo or font files. Never ask something a file already answers. If `opendesigner/state.json` exists, switch to opendesigner-extend.
 2. **Set up.** Run `python3 <skill>/scripts/engine.py init --name "<product or folder name>"`. Here `<skill>` means this skill's folder.
-3. **Greet in 3 lines at most,** then ask the first sketch question (`rules.md` section 1). There is no mode to choose.
+3. **Greet in 3 lines at most** (`rules.md` section 1). There is no mode to choose.
+   - If `profile.tracking` in `opendesigner/state.json` is not set, the greeting's one question is this line, word for word: "I keep a private log of your steps on this computer so I can make this faster for you. OK?" Record the answer with `journey.py consent on` or `journey.py consent off`. Then ask the first sketch question.
+   - Otherwise, ask the first sketch question straight away.
 4. If `opendesigner/state.json` has `profile.voice` set, lead with that voice.
 
 ## The flow: zoom, don't march
@@ -72,9 +75,22 @@ python3 <skill>/scripts/engine.py export --format css|tailwind|figma|paper|swift
 python3 <skill>/scripts/engine.py preview [--open]           opendesigner/preview.html
 python3 <skill>/scripts/engine.py build [--force]            generate and validate; exports and docs only if there are no errors
 python3 <skill>/scripts/engine.py review [--project src/]    end-of-implementation check: hard-coded colors, sizes, radii, shadows, durations; stale DESIGN.md sections
-python3 <skill>/scripts/engine.py feedback "..." --kind gap|bug|confusing|idea
+python3 <skill>/scripts/engine.py feedback "..." --kind gap|bug|confusing|idea [--from-journey]
 ```
 After every change, run `generate` and `validate` before showing results. Fix every error first. The report cites the rule it applied.
+
+## The journey log (only after a yes)
+The journey log is a private diary of the person's steps, kept on their computer. It shows where the questions slow people down. `rules.md` section 11 says what to log and when.
+```
+python3 <skill>/scripts/journey.py consent on|off           their answer to the log question
+python3 <skill>/scripts/journey.py log step_shown --step Q-shape-01    also help, frustration, speed_mode, session_end
+python3 <skill>/scripts/journey.py report                   opendesigner/journey/JOURNEY.md and a short summary
+python3 <skill>/scripts/journey.py share-consent [always|ask|never]    the sharing question, or their answer
+python3 <skill>/scripts/journey.py share [--dry-run] [--yes]           send the anonymous report, or show it first
+```
+- The engine logs its own steps: answers, changed answers, the finished sketch, errors, exports, reviews and feedback. Don't log those twice.
+- Never mention the log in normal messages. Never log before a yes.
+- Sharing an anonymous report with the OpenDesigner team is a separate yes. Ask it once, after the first finished level, never in the first message (`rules.md` section 11).
 
 ## DESIGN.md stays alive
 - DESIGN.md is the person's living spec. Once it exists, every `set` and `lock` refreshes it and PRODUCT.md by itself. Run `engine.py design-md` to create it, or after a `--no-doc` change.
@@ -94,6 +110,7 @@ If they share a site, screenshot, Figma file, repo or brand book, hand off to **
 4. Ask first, then append `assets/output/AGENTS-snippet.md` to their AGENTS.md (or CLAUDE.md).
 5. Send a short summary in three parts: what we chose and why, what is still open, and how to change it later ("use opendesigner-extend").
 6. Mention any feedback you recorded, and offer the issue link (`references/improve.md`).
+7. If the log is on: `journey.py log session_end`, then `journey.py report`. Mention one line of it only if it shows something useful. Then send or ask about the anonymous report as `rules.md` section 11 says.
 
 ## Improve OpenDesigner
 When a question, option or building block is missing, a step confuses the person, or something breaks, follow `references/improve.md`.
@@ -170,6 +187,8 @@ Keep it short:
 - Offer at most 3 choices, each with its rough minutes from `pacing.json`. Pick what matters most for this product. First come areas whose choices change the most (`pacing.json` → `top_decisions`). Then come areas their answers made risky, such as a light brand color or a dense product.
 - Accessibility is never an option to skip. Its floors (`guardrails.md` section 4) are already set at level 0.
 - "Stop" is a good answer. Finish with the Finish steps in SKILL.md, at whatever level they reached.
+- If the journey log is on, run `journey.py level-line <level>`. After the sketch, the engine prints this line itself. If there is a line, put it above the choices, for example "You took 9 steps; the shortest path is 5." If there is none, add nothing.
+- After the first finished level, the next message asks about sharing the anonymous report. Ask it once, and never again (`rules.md` section 11).
 - DESIGN.md shows each section's zoom level. A teammate can see what was decided and what is still a default (SKILL.md, "DESIGN.md stays alive"). When someone asks what a section means, point to its zoom line and offer to zoom in.
 
 # Interview rules
@@ -181,6 +200,7 @@ How to run the OpenDesigner interview. Sources: `research/L18-ai-first-distribut
   > I'll help you set up your design system: the colors, text, spacing and parts your app uses.
   > We start with 5 quick questions, and you get a complete first version. You can go deeper anywhere later.
   > First: what are you making?
+- **The first time only,** the first message asks about the journey log instead (section 11). Its last line is the log question. The first sketch question comes in the next message.
 - **One idea and one question per message.** Short sentences. No walls of text, and no long lists unless asked.
 - **Plain words first.** Every term gets its plain meaning the first time (section 2). Skip jargon where a plain word works.
 - **Details on request.** Give sources, real systems and trade-offs when the person says "why?" or "tell me more". Don't volunteer them all at once.
@@ -290,6 +310,52 @@ Vendors and NN/g have documented that AI-made interfaces converge on the same fe
 - Spend boldness in one place: one signature element (a color, a typeface, a shape or a motion moment). Tie it to the memorable thing (Q-brand-02), and let everything else stay quiet.
 - The fix for sameness is explicit decisions and the person's own assets, not a longer prompt.
 
+## 11. The journey log and sharing (BRIEF requirements 18 and 19)
+The journey log is a private diary of the person's steps, kept on their computer (`docs/JOURNEY-TRACKER.md`). Sending an anonymous report to the OpenDesigner team is a separate yes (`docs/PRIVACY.md`). Every command here is `python3 <skill>/scripts/journey.py ...`. If you can't run scripts, skip this whole section.
+
+**Asking about the log.** Ask once, in the first message, when `profile.tracking` in `state.json` is not set. Use this line word for word:
+> I keep a private log of your steps on this computer so I can make this faster for you. OK?
+
+Record the answer with `consent on` or `consent off`. Never log anything before a yes.
+
+**What to log.** Only when the log is on, and quietly: never mention it in normal messages.
+- You show a question or a screen: `log step_shown --step <Q-id>`.
+- The engine logs answers given through `pick`, `set` and `sketch`, changed answers, the finished sketch, errors, exports, reviews and feedback. Don't log those again.
+- An answer that doesn't go through the engine: `log step_answered --step <Q-id> --how default|option|free|delegated|reference`. A skip: `log step_skipped --step <Q-id> --reason person|rule|known|speed|later`.
+- They ask for help: `log help --kind explain|voice_switch|glossary|example`. Explain means "what does this mean?". Voice switch means "say it like a designer" or "like an engineer".
+- They say "faster", "skip the rest" or "just do it": `log speed_mode`.
+- A level other than the sketch finishes: `log level_complete --level broad|defined|detailed`.
+- They stop, or the Finish steps run: `log session_end`.
+
+**Signs of frustration.** Log `log frustration --signal <signal>` once per moment, not once per sentence:
+- `said`: they say it is annoying, confusing or too much.
+- `repeat_question`: they ask the same thing a second time.
+- `undo`: they take back a choice they just made.
+- `rage_skip`: they skip 3 or more steps in a row, within about a minute.
+- `just_do_it`: "just pick", "whatever", "just do it". Also log `speed_mode`, then use the defaults with `--set-by delegated`.
+- `error_loop`: the same validation error comes back after a fix.
+- `slow`: they say it is slow or taking too long.
+
+A `--note` is optional: 12 words at most, about the step, never about the person. Never put names, answers, colors, links or anything they typed in a note.
+
+**Asking about sharing.** Ask once, after the first finished level (usually the sketch), in the message after the result and the offer. Never ask in the first message or in the middle of a question. Never ask again once they answer. Don't ask when the log is off. Show this text word for word, as one question with three choices (the host's question tool can carry them):
+> Can I send the OpenDesigner team an anonymous report of this session? It shows where people get stuck, so the steps get faster for everyone.
+> What is sent: which questions came up, how long each took (to 5 seconds), how you answered (kept the default, picked an option and so on), skips, stops and help requests, plus the OpenDesigner version, the AI tool and the week.
+> Never sent: your answers, names, colors, brand, files, paths, links, notes or anything you typed. No ID ties reports to you or this computer.
+> Where it goes: a small server run by the OpenDesigner maintainers. Until it is set up, reports wait on this computer.
+> How long: reports are kept 12 months; after that only the totals stay.
+> You can see the exact report first: say "show me".
+> Choose: share every time · ask me each time · don't share. You can change your mind any time.
+
+- "Show me": run `share --dry-run`, show the JSON, then ask again.
+- Record the answer with `share-consent always` (share every time), `share-consent ask` (ask me each time) or `share-consent never` (don't share).
+- "Stop sharing", at any time: run `share-consent never`, then confirm in one line.
+
+**Sending.** At `session_end`, and after each later finished level:
+- `always`: run `share`. If it says reports aren't being collected yet, tell them once per session, in one line.
+- `ask`: ask this line word for word: "Send this session's anonymous report? Say "show me" to see it first." After a yes, run `share --yes`.
+- `never`, or not asked yet: do nothing.
+
 # Improving OpenDesigner (the self-improvement loop)
 
 OpenDesigner gets better when you say what went wrong. This covers BRIEF requirement 16 and lane U3. All four skills link here.
@@ -307,10 +373,12 @@ Don't interrupt the person for this. Record it quietly, and mention it once at t
 
 ## In someone's project (the usual case)
 1. Record it: `engine.py feedback "<area or question id>: <what happened, what you expected>" --kind gap|bug|confusing|idea`. The engine appends it to `opendesigner/feedback.md` and prints a pre-filled issue link for github.com/ckryptickunal/OpenDesigner.
+   - If the journey log is on and shows where they got stuck, add `--from-journey`. It adds the hotspots from the log: question ids and counts only, never notes.
 2. Write about OpenDesigner, not about their product. Leave out names, customers, private URLs, file contents and anything else they didn't choose to share.
 3. At the end, show the feedback in one short list, and offer the link: "Want to send these to the OpenDesigner project? The link opens a pre-filled issue. You check it and press submit yourself." Nothing is posted without their OK.
 4. If `gh` is installed and they say yes, you may run `gh issue create --repo ckryptickunal/OpenDesigner` with the same title and body. Show the exact command first.
 5. If they are offline or say no, the notes stay in `opendesigner/feedback.md`, and nothing leaves their machine.
+6. An anonymous report can go with an issue, only with their OK: `journey.py export --anon` writes it (`docs/PRIVACY.md`). Shared reports never go through GitHub issues, because an issue is posted under their account.
 
 ## Inside the OpenDesigner repo itself
 You are in the repo when `_coordination/PROTOCOL.md` and `tools/od.py` exist. Then fix the source directly:
@@ -318,7 +386,7 @@ You are in the repo when `_coordination/PROTOCOL.md` and `tools/od.py` exist. Th
    - Interview text lives in `skills/<skill>/SKILL.md` and `skills/opendesigner/references/*.md` (zoom, rules, improve, hooks, guardrails).
    - Questions, options, defaults and cards live in `synthesis/`: `QUESTIONNAIRE.md` (then run `python3 tools/build_questionnaire.py`), `levers.json`, `ontology.json` and `glossary.json`.
    - Templates live in `skills/opendesigner/assets/templates/`. The engine, `skills/opendesigner/scripts/engine.py`, is owned by R2: message them instead.
-   - Never edit `.agents/`, `.claude/`, `data/`, `references/stages/`, `references/cards/`, `references/*.json` or `chatgpt-project/knowledge/`. They are generated.
+   - Never edit `.agents/`, `.claude/`, `data/`, `references/stages/`, `references/cards/`, `references/*.json` or `chatgpt-project/knowledge/`. They are generated. One exception: `references/report.schema.json` is written by hand, and `journey.py` and `server/telemetry/` read it.
 2. Rebuild and check:
    ```
    python3 tools/build_data.py && python3 tools/sync_skills.py
@@ -603,6 +671,8 @@ This project's design system lives in `opendesigner/`, and `DESIGN.md` is its li
 4. Fix any drift `review` reports.
 
 **To change or extend the system,** use the `opendesigner-extend` skill. The accessibility floors are part of the system, not options: WCAG 2.2 AA contrast, 24 px minimum targets, visible focus and reduced motion.
+
+**`opendesigner/journey/` is a private log of the owner's steps.** It stays out of git. Never commit it, share it or read it into other work.
 
 **If a step was missing, wrong or confusing,** record it with `engine.py feedback "..." --kind gap|bug|confusing|idea`. Nothing is posted without the owner's OK.
 ```

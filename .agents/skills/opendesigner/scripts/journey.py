@@ -49,7 +49,7 @@ POST_TIMEOUT = 5
 MAX_REPORT_BYTES = 16384   # server/telemetry/worker.js refuses anything bigger
 LEVELS = ["sketch", "broad", "defined", "detailed"]
 WEIGHT_SECS = {"high": 60, "medium": 30, "low": 15}   # pacing.json _about: planned time per question [inferred]
-ASKED_TOGETHER = {"Q-brand-03": "Q-color-01"}          # zoom.md level 0, question 5: one message, not two steps
+ASKED_TOGETHER = {"Q-scope-06": "Q-scope-01", "Q-brand-03": "Q-color-01"}   # zoom.md level 0, questions 1 and 5: one message each
 
 CONSENT_QUESTION = "I keep a private log of your steps on this computer so I can make this faster for you. OK?"
 SHARE_CONSENT = """\
@@ -60,6 +60,7 @@ Where it goes: a small server run by the OpenDesigner maintainers. Until it is s
 How long: reports are kept 12 months; after that only the totals stay.
 You can see the exact report first: say "show me".
 Choose: share every time · ask me each time · don't share. You can change your mind any time."""
+SHARE_ASK = 'Send this session\'s anonymous report? Say "show me" to see it first.'   # when share_reports is "ask"
 
 EVENTS = {
     "session_start": "They started working with OpenDesigner. Logged by itself when a new session begins.",
@@ -752,7 +753,8 @@ def headline(sm, an):
         lines.append("Stopped at: " + ", ".join(label(k) for k in an["dropped"][:2]) + ".")
     if an["frustration"]:
         k = an["frustration"][0]
-        lines.append(f"Most frustrating: {label(k)}, {sum(sm['steps'][k]['signals'].values())} signals.")
+        n = sum(sm["steps"][k]["signals"].values())
+        lines.append(f"Most frustrating: {label(k)}, {n} signal{'s' if n != 1 else ''}.")
     if an["speedups"]:
         lines.append("Top speed-up: " + an["speedups"][0])
     return lines
@@ -821,7 +823,8 @@ def render_md(sm, an, title="Your OpenDesigner journey", about=None):
     out += ["", "## Frustration hotspots"]
     for k in an["frustration"]:
         s = steps[k]
-        out.append(f"- {label(k)}: {sum(s['signals'].values())} signals ({counts(s['signals'])})")
+        n = sum(s["signals"].values())
+        out.append(f"- {label(k)}: {n} signal{'s' if n != 1 else ''} ({counts(s['signals'])})")
         out += [f"  - note: \"{n}\"" for n in s["notes"][:3]]
     if not an["frustration"]:
         out.append("- None logged.")
@@ -876,7 +879,7 @@ SHARE_MESSAGES = {
     "nothing": "Nothing new to report since the last report.",
     "not_asked": "Not sent: they haven't been asked. Show them the text from `journey.py share-consent` first.",
     "off": "Not sent: sharing is off. Nothing left this computer.",
-    "needs_yes": "Not sent: sharing is set to 'ask'. Show the report (`journey.py share --dry-run`); after they say yes, run `journey.py share --yes`.",
+    "needs_yes": "Not sent: sharing is set to 'ask'. Ask them: " + SHARE_ASK + " After a yes, run `journey.py share --yes`.",
     "sent": "Sent the anonymous report {id}. Thank you.",
     "queued": "Couldn't reach the report server, so report {id} waits in {outbox} and goes with the next one.",
     "outbox": "Reports aren't being collected yet, so report {id} stays on this computer in {outbox}. Nothing was sent.",

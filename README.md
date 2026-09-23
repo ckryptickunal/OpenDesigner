@@ -219,7 +219,7 @@ OpenDesigner gets better each time someone says what went wrong.
 | Host packaging: Claude plugin and marketplace, Agent Plugins `plugin.json`, claude.ai zips, ChatGPT Project bundle | In the repo; Claude manifests pass `claude plugin validate` |
 | Engine: generate, validate, export (DTCG, CSS, Tailwind, Figma, Paper, Swift, Compose) | Works: [`engine.py`](skills/opendesigner/scripts/engine.py) `build` writes every format; 25 engine tests pass |
 | Zoom levels (a 5-question sketch first), the three-voice glossary (397 terms), and `engine.py feedback` for reporting gaps | Works: `engine.py sketch`, `review` and `feedback`; glossary in [docs/GLOSSARY.md](docs/GLOSSARY.md) |
-| Journey tracker (a private step log) and opt-in anonymous sharing | First part works: [`journey.py`](skills/opendesigner/scripts/journey.py), 23 tests. No server collects reports yet ([privacy](docs/PRIVACY.md)) |
+| Journey tracker (a private step log) and opt-in anonymous sharing | Works: the AI asks first, then the engine and the AI log each step ([`journey.py`](skills/opendesigner/scripts/journey.py)). No server collects reports yet ([privacy](docs/PRIVACY.md)) |
 | Worked examples | 3 in [`examples/`](examples/) |
 | Figma hands-on research (L12) | Open, [help wanted](docs/SEED-ISSUES.md) |
 | Figma and Paper round-trip writers | Planned, last step of phase 1 |

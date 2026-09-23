@@ -15,4 +15,6 @@ This project's design system lives in `opendesigner/`, and `DESIGN.md` is its li
 
 **To change or extend the system,** use the `opendesigner-extend` skill. The accessibility floors are part of the system, not options: WCAG 2.2 AA contrast, 24 px minimum targets, visible focus and reduced motion.
 
+**`opendesigner/journey/` is a private log of the owner's steps.** It stays out of git. Never commit it, share it or read it into other work.
+
 **If a step was missing, wrong or confusing,** record it with `engine.py feedback "..." --kind gap|bug|confusing|idea`. Nothing is posted without the owner's OK.

@@ -1,6 +1,8 @@
 # T1 phase B: wire the journey tracker and report sharing into OpenDesigner
 
-Owner: T1 journey. Start only when the orchestrator says the U4 wording pass on SKILL.md, the references and engine.py has landed. Phase A (done, new files only): `skills/opendesigner/scripts/journey.py`, `test_journey.py`, `references/report.schema.json`, `docs/JOURNEY-TRACKER.md`, `docs/PRIVACY.md`, `server/telemetry/`. BRIEF requirements 18 and 19.
+Owner: T1 journey. **Status: done 2026-09-24 (not committed; the orchestrator syncs).** Choices made while doing it: the greeting's one question is the log question and the first sketch question comes next (section 2.1); Q-scope-06 counts as asked with Q-scope-01, like Q-brand-03 with Q-color-01; a consent-text drift test lives in `test_journey.py` (`ConsentTexts`).
+
+Start only when the orchestrator says the U4 wording pass on SKILL.md, the references and engine.py has landed. Phase A (done, new files only): `skills/opendesigner/scripts/journey.py`, `test_journey.py`, `references/report.schema.json`, `docs/JOURNEY-TRACKER.md`, `docs/PRIVACY.md`, `server/telemetry/`. BRIEF requirements 18 and 19.
 
 Principles for every change below:
 - One consent per purpose. `profile.tracking` (local log) and `profile.share_reports` (sending) are separate, and neither is ever assumed.

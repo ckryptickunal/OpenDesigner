@@ -24,7 +24,7 @@ The schema is not copied: `worker.js` imports `skills/opendesigner/references/re
 - Refuses: anything over 16 KB, anything that isn't JSON, and anything that doesn't match the schema (an extra key, a question id that isn't one, a timing not rounded to 5 seconds, and so on).
 - Workers Logs are on by default for new Workers; `wrangler.toml.example` turns them off. Leave Logpush off too.
 
-Why 16 KB and not 8: a run through the sketch and broad levels is about 3 KB, but a full detailed run of all 192 questions measures about 14 KB. `journey.py` drops the per-question timings if a report would go over 16 KB.
+Why 16 KB and not 8: a run through the sketch and broad levels is about 3 KB. A run through every question measures about 13.5 KB: 193 questions, minus the 6 marked planned and skipped until they are built. `journey.py` drops the per-question timings if a report would go over 16 KB.
 
 ## Setting it up (only when the maintainers decide to host it)
 ```

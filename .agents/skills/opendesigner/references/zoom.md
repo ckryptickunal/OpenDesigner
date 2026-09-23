@@ -62,4 +62,6 @@ Keep it short:
 - Offer at most 3 choices, each with its rough minutes from `pacing.json`. Pick what matters most for this product. First come areas whose choices change the most (`pacing.json` → `top_decisions`). Then come areas their answers made risky, such as a light brand color or a dense product.
 - Accessibility is never an option to skip. Its floors (`guardrails.md` section 4) are already set at level 0.
 - "Stop" is a good answer. Finish with the Finish steps in SKILL.md, at whatever level they reached.
+- If the journey log is on, run `journey.py level-line <level>`. After the sketch, the engine prints this line itself. If there is a line, put it above the choices, for example "You took 9 steps; the shortest path is 5." If there is none, add nothing.
+- After the first finished level, the next message asks about sharing the anonymous report. Ask it once, and never again (`rules.md` section 11).
 - DESIGN.md shows each section's zoom level. A teammate can see what was decided and what is still a default (SKILL.md, "DESIGN.md stays alive"). When someone asks what a section means, point to its zoom line and offer to zoom in.

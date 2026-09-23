@@ -70,3 +70,5 @@ Decision log: opendesigner/decisions.md, D-<nnnn>
 
 ## 7. Improve OpenDesigner
 If a question, option or building block was missing, or a step confused the person, follow `<opendesigner>/references/improve.md` (`engine.py feedback ... --kind gap|bug|confusing|idea`). Nothing is posted without their OK.
+
+If `profile.tracking` is `on`, log the steps as `<opendesigner>/references/rules.md` section 11 says. If it is not set, don't ask here: the log question belongs to a first run.
