@@ -1,0 +1,4608 @@
+{
+ "version": "S1a-2026-09-23",
+ "layers": [
+  {
+   "id": "ctx",
+   "name": "Context and inputs",
+   "root": "ctx"
+  },
+  {
+   "id": "prin",
+   "name": "Principles",
+   "root": "prin"
+  },
+  {
+   "id": "found",
+   "name": "Foundations",
+   "root": "found"
+  },
+  {
+   "id": "tok",
+   "name": "Tokens",
+   "root": "tok"
+  },
+  {
+   "id": "comp",
+   "name": "Components",
+   "root": "comp"
+  },
+  {
+   "id": "pat",
+   "name": "Patterns and templates",
+   "root": "pat"
+  },
+  {
+   "id": "guard",
+   "name": "Guardrails and validation",
+   "root": "guard"
+  },
+  {
+   "id": "deliver",
+   "name": "Delivery and tooling",
+   "root": "deliver"
+  },
+  {
+   "id": "gov",
+   "name": "Governance, docs and adoption",
+   "root": "gov"
+  },
+  {
+   "id": "builder",
+   "name": "Builder surface (meta layer)",
+   "root": "builder"
+  }
+ ],
+ "field_notes": {
+  "cards": "Decision Cards that decide this node; every card id appears in exactly one node",
+  "related": "cards owned by another node that also shape this one (not counted for coverage)",
+  "members": "catalog items (L08 component ids C01-C64, L15 principle ids P01-P72, L08 pattern ids L08-P1 to L08-P13) grouped here",
+  "dtcg": "DTCG 2025.10 $type(s) involved, or a note that no type exists",
+  "l09": "shared default across benchmarked systems and where they diverge (benchmarks/L09-benchmark-matrix.md)"
+ },
+ "coverage": {
+  "cards_total": 325,
+  "cards_mapped": 276,
+  "unmapped": [
+   "DC-L07-08",
+   "DC-L07-09",
+   "DC-L07-18",
+   "DC-L07-19",
+   "DC-L07-20",
+   "DC-L07-21",
+   "DC-L07-23",
+   "DC-L07-24",
+   "DC-L07-25",
+   "DC-L07-26",
+   "DC-L08-23",
+   "DC-L09-08",
+   "DC-L10-22",
+   "DC-L11-06",
+   "DC-L11-07",
+   "DC-L11-08",
+   "DC-L11-09",
+   "DC-L11-10",
+   "DC-L11-11",
+   "DC-L11-12",
+   "DC-L11-13",
+   "DC-L11-14",
+   "DC-L11-15",
+   "DC-L11-16",
+   "DC-L11-17",
+   "DC-L11-18",
+   "DC-L11-20",
+   "DC-L11-21",
+   "DC-L11-22",
+   "DC-L11-23",
+   "DC-L11-24",
+   "DC-L14-11",
+   "DC-L14-14",
+   "DC-L15-11",
+   "DC-L16-01",
+   "DC-L16-02",
+   "DC-L16-03",
+   "DC-L16-04",
+   "DC-L16-05",
+   "DC-L16-06",
+   "DC-L16-07",
+   "DC-L16-08",
+   "DC-L16-09",
+   "DC-L16-10",
+   "DC-L16-11",
+   "DC-L16-12",
+   "DC-L16-13",
+   "DC-L16-14",
+   "DC-L16-15"
+  ],
+  "double_mapped": {}
+ },
+ "nodes": [
+  {
+   "id": "ctx",
+   "name": "Context and inputs",
+   "layer": "ctx",
+   "children": [
+    "ctx.strategy",
+    "ctx.scope",
+    "ctx.inventory",
+    "ctx.platforms",
+    "ctx.brand",
+    "ctx.constraints"
+   ],
+   "definition": "The facts the builder collects before any visual decision: why the system exists, who and what it serves, which platforms and devices it must cover, the brand's personality, and the hard limits it must fit. In the decision graph these are the step-0 and step-1 inputs that constrain the most other decisions (DC-L06-02 constrains 15, DC-L10-01 12, DC-L14-01 10, DC-L11-02 8)."
+  },
+  {
+   "id": "ctx.strategy",
+   "name": "Starting point and system posture",
+   "layer": "ctx",
+   "parent": "ctx",
+   "definition": "Whether the team adopts an existing system, adapts a themeable base, or creates its own, and how strict, modular and centralized the system will be (Kholmatova's parameters).",
+   "cards": [
+    "DC-L11-01",
+    "DC-L11-03"
+   ],
+   "dtcg": "none; stored as builder metadata such as `system.origin` and `governance.posture` (DC-L11-01, DC-L11-03)",
+   "platform": "Open web systems rarely cover native apps: 94% of systems support web, 35% iOS, 34% Android [S-L11-030].",
+   "default": "Small teams (1-5 people, 61% of teams) adapt an accessible headless or themeable base and spend effort on tokens and docs (DC-L11-01). Strict core, loose edges (DC-L11-03, [inferred] in the card).",
+   "sources": [
+    "S-L11-006",
+    "S-L11-018",
+    "S-L11-019",
+    "S-L11-030"
+   ]
+  },
+  {
+   "id": "ctx.scope",
+   "name": "Scope: products, audience and stack",
+   "layer": "ctx",
+   "parent": "ctx",
+   "definition": "Which products, audiences and technologies version 1 serves, and which it explicitly does not. The answer decides which exporters the builder runs.",
+   "cards": [
+    "DC-L11-02"
+   ],
+   "dtcg": "none; metadata `system.platforms` and `system.frameworks` (DC-L11-02)",
+   "default": "Scope version 1 to the products the pilot touches and list the products you will not serve (DC-L11-02).",
+   "sources": [
+    "S-L11-083",
+    "S-L11-002",
+    "S-L11-030"
+   ]
+  },
+  {
+   "id": "ctx.inventory",
+   "name": "Existing UI inventory (audit)",
+   "layer": "ctx",
+   "parent": "ctx",
+   "definition": "A screenshot inventory of every unique UI pattern, plus a visual and CSS audit of colors, type and spacing in the products the system will replace. It supplies shared names and candidate primitives.",
+   "cards": [
+    "DC-L11-04"
+   ],
+   "dtcg": "none; audit findings can seed primitives, for example frequent hex values clustered into ramps ([inferred] in DC-L11-04)",
+   "platform": "Run one inventory per platform, because names differ (sheet, modal, dialog) (DC-L11-04).",
+   "default": "Do the manual inventory even when automated data exists; its main value is shared vocabulary and buy-in (DC-L11-04).",
+   "sources": [
+    "S-L11-001",
+    "S-L11-105"
+   ]
+  },
+  {
+   "id": "ctx.platforms",
+   "name": "Target platforms",
+   "layer": "ctx",
+   "parent": "ctx",
+   "children": [
+    "ctx.platforms.posture",
+    "ctx.platforms.sharing",
+    "ctx.platforms.devices",
+    "ctx.platforms.stack",
+    "ctx.platforms.os-floor"
+   ],
+   "definition": "The operating systems and runtimes the system must serve (web, iOS, Android, Windows, macOS and others). Platform choice decides units, native type, target sizes, materials and navigation containers downstream.",
+   "cards": [
+    "DC-L10-01"
+   ],
+   "dtcg": "none in the Format module; a `platform` modifier in the Resolver document ([inferred] in DC-L10-01)",
+   "platform": "Android's large-screen rules make phone-only Android layouts no longer viable for new apps [S-L10-021]; Apple asks layouts to follow size class rather than device idiom [S-L10-013].",
+   "default": "Web plus iOS and Android phones, with Android and iPad large-screen layouts from day one; desktop, watch or TV only with a named use case (DC-L10-01).",
+   "l09": "Diverges (L09-A2.10): web only (most systems), one API for web and native (Blade), per-platform ramps under one language (Fluent), native only (Apple).",
+   "sources": [
+    "S-L10-020",
+    "S-L10-021",
+    "S-L10-025"
+   ]
+  },
+  {
+   "id": "ctx.platforms.posture",
+   "name": "Platform posture (native-first, brand-first or hybrid)",
+   "layer": "ctx",
+   "parent": "ctx.platforms",
+   "definition": "How far the product defers to each platform's own look and behavior versus imposing one brand look everywhere.",
+   "cards": [
+    "DC-L10-02",
+    "DC-L06-14"
+   ],
+   "dtcg": "not a token; it decides which semantic tokens get platform overrides (DC-L10-02)",
+   "platform": "Apple removed the opt-out from its new design at the 27 SDKs, so brand-first chrome on iOS means custom bars and controls [S-L10-076, S-L10-075].",
+   "default": "Coherent hybrid: share what users perceive as the brand (accent color, headline type, illustration, icon style, voice, sound) and adopt the platform's version of controls and behavior (DC-L10-02); \"80% native, 20% signature\" (DC-L06-14).",
+   "sources": [
+    "S-L10-009",
+    "S-L10-040",
+    "S-L06-008",
+    "S-L06-043"
+   ]
+  },
+  {
+   "id": "ctx.platforms.sharing",
+   "name": "What is shared across platforms",
+   "layer": "ctx",
+   "parent": "ctx.platforms",
+   "definition": "Which layer is common to every platform: tokens, component specs, or only principles. L10's identical-versus-adapt table lists element by element what stays the same (brand hue, role names, spacing numbers, voice) and what adapts (materials, target minimums, navigation containers).",
+   "cards": [
+    "DC-L10-03"
+   ],
+   "dtcg": "primitives and most semantic tokens shared; platform overrides at the semantic or component tier ([inferred] in DC-L10-03)",
+   "default": "Share tokens and component specs (anatomy, variants, states, content rules); implement and document accessibility per platform (DC-L10-03).",
+   "sources": [
+    "S-L10-039",
+    "S-L10-040",
+    "S-L10-053"
+   ]
+  },
+  {
+   "id": "ctx.platforms.devices",
+   "name": "Device classes in scope",
+   "layer": "ctx",
+   "parent": "ctx.platforms",
+   "definition": "Which device classes are first-class (phone, tablet and foldable, desktop, large display, watch, TV, car, spatial, voice and AI chat, kiosk, console) and which get foundations only. Device class is separate from platform, because one OS spans several classes.",
+   "cards": [
+    "DC-L14-01",
+    "DC-L10-24"
+   ],
+   "dtcg": "none in the Format module; a resolver `context` modifier kept separate from `platform` ([inferred] in DC-L14-01)",
+   "platform": "Viewing distance, input precision, attention per interaction, posture, ambient light, social setting and safety are the variables that change by device (L14 Part 3, [S-L14-001, S-L14-026, S-L14-031]).",
+   "default": "Phone, tablet/foldable and desktop/web first-class; TV, watch, car and spatial off until a named use case exists (DC-L14-01). Secondary form factors get foundations only (color, type roles, icons) plus platform templates (DC-L10-24).",
+   "sources": [
+    "S-L14-001",
+    "S-L14-067",
+    "S-L10-002"
+   ]
+  },
+  {
+   "id": "ctx.platforms.stack",
+   "name": "Implementation stack",
+   "layer": "ctx",
+   "parent": "ctx.platforms",
+   "definition": "The native toolkits and cross-platform frameworks the products are built with. The stack decides token output formats and how quickly OS visual changes reach the product.",
+   "cards": [
+    "DC-L10-20",
+    "DC-L10-21"
+   ],
+   "dtcg": "output formats rather than types: JS/TS objects for React Native, `flutter/class.dart`, `compose/object` for Compose Multiplatform [S-L10-056]",
+   "platform": "Compose Material 3 stable is 1.4.0; the expressive APIs are still in 1.5.0 alphas [S-L10-018].",
+   "default": "SwiftUI (UIKit where needed) and Compose for new native work (DC-L10-20); fully native or React Native for native-first products, Flutter or Compose Multiplatform for brand-first products that accept a lag on OS changes (DC-L10-21).",
+   "sources": [
+    "S-L10-018",
+    "S-L10-024",
+    "S-L10-056"
+   ]
+  },
+  {
+   "id": "ctx.platforms.os-floor",
+   "name": "OS version floor",
+   "layer": "ctx",
+   "parent": "ctx.platforms",
+   "definition": "The oldest OS versions supported and which design-language generation the system targets.",
+   "cards": [
+    "DC-L10-23"
+   ],
+   "dtcg": "version-gated values are rare; prefer runtime fallbacks (DC-L10-23)",
+   "default": "Support the current and previous major OS, design for the current language, and let older versions fall back to their native look (DC-L10-23).",
+   "sources": [
+    "S-L10-005",
+    "S-L10-019"
+   ]
+  },
+  {
+   "id": "ctx.brand",
+   "name": "Brand inputs",
+   "layer": "ctx",
+   "parent": "ctx",
+   "children": [
+    "ctx.brand.personality",
+    "ctx.brand.layering",
+    "ctx.brand.expression"
+   ],
+   "definition": "What the brand brings into the product: its personality, how the marketing identity relates to the product UI, and how much expression the product allows. L06 section 1 separates the expressive identity layer (logo system, campaign color, display type) from the productive product layer."
+  },
+  {
+   "id": "ctx.brand.personality",
+   "name": "Brand personality profile",
+   "layer": "ctx",
+   "parent": "ctx.brand",
+   "definition": "Brand traits expressed as a few slider positions (for example playful to serious, minimal to rich). This is the single most influential input: L06's lever matrix maps each adjective pair to concrete foundation settings.",
+   "cards": [
+    "DC-L06-02"
+   ],
+   "dtcg": "not a token; metadata such as `$extensions.brand.personality` ([inferred] in DC-L06-02)",
+   "default": "Ask for traits first, then 4-7 sliders, then show 2-3 generated style tiles to choose from (DC-L06-02).",
+   "sources": [
+    "S-L06-070",
+    "S-L06-071",
+    "S-L06-078"
+   ]
+  },
+  {
+   "id": "ctx.brand.layering",
+   "name": "Brand-to-product layering",
+   "layer": "ctx",
+   "parent": "ctx.brand",
+   "definition": "Whether marketing (expressive) and product (productive) surfaces share one system with modes, or run as separate systems.",
+   "cards": [
+    "DC-L06-01"
+   ],
+   "dtcg": "a `layer` mode axis rather than duplicate tokens, for example Carbon's productive easing [0.2, 0, 0.38, 0.9] versus expressive [0.4, 0.14, 0.3, 1] as `cubicBezier` (DC-L06-01)",
+   "default": "One system, productive by default, expressive opt-in (DC-L06-01).",
+   "sources": [
+    "S-L06-001",
+    "S-L06-002",
+    "S-L06-110"
+   ]
+  },
+  {
+   "id": "ctx.brand.expression",
+   "name": "Expressiveness level and hero-moment budget",
+   "layer": "ctx",
+   "parent": "ctx.brand",
+   "definition": "How much brand expression the product allows, and how many signature moments get expressive type, shape or motion.",
+   "cards": [
+    "DC-L06-03"
+   ],
+   "dtcg": "expressive variants as a mode or parallel set, for example `font.display.emphasized` (typography) and `shape.corner.expressive.*` (dimension) ([inferred] naming in DC-L06-03)",
+   "platform": "M3 Expressive is Android and Compose first [S-L06-009].",
+   "default": "Productive everywhere plus \"one or two hero moments\", following Material's own rule (DC-L06-03).",
+   "sources": [
+    "S-L06-002",
+    "S-L06-009"
+   ]
+  },
+  {
+   "id": "ctx.constraints",
+   "name": "Hard constraints",
+   "layer": "ctx",
+   "parent": "ctx",
+   "definition": "Limits the system must fit that are not taste choices: the design tool's plan tier, the legal accessibility target, supported locales and scripts.",
+   "cards": [
+    "DC-L07-27"
+   ],
+   "related": [
+    "DC-L01-22",
+    "DC-L11-19",
+    "DC-L06-24",
+    "DC-L02-24"
+   ],
+   "dtcg": "n/a",
+   "platform": "Figma MCP limits by plan: Starter 20 calls a month; Dev/Full seats 200 a day on Professional and Organization, 600 on Enterprise [S-L07-049].",
+   "default": "Ask for the Figma plan first and grey out architectures it cannot hold: Professional allows 10 modes per collection, Organization 20 (DC-L07-27, [S-L07-014]).",
+   "sources": [
+    "S-L07-014",
+    "S-L07-015",
+    "S-L07-049"
+   ]
+  },
+  {
+   "id": "prin",
+   "name": "Principles",
+   "layer": "prin",
+   "children": [
+    "prin.design",
+    "prin.ux",
+    "prin.visual"
+   ],
+   "definition": "The rules that decide what \"good\" means before any value is picked. Three kinds live here: the team's own design principles, UX behavior rules drawn from laws and heuristics, and visual design principles. Tokens and components decide how a product looks; this layer decides whether it works and holds together (L13 overview, L15 overview)."
+  },
+  {
+   "id": "prin.design",
+   "name": "Design principles",
+   "layer": "prin",
+   "parent": "prin",
+   "definition": "A short, ranked list of statements the team uses as tie-breakers when two good options conflict. L06 keeps four kinds apart: brand or design-language principles, product experience principles, system principles, and content or voice principles.",
+   "cards": [
+    "DC-L06-15",
+    "DC-L11-05"
+   ],
+   "dtcg": "none; stored as ordered records with `beats` relationships and do/don't examples ([inferred] in DC-L06-15 and DC-L11-05)",
+   "default": "3-5 principles, each naming the value it outranks and testable with a \"would this screen pass?\" question; avoid words every product could claim (DC-L06-15, DC-L11-05). Date-stamp them, since principles pages go stale first (L06 section 5.1, [S-L06-055, S-L06-057]).",
+   "sources": [
+    "S-L06-004",
+    "S-L06-077",
+    "S-L11-008"
+   ]
+  },
+  {
+   "id": "prin.ux",
+   "name": "UX behavior rules",
+   "layer": "prin",
+   "parent": "prin",
+   "children": [
+    "prin.ux.laws",
+    "prin.ux.heuristics",
+    "prin.ux.rules",
+    "prin.ux.timing",
+    "prin.ux.familiarity",
+    "prin.ux.inclusion",
+    "prin.ux.ethics"
+   ],
+   "definition": "Laws and heuristics turned into checkable rules. Each rule links a principle (for example Fitts's law) to a concrete check (no target below 24x24 CSS px) and to the place it applies (token, component, pattern, content or flow). L13 proposes this as a layer of its own on top of tokens and components.",
+   "dtcg": "no DTCG type; rules need their own model that references tokens, kept in `$extensions` or a sibling file (L13 Part E3, [inferred])",
+   "sources": [
+    "S-L13-001",
+    "S-L13-030",
+    "S-L13-098"
+   ]
+  },
+  {
+   "id": "prin.ux.laws",
+   "name": "Laws of UX catalog",
+   "layer": "prin",
+   "parent": "prin.ux",
+   "definition": "The 30 laws on lawsofux.com, each graded for evidence: research-backed (R), research-backed at origin but extrapolated to UI (R-), contested (C), heuristic (H), or pop analogy (P). Zeigarnik and choice overload are weak, and Miller's 7 plus or minus 2 does not limit menu length (L13 top findings, [S-L13-040, S-L13-045, S-L13-048]).",
+   "default": "Show each rule's evidence grade in the UI so users see how solid it is (L13 Part E3, [inferred]).",
+   "sources": [
+    "S-L13-001",
+    "S-L13-040",
+    "S-L13-045",
+    "S-L13-048",
+    "S-L13-050"
+   ]
+  },
+  {
+   "id": "prin.ux.heuristics",
+   "name": "Heuristic consensus set",
+   "layer": "prin",
+   "parent": "prin.ux",
+   "definition": "The eight principles on which Nielsen, Norman, Shneiderman, Tognazzini and the Laws of UX agree: visible status and feedback, consistency and conventions, error prevention, reversal and user control, recognition over recall, plain language, minimalism with progressive disclosure, and efficiency for experts. Most can be partly machine-checked (L13 Part B6).",
+   "sources": [
+    "S-L13-030",
+    "S-L13-035",
+    "S-L13-037",
+    "S-L13-038"
+   ]
+  },
+  {
+   "id": "prin.ux.rules",
+   "name": "Behavior-rule model and automation boundary",
+   "layer": "prin",
+   "parent": "prin.ux",
+   "definition": "The record format for a behavior rule (id, principle, evidence grade, scope, check kind, severity, override policy, exceptions, sources) and the four levels at which the builder applies it: default, lint error, warning, or human judgment. It also lists rules the builder must not automate, such as a \"max 7 navigation items\" cap (L13 Parts E1 to E3).",
+   "dtcg": "no DTCG type; rule checks reference token paths such as `{size.target.min}` (L13 Part E3)",
+   "default": "Lint errors block publishing unless overridden with a written reason: target below 24x24 CSS px, field without a programmatic label, meaning by color only, dialog without a dismiss path, pre-checked consent (L13 Part E1, [S-L13-098, S-L13-071]).",
+   "sources": [
+    "S-L13-098",
+    "S-L13-071",
+    "S-L13-108",
+    "S-L00-036"
+   ]
+  },
+  {
+   "id": "prin.ux.timing",
+   "name": "Response-time ladder",
+   "layer": "prin",
+   "parent": "prin.ux",
+   "definition": "The reconciled thresholds for how fast the interface must respond: 16 ms per frame, 50 ms to acknowledge input, 100 ms to feel instant, 200 ms for a good INP, 400 ms (Doherty), 1 s before focus breaks, 10 s before attention is lost. Each band maps to a feedback pattern (L13 top finding 3).",
+   "related": [
+    "DC-L13-01"
+   ],
+   "dtcg": "duration (the ladder can ship as tokens, L13 top finding 3)",
+   "platform": "Cars require a response within 0.25 s and a spinner past 2 s [S-L14-036].",
+   "sources": [
+    "S-L13-031",
+    "S-L13-032",
+    "S-L13-033",
+    "S-L13-051",
+    "S-L13-003"
+   ]
+  },
+  {
+   "id": "prin.ux.familiarity",
+   "name": "Convention versus novelty",
+   "layer": "prin",
+   "parent": "prin.ux",
+   "definition": "How far the product follows established platform and industry conventions (Jakob's law) versus inventing its own behavior.",
+   "cards": [
+    "DC-L13-17"
+   ],
+   "dtcg": "none; expressed through platform presets (DC-L13-17)",
+   "platform": "Users expect their own platform's idiom; iOS developers push back on porting M3 Expressive (DC-L13-17, COMMUNITY-SIGNAL section d).",
+   "default": "Conventional behavior with a custom skin; never override standard shortcuts; be novel only where it is the differentiator, and test it (DC-L13-17).",
+   "sources": [
+    "S-L13-006",
+    "S-L13-036"
+   ]
+  },
+  {
+   "id": "prin.ux.inclusion",
+   "name": "Inclusive design stance",
+   "layer": "prin",
+   "parent": "prin.ux",
+   "definition": "The accessibility floor and which situational and permanent constraints the system designs for, such as older users, low vision or one-handed use.",
+   "cards": [
+    "DC-L13-14"
+   ],
+   "dtcg": "accessibility modes as resolver contexts (contrast, density, motion) ([inferred] in DC-L13-14)",
+   "platform": "OS settings such as Dynamic Type, font scale, Reduce Motion and Increase Contrast must flow into tokens (DC-L13-14, DC-L10-16).",
+   "default": "WCAG 2.2 AA as the floor; the questionnaire asks about situational constraints and turns on larger targets, a contrast theme or captions (DC-L13-14).",
+   "sources": [
+    "S-L13-037",
+    "S-L13-038",
+    "S-L13-098"
+   ]
+  },
+  {
+   "id": "prin.ux.ethics",
+   "name": "Deceptive-pattern policy",
+   "layer": "prin",
+   "parent": "prin.ux",
+   "definition": "Which manipulative patterns the system forbids and which of them the builder can detect automatically.",
+   "cards": [
+    "DC-L13-15"
+   ],
+   "dtcg": "none; lint rules in `$extensions` or config ([inferred] in DC-L13-15)",
+   "default": "Enforce what a machine can detect: pre-checked marketing or consent boxes, unequal emphasis on accept and reject, re-prompting after a dismissal (DC-L13-15).",
+   "sources": [
+    "S-L13-071",
+    "S-L13-108",
+    "S-L13-110"
+   ]
+  },
+  {
+   "id": "prin.visual",
+   "name": "Visual design principles",
+   "layer": "prin",
+   "parent": "prin",
+   "children": [
+    "prin.visual.style",
+    "prin.visual.hierarchy",
+    "prin.visual.grouping",
+    "prin.visual.composition",
+    "prin.visual.signifiers",
+    "prin.visual.polish",
+    "prin.visual.aesthetics"
+   ],
+   "definition": "The catalog of 72 visual principles (hierarchy, CRAP, Gestalt, whitespace, color, type pairing, polish, aesthetics), each with an evidence grade and a builder stance: automate by construction, guide with warnings, or expose as a user control (L15 sections 1 and 3).",
+   "members": [
+    "P15",
+    "P19"
+   ],
+   "default": "Automate principles with strong evidence and one right answer; expose those that encode personality; guide anything that depends on a specific screen's content (L15 section 3, [inferred] in the lane).",
+   "sources": [
+    "S-L15-001",
+    "S-L15-016",
+    "S-L15-038",
+    "S-L15-047"
+   ]
+  },
+  {
+   "id": "prin.visual.style",
+   "name": "Visual style direction",
+   "layer": "prin",
+   "parent": "prin.visual",
+   "definition": "The overall style preset (flat, tonal, glass, soft, neo-brutalist, maximal) that sets many primitives at once, such as shadows, border widths and radius.",
+   "cards": [
+    "DC-L15-01"
+   ],
+   "dtcg": "no DTCG type for a preset; builder metadata that writes `shadow`, `dimension` and `color` primitives (DC-L15-01)",
+   "platform": "iOS 26 and later give standard components Liquid Glass automatically; custom glass should be sparing [S-L15-073]; web glass needs `backdrop-filter` and a solid fallback ([inferred] in DC-L15-01).",
+   "default": "Flat 2.0 with strong signifiers; keep fashionable styles for marketing surfaces (DC-L15-01).",
+   "sources": [
+    "S-L15-004",
+    "S-L15-005",
+    "S-L15-073"
+   ]
+  },
+  {
+   "id": "prin.visual.hierarchy",
+   "name": "Hierarchy strength and emphasis budget",
+   "layer": "prin",
+   "parent": "prin.visual",
+   "definition": "How dramatic the contrast between levels is (size ratio, weights, text-color tiers) and how many elements may claim top emphasis on one view.",
+   "cards": [
+    "DC-L15-02",
+    "DC-L15-03"
+   ],
+   "members": [
+    "P01-P13",
+    "P50",
+    "P51"
+   ],
+   "dtcg": "generator metadata feeding `dimension` (font sizes), `fontWeight` and `color` (text tiers); the emphasis budget is lint configuration, not tokens (DC-L15-02, DC-L15-03)",
+   "platform": "Hierarchy must survive Dynamic Type and Android font scaling [S-L15-055].",
+   "default": "Balanced: ratio 1.25, two weights, three text colors (DC-L15-02); strict budget on app surfaces with one primary action per view (DC-L15-03). Adjacent levels at least about 10% apart in size or 200 apart in weight ([inferred] in DC-L15-02).",
+   "sources": [
+    "S-L15-001",
+    "S-L15-002",
+    "S-L15-038",
+    "S-L15-067"
+   ]
+  },
+  {
+   "id": "prin.visual.grouping",
+   "name": "Grouping strategy",
+   "layer": "prin",
+   "parent": "prin.visual",
+   "definition": "Whether related items are grouped by space, by containers, or by lines. Gestalt grouping is the best-evidenced visual principle; common region overpowers proximity, which overpowers similarity (L15 finding 2).",
+   "cards": [
+    "DC-L15-05"
+   ],
+   "members": [
+    "P16",
+    "P23-P30",
+    "P32"
+   ],
+   "dtcg": "`dimension` (inset and stack spacing, divider width) and `color` (container surface); container depth is lint configuration (DC-L15-05)",
+   "platform": "iOS grouped tables use grouped background colors for regions [S-L15-054].",
+   "default": "Space first; containers only when content types mix, items sit in a grid, or spacing cannot be controlled; lines for long lists; inner-to-outer spacing at 1:2 or more (DC-L15-05).",
+   "sources": [
+    "S-L15-010",
+    "S-L15-012",
+    "S-L15-016"
+   ]
+  },
+  {
+   "id": "prin.visual.composition",
+   "name": "Composition, balance and alignment",
+   "layer": "prin",
+   "parent": "prin.visual",
+   "definition": "The layout model at the principle level (column grid, hierarchical, bento) and the default alignment axis. L03 owns the concrete columns, gutters and breakpoints.",
+   "cards": [
+    "DC-L15-07",
+    "DC-L15-08"
+   ],
+   "members": [
+    "P14",
+    "P17",
+    "P18",
+    "P20",
+    "P21",
+    "P31",
+    "P35-P38"
+   ],
+   "dtcg": "`number` (grid columns) and `dimension` (gutters, margins); alignment and tile spans are component props, not tokens (DC-L15-07, DC-L15-08)",
+   "platform": "Use logical start and end so right-to-left layouts mirror correctly [S-L15-053].",
+   "default": "Column grid for app surfaces, hierarchical or bento for marketing features (DC-L15-07); start-aligned everywhere, centered only for single-focus moments with short text (DC-L15-08). Golden ratio stays an optional preset because its evidence is weak (L15 finding 5).",
+   "sources": [
+    "S-L15-053",
+    "S-L15-052",
+    "S-L15-062"
+   ]
+  },
+  {
+   "id": "prin.visual.signifiers",
+   "name": "Interactive signifier strength",
+   "layer": "prin",
+   "parent": "prin.visual",
+   "definition": "How clearly interactive elements announce that they can be clicked or tapped (fills, underlines, borders, depth).",
+   "cards": [
+    "DC-L15-09"
+   ],
+   "members": [
+    "P63"
+   ],
+   "dtcg": "component tokens such as `button.primary.background` (color), `link.text-decoration` (no DTCG type; string), `input.border.width` (dimension) ([inferred] in DC-L15-09)",
+   "platform": "Liquid Glass controls float above content and can lose affordance over busy content [S-L15-007].",
+   "default": "Balanced, with strong signifiers forced for primary actions; go minimal only when density is low, layouts are conventional and key actions already stand out (DC-L15-09).",
+   "sources": [
+    "S-L15-004",
+    "S-L15-006",
+    "S-L15-007"
+   ]
+  },
+  {
+   "id": "prin.visual.polish",
+   "name": "Optical correction and polish",
+   "layer": "prin",
+   "parent": "prin.visual",
+   "definition": "Small optical fixes that make a UI feel finished: optical centering, overshoot, icon optical size, nested radii, one light source, fewer borders.",
+   "cards": [
+    "DC-L15-10"
+   ],
+   "members": [
+    "P55-P62",
+    "P64-P66"
+   ],
+   "dtcg": "`dimension` (icon keylines; inner radius computed as outer radius minus inset) ([inferred] in DC-L15-10)",
+   "platform": "SF Symbols already match text weights; Material icons ship with keylines; custom web icon sets vary (DC-L15-10).",
+   "default": "Auto-correct known cases and suggest fixes for custom assets (DC-L15-10).",
+   "sources": [
+    "S-L15-055",
+    "S-L15-058",
+    "S-L15-059"
+   ]
+  },
+  {
+   "id": "prin.visual.aesthetics",
+   "name": "Aesthetics and complexity readouts",
+   "layer": "prin",
+   "parent": "prin.visual",
+   "definition": "What \"looks good\" means empirically: judgments form in 17-50 ms, appeal peaks at moderate visual complexity and moderate colorfulness, and aesthetics multiply usability rather than replace it (L15 findings 3 and 4).",
+   "related": [
+    "DC-L15-11"
+   ],
+   "members": [
+    "P67-P72"
+   ],
+   "default": "Restrained default plus an optional computed complexity and colorfulness readout; never use attractiveness scores as a usability signal (L15 finding 3, L13 Part E2).",
+   "sources": [
+    "S-L15-044",
+    "S-L15-047",
+    "S-L15-042",
+    "S-L15-080",
+    "S-L13-053"
+   ]
+  },
+  {
+   "id": "found",
+   "name": "Foundations",
+   "layer": "found",
+   "children": [
+    "found.color",
+    "found.type",
+    "found.space",
+    "found.layout",
+    "found.interaction",
+    "found.shape",
+    "found.elevation",
+    "found.motion",
+    "found.sensory",
+    "found.icon",
+    "found.imagery",
+    "found.dataviz",
+    "found.content",
+    "found.a11y"
+   ],
+   "definition": "The visual, sensory and verbal raw material every screen is made of: color, typography, space, layout, shape, depth, motion, sound and haptics, icons, imagery, data visualization, content, accessibility, and interaction and input. Each foundation is a set of scales and roles that tokens store and components consume (L11 phase 5)."
+  },
+  {
+   "id": "found.color",
+   "name": "Color",
+   "layer": "found",
+   "parent": "found",
+   "children": [
+    "found.color.space",
+    "found.color.ramp",
+    "found.color.neutral",
+    "found.color.alpha",
+    "found.color.brand",
+    "found.color.character",
+    "found.color.roles",
+    "found.color.states",
+    "found.color.modes",
+    "found.color.personalization",
+    "found.color.contrast",
+    "found.color.expressive"
+   ],
+   "definition": "Every color decision, from how ramps are generated to which semantic roles exist, how modes remap them, and how contrast is guaranteed.",
+   "dtcg": "color (value object with one of 14 color spaces, optional alpha and hex fallback; Figma imports only sRGB and HSL) (L07 A3, A7)",
+   "l09": "Shared (L09-A1.3): neutral surfaces, one saturated accent and status colors in all but one of 24 systems (Material 3 tints surfaces with the primary hue). Diverges (L09-A2.3): monochrome plus one accent (Uber, Polaris, Geist) versus tonal tinted surfaces (Material) versus brand fields (Encore).",
+   "sources": [
+    "S-L01-004",
+    "S-L01-006",
+    "S-L09-005"
+   ]
+  },
+  {
+   "id": "found.color.space",
+   "name": "Color space and gamut",
+   "layer": "found",
+   "parent": "found.color",
+   "definition": "The color model used to build and interpolate ramps (sRGB, OKLCH, HCT, LCH) and the gamut the product targets (sRGB or Display P3).",
+   "cards": [
+    "DC-L01-01",
+    "DC-L01-05"
+   ],
+   "dtcg": "color (value object with one of 14 color spaces, optional alpha and hex fallback; Figma imports only sRGB and HSL) (L07 A3, A7)",
+   "platform": "Web accepts `oklch()`, `lab()` and `color(display-p3 ...)` with `@media (color-gamut)`; Android and Material tooling expects HCT through Material Color Utilities; iOS asset catalogs hold colors per color space (DC-L01-01, DC-L01-05).",
+   "default": "OKLCH for web-first systems, HCT when the system must feed Material dynamic color (DC-L01-01); sRGB hex primitives with optional P3 overrides for accents only (DC-L01-05).",
+   "l09": "Diverges (L09-A2.6): sRGB versus OKLCH versus HCT versus P3.",
+   "sources": [
+    "S-L01-008",
+    "S-L01-046",
+    "S-L01-049",
+    "S-L01-013"
+   ]
+  },
+  {
+   "id": "found.color.ramp",
+   "name": "Ramp generation and step meaning",
+   "layer": "found",
+   "parent": "found.color",
+   "definition": "How tonal ramps are produced, how many steps they have, how steps are numbered, and what a step number promises (lightness, tone, or contrast against a background). Step numbers mean different things in different systems: Tailwind lightness varies by hue, Spectrum keeps equal contrast per step, Material uses HCT tone (BOARD cross-lane note from L01).",
+   "cards": [
+    "DC-L01-02",
+    "DC-L01-03",
+    "DC-L01-04",
+    "DC-L09-03"
+   ],
+   "dtcg": "color (value object with one of 14 color spaces, optional alpha and hex fallback; Figma imports only sRGB and HSL) (L07 A3, A7)",
+   "platform": "Material's tone numbering is built into Material Color Utilities and Android dynamic color, so keep tone names as aliases if you target it; Apple exposes no public numbered ramps (DC-L01-02).",
+   "default": "11-12 steps for hues and 12-13 for neutrals; 100-based numbering if steps may be inserted later, 1-12 if every step has a fixed job (DC-L01-02). Tone- or contrast-indexed steps (DC-L01-03). Offer three generator modes: preset, seed-based and contrast-targeted (DC-L01-04). Generate from a seed in OKLCH with contrast-checked steps and let users pin exact brand hexes to the nearest step (DC-L09-03).",
+   "l09": "Shared (L09-A1.4): 10-12 step ramps in 12 systems; builder default 12 steps with a fixed job per step, exportable to a 50-950 scale. Diverges (L09-A2.6): hand-picked hex versus seed algorithms (HCT, HSV, LCH) versus contrast targets (Leonardo, USWDS grades, APCA steps).",
+   "sources": [
+    "S-L01-002",
+    "S-L01-006",
+    "S-L01-008",
+    "S-L01-040",
+    "S-L09-563",
+    "S-L09-616"
+   ]
+  },
+  {
+   "id": "found.color.neutral",
+   "name": "Neutral ramp",
+   "layer": "found",
+   "parent": "found.color",
+   "definition": "The gray ramp that carries most surfaces, borders and text: its temperature (pure, warm or cool tint), resolution, and usage bands.",
+   "cards": [
+    "DC-L01-06",
+    "DC-L01-07"
+   ],
+   "members": [
+    "P45"
+   ],
+   "dtcg": "color (value object with one of 14 color spaces, optional alpha and hex fallback; Figma imports only sRGB and HSL) (L07 A3, A7)",
+   "platform": "Apple system grays are defined per appearance and should not be hard-coded; Apple exposes four label levels and separators instead of a ramp (DC-L01-06, DC-L01-07).",
+   "default": "A slight hue-matched tint (OKLCH chroma about 0.01-0.03 at mid steps) for branded products, pure gray for image- or data-critical tools (DC-L01-06); 12-13 solid neutrals plus 4-5 alpha neutrals, with bands for backgrounds, borders and text (DC-L01-07).",
+   "l09": "Shared (L09-A1.3): one neutral ramp in the builder default.",
+   "sources": [
+    "S-L01-010",
+    "S-L01-013",
+    "S-L01-036"
+   ]
+  },
+  {
+   "id": "found.color.alpha",
+   "name": "Transparent (alpha) colors",
+   "layer": "found",
+   "parent": "found.color",
+   "definition": "Semi-transparent colors used where the background varies, such as hover fills, borders and scrims.",
+   "cards": [
+    "DC-L01-27"
+   ],
+   "dtcg": "color (value object with one of 14 color spaces, optional alpha and hex fallback; Figma imports only sRGB and HSL) (L07 A3, A7)",
+   "platform": "On macOS, some transparency on custom neutral backgrounds lets them pick up desktop tinting; Liquid Glass supplies its own translucency (DC-L01-27).",
+   "default": "4-5 alpha neutrals for hover, borders and scrims; solid colors for text, because contrast must be certifiable (DC-L01-27).",
+   "sources": [
+    "S-L01-005",
+    "S-L01-014",
+    "S-L01-018"
+   ]
+  },
+  {
+   "id": "found.color.brand",
+   "name": "Brand and accent color",
+   "layer": "found",
+   "parent": "found.color",
+   "definition": "How many accent colors exist, what job the brand color does in the product (reserved accent, signature surface, or whole fields), how a brand hex is adapted for UI contrast, and where it is placed on each platform.",
+   "cards": [
+    "DC-L01-08",
+    "DC-L01-09",
+    "DC-L06-04",
+    "DC-L10-04",
+    "DC-L15-06"
+   ],
+   "members": [
+    "P39",
+    "P42"
+   ],
+   "dtcg": "color (value object with one of 14 color spaces, optional alpha and hex fallback; Figma imports only sRGB and HSL) (L07 A3, A7)",
+   "platform": "On macOS a user-chosen accent replaces the app accent unless set to multicolor (DC-L01-08). On Apple 26+ platforms, brand color goes into content, not custom glass (DC-L06-04). Default placement: accent on actions and brand in content on Apple, a brand seed on Android, freer use on web (DC-L10-04).",
+   "default": "One brand accent plus neutrals plus status colors, with an optional secondary only when it has a job (DC-L01-08); brand as a reserved accent (DC-L06-04); anchor a ramp on the brand hex and map `bg.brand` to the nearest step giving 4.5:1 with white or black text (DC-L01-09); neutral plus one accent with analogous surface tints (DC-L15-06). The 60-30-10 rule has weak evidence and stays an optional soft check (L15 finding 5).",
+   "l09": "Shared (L09-A1.3): one accent ramp. Diverges (L09-A2.3): accent only on actions, on containers, or on whole surfaces.",
+   "sources": [
+    "S-L01-004",
+    "S-L01-013",
+    "S-L06-008",
+    "S-L10-009",
+    "S-L15-048"
+   ]
+  },
+  {
+   "id": "found.color.character",
+   "name": "Palette character (chroma and scheme variant)",
+   "layer": "found",
+   "parent": "found.color",
+   "definition": "How muted or vivid the palette is overall, and which scheme variant shapes it (for example Material's TonalSpot, Fidelity or Vibrant).",
+   "cards": [
+    "DC-L01-10",
+    "DC-L06-05"
+   ],
+   "members": [
+    "P40",
+    "P41",
+    "P43",
+    "P46"
+   ],
+   "dtcg": "color (value object with one of 14 color spaces, optional alpha and hex fallback; Figma imports only sRGB and HSL) (L07 A3, A7)",
+   "platform": "Android apps using dynamic color get the 2025 spec's higher-chroma palettes automatically; iOS has no wallpaper-driven scheme (DC-L01-10, DC-L06-05).",
+   "default": "Tonal (moderate chroma) for productivity products, vivid for consumer and marketing; low chroma on large areas (DC-L01-10). Static brand with TonalSpot-like colorfulness for most brands, Fidelity when the brand hue is a legal or recognition asset (DC-L06-05).",
+   "sources": [
+    "S-L01-010",
+    "S-L01-011",
+    "S-L06-082"
+   ]
+  },
+  {
+   "id": "found.color.roles",
+   "name": "Semantic color roles",
+   "layer": "found",
+   "parent": "found.color",
+   "children": [
+    "found.color.roles.surface",
+    "found.color.roles.foreground",
+    "found.color.roles.status",
+    "found.color.roles.border"
+   ],
+   "definition": "The named jobs colors do (background, text, border, icon, per role such as accent, neutral, danger) and the emphasis levels within each role. Components reference roles, never raw values.",
+   "cards": [
+    "DC-L01-11",
+    "DC-L01-12"
+   ],
+   "dtcg": "color (value object with one of 14 color spaces, optional alpha and hex fallback; Figma imports only sRGB and HSL) (L07 A3, A7)",
+   "platform": "Apple and Android expose system semantic colors (UIKit and SwiftUI colors; Android `colorPrimary`, `colorOnPrimary`); a cross-platform system maps its roles onto them (DC-L01-11).",
+   "default": "A property by role by emphasis by state grammar (Atlassian and Primer style) with explicit on-colors for bold fills (DC-L01-11); three emphasis levels (subtle, default, bold) plus an on-bold foreground (DC-L01-12).",
+   "l09": "Shared (L09-A1.1): a semantic layer over raw values in 24 of 25 systems.",
+   "sources": [
+    "S-L01-004",
+    "S-L01-013",
+    "S-L01-030"
+   ]
+  },
+  {
+   "id": "found.color.roles.surface",
+   "name": "Surface roles",
+   "layer": "found",
+   "parent": "found.color.roles",
+   "definition": "The background tiers that stack in a UI (base, raised, overlay, sunken) and their light and dark values. L04's surface roles for elevation (DC-L04-13) describe the same tiers from the depth side.",
+   "cards": [
+    "DC-L01-13"
+   ],
+   "related": [
+    "DC-L04-13"
+   ],
+   "dtcg": "color (value object with one of 14 color spaces, optional alpha and hex fallback; Figma imports only sRGB and HSL) (L07 A3, A7)",
+   "platform": "iOS switches base to elevated backgrounds automatically, so custom backgrounds can break it; macOS desktop tinting tints window backgrounds (DC-L01-13).",
+   "default": "4-5 surface tiers named by role and mapped separately for light and dark (DC-L01-13).",
+   "sources": [
+    "S-L01-004",
+    "S-L01-014"
+   ]
+  },
+  {
+   "id": "found.color.roles.foreground",
+   "name": "Foreground and text colors",
+   "layer": "found",
+   "parent": "found.color.roles",
+   "definition": "Text and icon colors by emphasis (primary, secondary, placeholder, disabled, inverse) and the on-colors that sit on bold fills.",
+   "cards": [
+    "DC-L01-14"
+   ],
+   "dtcg": "color (value object with one of 14 color spaces, optional alpha and hex fallback; Figma imports only sRGB and HSL) (L07 A3, A7)",
+   "platform": "Apple label colors adapt to vibrancy automatically; prefer them over custom text colors (DC-L01-14).",
+   "default": "Solid tokens for primary, secondary, tertiary or placeholder, disabled and inverse text, plus an on-color for each bold fill; secondary text must still pass 4.5:1 on the lowest surface it sits on (DC-L01-14).",
+   "sources": [
+    "S-L01-004",
+    "S-L01-014",
+    "S-L01-022"
+   ]
+  },
+  {
+   "id": "found.color.roles.status",
+   "name": "Status and feedback colors",
+   "layer": "found",
+   "parent": "found.color.roles",
+   "definition": "Colors that signal success, warning, danger and information.",
+   "cards": [
+    "DC-L01-15"
+   ],
+   "dtcg": "color (value object with one of 14 color spaces, optional alpha and hex fallback; Figma imports only sRGB and HSL) (L07 A3, A7)",
+   "platform": "Color meaning is cultural: red is positive in Chinese stock apps (DC-L01-15).",
+   "default": "Four statuses (success, warning, danger, info), each with subtle and bold levels plus text and icon colors, always paired with an icon (DC-L01-15).",
+   "l09": "Shared (L09-A1.3): four status ramps (success, warning, danger, info).",
+   "sources": [
+    "S-L01-004",
+    "S-L01-013",
+    "S-L01-023"
+   ]
+  },
+  {
+   "id": "found.color.roles.border",
+   "name": "Border, outline and focus colors",
+   "layer": "found",
+   "parent": "found.color.roles",
+   "definition": "Colors for decorative and interactive boundaries and the focus indicator color. L04 and L08 own the focus ring's geometry (see `found.interaction.focus`).",
+   "cards": [
+    "DC-L01-16"
+   ],
+   "dtcg": "color (value object with one of 14 color spaces, optional alpha and hex fallback; Figma imports only sRGB and HSL) (L07 A3, A7)",
+   "platform": "macOS has `keyboardFocusIndicatorColor`; browsers in forced-colors mode replace border and outline colors with system colors (DC-L01-16).",
+   "default": "Three border strengths (subtle decorative, default interactive at 3:1, strong) plus one focus color per mode (DC-L01-16).",
+   "sources": [
+    "S-L01-013",
+    "S-L01-048"
+   ]
+  },
+  {
+   "id": "found.color.states",
+   "name": "Interaction state colors",
+   "layer": "found",
+   "parent": "found.color",
+   "definition": "How hover, pressed, selected and disabled colors are derived from resting colors: by shifting ramp steps, or by overlaying a translucent state layer.",
+   "cards": [
+    "DC-L01-17"
+   ],
+   "related": [
+    "DC-L04-17",
+    "DC-L08-09"
+   ],
+   "dtcg": "color (value object with one of 14 color spaces, optional alpha and hex fallback; Figma imports only sRGB and HSL) (L07 A3, A7)",
+   "platform": "Android and Compose use state layers natively; web often uses `color-mix()`; Windows reverses the direction of the shift (DC-L01-17).",
+   "default": "Per-role state tokens from a ramp step shift (hover plus 1 step, pressed plus 2 steps toward higher contrast), with an overlay fallback for dynamic or user colors (DC-L01-17).",
+   "sources": [
+    "S-L01-002",
+    "S-L01-065",
+    "S-L01-033"
+   ]
+  },
+  {
+   "id": "found.color.modes",
+   "name": "Color modes and appearance",
+   "layer": "found",
+   "parent": "found.color",
+   "children": [
+    "found.color.modes.dark",
+    "found.color.modes.contrast",
+    "found.color.modes.appearance"
+   ],
+   "definition": "The alternative color mappings a system ships (light, dark, dimmed, high contrast, colorblind-safe) and how each platform and device class selects among them. Dark mode is always a separate mapping, not an inversion (BOARD cross-lane note from L01).",
+   "dtcg": "color values per resolver context; modes live in the DTCG Resolver module, not the Format (L07 A4)",
+   "l09": "Shared (L09-A1.6): light and dark as baseline modes in 21 of 25 systems; high contrast as an optional third mode.",
+   "sources": [
+    "S-L01-006",
+    "S-L01-014",
+    "S-L07-004"
+   ]
+  },
+  {
+   "id": "found.color.modes.dark",
+   "name": "Dark mode mapping",
+   "layer": "found",
+   "parent": "found.color.modes",
+   "definition": "How each semantic role is remapped for dark backgrounds, how dark the base surface is, how chroma changes in dark, and whether a dimmed theme exists.",
+   "cards": [
+    "DC-L01-18",
+    "DC-L01-19"
+   ],
+   "dtcg": "color (value object with one of 14 color spaces, optional alpha and hex fallback; Figma imports only sRGB and HSL) (L07 A3, A7)",
+   "platform": "Apple asks apps to follow the system setting; web uses `prefers-color-scheme` or `light-dark()`; watchOS and visionOS have no Dark Mode setting (DC-L01-18, DC-L01-19).",
+   "default": "Shared hue ramps with a mirrored mapping plus separate dark neutral ramps, mapped by role so each token keeps its contrast (DC-L01-18); dark base between #121212 and #1a1a1a (or tone 4-6) with a slight tint, accents one or two steps lighter and lower in chroma (DC-L01-19).",
+   "sources": [
+    "S-L01-006",
+    "S-L01-014",
+    "S-L01-047"
+   ]
+  },
+  {
+   "id": "found.color.modes.contrast",
+   "name": "Accessibility color themes",
+   "layer": "found",
+   "parent": "found.color.modes",
+   "definition": "Extra themes for users who need more contrast or different hue separation: contrast levels, high contrast, forced colors, and colorblind-safe variants.",
+   "cards": [
+    "DC-L01-20"
+   ],
+   "dtcg": "color (value object with one of 14 color spaces, optional alpha and hex fallback; Figma imports only sRGB and HSL) (L07 A3, A7)",
+   "platform": "Android offers Material contrast levels; Apple has Increase Contrast and Reduce Transparency; web has forced colors (DC-L01-20).",
+   "default": "Light and dark plus a component layer that survives forced colors (borders, not only fills or shadows); high contrast as the first extra mode; colorblind themes for data-dense or status-heavy products (DC-L01-20).",
+   "l09": "Contrast has become a mode axis: Material has 3 contrast levels, Primer high-contrast and colorblind themes, Atlassian increased contrast (L07 A8, [S-L07-104, S-L07-110, S-L07-108]).",
+   "sources": [
+    "S-L01-006",
+    "S-L01-014",
+    "S-L01-048"
+   ]
+  },
+  {
+   "id": "found.color.modes.appearance",
+   "name": "Appearance modes by platform and device",
+   "layer": "found",
+   "parent": "found.color.modes",
+   "definition": "Which appearance modes each platform and device class uses and who controls the switch (system setting, in-app override, ambient light).",
+   "cards": [
+    "DC-L10-17",
+    "DC-L14-09"
+   ],
+   "dtcg": "none beyond resolver contexts (L07 A4)",
+   "platform": "Liquid Glass bars flip light and dark with the content underneath regardless of app mode (DC-L10-17); TV color varies by set, so avoid subtle differences (DC-L14-09).",
+   "default": "System-following light and dark on phone, tablet, desktop and web; dark only on watch; an in-app override only on web, in addition to following the system (DC-L10-17); automatic day and night in the car (DC-L14-09).",
+   "sources": [
+    "S-L10-010",
+    "S-L10-027",
+    "S-L14-010",
+    "S-L14-026"
+   ]
+  },
+  {
+   "id": "found.color.personalization",
+   "name": "Dynamic and personalized color",
+   "layer": "found",
+   "parent": "found.color",
+   "definition": "Whether the product lets the OS or the user recolor it (Android wallpaper-based dynamic color, macOS accent, Apple icon looks) or keeps a fixed brand palette.",
+   "cards": [
+    "DC-L01-21",
+    "DC-L10-05"
+   ],
+   "dtcg": "color (value object with one of 14 color spaces, optional alpha and hex fallback; Figma imports only sRGB and HSL) (L07 A3, A7)",
+   "platform": "Android applies dynamic color through `DynamicColors`; Apple needs light and dark variants even for single-appearance apps; web has no dynamic color hook ([inferred] in DC-L10-05).",
+   "default": "Static brand color with optional dynamic color on Android behind a user setting, and accent-only tinting on Apple glass (DC-L01-21); dynamic color for utility apps and fixed brand for brand-led consumer apps (DC-L10-05).",
+   "sources": [
+    "S-L01-058",
+    "S-L10-019",
+    "S-L10-008"
+   ]
+  },
+  {
+   "id": "found.color.contrast",
+   "name": "Contrast and color independence",
+   "layer": "found",
+   "parent": "found.color",
+   "definition": "The contrast standard and level every color pair must meet, how it is enforced, and the rule that meaning never depends on color alone.",
+   "cards": [
+    "DC-L01-22",
+    "DC-L01-23",
+    "DC-L02-23"
+   ],
+   "members": [
+    "P44",
+    "P47"
+   ],
+   "dtcg": "none for the rule itself; checks run on `color` token pairs per resolver permutation (L07 Part C)",
+   "platform": "Apple asks for at least 4.5:1 and to strive for 7:1; Material role pairs guarantee at least 3:1 (DC-L01-22). Color meaning varies by culture (DC-L01-23).",
+   "default": "WCAG 2.2 AA for all pairs, AAA for high-contrast modes, APCA as an advisory lint on body text, tested as pairs in every mode at build time (DC-L01-22); every color-coded meaning also gets an icon, text or shape, and body links are underlined (DC-L01-23); three text emphasis levels verified in every mode (DC-L02-23). WCAG 3 is still a draft, so WCAG 2.2 is the enforceable target (BOARD note from L01).",
+   "l09": "Shared (L09-A1.11): WCAG AA is the stated floor in all 11 systems that state a target; Radix and Geist add APCA as a second opinion.",
+   "sources": [
+    "S-L01-014",
+    "S-L01-018",
+    "S-L01-050",
+    "S-L02-012",
+    "S-L09-563",
+    "S-L09-626"
+   ]
+  },
+  {
+   "id": "found.color.expressive",
+   "name": "Gradients and expressive color",
+   "layer": "found",
+   "parent": "found.color",
+   "definition": "Brand gradients, campaign colors and other expressive color used outside core UI controls.",
+   "cards": [
+    "DC-L01-25"
+   ],
+   "dtcg": "gradient (stops only; no kind such as linear or radial and no angle, so geometry needs an extension) (L07 A5)",
+   "platform": "CSS supports `in oklab` and `in oklch` gradient interpolation; Apple app icons use gradient backgrounds in Icon Composer (DC-L01-25).",
+   "default": "No gradients on interactive components; brand gradients allowed on marketing and illustration surfaces, interpolated in OKLab (DC-L01-25).",
+   "sources": [
+    "S-L01-066",
+    "S-L01-015",
+    "S-L07-002"
+   ]
+  },
+  {
+   "id": "found.type",
+   "name": "Typography",
+   "layer": "found",
+   "parent": "found",
+   "children": [
+    "found.type.typeface",
+    "found.type.roles",
+    "found.type.scale",
+    "found.type.metrics",
+    "found.type.text-layout",
+    "found.type.responsive",
+    "found.type.scaling",
+    "found.type.i18n",
+    "found.type.numerals"
+   ],
+   "definition": "Typefaces, the type scale and its roles, text metrics, text layout, responsive and accessible text behavior, and support for non-Latin scripts.",
+   "dtcg": "typography composite (fontFamily, fontSize, fontWeight, letterSpacing, lineHeight as a unitless multiplier), plus fontFamily, fontWeight, dimension and number as atomic tokens; no text case, decoration, paragraph spacing or font style (L07 A3, A5)",
+   "l09": "Shared (L09-A1.8): 11-15 named, hand-tuned styles; body 14px for tools and 16px for general products. Diverges (L09-A2.4, A2.5): body 13px (Polaris, SLDS) to 19px (GOV.UK); system stack versus open neutral versus custom brand face.",
+   "sources": [
+    "S-L02-001",
+    "S-L02-006",
+    "S-L09-403"
+   ]
+  },
+  {
+   "id": "found.type.typeface",
+   "name": "Typeface",
+   "layer": "found",
+   "parent": "found.type",
+   "children": [
+    "found.type.typeface.sourcing",
+    "found.type.typeface.personality",
+    "found.type.typeface.families",
+    "found.type.typeface.axes",
+    "found.type.typeface.delivery"
+   ],
+   "definition": "Which font families the system uses and why: where they come from, their personality, how many there are, their variable axes, and how they load."
+  },
+  {
+   "id": "found.type.typeface.sourcing",
+   "name": "Typeface sourcing and platform mapping",
+   "layer": "found",
+   "parent": "found.type.typeface",
+   "definition": "Whether the system uses each platform's system font, an open-source neutral face, or a custom brand face, and which roles get which face on each platform.",
+   "cards": [
+    "DC-L02-01",
+    "DC-L06-07",
+    "DC-L09-05",
+    "DC-L10-06"
+   ],
+   "dtcg": "fontFamily (string or fallback array; Figma imports a single name only) (L07 A3, A7)",
+   "platform": "System fonts give dynamic optical sizes, automatic tracking and Dynamic Type for free on Apple platforms (DC-L02-01); custom fonts on iOS must support Dynamic Type and Bold Text (DC-L06-07); Apple's SF is system-only and custom fonts must be bundled (DC-L09-05); Apple exposes system fonts through `Font.Design` constants (DC-L10-06).",
+   "default": "System stack for productivity tools and internal apps; one brand face, ideally open-source and variable, when brand recognition is a goal (DC-L02-01). Brand face for display and headline roles, system font for body, label and caption on native platforms (DC-L06-07, DC-L10-06). Inter or the system stack for a neutral start (DC-L09-05).",
+   "l09": "Diverges (L09-A2.5): system stack (Apple, Fluent, Ant, Radix) versus open neutral (Inter, Roboto) versus custom brand face (Plex, Adobe Clean, Uber Move, Cereal, Spotify Mix, Geist, GDS Transport).",
+   "sources": [
+    "S-L02-001",
+    "S-L06-008",
+    "S-L09-213",
+    "S-L10-011"
+   ]
+  },
+  {
+   "id": "found.type.typeface.personality",
+   "name": "Typeface classification and personality",
+   "layer": "found",
+   "parent": "found.type.typeface",
+   "definition": "The type class (neo-grotesque, humanist, geometric, serif, rounded) chosen to express the brand, and legibility vetoes on that choice.",
+   "cards": [
+    "DC-L02-02",
+    "DC-L06-08"
+   ],
+   "dtcg": "fontFamily (L07 A3)",
+   "platform": "Only system faces are guaranteed per platform; everything else ships with the app or loads over the web (DC-L02-02). SF Pro has a rounded variant and optical sizes natively (DC-L06-08).",
+   "default": "A neo-grotesque or humanist sans with a large x-height for UI, vetoed if it fails the confusable-pairs test (DC-L02-02); pick the class from the modern-heritage and friendly-authoritative sliders (DC-L06-08).",
+   "sources": [
+    "S-L02-011",
+    "S-L02-047",
+    "S-L06-019",
+    "S-L06-031"
+   ]
+  },
+  {
+   "id": "found.type.typeface.families",
+   "name": "Families, pairing and monospace",
+   "layer": "found",
+   "parent": "found.type.typeface",
+   "definition": "How many families the system uses, how they pair, and which monospace and numeric faces exist for code and data.",
+   "cards": [
+    "DC-L02-03",
+    "DC-L02-05"
+   ],
+   "members": [
+    "P48",
+    "P49",
+    "P52",
+    "P53",
+    "P54"
+   ],
+   "dtcg": "fontFamily (L07 A3)",
+   "platform": "Native apps bundle fonts; the web pays for each family in download time (DC-L02-03). Web gets tabular figures through `font-variant-numeric: tabular-nums` (DC-L02-05).",
+   "default": "One UI family plus one mono (2 total), with an optional serif or display face for marketing (DC-L02-03); the system mono stack plus tabular numerals in table cells (DC-L02-05).",
+   "sources": [
+    "S-L02-008",
+    "S-L02-042",
+    "S-L02-043"
+   ]
+  },
+  {
+   "id": "found.type.typeface.axes",
+   "name": "Variable axes and optical sizing",
+   "layer": "found",
+   "parent": "found.type.typeface",
+   "definition": "Use of variable-font axes such as weight, optical size and grade.",
+   "cards": [
+    "DC-L02-04"
+   ],
+   "dtcg": "no DTCG type for variation axes; weight maps to fontWeight, other axes need an extension (L07 A5, [inferred])",
+   "platform": "Apple applies optical size automatically for system fonts; Windows XAML and CSS `font-optical-sizing: auto` match optical size to font size (DC-L02-04).",
+   "default": "A variable font with weight and optical-size axes, with optical size tied to font size (DC-L02-04).",
+   "sources": [
+    "S-L02-001",
+    "S-L02-022",
+    "S-L02-026"
+   ]
+  },
+  {
+   "id": "found.type.typeface.delivery",
+   "name": "Font licensing and loading",
+   "layer": "found",
+   "parent": "found.type.typeface",
+   "definition": "How fonts are licensed, packaged and loaded, and what that costs in performance.",
+   "cards": [
+    "DC-L02-06"
+   ],
+   "dtcg": "none (delivery concern)",
+   "platform": "Native apps bundle fonts at build time; the web downloads them at runtime ([inferred] in DC-L02-06).",
+   "default": "WOFF2, one variable file per family, `font-display: swap` with a metric-adjusted fallback, subsets per script; budget at most 2 families (DC-L02-06).",
+   "sources": [
+    "S-L02-042",
+    "S-L02-045"
+   ]
+  },
+  {
+   "id": "found.type.roles",
+   "name": "Type roles and emphasis",
+   "layer": "found",
+   "parent": "found.type",
+   "definition": "The named text styles by job (display, headline, title, body, label, code) and the emphasized variant within each style.",
+   "cards": [
+    "DC-L02-07",
+    "DC-L02-12"
+   ],
+   "dtcg": "typography composite per role; Figma holds composites as text styles (L07 A3, A6)",
+   "platform": "Using Apple's style names maps to `UIFont.TextStyle` and gets Dynamic Type for free (DC-L02-07); SwiftUI `.bold()` keeps Dynamic Type for emphasis (DC-L02-12).",
+   "default": "A role by size matrix (display, headline, title, body, label, plus code) over a numeric size ramp (DC-L02-07); one emphasized weight per style, emphasis by weight first, color second, italics only in running text (DC-L02-12).",
+   "l09": "Shared (L09-A1.8): builder default of 13 styles (display, headline x3, title x3, body x3, label x3).",
+   "sources": [
+    "S-L02-001",
+    "S-L02-006",
+    "S-L02-007"
+   ]
+  },
+  {
+   "id": "found.type.scale",
+   "name": "Type scale",
+   "layer": "found",
+   "parent": "found.type",
+   "definition": "The base body size, the method and ratio that generate the other sizes, the number of steps, and whether there is a separate expressive scale for marketing.",
+   "cards": [
+    "DC-L02-08",
+    "DC-L02-09",
+    "DC-L02-10",
+    "DC-L02-11"
+   ],
+   "dtcg": "dimension (font sizes; px or rem only) (L07 A3)",
+   "platform": "HIG minimums: iOS 11pt, macOS 10pt, tvOS 23pt, visionOS 12pt, watchOS 12pt; Windows 14px semibold or 12px regular (DC-L02-08). Expressive fluid type is web-centric ([inferred] in DC-L02-11).",
+   "default": "Web app body 14px with 16px for long-form reading; iOS 17pt; Android 14sp or 16sp (DC-L02-08). A ratio-generated ramp rounded to even pixels, then hand-adjusted: 1.125-1.2 for dense apps, 1.25 for mixed, 1.333 and up for editorial (DC-L02-09). 8-10 sizes and 12-15 semantic styles; merge sizes less than about 10% apart (DC-L02-10). One productive scale plus 3-4 expressive display styles (DC-L02-11).",
+   "l09": "Shared (L09-A1.8): only Carbon and Ant use a formula; the rest hand-tune. Material and Spectrum 2 sizes follow 14 x 1.125^n (BOARD note from L02). Diverges (L09-A2.4): body 13 to 19px.",
+   "sources": [
+    "S-L02-001",
+    "S-L02-005",
+    "S-L02-009",
+    "S-L09-403",
+    "S-L09-540"
+   ]
+  },
+  {
+   "id": "found.type.metrics",
+   "name": "Text metrics",
+   "layer": "found",
+   "parent": "found.type",
+   "definition": "Line height, letter spacing, the weight palette, and paragraph spacing.",
+   "cards": [
+    "DC-L02-13",
+    "DC-L02-14",
+    "DC-L02-15",
+    "DC-L02-16"
+   ],
+   "related": [
+    "DC-L03-25"
+   ],
+   "dtcg": "number (unitless line height), dimension (letter spacing), fontWeight; paragraph spacing has no DTCG slot in the typography composite (L07 A3, A5)",
+   "platform": "Android clips the first and last line to the font's default height while web and iOS use half-leading (DC-L02-13); iOS tracks SF automatically (DC-L02-14); iOS Bold Text raises weights system-wide and custom fonts must honor it (DC-L02-15).",
+   "default": "Line heights rounded to 4px: about 1.5 for 12-16px, 1.4 for 18-24px, 1.25 for 28-40px, 1.1-1.15 for 48px and up (DC-L02-13). Tracking 0 at body, +0.02-0.05em at 11-12px and all caps, -0.01 to -0.02em from about 32px (DC-L02-14). Three weights: 400 body, 500-600 labels, 600-700 headings; light only at 32px and up (DC-L02-15). Paragraph spacing equal to body size (DC-L02-16).",
+   "sources": [
+    "S-L02-001",
+    "S-L02-006",
+    "S-L02-051"
+   ]
+  },
+  {
+   "id": "found.type.text-layout",
+   "name": "Text layout (measure, alignment, casing, truncation)",
+   "layer": "found",
+   "parent": "found.type",
+   "definition": "How text blocks are shaped: maximum line length, alignment, capitalization style of UI text, and what happens when text overflows.",
+   "cards": [
+    "DC-L02-17",
+    "DC-L02-18"
+   ],
+   "dtcg": "no DTCG type for measure, case or truncation; measure can be a dimension in ch-like units only through an extension (L07 A5, [inferred])",
+   "platform": "Windows text controls default to ellipsis trimming; iOS labels can set unlimited lines (DC-L02-18).",
+   "default": "Maximum prose width about 65-70 characters for Latin, 35-40 for CJK (DC-L02-17); start-aligned, sentence case, wrap first then ellipsis with access to the full text; all caps only for 11-12px labels (DC-L02-18).",
+   "sources": [
+    "S-L02-016",
+    "S-L02-022",
+    "S-L02-049"
+   ]
+  },
+  {
+   "id": "found.type.responsive",
+   "name": "Responsive and device-distance type",
+   "layer": "found",
+   "parent": "found.type",
+   "definition": "How type sizes change across breakpoints, platforms and viewing distances (fixed, stepped, fluid, or distance modes).",
+   "cards": [
+    "DC-L02-19",
+    "DC-L02-20",
+    "DC-L14-04"
+   ],
+   "dtcg": "dimension values per resolver context; DTCG has no conditional or fluid value such as `clamp()` (L07 A5)",
+   "platform": "Units differ: pt on Apple, sp for Android text, dp for other Android sizes, epx on Windows, px or rem on web (DC-L02-20). Figma cannot express `clamp()` (DC-L02-19). Official body sizes grow with distance: watch 16pt, phone 17pt, Mac 13pt, TV 29pt (L14 invariant I-3). Wear text of 20sp and up does not scale; visionOS points are angles (DC-L14-04).",
+   "default": "Fixed body and UI text; fluid or stepped only for display and headline styles on the web (DC-L02-19). One semantic scale with platform modes, mobile about 1.15-1.2x desktop; never below 11pt/sp on mobile or 12px on the web (DC-L02-20). Distance modes seeded from each platform's defaults (DC-L14-04).",
+   "sources": [
+    "S-L02-001",
+    "S-L02-022",
+    "S-L14-012",
+    "S-L14-021"
+   ]
+  },
+  {
+   "id": "found.type.scaling",
+   "name": "Text scaling and legibility",
+   "layer": "found",
+   "parent": "found.type",
+   "definition": "Support for the user's text-size setting (Dynamic Type, Android font scale, browser zoom) and robustness to user text-spacing overrides, including dyslexia considerations.",
+   "cards": [
+    "DC-L02-21",
+    "DC-L10-07",
+    "DC-L02-22"
+   ],
+   "dtcg": "dimension in scalable units (rem on web; sp on Android through the platform build) (L07 A3, DC-L10-08)",
+   "platform": "iOS Dynamic Type to AX5, Android to 200%, web 200% zoom; macOS has no Dynamic Type; Wear OS does not scale text of 20sp and up (L14 invariant I-6). React Native respects Dynamic Type through `dynamicTypeRamp` (DC-L10-07).",
+   "default": "Every text token in scalable units, no fixed-height text containers, tested at AX5, 200% font scale and 200% zoom (DC-L02-21); full scaling with no cap on body text and a documented cap of about 1.5x only for fixed chrome such as tab labels (DC-L10-07); body line height at least 1.4-1.5 and a confusable-pairs check (DC-L02-22).",
+   "sources": [
+    "S-L02-028",
+    "S-L10-011",
+    "S-L10-064",
+    "S-L02-049"
+   ]
+  },
+  {
+   "id": "found.type.i18n",
+   "name": "Scripts, fallbacks and script metrics",
+   "layer": "found",
+   "parent": "found.type",
+   "definition": "Which writing systems the type must cover, the fallback font stacks for each, and script-specific adjustments to line height, size, tracking, emphasis and direction.",
+   "cards": [
+    "DC-L02-24",
+    "DC-L02-25"
+   ],
+   "dtcg": "fontFamily fallback arrays; per-script metrics need resolver contexts or extensions (L07 A3, A5, [inferred])",
+   "platform": "Web `unicode-range` subsets let one family resolve to several script files, and `font-size-adjust` can normalize x-height across fallbacks (DC-L02-24). Android's line clipping is riskier for tall scripts (DC-L02-25).",
+   "default": "For an India-facing product: brand Latin face plus Noto Sans for each Indic script, falling back to Kohinoor on Apple and Nirmala UI on Windows (DC-L02-24); about +7% line height for Indic and CJK, +30% for Telugu and Burmese, no tracking, italics or all caps for non-Latin scripts (DC-L02-25).",
+   "sources": [
+    "S-L02-042",
+    "S-L02-021",
+    "S-L02-051",
+    "S-L02-055"
+   ]
+  },
+  {
+   "id": "found.type.numerals",
+   "name": "Numerals",
+   "layer": "found",
+   "parent": "found.type",
+   "definition": "Tabular versus proportional and lining versus oldstyle figures, and native digits for other scripts.",
+   "cards": [
+    "DC-L02-26"
+   ],
+   "dtcg": "no DTCG type for font features; needs an extension (L07 A5)",
+   "platform": "Web uses `font-variant-numeric`; iOS and Android monospaced-digit features were not verified ([inferred] in DC-L02-26).",
+   "default": "Proportional lining figures in text, tabular lining figures in tables and any live-updating number (DC-L02-26).",
+   "sources": [
+    "S-L02-043",
+    "S-L02-049"
+   ]
+  },
+  {
+   "id": "found.space",
+   "name": "Space, sizing and density",
+   "layer": "found",
+   "parent": "found",
+   "children": [
+    "found.space.base",
+    "found.space.scale",
+    "found.space.semantic",
+    "found.space.responsive",
+    "found.space.whitespace",
+    "found.space.rhythm",
+    "found.space.sizing",
+    "found.space.density"
+   ],
+   "definition": "The spacing scale and its semantic uses, the size scales for controls and media, and density: how tightly the whole UI is packed.",
+   "dtcg": "dimension (px or rem only; dp and pt map to px and translators convert) (L07 A3, DC-L03-01)",
+   "l09": "Shared (L09-A1.2): a 4px base with the ladder 4, 8, 12, 16, 24, 32, 40, 48, 64 plus 0 and 2, in 17 of 22 systems with a published scale; builder default 0, 2, 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96. Values converge; base unit and naming differ (BOARD note from L03).",
+   "sources": [
+    "S-L03-001",
+    "S-L03-003",
+    "S-L03-009",
+    "S-L03-010"
+   ]
+  },
+  {
+   "id": "found.space.base",
+   "name": "Base spacing unit",
+   "layer": "found",
+   "parent": "found.space",
+   "definition": "The grid unit every spacing and sizing value is a multiple of.",
+   "cards": [
+    "DC-L03-01"
+   ],
+   "dtcg": "dimension (px or rem only; dp and pt map to px and translators convert) (L07 A3, DC-L03-01)",
+   "platform": "Android uses dp and iOS pt; on the web, rem makes spacing follow the user's font-size preference (DC-L03-01).",
+   "default": "4 as the grid and 8 as the rhythm: name the scale on an 8 base but keep 2, 4, 6 and 12 for component internals (DC-L03-01).",
+   "sources": [
+    "S-L03-001",
+    "S-L03-038"
+   ]
+  },
+  {
+   "id": "found.space.scale",
+   "name": "Spacing scale",
+   "layer": "found",
+   "parent": "found.space",
+   "definition": "The ordered list of spacing values, including fine steps below the base unit and negative values for overlaps.",
+   "cards": [
+    "DC-L03-02",
+    "DC-L03-06"
+   ],
+   "dtcg": "dimension (px or rem only; dp and pt map to px and translators convert) (L07 A3, DC-L03-01)",
+   "platform": "The same numbers work on every platform as px, dp or pt; negative margins are native on the web while SwiftUI and Compose use offsets ([inferred] in DC-L03-06).",
+   "default": "A hybrid scale of about 12-15 steps: 0, 2, 4, 6, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, which is Atlassian's exact set (DC-L03-02); fine steps 2, 4, 6 and negatives for the same steps up to 32; keep 1px for borders (DC-L03-06).",
+   "l09": "Shared (L09-A1.2): nine common steps. The real differences are base (4 or 8) and naming, not values (L03 table A).",
+   "sources": [
+    "S-L03-001",
+    "S-L03-003",
+    "S-L03-010"
+   ]
+  },
+  {
+   "id": "found.space.semantic",
+   "name": "Semantic spacing (inset, gap, layout)",
+   "layer": "found",
+   "parent": "found.space",
+   "definition": "Named spacing jobs: inset (padding inside a component), gap (stack and inline spacing between siblings), and layout (margins, pane spacers, section spacing), plus the shape of an inset (square, squish, stretch).",
+   "cards": [
+    "DC-L03-04",
+    "DC-L03-05"
+   ],
+   "dtcg": "dimension (px or rem only; dp and pt map to px and translators convert) (L07 A3, DC-L03-01)",
+   "platform": "Use leading and trailing (logical `padding-block` and `padding-inline` on the web) so right-to-left layouts swap automatically (DC-L03-04, DC-L03-05).",
+   "default": "Three semantic families (inset, gap, layout); parents own spacing (DC-L03-04). Squish insets (vertical half of horizontal) for pill-like controls, stretch for inputs; control height equals line box plus twice the block padding (DC-L03-05).",
+   "sources": [
+    "S-L03-006",
+    "S-L03-030",
+    "S-L03-029"
+   ]
+  },
+  {
+   "id": "found.space.responsive",
+   "name": "Responsive spacing",
+   "layer": "found",
+   "parent": "found.space",
+   "definition": "Whether spacing values change with the window size.",
+   "cards": [
+    "DC-L03-17"
+   ],
+   "dtcg": "dimension values per breakpoint context (L07 A4)",
+   "platform": "On native platforms, margins come from system layout guides and the window size class (DC-L03-17).",
+   "default": "Only layout-level spacing (margins, pane spacers, section gaps) changes by breakpoint; component spacing changes only with density, never with breakpoint (DC-L03-17).",
+   "sources": [
+    "S-L03-026",
+    "S-L03-028"
+   ]
+  },
+  {
+   "id": "found.space.whitespace",
+   "name": "Whitespace personality and grouping",
+   "layer": "found",
+   "parent": "found.space",
+   "definition": "How airy or tight the product feels, expressed as the ratio between spacing inside a group and spacing between groups.",
+   "cards": [
+    "DC-L03-24"
+   ],
+   "related": [
+    "DC-L15-05"
+   ],
+   "dtcg": "dimension (px or rem only; dp and pt map to px and translators convert) (L07 A3, DC-L03-01)",
+   "platform": "Mobile has less room; Material recommends more generous spacing on desktop (DC-L03-24).",
+   "default": "Inner-to-outer spacing ratio at least 1:2, and 1:3 to 1:4 for airy brands; group implicitly and add borders only where interactivity or scanning needs them (DC-L03-24).",
+   "sources": [
+    "S-L03-028",
+    "S-L03-061"
+   ]
+  },
+  {
+   "id": "found.space.rhythm",
+   "name": "Vertical rhythm",
+   "layer": "found",
+   "parent": "found.space",
+   "definition": "How line heights and vertical spacing snap to a shared grid, and how layouts survive user text-spacing overrides.",
+   "cards": [
+    "DC-L03-25"
+   ],
+   "related": [
+    "DC-L02-16"
+   ],
+   "dtcg": "dimension (px or rem only; dp and pt map to px and translators convert) (L07 A3, DC-L03-01)",
+   "platform": "Native platforms size text boxes differently from CSS, and trimming behaves differently ([inferred] in DC-L03-25).",
+   "default": "Snap line heights and spacing to 4px; measure spacing from the text box (Carbon's approach) rather than a strict baseline grid on the web; use CSS `text-box` as progressive enhancement (DC-L03-25).",
+   "sources": [
+    "S-L03-039",
+    "S-L03-076",
+    "S-L03-077"
+   ]
+  },
+  {
+   "id": "found.space.sizing",
+   "name": "Size scales",
+   "layer": "found",
+   "parent": "found.space",
+   "children": [
+    "found.space.sizing.controls",
+    "found.space.sizing.media"
+   ],
+   "definition": "Shared size ladders for interactive controls and for media such as icons and avatars, so that everything placed side by side lines up."
+  },
+  {
+   "id": "found.space.sizing.controls",
+   "name": "Control height scale",
+   "layer": "found",
+   "parent": "found.space.sizing",
+   "definition": "The small, medium and large heights shared by buttons, inputs, selects and other inline controls.",
+   "cards": [
+    "DC-L03-07",
+    "DC-L08-07"
+   ],
+   "dtcg": "dimension (px or rem only; dp and pt map to px and translators convert) (L07 A3, DC-L03-01)",
+   "platform": "Desktop pointer controls can go to 24-32; touch keeps a 44pt (iOS) or 48dp (Android) target even when the visual control is smaller (DC-L03-07); HIG hit region 44 x 44pt, 60 x 60 on visionOS (DC-L08-07).",
+   "default": "Three sizes, sm 32, md 40, lg 48, for touch-inclusive products and 24, 32, 40 for pointer-first desktop tools, on multiples of 8 (DC-L03-07); one shared height scale for all inline controls and no mixed sizes in a group (DC-L08-07).",
+   "l09": "Diverges (L09-A2.4): control heights 28-32 in dense systems versus 40-48 in touch systems.",
+   "sources": [
+    "S-L03-029",
+    "S-L03-033",
+    "S-L08-039",
+    "S-L08-061"
+   ]
+  },
+  {
+   "id": "found.space.sizing.media",
+   "name": "Icon and avatar size scales",
+   "layer": "found",
+   "parent": "found.space.sizing",
+   "definition": "The size ladders for icons and avatars.",
+   "cards": [
+    "DC-L03-08"
+   ],
+   "related": [
+    "DC-L05-05"
+   ],
+   "dtcg": "dimension (px or rem only; dp and pt map to px and translators convert) (L07 A3, DC-L03-01)",
+   "platform": "Material Symbols and SF Symbols scale with text, so icon tokens can be set relative to text size where platforms support it ([inferred] in DC-L03-08).",
+   "default": "Icons 16, 20, 24, 32; avatars 16, 20, 24, 32, 40, 48, 64 (Primer's hybrid); icon size equals body line height minus 0-4px ([inferred] in DC-L03-08).",
+   "sources": [
+    "S-L03-063",
+    "S-L03-059"
+   ]
+  },
+  {
+   "id": "found.space.density",
+   "name": "Density",
+   "layer": "found",
+   "parent": "found.space",
+   "children": [
+    "found.space.density.voice",
+    "found.space.density.strategy",
+    "found.space.density.context"
+   ],
+   "definition": "How much content fits in a given area, and who controls it. Density changes layout, not just padding (BOARD note from L03). Six lanes decide parts of density; they are gathered here and split into voice, strategy and device context.",
+   "related": [
+    "DC-L03-11"
+   ],
+   "dtcg": "dimension values per `density` resolver context (L07 A4, DC-L03-11)",
+   "l09": "Diverges (L09-A2.4): body 13px (Polaris, SLDS), 14px (Carbon, Atlassian, Ant, Primer), 16px (Material, Radix, Mantine), 17pt (iOS), 19px (GOV.UK).",
+   "sources": [
+    "S-L03-029",
+    "S-L09-403",
+    "S-L09-540"
+   ]
+  },
+  {
+   "id": "found.space.density.voice",
+   "name": "Density voice and base size",
+   "layer": "found",
+   "parent": "found.space.density",
+   "definition": "The product-wide density personality (compact, comfortable, spacious) and the body size and control height that come with it.",
+   "cards": [
+    "DC-L15-04",
+    "DC-L09-04"
+   ],
+   "members": [
+    "P22",
+    "P33",
+    "P34"
+   ],
+   "dtcg": "dimension and typography values per density context (L07 A4)",
+   "platform": "Touch surfaces cannot go as dense as pointer surfaces; target minimums stay fixed (DC-L15-04). iOS default hit target 44pt; WCAG 2.2 SC 2.5.8 sets a 24 CSS px floor (DC-L09-04).",
+   "default": "Comfortable for app surfaces, spacious for marketing, compact as a user option for data-heavy tools (DC-L15-04); 14px body with 32px controls for B2B tools and 16px with 40px for everything else, as a density mode rather than two systems (DC-L09-04).",
+   "sources": [
+    "S-L15-003",
+    "S-L15-004",
+    "S-L09-303",
+    "S-L09-145"
+   ]
+  },
+  {
+   "id": "found.space.density.strategy",
+   "name": "Density strategy and modes",
+   "layer": "found",
+   "parent": "found.space.density",
+   "definition": "Who sets density (the system, the product, or the user) and which components get a compact mode.",
+   "cards": [
+    "DC-L03-10",
+    "DC-L08-13"
+   ],
+   "dtcg": "dimension values per density context (L07 A4)",
+   "platform": "Salesforce density does not apply to its mobile app; Material says density should not change automatically across breakpoints or orientation (DC-L03-10). Mobile rarely offers compact ([inferred] in DC-L08-13).",
+   "default": "Fixed comfortable density for consumer products; for enterprise and data products, component sizes plus a user-level compact mode that shrinks insets, stacks and row heights by one step (DC-L03-10), applied only to data-heavy components such as tables, lists, menus and trees (DC-L08-13).",
+   "sources": [
+    "S-L03-029",
+    "S-L03-070",
+    "S-L08-063"
+   ]
+  },
+  {
+   "id": "found.space.density.context",
+   "name": "Density by device class",
+   "layer": "found",
+   "parent": "found.space.density",
+   "definition": "How information density follows viewing distance and input rather than pixel count.",
+   "cards": [
+    "DC-L14-13"
+   ],
+   "dtcg": "values per `context` resolver modifier ([inferred] in DC-L14-01)",
+   "platform": "Watch: at most 3 glyph buttons or 2 text buttons in a row; TV: phone-level density; car: minimal; spatial: sparse with 16pt spacing (L14 Part 4).",
+   "default": "Density follows viewing distance and input; a 65-inch TV is a far-away phone (DC-L14-13).",
+   "sources": [
+    "S-L14-006",
+    "S-L14-009",
+    "S-L14-026"
+   ]
+  },
+  {
+   "id": "found.layout",
+   "name": "Layout",
+   "layer": "found",
+   "parent": "found",
+   "children": [
+    "found.layout.breakpoints",
+    "found.layout.grid",
+    "found.layout.containers",
+    "found.layout.adaptation",
+    "found.layout.safe-areas"
+   ],
+   "definition": "How screens are divided and adapt: breakpoints, column grids, containers and maximum widths, responsive and adaptive behavior, and safe areas. Canonical layouts and app shells are patterns (`pat.layout`); stacking order is in `found.elevation.stacking`.",
+   "dtcg": "dimension and number; no breakpoint or media-condition type (L07 A5)",
+   "sources": [
+    "S-L03-025",
+    "S-L03-026",
+    "S-L03-032"
+   ]
+  },
+  {
+   "id": "found.layout.breakpoints",
+   "name": "Breakpoints",
+   "layer": "found",
+   "parent": "found.layout",
+   "definition": "The window widths at which layouts change.",
+   "cards": [
+    "DC-L03-14"
+   ],
+   "related": [
+    "DC-L07-28"
+   ],
+   "dtcg": "no breakpoint type; breakpoints become resolver contexts or dimension tokens (DC-L07-28, L07 A5)",
+   "platform": "Android uses `WindowSizeClass`; iOS uses size classes, not device idiom; web uses rem-based media queries (DC-L03-14). Material renamed window size classes to breakpoints in May 2026 (BOARD note from L03).",
+   "default": "Material's five width breakpoints for cross-platform products, Tailwind's set for web-only products (DC-L03-14).",
+   "sources": [
+    "S-L03-021",
+    "S-L03-025",
+    "S-L03-032"
+   ]
+  },
+  {
+   "id": "found.layout.grid",
+   "name": "Column grid",
+   "layer": "found",
+   "parent": "found.layout",
+   "definition": "Columns, gutters and margins at each breakpoint.",
+   "cards": [
+    "DC-L03-15"
+   ],
+   "dtcg": "number (columns) and dimension (gutters, margins) (DC-L15-07)",
+   "platform": "Native mobile rarely uses visible column grids; Material and Apple use margins, panes and layout guides (DC-L03-15).",
+   "default": "Web product: 4, 8 and 12 columns (compact, medium, expanded and up), gutter 16-24, margin 16 at compact and 24 at medium and up, matching Material (DC-L03-15).",
+   "sources": [
+    "S-L03-026",
+    "S-L03-054"
+   ]
+  },
+  {
+   "id": "found.layout.containers",
+   "name": "Containers and maximum content width",
+   "layer": "found",
+   "parent": "found.layout",
+   "definition": "How content is framed inside the window: centered reading columns, navigation plus content, or fluid data surfaces, and their maximum widths.",
+   "cards": [
+    "DC-L03-16"
+   ],
+   "dtcg": "dimension (px or rem only; dp and pt map to px and translators convert) (L07 A3, DC-L03-01)",
+   "platform": "visionOS keeps content centered at very large window sizes; Android 16 ignores orientation and aspect-ratio locks at 600dp and up, so apps must fill the window (DC-L03-16).",
+   "default": "Reading surfaces centered with a maximum of about 1280px and a 40-80 character measure; product surfaces with left navigation and left-aligned content; data surfaces fluid (DC-L03-16).",
+   "sources": [
+    "S-L03-025",
+    "S-L03-032",
+    "S-L03-037"
+   ]
+  },
+  {
+   "id": "found.layout.adaptation",
+   "name": "Responsive and adaptive strategy",
+   "layer": "found",
+   "parent": "found.layout",
+   "definition": "How layouts respond to size: reflowing within a layout (responsive), switching layouts at breakpoints (adaptive), and whether components respond to their container or to the viewport.",
+   "cards": [
+    "DC-L03-22",
+    "DC-L03-21",
+    "DC-L10-10"
+   ],
+   "dtcg": "none (behavior); breakpoint values as above",
+   "platform": "Android 16 and later ignore orientation and resizability locks at 600dp and up, and 17 removes the opt-out; iPadOS 26 windowing makes arbitrary sizes common (DC-L10-10). Container queries are CSS only; native layouts get the same effect from layout APIs (DC-L03-21).",
+   "default": "Responsive inside panes, adaptive between breakpoints, using Material's show-and-hide, levitate and reflow vocabulary (DC-L03-22); viewport breakpoints for page layout and container queries for components (DC-L03-21); Material breakpoints on Android and web, size classes on Apple, and a list-detail template that becomes two panes at expanded (DC-L10-10).",
+   "sources": [
+    "S-L03-053",
+    "S-L03-055",
+    "S-L10-020",
+    "S-L10-025"
+   ]
+  },
+  {
+   "id": "found.layout.safe-areas",
+   "name": "Safe areas, insets and edge policy",
+   "layer": "found",
+   "parent": "found.layout",
+   "definition": "Where interactive content may go relative to screen edges, notches, system bars, hinges and TV overscan.",
+   "cards": [
+    "DC-L03-20",
+    "DC-L10-11",
+    "DC-L14-10"
+   ],
+   "dtcg": "none; insets come from the platform at runtime (DC-L10-11)",
+   "platform": "Web needs `viewport-fit=cover` (DC-L03-20); Material components handle insets automatically (DC-L10-11); TV keeps the outer 5% free, round watches use percentage margins, foldable hinges get no controls (L14 invariant I-8); Xbox boxes apps into the TV-safe area by default (DC-L14-10).",
+   "default": "Backgrounds edge to edge; interactive content inside the platform insets plus the normal margin; nothing on a hinge (DC-L03-20, DC-L10-11); nothing to read or select in the outer 5% on TV (DC-L14-10).",
+   "sources": [
+    "S-L03-079",
+    "S-L10-023",
+    "S-L14-023",
+    "S-L14-026"
+   ]
+  },
+  {
+   "id": "found.interaction",
+   "name": "Interaction and input",
+   "layer": "found",
+   "parent": "found",
+   "children": [
+    "found.interaction.modalities",
+    "found.interaction.targets",
+    "found.interaction.focus"
+   ],
+   "definition": "The input methods the system supports (touch, pointer, keyboard, remote, gaze, voice, rotary) and the foundations that depend on them: target sizes, target spacing and the focus indicator. L14 shows these follow input precision, not device.",
+   "dtcg": "dimension (px or rem only; dp and pt map to px and translators convert) (L07 A3, DC-L03-01)",
+   "sources": [
+    "S-L14-012",
+    "S-L03-035",
+    "S-L10-012"
+   ]
+  },
+  {
+   "id": "found.interaction.modalities",
+   "name": "Input modalities",
+   "layer": "found",
+   "parent": "found.interaction",
+   "definition": "Which inputs each surface must support and how density and targets switch between them.",
+   "cards": [
+    "DC-L10-15"
+   ],
+   "dtcg": "none; selects values per context (L07 A4)",
+   "platform": "Fluent asks for 44x44 on iOS and web and 48x48 on Android; Compose Material components enforce 48dp automatically (DC-L10-15). Every function must work with more than one input (L14 invariant I-4).",
+   "default": "Touch targets on all mobile and web surfaces (44 CSS px on web even though AA is 24) plus a pointer density mode for desktop (DC-L10-15).",
+   "sources": [
+    "S-L10-036",
+    "S-L10-039",
+    "S-L10-072",
+    "S-L14-081"
+   ]
+  },
+  {
+   "id": "found.interaction.targets",
+   "name": "Target size and spacing",
+   "layer": "found",
+   "parent": "found.interaction",
+   "definition": "The minimum hit area for interactive elements and the minimum spacing between adjacent targets, keyed to input precision.",
+   "cards": [
+    "DC-L03-12",
+    "DC-L14-03",
+    "DC-L03-13"
+   ],
+   "dtcg": "dimension (px or rem only; dp and pt map to px and translators convert) (L07 A3, DC-L03-01)",
+   "platform": "Pointer 20-28pt or 24px; finger 44-48; remote and gaze 56-66; hands in a moving car 64-76dp (L14 invariant I-2). Web detects input with `pointer: coarse | fine` (DC-L14-03, DC-L03-13).",
+   "default": "Web 24px visual minimum with a 44px hit area on coarse pointers, iOS 44pt, Android 48dp; visuals may shrink with density, hit areas never do (DC-L03-12). Key targets to input, not device (DC-L14-03). 8px between adjacent controls on desktop, 12px on touch (DC-L03-13).",
+   "sources": [
+    "S-L03-035",
+    "S-L03-029",
+    "S-L10-073",
+    "S-L14-043"
+   ]
+  },
+  {
+   "id": "found.interaction.focus",
+   "name": "Focus indicator",
+   "layer": "found",
+   "parent": "found.interaction",
+   "definition": "The visible ring or highlight that shows which element has keyboard, remote or switch focus: thickness, offset, color and shape. L04 and L08 each decided it; they agree.",
+   "cards": [
+    "DC-L04-09",
+    "DC-L08-11"
+   ],
+   "related": [
+    "DC-L01-16"
+   ],
+   "dtcg": "border composite (color, width, style) or dimension plus color; offset is a dimension (L07 A3)",
+   "platform": "Web uses `:focus-visible` with `outline` and `outline-offset`; iOS and Android rely on system focus for keyboards and switch control; tvOS focus uses Liquid Glass (DC-L04-09, DC-L08-11). Focus must change a physical property, not only color, so high-contrast modes keep it (L14 invariant I-5).",
+   "default": "A 2px solid ring with 2px offset, radius equal to the component radius plus the offset, a color with 3:1 on every surface (often a two-tone ring), and a forced-colors fallback (DC-L04-09, DC-L08-11).",
+   "sources": [
+    "S-L04-016",
+    "S-L08-069",
+    "S-L14-089"
+   ]
+  },
+  {
+   "id": "found.shape",
+   "name": "Shape and borders",
+   "layer": "found",
+   "parent": "found",
+   "children": [
+    "found.shape.radius",
+    "found.shape.personality",
+    "found.shape.roles",
+    "found.shape.geometry",
+    "found.shape.expressive",
+    "found.shape.border"
+   ],
+   "definition": "Corner radius (scale, personality, per-component roles, geometry, nesting, expressive shapes) and the borders, strokes and dividers that outline things.",
+   "dtcg": "dimension (L07 A3); Carbon v12 beta adds radius tokens (BOARD note from L04/L07)",
+   "l09": "Shared (L09-A1.7): a small radius scale with a 4-8px control default in 16 of 23 systems, median 6; builder scale 0, 2, 4, 6, 8, 12, 16, 24, full. Diverges most of all (L09-A2.1): control radius 0 (GOV.UK, Carbon v11), 4-8 (most), 12 (Airbnb), pill (Material, Spectrum 2, SLDS Cosmos); every 2025-2026 revision got rounder.",
+   "sources": [
+    "S-L04-003",
+    "S-L04-016",
+    "S-L09-101"
+   ]
+  },
+  {
+   "id": "found.shape.radius",
+   "name": "Radius scale and default control radius",
+   "layer": "found",
+   "parent": "found.shape",
+   "definition": "The ordered set of corner radii and the default radius for controls.",
+   "cards": [
+    "DC-L04-01",
+    "DC-L09-01"
+   ],
+   "dtcg": "dimension (L07 A3); Carbon v12 beta adds radius tokens (BOARD note from L04/L07)",
+   "platform": "Compose uses `RoundedCornerShape(dp)`; iOS uses continuous corners and container-relative shapes; web uses `border-radius` (DC-L04-01). iOS 26 and later expect concentric corners; Material Expressive adds 20, 32 and 48 and shape morphing on press (DC-L09-01).",
+   "default": "7 steps plus full on a 4px rhythm: 0, 2, 4, 8, 12, 16, 24, full; radius grows with component size (DC-L04-01). 6px controls and 8-12px containers, with a radius factor slider as in Radix (0, 0.75, 1, 1.5, full) (DC-L09-01).",
+   "l09": "Shared (L09-A1.7) and diverges (L09-A2.1) as above; Mantine 9 doubled its default radius from 4 to 8px (L09 overview, [S-L09-646]).",
+   "sources": [
+    "S-L04-004",
+    "S-L04-035",
+    "S-L09-101",
+    "S-L09-646"
+   ]
+  },
+  {
+   "id": "found.shape.personality",
+   "name": "Roundness and brand shape language",
+   "layer": "found",
+   "parent": "found.shape",
+   "definition": "The overall roundness dial (sharp, subtle, rounded, pill) and whether the brand contributes a signature shape.",
+   "cards": [
+    "DC-L04-02",
+    "DC-L06-09"
+   ],
+   "dtcg": "dimension (L07 A3); Carbon v12 beta adds radius tokens (BOARD note from L04/L07)",
+   "platform": "On iOS the system decides much of this: controls become capsules and concentric with the hardware (DC-L04-02); platform shapes may override brand radii ([inferred] in DC-L06-09).",
+   "default": "Subtle (4-6px controls, 8-12px containers) is the safest cross-audience default; sharp only when density and precision are brand values (DC-L04-02). Derive one radius family from the logo's curvature and allow shape variety only in hero moments (DC-L06-09).",
+   "sources": [
+    "S-L04-007",
+    "S-L04-038",
+    "S-L06-009",
+    "S-L06-030"
+   ]
+  },
+  {
+   "id": "found.shape.roles",
+   "name": "Radius roles per component",
+   "layer": "found",
+   "parent": "found.shape",
+   "definition": "Semantic radius roles (detail, control, container, overlay, person) that map the scale onto component types.",
+   "cards": [
+    "DC-L04-03"
+   ],
+   "dtcg": "dimension (L07 A3); Carbon v12 beta adds radius tokens (BOARD note from L04/L07)",
+   "platform": "Fluent and Apple warn against rounding corners that touch the screen edge (DC-L04-03).",
+   "default": "Small detail 2-4px, control 4-8px or full, container 8-12px, overlay or sheet 12-16px or more, person full (DC-L04-03).",
+   "sources": [
+    "S-L04-007",
+    "S-L04-016",
+    "S-L04-038"
+   ]
+  },
+  {
+   "id": "found.shape.geometry",
+   "name": "Corner geometry and nesting",
+   "layer": "found",
+   "parent": "found.shape",
+   "definition": "Whether corners are circular arcs or continuous curvature (squircles), and how inner radii derive from outer radii when shapes nest.",
+   "cards": [
+    "DC-L04-04",
+    "DC-L04-05"
+   ],
+   "members": [
+    "P61"
+   ],
+   "dtcg": "no DTCG type for corner smoothing; needs an extension. Inner radius is a computed alias (DC-L15-10)",
+   "platform": "iOS continuous corners are native and `ConcentricRectangle` exists from iOS 26; web has `corner-shape` with a `border-radius` fallback; Android uses `RoundedPolygon` (DC-L04-04, DC-L04-05).",
+   "default": "Circular arcs on the web, with `corner-shape: squircle` as progressive enhancement if parity with iOS matters; 60% smoothing in Figma (DC-L04-04). Inner radius equals the larger of outer radius minus padding and the smallest non-zero radius, derived automatically (DC-L04-05).",
+   "sources": [
+    "S-L04-035",
+    "S-L04-054",
+    "S-L04-057"
+   ]
+  },
+  {
+   "id": "found.shape.expressive",
+   "name": "Full-round and expressive shapes",
+   "layer": "found",
+   "parent": "found.shape",
+   "definition": "Pills and the expressive shape library (for example Material 3 Expressive's 35 shapes and shape morphing).",
+   "cards": [
+    "DC-L04-06"
+   ],
+   "dtcg": "dimension for `radius.full`; arbitrary shapes and morphs have no DTCG type (L07 A5, [inferred])",
+   "platform": "Compose ships the shape library natively; web needs SVG `clip-path: path()` or masks; iOS morphing is system-driven through `GlassEffectContainer` (DC-L04-06).",
+   "default": "Ship `radius.full`; add expressive shapes only for playful brands targeting Android and Material, limited to 1-3 signature uses (DC-L04-06).",
+   "sources": [
+    "S-L04-005",
+    "S-L04-038",
+    "S-L06-009"
+   ]
+  },
+  {
+   "id": "found.shape.border",
+   "name": "Border widths and dividers",
+   "layer": "found",
+   "parent": "found.shape",
+   "definition": "The stroke width scale for borders, selection and emphasis, and when dividers separate content. L03 and L04 both decided the width scale; they agree on 1, 2, 4.",
+   "cards": [
+    "DC-L04-07",
+    "DC-L03-09",
+    "DC-L04-08"
+   ],
+   "members": [
+    "P64"
+   ],
+   "dtcg": "dimension (width), strokeStyle, and the border composite (color, width, style); Figma lacks inset, outset and double strokes (L07 A3, DC-L04-07)",
+   "platform": "Fluent uses thicker strokes on mobile (DC-L04-07); hairlines may render thinner than one physical pixel in pt and dp contexts ([inferred] in DC-L03-09); Apple separators are vibrant (DC-L04-08).",
+   "default": "1px default, 2px for selected and focus, 4px for emphasis, with inset box-shadow borders for states that change width so layout does not jump (DC-L04-07, DC-L03-09). Space first, then a surface change, then 1px subtle lines; lines in dense data views (DC-L04-08).",
+   "sources": [
+    "S-L04-007",
+    "S-L04-052",
+    "S-L03-009",
+    "S-L04-032"
+   ]
+  },
+  {
+   "id": "found.elevation",
+   "name": "Elevation, materials and opacity",
+   "layer": "found",
+   "parent": "found",
+   "children": [
+    "found.elevation.depth-model",
+    "found.elevation.scale",
+    "found.elevation.shadow",
+    "found.elevation.surfaces",
+    "found.elevation.stacking",
+    "found.elevation.materials",
+    "found.elevation.opacity"
+   ],
+   "definition": "How surfaces separate in depth: the depth model, elevation levels, shadow recipes, surface roles, stacking order, translucent materials, and opacity including state layers and scrims.",
+   "dtcg": "shadow composite (one or an array of color, offsetX, offsetY, blur, spread, inset), color, number (opacity); no blur or material type (L07 A3, A5)",
+   "l09": "Shared (L09-A1.12): a 1px ring plus soft shadow for cards in 6 modern systems, and lighter surfaces for higher elevation in dark mode (Atlassian, Material, Apple, Encore, Linear). Diverges (L09-A2.2): shadow ladders, tonal layers (Carbon, Material, Encore, Linear), borders only (GOV.UK, Primer), glass (Apple, Airbnb).",
+   "sources": [
+    "S-L04-017",
+    "S-L04-018",
+    "S-L09-104"
+   ]
+  },
+  {
+   "id": "found.elevation.depth-model",
+   "name": "Depth model",
+   "layer": "found",
+   "parent": "found.elevation",
+   "definition": "The primary way surfaces separate: flat with borders, shadows, tonal color steps, or translucent material.",
+   "cards": [
+    "DC-L04-10",
+    "DC-L09-02"
+   ],
+   "dtcg": "shadow, color, border (L07 A3)",
+   "platform": "Android is tonal by default in M3; iOS uses materials, not shadow tokens; Windows uses Mica plus layer fills and strokes; the web can use any (DC-L04-10, DC-L09-02).",
+   "default": "Hybrid: flat surfaces with borders for in-page containers, shadows only for things that float (menus, popovers, dialogs, drag states), lighter surfaces in dark mode (DC-L04-10); light mode 1px ring plus a 3-level soft shadow, dark mode a lighter surface per level; tonal or borders for data-dense tools (DC-L09-02).",
+   "l09": "Diverges (L09-A2.2) as above.",
+   "sources": [
+    "S-L04-012",
+    "S-L04-032",
+    "S-L04-058",
+    "S-L09-104"
+   ]
+  },
+  {
+   "id": "found.elevation.scale",
+   "name": "Elevation levels",
+   "layer": "found",
+   "parent": "found.elevation",
+   "definition": "How many elevation levels exist and which components sit at each.",
+   "cards": [
+    "DC-L04-11"
+   ],
+   "dtcg": "shadow (L07 A3)",
+   "platform": "Android elevation in dp drives both the platform shadow and, in M3, tonal color (DC-L04-11).",
+   "default": "4 semantic levels (sunken, default, raised, overlay) backed by 4-6 shadow primitives (DC-L04-11).",
+   "sources": [
+    "S-L04-017",
+    "S-L04-058"
+   ]
+  },
+  {
+   "id": "found.elevation.shadow",
+   "name": "Shadow recipe",
+   "layer": "found",
+   "parent": "found.elevation",
+   "definition": "How shadows are built: number of layers, color, softness, and how they change in dark mode.",
+   "cards": [
+    "DC-L04-12"
+   ],
+   "members": [
+    "P62"
+   ],
+   "dtcg": "shadow composite; Figma holds it as an effect style, not a variable (L07 A3, A7)",
+   "platform": "Android shadows come from elevation plus a light-source model; Apple guidance favors materials over layer shadows (DC-L04-12).",
+   "default": "Two layers (a 1px contact shadow plus a soft blur scaled to elevation), neutral-tinted, alpha 8-24% in light mode; in dark mode double the alpha and add a 1px highlight or ring (DC-L04-12).",
+   "sources": [
+    "S-L04-006",
+    "S-L04-017",
+    "S-L04-018"
+   ]
+  },
+  {
+   "id": "found.elevation.surfaces",
+   "name": "Surface roles for elevation",
+   "layer": "found",
+   "parent": "found.elevation",
+   "definition": "The surface tiers seen from the depth side, including how much lighter each tier gets in dark mode. The same tiers appear as color roles in `found.color.roles.surface`.",
+   "cards": [
+    "DC-L04-13"
+   ],
+   "related": [
+    "DC-L01-13"
+   ],
+   "dtcg": "color (L07 A3)",
+   "default": "4 surfaces (sunken, default, raised, overlay) with 3-5% lightness steps in dark mode, based on Atlassian's dark hex steps ([inferred] in DC-L04-13).",
+   "sources": [
+    "S-L04-017",
+    "S-L04-069"
+   ]
+  },
+  {
+   "id": "found.elevation.stacking",
+   "name": "Stacking order (z-index layers)",
+   "layer": "found",
+   "parent": "found.elevation",
+   "definition": "The named order in which overlapping layers stack (sticky headers, dropdowns, scrims, modals, popovers, toasts). L03 and L04 each decided this; the builder keeps one scale.",
+   "cards": [
+    "DC-L04-14",
+    "DC-L03-23"
+   ],
+   "dtcg": "number (no layer type) (L07 A3)",
+   "platform": "A web concept; native platforms manage window and sheet stacking themselves, and the web top layer (`popover`, `dialog`) reduces the need for z-index (DC-L04-14, DC-L03-23).",
+   "default": "Semantic names spaced by 100, in the order base, sticky, dropdown, overlay or scrim, modal, popover or tooltip, toast, skip link (DC-L04-14); 6-8 named layers with gaps of 100 so new layers can slot in (DC-L03-23).",
+   "sources": [
+    "S-L04-022",
+    "S-L04-050",
+    "S-L03-037"
+   ]
+  },
+  {
+   "id": "found.elevation.materials",
+   "name": "Translucent materials",
+   "layer": "found",
+   "parent": "found.elevation",
+   "definition": "Glass, blur and vibrancy effects, where they are used, and the opaque fallbacks for users who reduce transparency.",
+   "cards": [
+    "DC-L04-15",
+    "DC-L10-12",
+    "DC-L04-16"
+   ],
+   "dtcg": "no DTCG type for blur or material; needs an extension (L07 A5, [inferred]). Figma holds blur in effect styles (L07 A6)",
+   "platform": "iOS uses `glassEffect` and `GlassEffectContainer`; Windows uses Mica and Acrylic; the web uses `backdrop-filter` with feature detection (DC-L04-15, DC-L04-16). visionOS window glass cannot be modified; Liquid Glass follows the iOS 27 transparency slider, Reduce Transparency and Increase Contrast (DC-L10-12).",
+   "default": "Opaque by default on web products; glass only for floating navigation or overlays (DC-L04-15); the platform material for chrome on native (glass on Apple, Mica on Windows, tonal on Android) and solid surfaces on web (DC-L10-12); every translucent token ships with an opaque twin (DC-L04-16).",
+   "sources": [
+    "S-L04-011",
+    "S-L04-038",
+    "S-L10-008",
+    "S-L10-032"
+   ]
+  },
+  {
+   "id": "found.elevation.opacity",
+   "name": "Opacity, state layers and scrims",
+   "layer": "found",
+   "parent": "found.elevation",
+   "definition": "The opacity values used for state overlays and disabled content, and the dimming layer behind modal content.",
+   "cards": [
+    "DC-L04-17",
+    "DC-L04-18"
+   ],
+   "related": [
+    "DC-L01-17"
+   ],
+   "dtcg": "number (opacity) and color with alpha (L07 A3)",
+   "platform": "Android ripples use the state-layer model; iOS mostly uses system highlight dimming (DC-L04-17); Android M3 uses the scrim color role and Windows uses Smoke (DC-L04-18).",
+   "default": "Material's numbers as a baseline (0.08, 0.10, 0.10, 0.16, 0.38), stronger overlays in dark mode (DC-L04-17); scrim 40-50% near-black in light mode and 50-60% in dark mode, tinted toward the neutral hue (DC-L04-18).",
+   "sources": [
+    "S-L04-003",
+    "S-L04-010",
+    "S-L04-070"
+   ]
+  },
+  {
+   "id": "found.motion",
+   "name": "Motion",
+   "layer": "found",
+   "parent": "found",
+   "children": [
+    "found.motion.personality",
+    "found.motion.duration",
+    "found.motion.easing",
+    "found.motion.springs",
+    "found.motion.interruptibility",
+    "found.motion.reduced",
+    "found.motion.platform"
+   ],
+   "definition": "How the interface moves: motion personality, duration and easing scales, springs, interruptibility, reduced motion, and how motion differs by platform and device.",
+   "dtcg": "duration, cubicBezier, transition; no spring, keyframe or choreography type (DTCG issue #429 open), so springs need an extension (L07 A3, A5)",
+   "l09": "Shared (L09-A1.5): core durations in the 100-300ms band in all 16 systems with motion tokens, a 6-8 step ladder, ease-out for entering. Diverges (L09-A2.7): no motion (GOV.UK), bezier ladders (most), springs (Material, Apple, Airbnb, Atlassian, Paste), productive and expressive modes (Carbon, Material).",
+   "sources": [
+    "S-L04-003",
+    "S-L04-014",
+    "S-L07-048",
+    "S-L09-105"
+   ]
+  },
+  {
+   "id": "found.motion.personality",
+   "name": "Motion personality and model",
+   "layer": "found",
+   "parent": "found.motion",
+   "definition": "How motion feels (quick and invisible or physical and playful), whether there are productive and expressive modes, and where expressive motion is allowed.",
+   "cards": [
+    "DC-L04-19",
+    "DC-L06-10",
+    "DC-L09-06"
+   ],
+   "members": [
+    "P32"
+   ],
+   "dtcg": "cubicBezier, duration, and a spring extension (L07 A5)",
+   "platform": "iOS system components carry Apple's physics; M3 components read the theme's MotionScheme (DC-L04-19). Springs are native in SwiftUI and Compose; CSS needs `linear()` approximations or JavaScript (DC-L06-10, DC-L09-06).",
+   "default": "Productive motion for 90% of interactions and expressive for 1-3 hero moments per flow, with bounce at or below 0.2 (damping ratio 0.8 or higher) (DC-L04-19); 7 durations from 50 to 500ms, ease-out enter, ease-in exit, and an optional expressive mode that uses springs for spatial moves only (DC-L09-06).",
+   "l09": "Diverges (L09-A2.7) as above.",
+   "sources": [
+    "S-L04-033",
+    "S-L06-002",
+    "S-L09-105"
+   ]
+  },
+  {
+   "id": "found.motion.duration",
+   "name": "Duration scale",
+   "layer": "found",
+   "parent": "found.motion",
+   "definition": "The named ladder of animation durations.",
+   "cards": [
+    "DC-L04-20"
+   ],
+   "dtcg": "duration (ms or s; Figma imports seconds only) (L07 A3, A7)",
+   "platform": "On iOS prefer springs with a perceptual duration; WinUI uses 83, 167 and 250ms control defaults (DC-L04-20).",
+   "default": "Six semantic steps: instant 0, micro 100, short 150-200, medium 250-300, long 400-500, extra 700; exits about 20-35% shorter than enters (DC-L04-20).",
+   "l09": "Shared (L09-A1.5): builder durations 50, 100, 150, 200, 300, 400, 500.",
+   "sources": [
+    "S-L04-013",
+    "S-L04-037"
+   ]
+  },
+  {
+   "id": "found.motion.easing",
+   "name": "Easing set",
+   "layer": "found",
+   "parent": "found.motion",
+   "definition": "The named timing curves for standard, entering, exiting and linear motion.",
+   "cards": [
+    "DC-L04-21"
+   ],
+   "dtcg": "cubicBezier (x in [0,1], y unbounded so overshoot is allowed); Figma easing variables can also hold springs (L07 A3, A6)",
+   "platform": "Android interpolators can be paths; iOS prefers springs; the web supports `cubic-bezier()` and `linear()` (DC-L04-21).",
+   "default": "Four curves: standard (0.2, 0, 0, 1), enter (0, 0, 0, 1) or (0.05, 0.7, 0.1, 1), exit (0.3, 0, 1, 1), and linear only for spinners and progress (DC-L04-21).",
+   "l09": "Shared (L09-A1.5): enter (0, 0, 0.2, 1) or (0.2, 0, 0, 1), exit (0.4, 0, 1, 1).",
+   "sources": [
+    "S-L04-003",
+    "S-L04-013",
+    "S-L04-064"
+   ]
+  },
+  {
+   "id": "found.motion.springs",
+   "name": "Springs and physics",
+   "layer": "found",
+   "parent": "found.motion",
+   "definition": "Spring-based motion defined by damping and stiffness (or duration and bounce) instead of fixed curves.",
+   "cards": [
+    "DC-L04-22"
+   ],
+   "dtcg": "no DTCG spring type; store as an extension and pre-sample to `linear()` for CSS (DC-L04-22, L07 A5)",
+   "platform": "Compose `spring(dampingRatio, stiffness)`; Android Views use DynamicAnimation; SwiftUI `Spring(duration:bounce:)` (DC-L04-22).",
+   "default": "Store springs as damping ratio and stiffness plus a derived duration and bounce for Apple, with pre-sampled `linear()` for CSS; critically damped springs for UI transitions (DC-L04-22).",
+   "sources": [
+    "S-L04-060",
+    "S-L04-064",
+    "S-L07-033"
+   ]
+  },
+  {
+   "id": "found.motion.interruptibility",
+   "name": "Enter and exit asymmetry and interruptibility",
+   "layer": "found",
+   "parent": "found.motion",
+   "definition": "How exits differ from enters and what happens when a transition is interrupted midway.",
+   "cards": [
+    "DC-L04-24"
+   ],
+   "dtcg": "duration and cubicBezier; the transition composite does not say which property animates (DTCG issue #103) (L07 A3)",
+   "platform": "SwiftUI springs retarget natively; CSS transitions reverse from their current value while keyframe animations do not ([inferred] in DC-L04-24).",
+   "default": "Exit about 70-80% of the enter duration with the accelerate curve; never block input during a transition longer than about 100ms ([inferred] in DC-L04-24).",
+   "sources": [
+    "S-L04-013",
+    "S-L04-037"
+   ]
+  },
+  {
+   "id": "found.motion.reduced",
+   "name": "Reduced motion",
+   "layer": "found",
+   "parent": "found.motion",
+   "definition": "What happens to motion when the user asks the OS to reduce it.",
+   "cards": [
+    "DC-L04-25"
+   ],
+   "dtcg": "duration and cubicBezier values per a `motion` resolver context (L07 Part C)",
+   "platform": "Every major OS has a setting (iOS and macOS Accessibility > Motion, Windows Animation effects, Android Remove animations) and the web has `prefers-reduced-motion` (DC-L04-25). Motion is optional, never the only signal, and never flashes more than three times a second (L14 invariant I-13).",
+   "default": "Treat WCAG 2.3.3 as a requirement even though it is AAA; build reduced motion as a token mode; keep feedback such as color and opacity and remove movement (DC-L04-25).",
+   "l09": "Shared (L09-A1.5): reduced motion swaps moves for fades.",
+   "sources": [
+    "S-L04-049",
+    "S-L04-067",
+    "S-L14-081"
+   ]
+  },
+  {
+   "id": "found.motion.platform",
+   "name": "Motion by platform and device class",
+   "layer": "found",
+   "parent": "found.motion",
+   "definition": "Which transitions the OS owns (navigation, back, sheets), which motion the brand owns, and how the motion budget shrinks on constrained devices.",
+   "cards": [
+    "DC-L10-14",
+    "DC-L14-08"
+   ],
+   "dtcg": "values per `platform` and `context` resolver modifiers (L07 A4)",
+   "platform": "watchOS layout animations have built-in easing that cannot be turned off; Flutter lacks the M3 motion physics system (DC-L10-14). Cars ban on-screen animation in templated categories; visionOS needs slower, calmer motion in the periphery (DC-L14-08, L14 Part 4).",
+   "default": "OS-owned navigation transitions and back behavior, shared brand motion for in-content micro-interactions as springs, system haptics only (DC-L10-14); the motion budget shrinks as attention narrows or the display wraps the body (DC-L14-08).",
+   "sources": [
+    "S-L10-024",
+    "S-L10-088",
+    "S-L14-032",
+    "S-L14-079"
+   ]
+  },
+  {
+   "id": "found.sensory",
+   "name": "Sound and haptics",
+   "layer": "found",
+   "parent": "found",
+   "children": [
+    "found.sensory.haptics",
+    "found.sensory.sound"
+   ],
+   "definition": "Non-visual feedback: haptic patterns and UI sounds (earcons).",
+   "dtcg": "no DTCG type for haptic or sound assets; needs an extension or asset references (L07 A5, BOARD note from L05)",
+   "sources": [
+    "S-L04-043",
+    "S-L04-044"
+   ]
+  },
+  {
+   "id": "found.sensory.haptics",
+   "name": "Haptic vocabulary",
+   "layer": "found",
+   "parent": "found.sensory",
+   "definition": "The small set of semantic haptic events (success, warning, error, selection, toggle, impact) and when they fire.",
+   "cards": [
+    "DC-L04-26"
+   ],
+   "dtcg": "no DTCG type; map semantic names to platform haptic APIs (DC-L04-26)",
+   "platform": "Android `performHapticFeedback` respects the user's touch-feedback setting and needs no permission, while `VibrationEffect` does (DC-L04-26). Platform haptic vocabularies are compared in L04 table G1.",
+   "default": "At most about 6 semantic events, used sparingly (DC-L04-26).",
+   "sources": [
+    "S-L04-045",
+    "S-L04-046"
+   ]
+  },
+  {
+   "id": "found.sensory.sound",
+   "name": "UI sounds",
+   "layer": "found",
+   "parent": "found.sensory",
+   "definition": "Whether the product plays sounds for events, and which ones.",
+   "cards": [
+    "DC-L04-27"
+   ],
+   "dtcg": "no DTCG type; asset references (L07 A5)",
+   "platform": "iOS apps must pick the right audio session category so they respect the silent switch (DC-L04-27).",
+   "default": "No UI sounds on web and productivity apps; sounds only for rare, meaningful events on mobile, games or spatial platforms, always with a mute option (DC-L04-27).",
+   "sources": [
+    "S-L04-072",
+    "S-L04-074"
+   ]
+  },
+  {
+   "id": "found.icon",
+   "name": "Iconography",
+   "layer": "found",
+   "parent": "found",
+   "children": [
+    "found.icon.source",
+    "found.icon.style",
+    "found.icon.construction",
+    "found.icon.sizes",
+    "found.icon.states",
+    "found.icon.labels",
+    "found.icon.color",
+    "found.icon.naming",
+    "found.icon.delivery",
+    "found.icon.tiers",
+    "found.icon.platform"
+   ],
+   "definition": "The UI icon set: where it comes from, its style and construction, sizes, states, color, pairing with labels, naming, tiers beyond UI icons, delivery, and how it maps to platform symbol sets.",
+   "dtcg": "no DTCG type for icons, images or aspect ratios; the builder needs its own asset-reference convention (BOARD note from L05; file type is only a future DTCG candidate, L07 A5)",
+   "sources": [
+    "S-L05-001",
+    "S-L05-003",
+    "S-L05-010"
+   ]
+  },
+  {
+   "id": "found.icon.source",
+   "name": "Icon library strategy",
+   "layer": "found",
+   "parent": "found.icon",
+   "definition": "Whether the system adopts an existing icon library, extends one, or draws its own.",
+   "cards": [
+    "DC-L05-01"
+   ],
+   "dtcg": "no DTCG type for icons, images or aspect ratios; the builder needs its own asset-reference convention (BOARD note from L05; file type is only a future DTCG candidate, L07 A5)",
+   "platform": "Cross-platform products often use SF Symbols on iOS and a matching set elsewhere; Fluent ships one set to Android, iOS, macOS, Flutter and SVG (DC-L05-01).",
+   "default": "The platform-native set on native apps and one open-source set on web; custom icons only for domain concepts the library lacks (DC-L05-01).",
+   "sources": [
+    "S-L05-001",
+    "S-L05-002",
+    "S-L05-006"
+   ]
+  },
+  {
+   "id": "found.icon.style",
+   "name": "Icon style and brand match",
+   "layer": "found",
+   "parent": "found.icon",
+   "definition": "Outline, filled or duotone, rounded or sharp, and how the icon style reflects the brand and the type.",
+   "cards": [
+    "DC-L05-02",
+    "DC-L06-13"
+   ],
+   "dtcg": "no DTCG type for icons, images or aspect ratios; the builder needs its own asset-reference convention (BOARD note from L05; file type is only a future DTCG candidate, L07 A5)",
+   "platform": "On iOS the component chooses the variant (tab bars prefer fill, toolbars outline) (DC-L05-02); SF Symbols and Material Symbols carry platform identity ([inferred] in DC-L06-13).",
+   "default": "Outlined at rest, filled when selected; corner style matched to the radius family (DC-L05-02); icon stroke matched to the body text stem weight at the icon's size (DC-L06-13).",
+   "sources": [
+    "S-L05-003",
+    "S-L05-010",
+    "S-L06-088"
+   ]
+  },
+  {
+   "id": "found.icon.construction",
+   "name": "Stroke, grid and keylines",
+   "layer": "found",
+   "parent": "found.icon",
+   "definition": "The construction rules for drawing icons: stroke weight, corners and terminals, the pixel grid, keyline shapes, live area and padding.",
+   "cards": [
+    "DC-L05-03",
+    "DC-L05-04"
+   ],
+   "members": [
+    "P28"
+   ],
+   "dtcg": "dimension for keylines and stroke width (DC-L15-10); the drawing itself is an asset (BOARD note from L05)",
+   "platform": "SF Symbols weight follows the adjacent font weight; Material Symbols expose weight through `font-variation-settings` (DC-L05-03); SF custom symbols use Apple's template with margins (DC-L05-04).",
+   "default": "Stroke so icon weight visually equals body text weight, roughly 1.5px for 14-16px regular text (DC-L05-03); Material's 24/20/2 construction unless the master size is 16 or 32, pixel-aligned at the smallest shipped size (DC-L05-04).",
+   "sources": [
+    "S-L05-003",
+    "S-L05-010",
+    "S-L05-017"
+   ]
+  },
+  {
+   "id": "found.icon.sizes",
+   "name": "Icon sizes and optical sizing",
+   "layer": "found",
+   "parent": "found.icon",
+   "definition": "The icon size ladder and how icon size pairs with adjacent text.",
+   "cards": [
+    "DC-L05-05"
+   ],
+   "related": [
+    "DC-L03-08"
+   ],
+   "members": [
+    "P56",
+    "P60"
+   ],
+   "dtcg": "dimension (L07 A3)",
+   "platform": "Material uses a 48dp target for a 24dp icon, 40dp for 20dp when mouse and keyboard are primary; Carbon touch targets at least 44px; SF Symbols scale with text (DC-L05-05).",
+   "default": "16, 20 and 24 (plus 12 and 32 if needed), paired to the adjacent text's line height (DC-L05-05).",
+   "sources": [
+    "S-L05-003",
+    "S-L05-010",
+    "S-L05-016"
+   ]
+  },
+  {
+   "id": "found.icon.states",
+   "name": "Icon states",
+   "layer": "found",
+   "parent": "found.icon",
+   "definition": "How icons show selected, active, disabled and emphasized states.",
+   "cards": [
+    "DC-L05-06"
+   ],
+   "dtcg": "color (state colors come from `found.color.states`)",
+   "platform": "On iOS the system updates standard components, so selected artwork is usually not shipped; on web a FILL-axis variable font can animate the swap (DC-L05-06).",
+   "default": "Outline at rest, filled plus accent color when selected (two cues, so it survives color blindness); hover and pressed feedback on the container, not the icon (DC-L05-06).",
+   "sources": [
+    "S-L05-003",
+    "S-L05-012"
+   ]
+  },
+  {
+   "id": "found.icon.labels",
+   "name": "Icons with labels",
+   "layer": "found",
+   "parent": "found.icon",
+   "definition": "When icons need text, and how icon and label align and space.",
+   "cards": [
+    "DC-L05-07"
+   ],
+   "related": [
+    "DC-L08-08"
+   ],
+   "dtcg": "dimension for icon-to-label gap (L07 A3)",
+   "platform": "Apple's HIG lists standard SF Symbols for common actions (trash, xmark, checkmark) that can go unlabeled in toolbars (DC-L05-07).",
+   "default": "Label everything in navigation; icon-only allowed for about a dozen universal actions (search, close, more, add, delete, edit, share, settings), each with an accessible name and tooltip (DC-L05-07).",
+   "sources": [
+    "S-L05-003",
+    "S-L05-010",
+    "S-L05-027"
+   ]
+  },
+  {
+   "id": "found.icon.color",
+   "name": "Icon color and rendering mode",
+   "layer": "found",
+   "parent": "found.icon",
+   "definition": "Which colors icons use and whether multicolor or hierarchical rendering is allowed.",
+   "cards": [
+    "DC-L05-08"
+   ],
+   "dtcg": "color (L07 A3)",
+   "platform": "System colors let SF Symbols adapt to dark mode, vibrancy and accessibility settings automatically; Material recommends grade -25 for light icons on dark backgrounds (DC-L05-08).",
+   "default": "One neutral icon color aliased to secondary text, semantic colors only on status icons, no decorative multicolor in UI chrome (DC-L05-08).",
+   "sources": [
+    "S-L05-010",
+    "S-L05-014"
+   ]
+  },
+  {
+   "id": "found.icon.naming",
+   "name": "Icon metaphors, naming and localization",
+   "layer": "found",
+   "parent": "found.icon",
+   "definition": "How icons are named, which metaphors are used, and how icons behave in right-to-left locales and other markets.",
+   "cards": [
+    "DC-L05-09"
+   ],
+   "dtcg": "no DTCG type for icons, images or aspect ratios; the builder needs its own asset-reference convention (BOARD note from L05; file type is only a future DTCG candidate, L07 A5)",
+   "platform": "SF Symbols 8 adds semantic search, so designers find symbols by describing them (DC-L05-09).",
+   "default": "Name assets by shape, expose a function-alias layer in the component API, record right-to-left behavior per icon, and test metaphors in each launch market (DC-L05-09).",
+   "sources": [
+    "S-L05-006",
+    "S-L05-012",
+    "S-L05-018"
+   ]
+  },
+  {
+   "id": "found.icon.delivery",
+   "name": "Icon delivery",
+   "layer": "found",
+   "parent": "found.icon",
+   "definition": "How icons ship to each platform: source format, generated packages, file naming.",
+   "cards": [
+    "DC-L05-10"
+   ],
+   "dtcg": "no DTCG type for icons, images or aspect ratios; the builder needs its own asset-reference convention (BOARD note from L05; file type is only a future DTCG candidate, L07 A5)",
+   "platform": "iOS takes vector PDF or SVG or custom SF Symbols (PNG needs @2x and @3x); Android uses vector drawables; web uses inline SVG with `fill=\"currentColor\"` (DC-L05-10).",
+   "default": "SVG as source of truth, generated per-framework components and native packages, files named `<name>_<size>_<style>`, with size and color controlled by tokens rather than baked in (DC-L05-10).",
+   "sources": [
+    "S-L05-010",
+    "S-L05-012",
+    "S-L05-013"
+   ]
+  },
+  {
+   "id": "found.icon.tiers",
+   "name": "Icon tiers beyond UI icons",
+   "layer": "found",
+   "parent": "found.icon",
+   "definition": "Pictograms and spot icons: larger, more detailed icon tiers used on marketing and onboarding surfaces.",
+   "cards": [
+    "DC-L05-11"
+   ],
+   "dtcg": "no DTCG type for icons, images or aspect ratios; the builder needs its own asset-reference convention (BOARD note from L05; file type is only a future DTCG candidate, L07 A5)",
+   "platform": "Mostly web and marketing; native apps use SF Symbols at large scales or custom symbols ([inferred] in DC-L05-11).",
+   "default": "Add a pictogram tier only with marketing surfaces, drawn with the UI icon's stroke logic scaled up (IBM and Dropbox) (DC-L05-11).",
+   "sources": [
+    "S-L05-017",
+    "S-L05-049"
+   ]
+  },
+  {
+   "id": "found.icon.platform",
+   "name": "Icons across platforms",
+   "layer": "found",
+   "parent": "found.icon",
+   "definition": "Which actions use each platform's own glyphs and which use the brand icon set.",
+   "cards": [
+    "DC-L10-25"
+   ],
+   "dtcg": "no DTCG type for icons, images or aspect ratios; the builder needs its own asset-reference convention (BOARD note from L05; file type is only a future DTCG candidate, L07 A5)",
+   "platform": "Share, back, more and settings glyphs differ between iOS and Android and users recognize their own platform's version ([inferred] in DC-L10-25).",
+   "default": "Platform-standard glyphs for system actions (share, back, close, more, search, settings) and a brand icon set for product-specific concepts (DC-L10-25).",
+   "sources": [
+    "S-L10-038",
+    "S-L10-044"
+   ]
+  },
+  {
+   "id": "found.imagery",
+   "name": "Imagery, illustration and brand marks",
+   "layer": "found",
+   "parent": "found",
+   "children": [
+    "found.imagery.photo",
+    "found.imagery.ratios",
+    "found.imagery.text-on-image",
+    "found.imagery.loading",
+    "found.imagery.illustration",
+    "found.imagery.rich-media",
+    "found.imagery.motifs",
+    "found.imagery.brand-marks"
+   ],
+   "definition": "Photography, image ratios and loading, text over images, illustration, rich media, graphic motifs, and the brand's marks inside the product (app icon, logo, favicon).",
+   "dtcg": "no DTCG type for icons, images or aspect ratios; the builder needs its own asset-reference convention (BOARD note from L05; file type is only a future DTCG candidate, L07 A5)",
+   "sources": [
+    "S-L05-011",
+    "S-L05-047",
+    "S-L06-003"
+   ]
+  },
+  {
+   "id": "found.imagery.photo",
+   "name": "Photography art direction",
+   "layer": "found",
+   "parent": "found.imagery",
+   "definition": "The rules for choosing and treating photos: subjects, perspective, light, color treatment and casting.",
+   "cards": [
+    "DC-L05-14"
+   ],
+   "dtcg": "no DTCG type for icons, images or aspect ratios; the builder needs its own asset-reference convention (BOARD note from L05; file type is only a future DTCG candidate, L07 A5)",
+   "platform": "Photos ship as JPEG or HEIC on Apple platforms with an embedded color profile (DC-L05-14).",
+   "default": "Write a one-paragraph photo brief (subjects, perspective, light, color treatment, casting) before commissioning or buying stock (DC-L05-14).",
+   "sources": [
+    "S-L05-011",
+    "S-L05-013",
+    "S-L05-036"
+   ]
+  },
+  {
+   "id": "found.imagery.ratios",
+   "name": "Aspect ratios and cropping",
+   "layer": "found",
+   "parent": "found.imagery",
+   "definition": "The allowed image aspect ratios and which component slot uses which.",
+   "cards": [
+    "DC-L05-15"
+   ],
+   "dtcg": "no aspect-ratio type (ratio is only a future DTCG candidate) (L07 A5)",
+   "platform": "Web sets `width` and `height` or CSS `aspect-ratio` to reserve space; Apple bitmaps need @2x and @3x on iOS (DC-L05-15).",
+   "default": "3-5 ratios (16:9, 3:2, 4:3, 1:1, optionally 2:1), one per component slot (DC-L05-15).",
+   "sources": [
+    "S-L05-047",
+    "S-L05-068"
+   ]
+  },
+  {
+   "id": "found.imagery.text-on-image",
+   "name": "Text and UI on images",
+   "layer": "found",
+   "parent": "found.imagery",
+   "definition": "How text stays legible when placed over photos: overlays, scrims, protection gradients.",
+   "cards": [
+    "DC-L05-16"
+   ],
+   "members": [
+    "P66"
+   ],
+   "dtcg": "color with alpha or gradient for scrims (L07 A3)",
+   "default": "Text beside images by default; when overlay is required (heroes), a scrim token tested for contrast against the worst-case region (DC-L05-16).",
+   "sources": [
+    "S-L05-072",
+    "S-L05-083"
+   ]
+  },
+  {
+   "id": "found.imagery.loading",
+   "name": "Image loading and placeholders",
+   "layer": "found",
+   "parent": "found.imagery",
+   "definition": "What shows while images load or when they fail.",
+   "cards": [
+    "DC-L05-17"
+   ],
+   "dtcg": "color (placeholder fill)",
+   "platform": "On the web, reserve space so layout shift (CLS) stays at or below 0.1 for 75% of visits (DC-L05-17).",
+   "default": "Always reserve the final box; a neutral placeholder fill for images, skeletons only for container components (DC-L05-17).",
+   "sources": [
+    "S-L05-068",
+    "S-L05-071"
+   ]
+  },
+  {
+   "id": "found.imagery.illustration",
+   "name": "Illustration style and tiers",
+   "layer": "found",
+   "parent": "found.imagery",
+   "definition": "The illustration style (derived from brand, icon stroke and radius), the character system if any, and the tiers where illustrations appear (hero, spot, empty state, pattern).",
+   "cards": [
+    "DC-L05-19",
+    "DC-L06-12",
+    "DC-L05-20"
+   ],
+   "dtcg": "no DTCG type for icons, images or aspect ratios; the builder needs its own asset-reference convention (BOARD note from L05; file type is only a future DTCG candidate, L07 A5)",
+   "platform": "Apple app icons prefer illustration to photos (DC-L05-19); animated illustrations have format and performance costs ([inferred] in DC-L06-12).",
+   "default": "Derive illustration geometry from the icon stroke, corner radius and brand palette, with one primary style (DC-L05-19); one style used in empty, error, success and onboarding states, with humor restricted in errors (DC-L06-12); neutral spots for routine empty states, colorful spots only for first run and celebration, hero work kept in marketing (DC-L05-20).",
+   "sources": [
+    "S-L05-049",
+    "S-L05-057",
+    "S-L06-014",
+    "S-L06-027"
+   ]
+  },
+  {
+   "id": "found.imagery.rich-media",
+   "name": "Emoji, 3D, animated icons and Lottie",
+   "layer": "found",
+   "parent": "found.imagery",
+   "definition": "Rich media assets beyond static images: emoji, stickers, 3D, animated icons and Lottie files.",
+   "cards": [
+    "DC-L05-21"
+   ],
+   "dtcg": "no DTCG type for icons, images or aspect ratios; the builder needs its own asset-reference convention (BOARD note from L05; file type is only a future DTCG candidate, L07 A5)",
+   "platform": "Apple asks to apply symbol animations judiciously and consider the app's tone (DC-L05-21).",
+   "default": "Animate icons only to confirm an action or show ongoing status; keep 3D and Lottie for onboarding, celebration and marketing (DC-L05-21).",
+   "sources": [
+    "S-L05-010",
+    "S-L05-062",
+    "S-L05-090"
+   ]
+  },
+  {
+   "id": "found.imagery.motifs",
+   "name": "Graphic devices and motifs",
+   "layer": "found",
+   "parent": "found.imagery",
+   "definition": "Signature shapes, patterns, crops, frames and gradients carried over from the brand identity.",
+   "cards": [
+    "DC-L06-11"
+   ],
+   "dtcg": "no DTCG type for icons, images or aspect ratios; the builder needs its own asset-reference convention (BOARD note from L05; file type is only a future DTCG candidate, L07 A5)",
+   "platform": "Apple puts brand content on the welcome or onboarding screen, not the launch screen (DC-L06-11).",
+   "default": "Graphic devices only on expressive surfaces (marketing, onboarding, empty states, hero moments) (DC-L06-11).",
+   "sources": [
+    "S-L06-008",
+    "S-L06-024",
+    "S-L06-030"
+   ]
+  },
+  {
+   "id": "found.imagery.brand-marks",
+   "name": "App icon, logo and favicon",
+   "layer": "found",
+   "parent": "found.imagery",
+   "definition": "The brand's marks inside the product: the app icon system per platform, logo placement, and favicons.",
+   "cards": [
+    "DC-L05-12",
+    "DC-L05-13"
+   ],
+   "dtcg": "no DTCG type for icons, images or aspect ratios; the builder needs its own asset-reference convention (BOARD note from L05; file type is only a future DTCG candidate, L07 A5)",
+   "platform": "Apple app icons are layered for Liquid Glass and must stay consistent across appearances; Android uses adaptive icons with a monochrome layer for themed icons (DC-L05-12); SVG favicons work in modern browsers and `.ico` remains for legacy (DC-L05-13).",
+   "default": "One glyph of 1-3 filled shapes on a solid or gradient background, exported as Apple layers, Android foreground, background and monochrome layers, and PWA sizes (DC-L05-12); a symbol-only logo at 24-32px in the app bar, the full lockup on sign-in and marketing (DC-L05-13).",
+   "sources": [
+    "S-L05-011",
+    "S-L05-040",
+    "S-L05-042"
+   ]
+  },
+  {
+   "id": "found.dataviz",
+   "name": "Data visualization",
+   "layer": "found",
+   "parent": "found",
+   "children": [
+    "found.dataviz.scope",
+    "found.dataviz.color",
+    "found.dataviz.anatomy",
+    "found.dataviz.a11y"
+   ],
+   "definition": "Charts as part of the system: which chart types exist, their colors, their anatomy and tokens, and how they stay accessible.",
+   "dtcg": "color (palettes) and the standard text, border and dimension types for chart chrome; no chart-specific types (DC-L05-24)",
+   "sources": [
+    "S-L05-075",
+    "S-L05-077",
+    "S-L05-083"
+   ]
+  },
+  {
+   "id": "found.dataviz.scope",
+   "name": "Chart scope and library",
+   "layer": "found",
+   "parent": "found.dataviz",
+   "definition": "Which chart types the system supports and which chart library it themes.",
+   "cards": [
+    "DC-L05-22"
+   ],
+   "dtcg": "none (scope decision)",
+   "platform": "Web-first in most systems; native apps theme platform chart frameworks with the same tokens ([inferred] in DC-L05-22).",
+   "default": "5-6 chart types (bar, line, area, stacked bar, donut or meter, scatter) plus a KPI big number; theme an existing library rather than building one (DC-L05-22).",
+   "sources": [
+    "S-L05-075",
+    "S-L05-076",
+    "S-L05-078"
+   ]
+  },
+  {
+   "id": "found.dataviz.color",
+   "name": "Data-visualization palettes",
+   "layer": "found",
+   "parent": "found.dataviz",
+   "definition": "Categorical, sequential, diverging and status palettes for charts. L01 summarized this and L05 owns it; both cards live here.",
+   "cards": [
+    "DC-L05-23",
+    "DC-L01-24"
+   ],
+   "dtcg": "color (L07 A3)",
+   "platform": "The same tokens must reach web chart libraries and native chart frameworks; Carbon flips sequential lightness by theme (DC-L05-23); Apple suggests wide color for data and status indicators on P3 displays (DC-L01-24).",
+   "default": "One brand chart color plus grey by default; a 6-8 step categorical sequence in fixed order, ordered for neighbor contrast; one sequential ramp per primary hue and one diverging ramp, per mode (DC-L05-23, DC-L01-24).",
+   "sources": [
+    "S-L05-075",
+    "S-L05-086",
+    "S-L01-024",
+    "S-L01-056"
+   ]
+  },
+  {
+   "id": "found.dataviz.anatomy",
+   "name": "Chart anatomy and tokens",
+   "layer": "found",
+   "parent": "found.dataviz",
+   "definition": "The parts of a chart (axes, gridlines, labels, legends, tooltips) and the tokens they use.",
+   "cards": [
+    "DC-L05-24"
+   ],
+   "dtcg": "existing color, dimension and typography tokens; chart-specific tokens only for marks and interaction states (DC-L05-24)",
+   "platform": "On mobile, Carbon allows a hidden legend behind a \"View legends\" button (DC-L05-24).",
+   "default": "Map chart chrome to existing text and border tokens; add chart tokens only for marks and interaction states (DC-L05-24).",
+   "sources": [
+    "S-L05-083",
+    "S-L05-091"
+   ]
+  },
+  {
+   "id": "found.dataviz.a11y",
+   "name": "Chart accessibility",
+   "layer": "found",
+   "parent": "found.dataviz",
+   "definition": "How charts work without relying on color and for screen-reader users.",
+   "cards": [
+    "DC-L05-25"
+   ],
+   "dtcg": "none (rules and structure)",
+   "default": "Every chart has a title that states the insight, direct labels or a legend with shape cues, a text summary, and a \"view as table\" option (DC-L05-25).",
+   "sources": [
+    "S-L05-034",
+    "S-L05-035",
+    "S-L05-083"
+   ]
+  },
+  {
+   "id": "found.content",
+   "name": "Content and voice",
+   "layer": "found",
+   "parent": "found",
+   "children": [
+    "found.content.voice",
+    "found.content.tone",
+    "found.content.mechanics",
+    "found.content.microcopy",
+    "found.content.terminology",
+    "found.content.localization",
+    "found.content.readability",
+    "found.content.scannability"
+   ],
+   "definition": "The words in the product: voice, tone by situation, grammar and capitalization, microcopy for components, terminology, localization readiness, readability targets and scannable structure. Voice stays the same across platforms; terminology for platform features adapts (L10 identical-versus-adapt table).",
+   "dtcg": "no DTCG type; content rules are text records and lint configuration (L07 A5, [inferred])",
+   "sources": [
+    "S-L06-014",
+    "S-L06-060",
+    "S-L10-009"
+   ]
+  },
+  {
+   "id": "found.content.voice",
+   "name": "Voice",
+   "layer": "found",
+   "parent": "found.content",
+   "definition": "The brand's consistent personality in words, described as a few traits.",
+   "cards": [
+    "DC-L06-18"
+   ],
+   "dtcg": "no DTCG type; content rules are text records and lint configuration (L07 A5, [inferred])",
+   "platform": "Voice is platform-independent; mechanics may follow platform conventions such as Apple's capitalization (DC-L06-18).",
+   "default": "3-4 traits, each with a \"but not\" and 3 copy examples (DC-L06-18).",
+   "sources": [
+    "S-L06-013",
+    "S-L06-070"
+   ]
+  },
+  {
+   "id": "found.content.tone",
+   "name": "Tone by situation",
+   "layer": "found",
+   "parent": "found.content",
+   "definition": "How the voice shifts by context: errors, success, onboarding, notifications.",
+   "cards": [
+    "DC-L06-19"
+   ],
+   "dtcg": "no DTCG type; content rules are text records and lint configuration (L07 A5, [inferred])",
+   "platform": "Notifications and lock-screen copy need shorter, context-aware tone (DC-L06-19).",
+   "default": "Errors serious, respectful and matter-of-fact; success as warm as the brand allows; humor used sparingly (DC-L06-19).",
+   "sources": [
+    "S-L06-052",
+    "S-L06-060"
+   ]
+  },
+  {
+   "id": "found.content.mechanics",
+   "name": "Grammar, mechanics and capitalization",
+   "layer": "found",
+   "parent": "found.content",
+   "definition": "The house rules for capitalization, contractions, pronouns, punctuation, numbers and dates.",
+   "cards": [
+    "DC-L06-20",
+    "DC-L06-21"
+   ],
+   "dtcg": "no DTCG type; content rules are text records and lint configuration (L07 A5, [inferred])",
+   "platform": "Microsoft reserves capitals for its product names (DC-L06-20); OS locale settings override hard-coded formats ([inferred] in DC-L06-21).",
+   "default": "Sentence case everywhere (DC-L06-20); contractions yes except negative contractions in high-stakes flows, \"you\" for the user, \"we\" sparingly, no exclamation marks in errors (DC-L06-21).",
+   "sources": [
+    "S-L06-047",
+    "S-L06-056",
+    "S-L06-048"
+   ]
+  },
+  {
+   "id": "found.content.microcopy",
+   "name": "Component microcopy",
+   "layer": "found",
+   "parent": "found.content",
+   "definition": "The wording rules each component ships with: button labels, empty-state text, error text, confirmations.",
+   "cards": [
+    "DC-L06-22"
+   ],
+   "dtcg": "no DTCG type; content rules are text records and lint configuration (L07 A5, [inferred])",
+   "platform": "Platform-standard labels (Cancel, OK, Done) follow OS conventions ([inferred] in DC-L06-22).",
+   "default": "Every component spec ships its microcopy rules with examples (DC-L06-22).",
+   "sources": [
+    "S-L06-051",
+    "S-L06-052"
+   ]
+  },
+  {
+   "id": "found.content.terminology",
+   "name": "Terminology and inclusive language",
+   "layer": "found",
+   "parent": "found.content",
+   "definition": "The word list: preferred terms, banned terms, and inclusive-language rules.",
+   "cards": [
+    "DC-L06-23"
+   ],
+   "dtcg": "no DTCG type; content rules are text records and lint configuration (L07 A5, [inferred])",
+   "platform": "Platform terms differ by input method, such as tap versus click ([inferred] in DC-L06-23).",
+   "default": "A 20-50 term glossary from day one, with copy linted against it ([inferred] in DC-L06-23).",
+   "sources": [
+    "S-L06-046",
+    "S-L06-054"
+   ]
+  },
+  {
+   "id": "found.content.localization",
+   "name": "Localization readiness",
+   "layer": "found",
+   "parent": "found.content",
+   "definition": "Rules that let the UI survive translation: text expansion, right-to-left, locale formats.",
+   "cards": [
+    "DC-L06-24"
+   ],
+   "dtcg": "no DTCG type; content rules are text records and lint configuration (L07 A5, [inferred])",
+   "platform": "The OS supplies fallback fonts per script; test the brand face against them ([inferred] in DC-L06-24).",
+   "default": "Never fix a label width to English length; budget 2-3x for labels under 10 characters (DC-L06-24).",
+   "sources": [
+    "S-L06-101",
+    "S-L06-050"
+   ]
+  },
+  {
+   "id": "found.content.readability",
+   "name": "Readability and plain language",
+   "layer": "found",
+   "parent": "found.content",
+   "definition": "Reading-level targets and length limits for labels and messages.",
+   "cards": [
+    "DC-L13-13"
+   ],
+   "dtcg": "no DTCG type; content rules are text records and lint configuration (L07 A5, [inferred])",
+   "platform": "Avoid platform-specific verbs such as tap and click in shared strings ([inferred] in DC-L13-13).",
+   "default": "Grade 6-8 for consumer products and 10-12 for expert tools; button labels 2-4 words, verb first (DC-L13-13).",
+   "sources": [
+    "S-L13-036",
+    "S-L13-091"
+   ]
+  },
+  {
+   "id": "found.content.scannability",
+   "name": "Content hierarchy for scanning",
+   "layer": "found",
+   "parent": "found.content",
+   "definition": "How content is structured so people can scan it: headings, front-loading, bold terms, lists.",
+   "cards": [
+    "DC-L13-04"
+   ],
+   "dtcg": "no DTCG type; content rules are text records and lint configuration (L07 A5, [inferred])",
+   "platform": "The same on all platforms; mobile shortens lines and raises heading frequency ([inferred] in DC-L13-04).",
+   "default": "A heading for every section, front-loaded first paragraphs, sparing bold, bullets for lists of three or more (DC-L13-04).",
+   "sources": [
+    "S-L13-062"
+   ]
+  },
+  {
+   "id": "found.a11y",
+   "name": "Accessibility",
+   "layer": "found",
+   "parent": "found",
+   "children": [
+    "found.a11y.settings"
+   ],
+   "definition": "The conformance target, who owns which accessibility guarantees, and the OS accessibility settings the system must honor. Specific accessibility rules live with the foundation they bound: contrast (`found.color.contrast`), text scaling (`found.type.scaling`), reduced motion (`found.motion.reduced`), targets (`found.interaction.targets`), focus (`found.interaction.focus`), charts (`found.dataviz.a11y`).",
+   "cards": [
+    "DC-L11-19"
+   ],
+   "related": [
+    "DC-L13-14",
+    "DC-L14-14"
+   ],
+   "dtcg": "none for the program; accessibility modes are resolver contexts (L07 Part C)",
+   "platform": "Native targets have their own guidance (Apple HIG, Material) (DC-L11-19). WCAG 3 is still a draft, so WCAG 2.2 is the enforceable target (BOARD note from L01).",
+   "default": "WCAG 2.2 AA; the system guarantees component-level behavior and contrast-safe token pairs, while product teams own page-level criteria and content (DC-L11-19).",
+   "l09": "Shared (L09-A1.11): WCAG AA is the stated floor in all 11 systems that state a target.",
+   "sources": [
+    "S-L11-091",
+    "S-L11-092",
+    "S-L11-093"
+   ]
+  },
+  {
+   "id": "found.a11y.settings",
+   "name": "Platform accessibility settings",
+   "layer": "found",
+   "parent": "found.a11y",
+   "definition": "The OS settings the system must respond to: text size, bold text, increased contrast, reduced transparency, reduced motion, forced colors, screen readers.",
+   "cards": [
+    "DC-L10-16"
+   ],
+   "dtcg": "values per accessibility resolver context (contrast, motion, transparency) (L07 A4)",
+   "platform": "Apple system colors ship light, dark and increased-contrast values in both modes; React Native `PlatformColor` picks up theme and high-contrast changes (DC-L10-16).",
+   "default": "Honor every listed setting, with high contrast and reduced transparency as first-class token modes; never convey a boundary by shadow or translucency alone (DC-L10-16, L14 invariant I-7).",
+   "sources": [
+    "S-L10-010",
+    "S-L10-031",
+    "S-L10-033"
+   ]
+  },
+  {
+   "id": "tok",
+   "name": "Tokens",
+   "layer": "tok",
+   "children": [
+    "tok.tiers",
+    "tok.naming",
+    "tok.coverage",
+    "tok.types",
+    "tok.modes",
+    "tok.themes",
+    "tok.delivery"
+   ],
+   "definition": "The data layer that stores every foundation decision as named values: how tokens are tiered and named, which properties become tokens, their value types, the modes and themes that remap them, and how they are emitted for each platform. The builder's internal model should round-trip losslessly to DTCG 2025.10 plus its Resolver module (L07 Part C, [inferred] in the lane).",
+   "dtcg": "all 13 DTCG 2025.10 types (color, dimension, fontFamily, fontWeight, duration, cubicBezier, number, strokeStyle, border, transition, shadow, gradient, typography) plus builder extensions for string, boolean and spring (L07 A3, Part C)",
+   "l09": "Shared (L09-A1.1): a semantic token layer over raw values in 24 of 25 systems; Tailwind is the only single-tier system.",
+   "sources": [
+    "S-L07-002",
+    "S-L07-004",
+    "S-L09-005"
+   ]
+  },
+  {
+   "id": "tok.tiers",
+   "name": "Token tiers",
+   "layer": "tok",
+   "parent": "tok",
+   "definition": "The layers of indirection: primitives (raw values), semantic tokens (meaning, where theming happens), and optional component tokens.",
+   "cards": [
+    "DC-L07-01",
+    "DC-L07-02"
+   ],
+   "dtcg": "aliases between tiers use `{a.b.c}` or JSON Pointer `$ref`; aliases must share a type and must not form cycles (L07 Part C)",
+   "platform": "Figma: primitives in a hidden collection, semantics in a moded collection (DC-L07-01); web component tokens map to scoped CSS custom properties, native to component style structs ([inferred] in DC-L07-02).",
+   "default": "Two tiers (primitive and semantic), with component tokens added only for components a brand must restyle independently or values reused by 3 or more components (DC-L07-01, DC-L07-02). DC-L01-26 and DC-L02-27 describe the same shape as three tiers with the component tier optional.",
+   "l09": "Shared (L09-A1.1): builder default of 3 tiers with the component tier optional. Component tokens are public in Material, Primer, Carbon and Spectrum, beta in SLDS 2, absent in Atlassian and Polaris (L07 A8).",
+   "sources": [
+    "S-L07-050",
+    "S-L07-100",
+    "S-L07-109",
+    "S-L07-112"
+   ]
+  },
+  {
+   "id": "tok.naming",
+   "name": "Token naming",
+   "layer": "tok",
+   "parent": "tok",
+   "children": [
+    "tok.naming.primitives"
+   ],
+   "definition": "The grammar for semantic token names, the namespace prefix, and the casing and separator rules that transform names per platform.",
+   "cards": [
+    "DC-L07-04",
+    "DC-L07-05",
+    "DC-L07-06"
+   ],
+   "dtcg": "DTCG group paths use `.`; names may not contain `.`, `{`, `}` or start with `$` (L07 Part C)",
+   "platform": "DTCG paths use `.`, Figma `/`, CSS `-` (DC-L07-04); on native the namespace is often a type or module (DC-L07-05); the pipeline applies kebab for CSS, camel for JS, Swift and Kotlin, snake for Android XML (DC-L07-06).",
+   "default": "Semantic grammar `[namespace].category.property.concept?.variant?.state?`, for example `ds.color.bg.accent.hover` (DC-L07-04); a 2-4 letter prefix added only in platform output, with theme and brand never in the name because they are modes (DC-L07-05); lowercase single-word or kebab segments in JSON (DC-L07-06).",
+   "sources": [
+    "S-L07-002",
+    "S-L07-011",
+    "S-L07-036",
+    "S-L07-158"
+   ]
+  },
+  {
+   "id": "tok.naming.primitives",
+   "name": "Primitive naming",
+   "layer": "tok",
+   "parent": "tok.naming",
+   "definition": "How raw values are named: descriptive names, numeric steps, percent-of-base, or t-shirt sizes. Spacing naming (DC-L03-03) is decided here with the general rule.",
+   "cards": [
+    "DC-L07-03",
+    "DC-L03-03"
+   ],
+   "dtcg": "n/a (naming)",
+   "platform": "Names starting with a digit are invalid identifiers in Swift, Kotlin and JS, so transforms must prefix them, for example `blue600` ([inferred] in DC-L07-03).",
+   "default": "Hue plus numeric step for color (50-950 or 0-100), percent-of-base 100-scale for space primitives, t-shirt or role names only for semantic and component sizes (DC-L07-03, DC-L03-03). Avoid ordinal 100-scales where `spacing-200` means 12px (DC-L03-03).",
+   "sources": [
+    "S-L07-003",
+    "S-L07-108",
+    "S-L03-003"
+   ]
+  },
+  {
+   "id": "tok.coverage",
+   "name": "Token coverage",
+   "layer": "tok",
+   "parent": "tok",
+   "definition": "Which properties become tokens and which stay as one-off values.",
+   "cards": [
+    "DC-L07-07"
+   ],
+   "dtcg": "n/a (scope)",
+   "platform": "z-index and breakpoints are web-centric; native uses elevation and size classes ([inferred] in DC-L07-07).",
+   "default": "Tokenize every property that Figma variables can bind and Check designs can lint, plus motion and focus; leave one-off illustration values out (DC-L07-07).",
+   "sources": [
+    "S-L07-013",
+    "S-L07-025"
+   ]
+  },
+  {
+   "id": "tok.types",
+   "name": "Token value types and encoding",
+   "layer": "tok",
+   "parent": "tok",
+   "children": [
+    "tok.types.color",
+    "tok.types.dimension",
+    "tok.types.typography",
+    "tok.types.shadow-border",
+    "tok.types.motion",
+    "tok.types.layout",
+    "tok.types.extensions"
+   ],
+   "definition": "How each kind of value is encoded: color, dimensions and units, typography, shadow and border, motion, and layout. DC-L04-28 decides encoding for shape, depth and motion together and is owned here.",
+   "cards": [
+    "DC-L04-28"
+   ],
+   "dtcg": "the 13 DTCG types; gaps: springs, modes inside the Format, conditional values, string and boolean, percentage and ratio, font style, assets, gradient geometry, text case and decoration, units beyond px and rem (L07 A5)",
+   "platform": "Figma variables cannot hold shadow composites; they become effect styles (DC-L04-28, L07 A7).",
+   "default": "Author in DTCG 2025.10; springs as `{dampingRatio, stiffness}` in `$extensions` on a transition token whose `$value` is a cubic-bezier fallback (DC-L04-28).",
+   "sources": [
+    "S-L07-002",
+    "S-L07-011",
+    "S-L04-003"
+   ]
+  },
+  {
+   "id": "tok.types.color",
+   "name": "Color encoding",
+   "layer": "tok",
+   "parent": "tok.types",
+   "definition": "How color values are written: color space, hex fallback, and which tiers and modes they sit in.",
+   "cards": [
+    "DC-L07-10",
+    "DC-L01-26"
+   ],
+   "dtcg": "color with `colorSpace`, `components`, optional `alpha` and `hex` (L07 A3)",
+   "platform": "Figma imports sRGB and HSL only, so an OKLCH master needs an sRGB and hex export (DC-L07-10); DTCG outputs reach iOS, Android, web and Flutter through generators (DC-L01-26).",
+   "default": "Author primitives in OKLCH or sRGB and always include `hex`; emit sRGB to Figma; P3 only for vivid brand colors (DC-L07-10). Primitives private, semantics public, stored as DTCG 2025.10 with the Resolver for modes (DC-L01-26).",
+   "sources": [
+    "S-L07-003",
+    "S-L07-011",
+    "S-L01-017"
+   ]
+  },
+  {
+   "id": "tok.types.dimension",
+   "name": "Dimension units",
+   "layer": "tok",
+   "parent": "tok.types",
+   "definition": "Which units dimension tokens are stored in and how they translate to pt, dp, epx, px and rem.",
+   "cards": [
+    "DC-L07-11",
+    "DC-L03-26",
+    "DC-L10-08"
+   ],
+   "dtcg": "dimension (px or rem only; no %, em, dp, sp or pt) and number (L07 A3, A5)",
+   "platform": "Export px as pt on iOS and dp on Android 1:1 and rem only on web (DC-L03-26); visionOS points are angular (DC-L10-08); Figma interprets letter-spacing variables as px (DC-L07-11).",
+   "default": "Store px in the source and convert to rem at the web transform step, which keeps Figma import lossless (DC-L07-11, DC-L03-26). DC-L10-08 proposes unitless 4-based numbers instead; this ontology follows px because DTCG dimension requires a unit (see Contradictions).",
+   "sources": [
+    "S-L07-002",
+    "S-L07-011",
+    "S-L03-038",
+    "S-L10-069"
+   ]
+  },
+  {
+   "id": "tok.types.typography",
+   "name": "Typography encoding",
+   "layer": "tok",
+   "parent": "tok.types",
+   "definition": "Whether type is stored as composite styles, atomic tokens, or both, and how it maps to Figma text styles and variables.",
+   "cards": [
+    "DC-L07-12",
+    "DC-L02-27",
+    "DC-L02-28"
+   ],
+   "dtcg": "typography composite plus atomic fontFamily, dimension, fontWeight and number; Figma cannot import the composite as variables (L07 A3, A7)",
+   "platform": "Compose `Typography` maps one-to-one to Material's 15 plus 15 emphasized styles; iOS should map semantic styles to `Font.TextStyle` (DC-L02-27). Fonts must be installed for every editor for string font-family variables to resolve (DC-L02-28).",
+   "default": "Atomic primitives plus semantic typography composites in JSON, plus Figma text styles whose fields are bound to variables (DC-L07-12, DC-L02-28); three tiers: primitives, semantic composites `text.{role}.{size}`, component aliases (DC-L02-27).",
+   "sources": [
+    "S-L07-011",
+    "S-L07-019",
+    "S-L02-005",
+    "S-L02-034"
+   ]
+  },
+  {
+   "id": "tok.types.shadow-border",
+   "name": "Shadow, border and elevation encoding",
+   "layer": "tok",
+   "parent": "tok.types",
+   "definition": "How shadows and borders are stored in JSON and mirrored into Figma effect styles.",
+   "cards": [
+    "DC-L07-13"
+   ],
+   "dtcg": "shadow and border composites, strokeStyle (L07 A3)",
+   "platform": "Figma has no inset, outset or double stroke styles; Android elevation and iOS shadows need custom transforms (DC-L07-13).",
+   "default": "Shadow composites in JSON; Figma effect styles whose color and offset fields are bound to variables so dark mode can swap shadow color (DC-L07-13).",
+   "sources": [
+    "S-L07-002",
+    "S-L07-020"
+   ]
+  },
+  {
+   "id": "tok.types.motion",
+   "name": "Motion encoding",
+   "layer": "tok",
+   "parent": "tok.types",
+   "definition": "How durations, easings and springs are stored and mirrored into Figma timing and easing variables.",
+   "cards": [
+    "DC-L07-14"
+   ],
+   "dtcg": "duration, cubicBezier, transition; springs as an extension (L07 A3, A5)",
+   "platform": "The Figma plugin API stores timing in seconds while the UI shows ms, and the REST API does not yet list timing or easing variables (DC-L07-14).",
+   "default": "3-5 duration tokens and 3-4 easing tokens in DTCG, springs as extensions until DTCG adds a type, mirrored as Figma timing and easing variables (DC-L07-14).",
+   "sources": [
+    "S-L07-013",
+    "S-L07-033",
+    "S-L07-034",
+    "S-L07-040"
+   ]
+  },
+  {
+   "id": "tok.types.layout",
+   "name": "Layout and breakpoint encoding",
+   "layer": "tok",
+   "parent": "tok.types",
+   "definition": "How breakpoints, grids and layout guides are stored: as modes of a breakpoint collection and as grid auto-layout settings.",
+   "cards": [
+    "DC-L07-28"
+   ],
+   "dtcg": "no breakpoint type; dimension and number values per breakpoint context (L07 A5)",
+   "platform": "Figma layout guides are visual aids, while grid auto layout actually reflows content and maps to CSS grid in Dev Mode (DC-L07-28, L07 A6).",
+   "default": "A Breakpoint collection with 3 modes driving spacing and layout-guide variables; grid auto layout for multi-column components (DC-L07-28).",
+   "sources": [
+    "S-L07-024",
+    "S-L07-044"
+   ]
+  },
+  {
+   "id": "tok.types.extensions",
+   "name": "Builder extension types",
+   "layer": "tok",
+   "parent": "tok.types",
+   "definition": "Values the builder needs that DTCG cannot hold: springs, string and boolean values, asset references (icons, images, fonts), aspect ratios, behavior rules, and builder metadata such as style presets and brand personality.",
+   "dtcg": "no DTCG type; stored under `$extensions` (for example `com.figma.type` for booleans) or in sibling files (L07 A5, L13 Part E3, BOARD note from L05)",
+   "sources": [
+    "S-L07-002",
+    "S-L07-011",
+    "S-L07-033"
+   ]
+  },
+  {
+   "id": "tok.modes",
+   "name": "Modes and theming axes",
+   "layer": "tok",
+   "parent": "tok",
+   "definition": "The axes along which semantic tokens take different values (color scheme, contrast, density, brand, breakpoint, platform, device context, motion) and how their combinations are kept manageable. In DTCG these are Resolver modifiers; in Figma, collections and modes.",
+   "cards": [
+    "DC-L07-15",
+    "DC-L11-25",
+    "DC-L07-17",
+    "DC-L03-11"
+   ],
+   "dtcg": "Resolver module: sets, modifiers with contexts, resolutionOrder; outputs equal the product of all contexts (L07 A4)",
+   "platform": "Web uses `[data-theme]` scopes or preference media queries; native uses dynamic colors and resource qualifiers (DC-L07-15). Figma mode caps apply per collection: Professional 10, Organization 20, API 40 (DC-L07-17). Density on web as `[data-density]` scopes, on native as environment values or CompositionLocals ([inferred] in DC-L03-11). Keep `context` (device class) separate from `platform` (BOARD note from L14).",
+   "default": "Color scheme (light, dark) plus contrast (standard, high) as one or two axes; density only with data-dense screens; brand only with a real second brand (DC-L07-15, DC-L11-25, where 76% of systems ship light and dark). At most 3 orthogonal axes, high contrast as a layered override (DC-L07-17). Density on the semantic layer as its own axis; primitives and target minimums untouched (DC-L03-11).",
+   "l09": "Shared (L09-A1.6): light and dark in 21 of 25 systems.",
+   "sources": [
+    "S-L07-004",
+    "S-L07-014",
+    "S-L11-030",
+    "S-L03-029"
+   ]
+  },
+  {
+   "id": "tok.themes",
+   "name": "Themes and brands",
+   "layer": "tok",
+   "parent": "tok",
+   "children": [
+    "tok.themes.generator",
+    "tok.themes.brands",
+    "tok.themes.whitelabel"
+   ],
+   "definition": "How the system is re-skinned: the few inputs that generate a theme, how multiple brands share one system, and what white-label customers may change.",
+   "l09": "Diverges (L09-A2.8): locked to one brand (Carbon, Primer, Geist) versus white-label generators (Blade, Paste, Ant, Fluent) versus multi-theme (SLDS, Gestalt, Encore).",
+   "sources": [
+    "S-L06-012",
+    "S-L07-015",
+    "S-L09-170"
+   ]
+  },
+  {
+   "id": "tok.themes.generator",
+   "name": "Theme-generator inputs",
+   "layer": "tok",
+   "parent": "tok.themes",
+   "definition": "The small set of brand knobs from which a whole theme is computed.",
+   "cards": [
+    "DC-L06-06"
+   ],
+   "dtcg": "inputs are builder metadata; outputs are ordinary color and dimension tokens ([inferred] in DC-L06-06)",
+   "platform": "Generation can run at build time for static themes or at runtime for user themes ([inferred] in DC-L06-06).",
+   "default": "Three inputs: brand or accent color, neutral base or temperature, and contrast; Linear uses three variables and Razorpay Blade one brand color (DC-L06-06, BOARD note from L06).",
+   "sources": [
+    "S-L06-012",
+    "S-L06-035",
+    "S-L06-094"
+   ]
+  },
+  {
+   "id": "tok.themes.brands",
+   "name": "Multi-brand architecture",
+   "layer": "tok",
+   "parent": "tok.themes",
+   "definition": "What stays fixed across brands (anatomy, behavior, semantic names, status meanings) and what flexes (brand color, typeface, logo, imagery), and where the brand axis lives.",
+   "cards": [
+    "DC-L06-16",
+    "DC-L07-16",
+    "DC-L09-07"
+   ],
+   "dtcg": "a `brand` resolver modifier or a Figma extended collection (Enterprise) (L07 Part C)",
+   "platform": "Figma extended collections allow chains (C extends B extends A) and override color and opacity together; migrating to them resets applied modes in consuming files (DC-L07-16). Runtime brand switching versus build-time themes ([inferred] in DC-L06-16).",
+   "default": "Fix anatomy, behavior, semantic names and status meanings; flex brand color, typeface, logo and imagery; treat radius, density and motion as flex-with-care (DC-L06-16). A dedicated brand axis that overrides only a named set of brandable tokens (DC-L07-16). Build every system as if a second brand will come (DC-L09-07).",
+   "l09": "Diverges (L09-A2.8) as above.",
+   "sources": [
+    "S-L06-053",
+    "S-L07-015",
+    "S-L07-034",
+    "S-L09-170"
+   ]
+  },
+  {
+   "id": "tok.themes.whitelabel",
+   "name": "White-label customization surface",
+   "layer": "tok",
+   "parent": "tok.themes",
+   "definition": "Which tokens external customers may change in a white-label product.",
+   "cards": [
+    "DC-L06-17"
+   ],
+   "dtcg": "a restricted set of brandable color, fontFamily and dimension tokens (DC-L06-17)",
+   "platform": "SLDS 2 component-level hooks are not supported under the Cosmos theme, so custom components must use global hooks (DC-L06-17).",
+   "default": "Brand color and logo; font and radius only with previews and validation (DC-L06-17).",
+   "sources": [
+    "S-L06-053",
+    "S-L06-069",
+    "S-L06-094"
+   ]
+  },
+  {
+   "id": "tok.delivery",
+   "name": "Platform delivery of tokens",
+   "layer": "tok",
+   "parent": "tok",
+   "definition": "The form tokens take in each platform's code: CSS custom properties and preference queries on the web, native theme objects on iOS and Android. The build pipeline that produces them is `deliver.pipeline`.",
+   "cards": [
+    "DC-L10-18"
+   ],
+   "dtcg": "output formats rather than types: css/variables, compose/object, ios-swift/class.swift, flutter/class.dart and others (L07 A9)",
+   "platform": "Electron and web-view desktop apps reuse the web layer (DC-L10-18).",
+   "default": "CSS custom properties for semantic tokens, media queries for user preferences, container queries for component responsiveness, viewport breakpoints only for page layout, rem for type (DC-L10-18).",
+   "sources": [
+    "S-L10-031",
+    "S-L10-033",
+    "S-L10-052"
+   ]
+  },
+  {
+   "id": "comp",
+   "name": "Components",
+   "layer": "comp",
+   "children": [
+    "comp.inventory",
+    "comp.taxonomy",
+    "comp.implementation",
+    "comp.api",
+    "comp.device-variants",
+    "comp.platform-rendering",
+    "comp.states",
+    "comp.behavior",
+    "comp.action",
+    "comp.input",
+    "comp.selection",
+    "comp.navigation",
+    "comp.feedback",
+    "comp.overlay",
+    "comp.containment",
+    "comp.data",
+    "comp.media",
+    "comp.layout"
+   ],
+   "definition": "Reusable UI parts with an anatomy, variants, states, props and accessibility behavior, built from tokens. The catalog in `research/L08-component-catalog.md` defines 64 canonical components (C01 to C64) across ten categories, with coverage across 10 benchmark systems; each entry lists the token families it consumes, which is the edge list from foundations to components.",
+   "dtcg": "component tokens are optional aliases of semantic tokens (DC-L07-02); DTCG has no component model, anatomy or state semantics (L07 A5)",
+   "sources": [
+    "S-L08-001",
+    "S-L08-008",
+    "S-L08-009"
+   ]
+  },
+  {
+   "id": "comp.inventory",
+   "name": "Component inventory scope",
+   "layer": "comp",
+   "parent": "comp",
+   "definition": "Which components version 1 ships and when extended components are added.",
+   "cards": [
+    "DC-L08-01"
+   ],
+   "dtcg": "n/a",
+   "platform": "Radix ships 30 primitives, shadcn 64, Spectrum 2 has 71 navigation entries, Primer 62; HIG components are platform controls you configure rather than build (DC-L08-01).",
+   "default": "Start with about 25 core components and add extended ones when two or more products ask ([inferred] in DC-L08-01). Only Switch, Progress bar, Dialog and Menu appear in all 10 benchmark systems (L08 catalog counts).",
+   "sources": [
+    "S-L08-001",
+    "S-L08-012",
+    "S-L08-018",
+    "S-L08-021"
+   ]
+  },
+  {
+   "id": "comp.taxonomy",
+   "name": "Hierarchy model and naming",
+   "layer": "comp",
+   "parent": "comp",
+   "definition": "How building blocks are layered (tokens, primitives, components, patterns, templates) and how components are named, with an alias table for names that collide across systems.",
+   "cards": [
+    "DC-L08-02"
+   ],
+   "dtcg": "n/a",
+   "platform": "Names collide: a Tag is a chip in Carbon and Fluent but a status label elsewhere (DC-L08-02).",
+   "default": "Tokens, primitives, components, patterns, templates, with an alias table for cross-system names ([inferred] in DC-L08-02).",
+   "sources": [
+    "S-L08-001",
+    "S-L08-054"
+   ]
+  },
+  {
+   "id": "comp.implementation",
+   "name": "Build strategy and technology",
+   "layer": "comp",
+   "parent": "comp",
+   "definition": "Whether components are built on a headless library, a styled library, or native controls, and whether they ship as framework components or web components.",
+   "cards": [
+    "DC-L08-03",
+    "DC-L10-19"
+   ],
+   "dtcg": "n/a",
+   "platform": "Web components run in Electron and web views but not in SwiftUI or Compose unless a host maps them to native components (DC-L10-19). M3 Expressive has no web implementation (DC-L08-03). shadcn/ui switched its default base from Radix to Base UI in July 2026 (BOARD note from L08).",
+   "default": "React web: shadcn on Base UI or React Aria; multi-framework: Ark UI or web components; mobile: native controls themed with tokens ([inferred] in DC-L08-03). Framework components when one framework dominates, web components when several frameworks or third parties consume the system (DC-L10-19).",
+   "sources": [
+    "S-L08-020",
+    "S-L08-026",
+    "S-L10-046",
+    "S-L10-048"
+   ]
+  },
+  {
+   "id": "comp.api",
+   "name": "Component API (code and Figma)",
+   "layer": "comp",
+   "parent": "comp",
+   "definition": "How a component is configured: props versus composition of named parts in code, and variants, booleans, text, instance swap and slots in Figma.",
+   "cards": [
+    "DC-L08-04",
+    "DC-L07-22"
+   ],
+   "dtcg": "n/a; the builder's `Component` entity holds properties of kind variant, boolean, text, instanceSwap or slot (L07 Part C)",
+   "platform": "SwiftUI and Compose favor composition with modifiers and slot lambdas ([inferred] in DC-L08-04); Figma slots are meant to map to React children, and boolean props bind only to layer visibility (DC-L07-22).",
+   "default": "Configuration for leaf components (Button, Badge), compound parts for containers (Dialog, Menu, Card, Table) ([inferred] in DC-L08-04); in Figma, variants only for state, size and type, booleans for optional icons, text props for labels, instance swap for fixed-position icons, slots for flexible content (DC-L07-22).",
+   "sources": [
+    "S-L08-064",
+    "S-L08-088",
+    "S-L07-021",
+    "S-L07-022"
+   ]
+  },
+  {
+   "id": "comp.device-variants",
+   "name": "Device variants of components",
+   "layer": "comp",
+   "parent": "comp",
+   "definition": "Whether one component set covers all device classes through context modes, or separate sets exist per device.",
+   "cards": [
+    "DC-L14-02"
+   ],
+   "dtcg": "values per `context` resolver modifier (DC-L14-01)",
+   "platform": "Wear and TV components differ in behavior, not only size (rotary scrolling, focus scaling), which is why Google split them (DC-L14-02).",
+   "default": "One set for phone, tablet, desktop and web with context modes; separate small libraries for watch and TV; template adapters for car (DC-L14-02).",
+   "sources": [
+    "S-L14-004",
+    "S-L14-018",
+    "S-L10-026"
+   ]
+  },
+  {
+   "id": "comp.platform-rendering",
+   "name": "System controls versus custom controls",
+   "layer": "comp",
+   "parent": "comp",
+   "definition": "Whether native platforms use the OS's own controls tinted with the brand, or custom-drawn controls.",
+   "cards": [
+    "DC-L10-13"
+   ],
+   "dtcg": "n/a",
+   "platform": "The pre-Liquid-Glass look cannot be kept past the 27 SDKs; Material Components for iOS and Material Web are in maintenance mode (DC-L10-13).",
+   "default": "System controls tinted with the accent on native platforms, custom controls on web; restyle color and label, not shape and behavior (DC-L10-13).",
+   "sources": [
+    "S-L10-067",
+    "S-L10-076",
+    "S-L10-082"
+   ]
+  },
+  {
+   "id": "comp.states",
+   "name": "Interaction states",
+   "layer": "comp",
+   "parent": "comp",
+   "children": [
+    "comp.states.disabled",
+    "comp.states.loading",
+    "comp.states.selected"
+   ],
+   "definition": "Which states each component styles distinctly (enabled, hover, focus-visible, pressed, selected, disabled, loading, error), and which subset each input method can trigger.",
+   "cards": [
+    "DC-L08-09",
+    "DC-L14-06"
+   ],
+   "related": [
+    "DC-L01-17",
+    "DC-L04-17"
+   ],
+   "dtcg": "no DTCG state semantics; states are a naming segment such as `.hover` (L07 A5, DC-L07-04)",
+   "platform": "Touch has no hover; visionOS uses a system gaze highlight and disallows custom hover effects on buttons (DC-L08-09). iPad and macOS need focus only on content elements, while tvOS needs focus on everything (DC-L14-06).",
+   "default": "Style enabled, hover, focus-visible, pressed, selected, disabled, loading and error, with overlays for hover and press and explicit tokens for selected and error (DC-L08-09); define all states once per component and let each context render the subset its inputs can trigger (DC-L14-06).",
+   "sources": [
+    "S-L08-039",
+    "S-L08-071",
+    "S-L14-004"
+   ]
+  },
+  {
+   "id": "comp.states.disabled",
+   "name": "Disabled and unavailable actions",
+   "layer": "comp",
+   "parent": "comp.states",
+   "definition": "Whether actions that cannot run are disabled, hidden, or left enabled with an explanation. Systems disagree here (BOARD note from L08).",
+   "cards": [
+    "DC-L08-10"
+   ],
+   "dtcg": "number (disabled opacity) and color (L07 A3)",
+   "platform": "Native disabled controls are not focusable on iOS and Android by default ([inferred] in DC-L08-10).",
+   "default": "Do not disable submit buttons; validate on submit and explain; use `aria-disabled` (still focusable) with visible helper text when an action truly cannot run (DC-L08-10).",
+   "sources": [
+    "S-L08-064",
+    "S-L08-066",
+    "S-L08-085"
+   ]
+  },
+  {
+   "id": "comp.states.loading",
+   "name": "Loading state",
+   "layer": "comp",
+   "parent": "comp.states",
+   "definition": "How a component shows it is busy: spinner, skeleton, or loading button.",
+   "cards": [
+    "DC-L08-12"
+   ],
+   "related": [
+    "DC-L13-01"
+   ],
+   "dtcg": "duration (spinner delay) (L07 A3)",
+   "platform": "HIG asks to show something as soon as possible and let people keep working while content loads; UIKit `UIRefreshControl`, Compose `LoadingIndicator` (DC-L08-12).",
+   "default": "Delay spinners about 1 s, use skeletons for first page load, keep loading buttons focusable (DC-L08-12).",
+   "sources": [
+    "S-L08-067",
+    "S-L08-074",
+    "S-L08-086"
+   ]
+  },
+  {
+   "id": "comp.states.selected",
+   "name": "Selected and active state",
+   "layer": "comp",
+   "parent": "comp.states",
+   "definition": "How the selected tab, row, chip or navigation item is marked.",
+   "cards": [
+    "DC-L08-14"
+   ],
+   "dtcg": "color and dimension (indicator) (L07 A3)",
+   "platform": "HIG tab bars and sidebars tint the selected item with the accent ([inferred] in DC-L08-14).",
+   "default": "An indicator plus color, never color alone; reserve brand primary for actions in action-dense products ([inferred] in DC-L08-14).",
+   "sources": [
+    "S-L08-034",
+    "S-L08-071"
+   ]
+  },
+  {
+   "id": "comp.behavior",
+   "name": "Microinteraction specification",
+   "layer": "comp",
+   "parent": "comp",
+   "definition": "How each interactive component documents its behavior: trigger, rules, feedback, and loops and modes (Saffer's four parts), plus its state list, implemented as a state machine.",
+   "cards": [
+    "DC-L13-12"
+   ],
+   "dtcg": "no DTCG type; behavior specs are component metadata (L07 A5)",
+   "platform": "Haptic feedback is native on iOS and Android and absent on the web (DC-L13-12).",
+   "default": "Each interactive component documents Saffer's four parts plus its states; in code they come from a state machine (DC-L13-12).",
+   "sources": [
+    "S-L13-074",
+    "S-L13-079",
+    "S-L13-106"
+   ]
+  },
+  {
+   "id": "comp.action",
+   "name": "Action components",
+   "layer": "comp",
+   "parent": "comp",
+   "children": [
+    "comp.action.button"
+   ],
+   "definition": "Components that trigger actions.",
+   "members": [
+    "C01 Button",
+    "C02 Icon button",
+    "C03 FAB",
+    "C04 Split button",
+    "C05 Button group",
+    "C06 Toggle button",
+    "C08 Toolbar"
+   ],
+   "dtcg": "component tokens are optional aliases of semantic tokens (DC-L07-02); DTCG has no component model, anatomy or state semantics (L07 A5)",
+   "sources": [
+    "S-L08-033",
+    "S-L08-061"
+   ]
+  },
+  {
+   "id": "comp.action.button",
+   "name": "Button hierarchy, content and destructive treatment",
+   "layer": "comp",
+   "parent": "comp.action",
+   "definition": "How many emphasis levels buttons have, how the primary action is placed, what goes inside a button (icon, label), and how destructive actions look.",
+   "cards": [
+    "DC-L08-05",
+    "DC-L13-18",
+    "DC-L08-08",
+    "DC-L08-06"
+   ],
+   "members": [
+    "P08"
+   ],
+   "dtcg": "color, dimension, border and typography via component tokens such as `button.primary.background` (DC-L15-09)",
+   "platform": "HIG marks the preferred choice with style, not size, and iOS 26 adds `.glass` and `.glassProminent` (DC-L08-05); dialog button order differs by OS ([inferred] in DC-L13-18); SwiftUI `confirmationDialog` with a destructive role (DC-L08-06).",
+   "default": "4 levels (primary, secondary, tertiary or outline, ghost or text) plus danger, one primary per view (DC-L08-05); at most one high-emphasis action per region, placed after the last field near the content it acts on (DC-L13-18); optional leading icon and sentence-case verb labels (DC-L08-08); subtle danger in context and solid danger only in the confirmation step (DC-L08-06).",
+   "sources": [
+    "S-L08-039",
+    "S-L08-061",
+    "S-L08-066",
+    "S-L13-054"
+   ]
+  },
+  {
+   "id": "comp.input",
+   "name": "Input components",
+   "layer": "comp",
+   "parent": "comp",
+   "children": [
+    "comp.input.field"
+   ],
+   "definition": "Components for entering data.",
+   "members": [
+    "C10 Text field",
+    "C11 Textarea",
+    "C12 Number field",
+    "C13 Search field",
+    "C14 Select",
+    "C15 Combobox",
+    "C16 Multi-select",
+    "C17 Date and time picker",
+    "C18 File upload",
+    "C19 Color picker",
+    "C20 OTP input",
+    "C21 Form field",
+    "C22 Rating"
+   ],
+   "dtcg": "component tokens are optional aliases of semantic tokens (DC-L07-02); DTCG has no component model, anatomy or state semantics (L07 A5)",
+   "sources": [
+    "S-L08-071",
+    "S-L08-106"
+   ]
+  },
+  {
+   "id": "comp.input.field",
+   "name": "Form field style and label placement",
+   "layer": "comp",
+   "parent": "comp.input",
+   "definition": "The visual style of text inputs (outlined, filled, underlined) and where labels sit.",
+   "cards": [
+    "DC-L08-16"
+   ],
+   "related": [
+    "DC-L13-05"
+   ],
+   "dtcg": "border, color, dimension (L07 A3)",
+   "platform": "iOS forms use grouped lists with inline labels; Android follows M3 fields ([inferred] in DC-L08-16).",
+   "default": "Outlined fields with top labels for web products; mark whichever of required or optional is rarer (DC-L08-16).",
+   "sources": [
+    "S-L08-105",
+    "S-L08-106"
+   ]
+  },
+  {
+   "id": "comp.selection",
+   "name": "Selection components",
+   "layer": "comp",
+   "parent": "comp",
+   "definition": "Components for choosing among options.",
+   "members": [
+    "C07 Segmented control",
+    "C23 Checkbox",
+    "C24 Radio group",
+    "C25 Switch",
+    "C26 Slider",
+    "C27 Chip or tag"
+   ],
+   "dtcg": "component tokens are optional aliases of semantic tokens (DC-L07-02); DTCG has no component model, anatomy or state semantics (L07 A5)",
+   "sources": [
+    "S-L08-008",
+    "S-L08-017"
+   ]
+  },
+  {
+   "id": "comp.navigation",
+   "name": "Navigation components",
+   "layer": "comp",
+   "parent": "comp",
+   "definition": "Components for moving between places.",
+   "related": [
+    "DC-L08-19"
+   ],
+   "members": [
+    "C09 Link",
+    "C28 Tabs",
+    "C29 Breadcrumbs",
+    "C30 Pagination",
+    "C31 Navigation bar",
+    "C32 Navigation rail",
+    "C33 Side navigation",
+    "C34 App bar or page header",
+    "C35 Tree view",
+    "C36 Steps"
+   ],
+   "dtcg": "component tokens are optional aliases of semantic tokens (DC-L07-02); DTCG has no component model, anatomy or state semantics (L07 A5)",
+   "sources": [
+    "S-L08-008",
+    "S-L08-012"
+   ]
+  },
+  {
+   "id": "comp.feedback",
+   "name": "Feedback components",
+   "layer": "comp",
+   "parent": "comp",
+   "children": [
+    "comp.feedback.ai"
+   ],
+   "definition": "Components that report status, progress or results.",
+   "related": [
+    "DC-L08-18"
+   ],
+   "members": [
+    "C37 Alert or banner",
+    "C38 Toast or snackbar",
+    "C39 Progress bar",
+    "C40 Spinner",
+    "C41 Skeleton",
+    "C42 Empty state",
+    "C43 Badge",
+    "C44 AI indicator and conversation"
+   ],
+   "dtcg": "component tokens are optional aliases of semantic tokens (DC-L07-02); DTCG has no component model, anatomy or state semantics (L07 A5)",
+   "sources": [
+    "S-L08-067",
+    "S-L08-074"
+   ]
+  },
+  {
+   "id": "comp.feedback.ai",
+   "name": "AI surfaces module",
+   "layer": "comp",
+   "parent": "comp.feedback",
+   "definition": "Components for AI features: AI labels, AI button variants, chat and conversation components.",
+   "cards": [
+    "DC-L08-22"
+   ],
+   "related": [
+    "DC-L13-16",
+    "DC-L14-12"
+   ],
+   "dtcg": "component tokens are optional aliases of semantic tokens (DC-L07-02); DTCG has no component model, anatomy or state semantics (L07 A5)",
+   "platform": "None of the native platforms in the benchmark define an AI control in their HIG component index (DC-L08-22).",
+   "default": "An optional module: AI label and AI button variant first, chat components only for conversational products ([inferred] in DC-L08-22).",
+   "sources": [
+    "S-L08-017",
+    "S-L08-018",
+    "S-L08-027"
+   ]
+  },
+  {
+   "id": "comp.overlay",
+   "name": "Overlay components",
+   "layer": "comp",
+   "parent": "comp",
+   "definition": "Components that appear above the page.",
+   "related": [
+    "DC-L08-20"
+   ],
+   "members": [
+    "C45 Tooltip",
+    "C46 Popover",
+    "C47 Dialog",
+    "C48 Confirmation dialog",
+    "C49 Sheet or drawer",
+    "C50 Menu",
+    "C51 Command palette"
+   ],
+   "dtcg": "component tokens are optional aliases of semantic tokens (DC-L07-02); DTCG has no component model, anatomy or state semantics (L07 A5)",
+   "sources": [
+    "S-L08-008",
+    "S-L08-039"
+   ]
+  },
+  {
+   "id": "comp.containment",
+   "name": "Containment components",
+   "layer": "comp",
+   "parent": "comp",
+   "children": [
+    "comp.containment.card"
+   ],
+   "definition": "Components that group content.",
+   "members": [
+    "C52 Card",
+    "C53 Accordion",
+    "C54 Divider",
+    "C55 Carousel"
+   ],
+   "dtcg": "component tokens are optional aliases of semantic tokens (DC-L07-02); DTCG has no component model, anatomy or state semantics (L07 A5)",
+   "sources": [
+    "S-L08-009",
+    "S-L08-022"
+   ]
+  },
+  {
+   "id": "comp.containment.card",
+   "name": "Card and panel separation",
+   "layer": "comp",
+   "parent": "comp.containment",
+   "definition": "How cards and panels separate from the page: tinted fill, outline, or elevation.",
+   "cards": [
+    "DC-L08-15"
+   ],
+   "dtcg": "color, border, shadow (L07 A3)",
+   "platform": "On iOS the content layer uses standard materials and Liquid Glass is reserved for the control layer (DC-L08-15).",
+   "default": "Tinted fill or outline for static cards, elevation only for things that float ([inferred] in DC-L08-15).",
+   "l09": "Shared (L09-A1.12): 1px ring plus soft shadow for cards in 6 modern systems.",
+   "sources": [
+    "S-L08-009",
+    "S-L08-022",
+    "S-L00-049"
+   ]
+  },
+  {
+   "id": "comp.data",
+   "name": "Data display components",
+   "layer": "comp",
+   "parent": "comp",
+   "children": [
+    "comp.data.avatar"
+   ],
+   "definition": "Components that present data and people.",
+   "members": [
+    "C56 List",
+    "C57 Table",
+    "C58 Avatar",
+    "C59 Text and heading"
+   ],
+   "dtcg": "component tokens are optional aliases of semantic tokens (DC-L07-02); DTCG has no component model, anatomy or state semantics (L07 A5)",
+   "sources": [
+    "S-L08-092"
+   ]
+  },
+  {
+   "id": "comp.data.avatar",
+   "name": "Avatars",
+   "layer": "comp",
+   "parent": "comp.data",
+   "definition": "Avatar sizes, shapes, fallbacks and presence indicators.",
+   "cards": [
+    "DC-L05-18"
+   ],
+   "dtcg": "dimension (sizes) (DC-L03-08)",
+   "default": "A 16-64 scale on a 4/8 rhythm; circle for a person, square for an entity, a third shape for AI agents if the product mixes human and AI actors (DC-L05-18).",
+   "sources": [
+    "S-L05-066",
+    "S-L05-067"
+   ]
+  },
+  {
+   "id": "comp.media",
+   "name": "Media components",
+   "layer": "comp",
+   "parent": "comp",
+   "definition": "Components that render icons and images.",
+   "members": [
+    "C60 Icon",
+    "C61 Image or thumbnail"
+   ],
+   "dtcg": "component tokens are optional aliases of semantic tokens (DC-L07-02); DTCG has no component model, anatomy or state semantics (L07 A5)",
+   "sources": [
+    "S-L08-001"
+   ]
+  },
+  {
+   "id": "comp.layout",
+   "name": "Layout primitives and utilities",
+   "layer": "comp",
+   "parent": "comp",
+   "definition": "Low-level layout components and accessibility utilities.",
+   "members": [
+    "C62 Layout primitives (box, stack, grid)",
+    "C63 Page layout or app shell",
+    "C64 Accessibility utilities (visually hidden, portal, slot)"
+   ],
+   "dtcg": "component tokens are optional aliases of semantic tokens (DC-L07-02); DTCG has no component model, anatomy or state semantics (L07 A5)",
+   "sources": [
+    "S-L08-012",
+    "S-L08-021"
+   ]
+  },
+  {
+   "id": "pat",
+   "name": "Patterns and templates",
+   "layer": "pat",
+   "children": [
+    "pat.forms",
+    "pat.feedback",
+    "pat.destructive",
+    "pat.navigation",
+    "pat.overlay",
+    "pat.collections",
+    "pat.disclosure",
+    "pat.empty",
+    "pat.onboarding",
+    "pat.ai",
+    "pat.glanceable",
+    "pat.layout",
+    "pat.motion",
+    "pat.other",
+    "pat.templates"
+   ],
+   "definition": "Recurring solutions that combine several components to serve a user goal (forms, feedback, navigation, disclosure, empty states, AI surfaces), plus page templates and layout archetypes. This is where most UX behavior rules from `prin.ux` apply (L13 Part C, L08 Patterns).",
+   "dtcg": "no DTCG type for patterns; they compose components and reference tokens (L07 A5)",
+   "sources": [
+    "S-L08-073",
+    "S-L13-064",
+    "S-L13-063"
+   ]
+  },
+  {
+   "id": "pat.forms",
+   "name": "Forms and field anatomy",
+   "layer": "pat",
+   "parent": "pat",
+   "children": [
+    "pat.forms.validation"
+   ],
+   "definition": "How forms are built: visible labels, hints, required-field marking and autocomplete.",
+   "cards": [
+    "DC-L13-05"
+   ],
+   "related": [
+    "DC-L08-16"
+   ],
+   "members": [
+    "L08-P1 Forms and validation"
+   ],
+   "dtcg": "no DTCG type for patterns; they compose components and reference tokens (L07 A5)",
+   "platform": "iOS grouped forms often put labels inline to the left; the web defaults to labels above the field ([inferred] in DC-L13-05).",
+   "default": "A visible label above every field, a hint under the label, the required asterisk at the label start plus a legend, and `autocomplete` on standard inputs (DC-L13-05). A placeholder-only label is a warning (L13 Part E1).",
+   "sources": [
+    "S-L13-066",
+    "S-L13-068",
+    "S-L13-098"
+   ]
+  },
+  {
+   "id": "pat.forms.validation",
+   "name": "Validation timing and error presentation",
+   "layer": "pat",
+   "parent": "pat.forms",
+   "definition": "When inputs are validated and how errors appear (inline, summary, or both). L08 and L13 disagree on timing; see Contradictions.",
+   "cards": [
+    "DC-L08-17",
+    "DC-L13-06"
+   ],
+   "dtcg": "no DTCG type for patterns; they compose components and reference tokens (L07 A5)",
+   "platform": "GOV.UK turns off browser validation (`novalidate`) for consistent messages (DC-L08-17); mobile keyboards make premature errors more costly ([inferred] in DC-L13-06).",
+   "default": "L08: validate on submit, and on blur only for format checks, with a summary plus inline errors for forms over about 5 fields (DC-L08-17). L13: validate on blur or when the input reaches its complete length, and clear the error on the keystroke that fixes it (DC-L13-06). Both reject validation while the user is still typing.",
+   "sources": [
+    "S-L08-077",
+    "S-L13-064",
+    "S-L13-065"
+   ]
+  },
+  {
+   "id": "pat.feedback",
+   "name": "Feedback patterns",
+   "layer": "pat",
+   "parent": "pat",
+   "children": [
+    "pat.feedback.loading",
+    "pat.feedback.messaging",
+    "pat.feedback.errors"
+   ],
+   "definition": "How the system reports waiting, results and errors: the loading ladder, the choice of message channel, and the error message pattern. These implement the heuristic \"visible status and feedback\" (L13 Part B6).",
+   "members": [
+    "L08-P5 Empty, loading and error states",
+    "L08-P6 Notifications",
+    "L08-P10 Feedback and confirmation"
+   ],
+   "dtcg": "no DTCG type for patterns; they compose components and reference tokens (L07 A5)",
+   "sources": [
+    "S-L13-030",
+    "S-L13-064"
+   ]
+  },
+  {
+   "id": "pat.feedback.loading",
+   "name": "Loading and wait feedback",
+   "layer": "pat",
+   "parent": "pat.feedback",
+   "definition": "What the UI shows at each wait duration, from instant acknowledgment to percent-done progress. It is the pattern side of the response-time ladder in `prin.ux.timing`.",
+   "cards": [
+    "DC-L13-01"
+   ],
+   "related": [
+    "DC-L08-12"
+   ],
+   "dtcg": "duration thresholds (L07 A3)",
+   "platform": "Web INP is good at 200 ms or less at the 75th percentile, and RAIL says respond within 100 ms (DC-L13-01).",
+   "default": "Acknowledge within 50 ms; no indicator under about 1 s; skeleton for page or region loads of 1-10 s; spinner for a module or item; percent-done progress beyond 10 s (DC-L13-01).",
+   "sources": [
+    "S-L13-038",
+    "S-L13-051",
+    "S-L13-052"
+   ]
+  },
+  {
+   "id": "pat.feedback.messaging",
+   "name": "Message channel selection",
+   "layer": "pat",
+   "parent": "pat.feedback",
+   "definition": "Which channel carries a message: inline, banner, toast or snackbar, dialog, or system notification. Systems disagree on toasts (BOARD note from L08).",
+   "cards": [
+    "DC-L08-18",
+    "DC-L13-09"
+   ],
+   "dtcg": "no DTCG type for patterns; they compose components and reference tokens (L07 A5)",
+   "platform": "iOS uses system notifications and in-place status rather than toasts; Android has snackbars (DC-L08-18); the web needs custom live regions ([inferred] in DC-L13-09).",
+   "default": "Four statuses; inline or banner by default; toasts only for low-stakes confirmations with an undo (DC-L08-18); put the message where the cause is (DC-L13-09).",
+   "sources": [
+    "S-L08-079",
+    "S-L08-098",
+    "S-L13-064"
+   ]
+  },
+  {
+   "id": "pat.feedback.errors",
+   "name": "Error messages",
+   "layer": "pat",
+   "parent": "pat.feedback",
+   "definition": "How error messages are written and shown: close to the source, visible, constructive, in plain language.",
+   "cards": [
+    "DC-L13-07"
+   ],
+   "related": [
+    "DC-L06-19"
+   ],
+   "dtcg": "no DTCG type for patterns; they compose components and reference tokens (L07 A5)",
+   "platform": "OS alert conventions differ (DC-L13-07).",
+   "default": "NN/g's 13 error-message guidelines, consistent with Nielsen H9 and Shneiderman rule 5; shown close to the source (DC-L13-07).",
+   "sources": [
+    "S-L13-030",
+    "S-L13-037",
+    "S-L13-064"
+   ]
+  },
+  {
+   "id": "pat.destructive",
+   "name": "Destructive actions: undo versus confirm",
+   "layer": "pat",
+   "parent": "pat",
+   "definition": "Whether a destructive action is protected by undo or by a confirmation step.",
+   "cards": [
+    "DC-L13-08"
+   ],
+   "related": [
+    "DC-L08-06"
+   ],
+   "members": [
+    "L08-P11 Destructive confirmations"
+   ],
+   "dtcg": "no DTCG type for patterns; they compose components and reference tokens (L07 A5)",
+   "platform": "Apple never gives the primary role to a destructive button; dialog button order differs by platform (DC-L13-08).",
+   "default": "Reversible actions use undo with no confirmation; irreversible and costly actions get a confirmation with verb labels and Cancel as the safe default (DC-L13-08). Delete with neither undo nor confirm is a warning (L13 Part E1).",
+   "sources": [
+    "S-L13-067",
+    "S-L08-039"
+   ]
+  },
+  {
+   "id": "pat.navigation",
+   "name": "Global navigation",
+   "layer": "pat",
+   "parent": "pat",
+   "children": [
+    "pat.navigation.containers"
+   ],
+   "definition": "The top-level navigation model: how many destinations, whether navigation stays visible, and how deep it goes.",
+   "cards": [
+    "DC-L13-02"
+   ],
+   "members": [
+    "L08-P2 Navigation"
+   ],
+   "dtcg": "no DTCG type for patterns; they compose components and reference tokens (L07 A5)",
+   "platform": "Material swaps the bottom bar for a rail or drawer by breakpoint; Apple converts the tab bar to a sidebar (DC-L13-02).",
+   "default": "Keep primary navigation visible whenever width allows; do not cap at seven items, which is the Miller misuse (DC-L13-02).",
+   "sources": [
+    "S-L13-048",
+    "S-L13-050",
+    "S-L13-095"
+   ]
+  },
+  {
+   "id": "pat.navigation.containers",
+   "name": "Navigation containers by size, platform and device",
+   "layer": "pat",
+   "parent": "pat.navigation",
+   "definition": "Which component holds navigation at each size and on each platform (bottom bar, rail, sidebar, menu bar, focus rows on TV), with destinations kept identical.",
+   "cards": [
+    "DC-L08-19",
+    "DC-L10-09",
+    "DC-L14-05"
+   ],
+   "dtcg": "no DTCG type for patterns; they compose components and reference tokens (L07 A5)",
+   "platform": "Apple warns against overflow tabs and turns the last tab into More (DC-L10-09); M3 says not to show a toolbar together with a navigation bar (DC-L08-19); tvOS Back goes to the parent screen (DC-L14-05).",
+   "default": "3-5 top destinations: bottom bar on phone, rail on tablet, sidebar on desktop; more than 7 destinations go in a sidebar with groups (DC-L08-19, DC-L10-09); keep destinations identical across devices and swap only the container (DC-L14-05).",
+   "sources": [
+    "S-L08-080",
+    "S-L10-014",
+    "S-L10-025",
+    "S-L14-005"
+   ]
+  },
+  {
+   "id": "pat.overlay",
+   "name": "Modality and overlays",
+   "layer": "pat",
+   "parent": "pat",
+   "definition": "When to use a dialog, a side sheet, a bottom sheet or a popover.",
+   "cards": [
+    "DC-L08-20"
+   ],
+   "dtcg": "no DTCG type for patterns; they compose components and reference tokens (L07 A5)",
+   "platform": "iOS resizable sheets use detents and a grabber (DC-L08-20).",
+   "default": "Dialog for short decisions, side sheet for editing with context, bottom sheet on phones, platform button order per platform (DC-L08-20). A dialog with no dismiss path is a lint error (L13 Part E1).",
+   "sources": [
+    "S-L08-040",
+    "S-L08-043"
+   ]
+  },
+  {
+   "id": "pat.collections",
+   "name": "Long collections",
+   "layer": "pat",
+   "parent": "pat",
+   "definition": "How long lists and result sets page: pagination, load more, or infinite scroll.",
+   "cards": [
+    "DC-L08-21"
+   ],
+   "members": [
+    "L08-P12 Pagination versus infinite scroll",
+    "L08-P8 Data tables"
+   ],
+   "dtcg": "no DTCG type for patterns; they compose components and reference tokens (L07 A5)",
+   "platform": "Mobile feeds default to continuous scroll; HIG page controls are for paged views, not data sets ([inferred] in DC-L08-21).",
+   "default": "Pagination for tables and goal-directed search, load more for result lists, infinite scroll only for feeds (DC-L08-21).",
+   "sources": [
+    "S-L08-073",
+    "S-L08-041"
+   ]
+  },
+  {
+   "id": "pat.disclosure",
+   "name": "Progressive disclosure",
+   "layer": "pat",
+   "parent": "pat",
+   "definition": "How advanced or secondary content is hidden until needed.",
+   "cards": [
+    "DC-L13-03"
+   ],
+   "members": [
+    "L08-P13 Progressive disclosure"
+   ],
+   "dtcg": "no DTCG type for patterns; they compose components and reference tokens (L07 A5)",
+   "platform": "Mobile favors staged disclosure (one thing per screen); desktop favors panels and accordions ([inferred] in DC-L13-03).",
+   "default": "At most two levels, with a trigger label that says what is behind it (DC-L13-03).",
+   "sources": [
+    "S-L13-063",
+    "S-L13-019"
+   ]
+  },
+  {
+   "id": "pat.empty",
+   "name": "Empty states",
+   "layer": "pat",
+   "parent": "pat",
+   "definition": "What a screen or collection shows when it has no content yet.",
+   "cards": [
+    "DC-L13-10"
+   ],
+   "related": [
+    "DC-L05-20"
+   ],
+   "dtcg": "no DTCG type for patterns; they compose components and reference tokens (L07 A5)",
+   "platform": "The same pattern everywhere; mobile uses smaller illustrations ([inferred] in DC-L13-10).",
+   "default": "Communicate status, help people learn, and give a direct next step with a call to action (DC-L13-10). A collection with no empty state is a warning (L13 Part E1).",
+   "sources": [
+    "S-L13-069"
+   ]
+  },
+  {
+   "id": "pat.onboarding",
+   "name": "Onboarding",
+   "layer": "pat",
+   "parent": "pat",
+   "definition": "How new users learn the product: tours, contextual help, empty states.",
+   "cards": [
+    "DC-L13-11"
+   ],
+   "members": [
+    "L08-P4 Onboarding"
+   ],
+   "dtcg": "no DTCG type for patterns; they compose components and reference tokens (L07 A5)",
+   "platform": "App-store listings, not first launch, are the place to promote features (DC-L13-11).",
+   "default": "No forced tour; contextual help and empty states; everything skippable (DC-L13-11).",
+   "sources": [
+    "S-L13-070"
+   ]
+  },
+  {
+   "id": "pat.ai",
+   "name": "AI and conversational patterns",
+   "layer": "pat",
+   "parent": "pat",
+   "definition": "Patterns for generative and agentic features and chat or voice surfaces: labeling AI content, citations, uncertainty, and edit, undo and retry around generated output.",
+   "cards": [
+    "DC-L13-16",
+    "DC-L14-12"
+   ],
+   "related": [
+    "DC-L08-22"
+   ],
+   "dtcg": "no DTCG type for patterns; they compose components and reference tokens (L07 A5)",
+   "platform": "On watch, car and speaker the same conversation becomes short voice turns or cards (DC-L14-12); Apple, Google and Microsoft run their own AI identity conventions ([inferred] in DC-L13-16).",
+   "default": "Label AI content, place distinctly styled citations next to claims, do not present reasoning traces as explanation, express uncertainty, do not autoscroll streamed answers (DC-L13-16, L13 finding 5); always pair generated output with Edit, Undo and Retry (DC-L14-12).",
+   "sources": [
+    "S-L13-083",
+    "S-L13-084",
+    "S-L13-089",
+    "S-L14-011"
+   ]
+  },
+  {
+   "id": "pat.glanceable",
+   "name": "Glanceable surfaces",
+   "layer": "pat",
+   "parent": "pat",
+   "definition": "Widgets, complications, tiles, notifications and Live Activities: surfaces read in a glance outside the app.",
+   "cards": [
+    "DC-L14-07"
+   ],
+   "dtcg": "no DTCG type for patterns; they compose components and reference tokens (L07 A5)",
+   "platform": "Always On on iPhone and Watch dims and slows updates; Wear ambient mode is similar (DC-L14-07).",
+   "default": "Design the complication or tile first, then the app; one number or one status per surface (DC-L14-07).",
+   "sources": [
+    "S-L14-015",
+    "S-L14-018",
+    "S-L14-084"
+   ]
+  },
+  {
+   "id": "pat.layout",
+   "name": "Layout archetypes",
+   "layer": "pat",
+   "parent": "pat",
+   "children": [
+    "pat.layout.canonical",
+    "pat.layout.shell"
+   ],
+   "definition": "Named screen structures that recur across products: canonical pane layouts and the app shell."
+  },
+  {
+   "id": "pat.layout.canonical",
+   "name": "Canonical layouts and panes",
+   "layer": "pat",
+   "parent": "pat.layout",
+   "definition": "Standard multi-pane layouts (list-detail, supporting pane, feed) and when each gets one, two or three panes.",
+   "cards": [
+    "DC-L03-18"
+   ],
+   "dtcg": "no DTCG type for patterns; they compose components and reference tokens (L07 A5)",
+   "platform": "Compose ships canonical layout scaffolds and Navigation 3 (DC-L03-18).",
+   "default": "Material's three archetypes plus a full-page document template; one pane below 840dp, two panes from 840dp, three only at the largest sizes (DC-L03-18).",
+   "sources": [
+    "S-L03-025",
+    "S-L03-027",
+    "S-L03-071"
+   ]
+  },
+  {
+   "id": "pat.layout.shell",
+   "name": "App shell regions",
+   "layer": "pat",
+   "parent": "pat.layout",
+   "definition": "The persistent regions of an app (navigation, header, content, supporting areas) and where navigation sits at each size.",
+   "cards": [
+    "DC-L03-19"
+   ],
+   "dtcg": "no DTCG type for patterns; they compose components and reference tokens (L07 A5)",
+   "platform": "On Apple platforms Liquid Glass floats controls over content, so backgrounds extend under sidebars, toolbars and tab bars (DC-L03-19).",
+   "default": "Compact: bottom bar with 3-5 destinations; medium: collapsed rail; expanded and up: expanded rail or sidebar; swap components only when they are functionally equivalent (DC-L03-19).",
+   "sources": [
+    "S-L03-025",
+    "S-L03-032"
+   ]
+  },
+  {
+   "id": "pat.motion",
+   "name": "Transitions and choreography",
+   "layer": "pat",
+   "parent": "pat",
+   "definition": "Named transition patterns between views and the stagger rules for sequencing several elements.",
+   "cards": [
+    "DC-L04-23"
+   ],
+   "dtcg": "transition composite and duration (stagger); DTCG has no choreography type (L07 A5)",
+   "platform": "Android has transition classes for all four Material patterns; iOS uses system transitions and matched geometry; the web uses the View Transitions API (DC-L04-23).",
+   "default": "Four named transitions (fade, fade-through, shared-axis, container transform) plus a stagger token of 20-50ms, total at most 500ms (DC-L04-23).",
+   "sources": [
+    "S-L04-014",
+    "S-L04-064"
+   ]
+  },
+  {
+   "id": "pat.other",
+   "name": "Other product patterns",
+   "layer": "pat",
+   "parent": "pat",
+   "definition": "Patterns L08 catalogued without a dedicated Decision Card: search and filtering, authentication, data tables and settings. Their decisions come from components and the forms, collections and feedback patterns above.",
+   "members": [
+    "L08-P3 Search and filtering",
+    "L08-P7 Authentication",
+    "L08-P9 Settings"
+   ],
+   "dtcg": "no DTCG type for patterns; they compose components and reference tokens (L07 A5)",
+   "sources": [
+    "S-L08-107",
+    "S-L08-086"
+   ]
+  },
+  {
+   "id": "pat.templates",
+   "name": "Page templates",
+   "layer": "pat",
+   "parent": "pat",
+   "definition": "Whole-page starting points assembled from the shell, components and patterns: dashboard, list or index page, detail page, settings, and marketing or landing page. Product systems ship the shell as components; marketing templates mostly live outside product systems (L08 Templates).",
+   "members": [
+    "Dashboard",
+    "List or index page",
+    "Detail page",
+    "Settings page",
+    "Marketing or landing page"
+   ],
+   "dtcg": "no DTCG type for patterns; they compose components and reference tokens (L07 A5)",
+   "default": "Detail pages use a supporting pane of about one third of the width (M3 list-detail and supporting pane) (L08 Templates, [S-L08-096]).",
+   "sources": [
+    "S-L08-001",
+    "S-L08-096",
+    "S-L08-012"
+   ]
+  }
+ ]
+}

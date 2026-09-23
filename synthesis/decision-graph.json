@@ -1,0 +1,4405 @@
+{
+ "nodes": [
+  {
+   "id": "DC-L01-01",
+   "lane": "L01",
+   "title": "Color space used to build ramps",
+   "block": "Foundations > Color > Palette generation > Color space",
+   "step": 4,
+   "fan_out": 6
+  },
+  {
+   "id": "DC-L01-02",
+   "lane": "L01",
+   "title": "Ramp step count and naming convention",
+   "block": "Foundations > Color > Palette generation > Ramp scale",
+   "step": 4,
+   "fan_out": 2
+  },
+  {
+   "id": "DC-L01-03",
+   "lane": "L01",
+   "title": "What a step means (ramp construction rule)",
+   "block": "Foundations > Color > Palette generation > Step semantics",
+   "step": 4,
+   "fan_out": 5
+  },
+  {
+   "id": "DC-L01-04",
+   "lane": "L01",
+   "title": "Palette generation tool and source of truth",
+   "block": "Foundations > Color > Palette generation > Tooling",
+   "step": 4,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L01-05",
+   "lane": "L01",
+   "title": "Gamut target and color syntax (sRGB vs Display P3)",
+   "block": "Foundations > Color > Color spaces and gamut",
+   "step": 4,
+   "fan_out": 2
+  },
+  {
+   "id": "DC-L01-06",
+   "lane": "L01",
+   "title": "Neutral temperature (pure vs tinted gray, warm vs cool)",
+   "block": "Foundations > Color > Neutrals > Temperature",
+   "step": 4,
+   "fan_out": 3
+  },
+  {
+   "id": "DC-L01-07",
+   "lane": "L01",
+   "title": "Neutral ramp resolution, usage bands and alpha neutrals",
+   "block": "Foundations > Color > Neutrals > Ramp and usage",
+   "step": 4,
+   "fan_out": 3
+  },
+  {
+   "id": "DC-L01-08",
+   "lane": "L01",
+   "title": "Number of accent (brand/UI) colors",
+   "block": "Foundations > Color > Brand vs UI color > Accent count",
+   "step": 4,
+   "fan_out": 3
+  },
+  {
+   "id": "DC-L01-09",
+   "lane": "L01",
+   "title": "Adapting brand color for UI use",
+   "block": "Foundations > Color > Brand vs UI color > Brand-to-UI translation",
+   "step": 4,
+   "fan_out": 3
+  },
+  {
+   "id": "DC-L01-10",
+   "lane": "L01",
+   "title": "Overall chroma level (muted vs vivid palette)",
+   "block": "Foundations > Color > Palette character > Vibrancy",
+   "step": 4,
+   "fan_out": 5
+  },
+  {
+   "id": "DC-L01-11",
+   "lane": "L01",
+   "title": "Semantic role taxonomy (naming grammar for color roles)",
+   "block": "Foundations > Color > Semantic roles > Taxonomy",
+   "step": 4,
+   "fan_out": 3
+  },
+  {
+   "id": "DC-L01-12",
+   "lane": "L01",
+   "title": "Emphasis levels per role",
+   "block": "Foundations > Color > Semantic roles > Emphasis",
+   "step": 4,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L01-13",
+   "lane": "L01",
+   "title": "Surface and layering model",
+   "block": "Foundations > Color > Semantic roles > Surfaces",
+   "step": 4,
+   "fan_out": 5
+  },
+  {
+   "id": "DC-L01-14",
+   "lane": "L01",
+   "title": "Foreground (\"on\") colors and text hierarchy",
+   "block": "Foundations > Color > Semantic roles > Foreground",
+   "step": 5,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L01-15",
+   "lane": "L01",
+   "title": "Status and feedback colors",
+   "block": "Foundations > Color > Semantic roles > Status",
+   "step": 4,
+   "fan_out": 3
+  },
+  {
+   "id": "DC-L01-16",
+   "lane": "L01",
+   "title": "Borders, outlines and focus color",
+   "block": "Foundations > Color > Semantic roles > Borders and focus",
+   "step": 5,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L01-17",
+   "lane": "L01",
+   "title": "Interaction state color method",
+   "block": "Foundations > Color > States > Interaction states",
+   "step": 5,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L01-18",
+   "lane": "L01",
+   "title": "Dark mode mapping strategy",
+   "block": "Foundations > Color > Modes > Dark mode mapping",
+   "step": 4,
+   "fan_out": 5
+  },
+  {
+   "id": "DC-L01-19",
+   "lane": "L01",
+   "title": "Dark surface darkness, chroma in dark, and dimmed themes",
+   "block": "Foundations > Color > Modes > Dark base and dimmed",
+   "step": 5,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L01-20",
+   "lane": "L01",
+   "title": "Accessibility theme set (contrast levels, high contrast, forced colors, colorblind themes)",
+   "block": "Foundations > Color > Modes > Accessibility modes",
+   "step": 5,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L01-21",
+   "lane": "L01",
+   "title": "Dynamic and personalized color",
+   "block": "Foundations > Color > Modes > Dynamic color",
+   "step": 4,
+   "fan_out": 5
+  },
+  {
+   "id": "DC-L01-22",
+   "lane": "L01",
+   "title": "Contrast standard, target level and enforcement method",
+   "block": "Foundations > Color > Accessibility > Contrast",
+   "step": 4,
+   "fan_out": 5
+  },
+  {
+   "id": "DC-L01-23",
+   "lane": "L01",
+   "title": "Color independence and color-vision-deficiency safety",
+   "block": "Foundations > Color > Accessibility > Not color alone",
+   "step": 4,
+   "fan_out": 2
+  },
+  {
+   "id": "DC-L01-24",
+   "lane": "L01",
+   "title": "Data-visualization color (summary; L05 owns depth)",
+   "block": "Foundations > Color > Data visualization",
+   "step": 4,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L01-25",
+   "lane": "L01",
+   "title": "Gradients and expressive/brand color use (summary)",
+   "block": "Foundations > Color > Expressive color > Gradients and illustration",
+   "step": 5,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L01-26",
+   "lane": "L01",
+   "title": "Color token architecture, tiers and mode handling",
+   "block": "Foundations > Color > Tokens > Architecture",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L01-27",
+   "lane": "L01",
+   "title": "Transparent (alpha) colors",
+   "block": "Foundations > Color > Primitives > Alpha colors",
+   "step": 6,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L02-01",
+   "lane": "L02",
+   "title": "Typeface sourcing strategy (system vs brand vs open-source)",
+   "block": "Foundations > Typography > Typeface > Sourcing",
+   "step": 3,
+   "fan_out": 6
+  },
+  {
+   "id": "DC-L02-02",
+   "lane": "L02",
+   "title": "Primary typeface classification (the personality choice)",
+   "block": "Foundations > Typography > Typeface > Classification",
+   "step": 3,
+   "fan_out": 3
+  },
+  {
+   "id": "DC-L02-03",
+   "lane": "L02",
+   "title": "Number of families and pairing",
+   "block": "Foundations > Typography > Typeface > Families and pairing",
+   "step": 3,
+   "fan_out": 2
+  },
+  {
+   "id": "DC-L02-04",
+   "lane": "L02",
+   "title": "Variable fonts, optical sizing and grade",
+   "block": "Foundations > Typography > Typeface > Variable axes",
+   "step": 3,
+   "fan_out": 5
+  },
+  {
+   "id": "DC-L02-05",
+   "lane": "L02",
+   "title": "Monospace and numeric faces",
+   "block": "Foundations > Typography > Typeface > Monospace / numerals",
+   "step": 4,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L02-06",
+   "lane": "L02",
+   "title": "Font licensing, loading and performance (web)",
+   "block": "Foundations > Typography > Typeface > Delivery",
+   "step": 3,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L02-07",
+   "lane": "L02",
+   "title": "Type role taxonomy and naming",
+   "block": "Foundations > Typography > Type roles",
+   "step": 0,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L02-08",
+   "lane": "L02",
+   "title": "Base body size",
+   "block": "Foundations > Typography > Type scale > Base size",
+   "step": 0,
+   "fan_out": 3
+  },
+  {
+   "id": "DC-L02-09",
+   "lane": "L02",
+   "title": "Scale method and ratio",
+   "block": "Foundations > Typography > Type scale > Generation method",
+   "step": 4,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L02-10",
+   "lane": "L02",
+   "title": "Number of steps and styles",
+   "block": "Foundations > Typography > Type scale > Step count",
+   "step": 5,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L02-11",
+   "lane": "L02",
+   "title": "Productive vs expressive typography (scale contrast)",
+   "block": "Foundations > Typography > Type sets",
+   "step": 0,
+   "fan_out": 5
+  },
+  {
+   "id": "DC-L02-12",
+   "lane": "L02",
+   "title": "Emphasis variants within a style",
+   "block": "Foundations > Typography > Type roles > Emphasis",
+   "step": 5,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L02-13",
+   "lane": "L02",
+   "title": "Line height system (and 4pt baseline snapping)",
+   "block": "Foundations > Typography > Metrics > Line height",
+   "step": 4,
+   "fan_out": 3
+  },
+  {
+   "id": "DC-L02-14",
+   "lane": "L02",
+   "title": "Letter spacing (tracking) strategy",
+   "block": "Foundations > Typography > Metrics > Letter spacing",
+   "step": 5,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L02-15",
+   "lane": "L02",
+   "title": "Weight palette and the job of each weight",
+   "block": "Foundations > Typography > Metrics > Weights",
+   "step": 4,
+   "fan_out": 2
+  },
+  {
+   "id": "DC-L02-16",
+   "lane": "L02",
+   "title": "Paragraph spacing and vertical rhythm",
+   "block": "Foundations > Typography > Metrics > Paragraph spacing / rhythm",
+   "step": 5,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L02-17",
+   "lane": "L02",
+   "title": "Line length (measure)",
+   "block": "Foundations > Typography > Layout of text > Measure",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L02-18",
+   "lane": "L02",
+   "title": "Alignment, casing and truncation",
+   "block": "Foundations > Typography > Layout of text > Alignment, case, overflow",
+   "step": 5,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L02-19",
+   "lane": "L02",
+   "title": "Responsive strategy (fixed, per-breakpoint or fluid)",
+   "block": "Foundations > Typography > Responsive type > Strategy",
+   "step": 1,
+   "fan_out": 2
+  },
+  {
+   "id": "DC-L02-20",
+   "lane": "L02",
+   "title": "Platform scales and minimum sizes (mobile vs desktop)",
+   "block": "Foundations > Typography > Responsive type > Platform scales",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L02-21",
+   "lane": "L02",
+   "title": "Text scaling support (Dynamic Type, Android font scale, browser zoom)",
+   "block": "Foundations > Typography > Accessibility > Text scaling",
+   "step": 4,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L02-22",
+   "lane": "L02",
+   "title": "Text spacing robustness, legibility and dyslexia considerations",
+   "block": "Foundations > Typography > Accessibility > Legibility and spacing",
+   "step": 6,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L02-23",
+   "lane": "L02",
+   "title": "Text color and contrast pairing (link with L01)",
+   "block": "Foundations > Typography > Accessibility > Contrast (shared with Color)",
+   "step": 5,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L02-24",
+   "lane": "L02",
+   "title": "Script coverage and font fallback stacks (incl. Indic, CJK, Arabic)",
+   "block": "Foundations > Typography > Internationalization > Scripts and fallback",
+   "step": 3,
+   "fan_out": 4
+  },
+  {
+   "id": "DC-L02-25",
+   "lane": "L02",
+   "title": "Script-specific metrics (line height, size, spacing, emphasis, direction)",
+   "block": "Foundations > Typography > Internationalization > Script metrics",
+   "step": 4,
+   "fan_out": 2
+  },
+  {
+   "id": "DC-L02-26",
+   "lane": "L02",
+   "title": "Numerals (tabular vs proportional, lining vs oldstyle, native digits)",
+   "block": "Foundations > Typography > Details > Numerals",
+   "step": 4,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L02-27",
+   "lane": "L02",
+   "title": "Typography token architecture and naming",
+   "block": "Foundations > Typography > Tokens",
+   "step": 1,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L02-28",
+   "lane": "L02",
+   "title": "Figma encoding: text styles vs typography variables",
+   "block": "Foundations > Typography > Tokens > Figma",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L03-01",
+   "lane": "L03",
+   "title": "Base spacing unit",
+   "block": "Foundations > Space > Base unit",
+   "step": 0,
+   "fan_out": 5
+  },
+  {
+   "id": "DC-L03-02",
+   "lane": "L03",
+   "title": "Spacing scale progression and step count",
+   "block": "Foundations > Space > Spacing scale",
+   "step": 1,
+   "fan_out": 5
+  },
+  {
+   "id": "DC-L03-03",
+   "lane": "L03",
+   "title": "Spacing token naming scheme",
+   "block": "Foundations > Space > Naming",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L03-04",
+   "lane": "L03",
+   "title": "Spacing semantics (inset, stack, inline, gap; component vs layout)",
+   "block": "Foundations > Space > Semantic spacing",
+   "step": 2,
+   "fan_out": 2
+  },
+  {
+   "id": "DC-L03-05",
+   "lane": "L03",
+   "title": "Inset shape (square, squish, stretch)",
+   "block": "Foundations > Space > Semantic spacing > Inset",
+   "step": 6,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L03-06",
+   "lane": "L03",
+   "title": "Fine steps, nudges and negative space tokens",
+   "block": "Foundations > Space > Spacing scale > Fine and negative steps",
+   "step": 1,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L03-07",
+   "lane": "L03",
+   "title": "Control height scale (sm / md / lg)",
+   "block": "Foundations > Sizing > Control heights",
+   "step": 5,
+   "fan_out": 2
+  },
+  {
+   "id": "DC-L03-08",
+   "lane": "L03",
+   "title": "Icon and avatar size scales",
+   "block": "Foundations > Sizing > Media sizes (icons, avatars)",
+   "step": 6,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L03-09",
+   "lane": "L03",
+   "title": "Border width scale",
+   "block": "Foundations > Sizing > Border widths",
+   "step": 3,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L03-10",
+   "lane": "L03",
+   "title": "Density strategy (who sets density, and how)",
+   "block": "Foundations > Space > Density",
+   "step": 3,
+   "fan_out": 3
+  },
+  {
+   "id": "DC-L03-11",
+   "lane": "L03",
+   "title": "Density implemented as a token mode",
+   "block": "Foundations > Space > Density > Modes",
+   "step": 4,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L03-12",
+   "lane": "L03",
+   "title": "Minimum touch and pointer target",
+   "block": "Foundations > Sizing > Targets",
+   "step": 0,
+   "fan_out": 2
+  },
+  {
+   "id": "DC-L03-13",
+   "lane": "L03",
+   "title": "Target spacing and control proximity",
+   "block": "Foundations > Space > Target spacing",
+   "step": 2,
+   "fan_out": 2
+  },
+  {
+   "id": "DC-L03-14",
+   "lane": "L03",
+   "title": "Breakpoint set",
+   "block": "Foundations > Layout > Breakpoints",
+   "step": 0,
+   "fan_out": 5
+  },
+  {
+   "id": "DC-L03-15",
+   "lane": "L03",
+   "title": "Column grid (columns, gutters, margins)",
+   "block": "Foundations > Layout > Grid",
+   "step": 4,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L03-16",
+   "lane": "L03",
+   "title": "Container model and max content width",
+   "block": "Foundations > Layout > Containers",
+   "step": 1,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L03-17",
+   "lane": "L03",
+   "title": "Responsive spacing (does spacing change with breakpoint?)",
+   "block": "Foundations > Space > Responsive spacing",
+   "step": 3,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L03-18",
+   "lane": "L03",
+   "title": "Canonical layouts and pane model",
+   "block": "Patterns > Layout > Canonical layouts",
+   "step": 2,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L03-19",
+   "lane": "L03",
+   "title": "App shell regions and navigation placement",
+   "block": "Patterns > Layout > App shell",
+   "step": 1,
+   "fan_out": 2
+  },
+  {
+   "id": "DC-L03-20",
+   "lane": "L03",
+   "title": "Safe areas, edge-to-edge and foldables",
+   "block": "Foundations > Layout > Safe areas",
+   "step": 2,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L03-21",
+   "lane": "L03",
+   "title": "Component-level responsiveness (container queries vs viewport media queries)",
+   "block": "Foundations > Layout > Responsive mechanism",
+   "step": 4,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L03-22",
+   "lane": "L03",
+   "title": "Responsive vs adaptive strategy",
+   "block": "Foundations > Layout > Adaptation strategy",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L03-23",
+   "lane": "L03",
+   "title": "Layer order (z-index scale)",
+   "block": "Foundations > Layout > Layers (L04 owns elevation styling)",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L03-24",
+   "lane": "L03",
+   "title": "Whitespace personality and grouping",
+   "block": "Foundations > Space > Whitespace and hierarchy",
+   "step": 4,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L03-25",
+   "lane": "L03",
+   "title": "Vertical rhythm and text-spacing resilience",
+   "block": "Foundations > Space > Vertical rhythm",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L03-26",
+   "lane": "L03",
+   "title": "Units and token encoding across platforms",
+   "block": "Foundations > Tokens > Dimension encoding",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L04-01",
+   "lane": "L04",
+   "title": "Corner radius scale (how many steps, which values)",
+   "block": "Foundations > Shape > Corner radius scale",
+   "step": 4,
+   "fan_out": 4
+  },
+  {
+   "id": "DC-L04-02",
+   "lane": "L04",
+   "title": "Overall roundness level (the \"shape personality\" dial)",
+   "block": "Foundations > Shape > Shape personality",
+   "step": 3,
+   "fan_out": 5
+  },
+  {
+   "id": "DC-L04-03",
+   "lane": "L04",
+   "title": "Per-component radius mapping (semantic radius roles)",
+   "block": "Foundations > Shape > Radius roles > Component mapping",
+   "step": 5,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L04-04",
+   "lane": "L04",
+   "title": "Corner geometry (circular arc vs continuous curvature / squircle)",
+   "block": "Foundations > Shape > Corner geometry",
+   "step": 4,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L04-05",
+   "lane": "L04",
+   "title": "Nested and concentric radius rule",
+   "block": "Foundations > Shape > Nesting rule",
+   "step": 6,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L04-06",
+   "lane": "L04",
+   "title": "Pill, full-round and expressive shape library (incl. shape morphing)",
+   "block": "Foundations > Shape > Full round and expressive shapes",
+   "step": 6,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L04-07",
+   "lane": "L04",
+   "title": "Border and stroke width scale (and outline vs fill vs shadow-as-border)",
+   "block": "Foundations > Borders > Stroke width scale",
+   "step": 4,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L04-08",
+   "lane": "L04",
+   "title": "Divider and separator usage",
+   "block": "Foundations > Borders > Dividers",
+   "step": 4,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L04-09",
+   "lane": "L04",
+   "title": "Focus indicator (thickness, offset, color, shape)",
+   "block": "Foundations > Borders > Focus ring",
+   "step": 7,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L04-10",
+   "lane": "L04",
+   "title": "Depth strategy (flat vs shadow vs tonal vs material)",
+   "block": "Foundations > Elevation > Depth strategy",
+   "step": 3,
+   "fan_out": 5
+  },
+  {
+   "id": "DC-L04-11",
+   "lane": "L04",
+   "title": "Elevation scale (number of levels and component mapping)",
+   "block": "Foundations > Elevation > Elevation scale",
+   "step": 4,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L04-12",
+   "lane": "L04",
+   "title": "Shadow recipe (layering, color, softness, dark mode)",
+   "block": "Foundations > Elevation > Shadow recipe",
+   "step": 4,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L04-13",
+   "lane": "L04",
+   "title": "Surface roles and dark-mode elevation",
+   "block": "Foundations > Elevation > Surface roles",
+   "step": 4,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L04-14",
+   "lane": "L04",
+   "title": "Z-index / layer scale",
+   "block": "Foundations > Elevation > Stacking layers",
+   "step": 5,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L04-15",
+   "lane": "L04",
+   "title": "Use of translucent materials (glass, blur, vibrancy)",
+   "block": "Foundations > Materials > Translucency",
+   "step": 3,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L04-16",
+   "lane": "L04",
+   "title": "Reduced transparency and legibility fallbacks",
+   "block": "Foundations > Materials > Accessibility fallbacks",
+   "step": 4,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L04-17",
+   "lane": "L04",
+   "title": "Opacity scale and state layers",
+   "block": "Foundations > Opacity > State and disabled opacity",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L04-18",
+   "lane": "L04",
+   "title": "Scrim / modal backdrop",
+   "block": "Foundations > Opacity > Scrims and overlays",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L04-19",
+   "lane": "L04",
+   "title": "Motion personality (productive vs expressive; snappy vs bouncy)",
+   "block": "Foundations > Motion > Motion personality",
+   "step": 4,
+   "fan_out": 5
+  },
+  {
+   "id": "DC-L04-20",
+   "lane": "L04",
+   "title": "Duration scale",
+   "block": "Foundations > Motion > Duration scale",
+   "step": 5,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L04-21",
+   "lane": "L04",
+   "title": "Easing set",
+   "block": "Foundations > Motion > Easing curves",
+   "step": 5,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L04-22",
+   "lane": "L04",
+   "title": "Springs vs duration-based motion",
+   "block": "Foundations > Motion > Physics (springs)",
+   "step": 5,
+   "fan_out": 2
+  },
+  {
+   "id": "DC-L04-23",
+   "lane": "L04",
+   "title": "Choreography and transition patterns",
+   "block": "Patterns > Motion > Transitions and choreography",
+   "step": 6,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L04-24",
+   "lane": "L04",
+   "title": "Enter/exit asymmetry and interruptibility",
+   "block": "Foundations > Motion > Interruptibility",
+   "step": 6,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L04-25",
+   "lane": "L04",
+   "title": "Reduced-motion policy",
+   "block": "Foundations > Motion > Accessibility (reduced motion)",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L04-26",
+   "lane": "L04",
+   "title": "Haptic feedback vocabulary",
+   "block": "Foundations > Haptics > Semantic haptic map",
+   "step": 5,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L04-27",
+   "lane": "L04",
+   "title": "Sound / UI audio (earcons)",
+   "block": "Foundations > Sound > UI sounds",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L04-28",
+   "lane": "L04",
+   "title": "Encoding shape, depth and motion tokens (DTCG types, gaps, naming)",
+   "block": "Tokens > Types > Shape, elevation, motion",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L05-01",
+   "lane": "L05",
+   "title": "Icon library strategy (adopt, extend, or draw your own)",
+   "block": "Foundations > Iconography > Icon library source",
+   "step": 0,
+   "fan_out": 3
+  },
+  {
+   "id": "DC-L05-02",
+   "lane": "L05",
+   "title": "Icon style (outline, filled, duotone; rounded, sharp)",
+   "block": "Foundations > Iconography > Style",
+   "step": 0,
+   "fan_out": 3
+  },
+  {
+   "id": "DC-L05-03",
+   "lane": "L05",
+   "title": "Stroke weight, corners and terminals (matching type)",
+   "block": "Foundations > Iconography > Stroke and corner metrics",
+   "step": 0,
+   "fan_out": 3
+  },
+  {
+   "id": "DC-L05-04",
+   "lane": "L05",
+   "title": "Icon grid, keylines, live area and padding",
+   "block": "Foundations > Iconography > Construction grid",
+   "step": 1,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L05-05",
+   "lane": "L05",
+   "title": "Icon size scale and optical sizing",
+   "block": "Foundations > Iconography > Sizes",
+   "step": 0,
+   "fan_out": 3
+  },
+  {
+   "id": "DC-L05-06",
+   "lane": "L05",
+   "title": "Icon state conventions (selected, active, disabled, emphasis)",
+   "block": "Foundations > Iconography > States",
+   "step": 1,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L05-07",
+   "lane": "L05",
+   "title": "Icon and label pairing (when icons need text, alignment, spacing)",
+   "block": "Foundations > Iconography > Icon with text",
+   "step": 1,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L05-08",
+   "lane": "L05",
+   "title": "Icon color and rendering mode",
+   "block": "Foundations > Iconography > Color",
+   "step": 1,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L05-09",
+   "lane": "L05",
+   "title": "Icon metaphors, naming and localization",
+   "block": "Foundations > Iconography > Metaphor, naming, localization",
+   "step": 1,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L05-10",
+   "lane": "L05",
+   "title": "Icon delivery and encoding (how icons ship)",
+   "block": "Foundations > Iconography > Delivery; Tokens > Assets",
+   "step": 1,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L05-11",
+   "lane": "L05",
+   "title": "Icon tiers beyond UI icons (pictograms and spot icons)",
+   "block": "Foundations > Iconography > Tiers (UI icon, pictogram, spot icon)",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L05-12",
+   "lane": "L05",
+   "title": "App icon system (iOS/macOS layered Liquid Glass, Android adaptive + themed, PWA)",
+   "block": "Brand in product > App icon",
+   "step": 0,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L05-13",
+   "lane": "L05",
+   "title": "Logo in product and favicons",
+   "block": "Brand in product > Logo usage; Brand in product > Favicon",
+   "step": 1,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L05-14",
+   "lane": "L05",
+   "title": "Photography art direction (subjects, perspective, light, color treatment, inclusion)",
+   "block": "Foundations > Imagery > Photography style",
+   "step": 0,
+   "fan_out": 3
+  },
+  {
+   "id": "DC-L05-15",
+   "lane": "L05",
+   "title": "Aspect ratios and cropping",
+   "block": "Foundations > Imagery > Aspect ratios",
+   "step": 1,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L05-16",
+   "lane": "L05",
+   "title": "Text and UI on images (overlays, scrims, protection)",
+   "block": "Foundations > Imagery > Text on images",
+   "step": 1,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L05-17",
+   "lane": "L05",
+   "title": "Image loading, placeholders and fallbacks",
+   "block": "Foundations > Imagery > Loading and placeholders",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L05-18",
+   "lane": "L05",
+   "title": "Avatars (sizes, shapes, fallbacks, presence)",
+   "block": "Components > Avatar (imagery-driven component)",
+   "step": 1,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L05-19",
+   "lane": "L05",
+   "title": "Illustration style and brand personality",
+   "block": "Foundations > Illustration > Style",
+   "step": 1,
+   "fan_out": 3
+  },
+  {
+   "id": "DC-L05-20",
+   "lane": "L05",
+   "title": "Illustration tiers and where they appear (hero, spot, empty state, patterns)",
+   "block": "Foundations > Illustration > Types and usage",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L05-21",
+   "lane": "L05",
+   "title": "Emoji, stickers, 3D assets, animated icons and Lottie (summary)",
+   "block": "Foundations > Rich media > Emoji, 3D, animated assets",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L05-22",
+   "lane": "L05",
+   "title": "Data-viz scope, chart library and chart-type guidance",
+   "block": "Foundations > Data visualization > Chart types and library",
+   "step": 1,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L05-23",
+   "lane": "L05",
+   "title": "Data-viz color palettes (categorical, sequential, diverging, status)",
+   "block": "Foundations > Color > Data visualization palettes (shared with L01)",
+   "step": 0,
+   "fan_out": 3
+  },
+  {
+   "id": "DC-L05-24",
+   "lane": "L05",
+   "title": "Chart anatomy and chart tokens (axes, gridlines, labels, legends, tooltips)",
+   "block": "Foundations > Data visualization > Chart anatomy",
+   "step": 1,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L05-25",
+   "lane": "L05",
+   "title": "Chart accessibility (not color alone, text alternatives, data tables)",
+   "block": "Foundations > Data visualization > Accessibility",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L06-01",
+   "lane": "L06",
+   "title": "Brand-to-product layering model",
+   "block": "Foundations > Brand > Layer architecture",
+   "step": 1,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L06-02",
+   "lane": "L06",
+   "title": "Brand personality profile (the input that drives the lever matrix)",
+   "block": "Foundations > Brand > Personality",
+   "step": 0,
+   "fan_out": 15
+  },
+  {
+   "id": "DC-L06-03",
+   "lane": "L06",
+   "title": "Expressiveness level and hero-moment budget",
+   "block": "Foundations > Brand > Expression intensity",
+   "step": 1,
+   "fan_out": 5
+  },
+  {
+   "id": "DC-L06-04",
+   "lane": "L06",
+   "title": "Role of the brand color inside the product",
+   "block": "Foundations > Color > Brand color role",
+   "step": 2,
+   "fan_out": 3
+  },
+  {
+   "id": "DC-L06-05",
+   "lane": "L06",
+   "title": "Color scheme source and colorfulness (static brand vs dynamic; scheme variant)",
+   "block": "Foundations > Color > Scheme strategy",
+   "step": 3,
+   "fan_out": 2
+  },
+  {
+   "id": "DC-L06-06",
+   "lane": "L06",
+   "title": "Theme-generator inputs (how many brand knobs)",
+   "block": "Foundations > Theming > Generator inputs",
+   "step": 4,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L06-07",
+   "lane": "L06",
+   "title": "Brand typeface strategy",
+   "block": "Foundations > Typography > Brand typeface",
+   "step": 2,
+   "fan_out": 3
+  },
+  {
+   "id": "DC-L06-08",
+   "lane": "L06",
+   "title": "Typeface personality (classification and axes)",
+   "block": "Foundations > Typography > Personality",
+   "step": 3,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L06-09",
+   "lane": "L06",
+   "title": "Shape language and signature shape",
+   "block": "Foundations > Shape > Brand shape language",
+   "step": 1,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L06-10",
+   "lane": "L06",
+   "title": "Motion personality",
+   "block": "Foundations > Motion > Personality",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L06-11",
+   "lane": "L06",
+   "title": "Graphic devices, motifs and signature details",
+   "block": "Foundations > Brand > Graphic devices",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L06-12",
+   "lane": "L06",
+   "title": "Illustration and character system",
+   "block": "Foundations > Illustration > Brand style and characters",
+   "step": 1,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L06-13",
+   "lane": "L06",
+   "title": "Iconography as brand translation",
+   "block": "Foundations > Iconography > Brand match",
+   "step": 4,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L06-14",
+   "lane": "L06",
+   "title": "Platform deference level (brand vs native conventions)",
+   "block": "Foundations > Brand > Platform deference",
+   "step": 1,
+   "fan_out": 2
+  },
+  {
+   "id": "DC-L06-15",
+   "lane": "L06",
+   "title": "Design principles (kind, count, ranking, format)",
+   "block": "Governance > Principles",
+   "step": 1,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L06-16",
+   "lane": "L06",
+   "title": "Multi-brand architecture (what is fixed, what flexes)",
+   "block": "Tokens > Theming > Brand layers",
+   "step": 2,
+   "fan_out": 2
+  },
+  {
+   "id": "DC-L06-17",
+   "lane": "L06",
+   "title": "White-label customisation surface",
+   "block": "Tokens > Theming > White-label controls",
+   "step": 5,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L06-18",
+   "lane": "L06",
+   "title": "Voice definition",
+   "block": "Content > Voice",
+   "step": 1,
+   "fan_out": 5
+  },
+  {
+   "id": "DC-L06-19",
+   "lane": "L06",
+   "title": "Tone modulation matrix",
+   "block": "Content > Tone",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L06-20",
+   "lane": "L06",
+   "title": "Capitalization style",
+   "block": "Content > Mechanics > Capitalization",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L06-21",
+   "lane": "L06",
+   "title": "Grammar and mechanics settings",
+   "block": "Content > Mechanics",
+   "step": 2,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L06-22",
+   "lane": "L06",
+   "title": "Component microcopy patterns",
+   "block": "Content > Microcopy",
+   "step": 3,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L06-23",
+   "lane": "L06",
+   "title": "Terminology, word list and inclusive language",
+   "block": "Content > Terminology",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L06-24",
+   "lane": "L06",
+   "title": "Localization readiness",
+   "block": "Content > Localization",
+   "step": 2,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L07-01",
+   "lane": "L07",
+   "title": "How many token tiers",
+   "block": "Tokens > Architecture > Tiers",
+   "step": 2,
+   "fan_out": 4
+  },
+  {
+   "id": "DC-L07-02",
+   "lane": "L07",
+   "title": "When a component token tier is worth it",
+   "block": "Tokens > Architecture > Component tokens",
+   "step": 3,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L07-03",
+   "lane": "L07",
+   "title": "Primitive (base) naming: descriptive vs numeric scales",
+   "block": "Tokens > Naming > Primitives",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L07-04",
+   "lane": "L07",
+   "title": "Semantic naming grammar (which levels, in what order)",
+   "block": "Tokens > Naming > Semantic grammar",
+   "step": 3,
+   "fan_out": 2
+  },
+  {
+   "id": "DC-L07-05",
+   "lane": "L07",
+   "title": "Namespace / prefix",
+   "block": "Tokens > Naming > Namespace",
+   "step": 0,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L07-06",
+   "lane": "L07",
+   "title": "Casing, separators and platform name transforms",
+   "block": "Tokens > Naming > Casing",
+   "step": 4,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L07-07",
+   "lane": "L07",
+   "title": "Which properties become tokens (token coverage)",
+   "block": "Tokens > Scope > Coverage",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L07-08",
+   "lane": "L07",
+   "title": "Source of truth (Figma, JSON repo, or code)",
+   "block": "Tokens > Architecture > Source of truth",
+   "step": 1,
+   "fan_out": 3
+  },
+  {
+   "id": "DC-L07-09",
+   "lane": "L07",
+   "title": "Interchange format and file layout",
+   "block": "Tokens > Architecture > File format",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L07-10",
+   "lane": "L07",
+   "title": "Color value encoding (color space, hex fallback)",
+   "block": "Tokens > Types > Color",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L07-11",
+   "lane": "L07",
+   "title": "Dimension units (px vs rem) and unitless numbers",
+   "block": "Tokens > Types > Dimension",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L07-12",
+   "lane": "L07",
+   "title": "Typography tokens: composite vs atomic, and styles vs variables in Figma",
+   "block": "Tokens > Types > Typography",
+   "step": 0,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L07-13",
+   "lane": "L07",
+   "title": "Shadow, border and elevation tokens (composites vs Figma effect styles)",
+   "block": "Tokens > Types > Shadow / Border",
+   "step": 0,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L07-14",
+   "lane": "L07",
+   "title": "Motion tokens (duration, easing, springs)",
+   "block": "Tokens > Types > Motion",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L07-15",
+   "lane": "L07",
+   "title": "Theming axes (which modes exist and where they live)",
+   "block": "Tokens > Theming > Modes",
+   "step": 0,
+   "fan_out": 3
+  },
+  {
+   "id": "DC-L07-16",
+   "lane": "L07",
+   "title": "Multi-brand architecture",
+   "block": "Tokens > Theming > Brands",
+   "step": 1,
+   "fan_out": 4
+  },
+  {
+   "id": "DC-L07-17",
+   "lane": "L07",
+   "title": "Containing the mode-combination explosion",
+   "block": "Tokens > Theming > Combinations",
+   "step": 4,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L07-18",
+   "lane": "L07",
+   "title": "Figma collection structure (how tiers map to collections)",
+   "block": "Figma > Variables > Collections",
+   "step": 3,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L07-19",
+   "lane": "L07",
+   "title": "Scoping and visibility (keeping primitives out of designers' hands)",
+   "block": "Figma > Variables > Scope & publishing",
+   "step": 4,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L07-20",
+   "lane": "L07",
+   "title": "Code syntax and platform names in Figma",
+   "block": "Figma > Variables > Code syntax",
+   "step": 5,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L07-21",
+   "lane": "L07",
+   "title": "Styles vs variables in Figma (which to use for what)",
+   "block": "Figma > Styles vs Variables",
+   "step": 1,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L07-22",
+   "lane": "L07",
+   "title": "Component API in Figma (variants vs properties vs slots)",
+   "block": "Components > Figma component API",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L07-23",
+   "lane": "L07",
+   "title": "Deprecation, descriptions and change management for tokens",
+   "block": "Tokens > Governance > Lifecycle",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L07-24",
+   "lane": "L07",
+   "title": "Design-to-code linkage and AI readiness (Code Connect, MCP, descriptions)",
+   "block": "Tooling > Design-code bridge",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L07-25",
+   "lane": "L07",
+   "title": "Pipeline and transformer choice",
+   "block": "Tooling > Token pipeline",
+   "step": 3,
+   "fan_out": 3
+  },
+  {
+   "id": "DC-L07-26",
+   "lane": "L07",
+   "title": "Governance tooling in Figma (lint, analytics, branching)",
+   "block": "Governance > Tooling",
+   "step": 0,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L07-27",
+   "lane": "L07",
+   "title": "Figma plan tier as a design constraint",
+   "block": "Tooling > Figma plan",
+   "step": 0,
+   "fan_out": 3
+  },
+  {
+   "id": "DC-L07-28",
+   "lane": "L07",
+   "title": "Layout and breakpoint tokens (grid auto layout, breakpoints as modes)",
+   "block": "Tokens > Layout",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L08-01",
+   "lane": "L08",
+   "title": "Component inventory scope",
+   "block": "Components > Inventory",
+   "step": 0,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L08-02",
+   "lane": "L08",
+   "title": "Hierarchy model and naming",
+   "block": "Components > Taxonomy",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L08-03",
+   "lane": "L08",
+   "title": "Build strategy (headless, styled, or native)",
+   "block": "Components > Implementation > Base library",
+   "step": 0,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L08-04",
+   "lane": "L08",
+   "title": "Component API style (configuration vs composition)",
+   "block": "Components > API",
+   "step": 1,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L08-05",
+   "lane": "L08",
+   "title": "Button hierarchy (how many emphasis levels)",
+   "block": "Components > Button > Variants",
+   "step": 0,
+   "fan_out": 2
+  },
+  {
+   "id": "DC-L08-06",
+   "lane": "L08",
+   "title": "Destructive action treatment",
+   "block": "Components > Button > Danger; Patterns > Destructive confirmation",
+   "step": 1,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L08-07",
+   "lane": "L08",
+   "title": "Control size scale and shape",
+   "block": "Components > Sizing; Foundations > Shape (L04)",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L08-08",
+   "lane": "L08",
+   "title": "Icon placement and content in controls",
+   "block": "Components > Button > Content",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L08-09",
+   "lane": "L08",
+   "title": "State model (which states get distinct styling, and how)",
+   "block": "Components > States",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L08-10",
+   "lane": "L08",
+   "title": "Disabled and unavailable actions",
+   "block": "Components > States > Disabled",
+   "step": 0,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L08-11",
+   "lane": "L08",
+   "title": "Focus indicator style",
+   "block": "Components > States > Focus-visible",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L08-12",
+   "lane": "L08",
+   "title": "Loading behavior",
+   "block": "Components > States > Loading; Patterns > Loading states",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L08-13",
+   "lane": "L08",
+   "title": "Density modes",
+   "block": "Components > Density; Foundations > Space (L03)",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L08-14",
+   "lane": "L08",
+   "title": "Selected and active state treatment",
+   "block": "Components > States > Selected",
+   "step": 1,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L08-15",
+   "lane": "L08",
+   "title": "Container separation for cards and panels",
+   "block": "Components > Card; Foundations > Elevation (L04)",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L08-16",
+   "lane": "L08",
+   "title": "Form field style and label placement",
+   "block": "Components > Text field; Patterns > Forms",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L08-17",
+   "lane": "L08",
+   "title": "Validation timing and error presentation",
+   "block": "Patterns > Forms > Validation",
+   "step": 0,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L08-18",
+   "lane": "L08",
+   "title": "Feedback and notification model",
+   "block": "Patterns > Notifications; Components > Toast, Banner, Alert",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L08-19",
+   "lane": "L08",
+   "title": "Navigation model by screen size",
+   "block": "Patterns > Navigation",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L08-20",
+   "lane": "L08",
+   "title": "Overlay model (dialog, sheet, popover)",
+   "block": "Patterns > Modality; Components > Dialog, Sheet, Popover",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L08-21",
+   "lane": "L08",
+   "title": "Long collections (pagination, load more, infinite scroll)",
+   "block": "Patterns > Collections",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L08-22",
+   "lane": "L08",
+   "title": "AI surfaces module",
+   "block": "Components > AI",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L08-23",
+   "lane": "L08",
+   "title": "Component documentation template",
+   "block": "Documentation > Component page",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L09-01",
+   "lane": "L09",
+   "title": "Shape posture (default control radius)",
+   "block": "Foundations > Shape > Radius scale and default",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L09-02",
+   "lane": "L09",
+   "title": "Depth model",
+   "block": "Foundations > Elevation",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L09-03",
+   "lane": "L09",
+   "title": "Color generation method",
+   "block": "Foundations > Color > Palette generation",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L09-04",
+   "lane": "L09",
+   "title": "Density and base size",
+   "block": "Foundations > Typography + Space > Density preset",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L09-05",
+   "lane": "L09",
+   "title": "Typeface posture",
+   "block": "Foundations > Typography > Typeface",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L09-06",
+   "lane": "L09",
+   "title": "Motion model",
+   "block": "Foundations > Motion",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L09-07",
+   "lane": "L09",
+   "title": "Brand posture and theming openness",
+   "block": "Theming > Brands and modes",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L09-08",
+   "lane": "L09",
+   "title": "Distribution model",
+   "block": "Delivery > Packaging",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L10-01",
+   "lane": "L10",
+   "title": "Target platforms and form factors",
+   "block": "Platforms > Scope > Target platforms",
+   "step": 0,
+   "fan_out": 12
+  },
+  {
+   "id": "DC-L10-02",
+   "lane": "L10",
+   "title": "Platform posture: native-first, brand-first, or coherent hybrid",
+   "block": "Platforms > Strategy > Native vs brand posture",
+   "step": 0,
+   "fan_out": 9
+  },
+  {
+   "id": "DC-L10-03",
+   "lane": "L10",
+   "title": "What is shared across platforms: tokens, components, or principles",
+   "block": "Platforms > Architecture > Sharing layer",
+   "step": 0,
+   "fan_out": 5
+  },
+  {
+   "id": "DC-L10-04",
+   "lane": "L10",
+   "title": "Brand color placement per platform",
+   "block": "Foundations > Color > Brand accent > Platform application",
+   "step": 1,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L10-05",
+   "lane": "L10",
+   "title": "User personalization vs fixed brand (dynamic color, accent, glass look)",
+   "block": "Foundations > Color > Personalization policy",
+   "step": 1,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L10-06",
+   "lane": "L10",
+   "title": "Typeface strategy per platform (system font vs brand font)",
+   "block": "Foundations > Typography > Typeface > Platform mapping",
+   "step": 1,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L10-07",
+   "lane": "L10",
+   "title": "Text scaling policy (Dynamic Type, sp, rem)",
+   "block": "Foundations > Typography > Scaling > Platform text scaling",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L10-08",
+   "lane": "L10",
+   "title": "Unit system and value translation",
+   "block": "Tokens > Encoding > Units per platform",
+   "step": 1,
+   "fan_out": 2
+  },
+  {
+   "id": "DC-L10-09",
+   "lane": "L10",
+   "title": "Primary navigation model per platform and size",
+   "block": "Patterns > Navigation > Top-level navigation",
+   "step": 2,
+   "fan_out": 2
+  },
+  {
+   "id": "DC-L10-10",
+   "lane": "L10",
+   "title": "Adaptive layout strategy (size classes, breakpoints, panes, foldables)",
+   "block": "Foundations > Layout > Adaptive strategy",
+   "step": 1,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L10-11",
+   "lane": "L10",
+   "title": "Edge-to-edge, safe areas, insets and system bars",
+   "block": "Foundations > Layout > Safe areas and insets",
+   "step": 3,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L10-12",
+   "lane": "L10",
+   "title": "Materials, translucency and surface treatment per platform",
+   "block": "Foundations > Depth > Materials (platform)",
+   "step": 3,
+   "fan_out": 2
+  },
+  {
+   "id": "DC-L10-13",
+   "lane": "L10",
+   "title": "Controls: system controls vs custom-branded controls (and shape)",
+   "block": "Components > Controls > Platform rendering",
+   "step": 1,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L10-14",
+   "lane": "L10",
+   "title": "Motion, back navigation and haptics per platform",
+   "block": "Foundations > Motion > Platform motion",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L10-15",
+   "lane": "L10",
+   "title": "Input modalities, density and target sizes",
+   "block": "Foundations > Interaction > Input modality and targets",
+   "step": 1,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L10-16",
+   "lane": "L10",
+   "title": "Platform accessibility settings the system must honor",
+   "block": "Foundations > Accessibility > Platform settings",
+   "step": 4,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L10-17",
+   "lane": "L10",
+   "title": "Dark mode and appearance modes per platform",
+   "block": "Foundations > Color > Appearance modes (platform)",
+   "step": 1,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L10-18",
+   "lane": "L10",
+   "title": "Web delivery layer (CSS custom properties, preference queries, container queries, rem)",
+   "block": "Tokens > Delivery > Web",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L10-19",
+   "lane": "L10",
+   "title": "Component implementation technology (web components vs framework components)",
+   "block": "Components > Implementation > Technology",
+   "step": 1,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L10-20",
+   "lane": "L10",
+   "title": "Native toolkit per platform (SwiftUI/UIKit, Compose/Views, WinUI)",
+   "block": "Platforms > Implementation > Native toolkit",
+   "step": 1,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L10-21",
+   "lane": "L10",
+   "title": "Cross-platform framework and how it themes",
+   "block": "Platforms > Implementation > Cross-platform framework",
+   "step": 0,
+   "fan_out": 3
+  },
+  {
+   "id": "DC-L10-22",
+   "lane": "L10",
+   "title": "Token pipeline to platforms",
+   "block": "Tokens > Delivery > Multi-platform build",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L10-23",
+   "lane": "L10",
+   "title": "OS version floor and design-language generation",
+   "block": "Platforms > Scope > OS versions",
+   "step": 0,
+   "fan_out": 4
+  },
+  {
+   "id": "DC-L10-24",
+   "lane": "L10",
+   "title": "Secondary form factors (watch, TV, car, XR) and desktop app shells",
+   "block": "Platforms > Scope > Secondary form factors",
+   "step": 1,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L10-25",
+   "lane": "L10",
+   "title": "Iconography across platforms (system symbols vs one brand icon set)",
+   "block": "Foundations > Iconography > Platform mapping",
+   "step": 1,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L11-01",
+   "lane": "L11",
+   "title": "Starting point (adopt, adapt, or create)",
+   "block": "Strategy > Starting point",
+   "step": 3,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L11-02",
+   "lane": "L11",
+   "title": "Scope: products, platforms, stack, audience",
+   "block": "Strategy > Scope",
+   "step": 0,
+   "fan_out": 8
+  },
+  {
+   "id": "DC-L11-03",
+   "lane": "L11",
+   "title": "System posture (Kholmatova's parameters)",
+   "block": "Strategy > Posture",
+   "step": 1,
+   "fan_out": 3
+  },
+  {
+   "id": "DC-L11-04",
+   "lane": "L11",
+   "title": "Audit method (interface inventory)",
+   "block": "Process > Discovery > Audit",
+   "step": 0,
+   "fan_out": 2
+  },
+  {
+   "id": "DC-L11-05",
+   "lane": "L11",
+   "title": "Design principles",
+   "block": "Foundations > Principles",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L11-06",
+   "lane": "L11",
+   "title": "Build order (foundations first vs components first vs pilot-driven)",
+   "block": "Process > Build order",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L11-07",
+   "lane": "L11",
+   "title": "Pilot selection",
+   "block": "Process > Pilot",
+   "step": 1,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L11-08",
+   "lane": "L11",
+   "title": "Rollout strategy",
+   "block": "Adoption > Rollout",
+   "step": 0,
+   "fan_out": 3
+  },
+  {
+   "id": "DC-L11-09",
+   "lane": "L11",
+   "title": "Team model",
+   "block": "Governance > Team model",
+   "step": 1,
+   "fan_out": 3
+  },
+  {
+   "id": "DC-L11-10",
+   "lane": "L11",
+   "title": "Roles and staffing",
+   "block": "Governance > Roles",
+   "step": 2,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L11-11",
+   "lane": "L11",
+   "title": "Contribution model",
+   "block": "Governance > Contribution",
+   "step": 2,
+   "fan_out": 2
+  },
+  {
+   "id": "DC-L11-12",
+   "lane": "L11",
+   "title": "Governance flow and decision records",
+   "block": "Governance > Process",
+   "step": 4,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L11-13",
+   "lane": "L11",
+   "title": "Component lifecycle / status labels",
+   "block": "Governance > Component status",
+   "step": 5,
+   "fan_out": 2
+  },
+  {
+   "id": "DC-L11-14",
+   "lane": "L11",
+   "title": "Versioning strategy",
+   "block": "Change > Versioning",
+   "step": 6,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L11-15",
+   "lane": "L11",
+   "title": "Deprecation and migration policy",
+   "block": "Change > Deprecation",
+   "step": 7,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L11-16",
+   "lane": "L11",
+   "title": "Source of truth and design-code sync",
+   "block": "Change > Source of truth",
+   "step": 1,
+   "fan_out": 2
+  },
+  {
+   "id": "DC-L11-17",
+   "lane": "L11",
+   "title": "Documentation platform",
+   "block": "Docs > Platform",
+   "step": 2,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L11-18",
+   "lane": "L11",
+   "title": "Component documentation page template",
+   "block": "Docs > Component page",
+   "step": 0,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L11-19",
+   "lane": "L11",
+   "title": "Accessibility program",
+   "block": "Foundations > Accessibility > Program",
+   "step": 0,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L11-20",
+   "lane": "L11",
+   "title": "Success metrics and instrumentation",
+   "block": "Measurement > Metrics",
+   "step": 4,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L11-21",
+   "lane": "L11",
+   "title": "Maturity stage targeting",
+   "block": "Measurement > Maturity",
+   "step": 5,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L11-22",
+   "lane": "L11",
+   "title": "Communication and community rituals",
+   "block": "Adoption > Communication",
+   "step": 1,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L11-23",
+   "lane": "L11",
+   "title": "Agent-readable distribution (how AI tools consume the system)",
+   "block": "Distribution > Agent context",
+   "step": 3,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L11-24",
+   "lane": "L11",
+   "title": "AI guardrails (enforcement, linting, evals)",
+   "block": "Governance > AI guardrails",
+   "step": 4,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L11-25",
+   "lane": "L11",
+   "title": "Theming dimensions (modes, brands, density, platforms)",
+   "block": "Foundations > Theming scope",
+   "step": 1,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L13-01",
+   "lane": "L13",
+   "title": "Loading and wait-feedback ladder",
+   "block": "Patterns > Feedback > Loading and latency",
+   "step": 0,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L13-02",
+   "lane": "L13",
+   "title": "Global navigation model and item count",
+   "block": "Patterns > Navigation > Global navigation",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L13-03",
+   "lane": "L13",
+   "title": "Progressive disclosure strategy",
+   "block": "Patterns > Information density > Disclosure",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L13-04",
+   "lane": "L13",
+   "title": "Content hierarchy for scanning",
+   "block": "Foundations > Content > Scannability (type styles in L02, layout in L03)",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L13-05",
+   "lane": "L13",
+   "title": "Form field labeling and required-field marking",
+   "block": "Patterns > Forms > Field anatomy",
+   "step": 0,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L13-06",
+   "lane": "L13",
+   "title": "Validation timing",
+   "block": "Patterns > Forms > Validation",
+   "step": 5,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L13-07",
+   "lane": "L13",
+   "title": "Error message pattern",
+   "block": "Patterns > Feedback > Errors",
+   "step": 5,
+   "fan_out": 2
+  },
+  {
+   "id": "DC-L13-08",
+   "lane": "L13",
+   "title": "Destructive and irreversible actions: undo vs confirm",
+   "block": "Patterns > Error prevention > Destructive actions",
+   "step": 6,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L13-09",
+   "lane": "L13",
+   "title": "Feedback channel selection (inline, toast, banner, dialog)",
+   "block": "Patterns > Feedback > Messaging",
+   "step": 6,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L13-10",
+   "lane": "L13",
+   "title": "Empty states",
+   "block": "Patterns > States > Empty",
+   "step": 1,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L13-11",
+   "lane": "L13",
+   "title": "Onboarding approach",
+   "block": "Patterns > Guidance > Onboarding",
+   "step": 1,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L13-12",
+   "lane": "L13",
+   "title": "Microinteraction specification model",
+   "block": "Components > Behavior > Interaction spec",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L13-13",
+   "lane": "L13",
+   "title": "Readability and plain-language targets",
+   "block": "Foundations > Content > Readability (L06 owns voice and tone)",
+   "step": 1,
+   "fan_out": 2
+  },
+  {
+   "id": "DC-L13-14",
+   "lane": "L13",
+   "title": "Inclusive design stance",
+   "block": "Principles > Inclusion",
+   "step": 0,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L13-15",
+   "lane": "L13",
+   "title": "Deceptive-pattern policy",
+   "block": "Principles > Ethics > Deceptive patterns",
+   "step": 1,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L13-16",
+   "lane": "L13",
+   "title": "AI interface patterns",
+   "block": "Patterns > AI > Generative and agentic features",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L13-17",
+   "lane": "L13",
+   "title": "Convention vs novelty (the Jakob's-law dial)",
+   "block": "Principles > Familiarity",
+   "step": 0,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L13-18",
+   "lane": "L13",
+   "title": "Primary action emphasis and placement",
+   "block": "Components > Actions > Emphasis hierarchy (L08 owns button variants)",
+   "step": 0,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L14-01",
+   "lane": "L14",
+   "title": "Device classes in scope and their support tier",
+   "block": "Platforms > Scope > Device classes",
+   "step": 1,
+   "fan_out": 10
+  },
+  {
+   "id": "DC-L14-02",
+   "lane": "L14",
+   "title": "One component set with device variants, or separate sets per device",
+   "block": "Components > Architecture > Device variants",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L14-03",
+   "lane": "L14",
+   "title": "Target-size policy by input modality",
+   "block": "Foundations > Sizing > Targets > By input",
+   "step": 2,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L14-04",
+   "lane": "L14",
+   "title": "Type sizing by viewing-distance class",
+   "block": "Foundations > Typography > Scale > Distance classes",
+   "step": 2,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L14-05",
+   "lane": "L14",
+   "title": "Navigation container per device class",
+   "block": "Patterns > Navigation > Device containers",
+   "step": 3,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L14-06",
+   "lane": "L14",
+   "title": "Interaction state model across inputs",
+   "block": "Foundations > Interaction > States",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L14-07",
+   "lane": "L14",
+   "title": "Glanceable surfaces tier (complications, tiles, widgets, notifications, Live Activities)",
+   "block": "Patterns > Surfaces > Glanceable",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L14-08",
+   "lane": "L14",
+   "title": "Motion policy per device class",
+   "block": "Foundations > Motion > Device policy",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L14-09",
+   "lane": "L14",
+   "title": "Appearance modes per device class",
+   "block": "Foundations > Color > Appearance by device",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L14-10",
+   "lane": "L14",
+   "title": "Safe zones and edge policy per device",
+   "block": "Foundations > Layout > Device safe zones",
+   "step": 3,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L14-11",
+   "lane": "L14",
+   "title": "Safety and distraction limits as enforceable rules",
+   "block": "Governance > Linting > Context safety rules",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L14-12",
+   "lane": "L14",
+   "title": "Conversational and AI surface",
+   "block": "Patterns > Conversational > AI chat, voice and agents",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L14-13",
+   "lane": "L14",
+   "title": "Information density per device class",
+   "block": "Foundations > Space > Density by context",
+   "step": 4,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L14-14",
+   "lane": "L14",
+   "title": "Accessibility test matrix per device class",
+   "block": "Governance > Accessibility > Device test matrix",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L15-01",
+   "lane": "L15",
+   "title": "Visual style direction (style preset)",
+   "block": "Foundations > Visual language > Style preset",
+   "step": 2,
+   "fan_out": 12
+  },
+  {
+   "id": "DC-L15-02",
+   "lane": "L15",
+   "title": "Hierarchy strength (how dramatic the contrast between levels is)",
+   "block": "Foundations > Visual language > Hierarchy > Strength",
+   "step": 3,
+   "fan_out": 4
+  },
+  {
+   "id": "DC-L15-03",
+   "lane": "L15",
+   "title": "Emphasis budget (focal points, primary actions, accent area)",
+   "block": "Foundations > Visual language > Hierarchy > Emphasis budget",
+   "step": 4,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L15-04",
+   "lane": "L15",
+   "title": "Density voice (compact, comfortable, spacious)",
+   "block": "Foundations > Visual language > Density voice",
+   "step": 2,
+   "fan_out": 7
+  },
+  {
+   "id": "DC-L15-05",
+   "lane": "L15",
+   "title": "Grouping strategy (space, containers or lines)",
+   "block": "Foundations > Visual language > Grouping",
+   "step": 3,
+   "fan_out": 3
+  },
+  {
+   "id": "DC-L15-06",
+   "lane": "L15",
+   "title": "Color scheme strategy and accent proportion",
+   "block": "Foundations > Color > Scheme strategy (principle level; L01 owns ramps and roles)",
+   "step": 4,
+   "fan_out": 4
+  },
+  {
+   "id": "DC-L15-07",
+   "lane": "L15",
+   "title": "Composition and grid model",
+   "block": "Foundations > Layout > Composition model (principle level; L03 owns columns, gutters, breakpoints)",
+   "step": 3,
+   "fan_out": 2
+  },
+  {
+   "id": "DC-L15-08",
+   "lane": "L15",
+   "title": "Balance and alignment axis",
+   "block": "Foundations > Layout > Balance",
+   "step": 3,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L15-09",
+   "lane": "L15",
+   "title": "Interactive signifier strength",
+   "block": "Foundations > Visual language > Signifiers",
+   "step": 3,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L15-10",
+   "lane": "L15",
+   "title": "Optical correction policy (polish automation)",
+   "block": "Foundations > Visual language > Polish",
+   "step": 5,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L15-11",
+   "lane": "L15",
+   "title": "Builder feedback mode (critique strictness)",
+   "block": "Builder > Guidance > Feedback mode",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L16-01",
+   "lane": "L16",
+   "title": "Primary interaction model",
+   "block": "Builder > Interaction model > Primary surface",
+   "step": 1,
+   "fan_out": 4
+  },
+  {
+   "id": "DC-L16-02",
+   "lane": "L16",
+   "title": "Source of truth and round-trip direction",
+   "block": "Builder > Data > Source of truth",
+   "step": 0,
+   "fan_out": 8
+  },
+  {
+   "id": "DC-L16-03",
+   "lane": "L16",
+   "title": "Canvas rendering substrate",
+   "block": "Builder > Canvas > Renderer",
+   "step": 2,
+   "fan_out": 2
+  },
+  {
+   "id": "DC-L16-04",
+   "lane": "L16",
+   "title": "How AI participates in editing",
+   "block": "Builder > AI > Edit model",
+   "step": 2,
+   "fan_out": 3
+  },
+  {
+   "id": "DC-L16-05",
+   "lane": "L16",
+   "title": "Generative variation (\"show me 6 options\")",
+   "block": "Builder > Exploration > Variation",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L16-06",
+   "lane": "L16",
+   "title": "Preview surface (what the engineer looks at while deciding)",
+   "block": "Builder > Feedback > Preview",
+   "step": 3,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L16-07",
+   "lane": "L16",
+   "title": "Feedback latency budget",
+   "block": "Builder > Feedback > Latency",
+   "step": 3,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L16-08",
+   "lane": "L16",
+   "title": "State, undo, versioning and sharing",
+   "block": "Builder > State > History",
+   "step": 1,
+   "fan_out": 3
+  },
+  {
+   "id": "DC-L16-09",
+   "lane": "L16",
+   "title": "Review and visual diff",
+   "block": "Builder > Governance > Review",
+   "step": 3,
+   "fan_out": 1
+  },
+  {
+   "id": "DC-L16-10",
+   "lane": "L16",
+   "title": "Keyboard-first operation and command palette",
+   "block": "Builder > Input > Keyboard",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L16-11",
+   "lane": "L16",
+   "title": "Multiplayer and agent presence",
+   "block": "Builder > Collaboration > Presence",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L16-12",
+   "lane": "L16",
+   "title": "Export and handoff channels",
+   "block": "Builder > Output > Channels",
+   "step": 2,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L16-13",
+   "lane": "L16",
+   "title": "Design-tool interop strategy",
+   "block": "Builder > Interop > Design tools",
+   "step": 1,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L16-14",
+   "lane": "L16",
+   "title": "Controls for foundation parameters",
+   "block": "Builder > Controls > Parameter widgets",
+   "step": 0,
+   "fan_out": 0
+  },
+  {
+   "id": "DC-L16-15",
+   "lane": "L16",
+   "title": "Guardrails inside the editing loop",
+   "block": "Builder > Governance > Guardrails",
+   "step": 3,
+   "fan_out": 1
+  }
+ ],
+ "edges": [
+  {
+   "source": "DC-L01-01",
+   "target": "DC-L01-02"
+  },
+  {
+   "source": "DC-L01-01",
+   "target": "DC-L01-03"
+  },
+  {
+   "source": "DC-L01-01",
+   "target": "DC-L01-05"
+  },
+  {
+   "source": "DC-L01-01",
+   "target": "DC-L01-17"
+  },
+  {
+   "source": "DC-L01-01",
+   "target": "DC-L01-18"
+  },
+  {
+   "source": "DC-L01-01",
+   "target": "DC-L01-22"
+  },
+  {
+   "source": "DC-L01-02",
+   "target": "DC-L01-12"
+  },
+  {
+   "source": "DC-L01-02",
+   "target": "DC-L01-24"
+  },
+  {
+   "source": "DC-L01-03",
+   "target": "DC-L01-02"
+  },
+  {
+   "source": "DC-L01-03",
+   "target": "DC-L01-07"
+  },
+  {
+   "source": "DC-L01-03",
+   "target": "DC-L01-17"
+  },
+  {
+   "source": "DC-L01-03",
+   "target": "DC-L01-18"
+  },
+  {
+   "source": "DC-L01-03",
+   "target": "DC-L01-24"
+  },
+  {
+   "source": "DC-L01-04",
+   "target": "DC-L01-01"
+  },
+  {
+   "source": "DC-L01-05",
+   "target": "DC-L01-01"
+  },
+  {
+   "source": "DC-L01-05",
+   "target": "DC-L01-25"
+  },
+  {
+   "source": "DC-L01-06",
+   "target": "DC-L01-07"
+  },
+  {
+   "source": "DC-L01-06",
+   "target": "DC-L01-19"
+  },
+  {
+   "source": "DC-L01-06",
+   "target": "DC-L15-06"
+  },
+  {
+   "source": "DC-L01-07",
+   "target": "DC-L01-13"
+  },
+  {
+   "source": "DC-L01-07",
+   "target": "DC-L01-16"
+  },
+  {
+   "source": "DC-L01-07",
+   "target": "DC-L01-18"
+  },
+  {
+   "source": "DC-L01-08",
+   "target": "DC-L01-09"
+  },
+  {
+   "source": "DC-L01-08",
+   "target": "DC-L01-11"
+  },
+  {
+   "source": "DC-L01-08",
+   "target": "DC-L01-24"
+  },
+  {
+   "source": "DC-L01-09",
+   "target": "DC-L01-04"
+  },
+  {
+   "source": "DC-L01-09",
+   "target": "DC-L01-06"
+  },
+  {
+   "source": "DC-L01-09",
+   "target": "DC-L01-18"
+  },
+  {
+   "source": "DC-L01-10",
+   "target": "DC-L01-06"
+  },
+  {
+   "source": "DC-L01-10",
+   "target": "DC-L01-15"
+  },
+  {
+   "source": "DC-L01-10",
+   "target": "DC-L01-24"
+  },
+  {
+   "source": "DC-L01-10",
+   "target": "DC-L01-25"
+  },
+  {
+   "source": "DC-L01-10",
+   "target": "DC-L15-06"
+  },
+  {
+   "source": "DC-L01-11",
+   "target": "DC-L01-12"
+  },
+  {
+   "source": "DC-L01-11",
+   "target": "DC-L01-20"
+  },
+  {
+   "source": "DC-L01-11",
+   "target": "DC-L01-21"
+  },
+  {
+   "source": "DC-L01-12",
+   "target": "DC-L01-15"
+  },
+  {
+   "source": "DC-L01-13",
+   "target": "DC-L01-07"
+  },
+  {
+   "source": "DC-L01-13",
+   "target": "DC-L01-14"
+  },
+  {
+   "source": "DC-L01-13",
+   "target": "DC-L01-16"
+  },
+  {
+   "source": "DC-L01-13",
+   "target": "DC-L01-19"
+  },
+  {
+   "source": "DC-L01-13",
+   "target": "DC-L01-27"
+  },
+  {
+   "source": "DC-L01-15",
+   "target": "DC-L01-11"
+  },
+  {
+   "source": "DC-L01-15",
+   "target": "DC-L01-23"
+  },
+  {
+   "source": "DC-L01-15",
+   "target": "DC-L13-07"
+  },
+  {
+   "source": "DC-L01-17",
+   "target": "DC-L01-27"
+  },
+  {
+   "source": "DC-L01-18",
+   "target": "DC-L01-02"
+  },
+  {
+   "source": "DC-L01-18",
+   "target": "DC-L01-13"
+  },
+  {
+   "source": "DC-L01-18",
+   "target": "DC-L01-17"
+  },
+  {
+   "source": "DC-L01-18",
+   "target": "DC-L01-19"
+  },
+  {
+   "source": "DC-L01-18",
+   "target": "DC-L01-24"
+  },
+  {
+   "source": "DC-L01-21",
+   "target": "DC-L01-08"
+  },
+  {
+   "source": "DC-L01-21",
+   "target": "DC-L01-09"
+  },
+  {
+   "source": "DC-L01-21",
+   "target": "DC-L01-10"
+  },
+  {
+   "source": "DC-L01-21",
+   "target": "DC-L01-11"
+  },
+  {
+   "source": "DC-L01-21",
+   "target": "DC-L01-17"
+  },
+  {
+   "source": "DC-L01-22",
+   "target": "DC-L01-03"
+  },
+  {
+   "source": "DC-L01-22",
+   "target": "DC-L01-09"
+  },
+  {
+   "source": "DC-L01-22",
+   "target": "DC-L01-14"
+  },
+  {
+   "source": "DC-L01-22",
+   "target": "DC-L01-16"
+  },
+  {
+   "source": "DC-L01-22",
+   "target": "DC-L01-20"
+  },
+  {
+   "source": "DC-L01-23",
+   "target": "DC-L01-15"
+  },
+  {
+   "source": "DC-L01-23",
+   "target": "DC-L01-24"
+  },
+  {
+   "source": "DC-L01-24",
+   "target": "DC-L01-23"
+  },
+  {
+   "source": "DC-L02-01",
+   "target": "DC-L02-03"
+  },
+  {
+   "source": "DC-L02-01",
+   "target": "DC-L02-04"
+  },
+  {
+   "source": "DC-L02-01",
+   "target": "DC-L02-06"
+  },
+  {
+   "source": "DC-L02-01",
+   "target": "DC-L02-21"
+  },
+  {
+   "source": "DC-L02-01",
+   "target": "DC-L02-24"
+  },
+  {
+   "source": "DC-L02-01",
+   "target": "DC-L02-26"
+  },
+  {
+   "source": "DC-L02-02",
+   "target": "DC-L02-03"
+  },
+  {
+   "source": "DC-L02-02",
+   "target": "DC-L02-15"
+  },
+  {
+   "source": "DC-L02-02",
+   "target": "DC-L02-22"
+  },
+  {
+   "source": "DC-L02-03",
+   "target": "DC-L02-05"
+  },
+  {
+   "source": "DC-L02-03",
+   "target": "DC-L02-06"
+  },
+  {
+   "source": "DC-L02-04",
+   "target": "DC-L02-06"
+  },
+  {
+   "source": "DC-L02-04",
+   "target": "DC-L02-12"
+  },
+  {
+   "source": "DC-L02-04",
+   "target": "DC-L02-14"
+  },
+  {
+   "source": "DC-L02-04",
+   "target": "DC-L02-15"
+  },
+  {
+   "source": "DC-L02-04",
+   "target": "DC-L15-10"
+  },
+  {
+   "source": "DC-L02-06",
+   "target": "DC-L02-24"
+  },
+  {
+   "source": "DC-L02-07",
+   "target": "DC-L02-27"
+  },
+  {
+   "source": "DC-L02-08",
+   "target": "DC-L02-09"
+  },
+  {
+   "source": "DC-L02-08",
+   "target": "DC-L02-13"
+  },
+  {
+   "source": "DC-L02-08",
+   "target": "DC-L02-17"
+  },
+  {
+   "source": "DC-L02-09",
+   "target": "DC-L02-10"
+  },
+  {
+   "source": "DC-L02-11",
+   "target": "DC-L02-03"
+  },
+  {
+   "source": "DC-L02-11",
+   "target": "DC-L02-09"
+  },
+  {
+   "source": "DC-L02-11",
+   "target": "DC-L02-15"
+  },
+  {
+   "source": "DC-L02-11",
+   "target": "DC-L02-19"
+  },
+  {
+   "source": "DC-L02-11",
+   "target": "DC-L15-02"
+  },
+  {
+   "source": "DC-L02-13",
+   "target": "DC-L02-16"
+  },
+  {
+   "source": "DC-L02-13",
+   "target": "DC-L02-22"
+  },
+  {
+   "source": "DC-L02-13",
+   "target": "DC-L02-25"
+  },
+  {
+   "source": "DC-L02-14",
+   "target": "DC-L02-22"
+  },
+  {
+   "source": "DC-L02-15",
+   "target": "DC-L02-12"
+  },
+  {
+   "source": "DC-L02-15",
+   "target": "DC-L02-23"
+  },
+  {
+   "source": "DC-L02-19",
+   "target": "DC-L02-09"
+  },
+  {
+   "source": "DC-L02-19",
+   "target": "DC-L02-17"
+  },
+  {
+   "source": "DC-L02-21",
+   "target": "DC-L02-18"
+  },
+  {
+   "source": "DC-L02-24",
+   "target": "DC-L02-01"
+  },
+  {
+   "source": "DC-L02-24",
+   "target": "DC-L02-02"
+  },
+  {
+   "source": "DC-L02-24",
+   "target": "DC-L02-18"
+  },
+  {
+   "source": "DC-L02-24",
+   "target": "DC-L02-25"
+  },
+  {
+   "source": "DC-L02-25",
+   "target": "DC-L02-13"
+  },
+  {
+   "source": "DC-L02-25",
+   "target": "DC-L02-14"
+  },
+  {
+   "source": "DC-L02-27",
+   "target": "DC-L02-28"
+  },
+  {
+   "source": "DC-L03-01",
+   "target": "DC-L03-02"
+  },
+  {
+   "source": "DC-L03-01",
+   "target": "DC-L03-03"
+  },
+  {
+   "source": "DC-L03-01",
+   "target": "DC-L03-06"
+  },
+  {
+   "source": "DC-L03-01",
+   "target": "DC-L03-07"
+  },
+  {
+   "source": "DC-L03-01",
+   "target": "DC-L03-15"
+  },
+  {
+   "source": "DC-L03-02",
+   "target": "DC-L03-03"
+  },
+  {
+   "source": "DC-L03-02",
+   "target": "DC-L03-04"
+  },
+  {
+   "source": "DC-L03-02",
+   "target": "DC-L03-11"
+  },
+  {
+   "source": "DC-L03-02",
+   "target": "DC-L03-13"
+  },
+  {
+   "source": "DC-L03-02",
+   "target": "DC-L03-25"
+  },
+  {
+   "source": "DC-L03-04",
+   "target": "DC-L03-05"
+  },
+  {
+   "source": "DC-L03-04",
+   "target": "DC-L03-17"
+  },
+  {
+   "source": "DC-L03-07",
+   "target": "DC-L03-05"
+  },
+  {
+   "source": "DC-L03-07",
+   "target": "DC-L03-08"
+  },
+  {
+   "source": "DC-L03-10",
+   "target": "DC-L03-11"
+  },
+  {
+   "source": "DC-L03-10",
+   "target": "DC-L03-24"
+  },
+  {
+   "source": "DC-L03-10",
+   "target": "DC-L14-13"
+  },
+  {
+   "source": "DC-L03-11",
+   "target": "DC-L03-07"
+  },
+  {
+   "source": "DC-L03-12",
+   "target": "DC-L03-07"
+  },
+  {
+   "source": "DC-L03-12",
+   "target": "DC-L03-13"
+  },
+  {
+   "source": "DC-L03-13",
+   "target": "DC-L03-07"
+  },
+  {
+   "source": "DC-L03-13",
+   "target": "DC-L03-10"
+  },
+  {
+   "source": "DC-L03-14",
+   "target": "DC-L03-15"
+  },
+  {
+   "source": "DC-L03-14",
+   "target": "DC-L03-16"
+  },
+  {
+   "source": "DC-L03-14",
+   "target": "DC-L03-17"
+  },
+  {
+   "source": "DC-L03-14",
+   "target": "DC-L03-18"
+  },
+  {
+   "source": "DC-L03-14",
+   "target": "DC-L03-19"
+  },
+  {
+   "source": "DC-L03-18",
+   "target": "DC-L03-21"
+  },
+  {
+   "source": "DC-L03-19",
+   "target": "DC-L03-18"
+  },
+  {
+   "source": "DC-L03-19",
+   "target": "DC-L03-20"
+  },
+  {
+   "source": "DC-L03-20",
+   "target": "DC-L14-10"
+  },
+  {
+   "source": "DC-L04-01",
+   "target": "DC-L04-03"
+  },
+  {
+   "source": "DC-L04-01",
+   "target": "DC-L04-05"
+  },
+  {
+   "source": "DC-L04-01",
+   "target": "DC-L04-09"
+  },
+  {
+   "source": "DC-L04-01",
+   "target": "DC-L15-10"
+  },
+  {
+   "source": "DC-L04-02",
+   "target": "DC-L04-01"
+  },
+  {
+   "source": "DC-L04-02",
+   "target": "DC-L04-03"
+  },
+  {
+   "source": "DC-L04-02",
+   "target": "DC-L04-04"
+  },
+  {
+   "source": "DC-L04-02",
+   "target": "DC-L04-06"
+  },
+  {
+   "source": "DC-L04-02",
+   "target": "DC-L04-19"
+  },
+  {
+   "source": "DC-L04-03",
+   "target": "DC-L04-05"
+  },
+  {
+   "source": "DC-L04-05",
+   "target": "DC-L04-09"
+  },
+  {
+   "source": "DC-L04-07",
+   "target": "DC-L04-09"
+  },
+  {
+   "source": "DC-L04-10",
+   "target": "DC-L04-07"
+  },
+  {
+   "source": "DC-L04-10",
+   "target": "DC-L04-08"
+  },
+  {
+   "source": "DC-L04-10",
+   "target": "DC-L04-11"
+  },
+  {
+   "source": "DC-L04-10",
+   "target": "DC-L04-12"
+  },
+  {
+   "source": "DC-L04-10",
+   "target": "DC-L04-13"
+  },
+  {
+   "source": "DC-L04-11",
+   "target": "DC-L04-14"
+  },
+  {
+   "source": "DC-L04-15",
+   "target": "DC-L04-16"
+  },
+  {
+   "source": "DC-L04-19",
+   "target": "DC-L04-20"
+  },
+  {
+   "source": "DC-L04-19",
+   "target": "DC-L04-21"
+  },
+  {
+   "source": "DC-L04-19",
+   "target": "DC-L04-22"
+  },
+  {
+   "source": "DC-L04-19",
+   "target": "DC-L04-23"
+  },
+  {
+   "source": "DC-L04-19",
+   "target": "DC-L04-26"
+  },
+  {
+   "source": "DC-L04-20",
+   "target": "DC-L04-23"
+  },
+  {
+   "source": "DC-L04-21",
+   "target": "DC-L04-23"
+  },
+  {
+   "source": "DC-L04-22",
+   "target": "DC-L04-06"
+  },
+  {
+   "source": "DC-L04-22",
+   "target": "DC-L04-24"
+  },
+  {
+   "source": "DC-L05-01",
+   "target": "DC-L05-06"
+  },
+  {
+   "source": "DC-L05-01",
+   "target": "DC-L05-09"
+  },
+  {
+   "source": "DC-L05-01",
+   "target": "DC-L05-10"
+  },
+  {
+   "source": "DC-L05-02",
+   "target": "DC-L05-06"
+  },
+  {
+   "source": "DC-L05-02",
+   "target": "DC-L05-08"
+  },
+  {
+   "source": "DC-L05-02",
+   "target": "DC-L05-11"
+  },
+  {
+   "source": "DC-L05-03",
+   "target": "DC-L05-11"
+  },
+  {
+   "source": "DC-L05-03",
+   "target": "DC-L05-19"
+  },
+  {
+   "source": "DC-L05-03",
+   "target": "DC-L05-24"
+  },
+  {
+   "source": "DC-L05-05",
+   "target": "DC-L05-04"
+  },
+  {
+   "source": "DC-L05-05",
+   "target": "DC-L05-07"
+  },
+  {
+   "source": "DC-L05-05",
+   "target": "DC-L05-18"
+  },
+  {
+   "source": "DC-L05-12",
+   "target": "DC-L05-13"
+  },
+  {
+   "source": "DC-L05-14",
+   "target": "DC-L05-15"
+  },
+  {
+   "source": "DC-L05-14",
+   "target": "DC-L05-16"
+  },
+  {
+   "source": "DC-L05-14",
+   "target": "DC-L05-18"
+  },
+  {
+   "source": "DC-L05-15",
+   "target": "DC-L05-17"
+  },
+  {
+   "source": "DC-L05-19",
+   "target": "DC-L05-11"
+  },
+  {
+   "source": "DC-L05-19",
+   "target": "DC-L05-20"
+  },
+  {
+   "source": "DC-L05-19",
+   "target": "DC-L05-21"
+  },
+  {
+   "source": "DC-L05-22",
+   "target": "DC-L05-25"
+  },
+  {
+   "source": "DC-L05-23",
+   "target": "DC-L05-22"
+  },
+  {
+   "source": "DC-L05-23",
+   "target": "DC-L05-24"
+  },
+  {
+   "source": "DC-L05-23",
+   "target": "DC-L05-25"
+  },
+  {
+   "source": "DC-L06-01",
+   "target": "DC-L06-16"
+  },
+  {
+   "source": "DC-L06-02",
+   "target": "DC-L06-01"
+  },
+  {
+   "source": "DC-L06-02",
+   "target": "DC-L06-03"
+  },
+  {
+   "source": "DC-L06-02",
+   "target": "DC-L06-04"
+  },
+  {
+   "source": "DC-L06-02",
+   "target": "DC-L06-05"
+  },
+  {
+   "source": "DC-L06-02",
+   "target": "DC-L06-07"
+  },
+  {
+   "source": "DC-L06-02",
+   "target": "DC-L06-08"
+  },
+  {
+   "source": "DC-L06-02",
+   "target": "DC-L06-09"
+  },
+  {
+   "source": "DC-L06-02",
+   "target": "DC-L06-10"
+  },
+  {
+   "source": "DC-L06-02",
+   "target": "DC-L06-12"
+  },
+  {
+   "source": "DC-L06-02",
+   "target": "DC-L06-13"
+  },
+  {
+   "source": "DC-L06-02",
+   "target": "DC-L06-14"
+  },
+  {
+   "source": "DC-L06-02",
+   "target": "DC-L06-15"
+  },
+  {
+   "source": "DC-L06-02",
+   "target": "DC-L06-18"
+  },
+  {
+   "source": "DC-L06-02",
+   "target": "DC-L06-21"
+  },
+  {
+   "source": "DC-L06-02",
+   "target": "DC-L15-01"
+  },
+  {
+   "source": "DC-L06-03",
+   "target": "DC-L06-04"
+  },
+  {
+   "source": "DC-L06-03",
+   "target": "DC-L06-10"
+  },
+  {
+   "source": "DC-L06-03",
+   "target": "DC-L06-11"
+  },
+  {
+   "source": "DC-L06-03",
+   "target": "DC-L15-01"
+  },
+  {
+   "source": "DC-L06-03",
+   "target": "DC-L15-03"
+  },
+  {
+   "source": "DC-L06-04",
+   "target": "DC-L06-05"
+  },
+  {
+   "source": "DC-L06-04",
+   "target": "DC-L15-03"
+  },
+  {
+   "source": "DC-L06-04",
+   "target": "DC-L15-06"
+  },
+  {
+   "source": "DC-L06-05",
+   "target": "DC-L06-06"
+  },
+  {
+   "source": "DC-L06-05",
+   "target": "DC-L15-06"
+  },
+  {
+   "source": "DC-L06-06",
+   "target": "DC-L06-17"
+  },
+  {
+   "source": "DC-L06-07",
+   "target": "DC-L06-08"
+  },
+  {
+   "source": "DC-L06-07",
+   "target": "DC-L06-13"
+  },
+  {
+   "source": "DC-L06-07",
+   "target": "DC-L06-24"
+  },
+  {
+   "source": "DC-L06-08",
+   "target": "DC-L06-13"
+  },
+  {
+   "source": "DC-L06-09",
+   "target": "DC-L06-13"
+  },
+  {
+   "source": "DC-L06-14",
+   "target": "DC-L06-07"
+  },
+  {
+   "source": "DC-L06-14",
+   "target": "DC-L15-01"
+  },
+  {
+   "source": "DC-L06-16",
+   "target": "DC-L06-06"
+  },
+  {
+   "source": "DC-L06-16",
+   "target": "DC-L06-17"
+  },
+  {
+   "source": "DC-L06-18",
+   "target": "DC-L06-19"
+  },
+  {
+   "source": "DC-L06-18",
+   "target": "DC-L06-20"
+  },
+  {
+   "source": "DC-L06-18",
+   "target": "DC-L06-21"
+  },
+  {
+   "source": "DC-L06-18",
+   "target": "DC-L06-22"
+  },
+  {
+   "source": "DC-L06-18",
+   "target": "DC-L06-23"
+  },
+  {
+   "source": "DC-L06-21",
+   "target": "DC-L06-22"
+  },
+  {
+   "source": "DC-L06-24",
+   "target": "DC-L06-07"
+  },
+  {
+   "source": "DC-L07-01",
+   "target": "DC-L07-02"
+  },
+  {
+   "source": "DC-L07-01",
+   "target": "DC-L07-04"
+  },
+  {
+   "source": "DC-L07-01",
+   "target": "DC-L07-18"
+  },
+  {
+   "source": "DC-L07-01",
+   "target": "DC-L07-25"
+  },
+  {
+   "source": "DC-L07-04",
+   "target": "DC-L07-06"
+  },
+  {
+   "source": "DC-L07-04",
+   "target": "DC-L07-19"
+  },
+  {
+   "source": "DC-L07-05",
+   "target": "DC-L07-20"
+  },
+  {
+   "source": "DC-L07-06",
+   "target": "DC-L07-20"
+  },
+  {
+   "source": "DC-L07-08",
+   "target": "DC-L07-09"
+  },
+  {
+   "source": "DC-L07-08",
+   "target": "DC-L07-23"
+  },
+  {
+   "source": "DC-L07-08",
+   "target": "DC-L07-25"
+  },
+  {
+   "source": "DC-L07-12",
+   "target": "DC-L07-21"
+  },
+  {
+   "source": "DC-L07-13",
+   "target": "DC-L07-21"
+  },
+  {
+   "source": "DC-L07-15",
+   "target": "DC-L07-01"
+  },
+  {
+   "source": "DC-L07-15",
+   "target": "DC-L07-17"
+  },
+  {
+   "source": "DC-L07-15",
+   "target": "DC-L07-18"
+  },
+  {
+   "source": "DC-L07-16",
+   "target": "DC-L07-01"
+  },
+  {
+   "source": "DC-L07-16",
+   "target": "DC-L07-02"
+  },
+  {
+   "source": "DC-L07-16",
+   "target": "DC-L07-17"
+  },
+  {
+   "source": "DC-L07-16",
+   "target": "DC-L07-18"
+  },
+  {
+   "source": "DC-L07-25",
+   "target": "DC-L07-06"
+  },
+  {
+   "source": "DC-L07-25",
+   "target": "DC-L07-17"
+  },
+  {
+   "source": "DC-L07-25",
+   "target": "DC-L07-20"
+  },
+  {
+   "source": "DC-L07-26",
+   "target": "DC-L07-23"
+  },
+  {
+   "source": "DC-L07-27",
+   "target": "DC-L07-08"
+  },
+  {
+   "source": "DC-L07-27",
+   "target": "DC-L07-16"
+  },
+  {
+   "source": "DC-L07-27",
+   "target": "DC-L07-17"
+  },
+  {
+   "source": "DC-L08-01",
+   "target": "DC-L08-23"
+  },
+  {
+   "source": "DC-L08-03",
+   "target": "DC-L08-04"
+  },
+  {
+   "source": "DC-L08-04",
+   "target": "DC-L08-23"
+  },
+  {
+   "source": "DC-L08-05",
+   "target": "DC-L08-06"
+  },
+  {
+   "source": "DC-L08-05",
+   "target": "DC-L08-14"
+  },
+  {
+   "source": "DC-L08-10",
+   "target": "DC-L08-17"
+  },
+  {
+   "source": "DC-L08-17",
+   "target": "DC-L08-10"
+  },
+  {
+   "source": "DC-L10-01",
+   "target": "DC-L10-02"
+  },
+  {
+   "source": "DC-L10-01",
+   "target": "DC-L10-08"
+  },
+  {
+   "source": "DC-L10-01",
+   "target": "DC-L10-09"
+  },
+  {
+   "source": "DC-L10-01",
+   "target": "DC-L10-10"
+  },
+  {
+   "source": "DC-L10-01",
+   "target": "DC-L10-11"
+  },
+  {
+   "source": "DC-L10-01",
+   "target": "DC-L10-15"
+  },
+  {
+   "source": "DC-L10-01",
+   "target": "DC-L10-17"
+  },
+  {
+   "source": "DC-L10-01",
+   "target": "DC-L10-19"
+  },
+  {
+   "source": "DC-L10-01",
+   "target": "DC-L10-20"
+  },
+  {
+   "source": "DC-L10-01",
+   "target": "DC-L10-22"
+  },
+  {
+   "source": "DC-L10-01",
+   "target": "DC-L10-24"
+  },
+  {
+   "source": "DC-L10-01",
+   "target": "DC-L14-01"
+  },
+  {
+   "source": "DC-L10-02",
+   "target": "DC-L10-03"
+  },
+  {
+   "source": "DC-L10-02",
+   "target": "DC-L10-04"
+  },
+  {
+   "source": "DC-L10-02",
+   "target": "DC-L10-06"
+  },
+  {
+   "source": "DC-L10-02",
+   "target": "DC-L10-09"
+  },
+  {
+   "source": "DC-L10-02",
+   "target": "DC-L10-12"
+  },
+  {
+   "source": "DC-L10-02",
+   "target": "DC-L10-13"
+  },
+  {
+   "source": "DC-L10-02",
+   "target": "DC-L10-14"
+  },
+  {
+   "source": "DC-L10-02",
+   "target": "DC-L10-21"
+  },
+  {
+   "source": "DC-L10-02",
+   "target": "DC-L10-25"
+  },
+  {
+   "source": "DC-L10-03",
+   "target": "DC-L10-19"
+  },
+  {
+   "source": "DC-L10-03",
+   "target": "DC-L10-21"
+  },
+  {
+   "source": "DC-L10-03",
+   "target": "DC-L10-22"
+  },
+  {
+   "source": "DC-L10-03",
+   "target": "DC-L10-24"
+  },
+  {
+   "source": "DC-L10-03",
+   "target": "DC-L14-02"
+  },
+  {
+   "source": "DC-L10-04",
+   "target": "DC-L10-05"
+  },
+  {
+   "source": "DC-L10-05",
+   "target": "DC-L10-04"
+  },
+  {
+   "source": "DC-L10-06",
+   "target": "DC-L10-07"
+  },
+  {
+   "source": "DC-L10-08",
+   "target": "DC-L10-18"
+  },
+  {
+   "source": "DC-L10-08",
+   "target": "DC-L10-22"
+  },
+  {
+   "source": "DC-L10-09",
+   "target": "DC-L10-11"
+  },
+  {
+   "source": "DC-L10-09",
+   "target": "DC-L14-05"
+  },
+  {
+   "source": "DC-L10-10",
+   "target": "DC-L10-09"
+  },
+  {
+   "source": "DC-L10-11",
+   "target": "DC-L10-12"
+  },
+  {
+   "source": "DC-L10-12",
+   "target": "DC-L10-11"
+  },
+  {
+   "source": "DC-L10-12",
+   "target": "DC-L10-16"
+  },
+  {
+   "source": "DC-L10-13",
+   "target": "DC-L10-14"
+  },
+  {
+   "source": "DC-L10-17",
+   "target": "DC-L14-09"
+  },
+  {
+   "source": "DC-L10-20",
+   "target": "DC-L10-22"
+  },
+  {
+   "source": "DC-L10-21",
+   "target": "DC-L10-01"
+  },
+  {
+   "source": "DC-L10-21",
+   "target": "DC-L10-03"
+  },
+  {
+   "source": "DC-L10-21",
+   "target": "DC-L10-22"
+  },
+  {
+   "source": "DC-L10-23",
+   "target": "DC-L10-05"
+  },
+  {
+   "source": "DC-L10-23",
+   "target": "DC-L10-11"
+  },
+  {
+   "source": "DC-L10-23",
+   "target": "DC-L10-12"
+  },
+  {
+   "source": "DC-L10-23",
+   "target": "DC-L10-14"
+  },
+  {
+   "source": "DC-L11-01",
+   "target": "DC-L11-20"
+  },
+  {
+   "source": "DC-L11-02",
+   "target": "DC-L11-01"
+  },
+  {
+   "source": "DC-L11-02",
+   "target": "DC-L11-03"
+  },
+  {
+   "source": "DC-L11-02",
+   "target": "DC-L11-04"
+  },
+  {
+   "source": "DC-L11-02",
+   "target": "DC-L11-07"
+  },
+  {
+   "source": "DC-L11-02",
+   "target": "DC-L11-09"
+  },
+  {
+   "source": "DC-L11-02",
+   "target": "DC-L11-14"
+  },
+  {
+   "source": "DC-L11-02",
+   "target": "DC-L11-16"
+  },
+  {
+   "source": "DC-L11-02",
+   "target": "DC-L11-25"
+  },
+  {
+   "source": "DC-L11-03",
+   "target": "DC-L11-11"
+  },
+  {
+   "source": "DC-L11-03",
+   "target": "DC-L11-12"
+  },
+  {
+   "source": "DC-L11-03",
+   "target": "DC-L11-24"
+  },
+  {
+   "source": "DC-L11-04",
+   "target": "DC-L11-02"
+  },
+  {
+   "source": "DC-L11-04",
+   "target": "DC-L11-07"
+  },
+  {
+   "source": "DC-L11-07",
+   "target": "DC-L11-06"
+  },
+  {
+   "source": "DC-L11-08",
+   "target": "DC-L11-14"
+  },
+  {
+   "source": "DC-L11-08",
+   "target": "DC-L11-15"
+  },
+  {
+   "source": "DC-L11-08",
+   "target": "DC-L11-22"
+  },
+  {
+   "source": "DC-L11-09",
+   "target": "DC-L11-10"
+  },
+  {
+   "source": "DC-L11-09",
+   "target": "DC-L11-11"
+  },
+  {
+   "source": "DC-L11-09",
+   "target": "DC-L11-12"
+  },
+  {
+   "source": "DC-L11-10",
+   "target": "DC-L11-01"
+  },
+  {
+   "source": "DC-L11-11",
+   "target": "DC-L11-12"
+  },
+  {
+   "source": "DC-L11-11",
+   "target": "DC-L11-13"
+  },
+  {
+   "source": "DC-L11-12",
+   "target": "DC-L11-13"
+  },
+  {
+   "source": "DC-L11-13",
+   "target": "DC-L11-14"
+  },
+  {
+   "source": "DC-L11-13",
+   "target": "DC-L11-15"
+  },
+  {
+   "source": "DC-L11-14",
+   "target": "DC-L11-15"
+  },
+  {
+   "source": "DC-L11-16",
+   "target": "DC-L11-17"
+  },
+  {
+   "source": "DC-L11-16",
+   "target": "DC-L11-23"
+  },
+  {
+   "source": "DC-L11-17",
+   "target": "DC-L11-23"
+  },
+  {
+   "source": "DC-L11-18",
+   "target": "DC-L11-23"
+  },
+  {
+   "source": "DC-L11-19",
+   "target": "DC-L11-13"
+  },
+  {
+   "source": "DC-L11-20",
+   "target": "DC-L11-21"
+  },
+  {
+   "source": "DC-L11-23",
+   "target": "DC-L11-24"
+  },
+  {
+   "source": "DC-L13-01",
+   "target": "DC-L13-10"
+  },
+  {
+   "source": "DC-L13-05",
+   "target": "DC-L13-06"
+  },
+  {
+   "source": "DC-L13-06",
+   "target": "DC-L13-07"
+  },
+  {
+   "source": "DC-L13-07",
+   "target": "DC-L13-06"
+  },
+  {
+   "source": "DC-L13-07",
+   "target": "DC-L13-09"
+  },
+  {
+   "source": "DC-L13-08",
+   "target": "DC-L13-09"
+  },
+  {
+   "source": "DC-L13-09",
+   "target": "DC-L13-08"
+  },
+  {
+   "source": "DC-L13-13",
+   "target": "DC-L13-07"
+  },
+  {
+   "source": "DC-L13-13",
+   "target": "DC-L13-16"
+  },
+  {
+   "source": "DC-L13-14",
+   "target": "DC-L13-13"
+  },
+  {
+   "source": "DC-L13-15",
+   "target": "DC-L13-16"
+  },
+  {
+   "source": "DC-L13-17",
+   "target": "DC-L13-11"
+  },
+  {
+   "source": "DC-L13-18",
+   "target": "DC-L13-15"
+  },
+  {
+   "source": "DC-L14-01",
+   "target": "DC-L14-02"
+  },
+  {
+   "source": "DC-L14-01",
+   "target": "DC-L14-03"
+  },
+  {
+   "source": "DC-L14-01",
+   "target": "DC-L14-04"
+  },
+  {
+   "source": "DC-L14-01",
+   "target": "DC-L14-05"
+  },
+  {
+   "source": "DC-L14-01",
+   "target": "DC-L14-07"
+  },
+  {
+   "source": "DC-L14-01",
+   "target": "DC-L14-08"
+  },
+  {
+   "source": "DC-L14-01",
+   "target": "DC-L14-10"
+  },
+  {
+   "source": "DC-L14-01",
+   "target": "DC-L14-11"
+  },
+  {
+   "source": "DC-L14-01",
+   "target": "DC-L14-12"
+  },
+  {
+   "source": "DC-L14-01",
+   "target": "DC-L14-14"
+  },
+  {
+   "source": "DC-L14-03",
+   "target": "DC-L14-13"
+  },
+  {
+   "source": "DC-L14-04",
+   "target": "DC-L14-13"
+  },
+  {
+   "source": "DC-L15-01",
+   "target": "DC-L01-10"
+  },
+  {
+   "source": "DC-L15-01",
+   "target": "DC-L02-02"
+  },
+  {
+   "source": "DC-L15-01",
+   "target": "DC-L03-09"
+  },
+  {
+   "source": "DC-L15-01",
+   "target": "DC-L04-02"
+  },
+  {
+   "source": "DC-L15-01",
+   "target": "DC-L04-10"
+  },
+  {
+   "source": "DC-L15-01",
+   "target": "DC-L04-15"
+  },
+  {
+   "source": "DC-L15-01",
+   "target": "DC-L15-03"
+  },
+  {
+   "source": "DC-L15-01",
+   "target": "DC-L15-04"
+  },
+  {
+   "source": "DC-L15-01",
+   "target": "DC-L15-05"
+  },
+  {
+   "source": "DC-L15-01",
+   "target": "DC-L15-07"
+  },
+  {
+   "source": "DC-L15-01",
+   "target": "DC-L15-08"
+  },
+  {
+   "source": "DC-L15-01",
+   "target": "DC-L15-09"
+  },
+  {
+   "source": "DC-L15-02",
+   "target": "DC-L01-14"
+  },
+  {
+   "source": "DC-L15-02",
+   "target": "DC-L02-09"
+  },
+  {
+   "source": "DC-L15-02",
+   "target": "DC-L02-15"
+  },
+  {
+   "source": "DC-L15-02",
+   "target": "DC-L03-24"
+  },
+  {
+   "source": "DC-L15-03",
+   "target": "DC-L01-15"
+  },
+  {
+   "source": "DC-L15-04",
+   "target": "DC-L03-07"
+  },
+  {
+   "source": "DC-L15-04",
+   "target": "DC-L03-10"
+  },
+  {
+   "source": "DC-L15-04",
+   "target": "DC-L03-24"
+  },
+  {
+   "source": "DC-L15-04",
+   "target": "DC-L15-01"
+  },
+  {
+   "source": "DC-L15-04",
+   "target": "DC-L15-02"
+  },
+  {
+   "source": "DC-L15-04",
+   "target": "DC-L15-05"
+  },
+  {
+   "source": "DC-L15-04",
+   "target": "DC-L15-09"
+  },
+  {
+   "source": "DC-L15-05",
+   "target": "DC-L01-13"
+  },
+  {
+   "source": "DC-L15-05",
+   "target": "DC-L03-24"
+  },
+  {
+   "source": "DC-L15-05",
+   "target": "DC-L04-08"
+  },
+  {
+   "source": "DC-L15-06",
+   "target": "DC-L01-08"
+  },
+  {
+   "source": "DC-L15-06",
+   "target": "DC-L01-15"
+  },
+  {
+   "source": "DC-L15-06",
+   "target": "DC-L01-24"
+  },
+  {
+   "source": "DC-L15-06",
+   "target": "DC-L15-03"
+  },
+  {
+   "source": "DC-L15-07",
+   "target": "DC-L03-15"
+  },
+  {
+   "source": "DC-L15-07",
+   "target": "DC-L03-21"
+  },
+  {
+   "source": "DC-L15-08",
+   "target": "DC-L02-18"
+  },
+  {
+   "source": "DC-L15-09",
+   "target": "DC-L04-09"
+  },
+  {
+   "source": "DC-L16-01",
+   "target": "DC-L16-03"
+  },
+  {
+   "source": "DC-L16-01",
+   "target": "DC-L16-05"
+  },
+  {
+   "source": "DC-L16-01",
+   "target": "DC-L16-10"
+  },
+  {
+   "source": "DC-L16-01",
+   "target": "DC-L16-12"
+  },
+  {
+   "source": "DC-L16-02",
+   "target": "DC-L16-01"
+  },
+  {
+   "source": "DC-L16-02",
+   "target": "DC-L16-04"
+  },
+  {
+   "source": "DC-L16-02",
+   "target": "DC-L16-08"
+  },
+  {
+   "source": "DC-L16-02",
+   "target": "DC-L16-09"
+  },
+  {
+   "source": "DC-L16-02",
+   "target": "DC-L16-11"
+  },
+  {
+   "source": "DC-L16-02",
+   "target": "DC-L16-12"
+  },
+  {
+   "source": "DC-L16-02",
+   "target": "DC-L16-13"
+  },
+  {
+   "source": "DC-L16-02",
+   "target": "DC-L16-15"
+  },
+  {
+   "source": "DC-L16-03",
+   "target": "DC-L16-06"
+  },
+  {
+   "source": "DC-L16-03",
+   "target": "DC-L16-07"
+  },
+  {
+   "source": "DC-L16-04",
+   "target": "DC-L16-07"
+  },
+  {
+   "source": "DC-L16-04",
+   "target": "DC-L16-09"
+  },
+  {
+   "source": "DC-L16-04",
+   "target": "DC-L16-15"
+  },
+  {
+   "source": "DC-L16-08",
+   "target": "DC-L16-04"
+  },
+  {
+   "source": "DC-L16-08",
+   "target": "DC-L16-09"
+  },
+  {
+   "source": "DC-L16-08",
+   "target": "DC-L16-11"
+  },
+  {
+   "source": "DC-L16-09",
+   "target": "DC-L11-12"
+  },
+  {
+   "source": "DC-L16-15",
+   "target": "DC-L11-24"
+  }
+ ],
+ "cycles": [
+  [
+   "DC-L13-08",
+   "DC-L13-09"
+  ],
+  [
+   "DC-L13-06",
+   "DC-L13-07"
+  ],
+  [
+   "DC-L01-01",
+   "DC-L01-02",
+   "DC-L01-03",
+   "DC-L01-04",
+   "DC-L01-05",
+   "DC-L01-06",
+   "DC-L01-07",
+   "DC-L01-08",
+   "DC-L01-09",
+   "DC-L01-10",
+   "DC-L01-11",
+   "DC-L01-12",
+   "DC-L01-13",
+   "DC-L01-15",
+   "DC-L01-18",
+   "DC-L01-21",
+   "DC-L01-22",
+   "DC-L01-23",
+   "DC-L01-24",
+   "DC-L15-03",
+   "DC-L15-06"
+  ],
+  [
+   "DC-L02-13",
+   "DC-L02-25"
+  ],
+  [
+   "DC-L02-01",
+   "DC-L02-02",
+   "DC-L02-03",
+   "DC-L02-04",
+   "DC-L02-06",
+   "DC-L02-24"
+  ],
+  [
+   "DC-L15-01",
+   "DC-L15-04"
+  ],
+  [
+   "DC-L06-07",
+   "DC-L06-24"
+  ],
+  [
+   "DC-L08-10",
+   "DC-L08-17"
+  ],
+  [
+   "DC-L10-11",
+   "DC-L10-12"
+  ],
+  [
+   "DC-L10-04",
+   "DC-L10-05"
+  ],
+  [
+   "DC-L10-01",
+   "DC-L10-02",
+   "DC-L10-03",
+   "DC-L10-21"
+  ],
+  [
+   "DC-L11-02",
+   "DC-L11-04"
+  ]
+ ]
+}

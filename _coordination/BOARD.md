@@ -1,0 +1,56 @@
+# Research board (the shared blackboard for this project)
+
+Product brief: `_coordination/BRIEF.md` (read first).
+Orchestrator session: **"Design system research and builder"** (the session name other sessions use with `SendMessage`).
+Started: 2026-09-23. Protocol: `_coordination/PROTOCOL.md`. Schema: `_coordination/SCHEMA.md`.
+
+## Lanes
+Status values: `open` (unclaimed), `claimed by <who>`, `done`, `blocked (<why>)`.
+
+| Lane | Scope | Output file | Status |
+|---|---|---|---|
+| L00 | Source validation with /last30days: community pulse on design systems, tokens, Figma, OS design languages; trusted vs disputed sources | `sources/COMMUNITY-SIGNAL.md`, `sources/SOURCE-REGISTRY.md` | done (8 topics via last30days, 100-entry registry) |
+| L01 | Color: palettes, ramps, color spaces (OKLCH, HCT), semantic roles, contrast (WCAG 2.2, APCA), dark mode, dynamic color, brand vs UI color, data-viz color | `research/L01-color.md` | done (27 cards, 75 sources) |
+| L02 | Typography: typefaces, type scales, line height, tracking, fluid type, platform type (SF, Roboto, Segoe), variable fonts, type tokens | `research/L02-typography.md` | done (28 cards, 64 sources) |
+| L03 | Space, sizing, layout: spacing scales, grids, breakpoints, containers, density, touch targets, adaptive/responsive layout | `research/L03-space-layout.md` | done (26 cards, 86 sources) |
+| L04 | Shape, elevation, materials, borders, motion, sound, haptics | `research/L04-shape-depth-motion.md` | done (28 cards, 77 sources) |
+| L05 | Iconography, imagery, illustration, data visualization | `research/L05-icons-imagery-dataviz.md` | done (25 cards, 96 sources) |
+| L06 | Brand and visual identity systems, brand-to-product translation, personality to visual attributes, content, voice and tone | `research/L06-brand-voice.md` | done (24 cards, lever matrix, 21 brand cases) |
+| L07 | Tokens architecture and Figma: token tiers, naming, DTCG spec, Figma variables/modes/collections/styles/components/variants/properties/libraries/Dev Mode/Code Connect/MCP, Style Dictionary, Tokens Studio, multi-brand theming | `research/L07-tokens-figma.md` | done (28 cards, about 130 sources, builder data model) |
+| L08 | Components and patterns: cross-system component inventory, anatomy, variants, states, props, per-component accessibility (WAI-ARIA APG), patterns, templates | `research/L08-components-patterns.md` | done (23 cards, 64-component catalog in L08-component-catalog.md, 13 patterns) |
+| L09 | Benchmark teardown of famous design systems (about 20), side-by-side matrix with real values | `benchmarks/L09-benchmark-matrix.md` | done (25 systems, 12 dimension tables, 564 sources, verifier pass 28/32 held, 3 fixed) |
+| L10 | Platforms: mobile vs web vs unified systems (Apple HIG, Material, Fluent, cross-platform), native conventions, adaptive layouts, RN/Flutter/SwiftUI/Compose token pipelines | `research/L10-platforms.md` | done (25 cards, 93 sources, platform questionnaire) |
+| L11 | The designer's job and the system's lifecycle: audit, principles, governance, contribution, versioning, documentation, adoption metrics, team models, maturity, AI + MCP trends 2025-26 | `research/L11-process-governance.md` | done (25 cards, 24 competitors, 77-question kickoff questionnaire) |
+| L12 | Figma MCP hands-on: inspect real community design-system files (Simple Design System, Material 3 kit, iOS 26 kit) for variables, collections, modes, component properties | `research/L12-figma-mcp-handson.md` | open (Figma MCP now connected, read-only; it reads the file open in Figma desktop, so each kit must be opened there first) |
+| L13 | UX laws (lawsofux.com), Nielsen heuristics, Norman, Shneiderman, core UX practices, law-to-design-system-rule mapping | `research/L13-ux-laws-heuristics.md` | done (30 laws, 44 heuristics, 18 cards, 110 sources) |
+| L14 | UI practices by device class (phone, tablet, desktop, watch, TV, car, spatial, voice/AI): invariants plus device matrix | `research/L14-device-practices.md` | done (12 device classes, 14 cards, 14 invariants, device matrix) |
+| L15 | Visual design principles: hierarchy, CRAP, Gestalt, color theory, polish, styles/trends; automate vs guide vs expose (NN/g, The Futur, Figma, Refactoring UI) | `research/L15-visual-design-principles.md` | done (72 principles, 11 cards; 'futur' = The Futur) |
+| L16 | Visual design tooling for engineers and the design-to-code round trip (Figma MCP, Paper MCP, Penpot, Onlook, theme playgrounds, Bret Victor principles) | `research/L16-visual-tooling-for-engineers.md` | done (43 tools, 15 cards, 323 sources) |
+| L17 | How design systems get made today (manual and AI), documentation practices, gstack's opinionated design skills, NN/g, designsystems.surf; building-block classification (generatable / extractable / designer-owned / tool-assisted) and designer hooks | `research/L17-how-systems-get-made.md` | claimed by orchestrator subagent |
+| D1 | Design artifacts for review: starter tokens (DTCG), building-blocks atlas, foundations specimen, button sheet, builder concept screen; written to Figma and Paper | `design/` | claimed by orchestrator subagent (writes wait for Figma sign-in and Paper reconnect) |
+| S1 | Synthesis: ontology (S1a), questionnaire (S1b), levers + decision graph (S1c), builder spec (S1d) | `synthesis/*` | S1a-S1c claimed by orchestrator subagents (resumed after rate limit); S1d next |
+| V1 | Verification: fresh-context verifier agents re-check claims and values against live sources | `synthesis/VERIFICATION.md` | waits for S1 |
+
+## Cross-lane notes
+(append below: `- [L0x -> L0y] note`)
+- [L05 -> L07] DTCG has no type for icons, images or aspect ratios; the builder needs its own asset-reference convention.
+- [L02 -> L01/L03] Material and Spectrum 2 type sizes follow 14 x 1.125^n; body size tracks density (14px dense web, 16-17 reading/mobile).
+- [ALL] Each agent has about 200 web searches; Perplexity is out of quota. Prefer WebFetch on known official URLs.
+- [L11 -> S1] No competitor walks a designer through the decisions; a guided decision flow is the open space. Kickoff questionnaire (77 questions) is ready for onboarding.
+- [L06 -> S1] A few brand inputs can generate a theme (Linear: 3 variables; Razorpay Blade: one brandColor); the 7-slider lever matrix maps brand adjectives to foundations.
+- [L07 -> S1] DTCG 2025.10 is stable (28 Oct 2025); modes live in the Resolver module. Figma imports DTCG only partly (one mode per file, sRGB/HSL, px, no composites). Figma has 6 variable types incl. timing/easing (Config 2026).
+- [L04/L07 -> S1] No DTCG spring type; systems improvise. Carbon v12 beta adds radius tokens.
+- [L01 -> S1] Ramp step numbers mean different things per system (Tailwind lightness varies by hue; Spectrum equal contrast per step; Material HCT tone). Dark mode is always a separate mapping. WCAG 3 still draft (10 Sep 2026), so WCAG 2.2 is the enforceable target.
+- [ALL] The built-in browser is shared across agents; open your own tab (tabs_create) instead of reusing the active one.
+- [L10 -> S1] Multi-platform systems converge on shared foundations + native chrome (Fluent reuses native patterns 80% of the time). Apple ignores the Liquid Glass opt-out once built with the 27 SDKs; brand color moves into content under the glass.
+- [L03 -> S1] Spacing values converge (2,4,8,12,16,24,32,40,48,64); base unit and naming differ. Material renamed window size classes to breakpoints (May 2026). Density changes layout, not just padding.
+- [TOOLS] `python3 tools/jev_nav.py find "question"` answers from all lanes with Jev (key read from .env JEV_API_KEY).
+- [L08 -> S1] Systems disagree on disabled submit buttons, tooltips on disabled controls, and toasts; these are real questionnaire items. shadcn/ui switched its default base library from Radix to Base UI (July 2026).
+- [L13 -> S1] Add a 'behavior rules' layer (schema in L13 Part E3). Timing ladder 16/50/100/200/400 ms/1 s/10 s maps to feedback patterns. Zeigarnik and choice overload are weakly supported; Miller's 7+-2 does not limit menu length.
+- [L13 -> V1] Figma article claims (4.5:1 for button states, 3px focus rings) contradict WCAG; verify.
+- [L00 -> S1] Practitioners treat code as source of truth with Figma mirroring. M3 Expressive not in a stable Compose release (1.5.0 alphas). Figma remote MCP canvas writes are free in beta, paid later. Polaris moved to shopify.dev web components; Twilio Paste docs at paste-dsys.com; Spotify Encore has no public docs.
+- [L14 -> L07/L10] Add a `context` token modifier separate from `platform`. Target tokens key to input precision (pointer 20-28, finger 44-48, remote/gaze/car 56-76) and ignore density.
+- [L14 -> L11/S1] Driving rules (NHTSA 2 s glance, 12 s task, 76 dp targets, no animation) can be hard validator rules.
+- [L09 -> S1] Shared defaults (builder presets): semantic token layer (24/25), 4px spacing base with 4-64 steps (17/22), neutral surfaces + one accent + status colors, 10-12 step ramps, motion 100-300 ms ease-out, light+dark (21/25), control radius 4-8px. Divergence points (builder questions): radius, depth model, brand color placement, density/body size 13-19px, typeface, ramp generation, springs.
+- [L15 -> S1] Hierarchy lint numbers (<=3 type sizes and 1 dominant element per view, 2-3 text colors, 2 weights, 1 primary action) are practitioner guidance. Gestalt grouping is best evidenced: inner gaps < outer gaps, enforce by construction. 60-30-10 and golden ratio have weak evidence; optional presets only.
+- [L16 -> S1] Figma canvas writes exist only on the remote MCP (use_figma, generate_figma_design); needs Full seat, free beta then usage-priced; local desktop server is read-only. Paper MCP writes HTML/styles/tokens but its tokens are CSS vars with no modes. Biggest gap: decide visually, see every mode before commit, push one portable source (DTCG) to Figma, Paper and code. Only Penpot round-trips DTCG.
