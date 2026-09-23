@@ -15,6 +15,8 @@ This is the question flow at the core of the design-system builder. L11 found th
 
 Every question is tagged with the lowest mode that asks it. A `Quick` question is also asked in Standard and Expert; a `Standard` question is also asked in Expert. `Any` marks the reference-intake panel, which is available on every screen in every mode and is never required.
 
+People never pick a mode: the interview runs by zoom levels (`skills/opendesigner/references/zoom.md`). `tools/build_data.py` turns these tags into each question's level: a short hand-picked list is zoom 0 (sketch) or zoom 1 (broad), other Quick and Standard questions are zoom 2 (defined), and Expert questions are zoom 3 (detailed).
+
 | Mode | Asks | Who it is for | What happens to the rest |
 |---|---|---|---|
 | **Quick** | 10 questions | "Give me a complete system in two minutes" | Every other question takes its default. Personality sliders pre-fill style answers through the lever matrix [DC-L06-02]. |
@@ -29,18 +31,18 @@ Why these ten: they combine the highest fan-out step-0 decisions in the graph (p
 
 The builder's interface is an LLM (Claude, ChatGPT, Codex or another capable model) interviewing the person, visually where the host allows (artifacts, canvases, Figma or Paper through MCP) and in plain text otherwise [BRIEF requirements 6-7]. `questionnaire.json` carries the same steps under `interview_protocol`.
 
-1. Agree the mode (Quick, Standard, Expert) and say roughly how many questions it means. Offer the reference panel (Q-ref-01) up front and keep it open.
+1. Start at zoom 0: the five sketch questions in `references/zoom.md`, then build. Nobody picks a mode. After each level, offer to stop or to zoom into one area, with its rough minutes from `pacing.json`. Offer the reference panel (Q-ref-01) up front and keep it open.
 2. Walk the stages in order. Open each with one sentence on what the stage decides, then render its Preview if the host can show visuals; otherwise describe the Example in words.
-3. Ask each question whose mode is included and whose "Show if" holds, using its **Ask** line. Spend time by **Time weight**: for `high`, explain why, show two or three options with their visual effect and a real system, recommend the default with its source, and state what it changes downstream before moving on; for `medium`, ask with the recommended default and the main alternatives; for `low`, state the default in one line and ask to confirm or change it.
+3. Ask each question at or below the zoom level being worked whose "Show if" holds, using its **Ask** line. Skip questions whose **Status** is planned: the feature is not built yet, so ask nothing and record nothing. Spend time by **Time weight**: for `high`, explain why, show two or three options with their visual effect and a real system, recommend the default with its source, and state what it changes downstream before moving on; for `medium`, ask with the recommended default and the main alternatives; for `low`, state the default in one line and ask to confirm or change it.
 4. For asset hooks, ask "do you have this?", accept the listed formats, and if the answer is no, offer the listed paths with their caveats. Never pretend a generated placeholder is a finished brand asset.
-5. Record every answer as {question id, option value, how it was set: chosen, confirmed default, auto default, or from reference}. Questions outside the mode take their default and stay editable.
+5. Record every answer as {question id, option value, how it was set: chosen, confirmed default, auto default, or from reference}. Questions above the level reached take their default and stay editable.
 6. When an answer conflicts with an earlier one (the cycles named in stage headers), show the conflict and settle it with the ranked principles from Q-brand-07; do not average silently [L06 section 4.2].
 7. After each stage, summarize the decisions in plain sentences a teammate could read, and append them to the decision log so a later session or another model can continue coherently [BRIEF requirements 9-11].
 8. Only offer option values that appear in the question. If the person wants something else, record it as a custom value with their reason.
 9. **Show, then ask, on the best surface available.** Pick the highest rung the host supports: an OpenDesigner MCP view, a host canvas or artifact, Figma or Paper through MCP, a local HTML file, the host's question tool, then plain text with hex values and numbered options; say which rung is in use and never block on a visual [DC-L18-06].
 10. **One well-formed question per turn.** Show the recommended option and the 2-3 closest alternatives with one visual each, allow "other", and say in one line what the answer changes; put the remaining options behind "more". Ask one high-weight question per turn; group up to three low-weight ones [DC-L18-09, DC-L18-08]. On cycle screens (stage headers name them), a single form with all the linked questions is fine [DC-L18-09].
-11. **Gates.** Pause for approval three times: after the scope stages (01-05, with the block map tagged by class), after direction (Stages 06-08), and after the asset checklist; end with a coverage check that lists every block as decided, defaulted, not applicable or pending. Quick mode keeps only the direction gate [DC-L17-12, DC-L17-09].
-12. **Owner-input blocks are never invented.** Questions tagged Block class I that Quick mode skips are recorded as "assumed" and listed for confirmation at the end, not silently decided [DC-L17-08, DC-L17-01].
+11. **Gates.** Pause for approval three times: after the scope stages (01-05, with the block map tagged by class), after direction (Stages 06-08), and after the asset checklist; end with a coverage check that lists every block as decided, defaulted, not applicable or pending. At zoom 0 and 1, keep only the direction gate [DC-L17-12, DC-L17-09].
+12. **Owner-input blocks are never invented.** Questions tagged Block class I that the zoom level reached skips are recorded as "assumed" and listed for confirmation at the end, not silently decided [DC-L17-08, DC-L17-01].
 13. **Write durable outputs to the person's repo:** DTCG tokens (canonical), DESIGN.md (readable view), a decision log in ADR style, a state file with every answer, status and coverage, and an AGENTS.md pointer, plus the exported lint rules [DC-L18-10, DC-L18-11].
 
 **Block class** (auto-filled on every question from L17's scheme, DC-L17-01; the per-question mapping is [inferred]): `G` generatable from inputs and defaults, `E` best extracted from something that exists, `D` designer-owned (an asset hook), `T` tool-assisted with a named tool and caveat, `I` owner input that only the team can decide.
@@ -51,6 +53,7 @@ The builder's interface is an LLM (Claude, ChatGPT, Codex or another capable mod
 
 ```
 ### Q-<area>-<nn> · <question in plain words> · <Quick|Standard|Expert|Any>
+- **Status:** (optional) `planned` when the feature behind the question is not built yet; the interview skips it and records nothing
 - **Why:** one line on why it matters
 - **Ask:** the one short prompt the interviewing model uses
 - **Example:** what the model shows, or asks the person for, while asking
@@ -61,6 +64,7 @@ The builder's interface is an LLM (Claude, ChatGPT, Codex or another capable mod
 - **Decides:** the Decision Cards this question settles
 - **Changes:** downstream cards and ontology block names that move when the answer changes
 - **Preview:** what the builder renders live, and what the person can do with it, while they decide
+- **Dials:** (optional) which dials and engine inputs the answer moves, when that is not obvious from the options
 - **Use / avoid:** (generatable blocks) where the chosen option belongs and where it does not, shown as a teaching note beside the control
 - **Hook:** (asset hooks) accepted formats, and the paths offered when the answer is "no"
 - **Pre-answers:** (reference intake) which later questions a reference can pre-fill
@@ -153,6 +157,27 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Time weight:** high (fan-out 8)
 - **Evidence:** DC-L11-02; S-L11-083, S-L11-002, S-L11-030
 - **Merges:** K2.1, K2.2 (surfaces part), B11 (marketing vs product, first half)
+
+### Q-scope-06 · What kind of screens does this system mostly serve? · Standard
+- **Why:** A sales page, a work tool, a help page and a showcase need different spacing, card use and big "hero" moments. Naming the kind of screen sets those rules [S-L17-007].
+- **Ask:** "What are these screens mostly for: selling, getting work done, reading, or enjoying an experience?"
+- **Example:** Show one piece of content four ways: a landing page, a dashboard, a docs page and a showcase.
+- **Control:** single choice for the main surface, then one choice per surface named in Q-scope-01
+- **Options:**
+  - `persuade` Persuade (marketing and landing pages): roomy spacing, one big hero line, sections rather than card grids; display sizes reach further [S-L17-007; DC-L02-11].
+  - `operate` Operate (app screens where people get work done): spacing follows Q-aud-01, no hero, cards only to group related data; 14px body text at middle density [S-L17-007; DC-L02-08].
+  - `read` Read (docs, articles and help): comfortable spacing, 16px body text, no cards around running text [S-L17-007; DC-L02-08].
+  - `experience` Experience (portfolios, showcases and games): roomy spacing, big imagery and hero moments; display sizes reach further [S-L17-007; DC-L02-11].
+- **Default:** operate. *Source:* the engine's default product type (work-tool) is an Operate surface [inferred].
+- **Dials:** none. Expression and Density stay one setting for the whole system. The main surface sets `raw.productType` (Operate work-tool, Read content, Persuade and Experience marketing), which moves body size; any Persuade or Experience surface sets `raw.marketingSurfaces`, which widens the display sizes. Each surface also gets its own density mode and hero rule in DESIGN.md and PRODUCT.md [inferred].
+- **Decides:** none (an owner input; spec 11 settles the modes) [S-L17-007]
+- **Changes:** DC-L02-08, DC-L02-11, DC-L03-10 · blocks: Strategy > Scope
+- **Preview:** the same sample content as each chosen surface, side by side.
+- **Use / avoid:** use one mode per surface; avoid treating a whole product as Persuade because it has one landing page [S-L17-007].
+- **Skip:** yes, defaults to operate.
+- **Block class:** I (owner input)
+- **Time weight:** medium (fan-out 0)
+- **Evidence:** S-L17-007; DC-L02-08, DC-L02-11, DC-L03-10
 
 ### Q-scope-02 · Is there existing UI to clean up and merge, or is this a new product? · Standard
 - **Why:** Checking the screens you have (an audit) shows how much to merge. For example, 40 grays can merge into one 10-step color ramp [DC-L11-04, inferred].
@@ -837,7 +862,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Use / avoid:** use flat 2.0 or tonal for app surfaces people use daily; use glass only on the functional layer (bars, controls, sheets) and never on reading surfaces; keep neo-brutalist and maximal for marketing or indie products; avoid soft/neumorphic for anything interactive unless borders are added to reach 3:1 [DC-L15-01; S-L10-008 via DC-L10-12].
 - **Skip:** yes; Quick maps sliders A, C and E to a preset [inferred from L06 section 4.2].
 - **Block class:** G (generatable)
-- **Time weight:** high (fan-out 12)
+- **Time weight:** high (fan-out 13)
 - **Evidence:** DC-L15-01; S-L15-004, S-L15-005, S-L15-006, S-L15-009, S-L15-060, S-L15-073
 
 ### Q-dir-02 · How much should fit on a screen? · Standard
@@ -3591,6 +3616,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Evidence:** DC-L13-10, DC-L13-11; S-L13-069, S-L13-070, S-L08-012, S-L08-015
 
 ### Q-pattern-05 · Which deceptive patterns should the builder block? · Standard
+- **Status:** planned. The engine has no deceptive-pattern lint yet (L13 E1). The interview skips this question and records nothing.
 - **Why:** Fair defaults make 'Accept' and 'Decline' look equal and leave opt-in boxes unticked. They also word 'Decline' without guilt [DC-L13-15].
 - **Ask:** "How firmly should we stop design tricks, like boxes ticked for you or a louder 'Yes' button?"
 - **Example:** Show a consent dialog with equal buttons vs a "confirmshaming" one, flagged.
@@ -4018,6 +4044,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 > Screen: the export menu and a preview of every file the builder will produce: tokens, code, docs pages, DESIGN.md, lint rules. Graph step 2-4. These outputs are what keep the system coherent in later sessions and explainable to a team (BRIEF requirements 9 and 10).
 
 ### Q-dist-01 · How should the system leave the builder? · Standard
+- **Status:** planned. Today the system leaves as token files, code exports and Figma or Paper writes (`engine.py export`). The install command, pull request and MCP tool channels are not built. The interview skips this question and records nothing.
 - **Why:** Engineers need the output in a form they already use. It can be a snippet, an install command, a token file, a pull request or a design file [DC-L16-12].
 - **Ask:** "In what forms should the system leave the builder: code, a command, files, a pull request, or Figma?"
 - **Example:** Show the export menu with one command per channel (for example `npx shadcn@latest add <url>`).
@@ -4061,6 +4088,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Merges:** K11.1, K11.2, K11.3
 
 ### Q-dist-02 · How should AI coding tools read the system? · Standard
+- **Status:** planned. Today every system ships DESIGN.md plus DTCG files. The MCP server, llms.txt, rules files and registry are not built. The interview skips this question and records nothing.
 - **Why:** 59% of teams say some UI gets built around their design system. Channels made for AI agents make the UI they generate follow it [DC-L11-23; S-L11-031].
 - **Ask:** "How should AI coding tools like Claude, ChatGPT, Codex or Cursor read your system?"
 - **Example:** Show a DESIGN.md excerpt and an agent's generated button using the tokens.
@@ -4083,6 +4111,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Merges:** K11.4, K11.5
 
 ### Q-dist-03 · How should the system check that people and agents follow it? · Standard
+- **Status:** planned. Today `engine.py review` scans code for raw values. Shipped lint rules and agent evals are not built. The interview skips this question and records nothing.
 - **Why:** When AI agents built with a design system, lint rules and structured docs cut accessibility errors. They fell from 5.1 to 0.6 per round in Sanity's evals [DC-L11-24; L13 E3].
 - **Ask:** "How should we catch screens that break the system's rules, whether a person or AI made them?"
 - **Example:** Show a lint result: "raw hex #3b82f6, use color.bg.accent".
@@ -4109,6 +4138,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 > Screen: how the builder (or the interviewing model) behaves while the person keeps editing. Graph step 0-5. Can be changed at any time.
 
 ### Q-pref-01 · How strict should the builder's critique be? · Standard
+- **Status:** planned. The engine has no critique modes yet: `validate` always reports errors and warnings, and `build` stops on errors. The interview skips this question and records nothing.
 - **Why:** Tips that name the design principle teach people the words for it. Strict mode stops export when something fails badly [DC-L15-11; S-L15-070].
 - **Ask:** "Should I give tips as you go, stay quiet, or block export on serious problems like contrast?"
 - **Example:** Show one coach message: "Two primary buttons in this group; make one secondary."
@@ -4129,6 +4159,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Evidence:** DC-L15-11; S-L15-047, S-L15-070, S-L15-075, S-L15-080
 
 ### Q-pref-02 · How should AI edits and variations work? · Expert
+- **Status:** planned. Patch review, lock-and-shuffle and the variation grid are not built; locks exist (`engine.py lock`). The interview skips this question and records nothing.
 - **Why:** Your own edits do exactly what you set, and AI edits come as patches you review, so you keep control and trust. Lock-and-shuffle tries new options without losing what you like [DC-L16-04, DC-L16-05].
 - **Ask:** "When the AI changes your design, how should you review it and try other versions?"
 - **Example:** Show a "show 6 variations" grid with two locked parameters.

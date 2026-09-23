@@ -10,7 +10,7 @@ People never pick a mode. Everyone starts with a quick sketch of the whole syste
 | 3 | detailed | Blocks, components and patterns, and the fine print of each area (`stages/*.detailed.md`) | the rest |
 
 ## Level 0: sketch (5 questions, one per message)
-1. **What are you making?** Take a free answer and record it: `engine.py set context.product '"<their words>"'`. If they name surfaces (an app and a landing page), confirm Q-scope-01 in one line.
+1. **What are you making?** Take a free answer and record it: `engine.py set context.product '"<their words>"'`. If they name surfaces (an app and a landing page), confirm Q-scope-01 in one line. In the same line, name each surface's kind (Q-scope-06): Persuade (selling), Operate (getting work done), Read (docs and articles) or Experience (showcases). The main surface goes first.
 2. **Who is it for?** This is Q-aud-01. Ask whether people use it all day (`dense`), regularly (`regular`), or now and then on the go (`large`).
 3. **Where does it run?** This is Q-plat-01. The choices are web, iPhone (`ios`), Android and desktop. Web alone is fine.
 4. **How should it feel?** Ask them to pick 2 or 3 words from these pairs:
@@ -29,7 +29,7 @@ People never pick a mode. Everyone starts with a quick sketch of the whole syste
 
 Then run one command. It records the answers and builds everything.
 ```
-engine.py sketch --name "<product>" --audience regular --platforms web,ios --feel friendly,minimal [--brand "#167874"]
+engine.py sketch --name "<product>" --audience regular --platforms web,ios --feel friendly,minimal [--brand "#167874"] [--surfaces "app:operate,landing page:persuade"]
 ```
 Show the result on the best visual surface the host has (SKILL.md, visual ladder): a preview, the palette and the type scale. Name one or two defaults they might want to change. Then make the offer (below).
 
@@ -48,7 +48,7 @@ Each screen is one message with one question. The person can say "skip", and the
 
 ## Levels 2 and 3: one area at a time
 There are 14 areas: overview, accessibility, platforms, modes, color, typography, layout, shape, elevation, motion, iconography, content, components and delivery. Their plain names are in `pacing.json`. The ids match the engine's, except `delivery`: the engine does not track its zoom level.
-1. Open the area's stage files. Ask its level-2 questions in stage order. Then run `engine.py generate` and show the change.
+1. Open the area's stage files. Ask its level-2 questions in stage order, and skip any marked **Planned** (not built yet). Then run `engine.py generate` and show the change.
 2. Record the level: `engine.py set zoom.color '"defined"'` (level names: `sketch`, `broad`, `defined`, `detailed`). The engine also infers the level from the decisions made in an area.
 3. Level 3 uses `NN-*.detailed.md` in the same way.
 4. Components live at level 3. Build them from tokens, not from scratch.

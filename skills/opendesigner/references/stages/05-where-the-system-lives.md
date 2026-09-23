@@ -8,7 +8,7 @@ Screen: design tool, source of truth and how engineers consume the output. Graph
 
 Zoom 3 (detailed) questions: `05-where-the-system-lives.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-tool-03 · Which design tool does your team use, and on which plan?
 Zoom 2 defined · weight medium · changes 3 decisions · class I · cards DC-L07-27

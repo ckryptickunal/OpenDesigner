@@ -8,7 +8,7 @@ Screen: small flows the person can click through: open a dialog and a side sheet
 
 Zoom 3 (detailed) questions: `23-patterns-and-ai-surfaces.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-pattern-01 · When should the product use a dialog, a sheet or a popover?
 Zoom 2 defined · weight low · changes 0 decisions · class G · cards DC-L08-20
@@ -39,6 +39,7 @@ Zoom 2 defined · weight low · changes 0 decisions · class G · cards DC-L13-1
 
 ## Q-pattern-05 · Which deceptive patterns should the builder block?
 Zoom 2 defined · weight medium · changes 1 decisions · class I · cards DC-L13-15
+- **Planned:** not asked yet. The engine has no deceptive-pattern lint yet (L13 E1). The interview skips this question and records nothing.
 - **Ask:** "How firmly should we stop design tricks, like boxes ticked for you or a louder 'Yes' button?"
 - **Why:** Fair defaults make 'Accept' and 'Decline' look equal and leave opt-in boxes unticked. They also word 'Decline' without guilt [DC-L13-15].
 - **Options:**

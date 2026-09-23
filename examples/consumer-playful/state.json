@@ -133,6 +133,16 @@
   },
   "overrides": {},
   "answers": {
+    "Q-scope-06": {
+      "value": [
+        "Today feed:experience",
+        "Onboarding and store pages:persuade",
+        "Settings:operate"
+      ],
+      "set_by": "chosen",
+      "decision": "D-0005",
+      "locked": false
+    },
     "Q-aud-01": {
       "value": "large",
       "set_by": "chosen",
@@ -159,27 +169,30 @@
     "base": null,
     "inventory": [
       "button",
-      "icon-button",
-      "link",
       "text-field",
       "textarea",
       "select",
       "checkbox",
       "radio",
       "switch",
-      "card",
+      "slider",
+      "tabs",
+      "tooltip",
+      "popover",
       "dialog",
       "menu",
-      "tooltip",
-      "toast",
-      "tabs",
-      "table",
+      "progress-bar",
+      "spinner",
+      "banner",
       "badge",
       "avatar",
-      "banner",
-      "progress",
-      "skeleton",
-      "navigation"
+      "card",
+      "list",
+      "table",
+      "link",
+      "breadcrumbs",
+      "side-navigation",
+      "accordion"
     ],
     "notes": {}
   },
@@ -291,8 +304,8 @@
   "references": {},
   "taste": {},
   "hashes": {
-    "DESIGN.md": "4d0193711bf6b398",
-    "PRODUCT.md": "e769854c376bb745"
+    "DESIGN.md": "43466a4b4367e6bd",
+    "PRODUCT.md": "a47b8e8fb1af0450"
   },
   "exports": {
     "prefix": "ds",

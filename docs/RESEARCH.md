@@ -12,9 +12,9 @@ Counts on this page were read from the files on 2026-09-24, with `python3 tools/
 | Decision Cards | 352 | `### DC-` headings across `research/` and `benchmarks/` |
 | Sources logged | 2,740 | distinct source ids in the research lanes' traces (`traces/L*-trace.md`), including sources that were opened and rejected. With the sponsorship research (R4) and the verification pass (V1), `traces/` holds 3,225 |
 | Design systems benchmarked | 25 | files in `benchmarks/systems/` |
-| Ontology nodes | 275, of which 211 are building blocks outside the builder layer | `synthesis/ontology.json` [S-V1b-091] |
-| Questions in the interview | 192 | `synthesis/questionnaire.json` (27 screens plus a reference panel) |
-| Decision graph | 352 decisions, 465 edges, 12 cycles | `synthesis/decision-graph.json` |
+| Ontology nodes | 275, of which 211 are building blocks outside the builder layer: 156 generatable, 23 tool-assisted, 21 owner input, 9 designer-owned, 2 extractable | `synthesis/ontology.json` [S-V1b-091] |
+| Questions in the interview | 193 | `synthesis/questionnaire.json` (27 screens plus a reference panel; 6 are planned and skipped for now) |
+| Decision graph | 352 decisions, 470 edges, 12 cycles | `synthesis/decision-graph.json` |
 | Claims re-checked (V1) | 161: 134 confirmed, 19 partly right, 5 wrong, 3 unverifiable | [`synthesis/VERIFICATION.md`](../synthesis/VERIFICATION.md) |
 
 ## How to read a claim
@@ -45,7 +45,7 @@ Counts on this page were read from the files on 2026-09-24, with `python3 tools/
 | L14 | Device classes: phone, tablet, desktop, watch, TV, car, spatial, voice and AI; 14 invariants and a device matrix | [`research/L14-device-practices.md`](../research/L14-device-practices.md) | 14 | 90 |
 | L15 | Visual design principles: hierarchy, Gestalt, color theory, polish, styles; what to automate, guide or expose | [`research/L15-visual-design-principles.md`](../research/L15-visual-design-principles.md) | 11 | 84 |
 | L16 | Visual tooling for engineers and the design-to-code round trip: Figma MCP, Paper MCP, Penpot, theme playgrounds, 43 tools | [`research/L16-visual-tooling-for-engineers.md`](../research/L16-visual-tooling-for-engineers.md) | 15 | 324 |
-| L17 | How design systems get made today, by hand and with AI; building-block classification (207 blocks on the 23 Sep map; `ontology.json` now has 211 [S-V1b-091]) and 14 designer hooks | [`research/L17-how-systems-get-made.md`](../research/L17-how-systems-get-made.md) | 13 | 304 |
+| L17 | How design systems get made today, by hand and with AI; building-block classification (207 blocks on the 23 Sep map; `ontology.json` now has 211 and is canonical [S-V1b-091]) and 14 designer hooks | [`research/L17-how-systems-get-made.md`](../research/L17-how-systems-get-made.md) | 13 | 304 |
 | L18 | AI-first distribution: Agent Skills, AGENTS.md, MCP, MCP Apps and visual UI in Claude, ChatGPT and Codex; the host capability matrix; the recommended repo architecture | [`research/L18-ai-first-distribution.md`](../research/L18-ai-first-distribution.md) | 14 | 228 |
 
 "Sources logged" counts rows in each lane's trace file, including rejected sources. Every lane file ends with **Open questions / gaps** and **Confidence** sections: the fastest way to find useful research work (see [SEED-ISSUES.md](SEED-ISSUES.md)).

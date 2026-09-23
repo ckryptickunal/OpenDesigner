@@ -121,6 +121,15 @@
   },
   "overrides": {},
   "answers": {
+    "Q-scope-06": {
+      "value": [
+        "Application form:operate",
+        "Guidance pages:read"
+      ],
+      "set_by": "chosen",
+      "decision": "D-0005",
+      "locked": false
+    },
     "Q-aud-01": {
       "value": "large",
       "set_by": "chosen",
@@ -157,27 +166,30 @@
     "base": null,
     "inventory": [
       "button",
-      "icon-button",
-      "link",
       "text-field",
       "textarea",
       "select",
       "checkbox",
       "radio",
       "switch",
-      "card",
+      "slider",
+      "tabs",
+      "tooltip",
+      "popover",
       "dialog",
       "menu",
-      "tooltip",
-      "toast",
-      "tabs",
-      "table",
+      "progress-bar",
+      "spinner",
+      "banner",
       "badge",
       "avatar",
-      "banner",
-      "progress",
-      "skeleton",
-      "navigation"
+      "card",
+      "list",
+      "table",
+      "link",
+      "breadcrumbs",
+      "side-navigation",
+      "accordion"
     ],
     "notes": {}
   },
@@ -289,8 +301,8 @@
   "references": {},
   "taste": {},
   "hashes": {
-    "DESIGN.md": "469bffef32d13c67",
-    "PRODUCT.md": "cfaa044537e063be"
+    "DESIGN.md": "11db68e1241f497a",
+    "PRODUCT.md": "68bef1d1d94cc8fb"
   },
   "exports": {
     "prefix": "ds",

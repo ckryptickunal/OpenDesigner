@@ -6,7 +6,7 @@ Area: `delivery` · zoom 3 detailed: 1 · visual: text or the host question tool
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-dist-04 · Where do docs live, and what goes on each component page?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L11-17, DC-L11-18, DC-L08-23

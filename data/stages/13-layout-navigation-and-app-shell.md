@@ -8,7 +8,7 @@ Screen: how pages reorganize across widths, shown on a resizable frame the perso
 
 Zoom 3 (detailed) questions: `13-layout-navigation-and-app-shell.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-layout-01 · At which widths should layouts reorganize?
 Zoom 2 defined · weight high · changes 5 decisions · class G · cards DC-L03-14

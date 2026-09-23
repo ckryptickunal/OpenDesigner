@@ -8,7 +8,7 @@ Screen: which variations of the system exist. Graph step 0-2. Asked before color
 
 Zoom 3 (detailed) questions: `07-themes-and-modes.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-theme-01 · Which appearance modes does the product support?
 Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L10-17, DC-L14-09

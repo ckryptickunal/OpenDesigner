@@ -6,7 +6,7 @@ Area: `shape` · zoom 3 detailed: 4 · visual: `assets/templates/radius.html`
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-shape-05 · Should a signature shape from your brand appear in the UI?
 Zoom 3 detailed · weight medium · changes 2 decisions · class D · cards DC-L06-09

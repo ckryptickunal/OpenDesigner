@@ -72,7 +72,7 @@ Each template has a **Copy my choice** button that produces `OD:` lines. When th
 ## The engine
 ```
 python3 <skill>/scripts/engine.py init [--name "Acme"]
-python3 <skill>/scripts/engine.py sketch --name "Acme" --audience regular --platforms web --feel friendly,minimal [--brand "#167874"]
+python3 <skill>/scripts/engine.py sketch --name "Acme" --audience regular --platforms web --feel friendly,minimal [--brand "#167874"] [--surfaces app:operate]
 python3 <skill>/scripts/engine.py set <path> <json-value> --why "..." [--set-by delegated] [--lock]
 python3 <skill>/scripts/engine.py resolve                    current dials and derived values, for payloads
 python3 <skill>/scripts/engine.py generate                   opendesigner/tokens/ (DTCG 2025.10)
@@ -80,8 +80,8 @@ python3 <skill>/scripts/engine.py validate [--json]          contrast, targets, 
 python3 <skill>/scripts/engine.py design-md                  DESIGN.md and PRODUCT.md at the project root
 python3 <skill>/scripts/engine.py export --format css|tailwind|figma|paper|swift|compose|dtcg|all
 python3 <skill>/scripts/engine.py preview [--open]           opendesigner/preview.html
-python3 <skill>/scripts/engine.py build                      all of the above, then validate
-python3 <skill>/scripts/engine.py review [--project src/]    end-of-implementation check: hard-coded values, stale DESIGN.md sections
+python3 <skill>/scripts/engine.py build [--force]            generate and validate; exports and docs only if there are no errors
+python3 <skill>/scripts/engine.py review [--project src/]    end-of-implementation check: hard-coded colors, sizes, radii, shadows, durations; stale DESIGN.md sections
 python3 <skill>/scripts/engine.py feedback "..." --kind gap|bug|confusing|idea
 ```
 After every change, run `generate` and `validate` before showing results. Fix every error first. The report cites the rule it applied.

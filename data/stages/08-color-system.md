@@ -8,7 +8,7 @@ Screen: one screen with four sections (brand input, strategy, ramps and neutrals
 
 Zoom 3 (detailed) questions: `08-color-system.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-color-01 · Do you have fixed brand colors, or should the builder generate the palette from one color?
 Zoom 0 sketch · weight high · changes 3 decisions · class E · cards DC-L09-03, DC-L01-09

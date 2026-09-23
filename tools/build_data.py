@@ -43,7 +43,7 @@ TEMPLATES = {
 # Zoom levels replace the questionnaire's depth modes (BRIEF requirement 14, lane U2). Level 0 and 1 are
 # hand-picked; the rest follow the questionnaire mode (Standard -> 2, Expert -> 3). [inferred; logged]
 ZOOM_NAMES = {0: "sketch", 1: "broad", 2: "defined", 3: "detailed"}
-ZOOM0 = ["Q-scope-01", "Q-aud-01", "Q-plat-01", "Q-brand-01", "Q-color-01", "Q-brand-03"]  # Q-brand-03 rides with Q-color-01
+ZOOM0 = ["Q-scope-01", "Q-scope-06", "Q-aud-01", "Q-plat-01", "Q-brand-01", "Q-color-01", "Q-brand-03"]  # Q-scope-06 rides with Q-scope-01, Q-brand-03 with Q-color-01
 ZOOM1 = ["Q-dir-01", "Q-dir-02", "Q-color-02", "Q-type-01", "Q-shape-01", "Q-depth-01", "Q-motion-01", "Q-tool-01"]
 # Areas a person can zoom into; section = the DESIGN.md heading the engine renders for it.
 AREAS = [("overview", "The big picture", "Overview", ["S01", "S03", "S06"]),
@@ -158,9 +158,11 @@ def build_questions(q):
                     "class": x["block_class"], "weight": x["time_weight"], "fan": x["fan_out"],
                     "ask": x["ask"], "options": [{"v": o["value"], "l": o["label"]} for o in x["options"]],
                     "default_value": default_value(x), "show_if": x["show_if"],
-                    "decides": x["decides"], "changes": x["changes"], "template": TEMPLATES.get(x["stage"])})
+                    "decides": x["decides"], "changes": x["changes"], "template": TEMPLATES.get(x["stage"]),
+                    **({"status": "planned"} if x.get("status") == "planned" else {})})
     return {"_about": STAMP + ". Slim index of every question. default_value is set only when the prose "
-                      "default names exactly one option; the prose default and everything else is in stages/*.md.",
+                      "default names exactly one option; the prose default and everything else is in stages/*.md. "
+                      "status planned: the feature is not built yet; the interview skips the question and records nothing.",
             "zoom_levels": ZOOM_NAMES, "zoom0": ZOOM0, "zoom1": ZOOM1, "questions": out}
 
 
@@ -178,8 +180,8 @@ def stage_md(stage, qs, n_total, note="", detailed=False):
              trim_sources(stage["screen"]) if not detailed else "Read the main stage file first; these questions refine it.", "",
              *([note, ""] if note else []),
              "Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* "
-             "holds. Everything else keeps its default (`auto_default`). Explain a term the first time with "
-             "`glossary.json`.", ""]
+             "holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing "
+             "and record nothing. Explain a term the first time with `glossary.json`.", ""]
     for x in qs:
         z = zoom_of(x)
         dv = default_value(x)
@@ -187,6 +189,8 @@ def stage_md(stage, qs, n_total, note="", detailed=False):
         lines.append(f"Zoom {z if z is not None else 'any'}{' ' + ZOOM_NAMES[z] if z is not None else ''} · "
                      f"weight {x['time_weight']} · changes {x['fan_out']} decisions · class {x['block_class'] or '-'}"
                      + (f" · cards {', '.join(x['decides'])}" if x["decides"] else ""))
+        if x.get("status") == "planned":
+            lines.append(f"- **Planned:** not asked yet. {x.get('planned_note', '')}".rstrip())
         if x["show_if"]:
             lines.append(f"- **Show if:** {x['show_if']}")
         lines.append(f"- **Ask:** \"{x['ask']}\"")
@@ -199,6 +203,8 @@ def stage_md(stage, qs, n_total, note="", detailed=False):
         lines.append(f"- **Default:** {('`' + str(dv) + '`: ') if dv is not None else ''}{trim_sources(x['default'])} "
                      f"*Source:* {trim_sources(x['default_source']) or '[inferred]'}")
         lines.append(f"- **Show:** {x['preview']}")
+        if x.get("dials"):
+            lines.append(f"- **Dials:** {trim_sources(x['dials'])}")
         if x["use_avoid"]:
             lines.append(f"- **Use / avoid:** {trim_sources(x['use_avoid'])}")
         if x["hook"]:
@@ -221,7 +227,7 @@ def build_ontology():
     nodes = [{"id": n["id"], "name": n["name"], "parent": n.get("parent"), "prov": n.get("provenance"),
               "cards": n.get("cards", []), "def": first_sentence(n.get("definition"))} for n in o["nodes"]]
     return {"_about": STAMP + ". prov = provenance class (generatable, extractable, designer-owned, "
-                      "tool-assisted); full text in synthesis/ontology.json.",
+                      "tool-assisted, owner-input); full text in synthesis/ontology.json.",
             "version": o["version"], "layers": o["layers"], "nodes": nodes}
 
 
@@ -289,7 +295,7 @@ def build_pacing(q, graph):
     for aid, name, section, stages in AREAS:
         levels = {}
         for z in (0, 1, 2, 3):
-            ids = [x["id"] for x in qs if x["stage"] in stages and zoom_of(x) == z]
+            ids = [x["id"] for x in qs if x["stage"] in stages and zoom_of(x) == z and x.get("status") != "planned"]
             secs = sum(SECONDS[x["time_weight"]] for x in qs if x["id"] in ids)
             if ids:
                 levels[str(z)] = {"questions": ids, "minutes": max(1, round(secs / 60))}
@@ -302,7 +308,8 @@ def build_pacing(q, graph):
             "thresholds": {"fanout_deep": 5, "show_visual_if_reach_gt": 20, "inferred": True},
             "deep_always": deep_always, "top_decisions": top,
             "assumed_owner_inputs_below_zoom2": q["meta"]["quick_mode_assumed_owner_inputs"],
-            "gates": q["interview_protocol"][11], "per_stage": dict(sorted(per_stage.items()))}
+            "gates": next(x for x in q["interview_protocol"] if x.startswith("Gates:")),
+            "planned": q["meta"].get("planned", []), "per_stage": dict(sorted(per_stage.items()))}
 
 
 # ---------- cards ----------

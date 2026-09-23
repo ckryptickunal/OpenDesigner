@@ -308,6 +308,7 @@
   "--set-by",
   "--source-ref",
   "--strict",
+  "--surfaces",
   "--theme",
   "--why"
  ]

@@ -8,7 +8,7 @@ Screen: who the brand is, and which brand assets already exist. Graph step 0-1. 
 
 Zoom 3 (detailed) questions: `03-brand-personality-and-principles.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-brand-01 · Where does your brand sit on these scales?
 Zoom 0 sketch · weight high · changes 15 decisions · class I · cards DC-L06-02

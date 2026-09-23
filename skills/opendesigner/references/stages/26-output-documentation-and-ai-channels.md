@@ -8,10 +8,11 @@ Screen: the export menu and a preview of every file the builder will produce: to
 
 Zoom 3 (detailed) questions: `26-output-documentation-and-ai-channels.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-dist-01 · How should the system leave the builder?
 Zoom 2 defined · weight low · changes 0 decisions · class T · cards DC-L16-12
+- **Planned:** not asked yet. Today the system leaves as token files, code exports and Figma or Paper writes (`engine.py export`). The install command, pull request and MCP tool channels are not built. The interview skips this question and records nothing.
 - **Ask:** "In what forms should the system leave the builder: code, a command, files, a pull request, or Figma?"
 - **Why:** Engineers need the output in a form they already use. It can be a snippet, an install command, a token file, a pull request or a design file [DC-L16-12].
 - **Options:**
@@ -28,6 +29,7 @@ Zoom 2 defined · weight low · changes 0 decisions · class T · cards DC-L16-1
 
 ## Q-dist-02 · How should AI coding tools read the system?
 Zoom 2 defined · weight low · changes 1 decisions · class T · cards DC-L11-23
+- **Planned:** not asked yet. Today every system ships DESIGN.md plus DTCG files. The MCP server, llms.txt, rules files and registry are not built. The interview skips this question and records nothing.
 - **Ask:** "How should AI coding tools like Claude, ChatGPT, Codex or Cursor read your system?"
 - **Why:** 59% of teams say some UI gets built around their design system. Channels made for AI agents make the UI they generate follow it [DC-L11-23].
 - **Options:**
@@ -43,6 +45,7 @@ Zoom 2 defined · weight low · changes 1 decisions · class T · cards DC-L11-2
 
 ## Q-dist-03 · How should the system check that people and agents follow it?
 Zoom 2 defined · weight low · changes 1 decisions · class T · cards DC-L11-24
+- **Planned:** not asked yet. Today `engine.py review` scans code for raw values. Shipped lint rules and agent evals are not built. The interview skips this question and records nothing.
 - **Ask:** "How should we catch screens that break the system's rules, whether a person or AI made them?"
 - **Why:** When AI agents built with a design system, lint rules and structured docs cut accessibility errors. They fell from 5.1 to 0.6 per round in Sanity's evals [DC-L11-24; L13 E3].
 - **Options:**

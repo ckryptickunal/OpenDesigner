@@ -13,3 +13,4 @@ Append-only heartbeat. Newest last.
 - 2026-09-24 01:49 IST: added lane T1
 - 2026-09-24 02:11 IST: synced: Checkpoint: V1 verification (161 claims, 49 corrections), S2 ontology and graph follow-ups, T1 journey tracker phase A with opt-in anonymous sharing (journey.py, PRIVACY.md, reference receiver), partial U4 plain-language edits; all checks green (48 tests)
 - 2026-09-24 02:36 IST: synced: U4 plain-language pass complete (README, docs, skills, questionnaire, engine messages); GitHub Sponsors enabled in FUNDING.yml
+- 2026-09-24 02:59 IST: synced: F1 consistency fixes: engine/skills/spec mismatches, kebab-case token paths, owner-input block class, surface-mode question, three-voice DESIGN.md; 58 tests pass

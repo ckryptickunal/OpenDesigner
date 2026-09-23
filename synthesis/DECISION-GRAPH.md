@@ -1,22 +1,22 @@
 # The decision graph in plain language
 
-Synthesis S1c. Source data: `synthesis/decision-graph.json` (built by `python3 tools/jev_nav.py graph` from every Decision Card's "Depends on" and "Affects" fields) and `synthesis/cards.json`. Dial names refer to `synthesis/LEVERS.md`. Counts refreshed on 2026-09-24 (session S2) after lanes L17 and L18 and the hand corrections in `synthesis/graph-overrides.json` entered the graph.
+Synthesis S1c. Source data: `synthesis/decision-graph.json` (built by `python3 tools/jev_nav.py graph` from every Decision Card's "Depends on" and "Affects" fields) and `synthesis/cards.json`. Dial names refer to `synthesis/LEVERS.md`. Counts refreshed on 2026-09-24 (session S2) after lanes L17 and L18 and the hand corrections in `synthesis/graph-overrides.json` entered the graph. Refreshed again on 2026-09-24 (session F1 fixes) after the five L17/L18 edges in section 8 were added.
 
 ## 1. What the graph contains
 
-- **352 decisions** (one per Decision Card across L01 to L18), **465 dependency edges** (457 parsed from the cards, plus 9 added and 1 removed by hand in `synthesis/graph-overrides.json`), of which only **58 cross lanes**. Most links were written inside a lane, so cross-lane causality is thinner in the data than in reality (section 8).
-- **8 dependency steps (0 to 7).** A decision's step is how far downstream it sits after each cycle is collapsed into one node. Step 0 has 94 decisions, then 59, 52, 40, 58, 29, 14 and 6.
+- **352 decisions** (one per Decision Card across L01 to L18), **470 dependency edges** (457 parsed from the cards, plus 14 added and 1 removed by hand in `synthesis/graph-overrides.json`), of which only **63 cross lanes**. Most links were written inside a lane, so cross-lane causality is thinner in the data than in reality (section 8).
+- **8 dependency steps (0 to 7).** A decision's step is how far downstream it sits after each cycle is collapsed into one node. Step 0 has 91 decisions, then 59, 53, 41, 59, 29, 14 and 6.
 - **12 cycles.** A cycle is a set of decisions that constrain each other, so they have to be made together. Section 4 turns each one into a builder screen. L17 and L18 added none.
-- **54 decisions have no edges at all**: 13 in L08 (components), 8 in L07 (tokens and Figma), 8 in L09 (the benchmark cards, which restate L01 and L04 decisions), 7 in L17 (process cards whose links name stages and files rather than card ids), and a few elsewhere. They are real decisions whose links were not written down, not unimportant ones.
+- **51 decisions have no edges at all**: 13 in L08 (components), 8 in L07 (tokens and Figma), 8 in L09 (the benchmark cards, which restate L01 and L04 decisions), 4 in L17 (process cards whose links name stages and files rather than card ids), and a few elsewhere. They are real decisions whose links were not written down, not unimportant ones.
 
 ## 2. Root decisions (step 0)
 
-The 94 roots fall into five kinds:
+The 91 roots fall into five kinds:
 
 1. **Context roots**: what is being built, where it runs and where the truth lives. Scope (DC-L11-02, with the audit DC-L11-04 in a cycle), target platforms and posture (DC-L10-01, -02, -03, -21 in a cycle), OS version floor (DC-L10-23), source of truth and round-trip direction (DC-L16-02), theming axes (DC-L07-15). Device classes (DC-L14-01) sits at step 1, right under platforms.
-2. **The personality root**: brand personality profile (DC-L06-02). It has the largest fan-out (15) and the second-largest downstream reach (127 decisions); only the platform cycle reaches more (section 5). In the builder this root *is* the set of dial positions.
+2. **The personality root**: brand personality profile (DC-L06-02). It has the largest fan-out (15) and the second-largest downstream reach (128 decisions); only the platform cycle reaches more (section 5). In the builder this root *is* the set of dial positions.
 3. **Foundation seeds that became roots because nothing upstream was linked**: base spacing unit (DC-L03-01), breakpoints (DC-L03-14), productive vs expressive typography (DC-L02-11), icon library and sizes (DC-L05-01, -05), photography (DC-L05-14), data-viz palettes (DC-L05-23). In practice these depend on density and personality. Base body size (DC-L02-08) and icon style and stroke (DC-L05-02, -03) left this group once the section 8 edges were added.
-4. **Encoding, tooling and process roots**: naming, units, DTCG types, Figma API choices (DC-L07-03, -05, -07, -10 to -14, -22, -24, -26 to -28; DC-L03-26; DC-L04-28; DC-L01-26). They change how tokens are written, not how the product looks. The builder's own process roots from L17 and L18 sit here too: block classification (DC-L17-01), the delivery unit (DC-L18-01), interview pacing (DC-L18-08), and seven L17 process cards with no links written (DC-L17-05, -06, -07, -10 to -13).
+4. **Encoding, tooling and process roots**: naming, units, DTCG types, Figma API choices (DC-L07-03, -05, -07, -10 to -14, -22, -24, -26 to -28; DC-L03-26; DC-L04-28; DC-L01-26). They change how tokens are written, not how the product looks. The builder's own process roots from L17 and L18 sit here too: block classification (DC-L17-01), the delivery unit (DC-L18-01), what the process records (DC-L17-10), and four L17 process cards with no links written (DC-L17-05, -06, -12, -13).
 5. **Component and behavior roots**: most L08 and L13 decisions (button hierarchy, state model, focus style, validation, feedback, navigation, overlays). Their look inputs come from foundations; their behavior inputs come from UX rules, which the graph mostly does not link yet.
 
 ## 3. The dependency steps, read as a sequence
@@ -34,7 +34,7 @@ The 94 roots fall into five kinds:
 
 The shape matters for the builder: **personality and context first, one "look" screen, then foundation screens, then token detail that mostly derives itself.** Steps 5 to 7 are where automation pays off, because each of those decisions has several upstream constraints and few real options left.
 
-The 27 builder-process decisions from L17 and L18 occupy all eight steps but mostly form their own chain: the delivery unit (DC-L18-01, step 0) leads through knowledge format, the server, the visual surface ladder, question format, durable outputs and shipped enforcement to the extend-session protocol (DC-L18-12, step 7). They shape how the builder asks and records, not how the product looks.
+The 27 builder-process decisions from L17 and L18 occupy all eight steps but mostly form their own chain: the delivery unit (DC-L18-01, step 0) leads through knowledge format, the server, the visual surface ladder, question format, durable outputs and shipped enforcement to the extend-session protocol (DC-L18-12, step 7). They shape how the builder asks and records, not how the product looks. The five L17/L18 edges from section 8 tie the L17 cards into this chain. L17's pacing and records now feed their L18 twins. The preview substrate and reference intake now sit under L18's surface ladder and package safety. The anti-generic rules sit under the style preset.
 
 ## 4. Clusters (cycles) as builder screens
 
@@ -61,12 +61,12 @@ Ranked mainly by downstream reach (how many decisions change if this one changes
 
 | # | Decision | Reach | Fan-out | Why it matters | Dial or screen |
 |---|---|---|---|---|---|
-| 1 | DC-L10-01 Target platforms (with its cycle) | 141 | 12 | native type, corners, materials, targets and token pipelines all depend on it, and through platform posture it now sits above platform deference | Platforms |
-| 2 | DC-L06-02 Brand personality profile | 127 | 15 | every visual lever and the voice descend from it | all eight dials |
-| 3 | DC-L06-03 Expressiveness and hero budget | 107 | 5 | flips type emphasis, color mixing, motion and containment together | Expression |
-| 4 | DC-L06-14 Platform deference | 101 | 2 | decides whether the platform or the brand wins on type, shape and components (same decision as DC-L10-02 and DC-L13-17 from other lanes) | Brand presence |
-| 5 | DC-L15-01 Visual style preset | 94 | 12 | the hub between brand and foundations: depth, materials, radius, borders, chroma, type classification, signifiers | Look and feel |
-| 6 | DC-L15-04 Density voice | 94 | 8 | sets body size, control heights, whitespace, density modes and signifier strength | Density |
+| 1 | DC-L10-01 Target platforms (with its cycle) | 142 | 12 | native type, corners, materials, targets and token pipelines all depend on it, and through platform posture it now sits above platform deference | Platforms |
+| 2 | DC-L06-02 Brand personality profile | 128 | 15 | every visual lever and the voice descend from it | all eight dials |
+| 3 | DC-L06-03 Expressiveness and hero budget | 108 | 5 | flips type emphasis, color mixing, motion and containment together | Expression |
+| 4 | DC-L06-14 Platform deference | 102 | 2 | decides whether the platform or the brand wins on type, shape and components (same decision as DC-L10-02 and DC-L13-17 from other lanes) | Brand presence |
+| 5 | DC-L15-01 Visual style preset | 95 | 13 | the hub between brand and foundations: depth, materials, radius, borders, chroma, type classification, signifiers, and the anti-generic rules (DC-L17-07) | Look and feel |
+| 6 | DC-L15-04 Density voice | 95 | 8 | sets body size, control heights, whitespace, density modes and signifier strength | Density |
 | 7 | DC-L06-04 Role of the brand color | 35 | 3 | reserved accent versus brand-flooded chrome changes every color role | Color studio |
 | 8 | DC-L06-05 Color scheme source and colorfulness | 34 | 3 | static versus dynamic, and the scheme variant, set chroma for all roles | Colorfulness |
 | 9 | DC-L15-05 Grouping strategy | 34 | 3 | space versus containers versus lines drives surfaces, whitespace and dividers | Look and feel |
@@ -74,7 +74,7 @@ Ranked mainly by downstream reach (how many decisions change if this one changes
 | 11 | DC-L02-11 Productive vs expressive typography | 32 | 5 | sets scale contrast, so the type scale, weights, pairing, responsive type and hierarchy strength follow it | Expression |
 | 12 | DC-L14-01 Device classes in scope | 12 | 10 | target sizes, type by viewing distance, motion policy, safe zones and driving rules fan out from it | Platforms |
 
-Runners-up: typeface sourcing (DC-L02-01, reach 25), scope (DC-L11-02, reach 24), source of truth (DC-L16-02, reach 21, fan-out 9), base spacing unit (DC-L03-01, reach 15), hierarchy strength (DC-L15-02), Figma plan tier (DC-L07-27) and shape language (DC-L06-09), each reaching 13. Roundness (DC-L04-02) fell from 14 to 7 when its edge to motion personality was removed. The most influential builder-process decision is the delivery unit (DC-L18-01, reach 12, fan-out 5), all inside L18.
+Runners-up: typeface sourcing (DC-L02-01, reach 25), scope (DC-L11-02, reach 24), source of truth (DC-L16-02, reach 21, fan-out 9), base spacing unit (DC-L03-01, reach 15), hierarchy strength (DC-L15-02), Figma plan tier (DC-L07-27) and shape language (DC-L06-09), each reaching 13. Roundness (DC-L04-02) fell from 14 to 7 when its edge to motion personality was removed. The most influential builder-process decision is the delivery unit (DC-L18-01, reach 14, fan-out 5). Its reach is L18 plus two L17 cards joined by the section 8 edges: preview substrate (DC-L17-11) and reference intake (DC-L17-03).
 
 ## 6. Top-level flow
 
@@ -173,7 +173,7 @@ Setup: a web product with Expression 50, Density 50, Roundness 50, Depth 40, War
 
 ## 8. Known gaps in the graph and edges worth adding
 
-The graph is parsed from card prose, so it misses links the research clearly supports. The first eight edges below, and the removal at the end, are now applied through `synthesis/graph-overrides.json`, which `python3 tools/jev_nav.py graph` merges; the L09 merge and the L17/L18 rows are still open. Adding them would make the causal paths match the levers in `LEVERS.md` [inferred list]:
+The graph is parsed from card prose, so it misses links the research clearly supports. The first eight edges below, the five L17/L18 rows and the removal at the end are now applied through `synthesis/graph-overrides.json`, which `python3 tools/jev_nav.py graph` merges. The L17/L18 rows were added on 2026-09-24 by session F1 fixes. Only the L09 merge is still open. These edges make the causal paths match the levers in `LEVERS.md` [inferred list]:
 
 | Missing edge | Reason |
 |---|---|

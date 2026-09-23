@@ -34,7 +34,7 @@ FIELD = re.compile(r"^- \*\*(.+?):\*\* ?(.*)$")
 CLASS_NAMES = {"G": "generatable", "E": "extractable", "D": "designer-owned", "T": "tool-assisted", "I": "owner input"}
 CLASS = {}
 for c, ids in {
-    "I": "scope-01 scope-02 scope-03 scope-04 scope-05 aud-01 aud-02 aud-03 aud-04 brand-01 brand-02 brand-05 brand-07 "
+    "I": "scope-01 scope-02 scope-03 scope-04 scope-05 scope-06 aud-01 aud-02 aud-03 aud-04 brand-01 brand-02 brand-05 brand-07 "
          "plat-01 plat-02 plat-03 plat-04 plat-05 plat-07 plat-08 plat-09 tool-01 tool-02 tool-03 theme-03 type-04 "
          "voice-06 comp-02 color-19 ai-01 pattern-05 pattern-06 gov-01 gov-02 gov-03 gov-04 gov-05 gov-06 pref-01 pref-02 pref-03",
     "E": "ref-01 color-01",
@@ -102,11 +102,15 @@ def finish(q):
         "default": default.strip(" ."), "default_source": src.strip(),
         "decides": decides, "graph_step": max([step.get(c, 0) for c in decides] or [0]), "fan_out": fo,
         "changes": sorted(set(DC.findall(ch_cards))), "blocks": [b.strip() for b in blocks.split(";") if b.strip()],
-        "preview": f.get("Preview", ""), "use_avoid": f.get("Use / avoid"), "hook": h,
+        "preview": f.get("Preview", ""), "use_avoid": f.get("Use / avoid"), "hook": h, "dials": f.get("Dials"),
         "pre_answers": QID.findall(f.get("Pre-answers", "")) or None,
         "skip": f.get("Skip", ""), "evidence": {"cards": sorted(set(DC.findall(ev))), "sources": sorted(set(SID.findall(ev)))},
         "merges": re.findall(r"\b([KBPD]\d+(?:\.\d+)?)\b", f.get("Merges", "")),
     })
+    st = f.get("Status", "")
+    q["status"] = "planned" if st.lower().startswith("planned") else "active"
+    if q["status"] == "planned":
+        q["planned_note"] = st.split(".", 1)[1].strip() if "." in st else ""
     kind = "hook" if h else ("reference" if q["mode"] == "Any" else ("input" if not decides else "decision"))
     q["kind"] = kind
     q["block_class"] = CLASS.get(q["id"], "G")
@@ -220,30 +224,33 @@ def main():
             "counts": {"stages": len(stages), "sequential_screens": len(stages) - 1, "questions": len(qs),
                        "quick": sum(q["mode"] == "Quick" for q in qs),
                        "standard": sum(q["mode"] in ("Quick", "Standard") for q in qs),
-                       "expert": sum(q["mode"] != "Any" for q in qs), "any_mode_panel": sum(q["mode"] == "Any" for q in qs)},
+                       "expert": sum(q["mode"] != "Any" for q in qs), "any_mode_panel": sum(q["mode"] == "Any" for q in qs),
+                       "planned": sum(q["status"] == "planned" for q in qs)},
+            "planned": [q["id"] for q in qs if q["status"] == "planned"],
             "modes": {"quick": "Quick questions only; everything else takes its default",
                       "standard": "Quick + Standard questions", "expert": "every question",
                       "any": "reference panel, available on every screen, never required"},
             "quick_order": [q["id"] for q in qs if q["mode"] == "Quick"],
             "time_weight_rule": "high: a decided card has fan-out 5+ or the question is Quick; medium: fan-out 2-4, or an asset hook, input question, the reference panel, or block class I; low: otherwise",
             "block_classes": CLASS_NAMES,
-            "quick_mode_assumed_owner_inputs": [q["id"] for q in qs if q["block_class"] == "I" and q["mode"] != "Quick"],
+            "quick_mode_assumed_owner_inputs": [q["id"] for q in qs if q["block_class"] == "I" and q["mode"] != "Quick"
+                                                and q["status"] != "planned"],
             "unplaced_source_questions": unplaced,
         },
         "interview_protocol": [
-            "Agree the mode (quick, standard, expert). Offer the reference panel (Q-ref-01) and keep it open.",
-            "Walk stages in order. Open each with one sentence on what it decides; render its preview if the host can show visuals, else describe the example in words.",
-            "Ask each question whose modes include the chosen mode and whose show_if holds, using its ask line.",
+            "Start at zoom 0 (sketch): the five questions in references/zoom.md, then build. Nobody picks a mode. After each level, offer to stop or to zoom into one area (pacing.json areas, with rough minutes). Offer the reference panel (Q-ref-01) and keep it open.",
+            "Walk the chosen area's stages in order. Open each with one sentence on what it decides; render its preview if the host can show visuals, else describe the example in words.",
+            "Ask each question at or below the zoom level being worked (questions.json zoom) whose show_if holds, using its ask line. Skip questions with status planned: the feature is not built yet, so ask nothing and record nothing.",
             "time_weight high: explain why, show 2-3 options with effect and a real system, recommend the default with its source, state what it changes. medium: ask with the default and main alternatives. low: state the default in one line and confirm.",
             "Asset hooks (kind=hook): ask whether the person has the asset, accept hook.accepts formats, otherwise offer hook.if_no paths with their caveats.",
-            "Record {question id, option value, set_by: chosen|confirmed_default|auto_default|reference}. Out-of-mode questions take their default.",
+            "Record {question id, option value, set_by: chosen|confirmed_default|auto_default|reference}. Questions above the zoom level reached take their default and stay editable.",
             "If an answer conflicts with an earlier one in the same cycle, show the conflict and settle it with the ranked principles (Q-brand-07). Do not average silently.",
             "After each stage, summarize decisions in plain sentences and append them to the decision log for later sessions and teammates.",
             "Only offer listed option values; record anything else as a custom value with the person's reason.",
             "Show on the best surface the host supports (MCP view, canvas or artifact, Figma or Paper via MCP, local HTML, host question tool, plain text); say which is in use; never block on a visual (DC-L18-06).",
             "One question per turn: recommended option plus 2-3 closest alternatives with a visual each, 'other' allowed, one line on what it changes; one high-weight question per turn, up to three low-weight ones grouped; a single form is fine on cycle screens (DC-L18-08, DC-L18-09).",
-            "Gates: approve after scope stages 01-05 (with the block map tagged by block_class), after direction stages 06-08, and after the asset checklist; finish with a coverage check. Quick mode keeps only the direction gate (DC-L17-12, DC-L17-09).",
-            "Never invent owner-input (block_class I) answers: in Quick mode record meta.quick_mode_assumed_owner_inputs as assumed and list them for confirmation at the end (DC-L17-08).",
+            "Gates: approve after scope stages 01-05 (with the block map tagged by block_class), after direction stages 06-08, and after the asset checklist; finish with a coverage check. At zoom 0 and 1 keep only the direction gate (DC-L17-12, DC-L17-09).",
+            "Never invent owner-input (block_class I) answers: below zoom 2, record meta.quick_mode_assumed_owner_inputs as assumed and list them for confirmation at the end (DC-L17-08).",
             "Write durable outputs to the user's repo: DTCG tokens (canonical), DESIGN.md, an ADR-style decision log, a state file with answers, statuses and coverage, an AGENTS.md pointer, and exported lint rules (DC-L18-10, DC-L18-11).",
         ],
         "stages": stages,

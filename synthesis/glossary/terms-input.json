@@ -2380,6 +2380,16 @@
   ]
  },
  {
+  "id": "deliver.records",
+  "term": "Durable records for later sessions and the team",
+  "kind": "building block",
+  "layer": "deliver",
+  "context": "The files the builder writes into the person's repo so a later session, possibly in another tool or model, can extend the system without drift, and so engineers can explain the decisions to their team (BRIEF.md requirements 9-10). L17 decided what the process records and L18 which files carry it.",
+  "source": [
+   "deliver.records"
+  ]
+ },
+ {
   "id": "deliver.interop",
   "term": "Design-tool interop",
   "kind": "building block",
@@ -2707,6 +2717,36 @@
   "context": "For blocks that cannot be generated well (logo, brand mark, custom icons, illustration, photography, brand typeface), the builder asks \"do you have this?\", accepts the resource, and offers paths when the answer is no: commission a designer or use a named tool, with honest caveats (BRIEF.md requirement 2). The nodes marked `designer-owned` or `tool-assisted` are the hook points.",
   "source": [
    "builder.hooks"
+  ]
+ },
+ {
+  "id": "builder.pacing",
+  "term": "Pacing and question format",
+  "kind": "building block",
+  "layer": "builder",
+  "context": "Where the interview spends its time and what one question looks like: the decisions that shape the most downstream get several turns and a visual comparison, the rest take a default and a confirmation (BRIEF.md requirement 8). L17 decided pacing from the process side and L18 from the interview side; L18 also decided the question format.",
+  "source": [
+   "builder.pacing"
+  ]
+ },
+ {
+  "id": "builder.surface",
+  "term": "Visual surface and return channel",
+  "kind": "building block",
+  "layer": "builder",
+  "context": "Where a palette, scale or component preview appears on the person's current AI host, from an interactive MCP App view down to plain text, and how a choice made in that visual reaches the model without retyping (BRIEF.md requirement 7).",
+  "source": [
+   "builder.surface"
+  ]
+ },
+ {
+  "id": "builder.distribution",
+  "term": "Distribution into AI hosts",
+  "kind": "building block",
+  "layer": "builder",
+  "context": "How OpenDesigner itself reaches the person's AI: what they install, where each host discovers it, which manifests and install channels exist, how the knowledge is chunked to fit a model's context, whether a server runs, and how the package stays safe to install (BRIEF.md requirements 6-7). These decisions are about the builder's own package; how the person's design system ships is the `deliver` layer.",
+  "source": [
+   "builder.distribution"
   ]
  },
  {
@@ -3927,6 +3967,16 @@
   "context": "The step-by-step conversation where the model asks one high-impact question at a time and records your answers",
   "source": [
    "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.surface-mode",
+  "term": "surface mode",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "What a kind of screen is for: Persuade (marketing), Operate (app UI), Read (docs) or Experience (showcases). Asked by Q-scope-06, stored per surface; it sets body size, display reach, density and hero rules per surface",
+  "source": [
+   "synthesis/QUESTIONNAIRE.md Q-scope-06; research/L17-how-systems-get-made.md A2 [S-L17-007]; skills/opendesigner/scripts/engine.py"
   ]
  }
 ]

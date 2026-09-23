@@ -8,7 +8,7 @@ Screen: corner radius, on a live component sheet (button, input, card, dialog, m
 
 Zoom 3 (detailed) questions: `14-shape.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-shape-01 · How soft should corners feel?
 Zoom 1 broad · weight high · changes 4 decisions · class G · cards DC-L09-01, DC-L04-02

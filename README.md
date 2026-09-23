@@ -63,7 +63,7 @@ There are four zoom levels. Nobody picks a mode: everyone starts with the sketch
 
 Stop whenever it's enough. Every level leaves you with files that work. Each choice is shown, explained and comes with a recommendation.
 
-New words come in three voices: plain words first, then the designer's word and the code name on one line. All 393 terms are in the [glossary](docs/GLOSSARY.md).
+New words come in three voices: plain words first, then the designer's word and the code name on one line. All 397 terms are in the [glossary](docs/GLOSSARY.md).
 
 ## What it does
 
@@ -105,7 +105,7 @@ Model:  Logo checked: outlined text, readable at 16 px on light and dark.
 ## How it works
 
 1. **Read first.** The model looks at your repo, CSS, existing tokens and any `DESIGN.md` before it asks anything.
-2. **Work from a full map.** Every part of a design system is on one map: 275 nodes in 10 layers. Its 211 building blocks are each tagged as generatable, extractable, tool-assisted or designer-owned ([glossary](docs/GLOSSARY.md)) [S-V1b-091]. Designer-owned also covers choices only your team can make, such as who the product is for.
+2. **Work from a full map.** Every part of a design system is on one map: 275 nodes in 10 layers. Its 211 building blocks are each tagged as generatable, extractable, tool-assisted, designer-owned or owner input ([glossary](docs/GLOSSARY.md)) [S-V1b-091]. Owner input means a choice only your team can make, such as who the product is for. The model asks it and never invents it.
 3. **Ask for what needs a person.** 14 kinds of assets need a human maker: logo, app icon, icons, illustration, photography, brand typeface, sound and more. For each one, the model asks "do you have this?" and checks what you give it. If you don't have it, it writes a designer brief or points to named open libraries with their licenses.
 4. **Direction, then foundations.** Personality and platforms come first, because they shape the most. Then color, type, space, shape, depth and motion, one block at a time. Each block shows a live preview, where to use it and where not to.
 5. **Learn from references at any step.** Add a website, screenshot, Figma file or brand book. Its values are pre-filled with their source, and you accept or ignore each one.
@@ -191,7 +191,7 @@ OpenDesigner's defaults are not taste. They come from this repo's research, whic
 | Decision Cards | **352**, each with options, visual effect, dependencies, token encoding, platform notes, accessibility limits and a default |
 | Sources logged | **2,740** by the research lanes (3,225 in all, with the sponsorship research and the verification pass). Each was opened and logged with its URL, publisher, date, tier and verdict, including the rejected ones |
 | Design systems benchmarked | **25**, with real values in 12 dimension tables |
-| Interview | **192** questions on 27 screens, ordered by a decision graph of 352 decisions and 465 dependencies |
+| Interview | **193** questions on 27 screens (6 marked planned and skipped until their feature exists), ordered by a decision graph of 352 decisions and 470 dependencies |
 | Independent check | **161** claims re-checked against live sources: 134 confirmed, 19 partly right, 5 wrong, 3 unverifiable. Fixes are in [`synthesis/VERIFICATION.md`](synthesis/VERIFICATION.md) |
 
 Start with [docs/RESEARCH.md](docs/RESEARCH.md). Every claim cites a source id or says `[inferred]`. Running `python3 tools/jev_nav.py check` confirms that every cited source is logged.
@@ -218,7 +218,7 @@ OpenDesigner gets better each time someone says what went wrong.
 | Four skills (`opendesigner`, `-extract`, `-extend`, `-export`), knowledge files and 8 visual templates | First version in [`skills/`](skills/) |
 | Host packaging: Claude plugin and marketplace, Agent Plugins `plugin.json`, claude.ai zips, ChatGPT Project bundle | In the repo; Claude manifests pass `claude plugin validate` |
 | Engine: generate, validate, export (DTCG, CSS, Tailwind, Figma, Paper, Swift, Compose) | Works: [`engine.py`](skills/opendesigner/scripts/engine.py) `build` writes every format; 25 engine tests pass |
-| Zoom levels (a 5-question sketch first), the three-voice glossary (393 terms), and `engine.py feedback` for reporting gaps | Works: `engine.py sketch`, `review` and `feedback`; glossary in [docs/GLOSSARY.md](docs/GLOSSARY.md) |
+| Zoom levels (a 5-question sketch first), the three-voice glossary (397 terms), and `engine.py feedback` for reporting gaps | Works: `engine.py sketch`, `review` and `feedback`; glossary in [docs/GLOSSARY.md](docs/GLOSSARY.md) |
 | Journey tracker (a private step log) and opt-in anonymous sharing | First part works: [`journey.py`](skills/opendesigner/scripts/journey.py), 23 tests. No server collects reports yet ([privacy](docs/PRIVACY.md)) |
 | Worked examples | 3 in [`examples/`](examples/) |
 | Figma hands-on research (L12) | Open, [help wanted](docs/SEED-ISSUES.md) |

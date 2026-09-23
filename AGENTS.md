@@ -38,7 +38,7 @@ python3 skills/opendesigner/scripts/engine.py set dials.roundness 45 --why "..."
 python3 skills/opendesigner/scripts/engine.py generate && python3 skills/opendesigner/scripts/engine.py validate
 python3 skills/opendesigner/scripts/engine.py design-md        (DESIGN.md and PRODUCT.md at the project root)
 python3 skills/opendesigner/scripts/engine.py export --format css|tailwind|figma|paper|swift|compose|dtcg|all
-python3 skills/opendesigner/scripts/engine.py build     (generate + exports + DESIGN.md + preview + validate)
+python3 skills/opendesigner/scripts/engine.py build     (generate + validate; if no errors: exports + DESIGN.md + preview; --force exports anyway)
 python3 skills/opendesigner/scripts/engine.py review    (end of every implementation: validate, refresh DESIGN.md, find drift)
 python3 skills/opendesigner/scripts/engine.py feedback "..." --kind gap|bug|confusing|idea
 ```

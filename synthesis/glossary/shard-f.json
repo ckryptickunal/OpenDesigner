@@ -204,7 +204,7 @@
   "term": "build (engine command)",
   "plain": "Does every making step in one go, then checks the result for problems.",
   "designer": "The one command to run at the end of a step or session. It rebuilds values, exports, guides and preview, then reports any problems.",
-  "engineer": "engine.py build runs generate, export --format all, design-md and preview, then validate; it exits 1 if validation finds errors.",
+  "engineer": "engine.py build runs generate, then validate. Only with no errors (or --force) does it run export --format all, design-md and preview. It exits 1 on errors.",
   "designer_says": "end-of-step rebuild",
   "code_name": "engine.py build",
   "example": "Run build before you show the result to your team.",
@@ -823,6 +823,20 @@
    "skills/opendesigner/SKILL.md",
    "skills/opendesigner/references/zoom.md",
    "skills/opendesigner/references/rules.md"
+  ]
+ },
+ {
+  "id": "use.surface-mode",
+  "term": "surface mode",
+  "plain": "What a screen is for: selling something, getting work done, reading, or enjoying an experience.",
+  "designer": "Persuade, Operate, Read or Experience, set for each surface. It changes spacing, card use and big hero moments, not the brand.",
+  "engineer": "answers.Q-scope-06 fills context.surfaces with {name, mode}. The main surface sets raw.productType; any Persuade or Experience surface sets raw.marketingSurfaces. No dial moves.",
+  "designer_says": "surface mode: persuade, operate, read, experience",
+  "code_name": "answers.Q-scope-06, context.surfaces",
+  "example": "A landing page is Persuade; the dashboard behind it is Operate.",
+  "source": [
+   "synthesis/QUESTIONNAIRE.md Q-scope-06",
+   "S-L17-007"
   ]
  }
 ]

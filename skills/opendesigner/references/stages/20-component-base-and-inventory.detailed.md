@@ -6,7 +6,7 @@ Area: `components` · zoom 3 detailed: 3 · visual: `assets/templates/component-
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-comp-03 · Should components use settings, or be built from smaller pieces?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L08-04, DC-L07-22

@@ -377,11 +377,242 @@
           }
         }
       }
+    },
+    "emphasized": {
+      "$description": "Emphasized variants: the same size and line height, one weight heavier. Use them for the selected item, key actions, headlines and editorial moments, not for whole paragraphs (DC-L02-11, S-L02-006).",
+      "body": {
+        "sm": {
+          "$value": {
+            "fontFamily": "{font.family.text}",
+            "fontSize": "{font.size.12}",
+            "fontWeight": "{font.weight.label}",
+            "letterSpacing": {
+              "value": 0.24,
+              "unit": "px"
+            },
+            "lineHeight": 1.3333
+          },
+          "$extensions": {
+            "opendesigner": {
+              "lineHeightPx": 16,
+              "letterSpacingEm": 0.02,
+              "use": "Emphasized body.sm: selection, actions, headlines.",
+              "avoid": "Whole paragraphs."
+            }
+          }
+        },
+        "md": {
+          "$value": {
+            "fontFamily": "{font.family.text}",
+            "fontSize": "{font.size.16}",
+            "fontWeight": "{font.weight.label}",
+            "letterSpacing": {
+              "value": 0.0,
+              "unit": "px"
+            },
+            "lineHeight": 1.5
+          },
+          "$extensions": {
+            "opendesigner": {
+              "lineHeightPx": 24,
+              "letterSpacingEm": 0.0,
+              "use": "Emphasized body.md: selection, actions, headlines.",
+              "avoid": "Whole paragraphs."
+            }
+          }
+        },
+        "lg": {
+          "$value": {
+            "fontFamily": "{font.family.text}",
+            "fontSize": "{font.size.21}",
+            "fontWeight": "{font.weight.label}",
+            "letterSpacing": {
+              "value": 0.0,
+              "unit": "px"
+            },
+            "lineHeight": 1.3333
+          },
+          "$extensions": {
+            "opendesigner": {
+              "lineHeightPx": 28,
+              "letterSpacingEm": 0.0,
+              "use": "Emphasized body.lg: selection, actions, headlines.",
+              "avoid": "Whole paragraphs."
+            }
+          }
+        }
+      },
+      "label": {
+        "md": {
+          "$value": {
+            "fontFamily": "{font.family.text}",
+            "fontSize": "{font.size.12}",
+            "fontWeight": "{font.weight.heading}",
+            "letterSpacing": {
+              "value": 0.24,
+              "unit": "px"
+            },
+            "lineHeight": 1.3333
+          },
+          "$extensions": {
+            "opendesigner": {
+              "lineHeightPx": 16,
+              "letterSpacingEm": 0.02,
+              "use": "Emphasized label.md: selection, actions, headlines.",
+              "avoid": "Whole paragraphs."
+            }
+          }
+        },
+        "lg": {
+          "$value": {
+            "fontFamily": "{font.family.text}",
+            "fontSize": "{font.size.16}",
+            "fontWeight": "{font.weight.heading}",
+            "letterSpacing": {
+              "value": 0.0,
+              "unit": "px"
+            },
+            "lineHeight": 1.5
+          },
+          "$extensions": {
+            "opendesigner": {
+              "lineHeightPx": 24,
+              "letterSpacingEm": 0.0,
+              "use": "Emphasized label.lg: selection, actions, headlines.",
+              "avoid": "Whole paragraphs."
+            }
+          }
+        }
+      },
+      "title": {
+        "sm": {
+          "$value": {
+            "fontFamily": "{font.family.text}",
+            "fontSize": "{font.size.16}",
+            "fontWeight": "{font.weight.display}",
+            "letterSpacing": {
+              "value": 0.0,
+              "unit": "px"
+            },
+            "lineHeight": 1.5
+          },
+          "$extensions": {
+            "opendesigner": {
+              "lineHeightPx": 24,
+              "letterSpacingEm": 0.0,
+              "use": "Emphasized title.sm: selection, actions, headlines.",
+              "avoid": "Whole paragraphs."
+            }
+          }
+        },
+        "md": {
+          "$value": {
+            "fontFamily": "{font.family.text}",
+            "fontSize": "{font.size.21}",
+            "fontWeight": "{font.weight.display}",
+            "letterSpacing": {
+              "value": 0.0,
+              "unit": "px"
+            },
+            "lineHeight": 1.3333
+          },
+          "$extensions": {
+            "opendesigner": {
+              "lineHeightPx": 28,
+              "letterSpacingEm": 0.0,
+              "use": "Emphasized title.md: selection, actions, headlines.",
+              "avoid": "Whole paragraphs."
+            }
+          }
+        },
+        "lg": {
+          "$value": {
+            "fontFamily": "{font.family.text}",
+            "fontSize": "{font.size.28}",
+            "fontWeight": "{font.weight.display}",
+            "letterSpacing": {
+              "value": 0.0,
+              "unit": "px"
+            },
+            "lineHeight": 1.2857
+          },
+          "$extensions": {
+            "opendesigner": {
+              "lineHeightPx": 36,
+              "letterSpacingEm": 0.0,
+              "use": "Emphasized title.lg: selection, actions, headlines.",
+              "avoid": "Whole paragraphs."
+            }
+          }
+        }
+      },
+      "headline": {
+        "sm": {
+          "$value": {
+            "fontFamily": "{font.family.display}",
+            "fontSize": "{font.size.38}",
+            "fontWeight": "{font.weight.display}",
+            "letterSpacing": {
+              "value": -0.38,
+              "unit": "px"
+            },
+            "lineHeight": 1.2632
+          },
+          "$extensions": {
+            "opendesigner": {
+              "lineHeightPx": 48,
+              "letterSpacingEm": -0.01,
+              "use": "Emphasized headline.sm: selection, actions, headlines.",
+              "avoid": "Whole paragraphs."
+            }
+          }
+        },
+        "md": {
+          "$value": {
+            "fontFamily": "{font.family.display}",
+            "fontSize": "{font.size.51}",
+            "fontWeight": "{font.weight.display}",
+            "letterSpacing": {
+              "value": -1.02,
+              "unit": "px"
+            },
+            "lineHeight": 1.098
+          },
+          "$extensions": {
+            "opendesigner": {
+              "lineHeightPx": 56,
+              "letterSpacingEm": -0.02,
+              "use": "Emphasized headline.md: selection, actions, headlines.",
+              "avoid": "Whole paragraphs."
+            }
+          }
+        },
+        "lg": {
+          "$value": {
+            "fontFamily": "{font.family.display}",
+            "fontSize": "{font.size.67}",
+            "fontWeight": "{font.weight.display}",
+            "letterSpacing": {
+              "value": -1.34,
+              "unit": "px"
+            },
+            "lineHeight": 1.1343
+          },
+          "$extensions": {
+            "opendesigner": {
+              "lineHeightPx": 76,
+              "letterSpacingEm": -0.02,
+              "use": "Emphasized headline.lg: selection, actions, headlines.",
+              "avoid": "Whole paragraphs."
+            }
+          }
+        }
+      }
     }
   },
   "space": {
     "$type": "dimension",
-    "$description": "Spacing ladder: 4 x [0, 0.5, 1, 1.5, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20], non-integers dropped (LEVERS B8). Names are pixel values.",
+    "$description": "Spacing ladder: 4 x [0, 0.5, 1, 1.5, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24], non-integers dropped (LEVERS B8; x24 added by spec 6.2). Names are pixel values.",
     "$extensions": {
       "opendesigner": {
         "unit": 4,
@@ -498,7 +729,7 @@
       "$value": "{radius.full}",
       "$description": "Buttons, inputs, selects (Roundness dial, DC-L04-02)."
     },
-    "controlSm": {
+    "control-sm": {
       "$value": "{radius.full}",
       "$description": "Controls under 32px tall drop one step (Fluent, S-L04-007)."
     },

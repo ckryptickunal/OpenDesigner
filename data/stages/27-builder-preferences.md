@@ -8,10 +8,11 @@ Screen: how the builder (or the interviewing model) behaves while the person kee
 
 Zoom 3 (detailed) questions: `27-builder-preferences.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-pref-01 · How strict should the builder's critique be?
 Zoom 2 defined · weight medium · changes 0 decisions · class I · cards DC-L15-11
+- **Planned:** not asked yet. The engine has no critique modes yet: `validate` always reports errors and warnings, and `build` stops on errors. The interview skips this question and records nothing.
 - **Ask:** "Should I give tips as you go, stay quiet, or block export on serious problems like contrast?"
 - **Why:** Tips that name the design principle teach people the words for it. Strict mode stops export when something fails badly [DC-L15-11].
 - **Options:**

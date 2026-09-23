@@ -263,9 +263,9 @@ Designers: commissioned brand assets · Code: `class D, data/hooks.json asset ho
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Only 7 blocks, but the ones people notice first: brand marks, photography, illustration, motion signature, graphic motifs, pictograms and sound. They are commissioned or supplied, never generated as final.
+**Designer:** Only 9 blocks, but the ones people notice first: brand marks, photography, illustration, motifs, custom icons, pictograms, sound, voice and tone. They are supplied or commissioned, never generated as final.
 
-**Engineer:** Class D in L17: 7 ontology nodes expanding into 14 asset hooks (H-logo to H-brandbook in data/hooks.json), each with accepted formats, fallbacks and a briefed placeholder.
+**Engineer:** Class D, provenance designer-owned in ontology.json (9 of 211 blocks). Its assets open hooks in data/hooks.json (H-logo to H-brandbook), each with formats, fallbacks and a briefed placeholder.
 
 **Also called:** class D
 
@@ -325,7 +325,7 @@ Designers: taken from your existing brand · Code: `class E, value with provenan
 
 **Designer:** Blocks best taken from what exists: your brand book, live product, repo or Figma file. Each value shows where it came from; you accept, adjust or ignore it.
 
-**Engineer:** Class E in the L17 scheme: 5 blocks primarily, 44 by any route. Read at intake; each value carries provenance (reference id, method computed|pixel|vision|file, confidence).
+**Engineer:** Class E, provenance extractable in ontology.json (2 of 211 blocks; many more can be pre-filled). Read at intake; each value carries its reference id, method and confidence.
 
 **Also called:** class E
 
@@ -413,9 +413,9 @@ Designers: sensible defaults to adjust · Code: `class G, from levers.json formu
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** About two thirds of a system, such as spacing, ramps, most tokens and components, follows from a few inputs and the eight dials. These get sensible defaults you adjust visually.
+**Designer:** About three quarters of a system, such as spacing, ramps, most tokens and components, follows from a few inputs and the eight dials. These get sensible defaults you adjust visually.
 
-**Engineer:** Class G (135 of 207 blocks in L17): computed by the synthesis/levers.json formulas from raw inputs and dials, or a sourced default. Decided silently, shown for adjustment.
+**Engineer:** Class G, provenance generatable in ontology.json (156 of 211 blocks): computed by the synthesis/levers.json formulas from raw inputs and dials, or a sourced default. Shown for adjustment.
 
 **Also called:** class G
 
@@ -638,9 +638,9 @@ Designers: business decisions, owner's call · Code: `class I questions`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Business decisions, not design work: scope, audience, platforms, governance, terminology. OpenDesigner asks them, pre-fills from hints in your repo or references, and never invents an answer.
+**Designer:** Business decisions, not design work: scope, audience, platforms, principles, governance, terminology. OpenDesigner asks them, pre-fills from hints in your repo or references, and never invents an answer.
 
-**Engineer:** Class I, the fifth class L17 added (29 blocks), so business decisions are not misfiled as designer-owned or generatable; questions tagged class "I" are asked or pre-filled, never invented.
+**Engineer:** Class I, provenance owner-input in ontology.json (21 of 211 blocks), so business decisions are not misfiled as designer-owned. Class I questions are asked or pre-filled, never invented.
 
 **Also called:** class I, owner decision
 
@@ -886,7 +886,7 @@ Designers: hover, pressed, focus, disabled · Code: `:hover, :focus-visible, :ac
 
 **Designer:** Style enabled, hover, focus-visible, pressed, selected, disabled, loading and error. States that carry meaning need 3:1 against neighbors; touch screens have no hover, so never hide essentials there.
 
-**Engineer:** CSS :hover, :focus-visible, :active, :disabled plus aria-*. Hover and press shift one and two ramp steps (color.bg.accent.boldHover, boldPressed); opacity.state.hover covers unknown colors.
+**Engineer:** CSS :hover, :focus-visible, :active, :disabled plus aria-*. Hover and press shift one and two ramp steps (color.bg.accent.bold-hover, bold-pressed); opacity.state.hover covers unknown colors.
 
 **Also called:** interaction state
 
@@ -901,7 +901,7 @@ Designers: success, warning, error, info · Code: `color.bg.success.subtle, colo
 
 **Designer:** Success, warning, error and info, each with subtle and bold levels. Never rely on color alone: pair with an icon and text, and put dark text on yellow fills.
 
-**Engineer:** color.bg.<status>.subtle, .bold, .boldHover; color.text.<status>, color.border.<status>; icons use color.text.<status>. Text 4.5:1, icons and borders 3:1. Color-only meaning: planned lint error.
+**Engineer:** color.bg.<status>.subtle, .bold, .bold-hover; color.text.<status>, color.border.<status>; icons use color.text.<status>. Text 4.5:1, icons and borders 3:1. Color-only meaning: planned lint error.
 
 **Also called:** feedback colors, semantic colors
 
@@ -961,7 +961,7 @@ Designers: made with a named tool · Code: `class T, tool named and recorded`
 
 **Designer:** Blocks an engineer can produce with a named tool, with a caveat: font sourcing, icons, voice drafting and the token pipeline. OpenDesigner recommends the tool and states the catch.
 
-**Engineer:** Class T in L17 (31 blocks): OpenDesigner names the tool (Terrazzo, Figma MCP, Code Connect), runs or links it, states the caveat and records the choice.
+**Engineer:** Class T, provenance tool-assisted in ontology.json (23 of 211 blocks): OpenDesigner names the tool (Terrazzo, Figma MCP, Code Connect), runs or links it, states the caveat, records the choice.
 
 **Also called:** class T
 
@@ -1087,7 +1087,7 @@ Designers: end-of-step rebuild · Code: `engine.py build`
 
 **Designer:** The one command to run at the end of a step or session. It rebuilds values, exports, guides and preview, then reports any problems.
 
-**Engineer:** engine.py build runs generate, export --format all, design-md and preview, then validate; it exits 1 if validation finds errors.
+**Engineer:** engine.py build runs generate, then validate. Only with no errors (or --force) does it run export --format all, design-md and preview. It exits 1 on errors.
 
 **Example:** Run build before you show the result to your team.
 
@@ -1655,6 +1655,21 @@ Designers: replaced decision, history kept · Code: `supersedes: D-nnnn`
 **Engineer:** decisions.md is append-only: a later entry for the same path supersedes the earlier one and records supersedes: D-nnnn. The newest entry per path is the effective value.
 
 **Example:** D-0009 replaces D-0002 when corners go from subtle to soft.
+
+</details>
+
+### surface mode
+
+What a screen is for: selling something, getting work done, reading, or enjoying an experience.  
+Designers: surface mode: persuade, operate, read, experience · Code: `answers.Q-scope-06, context.surfaces`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** Persuade, Operate, Read or Experience, set for each surface. It changes spacing, card use and big hero moments, not the brand.
+
+**Engineer:** answers.Q-scope-06 fills context.surfaces with {name, mode}. The main surface sets raw.productType; any Persuade or Experience surface sets raw.marketingSurfaces. No dial moves.
+
+**Example:** A landing page is Persuade; the dashboard behind it is Operate.
 
 </details>
 
@@ -2452,13 +2467,13 @@ Designers: color system: ramps and roles · Code: `color.accent.light.9, color.b
 ### Transparent (alpha) colors
 
 Colors you can partly see through, so they look right on any background.  
-Designers: semi-transparent fills · Code: `color.neutralAlpha.*`
+Designers: semi-transparent fills · Code: `color.neutral-alpha.*`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Semi-transparent fills that adapt to whatever sits beneath, ideal for hover fills, borders and scrims on varied backgrounds. Use solid colors for text, where contrast must be certified.
 
-**Engineer:** A DTCG color value with an alpha field: color.neutralAlpha.light.2 to .12 and dark twins match solid neutral steps over the page; color.overlay.scrim carries alpha too.
+**Engineer:** A DTCG color value with an alpha field: color.neutral-alpha.light.2 to .12 and dark twins match solid neutral steps over the page; color.overlay.scrim carries alpha too.
 
 **Example:** A light gray hover shade that works on white and on blue.
 
@@ -2469,13 +2484,13 @@ Designers: semi-transparent fills · Code: `color.neutralAlpha.*`
 ### Brand and accent color
 
 The one color that makes an app feel like its brand, often on its main button.  
-Designers: brand or accent color · Code: `color.bg.brand, color.text.onBrand`
+Designers: brand or accent color · Code: `color.bg.brand, color.text.on-brand`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Decides how many accents exist and what the brand color does: reserved accent, signature surface or whole fields. Default is neutrals plus one accent; adapt the brand hex for contrast.
 
-**Engineer:** The brand hex, if given, is kept exactly as a seed primitive for logos; UI roles like color.bg.brand alias an accent step, 4.5:1 with color.text.onBrand.
+**Engineer:** The brand hex, if given, is kept exactly as a seed primitive for logos; UI roles like color.bg.brand alias an accent step, 4.5:1 with color.text.on-brand.
 
 **Example:** The exact logo blue, moved one shade darker so white button text stays readable.
 
@@ -2605,13 +2620,13 @@ Designers: dark theme, mapped by role · Code: `prefers-color-scheme: dark`
 ### Neutral ramp
 
 The set of grays, from white to near black, used for most backgrounds, lines and text.  
-Designers: gray scale, tinted or pure · Code: `color.neutral.*, color.neutralAlpha.*`
+Designers: gray scale, tinted or pure · Code: `color.neutral.*, color.neutral-alpha.*`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** The gray scale behind most surfaces, borders and text. A slight tint toward the accent hue feels branded; pure gray suits image and data tools.
 
-**Engineer:** Primitives color.neutral.light.1 to .12 and a dark twin, tinted by the Warmth dial, plus alpha twins color.neutralAlpha.light.2 to .12. Semantic roles alias them.
+**Engineer:** Primitives color.neutral.light.1 to .12 and a dark twin, tinted by the Warmth dial, plus alpha twins color.neutral-alpha.light.2 to .12. Semantic roles alias them.
 
 **Example:** Near-white for the page, mid gray for borders, dark gray for text.
 
@@ -2662,7 +2677,7 @@ Designers: color roles by job and emphasis · Code: `color.bg.accent.bold`
 
 **Designer:** Named jobs such as background, text, border and icon, crossed with roles like accent, neutral or danger and emphasis levels (subtle, default, bold). Components use roles, never raw values.
 
-**Engineer:** Semantic tier named property, role, emphasis, state: color.bg.accent.bold aliases {color.accent.light.9}, with .boldHover and .boldPressed. Bold fills pair with on-colors such as color.text.onAccent.
+**Engineer:** Semantic tier named property, role, emphasis, state: color.bg.accent.bold aliases {color.accent.light.9}, with .bold-hover and .bold-pressed. Bold fills pair with on-colors such as color.text.on-accent.
 
 **Example:** Change the danger color once and every error message updates.
 
@@ -2696,7 +2711,7 @@ Designers: text and icon colors by emphasis · Code: `color.text.*, color.icon.*
 
 **Designer:** Text and icon colors by emphasis: primary, secondary, placeholder, disabled and inverse, plus an on-color for each bold fill. Secondary text should still pass 4.5:1 on its lowest surface.
 
-**Engineer:** Solid semantic tokens color.text.{primary|secondary|tertiary|disabled|inverse|onBrand} and color.icon.*, aliasing ramp steps per mode. WCAG requires 4.5:1 for normal text; disabled text is exempt.
+**Engineer:** Solid semantic tokens color.text.{primary|secondary|tertiary|disabled|inverse|on-brand} and color.icon.*, aliasing ramp steps per mode. WCAG requires 4.5:1 for normal text; disabled text is exempt.
 
 **Example:** Black for headings, gray for hints, white text on a blue button.
 
@@ -2713,7 +2728,7 @@ Designers: success, warning, danger, info colors · Code: `color.bg.success.*, c
 
 **Designer:** Success, warning, danger and info, each subtle and bold, for fills, text and icons. Always pair with an icon or words; yellow fills need dark text.
 
-**Engineer:** color.bg.success.subtle, .bold and .boldHover, color.text.success, color.border.success and color.text.onSuccess; the same for warning, danger, info. Status icons take the text token.
+**Engineer:** color.bg.success.subtle, .bold and .bold-hover, color.text.success, color.border.success and color.text.on-success; the same for warning, danger, info. Status icons take the text token.
 
 **Example:** A green check beside 'Saved', a red icon beside 'Payment failed'.
 
@@ -2758,13 +2773,13 @@ Designers: perceptual color space, like OKLCH · Code: `colorSpace: oklch`
 ### Interaction state colors
 
 How a button's color shifts when you point at it, press it, pick it, or can't use it.  
-Designers: hover, pressed, selected, disabled colors · Code: `color.bg.accent.boldHover, opacity.state.hover`
+Designers: hover, pressed, selected, disabled colors · Code: `color.bg.accent.bold-hover, opacity.state.hover`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Hover, pressed, selected and disabled colors come from stepping along the ramp; a translucent state layer covers colors unknown at design time. Selected needs a non-color cue.
 
-**Engineer:** Ramp steps per role, such as color.bg.accent.boldHover (+1 step) and .boldPressed (+2), and state-layer numbers such as opacity.state.hover = 0.08 for colors unknown at design time.
+**Engineer:** Ramp steps per role, such as color.bg.accent.bold-hover (+1 step) and .bold-pressed (+2), and state-layer numbers such as opacity.state.hover = 0.08 for colors unknown at design time.
 
 **Example:** A blue button turns one shade darker under the mouse.
 
@@ -3164,7 +3179,7 @@ Designers: one neutral icon color · Code: `color.icon.default, fill=currentColo
 
 **Designer:** One neutral icon color matched to secondary text, status colors only on status icons, no decorative multicolor. Meaningful icons need 3:1 (WCAG); Carbon asks 4.5:1 beside body text.
 
-**Engineer:** color.icon.default (same neutral step as color.text.secondary, not an alias), .subtle, .accent and .onAccent; status icons use color.text.danger and its siblings. Web SVG: fill=currentColor.
+**Engineer:** color.icon.default (same neutral step as color.text.secondary, not an alias), .subtle, .accent and .on-accent; status icons use color.text.danger and its siblings. Web SVG: fill=currentColor.
 
 **Example:** Grey icons in the toolbar, and a red one only beside an error.
 
@@ -4525,13 +4540,13 @@ Designers: modes: light, dark, density, motion · Code: `resolver modifiers, Fig
 ### Token naming
 
 The rules for how saved choices get their names, so you can guess a name and find it.  
-Designers: token naming convention · Code: `category.property.concept.variant(State)`
+Designers: token naming convention · Code: `category.property.concept.variant-state`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** The grammar that makes token names predictable: category, property, concept, variant, state. Theme and brand never appear in semantic names, because they are modes.
 
-**Engineer:** category.property.concept.variant, state appended in camelCase: color.bg.accent.boldHover. The export prefix (default ds) namespaces it: CSS --ds-color-bg-accent-bold-hover; Swift and Compose use camelCase.
+**Engineer:** category.property.concept.variant, every segment lowercase kebab-case, state joined by a hyphen: color.bg.accent.bold-hover. CSS adds the prefix (--ds-color-bg-accent-bold-hover); Swift and Compose use camelCase.
 
 </details>
 
@@ -4772,7 +4787,7 @@ Designers: button hierarchy: primary to danger · Code: `color.bg.action.primary
 
 **Designer:** Four emphasis levels plus danger, one primary per view, placed after the last field. Sentence-case verb labels with an optional leading icon; solid danger only in the confirmation step.
 
-**Engineer:** Semantic tokens color.bg.action.primary with color.text.onAction, and color.bg.danger.bold for destructive; button component tokens are not generated yet. APG Button; SwiftUI destructive role.
+**Engineer:** Semantic tokens color.bg.action.primary with color.text.on-action, and color.bg.danger.bold for destructive; button component tokens are not generated yet. APG Button; SwiftUI destructive role.
 
 **Example:** One filled Save button beside a plain-text Cancel button.
 
@@ -4991,7 +5006,7 @@ Designers: core set of about 25 components · Code: `button.* (proposed), APG pa
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Version 1's library size. The default is about 25 core components (the engine starts with 22); extended ones, such as date pickers, come when two or more products ask.
+**Designer:** Version 1's library size. The default is the 25 core components the engine starts with; extended ones, such as date pickers, come when two or more products ask.
 
 **Engineer:** The list lives in components.inventory in state.json; each included component must implement its APG pattern. Per-component token namespaces such as button.* (proposed) are not generated yet.
 
@@ -5106,13 +5121,13 @@ Designers: checkbox, radio, switch, slider, chip · Code: `APG Checkbox, Radio G
 ### Interaction states
 
 How a part looks when you point at it, press it, pick it, or it cannot be used.  
-Designers: hover, focus, pressed, selected, disabled · Code: `color.bg.action.primaryHover`
+Designers: hover, focus, pressed, selected, disabled · Code: `color.bg.action.primary-hover`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Each component's looks: enabled, hover, focus-visible, pressed, selected, disabled, loading, error. Hover and press step one or two shades along the ramp; selected and error get explicit colors.
 
-**Engineer:** DTCG has no state semantics; states become a name suffix such as color.bg.action.primaryHover or .primaryPressed. Define all states once; each context renders the subset its inputs trigger.
+**Engineer:** DTCG has no state semantics; states become a name suffix such as color.bg.action.primary-hover or .primary-pressed. Define all states once; each context renders the subset its inputs trigger.
 
 **Example:** A button shows a ring around it when reached with the Tab key.
 
@@ -5620,7 +5635,7 @@ Designers: design critique: coach or strict · Code: `answers.Q-pref-01: coach |
 
 **Designer:** How strongly the builder critiques visual choices: coaching by default; strict blocking and a metrics panel are planned. Every validate message names its rule, so users learn the vocabulary.
 
-**Engineer:** Not tokens: answers.Q-pref-01 records silent, coach, strict or metrics, but nothing acts on it yet. validate reports errors; review --strict fails on hard-coded values or stale DESIGN.md.
+**Engineer:** Not tokens. Q-pref-01 (silent, coach, strict or metrics) is planned, so the interview skips it. validate reports errors, build stops on them, and review --strict fails on hard-coded values.
 
 </details>
 
@@ -5848,6 +5863,21 @@ Designers: token build pipeline · Code: `Terrazzo or Style Dictionary v5`
 **Engineer:** Consumes DTCG 2025.10 plus resolver: Terrazzo 2.x supports resolvers; Style Dictionary v5 needs each mode pre-expanded. engine.py export writes CSS, Swift and Compose; pipeline configs are planned.
 
 **Also called:** token transformer
+
+</details>
+
+### Durable records for later sessions and the team
+
+Files saved in your project, so the next chat or your team knows what you chose and why.  
+Designers: design spec and decision log · Code: `DESIGN.md, decisions.md, state.json`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** DESIGN.md is the readable spec, a decision log keeps every choice with its reason, and RATIONALE.md explains it to your team. Later sessions build on them without drift.
+
+**Engineer:** opendesigner/tokens/ (DTCG, canonical), state.json and decisions.md, plus DESIGN.md and PRODUCT.md at the root. engine.py design-md refreshes them; engine.py review finds drift.
+
+**Also called:** decision records
 
 </details>
 
@@ -6122,6 +6152,21 @@ Designers: generator controls: seed and targets · Code: `state.json inputs; $ex
 
 </details>
 
+### Distribution into AI hosts
+
+How you add OpenDesigner to the AI app you already use.  
+Designers: install as a skill or plugin · Code: `skills/, plugin.json, release zip`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** You load OpenDesigner into your own AI: a Claude plugin, a skills folder that Codex, Cursor and Copilot find, or a ChatGPT Project with five files.
+
+**Engineer:** skills/ is the source; sync_skills.py copies it to .agents/skills and .claude/skills. Manifests: .claude-plugin/ and plugin.json. build_dist.py makes the zip. A server is planned.
+
+**Also called:** installing OpenDesigner
+
+</details>
+
 ### Designer hooks and resource requests
 
 If the tool cannot make something well, like a logo, it asks whether you have one or can get one.  
@@ -6178,6 +6223,21 @@ Designers: interaction model: chat, panels or canvas · Code: `OD:set <path>=<va
 
 </details>
 
+### Pacing and question format
+
+Big choices get more time and pictures to compare. Small ones get a quick yes.  
+Designers: pacing, depth and question cards · Code: `pacing.json and question weight`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** The interview slows down where a choice shapes the most: one big decision per turn, with visual options. Small ones come grouped with a default you confirm.
+
+**Engineer:** pacing.json sets zoom levels 0-3 and each question's time weight (high at fan-out 5+). Questions offer 2 to 4 options, one recommended; owner inputs are never invented.
+
+**Also called:** pacing
+
+</details>
+
 ### Preview surface and latency
 
 What you see as you decide, like light and dark sample screens side by side, and how fast it updates.  
@@ -6214,5 +6274,20 @@ Designers: undo, versions, shareable URL · Code: `state.json plus decisions.md;
 **Designer:** How the tool keeps history and shares work. Today: state.json and an append-only decisions.md in your repo; git gives versions and branches. Undo and state URLs are planned.
 
 **Engineer:** state.json (schema_version 1) holds the inputs; decisions.md logs every change, and a later entry supersedes an earlier one. A compact URL encoding and coalesced undo are planned.
+
+</details>
+
+### Visual surface and return channel
+
+Where you see your choices as pictures, and how your pick gets back to the AI.  
+Designers: visual previews and picks · Code: `assets/templates, show.py, OD: lines`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** Options show up in the richest visual your AI app allows, from an artifact or a local page down to plain text. Your pick comes back as a short line.
+
+**Engineer:** Eight JSON-fed templates in assets/templates render through show.py or an artifact. Copy my choice emits OD: lines the engine runs. An MCP App view is planned.
+
+**Also called:** visual surface, OD: lines
 
 </details>

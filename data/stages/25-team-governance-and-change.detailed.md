@@ -6,7 +6,7 @@ Area: `delivery` · zoom 3 detailed: 6 · visual: text or the host question tool
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-gov-02 · In what order will you build, pilot and roll out?
 Zoom 3 detailed · weight medium · changes 3 decisions · class I · cards DC-L11-06, DC-L11-07, DC-L11-08

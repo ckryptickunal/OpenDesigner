@@ -8,7 +8,7 @@ Screen: a live component sheet where every control can be hovered, pressed, focu
 
 Zoom 3 (detailed) questions: `21-actions-states-and-focus.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-state-01 · How many button styles, and how many main buttons in each area?
 Zoom 2 defined · weight medium · changes 2 decisions · class G · cards DC-L08-05, DC-L13-18

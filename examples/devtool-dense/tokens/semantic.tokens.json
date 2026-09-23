@@ -360,7 +360,7 @@
   },
   "space": {
     "$type": "dimension",
-    "$description": "Spacing ladder: 4 x [0, 0.5, 1, 1.5, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20], non-integers dropped (LEVERS B8). Names are pixel values.",
+    "$description": "Spacing ladder: 4 x [0, 0.5, 1, 1.5, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24], non-integers dropped (LEVERS B8; x24 added by spec 6.2). Names are pixel values.",
     "$extensions": {
       "opendesigner": {
         "unit": 4,
@@ -471,7 +471,7 @@
       "$value": "{radius.4}",
       "$description": "Buttons, inputs, selects (Roundness dial, DC-L04-02)."
     },
-    "controlSm": {
+    "control-sm": {
       "$value": "{radius.2}",
       "$description": "Controls under 32px tall drop one step (Fluent, S-L04-007)."
     },

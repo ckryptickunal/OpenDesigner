@@ -34,7 +34,7 @@ ENGINE = ROOT / "skills/opendesigner/scripts/engine.py"
 # Dotted names starting with these roots are treated as token paths and must match what the engine generates.
 TOKEN_ROOTS = ("color", "space", "radius", "font", "text", "motion", "elevation", "size", "opacity", "border", "focus",
                "icon", "layer", "shadow", "chart", "avatar", "nav", "input", "button", "illustration", "haptic", "z")
-TOKEN_RE = re.compile(r"\b(?:%s)(?:\.[A-Za-z0-9*]+)+" % "|".join(TOKEN_ROOTS))
+TOKEN_RE = re.compile(r"\b(?:%s)(?:\.[A-Za-z0-9*]+(?:-[A-Za-z0-9*]+)*)+" % "|".join(TOKEN_ROOTS))
 
 
 def refresh_tokens():

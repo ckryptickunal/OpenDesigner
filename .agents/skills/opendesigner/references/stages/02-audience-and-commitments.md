@@ -6,7 +6,7 @@ Area: `accessibility` · zoom 0 sketch: 1, zoom 2 defined: 3 · visual: text or 
 
 Screen: who the product is for and what it promises them. Graph step 0. These answers bound every later option.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-aud-01 · Who uses the product, and how often?
 Zoom 0 sketch · weight high · changes 0 decisions · class I · cards DC-L09-04

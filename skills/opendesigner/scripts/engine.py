@@ -449,10 +449,10 @@ def hook_catalog():
     return FALLBACK_HOOKS
 
 
-DEFAULT_COMPONENTS = [
-    "button", "icon-button", "link", "text-field", "textarea", "select", "checkbox", "radio", "switch",
-    "card", "dialog", "menu", "tooltip", "toast", "tabs", "table", "badge", "avatar", "banner", "progress",
-    "skeleton", "navigation",
+DEFAULT_COMPONENTS = [  # Q-comp-02 default "core-25": the 25 components in 8-10 of the 10 benchmark systems (DC-L08-01)
+    "button", "text-field", "textarea", "select", "checkbox", "radio", "switch", "slider", "tabs", "tooltip",
+    "popover", "dialog", "menu", "progress-bar", "spinner", "banner", "badge", "avatar", "card", "list",
+    "table", "link", "breadcrumbs", "side-navigation", "accordion",
 ]
 
 
@@ -533,14 +533,25 @@ def _macro_list(state):
     return out
 
 
+DEFAULT_PRESET = "flat2"  # Q-dir-01's default_value (references/questions.json); applies until Q-dir-01 is answered
+
+
+def effective_preset(state):
+    """(preset id, is_default). An unanswered Q-dir-01 takes its default like any other question (spec 7.9)."""
+    if state.get("preset"):
+        return state["preset"], False
+    if "Q-dir-01" in (state.get("answers") or {}):
+        return None, False
+    return DEFAULT_PRESET, True
+
+
 def resolve_dials(state):
     """Effective dial values. Order: explicit value > preset > coupling/default; then macro offsets on
     untouched dials; clamp 0-100. Touching a dial detaches it from coupling and macros (LEVERS A0, A9)."""
     L = levers()
     explicit = {k: dial_value(v) for k, v in (state.get("dials") or {}).items() if dial_value(v) is not None}
-    preset = None
-    if state.get("preset"):
-        preset = next((p for p in L["presets"] if p["id"] == state["preset"]), None)
+    pid, _default = effective_preset(state)
+    preset = next((p for p in L["presets"] if p["id"] == pid), None) if pid else None
     macros = {m["id"]: m for m in L["macros"]}
     offsets, pushes = {}, {}
     for mid, strength in _macro_list(state):
@@ -1016,7 +1027,7 @@ def build_color_primitives(ctx):
                     ext["p3"] = r.p3[i]
                 sub[str(i)] = tok(color_value(r.steps[i]), STEP_JOBS[i], ext or None)
             if 13 in r.steps:
-                sub["solidPressed"] = tok(color_value(r.steps[13]), "Pressed state of a light solid that carries dark text.")
+                sub["solid-pressed"] = tok(color_value(r.steps[13]), "Pressed state of a light solid that carries dark text.")
             group[mode] = sub
         group["$extensions"] = {NS: {"textOnSolid": {m: ctx.ramp(name, m).text_on_solid for m in ("light", "dark")}}}
         color[name] = group
@@ -1029,7 +1040,7 @@ def build_color_primitives(ctx):
             fx, a = neutral_alpha(r.steps[i]["hex"], bg, mode)
             sub[str(i)] = tok(srgb_value(fx, a), f"Composites to neutral {mode} {i} over {'white' if mode == 'light' else 'neutral dark 1'}.")
         alpha[mode] = sub
-    color["neutralAlpha"] = alpha
+    color["neutral-alpha"] = alpha
     opacity = {
         "$type": "number",
         "$description": "State and disabled opacities for colors unknown at design time (Material state layers, DC-L01-17).",
@@ -1066,7 +1077,7 @@ def build_color_semantic(ctx, mode):
         surf_nav, nav_desc = surf["base"], "Navigation on the page background."
     lt = lambda name: ctx.ramp(name, mode).text_on_solid
     on = lambda name: (white if lt(name) == "light" else n(12)) if L else n(1)
-    pressed = lambda name: r(name, "solidPressed") if (L and 13 in ctx.ramp(name, mode).steps) else r(name, 11)
+    pressed = lambda name: r(name, "solid-pressed") if (L and 13 in ctx.ramp(name, mode).steps) else r(name, 11)
     focus_step = 9 if (lt("accent") == "light") else 11
     out = {
         "surface": {
@@ -1084,21 +1095,21 @@ def build_color_semantic(ctx, mode):
             "inverse": tok(white if L else n(1), "Text on color.bg.inverse (tooltips, toasts)."),
             "link": tok(r("accent", 11), "Links. Underline them in running text so color is not the only cue."),
             "accent": tok(r("accent", 11), "Accent text and selected labels."),
-            "onAccent": tok(on("accent"), "Text and icons on color.bg.accent.bold* (auto-picked light or dark, S-L06-094)."),
+            "on-accent": tok(on("accent"), "Text and icons on color.bg.accent.bold* (auto-picked light or dark, S-L06-094)."),
         },
         "bg": {
             "neutral": {
                 "subtle": tok(n(3) if L else n(5), "Secondary buttons, chips, hovered rows."),
-                "subtleHover": tok(n(4) if L else n(6), "Hover: +1 step (DC-L01-17)."),
-                "subtlePressed": tok(n(5) if L else n(7), "Pressed or selected: +2 steps (DC-L01-17)."),
+                "subtle-hover": tok(n(4) if L else n(6), "Hover: +1 step (DC-L01-17)."),
+                "subtle-pressed": tok(n(5) if L else n(7), "Pressed or selected: +2 steps (DC-L01-17)."),
             },
             "accent": {
                 "subtle": tok(r("accent", 3), "Selected rows, accent badges."),
-                "subtleHover": tok(r("accent", 4), "Hover on accent subtle fills."),
-                "subtlePressed": tok(r("accent", 5), "Pressed accent subtle fills."),
+                "subtle-hover": tok(r("accent", 4), "Hover on accent subtle fills."),
+                "subtle-pressed": tok(r("accent", 5), "Pressed accent subtle fills."),
                 "bold": tok(r("accent", 9), "Solid accent fill."),
-                "boldHover": tok(r("accent", 10), "Hover on the solid accent (+1 step)."),
-                "boldPressed": tok(pressed("accent"), "Pressed solid accent (+2 steps)."),
+                "bold-hover": tok(r("accent", 10), "Hover on the solid accent (+1 step)."),
+                "bold-pressed": tok(pressed("accent"), "Pressed solid accent (+2 steps)."),
             },
             "disabled": tok(n(3) if L else n(4), "Disabled control fill."),
             "inverse": tok(n(12), "Tooltips and toasts: the inverted surface."),
@@ -1115,7 +1126,7 @@ def build_color_semantic(ctx, mode):
             "default": tok(n(11), "Icons beside text; same color as secondary text (DC-L05-08)."),
             "subtle": tok(n(10), "Decorative icons."),
             "accent": tok(r("accent", 11), "Selected and interactive icons."),
-            "onAccent": tok(on("accent"), "Icons on solid accent fills."),
+            "on-accent": tok(on("accent"), "Icons on solid accent fills."),
         },
     }
     softness = p["border.softness"]
@@ -1135,31 +1146,31 @@ def build_color_semantic(ctx, mode):
     else:
         act = (r("accent", 9), r("accent", 10), pressed("accent")), on("accent")
         act_desc = "Primary action. One per view (DC-L15-03, L15 P08)."
-    out["bg"]["action"] = {"primary": tok(act[0][0], act_desc), "primaryHover": tok(act[0][1], "Primary action hover."),
-                           "primaryPressed": tok(act[0][2], "Primary action pressed.")}
-    out["text"]["onAction"] = tok(act[1], "Text on the primary action fill.")
+    out["bg"]["action"] = {"primary": tok(act[0][0], act_desc), "primary-hover": tok(act[0][1], "Primary action hover."),
+                           "primary-pressed": tok(act[0][2], "Primary action pressed.")}
+    out["text"]["on-action"] = tok(act[1], "Text on the primary action fill.")
     brand_step = ctx.cinfo["pinnedStep"] or 9
     out["bg"]["brand"] = tok(r("accent", brand_step) if L else r("accent", 9),
-                             "Brand fill for signature surfaces; carries text.onBrand (brandAnchor rule, DC-L01-09).")
-    out["text"]["onBrand"] = tok(on("accent"), "Text on color.bg.brand.")
+                             "Brand fill for signature surfaces; carries text.on-brand (brandAnchor rule, DC-L01-09).")
+    out["text"]["on-brand"] = tok(on("accent"), "Text on color.bg.brand.")
     for extra in ("accent2", "accent3"):
         if extra in has:
             out["bg"][extra] = {"subtle": tok(r(extra, 3), f"{extra} subtle fill."), "bold": tok(r(extra, 9), f"{extra} solid fill.")}
             out["text"][extra] = tok(r(extra, 11), f"{extra} text.")
-            out["text"]["on" + extra[0].upper() + extra[1:]] = tok(on(extra), f"Text on {extra} solid.")
+            out["text"]["on-" + extra] = tok(on(extra), f"Text on {extra} solid.")
     surfaces_mode = p["color.surfaces"]
     if surfaces_mode in ("tinted-containers", "brand-or-dynamic-surfaces"):
         out["surface"]["tinted"] = tok(r("accent", 2), "Tinted container (Colorfulness 50+, L09 X rubric).")
     for s in ("success", "warning", "danger", "info"):
         out["bg"][s] = {"subtle": tok(r(s, 3), f"{s.title()} banner and badge background."),
                         "bold": tok(r(s, 9), f"{s.title()} solid fill."),
-                        "boldHover": tok(r(s, 10), f"{s.title()} solid hover.")}
+                        "bold-hover": tok(r(s, 10), f"{s.title()} solid hover.")}
         out["text"][s] = tok(r(s, 11), f"{s.title()} text and icons; pair with an icon or label (DC-L01-15).")
-        out["text"]["on" + s.title()] = tok(on(s), f"Text on bg.{s}.bold.")
+        out["text"]["on-" + s] = tok(on(s), f"Text on bg.{s}.bold.")
         out["border"][s] = tok(r(s, 8), f"{s.title()} boundary, for example an invalid field (3:1).")
     if ctx.raw.get("focusColor"):
         out["border"]["focus"] = tok(A("color.focus.custom"), "Focus ring from the raw focus color (L09 M12).")
-        out["border"]["focusInner"] = tok(n(12), "Inner ring of the two-tone focus indicator; keeps 3:1 when the custom color alone does not.")
+        out["border"]["focus-inner"] = tok(n(12), "Inner ring of the two-tone focus indicator; keeps 3:1 when the custom color alone does not.")
     scrim_alpha = 0.45 if L else 0.6
     shadow_base = ctx.ramp("neutral", "light").steps[12]["hex"] if L else "#000000"
     a = shadow_alpha(ctx)
@@ -1176,8 +1187,8 @@ def build_color_semantic(ctx, mode):
     if model == "materials":
         glass_base = "#ffffff" if L else ctx.ramp("neutral", "dark").steps[3]["hex"]
         out["surface"]["glass"] = tok(srgb_value(glass_base, 0.72), "Glass for controls and navigation only, never content (DC-L04-15).")
-        out["surface"]["glassFallback"] = tok(surf["overlay"], "Solid twin under Reduce Transparency and Increase Contrast (DC-L04-16).")
-        out["surface"]["glassDimming"] = tok(srgb_value("#000000", 0.35), "35% dimming under clear glass over bright content (S-L15-073).")
+        out["surface"]["glass-fallback"] = tok(surf["overlay"], "Solid twin under Reduce Transparency and Increase Contrast (DC-L04-16).")
+        out["surface"]["glass-dimming"] = tok(srgb_value("#000000", 0.35), "35% dimming under clear glass over bright content (S-L15-073).")
     return {"color": dict({"$type": "color",
                            "$description": f"Semantic color roles, {mode} mapping. Names never change across modes; only values do. "
                                            "Dark is a separate mapping, never an inversion (DC-L01-18).",
@@ -1341,7 +1352,8 @@ def build_typography(ctx):
         u, av = uses[name.split(".")[0]]
         styles.append((name, s, role, fam_name, u, av, False))
     used_lh = {}
-    for path, s, role, fam_name, use, avoid, caps in styles:
+
+    def add_style(root, path, s, role, fam_name, use, avoid, caps):
         lh = max(s + 2, snap4_down_on_tie(s * line_height_ratio(s)))
         used_lh[lh] = True
         em = tracking(s, caps)
@@ -1350,13 +1362,34 @@ def build_typography(ctx):
             ext["textTransform"] = "uppercase"
         if compact_lh and (path.startswith("label") or path in ("body.sm", "body.md")):
             ext["lineHeightTightPx"] = s + 4 if s <= 16 else snap4_down_on_tie(s * 1.2)
-        node = text
+        node = root
         parts = path.split(".")
         for q in parts[:-1]:
             node = node.setdefault(q, {})
         node[parts[-1]] = tok({"fontFamily": A(f"font.family.{fam_name}"), "fontSize": A(f"font.size.{s}"),
                                "fontWeight": A(f"font.weight.{role}"), "letterSpacing": dim(rnd(s * em, 2)),
                                "lineHeight": rnd(lh / s, 4)}, None, ext)
+    for st in styles:
+        add_style(text, *st)
+    # Emphasized variants: Expression 67 and up (levers.json type.emphasizedVariants). Material 3 Expressive pairs each
+    # baseline style with a heavier one for selection, actions, headlines and editorial moments (DC-L02-11, S-L02-006).
+    # Each uses the next heavier weight the system already has, so the weight count stays as DC-L02-15 set it.
+    emphasized = []
+    if ctx.P("type.emphasizedVariants", p.get("type.emphasizedVariants")):
+        order = sorted(w, key=lambda r: (w[r], r))
+
+        def heavier(role):
+            return next((r for r in order if w[r] > w[role]), None)
+        emph = {"$description": "Emphasized variants: the same size and line height, one weight heavier. Use them for the selected "
+                                "item, key actions, headlines and editorial moments, not for whole paragraphs (DC-L02-11, S-L02-006)."}
+        for path, s, role, fam_name, use, avoid, caps in styles:
+            hr = heavier(role)
+            if path.startswith("code.") or caps or not hr:
+                continue
+            add_style(emph, path, s, hr, fam_name, f"Emphasized {path}: selection, actions, headlines.", "Whole paragraphs.", False)
+            emphasized.append("emphasized." + path)
+        if emphasized:
+            text["emphasized"] = emph
     scripts = levers()["formulas"]["type"]["scripts"]
     script_notes = {}
     for sc_code in raw.get("scripts") or ["Latn"]:
@@ -1370,9 +1403,9 @@ def build_typography(ctx):
             script_notes[sc_code] = {"lineHeightFactor": f,
                                      "zeroTracking": sc_code in levers()["formulas"]["type"]["tracking"]["zeroScripts"]}
     text["$extensions"][NS]["scripts"] = script_notes
-    ctx.type_info = dict(sc, weights=w, styles=[s[0] for s in styles], lineHeights=sorted(used_lh), scripts=script_notes)
+    ctx.type_info = dict(sc, weights=w, styles=[s[0] for s in styles], emphasized=emphasized, lineHeights=sorted(used_lh), scripts=script_notes)
     font = {"family": dict({"$type": "fontFamily"}, **fam), "weight": weights, "size": size_tok,
-            "lineHeight": {k: v for k, v in lh_tok.items() if k.startswith("$") or int(k) in used_lh}}
+            "line-height": {k: v for k, v in lh_tok.items() if k.startswith("$") or int(k) in used_lh}}
     return {"font": font, "text": text}
 
 
@@ -1410,8 +1443,8 @@ def build_space_foundation(ctx):
     unit = int(ctx.raw.get("spaceUnit") or 4)
     ladder = space_ladder(unit)
     space = {"$type": "dimension",
-             "$description": f"Spacing ladder: {unit} x [0, 0.5, 1, 1.5, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20], non-integers dropped (LEVERS B8). "
-                             "Names are pixel values.",
+             "$description": f"Spacing ladder: {unit} x [{', '.join(fmt_num(m) for m in space_multipliers())}], non-integers dropped "
+                             "(LEVERS B8; x24 added by spec 6.2). Names are pixel values.",
              "$extensions": {NS: {"unit": unit, "evidence": ["DC-L03-01", "DC-L03-02", "S-L09-508"]}}}
     for v in ladder:
         space[str(v)] = tok(dim(v))
@@ -1532,7 +1565,7 @@ def build_shape(ctx):
     radius.update({
         "detail": tok(rr(detail), "Checkboxes, tags, small badges."),
         "control": tok(rr(control_v), "Buttons, inputs, selects (Roundness dial, DC-L04-02)."),
-        "controlSm": tok(rr(control_sm), "Controls under 32px tall drop one step (Fluent, S-L04-007)."),
+        "control-sm": tok(rr(control_sm), "Controls under 32px tall drop one step (Fluent, S-L04-007)."),
         "container": tok(rr(container), "Cards and panels."),
         "overlay": tok(rr(overlay), "Dialogs, sheets, popovers."),
         "person": tok(A("radius.full"), "Avatars."),
@@ -1546,7 +1579,7 @@ def build_shape(ctx):
     focus = {"$type": "dimension",
              "$description": f"Focus indicator: {focus_w}px ring, {offset}px offset, color.border.focus; never color-only (DC-L04-09, WCAG 2.4.7, 2.4.13).",
              "ring": {"width": tok(dim(focus_w)), "offset": tok(dim(offset))}}
-    ctx.shape_info = {"control": "full" if full else control_v, "controlSm": control_sm, "detail": detail, "container": container,
+    ctx.shape_info = {"control": "full" if full else control_v, "control-sm": control_sm, "detail": detail, "container": container,
                       "overlay": overlay, "nested": nested, "focusWidth": focus_w, "focusRadius": focus_r,
                       "iconCorners": p["icon.cornerStyle"], "iconCaps": p["icon.caps"]}
     return {"radius": radius, "border": border, "focus": focus}
@@ -1629,8 +1662,8 @@ def build_motion(ctx):
     r10 = lambda v: int(round(v / 10) * 10)
     d = {"instant": 0, "micro": 100, "short": 150, "medium": r10(250 * mult), "long": r10(400 * mult), "extra": r10(700 * mult)}
     exit_k = 0.75  # exits 20-35% shorter than entrances (Atlassian 250/200, Primer 300/200) [inferred midpoint]
-    d["mediumExit"] = r10(d["medium"] * exit_k)
-    d["longExit"] = r10(d["long"] * exit_k)
+    d["medium-exit"] = r10(d["medium"] * exit_k)
+    d["long-exit"] = r10(d["long"] * exit_k)
     std = p["motion.easing.standard"]
     if energy <= 33:
         enter, exit_ = [0, 0, 0.38, 0.9], [0.2, 0, 1, 0.9]      # Carbon productive (S-L06-002)
@@ -1692,7 +1725,7 @@ def build_motion_context(ctx, context):
     else:
         body = {"feedback": t("micro", "standard", "Hover, press, color changes."),
                 "enter": t("medium", "enter", "Menus, popovers, toasts entering."),
-                "exit": t("mediumExit", "exit", "Leaving: shorter than enter (DC-L04-24)."),
+                "exit": t("medium-exit", "exit", "Leaving: shorter than enter (DC-L04-24)."),
                 "move": tok(A("motion.spring.spatial.default"), "On-screen movement: spatial spring (web: linear() sample)."),
                 "expand": t("long", "enter", "Dialogs, sheets, side panels entering.")}
     desc = f"Semantic transitions, {context} motion. Reduced motion is a token mode: travel becomes opacity, feedback stays (DC-L04-25)."
@@ -1713,23 +1746,23 @@ def contrast_pairs(ctx):
     tmin = 7.0 if ctx.raw.get("contrastTarget") == "AAA" else 4.5
     surfaces = ["color.surface.base", "color.surface.raised", "color.surface.sunken", "color.surface.overlay"]
     text_on = {
-        "color.text.primary": surfaces + ["color.bg.neutral.subtle", "color.bg.neutral.subtleHover", "color.bg.neutral.subtlePressed",
+        "color.text.primary": surfaces + ["color.bg.neutral.subtle", "color.bg.neutral.subtle-hover", "color.bg.neutral.subtle-pressed",
                                           "color.bg.accent.subtle"],
-        "color.text.secondary": surfaces + ["color.bg.neutral.subtle", "color.bg.neutral.subtleHover"],
+        "color.text.secondary": surfaces + ["color.bg.neutral.subtle", "color.bg.neutral.subtle-hover"],
         "color.text.tertiary": surfaces,
         "color.text.link": surfaces + ["color.bg.accent.subtle"],
-        "color.text.onAccent": ["color.bg.accent.bold", "color.bg.accent.boldHover", "color.bg.accent.boldPressed"],
-        "color.text.onAction": ["color.bg.action.primary", "color.bg.action.primaryHover", "color.bg.action.primaryPressed"],
-        "color.text.onBrand": ["color.bg.brand"],
+        "color.text.on-accent": ["color.bg.accent.bold", "color.bg.accent.bold-hover", "color.bg.accent.bold-pressed"],
+        "color.text.on-action": ["color.bg.action.primary", "color.bg.action.primary-hover", "color.bg.action.primary-pressed"],
+        "color.text.on-brand": ["color.bg.brand"],
         "color.text.inverse": ["color.bg.inverse"],
     }
     for s in ("success", "warning", "danger", "info"):
         text_on[f"color.text.{s}"] = ["color.surface.base", "color.surface.raised", f"color.bg.{s}.subtle"]
-        text_on[f"color.text.on{s.title()}"] = [f"color.bg.{s}.bold", f"color.bg.{s}.boldHover"]
+        text_on[f"color.text.on-{s}"] = [f"color.bg.{s}.bold", f"color.bg.{s}.bold-hover"]
     for extra in ("accent2", "accent3"):
         if extra in ctx.cinfo["ramps"]:
             text_on[f"color.text.{extra}"] = ["color.surface.base", "color.surface.raised", f"color.bg.{extra}.subtle"]
-            text_on[f"color.text.on{extra[0].upper() + extra[1:]}"] = [f"color.bg.{extra}.bold"]
+            text_on[f"color.text.on-{extra}"] = [f"color.bg.{extra}.bold"]
     non_text = {
         "color.border.strong": surfaces,
         "color.border.input": surfaces + ["color.bg.neutral.subtle"],
@@ -1750,7 +1783,7 @@ def contrast_pairs(ctx):
             pr = {"mode": mode, "fg": "color.border.focus", "bg": bg, "min": 3.0, "kind": "focus", "rule": "WCAG 2.2 SC 1.4.11, 2.4.13",
                   "level": "error"}
             if ctx.raw.get("focusColor"):
-                pr["inner"] = "color.border.focusInner"
+                pr["inner"] = "color.border.focus-inner"
             pairs.append(pr)
         for bg in ("color.surface.base", "color.surface.raised"):
             pairs.append({"mode": mode, "fg": "color.bg.action.primary", "bg": bg, "min": 3.0, "kind": "fill-boundary",
@@ -1819,8 +1852,8 @@ def apply_token_overrides(ctx, files):
     return applied
 
 
-PRIMITIVE_RE = re.compile(r"^(color\.(white|black|brand|focus|neutralAlpha|neutral|accent|action|accent2|accent3|success|warning|danger|info)\."
-                          r"|color\.(white|black)$|opacity\.|space\.\d+$|radius\.(\d+|full)$|font\.(size|lineHeight)\.|border\.width\.\d+$"
+PRIMITIVE_RE = re.compile(r"^(color\.(white|black|brand|focus|neutral-alpha|neutral|accent|action|accent2|accent3|success|warning|danger|info)\."
+                          r"|color\.(white|black)$|opacity\.|space\.\d+$|radius\.(\d+|full)$|font\.(size|line-height)\.|border\.width\.\d+$"
                           r"|motion\.(duration|easing|spring)\.|elevation\.shadow\.)")
 
 
@@ -1889,7 +1922,7 @@ def generate_system(state):
     meta = {
         "engine": ENGINE_VERSION, "name": ctx.state.get("name"), "prefix": ctx.state["exports"].get("prefix", "ds"),
         "dials": ctx.dials, "dialSources": ctx.dial_src, "macroConflicts": ctx.conflicts,
-        "preset": ctx.state.get("preset"), "macros": ctx.state.get("macros"),
+        "preset": effective_preset(ctx.state)[0], "presetIsDefault": effective_preset(ctx.state)[1], "macros": ctx.state.get("macros"),
         "params": {k: {"value": ctx.params[k], **ctx.pmeta.get(k, {})} for k in sorted(ctx.params)},
         "color": ctx.cinfo, "ramps": ramps, "modes": ctx.modes,
         "type": ctx.type_info, "space": ctx.space_info, "density": ctx.density_info, "shape": ctx.shape_info,
@@ -2289,7 +2322,8 @@ def validate_files(files, state, rep):
         rep.add("warning", "lint", f"{len(sizes)} text sizes; 8 to 10 is the usual range", "Type scale size count", "DC-L02-10")
     if sizes and sizes[0] < 11:
         rep.add("warning", "lint", f"the smallest text size, {sizes[0]:g}px, is under 11px", "Minimum legible size 11pt/sp", "S-L02-001, S-L02-005")
-    styles = {k: v["resolved"] for k, v in toks.items() if k.startswith("text.") and v["type"] == "typography"}
+    styles = {k: v["resolved"] for k, v in toks.items() if k.startswith("text.") and not k.startswith("text.emphasized.")
+              and v["type"] == "typography"}  # emphasized variants pair with a baseline style; they are not extra levels
     if len(styles) > 15:
         rep.add("warning", "lint", f"{len(styles)} text styles; 12 to 15 is the usual range", "Type style count", "DC-L02-10")
     body_weights = {v["fontWeight"] for k, v in styles.items() if not k.startswith("text.display")}
@@ -2346,7 +2380,7 @@ def validate_files(files, state, rep):
         if nst and b_ > 0 and _px(nst["resolved"]) >= b_:
             rep.add("error", "lint", "radius.nested is not smaller than radius.container", "Nested radius = outer - padding", "DC-L04-05, S-L04-057")
     # ---- lint: materials
-    if any(k == "color.surface.glass" for k in toks) and "color.surface.glassFallback" not in toks:
+    if any(k == "color.surface.glass" for k in toks) and "color.surface.glass-fallback" not in toks:
         rep.add("error", "lint", "a glass surface has no solid fallback for people who turn off transparency", "Materials emit a solid twin (Reduce Transparency)", "DC-L04-16")
     # ---- lint: spacing (inner < outer, per density)
     if "density" in res.get("modifiers", {}):
@@ -2369,7 +2403,7 @@ def validate_files(files, state, rep):
             rep.add("warning", "lint", "buttons and links barely look clickable on a layout that is not roomy", "minimal-signifiers-dense", "S-L15-004")
         if dials.get("expression", 0) > 66 and (state.get("raw", {}).get("domain") or "").lower() in ("finance", "banking", "fintech"):
             rep.add("warning", "lint", "a very expressive look in a finance product can cost trust", "expressive-finance", "S-L06-010")
-    if (state.get("preset") or meta.get("preset")) == "soft":
+    if (effective_preset(state)[0] or meta.get("preset")) == "soft":
         rep.add("warning", "lint", "the soft (neumorphic) look fails 3:1 edge contrast by design", "neumorphic-preset", "S-L15-060")
     for c in meta.get("macroConflicts") or []:
         rep.add("warning", "lint", f"the feel words {', '.join(c['macros'])} pull {c['dial']} in opposite directions. Pick which one wins",
@@ -2399,7 +2433,7 @@ def validate_files(files, state, rep):
     mono(dur, "motion.duration ladder", strict=False)
     for mode in modes:
         t2 = pick(theme=mode)
-        ramps_ = sorted({k.split(".")[1] for k in t2 if re.fullmatch(rf"color\.[a-zA-Z0-9]+\.{mode}\.\d+", k)} - {"neutralAlpha"})
+        ramps_ = sorted({k.split(".")[1] for k in t2 if re.fullmatch(rf"color\.[a-zA-Z0-9-]+\.{mode}\.\d+", k)} - {"neutral-alpha"})
         for rname in ramps_:
             ys = [luminance(hex_of(t2[f"color.{rname}.{mode}.{i}"]["resolved"])) for i in range(1, 13)]
             seg = [ys[i] for i in list(range(0, 8)) + [10, 11]]  # steps 1-8 and 11-12; 9-10 may be light fills
@@ -2432,10 +2466,17 @@ def validate_files(files, state, rep):
             rep.add("advisory", "coverage", f"{counts['pending']} building blocks still pending: " + ", ".join(sorted(k for k, v in blocks.items()
                     if (v.get("status") if isinstance(v, dict) else v) == "pending")[:12]), "Nothing missed", "BRIEF req. 5")
     # ---- designer-owned assets (coverage, never an error)
-    open_hooks = [h for h, v in (state.get("hooks") or {}).items() if (v or {}).get("status", "pending") in ("pending", "unknown")]
+    open_hooks = [(h, v) for h, v in (state.get("hooks") or {}).items() if (v or {}).get("status", "pending") in ("pending", "unknown")]
     if open_hooks:
-        rep.add("advisory", "hooks", f"{len(open_hooks)} assets a person must make, not asked about yet: {', '.join(open_hooks)}",
-                "Designer hooks, not designer replacement", "BRIEF req. 2, Q-brand-08")
+        names = [hook_label(h, v) for h, v in open_hooks]
+        rep.add("advisory", "hooks", f"{len(open_hooks)} assets a person must make, not asked about yet: {'; '.join(names)}",
+                "Designer hooks, not designer replacement", "BRIEF req. 2, Q-brand-08", where=", ".join(h for h, _ in open_hooks))
+
+
+def hook_label(hid, rec):
+    """Plain asset name for a hook id: 'H-logo' -> 'logo, wordmark, symbol, lockups' (from hooks.json via state)."""
+    name = (rec or {}).get("name") or dict((h, n) for h, n, _q in hook_catalog()).get(hid) or hid
+    return name[:1].lower() + name[1:] if name[1:2].islower() else name
 
 
 def validate_dir(d, write_state_hash=True):
@@ -2461,6 +2502,7 @@ TERM_DEFAULTS = {  # plain voice first (BRIEF req. 12); a glossary file, when pr
     "elevation": "depth", "density": "density", "dial": "dial",
 }
 _GLOSSARY = None
+_GLOSSARY_FULL = {}
 
 
 def glossary():
@@ -2483,8 +2525,17 @@ def glossary():
                         plain = it.get("plain") or (it.get("voices") or {}).get("plain")
                         if key and isinstance(plain, str):
                             _GLOSSARY[key] = plain
+                            _GLOSSARY_FULL[key] = it
                 break
     return _GLOSSARY
+
+
+def short_line(key):
+    """The one-line 'Designers: X · Code: Y' note for a glossary term (synthesis/THREE-VOICES.md), or ''."""
+    glossary()
+    it = _GLOSSARY_FULL.get(key.lower()) or {}
+    ds, cn = it.get("designer_says"), it.get("code_name")
+    return f"Designers: {ds} · Code: `{cn}`" if ds and cn else ""
 
 
 def term(key):
@@ -2496,8 +2547,8 @@ def term(key):
 
 
 def words_of(path):
-    """color.bg.neutral.subtleHover -> 'neutral subtle hover background' (plain words for a token path)."""
-    parts = [re.sub(r"(?<=[a-z0-9])([A-Z])", lambda m: " " + m.group(1).lower(), x) for x in path.split(".")]
+    """color.bg.neutral.subtle-hover -> 'neutral subtle hover background' (plain words for a token path)."""
+    parts = [re.sub(r"(?<=[a-z0-9])([A-Z])", lambda m: " " + m.group(1).lower(), x).replace("-", " ") for x in path.split(".")]
     if parts and parts[0] == "color":
         parts = parts[1:]
     kind = {"bg": "background", "text": "text", "border": "border", "surface": "surface", "icon": "icon"}.get(parts[0] if parts else "", None)
@@ -2557,6 +2608,46 @@ def print_report(rep, d, as_json=False):
 TOP_KEYS = {"name", "summary", "context", "dials", "preset", "macros", "raw", "overrides", "answers", "principles",
             "components", "hooks", "exports", "locks", "zoom", "blocks", "references", "taste", "waivers", "mode", "profile"}
 VOICES = ["plain", "designer", "engineer"]  # BRIEF req. 12: plain first
+# Q-scope-06 surface modes [S-L17-007]. Tokens stay global: the main surface sets raw.productType, any Persuade or
+# Experience surface sets raw.marketingSurfaces, and each surface gets its density mode and hero rule in the docs [inferred].
+SURFACE_MODES = {
+    "persuade": {"name": "Persuade", "productType": "marketing", "density": "spacious",
+                 "rule": "one hero line per page; sections, not card grids"},
+    "operate": {"name": "Operate", "productType": "work-tool", "density": None,
+                "rule": "no hero; cards only to group related data"},
+    "read": {"name": "Read", "productType": "content", "density": "comfortable",
+             "rule": "no hero; `text.body.lg` for long text; no cards around running text"},
+    "experience": {"name": "Experience", "productType": "marketing", "density": "spacious",
+                   "rule": "hero moments and big imagery allowed; display styles welcome"},
+}
+
+
+def surface_list(value):
+    """Q-scope-06 answer -> [{name, mode}] with the main surface first. Takes a mode word, a list of mode words,
+    a list of {name, mode}, or 'name:mode' strings."""
+    items = value if isinstance(value, list) else [value]
+    out = []
+    for it in items:
+        if isinstance(it, dict):
+            name, mode = it.get("name") or "", str(it.get("mode") or "")
+        elif isinstance(it, str) and ":" in it:
+            name, mode = (x.strip() for x in it.split(":", 1))
+        else:
+            name, mode = "", str(it)
+        key = mode.strip().lower()
+        if key in SURFACE_MODES:
+            out.append({"name": name or SURFACE_MODES[key]["name"] + " surface", "mode": SURFACE_MODES[key]["name"]})
+    return out
+
+
+def surface_rule(surface, density_default):
+    info = SURFACE_MODES.get(str(surface.get("mode", "")).lower()) if isinstance(surface, dict) else None
+    if not info:
+        return ""
+    return f"density {info['density'] or density_default}; {info['rule']}"
+
+
+FIGMA_PLAN_OF = {"figma-starter": "starter", "figma-pro": "professional", "figma-org": "organization", "figma-ent": "enterprise"}  # Q-tool-03
 BRAND_ROWS = {"A": ("playful", "serious"), "B": ("friendly", "authoritative"), "C": ("minimal", "rich"),
               "D": (None, None), "E": ("premium", "everyday"), "F": ("modern", "heritage"), "G": ("bold", "deferential")}
 
@@ -2595,6 +2686,20 @@ def answer_effects(qid, value):
             eff["raw.defaultTheme"] = "dark"
     elif qid == "Q-dir-01":
         eff["preset"] = {"neo-brutalist": "neobrutal"}.get(v, v)
+    elif qid == "Q-scope-06":
+        surfaces = surface_list(v)
+        if surfaces:
+            if any(isinstance(it, dict) or (isinstance(it, str) and ":" in it) for it in (v if isinstance(v, list) else [v])):
+                eff["context.surfaces"] = surfaces
+            eff["raw.productType"] = SURFACE_MODES[surfaces[0]["mode"].lower()]["productType"]
+            eff["raw.marketingSurfaces"] = any(x["mode"] in ("Persuade", "Experience") for x in surfaces)
+    elif qid == "Q-tool-03":
+        plans = [FIGMA_PLAN_OF.get(x) for x in (v if isinstance(v, list) else [v]) if isinstance(x, str)]
+        eff["exports.figmaPlan"] = next((pl for pl in plans if pl), None)
+    elif qid == "Q-brand-07":
+        items = v.get("principles") if isinstance(v, dict) else v
+        if isinstance(items, list) and all(isinstance(x, str) for x in items) and items:
+            eff["principles"] = [x.strip() for x in items if x.strip()]
     elif qid == "Q-brand-01" and isinstance(v, dict):
         macros = []
         for row, pos in v.items():
@@ -2720,7 +2825,12 @@ def _store(state, path, value, set_by, did, lock):
             rec["locked"] = True
         state["answers"][parts[1]] = rec
         return answer_value(old)
-    old = set_path(state, path, value)
+    if parts[0] == "overrides" and len(parts) >= 2:  # overrides are keyed by the whole parameter or token path
+        key = path.split(".", 1)[1]
+        old = state.setdefault("overrides", {}).get(key)
+        state["overrides"][key] = value
+    else:
+        old = set_path(state, path, value)
     if lock and path not in (state.get("locks") or []):
         state.setdefault("locks", []).append(path)
     return old
@@ -3065,7 +3175,7 @@ def export_css(files, meta, prefix):
     lines += ["", f".{prefix}-focus-ring:focus-visible {{",
               f"  outline: var({css_var(prefix, 'focus.ring.width')}) solid var({css_var(prefix, 'color.border.focus')});",
               f"  outline-offset: var({css_var(prefix, 'focus.ring.offset')});"]
-    if any(k.endswith("focusInner") for k in flatten(files[[s['$ref'] for s in theme_ctx[default_theme]][0]])):
+    if any(k.endswith("focus-inner") for k in flatten(files[[s['$ref'] for s in theme_ctx[default_theme]][0]])):
         lines.append(f"  box-shadow: 0 0 0 var({css_var(prefix, 'focus.ring.offset')}) var({css_var(prefix, 'color.border.focus-inner')});")
     lines += ["}", "@media (forced-colors: active) {", f"  .{prefix}-focus-ring:focus-visible {{ outline-color: Highlight; }}", "}", ""]
     return "\n".join(lines)
@@ -3088,7 +3198,7 @@ def export_tailwind(files, meta, prefix):
     for path in sorted(flat):
         t = flat[path]
         v = f"var({css_var(prefix, path)})"
-        if t["type"] == "color" and not re.match(r"color\.(neutral|accent|action|success|warning|danger|info|neutralAlpha|accent2|accent3|white|black|brand|focus)\b", path):
+        if t["type"] == "color" and not re.match(r"color\.(neutral|accent|action|success|warning|danger|info|neutral-alpha|accent2|accent3|white|black|brand|focus)\b", path):
             for src, dst in TW_COLOR_MAP:
                 if path.startswith(src):
                     rest = "-".join(kebab(s) for s in path[len(src):].split("."))
@@ -3117,7 +3227,7 @@ def export_tailwind(files, meta, prefix):
             lines.append(f"  --spacing-{'-'.join(kebab(s) for s in path.split('.')[1:])}: var({css_var(prefix, path)});")
         elif re.match(r"size\.(control|target|icon)\.", path):
             lines.append(f"  --spacing-{'-'.join(kebab(s) for s in path.split('.'))}: var({css_var(prefix, path)});")
-    for r in ("detail", "control", "controlSm", "container", "overlay", "person", "full"):
+    for r in ("detail", "control", "control-sm", "container", "overlay", "person", "full"):
         lines.append(f"  --radius-{kebab(r)}: var({css_var(prefix, 'radius.' + r)});")
     for e in ("raised", "floating", "overlay"):
         lines.append(f"  --shadow-{e}: var({css_var(prefix, 'elevation.' + e)});")
@@ -3158,7 +3268,7 @@ def figma_scopes(path, typ):
         return ["STROKE_FLOAT"]
     if path.startswith("font.size."):
         return ["FONT_SIZE"]
-    if path.startswith("font.lineHeight."):
+    if path.startswith("font.line-height."):
         return ["LINE_HEIGHT"]
     if path.startswith("font.weight."):
         return ["FONT_WEIGHT"]
@@ -3359,7 +3469,7 @@ def export_figma(files, meta, state, prefix):
             "warnings": warnings, "collections": final, "textStyles": text_styles, "effectStyles": effect_styles}
 
 
-PAPER_TYPES = [("color", None), ("spacing", "space."), ("radius", "radius."), ("fontSize", "font.size."), ("lineHeight", "font.lineHeight."),
+PAPER_TYPES = [("color", None), ("spacing", "space."), ("radius", "radius."), ("fontSize", "font.size."), ("lineHeight", "font.line-height."),
                ("fontWeight", "font.weight."), ("fontFamily", "font.family."), ("opacity", "opacity.")]
 
 
@@ -3710,6 +3820,13 @@ def _keep_blocks(text):
     return keeps
 
 
+def _direction_words(state):
+    pid, is_default = effective_preset(state)
+    if not pid:
+        return "no named preset"
+    return f"preset {pid}" + (" (the default until Q-dir-01 is answered)" if is_default else "")
+
+
 def dial_words(dial, v, params):
     L = {d["id"]: d for d in levers()["dials"]}[dial]
     side = (L["left"] if v <= 33 else f"leaning {L['left']}" if v < 45 else "balanced" if v <= 55
@@ -3771,19 +3888,25 @@ def render_design_md(d, files, meta, state, existing=""):
     zoom = zoom_levels(d, state)
     ztitle = {t: k for k, t in ZOOM_AREAS}
 
-    def section(title, body):
+    def section(title, body, lead=None, term_key=None, fold=True):
+        """Three-voice layout (synthesis/THREE-VOICES.md, assets/output/DESIGN.md): zoom line, one plain sentence,
+        the one-line 'Designers · Code' note, then the full designer and engineer detail folded under 'More'."""
         parts = [f"## {title}", ""]
         zk = ztitle.get(title)
         if zk:
             z = zoom[zk]
             nxt = f" To zoom in, answer {', '.join(z['next'])}." if z["level"] != "detailed" and z["next"] else ""
             li = ZOOM_LEVELS.index(z["level"])
-            parts += [f"<!-- od:zoom area={zk} level={li} -->",
-                      f"> Zoom: {z['level']} ({li} of 3), {z['decisions']} decision{'s' if z['decisions'] != 1 else ''} in this area.{nxt}", ""]
-        parts += [body.strip(), ""]
+            parts += [f"> Zoom: {z['level']} ({li} of 3), {z['decisions']} decision{'s' if z['decisions'] != 1 else ''} in this area.{nxt}",
+                      f"<!-- od:zoom area={zk} level={li} -->", ""]
+        if lead:
+            sl = short_line(term_key) if term_key else ""
+            parts += [lead + ("\n" + sl if sl else ""), ""]
+        detail = [body.strip(), ""]
         di = dec_ids(title)
         if di:
-            parts += [di, ""]
+            detail += [di, ""]
+        parts += (["<details><summary>More</summary>", ""] + detail + ["</details>", ""]) if fold and lead else detail
         if title in keeps:
             parts += [keeps[title], ""]
         return "\n".join(parts)
@@ -3792,11 +3915,11 @@ def render_design_md(d, files, meta, state, existing=""):
     styles = sorted(p for p, t in light.items() if t["type"] == "typography")
     fm = ["---", "version: alpha", f"name: {json.dumps(state.get('name') or 'Design system')}",
           f"description: {json.dumps(state.get('summary') or (ctx.get('product') or 'Design system generated by OpenDesigner'))}", "colors:"]
-    fm_colors = [("primary", "color.bg.action.primary"), ("on-primary", "color.text.onAction"), ("accent", "color.bg.accent.bold"),
-                 ("on-accent", "color.text.onAccent"), ("surface", "color.surface.base"), ("surface-raised", "color.surface.raised"),
+    fm_colors = [("primary", "color.bg.action.primary"), ("on-primary", "color.text.on-action"), ("accent", "color.bg.accent.bold"),
+                 ("on-accent", "color.text.on-accent"), ("surface", "color.surface.base"), ("surface-raised", "color.surface.raised"),
                  ("on-surface", "color.text.primary"), ("on-surface-variant", "color.text.secondary"), ("outline", "color.border.default"),
                  ("outline-strong", "color.border.strong"), ("focus", "color.border.focus"), ("error", "color.bg.danger.bold"),
-                 ("on-error", "color.text.onDanger"), ("success", "color.bg.success.bold"), ("warning", "color.bg.warning.bold")]
+                 ("on-error", "color.text.on-danger"), ("success", "color.bg.success.bold"), ("warning", "color.bg.warning.bold")]
     for k, p in fm_colors:
         if p in light:
             fm.append(f'  {k}: "{H(p)}"')
@@ -3809,7 +3932,7 @@ def render_design_md(d, files, meta, state, existing=""):
                f"    fontSize: {fmt_num(_px(v['fontSize']))}px", f"    fontWeight: {int(v['fontWeight'])}",
                f"    lineHeight: {ext.get('lineHeightPx')}px", f"    letterSpacing: {fmt_num(ext.get('letterSpacingEm', 0))}em"]
     fm.append("rounded:")
-    for r in ("detail", "controlSm", "control", "container", "overlay", "full"):
+    for r in ("detail", "control-sm", "control", "container", "overlay", "full"):
         fm.append(f"  {kebab(r)}: {fmt_num(_px(light['radius.' + r]['resolved']))}px")
     fm.append("spacing:")
     dflt = meta["density"][params["space.densityMode"]]
@@ -3827,21 +3950,22 @@ def render_design_md(d, files, meta, state, existing=""):
            "  card:", '    backgroundColor: "{colors.surface-raised}"', '    textColor: "{colors.on-surface}"',
            '    rounded: "{rounded.container}"', f"    padding: {dflt['inset']['xl']}px", "---", ""]
     out = ["\n".join(fm), f"# {state.get('name') or 'Design system'}", "",
-           f"> Generated by the OpenDesigner engine {ENGINE_VERSION} from `state.json`, the tokens and `decisions.md`. Don't edit this file to change the system. "
-           "Run `engine.py set ...`, then `engine.py generate` and `engine.py design-md`. Hand-written notes survive only inside "
-           "`<!-- od:keep -->` ... `<!-- /od:keep -->` blocks at the end of a section. The DTCG files in `tokens/` are the source of truth.", ""]
+           f"> Generated by the OpenDesigner engine {ENGINE_VERSION} from `state.json` and `decisions.md`. The tokens in `tokens/` are the source of truth. "
+           "To change the system, record a decision (`engine.py set ...`) and run `engine.py build`; don't edit this file. "
+           "Notes inside `<!-- od:keep -->` ... `<!-- /od:keep -->` blocks at the end of a section survive. "
+           "Each section opens with one plain sentence; open **More** for the designer and engineer detail.", ""]
 
     # 1 Overview
     principles = state.get("principles") or []
     pl = "\n".join(f"{i}. {p}" for i, p in enumerate(principles, 1)) if principles else \
-        "No principles recorded yet (Q-brand-04). Until they are, the dials act as the tie-breakers below."
+        "No principles recorded yet (Q-brand-07). Until they are, the dials act as the tie-breakers below."
     surf = ctx.get("surfaces") or []
     body = [f"**Intent.** {state.get('summary') or ctx.get('product') or 'A design system generated from eight dials and a few raw inputs.'}",
             "", f"- Audience: {ctx.get('audience') or 'not recorded yet (Q-aud-01)'}",
             f"- The memorable thing: {ctx.get('memorable') or 'not recorded yet (Q-brand-02)'}",
-            f"- Surfaces: {', '.join((s.get('name', '') + ' (' + s.get('mode', '') + ')') if isinstance(s, dict) else str(s) for s in surf) or 'not recorded yet'}",
+            f"- Surfaces: {'; '.join((s.get('name', '') + ' (' + s.get('mode', '') + ((': ' + surface_rule(s, params['space.densityMode'])) if surface_rule(s, '') else '') + ')') if isinstance(s, dict) else str(s) for s in surf) or 'not recorded yet (Q-scope-06)'}",
             f"- Platforms: {', '.join(raw.get('platforms') or [])}; inputs: {', '.join(raw.get('inputs') or [])}",
-            f"- Direction: {('preset ' + state['preset']) if state.get('preset') else 'no named preset'}"
+            f"- Direction: {_direction_words(state)}"
             + (f"; brand macros {', '.join((m if isinstance(m, str) else m['id'] + ' x' + str(m.get('strength', 1))) for m in state['macros'])}" if state.get("macros") else ""),
             "", "**Principles (ranked).**", pl, "", "**Dial positions.** Three posture dials set the overall stance. Five character dials fine-tune it.", ""]
     body += [f"- {dial_words(k, dials[k], params)}" for k in DIALS]
@@ -3849,7 +3973,12 @@ def render_design_md(d, files, meta, state, existing=""):
              _md_table(["Area", "Zoom", "Next questions"], [(t, zoom[k]["level"], ", ".join(zoom[k]["next"]) if zoom[k]["level"] != "detailed" else "-")
                                                            for k, t in ZOOM_AREAS if k != "overview"])]
     body += ["", "The tokens in `tokens/` (DTCG 2025.10 with `opendesigner.resolver.json`) are the source of truth. This file is a generated view."]
-    out.append(section("Overview", "\n".join(body)))
+    ew = "calm" if dials["expression"] <= 33 else "balanced" if dials["expression"] <= 66 else "lively"
+    dw = "roomy" if dials["density"] <= 33 else "comfortable" if dials["density"] <= 66 else "compact"
+    style = {"flat2": "a flat", "tonal": "a tonal", "glass": "a glass", "neobrutal": "a bold, blocky", "soft": "a soft 3D",
+             "maximal": "a loud, busy"}.get(effective_preset(state)[0] or "", "its own")
+    lead_overview = f"**{state.get('name') or 'This system'} looks {ew} and {dw}, in {style} style.**"
+    out.append(section("Overview", "\n".join(body), lead=lead_overview, term_key="Visual style direction"))
 
     # 2 Colors
     ci = meta["color"]
@@ -3887,14 +4016,18 @@ def render_design_md(d, files, meta, state, existing=""):
             "opacities in `opacity.state.*` (hover 8%, focus 10%, pressed 10%, drag 16%).",
             "", "**Semantic roles** (use these, never the ramps):", "", _md_table(["Token", "Light", "Dark", "Use"], rows),
             "", "**Use / avoid.**", "- Use one solid accent fill per view for the primary action; spend chroma on small, meaningful elements.",
-            "- Avoid gray text on colored fills; use the matching `text.on*` role.",
+            "- Avoid gray text on colored fills; use the matching `text.on-*` role.",
             "- Avoid color as the only signal: pair status colors with an icon or label.",
             "- Charts: no chart palette is generated yet. Take chart colors from the status and accent hues, and check them separately."]
-    out.append(section("Colors", "\n".join(body)))
+    lead_colors = (f"**One accent color, made from your brand color `{brand}`, marks buttons, links and focus.** Everything else stays neutral."
+                   if brand else "**No brand color yet, so a stand-in blue marks buttons, links and focus.** Everything else stays neutral.")
+    out.append(section("Colors", "\n".join(body), lead=lead_colors, term_key="accent color"))
 
     # 3 Typography
     rows = []
     for p in styles:
+        if p.startswith("text.emphasized."):
+            continue
         v = light[p]["resolved"]
         ext = (light[p].get("$extensions") or {}).get(NS, {})
         rows.append((f"`{p}`", f"{fmt_num(_px(v['fontSize']))}/{ext.get('lineHeightPx')}", int(v["fontWeight"]),
@@ -3908,6 +4041,9 @@ def render_design_md(d, files, meta, state, existing=""):
             "", f"- Text face: {', '.join(fam) if isinstance(fam, list) else fam}. Licence status (hook H-type): **{h_type}**."
             + (" A system font needs no licence; it must not be embedded in apps." if raw.get("textFace") in (None, "system") else ""),
             f"- Weights: {', '.join(f'{k} {v}' for k, v in tinfo['weights'].items())} (two or three distinct weights per view).",
+            (f"- Emphasized variants (Expression {dials['expression']}, on from 67): {len(tinfo.get('emphasized') or [])} styles under "
+             "`text.emphasized.*`, the same size one weight heavier, for the selected item, key actions and headlines (DC-L02-11)."
+             if tinfo.get("emphasized") else "- Emphasized variants: off (they turn on at Expression 67 and up, DC-L02-11)."),
             "- Line heights snap to a 4px grid: 1.5 up to 17px, 1.4 to 26px, 1.25 to 44px, 1.12 above.",
             "- Letter spacing: +0.02em at 11-12px, -0.01em from 32px, -0.02em from 48px.",
             "- Text scaling: CSS sizes are rem, line heights unitless, so text scales to 200% (WCAG 1.4.4); containers must grow with it.",
@@ -3916,7 +4052,7 @@ def render_design_md(d, files, meta, state, existing=""):
             "", _md_table(["Style", "Size/line (px)", "Weight", "Tracking", "Use"], rows),
             "", "**Use / avoid.**", "- Use at most three sizes and two weights in one view; let color and weight carry hierarchy before size.",
             "- Avoid all caps for sentences and in scripts without case; use weight for emphasis there."]
-    out.append(section("Typography", "\n".join(body)))
+    out.append(section("Typography", "\n".join(body), lead=f"**Body text is {tinfo['base']}px, and each larger size is about {tinfo['ratio']} times the one below.**", term_key="type scale"))
 
     # 4 Layout
     drows = []
@@ -3934,7 +4070,7 @@ def render_design_md(d, files, meta, state, existing=""):
             "- Breakpoints and grid: not generated yet; use the platform defaults and keep layout spacing independent of density (DC-L03-17).",
             "", "**Use / avoid.**", "- Parents own spacing (padding and gap); children never set outer margins.",
             "- Avoid values off the ladder; if one is needed, add it as a decision."]
-    out.append(section("Layout", "\n".join(body)))
+    out.append(section("Layout", "\n".join(body), lead=f"**Spacing comes in steps of {sinfo['unit']}px, and screens use {params['space.densityMode']} spacing by default.**", term_key="spacing scale"))
 
     # 5 Elevation & Depth
     rows = []
@@ -3953,19 +4089,24 @@ def render_design_md(d, files, meta, state, existing=""):
             "", _md_table(["Token", "Layers (x y blur spread)", "Use"], rows),
             "", "- Borders: 1px default, 2px selected and focus, 4px emphasis; width changes use an inset shadow so layout does not jump.",
             "- Stacking: page < raised < floating (menus) < overlay (dialogs with `color.overlay.scrim`).",
-            "- " + ("Glass is for controls and navigation only, with `color.surface.glassFallback` under Reduce Transparency." if el["model"] == "materials"
+            "- " + ("Glass is for controls and navigation only, with `color.surface.glass-fallback` under Reduce Transparency." if el["model"] == "materials"
                     else "No materials or glass in this system.")]
-    out.append(section("Elevation & Depth", "\n".join(body)))
+    lead_depth = {"borders": "**Surfaces are separated by thin borders, with no shadows.**",
+                  "ring+faint-shadow": "**Cards get a faint outline and a very soft shadow.**",
+                  "tonal": "**Surfaces step in lightness; only menus and dialogs cast shadows.**",
+                  "shadow-ladder": "**Raised things cast soft shadows that grow with height.**",
+                  "materials": "**Controls and bars can be see-through glass, with solid fallbacks.**"}.get(el["model"], "")
+    out.append(section("Elevation & Depth", "\n".join(body), lead=lead_depth, term_key="Depth model"))
 
     # 6 Shapes
     body = [f"**Intent.** Roundness {dials['roundness']}/100 gives controls a **{shp['control']}** radius; details {shp['detail']}px, containers "
-            f"{shp['container']}px, overlays {shp['overlay']}px, people full. Controls under 32px tall use `radius.controlSm` ({shp['controlSm'] if shp['controlSm'] < FULL else 'full'}).",
+            f"{shp['container']}px, overlays {shp['overlay']}px, people full. Controls under 32px tall use `radius.control-sm` ({shp['control-sm'] if shp['control-sm'] < FULL else 'full'}).",
             "", f"- Nested radius: inner = max(outer - padding, smallest step). Here it is {shp['nested']}px inside a container with `space.inset.lg` "
             "padding. Equal radii on nested shapes look uneven (DC-L04-05).",
             f"- Focus ring: {shp['focusWidth']}px, 2px offset, radius = control radius + offset ({shp['focusRadius'] if shp['focusRadius'] < FULL else 'full'}).",
             f"- Icons: {shp['iconCorners']} corners, {shp['iconCaps']} caps. On iOS, use continuous corners (DC-L04-04).",
             "- Signature shapes: none generated; a brand shape library is a designer asset (hook H-motif)."]
-    out.append(section("Shapes", "\n".join(body)))
+    out.append(section("Shapes", "\n".join(body), lead=f"**Buttons and fields have {'fully round' if shp['control'] == 'full' else str(shp['control']) + 'px'} corners; cards have {shp['container']}px corners.**", term_key="corner radius"))
 
     # 7 Components
     inv = (state.get("components") or {}).get("inventory") or []
@@ -3981,7 +4122,7 @@ def render_design_md(d, files, meta, state, existing=""):
             "", "**Use / avoid.**", "- Every interactive component shows hover, pressed, focus-visible and disabled states from the tokens.",
             f"- Inputs keep a 3:1 boundary (`color.border.input`); signifier strength: {params['signifier.minStrength']}.",
             "- Component docs belong in `opendesigner/components/<name>.md` (spec 7.8)."]
-    out.append(section("Components", "\n".join(body)))
+    out.append(section("Components", "\n".join(body), lead=f"**Version 1 plans {len(inv)} components, all built from these tokens.**", term_key="Component inventory scope"))
 
     # 8 Do's and Don'ts
     vr = Report()
@@ -4002,7 +4143,7 @@ def render_design_md(d, files, meta, state, existing=""):
             "- Don't copy another brand's identity from a reference (colors, typeface, logo, imagery, copy).",
             "", "**Current validation findings:** " + (", ".join(f"{i['severity']}: {i['message']}" for i in warns) if warns else "none (errors 0, warnings 0)."),
             "", "**Waivers:** " + ("; ".join(f"{k}: {v}" for k, v in (state.get("waivers") or {}).items()) or "none.")]
-    out.append(section("Do's and Don'ts", "\n".join(body)))
+    out.append(section("Do's and Don'ts", "\n".join(body), lead="**These rules keep screens clear and easy to read.** The engine checks the ones it can.", term_key="Guardrails and validation"))
 
     # 9 Motion
     rows = [(f"`motion.duration.{k}`", f"{v}ms") for k, v in mot["durations"].items()]
@@ -4019,7 +4160,7 @@ def render_design_md(d, files, meta, state, existing=""):
             "- Springs are stored as damping and stiffness in `$extensions.opendesigner.spring` because DTCG 2025.10 has no spring type.",
             f"- Haptics: {params['haptics.intensity']} intensity where the platform has them; sound: hook H-sound is "
             f"{(state.get('hooks') or {}).get('H-sound', {}).get('status', 'pending')}."]
-    out.append(section("Motion", "\n".join(body)))
+    out.append(section("Motion", "\n".join(body), lead=("**Motion is off: things change in place without moving.**" if mot.get("motionOff") else f"**Most movements take {mot['durations']['medium']}ms.** They turn into fades when a person asks for less motion."), term_key="Motion"))
 
     # 10 Modes and Themes
     rows = [(n, ", ".join(m["contexts"]), m.get("default")) for n, m in mods.items()]
@@ -4028,7 +4169,7 @@ def render_design_md(d, files, meta, state, existing=""):
             "", f"- Web: `prefers-color-scheme` with a `[data-theme]` override; `[data-density]`; `prefers-reduced-motion` with `[data-motion]` (see `build/css/tokens.css`).",
             "- High-contrast themes are not generated; set `raw.contrastTarget` to AAA for 7:1 text everywhere.",
             "- A second brand or a client re-skin may override the color primitives and `color.bg.brand`; semantic names never change."]
-    out.append(section("Modes and Themes", "\n".join(body)))
+    out.append(section("Modes and Themes", "\n".join(body), lead=f"**The system has {'light and dark' if has_dark else 'one'} color {'modes' if has_dark else 'mode'}, three spacing densities and a reduced-motion mode.**", term_key="Modes and theming axes"))
 
     # 11 Iconography and Imagery
     hooks = state.get("hooks") or {}
@@ -4042,7 +4183,7 @@ def render_design_md(d, files, meta, state, existing=""):
                                                        ("Motifs and brand shapes", "H-motif", hs("H-motif"))]),
             "", "- Placeholders are labelled as placeholders. A generated stand-in is never shown as a finished brand asset.",
             "- Icon-only buttons need an accessible name and a hit area of `size.target.min`."]
-    out.append(section("Iconography and Imagery", "\n".join(body)))
+    out.append(section("Iconography and Imagery", "\n".join(body), lead=f"**Icons are {sinfo['iconDefault']}px by default.** The logo, photos and custom icons come from a person, not from the engine.", term_key="Iconography"))
 
     # 12 Content and Voice
     vstat = hs("H-voice")
@@ -4052,7 +4193,7 @@ def render_design_md(d, files, meta, state, existing=""):
             "", "- Buttons say what they do in two to four words; errors say what happened and how to fix it.",
             "- Reading level: plain language; avoid jargon in UI copy.",
             "- Word list: not recorded yet (Q-voice-03)."]
-    out.append(section("Content and Voice", "\n".join(body)))
+    out.append(section("Content and Voice", "\n".join(body), lead="**Words stay plain and short, and every button says what it does.**", term_key="Content and voice"))
 
     # 13 Accessibility
     body = [f"**Intent.** Standard: WCAG 2.2 {'AAA for text' if ci['textMin'] > 4.5 else 'AA'}. APCA is reported as advice only.",
@@ -4063,7 +4204,7 @@ def render_design_md(d, files, meta, state, existing=""):
             "Also: clear error messages, dialogs that can be closed, no pre-checked consent boxes, and captions for media.",
             "", "**Test on each platform:**", "- keyboard only", "- a screen reader (VoiceOver, NVDA or TalkBack)", "- 200% zoom",
             "- forced colors (Windows High Contrast)", "- reduced motion", "- touch on a phone, for every surface that allows touch"]
-    out.append(section("Accessibility", "\n".join(body)))
+    out.append(section("Accessibility", "\n".join(body), lead=f"**Text passes WCAG 2.2 {'AAA' if ci['textMin'] > 4.5 else 'AA'} contrast in every mode, and focus is always visible.**", term_key="Accessibility"))
 
     # 14 Platforms and Devices
     body = [f"**Intent.** Platforms: {', '.join(raw.get('platforms') or [])}. Inputs: {', '.join(raw.get('inputs') or [])}. "
@@ -4071,23 +4212,25 @@ def render_design_md(d, files, meta, state, existing=""):
             f"native base text size: {params['platform.useNativeBaseSize']}.",
             "", "- Navigation, back, sheets and pickers stay native on every platform (DC-L10-02).",
             "- Swift and Compose files in `build/` use the same names as the CSS variables (Figma code syntax matches them)."]
-    out.append(section("Platforms and Devices", "\n".join(body)))
+    out.append(section("Platforms and Devices", "\n".join(body), lead=f"**It runs on {', '.join(raw.get('platforms') or ['web'])}, and each platform keeps its own navigation.**", term_key="Target platforms"))
 
     # 15 Decisions
     rows = [(v["id"], f"`{k}`", v["value"], v["set_by"] + (" (locked)" if v["locked"] else ""), v["reason"])
             for k, v in sorted(decs.items(), key=lambda kv: kv[1]["id"])][-20:]
     body = ["The highest-reach decisions, newest value per path. Full log: [decisions.md](decisions.md).", "",
             _md_table(["Id", "Path", "Value", "Set by", "Reason"], rows) if rows else "No decisions recorded yet."]
-    out.append(section("Decisions", "\n".join(body)))
+    out.append(section("Decisions", "\n".join(body), lead=f"**{len(decs)} decision{'s' if len(decs) != 1 else ''} so far.** Each one says who set it and why.", term_key="decisions.md"))
 
     # 16 Open Items
-    pend = [f"{h} ({v.get('name', h)}): {v.get('status')}" for h, v in hooks.items() if v.get("status") in ("pending", "placeholder", "commissioning")]
+    pend = [f"{v.get('name', h)} ({h}): {v.get('status')}" for h, v in hooks.items() if v.get("status") in ("pending", "placeholder", "commissioning")]
     assumed = [f"{k} ({v['set_by']})" for k, v in decs.items() if v["set_by"] in ("assumed", "delegated", "auto_default")]
-    body = ["- Assets not final: " + ("; ".join(pend) if pend else "none."),
+    sketchy = [t for k, t in ZOOM_AREAS if k != "overview" and zoom[k]["level"] == "sketch"]
+    body = ["- Still defaults (zoom 0, sketch): " + (", ".join(sketchy) if sketchy else "none."),
+            "- Assets not final: " + ("; ".join(pend) if pend else "none."),
             "- Answers taken on assumption or delegated: " + (", ".join(assumed) if assumed else "none."),
             "- Waivers: " + ("; ".join(f"{k}: {v}" for k, v in (state.get("waivers") or {}).items()) or "none."),
             f"- Validation: {vr.count('error')} errors, {vr.count('warning')} warnings."]
-    out.append(section("Open Items", "\n".join(body)))
+    out.append(section("Open Items", "\n".join(body), lead="**These parts are still defaults, guesses, or waiting for a person.**", fold=False))
 
     # 17 For Agents
     body = ["1. Before any visual work, read this file, PRODUCT.md and `tokens/` (start at `tokens/opendesigner.resolver.json`).",
@@ -4096,7 +4239,7 @@ def render_design_md(d, files, meta, state, existing=""):
             "3. Do not change a locked decision without asking the owner.",
             "4. To change the system: `engine.py set <path> <value> --why \"...\"`, then `engine.py generate`, `engine.py validate`, `engine.py design-md`.",
             "5. To extend: add a decision (never hand-edit tokens or this file). Keep semantic names the same across modes. Deprecate instead of deleting."]
-    out.append(section("For Agents", "\n".join(body)))
+    out.append(section("For Agents", "\n".join(body), lead="**AI agents: read this file and the tokens before you change any screen.**", fold=False))
     return "\n".join(out).rstrip() + "\n"
 
 
@@ -4117,12 +4260,13 @@ def render_product_md(state, existing=""):
            "Hand-written notes survive only inside `<!-- od:keep -->` blocks.", ""]
     out.append(sec("Product", ctx.get("product") or state.get("summary") or "Not recorded yet (Stage 01)."))
     out.append(sec("Audience", ctx.get("audience") or "Not recorded yet (Q-aud-01)."))
-    out.append(sec("Surfaces", "\n".join(f"- {s.get('name')}: {s.get('mode')} mode" if isinstance(s, dict) else f"- {s}" for s in surf)
-                   or "Not recorded yet. Each surface gets a mode: Persuade, Operate, Read or Experience."))
+    out.append(sec("Surfaces", "\n".join(f"- {s.get('name')}: {s.get('mode')} mode" + (f" ({surface_rule(s, 'set by the Density dial')})" if surface_rule(s, "") else "")
+                                         if isinstance(s, dict) else f"- {s}" for s in surf)
+                   or "Not recorded yet (Q-scope-06). Each surface gets a mode: Persuade, Operate, Read or Experience."))
     out.append(sec("Memorable Thing", ctx.get("memorable") or "Not recorded yet (Q-brand-02)."))
     pr = state.get("principles") or []
     out.append(sec("Principles", ("\n".join(f"{i}. {p}" for i, p in enumerate(pr, 1)) + "\n\nTie-break: the higher-ranked principle wins.")
-                   if pr else "Not recorded yet (Q-brand-04)."))
+                   if pr else "Not recorded yet (Q-brand-07)."))
     cons = [f"Accessibility: WCAG 2.2 {raw.get('contrastTarget', 'AA')}", f"Platforms: {', '.join(raw.get('platforms') or [])}"]
     cons += ctx.get("constraints") or []
     out.append(sec("Constraints", "\n".join(f"- {c}" for c in cons)))
@@ -4221,13 +4365,13 @@ body{{margin:0;background:#f4f4f5;color:#18181b;font:14px/1.45 system-ui,-apple-
 .ds-btn{{{t(label)}height:{V('size.control.md')};min-width:{V('size.control.md')};padding:0 {V('space.inset.lg')};border-radius:{V('radius.control')};
   border:1px solid transparent;cursor:pointer;display:inline-flex;align-items:center;gap:{V('space.inline.xs')};
   transition:background-color {VV('motion.transition.feedback', 'duration')} {VV('motion.transition.feedback', 'easing')}}}
-.ds-btn.primary{{background:{V('color.bg.action.primary')};color:{V('color.text.onAction')}}}
-.ds-btn.primary:hover,.ds-btn.primary.is-hover{{background:{V('color.bg.action.primaryHover')}}}
-.ds-btn.primary:active,.ds-btn.primary.is-pressed{{background:{V('color.bg.action.primaryPressed')}}}
+.ds-btn.primary{{background:{V('color.bg.action.primary')};color:{V('color.text.on-action')}}}
+.ds-btn.primary:hover,.ds-btn.primary.is-hover{{background:{V('color.bg.action.primary-hover')}}}
+.ds-btn.primary:active,.ds-btn.primary.is-pressed{{background:{V('color.bg.action.primary-pressed')}}}
 .ds-btn.secondary{{background:{V('color.bg.neutral.subtle')};color:{V('color.text.primary')}}}
-.ds-btn.secondary:hover,.ds-btn.secondary.is-hover{{background:{V('color.bg.neutral.subtleHover')}}}
+.ds-btn.secondary:hover,.ds-btn.secondary.is-hover{{background:{V('color.bg.neutral.subtle-hover')}}}
 .ds-btn.outline{{background:transparent;color:{V('color.text.primary')};border-color:{V('color.border.default')}}}
-.ds-btn.danger{{background:{V('color.bg.danger.bold')};color:{V('color.text.onDanger')}}}
+.ds-btn.danger{{background:{V('color.bg.danger.bold')};color:{V('color.text.on-danger')}}}
 .ds-btn.is-focus,.ds-btn:focus-visible,.ds-input:focus-visible{{outline:{V('focus.ring.width')} solid {V('color.border.focus')};outline-offset:{V('focus.ring.offset')}}}
 .ds-btn[disabled]{{background:{V('color.bg.disabled')};color:{V('color.text.disabled')};cursor:not-allowed;border-color:transparent}}
 .ds-field{{display:flex;flex-direction:column;gap:{V('space.stack.xs')};min-width:200px;flex:1}}
@@ -4259,7 +4403,7 @@ body{{margin:0;background:#f4f4f5;color:#18181b;font:14px/1.45 system-ui,-apple-
 .motion-lane .motion-box{{position:absolute;left:4px;top:4px}}
 .pv-card:hover .motion-box.m-std{{transform:translateX(420px);transition:transform {V('motion.duration.medium')} {V('motion.easing.standard')}}}
 .pv-card:hover .motion-box.m-spring{{transform:translateX(420px);transition:transform {VV('motion.transition.move', 'duration')} {VV('motion.transition.move', 'easing')}}}
-.motion-box{{transition:transform {V('motion.duration.mediumExit')} {V('motion.easing.exit')}}}
+.motion-box{{transition:transform {V('motion.duration.medium-exit')} {V('motion.easing.exit')}}}
 @media (prefers-reduced-motion: reduce){{.pv-card:hover .motion-box{{transform:none}}}}
 """
     chips = "".join(f'<span class="pv-chip">{_esc(k)} <b>{v}</b></span>' for k, v in dials.items())
@@ -4341,7 +4485,7 @@ body{{margin:0;background:#f4f4f5;color:#18181b;font:14px/1.45 system-ui,-apple-
         html.append(f'<div data-density="{dn}" data-theme="light" style="display:flex;gap:10px;align-items:center;margin:0 0 8px"><span class="pv-mono" style="width:90px">{dn}</span>'
                     f'<button class="ds-btn primary">Save</button><input class="ds-input" style="max-width:160px" placeholder="Search"></div>')
     html.append("</div><div class=\"pv-card\"><p class=\"pv-note\">Radius roles</p><div style=\"display:flex;gap:12px;flex-wrap:wrap\">")
-    for r in ("detail", "controlSm", "control", "container", "overlay", "full"):
+    for r in ("detail", "control-sm", "control", "container", "overlay", "full"):
         html.append(f'<div style="text-align:center"><div style="width:64px;height:48px;background:#e0e7ff;border:1.5px solid #6366f1;border-radius:{V("radius." + r)}"></div><span class="pv-mono">{r}</span></div>')
     html.append("</div></div><div class=\"pv-card\"><p class=\"pv-note\">Hit-area floors (L14 I-1)</p><div style=\"display:flex;gap:14px;align-items:flex-end\">")
     for k, v in sinfo["targets"].items():
@@ -4589,15 +4733,23 @@ def cmd_resolve(d):
     print(json.dumps(out, indent=2, ensure_ascii=False))
 
 
-def cmd_build(d):
+def cmd_build(d, force=False):
+    """generate -> validate -> (only if no errors, or --force) export all + DESIGN.md + PRODUCT.md + preview."""
     files, meta, _ = cmd_generate(d, quiet=True)
+    rep = validate_dir(d)
+    errors = rep.count("error")
+    if errors and not force:
+        print_report(rep, d)
+        print(f"Stopped after tokens/: nothing was exported, and DESIGN.md and preview.html were not refreshed. "
+              f"Fix the error{'s' if errors != 1 else ''} above and run build again (--force exports anyway).")
+        return 1
     cmd_export(d, "all", files, meta, quiet=True)
     cmd_design_md(d, files=files, meta=meta, quiet=True)
     cmd_preview(d, files=files, meta=meta, quiet=True)
-    print(f"built {d}: tokens, build/ (css, tailwind, figma, paper, swift, compose, dtcg), DESIGN.md, PRODUCT.md, preview.html")
-    rep = validate_dir(d)
+    print(f"built {d}: tokens, build/ (css, tailwind, figma, paper, swift, compose, dtcg), DESIGN.md, PRODUCT.md, preview.html"
+          + (" (exported with errors because of --force)" if errors else ""))
     print_report(rep, d)
-    return 1 if rep.count("error") else 0
+    return 1 if errors else 0
 
 
 def main(argv=None):
@@ -4639,7 +4791,8 @@ def main(argv=None):
     p.add_argument("file")
     p.add_argument("--accept", action="store_true")
     p.add_argument("--json", action="store_true")
-    sub.add_parser("build", parents=[common], help="generate + export all + design-md + preview + validate")
+    p = sub.add_parser("build", parents=[common], help="generate + validate, then (if no errors) export all + design-md + preview")
+    p.add_argument("--force", action="store_true", help="export even when validation finds errors")
     p = sub.add_parser("sketch", parents=[common], help="Level 0: a complete coarse system from about five answers")
     p.add_argument("--name")
     p.add_argument("--brand", help="brand color hex")
@@ -4647,6 +4800,8 @@ def main(argv=None):
     p.add_argument("--platforms", help="comma list: web,ios,android,desktop,secondary")
     p.add_argument("--feel", help="comma list of brand macros: playful, serious, friendly, authoritative, minimal, rich, premium, everyday, modern, heritage, bold, deferential")
     p.add_argument("--theme", choices=["system-light-dark", "light-dark-toggle", "light-only", "dark-only"])
+    p.add_argument("--surfaces", help="Q-scope-06, main surface first: a mode (persuade, operate, read, experience) or name:mode pairs, "
+                                      "for example 'app:operate,landing page:persuade'")
     p = sub.add_parser("review", parents=[common], help="find hard-coded values that bypass tokens and stale DESIGN.md sections")
     p.add_argument("--project", default=None, help="folder to scan (default: the project root)")
     p.add_argument("--strict", action="store_true", help="exit 1 when anything is found")
@@ -4692,9 +4847,9 @@ def main(argv=None):
     elif a.cmd == "intake":
         cmd_intake(d, a.file, a.accept, a.json)
     elif a.cmd == "build":
-        return cmd_build(d)
+        return cmd_build(d, a.force)
     elif a.cmd == "sketch":
-        return cmd_sketch(d, a.name, a.brand, a.audience, a.platforms, a.feel, a.theme)
+        return cmd_sketch(d, a.name, a.brand, a.audience, a.platforms, a.feel, a.theme, surfaces=a.surfaces)
     elif a.cmd == "review":
         return cmd_review(d, a.project, a.strict, a.json)
     elif a.cmd == "feedback":
@@ -4728,7 +4883,7 @@ def zoom_levels(d, state):
     return out
 
 
-def cmd_sketch(d, name=None, brand=None, audience=None, platforms=None, feel=None, theme=None, quiet=False):
+def cmd_sketch(d, name=None, brand=None, audience=None, platforms=None, feel=None, theme=None, quiet=False, surfaces=None):
     """Level 0: about five answers give a complete, coarse system; everything else stays on defaults."""
     if not os.path.exists(os.path.join(d, "state.json")):
         cmd_init(d, name=name)
@@ -4748,6 +4903,11 @@ def cmd_sketch(d, name=None, brand=None, audience=None, platforms=None, feel=Non
         cmd_set(d, "macros", macros, why, quiet=True)
     if theme:
         cmd_set(d, "answers.Q-theme-01", theme, why, quiet=True)
+    if surfaces:
+        items = [x.strip() for x in surfaces.split(",") if x.strip()]
+        if not surface_list(items) or len(surface_list(items)) != len(items):
+            raise SystemExit(f"--surfaces takes mode words or name:mode pairs; modes are {', '.join(SURFACE_MODES)}.")
+        cmd_set(d, "answers.Q-scope-06", items if len(items) > 1 or ":" in items[0] else items[0], why, quiet=True)
     code = cmd_build(d) if not quiet else 0
     if not quiet:
         print("This is a sketch: every part works, and most choices are still defaults. Zoom into any area later (see the Zoom lines in DESIGN.md).")
@@ -4763,6 +4923,14 @@ RX_SWIFT_COLOR = re.compile(r"\b(Color|UIColor|NSColor)\(\s*(red|\.sRGB|hue|whit
 RX_KT_COLOR = re.compile(r"\bColor\(\s*0x[0-9A-Fa-f]{6,8}")
 RX_SIZE = re.compile(r"\b(padding|margin|gap|row-gap|column-gap|font-size|border-radius|inset|top|left|right|bottom|width|height)"
                      r"(-[a-z]+)?\s*:\s*(-?\d+(?:\.\d+)?)px")
+RX_SHADOW = re.compile(r"\b(box-shadow|text-shadow|boxShadow|textShadow)\s*:\s*['\"`]?\s*((?:inset\s+)?-?\d[^;'\"`{}]*)")
+RX_DROP_SHADOW = re.compile(r"\bdrop-shadow\(\s*(-?\d[^)]*)\)")
+RX_SHADOW_NATIVE = re.compile(r"\.shadow\(\s*(?:color:|radius:\s*\d|elevation\s*=\s*\d|\d+(?:\.\d+)?\.dp)")
+RX_MOTION = re.compile(r"\b(transition|transition-duration|animation|animation-duration|transitionDuration|animationDuration)"
+                       r"\s*:\s*['\"`]?([^;'\"`{}]*)")
+RX_TIME = re.compile(r"(?<![\w.-])(\d*\.?\d+)(ms|s)\b")
+RX_SWIFT_ANIM = re.compile(r"\.(easeInOut|easeIn|easeOut|linear|spring|smooth|snappy|bouncy)\(\s*duration:\s*(\d*\.?\d+)")
+RX_KT_ANIM = re.compile(r"\b(?:tween\(\s*(?:durationMillis\s*=\s*)?|durationMillis\s*=\s*)(\d+)")
 RX_RADIUS_NATIVE = re.compile(r"(cornerRadius\s*[:(]\s*(\d+)|RoundedCornerShape\(\s*(\d+)\.dp|\.padding\(\s*(\d+)\s*\)|(\d+)\.dp\b)")
 
 
@@ -4777,8 +4945,22 @@ def _nearest_color(hx, palette):
     return best[0], dist(best[1])
 
 
+def _nearest_duration(ms_val, durations):
+    """Closest duration token name for a raw time in ms (instant only for 0)."""
+    cands = {k: v for k, v in durations.items() if v > 0} or durations
+    return min(cands.items(), key=lambda kv: (abs(kv[1] - ms_val), kv[1]))[0]
+
+
+def _shadow_role(value):
+    """Map a raw shadow to the elevation role of the same size: the largest blur decides (DC-L04-10)."""
+    nums = [float(x) for x in re.findall(r"(-?\d*\.?\d+)px", value)]
+    blur = max((abs(x) for x in nums[2::4] or nums), default=0)  # offset-x offset-y blur spread
+    return "raised" if blur <= 4 else "floating" if blur <= 16 else "overlay"
+
+
 def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
-    """End-of-implementation check: hard-coded values that bypass tokens, and stale DESIGN.md sections."""
+    """End-of-implementation check: hard-coded colors, sizes, radii, shadows and durations that bypass tokens,
+    and stale DESIGN.md sections."""
     state = merge_defaults(load_state(d))
     files, meta, _ = generate_system(load_state(d))
     prefix = slug(meta.get("prefix") or "ds").replace("-", "")
@@ -4791,6 +4973,14 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
     radii = {k: v for k, v in (("detail", meta["shape"]["detail"]), ("control", meta["shape"]["control"]),
                                ("container", meta["shape"]["container"]), ("overlay", meta["shape"]["overlay"])) if isinstance(v, int)}
     sizes = meta["type"]["sizes"]
+    durations = meta["motion"]["durations"]
+    depth_model = meta["elevation"]["model"]
+    P, K = prefix.upper(), prefix.capitalize()
+
+    def shadow_fix(value):
+        if depth_model == "borders":
+            return f"this system uses borders, not shadows (depth model: borders); use var({css_var(prefix, 'color.border.default')})"
+        return f"use var({css_var(prefix, 'elevation.' + _shadow_role(value))})"
     findings, scanned = [], 0
     stateroot = os.path.abspath(d)
     for root, dirs, fnames in os.walk(project):
@@ -4816,14 +5006,15 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
                     continue
                 if re.search(r"^\s*(//|/\*|\*|<!--)", line) or "od-ignore" in line:
                     continue
-                for m in RX_HEX.finditer(line):
+                shadow_m = RX_SHADOW.search(line) or RX_DROP_SHADOW.search(line)
+                for m in ([] if shadow_m else RX_HEX.finditer(line)):  # a raw shadow is replaced whole, color included
                     hx = "#" + (m.group(1) if len(m.group(1)) == 6 else "".join(c * 2 for c in m.group(1)))
                     if re.match(r"\s*--", line):  # a custom property definition is a token source, not a bypass
                         continue
                     tokn, dd = _nearest_color(hx.lower(), palette) if palette else (None, 0)
                     findings.append({"kind": "color", "file": rel, "line": i, "value": hx,
                                      "fix": f"use var({css_var(prefix, tokn)})" + (" (closest match)" if dd > 0.02 else "") if tokn else "use a color token"})
-                if RX_FN.search(line) and not re.match(r"\s*--", line):
+                if RX_FN.search(line) and not shadow_m and not re.match(r"\s*--", line):
                     findings.append({"kind": "color", "file": rel, "line": i, "value": RX_FN.search(line).group(0) + "...)",
                                      "fix": "use a color token (var(--" + prefix + "-color-...))"})
                 if ext == ".swift" and RX_SWIFT_COLOR.search(line):
@@ -4848,7 +5039,35 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
                         near = min(ladder, key=lambda x: (abs(x - val), x))
                         findings.append({"kind": "size", "file": rel, "line": i, "value": f"{prop}: {val:g}px",
                                          "fix": f"use var({css_var(prefix, 'space.' + str(near))})" + ("" if near == val else f" ({val:g} is off the {meta['space']['unit']}px ladder)")})
-                if ext in (".swift", ".kt", ".kts") and "DesignTokens" not in rel:
+                custom_prop = bool(re.match(r"\s*--", line))  # a custom property definition is a token source, not a bypass
+                if shadow_m and not custom_prop:
+                    val = shadow_m.group(0)
+                    findings.append({"kind": "shadow", "file": rel, "line": i, "value": val.strip()[:80], "fix": shadow_fix(val)})
+                m = RX_MOTION.search(line)
+                if m and not custom_prop and "infinite" not in m.group(2):  # looping spinners are not on the duration ladder
+                    tm = RX_TIME.search(m.group(2))
+                    if tm:
+                        v_ms = float(tm.group(1)) * (1 if tm.group(2) == "ms" else 1000)
+                        if v_ms > 0:
+                            near = _nearest_duration(v_ms, durations)
+                            findings.append({"kind": "duration", "file": rel, "line": i, "value": f"{m.group(1)}: {tm.group(0)}",
+                                             "fix": f"use var({css_var(prefix, 'motion.duration.' + near)})"
+                                                    + ("" if durations[near] == v_ms else f" ({durations[near]}ms, the closest step)")})
+                native = ext in (".swift", ".kt", ".kts") and "DesignTokens" not in rel
+                if native and RX_SHADOW_NATIVE.search(line):
+                    findings.append({"kind": "shadow", "file": rel, "line": i, "value": RX_SHADOW_NATIVE.search(line).group(0) + "...)",
+                                     "fix": "use an elevation token: the raised, floating or overlay shadow in build/swift or build/compose"})
+                    continue
+                if native:
+                    ma = RX_SWIFT_ANIM.search(line) if ext == ".swift" else RX_KT_ANIM.search(line)
+                    if ma:
+                        v_ms = float(ma.group(ma.lastindex)) * (1000 if ext == ".swift" else 1)
+                        near = _nearest_duration(v_ms, durations) if v_ms > 0 else "instant"
+                        name = camel(["duration", near])
+                        findings.append({"kind": "duration", "file": rel, "line": i, "value": ma.group(0) + ")",
+                                         "fix": f"use {P}.Motion.{name}" if ext == ".swift" else f"use {K}Motion.{name}Ms"})
+                        continue
+                if native:
                     for m in RX_RADIUS_NATIVE.finditer(line):
                         findings.append({"kind": "size", "file": rel, "line": i, "value": m.group(0),
                                          "fix": f"use {prefix.upper()}.Space / {prefix.upper()}.Radius (Swift) or {prefix.capitalize()}Space (Compose)"})
@@ -4888,7 +5107,7 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
                 print(f"  ... and {total - limit} more (use --json for all).")
             print("  To keep a raw value on purpose, add the comment od-ignore on that line.")
         else:
-            print("No hard-coded colors, sizes or radii found: the code uses the tokens.")
+            print("No hard-coded colors, sizes, radii, shadows or durations found: the code uses the tokens.")
         if missing == ["DESIGN.md"]:
             print("DESIGN.md is missing. Run `engine.py design-md`.")
         elif stale:

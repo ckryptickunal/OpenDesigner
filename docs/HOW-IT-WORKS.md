@@ -35,7 +35,7 @@ flowchart TD
   P7 -. "a check fails" .-> P3
 ```
 
-Each phase groups screens of the interview in [`synthesis/QUESTIONNAIRE.md`](../synthesis/QUESTIONNAIRE.md). The screens follow the decision graph, so nothing is asked before the decisions it depends on. There are zero ordering violations across 465 dependencies. Details: [SPEC.md section 3](SPEC.md#3-the-process-as-a-model-runs-it).
+Each phase groups screens of the interview in [`synthesis/QUESTIONNAIRE.md`](../synthesis/QUESTIONNAIRE.md). The screens follow the decision graph, so nothing is asked before the decisions it depends on. There are zero ordering violations across 470 dependencies. Details: [SPEC.md section 3](SPEC.md#3-the-process-as-a-model-runs-it).
 
 ## 1. Define the building blocks first
 
@@ -46,11 +46,12 @@ The map has 211 building blocks outside the builder layer. Each one is tagged wi
 | Class | Blocks | What the model does |
 |---|---|---|
 | **Generatable** | 156 | Works it out from your inputs and the dials, shows it visually, lets you adjust |
-| **Designer-owned** | 30 | Needs a person. For an asset such as a logo, it opens an asset hook (below). For a choice only your team can make (scope, platforms, governance), it asks you and never invents an answer |
 | **Tool-assisted** | 23 | Recommends a named tool or library with its caveat (license, plan, platform) |
+| **Owner input** | 21 | A choice only your team can make, such as scope, platforms, principles or governance. It asks you and never invents an answer |
+| **Designer-owned** | 9 | Needs a human maker, such as a logo, photography, illustration, custom icons, sound or a voice guide. It opens an asset hook (below) |
 | **Extractable** | 2 | Reads it from your existing product or files, and asks you to confirm |
 
-These counts come from `ontology.json`. The L17 research sorted an earlier map of 207 blocks into five classes, with owner input as a class of its own. Its counts were 135 generatable, 31 tool-assisted, 29 owner input, 7 designer-owned and 5 extractable. The maintainer has not yet chosen which sorting is canonical [S-V1b-091].
+These counts come from `ontology.json`, which is the canonical sorting (decided on 2026-09-24). Across all 275 nodes the counts are 208 generatable, 26 tool-assisted, 27 owner input, 11 designer-owned and 3 extractable. The L17 research sorted an earlier map of 207 blocks into the same five classes. Its counts were 135 generatable, 31 tool-assisted, 29 owner input, 7 designer-owned and 5 extractable [S-V1b-091].
 
 Every block always shows a status: pending, default, decided, not applicable, awaiting asset, or assumed. Some blocks don't apply, like haptics for a web-only product. These are marked "not applicable" with a reason. The coverage check then counts them as decided, not missing.
 
@@ -65,7 +66,7 @@ You start with a rough version of the whole system. Then you zoom in only where 
 | 2 | defined | One area at a time, for example Color: ramps, roles, contrast | 1 to 15 questions per area |
 | 3 | detailed | Components, patterns and the fine print of each area | the rest |
 
-You can stop at any level. Every level leaves working files, and `DESIGN.md` shows how far each area has been zoomed. Each of the 192 questions has a zoom level, except the reference panel (Q-ref-01), which is open at every level. The questionnaire also keeps its earlier Quick, Standard and Expert tags (10, 92 and 191 questions).
+You can stop at any level. Every level leaves working files, and `DESIGN.md` shows how far each area has been zoomed. Each of the 193 questions has a zoom level, except the reference panel (Q-ref-01), which is open at every level. Six questions are marked planned: their feature is not built yet, so the interview skips them. The questionnaire also keeps its earlier Quick, Standard and Expert tags (10, 93 and 192 questions).
 
 Every term is explained in three voices. Plain words come first, so a school student can follow. The designer's word and the code name sit on one line below. The [glossary](GLOSSARY.md) lists them all.
 

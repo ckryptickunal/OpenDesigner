@@ -396,7 +396,7 @@
   ],
   "plain": "Colors that tell you how things went, like green for good and red for a problem.",
   "designer": "Success, warning, error and info, each with subtle and bold levels. Never rely on color alone: pair with an icon and text, and put dark text on yellow fills.",
-  "engineer": "color.bg.<status>.subtle, .bold, .boldHover; color.text.<status>, color.border.<status>; icons use color.text.<status>. Text 4.5:1, icons and borders 3:1. Color-only meaning: planned lint error.",
+  "engineer": "color.bg.<status>.subtle, .bold, .bold-hover; color.text.<status>, color.border.<status>; icons use color.text.<status>. Text 4.5:1, icons and borders 3:1. Color-only meaning: planned lint error.",
   "designer_says": "success, warning, error, info",
   "code_name": "color.bg.success.subtle, color.text.success",
   "source": [
@@ -919,7 +919,7 @@
   ],
   "plain": "How a part looks at a moment, like when you point at it, press it, or it is off.",
   "designer": "Style enabled, hover, focus-visible, pressed, selected, disabled, loading and error. States that carry meaning need 3:1 against neighbors; touch screens have no hover, so never hide essentials there.",
-  "engineer": "CSS :hover, :focus-visible, :active, :disabled plus aria-*. Hover and press shift one and two ramp steps (color.bg.accent.boldHover, boldPressed); opacity.state.hover covers unknown colors.",
+  "engineer": "CSS :hover, :focus-visible, :active, :disabled plus aria-*. Hover and press shift one and two ramp steps (color.bg.accent.bold-hover, bold-pressed); opacity.state.hover covers unknown colors.",
   "designer_says": "hover, pressed, focus, disabled",
   "code_name": ":hover, :focus-visible, :active, :disabled",
   "source": [
@@ -1116,13 +1116,14 @@
    "class G"
   ],
   "plain": "A part the tool can work out by itself from a few of your answers.",
-  "designer": "About two thirds of a system, such as spacing, ramps, most tokens and components, follows from a few inputs and the eight dials. These get sensible defaults you adjust visually.",
-  "engineer": "Class G (135 of 207 blocks in L17): computed by the synthesis/levers.json formulas from raw inputs and dials, or a sourced default. Decided silently, shown for adjustment.",
+  "designer": "About three quarters of a system, such as spacing, ramps, most tokens and components, follows from a few inputs and the eight dials. These get sensible defaults you adjust visually.",
+  "engineer": "Class G, provenance generatable in ontology.json (156 of 211 blocks): computed by the synthesis/levers.json formulas from raw inputs and dials, or a sourced default. Shown for adjustment.",
   "designer_says": "sensible defaults to adjust",
   "code_name": "class G, from levers.json formulas",
   "source": [
    "research/L17-how-systems-get-made.md G",
-   "DC-L17-01"
+   "DC-L17-01",
+   "synthesis/ontology.json provenance"
   ]
  },
  {
@@ -1133,13 +1134,14 @@
   ],
   "plain": "A part that can be read from something you already have, like your logo or site.",
   "designer": "Blocks best taken from what exists: your brand book, live product, repo or Figma file. Each value shows where it came from; you accept, adjust or ignore it.",
-  "engineer": "Class E in the L17 scheme: 5 blocks primarily, 44 by any route. Read at intake; each value carries provenance (reference id, method computed|pixel|vision|file, confidence).",
+  "engineer": "Class E, provenance extractable in ontology.json (2 of 211 blocks; many more can be pre-filled). Read at intake; each value carries its reference id, method and confidence.",
   "designer_says": "taken from your existing brand",
   "code_name": "class E, value with provenance",
   "source": [
    "research/L17-how-systems-get-made.md G",
    "DC-L17-01",
-   "DC-L17-03"
+   "DC-L17-03",
+   "synthesis/ontology.json provenance"
   ]
  },
  {
@@ -1149,14 +1151,15 @@
    "class D"
   ],
   "plain": "A part that needs a real person to make it well, like a logo or photos.",
-  "designer": "Only 7 blocks, but the ones people notice first: brand marks, photography, illustration, motion signature, graphic motifs, pictograms and sound. They are commissioned or supplied, never generated as final.",
-  "engineer": "Class D in L17: 7 ontology nodes expanding into 14 asset hooks (H-logo to H-brandbook in data/hooks.json), each with accepted formats, fallbacks and a briefed placeholder.",
+  "designer": "Only 9 blocks, but the ones people notice first: brand marks, photography, illustration, motifs, custom icons, pictograms, sound, voice and tone. They are supplied or commissioned, never generated as final.",
+  "engineer": "Class D, provenance designer-owned in ontology.json (9 of 211 blocks). Its assets open hooks in data/hooks.json (H-logo to H-brandbook), each with formats, fallbacks and a briefed placeholder.",
   "designer_says": "commissioned brand assets",
   "code_name": "class D, data/hooks.json asset hooks",
   "source": [
    "research/L17-how-systems-get-made.md G",
    "research/L17-how-systems-get-made.md H2",
-   "DC-L17-01"
+   "DC-L17-01",
+   "synthesis/ontology.json provenance"
   ]
  },
  {
@@ -1167,12 +1170,13 @@
   ],
   "plain": "A part a coder can make with a named tool, with a few things to watch for.",
   "designer": "Blocks an engineer can produce with a named tool, with a caveat: font sourcing, icons, voice drafting and the token pipeline. OpenDesigner recommends the tool and states the catch.",
-  "engineer": "Class T in L17 (31 blocks): OpenDesigner names the tool (Terrazzo, Figma MCP, Code Connect), runs or links it, states the caveat and records the choice.",
+  "engineer": "Class T, provenance tool-assisted in ontology.json (23 of 211 blocks): OpenDesigner names the tool (Terrazzo, Figma MCP, Code Connect), runs or links it, states the caveat, records the choice.",
   "designer_says": "made with a named tool",
   "code_name": "class T, tool named and recorded",
   "source": [
    "research/L17-how-systems-get-made.md G",
-   "DC-L17-01"
+   "DC-L17-01",
+   "synthesis/ontology.json provenance"
   ]
  },
  {
@@ -1183,13 +1187,14 @@
    "owner decision"
   ],
   "plain": "A choice only your team can make, like who the app is for or which devices it runs on.",
-  "designer": "Business decisions, not design work: scope, audience, platforms, governance, terminology. OpenDesigner asks them, pre-fills from hints in your repo or references, and never invents an answer.",
-  "engineer": "Class I, the fifth class L17 added (29 blocks), so business decisions are not misfiled as designer-owned or generatable; questions tagged class \"I\" are asked or pre-filled, never invented.",
+  "designer": "Business decisions, not design work: scope, audience, platforms, principles, governance, terminology. OpenDesigner asks them, pre-fills from hints in your repo or references, and never invents an answer.",
+  "engineer": "Class I, provenance owner-input in ontology.json (21 of 211 blocks), so business decisions are not misfiled as designer-owned. Class I questions are asked or pre-filled, never invented.",
   "designer_says": "business decisions, owner's call",
   "code_name": "class I questions",
   "source": [
    "research/L17-how-systems-get-made.md G",
-   "DC-L17-01"
+   "DC-L17-01",
+   "synthesis/ontology.json provenance"
   ]
  },
  {

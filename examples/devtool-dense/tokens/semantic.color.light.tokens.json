@@ -67,15 +67,15 @@
         "$value": "{color.accent.light.11}",
         "$description": "Accent text and selected labels."
       },
-      "onAccent": {
+      "on-accent": {
         "$value": "{color.white}",
         "$description": "Text and icons on color.bg.accent.bold* (auto-picked light or dark, S-L06-094)."
       },
-      "onAction": {
+      "on-action": {
         "$value": "{color.white}",
         "$description": "Text on the primary action fill."
       },
-      "onBrand": {
+      "on-brand": {
         "$value": "{color.white}",
         "$description": "Text on color.bg.brand."
       },
@@ -83,7 +83,7 @@
         "$value": "{color.success.light.11}",
         "$description": "Success text and icons; pair with an icon or label (DC-L01-15)."
       },
-      "onSuccess": {
+      "on-success": {
         "$value": "{color.white}",
         "$description": "Text on bg.success.bold."
       },
@@ -91,7 +91,7 @@
         "$value": "{color.warning.light.11}",
         "$description": "Warning text and icons; pair with an icon or label (DC-L01-15)."
       },
-      "onWarning": {
+      "on-warning": {
         "$value": "{color.neutral.light.12}",
         "$description": "Text on bg.warning.bold."
       },
@@ -99,7 +99,7 @@
         "$value": "{color.danger.light.11}",
         "$description": "Danger text and icons; pair with an icon or label (DC-L01-15)."
       },
-      "onDanger": {
+      "on-danger": {
         "$value": "{color.white}",
         "$description": "Text on bg.danger.bold."
       },
@@ -107,7 +107,7 @@
         "$value": "{color.info.light.11}",
         "$description": "Info text and icons; pair with an icon or label (DC-L01-15)."
       },
-      "onInfo": {
+      "on-info": {
         "$value": "{color.white}",
         "$description": "Text on bg.info.bold."
       }
@@ -118,11 +118,11 @@
           "$value": "{color.neutral.light.3}",
           "$description": "Secondary buttons, chips, hovered rows."
         },
-        "subtleHover": {
+        "subtle-hover": {
           "$value": "{color.neutral.light.4}",
           "$description": "Hover: +1 step (DC-L01-17)."
         },
-        "subtlePressed": {
+        "subtle-pressed": {
           "$value": "{color.neutral.light.5}",
           "$description": "Pressed or selected: +2 steps (DC-L01-17)."
         }
@@ -132,11 +132,11 @@
           "$value": "{color.accent.light.3}",
           "$description": "Selected rows, accent badges."
         },
-        "subtleHover": {
+        "subtle-hover": {
           "$value": "{color.accent.light.4}",
           "$description": "Hover on accent subtle fills."
         },
-        "subtlePressed": {
+        "subtle-pressed": {
           "$value": "{color.accent.light.5}",
           "$description": "Pressed accent subtle fills."
         },
@@ -144,11 +144,11 @@
           "$value": "{color.accent.light.9}",
           "$description": "Solid accent fill."
         },
-        "boldHover": {
+        "bold-hover": {
           "$value": "{color.accent.light.10}",
           "$description": "Hover on the solid accent (+1 step)."
         },
-        "boldPressed": {
+        "bold-pressed": {
           "$value": "{color.accent.light.11}",
           "$description": "Pressed solid accent (+2 steps)."
         }
@@ -166,18 +166,18 @@
           "$value": "{color.accent.light.9}",
           "$description": "Primary action. One per view (DC-L15-03, L15 P08)."
         },
-        "primaryHover": {
+        "primary-hover": {
           "$value": "{color.accent.light.10}",
           "$description": "Primary action hover."
         },
-        "primaryPressed": {
+        "primary-pressed": {
           "$value": "{color.accent.light.11}",
           "$description": "Primary action pressed."
         }
       },
       "brand": {
         "$value": "{color.accent.light.9}",
-        "$description": "Brand fill for signature surfaces; carries text.onBrand (brandAnchor rule, DC-L01-09)."
+        "$description": "Brand fill for signature surfaces; carries text.on-brand (brandAnchor rule, DC-L01-09)."
       },
       "success": {
         "subtle": {
@@ -188,7 +188,7 @@
           "$value": "{color.success.light.9}",
           "$description": "Success solid fill."
         },
-        "boldHover": {
+        "bold-hover": {
           "$value": "{color.success.light.10}",
           "$description": "Success solid hover."
         }
@@ -202,7 +202,7 @@
           "$value": "{color.warning.light.9}",
           "$description": "Warning solid fill."
         },
-        "boldHover": {
+        "bold-hover": {
           "$value": "{color.warning.light.10}",
           "$description": "Warning solid hover."
         }
@@ -216,7 +216,7 @@
           "$value": "{color.danger.light.9}",
           "$description": "Danger solid fill."
         },
-        "boldHover": {
+        "bold-hover": {
           "$value": "{color.danger.light.10}",
           "$description": "Danger solid hover."
         }
@@ -230,7 +230,7 @@
           "$value": "{color.info.light.9}",
           "$description": "Info solid fill."
         },
-        "boldHover": {
+        "bold-hover": {
           "$value": "{color.info.light.10}",
           "$description": "Info solid hover."
         }
@@ -291,7 +291,7 @@
         "$value": "{color.accent.light.11}",
         "$description": "Selected and interactive icons."
       },
-      "onAccent": {
+      "on-accent": {
         "$value": "{color.white}",
         "$description": "Icons on solid accent fills."
       }

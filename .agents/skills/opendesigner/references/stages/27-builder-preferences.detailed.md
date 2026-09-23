@@ -6,10 +6,11 @@ Area: `delivery` · zoom 3 detailed: 2 · visual: text or the host question tool
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-pref-02 · How should AI edits and variations work?
 Zoom 3 detailed · weight medium · changes 3 decisions · class I · cards DC-L16-04, DC-L16-05
+- **Planned:** not asked yet. Patch review, lock-and-shuffle and the variation grid are not built; locks exist (`engine.py lock`). The interview skips this question and records nothing.
 - **Ask:** "When the AI changes your design, how should you review it and try other versions?"
 - **Why:** Your own edits do exactly what you set, and AI edits come as patches you review, so you keep control and trust. Lock-and-shuffle tries new options without losing what you like [DC-L16-04, DC-L16-05].
 - **Options:**

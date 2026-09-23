@@ -8,7 +8,7 @@ Screen: a live sign-up form and a list with delete actions; the person fills fie
 
 Zoom 3 (detailed) questions: `22-forms-validation-and-feedback.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-form-01 · What style should form fields have, and where do labels go?
 Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L08-16, DC-L13-05

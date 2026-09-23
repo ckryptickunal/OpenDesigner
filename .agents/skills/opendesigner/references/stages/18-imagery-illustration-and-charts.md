@@ -8,7 +8,7 @@ Screen: an empty state, onboarding card, hero and dashboard, with the person's o
 
 Zoom 3 (detailed) questions: `18-imagery-illustration-and-charts.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-img-01 · Does the product use photography, and do you have photos or a photo brief?
 Zoom 2 defined · weight medium · changes 3 decisions · class D · cards DC-L05-14

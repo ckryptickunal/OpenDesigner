@@ -4,7 +4,7 @@ Synthesis S1d, written 2026-09-23. This is the definitive description of what Op
 
 **How to read the tags.** `DC-Lxx-nn` is a Decision Card (full text in `synthesis/cards.json`, or search with `python3 tools/jev_nav.py find`). `S-Lxx-nnn` is a source in `traces/Lxx-trace.md`. `Q-...` is a question in `synthesis/QUESTIONNAIRE.md` (machine copy `questionnaire.json`). References such as LEVERS B6 or L17 H2 point into `synthesis/LEVERS.md` or a research file. `[inferred]` marks a decision or reading made by this spec: treat it as a default to test, not a finding. Card text is not copied here; look it up by id. Product decisions made here are logged in `_coordination/DECISIONS.md` under "S1d spec (B)" (and three earlier entries under "S1d spec" at 19:01) and summarized in section 11. A first S1d instance wrote an alternative draft, `synthesis/OPENDESIGNER-SPEC.s1d-draft-b.md`; its useful content is merged here and it is not canonical.
 
-**Counts used throughout** (read from the files on 2026-09-23): the ontology has 271 nodes in 10 layers, 207 of them design-system blocks outside the builder meta layer (ONTOLOGY; L17 G1); `decision-graph.json` has 352 decisions, 465 edges and 12 cycles (DECISION-GRAPH.md prose still says 325 and 431; the JSON wins); the questionnaire has 28 stages and 192 questions, of which Quick asks 10, Standard 92 and Expert 191, with 30 high, 82 medium and 80 low time weights (`questionnaire.json`).
+**Counts used throughout** (read from the files on 2026-09-23): the ontology has 271 nodes in 10 layers, 207 of them design-system blocks outside the builder meta layer (ONTOLOGY; L17 G1; dated note, 2026-09-24: `ontology.json` has 275 nodes and 211 blocks outside the builder layer [S-V1b-091], and it is now the canonical block classification (orchestrator decision in `_coordination/DECISIONS.md`), with the five classes of section 4.1); `decision-graph.json` has 352 decisions, 465 edges and 12 cycles (DECISION-GRAPH.md prose still says 325 and 431; the JSON wins; dated note, 2026-09-24: 470 edges after session F1 fixes added five L17/L18 edges); the questionnaire has 28 stages and 192 questions, of which Quick asks 10, Standard 92 and Expert 191, with 30 high, 82 medium and 80 low time weights (`questionnaire.json`).
 
 **How the brief's requirements are met** (`_coordination/BRIEF.md`):
 
@@ -60,7 +60,7 @@ The interview order is the questionnaire's: 27 sequential screens (Stages 01-27)
 
 | Phase | Questionnaire stages | Goal | Ends with | Questions Q / S / E (cumulative) | High-weight |
 |---|---|---|---|---|---|
-| P0 Orient | none yet; Q-ref-01 offered | read what exists, agree the mode, show the block map | found / assumed / missing summary | bundled opening question | 0 |
+| P0 Orient | none yet; Q-ref-01 offered | read what exists, start at zoom 0 (the sketch), show the block map | found / assumed / missing summary | bundled opening question | 0 |
 | P1 Context and block map | 01 Scope and team, 02 Audience, 03 Brand personality and principles, 04 Platforms and devices, 05 Where the system lives | settle the highest-reach context; prune the block map | **Gate 1: block map and scope** | 4 / 24 / 31 | 11 |
 | P2 Direction | 06 Visual direction, 07 Themes and modes, 08 Color system | pick one direction from three concepts; build the color system | **Gate 2: direction** | 2 / 16 / 28 | 10 |
 | P3 Foundations | 09 Color details, 10 Typeface, 11 Type scale, 12 Space and density, 13 Layout and shell, 14 Shape, 15 Depth, 16 Motion, haptics and sound | derive foundations from dials and raw inputs; tune where it matters | validator clean | 4 / 22 / 61 | 8 |
@@ -230,7 +230,9 @@ From L17 A3 (gstack is Tier C: concrete, versioned methods, used as opinion [S-L
 
 ### 4.1 The five classes
 
-Every one of the 207 design-system blocks carries one primary class (how OpenDesigner gets a good value when the person supplies nothing), optional `also` classes (other routes that work) and, for D and T blocks, a `hook` (DC-L17-01; per-block table in L17 G3, copied into `data/` by `tools/build_data.py`). ONTOLOGY.md's own provenance field uses "designer-owned" for team decisions too; the five classes replace it (section 11).
+Every one of the 207 design-system blocks (L17's count on the 23 September map) carries one primary class (how OpenDesigner gets a good value when the person supplies nothing), optional `also` classes (other routes that work) and, for D and T blocks, a `hook` (DC-L17-01; per-block table in L17 G3, copied into `data/` by `tools/build_data.py`). ONTOLOGY.md's own provenance field used "designer-owned" for team decisions too; the five classes replace it (section 11).
+
+Dated note, 2026-09-24: `ontology.json` is now the canonical block classification (orchestrator decision in `_coordination/DECISIONS.md`). Its `provenance` field uses the same five classes, spelled `generatable`, `extractable`, `designer-owned`, `tool-assisted` and `owner-input`. Its 211 blocks outside the builder layer [S-V1b-091] are 156 generatable, 23 tool-assisted, 21 owner input, 9 designer-owned and 2 extractable. Over all 275 nodes the counts are 208, 26, 27, 11 and 3 (counted from `ontology.json` by session F1 fixes). The table below keeps L17's counts for the 207-block map.
 
 | Class | Blocks | Meaning | What the model does | Decision kind (3.3) | In Quick mode |
 |---|---|---|---|---|---|

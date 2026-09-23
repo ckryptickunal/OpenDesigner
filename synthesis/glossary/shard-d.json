@@ -591,7 +591,7 @@
   ],
   "plain": "The colors icons use: mostly one calm grey, with bright colors saved for warnings and errors.",
   "designer": "One neutral icon color matched to secondary text, status colors only on status icons, no decorative multicolor. Meaningful icons need 3:1 (WCAG); Carbon asks 4.5:1 beside body text.",
-  "engineer": "color.icon.default (same neutral step as color.text.secondary, not an alias), .subtle, .accent and .onAccent; status icons use color.text.danger and its siblings. Web SVG: fill=currentColor.",
+  "engineer": "color.icon.default (same neutral step as color.text.secondary, not an alias), .subtle, .accent and .on-accent; status icons use color.text.danger and its siblings. Web SVG: fill=currentColor.",
   "designer_says": "one neutral icon color",
   "code_name": "color.icon.default, fill=currentColor",
   "example": "Grey icons in the toolbar, and a red one only beside an error.",

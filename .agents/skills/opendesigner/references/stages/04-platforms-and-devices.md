@@ -8,7 +8,7 @@ Screen: where the product runs and what people touch it with. Graph step 0-2. Cy
 
 Zoom 3 (detailed) questions: `04-platforms-and-devices.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-plat-01 · Which platforms ship in the first release?
 Zoom 0 sketch · weight high · changes 12 decisions · class I · cards DC-L10-01

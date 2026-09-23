@@ -122,6 +122,15 @@
   },
   "overrides": {},
   "answers": {
+    "Q-scope-06": {
+      "value": [
+        "Pipelines table:operate",
+        "Run detail and logs:read"
+      ],
+      "set_by": "chosen",
+      "decision": "D-0005",
+      "locked": false
+    },
     "Q-aud-01": {
       "value": "dense",
       "set_by": "chosen",
@@ -147,27 +156,30 @@
     "base": null,
     "inventory": [
       "button",
-      "icon-button",
-      "link",
       "text-field",
       "textarea",
       "select",
       "checkbox",
       "radio",
       "switch",
-      "card",
+      "slider",
+      "tabs",
+      "tooltip",
+      "popover",
       "dialog",
       "menu",
-      "tooltip",
-      "toast",
-      "tabs",
-      "table",
+      "progress-bar",
+      "spinner",
+      "banner",
       "badge",
       "avatar",
-      "banner",
-      "progress",
-      "skeleton",
-      "navigation"
+      "card",
+      "list",
+      "table",
+      "link",
+      "breadcrumbs",
+      "side-navigation",
+      "accordion"
     ],
     "notes": {}
   },
@@ -279,8 +291,8 @@
   "references": {},
   "taste": {},
   "hashes": {
-    "DESIGN.md": "f6101d9c819a860b",
-    "PRODUCT.md": "70ad6e15a64216c5"
+    "DESIGN.md": "d299ca5f7080da9f",
+    "PRODUCT.md": "61b345a6b0b3e6fa"
   },
   "exports": {
     "prefix": "ds",

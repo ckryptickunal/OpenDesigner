@@ -8,7 +8,7 @@ Screen: motion feel on live interactions the person can trigger (open a menu, na
 
 Zoom 3 (detailed) questions: `16-motion-haptics-and-sound.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-motion-01 · Should motion feel quick and quiet, or physical and playful?
 Zoom 1 broad · weight high · changes 5 decisions · class G · cards DC-L09-06, DC-L04-19, DC-L06-10

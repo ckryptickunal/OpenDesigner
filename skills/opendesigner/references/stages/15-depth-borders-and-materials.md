@@ -8,7 +8,7 @@ Screen: how surfaces separate and float, on a live stack (page, card, menu, dial
 
 Zoom 3 (detailed) questions: `15-depth-borders-and-materials.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-depth-01 · How should surfaces separate from each other?
 Zoom 1 broad · weight high · changes 5 decisions · class G · cards DC-L09-02, DC-L04-10, DC-L08-15

@@ -8,7 +8,7 @@ Screen: which fonts, for which scripts. Graph step 2-4. Cycles kept together: DC
 
 Zoom 3 (detailed) questions: `10-typeface.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-type-01 · Should the product use the platform's font, a neutral open font, or your own brand typeface?
 Zoom 1 broad · weight high · changes 6 decisions · class T · cards DC-L09-05, DC-L02-01, DC-L06-07, DC-L10-06

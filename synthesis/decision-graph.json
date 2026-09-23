@@ -2398,7 +2398,7 @@
    "title": "Visual style direction (style preset)",
    "block": "Foundations > Visual language > Style preset",
    "step": 2,
-   "fan_out": 12
+   "fan_out": 13
   },
   {
    "id": "DC-L15-02",
@@ -2653,7 +2653,7 @@
    "lane": "L17",
    "title": "Anti-generic guardrails",
    "block": "Guardrails > Checks > Genericness",
-   "step": 0,
+   "step": 3,
    "fan_out": 0
   },
   {
@@ -2662,7 +2662,7 @@
    "title": "Pacing (where the model slows down)",
    "block": "Builder > Guidance > Pacing",
    "step": 1,
-   "fan_out": 0
+   "fan_out": 1
   },
   {
    "id": "DC-L17-09",
@@ -2678,14 +2678,14 @@
    "title": "What the process records (for harmony and team communication)",
    "block": "Delivery > Records",
    "step": 0,
-   "fan_out": 0
+   "fan_out": 1
   },
   {
    "id": "DC-L17-11",
    "lane": "L17",
    "title": "Preview substrate during the process",
    "block": "Builder > Preview",
-   "step": 0,
+   "step": 4,
    "fan_out": 0
   },
   {
@@ -2750,7 +2750,7 @@
    "title": "Visual surface ladder and capability detection",
    "block": "Interview > Surface",
    "step": 3,
-   "fan_out": 2
+   "fan_out": 3
   },
   {
    "id": "DC-L18-07",
@@ -2765,7 +2765,7 @@
    "lane": "L18",
    "title": "Interview pacing (where the time goes)",
    "block": "Interview > Pacing",
-   "step": 0,
+   "step": 2,
    "fan_out": 1
   },
   {
@@ -2814,7 +2814,7 @@
    "title": "Trust and safety of the package",
    "block": "Distribution > Security",
    "step": 3,
-   "fan_out": 0
+   "fan_out": 1
   }
  ],
  "edges": [
@@ -4399,6 +4399,10 @@
    "target": "DC-L15-09"
   },
   {
+   "source": "DC-L15-01",
+   "target": "DC-L17-07"
+  },
+  {
    "source": "DC-L15-02",
    "target": "DC-L01-14"
   },
@@ -4607,6 +4611,14 @@
    "target": "DC-L17-03"
   },
   {
+   "source": "DC-L17-08",
+   "target": "DC-L18-08"
+  },
+  {
+   "source": "DC-L17-10",
+   "target": "DC-L18-10"
+  },
+  {
    "source": "DC-L18-01",
    "target": "DC-L18-02"
   },
@@ -4648,6 +4660,10 @@
   },
   {
    "source": "DC-L18-06",
+   "target": "DC-L17-11"
+  },
+  {
+   "source": "DC-L18-06",
    "target": "DC-L18-07"
   },
   {
@@ -4677,6 +4693,10 @@
   {
    "source": "DC-L18-11",
    "target": "DC-L18-12"
+  },
+  {
+   "source": "DC-L18-14",
+   "target": "DC-L17-03"
   }
  ],
  "cycles": [

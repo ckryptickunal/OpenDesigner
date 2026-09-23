@@ -43,6 +43,7 @@ Each node has a stable id (`layer.block.sub-block`), a plain-language definition
 - **Default**: the starting value the lanes recommend, with the card it comes from.
 - **Benchmark (L09)**: the shared default across the 25 benchmarked systems and where they diverge. `L09-A1.n` cites row n of the shared-patterns table and `L09-A2.n` row n of the divergence table in `benchmarks/L09-benchmark-matrix.md`; each row carries its own matrix evidence.
 - **Sources**: source ids from the lane traces.
+- **Provenance**: how the builder gets a good value for the node: generatable, extractable, designer-owned, tool-assisted or owner-input, with a note giving the evidence (see "Provenance summary").
 
 Rules followed: every claim carries a Decision Card id, a source id, or an L09 row reference, or it is tagged [inferred]. Values are copied from the cards, not invented. Card bodies are not repeated here; look them up by id in `synthesis/cards.json`.
 
@@ -50,7 +51,7 @@ Rules followed: every claim carries a Decision Card id, a source id, or an L09 r
 The facts the builder collects before any visual decision: why the system exists, who and what it serves, which platforms and devices it must cover, the brand's personality, and the hard limits it must fit. In the decision graph these are the step-0 and step-1 inputs that constrain the most other decisions (DC-L06-02 constrains 15, DC-L10-01 12, DC-L14-01 10, DC-L11-02 8).
 - Children: `ctx.strategy`, `ctx.scope`, `ctx.inventory`, `ctx.platforms`, `ctx.brand`, `ctx.constraints`
 - Decided by: no card of its own (structural node)
-- Provenance: designer-owned (an answer only the team can give (a questionnaire item), not a creative asset; the builder asks and records it [inferred])
+- Provenance: owner-input (the context layer holds decisions only the team can make; the builder asks them, pre-fills them from the repo where it can, and never invents them (DC-L17-01, L17 G3))
 
 ### `ctx.strategy` Starting point and system posture
 Whether the team adopts an existing system, adapts a themeable base, or creates its own, and how strict, modular and centralized the system will be (Kholmatova's parameters). It also records the entry path: an existing product, a UI kit, a reference the team admires, or a brief only (DC-L17-02).
@@ -58,7 +59,7 @@ Whether the team adopts an existing system, adapts a themeable base, or creates 
 - DTCG: none; stored as builder metadata such as `system.origin` and `governance.posture` (DC-L11-01, DC-L11-03); the entry path as `entry: existing | kit | reference | brief` in the product context file (DC-L17-02)
 - Varies by platform/device: Open web systems rarely cover native apps: 94% of systems support web, 35% iOS, 34% Android [S-L11-030]. Native apps often start from platform kits, which makes native-first posture the path of least resistance ([inferred] in DC-L17-02).
 - Default: Small teams (1-5 people, 61% of teams) adapt an accessible headless or themeable base and spend effort on tokens and docs (DC-L11-01). Strict core, loose edges (DC-L11-03, [inferred] in the card). Entry path: audit first when a product exists; otherwise start from a brief with an optional reference, and offer a kit only as a component base, not as the visual direction (DC-L17-02).
-- Provenance: designer-owned (an answer only the team can give (a questionnaire item), not a creative asset; the builder asks and records it [inferred])
+- Provenance: owner-input (adopt, adapt or create is a business choice only the team can make; the builder asks it and never invents it (DC-L11-01, DC-L17-01, L17 G3))
 - Sources: S-L11-006 S-L11-018 S-L11-019 S-L11-030 S-L17-003 S-L17-021
 
 ### `ctx.scope` Scope: products, audience and stack
@@ -66,7 +67,7 @@ Which products, audiences and technologies version 1 serves, and which it explic
 - Decided by: DC-L11-02
 - DTCG: none; metadata `system.platforms` and `system.frameworks` (DC-L11-02)
 - Default: Scope version 1 to the products the pilot touches and list the products you will not serve (DC-L11-02).
-- Provenance: designer-owned (an answer only the team can give (a questionnaire item), not a creative asset; the builder asks and records it [inferred])
+- Provenance: owner-input (products, audience and stack are facts only the owner knows; the builder asks them and never invents them (DC-L11-02, DC-L17-01, L17 G3))
 - Sources: S-L11-083 S-L11-002 S-L11-030
 
 ### `ctx.inventory` Existing UI inventory (audit)
@@ -86,7 +87,7 @@ The operating systems and runtimes the system must serve (web, iOS, Android, Win
 - Varies by platform/device: Android's large-screen rules make phone-only Android layouts no longer viable for new apps [S-L10-021]; Apple asks layouts to follow size class rather than device idiom [S-L10-013].
 - Default: Web plus iOS and Android phones, with Android and iPad large-screen layouts from day one; desktop, watch or TV only with a named use case (DC-L10-01).
 - Benchmark (L09): Diverges (L09-A2.10): web only (most systems), one API for web and native (Blade), per-platform ramps under one language (Fluent), native only (Apple).
-- Provenance: designer-owned (an answer only the team can give (a questionnaire item), not a creative asset; the builder asks and records it [inferred])
+- Provenance: owner-input (which platforms and devices are in scope is the team's decision; the builder asks it and pre-fills it from the repo where it can (DC-L17-01, L17 G3))
 - Sources: S-L10-020 S-L10-021 S-L10-025
 
 #### `ctx.platforms.posture` Platform posture (native-first, brand-first or hybrid)
@@ -95,7 +96,7 @@ How far the product defers to each platform's own look and behavior versus impos
 - DTCG: not a token; it decides which semantic tokens get platform overrides (DC-L10-02)
 - Varies by platform/device: Apple removed the opt-out from its new design at the 27 SDKs, so brand-first chrome on iOS means custom bars and controls [S-L10-076, S-L10-075].
 - Default: Coherent hybrid: share what users perceive as the brand (accent color, headline type, illustration, icon style, voice, sound) and adopt the platform's version of controls and behavior (DC-L10-02); "80% native, 20% signature" (DC-L06-14).
-- Provenance: designer-owned (an answer only the team can give (a questionnaire item), not a creative asset; the builder asks and records it [inferred])
+- Provenance: owner-input (native-first or brand-first is a product decision only the team can make (DC-L10-02, DC-L17-01, L17 G3))
 - Sources: S-L10-009 S-L10-040 S-L06-008 S-L06-043
 
 #### `ctx.platforms.sharing` What is shared across platforms
@@ -103,7 +104,7 @@ Which layer is common to every platform: tokens, component specs, or only princi
 - Decided by: DC-L10-03
 - DTCG: primitives and most semantic tokens shared; platform overrides at the semantic or component tier ([inferred] in DC-L10-03)
 - Default: Share tokens and component specs (anatomy, variants, states, content rules); implement and document accessibility per platform (DC-L10-03).
-- Provenance: designer-owned (an answer only the team can give (a questionnaire item), not a creative asset; the builder asks and records it [inferred])
+- Provenance: owner-input (what is shared across platforms is the team's decision (DC-L10-03, DC-L17-01, L17 G3))
 - Sources: S-L10-039 S-L10-040 S-L10-053
 
 #### `ctx.platforms.devices` Device classes in scope
@@ -112,7 +113,7 @@ Which device classes are first-class (phone, tablet and foldable, desktop, large
 - DTCG: none in the Format module; a resolver `context` modifier kept separate from `platform` ([inferred] in DC-L14-01)
 - Varies by platform/device: Viewing distance, input precision, attention per interaction, posture, ambient light, social setting and safety are the variables that change by device (L14 Part 3, [S-L14-001, S-L14-026, S-L14-031]).
 - Default: Phone, tablet/foldable and desktop/web first-class; TV, watch, car and spatial off until a named use case exists (DC-L14-01). Secondary form factors get foundations only (color, type roles, icons) plus platform templates (DC-L10-24).
-- Provenance: designer-owned (an answer only the team can give (a questionnaire item), not a creative asset; the builder asks and records it [inferred])
+- Provenance: owner-input (which device classes are in scope is the team's decision (DC-L14-01, DC-L17-01, L17 G3))
 - Sources: S-L14-001 S-L14-067 S-L10-002
 
 #### `ctx.platforms.stack` Implementation stack
@@ -121,7 +122,7 @@ The native toolkits and cross-platform frameworks the products are built with. T
 - DTCG: output formats rather than types: JS/TS objects for React Native, `flutter/class.dart`, `compose/object` for Compose Multiplatform [S-L10-056]
 - Varies by platform/device: Compose Material 3 stable is 1.4.0; the expressive APIs are still in 1.5.0 alphas [S-L10-018].
 - Default: SwiftUI (UIKit where needed) and Compose for new native work (DC-L10-20); fully native or React Native for native-first products, Flutter or Compose Multiplatform for brand-first products that accept a lag on OS changes (DC-L10-21).
-- Provenance: designer-owned (an answer only the team can give (a questionnaire item), not a creative asset; the builder asks and records it [inferred])
+- Provenance: owner-input (the stack is the team's choice; when a repo exists the builder reads it from the manifests and asks the person to confirm (Q-plat-08, DC-L17-01); L17 G3 files it extractable first and owner input second)
 - Sources: S-L10-018 S-L10-024 S-L10-056
 
 #### `ctx.platforms.os-floor` OS version floor
@@ -129,21 +130,21 @@ The oldest OS versions supported and which design-language generation the system
 - Decided by: DC-L10-23
 - DTCG: version-gated values are rare; prefer runtime fallbacks (DC-L10-23)
 - Default: Support the current and previous major OS, design for the current language, and let older versions fall back to their native look (DC-L10-23).
-- Provenance: designer-owned (an answer only the team can give (a questionnaire item), not a creative asset; the builder asks and records it [inferred])
+- Provenance: owner-input (the OS support policy is the team's decision (DC-L17-01, L17 G3))
 - Sources: S-L10-005 S-L10-019
 
 ### `ctx.brand` Brand inputs
 What the brand brings into the product: its personality, how the marketing identity relates to the product UI, and how much expression the product allows. L06 section 1 separates the expressive identity layer (logo system, campaign color, display type) from the productive product layer.
 - Children: `ctx.brand.personality`, `ctx.brand.layering`, `ctx.brand.expression`
 - Decided by: no card of its own (structural node)
-- Provenance: designer-owned (an answer only the team can give (a questionnaire item), not a creative asset; the builder asks and records it [inferred])
+- Provenance: owner-input (brand inputs are the team's decisions, not creative assets; the logo and other identity assets are designer-owned nodes in `found.imagery` (DC-L17-01, L17 G3))
 
 #### `ctx.brand.personality` Brand personality profile
 Brand traits expressed as a few slider positions (for example playful to serious, minimal to rich). This is the single most influential input: L06's lever matrix maps each adjective pair to concrete foundation settings.
 - Decided by: DC-L06-02
 - DTCG: not a token; metadata such as `$extensions.brand.personality` ([inferred] in DC-L06-02)
 - Default: Ask for traits first, then 4-7 sliders, then show 2-3 generated style tiles to choose from (DC-L06-02).
-- Provenance: designer-owned (traits and slider positions come from the team; the builder then generates 2-3 style tiles from them (DC-L06-02))
+- Provenance: owner-input (traits and slider positions come from the team, and a reference can place the brand on the map; the builder then generates 2-3 style tiles from them (DC-L06-02, DC-L17-01, L17 G3))
 - Sources: S-L06-070 S-L06-071 S-L06-078
 
 #### `ctx.brand.layering` Brand-to-product layering
@@ -151,7 +152,7 @@ Whether marketing (expressive) and product (productive) surfaces share one syste
 - Decided by: DC-L06-01
 - DTCG: a `layer` mode axis rather than duplicate tokens, for example Carbon's productive easing [0.2, 0, 0.38, 0.9] versus expressive [0.4, 0.14, 0.3, 1] as `cubicBezier` (DC-L06-01)
 - Default: One system, productive by default, expressive opt-in (DC-L06-01).
-- Provenance: designer-owned (an answer only the team can give (a questionnaire item), not a creative asset; the builder asks and records it [inferred])
+- Provenance: owner-input (how the brand carries into the product is the team's decision (DC-L06-01, DC-L17-01, L17 G3))
 - Sources: S-L06-001 S-L06-002 S-L06-110
 
 #### `ctx.brand.expression` Expressiveness level and hero-moment budget
@@ -160,7 +161,7 @@ How much brand expression the product allows, and how many signature moments get
 - DTCG: expressive variants as a mode or parallel set, for example `font.display.emphasized` (typography) and `shape.corner.expressive.*` (dimension) ([inferred] naming in DC-L06-03)
 - Varies by platform/device: M3 Expressive is Android and Compose first [S-L06-009].
 - Default: Productive everywhere plus "one or two hero moments", following Material's own rule (DC-L06-03).
-- Provenance: designer-owned (an answer only the team can give (a questionnaire item), not a creative asset; the builder asks and records it [inferred])
+- Provenance: owner-input (the hero-moment budget is the team's decision; the Expression dial gives the starting value (DC-L06-03, DC-L17-01, L17 G3))
 - Sources: S-L06-002 S-L06-009
 
 ### `ctx.constraints` Hard constraints
@@ -170,7 +171,7 @@ Limits the system must fit that are not taste choices: the design tool's plan ti
 - DTCG: n/a
 - Varies by platform/device: Figma MCP limits by plan: Starter 20 calls a month; Dev/Full seats 200 a day on Professional and Organization, 600 on Enterprise [S-L07-049].
 - Default: Ask for the Figma plan first and grey out architectures it cannot hold: Professional allows 10 modes per collection, Organization 20 (DC-L07-27, [S-L07-014]).
-- Provenance: designer-owned (facts about the team's plan, legal target and locales; the Figma plan tier gates architectures (DC-L07-27) [inferred for the rest])
+- Provenance: owner-input (facts only the team knows: its plan, legal target, locales and deadlines; the Figma plan tier gates architectures (DC-L07-27, DC-L17-01) [inferred for the rest])
 - Sources: S-L07-014 S-L07-015 S-L07-049
 
 ## Layer 1: Principles (`prin`, 18 nodes)
@@ -184,7 +185,7 @@ A short, ranked list of statements the team uses as tie-breakers when two good o
 - Decided by: DC-L06-15, DC-L11-05
 - DTCG: none; stored as ordered records with `beats` relationships and do/don't examples ([inferred] in DC-L06-15 and DC-L11-05)
 - Default: 3-5 principles, each naming the value it outranks and testable with a "would this screen pass?" question; avoid words every product could claim (DC-L06-15, DC-L11-05). Date-stamp them, since principles pages go stale first (L06 section 5.1, [S-L06-055, S-L06-057]).
-- Provenance: designer-owned (principles are written by the team and ranked by what they outrank (DC-L06-15, DC-L11-05))
+- Provenance: owner-input (principles are written by the team and ranked by what they outrank; the model can draft them from the interview (DC-L06-15, DC-L11-05, DC-L17-01))
 - Sources: S-L06-004 S-L06-077 S-L11-008
 
 ### `prin.ux` UX behavior rules
@@ -231,7 +232,7 @@ How far the product follows established platform and industry conventions (Jakob
 - DTCG: none; expressed through platform presets (DC-L13-17)
 - Varies by platform/device: Users expect their own platform's idiom; iOS developers push back on porting M3 Expressive (DC-L13-17, COMMUNITY-SIGNAL section d).
 - Default: Conventional behavior with a custom skin; never override standard shortcuts; be novel only where it is the differentiator, and test it (DC-L13-17).
-- Provenance: designer-owned (novelty versus convention is a human-judgment item in L13's automation boundary (L13 Part E1 level 4))
+- Provenance: owner-input (novelty versus convention is the team's stance, a human-judgment item in L13's automation boundary (L13 Part E1 level 4, DC-L17-01))
 - Sources: S-L13-006 S-L13-036
 
 #### `prin.ux.inclusion` Inclusive design stance
@@ -1414,7 +1415,7 @@ The word list: preferred terms, banned terms, and inclusive-language rules.
 - DTCG: no DTCG type; content rules are text records and lint configuration (L07 A5, [inferred])
 - Varies by platform/device: Platform terms differ by input method, such as tap versus click ([inferred] in DC-L06-23).
 - Default: A 20-50 term glossary from day one, with copy linted against it ([inferred] in DC-L06-23).
-- Provenance: designer-owned (the glossary is the team's own vocabulary (DC-L06-23))
+- Provenance: owner-input (the word list is the team's own product vocabulary, not a creative asset (DC-L06-23, DC-L17-01, L17 G3))
 - Sources: S-L06-046 S-L06-054
 
 #### `found.content.localization` Localization readiness
@@ -1959,7 +1960,7 @@ Whether a destructive action is protected by undo or by a confirmation step.
 - DTCG: no DTCG type for patterns; they compose components and reference tokens (L07 A5)
 - Varies by platform/device: Apple never gives the primary role to a destructive button; dialog button order differs by platform (DC-L13-08).
 - Default: Reversible actions use undo with no confirmation; irreversible and costly actions get a confirmation with verb labels and Cancel as the safe default (DC-L13-08). Delete with neither undo nor confirm is a warning (L13 Part E1).
-- Provenance: designer-owned (which actions get undo versus confirm is human judgment (L13 Part E1 level 4))
+- Provenance: owner-input (which of the product's actions get undo or a confirmation needs product knowledge, a human-judgment item (L13 Part E1 level 4); the rule itself ships as a default (DC-L13-08) [inferred for the owner-input class])
 - Sources: S-L13-067 S-L08-039
 
 ### `pat.navigation` Global navigation
@@ -1970,7 +1971,7 @@ The top-level navigation model: how many destinations, whether navigation stays 
 - DTCG: no DTCG type for patterns; they compose components and reference tokens (L07 A5)
 - Varies by platform/device: Material swaps the bottom bar for a rail or drawer by breakpoint; Apple converts the tab bar to a sidebar (DC-L13-02).
 - Default: Keep primary navigation visible whenever width allows; do not cap at seven items, which is the Miller misuse (DC-L13-02).
-- Provenance: designer-owned (information architecture and labels are human judgment in L13's automation boundary (L13 Part E1 level 4); the container swap is generatable (DC-L10-09))
+- Provenance: owner-input (the destinations and their labels (the information architecture) are the team's product knowledge, a human-judgment item (L13 Part E1 level 4); the container swap is generatable (DC-L10-09) [inferred for the owner-input class])
 - Sources: S-L13-048 S-L13-050 S-L13-095
 
 #### `pat.navigation.containers` Navigation containers by size, platform and device
@@ -2301,7 +2302,7 @@ How the system is run as a product over time: build order and pilots, team and r
 - Children: `gov.process`, `gov.team`, `gov.contribution`, `gov.decisions`, `gov.lifecycle`, `gov.change`, `gov.docs`, `gov.adoption`, `gov.measure`, `gov.tooling`
 - Decided by: no card of its own (structural node)
 - DTCG: none; stored as builder metadata and records (L11)
-- Provenance: designer-owned (governance is run by people: an answer only the team can give (a questionnaire item), not a creative asset; the builder asks and records it [inferred])
+- Provenance: owner-input (governance is run by people: decisions only the team can make; the builder asks them, offers defaults and never invents them (DC-L17-01, L17 G3))
 - Sources: S-L11-003 S-L11-030 S-L11-105
 
 ### `gov.process` Build order and pilot
@@ -2309,7 +2310,7 @@ The order in which the system is built and which product pilots it.
 - Decided by: DC-L11-06, DC-L11-07
 - Varies by platform/device: Pick one pilot per platform for multi-platform systems ([inferred] in DC-L11-07).
 - Default: Minimal foundations first (color roles, type scale, spacing scale, radius), then pilot-driven components, then back-fill foundations (DC-L11-06); score 2-3 candidate pilots on 8 criteria and pick the one with a champion and common components (DC-L11-07).
-- Provenance: designer-owned (governance is run by people: an answer only the team can give (a questionnaire item), not a creative asset; the builder asks and records it [inferred])
+- Provenance: owner-input (the build order and pilot are the team's decision (DC-L17-01, L17 G3))
 - Sources: S-L11-009 S-L11-014 S-L11-105
 
 ### `gov.team` Team model and roles
@@ -2317,14 +2318,14 @@ Who owns the system (centralized, federated, hybrid) and which roles and skills 
 - Decided by: DC-L11-09, DC-L11-10
 - Varies by platform/device: Federated models help multi-platform systems; native platforms need iOS and Android engineers on the team (DC-L11-09, DC-L11-10).
 - Default: Start centralized, even with 1-2 people, with a named owner; add federated contributors once a contribution process exists (DC-L11-09). Small teams of 1-5 people are 61% of teams (DC-L11-01, [S-L11-030]).
-- Provenance: designer-owned (governance is run by people: an answer only the team can give (a questionnaire item), not a creative asset; the builder asks and records it [inferred])
+- Provenance: owner-input (the team model and roles are the team's decision (DC-L17-01, L17 G3))
 - Sources: S-L11-005 S-L11-013 S-L11-030 S-L11-097
 
 ### `gov.contribution` Contribution model
 How people outside the core team propose and add to the system.
 - Decided by: DC-L11-11
 - Default: Two lanes: a fast lane for fixes, icons and docs; a proposal lane (RFC) for new components, gated by "useful and unique" (DC-L11-11).
-- Provenance: designer-owned (governance is run by people: an answer only the team can give (a questionnaire item), not a creative asset; the builder asks and records it [inferred])
+- Provenance: owner-input (how contributions are accepted is the team's decision; the builder can generate the template (DC-L17-01, L17 G3))
 - Sources: S-L11-020 S-L11-021 S-L11-023
 
 ### `gov.decisions` Governance flow and decision records
@@ -2339,7 +2340,7 @@ The lifecycle states a component can be in.
 - Decided by: DC-L11-13
 - Varies by platform/device: Status can differ per platform package ([inferred] in DC-L11-13).
 - Default: Three states: experimental, ready, deprecated; Primer simplified from five to three (DC-L11-13).
-- Provenance: designer-owned (governance is run by people: an answer only the team can give (a questionnaire item), not a creative asset; the builder asks and records it [inferred])
+- Provenance: owner-input (which status labels a component can carry is a governance decision; the builder offers three states as the default (DC-L11-13, DC-L17-01) [inferred for the class; L17 G3 files it generatable])
 - Sources: S-L11-025 S-L11-026
 
 ### `gov.change` Versioning
@@ -2348,7 +2349,7 @@ How releases are numbered and scheduled.
 - Decided by: DC-L11-14
 - Varies by platform/device: Native libraries ship through package managers (SPM, Gradle) while Figma libraries publish separately, so aligning versions is manual unless automated (DC-L11-14).
 - Default: One semantic version for the whole library while small; per-package versions once there is more than one platform; release on a predictable schedule (DC-L11-14).
-- Provenance: designer-owned (governance is run by people: an answer only the team can give (a questionnaire item), not a creative asset; the builder asks and records it [inferred])
+- Provenance: owner-input (the versioning policy and release schedule are the team's decision; the builder offers a default (DC-L11-14, DC-L17-01))
 - Sources: S-L11-106 S-L11-028
 
 #### `gov.change.deprecation` Deprecation and migration
@@ -2357,7 +2358,7 @@ How tokens and components are retired and consumers migrated. L07 decided this f
 - DTCG: `$deprecated` (boolean or string) and `$description` on tokens; Figma has no native deprecated flag on variables (DC-L07-23)
 - Varies by platform/device: Native apps cannot force upgrades, so deprecation windows are longer ([inferred] in DC-L11-15).
 - Default: Deprecate in a minor release, remove in the next major, give at least one release cycle of notice, and pair every removal with a codemod or migration guide (DC-L11-15); every semantic token gets a description of its intended use, deprecated for one release before deletion (DC-L07-23).
-- Provenance: designer-owned (governance is run by people: an answer only the team can give (a questionnaire item), not a creative asset; the builder asks and records it [inferred])
+- Provenance: owner-input (the deprecation policy is the team's decision; the builder offers the notice and migration defaults (DC-L11-15, DC-L07-23, DC-L17-01, L17 G3))
 - Sources: S-L11-100 S-L11-101 S-L07-002 S-L07-029
 
 ### `gov.docs` Documentation platform
@@ -2383,7 +2384,7 @@ How the system is introduced to product teams and how the team keeps them inform
 - Decided by: DC-L11-08, DC-L11-22
 - Varies by platform/device: Native apps roll out through app releases, so migrations are slower than on web ([inferred] in DC-L11-08).
 - Default: Incremental rollout led by pain points, unless a rebrand offers a natural big-bang moment (DC-L11-08); release notes every release, a public roadmap, and a support channel (DC-L11-22).
-- Provenance: designer-owned (governance is run by people: an answer only the team can give (a questionnaire item), not a creative asset; the builder asks and records it [inferred])
+- Provenance: owner-input (rollout and communication are run by the team (DC-L17-01, L17 G3))
 - Sources: S-L11-002 S-L11-030 S-L11-105
 
 ### `gov.measure` Metrics and maturity
@@ -2497,7 +2498,7 @@ For blocks that cannot be generated well (logo, brand mark, custom icons, illust
 - Decided by: DC-L17-01, DC-L17-04
 - DTCG: none; each node carries `class`, `also` and `hook` metadata (DC-L17-01); assets are referenced from a manifest (`id, status, files, licence, owner, brief`), not tokenized, because DTCG has no asset type (DC-L17-04)
 - Varies by platform/device: A few blocks change class by platform: haptics are tool-assisted on iOS and Android and do not apply on the web ([inferred] in DC-L17-01). App icons and favicons have platform size sets, and fonts for native apps need app-embedding rights, not only web rights (DC-L17-04).
-- Default: Five classes, adding owner input to the four provenance values: generatable if a formula or sourced default gives an acceptable value, extractable if an existing asset is the truth, designer-owned if quality depends on a human creator, tool-assisted if a named tool gets an engineer there with a caveat, and owner input if only the business knows (DC-L17-01). Over the 207 non-builder leaves L17 counts 135 generatable, 31 tool-assisted, 29 owner input, 7 designer-owned and 5 extractable, and 44 blocks can be pre-filled from a reference (L17 Part G). Hooks are asked as a grouped checklist with open slots and briefed placeholders; the fallback order is have it, commission a designer with the generated brief, an open library with a compatible licence, a named tool with its caveat, or omit, and a generated identity asset is never presented as final (DC-L17-04). The 7 designer-owned nodes expand into 14 asset hooks (L17 Part H2).
+- Default: Five classes, adding owner input to the four provenance values: generatable if a formula or sourced default gives an acceptable value, extractable if an existing asset is the truth, designer-owned if quality depends on a human creator, tool-assisted if a named tool gets an engineer there with a caveat, and owner input if only the business knows (DC-L17-01). Over the 207 non-builder leaves L17 counts 135 generatable, 31 tool-assisted, 29 owner input, 7 designer-owned and 5 extractable, and 44 blocks can be pre-filled from a reference (L17 Part G). Hooks are asked as a grouped checklist with open slots and briefed placeholders; the fallback order is have it, commission a designer with the generated brief, an open library with a compatible licence, a named tool with its caveat, or omit, and a generated identity asset is never presented as final (DC-L17-04). The 7 designer-owned nodes expand into 14 asset hooks (L17 Part H2). The canonical classification is `ontology.json` (orchestrator, 2026-09-24): its 211 blocks are 156 generatable, 23 tool-assisted, 21 owner-input, 9 designer-owned and 2 extractable.
 - Provenance: designer-owned (the hook collects designer-owned resources and offers tool paths (BRIEF.md requirement 2))
 - Sources: S-L17-015 S-L17-004 S-L17-021 S-L17-023
 
@@ -2620,7 +2621,31 @@ Catalogs are grouped, not exploded: the 64 L08 components are members of ten cat
 
 ## Provenance summary
 
-Every node carries a `provenance` value requested in `_coordination/BRIEF.md`: generatable (formula from a few inputs), extractable (readable from a reference), designer-owned (needs a human creator, or a decision only the team can make), or tool-assisted (an engineer can make it with a named tool). The note beside each value cites a card or source, or is tagged [inferred]. Most generatable foundation and token nodes can also be read from a reference site or Figma file; the notes say so rather than adding a second value. Designer-owned nodes include the brand-mark, illustration, photography, motif, custom-icon construction, pictogram, voice, tone and terminology nodes, plus the team-decision nodes in context, principles and governance. Lane L17 (`research/L17-how-systems-get-made.md`) finished after this file was first built. Its classification (DC-L17-01, owned by `builder.hooks`) uses five classes, adding owner input for decisions only the business can make, and assigns one to each of the 207 non-builder leaves in its Part G. The `provenance` values here have not yet been replaced with Part G's classes; the team-decision nodes that L17 calls owner input are still filed as designer-owned.
+Every node carries a `provenance` value, as `_coordination/BRIEF.md` asks. It says how the builder gets a good value when the person supplies nothing. There are five classes (DC-L17-01, owned by `builder.hooks`):
+- **generatable**: a formula or a sourced default gives the value.
+- **extractable**: the best source already exists, such as a logo, a site, a repo or a Figma file.
+- **designer-owned**: quality needs a human creator. This covers brand marks, photography, illustration, motifs, custom icon construction, pictograms, sound, voice and tone.
+- **tool-assisted**: an engineer can make it with a named tool, with a caveat.
+- **owner-input**: a decision only the team or owner can make, such as scope, platforms, principles, terminology or governance. The builder asks it and never invents it.
+
+The note beside each value cites a card or source, or is tagged [inferred]. Most generatable foundation and token nodes can also be read from a reference site or Figma file. The notes say so rather than adding a second value.
+
+Counts on 2026-09-24 (session F1 fixes), read from `ontology.json`. A block is a node with no children outside the `builder` layer.
+
+| Class | All 275 nodes | 211 blocks |
+|---|---|---|
+| generatable | 208 | 156 |
+| tool-assisted | 26 | 23 |
+| owner-input | 27 | 21 |
+| designer-owned | 11 | 9 |
+| extractable | 3 | 2 |
+
+How the classes got here:
+- The first build used four classes and filed team decisions as designer-owned.
+- Lane L17 (`research/L17-how-systems-get-made.md`, Part G) added owner input and classified the 207 blocks of the 23 September map: 135 generatable, 31 tool-assisted, 29 owner input, 7 designer-owned and 5 extractable.
+- On 2026-09-24 the orchestrator made `ontology.json` the canonical classification (`_coordination/DECISIONS.md`).
+- Session F1 fixes then moved 27 team-decision nodes from designer-owned to owner-input. Of the 21 blocks among them, 18 match L17's owner-input rows. Three are F1's own reading: `ctx.platforms.stack` (L17: extractable first, owner input second), `pat.destructive` and `gov.lifecycle` (L17: generatable).
+- L17 files 11 more blocks as owner input that stay generatable or tool-assisted here, because a sourced default or a named tool gives a good value: `prin.ux.inclusion`, `prin.ux.ethics`, `prin.visual.style`, `tok.themes.brands`, `tok.themes.whitelabel`, `comp.implementation`, `comp.platform-rendering`, `guard.critique`, `deliver.source-of-truth`, `gov.decisions` and `gov.measure`. Other class differences from L17's table stay as session S2 left them.
 
 ## Open gaps
 

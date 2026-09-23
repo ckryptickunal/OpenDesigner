@@ -27,7 +27,7 @@
       },
       "exit": {
         "$value": {
-          "duration": "{motion.duration.mediumExit}",
+          "duration": "{motion.duration.medium-exit}",
           "delay": {
             "value": 0,
             "unit": "ms"

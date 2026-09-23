@@ -8,7 +8,7 @@ Screen: an icon sheet in the product's own buttons, tabs and lists, next to body
 
 Zoom 3 (detailed) questions: `17-icons-app-icon-and-logo-use.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-icon-01 · Do you have a custom icon set, or should the system adopt a library?
 Zoom 2 defined · weight medium · changes 3 decisions · class T · cards DC-L05-01, DC-L10-25

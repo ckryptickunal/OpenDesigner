@@ -8,7 +8,7 @@ Screen: a token browser beside the product preview; clicking any element shows i
 
 Zoom 3 (detailed) questions: `24-tokens-and-encoding.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-token-01 · How many token layers should sit between raw values and components?
 Zoom 2 defined · weight medium · changes 4 decisions · class G · cards DC-L07-01, DC-L07-02, DC-L01-26, DC-L02-27

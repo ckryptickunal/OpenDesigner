@@ -6,7 +6,7 @@ Area: `modes` · zoom 3 detailed: 2 · visual: `assets/templates/palette.html`
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-theme-02 · Besides light and dark, which other theme switches should exist?
 Zoom 3 detailed · weight medium · changes 3 decisions · class G · cards DC-L07-15, DC-L11-25

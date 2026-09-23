@@ -538,9 +538,9 @@
   "term": "Token naming",
   "plain": "The rules for how saved choices get their names, so you can guess a name and find it.",
   "designer": "The grammar that makes token names predictable: category, property, concept, variant, state. Theme and brand never appear in semantic names, because they are modes.",
-  "engineer": "category.property.concept.variant, state appended in camelCase: color.bg.accent.boldHover. The export prefix (default ds) namespaces it: CSS --ds-color-bg-accent-bold-hover; Swift and Compose use camelCase.",
+  "engineer": "category.property.concept.variant, every segment lowercase kebab-case, state joined by a hyphen: color.bg.accent.bold-hover. CSS adds the prefix (--ds-color-bg-accent-bold-hover); Swift and Compose use camelCase.",
   "designer_says": "token naming convention",
-  "code_name": "category.property.concept.variant(State)",
+  "code_name": "category.property.concept.variant-state",
   "source": [
    "tok.naming",
    "DC-L07-04",
@@ -831,7 +831,7 @@
   "term": "Visual critique strictness",
   "plain": "How tough the tool is when it reviews your look: a gentle coach, a strict gate, or a score sheet.",
   "designer": "How strongly the builder critiques visual choices: coaching by default; strict blocking and a metrics panel are planned. Every validate message names its rule, so users learn the vocabulary.",
-  "engineer": "Not tokens: answers.Q-pref-01 records silent, coach, strict or metrics, but nothing acts on it yet. validate reports errors; review --strict fails on hard-coded values or stale DESIGN.md.",
+  "engineer": "Not tokens. Q-pref-01 (silent, coach, strict or metrics) is planned, so the interview skips it. validate reports errors, build stops on them, and review --strict fails on hard-coded values.",
   "designer_says": "design critique: coach or strict",
   "code_name": "answers.Q-pref-01: coach | strict (planned)",
   "source": [
@@ -966,6 +966,23 @@
    "deliver.ai",
    "DC-L11-23",
    "DC-L07-23"
+  ]
+ },
+ {
+  "id": "deliver.records",
+  "term": "Durable records for later sessions and the team",
+  "plain": "Files saved in your project, so the next chat or your team knows what you chose and why.",
+  "designer": "DESIGN.md is the readable spec, a decision log keeps every choice with its reason, and RATIONALE.md explains it to your team. Later sessions build on them without drift.",
+  "engineer": "opendesigner/tokens/ (DTCG, canonical), state.json and decisions.md, plus DESIGN.md and PRODUCT.md at the root. engine.py design-md refreshes them; engine.py review finds drift.",
+  "designer_says": "design spec and decision log",
+  "code_name": "DESIGN.md, decisions.md, state.json",
+  "source": [
+   "deliver.records",
+   "DC-L17-10",
+   "DC-L18-10"
+  ],
+  "aka": [
+   "decision records"
   ]
  },
  {
@@ -1430,6 +1447,63 @@
   "code_name": "hooks.<H-id>.status in state.json",
   "source": [
    "builder.hooks"
+  ]
+ },
+ {
+  "id": "builder.pacing",
+  "term": "Pacing and question format",
+  "plain": "Big choices get more time and pictures to compare. Small ones get a quick yes.",
+  "designer": "The interview slows down where a choice shapes the most: one big decision per turn, with visual options. Small ones come grouped with a default you confirm.",
+  "engineer": "pacing.json sets zoom levels 0-3 and each question's time weight (high at fan-out 5+). Questions offer 2 to 4 options, one recommended; owner inputs are never invented.",
+  "designer_says": "pacing, depth and question cards",
+  "code_name": "pacing.json and question weight",
+  "source": [
+   "builder.pacing",
+   "DC-L17-08",
+   "DC-L18-08",
+   "DC-L18-09"
+  ],
+  "aka": [
+   "pacing"
+  ]
+ },
+ {
+  "id": "builder.surface",
+  "term": "Visual surface and return channel",
+  "plain": "Where you see your choices as pictures, and how your pick gets back to the AI.",
+  "designer": "Options show up in the richest visual your AI app allows, from an artifact or a local page down to plain text. Your pick comes back as a short line.",
+  "engineer": "Eight JSON-fed templates in assets/templates render through show.py or an artifact. Copy my choice emits OD: lines the engine runs. An MCP App view is planned.",
+  "designer_says": "visual previews and picks",
+  "code_name": "assets/templates, show.py, OD: lines",
+  "source": [
+   "builder.surface",
+   "DC-L18-06",
+   "DC-L18-07"
+  ],
+  "aka": [
+   "visual surface",
+   "OD: lines"
+  ]
+ },
+ {
+  "id": "builder.distribution",
+  "term": "Distribution into AI hosts",
+  "plain": "How you add OpenDesigner to the AI app you already use.",
+  "designer": "You load OpenDesigner into your own AI: a Claude plugin, a skills folder that Codex, Cursor and Copilot find, or a ChatGPT Project with five files.",
+  "engineer": "skills/ is the source; sync_skills.py copies it to .agents/skills and .claude/skills. Manifests: .claude-plugin/ and plugin.json. build_dist.py makes the zip. A server is planned.",
+  "designer_says": "install as a skill or plugin",
+  "code_name": "skills/, plugin.json, release zip",
+  "source": [
+   "builder.distribution",
+   "DC-L18-01",
+   "DC-L18-02",
+   "DC-L18-03",
+   "DC-L18-04",
+   "DC-L18-05",
+   "DC-L18-14"
+  ],
+  "aka": [
+   "installing OpenDesigner"
   ]
  }
 ]

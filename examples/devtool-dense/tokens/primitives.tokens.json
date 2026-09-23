@@ -1241,7 +1241,7 @@
           },
           "$description": "high-contrast text"
         },
-        "solidPressed": {
+        "solid-pressed": {
           "$value": {
             "colorSpace": "oklch",
             "components": [
@@ -2296,7 +2296,7 @@
         }
       }
     },
-    "neutralAlpha": {
+    "neutral-alpha": {
       "$description": "Alpha twins of the neutral ramp over the page background (Radix and Atlassian pattern, DC-L01-07).",
       "light": {
         "2": {
@@ -2696,7 +2696,7 @@
         }
       }
     },
-    "lineHeight": {
+    "line-height": {
       "$type": "dimension",
       "$description": "Line heights snapped to a 4px grid: 1.5 up to 17px, 1.4 to 26px, 1.25 to 44px, 1.12 above (DC-L02-13).",
       "16": {
@@ -2745,7 +2745,7 @@
   },
   "space": {
     "$type": "dimension",
-    "$description": "Spacing ladder: 4 x [0, 0.5, 1, 1.5, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20], non-integers dropped (LEVERS B8). Names are pixel values.",
+    "$description": "Spacing ladder: 4 x [0, 0.5, 1, 1.5, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24], non-integers dropped (LEVERS B8; x24 added by spec 6.2). Names are pixel values.",
     "$extensions": {
       "opendesigner": {
         "unit": 4,
@@ -2999,13 +2999,13 @@
           "unit": "ms"
         }
       },
-      "mediumExit": {
+      "medium-exit": {
         "$value": {
           "value": 160,
           "unit": "ms"
         }
       },
-      "longExit": {
+      "long-exit": {
         "$value": {
           "value": 260,
           "unit": "ms"

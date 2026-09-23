@@ -8,10 +8,10 @@ Screen: the overall look before any single foundation. Graph step 2-3. Cycle kep
 
 Zoom 3 (detailed) questions: `06-visual-direction.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-dir-01 · Which overall visual style fits the product?
-Zoom 1 broad · weight high · changes 12 decisions · class G · cards DC-L15-01
+Zoom 1 broad · weight high · changes 13 decisions · class G · cards DC-L15-01
 - **Ask:** "Which overall look fits: flat, tonal, glass, neo-brutalist, soft, or bold and busy?"
 - **Why:** The style preset sets depth, glass effects, corner radius, borders and color strength all at once. It steers 12 other choices (fan-out 12) [DC-L15-01].
 - **Options:**

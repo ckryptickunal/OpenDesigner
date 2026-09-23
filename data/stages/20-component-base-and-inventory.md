@@ -8,7 +8,7 @@ Screen: the component catalog, rendered with every foundation chosen so far; eac
 
 Zoom 3 (detailed) questions: `20-component-base-and-inventory.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-comp-01 · What should your components be built on?
 Zoom 2 defined · weight low · changes 1 decisions · class T · cards DC-L08-03

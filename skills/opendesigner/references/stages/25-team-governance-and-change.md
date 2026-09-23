@@ -8,7 +8,7 @@ Screen: a governance plan generated from earlier answers (team size, scope, plat
 
 Zoom 3 (detailed) questions: `25-team-governance-and-change.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-gov-01 · How strict should the system be: can product teams override or extend it?
 Zoom 2 defined · weight medium · changes 3 decisions · class I · cards DC-L11-03

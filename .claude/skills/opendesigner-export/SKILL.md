@@ -44,7 +44,14 @@ Detect what is connected before promising anything:
 
 Write flow with `use_figma`:
 1. Confirm the target file with the person and suggest working on a duplicate first.
-2. Create collections by tier: **Primitives** (ramps and raw sizes, no modes) and **Semantic** (roles aliased to primitives, with Light and Dark modes). The number of modes per collection depends on the Figma plan. Check it before adding more themes.
+2. Create the five collections in `build/figma/variables.json`, in its order:
+   - **Primitives:** ramps and raw sizes, no modes, hidden from publishing.
+   - **Color:** color roles aliased to primitives, one mode per color scheme (Light and Dark).
+   - **Density:** spacing and control sizes, one mode per density (spacious, comfortable, compact).
+   - **Motion:** durations and easings, with Standard and Reduced modes.
+   - **Tokens:** everything that does not change by mode (radius, weights, font families and the like).
+
+   The Figma plan caps the modes per collection (`exports.figmaPlan`, set by Q-tool-03). The engine splits a collection that goes over the cap and warns. Check the plan before adding more themes.
 3. Create variables with explicit scopes (never "all scopes"), and set code syntax to the CSS variable name so developers see `var(--...)`.
 4. Add text styles for the type scale and effect styles for the elevation levels.
 5. Build one specimen frame per foundation (palette, type, spacing, radius, elevation) and a component sheet, bound to the variables.
