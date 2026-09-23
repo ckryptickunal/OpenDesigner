@@ -1,0 +1,26 @@
+# Copy to wrangler.toml, fill in database_id, then follow README.md. Nothing here is deployed by OpenDesigner.
+name = "opendesigner-reports"
+main = "worker.js"
+compatibility_date = "2026-09-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "opendesigner-reports"
+database_id = "<printed by: npx wrangler d1 create opendesigner-reports>"
+
+# 20 reports a minute per address; the address is a counter key only and is never stored.
+[[ratelimits]]
+name = "RATE_LIMITER"
+namespace_id = "1001"
+
+  [ratelimits.simple]
+  limit = 20
+  period = 60
+
+# Mondays 03:00 UTC: delete raw reports older than 12 months.
+[triggers]
+crons = ["0 3 * * 1"]
+
+# Workers Logs are on by default for new Workers; they would keep request details. Keep them off.
+[observability]
+enabled = false

@@ -177,7 +177,7 @@ Claude Design is a hand-off target (it can import the DESIGN.md and tokens), not
 | Claude app, web and desktop | custom visuals (a click sends a follow-up prompt) [S-L18-041]; artifacts for multi-panel screens [S-L18-027] | MCP Apps views [S-L18-013] | follow-up prompt; widget message; typed or pasted `OD:` line |
 | Claude app, mobile | text, and artifacts where the app shows them [inferred] (custom visuals are not on mobile [S-L18-041]) | MCP Apps views [S-L18-013] | typed; widget message |
 | Claude Code CLI | local `preview.html`; Claude Code artifacts with "copy as prompt" [S-L18-043]; AskUserQuestion [S-L18-304] | none: the CLI does not render MCP Apps [S-L18-044] | pasted `OD:` line; structured answer |
-| Claude desktop Code tab | as the CLI | MCP App widgets since 2026-09-02 [S-L18-045] | widget message |
+| Claude desktop Code tab | as the CLI | MCP App widgets (date not documented for the standard app) [S-V1a-022] | widget message |
 | ChatGPT web and mobile | code-block HTML preview with no channel back [S-L18-128]; text | MCP Apps through a plugin or developer mode [S-L18-055] [S-L18-119] | typed; widget message |
 | ChatGPT desktop and Codex app | the built-in browser renders local HTML and takes element comments [S-L18-115] | MCP App panels [S-L18-109] | element comments; widget |
 | Codex CLI and IDE | local HTML; `request_user_input` | none; image input only [S-L18-137] | pasted `OD:` line |

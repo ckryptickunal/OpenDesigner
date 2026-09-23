@@ -1,6 +1,6 @@
 # Zoom levels
 
-People never pick a mode. Everyone starts with a quick sketch of the whole system. Then they zoom into only the parts they care about, and they can stop at any level with something that works. This follows BRIEF requirement 14. The question lists are in `pacing.json` → `areas[].levels`. Each question's level is in `questions.json` → `zoom` and in its stage file.
+People never pick a mode. Everyone starts with a quick sketch of the whole system. Then they zoom into only the parts they care about. They can stop at any level with something that works (BRIEF requirement 14). Each level's questions are in `pacing.json` → `areas[].levels`. Each question's level is in `questions.json` → `zoom` and in its stage file.
 
 | Level | Name | What the person gets | Rough size |
 |---|---|---|---|
@@ -14,16 +14,19 @@ People never pick a mode. Everyone starts with a quick sketch of the whole syste
 2. **Who is it for?** This is Q-aud-01. Ask whether people use it all day (`dense`), regularly (`regular`), or now and then on the go (`large`).
 3. **Where does it run?** This is Q-plat-01. The choices are web, iPhone (`ios`), Android and desktop. Web alone is fine.
 4. **How should it feel?** Offer 2 or 3 words from this list: playful or serious, friendly or authoritative, minimal or rich, premium or everyday, modern or heritage, bold or quiet. These fill in the personality sliders (Q-brand-01), so don't ask for the sliders.
-5. **Do you have a brand color or a logo?** This is Q-color-01, asked together with Q-brand-03. A hex color is used as the seed (`--brand`). The engine keeps its hue and sets strength and lightness for contrast. If the exact hex must appear on buttons, also run `engine.py set Q-color-01 keep-hex`. A logo file becomes the source of candidate colors. With neither, suggest 3 seed colors that fit their words, and label them as a starting point.
+5. **Do you have a brand color or a logo?** This is Q-color-01, asked together with Q-brand-03.
+   - A hex color becomes the seed (`--brand`). The engine keeps its hue and sets strength and lightness for contrast. If the exact hex must appear on buttons, also run `engine.py set Q-color-01 keep-hex`.
+   - A logo file becomes the source of candidate colors.
+   - With neither, suggest 3 seed colors that fit their words, and label them as a starting point.
 
-Then run one command, which records the answers and builds everything:
+Then run one command. It records the answers and builds everything:
 ```
 engine.py sketch --name "<product>" --audience regular --platforms web,ios --feel friendly,minimal [--brand "#167874"]
 ```
-Show the result: a preview, the palette, and the type scale, on whatever visual surface the host has (see SKILL.md). Name one or two defaults they might want to change. Then make the offer (below).
+Show the result on whatever visual surface the host has (SKILL.md, visual ladder): a preview, the palette and the type scale. Name one or two defaults they might want to change. Then make the offer (below).
 
 ## Level 1: broad (one screen per foundation)
-Go in this order, using the listed templates:
+Go in this order, with the listed templates:
 - Q-dir-01, style (`option-gallery`)
 - Q-dir-02, how much fits on a screen (`spacing-ruler`)
 - Q-color-02, where the brand color shows (`palette`)
@@ -33,22 +36,22 @@ Go in this order, using the listed templates:
 - Q-motion-01, motion feel (`motion`)
 - Q-tool-01, where the master copy lives (text)
 
-Each screen is one message with one question. The person can say "skip" and the default stays. After the last screen, run `engine.py build`. The engine marks each area it touched as `broad` by itself.
+Each screen is one message with one question. The person can say "skip", and the default stays. After the last screen, run `engine.py build`. The engine marks each area it touched as `broad` by itself.
 
 ## Levels 2 and 3: one area at a time
-Areas: overview, accessibility, platforms, modes, color, typography, layout, shape, elevation, motion, iconography, content, components and delivery. Their plain names are in `pacing.json`. The ids match the engine.
-1. Open the area's stage files. Ask its level-2 questions in stage order, then run `engine.py generate` and show the change.
+Areas: overview, accessibility, platforms, modes, color, typography, layout, shape, elevation, motion, iconography, content, components and delivery. Their plain names are in `pacing.json`. The ids match the engine's, except `delivery`, whose zoom level the engine does not track.
+1. Open the area's stage files. Ask its level-2 questions in stage order. Then run `engine.py generate` and show the change.
 2. Record the level: `engine.py set zoom.color '"defined"'` (level names: `sketch`, `broad`, `defined`, `detailed`). The engine also infers the level from the decisions made in an area.
 3. Level 3 uses `NN-*.detailed.md` in the same way.
 4. Components live at level 3. Build them from tokens, not from scratch.
 
-## The offer after every level (short)
-> Your system works at the **sketch** level. Stop here, or zoom in:
-> **Color** (ramps and contrast, about 5 min) · **Text** (sizes and fonts, about 4 min) · **Everything, broadly** (8 quick screens)
+## The offer after every level
+Keep it short:
+> Your first version is ready. It is a **sketch**: every part works, and most choices are still defaults.
+> Stop here, or zoom into one area:
+> **Color** (shades and contrast, about 5 min) · **Text** (sizes and fonts, about 4 min) · **Everything, broadly** (8 quick screens)
 
-- Offer at most 3 choices. Pick them by what matters most for this product: high fan-out areas first (`pacing.json` → `top_decisions`), then anything their answers made risky, such as a light brand color or a dense product.
-- Accessibility is never an option to skip. Contrast, target size, focus and reduced motion are already locked in at level 0.
-- "Stop" is a good answer. Finish with the Finish steps in SKILL.md at whatever level they reached.
-
-## DESIGN.md at every level
-DESIGN.md is refreshed after every decision you record: run `engine.py design-md` after each confirmed answer and after `zoom.*` changes. Each section shows its zoom level (sketch, broad, defined, detailed), so a teammate can see what was decided and what is still a default. When someone asks what a section means, point to its zoom line and offer to zoom in.
+- Offer at most 3 choices, each with its rough minutes from `pacing.json`. Pick them by what matters most for this product: high fan-out areas first (`pacing.json` → `top_decisions`), then anything their answers made risky, such as a light brand color or a dense product.
+- Accessibility is never an option to skip. Its floors (`guardrails.md` section 4) are already set at level 0.
+- "Stop" is a good answer. Finish with the Finish steps in SKILL.md, at whatever level they reached.
+- DESIGN.md shows each section's zoom level, so a teammate can see what was decided and what is still a default (SKILL.md, "DESIGN.md stays alive"). When someone asks what a section means, point to its zoom line and offer to zoom in.

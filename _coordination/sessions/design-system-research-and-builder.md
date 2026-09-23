@@ -15,3 +15,4 @@ Append-only heartbeat. Newest last.
 - 2026-09-23 23:58 IST: U1: second verification done (token errors gone, behavior claims remain); two sweep agents fixing; checker now covers state keys, extensions, commands, flags
 - 2026-09-24 00:58 IST: finished U1: 393 terms in 3 voices + short line; plain grade 5.3; engine-checked names; 3 verification passes (30% -> 35% -> 13% problems, 0 in plain voice); fixes applied
 - 2026-09-24 00:58 IST: synced: U1: three-voice glossary (393 terms) with engine-checked names; THREE-VOICES rule; readability tool; hooks.json parser and rules.md fixes
+- 2026-09-24 00:59 IST: U4 started: 3 agents (README+docs; skills+references+templates; questionnaire+engine messages); shared rules in _coordination/lanes/U4-rules.md; final build and push by me

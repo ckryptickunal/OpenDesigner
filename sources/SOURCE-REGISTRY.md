@@ -13,7 +13,7 @@ Built 2026-09-23 by lane L00. This is the list every lane can draw from. Each ro
 - *Verdict*: USE, USE WITH CARE, USE AS DRAFT ONLY, OPINION ONLY, MOVED (use the new URL), STALE, UNREACHABLE, REJECT.
 
 **Key registry findings**
-1. **Moved:** Shopify Polaris (now shopify.dev/docs/api/polaris, delivered as web components), Twilio Paste (paste.twilio.design redirects to GitHub; docs now at paste-dsys.com), SAP Fiori (now sap.com/design-system/fiori-design-web/). Lanes quoting old URLs or old Polaris React docs are citing stale material.
+1. **Moved:** Shopify Polaris (now shopify.dev/docs/api/polaris, delivered as web components), Twilio Paste (paste.twilio.design redirects to GitHub; the repo's homepage field points to paste-dsys.com, an independent fork not affiliated with Twilio [S-V1a-052]), SAP Fiori (now sap.com/design-system/fiori-design-web/). Lanes quoting old URLs or old Polaris React docs are citing stale material.
 2. **No public docs:** Spotify Encore. Treat it as a case study only.
 3. **JavaScript-only sites** (scripts and fetch tools read nothing): m3.material.io, Apple HIG HTML (use the JSON endpoint `developer.apple.com/tutorials/data/design/human-interface-guidelines/<page>.json`), zeroheight's State of AI report. Read these in a browser or through the Figma/Apple JSON endpoints.
 4. **Stale:** Sparkbox Design Systems Survey (latest edition 2022); NN/g "Design Systems 101" (2021, still fine as a definition); Spectrum v1 site (Last-Modified 2024); APCA calculator page ("Revised May 27, 2022").
@@ -53,7 +53,7 @@ Built 2026-09-23 by lane L00. This is the list every lane can draw from. Each ro
 | 27 | shadcn/ui | https://ui.shadcn.com/ | A | 200 | not shown | Strong positive (default scaffold for AI-built systems; shadcn lint) | USE; changelog is the version reference |
 | 28 | Geist (Vercel) | https://vercel.com/geist/introduction | A | 200 | not shown | Not mentioned | USE |
 | 29 | Twilio Paste, old domain | https://paste.twilio.design/ | A | 200 -> github.com:443/twilio-labs/paste | not shown | Not mentioned | MOVED: redirects to github.com/twilio-labs/paste; repo homepage is paste-dsys.com |
-| 30 | Twilio Paste, current | https://paste-dsys.com/ | A | 200 | not shown | Not mentioned | USE (HTTP 200 today); repo not archived, pushed 5 Sep 2026 |
+| 30 | Paste DSys (independent fork, not Twilio) | https://paste-dsys.com/ | C | 200 | not shown | Not mentioned | REJECT as a Paste source: "not affiliated with, endorsed by, or sponsored by Twilio" [S-V1a-052]; the Twilio repo is not archived, pushed 5 Sep 2026 |
 | 31 | Gestalt (Pinterest) | https://gestalt.pinterest.systems/ | A | 200 | updated 2026-02-25 | Not mentioned | USE; updated 25 Feb 2026 |
 | 32 | Blade (Razorpay) | https://blade.razorpay.com/ | A | 200 | Last-Modified 22 Sep 2026 | Not mentioned | USE; served as a Storybook; Last-Modified 22 Sep 2026 |
 | 33 | Encore (Spotify) | https://spotify.design/article/reimagining-design-systems-at-spotify | B | 404 -> open.spotify.com/article/reimagining-design-systems-at-spotify Not Found | not shown | Not mentioned | NO PUBLIC DOCS: guessed article URL 404s. Use only talks/articles as a case study |

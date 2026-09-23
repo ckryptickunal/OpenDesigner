@@ -93,7 +93,7 @@ Raw engine output lives in `sources/last30days-raw/` (`<slug>.md` is the full sa
 - Users debate whether M3E is "Pixel UI" rather than stock Android. [S-L00-046]
 
 **Confirmed facts (Tier A, checked today)**
-- **Jetpack Compose Material3: latest stable is 1.4.0 (released 24 Sep 2025). Latest alpha is 1.5.0-alpha28 (9 Sep 2026).** Expressive APIs are being "graduated" to non-experimental in the **1.5.0 alphas**: motion scheme, FAB and FAB menu, buttons, split button, floating toolbar, flexible top and bottom app bars, and search bars. Google also **reverted** the promotion of MaterialShapes and LoadingIndicator. So as of today, **no stable Compose release ships the full M3 Expressive API without opt-ins.** [S-L00-047]
+- **Jetpack Compose Material3: latest stable is 1.4.0 (released 24 Sep 2025). Latest alpha is 1.5.0-alpha28 (9 Sep 2026).** (Superseded by 1.5.0-alpha29 on 23 Sep 2026 [S-V1b-035].) Expressive APIs are being "graduated" to non-experimental in the **1.5.0 alphas**: motion scheme, FAB and FAB menu, buttons, split button, floating toolbar, flexible top and bottom app bars, and search bars. Google also **reverted** the promotion of MaterialShapes and LoadingIndicator. So as of today, **no stable Compose release ships the full M3 Expressive API without opt-ins.** [S-L00-047]
 - For Wear OS, M3 Expressive ships in the separate Wear Compose Material 3 library (per the same release page). [S-L00-047]
 - Material Web v2.5.0 (15 Jul 2026). [S-L00-042]
 - Google Design's "Introducing: Material 3 Expressive" video dates from 13 May 2025. [S-L00-046]
@@ -258,7 +258,7 @@ Legend: **Confirmed** = checked today against a Tier A (or strong Tier B) source
 
 **L09 Benchmark**
 - **Moved:** polaris.shopify.com and polaris-react.shopify.com now redirect to shopify.dev/docs/api/polaris. Polaris is now delivered as web components. Benchmark the shopify.dev pages, not old Polaris React docs [S-L00-059].
-- **Moved:** paste.twilio.design redirects to the GitHub repo; the repo's homepage is now paste-dsys.com (live) [S-L00-059].
+- **Moved:** paste.twilio.design redirects to the GitHub repo; the repo's homepage is now paste-dsys.com (live), but that site is an independent fork not affiliated with Twilio, so it is not Paste's new home [S-L00-059] [S-V1a-052].
 - **No public docs:** Spotify Encore (the old spotify.design article returns 404). Use it only as a case study from talks and articles [S-L00-059].
 - **Moved:** SAP Fiori guidelines moved to sap.com/design-system/fiori-design-web/ (the page blocks bots) [S-L00-059].
 - Confirmed live: Salesforce "Lightning Design System 2" (updated 2 Apr 2026), Base by Uber (updated 6 Aug 2025), Gestalt (updated 25 Feb 2026), Porsche Design System v4, NYPL Reservoir v4, Blade (served as a Storybook) [S-L00-059].

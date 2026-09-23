@@ -94,7 +94,7 @@ The surface mode (Persuade, Operate, Read, Experience; S-L17-007) has no questio
 |---|---|---|---|
 | Claude app, web and desktop | Custom visuals inline; artifacts for multi-panel screens | Custom visual click sends a follow-up prompt; artifacts: the person reports the pick (S-L18-041, S-L18-027) | Widgets on web, desktop and mobile (S-L18-013) |
 | Claude Code CLI | Published Claude Code artifact or a local HTML file; AskUserQuestion for 2-4 options | "Copy as prompt" `OD:` string; structured answer (S-L18-043, S-L18-304) | No widgets in the CLI (S-L18-044) |
-| Claude Code desktop Code tab | Artifacts and local HTML | Copy as prompt | Widgets since 2026-09-02 (S-L18-045) |
+| Claude Code desktop Code tab | Artifacts and local HTML | Copy as prompt | Widgets (standard-app date not documented) (S-L18-045, S-V1a-022) |
 | ChatGPT web and mobile | Code-block HTML preview or text | Typed reply; the preview has no documented return channel (S-L18-128) | Widgets through a plugin or developer mode (S-L18-055, S-L18-119) |
 | ChatGPT desktop and Codex app | Built-in browser rendering the local HTML | Element comments reach the agent (S-L18-115) | Widget panels (S-L18-109) |
 | Codex CLI and IDE | Local HTML; `request_user_input` | Pasted `OD:` string | None; image input only (S-L18-137) |

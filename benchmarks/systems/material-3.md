@@ -8,7 +8,7 @@ _Lane L09 teardown. Verified against live sources on 2026-09-23. Every value car
 |---|---|---|
 | Owner | Google, Material Design team (m3.material.io); code in AndroidX, material-components, material-foundation orgs | [S-L09-121] [S-L09-128] [S-L09-112] |
 | Launch and major versions | M1 announced 2014-06-25; M2 2018; M3 / "Material You" May 2021; M3 Expressive launched 2025-05-13 (Android 16, Wear OS 6); I/O 2026 update (Expressive layout, spacing system) 2026-05-19 | [S-L09-136] (Tier C, history only) [S-L09-125] [S-L09-121] |
-| Current version (Sept 2026) | Compose Material3 1.4.0 stable (2025-09-24), 1.5.0-alpha28 (2026-09-09); @material/web 2.5.0 (2026-07-15); MDC-Android 1.14.0 (2026-05-13, final line); Compose token schema v0_103, web tokens v0_192 | [S-L09-117] [S-L09-119] [S-L09-118] [S-L09-128] [S-L09-100] [S-L09-134] |
+| Current version (Sept 2026) | Compose Material3 1.4.0 stable (2025-09-24), 1.5.0-alpha29 (2026-09-23) [S-V1b-035]; @material/web 2.5.0 (2026-07-15); MDC-Android 1.14.0 (2026-05-13, final line); Compose token schema v0_103, web tokens v0_192 | [S-L09-117] [S-L09-119] [S-L09-118] [S-L09-128] [S-L09-100] [S-L09-134] |
 | Platforms | Android (Compose-first), Wear OS (Wear Compose Material 3), web, plus 2026 guidance for watches and immersive XR; Flutter also ships M3 [inferred, not checked this session] | [S-L09-119] [S-L09-121] [S-L09-127] |
 | Open source + license | Yes. Apache-2.0 (androidx, material-web, material-color-utilities). Docs licence not checked | [S-L09-129] [S-L09-112] |
 | Code frameworks | Jetpack Compose (primary; spacing tokens are Compose-only); Android Views MDC (maintenance mode since I/O 2026); Web Components MWC (maintenance mode "pending new maintainers") | [S-L09-122] [S-L09-128] [S-L09-129] |

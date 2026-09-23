@@ -1,23 +1,28 @@
 # How OpenDesigner works
 
-OpenDesigner turns your AI assistant into a patient design-system partner. You load it into the tool you already use (Claude, ChatGPT, Codex, Cursor and others). The model reads what you already have, shows you the building blocks of a design system, asks only the questions that matter for your product, shows each choice visually where your tool allows it, and writes the result into your repo as design tokens, a `DESIGN.md` and a decision log.
+OpenDesigner turns your AI assistant into a patient design-system partner. You load it into the tool you already use (Claude, ChatGPT, Codex, Cursor and others). Then the model:
 
-It does not replace a designer. It generates what can be generated well (spacing, type scales, color ramps, radii, elevation, motion, component states), asks you for what cannot (logo, custom icons, illustration, photography, a brand typeface), and records every decision with its reason so your team, a designer or the next AI session can pick it up.
+- reads what you already have;
+- asks only the questions that matter for your product, starting with a 5-question sketch;
+- shows each choice visually where your tool allows it;
+- writes the result into your repo as design tokens, a `DESIGN.md` and a decision log.
 
-This page is the human-friendly version. The full product specification is [SPEC.md](SPEC.md); the evidence behind each step is mapped in [RESEARCH.md](RESEARCH.md).
+It does not replace a designer. It makes what can be made well: spacing, type scales, color ramps, radii, elevation, motion and component states. It asks you for what can't be: a logo, custom icons, illustration, photography or a brand typeface. It records every decision with its reason, so your team, a designer or the next AI session can pick it up.
+
+This page is the easy-to-read version. The full product specification is [SPEC.md](SPEC.md), and [RESEARCH.md](RESEARCH.md) maps the evidence behind each step. Unfamiliar words are in the [glossary](GLOSSARY.md).
 
 ## The process at a glance
 
-The model runs ten phases. Three of them end at a gate where you approve before it moves on.
+The diagram shows the full process from the specification: ten phases, three of which end at a gate where you approve before the model moves on. In practice, the skill starts with a 5-question sketch (section 2). Then, for each area you zoom into, it asks questions in this order.
 
 ```mermaid
 flowchart TD
-  P0["P0 Orient<br/>read the repo, CSS, tokens, DESIGN.md;<br/>agree the depth mode; show the block map"] --> P1
+  P0["P0 Orient<br/>read the repo, CSS, tokens, DESIGN.md;<br/>start with a 5-question sketch"] --> P1
   P1["P1 Context and block map<br/>scope, audience, personality, platforms,<br/>where the system lives"] --> G1{{"Gate 1<br/>scope and block map"}}
   G1 --> P2["P2 Direction<br/>three named directions, one chosen;<br/>the color system"]
   P2 --> G2{{"Gate 2<br/>direction"}}
   G2 --> P3["P3 Foundations<br/>color details, type, space, layout,<br/>shape, depth, motion"]
-  P3 --> P4["P4 Assets, imagery, voice<br/>designer hooks for logo, icons,<br/>illustration, photography, voice"]
+  P3 --> P4["P4 Assets, imagery, voice<br/>asset hooks for logo, icons,<br/>illustration, photography, voice"]
   P4 --> G3{{"Gate 3<br/>every asset has a status"}}
   G3 --> P5["P5 Components and patterns<br/>states, accessibility, policies"]
   P5 --> P6["P6 Encoding, governance, output"]
@@ -30,55 +35,66 @@ flowchart TD
   P7 -. "a check fails" .-> P3
 ```
 
-Each phase wraps screens of the interview in [`synthesis/QUESTIONNAIRE.md`](../synthesis/QUESTIONNAIRE.md), which are ordered by the decision graph, so nothing is asked before the decisions it depends on (zero ordering violations across 465 dependencies). Quick mode keeps only Gate 2. Details: [SPEC.md section 3](SPEC.md#3-the-process-as-a-model-runs-it).
+Each phase groups screens of the interview in [`synthesis/QUESTIONNAIRE.md`](../synthesis/QUESTIONNAIRE.md). The screens follow the decision graph, so nothing is asked before the decisions it depends on. There are zero ordering violations across 465 dependencies. Details: [SPEC.md section 3](SPEC.md#3-the-process-as-a-model-runs-it).
 
 ## 1. Define the building blocks first
 
-Before any color or font question, the model shows the whole map of what a design system contains, in ten layers: context, principles, foundations, tokens, components, patterns, guardrails, delivery, governance, and the builder surface itself. The map is [`synthesis/ontology.json`](../synthesis/ontology.json) (271 nodes; readable version in [`synthesis/ONTOLOGY.md`](../synthesis/ONTOLOGY.md)).
+The model works from a map of everything a design system contains. The map has ten layers: context, principles, foundations, tokens, components, patterns, guardrails, delivery, governance, and the builder surface itself. It is [`synthesis/ontology.json`](../synthesis/ontology.json) (271 nodes), with a readable version in [`synthesis/ONTOLOGY.md`](../synthesis/ONTOLOGY.md).
 
-Each of the 207 design-system blocks is tagged with who or what should produce it:
+Each of the 207 design-system blocks is tagged with who or what should make it:
 
 | Class | Blocks | What the model does |
 |---|---|---|
-| **Generatable** | 135 | Derives it from your inputs and the dials, shows it visually, lets you adjust |
+| **Generatable** | 135 | Works it out from your inputs and the dials, shows it visually, lets you adjust |
 | **Tool-assisted** | 31 | Recommends a named tool or library with its caveat (license, plan, platform) |
 | **Owner input** | 29 | Asks you, because only your team can decide it (scope, platforms, governance); never invents an answer |
-| **Designer-owned** | 7 | Opens a designer hook (below) |
+| **Designer-owned** | 7 | Opens an asset hook (below) |
 | **Extractable** | 5 | Reads it from your existing product or files, and asks you to confirm |
 
-Every block always has a visible status: pending, default, decided, not applicable, awaiting asset, or assumed. Blocks that do not apply (haptics for a web-only product, say) are marked "not applicable" with a reason, so the coverage check counts them as decided instead of missing.
+Every block always shows a status: pending, default, decided, not applicable, awaiting asset, or assumed. Some blocks don't apply, like haptics for a web-only product. These are marked "not applicable" with a reason. The coverage check then counts them as decided, not missing.
 
 ## 2. Zoom levels: start with a sketch, go deeper where it matters
 
-You start at low resolution and zoom in only where you need to:
+You start with a rough version of the whole system. Then you zoom in only where you need to. Nobody picks a mode.
 
-1. **Sketch.** About 5 questions give you a complete, working system with sourced defaults.
-2. **Zoom in.** Open any area (color, type, spacing, components, motion) and decide it in more detail.
-3. **Stop at any level.** Every level leaves working files, and `DESIGN.md` shows how far each area has been zoomed.
+| Level | Name | What you get | Rough size |
+|---|---|---|---|
+| 0 | sketch | A complete but coarse system: every token exists, and every `DESIGN.md` section is filled from sourced defaults | 5 questions, about 3 minutes |
+| 1 | broad | One short screen for each foundation: style, density, color use, text, corners, depth, motion, and where the files live | 8 questions, about 8 minutes |
+| 2 | defined | One area at a time, for example Color: ramps, roles, contrast | 1 to 15 questions per area |
+| 3 | detailed | Components, patterns and the fine print of each area | the rest |
 
-The first release of the skill offers this as three depth modes, which are becoming zoom levels you can move between area by area:
+You can stop at any level. Every level leaves working files, and `DESIGN.md` shows how far each area has been zoomed. Each of the 192 questions has a zoom level. The questionnaire also keeps its earlier Quick, Standard and Expert tags (10, 92 and 191 questions).
 
-| Mode | Questions | For |
-|---|---|---|
-| **Quick** | 10 | A first look or a prototype. Everything else takes a sourced default and stays editable; business decisions are stored as "assumed" and confirmed before export. |
-| **Standard** | 92 | An engineer setting up a real product's system |
-| **Expert** | 191 | Design-system leads, multi-platform or multi-brand systems |
+Every term is explained in three voices. Plain words come first, so a school student can follow. The designer's word and the code name sit on one line below. The [glossary](GLOSSARY.md) lists them all.
 
-Every term is explained in three voices: plain words first (a school student should follow it), then the designer's term and the engineer's term, one line away. The [glossary](GLOSSARY.md) lists them all.
+The model slows down on the decisions that shape the most others. In the decision graph, brand personality directly shapes 15 other decisions, and target platforms shape 12. It moves quickly through safe defaults.
 
-The model slows down on decisions with the most downstream effect in the decision graph (brand personality directly shapes 15 other decisions, target platforms 12) and moves quickly through safe defaults. For a high-impact question it explains why it matters, shows two or three options with real systems that use them, recommends one with its source, and says what it changes downstream. For a low-impact one it states the default in one line and asks you to confirm, grouping up to three small questions per turn.
+For a high-impact question, the model:
+- explains why it matters;
+- shows two or three options, with real systems that use them;
+- recommends one, with its source;
+- says what it changes further down.
 
-Every answer is recorded with how it was set: chosen, confirmed default, automatic default, or from a reference. A recommendation you did not answer is never recorded as your decision.
+For a low-impact gap, it takes the default and labels it as an assumption instead of asking. It asks one question per message.
 
-## 3. Designer hooks: ask, do not fake
+Every answer is recorded with how it was set, for example chosen, confirmed default, automatic default, delegated ("you decide"), assumed, or from a reference. A recommendation you did not answer is never recorded as your decision.
 
-Some blocks cannot be generated well. For each, the model asks "do you have this?", accepts the file in useful formats, checks it, and, if the answer is no, offers honest paths: commission a designer (with a written brief that carries your tokens and direction), use a named open library or tool (with its license terms), or leave a briefed placeholder slot. A placeholder is labeled as a placeholder everywhere it appears.
+## 3. Asset hooks: ask, don't fake
 
-The 14 asset hooks: logo and lockups, app icon, favicon set, custom icons, illustration, photography, brand typeface, fixed brand colors, motion signature, graphic motifs, UI sounds, custom haptics, voice and tone guide, and brand book. Each one's formats, checks and fallbacks are in [SPEC.md section 4](SPEC.md#4-building-block-classes-and-hooks).
+Some blocks can't be generated well. For each one, the model asks "do you have this?" (an asset hook). If you do, it accepts the file in useful formats and checks it. If you don't, it offers honest paths:
+
+- commission a designer, with a written brief that carries your tokens and direction;
+- use a named open library or tool, with its license terms;
+- leave a placeholder slot with a brief.
+
+A placeholder is labeled as a placeholder everywhere it appears.
+
+There are 14 asset hooks: logo and lockups, app icon, favicon set, custom icons, illustration, photography and brand typeface. The rest are fixed brand colors, motion signature, graphic motifs, UI sounds, custom haptics, voice and tone guide, and brand book. [SPEC.md section 4](SPEC.md#4-building-block-classes-and-hooks) lists each one's formats, checks and fallbacks.
 
 ## 4. The eight dials
 
-A handful of raw inputs (brand color, typeface, base size, platforms, contrast target) plus eight dials, each 0 to 100, generate most of the look. 50 is a sensible default. Three dials set the posture; five tune character and follow the first three until you touch them.
+A dial is a slider from 0 to 100, and 50 is a sensible default. Eight dials, plus a few raw inputs (brand color, typeface, base size, platforms, contrast target), set most of the look. Three dials set the overall stance. The other five tune the character, and they follow the first three until you move them.
 
 | Dial | 0 end | 100 end | Mainly changes |
 |---|---|---|---|
@@ -91,15 +107,28 @@ A handful of raw inputs (brand color, typeface, base size, platforms, contrast t
 | **Colorfulness** | monochrome | vivid | chroma of ramps and surfaces |
 | **Warmth** | cool, formal | warm, friendly | neutral temperature, border softness |
 
-Brand adjectives such as "playful" or "premium" are macros that move several dials at once, and style presets (flat, tonal, glass, neo-brutalist) are named dial settings. The dials were tested against 13 real systems (Material 3 Expressive, Apple HIG, Carbon, Fluent 2, Polaris, Atlassian, Primer, GOV.UK, shadcn/ui, Linear, Geist, Blade and Airbnb): dials plus raw inputs reproduce the signature of 6 of them outright, and the other 7 need one or two overrides or a signature asset. The dial values were set by reading the same benchmark, so this shows the mapping is consistent, not that it predicts unseen systems. Formulas, recipes and their weak spots are in [`synthesis/LEVERS.md`](../synthesis/LEVERS.md); the machine-readable version the engine uses is [`synthesis/levers.json`](../synthesis/levers.json).
+Brand words such as "playful" or "premium" move several dials at once. Style presets (flat, tonal, glass, neo-brutalist) are named dial settings.
 
-Some things the model never decides for you: your brand personality and dial positions, which element matters most on each screen, and which actions get undo or confirmation. It asks and records those.
+The dials were tested against 13 real systems: Material 3 Expressive, Apple HIG, Carbon, Fluent 2, Polaris, Atlassian, Primer, GOV.UK, shadcn/ui, Linear, Geist, Blade and Airbnb. Dials plus raw inputs reproduce the signature look of 6 of them outright. The other 7 need one or two overrides or a signature asset. The dial values were set by reading the same benchmark. So this shows the mapping is consistent, not that it predicts systems it has not seen.
+
+Formulas, recipes and their weak spots are in [`synthesis/LEVERS.md`](../synthesis/LEVERS.md). The engine uses the machine-readable version, [`synthesis/levers.json`](../synthesis/levers.json).
+
+Some things the model never decides for you. It asks you and records your answer for:
+- your brand personality and dial positions;
+- which element matters most on each screen;
+- which actions get undo or confirmation.
 
 ## 5. Visual-first editing, on the best surface your tool has
 
-Each generatable block gets a detail panel: what it is, where to use it, where not to, its current value and source, a live preview on real components in every mode (light, dark, compact, reduced motion), and which other blocks change if it changes. The interface teaches as you edit.
+Each generatable block gets a detail panel. It shows:
+- what the block is, where to use it and where not to;
+- its current value and source;
+- a live preview on real components in every mode (light, dark, compact, reduced motion);
+- which other blocks change if it changes.
 
-How that is shown depends on the host. The model picks the highest rung available, says which one it is using, and never blocks on a visual:
+The panel teaches as you edit.
+
+How it is shown depends on your AI tool. The model picks the best option available, starting from the top of this list, and says which one it is using. It never waits on a visual to move on.
 
 1. An OpenDesigner MCP App view (planned, Phase 2)
 2. HTML the host renders: Claude custom visuals and artifacts, Claude Code artifacts, the Codex desktop browser
@@ -108,27 +137,36 @@ How that is shown depends on the host. The model picks the highest rung availabl
 5. The host's multiple-choice question tool
 6. Plain text with hex values, ratios and numbered options, which works everywhere
 
-The same HTML templates (palette, type scale, spacing ruler, radius, elevation, motion, component sheet, option gallery and more) feed every surface, and every visual also prints its values as text. Which host gets which surface: [SPEC.md section 3.6](SPEC.md#36-visual-surfaces-per-host).
+The same HTML templates feed every surface: palette, type scale, spacing ruler, radius, elevation, motion, component sheet and option gallery. Every visual also prints its values as text. [SPEC.md section 3.6](SPEC.md#36-visual-surfaces-per-host) says which host gets which surface.
 
 ## 6. Reference intake, at any point
 
-You can add an example website, screenshot, Figma file, repo or brand book whenever you like. Each reference is tagged as "our product", "inspiration" or "competitor". The model measures what it can (color, type, spacing, radius, depth model, motion character, components), shows every value with its provenance and confidence, and pre-fills; you accept, adjust or ignore each one. A reference never decides on its own.
+You can add an example website, screenshot, Figma file, repo or brand book whenever you like. Each reference is tagged as "our product", "inspiration" or "competitor".
 
-Hard rule: a reference contributes structure and quality, never identity. OpenDesigner does not copy another brand's name, logo, brand hue, proprietary typeface, imagery or copy, and it always asks how brand-led you want to be rather than inferring it from the reference.
+The model measures what it can: color, type, spacing, radius, depth model, motion character and components. It shows every value with where it came from and how sure it is, then pre-fills it. You accept, adjust or ignore each one. A reference never decides on its own.
+
+Hard rule: a reference gives structure and quality, never identity. OpenDesigner does not copy another brand's name, logo, brand hue, proprietary typeface, imagery or copy. It always asks how brand-led you want to be, instead of guessing from the reference.
 
 ## 7. Validate before you trust it
 
-Deterministic checks run before any model critique ([`synthesis/LEVERS.md`](../synthesis/LEVERS.md) section D). Accessibility rules fail; taste rules warn.
+Rule-based checks run first, before the model gives any opinion ([`synthesis/LEVERS.md`](../synthesis/LEVERS.md) section D). They give the same result every time. Breaking an accessibility rule is an error; breaking a taste rule is a warning.
 
-- **Enforced by construction:** WCAG 2.2 AA text contrast (4.5:1 body, 3:1 large), 3:1 non-text contrast for borders and focus rings, minimum target sizes keyed to input type (24 CSS px on the web, 44pt iOS, 48dp Android), a generated focus ring, reduced-motion and reduced-transparency modes, text that scales to 200%, inner spacing smaller than outer spacing.
-- **Lint errors** that block publishing unless waived with a written reason: targets under 24 px, fields with no label, meaning shown by color alone, dialogs with no way out.
-- **Warnings** you can override: too many type sizes or primary actions in one view, very high colorfulness with high density, and similar practitioner guidance, labelled as guidance rather than law.
+- **Built in**, so every generated system meets them:
+  - WCAG 2.2 AA text contrast: 4.5:1 for body text, 3:1 for large text.
+  - 3:1 contrast for borders, focus rings and other non-text parts.
+  - Minimum target sizes for each input type: 24 CSS px on the web, 44pt on iOS, 48dp on Android.
+  - A generated focus ring.
+  - Reduced-motion and reduced-transparency modes.
+  - Text that scales to 200%.
+  - Inner spacing smaller than outer spacing.
+- **Lint errors** block publishing unless you waive them with a written reason. Examples: targets under 24 px, fields with no label, meaning shown by color alone, and dialogs with no way out.
+- **Warnings** you can override. Examples: too many type sizes or primary actions in one view, or very high colorfulness with high density. These come from practitioner advice and are labelled as guidance, not law.
 
-Only on a passing system does the model critique it, on a rubric fixed in advance. Then a coverage check shows every block's status. Nothing is silently skipped.
+The model critiques the system only after it passes, using a rubric fixed in advance. Then a coverage check shows every block's status. Nothing is silently skipped.
 
 ## 8. Export, and what lands in your repo
 
-The canonical source is `opendesigner/state.json` plus the DTCG tokens it generates; everything else is a generated view.
+The source of truth is `opendesigner/state.json` plus the DTCG tokens made from it. Everything else is generated from them.
 
 | Output | What it is for |
 |---|---|
@@ -143,12 +181,16 @@ The canonical source is `opendesigner/state.json` plus the DTCG tokens it genera
 | `opendesigner/coverage.md`, asset briefs | Every block's status; briefs a designer can act on |
 | `opendesigner/state.json`, `preview.html` | Continue later; see every token and the components on one page |
 
-This is the full contract from [SPEC.md section 7](SPEC.md#7-outputs). The first release writes the core set (tokens, exports, `DESIGN.md`, the decision log, `state.json` and the preview, plus a snippet for your `AGENTS.md`); the README's status table says what has shipped.
+This is the full contract from [SPEC.md section 7](SPEC.md#7-outputs). Today the engine writes the core set: tokens, exports, `DESIGN.md`, `PRODUCT.md`, the decision log, `state.json` and the preview. The skill also writes `RATIONALE.md` from a template and, if you agree, adds a snippet to your `AGENTS.md`. The README's status table says what has shipped.
 
 ## 9. Keeping it coherent later
 
-When you come back to change something, possibly in a different AI tool, the extend flow reads `DESIGN.md`, the tokens and the decision log first, shows the change on the block's detail panel with everything downstream it touches, and records it as a new decision that supersedes the old one. Locked decisions change only with your consent. The engine is deterministic: the same `state.json` produces the same tokens on any machine, which is what lets different models extend the same system without drift. Details: [SPEC.md section 9](SPEC.md#9-harmony-and-extension-across-sessions-and-models).
+You may come back later to change something, maybe in a different AI tool. The extend flow (the `opendesigner-extend` skill) first reads `DESIGN.md`, the tokens and the decision log. It shows the change on the block's detail panel, with everything further down that it touches. Then it records the change as a new decision that replaces the old one. Locked decisions change only with your consent.
+
+The engine gives the same result every time: the same `state.json` makes the same tokens on any machine. That is what lets different models extend the same system without drift. Details: [SPEC.md section 9](SPEC.md#9-harmony-and-extension-across-sessions-and-models).
 
 ## 10. When something is missing
 
-If the model finds a gap, a bug or a confusing step while working in your project, it writes it down and offers a ready-to-file issue for this repository (`engine.py feedback` prepares the link). Nothing is posted unless you submit it. Inside this repository, fixes go straight into the source files and are checked and synced; see [CONTRIBUTING.md](../CONTRIBUTING.md#the-self-improvement-loop).
+The model may find a gap, a bug or a confusing step while it works in your project. If so, it writes it down with `engine.py feedback`. That saves the note in `opendesigner/feedback.md` and prepares a ready-to-file issue link for this repository. Nothing is posted unless you submit it.
+
+Inside this repository, fixes go straight into the source files, then get checked and synced. See [CONTRIBUTING.md](../CONTRIBUTING.md#the-self-improvement-loop).

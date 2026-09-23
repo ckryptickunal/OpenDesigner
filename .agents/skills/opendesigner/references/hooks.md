@@ -1,17 +1,19 @@
 # Designer hooks and tool hooks
 
-Some blocks need a human creator or a named tool. OpenDesigner asks for them instead of faking them. Source: `research/L17-how-systems-get-made.md` Part H (formats, fallbacks and checks verified against 81 Tier A pages). Full per-hook detail, including exact sizes, licence terms and evidence ids, is in `hooks.json`.
+Some blocks need a human maker or a named tool. OpenDesigner asks for them instead of faking them. Source: `research/L17-how-systems-get-made.md` Part H (formats, fallbacks and checks, verified against 81 Tier A pages). Full detail for each hook, including exact sizes, licence terms and evidence ids, is in `hooks.json`.
 
 ## Rules for every hook
 1. **Ask once, as one checklist** (Q-brand-08), when the person zooms into brand or imagery: "Which of these do you already have?" At levels 0 and 1, ask only about a brand color or logo. Everything else keeps its fallback and a briefed placeholder.
-2. **One vector master, generated derivatives.** Ask for the master (SVG, or PDF with outlined text; layered files for app icons) and derive the platform sizes from it, with size and safe-zone checks.
-3. **Keep a licence ledger per asset:** source, licence, attribution string, allowed slots, owner. Keep MIT/ISC/Apache notices for icon libraries; add required credits; block assets from slots their licence forbids (for example some free illustration sets cannot be used in logos).
-4. **Fetch per project; never pool assets** into a shared catalog. Several licences forbid offering their assets as a selectable library inside a tool.
-5. **State AI-tool terms for the person's plan.** Ownership of AI output varies by tool and plan; in the US purely AI-generated work is not copyrightable (human selection and modification can be); the EU AI Act requires machine-readable marking of synthetic media. Say so when you suggest an AI tool.
-6. **The commission path ships a brief** (required files and sizes from `hooks.json`, the system's tokens and direction) plus a reminder that a contractor's logo needs a written copyright assignment.
-7. **A generated stand-in is never presented as final.** Placeholders are labelled as placeholders.
+2. **If they have it,** accept the master formats in the tables below.
+3. **If they don't,** offer these paths in order: a designer with a written brief, an open library with its licence, a named tool with its caveats, or none. Each hook's row lists its own options.
+4. **One vector master, generated derivatives.** Ask for the master: SVG, or PDF with outlined text; layered files for app icons. Derive the platform sizes from it, with size and safe-zone checks.
+5. **Keep a licence ledger per asset:** source, licence, attribution string, allowed slots and owner. Keep MIT, ISC and Apache notices for icon libraries, and add required credits. Block an asset from any slot its licence forbids (for example, some free illustration sets cannot be used in logos).
+6. **Fetch per project; never pool assets** into a shared catalog. Several licences forbid offering their assets as a selectable library inside a tool.
+7. **When you suggest an AI tool,** state its terms for the person's plan (`guardrails.md` section 3).
+8. **The commission path ships a brief** (below): required files and sizes from `hooks.json`, plus the system's tokens and direction. Remind the person that a contractor's logo needs a written copyright assignment.
+9. **Label placeholders as placeholders.** A generated stand-in is never presented as final.
 
-Record each hook: `engine.py set hooks.<H-id>.status '"<status>"' --why "..."` with status `have`, `commissioning`, `tool`, `open-library`, `placeholder` or `not-needed` (`pending` until asked). Use `--set-by asset` for values derived from a supplied asset.
+Record each hook: `engine.py set hooks.<H-id>.status '"<status>"' --why "..."`. The status is `have`, `commissioning`, `tool`, `open-library`, `placeholder` or `not-needed` (`pending` until asked). Use `--set-by asset` for values derived from a supplied asset.
 
 ## Asset hooks
 | Hook | Ask | Master format | If no (in order) |
@@ -40,12 +42,12 @@ Record each hook: `engine.py set hooks.<H-id>.status '"<status>"' --why "..."` w
 | `H-dataviz` | Do you show charts? Which library? | Chart libraries per L05 | Library defaults override tokens unless themed |
 | `H-a11y` | Who tests with assistive technology? | axe-core and lint rules, plus human screen-reader passes | Automated tools catch only part of WCAG |
 
-## Brief for a missing asset (fill and hand to the person)
+## Brief for a missing asset (fill it in and give it to the person)
 ```
 Asset: <hook name>            Needed by: <date or milestone>
 Files: <formats and sizes from hooks.json>
 System: <link to DESIGN.md>; palette <accent + neutrals>; type <faces>; radius <control/container>
-Direction: <the chosen direction in one line>; memorable thing: <from Stage 0>
+Direction: <the chosen direction in one line>; memorable thing: <from Q-brand-02>
 Constraints: <licence, platforms, dark mode, reduced motion>
 Rights: written copyright assignment to <owner> on delivery
 ```

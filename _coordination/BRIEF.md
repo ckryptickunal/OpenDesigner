@@ -41,3 +41,15 @@ Requirements this adds:
 15. **DESIGN.md is a living document.** Every decision updates it, each section shows how far it has been zoomed (sketch, defined, detailed), and it is reviewed at the end of every implementation.
 16. **Self-improvement loop.** When the model finds a gap, bug or confusing step, it records it and routes it back: in a user's project as a ready-to-file issue (the person approves before anything is posted); inside the OpenDesigner repo as a direct fix to the skill or data files, checked and synced.
 17. **Many sessions, one plan.** Parallel sessions given the same request claim different lanes on the board instead of repeating each other.
+
+## Journey tracker (added 2026-09-24)
+> "Add a tracker to the feature that tracks every step that the user has taken, every step that the user has dropped off of, every step that the user has felt frustrated at using it, and how many steps people were able to take, to make it faster."
+
+Requirement this adds:
+18. **Journey tracker.** Every run records, locally in the person's project, each step shown and answered (with time and how it was answered), skips, changed answers, help requests, frustration signals, errors, and where a session stopped. A report shows the funnel, drop-off points, frustration hotspots, steps taken compared with the fewest possible, and concrete speed-ups (for example, auto-default a question most people accept). It never leaves the machine unless the person chooses to share an anonymous summary; the model asks once before logging, and the person can turn it off. Kunal will use it on his own from-scratch test run first.
+
+## Consent to share reports (added 2026-09-24)
+> "Add a consent: when somebody is using the repo, they get asked whether it is okay for the feature to send these reports back to us. With proper reasoning and information, without leaking anything about the person using it."
+
+Requirement this adds:
+19. **Opt-in sharing, separate from local logging.** Local logging (requirement 18) and sending reports to the OpenDesigner maintainers are two different consents. Sharing is off until the person says yes. The ask is short, plain and honest: why it helps (it shows where people get stuck, so the flow gets faster for everyone), exactly what is sent, what is never sent, where it goes, how long it is kept, and how to say no or change their mind. The person can see the exact report before anything leaves the machine, choose "share", "ask me each time" or "don't share", and revoke at any time. Only an allowlisted, anonymous summary is ever sent: counts, question ids from the public questionnaire, zoom levels, rounded timings, signal types, host type and OpenDesigner version. Never answers, names, brand values, colors, file paths, project names, free-text notes, reference URLs, code or anything typed by the person. No persistent identifier ties reports to a person or machine. Sending does not post under the person's GitHub account, because that would reveal who they are.

@@ -251,7 +251,7 @@ def graph(_):
 
 def check(_):
     """Citation integrity: every S-id cited must be logged in a trace; every DC id referenced must exist."""
-    sid, dcid = re.compile(r"S-L\d+-\d+"), re.compile(r"DC-L\d+-\d+")
+    sid, dcid = re.compile(r"S-[A-Z]+\d*[a-z]?-\d+"), re.compile(r"DC-L\d+-\d+")
     defined = {s for p in (ROOT / "traces").glob("*-trace.md") for s in sid.findall(p.read_text(errors="replace"))}
     cards_known = {c["id"] for l in lanes() for f in lane_files(l["id"]) for c in cards(f)}
     docs = [p for d in ("research", "benchmarks", "benchmarks/systems", "synthesis", "sources") for p in sorted((ROOT / d).glob("*.md"))]

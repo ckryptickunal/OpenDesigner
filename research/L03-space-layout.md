@@ -505,7 +505,7 @@ Pattern [inferred]: 768 is the one breakpoint shared exactly by Primer, Bootstra
 - **Block path:** Foundations > Tokens > Dimension encoding
 - **Questions the designer answers:** Do spacing tokens use px or rem on the web? How do they map to pt and dp? How do we store them in DTCG and in Figma?
 - **Options / facts:**
-  - **DTCG 2025.10**: `$type: "dimension"`, `$value: {"value": <number>, "unit": "px" | "rem"}`; only px and rem allowed; `number` type for unitless values [S-L03-037]. The Sept 2026 draft keeps this and adds that px equals Android dp and iOS pt, and translators SHOULD convert [S-L03-038].
+  - **DTCG 2025.10**: `$type: "dimension"`, `$value: {"value": <number>, "unit": "px" | "rem"}`; only px and rem allowed; `number` type for unitless values [S-L03-037]. 2025.10 already says that px equals Android dp and iOS pt, and translators SHOULD convert; the Sept 2026 draft keeps this [S-L03-038] [S-V1b-002].
   - **Native units**: Fluent's ramp is measured in pt on iOS, dp on Android, px on web [S-L03-010]; Material: 1dp = 1 physical px at 160 dpi; dp = px x 160 / density [S-L03-029].
   - **rem on web**: Carbon, Atlassian and Primer publish rem and px side by side [S-L03-001, S-L03-003, S-L03-009]; Tailwind's base is `0.25rem` and its breakpoints are rem [S-L03-017].
   - **Mixed rem/px (practitioner view)**: rem for font sizes and media queries; px for padding, horizontal spacing and borders, because scaling spacing with font size squeezes content further [S-L03-072] (Tier B opinion; contradicts rem-everything systems).

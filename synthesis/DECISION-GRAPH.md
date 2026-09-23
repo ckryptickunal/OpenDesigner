@@ -1,22 +1,22 @@
 # The decision graph in plain language
 
-Synthesis S1c. Source data: `synthesis/decision-graph.json` (built by `python3 tools/jev_nav.py graph` from every Decision Card's "Depends on" and "Affects" fields) and `synthesis/cards.json`. Dial names refer to `synthesis/LEVERS.md`.
+Synthesis S1c. Source data: `synthesis/decision-graph.json` (built by `python3 tools/jev_nav.py graph` from every Decision Card's "Depends on" and "Affects" fields) and `synthesis/cards.json`. Dial names refer to `synthesis/LEVERS.md`. Counts refreshed on 2026-09-24 (session S2) after lanes L17 and L18 and the hand corrections in `synthesis/graph-overrides.json` entered the graph.
 
 ## 1. What the graph contains
 
-- **325 decisions** (one per Decision Card across L01 to L16), **431 dependency edges**, of which only **45 cross lanes**. Most links were written inside a lane, so cross-lane causality is thinner in the data than in reality (section 8).
-- **8 dependency steps (0 to 7).** A decision's step is how far downstream it sits after each cycle is collapsed into one node. Step 0 has 89 decisions, then 58, 54, 34, 51, 26, 11 and 2.
-- **12 cycles.** A cycle is a set of decisions that constrain each other, so they have to be made together. Section 4 turns each one into a builder screen.
-- **48 decisions have no edges at all**: 14 in L08 (components), 8 in L07 (tokens and Figma), 8 in L09 (the benchmark cards, which restate L01 and L04 decisions), and a few elsewhere. They are real decisions whose links were not written down, not unimportant ones.
+- **352 decisions** (one per Decision Card across L01 to L18), **465 dependency edges** (457 parsed from the cards, plus 9 added and 1 removed by hand in `synthesis/graph-overrides.json`), of which only **58 cross lanes**. Most links were written inside a lane, so cross-lane causality is thinner in the data than in reality (section 8).
+- **8 dependency steps (0 to 7).** A decision's step is how far downstream it sits after each cycle is collapsed into one node. Step 0 has 94 decisions, then 59, 52, 40, 58, 29, 14 and 6.
+- **12 cycles.** A cycle is a set of decisions that constrain each other, so they have to be made together. Section 4 turns each one into a builder screen. L17 and L18 added none.
+- **54 decisions have no edges at all**: 13 in L08 (components), 8 in L07 (tokens and Figma), 8 in L09 (the benchmark cards, which restate L01 and L04 decisions), 7 in L17 (process cards whose links name stages and files rather than card ids), and a few elsewhere. They are real decisions whose links were not written down, not unimportant ones.
 
 ## 2. Root decisions (step 0)
 
-The 89 roots fall into five kinds:
+The 94 roots fall into five kinds:
 
 1. **Context roots**: what is being built, where it runs and where the truth lives. Scope (DC-L11-02, with the audit DC-L11-04 in a cycle), target platforms and posture (DC-L10-01, -02, -03, -21 in a cycle), OS version floor (DC-L10-23), source of truth and round-trip direction (DC-L16-02), theming axes (DC-L07-15). Device classes (DC-L14-01) sits at step 1, right under platforms.
-2. **The personality root**: brand personality profile (DC-L06-02). It has the largest fan-out (15) and the largest downstream reach (116 decisions). In the builder this root *is* the set of dial positions.
-3. **Foundation seeds that became roots because nothing upstream was linked**: base body size (DC-L02-08), base spacing unit (DC-L03-01), breakpoints (DC-L03-14), productive vs expressive typography (DC-L02-11), icon library, style, stroke and sizes (DC-L05-01, -02, -03, -05), photography (DC-L05-14), data-viz palettes (DC-L05-23). In practice these depend on density and personality; section 8 lists the missing edges.
-4. **Encoding and tooling roots**: naming, units, DTCG types, Figma API choices (DC-L07-03, -05, -07, -10 to -14, -22, -24, -26 to -28; DC-L03-26; DC-L04-28; DC-L01-26). They change how tokens are written, not how the product looks.
+2. **The personality root**: brand personality profile (DC-L06-02). It has the largest fan-out (15) and the second-largest downstream reach (127 decisions); only the platform cycle reaches more (section 5). In the builder this root *is* the set of dial positions.
+3. **Foundation seeds that became roots because nothing upstream was linked**: base spacing unit (DC-L03-01), breakpoints (DC-L03-14), productive vs expressive typography (DC-L02-11), icon library and sizes (DC-L05-01, -05), photography (DC-L05-14), data-viz palettes (DC-L05-23). In practice these depend on density and personality. Base body size (DC-L02-08) and icon style and stroke (DC-L05-02, -03) left this group once the section 8 edges were added.
+4. **Encoding, tooling and process roots**: naming, units, DTCG types, Figma API choices (DC-L07-03, -05, -07, -10 to -14, -22, -24, -26 to -28; DC-L03-26; DC-L04-28; DC-L01-26). They change how tokens are written, not how the product looks. The builder's own process roots from L17 and L18 sit here too: block classification (DC-L17-01), the delivery unit (DC-L18-01), interview pacing (DC-L18-08), and seven L17 process cards with no links written (DC-L17-05, -06, -07, -10 to -13).
 5. **Component and behavior roots**: most L08 and L13 decisions (button hierarchy, state model, focus style, validation, feedback, navigation, overlays). Their look inputs come from foundations; their behavior inputs come from UX rules, which the graph mostly does not link yet.
 
 ## 3. The dependency steps, read as a sequence
@@ -26,13 +26,15 @@ The 89 roots fall into five kinds:
 | 0 | Context and personality | scope, platforms, source of truth, brand personality |
 | 1 | Posture | expressiveness and hero budget (DC-L06-03), platform deference (DC-L06-14), device classes (DC-L14-01) |
 | 2 | Look direction | style preset and density voice (DC-L15-01 and DC-L15-04, a cycle), brand color role (DC-L06-04), motion personality at brand level (DC-L06-10) |
-| 3 | Foundation strategies | typeface sourcing and classification (L02 cycle), roundness (DC-L04-02), depth strategy (DC-L04-10), grouping (DC-L15-05), color scheme source (DC-L06-05), hierarchy strength (DC-L15-02) |
-| 4 | Foundation systems | the whole color system (21-decision cycle), type scale (DC-L02-09), line height and scripts, motion personality at token level (DC-L04-19), emphasis budget (DC-L15-03) |
-| 5 | Token details | on-colors, borders and focus color, state colors, dark surfaces, durations, easings, springs, control heights, component radius mapping, letter spacing, z-index |
-| 6 | Derived details | nested radius, pill and expressive shapes, choreography, enter/exit asymmetry, icon and avatar sizes, alpha colors |
-| 7 | Last | focus indicator (depends on radius, color and borders), deprecation policy |
+| 3 | Foundation strategies | typeface sourcing and classification (L02 cycle), base body size (DC-L02-08), roundness (DC-L04-02), depth strategy (DC-L04-10), motion personality at token level (DC-L04-19), grouping (DC-L15-05), color scheme source (DC-L06-05), hierarchy strength (DC-L15-02) |
+| 4 | Foundation systems | the whole color system (21-decision cycle), type scale (DC-L02-09), line height and scripts, durations, easings and springs (DC-L04-20 to -22), emphasis budget (DC-L15-03) |
+| 5 | Token details | on-colors, borders and focus color, state colors, dark surfaces, choreography and enter/exit, icon style and stroke, pill and expressive shapes, control heights, component radius mapping, letter spacing, z-index |
+| 6 | Derived details | nested radius, icon and avatar sizes, icon states and color, illustration style, chart anatomy, alpha colors |
+| 7 | Last | focus indicator (depends on radius, color and borders), deprecation policy, icon and illustration tiers, the extend-session protocol (DC-L18-12) |
 
 The shape matters for the builder: **personality and context first, one "look" screen, then foundation screens, then token detail that mostly derives itself.** Steps 5 to 7 are where automation pays off, because each of those decisions has several upstream constraints and few real options left.
+
+The 27 builder-process decisions from L17 and L18 occupy all eight steps but mostly form their own chain: the delivery unit (DC-L18-01, step 0) leads through knowledge format, the server, the visual surface ladder, question format, durable outputs and shipped enforcement to the extend-session protocol (DC-L18-12, step 7). They shape how the builder asks and records, not how the product looks.
 
 ## 4. Clusters (cycles) as builder screens
 
@@ -55,24 +57,24 @@ Each cycle is a set of decisions that must be edited together, so each becomes o
 
 ## 5. The 12 most influential decisions
 
-Ranked mainly by downstream reach (how many decisions change if this one changes). All 21 color-cycle decisions share a reach of 32, so the two that constrain the rest most (contrast and ramp rule) represent the cycle. DC-L14-01 is included for its fan-out of 10 even though its reach is low, because the graph links little out of L14.
+Ranked mainly by downstream reach (how many decisions change if this one changes). The platform cycle now ranks first because the override that links platform posture to platform deference (section 8) puts it upstream of DC-L06-14 and everything below it. All 21 color-cycle decisions share a reach of 32, so contrast (DC-L01-22), the constraint every ramp is solved against, represents the cycle; the ramp rule (DC-L01-03), which decides what a step number means and therefore dark mapping and state colors, and color space (DC-L01-01, fan-out 6) carry the same reach. DC-L14-01 is included for its fan-out of 10 even though its reach is low (12), because the graph links little out of L14.
 
 | # | Decision | Reach | Fan-out | Why it matters | Dial or screen |
 |---|---|---|---|---|---|
-| 1 | DC-L06-02 Brand personality profile | 116 | 15 | every visual lever and the voice descend from it | all eight dials |
-| 2 | DC-L06-03 Expressiveness and hero budget | 99 | 5 | flips type emphasis, color mixing, motion and containment together | Expression |
-| 3 | DC-L06-14 Platform deference | 97 | 2 | decides whether the platform or the brand wins on type, shape and components (same decision as DC-L10-02 and DC-L13-17 from other lanes) | Brand presence |
-| 4 | DC-L15-01 Visual style preset | 93 | 12 | the hub between brand and foundations: depth, materials, radius, borders, chroma, type classification, signifiers | Look and feel |
-| 5 | DC-L15-04 Density voice | 93 | 7 | sets control heights, whitespace, density modes and signifier strength | Density |
-| 6 | DC-L10-01 Target platforms (with its cycle) | 37 | 12 | native type, corners, materials, targets and token pipelines all depend on it | Platforms |
+| 1 | DC-L10-01 Target platforms (with its cycle) | 141 | 12 | native type, corners, materials, targets and token pipelines all depend on it, and through platform posture it now sits above platform deference | Platforms |
+| 2 | DC-L06-02 Brand personality profile | 127 | 15 | every visual lever and the voice descend from it | all eight dials |
+| 3 | DC-L06-03 Expressiveness and hero budget | 107 | 5 | flips type emphasis, color mixing, motion and containment together | Expression |
+| 4 | DC-L06-14 Platform deference | 101 | 2 | decides whether the platform or the brand wins on type, shape and components (same decision as DC-L10-02 and DC-L13-17 from other lanes) | Brand presence |
+| 5 | DC-L15-01 Visual style preset | 94 | 12 | the hub between brand and foundations: depth, materials, radius, borders, chroma, type classification, signifiers | Look and feel |
+| 6 | DC-L15-04 Density voice | 94 | 8 | sets body size, control heights, whitespace, density modes and signifier strength | Density |
 | 7 | DC-L06-04 Role of the brand color | 35 | 3 | reserved accent versus brand-flooded chrome changes every color role | Color studio |
-| 8 | DC-L06-05 Color scheme source and colorfulness | 34 | 2 | static versus dynamic, and the scheme variant, set chroma for all roles | Colorfulness |
+| 8 | DC-L06-05 Color scheme source and colorfulness | 34 | 3 | static versus dynamic, and the scheme variant, set chroma for all roles | Colorfulness |
 | 9 | DC-L15-05 Grouping strategy | 34 | 3 | space versus containers versus lines drives surfaces, whitespace and dividers | Look and feel |
-| 10 | DC-L01-22 Contrast standard and enforcement | 32 | 5 | the constraint every ramp is solved against; 29 decisions sit upstream of it too, so it is also the main gate | Color studio (contrast matrix) |
-| 11 | DC-L01-03 Ramp construction rule | 32 | 5 | decides what a step number means, and therefore dark mapping, state colors and step-distance guarantees | Color studio |
-| 12 | DC-L14-01 Device classes in scope | 11 | 10 | target sizes, type by viewing distance, motion policy, safe zones and driving rules fan out from it | Platforms |
+| 10 | DC-L01-22 Contrast standard and enforcement | 32 | 5 | the constraint every ramp is solved against; 33 decisions sit upstream of it too, so it is also the main gate | Color studio (contrast matrix) |
+| 11 | DC-L02-11 Productive vs expressive typography | 32 | 5 | sets scale contrast, so the type scale, weights, pairing, responsive type and hierarchy strength follow it | Expression |
+| 12 | DC-L14-01 Device classes in scope | 12 | 10 | target sizes, type by viewing distance, motion policy, safe zones and driving rules fan out from it | Platforms |
 
-Runners-up: scope (DC-L11-02, reach 20), typeface sourcing (DC-L02-01, reach 19), source of truth (DC-L16-02, reach 18), base spacing unit (DC-L03-01, reach 15), roundness (DC-L04-02, reach 14).
+Runners-up: typeface sourcing (DC-L02-01, reach 25), scope (DC-L11-02, reach 24), source of truth (DC-L16-02, reach 21, fan-out 9), base spacing unit (DC-L03-01, reach 15), hierarchy strength (DC-L15-02), Figma plan tier (DC-L07-27) and shape language (DC-L06-09), each reaching 13. Roundness (DC-L04-02) fell from 14 to 7 when its edge to motion personality was removed. The most influential builder-process decision is the delivery unit (DC-L18-01, reach 12, fan-out 5), all inside L18.
 
 ## 6. Top-level flow
 
@@ -116,7 +118,7 @@ flowchart LR
 
   SC --> PL --> DV
   BP --> EX & DF
-  PL -. missing edge .-> DF
+  PL --> DF
   EX --> SP & BC
   DF --> SP
   SP <--> DN
@@ -124,24 +126,23 @@ flowchart LR
   SP --> COL & TYP & SHP & DEP
   SP --> GR --> COL
   DN --> SPC
-  EX -.-> MOT
-  SHP --> MOT
+  EX --> MOT
   CON --> COL
   COL --> ST
   SHP --> NR
   MOT --> DUR
-  TYP -. missing edge .-> ICN
+  TYP --> ICN
   DV --> SPC
   ST & NR & DUR & SPC & ICN --> CMP --> BEH
 ```
 
-Dashed arrows are links the research supports but the graph does not yet encode (section 8). The `SHP --> MOT` arrow reflects an edge in the data (DC-L04-02 to DC-L04-19) that looks like an artifact of card wording; the real driver of motion personality is Expression and Energy.
+The links that were dashed here as missing (platforms to deference, Expression to motion, type to icons) are now in the data through `synthesis/graph-overrides.json` (section 8); Expression reaches motion personality through brand motion personality (DC-L06-10). The roundness-to-motion edge (DC-L04-02 to DC-L04-19) was removed there as an artifact of card wording, so motion personality now descends only from brand motion personality.
 
 ## 7. Worked example: brand personality moves from calm to energetic
 
 Setup: a web product with Expression 50, Density 50, Roundness 50, Depth 40, Warmth 50 and a blue brand color. The person moves **Energy from 20 (calm) to 85 (energetic)** and leaves Colorfulness untouched, so it follows the coupling rule. Values below were produced by running `levers.json` through the test engine.
 
-**Path through the graph:** DC-L06-02 (personality) to DC-L06-10 (brand motion personality) and, through the style preset DC-L15-01, to DC-L04-19 (motion personality), which feeds DC-L04-20 (durations), DC-L04-21 (easing), DC-L04-22 (springs), DC-L04-23 (choreography), DC-L04-24 (enter/exit) and DC-L04-26 (haptics). In parallel, DC-L06-02 to DC-L06-05 (colorfulness) to DC-L15-06 and the color cycle (DC-L01-10 chroma, then ramps, roles and dark mode), and DC-L15-01 to DC-L02-02 to DC-L02-15 (weights). DC-L04-25 (reduced motion) overrides the motion changes for anyone who asks for less motion.
+**Path through the graph:** DC-L06-02 (personality) to DC-L06-10 (brand motion personality) to DC-L04-19 (motion personality), which feeds DC-L04-20 (durations), DC-L04-21 (easing), DC-L04-22 (springs), DC-L04-23 (choreography), DC-L04-24 (enter/exit) and DC-L04-26 (haptics). In parallel, DC-L06-02 to DC-L06-05 (colorfulness) to DC-L15-06 and the color cycle (DC-L01-10 chroma, then ramps, roles and dark mode), and DC-L15-01 to DC-L02-02 to DC-L02-15 (weights). DC-L04-25 (reduced motion) overrides the motion changes for anyone who asks for less motion.
 
 | Token or parameter | Calm (20) | Energetic (85) | Rule |
 |---|---|---|---|
@@ -168,11 +169,11 @@ Setup: a web product with Expression 50, Density 50, Roundness 50, Depth 40, War
 
 **Guardrails that fire:** bounce 0.28 is above the 0.2 limit, so the builder warns unless the Playful macro is on (DC-L04-19). Long durations of 456-570ms are fine for full-screen moves but would trip the "standard transition over 500ms" warning if used for ordinary transitions (L13 E1). The reduced-motion mode is regenerated with the same travel removed, so accessibility does not change. Moving Colorfulness to 60 also moves the accent count to 3; the builder should show this side effect in its "what changed" panel and offer to lock Colorfulness.
 
-**Graph gap exposed by this example:** DC-L06-10 (brand-level motion personality) has no outgoing edge to DC-L04-19 (token-level motion personality), so the data routes the change through the style preset and roundness instead. Section 8 lists the fix.
+**Graph gap exposed by this example, now closed:** DC-L06-10 (brand-level motion personality) had no outgoing edge to DC-L04-19 (token-level motion personality), so the data routed the change through the style preset and roundness. The edge is now added through `synthesis/graph-overrides.json` (section 8).
 
 ## 8. Known gaps in the graph and edges worth adding
 
-The graph is parsed from card prose, so it misses links the research clearly supports. Adding these would make the causal paths match the levers in `LEVERS.md` [inferred list]:
+The graph is parsed from card prose, so it misses links the research clearly supports. The first eight edges below, and the removal at the end, are now applied through `synthesis/graph-overrides.json`, which `python3 tools/jev_nav.py graph` merges; the L09 merge and the L17/L18 rows are still open. Adding them would make the causal paths match the levers in `LEVERS.md` [inferred list]:
 
 | Missing edge | Reason |
 |---|---|
@@ -182,8 +183,13 @@ The graph is parsed from card prose, so it misses links the research clearly sup
 | DC-L06-09 to DC-L04-02 | brand shape language should drive the roundness dial |
 | DC-L06-05 to DC-L01-10 | scheme colorfulness should drive chroma level directly |
 | DC-L02-15 to DC-L05-03 | icon stroke follows type weight |
-| DC-L06-13 to DC-L05-02 | iconography as brand translation should drive icon style; today no L05 decision is reachable from personality |
+| DC-L06-13 to DC-L05-02 | iconography as brand translation should drive icon style; before this edge no L05 decision was reachable from personality |
 | DC-L14-03 to DC-L08-07 | target policy should drive control sizes |
 | DC-L09-01 to -08 merged into their L01/L04 twins | the benchmark cards duplicate roundness, depth, color generation, density, typeface, motion and brand posture |
+| DC-L17-08 to DC-L18-08 | pacing is one decision seen from the process side (L17) and the interview side (L18) |
+| DC-L17-10 to DC-L18-10 | what the process records decides which files carry it; L17 leaves the packaging to L18 |
+| DC-L18-06 to DC-L17-11 | the preview substrate depends on what the host can render (DC-L17-11 names "host capabilities (L18)" upstream) |
+| DC-L18-14 to DC-L17-03 | package safety governs reference intake (DC-L18-14 names "reference-intake flow (L17)" downstream) |
+| DC-L15-01 to DC-L17-07 | anti-generic rules depend on the chosen direction (DC-L17-07 names "direction" upstream) |
 
-Remove or re-check: DC-L04-02 to DC-L04-19 (roundness driving motion personality) reads as a wording artifact.
+Removed through `synthesis/graph-overrides.json`: DC-L04-02 to DC-L04-19 (roundness driving motion personality), which read as a wording artifact.

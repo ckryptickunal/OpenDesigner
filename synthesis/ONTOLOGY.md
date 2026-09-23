@@ -1,10 +1,10 @@
 # Design-system ontology (S1a)
 
-This file is the map of every building block of a design system, arranged in layers. The design-system builder uses it as its internal structure: each node is a place where the builder stores values, asks questions, or runs checks. It was synthesized on 2026-09-23 from research lanes L00 to L16. `synthesis/ontology.json` holds the same tree in machine-readable form. Both files come from one build over the same data, so they agree; treat `ontology.json` as the canonical copy when editing.
+This file is the map of every building block of a design system, arranged in layers. The design-system builder uses it as its internal structure: each node is a place where the builder stores values, asks questions, or runs checks. It was synthesized on 2026-09-23 from research lanes L00 to L16, and extended on 2026-09-24 (session S2) with the 27 Decision Cards of lanes L17 and L18. `synthesis/ontology.json` holds the same tree in machine-readable form. Both files come from one build over the same data, so they agree; treat `ontology.json` as the canonical copy when editing.
 
 ## Overview (top two levels)
 
-Arrows show the main direction of influence: context decides principles, principles bound the foundations, foundations are stored as tokens, tokens style components, and components compose into patterns. Guardrails check the lower layers, delivery ships them, governance runs the whole system over time, and the builder surface is the tool the engineer uses to edit it [inferred from the dependency graph in `synthesis/decision-graph.json`, where DC-L06-02, DC-L10-01, DC-L14-01 and DC-L11-02 sit at step 0 or 1].
+Arrows show the main direction of influence: context decides principles, principles bound the foundations, foundations are stored as tokens, tokens style components, and components compose into patterns. Guardrails check the lower layers, delivery ships them, governance runs the whole system over time, and the builder surface is the tool the engineer uses to edit it, including how it is packaged into the person's AI and how it runs the interview there [inferred from the dependency graph in `synthesis/decision-graph.json`, where DC-L06-02, DC-L10-01, DC-L14-01 and DC-L11-02 sit at step 0 or 1].
 
 ```mermaid
 flowchart TB
@@ -15,9 +15,9 @@ flowchart TB
   comp["Components<br/><small>inventory · taxonomy · implementation · api · device-variants · platform-rendering · states · behavior · action · input · selection · navigation · feedback · overlay · containment · data · media · layout</small>"]
   pat["Patterns and templates<br/><small>forms · feedback · destructive · navigation · overlay · collections · disclosure · empty · onboarding · ai · glanceable · layout · motion · other · templates</small>"]
   guard["Guardrails and validation<br/><small>enforcement · checks · critique · safety · testing</small>"]
-  deliver["Delivery and tooling<br/><small>source-of-truth · interchange · pipeline · packaging · channels · ai · interop</small>"]
+  deliver["Delivery and tooling<br/><small>source-of-truth · interchange · pipeline · packaging · channels · ai · records · interop</small>"]
   gov["Governance, docs and adoption<br/><small>process · team · contribution · decisions · lifecycle · change · docs · adoption · measure · tooling</small>"]
-  builder["Builder surface (meta layer)<br/><small>interaction · canvas · preview · controls · ai · state · review · input · collab · intake · hooks</small>"]
+  builder["Builder surface (meta layer)<br/><small>interaction · canvas · preview · controls · ai · state · review · input · collab · intake · hooks · pacing · surface · distribution</small>"]
   ctx -->|bounds| prin
   prin -->|constrain| found
   found -->|stored as| tok
@@ -53,13 +53,13 @@ The facts the builder collects before any visual decision: why the system exists
 - Provenance: designer-owned (an answer only the team can give (a questionnaire item), not a creative asset; the builder asks and records it [inferred])
 
 ### `ctx.strategy` Starting point and system posture
-Whether the team adopts an existing system, adapts a themeable base, or creates its own, and how strict, modular and centralized the system will be (Kholmatova's parameters).
-- Decided by: DC-L11-01, DC-L11-03
-- DTCG: none; stored as builder metadata such as `system.origin` and `governance.posture` (DC-L11-01, DC-L11-03)
-- Varies by platform/device: Open web systems rarely cover native apps: 94% of systems support web, 35% iOS, 34% Android [S-L11-030].
-- Default: Small teams (1-5 people, 61% of teams) adapt an accessible headless or themeable base and spend effort on tokens and docs (DC-L11-01). Strict core, loose edges (DC-L11-03, [inferred] in the card).
+Whether the team adopts an existing system, adapts a themeable base, or creates its own, and how strict, modular and centralized the system will be (Kholmatova's parameters). It also records the entry path: an existing product, a UI kit, a reference the team admires, or a brief only (DC-L17-02).
+- Decided by: DC-L11-01, DC-L11-03, DC-L17-02
+- DTCG: none; stored as builder metadata such as `system.origin` and `governance.posture` (DC-L11-01, DC-L11-03); the entry path as `entry: existing | kit | reference | brief` in the product context file (DC-L17-02)
+- Varies by platform/device: Open web systems rarely cover native apps: 94% of systems support web, 35% iOS, 34% Android [S-L11-030]. Native apps often start from platform kits, which makes native-first posture the path of least resistance ([inferred] in DC-L17-02).
+- Default: Small teams (1-5 people, 61% of teams) adapt an accessible headless or themeable base and spend effort on tokens and docs (DC-L11-01). Strict core, loose edges (DC-L11-03, [inferred] in the card). Entry path: audit first when a product exists; otherwise start from a brief with an optional reference, and offer a kit only as a component base, not as the visual direction (DC-L17-02).
 - Provenance: designer-owned (an answer only the team can give (a questionnaire item), not a creative asset; the builder asks and records it [inferred])
-- Sources: S-L11-006 S-L11-018 S-L11-019 S-L11-030
+- Sources: S-L11-006 S-L11-018 S-L11-019 S-L11-030 S-L17-003 S-L17-021
 
 ### `ctx.scope` Scope: products, audience and stack
 Which products, audiences and technologies version 1 serves, and which it explicitly does not. The answer decides which exporters the builder runs.
@@ -671,7 +671,7 @@ The spacing scale and its semantic uses, the size scales for controls and media,
 - Children: `found.space.base`, `found.space.scale`, `found.space.semantic`, `found.space.responsive`, `found.space.whitespace`, `found.space.rhythm`, `found.space.sizing`, `found.space.density`
 - Decided by: no card of its own (structural node)
 - DTCG: dimension (px or rem only; dp and pt map to px and translators convert) (L07 A3, DC-L03-01)
-- Benchmark (L09): Shared (L09-A1.2): a 4px base with the ladder 4, 8, 12, 16, 24, 32, 40, 48, 64 plus 0 and 2, in 17 of 22 systems with a published scale; builder default 0, 2, 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96. Values converge; base unit and naming differ (BOARD note from L03).
+- Benchmark (L09): Shared (L09-A1.2): the ladder 4, 8, 12, 16, 24, 32, 40, 48, 64 appears in 17 of 22 published scales, but only 13 of 22 use a 4px base [S-V1b-080]; builder default 0, 2, 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96. Values converge; base unit and naming differ (BOARD note from L03).
 - Provenance: generatable (the whole ladder follows from a base unit and a progression rule (DC-L03-01, DC-L03-02))
 - Sources: S-L03-001 S-L03-003 S-L03-009 S-L03-010
 
@@ -890,7 +890,7 @@ The visible ring or highlight that shows which element has keyboard, remote or s
 Corner radius (scale, personality, per-component roles, geometry, nesting, expressive shapes) and the borders, strokes and dividers that outline things.
 - Children: `found.shape.radius`, `found.shape.personality`, `found.shape.roles`, `found.shape.geometry`, `found.shape.expressive`, `found.shape.border`
 - Decided by: no card of its own (structural node)
-- DTCG: dimension (L07 A3); Carbon v12 beta adds radius tokens (BOARD note from L04/L07)
+- DTCG: dimension (L07 A3); Carbon v12 (unreleased, behind the `enable-v12-release` flag) adds radius tokens (BOARD note from L04/L07) [S-V1b-044]
 - Benchmark (L09): Shared (L09-A1.7): a small radius scale with a 4-8px control default in 16 of 23 systems, median 6; builder scale 0, 2, 4, 6, 8, 12, 16, 24, full. Diverges most of all (L09-A2.1): control radius 0 (GOV.UK, Carbon v11), 4-8 (most), 12 (Airbnb), pill (Material, Spectrum 2, SLDS Cosmos); every 2025-2026 revision got rounder.
 - Provenance: generatable (the radius scale follows a rhythm and a factor slider (DC-L04-01, DC-L09-01); inner radii are computed (DC-L04-05))
 - Sources: S-L04-003 S-L04-016 S-L09-101
@@ -898,7 +898,7 @@ Corner radius (scale, personality, per-component roles, geometry, nesting, expre
 #### `found.shape.radius` Radius scale and default control radius
 The ordered set of corner radii and the default radius for controls.
 - Decided by: DC-L04-01, DC-L09-01
-- DTCG: dimension (L07 A3); Carbon v12 beta adds radius tokens (BOARD note from L04/L07)
+- DTCG: dimension (L07 A3); Carbon v12 (unreleased, behind the `enable-v12-release` flag) adds radius tokens (BOARD note from L04/L07) [S-V1b-044]
 - Varies by platform/device: Compose uses `RoundedCornerShape(dp)`; iOS uses continuous corners and container-relative shapes; web uses `border-radius` (DC-L04-01). iOS 26 and later expect concentric corners; Material Expressive adds 20, 32 and 48 and shape morphing on press (DC-L09-01).
 - Default: 7 steps plus full on a 4px rhythm: 0, 2, 4, 8, 12, 16, 24, full; radius grows with component size (DC-L04-01). 6px controls and 8-12px containers, with a radius factor slider as in Radix (0, 0.75, 1, 1.5, full) (DC-L09-01).
 - Benchmark (L09): Shared (L09-A1.7) and diverges (L09-A2.1) as above; Mantine 9 doubled its default radius from 4 to 8px (L09 overview, [S-L09-646]).
@@ -908,7 +908,7 @@ The ordered set of corner radii and the default radius for controls.
 #### `found.shape.personality` Roundness and brand shape language
 The overall roundness dial (sharp, subtle, rounded, pill) and whether the brand contributes a signature shape.
 - Decided by: DC-L04-02, DC-L06-09
-- DTCG: dimension (L07 A3); Carbon v12 beta adds radius tokens (BOARD note from L04/L07)
+- DTCG: dimension (L07 A3); Carbon v12 (unreleased, behind the `enable-v12-release` flag) adds radius tokens (BOARD note from L04/L07) [S-V1b-044]
 - Varies by platform/device: On iOS the system decides much of this: controls become capsules and concentric with the hardware (DC-L04-02); platform shapes may override brand radii ([inferred] in DC-L06-09).
 - Default: Subtle (4-6px controls, 8-12px containers) is the safest cross-audience default; sharp only when density and precision are brand values (DC-L04-02). Derive one radius family from the logo's curvature and allow shape variety only in hero moments (DC-L06-09).
 - Provenance: generatable (one roundness dial (DC-L04-02); a signature shape derived from logo curvature needs the logo (DC-L06-09))
@@ -917,7 +917,7 @@ The overall roundness dial (sharp, subtle, rounded, pill) and whether the brand 
 #### `found.shape.roles` Radius roles per component
 Semantic radius roles (detail, control, container, overlay, person) that map the scale onto component types.
 - Decided by: DC-L04-03
-- DTCG: dimension (L07 A3); Carbon v12 beta adds radius tokens (BOARD note from L04/L07)
+- DTCG: dimension (L07 A3); Carbon v12 (unreleased, behind the `enable-v12-release` flag) adds radius tokens (BOARD note from L04/L07) [S-V1b-044]
 - Varies by platform/device: Fluent and Apple warn against rounding corners that touch the screen edge (DC-L04-03).
 - Default: Small detail 2-4px, control 4-8px or full, container 8-12px, overlay or sheet 12-16px or more, person full (DC-L04-03).
 - Provenance: generatable (the radius scale follows a rhythm and a factor slider (DC-L04-01, DC-L09-01); inner radii are computed (DC-L04-05))
@@ -2110,25 +2110,27 @@ The checks that keep hand-made and agent-made work inside the rules: which rules
 
 ### `guard.enforcement` Rule enforcement and exported lint
 How rules are enforced for humans and agents: raw values only through an explicit detach, the same scopes for agents as for people, and lint rules exported with every generated system.
-- Decided by: DC-L11-24, DC-L16-15
+- Decided by: DC-L11-24, DC-L16-15, DC-L18-11
 - DTCG: lint configuration (stylelint, eslint rules) exported beside the DTCG files (DC-L11-24)
-- Varies by platform/device: Web lint tooling is mature (stylelint, eslint); native needs custom rules ([inferred] in DC-L11-24).
-- Default: Raw values only through an explicit detach; agents get the same scopes as humans; exports ship lint rules (DC-L16-15, DC-L11-24). Linting plus structured, JSON-shaped docs cut accessibility violations per iteration from 5.1 to 0.6 in Sanity's agent evals (L13 Part E3, [S-L00-036]).
+- Varies by platform/device: Web lint tooling is mature (stylelint, eslint); native needs custom rules ([inferred] in DC-L11-24). Validator scripts in the skill must be dependency-free, because API skills have no network or package installs (DC-L18-11).
+- Default: Raw values only through an explicit detach; agents get the same scopes as humans; exports ship lint rules (DC-L16-15, DC-L11-24). Linting plus structured, JSON-shaped docs cut accessibility violations per iteration from 5.1 to 0.6 in Sanity's agent evals (L13 Part E3, [S-L00-036]). The skill ships a validator (token references resolve, contrast pairs pass, spacing and radius stay on scale, no orphan tokens) that runs after every generation step, plus lint configs for the person's CI; host hooks are optional (DC-L18-11).
 - Provenance: generatable (checks are computed from tokens, components and rules (L13 Part E3, DC-L11-24))
-- Sources: S-L11-053 S-L11-104 S-L16-024 S-L16-120
+- Sources: S-L11-053 S-L11-104 S-L16-024 S-L16-120 S-L18-032 S-L18-332 S-L18-339
 
 ### `guard.checks` Check catalog
-The checks the builder runs, gathered from the lanes: contrast on every color pair in every mode permutation, target size, labels, color-only meaning, dismiss paths, deceptive patterns, hierarchy counts, alias type and cycle checks, Figma limits, and axis orthogonality.
-- Decided by: no card of its own (structural node)
+The checks the builder runs, gathered from the lanes: contrast on every color pair in every mode permutation, target size, labels, color-only meaning, dismiss paths, deceptive patterns, hierarchy counts, alias type and cycle checks, Figma limits, and axis orthogonality. Two builder-level families sit here as well: anti-generic rules that catch common AI-generated looks (DC-L17-07), and the coverage check that gives every ontology block a status, so nothing is silently skipped (DC-L17-09, BRIEF.md requirement 5).
+- Decided by: DC-L17-07, DC-L17-09
 - Also shaped by: DC-L01-22, DC-L03-12, DC-L13-15, DC-L15-03, DC-L07-17
-- DTCG: checks reference token paths; results are not tokens (L13 Part E3)
-- Default: Aliases must share a type and must not form cycles; at most 5,000 variables per Figma collection; mode caps Professional 10, Organization 20, API 40 (L07 Part C, [S-L07-013, S-L07-014, S-L07-034]); two modifiers must not set the same token (L07 A4, [S-L07-004]). Hierarchy lint: at most 3 type sizes and 1 dominant element per view, 2-3 text colors, 2 weights, 1 primary action, as practitioner guidance (BOARD note from L15).
+- DTCG: checks reference token paths; results are not tokens (L13 Part E3); anti-generic rules as `id, severity, rationale, waived_by, reason` in the guardrails config (DC-L17-07); coverage as a report generated from node statuses, with a reason on every waiver (DC-L17-09)
+- Varies by platform/device: Most anti-generic rules are web-marketing tells, so operational surfaces and native apps need a smaller set (DC-L17-07); a block can be decided on one platform and pending on another, so coverage is kept per platform where the node varies ([inferred] in DC-L17-09).
+- Default: Aliases must share a type and must not form cycles; at most 5,000 variables per Figma collection; mode caps Professional 10, Organization 20, API 40 (L07 Part C, [S-L07-013, S-L07-014, S-L07-034]); two modifiers must not set the same token (L07 A4, [S-L07-004]). Hierarchy lint: at most 3 type sizes and 1 dominant element per view, 2-3 text colors, 2 weights, 1 primary action, as practitioner guidance (BOARD note from L15). Anti-generic rules run as lint with waivers, deterministic first and model critique second: taste rules warn and can be waived with a reason, accessibility rules fail and cannot be waived (DC-L17-07). Coverage gives each block a status (pending, default, decided, not applicable, awaiting asset) and each layer a 0-10 score with the gap in plain words; export is allowed with a named remainder, and unmet hard rules block a complete status (DC-L17-09).
 - Provenance: generatable (checks are computed from tokens, components and rules (L13 Part E3, DC-L11-24))
-- Sources: S-L07-004 S-L07-013 S-L13-098 S-L15-001 S-L15-038
+- Sources: S-L07-004 S-L07-013 S-L13-098 S-L15-001 S-L15-038 S-L17-011 S-L17-020 S-L17-006
 
 ### `guard.critique` Visual critique strictness
 How strongly the builder critiques visual choices: coaching messages, strict blocking, or an advanced metrics panel.
 - Decided by: DC-L15-11
+- Also shaped by: DC-L17-07
 - DTCG: none (builder setting)
 - Varies by platform/device: Metrics computed on screenshots work for any platform; structural lints need the builder's own component tree ([inferred] in DC-L15-11).
 - Default: Coach by default for engineers, strict for teams shipping to production, a metrics panel as an advanced view; every message names the principle it applies (DC-L15-11).
@@ -2153,9 +2155,9 @@ The minimum assistive-technology tests per shipped device class.
 - Provenance: tool-assisted (tests run with each platform's screen reader and motor alternatives (DC-L14-14))
 - Sources: S-L10-071 S-L10-072 S-L14-080
 
-## Layer 7: Delivery and tooling (`deliver`, 15 nodes)
-How the system leaves the builder and stays in sync: the source of truth, the interchange file, the build pipeline, packaging, export channels, agent-readable outputs, and the round trip with design tools (Figma, Paper, Penpot).
-- Children: `deliver.source-of-truth`, `deliver.interchange`, `deliver.pipeline`, `deliver.packaging`, `deliver.channels`, `deliver.ai`, `deliver.interop`
+## Layer 7: Delivery and tooling (`deliver`, 16 nodes)
+How the system leaves the builder and stays in sync: the source of truth, the interchange file, the build pipeline, packaging, export channels, agent-readable outputs, the durable records later sessions read, and the round trip with design tools (Figma, Paper, Penpot).
+- Children: `deliver.source-of-truth`, `deliver.interchange`, `deliver.pipeline`, `deliver.packaging`, `deliver.channels`, `deliver.ai`, `deliver.records`, `deliver.interop`
 - Decided by: no card of its own (structural node)
 - Provenance: generatable (outputs compile from the model (DC-L16-02, DC-L16-12))
 - Sources: S-L07-045 S-L16-113 S-L07-179
@@ -2216,15 +2218,25 @@ How AI coding and design agents consume the system: MCP servers, llms.txt, DESIG
 - Provenance: generatable (outputs compile from the model (DC-L16-02, DC-L16-12))
 - Sources: S-L11-040 S-L11-044 S-L16-338 S-L09-336
 
+### `deliver.records` Durable records for later sessions and the team
+The files the builder writes into the person's repo so a later session, possibly in another tool or model, can extend the system without drift, and so engineers can explain the decisions to their team (BRIEF.md requirements 9-10). L17 decided what the process records and L18 which files carry it.
+- Decided by: DC-L17-10, DC-L18-10
+- Also shaped by: DC-L11-12, DC-L11-23
+- DTCG: DTCG 2025.10 token files are canonical, with `$description` as intent and `$deprecated` instead of deletion; decision records carry the value, status, reason, date and `supersedes` (DC-L18-10), and each names its source: default, reference, person, designer or asset (DC-L17-10)
+- Varies by platform/device: Claude Code's artifact design skill already looks for a design system in CLAUDE.md or a theme file, so a pointer there makes Claude's own visuals follow the system (DC-L18-10).
+- Default: Write the product context, DESIGN.md, the tokens, a decision log with provenance, an asset manifest and a coverage report (DC-L17-10). Tokens are canonical, DESIGN.md is the readable view, the decision log is ADR-style, a state file holds answers, statuses and coverage against the ontology, and an AGENTS.md snippet points to them: JSON for what must not drift, Markdown for why (DC-L18-10). The contrast target and motion policy are stored as locked decisions ([inferred] in DC-L18-10). OpenDesigner keeps these files in `./opendesigner/`, with DESIGN.md and PRODUCT.md at the project root (`synthesis/OPENDESIGNER-SPEC.md` contradictions 25 and 26).
+- Provenance: generatable (written from the builder's state and decision log as the person decides (DC-L17-10, DC-L18-10))
+- Sources: S-L17-004 S-L17-213 S-L18-323 S-L18-325 S-L18-327 S-L18-342
+
 ### `deliver.interop` Design-tool interop
 How the builder mirrors the system into design tools and captures changes back. No tool found does deterministic two-way token sync between a canvas and git (L16 overview finding 6).
 - Children: `deliver.interop.figma`, `deliver.interop.paper`, `deliver.interop.penpot`
-- Decided by: DC-L16-13
+- Decided by: DC-L16-13, DC-L18-13
 - DTCG: DTCG per mode for Figma import; Paper tokens are CSS variables with no modes (L16 G2)
-- Varies by platform/device: Figma writes need the remote MCP server and a Full seat; Paper needs Paper Desktop running locally; Penpot acts only on the focused page (L16 G2).
-- Default: Write to Figma through the remote MCP `use_figma` when a Full seat is present, otherwise emit a DTCG file per mode that Figma imports natively; write to Paper through its MCP and treat both as mirrors (DC-L16-13). Paper's write tools include `write_html` and `create_tokens` (L16 G2, [S-L16-020]). Kunal has a full Figma seat (BRIEF.md).
+- Varies by platform/device: Figma writes need the remote MCP server and a Full seat; Paper needs Paper Desktop running locally; Penpot acts only on the focused page (L16 G2). Figma write clients include Claude Code, Claude Desktop, Codex, Cursor and VS Code; ChatGPT is in Figma's catalog but not in its write matrix, and Gemini CLI is not listed (DC-L18-13).
+- Default: Write to Figma through the remote MCP `use_figma` when a Full seat is present, otherwise emit a DTCG file per mode that Figma imports natively; write to Paper through its MCP and treat both as mirrors (DC-L16-13). Paper's write tools include `write_html` and `create_tokens` (L16 G2, [S-L16-020]). Kunal has a full Figma seat (BRIEF.md). From inside an AI host, always export files, and write to Figma or Paper only when the host has that MCP server connected, confirming before writing to a real file (DC-L18-13).
 - Provenance: tool-assisted (Figma's remote MCP `use_figma`, Figma DTCG import, and Paper's MCP tools carry the mirror (DC-L16-13, L16 G2))
-- Sources: S-L16-002 S-L16-018 S-L16-020 S-L16-113
+- Sources: S-L16-002 S-L16-018 S-L16-020 S-L16-113 S-L18-047 S-L18-136 S-L18-244
 
 #### `deliver.interop.figma` Figma
 How tokens and components are represented in Figma: collections and modes, scopes and publishing, code syntax, styles versus variables, and Code Connect.
@@ -2390,9 +2402,9 @@ Figma's governance features: the Check designs linter, library analytics and bra
 - Provenance: tool-assisted (Figma's Check designs, library analytics and branching (DC-L07-26))
 - Sources: S-L07-025 S-L07-029 S-L07-031
 
-## Layer 9: Builder surface (meta layer) (`builder`, 12 nodes)
-Decisions about the builder tool itself rather than about the design system it produces: how the engineer edits, previews, explores, reviews and collaborates. They are kept as a separate layer so every L16 card has a home without mixing tool design into the design system's own structure. L16 recommends that the builder be the visual tool itself, rendering real HTML and CSS components from its own model (L16 G2 option 4, [inferred] in the lane).
-- Children: `builder.interaction`, `builder.canvas`, `builder.preview`, `builder.controls`, `builder.ai`, `builder.state`, `builder.review`, `builder.input`, `builder.collab`, `builder.intake`, `builder.hooks`
+## Layer 9: Builder surface (meta layer) (`builder`, 15 nodes)
+Decisions about the builder tool itself rather than about the design system it produces: how the engineer edits, previews, explores, reviews and collaborates (L16); how the builder classifies blocks, proposes, paces and gates the process (L17); and how it is packaged into AI hosts and runs its interview there (L18). They are kept as a separate layer so every builder card has a home without mixing tool design into the design system's own structure. L16 recommends that the builder be the visual tool itself, rendering real HTML and CSS components from its own model (L16 G2 option 4, [inferred] in the lane).
+- Children: `builder.interaction`, `builder.canvas`, `builder.preview`, `builder.controls`, `builder.ai`, `builder.state`, `builder.review`, `builder.input`, `builder.collab`, `builder.intake`, `builder.hooks`, `builder.pacing`, `builder.surface`, `builder.distribution`
 - Decided by: no card of its own (structural node)
 - Provenance: generatable (a feature of the builder itself, not a block the user supplies [inferred])
 - Sources: S-L16-358 S-L16-366 S-L16-113
@@ -2407,11 +2419,11 @@ Whether the engineer works mainly through panels with a live preview, a free can
 
 ### `builder.canvas` Canvas rendering substrate
 What the builder's canvas renders: real HTML and CSS components, an image, or a design-tool scene graph.
-- Decided by: DC-L16-03
+- Decided by: DC-L16-03, DC-L17-11
 - Varies by platform/device: No substrate renders SwiftUI or Compose natively on a shared canvas; native output is always a transform from the model ([inferred] in DC-L16-03).
-- Default: Render previews and specimens as real HTML and CSS, ideally the real component library; native platforms stay compiled outputs (DC-L16-03).
+- Default: Render previews and specimens as real HTML and CSS, ideally the real component library; native platforms stay compiled outputs (DC-L16-03). During the interview every decision is made on rendered components; raster mockups serve only optional mood boards, labeled as such, because only rendered previews can be measured and checked for contrast and targets (DC-L17-11).
 - Provenance: generatable (a feature of the builder itself, not a block the user supplies [inferred])
-- Sources: S-L16-001 S-L16-015 S-L16-111
+- Sources: S-L16-001 S-L16-015 S-L16-111 S-L17-012 S-L17-014
 
 ### `builder.preview` Preview surface and latency
 What the engineer sees while deciding (specimens, a component matrix, sample screens, every mode side by side) and how fast it updates.
@@ -2422,34 +2434,39 @@ What the engineer sees while deciding (specimens, a component matrix, sample scr
 - Sources: S-L16-322 S-L16-327 S-L16-358 S-L16-390
 
 ### `builder.controls` Controls for foundation parameters
-The widgets that edit foundations: generator-first inputs (seed color, contrast targets, min and max keyframes) with raw editing as an explicit detach.
-- Decided by: DC-L16-14
-- Varies by platform/device: P3 and OKLCH need sRGB fallbacks for Figma import (DC-L16-14).
-- Default: Generator-first controls: seed plus contrast targets for color, min and max keyframes for type and space; raw value editing as an explicit detach (DC-L16-14).
+The widgets that edit foundations: generator-first inputs (seed color, contrast targets, min and max keyframes) with raw editing as an explicit detach, and the detail panel beside every control that teaches where the block belongs (BRIEF.md requirement 3).
+- Decided by: DC-L16-14, DC-L17-13
+- Also shaped by: DC-L08-23
+- DTCG: none; per-block guidance `{what, use_when, avoid_when, threshold, example, source_cards, downstream}` stored beside the tokens and exported into docs and agent files (DC-L17-13)
+- Varies by platform/device: P3 and OKLCH need sRGB fallbacks for Figma import (DC-L16-14). Thresholds and alternatives can differ by platform, such as a sheet versus a dialog on phones ([inferred] in DC-L17-13).
+- Default: Generator-first controls: seed plus contrast targets for color, min and max keyframes for type and space; raw value editing as an explicit detach (DC-L16-14). Beside every control, a short detail panel shows what the block is, where to use it, where not to (with the alternative and a threshold when one exists), a live preview in all modes, its source and what else changes; component pages extend the component documentation template (DC-L17-13, DC-L08-23).
 - Provenance: generatable (a feature of the builder itself, not a block the user supplies [inferred])
-- Sources: S-L16-321 S-L16-337 S-L16-341
+- Sources: S-L16-321 S-L16-337 S-L16-341 S-L17-112 S-L17-113 S-L17-117
 
 ### `builder.ai` AI editing and generative variation
-How the agent takes part in editing (reviewable patches) and how the builder offers alternatives (lock, shuffle, "show 6").
-- Decided by: DC-L16-04, DC-L16-05
-- Default: Every human edit is deterministic and instant; every agent edit arrives as a reviewable patch with before and after previews (DC-L16-04); lock and shuffle on every foundation parameter and a "show 6" grid of the same real-component specimen per variant, with pinning (DC-L16-05).
+How the agent takes part in editing (reviewable patches), how the builder offers alternatives (lock, shuffle, "show 6", distinct concepts), and how it frames each proposal as safe choices plus deliberate risks.
+- Decided by: DC-L16-04, DC-L16-05, DC-L17-05, DC-L17-06
+- DTCG: none; a variant is a dial vector plus overrides, and rejected variants stay in the log (DC-L17-05); a proposal stores `rationale: {safe, risks: [{what, why, gain, cost}]}` in the decision log (DC-L17-06)
+- Varies by platform/device: Render variants on the target platform's real components ([inferred] in DC-L17-05); on native platforms, risks usually belong in content and brand moments rather than in system controls ([inferred] in DC-L17-06).
+- Default: Every human edit is deterministic and instant; every agent edit arrives as a reviewable patch with before and after previews (DC-L16-04); lock and shuffle on every foundation parameter and a "show 6" grid of the same real-component specimen per variant, with pinning (DC-L16-05). L17 starts with concepts: 3 directions in text, confirmed, then rendered on real components with light and dark side by side and remixed at block level, with lock and shuffle for fine exploration afterwards (DC-L17-05). Every proposal shows a safe/risk split, 2 risks by default with at least one tied to the memorable thing, and no risk may break a hard rule such as contrast, targets or reduced motion (DC-L17-06).
 - Provenance: generatable (a feature of the builder itself, not a block the user supplies [inferred])
-- Sources: S-L16-026 S-L16-102 S-L16-264 S-L16-328
+- Sources: S-L16-026 S-L16-102 S-L16-264 S-L16-328 S-L17-005 S-L17-004 S-L17-021
 
 ### `builder.state` State, undo, versions and sharing
-How the builder keeps history and shares states.
-- Decided by: DC-L16-08
-- Default: Unlimited coalesced undo; the URL always encodes the current state; named versions; experiments as branches that merge through a diff view (DC-L16-08).
+How the builder keeps history and shares states, and how a later session, possibly in another tool or model, picks the system up again.
+- Decided by: DC-L16-08, DC-L18-12
+- Varies by platform/device: Works in any host that can read files; in chat-only hosts the person uploads the state and token files ([inferred] in DC-L18-12).
+- Default: Unlimited coalesced undo; the URL always encodes the current state; named versions; experiments as branches that merge through a diff view (DC-L16-08). A returning session reads the state file, the decision log, the tokens and the git log, runs the validator, lists the locked decisions, asks only about what is new, and asks before superseding a locked decision; superseding writes a new record with `supersedes` and never edits the old one (DC-L18-12).
 - Provenance: generatable (a feature of the builder itself, not a block the user supplies [inferred])
-- Sources: S-L16-106 S-L16-321 S-L16-328
+- Sources: S-L16-106 S-L16-321 S-L16-328 S-L18-322 S-L18-327 S-L18-342
 
 ### `builder.review` Review and visual diff
-How changes are reviewed before they ship.
-- Decided by: DC-L16-09
+How changes are reviewed before they ship, and where the process stops for the person's approval.
+- Decided by: DC-L16-09, DC-L17-12
 - Varies by platform/device: Per-platform renders in the diff when platform outputs differ ([inferred] in DC-L16-09).
-- Default: Every change set gets a visual diff page (affected components, before and after, per mode) plus the code diff, exported as a PR (DC-L16-09).
+- Default: Every change set gets a visual diff page (affected components, before and after, per mode) plus the code diff, exported as a PR (DC-L16-09). Three approval gates (block map and scope, direction, assets) plus a final review of taste decisions; a quick run keeps only the direction gate, and every gate is recorded in the decision log (DC-L17-12).
 - Provenance: generatable (a feature of the builder itself, not a block the user supplies [inferred])
-- Sources: S-L16-128 S-L16-387 S-L16-400
+- Sources: S-L16-128 S-L16-387 S-L16-400 S-L17-006 S-L17-023
 
 ### `builder.input` Keyboard-first operation
 Keyboard access to every action and token.
@@ -2468,29 +2485,61 @@ Whether several people and agents edit together, and how their presence shows.
 
 ### `builder.intake` Reference intake
 Adding an example website, screenshot, Figma file or other resource at any point, so the AI reads what the reference uses (color, type, spacing, radius, motion, components) and builds on its structure and quality, never another brand's identity (BRIEF.md requirement 4). Each node's `provenance` value marks what a reference can supply.
-- Decided by: no card of its own (structural node)
-- Default: Read Figma references through the MCP read tools (`get_variable_defs`, `get_design_context`), which work on every plan (L16 overview finding 1, [S-L16-000]); other extraction methods are not yet covered by a Decision Card [inferred].
+- Decided by: DC-L17-03
+- DTCG: every pre-filled token records where it came from in `$extensions.opendesigner.source = {reference, method, confidence}` ([inferred] in DC-L17-03; DTCG allows `$extensions`)
+- Varies by platform/device: Web references expose computed styles; app references usually arrive as screenshots, so their values are estimates ([inferred] in DC-L17-03).
+- Default: Read Figma references through the MCP read tools (`get_variable_defs`, `get_design_context`), which work on every plan (L16 overview finding 1, [S-L16-000]). Ask what each reference should teach: reinterpret it by default, replicate its structure with the identity swapped only when the person says "our version of this", and read competitors only to list the tropes to avoid. Never carry a name, logo, copy, photography, illustration or proprietary font; offer licensed substitutes and log each substitution (DC-L17-03). Extracted values are re-checked against the chosen contrast target in their new context ([inferred] in DC-L17-03). L17 Part F rates what can be read reliably from each kind of reference.
 - Provenance: extractable (the entry point for extraction from reference sites, screenshots and Figma files (BRIEF.md requirement 4, L16 A1))
-- Sources: S-L16-000 S-L16-004
+- Sources: S-L16-000 S-L16-004 S-L17-022 S-L17-023 S-L17-237
 
 ### `builder.hooks` Designer hooks and resource requests
-For blocks that cannot be generated well (logo, brand mark, custom icons, illustration, photography, brand typeface), the builder asks "do you have this?", accepts the resource, and offers paths when the answer is no: commission a designer or use a named tool, with honest caveats (BRIEF.md requirement 2). The nodes marked `designer-owned` or `tool-assisted` are the hook points.
-- Decided by: no card of its own (structural node)
-- Default: Ask per designer-owned node; keep a placeholder that downstream previews render until the resource arrives [inferred].
+For blocks that cannot be generated well (logo, brand mark, custom icons, illustration, photography, brand typeface), the builder asks "do you have this?", accepts the resource, and offers paths when the answer is no: commission a designer or use a named tool, with honest caveats (BRIEF.md requirement 2). The nodes marked `designer-owned` or `tool-assisted` are the hook points. Which blocks are hook points comes from the block classification: every block gets one primary route (generate, extract, a designer asset, a named tool, or the owner's answer) and optional secondary routes (DC-L17-01).
+- Decided by: DC-L17-01, DC-L17-04
+- DTCG: none; each node carries `class`, `also` and `hook` metadata (DC-L17-01); assets are referenced from a manifest (`id, status, files, licence, owner, brief`), not tokenized, because DTCG has no asset type (DC-L17-04)
+- Varies by platform/device: A few blocks change class by platform: haptics are tool-assisted on iOS and Android and do not apply on the web ([inferred] in DC-L17-01). App icons and favicons have platform size sets, and fonts for native apps need app-embedding rights, not only web rights (DC-L17-04).
+- Default: Five classes, adding owner input to the four provenance values: generatable if a formula or sourced default gives an acceptable value, extractable if an existing asset is the truth, designer-owned if quality depends on a human creator, tool-assisted if a named tool gets an engineer there with a caveat, and owner input if only the business knows (DC-L17-01). Over the 207 non-builder leaves L17 counts 135 generatable, 31 tool-assisted, 29 owner input, 7 designer-owned and 5 extractable, and 44 blocks can be pre-filled from a reference (L17 Part G). Hooks are asked as a grouped checklist with open slots and briefed placeholders; the fallback order is have it, commission a designer with the generated brief, an open library with a compatible licence, a named tool with its caveat, or omit, and a generated identity asset is never presented as final (DC-L17-04). The 7 designer-owned nodes expand into 14 asset hooks (L17 Part H2).
 - Provenance: designer-owned (the hook collects designer-owned resources and offers tool paths (BRIEF.md requirement 2))
+- Sources: S-L17-015 S-L17-004 S-L17-021 S-L17-023
+
+### `builder.pacing` Pacing and question format
+Where the interview spends its time and what one question looks like: the decisions that shape the most downstream get several turns and a visual comparison, the rest take a default and a confirmation (BRIEF.md requirement 8). L17 decided pacing from the process side and L18 from the interview side; L18 also decided the question format.
+- Decided by: DC-L17-08, DC-L18-08, DC-L18-09
+- DTCG: none; per-node `fan_out`, `class` and `min_mode` metadata (DC-L17-08), pacing thresholds in a data file such as `fanout_threshold_deep: 8` (values to calibrate, [inferred] in DC-L18-08), and per-question `id`, `why_it_matters`, `options[]`, `recommended`, `reason` and `affects[]` ([inferred] in DC-L18-09)
+- Varies by platform/device: Multi-platform scope raises the weight of platform decisions (DC-L17-08). In terminal hosts, deep decisions get a local HTML or artifact preview and shallow ones stay in text ([inferred] in DC-L18-08). AskUserQuestion takes up to 4 options per question, and MCP elicitation forms take enums only (DC-L18-09).
+- Default: Weight time by each decision's fan-out and downstream reach in `synthesis/decision-graph.json` and by its class: never auto-decide an owner-input block, and auto-decide generatable blocks with visible defaults (DC-L17-08). One high-impact decision per turn, up to 3 low-impact ones grouped, defaults recorded as defaults, and the person can override the depth (DC-L18-08); accessibility floors are always treated as deep ([inferred] in DC-L18-08). Each question is closed, with 2-4 options, one recommended with its reason, a visual per option, a free answer allowed and one line on what it changes downstream; cycle screens, where decisions constrain each other, use one form (DC-L18-09).
+- Provenance: generatable (a feature of the builder itself, not a block the user supplies [inferred])
+- Sources: S-L17-015 S-L18-304 S-L18-310 S-L18-321 S-L18-322
+
+### `builder.surface` Visual surface and return channel
+Where a palette, scale or component preview appears on the person's current AI host, from an interactive MCP App view down to plain text, and how a choice made in that visual reaches the model without retyping (BRIEF.md requirement 7).
+- Decided by: DC-L18-06, DC-L18-07
+- DTCG: none; each visual template reads a JSON payload of candidate tokens and labels, so one file renders on any rung ([inferred] in DC-L18-06); every channel returns choices in one grammar, `OD:<action> <token-path>=<value> [status]` ([inferred] in DC-L18-07)
+- Varies by platform/device: Claude inline cards allow at most 2 actions and no dropdowns, custom visuals are not on mobile, and ChatGPT code-block previews have no channel back to the model (DC-L18-06). Hosts can restrict which tools an app may call and may ask the person to approve calls (DC-L18-07). Terminal agents render no UI in chat, so their visual path is a file the person opens (L18 Part A).
+- Default: Detect the available surfaces from the tools the model can see, use the highest rung (an OpenDesigner MCP App view, host-native HTML such as Claude artifacts or custom visuals, Figma or Paper, a local HTML file, the host's question tool, then plain text), say which rung is in use, never block the interview on a visual, and give every visual text equivalents such as hex values, contrast ratios and px values ([inferred] in DC-L18-06). The Claude Design canvas is a hand-off target rather than a rung (`synthesis/OPENDESIGNER-SPEC.md` contradiction 31). Choices return as a visible message or tool call, so they appear in the transcript and survive a context reset; silent context updates are only for high-frequency slider drags, and a copy-as-prompt `OD:` line is used wherever no bridge exists ([inferred] in DC-L18-07).
+- Provenance: generatable (a feature of the builder itself, not a block the user supplies [inferred])
+- Sources: S-L18-010 S-L18-011 S-L18-017 S-L18-041 S-L18-043 S-L18-128
+
+### `builder.distribution` Distribution into AI hosts
+How OpenDesigner itself reaches the person's AI: what they install, where each host discovers it, which manifests and install channels exist, how the knowledge is chunked to fit a model's context, whether a server runs, and how the package stays safe to install (BRIEF.md requirements 6-7). These decisions are about the builder's own package; how the person's design system ships is the `deliver` layer.
+- Decided by: DC-L18-01, DC-L18-02, DC-L18-03, DC-L18-04, DC-L18-05, DC-L18-14
+- DTCG: none; the unit is `skills/opendesigner/SKILL.md` with portable frontmatter only (DC-L18-01); the SKILL.md body stays under 5k tokens or 500 lines with references one level deep, and data the model must not rewrite is JSON (DC-L18-04); server tools carry `readOnlyHint: true`, and views declare `_meta.ui.csp` (DC-L18-05, DC-L18-14)
+- Varies by platform/device: claude.ai needs code execution on, API skills have no network, and ChatGPT web gets skills only inside plugins (DC-L18-01). Claude Code reads only `.claude/skills/`, and symlinks break on Windows and in zips (DC-L18-02). No documented route lets a Plus or Pro ChatGPT web user install from GitHub directly (DC-L18-03). ChatGPT Free Projects allow 5 files (DC-L18-04). ChatGPT web reaches local servers only through Secure MCP Tunnel, and the Claude API connector is tools-only (DC-L18-05).
+- Default: A skill folder first, an MCP server second, a Project knowledge bundle as the documented fallback, and never a custom GPT (DC-L18-01). `skills/` is the source of truth with generated real copies in `.agents/skills/` and `.claude/skills/`, and AGENTS.md is the canonical entry file that `CLAUDE.md` and `GEMINI.md` import (DC-L18-02). A Claude marketplace, an Agent Plugins manifest at the root and a release zip at launch, with one version number (DC-L18-03). Knowledge is chunked by stage and by card and loaded on demand (DC-L18-04). A remote, stateless, no-auth, read-only server plus a local package from the same codebase, with state kept in the person's files (DC-L18-05). Least privilege: no network in scripts, a read-only server that returns data rather than instructions, signed releases, and fetched pages treated as data (DC-L18-14).
+- Provenance: generatable (a feature of the builder itself, not a block the user supplies [inferred])
+- Sources: S-L18-001 S-L18-050 S-L18-106 S-L18-118 S-L18-212 S-L18-059 S-L18-011 S-L18-025
 
 ## Coverage check
 
-Computed by the build script over `synthesis/cards.json` (325 cards) and the 271 nodes above.
+Computed over `synthesis/cards.json` (352 cards) and the 275 nodes above; recomputed on 2026-09-24 after lanes L17 and L18 were mapped.
 
-- Cards mapped to exactly one node: 325 of 325
+- Cards mapped to exactly one node: 352 of 352
 - Unmapped cards: 0
 - Double-mapped cards: 0
-- Nodes per layer: ctx 15, prin 18, found 123, tok 19, comp 27, pat 23, guard 6, deliver 15, gov 13, builder 12; total 271
+- Nodes per layer: ctx 15, prin 18, found 123, tok 19, comp 27, pat 23, guard 6, deliver 16, gov 13, builder 15; total 275
 
 ### How the coverage was resolved
 
-Every card was assigned by hand to one owning node; the build script then counts owners per card and fails loudly on an unknown, missing or duplicate assignment. Where two or more lanes decided the same thing, all their cards sit on one node (for example the three source-of-truth cards on `deliver.source-of-truth`). Where a card also shapes a second node, the second node lists it under "Also shaped by", which does not count as a mapping. The final count is 325 of 325 cards mapped exactly once, including L16's 15 cards; `synthesis/cards.json` was refreshed with `python3 tools/jev_nav.py export` before the final build.
+Every card was assigned by hand to one owning node; the build script then counts owners per card and fails loudly on an unknown, missing or duplicate assignment. Where two or more lanes decided the same thing, all their cards sit on one node (for example the three source-of-truth cards on `deliver.source-of-truth`). Where a card also shapes a second node, the second node lists it under "Also shaped by", which does not count as a mapping. The first build mapped 325 of 325 cards, including L16's 15. Lanes L17 and L18 finished after it, so their 27 cards had no owner until session S2 mapped them on 2026-09-24: 14 went to existing nodes (`ctx.strategy`, `builder.intake`, `builder.hooks`, `builder.ai`, `builder.canvas`, `builder.review`, `builder.controls`, `builder.state`, `guard.checks`, `guard.enforcement`, `deliver.interop`) and 13 to four new nodes (`builder.pacing`, `builder.surface`, `builder.distribution`, `deliver.records`). The count is now 352 of 352 cards mapped exactly once; `synthesis/cards.json` was refreshed with `python3 tools/jev_nav.py export` before the count.
 
 ## Block-path naming conflicts normalized
 
@@ -2530,7 +2579,16 @@ Lanes used different block paths for the same decision, and in one case the same
 | Deprecation | L07 "Tokens > Governance > Lifecycle" (DC-L07-23); L11 "Change > Deprecation" (DC-L11-15) | `gov.change.deprecation` |
 | Figma structure | L07 "Figma > Variables", "Figma > Styles vs Variables", "Tooling > Design-code bridge" (DC-L07-18 to 21, 24) | `deliver.interop.figma` and children |
 | Avatar and brand marks | L05 "Components > Avatar" (DC-L05-18); L05 "Brand in product" (DC-L05-12, 13) | `comp.data.avatar`; `found.imagery.brand-marks` |
-| Top-level labels | L11 "Strategy", "Process", "Change", "Docs", "Measurement", "Adoption", "Distribution"; L09 "Theming", "Delivery"; L06 "Content"; L13 "Principles"; L14 and L15 "Builder" and "Governance > Linting" | the ten layers of this file |
+| Pacing | L17 "Builder > Guidance > Pacing" (DC-L17-08); L18 "Interview > Pacing" and "Interview > Question anatomy" (DC-L18-08, 09) | `builder.pacing` |
+| Variants and proposals | L16 "show me 6 options" (DC-L16-05); L17 "Builder > Exploration > Variants" and "Builder > Guidance > Proposal framing" (DC-L17-05, 06) | `builder.ai` |
+| Preview substrate | L16 canvas substrate (DC-L16-03); L17 "Builder > Preview" (DC-L17-11) | `builder.canvas` |
+| Block classification and hooks | L17 "Builder > Guidance > Block classification" and "Designer hooks" (DC-L17-01, 04) | `builder.hooks` (the classification is the scheme behind every node's `provenance`) |
+| Records for later sessions | L17 "Delivery > Records" (DC-L17-10); L18 "Harmony > Outputs" (DC-L18-10) | `deliver.records` |
+| Enforcement shipped with the system | L11 (DC-L11-24); L16 (DC-L16-15); L18 "Harmony > Guardrails" (DC-L18-11) | `guard.enforcement` |
+| Round trip from AI hosts | L16 interop (DC-L16-13); L18 "Distribution > Round trip" (DC-L18-13) | `deliver.interop` |
+| "Distribution" (same word, different things) | L18 "Distribution > Packaging", "Channels", "Knowledge", "Live layer", "Security" mean OpenDesigner's own package (DC-L18-01 to 05, 14); `deliver.packaging` and `deliver.channels` mean how the person's design system ships | `builder.distribution` |
+| Starting point | L11 "Strategy > Starting point" (DC-L11-01); L17 "Context > Starting point > Entry path" (DC-L17-02) | `ctx.strategy` |
+| Top-level labels | L11 "Strategy", "Process", "Change", "Docs", "Measurement", "Adoption", "Distribution"; L09 "Theming", "Delivery"; L06 "Content"; L13 "Principles"; L14 and L15 "Builder" and "Governance > Linting"; L17 "Builder", "Guardrails", "Delivery"; L18 "Distribution", "Interview", "Harmony" | the ten layers of this file |
 
 Two overlaps were kept as separate, cross-linked nodes because they decide different values: surface tiers as color (`found.color.roles.surface`, DC-L01-13) versus as depth steps (`found.elevation.surfaces`, DC-L04-13); and whitespace ratios (`found.space.whitespace`, DC-L03-24) versus grouping strategy (`prin.visual.grouping`, DC-L15-05). The same holds for paragraph spacing (DC-L02-16) versus vertical rhythm (DC-L03-25).
 
@@ -2552,7 +2610,7 @@ Cross-system disagreements that are design choices rather than lane errors (disa
 
 ## Structural decisions
 
-1. **Ten layers, the tenth a meta layer.** The design system occupies layers 0 to 8. L16's cards about the tool itself (canvas, preview, undo, review, multiplayer) sit in `builder`, so every card has a home without mixing tool design into the system's structure.
+1. **Ten layers, the tenth a meta layer.** The design system occupies layers 0 to 8. L16's cards about the tool itself (canvas, preview, undo, review, multiplayer) sit in `builder`, so every card has a home without mixing tool design into the system's structure. L17's process cards and L18's packaging and interview cards joined them on 2026-09-24; L18's distribution cards describe OpenDesigner's own package, so they sit in `builder.distribution`, while `deliver` keeps how the person's design system ships.
 2. **Foundations hold values and intent; the token layer holds encoding.** Encoding cards filed under foundations (DC-L01-26, DC-L02-27, DC-L02-28, DC-L03-26, DC-L04-28, DC-L10-08) moved to `tok.types`, and Figma-specific cards moved to `deliver.interop.figma`.
 3. **Cross-cutting concepts get one home.** Density (six cards from five lanes), focus, stacking order, source of truth, brand color and navigation containers were each consolidated into one node, with related cards cross-linked rather than duplicated.
 4. **Two new structural nodes the lanes implied but did not name.** `found.interaction` (input modalities, targets, focus), following L14's finding that targets follow input precision rather than device; and a behavior-rule sub-layer (`prin.ux`) whose enforcement lives separately in `guard`, following L13 Part E.
@@ -2562,10 +2620,10 @@ Catalogs are grouped, not exploded: the 64 L08 components are members of ten cat
 
 ## Provenance summary
 
-Every node carries a `provenance` value requested in `_coordination/BRIEF.md`: generatable (formula from a few inputs), extractable (readable from a reference), designer-owned (needs a human creator, or a decision only the team can make), or tool-assisted (an engineer can make it with a named tool). The note beside each value cites a card or source, or is tagged [inferred]. Most generatable foundation and token nodes can also be read from a reference site or Figma file; the notes say so rather than adding a second value. Designer-owned nodes include the brand-mark, illustration, photography, motif, custom-icon construction, pictogram, voice, tone and terminology nodes, plus the team-decision nodes in context, principles and governance. Lane L17 (`research/L17-how-systems-get-made.md`) is classifying this in parallel and was not available when this file was built; its findings should replace the [inferred] values.
+Every node carries a `provenance` value requested in `_coordination/BRIEF.md`: generatable (formula from a few inputs), extractable (readable from a reference), designer-owned (needs a human creator, or a decision only the team can make), or tool-assisted (an engineer can make it with a named tool). The note beside each value cites a card or source, or is tagged [inferred]. Most generatable foundation and token nodes can also be read from a reference site or Figma file; the notes say so rather than adding a second value. Designer-owned nodes include the brand-mark, illustration, photography, motif, custom-icon construction, pictogram, voice, tone and terminology nodes, plus the team-decision nodes in context, principles and governance. Lane L17 (`research/L17-how-systems-get-made.md`) finished after this file was first built. Its classification (DC-L17-01, owned by `builder.hooks`) uses five classes, adding owner input for decisions only the business can make, and assigns one to each of the 207 non-builder leaves in its Part G. The `provenance` values here have not yet been replaced with Part G's classes; the team-decision nodes that L17 calls owner input are still filed as designer-owned.
 
 ## Open gaps
 
-- No Decision Card covers how the builder extracts values from a reference website or screenshot (BRIEF.md requirement 4); `builder.intake` records only the Figma read path [inferred].
+- Reference intake now has a card for fidelity and the identity firewall (DC-L17-03), and L17 Part F rates what each reference type yields, but no card yet fixes the extraction method per reference type (computed styles, pixels, vision); `builder.intake` still names only the Figma read path as a default [inferred].
 - Search and filtering, authentication, data tables and settings patterns have no Decision Cards (`pat.other`).
 - DTCG has no types for springs, assets, aspect ratios, breakpoints, blur or behavior rules; `tok.types.extensions` collects these, but the builder's extension schema is still to be designed (L07 A5).
