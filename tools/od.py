@@ -5,6 +5,7 @@ Everything lives in files under _coordination/, so any agent that can read and w
 Git is the transport between machines; a lock directory prevents races between sessions on one machine.
 
   python3 tools/od.py status                          board, active sessions, unread messages
+  python3 tools/od.py add U6 "scope" "output file" --by "Session name"   add a lane (fails if the id exists)
   python3 tools/od.py claim L19 --by "Session name"   claim an open lane (fails if someone else holds it)
   python3 tools/od.py done L19 --by "Session name" --summary "12 cards"
   python3 tools/od.py heartbeat --by "Session name" "what I am doing now"
@@ -60,12 +61,19 @@ def git(*args, check=True):
 
 
 def lane_rows(text):
-    return [(m.start(), m.end(), m) for m in re.finditer(r"^\| (L\d+|S\d\w*|V\d|D\d) \| (.+?) \| (.+?) \| (.+?) \|$", text, re.M)]
+    return [(m.start(), m.end(), m) for m in re.finditer(r"^\| ([A-Z]\d+\w*) \| (.+?) \| (.+?) \| (.+?) \|$", text, re.M)]
+
+
+def duplicates(text):
+    ids = [m[1] for _, _, m in lane_rows(text)]
+    return sorted({i for i in ids if ids.count(i) > 1})
 
 
 def set_status(lane, new, expect_open, by):
     with lock():
         text = BOARD.read_text()
+        if lane in duplicates(text):
+            sys.exit(f"{lane} appears more than once on the board. Merge its rows into one, then try again.")
         for start, end, m in lane_rows(text):
             if m[1] != lane:
                 continue
@@ -75,7 +83,7 @@ def set_status(lane, new, expect_open, by):
             row = f"| {m[1]} | {m[2]} | {m[3]} | {new} |"
             BOARD.write_text(text[:start] + row + text[end:])
             return
-        sys.exit(f"No lane {lane} on the board. Add a row to {BOARD.relative_to(ROOT)} first.")
+        sys.exit(f"No lane {lane} on the board. Add it first: od.py add {lane} \"scope\" \"output\"")
 
 
 def heartbeat_line(by, text):
@@ -92,6 +100,8 @@ def cmd_status(_):
     print("Lanes")
     for _, _, m in lane_rows(text):
         print(f"  {m[1]:4} {m[4][:90]}")
+    for lane in duplicates(text):
+        print(f"  ! {lane} appears more than once; merge its rows before claiming it")
     print("\nSessions (heartbeat in the last %d minutes marked *)" % ACTIVE_MINUTES)
     for p in sorted((CO / "sessions").glob("*.md")):
         last = [l for l in p.read_text().splitlines() if l.startswith("- ")][-1:] or ["(no heartbeat)"]
@@ -100,6 +110,19 @@ def cmd_status(_):
     inbox = CO / "inbox"
     unread = {d.name: len(list(d.glob("*.md"))) for d in inbox.iterdir() if d.is_dir()} if inbox.exists() else {}
     print("\nUnread messages: " + (", ".join(f"{k} {v}" for k, v in unread.items() if v) or "none"))
+
+
+def cmd_add(a):
+    """Create a lane row under the lock, so two sessions cannot create the same lane at once."""
+    with lock():
+        text = BOARD.read_text()
+        if a.lane in {m[1] for _, _, m in lane_rows(text)}:
+            sys.exit(f"{a.lane} is already on the board. Pick another id, or claim the existing lane.")
+        rows = lane_rows(text)
+        at = rows[-1][1] if rows else text.index(NOTES_MARK)
+        BOARD.write_text(text[:at] + f"\n| {a.lane} | {a.scope} | {a.output} | {a.status} |" + text[at:])
+    heartbeat_line(a.by, f"added lane {a.lane}")
+    print(f"{a.lane} added ({a.status})")
 
 
 def cmd_claim(a):
@@ -171,6 +194,8 @@ if __name__ == "__main__":
     by = dict(default=os.environ.get("OD_SESSION"), required=not os.environ.get("OD_SESSION"))
 
     sub.add_parser("status").set_defaults(fn=cmd_status)
+    p = sub.add_parser("add"); p.add_argument("lane"); p.add_argument("scope"); p.add_argument("output")
+    p.add_argument("--status", default="open"); p.add_argument("--by", **by); p.set_defaults(fn=cmd_add)
     p = sub.add_parser("claim"); p.add_argument("lane"); p.add_argument("--by", **by); p.set_defaults(fn=cmd_claim)
     p = sub.add_parser("done"); p.add_argument("lane"); p.add_argument("--by", **by); p.add_argument("--summary", default="")
     p.set_defaults(fn=cmd_done)

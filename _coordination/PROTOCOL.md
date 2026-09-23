@@ -9,7 +9,7 @@ Any number of agents can work here at once: Claude sessions on this Mac, Claude 
 4. Run `python3 tools/od.py status` to see lanes, active sessions and unread messages, then `python3 tools/od.py inbox "$OD_SESSION"`.
 
 ## 2. Claiming and finishing work
-- Claim before you start: `python3 tools/od.py claim L19`. It fails if another session holds the lane. If the lane you want is not on the board, add a row to `_coordination/BOARD.md` first (one line, status `open`).
+- Claim before you start: `python3 tools/od.py claim L19`. It fails if another session holds the lane. If the lane you want is not on the board, add it with `python3 tools/od.py add U6 "scope" "output file"`, then claim it. Don't hand-edit new rows into `BOARD.md`: `add` takes the lock and refuses an id that already exists, so two sessions given the same request can't create the same lane twice. `status` warns if a lane id appears twice; merge those rows before claiming.
 - Post a heartbeat when you change task and at least every 30-45 minutes: `python3 tools/od.py heartbeat "what I am doing"`. Sessions with no heartbeat for 45 minutes are shown as inactive; their lanes can be taken over after messaging them.
 - Finish: `python3 tools/od.py done L19 --summary "14 cards, 80 sources"`, then sync (section 4).
 
