@@ -1,0 +1,982 @@
+[
+ {
+  "id": "ctx",
+  "term": "Context and inputs",
+  "kind": "building block",
+  "layer": "ctx",
+  "context": "The facts the builder collects before any visual decision: why the system exists, who and what it serves, which platforms and devices it must cover, the brand's personality, and the hard limits it must fit. In the decision graph these are the step-0 and step-1 inputs that constrain the most other decisions (DC-L06-02 constrains 15, DC-L10-01 12, DC-L14-01 10, DC-L11-02 8).",
+  "source": [
+   "ctx"
+  ]
+ },
+ {
+  "id": "ctx.strategy",
+  "term": "Starting point and system posture",
+  "kind": "building block",
+  "layer": "ctx",
+  "context": "Whether the team adopts an existing system, adapts a themeable base, or creates its own, and how strict, modular and centralized the system will be (Kholmatova's parameters).",
+  "source": [
+   "ctx.strategy"
+  ]
+ },
+ {
+  "id": "ctx.scope",
+  "term": "Scope: products, audience and stack",
+  "kind": "building block",
+  "layer": "ctx",
+  "context": "Which products, audiences and technologies version 1 serves, and which it explicitly does not. The answer decides which exporters the builder runs.",
+  "source": [
+   "ctx.scope"
+  ]
+ },
+ {
+  "id": "ctx.inventory",
+  "term": "Existing UI inventory (audit)",
+  "kind": "building block",
+  "layer": "ctx",
+  "context": "A screenshot inventory of every unique UI pattern, plus a visual and CSS audit of colors, type and spacing in the products the system will replace. It supplies shared names and candidate primitives.",
+  "source": [
+   "ctx.inventory"
+  ]
+ },
+ {
+  "id": "ctx.platforms",
+  "term": "Target platforms",
+  "kind": "building block",
+  "layer": "ctx",
+  "context": "The operating systems and runtimes the system must serve (web, iOS, Android, Windows, macOS and others). Platform choice decides units, native type, target sizes, materials and navigation containers downstream.",
+  "source": [
+   "ctx.platforms"
+  ]
+ },
+ {
+  "id": "ctx.platforms.posture",
+  "term": "Platform posture (native-first, brand-first or hybrid)",
+  "kind": "building block",
+  "layer": "ctx",
+  "context": "How far the product defers to each platform's own look and behavior versus imposing one brand look everywhere.",
+  "source": [
+   "ctx.platforms.posture"
+  ]
+ },
+ {
+  "id": "ctx.platforms.sharing",
+  "term": "What is shared across platforms",
+  "kind": "building block",
+  "layer": "ctx",
+  "context": "Which layer is common to every platform: tokens, component specs, or only principles. L10's identical-versus-adapt table lists element by element what stays the same (brand hue, role names, spacing numbers, voice) and what adapts (materials, target minimums, navigation containers).",
+  "source": [
+   "ctx.platforms.sharing"
+  ]
+ },
+ {
+  "id": "ctx.platforms.devices",
+  "term": "Device classes in scope",
+  "kind": "building block",
+  "layer": "ctx",
+  "context": "Which device classes are first-class (phone, tablet and foldable, desktop, large display, watch, TV, car, spatial, voice and AI chat, kiosk, console) and which get foundations only. Device class is separate from platform, because one OS spans several classes.",
+  "source": [
+   "ctx.platforms.devices"
+  ]
+ },
+ {
+  "id": "ctx.platforms.stack",
+  "term": "Implementation stack",
+  "kind": "building block",
+  "layer": "ctx",
+  "context": "The native toolkits and cross-platform frameworks the products are built with. The stack decides token output formats and how quickly OS visual changes reach the product.",
+  "source": [
+   "ctx.platforms.stack"
+  ]
+ },
+ {
+  "id": "ctx.platforms.os-floor",
+  "term": "OS version floor",
+  "kind": "building block",
+  "layer": "ctx",
+  "context": "The oldest OS versions supported and which design-language generation the system targets.",
+  "source": [
+   "ctx.platforms.os-floor"
+  ]
+ },
+ {
+  "id": "ctx.brand",
+  "term": "Brand inputs",
+  "kind": "building block",
+  "layer": "ctx",
+  "context": "What the brand brings into the product: its personality, how the marketing identity relates to the product UI, and how much expression the product allows. L06 section 1 separates the expressive identity layer (logo system, campaign color, display type) from the productive product layer.",
+  "source": [
+   "ctx.brand"
+  ]
+ },
+ {
+  "id": "ctx.brand.personality",
+  "term": "Brand personality profile",
+  "kind": "building block",
+  "layer": "ctx",
+  "context": "Brand traits expressed as a few slider positions (for example playful to serious, minimal to rich). This is the single most influential input: L06's lever matrix maps each adjective pair to concrete foundation settings.",
+  "source": [
+   "ctx.brand.personality"
+  ]
+ },
+ {
+  "id": "ctx.brand.layering",
+  "term": "Brand-to-product layering",
+  "kind": "building block",
+  "layer": "ctx",
+  "context": "Whether marketing (expressive) and product (productive) surfaces share one system with modes, or run as separate systems.",
+  "source": [
+   "ctx.brand.layering"
+  ]
+ },
+ {
+  "id": "ctx.brand.expression",
+  "term": "Expressiveness level and hero-moment budget",
+  "kind": "building block",
+  "layer": "ctx",
+  "context": "How much brand expression the product allows, and how many signature moments get expressive type, shape or motion.",
+  "source": [
+   "ctx.brand.expression"
+  ]
+ },
+ {
+  "id": "ctx.constraints",
+  "term": "Hard constraints",
+  "kind": "building block",
+  "layer": "ctx",
+  "context": "Limits the system must fit that are not taste choices: the design tool's plan tier, the legal accessibility target, supported locales and scripts.",
+  "source": [
+   "ctx.constraints"
+  ]
+ },
+ {
+  "id": "prin",
+  "term": "Principles",
+  "kind": "building block",
+  "layer": "prin",
+  "context": "The rules that decide what \"good\" means before any value is picked. Three kinds live here: the team's own design principles, UX behavior rules drawn from laws and heuristics, and visual design principles. Tokens and components decide how a product looks; this layer decides whether it works and holds together (L13 overview, L15 overview).",
+  "source": [
+   "prin"
+  ]
+ },
+ {
+  "id": "prin.design",
+  "term": "Design principles",
+  "kind": "building block",
+  "layer": "prin",
+  "context": "A short, ranked list of statements the team uses as tie-breakers when two good options conflict. L06 keeps four kinds apart: brand or design-language principles, product experience principles, system principles, and content or voice principles.",
+  "source": [
+   "prin.design"
+  ]
+ },
+ {
+  "id": "prin.ux",
+  "term": "UX behavior rules",
+  "kind": "building block",
+  "layer": "prin",
+  "context": "Laws and heuristics turned into checkable rules. Each rule links a principle (for example Fitts's law) to a concrete check (no target below 24x24 CSS px) and to the place it applies (token, component, pattern, content or flow). L13 proposes this as a layer of its own on top of tokens and components.",
+  "source": [
+   "prin.ux"
+  ]
+ },
+ {
+  "id": "prin.ux.laws",
+  "term": "Laws of UX catalog",
+  "kind": "building block",
+  "layer": "prin",
+  "context": "The 30 laws on lawsofux.com, each graded for evidence: research-backed (R), research-backed at origin but extrapolated to UI (R-), contested (C), heuristic (H), or pop analogy (P). Zeigarnik and choice overload are weak, and Miller's 7 plus or minus 2 does not limit menu length (L13 top findings, [S-L13-040, S-L13-045, S-L13-048]).",
+  "source": [
+   "prin.ux.laws"
+  ]
+ },
+ {
+  "id": "prin.ux.heuristics",
+  "term": "Heuristic consensus set",
+  "kind": "building block",
+  "layer": "prin",
+  "context": "The eight principles on which Nielsen, Norman, Shneiderman, Tognazzini and the Laws of UX agree: visible status and feedback, consistency and conventions, error prevention, reversal and user control, recognition over recall, plain language, minimalism with progressive disclosure, and efficiency for experts. Most can be partly machine-checked (L13 Part B6).",
+  "source": [
+   "prin.ux.heuristics"
+  ]
+ },
+ {
+  "id": "prin.ux.rules",
+  "term": "Behavior-rule model and automation boundary",
+  "kind": "building block",
+  "layer": "prin",
+  "context": "The record format for a behavior rule (id, principle, evidence grade, scope, check kind, severity, override policy, exceptions, sources) and the four levels at which the builder applies it: default, lint error, warning, or human judgment. It also lists rules the builder must not automate, such as a \"max 7 navigation items\" cap (L13 Parts E1 to E3).",
+  "source": [
+   "prin.ux.rules"
+  ]
+ },
+ {
+  "id": "prin.ux.timing",
+  "term": "Response-time ladder",
+  "kind": "building block",
+  "layer": "prin",
+  "context": "The reconciled thresholds for how fast the interface must respond: 16 ms per frame, 50 ms to acknowledge input, 100 ms to feel instant, 200 ms for a good INP, 400 ms (Doherty), 1 s before focus breaks, 10 s before attention is lost. Each band maps to a feedback pattern (L13 top finding 3).",
+  "source": [
+   "prin.ux.timing"
+  ]
+ },
+ {
+  "id": "prin.ux.familiarity",
+  "term": "Convention versus novelty",
+  "kind": "building block",
+  "layer": "prin",
+  "context": "How far the product follows established platform and industry conventions (Jakob's law) versus inventing its own behavior.",
+  "source": [
+   "prin.ux.familiarity"
+  ]
+ },
+ {
+  "id": "prin.ux.inclusion",
+  "term": "Inclusive design stance",
+  "kind": "building block",
+  "layer": "prin",
+  "context": "The accessibility floor and which situational and permanent constraints the system designs for, such as older users, low vision or one-handed use.",
+  "source": [
+   "prin.ux.inclusion"
+  ]
+ },
+ {
+  "id": "prin.ux.ethics",
+  "term": "Deceptive-pattern policy",
+  "kind": "building block",
+  "layer": "prin",
+  "context": "Which manipulative patterns the system forbids and which of them the builder can detect automatically.",
+  "source": [
+   "prin.ux.ethics"
+  ]
+ },
+ {
+  "id": "prin.visual",
+  "term": "Visual design principles",
+  "kind": "building block",
+  "layer": "prin",
+  "context": "The catalog of 72 visual principles (hierarchy, CRAP, Gestalt, whitespace, color, type pairing, polish, aesthetics), each with an evidence grade and a builder stance: automate by construction, guide with warnings, or expose as a user control (L15 sections 1 and 3).",
+  "source": [
+   "prin.visual"
+  ]
+ },
+ {
+  "id": "prin.visual.style",
+  "term": "Visual style direction",
+  "kind": "building block",
+  "layer": "prin",
+  "context": "The overall style preset (flat, tonal, glass, soft, neo-brutalist, maximal) that sets many primitives at once, such as shadows, border widths and radius.",
+  "source": [
+   "prin.visual.style"
+  ]
+ },
+ {
+  "id": "prin.visual.hierarchy",
+  "term": "Hierarchy strength and emphasis budget",
+  "kind": "building block",
+  "layer": "prin",
+  "context": "How dramatic the contrast between levels is (size ratio, weights, text-color tiers) and how many elements may claim top emphasis on one view.",
+  "source": [
+   "prin.visual.hierarchy"
+  ]
+ },
+ {
+  "id": "prin.visual.grouping",
+  "term": "Grouping strategy",
+  "kind": "building block",
+  "layer": "prin",
+  "context": "Whether related items are grouped by space, by containers, or by lines. Gestalt grouping is the best-evidenced visual principle; common region overpowers proximity, which overpowers similarity (L15 finding 2).",
+  "source": [
+   "prin.visual.grouping"
+  ]
+ },
+ {
+  "id": "prin.visual.composition",
+  "term": "Composition, balance and alignment",
+  "kind": "building block",
+  "layer": "prin",
+  "context": "The layout model at the principle level (column grid, hierarchical, bento) and the default alignment axis. L03 owns the concrete columns, gutters and breakpoints.",
+  "source": [
+   "prin.visual.composition"
+  ]
+ },
+ {
+  "id": "prin.visual.signifiers",
+  "term": "Interactive signifier strength",
+  "kind": "building block",
+  "layer": "prin",
+  "context": "How clearly interactive elements announce that they can be clicked or tapped (fills, underlines, borders, depth).",
+  "source": [
+   "prin.visual.signifiers"
+  ]
+ },
+ {
+  "id": "prin.visual.polish",
+  "term": "Optical correction and polish",
+  "kind": "building block",
+  "layer": "prin",
+  "context": "Small optical fixes that make a UI feel finished: optical centering, overshoot, icon optical size, nested radii, one light source, fewer borders.",
+  "source": [
+   "prin.visual.polish"
+  ]
+ },
+ {
+  "id": "prin.visual.aesthetics",
+  "term": "Aesthetics and complexity readouts",
+  "kind": "building block",
+  "layer": "prin",
+  "context": "What \"looks good\" means empirically: judgments form in 17-50 ms, appeal peaks at moderate visual complexity and moderate colorfulness, and aesthetics multiply usability rather than replace it (L15 findings 3 and 4).",
+  "source": [
+   "prin.visual.aesthetics"
+  ]
+ },
+ {
+  "id": "tok",
+  "term": "Tokens",
+  "kind": "building block",
+  "layer": "tok",
+  "context": "The data layer that stores every foundation decision as named values: how tokens are tiered and named, which properties become tokens, their value types, the modes and themes that remap them, and how they are emitted for each platform. The builder's internal model should round-trip losslessly to DTCG 2025.10 plus its Resolver module (L07 Part C, [inferred] in the lane).",
+  "source": [
+   "tok"
+  ]
+ },
+ {
+  "id": "tok.tiers",
+  "term": "Token tiers",
+  "kind": "building block",
+  "layer": "tok",
+  "context": "The layers of indirection: primitives (raw values), semantic tokens (meaning, where theming happens), and optional component tokens.",
+  "source": [
+   "tok.tiers"
+  ]
+ },
+ {
+  "id": "tok.naming",
+  "term": "Token naming",
+  "kind": "building block",
+  "layer": "tok",
+  "context": "The grammar for semantic token names, the namespace prefix, and the casing and separator rules that transform names per platform.",
+  "source": [
+   "tok.naming"
+  ]
+ },
+ {
+  "id": "tok.naming.primitives",
+  "term": "Primitive naming",
+  "kind": "building block",
+  "layer": "tok",
+  "context": "How raw values are named: descriptive names, numeric steps, percent-of-base, or t-shirt sizes. Spacing naming (DC-L03-03) is decided here with the general rule.",
+  "source": [
+   "tok.naming.primitives"
+  ]
+ },
+ {
+  "id": "tok.coverage",
+  "term": "Token coverage",
+  "kind": "building block",
+  "layer": "tok",
+  "context": "Which properties become tokens and which stay as one-off values.",
+  "source": [
+   "tok.coverage"
+  ]
+ },
+ {
+  "id": "tok.types",
+  "term": "Token value types and encoding",
+  "kind": "building block",
+  "layer": "tok",
+  "context": "How each kind of value is encoded: color, dimensions and units, typography, shadow and border, motion, and layout. DC-L04-28 decides encoding for shape, depth and motion together and is owned here.",
+  "source": [
+   "tok.types"
+  ]
+ },
+ {
+  "id": "tok.types.color",
+  "term": "Color encoding",
+  "kind": "building block",
+  "layer": "tok",
+  "context": "How color values are written: color space, hex fallback, and which tiers and modes they sit in.",
+  "source": [
+   "tok.types.color"
+  ]
+ },
+ {
+  "id": "tok.types.dimension",
+  "term": "Dimension units",
+  "kind": "building block",
+  "layer": "tok",
+  "context": "Which units dimension tokens are stored in and how they translate to pt, dp, epx, px and rem.",
+  "source": [
+   "tok.types.dimension"
+  ]
+ },
+ {
+  "id": "tok.types.typography",
+  "term": "Typography encoding",
+  "kind": "building block",
+  "layer": "tok",
+  "context": "Whether type is stored as composite styles, atomic tokens, or both, and how it maps to Figma text styles and variables.",
+  "source": [
+   "tok.types.typography"
+  ]
+ },
+ {
+  "id": "tok.types.shadow-border",
+  "term": "Shadow, border and elevation encoding",
+  "kind": "building block",
+  "layer": "tok",
+  "context": "How shadows and borders are stored in JSON and mirrored into Figma effect styles.",
+  "source": [
+   "tok.types.shadow-border"
+  ]
+ },
+ {
+  "id": "tok.types.motion",
+  "term": "Motion encoding",
+  "kind": "building block",
+  "layer": "tok",
+  "context": "How durations, easings and springs are stored and mirrored into Figma timing and easing variables.",
+  "source": [
+   "tok.types.motion"
+  ]
+ },
+ {
+  "id": "tok.types.layout",
+  "term": "Layout and breakpoint encoding",
+  "kind": "building block",
+  "layer": "tok",
+  "context": "How breakpoints, grids and layout guides are stored: as modes of a breakpoint collection and as grid auto-layout settings.",
+  "source": [
+   "tok.types.layout"
+  ]
+ },
+ {
+  "id": "tok.types.extensions",
+  "term": "Builder extension types",
+  "kind": "building block",
+  "layer": "tok",
+  "context": "Values the builder needs that DTCG cannot hold: springs, string and boolean values, asset references (icons, images, fonts), aspect ratios, behavior rules, and builder metadata such as style presets and brand personality.",
+  "source": [
+   "tok.types.extensions"
+  ]
+ },
+ {
+  "id": "tok.modes",
+  "term": "Modes and theming axes",
+  "kind": "building block",
+  "layer": "tok",
+  "context": "The axes along which semantic tokens take different values (color scheme, contrast, density, brand, breakpoint, platform, device context, motion) and how their combinations are kept manageable. In DTCG these are Resolver modifiers; in Figma, collections and modes.",
+  "source": [
+   "tok.modes"
+  ]
+ },
+ {
+  "id": "tok.themes",
+  "term": "Themes and brands",
+  "kind": "building block",
+  "layer": "tok",
+  "context": "How the system is re-skinned: the few inputs that generate a theme, how multiple brands share one system, and what white-label customers may change.",
+  "source": [
+   "tok.themes"
+  ]
+ },
+ {
+  "id": "tok.themes.generator",
+  "term": "Theme-generator inputs",
+  "kind": "building block",
+  "layer": "tok",
+  "context": "The small set of brand knobs from which a whole theme is computed.",
+  "source": [
+   "tok.themes.generator"
+  ]
+ },
+ {
+  "id": "tok.themes.brands",
+  "term": "Multi-brand architecture",
+  "kind": "building block",
+  "layer": "tok",
+  "context": "What stays fixed across brands (anatomy, behavior, semantic names, status meanings) and what flexes (brand color, typeface, logo, imagery), and where the brand axis lives.",
+  "source": [
+   "tok.themes.brands"
+  ]
+ },
+ {
+  "id": "tok.themes.whitelabel",
+  "term": "White-label customization surface",
+  "kind": "building block",
+  "layer": "tok",
+  "context": "Which tokens external customers may change in a white-label product.",
+  "source": [
+   "tok.themes.whitelabel"
+  ]
+ },
+ {
+  "id": "tok.delivery",
+  "term": "Platform delivery of tokens",
+  "kind": "building block",
+  "layer": "tok",
+  "context": "The form tokens take in each platform's code: CSS custom properties and preference queries on the web, native theme objects on iOS and Android. The build pipeline that produces them is `deliver.pipeline`.",
+  "source": [
+   "tok.delivery"
+  ]
+ },
+ {
+  "id": "guard",
+  "term": "Guardrails and validation",
+  "kind": "building block",
+  "layer": "guard",
+  "context": "The checks that keep hand-made and agent-made work inside the rules: which rules run, where they run (in the editor, at export, in CI), how strict they are, and which device-specific safety and accessibility tests apply. The rule content comes from `prin.ux.rules`, the visual principles and the foundation constraints; this layer is the enforcement.",
+  "source": [
+   "guard"
+  ]
+ },
+ {
+  "id": "guard.enforcement",
+  "term": "Rule enforcement and exported lint",
+  "kind": "building block",
+  "layer": "guard",
+  "context": "How rules are enforced for humans and agents: raw values only through an explicit detach, the same scopes for agents as for people, and lint rules exported with every generated system.",
+  "source": [
+   "guard.enforcement"
+  ]
+ },
+ {
+  "id": "guard.checks",
+  "term": "Check catalog",
+  "kind": "building block",
+  "layer": "guard",
+  "context": "The checks the builder runs, gathered from the lanes: contrast on every color pair in every mode permutation, target size, labels, color-only meaning, dismiss paths, deceptive patterns, hierarchy counts, alias type and cycle checks, Figma limits, and axis orthogonality.",
+  "source": [
+   "guard.checks"
+  ]
+ },
+ {
+  "id": "guard.critique",
+  "term": "Visual critique strictness",
+  "kind": "building block",
+  "layer": "guard",
+  "context": "How strongly the builder critiques visual choices: coaching messages, strict blocking, or an advanced metrics panel.",
+  "source": [
+   "guard.critique"
+  ]
+ },
+ {
+  "id": "guard.safety",
+  "term": "Safety and distraction limits",
+  "kind": "building block",
+  "layer": "guard",
+  "context": "Hard rules for contexts where a design can endanger people, such as driving and headsets.",
+  "source": [
+   "guard.safety"
+  ]
+ },
+ {
+  "id": "guard.testing",
+  "term": "Accessibility test matrix by device",
+  "kind": "building block",
+  "layer": "guard",
+  "context": "The minimum assistive-technology tests per shipped device class.",
+  "source": [
+   "guard.testing"
+  ]
+ },
+ {
+  "id": "deliver",
+  "term": "Delivery and tooling",
+  "kind": "building block",
+  "layer": "deliver",
+  "context": "How the system leaves the builder and stays in sync: the source of truth, the interchange file, the build pipeline, packaging, export channels, agent-readable outputs, and the round trip with design tools (Figma, Paper, Penpot).",
+  "source": [
+   "deliver"
+  ]
+ },
+ {
+  "id": "deliver.source-of-truth",
+  "term": "Source of truth and round-trip direction",
+  "kind": "building block",
+  "layer": "deliver",
+  "context": "Which copy of the system is canonical (the builder's model, a JSON repo, Figma, or code) and which way changes flow. L07, L11 and L16 each decided this; they agree that the builder's own model is canonical.",
+  "source": [
+   "deliver.source-of-truth"
+  ]
+ },
+ {
+  "id": "deliver.interchange",
+  "term": "Interchange format and file layout",
+  "kind": "building block",
+  "layer": "deliver",
+  "context": "The standard file format tokens are exchanged in and how files are split.",
+  "source": [
+   "deliver.interchange"
+  ]
+ },
+ {
+  "id": "deliver.pipeline",
+  "term": "Token build pipeline",
+  "kind": "building block",
+  "layer": "deliver",
+  "context": "The transformer that turns DTCG files into platform code (CSS, Swift, Kotlin, Android XML, Flutter, Tailwind).",
+  "source": [
+   "deliver.pipeline"
+  ]
+ },
+ {
+  "id": "deliver.packaging",
+  "term": "Distribution model",
+  "kind": "building block",
+  "layer": "deliver",
+  "context": "How engineers consume the system: an npm component library, copy-in source, a CDN runtime, CSS and HTML only, headless primitives, or utilities.",
+  "source": [
+   "deliver.packaging"
+  ]
+ },
+ {
+  "id": "deliver.channels",
+  "term": "Export and handoff channels",
+  "kind": "building block",
+  "layer": "deliver",
+  "context": "The ways a builder state leaves the tool: copy CSS, a CLI or registry URL, a DTCG file, a pull request, or a push to a design tool.",
+  "source": [
+   "deliver.channels"
+  ]
+ },
+ {
+  "id": "deliver.ai",
+  "term": "Agent-readable distribution",
+  "kind": "building block",
+  "layer": "deliver",
+  "context": "How AI coding and design agents consume the system: MCP servers, llms.txt, DESIGN.md, Markdown twins of docs, structured guideline files.",
+  "source": [
+   "deliver.ai"
+  ]
+ },
+ {
+  "id": "deliver.interop",
+  "term": "Design-tool interop",
+  "kind": "building block",
+  "layer": "deliver",
+  "context": "How the builder mirrors the system into design tools and captures changes back. No tool found does deterministic two-way token sync between a canvas and git (L16 overview finding 6).",
+  "source": [
+   "deliver.interop"
+  ]
+ },
+ {
+  "id": "deliver.interop.figma",
+  "term": "Figma",
+  "kind": "building block",
+  "layer": "deliver",
+  "context": "How tokens and components are represented in Figma: collections and modes, scopes and publishing, code syntax, styles versus variables, and Code Connect.",
+  "source": [
+   "deliver.interop.figma"
+  ]
+ },
+ {
+  "id": "deliver.interop.figma.variables",
+  "term": "Collections, modes, scopes and publishing",
+  "kind": "building block",
+  "layer": "deliver",
+  "context": "How token tiers map to Figma variable collections and modes, and how scoping and hiding keep primitives out of designers' pickers.",
+  "source": [
+   "deliver.interop.figma.variables"
+  ]
+ },
+ {
+  "id": "deliver.interop.figma.code-syntax",
+  "term": "Code syntax",
+  "kind": "building block",
+  "layer": "deliver",
+  "context": "The per-platform code names Figma shows for each variable in Dev Mode (Web, Android, iOS). L16 calls code syntax the join key between canvas and code.",
+  "source": [
+   "deliver.interop.figma.code-syntax"
+  ]
+ },
+ {
+  "id": "deliver.interop.figma.styles",
+  "term": "Styles versus variables",
+  "kind": "building block",
+  "layer": "deliver",
+  "context": "Which values live as Figma variables and which as styles (text, effect, paint, layout guide).",
+  "source": [
+   "deliver.interop.figma.styles"
+  ]
+ },
+ {
+  "id": "deliver.interop.figma.code-connect",
+  "term": "Code Connect and AI readiness",
+  "kind": "building block",
+  "layer": "deliver",
+  "context": "Links from Figma components to code components, plus the descriptions and examples that Figma's MCP server and agent use as context.",
+  "source": [
+   "deliver.interop.figma.code-connect"
+  ]
+ },
+ {
+  "id": "deliver.interop.paper",
+  "term": "Paper",
+  "kind": "building block",
+  "layer": "deliver",
+  "context": "Paper is an HTML and CSS design canvas whose local MCP server exposes 34 tools, including `write_html`, `update_styles` and `create_tokens`. Its tokens are CSS variables with no modes, no libraries and no DTCG yet, so a light and dark system cannot be one token set there (L16 overview finding 3, Part B).",
+  "source": [
+   "deliver.interop.paper"
+  ]
+ },
+ {
+  "id": "deliver.interop.penpot",
+  "term": "Penpot",
+  "kind": "building block",
+  "layer": "deliver",
+  "context": "Penpot is an open-source design tool with native DTCG token import and export and multi-dimensional themes; it is the only tool L16 found that imports and exports DTCG natively (L16 overview finding 6, L07 A9).",
+  "source": [
+   "deliver.interop.penpot"
+  ]
+ },
+ {
+  "id": "gov",
+  "term": "Governance, docs and adoption",
+  "kind": "building block",
+  "layer": "gov",
+  "context": "How the system is run as a product over time: build order and pilots, team and roles, contribution, decisions, lifecycle status, versioning and deprecation, documentation, rollout and communication, and measurement (L11 phases 6 to 10).",
+  "source": [
+   "gov"
+  ]
+ },
+ {
+  "id": "gov.process",
+  "term": "Build order and pilot",
+  "kind": "building block",
+  "layer": "gov",
+  "context": "The order in which the system is built and which product pilots it.",
+  "source": [
+   "gov.process"
+  ]
+ },
+ {
+  "id": "gov.team",
+  "term": "Team model and roles",
+  "kind": "building block",
+  "layer": "gov",
+  "context": "Who owns the system (centralized, federated, hybrid) and which roles and skills staff it.",
+  "source": [
+   "gov.team"
+  ]
+ },
+ {
+  "id": "gov.contribution",
+  "term": "Contribution model",
+  "kind": "building block",
+  "layer": "gov",
+  "context": "How people outside the core team propose and add to the system.",
+  "source": [
+   "gov.contribution"
+  ]
+ },
+ {
+  "id": "gov.decisions",
+  "term": "Governance flow and decision records",
+  "kind": "building block",
+  "layer": "gov",
+  "context": "The steps a change goes through and how decisions are recorded.",
+  "source": [
+   "gov.decisions"
+  ]
+ },
+ {
+  "id": "gov.lifecycle",
+  "term": "Component status labels",
+  "kind": "building block",
+  "layer": "gov",
+  "context": "The lifecycle states a component can be in.",
+  "source": [
+   "gov.lifecycle"
+  ]
+ },
+ {
+  "id": "gov.change",
+  "term": "Versioning",
+  "kind": "building block",
+  "layer": "gov",
+  "context": "How releases are numbered and scheduled.",
+  "source": [
+   "gov.change"
+  ]
+ },
+ {
+  "id": "gov.change.deprecation",
+  "term": "Deprecation and migration",
+  "kind": "building block",
+  "layer": "gov",
+  "context": "How tokens and components are retired and consumers migrated. L07 decided this for tokens and L11 for the library; the rules agree.",
+  "source": [
+   "gov.change.deprecation"
+  ]
+ },
+ {
+  "id": "gov.docs",
+  "term": "Documentation platform",
+  "kind": "building block",
+  "layer": "gov",
+  "context": "Where documentation lives and who can author it.",
+  "source": [
+   "gov.docs"
+  ]
+ },
+ {
+  "id": "gov.docs.component-page",
+  "term": "Component documentation page",
+  "kind": "building block",
+  "layer": "gov",
+  "context": "The template for each component's documentation page. L08 and L11 each proposed one; they share the same core.",
+  "source": [
+   "gov.docs.component-page"
+  ]
+ },
+ {
+  "id": "gov.adoption",
+  "term": "Rollout and communication",
+  "kind": "building block",
+  "layer": "gov",
+  "context": "How the system is introduced to product teams and how the team keeps them informed.",
+  "source": [
+   "gov.adoption"
+  ]
+ },
+ {
+  "id": "gov.measure",
+  "term": "Metrics and maturity",
+  "kind": "building block",
+  "layer": "gov",
+  "context": "How adoption and value are measured, and which maturity stage the team targets.",
+  "source": [
+   "gov.measure"
+  ]
+ },
+ {
+  "id": "gov.tooling",
+  "term": "Governance tooling in Figma",
+  "kind": "building block",
+  "layer": "gov",
+  "context": "Figma's governance features: the Check designs linter, library analytics and branching.",
+  "source": [
+   "gov.tooling"
+  ]
+ },
+ {
+  "id": "builder",
+  "term": "Builder surface (meta layer)",
+  "kind": "building block",
+  "layer": "builder",
+  "context": "Decisions about the builder tool itself rather than about the design system it produces: how the engineer edits, previews, explores, reviews and collaborates. They are kept as a separate layer so every L16 card has a home without mixing tool design into the design system's own structure. L16 recommends that the builder be the visual tool itself, rendering real HTML and CSS components from its own model (L16 G2 option 4, [inferred] in the lane).",
+  "source": [
+   "builder"
+  ]
+ },
+ {
+  "id": "builder.interaction",
+  "term": "Primary interaction model",
+  "kind": "building block",
+  "layer": "builder",
+  "context": "Whether the engineer works mainly through panels with a live preview, a free canvas, a chat agent, or code.",
+  "source": [
+   "builder.interaction"
+  ]
+ },
+ {
+  "id": "builder.canvas",
+  "term": "Canvas rendering substrate",
+  "kind": "building block",
+  "layer": "builder",
+  "context": "What the builder's canvas renders: real HTML and CSS components, an image, or a design-tool scene graph.",
+  "source": [
+   "builder.canvas"
+  ]
+ },
+ {
+  "id": "builder.preview",
+  "term": "Preview surface and latency",
+  "kind": "building block",
+  "layer": "builder",
+  "context": "What the engineer sees while deciding (specimens, a component matrix, sample screens, every mode side by side) and how fast it updates.",
+  "source": [
+   "builder.preview"
+  ]
+ },
+ {
+  "id": "builder.controls",
+  "term": "Controls for foundation parameters",
+  "kind": "building block",
+  "layer": "builder",
+  "context": "The widgets that edit foundations: generator-first inputs (seed color, contrast targets, min and max keyframes) with raw editing as an explicit detach.",
+  "source": [
+   "builder.controls"
+  ]
+ },
+ {
+  "id": "builder.ai",
+  "term": "AI editing and generative variation",
+  "kind": "building block",
+  "layer": "builder",
+  "context": "How the agent takes part in editing (reviewable patches) and how the builder offers alternatives (lock, shuffle, \"show 6\").",
+  "source": [
+   "builder.ai"
+  ]
+ },
+ {
+  "id": "builder.state",
+  "term": "State, undo, versions and sharing",
+  "kind": "building block",
+  "layer": "builder",
+  "context": "How the builder keeps history and shares states.",
+  "source": [
+   "builder.state"
+  ]
+ },
+ {
+  "id": "builder.review",
+  "term": "Review and visual diff",
+  "kind": "building block",
+  "layer": "builder",
+  "context": "How changes are reviewed before they ship.",
+  "source": [
+   "builder.review"
+  ]
+ },
+ {
+  "id": "builder.input",
+  "term": "Keyboard-first operation",
+  "kind": "building block",
+  "layer": "builder",
+  "context": "Keyboard access to every action and token.",
+  "source": [
+   "builder.input"
+  ]
+ },
+ {
+  "id": "builder.collab",
+  "term": "Multiplayer and agent presence",
+  "kind": "building block",
+  "layer": "builder",
+  "context": "Whether several people and agents edit together, and how their presence shows.",
+  "source": [
+   "builder.collab"
+  ]
+ },
+ {
+  "id": "builder.intake",
+  "term": "Reference intake",
+  "kind": "building block",
+  "layer": "builder",
+  "context": "Adding an example website, screenshot, Figma file or other resource at any point, so the AI reads what the reference uses (color, type, spacing, radius, motion, components) and builds on its structure and quality, never another brand's identity (BRIEF.md requirement 4). Each node's `provenance` value marks what a reference can supply.",
+  "source": [
+   "builder.intake"
+  ]
+ },
+ {
+  "id": "builder.hooks",
+  "term": "Designer hooks and resource requests",
+  "kind": "building block",
+  "layer": "builder",
+  "context": "For blocks that cannot be generated well (logo, brand mark, custom icons, illustration, photography, brand typeface), the builder asks \"do you have this?\", accepts the resource, and offers paths when the answer is no: commission a designer or use a named tool, with honest caveats (BRIEF.md requirement 2). The nodes marked `designer-owned` or `tool-assisted` are the hook points.",
+  "source": [
+   "builder.hooks"
+  ]
+ }
+]

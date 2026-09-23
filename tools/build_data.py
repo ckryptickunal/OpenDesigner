@@ -9,9 +9,9 @@ for consumers that are not skills (an MCP server, other tools).
     python3 tools/build_data.py --check    exit 1 if any generated file is out of date
 
 Inputs:  synthesis/questionnaire.json, levers.json, decision-graph.json, ontology.json,
-         cards.json, research/L17-how-systems-get-made.md (Part H hook tables)
+         cards.json, glossary.json (when U1 has written it), research/L17 Part H (hook tables)
 Outputs: skills/opendesigner/references/{stages/*.md, questions.json, levers.json, graph.json,
-         ontology-slim.json, hooks.json, pacing.json, cards/*.json}
+         ontology-slim.json, hooks.json, pacing.json, cards/*.json}; glossary.json in every skill
          skills/opendesigner-extract/references/reference-intake.json
          data/ (copy of the above), chatgpt-project/knowledge/ (at most 5 files)
 Standard library only.
@@ -40,6 +40,39 @@ TEMPLATES = {
 }
 
 
+# Zoom levels replace the questionnaire's depth modes (BRIEF requirement 14, lane U2). Level 0 and 1 are
+# hand-picked; the rest follow the questionnaire mode (Standard -> 2, Expert -> 3). [inferred; logged]
+ZOOM_NAMES = {0: "sketch", 1: "broad", 2: "defined", 3: "detailed"}
+ZOOM0 = ["Q-scope-01", "Q-aud-01", "Q-plat-01", "Q-brand-01", "Q-color-01", "Q-brand-03"]  # Q-brand-03 rides with Q-color-01
+ZOOM1 = ["Q-dir-01", "Q-dir-02", "Q-color-02", "Q-type-01", "Q-shape-01", "Q-depth-01", "Q-motion-01", "Q-tool-01"]
+# Areas a person can zoom into; section = the DESIGN.md heading the engine renders for it.
+AREAS = [("overview", "The big picture", "Overview", ["S01", "S02", "S03", "S06"]),
+         ("platforms", "Where it runs", "Platforms and Devices", ["S04"]),
+         ("themes", "Light and dark", "Modes and Themes", ["S07"]),
+         ("color", "Color", "Colors", ["S08", "S09"]),
+         ("type", "Text", "Typography", ["S10", "S11"]),
+         ("layout", "Spacing and layout", "Layout", ["S12", "S13"]),
+         ("shape", "Corners", "Shapes", ["S14"]),
+         ("depth", "Depth and shadows", "Elevation & Depth", ["S15"]),
+         ("motion", "Motion and sound", "Motion", ["S16"]),
+         ("imagery", "Icons and images", "Iconography and Imagery", ["S17", "S18"]),
+         ("voice", "Words", "Content and Voice", ["S19"]),
+         ("components", "Components", "Components", ["S20", "S21", "S22", "S23"]),
+         ("delivery", "Files, tools and team", "For Agents", ["S05", "S24", "S25", "S26", "S27"])]
+AREA_OF = {st: a[0] for a in AREAS for st in a[3]}
+SECONDS = {"high": 60, "medium": 30, "low": 15}  # rough time per question by weight [inferred]
+
+
+def zoom_of(x):
+    if x["mode"] == "Any":
+        return None
+    if x["id"] in ZOOM0:
+        return 0
+    if x["id"] in ZOOM1:
+        return 1
+    return 2 if x["mode"] in ("Quick", "Standard") else 3
+
+
 def load(name):
     return json.loads((SYN / name).read_text(encoding="utf-8"))
 
@@ -47,6 +80,16 @@ def load(name):
 def slug(text):
     text = re.sub(r"\(.*?\)", "", text).lower()
     return re.sub(r"[^a-z0-9]+", "-", text).strip("-")[:40].rstrip("-")
+
+
+def trim_sources(text):
+    """Stage files keep Decision Card ids and drop raw source ids (the cards carry them), to stay short."""
+    t = re.sub(r"S-L\d+-\d+", "", text or "")
+    t = re.sub(r"\[\s*[,;\s]*\]", "", t)                      # brackets left empty
+    t = re.sub(r"\[\s*[,;]\s*", "[", t)
+    t = re.sub(r"\s*[,;]\s*(?=[,;\]])", "", t)
+    t = re.sub(r"\[\s*(inferred)\s*\]", r"[\1]", t)
+    return re.sub(r"  +", " ", t).replace(" .", ".").replace(" ,", ",").strip()
 
 
 def val(v):
@@ -108,60 +151,59 @@ def default_value(x):
 def build_questions(q):
     out = []
     for x in q["questions"]:
-        out.append({"id": x["id"], "stage": x["stage"], "mode": x["mode"], "kind": x["kind"],
+        out.append({"id": x["id"], "stage": x["stage"], "zoom": zoom_of(x), "area": AREA_OF.get(x["stage"]),
+                    "mode": x["mode"], "kind": x["kind"],
                     "class": x["block_class"], "weight": x["time_weight"], "fan": x["fan_out"],
                     "ask": x["ask"], "options": [{"v": o["value"], "l": o["label"]} for o in x["options"]],
                     "default_value": default_value(x), "show_if": x["show_if"],
                     "decides": x["decides"], "changes": x["changes"], "template": TEMPLATES.get(x["stage"])})
     return {"_about": STAMP + ". Slim index of every question. default_value is set only when the prose "
                       "default names exactly one option; the prose default and everything else is in stages/*.md.",
-            "modes": q["meta"]["modes"], "quick_order": q["meta"]["quick_order"], "questions": out}
+            "zoom_levels": ZOOM_NAMES, "zoom0": ZOOM0, "zoom1": ZOOM1, "questions": out}
 
 
 # ---------- stage files ----------
-def stage_md(stage, qs, n_total):
-    lines = [f"# Stage {stage['n']:02d}: {stage['title']} ({stage['id']})", "",
-             f"<!-- {STAMP} -->", "", stage["screen"], ""]
+def stage_md(stage, qs, n_total, note="", detailed=False):
     tpl = TEMPLATES.get(stage["id"])
     counts = defaultdict(int)
     for x in qs:
-        counts[x["mode"]] += 1
-    lines.append(f"**Questions:** {len(qs)} ({', '.join(f'{k} {v}' for k, v in sorted(counts.items()))}). "
-                 f"**Visual template:** {('`assets/templates/' + tpl + '`') if tpl else 'none (text, or the host question tool)'}.")
-    lines.append("Ask in the order below. Skip a question when its mode is above the chosen depth or its "
-                 "*Show if* is false; it then takes its default, recorded with status `default`.")
-    lines.append("")
+        counts[zoom_of(x)] += 1
+    zc = ", ".join(f"zoom {k} {ZOOM_NAMES[k]}: {counts[k]}" for k in sorted(k for k in counts if k is not None))
+    lines = [f"# Stage {stage['n']:02d}: {stage['title']}" + (" (zoom 3, detailed)" if detailed else ""), "",
+             f"<!-- {STAMP} -->", "",
+             f"Area: `{AREA_OF.get(stage['id'], 'any')}` · {zc or 'open on every screen'} · visual: "
+             + (f"`assets/templates/{tpl}`" if tpl else "text or the host question tool"), "",
+             trim_sources(stage["screen"]) if not detailed else "Read the main stage file first; these questions refine it.", "",
+             *([note, ""] if note else []),
+             "Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* "
+             "holds. Everything else keeps its default (`auto_default`). Explain a term the first time with "
+             "`glossary.json`.", ""]
     for x in qs:
+        z = zoom_of(x)
+        dv = default_value(x)
         lines.append(f"## {x['id']} · {x['question']}")
-        lines.append(f"*Mode:* {x['mode']} · *weight:* {x['time_weight']} (fan-out {x['fan_out']}) · "
-                     f"*kind:* {x['kind']} · *class:* {x['block_class'] or '-'} · *control:* {x['control']}")
+        lines.append(f"Zoom {z if z is not None else 'any'}{' ' + ZOOM_NAMES[z] if z is not None else ''} · "
+                     f"weight {x['time_weight']} · changes {x['fan_out']} decisions · class {x['block_class'] or '-'}"
+                     + (f" · cards {', '.join(x['decides'])}" if x["decides"] else ""))
         if x["show_if"]:
             lines.append(f"- **Show if:** {x['show_if']}")
         lines.append(f"- **Ask:** \"{x['ask']}\"")
-        lines.append(f"- **Why it matters:** {x['why']}")
+        lines.append(f"- **Why:** {trim_sources(x['why'])}")
         lines.append("- **Options:**")
-        for o in x["options"]:
-            eff = (o.get("effect") or "").strip()
-            lines.append(f"  - `{val(o['value'])}` {o['label']}" + (f": {eff}" if eff else ""))
-        lines.append(f"- **Default:** {x['default']} *Source:* {x['default_source']}")
-        dv = default_value(x)
-        if dv is not None:
-            lines.append(f"- **Default value:** `{dv}`")
+        opts = sorted(x["options"], key=lambda o: 0 if dv is not None and o["value"] == dv else 1)
+        for o in opts:
+            eff = trim_sources(o.get("effect"))
+            lines.append(f"  - `{val(o['value'])}` {trim_sources(o['label'])}" + (f": {eff}" if eff else ""))
+        lines.append(f"- **Default:** {('`' + str(dv) + '`: ') if dv is not None else ''}{trim_sources(x['default'])} "
+                     f"*Source:* {trim_sources(x['default_source']) or '[inferred]'}")
         lines.append(f"- **Show:** {x['preview']}")
-        lines.append(f"- **Example:** {x['example']}")
         if x["use_avoid"]:
-            lines.append(f"- **Use / avoid:** {x['use_avoid']}")
+            lines.append(f"- **Use / avoid:** {trim_sources(x['use_avoid'])}")
         if x["hook"]:
             h = x["hook"]
-            lines.append(f"- **Hook, accepts:** {h.get('accepts') or '-'}")
-            if h.get("if_no"):
-                lines.append(f"- **Hook, if no:** {h['if_no']}")
-        if x["pre_answers"]:
-            lines.append(f"- **Pre-answers:** {', '.join(x['pre_answers'])}")
+            lines.append(f"- **Hook:** accepts {trim_sources(h.get('accepts')) or '-'}"
+                         + (f" If no: {trim_sources(h['if_no'])}" if h.get("if_no") else ""))
         lines.append(f"- **Skip:** {x['skip']}")
-        lines.append(f"- **Decides:** {', '.join(x['decides']) or '-'} · **Changes downstream:** "
-                     f"{', '.join(x['changes']) or '-'}")
-        lines.append(f"- **Record:** `OD:set {x['id']}=<json-value> --why \"...\"`")
         lines.append("")
     return "\n".join(lines)
 
@@ -237,12 +279,23 @@ def build_pacing(q, graph):
         r"contrast|reduc\w* motion|accessib|target size", x["question"], re.I)]
     top = [{"card": c, "title": graph["nodes"][c]["t"], "fan": graph["nodes"][c]["fan"],
             "reach": graph["nodes"][c]["reach"], "q": graph["nodes"][c]["q"]} for c in graph["top_fanout"]]
-    return {"_about": STAMP + ". Where the interview spends time (DC-L18-08, DC-L17-08).",
-            "modes": q["meta"]["modes"], "counts": q["meta"]["counts"], "quick_order": q["meta"]["quick_order"],
+    areas = []
+    for aid, name, section, stages in AREAS:
+        levels = {}
+        for z in (0, 1, 2, 3):
+            ids = [x["id"] for x in qs if x["stage"] in stages and zoom_of(x) == z]
+            secs = sum(SECONDS[x["time_weight"]] for x in qs if x["id"] in ids)
+            if ids:
+                levels[str(z)] = {"questions": ids, "minutes": max(1, round(secs / 60))}
+        areas.append({"id": aid, "name": name, "section": section, "stages": stages, "levels": levels})
+    return {"_about": STAMP + ". Where the interview spends time (DC-L18-08, DC-L17-08). minutes are rough "
+                      "estimates from the time weight (high 60 s, medium 30 s, low 15 s) [inferred].",
+            "zoom_levels": ZOOM_NAMES, "zoom0": ZOOM0, "zoom1": ZOOM1, "areas": areas,
+            "counts": q["meta"]["counts"],
             "time_weight_rule": q["meta"]["time_weight_rule"],
             "thresholds": {"fanout_deep": 5, "show_visual_if_reach_gt": 20, "inferred": True},
             "deep_always": deep_always, "top_decisions": top,
-            "assumed_owner_inputs_in_quick": q["meta"]["quick_mode_assumed_owner_inputs"],
+            "assumed_owner_inputs_below_zoom2": q["meta"]["quick_mode_assumed_owner_inputs"],
             "gates": q["interview_protocol"][11], "per_stage": dict(sorted(per_stage.items()))}
 
 
@@ -266,6 +319,18 @@ def build_intake():
             "raw": [r["id"] for r in lv["raw"]]}
 
 
+# ---------- glossary (written by lane U1; shipped only when it exists) ----------
+def build_glossary():
+    src = SYN / "glossary.json"
+    if not src.exists():
+        return None
+    g = json.loads(src.read_text(encoding="utf-8"))
+    terms = g.get("terms", g) if isinstance(g, dict) else g
+    body = ",\n".join(json.dumps(t, ensure_ascii=False, separators=(",", ":")) for t in terms)
+    return ('{"_about":"' + STAMP + '. One term per line: search for the term or an alias, read that line. '
+            'Voices: plain first; designer and engineer on request.",\n"terms":[\n' + body + "\n]}\n")
+
+
 # ---------- write ----------
 def outputs():
     q = load("questionnaire.json")
@@ -277,7 +342,13 @@ def outputs():
     for s in q["stages"]:
         order = {qid: i for i, qid in enumerate(s["questions"])}
         qs = sorted(by_stage[s["id"]], key=lambda x: order.get(x["id"], 999))
-        files[f"stages/{s['n']:02d}-{slug(s['title'])}.md"] = stage_md(s, qs, len(q["questions"]))
+        base = f"stages/{s['n']:02d}-{slug(s['title'])}"
+        main = [x for x in qs if zoom_of(x) != 3]
+        detail = [x for x in qs if zoom_of(x) == 3]
+        files[base + ".md"] = stage_md(s, main, len(q["questions"]),
+                                       note=f"Zoom 3 (detailed) questions: `{base.split('/')[1]}.detailed.md`." if detail else "")
+        if detail:
+            files[base + ".detailed.md"] = stage_md(s, detail, len(q["questions"]), detailed=True)
     files["questions.json"] = dump(build_questions(q))
     files["levers.json"] = (SYN / "levers.json").read_text(encoding="utf-8")
     files["graph.json"] = dump(graph)
@@ -289,20 +360,23 @@ def outputs():
     return files
 
 
-def gpt_files(ref_files):
+def gpt_files(ref_files, glossary=None):
     """Up to 5 knowledge files for a ChatGPT Project (Free allows 5)."""
     def read(p):
         return p.read_text(encoding="utf-8") if p.exists() else ""
     skill = re.sub(r"^---.*?---\n", "", read(SKILL / "SKILL.md"), flags=re.S)
-    parts = [skill] + [read(REF / n) for n in ("rules.md", "guardrails.md", "hooks.md")]
-    for n in ("DESIGN.md", "decisions.md", "AGENTS-snippet.md", "state.json"):
+    parts = [skill] + [read(REF / n) for n in ("zoom.md", "rules.md", "improve.md", "guardrails.md", "hooks.md")]
+    for n in ("DESIGN.md", "decisions.md", "RATIONALE.md", "AGENTS-snippet.md", "state.json"):
         body = read(SKILL / "assets" / "output" / n)
         if body:
             parts.append(f"## Output template: {n}\n\n```\n{body.strip()}\n```")
-    stages = "\n\n".join(v for k, v in sorted(ref_files.items()) if k.startswith("stages/"))
+    stages = "\n\n".join(v for k, v in sorted(ref_files.items(), key=lambda kv: (kv[0].replace(".detailed", ""), ".detailed" in kv[0]))
+                           if k.startswith("stages/"))
     lookup = {"graph": json.loads(ref_files["graph.json"]), "ontology": json.loads(ref_files["ontology-slim.json"]),
               "hooks": json.loads(ref_files["hooks.json"]), "pacing": json.loads(ref_files["pacing.json"]),
               "questions": json.loads(ref_files["questions.json"])}
+    if glossary:
+        lookup["glossary"] = json.loads(glossary)["terms"]
     out = {"01-protocol.md": "\n\n".join(p.strip() for p in parts if p.strip()) + "\n",
            "02-stages.md": stages, "03-levers.json": ref_files["levers.json"],
            "04-lookup.json": dump(lookup)}
@@ -321,7 +395,13 @@ def targets():
     intake = dump(build_intake())
     t[EXTRACT_REF / "reference-intake.json"] = intake
     t[DATA / "reference-intake.json"] = intake
-    for k, v in gpt_files(ref).items():
+    glossary = build_glossary()
+    if glossary:
+        for skill in sorted((ROOT / "skills").iterdir()):
+            if (skill / "SKILL.md").exists():
+                t[skill / "references" / "glossary.json"] = glossary
+        t[DATA / "glossary.json"] = glossary
+    for k, v in gpt_files(ref, glossary).items():
         t[GPT / k] = v
     return t
 

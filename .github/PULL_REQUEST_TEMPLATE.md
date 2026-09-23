@@ -21,7 +21,7 @@
 - [ ] Every new claim cites a source id (`[S-Lxx-nnn]`) or is marked `[inferred]`, and new sources are logged in `traces/`.
 - [ ] `python3 tools/jev_nav.py check` reports 0 files with dangling references.
 - [ ] Every JSON file still parses, and `python3 tools/check_links.py` passes.
-- [ ] If I changed `skills/`, I ran `python3 tools/sync_skills.py` and the engine tests.
+- [ ] I edited source files (`research/`, `synthesis/`, `skills/`, `tools/`), not generated copies; if I changed them, I ran `python3 tools/build_data.py` and `python3 tools/sync_skills.py`, and the engine tests.
 - [ ] Nothing copies another brand's identity (logo, name, typeface files, illustrations).
 - [ ] No secrets, keys or `.env` files are included.
 - [ ] If this changes a product decision, I added a line to `_coordination/DECISIONS.md` with `python3 tools/od.py log`.

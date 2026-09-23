@@ -1,0 +1,622 @@
+[
+ {
+  "id": "found",
+  "term": "Foundations",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The visual, sensory and verbal raw material every screen is made of: color, typography, space, layout, shape, depth, motion, sound and haptics, icons, imagery, data visualization, content, accessibility, and interaction and input. Each foundation is a set of scales and roles that tokens store and components consume (L11 phase 5).",
+  "source": [
+   "found"
+  ]
+ },
+ {
+  "id": "found.color",
+  "term": "Color",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Every color decision, from how ramps are generated to which semantic roles exist, how modes remap them, and how contrast is guaranteed.",
+  "source": [
+   "found.color"
+  ]
+ },
+ {
+  "id": "found.color.space",
+  "term": "Color space and gamut",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The color model used to build and interpolate ramps (sRGB, OKLCH, HCT, LCH) and the gamut the product targets (sRGB or Display P3).",
+  "source": [
+   "found.color.space"
+  ]
+ },
+ {
+  "id": "found.color.ramp",
+  "term": "Ramp generation and step meaning",
+  "kind": "building block",
+  "layer": "found",
+  "context": "How tonal ramps are produced, how many steps they have, how steps are numbered, and what a step number promises (lightness, tone, or contrast against a background). Step numbers mean different things in different systems: Tailwind lightness varies by hue, Spectrum keeps equal contrast per step, Material uses HCT tone (BOARD cross-lane note from L01).",
+  "source": [
+   "found.color.ramp"
+  ]
+ },
+ {
+  "id": "found.color.neutral",
+  "term": "Neutral ramp",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The gray ramp that carries most surfaces, borders and text: its temperature (pure, warm or cool tint), resolution, and usage bands.",
+  "source": [
+   "found.color.neutral"
+  ]
+ },
+ {
+  "id": "found.color.alpha",
+  "term": "Transparent (alpha) colors",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Semi-transparent colors used where the background varies, such as hover fills, borders and scrims.",
+  "source": [
+   "found.color.alpha"
+  ]
+ },
+ {
+  "id": "found.color.brand",
+  "term": "Brand and accent color",
+  "kind": "building block",
+  "layer": "found",
+  "context": "How many accent colors exist, what job the brand color does in the product (reserved accent, signature surface, or whole fields), how a brand hex is adapted for UI contrast, and where it is placed on each platform.",
+  "source": [
+   "found.color.brand"
+  ]
+ },
+ {
+  "id": "found.color.character",
+  "term": "Palette character (chroma and scheme variant)",
+  "kind": "building block",
+  "layer": "found",
+  "context": "How muted or vivid the palette is overall, and which scheme variant shapes it (for example Material's TonalSpot, Fidelity or Vibrant).",
+  "source": [
+   "found.color.character"
+  ]
+ },
+ {
+  "id": "found.color.roles",
+  "term": "Semantic color roles",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The named jobs colors do (background, text, border, icon, per role such as accent, neutral, danger) and the emphasis levels within each role. Components reference roles, never raw values.",
+  "source": [
+   "found.color.roles"
+  ]
+ },
+ {
+  "id": "found.color.roles.surface",
+  "term": "Surface roles",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The background tiers that stack in a UI (base, raised, overlay, sunken) and their light and dark values. L04's surface roles for elevation (DC-L04-13) describe the same tiers from the depth side.",
+  "source": [
+   "found.color.roles.surface"
+  ]
+ },
+ {
+  "id": "found.color.roles.foreground",
+  "term": "Foreground and text colors",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Text and icon colors by emphasis (primary, secondary, placeholder, disabled, inverse) and the on-colors that sit on bold fills.",
+  "source": [
+   "found.color.roles.foreground"
+  ]
+ },
+ {
+  "id": "found.color.roles.status",
+  "term": "Status and feedback colors",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Colors that signal success, warning, danger and information.",
+  "source": [
+   "found.color.roles.status"
+  ]
+ },
+ {
+  "id": "found.color.roles.border",
+  "term": "Border, outline and focus colors",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Colors for decorative and interactive boundaries and the focus indicator color. L04 and L08 own the focus ring's geometry (see `found.interaction.focus`).",
+  "source": [
+   "found.color.roles.border"
+  ]
+ },
+ {
+  "id": "found.color.states",
+  "term": "Interaction state colors",
+  "kind": "building block",
+  "layer": "found",
+  "context": "How hover, pressed, selected and disabled colors are derived from resting colors: by shifting ramp steps, or by overlaying a translucent state layer.",
+  "source": [
+   "found.color.states"
+  ]
+ },
+ {
+  "id": "found.color.modes",
+  "term": "Color modes and appearance",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The alternative color mappings a system ships (light, dark, dimmed, high contrast, colorblind-safe) and how each platform and device class selects among them. Dark mode is always a separate mapping, not an inversion (BOARD cross-lane note from L01).",
+  "source": [
+   "found.color.modes"
+  ]
+ },
+ {
+  "id": "found.color.modes.dark",
+  "term": "Dark mode mapping",
+  "kind": "building block",
+  "layer": "found",
+  "context": "How each semantic role is remapped for dark backgrounds, how dark the base surface is, how chroma changes in dark, and whether a dimmed theme exists.",
+  "source": [
+   "found.color.modes.dark"
+  ]
+ },
+ {
+  "id": "found.color.modes.contrast",
+  "term": "Accessibility color themes",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Extra themes for users who need more contrast or different hue separation: contrast levels, high contrast, forced colors, and colorblind-safe variants.",
+  "source": [
+   "found.color.modes.contrast"
+  ]
+ },
+ {
+  "id": "found.color.modes.appearance",
+  "term": "Appearance modes by platform and device",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Which appearance modes each platform and device class uses and who controls the switch (system setting, in-app override, ambient light).",
+  "source": [
+   "found.color.modes.appearance"
+  ]
+ },
+ {
+  "id": "found.color.personalization",
+  "term": "Dynamic and personalized color",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Whether the product lets the OS or the user recolor it (Android wallpaper-based dynamic color, macOS accent, Apple icon looks) or keeps a fixed brand palette.",
+  "source": [
+   "found.color.personalization"
+  ]
+ },
+ {
+  "id": "found.color.contrast",
+  "term": "Contrast and color independence",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The contrast standard and level every color pair must meet, how it is enforced, and the rule that meaning never depends on color alone.",
+  "source": [
+   "found.color.contrast"
+  ]
+ },
+ {
+  "id": "found.color.expressive",
+  "term": "Gradients and expressive color",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Brand gradients, campaign colors and other expressive color used outside core UI controls.",
+  "source": [
+   "found.color.expressive"
+  ]
+ },
+ {
+  "id": "found.type",
+  "term": "Typography",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Typefaces, the type scale and its roles, text metrics, text layout, responsive and accessible text behavior, and support for non-Latin scripts.",
+  "source": [
+   "found.type"
+  ]
+ },
+ {
+  "id": "found.type.typeface",
+  "term": "Typeface",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Which font families the system uses and why: where they come from, their personality, how many there are, their variable axes, and how they load.",
+  "source": [
+   "found.type.typeface"
+  ]
+ },
+ {
+  "id": "found.type.typeface.sourcing",
+  "term": "Typeface sourcing and platform mapping",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Whether the system uses each platform's system font, an open-source neutral face, or a custom brand face, and which roles get which face on each platform.",
+  "source": [
+   "found.type.typeface.sourcing"
+  ]
+ },
+ {
+  "id": "found.type.typeface.personality",
+  "term": "Typeface classification and personality",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The type class (neo-grotesque, humanist, geometric, serif, rounded) chosen to express the brand, and legibility vetoes on that choice.",
+  "source": [
+   "found.type.typeface.personality"
+  ]
+ },
+ {
+  "id": "found.type.typeface.families",
+  "term": "Families, pairing and monospace",
+  "kind": "building block",
+  "layer": "found",
+  "context": "How many families the system uses, how they pair, and which monospace and numeric faces exist for code and data.",
+  "source": [
+   "found.type.typeface.families"
+  ]
+ },
+ {
+  "id": "found.type.typeface.axes",
+  "term": "Variable axes and optical sizing",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Use of variable-font axes such as weight, optical size and grade.",
+  "source": [
+   "found.type.typeface.axes"
+  ]
+ },
+ {
+  "id": "found.type.typeface.delivery",
+  "term": "Font licensing and loading",
+  "kind": "building block",
+  "layer": "found",
+  "context": "How fonts are licensed, packaged and loaded, and what that costs in performance.",
+  "source": [
+   "found.type.typeface.delivery"
+  ]
+ },
+ {
+  "id": "found.type.roles",
+  "term": "Type roles and emphasis",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The named text styles by job (display, headline, title, body, label, code) and the emphasized variant within each style.",
+  "source": [
+   "found.type.roles"
+  ]
+ },
+ {
+  "id": "found.type.scale",
+  "term": "Type scale",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The base body size, the method and ratio that generate the other sizes, the number of steps, and whether there is a separate expressive scale for marketing.",
+  "source": [
+   "found.type.scale"
+  ]
+ },
+ {
+  "id": "found.type.metrics",
+  "term": "Text metrics",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Line height, letter spacing, the weight palette, and paragraph spacing.",
+  "source": [
+   "found.type.metrics"
+  ]
+ },
+ {
+  "id": "found.type.text-layout",
+  "term": "Text layout (measure, alignment, casing, truncation)",
+  "kind": "building block",
+  "layer": "found",
+  "context": "How text blocks are shaped: maximum line length, alignment, capitalization style of UI text, and what happens when text overflows.",
+  "source": [
+   "found.type.text-layout"
+  ]
+ },
+ {
+  "id": "found.type.responsive",
+  "term": "Responsive and device-distance type",
+  "kind": "building block",
+  "layer": "found",
+  "context": "How type sizes change across breakpoints, platforms and viewing distances (fixed, stepped, fluid, or distance modes).",
+  "source": [
+   "found.type.responsive"
+  ]
+ },
+ {
+  "id": "found.type.scaling",
+  "term": "Text scaling and legibility",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Support for the user's text-size setting (Dynamic Type, Android font scale, browser zoom) and robustness to user text-spacing overrides, including dyslexia considerations.",
+  "source": [
+   "found.type.scaling"
+  ]
+ },
+ {
+  "id": "found.type.i18n",
+  "term": "Scripts, fallbacks and script metrics",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Which writing systems the type must cover, the fallback font stacks for each, and script-specific adjustments to line height, size, tracking, emphasis and direction.",
+  "source": [
+   "found.type.i18n"
+  ]
+ },
+ {
+  "id": "found.type.numerals",
+  "term": "Numerals",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Tabular versus proportional and lining versus oldstyle figures, and native digits for other scripts.",
+  "source": [
+   "found.type.numerals"
+  ]
+ },
+ {
+  "id": "found.space",
+  "term": "Space, sizing and density",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The spacing scale and its semantic uses, the size scales for controls and media, and density: how tightly the whole UI is packed.",
+  "source": [
+   "found.space"
+  ]
+ },
+ {
+  "id": "found.space.base",
+  "term": "Base spacing unit",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The grid unit every spacing and sizing value is a multiple of.",
+  "source": [
+   "found.space.base"
+  ]
+ },
+ {
+  "id": "found.space.scale",
+  "term": "Spacing scale",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The ordered list of spacing values, including fine steps below the base unit and negative values for overlaps.",
+  "source": [
+   "found.space.scale"
+  ]
+ },
+ {
+  "id": "found.space.semantic",
+  "term": "Semantic spacing (inset, gap, layout)",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Named spacing jobs: inset (padding inside a component), gap (stack and inline spacing between siblings), and layout (margins, pane spacers, section spacing), plus the shape of an inset (square, squish, stretch).",
+  "source": [
+   "found.space.semantic"
+  ]
+ },
+ {
+  "id": "found.space.responsive",
+  "term": "Responsive spacing",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Whether spacing values change with the window size.",
+  "source": [
+   "found.space.responsive"
+  ]
+ },
+ {
+  "id": "found.space.whitespace",
+  "term": "Whitespace personality and grouping",
+  "kind": "building block",
+  "layer": "found",
+  "context": "How airy or tight the product feels, expressed as the ratio between spacing inside a group and spacing between groups.",
+  "source": [
+   "found.space.whitespace"
+  ]
+ },
+ {
+  "id": "found.space.rhythm",
+  "term": "Vertical rhythm",
+  "kind": "building block",
+  "layer": "found",
+  "context": "How line heights and vertical spacing snap to a shared grid, and how layouts survive user text-spacing overrides.",
+  "source": [
+   "found.space.rhythm"
+  ]
+ },
+ {
+  "id": "found.space.sizing",
+  "term": "Size scales",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Shared size ladders for interactive controls and for media such as icons and avatars, so that everything placed side by side lines up.",
+  "source": [
+   "found.space.sizing"
+  ]
+ },
+ {
+  "id": "found.space.sizing.controls",
+  "term": "Control height scale",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The small, medium and large heights shared by buttons, inputs, selects and other inline controls.",
+  "source": [
+   "found.space.sizing.controls"
+  ]
+ },
+ {
+  "id": "found.space.sizing.media",
+  "term": "Icon and avatar size scales",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The size ladders for icons and avatars.",
+  "source": [
+   "found.space.sizing.media"
+  ]
+ },
+ {
+  "id": "found.space.density",
+  "term": "Density",
+  "kind": "building block",
+  "layer": "found",
+  "context": "How much content fits in a given area, and who controls it. Density changes layout, not just padding (BOARD note from L03). Six lanes decide parts of density; they are gathered here and split into voice, strategy and device context.",
+  "source": [
+   "found.space.density"
+  ]
+ },
+ {
+  "id": "found.space.density.voice",
+  "term": "Density voice and base size",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The product-wide density personality (compact, comfortable, spacious) and the body size and control height that come with it.",
+  "source": [
+   "found.space.density.voice"
+  ]
+ },
+ {
+  "id": "found.space.density.strategy",
+  "term": "Density strategy and modes",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Who sets density (the system, the product, or the user) and which components get a compact mode.",
+  "source": [
+   "found.space.density.strategy"
+  ]
+ },
+ {
+  "id": "found.space.density.context",
+  "term": "Density by device class",
+  "kind": "building block",
+  "layer": "found",
+  "context": "How information density follows viewing distance and input rather than pixel count.",
+  "source": [
+   "found.space.density.context"
+  ]
+ },
+ {
+  "id": "found.layout",
+  "term": "Layout",
+  "kind": "building block",
+  "layer": "found",
+  "context": "How screens are divided and adapt: breakpoints, column grids, containers and maximum widths, responsive and adaptive behavior, and safe areas. Canonical layouts and app shells are patterns (`pat.layout`); stacking order is in `found.elevation.stacking`.",
+  "source": [
+   "found.layout"
+  ]
+ },
+ {
+  "id": "found.layout.breakpoints",
+  "term": "Breakpoints",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The window widths at which layouts change.",
+  "source": [
+   "found.layout.breakpoints"
+  ]
+ },
+ {
+  "id": "found.layout.grid",
+  "term": "Column grid",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Columns, gutters and margins at each breakpoint.",
+  "source": [
+   "found.layout.grid"
+  ]
+ },
+ {
+  "id": "found.layout.containers",
+  "term": "Containers and maximum content width",
+  "kind": "building block",
+  "layer": "found",
+  "context": "How content is framed inside the window: centered reading columns, navigation plus content, or fluid data surfaces, and their maximum widths.",
+  "source": [
+   "found.layout.containers"
+  ]
+ },
+ {
+  "id": "found.layout.adaptation",
+  "term": "Responsive and adaptive strategy",
+  "kind": "building block",
+  "layer": "found",
+  "context": "How layouts respond to size: reflowing within a layout (responsive), switching layouts at breakpoints (adaptive), and whether components respond to their container or to the viewport.",
+  "source": [
+   "found.layout.adaptation"
+  ]
+ },
+ {
+  "id": "found.layout.safe-areas",
+  "term": "Safe areas, insets and edge policy",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Where interactive content may go relative to screen edges, notches, system bars, hinges and TV overscan.",
+  "source": [
+   "found.layout.safe-areas"
+  ]
+ },
+ {
+  "id": "found.interaction",
+  "term": "Interaction and input",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The input methods the system supports (touch, pointer, keyboard, remote, gaze, voice, rotary) and the foundations that depend on them: target sizes, target spacing and the focus indicator. L14 shows these follow input precision, not device.",
+  "source": [
+   "found.interaction"
+  ]
+ },
+ {
+  "id": "found.interaction.modalities",
+  "term": "Input modalities",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Which inputs each surface must support and how density and targets switch between them.",
+  "source": [
+   "found.interaction.modalities"
+  ]
+ },
+ {
+  "id": "found.interaction.targets",
+  "term": "Target size and spacing",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The minimum hit area for interactive elements and the minimum spacing between adjacent targets, keyed to input precision.",
+  "source": [
+   "found.interaction.targets"
+  ]
+ },
+ {
+  "id": "found.interaction.focus",
+  "term": "Focus indicator",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The visible ring or highlight that shows which element has keyboard, remote or switch focus: thickness, offset, color and shape. L04 and L08 each decided it; they agree.",
+  "source": [
+   "found.interaction.focus"
+  ]
+ },
+ {
+  "id": "found.shape",
+  "term": "Shape and borders",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Corner radius (scale, personality, per-component roles, geometry, nesting, expressive shapes) and the borders, strokes and dividers that outline things.",
+  "source": [
+   "found.shape"
+  ]
+ },
+ {
+  "id": "found.shape.radius",
+  "term": "Radius scale and default control radius",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The ordered set of corner radii and the default radius for controls.",
+  "source": [
+   "found.shape.radius"
+  ]
+ }
+]

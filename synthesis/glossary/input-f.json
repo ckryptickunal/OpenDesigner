@@ -1,0 +1,442 @@
+[
+ {
+  "id": "use.cmd-init",
+  "term": "init (engine command)",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "engine.py init: create state.json with defaults in ./opendesigner/",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.cmd-set",
+  "term": "set (engine command)",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "engine.py set <dotted.path> <value> --why: record one decision, appended to decisions.md",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.cmd-pick",
+  "term": "pick (engine command)",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "engine.py pick <Q-id> <option> --why: answer one interview question",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.cmd-lock",
+  "term": "lock and unlock (engine commands)",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "engine.py lock/unlock: freeze a decision so later changes cannot drift it",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.cmd-resolve",
+  "term": "resolve (engine command)",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "engine.py resolve: print effective dials and derived parameters as JSON",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.cmd-generate",
+  "term": "generate (engine command)",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "engine.py generate: write tokens/ in DTCG 2025.10 plus a resolver file",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.cmd-validate",
+  "term": "validate (engine command)",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "engine.py validate: contrast, targets and lint checks; exit 1 on errors; report cites the rule",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.cmd-export",
+  "term": "export (engine command)",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "engine.py export --format css|tailwind|figma|paper|swift|compose|dtcg|all",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.cmd-design-md",
+  "term": "design-md (engine command)",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "engine.py design-md: render DESIGN.md and PRODUCT.md at the project root",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.cmd-preview",
+  "term": "preview (engine command)",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "engine.py preview: render preview.html, a specimen of every token and a few components",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.cmd-intake",
+  "term": "intake (engine command)",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "engine.py intake: fit reference measurements (from a site or file) to proposed dials and inputs",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.cmd-build",
+  "term": "build (engine command)",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "engine.py build: generate + export all + design-md + preview + validate in one step",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.cmd-feedback",
+  "term": "feedback (engine command)",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "engine.py feedback \"text\" --kind gap|bug|confusing|idea: records to opendesigner/feedback.md and prints a pre-filled GitHub issue link; nothing is posted without the person's OK (U3 plan, _coordination/lanes/U-lanes.md)",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.file-state",
+  "term": "state.json",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "opendesigner/state.json: the person's answers by question id, dial values 0-100, raw inputs, asset-hook status; the one source the rest is generated from",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.file-decisions",
+  "term": "decisions.md",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "opendesigner/decisions.md: log of every decision with how it was set and why",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.file-product",
+  "term": "PRODUCT.md",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "PRODUCT.md at the project root: product context (audience, scope, platforms) written by design-md",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.file-rationale",
+  "term": "RATIONALE.md",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "opendesigner/RATIONALE.md: one-page explanation of the system's choices to share with a team",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.file-agents-snippet",
+  "term": "AGENTS.md snippet",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "Text added (after asking) to the person's AGENTS.md telling future AI sessions to read DESIGN.md and tokens before changing UI",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.file-tokens-folder",
+  "term": "tokens folder",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "opendesigner/tokens/: canonical DTCG 2025.10 token files and resolver",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.file-build-folder",
+  "term": "build folder",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "opendesigner/build/: generated exports (CSS, Tailwind, Swift, Compose, Figma, Paper)",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.file-preview",
+  "term": "preview page",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "preview.html: a page showing every token and a few components so you can see the system",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.file-feedback",
+  "term": "feedback file",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "opendesigner/feedback.md: gaps, bugs and ideas found while using OpenDesigner, ready to file as issues",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.designmd-front-matter",
+  "term": "DESIGN.md front matter",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "The YAML header at the top of DESIGN.md (Google's open DESIGN.md format); DTCG tokens stay canonical",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.designmd-dos-donts",
+  "term": "Do's and Don'ts",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "DESIGN.md section listing how to use and not use the system, for people and AI",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.status-chosen",
+  "term": "chosen (decision status)",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "set_by value: the person picked this value themselves",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.status-confirmed-default",
+  "term": "confirmed default (decision status)",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "set_by value: the person saw the recommended default and said yes",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.status-auto-default",
+  "term": "auto default (decision status)",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "set_by value: a safe default applied without asking (low time weight)",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.status-assumed",
+  "term": "assumed (decision status)",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "set_by value: filled in to keep going and flagged for the person to confirm later (owner inputs are never silently assumed)",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.status-delegated",
+  "term": "delegated (decision status)",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "set_by value: the person said 'you decide' and the model chose",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.status-reference",
+  "term": "from reference (decision status)",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "set_by value: taken from a reference site or file the person shared",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.status-locked",
+  "term": "locked decision",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "A decision frozen with lock so later sessions cannot change it without unlocking",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.status-supersedes",
+  "term": "superseded decision",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "A decision replaced by a newer one; decisions.md keeps both and links them",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.od-line",
+  "term": "OD line",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "A line starting with OD: produced by a visual template's Copy my choice button; each maps to one engine command (pick, set, lock, remix, note)",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.question-id",
+  "term": "question id",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "Stable id of an interview question, such as Q-shape-01, used in state.json and decisions.md",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.time-weight",
+  "term": "time weight",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "How long the model should spend on a question: high for decisions that shape many others, low for safe defaults",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.zoom-broad",
+  "term": "broad level",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "Zoom level 1: each foundation at a glance (U2 zoom levels: sketch, broad, defined, detailed)",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.zoom-defined",
+  "term": "defined level",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "Zoom level 2: each area decided with real values",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.zoom-detailed",
+  "term": "detailed level",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "Zoom level 3: every block and component specified in detail",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.hook-status",
+  "term": "hook status",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "Status of an asset hook: have, commissioning (a designer is making it), using tool, or skipped",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.template",
+  "term": "visual template",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "A small HTML page the model fills with options (palette, type scale, spacing ruler, radius, elevation, motion, component sheet, option gallery) so you can see and pick",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.copy-my-choice",
+  "term": "Copy my choice button",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "Button on every visual template that copies your picks as OD lines to paste back into the chat",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.validation-report",
+  "term": "validation report",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "Output of validate: errors (must fix, e.g. contrast below 4.5:1) and warnings (worth a look), each citing its rule",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.recommendation",
+  "term": "recommendation",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "The option the model suggests, with its reason; a recommendation is not an answer until you accept it",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ },
+ {
+  "id": "use.interview",
+  "term": "interview",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "The step-by-step conversation where the model asks one high-impact question at a time and records your answers",
+  "source": [
+   "skills/opendesigner/SKILL.md; skills/opendesigner/scripts/engine.py; synthesis/OPENDESIGNER-SPEC.md section 7"
+  ]
+ }
+]

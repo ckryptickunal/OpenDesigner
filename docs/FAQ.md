@@ -8,7 +8,7 @@ Short answers to the questions people ask most. Each answer links to the researc
 
 ### How do I create a design system with AI?
 
-Load OpenDesigner into the AI tool you already use (Claude Code, Claude, Codex, ChatGPT, Cursor and others; install steps are in the [README](../README.md#quickstart)) and say "create a design system for this project". The model reads your repo first, shows you the building blocks, asks you between 10 questions (Quick mode) and 191 (Expert mode), shows each choice visually where your tool allows it, and writes DTCG design tokens, CSS variables, a Tailwind theme, a `DESIGN.md` and a decision log into your project. [How it works](HOW-IT-WORKS.md).
+Load OpenDesigner into the AI tool you already use (Claude Code, Claude, Codex, ChatGPT, Cursor and others; install steps are in the [README](../README.md#quickstart)) and say "create a design system for this project". The model reads your repo first, shows you the building blocks, starts with a short sketch and lets you zoom into any area, shows each choice visually where your tool allows it, and writes DTCG design tokens, CSS variables, a Tailwind theme, a `DESIGN.md` and a decision log into your project. [How it works](HOW-IT-WORKS.md).
 
 The difference from prompting "make me a design system" is that every recommendation comes from a cited research base (352 Decision Cards, 25 benchmarked systems), the order of questions follows what depends on what, and deterministic checks (contrast, target sizes, scale steps) run before you see the result.
 
@@ -18,7 +18,7 @@ Most of what makes an interface look designed is consistency: one spacing scale,
 
 ### How long does it take?
 
-Quick mode asks 10 questions and fills everything else with sourced defaults you can change later. Standard mode asks 92, Expert 191. You can switch modes, and every default stays editable.
+Start with a sketch: about 5 questions give you a complete, working system with sourced defaults. Then zoom into any area you care about, and stop whenever it is enough. (The first release offers this as depth modes: Quick asks 10 questions, Standard 92, Expert 191.) Every default stays editable.
 
 ### What do I get at the end?
 

@@ -12,13 +12,13 @@ REPO=ckryptickunal/OpenDesigner
 2. **Decide the licenses.** The defaults are MIT for code, skills and data, and CC BY 4.0 for written research and docs (`LICENSE`, `LICENSE-CONTENT`). Change them now if you want something else; it is much harder after outside contributions arrive.
 3. **Check for other secrets** once more: `git log -p | grep -iE "api[_-]?key|secret|token" | head`.
 
-## About description (298 characters)
+## About description (315 characters)
 
 ```
-Open-source AI design system builder. Load it into Claude, ChatGPT, Codex or Cursor: it interviews you, recommends sourced defaults and writes DTCG design tokens, CSS, Tailwind, DESIGN.md and a decision log, with WCAG 2.2 checks. Built on 352 cited Decision Cards and 25 benchmarked design systems.
+Open-source AI design system builder. Load it into Claude, ChatGPT, Codex or Cursor: it interviews you, recommends sourced defaults and writes DTCG design tokens, CSS, Tailwind, Figma variables, DESIGN.md and a decision log, with WCAG 2.2 checks. Built on 352 cited Decision Cards and 25 benchmarked design systems.
 ```
 
-It leads with the phrase people search for, names the hosts and formats people filter by, and ends with the proof. Update the card count when the research grows (`python3 tools/jev_nav.py check` prints it). If the Figma variables exporter ships, add "Figma variables" after "Tailwind" (the text stays under 350 characters).
+It leads with the phrase people search for, names the hosts and formats people filter by, and ends with the proof. Update the card count when the research grows (`python3 tools/jev_nav.py check` prints it).
 
 ## Topics (20, the maximum)
 
@@ -40,7 +40,7 @@ Upload `docs/assets/social-preview.png` (1280x640) under **Settings > General > 
 
 ```bash
 gh repo edit "$REPO" \
-  --description "Open-source AI design system builder. Load it into Claude, ChatGPT, Codex or Cursor: it interviews you, recommends sourced defaults and writes DTCG design tokens, CSS, Tailwind, DESIGN.md and a decision log, with WCAG 2.2 checks. Built on 352 cited Decision Cards and 25 benchmarked design systems." \
+  --description "Open-source AI design system builder. Load it into Claude, ChatGPT, Codex or Cursor: it interviews you, recommends sourced defaults and writes DTCG design tokens, CSS, Tailwind, Figma variables, DESIGN.md and a decision log, with WCAG 2.2 checks. Built on 352 cited Decision Cards and 25 benchmarked design systems." \
   --add-topic design-system,design-systems,design-tokens,dtcg,design-system-generator,ai-design,claude,claude-code,claude-skills,agent-skills,codex,chatgpt,mcp,figma,tailwindcss,shadcn-ui,accessibility,wcag,ui-design,theming \
   --enable-issues --enable-discussions --enable-wiki=false --enable-projects=false \
   --enable-squash-merge --enable-merge-commit=false --enable-rebase-merge=false \

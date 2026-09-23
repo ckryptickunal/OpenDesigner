@@ -7,6 +7,7 @@ body:
     attributes:
       value: |
         Thanks for reporting. For a wrong research value use "Research correction" instead. For security problems, use private reporting (see SECURITY.md), not this form.
+        Tip: in a project that uses OpenDesigner, `python3 <skill>/scripts/engine.py feedback` pre-fills this form from your session. Nothing is posted until you submit it. Fixes go to the source files (`skills/`, `synthesis/`, `research/`), not the generated copies.
   - type: dropdown
     id: area
     attributes:

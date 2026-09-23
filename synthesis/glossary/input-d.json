@@ -1,0 +1,612 @@
+[
+ {
+  "id": "found.shape.personality",
+  "term": "Roundness and brand shape language",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The overall roundness dial (sharp, subtle, rounded, pill) and whether the brand contributes a signature shape.",
+  "source": [
+   "found.shape.personality"
+  ]
+ },
+ {
+  "id": "found.shape.roles",
+  "term": "Radius roles per component",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Semantic radius roles (detail, control, container, overlay, person) that map the scale onto component types.",
+  "source": [
+   "found.shape.roles"
+  ]
+ },
+ {
+  "id": "found.shape.geometry",
+  "term": "Corner geometry and nesting",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Whether corners are circular arcs or continuous curvature (squircles), and how inner radii derive from outer radii when shapes nest.",
+  "source": [
+   "found.shape.geometry"
+  ]
+ },
+ {
+  "id": "found.shape.expressive",
+  "term": "Full-round and expressive shapes",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Pills and the expressive shape library (for example Material 3 Expressive's 35 shapes and shape morphing).",
+  "source": [
+   "found.shape.expressive"
+  ]
+ },
+ {
+  "id": "found.shape.border",
+  "term": "Border widths and dividers",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The stroke width scale for borders, selection and emphasis, and when dividers separate content. L03 and L04 both decided the width scale; they agree on 1, 2, 4.",
+  "source": [
+   "found.shape.border"
+  ]
+ },
+ {
+  "id": "found.elevation",
+  "term": "Elevation, materials and opacity",
+  "kind": "building block",
+  "layer": "found",
+  "context": "How surfaces separate in depth: the depth model, elevation levels, shadow recipes, surface roles, stacking order, translucent materials, and opacity including state layers and scrims.",
+  "source": [
+   "found.elevation"
+  ]
+ },
+ {
+  "id": "found.elevation.depth-model",
+  "term": "Depth model",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The primary way surfaces separate: flat with borders, shadows, tonal color steps, or translucent material.",
+  "source": [
+   "found.elevation.depth-model"
+  ]
+ },
+ {
+  "id": "found.elevation.scale",
+  "term": "Elevation levels",
+  "kind": "building block",
+  "layer": "found",
+  "context": "How many elevation levels exist and which components sit at each.",
+  "source": [
+   "found.elevation.scale"
+  ]
+ },
+ {
+  "id": "found.elevation.shadow",
+  "term": "Shadow recipe",
+  "kind": "building block",
+  "layer": "found",
+  "context": "How shadows are built: number of layers, color, softness, and how they change in dark mode.",
+  "source": [
+   "found.elevation.shadow"
+  ]
+ },
+ {
+  "id": "found.elevation.surfaces",
+  "term": "Surface roles for elevation",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The surface tiers seen from the depth side, including how much lighter each tier gets in dark mode. The same tiers appear as color roles in `found.color.roles.surface`.",
+  "source": [
+   "found.elevation.surfaces"
+  ]
+ },
+ {
+  "id": "found.elevation.stacking",
+  "term": "Stacking order (z-index layers)",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The named order in which overlapping layers stack (sticky headers, dropdowns, scrims, modals, popovers, toasts). L03 and L04 each decided this; the builder keeps one scale.",
+  "source": [
+   "found.elevation.stacking"
+  ]
+ },
+ {
+  "id": "found.elevation.materials",
+  "term": "Translucent materials",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Glass, blur and vibrancy effects, where they are used, and the opaque fallbacks for users who reduce transparency.",
+  "source": [
+   "found.elevation.materials"
+  ]
+ },
+ {
+  "id": "found.elevation.opacity",
+  "term": "Opacity, state layers and scrims",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The opacity values used for state overlays and disabled content, and the dimming layer behind modal content.",
+  "source": [
+   "found.elevation.opacity"
+  ]
+ },
+ {
+  "id": "found.motion",
+  "term": "Motion",
+  "kind": "building block",
+  "layer": "found",
+  "context": "How the interface moves: motion personality, duration and easing scales, springs, interruptibility, reduced motion, and how motion differs by platform and device.",
+  "source": [
+   "found.motion"
+  ]
+ },
+ {
+  "id": "found.motion.personality",
+  "term": "Motion personality and model",
+  "kind": "building block",
+  "layer": "found",
+  "context": "How motion feels (quick and invisible or physical and playful), whether there are productive and expressive modes, and where expressive motion is allowed.",
+  "source": [
+   "found.motion.personality"
+  ]
+ },
+ {
+  "id": "found.motion.duration",
+  "term": "Duration scale",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The named ladder of animation durations.",
+  "source": [
+   "found.motion.duration"
+  ]
+ },
+ {
+  "id": "found.motion.easing",
+  "term": "Easing set",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The named timing curves for standard, entering, exiting and linear motion.",
+  "source": [
+   "found.motion.easing"
+  ]
+ },
+ {
+  "id": "found.motion.springs",
+  "term": "Springs and physics",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Spring-based motion defined by damping and stiffness (or duration and bounce) instead of fixed curves.",
+  "source": [
+   "found.motion.springs"
+  ]
+ },
+ {
+  "id": "found.motion.interruptibility",
+  "term": "Enter and exit asymmetry and interruptibility",
+  "kind": "building block",
+  "layer": "found",
+  "context": "How exits differ from enters and what happens when a transition is interrupted midway.",
+  "source": [
+   "found.motion.interruptibility"
+  ]
+ },
+ {
+  "id": "found.motion.reduced",
+  "term": "Reduced motion",
+  "kind": "building block",
+  "layer": "found",
+  "context": "What happens to motion when the user asks the OS to reduce it.",
+  "source": [
+   "found.motion.reduced"
+  ]
+ },
+ {
+  "id": "found.motion.platform",
+  "term": "Motion by platform and device class",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Which transitions the OS owns (navigation, back, sheets), which motion the brand owns, and how the motion budget shrinks on constrained devices.",
+  "source": [
+   "found.motion.platform"
+  ]
+ },
+ {
+  "id": "found.sensory",
+  "term": "Sound and haptics",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Non-visual feedback: haptic patterns and UI sounds (earcons).",
+  "source": [
+   "found.sensory"
+  ]
+ },
+ {
+  "id": "found.sensory.haptics",
+  "term": "Haptic vocabulary",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The small set of semantic haptic events (success, warning, error, selection, toggle, impact) and when they fire.",
+  "source": [
+   "found.sensory.haptics"
+  ]
+ },
+ {
+  "id": "found.sensory.sound",
+  "term": "UI sounds",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Whether the product plays sounds for events, and which ones.",
+  "source": [
+   "found.sensory.sound"
+  ]
+ },
+ {
+  "id": "found.icon",
+  "term": "Iconography",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The UI icon set: where it comes from, its style and construction, sizes, states, color, pairing with labels, naming, tiers beyond UI icons, delivery, and how it maps to platform symbol sets.",
+  "source": [
+   "found.icon"
+  ]
+ },
+ {
+  "id": "found.icon.source",
+  "term": "Icon library strategy",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Whether the system adopts an existing icon library, extends one, or draws its own.",
+  "source": [
+   "found.icon.source"
+  ]
+ },
+ {
+  "id": "found.icon.style",
+  "term": "Icon style and brand match",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Outline, filled or duotone, rounded or sharp, and how the icon style reflects the brand and the type.",
+  "source": [
+   "found.icon.style"
+  ]
+ },
+ {
+  "id": "found.icon.construction",
+  "term": "Stroke, grid and keylines",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The construction rules for drawing icons: stroke weight, corners and terminals, the pixel grid, keyline shapes, live area and padding.",
+  "source": [
+   "found.icon.construction"
+  ]
+ },
+ {
+  "id": "found.icon.sizes",
+  "term": "Icon sizes and optical sizing",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The icon size ladder and how icon size pairs with adjacent text.",
+  "source": [
+   "found.icon.sizes"
+  ]
+ },
+ {
+  "id": "found.icon.states",
+  "term": "Icon states",
+  "kind": "building block",
+  "layer": "found",
+  "context": "How icons show selected, active, disabled and emphasized states.",
+  "source": [
+   "found.icon.states"
+  ]
+ },
+ {
+  "id": "found.icon.labels",
+  "term": "Icons with labels",
+  "kind": "building block",
+  "layer": "found",
+  "context": "When icons need text, and how icon and label align and space.",
+  "source": [
+   "found.icon.labels"
+  ]
+ },
+ {
+  "id": "found.icon.color",
+  "term": "Icon color and rendering mode",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Which colors icons use and whether multicolor or hierarchical rendering is allowed.",
+  "source": [
+   "found.icon.color"
+  ]
+ },
+ {
+  "id": "found.icon.naming",
+  "term": "Icon metaphors, naming and localization",
+  "kind": "building block",
+  "layer": "found",
+  "context": "How icons are named, which metaphors are used, and how icons behave in right-to-left locales and other markets.",
+  "source": [
+   "found.icon.naming"
+  ]
+ },
+ {
+  "id": "found.icon.delivery",
+  "term": "Icon delivery",
+  "kind": "building block",
+  "layer": "found",
+  "context": "How icons ship to each platform: source format, generated packages, file naming.",
+  "source": [
+   "found.icon.delivery"
+  ]
+ },
+ {
+  "id": "found.icon.tiers",
+  "term": "Icon tiers beyond UI icons",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Pictograms and spot icons: larger, more detailed icon tiers used on marketing and onboarding surfaces.",
+  "source": [
+   "found.icon.tiers"
+  ]
+ },
+ {
+  "id": "found.icon.platform",
+  "term": "Icons across platforms",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Which actions use each platform's own glyphs and which use the brand icon set.",
+  "source": [
+   "found.icon.platform"
+  ]
+ },
+ {
+  "id": "found.imagery",
+  "term": "Imagery, illustration and brand marks",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Photography, image ratios and loading, text over images, illustration, rich media, graphic motifs, and the brand's marks inside the product (app icon, logo, favicon).",
+  "source": [
+   "found.imagery"
+  ]
+ },
+ {
+  "id": "found.imagery.photo",
+  "term": "Photography art direction",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The rules for choosing and treating photos: subjects, perspective, light, color treatment and casting.",
+  "source": [
+   "found.imagery.photo"
+  ]
+ },
+ {
+  "id": "found.imagery.ratios",
+  "term": "Aspect ratios and cropping",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The allowed image aspect ratios and which component slot uses which.",
+  "source": [
+   "found.imagery.ratios"
+  ]
+ },
+ {
+  "id": "found.imagery.text-on-image",
+  "term": "Text and UI on images",
+  "kind": "building block",
+  "layer": "found",
+  "context": "How text stays legible when placed over photos: overlays, scrims, protection gradients.",
+  "source": [
+   "found.imagery.text-on-image"
+  ]
+ },
+ {
+  "id": "found.imagery.loading",
+  "term": "Image loading and placeholders",
+  "kind": "building block",
+  "layer": "found",
+  "context": "What shows while images load or when they fail.",
+  "source": [
+   "found.imagery.loading"
+  ]
+ },
+ {
+  "id": "found.imagery.illustration",
+  "term": "Illustration style and tiers",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The illustration style (derived from brand, icon stroke and radius), the character system if any, and the tiers where illustrations appear (hero, spot, empty state, pattern).",
+  "source": [
+   "found.imagery.illustration"
+  ]
+ },
+ {
+  "id": "found.imagery.rich-media",
+  "term": "Emoji, 3D, animated icons and Lottie",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Rich media assets beyond static images: emoji, stickers, 3D, animated icons and Lottie files.",
+  "source": [
+   "found.imagery.rich-media"
+  ]
+ },
+ {
+  "id": "found.imagery.motifs",
+  "term": "Graphic devices and motifs",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Signature shapes, patterns, crops, frames and gradients carried over from the brand identity.",
+  "source": [
+   "found.imagery.motifs"
+  ]
+ },
+ {
+  "id": "found.imagery.brand-marks",
+  "term": "App icon, logo and favicon",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The brand's marks inside the product: the app icon system per platform, logo placement, and favicons.",
+  "source": [
+   "found.imagery.brand-marks"
+  ]
+ },
+ {
+  "id": "found.dataviz",
+  "term": "Data visualization",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Charts as part of the system: which chart types exist, their colors, their anatomy and tokens, and how they stay accessible.",
+  "source": [
+   "found.dataviz"
+  ]
+ },
+ {
+  "id": "found.dataviz.scope",
+  "term": "Chart scope and library",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Which chart types the system supports and which chart library it themes.",
+  "source": [
+   "found.dataviz.scope"
+  ]
+ },
+ {
+  "id": "found.dataviz.color",
+  "term": "Data-visualization palettes",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Categorical, sequential, diverging and status palettes for charts. L01 summarized this and L05 owns it; both cards live here.",
+  "source": [
+   "found.dataviz.color"
+  ]
+ },
+ {
+  "id": "found.dataviz.anatomy",
+  "term": "Chart anatomy and tokens",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The parts of a chart (axes, gridlines, labels, legends, tooltips) and the tokens they use.",
+  "source": [
+   "found.dataviz.anatomy"
+  ]
+ },
+ {
+  "id": "found.dataviz.a11y",
+  "term": "Chart accessibility",
+  "kind": "building block",
+  "layer": "found",
+  "context": "How charts work without relying on color and for screen-reader users.",
+  "source": [
+   "found.dataviz.a11y"
+  ]
+ },
+ {
+  "id": "found.content",
+  "term": "Content and voice",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The words in the product: voice, tone by situation, grammar and capitalization, microcopy for components, terminology, localization readiness, readability targets and scannable structure. Voice stays the same across platforms; terminology for platform features adapts (L10 identical-versus-adapt table).",
+  "source": [
+   "found.content"
+  ]
+ },
+ {
+  "id": "found.content.voice",
+  "term": "Voice",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The brand's consistent personality in words, described as a few traits.",
+  "source": [
+   "found.content.voice"
+  ]
+ },
+ {
+  "id": "found.content.tone",
+  "term": "Tone by situation",
+  "kind": "building block",
+  "layer": "found",
+  "context": "How the voice shifts by context: errors, success, onboarding, notifications.",
+  "source": [
+   "found.content.tone"
+  ]
+ },
+ {
+  "id": "found.content.mechanics",
+  "term": "Grammar, mechanics and capitalization",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The house rules for capitalization, contractions, pronouns, punctuation, numbers and dates.",
+  "source": [
+   "found.content.mechanics"
+  ]
+ },
+ {
+  "id": "found.content.microcopy",
+  "term": "Component microcopy",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The wording rules each component ships with: button labels, empty-state text, error text, confirmations.",
+  "source": [
+   "found.content.microcopy"
+  ]
+ },
+ {
+  "id": "found.content.terminology",
+  "term": "Terminology and inclusive language",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The word list: preferred terms, banned terms, and inclusive-language rules.",
+  "source": [
+   "found.content.terminology"
+  ]
+ },
+ {
+  "id": "found.content.localization",
+  "term": "Localization readiness",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Rules that let the UI survive translation: text expansion, right-to-left, locale formats.",
+  "source": [
+   "found.content.localization"
+  ]
+ },
+ {
+  "id": "found.content.readability",
+  "term": "Readability and plain language",
+  "kind": "building block",
+  "layer": "found",
+  "context": "Reading-level targets and length limits for labels and messages.",
+  "source": [
+   "found.content.readability"
+  ]
+ },
+ {
+  "id": "found.content.scannability",
+  "term": "Content hierarchy for scanning",
+  "kind": "building block",
+  "layer": "found",
+  "context": "How content is structured so people can scan it: headings, front-loading, bold terms, lists.",
+  "source": [
+   "found.content.scannability"
+  ]
+ },
+ {
+  "id": "found.a11y",
+  "term": "Accessibility",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The conformance target, who owns which accessibility guarantees, and the OS accessibility settings the system must honor. Specific accessibility rules live with the foundation they bound: contrast (`found.color.contrast`), text scaling (`found.type.scaling`), reduced motion (`found.motion.reduced`), targets (`found.interaction.targets`), focus (`found.interaction.focus`), charts (`found.dataviz.a11y`).",
+  "source": [
+   "found.a11y"
+  ]
+ },
+ {
+  "id": "found.a11y.settings",
+  "term": "Platform accessibility settings",
+  "kind": "building block",
+  "layer": "found",
+  "context": "The OS settings the system must respond to: text size, bold text, increased contrast, reduced transparency, reduced motion, forced colors, screen readers.",
+  "source": [
+   "found.a11y.settings"
+  ]
+ }
+]

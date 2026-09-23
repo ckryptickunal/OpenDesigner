@@ -1,0 +1,502 @@
+[
+ {
+  "id": "comp",
+  "term": "Components",
+  "kind": "building block",
+  "layer": "comp",
+  "context": "Reusable UI parts with an anatomy, variants, states, props and accessibility behavior, built from tokens. The catalog in `research/L08-component-catalog.md` defines 64 canonical components (C01 to C64) across ten categories, with coverage across 10 benchmark systems; each entry lists the token families it consumes, which is the edge list from foundations to components.",
+  "source": [
+   "comp"
+  ]
+ },
+ {
+  "id": "comp.inventory",
+  "term": "Component inventory scope",
+  "kind": "building block",
+  "layer": "comp",
+  "context": "Which components version 1 ships and when extended components are added.",
+  "source": [
+   "comp.inventory"
+  ]
+ },
+ {
+  "id": "comp.taxonomy",
+  "term": "Hierarchy model and naming",
+  "kind": "building block",
+  "layer": "comp",
+  "context": "How building blocks are layered (tokens, primitives, components, patterns, templates) and how components are named, with an alias table for names that collide across systems.",
+  "source": [
+   "comp.taxonomy"
+  ]
+ },
+ {
+  "id": "comp.implementation",
+  "term": "Build strategy and technology",
+  "kind": "building block",
+  "layer": "comp",
+  "context": "Whether components are built on a headless library, a styled library, or native controls, and whether they ship as framework components or web components.",
+  "source": [
+   "comp.implementation"
+  ]
+ },
+ {
+  "id": "comp.api",
+  "term": "Component API (code and Figma)",
+  "kind": "building block",
+  "layer": "comp",
+  "context": "How a component is configured: props versus composition of named parts in code, and variants, booleans, text, instance swap and slots in Figma.",
+  "source": [
+   "comp.api"
+  ]
+ },
+ {
+  "id": "comp.device-variants",
+  "term": "Device variants of components",
+  "kind": "building block",
+  "layer": "comp",
+  "context": "Whether one component set covers all device classes through context modes, or separate sets exist per device.",
+  "source": [
+   "comp.device-variants"
+  ]
+ },
+ {
+  "id": "comp.platform-rendering",
+  "term": "System controls versus custom controls",
+  "kind": "building block",
+  "layer": "comp",
+  "context": "Whether native platforms use the OS's own controls tinted with the brand, or custom-drawn controls.",
+  "source": [
+   "comp.platform-rendering"
+  ]
+ },
+ {
+  "id": "comp.states",
+  "term": "Interaction states",
+  "kind": "building block",
+  "layer": "comp",
+  "context": "Which states each component styles distinctly (enabled, hover, focus-visible, pressed, selected, disabled, loading, error), and which subset each input method can trigger.",
+  "source": [
+   "comp.states"
+  ]
+ },
+ {
+  "id": "comp.states.disabled",
+  "term": "Disabled and unavailable actions",
+  "kind": "building block",
+  "layer": "comp",
+  "context": "Whether actions that cannot run are disabled, hidden, or left enabled with an explanation. Systems disagree here (BOARD note from L08).",
+  "source": [
+   "comp.states.disabled"
+  ]
+ },
+ {
+  "id": "comp.states.loading",
+  "term": "Loading state",
+  "kind": "building block",
+  "layer": "comp",
+  "context": "How a component shows it is busy: spinner, skeleton, or loading button.",
+  "source": [
+   "comp.states.loading"
+  ]
+ },
+ {
+  "id": "comp.states.selected",
+  "term": "Selected and active state",
+  "kind": "building block",
+  "layer": "comp",
+  "context": "How the selected tab, row, chip or navigation item is marked.",
+  "source": [
+   "comp.states.selected"
+  ]
+ },
+ {
+  "id": "comp.behavior",
+  "term": "Microinteraction specification",
+  "kind": "building block",
+  "layer": "comp",
+  "context": "How each interactive component documents its behavior: trigger, rules, feedback, and loops and modes (Saffer's four parts), plus its state list, implemented as a state machine.",
+  "source": [
+   "comp.behavior"
+  ]
+ },
+ {
+  "id": "comp.action",
+  "term": "Action components",
+  "kind": "building block",
+  "layer": "comp",
+  "context": "Components that trigger actions.",
+  "source": [
+   "comp.action"
+  ]
+ },
+ {
+  "id": "comp.action.button",
+  "term": "Button hierarchy, content and destructive treatment",
+  "kind": "building block",
+  "layer": "comp",
+  "context": "How many emphasis levels buttons have, how the primary action is placed, what goes inside a button (icon, label), and how destructive actions look.",
+  "source": [
+   "comp.action.button"
+  ]
+ },
+ {
+  "id": "comp.input",
+  "term": "Input components",
+  "kind": "building block",
+  "layer": "comp",
+  "context": "Components for entering data.",
+  "source": [
+   "comp.input"
+  ]
+ },
+ {
+  "id": "comp.input.field",
+  "term": "Form field style and label placement",
+  "kind": "building block",
+  "layer": "comp",
+  "context": "The visual style of text inputs (outlined, filled, underlined) and where labels sit.",
+  "source": [
+   "comp.input.field"
+  ]
+ },
+ {
+  "id": "comp.selection",
+  "term": "Selection components",
+  "kind": "building block",
+  "layer": "comp",
+  "context": "Components for choosing among options.",
+  "source": [
+   "comp.selection"
+  ]
+ },
+ {
+  "id": "comp.navigation",
+  "term": "Navigation components",
+  "kind": "building block",
+  "layer": "comp",
+  "context": "Components for moving between places.",
+  "source": [
+   "comp.navigation"
+  ]
+ },
+ {
+  "id": "comp.feedback",
+  "term": "Feedback components",
+  "kind": "building block",
+  "layer": "comp",
+  "context": "Components that report status, progress or results.",
+  "source": [
+   "comp.feedback"
+  ]
+ },
+ {
+  "id": "comp.feedback.ai",
+  "term": "AI surfaces module",
+  "kind": "building block",
+  "layer": "comp",
+  "context": "Components for AI features: AI labels, AI button variants, chat and conversation components.",
+  "source": [
+   "comp.feedback.ai"
+  ]
+ },
+ {
+  "id": "comp.overlay",
+  "term": "Overlay components",
+  "kind": "building block",
+  "layer": "comp",
+  "context": "Components that appear above the page.",
+  "source": [
+   "comp.overlay"
+  ]
+ },
+ {
+  "id": "comp.containment",
+  "term": "Containment components",
+  "kind": "building block",
+  "layer": "comp",
+  "context": "Components that group content.",
+  "source": [
+   "comp.containment"
+  ]
+ },
+ {
+  "id": "comp.containment.card",
+  "term": "Card and panel separation",
+  "kind": "building block",
+  "layer": "comp",
+  "context": "How cards and panels separate from the page: tinted fill, outline, or elevation.",
+  "source": [
+   "comp.containment.card"
+  ]
+ },
+ {
+  "id": "comp.data",
+  "term": "Data display components",
+  "kind": "building block",
+  "layer": "comp",
+  "context": "Components that present data and people.",
+  "source": [
+   "comp.data"
+  ]
+ },
+ {
+  "id": "comp.data.avatar",
+  "term": "Avatars",
+  "kind": "building block",
+  "layer": "comp",
+  "context": "Avatar sizes, shapes, fallbacks and presence indicators.",
+  "source": [
+   "comp.data.avatar"
+  ]
+ },
+ {
+  "id": "comp.media",
+  "term": "Media components",
+  "kind": "building block",
+  "layer": "comp",
+  "context": "Components that render icons and images.",
+  "source": [
+   "comp.media"
+  ]
+ },
+ {
+  "id": "comp.layout",
+  "term": "Layout primitives and utilities",
+  "kind": "building block",
+  "layer": "comp",
+  "context": "Low-level layout components and accessibility utilities.",
+  "source": [
+   "comp.layout"
+  ]
+ },
+ {
+  "id": "pat",
+  "term": "Patterns and templates",
+  "kind": "building block",
+  "layer": "pat",
+  "context": "Recurring solutions that combine several components to serve a user goal (forms, feedback, navigation, disclosure, empty states, AI surfaces), plus page templates and layout archetypes. This is where most UX behavior rules from `prin.ux` apply (L13 Part C, L08 Patterns).",
+  "source": [
+   "pat"
+  ]
+ },
+ {
+  "id": "pat.forms",
+  "term": "Forms and field anatomy",
+  "kind": "building block",
+  "layer": "pat",
+  "context": "How forms are built: visible labels, hints, required-field marking and autocomplete.",
+  "source": [
+   "pat.forms"
+  ]
+ },
+ {
+  "id": "pat.forms.validation",
+  "term": "Validation timing and error presentation",
+  "kind": "building block",
+  "layer": "pat",
+  "context": "When inputs are validated and how errors appear (inline, summary, or both). L08 and L13 disagree on timing; see Contradictions.",
+  "source": [
+   "pat.forms.validation"
+  ]
+ },
+ {
+  "id": "pat.feedback",
+  "term": "Feedback patterns",
+  "kind": "building block",
+  "layer": "pat",
+  "context": "How the system reports waiting, results and errors: the loading ladder, the choice of message channel, and the error message pattern. These implement the heuristic \"visible status and feedback\" (L13 Part B6).",
+  "source": [
+   "pat.feedback"
+  ]
+ },
+ {
+  "id": "pat.feedback.loading",
+  "term": "Loading and wait feedback",
+  "kind": "building block",
+  "layer": "pat",
+  "context": "What the UI shows at each wait duration, from instant acknowledgment to percent-done progress. It is the pattern side of the response-time ladder in `prin.ux.timing`.",
+  "source": [
+   "pat.feedback.loading"
+  ]
+ },
+ {
+  "id": "pat.feedback.messaging",
+  "term": "Message channel selection",
+  "kind": "building block",
+  "layer": "pat",
+  "context": "Which channel carries a message: inline, banner, toast or snackbar, dialog, or system notification. Systems disagree on toasts (BOARD note from L08).",
+  "source": [
+   "pat.feedback.messaging"
+  ]
+ },
+ {
+  "id": "pat.feedback.errors",
+  "term": "Error messages",
+  "kind": "building block",
+  "layer": "pat",
+  "context": "How error messages are written and shown: close to the source, visible, constructive, in plain language.",
+  "source": [
+   "pat.feedback.errors"
+  ]
+ },
+ {
+  "id": "pat.destructive",
+  "term": "Destructive actions: undo versus confirm",
+  "kind": "building block",
+  "layer": "pat",
+  "context": "Whether a destructive action is protected by undo or by a confirmation step.",
+  "source": [
+   "pat.destructive"
+  ]
+ },
+ {
+  "id": "pat.navigation",
+  "term": "Global navigation",
+  "kind": "building block",
+  "layer": "pat",
+  "context": "The top-level navigation model: how many destinations, whether navigation stays visible, and how deep it goes.",
+  "source": [
+   "pat.navigation"
+  ]
+ },
+ {
+  "id": "pat.navigation.containers",
+  "term": "Navigation containers by size, platform and device",
+  "kind": "building block",
+  "layer": "pat",
+  "context": "Which component holds navigation at each size and on each platform (bottom bar, rail, sidebar, menu bar, focus rows on TV), with destinations kept identical.",
+  "source": [
+   "pat.navigation.containers"
+  ]
+ },
+ {
+  "id": "pat.overlay",
+  "term": "Modality and overlays",
+  "kind": "building block",
+  "layer": "pat",
+  "context": "When to use a dialog, a side sheet, a bottom sheet or a popover.",
+  "source": [
+   "pat.overlay"
+  ]
+ },
+ {
+  "id": "pat.collections",
+  "term": "Long collections",
+  "kind": "building block",
+  "layer": "pat",
+  "context": "How long lists and result sets page: pagination, load more, or infinite scroll.",
+  "source": [
+   "pat.collections"
+  ]
+ },
+ {
+  "id": "pat.disclosure",
+  "term": "Progressive disclosure",
+  "kind": "building block",
+  "layer": "pat",
+  "context": "How advanced or secondary content is hidden until needed.",
+  "source": [
+   "pat.disclosure"
+  ]
+ },
+ {
+  "id": "pat.empty",
+  "term": "Empty states",
+  "kind": "building block",
+  "layer": "pat",
+  "context": "What a screen or collection shows when it has no content yet.",
+  "source": [
+   "pat.empty"
+  ]
+ },
+ {
+  "id": "pat.onboarding",
+  "term": "Onboarding",
+  "kind": "building block",
+  "layer": "pat",
+  "context": "How new users learn the product: tours, contextual help, empty states.",
+  "source": [
+   "pat.onboarding"
+  ]
+ },
+ {
+  "id": "pat.ai",
+  "term": "AI and conversational patterns",
+  "kind": "building block",
+  "layer": "pat",
+  "context": "Patterns for generative and agentic features and chat or voice surfaces: labeling AI content, citations, uncertainty, and edit, undo and retry around generated output.",
+  "source": [
+   "pat.ai"
+  ]
+ },
+ {
+  "id": "pat.glanceable",
+  "term": "Glanceable surfaces",
+  "kind": "building block",
+  "layer": "pat",
+  "context": "Widgets, complications, tiles, notifications and Live Activities: surfaces read in a glance outside the app.",
+  "source": [
+   "pat.glanceable"
+  ]
+ },
+ {
+  "id": "pat.layout",
+  "term": "Layout archetypes",
+  "kind": "building block",
+  "layer": "pat",
+  "context": "Named screen structures that recur across products: canonical pane layouts and the app shell.",
+  "source": [
+   "pat.layout"
+  ]
+ },
+ {
+  "id": "pat.layout.canonical",
+  "term": "Canonical layouts and panes",
+  "kind": "building block",
+  "layer": "pat",
+  "context": "Standard multi-pane layouts (list-detail, supporting pane, feed) and when each gets one, two or three panes.",
+  "source": [
+   "pat.layout.canonical"
+  ]
+ },
+ {
+  "id": "pat.layout.shell",
+  "term": "App shell regions",
+  "kind": "building block",
+  "layer": "pat",
+  "context": "The persistent regions of an app (navigation, header, content, supporting areas) and where navigation sits at each size.",
+  "source": [
+   "pat.layout.shell"
+  ]
+ },
+ {
+  "id": "pat.motion",
+  "term": "Transitions and choreography",
+  "kind": "building block",
+  "layer": "pat",
+  "context": "Named transition patterns between views and the stagger rules for sequencing several elements.",
+  "source": [
+   "pat.motion"
+  ]
+ },
+ {
+  "id": "pat.other",
+  "term": "Other product patterns",
+  "kind": "building block",
+  "layer": "pat",
+  "context": "Patterns L08 catalogued without a dedicated Decision Card: search and filtering, authentication, data tables and settings. Their decisions come from components and the forms, collections and feedback patterns above.",
+  "source": [
+   "pat.other"
+  ]
+ },
+ {
+  "id": "pat.templates",
+  "term": "Page templates",
+  "kind": "building block",
+  "layer": "pat",
+  "context": "Whole-page starting points assembled from the shell, components and patterns: dashboard, list or index page, detail page, settings, and marketing or landing page. Product systems ship the shell as components; marketing templates mostly live outside product systems (L08 Templates).",
+  "source": [
+   "pat.templates"
+  ]
+ }
+]

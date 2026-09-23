@@ -1,0 +1,782 @@
+[
+ {
+  "id": "dial.expression",
+  "term": "expression dial",
+  "kind": "dial",
+  "layer": "dials",
+  "context": "{\"definition\": \"How much the interface performs on everyday screens.\", \"drives\": [{\"param\": \"type.ratio\", \"map\": {\"kind\": \"bands\", \"bands\": [[0, 33, 1.2], [34, 66, 1.25], [67, 100, 1.333]]}, \"evidence\": [\"DC-L15-02\", \"DC-L02-09\"], \"inferred\": false, \"note\": \"capped by density; 1.125 is the productive low end\"}, {\"param\": \"type.emphasizedVariants\", \"map\": {\"kind\": \"bands\", \"bands\": [[0, 66, false], [67, 100, true]]}, \"evidence\": [\"DC-L02-11\", \"S-L02-006\"], \"inferred\": false}, {\"param\": \"type.weightCount\", \"map\": {\"kind\": \"bands\", \"bands\": [[0, 33, 2], [34, 66, 3], [67, 100, 4]]}, \"evidence\": [\"",
+  "source": [
+   "synthesis/levers.json#dials"
+  ]
+ },
+ {
+  "id": "dial.brandPresence",
+  "term": "brandPresence dial",
+  "kind": "dial",
+  "layer": "dials",
+  "context": "{\"definition\": \"How much the product looks like the brand versus the platform. Calibrated to L09 Y score x 10.\", \"drives\": [{\"param\": \"type.faceSuggestion\", \"map\": {\"kind\": \"bands\", \"bands\": [[0, 25, \"system-font-per-platform\"], [26, 50, \"open-neutral-face\"], [51, 75, \"open-custom-face\"], [76, 100, \"proprietary-brand-face\"]]}, \"evidence\": [\"L09-A3-Y-rubric\", \"DC-L06-07\", \"DC-L02-01\"], \"inferred\": false}, {\"param\": \"color.brandPlacement\", \"map\": {\"kind\": \"bands\", \"bands\": [[0, 33, \"accent-only+content-layer\"], [34, 66, \"accent+signature-surface\"], [67, 100, \"large-surfaces+custom-components\"]]}",
+  "source": [
+   "synthesis/levers.json#dials"
+  ]
+ },
+ {
+  "id": "dial.density",
+  "term": "density dial",
+  "kind": "dial",
+  "layer": "dials",
+  "context": "{\"definition\": \"How much information fits on a screen.\", \"drives\": [{\"param\": \"type.baseSize.web\", \"map\": {\"kind\": \"bands\", \"bands\": [[0, 10, 19], [11, 33, 16], [34, 66, {\"content\": 16, \"work-tool\": 14}], [67, 89, 14], [90, 100, 13]]}, \"evidence\": [\"DC-L02-08\", \"L09-A3-density-axis\"], \"inferred\": false}, {\"param\": \"type.ratioCap\", \"map\": {\"kind\": \"bands\", \"bands\": [[0, 66, null], [67, 100, 1.2]]}, \"evidence\": [\"DC-L02-09\"], \"inferred\": false}, {\"param\": \"type.compactLineHeightVariant\", \"map\": {\"kind\": \"bands\", \"bands\": [[0, 66, false], [67, 100, true]]}, \"evidence\": [\"DC-L02-13\", \"S-L02-011\"],",
+  "source": [
+   "synthesis/levers.json#dials"
+  ]
+ },
+ {
+  "id": "dial.energy",
+  "term": "energy dial",
+  "kind": "dial",
+  "layer": "dials",
+  "context": "{\"definition\": \"How lively the interface feels in motion and intensity.\", \"drives\": [{\"param\": \"motion.spring.spatial.dampingRatio\", \"map\": {\"kind\": \"anchors\", \"points\": [[0, 1.0], [33, 1.0], [50, 0.9], [75, 0.8], [100, 0.6]]}, \"evidence\": [\"S-L04-003\", \"S-L04-004\", \"S-L04-037\"], \"inferred\": false, \"note\": \"anchors sourced; interpolation inferred\"}, {\"param\": \"motion.spring.spatial.stiffness\", \"map\": {\"kind\": \"anchors\", \"points\": [[0, 700], [50, 700], [75, 380], [100, 380]]}, \"evidence\": [\"S-L04-004\"], \"inferred\": false, \"note\": \"fast variant 800 at 100 (M3 expressive fast)\"}, {\"param\": \"motio",
+  "source": [
+   "synthesis/levers.json#dials"
+  ]
+ },
+ {
+  "id": "dial.roundness",
+  "term": "roundness dial",
+  "kind": "dial",
+  "layer": "dials",
+  "context": "{\"definition\": \"Corner radius of the default control and everything derived from it.\", \"drives\": [{\"param\": \"radius.control\", \"map\": {\"kind\": \"bands\", \"bands\": [[0, 12, 0], [13, 25, 2], [26, 37, 4], [38, 47, 6], [48, 60, 8], [61, 80, 12], [81, 92, 16], [93, 100, \"full\"]]}, \"evidence\": [\"DC-L04-02\", \"DC-L09-01\", \"L09-M6\"], \"inferred\": false}, {\"param\": \"icon.cornerStyle\", \"map\": {\"kind\": \"bands\", \"bands\": [[0, 12, \"sharp\"], [13, 60, \"default\"], [61, 100, \"rounded\"]]}, \"evidence\": [\"DC-L05-02\", \"S-L05-003\"], \"inferred\": false}, {\"param\": \"icon.caps\", \"map\": {\"kind\": \"bands\", \"bands\": [[0, 40, \"s",
+  "source": [
+   "synthesis/levers.json#dials"
+  ]
+ },
+ {
+  "id": "dial.depth",
+  "term": "depth dial",
+  "kind": "dial",
+  "layer": "dials",
+  "context": "{\"definition\": \"How strongly surfaces separate in the third dimension (ordinal bands of depth models).\", \"drives\": [{\"param\": \"elevation.model\", \"map\": {\"kind\": \"bands\", \"bands\": [[0, 15, \"borders\"], [16, 35, \"ring+faint-shadow\"], [36, 55, \"tonal\"], [56, 80, \"shadow-ladder\"], [81, 100, \"materials\"]]}, \"evidence\": [\"DC-L04-10\", \"DC-L09-02\", \"L09-M7\"], \"inferred\": false}, {\"param\": \"elevation.shadowAlpha.light\", \"map\": {\"kind\": \"anchors\", \"points\": [[16, 0.08], [100, 0.24]]}, \"evidence\": [\"DC-L04-12\"], \"inferred\": true, \"note\": \"range sourced, slope inferred\"}, {\"param\": \"elevation.darkMode\", \"m",
+  "source": [
+   "synthesis/levers.json#dials"
+  ]
+ },
+ {
+  "id": "dial.colorfulness",
+  "term": "colorfulness dial",
+  "kind": "dial",
+  "layer": "dials",
+  "context": "{\"definition\": \"How much chroma the palette carries and how much of the screen it covers.\", \"drives\": [{\"param\": \"color.accentChroma.hct\", \"map\": {\"kind\": \"anchors\", \"points\": [[0, 0], [20, 10], [50, 34], [75, 48], [100, \"max\"]]}, \"evidence\": [\"S-L01-010\"], \"inferred\": false, \"note\": \"anchors: Monochrome, Neutral 8-12, TonalSpot 32-36, Expressive 48, Vibrant max\"}, {\"param\": \"color.schemeVariant\", \"map\": {\"kind\": \"bands\", \"bands\": [[0, 10, \"monochrome\"], [11, 35, \"neutral\"], [36, 62, \"tonalSpot\"], [63, 87, \"expressive\"], [88, 100, \"vibrant\"]]}, \"evidence\": [\"S-L06-083\", \"S-L01-010\"], \"inferred",
+  "source": [
+   "synthesis/levers.json#dials"
+  ]
+ },
+ {
+  "id": "dial.warmth",
+  "term": "warmth dial",
+  "kind": "dial",
+  "layer": "dials",
+  "context": "{\"definition\": \"Temperature of the neutrals and formality of the details around them.\", \"drives\": [{\"param\": \"color.neutral.tint.oklch\", \"map\": {\"kind\": \"anchors\", \"points\": [[0, {\"c\": 0.046, \"h\": 257}], [25, {\"c\": 0.027, \"h\": 264}], [50, {\"c\": 0, \"h\": null}], [75, {\"c\": 0.013, \"h\": 58}], [100, {\"c\": 0.021, \"h\": 43}]], \"interpolate\": \"linear on c between neighbouring anchors; hue taken from the non-zero side; at 50 hue is null (pure) unless flags.tintTowardBrand\"}, \"evidence\": [\"DC-L01-06\", \"S-L01-062\"], \"inferred\": false, \"note\": \"Tailwind slate, gray, neutral, stone, taupe at step 500; ends ",
+  "source": [
+   "synthesis/levers.json#dials"
+  ]
+ },
+ {
+  "id": "core.design-system",
+  "term": "design system",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "The whole set of rules, parts and files that make a product look and behave consistently",
+  "source": [
+   "synthesis/ONTOLOGY.md"
+  ]
+ },
+ {
+  "id": "core.design-token",
+  "term": "design token",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "A named design value (color, size, duration) stored once and reused everywhere",
+  "source": [
+   "research/L07-tokens-figma.md"
+  ]
+ },
+ {
+  "id": "core.primitive-token",
+  "term": "primitive token",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "Raw value tier (blue.500 = a color) with no meaning attached",
+  "source": [
+   "research/L07-tokens-figma.md DC-L07-01"
+  ]
+ },
+ {
+  "id": "core.semantic-token",
+  "term": "semantic token",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "Meaning tier that points at a primitive (color.bg.accent -> blue.500)",
+  "source": [
+   "research/L07-tokens-figma.md DC-L07-01"
+  ]
+ },
+ {
+  "id": "core.component-token",
+  "term": "component token",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "Tier scoped to one component (button.primary.bg)",
+  "source": [
+   "research/L07-tokens-figma.md DC-L07-01"
+  ]
+ },
+ {
+  "id": "core.alias",
+  "term": "alias",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "A token whose value is a reference to another token",
+  "source": [
+   "research/L07-tokens-figma.md"
+  ]
+ },
+ {
+  "id": "core.mode",
+  "term": "mode",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "One set of values for the same tokens, e.g. light or dark, compact or comfortable",
+  "source": [
+   "research/L07-tokens-figma.md"
+  ]
+ },
+ {
+  "id": "core.theme",
+  "term": "theme",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "A named combination of modes and brand values applied to the whole system",
+  "source": [
+   "research/L07-tokens-figma.md"
+  ]
+ },
+ {
+  "id": "core.dtcg",
+  "term": "DTCG",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "W3C Design Tokens Community Group format, stable version 2025.10",
+  "source": [
+   "research/L07-tokens-figma.md"
+  ]
+ },
+ {
+  "id": "core.resolver-file",
+  "term": "resolver file",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "DTCG module that says which token files and modes combine into a theme",
+  "source": [
+   "research/L07-tokens-figma.md"
+  ]
+ },
+ {
+  "id": "core.color-ramp",
+  "term": "color ramp",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "Ordered shades of one hue from light to dark",
+  "source": [
+   "research/L01-color.md DC-L01-02"
+  ]
+ },
+ {
+  "id": "core.neutral",
+  "term": "neutral",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "Grays (pure or tinted) used for text, backgrounds and borders",
+  "source": [
+   "research/L01-color.md DC-L01-06"
+  ]
+ },
+ {
+  "id": "core.accent-color",
+  "term": "accent color",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "The one color used for primary actions, selection and focus",
+  "source": [
+   "research/L01-color.md"
+  ]
+ },
+ {
+  "id": "core.status-colors",
+  "term": "status colors",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "Success, warning, error and info colors",
+  "source": [
+   "research/L01-color.md"
+  ]
+ },
+ {
+  "id": "core.contrast-ratio",
+  "term": "contrast ratio",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "How different two colors are in lightness; WCAG 2.2 needs 4.5:1 for body text, 3:1 for large text and UI parts",
+  "source": [
+   "research/L01-color.md DC-L01-22"
+  ]
+ },
+ {
+  "id": "core.wcag",
+  "term": "WCAG",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "Web Content Accessibility Guidelines; version 2.2, level AA is the usual target",
+  "source": [
+   "research/L01-color.md"
+  ]
+ },
+ {
+  "id": "core.oklch",
+  "term": "OKLCH",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "Perceptual color space (lightness, chroma, hue) used to build even ramps",
+  "source": [
+   "research/L01-color.md DC-L01-01"
+  ]
+ },
+ {
+  "id": "core.dark-mode",
+  "term": "dark mode",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "A separate mapping of colors for dark backgrounds, not an inversion",
+  "source": [
+   "research/L01-color.md DC-L01-18"
+  ]
+ },
+ {
+  "id": "core.surface",
+  "term": "surface",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "A background layer that content sits on; systems stack several surface levels",
+  "source": [
+   "research/L01-color.md DC-L01-13"
+  ]
+ },
+ {
+  "id": "core.typeface",
+  "term": "typeface",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "A font family, such as Inter or SF Pro",
+  "source": [
+   "research/L02-typography.md"
+  ]
+ },
+ {
+  "id": "core.type-scale",
+  "term": "type scale",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "The fixed list of text sizes the product uses, often base x ratio^n",
+  "source": [
+   "research/L02-typography.md"
+  ]
+ },
+ {
+  "id": "core.line-height",
+  "term": "line height",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "Vertical space each line of text takes",
+  "source": [
+   "research/L02-typography.md DC-L02-13"
+  ]
+ },
+ {
+  "id": "core.letter-spacing",
+  "term": "letter spacing",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "Space added or removed between letters (tracking)",
+  "source": [
+   "research/L02-typography.md"
+  ]
+ },
+ {
+  "id": "core.font-weight",
+  "term": "font weight",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "How thick the letters are, from thin (100) to black (900)",
+  "source": [
+   "research/L02-typography.md"
+  ]
+ },
+ {
+  "id": "core.spacing-scale",
+  "term": "spacing scale",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "The fixed list of gaps and paddings, usually multiples of 4px",
+  "source": [
+   "research/L03-space-layout.md DC-L03-01"
+  ]
+ },
+ {
+  "id": "core.padding",
+  "term": "padding",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "Space inside an element, between its edge and its content",
+  "source": [
+   "research/L03-space-layout.md"
+  ]
+ },
+ {
+  "id": "core.margin",
+  "term": "margin",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "Space outside an element, between it and its neighbours",
+  "source": [
+   "research/L03-space-layout.md"
+  ]
+ },
+ {
+  "id": "core.gap",
+  "term": "gap",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "Space between items laid out in a row, column or grid",
+  "source": [
+   "research/L03-space-layout.md"
+  ]
+ },
+ {
+  "id": "core.grid",
+  "term": "grid",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "Columns and gutters that line up content across a page",
+  "source": [
+   "research/L03-space-layout.md"
+  ]
+ },
+ {
+  "id": "core.breakpoint",
+  "term": "breakpoint",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "Screen width at which the layout changes",
+  "source": [
+   "research/L03-space-layout.md DC-L03-14"
+  ]
+ },
+ {
+  "id": "core.density",
+  "term": "density",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "How tightly packed the interface is (compact vs comfortable)",
+  "source": [
+   "research/L03-space-layout.md DC-L03-10"
+  ]
+ },
+ {
+  "id": "core.touch-target",
+  "term": "touch target",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "The tappable area of a control; WCAG 2.2 AA minimum 24 by 24 CSS px, platforms ask 44pt (Apple) or 48dp (Android)",
+  "source": [
+   "research/L03-space-layout.md DC-L03-12"
+  ]
+ },
+ {
+  "id": "core.corner-radius",
+  "term": "corner radius",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "How rounded corners are",
+  "source": [
+   "research/L04-shape-depth-motion.md DC-L04-01"
+  ]
+ },
+ {
+  "id": "core.elevation",
+  "term": "elevation",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "How far a surface seems to float above the one below it",
+  "source": [
+   "research/L04-shape-depth-motion.md"
+  ]
+ },
+ {
+  "id": "core.shadow",
+  "term": "shadow",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "Drawn darkness under an element that shows elevation",
+  "source": [
+   "research/L04-shape-depth-motion.md"
+  ]
+ },
+ {
+  "id": "core.motion-duration",
+  "term": "motion duration",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "How long an animation lasts, typically 100-300 ms for UI",
+  "source": [
+   "research/L04-shape-depth-motion.md"
+  ]
+ },
+ {
+  "id": "core.easing-curve",
+  "term": "easing curve",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "How an animation speeds up and slows down over its duration",
+  "source": [
+   "research/L04-shape-depth-motion.md"
+  ]
+ },
+ {
+  "id": "core.spring-animation",
+  "term": "spring animation",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "Physics-based motion defined by stiffness and damping instead of a fixed duration",
+  "source": [
+   "research/L04-shape-depth-motion.md"
+  ]
+ },
+ {
+  "id": "core.reduced-motion",
+  "term": "reduced motion",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "A user setting (prefers-reduced-motion) asking for less animation",
+  "source": [
+   "research/L04-shape-depth-motion.md"
+  ]
+ },
+ {
+  "id": "core.focus-ring",
+  "term": "focus ring",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "The visible outline showing which control the keyboard is on",
+  "source": [
+   "research/L04-shape-depth-motion.md"
+  ]
+ },
+ {
+  "id": "core.icon",
+  "term": "icon",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "A small symbol that stands for an action or object",
+  "source": [
+   "research/L05-icons-imagery-dataviz.md"
+  ]
+ },
+ {
+  "id": "core.component",
+  "term": "component",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "A reusable interface part such as a button or text field",
+  "source": [
+   "research/L08-components-patterns.md"
+  ]
+ },
+ {
+  "id": "core.variant",
+  "term": "variant",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "A styled version of a component, e.g. primary or secondary button",
+  "source": [
+   "research/L08-components-patterns.md"
+  ]
+ },
+ {
+  "id": "core.state",
+  "term": "state",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "How a component looks in a situation: hover, pressed, focused, disabled, loading, error",
+  "source": [
+   "research/L08-components-patterns.md"
+  ]
+ },
+ {
+  "id": "core.anatomy",
+  "term": "anatomy",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "The named parts a component is made of",
+  "source": [
+   "research/L08-components-patterns.md"
+  ]
+ },
+ {
+  "id": "core.pattern",
+  "term": "pattern",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "A proven arrangement of components that solves a common task, such as a form or search",
+  "source": [
+   "research/L08-components-patterns.md"
+  ]
+ },
+ {
+  "id": "core.template",
+  "term": "template",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "A page layout built from patterns, such as a dashboard or settings page",
+  "source": [
+   "research/L08-components-patterns.md"
+  ]
+ },
+ {
+  "id": "core.design-md",
+  "term": "DESIGN.md",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "A readable file at the project root that records the design system's decisions for people and AI models",
+  "source": [
+   "synthesis/OPENDESIGNER-SPEC.md"
+  ]
+ },
+ {
+  "id": "core.source-of-truth",
+  "term": "source of truth",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "The one place a value is edited; everything else is generated from it",
+  "source": [
+   "research/L07-tokens-figma.md DC-L07-08"
+  ]
+ },
+ {
+  "id": "core.design-to-code",
+  "term": "design to code",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "Turning design decisions into working code (tokens, CSS, components)",
+  "source": [
+   "research/L16-visual-tooling-for-engineers.md"
+  ]
+ },
+ {
+  "id": "core.figma-variables",
+  "term": "Figma variables",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "Figma's built-in named values with modes, the Figma equivalent of tokens",
+  "source": [
+   "research/L07-tokens-figma.md"
+  ]
+ },
+ {
+  "id": "core.mcp",
+  "term": "MCP",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "Model Context Protocol, the standard that lets an AI model use outside tools such as Figma or Paper",
+  "source": [
+   "research/L18-ai-first-distribution.md"
+  ]
+ },
+ {
+  "id": "core.skill",
+  "term": "skill",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "A folder of instructions and files an AI model loads to do a specific job well",
+  "source": [
+   "research/L18-ai-first-distribution.md"
+  ]
+ },
+ {
+  "id": "core.asset-hook",
+  "term": "asset hook",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "A question where OpenDesigner asks whether you have something only a designer or a tool can make (logo, icons, photos)",
+  "source": [
+   "research/L17-how-systems-get-made.md"
+  ]
+ },
+ {
+  "id": "core.reference-intake",
+  "term": "reference intake",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "Reading an example website, screenshot or file to learn its structure and quality, never its brand identity",
+  "source": [
+   "research/L17-how-systems-get-made.md"
+  ]
+ },
+ {
+  "id": "core.generatable",
+  "term": "generatable",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "A building block OpenDesigner can compute from a few inputs",
+  "source": [
+   "research/L17-how-systems-get-made.md"
+  ]
+ },
+ {
+  "id": "core.extractable",
+  "term": "extractable",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "A building block that can be read from a reference",
+  "source": [
+   "research/L17-how-systems-get-made.md"
+  ]
+ },
+ {
+  "id": "core.designer-owned",
+  "term": "designer-owned",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "A building block that needs a human creator, such as a logo",
+  "source": [
+   "research/L17-how-systems-get-made.md"
+  ]
+ },
+ {
+  "id": "core.tool-assisted",
+  "term": "tool-assisted",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "A building block an engineer can make with a named tool",
+  "source": [
+   "research/L17-how-systems-get-made.md"
+  ]
+ },
+ {
+  "id": "core.owner-input",
+  "term": "owner input",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "A decision only the team can make, such as scope or audience",
+  "source": [
+   "research/L17-how-systems-get-made.md"
+  ]
+ },
+ {
+  "id": "core.zoom-level",
+  "term": "zoom level",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "How detailed a part of the system is so far: sketch, defined or detailed",
+  "source": [
+   "_coordination/BRIEF.md requirement 14-15"
+  ]
+ },
+ {
+  "id": "core.sketch-level",
+  "term": "sketch level",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "The first, low-detail pass over the whole system: a complete but coarse result",
+  "source": [
+   "_coordination/BRIEF.md requirement 14"
+  ]
+ },
+ {
+  "id": "core.lint-rule",
+  "term": "lint rule",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "An automatic check that flags a design or code problem, such as too many font sizes",
+  "source": [
+   "research/L15-visual-design-principles.md"
+  ]
+ },
+ {
+  "id": "core.visual-hierarchy",
+  "term": "visual hierarchy",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "The order in which the eye notices things, set by size, weight, color and position",
+  "source": [
+   "research/L15-visual-design-principles.md"
+  ]
+ },
+ {
+  "id": "core.gestalt-grouping",
+  "term": "Gestalt grouping",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "People see things that are close together or enclosed as one group",
+  "source": [
+   "research/L15-visual-design-principles.md"
+  ]
+ },
+ {
+  "id": "core.fittss-law",
+  "term": "Fitts's law",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "Bigger and closer targets are faster to hit",
+  "source": [
+   "research/L13-ux-laws-heuristics.md"
+  ]
+ },
+ {
+  "id": "core.hicks-law",
+  "term": "Hick's law",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "More choices take longer to decide between, unless they are grouped or searchable",
+  "source": [
+   "research/L13-ux-laws-heuristics.md"
+  ]
+ },
+ {
+  "id": "core.progressive-disclosure",
+  "term": "progressive disclosure",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "Showing only what is needed now and revealing detail on request",
+  "source": [
+   "research/L13-ux-laws-heuristics.md"
+  ]
+ },
+ {
+  "id": "core.platform-convention",
+  "term": "platform convention",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "The way an operating system expects controls and navigation to behave",
+  "source": [
+   "research/L10-platforms.md"
+  ]
+ },
+ {
+  "id": "core.native-look",
+  "term": "native look",
+  "kind": "everyday term",
+  "layer": "core",
+  "context": "Following the platform's own controls and styling instead of a custom brand style",
+  "source": [
+   "research/L10-platforms.md DC-L10-02"
+  ]
+ }
+]

@@ -3,6 +3,10 @@ description: The interview asked the wrong thing, went too fast or too slow, mis
 title: "Interview: "
 labels: ["skill", "triage"]
 body:
+  - type: markdown
+    attributes:
+      value: |
+        Tip: in a project that uses OpenDesigner, `python3 <skill>/scripts/engine.py feedback` pre-fills this form from your session. Nothing is posted until you submit it. Fixes go to the source files (`skills/`, `synthesis/`, `research/`), not the generated copies.
   - type: dropdown
     id: kind
     attributes:

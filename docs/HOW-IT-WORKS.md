@@ -48,13 +48,23 @@ Each of the 207 design-system blocks is tagged with who or what should produce i
 
 Every block always has a visible status: pending, default, decided, not applicable, awaiting asset, or assumed. Blocks that do not apply (haptics for a web-only product, say) are marked "not applicable" with a reason, so the coverage check counts them as decided instead of missing.
 
-## 2. Depth modes: time goes where it matters
+## 2. Zoom levels: start with a sketch, go deeper where it matters
+
+You start at low resolution and zoom in only where you need to:
+
+1. **Sketch.** About 5 questions give you a complete, working system with sourced defaults.
+2. **Zoom in.** Open any area (color, type, spacing, components, motion) and decide it in more detail.
+3. **Stop at any level.** Every level leaves working files, and `DESIGN.md` shows how far each area has been zoomed.
+
+The first release of the skill offers this as three depth modes, which are becoming zoom levels you can move between area by area:
 
 | Mode | Questions | For |
 |---|---|---|
 | **Quick** | 10 | A first look or a prototype. Everything else takes a sourced default and stays editable; business decisions are stored as "assumed" and confirmed before export. |
 | **Standard** | 92 | An engineer setting up a real product's system |
 | **Expert** | 191 | Design-system leads, multi-platform or multi-brand systems |
+
+Every term is explained in three voices: plain words first (a school student should follow it), then the designer's term and the engineer's term, one line away. The [glossary](GLOSSARY.md) lists them all.
 
 The model slows down on decisions with the most downstream effect in the decision graph (brand personality directly shapes 15 other decisions, target platforms 12) and moves quickly through safe defaults. For a high-impact question it explains why it matters, shows two or three options with real systems that use them, recommends one with its source, and says what it changes downstream. For a low-impact one it states the default in one line and asks you to confirm, grouping up to three small questions per turn.
 
@@ -138,3 +148,7 @@ This is the full contract from [SPEC.md section 7](SPEC.md#7-outputs). The first
 ## 9. Keeping it coherent later
 
 When you come back to change something, possibly in a different AI tool, the extend flow reads `DESIGN.md`, the tokens and the decision log first, shows the change on the block's detail panel with everything downstream it touches, and records it as a new decision that supersedes the old one. Locked decisions change only with your consent. The engine is deterministic: the same `state.json` produces the same tokens on any machine, which is what lets different models extend the same system without drift. Details: [SPEC.md section 9](SPEC.md#9-harmony-and-extension-across-sessions-and-models).
+
+## 10. When something is missing
+
+If the model finds a gap, a bug or a confusing step while working in your project, it writes it down and offers a ready-to-file issue for this repository (`engine.py feedback` prepares the link). Nothing is posted unless you submit it. Inside this repository, fixes go straight into the source files and are checked and synced; see [CONTRIBUTING.md](../CONTRIBUTING.md#the-self-improvement-loop).

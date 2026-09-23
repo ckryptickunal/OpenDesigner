@@ -13,7 +13,7 @@ Only maintainers can see these reports. You should get a first reply within 7 da
 ## What counts
 
 - Anything in `skills/` that could run unexpected code, read files outside the person's project, or make network calls (skills are meant to be offline and standard-library only).
-- Prompt-injection paths: a reference file, URL or design file that could make a skill ignore its rules, leak data or write outside `./opendesigner/`.
+- Prompt-injection paths: a reference file, URL or design file that could make a skill ignore its rules, leak data or write outside the person's project.
 - Workflow or CI configuration that could leak secrets or let untrusted pull requests run with write access.
 - Committed secrets (API keys, tokens) anywhere in the repository or its history.
 

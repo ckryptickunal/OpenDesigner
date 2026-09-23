@@ -8,3 +8,4 @@ Append-only heartbeat. Newest last.
 - 2026-09-23 19:10 IST: R1: social preview rendered (docs/assets/social-preview.png, 1280x640, 100 KB); next llms.txt and README
 - 2026-09-23 19:12 IST: R1: README draft written; waiting on R2/R3 manifests and engine to finalize quickstart, examples and exporter status
 - 2026-09-23 19:28 IST: R1: docs/SPEC.md copied, funding.json added, README quickstart from R3 manifests; waiting on R2 engine and examples to finish the README
+- 2026-09-23 19:40 IST: R1 done: community files, .github (forms, CI, labels), docs (HOW-IT-WORKS, RESEARCH, FAQ, SPEC copy, GITHUB-SETTINGS, SEED-ISSUES), llms.txt, funding.json, social preview + 3 example thumbnails, README. Pending from others: docs/GLOSSARY.md, engine.py feedback, test_engine.py
