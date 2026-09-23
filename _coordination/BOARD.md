@@ -1,7 +1,7 @@
 # Research board (the shared blackboard for this project)
 
 Product brief: `_coordination/BRIEF.md` (read first).
-Orchestrator session: **"Design system research and builder"** (the session name other sessions use with `SendMessage`).
+Orchestrator session: **"Design system research and builder"** (instant: `SendMessage` from local Claude sessions; durable: `python3 tools/od.py send`).
 Started: 2026-09-23. Protocol: `_coordination/PROTOCOL.md`. Schema: `_coordination/SCHEMA.md`.
 
 ## Lanes
@@ -27,8 +27,9 @@ Status values: `open` (unclaimed), `claimed by <who>`, `done`, `blocked (<why>)`
 | L15 | Visual design principles: hierarchy, CRAP, Gestalt, color theory, polish, styles/trends; automate vs guide vs expose (NN/g, The Futur, Figma, Refactoring UI) | `research/L15-visual-design-principles.md` | done (72 principles, 11 cards; 'futur' = The Futur) |
 | L16 | Visual design tooling for engineers and the design-to-code round trip (Figma MCP, Paper MCP, Penpot, Onlook, theme playgrounds, Bret Victor principles) | `research/L16-visual-tooling-for-engineers.md` | done (43 tools, 15 cards, 323 sources) |
 | L17 | How design systems get made today (manual and AI), documentation practices, gstack's opinionated design skills, NN/g, designsystems.surf; building-block classification (generatable / extractable / designer-owned / tool-assisted) and designer hooks | `research/L17-how-systems-get-made.md` | claimed by orchestrator subagent |
+| L18 | AI-first distribution: skills, AGENTS.md, MCP, MCP Apps and visual UI in Claude, ChatGPT and Codex; Claude's design function; LLM interview design; recommended repo architecture | `research/L18-ai-first-distribution.md` | claimed by orchestrator subagent |
 | D1 | Design artifacts for review: starter tokens (DTCG), building-blocks atlas, foundations specimen, button sheet, builder concept screen; written to Figma and Paper | `design/` | claimed by orchestrator subagent (writes wait for Figma sign-in and Paper reconnect) |
-| S1 | Synthesis: ontology (S1a), questionnaire (S1b), levers + decision graph (S1c), builder spec (S1d) | `synthesis/*` | S1a-S1c claimed by orchestrator subagents (resumed after rate limit); S1d next |
+| S1 | Synthesis: ontology (S1a), questionnaire (S1b), levers + decision graph (S1c), builder spec (S1d) | `synthesis/*` | S1c done (8 dials, 13 look recipes); S1a, S1b running; S1d (builder spec) next |
 | V1 | Verification: fresh-context verifier agents re-check claims and values against live sources | `synthesis/VERIFICATION.md` | waits for S1 |
 
 ## Cross-lane notes

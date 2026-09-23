@@ -1,0 +1,19 @@
+# Decision log
+
+Append-only. One line per decision, with the reason. Add entries with `python3 tools/od.py log "decision and why"`.
+Entries before 18:30 IST on 2026-09-23 were back-filled by the orchestrator from its session; times are approximate.
+
+- 2026-09-23 13:30 IST [Design system research and builder] Split the research into lanes L00-L11 with a shared Decision Card schema, so every finding feeds the ontology, questionnaire and decision graph the same way.
+- 2026-09-23 13:30 IST [Design system research and builder] Figma's desktop MCP was not enabled, so lanes used Figma's official docs; the hands-on Figma lane (L12) was parked.
+- 2026-09-23 13:35 IST [Design system research and builder] One dedicated lane (L00) ran /last30days for source validation, because Kunal asked for it and running it in every lane would have exhausted rate limits.
+- 2026-09-23 13:45 IST [Design system research and builder] Disk hit 100%: told all agents not to delete anything and asked Kunal to free space; I don't delete user files, even caches.
+- 2026-09-23 14:00 IST [Design system research and builder] Hit the 20-concurrent-subagent cap; queued L14-L16 as prompt files in _coordination/lanes/ and launched them as slots freed.
+- 2026-09-23 14:05 IST [Design system research and builder] ~/.claude/settings.json had a stray `: true }` tail and had been invalid since 22 Jun; removed only the tail (backup kept) so the TypeSafe plugin could install. Later, at Kunal's request, removed the vibe-ads status line and the Cofounder.co entries.
+- 2026-09-23 14:05 IST [Design system research and builder] Installed the TypeSafe skill plugin after reading it (instructions only, no hooks or servers). Did not install fast-jev-compaction: it needs Claude Code 2.1.274+ (installed: 2.1.238) and sends tool history to TypeSafe's servers, which is Kunal's call.
+- 2026-09-23 14:10 IST [Design system research and builder] Registered Paper's MCP server (documented command) because Figma's local server is read-only and Kunal wants a design and code round trip.
+- 2026-09-23 14:30 IST [Design system research and builder] Jev search design: code gathers candidate cards (keywords across all lanes plus Jev's single lane pick), then Jev judges each card with a Noul. A lane Choice alone missed cross-lane answers; a Noul per lane over-included lanes.
+- 2026-09-23 15:00 IST [Design system research and builder] Built the decision graph mechanically from the cards' depends/affects fields rather than by hand, so the question order is reproducible (`jev_nav.py graph`).
+- 2026-09-23 17:55 IST [Design system research and builder] Synthesis agents hit the account's session limit; resumed the same agents after the reset instead of restarting them, to keep what they had already read.
+- 2026-09-23 18:15 IST [Design system research and builder] Recorded Kunal's process vision as _coordination/BRIEF.md so every agent designs around designer hooks, visual-first editing and reference intake.
+- 2026-09-23 18:25 IST [Design system research and builder] The first OpenDesigner commit included .env (Gemini and Jev keys). Untracked it, added .gitignore, pushed. The keys remain in the first commit's history; rotating them and rewriting that commit is Kunal's decision.
+- 2026-09-23 18:30 IST [Design system research and builder] Collaboration moved from Claude-only messaging to repo files plus git (tools/od.py, AGENTS.md), so Codex, ChatGPT and sessions on other machines can take part.

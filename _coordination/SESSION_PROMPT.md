@@ -1,41 +1,43 @@
-# Prompts for extra Claude sessions
+# Prompts for extra sessions
 
-Paste one of these into a new Claude Code session opened in `/Users/Kunal/Desktop/Design-System`. Each session coordinates through the files in `_coordination/` and can message the orchestrator session by name.
-
----
-
-## Prompt A: join the research as a new lane
-
-```
-You are joining a multi-session research project in /Users/Kunal/Desktop/Design-System. I am building a "design-system builder": a product that helps people create their own design system from building blocks. Several Claude sessions and subagents are already working here.
-
-1. Read _coordination/PROTOCOL.md, _coordination/SCHEMA.md and _coordination/BOARD.md before doing anything else.
-2. Claim the lane I name below (or, if I name none, the first lane marked `open`) by editing only that lane's row in BOARD.md to `claimed by <your session title>`.
-3. Send one message with SendMessage to the session named "Design system research and builder" (find it with ListAgents) saying which lane you claimed.
-4. Research according to SCHEMA.md: Tier A official sources first, log every source you open in traces/<LANE>-trace.md, write Decision Cards in research/<LANE>-<slug>.md, and tag every claim with a source id or [inferred]. Read sources/COMMUNITY-SIGNAL.md before you finalize.
-5. When you finish, set your row in BOARD.md to `done` and message the orchestrator with the file path and your top 5 findings.
-Never edit another lane's files. Today's date matters: verify anything from 2025-2026 against live sources.
-
-Lane: <fill in, e.g. "L13 accessibility deep dive" or leave blank>
-```
+Paste one of these into a new session. Works in Claude Code, Codex, or any agent that can read and write the repo.
 
 ---
 
-## Prompt B: the Figma MCP hands-on lane (L12)
-
-Before using this prompt, turn on Figma's MCP server. Either:
-- **Figma desktop app:** open a design file, open the Figma menu > Preferences > "Enable Dev Mode MCP Server" (the menu wording may differ in newer versions), then restart the Claude desktop app. Or:
-- **claude.ai Figma connector:** authorize it in your claude.ai connector settings.
-
-Then duplicate these community files into your Figma drafts (so the MCP can read them): Figma's "Simple Design System", Google's "Material 3 Design Kit", Apple's "iOS and iPadOS 26" UI kit, and optionally Microsoft's "Fluent 2 Web" kit.
+## Prompt A: join the project (any agent with repo access)
 
 ```
-You are taking lane L12 (Figma MCP hands-on) in /Users/Kunal/Desktop/Design-System. First read _coordination/PROTOCOL.md, _coordination/SCHEMA.md and _coordination/BOARD.md, then claim L12 in BOARD.md and message the session "Design system research and builder" that you claimed it.
+You are joining OpenDesigner, an open-source, AI-first resource for creating design systems. Many sessions (Claude, Codex, others) work on it in parallel and coordinate through files in the repo.
 
-Goal: inspect real design-system files through the Figma MCP tools (get_metadata, get_variable_defs, get_design_context, get_screenshot) and record how professional systems are actually structured inside Figma. For each file I have open (Simple Design System, Material 3 Design Kit, iOS 26 UI kit, Fluent 2 kit), document:
-- variable collections, their modes, variable types and counts, naming conventions, aliasing chains (primitive to semantic to component), scoping, and code syntax if set
-- text/color/effect styles still in use alongside variables
-- component structure: how variants and component properties (boolean, instance swap, text, variant) are set up for Button, Text field, Checkbox, Dialog and Navigation, including how states are modeled
-- page and file organization (cover, foundations, components, patterns)
-Save screenshots of key frames to research/L12-assets/. Write research/L12-figma-mcp-handson.md using the Decision Card format where it fits, and log every file and node inspected in traces/L12-trace.md. When done, set L12 to done in BOARD.md and message the orchestrator with the path and your top 5 findings.
+Setup: if you are not already in the repo, clone https://github.com/ckryptickunal/OpenDesigner (on Kunal's Mac the working copy is /Users/Kunal/Desktop/Design-System). Then:
+1. Read _coordination/BRIEF.md, _coordination/PROTOCOL.md and _coordination/SCHEMA.md, in that order.
+2. Choose a session name, export OD_SESSION="<name>", run `python3 tools/od.py status`, and read your inbox with `python3 tools/od.py inbox "$OD_SESSION"`.
+3. Claim the lane I name below with `python3 tools/od.py claim <LANE>` (or the first `open` lane if I name none). Tell the orchestrator: `python3 tools/od.py send "Design system research and builder" "claimed <LANE>"` (Claude sessions on the same Mac can also use SendMessage to that name).
+4. Work per SCHEMA.md: official sources first, log every source in traces/<LANE>-trace.md, write Decision Cards in research/<LANE>-<slug>.md, tag every claim with a source id or [inferred]. Post `od.py heartbeat` updates as you go.
+5. Finish with `python3 tools/od.py done <LANE> --summary "..."`, `python3 tools/jev_nav.py check`, and `python3 tools/od.py sync -m "<LANE>: ..."`, then message the orchestrator your top 5 findings.
+Never edit another lane's files and never commit secrets. Verify anything from 2025-2026 against live sources.
+
+Lane: <fill in, or leave blank>
+```
+
+---
+
+## Prompt B: agents without repo access (for example chat-only ChatGPT)
+
+```
+You are helping research OpenDesigner, an open-source, AI-first resource for creating design systems. I will paste a lane prompt below. Follow it, but instead of writing files, reply with: (1) the full lane document in Markdown, using Decision Cards in this format: "### DC-<LANE>-<nn>: <title>" followed by bullet fields Block path, Questions the designer answers, Options, Visual effect, Depends on, Affects, Token encoding, Platform notes, Accessibility constraints, Default + heuristic, Evidence; and (2) a source table with URL, publisher, date, and what you took from it. Cite a source for every claim or mark it [inferred]. I will paste your answer into the repo.
+
+<paste a lane prompt from _coordination/lanes/ here>
+```
+
+---
+
+## Prompt C: the Figma MCP hands-on lane (L12)
+
+Before using this prompt, open the kits you want inspected in the Figma desktop app (its local MCP reads the open file): Figma's "Simple Design System", Google's "Material 3 Design Kit", Apple's iOS/iPadOS UI kit, and optionally Microsoft's "Fluent 2 Web".
+
+```
+You are taking lane L12 (Figma MCP hands-on) in OpenDesigner. Follow Prompt A's setup and claim L12.
+
+Goal: inspect real design-system files through the Figma MCP tools (get_metadata, get_variable_defs, get_design_context, get_screenshot) and record how professional systems are structured inside Figma. For each open file, document: variable collections, modes, variable types and counts, naming conventions, aliasing chains (primitive to semantic to component), scoping and code syntax; styles still used alongside variables; how Button, Text field, Checkbox, Dialog and Navigation use variants and component properties (boolean, instance swap, text, variant) and model states; page and file organization. Save key screenshots to research/L12-assets/, write research/L12-figma-mcp-handson.md (Decision Cards where they fit), log every file and node inspected in traces/L12-trace.md, then finish per Prompt A.
 ```

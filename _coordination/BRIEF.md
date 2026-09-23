@@ -17,3 +17,16 @@ Make creating design systems, designs and visuals a beautiful, visual process fo
 
 ## Round trip
 Designs and tokens should move between the builder, Figma and Paper, and code. Kunal has a full Figma seat.
+
+## AI-first and open source (added 2026-09-23, second message)
+The product is **OpenDesigner** (repo: github.com/ckryptickunal/OpenDesigner, currently private, intended to be open source). It is AI-first: people load this repository or resource into their own Claude, ChatGPT or Codex and use it to build what they want.
+
+> "These could be a set of things that the LLM asks the users, either visually or through any other way: ask them the inputs, recommend them the best practices, show them examples or ask them for examples, and then spend quality time at each and every step that plays a critical role in shaping the design going ahead. This critical time would help people extend and keep everything harmonious. This is similar to the design function of Claude, but it is going to be open source for everybody, and mostly will be used by software engineers, design engineers, designers, anybody who is well versed in the already existing flow or who is not well versed in it but needs to communicate with his or her team."
+
+Requirements this adds:
+6. **The LLM is the builder's interface.** The repo must work as knowledge plus instructions that any capable model (Claude, ChatGPT, Codex, others) can follow: it interviews, recommends, shows examples, asks for examples. A standalone app is optional, not the core.
+7. **Visual where the host allows it, text where it doesn't.** Use visual interviews (artifacts, canvases, MCP-rendered UI, Figma/Paper) when the host supports them, with a text fallback that works everywhere.
+8. **Time goes where it matters.** The model slows down on the decisions that shape the most downstream (the high fan-out decisions in `synthesis/decision-graph.json`) and moves quickly through safe defaults.
+9. **Harmony over time.** Outputs must let people extend the system later without breaking coherence (tokens, rules, DESIGN.md-style context the next session can read).
+10. **A team communication tool.** Outputs should also help engineers explain design decisions to their teams, and help non-experts talk to designers.
+11. **Everything traceable.** Every trace and decision is kept in the repo, and parallel sessions (Claude or otherwise) can collaborate through it (see `_coordination/PROTOCOL.md`).

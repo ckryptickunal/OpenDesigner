@@ -25,7 +25,7 @@ Synthesis S1c. Audience: engineers building or using the design-system builder. 
 
 Dropped as dials and turned into macros: playful/serious (row A), premium/everyday (row E) and modern/heritage (row F). Each of these is a combination of the eight dials plus a typeface suggestion, so a separate dial would double-count [inferred].
 
-**Dial coupling.** When a user has not touched a character dial, it follows the posture dials: Roundness, Colorfulness, Energy and Depth default to `50 + 0.5 x (Expression - 50)`; Colorfulness also moves `0.3 x (Energy - 50)`, because L06 row D ties saturation to energy; Density pulls Roundness down by up to 10 points [inferred; direction from L04's graph note that density pushes toward sharper radii and thinner strokes, and from the L09 X rubric that sums radius, surface color, motion and material into one expressiveness score]. Touching a dial detaches it from the coupling.
+**Dial coupling.** When a user has not touched a character dial, it follows the posture dials: Roundness, Colorfulness and Energy default to `50 + 0.5 x (Expression - 50)` and Depth to `40 + 0.5 x (Expression - 50)`, with the materials band only when Expression is above 60 and the platform supports materials; Colorfulness also moves `0.3 x (Energy - 50)`, because L06 row D ties saturation to energy; Density pulls Roundness down by up to 10 points [inferred; direction from L04's graph note that density pushes toward sharper radii and thinner strokes, and from the L09 X rubric that sums radius, surface color, motion and material into one expressiveness score]. Touching a dial detaches it from the coupling.
 
 ### A1. Expression (productive 0 to expressive 100)
 
@@ -102,7 +102,7 @@ Definition: the corner radius of the default control, and everything that follow
 | 38-47 | 6 | Atlassian, Primer, Ant, Geist (benchmark median) | M6 in L09 |
 | 48-60 | 8 | Polaris, Paste, Uber, Blade, Mantine v9, shadcn | M6 in L09 |
 | 61-80 | 12 | Airbnb | M6 in L09 |
-| 81-92 | 16 | (Carbon v12 and Atlassian containers use 16 at the large end) | DC-L04-02 |
+| 81-92 | 16 | (no benchmarked system uses 16 on controls; it is Atlassian's xxlarge role and a Carbon v12 token step) | L09 M6, DC-L04-03 |
 | 93-100 | full (pill) | Material 3, Spectrum 2, SLDS Cosmos, Gestalt classic | M6 in L09 |
 
 It also drives: container and overlay radii, the nested-radius rule and focus-ring radius (section B5); icon corner style and caps, rounded icons at 61+ and sharp icons at 12 or below (DC-L05-02 [S-L05-003]; caps [inferred]); and a typeface suggestion of rounded or geometric sans at 81+ (Google Sans Flex roundness "personal, playful" [S-L06-031]). The benchmark trend is rounder: Carbon 0 to 4, Mantine 4 to 8, SLDS 4 to pill, Spectrum sharp to pill [S-L09-258][S-L09-646][S-L09-237][S-L09-228].
@@ -294,7 +294,7 @@ Every foreground/background pair is tested in every mode at build time (DC-L01-2
 
 ### B11. Motion from the Energy dial
 
-- **Duration ladder:** instant 0, micro 100, short 150-200, medium 250-300, long 400-500, extra 700 (DC-L04-20). Energy multiplies medium and longer steps by 0.8 to 1.2 (A4). Exits are 20-35% shorter than entrances (Atlassian 250 vs 200; Primer 300 vs 200) [S-L04-018][S-L04-024]. Duration grows with travel distance (Carbon [S-L06-002]). Standard transitions stay at or under 400ms, the Doherty threshold; over 500ms raises a warning (L13 B5 and E1).
+- **Duration ladder:** instant 0, micro 100, short 150-200, medium 250-300, long 400-500, extra 700 (DC-L04-20). Energy multiplies medium and longer steps by 0.8 to 1.2 (A4). Exits are 20-35% shorter than entrances (Atlassian 250 vs 200; Primer 300 vs 200) [S-L04-018][S-L04-024]. Duration grows with travel distance (Carbon [S-L06-002]). Standard transitions stay at or under 400ms, the Doherty threshold; over 500ms raises a warning (L13 B5 and E1, where both links are marked inferred).
 - **Easing set:** standard, enter (decelerate), exit (accelerate), and linear only for spinners and progress (DC-L04-21). Curves by Energy band as in A4.
 - **Springs:** store damping ratio and stiffness; emit Apple's `duration` and `bounce` and a pre-sampled CSS `linear()` (DC-L04-22). Conversion with mass 1: `duration ~ 2 pi / sqrt(stiffness)`, `bounce ~ 1 - dampingRatio` (L04 F3 note). Recomputed: stiffness 700 gives 237ms, 380 gives 322ms, 800 gives 222ms. Effects springs (color, opacity) stay critically damped at 1.0 in every setting, as in Material [S-L04-004].
 - **Speeds:** fast for small components (switches, buttons), default for partial-screen surfaces (sheets, drawers), slow for full-screen. Material standard spatial stiffness 1400 / 700 / 300 at damping 0.9; expressive spatial 800 / 380 / 200 at damping 0.6 / 0.8 / 0.8; effects 3800 / 1600 / 800 at 1.0 [S-L04-003][S-L04-004][S-L04-064].
@@ -411,7 +411,7 @@ The brief asks that a person can drop in an example website, screenshot or Figma
 | Colorfulness | **Yes** | chroma of the accent and of large surfaces; count of distinct accent hues; share of screen area that is chromatic | A7 anchors run backwards (surface chroma and accent count first, accent chroma second) | high |
 | Warmth, color part | **Yes** | neutral hue and chroma in OKLCH | nearest A8 anchor (slate, gray, pure, stone, taupe) | high |
 | Warmth, voice part | Partly | capitalization of buttons and headings, contractions | A8 content rows | medium; needs enough copy |
-| Energy | **Partly** | transition durations, easing curves, overshoot (a bezier y value above 1 or an overshooting `linear()`), saturation, heading weight | duration multiplier = median medium duration / 275ms; damping from overshoot size; saturation and weight as secondary signals | medium on URLs, low on Figma unless motion is defined, **none from screenshots** |
+| Energy | **Partly** | transition durations, easing curves, overshoot (a bezier y value above 1 or an overshooting `linear()`), saturation, heading weight | duration multiplier = median medium duration / 275ms (the middle of the 250-300 medium step) [inferred]; damping from overshoot size; saturation and weight as secondary signals | medium on URLs, low on Figma unless motion is defined, **none from screenshots** |
 | Expression | **Partly** | display-to-body ratio, emphasized styles, containment, icon fill, how much chrome carries color; the L09 X score is computable from these levers | fit the L09 X rubric (radius + surface color + type contrast + motion + material), subtract what the character dials already explain | medium; one page can mislead because hero moments are rare by design |
 | Brand presence | **No, ask** | could detect whether the font is a system, open or proprietary face | none; this dial expresses the person's own intent (how native their product should feel), and copying a reference's brand-led posture would copy its identity | n/a |
 

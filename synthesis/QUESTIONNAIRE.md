@@ -30,6 +30,8 @@ Why these ten: they combine the highest fan-out step-0 decisions in the graph (p
 ```
 ### Q-<area>-<nn> · <question in plain words> · <Quick|Standard|Expert|Any>
 - **Why:** one line on why it matters
+- **Ask:** the one short prompt the interviewing model uses
+- **Example:** what the model shows, or asks the person for, while asking
 - **Control:** single choice | multi-select | slider | color picker | number | text (plus modifiers)
 - **Show if:** (optional) condition on earlier answers
 - **Options:** one line each: `value` label: visual effect (real systems that use it)
@@ -41,6 +43,7 @@ Why these ten: they combine the highest fan-out step-0 decisions in the graph (p
 - **Hook:** (asset hooks) accepted formats, and the paths offered when the answer is "no"
 - **Pre-answers:** (reference intake) which later questions a reference can pre-fill
 - **Skip:** whether it can be skipped and auto-defaulted
+- **Time weight:** high, medium or low: how long the model should spend (rule below)
 - **Evidence:** card ids and source ids
 - **Merges:** (optional) source questionnaire items folded into this question
 ```
@@ -77,6 +80,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-ref-01 · Do you have an example website, screenshot, Figma file or other resource the builder should learn from? · Any
 - **Why:** Tools already extract design systems from references (Google Stitch extracts from a URL; Polymet extracts tokens from a URL); the builder uses the same idea to pre-answer questions instead of starting blank [S-L16-256, S-L16-405].
+- **Ask:** "Before we start, is there a site, screenshot or Figma file whose structure or quality you like? I'll read it and suggest answers."
+- **Example:** Ask for a URL of their own product or an app they admire; show the 'extracted from reference' card with 3-4 found values.
 - **Control:** drop zone + URL field; multiple references allowed, each tagged "our product", "inspiration" or "competitor"
 - **Options:**
   - `url` A live website URL: the builder reads computed colors, type, spacing, radius, shadows, motion and components [inferred; S-L16-405].
@@ -101,6 +106,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-scope-01 · Which products and surfaces will this system serve, and which will it explicitly not serve? · Standard
 - **Why:** Scope sets how abstract components must be and how many token layers you need [DC-L11-02].
+- **Ask:** "What will this system style: just your app, or also a marketing site, docs, emails or internal tools?"
+- **Example:** Show two thumbnails, an app screen and a marketing page, drawn from the same tokens.
 - **Control:** multi-select + text field for "not served"
 - **Options:**
   - `product-app` Product app: tight, opinionated visuals are possible when this is the only surface [DC-L11-02, inferred].
@@ -119,6 +126,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-scope-02 · Is there existing UI to consolidate, or is this a new product? · Standard
 - **Why:** An audit sets how much the system must consolidate, for example 40 grays merged into one 10-step ramp [DC-L11-04, inferred].
+- **Ask:** "Is there existing UI we should consolidate, or are we starting fresh?"
+- **Example:** If existing, ask for a URL or CSS file; show a count like '38 grays, 14 button styles found'.
 - **Control:** single choice (+ URL or CSS import when existing)
 - **Options:**
   - `greenfield` New product: skip the audit and go straight to visual language [S-L11-105].
@@ -135,6 +144,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-scope-03 · Who will consume the system? · Expert
 - **Why:** Each audience needs different docs and export formats; AI agents need machine-readable exports [DC-L11-02; S-L11-083].
+- **Ask:** "Who will use the system itself: engineers, designers, content people, partners, AI coding agents?"
+- **Example:** Show the output list per audience, e.g. 'AI agents get DESIGN.md and an MCP manifest'.
 - **Control:** multi-select
 - **Options:**
   - `engineers` Engineers: component API docs and code packages (DC-L11-18).
@@ -152,6 +163,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-scope-04 · How many people will build and maintain the system, and how are they organized? · Expert
 - **Why:** Small teams should adapt an existing accessible base rather than build from scratch; team size sets how much the builder must automate [DC-L11-01, DC-L11-10].
+- **Ask:** "How many people will build and maintain this, and are they one team or spread across product teams?"
+- **Example:** Give the survey split: most teams are 1-5 people.
 - **Control:** single choice (size) + single choice (model)
 - **Options:**
   - `size-1-2` 1-2 people (28% of teams) [S-L11-030].
@@ -177,6 +190,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-aud-01 · Who uses the product, and how often? · Quick
 - **Why:** Audience sets density and base text size, the fourth-largest visual difference between systems (body text ranges 13-19px) [DC-L09-04; L09 A2 row 4].
+- **Ask:** "Who uses the product and how often: all day in data-heavy work, regularly, or occasionally on the go?"
+- **Example:** Show one table-and-form screen at dense, regular and large densities side by side.
 - **Control:** single choice
 - **Options:**
   - `dense` People working all day in data-heavy tools: body 13-14px, controls 28-32px; compact and utilitarian (Polaris 13px, SLDS 13px, Carbon, Atlassian, Primer, Ant 14px) [DC-L09-04; S-L09-403].
@@ -193,6 +208,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-aud-02 · What is at stake for users, and what state are they usually in? · Standard
 - **Why:** The category sets a ceiling on expressiveness; Google found expressive design may not suit banking [S-L06-010]. User state drives tone [DC-L06-19; S-L06-060].
+- **Ask:** "What's at stake for your users, and what state are they usually in when they use it?"
+- **Example:** Contrast a banking transfer screen with a game reward screen.
 - **Control:** single choice (category) + multi-select (states)
 - **Options:**
   - `high-trust` Money, health or government: caps expressiveness and playful motion; calm, formal defaults [S-L06-010, S-L06-041].
@@ -210,6 +227,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-aud-03 · What accessibility standard must the system meet? · Standard
 - **Why:** The target bounds color, type size, focus ring and target-size options in every later stage [DC-L11-19].
+- **Ask:** "Which accessibility standard must you meet? WCAG 2.2 AA is the usual floor."
+- **Example:** Show a text pair that passes 4.5:1 and one that fails.
 - **Control:** single choice
 - **Options:**
   - `wcag22-aa` WCAG 2.2 AA: 4.5:1 text, 3:1 large text and UI parts, 24px target floor (GOV.UK commits to 2.2 AA) [S-L11-093; L09 A1 row 11].
@@ -225,6 +244,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-aud-04 · Which settings should users be able to adjust, and which situations must you design for? · Standard
 - **Why:** Inclusive defaults ("solve for one, extend to many") switch on extra modes and larger targets [DC-L13-14; S-L13-072].
+- **Ask:** "Which settings should users be able to change: text size, density, contrast, reduced motion?"
+- **Example:** Show the preview with a mode switcher gaining one toggle per setting.
 - **Control:** multi-select (settings) + multi-select (situations)
 - **Options:**
   - `text-size` Text size: layouts must reflow at large sizes (DC-L02-21).
@@ -247,6 +268,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-brand-01 · Where does your brand sit on these scales? · Quick
 - **Why:** The sliders set defaults for color saturation, radius, type, weight, motion, illustration and voice through the L06 lever matrix [DC-L06-02].
+- **Ask:** "Place your brand on these scales; drag each slider toward the end that sounds like you."
+- **Example:** Show 2-3 style tiles updating live; ask for traits in 'X, but not Y' form, e.g. 'Fun, but not childish'.
 - **Control:** slider x7 (0-100, 50 = system default) + optional text "X, but not Y" traits. Quick shows rows A, B, C, D, G; Standard and Expert add E and F.
 - **Options:**
   - `A playful-serious` Playful: saturated brand color on chrome, large radii and pills, springs with overshoot, characters. Serious: neutral or monochrome scheme, small radii, ease-out without bounce, pictograms (M3 Expressive vs Carbon) [S-L06-011, S-L06-083, S-L06-009, S-L06-002].
@@ -266,6 +289,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-brand-02 · Which products should yours feel like, and what one thing should people recognize it by? · Standard
 - **Why:** References align taste fast (a 20-second gut test), and the "cover the logo" test names the signature lever to invest in [S-L11-001, S-L06-004].
+- **Ask:** "Which products should yours feel like, and what one thing should people recognize it by?"
+- **Example:** Ask for 1-5 product names or URLs; place them on the personality map.
 - **Control:** text (up to 5 reference products or URLs) + single choice (signature lever)
 - **Options:**
   - `sig-typeface` Signature typeface (Uber Move, Spotify Mix, IBM Plex) [L09 A3; S-L06-019].
@@ -283,6 +308,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-brand-03 · Do you have a logo and brand mark? · Standard
 - **Why:** A logo is a block the builder cannot generate well; it feeds the logo component, favicons and app icons [DC-L05-13; BRIEF requirement 2].
+- **Ask:** "Do you have a logo or brand mark? If so, share the SVG."
+- **Example:** Show the logo in an app bar at 24-32px and as a favicon; if none, show the placeholder wordmark.
 - **Control:** single choice + file upload
 - **Options:**
   - `yes-full` Yes, symbol and wordmark: the builder makes a Logo component with Icon and Lockup variants (Atlassian sizes 16-48px, appearances brand, neutral, inverse) [S-L05-044].
@@ -300,6 +327,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-brand-04 · How expressive should the product be? · Standard
 - **Why:** Expressive design raised perceived modernity by 34% and made key elements up to 4x faster to spot in Google's tests, but overdone it hurts usability and a strong minority prefers calm [DC-L06-03; S-L06-010].
+- **Ask:** "How expressive should the product be: calm and productive, calm with one or two big moments, or expressive throughout?"
+- **Example:** Show one success moment animated three ways.
 - **Control:** single choice
 - **Options:**
   - `productive` Productive only: calm, dense, efficient (Carbon product UI, Linear 2026 "calmer interface") [S-L06-002, S-L06-067].
@@ -315,6 +344,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 ### Q-brand-05 · How do marketing pages relate to the product? · Standard
 - **Show if:** Q-scope-01 includes `marketing`
 - **Why:** The layering model decides whether marketing and app look visibly related or drift apart [DC-L06-01; S-L06-110].
+- **Ask:** "How should the marketing site relate to the product: one system with two moods, or separate?"
+- **Example:** Show a marketing hero next to a product table under each option.
 - **Control:** single choice
 - **Options:**
   - `one-system-two-sets` One system with productive and expressive value sets: same type family and color logic, app denser (Carbon type sets -01/-02) [S-L06-001, S-L06-002].
@@ -331,6 +362,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-brand-06 · Should marketing and editorial pages get their own, more dramatic type set? · Expert
 - **Why:** One productive scale keeps apps calm; an expressive set gives editorial pages big size jumps that "would be distracting if used in product" [DC-L02-11; S-L02-011].
+- **Ask:** "Do marketing pages need their own dramatic heading styles?"
+- **Example:** Show a heading ladder, productive vs expressive.
 - **Control:** single choice
 - **Options:**
   - `two-sets` Two sets: productive base 14px with fixed headings, expressive base 16px with fluid headings (Carbon display from 42px to 156px across breakpoints) [S-L02-012, S-L02-011].
@@ -347,6 +380,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-brand-07 · How closely should interactions follow familiar conventions? · Standard
 - **Why:** Native behavior feels trustworthy but generic; novelty is distinctive but costs learnability (Jakob's law) [DC-L13-17].
+- **Ask:** "Should interactions follow familiar conventions, get a custom look, or be novel where it matters?"
+- **Example:** Show a standard dropdown beside a custom one.
 - **Control:** single choice
 - **Options:**
   - `native` Platform-native: follow HIG, Material or Fluent behavior and look; instantly usable, generic [DC-L13-17].
@@ -361,6 +396,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-brand-08 · What are your 3-5 design principles, and which one wins a tie? · Standard
 - **Why:** Principles break ties between sliders that pull the same lever in opposite directions [DC-L06-15; L06 section 4.2].
+- **Ask:** "What 3-5 principles should break ties, and which one wins? I can draft some from your sliders."
+- **Example:** Show GOV.UK-style imperatives and a do/don't pair per principle.
 - **Control:** text list (3-5) + drag to rank + single choice (format)
 - **Options:**
   - `checklist` Question checklists (IBM) [S-L06-004].
@@ -383,6 +420,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-plat-01 · Which platforms ship in the first release? · Quick
 - **Why:** Each platform adds conventions the brand must coexist with, plus units, target minimums and exporters [DC-L10-01].
+- **Ask:** "Which platforms ship first: web, iOS, Android, desktop?"
+- **Example:** Show one screen in browser, iOS and Android chrome.
 - **Control:** multi-select
 - **Options:**
   - `web` Web: one delivery layer (CSS custom properties); the brand can show in every pixel (Polaris calls Shopify's platform "the web platform") [S-L10-047].
@@ -400,6 +439,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-plat-02 · Which device classes must work great on day one, which only need to work, and which are out? · Standard
 - **Why:** Each first-class device class adds a visibly different silhouette; "adapted only" classes look stretched, which Google now penalizes on large screens [DC-L14-01; S-L14-069].
+- **Ask:** "Which devices must work great on day one, which just need to work, and which are out?"
+- **Example:** Show a device row: phone, tablet, laptop, TV, watch.
 - **Control:** tier picker per class (first-class / works / out)
 - **Options:**
   - `phone` Phone [DC-L14-01].
@@ -419,6 +460,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-plat-03 · What do people touch or press with? · Standard
 - **Why:** Input precision sets target sizes: the visible control can be small, the hit area can't [DC-L10-15].
+- **Ask:** "What will people touch or press with: fingers, mouse, keyboard, remote, eyes and hands?"
+- **Example:** Show one button with its hit area outlined for touch vs mouse.
 - **Control:** multi-select
 - **Options:**
   - `touch` Touch: 44x44pt iOS, 48x48dp Android; airier layouts, larger rows [S-L10-012, S-L10-072].
@@ -438,6 +481,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 ### Q-plat-04 · Will anyone use the product while driving, moving, or wearing a headset? · Standard
 - **Show if:** Q-plat-02 marks car, watch or spatial as first-class or works
 - **Why:** In a vehicle context, distraction limits become hard errors, not warnings [DC-L14-11].
+- **Ask:** "Will anyone use this while driving, walking, or in a headset?"
+- **Example:** Show which elements would fail the 2-second glance rule.
 - **Control:** multi-select
 - **Options:**
   - `driving` Driving: glances at most 2 s and 12 s per task (NHTSA), no animation or auto-scroll, 76dp targets, at most 120 characters per text item [S-L14-031, S-L14-032, S-L14-037].
@@ -455,6 +500,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 ### Q-plat-05 · Should your native apps look like the platform, like your brand, or a mix? · Standard
 - **Show if:** Q-plat-01 includes ios, android or desktop. In Quick mode it is derived from slider G and shown as a confirm chip.
 - **Why:** Native apps feel at home and inherit OS updates for free; brand-first apps look identical everywhere but must re-implement every OS change [DC-L10-02].
+- **Ask:** "Should your iOS and Android apps look like the platform, like your brand, or a mix?"
+- **Example:** Show one screen native-first, hybrid and brand-first.
 - **Control:** single choice
 - **Options:**
   - `native-first` Native-first: system components almost everywhere; brand shows in content, accents, imagery and voice (Apple: "Express your brand with familiar components") [S-L10-009].
@@ -471,6 +518,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 ### Q-plat-06 · On native platforms, use system controls or custom-branded ones? · Expert
 - **Show if:** Q-plat-01 includes ios, android or desktop
 - **Why:** System controls update with the OS (rounder, capsule-like on iOS 26+); custom controls keep brand shape but must supply their own accessibility [DC-L10-13].
+- **Ask:** "On native platforms, keep the system's controls or restyle them?"
+- **Example:** Show switches and sliders: system vs custom.
 - **Control:** single choice
 - **Options:**
   - `system` System controls tinted with the accent: native feel, Liquid Glass and Material behavior for free [S-L10-075, S-L10-072].
@@ -487,6 +536,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 ### Q-plat-07 · What do the platforms share? · Expert
 - **Show if:** more than one platform in Q-plat-01
 - **Why:** The more is shared, the more identical the product looks across platforms and the less native [DC-L10-03].
+- **Ask:** "What should platforms share: principles, tokens, component specs, or code?"
+- **Example:** Show one card component rendered per platform under each option.
 - **Control:** single choice
 - **Options:**
   - `principles` Principles only: loosest alignment (Fluent's four principles) [S-L10-038].
@@ -503,6 +554,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-plat-08 · What will you build the UI with? · Standard
 - **Why:** The stack decides the code the builder generates and how fast OS visual changes reach users [DC-L10-21, DC-L10-20, DC-L10-19].
+- **Ask:** "What will you build the UI with?"
+- **Example:** Show a generated Button in each selected stack.
 - **Control:** multi-select
 - **Options:**
   - `react` React (72% of systems), `vue`, `angular` (28%), `svelte`: framework components [S-L11-030; DC-L10-19].
@@ -521,6 +574,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 ### Q-plat-09 · Which OS versions do you support? · Expert
 - **Show if:** Q-plat-01 includes ios or android
 - **Why:** A floor at the newest OS lets the system assume glass chrome, dynamic color and edge-to-edge; a lower floor forces dual designs [DC-L10-23].
+- **Ask:** "Which OS versions must you support?"
+- **Example:** Show a matrix of assumed features: glass, dynamic color, edge-to-edge.
 - **Control:** single choice per platform
 - **Options:**
   - `current-prev` Current and previous major: design for the current language, older versions fall back to their native look [DC-L10-23].
@@ -542,6 +597,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-tool-01 · Where should the master copy of the system live? · Quick
 - **Why:** Whichever side is not the source of truth drifts unless sync runs automatically; 60% of teams have no token automation [DC-L07-08; S-L11-030].
+- **Ask:** "Where should the master copy live: here, a token file in git, your code, or Figma?"
+- **Example:** Show a round-trip diagram for the chosen option.
 - **Control:** single choice
 - **Options:**
   - `builder` The builder's own model, compiled to DTCG, CSS, native code and design files in one step; design tools are push targets [DC-L16-02, DC-L11-16].
@@ -558,6 +615,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-tool-02 · How will engineers consume the system? · Standard
 - **Why:** Copy-in source drifts per product, CDN runtimes stay uniform, headless layers leave the look to you [DC-L09-08].
+- **Ask:** "How will engineers consume it: npm package, copy-in source, CSS only, tokens only?"
+- **Example:** Show the exported file tree per option.
 - **Control:** multi-select
 - **Options:**
   - `npm` Versioned npm component library (Carbon, Fluent, Ant, Chakra, Mantine) [DC-L09-08].
@@ -577,6 +636,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-tool-03 · Which design tool does your team use, and on which plan? · Standard
 - **Why:** The plan caps modes per collection, so it bounds which theming architectures fit [DC-L07-27].
+- **Ask:** "Do you use a design tool? If Figma, which plan?"
+- **Example:** Show the mode-budget meter, e.g. '6 of 10 modes used'.
 - **Control:** single choice (tool) + single choice (Figma plan)
 - **Options:**
   - `figma-starter` Figma Starter: variables but no extra modes, no published libraries [S-L07-011, S-L07-020].
@@ -597,6 +658,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 ### Q-tool-04 · Should Figma components be linked to code for AI tools? · Expert
 - **Show if:** Q-tool-03 is figma-org or figma-ent
 - **Why:** Linked components make generated UI match the real system instead of generic React + Tailwind [DC-L07-24; S-L07-042].
+- **Ask:** "Should Figma components be linked to code for AI tools?"
+- **Example:** Show one MCP response with and without Code Connect.
 - **Control:** single choice
 - **Options:**
   - `cc-ui` Code Connect UI inside Figma, several frameworks per component [S-L07-026].
@@ -617,6 +680,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-dir-01 · Which overall visual style fits the product? · Standard
 - **Why:** The style preset moves depth, materials, radius, borders and chroma together (fan-out 12) [DC-L15-01].
+- **Ask:** "Which overall style fits: flat, tonal, glass, neo-brutalist, soft, or maximal?"
+- **Example:** Show one product screen in each style.
 - **Control:** single choice (visual cards)
 - **Options:**
   - `flat2` Flat 2.0: mostly flat surfaces, subtle shadows or tonal steps, clear signifiers; neutral, efficient, timeless (Carbon, Primer, Polaris, Fluent) [S-L15-009].
@@ -635,6 +700,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-dir-02 · How much should fit on a screen? · Standard
 - **Why:** Spacious layouts look confident but slow repeat users; compact layouts look efficient but need strong grouping and signifiers [DC-L15-04; S-L15-003, S-L15-004].
+- **Ask:** "How much should fit on a screen: compact, comfortable, or spacious?"
+- **Example:** Show a data table at each density.
 - **Control:** single choice (pre-filled from Q-aud-01)
 - **Options:**
   - `compact` Compact: serious, efficient, expert; more data per screen (Carbon table rows from 24px) [S-L08-062; DC-L15-04].
@@ -652,6 +719,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-dir-03 · How dramatic should the difference between headings and body text be? · Standard
 - **Why:** Hierarchy strength sets the type ratio, weights and text-color tiers; too subtle makes levels "almost match", too dramatic leaves few usable steps [DC-L15-02; S-L15-070].
+- **Ask:** "How dramatic should headings be compared with body text?"
+- **Example:** Show a heading ladder at subtle, balanced and dramatic.
 - **Control:** single choice + Expert sub-choice (lead lever: size, weight or color)
 - **Options:**
   - `subtle` Subtle: ratio 1.125-1.2 (16, 18, 20, 23px), weights 400 and 600; calm, dense, professional (Carbon productive) [S-L15-038; DC-L15-02].
@@ -667,6 +736,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-dir-04 · How should related things be grouped? · Standard
 - **Why:** Grouping sets whether surfaces use space, cards or lines, which drives surface colors, dividers and whitespace [DC-L15-05].
+- **Ask:** "Should related things be grouped by space, cards, or lines?"
+- **Example:** Show one settings page grouped three ways.
 - **Control:** single choice
 - **Options:**
   - `space` Space first: proximity only, outer gaps larger than inner; lighter, calmer, modern (Refactoring UI "Use fewer borders"; Carbon, Fluent) [S-L15-037; DC-L03-24].
@@ -682,6 +753,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-dir-05 · Should layouts be start-aligned or centered? · Expert
 - **Why:** Alignment sets the text alignment defaults and where centered layouts are allowed [DC-L15-08].
+- **Ask:** "Start-aligned layouts, or centered?"
+- **Example:** Show an empty state and a form in each alignment.
 - **Control:** single choice
 - **Options:**
   - `start` Start-aligned, asymmetric: efficient, modern, scannable (Apple's "top and leading side") [S-L15-053, S-L15-072].
@@ -702,6 +775,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-theme-01 · Which appearance modes does the product support? · Standard
 - **Why:** Dark mode is a separate mapping, not an inversion, so each mode doubles color decisions and contrast checks [DC-L10-17; S-L10-089].
+- **Ask:** "Light and dark following the system, or one mode only?"
+- **Example:** Show the preview split diagonally, light and dark.
 - **Control:** single choice
 - **Options:**
   - `system-light-dark` Light and dark, following the system setting: blends with the OS at night (Apple expects apps to respect the preference) [S-L10-089].
@@ -719,6 +794,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-theme-02 · Which other theme axes should exist? · Expert
 - **Why:** Each extra axis multiplies the values to check: 2 modes x 3 brands = 6 palettes to contrast-test [DC-L11-25, DC-L07-15].
+- **Ask:** "Besides light and dark, which other theme variations do you need?"
+- **Example:** Show the palette count, e.g. '2 modes x 2 contrasts = 4 palettes to test'.
 - **Control:** multi-select (pre-filled from Q-aud-04)
 - **Options:**
   - `contrast` Contrast: standard and high (Material standard/medium/high; Atlassian increased contrast; Primer 14 theme files incl. color-blind variants) [S-L07-104, S-L07-108, S-L07-110].
@@ -736,6 +813,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-theme-03 · Will other brands, products or clients re-skin this system? · Standard
 - **Why:** Locked systems look consistent; generator systems keep structure and vary hue; theme-swap systems can change shape and depth too [DC-L09-07].
+- **Ask:** "Will other brands, products or clients re-skin this system?"
+- **Example:** Show the preview re-skinned with two sample brand colors.
 - **Control:** single choice
 - **Options:**
   - `locked` One brand, locked (Carbon, Primer, Geist) [DC-L09-07].
@@ -753,6 +832,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 ### Q-theme-04 · What may differ between brands, and how is that stored? · Expert
 - **Show if:** Q-theme-03 is brand-themes or white-label
 - **Why:** If brands differ in more than about 20% of semantic tokens, they are separate themes, not brands [DC-L07-16].
+- **Ask:** "What may differ between brands, and how should brands be stored?"
+- **Example:** Show a table of brandable tokens per brand.
 - **Control:** multi-select (what flexes) + single choice (storage)
 - **Options:**
   - `flex-color-type-imagery` Flex brand color, typeface, logo, imagery; fix anatomy, behavior, semantic names, status meanings [DC-L06-16].
@@ -774,6 +855,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-color-01 · Do you have fixed brand colors, or should the builder generate the palette from one color? · Quick
 - **Why:** Hand-picked hexes keep brand nuance; a seed algorithm gives even ramps; contrast targets give predictable legibility across hues (L09 divergence 6) [DC-L09-03].
+- **Ask:** "Do you have fixed brand colors, or should I generate the palette from one color?"
+- **Example:** Ask for hex values; if none, offer 3 seed swatches weighted by the sliders.
 - **Control:** color picker (1-3 seeds, each lockable) + single choice (method)
 - **Options:**
   - `keep-hex` Keep exact brand hexes and hand-tune ramps around them (Carbon, Primer, Atlassian, GOV.UK) [DC-L09-03].
@@ -792,6 +875,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-color-02 · Where should your brand color appear? · Quick
 - **Why:** Brand color placement is the third-largest visual difference between systems: actions only, containers, or whole surfaces (L09 divergence 3) [DC-L06-04].
+- **Ask:** "Where should your brand color appear: only on key actions, on one signature area, or across the chrome?"
+- **Example:** Show the same screen with each placement.
 - **Control:** single choice (with platform overrides in Expert)
 - **Options:**
   - `accent` Reserved accent on primary actions, links, status, selected tab: calm, content-first (Apple HIG, Carbon) [S-L06-008, S-L06-001].
@@ -810,6 +895,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-color-03 · How colorful should the palette be? · Standard
 - **Why:** Chroma sets how calm or energetic the product reads; high chroma weakens status colors because everything shouts [DC-L01-10].
+- **Ask:** "How colorful should the palette be, from monochrome to vivid?"
+- **Example:** Show a chroma slider moving surfaces, accent and status together.
 - **Control:** single choice (pre-filled from sliders A and D)
 - **Options:**
   - `monochrome` Monochrome or neutral: calm, premium, technical (Material Monochrome and Neutral variants, chroma 0 and 8-12; Polaris black brand) [S-L01-010, S-L01-039].
@@ -827,6 +914,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-color-04 · How many accent colors does the product need? · Standard
 - **Why:** One accent makes every colored element read as actionable; three accents feel expressive but need discipline [DC-L01-08].
+- **Ask:** "How many accent colors does the product need? One is usual."
+- **Example:** Show the screen with each accent's job highlighted.
 - **Control:** single choice
 - **Options:**
   - `one` One accent plus neutrals and status: focused, calm (Carbon core blue; Apple one app accent; Linear, Notion) [S-L01-029, S-L01-013; DC-L15-06].
@@ -844,6 +933,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-color-05 · How much of a screen may use accent color and emphasis? · Expert
 - **Why:** Raising emphasis without a budget makes screens louder, not clearer [DC-L15-03; S-L15-067].
+- **Ask:** "How much of a screen may use accent color?"
+- **Example:** Show the accent-area meter and a two-primaries warning.
 - **Control:** single choice (pre-filled from Q-brand-04)
 - **Options:**
   - `strict` Strict: one dominant element and one primary action per view; accent only on primary actions, selection, status (Apple) [S-L15-067, S-L15-054].
@@ -860,6 +951,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 ### Q-color-06 · Should colors follow the user's wallpaper or system accent? · Standard
 - **Show if:** Q-plat-01 includes android, ios or desktop
 - **Why:** Following the OS feels personal and native but weakens brand recall and makes screenshots differ per user [DC-L10-05].
+- **Ask:** "Should colors follow the user's wallpaper or system accent?"
+- **Example:** Show the Android preview recolored by three wallpapers.
 - **Control:** single choice
 - **Options:**
   - `static` Fixed brand color everywhere (Material static baseline; advised for enterprise and iOS) [S-L06-082, S-L01-006].
@@ -876,6 +969,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-color-07 · How should color ramps be built? · Expert
 - **Why:** In HSL, yellow at the same lightness looks lighter than blue; perceptual or contrast-indexed ramps keep every hue's steps equally heavy [DC-L01-01; S-L01-044].
+- **Ask:** "How should ramps be built: perceptual, tone-based, contrast-based, hand-tuned or a preset?"
+- **Example:** Show blue and green at the same step, HSL vs OKLCH.
 - **Control:** single choice (space) + single choice (step rule) + single choice (generator)
 - **Options:**
   - `oklch` OKLCH, perceptual (Tailwind v4 moved its palette to oklch in Jan 2025; CSS `oklch()` Baseline since May 2023) [S-L01-045, S-L01-046].
@@ -894,6 +989,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-color-08 · How many steps should each ramp have, and how are they numbered? · Expert
 - **Why:** More steps allow quieter, layered UIs; fewer steps force bolder jumps [DC-L01-02].
+- **Ask:** "How many steps per ramp, and how should they be numbered?"
+- **Example:** Show a 12-step ramp with each step's job labeled.
 - **Control:** single choice
 - **Options:**
   - `tailwind-11` 11 steps, 50-950 (Tailwind) [S-L01-001].
@@ -911,6 +1008,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-color-09 · Should grays be pure, or tinted warm or cool? · Standard
 - **Why:** Neutrals cover most of the screen, so their temperature is a personality lever (Linear moved to "a warmer gray" in 2026) [DC-L01-06; S-L06-067].
+- **Ask:** "Should grays be pure, cool, warm, or tinted toward your brand?"
+- **Example:** Show surfaces re-tinted as the slider moves.
 - **Control:** single choice + hue/chroma slider
 - **Options:**
   - `pure` Pure gray (chroma 0): neutral, technical, never competes with content (Tailwind neutral, Radix gray, Spectrum for image workflows) [S-L01-062, S-L01-036].
@@ -928,6 +1027,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-color-10 · How many gray steps, and should there be transparent grays? · Expert
 - **Why:** More near-white steps let cards, sidebars and wells separate without borders [DC-L01-07].
+- **Ask:** "How many gray steps, and do you want transparent grays for overlays?"
+- **Example:** Show the neutral ramp with background, border and text bands.
 - **Control:** number (solid steps) + number (alpha steps)
 - **Options:**
   - `bands` Solid neutrals with fixed usage bands (Primer 0-13: 0-5 backgrounds, 7-8 borders, 9-10 text) [S-L01-027].
@@ -943,6 +1044,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-color-11 · Which color gamut should the system target? · Expert
 - **Why:** Display P3 gives richer reds, greens and oranges on modern screens; sRGB is simplest and accurate on most displays [DC-L01-05].
+- **Ask:** "sRGB only, or richer Display P3 colors where screens support them?"
+- **Example:** Show accent chips in sRGB and P3.
 - **Control:** single choice
 - **Options:**
   - `srgb` sRGB hex only [S-L01-013].
@@ -959,6 +1062,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-color-12 · How should color roles be named? · Expert
 - **Why:** Property-first grammars make it hard to put a border color on text; pairing grammars guarantee legible pairs [DC-L01-11].
+- **Ask:** "How should color roles be named?"
+- **Example:** Show `bgColor-accent-muted` vs `primary-container`.
 - **Control:** single choice
 - **Options:**
   - `property-role` Property x role x emphasis x state (`bgColor-accent-muted`, `fgColor-onEmphasis`: Primer, Atlassian) [S-L01-027, S-L01-032].
@@ -974,6 +1079,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-color-13 · How many emphasis levels should each color role have? · Expert
 - **Why:** More levels allow soft tinted status panels and quiet selection; two levels look punchier [DC-L01-12].
+- **Ask:** "How many emphasis levels per color role?"
+- **Example:** Show a banner, badge and button at each level.
 - **Control:** single choice
 - **Options:**
   - `two` Muted and emphasis (Primer) [S-L01-050].
@@ -990,6 +1097,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-color-14 · How should surfaces be layered? · Standard
 - **Why:** The surface model decides whether depth comes from tone steps, alternating layers, or elevation names, and how dark mode shows depth [DC-L01-13].
+- **Ask:** "How should surfaces stack: tone steps, alternating layers, or elevation names?"
+- **Example:** Show a page, card, popover and dialog stack in light and dark.
 - **Control:** single choice (pre-filled from Q-dir-04)
 - **Options:**
   - `container-tiers` Named container tiers not tied to elevation: flat, calm, modern (Material 3 `surface-container-lowest` to `-highest`) [S-L01-004, S-L01-054].
@@ -1006,6 +1115,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-color-15 · Which status colors do you need? · Standard
 - **Why:** Few statuses keep alerts unmistakable; many make dense developer UIs scannable but cost learning [DC-L01-15].
+- **Ask:** "Which status colors do you need beyond success, warning, danger and info?"
+- **Example:** Show banners and badges per status.
 - **Control:** multi-select
 - **Options:**
   - `classic-4` Success, warning, danger, info (Radix hue suggestions; Carbon Red 60, Yellow 30, Green 60) [S-L01-053, S-L01-056].
@@ -1022,6 +1133,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 ### Q-color-16 · How should dark mode be derived from light? · Expert
 - **Show if:** Q-theme-01 includes dark
 - **Why:** Mirrored mappings keep hierarchy identical across modes; separate hand-tuned dark ramps look richer but drift [DC-L01-18].
+- **Ask:** "How should dark mode be derived from light?"
+- **Example:** Show both modes with failing pairs lit up.
 - **Control:** single choice
 - **Options:**
   - `tone-reassign` Same palettes, different tones per role (Material: primary 40 becomes 80, surface 98 becomes 6) [S-L01-010].
@@ -1037,6 +1150,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-color-17 · Which contrast rule should the builder enforce on every color pair? · Standard
 - **Why:** AA allows mid-gray secondary text and softer tints; AAA forces darker text and deeper accents [DC-L01-22].
+- **Ask:** "Which contrast rule should I enforce on every color pair?"
+- **Example:** Show the contrast matrix with pass/fail per mode.
 - **Control:** single choice (pre-filled from Q-aud-03)
 - **Options:**
   - `aa` WCAG 2.2 AA: text 4.5:1, large text 3:1, UI parts 3:1; no rounding (4.499:1 fails) [S-L01-022, S-L01-023].
@@ -1052,6 +1167,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-color-18 · How should meaning survive when color can't be seen? · Expert
 - **Why:** About 1 in 12 men have a color vision deficiency; WCAG 1.4.1 (Level A) forbids color as the only cue [DC-L01-23; S-L01-060, S-L01-024].
+- **Ask:** "How should meaning survive for color-blind users: underlined links, icons, special themes?"
+- **Example:** Show the screen under red-green simulation.
 - **Control:** single choice (links) + toggle (CVD themes)
 - **Options:**
   - `underline-always` Underline links in body text: robust, more document-like [DC-L01-23].
@@ -1067,6 +1184,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-color-19 · Does the product show charts, and which chart colors does it need? · Standard
 - **Why:** Chart palettes drawn from UI ramps look native; separate high-chroma palettes pop but can clash; long categorical lists become illegible [DC-L01-24].
+- **Ask:** "Does the product show charts? Which chart colors?"
+- **Example:** Show a bar chart, line chart and heatmap in light and dark.
 - **Control:** single choice
 - **Options:**
   - `none` No charts.
@@ -1088,6 +1207,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-color-20 · How should hover and pressed states change color? · Standard
 - **Why:** Overlays give soft, consistent feedback on any color, including dynamic ones; step shifts give crisper, exact changes per theme [DC-L01-17].
+- **Ask:** "Should hover and pressed states use an overlay or a step darker?"
+- **Example:** Let them hover and press a live button, row and chip.
 - **Control:** single choice
 - **Options:**
   - `overlay` State layers: an overlay of the content color, hover +8%, focus +10%, press +10%, drag +16% (Material 3) [S-L01-005, S-L01-065].
@@ -1104,6 +1225,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 ### Q-color-21 · How dark should dark mode be? · Standard
 - **Show if:** Q-theme-01 includes dark
 - **Why:** Pure black is dramatic but smears on OLED when scrolling; near-black looks sleek; charcoal is softer for long reading [DC-L01-19; S-L01-055].
+- **Ask:** "How dark should dark mode be: pure black, near-black, or charcoal?"
+- **Example:** Show the dark preview with a darkness slider.
 - **Control:** single choice + toggle (dimmed theme)
 - **Options:**
   - `black` Pure black #000: cinematic, halation and smear on OLED [S-L01-055].
@@ -1120,6 +1243,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-color-22 · How many text colors, and are they solid or transparent? · Expert
 - **Why:** Solid text tokens stay crisp over any background; opacity-based text blends with tinted surfaces but is less predictable [DC-L01-14].
+- **Ask:** "How many text colors, solid or transparent?"
+- **Example:** Show a text ladder on each surface with ratios.
 - **Control:** single choice
 - **Options:**
   - `solid-levels` Solid tokens per level (Carbon `$text-primary`/`$text-secondary`; Fluent `colorNeutralForeground1`) [S-L01-029, S-L01-034].
@@ -1135,6 +1260,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-color-23 · How strong should borders be, and what color is the focus ring? · Expert
 - **Why:** Strong outlines feel explicit and form-heavy; subtle borders plus tonal fills feel softer; a brand focus ring feels branded, a black/white ring always works [DC-L01-16].
+- **Ask:** "How strong should borders be, and what color is the focus ring?"
+- **Example:** Let them tab through a field, card and table.
 - **Control:** single choice (borders) + single choice (focus color)
 - **Options:**
   - `two-tier` Two tiers: `outline` for fields, `outline-variant` for dividers (Material) [S-L01-004].
@@ -1151,6 +1278,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-color-24 · Which accessibility color themes should ship? · Expert
 - **Why:** High-contrast modes trade brand nuance for legibility; forced colors reduce the UI to the user's palette, so meaning carried only by fills or shadows disappears [DC-L01-20].
+- **Ask:** "Which accessibility color themes should ship: high contrast, color-blind, forced colors?"
+- **Example:** Show the screen in each theme.
 - **Control:** multi-select (pre-filled from Q-aud-04 and Q-theme-02)
 - **Options:**
   - `contrast-levels` Contrast levels standard, medium (3:1 minimum) and high (7:1) in both modes (Material) [S-L01-006].
@@ -1168,6 +1297,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-color-25 · Where are gradients allowed? · Expert
 - **Why:** Gradients add energy and brand warmth but reduce clarity in dense UIs and compete with status color [DC-L01-25].
+- **Ask:** "Where are gradients allowed?"
+- **Example:** Show a hero gradient interpolated in sRGB vs OKLab.
 - **Control:** single choice
 - **Options:**
   - `brand-only` Brand and marketing surfaces only, interpolated in OKLab (Tailwind v4 default) [S-L01-066].
@@ -1183,6 +1314,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-color-26 · Should the system include transparent colors? · Expert
 - **Why:** Alpha colors let hover, selection and borders pick up the surface beneath, so they look integrated on tinted surfaces and photos [DC-L01-27].
+- **Ask:** "Should the system include transparent colors?"
+- **Example:** Show hover over a white card, a tinted panel and a photo.
 - **Control:** single choice
 - **Options:**
   - `alpha-ramps` Alpha ramps mirroring every solid ramp (Radix `--blue-a1..a12`, blackA, whiteA) [S-L01-052].
@@ -1196,4 +1329,511 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Use / avoid:** use alpha when the background varies; use solid when the pair must be contrast-certified [DC-L01-27].
 - **Skip:** yes.
 - **Evidence:** DC-L01-27; S-L01-030, S-L01-031, S-L01-036, S-L01-052
+
+---
+
+## Stage 10 · Typeface
+> Screen: which fonts, for which scripts. Graph step 2-4. Cycles kept together: DC-L02-01 + DC-L02-02 + DC-L02-03 + DC-L02-04 + DC-L02-06 + DC-L02-24 (the typeface must cover your scripts and license terms, and those in turn narrow the typeface) and DC-L06-07 + DC-L06-24 (brand typeface vs localization readiness). The preview is a type specimen in the product's own UI, with a coverage bar for each chosen script.
+
+### Q-type-01 · Should the product use the platform's font, a neutral open font, or your own brand typeface? · Quick
+- **Why:** After color, the typeface is the largest single brand lever; system fonts feel native and invisible, a custom face gives instant recognition (L09 divergence 5) [DC-L09-05].
+- **Ask:** "Platform font, a neutral open font like Inter, or your own brand typeface?"
+- **Example:** Show the same screen in each option next to the OS chrome.
+- **Control:** single choice (specimen cards)
+- **Options:**
+  - `system` Platform system fonts: SF Pro, Roboto, Segoe UI Variable; native, content leads (Apple, Fluent, Ant, Radix, Mantine, SLDS) [S-L02-001, S-L02-007; DC-L09-05].
+  - `open-neutral` A neutral open font: the neutral SaaS look (Inter: Polaris, Chakra, Paste, Linear; Roboto: Material) [DC-L09-05].
+  - `open-custom` An open font with character: IBM Plex, Geist, Public Sans, Mona Sans [DC-L09-05; S-L06-006].
+  - `brand-display` Brand face for headlines, system font for body (Apple's recommendation) [S-L10-009, S-L06-008].
+  - `brand-everywhere` Proprietary brand face everywhere: Uber Move, Adobe Clean, Cereal, Spotify Mix [DC-L09-05; S-L06-021, S-L06-019].
+- **Default:** system for productivity and internal tools; on native platforms any brand face goes in display roles only. *Source:* card heuristics [DC-L02-01, DC-L10-06]; L09 suggests Inter or the system stack for a neutral start [DC-L09-05].
+- **Decides:** DC-L09-05, DC-L02-01, DC-L06-07, DC-L10-06
+- **Changes:** DC-L02-02, DC-L02-03, DC-L02-04, DC-L02-06, DC-L02-24, DC-L10-07, DC-L02-21 · blocks: Foundations > Typography > Typeface > Sourcing; Platform map
+- **Preview:** the same screen set in each option, side by side with the OS chrome, so the "foreign next to OS chrome" effect is visible [DC-L02-01].
+- **Use / avoid:** use system fonts when the product lives inside another OS's chrome; use a brand face when recognition is a stated goal; avoid a brand face in body text if it needs size bumps to match system legibility at 13pt [DC-L02-01, DC-L10-06].
+- **Skip:** yes, system.
+- **Evidence:** DC-L09-05, DC-L02-01, DC-L06-07, DC-L10-06; S-L02-001, S-L02-007, S-L06-031, S-L10-009, S-L09-213
+- **Merges:** K3.5, B8, P7
+
+### Q-type-02 · Do you have the brand typeface files and a license that covers web and apps? · Standard
+- **Show if:** Q-type-01 is brand-display or brand-everywhere
+- **Why:** A brand typeface is a block the builder cannot create; its license and files decide where it may be used and how it loads [DC-L02-06; BRIEF requirement 2].
+- **Ask:** "Do you have the brand font files and a license for web and apps?"
+- **Example:** Ask for WOFF2 or OTF files; if none, offer 3 open-source faces with a similar feel.
+- **Control:** single choice + file upload + license checkboxes (web, iOS/Android apps, embedding)
+- **Options:**
+  - `yes` Yes: files and license in hand.
+  - `license-only` Licensed but files not yet supplied.
+  - `no` No: see the Hook line.
+- **Default:** WOFF2, one variable file per family, `font-display: swap` with a metric-adjusted fallback, subsets per script. *Source:* card heuristic [DC-L02-06].
+- **Decides:** DC-L02-06
+- **Changes:** DC-L02-04, DC-L02-24, DC-L10-22 · blocks: Foundations > Typography > Typeface > Delivery
+- **Hook:** Accepts WOFF2 for web, OTF or TTF for native apps, variable files preferred; the builder reads axes (wght, opsz) and Unicode coverage from the file. OS system fonts must not be embedded (Apple) [S-L02-001]. If no: (1) pick an open-source face under the SIL OFL with a similar personality (Inter, Roboto Flex, Noto, Google Sans Flex, IBM Plex) [S-L02-026, S-L02-012]; (2) license a commercial face, noting per-domain, per-app or per-pageview terms [inferred]; (3) commission a custom face from a type foundry, with the caveat that it is slow and costly (Google needed three iterations to make one brand face work at small sizes) [S-L06-031].
+- **Preview:** the loaded font in the specimen, with a first-load simulation showing `swap` reflow vs `optional` stability [S-L02-042].
+- **Use / avoid:** use at most 2 families and 1 variable file each on first load; avoid `font-display: block` for body text (brief invisible text) [DC-L02-06; S-L02-042].
+- **Skip:** yes; the system stack stands in until files arrive.
+- **Evidence:** DC-L02-06; S-L02-001, S-L02-012, S-L02-026, S-L02-042, S-L06-031
+- **Merges:** K3.5 (licensing), B7 (typeface licences)
+
+### Q-type-03 · Which kind of typeface fits the personality? · Standard
+- **Why:** Classification carries personality: neutral, friendly, warm, editorial or technical [DC-L02-02, DC-L06-08].
+- **Ask:** "Which kind of typeface fits: neutral grotesque, geometric, humanist, serif, slab or rounded?"
+- **Example:** Show 'Il1 O0 rn m' at 12-14px for each candidate.
+- **Control:** single choice (pre-filled from sliders F, B, A and D)
+- **Options:**
+  - `neo-grotesque` Neo-grotesque sans: neutral, efficient, "invisible" (Inter, SF Pro, Roboto; Apple, Material, Polaris) [S-L02-049; DC-L02-02].
+  - `geometric` Geometric sans: modern, friendly, fashionable, weaker in long text (DM Sans, Poppins; Google Sans lineage) [S-L02-049, S-L02-024].
+  - `humanist` Humanist sans: warm, approachable, very legible small (Segoe, IBM Plex Sans often grouped here) [S-L02-049].
+  - `serif` Serif: editorial, heritage (Cooper for Mailchimp's sincerity) [S-L06-028].
+  - `slab` Slab serif: publishing heritage, "friendly slab" [S-L06-078].
+  - `rounded` Rounded terminals: "personal, playful" (Google Sans Flex ROND axis) [S-L06-031].
+- **Default:** neo-grotesque or humanist sans with a large x-height. *Source:* card heuristic [DC-L02-02]; slider mapping [DC-L06-08].
+- **Decides:** DC-L02-02, DC-L06-08
+- **Changes:** DC-L02-03, DC-L02-14, DC-L05-03 · blocks: Foundations > Typography > Typeface > Classification; Personality
+- **Preview:** a specimen with the confusable-pairs test (Il1, O0, rn/m) at 12-14px for each candidate.
+- **Use / avoid:** use geometric faces for headlines, humanist or neo-grotesque for body; avoid any face that fails the confusable-pairs test at 12-14px or lacks your scripts [DC-L02-02].
+- **Skip:** yes.
+- **Evidence:** DC-L02-02, DC-L06-08; S-L02-024, S-L02-049, S-L06-028, S-L06-031, S-L06-078
+
+### Q-type-04 · Which languages and scripts must the product support, now and within two years? · Standard
+- **Why:** Scripts veto typefaces: without a matched fallback, Hindi next to a brand Latin face looks a different size and sits off the baseline; labels need room to grow [DC-L02-24, DC-L06-24].
+- **Ask:** "Which languages and scripts must work now and within two years? Any right-to-left?"
+- **Example:** Show a button row in each chosen script with overflow flagged.
+- **Control:** multi-select (scripts) + toggle (right-to-left)
+- **Options:**
+  - `latin` Latin (plus Vietnamese and extended Latin; Spotify Mix began here) [S-L06-019].
+  - `indic` Indic scripts (Devanagari, Bangla, Tamil, Telugu, Gujarati): Noto Sans per script, Kohinoor on Apple, Nirmala UI on Windows [S-L02-026, S-L02-062].
+  - `cjk` Chinese, Japanese, Korean: taller line heights [S-L06-101].
+  - `arabic-hebrew` Arabic or Hebrew: right-to-left mirroring of layout and icons [DC-L02-24; K5.1].
+  - `thai-other` Thai and other scripts with tall marks [S-L06-101].
+- **Default:** Latin; for India-facing products, brand Latin face plus Noto Sans for each target Indic script with a size or x-height adjustment; every label budgets 2-3x length for strings under 10 characters. *Source:* card heuristics [DC-L02-24, DC-L06-24; S-L06-101].
+- **Decides:** DC-L02-24, DC-L06-24
+- **Changes:** DC-L02-25, DC-L02-13, DC-L05-09, DC-L03-04 · blocks: Foundations > Typography > Internationalization; Content > Localization
+- **Preview:** the specimen and a button row rendered in each chosen script, with baseline alignment and label overflow flagged.
+- **Use / avoid:** use logical (start/end) spacing and mirrored directional icons when RTL is on; avoid fixing a label width to its English length [DC-L06-24; S-L06-101].
+- **Skip:** yes, Latin.
+- **Evidence:** DC-L02-24, DC-L06-24; S-L02-026, S-L02-051, S-L02-053, S-L06-101, S-L06-019
+- **Merges:** K5.1, K5.2, B14
+
+### Q-type-05 · One type family, or a pair? · Expert
+- **Why:** One family feels calm and coherent; a serif or display partner adds editorial contrast [DC-L02-03].
+- **Ask:** "One type family, or a pair?"
+- **Example:** Show a hero and a product panel per pairing.
+- **Control:** single choice
+- **Options:**
+  - `one` One family for everything; weights and optical sizes create contrast (Windows, Apple, Fluent, Polaris guidance) [S-L02-022, S-L02-001].
+  - `superfamily` One family with display and text cuts (Google Sans + Google Sans Text; Inter Display + Inter at Linear) [S-L02-006, S-L06-012].
+  - `sans-serif` Sans for UI plus a serif (Carbon: Plex Sans and Plex Serif) [S-L02-011].
+  - `display-face` A distinct display face for brand moments [DC-L02-03].
+- **Default:** 1 UI family + 1 mono, with an optional serif or display face for marketing. *Source:* card heuristic [DC-L02-03].
+- **Decides:** DC-L02-03
+- **Changes:** DC-L02-06, DC-L02-15 · blocks: Foundations > Typography > Typeface > Families and pairing
+- **Preview:** a marketing hero and a product panel with each pairing.
+- **Use / avoid:** add a second face only for a change of job (display vs text, code); avoid near-identical pairs that read as a mistake [DC-L02-03; DC-L15 P49 via DC-L15-11].
+- **Skip:** yes.
+- **Evidence:** DC-L02-03; S-L02-001, S-L02-006, S-L02-011, S-L02-022
+
+### Q-type-06 · Which font for code and numbers? · Expert
+- **Why:** Mono reads technical; tabular figures stop numbers jittering in tables and live values [DC-L02-05; S-L02-052].
+- **Ask:** "Which font for code and numbers, and should table numbers be tabular?"
+- **Example:** Show a live counter with proportional vs tabular digits.
+- **Control:** single choice + toggle (tabular numbers in tables)
+- **Options:**
+  - `system-mono` System mono stack (`ui-monospace, SFMono-Regular, ...`: Primer, Polaris) [S-L02-017, S-L02-014].
+  - `brand-mono` Brand mono (IBM Plex Mono code-01 12/16; Atlassian Mono) [S-L02-011, S-L02-015].
+  - `numeric-face` A dedicated numeric or metric style for KPIs (Fluent Bahnschrift; Atlassian `font.metric.large` 28/32) [S-L02-008, S-L02-015].
+- **Default:** system mono stack plus `tabular-nums` on numeric table cells; a metric style only if the product has dashboards. *Source:* card heuristic [DC-L02-05].
+- **Decides:** DC-L02-05
+- **Changes:** DC-L02-26, DC-L05-24 · blocks: Foundations > Typography > Typeface > Monospace / numeric
+- **Preview:** a code block, a table column and a live counter with proportional vs tabular figures.
+- **Use / avoid:** use tabular figures in tables, clocks and anything that updates; avoid mono for body text [DC-L02-05; S-L02-052].
+- **Skip:** yes.
+- **Evidence:** DC-L02-05; S-L02-008, S-L02-011, S-L02-014, S-L02-015, S-L02-052
+
+### Q-type-07 · Should the font use variable weights and automatic optical sizing? · Expert
+- **Why:** Optical sizing makes small text sturdier and large text sleeker; without it, display text in a text cut looks clunky [DC-L02-04].
+- **Ask:** "Use variable weights and automatic optical sizing where the font supports it?"
+- **Example:** Show 11px to 64px with opsz on and off.
+- **Control:** single choice
+- **Options:**
+  - `static` Static fonts, discrete weights (Roboto as applied by M3 components) [S-L02-053].
+  - `variable-wght` Variable weight axis, including in-between weights (Polaris 450/550/650) [S-L02-014].
+  - `variable-opsz` Variable weight plus optical size tied to font size (SF Pro, Segoe UI Variable 8-36pt, Inter opsz 14-32; Material sets opsz = font size) [S-L02-001, S-L02-022, S-L02-026].
+- **Default:** variable-opsz when the face has it; otherwise separate display tracking and line-height values above about 24px. *Source:* card heuristic [DC-L02-04].
+- **Decides:** DC-L02-04
+- **Changes:** DC-L02-14, DC-L02-15, DC-L02-06 · blocks: Foundations > Typography > Typeface > Variable axes
+- **Preview:** a size ramp from 11px to 64px with opsz on and off.
+- **Use / avoid:** use opsz tied to size; avoid setting display sizes in a text cut without tracking adjustments [DC-L02-04, DC-L02-14].
+- **Skip:** yes.
+- **Evidence:** DC-L02-04; S-L02-001, S-L02-014, S-L02-022, S-L02-026, S-L02-053
+
+---
+
+## Stage 11 · Type scale and text
+> Screen: sizes, line heights, weights and text behavior, on a live type ladder next to a real product screen. Graph step 0-5. Cycle kept together: DC-L02-13 + DC-L02-25 (line heights must fit each script's height category, and script metrics are set relative to the line-height system). Mostly pre-filled from Q-aud-01 (density) and Q-dir-03 (hierarchy strength).
+
+### Q-type-08 · What size should body text be? · Standard
+- **Why:** Base size is the density dial for text: 13-14px reads dense and "pro tool", 16-17 comfortable and reading-friendly [DC-L02-08].
+- **Ask:** "What size should body text be?"
+- **Example:** Show a form and a paragraph at 14, 16 and 17.
+- **Control:** single choice per platform (pre-filled from Q-aud-01)
+- **Options:**
+  - `13` 13px (Polaris text-body-md 13/20) [S-L02-014].
+  - `14` 14px (Material Body Medium 14/20, Fluent, Carbon productive, Atlassian, Primer) [S-L02-006, S-L02-007, S-L02-011, S-L02-015].
+  - `16` 16px (Carbon expressive, Material Body Large 16/24) [S-L02-011, S-L02-005].
+  - `17` 17pt (iOS Body) [S-L02-001].
+  - `19` 19px (GOV.UK) [DC-L09-04].
+- **Default:** web app 14px UI body with 16px for long-form reading; iOS 17pt; Android 14sp Body Medium / 16sp Body Large. *Source:* platform convention and card heuristic [DC-L02-08]; L09 shared default row 8.
+- **Decides:** DC-L02-08
+- **Changes:** DC-L02-09, DC-L02-13, DC-L02-17, DC-L03-07 · blocks: Foundations > Typography > Type scale > Base size
+- **Preview:** a settings form and an article paragraph at each size; the table on the preview shows rows per screen.
+- **Use / avoid:** use 16px or more where users mostly read paragraphs; use 14px where they mostly operate controls and tables; avoid anything people must read below 12px on web or 11pt on mobile [DC-L02-08, DC-L02-20].
+- **Skip:** yes.
+- **Evidence:** DC-L02-08; S-L02-001, S-L02-005, S-L02-006, S-L02-011, S-L02-014
+- **Merges:** K7.2 (sizes)
+
+### Q-type-09 · Which ratio should generate the size scale? · Expert
+- **Why:** The ratio sets how many usable steps exist and how strongly they differ [DC-L02-09].
+- **Ask:** "Which ratio should generate the size scale?"
+- **Example:** Show the ladder recomputed; close steps flagged.
+- **Control:** single choice + manual override per step
+- **Options:**
+  - `1.125` 1.125 major second: 16, 18, 20, 23, 26, 29 (Material: "Major Second type scale with 14 as its key base size") [S-L02-006].
+  - `1.2` 1.2 minor third: 16, 19, 23, 28, 33, 40 [DC-L02-09].
+  - `1.25` 1.25 major third: 16, 20, 25, 31, 39, 49 [DC-L02-09].
+  - `1.333` 1.333 perfect fourth and above: editorial [DC-L02-09].
+  - `hand-tuned` Hand-tuned list (11-15 named styles in 12 systems; only Carbon and Ant use a formula) [L09 A1 row 8].
+- **Default:** ratio from Q-dir-03, rounded to even pixels, then hand-adjusted; 1.125-1.2 dense apps, 1.25 mixed, 1.333+ editorial. *Source:* card heuristic [DC-L02-09]. Golden ratio is offered only as an optional preset (weak evidence) [BOARD L15 note].
+- **Decides:** DC-L02-09
+- **Changes:** DC-L02-10, DC-L02-13 · blocks: Foundations > Typography > Type scale > Generation
+- **Preview:** the ladder recomputed live; adjacent steps closer than about 10% are flagged for merging.
+- **Use / avoid:** use a formula to start and hand-tune the result; avoid keeping two sizes that differ by less than about 10% [DC-L02-10].
+- **Skip:** yes.
+- **Evidence:** DC-L02-09; S-L02-006, S-L02-060, S-L09-213
+
+### Q-type-10 · How many text styles, and how are they named? · Expert
+- **Why:** Purpose-named roles make people pick by job and stop ad-hoc sizes; too many steps blur hierarchy [DC-L02-07, DC-L02-10].
+- **Ask:** "How many text styles, and how should they be named?"
+- **Example:** Show styles used in context: page title, card title, label.
+- **Control:** single choice (naming) + number (styles)
+- **Options:**
+  - `role-size` Role x size matrix: display, headline, title, body, label x large, medium, small (Material 15 styles) [S-L02-052].
+  - `named` Named semantic styles (Apple's 11: Large Title ... Caption 2; Primer) [S-L02-001, S-L02-017].
+  - `tshirt` Category plus t-shirt sizes, easy to extend (Atlassian heading.xxlarge ... ) [S-L02-015].
+- **Default:** role x size matrix plus code, 8-10 sizes and 12-15 styles (13 in the L09 preset). *Source:* card heuristics [DC-L02-07, DC-L02-10]; L09 shared default row 8.
+- **Decides:** DC-L02-07, DC-L02-10
+- **Changes:** DC-L02-27, DC-L07-12, DC-L13-04 · blocks: Foundations > Typography > Type roles; Type scale > Step count
+- **Preview:** the style list with each style used in context (page title, card title, button label, caption).
+- **Use / avoid:** name semantic styles by job and primitives by number; avoid more than about 3 type sizes in a single view [DC-L02-07; BOARD L15 note].
+- **Skip:** yes.
+- **Evidence:** DC-L02-07, DC-L02-10; S-L02-001, S-L02-005, S-L02-006, S-L02-015, S-L02-017
+
+### Q-type-11 · How should line heights be set? · Expert
+- **Why:** Tight leading makes headings solid; 1.4-1.6 makes paragraphs easy to track; Latin line heights clip Indic and Telugu marks [DC-L02-13, DC-L02-25].
+- **Ask:** "How should line heights be set, including for other scripts?"
+- **Example:** Show a paragraph in Latin and Devanagari with clipping flagged.
+- **Control:** single choice + table of script categories
+- **Options:**
+  - `4pt` Fixed values snapped to 4pt (Material Body Large 16/24; Atlassian; Polaris) [S-L02-005, S-L02-015, S-L02-014].
+  - `2pt` Fixed values on a 2pt grid (Fluent, Carbon) [S-L02-007, S-L02-011].
+  - `ratios` Named unitless ratios (Primer tight 1.25 to loose 1.75) [DC-L02-13].
+  - `script-heights` Plus language height categories: Medium about +7% (Arabic, Hindi, CJK, Thai), Large +30% (Telugu, Burmese), Extra large +100% (Nastaliq) (Material 3) [S-L02-006].
+- **Default:** ratio-derived and rounded to 4px: about 1.5 for 12-16px, 1.4 for 18-24px, 1.25 for 28-40px, 1.1-1.15 for 48px+; Medium height for Indic and CJK, Large for Telugu and Burmese; no italics or all caps for non-Latin scripts. *Source:* card heuristics [DC-L02-13, DC-L02-25].
+- **Decides:** DC-L02-13, DC-L02-25
+- **Changes:** DC-L02-16, DC-L03-25, DC-L03-07 · blocks: Foundations > Typography > Metrics > Line height; Internationalization > Script metrics
+- **Preview:** a paragraph and a two-line button label in Latin and each chosen script, with clipping flagged.
+- **Use / avoid:** use smaller ratios as text gets larger; avoid fixed-height components that hold text [DC-L02-13, DC-L02-25].
+- **Skip:** yes.
+- **Evidence:** DC-L02-13, DC-L02-25; S-L02-005, S-L02-006, S-L02-007, S-L02-011, S-L02-015
+
+### Q-type-12 · Which font weights, and how is emphasis shown? · Expert
+- **Why:** Size-led hierarchy with regular headings looks elegant and editorial; weight-led hierarchy with bold headings looks sturdy and product-like [DC-L02-15].
+- **Ask:** "Which font weights, and how is emphasis shown?"
+- **Example:** Show headings and a selected chip in each weight set.
+- **Control:** single choice (weights) + single choice (emphasis)
+- **Options:**
+  - `two` Two weights: Regular and Semibold (Windows 11) [S-L02-022].
+  - `three` Three weights (Carbon 300/400/600; Material 400/500/700; Atlassian Regular/Medium/Bold) [S-L02-012, S-L02-005, S-L02-015].
+  - `four` Four weights (Fluent 400-700; Primer 300-600) [S-L02-008, S-L02-017].
+  - `emphasized-twin` One emphasized twin per style (Material Expressive 400 to 500, 500 to 700) [S-L02-005, S-L02-006].
+  - `strong-stronger` Strong and Stronger variants (Fluent Body 1 400/600/700) [S-L02-007].
+- **Default:** 3 weights (400 body, 500-600 labels, 600-700 headings) and one emphasized weight per style. *Source:* card heuristics [DC-L02-15, DC-L02-12]; BOARD L15 note (2 weights per view).
+- **Decides:** DC-L02-15, DC-L02-12
+- **Changes:** DC-L02-06 (files to load), DC-L08-14 · blocks: Foundations > Typography > Metrics > Weights; Type roles > Emphasis
+- **Preview:** headings and a selected chip in each weight set.
+- **Use / avoid:** use weight first, color second, italics only inside running text; avoid light (300) below 32px [DC-L02-12, DC-L02-15].
+- **Skip:** yes.
+- **Evidence:** DC-L02-15, DC-L02-12; S-L02-005, S-L02-007, S-L02-012, S-L02-022
+
+### Q-type-13 · Should letter spacing change with size? · Expert
+- **Why:** Negative tracking makes headlines confident; positive tracking helps small text and all-caps labels [DC-L02-14].
+- **Ask:** "Should letter spacing tighten for big text and loosen for small text?"
+- **Example:** Show a headline and an all-caps label with tracking on and off.
+- **Control:** single choice
+- **Options:**
+  - `size-table` A size-specific table (SF Pro: +41/1000 em at 6pt, 0 at 12pt, -26/1000 em at 17pt), applied automatically by the OS [S-L02-001].
+  - `per-style` Per-style tracking tokens (Material: Display Large -0.2sp, Body Large 0.5sp) [S-L02-005].
+  - `zero` No tracking beyond the font's defaults [DC-L02-14].
+- **Default:** 0 at body sizes, +0.02 to +0.05em at 11-12px and all caps, -0.01 to -0.02em from about 32px, in em units. *Source:* card heuristic [DC-L02-14].
+- **Decides:** DC-L02-14
+- **Changes:** DC-L07-12 · blocks: Foundations > Typography > Metrics > Letter spacing
+- **Preview:** a headline and an all-caps label with tracking on and off.
+- **Use / avoid:** use em-based tracking so it scales; let optical-size fonts do most of the work; avoid tracking non-Latin scripts [DC-L02-14, DC-L02-25].
+- **Skip:** yes.
+- **Evidence:** DC-L02-14; S-L02-001, S-L02-005, S-L02-009, S-L02-021
+
+### Q-type-14 · How should running text be laid out: line length, alignment, truncation and paragraph spacing? · Expert
+- **Why:** Lines that are too wide make readers lose their place; centered or justified text slows reading [DC-L02-17, DC-L02-18].
+- **Ask:** "How wide can paragraphs get, and how should long text be cut off?"
+- **Example:** Let them drag a width handle on an article.
+- **Control:** number (max characters per line) + single choice (overflow) + number (paragraph spacing)
+- **Options:**
+  - `measure-45-75` 45-75 characters (Bringhurst) or 50-60 (Windows); WCAG 1.4.8 AAA caps at 80, 40 for CJK [S-L02-051, S-L02-022, S-L02-029].
+  - `wrap-then-ellipsis` Wrap first, then ellipsis with access to the full text [DC-L02-18].
+  - `para-1x` Paragraph spacing equal to the body size (Atlassian body 12px, body large 16px) [S-L02-015; DC-L02-16].
+  - `text-box-trim` Trim half-leading so spacing measures from cap height (CSS `text-box: trim-both`) [DC-L02-16].
+- **Default:** max prose width about 65-70ch (35-40 characters CJK), start-aligned, wrap then ellipsis, paragraph spacing 1x body size with twice as much space above a heading as below it. *Source:* card heuristics [DC-L02-17, DC-L02-18, DC-L02-16].
+- **Decides:** DC-L02-17, DC-L02-18, DC-L02-16
+- **Changes:** DC-L03-16, DC-L03-25 · blocks: Foundations > Typography > Layout of text
+- **Preview:** an article at the chosen measure with a width handle to drag; lines over the limit highlight.
+- **Use / avoid:** constrain the container before touching font size when lines exceed about 10-12 words; avoid full justification and centered paragraphs [DC-L02-17, DC-L02-18].
+- **Skip:** yes.
+- **Evidence:** DC-L02-17, DC-L02-18, DC-L02-16; S-L02-015, S-L02-022, S-L02-029, S-L02-051
+
+### Q-type-15 · Should text sizes change with screen width? · Expert
+- **Why:** Fixed sizes look consistent and app-like; fluid display type fills wide heroes smoothly [DC-L02-19].
+- **Ask:** "Should text sizes change with screen width?"
+- **Example:** Drag the preview width; watch the hero and a card heading.
+- **Control:** single choice
+- **Options:**
+  - `fixed` Fixed everywhere; rely on the OS text-size setting (Carbon productive, Windows, iOS) [S-L02-011, S-L02-022, S-L02-001].
+  - `stepped` Per-breakpoint steps (Carbon expressive at md, lg, xlg, max) [S-L02-011].
+  - `fluid` Fluid display sizes with `clamp()` within the 2.5x zoom rule [S-L02-028; DC-L02-19].
+- **Default:** fixed body and UI text; fluid or stepped only for display and headline styles on the web. *Source:* card heuristic [DC-L02-19].
+- **Decides:** DC-L02-19
+- **Changes:** DC-L03-17, DC-L07-28 · blocks: Foundations > Typography > Responsive type > Strategy
+- **Preview:** a hero and a card heading as the preview width is dragged.
+- **Use / avoid:** use fluid type for marketing heroes; avoid fluid styles inside cards, tables or forms [DC-L02-19; S-L02-011].
+- **Skip:** yes.
+- **Evidence:** DC-L02-19; S-L02-011, S-L02-022, S-L02-028
+
+### Q-type-16 · Should type sizes differ by platform or viewing distance? · Expert
+- **Show if:** more than one platform or device class
+- **Why:** Mobile type about 1.2x desktop compensates for touch and distance; TVs and cars need distance-scaled type [DC-L02-20, DC-L14-04].
+- **Ask:** "Should sizes differ by platform or viewing distance?"
+- **Example:** Show one screen at phone, desktop and TV.
+- **Control:** single choice
+- **Options:**
+  - `platform-modes` One semantic scale with platform modes (Spectrum 2: 14px desktop, 17px mobile) [S-L02-021].
+  - `per-platform` Per-platform ramps (Fluent: web Body 1 14/20, iOS 17/22, Android 16/24, macOS 13/16) [S-L02-007].
+  - `native-units` One scale in native units (Material) [DC-L02-20].
+  - `distance-modes` Distance modes seeded from native defaults (Apple watch 16, phone 17, Mac 13, TV 29 pt) [S-L14-012].
+- **Default:** one semantic scale with platform modes, mobile about 1.15-1.2x desktop, plus distance modes for TV, car and spatial. *Source:* card heuristics [DC-L02-20, DC-L14-04].
+- **Decides:** DC-L02-20, DC-L14-04
+- **Changes:** DC-L14-13, DC-L07-15 · blocks: Foundations > Typography > Responsive type > Platform scales; Distance classes
+- **Preview:** the same screen at phone, desktop and TV with type scaled to a similar visual angle.
+- **Use / avoid:** keep roles and roughly the visual angle when moving to a farther device; avoid reusing desktop sizes on phones [DC-L14-04, DC-L02-20].
+- **Skip:** yes.
+- **Evidence:** DC-L02-20, DC-L14-04; S-L02-007, S-L02-021, S-L14-012, S-L14-026
+
+### Q-type-17 · How far must layouts support users' larger-text settings? · Standard
+- **Why:** At the largest sizes hierarchy compresses (iOS AX5 Body 53pt vs Large Title 60pt) and layouts must restack [DC-L02-21; S-L02-001].
+- **Ask:** "How far must layouts support users' larger-text settings?"
+- **Example:** Show a list row at default, 200% and AX5.
+- **Control:** single choice
+- **Options:**
+  - `full` Full scaling, no cap on body text: iOS AX1-AX5, Android nonlinear to 200%, web rem [S-L10-011, S-L10-071, S-L10-074].
+  - `capped-chrome` Full for content, capped at about 1.5x for fixed chrome like tab labels [DC-L10-07].
+  - `none` No scaling support: fails platform guidance (Apple asks for at least 200%) [S-L10-012].
+- **Default:** capped-chrome, with every text token in scalable units and no fixed-height text containers. *Source:* platform convention and accessibility rule [DC-L10-07, DC-L02-21].
+- **Decides:** DC-L02-21, DC-L10-07
+- **Changes:** DC-L03-07, DC-L05-05, DC-L08-07 · blocks: Foundations > Typography > Scaling
+- **Preview:** a list row and a tab bar at default, 200% and AX5, restacking live.
+- **Use / avoid:** use containers that grow with text; avoid truncating at the largest sizes [DC-L02-21, DC-L10-07].
+- **Skip:** yes.
+- **Evidence:** DC-L02-21, DC-L10-07; S-L02-001, S-L10-011, S-L10-012, S-L10-071, S-L10-074
+- **Merges:** P8, K4.4 (text scaling)
+
+---
+
+## Stage 12 · Space, sizing and density
+> Screen: the spacing scale, target sizes and control heights, shown on a live component sheet with spacing overlays (padding in one tint, gaps in another). Graph step 0-6. Pre-filled from Q-aud-01, Q-plat-03 and Q-dir-02.
+
+### Q-space-01 · What should the base spacing unit be? · Standard
+- **Why:** The base sets the smallest perceptible difference between spacings; 8 gives chunky, calm steps, 4 gives finer control [DC-L03-01].
+- **Ask:** "What base unit should spacing use? 4 as the grid and 8 as the rhythm is common."
+- **Example:** Show spacing overlays on a card and form.
+- **Control:** single choice
+- **Options:**
+  - `4-grid-8-rhythm` 4 as the grid, 8 as the rhythm: named on an 8 base with 2, 4, 6, 12 kept for internals (Material 3, Atlassian, Spectrum) [S-L03-030, S-L03-003, S-L03-044].
+  - `4` 4 throughout (Fluent 2, Polaris, Primer, Tailwind `--spacing: 0.25rem`) [S-L03-010, S-L03-005, S-L03-009, S-L03-017].
+  - `8` 8 with few sub-steps (Carbon's 8px mini unit) [S-L03-002].
+  - `rem-16` 16px rem-based (Bootstrap `$spacer: 1rem`) [DC-L03-01].
+- **Default:** 4-grid-8-rhythm. *Source:* L09 shared default row 2 (4px base, 17 of 22 systems contain the 4-64 ladder) and card heuristic [L09 A1; DC-L03-01].
+- **Decides:** DC-L03-01
+- **Changes:** DC-L03-02, DC-L03-03, DC-L03-06, DC-L03-07, DC-L03-15 · blocks: Foundations > Space > Base unit
+- **Preview:** a card, form and toolbar with spacing overlays; hovering any gap shows its token and value.
+- **Use / avoid:** use the 2/4/6 sub-steps inside components (icon-to-label, chip padding); avoid them between layout sections [DC-L03-01, DC-L03-04].
+- **Skip:** yes.
+- **Evidence:** DC-L03-01; S-L03-002, S-L03-003, S-L03-010, S-L03-030, S-L03-044
+- **Merges:** K7.3 (space)
+
+### Q-space-02 · How should spacing steps grow? · Standard
+- **Why:** Hybrid and geometric scales make levels of separation read instantly; linear scales with close steps get used inconsistently [DC-L03-02; S-L03-039].
+- **Ask:** "How should spacing steps grow: fine then coarse, linear, or doubling?"
+- **Example:** Show the scale as bars mapped to where each is used.
+- **Control:** single choice + editable step list
+- **Options:**
+  - `hybrid` Fine at the bottom, coarse at the top: 0, 2, 4, 6, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80 (Atlassian's exact set; Carbon similar to 160) [S-L03-003, S-L03-001].
+  - `linear` Linear 4px increments (Tailwind open-ended, Fluent to 56, Primer to 48) [S-L03-015, S-L03-010, S-L03-009].
+  - `geometric` Doubling: 2, 4, 8, 16, 32, 64 (Curtis: linear offers "too many choices too close together") [S-L03-039].
+- **Default:** hybrid, 12-15 steps. *Source:* card heuristic [DC-L03-02]; L09 shared default row 2 (0, 2, 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96).
+- **Decides:** DC-L03-02
+- **Changes:** DC-L03-03, DC-L03-04, DC-L03-11, DC-L03-24 · blocks: Foundations > Space > Spacing scale
+- **Preview:** the scale as bars; dragging a step shows where it is used on the component sheet.
+- **Use / avoid:** keep adjacent steps at least about 25% apart above 8px so the difference is visible; avoid adding steps nobody can tell apart [DC-L03-02].
+- **Skip:** yes.
+- **Evidence:** DC-L03-02; S-L03-001, S-L03-003, S-L03-009, S-L03-039
+
+### Q-space-03 · How big must tap and click targets be? · Standard
+- **Why:** Target size is an accessibility floor (WCAG 2.5.8) and sets how far apart controls sit; the visual may shrink with density, the hit area never does [DC-L03-12].
+- **Ask:** "How big must tap and click targets be?"
+- **Example:** Show hit areas and the 24px-circle test on a toolbar.
+- **Control:** single choice (pre-filled from Q-plat-03 and Q-aud-03)
+- **Options:**
+  - `web-24-44` Web: 24px visual minimum, 44px hit area on touch (`pointer: coarse`) [S-L03-035; DC-L03-12].
+  - `ios-44` iOS 44x44pt (visionOS 60, tvOS 66, macOS 28) [S-L03-033, S-L03-034].
+  - `android-48` Android 48x48dp, even for small icon buttons [S-L03-029, S-L03-058].
+  - `vehicle-76` Vehicle 76x76dp (Design for Driving), 64dp parked [S-L14-037, S-L14-032].
+- **Default:** keyed to input, not device: the largest input the device supports; gaps of 8px between controls on desktop and 12px on touch; two sub-24px targets never closer than 24px center to center. *Source:* platform convention and accessibility rule [DC-L14-03, DC-L03-13, DC-L03-12].
+- **Decides:** DC-L03-12, DC-L14-03, DC-L03-13
+- **Changes:** DC-L03-07, DC-L08-07, DC-L05-05 · blocks: Foundations > Sizing > Targets; Space > Target spacing
+- **Preview:** hit areas drawn around every control; the 24px-circle test from WCAG 2.5.8 runs live on a dense toolbar.
+- **Use / avoid:** decouple hit area from visual size (padding, pseudo-elements); avoid shrinking hit areas in compact mode [DC-L03-12; S-L03-035].
+- **Skip:** yes.
+- **Evidence:** DC-L03-12, DC-L14-03, DC-L03-13; S-L03-029, S-L03-033, S-L03-035, S-L14-037
+
+### Q-space-04 · How tall should buttons and inputs be? · Standard
+- **Why:** 32px defaults read as desktop productivity; 40-48px read as touch-friendly; 56dp+ read as expressive [DC-L03-07].
+- **Ask:** "How tall should buttons and inputs be?"
+- **Example:** Show a toolbar mixing controls at each height.
+- **Control:** single choice (pre-filled from Q-dir-02)
+- **Options:**
+  - `pointer-24-32-40` sm 24, md 32, lg 40: pointer-first desktop tools (Fluent inputs 24/32/40, 32 default) [S-L03-046].
+  - `touch-32-40-48` sm 32, md 40, lg 48: touch-inclusive (Carbon S/M/L; "large 48px is the most common button size in software products") [S-L03-042, S-L03-082].
+  - `expressive-m3` XS 32, S 40, M 56, L 96, XL 136dp, round or square, morphing when pressed (M3 Expressive) [S-L08-102].
+- **Default:** touch-32-40-48 for touch-inclusive products, pointer-24-32-40 for desktop tools; one shared height scale for every inline control; derive height as line box plus twice the block padding. *Source:* card heuristics [DC-L03-07, DC-L08-07, DC-L03-05].
+- **Decides:** DC-L03-07, DC-L08-07
+- **Changes:** DC-L04-03, DC-L08-16, DC-L05-05 · blocks: Foundations > Sizing > Control heights; Components > Sizing
+- **Preview:** a toolbar mixing a button, input, select and segmented control at each size; mismatched heights are flagged.
+- **Use / avoid:** keep sizes on multiples of 8 and never mix sizes in one group; avoid heights below the target floor without padded hit areas [DC-L08-07, DC-L03-12].
+- **Skip:** yes.
+- **Evidence:** DC-L03-07, DC-L08-07; S-L03-042, S-L03-046, S-L08-061, S-L08-062, S-L08-102
+
+### Q-space-05 · How much breathing room between groups versus inside them? · Standard
+- **Why:** A high inner-to-outer ratio (8px inside, 32px between) reads clear and premium; a low ratio reads cramped and ambiguous [DC-L03-24].
+- **Ask:** "How much more space between groups than inside them?"
+- **Example:** Drag the inner:outer slider on a settings page.
+- **Control:** slider (inner:outer ratio)
+- **Options:**
+  - `1:2` 1:2, the minimum for clear grouping [DC-L03-24, DC-L15-05].
+  - `1:3-1:4` 1:3 to 1:4: airy brands, generous margins ("spacious layouts feel calm and open", Material) [S-L03-028].
+  - `dense` Dense sections inside an uncrowded page (Carbon: "the whole page should not be crowded") [S-L03-001].
+- **Default:** 1:2, or 1:3-1:4 when Q-dir-02 is spacious. *Source:* card heuristic [DC-L03-24]; BOARD L15 note (inner gaps smaller than outer gaps, enforced by construction).
+- **Decides:** DC-L03-24
+- **Changes:** DC-L03-04, DC-L08-15 · blocks: Foundations > Space > Whitespace and hierarchy
+- **Preview:** a settings page with the slider live; groups that read as one block are outlined.
+- **Use / avoid:** use space as the default grouping cue; add borders only where interactivity or scanning needs them [DC-L03-24].
+- **Skip:** yes.
+- **Evidence:** DC-L03-24; S-L03-001, S-L03-028, S-L03-061
+
+### Q-space-06 · How should spacing tokens be organized by purpose? · Expert
+- **Why:** Semantic roles make the same inset appear in every card and the same stack between every field, which reads as rhythm [DC-L03-04; S-L03-028].
+- **Ask:** "How should spacing tokens be organized by purpose?"
+- **Example:** Show inset shapes on a card, button and input.
+- **Control:** single choice + table (inset shapes)
+- **Options:**
+  - `curtis` Inset, squish inset, stretch inset, stack, inline, grid (EightShapes) [S-L03-039].
+  - `material` Padding, gap, margin; "use padding and gaps before margins" (Material 3) [S-L03-030].
+  - `layout-component` Separate component spacing from layout spacing (Carbon) [S-L03-001].
+  - `insets` Inset shapes: square for cards and dialogs, squish (vertical about half of horizontal) for buttons and rows, stretch for inputs [S-L03-039, S-L03-046; DC-L03-05].
+- **Default:** three families (inset, gap, layout); parents own spacing and children never set outer margins; squish for pill-like controls, stretch for inputs only. *Source:* card heuristics [DC-L03-04, DC-L03-05].
+- **Decides:** DC-L03-04, DC-L03-05
+- **Changes:** DC-L03-03, DC-L07-04 · blocks: Foundations > Space > Semantic spacing; Inset
+- **Preview:** a card, button and input with each inset shape overlaid.
+- **Use / avoid:** use padding and gap on parents; avoid margins on reusable components [DC-L03-04; S-L03-030].
+- **Skip:** yes.
+- **Evidence:** DC-L03-04, DC-L03-05; S-L03-001, S-L03-030, S-L03-039, S-L03-046
+
+### Q-space-07 · Do you need tiny nudges and negative spacing? · Expert
+- **Why:** Nudges fix optical misalignment (icons that look off-center); negatives create overlaps such as avatar stacks [DC-L03-06].
+- **Ask:** "Do you need tiny nudges and negative spacing?"
+- **Example:** Show an icon-label pair and an avatar stack.
+- **Control:** multi-select
+- **Options:**
+  - `nudges` Nudge steps 2, 6, 10 (Fluent; Material nested units) [S-L03-010, S-L03-030].
+  - `hairline` 1px step (Spectrum `spacing-25`, Polaris `space-025`) [S-L03-044, S-L03-005].
+  - `negatives` Negative tokens -2 to -32 (Atlassian, Primer) [S-L03-003, S-L03-009].
+- **Default:** 2, 4, 6 (10 only if the icon set needs it), negatives mirroring positives up to 32; 1px reserved for borders, not spacing. *Source:* card heuristic [DC-L03-06].
+- **Decides:** DC-L03-06
+- **Changes:** DC-L07-03 · blocks: Foundations > Space > Fine and negative
+- **Preview:** an icon-label pair and an avatar stack with and without nudges.
+- **Use / avoid:** use negatives for deliberate overlaps; avoid using nudges to patch layout bugs [DC-L03-06, inferred].
+- **Skip:** yes.
+- **Evidence:** DC-L03-06; S-L03-003, S-L03-005, S-L03-010, S-L03-030
+
+### Q-space-08 · How should vertical rhythm be kept? · Expert
+- **Why:** Stray line-height space makes padding look uneven (top bigger than bottom) [DC-L03-25; S-L03-039].
+- **Ask:** "How should vertical rhythm be kept?"
+- **Example:** Measure a button's top and bottom padding, trim on and off.
+- **Control:** single choice
+- **Options:**
+  - `box-based` Measure spacing from the text box; spacers snap to the text box (Carbon) [S-L03-002].
+  - `baseline` A baseline grid for multi-column content (Fluent) [S-L03-010].
+  - `trim` Trim line-height with CSS `text-box` as progressive enhancement [S-L03-077, S-L03-039].
+- **Default:** snap line heights and spacing to 4px, measure from the text box, `text-box` trim as enhancement; content must survive WCAG 1.4.12 text-spacing overrides. *Source:* card heuristic [DC-L03-25]; accessibility rule [DC-L02-22].
+- **Decides:** DC-L03-25
+- **Changes:** DC-L02-16 · blocks: Foundations > Space > Vertical rhythm
+- **Preview:** a button and card with the top and bottom padding measured, trim on and off.
+- **Use / avoid:** use a strict baseline grid only for multi-column editorial pages; avoid it for app UI on the web [DC-L03-25].
+- **Skip:** yes.
+- **Evidence:** DC-L03-25; S-L03-002, S-L03-010, S-L03-039, S-L03-077
+
+### Q-space-09 · Who controls density, and how is it stored? · Expert
+- **Why:** User-selectable density can change layout, not just padding (Salesforce compact moves labels inline) [DC-L03-10; S-L03-070].
+- **Ask:** "Who controls density, and how is it stored?"
+- **Example:** Toggle a table between modes; targets stay fixed.
+- **Control:** single choice (who) + single choice (storage)
+- **Options:**
+  - `fixed` Fixed density, no setting (most consumer and marketing systems) [DC-L03-10].
+  - `size-props` Component size props chosen by designers (Carbon, Fluent, Primer) [S-L03-042, S-L03-046, S-L03-009].
+  - `user-global` User-selectable global density (Salesforce comfy/cozy/compact, Gmail) [S-L03-070].
+  - `semantic-mode` Stored as a semantic-layer mode, separate from breakpoints and color themes; primitives and target minimums untouched [DC-L03-11].
+  - `per-device` Density follows viewing distance and input per device class ("a 65-inch TV is a far-away phone") [DC-L14-13; S-L14-026].
+- **Default:** consumer: fixed comfortable; enterprise and data: size props plus a user compact mode that shrinks insets, stacks and row heights by one step (about 4px); stored as a semantic mode. *Source:* card heuristics [DC-L03-10, DC-L03-11, DC-L14-13].
+- **Decides:** DC-L03-10, DC-L03-11, DC-L14-13
+- **Changes:** DC-L07-15, DC-L07-17 · blocks: Foundations > Space > Density; Density > Modes; Density by context
+- **Preview:** a data table toggled between modes; target outlines stay fixed while padding shrinks.
+- **Use / avoid:** use a compact mode for tables, lists, menus and trees; avoid a type-only density mode that leaves oversized padding [DC-L03-11; S-L03-070].
+- **Skip:** yes.
+- **Evidence:** DC-L03-10, DC-L03-11, DC-L14-13; S-L03-042, S-L03-057, S-L03-070, S-L14-026
+- **Merges:** K6.3 (density modes, mechanism)
+
+### Q-space-10 · Which icon and avatar sizes should exist? · Expert
+- **Why:** Icons sized to the text line height sit level with labels; oversized icons shift the personality toward friendly and consumer [DC-L03-08].
+- **Ask:** "Which icon and avatar sizes should exist?"
+- **Example:** Show icon-label pairs at each text size.
+- **Control:** editable size lists
+- **Options:**
+  - `icons-16-32` Icons 16/20/24/32 (Carbon: 16 and 20 pair with 14 and 16px text) [S-L03-062].
+  - `platform-scaled` Platform-scaled icon sizes (Spectrum desktop 14-26, mobile 16-30) [S-L03-044].
+  - `button-sized` Icon sized to the button size (Material Expressive 20-40dp for XS-XL) [S-L03-059].
+  - `avatars` Avatars 16/20/24/32/40/48/64 (Primer) [S-L03-063].
+- **Default:** icons 16/20/24/32, avatars 16-64 as Primer; icon size = body line height minus 0-4px. *Source:* card heuristic [DC-L03-08].
+- **Decides:** DC-L03-08
+- **Changes:** DC-L05-05, DC-L05-18 · blocks: Foundations > Sizing > Media sizes
+- **Preview:** icon-label pairs at each text size, and an avatar row.
+- **Use / avoid:** keep the icon-to-text ratio fixed ("Don't alter the icon-text size ratio", Carbon) [S-L03-062]; avoid in-between icon sizes that blur the pixel grid [inferred].
+- **Skip:** yes.
+- **Evidence:** DC-L03-08; S-L03-044, S-L03-059, S-L03-062, S-L03-063
 

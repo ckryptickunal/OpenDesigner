@@ -1,4 +1,4 @@
-# Design-System research
+# OpenDesigner (research base)
 
 Research base for a **design-system builder**: a product that helps people create their own design system from building blocks.
 
