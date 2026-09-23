@@ -144,6 +144,9 @@ components:
 
 ## Overview
 
+<!-- od:zoom area=overview level=2 -->
+> Zoom: defined (2 of 3), 4 decisions in this area. Zoom in next with Q-brand-01, Q-dir-01.
+
 **Intent.** A dense, calm console for a fictional CI and observability tool: productive, compact, sharp, quiet.
 
 - Audience: Engineers who keep it open all day on large desktop screens.
@@ -168,11 +171,31 @@ components:
 - **Colorfulness 30/100** (monochrome to vivid: monochrome): scheme neutral, accent chroma 18.0 (HCT), 1 accent(s), surfaces: neutral+one-accent.
 - **Warmth 30/100** (cool/formal to warm/friendly: cool/formal): neutral tint chroma 0.022 at hue 264, borders: strong-rules, sentence-case, contractions allowed.
 
+**Zoom by area** (sketch, broad, defined, detailed; stop at any level, each one works):
+
+| Area | Zoom | Next questions |
+|---|---|---|
+| Colors | defined | Q-color-01, Q-color-02, Q-color-20 |
+| Typography | defined | Q-type-01, Q-type-08 |
+| Layout | broad | Q-space-01, Q-layout-01 |
+| Elevation & Depth | broad | Q-depth-01 |
+| Shapes | broad | Q-shape-01 |
+| Components | sketch | Q-comp-01, Q-state-01 |
+| Motion | broad | Q-motion-01, Q-motion-02 |
+| Modes and Themes | sketch | Q-theme-01, Q-theme-02 |
+| Iconography and Imagery | defined | Q-icon-01, Q-img-01 |
+| Content and Voice | broad | Q-voice-01 |
+| Accessibility | sketch | Q-color-24, Q-aud-02 |
+| Platforms and Devices | broad | Q-plat-05 |
+
 Tokens in `tokens/` (DTCG 2025.10 with `opendesigner.resolver.json`) are canonical; this file is a generated view.
 
 Decisions: D-0009 (answers.Q-aud-01), D-0012 (dials.expression), D-0013 (dials.brandPresence), D-0014 (dials.density).
 
 ## Colors
+
+<!-- od:zoom area=color level=2 -->
+> Zoom: defined (2 of 3), 4 decisions in this area. Zoom in next with Q-color-01, Q-color-02, Q-color-20.
 
 **Intent.** Brand color `#4a5cf0` drives the accent ramp's hue; the Colorfulness dial (30) sets its chroma (scheme neutral, peak HCT chroma 71.36). The brand's role is **reserved-accent** and it sits closest to accent step 9. The brand hex is kept exactly at step 9 (brand must be exact).
 
@@ -203,28 +226,28 @@ Decisions: D-0009 (answers.Q-aud-01), D-0012 (dials.expression), D-0013 (dials.b
 
 | Token | Light | Dark | Use |
 |---|---|---|---|
-| `color.bg.accent.bold` | `#4a5cf0` | `#5e76ec` | Solid accent fill. |
+| `color.bg.accent.bold` | `#4a5cf0` | `#637bf2` | Solid accent fill. |
 | `color.bg.accent.boldHover` | `#4353de` | `#7791ff` | Hover on the solid accent (+1 step). |
 | `color.bg.accent.boldPressed` | `#3a49c1` | `#91a8ff` | Pressed solid accent (+2 steps). |
 | `color.bg.accent.subtle` | `#e5ebff` | `#21273c` | Selected rows, accent badges. |
 | `color.bg.accent.subtleHover` | `#d9e2ff` | `#262e4e` | Hover on accent subtle fills. |
 | `color.bg.accent.subtlePressed` | `#cedaff` | `#2b3560` | Pressed accent subtle fills. |
-| `color.bg.action.primary` | `#4a5cf0` | `#5e76ec` | Primary action. One per view (DC-L15-03, L15 P08). |
+| `color.bg.action.primary` | `#4a5cf0` | `#637bf2` | Primary action. One per view (DC-L15-03, L15 P08). |
 | `color.bg.action.primaryHover` | `#4353de` | `#7791ff` | Primary action hover. |
 | `color.bg.action.primaryPressed` | `#3a49c1` | `#91a8ff` | Primary action pressed. |
-| `color.bg.brand` | `#4a5cf0` | `#5e76ec` | Brand fill for signature surfaces; carries text.onBrand (brandAnchor rule, DC-L01-09). |
-| `color.bg.danger.bold` | `#d93834` | `#d5564d` | Danger solid fill. |
+| `color.bg.brand` | `#4a5cf0` | `#637bf2` | Brand fill for signature surfaces; carries text.onBrand (brandAnchor rule, DC-L01-09). |
+| `color.bg.danger.bold` | `#d93834` | `#da5b51` | Danger solid fill. |
 | `color.bg.danger.boldHover` | `#c02726` | `#f17065` | Danger solid hover. |
 | `color.bg.danger.subtle` | `#ffe6e3` | `#39211f` | Danger banner and badge background. |
 | `color.bg.disabled` | `#e8ecf1` | `#2b2e33` | Disabled control fill. |
-| `color.bg.info.bold` | `#007cb7` | `#0087c6` | Info solid fill. |
+| `color.bg.info.bold` | `#007cb7` | `#008bcd` | Info solid fill. |
 | `color.bg.info.boldHover` | `#006a9d` | `#00a0ea` | Info solid hover. |
 | `color.bg.info.subtle` | `#d9efff` | `#062a3f` | Info banner and badge background. |
 | `color.bg.inverse` | `#222428` | `#e6e9ee` | Tooltips and toasts: the inverted surface. |
 | `color.bg.neutral.subtle` | `#e8ecf1` | `#33363d` | Secondary buttons, chips, hovered rows. |
 | `color.bg.neutral.subtleHover` | `#dfe3ea` | `#3b3f47` | Hover: +1 step (DC-L01-17). |
 | `color.bg.neutral.subtlePressed` | `#d6dbe3` | `#434852` | Pressed or selected: +2 steps (DC-L01-17). |
-| `color.bg.success.bold` | `#00883d` | `#009343` | Success solid fill. |
+| `color.bg.success.bold` | `#00883d` | `#009845` | Success solid fill. |
 | `color.bg.success.boldHover` | `#007433` | `#13ae52` | Success solid hover. |
 | `color.bg.success.subtle` | `#d9f1dd` | `#172c1b` | Success banner and badge background. |
 | `color.bg.warning.bold` | `#efb239` | `#e6b55d` | Warning solid fill. |
@@ -279,6 +302,9 @@ Decisions: D-0018 (dials.colorfulness), D-0019 (dials.warmth), D-0020 (raw.brand
 
 ## Typography
 
+<!-- od:zoom area=typography level=2 -->
+> Zoom: defined (2 of 3), 3 decisions in this area. Zoom in next with Q-type-01, Q-type-08.
+
 **Intent.** Body text is 14px; sizes follow `round(14 x 1.2^n)` for n from -2 to 5, reaching about 2.5x body (product surfaces only). Sizes: 12, 14, 17, 20, 24, 29, 35px.
 
 - Text face: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif. Licence status (hook H-type): **open-library**.
@@ -312,6 +338,9 @@ Decisions: D-0022 (raw.textFace), D-0023 (raw.monoFace), D-0024 (raw.scripts).
 
 ## Layout
 
+<!-- od:zoom area=layout level=1 -->
+> Zoom: broad (1 of 3), 2 decisions in this area. Zoom in next with Q-space-01, Q-layout-01.
+
 **Intent.** Everything sits on a 4px unit: ladder 0, 2, 4, 6, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96. Density is a mode on the semantic layer (default **compact**); primitives and hit-area minimums never change.
 
 | Density | inset xs/sm/md/lg/xl | section sm/md/lg | control sm/md/lg | outer:inner |
@@ -332,6 +361,9 @@ Decisions: D-0011 (raw.inputs), D-0014 (dials.density).
 
 ## Elevation & Depth
 
+<!-- od:zoom area=elevation level=1 -->
+> Zoom: broad (1 of 3), 1 decision in this area. Zoom in next with Q-depth-01.
+
 **Intent.** Depth 22/100 selects the **ring+faint-shadow** model. Shadow alpha in light mode is 0.091; dark mode doubles it and lifts surfaces by lightness instead (sunken, base, raised, overlay).
 
 | Token | Layers (x y blur spread) | Use |
@@ -348,6 +380,9 @@ Decisions: D-0017 (dials.depth).
 
 ## Shapes
 
+<!-- od:zoom area=shape level=1 -->
+> Zoom: broad (1 of 3), 1 decision in this area. Zoom in next with Q-shape-01.
+
 **Intent.** Roundness 30/100 gives controls a **4** radius; details 2px, containers 8px, overlays 12px, people full. Controls under 32px tall use `radius.controlSm` (2).
 
 - Nested radius: inner = max(outer - padding, smallest step), here 2px inside a container with `space.inset.lg` padding; equal radii on nested shapes look uneven (DC-L04-05).
@@ -358,6 +393,9 @@ Decisions: D-0017 (dials.depth).
 Decisions: D-0016 (dials.roundness).
 
 ## Components
+
+<!-- od:zoom area=components level=0 -->
+> Zoom: sketch (0 of 3), 0 decisions in this area. Zoom in next with Q-comp-01, Q-state-01.
 
 **Intent.** v1 components use the semantic tokens only. Base: not chosen yet (Q-comp-01). Buttons are 32px tall (compact), 4 radius, `text.label.lg`; one primary action per view.
 
@@ -415,6 +453,9 @@ Decisions: none recorded yet; values are defaults from references/levers.json.
 
 ## Motion
 
+<!-- od:zoom area=motion level=1 -->
+> Zoom: broad (1 of 3), 1 decision in this area. Zoom in next with Q-motion-01, Q-motion-02.
+
 **Intent.** Energy 20/100: durations x0.88 on medium and longer steps; standard easing `cubic-bezier(0.2, 0, 0.38, 0.9)`, enter `[0, 0, 0.38, 0.9]`, exit `[0.2, 0, 1, 0.9]`. Spatial spring: damping 1.0, stiffness 700.0 (Apple duration 0.237s, bounce 0.0; web `linear()` sample over 350ms).
 
 | Token | Value |
@@ -437,6 +478,9 @@ Decisions: D-0015 (dials.energy).
 
 ## Modes and Themes
 
+<!-- od:zoom area=modes level=0 -->
+> Zoom: sketch (0 of 3), 0 decisions in this area. Zoom in next with Q-theme-01, Q-theme-02.
+
 **Intent.** Modes live in the DTCG resolver (`tokens/opendesigner.resolver.json`); modifiers are orthogonal, so no two set the same token.
 
 | Modifier | Contexts | Default |
@@ -452,6 +496,9 @@ Decisions: D-0015 (dials.energy).
 Decisions: none recorded yet; values are defaults from references/levers.json.
 
 ## Iconography and Imagery
+
+<!-- od:zoom area=iconography level=2 -->
+> Zoom: defined (2 of 3), 5 decisions in this area. Zoom in next with Q-icon-01, Q-img-01.
 
 **Intent.** Default icon size 16px; sizes 16/20/24 pair with 14/16/20px text. Stroke follows the label weight: 1.5px at 16, 1.5px at 20, 2.0px at 24. Rest style: outline.
 
@@ -472,6 +519,9 @@ Decisions: D-0025 (hooks.H-logo.status), D-0026 (hooks.H-favicon.status), D-0027
 
 ## Content and Voice
 
+<!-- od:zoom area=content level=1 -->
+> Zoom: broad (1 of 3), 1 decision in this area. Zoom in next with Q-voice-01.
+
 **Intent.** Draft: voice guidance level **short** (Brand presence 55); **sentence-case**; contractions **allowed** (Warmth 30). Voice guide hook H-voice: placeholder.
 
 - Buttons say what they do in two to four words; errors say what happened and how to fix it.
@@ -482,6 +532,9 @@ Decisions: D-0032 (hooks.H-voice.status).
 
 ## Accessibility
 
+<!-- od:zoom area=accessibility level=0 -->
+> Zoom: sketch (0 of 3), 0 decisions in this area. Zoom in next with Q-color-24, Q-aud-02.
+
 **Intent.** Standard: WCAG 2.2 AA. APCA is reported as advice only.
 
 **The system guarantees:** text and boundary contrast in every mode, visible focus (2px ring, 2px offset, 3:1), target floors by input, a reduced-motion mode, rem-based type for 200% text scaling, and on-color text chosen automatically.
@@ -490,7 +543,12 @@ Decisions: D-0032 (hooks.H-voice.status).
 
 **Test matrix:** keyboard only and a screen reader (VoiceOver, NVDA or TalkBack) per platform; 200% zoom; forced colors (Windows High Contrast); reduced motion; touch on a phone for every surface that allows touch.
 
+Decisions: none recorded yet; values are defaults from references/levers.json.
+
 ## Platforms and Devices
+
+<!-- od:zoom area=platforms level=1 -->
+> Zoom: broad (1 of 3), 2 decisions in this area. Zoom in next with Q-plat-05.
 
 **Intent.** Platforms: web, desktop. Inputs: pointer. Brand presence 55: platform overrides shape and material: False; native base text size: False.
 

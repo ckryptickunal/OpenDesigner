@@ -149,9 +149,9 @@
     }
   },
   "principles": [
-    "Start with user needs.",
-    "Do less, but make it work for everyone.",
-    "Plain over clever."
+    "Plain words, one question at a time.",
+    "It works for everyone, on any device, with any assistive technology.",
+    "Nothing decorative: every element earns its place."
   ],
   "components": {
     "base": null,
@@ -281,12 +281,16 @@
       "note": ""
     }
   },
+  "zoom": {},
+  "profile": {
+    "voice": "plain"
+  },
   "blocks": {},
   "references": {},
   "taste": {},
   "hashes": {
-    "DESIGN.md": "7163f4ba74780902",
-    "PRODUCT.md": "a81ffc203d2818c4"
+    "DESIGN.md": "469bffef32d13c67",
+    "PRODUCT.md": "cfaa044537e063be"
   },
   "exports": {
     "prefix": "ds",

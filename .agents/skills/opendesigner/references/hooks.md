@@ -3,7 +3,7 @@
 Some blocks need a human creator or a named tool. OpenDesigner asks for them instead of faking them. Source: `research/L17-how-systems-get-made.md` Part H (formats, fallbacks and checks verified against 81 Tier A pages). Full per-hook detail, including exact sizes, licence terms and evidence ids, is in `hooks.json`.
 
 ## Rules for every hook
-1. **Ask once, as one checklist** (Q-brand-08 in Stage 03): "Which of these do you already have?" In Quick mode ask nothing: apply each fallback and leave a briefed placeholder.
+1. **Ask once, as one checklist** (Q-brand-08), when the person zooms into brand or imagery: "Which of these do you already have?" At levels 0 and 1, ask only about a brand color or logo. Everything else keeps its fallback and a briefed placeholder.
 2. **One vector master, generated derivatives.** Ask for the master (SVG, or PDF with outlined text; layered files for app icons) and derive the platform sizes from it, with size and safe-zone checks.
 3. **Keep a licence ledger per asset:** source, licence, attribution string, allowed slots, owner. Keep MIT/ISC/Apache notices for icon libraries; add required credits; block assets from slots their licence forbids (for example some free illustration sets cannot be used in logos).
 4. **Fetch per project; never pool assets** into a shared catalog. Several licences forbid offering their assets as a selectable library inside a tool.

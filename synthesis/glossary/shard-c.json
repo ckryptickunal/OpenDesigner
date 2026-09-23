@@ -1,0 +1,1063 @@
+[
+ {
+  "id": "found",
+  "term": "Foundations",
+  "aka": [
+   "design foundations",
+   "foundation"
+  ],
+  "plain": "The basic parts every screen is built from, like color, text, space and shape.",
+  "designer": "The raw material of every screen: color, type, space, layout, shape, depth, motion, sound, haptics, icons, imagery, data visualization, content, accessibility and input, each a set of scales and roles.",
+  "engineer": "Each foundation is a family of scales and roles stored as tokens, for example DTCG color, dimension and typography types, that components consume through semantic aliases rather than raw values.",
+  "example": "The same blue and the same 8px gap reused on every screen.",
+  "source": [
+   "found"
+  ]
+ },
+ {
+  "id": "found.color",
+  "term": "Color",
+  "aka": [
+   "color system",
+   "palette"
+  ],
+  "plain": "Which colors an app uses, what job each one does, and how they switch for dark mode.",
+  "designer": "The full color system: how ramps are generated, which roles exist (surface, text, border, status), how light, dark and high-contrast modes remap them, and how contrast is guaranteed.",
+  "engineer": "DTCG color tokens in two tiers: primitive ramps (color.blue.500) and semantic roles (color.bg.accent) that alias them and resolve per mode through the Resolver module.",
+  "example": "Blue buttons, gray text and a white page that turns dark at night.",
+  "source": [
+   "found.color",
+   "DC-L01-02",
+   "DC-L09-03"
+  ]
+ },
+ {
+  "id": "found.color.space",
+  "term": "Color space and gamut",
+  "aka": [
+   "color model",
+   "OKLCH",
+   "Display P3"
+  ],
+  "plain": "How colors are mixed so each step looks even, and how bold a screen's colors can get.",
+  "designer": "Perceptual spaces such as OKLCH or HCT make equal steps look equally heavy across hues, so hierarchy survives color swaps. Gamut decides whether vivid Display P3 accents are allowed.",
+  "engineer": "DTCG color values set colorSpace ('oklch', 'srgb', 'display-p3') with an optional hex fallback. Default: OKLCH ramps for web, HCT for Material, sRGB hex with P3 accent overrides.",
+  "example": "Blue and green buttons at the same step look equally strong.",
+  "source": [
+   "found.color.space",
+   "DC-L01-01",
+   "DC-L01-05"
+  ]
+ },
+ {
+  "id": "found.color.ramp",
+  "term": "Ramp generation and step meaning",
+  "aka": [
+   "tonal ramp",
+   "color scale",
+   "tonal palette"
+  ],
+  "plain": "A row of shades of one color, from light to dark, where each step has a job.",
+  "designer": "What a step promises differs by system: Tailwind lightness varies by hue, Spectrum keeps equal contrast per step, Material uses HCT tone. Radix gives each step a job.",
+  "engineer": "Primitive color tokens grouped by hue, such as color.blue.500; default 12 steps, exportable to a 50-950 scale, generated from a seed in OKLCH with contrast-checked steps.",
+  "example": "Pale blue for a background, deep blue for the text on it.",
+  "source": [
+   "found.color.ramp",
+   "DC-L01-02",
+   "DC-L01-03",
+   "DC-L01-04",
+   "DC-L09-03"
+  ]
+ },
+ {
+  "id": "found.color.neutral",
+  "term": "Neutral ramp",
+  "aka": [
+   "gray ramp",
+   "grays"
+  ],
+  "plain": "The set of grays, from white to near black, used for most backgrounds, lines and text.",
+  "designer": "The gray scale behind most surfaces, borders and text. A slight tint toward the accent hue feels branded; pure gray suits image and data tools.",
+  "engineer": "Primitives color.neutral.0 to color.neutral.13 plus 4-5 alpha steps (color.neutral.100A). Semantic tokens point at a gray alias so the tint swaps once.",
+  "example": "Near-white for the page, mid gray for borders, dark gray for text.",
+  "source": [
+   "found.color.neutral",
+   "DC-L01-06",
+   "DC-L01-07"
+  ]
+ },
+ {
+  "id": "found.color.alpha",
+  "term": "Transparent (alpha) colors",
+  "aka": [
+   "alpha colors",
+   "translucent colors"
+  ],
+  "plain": "Colors you can partly see through, so they look right on any background.",
+  "designer": "Semi-transparent fills that adapt to whatever sits beneath, ideal for hover fills, borders and scrims on varied backgrounds. Use solid colors for text, where contrast must be certified.",
+  "engineer": "A DTCG color value with an alpha field (\"alpha\": 0.016), named color.neutral.200A or color.blue.a3. Default: 4-5 alpha neutrals for hover, borders and scrims.",
+  "example": "A light gray hover shade that works on white and on blue.",
+  "source": [
+   "found.color.alpha",
+   "DC-L01-27"
+  ]
+ },
+ {
+  "id": "found.color.brand",
+  "term": "Brand and accent color",
+  "aka": [
+   "accent color",
+   "primary color"
+  ],
+  "plain": "The one color that makes an app feel like its brand, often on its main button.",
+  "designer": "Decides how many accents exist and what the brand color does: reserved accent, signature surface or whole fields. Default is neutrals plus one accent; adapt the brand hex for contrast.",
+  "engineer": "Keep color.brand.raw (exact hex, for logos) apart from UI roles such as color.bg.brand, which alias the ramp step giving 4.5:1 with its text.",
+  "example": "The exact logo blue, moved one shade darker so white button text stays readable.",
+  "source": [
+   "found.color.brand",
+   "DC-L01-08",
+   "DC-L01-09",
+   "DC-L06-04",
+   "DC-L10-04",
+   "DC-L15-06"
+  ]
+ },
+ {
+  "id": "found.color.character",
+  "term": "Palette character (chroma and scheme variant)",
+  "aka": [
+   "colorfulness",
+   "scheme variant"
+  ],
+  "plain": "How bold or how soft and calm the colors feel as a whole.",
+  "designer": "Overall palette saturation, muted to vivid, plus the scheme variant shaping it (Material's TonalSpot, Fidelity or Vibrant). Keep large surfaces calm; spend color on small, meaningful elements.",
+  "engineer": "No DTCG type of its own: stored as generator metadata, such as $extensions.generator.chroma = 'tonal' and $extensions.scheme.variant = 'tonalSpot', which feed the ramp generator.",
+  "example": "A calm banking app next to a loud, colorful game.",
+  "source": [
+   "found.color.character",
+   "DC-L01-10",
+   "DC-L06-05"
+  ]
+ },
+ {
+  "id": "found.color.roles",
+  "term": "Semantic color roles",
+  "aka": [
+   "color roles",
+   "semantic colors"
+  ],
+  "plain": "Color names that say the job, like page background or warning text, not the shade.",
+  "designer": "Named jobs such as background, text, border and icon, crossed with roles like accent, neutral or danger and emphasis levels (subtle, default, bold). Components use roles, never raw values.",
+  "engineer": "Semantic tier with a property, role, emphasis, state grammar: color.bg.accent.emphasis aliases {color.blue.5}. Bold fills get on-colors such as fg.onEmphasis or color.text.inverse.",
+  "example": "Change the danger color once and every error message updates.",
+  "source": [
+   "found.color.roles",
+   "DC-L01-11",
+   "DC-L01-12"
+  ]
+ },
+ {
+  "id": "found.color.roles.surface",
+  "term": "Surface roles",
+  "aka": [
+   "background layers",
+   "surface tiers"
+  ],
+  "plain": "Background colors for things that stack, like a page, a card on it, and a pop-up on top.",
+  "designer": "Background tiers (base, raised, overlay, sunken) that show layering. In light mode, shadow or border plus a subtle tone separates them; in dark mode, lighter tones do.",
+  "engineer": "color.surface.{base|raised|overlay|sunken}, or color.surface.container.{lowest..highest}, aliasing neutral primitives with separate light and dark values; default 4-5 tiers.",
+  "example": "A white card sitting on a light gray page.",
+  "see_also": [
+   "found.color.modes.dark"
+  ],
+  "source": [
+   "found.color.roles.surface",
+   "DC-L01-13",
+   "DC-L04-13"
+  ]
+ },
+ {
+  "id": "found.color.roles.foreground",
+  "term": "Foreground and text colors",
+  "aka": [
+   "text colors",
+   "on-colors"
+  ],
+  "plain": "Colors for words and icons, from strong main text to faint hint text.",
+  "designer": "Text and icon colors by emphasis: primary, secondary, placeholder, disabled and inverse, plus an on-color for each bold fill. Secondary text should still pass 4.5:1 on its lowest surface.",
+  "engineer": "Solid semantic tokens color.text.{primary|secondary|tertiary|disabled|inverse|onBrand} and color.icon.*, aliasing ramp steps per mode. WCAG requires 4.5:1 for normal text; disabled text is exempt.",
+  "example": "Black for headings, gray for hints, white text on a blue button.",
+  "source": [
+   "found.color.roles.foreground",
+   "DC-L01-14"
+  ]
+ },
+ {
+  "id": "found.color.roles.status",
+  "term": "Status and feedback colors",
+  "aka": [
+   "feedback colors",
+   "status colors"
+  ],
+  "plain": "Colors that show how things went, like green for success and red for an error.",
+  "designer": "Success, warning, danger and info, each subtle and bold, for fills, text and icons. Always pair with an icon or words; yellow fills need dark text.",
+  "engineer": "color.{bg|text|border|icon}.{success|warning|danger|info}.{subtle|bold}. Status text needs 4.5:1 against its background; status icons and borders need 3:1.",
+  "example": "A green check beside 'Saved', a red icon beside 'Payment failed'.",
+  "source": [
+   "found.color.roles.status",
+   "DC-L01-15"
+  ]
+ },
+ {
+  "id": "found.color.roles.border",
+  "term": "Border, outline and focus colors",
+  "aka": [
+   "stroke colors",
+   "divider colors"
+  ],
+  "plain": "Colors for lines around things, and for the ring that shows where the keyboard is.",
+  "designer": "Subtle, default and strong border strengths plus one focus color per mode. Interactive borders and focus rings need 3:1 against adjacent colors; decorative dividers do not.",
+  "engineer": "color.border.{subtle|default|strong|interactive|focused}, color.divider, color.focus.ring and color.focus.inset. In forced-colors mode browsers replace border and outline colors with system colors.",
+  "example": "A soft gray line between list rows, a blue ring on the active field.",
+  "see_also": [
+   "found.interaction.focus"
+  ],
+  "source": [
+   "found.color.roles.border",
+   "DC-L01-16"
+  ]
+ },
+ {
+  "id": "found.color.states",
+  "term": "Interaction state colors",
+  "aka": [
+   "state colors",
+   "state layers"
+  ],
+  "plain": "How a button's color shifts when you point at it, press it, pick it, or can't use it.",
+  "designer": "Hover, pressed, selected and disabled colors derived from the resting color by stepping along the ramp or overlaying a translucent state layer. Selected needs a non-color cue too.",
+  "engineer": "Either per-role tokens like color.bg.brand.bold.hovered (hover one ramp step, pressed two) or an overlay token, state.hover.opacity = 0.08 ($type number), applied on the on-color.",
+  "example": "A blue button turns one shade darker under the mouse.",
+  "source": [
+   "found.color.states",
+   "DC-L01-17"
+  ]
+ },
+ {
+  "id": "found.color.modes",
+  "term": "Color modes and appearance",
+  "aka": [
+   "themes",
+   "appearance modes"
+  ],
+  "plain": "Full swaps of an app's colors, like light, dark, or a sharper set that is easier to see.",
+  "designer": "The alternative color mappings a system ships: light, dark, dimmed, high contrast and colorblind-safe, and how each platform picks one. Dark mode is a separate mapping, never an inversion.",
+  "engineer": "Modes live in the DTCG Resolver module: a theme modifier whose light and dark contexts point semantic tokens at different sources. On web, light-dark() with color-scheme.",
+  "example": "Your phone switches to dark at night and the app follows.",
+  "source": [
+   "found.color.modes"
+  ]
+ },
+ {
+  "id": "found.color.modes.dark",
+  "term": "Dark mode mapping",
+  "aka": [
+   "dark theme"
+  ],
+  "plain": "How each color is picked again for dark screens, so text stays easy to read.",
+  "designer": "Each role gets its own dark value, mapped by role rather than by flipping. The base surface is near-black (about #121212), slightly tinted; accents go lighter and less saturated.",
+  "engineer": "Semantic tokens resolve per Resolver context (light, dark, optionally dark-dimmed); for each role choose the dark step giving the same contrast relationship as light. Web: prefers-color-scheme or light-dark().",
+  "example": "White text on a near-black page, with the blue lightened a step.",
+  "source": [
+   "found.color.modes.dark",
+   "DC-L01-18",
+   "DC-L01-19"
+  ]
+ },
+ {
+  "id": "found.color.modes.contrast",
+  "term": "Accessibility color themes",
+  "aka": [
+   "high contrast mode",
+   "colorblind themes",
+   "forced colors"
+  ],
+  "plain": "Extra color sets for people who need text to stand out more, or who mix up colors.",
+  "designer": "Themes for users who need more contrast or hue separation: contrast levels, high contrast, forced colors, colorblind-safe palettes. Back fills with borders or icons so they survive forced colors.",
+  "engineer": "Extra Resolver modifiers combined with theme, such as contrast: standard|high and vision: default|protan-deutan|tritan. Material offers three contrast levels; web forced-colors mode swaps in system colors.",
+  "example": "Primer's colorblind theme shows success in blue instead of green.",
+  "source": [
+   "found.color.modes.contrast",
+   "DC-L01-20"
+  ]
+ },
+ {
+  "id": "found.color.modes.appearance",
+  "term": "Appearance modes by platform and device",
+  "aka": [
+   "system appearance"
+  ],
+  "plain": "Which light or dark looks each kind of device uses, and who gets to switch between them.",
+  "designer": "Which appearances each device class gets and who switches: system setting, in-app override or ambient light. Phones and desktops follow the system; watches stay dark; cars switch day and night.",
+  "engineer": "An appearance mode on the semantic tier with per-context availability, such as wrist: [dark] and vehicle: [day, night]. Offer an in-app override only on web, alongside system-follow.",
+  "example": "A watch app that is always dark, even at noon.",
+  "source": [
+   "found.color.modes.appearance",
+   "DC-L10-17",
+   "DC-L14-09"
+  ]
+ },
+ {
+  "id": "found.color.personalization",
+  "term": "Dynamic and personalized color",
+  "aka": [
+   "dynamic color",
+   "wallpaper colors"
+  ],
+  "plain": "Whether an app can take on colors you pick, like your wallpaper, or keeps its own.",
+  "designer": "Whether the OS or user may recolor the product (Android wallpaper-based dynamic color, macOS accent, Apple icon looks) or keeps a fixed brand palette. Keep brand-critical and status colors fixed.",
+  "engineer": "Dynamic roles resolve at runtime, so tokens store roles plus the generator recipe (source, variant, spec version, contrast level). Android applies it via DynamicColors; brand tokens remain the fallback.",
+  "example": "A notes app turns green because your wallpaper is a forest.",
+  "source": [
+   "found.color.personalization",
+   "DC-L01-21",
+   "DC-L10-05"
+  ]
+ },
+ {
+  "id": "found.color.contrast",
+  "term": "Contrast and color independence",
+  "aka": [
+   "color contrast",
+   "WCAG contrast"
+  ],
+  "plain": "Text must stand out from what is behind it, and color must never be the only clue.",
+  "designer": "WCAG 2.2 AA is the floor: 4.5:1 for text, 3:1 for large text and control boundaries. Meaning never depends on color alone; add an icon, label or underline.",
+  "engineer": "No DTCG contrast field; record intended pairs, $extensions.contrast = { against: '{color.bg.default}', min: 4.5 }, and test every pair in every Resolver mode at build time. APCA is advisory.",
+  "example": "An error field shows a red border plus an icon and message, not red alone.",
+  "source": [
+   "found.color.contrast",
+   "DC-L01-22",
+   "DC-L01-23",
+   "DC-L02-23"
+  ]
+ },
+ {
+  "id": "found.color.expressive",
+  "term": "Gradients and expressive color",
+  "aka": [
+   "brand gradients",
+   "campaign colors"
+  ],
+  "plain": "Bold color blends for ads and pictures, kept off buttons and forms.",
+  "designer": "Brand gradients and campaign colors that live outside core controls, on marketing and illustration surfaces. Keep them off interactive components; if a gradient carries data meaning, use a sequential palette.",
+  "engineer": "DTCG 2025.10 gradient type: an array of stops, each with color and position. It has no kind, angle or interpolation space, so store those in $extensions; interpolate in OKLab.",
+  "example": "A purple-to-orange blend on a sale banner, never on the checkout button.",
+  "source": [
+   "found.color.expressive",
+   "DC-L01-25"
+  ]
+ },
+ {
+  "id": "found.type",
+  "term": "Typography",
+  "aka": [
+   "type",
+   "type system"
+  ],
+  "plain": "How the words in an app look: which fonts, what sizes, and how much space they get.",
+  "designer": "Typefaces, the type scale and its named roles, line height and spacing, text layout, and how text behaves across screens, zoom settings and non-Latin scripts.",
+  "engineer": "DTCG typography composite (fontFamily, fontSize, fontWeight, letterSpacing, lineHeight as a unitless multiplier), built from atomic fontFamily, fontWeight, dimension and number tokens. No slot for text case or paragraph spacing.",
+  "example": "Big bold headings, 16px body text for reading, small gray labels.",
+  "source": [
+   "found.type"
+  ]
+ },
+ {
+  "id": "found.type.typeface",
+  "term": "Typeface",
+  "aka": [
+   "font",
+   "font family"
+  ],
+  "plain": "The style of letters an app uses, like the font you pick for a school report.",
+  "designer": "Which font families the system uses and why: where they come from, the personality they project, how many there are, their variable axes, and how they load.",
+  "engineer": "DTCG fontFamily tokens, a string or fallback array: primitive font.family.brand and font.family.mono, aliased by semantic roles such as font.family.body.",
+  "example": "Inter for the whole app, plus a code font for snippets.",
+  "source": [
+   "found.type.typeface",
+   "DC-L02-01",
+   "DC-L09-05"
+  ]
+ },
+ {
+  "id": "found.type.typeface.sourcing",
+  "term": "Typeface sourcing and platform mapping",
+  "aka": [
+   "system font versus brand font"
+  ],
+  "plain": "Whether an app uses the font that came with your device, a free font, or its own.",
+  "designer": "System stack, open neutral face (Inter, Roboto) or custom brand face, and which roles get which on each platform. Common split: brand for display and headlines, system for body.",
+  "engineer": "fontFamily tokens with platform values such as font.family.text = { ios: 'system', android: 'Roboto', web: 'system-ui', windows: 'Segoe UI Variable' }. Apple's SF is system-only; custom faces must be bundled.",
+  "example": "SF Pro on iPhone, Roboto on Android, the brand font for headlines.",
+  "source": [
+   "found.type.typeface.sourcing",
+   "DC-L02-01",
+   "DC-L06-07",
+   "DC-L09-05",
+   "DC-L10-06"
+  ]
+ },
+ {
+  "id": "found.type.typeface.personality",
+  "term": "Typeface classification and personality",
+  "aka": [
+   "type classification",
+   "font personality"
+  ],
+  "plain": "The mood a font's letter shapes give, such as friendly, serious, new or old.",
+  "designer": "The type class (neo-grotesque, humanist, geometric, serif, rounded) chosen from brand adjectives, then vetoed if letters get confused at 12-14px or scripts are missing.",
+  "engineer": "Not a token itself: it selects the value of font.family.*, and the builder stores it as metadata, such as $extensions.classification: 'neo-grotesque', to drive recommendations.",
+  "example": "A rounded font feels playful; a serif leans toward heritage.",
+  "source": [
+   "found.type.typeface.personality",
+   "DC-L02-02",
+   "DC-L06-08"
+  ]
+ },
+ {
+  "id": "found.type.typeface.families",
+  "term": "Families, pairing and monospace",
+  "aka": [
+   "font pairing",
+   "monospace font"
+  ],
+  "plain": "How many fonts an app uses, which ones pair well, and a font for code.",
+  "designer": "Default to one UI family plus one monospace, adding a serif or display face only for marketing. Pair siblings that share x-height, contrast and width; tabular figures handle data.",
+  "engineer": "Primitives font.family.sans, .serif and .mono; semantic font.family.heading, .body and .code; composite text.code.block (Primer: 13px / 1.5); numeric cells get font-variant-numeric: tabular-nums.",
+  "example": "One sans-serif for the app and a monospace font for code samples.",
+  "source": [
+   "found.type.typeface.families",
+   "DC-L02-03",
+   "DC-L02-05"
+  ]
+ },
+ {
+  "id": "found.type.typeface.axes",
+  "term": "Variable axes and optical sizing",
+  "aka": [
+   "variable fonts",
+   "optical size"
+  ],
+  "plain": "One font that can slide from thin to bold and reshape its letters for small or big text.",
+  "designer": "Variable fonts expose axes such as weight, optical size and grade. Default: a font with wght and opsz, with optical size tied to font size.",
+  "engineer": "DTCG fontWeight takes 1-1000; the typography composite has no slot for opsz, GRAD or wdth, so they live in $extensions. CSS: font-optical-sizing: auto.",
+  "example": "One font file covers regular, semibold and bold.",
+  "source": [
+   "found.type.typeface.axes",
+   "DC-L02-04"
+  ]
+ },
+ {
+  "id": "found.type.typeface.delivery",
+  "term": "Font licensing and loading",
+  "aka": [
+   "font loading",
+   "web fonts"
+  ],
+  "plain": "The rules for using a font, and how it shows up fast without text jumping.",
+  "designer": "How fonts are licensed, packaged and loaded, and what that costs in speed. Each web family adds download time, so budget two families and show a fallback first.",
+  "engineer": "Not tokenized beyond the fontFamily fallback array; the builder outputs @font-face CSS. Default: WOFF2, one variable file per family, font-display: swap, a metric-adjusted fallback and per-script subsets.",
+  "example": "Text appears at once in a system font, then swaps to the brand font.",
+  "source": [
+   "found.type.typeface.delivery",
+   "DC-L02-06"
+  ]
+ },
+ {
+  "id": "found.type.roles",
+  "term": "Type roles and emphasis",
+  "aka": [
+   "text styles",
+   "type styles"
+  ],
+  "plain": "Set text styles for each job, like big titles, reading text and small button words.",
+  "designer": "Named styles by job (display, headline, title, body, label, code), most in large, medium and small, with one emphasized weight per style. Emphasis uses weight first, color second.",
+  "engineer": "Semantic composites of $type typography, such as text.body.medium, over numeric primitives (font.size.200, font.weight.semibold). Emphasis is a parallel style, text.body.medium.emphasized.",
+  "example": "Headline Large for a page title, Body Medium for paragraphs, Label Small for tags.",
+  "source": [
+   "found.type.roles",
+   "DC-L02-07",
+   "DC-L02-12"
+  ]
+ },
+ {
+  "id": "found.type.scale",
+  "term": "Type scale",
+  "aka": [
+   "type ramp",
+   "font size scale"
+  ],
+  "plain": "The fixed list of text sizes an app may use, from tiny labels to big headings.",
+  "designer": "Body size and the ratio that generates the rest. Body runs 14px for tools, 16px for reading; ratios run 1.125-1.2 for dense apps, 1.333+ for editorial.",
+  "engineer": "Primitive dimension tokens in rem or px, such as font.size.100; default 8-10 sizes under 12-15 semantic styles. Base, ratio and rounding are stored as metadata.",
+  "example": "Every heading picks from the same few sizes instead of a random one.",
+  "source": [
+   "found.type.scale",
+   "DC-L02-08",
+   "DC-L02-09",
+   "DC-L02-10",
+   "DC-L02-11"
+  ]
+ },
+ {
+  "id": "found.type.metrics",
+  "term": "Text metrics",
+  "aka": [
+   "line height",
+   "letter spacing",
+   "leading"
+  ],
+  "plain": "Gaps between lines, letters and blocks of text, and how thick the letters are.",
+  "designer": "Line height near 1.5 for 12-16px, tighter as text grows; letter spacing 0 at body, negative on big headings; three weights; paragraph spacing about one body size.",
+  "engineer": "Typography composite: lineHeight is a unitless multiplier, letterSpacing a px or rem dimension, fontWeight 1-1000 or aliases like semi-bold. Paragraph spacing has no slot; use a separate dimension token.",
+  "example": "16px body text with a 24px line height and no extra letter spacing.",
+  "source": [
+   "found.type.metrics",
+   "DC-L02-13",
+   "DC-L02-14",
+   "DC-L02-15",
+   "DC-L02-16"
+  ]
+ },
+ {
+  "id": "found.type.text-layout",
+  "term": "Text layout (measure, alignment, casing, truncation)",
+  "aka": [
+   "measure",
+   "line length",
+   "truncation"
+  ],
+  "plain": "How long lines of text get, which side they line up on, and what happens when words don't fit.",
+  "designer": "Keep prose near 65-70 characters per line (35-40 for CJK). Default to start alignment and sentence case; wrap first, then ellipsis with access to the full text.",
+  "engineer": "No DTCG type for measure, case or truncation. Measure uses CSS ch (size.measure.prose = 65ch), kept in $extensions or converted to rem; text-transform lives in component tokens.",
+  "example": "A help article capped at about 70 characters per line.",
+  "see_also": [
+   "found.layout.containers"
+  ],
+  "source": [
+   "found.type.text-layout",
+   "DC-L02-17",
+   "DC-L02-18"
+  ]
+ },
+ {
+  "id": "found.type.responsive",
+  "term": "Responsive and device-distance type",
+  "aka": [
+   "fluid type",
+   "viewing-distance type"
+  ],
+  "plain": "How text size changes on phones, watches and TVs, so it looks right from where you sit.",
+  "designer": "Body text stays fixed; display styles may go fluid on web. Farther screens need bigger numbers: body is 17pt on phone, 29pt on TV.",
+  "engineer": "DTCG has no fluid value such as clamp(), so use one mode per breakpoint or distance class. Units: pt on Apple, sp on Android, epx on Windows, rem on web.",
+  "example": "Body text is 17 points on iPhone and 29 points on Apple TV.",
+  "source": [
+   "found.type.responsive",
+   "DC-L02-19",
+   "DC-L02-20",
+   "DC-L14-04"
+  ]
+ },
+ {
+  "id": "found.type.scaling",
+  "term": "Text scaling and legibility",
+  "aka": [
+   "Dynamic Type",
+   "font scale",
+   "text zoom"
+  ],
+  "plain": "When you turn up text size in settings, the app still fits and reads well.",
+  "designer": "Support the user's text-size setting: Dynamic Type up to AX5, Android font scale to 200%, browser zoom to 200%. Containers grow with text, and layouts survive user text-spacing overrides.",
+  "engineer": "Text tokens use scalable units: rem on web, sp on Android, UIFont.TextStyle on iOS. Never put sp in spacing tokens; no text container gets a fixed height.",
+  "example": "At the largest text setting, a button grows taller instead of cutting off its label.",
+  "source": [
+   "found.type.scaling",
+   "DC-L02-21",
+   "DC-L10-07",
+   "DC-L02-22"
+  ]
+ },
+ {
+  "id": "found.type.i18n",
+  "term": "Scripts, fallbacks and script metrics",
+  "aka": [
+   "internationalization",
+   "non-Latin scripts",
+   "font fallback"
+  ],
+  "plain": "Making words in Hindi, Arabic and more look right, with backup fonts and room to fit.",
+  "designer": "Scripts to cover, a fallback stack for each, and script tweaks: taller line height for Indic and CJK, no italics or all caps outside Latin, right-to-left direction.",
+  "engineer": "fontFamily fallback arrays per locale mode, such as font.family.body in hi-IN = ['Brand Sans', 'Noto Sans Devanagari', ...]. Web subsets with unicode-range and normalizes x-height via font-size-adjust.",
+  "example": "Hindi text falls back to Noto Sans Devanagari with a taller line height.",
+  "source": [
+   "found.type.i18n",
+   "DC-L02-24",
+   "DC-L02-25"
+  ]
+ },
+ {
+  "id": "found.type.numerals",
+  "term": "Numerals",
+  "aka": [
+   "tabular figures",
+   "tabular numbers"
+  ],
+  "plain": "Giving each digit the same width, so rows of prices line up neatly.",
+  "designer": "Proportional lining figures in running text, tabular lining figures in tables and live-updating numbers so digits line up and do not jump. Native digits serve other scripts.",
+  "engineer": "No DTCG slot for font features; store $extensions such as fontFeatureSettings: 'tnum', or emit component CSS font-variant-numeric: tabular-nums lining-nums.",
+  "example": "A countdown timer whose digits stay put as they change.",
+  "source": [
+   "found.type.numerals",
+   "DC-L02-26"
+  ]
+ },
+ {
+  "id": "found.space",
+  "term": "Space, sizing and density",
+  "aka": [
+   "spacing",
+   "sizing"
+  ],
+  "plain": "How much room goes between and inside things, how big the parts are, and how tightly they pack.",
+  "designer": "The spacing scale and its named uses, the size ladders for controls and media, and density: how tightly the whole UI packs. Values converge; base unit and naming differ.",
+  "engineer": "DTCG dimension tokens in px or rem (dp and pt map to px): space.* steps, semantic inset, gap and layout aliases, size.control.* and size.icon.*, and density resolver contexts.",
+  "example": "The same 16px padding inside every card.",
+  "source": [
+   "found.space"
+  ]
+ },
+ {
+  "id": "found.space.base",
+  "term": "Base spacing unit",
+  "aka": [
+   "grid unit",
+   "4px grid",
+   "8pt grid"
+  ],
+  "plain": "The one small step that every gap and size is counted in, like the marks on a ruler.",
+  "designer": "The unit every spacing and sizing value multiplies. Default: 4 as the grid, 8 as the rhythm. A pure 4 base suits dense tools; 8 suits marketing and content sites.",
+  "engineer": "A primitive dimension token, space.base = {value: 8, unit: 'px'}, that scale steps alias or multiply. On the web, rem units make spacing follow the user's font-size setting.",
+  "example": "Gaps of 4, 8, 16 and 24 pixels, all built from 4.",
+  "source": [
+   "found.space.base",
+   "DC-L03-01"
+  ]
+ },
+ {
+  "id": "found.space.scale",
+  "term": "Spacing scale",
+  "aka": [
+   "space scale",
+   "spacing ramp"
+  ],
+  "plain": "The short list of gap sizes you may use, so spacing never has to be guessed.",
+  "designer": "The ordered set of allowed gaps: 12-15 steps from 0 to 80 (Atlassian's set). 2px steps serve component internals; above 8px, steps differ by 25% or more.",
+  "engineer": "Primitive dimension tokens space.0 to space.1000, used only through semantic or component tokens. Negatives like space.negative.100 = {value: -8, unit: 'px'} mirror positive steps up to 32.",
+  "example": "Padding of 16 and a gap of 8, never 15 or 7.",
+  "source": [
+   "found.space.scale",
+   "DC-L03-02",
+   "DC-L03-06"
+  ]
+ },
+ {
+  "id": "found.space.semantic",
+  "term": "Semantic spacing (inset, gap, layout)",
+  "aka": [
+   "inset",
+   "stack",
+   "gap",
+   "padding"
+  ],
+  "plain": "Names for what each gap is for, like room inside a button or space between cards.",
+  "designer": "Three named jobs: inset (padding inside a component), gap (between siblings in a stack or row), and layout (margins, pane spacers, sections). Insets can be square, squished or stretched.",
+  "engineer": "Semantic dimension aliases: space.inset.md, space.stack.lg, layout.spacer.pane. A squish inset is two tokens, .block and .inline; DTCG 2025.10 has no padding composite.",
+  "example": "A pill button has less padding above and below than on its sides.",
+  "source": [
+   "found.space.semantic",
+   "DC-L03-04",
+   "DC-L03-05"
+  ]
+ },
+ {
+  "id": "found.space.responsive",
+  "term": "Responsive spacing",
+  "aka": [
+   "adaptive spacing"
+  ],
+  "plain": "Whether the gaps get bigger when the window gets wider.",
+  "designer": "Only layout spacing (page margins, pane spacers, section gaps) grows with window size. Component spacing changes only with density, never with breakpoint, so controls feel the same everywhere.",
+  "engineer": "Layout tokens get breakpoint modes, such as layout.margin = 16 / 24 / 24; component tokens get none. Native platforms take margins from system layout guides and window size classes.",
+  "example": "Page margins grow from 16px in narrow windows to 24px in wider ones.",
+  "source": [
+   "found.space.responsive",
+   "DC-L03-17"
+  ]
+ },
+ {
+  "id": "found.space.whitespace",
+  "term": "Whitespace personality and grouping",
+  "aka": [
+   "white space",
+   "negative space"
+  ],
+  "plain": "How roomy or packed things feel, and how gaps show what belongs together.",
+  "designer": "Airy or tight feel, set by the ratio of space inside a group to space between groups: at least 1:2, or 1:3 to 1:4 for airy brands.",
+  "engineer": "Layout-tier tokens space.section.sm, .md and .lg plus inner and outer semantic spacing pairs, chosen so the inner-to-outer ratio holds, with inner at most half of outer.",
+  "example": "A label sits close to its field and far from the next one.",
+  "source": [
+   "found.space.whitespace",
+   "DC-L03-24",
+   "DC-L15-05"
+  ]
+ },
+ {
+  "id": "found.space.rhythm",
+  "term": "Vertical rhythm",
+  "aka": [
+   "baseline grid"
+  ],
+  "plain": "Lining up text lines and gaps on the same steps, like the lines in a notebook.",
+  "designer": "Line heights and vertical spacing snap to a 4px grid. Measure spacing from the text box instead of a strict baseline grid, and let layouts survive user text-spacing overrides.",
+  "engineer": "Line-height and section-spacing tokens sit on multiples of 4px on the spacing scale. On web, CSS text-box trimming is a progressive enhancement; text boxes never get fixed heights.",
+  "example": "Line heights such as 20px and 24px, both multiples of 4.",
+  "see_also": [
+   "found.type.metrics"
+  ],
+  "source": [
+   "found.space.rhythm",
+   "DC-L03-25",
+   "DC-L02-16"
+  ]
+ },
+ {
+  "id": "found.space.sizing",
+  "term": "Size scales",
+  "aka": [
+   "sizing scale",
+   "size ladder"
+  ],
+  "plain": "A few set sizes for buttons and icons, so things placed in a row line up.",
+  "designer": "Shared size ladders for interactive controls and for icons and avatars, so a button, input and icon placed side by side align on the same heights.",
+  "engineer": "Dimension tokens on the spacing grid: size.control.sm/md/lg, size.icon.sm/md/lg and size.avatar.xs..xl, aliased by component tokens such as button.height.md.",
+  "example": "A 40px button and a 40px input side by side.",
+  "source": [
+   "found.space.sizing",
+   "DC-L03-07",
+   "DC-L03-08"
+  ]
+ },
+ {
+  "id": "found.space.sizing.controls",
+  "term": "Control height scale",
+  "aka": [
+   "control sizes",
+   "component sizes"
+  ],
+  "plain": "Small, medium and large heights that buttons, text boxes and menus share, so a row lines up.",
+  "designer": "Small, medium and large heights shared by buttons, inputs and selects: 32, 40, 48 for touch-inclusive products, 24, 32, 40 for pointer-first desktop tools. Don't mix sizes in one group.",
+  "engineer": "Dimension tokens size.control.sm/md/lg, aliased by button.height.md and input.height.md. Hit areas stay 44pt (iOS) and 48dp (Android) when controls shrink.",
+  "example": "A search box and its button, both 40px tall.",
+  "see_also": [
+   "found.interaction.targets"
+  ],
+  "source": [
+   "found.space.sizing.controls",
+   "DC-L03-07",
+   "DC-L08-07"
+  ]
+ },
+ {
+  "id": "found.space.sizing.media",
+  "term": "Icon and avatar size scales",
+  "aka": [
+   "icon sizes",
+   "avatar sizes"
+  ],
+  "plain": "A few set sizes for icons and the small round photos of people.",
+  "designer": "Fixed ladders so icons and avatars stay consistent: icons 16, 20, 24, 32; avatars 16 to 64 (Primer's set). Icon size equals the body line height minus 0-4px.",
+  "engineer": "Dimension tokens size.icon.sm = 16, size.icon.md = 20, size.icon.lg = 24 and size.avatar.xs to .xl. SF Symbols and Material Symbols can instead scale with text.",
+  "example": "A 16px icon in a small button, a 40px avatar beside a comment.",
+  "source": [
+   "found.space.sizing.media",
+   "DC-L03-08",
+   "DC-L05-05"
+  ]
+ },
+ {
+  "id": "found.space.density",
+  "term": "Density",
+  "aka": [
+   "information density"
+  ],
+  "plain": "How much fits on the screen at once, packed tight or spread out, and who gets to choose.",
+  "designer": "How much content fits in an area and who controls it. Density changes layout, not only padding: body size, control height and row height.",
+  "engineer": "Dimension and typography values per density resolver context, such as density: compact | default swapping size.control.md 32 and 40. Target minimums are fixed tokens that density never overrides.",
+  "example": "A spreadsheet packs rows tight; a shop page spreads things out.",
+  "source": [
+   "found.space.density",
+   "DC-L03-11"
+  ]
+ },
+ {
+  "id": "found.space.density.voice",
+  "term": "Density voice and base size",
+  "aka": [
+   "density personality"
+  ],
+  "plain": "Whether the whole app feels tight, cozy or roomy, and how big its text and buttons are.",
+  "designer": "The product-wide density personality: compact, comfortable or spacious, with the body size and control height that come with it. Comfortable suits apps, spacious suits marketing, compact suits data tools.",
+  "engineer": "A density mode on the semantic spacing layer swapping size.control.md and font.body.size. Default: 14px / 32px for business tools, 16px / 40px otherwise.",
+  "example": "An admin tool with 14px text and 32px buttons.",
+  "source": [
+   "found.space.density.voice",
+   "DC-L15-04",
+   "DC-L09-04"
+  ]
+ },
+ {
+  "id": "found.space.density.strategy",
+  "term": "Density strategy and modes",
+  "aka": [
+   "density modes",
+   "compact mode"
+  ],
+  "plain": "Who picks how tight things are packed, the app or you, and which parts can pack tighter.",
+  "designer": "Who sets density (system, product or user) and which components get a compact mode. Consumer products stay comfortable; data tools offer a compact mode for tables, lists, menus and trees.",
+  "engineer": "A density mode on the spacing collection (compact | default); compact shrinks insets, stacks and row heights one scale step, about 4px, never taking targets below platform minimums.",
+  "example": "A 'Compact' option that makes table rows shorter so more fit.",
+  "source": [
+   "found.space.density.strategy",
+   "DC-L03-10",
+   "DC-L08-13"
+  ]
+ },
+ {
+  "id": "found.space.density.context",
+  "term": "Density by device class",
+  "aka": [
+   "device density"
+  ],
+  "plain": "How much to show at once depends on how far away you are, not how big the screen is.",
+  "designer": "Density follows viewing distance and input, not pixel count. A 65-inch TV is a far-away phone: phone-level density. Watches, cars and headsets stay sparse; desks can go compact.",
+  "engineer": "Density keyed to a context resolver modifier, not screen size: {desk: compact, handheld: comfortable, leanback: comfortable, wrist: sparse, vehicle: sparse, spatial: sparse}.",
+  "example": "A TV app shows about as much as a phone app, not a laptop.",
+  "source": [
+   "found.space.density.context",
+   "DC-L14-13"
+  ]
+ },
+ {
+  "id": "found.layout",
+  "term": "Layout",
+  "aka": [
+   "page layout"
+  ],
+  "plain": "How a screen is split into areas, and how those areas move when the screen size changes.",
+  "designer": "How screens divide and adapt: breakpoints, column grids, containers and maximum widths, reflowing and switching layouts, and safe areas. App shells and canonical layouts live with patterns.",
+  "engineer": "Dimension and number tokens for grids, margins and max widths. DTCG has no breakpoint or media-condition type, so breakpoints compile to build-time variables or resolver contexts.",
+  "example": "One column on a phone, a sidebar and content on a laptop.",
+  "source": [
+   "found.layout"
+  ]
+ },
+ {
+  "id": "found.layout.breakpoints",
+  "term": "Breakpoints",
+  "aka": [
+   "window size classes",
+   "media queries"
+  ],
+  "plain": "The window widths where the layout switches, like when a phone view turns into a tablet view.",
+  "designer": "Window widths where the layout changes. Adopt Material's five width breakpoints for cross-platform work or Tailwind's set for web-only; design mobile first, then reveal, divide, resize, reposition or swap.",
+  "engineer": "Dimension tokens in rem: breakpoint.md = {value: 48, unit: 'rem'}. CSS media queries cannot read custom properties, so compile them at build time. Android: WindowSizeClass; iOS: size classes.",
+  "example": "At 48rem the single column splits into two.",
+  "source": [
+   "found.layout.breakpoints",
+   "DC-L03-14",
+   "DC-L07-28"
+  ]
+ },
+ {
+  "id": "found.layout.grid",
+  "term": "Column grid",
+  "aka": [
+   "layout grid",
+   "gutters"
+  ],
+  "plain": "Hidden columns that line things up on a page, like the lines on graph paper.",
+  "designer": "Columns, gutters and margins: 4, 8 or 12 columns as width grows, 16-24px gutters, 16px margins on compact, 24px above. Type never hangs into the gutter.",
+  "engineer": "grid.columns.* as number tokens; grid.gutter.* and grid.margin.* as dimension tokens, one value per breakpoint. Native mobile uses panes and layout guides instead.",
+  "example": "Cards spanning 4 of 12 columns, three to a row.",
+  "source": [
+   "found.layout.grid",
+   "DC-L03-15"
+  ]
+ },
+ {
+  "id": "found.layout.containers",
+  "term": "Containers and maximum content width",
+  "aka": [
+   "max width",
+   "content width"
+  ],
+  "plain": "How wide the main content may get, so lines of text don't stretch across a huge screen.",
+  "designer": "How content is framed: centered reading columns (max about 1280px, text 40-80 characters), navigation plus left-aligned content, or fluid data surfaces. Ask: reading, working or monitoring?",
+  "engineer": "Dimension tokens like layout.container.max = {value: 80, unit: 'rem'}. A 65ch measure is not a valid DTCG dimension (px or rem only); keep it in CSS.",
+  "example": "A blog post stays in a centered column even on a wide monitor.",
+  "source": [
+   "found.layout.containers",
+   "DC-L03-16"
+  ]
+ },
+ {
+  "id": "found.layout.adaptation",
+  "term": "Responsive and adaptive strategy",
+  "aka": [
+   "responsive design",
+   "adaptive design",
+   "container queries"
+  ],
+  "plain": "How a layout fits different screen sizes, by stretching or by changing to a new layout.",
+  "designer": "Responsive means reflowing within a layout; adaptive means switching layouts at breakpoints, such as pane count or navigation type. Default: responsive inside panes, adaptive between breakpoints.",
+  "engineer": "Page layout uses viewport media queries; components use CSS container queries, with sizes like container.sm = {value: 24, unit: 'rem'}. Variant switching lives in code, not tokens.",
+  "example": "A list becomes a list plus detail view on a wide tablet.",
+  "source": [
+   "found.layout.adaptation",
+   "DC-L03-22",
+   "DC-L03-21",
+   "DC-L10-10"
+  ]
+ },
+ {
+  "id": "found.layout.safe-areas",
+  "term": "Safe areas, insets and edge policy",
+  "aka": [
+   "safe area",
+   "insets",
+   "edge-to-edge"
+  ],
+  "plain": "Keeping buttons and text away from notches, screen edges and folds where they get cut off.",
+  "designer": "Backgrounds run edge to edge; interactive content stays inside the safe area, clear of notches, system bars and hinges. TVs keep the outer 5% clear.",
+  "engineer": "Insets are runtime values from the platform, not tokens; tokens add padding on top, such as layout.safe.extra = 16. Web needs viewport-fit=cover plus env(safe-area-inset-*).",
+  "example": "A video fills the whole screen, but its buttons stay clear of the notch.",
+  "source": [
+   "found.layout.safe-areas",
+   "DC-L03-20",
+   "DC-L10-11",
+   "DC-L14-10"
+  ]
+ },
+ {
+  "id": "found.interaction",
+  "term": "Interaction and input",
+  "aka": [
+   "input methods"
+  ],
+  "plain": "All the ways people control an app, like touch, mouse, keyboard, TV remote or voice.",
+  "designer": "The inputs the system supports (touch, pointer, keyboard, remote, gaze, voice, rotary) and what depends on them: target sizes, target spacing and focus. These follow input precision, not device.",
+  "engineer": "Dimension tokens for target size and spacing (size.target.min, space.target.gap) plus focus-ring tokens, keyed to input mode such as pointer, touch or remote rather than device type.",
+  "example": "A laptop with a touchscreen gets finger-sized targets on its touch surfaces.",
+  "source": [
+   "found.interaction"
+  ]
+ },
+ {
+  "id": "found.interaction.modalities",
+  "term": "Input modalities",
+  "aka": [
+   "input modes"
+  ],
+  "plain": "Which ways of using the app each screen must handle, like tap, click or type.",
+  "designer": "Which inputs each surface must support, and how density and targets switch between them. Default: touch-size targets on mobile and web, a pointer density mode for desktop.",
+  "engineer": "size.target.min per platform (44 iOS, 48 Android, 24/44 web, 28 macOS, 66 tvOS, 60 visionOS) and a density mode keyed by input, density = touch | pointer.",
+  "example": "A web app uses 44px targets for touch, even though 24px passes.",
+  "source": [
+   "found.interaction.modalities",
+   "DC-L10-15"
+  ]
+ },
+ {
+  "id": "found.interaction.targets",
+  "term": "Target size and spacing",
+  "aka": [
+   "touch target",
+   "hit area",
+   "tap target"
+  ],
+  "plain": "How big and how far apart buttons must be so fingers don't hit the wrong one.",
+  "designer": "Minimum hit area and target spacing by input precision: pointer 24px, finger 44-48, remote and gaze 56-66. Visuals may shrink with density; hit areas never do.",
+  "engineer": "Fixed tokens: size.target.min (24px web AA floor, 44pt iOS, 48dp Android) and space.target.gap (8 pointer, 12 touch). Web detects via pointer: coarse | fine.",
+  "example": "A small close icon still gets a 44-point tap area on iPhone.",
+  "source": [
+   "found.interaction.targets",
+   "DC-L03-12",
+   "DC-L14-03",
+   "DC-L03-13"
+  ]
+ },
+ {
+  "id": "found.interaction.focus",
+  "term": "Focus indicator",
+  "aka": [
+   "focus ring",
+   "focus-visible"
+  ],
+  "plain": "The outline that shows where you are when you move with the keyboard or a TV remote.",
+  "designer": "The visible ring showing keyboard, remote or switch focus. Default: 2px solid ring at 2px offset, following the component's radius, with 3:1 contrast against every surface.",
+  "engineer": "focus.ring.width and focus.ring.offset (dimension), focus.ring.color (color), or a border composite; DTCG has no outline type. Web: :focus-visible with outline and outline-offset.",
+  "example": "Pressing Tab puts a ring around the next link.",
+  "see_also": [
+   "found.color.roles.border"
+  ],
+  "source": [
+   "found.interaction.focus",
+   "DC-L04-09",
+   "DC-L08-11",
+   "DC-L01-16"
+  ]
+ },
+ {
+  "id": "found.shape",
+  "term": "Shape and borders",
+  "aka": [
+   "corner radius",
+   "borders"
+  ],
+  "plain": "How round the corners are, and the lines that outline and split things on screen.",
+  "designer": "Corner radius (scale, personality, per-component roles, nesting, expressive shapes) plus borders, strokes and dividers. Radius is where systems diverge most, from square to pill; every 2025-2026 revision got rounder.",
+  "engineer": "Radius tokens are DTCG dimensions (radius.100 = 4px), aliased by semantic radius.control, radius.container and radius.full. Strokes use the border composite: color, width and style.",
+  "example": "A card with 12px corners and a thin gray outline.",
+  "source": [
+   "found.shape"
+  ]
+ },
+ {
+  "id": "found.shape.radius",
+  "term": "Radius scale and default control radius",
+  "aka": [
+   "border radius",
+   "corner radius scale"
+  ],
+  "plain": "A short list of how round corners can be, and the usual roundness for buttons.",
+  "designer": "Allowed corner radii plus the control default. Builder scale: 0, 2, 4, 6, 8, 12, 16, 24, full; 6px controls, 8-12px containers. Radius grows with component size.",
+  "engineer": "DTCG dimension tokens, {value: 8, unit: 'px'}: primitive radius.100 = 4px, semantic radius.control and radius.container, component button.radius. CSS border-radius; Compose RoundedCornerShape; iOS continuous corners.",
+  "example": "Buttons with 6px corners inside cards with 12px corners.",
+  "source": [
+   "found.shape.radius",
+   "DC-L04-01",
+   "DC-L09-01"
+  ]
+ }
+]

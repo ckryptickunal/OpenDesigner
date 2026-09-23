@@ -59,6 +59,8 @@ Paper's MCP server runs inside Paper Desktop (local, `127.0.0.1:29979/mcp`). If 
 6. Designer comments (`list_comment_threads`) and selections (`get_selection`) come back as decisions through the engine, like Figma edits.
 
 ## 4. Before you hand over
+- Explain each export in one plain sentence first ("This file gives your web app the colors as CSS variables"), then the path.
 - `engine.py validate` passes, or each remaining warning has a written waiver.
 - The person knows which file is canonical (DTCG in `opendesigner/tokens/`) and that exports are regenerated, not edited.
-- Record the export in the stage summary: formats, destinations (file names, Figma file, Paper file) and date.
+- Record the export in the summary: formats, destinations (file names, Figma file, Paper file) and date.
+- If an export was missing, wrong or confusing, record it with `engine.py feedback "..." --kind gap|bug|confusing|idea` (`references/improve.md` in the opendesigner skill). Nothing is posted without the person's OK.

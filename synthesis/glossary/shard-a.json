@@ -1,0 +1,636 @@
+[
+ {
+  "id": "dial.expression",
+  "term": "expression dial",
+  "aka": [
+   "Expression",
+   "productive to expressive"
+  ],
+  "plain": "A slider for how much the app shows off, from quiet and plain to bold and loud.",
+  "designer": "Productive (0) keeps attention on the task; expressive (100) adds emphasis: a bigger type scale, more weights, hero moments, brand-colored chrome, visible containers and motion throughout.",
+  "engineer": "Posture dial 0-100, default 50 (levers.json). Drives type.ratio 1.2/1.25/1.333, type.weightCount 2-4, emphasis.heroMoments, color.brandRole, layout.containment and motion.expressiveScope.",
+  "example": "Carbon's productive mode sits low; Material's expressive styles sit high.",
+  "source": [
+   "synthesis/levers.json#dials",
+   "synthesis/LEVERS.md A1",
+   "DC-L15-02",
+   "DC-L02-11",
+   "DC-L06-03"
+  ]
+ },
+ {
+  "id": "dial.brandPresence",
+  "term": "brandPresence dial",
+  "aka": [
+   "Brand presence",
+   "native to brand-led"
+  ],
+  "plain": "A slider for how much the app looks like your brand, or like the phone it runs on.",
+  "designer": "Native (0): system font and components, brand only in accents. Brand-led (100): custom face, brand color on large surfaces, custom components. Navigation, back and sheets always stay native.",
+  "engineer": "Posture dial 0-100, default 50. Drives type.faceSuggestion, color.brandPlacement, components.nativeShare (1.0 at 0, 0.8 at 50, 0 at 100) and content.voiceGuidance; behavior.navigationNative stays true.",
+  "example": "Fluent reuses native patterns about 80% of the time.",
+  "source": [
+   "synthesis/levers.json#dials",
+   "synthesis/LEVERS.md A2",
+   "DC-L10-02",
+   "DC-L06-14"
+  ]
+ },
+ {
+  "id": "dial.density",
+  "term": "density dial",
+  "aka": [
+   "Density",
+   "spacious to compact"
+  ],
+  "plain": "A slider for how much fits on one screen, from roomy and calm to tight and packed.",
+  "designer": "Spacious (0) reads calm: 16px+ body, 48px controls. Compact (100) reads serious and efficient: 14px body (13 at 90+), 32px controls. Hit areas never shrink.",
+  "engineer": "Posture dial 0-100. Drives type.baseSize.web (19 to 13), control.height.md (48/40/32), icon.defaultSize (24/20/16) and space.densityMode; target.min never changes.",
+  "example": "GOV.UK's 19px body sits near 0; Polaris's 13px near 90.",
+  "source": [
+   "synthesis/levers.json#dials",
+   "synthesis/LEVERS.md A3",
+   "DC-L02-08",
+   "DC-L03-10",
+   "DC-L03-12"
+  ]
+ },
+ {
+  "id": "dial.energy",
+  "term": "energy dial",
+  "aka": [
+   "Energy",
+   "calm to energetic"
+  ],
+  "plain": "A slider for how lively the app feels, from calm to bouncy and bright.",
+  "designer": "Calm (0) uses no-overshoot springs, shorter durations (0.8x), lighter headings and recessive navigation; energetic (100) adds bounce, 1.2x longer medium moves, more saturation and heavier headings.",
+  "engineer": "Character dial 0-100, default 50. Drives motion.spring.spatial.dampingRatio (1.0 to 0.6), stiffness (700 to 380), motion.easing.standard and motion.durationMultiplier (0.8 to 1.2).",
+  "example": "Material 3's standard spring damps at 0.9; its expressive one at 0.8.",
+  "source": [
+   "synthesis/levers.json#dials",
+   "synthesis/LEVERS.md A4",
+   "DC-L04-19",
+   "DC-L04-22",
+   "DC-L06-10"
+  ]
+ },
+ {
+  "id": "dial.roundness",
+  "term": "roundness dial",
+  "aka": [
+   "Roundness",
+   "sharp to soft"
+  ],
+  "plain": "A slider for how round the corners are, from sharp boxes to soft pill shapes.",
+  "designer": "Sets the default control radius and everything derived from it: container and overlay radii, nested radii, focus-ring radius, icon corners and caps. Benchmark median is 6px.",
+  "engineer": "Character dial 0-100, default 50. radius.control bands: 0, 2, 4, 6, 8, 12, 16px, full (pill) at 93+. Also drives icon.cornerStyle and icon.caps.",
+  "example": "Carbon sits at 0px corners; Material 3 uses full pill buttons.",
+  "source": [
+   "synthesis/levers.json#dials",
+   "synthesis/LEVERS.md A5",
+   "DC-L04-02",
+   "DC-L05-02"
+  ]
+ },
+ {
+  "id": "dial.depth",
+  "term": "depth dial",
+  "aka": [
+   "Depth",
+   "flat to deep"
+  ],
+  "plain": "A slider for how much parts seem to lift off the page, from flat to deep.",
+  "designer": "Each band is a different model: borders only, ring plus faint shadow, tonal layers, shadow ladder, then glass materials with a solid fallback. Dark mode lifts raised surfaces by lightness.",
+  "engineer": "Character dial 0-100, default 40. elevation.model breaks at 15, 35, 55 and 80; elevation.shadowAlpha.light scales 0.08 to 0.24; elevation.darkMode = lighter-raised-surfaces in every band.",
+  "example": "GOV.UK uses borders only; Apple's Liquid Glass sits at the deep end.",
+  "source": [
+   "synthesis/levers.json#dials",
+   "synthesis/LEVERS.md A6",
+   "DC-L04-10",
+   "DC-L04-12",
+   "DC-L04-15"
+  ]
+ },
+ {
+  "id": "dial.colorfulness",
+  "term": "colorfulness dial",
+  "aka": [
+   "Colorfulness",
+   "monochrome to vivid"
+  ],
+  "plain": "A slider for how much color the app uses, from all gray to bright and bold.",
+  "designer": "Low keeps the palette near gray with one accent; high raises accent chroma, adds secondary and tertiary accents above 60 and tints surfaces. Spend strong color on small, meaningful elements.",
+  "engineer": "Character dial 0-100, default 50. Drives color.accentChroma.hct (0, 10, 34, 48, max), color.schemeVariant (monochrome, neutral, tonalSpot, expressive, vibrant) and color.accentCount (1, or 3 from 60).",
+  "example": "Material's scheme variants run from Monochrome to Vibrant along this dial.",
+  "source": [
+   "synthesis/levers.json#dials",
+   "synthesis/LEVERS.md A7",
+   "DC-L01-10",
+   "DC-L01-08",
+   "DC-L06-05"
+  ]
+ },
+ {
+  "id": "dial.warmth",
+  "term": "warmth dial",
+  "aka": [
+   "Warmth",
+   "cool/formal to warm/friendly"
+  ],
+  "plain": "A slider for how cool and formal or warm and friendly the grays and the wording feel.",
+  "designer": "Cool tints neutrals blue (slate) with title case and firmer borders; warm tints them toward stone or taupe, softens borders, uses sentence case and contractions. Brand hue never moves.",
+  "engineer": "Character dial 0-100. color.neutral.tint.oklch (chroma, hue): slate (0.046, 257) at 0, pure gray at 50, taupe (0.021, 43) at 100; plus border and casing rules.",
+  "example": "Cool end: GOV.UK writes \"cannot\". Warm end: \"can't\" and \"we\".",
+  "source": [
+   "synthesis/levers.json#dials",
+   "synthesis/LEVERS.md A8",
+   "DC-L01-06"
+  ]
+ },
+ {
+  "id": "core.design-system",
+  "term": "design system",
+  "plain": "The shared rules and parts that make all the screens of an app look and work the same.",
+  "designer": "Foundations, tokens, components, patterns and the guidance and governance around them, so every team ships consistent, accessible screens without re-deciding color, type and spacing each time.",
+  "engineer": "In OpenDesigner: opendesigner/state.json plus generated DTCG 2025.10 tokens, component docs, lint rules and DESIGN.md. Ontology layers: context, principles, foundations, tokens, components, patterns, guardrails, delivery, governance.",
+  "source": [
+   "synthesis/ONTOLOGY.md",
+   "synthesis/OPENDESIGNER-SPEC.md 7.1"
+  ]
+ },
+ {
+  "id": "core.design-token",
+  "term": "design token",
+  "aka": [
+   "token"
+  ],
+  "plain": "A color, size or other choice with a name, kept in one place for the whole app.",
+  "designer": "A named decision (brand blue, 16px spacing, 200ms fade) that design files and code both reference, so changing it once restyles every screen and nothing drifts.",
+  "engineer": "A DTCG 2025.10 object with a required $value and a $type such as color, dimension or duration, named by dot path (color.bg.accent) and compiled to CSS custom properties.",
+  "example": "Atlassian's space.100 is 8px, used for every small gap.",
+  "source": [
+   "research/L07-tokens-figma.md A2",
+   "DC-L07-01"
+  ]
+ },
+ {
+  "id": "core.primitive-token",
+  "term": "primitive token",
+  "aka": [
+   "base token",
+   "global token",
+   "reference token"
+  ],
+  "plain": "A raw value with a plain name, like \"blue 500\", that says what it is, not what it is for.",
+  "designer": "The raw palette and scales (blue.500, space.200) with no meaning attached. Designers pick from semantic tokens instead; primitives are the ingredients those tokens point to.",
+  "engineer": "Bottom tier: single-valued tokens such as color.blue.500 (an OKLCH color object) or space.200 (dimension). Values never change per mode; semantic tokens alias them. File: primitives.tokens.json.",
+  "example": "blue.500 is a primitive; it knows its color but not its job.",
+  "source": [
+   "research/L07-tokens-figma.md DC-L07-01",
+   "synthesis/OPENDESIGNER-SPEC.md 7.4"
+  ]
+ },
+ {
+  "id": "core.semantic-token",
+  "term": "semantic token",
+  "aka": [
+   "alias token",
+   "system token",
+   "role token"
+  ],
+  "plain": "A value named for its job, like \"page background\", that points to a raw value below it.",
+  "designer": "Named by role, not by look: color.bg.accent, color.text.subtle. Themes, dark mode and rebrands re-point these names, so designs stay correct without touching every screen.",
+  "engineer": "Tier 2: a token whose $value is a reference, color.bg.accent = \"{color.blue.500}\". Modes live on this tier; each resolver context re-points it.",
+  "example": "Page background is white in light mode and near-black in dark.",
+  "source": [
+   "research/L07-tokens-figma.md DC-L07-01",
+   "research/L07-tokens-figma.md A4"
+  ]
+ },
+ {
+  "id": "core.component-token",
+  "term": "component token",
+  "aka": [
+   "component-level token"
+  ],
+  "plain": "A saved value for one part only, like the color of the main button.",
+  "designer": "Lets one component be restyled on its own (button.primary.bg) without changing every accent in the product. Add them only when a brand must tune that component separately.",
+  "engineer": "Tier 3, scoped to one component: button.primary.bg = \"{color.bg.accent}\". Added only for components restyled independently or values shared by three or more; file component.tokens.json.",
+  "source": [
+   "research/L07-tokens-figma.md DC-L07-01",
+   "DC-L07-02",
+   "synthesis/OPENDESIGNER-SPEC.md 7.4"
+  ]
+ },
+ {
+  "id": "core.alias",
+  "term": "alias",
+  "aka": [
+   "reference",
+   "token reference"
+  ],
+  "plain": "A name that points to another choice instead of holding a value of its own.",
+  "designer": "A token that borrows another token's value, so one change flows down the chain. It is how semantic and component tokens stay linked to the palette.",
+  "engineer": "In DTCG 2025.10, $value \"{color.blue.500}\" targets a whole token; {\"$ref\": JSON Pointer} reaches inside values. Chains are allowed; circular references are errors. Figma variables alias within one type.",
+  "source": [
+   "research/L07-tokens-figma.md A2",
+   "research/L07-tokens-figma.md A6"
+  ]
+ },
+ {
+  "id": "core.mode",
+  "term": "mode",
+  "aka": [
+   "token mode",
+   "context"
+  ],
+  "plain": "One full set of the saved values, such as the light set or the dark set.",
+  "designer": "Swaps every value at once while names stay fixed: light or dark, compact or comfortable, standard or reduced motion. Designs switch mode instead of being redrawn.",
+  "engineer": "DTCG keeps modes in the resolver: a context (theme: light or dark) picks one file per mode, such as semantic.color.dark.tokens.json. Figma: a column per mode.",
+  "source": [
+   "research/L07-tokens-figma.md A4",
+   "research/L07-tokens-figma.md A6",
+   "synthesis/OPENDESIGNER-SPEC.md 7.4"
+  ]
+ },
+ {
+  "id": "core.theme",
+  "term": "theme",
+  "aka": [
+   "brand theme"
+  ],
+  "plain": "A named look for the whole app, such as your brand in dark mode.",
+  "designer": "A named combination (Brand A, dark, high contrast) applied across the system. Keep brand, color scheme and density as separate axes so combinations need not be drawn by hand.",
+  "engineer": "One permutation of DTCG resolver modifiers; outputs multiply (4, 3 and 2 contexts give 24). Keep modifiers orthogonal. CSS export emits one [data-theme] scope per context.",
+  "source": [
+   "research/L07-tokens-figma.md A4",
+   "synthesis/OPENDESIGNER-SPEC.md 7.5"
+  ]
+ },
+ {
+  "id": "core.dtcg",
+  "term": "DTCG",
+  "aka": [
+   "Design Tokens Community Group format",
+   "DTCG 2025.10"
+  ],
+  "plain": "A shared way to write design choices that both design apps and code can read.",
+  "designer": "The open token format Figma, Penpot, Tokens Studio, Style Dictionary and Terrazzo support, so tokens move between tools without retyping. Stable since 28 Oct 2025.",
+  "engineer": "Design Tokens Format Module 2025.10 plus Color and Resolver modules (a Final Community Group Report). Files are .tokens.json with $value, $type, $description, $extensions; themes go in .resolver.json.",
+  "source": [
+   "research/L07-tokens-figma.md A1",
+   "research/L07-tokens-figma.md A2"
+  ]
+ },
+ {
+  "id": "core.resolver-file",
+  "term": "resolver file",
+  "aka": [
+   ".resolver.json",
+   "resolver document"
+  ],
+  "plain": "A small file that says which value files to mix for each look, like light or dark.",
+  "designer": "The recipe behind themes: it lists the token sets and switches (theme, brand, density) and which one wins, so tools produce every light, dark or brand combination consistently.",
+  "engineer": "DTCG Resolver Module 2025.10: version, sets, modifiers with contexts, and resolutionOrder (later entries win). OpenDesigner writes opendesigner.resolver.json; Terrazzo supports resolvers, Style Dictionary v5 does not.",
+  "source": [
+   "research/L07-tokens-figma.md A4",
+   "synthesis/OPENDESIGNER-SPEC.md 7.4"
+  ]
+ },
+ {
+  "id": "core.color-ramp",
+  "term": "color ramp",
+  "aka": [
+   "tonal palette",
+   "color scale",
+   "shades"
+  ],
+  "plain": "A row of shades of one color, from very light to very dark.",
+  "designer": "Evenly stepped shades of one hue, usually 11 or 12 steps, so backgrounds, borders, hovers and text come from a set, not by eye.",
+  "engineer": "Ordered primitives such as color.blue.50 to color.blue.950 (Tailwind's 11 steps), generated in OKLCH as DTCG color objects with hex fallback; semantic tokens alias into it.",
+  "example": "Light blue for backgrounds, dark blue for text on them.",
+  "source": [
+   "research/L01-color.md DC-L01-02",
+   "DC-L01-01"
+  ]
+ },
+ {
+  "id": "core.neutral",
+  "term": "neutral",
+  "aka": [
+   "gray ramp",
+   "neutrals"
+  ],
+  "plain": "The grays for text, backgrounds and lines, at times with a faint hint of color.",
+  "designer": "Pure gray reads neutral and tool-like, suiting photo and data apps; a slight tint toward the brand, warm or cool sets the product's temperature.",
+  "engineer": "A 12-13 step ramp such as color.neutral.50 to 950. Tinted ramps keep OKLCH chroma about 0.01-0.03 mid-ramp and 0-0.008 at the ends.",
+  "source": [
+   "research/L01-color.md DC-L01-06",
+   "DC-L01-02"
+  ]
+ },
+ {
+  "id": "core.accent-color",
+  "term": "accent color",
+  "aka": [
+   "brand color",
+   "primary color"
+  ],
+  "plain": "The one strong color used for main buttons and for things you pick.",
+  "designer": "One accent keeps a calm, focused feel and makes color mean \"you can act here\". Add a second accent only when it has a job, not for decoration.",
+  "engineer": "Roles such as color.bg.accent and color.focus.ring alias one brand ramp step. Accent text must pass 4.5:1 and accent boundaries 3:1 in every mode.",
+  "source": [
+   "research/L01-color.md DC-L01-08",
+   "DC-L01-16",
+   "DC-L01-22"
+  ]
+ },
+ {
+  "id": "core.status-colors",
+  "term": "status colors",
+  "aka": [
+   "feedback colors",
+   "semantic colors"
+  ],
+  "plain": "Colors that tell you how things went, like green for good and red for a problem.",
+  "designer": "Success, warning, error and info, each with subtle and bold levels. Never rely on color alone: pair with an icon and text, and put dark text on yellow fills.",
+  "engineer": "color.{bg|text|border|icon}.{success|warning|danger|info}.{subtle|bold}. Status text needs 4.5:1; status icons and borders 3:1. Color-only meaning is a lint error.",
+  "source": [
+   "research/L01-color.md DC-L01-15",
+   "synthesis/OPENDESIGNER-SPEC.md 6.3"
+  ]
+ },
+ {
+  "id": "core.contrast-ratio",
+  "term": "contrast ratio",
+  "aka": [
+   "color contrast"
+  ],
+  "plain": "A score for how much text stands out from what is behind it; higher is easier to read.",
+  "designer": "WCAG 2.2 AA: 4.5:1 for body text, 3:1 for large text, icons and control borders, 7:1 in high-contrast themes. Test colors as pairs, never alone.",
+  "engineer": "engine.py validate checks every foreground and background pair in every mode with no rounding (4.499:1 fails); APCA Lc 75 on body is an advisory warning.",
+  "example": "Gray text on white may pass at 4.5:1 and fail at 4.4:1.",
+  "source": [
+   "research/L01-color.md DC-L01-22",
+   "synthesis/OPENDESIGNER-SPEC.md 6.2"
+  ]
+ },
+ {
+  "id": "core.wcag",
+  "term": "WCAG",
+  "aka": [
+   "Web Content Accessibility Guidelines",
+   "WCAG 2.2"
+  ],
+  "plain": "The main rule book that helps apps and sites work for people who can't see, hear or move well.",
+  "designer": "Version 2.2, level AA, is the usual target: text contrast 4.5:1, non-text contrast 3:1, visible focus, 24 by 24 CSS px minimum targets. AAA is stricter.",
+  "engineer": "Criteria OpenDesigner builds in: 1.4.3 and 1.4.11 contrast, 2.4.7 focus visible, 2.5.8 target size (AA), and 2.3.3 animation from interactions (AAA).",
+  "source": [
+   "research/L01-color.md DC-L01-22",
+   "DC-L03-12",
+   "DC-L04-09",
+   "DC-L04-25"
+  ]
+ },
+ {
+  "id": "core.oklch",
+  "term": "OKLCH",
+  "aka": [
+   "oklch()"
+  ],
+  "plain": "A way to write a color by how light it is, how strong it is and which color it is.",
+  "designer": "A perceptual color space: blue 600 and green 600 look equally heavy, so ramps stay balanced and hue swaps keep hierarchy. HSL makes yellows wash out and blues go muddy.",
+  "engineer": "CSS oklch(L C H), Baseline since May 2023; Tailwind v4 uses it for its whole palette. DTCG color object: colorSpace \"oklch\", components [L, C, H], optional hex fallback.",
+  "source": [
+   "research/L01-color.md DC-L01-01",
+   "research/L07-tokens-figma.md A3"
+  ]
+ },
+ {
+  "id": "core.dark-mode",
+  "term": "dark mode",
+  "aka": [
+   "dark theme"
+  ],
+  "plain": "A dark version of the app where each color is picked with care, not flipped.",
+  "designer": "Map by role, not by value: each semantic color gets the dark step that keeps its light-mode contrast. Raised surfaces get lighter; accents soften to reduce glare.",
+  "engineer": "A resolver context (theme: dark) loading semantic.color.dark.tokens.json: same token names, re-pointed to other ramp steps (Atlassian 700 becomes 400). CSS scope via [data-theme] or prefers-color-scheme.",
+  "source": [
+   "research/L01-color.md DC-L01-18",
+   "DC-L01-13",
+   "synthesis/OPENDESIGNER-SPEC.md 7.4"
+  ]
+ },
+ {
+  "id": "core.surface",
+  "term": "surface",
+  "aka": [
+   "layer",
+   "background level"
+  ],
+  "plain": "A background layer that things sit on, like a card on a page.",
+  "designer": "Stacked background levels (sunken, base, raised, overlay) that separate page, cards and popovers. Light mode separates them with subtle tone plus shadow or border; dark mode with lighter tones.",
+  "engineer": "4-5 role-named color tokens mapped per mode, e.g. Atlassian elevation.surface, .sunken, .raised, .overlay; Material 3 surface-container-lowest to -highest; Carbon $layer-01 to 03.",
+  "source": [
+   "research/L01-color.md DC-L01-13"
+  ]
+ },
+ {
+  "id": "core.typeface",
+  "term": "typeface",
+  "aka": [
+   "font family",
+   "font"
+  ],
+  "plain": "A set of letters that all share one look, like the letters on an iPhone.",
+  "designer": "The main personality choice in type: system fonts feel native, open faces like Inter feel neutral, proprietary faces like Plex or Cereal feel brand-led. Check licence and script coverage early.",
+  "engineer": "DTCG fontFamily: a string or an array in fallback order, e.g. [\"Inter\", \"system-ui\", \"sans-serif\"]. Emitted as CSS font-family; Figma import accepts a single string only.",
+  "example": "SF Pro on Apple devices, Roboto on Android.",
+  "source": [
+   "research/L02-typography.md DC-L02-01",
+   "DC-L02-02",
+   "research/L07-tokens-figma.md A3",
+   "synthesis/LEVERS.md A2"
+  ]
+ },
+ {
+  "id": "core.type-scale",
+  "term": "type scale",
+  "aka": [
+   "typescale",
+   "type ramp"
+  ],
+  "plain": "The short list of text sizes an app uses, from small labels to big titles.",
+  "designer": "Sizes grown from a base by a ratio: 1.125-1.2 feels calm and dense, 1.25 suits product plus marketing, 1.333+ feels editorial. Use three sizes or fewer per view.",
+  "engineer": "size(n) = base x ratio^n, rounded to even pixels; stored as dimension primitives (font.size.*). Expression sets type.ratio 1.2/1.25/1.333; Density caps it at 1.2.",
+  "example": "Base 16 at ratio 1.25 gives 16, 20, 25, 31, 39.",
+  "source": [
+   "research/L02-typography.md DC-L02-09",
+   "DC-L15-02",
+   "synthesis/levers.json#dials"
+  ]
+ },
+ {
+  "id": "core.line-height",
+  "term": "line height",
+  "aka": [
+   "leading"
+  ],
+  "plain": "How much room each line of text gets from top to bottom, so lines don't crowd.",
+  "designer": "Tight (1.1-1.25) makes headings solid; about 1.5 keeps paragraphs easy to follow. Bigger text wants a smaller ratio, longer lines a larger one; snap to 4px.",
+  "engineer": "Unitless number in the DTCG typography composite (lineHeight, a multiplier of fontSize); CSS line-height. Default: ratio rounded to the nearest 4px; Carbon ships compact 14/18 beside 14/20.",
+  "source": [
+   "research/L02-typography.md DC-L02-13",
+   "research/L07-tokens-figma.md A3"
+  ]
+ },
+ {
+  "id": "core.letter-spacing",
+  "term": "letter spacing",
+  "aka": [
+   "tracking"
+  ],
+  "plain": "How close together or far apart the letters in a word sit.",
+  "designer": "Zero at body sizes, slightly positive (+0.02-0.05em) for small text and all caps, slightly negative from about 32px so big headlines feel dense and designed.",
+  "engineer": "DTCG letterSpacing is a dimension (px or rem only) inside typography, though em is the natural unit; CSS letter-spacing. Figma letter-spacing variables are px, not %.",
+  "source": [
+   "research/L02-typography.md DC-L02-14"
+  ]
+ },
+ {
+  "id": "core.font-weight",
+  "term": "font weight",
+  "aka": [
+   "weight",
+   "boldness"
+  ],
+  "plain": "How thick or thin the letters are, from very thin to very bold.",
+  "designer": "Most systems use two to four weights: 400 body, 500-600 labels, 600-700 headings. Light (300) only at 32px and up. Weight-led hierarchy looks punchy; size-led looks airy.",
+  "engineer": "DTCG fontWeight: a number 1-1000 or an alias (thin 100 to black 900, extra-black 950); CSS font-weight. Expression sets type.weightCount 2-4; Energy sets heading weight 600-750.",
+  "source": [
+   "research/L02-typography.md DC-L02-15",
+   "research/L07-tokens-figma.md A3",
+   "synthesis/levers.json#dials"
+  ]
+ },
+ {
+  "id": "core.spacing-scale",
+  "term": "spacing scale",
+  "aka": [
+   "space scale",
+   "spacing ladder"
+  ],
+  "plain": "A short list of gap sizes the whole app picks from, like marks on a ruler.",
+  "designer": "A 4px grid with an 8px rhythm, about 14 steps from 0 to 80. Steps differ enough that tight-within, loose-between grouping reads at a glance.",
+  "engineer": "Dimension primitives space.0 to space.1000 in px (rem on web export); components use semantic aliases like space.inset.md = \"{space.200}\", never raw steps.",
+  "example": "0, 2, 4, 6, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80.",
+  "source": [
+   "research/L03-space-layout.md DC-L03-01",
+   "DC-L03-02",
+   "DC-L03-04"
+  ]
+ },
+ {
+  "id": "core.padding",
+  "term": "padding",
+  "aka": [
+   "inset"
+  ],
+  "plain": "The empty space inside a box, between its edge and what is in it.",
+  "designer": "Inner breathing room of buttons, cards and fields. Keep it smaller than the space between groups so related things read together; parents own spacing, children never add outer margins.",
+  "engineer": "CSS padding, fed by semantic inset tokens such as space.inset.md = \"{space.200}\" (dimension). Density modes shrink insets one scale step; Material uses padding and gap before margins.",
+  "source": [
+   "research/L03-space-layout.md DC-L03-04",
+   "DC-L03-10",
+   "DC-L03-24"
+  ]
+ },
+ {
+  "id": "core.margin",
+  "term": "margin",
+  "aka": [
+   "outer spacing"
+  ],
+  "plain": "The empty space outside a box that keeps it away from the things next to it.",
+  "designer": "Space around an element or page edge. Prefer padding on the parent and gap between siblings; keep margins for page edges and layout sections so spacing stays predictable.",
+  "engineer": "CSS margin. OpenDesigner keeps it to layout tokens such as layout.margin.compact = 16 (Material's page margin, 24 above compact); components set no outer margin.",
+  "source": [
+   "research/L03-space-layout.md DC-L03-04",
+   "DC-L03-15"
+  ]
+ },
+ {
+  "id": "core.gap",
+  "term": "gap",
+  "aka": [
+   "stack spacing",
+   "inline spacing"
+  ],
+  "plain": "The empty space between things lined up in a row, a column or a grid.",
+  "designer": "Even spacing between siblings set once on the container, so every list, toolbar and form keeps the same rhythm without per-item margins.",
+  "engineer": "CSS gap on flex and grid containers, from semantic dimension tokens like space.gap.control = \"{space.100}\" or space.stack.lg. Figma: number variables scoped to gap.",
+  "source": [
+   "research/L03-space-layout.md DC-L03-04",
+   "research/L07-tokens-figma.md A6"
+  ]
+ },
+ {
+  "id": "core.grid",
+  "term": "grid",
+  "aka": [
+   "column grid",
+   "layout grid"
+  ],
+  "plain": "Columns you can't see that help line things up across a page.",
+  "designer": "Columns, gutters and margins that align content. 4, 8 and 12 columns suit most products; 16 suits editorial or wide dashboards. Type never hangs into the gutter; containers may.",
+  "engineer": "CSS grid-template-columns driven by grid.columns (number) and grid.gutter and grid.margin (dimension) per breakpoint: 4, 8, 12 columns; 16-24px gutters.",
+  "source": [
+   "research/L03-space-layout.md DC-L03-15"
+  ]
+ },
+ {
+  "id": "core.breakpoint",
+  "term": "breakpoint",
+  "aka": [
+   "window size class"
+  ],
+  "plain": "A screen width where the page changes its layout, like going to one column on a phone.",
+  "designer": "Each one is a moment the layout visibly reorganizes: panes appear, navigation moves from bar to rail. Fewer breakpoints mean bigger shifts; design mobile first.",
+  "engineer": "Material 600/840/1200/1600dp width breakpoints (Tailwind's set for web-only), written as rem media queries; DTCG has no breakpoint type, so they sit in $extensions.opendesigner.",
+  "source": [
+   "research/L03-space-layout.md DC-L03-14",
+   "synthesis/OPENDESIGNER-SPEC.md 7.4"
+  ]
+ },
+ {
+  "id": "core.density",
+  "term": "density",
+  "aka": [
+   "compactness"
+  ],
+  "plain": "How tightly things are packed on the screen, from roomy to tight.",
+  "designer": "Dense layouts feel serious and focused and suit tables and dashboards; spacious ones feel calm and open. Density shrinks padding and row heights, never tap targets.",
+  "engineer": "A semantic-tier mode axis (semantic.density.compact|comfortable|spacious.tokens.json), separate from breakpoints and color; each step about 4px (Material -1 to -3). size.target.min stays fixed.",
+  "source": [
+   "research/L03-space-layout.md DC-L03-10",
+   "DC-L03-11",
+   "synthesis/OPENDESIGNER-SPEC.md 7.4"
+  ]
+ },
+ {
+  "id": "core.touch-target",
+  "term": "touch target",
+  "aka": [
+   "hit area",
+   "tap target"
+  ],
+  "plain": "The area you can tap to press a button, which can be bigger than what you see.",
+  "designer": "Minimum hit area: 24 by 24 CSS px on web (WCAG 2.2 AA), 44pt on Apple, 48dp on Android. Visuals may shrink with density; hit areas never do.",
+  "engineer": "size.target.min, fixed across density modes: 24 CSS px web, 44pt iOS, 48dp Android. Targets under 24x24 without a spacing exception fail lint.",
+  "source": [
+   "research/L03-space-layout.md DC-L03-12",
+   "research/L13-ux-laws-heuristics.md",
+   "synthesis/OPENDESIGNER-SPEC.md 6.3"
+  ]
+ }
+]

@@ -271,11 +271,15 @@
       "note": ""
     }
   },
+  "zoom": {},
+  "profile": {
+    "voice": "plain"
+  },
   "blocks": {},
   "references": {},
   "taste": {},
   "hashes": {
-    "DESIGN.md": "a86bda748aed997a",
+    "DESIGN.md": "f6101d9c819a860b",
     "PRODUCT.md": "70ad6e15a64216c5"
   },
   "exports": {

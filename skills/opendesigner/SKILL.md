@@ -4,7 +4,7 @@ description: Builds a design system with you, one decision at a time, with visua
 license: MIT
 compatibility: Python 3.10+ for scripts (standard library only, no network). Works in text-only hosts; visual steps use HTML templates when the host can show them.
 metadata:
-  version: "0.2.0"
+  version: "0.1.0"
   homepage: "https://github.com/ckryptickunal/OpenDesigner"
 ---
 
@@ -45,11 +45,11 @@ Use the files in `references/` for facts, not your memory. Use `scripts/engine.p
 4. If `opendesigner/state.json` has `profile.voice` set, lead with that voice.
 
 ## The flow: zoom, don't march (`references/zoom.md`)
-- **Level 0, sketch:** 5 questions, one per message: what you're making, who it's for, where it runs, how it should feel, and your brand color or logo. Then run `engine.py build` and show the complete first version.
+- **Level 0, sketch:** 5 questions, one per message: what you're making, who it's for, where it runs, how it should feel, and your brand color or logo. Then run `engine.py sketch ...` (see `zoom.md`), which records the answers and builds a complete first version. Show it.
 - **Level 1, broad:** one short screen per foundation (style, density, color use, text, corners, depth, motion, where files live).
 - **Level 2, defined, and level 3, detailed:** one area at a time, only if the person wants it.
 - **After every level,** make the offer: "Stop here, or zoom into X". Name at most 3 areas, with rough minutes from `pacing.json`. Stopping is fine at any level.
-- Record finished levels with `engine.py set zoom.<area> <level>` (`zoom.all` after levels 0 and 1).
+- The engine infers each area's zoom level from its decisions. When you finish zooming into an area, record it: `engine.py set zoom.color '"defined"'` (`sketch`, `broad`, `defined`, `detailed`).
 - Accessibility floors are set at level 0 and never skipped: WCAG 2.2 AA contrast, 24 px minimum targets, visible focus, reduced motion.
 
 ## How to talk (`references/rules.md`)
@@ -96,6 +96,7 @@ Questions nobody reached keep their default as `auto_default`, with no command n
 
 ```
 python3 <skill>/scripts/engine.py init [--name "Acme"]
+python3 <skill>/scripts/engine.py sketch --name "Acme" --audience regular --platforms web --feel friendly,minimal [--brand "#167874"]
 python3 <skill>/scripts/engine.py set <path> <json-value> --why "..." [--set-by delegated] [--lock]
 python3 <skill>/scripts/engine.py resolve                    current dials and derived values, for payloads
 python3 <skill>/scripts/engine.py generate                   opendesigner/tokens/ (DTCG 2025.10)
@@ -104,7 +105,7 @@ python3 <skill>/scripts/engine.py design-md                  DESIGN.md and PRODU
 python3 <skill>/scripts/engine.py export --format css|tailwind|figma|paper|swift|compose|dtcg|all
 python3 <skill>/scripts/engine.py preview [--open]           opendesigner/preview.html
 python3 <skill>/scripts/engine.py build                      all of the above, then validate
-python3 <skill>/scripts/engine.py review                     end-of-implementation check (below)
+python3 <skill>/scripts/engine.py review [--project src/]      end-of-implementation check: hard-coded values, stale DESIGN.md sections
 python3 <skill>/scripts/engine.py feedback "..." --kind gap|bug|confusing|idea
 ```
 Run `generate` and `validate` before showing results. Fix every error first; the report cites the rule it applied.

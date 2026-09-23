@@ -327,11 +327,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.598,
+              0.6067,
               0.0216,
               264.0
             ],
-            "hex": "#79808d"
+            "hex": "#7c8290"
           },
           "$description": "solid fill (peak chroma)"
         },
@@ -635,11 +635,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.608,
+              0.6244,
               0.1793,
               271.67
             ],
-            "hex": "#5e76ec"
+            "hex": "#637bf2"
           },
           "$description": "solid fill (peak chroma)"
         },
@@ -1006,11 +1006,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.5807,
-              0.1599,
+              0.5954,
+              0.164,
               150.0
             ],
-            "hex": "#009343"
+            "hex": "#009845"
           },
           "$description": "solid fill (peak chroma)",
           "$extensions": {
@@ -1018,12 +1018,12 @@
               "p3": {
                 "colorSpace": "display-p3",
                 "components": [
-                  0.2138,
-                  0.577,
-                  0.273
+                  0.2333,
+                  0.595,
+                  0.2898
                 ],
                 "oklch": [
-                  0.5807,
+                  0.5954,
                   0.1772,
                   150.0
                 ]
@@ -1726,11 +1726,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.6168,
+              0.6308,
               0.1615,
               27.0
             ],
-            "hex": "#d5564d"
+            "hex": "#da5b51"
           },
           "$description": "solid fill (peak chroma)"
         },
@@ -2199,11 +2199,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.5939,
-              0.136,
+              0.6085,
+              0.1394,
               240.0
             ],
-            "hex": "#0087c6"
+            "hex": "#008bcd"
           },
           "$description": "solid fill (peak chroma)",
           "$extensions": {
@@ -2212,12 +2212,12 @@
                 "colorSpace": "display-p3",
                 "components": [
                   0.0,
-                  0.5194,
-                  0.8358
+                  0.5371,
+                  0.8633
                 ],
                 "oklch": [
-                  0.5939,
-                  0.1777,
+                  0.6085,
+                  0.1821,
                   240.0
                 ]
               }
@@ -2539,12 +2539,12 @@
           "$value": {
             "colorSpace": "srgb",
             "components": [
-              0.8549,
-              0.9059,
+              0.8588,
+              0.902,
               1.0
             ],
-            "hex": "#dae7ff",
-            "alpha": 0.509
+            "hex": "#dbe6ff",
+            "alpha": 0.522
           },
           "$description": "Composites to neutral dark 9 over neutral dark 1."
         },

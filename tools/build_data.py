@@ -46,19 +46,21 @@ ZOOM_NAMES = {0: "sketch", 1: "broad", 2: "defined", 3: "detailed"}
 ZOOM0 = ["Q-scope-01", "Q-aud-01", "Q-plat-01", "Q-brand-01", "Q-color-01", "Q-brand-03"]  # Q-brand-03 rides with Q-color-01
 ZOOM1 = ["Q-dir-01", "Q-dir-02", "Q-color-02", "Q-type-01", "Q-shape-01", "Q-depth-01", "Q-motion-01", "Q-tool-01"]
 # Areas a person can zoom into; section = the DESIGN.md heading the engine renders for it.
-AREAS = [("overview", "The big picture", "Overview", ["S01", "S02", "S03", "S06"]),
+AREAS = [("overview", "The big picture", "Overview", ["S01", "S03", "S06"]),
+         ("accessibility", "Access for everyone", "Accessibility", ["S02"]),
          ("platforms", "Where it runs", "Platforms and Devices", ["S04"]),
-         ("themes", "Light and dark", "Modes and Themes", ["S07"]),
+         ("modes", "Light and dark", "Modes and Themes", ["S07"]),
          ("color", "Color", "Colors", ["S08", "S09"]),
-         ("type", "Text", "Typography", ["S10", "S11"]),
+         ("typography", "Text", "Typography", ["S10", "S11"]),
          ("layout", "Spacing and layout", "Layout", ["S12", "S13"]),
          ("shape", "Corners", "Shapes", ["S14"]),
-         ("depth", "Depth and shadows", "Elevation & Depth", ["S15"]),
+         ("elevation", "Depth and shadows", "Elevation & Depth", ["S15"]),
          ("motion", "Motion and sound", "Motion", ["S16"]),
-         ("imagery", "Icons and images", "Iconography and Imagery", ["S17", "S18"]),
-         ("voice", "Words", "Content and Voice", ["S19"]),
+         ("iconography", "Icons and images", "Iconography and Imagery", ["S17", "S18"]),
+         ("content", "Words", "Content and Voice", ["S19"]),
          ("components", "Components", "Components", ["S20", "S21", "S22", "S23"]),
          ("delivery", "Files, tools and team", "For Agents", ["S05", "S24", "S25", "S26", "S27"])]
+# Area ids match engine.py ZOOM_AREAS (R2), except "delivery", which the engine does not track [inferred].
 AREA_OF = {st: a[0] for a in AREAS for st in a[3]}
 SECONDS = {"high": 60, "medium": 30, "low": 15}  # rough time per question by weight [inferred]
 

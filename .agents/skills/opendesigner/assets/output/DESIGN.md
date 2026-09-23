@@ -1,60 +1,64 @@
 ---
-# DESIGN.md front matter (Google's open DESIGN.md format; DTCG tokens in opendesigner/tokens/ are canonical)
-name: {{name}}
-generated-by: OpenDesigner {{version}}
+# DESIGN.md front matter (Google's open DESIGN.md format). The DTCG tokens in opendesigner/tokens/ are canonical.
+# engine.py design-md renders this file after every confirmed decision. Text inside od:keep blocks survives.
+version: alpha
+name: "{{name}}"
+description: "{{one plain sentence about the product}}"
 colors:
-  primary: "{{accent.9}}"
+  primary: "{{accent}}"
   on-primary: "{{on-accent}}"
-  background: "{{neutral.1}}"
-  surface: "{{neutral.2}}"
-  text: "{{neutral.12}}"
-  text-muted: "{{neutral.11}}"
-  border: "{{neutral.6}}"
+  surface: "{{surface}}"
+  on-surface: "{{text}}"
 typography:
-  body: { fontFamily: "{{textFace}}", fontSize: "{{baseSize}}px", lineHeight: "{{bodyLineHeight}}px" }
-  heading: { fontFamily: "{{displayFace}}", fontWeight: {{headingWeight}} }
+  body-md: { fontFamily: "{{textFace}}", fontSize: {{baseSize}}px, lineHeight: {{lineHeight}}px }
 rounded:
-  control: "{{radius.control}}px"
-  container: "{{radius.container}}px"
+  control: {{radius.control}}px
+  container: {{radius.container}}px
 spacing:
-  unit: "{{spaceUnit}}px"
-  scale: [{{space.steps}}]
-components:
-  button-primary: { background: "{colors.primary}", color: "{colors.on-primary}", rounded: "{rounded.control}" }
+  unit: {{spaceUnit}}px
 ---
 
 # {{name}} design system
 
+<!-- One section per area. Each section opens with its zoom line. Each decision opens with one plain sentence
+and the short "Designers · Code" line; the full designer and engineer notes stay collapsed. -->
+
 ## Overview
-{{One paragraph: product, audience, the memorable thing, the chosen direction and its safe choices and risks.}}
+> Zoom: sketch (0 of 3). Say "zoom into the big picture" to set style, density and principles.
+<!-- od:zoom area=overview level=0 -->
+
+{{One plain paragraph: what the product is, who it is for, how it should feel, and the one thing people should remember.}}
 
 ## Colors
-{{Accent and neutral ramps, roles, where the brand color appears (Q-color-02), contrast target, dark mode.}}
+> Zoom: broad (1 of 3). Say "zoom into Colors" to define ramps, roles and contrast.
+<!-- od:zoom area=color level=1 -->
+
+**The brand color shows only on buttons and links.** It keeps the screen calm and makes actions easy to find.
+Designers: accent used sparingly · Code: `color.bg.action.primary`
+<details><summary>More</summary>
+
+- Designer: {{the designer voice for this decision}}
+- Engineer: {{token paths, CSS variables, contrast ratios}}
+- Decision: {{D-nnnn}}, set by {{chosen | delegated | ...}}, because {{reason}}
+</details>
 
 ## Typography
-{{Faces and their licences, base size, ratio, the scale table, line heights, numerals.}}
+> Zoom: sketch (0 of 3). Say "zoom into Text" to set sizes, weights and fonts.
+<!-- od:zoom area=type level=0 -->
 
 ## Layout
-{{Spacing unit and scale, density, breakpoints, containers, target sizes.}}
-
 ## Elevation & Depth
-{{The depth model and each level; how dark mode raises surfaces.}}
-
 ## Shapes
-{{Radius per role; nested radius rule; people stay round.}}
-
 ## Motion
-{{Duration ladder, easing, exits shorter than entrances, reduced-motion behavior.}}
-
 ## Components
-{{Base library, inventory, state rules (hover, focus, disabled, loading, error).}}
-
 ## Do's and Don'ts
-- Do use tokens by name; don't hard-code values.
-- {{Rules from the decisions, for example: one primary action per view.}}
+<!-- The engine fills the remaining sections in the same pattern: zoom line, marker, plain decisions, collapsed detail. -->
 
-## Assets
-{{Each designer hook with its status (have, commissioning, placeholder) and owner.}}
+## Open Items
+- Still defaults (zoom 0): {{areas}}
+- Assumed answers to confirm: {{question ids}}
+- Assets pending: {{hooks with owner}}
 
-## Decisions
-{{The highest-impact decisions with their D-numbers; full log in decisions.md.}}
+<!-- od:keep -->
+{{Anything the team writes here by hand is kept when the file is regenerated.}}
+<!-- /od:keep -->

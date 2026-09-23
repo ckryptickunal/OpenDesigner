@@ -61,7 +61,7 @@ Pick one, say "show me", or tell me what you want.
 | `confirmed_default` | The person accepted your recommended default | `--set-by confirmed_default` |
 | `auto_default` | Out of mode, or a Mechanical decision nobody looked at | nothing to run: the default stands; list it in the stage summary |
 | `delegated` | The person said "you decide" | `--set-by delegated --why "<your reason>"`; list it at the next gate and in the final summary |
-| `assumed` | Owner input you could not ask (Quick mode) | `--set-by assumed`; list it at the end for confirmation; never present it as decided |
+| `assumed` | Owner input you could not ask (the person stopped before zoom 2) | `--set-by assumed`; list it at the end for confirmation; never present it as decided |
 | `reference` | Accepted from a reference | `--set-by reference --source-ref <ref-id>` (opendesigner-extract) |
 | `asset` | Derived from an asset the person supplied (for example brand color from the logo) | `--set-by asset` |
 | locked | Must not change without explicit consent (brand hexes, accessibility floors, anything they lock) | `--lock` on the set, or `engine.py lock <path>` |

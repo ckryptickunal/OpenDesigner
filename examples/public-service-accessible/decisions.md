@@ -36,7 +36,7 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 - reason: constraints
 - previous value: []
 
-## D-0008 · principles = ["Start with user needs.", "Do less, but make it work for everyone.", "Plain over clever."]
+## D-0008 · principles = ["Plain words, one question at a time.", "It works for everyone, on any device, with any assistive technology.", "Nothing decorative: every element earns its place."]
 - set_by: chosen · locked: no · date: 2026-09-23 · supersedes: none · source_ref: none
 - reason: ranked principles
 - previous value: []

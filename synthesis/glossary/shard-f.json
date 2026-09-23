@@ -1,0 +1,740 @@
+[
+ {
+  "id": "use.cmd-init",
+  "term": "init (engine command)",
+  "plain": "Starts a new, blank design in your project, with safe first answers already filled in.",
+  "designer": "The first step of a session. It opens a system on sourced defaults, so every later choice is a change from a known starting point.",
+  "engineer": "engine.py init [--name \"Acme\"] [--from path] [--force] creates ./opendesigner/state.json from levers.json defaults and opens decisions.md with entry D-0001. Refuses to overwrite without --force.",
+  "example": "Type init once, then answer the first question.",
+  "see_also": [
+   "use.file-state",
+   "use.file-decisions"
+  ],
+  "source": [
+   "skills/opendesigner/scripts/engine.py (cmd_init)",
+   "skills/opendesigner/SKILL.md",
+   "synthesis/OPENDESIGNER-SPEC.md 7.1"
+  ]
+ },
+ {
+  "id": "use.cmd-set",
+  "term": "set (engine command)",
+  "plain": "Saves one choice and the reason you gave, so it is never lost or forgotten.",
+  "designer": "Records a single decision with its rationale. Later sessions see what was chosen and why, instead of guessing from the finished look.",
+  "engineer": "engine.py set <path> <json-value> --why \"reason\" [--set-by delegated] [--lock]. Writes state.json and appends a D-nnnn entry to decisions.md; locked paths need unlock or --force.",
+  "example": "Set the brand color to teal because it matches the logo.",
+  "see_also": [
+   "use.cmd-pick",
+   "use.file-decisions",
+   "use.od-line"
+  ],
+  "source": [
+   "skills/opendesigner/scripts/engine.py (cmd_set)",
+   "skills/opendesigner/SKILL.md",
+   "synthesis/OPENDESIGNER-SPEC.md 7.9"
+  ]
+ },
+ {
+  "id": "use.cmd-pick",
+  "term": "pick (engine command)",
+  "plain": "Saves your answer to one question in the chat, along with your reason.",
+  "designer": "The shortcut for answering an interview question by its id. One answer can also move linked dials, such as corner softness setting roundness.",
+  "engineer": "engine.py pick <Q-id> <option-value> --why \"reason\". Same as set on answers.<Q-id>; mapped answers also set dials or raw inputs (Q-shape-01 subtle sets dials.roundness to 40).",
+  "example": "Pick subtle corners for a busy work tool.",
+  "see_also": [
+   "use.cmd-set",
+   "use.question-id"
+  ],
+  "source": [
+   "skills/opendesigner/scripts/engine.py (answer_effects, main)",
+   "skills/opendesigner/SKILL.md"
+  ]
+ },
+ {
+  "id": "use.cmd-lock",
+  "term": "lock and unlock (engine commands)",
+  "aka": [
+   "freeze a decision"
+  ],
+  "plain": "Lock keeps a choice safe so no one changes it by mistake, and unlock lets it change again.",
+  "designer": "Protects decisions that must not drift, such as brand colors or accessibility floors. Unlocking needs the owner's clear consent, so later sessions cannot quietly restyle them.",
+  "engineer": "engine.py lock <path>, engine.py unlock <path>. Sets locked on the answer or dial record, or adds the path to state.json locks; set refuses locked paths without --force.",
+  "example": "Lock the brand teal so no one swaps it later.",
+  "see_also": [
+   "use.status-locked"
+  ],
+  "source": [
+   "skills/opendesigner/scripts/engine.py (cmd_lock, is_locked)",
+   "skills/opendesigner/references/rules.md section 5"
+  ]
+ },
+ {
+  "id": "use.cmd-resolve",
+  "term": "resolve (engine command)",
+  "plain": "Shows the exact numbers your choices lead to, like a recipe card for the whole look.",
+  "designer": "Shows the real dial positions and every value they lead to, such as type ratio or control radius, so the options you are shown use real numbers.",
+  "engineer": "engine.py resolve prints JSON: effective dials (explicit, then preset, coupling and macros, clamped 0-100), dialSources, macroConflicts, zoom and every derived param. Read-only; fills template payloads.",
+  "example": "Roundness 45 resolves to a real corner size in pixels.",
+  "see_also": [
+   "use.template"
+  ],
+  "source": [
+   "skills/opendesigner/scripts/engine.py (cmd_resolve, resolve_dials)",
+   "skills/opendesigner/SKILL.md"
+  ]
+ },
+ {
+  "id": "use.cmd-generate",
+  "term": "generate (engine command)",
+  "plain": "Turns your saved choices into the full list of colors, sizes and spacing your app will use.",
+  "designer": "Rebuilds every design value from your decisions, including light and dark, density and reduced motion. Run it after each step that changes values.",
+  "engineer": "engine.py generate writes opendesigner/tokens/: DTCG 2025.10 files per tier and mode (primitives, semantic.color.light and dark, density, motion) plus opendesigner.resolver.json and opendesigner.meta.json.",
+  "example": "Change the brand color, then generate to see new shades.",
+  "see_also": [
+   "use.file-tokens-folder",
+   "use.cmd-build"
+  ],
+  "source": [
+   "skills/opendesigner/scripts/engine.py (cmd_generate, generate_system)",
+   "synthesis/OPENDESIGNER-SPEC.md 7.4"
+  ]
+ },
+ {
+  "id": "use.cmd-validate",
+  "term": "validate (engine command)",
+  "plain": "Checks your design for problems, like text too faint to read or buttons too small to tap.",
+  "designer": "Runs the checks a careful reviewer would: text contrast, target sizes, naming and unused values. Fix every error before showing results; warnings are worth a look.",
+  "engineer": "engine.py validate [--json] checks contrast in every resolver permutation, 24px targets, DTCG structure and lint. Exits 1 on errors, 0 with warnings; findings cite their rule.",
+  "example": "Gray text on a gray card fails and must be fixed.",
+  "see_also": [
+   "use.validation-report",
+   "use.cmd-build"
+  ],
+  "source": [
+   "skills/opendesigner/scripts/engine.py (validate_dir, print_report)",
+   "skills/opendesigner/SKILL.md"
+  ]
+ },
+ {
+  "id": "use.cmd-export",
+  "term": "export (engine command)",
+  "plain": "Copies your design into the forms that websites, phone apps and design tools can read.",
+  "designer": "Hands the system to each place it lives: web styles, a Tailwind theme, Figma variables, Paper, iOS and Android code, all from one source.",
+  "engineer": "engine.py export --format css|tailwind|figma|paper|swift|compose|dtcg|all writes one subfolder per format in opendesigner/build/, for example css/tokens.css or swift/DesignTokens.swift.",
+  "example": "Export to Tailwind for the website and Swift for the iPhone app.",
+  "see_also": [
+   "use.file-build-folder"
+  ],
+  "source": [
+   "skills/opendesigner/scripts/engine.py (cmd_export)",
+   "synthesis/OPENDESIGNER-SPEC.md 7.5-7.7"
+  ]
+ },
+ {
+  "id": "use.cmd-design-md",
+  "term": "design-md (engine command)",
+  "plain": "Writes two short, easy pages: one about how your app looks, and one about what it is for.",
+  "designer": "Produces the readable guide to the system and a separate product brief. Hand-written notes survive only inside keep blocks; the rest is rebuilt from decisions.",
+  "engineer": "engine.py design-md [--out DIR] renders DESIGN.md and PRODUCT.md at the project root from state.json, tokens and decisions.md; only <!-- od:keep --> blocks survive regeneration.",
+  "example": "Run it after each choice so the guide stays current.",
+  "see_also": [
+   "use.designmd-front-matter",
+   "use.designmd-dos-donts",
+   "use.file-product"
+  ],
+  "source": [
+   "skills/opendesigner/scripts/engine.py (cmd_design_md)",
+   "synthesis/OPENDESIGNER-SPEC.md 7.2-7.3"
+  ]
+ },
+ {
+  "id": "use.cmd-preview",
+  "term": "preview (engine command)",
+  "plain": "Makes one web page that shows every color, size and shape in your design, with a few sample parts.",
+  "designer": "Builds a single specimen page of every value and a few components, light and dark side by side, so you can judge the system by eye.",
+  "engineer": "engine.py preview [--open] writes opendesigner/preview.html, a self-contained specimen of every token and a few components in light and dark; --open launches it in the browser.",
+  "example": "Open the preview to see buttons and cards in both modes.",
+  "see_also": [
+   "use.file-preview"
+  ],
+  "source": [
+   "skills/opendesigner/scripts/engine.py (cmd_preview, render_preview)",
+   "skills/opendesigner/SKILL.md"
+  ]
+ },
+ {
+  "id": "use.cmd-intake",
+  "term": "intake (engine command)",
+  "plain": "Looks at the sizes in a site or file you like and turns them into first ideas for your design.",
+  "designer": "Turns what was measured on a reference, like its corner radii or type sizes, into proposed dial positions. Nothing changes until you accept. Competitor references propose nothing.",
+  "engineer": "engine.py intake <measurements.json> [--accept] [--json] fits reference measurements to proposed dials and raw inputs with confidence levels; --accept records each as set --set-by reference --source-ref <ref-id>.",
+  "example": "A site with round buttons suggests a high roundness dial.",
+  "see_also": [
+   "use.status-reference"
+  ],
+  "source": [
+   "skills/opendesigner/scripts/engine.py (cmd_intake, fit_reference)",
+   "synthesis/OPENDESIGNER-SPEC.md section 5"
+  ]
+ },
+ {
+  "id": "use.cmd-build",
+  "term": "build (engine command)",
+  "plain": "Does every making step in one go, then checks the result for problems.",
+  "designer": "The one command to run at the end of a step or session. It rebuilds values, exports, guides and preview, then reports any problems.",
+  "engineer": "engine.py build runs generate, export --format all, design-md and preview, then validate; it exits 1 if validation finds errors.",
+  "example": "Run build before you show the result to your team.",
+  "see_also": [
+   "use.cmd-generate",
+   "use.cmd-export",
+   "use.cmd-design-md",
+   "use.cmd-preview",
+   "use.cmd-validate"
+  ],
+  "source": [
+   "skills/opendesigner/scripts/engine.py (cmd_build)",
+   "skills/opendesigner/SKILL.md"
+  ]
+ },
+ {
+  "id": "use.cmd-feedback",
+  "term": "feedback (engine command)",
+  "plain": "Notes a problem or idea about this tool, so you can send it to the people who make it.",
+  "designer": "Captures gaps, bugs, confusing steps and ideas while you work, ready to send to the project as an issue. Nothing is posted unless you say yes.",
+  "engineer": "engine.py feedback \"text\" --kind gap|bug|confusing|idea (default idea) appends an F-nnn entry to opendesigner/feedback.md and prints a pre-filled GitHub issue link. Nothing is posted.",
+  "example": "A question you had to ask twice becomes a confusing note.",
+  "see_also": [
+   "use.file-feedback"
+  ],
+  "source": [
+   "skills/opendesigner/scripts/engine.py (cmd_feedback)",
+   "skills/opendesigner/references/improve.md",
+   "_coordination/lanes/U-lanes.md U3"
+  ]
+ },
+ {
+  "id": "use.file-state",
+  "term": "state.json",
+  "plain": "The one file that holds all your answers and settings; everything else is made from it.",
+  "designer": "The single record of every answer, dial position, brand input and asset status. Change the system by changing a decision here through the engine, never by editing outputs.",
+  "engineer": "opendesigner/state.json (schema opendesigner-state/1): answers {Q-id: {value, set_by, locked, decision}}, dials 0-100, raw inputs, overrides, hooks, locks, zoom, hashes. Tokens and views generate from it.",
+  "example": "Your brand color and corner choice both live here.",
+  "see_also": [
+   "use.cmd-init",
+   "use.file-decisions"
+  ],
+  "source": [
+   "skills/opendesigner/scripts/engine.py (default_state)",
+   "skills/opendesigner/assets/output/state.json",
+   "synthesis/OPENDESIGNER-SPEC.md 7.10"
+  ]
+ },
+ {
+  "id": "use.file-decisions",
+  "term": "decisions.md",
+  "aka": [
+   "decision log"
+  ],
+  "plain": "A diary of every choice made, with how it was made, when and why.",
+  "designer": "The running history of the system: each decision with its reason, how it was set and whether it is locked. Teammates read it to learn why.",
+  "engineer": "opendesigner/decisions.md is append-only, ADR-style. Each set, pick, lock and init adds a D-nnnn entry: path = value, set_by, locked, date, supersedes, source_ref and reason.",
+  "example": "D-0002: corners set to subtle because it is a dense tool.",
+  "see_also": [
+   "use.status-supersedes",
+   "use.cmd-set"
+  ],
+  "source": [
+   "skills/opendesigner/scripts/engine.py (log_decision)",
+   "skills/opendesigner/assets/output/decisions.md",
+   "synthesis/OPENDESIGNER-SPEC.md 7.9"
+  ]
+ },
+ {
+  "id": "use.file-product",
+  "term": "PRODUCT.md",
+  "plain": "A short page about your product: who it is for, what it does and where it runs.",
+  "designer": "The product brief kept apart from the visual system: audience, surfaces, the memorable thing, ranked principles, constraints and scope. It changes at a different pace than the look.",
+  "engineer": "PRODUCT.md at the project root, rendered by engine.py design-md from state.json context. Headings: Product, Audience, Surfaces, Memorable Thing, Principles, Constraints, Scope, Team and Governance.",
+  "example": "An invoicing app for small shop owners, on web and iPhone.",
+  "see_also": [
+   "use.cmd-design-md"
+  ],
+  "source": [
+   "skills/opendesigner/scripts/engine.py (render_product_md)",
+   "synthesis/OPENDESIGNER-SPEC.md 7.3"
+  ]
+ },
+ {
+  "id": "use.file-rationale",
+  "term": "RATIONALE.md",
+  "plain": "A one-page note that tells your team, in plain words, why the design looks the way it does.",
+  "designer": "A one-page case for teammates who will not read the log: the five choices that shape everything, what the rules guarantee, and what is still open.",
+  "engineer": "opendesigner/RATIONALE.md, written by the model (not the engine) from decisions.md using assets/output/RATIONALE.md; refreshed after each extend session; ids only in footnotes.",
+  "example": "We chose soft corners because the app is for families.",
+  "see_also": [
+   "use.file-decisions"
+  ],
+  "source": [
+   "skills/opendesigner/assets/output/RATIONALE.md",
+   "skills/opendesigner/SKILL.md (Finish)",
+   "synthesis/OPENDESIGNER-SPEC.md 7.11"
+  ]
+ },
+ {
+  "id": "use.file-agents-snippet",
+  "term": "AGENTS.md snippet",
+  "aka": [
+   "agent pointer"
+  ],
+  "plain": "A short note, added only if you say yes, that tells new AI helpers to read your design rules first.",
+  "designer": "Keeps later AI sessions on-system: they read the design guide and values before touching UI, stop hard-coding values, and ask before changing locked decisions.",
+  "engineer": "assets/output/AGENTS-snippet.md, appended to AGENTS.md or CLAUDE.md after asking: read DESIGN.md, PRODUCT.md and tokens first, never hard-code values, run engine.py review after implementation.",
+  "example": "A new AI session reads it before styling a page.",
+  "see_also": [
+   "use.cmd-design-md",
+   "use.status-locked"
+  ],
+  "source": [
+   "skills/opendesigner/assets/output/AGENTS-snippet.md",
+   "skills/opendesigner/SKILL.md (Finish)",
+   "synthesis/OPENDESIGNER-SPEC.md 7.12"
+  ]
+ },
+ {
+  "id": "use.file-tokens-folder",
+  "term": "tokens folder",
+  "plain": "The folder that holds the main list of every color, size and timing in your design.",
+  "designer": "The source of truth for every design value. Figma, CSS and app code are copies made from it, so a change here reaches all of them.",
+  "engineer": "opendesigner/tokens/: canonical DTCG 2025.10 files, one per tier and mode (primitives.tokens.json, semantic.color.dark.tokens.json), plus opendesigner.resolver.json. Written by generate; never hand-edited.",
+  "example": "The dark mode colors sit in their own file here.",
+  "see_also": [
+   "use.cmd-generate",
+   "use.file-build-folder"
+  ],
+  "source": [
+   "skills/opendesigner/scripts/engine.py (cmd_generate)",
+   "synthesis/OPENDESIGNER-SPEC.md 7.4"
+  ]
+ },
+ {
+  "id": "use.file-build-folder",
+  "term": "build folder",
+  "plain": "The folder with ready copies of your design for web pages, phone apps and design tools.",
+  "designer": "Where the exports land, one per tool the team uses: web styles, Tailwind theme, Figma import files, Paper, iOS and Android. Rebuilt, never edited by hand.",
+  "engineer": "opendesigner/build/, written by engine.py export: css/tokens.css, tailwind/theme.css, figma/variables.json, paper/, swift/DesignTokens.swift, compose/DesignTokens.kt, dtcg/<name>.resolver.json.",
+  "example": "Your web app imports the file in css.",
+  "see_also": [
+   "use.cmd-export",
+   "use.file-tokens-folder"
+  ],
+  "source": [
+   "skills/opendesigner/scripts/engine.py (cmd_export)",
+   "synthesis/OPENDESIGNER-SPEC.md 7.1, 7.5"
+  ]
+ },
+ {
+  "id": "use.file-preview",
+  "term": "preview page",
+  "aka": [
+   "specimen page"
+  ],
+  "plain": "A single web page that lets you see your whole design at once, in light and dark.",
+  "designer": "A specimen sheet for judging the system as a whole: colors, type, spacing, corners, depth and sample components, light and dark side by side.",
+  "engineer": "opendesigner/preview.html, written by engine.py preview or build: one self-contained HTML file that uses the generated CSS variables to show every token and a few components.",
+  "example": "Open it in any browser, with no setup.",
+  "see_also": [
+   "use.cmd-preview"
+  ],
+  "source": [
+   "skills/opendesigner/scripts/engine.py (render_preview)",
+   "synthesis/OPENDESIGNER-SPEC.md 7.1"
+  ]
+ },
+ {
+  "id": "use.file-feedback",
+  "term": "feedback file",
+  "plain": "A list of problems and ideas you found while using this tool, kept so you can send them in later.",
+  "designer": "A running list of gaps, bugs, confusing steps and ideas noticed during a session, kept on your machine until you choose to send them to the project.",
+  "engineer": "opendesigner/feedback.md, appended by engine.py feedback: one F-nnn entry per note with date, kind and a pre-filled issue link. Stays local; the person submits the issue.",
+  "example": "F-001: no question about chart colors in dark mode.",
+  "see_also": [
+   "use.cmd-feedback"
+  ],
+  "source": [
+   "skills/opendesigner/scripts/engine.py (cmd_feedback)",
+   "skills/opendesigner/references/improve.md"
+  ]
+ },
+ {
+  "id": "use.designmd-front-matter",
+  "term": "DESIGN.md front matter",
+  "plain": "A short block of settings at the top of the design guide, set out so a computer can read it.",
+  "designer": "The machine-readable header of the design guide: main colors, type styles, corner radii, spacing and key components, so other AI tools pick up the look quickly.",
+  "engineer": "YAML front matter in DESIGN.md using only Google's DESIGN.md keys (version, name, description, colors, typography, rounded, spacing, components), filled from default-mode semantic tokens. DTCG files stay canonical.",
+  "example": "primary: the main brand color as a hex value.",
+  "see_also": [
+   "use.cmd-design-md",
+   "use.file-tokens-folder"
+  ],
+  "source": [
+   "skills/opendesigner/assets/output/DESIGN.md",
+   "synthesis/OPENDESIGNER-SPEC.md 7.2"
+  ]
+ },
+ {
+  "id": "use.designmd-dos-donts",
+  "term": "Do's and Don'ts",
+  "plain": "A list in the design guide of what to do and what to avoid, for people and AI helpers.",
+  "designer": "The guide's rules in plain sentences: what the system guarantees, the do's (one primary action per view) and don'ts (never shrink hit areas), plus any waivers.",
+  "engineer": "Section 8 of DESIGN.md (## Do's and Don'ts), written by design-md: rules enforced by construction, Do and Don't bullets, current validation findings and waivers with reasons.",
+  "example": "Don't use motion as the only signal.",
+  "see_also": [
+   "use.cmd-design-md",
+   "use.validation-report"
+  ],
+  "source": [
+   "skills/opendesigner/scripts/engine.py (render_design_md)",
+   "synthesis/OPENDESIGNER-SPEC.md 7.2"
+  ]
+ },
+ {
+  "id": "use.status-chosen",
+  "term": "chosen (decision status)",
+  "plain": "Means you picked this answer yourself.",
+  "designer": "The strongest status: the owner made this call. Treat it as intent, and raise any concern as a question rather than changing it.",
+  "engineer": "set_by: chosen, the default for engine.py set and pick when --set-by is omitted. Stored on the answer or dial record and in its decisions.md entry.",
+  "example": "You typed teal, so teal is chosen.",
+  "see_also": [
+   "use.status-confirmed-default",
+   "use.status-delegated"
+  ],
+  "source": [
+   "skills/opendesigner/scripts/engine.py (SET_BY)",
+   "skills/opendesigner/references/rules.md section 5"
+  ]
+ },
+ {
+  "id": "use.status-confirmed-default",
+  "term": "confirmed default (decision status)",
+  "plain": "We gave you a suggested answer and you said yes to it.",
+  "designer": "The owner saw the recommended default and accepted it. It counts as decided, but tells reviewers the idea came from the recommendation.",
+  "engineer": "set_by: confirmed_default, recorded with engine.py set <path> <value> --set-by confirmed_default. A leading \"default:\" in --why is read as this status too.",
+  "example": "The suggestion was 16px text, and you said fine.",
+  "see_also": [
+   "use.recommendation",
+   "use.status-chosen"
+  ],
+  "source": [
+   "skills/opendesigner/scripts/engine.py (SET_BY, SET_BY_ALIASES)",
+   "skills/opendesigner/references/rules.md section 5"
+  ]
+ },
+ {
+  "id": "use.status-auto-default",
+  "term": "auto default (decision status)",
+  "plain": "A safe answer left in place for you, because no one got to that question.",
+  "designer": "A sourced default that stands because the question was never reached, or had one right answer. It goes in the stage summary so someone can revisit it.",
+  "engineer": "set_by: auto_default. Unreached or mechanical questions need no command; the levers.json default stands. init logs D-0001 this way; logged ones appear in DESIGN.md Open Items.",
+  "example": "You stopped early, so the icon size kept its default.",
+  "see_also": [
+   "use.status-confirmed-default",
+   "use.status-assumed"
+  ],
+  "source": [
+   "skills/opendesigner/scripts/engine.py (cmd_init, render_design_md)",
+   "skills/opendesigner/SKILL.md",
+   "skills/opendesigner/references/rules.md section 5"
+  ]
+ },
+ {
+  "id": "use.status-assumed",
+  "term": "assumed (decision status)",
+  "plain": "A guess put in so the work can go on, marked for you to check later.",
+  "designer": "A stand-in answer for something only the owner knows, like audience or brand facts. It keeps work moving but must be confirmed and never shown as decided.",
+  "engineer": "set_by: assumed, via --set-by assumed (a leading \"pending:\" in --why maps here too). DESIGN.md Open Items and the final summary list every assumed path for confirmation.",
+  "example": "Audience set to office workers until you confirm.",
+  "see_also": [
+   "use.status-auto-default",
+   "use.status-delegated"
+  ],
+  "source": [
+   "skills/opendesigner/scripts/engine.py (SET_BY_ALIASES, render_design_md)",
+   "skills/opendesigner/references/rules.md sections 5 and 7"
+  ]
+ },
+ {
+  "id": "use.status-delegated",
+  "term": "delegated (decision status)",
+  "plain": "You said \"you decide\", so the AI made this choice for you.",
+  "designer": "The owner handed this call to the model. It still carries a reason, and it is listed at the next approval gate so the owner can review it.",
+  "engineer": "set_by: delegated, via engine.py set <path> <value> --set-by delegated --why \"<model's reason>\". Listed at the next gate and in DESIGN.md Open Items.",
+  "example": "You said pick any motion, so the AI chose calm motion.",
+  "see_also": [
+   "use.status-chosen",
+   "use.status-assumed"
+  ],
+  "source": [
+   "skills/opendesigner/scripts/engine.py (SET_BY)",
+   "skills/opendesigner/references/rules.md sections 5 and 7"
+  ]
+ },
+ {
+  "id": "use.status-reference",
+  "term": "from reference (decision status)",
+  "plain": "Taken from a site or file you shared as an example you like.",
+  "designer": "The value came from a reference you shared, measured for structure and quality only. Identity, such as logos, exact brand hues or typefaces, is never copied.",
+  "engineer": "set_by: reference, with --source-ref <ref-id>; written by engine.py intake --accept or set --set-by reference. The ref id points into state.json references.",
+  "example": "Tight spacing taken from a site you admire.",
+  "see_also": [
+   "use.cmd-intake"
+  ],
+  "source": [
+   "skills/opendesigner/scripts/engine.py (cmd_intake, SET_BY)",
+   "skills/opendesigner/references/rules.md section 5"
+  ]
+ },
+ {
+  "id": "use.status-locked",
+  "term": "locked decision",
+  "plain": "A choice kept safe, so no one can change it without asking and unlocking it first.",
+  "designer": "Use it for what must not drift: brand hexes, accessibility floors, anything the owner fixes. Later sessions have to ask before touching it.",
+  "engineer": "A path with locked: true on its answer or dial record, or listed in state.json locks. engine.py set refuses it until it is unlocked, or --force with consent.",
+  "example": "The logo color is locked, so a new page cannot change it.",
+  "see_also": [
+   "use.cmd-lock"
+  ],
+  "source": [
+   "skills/opendesigner/scripts/engine.py (is_locked, cmd_set)",
+   "skills/opendesigner/references/rules.md section 5"
+  ]
+ },
+ {
+  "id": "use.status-supersedes",
+  "term": "superseded decision",
+  "plain": "An old choice that a newer one replaced, with both kept in the diary so you can see the change.",
+  "designer": "Nothing in the history is erased. When a decision changes, the old entry stays and the new one points back to it, so you can trace how the system grew.",
+  "engineer": "decisions.md is append-only: a later entry for the same path supersedes the earlier one and records supersedes: D-nnnn. The newest entry per path is the effective value.",
+  "example": "D-0009 replaces D-0002 when corners go from subtle to soft.",
+  "see_also": [
+   "use.file-decisions"
+  ],
+  "source": [
+   "skills/opendesigner/scripts/engine.py (log_decision, DECISIONS_HEADER)",
+   "synthesis/OPENDESIGNER-SPEC.md 7.9"
+  ]
+ },
+ {
+  "id": "use.od-line",
+  "term": "OD line",
+  "aka": [
+   "copy-back line"
+  ],
+  "plain": "A short line of text that stands for one choice, which you paste back into the chat.",
+  "designer": "The one format every click and reply turns into, so a choice made in a visual picker lands in the record exactly, with an optional reason and lock.",
+  "engineer": "A line starting OD: (set, lock, unlock, accept, ignore, remix), such as OD:set Q-shape-01=\"subtle\" --why \"dense tool\", applied with engine.py set or lock.",
+  "example": "OD:set dials.roundness=45 means a bit softer corners.",
+  "see_also": [
+   "use.copy-my-choice",
+   "use.cmd-set"
+  ],
+  "source": [
+   "skills/opendesigner/references/rules.md section 9",
+   "skills/opendesigner/SKILL.md",
+   "skills/opendesigner/assets/templates/radius.html"
+  ]
+ },
+ {
+  "id": "use.question-id",
+  "term": "question id",
+  "plain": "A short name tag for each question, so you can go back and change that answer any time.",
+  "designer": "The stable handle for a question across sessions. Say \"change Q-shape-01\" and any later session finds the same decision, its history and what it affects.",
+  "engineer": "Format Q-<area>-<nn>, such as Q-shape-01, listed in questions.json. engine.py set turns a bare Q-id into answers.<Q-id>; decisions.md entries carry it.",
+  "example": "Q-color-01 is the question about your brand color.",
+  "see_also": [
+   "use.cmd-pick",
+   "use.interview"
+  ],
+  "source": [
+   "skills/opendesigner/scripts/engine.py (normalize_path)",
+   "skills/opendesigner/references/questions.json",
+   "skills/opendesigner/references/rules.md section 4"
+  ]
+ },
+ {
+  "id": "use.time-weight",
+  "term": "time weight",
+  "aka": [
+   "question weight"
+  ],
+  "plain": "How much care a question gets: big choices get more time, and small ones get a quick yes.",
+  "designer": "Tells the model where to slow down. High-weight questions shape many others, so they get real options and a line on what else changes; low-weight ones get a quick default.",
+  "engineer": "The weight field (high, medium, low) in questions.json: high means fan-out 5+ or a Quick question, medium fan-out 2-4 or owner inputs, low otherwise, per pacing.json.",
+  "example": "Brand personality is high weight; icon stroke is low.",
+  "see_also": [
+   "use.interview",
+   "use.recommendation"
+  ],
+  "source": [
+   "skills/opendesigner/references/pacing.json (time_weight_rule)",
+   "skills/opendesigner/references/questions.json",
+   "skills/opendesigner/references/rules.md section 4"
+  ]
+ },
+ {
+  "id": "use.zoom-broad",
+  "term": "broad level",
+  "aka": [
+   "zoom level 1"
+  ],
+  "plain": "The second step of detail, with one quick screen for each main part of your design.",
+  "designer": "Zoom level 1: one short screen per foundation (style, density, color use, text, corners, depth, motion, where files live). About 8 questions and 8 minutes.",
+  "engineer": "Zoom level 1, the eight questions in questions.json zoom1. Stored as state.json zoom.<area> = \"broad\", or inferred from 1-2 decisions in the area.",
+  "example": "One screen picks corners, the next picks depth.",
+  "see_also": [
+   "use.zoom-defined",
+   "use.zoom-detailed",
+   "use.interview"
+  ],
+  "source": [
+   "skills/opendesigner/references/zoom.md",
+   "skills/opendesigner/scripts/engine.py (zoom_levels)",
+   "_coordination/lanes/U-lanes.md U2"
+  ]
+ },
+ {
+  "id": "use.zoom-defined",
+  "term": "defined level",
+  "aka": [
+   "zoom level 2"
+  ],
+  "plain": "The third step of detail: you pick one part, like color, and set it with real numbers.",
+  "designer": "Zoom level 2: one area at a time, such as color ramps, roles and contrast, with real values. Take only the areas that matter for your product.",
+  "engineer": "Zoom level 2: an area's level-2 questions in stage order, then engine.py generate. Stored as zoom.<area> = \"defined\", or inferred from 3-5 decisions in that area.",
+  "example": "Zoom into color to set exact shades and contrast.",
+  "see_also": [
+   "use.zoom-broad",
+   "use.zoom-detailed"
+  ],
+  "source": [
+   "skills/opendesigner/references/zoom.md",
+   "skills/opendesigner/scripts/engine.py (zoom_levels)",
+   "_coordination/lanes/U-lanes.md U2"
+  ]
+ },
+ {
+  "id": "use.zoom-detailed",
+  "term": "detailed level",
+  "aka": [
+   "zoom level 3"
+  ],
+  "plain": "The deepest step, where every small part and button is worked out in full.",
+  "designer": "Zoom level 3: the fine print of each area plus blocks, components and patterns, built from the system's values rather than from scratch.",
+  "engineer": "Zoom level 3: questions tagged zoom 3, from stages/NN-*.detailed.md. Stored as zoom.<area> = \"detailed\", or inferred from 6 or more decisions or any override in that area.",
+  "example": "Every button state, such as hover and disabled, is set.",
+  "see_also": [
+   "use.zoom-broad",
+   "use.zoom-defined"
+  ],
+  "source": [
+   "skills/opendesigner/references/zoom.md",
+   "skills/opendesigner/scripts/engine.py (zoom_levels)",
+   "_coordination/lanes/U-lanes.md U2"
+  ]
+ },
+ {
+  "id": "use.hook-status",
+  "term": "hook status",
+  "plain": "Shows where art like your logo stands: you have it, someone is making it, or it is not needed.",
+  "designer": "Tracks assets only a person should create, such as logo, icons or photos: have, commissioning a designer, open library, a named tool, placeholder, or not needed.",
+  "engineer": "hooks.<H-id>.status in state.json: pending (until asked), have, commissioning, tool, open-library, placeholder or not-needed. Set with engine.py set hooks.H-logo.status '\"have\"'; other values are rejected.",
+  "example": "Logo: commissioning, since a designer is drawing it.",
+  "see_also": [
+   "use.file-state"
+  ],
+  "source": [
+   "skills/opendesigner/scripts/engine.py (HOOK_STATUSES)",
+   "skills/opendesigner/references/hooks.md"
+  ]
+ },
+ {
+  "id": "use.template",
+  "term": "visual template",
+  "plain": "A small web page that shows each option as a real sample, so you can see it before you pick.",
+  "designer": "Show, then ask: a live sample of each option on real components (palette, type scale, spacing ruler, radius, elevation, motion, component sheet, option gallery) instead of a description.",
+  "engineer": "One of eight self-contained HTML files in assets/templates/, fed a JSON payload in its od-data script and filled from engine.py resolve; show.py opens a local copy.",
+  "example": "The radius page shows buttons with four corner sizes.",
+  "see_also": [
+   "use.copy-my-choice",
+   "use.cmd-resolve"
+  ],
+  "source": [
+   "skills/opendesigner/assets/templates/",
+   "skills/opendesigner/SKILL.md (Show, then ask)"
+  ]
+ },
+ {
+  "id": "use.copy-my-choice",
+  "term": "Copy my choice button",
+  "plain": "A button that copies your picks as short lines of text, ready to paste back into the chat.",
+  "designer": "Closes the loop between looking and deciding: your pick, an optional note and a lock box become text the model applies exactly, with no retyping.",
+  "engineer": "The #copy button in every template writes OD: lines to the clipboard (navigator.clipboard, execCommand fallback); the note field adds --why and the lock checkbox adds OD:lock lines.",
+  "example": "Pick soft corners, press the button, paste in chat.",
+  "see_also": [
+   "use.od-line",
+   "use.template"
+  ],
+  "source": [
+   "skills/opendesigner/assets/templates/radius.html",
+   "skills/opendesigner/SKILL.md"
+  ]
+ },
+ {
+  "id": "use.validation-report",
+  "term": "validation report",
+  "plain": "The list of problems the checker found: ones you must fix and ones worth a look, each with its rule.",
+  "designer": "Tells you what blocks shipping (errors, like text contrast under 4.5:1 or targets under 24px) and what needs judgment (warnings), each citing its rule and source.",
+  "engineer": "Printed by validate or build, or JSON with --json: items with severity (error, warn, info), category, rule, where, measured, threshold, evidence and fix; plus lowest ratios and a summary.",
+  "example": "Error: body text on gray is 3.9 to 1, below 4.5.",
+  "see_also": [
+   "use.cmd-validate"
+  ],
+  "source": [
+   "skills/opendesigner/scripts/engine.py (Report, print_report)",
+   "skills/opendesigner/assets/output/RATIONALE.md"
+  ]
+ },
+ {
+  "id": "use.recommendation",
+  "term": "recommendation",
+  "plain": "The answer the AI suggests, with a reason, and it only counts once you say yes.",
+  "designer": "Every question comes with one suggested option and a short reason tied to your answers, with sources on request. Accepting it records a confirmed default, not your own choice.",
+  "engineer": "Listed first among 2 to 4 options on the question card, with its reason in brackets. Accepting records --set-by confirmed_default; a recommendation is never logged as chosen.",
+  "example": "Subtle corners, because your app is a busy work tool.",
+  "see_also": [
+   "use.status-confirmed-default",
+   "use.interview"
+  ],
+  "source": [
+   "skills/opendesigner/references/rules.md sections 3-5",
+   "skills/opendesigner/SKILL.md"
+  ]
+ },
+ {
+  "id": "use.interview",
+  "term": "interview",
+  "plain": "The step-by-step chat where the AI asks you one big question at a time and saves your answers.",
+  "designer": "A guided conversation that starts with a quick sketch of the whole system, then zooms into the areas you care about, one high-impact question per turn.",
+  "engineer": "Run by the opendesigner skill: questions from references/stages/, metadata in questions.json, pacing in pacing.json; each answer goes through engine.py pick or set into state.json.",
+  "example": "First question: what are you making?",
+  "see_also": [
+   "use.question-id",
+   "use.recommendation",
+   "use.zoom-broad"
+  ],
+  "source": [
+   "skills/opendesigner/SKILL.md",
+   "skills/opendesigner/references/zoom.md",
+   "skills/opendesigner/references/rules.md"
+  ]
+ }
+]

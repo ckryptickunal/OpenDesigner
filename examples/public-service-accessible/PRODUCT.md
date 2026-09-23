@@ -21,9 +21,9 @@ Nothing to learn: one question per page.
 
 ## Principles
 
-1. Start with user needs.
-2. Do less, but make it work for everyone.
-3. Plain over clever.
+1. Plain words, one question at a time.
+2. It works for everyone, on any device, with any assistive technology.
+3. Nothing decorative: every element earns its place.
 
 Tie-break: the higher-ranked principle wins.
 

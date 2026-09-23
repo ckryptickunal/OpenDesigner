@@ -144,6 +144,9 @@ components:
 
 ## Overview
 
+<!-- od:zoom area=overview level=2 -->
+> Zoom: defined (2 of 3), 4 decisions in this area. Zoom in next with Q-brand-01, Q-dir-01.
+
 **Intent.** A plain, high-contrast system for a fictional city benefits service: AAA text, generous targets, no motion.
 
 - Audience: Everyone, including people with low vision, low literacy, old devices and assistive technology.
@@ -153,9 +156,9 @@ components:
 - Direction: no named preset
 
 **Principles (ranked).**
-1. Start with user needs.
-2. Do less, but make it work for everyone.
-3. Plain over clever.
+1. Plain words, one question at a time.
+2. It works for everyone, on any device, with any assistive technology.
+3. Nothing decorative: every element earns its place.
 
 **Dial positions.** Three posture dials set the overall stance; five character dials tune it.
 
@@ -168,11 +171,31 @@ components:
 - **Colorfulness 35/100** (monochrome to vivid: leaning monochrome): scheme neutral, accent chroma 22.0 (HCT), 1 accent(s), surfaces: neutral+one-accent.
 - **Warmth 45/100** (cool/formal to warm/friendly: balanced): neutral tint chroma 0.005 at hue 264, borders: default, sentence-case, contractions allowed.
 
+**Zoom by area** (sketch, broad, defined, detailed; stop at any level, each one works):
+
+| Area | Zoom | Next questions |
+|---|---|---|
+| Colors | detailed | - |
+| Typography | broad | Q-type-01, Q-type-08 |
+| Layout | defined | Q-space-01, Q-layout-01 |
+| Elevation & Depth | broad | Q-depth-01 |
+| Shapes | broad | Q-shape-01 |
+| Components | sketch | Q-comp-01, Q-state-01 |
+| Motion | broad | Q-motion-02 |
+| Modes and Themes | broad | Q-theme-02 |
+| Iconography and Imagery | defined | Q-icon-01, Q-img-01 |
+| Content and Voice | broad | Q-voice-01 |
+| Accessibility | defined | Q-color-24, Q-aud-02 |
+| Platforms and Devices | broad | Q-plat-05 |
+
 Tokens in `tokens/` (DTCG 2025.10 with `opendesigner.resolver.json`) are canonical; this file is a generated view.
 
 Decisions: D-0009 (answers.Q-aud-01), D-0014 (dials.expression), D-0015 (dials.brandPresence), D-0016 (dials.density).
 
 ## Colors
+
+<!-- od:zoom area=color level=3 -->
+> Zoom: detailed (3 of 3), 6 decisions in this area.
 
 **Intent.** Brand color `#075c63` drives the accent ramp's hue; the Colorfulness dial (35) sets its chroma (scheme neutral, peak HCT chroma 31.47). The brand's role is **reserved-accent** and it sits closest to accent step 9. The brand hex is kept exactly at step 9 (brand must be exact).
 
@@ -279,6 +302,9 @@ Decisions: D-0011 (answers.Q-theme-01), D-0019 (dials.colorfulness), D-0020 (dia
 
 ## Typography
 
+<!-- od:zoom area=typography level=1 -->
+> Zoom: broad (1 of 3), 1 decision in this area. Zoom in next with Q-type-01, Q-type-08.
+
 **Intent.** Body text is 19px; sizes follow `round(19 x 1.2^n)` for n from -2 to 5, reaching about 2.5x body (product surfaces only). Sizes: 13, 16, 19, 23, 27, 33, 39, 47px.
 
 - Text face: Atkinson Hyperlegible, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif. Licence status (hook H-type): **open-library**.
@@ -312,6 +338,9 @@ Decisions: D-0024 (raw.textFace).
 
 ## Layout
 
+<!-- od:zoom area=layout level=2 -->
+> Zoom: defined (2 of 3), 4 decisions in this area. Zoom in next with Q-space-01, Q-layout-01.
+
 **Intent.** Everything sits on a 5px unit: ladder 0, 5, 10, 15, 20, 25, 30, 40, 50, 60, 80, 100, 120. Density is a mode on the semantic layer (default **spacious**); primitives and hit-area minimums never change.
 
 | Density | inset xs/sm/md/lg/xl | section sm/md/lg | control sm/md/lg | outer:inner |
@@ -332,6 +361,9 @@ Decisions: D-0013 (raw.inputs), D-0016 (dials.density), D-0025 (raw.spaceUnit), 
 
 ## Elevation & Depth
 
+<!-- od:zoom area=elevation level=1 -->
+> Zoom: broad (1 of 3), 1 decision in this area. Zoom in next with Q-depth-01.
+
 **Intent.** Depth 5/100 selects the **borders** model. Shadow alpha in light mode is 0.0; dark mode doubles it and lifts surfaces by lightness instead (sunken, base, raised, overlay).
 
 | Token | Layers (x y blur spread) | Use |
@@ -348,6 +380,9 @@ Decisions: D-0018 (dials.depth).
 
 ## Shapes
 
+<!-- od:zoom area=shape level=1 -->
+> Zoom: broad (1 of 3), 1 decision in this area. Zoom in next with Q-shape-01.
+
 **Intent.** Roundness 0/100 gives controls a **0** radius; details 0px, containers 0px, overlays 0px, people full. Controls under 32px tall use `radius.controlSm` (0).
 
 - Nested radius: inner = max(outer - padding, smallest step), here 0px inside a container with `space.inset.lg` padding; equal radii on nested shapes look uneven (DC-L04-05).
@@ -358,6 +393,9 @@ Decisions: D-0018 (dials.depth).
 Decisions: D-0017 (dials.roundness).
 
 ## Components
+
+<!-- od:zoom area=components level=0 -->
+> Zoom: sketch (0 of 3), 0 decisions in this area. Zoom in next with Q-comp-01, Q-state-01.
 
 **Intent.** v1 components use the semantic tokens only. Base: not chosen yet (Q-comp-01). Buttons are 48px tall (spacious), 0 radius, `text.label.lg`; one primary action per view.
 
@@ -415,6 +453,9 @@ Decisions: none recorded yet; values are defaults from references/levers.json.
 
 ## Motion
 
+<!-- od:zoom area=motion level=1 -->
+> Zoom: broad (1 of 3), 1 decision in this area. Zoom in next with Q-motion-02.
+
 **Intent.** Energy 0/100: durations x0.80 on medium and longer steps; standard easing `cubic-bezier(0.2, 0, 0.38, 0.9)`, enter `[0, 0, 0.38, 0.9]`, exit `[0.2, 0, 1, 0.9]`. Spatial spring: damping 1.0, stiffness 700.0 (Apple duration 0.237s, bounce 0.0; web `linear()` sample over 350ms). Motion is off (flags.motionOff): standard equals reduced.
 
 | Token | Value |
@@ -437,6 +478,9 @@ Decisions: D-0012 (answers.Q-motion-01).
 
 ## Modes and Themes
 
+<!-- od:zoom area=modes level=1 -->
+> Zoom: broad (1 of 3), 1 decision in this area. Zoom in next with Q-theme-02.
+
 **Intent.** Modes live in the DTCG resolver (`tokens/opendesigner.resolver.json`); modifiers are orthogonal, so no two set the same token.
 
 | Modifier | Contexts | Default |
@@ -451,6 +495,9 @@ Decisions: D-0012 (answers.Q-motion-01).
 Decisions: D-0011 (answers.Q-theme-01).
 
 ## Iconography and Imagery
+
+<!-- od:zoom area=iconography level=2 -->
+> Zoom: defined (2 of 3), 4 decisions in this area. Zoom in next with Q-icon-01, Q-img-01.
 
 **Intent.** Default icon size 24px; sizes 16/20/24 pair with 14/16/20px text. Stroke follows the label weight: 1.5px at 16, 1.5px at 20, 2.0px at 24. Rest style: outline.
 
@@ -471,6 +518,9 @@ Decisions: D-0028 (hooks.H-logo.status), D-0029 (hooks.H-icons.status), D-0030 (
 
 ## Content and Voice
 
+<!-- od:zoom area=content level=1 -->
+> Zoom: broad (1 of 3), 1 decision in this area. Zoom in next with Q-voice-01.
+
 **Intent.** voice guidance level **full** (Brand presence 85); **sentence-case**; contractions **allowed** (Warmth 45). Voice guide hook H-voice: have.
 
 - Buttons say what they do in two to four words; errors say what happened and how to fix it.
@@ -481,6 +531,9 @@ Decisions: D-0033 (hooks.H-voice.status).
 
 ## Accessibility
 
+<!-- od:zoom area=accessibility level=2 -->
+> Zoom: defined (2 of 3), 3 decisions in this area. Zoom in next with Q-color-24, Q-aud-02.
+
 **Intent.** Standard: WCAG 2.2 AAA for text. APCA is reported as advice only.
 
 **The system guarantees:** text and boundary contrast in every mode, visible focus (2px ring, 2px offset, 3:1), target floors by input, a reduced-motion mode, rem-based type for 200% text scaling, and on-color text chosen automatically.
@@ -489,7 +542,12 @@ Decisions: D-0033 (hooks.H-voice.status).
 
 **Test matrix:** keyboard only and a screen reader (VoiceOver, NVDA or TalkBack) per platform; 200% zoom; forced colors (Windows High Contrast); reduced motion; touch on a phone for every surface that allows touch.
 
+Decisions: D-0023 (raw.contrastTarget), D-0026 (raw.minTarget), D-0027 (raw.focusWidth).
+
 ## Platforms and Devices
+
+<!-- od:zoom area=platforms level=1 -->
+> Zoom: broad (1 of 3), 2 decisions in this area. Zoom in next with Q-plat-05.
 
 **Intent.** Platforms: web. Inputs: touch, pointer. Brand presence 85: platform overrides shape and material: False; native base text size: False.
 

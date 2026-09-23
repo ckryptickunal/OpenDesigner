@@ -27,7 +27,7 @@
   --ds-color-neutral-dark-6: #3b3f47;
   --ds-color-neutral-dark-7: #434852;
   --ds-color-neutral-dark-8: #7a808c;
-  --ds-color-neutral-dark-9: #79808d;
+  --ds-color-neutral-dark-9: #7c8290;
   --ds-color-neutral-dark-10: #8f96a4;
   --ds-color-neutral-dark-11: #a5abb8;
   --ds-color-neutral-dark-12: #e6e9ee;
@@ -51,7 +51,7 @@
   --ds-color-accent-dark-6: #303c73;
   --ds-color-accent-dark-7: #34428a;
   --ds-color-accent-dark-8: #647be1;
-  --ds-color-accent-dark-9: #5e76ec;
+  --ds-color-accent-dark-9: #637bf2;
   --ds-color-accent-dark-10: #7791ff;
   --ds-color-accent-dark-11: #91a8ff;
   --ds-color-accent-dark-12: #c8d5fe;
@@ -75,7 +75,7 @@
   --ds-color-success-dark-6: #084a20;
   --ds-color-success-dark-7: #005423;
   --ds-color-success-dark-8: #199547;
-  --ds-color-success-dark-9: #009343;
+  --ds-color-success-dark-9: #009845;
   --ds-color-success-dark-10: #13ae52;
   --ds-color-success-dark-11: #47c26c;
   --ds-color-success-dark-12: #b9dfc0;
@@ -124,7 +124,7 @@
   --ds-color-danger-dark-6: #692e29;
   --ds-color-danger-dark-7: #7c2f2a;
   --ds-color-danger-dark-8: #cd6057;
-  --ds-color-danger-dark-9: #d5564d;
+  --ds-color-danger-dark-9: #da5b51;
   --ds-color-danger-dark-10: #f17065;
   --ds-color-danger-dark-11: #ff8c80;
   --ds-color-danger-dark-12: #f9cbc5;
@@ -148,7 +148,7 @@
   --ds-color-info-dark-6: #004467;
   --ds-color-info-dark-7: #004d73;
   --ds-color-info-dark-8: #0089c9;
-  --ds-color-info-dark-9: #0087c6;
+  --ds-color-info-dark-9: #008bcd;
   --ds-color-info-dark-10: #00a0ea;
   --ds-color-info-dark-11: #3ab6ff;
   --ds-color-info-dark-12: #abdcff;
@@ -170,7 +170,7 @@
   --ds-color-neutral-alpha-dark-6: rgb(208 224 255 / 0.207);
   --ds-color-neutral-alpha-dark-7: rgb(204 221 254 / 0.255);
   --ds-color-neutral-alpha-dark-8: rgb(222 233 255 / 0.505);
-  --ds-color-neutral-alpha-dark-9: rgb(218 231 255 / 0.509);
+  --ds-color-neutral-alpha-dark-9: rgb(219 230 255 / 0.522);
   --ds-color-neutral-alpha-dark-10: rgb(222 233 255 / 0.608);
   --ds-color-neutral-alpha-dark-11: rgb(229 237 255 / 0.694);
   --ds-color-neutral-alpha-dark-12: rgb(247 250 255 / 0.927);
@@ -718,7 +718,7 @@
     --ds-color-accent-dark-11: color(display-p3 0.5784 0.6531 1);
     --ds-color-success-light-12: color(display-p3 0.0653 0.2396 0.0949);
     --ds-color-success-dark-7: color(display-p3 0.1095 0.3295 0.1452);
-    --ds-color-success-dark-9: color(display-p3 0.2138 0.577 0.273);
+    --ds-color-success-dark-9: color(display-p3 0.2333 0.595 0.2898);
     --ds-color-warning-light-11: color(display-p3 0.5099 0.3652 0);
     --ds-color-danger-light-4: color(display-p3 1 0.8533 0.828);
     --ds-color-danger-light-5: color(display-p3 1 0.8068 0.7742);
@@ -734,7 +734,7 @@
     --ds-color-info-dark-6: color(display-p3 0 0.2602 0.4339);
     --ds-color-info-dark-7: color(display-p3 0 0.2946 0.4872);
     --ds-color-info-dark-8: color(display-p3 0 0.5278 0.8488);
-    --ds-color-info-dark-9: color(display-p3 0 0.5194 0.8358);
+    --ds-color-info-dark-9: color(display-p3 0 0.5371 0.8633);
     --ds-color-info-dark-10: color(display-p3 0 0.6151 0.9843);
     --ds-color-info-dark-11: color(display-p3 0.3427 0.7032 1);
   }

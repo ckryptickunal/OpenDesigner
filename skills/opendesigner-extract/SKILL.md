@@ -12,6 +12,8 @@ metadata:
 
 Use this when the person offers something to learn from: their own product, a site they admire, a screenshot, a Figma file, a repo, a token file or a brand book. It runs inside the opendesigner interview (stage 00, open at every stage) or on its own before one. Output: values with provenance, mapped to the eight dials, offered as pre-filled answers. Nothing is decided until the person accepts it.
 
+Talk plainly: one idea per message, and the first time a term appears, give its plain meaning plus "Designers: X · Code: Y" from `references/glossary.json` (`references/rules.md` in the opendesigner skill).
+
 Knowledge: `references/reference-intake.json` (what each source can yield, the inverse formulas, the dial maps; from synthesis/LEVERS.md section E). Helpers: `scripts/css_scan.py` (repo CSS and token files, or browser output), `scripts/read_page.js` (computed styles from a live page).
 
 ## 1. Consent and tagging (always first)
@@ -74,5 +76,7 @@ From reference: example.com (inspiration, reinterpret) · computed in browser ·
 - The person answers per line, or pastes `OD:accept <ref-id>:<path>` / `OD:ignore <ref-id>:<path>`. For each accepted value: `engine.py set <path> <value> --set-by reference --source-ref <ref-id> --why "measured: <basis>"` (or `engine.py intake <file> --accept` when they accept all). Adjusted values record the person's number with `--set-by chosen`. Ignored values record nothing.
 - Add a line per reference to the stage summary (source, tag, fidelity, what was taken, what was not), so the decision log shows provenance.
 - Then hand back to the opendesigner interview; pre-filled answers show as "from reference" until confirmed.
+
+If something was missing, wrong or confusing, record it with `engine.py feedback "..." --kind gap|bug|confusing|idea` and follow `references/improve.md` in the opendesigner skill; nothing is posted without the person's OK.
 
 The engine is `scripts/engine.py` in this skill when it was installed from a release zip, otherwise the sibling `opendesigner` skill's `scripts/engine.py`. If neither is present, give the accepted values as a list and say the engine is needed to generate tokens.
