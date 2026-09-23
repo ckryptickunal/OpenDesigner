@@ -30,6 +30,19 @@ QID = re.compile(r"\bQ-[a-z]+-\d\d\b")
 MODES = {"Quick": ["quick", "standard", "expert"], "Standard": ["standard", "expert"],
          "Expert": ["expert"], "Any": ["quick", "standard", "expert"]}
 FIELD = re.compile(r"^- \*\*(.+?):\*\* ?(.*)$")
+# Block class per question, applying L17's scheme (DC-L17-01); the mapping is this file's judgment [inferred]. Default G.
+CLASS_NAMES = {"G": "generatable", "E": "extractable", "D": "designer-owned", "T": "tool-assisted", "I": "owner input"}
+CLASS = {}
+for c, ids in {
+    "I": "scope-01 scope-02 scope-03 scope-04 scope-05 aud-01 aud-02 aud-03 aud-04 brand-01 brand-02 brand-05 brand-07 "
+         "plat-01 plat-02 plat-03 plat-04 plat-05 plat-07 plat-08 plat-09 tool-01 tool-02 tool-03 theme-03 type-04 "
+         "voice-06 comp-02 color-19 ai-01 pattern-05 pattern-06 gov-01 gov-02 gov-03 gov-04 gov-05 gov-06 pref-01 pref-02 pref-03",
+    "E": "ref-01 color-01",
+    "D": "brand-03 brand-08 icon-06 img-01 img-04 img-06 img-07 motion-08 shape-05",
+    "T": "icon-01 type-01 type-02 voice-01 tool-04 token-07 token-08 dist-01 dist-02 dist-03 viz-01 comp-01 gov-07 motion-09 color-06 depth-04 icon-07",
+}.items():
+    for i in ids.split():
+        CLASS["Q-" + i] = c
 
 
 def parse(text):
@@ -96,9 +109,10 @@ def finish(q):
     })
     kind = "hook" if h else ("reference" if q["mode"] == "Any" else ("input" if not decides else "decision"))
     q["kind"] = kind
+    q["block_class"] = CLASS.get(q["id"], "G")
     if fo >= 5 or q["mode"] == "Quick":
         tw = "high"
-    elif fo >= 2 or kind in ("hook", "input", "reference"):
+    elif fo >= 2 or kind in ("hook", "input", "reference") or q["block_class"] == "I":
         tw = "medium"
     else:
         tw = "low"
@@ -160,7 +174,8 @@ def main():
     problems += [f"card not covered: {c}" for c in missing]
     problems += viol
     print(f"{len(stages)} stages, {len(qs)} questions; quick {sum(q['mode']=='Quick' for q in qs)}, "
-          f"standard {sum(q['mode'] in ('Quick','Standard') for q in qs)}, expert {len(qs)}; "
+          f"standard {sum(q['mode'] in ('Quick','Standard') for q in qs)}, expert {sum(q['mode']!='Any' for q in qs)}, "
+          f"any-mode panel {sum(q['mode']=='Any' for q in qs)}; "
           f"covered cards: asked {len(decided)}, auto {len(auto)}, not asked {len(notasked)}, missing {len(missing)}")
     print(f"graph: {len(graph['nodes'])} nodes, {len(graph['edges'])} edges, {len(graph['cycles'])} cycles; ordering violations {len(viol)}")
     for p in problems:
@@ -173,9 +188,10 @@ def main():
         m = re.match(r"^### (Q-[a-z]+-\d\d) · ", line)
         if m:
             cur = byid.get(m.group(1))
-        if line.startswith("- **Time weight:**") and cur and not line.startswith("- **Time weight:** high, medium or low"):
+        if (line.startswith("- **Time weight:**") or line.startswith("- **Block class:**")) and cur and "high, medium or low" not in line and "G, E, D, T or I" not in line:
             continue
         if line.startswith("- **Evidence:**") and cur:
+            out.append(f"- **Block class:** {cur['block_class']} ({CLASS_NAMES[cur['block_class']]})")
             out.append(f"- **Time weight:** {cur['time_weight']} (fan-out {cur['fan_out']})")
         out.append(line)
     text = "\n".join(out)
@@ -201,13 +217,17 @@ def main():
         "meta": {
             "title": "Guided decision flow (questionnaire)", "file": "synthesis/QUESTIONNAIRE.md", "built_by": "tools/build_questionnaire.py",
             "graph": {"nodes": len(graph["nodes"]), "edges": len(graph["edges"]), "cycles": len(graph["cycles"]), "ordering_violations": len(viol)},
-            "counts": {"stages": len(stages), "questions": len(qs), "quick": sum(q["mode"] == "Quick" for q in qs),
-                       "standard": sum(q["mode"] in ("Quick", "Standard") for q in qs), "expert": len(qs)},
+            "counts": {"stages": len(stages), "sequential_screens": len(stages) - 1, "questions": len(qs),
+                       "quick": sum(q["mode"] == "Quick" for q in qs),
+                       "standard": sum(q["mode"] in ("Quick", "Standard") for q in qs),
+                       "expert": sum(q["mode"] != "Any" for q in qs), "any_mode_panel": sum(q["mode"] == "Any" for q in qs)},
             "modes": {"quick": "Quick questions only; everything else takes its default",
                       "standard": "Quick + Standard questions", "expert": "every question",
                       "any": "reference panel, available on every screen, never required"},
             "quick_order": [q["id"] for q in qs if q["mode"] == "Quick"],
-            "time_weight_rule": "high: a decided card has fan-out 5+ or the question is Quick; medium: fan-out 2-4, or an asset hook, input question or the reference panel; low: otherwise",
+            "time_weight_rule": "high: a decided card has fan-out 5+ or the question is Quick; medium: fan-out 2-4, or an asset hook, input question, the reference panel, or block class I; low: otherwise",
+            "block_classes": CLASS_NAMES,
+            "quick_mode_assumed_owner_inputs": [q["id"] for q in qs if q["block_class"] == "I" and q["mode"] != "Quick"],
             "unplaced_source_questions": unplaced,
         },
         "interview_protocol": [
@@ -220,6 +240,11 @@ def main():
             "If an answer conflicts with an earlier one in the same cycle, show the conflict and settle it with the ranked principles (Q-brand-07). Do not average silently.",
             "After each stage, summarize decisions in plain sentences and append them to the decision log for later sessions and teammates.",
             "Only offer listed option values; record anything else as a custom value with the person's reason.",
+            "Show on the best surface the host supports (MCP view, canvas or artifact, Figma or Paper via MCP, local HTML, host question tool, plain text); say which is in use; never block on a visual (DC-L18-06).",
+            "One question per turn: recommended option plus 2-3 closest alternatives with a visual each, 'other' allowed, one line on what it changes; one high-weight question per turn, up to three low-weight ones grouped; a single form is fine on cycle screens (DC-L18-08, DC-L18-09).",
+            "Gates: approve after scope stages 01-05 (with the block map tagged by block_class), after direction stages 06-08, and after the asset checklist; finish with a coverage check. Quick mode keeps only the direction gate (DC-L17-12, DC-L17-09).",
+            "Never invent owner-input (block_class I) answers: in Quick mode record meta.quick_mode_assumed_owner_inputs as assumed and list them for confirmation at the end (DC-L17-08).",
+            "Write durable outputs to the user's repo: DTCG tokens (canonical), DESIGN.md, an ADR-style decision log, a state file with answers, statuses and coverage, an AGENTS.md pointer, and exported lint rules (DC-L18-10, DC-L18-11).",
         ],
         "stages": stages,
         "questions": qs,

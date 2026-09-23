@@ -28,8 +28,12 @@ Status values: `open` (unclaimed), `claimed by <who>`, `done`, `blocked (<why>)`
 | L16 | Visual design tooling for engineers and the design-to-code round trip (Figma MCP, Paper MCP, Penpot, Onlook, theme playgrounds, Bret Victor principles) | `research/L16-visual-tooling-for-engineers.md` | done (43 tools, 15 cards, 323 sources) |
 | L17 | How design systems get made today (manual and AI), documentation practices, gstack's opinionated design skills, NN/g, designsystems.surf; building-block classification (generatable / extractable / designer-owned / tool-assisted) and designer hooks | `research/L17-how-systems-get-made.md` | done (13 cards, 303 sources, 207-block classification, 14 asset hooks, gstack methods) |
 | L18 | AI-first distribution: skills, AGENTS.md, MCP, MCP Apps and visual UI in Claude, ChatGPT and Codex; Claude's design function; LLM interview design; recommended repo architecture | `research/L18-ai-first-distribution.md` | done (14 cards, 224 sources, host capability matrix, repo architecture) |
-| D1 | Design artifacts for review: starter tokens (DTCG), building-blocks atlas, foundations specimen, button sheet, builder concept screen; written to Figma and Paper | `design/` | claimed by orchestrator subagent (writes wait for Figma sign-in and Paper reconnect) |
-| S1 | Synthesis: ontology (S1a), questionnaire (S1b), levers + decision graph (S1c), builder spec (S1d) | `synthesis/*` | S1a done (271 nodes, 10 layers, 325/325 cards mapped); S1c done (8 dials, 13 look recipes); S1b running; S1d (OpenDesigner spec) claimed by orchestrator subagent |
+| D1 | Design artifacts for review: starter tokens (DTCG), atlas, foundations, button sheet, builder concept; written to Paper and Figma | `design/` | tokens and 4 artboards done; orchestrator writing to Paper; Figma waits for sign-in (plugin:figma:figma) |
+| R1 | README, docs, SEO, community health files, .github, licenses, social preview, seed issues | see `_coordination/REPO-PLAN.md` | claimed by orchestrator subagent |
+| R2 | Engine (engine.py: ramps, scales, contrast, validate, export) + examples | see REPO-PLAN | claimed by orchestrator subagent |
+| R3 | Skills, data build, visual templates, manifests, skill sync, ChatGPT project, agent entry files | see REPO-PLAN | claimed by orchestrator subagent |
+| R4 | Sponsorship and funding options | `docs/SPONSORSHIP.md` | claimed by orchestrator subagent |
+| S1 | Synthesis: ontology (S1a), questionnaire (S1b), levers + decision graph (S1c), spec (S1d) | `synthesis/*` | S1a, S1b, S1c done; S1d relaunched after session restart |
 | V1 | Verification: fresh-context verifier agents re-check claims and values against live sources | `synthesis/VERIFICATION.md` | waits for S1 |
 
 ## Cross-lane notes

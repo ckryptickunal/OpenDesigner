@@ -82,7 +82,8 @@ def esc(s):
 
 
 def E(tag, style="", *kids, **attrs):
-    if style and "box-sizing" not in style and any(k in style for k in ("width", "height", "padding")):
+    if (style and "box-sizing" not in style and any(k in style for k in ("width:", "height:"))
+            and any(k in style for k in ("padding", "border:"))):
         style += ";box-sizing:border-box"
     a = "".join(f' {k.replace("_", "-")}="{v}"' for k, v in attrs.items())
     s = f' style="{style}"' if style else ""
@@ -190,7 +191,7 @@ def chip(text, bg, fg, extra="", icon_name=None):
 SPACE_STEPS = [(k, num(f"space.{k}")) for k in ("025", "050", "075", "100", "150", "200", "250", "300", "400", "500", "600", "800", "1000", "1200")]
 
 
-def staircase(mode="light", selected=None, gap=16, handle=False):
+def staircase(mode="light", selected=None, gap=16, handle=False, minw=28):
     tc = lambda p: col(p, mode)
     cols = []
     for name, v in SPACE_STEPS:
@@ -200,7 +201,7 @@ def staircase(mode="light", selected=None, gap=16, handle=False):
         if sel and handle:
             sq = D("display:flex;align-items:flex-end;gap:3px", sq,
                    D(f"width:4px;height:{min(v, 20)}px;border-radius:2px;background:{tc('color.bg.accent.bold')};opacity:0.55"))
-        w = max(v, 28)
+        w = max(v, minw)
         cols.append(D(f"display:flex;flex-direction:column;align-items:center;gap:8px;width:{w + (7 if sel and handle else 0)}px;flex:none",
                       D(f"height:96px;display:flex;align-items:flex-end;justify-content:center;width:100%;border-bottom:1px solid {tc('color.border.strong')}", sq),
                       S(ty("code.sm") + f";color:{tc('color.text.accent') if sel else tc('color.text.tertiary')}", name),
@@ -255,8 +256,10 @@ def ease_plot(bez, label, token, mode="light"):
            f'<path d="M{P(0, 0)} C{P(x1, y1)} {P(x2, y2)} {P(1, 1)}" stroke="{T1}" stroke-width="2" stroke-linecap="round"/>'
            f'<circle cx="{8 + x1 * 104:.1f}" cy="{112 - y1 * 104:.1f}" r="3" fill="{col("color.bg.accent.bold")}"/>'
            f'<circle cx="{8 + x2 * 104:.1f}" cy="{112 - y2 * 104:.1f}" r="3" fill="{col("color.bg.accent.bold")}"/></svg>')
-    return D("display:flex;flex-direction:column;gap:8px", svg, S(ty("title.sm"), label), mono(token, T3),
-             mono(f"cubic-bezier({x1}, {y1}, {x2}, {y2})", T2))
+    return D("display:flex;gap:16px;align-items:center", svg,
+             D("display:flex;flex-direction:column;gap:4px;width:176px", S(ty("title.sm"), label), mono(token, T3),
+               mono(f"cubic-bezier({x1:g}, {y1:g}, {x2:g}, {y2:g})", T2),
+               S(ty("body.sm") + f";color:{T2}", T[mode][token]["$description"])))
 
 
 # ================================================================= 01 building blocks map
@@ -337,9 +340,9 @@ def building_blocks_map():
                  S(ty("body.md") + f";color:{T2};padding-left:30px", desc))
         right_rows = [D("display:flex;flex-wrap:wrap;gap:8px;align-items:center", *[gen_chip(g) for g in gens])]
         if hooks:
-            right_rows.append(D(f"display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-top:12px;border-top:1px solid {BORDER}",
-                                D("width:72px;flex:none", S(ty("label.sm") + f";color:{T3}", "Asks for")),
-                                *[hook_chip(h, q) for h, q in hooks]))
+            right_rows.append(D(f"display:flex;gap:8px;align-items:flex-start;padding-top:12px;border-top:1px solid {BORDER}",
+                                D("width:72px;flex:none;padding-top:16px", S(ty("label.sm") + f";color:{T3}", "Asks for")),
+                                D("flex:1;display:flex;flex-wrap:wrap;gap:8px", *[hook_chip(h, q) for h, q in hooks])))
         right = D("flex:1;display:flex;flex-direction:column;gap:12px", *right_rows)
         rows.append(card("display:flex;gap:32px;align-items:flex-start;padding:20px 24px", left, right))
         if verb:
@@ -537,8 +540,8 @@ def spacing_block():
             ("Small steps stay inside", "2, 4 and 6px are for component internals only (DC-L03-06)."))])
     return section("02.5-spacing", "04", "Spacing",
                    "A 4px grid with an 8px rhythm, shown at 1:1. Semantic tokens say what the space is for; the compact density moves each one down a step, while primitives and target sizes stay fixed.",
-                   card("display:flex;gap:32px;align-items:flex-end",
-                        D("flex:1;display:flex;flex-direction:column;gap:24px",
+                   card("display:flex;gap:32px;align-items:stretch",
+                        D("flex:1;display:flex;flex-direction:column;justify-content:space-between;gap:24px",
                           D("display:flex;justify-content:space-between;align-items:baseline", S(ty("title.sm"), "Scale · space.{name}"), mono("actual pixels", T3)),
                           staircase("light")), rules),
                    D("display:flex;gap:24px;align-items:flex-start",
@@ -571,7 +574,7 @@ def radius_block():
           S(ty("body.sm") + f";color:{T2}", f"{num('radius.' + n):g}px · {d}" if n != "full" else d)) for n, d, el in roles])
     borders = D("display:flex;gap:40px;align-items:flex-end", *[
         D("display:flex;flex-direction:column;gap:8px", D(f"width:120px;height:{w}px;background:{T1}"), mono(f"border.width.{w}", T2)) for w in (1, 2, 4)],
-        D("display:flex;flex-direction:column;gap:12px", button("primary", "focus", "sm", label="Focused"),
+        D("display:flex;flex-direction:column;gap:12px;align-items:flex-start", button("primary", "focus", "sm", label="Focused"),
           mono("focus.ring.width 2 · offset 2 · border.focus", T2)))
     return section("02.6-radius", "05", "Radius, borders and focus",
                    "Nine radius steps with a 6px control default (the median across 22 systems). Radius grows with the element; nested corners use outer radius minus padding.",
@@ -586,8 +589,8 @@ def elevation_panel(mode):
     tc = lambda p: col(p, mode)
     tiles = []
     for lvl, extra, recipe in (("sunken", "", ""), ("base", f"border:1px solid {tc('color.border.subtle')}", ""),
-                               ("raised", f"border:1px solid {tc('color.border.subtle')};box-shadow:{shadow_css('elevation.shadow.raised', mode)}", "+ shadow.raised"),
-                               ("overlay", f"box-shadow:{shadow_css('elevation.shadow.overlay', mode)}", "+ shadow.overlay")):
+                               ("raised", f"border:1px solid {tc('color.border.subtle')};box-shadow:{shadow_css('elevation.shadow.raised', mode)}", "shadow.raised"),
+                               ("overlay", f"box-shadow:{shadow_css('elevation.shadow.overlay', mode)}", "shadow.overlay")):
         tiles.append(D(f"flex:1;height:112px;border-radius:12px;background:{tc('color.surface.' + lvl)};padding:14px;display:flex;flex-direction:column;justify-content:space-between;{extra}",
                        S(ty("title.sm") + f";color:{tc('color.text.primary')}", lvl.title()),
                        D("display:flex;flex-direction:column", S(ty("code.sm") + f";color:{tc('color.text.tertiary')}", f"surface.{lvl}"),
@@ -653,33 +656,46 @@ STATES = [("enabled", "Enabled"), ("hover", "Hover"), ("focus", "Focus-visible")
 
 
 def anatomy():
-    acc = col("color.bg.accent.bold")
-    on = col("color.text.onAccent")
-    guide = "rgba(255,255,255,0.22)"
-    seg = lambda w, txt=None: D(f"width:{w}px;height:80px;background:{guide};flex:none;display:flex;align-items:center;justify-content:center")
-    label_w = 184
-    big = D(f"display:flex;align-items:center;height:80px;border-radius:{num('radius.control') * 2:g}px;background:{acc};overflow:hidden;flex:none",
-            seg(32), D("width:32px;height:80px;flex:none;display:flex;align-items:center;justify-content:center", icon("plus", on, 32, 1.5)),
-            seg(16), D(f"width:{label_w}px;flex:none;{ty('label.lg')};font-size:28px;line-height:40px;color:{on};text-align:center", "Create token"), seg(32))
-    dims = D("display:flex;gap:0", *[D(f"width:{w}px;flex:none;display:flex;flex-direction:column;align-items:center;gap:4px",
-                                       D(f"width:100%;height:1px;background:{T3}"), mono(t, T2))
-                                     for w, t in ((32, "16"), (32, "16"), (16, "8"), (label_w, "label"), (32, "16"))])
+    acc, on = col("color.bg.accent.bold"), col("color.text.onAccent")
+    k = 3  # drawing scale
+    pad, isz, gap, lab_w = num("space.inset.lg") * k, num("size.icon.sm") * k, num("space.gap.sm") * k, 188
+    h = num("size.control.md") * k
+    guide = "rgba(255,255,255,0.24)"
+    segs = [(pad, "5", "16", True), (isz, "2", "16", False), (gap, "3", "8", True), (lab_w, "4", "label", False), (pad, "5", "16", True)]
+    markers = D("display:flex", *[D(f"width:{w:g}px;flex:none;display:flex;justify-content:center", badge_num(n)) for w, n, _, _ in segs])
+    parts_x = []
+    for w, n, _, is_guide in segs:
+        if n == "2":
+            parts_x.append(D(f"width:{w:g}px;height:{h:g}px;flex:none;display:flex;align-items:center;justify-content:center", icon("plus", on, int(w), 1.5)))
+        elif n == "4":
+            parts_x.append(D(f"width:{w:g}px;flex:none;font-size:42px;line-height:60px;font-weight:500;color:{on};text-align:center", "Create"))
+        else:
+            parts_x.append(D(f"width:{w:g}px;height:{h:g}px;flex:none;background:{guide}"))
+    big = D(f"display:flex;align-items:center;height:{h:g}px;border-radius:{num('radius.control') * k:g}px;background:{acc};overflow:hidden;flex:none", *parts_x)
+    vdim = D("display:flex;align-items:center;gap:8px",
+             D(f"width:1px;height:{h:g}px;background:{T3}"), D("display:flex;flex-direction:column;gap:6px", badge_num("1"), mono("40", T2)))
+    dims = D("display:flex", *[D(f"width:{w:g}px;flex:none;display:flex;flex-direction:column;align-items:center;gap:4px",
+                                 D(f"width:100%;height:1px;background:{T3}"), mono(t, T2)) for w, _, t, _ in segs])
+    small = D("display:flex;gap:40px;align-items:center;padding-top:8px",
+              D("display:flex;gap:12px;align-items:center", button("primary", "focus", label="Create"), badge_num("6"), mono("focus-visible", T3)),
+              D("display:flex;gap:12px;align-items:center", button("primary", "loading", label="Create"), badge_num("7"), mono("loading", T3)))
     parts = [
-        ("1", "Container", "color.bg.accent.bold · radius.control (6) · size.control.md (40)"),
-        ("2", "Leading icon (optional)", "size.icon.sm (16) · currentColor"),
-        ("3", "Gap", "space.gap.sm (8)"),
-        ("4", "Label", "text.label.lg (14/20 · 500) · color.text.onAccent"),
-        ("5", "Padding inline", "space.inset.lg (16); sm uses inset.md, lg uses inset.xl"),
-        ("6", "Focus ring", "border.focus · focus.ring.width 2 · focus.ring.offset 2"),
-        ("7", "Spinner (loading)", "replaces the icon; label stays, width stays"),
+        ("1", "Container", "color.bg.accent.bold · radius.control 6 · size.control.md 40"),
+        ("2", "Leading icon, optional", "size.icon.sm 16 · inherits the label color"),
+        ("3", "Gap", "space.gap.sm 8"),
+        ("4", "Label", "text.label.lg 14/20 · 500 · color.text.onAccent"),
+        ("5", "Padding inline", "space.inset.lg 16 (sm: inset.md 12, lg: inset.xl 24)"),
+        ("6", "Focus ring", "border.focus · 2px ring · 2px offset, keyboard focus only"),
+        ("7", "Spinner", "replaces the icon; label and width stay"),
     ]
-    plist = D("display:flex;flex-direction:column;gap:12px;flex:1", *[
+    plist = D("display:flex;flex-direction:column;gap:14px;flex:1", *[
         D("display:flex;gap:12px;align-items:flex-start", badge_num(n),
           D("display:flex;flex-direction:column;gap:2px", S(ty("title.sm"), t), mono(tok, T2))) for n, t, tok in parts])
     return section("03.2-anatomy", "01", "Anatomy",
-                   "Drawn at 2x. Height comes from a 20px line box plus block padding, so every size stays on the 8px ladder.",
+                   "Drawn at 3x. Height is a 20px line box plus block padding, so every size stays on the 8px ladder; the tinted bands are padding and gap.",
                    card("display:flex;gap:64px;align-items:center;padding:40px",
-                        D("display:flex;flex-direction:column;gap:12px;align-items:flex-start", mono("button · primary · md · 2x", T3), big, dims),
+                        D("display:flex;flex-direction:column;gap:10px;align-items:flex-start", mono("button · primary · md · 3x", T3),
+                          markers, D("display:flex;gap:16px;align-items:center", big, vdim), dims, small),
                         plist))
 
 
@@ -709,7 +725,7 @@ def sizes():
         h = num(f"size.control.{sz}")
         pad = {"sm": "inset.md", "md": "inset.lg", "lg": "inset.xl"}[sz]
         cols.append(D("display:flex;flex-direction:column;gap:16px;flex:1",
-                      D("display:flex;gap:12px;align-items:center", button("primary", size=sz, label="Save changes", lead_icon=True),
+                      D("display:flex;gap:12px;align-items:center;height:48px", button("primary", size=sz, label="Save changes", lead_icon=True),
                         button("secondary", size=sz, label="Preview")),
                       D("display:flex;flex-direction:column;gap:2px", S(ty("title.sm"), f"{sz} · {h:g}px"),
                         mono(f"size.control.{sz} · space.{pad} · icon {20 if sz == 'lg' else 16}", T2))))
@@ -758,7 +774,7 @@ def usage():
     return section("03.6-usage", "05", "Usage",
                    "The rules the builder enforces while you compose screens.",
                    D("display:flex;flex-wrap:wrap;gap:16px", *[
-                       card("width:421px;display:flex;flex-direction:column;gap:6px;padding:20px", S(ty("title.sm"), t),
+                       card("width:426px;display:flex;flex-direction:column;gap:6px;padding:20px", S(ty("title.sm"), t),
                             S(ty("body.md") + f";color:{T2}", d), mono(src, T3)) for t, d, src in rules]))
 
 
@@ -818,7 +834,8 @@ def rail():
             active = ks == "active"
             items.append(D(f"display:flex;align-items:center;gap:10px;padding:6px 8px 6px 34px;border-radius:6px;{'background:' + col('color.bg.accent.subtle') if active else ''}",
                            status_icon(ks), S(ty("body.md") + f";color:{col('color.text.accent') if active else (T1 if ks != 'todo' else T2)};flex:1;{'font-weight:500' if active else ''}", kname),
-                           S(ty("body.sm") + f";color:{T3}", "Do you have this?") if ks == "hook" else ""))
+                           D(f"padding:0 6px;border:1px dashed {col('color.border.strong')};border-radius:4px", S(ty("label.md") + f";color:{T2}", "Ask"))
+                           if ks == "hook" else ""))
     progress = D(f"height:4px;border-radius:2px;background:{NEU};display:flex", D(f"width:43%;height:4px;border-radius:2px;background:{col('color.bg.accent.bold')}"))
     return D(f"width:272px;flex:none;background:{CARD};border-right:1px solid {BORDER};padding:20px 12px;display:flex;flex-direction:column;gap:16px",
              D("display:flex;flex-direction:column;gap:10px;padding:0 8px",
@@ -832,7 +849,7 @@ def rail():
 
 def mini_ui(mode, highlight=True):
     tc = lambda p: col(p, mode)
-    tint = tc("color.bg.accent.subtle") if highlight else "transparent"
+    tint = col(f"color.accent.{mode}.{4 if mode == 'light' else 5}", mode) if highlight else "transparent"
     inp = D(f"height:40px;padding:0 12px;border-radius:6px;border:1px solid {tc('color.border.strong')};background:{tc('color.surface.raised')};display:flex;align-items:center",
             S(ty("body.md") + f";color:{tc('color.text.primary')}", "Field notes"))
     row = lambda initials, name, role: D(f"display:flex;align-items:center;gap:12px;padding:8px 0;border-top:1px solid {tc('color.border.subtle')}",
@@ -866,7 +883,7 @@ def center():
                  D("display:flex;justify-content:space-between;align-items:center",
                    D("display:flex;gap:8px;align-items:center", badge_num("2"), S(ty("title.sm"), "Scale")),
                    mono("14 steps · 4px grid · shown at 1:1", T3)),
-                 staircase("light", selected="200", gap=12, handle=True),
+                 staircase("light", selected="200", gap=10, handle=True, minw=24),
                  D("display:flex;justify-content:space-between;align-items:center",
                    D("display:flex;gap:8px;align-items:baseline", mono("space.200 = 16px", T1),
                      S(ty("body.sm") + f";color:{T2}", "feeds space.inset.lg, which 14 components use")),
@@ -875,10 +892,20 @@ def center():
                    D("display:flex;justify-content:space-between;align-items:center",
                      D("display:flex;gap:8px;align-items:center", badge_num("3"), S(ty("title.sm"), "Live preview"),
                        S(ty("body.sm") + f";color:{T3}", "re-renders on every change, both modes at once")),
-                     D("display:flex;gap:8px;align-items:center", D(f"width:12px;height:12px;border-radius:2px;background:{col('color.bg.accent.subtle')}"),
+                     D("display:flex;gap:8px;align-items:center", D(f"width:12px;height:12px;border-radius:2px;background:{col('color.accent.light.4')}"),
                        S(ty("body.sm") + f";color:{T2}", "Highlight: where space.inset.lg applies"))),
                    D("display:flex;gap:16px", mini_ui("light"), mini_ui("dark")))
-    return D(f"flex:1;background:{SUNK};padding:24px;display:flex;flex-direction:column;gap:16px", head, ruler, preview)
+    changes = card("display:flex;flex-direction:column;gap:10px;padding:16px 20px",
+                   D("display:flex;justify-content:space-between;align-items:center",
+                     D("display:flex;gap:8px;align-items:baseline", S(ty("title.sm"), "Change set"), S(ty("body.sm") + f";color:{T3}", "3 changes since the last commit")),
+                     button("ghost", size="sm", label="Review visual diff")),
+                   *[D(f"display:flex;gap:16px;align-items:baseline;padding-top:8px;border-top:1px solid {BORDER}",
+                       D("width:160px;flex:none", mono(tok, T1)), S(ty("label.md") + f";color:{T1};width:160px;flex:none", chg),
+                       S(ty("body.sm") + f";color:{T2}", eff))
+                     for tok, chg, eff in (("space.inset.lg", "12 → 16px", "14 components, both modes; contrast unaffected"),
+                                           ("space.gap.md", "8 → 12px", "Form stacks and card groups"),
+                                           ("density default", "compact → comfortable", "Compact stays available per user"))])
+    return D(f"flex:1;min-width:0;background:{SUNK};padding:24px;display:flex;flex-direction:column;gap:16px", head, ruler, preview, changes)
 
 
 def panel_block(n, title, right, *kids):

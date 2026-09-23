@@ -6,7 +6,7 @@ This is the question flow at the core of the design-system builder. L11 found th
 
 ## How the flow is built
 
-- **One stage = one builder screen.** Stages are ordered by the dependency step in `synthesis/decision-graph.json` (step 0 = nothing upstream). A validator checked every one of the graph's 431 edges: no question is asked before a question it depends on, except the 10 builder-product cards listed under "Not asked" that the builder designs rather than asks.
+- **One stage = one builder screen.** Stages are ordered by the dependency step in `synthesis/decision-graph.json` (step 0 = nothing upstream). `tools/build_questionnaire.py` checks every edge in the graph, including S1c's `graph-overrides.json`: no question is asked before a question it depends on, within or across stages. Cards that describe the builder itself (L16, L17, L18) are listed under "Not asked" with how this flow applies them; the counts at build time are in `questionnaire.json` meta.
 - **Cycles stay on one screen.** The graph has 12 cycles (decisions that constrain each other). Each cycle's cards sit on one screen, and the screen shows one shared live preview so the person sees the trade-off. The largest cycle is color: 21 cards, which is why Stage 08 is one screen with sections.
 - **Cards without links were placed by their text.** Many component and pattern cards (L08, L13) have graph step 0 only because their "Depends on" text names lanes rather than card ids (for example DC-L08-07 depends on "radius scale, spacing/density, type scale"). They are placed after the foundations they name [inferred from each card's Depends-on field].
 - **Look first, encoding later.** Token naming, file format and governance come after the visual stages. They change how the system is stored, not how it looks, and nothing visual depends on them in the graph.
@@ -23,7 +23,7 @@ Every question is tagged with the lowest mode that asks it. A `Quick` question i
 
 **Quick mode, in order:** Q-aud-01 (who uses it), Q-brand-01 (personality sliders), Q-plat-01 (platforms), Q-tool-01 (where the system lives), Q-color-01 (brand color input), Q-color-02 (where brand color appears), Q-type-01 (typeface posture), Q-shape-01 (corner softness), Q-depth-01 (how surfaces separate), Q-motion-01 (motion feel).
 
-Why these ten: they combine the highest fan-out step-0 decisions in the graph (personality DC-L06-02 fans out to 15 decisions, platforms DC-L10-01 to 12, source of truth DC-L16-02 to 8) with the L09 divergence points that change the look most (shape, depth, surface color, density, typeface, color generation, motion) [L09 A2; DC-L09-01 to DC-L09-08]. Everything L09 found nearly every system shares is pre-filled instead of asked: a 3-tier token model, a 4px spacing base, neutral surfaces plus one accent plus status colors, 12-step ramps, 100-300 ms ease-out motion, light and dark modes, WCAG 2.2 AA [L09 A1 rows 1-12]. Platform posture (DC-L10-02, fan-out 9) is derived in Quick mode from the personality slider "Bold vs deferential" and shown as a confirm chip [inferred].
+Why these ten: they combine the highest fan-out step-0 decisions in the graph (personality DC-L06-02 fans out to 15 decisions, platforms DC-L10-01 to 12, source of truth DC-L16-02 to 9, in the graph as of this build) with the L09 divergence points that change the look most (shape, depth, surface color, density, typeface, color generation, motion) [L09 A2; DC-L09-01 to DC-L09-08]. Everything L09 found nearly every system shares is pre-filled instead of asked: a 3-tier token model, a 4px spacing base, neutral surfaces plus one accent plus status colors, 12-step ramps, 100-300 ms ease-out motion, light and dark modes, WCAG 2.2 AA [L09 A1 rows 1-12]. Platform posture (DC-L10-02, fan-out 11) is derived in Quick mode from the personality slider "Bold vs deferential" and shown as a confirm chip [inferred].
 
 ## How a model runs this interview
 
@@ -37,8 +37,15 @@ The builder's interface is an LLM (Claude, ChatGPT, Codex or another capable mod
 6. When an answer conflicts with an earlier one (the cycles named in stage headers), show the conflict and settle it with the ranked principles from Q-brand-07; do not average silently [L06 section 4.2].
 7. After each stage, summarize the decisions in plain sentences a teammate could read, and append them to the decision log so a later session or another model can continue coherently [BRIEF requirements 9-11].
 8. Only offer option values that appear in the question. If the person wants something else, record it as a custom value with their reason.
+9. **Show, then ask, on the best surface available.** Pick the highest rung the host supports: an OpenDesigner MCP view, a host canvas or artifact, Figma or Paper through MCP, a local HTML file, the host's question tool, then plain text with hex values and numbered options; say which rung is in use and never block on a visual [DC-L18-06].
+10. **One well-formed question per turn.** Show the recommended option and the 2-3 closest alternatives with one visual each, allow "other", and say in one line what the answer changes; put the remaining options behind "more". Ask one high-weight question per turn; group up to three low-weight ones [DC-L18-09, DC-L18-08]. On cycle screens (stage headers name them), a single form with all the linked questions is fine [DC-L18-09].
+11. **Gates.** Pause for approval three times: after the scope stages (01-05, with the block map tagged by class), after direction (Stages 06-08), and after the asset checklist; end with a coverage check that lists every block as decided, defaulted, not applicable or pending. Quick mode keeps only the direction gate [DC-L17-12, DC-L17-09].
+12. **Owner-input blocks are never invented.** Questions tagged Block class I that Quick mode skips are recorded as "assumed" and listed for confirmation at the end, not silently decided [DC-L17-08, DC-L17-01].
+13. **Write durable outputs to the person's repo:** DTCG tokens (canonical), DESIGN.md (readable view), a decision log in ADR style, a state file with every answer, status and coverage, and an AGENTS.md pointer, plus the exported lint rules [DC-L18-10, DC-L18-11].
 
-**Time weight rule** [inferred from `decision-graph.json`]: `high` when a decided card constrains 5 or more others (fan-out 5+) or the question is in Quick mode; `medium` when fan-out is 2-4, or the question is an asset hook, an input question or the reference panel; `low` otherwise. Each question shows its weight and the fan-out it came from.
+**Block class** (auto-filled on every question from L17's scheme, DC-L17-01; the per-question mapping is [inferred]): `G` generatable from inputs and defaults, `E` best extracted from something that exists, `D` designer-owned (an asset hook), `T` tool-assisted with a named tool and caveat, `I` owner input that only the team can decide.
+
+**Time weight rule** [inferred from `decision-graph.json`]: `high` when a decided card constrains 5 or more others (fan-out 5+) or the question is in Quick mode; `medium` when fan-out is 2-4, or the question is an asset hook, an input question, the reference panel, or an owner-input (I) question; `low` otherwise. Each question shows its weight and the fan-out it came from.
 
 ## How to read an entry
 
@@ -58,6 +65,7 @@ The builder's interface is an LLM (Claude, ChatGPT, Codex or another capable mod
 - **Hook:** (asset hooks) accepted formats, and the paths offered when the answer is "no"
 - **Pre-answers:** (reference intake) which later questions a reference can pre-fill
 - **Skip:** whether it can be skipped and auto-defaulted
+- **Block class:** G, E, D, T or I: how the value is obtained (L17's scheme, defined below)
 - **Time weight:** high, medium or low: how long the model should spend (rule below)
 - **Evidence:** card ids and source ids
 - **Merges:** (optional) source questionnaire items folded into this question
@@ -71,12 +79,13 @@ Source questionnaire codes used in "Merges": `K` = L11 kickoff questionnaire Par
 
 The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
-1. **Asset hooks for blocks the builder cannot generate well.** A logo, brand mark, custom icons, illustration, photography, a brand typeface and similar assets need a designer or a dedicated tool. For each, the builder asks "Do you have this?", names the formats it accepts, and offers honest paths when the answer is no. Hook questions carry a **Hook** line. In Quick mode no hook is asked; each hook's "if no" fallback is applied and the asset tray stays open so files can be dropped in later.
+1. **Asset hooks for blocks the builder cannot generate well.** A logo, brand mark, custom icons, illustration, photography, a brand typeface and similar assets need a designer or a dedicated tool. For each, the builder asks "Do you have this?", names the formats it accepts, and offers honest paths when the answer is no. They are asked once as a grouped checklist in Stage 03 (Q-brand-08), then opened one by one at the stage where each asset is used. Hook questions carry a **Hook** line. In Quick mode no hook is asked; each hook's "if no" fallback is applied and the asset tray stays open so files can be dropped in later [DC-L17-04].
 2. **Visual, teaching controls for generatable blocks.** Spacing, primitives, tokens and components are chosen on a live preview, and each such question carries a **Use / avoid** line that the builder shows beside the control, so the interface teaches where each option belongs.
 3. **Reference intake at any point.** Q-ref-01 is a side panel on every screen. A reference can pre-fill later answers; the person confirms each one.
 
 | Asset hook | Question | Stage |
 |---|---|---|
+| Grouped "do you have these?" checklist | Q-brand-08 | 03 |
 | Logo, brand mark, favicon | Q-brand-03 | 03 |
 | Fixed brand colors | Q-color-01 (locked hex input) | 08 |
 | Brand typeface files and license | Q-type-02 | 10 |
@@ -86,6 +95,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 | Illustration, characters, mascot | Q-img-04 | 18 |
 | Animated assets (Lottie, 3D, animated icons) | Q-img-06 | 18 |
 | UI sounds or sonic logo | Q-motion-08 | 16 |
+| Custom haptic patterns | Q-motion-09 | 16 |
+| Patterns, textures, gradients (motifs) | Q-img-07 | 18 |
 | Existing voice and tone guide | Q-voice-01 | 19 |
 
 ---
@@ -111,6 +122,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** an "extracted from reference" card listing each found value next to the question it would answer, with Accept, Adjust and Ignore buttons.
 - **Use / avoid:** use a reference to copy structure and quality (spacing rhythm, type ratios, density, depth model); avoid copying another brand's identity: its logo, brand color, proprietary typeface or illustration are never carried over, and a "competitor" reference is used only to flag shared tropes [BRIEF requirement 4; S-L06-027].
 - **Skip:** yes; always optional.
+- **Block class:** E (extractable)
 - **Time weight:** medium (fan-out 0)
 - **Evidence:** S-L16-256, S-L16-405, S-L11-041, DC-L11-23, DC-L11-04
 - **Merges:** K3.3 (reference products), B3 (competitors, as "competitor" references)
@@ -137,6 +149,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Changes:** DC-L11-03, DC-L11-07, DC-L11-14, DC-L11-16, DC-L11-25, DC-L06-01 · blocks: Strategy > Scope; Tokens > Architecture > Tiers; Components > Inventory
 - **Preview:** a strip with one sample screen per selected surface, all rendered from the same draft tokens.
 - **Skip:** yes, defaults to a single product app.
+- **Block class:** I (owner input)
 - **Time weight:** high (fan-out 8)
 - **Evidence:** DC-L11-02; S-L11-083, S-L11-002, S-L11-030
 - **Merges:** K2.1, K2.2 (surfaces part), B11 (marketing vs product, first half)
@@ -156,6 +169,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Changes:** DC-L11-02, DC-L11-07; foundation ramps (L01-L04), component list (L08), naming (L07) · blocks: Process > Discovery > Audit
 - **Preview:** an inventory board: counts of unique colors, type styles and button variants found, with the proposed consolidated ramp beside them.
 - **Skip:** yes, defaults to greenfield.
+- **Block class:** I (owner input)
 - **Time weight:** medium (fan-out 2)
 - **Evidence:** DC-L11-04; S-L11-001, S-L11-105, S-L11-035
 - **Merges:** K1.5, K1.6
@@ -176,6 +190,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Changes:** DC-L11-18, DC-L11-23, DC-L16-12 · blocks: Docs > Component page; Distribution > Agent context
 - **Preview:** a list of the output files the builder will generate for each checked audience.
 - **Skip:** yes.
+- **Block class:** I (owner input)
 - **Time weight:** high (fan-out 8)
 - **Evidence:** DC-L11-02, DC-L11-23; S-L11-083, S-L11-088
 - **Merges:** K1.1, K9.1
@@ -199,10 +214,34 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Changes:** DC-L11-01, DC-L11-11, DC-L11-12 · blocks: Governance > Team model; Governance > Roles
 - **Preview:** none visual; shows which governance defaults (contribution flow, review gates) the builder will switch on.
 - **Skip:** yes.
+- **Block class:** I (owner input)
 - **Time weight:** medium (fan-out 3)
 - **Evidence:** DC-L11-09, DC-L11-10; S-L11-005, S-L11-013, S-L11-030, S-L11-006
 - **Merges:** K9.2, K9.3, K13.2, K1.4
 
+
+### Q-scope-05 · How are you starting: from an existing product, a UI kit or library, a reference you admire, or just a brief? · Standard
+- **Why:** Kit-first systems look like the kit; reference-first systems inherit its rhythm; brief-first systems vary most but need the most decisions; adopting, adapting or creating sets the cost [DC-L17-02, DC-L11-01; S-L11-006].
+- **Ask:** "Where are we starting from: your existing product, a UI kit or component library, a site you admire, or a blank page with a brief?"
+- **Example:** Show the same screen started from a stock kit, from a reference's structure with your identity, and from the brief alone.
+- **Control:** single choice (entry) + single choice (build posture) + single choice (reference fidelity, shown for the reference path)
+- **Options:**
+  - `existing-product` From an existing product: audit and extract, then consolidate (the interface inventory; see Q-scope-02) [DC-L17-02; DC-L11-04].
+  - `ui-kit` From a UI kit or library (Untitled UI, Material 3 kit, shadcn): fast, but the kit's defaults become the look unless changed (the M3 kit shipped 6 versions in 12 months) [DC-L17-02; S-L17-322].
+  - `reference` From a reference you admire: carry structure and quality, never identity (gstack and Stitch support this) [DC-L17-02; S-L17-003].
+  - `brief` From a brief only: interview, then generate directions [DC-L17-02; S-L17-021].
+  - `adopt` / `adapt` / `create` Build posture: adopt a system as-is (Material, Carbon, Fluent), adapt a themeable base (shadcn create, Radix Themes), or create your own; NN/g ranks their cost lowest to highest [DC-L11-01; S-L11-006, S-L11-071, S-L11-068].
+  - `reinterpret` / `replicate-swap` / `flag-only` Reference fidelity: reinterpret the lessons (default), replicate structure with every identity element swapped (only for "our version of this"), or read a competitor only to list shared tropes; copying identity is never offered [DC-L17-03; S-L17-023, S-L17-022].
+- **Default:** existing product: audit first; otherwise brief first with an optional reference, a kit only as a component base (Q-comp-01), not as the visual direction; small teams adapt an accessible base; references reinterpreted. *Source:* card heuristics [DC-L17-02, DC-L11-01, DC-L17-03; S-L11-030].
+- **Decides:** DC-L17-02, DC-L11-01, DC-L17-03
+- **Changes:** DC-L11-20, DC-L08-03 · blocks: Context > Starting point > Entry path; Strategy > Starting point; Builder > Input > Reference intake
+- **Preview:** the three starting points side by side on one screen, with "carried from reference" and "swapped" labels on each element.
+- **Use / avoid:** use a kit for components and a reference for structure; avoid letting either become the brand ("websites made with shadcn/ui famously look the same") [DC-L11-01; S-L11-073].
+- **Skip:** yes, brief first.
+- **Block class:** I (owner input)
+- **Time weight:** medium (fan-out 2)
+- **Evidence:** DC-L17-02, DC-L11-01, DC-L17-03; S-L11-006, S-L11-071, S-L11-073, S-L17-003, S-L17-023
+- **Merges:** K0.5, K2.6 (starting library)
 ---
 
 ## Stage 02 · Audience and commitments
@@ -223,6 +262,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the same table-plus-form screen at the three densities side by side; hovering a row shows its height, padding and text size.
 - **Use / avoid:** use dense for tables, dashboards and editors people work in all day; avoid dense on touch-first, occasional or public surfaces, where it hurts legibility and forces the targets out of step with the visuals [DC-L09-04, DC-L15-04].
 - **Skip:** yes, defaults to regular. Target sizes do not shrink with density; they follow input precision (Q-space-03, DC-L14-03).
+- **Block class:** I (owner input)
 - **Time weight:** high (fan-out 0)
 - **Evidence:** DC-L09-04, DC-L15-04; S-L09-403, S-L09-540
 - **Merges:** B1 (audience half), K1.1 (users of the product, not of the system)
@@ -243,6 +283,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Changes:** DC-L06-03, DC-L06-19, DC-L13-17 (default positions of their sliders)
 - **Preview:** a pre-filled position on the personality sliders of Stage 03, with a note where the category caps them.
 - **Skip:** yes.
+- **Block class:** I (owner input)
 - **Time weight:** medium (fan-out 0)
 - **Evidence:** DC-L06-03, DC-L06-19; S-L06-010, S-L06-060, S-L06-014
 - **Merges:** B1 (emotional state), B2
@@ -261,7 +302,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Changes:** DC-L01-22, DC-L03-12, DC-L04-09, DC-L14-03, DC-L02-08 · blocks: Foundations > Accessibility > Program
 - **Preview:** a guardrail strip listing which later options will be blocked or flagged at this level.
 - **Skip:** yes, AA. The builder also generates the system-vs-product-team responsibility statement GOV.UK publishes [S-L11-092].
-- **Time weight:** low (fan-out 1)
+- **Block class:** I (owner input)
+- **Time weight:** medium (fan-out 1)
 - **Evidence:** DC-L11-19; S-L11-093, S-L11-092, S-L11-094, S-L11-030
 - **Merges:** K4.1, K4.2, B15 (WCAG level)
 
@@ -281,14 +323,15 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Changes:** DC-L07-15, DC-L11-25, DC-L01-20, DC-L04-25, DC-L02-21, DC-L03-11 · blocks: Principles > Inclusion; Tokens > Theming > Modes
 - **Preview:** a mode switcher on the preview screen that gains one toggle per checked setting.
 - **Skip:** yes.
-- **Time weight:** low (fan-out 1)
+- **Block class:** I (owner input)
+- **Time weight:** medium (fan-out 1)
 - **Evidence:** DC-L13-14; S-L13-072, S-L13-076, S-L13-098
 - **Merges:** K4.4, B15 (user settings part)
 
 ---
 
 ## Stage 03 · Brand personality and principles
-> Screen: who the brand is. Graph step 0-1. Personality has the largest fan-out in the graph (15 decisions), so it comes before any foundation [DC-L06-02].
+> Screen: who the brand is, and which brand assets already exist. Graph step 0-1. Personality has the largest fan-out in the graph (15 decisions), so it comes before any foundation [DC-L06-02]. The grouped asset checklist (Q-brand-08) sits here, as L17 recommends, so missing assets can be commissioned while the rest of the flow continues [DC-L17-04].
 
 ### Q-brand-01 · Where does your brand sit on these scales? · Quick
 - **Why:** The sliders set defaults for color saturation, radius, type, weight, motion, illustration and voice through the L06 lever matrix [DC-L06-02].
@@ -308,6 +351,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Changes:** DC-L06-03, DC-L06-14, DC-L06-18, DC-L06-01, DC-L15-01, DC-L06-04, DC-L06-09, DC-L06-10, DC-L01-10, DC-L01-06, DC-L04-02, DC-L02-02 · blocks: Foundations > Brand > Personality (feeds every foundation)
 - **Preview:** 2-3 generated style tiles (type, color, radius, a button, a card) that update as sliders move; slider conflicts (for example "playful" wants large radii, "authoritative" wants small) are shown, not silently averaged [S-L06-078; L06 section 4.2].
 - **Skip:** yes; all sliders at 50 give the neutral-toolkit look that L09 warns every generated app starts from [L09 A3].
+- **Block class:** I (owner input)
 - **Time weight:** high (fan-out 15)
 - **Evidence:** DC-L06-02; S-L06-070, S-L06-071, S-L06-078, S-L06-011, S-L06-013
 - **Merges:** B5, B6, K3.3 (feel)
@@ -328,9 +372,41 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Changes:** DC-L06-02 slider pre-positions, DC-L06-11, DC-L06-07, DC-L06-12
 - **Preview:** reference thumbnails placed on the L09 personality map (productive to expressive, neutral to brand-led) with the person's current position.
 - **Skip:** yes.
+- **Block class:** I (owner input)
 - **Time weight:** medium (fan-out 0)
 - **Evidence:** DC-L06-02, DC-L06-11; S-L06-004, S-L06-027, S-L11-001
 - **Merges:** B3, B4, K3.3 (reference products)
+
+### Q-brand-08 · Which of these assets do you already have? · Standard
+- **Why:** Designer-owned blocks are asked once as a grouped checklist so gaps surface early; each "yes" opens its hook, each "no" gets a fallback and a briefed placeholder slot [DC-L17-04; BRIEF requirement 2].
+- **Ask:** "Tick what you already have: logo, brand colors, brand font files, icons, app icon, photos, illustrations, animations, sounds, voice guide, brand book."
+- **Example:** Show the asset shelf with empty, briefed slots; a dropped logo SVG fills its slot and proposes brand-color candidates from its fills.
+- **Control:** multi-select checklist + drop zone
+- **Options:**
+  - `logo` Logo and brand mark: opens Q-brand-03 [DC-L05-13].
+  - `brand-colors` Exact brand colors: opens the locked-hex input in Q-color-01 [DC-L01-09].
+  - `typeface` Brand font files and license: opens Q-type-02 [DC-L02-06].
+  - `icons` Icon set: opens Q-icon-01 [DC-L05-01].
+  - `app-icon` App icon: opens Q-icon-06 [DC-L05-12].
+  - `photography` Photos or a photo brief: opens Q-img-01 [DC-L05-14].
+  - `illustration` Illustrations or a mascot: opens Q-img-04 [DC-L06-12].
+  - `motion-assets` Animations, Lottie or 3D: opens Q-img-06 [DC-L05-21].
+  - `motifs` Patterns, textures, gradients or a signature shape: opens Q-img-07 and Q-shape-05 [DC-L06-11, DC-L06-09].
+  - `sounds` UI sounds or a sonic logo: opens Q-motion-08 [DC-L04-27].
+  - `voice-guide` Voice and tone guide or word list: opens Q-voice-01 [DC-L06-18].
+  - `brand-book` Brand book PDF: read through Q-ref-01; colors, font names and embedded logos are extracted [S-L17-569, S-L17-570, S-L17-571].
+- **Default:** nothing ticked; every hook's fallback applies and its slot stays open with a written brief. *Source:* card heuristic, fallback order: have it, commission a designer with the generated brief, an open library with a compatible license, a named tool with its caveat, omit [DC-L17-04].
+- **Decides:** none directly (asset inventory)
+- **Changes:** pre-answers the hooks listed; records an asset decision per hook (have, commissioning, tool, open library, placeholder, not needed) [inferred from L17 Part I Stage 3]
+- **Pre-answers:** Q-brand-03, Q-color-01, Q-type-02, Q-icon-01, Q-icon-06, Q-img-01, Q-img-04, Q-img-06, Q-img-07, Q-shape-05, Q-motion-08, Q-voice-01
+- **Hook:** Accepts any of the formats listed on the individual hooks; each asset gets a license ledger entry (source, license, attribution, allowed slots, owner), and assets are fetched per project rather than pooled into a shared catalog, because several open licenses forbid redistribution as a library [S-L17-512, S-L17-517, S-L17-519, S-L17-522]. If no: every slot keeps a briefed placeholder; a generated stand-in is never presented as final [S-L17-004, S-L17-021].
+- **Preview:** the asset shelf, one slot per hook, with status chips.
+- **Use / avoid:** use this checklist once, early, so the designer hand-off can start in parallel; avoid generating identity assets silently [DC-L17-04].
+- **Skip:** yes; Quick mode applies all fallbacks.
+- **Block class:** D (designer-owned)
+- **Time weight:** medium (fan-out 0)
+- **Evidence:** DC-L17-04; S-L17-004, S-L17-021, S-L17-512, S-L17-569
+- **Merges:** B7 (asset inventory)
 
 ### Q-brand-03 · Do you have a logo and brand mark? · Standard
 - **Why:** A logo is a block the builder cannot generate well; it feeds the logo component, favicons and app icons [DC-L05-13; BRIEF requirement 2].
@@ -344,10 +420,11 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Default:** no, with a text wordmark placeholder. *Source:* [inferred].
 - **Decides:** none directly (asset input for DC-L05-13)
 - **Changes:** DC-L05-13, DC-L05-12 (app icon), DC-L04-27 (a sonic logo is a separate hook, Q-motion-08) · blocks: Brand in product > Logo usage; Brand in product > Favicon
-- **Hook:** Accepts SVG (preferred, one master for the favicon set), PDF or EPS vector, or PNG at 512px or larger; light, dark and monochrome versions if they exist. The builder then derives `favicon.ico` 32px, `icon.svg` with a dark-scheme style, `apple-touch-icon.png` 180px, manifest PNGs 192 and 512 plus a maskable 512 [S-L05-042, S-L05-040, S-L05-041]. If no: (1) commission a designer (the recommended path for anything customers will recognize), (2) use a temporary wordmark set in the chosen typeface, which the builder generates and labels "placeholder", or (3) use an AI or template logo tool, with the caveat that its output may not be distinctive or ownable [inferred].
+- **Hook:** Accepts SVG (preferred, one master for the favicon set), PDF or EPS vector, or PNG at 512px or larger; light, dark and monochrome versions if they exist. The builder then derives `favicon.ico` 32px, `icon.svg` with a dark-scheme style, `apple-touch-icon.png` 180px, manifest PNGs 192 and 512 plus a maskable 512 [S-L05-042, S-L05-040, S-L05-041]. If no: (1) commission a designer with the generated brief and a reminder that a contractor's logo needs a written copyright assignment, the recommended path for anything customers will recognize; (2) a wordmark set in the chosen typeface (OFL, Google Fonts, Adobe Fonts and ITF FFL allow fonts in logos), generated and labeled "placeholder"; (3) AI logo generators (Looka, Brandmark) with caveats: Looka's icons and fonts come from a shared database available to others, and a trademark search is needed before adoption [S-L17-534, S-L17-535, S-L17-564, S-L17-579].
 - **Preview:** the logo placed in an app bar at 24-32px, on a sign-in screen as a lockup, and as a browser-tab favicon, in light and dark.
 - **Use / avoid:** use the symbol-only mark at 24-32px in dense app chrome and the full lockup on sign-in and marketing; avoid recoloring fixed-color product marks (Fluent never recolors launch icons) and avoid relying on inherited color [S-L05-044, S-L05-014].
 - **Skip:** yes; the placeholder wordmark is applied.
+- **Block class:** D (designer-owned)
 - **Time weight:** medium (fan-out 0)
 - **Evidence:** DC-L05-13; S-L05-014, S-L05-040, S-L05-042, S-L05-044
 - **Merges:** B7 (logo), K3.1 (brand guidelines, logo part)
@@ -366,6 +443,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Changes:** DC-L06-04, DC-L06-10, DC-L06-11, DC-L15-01, DC-L15-03 · blocks: Foundations > Brand > Expression intensity
 - **Preview:** one screen shown in all three settings, with the hero moment (for example a success state) animated.
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** high (fan-out 5)
 - **Evidence:** DC-L06-03; S-L06-002, S-L06-009, S-L06-010, S-L06-067
 
@@ -385,7 +463,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Changes:** DC-L06-16, DC-L02-11 · blocks: Foundations > Brand > Layer architecture
 - **Preview:** a marketing hero and a product table side by side, rendered from the chosen layering.
 - **Skip:** yes.
-- **Time weight:** low (fan-out 1)
+- **Block class:** I (owner input)
+- **Time weight:** medium (fan-out 1)
 - **Evidence:** DC-L06-01; S-L06-001, S-L06-003, S-L06-053, S-L06-085, S-L06-110
 - **Merges:** B11 (second half)
 
@@ -405,6 +484,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a heading ladder at productive and expressive settings, across three breakpoints.
 - **Use / avoid:** use fluid, expressive display styles on marketing and editorial pages; avoid them inside product containers (Carbon: "Do not use these styles inside a container") [S-L02-011].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** high (fan-out 5)
 - **Evidence:** DC-L02-11; S-L02-006, S-L02-011, S-L02-012, S-L02-015, S-L02-041
 
@@ -424,7 +504,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Changes:** tie-break rules for slider conflicts; ADRs (DC-L11-12) · blocks: Foundations > Principles; Governance > Principles
 - **Preview:** each principle shown with a do/don't pair generated from the current draft.
 - **Skip:** yes.
-- **Time weight:** low (fan-out 0)
+- **Block class:** I (owner input)
+- **Time weight:** medium (fan-out 0)
 - **Evidence:** DC-L06-15, DC-L11-05; S-L06-044, S-L06-077, S-L11-008
 - **Merges:** K3.2, B12, K1.2 (interview themes become principle inputs)
 
@@ -449,6 +530,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Changes:** DC-L10-02, DC-L10-08, DC-L10-09, DC-L10-10, DC-L10-11, DC-L10-15, DC-L10-17, DC-L10-19, DC-L10-20, DC-L10-22, DC-L10-24, DC-L14-01 · blocks: Platforms > Scope > Target platforms
 - **Preview:** the same screen rendered in each platform's chrome (browser, iOS glass bars, Material top bar), side by side.
 - **Skip:** yes, web.
+- **Block class:** I (owner input)
 - **Time weight:** high (fan-out 12)
 - **Evidence:** DC-L10-01; S-L10-021, S-L10-046, S-L10-047, S-L10-075, S-L11-030
 - **Merges:** P1, K2.2 (platform part)
@@ -468,6 +550,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Changes:** DC-L10-03, DC-L10-04, DC-L10-06, DC-L10-09, DC-L10-12, DC-L10-13, DC-L10-14, DC-L10-21, DC-L10-25, DC-L06-07, DC-L15-01 · blocks: Platforms > Strategy > Native vs brand posture
 - **Preview:** one screen as native-first, hybrid and brand-first on iOS and Android.
 - **Skip:** yes.
+- **Block class:** I (owner input)
 - **Time weight:** high (fan-out 11)
 - **Evidence:** DC-L10-02, DC-L06-14; S-L10-009, S-L10-038, S-L10-075, S-L10-076, S-L06-043
 - **Merges:** P3
@@ -486,6 +569,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Changes:** DC-L08-03, DC-L10-13 · blocks: Principles > Familiarity
 - **Preview:** a standard dropdown and a custom one next to each other, both keyboard-operable.
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L13-17; S-L13-006, S-L13-030, S-L13-036, S-L13-055
 
@@ -504,6 +588,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Changes:** DC-L10-14, DC-L10-12 · blocks: Components > Controls > Platform rendering
 - **Preview:** switch, slider and segmented control in each style on iOS.
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L10-13; S-L10-009, S-L10-014, S-L10-072, S-L10-075
 - **Merges:** P14
@@ -524,6 +609,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Changes:** DC-L10-19, DC-L10-21, DC-L10-22, DC-L10-24, DC-L14-02 · blocks: Platforms > Architecture > Sharing layer
 - **Preview:** a diagram of which layers are shared, with the same card component rendered per platform.
 - **Skip:** yes.
+- **Block class:** I (owner input)
 - **Time weight:** high (fan-out 5)
 - **Evidence:** DC-L10-03; S-L10-039, S-L10-040, S-L10-046, S-L10-053
 - **Merges:** P4
@@ -544,6 +630,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Changes:** DC-L10-22, DC-L10-03, DC-L10-01, DC-L08-03 · blocks: Platforms > Implementation
 - **Preview:** a code tab showing a generated Button in each selected stack.
 - **Skip:** yes.
+- **Block class:** I (owner input)
 - **Time weight:** medium (fan-out 3)
 - **Evidence:** DC-L10-19, DC-L10-20, DC-L10-21; S-L10-047, S-L10-055, S-L10-063, S-L11-030
 - **Merges:** K2.3, P20, P21, P22
@@ -566,6 +653,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Changes:** DC-L14-02, DC-L14-03, DC-L14-04, DC-L14-05, DC-L14-07, DC-L14-08, DC-L14-10, DC-L14-11, DC-L14-12, DC-L14-14 · blocks: Platforms > Scope > Device classes; token `context` modifier
 - **Preview:** a device row (watch, phone, tablet, laptop, TV) showing the draft screen at each first-class size.
 - **Skip:** yes.
+- **Block class:** I (owner input)
 - **Time weight:** high (fan-out 10)
 - **Evidence:** DC-L14-01, DC-L10-24; S-L14-069, S-L14-001, S-L14-017, S-L10-024
 - **Merges:** P2, P25, D1, D3
@@ -587,7 +675,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a button row with its hit area outlined for each input.
 - **Use / avoid:** use the touch target size for anything a finger can reach, including web; use pointer-sized visuals only with a hit area padded to the floor; avoid drag-only interactions without a non-drag alternative (WCAG 2.5.7) [DC-L10-15; S-L10-083].
 - **Skip:** yes.
-- **Time weight:** low (fan-out 0)
+- **Block class:** I (owner input)
+- **Time weight:** medium (fan-out 0)
 - **Evidence:** DC-L10-15; S-L10-012, S-L10-036, S-L10-072, S-L10-073, S-L10-083
 - **Merges:** P16, D2
 
@@ -607,7 +696,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Changes:** validator rules; DC-L04-19 and DC-L14-08 (motion off in vehicles) · blocks: Governance > Linting > Context safety rules
 - **Preview:** the draft screen with failing elements flagged under the chosen context.
 - **Skip:** yes.
-- **Time weight:** low (fan-out 0)
+- **Block class:** I (owner input)
+- **Time weight:** medium (fan-out 0)
 - **Evidence:** DC-L14-11; S-L14-031, S-L14-032, S-L14-037, S-L14-008
 - **Merges:** D4
 
@@ -627,6 +717,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Changes:** DC-L10-05, DC-L10-11, DC-L10-12, DC-L10-14 · blocks: Platforms > Scope > OS versions
 - **Preview:** a matrix of which platform features (glass, dynamic color, edge-to-edge, predictive back) are assumed.
 - **Skip:** yes.
+- **Block class:** I (owner input)
 - **Time weight:** medium (fan-out 4)
 - **Evidence:** DC-L10-23; S-L10-005, S-L10-019, S-L10-020, S-L10-023, S-L10-071, S-L10-076
 - **Merges:** P24
@@ -654,6 +745,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Changes:** DC-L07-08, DC-L07-16, DC-L07-17, DC-L07-18, DC-L07-26, DC-L07-24 · blocks: Tooling > Figma plan
 - **Preview:** a mode-budget meter (modes used vs the plan's limit) that later theming answers fill.
 - **Skip:** yes.
+- **Block class:** I (owner input)
 - **Time weight:** medium (fan-out 3)
 - **Evidence:** DC-L07-27, DC-L16-13; S-L07-014, S-L07-015, S-L07-034, S-L16-002, S-L16-113
 - **Merges:** K2.4
@@ -673,6 +765,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Changes:** DC-L07-25, DC-L07-09, DC-L16-12, DC-L11-14 · blocks: Builder > Data > Source of truth; Tokens > Architecture > Source of truth; Builder > Interop > Design tools
 - **Preview:** a round-trip diagram: which targets are generated, which only mirror, and which direction sync runs.
 - **Skip:** yes, builder.
+- **Block class:** I (owner input)
 - **Time weight:** high (fan-out 9)
 - **Evidence:** DC-L16-02, DC-L07-08, DC-L11-16; S-L11-030, S-L07-011, S-L16-113
 - **Merges:** K2.5, K10.5
@@ -695,7 +788,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Changes:** DC-L11-14, DC-L16-12, DC-L08-03 · blocks: Delivery > Packaging
 - **Preview:** the file tree the builder will export for each checked channel.
 - **Skip:** yes.
-- **Time weight:** low (fan-out 0)
+- **Block class:** I (owner input)
+- **Time weight:** medium (fan-out 0)
 - **Evidence:** DC-L09-08; S-L09-199, S-L09-313, S-L09-587, S-L09-589, S-L09-609
 - **Merges:** K10.1
 
@@ -715,6 +809,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Changes:** DC-L11-23 · blocks: Tooling > Design-code bridge
 - **Preview:** a sample MCP response for one component, with and without linkage.
 - **Skip:** yes.
+- **Block class:** T (tool-assisted)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L07-24; S-L07-026, S-L07-027, S-L07-042
 
@@ -741,6 +836,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** one product screen (nav, card, form, table) rendered in each style, with contrast warnings on soft and glass.
 - **Use / avoid:** use flat 2.0 or tonal for app surfaces people use daily; use glass only on the functional layer (bars, controls, sheets) and never on reading surfaces; keep neo-brutalist and maximal for marketing or indie products; avoid soft/neumorphic for anything interactive unless borders are added to reach 3:1 [DC-L15-01; S-L10-008 via DC-L10-12].
 - **Skip:** yes; Quick maps sliders A, C and E to a preset [inferred from L06 section 4.2].
+- **Block class:** G (generatable)
 - **Time weight:** high (fan-out 12)
 - **Evidence:** DC-L15-01; S-L15-004, S-L15-005, S-L15-006, S-L15-009, S-L15-060, S-L15-073
 
@@ -760,6 +856,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a data table and a settings form at each density, with the target-size floor drawn so it visibly does not shrink [DC-L15-04].
 - **Use / avoid:** use compact for data-heavy components (tables, lists, menus, trees); use spacious for marketing and focused tasks; avoid shrinking targets with density; they stay at the floor in every mode [DC-L15-04, DC-L08-13; S-L08-070].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** high (fan-out 8)
 - **Evidence:** DC-L15-04, DC-L08-13; S-L15-003, S-L15-004, S-L08-062, S-L08-063, S-L08-070
 - **Merges:** K6.3 (density modes part)
@@ -779,6 +876,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a heading ladder plus an article card at each strength; levels closer than the threshold are flagged.
 - **Use / avoid:** use subtle hierarchy in dense tools where color and weight lead; use dramatic hierarchy on editorial and marketing pages; avoid color-only hierarchy and avoid levels that almost match [DC-L15-02; S-L15-002, S-L15-070].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 4)
 - **Evidence:** DC-L15-02; S-L15-002, S-L15-028, S-L15-033, S-L15-038, S-L15-070
 
@@ -797,6 +895,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a settings page grouped each way.
 - **Use / avoid:** use space for simple groups, containers for mixed content or grids, lines for long homogeneous lists; avoid nesting containers inside containers [DC-L15-05; S-L15-012].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 3)
 - **Evidence:** DC-L15-05; S-L15-010, S-L15-012, S-L15-033, S-L15-037, S-L15-053
 
@@ -815,6 +914,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** an empty state and a form in each alignment.
 - **Use / avoid:** use centered layouts for single-focus moments with short text (empty states, dialogs, sign-in); avoid centering multi-line body text [DC-L15-08].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L15-08; S-L15-001, S-L15-033, S-L15-049, S-L15-053
 
@@ -839,6 +939,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the draft screen split diagonally, light and dark.
 - **Use / avoid:** use system-following modes on Apple platforms; offer an in-app toggle only on web and only in addition; avoid an app-only appearance switch on Apple, which reads as broken [DC-L10-17; S-L10-089].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L10-17, DC-L14-09; S-L10-089, S-L10-027, S-L14-037, S-L11-030
 - **Merges:** K6.1, P18
@@ -859,6 +960,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Changes:** DC-L07-01, DC-L07-17, DC-L07-18, DC-L01-20 · blocks: Tokens > Theming > Modes; Foundations > Theming scope
 - **Preview:** a mode-combination grid with the count of palettes to test, and the Figma mode budget from Q-tool-03.
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 3)
 - **Evidence:** DC-L07-15, DC-L11-25; S-L07-004, S-L07-104, S-L07-110, S-L11-030
 - **Merges:** K6.3 (breakpoint modes), K6.4
@@ -878,7 +980,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Changes:** DC-L07-16, DC-L06-16, DC-L06-17, DC-L06-06, DC-L07-01 · blocks: Theming > Brands and modes
 - **Preview:** the draft screen re-skinned with two sample brand colors, contrast re-checked live.
 - **Skip:** yes.
-- **Time weight:** low (fan-out 0)
+- **Block class:** I (owner input)
+- **Time weight:** medium (fan-out 0)
 - **Evidence:** DC-L09-07; S-L09-170, S-L09-237, S-L09-459, S-L06-053, S-L11-030
 - **Merges:** K6.2, B10
 
@@ -899,6 +1002,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Changes:** DC-L07-17, DC-L07-18, DC-L06-17 · blocks: Tokens > Theming > Brands
 - **Preview:** a table of brandable tokens with each brand's values.
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 4)
 - **Evidence:** DC-L07-16, DC-L06-16; S-L07-011, S-L07-014, S-L07-015, S-L06-053, S-L06-094
 
@@ -924,6 +1028,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the seed becomes ramps live; locked hexes show a pin on their step; a light brand color (yellow, cyan, lime) visibly switches its button text to dark (Spectrum does this) [S-L01-036].
 - **Use / avoid:** use the brand hex as a ramp anchor and pick UI steps by contrast; avoid using a brand color whose ratio with white is below 3:1 for small text; use it as a fill with dark text or as a tint [DC-L01-09; S-L01-044].
 - **Skip:** yes, a seed is suggested.
+- **Block class:** E (extractable)
 - **Time weight:** high (fan-out 3)
 - **Evidence:** DC-L09-03, DC-L01-09, DC-L06-06 (context); S-L09-459, S-L09-563, S-L06-012, S-L01-036, S-L01-044
 - **Merges:** K3.4, B7 (brand colors), K7.1 (ramp method)
@@ -945,6 +1050,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the preview screen re-renders per option; on iOS, a tinted nav bar is flagged as "fighting the glass" [S-L10-009, S-L10-010].
 - **Use / avoid:** use brand color on the one element per view that matters most; avoid tinting several control backgrounds at once ("Using your brand color too broadly can overwhelm your interface") [S-L06-008].
 - **Skip:** yes, accent.
+- **Block class:** G (generatable)
 - **Time weight:** high (fan-out 3)
 - **Evidence:** DC-L06-04, DC-L10-04; S-L06-008, S-L06-011, S-L06-030, S-L10-009, S-L10-010
 - **Merges:** P5
@@ -966,6 +1072,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a chroma slider under the five named stops; surfaces, accent and status chips update together.
 - **Use / avoid:** use low chroma on large areas (surfaces) and spend chroma on small, high-meaning elements (primary action, status, selection); avoid vivid surfaces in high-trust categories [DC-L01-10; S-L01-013, S-L06-010].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** high (fan-out 5)
 - **Evidence:** DC-L01-10, DC-L06-05; S-L01-010, S-L01-058, S-L01-062, S-L06-083, S-L06-072
 
@@ -986,6 +1093,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the product screen with each accent's jobs highlighted (actions, discovery, categories).
 - **Use / avoid:** add an accent only when it has a job (a second action tier, discovery, categories); avoid adding one for decoration or picking wheel presets (triadic, complementary) as a palette [DC-L01-08; S-L15-025].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 4)
 - **Evidence:** DC-L01-08, DC-L15-06; S-L01-004, S-L01-013, S-L01-029, S-L15-017, S-L15-054
 
@@ -1004,6 +1112,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** an accent-area meter on the preview screen, plus a warning when two primaries appear.
 - **Use / avoid:** use accent for the one thing the user should do next; avoid two primary buttons in one group ("if you need two primaries, one of them is secondary") [DC-L15-03].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L15-03; S-L15-026, S-L15-038, S-L15-048, S-L15-054, S-L15-067
 
@@ -1023,6 +1132,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the Android preview recolored with three sample wallpapers; brand-critical colors stay put.
 - **Use / avoid:** let dynamic color own surfaces and secondary accents; avoid letting it change error and brand-critical colors [DC-L01-21; S-L01-004].
 - **Skip:** yes.
+- **Block class:** T (tool-assisted)
 - **Time weight:** high (fan-out 5)
 - **Evidence:** DC-L10-05, DC-L01-21; S-L10-019, S-L10-075, S-L01-006, S-L01-058, S-L06-082
 - **Merges:** P6, B9
@@ -1045,6 +1155,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** two accents side by side at the same step; switching the method shows whether they stay equally heavy, with the contrast of each step printed.
 - **Use / avoid:** use contrast-indexing when users can recolor the accent, so every accent passes the same pairings; avoid HSL-based lightness steps [DC-L01-03, DC-L01-01].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** high (fan-out 6)
 - **Evidence:** DC-L01-01, DC-L01-03, DC-L01-04; S-L01-006, S-L01-035, S-L01-044, S-L01-045, S-L01-062
 
@@ -1065,6 +1176,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the ramp strip with each step's job labeled (app background, subtle fill, border, solid, text).
 - **Use / avoid:** use numbers with gaps (50-950) if steps may be inserted later, 1-12 if every step has a fixed job; avoid more steps than distinct UI jobs plus two hover/pressed shifts [DC-L01-02].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 2)
 - **Evidence:** DC-L01-02; S-L01-001, S-L01-002, S-L01-006, S-L01-029, S-L01-036
 
@@ -1084,6 +1196,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the preview screen's surfaces, borders and text re-tinted live as the slider moves.
 - **Use / avoid:** use pure gray where color judgment matters (photo, data, charts); keep chroma lowest at the lightest and darkest steps; avoid strong tints that make status colors look off [DC-L01-06; S-L01-036].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 3)
 - **Evidence:** DC-L01-06; S-L01-027, S-L01-036, S-L01-053, S-L01-062, S-L06-067
 - **Merges:** K3.4 (neutral palette)
@@ -1103,6 +1216,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the neutral ramp with bands shaded (backgrounds, borders, text) and a card stack using them.
 - **Use / avoid:** use alpha neutrals for hover fills and overlays that must work on any surface; avoid using alpha for text [inferred].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 3)
 - **Evidence:** DC-L01-07; S-L01-027, S-L01-029, S-L01-031, S-L01-036, S-L01-052
 
@@ -1122,6 +1236,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** accent chips in sRGB and P3 next to each other (visible only on a P3 display; otherwise a note).
 - **Use / avoid:** use P3 where saturation carries brand or status meaning; avoid P3 for neutrals, where it adds nothing [DC-L01-05, inferred].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 2)
 - **Evidence:** DC-L01-05, DC-L07-10; S-L01-045, S-L01-049, S-L01-052, S-L07-003
 
@@ -1140,6 +1255,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a token-name inspector: hovering any element on the preview shows its role token.
 - **Use / avoid:** use paired fg/bg tokens so each pair is contrast-tested; avoid tokens named after a hue ("blue-button") at the semantic tier [DC-L01-11; DC-L07-04].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 3)
 - **Evidence:** DC-L01-11; S-L01-004, S-L01-027, S-L01-029, S-L01-032
 
@@ -1159,6 +1275,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a status banner, badge and button in each emphasis level.
 - **Use / avoid:** use subtle levels on large areas (banners) and bold for small, urgent elements; avoid bold fills on page-size areas [DC-L01-12].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L01-12; S-L01-004, S-L01-030, S-L01-050
 
@@ -1178,6 +1295,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a page, card, popover and dialog stack in light and dark, with the tier of each labeled.
 - **Use / avoid:** use lighter-when-higher surfaces in dark mode; avoid separating interactive surfaces by tone alone when the edge carries meaning (needs 3:1) [DC-L01-13; S-L01-023].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** high (fan-out 5)
 - **Evidence:** DC-L01-13; S-L01-004, S-L01-010, S-L01-029, S-L01-032, S-L01-054
 
@@ -1196,6 +1314,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** banners, badges and inline errors for each status, with a warning flag if a status hue sits too close to the brand hue.
 - **Use / avoid:** use dark text on yellow and amber fills, which fail 4.5:1 with white (Atlassian `warning.inverse`); avoid conveying status by color alone [DC-L01-15; S-L01-030, S-L01-024].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 3)
 - **Evidence:** DC-L01-15; S-L01-030, S-L01-036, S-L01-050, S-L01-053, S-L01-056
 
@@ -1215,6 +1334,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** light and dark side by side with every pair re-checked; failing pairs light up in the contrast matrix.
 - **Use / avoid:** use role-based mapping so each token keeps its contrast relationship; avoid inverting colors [DC-L01-18; S-L10-089].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** high (fan-out 5)
 - **Evidence:** DC-L01-18; S-L01-006, S-L01-010, S-L01-031, S-L01-052
 
@@ -1233,6 +1353,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the contrast matrix of all role pairs, pass/fail per mode, with the nearest passing step suggested for failures.
 - **Use / avoid:** test tokens as pairs, in every mode, at build time; avoid judging a single color by eye [DC-L01-22].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** high (fan-out 5)
 - **Evidence:** DC-L01-22; S-L01-022, S-L01-023, S-L01-025, S-L01-027, S-L09-563
 
@@ -1251,6 +1372,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the preview screen under red-green and blue-yellow simulation.
 - **Use / avoid:** use a second channel whenever two meanings differ only in hue; avoid red/green-only status pairs [DC-L01-23].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 2)
 - **Evidence:** DC-L01-23; S-L01-013, S-L01-024, S-L01-036, S-L01-060
 
@@ -1270,6 +1392,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a bar chart, line chart and heatmap in light and dark, with the 3:1 check against the surface.
 - **Use / avoid:** use direct labels or grouping beyond 8 categories; avoid adding more hues [DC-L01-24; S-L05-075].
 - **Skip:** yes, none unless Q-scope-01 includes internal-tools.
+- **Block class:** I (owner input)
 - **Time weight:** medium (fan-out 3)
 - **Evidence:** DC-L01-24, DC-L05-23; S-L01-023, S-L01-032, S-L01-056, S-L05-034, S-L05-075
 
@@ -1293,6 +1416,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a button, list row and chip you can hover and press on the preview, with the resulting token value shown.
 - **Use / avoid:** use overlays for components that sit on user or dynamic colors; avoid state changes that rely on a hue shift alone [DC-L01-17, DC-L01-23].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L01-17; S-L01-005, S-L01-029, S-L01-064, S-L01-065
 
@@ -1313,6 +1437,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the dark preview with a darkness slider; accent chroma drops as the base darkens.
 - **Use / avoid:** use "dimmed" only for audiences that read long-form at night (developer tools, reading apps); avoid bright objects on pure black in immersive views [DC-L01-19; S-L01-013].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L01-19; S-L01-010, S-L01-013, S-L01-029, S-L01-050, S-L01-055
 
@@ -1331,6 +1456,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a text ladder on every surface tier, each with its ratio.
 - **Use / avoid:** use 2-3 text colors per view; avoid placeholder-grey for anything users must read [DC-L01-14; BOARD L15 note].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L01-14; S-L01-004, S-L01-010, S-L01-027, S-L01-029, S-L01-055
 
@@ -1350,6 +1476,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a text field, card and table with each border strength; tab through to see the focus ring.
 - **Use / avoid:** use the 3:1 border token whenever an input's only boundary is its border; avoid decorative borders to mark interactive boundaries [DC-L01-16; S-L01-023].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L01-16; S-L01-002, S-L01-004, S-L01-023, S-L01-029, S-L01-036
 
@@ -1370,6 +1497,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the preview screen in each checked theme, including a simulated forced-colors rendering.
 - **Use / avoid:** use a border or icon wherever status or selection is conveyed by fill; avoid focus rings drawn only with box-shadow (forced colors removes shadows) [DC-L01-20; S-L10-031].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L01-20; S-L01-006, S-L01-013, S-L01-027, S-L01-048, S-L01-050
 
@@ -1388,6 +1516,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a hero banner with gradients interpolated in sRGB and OKLab (the sRGB one shows a gray "dead zone").
 - **Use / avoid:** use a sequential palette, not a gradient, when color carries data meaning (Carbon) [S-L01-056]; avoid P3 gradients without an sRGB variant [S-L01-013].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L01-25; S-L01-013, S-L01-056, S-L01-066
 
@@ -1407,6 +1536,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a hover state over a white card, a tinted panel and a photo, solid vs alpha.
 - **Use / avoid:** use alpha when the background varies; use solid when the pair must be contrast-certified [DC-L01-27].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L01-27; S-L01-030, S-L01-031, S-L01-036, S-L01-052
 
@@ -1432,6 +1562,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the same screen set in each option, side by side with the OS chrome, so the "foreign next to OS chrome" effect is visible [DC-L02-01].
 - **Use / avoid:** use system fonts when the product lives inside another OS's chrome; use a brand face when recognition is a stated goal; avoid a brand face in body text if it needs size bumps to match system legibility at 13pt [DC-L02-01, DC-L10-06].
 - **Skip:** yes, system.
+- **Block class:** T (tool-assisted)
 - **Time weight:** high (fan-out 6)
 - **Evidence:** DC-L09-05, DC-L02-01, DC-L06-07, DC-L10-06; S-L02-001, S-L02-007, S-L06-031, S-L10-009, S-L09-213
 - **Merges:** K3.5, B8, P7
@@ -1453,6 +1584,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the loaded font in the specimen, with a first-load simulation showing `swap` reflow vs `optional` stability [S-L02-042].
 - **Use / avoid:** use at most 2 families and 1 variable file each on first load; avoid `font-display: block` for body text (brief invisible text) [DC-L02-06; S-L02-042].
 - **Skip:** yes; the system stack stands in until files arrive.
+- **Block class:** T (tool-assisted)
 - **Time weight:** medium (fan-out 1)
 - **Evidence:** DC-L02-06; S-L02-001, S-L02-012, S-L02-026, S-L02-042, S-L06-031
 - **Merges:** K3.5 (licensing), B7 (typeface licences)
@@ -1475,6 +1607,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a specimen with the confusable-pairs test (Il1, O0, rn/m) at 12-14px for each candidate.
 - **Use / avoid:** use geometric faces for headlines, humanist or neo-grotesque for body; avoid any face that fails the confusable-pairs test at 12-14px or lacks your scripts [DC-L02-02].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 3)
 - **Evidence:** DC-L02-02, DC-L06-08; S-L02-024, S-L02-049, S-L06-028, S-L06-031, S-L06-078
 
@@ -1495,6 +1628,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the specimen and a button row rendered in each chosen script, with baseline alignment and label overflow flagged.
 - **Use / avoid:** use logical (start/end) spacing and mirrored directional icons when RTL is on; avoid fixing a label width to its English length [DC-L06-24; S-L06-101].
 - **Skip:** yes, Latin.
+- **Block class:** I (owner input)
 - **Time weight:** medium (fan-out 4)
 - **Evidence:** DC-L02-24, DC-L06-24; S-L02-026, S-L02-051, S-L02-053, S-L06-101, S-L06-019
 - **Merges:** K5.1, K5.2, B14
@@ -1515,6 +1649,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a marketing hero and a product panel with each pairing.
 - **Use / avoid:** add a second face only for a change of job (display vs text, code); avoid near-identical pairs that read as a mistake [DC-L02-03; L15 P49].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 2)
 - **Evidence:** DC-L02-03; S-L02-001, S-L02-006, S-L02-011, S-L02-022
 
@@ -1533,6 +1668,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a code block, a table column and a live counter with proportional vs tabular figures.
 - **Use / avoid:** use tabular figures in tables, clocks and anything that updates; avoid mono for body text [DC-L02-05; S-L02-052].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L02-05; S-L02-008, S-L02-011, S-L02-014, S-L02-015, S-L02-052
 
@@ -1551,6 +1687,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a size ramp from 11px to 64px with opsz on and off.
 - **Use / avoid:** use opsz tied to size; avoid setting display sizes in a text cut without tracking adjustments [DC-L02-04, DC-L02-14].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** high (fan-out 5)
 - **Evidence:** DC-L02-04; S-L02-001, S-L02-014, S-L02-022, S-L02-026, S-L02-053
 
@@ -1576,6 +1713,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a settings form and an article paragraph at each size; the table on the preview shows rows per screen.
 - **Use / avoid:** use 16px or more where users mostly read paragraphs; use 14px where they mostly operate controls and tables; avoid anything people must read below 12px on web or 11pt on mobile [DC-L02-08, DC-L02-20].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 3)
 - **Evidence:** DC-L02-08; S-L02-001, S-L02-005, S-L02-006, S-L02-011, S-L02-014
 - **Merges:** K7.2 (sizes)
@@ -1595,6 +1733,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a hero and a card heading as the preview width is dragged.
 - **Use / avoid:** use fluid type for marketing heroes; avoid fluid styles inside cards, tables or forms [DC-L02-19; S-L02-011].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 2)
 - **Evidence:** DC-L02-19; S-L02-011, S-L02-022, S-L02-028
 
@@ -1613,6 +1752,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a list row and a tab bar at default, 200% and AX5, restacking live.
 - **Use / avoid:** use containers that grow with text; avoid truncating at the largest sizes [DC-L02-21, DC-L10-07].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L02-21, DC-L10-07; S-L02-001, S-L10-011, S-L10-012, S-L10-071, S-L10-074
 - **Merges:** P8, K4.4 (text scaling)
@@ -1634,6 +1774,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the ladder recomputed live; adjacent steps closer than about 10% are flagged for merging.
 - **Use / avoid:** use a formula to start and hand-tune the result; avoid keeping two sizes that differ by less than about 10% [DC-L02-10].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L02-09; S-L02-006, S-L02-060, S-L09-213
 
@@ -1652,6 +1793,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the style list with each style used in context (page title, card title, button label, caption).
 - **Use / avoid:** name semantic styles by job and primitives by number; avoid more than about 3 type sizes in a single view [DC-L02-07; BOARD L15 note].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L02-07, DC-L02-10; S-L02-001, S-L02-005, S-L02-006, S-L02-015, S-L02-017
 
@@ -1671,6 +1813,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a paragraph and a two-line button label in Latin and each chosen script, with clipping flagged.
 - **Use / avoid:** use smaller ratios as text gets larger; avoid fixed-height components that hold text [DC-L02-13, DC-L02-25].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 3)
 - **Evidence:** DC-L02-13, DC-L02-25; S-L02-005, S-L02-006, S-L02-007, S-L02-011, S-L02-015
 
@@ -1691,6 +1834,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** headings and a selected chip in each weight set.
 - **Use / avoid:** use weight first, color second, italics only inside running text; avoid light (300) below 32px [DC-L02-12, DC-L02-15].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 3)
 - **Evidence:** DC-L02-15, DC-L02-12; S-L02-005, S-L02-007, S-L02-012, S-L02-022
 
@@ -1709,6 +1853,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a headline and an all-caps label with tracking on and off.
 - **Use / avoid:** use em-based tracking so it scales; let optical-size fonts do most of the work; avoid tracking non-Latin scripts [DC-L02-14, DC-L02-25].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L02-14; S-L02-001, S-L02-005, S-L02-009, S-L02-021
 
@@ -1728,6 +1873,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** an article at the chosen measure with a width handle to drag; lines over the limit highlight.
 - **Use / avoid:** constrain the container before touching font size when lines exceed about 10-12 words; avoid full justification and centered paragraphs [DC-L02-17, DC-L02-18].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L02-17, DC-L02-18, DC-L02-16; S-L02-015, S-L02-022, S-L02-029, S-L02-051
 
@@ -1748,6 +1894,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the same screen at phone, desktop and TV with type scaled to a similar visual angle.
 - **Use / avoid:** keep roles and roughly the visual angle when moving to a farther device; avoid reusing desktop sizes on phones [DC-L14-04, DC-L02-20].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L02-20, DC-L14-04; S-L02-007, S-L02-021, S-L14-012, S-L14-026
 
@@ -1772,6 +1919,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a card, form and toolbar with spacing overlays; hovering any gap shows its token and value.
 - **Use / avoid:** use the 2/4/6 sub-steps inside components (icon-to-label, chip padding); avoid them between layout sections [DC-L03-01, DC-L03-04].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** high (fan-out 5)
 - **Evidence:** DC-L03-01; S-L03-002, S-L03-003, S-L03-010, S-L03-030, S-L03-044
 - **Merges:** K7.3 (space)
@@ -1791,6 +1939,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the scale as bars; dragging a step shows where it is used on the component sheet.
 - **Use / avoid:** keep adjacent steps at least about 25% apart above 8px so the difference is visible; avoid adding steps nobody can tell apart [DC-L03-02].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** high (fan-out 5)
 - **Evidence:** DC-L03-02; S-L03-001, S-L03-003, S-L03-009, S-L03-039
 
@@ -1810,6 +1959,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** hit areas drawn around every control; the 24px-circle test from WCAG 2.5.8 runs live on a dense toolbar.
 - **Use / avoid:** decouple hit area from visual size (padding, pseudo-elements); avoid shrinking hit areas in compact mode [DC-L03-12; S-L03-035].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 2)
 - **Evidence:** DC-L03-12, DC-L14-03, DC-L03-13; S-L03-029, S-L03-033, S-L03-035, S-L14-037
 
@@ -1830,6 +1980,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a data table toggled between modes; target outlines stay fixed while padding shrinks.
 - **Use / avoid:** use a compact mode for tables, lists, menus and trees; avoid a type-only density mode that leaves oversized padding [DC-L03-11; S-L03-070].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 3)
 - **Evidence:** DC-L03-10, DC-L03-11, DC-L14-13; S-L03-042, S-L03-057, S-L03-070, S-L14-026
 - **Merges:** K6.3 (density modes, mechanism)
@@ -1849,6 +2000,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a toolbar mixing a button, input, select and segmented control at each size; mismatched heights are flagged.
 - **Use / avoid:** keep sizes on multiples of 8 and never mix sizes in one group; avoid heights below the target floor without padded hit areas [DC-L08-07, DC-L03-12].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 2)
 - **Evidence:** DC-L03-07, DC-L08-07; S-L03-042, S-L03-046, S-L08-061, S-L08-062, S-L08-102
 
@@ -1867,6 +2019,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a settings page with the slider live; groups that read as one block are outlined.
 - **Use / avoid:** use space as the default grouping cue; add borders only where interactivity or scanning needs them [DC-L03-24].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L03-24; S-L03-001, S-L03-028, S-L03-061
 
@@ -1886,6 +2039,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a card, button and input with each inset shape overlaid.
 - **Use / avoid:** use padding and gap on parents; avoid margins on reusable components [DC-L03-04; S-L03-030].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 2)
 - **Evidence:** DC-L03-04, DC-L03-05; S-L03-001, S-L03-030, S-L03-039, S-L03-046
 
@@ -1904,6 +2058,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** an icon-label pair and an avatar stack with and without nudges.
 - **Use / avoid:** use negatives for deliberate overlaps; avoid using nudges to patch layout bugs [DC-L03-06, inferred].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L03-06; S-L03-003, S-L03-005, S-L03-010, S-L03-030
 
@@ -1922,6 +2077,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a button and card with the top and bottom padding measured, trim on and off.
 - **Use / avoid:** use a strict baseline grid only for multi-column editorial pages; avoid it for app UI on the web [DC-L03-25].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L03-25; S-L03-002, S-L03-010, S-L03-039, S-L03-077
 
@@ -1941,6 +2097,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** icon-label pairs at each text size, and an avatar row.
 - **Use / avoid:** keep the icon-to-text ratio fixed ("Don't alter the icon-text size ratio", Carbon) [S-L03-062]; avoid in-between icon sizes that blur the pixel grid [inferred].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L03-08; S-L03-044, S-L03-059, S-L03-062, S-L03-063
 
@@ -1965,6 +2122,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the resizable frame with breakpoint ticks; the layout snaps at each one.
 - **Use / avoid:** decide layout by window size, never by device type or orientation [DC-L10-10; S-L10-013]; avoid breakpoints that only nudge padding.
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** high (fan-out 5)
 - **Evidence:** DC-L03-14; S-L03-016, S-L03-018, S-L03-021, S-L03-025, S-L03-032
 
@@ -1983,6 +2141,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the resizable frame; pane boundaries highlight when they change.
 - **Use / avoid:** use adaptive changes for pane count and navigation; avoid device-type checks that break in split view and resizable windows [S-L10-013].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L03-22, DC-L10-10; S-L03-010, S-L03-071, S-L10-013, S-L10-022, S-L10-025
 - **Merges:** P11
@@ -2003,6 +2162,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the person's own destination names in each container across the frame widths.
 - **Use / avoid:** keep destinations identical across devices and swap only the container; avoid hiding primary navigation on wide layouts [DC-L14-05; S-L13-097].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 2)
 - **Evidence:** DC-L08-19, DC-L13-02, DC-L10-09, DC-L14-05, DC-L03-19; S-L08-083, S-L10-014, S-L13-048, S-L13-063, S-L03-025
 - **Merges:** P10, K8.3 (navigation part)
@@ -2023,6 +2183,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the three page types in the resizable frame.
 - **Use / avoid:** use fluid width for tables and dashboards; avoid full-width paragraphs [DC-L03-16, DC-L02-17].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L03-16, DC-L03-18; S-L03-008, S-L03-025, S-L03-026, S-L03-027, S-L03-074
 
@@ -2042,6 +2203,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** grid overlay toggle on the frame.
 - **Use / avoid:** make every grid break nameable ("this hero breaks the grid to signal X"); avoid changing component spacing by breakpoint [DC-L15-07, DC-L03-17].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 2)
 - **Evidence:** DC-L03-15, DC-L15-07, DC-L03-17; S-L03-002, S-L03-026, S-L03-054, S-L15-062
 
@@ -2060,6 +2222,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the card dragged between slots.
 - **Use / avoid:** use container queries for reusable components; avoid viewport queries inside components placed in panes [DC-L03-21].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L03-21; S-L03-016, S-L03-055, S-L03-056
 
@@ -2085,6 +2248,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the logo curvature overlaid on the button radius.
 - **Use / avoid:** use shape variety only in hero moments; avoid shrinking essential actions into small shapes ("smaller shapes can result in essential actions looking less important") [S-L06-009].
 - **Skip:** yes.
+- **Block class:** D (designer-owned)
 - **Time weight:** medium (fan-out 2)
 - **Evidence:** DC-L06-09; S-L06-003, S-L06-009, S-L06-030, S-L06-073, S-L06-088
 
@@ -2106,6 +2270,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the component sheet morphing as the slider moves; the focus ring follows the radius.
 - **Use / avoid:** use sharp corners when density and precision are brand values (data, developer tools) and pill when the brand is consumer and touch-first; avoid pill on dense, short controls, which need taller heights [DC-L04-02, DC-L09-01].
 - **Skip:** yes, 6px.
+- **Block class:** G (generatable)
 - **Time weight:** high (fan-out 4)
 - **Evidence:** DC-L09-01, DC-L04-02; S-L09-101, S-L09-559, S-L04-005, S-L04-029, S-L04-038
 - **Merges:** K7.4 (shape)
@@ -2126,6 +2291,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** each step with the components that use it; unused steps are flagged for deletion.
 - **Use / avoid:** grow radius with component size; delete any step you cannot name a component for [DC-L04-01].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 4)
 - **Evidence:** DC-L04-01; S-L04-003, S-L04-016, S-L04-024, S-L04-030
 
@@ -2144,6 +2310,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the component sheet with each component's role labeled.
 - **Use / avoid:** use full radius for people and pills; avoid giving small badges and large dialogs the same radius [DC-L04-03].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L04-03; S-L04-007, S-L04-016, S-L04-018, S-L04-035
 
@@ -2162,6 +2329,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** magnified corner comparison.
 - **Use / avoid:** use continuous corners only where brand parity with iOS matters; avoid relying on `corner-shape` for anything functional [DC-L04-04].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L04-04; S-L04-036, S-L04-054, S-L04-055
 
@@ -2187,6 +2355,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the live stack re-rendered per option, light and dark.
 - **Use / avoid:** use tonal or borders for data-dense tools; avoid shadows on static in-page cards when the same color steps would do [DC-L09-02, DC-L04-10].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** high (fan-out 5)
 - **Evidence:** DC-L09-02, DC-L04-10, DC-L08-15; S-L09-104, S-L09-559, S-L04-008, S-L04-017, S-L04-058
 
@@ -2205,6 +2374,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the stack with each level labeled in both modes.
 - **Use / avoid:** components at the same level never overlap each other; avoid pure-black shadows as the only dark-mode depth cue [DC-L04-11, DC-L04-13].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L04-11, DC-L04-13; S-L04-003, S-L04-017, S-L04-018, S-L04-022
 
@@ -2225,6 +2395,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** shadows on the live stack with the alpha slider.
 - **Use / avoid:** use one light source for every shadow; avoid single hard shadows [DC-L04-12; L15 P62].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L04-12; S-L04-008, S-L04-018, S-L04-022, S-L04-024
 
@@ -2244,6 +2415,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the toolbar and a sheet over a busy photo with live contrast readouts; the opaque fallback shown beside it.
 - **Use / avoid:** use glass on the functional layer (bars, controls, sheets) only; avoid glass on reading surfaces and any translucent token without an opaque twin [S-L10-008; DC-L04-16].
 - **Skip:** yes.
+- **Block class:** T (tool-assisted)
 - **Time weight:** medium (fan-out 2)
 - **Evidence:** DC-L04-15, DC-L10-12, DC-L10-11; S-L04-011, S-L04-032, S-L10-008, S-L10-023, S-L10-075
 - **Merges:** P12, P13
@@ -2264,6 +2436,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** an input switching from default to error without shifting layout.
 - **Use / avoid:** use lines in dense tables; avoid stacking dividers and card borders on the same edge [DC-L04-08; L15 P64].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L04-07, DC-L03-09, DC-L04-08; S-L03-009, S-L04-006, S-L04-017, S-L04-024
 
@@ -2283,6 +2456,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a dialog and a bottom sheet over the page with the slider live.
 - **Use / avoid:** use lighter scrims for non-blocking sheets; avoid scrims so light that the dialog's modality is unclear [DC-L04-18].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L04-18, DC-L04-17; S-L04-003, S-L04-069, S-L04-070, S-L04-071
 
@@ -2307,6 +2481,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the live interactions replay on every change, with a slow-motion button.
 - **Use / avoid:** use expressive motion for page transitions, the primary action and alerts; avoid bounce on everyday controls and in high-trust products [DC-L06-10, DC-L04-19].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** high (fan-out 5)
 - **Evidence:** DC-L09-06, DC-L04-19, DC-L06-10; S-L09-105, S-L06-002, S-L04-075, S-L10-024
 - **Merges:** K7.4 (motion personality)
@@ -2327,6 +2502,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a switch and a sheet driven by the spring, dragged and released mid-flight.
 - **Use / avoid:** use springs for spatial moves; avoid overshoot on color and opacity [DC-L04-22; S-L10-024].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 2)
 - **Evidence:** DC-L04-22; S-L04-060, S-L04-064, S-L10-024, S-L09-105
 
@@ -2346,6 +2522,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a timeline of each transition with its duration; clicking mid-animation shows retargeting.
 - **Use / avoid:** scale duration with distance travelled; avoid standard transitions over 500ms [DC-L04-20; L13 E1].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L04-20, DC-L04-24; S-L04-003, S-L04-018, S-L04-024, S-L04-033
 
@@ -2364,6 +2541,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the curve editor with a live card.
 - **Use / avoid:** use linear only for continuous indicators; avoid ease-in for entrances [DC-L04-21].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L04-21; S-L04-003, S-L04-006, S-L04-013, S-L04-014, S-L04-018
 
@@ -2383,6 +2561,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** an avatar, a FAB and a toggle with and without morphing.
 - **Use / avoid:** use expressive shapes on avatars and hero moments; avoid them on dense controls [DC-L04-06].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L04-06; S-L04-005, S-L04-016, S-L04-031
 
@@ -2403,6 +2582,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** each transition playable on the preview.
 - **Use / avoid:** use OS-owned navigation transitions on native platforms; avoid custom page transitions that fight the back gesture [DC-L10-14].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L04-23; S-L04-009, S-L04-014, S-L04-018, S-L04-033
 
@@ -2421,6 +2601,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the reduced-motion toggle on every live interaction.
 - **Use / avoid:** keep feedback (color, opacity) and remove travel (translate, scale, parallax); avoid removing feedback entirely [DC-L04-25].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L04-25, DC-L14-08; S-L04-049, S-L04-067, S-L04-075, S-L14-032
 - **Merges:** B15 (reduced motion)
@@ -2437,10 +2618,11 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Default:** silent on web and productivity apps. *Source:* card heuristic [DC-L04-27].
 - **Decides:** DC-L04-27
 - **Changes:** DC-L04-26 · blocks: Foundations > Sound > UI sounds
-- **Hook:** Accepts short audio files (WAV master plus compressed AAC or CAF for apps) [inferred formats]. If no: (1) stay silent, which is the norm for web and productivity apps; (2) use system sounds on native platforms; (3) commission a sound designer for a sonic logo, with the caveat that repeated identical sounds feel mechanical [S-L04-074].
+- **Hook:** Accepts Apple notification sounds as Linear PCM, IMA4, µLaw or aLaw in .aiff, .wav or .caf under 30 seconds; Android decodes Ogg (Vorbis, Opus), WAV, MP3, AAC and FLAC [S-L17-550, S-L17-551, S-L17-552]. If no: (1) stay silent, the norm for web and productivity apps; (2) use platform system sounds (Android `SoundEffectConstants`, iOS system behavior); (3) commission a sound designer for a sonic logo, noting that repeated identical sounds feel mechanical; no verified open UI-sound library was found [S-L04-074, S-L17-553, S-L17-555].
 - **Preview:** the event list with a play button per sound and the mute state.
 - **Use / avoid:** use sound only for rare, meaningful events that honor silent mode; avoid sounds on web and in shared-space products [DC-L04-27].
 - **Skip:** yes, silent.
+- **Block class:** D (designer-owned)
 - **Time weight:** medium (fan-out 0)
 - **Evidence:** DC-L04-27; S-L04-043, S-L04-072, S-L04-074
 - **Merges:** B7 (sonic logo)
@@ -2459,10 +2641,12 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Default:** os-nav-brand-micro and haptics-system; a semantic map only for products with frequent confirmations. *Source:* card heuristics [DC-L10-14, DC-L04-26].
 - **Decides:** DC-L10-14, DC-L04-26
 - **Changes:** DC-L07-14 · blocks: Foundations > Motion > Platform motion; Haptics > Semantic haptic map
+- **Hook:** Custom haptics accept Apple AHAP (.ahap JSON, intensity and sharpness 0-1) and Android `VibrationEffect` compositions. If no: system patterns first (Apple notification, impact, selection; Android `HapticFeedbackConstants`) [S-L17-547, S-L17-548, S-L17-549].
 - **Preview:** the event list with each haptic's platform mapping.
 - **Use / avoid:** use haptics sparingly ("less is more"); avoid long "buzzy" vibrations [S-L04-046; DC-L04-26].
 - **Skip:** yes.
-- **Time weight:** low (fan-out 0)
+- **Block class:** T (tool-assisted)
+- **Time weight:** medium (fan-out 0)
 - **Evidence:** DC-L10-14, DC-L04-26; S-L04-043, S-L04-044, S-L04-046, S-L10-020, S-L10-024
 - **Merges:** P15
 
@@ -2484,6 +2668,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a settings simulator panel with each toggle applied live.
 - **Use / avoid:** never convey a boundary or focus state with shadow or translucency alone; avoid app-level switches that override these settings [DC-L10-16].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L10-16; S-L10-008, S-L10-031, S-L10-072, S-L10-075
 - **Merges:** P17, K4.4
@@ -2510,6 +2695,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the icon sheet in context; swapping libraries updates every icon.
 - **Use / avoid:** use one icon family per product; avoid mixing two libraries' strokes in one toolbar [DC-L05-01, inferred].
 - **Skip:** yes; the default library is applied.
+- **Block class:** T (tool-assisted)
 - **Time weight:** medium (fan-out 3)
 - **Evidence:** DC-L05-01, DC-L10-25; S-L05-002, S-L05-006, S-L05-010, S-L05-029, S-L05-038
 - **Merges:** K7.5 (icons), P26
@@ -2530,6 +2716,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the tab bar and toolbar with style and corner toggles.
 - **Use / avoid:** keep hover and pressed feedback on the container, not the glyph; avoid color-only selected states [DC-L05-06].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 3)
 - **Evidence:** DC-L05-02, DC-L05-06; S-L05-003, S-L05-010, S-L05-014
 
@@ -2549,6 +2736,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** icon-label pairs at each text size with the stroke slider.
 - **Use / avoid:** use heavier strokes on busy or photographic backgrounds; avoid sub-1.5px strokes below 20px [DC-L05-03].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 3)
 - **Evidence:** DC-L05-03, DC-L06-13 (context); S-L05-001, S-L05-003, S-L05-021, S-L05-032, S-L06-088
 
@@ -2567,6 +2755,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the icon sheet at each size, magnified to show pixel alignment.
 - **Use / avoid:** pixel-align at the smallest shipped size; avoid 12px icons for anything interactive [DC-L05-04, DC-L05-05].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 3)
 - **Evidence:** DC-L05-04, DC-L05-05; S-L05-001, S-L05-003, S-L05-014, S-L05-016
 
@@ -2586,6 +2775,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** toolbar variants with a label toggle; hover shows the tooltip.
 - **Use / avoid:** give every icon-only control an accessible label; avoid decorative multicolor icons in UI chrome [DC-L05-07, DC-L05-08; L10 baked-in rule 9].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L05-07, DC-L05-08; S-L05-003, S-L05-014, S-L05-016, S-L05-021, S-L05-027
 
@@ -2606,6 +2796,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a home-screen mock per platform with all appearances.
 - **Use / avoid:** use simple filled overlapping shapes; avoid photos, fine lines, text and baked-in shadows [DC-L05-12].
 - **Skip:** yes; a placeholder is generated.
+- **Block class:** D (designer-owned)
 - **Time weight:** medium (fan-out 1)
 - **Evidence:** DC-L05-12; S-L05-007, S-L05-008, S-L05-011, S-L05-042, S-L05-010
 
@@ -2625,6 +2816,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the exported icon package tree.
 - **Use / avoid:** mirror directional icons in RTL; avoid mirroring icons that depict real objects (clocks, checkmarks) [DC-L05-09, inferred].
 - **Skip:** yes.
+- **Block class:** T (tool-assisted)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L05-10, DC-L05-09; S-L05-012, S-L05-014, S-L05-022, S-L05-038
 
@@ -2643,6 +2835,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the app bar and sign-in page.
 - **Use / avoid:** give a logo that acts as a link an accessible name; avoid repeating the logo throughout the UI (Apple) [DC-L05-13; S-L10-009].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L05-13; S-L05-014, S-L05-042, S-L05-044
 
@@ -2664,10 +2857,11 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Default:** none for tools; for consumer products, a one-paragraph photo brief (subject types, perspective, light, color treatment, casting) before commissioning or buying. *Source:* card heuristic [DC-L05-14].
 - **Decides:** DC-L05-14
 - **Changes:** DC-L05-15, DC-L05-16, DC-L05-17 · blocks: Foundations > Imagery > Photography style
-- **Hook:** Accepts JPEG, WebP or AVIF exports and a written brief; masters in RAW or TIFF are kept outside the system. If no: (1) the builder drafts the photo brief from the personality sliders for you to edit; (2) commission a photographer (best for recognizability); (3) license stock against the brief; (4) AI-generated images only for placeholders, with the caveat that they can misrepresent people and products [inferred]. Neutral placeholders are used until real images arrive.
+- **Hook:** Accepts JPEG, WebP or AVIF exports and a written brief; masters in RAW or TIFF are kept outside the system. If no: (1) the builder drafts the photo brief from the personality sliders for you to edit; (2) commission a photographer (best for recognizability); (3) stock against the brief: Unsplash (free commercial, no competing service) or Pexels (no implied endorsement); (4) AI images with ownership and uniqueness caveats per tool, marked as synthetic under EU AI Act Art. 50; NN/g found AI images close to stock but failing on visible artifacts and stereotypes [S-L17-529, S-L17-530, S-L17-531, S-L17-578, S-L17-126]. Neutral placeholders are used until real images arrive.
 - **Preview:** image slots in the hero, cards and avatars with the uploaded photos, or labeled placeholders.
 - **Use / avoid:** use real product and people photos where trust matters; avoid stock that contradicts the brief's casting and light [DC-L05-14].
 - **Skip:** yes.
+- **Block class:** D (designer-owned)
 - **Time weight:** medium (fan-out 3)
 - **Evidence:** DC-L05-14; S-L05-046, S-L05-057, S-L05-011
 - **Merges:** K7.5 (imagery)
@@ -2688,6 +2882,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the card grid and hero with live contrast readout.
 - **Use / avoid:** use art-directed crops per breakpoint for heroes; avoid text over busy image regions without a scrim [DC-L05-15, DC-L05-16].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L05-15, DC-L05-16; S-L05-047, S-L05-072, S-L05-083
 
@@ -2705,6 +2900,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the comment thread with fallbacks (initials, placeholder) and presence dots.
 - **Use / avoid:** keep shape meaning consistent everywhere; avoid using the person circle for bots [DC-L05-18].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L05-18; S-L05-066, S-L05-067, S-L05-069
 
@@ -2723,10 +2919,11 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Default:** one style derived from the icon stroke, corner radius and palette; neutral spots for routine empty states, colorful spots only for first run and celebration; no humor in errors. *Source:* card heuristics [DC-L05-19, DC-L05-20, DC-L06-12].
 - **Decides:** DC-L05-19, DC-L06-12, DC-L05-20
 - **Changes:** DC-L05-11, DC-L13-10, DC-L13-11 · blocks: Foundations > Illustration > Style; Brand style and characters; Types and usage
-- **Hook:** Accepts SVG (preferred), PNG at 2x, Lottie JSON for animated pieces, plus any illustration guidelines. If no: (1) ship icon-plus-text empty states, which is honest and cheap; (2) commission an illustrator with a brief derived from the icon stroke and palette; (3) use AI generation for drafts only, with the caveat that style drifts from piece to piece unless one artist or a strict style guide owns it [inferred].
+- **Hook:** Accepts SVG (preferred), PNG at 2x, Lottie JSON for animated pieces, plus any illustration guidelines. If no: (1) ship honest icon-plus-text empty states; (2) commission an illustrator with a brief derived from the icon stroke and palette; (3) open sets under their exact terms: unDraw (free commercial, bans AI training and competing packs), Open Peeps and Humaaans (CC0), Blush (no resale), Storyset (credit required, no logos); (4) AI tools such as Recraft or Firefly, where ownership depends on plan, and style drifts between pieces unless one artist or a strict guide owns it [S-L17-519, S-L17-521, S-L17-522, S-L17-523, S-L17-525; inferred for drift].
 - **Preview:** the empty, error and success states with the uploaded art or the fallback.
 - **Use / avoid:** use illustration only where it has a job (IBM: "have a job to do"); avoid real screenshots in onboarding illustrations and jokes in error states [S-L05-049, S-L05-050; DC-L06-12].
 - **Skip:** yes.
+- **Block class:** D (designer-owned)
 - **Time weight:** medium (fan-out 3)
 - **Evidence:** DC-L05-19, DC-L06-12, DC-L05-20; S-L05-048, S-L05-049, S-L05-050, S-L06-026, S-L06-028
 - **Merges:** K7.5 (illustration), B7 (illustration, mascot)
@@ -2747,6 +2944,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a feature grid with each tier.
 - **Use / avoid:** use pictograms on marketing and onboarding; avoid them inside dense product UI [DC-L05-11].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L05-11; S-L05-049, S-L05-050, S-L05-058
 
@@ -2763,10 +2961,11 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Default:** symbol animation only, to confirm an action or show ongoing status; 3D and Lottie kept for onboarding, celebration and marketing. *Source:* card heuristic [DC-L05-21].
 - **Decides:** DC-L05-21
 - **Changes:** DC-L04-25 (every animation needs a reduced-motion version) · blocks: Foundations > Rich media
-- **Hook:** Accepts Lottie JSON or dotLottie, animated SVG, GLB or USDZ for 3D, PNG or SVG for emoji [inferred formats]. If no: use built-in symbol animation; commission a motion designer for celebration moments.
+- **Hook:** Accepts Lottie JSON, dotLottie (v2 adds state machines and theming), After Effects via Bodymovin, Rive .riv, glTF/GLB and USDZ for 3D; PNG or SVG for emoji [S-L17-541, S-L17-542, S-L17-543, S-L17-556]. If no: motion comes from the system's motion tokens only (no signature animation); commission a motion designer for celebration moments; community Lottie assets only under their stated licenses [S-L17-544, S-L17-546].
 - **Preview:** each asset playing in its slot, with the reduced-motion alternative.
 - **Use / avoid:** use animated assets for rare moments; avoid looping animation near reading content [DC-L05-21; DC-L04-25].
 - **Skip:** yes.
+- **Block class:** D (designer-owned)
 - **Time weight:** medium (fan-out 0)
 - **Evidence:** DC-L05-21; S-L05-006, S-L05-010, S-L05-062, S-L05-063
 
@@ -2782,10 +2981,12 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Default:** expressive-only. *Source:* card heuristic [DC-L06-11].
 - **Decides:** DC-L06-11
 - **Changes:** DC-L13-10, DC-L13-11 · blocks: Foundations > Brand > Graphic devices
+- **Hook:** Accepts SVG patterns, gradient definitions and shape SVGs, recorded as brand-expression tokens with allowed surfaces. If no: commission, or ship none; NN/g and gstack both warn that decoration standing in for content reads as generic [S-L17-004, S-L17-021].
 - **Preview:** onboarding and a product screen with the motif on and off.
 - **Use / avoid:** let branding defer to content in task screens (Apple) [S-L06-008]; avoid devices behind text.
 - **Skip:** yes.
-- **Time weight:** low (fan-out 0)
+- **Block class:** D (designer-owned)
+- **Time weight:** medium (fan-out 0)
 - **Evidence:** DC-L06-11; S-L06-001, S-L06-008, S-L06-024, S-L06-030
 
 ### Q-viz-01 · Which chart types and chart library? · Standard
@@ -2804,6 +3005,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a dashboard with the chosen types in the product's palette.
 - **Use / avoid:** use bars for comparison and lines for trends; avoid pie charts with more than a few slices and 3D charts [DC-L05-22, inferred].
 - **Skip:** yes.
+- **Block class:** T (tool-assisted)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L05-22; S-L05-075, S-L05-076, S-L05-077, S-L05-083
 
@@ -2830,6 +3032,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the error, empty state and success message rewritten in the chosen voice.
 - **Use / avoid:** use the traits to decide copy disputes; avoid traits every product could claim ("simple", "friendly") without a "but not" [DC-L06-18; DC-L11-05].
 - **Skip:** yes.
+- **Block class:** T (tool-assisted)
 - **Time weight:** high (fan-out 5)
 - **Evidence:** DC-L06-18; S-L06-013, S-L06-014, S-L06-046, S-L06-060, S-L06-070
 - **Merges:** K3.6, B13 (voice)
@@ -2849,6 +3052,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the tone matrix with each cell's example message.
 - **Use / avoid:** use warmth after trust is earned (success, completion); avoid humor in errors and in high-trust categories [DC-L06-19; S-L06-060].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L06-19; S-L06-013, S-L06-014, S-L06-052, S-L06-060
 - **Merges:** B13 (tone)
@@ -2868,6 +3072,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the product screen's labels re-cased live.
 - **Use / avoid:** use one rule per element type everywhere; avoid all caps for sentences [DC-L06-20, DC-L02-18].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L06-20; S-L06-047, S-L06-051, S-L06-052, S-L06-056
 
@@ -2886,6 +3091,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a readability score beside each sample string.
 - **Use / avoid:** use verbs that name the result ("Save changes"); avoid branded or clever button labels [DC-L13-13, DC-L06-22].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 2)
 - **Evidence:** DC-L13-13; S-L13-036, S-L13-091
 
@@ -2905,6 +3111,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** sample strings updating per toggle.
 - **Use / avoid:** keep mechanics identical across products; avoid mixing date and number formats (see Q-voice-06) [DC-L06-21].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L06-21; S-L06-046, S-L06-048, S-L06-049, S-L06-052, S-L06-056
 
@@ -2924,7 +3131,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** each component with its microcopy rule and an example.
 - **Use / avoid:** use the glossary term everywhere; avoid synonyms for the same object [DC-L06-23].
 - **Skip:** yes.
-- **Time weight:** low (fan-out 0)
+- **Block class:** I (owner input)
+- **Time weight:** medium (fan-out 0)
 - **Evidence:** DC-L06-22, DC-L06-23; S-L06-014, S-L06-047, S-L06-051, S-L06-052, S-L06-102
 - **Merges:** K5.3, K5.4, K5.5
 
@@ -2937,7 +3145,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Why:** Headless primitives leave every visual choice to your tokens; styled forks inherit the source's look until re-themed; native controls inherit the platform look [DC-L08-03]. Adopting a whole system makes you look like it ("websites made with shadcn/ui famously look the same") [DC-L11-01; S-L11-073].
 - **Ask:** "Build on headless primitives, a copy-in styled layer like shadcn, web components, native controls, or adopt a full system as-is?"
 - **Example:** Show the same dialog built on Base UI with your tokens vs stock Material.
-- **Control:** single choice per platform (pre-filled from Q-plat-08 and Q-tool-02)
+- **Control:** single choice per platform (pre-filled from Q-scope-05, Q-plat-08 and Q-tool-02)
 - **Options:**
   - `headless` Headless primitives: Radix, Base UI (v1 stable Dec 2025), React Aria, Ark UI [S-L08-030, S-L08-026, S-L08-032, S-L08-031].
   - `copy-in-styled` Copy-in styled layer: shadcn/ui on Base UI (its default since July 2026), Radix or React Aria [S-L08-020; BOARD L08 note].
@@ -2945,14 +3153,15 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
   - `native` Native controls themed with your tokens (SwiftUI/UIKit, Compose Material 3) [S-L08-103, S-L08-105].
   - `adopt` Adopt a system as-is (Material, Carbon, Fluent, Untitled UI) [S-L11-078; DC-L11-01].
 - **Default:** React web: shadcn on Base UI or React Aria; multi-framework: Ark UI or web components; mobile: native controls; small teams adapt an accessible base and invest in tokens and docs. *Source:* card heuristics [DC-L08-03, DC-L11-01; S-L11-006, S-L11-030].
-- **Decides:** DC-L08-03, DC-L11-01
-- **Changes:** DC-L08-04, DC-L11-20 · blocks: Components > Implementation > Base library; Strategy > Starting point
+- **Decides:** DC-L08-03
+- **Changes:** DC-L08-04 · blocks: Components > Implementation > Base library
 - **Preview:** the catalog re-rendered per base; a keyboard-test strip shows focus order and ARIA roles inherited.
 - **Use / avoid:** use accessible primitives so keyboard and ARIA behavior come for free; avoid assuming re-themed colors inherit contrast (they don't) [DC-L11-01].
 - **Skip:** yes.
-- **Time weight:** medium (fan-out 2)
-- **Evidence:** DC-L08-03, DC-L11-01; S-L08-020, S-L08-026, S-L08-030, S-L11-006, S-L11-073
-- **Merges:** K0.5, K2.6
+- **Block class:** T (tool-assisted)
+- **Time weight:** low (fan-out 1)
+- **Evidence:** DC-L08-03, DC-L11-01 (context, decided in Q-scope-05); S-L08-020, S-L08-026, S-L08-030, S-L11-006, S-L11-073
+- **Merges:** K2.6 (base library)
 
 ### Q-comp-02 · Which components are in version 1? · Standard
 - **Why:** Completeness is the top adoption factor (79%), but a large inventory raises maintenance cost [DC-L08-01; S-L11-030].
@@ -2969,7 +3178,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the catalog grid with a count and a "used by" tag per component.
 - **Use / avoid:** use the audit (Q-scope-02) and pilot to pick extras; avoid building components no product has asked for [DC-L08-01, DC-L11-07].
 - **Skip:** yes.
-- **Time weight:** low (fan-out 1)
+- **Block class:** I (owner input)
+- **Time weight:** medium (fan-out 1)
 - **Evidence:** DC-L08-01; S-L08-001, S-L08-008, S-L08-009, S-L11-030
 - **Merges:** K8.1
 
@@ -2988,6 +3198,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** generated code and the Figma component panel for one component.
 - **Use / avoid:** use slots for cards, modals and lists so instances keep receiving updates; avoid variant explosions for optional content [DC-L07-22].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L08-04, DC-L07-22; S-L07-021, S-L07-022, S-L08-064, S-L08-088
 
@@ -3007,6 +3218,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the catalog's sidebar regrouped per option.
 - **Use / avoid:** use one canonical name with aliases; avoid two components for one job [DC-L08-02].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L08-02; S-L08-008, S-L08-011, S-L08-054, S-L08-086
 - **Merges:** K8.2
@@ -3027,6 +3239,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** one component across device classes.
 - **Use / avoid:** split a library when the input model changes (focus, crown, templates); avoid stretching phone components onto TV [DC-L14-02].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L14-02; S-L03-044, S-L10-026, S-L14-010, S-L14-025
 
@@ -3050,6 +3263,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the button sheet in every state, plus a form footer.
 - **Use / avoid:** use style, not size, to mark the preferred choice (Apple); avoid two primary buttons in one group [S-L08-039; L13 E1].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 2)
 - **Evidence:** DC-L08-05, DC-L13-18; S-L08-033, S-L08-061, S-L08-063, S-L13-014, S-L13-054
 
@@ -3068,6 +3282,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a click-test overlay highlighting everything interactive.
 - **Use / avoid:** use stronger signifiers as density rises; avoid minimal signifiers in dense layouts [DC-L15-09; S-L15-004].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L15-09; S-L15-004, S-L15-006, S-L15-038, S-L15-054
 
@@ -3087,6 +3302,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** keyboard tab-through of the preview screen with the ring on every stop.
 - **Use / avoid:** show focus only for keyboard (`:focus-visible`); avoid rings that the element's own fill hides [DC-L08-11, DC-L04-09].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L04-09, DC-L08-11; S-L04-003, S-L04-016, S-L04-024, S-L08-062, S-L08-069
 
@@ -3105,6 +3321,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the state matrix for every component.
 - **Use / avoid:** make hover content dismissible and persistent (WCAG 1.4.13); avoid hover-only affordances on touch [DC-L14-06].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L08-09, DC-L14-06; S-L01-005, S-L08-062, S-L14-013, S-L14-070, S-L14-071
 
@@ -3124,6 +3341,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** tabs, nav rail and segmented control selected.
 - **Use / avoid:** use two cues for selection; avoid selection states that look like primary buttons [DC-L08-14].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L08-14; S-L08-012, S-L08-034, S-L08-083, S-L08-085
 
@@ -3142,6 +3360,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a list with delete actions and the confirm step.
 - **Use / avoid:** use undo instead of confirmation for reversible actions (Q-form-05); avoid solid red buttons in dense lists [DC-L08-06].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L08-06; S-L08-061, S-L08-063, S-L08-064, S-L08-075
 
@@ -3160,6 +3379,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the button sheet with icons.
 - **Use / avoid:** use trailing icons for direction (next, external); avoid icon-only buttons without an accessible name [DC-L08-08].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L08-08; S-L08-033, S-L08-061, S-L08-063, S-L08-064
 
@@ -3178,6 +3398,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the three simulated waits.
 - **Use / avoid:** use optimistic UI only when failure is rare and reversible; avoid spinners for waits under a second [DC-L13-01].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L13-01, DC-L08-12; S-L13-031, S-L13-032, S-L13-033, S-L08-067, S-L08-074
 
@@ -3203,6 +3424,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the sign-up form in each style, typed into live.
 - **Use / avoid:** use a visible label on every field; avoid placeholder-only labels (a lint warning) [DC-L13-05; L13 E1].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L08-16, DC-L13-05; S-L08-105, S-L08-106, S-L13-066, S-L13-068
 
@@ -3222,6 +3444,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the live form with timing toggles.
 - **Use / avoid:** use on-blur validation for format checks; avoid flagging a field before the person has finished typing [DC-L13-06].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L13-06, DC-L08-17, DC-L08-10; S-L08-077, S-L08-085, S-L08-106, S-L13-065, S-L13-100
 
@@ -3242,6 +3465,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the three severities on the form.
 - **Use / avoid:** use a fix-it sentence in every error; avoid blame and jargon codes [DC-L13-07, DC-L06-22].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 2)
 - **Evidence:** DC-L13-07; S-L13-030, S-L13-037, S-L13-064
 
@@ -3260,6 +3484,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the save action with each channel.
 - **Use / avoid:** use toasts only for reversible, low-stakes results; avoid a toast as the only record of an error [DC-L13-09].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L08-18, DC-L13-09; S-L08-008, S-L08-011, S-L08-079, S-L08-098, S-L13-064
 
@@ -3278,6 +3503,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the list delete flow per option.
 - **Use / avoid:** use verb labels on confirmations; avoid "Are you sure?" dialogs for reversible actions [DC-L13-08].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L13-08; S-L13-037, S-L13-067, S-L08-012, S-L08-039
 
@@ -3301,6 +3527,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the same edit task in each overlay.
 - **Use / avoid:** use a dismiss path on every dialog (missing one is a lint error); avoid stacking modals [DC-L08-20; L13 E1].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L08-20; S-L08-008, S-L08-040, S-L08-086, S-L08-096
 
@@ -3319,6 +3546,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** each collection type on the preview.
 - **Use / avoid:** use pagination where people need to return to a position; avoid infinite scroll above a footer people need [DC-L08-21].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L08-21; S-L08-017, S-L08-041, S-L08-073
 
@@ -3338,6 +3566,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the settings page per option.
 - **Use / avoid:** use steppers that show position and total; avoid more than two disclosure levels (a lint warning) [DC-L13-03; L13 E1].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L13-03; S-L13-019, S-L13-030, S-L13-063
 
@@ -3357,6 +3586,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** each empty-state kind with the illustration choice from Q-img-04.
 - **Use / avoid:** use an empty state on every collection (missing one is a lint warning); avoid tours without a skip control [DC-L13-10, DC-L13-11; L13 E1].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L13-10, DC-L13-11; S-L13-069, S-L13-070, S-L08-012, S-L08-015
 
@@ -3375,7 +3605,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a consent dialog and a cancellation flow checked live.
 - **Use / avoid:** use equal emphasis for accept and reject; avoid nagging and fake urgency (the Zeigarnik effect does not justify nags) [DC-L13-15; L13 E2].
 - **Skip:** yes.
-- **Time weight:** low (fan-out 1)
+- **Block class:** I (owner input)
+- **Time weight:** medium (fan-out 1)
 - **Evidence:** DC-L13-15; S-L13-071, S-L13-108, S-L13-110
 
 ### Q-pattern-06 · What should appear on glanceable surfaces (widgets, tiles, complications)? · Expert
@@ -3393,7 +3624,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the metric on each glance surface.
 - **Use / avoid:** use tiles that are "immediate, predictable, relevant"; avoid shrinking app screens into widgets [S-L14-020; DC-L14-07].
 - **Skip:** yes.
-- **Time weight:** low (fan-out 0)
+- **Block class:** I (owner input)
+- **Time weight:** medium (fan-out 0)
 - **Evidence:** DC-L14-07; S-L14-001, S-L14-015, S-L14-020, S-L14-047
 - **Merges:** D5
 
@@ -3414,7 +3646,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** AI output in a table cell, a side panel and a chat thread.
 - **Use / avoid:** use AI styling only on AI-generated content (Carbon warns against decoration); avoid human-sounding anthropomorphic framing and reasoning traces presented as explanations [DC-L14-12, DC-L13-16].
 - **Skip:** yes, none.
-- **Time weight:** low (fan-out 0)
+- **Block class:** I (owner input)
+- **Time weight:** medium (fan-out 0)
 - **Evidence:** DC-L08-22, DC-L13-16, DC-L14-12; S-L08-009, S-L08-067, S-L13-089, S-L14-011, S-L14-058
 - **Merges:** D6
 
@@ -3438,6 +3671,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the token chain inspector on the preview.
 - **Use / avoid:** use semantic tokens in every component; avoid components referencing a raw hex or px (L09: 24 of 25 systems forbid it) [L09 A1 row 1].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 4)
 - **Evidence:** DC-L07-01, DC-L07-02, DC-L01-26, DC-L02-27; S-L07-003, S-L07-036, S-L07-108, S-L01-027
 - **Merges:** K7.6 (tiers)
@@ -3457,6 +3691,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** one value converted per platform.
 - **Use / avoid:** question any value not divisible by 4 (except 2, 6, 10 for icon nudges); avoid sp or rem for spacing that must not scale with text on Android [DC-L10-08; L10 baked-in rule 4].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 2)
 - **Evidence:** DC-L07-11, DC-L10-08, DC-L03-26; S-L03-037, S-L03-038, S-L07-002, S-L10-039, S-L10-070
 - **Merges:** P9
@@ -3478,6 +3713,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the generated file tree with one file open.
 - **Use / avoid:** use one canonical export and generate everything else from it; avoid hand-edited platform files [DC-L07-25].
 - **Skip:** yes.
+- **Block class:** T (tool-assisted)
 - **Time weight:** medium (fan-out 3)
 - **Evidence:** DC-L07-09, DC-L07-25, DC-L10-22, DC-L10-18; S-L07-002, S-L07-004, S-L07-155, S-L07-179, S-L10-056
 - **Merges:** P19, P23
@@ -3499,6 +3735,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a name linter that shows each token's name in JSON, CSS, Swift and Kotlin.
 - **Use / avoid:** use role names at the semantic tier; avoid `padding` or `margin` in primitive names and ordinal scales that look proportional but aren't [DC-L03-03].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** medium (fan-out 2)
 - **Evidence:** DC-L07-03, DC-L07-04, DC-L07-05, DC-L07-06, DC-L03-03; S-L07-003, S-L07-036, S-L07-158
 - **Merges:** K7.6
@@ -3518,6 +3755,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a coverage bar per category.
 - **Use / avoid:** use tokens for anything a lint rule should check; avoid tokenizing one-off art values [DC-L07-07].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L07-07; S-L07-002, S-L07-036, S-L07-108
 
@@ -3536,6 +3774,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** JSON and Figma views of one token of each type.
 - **Use / avoid:** use variables for single values that change by mode and styles for bundles; avoid hard-coded style values [DC-L07-21].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L07-12, DC-L07-13, DC-L07-14, DC-L04-28, DC-L02-28; S-L07-002, S-L07-013, S-L07-019, S-L07-033
 
@@ -3555,6 +3794,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the combination count and the Figma mode budget from Q-tool-03.
 - **Use / avoid:** use additive collections to stay within the plan's mode limit; avoid putting brand and scheme in one flattened axis [DC-L07-18, DC-L07-27].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L07-17, DC-L07-18, DC-L07-28; S-L07-004, S-L07-011, S-L07-014, S-L07-024
 
@@ -3575,6 +3815,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the Figma variable panel as a designer would see it.
 - **Use / avoid:** use scopes so a spacing token cannot be picked for a color; avoid "show in all" scopes [DC-L07-19].
 - **Skip:** yes.
+- **Block class:** T (tool-assisted)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L07-19, DC-L07-20, DC-L07-21, DC-L07-26; S-L07-018, S-L07-019, S-L07-025, S-L07-029
 
@@ -3593,6 +3834,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a token's detail card with description and status.
 - **Use / avoid:** use descriptions written for agents as well as people; avoid deleting tokens without a replacement [DC-L07-23].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L07-23; S-L07-002, S-L07-029, S-L07-031, S-L07-042
 
@@ -3615,6 +3857,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the client panel re-skinning the preview with contrast re-checked.
 - **Use / avoid:** use generated on-colors so client colors keep contrast; avoid exposing raw token editing to clients [DC-L06-17, DC-L06-16].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L06-06, DC-L06-17; S-L06-012, S-L06-053, S-L06-067, S-L06-068, S-L06-094
 
@@ -3638,6 +3881,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a layer diagram with lock icons per layer.
 - **Use / avoid:** use a snowflake path for one-off needs; avoid forcing every product-specific component into the core [DC-L11-03, DC-L11-12].
 - **Skip:** yes.
+- **Block class:** I (owner input)
 - **Time weight:** medium (fan-out 3)
 - **Evidence:** DC-L11-03; S-L11-014, S-L11-018, S-L11-019
 - **Merges:** K6.5, K8.4
@@ -3658,6 +3902,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a timeline of the plan.
 - **Use / avoid:** use a second pilot from a different product family to reduce bias; avoid building components no pilot needs [DC-L11-07].
 - **Skip:** yes.
+- **Block class:** I (owner input)
 - **Time weight:** medium (fan-out 3)
 - **Evidence:** DC-L11-06, DC-L11-07, DC-L11-08; S-L11-009, S-L11-014, S-L11-105, S-L11-107
 - **Merges:** K2.7, K2.8, K13.1
@@ -3679,6 +3924,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the generated decision log.
 - **Use / avoid:** record why an option was chosen and what it beat; avoid undocumented overrides [DC-L11-12].
 - **Skip:** yes.
+- **Block class:** I (owner input)
 - **Time weight:** medium (fan-out 2)
 - **Evidence:** DC-L11-11, DC-L11-12; S-L11-003, S-L11-020, S-L11-021, S-L11-024, S-L11-095
 - **Merges:** K9.4, K9.5, K9.6, K9.7
@@ -3699,6 +3945,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** status badges in the catalog and a sample changelog.
 - **Use / avoid:** pair every removal with a migration path; avoid breaking changes in minor releases [DC-L11-14, DC-L11-15].
 - **Skip:** yes.
+- **Block class:** I (owner input)
 - **Time weight:** medium (fan-out 2)
 - **Evidence:** DC-L11-13, DC-L11-14, DC-L11-15; S-L11-025, S-L11-028, S-L11-100, S-L11-106
 - **Merges:** K8.5, K10.2, K10.3, K10.4
@@ -3719,7 +3966,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the metrics dashboard mock.
 - **Use / avoid:** add speed or ROI studies only when leadership asks; avoid vanity counts of components [DC-L11-20].
 - **Skip:** yes.
-- **Time weight:** low (fan-out 1)
+- **Block class:** I (owner input)
+- **Time weight:** medium (fan-out 1)
 - **Evidence:** DC-L11-20, DC-L11-21; S-L11-030, S-L11-033, S-L11-035, S-L11-037, S-L11-083
 - **Merges:** K0.1, K0.2, K0.3, K1.3, K12.1, K12.2, K12.3, K12.4
 
@@ -3739,7 +3987,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the release-note template.
 - **Use / avoid:** use changelogs that name the migration; avoid silent releases [DC-L11-22].
 - **Skip:** yes.
-- **Time weight:** low (fan-out 0)
+- **Block class:** I (owner input)
+- **Time weight:** medium (fan-out 0)
 - **Evidence:** DC-L11-22; S-L11-002, S-L11-030, S-L11-105
 - **Merges:** K0.4, K13.3, K13.4
 
@@ -3758,6 +4007,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the test matrix with pass/untested status per cell.
 - **Use / avoid:** use manual assistive-technology testing on every release candidate; avoid treating automated scans as compliance [DC-L11-19, DC-L14-14].
 - **Skip:** yes.
+- **Block class:** T (tool-assisted)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L14-14; S-L10-072, S-L11-093, S-L14-007, S-L14-079, S-L14-080
 - **Merges:** K4.3, K4.5, D7
@@ -3785,6 +4035,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the export menu and file tree.
 - **Use / avoid:** use one canonical source for every channel (Q-tool-01); avoid channels that fork the source [DC-L16-02].
 - **Skip:** yes.
+- **Block class:** T (tool-assisted)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L16-12; S-L16-002, S-L16-323, S-L16-333, S-L16-338
 
@@ -3804,6 +4055,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** a generated component page.
 - **Use / avoid:** use generated "use it for / avoid it for" notes from this questionnaire on every page; avoid docs that repeat props without guidance [DC-L11-18].
 - **Skip:** yes.
+- **Block class:** G (generatable)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L11-17, DC-L11-18, DC-L08-23; S-L11-030, S-L11-088, S-L11-090, S-L08-033
 - **Merges:** K11.1, K11.2, K11.3
@@ -3825,6 +4077,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the agent-facing files and a sample agent answer.
 - **Use / avoid:** use evals to check agents follow the files; avoid assuming docs changes alone steer agents [DC-L11-23; S-L11-108].
 - **Skip:** yes.
+- **Block class:** T (tool-assisted)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L11-23; S-L11-031, S-L11-041, S-L11-045, S-L11-047, S-L11-108
 - **Merges:** K11.4, K11.5
@@ -3845,6 +4098,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the lint report for the preview screen.
 - **Use / avoid:** use lint errors for Tier A rules and warnings for context-dependent ones (L13 E1); avoid automating the misapplied laws in L13 E2 (no seven-item caps) [L13 E1, E2].
 - **Skip:** yes.
+- **Block class:** T (tool-assisted)
 - **Time weight:** low (fan-out 1)
 - **Evidence:** DC-L11-24; S-L11-053, S-L11-104, S-L11-108, S-L00-036
 - **Merges:** K11.6
@@ -3870,7 +4124,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the preview screen with messages at each level.
 - **Use / avoid:** accessibility failures are at least warnings in every mode; avoid silent mode for production exports [DC-L15-11].
 - **Skip:** yes.
-- **Time weight:** low (fan-out 0)
+- **Block class:** I (owner input)
+- **Time weight:** medium (fan-out 0)
 - **Evidence:** DC-L15-11; S-L15-047, S-L15-070, S-L15-075, S-L15-080
 
 ### Q-pref-02 · How should AI edits and variations work? · Expert
@@ -3889,6 +4144,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** the variation grid.
 - **Use / avoid:** use variations for open, taste-driven questions (color, type, radius); avoid shuffling locked or accessibility-bound values [DC-L16-05].
 - **Skip:** yes.
+- **Block class:** I (owner input)
 - **Time weight:** medium (fan-out 3)
 - **Evidence:** DC-L16-04, DC-L16-05; S-L16-026, S-L16-031, S-L16-327, S-L16-335
 
@@ -3907,7 +4163,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Preview:** before/after pairs for each correction.
 - **Use / avoid:** use formulas where they exist; avoid correcting brand assets without approval [DC-L15-10].
 - **Skip:** yes.
-- **Time weight:** low (fan-out 0)
+- **Block class:** I (owner input)
+- **Time weight:** medium (fan-out 0)
 - **Evidence:** DC-L15-10; S-L15-055, S-L15-058, S-L15-059
 
 ---
@@ -3933,7 +4190,7 @@ These cards have one defensible answer backed by a platform rule, an accessibili
 
 ## Not asked: builder product decisions
 
-These L16 cards describe how the builder itself should work (for the builder spec, S2), not choices a person makes about their design system. They shaped the Preview lines in this file.
+These L16, L17 and L18 cards describe how the builder and the OpenDesigner package work (for the builder spec), not choices a person makes about their design system. Where this file applies one, the row says how.
 
 | Card | What it decides for the builder |
 |---|---|
@@ -3947,6 +4204,31 @@ These L16 cards describe how the builder itself should work (for the builder spe
 | DC-L16-11 | Multiplayer and agent presence |
 | DC-L16-14 | Control widgets for foundation parameters (sliders, pickers) |
 | DC-L16-15 | Guardrails inside the editing loop |
+| DC-L17-01 | Block classification (G/E/D/T/I): applied as the Block class line on every question |
+| DC-L17-04 | Designer-hook policy: applied as the grouped checklist (Q-brand-08) and the fallback order on every Hook line |
+| DC-L17-05 | Variant generation ("show me options"): applied in Q-pref-02 previews |
+| DC-L17-06 | Proposal framing (safe choices vs risks): applied in the direction gate |
+| DC-L17-07 | Anti-generic guardrails: applied through the Use / avoid lines and the critique mode (Q-pref-01) |
+| DC-L17-08 | Pacing: applied as Time weight and protocol step 12 |
+| DC-L17-09 | Coverage check and completeness scoring: applied in protocol step 11 and by the build script's coverage check |
+| DC-L17-10 | What the process records: applied in protocol steps 5, 7 and 13 |
+| DC-L17-11 | Preview substrate during the process: applied in the Preview lines |
+| DC-L17-12 | Approval gates: applied in protocol step 11 |
+| DC-L17-13 | The per-block detail panel: applied as the Preview and Use / avoid lines |
+| DC-L18-01 | Primary delivery unit of the OpenDesigner package |
+| DC-L18-02 | Repo layout for multi-host discovery |
+| DC-L18-03 | Plugin manifests and distribution channels |
+| DC-L18-04 | Knowledge format and chunking (this JSON is one stage or question per line for that reason) |
+| DC-L18-05 | MCP server scope, hosting and auth |
+| DC-L18-06 | Visual surface ladder: applied in protocol step 9 |
+| DC-L18-07 | How a visual choice returns to the model |
+| DC-L18-08 | Interview pacing: applied as Time weight and protocol step 10 |
+| DC-L18-09 | Question format: applied in protocol step 10 |
+| DC-L18-10 | Durable outputs: applied in protocol step 13 |
+| DC-L18-11 | Enforcement shipped with the system: applied in Q-dist-03 and protocol step 13 |
+| DC-L18-12 | The "extend" session protocol |
+| DC-L18-13 | Design-tool round trip inside AI hosts |
+| DC-L18-14 | Trust and safety of the package |
 
 ## Merge log
 
@@ -3954,8 +4236,8 @@ All 125 source questions were placed; none was dropped outright. The table lists
 
 | Source | Where each question went |
 |---|---|
-| L11 kickoff (K, 77) | K0.1 Q-gov-05; K0.2 Q-gov-05; K0.3 Q-gov-05; K0.4 Q-gov-06; K0.5 Q-comp-01; K1.1 Q-scope-03, Q-aud-01; K1.2 Q-brand-07; K1.3 Q-gov-05; K1.4 Q-scope-04; K1.5 Q-scope-02; K1.6 Q-scope-02; K2.1 Q-scope-01; K2.2 Q-scope-01, Q-plat-01; K2.3 Q-plat-08; K2.4 Q-tool-03; K2.5 Q-tool-01; K2.6 Q-comp-01; K2.7 Q-gov-02; K2.8 Q-gov-02; K3.1 Q-brand-03; K3.2 Q-brand-07; K3.3 Q-ref-01, Q-brand-01, Q-brand-02; K3.4 Q-color-01, Q-color-09; K3.5 Q-type-01, Q-type-02; K3.6 Q-voice-01; K4.1 Q-aud-03; K4.2 Q-aud-03; K4.3 Q-gov-07; K4.4 Q-aud-04, Q-type-17, Q-motion-10; K4.5 Q-gov-07; K5.1 Q-type-04; K5.2 Q-type-04; K5.3 Q-voice-06; K5.4 Q-voice-06; K5.5 Q-voice-06; K6.1 Q-theme-01; K6.2 Q-theme-03; K6.3 Q-dir-02, Q-theme-02, Q-space-09; K6.4 Q-theme-02; K6.5 Q-gov-01; K7.1 Q-color-01; K7.2 Q-type-08; K7.3 Q-space-01; K7.4 Q-shape-01, Q-motion-01; K7.5 Q-icon-01, Q-img-01, Q-img-04; K7.6 Q-token-01, Q-token-02; K8.1 Q-comp-02; K8.2 Q-comp-04; K8.3 Q-layout-04; K8.4 Q-gov-01; K8.5 Q-gov-04; K9.1 Q-scope-03; K9.2 Q-scope-04; K9.3 Q-scope-04; K9.4 Q-gov-03; K9.5 Q-gov-03; K9.6 Q-gov-03; K9.7 Q-gov-03; K10.1 Q-tool-02; K10.2 Q-gov-04; K10.3 Q-gov-04; K10.4 Q-gov-04; K10.5 Q-tool-01; K11.1 Q-dist-04; K11.2 Q-dist-04; K11.3 Q-dist-04; K11.4 Q-dist-02; K11.5 Q-dist-02; K11.6 Q-dist-03; K12.1 Q-gov-05; K12.2 Q-gov-05; K12.3 Q-gov-05; K12.4 Q-gov-05; K13.1 Q-gov-02; K13.2 Q-scope-04; K13.3 Q-gov-06; K13.4 Q-gov-06 |
-| L06 brand (B, 15) | B1 Q-aud-01, Q-aud-02; B2 Q-aud-02; B3 Q-ref-01, Q-brand-02; B4 Q-brand-02; B5 Q-brand-01; B6 Q-brand-01; B7 Q-brand-03, Q-color-01, Q-type-02, Q-motion-08, Q-img-04; B8 Q-type-01; B9 Q-color-06; B10 Q-theme-03; B11 Q-scope-01, Q-brand-05; B12 Q-brand-07; B13 Q-voice-01, Q-voice-02; B14 Q-type-04; B15 Q-aud-03, Q-aud-04, Q-motion-07 |
+| L11 kickoff (K, 77) | K0.1 Q-gov-05; K0.2 Q-gov-05; K0.3 Q-gov-05; K0.4 Q-gov-06; K0.5 Q-scope-05; K1.1 Q-scope-03, Q-aud-01; K1.2 Q-brand-07; K1.3 Q-gov-05; K1.4 Q-scope-04; K1.5 Q-scope-02; K1.6 Q-scope-02; K2.1 Q-scope-01; K2.2 Q-scope-01, Q-plat-01; K2.3 Q-plat-08; K2.4 Q-tool-03; K2.5 Q-tool-01; K2.6 Q-scope-05, Q-comp-01; K2.7 Q-gov-02; K2.8 Q-gov-02; K3.1 Q-brand-03; K3.2 Q-brand-07; K3.3 Q-ref-01, Q-brand-01, Q-brand-02; K3.4 Q-color-01, Q-color-09; K3.5 Q-type-01, Q-type-02; K3.6 Q-voice-01; K4.1 Q-aud-03; K4.2 Q-aud-03; K4.3 Q-gov-07; K4.4 Q-aud-04, Q-type-17, Q-motion-10; K4.5 Q-gov-07; K5.1 Q-type-04; K5.2 Q-type-04; K5.3 Q-voice-06; K5.4 Q-voice-06; K5.5 Q-voice-06; K6.1 Q-theme-01; K6.2 Q-theme-03; K6.3 Q-dir-02, Q-theme-02, Q-space-09; K6.4 Q-theme-02; K6.5 Q-gov-01; K7.1 Q-color-01; K7.2 Q-type-08; K7.3 Q-space-01; K7.4 Q-shape-01, Q-motion-01; K7.5 Q-icon-01, Q-img-01, Q-img-04; K7.6 Q-token-01, Q-token-02; K8.1 Q-comp-02; K8.2 Q-comp-04; K8.3 Q-layout-04; K8.4 Q-gov-01; K8.5 Q-gov-04; K9.1 Q-scope-03; K9.2 Q-scope-04; K9.3 Q-scope-04; K9.4 Q-gov-03; K9.5 Q-gov-03; K9.6 Q-gov-03; K9.7 Q-gov-03; K10.1 Q-tool-02; K10.2 Q-gov-04; K10.3 Q-gov-04; K10.4 Q-gov-04; K10.5 Q-tool-01; K11.1 Q-dist-04; K11.2 Q-dist-04; K11.3 Q-dist-04; K11.4 Q-dist-02; K11.5 Q-dist-02; K11.6 Q-dist-03; K12.1 Q-gov-05; K12.2 Q-gov-05; K12.3 Q-gov-05; K12.4 Q-gov-05; K13.1 Q-gov-02; K13.2 Q-scope-04; K13.3 Q-gov-06; K13.4 Q-gov-06 |
+| L06 brand (B, 15) | B1 Q-aud-01, Q-aud-02; B2 Q-aud-02; B3 Q-ref-01, Q-brand-02; B4 Q-brand-02; B5 Q-brand-01; B6 Q-brand-01; B7 Q-brand-08, Q-brand-03, Q-color-01, Q-type-02, Q-motion-08, Q-img-04; B8 Q-type-01; B9 Q-color-06; B10 Q-theme-03; B11 Q-scope-01, Q-brand-05; B12 Q-brand-07; B13 Q-voice-01, Q-voice-02; B14 Q-type-04; B15 Q-aud-03, Q-aud-04, Q-motion-07 |
 | L10 platform (P, 26) | P1 Q-plat-01; P2 Q-plat-02; P3 Q-plat-05; P4 Q-plat-07; P5 Q-color-02; P6 Q-color-06; P7 Q-type-01; P8 Q-type-17; P9 Q-token-04; P10 Q-layout-04; P11 Q-layout-02; P12 Q-depth-04; P13 Q-depth-04; P14 Q-plat-06; P15 Q-motion-09; P16 Q-plat-03; P17 Q-motion-10; P18 Q-theme-01; P19 Q-token-08; P20 Q-plat-08; P21 Q-plat-08; P22 Q-plat-08; P23 Q-token-08; P24 Q-plat-09; P25 Q-plat-02; P26 Q-icon-01 |
 | L14 device extract (D, 7) | D1 Q-plat-02; D2 Q-plat-03; D3 Q-plat-02; D4 Q-plat-04; D5 Q-pattern-06; D6 Q-ai-01; D7 Q-gov-07 |
 
@@ -3983,10 +4265,12 @@ Judgment calls:
 | Q-color-06 | Dynamic color: Material pushes dynamic color [DC-L01-21]; brand-led consumer apps keep fixed brand color, and iOS has no equivalent [DC-L10-05]. | Per-platform choice; brand-critical and status colors always fixed. |
 | Q-space-01 | Base unit: 8 (Carbon, Atlassian, Material, Spectrum naming) vs 4 (Fluent, Polaris, Primer, Tailwind) [DC-L03-01]. | "4 as the grid, 8 as the rhythm" as a reconciling default. |
 | Q-shape-03 | Pills: Material and Spectrum 2 use pills widely [DC-L09-01]; Carbon v12 moved tags away from pills [S-L04-031]; Atlassian reserves full radius for people [S-L04-016]. | Pill as an option per component role; people = full circle by default. |
+| Asset hooks | Fallback order: L17's policy puts "commission a designer" before open libraries [DC-L17-04]; the icon and typeface cards default to open libraries first [DC-L05-01, DC-L02-01]. | Icons and typefaces lead with open libraries (they are tool-assisted blocks); identity assets (logo, app icon, illustration, photography, sound) lead with commissioning. |
+| Quick mode | L17 says owner-input blocks are never auto-decided [DC-L17-08]; Quick mode asks only 10 questions, so scope, principles and similar owner inputs take defaults. | Quick records them as "assumed" and lists them for confirmation at the end (`meta.quick_mode_assumed_owner_inputs`). |
 | Q-voice-03 | Capitalization: sentence case everywhere (Microsoft, Atlassian) vs title-case headings (Mailchimp) vs per element (Apple) [DC-L06-20]. | Three options; sentence case by default. |
 
 ## Confidence and gaps
 
 - **Confirmed from files:** every option value, system name and default comes from a card in `synthesis/cards.json` (refreshed 2026-09-23, 325 cards) or from L09's shared-pattern and divergence tables; card and source ids are cited inline. The ordering was validated against `synthesis/decision-graph.json` including S1c's `graph-overrides.json` (see `questionnaire.json` meta for the counts).
 - **Inferred (tagged in place):** the Quick-mode selection and the choice to derive posture from slider G; the stage grouping of cards without graph links; accepted file formats in some asset hooks (sounds, animated assets); the time-weight rule; the Ask and Example prompts.
-- **Not yet reconciled:** L17's block classification (`research/L17-how-systems-get-made.md`) was not written when this file was produced; when it lands, check that every block it marks "cannot generate" has an asset hook here.
+- **Reconciled late:** L17 (`research/L17-how-systems-get-made.md`) and L18 (`research/L18-ai-first-distribution.md`) landed while this file was being finished. L17's 14 hooks map to the Hook lines here (L17 H-brandbook is the brief option of Q-ref-01; H-favicon is derived in Q-brand-03); L17's tool hooks H-tokens, H-figma, H-comp, H-dataviz and H-a11y map to Q-token-08, Q-tool-03, Q-comp-01, Q-viz-01 and Q-gov-07. The per-question Block class is this file's application of L17's scheme, not L17's own block-by-block table (which is keyed to ontology blocks, not questions).
