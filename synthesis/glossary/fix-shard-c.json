@@ -1,0 +1,105 @@
+{
+ "found.color": [
+  "engineer: color.blue.500); use the real name or add (proposed",
+  "code_name: color.blue.500); use the real name or add (proposed"
+ ],
+ "found.color.alpha": [
+  "engineer: color.neutral.200A); use the real name or add (proposed",
+  "engineer: color.blue.a3); use the real name or add (proposed",
+  "code_name: color.neutral.200A); use the real name or add (proposed"
+ ],
+ "found.color.brand": [
+  "engineer: color.brand.raw); use the real name or add (proposed",
+  "code_name: color.brand.raw); use the real name or add (proposed"
+ ],
+ "found.color.contrast": [
+  "engineer: color.bg.default); use the real name or add (proposed"
+ ],
+ "found.color.neutral": [
+  "engineer: color.neutral.0); use the real name or add (proposed",
+  "engineer: color.neutral.13); use the real name or add (proposed",
+  "engineer: color.neutral.100A); use the real name or add (proposed"
+ ],
+ "found.color.ramp": [
+  "engineer: color.blue.500); use the real name or add (proposed",
+  "code_name: color.blue.500); use the real name or add (proposed"
+ ],
+ "found.color.roles": [
+  "engineer: color.bg.accent.emphasis); use the real name or add (proposed",
+  "engineer: color.blue.5); use the real name or add (proposed",
+  "code_name: color.bg.accent.emphasis); use the real name or add (proposed"
+ ],
+ "found.color.roles.border": [
+  "engineer: color.divider); use the real name or add (proposed",
+  "engineer: color.focus.ring); use the real name or add (proposed",
+  "engineer: color.focus.inset); use the real name or add (proposed",
+  "code_name: color.focus.ring); use the real name or add (proposed"
+ ],
+ "found.color.roles.surface": [
+  "engineer: color.surface.container); use the real name or add (proposed"
+ ],
+ "found.color.states": [
+  "engineer: color.bg.brand.bold.hovered); use the real name or add (proposed",
+  "code_name: color.*.hovered); use the real name or add (proposed"
+ ],
+ "found.interaction.focus": [
+  "engineer: focus.ring.color); use the real name or add (proposed"
+ ],
+ "found.shape": [
+  "engineer: radius.100); use the real name or add (proposed"
+ ],
+ "found.shape.radius": [
+  "engineer: radius.100); use the real name or add (proposed",
+  "engineer: button.radius); use the real name or add (proposed"
+ ],
+ "found.space.base": [
+  "engineer: space.base); use the real name or add (proposed",
+  "code_name: space.base); use the real name or add (proposed"
+ ],
+ "found.space.density.voice": [
+  "engineer: font.body.size); use the real name or add (proposed",
+  "code_name: font.body.size); use the real name or add (proposed"
+ ],
+ "found.space.scale": [
+  "engineer: space.1000); use the real name or add (proposed",
+  "engineer: space.negative.100); use the real name or add (proposed",
+  "code_name: space.1000); use the real name or add (proposed"
+ ],
+ "found.space.sizing": [
+  "engineer: size.avatar.xs); use the real name or add (proposed",
+  "code_name: size.avatar.*); use the real name or add (proposed"
+ ],
+ "found.space.sizing.media": [
+  "engineer: size.avatar.xs); use the real name or add (proposed",
+  "code_name: size.avatar.*); use the real name or add (proposed"
+ ],
+ "found.type.i18n": [
+  "engineer: font.family.body); use the real name or add (proposed",
+  "code_name: font.family.body); use the real name or add (proposed"
+ ],
+ "found.type.roles": [
+  "engineer: text.body.medium); use the real name or add (proposed",
+  "engineer: font.size.200); use the real name or add (proposed",
+  "engineer: font.weight.semibold); use the real name or add (proposed",
+  "engineer: text.body.medium.emphasized); use the real name or add (proposed",
+  "code_name: text.body.medium); use the real name or add (proposed"
+ ],
+ "found.type.scale": [
+  "engineer: font.size.100); use the real name or add (proposed",
+  "code_name: font.size.100); use the real name or add (proposed"
+ ],
+ "found.type.text-layout": [
+  "engineer: size.measure.prose); use the real name or add (proposed",
+  "code_name: size.measure.prose); use the real name or add (proposed"
+ ],
+ "found.type.typeface": [
+  "engineer: font.family.brand); use the real name or add (proposed",
+  "engineer: font.family.body); use the real name or add (proposed"
+ ],
+ "found.type.typeface.families": [
+  "engineer: font.family.sans); use the real name or add (proposed",
+  "engineer: font.family.heading); use the real name or add (proposed",
+  "engineer: text.code.block); use the real name or add (proposed",
+  "code_name: font.family.sans); use the real name or add (proposed"
+ ]
+}

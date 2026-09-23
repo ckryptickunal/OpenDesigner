@@ -1,0 +1,97 @@
+{
+ "found.content.microcopy": [
+  "engineer: button.submit.label); use the real name or add (proposed",
+  "code_name: button.submit.label); use the real name or add (proposed"
+ ],
+ "found.content.readability": [
+  "engineer: button.label.maxWords); use the real name or add (proposed"
+ ],
+ "found.dataviz": [
+  "code_name: color.chart.*); use the real name or add (proposed"
+ ],
+ "found.dataviz.anatomy": [
+  "engineer: chart.gridline.color); use the real name or add (proposed",
+  "engineer: chart.tick.label.color); use the real name or add (proposed",
+  "engineer: color.text.subtle); use the real name or add (proposed",
+  "engineer: chart.series.dimmed.opacity); use the real name or add (proposed",
+  "code_name: chart.gridline.color); use the real name or add (proposed",
+  "code_name: chart.tick.label.color); use the real name or add (proposed"
+ ],
+ "found.dataviz.color": [
+  "engineer: color.chart.categorical.1); use the real name or add (proposed",
+  "engineer: color.chart.sequential); use the real name or add (proposed",
+  "engineer: color.chart.diverging); use the real name or add (proposed",
+  "code_name: color.chart.categorical); use the real name or add (proposed"
+ ],
+ "found.dataviz.scope": [
+  "engineer: color.chart.*); use the real name or add (proposed",
+  "code_name: color.chart.*); use the real name or add (proposed"
+ ],
+ "found.elevation.depth-model": [
+  "engineer: elevation.model); use the real name or add (proposed",
+  "code_name: elevation.model); use the real name or add (proposed"
+ ],
+ "found.elevation.scale": [
+  "engineer: elevation.shadow.1); use the real name or add (proposed"
+ ],
+ "found.elevation.stacking": [
+  "engineer: layer.modal); use the real name or add (proposed",
+  "code_name: layer.modal); use the real name or add (proposed"
+ ],
+ "found.elevation.surfaces": [
+  "engineer: color.roles.surface); use the real name or add (proposed"
+ ],
+ "found.icon.color": [
+  "engineer: color.icon.danger); use the real name or add (proposed"
+ ],
+ "found.icon.labels": [
+  "engineer: space.icon.gap); use the real name or add (proposed",
+  "code_name: space.icon.gap); use the real name or add (proposed"
+ ],
+ "found.icon.platform": [
+  "engineer: icon.share); use the real name or add (proposed",
+  "code_name: icon.share); use the real name or add (proposed"
+ ],
+ "found.icon.source": [
+  "engineer: icon.library); use the real name or add (proposed",
+  "code_name: icon.library); use the real name or add (proposed"
+ ],
+ "found.icon.states": [
+  "engineer: icon.fill.selected); use the real name or add (proposed",
+  "engineer: icon.grade.emphasis); use the real name or add (proposed",
+  "code_name: icon.fill.selected); use the real name or add (proposed",
+  "code_name: color.icon.selected); use the real name or add (proposed"
+ ],
+ "found.icon.style": [
+  "engineer: icon.style.default); use the real name or add (proposed",
+  "engineer: icon.style.selected); use the real name or add (proposed",
+  "engineer: icon.fill.rest); use the real name or add (proposed",
+  "engineer: icon.fill.selected); use the real name or add (proposed",
+  "code_name: icon.style.default); use the real name or add (proposed",
+  "code_name: icon.style.selected); use the real name or add (proposed"
+ ],
+ "found.icon.tiers": [
+  "engineer: icon.size.pictogram); use the real name or add (proposed",
+  "engineer: icon.size.spot); use the real name or add (proposed",
+  "code_name: icon.size.pictogram); use the real name or add (proposed",
+  "code_name: icon.size.spot); use the real name or add (proposed"
+ ],
+ "found.imagery.brand-marks": [
+  "engineer: icon.svg); use the real name or add (proposed",
+  "code_name: icon.svg); use the real name or add (proposed"
+ ],
+ "found.imagery.illustration": [
+  "engineer: illustration.color.*); use the real name or add (proposed",
+  "engineer: illustration.stroke.width); use the real name or add (proposed",
+  "engineer: illustration.size.spot); use the real name or add (proposed",
+  "code_name: illustration.color.*); use the real name or add (proposed",
+  "code_name: illustration.size.spot); use the real name or add (proposed"
+ ],
+ "found.sensory": [
+  "code_name: haptic.feedback.*); use the real name or add (proposed"
+ ],
+ "found.sensory.haptics": [
+  "engineer: haptic.feedback.success); use the real name or add (proposed",
+  "code_name: haptic.feedback.success); use the real name or add (proposed"
+ ]
+}

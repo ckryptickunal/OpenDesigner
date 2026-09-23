@@ -9,6 +9,8 @@
   "plain": "The parts an app is made of, like buttons and menus, built once and used again.",
   "designer": "Reusable UI elements with defined anatomy, variants and states, styled from the system's tokens. OpenDesigner's catalog lists 64 canonical components in ten categories, benchmarked across 10 systems.",
   "engineer": "Catalog entries C01-C64 list anatomy, props, states, the APG pattern and consumed token families. Component tokens optionally alias semantic tokens; DTCG has no component model.",
+  "designer_says": "components: anatomy, variants, states",
+  "code_name": "comp.* (catalog C01-C64)",
   "example": "A Button, a Dialog and a Card are three components.",
   "source": [
    "comp",
@@ -26,6 +28,8 @@
   "plain": "Choosing which parts to make first, and when to add more later.",
   "designer": "How large version 1's library is. The default ships about 25 core components and adds extended ones, such as date pickers, when two or more products ask.",
   "engineer": "Each included component gets a token namespace such as button.* and must implement its APG pattern. For scale, Radix ships 30 primitives and shadcn/ui 64.",
+  "designer_says": "core set of about 25 components",
+  "code_name": "per-component namespace like button.*",
   "example": "Buttons and checkboxes in version 1; a color picker later.",
   "source": [
    "comp.inventory",
@@ -42,6 +46,8 @@
   "plain": "How the parts are sorted from smallest to biggest, and what each one is called.",
   "designer": "The five levels: tokens, primitives, components, patterns and templates, with Brad Frost's atomic names kept as aliases. An alias table resolves collisions, such as Tag meaning chip in Carbon.",
   "engineer": "Not a token; the chosen level and component names become token path segments such as comp.button or pattern.form. Each catalog entry's Names line feeds the cross-system alias table.",
+  "designer_says": "atomic design levels and naming",
+  "code_name": "comp.button, pattern.form",
   "example": "A Tag in one system is called a Chip in another.",
   "source": [
    "comp.taxonomy",
@@ -59,6 +65,8 @@
   "plain": "Picking what the parts are built on: a kit with no looks, a kit with looks, or the phone's own.",
   "designer": "Picks the base under your components. Headless libraries leave every visual choice to your tokens, styled libraries arrive with a look to re-theme, and native controls inherit the platform's look.",
   "engineer": "Default for React web: shadcn/ui on Base UI or React Aria; multi-framework: Ark UI or web components; mobile: SwiftUI and Compose controls themed with tokens.",
+  "designer_says": "headless, styled or native base",
+  "code_name": "shadcn/ui, Base UI, React Aria",
   "example": "A React app styling shadcn/ui components with its own tokens.",
   "source": [
    "comp.implementation",
@@ -77,6 +85,8 @@
   "plain": "The switches and knobs on a part, like size or style, that people use to set it up.",
   "designer": "How a component is configured in Figma: variants for state, size and type, booleans for optional icons, text properties for labels, instance swap for fixed icons, slots for flexible content.",
   "engineer": "Props for leaf components like Button; compound parts (Menu.Trigger, Menu.Item) for containers like Dialog. Figma slots map to React children, and booleans bind only to layer visibility.",
+  "designer_says": "variants, booleans, slots, instance swap",
+  "code_name": "props, compound parts like Menu.Item",
   "example": "A Button with a size setting and an optional icon.",
   "source": [
    "comp.api",
@@ -94,6 +104,8 @@
   "plain": "If one set of parts fits phones and laptops, or if watches and TVs get their own.",
   "designer": "One component set covers phone, tablet, desktop and web through context modes; watch and TV get small separate libraries because their input changes, not only their size.",
   "engineer": "Shared semantic names like button.primary.bg resolve per context modifier in the DTCG resolver; device-only components get their own namespace, wrist.tile.* or leanback.card.*. Car uses system templates.",
+  "designer_says": "one component set, context modes",
+  "code_name": "button.primary.bg per context modifier",
   "example": "Google ships separate Compose libraries for Wear and TV.",
   "source": [
    "comp.device-variants",
@@ -111,6 +123,8 @@
   "plain": "Whether an app uses the phone's own buttons in its brand color, or draws its own.",
   "designer": "System controls feel native and update with the OS, such as Liquid Glass; custom ones keep brand shape but can look out of place. Restyle color and label, not shape.",
   "engineer": "Default: tint SwiftUI, UIKit and Compose controls with the accent token, custom controls on web. System controls carry VoiceOver and TalkBack roles; custom ones must supply them.",
+  "designer_says": "system or custom controls",
+  "code_name": "SwiftUI, UIKit and Compose controls",
   "example": "An iOS toggle switch tinted in the brand's green.",
   "source": [
    "comp.platform-rendering",
@@ -127,6 +141,8 @@
   "plain": "How a part looks when you point at it, press it, pick it, or it cannot be used.",
   "designer": "The looks each component defines: enabled, hover, focus-visible, pressed, selected, disabled, loading and error. Hover and press use overlays; selected and error get explicit colors. Touch screens never show hover.",
   "engineer": "DTCG has no state semantics; states become a name segment such as button.primary.container.color.hover. Define all states once; each context renders the subset its inputs trigger.",
+  "designer_says": "hover, focus, pressed, selected, disabled",
+  "code_name": "button.primary.container.color.hover",
   "example": "A button shows a ring around it when reached with the Tab key.",
   "source": [
    "comp.states",
@@ -144,6 +160,8 @@
   "plain": "What to do with a button that cannot work right now: fade it, hide it, or explain why.",
   "designer": "Faded controls signal 'not now' but can hide why. The default never disables submit buttons: it validates on submit, explains, and adds helper text when an action truly cannot run.",
   "engineer": "Use aria-disabled, as APG recommends; it stays focusable, while disabled controls leave the tab order. Tokens: color.text.disabled or state.disabled.opacity. WCAG exempts them from contrast.",
+  "designer_says": "disabled or unavailable state",
+  "code_name": "aria-disabled",
   "example": "A Save button that stays clickable and says what is missing.",
   "source": [
    "comp.states.disabled",
@@ -160,6 +178,8 @@
   "plain": "How a part shows it is busy, like a spinning wheel or gray boxes where things will load.",
   "designer": "Choose a spinner, a skeleton that previews the layout, or a loading button. Delay spinners about 1 s, use skeletons for first page loads, and keep loading buttons focusable.",
   "engineer": "A delay token such as loading.delay = 1000ms (DTCG duration); announce state through a 4.1.3 status message. Natives: UIKit UIActivityIndicatorView, Compose LoadingIndicator. S2 isPending keeps focus.",
+  "designer_says": "spinner, skeleton or loading button",
+  "code_name": "loading.delay = 1000ms",
   "example": "A Save button showing a small spinner while it saves.",
   "source": [
    "comp.states.loading",
@@ -177,6 +197,8 @@
   "plain": "How the app shows which tab, row or item you picked, using a mark as well as a color.",
   "designer": "Mark the chosen tab, row, chip or navigation item with an indicator plus color, never color alone. In action-dense products, save brand primary for actions.",
   "engineer": "Expose aria-selected, aria-current or aria-pressed depending on the pattern. Tokens: color.selected.bg, color.selected.fg and indicator.shape; the indicator needs 3:1 contrast where it conveys state.",
+  "designer_says": "selected indicator plus color",
+  "code_name": "aria-selected, aria-current, aria-pressed",
   "example": "A pill shape behind the icon of the current tab.",
   "source": [
    "comp.states.selected",
@@ -193,6 +215,8 @@
   "plain": "A short write-up of what starts a small action, what it does, and what you see or feel.",
   "designer": "Each interactive component documents Saffer's four parts: trigger, rules, feedback, and loops and modes, plus its state list. This keeps press, hover, success and failure feedback consistent across the product.",
   "engineer": "Implement the spec as a state machine, as Ark UI does; store trigger, rules, feedback, loops and modes as structured component docs. DTCG has no behavior type.",
+  "designer_says": "microinteraction spec: trigger, rules, feedback",
+  "code_name": "component state machine",
   "example": "Pull to refresh: the pull is the trigger, the spinner is the feedback.",
   "source": [
    "comp.behavior",
@@ -208,6 +232,8 @@
   "plain": "Parts you tap or click to make something happen, like buttons.",
   "designer": "Components that trigger actions: button, icon button, floating action button, split button, button group, toggle button and toolbar. Their emphasis and placement signal what users should do next.",
   "engineer": "APG patterns: Button (Enter and Space activate), toggle Button with aria-pressed, Menu Button with aria-haspopup, and Toolbar with a roving tabindex. Natives: SwiftUI Button, UIKit UIButton, Compose Button.",
+  "designer_says": "buttons and action components",
+  "code_name": "APG Button, Menu Button, Toolbar",
   "example": "Save, Share and a plus button that adds an item.",
   "source": [
    "comp.action",
@@ -225,6 +251,8 @@
   "plain": "How many kinds of button there are, which one stands out, and how a Delete button looks.",
   "designer": "Four emphasis levels plus danger, one primary per view, placed after the last field. Sentence-case verb labels with an optional leading icon; solid danger only in the confirmation step.",
   "engineer": "Component tokens alias semantic ones: color.action.primary.bg feeds button.primary.container.color, color.feedback.danger feeds button.danger. APG Button; SwiftUI confirmationDialog with a destructive role.",
+  "designer_says": "button hierarchy: primary to danger",
+  "code_name": "button.primary.container.color, button.danger",
   "example": "One filled Save button beside a plain-text Cancel button.",
   "source": [
    "comp.action.button",
@@ -244,6 +272,8 @@
   "plain": "Parts where you type or pick something, like a text box, a date picker or a file upload.",
   "designer": "Components for entering data, from text fields and selects to date pickers, file uploads and one-time codes. Field style, label placement and validation decide how easy forms feel.",
   "engineer": "Native inputs plus aria-describedby for help and errors and aria-invalid; APG Combobox for suggestions, Listbox or select-only Combobox for Select, Spinbutton for number fields. Compose TextField, SwiftUI TextField.",
+  "designer_says": "form inputs and text fields",
+  "code_name": "aria-describedby, aria-invalid, APG Combobox",
   "example": "An email box, a country dropdown and a birthday picker.",
   "source": [
    "comp.input",
@@ -260,6 +290,8 @@
   "plain": "How a text box looks, with a full border, a shaded fill or a line, and where its name sits.",
   "designer": "Outlined reads crisp, filled reads soft and app-like, underlined is minimal but low in affordance. Default: outlined fields with top labels; mark whichever of required or optional is rarer.",
   "engineer": "Tokens: input.container.color, input.border.color.{default,hover,focus,error}, input.label.typography. Every input needs a programmatic label; placeholders are not labels; borders need 3:1 contrast.",
+  "designer_says": "outlined field, top label",
+  "code_name": "input.border.color, input.label.typography",
   "example": "A box with a border and its label, Email, sitting above it.",
   "source": [
    "comp.input.field",
@@ -276,6 +308,8 @@
   "plain": "Parts for making a choice, like check boxes, on-off switches and sliders.",
   "designer": "Components for choosing among options: checkbox, radio group, switch, slider, segmented control and chip. Pick by task: switches apply instantly, radios pick one, checkboxes pick many, chips filter.",
   "engineer": "APG Checkbox (aria-checked true, false or mixed), Radio Group (arrow keys move and select), Switch (role switch) and Slider (aria-valuenow). Natives: SwiftUI Toggle and Slider, Compose Checkbox, Switch, RadioButton.",
+  "designer_says": "checkbox, radio, switch, slider, chip",
+  "code_name": "APG Checkbox, Radio Group, Switch, Slider",
   "example": "A switch that turns dark mode on or off.",
   "source": [
    "comp.selection",
@@ -292,6 +326,8 @@
   "plain": "Parts that help you move around an app, like tabs, links and a bar of icons at the bottom.",
   "designer": "Components for moving between places: link, tabs, breadcrumbs, pagination, bottom navigation bar, navigation rail, sidebar, app bar, tree view and steps. The container follows screen size and destination count.",
   "engineer": "Use links inside a nav landmark with aria-current, never the menu role. APG patterns: Tabs (tablist, tab, tabpanel), Breadcrumb, Tree View. Natives: SwiftUI TabView and NavigationSplitView, Compose NavigationBar and NavigationRail.",
+  "designer_says": "tabs, breadcrumbs, nav bar, sidebar",
+  "code_name": "nav landmark with aria-current",
   "example": "Home, Search and Profile tabs along the bottom of a phone app.",
   "source": [
    "comp.navigation",
@@ -309,6 +345,8 @@
   "plain": "Parts that tell you what is going on, like a warning box, a loading bar or a red dot.",
   "designer": "Components that report status, progress or results: alert or banner, toast, progress bar, spinner, skeleton, empty state, badge and AI indicators. Four status colors map info, success, warning and error.",
   "engineer": "APG Alert (role alert, no focus move); toasts have no APG pattern and use a status live region. Tokens: color.feedback.{info,success,warning,error}.{bg,fg}. Native: Compose Snackbar.",
+  "designer_says": "alerts, toasts, progress, empty states",
+  "code_name": "color.feedback.*, role=alert",
   "example": "A green banner saying your changes were saved.",
   "source": [
    "comp.feedback",
@@ -326,6 +364,8 @@
   "plain": "Extra parts for AI features, like a label that says AI made this, and chat bubbles.",
   "designer": "An optional module: AI label and AI button variant first, chat components only for conversational products. A distinct AI accent aids recognition but can compete with the primary color.",
   "engineer": "Accent or gradient tokens under color.ai.*. Examples: Carbon AI label, Spectrum 2 genai variant, shadcn Message and Bubble. Stream text into polite live regions.",
+  "designer_says": "AI label and AI accent",
+  "code_name": "color.ai.*",
   "example": "A small AI tag next to a summary the app wrote.",
   "source": [
    "comp.feedback.ai",
@@ -343,6 +383,8 @@
   "plain": "Parts that pop up over the page, like tips, menus and boxes that ask you something.",
   "designer": "Components that appear above the page: tooltip, popover, dialog, confirmation dialog, sheet or drawer, menu and command palette. Use modal ones only when blocking the page has a clear benefit.",
   "engineer": "APG Dialog (Modal): focus moves inside and is trapped, Escape closes, focus returns to the invoker, with role dialog and aria-modal. Also Alert Dialog, Menu Button and Tooltip.",
+  "designer_says": "dialogs, popovers, sheets, menus",
+  "code_name": "APG Dialog (Modal), aria-modal",
   "example": "A box asking Delete this file? with Delete and Cancel buttons.",
   "source": [
    "comp.overlay",
@@ -359,6 +401,8 @@
   "plain": "Parts that group things, like cards, sections that open and close, and dividing lines.",
   "designer": "Components that group content: card, accordion, divider and carousel. They set how content chunks read, whether by fill, outline or shadow, and how much stays hidden until opened.",
   "engineer": "APG Accordion (a heading wrapping a button with aria-expanded and aria-controls), Disclosure, and Carousel (rotation stop control first in tab order). Natives: SwiftUI DisclosureGroup; Compose Card, ElevatedCard, OutlinedCard.",
+  "designer_says": "cards, accordions, dividers, carousels",
+  "code_name": "APG Accordion, Disclosure, Carousel",
   "example": "A help page where each question opens to show its answer.",
   "source": [
    "comp.containment",
@@ -376,6 +420,8 @@
   "plain": "How a card stands apart from the page: a light fill, a thin border, or a shadow.",
   "designer": "Tinted fill feels soft and works in dark mode, outline feels crisp and flat, shadow adds depth. Use fill or outline for static cards, elevation only for floating things.",
   "engineer": "Tokens: surface.container.* color roles, border.subtle, and elevation.level1 as a DTCG shadow. Interactive cards bounded only by a border need 3:1 contrast (WCAG 1.4.11).",
+  "designer_says": "fill, outline or shadow card",
+  "code_name": "surface.container.*, border.subtle, elevation.level1",
   "example": "Cards on a pale gray page, each with a thin outline.",
   "source": [
    "comp.containment.card",
@@ -391,6 +437,8 @@
   "plain": "Parts that show facts and people, like lists, tables and small photos of users.",
   "designer": "Components that present data and people: list, table, avatar, and text and heading. Density, row height and type roles decide how scannable a screen of data feels.",
   "engineer": "APG Table for static data, Grid for interactive or editable cells, Treegrid for nested rows, Listbox for selectable lists. Natives: SwiftUI List and Table, UIKit UITableView.",
+  "designer_says": "lists, tables and avatars",
+  "code_name": "APG Table, Grid, Treegrid, Listbox",
   "example": "A table of orders with a small photo of each customer.",
   "source": [
    "comp.data",
@@ -407,6 +455,8 @@
   "plain": "A small picture or letters that stand for a person, team or AI helper.",
   "designer": "Sizes from 16 to 64 on a 4/8 rhythm. Circle means person, square means team or organization, and a third shape marks AI agents when humans and AI mix.",
   "engineer": "avatar.size.* from 16 to 64 (DTCG dimension), avatar.radius.person = 9999px. Alt text when no name sits beside it; text for presence badges at 32px or less.",
+  "designer_says": "circle for people, square for teams",
+  "code_name": "avatar.size.*, avatar.radius.person",
   "example": "A round photo for a person, a square logo for a team.",
   "source": [
    "comp.data.avatar",
@@ -422,6 +472,8 @@
   "plain": "Parts that show icons and pictures at the right size and shape.",
   "designer": "Components that render icons and images, such as thumbnails. They keep icon sizes, image corners and aspect ratios on the system's scales instead of hand-set values.",
   "engineer": "C60 Icon consumes icon size and color tokens; C61 Image consumes radius, aspect-ratio and placeholder surface tokens. Radix ships Accessible Icon and Aspect Ratio.",
+  "designer_says": "icons and images on system scales",
+  "code_name": "C60 Icon, C61 Image",
   "example": "A trash-can icon and a square product photo.",
   "source": [
    "comp.media",
@@ -439,6 +491,8 @@
   "plain": "Hidden helper parts that space things out and help people who have the screen read aloud.",
   "designer": "Box, stack and grid primitives expose spacing, color and radius as props so layouts stay on scale. The app shell and accessibility utilities, like visually hidden text, sit here too.",
   "engineer": "Box, Stack, Inline and Grid take spacing tokens as props; the app shell uses APG Landmarks and Window Splitter; utilities include Radix Visually Hidden, Portal and Slot.",
+  "designer_says": "box, stack and grid primitives",
+  "code_name": "Box, Stack, Inline, Grid",
   "example": "A Stack that puts the same gap between every card.",
   "source": [
    "comp.layout",
@@ -455,6 +509,8 @@
   "plain": "Common ways to join parts to do a job, like a sign-up form, plus whole pages.",
   "designer": "Recurring solutions that combine components around a user goal: forms, feedback, navigation, disclosure, empty states, plus page templates and layout archetypes. Most UX behavior rules apply here.",
   "engineer": "No DTCG type exists for patterns; they compose components and reference tokens. The builder encodes their behavior rules as lint checks, like warning on a collection with no empty state.",
+  "designer_says": "UX patterns and page templates",
+  "code_name": "pattern.* with lint checks",
   "example": "A sign-up form: fields, labels, a button and error messages together.",
   "source": [
    "pat",
@@ -471,6 +527,8 @@
   "plain": "How a form is set up: a name above each box, a tip, and a star on must-fill boxes.",
   "designer": "A visible label above every field, a hint under the label, an asterisk at the label start with a legend, and autofill on standard inputs. Placeholder-only labels are a warning.",
   "engineer": "Set autocomplete attributes on personal-data inputs and expose the required state to assistive tech, not only an asterisk. Lint error: field with no programmatic label. Tokens: space.field.label-gap.",
+  "designer_says": "labels above fields, hints below",
+  "code_name": "autocomplete, space.field.label-gap",
   "example": "Email, with a star and the hint We never share it.",
   "source": [
    "pat.forms",
@@ -488,6 +546,8 @@
   "plain": "When a form checks your answers and where it shows mistakes: by each box, at the top, or both.",
   "designer": "Sources disagree: one validates on submit, the other on blur. Both reject flagging errors mid-typing. Forms over about 5 fields show an error summary plus inline messages.",
   "engineer": "A prop validateOn: blur | submit | change, with revalidateOn: change. Errors identified in text and linked to fields (WCAG 3.3.1); focus the summary on submit. GOV.UK sets novalidate.",
+  "designer_says": "inline validation and error summary",
+  "code_name": "validateOn: blur | submit | change",
   "example": "A phone number is checked when you leave the box, not while typing.",
   "source": [
    "pat.forms.validation",
@@ -505,6 +565,8 @@
   "plain": "How an app tells you it is busy, that it worked, or that it went wrong.",
   "designer": "How the system reports waiting, results and errors: the loading ladder, the choice of message channel, and the error message pattern. They implement the heuristic of visible status and feedback.",
   "engineer": "Composes alerts, toasts, progress bars, spinners, skeletons and empty states. Announce changes through live regions (WCAG 4.1.3) without stealing focus. Duration thresholds are DTCG duration tokens.",
+  "designer_says": "loading, messages and errors",
+  "code_name": "aria-live regions",
   "example": "A spinner while saving, then a Saved message.",
   "source": [
    "pat.feedback",
@@ -523,6 +585,8 @@
   "plain": "What the app shows while you wait: nothing for a blink, a filling bar for a long wait.",
   "designer": "Acknowledge within 50 ms, show nothing under about 1 s, use a skeleton for 1 to 10 s page loads, and past 10 s show determinate progress with cancel.",
   "engineer": "DTCG duration tokens: feedback.acknowledge.max = 50ms, feedback.indicator.delay = 1000ms, rules in $extensions. Pair aria-busy with a polite live region; every indicator carries a text label.",
+  "designer_says": "loading ladder: skeleton, then progress",
+  "code_name": "feedback.indicator.delay, aria-busy",
   "example": "A page shows gray outlines of its content while it loads.",
   "source": [
    "pat.feedback.loading",
@@ -540,6 +604,8 @@
   "plain": "Choosing where a message shows up: beside the cause, in a bar up top, or in a quick pop-up.",
   "designer": "Put the message where the cause is, inline or in a banner by default. Toasts only for low-stakes confirmations with undo; Primer ships none. Dialogs only for blocking decisions.",
   "engineer": "Four status roles: color.feedback.{info,success,warning,error}. Use live regions (WCAG 4.1.3) without moving focus; never auto-dismiss a toast that holds an action (2.2.1).",
+  "designer_says": "inline, banner, toast or dialog",
+  "code_name": "color.feedback.{info,success,warning,error}",
   "example": "A Deleted, Undo toast after removing an email.",
   "source": [
    "pat.feedback.messaging",
@@ -557,6 +623,8 @@
   "plain": "Telling people what went wrong and how to fix it, in plain words, right next to the problem.",
   "designer": "Follow NN/g's 13 guidelines: shown near the source, visible without relying on color, precise, constructive and blame-free, input kept. Template: what happened, then how to fix it.",
   "engineer": "Tokens color.feedback.error.{fg,bg,border} and icon.status.error, plus a {problem}{cause?}{remedy} template in $extensions. Lint: no remedy, raw error code, color-only error state.",
+  "designer_says": "what happened, then how to fix",
+  "code_name": "color.feedback.error.*, icon.status.error",
   "example": "That email is already in use. Sign in instead?",
   "source": [
    "pat.feedback.errors",
@@ -573,6 +641,8 @@
   "plain": "If a delete can be taken back with Undo, or if the app asks you first.",
   "designer": "Reversible actions get undo and no confirmation; irreversible or costly ones get a dialog with verb labels like Delete file, and Cancel as the safe default. Overused confirmations breed habituation.",
   "engineer": "APG Alert Dialog (role alertdialog), focus returned to the invoker. Undo toast timing is a DTCG duration and must be pausable. Lint warns on delete without undo or confirm.",
+  "designer_says": "undo versus confirm",
+  "code_name": "APG Alert Dialog",
   "example": "Deleting an email shows Undo; deleting an account asks first.",
   "source": [
    "pat.destructive",
@@ -590,6 +660,8 @@
   "plain": "How an app's main menu works: how many places, how deep it goes, and if it stays in view.",
   "designer": "Keep primary navigation visible whenever width allows. Do not cap items at seven, a misuse of Miller's law; group long lists and test labels with a tree test.",
   "engineer": "A pattern config rather than a token, for example nav.visibleItems.compact = 5. Expose the nav landmark and aria-current; keep placement consistent (WCAG 3.2.3). Information architecture stays designer-owned.",
+  "designer_says": "global navigation, always visible",
+  "code_name": "nav.visibleItems.compact",
   "example": "Five tabs that stay visible at the bottom of a phone app.",
   "source": [
    "pat.navigation",
@@ -606,6 +678,8 @@
   "plain": "The same places to go, shown as a bottom bar on phones and a side list on laptops.",
   "designer": "3 to 5 destinations: bottom bar on phone, rail on tablet, sidebar on desktop; more than 7 go in a grouped sidebar. Keep destinations identical and swap only the container.",
   "engineer": "A rule table from context and breakpoint to container, with tokens like nav.bar.height and nav.rail.width.collapsed. Natives: SwiftUI sidebarAdaptable tab views, Compose NavigationBar and NavigationRail.",
+  "designer_says": "bottom bar, rail or sidebar",
+  "code_name": "nav.bar.height, nav.rail.width.collapsed",
   "example": "Tabs on the phone become a sidebar on the iPad.",
   "source": [
    "pat.navigation.containers",
@@ -624,6 +698,8 @@
   "plain": "Which pop-up to use: a box in the middle, a panel that slides in, or a small note.",
   "designer": "Dialog for short decisions, side sheet for editing with context, bottom sheet on phones, popover for small scoped tasks. Follow each platform's button order, and always give a way out.",
   "engineer": "APG Dialog (Modal): focus trapped and returned, Escape closes, aria-modal. iOS sheets use detents and a grabber (UISheetPresentationController). A dialog with no dismiss path is a lint error.",
+  "designer_says": "dialog, sheet or popover choice",
+  "code_name": "APG Dialog (Modal), UISheetPresentationController",
   "example": "A bottom sheet with share options on a phone.",
   "source": [
    "pat.overlay",
@@ -640,6 +716,8 @@
   "plain": "How a long list is split up: page numbers, a Load more button, or scrolling that never ends.",
   "designer": "Pagination for tables and goal-directed search, Load more for result lists, infinite scroll only for feeds. Infinite scroll hides the footer and makes items hard to find again.",
   "engineer": "No new tokens; pagination reuses button and link tokens. Infinite scroll harms keyboard and footer access, so accessible feeds follow the APG Feed pattern.",
+  "designer_says": "pagination, load more, infinite scroll",
+  "code_name": "APG Feed pattern",
   "example": "Search results with page numbers; a social feed that keeps scrolling.",
   "source": [
    "pat.collections",
@@ -656,6 +734,8 @@
   "plain": "Keeping extra choices out of sight until you need them, so the screen stays clean.",
   "designer": "Show key options first and put advanced ones behind a labeled trigger, like More options. Use at most two levels, and never hide anything essential behind hover.",
   "engineer": "Triggers expose expanded or collapsed state through APG Accordion or Disclosure (aria-expanded, aria-controls). Components: accordion, toggletip, popover, sheet, tabs, steps for staged disclosure. No token; it is a pattern rule.",
+  "designer_says": "progressive disclosure, two levels max",
+  "code_name": "aria-expanded, aria-controls",
   "example": "An Advanced settings link that opens more choices.",
   "source": [
    "pat.disclosure",
@@ -672,6 +752,8 @@
   "plain": "What a screen shows when there is nothing in it yet, and what you can do next.",
   "designer": "Cover first use, user-cleared and no-results cases. Each communicates status, teaches the feature, and offers a direct next step with a call to action. Loading is not an empty state.",
   "engineer": "Reuses illustration, spacing and type tokens. Status must be real text, not only an image. Lint warns on a collection with no empty variant. Examples: Primer Blankslate, shadcn Empty.",
+  "designer_says": "empty states: first use, no results",
+  "code_name": "Primer Blankslate, shadcn Empty",
   "example": "No projects yet, with a Create project button.",
   "source": [
    "pat.empty",
@@ -688,6 +770,8 @@
   "plain": "How new people learn an app: tips when they need them, not a tour they must sit through.",
   "designer": "No forced tour. Use contextual help and empty states that teach, and make everything skippable. Deck-of-cards tutorials make the interface look more complicated than it is.",
   "engineer": "No tokens. Coachmarks reuse Tooltip or Popover and need dialog-style focus management, keyboard access and a dismiss control. Lint warns on a tour with no skip control.",
+  "designer_says": "skippable, contextual onboarding",
+  "code_name": "Tooltip or Popover coachmarks",
   "example": "A tip that appears the first time you open the editor.",
   "source": [
    "pat.onboarding",
@@ -704,6 +788,8 @@
   "plain": "Rules for AI tools: say what AI made, show where facts come from, and let people fix it.",
   "designer": "Label AI content, place distinctly styled citations next to claims, express uncertainty, and pair every generated result with Edit, Undo and Retry. Never autoscroll streamed answers.",
   "engineer": "Tokens: color.ai.* or an ai accent role, icon.ai, and streaming motion. Announce streamed text at completion or in chunks. Carbon switches components into an AI presence mode.",
+  "designer_says": "AI labels, citations, edit and retry",
+  "code_name": "color.ai.*, icon.ai",
   "example": "A chat answer with numbered sources and a Retry button.",
   "source": [
    "pat.ai",
@@ -721,6 +807,8 @@
   "plain": "Tiny views you read in a blink without opening the app, like a watch face.",
   "designer": "Widgets, complications, tiles, notifications and Live Activities. Design the complication or tile first, then the app, with one number or one status per surface. Always On dims them.",
   "engineer": "Numeral type styles such as type.numeral.lg, compact spacing, and an ambient mode that dims secondary content. Content descriptions must match exactly what is shown.",
+  "designer_says": "widgets, complications, tiles, Live Activities",
+  "code_name": "type.numeral.lg, ambient mode",
   "example": "A watch face showing the next meeting time.",
   "source": [
    "pat.glanceable",
@@ -736,6 +824,8 @@
   "plain": "Screen shapes many apps share, like a list on the left and details on the right.",
   "designer": "Named screen structures that recur across products: canonical pane layouts such as list-detail, supporting pane and feed, and the app shell that holds navigation, header and content.",
   "engineer": "Compose ships canonical layout scaffolds; SwiftUI has NavigationSplitView and UIKit UISplitViewController. Pane and rail widths are DTCG dimension tokens. Landmarks follow pane order.",
+  "designer_says": "layout archetypes: list-detail, feed, shell",
+  "code_name": "NavigationSplitView, Compose canonical scaffolds",
   "example": "An email app: folder list, message list and open message.",
   "source": [
    "pat.layout",
@@ -754,6 +844,8 @@
   "plain": "Ways to split a screen into one, two or three parts side by side, based on how wide it is.",
   "designer": "Material's list-detail, supporting pane and feed layouts. One pane below 840dp, two from 840dp, three only at 1600dp and up, with the supporting pane about a third.",
   "engineer": "Tokens: layout.pane.fixed.expanded = 360dp, layout.pane.fixed.large = 412dp, layout.pane.supporting.ratio = 0.333 (DTCG number). Compose ships canonical layout scaffolds and Navigation 3.",
+  "designer_says": "list-detail, supporting pane, feed",
+  "code_name": "layout.pane.supporting.ratio",
   "example": "On a tablet, the inbox list and the open email side by side.",
   "source": [
    "pat.layout.canonical",
@@ -770,6 +862,8 @@
   "plain": "The parts of an app that stay put, like the menu and top bar, while the main content changes.",
   "designer": "The persistent regions: navigation, header, content and supporting areas. Compact screens use a bottom bar with 3 to 5 destinations, medium a collapsed rail, expanded a rail or sidebar.",
   "engineer": "Tokens: layout.rail.width.collapsed, layout.sidebar.width, layout.header.height (DTCG dimension). Swap only functionally equivalent components. Examples: Carbon UI shell, SwiftUI NavigationSplitView, Compose Scaffold.",
+  "designer_says": "app shell: nav, header, content",
+  "code_name": "layout.sidebar.width, layout.header.height",
   "example": "A sidebar and header that stay while pages change in the middle.",
   "source": [
    "pat.layout.shell",
@@ -786,6 +880,8 @@
   "plain": "How the screen moves as you go to the next one, and the order things show up in.",
   "designer": "Fade, fade through, shared axis and container transform, which visibly links an element to what it opens. Stagger items 20 to 50 ms apart, at most 500 ms total.",
   "engineer": "Each pattern is a DTCG transition composite {duration, delay, timingFunction}; no choreography type exists. Web uses View Transitions; reduced motion swaps spatial transitions for a fade.",
+  "designer_says": "container transform, shared axis, fade through",
+  "code_name": "$type: transition; View Transitions",
   "example": "A card grows into the detail page when you tap it.",
   "source": [
    "pat.motion",
@@ -803,6 +899,8 @@
   "plain": "More jobs apps often need, like search, filters, signing in, big tables and settings.",
   "designer": "Search and filtering, authentication, data tables and settings, catalogued without their own Decision Card. Their choices come from the components involved and the forms, collections and feedback patterns.",
   "engineer": "Examples: filters compose Search field, Combobox, Chips and Sheet; sign-in allows paste and password managers (WCAG 3.3.8); interactive tables use APG Grid, static ones Table.",
+  "designer_says": "search, filters, sign-in, settings",
+  "code_name": "Search field, Combobox, Chips, Sheet",
   "example": "A sign-in screen that lets a password manager fill the password.",
   "source": [
    "pat.other",
@@ -819,6 +917,8 @@
   "plain": "Whole pages to start from, like a dashboard, a list page, a detail page or a settings page.",
   "designer": "Whole-page starting points assembled from shell, components and patterns: dashboard, list or index, detail, settings, and marketing or landing page. Detail pages use a supporting pane of about one third.",
   "engineer": "Product systems ship the shell as components: Primer PageLayout, Carbon UI shell and Polaris Page; marketing templates mostly live outside them. A reference site's page structure can be extracted.",
+  "designer_says": "page templates: dashboard, detail, settings",
+  "code_name": "Primer PageLayout, Polaris Page",
   "example": "A dashboard with a sidebar, a header and a grid of cards.",
   "source": [
    "pat.templates",

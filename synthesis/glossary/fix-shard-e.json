@@ -1,0 +1,83 @@
+{
+ "comp.action.button": [
+  "engineer: color.action.primary.bg); use the real name or add (proposed",
+  "engineer: button.primary.container.color); use the real name or add (proposed",
+  "engineer: color.feedback.danger); use the real name or add (proposed",
+  "engineer: button.danger); use the real name or add (proposed",
+  "code_name: button.primary.container.color); use the real name or add (proposed",
+  "code_name: button.danger); use the real name or add (proposed"
+ ],
+ "comp.containment.card": [
+  "engineer: border.subtle); use the real name or add (proposed",
+  "engineer: elevation.level1); use the real name or add (proposed",
+  "code_name: border.subtle); use the real name or add (proposed",
+  "code_name: elevation.level1); use the real name or add (proposed"
+ ],
+ "comp.data.avatar": [
+  "engineer: avatar.size.*); use the real name or add (proposed",
+  "engineer: avatar.radius.person); use the real name or add (proposed",
+  "code_name: avatar.size.*); use the real name or add (proposed",
+  "code_name: avatar.radius.person); use the real name or add (proposed"
+ ],
+ "comp.device-variants": [
+  "engineer: button.primary.bg); use the real name or add (proposed",
+  "code_name: button.primary.bg); use the real name or add (proposed"
+ ],
+ "comp.feedback": [
+  "engineer: color.feedback); use the real name or add (proposed",
+  "code_name: color.feedback.*); use the real name or add (proposed"
+ ],
+ "comp.feedback.ai": [
+  "engineer: color.ai.*); use the real name or add (proposed",
+  "code_name: color.ai.*); use the real name or add (proposed"
+ ],
+ "comp.input.field": [
+  "engineer: input.container.color); use the real name or add (proposed",
+  "engineer: input.border.color); use the real name or add (proposed",
+  "engineer: input.label.typography); use the real name or add (proposed",
+  "code_name: input.border.color); use the real name or add (proposed",
+  "code_name: input.label.typography); use the real name or add (proposed"
+ ],
+ "comp.inventory": [
+  "engineer: button.*); use the real name or add (proposed",
+  "code_name: button.*); use the real name or add (proposed"
+ ],
+ "comp.states": [
+  "engineer: button.primary.container.color.hover); use the real name or add (proposed",
+  "code_name: button.primary.container.color.hover); use the real name or add (proposed"
+ ],
+ "comp.states.selected": [
+  "engineer: color.selected.bg); use the real name or add (proposed",
+  "engineer: color.selected.fg); use the real name or add (proposed"
+ ],
+ "pat.ai": [
+  "engineer: color.ai.*); use the real name or add (proposed",
+  "engineer: icon.ai); use the real name or add (proposed",
+  "code_name: color.ai.*); use the real name or add (proposed",
+  "code_name: icon.ai); use the real name or add (proposed"
+ ],
+ "pat.feedback.errors": [
+  "engineer: color.feedback.error); use the real name or add (proposed",
+  "engineer: icon.status.error); use the real name or add (proposed",
+  "code_name: color.feedback.error.*); use the real name or add (proposed",
+  "code_name: icon.status.error); use the real name or add (proposed"
+ ],
+ "pat.feedback.messaging": [
+  "engineer: color.feedback); use the real name or add (proposed",
+  "code_name: color.feedback); use the real name or add (proposed"
+ ],
+ "pat.forms": [
+  "engineer: space.field.label); use the real name or add (proposed",
+  "code_name: space.field.label); use the real name or add (proposed"
+ ],
+ "pat.navigation": [
+  "engineer: nav.visibleItems.compact); use the real name or add (proposed",
+  "code_name: nav.visibleItems.compact); use the real name or add (proposed"
+ ],
+ "pat.navigation.containers": [
+  "engineer: nav.bar.height); use the real name or add (proposed",
+  "engineer: nav.rail.width.collapsed); use the real name or add (proposed",
+  "code_name: nav.bar.height); use the real name or add (proposed",
+  "code_name: nav.rail.width.collapsed); use the real name or add (proposed"
+ ]
+}

@@ -1,0 +1,69 @@
+{
+ "ctx.brand.expression": [
+  "engineer: font.display.emphasized); use the real name or add (proposed",
+  "engineer: motion.spring.expressive.*); use the real name or add (proposed",
+  "code_name: font.display.emphasized); use the real name or add (proposed",
+  "code_name: motion.spring.expressive.*); use the real name or add (proposed"
+ ],
+ "ctx.brand.layering": [
+  "engineer: motion.easing.productive.standard); use the real name or add (proposed"
+ ],
+ "prin.visual.grouping": [
+  "engineer: space.stack.inner); use the real name or add (proposed",
+  "engineer: color.surface.container); use the real name or add (proposed",
+  "engineer: border.width.divider); use the real name or add (proposed",
+  "code_name: space.stack.inner); use the real name or add (proposed",
+  "code_name: border.width.divider); use the real name or add (proposed"
+ ],
+ "prin.visual.polish": [
+  "engineer: icon.keyline.square); use the real name or add (proposed",
+  "engineer: icon.keyline.circle); use the real name or add (proposed",
+  "engineer: radius.inner); use the real name or add (proposed",
+  "engineer: radius.outer); use the real name or add (proposed",
+  "code_name: radius.inner); use the real name or add (proposed",
+  "code_name: radius.outer); use the real name or add (proposed"
+ ],
+ "prin.visual.signifiers": [
+  "engineer: button.primary.background); use the real name or add (proposed",
+  "engineer: input.border.width); use the real name or add (proposed",
+  "code_name: button.primary.background); use the real name or add (proposed"
+ ],
+ "prin.visual.style": [
+  "engineer: shadow.raised); use the real name or add (proposed"
+ ],
+ "tok.naming": [
+  "engineer: color.bg.accent.hover); use the real name or add (proposed"
+ ],
+ "tok.naming.primitives": [
+  "engineer: color.blue.600); use the real name or add (proposed",
+  "engineer: space.100); use the real name or add (proposed",
+  "engineer: space.150); use the real name or add (proposed",
+  "code_name: color.blue.600); use the real name or add (proposed",
+  "code_name: space.100); use the real name or add (proposed"
+ ],
+ "tok.themes.brands": [
+  "engineer: color.violet.600); use the real name or add (proposed",
+  "engineer: color.teal.600); use the real name or add (proposed",
+  "code_name: color.violet.600); use the real name or add (proposed"
+ ],
+ "tok.themes.generator": [
+  "engineer: input.accent); use the real name or add (proposed",
+  "engineer: input.base); use the real name or add (proposed",
+  "engineer: input.contrast); use the real name or add (proposed",
+  "code_name: input.accent); use the real name or add (proposed"
+ ],
+ "tok.themes.whitelabel": [
+  "engineer: color.brand); use the real name or add (proposed",
+  "engineer: font.display); use the real name or add (proposed",
+  "code_name: color.brand); use the real name or add (proposed"
+ ],
+ "tok.tiers": [
+  "engineer: color.blue.600); use the real name or add (proposed",
+  "engineer: color.blue.600); use the real name or add (proposed",
+  "engineer: button.primary.bg); use the real name or add (proposed",
+  "code_name: color.blue.600); use the real name or add (proposed"
+ ],
+ "tok.types.shadow-border": [
+  "engineer: elevation.2); use the real name or add (proposed"
+ ]
+}

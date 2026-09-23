@@ -4,6 +4,7 @@
   python3 tools/check_glossary.py synthesis/glossary/shard-a.json   check one shard while writing it
   python3 tools/check_glossary.py --build                          merge shards, check coverage, write
                                                                    synthesis/glossary.json and docs/GLOSSARY.md
+  python3 tools/check_glossary.py --refresh-tokens                 regenerate engine-token-paths.txt from the engine
 Exit code 1 when any error is found.
 """
 import json, re, sys
@@ -25,6 +26,55 @@ LAYER_NAMES = {"core": "Everyday terms", "use": "Using OpenDesigner", "dials": "
                "found": "Foundations", "tok": "Tokens", "comp": "Components", "pat": "Patterns and templates",
                "guard": "Guardrails and validation", "deliver": "Delivery and tooling",
                "gov": "Governance, docs and adoption", "builder": "How OpenDesigner works"}
+
+
+TOKENS_FILE = G / "engine-token-paths.txt"
+ENGINE = ROOT / "skills/opendesigner/scripts/engine.py"
+# Dotted names starting with these roots are treated as token paths and must match what the engine generates.
+TOKEN_ROOTS = ("color", "space", "radius", "font", "text", "motion", "elevation", "size", "opacity", "border", "focus",
+               "icon", "layer", "shadow", "chart", "avatar", "nav", "input", "button", "illustration", "haptic", "z")
+TOKEN_RE = re.compile(r"\b(?:%s)(?:\.[A-Za-z0-9*]+)+" % "|".join(TOKEN_ROOTS))
+
+
+def refresh_tokens():
+    """Generate a default system in a temp dir and record every token path it produces."""
+    import subprocess, tempfile
+    with tempfile.TemporaryDirectory() as tmp:
+        d = Path(tmp) / "opendesigner"
+        for args in (["init", "--name", "Glossary check"], ["generate"]):
+            subprocess.run([sys.executable, str(ENGINE), "--dir", str(d), *args], check=True, capture_output=True)
+        paths = set()
+        def walk(node, prefix):
+            if isinstance(node, dict):
+                if "$value" in node:
+                    paths.add(".".join(prefix))
+                    return
+                for k, v in node.items():
+                    if not k.startswith("$"):
+                        walk(v, prefix + [k])
+        for f in (d / "tokens").rglob("*.json"):
+            walk(json.loads(f.read_text()), [])
+    TOKENS_FILE.write_text("\n".join(sorted(paths)) + "\n")
+    print(f"{len(paths)} token paths -> {TOKENS_FILE.relative_to(ROOT)}")
+
+
+def unknown_tokens(e, real):
+    """Token-like names in the engineer voice or code_name that the engine does not generate and are not marked (proposed)."""
+    prefixes = {".".join(p.split(".")[:i]) for p in real for i in range(1, p.count(".") + 1)}
+    bad = []
+    for field in ("engineer", "code_name"):
+        text = e.get(field, "")
+        for m in TOKEN_RE.finditer(text):
+            name = m.group(0).rstrip(".")
+            if name.endswith(("json", ".md", ".py")) or ".tokens" in name:  # file names, not token paths
+                continue
+            base = name[:-2] if name.endswith(".*") else name
+            if name in real or base in prefixes or base in real:
+                continue
+            if "(proposed)" in text[m.end():m.end() + 14]:
+                continue
+            bad.append(f"{field}: {name}")
+    return bad
 
 
 def words(text):
@@ -51,6 +101,7 @@ def grade(text):
 def check_entries(entries, label):
     errors, warnings, grades = [], [], []
     seen = set()
+    real = set(TOKENS_FILE.read_text().split()) if TOKENS_FILE.exists() else set()
     for e in entries:
         tag = f"{label}:{e.get('id', '?')}"
         for field in ("id", "term", "plain", "designer", "engineer", "source"):
@@ -70,6 +121,9 @@ def check_entries(entries, label):
         jar = sorted({w.lower() for w in words(plain)} & JARGON)
         if jar:
             errors.append(f"{tag} plain voice uses jargon {jar}")
+        if real:
+            for u in unknown_tokens(e, real):
+                errors.append(f"{tag} names a token the engine does not generate ({u}); use the real name or add (proposed)")
         if plain and (plain == e.get("designer") or plain == e.get("engineer")):
             errors.append(f"{tag} voices must differ")
         if plain:
@@ -130,6 +184,9 @@ def write_markdown(entries):
 
 
 if __name__ == "__main__":
+    if sys.argv[1:] == ["--refresh-tokens"]:
+        refresh_tokens()
+        sys.exit(0)
     if sys.argv[1:] == ["--build"]:
         errs = build()
     else:

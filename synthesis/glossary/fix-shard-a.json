@@ -1,0 +1,105 @@
+{
+ "core.accent-color": [
+  "engineer: color.focus.ring); use the real name or add (proposed"
+ ],
+ "core.alias": [
+  "engineer: color.blue.500); use the real name or add (proposed",
+  "code_name: color.blue.500); use the real name or add (proposed"
+ ],
+ "core.anatomy": [
+  "engineer: button.primary.container.color); use the real name or add (proposed",
+  "code_name: button.primary.container); use the real name or add (proposed"
+ ],
+ "core.color-ramp": [
+  "engineer: color.blue.50); use the real name or add (proposed",
+  "engineer: color.blue.950); use the real name or add (proposed",
+  "code_name: color.blue.50); use the real name or add (proposed",
+  "code_name: color.blue.950); use the real name or add (proposed"
+ ],
+ "core.component-token": [
+  "engineer: button.primary.bg); use the real name or add (proposed",
+  "code_name: button.primary.bg); use the real name or add (proposed"
+ ],
+ "core.elevation": [
+  "engineer: elevation.sunken); use the real name or add (proposed",
+  "engineer: shadow.100); use the real name or add (proposed",
+  "code_name: elevation.sunken); use the real name or add (proposed"
+ ],
+ "core.focus-ring": [
+  "engineer: focus.ring.color); use the real name or add (proposed"
+ ],
+ "core.gap": [
+  "engineer: space.gap.control); use the real name or add (proposed",
+  "engineer: space.100); use the real name or add (proposed",
+  "code_name: space.gap.control); use the real name or add (proposed"
+ ],
+ "core.gestalt-grouping": [
+  "engineer: space.innerOuterRatio); use the real name or add (proposed",
+  "code_name: space.innerOuterRatio); use the real name or add (proposed"
+ ],
+ "core.icon": [
+  "engineer: icon.size.sm); use the real name or add (proposed",
+  "engineer: icon.stroke.width); use the real name or add (proposed",
+  "code_name: icon.stroke.width); use the real name or add (proposed"
+ ],
+ "core.neutral": [
+  "engineer: color.neutral.50); use the real name or add (proposed",
+  "code_name: color.neutral.50); use the real name or add (proposed"
+ ],
+ "core.padding": [
+  "engineer: space.200); use the real name or add (proposed"
+ ],
+ "core.primitive-token": [
+  "engineer: color.blue.500); use the real name or add (proposed",
+  "engineer: space.200); use the real name or add (proposed",
+  "code_name: color.blue.500); use the real name or add (proposed"
+ ],
+ "core.semantic-token": [
+  "engineer: color.blue.500); use the real name or add (proposed",
+  "code_name: color.blue.500); use the real name or add (proposed"
+ ],
+ "core.spacing-scale": [
+  "engineer: space.1000); use the real name or add (proposed",
+  "engineer: space.200); use the real name or add (proposed",
+  "code_name: space.1000); use the real name or add (proposed"
+ ],
+ "core.surface": [
+  "engineer: elevation.surface); use the real name or add (proposed",
+  "code_name: elevation.surface); use the real name or add (proposed"
+ ],
+ "core.variant": [
+  "engineer: button.primary.bg); use the real name or add (proposed"
+ ],
+ "dial.brandPresence": [
+  "engineer: color.brandPlacement); use the real name or add (proposed"
+ ],
+ "dial.colorfulness": [
+  "engineer: color.accentChroma.hct); use the real name or add (proposed",
+  "engineer: color.schemeVariant); use the real name or add (proposed",
+  "engineer: color.accentCount); use the real name or add (proposed"
+ ],
+ "dial.density": [
+  "engineer: icon.defaultSize); use the real name or add (proposed",
+  "engineer: space.densityMode); use the real name or add (proposed"
+ ],
+ "dial.depth": [
+  "engineer: elevation.model); use the real name or add (proposed",
+  "engineer: elevation.shadowAlpha.light); use the real name or add (proposed",
+  "engineer: elevation.darkMode); use the real name or add (proposed"
+ ],
+ "dial.energy": [
+  "engineer: motion.spring.spatial.dampingRatio); use the real name or add (proposed",
+  "engineer: motion.durationMultiplier); use the real name or add (proposed"
+ ],
+ "dial.expression": [
+  "engineer: color.brandRole); use the real name or add (proposed",
+  "engineer: motion.expressiveScope); use the real name or add (proposed"
+ ],
+ "dial.roundness": [
+  "engineer: icon.cornerStyle); use the real name or add (proposed",
+  "engineer: icon.caps); use the real name or add (proposed"
+ ],
+ "dial.warmth": [
+  "engineer: color.neutral.tint.oklch); use the real name or add (proposed"
+ ]
+}

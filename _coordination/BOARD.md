@@ -30,16 +30,19 @@ Status values: `open` (unclaimed), `claimed by <who>`, `done`, `blocked (<why>)`
 | L18 | AI-first distribution: skills, AGENTS.md, MCP, MCP Apps and visual UI in Claude, ChatGPT and Codex; Claude's design function; LLM interview design; recommended repo architecture | `research/L18-ai-first-distribution.md` | done (14 cards, 224 sources, host capability matrix, repo architecture) |
 | D1 | Design artifacts for review: starter tokens (DTCG), atlas, foundations, button sheet, builder concept; written to Paper and Figma | `design/` | Paper done (48 tokens + 4 artboards, 55 calls, reviewed); Figma waits for sign-in (plugin:figma:figma) |
 | R1 | README, docs, SEO, community health files, .github, licenses, social preview, seed issues | see `_coordination/REPO-PLAN.md` | done (applied: About, 20 topics, Discussions, 22 labels, 21 issues; README needs a refresh after U2-U4) |
-| R2 | Engine (engine.py: ramps, scales, contrast, validate, export) + examples | see REPO-PLAN | claimed by orchestrator subagent |
-| R3 | Skills, data build, visual templates, manifests, skill sync, ChatGPT project, agent entry files | see REPO-PLAN | claimed by orchestrator subagent |
+| R2 | Engine (engine.py: ramps, scales, contrast, validate, export, sketch, review, feedback, intake) + examples | see REPO-PLAN | done (25 tests pass; 3 examples validate 0 errors, 0 warnings) |
+| R3 | Skills, data build, visual templates, manifests, skill sync, ChatGPT project, agent entry files | see REPO-PLAN | done (4 skills, 28 stage files, 8 templates, manifests validated) |
 | R4 | Sponsorship and funding options | `docs/SPONSORSHIP.md`, `.github/FUNDING.yml` | done (58 rows, about 85 programs verified 2026-09-23) |
 | U1 | Three-register glossary: every term in plain words (school level), designer words and engineer words; source synthesis/glossary.json for build_data to ship in skills | `synthesis/glossary.json`, `docs/GLOSSARY.md` | claimed by Design system research and builder |
-| U2 | Ease of use: first-run flow, concise message style, zoom levels (sketch, broad, defined, detailed; stop at any level), living DESIGN.md updated at each level with each section's zoom level, DESIGN.md review after every implementation | skills/ (R3), engine (R2) | claimed by R3 and R2 (continuing) |
-| U3 | Self-improvement loop: record gaps, bugs and confusing steps; pre-filled issue links or gh issue/PR only with the person's OK; offline fallback; in-repo fixes to skills and synthesis, checked and synced | skills/ (R3), engine (R2), CONTRIBUTING + .github (R1) | claimed by R3, R2, R1 (continuing) |
+| U2 | Ease of use: zoom levels, concise message style, living DESIGN.md, review after implementation | skills/ (R3), engine (R2) | done (skills and engine) |
+| U3 | Self-improvement loop: engine feedback + pre-filled issue link, references/improve.md, in-repo fixes | skills/ (R3), engine (R2), CONTRIBUTING (R1) | done |
 | U4 | Plain-language and clutter pass over every user-facing text | README, docs/, skills text, templates, engine messages | claimed by Design system research and builder (2026-09-23 19:40 IST) |
 | U5 | Three-persona usability test (student, designer, engineer) | `research/U5-usability.md` | open after U2-U4 |
 | S1 | Synthesis: ontology (S1a), questionnaire (S1b), levers + decision graph (S1c), spec (S1d) | `synthesis/*` | done (S1d: 14 sections, 19 decisions, 32 contradictions settled; draft-b kept as non-canonical) |
 | S2 | Synthesis follow-ups from S1d: map 27 L17/L18 cards into the ontology; refresh DECISION-GRAPH prose counts; add a surface-mode question (Persuade/Operate/Read/Experience) to the questionnaire | `synthesis/*` | open |
+| A1 | Funding application packets (private, outside repo: ~/Desktop/SPonsorMe/OpenDesigner-applications/) | private | claimed by orchestrator subagent |
+| A2 | Sponsor outreach Gmail drafts with resume (drafts only) | private | claimed by orchestrator subagent |
+| H1 | Handover document for Kunal's teammate: every funding option, full project context, step-by-step, FAQs (private) | private | orchestrator, after A1 and A2 |
 | V1 | Verification: fresh-context verifier agents re-check claims and values against live sources | `synthesis/VERIFICATION.md` | waits for S1 |
 
 ## Cross-lane notes
