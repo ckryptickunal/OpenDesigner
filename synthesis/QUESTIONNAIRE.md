@@ -1207,7 +1207,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-color-09 · Should grays be pure, or tinted warm or cool? · Standard
 - **Why:** Grays fill most of the screen, so warm or cool grays change how the product feels. Linear moved to "a warmer gray" in 2026 [DC-L01-06; S-L06-067].
-- **Ask:** "Should grays be pure, cool, warm, or tinted toward your brand?"
+- **Ask:** "Your text, backgrounds and lines use grays. Should they be pure gray, cool, warm, or tinted toward your brand?"
 - **Example:** Show surfaces re-tinted as the slider moves.
 - **Control:** single choice + hue/chroma slider
 - **Options:**
@@ -1456,7 +1456,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
   - `near-black` Near-black #0D1117 to #161616: sleek, modern (Primer, Carbon Gray 100, Material tone 4) [S-L01-050, S-L01-029, S-L01-010].
   - `charcoal` Charcoal #262626 to #292929: soft and comfortable (Carbon Gray 90, Fluent) [S-L01-029, S-L01-034].
   - `dimmed` Add a dimmed theme for long reading at night (Primer dark-dimmed) [DC-L01-19].
-- **Default:** a dark base between #121212 and #1a1a1a with a slight neutral tint; accents one or two steps lighter and lower in chroma than in light. *Source:* card heuristic [DC-L01-19].
+- **Default:** near-black: a dark base between #121212 and #1a1a1a with a slight neutral tint; accents one or two steps lighter and lower in chroma than in light. *Source:* card heuristic [DC-L01-19].
 - **Decides:** DC-L01-19
 - **Changes:** DC-L04-13, DC-L04-12 · blocks: Foundations > Color > Modes > Dark base and dimmed
 - **Preview:** the dark preview with a darkness slider; accent chroma drops as the base darkens.
@@ -1595,11 +1595,13 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 ### Q-type-02 · Do you have the brand typeface files and a license that covers web and apps? · Standard
 - **Show if:** Q-type-01 is brand-display or brand-everywhere
 - **Why:** The builder cannot make a brand typeface. Its license and files decide where it may be used and how it loads [DC-L02-06; BRIEF requirement 2].
-- **Ask:** "Do you have the brand font files and a license for web and apps?"
+- **Ask:** "Do you have the brand font files? Does the license cover websites, apps, or both?"
 - **Example:** Ask for WOFF2 or OTF files; if none, offer 3 open-source faces with a similar feel.
 - **Control:** single choice + file upload + license checkboxes (web, iOS/Android apps, embedding)
 - **Options:**
-  - `yes` Yes: files and license in hand.
+  - `yes` Yes: files and a license for every platform in scope.
+  - `web-only` Licensed for websites only: iOS and Android apps use the system font instead, and the model says so per platform.
+  - `app-only` Licensed for apps only: the website uses the system font or an open face instead.
   - `license-only` Licensed, but no files yet.
   - `no` No: see the Hook line.
 - **Default:** WOFF2, one variable file per family, `font-display: swap` with a metric-adjusted fallback, subsets per script. *Source:* card heuristic [DC-L02-06].

@@ -8,13 +8,13 @@ A plain, high-contrast system for a fictional city benefits service: AAA text, g
 
 | What | Result |
 |---|---|
-| Type | body 19px, ratio 1.2, sizes 13, 16, 19, 23, 27, 33, 39, 47; weights body 400, label 400, heading 600 |
+| Type | body 19px, ratio 1.2, sizes 16, 19, 23, 27, 33, 39, 47; weights body 400, label 400, heading 600 |
 | Space | 5px unit; default density spacious (controls 40/48/56px); hit areas pointer 48px, touch 48px |
 | Shape | control radius 0, containers 0px, focus ring 3px |
 | Depth | borders |
 | Motion | medium 200ms, spring damping 1.0, motion off (reduced everywhere) |
 | Color | neutral scheme, accent solid `#075c63`, text minimum 7.0:1, themes light |
-| Validation | 0 errors, 0 warnings, 3 notes; 76 contrast pairs checked |
+| Validation | 0 errors, 0 warnings, 3 notes; 82 contrast pairs checked |
 
 **Files:** `state.json` (the only input), `decisions.md` (why each choice), `tokens/` (DTCG 2025.10 + resolver, canonical), `build/` (css, tailwind, figma, paper, swift, compose, dtcg), `DESIGN.md`, `PRODUCT.md`, `preview.html`.
 

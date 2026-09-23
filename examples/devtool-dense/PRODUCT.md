@@ -40,4 +40,4 @@ Tie-break: the higher-ranked principle wins.
 
 ## Team and Governance
 
-Not recorded yet (Stage 25).
+Not recorded yet (Q-scope-03, Q-scope-04, Q-gov-01).

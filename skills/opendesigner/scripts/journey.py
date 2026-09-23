@@ -5,18 +5,19 @@ Standard library only, Python 3.10+ (BRIEF requirements 18 and 19). Two separate
     profile.tracking       "on" | "off"; missing means ask once        keep a local log in opendesigner/journey/
     profile.share_reports  "always" | "ask" | "never"; missing means not asked yet
                                                                        send an anonymous report to the maintainers
-The local log never leaves the computer. `share` sends only the allowlisted payload described by
+The local log never leaves the project. `share` sends only the allowlisted payload described by
 references/report.schema.json, and only with the person's yes.
 
 Commands (run from the person's project; files live in ./opendesigner/journey/ unless --dir is given):
-    journey.py consent [on|off] [--forget]            show or set local logging (--forget deletes the log)
+    journey.py consent [on|off] [--forget] [--where local|web]   show or set local logging (--forget deletes the log)
     journey.py log <event> [--step ID] [--level L] [--area A] [--how H] [--secs N] [--turns N]
                    [--signal S] [--reason R] [--kind K] [--count N] [--note "..."] [--session auto]
     journey.py events                                 every event and value, in plain words
     journey.py report [--json]                        write journey/JOURNEY.md and print a short summary
     journey.py level-line <level>                     "You took N steps; the shortest path is M." when worth saying
     journey.py export --anon [--out FILE|-]           the anonymous report, to attach to a feedback issue
-    journey.py share-consent [always|ask|never]       print the consent text, or record the answer
+    journey.py share-consent [always|ask|never] [--details]   print the short sharing question (or the full facts),
+                                                      or record the answer
     journey.py share [--dry-run] [--yes] [--host H]   send the anonymous report (or keep it in journey/outbox/)
     journey.py aggregate <files or folders...> --out FILE   one report across many reports or logs (maintainers)
 
@@ -51,16 +52,36 @@ LEVELS = ["sketch", "broad", "defined", "detailed"]
 WEIGHT_SECS = {"high": 60, "medium": 30, "low": 15}   # pacing.json _about: planned time per question [inferred]
 ASKED_TOGETHER = {"Q-scope-06": "Q-scope-01", "Q-brand-03": "Q-color-01"}   # zoom.md level 0, questions 1 and 5: one message each
 
-CONSENT_QUESTION = "I keep a private log of your steps on this computer so I can make this faster for you. OK?"
+# The texts below are shown word for word, and rules.md, docs/PRIVACY.md and docs/JOURNEY-TRACKER.md quote them
+# (test_journey.py ConsentTexts checks that they match).
+# The log question is host-aware: "on this computer" only when the scripts run on the person's own computer.
+CONSENT_QUESTIONS = {
+    "local": "I keep a private log of your steps on this computer so I can make this faster for you. OK?",
+    "web": "I keep a private log of your steps in your project files so I can make this faster for you. OK?",
+}
+CONSENT_QUESTION = CONSENT_QUESTIONS["local"]
+# The sharing ask: short, once, at the end of the first session. The full facts are one reply away ("details").
 SHARE_CONSENT = """\
-Can I send the OpenDesigner team an anonymous report of this session? It shows where people get stuck, so the steps get faster for everyone.
+Can I send the OpenDesigner team an anonymous report of which steps were slow or confusing, so they can make them faster?
+It never includes your answers, names, colors, files or anything you typed. Share every time, ask me each time, or don't share?
+Say "details" to see exactly what is sent."""
+SHARE_DETAILS = """\
+Why: it shows the OpenDesigner team where people get stuck, so the steps get faster for everyone.
 What is sent: which questions came up, how long each took (to 5 seconds), how you answered (kept the default, picked an option and so on), skips, stops and help requests, plus the OpenDesigner version, the AI tool and the week.
-Never sent: your answers, names, colors, brand, files, paths, links, notes or anything you typed. No ID ties reports to you or this computer.
-Where it goes: a small server run by the OpenDesigner maintainers. Until it is set up, reports wait on this computer.
+Never sent: your answers, names, colors, brand, files, paths, links, notes or anything you typed. No ID ties reports to you or your device.
+Where it goes: a small server run by the OpenDesigner maintainers. Until it is set up, reports wait in your project files and nothing is sent.
 How long: reports are kept 12 months; after that only the totals stay.
-You can see the exact report first: say "show me".
-Choose: share every time · ask me each time · don't share. You can change your mind any time."""
+To see the exact report first, say "show me".
+Choose: share every time · ask me each time · don't share. To change your mind later, say "stop sharing" or "start sharing"."""
 SHARE_ASK = 'Send this session\'s anonymous report? Say "show me" to see it first.'   # when share_reports is "ask"
+# Messages that are not questionnaire questions. Log `step_shown --step <moment>` before them, so help and frustration
+# about them are not blamed on the last question. They never reach the anonymous report (not public question ids).
+MOMENTS = {"consent.share": "the question about sharing reports", "result": "a result or preview",
+           "offer": "the offer to stop or zoom in", "finish.agents": "the question about the AGENTS.md note",
+           "finish.feedback": "the offer to send feedback"}
+BETWEEN = "(between steps)"   # help or frustration logged when no step was on screen
+ATTACHED = ("help", "frustration", "speed_mode")   # these belong to the step on screen when --step is not given
+UNSEEN_REASONS = ("rule", "known")   # skipped without being shown: not a step the person took
 
 EVENTS = {
     "session_start": "They started working with OpenDesigner. Logged by itself when a new session begins.",
@@ -83,7 +104,8 @@ HOW = {"default": "kept the recommended default", "option": "picked one of the o
 SIGNALS = {"said": "said it outright ('this is annoying')", "repeat_question": "asked the same thing again",
            "undo": "undid or reverted a choice", "rage_skip": "skipped several steps in a row", "just_do_it": "said 'just do it'",
            "error_loop": "hit the same error again", "slow": "said it is slow or taking too long"}
-REASONS = {"person": "they said skip", "rule": "a skip rule said it does not apply", "known": "a file already answered it",
+REASONS = {"person": "they said skip", "rule": "a skip rule said it does not apply",
+           "known": "their files or earlier words already answered it",
            "speed": "skipped to go faster", "later": "parked for later"}
 HELP_KINDS = {"explain": "asked what something means", "voice_switch": "asked for the designer or engineer wording",
               "glossary": "looked up a term", "example": "asked for an example"}
@@ -180,6 +202,15 @@ def detect_host():
     return "claude-code" if os.environ.get("CLAUDECODE") else "unknown"
 
 
+def detect_where():
+    """'local' when the scripts clearly run on the person's own computer; otherwise 'web', whose wording is always true."""
+    return "local" if os.environ.get("CLAUDECODE") and not os.environ.get("CLAUDE_CODE_REMOTE") else "web"
+
+
+def consent_question(where=None):
+    return CONSENT_QUESTIONS.get(where or detect_where(), CONSENT_QUESTIONS["web"])
+
+
 def norm_level(v):
     if v in (None, ""):
         return None
@@ -264,11 +295,20 @@ def check_event(event, data):
             raise ValueError(f"--{key} is a number, 0 or more")
 
 
+HOUSEKEEPING = ("review", "export", "feedback_filed", "error")   # engine events that may run just after session_end
+
+
 def current_session(events, event, now):
-    """The session in progress, or a new one after session_end, after IDLE_MINUTES quiet, or on session_start."""
+    """The session in progress, or a new one after session_end, after IDLE_MINUTES quiet, or on session_start.
+    Engine housekeeping right after session_end (a final review or export) stays in the session that just ended."""
     last = events[-1] if events else None
-    if (last and event != "session_start" and last.get("event") != "session_end"
-            and now - parse_ts(last["ts"]) <= _dt.timedelta(minutes=IDLE_MINUTES)):
+    if not last or event == "session_start" or now - parse_ts(last["ts"]) > _dt.timedelta(minutes=IDLE_MINUTES):
+        last = None
+    else:
+        person = next((e for e in reversed(events) if e.get("event") not in HOUSEKEEPING), None)
+        if person and person.get("event") == "session_end" and event not in HOUSEKEEPING:
+            last = None
+    if last:
         return last["session"], False
     used = {e.get("session") for e in events}
     n = len(used) + 1
@@ -277,8 +317,28 @@ def current_session(events, event, now):
     return f"S{n:03d}", True
 
 
+def advance(current, e):
+    """The step on screen after event e: set by step_shown; cleared when that step is answered or skipped, when a
+    level completes, and when a session starts or ends. Help and frustration without --step belong to it."""
+    ev, step = e.get("event"), e.get("step")
+    if ev == "step_shown" and step:
+        return step
+    if ev in ("step_answered", "step_skipped") and step == current or ev in ("level_complete", "session_start", "session_end"):
+        return None
+    return current
+
+
+def current_step(events, session):
+    cur = None
+    for e in events:
+        if e.get("session") == session:
+            cur = advance(cur, e)
+    return cur
+
+
 def log(d, event, step=None, level=None, area=None, session="auto", now=None, **data):
-    """Append one event and return it; None when local logging is not on. Raises ValueError on a bad event."""
+    """Append one event and return it; None when local logging is not on. Raises ValueError on a bad event.
+    Help, frustration and speed_mode without --step or --area are stamped with the step on screen, if any."""
     if profile(d).get("tracking") != "on":
         return None
     data = {k: v for k, v in data.items() if v is not None}
@@ -288,14 +348,16 @@ def log(d, event, step=None, level=None, area=None, session="auto", now=None, **
     if "kind" in data and event not in KINDS:
         data["kind"] = re.sub(r"[^a-z0-9_-]", "", str(data["kind"]).lower())[:32]
     now = now or now_local()
-    q = questions().get(step or "")
-    level = norm_level(level) or q_level(step)
-    area = area or (q or {}).get("area")
     path = jpath(d, "events.jsonl")
     events = read_events(path)
     fresh = False
     if session in (None, "", "auto"):
         session, fresh = current_session(events, event, now)
+    if event in ATTACHED and not step and not area and not fresh:
+        step = current_step(events, session)
+    q = questions().get(step or "")
+    level = norm_level(level) or q_level(step)
+    area = area or (q or {}).get("area")
     recs = []
     if fresh and event != "session_start":
         recs.append({"ts": now.isoformat(), "session": session, "event": "session_start", "step": None, "level": None,
@@ -354,23 +416,28 @@ def summarize(events, now=None):
         times = [parse_ts(e["ts"]) for e in evs]
         secs_total += (times[-1] - times[0]).total_seconds()
         open_, answered_at, current, last_shown, last_done, ended = {}, {}, None, None, None, False
+        unseen = set()  # skipped by a rule or already known: never put in front of the person
         for e, ts in zip(evs, times):
             ev, step = e["event"], e.get("step")
             data = e.get("data") if isinstance(e.get("data"), dict) else {}
             bump(counts, ev)
+            current = advance(current, e)
             if ev == "step_shown" and step:
                 for v in open_.values():
                     v["until"] = v["until"] or ts
                 st(step, e)["shown"] += 1
                 open_[step] = {"t": ts, "until": None, "help": 0}
-                current, last_shown = step, ts
+                unseen.discard(step)
+                last_shown = ts
             elif ev in ("step_answered", "step_skipped") and step:
                 s = st(step, e)
                 prev = answered_at.get(step)
                 if step not in open_ and prev and (ts - prev).total_seconds() < DUPLICATE_SECS:
                     continue
                 v = open_.pop(step, None)
-                if v is None and step not in ASKED_TOGETHER:
+                if ev == "step_skipped" and data.get("reason") in UNSEEN_REASONS and v is None:
+                    unseen.add(step)
+                elif v is None and step not in ASKED_TOGETHER and step not in unseen:
                     s["shown"] += 1  # answered without a logged step_shown: it was still a step
                 secs = num(data.get("secs"))
                 if secs is None and v:
@@ -390,9 +457,18 @@ def summarize(events, now=None):
                 answered_at[step] = ts
             elif ev == "step_changed" and step:
                 st(step, e)["changed"] += 1
-            elif ev in ("help", "frustration", "speed_mode", "error") and (step or current):
-                target = step or current  # no step given: the step on screen
-                s = st(target, e)
+            elif ev in ATTACHED or ev == "error":
+                if step:
+                    target, src = step, e
+                elif ev in ATTACHED and e.get("area"):
+                    target, src = f"area:{e['area']}", {"area": e["area"]}  # about a whole area, not one step
+                elif current:
+                    target, src = current, e  # no step given: the step on screen (logs made before steps were stamped)
+                elif ev in ATTACHED:
+                    target, src = BETWEEN, {}  # nothing on screen: never blame the last question
+                else:
+                    continue
+                s = st(target, src)
                 if ev == "help":
                     s["help"] += 1
                     if data.get("kind") in HELP_KINDS:
@@ -661,6 +737,12 @@ def load_reports(paths, now=None):
 # =============================================================================================
 
 def label(step, s=None):
+    if step in MOMENTS:
+        return f"{step} ({MOMENTS[step]})"
+    if step == BETWEEN:
+        return "between steps (nothing was on screen)"
+    if str(step).startswith("area:"):
+        return f"{area_name(step[5:])} (the whole area)"
     q = questions().get(step)
     ask = (q or {}).get("ask") or ""
     short = ask if len(ask) <= 48 else ask[:48].rsplit(" ", 1)[0] + "..."
@@ -709,25 +791,35 @@ def analyze(sm, min_n=1):
     changed = top(lambda s: s["changed"], 10)
     defaults = []
     for k, s in qsteps.items():
-        total = s["answered"] + s["skipped"]
-        if total:
-            kept = s["how"].get("default", 0) + s["how"].get("delegated", 0) + s["skipped"]
-            defaults.append({"step": k, "kept": kept, "total": total, "weight": (questions().get(k) or {}).get("weight"),
+        unseen = sum(s["reasons"].get(r, 0) for r in UNSEEN_REASONS)  # a rule or their own words settled it
+        total = s["answered"] + s["skipped"] - unseen
+        if total > 0:
+            kept = s["how"].get("default", 0) + s["skipped"] - unseen
+            defaults.append({"step": k, "kept": kept, "delegated": s["how"].get("delegated", 0), "total": total,
+                             "weight": (questions().get(k) or {}).get("weight"),
                              "secs": round(sum(s["secs"]) / len(s["secs"])) if s["secs"] else None})
-    defaults.sort(key=lambda r: (-r["kept"] / r["total"], -r["total"], r["step"]))
+    defaults.sort(key=lambda r: (-(r["kept"] + r["delegated"]) / r["total"], -r["total"], r["step"]))
     speedups = [f"{k}: {sum(steps[k]['signals'].values())} frustration signals: reword it, split it, or show a visual."
                 for k in frustration if sum(steps[k]["signals"].values()) >= 2]
     speedups += [f"{k}: {steps[k]['help']} help requests: put the explanation into the question itself."
                  for k in help_ if steps[k]["help"] >= 2]
     speedups += [f"{k}: stopped here {steps[k]['dropped']} times: make it skippable, or ask it later."
                  for k in dropped if steps[k]["dropped"] >= max(min_n, 2)]
-    kept = [r for r in defaults if r["total"] >= min_n and r["kept"] / r["total"] >= 0.8]
-    speedups += [f"{r['step']}: default kept {r['kept']} of {r['total']} times and {r['weight'] or 'unknown'} impact: "
-                 "auto-apply it and mention it in one line." for r in kept if r["weight"] != "high"]
-    high = [r["step"] for r in kept if r["weight"] == "high"]
-    if high:
-        speedups.append(", ".join(high[:6]) + (f" and {len(high) - 6} more" if len(high) > 6 else "")
-                        + ": default kept every time or nearly, but they shape a lot: keep asking, with the default as a one-tap yes.")
+    auto = [r for r in defaults if auto_apply(r, min_n)]
+    speedups += [f"{r['step']}: {kept_words(r)} and {r['weight'] or 'unknown'} impact: auto-apply it and mention it in one line."
+                 for r in auto]
+
+    def names(rows):
+        return ", ".join(rows[:6]) + (f" and {len(rows) - 6} more" if len(rows) > 6 else "")
+    high = [r for r in defaults if r["total"] >= min_n and r["weight"] == "high"]
+    kept_high = [r["step"] for r in high if r["kept"] / r["total"] >= 0.8]
+    if kept_high:
+        speedups.append(names(kept_high) + ": default kept every time or nearly, but they shape a lot: keep asking, "
+                        "with the default as a one-tap yes.")
+    handed = [r["step"] for r in high if r["delegated"] / r["total"] >= 0.8]
+    if handed:  # delegation is a choice to go faster, not a vote for the default
+        speedups.append(names(handed) + ": handed over ('you choose') every time or nearly: when someone is in a hurry, "
+                        "pick these for them and list them in one line.")
     slowest = sorted((r for r in defaults if r["secs"] is not None), key=lambda r: (-r["secs"], r["step"]))[:5]
     how = {}
     for s in qsteps.values():
@@ -735,6 +827,18 @@ def analyze(sm, min_n=1):
             bump(how, k, n)
     return {"levels": levels, "areas": area_rows, "frustration": frustration, "help": help_, "dropped": dropped,
             "changed": changed, "defaults": defaults, "speedups": speedups, "slowest": slowest, "how": how}
+
+
+def auto_apply(r, min_n=1):
+    """A low- or medium-impact question whose default stayed (accepted, skipped or handed over) at least 80% of the time."""
+    return r["total"] >= min_n and r["weight"] != "high" and (r["kept"] + r["delegated"]) / r["total"] >= 0.8
+
+
+def kept_words(r):
+    parts = [f"default kept {r['kept']} of {r['total']} times"] if r["kept"] else []
+    if r["delegated"]:
+        parts.append(f"handed over ('you choose') {r['delegated']} of {r['total']} times")
+    return " and ".join(parts)
 
 
 def headline(sm, an):
@@ -785,7 +889,7 @@ def feedback_text(d, now=None):
         ks = [k for k in ks if k in known][:3]
         if ks:
             parts.append(f"{name}: " + ", ".join(f"{k} ({n(k)})" for k in ks))
-    auto = [r for r in an["defaults"] if r["step"] in known and r["kept"] / r["total"] >= 0.8 and r["weight"] != "high"][:5]
+    auto = [r for r in an["defaults"] if r["step"] in known and auto_apply(r)][:5]
     if auto:
         parts.append("Default kept: " + ", ".join(f"{r['step']} ({r['kept']} of {r['total']})" for r in auto))
     return "Journey hotspots: " + "; ".join(parts) + "."
@@ -799,7 +903,7 @@ def render_md(sm, an, title="Your OpenDesigner journey", about=None):
         return ", ".join(f"{names.get(k, k) if names else k} {n}" for k, n in sorted(dct.items(), key=lambda kv: (-kv[1], kv[0])))
 
     out = [f"# {title}", "", about or ("A private record of how this design system was made, so the steps can get fewer. "
-           "It stays on this computer. `journey.py export --anon` shows the only part that could ever be shared."), "",
+           "It stays in your project files. `journey.py export --anon` shows the only part that could ever be shared."), "",
            "## In short", *[f"- {x}" for x in headline(sm, an)], ""]
     out += ["## Funnel by level", "Steps taken counts every time a step was shown, plus extra back-and-forth. The shortest path is "
             "one message per question reached. Planned is what pacing.json lists for the areas zoomed into.", "",
@@ -835,10 +939,11 @@ def render_md(sm, an, title="Your OpenDesigner journey", about=None):
     out += [f"- {label(k)}: changed {steps[k]['changed']} time{'s' if steps[k]['changed'] != 1 else ''}" for k in an["changed"]] or ["- None."]
     out += ["", "## Speed-ups to try"]
     out += [f"- {x}" for x in an["speedups"][:10]] or ["- None yet: more runs give clearer signals."]
-    out += ["", "## Default kept, per question", "Kept means the default stayed: accepted, delegated (\"you choose\") or skipped.", "",
-            "| Question | Kept | Impact | Average time |", "|---|---|---|---|"]
-    out += [f"| {r['step']} | {r['kept']} of {r['total']} | {r['weight'] or '?'} | {str(r['secs']) + ' s' if r['secs'] is not None else '-'} |"
-            for r in an["defaults"][:25]]
+    out += ["", "## Default kept, per question", "Kept means they accepted the default or skipped the question. Handed over means they "
+            "said \"you choose\". Questions a rule skipped, or that their own words already answered, are left out.", "",
+            "| Question | Kept | Handed over | Impact | Average time |", "|---|---|---|---|---|"]
+    out += [f"| {r['step']} | {r['kept']} of {r['total']} | {r['delegated']} | {r['weight'] or '?'} | "
+            f"{str(r['secs']) + ' s' if r['secs'] is not None else '-'} |" for r in an["defaults"][:25]]
     out += ["", "## Slowest steps"]
     out += [f"- {label(r['step'])}: {r['secs']} s on average (planned about {WEIGHT_SECS.get(r['weight'], 30)} s)"
             for r in an["slowest"]] or ["- No timings yet."]
@@ -877,12 +982,13 @@ def cmd_report(d, as_json=False):
 
 SHARE_MESSAGES = {
     "nothing": "Nothing new to report since the last report.",
-    "not_asked": "Not sent: they haven't been asked. Show them the text from `journey.py share-consent` first.",
-    "off": "Not sent: sharing is off. Nothing left this computer.",
+    "not_asked": "Not sent: they haven't been asked. Ask once, at the end of the first session, with the text from "
+                 "`journey.py share-consent`.",
+    "off": "Not sent: sharing is off. Nothing was sent.",
     "needs_yes": "Not sent: sharing is set to 'ask'. Ask them: " + SHARE_ASK + " After a yes, run `journey.py share --yes`.",
     "sent": "Sent the anonymous report {id}. Thank you.",
     "queued": "Couldn't reach the report server, so report {id} waits in {outbox} and goes with the next one.",
-    "outbox": "Reports aren't being collected yet, so report {id} stays on this computer in {outbox}. Nothing was sent.",
+    "outbox": "Reports aren't being collected yet, so report {id} stays in your project files, in {outbox}. Nothing was sent.",
 }
 
 
@@ -893,6 +999,8 @@ def main(argv=None):
     p = sub.add_parser("consent", help="show or set local logging")
     p.add_argument("value", nargs="?", choices=["on", "off"])
     p.add_argument("--forget", action="store_true", help="with off: delete the journey folder")
+    p.add_argument("--where", choices=list(CONSENT_QUESTIONS), default=None,
+                   help="which log question to print: local (scripts run on their computer) or web (a web chat's sandbox)")
     p = sub.add_parser("log", help="append one event")
     p.add_argument("event")
     for flag in ("--step", "--level", "--area", "--how", "--signal", "--reason", "--kind", "--note"):
@@ -909,8 +1017,9 @@ def main(argv=None):
     p.add_argument("--anon", action="store_true", required=True)
     p.add_argument("--out", default=None, help="file, or - for stdout (default journey/anonymous-report.json)")
     p.add_argument("--host", choices=HOSTS, default=None)
-    p = sub.add_parser("share-consent", help="print the sharing consent text, or record the answer")
+    p = sub.add_parser("share-consent", help="print the short sharing question, or record the answer")
     p.add_argument("value", nargs="?", choices=list(SHARE_CHOICES))
+    p.add_argument("--details", action="store_true", help="print the full facts, for when they say 'details'")
     p = sub.add_parser("share", help="send the anonymous report, if they agreed")
     p.add_argument("--dry-run", dest="dry_run", action="store_true", help="print the exact JSON; send nothing")
     p.add_argument("--yes", action="store_true", help="they confirmed this report (needed when sharing is 'ask')")
@@ -926,13 +1035,13 @@ def main(argv=None):
             print(f"Local journey log is {a.value}." + (" The log was deleted." if a.forget else ""))
         else:
             cur = profile(d).get("tracking")
-            print(f"Local journey log is {cur}." if cur else f"Not asked yet. Ask once:\n  {CONSENT_QUESTION}\n"
+            print(f"Local journey log is {cur}." if cur else f"Not asked yet. Ask once:\n  {consent_question(a.where)}\n"
                   "Then run: journey.py consent on   (or: consent off)")
     elif a.cmd == "log":
         data = {k: getattr(a, k) for k in ("how", "signal", "reason", "kind", "note", "secs", "turns", "count")}
         cur = profile(d).get("tracking")
         if cur is None:
-            print(f"Not logged: they haven't been asked. Ask once:\n  {CONSENT_QUESTION}\n"
+            print(f"Not logged: they haven't been asked. Ask once:\n  {consent_question()}\n"
                   "Then run: journey.py consent on   (or: consent off)")
             return 0
         try:
@@ -965,9 +1074,10 @@ def main(argv=None):
     elif a.cmd == "share-consent":
         if a.value:
             set_share(d, a.value)
+            record(d, "step_answered", step="consent.share", how="option")  # closes the moment, so later signals aren't blamed on it
             print(f"Sharing: {SHARE_CHOICES[a.value]}." + (" Unsent reports were deleted." if a.value == "never" else ""))
         else:
-            print(SHARE_CONSENT)
+            print(SHARE_DETAILS if a.details else SHARE_CONSENT)
             cur = profile(d).get("share_reports")
             print(f"(now: {SHARE_CHOICES.get(cur, 'not asked yet')}. Record the answer: journey.py share-consent always|ask|never)",
                   file=sys.stderr)

@@ -3,7 +3,7 @@
 Some blocks need a human maker or a named tool. OpenDesigner asks for them instead of faking them. Source: `research/L17-how-systems-get-made.md` Part H (formats, fallbacks and checks, verified against 81 Tier A pages). `hooks.json` has the full detail for each hook: exact sizes, licence terms and evidence ids.
 
 ## Rules for every hook
-1. **Ask once, as one checklist** (Q-brand-08), when the person zooms into brand or imagery. Say: "Which of these do you already have?" At levels 0 and 1, ask only about a brand color or logo. Everything else keeps its fallback and a briefed placeholder.
+1. **Ask once, as one checklist** (Q-brand-08), when the person zooms into brand or imagery. Say: "Which of these do you already have?" At levels 0 and 1, ask only about a brand color or logo. Everything else keeps its fallback and a briefed placeholder. An internal work tool with no brand may not need the brand-only hooks: sound, haptics, photos, illustration, motion and motif. Offer to mark them `not-needed` in one step, so they stop showing as open.
 2. **If they have it,** accept the master formats in the tables below.
 3. **If they don't,** offer these paths in order:
    - a designer, with a written brief
@@ -39,6 +39,9 @@ The **Ask** and **Question** columns are what you say to the person, in plain wo
 | `H-haptic` (Q-motion-09) | Do you have your own vibration patterns? | Apple AHAP, Android VibrationEffect | System patterns first |
 | `H-voice` (Q-voice-01) | Do you have a guide for how your product writes, or a word list? | PDF, Markdown, existing product copy | Model drafts voice from the personality answers, marked draft until a content designer or owner reviews it |
 | `H-brandbook` (Q-ref-01) | Do you have a brand book? | PDF | Hand to opendesigner-extract: colors, font names, embedded logos; ask for the SVG master of any logo found |
+
+**Brand font licence, per platform.** When they name a brand font, record what its licence covers with `engine.py pick Q-type-02 yes|web-only|app-only|license-only|no --why "<their words>"`. For any other mix, set it directly: `engine.py set raw.fontLicence '{"web": true, "app": false, "selfHost": true}'`. Name the font with `engine.py set raw.brandFace '"<font name>"'`. Then say in one line what it means for each platform in scope. For example: "Your licence covers websites only, so the iPhone app will use the system font."
+The Swift and Compose exports fall back to the system font by themselves when `app` is not true. If they don't know what the licence covers, record nothing, and list it as an open item: never guess.
 
 ## Tool hooks
 | Hook | Question | Named tools | Caveat |

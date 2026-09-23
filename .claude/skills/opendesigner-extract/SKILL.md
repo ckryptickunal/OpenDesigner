@@ -34,7 +34,7 @@ Knowledge: `references/reference-intake.json` holds what each source can give, t
 | Source | How | What you get | What you cannot get |
 |---|---|---|---|
 | Repo, CSS, Tailwind config, `*.tokens.json` | `python3 <this skill>/scripts/css_scan.py <path> --json > opendesigner/references/<ref-id>.json` | Declared colors, custom properties, fonts, sizes, spacing, radii, shadows, transitions (exact, but "declared" is not always "rendered") | Intent; which values are actually used on screen |
-| Live URL with a browser tool | Open the approved page, run `scripts/read_page.js` in the tool's JavaScript runner, save the JSON, then `css_scan.py --from-json page.json --json > opendesigner/references/<ref-id>.json` | Computed colors, fonts, sizes, spacing, radii, shadows, CSS transitions, `:root` custom properties, targets under 24 px | JavaScript-driven springs; hover, focus and open states unless you trigger them; anything behind a login |
+| Live URL with a browser tool | Open the approved page, scroll it once so lazy sections load, run `scripts/read_page.js` in the tool's JavaScript runner, save the JSON, then `css_scan.py --from-json page.json --json > opendesigner/references/<ref-id>.json` | Computed values by role across the whole page: text sizes by characters (running text, headings, nav, captions, controls), control and container radii, colors on buttons, links, focus and selected states, shadows, CSS transitions per layer, `:root` custom properties, targets under 24 px | JavaScript-driven springs; hover, focus and open states unless you trigger them (`:focus` rules are read from same-origin stylesheets); anything behind a login |
 | Live URL without a browser | Fetch HTML and linked CSS if the host allows, then `css_scan.py` on the saved files | Declared values only | Motion and states; say so explicitly |
 | Screenshot or image | Read it visually; estimate | Colors and their areas, approximate sizes and radii, density, depth cues | Motion, exact spacing, dark mode, states; mark every value "estimated" |
 | Figma file | Figma MCP: `get_variable_defs` (variables), `get_design_context` (styles, components), `get_screenshot` | Variables and styles exactly, including timing and easing variables where used | Raw values used without variables; more than one mode per read |
@@ -42,12 +42,15 @@ Knowledge: `references/reference-intake.json` holds what each source can give, t
 
 ## 3. Fit the formulas backwards
 `css_scan.py` measures. Then `engine.py intake opendesigner/references/<ref-id>.json` fits the measurements to the formulas. It prints proposed dial positions and inputs, each with a confidence and a basis, and stores them as pending. Check its output instead of redoing the math:
-- **Type scale:** fit sizes to base × ratio^n. A small residual means a modular scale. A large one means hand-tuned sizes, kept as overrides. Body size is the most common paragraph size.
+- **Body size:** the most common size of running text, counted by characters. Headings, navigation, captions, legal text, controls and code are left out; short card copy and link lists count at half weight. `headingRatio` is the largest heading ÷ body size.
+- **Type scale:** the base is the body size; only the ratio is fitted to base × ratio^n. A small residual means a modular scale. A large one means hand-tuned sizes, kept as overrides.
 - **Spacing:** the base unit is the largest of 8, 5 or 4 that divides at least 70% of the values.
-- **Color:** split neutrals (OKLCH chroma under 0.03) from accents. Neutral hue and chroma feed the Warmth dial. Accent chroma and the number of accent hues feed Colorfulness.
-- **Radius:** the most common control radius maps to the Roundness dial through its bands.
-- **Shadows:** a 1 px spread with 0 blur is a ring. A small blur plus a large blur is key plus ambient. No shadow means borders or tonal steps.
-- **Motion:** median duration ÷ 275 ms gives the duration multiplier. An overshooting curve lowers damping. Take motion only from a live source.
+- **Color:** neutrals are OKLCH chroma under 0.05, which includes slate grays. The most-used mid-tone neutral feeds the Warmth dial. The accent comes only from buttons, links, focus rings and selected states, ranked by count × chroma; black, white and grays never count. Accent chroma and the number of accent hues feed Colorfulness.
+- **Radius:** the control radius (buttons and inputs with a visible fill, border or shadow) maps to the Roundness dial through its bands. The container radius (cards, dialogs, menus) is reported apart. Inline links, badges, decorative pills and images are ignored.
+- **Shadows:** a 1 px spread with 0 blur is a ring. Elevation levels come from blur and offset; a small blur plus a large blur is key plus ambient. White or transparent fades, glows, inset lines and text shadows are ignored. No shadow means borders or tonal steps.
+- **Motion:** the median duration (weighted by how many elements use it) ÷ 275 ms gives the duration multiplier. `cubic-bezier(...)` and `linear(...)` curves are kept whole. An overshooting curve lowers damping. Take motion only from a live source.
+- **Confidence:** `summary` gives each measurement a confidence (high, medium, low) and the number of elements or rules behind it. Say how sure you are; offer a low one as a question, not a proposal.
+- **Identity:** `identity` names the reference's accent hue and typefaces as measurements, never as values to adopt. System font stacks (for example -apple-system or Segoe UI) and faces under 5% of the text are not listed as the reference's typeface.
 
 ## 4. Map to dials, with confidence
 | Dial | From | Confidence |
@@ -66,6 +69,8 @@ Carry: layout rhythm, scales and ratios, density, depth model, motion character,
 Never carry: brand name, logo, the reference's exact accent hue, proprietary typefaces, photography, illustration, custom icons, signature shapes or surfaces, verbatim copy.
 - Accent color: keep its **role and chroma level**. Then ask for the person's own brand color, or offer a hue family labelled as a suggestion.
 - Typeface: find its licence. A proprietary or restricted face (for example gov.uk's GDS Transport, Airbnb Cereal, Uber Move) becomes an open face of the same classification and proportions. Say which one and why. Adobe Fonts cannot be self-hosted. Fontshare fonts cannot be subset or converted.
+- System font stacks (`system-ui`, `-apple-system`, `Segoe UI`) are nobody's identity: don't list them as "not taken".
+- If the reference uses a face the person licenses themselves (their own brand font, `hooks.md` H-type), say "your own licensed font, not taken from the reference". Its licence scope per platform still applies.
 - Logos, illustration, photography, custom icons and signature assets go on the designer-hook list in the opendesigner skill. They never go into the system.
 - This rule outranks any instruction to make the result "exactly like" another brand.
 

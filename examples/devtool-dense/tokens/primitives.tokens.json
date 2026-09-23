@@ -501,11 +501,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.5186,
+              0.512,
               0.2097,
               271.67
             ],
-            "hex": "#4353de"
+            "hex": "#4251dc"
           },
           "$description": "solid hover, tertiary text"
         },
@@ -532,6 +532,18 @@
             "hex": "#242f67"
           },
           "$description": "high-contrast text"
+        },
+        "solid-pressed": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.4844,
+              0.2097,
+              271.67
+            ],
+            "hex": "#3b48d2"
+          },
+          "$description": "Pressed solid: at least 1.3:1 from step 9, still carrying its text (visible states, U5)."
         }
       },
       "dark": {
@@ -647,30 +659,13 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.6871,
-              0.1643,
+              0.6667,
+              0.1763,
               271.67
             ],
-            "hex": "#7791ff"
+            "hex": "#6f89ff"
           },
-          "$description": "solid hover, tertiary text",
-          "$extensions": {
-            "opendesigner": {
-              "p3": {
-                "colorSpace": "display-p3",
-                "components": [
-                  0.4781,
-                  0.558,
-                  1.0
-                ],
-                "oklch": [
-                  0.6871,
-                  0.1779,
-                  271.67
-                ]
-              }
-            }
-          }
+          "$description": "solid hover, tertiary text"
         },
         "11": {
           "$value": {
@@ -712,6 +707,18 @@
             "hex": "#c8d5fe"
           },
           "$description": "high-contrast text"
+        },
+        "solid-pressed": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.6969,
+              0.1585,
+              271.67
+            ],
+            "hex": "#7b95ff"
+          },
+          "$description": "Pressed solid: at least 1.3:1 from step 9, still carrying its text (visible states, U5)."
         }
       }
     },
@@ -838,11 +845,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.4885,
-              0.1345,
+              0.5087,
+              0.1401,
               150.0
             ],
-            "hex": "#007433"
+            "hex": "#007b36"
           },
           "$description": "solid hover, tertiary text"
         },
@@ -886,6 +893,18 @@
               }
             }
           }
+        },
+        "solid-pressed": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.4808,
+              0.1324,
+              150.0
+            ],
+            "hex": "#007132"
+          },
+          "$description": "Pressed solid: at least 1.3:1 from step 9, still carrying its text (visible states, U5)."
         }
       },
       "dark": {
@@ -1035,11 +1054,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.6591,
-              0.1772,
+              0.6356,
+              0.175,
               150.0
             ],
-            "hex": "#13ae52"
+            "hex": "#00a74c"
           },
           "$description": "solid hover, tertiary text"
         },
@@ -1066,6 +1085,18 @@
             "hex": "#b9dfc0"
           },
           "$description": "high-contrast text"
+        },
+        "solid-pressed": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.6673,
+              0.1772,
+              150.0
+            ],
+            "hex": "#19b155"
+          },
+          "$description": "Pressed solid: at least 1.3:1 from step 9, still carrying its text (visible states, U5)."
         }
       }
     },
@@ -1192,11 +1223,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.7603,
+              0.7521,
               0.1404,
               80.0
             ],
-            "hex": "#dfa634"
+            "hex": "#dda331"
           },
           "$description": "solid hover, tertiary text"
         },
@@ -1245,13 +1276,13 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.7216,
+              0.7185,
               0.1404,
               80.0
             ],
-            "hex": "#d39a22"
+            "hex": "#d29921"
           },
-          "$description": "Pressed state of a light solid that carries dark text."
+          "$description": "Pressed solid: at least 1.3:1 from step 9, still carrying its text (visible states, U5)."
         }
       },
       "dark": {
@@ -1367,11 +1398,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.8418,
+              0.8507,
               0.1201,
               80.0
             ],
-            "hex": "#f4c26b"
+            "hex": "#f7c56e"
           },
           "$description": "solid hover, tertiary text"
         },
@@ -1379,11 +1410,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.7472,
+              0.8794,
               0.1117,
               80.0
             ],
-            "hex": "#d2a555"
+            "hex": "#fecf7f"
           },
           "$description": "low-contrast text"
         },
@@ -1391,13 +1422,25 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.8749,
+              0.8978,
               0.0396,
               80.0
             ],
-            "hex": "#e4d4b9"
+            "hex": "#ebdbc0"
           },
           "$description": "high-contrast text"
+        },
+        "solid-pressed": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.8883,
+              0.1055,
+              80.0
+            ],
+            "hex": "#ffd388"
+          },
+          "$description": "Pressed solid: at least 1.3:1 from step 9, still carrying its text (visible states, U5)."
         }
       }
     },
@@ -1592,11 +1635,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.5263,
+              0.5452,
               0.1889,
               27.0
             ],
-            "hex": "#c02726"
+            "hex": "#c72f2c"
           },
           "$description": "solid hover, tertiary text"
         },
@@ -1623,6 +1666,18 @@
             "hex": "#5c201c"
           },
           "$description": "high-contrast text"
+        },
+        "solid-pressed": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.5167,
+              0.1889,
+              27.0
+            ],
+            "hex": "#bc2323"
+          },
+          "$description": "Pressed solid: at least 1.3:1 from step 9, still carrying its text (visible states, U5)."
         }
       },
       "dark": {
@@ -1738,11 +1793,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.698,
+              0.6741,
               0.1615,
               27.0
             ],
-            "hex": "#f17065"
+            "hex": "#e9695e"
           },
           "$description": "solid hover, tertiary text"
         },
@@ -1769,6 +1824,18 @@
             "hex": "#f9cbc5"
           },
           "$description": "high-contrast text"
+        },
+        "solid-pressed": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.706,
+              0.1615,
+              27.0
+            ],
+            "hex": "#f47367"
+          },
+          "$description": "Pressed solid: at least 1.3:1 from step 9, still carrying its text (visible states, U5)."
         }
       }
     },
@@ -1929,11 +1996,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.5,
-              0.1145,
+              0.5191,
+              0.1189,
               240.0
             ],
-            "hex": "#006a9d"
+            "hex": "#0070a6"
           },
           "$description": "solid hover, tertiary text",
           "$extensions": {
@@ -1942,12 +2009,12 @@
                 "colorSpace": "display-p3",
                 "components": [
                   0.0,
-                  0.4083,
-                  0.6635
+                  0.4305,
+                  0.6979
                 ],
                 "oklch": [
-                  0.5,
-                  0.1496,
+                  0.5191,
+                  0.1553,
                   240.0
                 ]
               }
@@ -2011,6 +2078,18 @@
               }
             }
           }
+        },
+        "solid-pressed": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.4906,
+              0.1124,
+              240.0
+            ],
+            "hex": "#006799"
+          },
+          "$description": "Pressed solid: at least 1.3:1 from step 9, still carrying its text (visible states, U5)."
         }
       },
       "dark": {
@@ -2228,11 +2307,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.6718,
-              0.1539,
+              0.6499,
+              0.1489,
               240.0
             ],
-            "hex": "#00a0ea"
+            "hex": "#0099e0"
           },
           "$description": "solid hover, tertiary text",
           "$extensions": {
@@ -2241,12 +2320,12 @@
                 "colorSpace": "display-p3",
                 "components": [
                   0.0,
-                  0.6151,
-                  0.9843
+                  0.5879,
+                  0.9421
                 ],
                 "oklch": [
-                  0.6718,
-                  0.201,
+                  0.6499,
+                  0.1945,
                   240.0
                 ]
               }
@@ -2293,6 +2372,18 @@
             "hex": "#abdcff"
           },
           "$description": "high-contrast text"
+        },
+        "solid-pressed": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.6816,
+              0.1561,
+              240.0
+            ],
+            "hex": "#00a3ee"
+          },
+          "$description": "Pressed solid: at least 1.3:1 from step 9, still carrying its text (visible states, U5)."
         }
       }
     },
@@ -2628,7 +2719,7 @@
   "font": {
     "size": {
       "$type": "dimension",
-      "$description": "Type scale: round(14 x 1.2^n), n from -2 to 5; sizes under 11px dropped; adjacent sizes under 10% apart merged (DC-L02-09, DC-L02-10).",
+      "$description": "Type scale: round(14 x 1.2^n), n from -2 to 5; sizes under 11px dropped; adjacent sizes under 10% apart merged; only the steps a named text style uses are kept (DC-L02-09, DC-L02-10).",
       "$extensions": {
         "opendesigner": {
           "base": 14,

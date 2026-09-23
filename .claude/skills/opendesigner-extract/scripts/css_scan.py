@@ -7,18 +7,41 @@ to OpenDesigner's formulas run backwards (synthesis/LEVERS.md section E).
     add --json for machine output (default: a short readable report)
 
 Every value is labelled with how it was obtained: "declared" (written in source files; not necessarily
-rendered) or "computed" (read from a live page). Nothing here decides anything: the person accepts,
-adjusts or ignores each value. Standard library only; no network.
+rendered) or "computed" (read from a live page). Values are measured by role:
+  body size       the most common size of running text by characters (not headings, nav, captions,
+                  legal text, controls or code), and its ratio to the largest heading
+  accent          chromatic colors on buttons, links, focus rings and selected states, ranked by
+                  count x OKLCH chroma; grays, near-neutrals, black and white are skipped
+  radius          control radius (buttons, inputs) and container radius (cards, dialogs, menus) apart;
+                  inline links, badges, pills used as decoration and images are ignored
+  depth           elevation shadows classified by blur and offset; white or transparent fades, glows,
+                  insets and text shadows are ignored; 1 px rings are counted apart
+  motion          durations and easings per transition layer (cubic-bezier(...) and linear(...) intact)
+Each measurement carries a confidence (high, medium, low, none) and the element or rule count behind
+it. The accent hex and typeface names are measurements of the reference's identity, never values to
+adopt. Nothing here decides anything: the person accepts, adjusts or ignores each value.
+Standard library only; no network.
 """
-import argparse, json, math, os, re, sys
+import argparse, json, math, re
 from collections import Counter
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 INTAKE = HERE.parent / "references" / "reference-intake.json"
 EXT = {".css", ".scss", ".less", ".html", ".htm", ".jsx", ".tsx", ".js", ".ts", ".vue", ".svelte"}
+RULE_EXT = {".css", ".scss", ".less", ".html", ".htm", ".vue", ".svelte"}
 SKIP = {"node_modules", ".git", "dist", "build", ".next", "vendor", "coverage", "opendesigner"}
 NUM = r"(-?\d*\.?\d+)(px|rem|em|ms|s)?"
+NEUTRAL_MAX_C = 0.05   # OKLCH chroma under this is a gray or tinted neutral (slate reaches about 0.046)
+ACCENT_WEIGHT = {"button": 3, "focus": 3, "selected": 2, "control": 2, "ring": 2, "buttonBorder": 1,
+                 "buttonText": 1, "link": 1, "hover": 1, "token": 1, "fieldBorder": 0.5}
+SYSTEM_FACES = {"-apple-system", "blinkmacsystemfont", "system-ui", "ui-sans-serif", "ui-serif", "ui-monospace",
+                "ui-rounded", "sans-serif", "serif", "monospace", "cursive", "fantasy", "segoe ui", "helvetica neue",
+                "helvetica", "arial", "sf pro text", "sf pro display", "sf mono", "menlo", "monaco", "consolas",
+                "courier new", "courier", "times", "times new roman", "georgia", "verdana", "tahoma",
+                "apple color emoji", "segoe ui emoji", "noto color emoji", "inherit", "initial"}
+EASING_RE = re.compile(r"cubic-bezier\([^()]*\)|linear\([^()]*\)|steps\([^()]*\)|ease-in-out|ease-in|ease-out|"
+                       r"step-start|step-end|\bease\b|\blinear\b")
 
 
 def px(v, unit):
@@ -26,7 +49,26 @@ def px(v, unit):
     return v * 16 if unit in ("rem", "em") else v
 
 
-# ---------- colour maths (sRGB hex -> OKLCH) ----------
+def split_top(s, sep=","):
+    """Split on sep outside parentheses, so cubic-bezier(0.25, 0.1, 0.25, 1) stays whole."""
+    out, depth, cur = [], 0, ""
+    for ch in s or "":
+        if ch == "(":
+            depth += 1
+        elif ch == ")":
+            depth = max(0, depth - 1)
+        if ch == sep and depth == 0:
+            if cur.strip():
+                out.append(cur.strip())
+            cur = ""
+        else:
+            cur += ch
+    if cur.strip():
+        out.append(cur.strip())
+    return out
+
+
+# ---------- colour maths ----------
 def hex_norm(h):
     h = h.lstrip("#").lower()
     if len(h) in (3, 4):
@@ -47,20 +89,206 @@ def oklch(h):
     return round(L, 3), round(math.hypot(a, bb), 3), round(math.degrees(math.atan2(bb, a)) % 360)
 
 
-def rgb_to_hex(m):
-    parts = [p for p in re.split(r"[\s,/]+", m.strip()) if p][:3]
+def _to_hex(rgb):
+    return "#" + "".join(f"{max(0, min(255, round(v * 255))):02x}" for v in rgb)
+
+
+def _oklch_to_rgb(L, C, H):
+    a, b = C * math.cos(math.radians(H)), C * math.sin(math.radians(H))
+    l_, m_, s_ = L + 0.3963377774 * a + 0.2158037573 * b, L - 0.1055613458 * a - 0.0638541728 * b, L - 0.0894841775 * a - 1.2914855480 * b
+    l, m, s = l_ ** 3, m_ ** 3, s_ ** 3
+    lin = (4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+           -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+           -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s)
+    return [12.92 * c if c <= 0.0031308 else 1.055 * max(c, 0) ** (1 / 2.4) - 0.055 for c in lin]
+
+
+def _hsl_to_rgb(h, s, l):
+    c = (1 - abs(2 * l - 1)) * s
+    x, m = c * (1 - abs((h / 60) % 2 - 1)), l - c / 2
+    r, g, b = [(c, x, 0), (x, c, 0), (0, c, x), (0, x, c), (x, 0, c), (c, 0, x)][int(h // 60) % 6]
+    return [r + m, g + m, b + m]
+
+
+COLOR_RE = re.compile(r"#[0-9a-fA-F]{3,8}\b|(?:rgba?|hsla?|oklch)\([^()]*\)|\b(?:white|black|transparent)\b", re.I)
+
+
+def parse_color(tok):
+    """'#abc', 'rgb(...)', 'hsl(...)', 'oklch(...)', 'white', 'black', 'transparent' -> (hex, alpha) or None."""
+    t = tok.strip().lower()
+    if t in ("white", "black", "transparent"):
+        return {"white": ("#ffffff", 1.0), "black": ("#000000", 1.0), "transparent": ("#000000", 0.0)}[t]
+    if t.startswith("#"):
+        h = t[1:]
+        if len(h) in (3, 4):
+            h = "".join(c * 2 for c in h)
+        if len(h) not in (6, 8) or not re.fullmatch(r"[0-9a-f]+", h):
+            return None
+        return "#" + h[:6], (int(h[6:8], 16) / 255 if len(h) == 8 else 1.0)
+    m = re.match(r"(rgba?|hsla?|oklch)\(([^()]*)\)", t)
+    if not m:
+        return None
+    fn, parts = m.group(1), [p for p in re.split(r"[\s,/]+", m.group(2).strip()) if p]
+    if len(parts) < 3:
+        return None
     try:
-        vals = [round(float(p[:-1]) * 2.55) if p.endswith("%") else round(float(p)) for p in parts]
-        return "#" + "".join(f"{max(0, min(255, v)):02x}" for v in vals)
+        a = (float(parts[3][:-1]) / 100 if parts[3].endswith("%") else float(parts[3])) if len(parts) > 3 else 1.0
+        if fn.startswith("rgb"):
+            rgb = [float(p[:-1]) / 100 if p.endswith("%") else float(p) / 255 for p in parts[:3]]
+        elif fn.startswith("hsl"):
+            rgb = _hsl_to_rgb(float(parts[0].replace("deg", "")) % 360, float(parts[1].rstrip("%")) / 100, float(parts[2].rstrip("%")) / 100)
+        else:
+            L = float(parts[0][:-1]) / 100 if parts[0].endswith("%") else float(parts[0])
+            C = float(parts[1][:-1]) / 100 * 0.4 if parts[1].endswith("%") else float(parts[1])
+            rgb = _oklch_to_rgb(L, C, 0.0 if parts[2] == "none" else float(parts[2].replace("deg", "")))
     except ValueError:
         return None
+    return _to_hex(rgb), max(0.0, min(1.0, a))
+
+
+def is_neutral(h):
+    return oklch(h)[1] < NEUTRAL_MAX_C
+
+
+# ---------- selectors and roles (declared files) ----------
+def compounds(sel):
+    """'.card > a.btn:hover' -> ['.card', 'a.btn:hover'] (split on combinators outside [] and ())."""
+    sel = re.sub(r":not\([^()]*\)", "", sel)
+    out, depth, cur = [], 0, ""
+    for ch in sel.strip():
+        depth += ch in "[(" and 1 or 0
+        depth -= ch in "])" and 1 or 0
+        if depth == 0 and (ch.isspace() or ch in ">+~"):
+            if cur:
+                out.append(cur)
+            cur = ""
+        else:
+            cur += ch
+    if cur:
+        out.append(cur)
+    return out or [sel]
+
+
+def parse_compound(c):
+    tag = (re.match(r"^[a-zA-Z][\w-]*|^:root", c) or [""])[0].lower()
+    words = set()
+    for name in re.findall(r"[.#]([\w-]+)", c):
+        words |= {w.lower() for w in re.split(r"[-_]+|(?<=[a-z])(?=[A-Z])", name) if w}
+    attrs = " ".join(re.findall(r"\[([^\]]*)\]", c)).lower()
+    pseudos = {p.lower() for p in re.findall(r"::?([\w-]+)", c)}
+    return tag, words, attrs, pseudos
+
+
+def text_role(sel):
+    comps = [parse_compound(c) for c in compounds(sel)]
+    tag, words, attrs, _ = comps[-1]
+    anc_tags = {t for t, *_ in comps[:-1]}
+    anc_words = set().union(*[w for _, w, _, _ in comps[:-1]]) if len(comps) > 1 else set()
+    if tag in ("pre", "code", "kbd", "samp") or words & {"code", "mono", "pre"}:
+        return "code"
+    if re.fullmatch(r"h[1-6]", tag) or words & {"heading", "headline", "title", "display", "h1", "h2", "h3"} or "role=heading" in attrs.replace('"', ""):
+        return "heading"
+    if tag in ("button", "input", "select", "textarea", "label") or words & {"btn", "button", "input", "field", "label", "tab", "cta"}:
+        return "control"
+    caption_words = {"caption", "legal", "footnote", "disclaimer", "copyright", "fineprint", "overline", "eyebrow", "hint", "helper", "footer"}
+    if tag in ("small", "figcaption", "caption", "sup", "sub", "footer") or words & caption_words or anc_tags & {"footer", "small", "figcaption"} or anc_words & caption_words:
+        return "caption"
+    nav_words = {"nav", "navbar", "navigation", "menu", "breadcrumb", "breadcrumbs", "sidebar", "toolbar", "tabs"}
+    if tag == "nav" or words & nav_words or "nav" in anc_tags or anc_words & nav_words:
+        return "nav"
+    if tag in ("html", "body", ":root", "p", "li", "dd", "td", "blockquote", "article", "main") or words & {"body", "prose", "content", "paragraph", "copy", "article", "description"}:
+        return "body"
+    return "other"
+
+
+def radius_role(sel):
+    tag, words, attrs, _ = parse_compound(compounds(sel)[-1])
+    if tag in ("img", "video", "picture", "svg", "canvas", "iframe") or words & {"avatar", "image", "img", "thumb", "thumbnail", "media", "photo"}:
+        return "media"
+    if tag in ("button", "input", "select", "textarea") or "role=button" in attrs.replace('"', "") or \
+            words & {"btn", "button", "input", "field", "select", "textarea", "textbox", "combobox", "control", "cta"}:
+        return "control"
+    if words & {"badge", "pill", "tag", "chip", "dot", "indicator", "status", "kbd", "label"}:
+        return "decor"
+    if tag == "dialog" or words & {"card", "modal", "dialog", "popover", "panel", "sheet", "tile", "dropdown", "menu",
+                                   "toast", "tooltip", "popup", "drawer", "callout", "alert"}:
+        return "container"
+    if tag == "a" or "link" in words:
+        return "link"
+    return "other"
+
+
+def accent_source(sel, prop, value):
+    tag, words, attrs, pseudos = parse_compound(compounds(sel)[-1])
+    if prop in ("outline", "outline-color") or (pseudos & {"focus", "focus-visible", "focus-within"} and prop in ("box-shadow", "border-color", "border")):
+        return "focus"
+    if prop == "accent-color":
+        return "control"
+    if re.search(r"aria-(selected|current|pressed|checked)|data-state", attrs) or "checked" in pseudos or words & {"active", "selected", "current", "checked"}:
+        return "selected" if prop in ("background", "background-color", "color", "border-color", "border") else None
+    role = radius_role(sel)
+    is_button = tag == "button" or words & {"btn", "button", "cta"} or "role=button" in attrs.replace('"', "")
+    is_link = tag == "a" or "link" in words
+    if pseudos & {"hover", "active"} and (is_button or is_link) and prop in ("background", "background-color", "color", "border-color"):
+        return "hover"
+    if is_button:
+        return {"background": "button", "background-color": "button", "border": "buttonBorder",
+                "border-color": "buttonBorder", "color": "buttonText"}.get(prop)
+    if role == "control" and prop in ("border", "border-color"):
+        return "fieldBorder"
+    if is_link and prop == "color":
+        return "link"
+    return None
+
+
+def resolve_vars(value, props, depth=0):
+    if "var(" not in value or depth > 6:
+        return value
+
+    def sub(m):
+        name, fb = m.group(1), (m.group(2) or "").strip()
+        return props.get(name, fb)
+    return resolve_vars(re.sub(r"var\((--[\w-]+)\s*(?:,([^()]*))?\)", sub, value), props, depth + 1)
+
+
+def iter_rules(text, suffix):
+    """(selector, [(prop, value)]) from CSS text, <style> blocks and inline style attributes."""
+    if suffix in (".html", ".htm", ".vue", ".svelte"):
+        for tag, attrs in re.findall(r"<([a-zA-Z][\w-]*)\b([^>]*)>", text):
+            st = re.search(r"\bstyle\s*=\s*\"([^\"]*)\"|\bstyle\s*=\s*'([^']*)'", attrs)
+            if st:
+                cls = re.search(r"\bclass\s*=\s*[\"']([^\"']*)[\"']", attrs)
+                role = re.search(r"\brole\s*=\s*[\"']([^\"']*)[\"']", attrs)
+                sel = tag.lower() + "".join("." + c for c in (cls.group(1).split() if cls else [])) + (f"[role={role.group(1)}]" if role else "")
+                yield sel, decls(st.group(1) or st.group(2) or "")
+        text = "\n".join(re.findall(r"<style[^>]*>(.*?)</style>", text, re.S | re.I))
+    text = re.sub(r"/\*.*?\*/", "", text, flags=re.S)
+    for sel, body in re.findall(r"([^{}]+)\{([^{}]*)\}", text):
+        sel = sel.split(";")[-1].strip()
+        if not sel or sel.startswith("@") or re.fullmatch(r"[\s,]*((from|to|\d+(\.\d+)?%)[\s,]*)+", sel):
+            continue
+        yield sel, decls(body)
+
+
+def decls(body):
+    out = []
+    for d in split_top(body, ";"):
+        if ":" in d:
+            k, v = d.split(":", 1)
+            out.append((k.strip().lower(), re.sub(r"!important", "", v).strip()))
+    return out
 
 
 # ---------- capture from files ----------
 def scan_files(paths):
     V = {k: Counter() for k in ("colors", "fontFamilies", "fontSizes", "lineHeights", "fontWeights",
                                 "spacing", "radii", "shadows", "durations", "easings")}
-    props, files = {}, 0
+    R = {k: {} for k in ("textSizes", "textElements", "radiiByRole", "accentSources")}
+    props, files, rules, raw_families = {}, 0, [], Counter()
+
+    def add(group, role, key, n=1):
+        R[group].setdefault(role, Counter())[key] += n
+
     for root in paths:
         root = Path(root)
         items = [root] if root.is_file() else [p for p in root.rglob("*") if p.is_file()
@@ -78,16 +306,12 @@ def scan_files(paths):
             files += 1
             for k, v in re.findall(r"(--[\w-]+)\s*:\s*([^;}\n]+)", t):
                 props.setdefault(k, v.strip())
-            for h in re.findall(r"#[0-9a-fA-F]{3,8}\b", t):
-                n = hex_norm(h)
-                if n:
-                    V["colors"][n] += 1
-            for m in re.findall(r"rgba?\(([^)]+)\)", t):
-                n = rgb_to_hex(m)
-                if n:
-                    V["colors"][n] += 1
-            for m in re.findall(r"font-family\s*:\s*([^;}\n]+)", t):
-                V["fontFamilies"][m.split(",")[0].strip(" '\"")] += 1
+            for tok in re.findall(r"#[0-9a-fA-F]{3,8}\b|(?:rgba?|hsla?|oklch)\([^()]*\)", t):
+                c = parse_color(tok)
+                if c and c[1] > 0:
+                    V["colors"][c[0]] += 1
+            for m in re.findall(r"(?<![\w-])font-family\s*:\s*([^;}\n]+)", t):
+                raw_families[m.strip()] += 1
             for v, u in re.findall(r"font-size\s*:\s*" + NUM, t):
                 if u in ("px", "rem", "em"):
                     V["fontSizes"][round(px(v, u))] += 1
@@ -105,31 +329,109 @@ def scan_files(paths):
                         V["radii"][round(px(v, u))] += 1
                     elif "%" in rest or "9999" in rest:
                         V["radii"]["full"] += 1
-            for m in re.findall(r"box-shadow\s*:\s*([^;}\n]+)", t):
+            for m in re.findall(r"(?<![\w-])box-shadow\s*:\s*([^;}\n]+)", t):
                 V["shadows"][m.strip()] += 1
-            for rest in re.findall(r"transition(?:-duration)?\s*:\s*([^;}\n]+)", t):
-                for v, u in re.findall(r"(\d*\.?\d+)(ms|s)\b", rest)[:1]:
-                    V["durations"][round(float(v) * (1000 if u == "s" else 1))] += 1
-                for e in re.findall(r"(cubic-bezier\([^)]+\)|ease-in-out|ease-out|ease-in|linear\([^)]*\)|\bease\b)", rest):
-                    V["easings"][e] += 1
-    return {"method": "declared", "files": files, "customProperties": props,
-            "values": {k: dict(v.most_common(40)) for k, v in V.items()}}
+            for prop, rest in re.findall(r"\b(transition|animation)(?:-duration|-timing-function)?\s*:\s*([^;}\n]+)", t):
+                for layer in split_top(rest):
+                    times = re.findall(r"(-?\d*\.?\d+)(ms|s)\b", layer)
+                    ease = EASING_RE.search(layer)
+                    if times and float(times[0][0]) > 0:
+                        V["durations"][round(float(times[0][0]) * (1000 if times[0][1] == "s" else 1))] += 1
+                        if ease:
+                            V["easings"][ease.group(0)] += 1
+                    elif ease and not times:
+                        V["easings"][ease.group(0)] += 1
+            if f.suffix.lower() in RULE_EXT:
+                rules += list(iter_rules(t, f.suffix.lower()))
+    # role-aware pass (after all custom properties are known, so var() resolves)
+    for v, n in raw_families.items():
+        first = split_top(resolve_vars(v, props))[:1]
+        if first and "var(" not in first[0]:
+            V["fontFamilies"][first[0].strip(" '\"")] += n
+    raw_shadows, V["shadows"] = V["shadows"], Counter()
+    for k, v in props.items():
+        if re.search(r"shadow|elevation", k):
+            raw_shadows[v] += 1
+    for v, n in raw_shadows.items():
+        v = resolve_vars(v, props)
+        if v and v != "none" and "var(" not in v:
+            V["shadows"][v] += n
+    for k, v in props.items():
+        if re.search(r"primary|accent|brand|link|focus|ring|interactive|action|cta|highlight", k) and not re.search(r"foreground|-fg|on-|contrast|text", k):
+            c = parse_color(resolve_vars(v, props))
+            if c and c[1] >= 0.5:
+                add("accentSources", "token", c[0])
+    for sel_group, ds in rules:
+        for sel in split_top(sel_group):
+            for prop, raw in ds:
+                val = resolve_vars(raw, props)
+                if prop in ("font-size", "font"):
+                    m = re.search(NUM, val) if prop == "font-size" else re.search(r"(\d*\.?\d+)(px|rem|em)\b", val)
+                    if m and m.group(2) in ("px", "rem", "em"):
+                        role = text_role(sel)
+                        w = 3 if parse_compound(compounds(sel)[-1])[0] in ("html", "body", ":root") else (
+                            2 if parse_compound(compounds(sel)[-1])[0] in ("p", "li", "dd", "td", "blockquote", "article", "main") else 1)
+                        add("textSizes", role, round(px(m.group(1), m.group(2))), w)
+                        add("textElements", role, round(px(m.group(1), m.group(2))))
+                elif prop == "border-radius":
+                    m = re.search(r"(-?\d*\.?\d+)(px|rem|em|%)?", val)
+                    if m:
+                        n = float(m.group(1))
+                        r = "full" if (m.group(2) == "%" and n >= 50) or n >= 999 else round(px(n, m.group(2)))
+                        if r == 0 and "." not in compounds(sel)[-1]:
+                            continue  # reset such as Tailwind preflight's `button, input { border-radius: 0 }`
+                        add("radiiByRole", radius_role(sel), r)
+                elif prop in ("background", "background-color", "color", "border", "border-color", "outline", "outline-color",
+                              "box-shadow", "accent-color"):
+                    src = accent_source(sel, prop, val)
+                    if src:
+                        for tok in COLOR_RE.findall(val):
+                            c = parse_color(tok)
+                            if c and c[1] >= 0.5:
+                                add("accentSources", src, c[0])
+    vals = {k: dict(v.most_common(40)) for k, v in V.items()}
+    for k, groups in R.items():
+        vals[k] = {role: dict(c.most_common(40)) for role, c in groups.items()}
+    return {"method": "declared", "files": files, "customProperties": props, "values": vals}
 
 
 # ---------- analysis ----------
-def fit_type(sizes):
-    s = sorted({float(x) for x in sizes if str(x).replace(".", "").isdigit() and 9 <= float(x) <= 120})
+def level(count, share, high, medium):
+    """Confidence from how many elements/rules back a value and how dominant it is."""
+    if count >= high[0] and share >= high[1]:
+        return "high"
+    if count >= medium[0] and share >= medium[1]:
+        return "medium"
+    return "low" if count else "none"
+
+
+def _num(k):
+    try:
+        return float(k)
+    except (TypeError, ValueError):
+        return None
+
+
+RATIOS = (1.618, 1.5, 1.414, 1.333, 1.25, 1.2, 1.125, 1.067)
+
+
+def fit_type(sizes, base=None):
+    """Fit sizes to base x ratio^n. The base is the measured body size; only the ratio is fitted.
+    Larger ratios are preferred unless a smaller one fits clearly better (a dense grid fits anything)."""
+    s = sorted({float(x) for x in sizes if _num(x) is not None and 9 <= float(x) <= 120})
     if len(s) < 3:
         return None
+    if base is None:
+        base = min((x for x in s if 12 <= x <= 20), key=lambda x: abs(x - 16), default=s[0])
     best = None
-    for base in [x for x in s if 12 <= x <= 20] or s[:1]:
-        for r in (1.067, 1.125, 1.2, 1.25, 1.333, 1.414, 1.5, 1.618):
-            err = sum(min(abs(math.log(x / base) - n * math.log(r)) for n in range(-3, 13)) for x in s) / len(s)
-            if best is None or err < best[2]:
-                best = (base, r, err)
-    base, r, err = best
-    return {"base": base, "ratio": r, "meanLogResidual": round(err, 4),
-            "reading": "modular scale" if err < 0.03 else "loose fit: keep measured sizes as overrides",
+    for r in RATIOS:
+        lr = math.log(r)
+        err = sum(min(abs(math.log(x / base) - n * lr) for n in range(-4, 17)) for x in s) / len(s)
+        if best is None or err / lr < best[2] - 0.02:
+            best = (r, err, err / lr)
+    r, err, rel = best
+    return {"base": base, "ratio": r, "meanLogResidual": round(err, 4), "relativeResidual": round(rel, 3),
+            "reading": "modular scale" if err < 0.03 and rel < 0.15 else "loose fit: keep measured sizes as overrides",
             "sizes": s}
 
 
@@ -139,7 +441,8 @@ def fit_space(vals):
         return None
     share = {u: round(sum(1 for x in v if x % u == 0) / len(v), 2) for u in (8, 5, 4)}
     unit = next((u for u in (8, 5, 4) if share[u] >= 0.7), 4)
-    return {"unit": unit, "shareDivisible": share, "steps": sorted({int(x) for x in vals})[:16]}
+    return {"unit": unit, "shareDivisible": share, "steps": sorted({int(float(x)) for x in vals})[:16],
+            "count": len(v), "confidence": level(len(v), share[unit], (40, 0.8), (10, 0.7))}
 
 
 def dial_from_band(drives, param, value):
@@ -155,64 +458,343 @@ def dial_from_band(drives, param, value):
     return None
 
 
+def measure_type(vals, computed):
+    ts, te = vals.get("textSizes") or {}, vals.get("textElements") or {}
+    out = {}
+    if ts.get("body") or ts.get("label"):
+        # running text counts in full; short UI text and link lists count at half weight, so a page made
+        # of cards still gives a reading, but prose wins wherever there is some
+        prose = {float(k): n for k, n in (ts.get("body") or {}).items()}
+        labels = {float(k): n * 0.5 for k, n in (ts.get("label") or {}).items()}
+        sizes = {k: prose.get(k, 0) + labels.get(k, 0) for k in set(prose) | set(labels)}
+        body = max(sizes, key=lambda k: (sizes[k], -abs(k - 16)))
+        share = sizes[body] / sum(sizes.values())
+        els = sum(n for r in ("body", "label") for k, n in (te.get(r) or {}).items() if float(k) == body) or int(sizes[body])
+        conf = level(els, share, (10, 0.5), (3, 0.3)) if computed else level(els, share, (2, 0.5), (1, 0.3))
+        mostly_labels = labels.get(body, 0) > prose.get(body, 0)
+        if mostly_labels and conf == "high":
+            conf = "medium"
+        out["body"] = {"px": body, "share": round(share, 2), "count": els, "confidence": conf,
+                       "basis": (f"{round(share * 100)}% of the running text by characters" if computed else
+                                 f"{round(share * 100)}% of the weighted font-size declarations on body, p and prose selectors")
+                       + (" (mostly short text such as card copy and link lists: an article page reads better)" if mostly_labels else "")}
+    else:
+        fs = {float(k): n for k, n in (vals.get("fontSizes") or {}).items() if _num(k) is not None and 12 <= float(k) <= 20}
+        if fs:
+            body = max(fs, key=lambda k: (fs[k], -abs(k - 16)))
+            out["body"] = {"px": body, "share": round(fs[body] / sum(fs.values()), 2), "count": int(fs[body]), "confidence": "low",
+                           "basis": "most common size between 12 and 20 px by element count; this capture has no text roles "
+                                    "(headings, nav and captions are mixed in): re-run read_page.js for a better reading"}
+    heads = {float(k): n for k, n in (ts.get("heading") or {}).items()}
+    if heads:
+        top = max(heads)
+        out["largestHeading"] = {"px": top, "count": sum(n for k, n in (te.get("heading") or {}).items() if float(k) == top) or 1}
+    elif out.get("body"):
+        allsz = [float(k) for k in (vals.get("fontSizes") or {}) if _num(k) is not None]
+        if allsz and max(allsz) > out["body"]["px"]:
+            out["largestHeading"] = {"px": max(allsz), "count": 1, "note": "no heading elements found; largest text on the page"}
+    if out.get("body") and out.get("largestHeading"):
+        conf = "medium" if out["body"]["confidence"] in ("high", "medium") and "note" not in out["largestHeading"] else "low"
+        out["headingRatio"] = {"value": round(out["largestHeading"]["px"] / out["body"]["px"], 2), "confidence": conf,
+                               "basis": "largest heading / body size; one page can mislead"}
+    pool = set()
+    for role, sz in ts.items():
+        if role != "code":
+            pool |= {k for k in sz}
+    out["scale"] = fit_type(pool or vals.get("fontSizes", {}), out["body"]["px"] if out.get("body") else None)
+    fams = Counter()
+    for k, n in (vals.get("fontFamilies") or {}).items():
+        fams[k.strip(" '\"")] += n
+    total = sum(fams.values()) or 1
+    faces = [f for f, n in fams.most_common() if f and f.lower() not in SYSTEM_FACES and n / total >= 0.05]
+    out["families"] = faces[:5]  # the reference's own typefaces (identity): named, never recommended
+    out["minorFaces"] = [f for f, n in fams.most_common() if f and f.lower() not in SYSTEM_FACES and n / total < 0.05][:5]
+    out["systemFaces"] = [f for f, _ in fams.most_common() if f.lower() in SYSTEM_FACES][:5]
+    if fams:
+        out["primaryIsSystem"] = fams.most_common(1)[0][0].lower() in SYSTEM_FACES
+    out["weights"] = sorted({int(w) for w in vals.get("fontWeights", {}) if str(w).isdigit()})
+    return out
+
+
+def measure_accent(vals, computed, rings):
+    src = {k: dict(v) for k, v in (vals.get("accentSources") or {}).items()}
+    if rings:
+        src["ring"] = rings
+    cand = {}
+    for source, colors in src.items():
+        for h, n in colors.items():
+            h = hex_norm(h)
+            if not h:
+                continue
+            L, C, H = oklch(h)
+            if C < NEUTRAL_MAX_C or L > 0.97 or L < 0.1:
+                continue  # grays, tinted neutrals, black, white
+            c = cand.setdefault(h, {"hex": h, "count": 0, "oklch": [L, C, H], "sources": {}, "_w": 0})
+            c["count"] += n
+            c["sources"][source] = c["sources"].get(source, 0) + n
+            c["_w"] += n * ACCENT_WEIGHT.get(source, 1)
+    interactive = bool(cand)
+    if not cand:  # no interactive evidence: rank every chromatic color, low confidence
+        for h, n in (vals.get("colors") or {}).items():
+            h = hex_norm(h)
+            if h:
+                L, C, H = oklch(h)
+                if C >= NEUTRAL_MAX_C and 0.1 <= L <= 0.97:
+                    cand[h] = {"hex": h, "count": n, "oklch": [L, C, H], "sources": {"anywhere": n}, "_w": n}
+    ranked = sorted(cand.values(), key=lambda c: -c["_w"] * c["oklch"][1])
+    for c in ranked:
+        c["score"] = round(c.pop("_w") * c["oklch"][1], 2)
+    if not ranked:
+        return [], {"confidence": "none", "count": 0, "basis": "no chromatic color on buttons, links, focus rings or selected states"}
+    top = ranked[0]
+    rival = next((c for c in ranked[1:] if min(abs(c["oklch"][2] - top["oklch"][2]), 360 - abs(c["oklch"][2] - top["oklch"][2])) > 25), None)
+    margin = top["score"] / rival["score"] if rival and rival["score"] else 9
+    if not interactive:
+        conf = "low"
+    elif computed:
+        conf = "high" if top["count"] >= 5 and (len(top["sources"]) >= 2 or top["sources"].get("button", 0) >= 5) and margin >= 1.5 else (
+            "medium" if top["count"] >= 2 else "low")
+    else:
+        conf = "high" if top["count"] >= 2 and len(top["sources"]) >= 2 and margin >= 1.5 else ("medium" if top["count"] >= 1 else "low")
+    basis = (f"on {', '.join(sorted(top['sources']))}; ranked by count x chroma" if interactive else
+             "no interactive elements with a chromatic color; ranked every color by count x chroma")
+    return ranked, {"confidence": conf, "count": top["count"], "basis": basis}
+
+
+def parse_shadow_layer(layer):
+    layer = layer.strip()
+    inset = bool(re.search(r"\binset\b", layer))
+    ctok = COLOR_RE.search(layer)
+    col = parse_color(ctok.group(0)) if ctok else None
+    rest = COLOR_RE.sub(" ", layer).replace("inset", " ")
+    nums = [px(v, u or "px") for v, u in re.findall(r"(-?\d*\.?\d+)(px|rem|em)?\b", rest)]
+    if len(nums) < 2:
+        return None
+    x, y, blur, spread = (nums + [0, 0])[:4]
+    return {"x": x, "y": y, "blur": blur, "spread": spread, "inset": inset,
+            "hex": col[0] if col else None, "alpha": round(col[1], 3) if col else None}
+
+
+def classify_layer(s):
+    if s["alpha"] == 0:
+        return "transparent"
+    if s["inset"]:
+        return "inset"
+    if s["x"] == 0 and s["y"] == 0 and s["blur"] == 0:
+        return "ring" if s["spread"] > 0 else "transparent"
+    if s["hex"] and oklch(s["hex"])[0] >= 0.9 and oklch(s["hex"])[1] < NEUTRAL_MAX_C:
+        return "fade"
+    if s["x"] == 0 and s["y"] == 0 and s["spread"] >= s["blur"]:
+        return "glow"
+    b = max(s["blur"], abs(s["y"]) * 2)
+    return "low" if b <= 4 else "medium" if b <= 16 else "high" if b <= 32 else "overlay"
+
+
+def fmt_layer(s):
+    col = f"rgba({int(s['hex'][1:3], 16)}, {int(s['hex'][3:5], 16)}, {int(s['hex'][5:7], 16)}, {s['alpha']})" if s["hex"] else "currentColor"
+    return f"{s['x']:g}px {s['y']:g}px {s['blur']:g}px {s['spread']:g}px {col}"
+
+
+def measure_depth(vals, computed, elements):
+    ignored, levels, elev, rings = Counter(), {}, Counter(), Counter()
+    with_ring = only_ring = 0
+    for value, n in (vals.get("shadows") or {}).items():
+        layers = [s for s in (parse_shadow_layer(l) for l in split_top(value)) if s]
+        kinds = [classify_layer(s) for s in layers]
+        keep = [s for s, k in zip(layers, kinds) if k in ("low", "medium", "high", "overlay")]
+        for s, k in zip(layers, kinds):
+            if k == "ring" and s["hex"]:
+                rings[s["hex"]] += n
+            if k not in ("low", "medium", "high", "overlay", "ring"):
+                ignored[k] += n
+        if keep:
+            elev[", ".join(fmt_layer(s) for s in keep)] += n
+            for s, k in zip(layers, kinds):
+                if k in ("low", "medium", "high", "overlay"):
+                    lv = levels.setdefault(k, {"level": k, "blur": s["blur"], "y": s["y"], "alpha": s["alpha"], "count": 0})
+                    lv["count"] += n
+            with_ring += n if "ring" in kinds else 0
+        elif "ring" in kinds:
+            only_ring += n
+    E = sum(elev.values())
+    if not E:
+        hint = "borders"
+        conf = ("medium" if (elements or 0) >= 100 else "low") if computed else "low"
+    else:
+        hint = "ring+faint-shadow" if with_ring * 2 >= E else "shadow-ladder"
+        conf = level(E, 1, (5, 0), (2, 0)) if computed else level(E, 1, (3, 0), (1, 0))
+    order = ["low", "medium", "high", "overlay"]
+    out = {"shadows": [s for s, _ in elev.most_common(5)], "hint": hint,
+           "levels": sorted(levels.values(), key=lambda l: order.index(l["level"])),
+           "rings": only_ring + with_ring, "ignored": dict(ignored), "count": E, "confidence": conf,
+           "basis": (f"{E} element(s) with elevation shadows, levels by blur and offset" if E else "no elevation shadows")
+           + ("; white or transparent fades, glows, insets and text shadows ignored" if ignored or not E else "")}
+    chroma_rings = {h: n for h, n in rings.items() if not is_neutral(h)}
+    return out, chroma_rings
+
+
+def mode(counter):
+    items = [(k, n) for k, n in counter.items()]
+    if not items:
+        return None, 0, 0
+    k, n = max(items, key=lambda kv: (kv[1], -(_num(kv[0]) if _num(kv[0]) is not None else 999)))
+    k = "full" if k == "full" else int(float(k))
+    return k, n, n / sum(n for _, n in items)
+
+
+def measure_radius(vals, computed, dials):
+    rr = vals.get("radiiByRole") or {}
+    out = {}
+    th = ((5, 0.6), (2, 0.4)) if computed else ((3, 0.6), (1, 0.4))
+    if rr:
+        for role in ("control", "container"):
+            v, n, share = mode(rr.get(role) or {})
+            if v is not None:
+                out[role] = {"px": v, "count": n, "share": round(share, 2), "confidence": level(n, share, *th),
+                             "values": {str(k): c for k, c in sorted((rr.get(role) or {}).items(), key=lambda kv: -kv[1])[:6]}}
+        out["ignored"] = {r: sum(c.values()) for r, c in rr.items() if r not in ("control", "container") and c}
+        out["basis"] = "controls (buttons, inputs) and containers (cards, dialogs, menus) apart; inline links, badges, decorative pills and images ignored"
+        if "control" not in out and not computed and rr.get("other"):
+            v, n, share = mode(rr["other"])
+            out["control"] = {"px": v, "count": n, "share": round(share, 2), "confidence": "low",
+                              "values": {str(k): c for k, c in sorted(rr["other"].items(), key=lambda kv: -kv[1])[:6]},
+                              "note": "no button or input selectors recognised: most common radius on other selectors"}
+    else:
+        flat = Counter({k: n for k, n in (vals.get("radii") or {}).items() if k == "full" or (_num(k) or 0) >= 2})
+        v, n, share = mode(flat)
+        if v is not None:
+            out["control"] = {"px": v, "count": n, "share": round(share, 2), "confidence": "low"}
+        out["basis"] = "no roles in this capture (all elements mixed; 1 px corners dropped): re-run read_page.js for control and container radii"
+    if "control" in out:
+        out["mostCommon"] = out["control"]["px"]  # engine.py intake reads this as the control radius
+        out["roundnessDial"] = dial_from_band(dials.get("roundness", {}).get("drives", []), "radius.control", out["control"]["px"])
+    return out
+
+
+def measure_motion(vals, computed):
+    du = [(float(k), n) for k, n in (vals.get("durations") or {}).items() if _num(k) and float(k) > 0]
+    if not du:
+        return {"note": "no motion found; do not infer Energy from this source", "count": 0, "confidence": "none"}
+    du.sort()
+    total = sum(n for _, n in du)
+    acc, med = 0, du[-1][0]
+    for d, n in du:
+        acc += n
+        if acc * 2 >= total:
+            med = d
+            break
+    eas = Counter({k: n for k, n in (vals.get("easings") or {}).items()})
+    overshoot = any(any(float(v) > 1 or float(v) < 0 for v in re.findall(r"-?\d*\.?\d+", e)[1::2])
+                    for e in eas if e.startswith("cubic-bezier("))
+    return {"durations": [d for d, _ in du][:10], "median": med, "durationMultiplier": round(med / 275, 2),
+            "easings": [e for e, _ in eas.most_common(5)], "overshoot": overshoot, "count": total,
+            "confidence": "medium" if total >= (10 if computed else 5) else "low",
+            "note": "CSS transitions and animations only; JavaScript-driven motion is not visible" + (
+                "; declared, not necessarily rendered" if not computed else "")}
+
+
 def analyse(cap):
     vals = cap["values"]
+    computed = cap.get("method") == "computed"
     dials = {d["id"]: d for d in json.loads(INTAKE.read_text())["dials"]} if INTAKE.exists() else {}
-    out = {"method": cap.get("method"), "source": cap.get("source"), "files": cap.get("files")}
-    cols = [(h, n) for h, n in vals.get("colors", {}).items() if h]
-    neutrals, accents = [], []
-    for h, n in cols:
-        L, C, H = oklch(h)
-        (neutrals if C < 0.03 else accents).append({"hex": h, "count": n, "oklch": [L, C, H]})
-    out["color"] = {"accents": accents[:6], "neutrals": neutrals[:8],
-                    "note": "the reference's accent hue is identity: carry its role and chroma level, not the hex"}
-    if neutrals:
-        mid = sorted(neutrals, key=lambda x: abs(x["oklch"][0] - 0.6))[0]["oklch"]
-        out["color"]["neutralTint"] = {"chroma": mid[1], "hue": mid[2]}
+    out = {"method": cap.get("method"), "source": cap.get("source"), "files": cap.get("files"), "elements": cap.get("elements")}
+    depth, ring_colors = measure_depth(vals, computed, cap.get("elements"))
+    accents, aconf = measure_accent(vals, computed, ring_colors)
+    neutrals = []
+    for h, n in (vals.get("colors") or {}).items():
+        h = hex_norm(h)
+        if h and is_neutral(h):
+            neutrals.append({"hex": h, "count": n, "oklch": list(oklch(h))})
+    neutrals.sort(key=lambda x: -x["count"])
+    out["color"] = {"accents": accents[:6], "neutrals": neutrals[:8], **aconf,
+                    "note": "the accent hex is the reference's identity, a measurement only: carry its role and chroma level, never the hue as the person's primary"}
+    mids = [x for x in neutrals if 0.25 <= x["oklch"][0] <= 0.85]
+    if mids or neutrals:
+        mid = max(mids, key=lambda x: x["count"]) if mids else min(neutrals, key=lambda x: abs(x["oklch"][0] - 0.6))
+        out["color"]["neutralTint"] = {"chroma": mid["oklch"][1], "hue": mid["oklch"][2], "count": mid["count"],
+                                       "confidence": level(mid["count"], 1, (10, 0), (3, 0))}
     if accents:
         out["color"]["accentChroma"] = accents[0]["oklch"][1]
-    out["type"] = {"families": list(vals.get("fontFamilies", {}))[:5], "scale": fit_type(vals.get("fontSizes", {})),
-                   "weights": sorted(int(w) for w in vals.get("fontWeights", {}))}
+    ty = measure_type(vals, computed)
+    out["type"] = ty
+    if ty.get("body"):
+        out["bodySize"] = ty["body"]["px"]  # engine.py intake reads this before type.scale.base
     out["space"] = fit_space(vals.get("spacing", {}))
-    radii = Counter({k: v for k, v in vals.get("radii", {}).items()})
-    if radii:
-        top = radii.most_common(1)[0][0]
-        top = "full" if top == "full" else int(float(top))
-        rd = dial_from_band(dials.get("roundness", {}).get("drives", []), "radius.control", top)
-        out["radius"] = {"mostCommon": top, "all": dict(radii.most_common(8)), "roundnessDial": rd}
-    sh = list(vals.get("shadows", {}))
-    out["depth"] = {"shadows": sh[:5], "hint": "borders" if not sh else
-                    ("ring+faint-shadow" if any(re.search(r"0 0 0 1px", s) for s in sh) else "shadow-ladder")}
-    du = sorted(float(d) for d in vals.get("durations", {}))
-    if du:
-        med = du[len(du) // 2]
-        out["motion"] = {"durations": du[:10], "median": med, "durationMultiplier": round(med / 275, 2),
-                         "easings": list(vals.get("easings", {}))[:5],
-                         "note": "declared CSS only; JavaScript-driven motion needs a live browser" if cap.get("method") == "declared" else ""}
-    else:
-        out["motion"] = {"note": "no motion found; do not infer Energy from this source"}
+    rad = measure_radius(vals, computed, dials)
+    if rad:
+        out["radius"] = rad
+    out["depth"] = depth
+    out["motion"] = measure_motion(vals, computed)
+    out["summary"] = summarize(out)
+    out["identity"] = {"rule": "measurements of the reference's identity, never values to adopt: carry role, chroma level, "
+                               "structure and rhythm; ask for the person's own brand color and typeface",
+                       "accentHue": accents[0]["hex"] if accents else None, "typefaces": ty.get("families", [])}
     out["neverInferred"] = ["brandPresence (always ask)", "intent, audience, principles"]
     return out
 
 
-def report(a):
-    L = [f"Source method: {a['method']} ({a.get('files') or 0} files)"]
-    c = a["color"]
-    L.append("Accent candidates: " + (", ".join(f"{x['hex']} x{x['count']} (C {x['oklch'][1]})" for x in c["accents"][:4]) or "none"))
-    if c.get("neutralTint"):
-        L.append(f"Neutral tint: chroma {c['neutralTint']['chroma']}, hue {c['neutralTint']['hue']} (Warmth dial)")
+def summarize(a):
+    S = {}
+
+    def put(key, value, block, basis=None):
+        if value is not None and block:
+            S[key] = {"value": value, "confidence": block.get("confidence", "low"), "count": block.get("count"),
+                      "basis": basis or block.get("basis")}
     t = a["type"]
-    L.append("Type families: " + (", ".join(t["families"]) or "none"))
-    if t["scale"]:
-        L.append(f"Type scale: base {t['scale']['base']} x {t['scale']['ratio']} ({t['scale']['reading']})")
-    if a["space"]:
-        L.append(f"Spacing unit: {a['space']['unit']} (share divisible {a['space']['shareDivisible']})")
-    if a.get("radius"):
-        L.append(f"Radius: most common {a['radius']['mostCommon']} -> Roundness dial about {a['radius']['roundnessDial']}")
-    L.append(f"Depth: {a['depth']['hint']}")
+    put("bodySize", (t.get("body") or {}).get("px"), t.get("body"))
+    if t.get("headingRatio"):
+        put("headingRatio", t["headingRatio"]["value"], {**t["headingRatio"], "count": t["largestHeading"]["count"]},
+            f"largest heading {t['largestHeading']['px']:g} px / body; one page can mislead")
+    c = a["color"]
+    if c.get("accents"):
+        top = c["accents"][0]
+        put("accent", {"chroma": top["oklch"][1], "usedOn": sorted(top["sources"])}, c,
+            c["basis"] + "; the hue is identity and is not carried")
+    if c.get("neutralTint"):
+        put("neutralTint", {"chroma": c["neutralTint"]["chroma"], "hue": c["neutralTint"]["hue"]}, c["neutralTint"],
+            "most-used mid-tone neutral")
+    r = a.get("radius") or {}
+    put("radiusControl", (r.get("control") or {}).get("px"), r.get("control"), r.get("basis"))
+    put("radiusContainer", (r.get("container") or {}).get("px"), r.get("container"), r.get("basis"))
+    put("depth", a["depth"]["hint"], a["depth"])
     m = a["motion"]
-    L.append(f"Motion: median {m['median']} ms, multiplier {m['durationMultiplier']}" if "median" in m else f"Motion: {m['note']}")
-    L.append("Always ask: brand presence, intent, audience. Never copy the accent hex, logo, typeface licence or copy.")
+    put("motionMedianMs", m.get("median"), m, m.get("note"))
+    if a.get("space"):
+        put("spaceUnit", a["space"]["unit"], a["space"], f"share divisible {a['space']['shareDivisible']}")
+    return S
+
+
+def report(a):
+    S = a["summary"]
+
+    def line(label, key, fmt):
+        if key not in S:
+            return f"{label}: not measured"
+        s = S[key]
+        return f"{label}: {fmt(s['value'])}  [{s['confidence']}, n={s['count']}]"
+    where = f"{a.get('files') or 0} files" if a["method"] == "declared" else f"{a.get('elements') or 0} elements"
+    L = [f"Source method: {a['method']} ({where})",
+         line("Body size", "bodySize", lambda v: f"{v:g} px"),
+         line("Heading ratio", "headingRatio", lambda v: f"x{v} (largest heading / body)"),
+         line("Accent", "accent", lambda v: f"chroma {v['chroma']} on {', '.join(v['usedOn'])} (hue not carried)"),
+         line("Neutral tint", "neutralTint", lambda v: f"chroma {v['chroma']}, hue {v['hue']} (Warmth dial)"),
+         line("Control radius", "radiusControl", lambda v: f"{v} px" if v != "full" else "full (pill)"),
+         line("Container radius", "radiusContainer", lambda v: f"{v} px" if v != "full" else "full"),
+         line("Depth", "depth", str),
+         line("Motion", "motionMedianMs", lambda v: f"median {v:g} ms, multiplier {a['motion']['durationMultiplier']}"),
+         line("Spacing unit", "spaceUnit", str)]
+    t = a["type"]
+    if t.get("scale"):
+        L.append(f"Type scale: base {t['scale']['base']:g} x {t['scale']['ratio']} ({t['scale']['reading']})")
+    if a.get("radius", {}).get("roundnessDial") is not None:
+        L.append(f"Roundness dial about {a['radius']['roundnessDial']}")
+    if a["depth"].get("ignored"):
+        L.append("Shadows ignored: " + ", ".join(f"{k} x{n}" for k, n in a["depth"]["ignored"].items()))
+    idn = a["identity"]
+    L.append("Identity, not carried unless this is the person's own product: " + ", ".join(filter(None, [f"accent hue {idn['accentHue']}" if idn["accentHue"] else "",
+                                                              "typeface " + ", ".join(idn["typefaces"]) if idn["typefaces"] else "",
+                                                              "logo, name, copy"])))
+    L.append("Always ask: brand presence, intent, audience.")
     return "\n".join(L)
 
 
@@ -224,6 +806,8 @@ def main():
     a = ap.parse_args()
     if a.from_json:
         cap = json.loads(Path(a.from_json).read_text(encoding="utf-8"))
+        if isinstance(cap, str):  # a browser tool may hand back the JSON as a quoted string
+            cap = json.loads(cap)
         cap.setdefault("method", "computed")
     elif a.paths:
         cap = scan_files(a.paths)

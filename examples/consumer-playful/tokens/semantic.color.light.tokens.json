@@ -38,8 +38,38 @@
         "$description": "Colored navigation (Energy 67+ with brand chrome allowed by Expression 67+)."
       },
       "tinted": {
-        "$value": "{color.accent.light.2}",
-        "$description": "Tinted container (Colorfulness 50+, L09 X rubric)."
+        "$value": "{color.accent.light.3}",
+        "$description": "Tinted container (Colorfulness 50+, L09 X rubric; Q-color-05)."
+      },
+      "glass": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "hex": "#ffffff",
+          "alpha": 0.72
+        },
+        "$description": "Glass for controls and navigation only, never content (DC-L04-15)."
+      },
+      "glass-fallback": {
+        "$value": "{color.white}",
+        "$description": "Solid twin under Reduce Transparency and Increase Contrast (DC-L04-16)."
+      },
+      "glass-dimming": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "hex": "#000000",
+          "alpha": 0.35
+        },
+        "$description": "35% dimming under clear glass over bright content (S-L15-073)."
       }
     },
     "text": {
@@ -165,12 +195,46 @@
           "$description": "Solid accent fill."
         },
         "bold-hover": {
-          "$value": "{color.accent.light.10}",
-          "$description": "Hover on the solid accent (+1 step)."
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              1.0,
+              0.4549,
+              0.3373
+            ],
+            "hex": "#ff7456"
+          },
+          "$description": "Hover: #ffffff at 16% over the solid (state layer, DC-L01-17).",
+          "$extensions": {
+            "opendesigner": {
+              "stateLayer": {
+                "over": "{color.accent.light.9}",
+                "color": "#ffffff",
+                "alpha": 0.16
+              }
+            }
+          }
         },
         "bold-pressed": {
-          "$value": "{color.accent.light.solid-pressed}",
-          "$description": "Pressed solid accent (+2 steps)."
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              1.0,
+              0.5294,
+              0.4235
+            ],
+            "hex": "#ff876c"
+          },
+          "$description": "Pressed: #ffffff at 27% over the solid (state layer).",
+          "$extensions": {
+            "opendesigner": {
+              "stateLayer": {
+                "over": "{color.accent.light.9}",
+                "color": "#ffffff",
+                "alpha": 0.27
+              }
+            }
+          }
         }
       },
       "disabled": {
@@ -181,18 +245,56 @@
         "$value": "{color.neutral.light.12}",
         "$description": "Tooltips and toasts: the inverted surface."
       },
+      "field": {
+        "$value": "{color.white}",
+        "$description": "Text field fill: outlined fields sit on the raised surface (Q-form-01)."
+      },
       "action": {
         "primary": {
           "$value": "{color.accent.light.9}",
           "$description": "Primary action. One per view (DC-L15-03, L15 P08)."
         },
         "primary-hover": {
-          "$value": "{color.accent.light.10}",
-          "$description": "Primary action hover."
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              1.0,
+              0.4549,
+              0.3373
+            ],
+            "hex": "#ff7456"
+          },
+          "$description": "Hover: #ffffff at 16% over the solid (state layer, DC-L01-17).",
+          "$extensions": {
+            "opendesigner": {
+              "stateLayer": {
+                "over": "{color.accent.light.9}",
+                "color": "#ffffff",
+                "alpha": 0.16
+              }
+            }
+          }
         },
         "primary-pressed": {
-          "$value": "{color.accent.light.solid-pressed}",
-          "$description": "Primary action pressed."
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              1.0,
+              0.5294,
+              0.4235
+            ],
+            "hex": "#ff876c"
+          },
+          "$description": "Pressed: #ffffff at 27% over the solid (state layer).",
+          "$extensions": {
+            "opendesigner": {
+              "stateLayer": {
+                "over": "{color.accent.light.9}",
+                "color": "#ffffff",
+                "alpha": 0.27
+              }
+            }
+          }
         }
       },
       "brand": {
@@ -207,6 +309,48 @@
         "bold": {
           "$value": "{color.accent2.light.9}",
           "$description": "accent2 solid fill."
+        },
+        "bold-hover": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.498,
+              0.4118,
+              0.0
+            ],
+            "hex": "#7f6900"
+          },
+          "$description": "Hover: #000000 at 9% over the solid (state layer, DC-L01-17).",
+          "$extensions": {
+            "opendesigner": {
+              "stateLayer": {
+                "over": "{color.accent2.light.9}",
+                "color": "#000000",
+                "alpha": 0.09
+              }
+            }
+          }
+        },
+        "bold-pressed": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.4549,
+              0.3725,
+              0.0
+            ],
+            "hex": "#745f00"
+          },
+          "$description": "Pressed: #000000 at 17% over the solid (state layer).",
+          "$extensions": {
+            "opendesigner": {
+              "stateLayer": {
+                "over": "{color.accent2.light.9}",
+                "color": "#000000",
+                "alpha": 0.17
+              }
+            }
+          }
         }
       },
       "accent3": {
@@ -217,6 +361,48 @@
         "bold": {
           "$value": "{color.accent3.light.9}",
           "$description": "accent3 solid fill."
+        },
+        "bold-hover": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.6157,
+              0.3059,
+              0.5647
+            ],
+            "hex": "#9d4e90"
+          },
+          "$description": "Hover: #000000 at 9% over the solid (state layer, DC-L01-17).",
+          "$extensions": {
+            "opendesigner": {
+              "stateLayer": {
+                "over": "{color.accent3.light.9}",
+                "color": "#000000",
+                "alpha": 0.09
+              }
+            }
+          }
+        },
+        "bold-pressed": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.5647,
+              0.2824,
+              0.5216
+            ],
+            "hex": "#904885"
+          },
+          "$description": "Pressed: #000000 at 16% over the solid (state layer).",
+          "$extensions": {
+            "opendesigner": {
+              "stateLayer": {
+                "over": "{color.accent3.light.9}",
+                "color": "#000000",
+                "alpha": 0.16
+              }
+            }
+          }
         }
       },
       "success": {
@@ -229,8 +415,46 @@
           "$description": "Success solid fill."
         },
         "bold-hover": {
-          "$value": "{color.success.light.10}",
-          "$description": "Success solid hover."
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.0,
+              0.4863,
+              0.2196
+            ],
+            "hex": "#007c38"
+          },
+          "$description": "Hover: #000000 at 9% over the solid (state layer, DC-L01-17).",
+          "$extensions": {
+            "opendesigner": {
+              "stateLayer": {
+                "over": "{color.success.light.9}",
+                "color": "#000000",
+                "alpha": 0.09
+              }
+            }
+          }
+        },
+        "bold-pressed": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.0,
+              0.4471,
+              0.2
+            ],
+            "hex": "#007233"
+          },
+          "$description": "Pressed: #000000 at 16% over the solid (state layer).",
+          "$extensions": {
+            "opendesigner": {
+              "stateLayer": {
+                "over": "{color.success.light.9}",
+                "color": "#000000",
+                "alpha": 0.16
+              }
+            }
+          }
         }
       },
       "warning": {
@@ -243,8 +467,46 @@
           "$description": "Warning solid fill."
         },
         "bold-hover": {
-          "$value": "{color.warning.light.10}",
-          "$description": "Warning solid hover."
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.8667,
+              0.6471,
+              0.2157
+            ],
+            "hex": "#dda537"
+          },
+          "$description": "Hover: #272321 at 9% over the solid (state layer, DC-L01-17).",
+          "$extensions": {
+            "opendesigner": {
+              "stateLayer": {
+                "over": "{color.warning.light.9}",
+                "color": "#272321",
+                "alpha": 0.09
+              }
+            }
+          }
+        },
+        "bold-pressed": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.8118,
+              0.6078,
+              0.2078
+            ],
+            "hex": "#cf9b35"
+          },
+          "$description": "Pressed: #272321 at 16% over the solid (state layer).",
+          "$extensions": {
+            "opendesigner": {
+              "stateLayer": {
+                "over": "{color.warning.light.9}",
+                "color": "#272321",
+                "alpha": 0.16
+              }
+            }
+          }
         }
       },
       "danger": {
@@ -257,8 +519,46 @@
           "$description": "Danger solid fill."
         },
         "bold-hover": {
-          "$value": "{color.danger.light.10}",
-          "$description": "Danger solid hover."
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.7725,
+              0.2,
+              0.1843
+            ],
+            "hex": "#c5332f"
+          },
+          "$description": "Hover: #000000 at 9% over the solid (state layer, DC-L01-17).",
+          "$extensions": {
+            "opendesigner": {
+              "stateLayer": {
+                "over": "{color.danger.light.9}",
+                "color": "#000000",
+                "alpha": 0.09
+              }
+            }
+          }
+        },
+        "bold-pressed": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.7137,
+              0.1843,
+              0.1725
+            ],
+            "hex": "#b62f2c"
+          },
+          "$description": "Pressed: #000000 at 16% over the solid (state layer).",
+          "$extensions": {
+            "opendesigner": {
+              "stateLayer": {
+                "over": "{color.danger.light.9}",
+                "color": "#000000",
+                "alpha": 0.16
+              }
+            }
+          }
         }
       },
       "info": {
@@ -271,8 +571,46 @@
           "$description": "Info solid fill."
         },
         "bold-hover": {
-          "$value": "{color.info.light.10}",
-          "$description": "Info solid hover."
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.0,
+              0.4431,
+              0.6549
+            ],
+            "hex": "#0071a7"
+          },
+          "$description": "Hover: #000000 at 9% over the solid (state layer, DC-L01-17).",
+          "$extensions": {
+            "opendesigner": {
+              "stateLayer": {
+                "over": "{color.info.light.9}",
+                "color": "#000000",
+                "alpha": 0.09
+              }
+            }
+          }
+        },
+        "bold-pressed": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.0,
+              0.4078,
+              0.6039
+            ],
+            "hex": "#00689a"
+          },
+          "$description": "Pressed: #000000 at 16% over the solid (state layer).",
+          "$extensions": {
+            "opendesigner": {
+              "stateLayer": {
+                "over": "{color.info.light.9}",
+                "color": "#000000",
+                "alpha": 0.16
+              }
+            }
+          }
         }
       }
     },
@@ -348,7 +686,7 @@
           "hex": "#272321",
           "alpha": 0.45
         },
-        "$description": "Modal backdrop (DC-L04-18)."
+        "$description": "Modal backdrop (DC-L04-18; Q-depth-06)."
       }
     },
     "shadow": {

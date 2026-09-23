@@ -514,7 +514,10 @@
     },
     "pinnedStep": 9,
     "brandAnchorStep": 9,
+    "brandExact": true,
     "brandPinFailed": false,
+    "brandAdjustedTo": null,
+    "brandContrastWhite": 5.15,
     "statusPeakHct": 84.0,
     "textMin": 4.5,
     "ramps": [
@@ -522,8 +525,32 @@
       "success",
       "warning",
       "danger",
-      "info"
-    ]
+      "info",
+      "discovery"
+    ],
+    "accentCount": 1,
+    "chart": {
+      "light": [
+        "#6a83ff",
+        "#886d00",
+        "#f1528c",
+        "#007e70",
+        "#c465e4",
+        "#397f00",
+        "#e96500",
+        "#00799c"
+      ],
+      "dark": [
+        "#4c5fe3",
+        "#a78700",
+        "#ca296c",
+        "#009b8b",
+        "#a142c0",
+        "#489d00",
+        "#b64d00",
+        "#0095c0"
+      ]
+    }
   },
   "ramps": {
     "accent": {
@@ -538,7 +565,7 @@
           "#34428a",
           "#647be1",
           "#637bf2",
-          "#7791ff",
+          "#6f89ff",
           "#91a8ff",
           "#c8d5fe"
         ],
@@ -581,8 +608,8 @@
             0.179
           ],
           [
-            0.687,
-            0.164
+            0.667,
+            0.176
           ],
           [
             0.75,
@@ -605,7 +632,7 @@
           "#b8c8ff",
           "#667eec",
           "#4a5cf0",
-          "#4353de",
+          "#4251dc",
           "#3a49c1",
           "#242f67"
         ],
@@ -648,7 +675,7 @@
             0.221
           ],
           [
-            0.519,
+            0.512,
             0.21
           ],
           [
@@ -674,7 +701,7 @@
           "#7c2f2a",
           "#cd6057",
           "#da5b51",
-          "#f17065",
+          "#e9695e",
           "#ff8c80",
           "#f9cbc5"
         ],
@@ -717,7 +744,7 @@
             0.162
           ],
           [
-            0.698,
+            0.674,
             0.162
           ],
           [
@@ -741,7 +768,7 @@
           "#ffb8af",
           "#d76258",
           "#d93834",
-          "#c02726",
+          "#c72f2c",
           "#a82321",
           "#5c201c"
         ],
@@ -784,7 +811,7 @@
             0.199
           ],
           [
-            0.526,
+            0.545,
             0.189
           ],
           [
@@ -794,6 +821,142 @@
           [
             0.334,
             0.089
+          ]
+        ]
+      }
+    },
+    "discovery": {
+      "dark": {
+        "hex": [
+          "#1a171f",
+          "#221e2b",
+          "#2d233d",
+          "#372850",
+          "#422d62",
+          "#4d3176",
+          "#5a338d",
+          "#9b67e6",
+          "#a263f8",
+          "#ad74ff",
+          "#bf9aff",
+          "#deceff"
+        ],
+        "textOnSolid": "light",
+        "oklch": [
+          [
+            0.211,
+            0.017
+          ],
+          [
+            0.245,
+            0.026
+          ],
+          [
+            0.28,
+            0.049
+          ],
+          [
+            0.314,
+            0.071
+          ],
+          [
+            0.349,
+            0.092
+          ],
+          [
+            0.383,
+            0.114
+          ],
+          [
+            0.418,
+            0.144
+          ],
+          [
+            0.626,
+            0.186
+          ],
+          [
+            0.639,
+            0.214
+          ],
+          [
+            0.68,
+            0.2
+          ],
+          [
+            0.758,
+            0.146
+          ],
+          [
+            0.88,
+            0.069
+          ]
+        ]
+      },
+      "light": {
+        "hex": [
+          "#fdfcff",
+          "#f6f2ff",
+          "#efe8ff",
+          "#e8deff",
+          "#e2d4ff",
+          "#dbc9ff",
+          "#d5bfff",
+          "#a168f0",
+          "#9b40ff",
+          "#8e35eb",
+          "#7628c7",
+          "#42236a"
+        ],
+        "textOnSolid": "light",
+        "oklch": [
+          [
+            0.993,
+            0.004
+          ],
+          [
+            0.969,
+            0.017
+          ],
+          [
+            0.944,
+            0.031
+          ],
+          [
+            0.919,
+            0.046
+          ],
+          [
+            0.894,
+            0.06
+          ],
+          [
+            0.869,
+            0.075
+          ],
+          [
+            0.845,
+            0.091
+          ],
+          [
+            0.641,
+            0.198
+          ],
+          [
+            0.596,
+            0.262
+          ],
+          [
+            0.554,
+            0.25
+          ],
+          [
+            0.486,
+            0.224
+          ],
+          [
+            0.337,
+            0.119
           ]
         ]
       }
@@ -810,7 +973,7 @@
           "#004d73",
           "#0089c9",
           "#008bcd",
-          "#00a0ea",
+          "#0099e0",
           "#3ab6ff",
           "#abdcff"
         ],
@@ -853,8 +1016,8 @@
             0.139
           ],
           [
-            0.672,
-            0.154
+            0.65,
+            0.149
           ],
           [
             0.741,
@@ -877,7 +1040,7 @@
           "#8fd1ff",
           "#008ed1",
           "#007cb7",
-          "#006a9d",
+          "#0070a6",
           "#005c8a",
           "#003755"
         ],
@@ -920,8 +1083,8 @@
             0.128
           ],
           [
-            0.5,
-            0.115
+            0.519,
+            0.119
           ],
           [
             0.454,
@@ -1082,7 +1245,7 @@
           "#005423",
           "#199547",
           "#009845",
-          "#13ae52",
+          "#00a74c",
           "#47c26c",
           "#b9dfc0"
         ],
@@ -1125,8 +1288,8 @@
             0.164
           ],
           [
-            0.659,
-            0.177
+            0.636,
+            0.175
           ],
           [
             0.726,
@@ -1149,7 +1312,7 @@
           "#87dc9a",
           "#089a47",
           "#00883d",
-          "#007433",
+          "#007b36",
           "#00652c",
           "#003d17"
         ],
@@ -1192,8 +1355,8 @@
             0.151
           ],
           [
-            0.488,
-            0.135
+            0.509,
+            0.14
           ],
           [
             0.444,
@@ -1218,9 +1381,9 @@
           "#5f4306",
           "#a47b2f",
           "#e6b55d",
-          "#f4c26b",
-          "#d2a555",
-          "#e4d4b9"
+          "#f7c56e",
+          "#fecf7f",
+          "#ebdbc0"
         ],
         "textOnSolid": "dark",
         "oklch": [
@@ -1261,15 +1424,15 @@
             0.12
           ],
           [
-            0.842,
+            0.851,
             0.12
           ],
           [
-            0.747,
+            0.879,
             0.112
           ],
           [
-            0.875,
+            0.898,
             0.04
           ]
         ]
@@ -1285,7 +1448,7 @@
           "#e7c58b",
           "#aa7f2c",
           "#efb239",
-          "#dfa634",
+          "#dda331",
           "#845d00",
           "#463001"
         ],
@@ -1328,7 +1491,7 @@
             0.148
           ],
           [
-            0.76,
+            0.752,
             0.14
           ],
           [
@@ -1373,6 +1536,15 @@
     ],
     "merged": [],
     "minSize": 11,
+    "scaleSizes": [
+      12,
+      14,
+      17,
+      20,
+      24,
+      29,
+      35
+    ],
     "weights": {
       "body": 400,
       "label": 400,
@@ -1392,7 +1564,9 @@
       "title.lg",
       "headline.sm",
       "headline.md",
-      "headline.lg"
+      "headline.lg",
+      "numeric.md",
+      "numeric.lg"
     ],
     "emphasized": [],
     "lineHeights": [
@@ -1404,7 +1578,23 @@
       36,
       44
     ],
-    "scripts": {}
+    "scripts": {},
+    "faces": {
+      "text": {
+        "face": "Inter",
+        "web": true,
+        "app": true,
+        "selfHost": true,
+        "open": true
+      },
+      "display": {
+        "face": "=textFace",
+        "web": true,
+        "app": true,
+        "selfHost": true,
+        "open": true
+      }
+    }
   },
   "space": {
     "unit": 4,
@@ -1433,6 +1623,13 @@
       "16": 1.5,
       "20": 1.5,
       "24": 2.0
+    },
+    "breakpoints": {
+      "sm": 640,
+      "md": 768,
+      "lg": 1024,
+      "xl": 1280,
+      "2xl": 1536
     }
   },
   "density": {
@@ -1661,6 +1858,15 @@
     },
     {
       "mode": "light",
+      "fg": "color.text.primary",
+      "bg": "color.bg.field",
+      "min": 4.5,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3",
+      "level": "error"
+    },
+    {
+      "mode": "light",
       "fg": "color.text.secondary",
       "bg": "color.surface.base",
       "min": 4.5,
@@ -1913,6 +2119,15 @@
     },
     {
       "mode": "light",
+      "fg": "color.text.on-success",
+      "bg": "color.bg.success.bold-pressed",
+      "min": 4.5,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3",
+      "level": "error"
+    },
+    {
+      "mode": "light",
       "fg": "color.text.warning",
       "bg": "color.surface.base",
       "min": 4.5,
@@ -1951,6 +2166,15 @@
       "mode": "light",
       "fg": "color.text.on-warning",
       "bg": "color.bg.warning.bold-hover",
+      "min": 4.5,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3",
+      "level": "error"
+    },
+    {
+      "mode": "light",
+      "fg": "color.text.on-warning",
+      "bg": "color.bg.warning.bold-pressed",
       "min": 4.5,
       "kind": "text",
       "rule": "WCAG 2.2 SC 1.4.3",
@@ -2003,6 +2227,15 @@
     },
     {
       "mode": "light",
+      "fg": "color.text.on-danger",
+      "bg": "color.bg.danger.bold-pressed",
+      "min": 4.5,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3",
+      "level": "error"
+    },
+    {
+      "mode": "light",
       "fg": "color.text.info",
       "bg": "color.surface.base",
       "min": 4.5,
@@ -2048,6 +2281,114 @@
     },
     {
       "mode": "light",
+      "fg": "color.text.on-info",
+      "bg": "color.bg.info.bold-pressed",
+      "min": 4.5,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3",
+      "level": "error"
+    },
+    {
+      "mode": "light",
+      "fg": "color.text.discovery",
+      "bg": "color.surface.base",
+      "min": 4.5,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3",
+      "level": "error"
+    },
+    {
+      "mode": "light",
+      "fg": "color.text.discovery",
+      "bg": "color.surface.raised",
+      "min": 4.5,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3",
+      "level": "error"
+    },
+    {
+      "mode": "light",
+      "fg": "color.text.discovery",
+      "bg": "color.bg.discovery.subtle",
+      "min": 4.5,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3",
+      "level": "error"
+    },
+    {
+      "mode": "light",
+      "fg": "color.text.on-discovery",
+      "bg": "color.bg.discovery.bold",
+      "min": 4.5,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3",
+      "level": "error"
+    },
+    {
+      "mode": "light",
+      "fg": "color.text.on-discovery",
+      "bg": "color.bg.discovery.bold-hover",
+      "min": 4.5,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3",
+      "level": "error"
+    },
+    {
+      "mode": "light",
+      "fg": "color.text.on-discovery",
+      "bg": "color.bg.discovery.bold-pressed",
+      "min": 4.5,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3",
+      "level": "error"
+    },
+    {
+      "mode": "light",
+      "fg": "color.workflow.todo.text",
+      "bg": "color.workflow.todo.bg",
+      "min": 4.5,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3",
+      "level": "error"
+    },
+    {
+      "mode": "light",
+      "fg": "color.workflow.in-progress.text",
+      "bg": "color.workflow.in-progress.bg",
+      "min": 4.5,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3",
+      "level": "error"
+    },
+    {
+      "mode": "light",
+      "fg": "color.workflow.done.text",
+      "bg": "color.workflow.done.bg",
+      "min": 4.5,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3",
+      "level": "error"
+    },
+    {
+      "mode": "light",
+      "fg": "color.workflow.blocked.text",
+      "bg": "color.workflow.blocked.bg",
+      "min": 4.5,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3",
+      "level": "error"
+    },
+    {
+      "mode": "light",
+      "fg": "color.workflow.review.text",
+      "bg": "color.workflow.review.bg",
+      "min": 4.5,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3",
+      "level": "error"
+    },
+    {
+      "mode": "light",
       "fg": "color.border.strong",
       "bg": "color.surface.base",
       "min": 3.0,
@@ -2129,6 +2470,15 @@
     },
     {
       "mode": "light",
+      "fg": "color.border.input",
+      "bg": "color.bg.field",
+      "min": 3.0,
+      "kind": "non-text",
+      "rule": "WCAG 2.2 SC 1.4.11",
+      "level": "error"
+    },
+    {
+      "mode": "light",
       "fg": "color.icon.default",
       "bg": "color.surface.base",
       "min": 3.0,
@@ -2252,6 +2602,78 @@
       "kind": "focus",
       "rule": "WCAG 2.2 SC 1.4.11, 2.4.13",
       "level": "error"
+    },
+    {
+      "mode": "light",
+      "fg": "color.chart.categorical.1",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "light",
+      "fg": "color.chart.categorical.2",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "light",
+      "fg": "color.chart.categorical.3",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "light",
+      "fg": "color.chart.categorical.4",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "light",
+      "fg": "color.chart.categorical.5",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "light",
+      "fg": "color.chart.categorical.6",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "light",
+      "fg": "color.chart.categorical.7",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "light",
+      "fg": "color.chart.categorical.8",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
     },
     {
       "mode": "light",
@@ -2345,6 +2767,15 @@
     },
     {
       "mode": "dark",
+      "fg": "color.text.primary",
+      "bg": "color.bg.field",
+      "min": 4.5,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3",
+      "level": "error"
+    },
+    {
+      "mode": "dark",
       "fg": "color.text.secondary",
       "bg": "color.surface.base",
       "min": 4.5,
@@ -2597,6 +3028,15 @@
     },
     {
       "mode": "dark",
+      "fg": "color.text.on-success",
+      "bg": "color.bg.success.bold-pressed",
+      "min": 4.5,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3",
+      "level": "error"
+    },
+    {
+      "mode": "dark",
       "fg": "color.text.warning",
       "bg": "color.surface.base",
       "min": 4.5,
@@ -2635,6 +3075,15 @@
       "mode": "dark",
       "fg": "color.text.on-warning",
       "bg": "color.bg.warning.bold-hover",
+      "min": 4.5,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3",
+      "level": "error"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.text.on-warning",
+      "bg": "color.bg.warning.bold-pressed",
       "min": 4.5,
       "kind": "text",
       "rule": "WCAG 2.2 SC 1.4.3",
@@ -2687,6 +3136,15 @@
     },
     {
       "mode": "dark",
+      "fg": "color.text.on-danger",
+      "bg": "color.bg.danger.bold-pressed",
+      "min": 4.5,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3",
+      "level": "error"
+    },
+    {
+      "mode": "dark",
       "fg": "color.text.info",
       "bg": "color.surface.base",
       "min": 4.5,
@@ -2732,6 +3190,114 @@
     },
     {
       "mode": "dark",
+      "fg": "color.text.on-info",
+      "bg": "color.bg.info.bold-pressed",
+      "min": 4.5,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3",
+      "level": "error"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.text.discovery",
+      "bg": "color.surface.base",
+      "min": 4.5,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3",
+      "level": "error"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.text.discovery",
+      "bg": "color.surface.raised",
+      "min": 4.5,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3",
+      "level": "error"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.text.discovery",
+      "bg": "color.bg.discovery.subtle",
+      "min": 4.5,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3",
+      "level": "error"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.text.on-discovery",
+      "bg": "color.bg.discovery.bold",
+      "min": 4.5,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3",
+      "level": "error"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.text.on-discovery",
+      "bg": "color.bg.discovery.bold-hover",
+      "min": 4.5,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3",
+      "level": "error"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.text.on-discovery",
+      "bg": "color.bg.discovery.bold-pressed",
+      "min": 4.5,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3",
+      "level": "error"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.workflow.todo.text",
+      "bg": "color.workflow.todo.bg",
+      "min": 4.5,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3",
+      "level": "error"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.workflow.in-progress.text",
+      "bg": "color.workflow.in-progress.bg",
+      "min": 4.5,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3",
+      "level": "error"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.workflow.done.text",
+      "bg": "color.workflow.done.bg",
+      "min": 4.5,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3",
+      "level": "error"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.workflow.blocked.text",
+      "bg": "color.workflow.blocked.bg",
+      "min": 4.5,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3",
+      "level": "error"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.workflow.review.text",
+      "bg": "color.workflow.review.bg",
+      "min": 4.5,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3",
+      "level": "error"
+    },
+    {
+      "mode": "dark",
       "fg": "color.border.strong",
       "bg": "color.surface.base",
       "min": 3.0,
@@ -2813,6 +3379,15 @@
     },
     {
       "mode": "dark",
+      "fg": "color.border.input",
+      "bg": "color.bg.field",
+      "min": 3.0,
+      "kind": "non-text",
+      "rule": "WCAG 2.2 SC 1.4.11",
+      "level": "error"
+    },
+    {
+      "mode": "dark",
       "fg": "color.icon.default",
       "bg": "color.surface.base",
       "min": 3.0,
@@ -2936,6 +3511,78 @@
       "kind": "focus",
       "rule": "WCAG 2.2 SC 1.4.11, 2.4.13",
       "level": "error"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.chart.categorical.1",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.chart.categorical.2",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.chart.categorical.3",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.chart.categorical.4",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.chart.categorical.5",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.chart.categorical.6",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.chart.categorical.7",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.chart.categorical.8",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
     },
     {
       "mode": "dark",
@@ -2964,5 +3611,7 @@
   "inputs": [
     "pointer"
   ],
-  "stateHash": "4d3b2a4eb26ff0cd"
+  "textScaling": "full",
+  "notes": [],
+  "stateHash": "e6912ebbc473edd6"
 }

@@ -6,6 +6,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
@@ -25,10 +26,13 @@ data class DsColors(
     val bgBrand: Color,
     val bgDangerBold: Color,
     val bgDangerBoldHover: Color,
+    val bgDangerBoldPressed: Color,
     val bgDangerSubtle: Color,
     val bgDisabled: Color,
+    val bgField: Color,
     val bgInfoBold: Color,
     val bgInfoBoldHover: Color,
+    val bgInfoBoldPressed: Color,
     val bgInfoSubtle: Color,
     val bgInverse: Color,
     val bgNeutralSubtle: Color,
@@ -36,14 +40,17 @@ data class DsColors(
     val bgNeutralSubtlePressed: Color,
     val bgSuccessBold: Color,
     val bgSuccessBoldHover: Color,
+    val bgSuccessBoldPressed: Color,
     val bgSuccessSubtle: Color,
     val bgWarningBold: Color,
     val bgWarningBoldHover: Color,
+    val bgWarningBoldPressed: Color,
     val bgWarningSubtle: Color,
     val borderAccent: Color,
     val borderDanger: Color,
     val borderDefault: Color,
     val borderFocus: Color,
+    val borderFocusInner: Color,
     val borderInfo: Color,
     val borderInput: Color,
     val borderStrong: Color,
@@ -85,36 +92,42 @@ data class DsColors(
 
 val DsLightColors = DsColors(
     bgAccentBold = Color(0xFF075C63),
-    bgAccentBoldHover = Color(0xFF015056),
-    bgAccentBoldPressed = Color(0xFF004247),
+    bgAccentBoldHover = Color(0xFF025057),
+    bgAccentBoldPressed = Color(0xFF00484E),
     bgAccentSubtle = Color(0xFFE2EDEF),
     bgAccentSubtleHover = Color(0xFFD4E6E8),
     bgAccentSubtlePressed = Color(0xFFC7DFE1),
     bgActionPrimary = Color(0xFF075C63),
-    bgActionPrimaryHover = Color(0xFF015056),
-    bgActionPrimaryPressed = Color(0xFF004247),
+    bgActionPrimaryHover = Color(0xFF025057),
+    bgActionPrimaryPressed = Color(0xFF00484E),
     bgBrand = Color(0xFF075C63),
     bgDangerBold = Color(0xFF963933),
-    bgDangerBoldHover = Color(0xFF802A25),
+    bgDangerBoldHover = Color(0xFF86302A),
+    bgDangerBoldPressed = Color(0xFF7D2722),
     bgDangerSubtle = Color(0xFFFBE7E5),
     bgDisabled = Color(0xFFEBEBED),
+    bgField = Color(0xFFFFFFFF),
     bgInfoBold = Color(0xFF005D8B),
-    bgInfoBoldHover = Color(0xFF004C73),
+    bgInfoBoldHover = Color(0xFF00527B),
+    bgInfoBoldPressed = Color(0xFF00496F),
     bgInfoSubtle = Color(0xFFDFEDF8),
     bgInverse = Color(0xFF191A1B),
     bgNeutralSubtle = Color(0xFFEBEBED),
     bgNeutralSubtleHover = Color(0xFFE2E3E5),
     bgNeutralSubtlePressed = Color(0xFFD9DADC),
     bgSuccessBold = Color(0xFF01662C),
-    bgSuccessBoldHover = Color(0xFF005423),
+    bgSuccessBoldHover = Color(0xFF005A26),
+    bgSuccessBoldPressed = Color(0xFF005121),
     bgSuccessSubtle = Color(0xFFE1EFE3),
     bgWarningBold = Color(0xFFE7B55B),
-    bgWarningBoldHover = Color(0xFFD8A954),
+    bgWarningBoldHover = Color(0xFFD5A652),
+    bgWarningBoldPressed = Color(0xFFFFD389),
     bgWarningSubtle = Color(0xFFF3EADD),
     borderAccent = Color(0xFF5D8E93),
     borderDanger = Color(0xFFBC726A),
     borderDefault = Color(0xFFC8C9CC),
-    borderFocus = Color(0xFF075C63),
+    borderFocus = Color(0xFF191A1B),
+    borderFocusInner = Color(0xFFFFFFFF),
     borderInfo = Color(0xFF4A8CB8),
     borderInput = Color(0xFF858689),
     borderStrong = Color(0xFF858689),
@@ -156,36 +169,42 @@ val DsLightColors = DsColors(
 
 val DsDarkColors = DsColors(
     bgAccentBold = Color(0xFF075C63),
-    bgAccentBoldHover = Color(0xFF015056),
-    bgAccentBoldPressed = Color(0xFF004247),
+    bgAccentBoldHover = Color(0xFF025057),
+    bgAccentBoldPressed = Color(0xFF00484E),
     bgAccentSubtle = Color(0xFFE2EDEF),
     bgAccentSubtleHover = Color(0xFFD4E6E8),
     bgAccentSubtlePressed = Color(0xFFC7DFE1),
     bgActionPrimary = Color(0xFF075C63),
-    bgActionPrimaryHover = Color(0xFF015056),
-    bgActionPrimaryPressed = Color(0xFF004247),
+    bgActionPrimaryHover = Color(0xFF025057),
+    bgActionPrimaryPressed = Color(0xFF00484E),
     bgBrand = Color(0xFF075C63),
     bgDangerBold = Color(0xFF963933),
-    bgDangerBoldHover = Color(0xFF802A25),
+    bgDangerBoldHover = Color(0xFF86302A),
+    bgDangerBoldPressed = Color(0xFF7D2722),
     bgDangerSubtle = Color(0xFFFBE7E5),
     bgDisabled = Color(0xFFEBEBED),
+    bgField = Color(0xFFFFFFFF),
     bgInfoBold = Color(0xFF005D8B),
-    bgInfoBoldHover = Color(0xFF004C73),
+    bgInfoBoldHover = Color(0xFF00527B),
+    bgInfoBoldPressed = Color(0xFF00496F),
     bgInfoSubtle = Color(0xFFDFEDF8),
     bgInverse = Color(0xFF191A1B),
     bgNeutralSubtle = Color(0xFFEBEBED),
     bgNeutralSubtleHover = Color(0xFFE2E3E5),
     bgNeutralSubtlePressed = Color(0xFFD9DADC),
     bgSuccessBold = Color(0xFF01662C),
-    bgSuccessBoldHover = Color(0xFF005423),
+    bgSuccessBoldHover = Color(0xFF005A26),
+    bgSuccessBoldPressed = Color(0xFF005121),
     bgSuccessSubtle = Color(0xFFE1EFE3),
     bgWarningBold = Color(0xFFE7B55B),
-    bgWarningBoldHover = Color(0xFFD8A954),
+    bgWarningBoldHover = Color(0xFFD5A652),
+    bgWarningBoldPressed = Color(0xFFFFD389),
     bgWarningSubtle = Color(0xFFF3EADD),
     borderAccent = Color(0xFF5D8E93),
     borderDanger = Color(0xFFBC726A),
     borderDefault = Color(0xFFC8C9CC),
-    borderFocus = Color(0xFF075C63),
+    borderFocus = Color(0xFF191A1B),
+    borderFocusInner = Color(0xFFFFFFFF),
     borderInfo = Color(0xFF4A8CB8),
     borderInput = Color(0xFF858689),
     borderStrong = Color(0xFF858689),
@@ -298,21 +317,24 @@ object DsSpace {
     val spaceTargetGap = 12.dp
 }
 
+// text: Atkinson Hyperlegible. Add its font files to res/font and replace FontFamily.Default with FontFamily(Font(R.font.<file>)).
+val DsTextFamily: FontFamily = FontFamily.Default
+
 object DsType {
-    val bodyLg = TextStyle(fontSize = 23.sp, lineHeight = 32.sp, fontWeight = FontWeight(400), letterSpacing = 0.em)
-    val bodyMd = TextStyle(fontSize = 19.sp, lineHeight = 28.sp, fontWeight = FontWeight(400), letterSpacing = 0.em)
-    val bodySm = TextStyle(fontSize = 16.sp, lineHeight = 24.sp, fontWeight = FontWeight(400), letterSpacing = 0.em)
-    val codeMd = TextStyle(fontSize = 19.sp, lineHeight = 28.sp, fontWeight = FontWeight(400), letterSpacing = 0.em)
-    val codeSm = TextStyle(fontSize = 16.sp, lineHeight = 24.sp, fontWeight = FontWeight(400), letterSpacing = 0.em)
-    val headlineLg = TextStyle(fontSize = 47.sp, lineHeight = 52.sp, fontWeight = FontWeight(600), letterSpacing = -0.01.em)
-    val headlineMd = TextStyle(fontSize = 39.sp, lineHeight = 48.sp, fontWeight = FontWeight(600), letterSpacing = -0.01.em)
-    val headlineSm = TextStyle(fontSize = 33.sp, lineHeight = 40.sp, fontWeight = FontWeight(600), letterSpacing = -0.01.em)
-    val labelLg = TextStyle(fontSize = 19.sp, lineHeight = 28.sp, fontWeight = FontWeight(400), letterSpacing = 0.em)
-    val labelMd = TextStyle(fontSize = 16.sp, lineHeight = 24.sp, fontWeight = FontWeight(400), letterSpacing = 0.em)
-    val labelSm = TextStyle(fontSize = 16.sp, lineHeight = 24.sp, fontWeight = FontWeight(400), letterSpacing = 0.05.em)
-    val titleLg = TextStyle(fontSize = 27.sp, lineHeight = 32.sp, fontWeight = FontWeight(600), letterSpacing = 0.em)
-    val titleMd = TextStyle(fontSize = 23.sp, lineHeight = 32.sp, fontWeight = FontWeight(600), letterSpacing = 0.em)
-    val titleSm = TextStyle(fontSize = 19.sp, lineHeight = 28.sp, fontWeight = FontWeight(600), letterSpacing = 0.em)
+    val bodyLg = TextStyle(fontFamily = DsTextFamily, fontSize = 23.sp, lineHeight = 32.sp, fontWeight = FontWeight(400), letterSpacing = 0.em)
+    val bodyMd = TextStyle(fontFamily = DsTextFamily, fontSize = 19.sp, lineHeight = 28.sp, fontWeight = FontWeight(400), letterSpacing = 0.em)
+    val bodySm = TextStyle(fontFamily = DsTextFamily, fontSize = 16.sp, lineHeight = 24.sp, fontWeight = FontWeight(400), letterSpacing = 0.em)
+    val codeMd = TextStyle(fontFamily = DsTextFamily, fontSize = 19.sp, lineHeight = 28.sp, fontWeight = FontWeight(400), letterSpacing = 0.em)
+    val codeSm = TextStyle(fontFamily = DsTextFamily, fontSize = 16.sp, lineHeight = 24.sp, fontWeight = FontWeight(400), letterSpacing = 0.em)
+    val headlineLg = TextStyle(fontFamily = DsTextFamily, fontSize = 47.sp, lineHeight = 52.sp, fontWeight = FontWeight(600), letterSpacing = -0.01.em)
+    val headlineMd = TextStyle(fontFamily = DsTextFamily, fontSize = 39.sp, lineHeight = 48.sp, fontWeight = FontWeight(600), letterSpacing = -0.01.em)
+    val headlineSm = TextStyle(fontFamily = DsTextFamily, fontSize = 33.sp, lineHeight = 40.sp, fontWeight = FontWeight(600), letterSpacing = -0.01.em)
+    val labelLg = TextStyle(fontFamily = DsTextFamily, fontSize = 19.sp, lineHeight = 28.sp, fontWeight = FontWeight(400), letterSpacing = 0.em)
+    val labelMd = TextStyle(fontFamily = DsTextFamily, fontSize = 16.sp, lineHeight = 24.sp, fontWeight = FontWeight(400), letterSpacing = 0.em)
+    val labelSm = TextStyle(fontFamily = DsTextFamily, fontSize = 16.sp, lineHeight = 24.sp, fontWeight = FontWeight(400), letterSpacing = 0.05.em)
+    val titleLg = TextStyle(fontFamily = DsTextFamily, fontSize = 27.sp, lineHeight = 32.sp, fontWeight = FontWeight(600), letterSpacing = 0.em)
+    val titleMd = TextStyle(fontFamily = DsTextFamily, fontSize = 23.sp, lineHeight = 32.sp, fontWeight = FontWeight(600), letterSpacing = 0.em)
+    val titleSm = TextStyle(fontFamily = DsTextFamily, fontSize = 19.sp, lineHeight = 28.sp, fontWeight = FontWeight(600), letterSpacing = 0.em)
 }
 
 object DsMotion {

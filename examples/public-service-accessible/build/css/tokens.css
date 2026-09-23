@@ -40,9 +40,10 @@
   --ds-color-accent-light-7: #abd0d4;
   --ds-color-accent-light-8: #5d8e93;
   --ds-color-accent-light-9: #075c63;
-  --ds-color-accent-light-10: #015056;
+  --ds-color-accent-light-10: #025057;
   --ds-color-accent-light-11: #004247;
   --ds-color-accent-light-12: #163032;
+  --ds-color-accent-light-solid-pressed: #00484e;
   --ds-color-accent-dark-1: #161919;
   --ds-color-accent-dark-2: #1c2021;
   --ds-color-accent-dark-3: #20292a;
@@ -52,9 +53,10 @@
   --ds-color-accent-dark-7: #2d4d51;
   --ds-color-accent-dark-8: #5c898e;
   --ds-color-accent-dark-9: #75abb1;
-  --ds-color-accent-dark-10: #91c7cd;
+  --ds-color-accent-dark-10: #84babf;
   --ds-color-accent-dark-11: #acdfe4;
   --ds-color-accent-dark-12: #d5e7e8;
+  --ds-color-accent-dark-solid-pressed: #8ec5cb;
   --ds-color-success-light-1: #fafefb;
   --ds-color-success-light-2: #eff5f0;
   --ds-color-success-light-3: #e1efe3;
@@ -64,9 +66,10 @@
   --ds-color-success-light-7: #a7d4af;
   --ds-color-success-light-8: #599365;
   --ds-color-success-light-9: #01662c;
-  --ds-color-success-light-10: #005423;
+  --ds-color-success-light-10: #005a26;
   --ds-color-success-light-11: #00451c;
   --ds-color-success-light-12: #14321b;
+  --ds-color-success-light-solid-pressed: #005121;
   --ds-color-success-dark-1: #161916;
   --ds-color-success-dark-2: #1b211c;
   --ds-color-success-dark-3: #1f2a21;
@@ -76,9 +79,10 @@
   --ds-color-success-dark-7: #2a5033;
   --ds-color-success-dark-8: #578d63;
   --ds-color-success-dark-9: #70b07e;
-  --ds-color-success-dark-10: #8bcc98;
+  --ds-color-success-dark-10: #7ebf8b;
   --ds-color-success-dark-11: #a7e4b2;
   --ds-color-success-dark-12: #d4e9d7;
+  --ds-color-success-dark-solid-pressed: #89ca96;
   --ds-color-warning-light-1: #fffcf9;
   --ds-color-warning-light-2: #f8f4ed;
   --ds-color-warning-light-3: #f3eadd;
@@ -88,10 +92,10 @@
   --ds-color-warning-light-7: #e2c697;
   --ds-color-warning-light-8: #a48042;
   --ds-color-warning-light-9: #e7b55b;
-  --ds-color-warning-light-10: #d8a954;
+  --ds-color-warning-light-10: #d5a652;
   --ds-color-warning-light-11: #604200;
   --ds-color-warning-light-12: #3b2906;
-  --ds-color-warning-light-solid-pressed: #cd9e49;
+  --ds-color-warning-light-solid-pressed: #ffd389;
   --ds-color-warning-dark-1: #1a1814;
   --ds-color-warning-dark-2: #231f1a;
   --ds-color-warning-dark-3: #2e261b;
@@ -101,9 +105,10 @@
   --ds-color-warning-dark-7: #5c441a;
   --ds-color-warning-dark-8: #9d7c42;
   --ds-color-warning-dark-9: #dfb772;
-  --ds-color-warning-dark-10: #edc47f;
+  --ds-color-warning-dark-10: #f0c781;
   --ds-color-warning-dark-11: #f7d090;
   --ds-color-warning-dark-12: #efe2cc;
+  --ds-color-warning-dark-solid-pressed: #fdd48e;
   --ds-color-danger-light-1: #fffcfc;
   --ds-color-danger-light-2: #fbf2f1;
   --ds-color-danger-light-3: #fbe7e5;
@@ -113,9 +118,10 @@
   --ds-color-danger-light-7: #f8bbb3;
   --ds-color-danger-light-8: #bc726a;
   --ds-color-danger-light-9: #963933;
-  --ds-color-danger-light-10: #802a25;
+  --ds-color-danger-light-10: #86302a;
   --ds-color-danger-light-11: #6c211d;
   --ds-color-danger-light-12: #46211e;
+  --ds-color-danger-light-solid-pressed: #7d2722;
   --ds-color-danger-dark-1: #1c1716;
   --ds-color-danger-dark-2: #261e1d;
   --ds-color-danger-dark-3: #332422;
@@ -125,9 +131,10 @@
   --ds-color-danger-dark-7: #6b3b36;
   --ds-color-danger-dark-8: #b46f67;
   --ds-color-danger-dark-9: #df8c83;
-  --ds-color-danger-dark-10: #fda89e;
+  --ds-color-danger-dark-10: #ef9b91;
   --ds-color-danger-dark-11: #ffc9c2;
   --ds-color-danger-dark-12: #fbddd9;
+  --ds-color-danger-dark-solid-pressed: #fba69c;
   --ds-color-info-light-1: #fbfdff;
   --ds-color-info-light-2: #eef5fa;
   --ds-color-info-light-3: #dfedf8;
@@ -137,9 +144,10 @@
   --ds-color-info-light-7: #9ed0f3;
   --ds-color-info-light-8: #4a8cb8;
   --ds-color-info-light-9: #005d8b;
-  --ds-color-info-light-10: #004c73;
+  --ds-color-info-light-10: #00527b;
   --ds-color-info-light-11: #003f5f;
   --ds-color-info-light-12: #0a2f45;
+  --ds-color-info-light-solid-pressed: #00496f;
   --ds-color-info-dark-1: #15191c;
   --ds-color-info-dark-2: #1a2025;
   --ds-color-info-dark-3: #1d2932;
@@ -149,9 +157,10 @@
   --ds-color-info-dark-7: #1f4c69;
   --ds-color-info-dark-8: #4a88b1;
   --ds-color-info-dark-9: #60a9db;
-  --ds-color-info-dark-10: #7cc5f8;
+  --ds-color-info-dark-10: #6fb8ea;
   --ds-color-info-dark-11: #abdcff;
   --ds-color-info-dark-12: #cfe7f8;
+  --ds-color-info-dark-solid-pressed: #7ac3f6;
   --ds-color-neutral-alpha-light-2: rgb(5 26 47 / 0.048);
   --ds-color-neutral-alpha-light-3: rgb(2 2 27 / 0.079);
   --ds-color-neutral-alpha-light-4: rgb(1 9 27 / 0.114);
@@ -180,7 +189,6 @@
   --ds-opacity-state-drag: 0.16;
   --ds-opacity-disabled-container: 0.12;
   --ds-opacity-disabled-content: 0.38;
-  --ds-font-size-13: 0.8125rem;
   --ds-font-size-16: 1rem;
   --ds-font-size-19: 1.1875rem;
   --ds-font-size-23: 1.4375rem;
@@ -404,35 +412,41 @@
   --ds-color-bg-accent-subtle-pressed: var(--ds-color-accent-light-5);
   --ds-color-bg-accent-bold: var(--ds-color-accent-light-9);
   --ds-color-bg-accent-bold-hover: var(--ds-color-accent-light-10);
-  --ds-color-bg-accent-bold-pressed: var(--ds-color-accent-light-11);
+  --ds-color-bg-accent-bold-pressed: var(--ds-color-accent-light-solid-pressed);
   --ds-color-bg-disabled: var(--ds-color-neutral-light-3);
   --ds-color-bg-inverse: var(--ds-color-neutral-light-12);
+  --ds-color-bg-field: var(--ds-color-white);
   --ds-color-bg-action-primary: var(--ds-color-accent-light-9);
   --ds-color-bg-action-primary-hover: var(--ds-color-accent-light-10);
-  --ds-color-bg-action-primary-pressed: var(--ds-color-accent-light-11);
+  --ds-color-bg-action-primary-pressed: var(--ds-color-accent-light-solid-pressed);
   --ds-color-bg-brand: var(--ds-color-accent-light-9);
   --ds-color-bg-success-subtle: var(--ds-color-success-light-3);
   --ds-color-bg-success-bold: var(--ds-color-success-light-9);
   --ds-color-bg-success-bold-hover: var(--ds-color-success-light-10);
+  --ds-color-bg-success-bold-pressed: var(--ds-color-success-light-solid-pressed);
   --ds-color-bg-warning-subtle: var(--ds-color-warning-light-3);
   --ds-color-bg-warning-bold: var(--ds-color-warning-light-9);
   --ds-color-bg-warning-bold-hover: var(--ds-color-warning-light-10);
+  --ds-color-bg-warning-bold-pressed: var(--ds-color-warning-light-solid-pressed);
   --ds-color-bg-danger-subtle: var(--ds-color-danger-light-3);
   --ds-color-bg-danger-bold: var(--ds-color-danger-light-9);
   --ds-color-bg-danger-bold-hover: var(--ds-color-danger-light-10);
+  --ds-color-bg-danger-bold-pressed: var(--ds-color-danger-light-solid-pressed);
   --ds-color-bg-info-subtle: var(--ds-color-info-light-3);
   --ds-color-bg-info-bold: var(--ds-color-info-light-9);
   --ds-color-bg-info-bold-hover: var(--ds-color-info-light-10);
+  --ds-color-bg-info-bold-pressed: var(--ds-color-info-light-solid-pressed);
   --ds-color-border-subtle: var(--ds-color-neutral-light-6);
   --ds-color-border-default: var(--ds-color-neutral-light-7);
   --ds-color-border-strong: var(--ds-color-neutral-light-8);
   --ds-color-border-input: var(--ds-color-neutral-light-8);
-  --ds-color-border-focus: var(--ds-color-accent-light-9);
+  --ds-color-border-focus: var(--ds-color-neutral-light-12);
   --ds-color-border-accent: var(--ds-color-accent-light-8);
   --ds-color-border-success: var(--ds-color-success-light-8);
   --ds-color-border-warning: var(--ds-color-warning-light-8);
   --ds-color-border-danger: var(--ds-color-danger-light-8);
   --ds-color-border-info: var(--ds-color-info-light-8);
+  --ds-color-border-focus-inner: var(--ds-color-white);
   --ds-color-icon-default: var(--ds-color-neutral-light-11);
   --ds-color-icon-subtle: var(--ds-color-neutral-light-10);
   --ds-color-icon-accent: var(--ds-color-accent-light-11);
@@ -558,7 +572,7 @@
     --ds-color-warning-light-11: color(display-p3 0.369 0.2604 0);
     --ds-color-danger-dark-11: color(display-p3 1 0.7813 0.745);
     --ds-color-info-light-9: color(display-p3 0.0683 0.359 0.5688);
-    --ds-color-info-light-10: color(display-p3 0 0.2931 0.4848);
+    --ds-color-info-light-10: color(display-p3 0.0276 0.3146 0.5102);
     --ds-color-info-light-11: color(display-p3 0 0.2409 0.4039);
   }
 }
@@ -582,6 +596,7 @@
 .ds-focus-ring:focus-visible {
   outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus);
   outline-offset: var(--ds-focus-ring-offset);
+  box-shadow: 0 0 0 var(--ds-focus-ring-offset) var(--ds-color-border-focus-inner);
 }
 @media (forced-colors: active) {
   .ds-focus-ring:focus-visible { outline-color: Highlight; }

@@ -37,7 +37,7 @@ In a chat-only host, ask the person to upload `state.json`, `decisions.md` and D
 | "New brand color", "dark mode", "add Android" | An area reopened | Ask that area's questions at its current zoom level |
 | "Make it feel more playful", a new direction | A challenge | It touches most decisions. Say what would move (`graph.json`), offer safe choices and risks, and change nothing without a clear yes |
 | "Why is X like this?" | A question | Answer from `decisions.md` and the cards. Change nothing |
-| A value that doesn't exist yet | A token addition | Add it through the engine with a reason. Never hard-code it |
+| A value that doesn't exist yet | A token addition | Add it through the engine with a reason (section 4, "Add a token"). Never hard-code it |
 
 ## 3. Locks and conflicts
 - Anything in `state.json` → `locks` (brand colors, contrast target, reduced motion, anything the owner locked) changes only with explicit consent. Name the lock and ask.
@@ -47,15 +47,28 @@ In a chat-only host, ask the person to upload `state.json`, `decisions.md` and D
 ## 4. Make the change
 1. Show it first: the current value, the new value, and what else moves (`graph.json`). Use a template from `<opendesigner>/assets/templates/` when the host can show one.
 2. Apply it with `engine.py set <Q-id or path> <value> --why "..."`. Add `--lock` if the owner wants it locked. Use `--force` only with consent to change a locked value.
-3. Refresh with `engine.py generate`, then `engine.py validate` (fix errors first), then `engine.py design-md`, then the exports the project uses.
+3. Refresh with `engine.py build`. It generates, validates (fix errors first), and rewrites the exports, DESIGN.md and the preview.
 4. Show what changed: `git diff --stat opendesigner/ DESIGN.md` and a short table of changed values. Refresh `opendesigner/RATIONALE.md` if a big decision changed.
+
+### Add a token
+When the work needs a value the system doesn't have, first check that no existing token fits: reuse beats a near-duplicate. Then add it with a plain name for its role, in the same family as its neighbors:
+```
+engine.py set size.row.md 36 --why "table rows in the jobs list"
+engine.py set color.bg.highlight '"#fff4c2"' --why "highlighted search matches"
+engine.py set dark:color.bg.highlight '"#3a3000"' --why "the same highlight in dark mode"
+engine.py set compact:space.inset.md 10 --why "tighter cards in compact mode"
+```
+- A new path creates the token. The engine takes its type from the value and writes it to the right file. A new color goes into the light and dark files; a new size has one value for every mode.
+- A prefix (`dark:`, `compact:`) changes one mode of a token that already differs by mode, such as a color or a spacing step. Without a prefix, a change to a spacing or control-size token changes the default density only.
+- Colors you add still have to pass contrast: run `engine.py build` and fix what `validate` reports.
+- Tell the person the token's name and where to use it, in one line. Then use the token in the code, never the raw value.
 
 ## 5. End of every implementation: review
 After building anything with the system (a page, a component, a refactor):
 1. Run `engine.py review` (add `--project <folder>` to scan a specific folder; `--strict` makes findings fail the run).
 2. Re-read the DESIGN.md sections you touched.
 3. For every new value the work needed, add a decision. Never inline it.
-4. Fix any drift that review lists (raw colors, sizes, radii, shadows or durations in code that aren't tokens). Replace each with the nearest token, or add a token if it's genuinely new. Apply only what the person approves.
+4. Fix any drift that review lists (raw colors, sizes, radii, shadows or durations in code that aren't tokens). Replace each with the token for that role: a background gets a `bg` token, text gets a `text` token, a border gets a `border` token, a hover transition gets the feedback transition. The nearest value alone can pick the wrong role. Add a token if the value is genuinely new. Apply only what the person approves.
 
 ## 6. Tell the team
 End with a change note that can be read in 20 seconds:

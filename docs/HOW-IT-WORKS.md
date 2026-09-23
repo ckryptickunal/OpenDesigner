@@ -61,7 +61,7 @@ You start with a rough version of the whole system. Then you zoom in only where 
 
 | Level | Name | What you get | Rough size |
 |---|---|---|---|
-| 0 | sketch | A complete but coarse system: every token exists, and every `DESIGN.md` section is filled from sourced defaults | 5 questions, about 3 minutes |
+| 0 | sketch | A complete but coarse system: every token exists, and every `DESIGN.md` section is filled from sourced defaults | 3 to 5 questions (3 in plain voice), about 3 minutes |
 | 1 | broad | One short screen for each foundation: style, density, color use, text, corners, depth, motion, and where the files live | 8 questions, about 8 minutes |
 | 2 | defined | One area at a time, for example Color: ramps, roles, contrast | 1 to 15 questions per area |
 | 3 | detailed | Components, patterns and the fine print of each area | the rest |
@@ -199,6 +199,6 @@ Inside this repository, fixes go straight into the source files, then get checke
 
 ## 11. Your steps and your privacy
 
-If you say yes, the model keeps a private log of your steps on your computer. It notes which questions came up, how long they took, and where you got stuck. A report from it shows where the questions can get shorter. Details: [JOURNEY-TRACKER.md](JOURNEY-TRACKER.md).
+If you say yes, the model keeps a private log of your steps with your project (on your computer, or in the chat's project files in web tools). It notes which questions came up, how long they took, and where you got stuck. A report from it shows where the questions can get shorter. Details: [JOURNEY-TRACKER.md](JOURNEY-TRACKER.md).
 
 Sending an anonymous summary to the maintainers is a separate yes. It never includes your answers, names, files or anything you typed. No server collects reports yet. Details: [PRIVACY.md](PRIVACY.md).

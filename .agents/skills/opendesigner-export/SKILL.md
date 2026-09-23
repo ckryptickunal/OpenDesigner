@@ -18,23 +18,32 @@ The engine is `scripts/engine.py` in this skill when it was installed from a rel
 
 ## 1. Code exports (always available)
 ```
-python3 <engine> generate
-python3 <engine> validate                   must pass before exporting
-python3 <engine> export --format all        or one of: css tailwind dtcg figma paper swift compose
-python3 <engine> design-md
+python3 <engine> build                      generate, validate, then every export, DESIGN.md and the preview
+python3 <engine> export --format tailwind   one format only: css tailwind dtcg figma paper swift compose, or all
 ```
 | Format | Output in `opendesigner/` | Use it |
 |---|---|---|
 | (canonical) | `tokens/` (DTCG sets plus `opendesigner.resolver.json` for modes) | Style Dictionary, Terrazzo, Tokens Studio, Penpot |
 | `dtcg` | `build/dtcg/<name>.resolver.json` | A single resolver file for tools that take one entry point |
 | `css` | `build/css/tokens.css` (custom properties, light and dark) | Import once at the app root |
-| `tailwind` | `build/tailwind/theme.css` (Tailwind v4 `@theme`) | `@import` it after Tailwind in the main CSS file |
-| `swift` | `build/swift/DesignTokens.swift` | Add to the iOS target |
+| `tailwind` | `build/tailwind/theme.css` (Tailwind v4 `@theme`; it imports `../css/tokens.css` itself) | One line after Tailwind in the main CSS file (below) |
+| `swift` | `build/swift/DesignTokens.swift` (Dynamic Type text styles; body 17 pt) | Add to the iOS target |
 | `compose` | `build/compose/DesignTokens.kt` | Add to the Android UI module |
 | `figma` | `build/figma/variables.json` and `build/figma/import/<Collection>.<Mode>.tokens.json` | Import in Figma (below) when there is no MCP |
 | `paper` | `build/paper/tokens.json`, `build/paper/tokens.light.css`, `tokens.dark.css` | Paper tokens (below) |
 
-Ask before wiring an export into the person's code, such as their main CSS file, Tailwind config or build. Offer to append `<opendesigner>/assets/output/AGENTS-snippet.md` to their AGENTS.md, so later agents use the tokens.
+**Tailwind v4 wiring.** In the main CSS file, for example `src/index.css`:
+```css
+@import "tailwindcss";
+@import "../opendesigner/build/tailwind/theme.css";
+```
+- Adjust the relative path to where the CSS file sits. `theme.css` brings in `tokens.css`, so light and dark, density and reduced motion work through CSS variables.
+- Utility classes follow the token roles, for example `bg-action-primary`, `text-fg-primary`, `rounded-control` and `h-control-md`. DESIGN.md lists the class for each role.
+- By default the export switches off Tailwind's own palette, radius, shadow and text sizes, so a stray `bg-blue-600` or `rounded-lg` doesn't compile. To keep them, run `engine.py set exports.tailwindReset false`, then `engine.py build`.
+
+**Fonts per platform.** If `raw.fontLicence` says the brand font's licence doesn't cover apps, the Swift and Compose files use the system font instead, and say so. Tell the person in one line before they ship an app build.
+
+Ask before wiring an export into the person's code, such as their main CSS file, Tailwind config or build. For an engineer, name the exact files and lines, as above. Offer to append `<opendesigner>/assets/output/AGENTS-snippet.md` to their AGENTS.md, so later agents use the tokens.
 
 ## 2. Figma
 Detect what is connected before promising anything:

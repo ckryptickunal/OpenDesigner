@@ -109,15 +109,56 @@
       "brandExact": true,
       "tintTowardBrand": false,
       "motionOff": false,
-      "darkMode": true
+      "darkMode": true,
+      "p3": true
     },
     "overrides": {},
+    "brandFace": null,
+    "fontLicence": {
+      "web": null,
+      "app": null,
+      "selfHost": null
+    },
+    "fontClass": null,
+    "accentCount": null,
+    "accentHarmony": "triadic",
+    "neutralTint": null,
+    "chartPalette": "categorical-8",
+    "statusSet": "workflow",
+    "stateMethod": "hybrid",
+    "darkBase": null,
+    "surfaceLayers": null,
+    "focusStyle": "brand",
+    "focusOffset": 2,
+    "fieldStyle": "outlined",
+    "textScaling": "full",
+    "lineHeightGrid": 4,
+    "tracking": "size-table",
+    "numericStyles": true,
+    "spaceLadder": "hybrid",
+    "spaceExtras": [],
+    "groupRatio": null,
+    "breakpoints": "tailwind",
+    "glass": null,
+    "borderWidths": [
+      1,
+      2,
+      4
+    ],
+    "scrim": null,
+    "stateOpacity": "material",
+    "reducedMotion": "replace",
+    "iconStroke": null,
+    "devices": [],
+    "situations": [],
+    "domain": null,
+    "minTarget": null,
+    "focusWidth": 2,
     "secondaryColors": [],
     "monoFace": "JetBrains Mono",
     "scripts": [
       "Latn"
     ],
-    "domain": null,
     "defaultTheme": "system"
   },
   "overrides": {},
@@ -144,6 +185,30 @@
       ],
       "set_by": "chosen",
       "decision": "D-0010",
+      "locked": false
+    },
+    "Q-color-15": {
+      "value": "workflow",
+      "set_by": "chosen",
+      "decision": "D-0033",
+      "locked": false
+    },
+    "Q-color-19": {
+      "value": "categorical-6-8",
+      "set_by": "chosen",
+      "decision": "D-0034",
+      "locked": false
+    },
+    "Q-type-06": {
+      "value": "numeric-face",
+      "set_by": "chosen",
+      "decision": "D-0035",
+      "locked": false
+    },
+    "Q-layout-01": {
+      "value": "tailwind",
+      "set_by": "chosen",
+      "decision": "D-0036",
       "locked": false
     }
   },
@@ -291,12 +356,13 @@
   "references": {},
   "taste": {},
   "hashes": {
-    "DESIGN.md": "d299ca5f7080da9f",
-    "PRODUCT.md": "61b345a6b0b3e6fa"
+    "DESIGN.md": "9900c207e43cda1e",
+    "PRODUCT.md": "e93648bd4aa53eca"
   },
   "exports": {
     "prefix": "ds",
-    "figmaPlan": "professional"
+    "figmaPlan": "professional",
+    "tailwindReset": true
   },
   "locks": []
 }

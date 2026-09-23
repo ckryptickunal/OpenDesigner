@@ -1,6 +1,6 @@
 # Privacy: the journey log and shared reports
 
-**In plain words:** OpenDesigner can keep a private diary of the steps you take (the journey log). That diary never leaves your computer. Separately, and only if you say yes, it can send the OpenDesigner team a small anonymous report. The report says which questions came up, how long they took and where people got stuck. It never sends your answers, your brand, your files or anything you typed. You can see the exact report before it goes, and you can say no or change your mind at any time.
+**In plain words:** OpenDesigner can keep a private diary of the steps you take (the journey log). That diary stays in your project files and is never sent. Separately, and only if you say yes, it can send the OpenDesigner team a small anonymous report. The report says which questions came up, how long they took and where people got stuck. It never sends your answers, your brand, your files or anything you typed. You can see the exact report before it goes, and you can say no or change your mind at any time.
 
 - **Designers:** opt-in, anonymous usage analytics about the interview flow, never about your design.
 - **Engineers:** two consents in `opendesigner/state.json` (`profile.tracking`, `profile.share_reports`); an allowlisted JSON payload validated against `skills/opendesigner/references/report.schema.json`; HTTPS POST only after consent; no persistent identifier.
@@ -11,27 +11,41 @@ This covers BRIEF requirements 18 and 19. How the log works is in [JOURNEY-TRACK
 | | The journey log | Shared reports |
 |---|---|---|
 | What it is | A diary of your steps, for you | An anonymous summary, for the OpenDesigner team |
-| Where it stays | `opendesigner/journey/` on your computer, kept out of git | A server run by the maintainers, once one is set up |
+| Where it stays | `opendesigner/journey/` in your project, kept out of git | A server run by the maintainers, once one is set up |
 | Default | Off until you say yes | Off until you say yes |
 | Saved as | `profile.tracking`: `on` or `off` | `profile.share_reports`: `always`, `ask` or `never` |
 | Turn off | `journey.py consent off` (add `--forget` to delete the log) | `journey.py share-consent never` |
 
-Saying yes to the log is not saying yes to sharing. The AI asks about sharing separately, later, and only once.
+Saying yes to the log is not saying yes to sharing. The AI asks about sharing separately, later, and only once. For both questions, only a clear yes counts: "whatever", "ok I guess", "idk" or no answer is a no.
 
-## The question you are asked
-The AI shows this text word for word (`journey.py share-consent` prints it):
+## The questions you are asked
+**The log question** comes once, in the first message. The AI says "on this computer" only when it runs on your own computer, for example in Claude Code:
 
-> Can I send the OpenDesigner team an anonymous report of this session? It shows where people get stuck, so the steps get faster for everyone.
+> I keep a private log of your steps on this computer so I can make this faster for you. OK?
+
+In a web chat, such as claude.ai or ChatGPT, it says:
+
+> I keep a private log of your steps in your project files so I can make this faster for you. OK?
+
+**The sharing question** comes once, at the end of your first session, after your files are written. It is never in the first message, and it is never asked again once you answer. The AI shows these lines word for word (`journey.py share-consent` prints them):
+
+> Can I send the OpenDesigner team an anonymous report of which steps were slow or confusing, so they can make them faster?
+> It never includes your answers, names, colors, files or anything you typed. Share every time, ask me each time, or don't share?
+> Say "details" to see exactly what is sent.
+
+If you say "details", the AI shows the full facts, word for word (`journey.py share-consent --details`):
+
+> Why: it shows the OpenDesigner team where people get stuck, so the steps get faster for everyone.
 > What is sent: which questions came up, how long each took (to 5 seconds), how you answered (kept the default, picked an option and so on), skips, stops and help requests, plus the OpenDesigner version, the AI tool and the week.
-> Never sent: your answers, names, colors, brand, files, paths, links, notes or anything you typed. No ID ties reports to you or this computer.
-> Where it goes: a small server run by the OpenDesigner maintainers. Until it is set up, reports wait on this computer.
+> Never sent: your answers, names, colors, brand, files, paths, links, notes or anything you typed. No ID ties reports to you or your device.
+> Where it goes: a small server run by the OpenDesigner maintainers. Until it is set up, reports wait in your project files and nothing is sent.
 > How long: reports are kept 12 months; after that only the totals stay.
-> You can see the exact report first: say "show me".
-> Choose: share every time · ask me each time · don't share. You can change your mind any time.
+> To see the exact report first, say "show me".
+> Choose: share every time · ask me each time · don't share. To change your mind later, say "stop sharing" or "start sharing".
 
 - **Share every time** (`always`): a report goes when a session or level ends, without asking again.
-- **Ask me each time** (`ask`): the AI asks before each report and sends it only after your yes.
-- **Don't share** (`never`): nothing is sent, and reports that were waiting to be sent are deleted.
+- **Ask me each time** (`ask`): before each report, the AI asks "Send this session's anonymous report? Say "show me" to see it first." It sends the report only after your yes. A plain "yes" to the sharing question means this choice, and this session's report goes.
+- **Don't share** (`never`): nothing is sent, and reports that were waiting to be sent are deleted. A plain "no", or any answer that isn't a clear choice, means this.
 
 To see exactly what would be sent, before or after you choose: `python3 <skill>/scripts/journey.py share --dry-run`. The report that is sent afterwards has exactly that content. If new steps were logged in between, run it again to see the new one.
 
@@ -62,7 +76,7 @@ A step that is not a public question id is dropped from the report, not sent. An
 
 ## How it is sent, and where it goes
 - Sending uses a plain HTTPS request with a 5-second timeout, to the address in the `OPENDESIGNER_REPORTS_URL` environment variable or `profile.reports_url` in `state.json`.
-- **Right now no server is collecting reports.** Until the maintainers set one up and publish its address here, nothing leaves your computer. A report you agree to share is saved in `opendesigner/journey/outbox/`, and `journey.py share` says so plainly.
+- **Right now no server is collecting reports.** Until the maintainers set one up and publish its address here, nothing is sent. A report you agree to share is saved in your project, in `opendesigner/journey/outbox/`, and `journey.py share` says so plainly.
 - If the server can't be reached, the report waits in the outbox and goes with the next one. Nothing is retried in the background.
 - Reports are never filed as GitHub issues, because an issue is posted under your GitHub account and would show who you are.
 

@@ -854,7 +854,7 @@ Zoom 2 defined · weight high · changes 5 decisions · class T · cards DC-L10-
 
 ## Q-color-09 · Should grays be pure, or tinted warm or cool?
 Zoom 2 defined · weight medium · changes 3 decisions · class G · cards DC-L01-06
-- **Ask:** "Should grays be pure, cool, warm, or tinted toward your brand?"
+- **Ask:** "Your text, backgrounds and lines use grays. Should they be pure gray, cool, warm, or tinted toward your brand?"
 - **Why:** Grays fill most of the screen, so warm or cool grays change how the product feels. Linear moved to "a warmer gray" in 2026 [DC-L01-06].
 - **Options:**
   - `hue-matched` Slight tint toward the accent hue (OKLCH chroma about 0.01-0.03 at mid steps) [DC-L01-06].
@@ -1088,11 +1088,11 @@ Zoom 2 defined · weight low · changes 0 decisions · class G · cards DC-L01-1
 - **Ask:** "How dark should dark mode be: pure black, near-black, or charcoal?"
 - **Why:** Pure black looks dramatic but smears on OLED screens when you scroll. Near-black looks sleek, and charcoal is softer for long reading [DC-L01-19].
 - **Options:**
-  - `black` Pure black #000: cinematic, halation and smear on OLED.
   - `near-black` Near-black #0D1117 to #161616: sleek, modern (Primer, Carbon Gray 100, Material tone 4).
+  - `black` Pure black #000: cinematic, halation and smear on OLED.
   - `charcoal` Charcoal #262626 to #292929: soft and comfortable (Carbon Gray 90, Fluent).
   - `dimmed` Add a dimmed theme for long reading at night (Primer dark-dimmed) [DC-L01-19].
-- **Default:** a dark base between #121212 and #1a1a1a with a slight neutral tint; accents one or two steps lighter and lower in chroma than in light *Source:* card heuristic [DC-L01-19].
+- **Default:** `near-black`: near-black: a dark base between #121212 and #1a1a1a with a slight neutral tint; accents one or two steps lighter and lower in chroma than in light *Source:* card heuristic [DC-L01-19].
 - **Show:** the dark preview with a darkness slider; accent chroma drops as the base darkens.
 - **Use / avoid:** use "dimmed" only for audiences that read long-form at night (developer tools, reading apps); avoid bright objects on pure black in immersive views [DC-L01-19].
 - **Skip:** yes.
@@ -1208,10 +1208,12 @@ Zoom 1 broad · weight high · changes 6 decisions · class T · cards DC-L09-05
 ## Q-type-02 · Do you have the brand typeface files and a license that covers web and apps?
 Zoom 2 defined · weight medium · changes 1 decisions · class T · cards DC-L02-06
 - **Show if:** Q-type-01 is brand-display or brand-everywhere
-- **Ask:** "Do you have the brand font files and a license for web and apps?"
+- **Ask:** "Do you have the brand font files? Does the license cover websites, apps, or both?"
 - **Why:** The builder cannot make a brand typeface. Its license and files decide where it may be used and how it loads [DC-L02-06; BRIEF requirement 2].
 - **Options:**
-  - `yes` Yes: files and license in hand.
+  - `yes` Yes: files and a license for every platform in scope.
+  - `web-only` Licensed for websites only: iOS and Android apps use the system font instead, and the model says so per platform.
+  - `app-only` Licensed for apps only: the website uses the system font or an open face instead.
   - `license-only` Licensed, but no files yet.
   - `no` No: see the Hook line.
 - **Default:** WOFF2, one variable file per family, `font-display: swap` with a metric-adjusted fallback, subsets per script *Source:* card heuristic [DC-L02-06].

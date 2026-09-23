@@ -32,7 +32,7 @@ What it cannot generate well (a logo, custom icons, illustration, photography) i
 
 ### How long does it take?
 
-Start with a sketch. About 5 questions, in about 3 minutes, give you a complete, working system with sourced defaults. Then zoom into any area you care about, and stop whenever it is enough. The next level, one short screen per foundation, is 8 questions in about 8 minutes. Every default stays editable. The full interview has 192 questions, but you only answer the ones for the areas you zoom into.
+Start with a sketch. About 3 to 5 questions, in about 3 minutes, give you a complete, working system with sourced defaults. Then zoom into any area you care about, and stop whenever it is enough. The next level, one short screen per foundation, is 8 questions in about 8 minutes. Every default stays editable. The full interview has 192 questions, but you only answer the ones for the areas you zoom into.
 
 ### What do I get at the end?
 
@@ -123,7 +123,7 @@ The interview asks for your platforms early, because that decision directly shap
 
 The skills and engine run on your machine. They use the Python standard library only, and the engine makes no network calls. Your conversation still goes to whichever AI provider you use, as it would for any prompt. Reference intake only fetches a URL after you confirm it.
 
-There is one opt-in exception. If you say yes, the journey tracker keeps a private log of your steps, and that log stays on your computer. Sending an anonymous summary to the maintainers is a second, separate yes. It never includes your answers, names, files or anything you typed. See [PRIVACY.md](PRIVACY.md).
+There is one opt-in exception. If you say yes, the journey tracker keeps a private log of your steps, and that log stays with your project: on your computer when you run OpenDesigner locally, or in the chat's project files in web tools. Sending an anonymous summary to the maintainers is a second, separate yes. It never includes your answers, names, files or anything you typed. See [PRIVACY.md](PRIVACY.md).
 
 ## How it compares
 

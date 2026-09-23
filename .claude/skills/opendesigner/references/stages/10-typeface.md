@@ -28,10 +28,12 @@ Zoom 1 broad · weight high · changes 6 decisions · class T · cards DC-L09-05
 ## Q-type-02 · Do you have the brand typeface files and a license that covers web and apps?
 Zoom 2 defined · weight medium · changes 1 decisions · class T · cards DC-L02-06
 - **Show if:** Q-type-01 is brand-display or brand-everywhere
-- **Ask:** "Do you have the brand font files and a license for web and apps?"
+- **Ask:** "Do you have the brand font files? Does the license cover websites, apps, or both?"
 - **Why:** The builder cannot make a brand typeface. Its license and files decide where it may be used and how it loads [DC-L02-06; BRIEF requirement 2].
 - **Options:**
-  - `yes` Yes: files and license in hand.
+  - `yes` Yes: files and a license for every platform in scope.
+  - `web-only` Licensed for websites only: iOS and Android apps use the system font instead, and the model says so per platform.
+  - `app-only` Licensed for apps only: the website uses the system font or an open face instead.
   - `license-only` Licensed, but no files yet.
   - `no` No: see the Hook line.
 - **Default:** WOFF2, one variable file per family, `font-display: swap` with a metric-adjusted fallback, subsets per script *Source:* card heuristic [DC-L02-06].

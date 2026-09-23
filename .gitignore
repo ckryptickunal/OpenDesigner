@@ -12,3 +12,7 @@ node_modules/
 
 # Release zips (tools/build_dist.py)
 dist/
+
+# Learning wiki: third-party raw text stays local (tools/wiki.py re-fetches it)
+learn/raw/
+.venv-wiki/

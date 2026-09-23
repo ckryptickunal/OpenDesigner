@@ -98,7 +98,7 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 ## D-0021 · raw.flags.brandExact = true
 - set_by: chosen · locked: no · date: 2026-09-24 · supersedes: none · source_ref: none
 - reason: keep the exact indigo on the primary action even at low colorfulness (Carbon pattern)
-- previous value: false
+- previous value: true
 
 ## D-0022 · raw.textFace = "Inter"
 - set_by: chosen · locked: no · date: 2026-09-24 · supersedes: none · source_ref: none
@@ -154,3 +154,23 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 - set_by: chosen · locked: no · date: 2026-09-24 · supersedes: none · source_ref: none
 - reason: draft voice from the dials until a writer reviews it
 - previous value: "pending"
+
+## D-0033 · answers.Q-color-15 = "workflow"
+- set_by: chosen · locked: no · date: 2026-09-24 · supersedes: none · source_ref: none
+- reason: pipeline runs need todo, running, passed, failed and review states
+- also set: raw.statusSet = "workflow" (from Q-color-15)
+
+## D-0034 · answers.Q-color-19 = "categorical-6-8"
+- set_by: chosen · locked: no · date: 2026-09-24 · supersedes: none · source_ref: none
+- reason: build-time and flaky-test charts need 8 series in a fixed order
+- also set: raw.chartPalette = "categorical-8" (from Q-color-19)
+
+## D-0035 · answers.Q-type-06 = "numeric-face"
+- set_by: chosen · locked: no · date: 2026-09-24 · supersedes: none · source_ref: none
+- reason: durations and counts must line up in log tables (tabular figures)
+- also set: raw.numericStyles = true (from Q-type-06)
+
+## D-0036 · answers.Q-layout-01 = "tailwind"
+- set_by: chosen · locked: no · date: 2026-09-24 · supersedes: none · source_ref: none
+- reason: web console built with Tailwind; its breakpoints become tokens
+- also set: raw.breakpoints = "tailwind" (from Q-layout-01)

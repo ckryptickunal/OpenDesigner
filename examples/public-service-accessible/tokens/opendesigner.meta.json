@@ -514,7 +514,10 @@
     },
     "pinnedStep": 9,
     "brandAnchorStep": 9,
+    "brandExact": true,
     "brandPinFailed": false,
+    "brandAdjustedTo": null,
+    "brandContrastWhite": 7.72,
     "statusPeakHct": 48.0,
     "textMin": 7.0,
     "ramps": [
@@ -523,7 +526,9 @@
       "warning",
       "danger",
       "info"
-    ]
+    ],
+    "accentCount": 1,
+    "chart": {}
   },
   "ramps": {
     "accent": {
@@ -538,7 +543,7 @@
           "#2d4d51",
           "#5c898e",
           "#75abb1",
-          "#91c7cd",
+          "#84babf",
           "#acdfe4",
           "#d5e7e8"
         ],
@@ -581,7 +586,7 @@
             0.057
           ],
           [
-            0.795,
+            0.752,
             0.057
           ],
           [
@@ -605,7 +610,7 @@
           "#abd0d4",
           "#5d8e93",
           "#075c63",
-          "#015056",
+          "#025057",
           "#004247",
           "#163032"
         ],
@@ -648,7 +653,7 @@
             0.072
           ],
           [
-            0.393,
+            0.395,
             0.067
           ],
           [
@@ -674,7 +679,7 @@
           "#6b3b36",
           "#b46f67",
           "#df8c83",
-          "#fda89e",
+          "#ef9b91",
           "#ffc9c2",
           "#fbddd9"
         ],
@@ -717,7 +722,7 @@
             0.103
           ],
           [
-            0.812,
+            0.77,
             0.103
           ],
           [
@@ -741,7 +746,7 @@
           "#f8bbb3",
           "#bc726a",
           "#963933",
-          "#802a25",
+          "#86302a",
           "#6c211d",
           "#46211e"
         ],
@@ -784,7 +789,7 @@
             0.126
           ],
           [
-            0.415,
+            0.433,
             0.12
           ],
           [
@@ -810,7 +815,7 @@
           "#1f4c69",
           "#4a88b1",
           "#60a9db",
-          "#7cc5f8",
+          "#6fb8ea",
           "#abdcff",
           "#cfe7f8"
         ],
@@ -853,7 +858,7 @@
             0.103
           ],
           [
-            0.795,
+            0.754,
             0.103
           ],
           [
@@ -877,7 +882,7 @@
           "#9ed0f3",
           "#4a8cb8",
           "#005d8b",
-          "#004c73",
+          "#00527b",
           "#003f5f",
           "#0a2f45"
         ],
@@ -920,8 +925,8 @@
             0.105
           ],
           [
-            0.398,
-            0.091
+            0.417,
+            0.096
           ],
           [
             0.349,
@@ -1082,7 +1087,7 @@
           "#2a5033",
           "#578d63",
           "#70b07e",
-          "#8bcc98",
+          "#7ebf8b",
           "#a7e4b2",
           "#d4e9d7"
         ],
@@ -1125,7 +1130,7 @@
             0.1
           ],
           [
-            0.788,
+            0.747,
             0.1
           ],
           [
@@ -1149,7 +1154,7 @@
           "#a7d4af",
           "#599365",
           "#01662c",
-          "#005423",
+          "#005a26",
           "#00451c",
           "#14321b"
         ],
@@ -1192,8 +1197,8 @@
             0.122
           ],
           [
-            0.389,
-            0.107
+            0.408,
+            0.112
           ],
           [
             0.343,
@@ -1218,7 +1223,7 @@
           "#5c441a",
           "#9d7c42",
           "#dfb772",
-          "#edc47f",
+          "#f0c781",
           "#f7d090",
           "#efe2cc"
         ],
@@ -1261,7 +1266,7 @@
             0.099
           ],
           [
-            0.842,
+            0.851,
             0.099
           ],
           [
@@ -1285,7 +1290,7 @@
           "#e2c697",
           "#a48042",
           "#e7b55b",
-          "#d8a954",
+          "#d5a652",
           "#604200",
           "#3b2906"
         ],
@@ -1328,7 +1333,7 @@
             0.122
           ],
           [
-            0.761,
+            0.753,
             0.116
           ],
           [
@@ -1362,7 +1367,6 @@
       47
     ],
     "sizes": [
-      13,
       16,
       19,
       23,
@@ -1373,6 +1377,16 @@
     ],
     "merged": [],
     "minSize": 11,
+    "scaleSizes": [
+      13,
+      16,
+      19,
+      23,
+      27,
+      33,
+      39,
+      47
+    ],
     "weights": {
       "body": 400,
       "label": 400,
@@ -1403,7 +1417,23 @@
       48,
       52
     ],
-    "scripts": {}
+    "scripts": {},
+    "faces": {
+      "text": {
+        "face": "Atkinson Hyperlegible",
+        "web": true,
+        "app": true,
+        "selfHost": true,
+        "open": true
+      },
+      "display": {
+        "face": "=textFace",
+        "web": true,
+        "app": true,
+        "selfHost": true,
+        "open": true
+      }
+    }
   },
   "space": {
     "unit": 5,
@@ -1431,7 +1461,8 @@
       "16": 1.5,
       "20": 1.5,
       "24": 2.0
-    }
+    },
+    "breakpoints": {}
   },
   "density": {
     "spacious": {
@@ -1652,6 +1683,15 @@
       "mode": "light",
       "fg": "color.text.primary",
       "bg": "color.bg.accent.subtle",
+      "min": 7.0,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3 / 1.4.6 (AAA)",
+      "level": "error"
+    },
+    {
+      "mode": "light",
+      "fg": "color.text.primary",
+      "bg": "color.bg.field",
       "min": 7.0,
       "kind": "text",
       "rule": "WCAG 2.2 SC 1.4.3 / 1.4.6 (AAA)",
@@ -1911,6 +1951,15 @@
     },
     {
       "mode": "light",
+      "fg": "color.text.on-success",
+      "bg": "color.bg.success.bold-pressed",
+      "min": 7.0,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3 / 1.4.6 (AAA)",
+      "level": "error"
+    },
+    {
+      "mode": "light",
       "fg": "color.text.warning",
       "bg": "color.surface.base",
       "min": 7.0,
@@ -1949,6 +1998,15 @@
       "mode": "light",
       "fg": "color.text.on-warning",
       "bg": "color.bg.warning.bold-hover",
+      "min": 7.0,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3 / 1.4.6 (AAA)",
+      "level": "error"
+    },
+    {
+      "mode": "light",
+      "fg": "color.text.on-warning",
+      "bg": "color.bg.warning.bold-pressed",
       "min": 7.0,
       "kind": "text",
       "rule": "WCAG 2.2 SC 1.4.3 / 1.4.6 (AAA)",
@@ -2001,6 +2059,15 @@
     },
     {
       "mode": "light",
+      "fg": "color.text.on-danger",
+      "bg": "color.bg.danger.bold-pressed",
+      "min": 7.0,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3 / 1.4.6 (AAA)",
+      "level": "error"
+    },
+    {
+      "mode": "light",
       "fg": "color.text.info",
       "bg": "color.surface.base",
       "min": 7.0,
@@ -2046,6 +2113,15 @@
     },
     {
       "mode": "light",
+      "fg": "color.text.on-info",
+      "bg": "color.bg.info.bold-pressed",
+      "min": 7.0,
+      "kind": "text",
+      "rule": "WCAG 2.2 SC 1.4.3 / 1.4.6 (AAA)",
+      "level": "error"
+    },
+    {
+      "mode": "light",
       "fg": "color.border.strong",
       "bg": "color.surface.base",
       "min": 3.0,
@@ -2127,6 +2203,15 @@
     },
     {
       "mode": "light",
+      "fg": "color.border.input",
+      "bg": "color.bg.field",
+      "min": 3.0,
+      "kind": "non-text",
+      "rule": "WCAG 2.2 SC 1.4.11",
+      "level": "error"
+    },
+    {
+      "mode": "light",
       "fg": "color.icon.default",
       "bg": "color.surface.base",
       "min": 3.0,
@@ -2213,7 +2298,8 @@
       "min": 3.0,
       "kind": "focus",
       "rule": "WCAG 2.2 SC 1.4.11, 2.4.13",
-      "level": "error"
+      "level": "error",
+      "inner": "color.border.focus-inner"
     },
     {
       "mode": "light",
@@ -2222,7 +2308,8 @@
       "min": 3.0,
       "kind": "focus",
       "rule": "WCAG 2.2 SC 1.4.11, 2.4.13",
-      "level": "error"
+      "level": "error",
+      "inner": "color.border.focus-inner"
     },
     {
       "mode": "light",
@@ -2231,7 +2318,8 @@
       "min": 3.0,
       "kind": "focus",
       "rule": "WCAG 2.2 SC 1.4.11, 2.4.13",
-      "level": "error"
+      "level": "error",
+      "inner": "color.border.focus-inner"
     },
     {
       "mode": "light",
@@ -2240,7 +2328,8 @@
       "min": 3.0,
       "kind": "focus",
       "rule": "WCAG 2.2 SC 1.4.11, 2.4.13",
-      "level": "error"
+      "level": "error",
+      "inner": "color.border.focus-inner"
     },
     {
       "mode": "light",
@@ -2249,7 +2338,8 @@
       "min": 3.0,
       "kind": "focus",
       "rule": "WCAG 2.2 SC 1.4.11, 2.4.13",
-      "level": "error"
+      "level": "error",
+      "inner": "color.border.focus-inner"
     },
     {
       "mode": "light",
@@ -2278,5 +2368,7 @@
     "touch",
     "pointer"
   ],
-  "stateHash": "9f01404ee2821cd6"
+  "textScaling": "full",
+  "notes": [],
+  "stateHash": "11d97d6419351e42"
 }

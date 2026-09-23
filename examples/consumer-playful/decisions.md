@@ -149,3 +149,19 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 - set_by: chosen · locked: no · date: 2026-09-24 · supersedes: none · source_ref: none
 - reason: draft: casual, encouraging, contractions
 - previous value: "pending"
+
+## D-0032 · answers.Q-color-04 = "three"
+- set_by: chosen · locked: no · date: 2026-09-24 · supersedes: none · source_ref: none
+- reason: friends' streaks use three accents around the coral
+- also set: raw.accentCount = 3 (from Q-color-04)
+- also set: raw.accentHarmony = "triadic" (from Q-color-04)
+
+## D-0033 · answers.Q-color-20 = "overlay"
+- set_by: chosen · locked: no · date: 2026-09-24 · supersedes: none · source_ref: none
+- reason: state layers keep hover and press visible on every colorful fill
+- also set: raw.stateMethod = "overlay" (from Q-color-20)
+
+## D-0034 · answers.Q-depth-04 = "control-layer"
+- set_by: chosen · locked: no · date: 2026-09-24 · supersedes: none · source_ref: none
+- reason: glass only on the iOS tab bar and toolbars, never on content
+- also set: raw.glass = true (from Q-depth-04)

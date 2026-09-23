@@ -822,6 +822,18 @@
       "$description": "Dialogs and sheets (with color.overlay.scrim)."
     }
   },
+  "material": {
+    "glass": {
+      "blur": {
+        "$value": {
+          "value": 24,
+          "unit": "px"
+        },
+        "$type": "dimension",
+        "$description": "Backdrop blur for glass controls and bars."
+      }
+    }
+  },
   "$extensions": {
     "opendesigner": {
       "source": "formula",

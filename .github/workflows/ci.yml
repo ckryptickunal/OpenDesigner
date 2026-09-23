@@ -57,6 +57,9 @@ jobs:
       - name: Journey tracker tests (local log, anonymous report, consent texts)
         run: python3 skills/opendesigner/scripts/test_journey.py
 
+      - name: Reference extraction tests (css_scan.py, read_page.js with the runner's Node)
+        run: python3 skills/opendesigner-extract/scripts/test_extract.py
+
       - name: Generated skill copies match skills/
         run: |
           if [ -f tools/sync_skills.py ]; then

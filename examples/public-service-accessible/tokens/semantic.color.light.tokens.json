@@ -146,11 +146,11 @@
         },
         "bold-hover": {
           "$value": "{color.accent.light.10}",
-          "$description": "Hover on the solid accent (+1 step)."
+          "$description": "Hover: one step, at least 1.15:1 from the solid (DC-L01-17)."
         },
         "bold-pressed": {
-          "$value": "{color.accent.light.11}",
-          "$description": "Pressed solid accent (+2 steps)."
+          "$value": "{color.accent.light.solid-pressed}",
+          "$description": "Pressed: at least 1.3:1 from the solid."
         }
       },
       "disabled": {
@@ -161,6 +161,10 @@
         "$value": "{color.neutral.light.12}",
         "$description": "Tooltips and toasts: the inverted surface."
       },
+      "field": {
+        "$value": "{color.white}",
+        "$description": "Text field fill: outlined fields sit on the raised surface (Q-form-01)."
+      },
       "action": {
         "primary": {
           "$value": "{color.accent.light.9}",
@@ -168,11 +172,11 @@
         },
         "primary-hover": {
           "$value": "{color.accent.light.10}",
-          "$description": "Primary action hover."
+          "$description": "Hover: one step, at least 1.15:1 from the solid (DC-L01-17)."
         },
         "primary-pressed": {
-          "$value": "{color.accent.light.11}",
-          "$description": "Primary action pressed."
+          "$value": "{color.accent.light.solid-pressed}",
+          "$description": "Pressed: at least 1.3:1 from the solid."
         }
       },
       "brand": {
@@ -190,7 +194,11 @@
         },
         "bold-hover": {
           "$value": "{color.success.light.10}",
-          "$description": "Success solid hover."
+          "$description": "Hover: one step, at least 1.15:1 from the solid (DC-L01-17)."
+        },
+        "bold-pressed": {
+          "$value": "{color.success.light.solid-pressed}",
+          "$description": "Pressed: at least 1.3:1 from the solid."
         }
       },
       "warning": {
@@ -204,7 +212,11 @@
         },
         "bold-hover": {
           "$value": "{color.warning.light.10}",
-          "$description": "Warning solid hover."
+          "$description": "Hover: one step, at least 1.15:1 from the solid (DC-L01-17)."
+        },
+        "bold-pressed": {
+          "$value": "{color.warning.light.solid-pressed}",
+          "$description": "Pressed: at least 1.3:1 from the solid."
         }
       },
       "danger": {
@@ -218,7 +230,11 @@
         },
         "bold-hover": {
           "$value": "{color.danger.light.10}",
-          "$description": "Danger solid hover."
+          "$description": "Hover: one step, at least 1.15:1 from the solid (DC-L01-17)."
+        },
+        "bold-pressed": {
+          "$value": "{color.danger.light.solid-pressed}",
+          "$description": "Pressed: at least 1.3:1 from the solid."
         }
       },
       "info": {
@@ -232,7 +248,11 @@
         },
         "bold-hover": {
           "$value": "{color.info.light.10}",
-          "$description": "Info solid hover."
+          "$description": "Hover: one step, at least 1.15:1 from the solid (DC-L01-17)."
+        },
+        "bold-pressed": {
+          "$value": "{color.info.light.solid-pressed}",
+          "$description": "Pressed: at least 1.3:1 from the solid."
         }
       }
     },
@@ -254,8 +274,8 @@
         "$description": "Text field and select borders (3:1, DC-L01-16)."
       },
       "focus": {
-        "$value": "{color.accent.light.9}",
-        "$description": "Focus ring (3:1 against every surface, DC-L04-09)."
+        "$value": "{color.neutral.light.12}",
+        "$description": "Focus ring (3:1 against every surface, DC-L04-09); outer ring of a two-tone ring (Q-state-03)."
       },
       "accent": {
         "$value": "{color.accent.light.8}",
@@ -276,6 +296,10 @@
       "info": {
         "$value": "{color.info.light.8}",
         "$description": "Info boundary, for example an invalid field (3:1)."
+      },
+      "focus-inner": {
+        "$value": "{color.white}",
+        "$description": "Inner ring of the two-tone focus indicator; keeps 3:1 on every surface (DC-L08-11)."
       }
     },
     "icon": {
@@ -308,7 +332,7 @@
           "hex": "#191a1b",
           "alpha": 0.45
         },
-        "$description": "Modal backdrop (DC-L04-18)."
+        "$description": "Modal backdrop (DC-L04-18; Q-depth-06)."
       }
     },
     "shadow": {

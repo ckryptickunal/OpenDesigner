@@ -29,11 +29,11 @@ Zoom 2 defined · weight low · changes 0 decisions · class G · cards DC-L01-1
 - **Ask:** "How dark should dark mode be: pure black, near-black, or charcoal?"
 - **Why:** Pure black looks dramatic but smears on OLED screens when you scroll. Near-black looks sleek, and charcoal is softer for long reading [DC-L01-19].
 - **Options:**
-  - `black` Pure black #000: cinematic, halation and smear on OLED.
   - `near-black` Near-black #0D1117 to #161616: sleek, modern (Primer, Carbon Gray 100, Material tone 4).
+  - `black` Pure black #000: cinematic, halation and smear on OLED.
   - `charcoal` Charcoal #262626 to #292929: soft and comfortable (Carbon Gray 90, Fluent).
   - `dimmed` Add a dimmed theme for long reading at night (Primer dark-dimmed) [DC-L01-19].
-- **Default:** a dark base between #121212 and #1a1a1a with a slight neutral tint; accents one or two steps lighter and lower in chroma than in light *Source:* card heuristic [DC-L01-19].
+- **Default:** `near-black`: near-black: a dark base between #121212 and #1a1a1a with a slight neutral tint; accents one or two steps lighter and lower in chroma than in light *Source:* card heuristic [DC-L01-19].
 - **Show:** the dark preview with a darkness slider; accent chroma drops as the base darkens.
 - **Use / avoid:** use "dimmed" only for audiences that read long-form at night (developer tools, reading apps); avoid bright objects on pure black in immersive views [DC-L01-19].
 - **Skip:** yes.

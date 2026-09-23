@@ -87,9 +87,37 @@ class Consent(Project):
         j.set_tracking(self.d, True)
         _, out = run(["--dir", self.d, "share-consent"])
         self.assertEqual(out.strip(), j.SHARE_CONSENT)
-        self.assertLessEqual(len(j.SHARE_CONSENT.splitlines()), 8)
+        _, out = run(["--dir", self.d, "share-consent", "--details"])
+        self.assertEqual(out.strip(), j.SHARE_DETAILS)
         run(["--dir", self.d, "share-consent", "ask"])
         self.assertEqual(self.state()["profile"], {"voice": "plain", "tracking": "on", "share_reports": "ask"})
+
+    def test_share_ask_is_short_and_the_details_are_complete(self):
+        """BRIEF 13 and 19 together: a short plain ask, with every fact one reply away (U5 consent decision)."""
+        ask = j.SHARE_CONSENT
+        self.assertLessEqual(len(ask.splitlines()), 3)
+        self.assertLessEqual(len(ask.split()), 55)
+        self.assertIn('"details"', ask)
+        for choice in j.SHARE_CHOICES.values():
+            self.assertIn(choice, ask.lower())
+        det = j.SHARE_DETAILS
+        self.assertLessEqual(len(det.splitlines()), 8)
+        for part in ("Why:", "What is sent:", "Never sent:", "Where it goes:", "How long:", '"show me"', "change your mind"):
+            self.assertIn(part, det)
+        for choice in j.SHARE_CHOICES.values():
+            self.assertIn(choice, det.splitlines()[-1])
+        self.assertNotIn("this computer", ask + det)   # true in every host
+
+    def test_log_question_is_host_aware(self):
+        self.assertIn("on this computer", j.consent_question("local"))
+        self.assertIn("in your project files", j.consent_question("web"))
+        with mock.patch.dict(os.environ, {"CLAUDECODE": "1"}, clear=False):
+            os.environ.pop("CLAUDE_CODE_REMOTE", None)
+            self.assertEqual(j.detect_where(), "local")
+        with mock.patch.dict(os.environ, {"CLAUDECODE": "", "CLAUDE_CODE_REMOTE": ""}):
+            self.assertEqual(j.detect_where(), "web")
+        _, out = run(["--dir", self.d, "consent", "--where", "web"])
+        self.assertIn(j.CONSENT_QUESTIONS["web"], out)
 
 
 class Logging(Project):
@@ -169,6 +197,76 @@ class Report(Project):
         self.assertEqual([x["step"] for x in sm["dropoffs"]], ["Q-plat-01", "Q-shape-01"])
         self.assertEqual(sm["steps"]["Q-plat-01"]["dropped"], 1)
         self.assertEqual(sm["sessions"], 4)
+
+    def test_help_and_frustration_blame_the_step_that_caused_them(self):
+        """U5 student F30: a complaint about the sharing text was pinned on Q-color-01, long after it was answered."""
+        for q in ("Q-color-01", "Q-plat-01"):
+            self.log("step_shown", step=q)
+        self.log("help", kind="explain")                               # asked while Q-plat-01 was on screen
+        self.assertEqual(self.events()[-1]["step"], "Q-plat-01")       # stamped in the log itself
+        for q in ("Q-color-01", "Q-plat-01"):
+            self.log("step_answered", step=q, how="option")            # the engine records the sketch answers
+        self.log("level_complete", level="sketch")
+        self.log("frustration", signal="said")                         # nothing on screen: nobody is blamed
+        self.assertIsNone(self.events()[-1]["step"])
+        self.log("step_shown", step="consent.share")                   # a moment, not a question
+        self.log("frustration", signal="said", note="too much text")
+        self.assertEqual(self.events()[-1]["step"], "consent.share")
+        run(["--dir", self.d, "share-consent", "never"])               # answering closes the moment
+        self.log("help", kind="explain")
+        self.log("frustration", area="color", signal="said")           # about a whole area
+        sm = j.summarize(self.events())
+        steps = sm["steps"]
+        self.assertEqual(steps["Q-plat-01"]["help"], 1)
+        self.assertEqual(steps["Q-color-01"]["signals"], {})
+        self.assertEqual(steps["consent.share"]["signals"], {"said": 1})
+        self.assertEqual(steps[j.BETWEEN]["signals"], {"said": 1})
+        self.assertEqual(steps[j.BETWEEN]["help"], 1)
+        self.assertEqual(steps["area:color"]["signals"], {"said": 1})
+        an = j.analyze(sm)
+        self.assertNotIn("Q-color-01", an["frustration"])
+        self.assertEqual(j.label("consent.share"), "consent.share (the question about sharing reports)")
+        self.assertEqual(j.label("area:color"), "Color (the whole area)")
+        self.assertNotIn("consent.share", j.payload(sm)["questions"])   # moments never reach the report
+        # an old log without stamped steps reads the same way
+        old = [dict(e, step=None) if e["event"] in j.ATTACHED and not e["data"].get("auto") else e for e in self.events()]
+        self.assertEqual(j.summarize(old)["steps"]["consent.share"]["signals"], {"said": 1})
+
+    def test_known_and_rule_skips_are_not_steps_taken(self):
+        """U5 student F5 and F31: a question their words already answered, or a rule skipped, was never in front of them."""
+        self.log("step_shown", step="Q-aud-01")
+        self.log("step_answered", step="Q-aud-01", how="option")
+        self.log("step_skipped", step="Q-plat-01", reason="known")       # "a website" already said where it runs
+        self.log("step_answered", 200, step="Q-plat-01", how="option")   # the sketch records it later
+        self.log("step_skipped", step="Q-color-06", reason="rule")
+        sm = j.summarize(self.events())
+        self.assertEqual(sm["levels"]["sketch"]["steps_taken"], 1)
+        self.assertEqual(sm["levels"]["sketch"]["fewest"], 1)
+        an = j.analyze(sm)
+        self.assertNotIn("Q-color-06", [r["step"] for r in an["defaults"]])
+        self.assertFalse(any("Q-color-06" in x for x in an["speedups"]))
+
+    def test_delegation_is_not_a_vote_for_the_default(self):
+        """U5 engineer F19: after 'just pick', the report said 'keep asking' the questions they handed over."""
+        for q in ("Q-brand-01", "Q-color-01"):
+            self.log("step_answered", step=q, how="delegated")
+        self.log("step_shown", step="Q-color-20")
+        self.log("step_answered", step="Q-color-20", how="delegated")
+        an = j.analyze(j.summarize(self.events()))
+        text = " ".join(an["speedups"])
+        self.assertNotIn("keep asking", text)
+        self.assertIn("Q-brand-01, Q-color-01: handed over", text)
+        self.assertIn("Q-color-20: handed over ('you choose') 1 of 1 times and low impact: auto-apply it", text)
+
+    def test_housekeeping_after_the_end_stays_in_that_session(self):
+        """U5 designer F31: a review right after session_end opened a phantom second session."""
+        self.log("step_shown", step="Q-aud-01")
+        self.log("session_end")
+        self.log("review")
+        self.log("export", kind="css")
+        self.assertEqual({e["session"] for e in self.events()}, {"S001"})
+        self.log("step_shown", step="Q-shape-01")                       # real work after the end: a new session
+        self.assertEqual(self.events()[-1]["session"], "S002")
 
     def test_frustration_hotspots_rank_by_count(self):
         self.log("step_shown", step="Q-type-01")
@@ -402,17 +500,19 @@ class ConsentTexts(unittest.TestCase):
         quoted = [x[2:] for x in text.splitlines() if x.startswith("> ")]
         return any(quoted[i:i + len(lines)] == lines for i in range(len(quoted)))
 
+    FILES = (("skill", "references/rules.md"), ("repo", "docs/PRIVACY.md"), ("repo", "docs/JOURNEY-TRACKER.md"))
+
     def test_log_question(self):
-        for where, rel in (("skill", "SKILL.md"), ("skill", "references/rules.md"), ("repo", "docs/JOURNEY-TRACKER.md")):
-            self.assertIn(j.CONSENT_QUESTION, self.read(where, rel), rel)
+        for where, rel in self.FILES:
+            for q in j.CONSENT_QUESTIONS.values():
+                self.assertTrue(self.quoted_block(self.read(where, rel), [q]), f"{rel}: the log question drifted from journey.py")
 
     def test_share_text(self):
-        lines = j.SHARE_CONSENT.splitlines()
-        for where, rel in (("skill", "references/rules.md"), ("repo", "docs/PRIVACY.md")):
-            self.assertTrue(self.quoted_block(self.read(where, rel), lines), f"{rel}: the sharing text drifted from journey.py")
-        self.assertIn(j.SHARE_ASK, self.read("skill", "references/rules.md"))
-        for label in j.SHARE_CHOICES.values():
-            self.assertIn(label, lines[-1])
+        for where, rel in self.FILES:
+            text = self.read(where, rel)
+            for name, block in (("sharing question", j.SHARE_CONSENT), ("details", j.SHARE_DETAILS)):
+                self.assertTrue(self.quoted_block(text, block.splitlines()), f"{rel}: the {name} drifted from journey.py")
+            self.assertIn(j.SHARE_ASK, text, rel)
 
 
 if __name__ == "__main__":

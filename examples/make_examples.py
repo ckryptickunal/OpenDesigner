@@ -53,6 +53,10 @@ EXAMPLES = {
             ("set", "hooks.H-illus.status", "not-needed", "empty states use icon plus text"),
             ("set", "hooks.H-photo.status", "not-needed", "no photography in a console"),
             ("set", "hooks.H-voice.status", "placeholder", "draft voice from the dials until a writer reviews it"),
+            ("pick", "Q-color-15", "workflow", "pipeline runs need todo, running, passed, failed and review states"),
+            ("pick", "Q-color-19", "categorical-6-8", "build-time and flaky-test charts need 8 series in a fixed order"),
+            ("pick", "Q-type-06", "numeric-face", "durations and counts must line up in log tables (tabular figures)"),
+            ("pick", "Q-layout-01", "tailwind", "web console built with Tailwind; its breakpoints become tokens"),
         ],
     },
     "consumer-playful": {
@@ -89,6 +93,9 @@ EXAMPLES = {
             ("set", "hooks.H-icons.status", "open-library", "Phosphor (MIT), rounded weight"),
             ("set", "hooks.H-type.status", "open-library", "Nunito under the SIL OFL"),
             ("set", "hooks.H-voice.status", "placeholder", "draft: casual, encouraging, contractions"),
+            ("pick", "Q-color-04", "three", "friends' streaks use three accents around the coral"),
+            ("pick", "Q-color-20", "overlay", "state layers keep hover and press visible on every colorful fill"),
+            ("pick", "Q-depth-04", "control-layer", "glass only on the iOS tab bar and toolbars, never on content"),
         ],
     },
     "public-service-accessible": {
@@ -127,6 +134,9 @@ EXAMPLES = {
             ("set", "hooks.H-photo.status", "not-needed", "no photography"),
             ("set", "hooks.H-type.status", "open-library", "Atkinson Hyperlegible under the SIL OFL"),
             ("set", "hooks.H-voice.status", "have", "plain-English content guide exists"),
+            ("pick", "Q-state-03", "two-tone", "a two-tone focus ring that reads on every surface"),
+            ("pick", "Q-motion-07", "remove", "reduced motion removes feedback transitions too"),
+            ("pick", "Q-form-01", "outlined", "outlined fields with the label above, like most public services"),
         ],
     },
 }

@@ -4,6 +4,7 @@
     python3 skills/opendesigner/scripts/test_engine.py        (or: python3 -m unittest test_engine)
 """
 import contextlib
+import copy
 import io
 import json
 import os
@@ -295,8 +296,8 @@ class StateAndLog(unittest.TestCase):
             d = os.path.join(t, "opendesigner")
             quiet(e.cmd_sketch, d, "Sketch", "#5b5bd6", "regular", "web", "friendly", "system-light-dark", quiet=True)
             z = e.zoom_levels(d, e.merge_defaults(e.read_json(os.path.join(d, "state.json"))))
-            self.assertEqual(z["color"]["level"], "broad")
-            self.assertEqual(z["motion"]["level"], "sketch")
+            self.assertEqual({v["level"] for v in z.values()}, {"sketch"})   # a sketch alone reads 'sketch' everywhere (U5 F23)
+            self.assertEqual(z["color"]["next"], ["Q-color-02"])
             files, meta, _ = e.generate_system(e.read_json(os.path.join(d, "state.json")))
             rep = e.Report()
             e.validate_files(files, e.read_json(os.path.join(d, "state.json")), rep)
@@ -488,7 +489,7 @@ class ReviewAndFeedback(unittest.TestCase):
             got = {(f_["file"].split(os.sep)[-1], f_["line"], f_["kind"]): f_["fix"] for f_ in res["findings"]}
             self.assertIn("--ds-elevation-overlay", got[("b.css", 1, "shadow")])      # 24px blur -> overlay role
             self.assertIn("--ds-elevation-raised", got[("b.css", 6, "shadow")])       # 4px blur -> raised role
-            self.assertIn("--ds-motion-duration-", got[("b.css", 2, "duration")])
+            self.assertIn("--ds-motion-transition-feedback-duration", got[("b.css", 2, "duration")])  # a 200ms opacity change is feedback
             self.assertIn("DSMotion.duration", got[("S.swift", 2, "duration")].replace(".Motion.", "Motion."))
             self.assertTrue(got[("C.kt", 1, "duration")].endswith("Ms"))
             self.assertNotIn(("b.css", 3, "duration"), got)
@@ -561,6 +562,453 @@ class JourneyTracking(unittest.TestCase):
             self.assertIn("Frustration: Q-color-02 (2)", text)
             self.assertNotIn("Priya", text)
             self.assertEqual(self.events(d)[-1], ("feedback_filed", None, {"kind": "confusing"}))
+
+
+def u5_state(**raw):
+    s = e.default_state("U5 test")
+    s["raw"]["brandColor"] = "#2563eb"
+    s["raw"]["platforms"] = ["ios", "web"]
+    for k, v in raw.items():
+        s["raw"][k] = v
+    return e.merge_defaults(s)
+
+
+def token_hash(state):
+    files, _m, _c = e.generate_system(state)
+    return json.dumps({k: v for k, v in files.items() if k != "opendesigner.meta.json"}, sort_keys=True)
+
+
+def option_value(qid, v):
+    """A realistic answer value for one listed option of a question."""
+    if qid == "Q-brand-01":
+        return {v[:1]: 20}
+    if qid == "Q-aud-02" and v == "state-*":
+        return "state-anxious"
+    if qid == "Q-plat-01":
+        return [v]
+    return v
+
+
+class AnswerCoverage(unittest.TestCase):
+    """U5 fix 1: every answer reaches the system, or the engine says what it shapes instead. Never silent."""
+
+    def test_every_option_has_an_effect_or_a_stated_record(self):
+        qs = e.questions()
+        self.assertGreaterEqual(len(qs), 190)
+        silent = []
+        for qid, q in qs.items():
+            for v in e.option_values(q):
+                eff, kind, _note = e.answer_outcome(qid, option_value(qid, v))
+                if not eff and not kind:
+                    silent.append(f"{qid}={v}")
+        self.assertEqual(silent, [], "options that change nothing and say nothing")
+
+    def test_mapped_questions_change_tokens(self):
+        """Every question that is not declared record-only moves tokens: its options give at least two different systems."""
+        base = u5_state()
+        flat_only = []
+        for qid, q in e.questions().items():
+            if qid in e.ANSWER_RECORDS:
+                continue
+            hashes = set()
+            for v in e.option_values(q):
+                val = option_value(qid, v)
+                s2 = copy.deepcopy(base)
+                s2["answers"][qid] = {"value": val, "set_by": "chosen"}
+                for pth, x in e.answer_effects(qid, val, s2).items():
+                    e._store(s2, pth, x, "chosen", "t", False)
+                hashes.add(token_hash(s2))
+            if len(hashes) < 2:
+                flat_only.append(qid)
+        self.assertEqual(flat_only, [])
+
+    def test_replies_say_what_changed(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="Replies")
+            quiet(e.cmd_set, d, "raw.brandColor", "#2563eb", "brand")
+            for qid, v, want in (("Q-form-02", "on-blur", "shapes DESIGN.md rules, not tokens"),
+                                 ("Q-type-17", "capped-chrome", "build/"),
+                                 ("Q-gov-01", "strict", "owner input"),
+                                 ("Q-color-03", "vivid", "tokens:"),
+                                 ("Q-type-01", "open-source", "not one of the listed options")):
+                out = io.StringIO()
+                with contextlib.redirect_stdout(out):
+                    e.cmd_set(d, "answers." + qid, v, "test")
+                self.assertIn(want, out.getvalue(), qid)
+            with open(os.path.join(d, "decisions.md"), encoding="utf-8") as f:
+                self.assertIn("also set: dials.colorfulness = 92 (from Q-color-03)", f.read())
+
+    def test_testers_answers_move_the_right_tokens(self):
+        def apply(qid, v, s=None):
+            s2 = copy.deepcopy(s or u5_state())
+            for pth, x in e.answer_effects(qid, v, s2).items():
+                e._store(s2, pth, x, "chosen", "t", False)
+            files, meta, _c = e.generate_system(s2)
+            return s2, files, meta
+        _s, _f, tonal = apply("Q-color-03", "tonal")
+        _s, _f, vivid = apply("Q-color-03", "vivid")
+        self.assertGreater(vivid["color"]["peakHct"], tonal["color"]["peakHct"])
+        s2, files, meta = apply("Q-color-04", "contrasting", u5_state(secondaryColors=["#ff9900"]))
+        self.assertIn("accent2", meta["color"]["ramps"])
+        self.assertEqual(meta["color"]["accentCount"], 2)
+        _s, files, meta = apply("Q-color-09", "cool")
+        self.assertAlmostEqual(meta["color"]["neutralTint"]["h"], 255.0, delta=1)
+        _s, files, meta = apply("Q-color-19", "categorical-6-8")
+        flat = e.resolve_all(files, {"theme": "light"})
+        self.assertIn("color.chart.categorical.8", flat)
+        rep = e.Report()
+        e.validate_files(files, _s, rep)
+        self.assertFalse([i for i in rep.items if i["category"] == "contrast" and "chart" in i["message"]])
+        _s, files, meta = apply("Q-color-20", "overlay")
+        flat = e.resolve_all(files, {"theme": "light"})
+        self.assertEqual(flat["color.bg.action.primary-hover"]["$value"]["colorSpace"], "srgb")  # a composited state layer
+        _s, files, meta = apply("Q-color-21", "black")
+        self.assertEqual(meta["ramps"]["neutral"]["dark"]["hex"][0], "#000000")
+        _s, files, meta = apply("Q-dir-02", "compact")
+        self.assertEqual(meta["density"]["compact"]["control"]["md"], 32)
+        _s, files, meta = apply("Q-color-02", "flooded-chrome", u5_state())
+        self.assertEqual(e.resolve_all(files, {"theme": "light"})["color.surface.nav"]["$value"], "{color.accent.light.9}")
+        _s, files, meta = apply("Q-form-01", "filled")
+        self.assertEqual(e.resolve_all(files, {"theme": "light"})["color.bg.field"]["$value"], "{color.neutral.light.3}")
+
+
+class BrandColor(unittest.TestCase):
+    """U5 fix 2: a person's brand hex that passes is kept exactly; feel words never gray it out."""
+
+    def test_exact_hex_on_primary_when_it_passes(self):
+        for brand, feel in (("#2563eb", ["playful"]), ("#1f6f5c", ["serious", "minimal", "premium"]), ("#2563eb", ["serious", "minimal"])):
+            s = u5_state()
+            s["raw"]["brandColor"] = brand
+            s["macros"] = feel
+            files, meta, _c = e.generate_system(s)
+            flat = e.resolve_all(files, {"theme": "light"})
+            self.assertEqual(e.hex_of(flat["color.bg.action.primary"]["resolved"]), brand, (brand, feel))
+            self.assertGreaterEqual(meta["dials"]["colorfulness"], 36)
+            self.assertNotEqual(meta["color"]["scheme"], "monochrome")
+            self.assertIn("exactly", e.brand_line(meta, s))
+
+    def test_failing_hex_is_adjusted_and_explained(self):
+        s = u5_state(brandColor="#7a7a7a")
+        files, meta, _c = e.generate_system(s)
+        self.assertIsNone(meta["color"]["pinnedStep"])
+        line = e.brand_line(meta, s)
+        self.assertIn("#7A7A7A", line)
+        self.assertIn("color.brand.seed", line)
+        self.assertEqual(line.count("\n"), 0)
+
+    def test_seed_and_explicit_monochrome_are_honoured(self):
+        s = u5_state()
+        s["raw"]["flags"]["brandExact"] = False
+        _f, meta, _c = e.generate_system(s)
+        self.assertIsNone(meta["color"]["pinnedStep"])
+        s = u5_state()
+        s["dials"]["colorfulness"] = {"value": 5, "set_by": "chosen"}
+        _f, meta, _c = e.generate_system(s)
+        self.assertEqual(meta["color"]["scheme"], "monochrome")
+
+
+class FeelWordsAndDelegation(unittest.TestCase):
+    """U5 fixes 3 and 9."""
+
+    def test_free_words_map_and_unknown_words_never_error(self):
+        macros, mapping, unknown = e.feel_words(["fun!!", "calm", "techy", "a bit cozy", "zesty"])
+        self.assertEqual(mapping["fun!!"], ["playful"])
+        self.assertIn("deferential", mapping["calm"])
+        self.assertEqual(mapping["techy"], ["modern"])
+        self.assertEqual(mapping["a bit cozy"], ["friendly"])
+        self.assertEqual(unknown, ["zesty"])
+        for w in ("fun", "playful", "bright", "bold", "calm", "quiet", "serious", "minimal", "friendly", "techy", "premium", "cozy"):
+            self.assertTrue(e.feel_words([w])[0], w)
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(e.cmd_sketch(d, "Words", None, "regular", "web", "fun,quiet,zesty"), 0)
+            self.assertIn("zesty", out.getvalue())
+            st = e.read_json(os.path.join(d, "state.json"))
+            self.assertEqual(st["macros"], ["playful", "deferential"])
+
+    def test_sketch_delegated(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Ops", "#2563eb", "dense", "web", "serious,minimal", quiet=True, delegated="all")
+            st = e.read_json(os.path.join(d, "state.json"))
+            self.assertEqual(st["answers"]["Q-aud-01"]["set_by"], "delegated")
+            with open(os.path.join(d, "decisions.md"), encoding="utf-8") as f:
+                log = f.read()
+            self.assertRegex(log, r"## D-\d+ · macros = .*\n- set_by: delegated")
+            self.assertRegex(log, r"## D-\d+ · raw.brandColor = .*\n- set_by: delegated")
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Ops", "#2563eb", "dense", "web", "serious", quiet=True, delegated="feel")
+            st = e.read_json(os.path.join(d, "state.json"))
+            self.assertEqual(st["answers"]["Q-aud-01"]["set_by"], "chosen")
+            with self.assertRaises(SystemExit):
+                e.cmd_sketch(d, "Ops", delegated="colour")
+
+
+class VisibleStates(unittest.TestCase):
+    """U5 fix 4: hover and pressed differ visibly from the fill, including a pinned brand solid."""
+
+    def test_states_differ_and_keep_text(self):
+        for brand in ("#1f6f5c", "#2563eb", "#0a0a0a", "#ffdd00", "#e11d48"):
+            for method in ("hybrid", "overlay"):
+                s = u5_state(brandColor=brand, stateMethod=method)
+                files, meta, _c = e.generate_system(s)
+                for mode in ("light", "dark"):
+                    flat = e.resolve_all(files, {"theme": mode})
+                    H = lambda p: e.hex_of(flat[p]["resolved"])
+                    for base, on in (("color.bg.action.primary", "color.text.on-action"), ("color.bg.accent.bold", "color.text.on-accent"),
+                                     ("color.bg.danger.bold", "color.text.on-danger")):
+                        hov = base + "-hover"
+                        prs = base + "-pressed"
+                        self.assertGreaterEqual(e.contrast(H(hov), H(base)), e.STATE_MIN["hover"] - 0.005, (brand, method, mode, hov))
+                        self.assertGreaterEqual(e.contrast(H(prs), H(base)), e.STATE_MIN["pressed"] - 0.005, (brand, method, mode, prs))
+                        self.assertGreaterEqual(e.contrast(H(on), H(hov)), 4.5, (brand, method, mode))
+                        self.assertGreaterEqual(e.contrast(H(on), H(prs)), 4.5, (brand, method, mode))
+                rep = e.Report()
+                e.validate_files(files, s, rep)
+                self.assertEqual([i["message"] for i in rep.items if i["severity"] == "error"], [], (brand, method))
+                self.assertFalse([i for i in rep.items if i["category"] == "states"], (brand, method))
+        s = u5_state(brandColor="#1f6f5c")
+        files, _m, _c = e.generate_system(s)
+        s["overrides"]["light:color.bg.action.primary-hover"] = "{color.accent.light.9}"
+        files, _m, _c = e.generate_system(s)
+        rep = e.Report()
+        e.validate_files(files, s, rep)
+        self.assertTrue([i for i in rep.items if i["category"] == "states"])
+
+
+class PersonalOutputs(unittest.TestCase):
+    """U5 fix 5: DESIGN.md opens with a plain summary that is true; the preview is the person's project."""
+
+    def test_summary_names_and_facts(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="robotics-club-site")
+            quiet(e.cmd_set, d, "context.product", "A website for our school robotics club, to get new members", "their words")
+            quiet(e.cmd_sketch, d, "Robotics Club", "#2563EB", "large", "web", "fun,bright", surfaces="website:persuade")
+            with open(os.path.join(t, "DESIGN.md"), encoding="utf-8") as f:
+                text = f.read()
+            front = text.split("---", 2)[1]
+            self.assertLessEqual(len(front.strip().splitlines()), 18)                    # short front matter
+            body = text.split("---", 2)[2]
+            summary = body.split("\n> Generated", 1)[0].strip().splitlines()
+            self.assertEqual(summary[0], "# Robotics Club")                             # --name wins over init's folder name
+            self.assertLessEqual(len([x for x in summary if x.strip()]), 15)
+            joined = "\n".join(summary)
+            for want in ("school robotics club", "now and then", "website", "playful", "#2563EB", "exactly", "Next", "Licence risks"):
+                self.assertIn(want, joined)
+            self.assertNotIn("not recorded yet (Q-aud-01)", text)
+            self.assertNotIn("not recorded yet (Q-scope-06)", text)
+            self.assertNotIn("defined (2 of 3)", text)
+            with open(os.path.join(t, "PRODUCT.md"), encoding="utf-8") as f:
+                prod = f.read()
+            self.assertNotIn("Not recorded yet (Q-aud-01)", prod)
+            self.assertNotIn("Not recorded yet (Q-scope-06)", prod)
+            with open(os.path.join(d, "preview.html"), encoding="utf-8") as f:
+                pv = f.read()
+            self.assertIn("Robotics Club", pv)
+            self.assertIn("Join us", pv)
+            self.assertNotIn("acme", pv.lower())
+            self.assertNotIn("Invite your team", pv)
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_review(d)
+            self.assertIn("No code yet", out.getvalue())
+
+    def test_preview_follows_the_surface(self):
+        for surf, product, want in (("app:operate", "Internal admin for users and jobs", "Add user"),
+                                    ("app:operate", "Personal finance: budgets and bills", "Add transaction"),
+                                    ("docs:read", "Developer guides", "Getting started")):
+            with tempfile.TemporaryDirectory() as t:
+                d = os.path.join(t, "opendesigner")
+                quiet(e.cmd_init, d, name="P")
+                quiet(e.cmd_set, d, "context.product", product, "x")
+                quiet(e.cmd_sketch, d, "Pilot", None, "regular", "web", surfaces=surf)
+                with open(os.path.join(d, "preview.html"), encoding="utf-8") as f:
+                    self.assertIn(want, f.read(), surf)
+
+    def test_zoom_follows_question_levels(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Z", "#2563eb", "regular", "web", "calm", quiet=True)
+            quiet(e.cmd_set, d, "Q-color-02", "accent", "level 1")
+            st = e.merge_defaults(e.read_json(os.path.join(d, "state.json")))
+            self.assertEqual(e.zoom_levels(d, st)["color"]["level"], "broad")
+            for q in ("Q-color-03", "Q-color-04", "Q-color-09", "Q-color-14", "Q-color-15"):
+                quiet(e.cmd_set, d, q, e.questions()[q]["default_value"] or "tonal", "defined", set_by="delegated")
+            st = e.merge_defaults(e.read_json(os.path.join(d, "state.json")))
+            self.assertEqual(e.zoom_levels(d, st)["color"]["level"], "defined")
+            quiet(e.cmd_set, d, "zoom.color", "broad", "the model ran level 1 only")
+            st = e.merge_defaults(e.read_json(os.path.join(d, "state.json")))
+            self.assertEqual(e.zoom_levels(d, st)["color"]["level"], "broad")
+
+
+class PlatformsAndLicences(unittest.TestCase):
+    """U5 fix 6: font licence scope per platform; iOS Dynamic Type."""
+
+    def gen(self, lic, plats=("web", "ios")):
+        s = u5_state(platforms=list(plats), textFace="Söhne", fontLicence=lic)
+        files, meta, _c = e.generate_system(s)
+        return s, files, meta
+
+    def test_web_only_face_falls_back_in_apps(self):
+        s, files, meta = self.gen({"web": True, "app": False, "selfHost": True})
+        sw = e.export_swift(files, meta, "ds")
+        kt = e.export_compose(files, meta, "ds")
+        self.assertNotIn('Font.custom("Söhne"', sw)
+        self.assertIn("not licensed for apps", sw)
+        self.assertIn("Font.system(.body", sw)
+        self.assertIn("not licensed for apps", kt)
+        flat = e.resolve_all(files, {})
+        self.assertEqual(flat["font.family.text"]["resolved"][0], "Söhne")        # the web keeps it
+        self.assertTrue(any("not licensed for apps" in r for r in e.licence_risks(s, meta)))
+
+    def test_app_licence_uses_dynamic_type_sizes(self):
+        s, files, meta = self.gen({"web": True, "app": True, "selfHost": True})
+        sw = e.export_swift(files, meta, "ds")
+        self.assertIn('Font.custom("Söhne", size: 17, relativeTo: .body)', sw)
+        self.assertNotIn("size: 14,", sw)
+        s, files, meta = self.gen({"web": False, "app": False, "selfHost": False})
+        self.assertEqual(e.resolve_all(files, {})["font.family.text"]["resolved"][0], "system-ui")
+        rep = e.Report()
+        s2, files2, meta2 = self.gen({})
+        e.validate_files(files2, s2, rep)
+        self.assertTrue([i for i in rep.items if i["category"] == "licence" and i["severity"] == "warn"])
+
+    def test_q_type_02_web_only(self):
+        eff = e.answer_effects("Q-type-02", "web-only")
+        self.assertEqual(eff["raw.fontLicence"], {"web": True, "app": False, "selfHost": True})
+
+
+class ReviewReactAndTailwind(unittest.TestCase):
+    """U5 fix 7: review finds JSX and Tailwind drift and suggests tokens by role."""
+
+    def test_jsx_tailwind_and_roles(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Ops", "#2563eb", "dense", "web", "serious", quiet=True)
+            quiet(e.cmd_build, d)
+            os.makedirs(os.path.join(t, "src"))
+            with open(os.path.join(t, "src", "UserForm.jsx"), "w") as f:
+                f.write("const s = { borderRadius: 10, padding: 20, fontSize: 15, boxShadow: '0 4px 12px rgba(0,0,0,0.15)', background: '#ffffff' };\n"
+                        "export const B = () => <button style={{ background: '#2563eb', color: '#fff', transition: 'background 250ms' }}>Save</button>;\n"
+                        "export const C = () => <div className=\"bg-[#2563eb] p-[13px] rounded-lg bg-blue-600 text-white text-lg shadow-md\">x</div>;\n")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_review(d, as_json=True)
+            res = json.loads(out.getvalue())
+            vals = {f_["value"]: f_["fix"] for f_ in res["findings"]}
+            for want in ("borderRadius: 10", "padding: 20", "fontSize: 15", "#ffffff", "bg-[#2563eb]", "p-[13px]", "rounded-lg",
+                         "bg-blue-600", "text-white", "text-lg", "shadow-md"):
+                self.assertIn(want, vals, want)
+            self.assertIn("action-primary", vals["#2563eb"])                     # a button fill gets the primary action, not info
+            self.assertNotIn("info", vals["#2563eb"])
+            self.assertIn("bg-action-primary", vals["bg-[#2563eb]"])
+            self.assertIn("transition-feedback", [f_["fix"] for f_ in res["findings"] if f_["kind"] == "duration"][0])
+            self.assertIn("off", vals["bg-blue-600"])                           # the reset removes default palette classes
+
+
+class ExtendTokens(unittest.TestCase):
+    """U5 fix 8: set adds a new token and keeps DTCG and density modes."""
+
+    def test_new_and_changed_tokens(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Ext", "#2563eb", "dense", "web", quiet=True)
+            quiet(e.cmd_set, d, "size.row.md", 36, "table rows")
+            quiet(e.cmd_set, d, "compact:size.control.md", 30, "compact only")
+            quiet(e.cmd_set, d, "space.inset.md", 12, "default density only")
+            quiet(e.cmd_set, d, "color.bg.highlight", "#fff4c2", "new color")
+            files, meta, _c = quiet(e.cmd_generate, d)
+            self.assertEqual(files["semantic.tokens.json"]["size"]["row"]["md"]["$value"], {"value": 36, "unit": "px"})
+            self.assertEqual(files["semantic.tokens.json"]["size"]["row"]["md"]["$type"], "dimension")
+            dens = {n: files[f"semantic.density.{n}.tokens.json"] for n in e.DENSITIES}
+            self.assertEqual(dens["compact"]["space"]["inset"]["md"]["$value"], {"value": 12, "unit": "px"})
+            self.assertNotEqual(dens["spacious"]["space"]["inset"]["md"]["$value"], {"value": 12, "unit": "px"})
+            self.assertEqual(dens["compact"]["size"]["control"]["md"]["$value"], {"value": 30, "unit": "px"})
+            self.assertNotEqual(dens["comfortable"]["size"]["control"]["md"]["$value"], {"value": 30, "unit": "px"})
+            for m in ("light", "dark"):
+                self.assertEqual(files[f"semantic.color.{m}.tokens.json"]["color"]["bg"]["highlight"]["$value"]["hex"], "#fff4c2")
+            rep = e.validate_dir(d)
+            self.assertEqual(rep.count("error"), 0)
+            n = len(e._decision_entries(d))
+            with self.assertRaises(SystemExit):
+                quiet(e.cmd_set, d, "size.row.md", "tall", "not a size")
+            with self.assertRaises(SystemExit):
+                quiet(e.cmd_set, d, "shape.blob", "wobbly", "type unknown")
+            self.assertEqual(len(e._decision_entries(d)), n)                     # nothing logged for a refused change
+
+
+class TailwindExport(unittest.TestCase):
+    """U5 fix 10: one import, optional reset, class names in DESIGN.md."""
+
+    def test_self_contained_theme(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "TW", "#2563eb", "dense", "web")
+            with open(os.path.join(d, "build", "tailwind", "theme.css"), encoding="utf-8") as f:
+                tw = f.read()
+            code = [x for x in tw.splitlines() if x.strip() and not x.startswith(("/*", "   ")) and not x.strip().startswith(("@import \"tailwindcss\"", "@import \"<path"))]
+            self.assertEqual(code[0], '@import "../css/tokens.css";')
+            self.assertIn("--color-*: initial;", tw)
+            self.assertIn("--spacing-control-md:", tw)
+            self.assertNotIn("--spacing-size-", tw)
+            with open(os.path.join(t, "DESIGN.md"), encoding="utf-8") as f:
+                self.assertIn("`bg-action-primary`", f.read())
+            quiet(e.cmd_set, d, "exports.tailwindReset", False, "keep Tailwind defaults")
+            quiet(e.cmd_build, d)
+            with open(os.path.join(d, "build", "tailwind", "theme.css"), encoding="utf-8") as f:
+                self.assertNotIn("--color-*: initial;", f.read())
+
+
+class ShowTemplates(unittest.TestCase):
+    """U5 fix 11: engine.py show fills every template with real values."""
+
+    def test_every_template_fills(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Showcase", "#1f6f5c", "regular", "web", "serious,minimal", quiet=True)
+            for name in e.TEMPLATE_QUESTIONS:
+                p = quiet(e.cmd_show, d, name)
+                with open(p, encoding="utf-8") as f:
+                    html = f.read()
+                data = json.loads(re.search(r'<script type="application/json" id="od-data">(.*?)</script>', html, re.S).group(1).replace("<\\/", "</"))
+                self.assertTrue(data["options"], name)
+                self.assertIn("Showcase", data["title"], name)
+                self.assertNotIn(">Acme<", html)
+            pal = e.build_payload(e.merge_defaults(e.read_json(os.path.join(d, "state.json"))), "palette")
+            accents = {o["value"]: o["ramps"][0]["light"][8] for o in pal["options"]}
+            self.assertEqual(accents["tonal"], "#1f6f5c")                            # the brand stays exact in every option
+            self.assertNotEqual(pal["options"][0]["ramps"][0]["light"][2], pal["options"][1]["ramps"][0]["light"][2])
+
+
+class IntakeU5(unittest.TestCase):
+    """Coordinator follow-ups: a tight key shadow no longer reads as deep; a face the person licenses may carry over."""
+
+    def test_depth_weights_soft_shadows(self):
+        ref = {"method": "computed", "depth": {"hint": "shadow-ladder", "shadows": ["0px 2px 2px rgba(0,0,0,0.3)"],
+                                               "levels": [{"level": "low", "blur": 2, "y": 2, "alpha": 0.3, "count": 50},
+                                                          {"level": "medium", "blur": 12, "y": 4, "alpha": 0.12, "count": 10}]}}
+        got = {p["path"]: p["value"] for p in e.fit_reference(ref)["proposals"]}
+        self.assertLessEqual(got["dials.depth"], 60)
+        legacy = {"method": "computed", "depth": {"hint": "shadow-ladder", "shadows": ["0 2px 2px rgba(0,0,0,0.3)", "0 0 64px 64px rgba(255,255,255,0.75)"]}}
+        self.assertLessEqual({p["path"]: p["value"] for p in e.fit_reference(legacy)["proposals"]}["dials.depth"], 60)
+
+    def test_own_licensed_face_carries_over(self):
+        ref = {"method": "computed", "tag": "inspiration", "type": {"families": ["sohne-var", "-apple-system"]}}
+        fit = e.fit_reference(ref)
+        self.assertNotIn("raw.textFace", {p["path"] for p in fit["proposals"]})
+        self.assertFalse(any("-apple-system" in n for n in fit["notes"]))
+        s = u5_state(textFace="Söhne", fontLicence={"web": True, "app": False})
+        s["hooks"]["H-type"]["status"] = "have"
+        got = {p["path"]: p["value"] for p in e.fit_reference(ref, s)["proposals"]}
+        self.assertEqual(got["raw.textFace"], "Söhne")
+        s["hooks"]["H-type"]["status"] = "pending"
+        s["raw"]["fontLicence"] = {}
+        self.assertNotIn("raw.textFace", {p["path"] for p in e.fit_reference(ref, s)["proposals"]})
 
 
 if __name__ == "__main__":

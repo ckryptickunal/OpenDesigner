@@ -13,8 +13,8 @@ An expressive, rounded, colorful system for a fictional habit app shared between
 | Shape | control radius full, containers 24px, focus ring 2px |
 | Depth | shadow-ladder |
 | Motion | medium 280ms, spring damping 0.76 |
-| Color | expressive scheme, accent solid `#f56545`, text minimum 4.5:1, themes light, dark |
-| Validation | 0 errors, 0 warnings, 7 notes; 168 contrast pairs checked |
+| Color | expressive scheme, accent solid `#ff5a36`, text minimum 4.5:1, themes light, dark |
+| Validation | 0 errors, 0 warnings, 7 notes; 188 contrast pairs checked |
 
 **Files:** `state.json` (the only input), `decisions.md` (why each choice), `tokens/` (DTCG 2025.10 + resolver, canonical), `build/` (css, tailwind, figma, paper, swift, compose, dtcg), `DESIGN.md`, `PRODUCT.md`, `preview.html`.
 

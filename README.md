@@ -4,7 +4,7 @@
 
 OpenDesigner is a free, open-source helper for AI tools like Claude, ChatGPT and Codex. It helps you make a **design system**: the rules for how your app looks, such as colors, text sizes, spacing, corners and buttons. It asks simple questions one at a time, shows you choices you can see, and explains new words in plain language.
 
-**What you get:** your rules saved as files in your project, a `DESIGN.md` page that explains them, and a preview page. About 5 questions give you a complete set that works. Go deeper only where you want to.
+**What you get:** your rules saved as files in your project, a `DESIGN.md` page that explains them, and a preview page. About 3 to 5 questions give you a complete set that works. Go deeper only where you want to.
 
 **To start:** add OpenDesigner to your AI tool ([Quickstart](#quickstart)), then say **"Create a design system for this project."**
 
@@ -56,7 +56,7 @@ Then say: **"Create a design system for this project."**
 
 There are four zoom levels. Nobody picks a mode: everyone starts with the sketch.
 
-1. **Sketch.** About 5 questions, in about 3 minutes. You already get a complete, working system.
+1. **Sketch.** About 3 to 5 questions, in about 3 minutes. You already get a complete, working system.
 2. **Broad.** One short screen for each main area: 8 questions, about 8 minutes.
 3. **Defined.** Pick one area, such as color, text, spacing, buttons or motion, and set it with real values.
 4. **Detailed.** Components, patterns and the fine print of each area.
@@ -77,7 +77,7 @@ OpenDesigner is an open-source AI design system generator that walks you through
 - **Its advice comes from research you can check.** The research has 352 Decision Cards across 18 research lanes and 2,740 logged sources. It also tears down 25 public design systems (Material, Apple HIG, Carbon, Fluent, Polaris, Primer, shadcn/ui and more).
 - **Code checks the result before you see it:** contrast (WCAG 2.2), touch-target sizes and scales.
 - **Every decision is written down with its reason.** Your team and the next AI session can extend the system without breaking it.
-- **A private log of your steps, if you say yes.** It stays on your computer and shows where the questions slow you down ([journey tracker](docs/JOURNEY-TRACKER.md)).
+- **A private log of your steps, if you say yes.** It stays with your project (on your computer, or in the chat's files in web tools) and shows where the questions slow you down ([journey tracker](docs/JOURNEY-TRACKER.md)).
 - **Sharing is a separate yes.** Only then does it send the maintainers an anonymous summary. It never sends your answers, names or files ([privacy](docs/PRIVACY.md)).
 
 ## What a session looks like

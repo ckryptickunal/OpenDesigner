@@ -106,18 +106,57 @@
       "brandExact": true,
       "tintTowardBrand": false,
       "motionOff": true,
-      "darkMode": false
+      "darkMode": false,
+      "p3": true
     },
     "overrides": {},
+    "brandFace": null,
+    "fontLicence": {
+      "web": null,
+      "app": null,
+      "selfHost": null
+    },
+    "fontClass": null,
+    "accentCount": null,
+    "accentHarmony": "triadic",
+    "neutralTint": null,
+    "chartPalette": null,
+    "statusSet": "classic-4",
+    "stateMethod": "hybrid",
+    "darkBase": null,
+    "surfaceLayers": null,
+    "focusStyle": "two-tone",
+    "focusOffset": 2,
+    "fieldStyle": "outlined",
+    "textScaling": "full",
+    "lineHeightGrid": 4,
+    "tracking": "size-table",
+    "numericStyles": false,
+    "spaceLadder": "hybrid",
+    "spaceExtras": [],
+    "groupRatio": null,
+    "breakpoints": null,
+    "glass": null,
+    "borderWidths": [
+      1,
+      2,
+      4
+    ],
+    "scrim": null,
+    "stateOpacity": "material",
+    "reducedMotion": "remove",
+    "iconStroke": null,
+    "devices": [],
+    "situations": [],
+    "domain": null,
+    "minTarget": 48,
+    "focusWidth": 3,
     "secondaryColors": [],
     "monoFace": "ui-monospace",
     "scripts": [
       "Latn"
     ],
-    "domain": null,
-    "defaultTheme": "system",
-    "minTarget": 48,
-    "focusWidth": 3
+    "defaultTheme": "system"
   },
   "overrides": {},
   "answers": {
@@ -154,6 +193,24 @@
       "value": "none",
       "set_by": "chosen",
       "decision": "D-0012",
+      "locked": false
+    },
+    "Q-state-03": {
+      "value": "two-tone",
+      "set_by": "chosen",
+      "decision": "D-0034",
+      "locked": false
+    },
+    "Q-motion-07": {
+      "value": "remove",
+      "set_by": "chosen",
+      "decision": "D-0035",
+      "locked": false
+    },
+    "Q-form-01": {
+      "value": "outlined",
+      "set_by": "chosen",
+      "decision": "D-0036",
       "locked": false
     }
   },
@@ -301,12 +358,13 @@
   "references": {},
   "taste": {},
   "hashes": {
-    "DESIGN.md": "11db68e1241f497a",
-    "PRODUCT.md": "68bef1d1d94cc8fb"
+    "DESIGN.md": "dc0434f3236c7b5a",
+    "PRODUCT.md": "2b7b0e8f8ae98976"
   },
   "exports": {
     "prefix": "ds",
-    "figmaPlan": "professional"
+    "figmaPlan": "professional",
+    "tailwindReset": true
   },
   "locks": []
 }

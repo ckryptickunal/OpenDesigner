@@ -31,15 +31,16 @@ Take facts from `references/`, not from memory. Use `scripts/engine.py` for all 
 
 ## Start
 1. **Look before you ask.** Check for `opendesigner/`, `DESIGN.md`, `PRODUCT.md`, token files, `tailwind.config.*`, CSS custom properties, `package.json`, and logo or font files. Never ask something a file already answers. If `opendesigner/state.json` exists, switch to opendesigner-extend.
-2. **Set up.** Run `python3 <skill>/scripts/engine.py init --name "<product or folder name>"`. Here `<skill>` means this skill's folder.
+2. **Set up.** Run `python3 <skill>/scripts/engine.py init --name "<product or folder name>"`. Here `<skill>` means this skill's folder. The product name from the sketch (`sketch --name`) replaces the folder name later.
 3. **Greet in 3 lines at most** (`rules.md` section 1). There is no mode to choose.
-   - If `profile.tracking` in `opendesigner/state.json` is not set, the greeting's one question is this line, word for word: "I keep a private log of your steps on this computer so I can make this faster for you. OK?" Record the answer with `journey.py consent on` or `journey.py consent off`. Then ask the first sketch question.
+   - If `profile.tracking` in `opendesigner/state.json` is not set, the greeting's one question is the log question from `rules.md` section 11, word for word. It says "on this computer" only when the scripts run on the person's own computer, and "in your project files" in a web chat. Record the answer with `journey.py consent on` or `journey.py consent off`. Then ask the first sketch question.
    - Otherwise, ask the first sketch question straight away.
 4. If `opendesigner/state.json` has `profile.voice` set, lead with that voice.
 
 ## The flow: zoom, don't march
 Details are in `references/zoom.md`.
-- **Level 0, sketch:** 5 questions, one per message. Then `engine.py sketch ...` records the answers and builds a complete first version. Show it.
+- **Level 0, sketch:** up to 5 questions, one per message, fewer when their words already answer some. Then `engine.py sketch ...` records the answers and builds a complete first version. Show the first result: a plain line on what they got, the preview, and one clear next step (`zoom.md`, "The first result").
+- **People in a hurry** ("just pick") get the sketch with `--delegated` and no optional questions. People who talk in plain words get fewer questions (`zoom.md`).
 - **Level 1, broad:** one short screen per foundation.
 - **Level 2, defined, and level 3, detailed:** one area at a time, only if the person wants it.
 - **After every level,** offer "Stop here, or zoom into X". Stopping is fine at any level.
@@ -58,14 +59,15 @@ Use the best surface the host supports, and say which one you use. Never block o
 5. The host's question tool (Claude AskUserQuestion, Codex `request_user_input`), up to 4 options.
 6. Plain text: numbered options with values.
 
-Templates: `palette` (color, light and dark), `type-scale` (text), `spacing-ruler` (spacing and density), `radius` (corners), `elevation` (depth), `motion`, `component-sheet` (components and states), `option-gallery` (3 to 8 directions side by side). Fill payloads from `engine.py resolve` and `tokens/`, never with invented values.
+Templates: `palette` (color, light and dark), `type-scale` (text), `spacing-ruler` (spacing and density), `radius` (corners), `elevation` (depth), `motion`, `component-sheet` (components and states), `option-gallery` (3 to 8 directions side by side). `engine.py show <template>` fills one with real values, plus what-if options for its question, without changing any choice. It writes `opendesigner/preview/<template>.html` (`--open` opens it). Never fill a template with invented values.
 
 Each template has a **Copy my choice** button that produces `OD:` lines. When the person pastes them back, run each line with the engine (`rules.md` section 9) and confirm in one sentence. Record how each answer was set with `--set-by` (`rules.md` section 5).
 
 ## The engine
 ```
 python3 <skill>/scripts/engine.py init [--name "Acme"]
-python3 <skill>/scripts/engine.py sketch --name "Acme" --audience regular --platforms web --feel friendly,minimal [--brand "#167874"] [--surfaces app:operate]
+python3 <skill>/scripts/engine.py sketch --name "Acme" --audience regular --platforms web --feel friendly,minimal [--brand "#167874"] [--surfaces app:operate] [--delegated feel,brand]
+python3 <skill>/scripts/engine.py feel [words...]            the feel words it knows, or how it reads theirs ("fun" is playful)
 python3 <skill>/scripts/engine.py set <path> <json-value> --why "..." [--set-by delegated] [--lock]
 python3 <skill>/scripts/engine.py resolve                    current dials and derived values, for payloads
 python3 <skill>/scripts/engine.py generate                   opendesigner/tokens/ (DTCG 2025.10)
@@ -73,24 +75,26 @@ python3 <skill>/scripts/engine.py validate [--json]          contrast, targets, 
 python3 <skill>/scripts/engine.py design-md                  DESIGN.md and PRODUCT.md at the project root
 python3 <skill>/scripts/engine.py export --format css|tailwind|figma|paper|swift|compose|dtcg|all
 python3 <skill>/scripts/engine.py preview [--open]           opendesigner/preview.html
-python3 <skill>/scripts/engine.py build [--force]            generate and validate; exports and docs only if there are no errors
+python3 <skill>/scripts/engine.py show <template> [--open]   one visual template filled with real values (opendesigner/preview/)
+python3 <skill>/scripts/engine.py build [--force]            generate and validate; exports, DESIGN.md and preview only if there are no errors
 python3 <skill>/scripts/engine.py review [--project src/]    end-of-implementation check: hard-coded colors, sizes, radii, shadows, durations; stale DESIGN.md sections
 python3 <skill>/scripts/engine.py feedback "..." --kind gap|bug|confusing|idea [--from-journey]
 ```
-After every change, run `generate` and `validate` before showing results. Fix every error first. The report cites the rule it applied.
+After every change, run `build` before showing results, so the exports and preview are never stale. Fix every error first. The report cites the rule it applied. When `pick` or `set` says an answer changes no tokens, it is still saved (as a DESIGN.md rule or a PRODUCT.md fact). Tell the person so, in a few words.
 
 ## The journey log (only after a yes)
-The journey log is a private diary of the person's steps, kept on their computer. It shows where the questions slow people down. `rules.md` section 11 says what to log and when.
+The journey log is a private diary of the person's steps, kept in their project files. It shows where the questions slow people down. `rules.md` section 11 says what to log and when.
 ```
-python3 <skill>/scripts/journey.py consent on|off           their answer to the log question
+python3 <skill>/scripts/journey.py consent on|off           their answer to the log question (consent --where local|web prints it)
 python3 <skill>/scripts/journey.py log step_shown --step Q-shape-01    also help, frustration, speed_mode, session_end
 python3 <skill>/scripts/journey.py report                   opendesigner/journey/JOURNEY.md and a short summary
-python3 <skill>/scripts/journey.py share-consent [always|ask|never]    the sharing question, or their answer
+python3 <skill>/scripts/journey.py share-consent [always|ask|never] [--details]   the short sharing question, its details, or their answer
 python3 <skill>/scripts/journey.py share [--dry-run] [--yes]           send the anonymous report, or show it first
 ```
 - The engine logs its own steps: answers, changed answers, the finished sketch, errors, exports, reviews and feedback. Don't log those twice.
-- Never mention the log in normal messages. Never log before a yes.
-- Sharing an anonymous report with the OpenDesigner team is a separate yes. Ask it once, after the first finished level, never in the first message (`rules.md` section 11).
+- Never mention the log in normal messages. Never log before a clear yes.
+- Help and frustration belong to the step that caused them: pass `--step` when it is not the question on screen (`rules.md` section 11).
+- Sharing an anonymous report with the OpenDesigner team is a separate yes. Ask it once, in the last message of the first session, after the outputs are written. Never ask it in the first message, and never again. Only a clear choice counts: "whatever" or no answer is a no (`rules.md` section 11).
 
 ## DESIGN.md stays alive
 - DESIGN.md is the person's living spec. Once it exists, every `set` and `lock` refreshes it and PRODUCT.md by itself. Run `engine.py design-md` to create it, or after a `--no-doc` change.
@@ -100,17 +104,19 @@ python3 <skill>/scripts/journey.py share [--dry-run] [--yes]           send the 
 ## Designer hooks
 Some assets need a person to make them, such as a logo, app icon, illustration, photos, a brand typeface or exact brand colors. `references/hooks.md` lists all 14. It says when to ask, which formats to accept, what to offer when they don't have one, and how to record the answer.
 
+When they name a brand font, ask where its licence lets them use it: websites, apps, and hosting the files themselves. Then say in one line what that means for each platform they build for. For example: "Your licence covers websites only, so the iPhone app will use the system font." Record it with `engine.py pick Q-type-02 web-only` (or `yes`, `app-only`), as `hooks.md` (H-type) says. Never guess a licence.
+
 ## References the person brings
 If they share a site, screenshot, Figma file, repo or brand book, hand off to **opendesigner-extract**.
 
 ## Finish (at whatever level they stop)
-1. `engine.py build`. Validation passes, or each warning has a written reason.
-2. Show coverage in one line (decided, defaulted, not applicable, pending), plus the pending list.
-3. Check the outputs: `opendesigner/tokens/` (canonical), `opendesigner/build/` (exports), `DESIGN.md` and `PRODUCT.md` at the root, `opendesigner/decisions.md` and `state.json`. Write `opendesigner/RATIONALE.md` for the team from `assets/output/RATIONALE.md`.
-4. Ask first, then append `assets/output/AGENTS-snippet.md` to their AGENTS.md (or CLAUDE.md).
-5. Send a short summary in three parts: what we chose and why, what is still open, and how to change it later ("use opendesigner-extend").
-6. Mention any feedback you recorded, and offer the issue link (`references/improve.md`).
-7. If the log is on: `journey.py log session_end`, then `journey.py report`. Mention one line of it only if it shows something useful. Then send or ask about the anonymous report as `rules.md` section 11 says.
+One question per message here, as everywhere.
+1. `engine.py build`. Validation passes, or each warning has a written reason. For a warning the defaults raise, write the reason yourself; don't ask the person about it.
+2. Check the outputs: `opendesigner/tokens/` (canonical), `opendesigner/build/` (exports), `DESIGN.md` and `PRODUCT.md` at the root, `opendesigner/decisions.md` and `state.json`. Write `opendesigner/RATIONALE.md` for the team from `assets/output/RATIONALE.md`.
+3. Send a short summary in three parts: what we chose and why, what is still open, and how to change it later ("use opendesigner-extend"). Add coverage in one line (decided, defaulted, not applicable, pending). For the plain voice, point to the preview and the short summary at the top of DESIGN.md, not the rest of the file. For the engineer voice, name the export files they will import.
+4. If the project has code or agent files (AGENTS.md, CLAUDE.md, `.cursor/`), ask in its own message: "Want me to add a short note to your AGENTS.md, so other AI helpers follow these choices?" After a yes, append `assets/output/AGENTS-snippet.md`. Skip this step when there is no code yet.
+5. If you recorded feedback, mention it and offer the issue link (`references/improve.md`).
+6. If the log is on: `journey.py log session_end`, then `journey.py report`. Mention one line of it only if it shows something useful. In the first session, the last message is the sharing question. In later sessions, send or ask about the report. Both are in `rules.md` section 11.
 
 ## Improve OpenDesigner
 When a question, option or building block is missing, a step confuses the person, or something breaks, follow `references/improve.md`.
@@ -129,34 +135,66 @@ People never pick a mode. Everyone starts with a quick sketch of the whole syste
 
 | Level | Name | What the person gets | Rough size |
 |---|---|---|---|
-| 0 | sketch | A complete but coarse system: every token exists, every DESIGN.md section is filled from defaults | 5 questions, about 3 minutes |
+| 0 | sketch | A complete but coarse system: every token exists, every DESIGN.md section is filled from defaults | up to 5 questions, about 3 minutes |
 | 1 | broad | One short screen for each foundation: style, density, color use, text, corners, depth, motion, and where the files live | 8 questions, about 8 minutes |
 | 2 | defined | One area at a time (for example Color: ramps, roles, contrast) | 1 to 15 questions per area |
 | 3 | detailed | Blocks, components and patterns, and the fine print of each area (`stages/*.detailed.md`) | the rest |
 
-## Level 0: sketch (5 questions, one per message)
-1. **What are you making?** Take a free answer and record it: `engine.py set context.product '"<their words>"'`. If they name surfaces (an app and a landing page), confirm Q-scope-01 in one line. In the same line, name each surface's kind (Q-scope-06): Persuade (selling), Operate (getting work done), Read (docs and articles) or Experience (showcases). The main surface goes first.
+## Level 0: sketch (a few questions, one per message)
+Five answers shape the sketch. Ask only what their words and files don't already tell you.
+
+1. **What are you making?** Take a free answer and record it: `engine.py set context.product '"<their words>"'`. If the product has a name, pass it as `sketch --name`. It replaces the folder name that `init` used.
+   - Take each surface's kind (Q-scope-06) from their words. Say it plainly, like "a site that shows off your club". Pass it with `--surfaces`. When you inferred it, record it before the sketch instead (below, "Assumed answers"). Name the kinds (Persuade, Operate, Read, Experience) only when the designer or engineer voice leads.
+   - If they name several surfaces (an app and a landing page), confirm Q-scope-01 in one line. The main surface goes first.
 2. **Who is it for?** This is Q-aud-01. Ask whether people use it all day (`dense`), regularly (`regular`), or now and then on the go (`large`).
 3. **Where does it run?** This is Q-plat-01. The choices are web, iPhone (`ios`), Android and desktop. Web alone is fine.
-4. **How should it feel?** Ask them to pick 2 or 3 words from these pairs:
-   - playful or serious
-   - friendly or authoritative
-   - minimal or rich
-   - premium or everyday
-   - modern or heritage
-   - bold or quiet
-
-   The words fill in the personality sliders (Q-brand-01), so don't ask for the sliders.
+4. **How should it feel?** Ask: "Describe the feel in 2 or 3 words, like fun, calm, serious or bold." Pass their words to `sketch --feel`.
+   - The engine maps common words to its own (fun to playful, calm to deferential and minimal). `engine.py feel fun calm` shows the mapping, and `engine.py feel` lists every word it knows.
+   - If the engine doesn't know a word, it builds with the others and prints one short question. Ask that question with the result.
+   - Show six pairs only if they ask for choices, or when the designer voice leads. The pairs are playful or serious · friendly or authoritative · minimal or rich · premium or everyday · modern or heritage · bold or quiet.
+   - The words fill in the personality sliders (Q-brand-01), so don't ask for the sliders.
 5. **Do you have a brand color or a logo?** This is Q-color-01, asked together with Q-brand-03.
-   - A hex color becomes the seed (`--brand`). The engine keeps its hue and sets strength and lightness for contrast. If the exact hex must appear on buttons, also run `engine.py set Q-color-01 keep-hex`.
-   - A logo file becomes the source of candidate colors.
+   - A hex color becomes the seed (`--brand`). The engine keeps it exact on main buttons when it passes contrast. If it doesn't, the engine changes it just enough and prints one line: pass that line on.
+   - A color word ("blue"): pick a hex of that color that fits their feel words, and pass it as `--brand`.
+   - A logo file: if you can see images, find its main color. If you can't, ask "What color is your logo mostly?" Before the sketch, record it with `engine.py set raw.brandColor '"<hex>"' --set-by asset --why "main color of their logo"`, and record the logo with `engine.py set hooks.H-logo.status '"have"' --set-by asset`. Then run `sketch` without `--brand`. A second strong logo color can become a second accent later (Q-color-04, `raw.secondaryColors`).
    - With neither, suggest 3 seed colors that fit their words, and label them as a starting point.
+
+**Don't re-ask.** Skip a question their words or files already answered ("a website" answers where it runs). Log `step_skipped --step <Q-id> --reason known`, and still pass the answer to `sketch`. Say what you took from their words in one line with the result.
+
+**Plain voice: ask fewer.** When the plain voice leads, ask questions 1, 4 and 5. Take who it's for and where it runs from their words when you can. For example, "a website for my school club" means visitors now and then, mostly on phones (`large`), on the web. Record those as assumed answers (below), and say them in one line with the result. Ask question 2 or 3 only when their words give no clue.
+
+**Assumed answers.** An owner input you took from their words, not from an answer, is `assumed` (`rules.md` section 5). Record it before the sketch, and leave its flag out of the `sketch` command, which keeps it:
+```
+engine.py pick Q-aud-01 large --set-by assumed --why "a club website: visitors come now and then, on phones"
+engine.py pick Q-plat-01 '["web"]' --set-by assumed --why "they said a website"
+engine.py pick Q-scope-06 persuade --set-by assumed --why "a site that shows off the club"
+```
+
+**People in a hurry.** When they say "just pick", "just do it" or "you choose" about the rest:
+- Stop asking. Pick values that fit their words and files. For example, reuse the button color already in their CSS as the seed.
+- Pass what you picked with `--delegated`, naming those flags (`--delegated feel,brand`). A bare `--delegated` marks every sketch answer as handed over, so use it only when they answered none themselves.
+- Log `speed_mode` (`rules.md` section 11). That is delegation. Add a frustration signal only if they sound fed up.
+- Ask about who it's for once, and only if nothing points to an answer (`rules.md` section 7). If something does, record it as an assumed answer.
+- After the sketch, send the result, the next step and the offer in one short message, with no extra visuals.
 
 Then run one command. It records the answers and builds everything.
 ```
-engine.py sketch --name "<product>" --audience regular --platforms web,ios --feel friendly,minimal [--brand "#167874"] [--surfaces "app:operate,landing page:persuade"]
+engine.py sketch --name "<product>" --audience regular --platforms web,ios --feel friendly,minimal [--brand "#167874"] [--surfaces "app:operate,landing page:persuade"] [--delegated feel,brand]
 ```
-Show the result on the best visual surface the host has (SKILL.md, visual ladder): a preview, the palette and the type scale. Name one or two defaults they might want to change. Then make the offer (below).
+Then send the first result (below), and make the offer.
+
+## The first result
+Show what they got, not how it was made. Send one message:
+1. **One plain line on what they got, in their words.** For example: "Robotics Club now has its colors, text and spacing, in your logo blue, with a fun feel."
+2. **The visual,** on the best surface the host has (SKILL.md, visual ladder). Lead with the preview (`engine.py preview --open`).
+3. **What you guessed,** in one line: answers you took from their words, and anything the engine changed. For example: "I guessed people visit now and then, mostly on phones. Say if that's wrong."
+4. **One clear next step,** the single most useful thing to do now:
+   - Plain voice: "Look at the preview and tell me anything that feels off."
+   - Engineer voice: the exact file and how to wire it in. For Tailwind v4, two lines in the main CSS file: `@import "tailwindcss";` then `@import "<path to>/opendesigner/build/tailwind/theme.css";`. For plain CSS, import `opendesigner/build/css/tokens.css` once. The opendesigner-export skill lists every file.
+   - Designer voice: the one or two defaults most worth a look, such as the body text size. Say where DESIGN.md explains them.
+5. **The offer** (below).
+
+Never dump settings: no dial numbers, token names, hex lists or file trees unless they ask. Point a plain-voice person to the preview first. If they want to read something, DESIGN.md opens with a short plain summary.
 
 ## Level 1: broad (one screen per foundation)
 Go in this order, with the listed templates:
@@ -173,22 +211,25 @@ Each screen is one message with one question. The person can say "skip", and the
 
 ## Levels 2 and 3: one area at a time
 There are 14 areas: overview, accessibility, platforms, modes, color, typography, layout, shape, elevation, motion, iconography, content, components and delivery. Their plain names are in `pacing.json`. The ids match the engine's, except `delivery`: the engine does not track its zoom level.
-1. Open the area's stage files. Ask its level-2 questions in stage order, and skip any marked **Planned** (not built yet). Then run `engine.py generate` and show the change.
-2. Record the level: `engine.py set zoom.color '"defined"'` (level names: `sketch`, `broad`, `defined`, `detailed`). The engine also infers the level from the decisions made in an area.
-3. Level 3 uses `NN-*.detailed.md` in the same way.
-4. Components live at level 3. Build them from tokens, not from scratch.
+1. Zooming into an area asks its skipped lower-level questions first (for Color after the sketch: Q-color-02 from level 1).
+2. Open the area's stage files. Ask its level-2 questions in stage order, and skip any marked **Planned** (not built yet). Then run `engine.py build` and show the change.
+3. **Plain voice: ask fewer.** When the plain voice leads, ask only three kinds of question: weight `high`, asset hooks, and owner inputs (block class I). Also ask a `medium` question when their words or assets make it matter: a logo with two colors makes Q-color-04 matter. The rest keep their defaults (`auto_default`: nothing to run). Name them in one line of the level summary, like "I also picked the grays and hover colors for you." They can say "ask me everything".
+4. Sometimes `pick` says an answer shapes DESIGN.md rules, not tokens. Then say it is saved as a rule, so they don't expect the preview to change.
+5. Record the level: `engine.py set zoom.color '"defined"'` (level names: `sketch`, `broad`, `defined`, `detailed`). The engine also infers the level from the decisions made in an area.
+6. Level 3 uses `NN-*.detailed.md` in the same way. Pull a level-3 question forward when the product needs it. For example, ask about numbers that line up in columns (Q-type-06) when zooming into Text for a finance or data product.
+7. Components live at level 3. Build them from tokens, not from scratch.
 
 ## The offer after every level
-Keep it short:
-> Your first version is ready. It is a **sketch**: every part works, and most choices are still defaults.
-> Stop here, or zoom into one area:
-> **Color** (shades and contrast, about 5 min) · **Text** (sizes and fonts, about 4 min) · **Everything, broadly** (8 quick screens)
+Keep it short, in plain words:
+> That's your first version: everything works, and I picked most of the small choices for you.
+> Stop here, or go deeper on one part:
+> **Colors** (about 6 min) · **Text** (about 2 min) · **Everything, in 8 quick screens** (about 8 min)
 
-- Offer at most 3 choices, each with its rough minutes from `pacing.json`. Pick what matters most for this product. First come areas whose choices change the most (`pacing.json` → `top_decisions`). Then come areas their answers made risky, such as a light brand color or a dense product.
+- Offer at most 3 choices. Use each area's plain name and its minutes from `pacing.json` (`areas[].levels["<level>"].minutes`). Pick what matters most for this product. First come areas whose choices change the most (`pacing.json` → `top_decisions`). Then come areas their answers made risky, such as a light brand color or a dense product.
 - Accessibility is never an option to skip. Its floors (`guardrails.md` section 4) are already set at level 0.
 - "Stop" is a good answer. Finish with the Finish steps in SKILL.md, at whatever level they reached.
 - If the journey log is on, run `journey.py level-line <level>`. After the sketch, the engine prints this line itself. If there is a line, put it above the choices, for example "You took 9 steps; the shortest path is 5." If there is none, add nothing.
-- After the first finished level, the next message asks about sharing the anonymous report. Ask it once, and never again (`rules.md` section 11).
+- The sharing question is not part of the offer. It comes once, at the end of the first session (`rules.md` section 11).
 - DESIGN.md shows each section's zoom level. A teammate can see what was decided and what is still a default (SKILL.md, "DESIGN.md stays alive"). When someone asks what a section means, point to its zoom line and offer to zoom in.
 
 # Interview rules
@@ -196,12 +237,13 @@ Keep it short:
 How to run the OpenDesigner interview. Sources: `research/L18-ai-first-distribution.md` Part F and DC-L18-06 to 12, `research/L17-how-systems-get-made.md` Parts A and I, and `synthesis/QUESTIONNAIRE.md` (interview protocol). The mechanics adopted from gstack (MIT) and impeccable (Apache-2.0) are described here in our own words, not copied.
 
 ## 1. Message style
-- **First message: 3 lines at most.** Say what you will do and that it starts with 5 quick questions. Then ask the first one. If you already read their repo, one line says what you found.
+- **First message: 3 lines at most.** Line 1 says what you will do. Line 2 says it starts with a few quick questions. If you already read their repo, line 2 says what you found instead. Line 3 asks the first question.
   > I'll help you set up your design system: the colors, text, spacing and parts your app uses.
-  > We start with 5 quick questions, and you get a complete first version. You can go deeper anywhere later.
+  > We start with a few quick questions, and you get a complete first version. You can go deeper anywhere later.
   > First: what are you making?
-- **The first time only,** the first message asks about the journey log instead (section 11). Its last line is the log question. The first sketch question comes in the next message.
-- **One idea and one question per message.** Short sentences. No walls of text, and no long lists unless asked.
+- **The first time only,** line 3 is the log question instead (section 11). The first sketch question comes in the next message.
+- **In the greeting, a plain meaning is enough** for a term, as in the example above. The "Designers · Code" line waits for the first question that uses the term.
+- **One idea and one question per message.** Short sentences. No walls of text, and no long lists unless asked. For the plain voice, keep a question message to about 40 words, the short line included.
 - **Plain words first.** Every term gets its plain meaning the first time (section 2). Skip jargon where a plain word works.
 - **Details on request.** Give sources, real systems and trade-offs when the person says "why?" or "tell me more". Don't volunteer them all at once.
 - **Show, then ask.** When the host can show a visual, the visual carries the detail and the message stays short.
@@ -217,15 +259,17 @@ Search `glossary.json` for each term (one term per line; match the term or one o
 4. **"Explain fully"** shows all three full voices for that one term. That is the only time all three appear together.
 5. **Same words every time.** Use the glossary's `term` in messages and files. Accept `aliases` as input, but answer with the `term`.
 6. **If a term is not in `glossary.json`,** give the plain meaning in your own words, under 20 words. Add the short line only if you are sure of it.
-7. **In files:** DESIGN.md decisions open with one plain sentence and the short line, with the rest collapsed. RATIONALE.md is plain first, then designer. Tokens and code comments use the engineer voice.
+7. **Skip the short line when nobody needs it.** Sometimes the plain voice leads and nothing shows they work with design or code: no repo, no design words. Then give the plain sentence only. The short line is one reply away ("what do designers call it?").
+8. **Lead with the job.** Say what the thing is for before the choice: "Your text, backgrounds and lines use grays. Plain gray, or a little blue?"
+9. **In files:** DESIGN.md decisions open with one plain sentence and the short line, with the rest collapsed. RATIONALE.md is plain first, then designer. Tokens and code comments use the engineer voice.
 
 ## 3. The rules, in the order they matter
 1. **Look before you ask.** Read the repo, CSS, tokens, brand files and any reference first. Ask only about taste, trade-offs and facts no file holds. If there are several candidates (two blues in the CSS), list them and recommend one.
 2. **Every question must do one of three things:** change the system, lock an assumption, or pick a trade-off. For small gaps, don't ask: assume, and label the assumption.
 3. **Zoom, don't march** (`zoom.md`).
 4. **Order by downstream reach.** Product truth first (what it is, who it's for, where it runs, how it feels), then foundations, then components.
-5. **Offer 2 to 4 real options.** Recommend one with a short reason, and always allow a free answer. The stage files list real systems that use each option. Show them when asked "why?" or when the designer voice leads. At the style screen (Q-dir-01), give 2 or 3 **safe choices** and at least 2 **risks**. Say what each one gains and what it costs. Directions must differ in type, palette and shape.
-6. **Ask for examples, including one they dislike.** Do this once, when they zoom into direction, color, type, corners or motion.
+5. **Offer 2 to 4 real options.** Recommend one with a short reason, and always allow a free answer. Accept their own words as an answer, and map them to the nearest option (section 7). The stage files list real systems that use each option. Show them when asked "why?" or when the designer voice leads. At the style screen (Q-dir-01), give 2 or 3 **safe choices** and at least 2 **risks**. Say what each one gains and what it costs. Directions must differ in type, palette and shape.
+6. **Ask for examples, including one they dislike.** Do this once, when they zoom into direction, color, type, corners or motion. Record what they name: `engine.py set taste.likes '["..."]'` and `engine.py set taste.dislikes '["..."]'`. "I don't know" is a fine answer: move on.
 7. **Word questions neutrally.** The recommendation lives in the options, not in the question.
 8. **Record honestly.** A recommendation you made is not an answer you received (section 5).
 9. **Play back before writing outside `opendesigner/`.** List the decisions (question id, value, how it was set) with a way to change each, and get a yes.
@@ -246,7 +290,7 @@ Pick one, say "show me", or tell me what you want.
 ```
 - The plain sentence and the "Designers · Code" line appear only the first time the term comes up.
 - The question id (Q-shape-01) is the stable handle for later changes ("change Q-shape-01"). Show it only when the engineer voice leads or the person asks. The engine numbers log entries D-0001, D-0002 and so on.
-- Put the recommended option first, and keep the rest behind "more options". Questions with weight `high` get one extra line on what the choice changes elsewhere. Nothing else.
+- Put the recommended option first. Show up to 4 options. If a question has more, show the 3 closest and put the rest behind "more options". Questions with weight `high` get one extra line on what the choice changes elsewhere. Nothing else.
 
 ## 5. Answer statuses (`--set-by`)
 | Status | Meaning | Record with |
@@ -254,8 +298,8 @@ Pick one, say "show me", or tell me what you want.
 | `chosen` | The person picked it (default) | `engine.py set <path> <value> --why "<their words>"` |
 | `confirmed_default` | The person accepted your recommended default | `--set-by confirmed_default` |
 | `auto_default` | A question nobody reached, or a Mechanical decision nobody looked at | nothing to run: the default stands; list it in the stage summary |
-| `delegated` | The person said "you decide" | `--set-by delegated --why "<your reason>"`; list it at the next gate and in the final summary |
-| `assumed` | Owner input you could not ask (the person stopped before zoom 2) | `--set-by assumed`; list it at the end for confirmation; never present it as decided |
+| `delegated` | The person said "you decide" about this question, or "pick the rest" about the questions still to come | `--set-by delegated --why "<your reason>"`; list it at the next gate and in the final summary. Questions they never saw and never handed over stay `auto_default` |
+| `assumed` | Owner input you took from their words or files instead of asking (a club website: visitors come now and then, on phones), or could not ask | `--set-by assumed`; say it in one line so they can correct it; list it at the end; never present it as decided |
 | `reference` | Accepted from a reference | `--set-by reference --source-ref <ref-id>` (opendesigner-extract) |
 | `asset` | Derived from an asset the person supplied (for example brand color from the logo) | `--set-by asset` |
 | locked | Must not change without explicit consent (brand hexes, accessibility floors, anything they lock) | `--lock` on the set, or `engine.py lock <path>` |
@@ -269,13 +313,16 @@ A value outside the listed options is recorded as given, with the person's reaso
 - If an override makes two choices clash (for example a brutalist direction with bouncy motion), flag it once. Never block it.
 
 ## 7. When answers are vague, skipped or conflicting
-- **Vague taste words** ("clean", "modern", "premium"): turn them into 3 to 5 precise visual keywords, and confirm before generating. For example, "clean" could become "gray surfaces, one accent color, thin 1 px borders, lots of space".
-- **"You decide" / "skip":** take the default and record `delegated`. For a high fan-out owner input (scope, platforms, audience), push back once: ask only the one or two parts that matter most. If they decline again, respect it and mark it `assumed`.
+- **Their own words.** Take answers in their words ("fun", "calm", "a website") and map them to the nearest option. Never make them pick from a list they didn't ask for. The engine maps common feel words to its own (`zoom.md`, question 4).
+- **Vague taste words** ("clean", "modern", "premium"): turn them into 3 to 5 precise visual keywords. For example, "clean" could become "gray surfaces, one accent color, thin 1 px borders, lots of space". At the sketch, don't spend a message confirming: say how you read their words in one line with the result, so they can correct it. At later levels, confirm before generating.
+- **Don't re-ask.** If their words already answered a question ("a website" answers where it runs), don't ask it. Say what you took from their words in one line, and log the skip with `--reason known`.
+- **"You decide" / "skip":** take the default and record `delegated`. For a high fan-out owner input (scope, platforms, audience), push back once: ask only the one or two parts that matter most. If their words or files already point to an answer, don't push back: record it as `assumed` and say it in one line. If they decline again, respect it and mark it `assumed`.
+- **In a hurry** ("just pick", "just do it", "skip the rest"): stop asking optional questions. Pick what fits their words and files, record it as `delegated`, and list it in one line (`zoom.md`, "People in a hurry").
 - **Conflicting answers** inside one cycle: show both answers and the conflict. Settle it with their ranked principles (Q-brand-07). Never quietly split the difference.
 - **Changing an earlier decision:** re-run `generate` and name the downstream decisions that moved (`graph.json` → edges).
 
 ## 8. Summaries and the offer after each level
-After each level or area, write 2 to 4 plain sentences a teammate could read. For example: "We chose slightly rounded 6 px corners, because the app is a busy work tool. Cards use 8 px." The engine logs each `set` with its `--why` in `opendesigner/decisions.md`. Then make the offer (`zoom.md`): stop here, or zoom into at most 3 named areas.
+After each level or area, write 2 to 4 plain sentences a teammate could read. For example: "We chose slightly rounded 6 px corners, because the app is a busy work tool. Cards use 8 px." Name the defaults you filled in, in one line. Never dump settings: no dial numbers, token lists or hex codes unless they ask. The engine logs each `set` with its `--why` in `opendesigner/decisions.md`. Then make the offer (`zoom.md`): stop here, or zoom into at most 3 named areas. After the sketch, the first result has its own shape (`zoom.md`, "The first result").
 
 ## 9. `OD:` lines (spec 3.7, DC-L18-07)
 One line per decision. A line looks the same whether it comes from a template button, a widget, a click or a typed reply. Each line maps to one engine command:
@@ -311,50 +358,69 @@ Vendors and NN/g have documented that AI-made interfaces converge on the same fe
 - The fix for sameness is explicit decisions and the person's own assets, not a longer prompt.
 
 ## 11. The journey log and sharing (BRIEF requirements 18 and 19)
-The journey log is a private diary of the person's steps, kept on their computer (`docs/JOURNEY-TRACKER.md`). Sending an anonymous report to the OpenDesigner team is a separate yes (`docs/PRIVACY.md`). Every command here is `python3 <skill>/scripts/journey.py ...`. If you can't run scripts, skip this whole section.
+The journey log is a private diary of the person's steps, kept in their project files (`docs/JOURNEY-TRACKER.md`). Sending an anonymous report to the OpenDesigner team is a separate yes (`docs/PRIVACY.md`). Every command here is `python3 <skill>/scripts/journey.py ...`. If you can't run scripts, skip this whole section.
 
-**Asking about the log.** Ask once, in the first message, when `profile.tracking` in `state.json` is not set. Use this line word for word:
+**Asking about the log.** Ask once, as the last line of the first message, when `profile.tracking` in `state.json` is not set. Use one of two lines, word for word. When the scripts run on the person's own computer (Claude Code, Codex, Cursor, VS Code, a terminal), say:
+
 > I keep a private log of your steps on this computer so I can make this faster for you. OK?
 
-Record the answer with `consent on` or `consent off`. Never log anything before a yes.
+In a web chat (claude.ai, ChatGPT), or when you are not sure where the scripts run, say:
+
+> I keep a private log of your steps in your project files so I can make this faster for you. OK?
+
+`consent --where local|web` prints either line. Record the answer with `consent on` or `consent off`. Never log anything before a yes.
+
+**Only a clear yes counts, for both questions in this section.** "Yes", "ok" or "sure" is a yes. "Whatever", "ok I guess", "idk", "you pick", no answer, or a change of subject is not. Record it as a no (`consent off`, or `share-consent never` for sharing), and don't ask again. A consent is never delegated or defaulted, even when the person is in a hurry, and it is never a `just_do_it` signal.
 
 **What to log.** Only when the log is on, and quietly: never mention it in normal messages.
 - You show a question or a screen: `log step_shown --step <Q-id>`.
+- Before a message that is not a questionnaire question, log it with a moment id. Then help or frustration about it lands there, not on the last question. The ids are `consent.share` (the sharing question), `result` (a result or preview), `offer` (stop or zoom in), `finish.agents` (the AGENTS.md note) and `finish.feedback` (the feedback link).
 - The engine logs answers given through `pick`, `set` and `sketch`, changed answers, the finished sketch, errors, exports, reviews and feedback. Don't log those again.
-- An answer that doesn't go through the engine: `log step_answered --step <Q-id> --how default|option|free|delegated|reference`. A skip: `log step_skipped --step <Q-id> --reason person|rule|known|speed|later`.
+- An answer that doesn't go through the engine: `log step_answered --step <Q-id> --how default|option|free|delegated|reference`.
+- A skip: `log step_skipped --step <Q-id> --reason person|rule|known|speed|later`. Use `known` when their files or earlier words already answered it.
 - They ask for help: `log help --kind explain|voice_switch|glossary|example`. Explain means "what does this mean?". Voice switch means "say it like a designer" or "like an engineer".
-- They say "faster", "skip the rest" or "just do it": `log speed_mode`.
+- They hand choices over ("just pick", "you choose", "skip the rest", "faster"): `log speed_mode`. Record what they handed over as `delegated` (section 5; `zoom.md`, "People in a hurry"). That is delegation, not frustration.
 - A level other than the sketch finishes: `log level_complete --level broad|defined|detailed`.
 - They stop, or the Finish steps run: `log session_end`.
+
+**Which step a signal belongs to.** `help`, `frustration` and `speed_mode` attach to the step on screen. Once that step is answered, or a level finishes, nothing is on screen. When a signal is about something else, name it: `--step <Q-id or moment id>` for one step (for example `--step Q-color-01` for "why is my blue gray?"), or `--area <area>` for a whole area.
 
 **Signs of frustration.** Log `log frustration --signal <signal>` once per moment, not once per sentence:
 - `said`: they say it is annoying, confusing or too much.
 - `repeat_question`: they ask the same thing a second time.
 - `undo`: they take back a choice they just made.
 - `rage_skip`: they skip 3 or more steps in a row, within about a minute.
-- `just_do_it`: "just pick", "whatever", "just do it". Also log `speed_mode`, then use the defaults with `--set-by delegated`.
+- `just_do_it`: they hand things over because they are fed up ("ugh, just pick", "is there a lot more?"). A calm "just pick" at the start is delegation only.
 - `error_loop`: the same validation error comes back after a fix.
 - `slow`: they say it is slow or taking too long.
 
 A `--note` is optional: 12 words at most, about the step, never about the person. Never put names, answers, colors, links or anything they typed in a note.
 
-**Asking about sharing.** Ask once, after the first finished level (usually the sketch), in the message after the result and the offer. Never ask in the first message or in the middle of a question. Never ask again once they answer. Don't ask when the log is off. Show this text word for word, as one question with three choices (the host's question tool can carry them):
-> Can I send the OpenDesigner team an anonymous report of this session? It shows where people get stuck, so the steps get faster for everyone.
+**Asking about sharing.** Ask once, in the last message of the first session. That comes after the Finish steps have written the outputs, and after the summary. Never ask in the first message, in the middle of a question or a fix, or when the log is off. Never ask again once they answer. If the first session ends without the Finish steps, ask at the end of the next one. Log `step_shown --step consent.share` first. Show these lines word for word (`share-consent` prints them):
+
+> Can I send the OpenDesigner team an anonymous report of which steps were slow or confusing, so they can make them faster?
+> It never includes your answers, names, colors, files or anything you typed. Share every time, ask me each time, or don't share?
+> Say "details" to see exactly what is sent.
+
+- "Details" (or "tell me more", "what is sent?"): show this text word for word (`share-consent --details` prints it), then wait for their choice:
+
+> Why: it shows the OpenDesigner team where people get stuck, so the steps get faster for everyone.
 > What is sent: which questions came up, how long each took (to 5 seconds), how you answered (kept the default, picked an option and so on), skips, stops and help requests, plus the OpenDesigner version, the AI tool and the week.
-> Never sent: your answers, names, colors, brand, files, paths, links, notes or anything you typed. No ID ties reports to you or this computer.
-> Where it goes: a small server run by the OpenDesigner maintainers. Until it is set up, reports wait on this computer.
+> Never sent: your answers, names, colors, brand, files, paths, links, notes or anything you typed. No ID ties reports to you or your device.
+> Where it goes: a small server run by the OpenDesigner maintainers. Until it is set up, reports wait in your project files and nothing is sent.
 > How long: reports are kept 12 months; after that only the totals stay.
-> You can see the exact report first: say "show me".
-> Choose: share every time · ask me each time · don't share. You can change your mind any time.
+> To see the exact report first, say "show me".
+> Choose: share every time · ask me each time · don't share. To change your mind later, say "stop sharing" or "start sharing".
 
-- "Show me": run `share --dry-run`, show the JSON, then ask again.
-- Record the answer with `share-consent always` (share every time), `share-consent ask` (ask me each time) or `share-consent never` (don't share).
-- "Stop sharing", at any time: run `share-consent never`, then confirm in one line.
+- "Show me": run `share --dry-run`, show the JSON, then ask for their choice again.
+- Record a clear choice with `share-consent always` (share every time), `share-consent ask` (ask me each time) or `share-consent never` (don't share). A plain "yes" means ask me each time: record `ask`, then run `share --yes` for this session's report. A plain "no" means don't share.
+- "Stop sharing", at any time: run `share-consent never`, then confirm in one line. "Start sharing" later: ask which of the three choices they want, and record it.
 
-**Sending.** At `session_end`, and after each later finished level:
+**Sending.** At `session_end` from the second session on, and after each later finished level:
 - `always`: run `share`. If it says reports aren't being collected yet, tell them once per session, in one line.
 - `ask`: ask this line word for word: "Send this session's anonymous report? Say "show me" to see it first." After a yes, run `share --yes`.
 - `never`, or not asked yet: do nothing.
+- Right after they choose `always` in the first session, run `share` once for that session.
 
 # Improving OpenDesigner (the self-improvement loop)
 
@@ -463,7 +529,7 @@ Hard rules for every OpenDesigner skill. Sources: `_coordination/BRIEF.md` requi
 Some blocks need a human maker or a named tool. OpenDesigner asks for them instead of faking them. Source: `research/L17-how-systems-get-made.md` Part H (formats, fallbacks and checks, verified against 81 Tier A pages). `hooks.json` has the full detail for each hook: exact sizes, licence terms and evidence ids.
 
 ## Rules for every hook
-1. **Ask once, as one checklist** (Q-brand-08), when the person zooms into brand or imagery. Say: "Which of these do you already have?" At levels 0 and 1, ask only about a brand color or logo. Everything else keeps its fallback and a briefed placeholder.
+1. **Ask once, as one checklist** (Q-brand-08), when the person zooms into brand or imagery. Say: "Which of these do you already have?" At levels 0 and 1, ask only about a brand color or logo. Everything else keeps its fallback and a briefed placeholder. An internal work tool with no brand may not need the brand-only hooks: sound, haptics, photos, illustration, motion and motif. Offer to mark them `not-needed` in one step, so they stop showing as open.
 2. **If they have it,** accept the master formats in the tables below.
 3. **If they don't,** offer these paths in order:
    - a designer, with a written brief
@@ -499,6 +565,9 @@ The **Ask** and **Question** columns are what you say to the person, in plain wo
 | `H-haptic` (Q-motion-09) | Do you have your own vibration patterns? | Apple AHAP, Android VibrationEffect | System patterns first |
 | `H-voice` (Q-voice-01) | Do you have a guide for how your product writes, or a word list? | PDF, Markdown, existing product copy | Model drafts voice from the personality answers, marked draft until a content designer or owner reviews it |
 | `H-brandbook` (Q-ref-01) | Do you have a brand book? | PDF | Hand to opendesigner-extract: colors, font names, embedded logos; ask for the SVG master of any logo found |
+
+**Brand font licence, per platform.** When they name a brand font, record what its licence covers with `engine.py pick Q-type-02 yes|web-only|app-only|license-only|no --why "<their words>"`. For any other mix, set it directly: `engine.py set raw.fontLicence '{"web": true, "app": false, "selfHost": true}'`. Name the font with `engine.py set raw.brandFace '"<font name>"'`. Then say in one line what it means for each platform in scope. For example: "Your licence covers websites only, so the iPhone app will use the system font."
+The Swift and Compose exports fall back to the system font by themselves when `app` is not true. If they don't know what the licence covers, record nothing, and list it as an open item: never guess.
 
 ## Tool hooks
 | Hook | Question | Named tools | Caveat |

@@ -57,6 +57,7 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 - set_by: chosen · locked: no · date: 2026-09-24 · supersedes: none · source_ref: none
 - reason: one light theme keeps testing simple; forced colors still work
 - also set: raw.flags.darkMode = false (from Q-theme-01)
+- also set: raw.defaultTheme = "system" (from Q-theme-01)
 
 ## D-0012 · answers.Q-motion-01 = "none"
 - set_by: chosen · locked: no · date: 2026-09-24 · supersedes: none · source_ref: none
@@ -105,7 +106,7 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 ## D-0022 · raw.flags.brandExact = true
 - set_by: chosen · locked: no · date: 2026-09-24 · supersedes: none · source_ref: none
 - reason: the teal is the button fill exactly; it already carries white text at AAA
-- previous value: false
+- previous value: true
 
 ## D-0023 · raw.contrastTarget = "AAA"
 - set_by: chosen · locked: no · date: 2026-09-24 · supersedes: none · source_ref: none
@@ -129,6 +130,7 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 ## D-0027 · raw.focusWidth = 3
 - set_by: chosen · locked: no · date: 2026-09-24 · supersedes: none · source_ref: none
 - reason: a thicker 3px focus ring
+- previous value: 2
 
 ## D-0028 · hooks.H-logo.status = "have"
 - set_by: chosen · locked: no · date: 2026-09-24 · supersedes: none · source_ref: none
@@ -159,3 +161,18 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 - set_by: chosen · locked: no · date: 2026-09-24 · supersedes: none · source_ref: none
 - reason: plain-English content guide exists
 - previous value: "pending"
+
+## D-0034 · answers.Q-state-03 = "two-tone"
+- set_by: chosen · locked: no · date: 2026-09-24 · supersedes: none · source_ref: none
+- reason: a two-tone focus ring that reads on every surface
+- also set: raw.focusStyle = "two-tone" (from Q-state-03)
+
+## D-0035 · answers.Q-motion-07 = "remove"
+- set_by: chosen · locked: no · date: 2026-09-24 · supersedes: none · source_ref: none
+- reason: reduced motion removes feedback transitions too
+- also set: raw.reducedMotion = "remove" (from Q-motion-07)
+
+## D-0036 · answers.Q-form-01 = "outlined"
+- set_by: chosen · locked: no · date: 2026-09-24 · supersedes: none · source_ref: none
+- reason: outlined fields with the label above, like most public services
+- also set: raw.fieldStyle = "outlined" (from Q-form-01)

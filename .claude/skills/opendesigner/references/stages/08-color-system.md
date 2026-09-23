@@ -86,7 +86,7 @@ Zoom 2 defined · weight high · changes 5 decisions · class T · cards DC-L10-
 
 ## Q-color-09 · Should grays be pure, or tinted warm or cool?
 Zoom 2 defined · weight medium · changes 3 decisions · class G · cards DC-L01-06
-- **Ask:** "Should grays be pure, cool, warm, or tinted toward your brand?"
+- **Ask:** "Your text, backgrounds and lines use grays. Should they be pure gray, cool, warm, or tinted toward your brand?"
 - **Why:** Grays fill most of the screen, so warm or cool grays change how the product feels. Linear moved to "a warmer gray" in 2026 [DC-L01-06].
 - **Options:**
   - `hue-matched` Slight tint toward the accent hue (OKLCH chroma about 0.01-0.03 at mid steps) [DC-L01-06].
