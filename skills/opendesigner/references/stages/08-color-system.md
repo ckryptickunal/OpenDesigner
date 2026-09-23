@@ -23,7 +23,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Hook, accepts:** hex, RGB or OKLCH values, a brand book PDF, or a reference from Q-ref-01. If no brand color exists: the builder suggests seeds weighted by the personality sliders (blue reads competent, red excitement, per Labrecque & Milne) and labels the choice as a starting point, not a brand decision [S-L06-072]
 - **Skip:** yes, a seed is suggested.
 - **Decides:** DC-L09-03, DC-L01-09 · **Changes downstream:** DC-L01-01, DC-L01-03, DC-L01-04, DC-L06-06, DC-L15-06
-- **Record:** `OD:pick Q-color-01=<value>`
+- **Record:** `OD:set Q-color-01=<json-value> --why "..."`
 
 ## Q-color-02 · Where should your brand color appear?
 *Mode:* Quick · *weight:* high (fan-out 3) · *kind:* decision · *class:* G · *control:* single choice (with platform overrides in Expert)
@@ -42,7 +42,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use brand color on the one element per view that matters most; avoid tinting several control backgrounds at once ("Using your brand color too broadly can overwhelm your interface") [S-L06-008].
 - **Skip:** yes, accent.
 - **Decides:** DC-L06-04, DC-L10-04 · **Changes downstream:** DC-L01-08, DC-L01-13, DC-L08-05, DC-L15-03
-- **Record:** `OD:pick Q-color-02=<value>`
+- **Record:** `OD:set Q-color-02=<json-value> --why "..."`
 
 ## Q-color-03 · How colorful should the palette be?
 *Mode:* Standard · *weight:* high (fan-out 5) · *kind:* decision · *class:* G · *control:* single choice (pre-filled from sliders A and D)
@@ -61,7 +61,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use low chroma on large areas (surfaces) and spend chroma on small, high-meaning elements (primary action, status, selection); avoid vivid surfaces in high-trust categories [DC-L01-10; S-L01-013, S-L06-010].
 - **Skip:** yes.
 - **Decides:** DC-L01-10, DC-L06-05 · **Changes downstream:** DC-L01-15, DC-L01-24, DC-L15-06
-- **Record:** `OD:pick Q-color-03=<value>`
+- **Record:** `OD:set Q-color-03=<json-value> --why "..."`
 
 ## Q-color-04 · How many accent colors does the product need?
 *Mode:* Standard · *weight:* medium (fan-out 4) · *kind:* decision · *class:* G · *control:* single choice
@@ -80,7 +80,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** add an accent only when it has a job (a second action tier, discovery, categories); avoid adding one for decoration or picking wheel presets (triadic, complementary) as a palette [DC-L01-08; S-L15-025].
 - **Skip:** yes.
 - **Decides:** DC-L01-08, DC-L15-06 · **Changes downstream:** DC-L01-11, DC-L01-24, DC-L08-05
-- **Record:** `OD:pick Q-color-04=<value>`
+- **Record:** `OD:set Q-color-04=<json-value> --why "..."`
 
 ## Q-color-05 · How much of a screen may use accent color and emphasis?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice (pre-filled from Q-brand-04)
@@ -97,7 +97,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use accent for the one thing the user should do next; avoid two primary buttons in one group ("if you need two primaries, one of them is secondary") [DC-L15-03].
 - **Skip:** yes.
 - **Decides:** DC-L15-03 · **Changes downstream:** DC-L08-05, DC-L13-18, DC-L15-11
-- **Record:** `OD:pick Q-color-05=<value>`
+- **Record:** `OD:set Q-color-05=<json-value> --why "..."`
 
 ## Q-color-06 · Should colors follow the user's wallpaper or system accent?
 *Mode:* Standard · *weight:* high (fan-out 5) · *kind:* decision · *class:* T · *control:* single choice
@@ -114,7 +114,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** let dynamic color own surfaces and secondary accents; avoid letting it change error and brand-critical colors [DC-L01-21; S-L01-004].
 - **Skip:** yes.
 - **Decides:** DC-L10-05, DC-L01-21 · **Changes downstream:** DC-L01-15, DC-L05-12
-- **Record:** `OD:pick Q-color-06=<value>`
+- **Record:** `OD:set Q-color-06=<json-value> --why "..."`
 
 ## Q-color-07 · How should color ramps be built?
 *Mode:* Expert · *weight:* high (fan-out 6) · *kind:* decision · *class:* G · *control:* single choice (space) + single choice (step rule) + single choice (generator)
@@ -134,7 +134,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use contrast-indexing when users can recolor the accent, so every accent passes the same pairings; avoid HSL-based lightness steps [DC-L01-03, DC-L01-01].
 - **Skip:** yes.
 - **Decides:** DC-L01-01, DC-L01-03, DC-L01-04 · **Changes downstream:** DC-L01-02, DC-L01-18, DC-L01-24, DC-L07-10
-- **Record:** `OD:pick Q-color-07=<value>`
+- **Record:** `OD:set Q-color-07=<json-value> --why "..."`
 
 ## Q-color-08 · How many steps should each ramp have, and how are they numbered?
 *Mode:* Expert · *weight:* medium (fan-out 2) · *kind:* decision · *class:* G · *control:* single choice
@@ -152,7 +152,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use numbers with gaps (50-950) if steps may be inserted later, 1-12 if every step has a fixed job; avoid more steps than distinct UI jobs plus two hover/pressed shifts [DC-L01-02].
 - **Skip:** yes.
 - **Decides:** DC-L01-02 · **Changes downstream:** DC-L01-07, DC-L01-11, DC-L07-03
-- **Record:** `OD:pick Q-color-08=<value>`
+- **Record:** `OD:set Q-color-08=<json-value> --why "..."`
 
 ## Q-color-09 · Should grays be pure, or tinted warm or cool?
 *Mode:* Standard · *weight:* medium (fan-out 3) · *kind:* decision · *class:* G · *control:* single choice + hue/chroma slider
@@ -170,7 +170,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use pure gray where color judgment matters (photo, data, charts); keep chroma lowest at the lightest and darkest steps; avoid strong tints that make status colors look off [DC-L01-06; S-L01-036].
 - **Skip:** yes.
 - **Decides:** DC-L01-06 · **Changes downstream:** DC-L01-07, DC-L01-13, DC-L15-06
-- **Record:** `OD:pick Q-color-09=<value>`
+- **Record:** `OD:set Q-color-09=<json-value> --why "..."`
 
 ## Q-color-10 · How many gray steps, and should there be transparent grays?
 *Mode:* Expert · *weight:* medium (fan-out 3) · *kind:* decision · *class:* G · *control:* number (solid steps) + number (alpha steps)
@@ -186,7 +186,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use alpha neutrals for hover fills and overlays that must work on any surface; avoid using alpha for text [inferred].
 - **Skip:** yes.
 - **Decides:** DC-L01-07 · **Changes downstream:** DC-L01-13, DC-L01-14, DC-L01-27
-- **Record:** `OD:pick Q-color-10=<value>`
+- **Record:** `OD:set Q-color-10=<json-value> --why "..."`
 
 ## Q-color-11 · Which color gamut should the system target?
 *Mode:* Expert · *weight:* medium (fan-out 2) · *kind:* decision · *class:* G · *control:* single choice
@@ -204,7 +204,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use P3 where saturation carries brand or status meaning; avoid P3 for neutrals, where it adds nothing [DC-L01-05, inferred].
 - **Skip:** yes.
 - **Decides:** DC-L01-05, DC-L07-10 · **Changes downstream:** DC-L07-25, DC-L10-22
-- **Record:** `OD:pick Q-color-11=<value>`
+- **Record:** `OD:set Q-color-11=<json-value> --why "..."`
 
 ## Q-color-12 · How should color roles be named?
 *Mode:* Expert · *weight:* medium (fan-out 3) · *kind:* decision · *class:* G · *control:* single choice
@@ -220,7 +220,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use paired fg/bg tokens so each pair is contrast-tested; avoid tokens named after a hue ("blue-button") at the semantic tier [DC-L01-11; DC-L07-04].
 - **Skip:** yes.
 - **Decides:** DC-L01-11 · **Changes downstream:** DC-L01-12, DC-L01-14, DC-L07-04
-- **Record:** `OD:pick Q-color-12=<value>`
+- **Record:** `OD:set Q-color-12=<json-value> --why "..."`
 
 ## Q-color-13 · How many emphasis levels should each color role have?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice
@@ -238,7 +238,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use subtle levels on large areas (banners) and bold for small, urgent elements; avoid bold fills on page-size areas [DC-L01-12].
 - **Skip:** yes.
 - **Decides:** DC-L01-12 · **Changes downstream:** DC-L01-14, DC-L01-17
-- **Record:** `OD:pick Q-color-13=<value>`
+- **Record:** `OD:set Q-color-13=<json-value> --why "..."`
 
 ## Q-color-14 · How should surfaces be layered?
 *Mode:* Standard · *weight:* high (fan-out 5) · *kind:* decision · *class:* G · *control:* single choice (pre-filled from Q-dir-04)
@@ -256,7 +256,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use lighter-when-higher surfaces in dark mode; avoid separating interactive surfaces by tone alone when the edge carries meaning (needs 3:1) [DC-L01-13; S-L01-023].
 - **Skip:** yes.
 - **Decides:** DC-L01-13 · **Changes downstream:** DC-L04-10, DC-L04-13, DC-L08-15
-- **Record:** `OD:pick Q-color-14=<value>`
+- **Record:** `OD:set Q-color-14=<json-value> --why "..."`
 
 ## Q-color-15 · Which status colors do you need?
 *Mode:* Standard · *weight:* medium (fan-out 3) · *kind:* decision · *class:* G · *control:* multi-select
@@ -272,7 +272,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use dark text on yellow and amber fills, which fail 4.5:1 with white (Atlassian `warning.inverse`); avoid conveying status by color alone [DC-L01-15; S-L01-030, S-L01-024].
 - **Skip:** yes.
 - **Decides:** DC-L01-15 · **Changes downstream:** DC-L05-23, DC-L08-18, DC-L13-07
-- **Record:** `OD:pick Q-color-15=<value>`
+- **Record:** `OD:set Q-color-15=<json-value> --why "..."`
 
 ## Q-color-16 · How should dark mode be derived from light?
 *Mode:* Expert · *weight:* high (fan-out 5) · *kind:* decision · *class:* G · *control:* single choice
@@ -289,7 +289,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use role-based mapping so each token keeps its contrast relationship; avoid inverting colors [DC-L01-18; S-L10-089].
 - **Skip:** yes.
 - **Decides:** DC-L01-18 · **Changes downstream:** DC-L01-19, DC-L01-24, DC-L04-13
-- **Record:** `OD:pick Q-color-16=<value>`
+- **Record:** `OD:set Q-color-16=<json-value> --why "..."`
 
 ## Q-color-17 · Which contrast rule should the builder enforce on every color pair?
 *Mode:* Standard · *weight:* high (fan-out 5) · *kind:* decision · *class:* G · *control:* single choice (pre-filled from Q-aud-03)
@@ -305,7 +305,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** test tokens as pairs, in every mode, at build time; avoid judging a single color by eye [DC-L01-22].
 - **Skip:** yes.
 - **Decides:** DC-L01-22 · **Changes downstream:** DC-L01-14, DC-L01-16, DC-L01-20, DC-L02-23
-- **Record:** `OD:pick Q-color-17=<value>`
+- **Record:** `OD:set Q-color-17=<json-value> --why "..."`
 
 ## Q-color-18 · How should meaning survive when color can't be seen?
 *Mode:* Expert · *weight:* medium (fan-out 2) · *kind:* decision · *class:* G · *control:* single choice (links) + toggle (CVD themes)
@@ -322,7 +322,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use a second channel whenever two meanings differ only in hue; avoid red/green-only status pairs [DC-L01-23].
 - **Skip:** yes.
 - **Decides:** DC-L01-23 · **Changes downstream:** DC-L01-20, DC-L01-24, DC-L05-25
-- **Record:** `OD:pick Q-color-18=<value>`
+- **Record:** `OD:set Q-color-18=<json-value> --why "..."`
 
 ## Q-color-19 · Does the product show charts, and which chart colors does it need?
 *Mode:* Standard · *weight:* medium (fan-out 3) · *kind:* decision · *class:* I · *control:* single choice
@@ -340,4 +340,4 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use direct labels or grouping beyond 8 categories; avoid adding more hues [DC-L01-24; S-L05-075].
 - **Skip:** yes, none unless Q-scope-01 includes internal-tools.
 - **Decides:** DC-L01-24, DC-L05-23 · **Changes downstream:** DC-L05-22, DC-L05-24, DC-L05-25
-- **Record:** `OD:pick Q-color-19=<value>`
+- **Record:** `OD:set Q-color-19=<json-value> --why "..."`

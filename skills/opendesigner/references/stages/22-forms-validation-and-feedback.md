@@ -24,7 +24,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use a visible label on every field; avoid placeholder-only labels (a lint warning) [DC-L13-05; L13 E1].
 - **Skip:** yes.
 - **Decides:** DC-L08-16, DC-L13-05 · **Changes downstream:** DC-L08-17
-- **Record:** `OD:pick Q-form-01=<value>`
+- **Record:** `OD:set Q-form-01=<json-value> --why "..."`
 
 ## Q-form-02 · When should forms show errors, and should the submit button ever be disabled?
 *Mode:* Standard · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice (timing) + single choice (disabled policy)
@@ -42,7 +42,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use on-blur validation for format checks; avoid flagging a field before the person has finished typing [DC-L13-06].
 - **Skip:** yes.
 - **Decides:** DC-L13-06, DC-L08-17, DC-L08-10 · **Changes downstream:** DC-L13-07
-- **Record:** `OD:pick Q-form-02=<value>`
+- **Record:** `OD:set Q-form-02=<json-value> --why "..."`
 
 ## Q-form-03 · How should error messages be shown and written?
 *Mode:* Expert · *weight:* medium (fan-out 2) · *kind:* decision · *class:* G · *control:* mapping (severity to pattern)
@@ -60,7 +60,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use a fix-it sentence in every error; avoid blame and jargon codes [DC-L13-07, DC-L06-22].
 - **Skip:** yes.
 - **Decides:** DC-L13-07 · **Changes downstream:** DC-L11-18
-- **Record:** `OD:pick Q-form-03=<value>`
+- **Record:** `OD:set Q-form-03=<json-value> --why "..."`
 
 ## Q-form-04 · Where should confirmations and notifications appear: inline, toast, banner or dialog?
 *Mode:* Standard · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice + per-status table
@@ -77,7 +77,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use toasts only for reversible, low-stakes results; avoid a toast as the only record of an error [DC-L13-09].
 - **Skip:** yes.
 - **Decides:** DC-L08-18, DC-L13-09 · **Changes downstream:** DC-L13-08
-- **Record:** `OD:pick Q-form-04=<value>`
+- **Record:** `OD:set Q-form-04=<json-value> --why "..."`
 
 ## Q-form-05 · For destructive actions, undo or confirm?
 *Mode:* Standard · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice
@@ -94,4 +94,4 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use verb labels on confirmations; avoid "Are you sure?" dialogs for reversible actions [DC-L13-08].
 - **Skip:** yes.
 - **Decides:** DC-L13-08 · **Changes downstream:** DC-L13-09
-- **Record:** `OD:pick Q-form-05=<value>`
+- **Record:** `OD:set Q-form-05=<json-value> --why "..."`

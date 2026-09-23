@@ -24,7 +24,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show two thumbnails, an app screen and a marketing page, drawn from the same tokens.
 - **Skip:** yes, defaults to a single product app.
 - **Decides:** DC-L11-02 · **Changes downstream:** DC-L06-01, DC-L11-03, DC-L11-07, DC-L11-14, DC-L11-16, DC-L11-25
-- **Record:** `OD:pick Q-scope-01=<value>`
+- **Record:** `OD:set Q-scope-01=<json-value> --why "..."`
 
 ## Q-scope-02 · Is there existing UI to consolidate, or is this a new product?
 *Mode:* Standard · *weight:* medium (fan-out 2) · *kind:* decision · *class:* I · *control:* single choice (+ URL or CSS import when existing)
@@ -41,7 +41,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** If existing, ask for a URL or CSS file; show a count like '38 grays, 14 button styles found'.
 - **Skip:** yes, defaults to greenfield.
 - **Decides:** DC-L11-04 · **Changes downstream:** DC-L11-02, DC-L11-07
-- **Record:** `OD:pick Q-scope-02=<value>`
+- **Record:** `OD:set Q-scope-02=<json-value> --why "..."`
 
 ## Q-scope-03 · Who will consume the system?
 *Mode:* Expert · *weight:* high (fan-out 8) · *kind:* decision · *class:* I · *control:* multi-select
@@ -59,7 +59,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show the output list per audience, e.g. 'AI agents get DESIGN.md and an MCP manifest'.
 - **Skip:** yes.
 - **Decides:** DC-L11-02 · **Changes downstream:** DC-L11-18, DC-L11-23, DC-L16-12
-- **Record:** `OD:pick Q-scope-03=<value>`
+- **Record:** `OD:set Q-scope-03=<json-value> --why "..."`
 
 ## Q-scope-04 · How many people will build and maintain the system, and how are they organized?
 *Mode:* Expert · *weight:* medium (fan-out 3) · *kind:* decision · *class:* I · *control:* single choice (size) + single choice (model)
@@ -79,7 +79,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Give the survey split: most teams are 1-5 people.
 - **Skip:** yes.
 - **Decides:** DC-L11-09, DC-L11-10 · **Changes downstream:** DC-L11-01, DC-L11-11, DC-L11-12
-- **Record:** `OD:pick Q-scope-04=<value>`
+- **Record:** `OD:set Q-scope-04=<json-value> --why "..."`
 
 ## Q-scope-05 · How are you starting: from an existing product, a UI kit or library, a reference you admire, or just a brief?
 *Mode:* Standard · *weight:* medium (fan-out 2) · *kind:* decision · *class:* I · *control:* single choice (entry) + single choice (build posture) + single choice (reference fidelity, shown for the reference path)
@@ -98,4 +98,4 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use a kit for components and a reference for structure; avoid letting either become the brand ("websites made with shadcn/ui famously look the same") [DC-L11-01; S-L11-073].
 - **Skip:** yes, brief first.
 - **Decides:** DC-L17-02, DC-L11-01, DC-L17-03 · **Changes downstream:** DC-L08-03, DC-L11-20
-- **Record:** `OD:pick Q-scope-05=<value>`
+- **Record:** `OD:set Q-scope-05=<json-value> --why "..."`

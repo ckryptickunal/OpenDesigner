@@ -23,7 +23,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use 16px or more where users mostly read paragraphs; use 14px where they mostly operate controls and tables; avoid anything people must read below 12px on web or 11pt on mobile [DC-L02-08, DC-L02-20].
 - **Skip:** yes.
 - **Decides:** DC-L02-08 · **Changes downstream:** DC-L02-09, DC-L02-13, DC-L02-17, DC-L03-07
-- **Record:** `OD:pick Q-type-08=<value>`
+- **Record:** `OD:set Q-type-08=<json-value> --why "..."`
 
 ## Q-type-15 · Should text sizes change with screen width?
 *Mode:* Expert · *weight:* medium (fan-out 2) · *kind:* decision · *class:* G · *control:* single choice
@@ -40,7 +40,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use fluid type for marketing heroes; avoid fluid styles inside cards, tables or forms [DC-L02-19; S-L02-011].
 - **Skip:** yes.
 - **Decides:** DC-L02-19 · **Changes downstream:** DC-L03-17, DC-L07-28
-- **Record:** `OD:pick Q-type-15=<value>`
+- **Record:** `OD:set Q-type-15=<json-value> --why "..."`
 
 ## Q-type-17 · How far must layouts support users' larger-text settings?
 *Mode:* Standard · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice
@@ -57,7 +57,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use containers that grow with text; avoid truncating at the largest sizes [DC-L02-21, DC-L10-07].
 - **Skip:** yes.
 - **Decides:** DC-L02-21, DC-L10-07 · **Changes downstream:** DC-L03-07, DC-L05-05, DC-L08-07
-- **Record:** `OD:pick Q-type-17=<value>`
+- **Record:** `OD:set Q-type-17=<json-value> --why "..."`
 
 ## Q-type-09 · Which ratio should generate the size scale?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice + manual override per step
@@ -75,7 +75,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use a formula to start and hand-tune the result; avoid keeping two sizes that differ by less than about 10% [DC-L02-10].
 - **Skip:** yes.
 - **Decides:** DC-L02-09 · **Changes downstream:** DC-L02-10, DC-L02-13
-- **Record:** `OD:pick Q-type-09=<value>`
+- **Record:** `OD:set Q-type-09=<json-value> --why "..."`
 
 ## Q-type-10 · How many text styles, and how are they named?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice (naming) + number (styles)
@@ -92,7 +92,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** name semantic styles by job and primitives by number; avoid more than about 3 type sizes in a single view [DC-L02-07; BOARD L15 note].
 - **Skip:** yes.
 - **Decides:** DC-L02-07, DC-L02-10 · **Changes downstream:** DC-L02-27, DC-L07-12, DC-L13-04
-- **Record:** `OD:pick Q-type-10=<value>`
+- **Record:** `OD:set Q-type-10=<json-value> --why "..."`
 
 ## Q-type-11 · How should line heights be set?
 *Mode:* Expert · *weight:* medium (fan-out 3) · *kind:* decision · *class:* G · *control:* single choice + table of script categories
@@ -109,7 +109,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use smaller ratios as text gets larger; avoid fixed-height components that hold text [DC-L02-13, DC-L02-25].
 - **Skip:** yes.
 - **Decides:** DC-L02-13, DC-L02-25 · **Changes downstream:** DC-L02-16, DC-L03-07, DC-L03-25
-- **Record:** `OD:pick Q-type-11=<value>`
+- **Record:** `OD:set Q-type-11=<json-value> --why "..."`
 
 ## Q-type-12 · Which font weights, and how is emphasis shown?
 *Mode:* Expert · *weight:* medium (fan-out 3) · *kind:* decision · *class:* G · *control:* single choice (weights) + single choice (emphasis)
@@ -127,7 +127,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use weight first, color second, italics only inside running text; avoid light (300) below 32px [DC-L02-12, DC-L02-15].
 - **Skip:** yes.
 - **Decides:** DC-L02-15, DC-L02-12 · **Changes downstream:** DC-L02-06, DC-L08-14
-- **Record:** `OD:pick Q-type-12=<value>`
+- **Record:** `OD:set Q-type-12=<json-value> --why "..."`
 
 ## Q-type-13 · Should letter spacing change with size?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice
@@ -143,7 +143,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use em-based tracking so it scales; let optical-size fonts do most of the work; avoid tracking non-Latin scripts [DC-L02-14, DC-L02-25].
 - **Skip:** yes.
 - **Decides:** DC-L02-14 · **Changes downstream:** DC-L07-12
-- **Record:** `OD:pick Q-type-13=<value>`
+- **Record:** `OD:set Q-type-13=<json-value> --why "..."`
 
 ## Q-type-14 · How should running text be laid out: line length, alignment, truncation and paragraph spacing?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* number (max characters per line) + single choice (overflow) + number (paragraph spacing)
@@ -160,7 +160,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** constrain the container before touching font size when lines exceed about 10-12 words; avoid full justification and centered paragraphs [DC-L02-17, DC-L02-18].
 - **Skip:** yes.
 - **Decides:** DC-L02-17, DC-L02-18, DC-L02-16 · **Changes downstream:** DC-L03-16, DC-L03-25
-- **Record:** `OD:pick Q-type-14=<value>`
+- **Record:** `OD:set Q-type-14=<json-value> --why "..."`
 
 ## Q-type-16 · Should type sizes differ by platform or viewing distance?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice
@@ -178,4 +178,4 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** keep roles and roughly the visual angle when moving to a farther device; avoid reusing desktop sizes on phones [DC-L14-04, DC-L02-20].
 - **Skip:** yes.
 - **Decides:** DC-L02-20, DC-L14-04 · **Changes downstream:** DC-L07-15, DC-L14-13
-- **Record:** `OD:pick Q-type-16=<value>`
+- **Record:** `OD:set Q-type-16=<json-value> --why "..."`

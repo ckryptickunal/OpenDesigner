@@ -1,0 +1,107 @@
+{
+  "space": {
+    "$type": "dimension",
+    "$description": "Semantic spacing, spacious density: aliases into the ladder, shifted +1 step (DC-L03-10, DC-L03-11). Parents own spacing; children never set outer margins (DC-L03-04).",
+    "$extensions": {
+      "opendesigner": {
+        "density": "spacious",
+        "innerOuterRatio": 3.5,
+        "excluded": [
+          "menus",
+          "snackbars",
+          "dialogs"
+        ],
+        "evidence": [
+          "DC-L03-04",
+          "DC-L03-10",
+          "DC-L03-11",
+          "DC-L03-24",
+          "S-L03-029"
+        ]
+      }
+    },
+    "inset": {
+      "xs": {
+        "$value": "{space.10}"
+      },
+      "sm": {
+        "$value": "{space.15}"
+      },
+      "md": {
+        "$value": "{space.20}"
+      },
+      "lg": {
+        "$value": "{space.25}"
+      },
+      "xl": {
+        "$value": "{space.40}"
+      }
+    },
+    "stack": {
+      "xs": {
+        "$value": "{space.10}"
+      },
+      "sm": {
+        "$value": "{space.15}"
+      },
+      "md": {
+        "$value": "{space.20}"
+      },
+      "lg": {
+        "$value": "{space.25}"
+      },
+      "xl": {
+        "$value": "{space.40}"
+      }
+    },
+    "inline": {
+      "xs": {
+        "$value": "{space.10}"
+      },
+      "sm": {
+        "$value": "{space.15}"
+      },
+      "md": {
+        "$value": "{space.20}"
+      }
+    },
+    "section": {
+      "sm": {
+        "$value": "{space.80}",
+        "$description": "Outer gap between groups: at least ratio x the inner gap (inner < outer, L15 P16)."
+      },
+      "md": {
+        "$value": "{space.100}",
+        "$description": "Outer gap between groups: at least ratio x the inner gap (inner < outer, L15 P16)."
+      },
+      "lg": {
+        "$value": "{space.120}",
+        "$description": "Outer gap between groups: at least ratio x the inner gap (inner < outer, L15 P16)."
+      }
+    }
+  },
+  "size": {
+    "$type": "dimension",
+    "control": {
+      "$description": "Control heights, spacious (DC-L03-07). Hit areas never shrink below size.target.min.",
+      "sm": {
+        "$value": {
+          "value": 40,
+          "unit": "px"
+        }
+      },
+      "md": {
+        "$value": {
+          "value": 48,
+          "unit": "px"
+        }
+      },
+      "lg": {
+        "$value": {
+          "value": 56,
+          "unit": "px"
+        }
+      }
+    }
+  }
+}

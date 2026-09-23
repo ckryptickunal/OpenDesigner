@@ -24,7 +24,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use one canonical source for every channel (Q-tool-01); avoid channels that fork the source [DC-L16-02].
 - **Skip:** yes.
 - **Decides:** DC-L16-12 · **Changes downstream:** -
-- **Record:** `OD:pick Q-dist-01=<value>`
+- **Record:** `OD:set Q-dist-01=<json-value> --why "..."`
 
 ## Q-dist-04 · Where do docs live, and what goes on each component page?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice (platform) + template editor
@@ -41,7 +41,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use generated "use it for / avoid it for" notes from this questionnaire on every page; avoid docs that repeat props without guidance [DC-L11-18].
 - **Skip:** yes.
 - **Decides:** DC-L11-17, DC-L11-18, DC-L08-23 · **Changes downstream:** -
-- **Record:** `OD:pick Q-dist-04=<value>`
+- **Record:** `OD:set Q-dist-04=<json-value> --why "..."`
 
 ## Q-dist-02 · How should AI coding tools read the system?
 *Mode:* Standard · *weight:* low (fan-out 1) · *kind:* decision · *class:* T · *control:* multi-select
@@ -59,7 +59,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use evals to check agents follow the files; avoid assuming docs changes alone steer agents [DC-L11-23; S-L11-108].
 - **Skip:** yes.
 - **Decides:** DC-L11-23 · **Changes downstream:** DC-L11-24
-- **Record:** `OD:pick Q-dist-02=<value>`
+- **Record:** `OD:set Q-dist-02=<json-value> --why "..."`
 
 ## Q-dist-03 · How should the system check that people and agents follow it?
 *Mode:* Standard · *weight:* low (fan-out 1) · *kind:* decision · *class:* T · *control:* multi-select (pre-filled from Q-gov-01 and Q-pref-01)
@@ -77,4 +77,4 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use lint errors for Tier A rules and warnings for context-dependent ones (L13 E1); avoid automating the misapplied laws in L13 E2 (no seven-item caps) [L13 E1, E2].
 - **Skip:** yes.
 - **Decides:** DC-L11-24 · **Changes downstream:** -
-- **Record:** `OD:pick Q-dist-03=<value>`
+- **Record:** `OD:set Q-dist-03=<json-value> --why "..."`

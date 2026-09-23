@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>OpenDesigner · Spacing</title>
+<title>OpenDesigner · Motion</title>
 <!--
-OpenDesigner visual template: Spacing. A spacing ruler, padding and gap overlays, and control heights (stages 12-13).
+OpenDesigner visual template: Motion. Durations and easing on live interactions, with reduced-motion handling (stage 16).
 Feed it JSON in one of three ways: replace the contents of <script id="od-data">, set window.OD_DATA before the
 last script runs, or open the file with #data=<url-encoded JSON>. The sample payload below documents every field.
 "Copy my choice" produces OD: lines (grammar in references/rules.md): OD:<action> <target>=<value> <status>.
@@ -47,22 +47,28 @@ input[type=range]{min-height:44px;accent-color:var(--c-strong);flex:1 1 220px}
 .od-out{flex:1 1 320px;min-height:44px;font:12px/1.4 var(--mono);padding:8px;border:1px solid var(--c-border);border-radius:var(--r);background:var(--c-bg);color:var(--c-fg);resize:vertical}
 input[type=radio],input[type=checkbox]{accent-color:var(--c-strong);width:18px;height:18px}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.rul{display:grid;gap:6px}.rs{display:grid;grid-template-columns:70px 64px 1fr;gap:10px;align-items:center}
-.bar{height:14px;background:currentColor;opacity:.55;border-radius:2px;max-width:100%}
-.demo{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;margin-top:20px}
-.card{border:1px solid rgba(128,128,128,.4);border-radius:10px;position:relative;background:rgba(128,128,128,.06)}
-.pad{outline:1px dashed rgba(220,38,38,.7);outline-offset:-1px}
-.inner{background:var(--s-bg2,rgba(255,255,255,.9));color:inherit;border-radius:6px;display:grid}
-.item{border:1px solid rgba(128,128,128,.35);border-radius:6px;padding:8px;background:var(--s-bg,#fff)}
-.gapl{font:10px var(--mono);color:#dc2626;text-align:center;line-height:1}
-.ctl{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}.ctl span{display:flex;align-items:center;justify-content:center;border:1px solid rgba(128,128,128,.5);border-radius:6px;padding:0 12px;font-size:13px}
+.demos{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.dm{border:1px solid rgba(128,128,128,.35);border-radius:10px;padding:12px;display:grid;gap:10px;min-height:190px;align-content:start;position:relative;overflow:hidden}
+.menu{border:1px solid rgba(128,128,128,.45);border-radius:8px;padding:6px;background:var(--s-bg);transform-origin:top left;box-shadow:0 8px 24px rgba(0,0,0,.15)}
+.menu div{padding:6px 8px;border-radius:4px}.sw2{width:52px;height:30px;border-radius:15px;background:rgba(128,128,128,.4);position:relative}
+.sw2 i{position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:var(--s-bg);box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.sheet{position:absolute;left:0;right:0;bottom:0;height:90px;border-top:1px solid rgba(128,128,128,.45);border-radius:12px 12px 0 0;background:var(--s-bg);padding:12px;transform:translateY(100%)}
+svg.curve{width:100%;height:120px;border:1px solid rgba(128,128,128,.3);border-radius:8px}
+.rm{border:1px solid var(--c-border);border-radius:var(--r);padding:10px 12px;background:var(--c-surface)}
 </style>
 </head>
 <body>
 <header class="od-h"><div><h1 id="t"></h1><p class="sub" id="st"></p></div><div class="seg" id="theme" role="group" aria-label="Color mode"></div></header>
 <main>
 <fieldset class="opts" id="opts"></fieldset>
-<section><div id="sp" class="specimen" data-label="your spacing"></div></section>
+<p class="rm" id="rm" hidden>Your system asks for reduced motion, so the demos play as short cross-fades. <button type="button" id="full">Play full motion once</button></p>
+<section><div class="row" style="margin-bottom:10px"><button type="button" id="all">Play all</button><span class="kv" id="dur"></span></div>
+<div id="ms" class="specimen" data-label="your motion"><div class="demos">
+<div class="dm"><strong>Menu open</strong><button type="button" data-p="menu">Play</button><div class="menu" id="menu"><div>Rename</div><div>Duplicate</div><div>Delete</div></div></div>
+<div class="dm"><strong>Toggle</strong><button type="button" data-p="toggle">Play</button><div class="sw2" role="img" aria-label="switch"><i id="knob"></i></div></div>
+<div class="dm"><strong>Sheet</strong><button type="button" data-p="sheet">Play</button><div class="sheet" id="sheet">Bottom sheet</div></div>
+<div class="dm"><strong>Standard curve</strong><svg class="curve" id="curve" viewBox="-5 -30 110 140" role="img" aria-label="easing curve"></svg></div>
+</div></div></section>
 </main>
 <footer class="od-f">
 <label><input type="checkbox" id="lock"> Lock this decision</label>
@@ -73,156 +79,54 @@ input[type=radio],input[type=checkbox]{accent-color:var(--c-strong);width:18px;h
 </footer>
 <script type="application/json" id="od-data">
 {
- "title": "Spacing scale",
- "subtitle": "Sample data. The ruler is drawn at 1:1. Red dashes mark padding; red numbers mark gaps between items.",
- "question": "Q-space-01",
- "recommended": "4-grid-8-rhythm",
+ "title": "Motion feel",
+ "subtitle": "Sample data. Press Play to feel each option. Durations come from the ladder in levers.json scaled by the Energy dial; exits run shorter than entrances.",
+ "question": "Q-motion-01",
+ "recommended": "two-mode",
  "options": [
   {
-   "value": "4-grid-8-rhythm",
-   "label": "4 grid, 8 rhythm",
-   "note": "fine steps up to 16, then coarse",
-   "steps": [
-    {
-     "name": "1",
-     "px": 4
-    },
-    {
-     "name": "2",
-     "px": 8
-    },
-    {
-     "name": "3",
-     "px": 12
-    },
-    {
-     "name": "4",
-     "px": 16
-    },
-    {
-     "name": "5",
-     "px": 24
-    },
-    {
-     "name": "6",
-     "px": 32
-    },
-    {
-     "name": "7",
-     "px": 40
-    },
-    {
-     "name": "8",
-     "px": 48
-    },
-    {
-     "name": "9",
-     "px": 64
-    }
-   ],
-   "demo": {
-    "pad": "4",
-    "gap": "3",
-    "inner": "1"
+   "value": "productive",
+   "label": "Quick and invisible",
+   "note": "fast, no overshoot",
+   "durations": {
+    "short": 100,
+    "medium": 200,
+    "long": 300
    },
-   "controls": {
-    "sm": 32,
-    "md": 40,
-    "lg": 48
+   "easing": {
+    "standard": "cubic-bezier(0.2,0,0.38,0.9)",
+    "enter": "cubic-bezier(0,0,0.38,0.9)",
+    "exit": "cubic-bezier(0.2,0,1,0.9)"
    }
   },
   {
-   "value": "8",
-   "label": "8 only",
-   "note": "coarser, simpler; tight spots get cramped",
-   "steps": [
-    {
-     "name": "1",
-     "px": 8
-    },
-    {
-     "name": "2",
-     "px": 16
-    },
-    {
-     "name": "3",
-     "px": 24
-    },
-    {
-     "name": "4",
-     "px": 32
-    },
-    {
-     "name": "5",
-     "px": 40
-    },
-    {
-     "name": "6",
-     "px": 48
-    },
-    {
-     "name": "7",
-     "px": 64
-    }
-   ],
-   "demo": {
-    "pad": "3",
-    "gap": "2",
-    "inner": "1"
+   "value": "two-mode",
+   "label": "Calm, a few expressive moments",
+   "note": "product UI quick, hero moments slower",
+   "durations": {
+    "short": 150,
+    "medium": 250,
+    "long": 400
    },
-   "controls": {
-    "sm": 32,
-    "md": 40,
-    "lg": 48
+   "easing": {
+    "standard": "cubic-bezier(0.2,0,0,1)",
+    "enter": "cubic-bezier(0,0,0,1)",
+    "exit": "cubic-bezier(0.3,0,1,1)"
    }
   },
   {
-   "value": "4",
-   "label": "4 linear",
-   "note": "every multiple of 4; many near-duplicates",
-   "steps": [
-    {
-     "name": "1",
-     "px": 4
-    },
-    {
-     "name": "2",
-     "px": 8
-    },
-    {
-     "name": "3",
-     "px": 12
-    },
-    {
-     "name": "4",
-     "px": 16
-    },
-    {
-     "name": "5",
-     "px": 20
-    },
-    {
-     "name": "6",
-     "px": 24
-    },
-    {
-     "name": "7",
-     "px": 28
-    },
-    {
-     "name": "8",
-     "px": 32
-    }
-   ],
-   "demo": {
-    "pad": "4",
-    "gap": "3",
-    "inner": "2"
+   "value": "springs",
+   "label": "Physical and bouncy",
+   "note": "overshoot; keep it off dense screens",
+   "durations": {
+    "short": 200,
+    "medium": 320,
+    "long": 480
    },
-   "controls": {
-    "sm": 28,
-    "md": 36,
-    "lg": 44
+   "easing": {
+    "standard": "cubic-bezier(0.34,1.4,0.64,1)",
+    "enter": "cubic-bezier(0.34,1.56,0.64,1)",
+    "exit": "cubic-bezier(0.4,0,1,1)"
    }
   }
  ]
@@ -236,14 +140,16 @@ function loadData(){let d={};try{d=JSON.parse($('#od-data').textContent)}catch(e
  if(m){try{d=JSON.parse(decodeURIComponent(m[1]))}catch(e){console.warn('OpenDesigner: #data is not valid JSON')}}return d}
 const D=loadData();
 const OD={sel:null,extra:null,draw:()=>{}};
-// OD: line grammar (DC-L18-07): OD:<action> <target>=<value> <status>
-function fmtv(v){v=String(v);return /[\s"=]/.test(v)?JSON.stringify(v):v}
+// OD: line grammar (spec 3.7, DC-L18-07): OD:set <path>=<json-value> [--why "reason"], OD:lock <path>
+function fmtv(v){return typeof v==='number'||typeof v==='boolean'?String(v):JSON.stringify(String(v))}
 function fill(tpl,v){return tpl.replace('{v}',fmtv(v))}
-const STATUS=/\s(confirmed|default|delegated|locked)$/;
-function lines(){const st=$('#lock').checked?'locked':'confirmed';let L=[];const o=OD.sel;
- if(o){if(o.od)L=[].concat(o.od);else if(D.question)L=['OD:pick '+D.question+'='+fmtv(o.value)];else if(D.path)L=['OD:set '+D.path+'='+fmtv(o.value)]}
- if(OD.extra)L=L.concat(OD.extra());L=L.map(x=>STATUS.test(x)||/^OD:(note|remix) /.test(x)?x:x+' '+st);
- const n=$('#note').value.trim();if(n&&L.length)L.push('OD:note '+(D.question||D.path||'general')+'='+JSON.stringify(n));return L}
+function lines(){let L=[];const o=OD.sel;
+ if(o){if(o.od)L=[].concat(o.od);else if(D.question)L=['OD:set '+D.question+'='+fmtv(o.value)];else if(D.path)L=['OD:set '+D.path+'='+fmtv(o.value)]}
+ if(OD.extra)L=L.concat(OD.extra());
+ const why=[$('#note').value.trim()].concat(OD.why?OD.why():[]).filter(Boolean).join('; ');
+ L=L.map(x=>why&&/^OD:set /.test(x)&&x.indexOf(' --why ')<0?x+' --why '+JSON.stringify(why):x);
+ if($('#lock').checked)L=L.concat(L.filter(x=>/^OD:set /.test(x)).map(x=>'OD:lock '+x.slice(7).split('=')[0]));
+ return L}
 function update(){OD.draw();$('#out').value=lines().join('\n')||'(nothing chosen yet)'}
 async function copy(){const t=$('#out').value;let ok=false;
  try{await navigator.clipboard.writeText(t);ok=true}catch(e){$('#out').select();try{ok=document.execCommand('copy')}catch(_){}}
@@ -264,16 +170,25 @@ function boot(){$('#t').textContent=D.title||document.title;$('#st').textContent
  seg($('#theme'),['auto','light','dark'],'auto',v=>{if(v==='auto')delete document.documentElement.dataset.theme;else document.documentElement.dataset.theme=v;update()},v=>v[0].toUpperCase()+v.slice(1));
  matchMedia('(prefers-color-scheme: dark)').addEventListener('change',update);
  $('#copy').onclick=copy;$('#lock').onchange=update;$('#note').oninput=update;update()}
-function near(st,px){return st.reduce((a,b)=>Math.abs(b.px-px)<Math.abs(a.px-px)?b:a)}
-function pick(st,name,px){return st.find(s=>String(s.name)===String(name))||near(st,px)}
-OD.draw=()=>{const o=OD.sel;if(!o)return;const st=o.steps||[],dm=o.demo||{};const pad=pick(st,dm.pad,16),gap=pick(st,dm.gap,12),inn=pick(st,dm.inner,8);
- const ch=o.controls||{sm:32,md:40,lg:48};
- $('#sp').innerHTML='<div class="rul">'+st.map(s=>'<div class="rs"><span class="kv">'+esc(s.name)+'</span><span class="kv">'+s.px+' px</span><span class="bar" style="width:'+s.px+'px" role="img" aria-label="'+s.px+' pixels"></span></div>').join('')+'</div>'
- +'<div class="demo"><div><h2>Card: padding '+pad.px+', gap '+gap.px+', inner '+inn.px+'</h2><div class="card pad" style="padding:'+pad.px+'px"><div class="inner" style="gap:'+gap.px+'px">'
- +['Title','Supporting text','Actions'].map((t,i)=>(i?'<div class="gapl" aria-hidden="true">'+gap.px+'</div>':'')+'<div class="item" style="display:grid;gap:'+inn.px+'px"><strong>'+t+'</strong><span class="kv">inner gap '+inn.px+' px</span></div>').join('')
- +'</div></div></div><div><h2>Control heights</h2><div class="ctl">'+Object.entries(ch).map(([k,v])=>'<span style="height:'+v+'px">'+esc(k)+' '+v+'</span>').join('')+'</div>'
- +'<p class="kv" style="margin-top:12px">Inner gaps stay smaller than outer gaps, so related items read as a group.</p></div></div>'};
-mountOptions(o=>'<span class="kv">'+(o.steps||[]).map(s=>s.px).join(' ')+'</span>');boot();
+const RM=matchMedia('(prefers-reduced-motion: reduce)');let force=false;
+function o(){return OD.sel||{}}function ms(k){return ((o().durations||{})[k])||({short:150,medium:250,long:400})[k]}
+function ez(k){return ((o().easing||{})[k])||'cubic-bezier(0.2,0,0,1)'}
+function reduced(){return RM.matches&&!force}
+function play(p){const r=reduced();
+ if(p==='menu'){const e=$('#menu');e.animate(r?[{opacity:0},{opacity:1}]:[{opacity:0,transform:'scale(.92)'},{opacity:1,transform:'scale(1)'}],{duration:r?100:ms('medium'),easing:ez('enter'),fill:'both'})}
+ if(p==='toggle'){const e=$('#knob');e.animate(r?[{opacity:.4},{opacity:1}]:[{transform:'translateX(0)'},{transform:'translateX(22px)'}],{duration:r?100:ms('short'),easing:ez('standard'),fill:'both',direction:e.dataset.on?'reverse':'normal'});e.dataset.on=e.dataset.on?'':'1'}
+ if(p==='sheet'){const e=$('#sheet');e.animate(r?[{opacity:0,transform:'translateY(0)'},{opacity:1,transform:'translateY(0)'}]:[{transform:'translateY(100%)'},{transform:'translateY(0)'}],{duration:r?100:ms('long'),easing:ez('enter'),fill:'both'});
+  setTimeout(()=>e.animate(r?[{opacity:1},{opacity:0}]:[{transform:'translateY(0)'},{transform:'translateY(100%)'}],{duration:r?100:Math.round(ms('long')*0.75),easing:ez('exit'),fill:'both'}),(r?100:ms('long'))+700)}}
+$('#ms').onclick=e=>{const b=e.target.closest('[data-p]');if(b)play(b.dataset.p)};
+$('#all').onclick=()=>['menu','toggle','sheet'].forEach(play);
+$('#full').onclick=()=>{force=true;['menu','toggle','sheet'].forEach(play);setTimeout(()=>force=false,50)};
+function curve(){const m=ez('standard').match(/cubic-bezier\(([^)]+)\)/);const svg=$('#curve');if(!m){svg.innerHTML='<text x="0" y="50" font-size="10" fill="currentColor">'+esc(ez('standard'))+'</text>';return}
+ const [a,b,c,d]=m[1].split(',').map(Number);const Y=v=>100-v*100;
+ svg.innerHTML='<path d="M0 100 L100 0" stroke="currentColor" stroke-opacity=".2" fill="none"/><path d="M0 100 C'+a*100+' '+Y(b)+' '+c*100+' '+Y(d)+' 100 0" stroke="currentColor" stroke-width="2.5" fill="none"/><text x="0" y="-12" font-size="9" fill="currentColor">'+esc(m[0])+'</text>'}
+OD.draw=()=>{const m=mode(),el=$('#ms');el.style.setProperty('--s-bg',m==='dark'?'#1c1c20':'#ffffff');el.style.setProperty('--s-fg',m==='dark'?'#ececef':'#1b1b1f');
+ $('#dur').textContent='short '+ms('short')+' ms · medium '+ms('medium')+' ms · long '+ms('long')+' ms · exits 25% shorter';curve()};
+$('#rm').hidden=!RM.matches;RM.addEventListener('change',()=>{$('#rm').hidden=!RM.matches});
+mountOptions(x=>'<span class="kv">'+[(x.durations||{}).short,(x.durations||{}).medium,(x.durations||{}).long].filter(Boolean).join(' / ')+' ms</span>');boot();
 </script>
 </body>
 </html>

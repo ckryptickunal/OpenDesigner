@@ -1,0 +1,298 @@
+{
+  "$schema": "opendesigner-state/1",
+  "schema_version": 1,
+  "engine_version": "1.0.0",
+  "levers_version": "levers/1.0 2026-09-23",
+  "mode": "standard",
+  "name": "Consumer Playful",
+  "summary": "An expressive, rounded, colorful system for a fictional habit app shared between friends.",
+  "context": {
+    "product": "A habit tracker where friends cheer each other on.",
+    "audience": "Casual users on phones, a few minutes a day, many first-time visitors.",
+    "surfaces": [
+      {
+        "name": "Today feed",
+        "mode": "Experience"
+      },
+      {
+        "name": "Onboarding and store pages",
+        "mode": "Persuade"
+      },
+      {
+        "name": "Settings",
+        "mode": "Operate"
+      }
+    ],
+    "entryPath": "",
+    "memorable": "The streak celebration.",
+    "scope": {
+      "in": [
+        "iOS app",
+        "Android app",
+        "web app",
+        "marketing pages"
+      ],
+      "out": [
+        "watch",
+        "TV"
+      ]
+    },
+    "constraints": [],
+    "team": ""
+  },
+  "dials": {
+    "expression": {
+      "value": 82,
+      "set_by": "chosen",
+      "detached": true,
+      "decision": "D-0013"
+    },
+    "brandPresence": {
+      "value": 70,
+      "set_by": "chosen",
+      "detached": true,
+      "decision": "D-0014"
+    },
+    "density": {
+      "value": 25,
+      "set_by": "chosen",
+      "detached": true,
+      "decision": "D-0015"
+    },
+    "energy": {
+      "value": 80,
+      "set_by": "chosen",
+      "detached": true,
+      "decision": "D-0016"
+    },
+    "roundness": {
+      "value": 97,
+      "set_by": "chosen",
+      "detached": true,
+      "decision": "D-0017"
+    },
+    "depth": {
+      "value": 62,
+      "set_by": "chosen",
+      "detached": true,
+      "decision": "D-0018"
+    },
+    "colorfulness": {
+      "value": 85,
+      "set_by": "chosen",
+      "detached": true,
+      "decision": "D-0019"
+    },
+    "warmth": {
+      "value": 78,
+      "set_by": "chosen",
+      "detached": true,
+      "decision": "D-0020"
+    }
+  },
+  "preset": null,
+  "macros": [
+    "playful",
+    "friendly"
+  ],
+  "raw": {
+    "brandColor": "#ff5a36",
+    "primaryActionColor": null,
+    "focusColor": null,
+    "neutralBase": null,
+    "contrastTarget": "AA",
+    "textFace": "Nunito",
+    "displayFace": "=textFace",
+    "baseSize": null,
+    "spaceUnit": 4,
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "inputs": [
+      "touch",
+      "pointer"
+    ],
+    "productType": "content",
+    "marketingSurfaces": true,
+    "flags": {
+      "brandExact": false,
+      "tintTowardBrand": false,
+      "motionOff": false,
+      "darkMode": true
+    },
+    "overrides": {},
+    "secondaryColors": [],
+    "monoFace": "ui-monospace",
+    "scripts": [
+      "Latn"
+    ],
+    "domain": null,
+    "defaultTheme": "system"
+  },
+  "overrides": {},
+  "answers": {
+    "Q-aud-01": {
+      "value": "large",
+      "set_by": "chosen",
+      "decision": "D-0010",
+      "locked": false
+    },
+    "Q-plat-01": {
+      "value": [
+        "ios",
+        "android",
+        "web"
+      ],
+      "set_by": "chosen",
+      "decision": "D-0011",
+      "locked": false
+    }
+  },
+  "principles": [
+    "Celebrate progress, never shame a miss.",
+    "Big, friendly targets for thumbs.",
+    "One joyful moment per screen, not ten."
+  ],
+  "components": {
+    "base": null,
+    "inventory": [
+      "button",
+      "icon-button",
+      "link",
+      "text-field",
+      "textarea",
+      "select",
+      "checkbox",
+      "radio",
+      "switch",
+      "card",
+      "dialog",
+      "menu",
+      "tooltip",
+      "toast",
+      "tabs",
+      "table",
+      "badge",
+      "avatar",
+      "banner",
+      "progress",
+      "skeleton",
+      "navigation"
+    ],
+    "notes": {}
+  },
+  "hooks": {
+    "H-logo": {
+      "status": "have",
+      "name": "Logo, wordmark, symbol, lockups",
+      "question": "Q-brand-03",
+      "files": [],
+      "note": ""
+    },
+    "H-appicon": {
+      "status": "commissioning",
+      "name": "App icon",
+      "question": "Q-icon-06",
+      "files": [],
+      "note": ""
+    },
+    "H-favicon": {
+      "status": "pending",
+      "name": "Favicon set",
+      "question": "Q-brand-03",
+      "files": [],
+      "note": ""
+    },
+    "H-icons": {
+      "status": "open-library",
+      "name": "Custom icons, pictograms, spot icons",
+      "question": "Q-icon-01",
+      "files": [],
+      "note": ""
+    },
+    "H-illus": {
+      "status": "commissioning",
+      "name": "Illustration, characters, empty-state art",
+      "question": "Q-img-04",
+      "files": [],
+      "note": ""
+    },
+    "H-photo": {
+      "status": "pending",
+      "name": "Photography and art direction",
+      "question": "Q-img-01",
+      "files": [],
+      "note": ""
+    },
+    "H-type": {
+      "status": "open-library",
+      "name": "Brand typeface files",
+      "question": "Q-type-02",
+      "files": [],
+      "note": ""
+    },
+    "H-color": {
+      "status": "pending",
+      "name": "Fixed brand colors",
+      "question": "Q-color-01",
+      "files": [],
+      "note": ""
+    },
+    "H-motion": {
+      "status": "commissioning",
+      "name": "Motion signature and rich media",
+      "question": "Q-img-06",
+      "files": [],
+      "note": ""
+    },
+    "H-motif": {
+      "status": "pending",
+      "name": "Graphic devices, patterns, textures, brand gradients, signature shape",
+      "question": "Q-img-07",
+      "files": [],
+      "note": ""
+    },
+    "H-sound": {
+      "status": "pending",
+      "name": "UI sounds and sonic logo",
+      "question": "Q-motion-08",
+      "files": [],
+      "note": ""
+    },
+    "H-haptic": {
+      "status": "pending",
+      "name": "Custom haptic patterns",
+      "question": "Q-motion-09",
+      "files": [],
+      "note": ""
+    },
+    "H-voice": {
+      "status": "placeholder",
+      "name": "Voice and tone guide",
+      "question": "Q-voice-01",
+      "files": [],
+      "note": ""
+    },
+    "H-brandbook": {
+      "status": "pending",
+      "name": "Brand guidelines PDF",
+      "question": "Q-ref-01",
+      "files": [],
+      "note": ""
+    }
+  },
+  "blocks": {},
+  "references": {},
+  "taste": {},
+  "hashes": {
+    "DESIGN.md": "d29ed851dae3bca1",
+    "PRODUCT.md": "e769854c376bb745"
+  },
+  "exports": {
+    "prefix": "ds",
+    "figmaPlan": "professional"
+  },
+  "locks": []
+}

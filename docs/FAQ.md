@@ -22,7 +22,7 @@ Quick mode asks 10 questions and fills everything else with sourced defaults you
 
 ### What do I get at the end?
 
-Files in your repo: DTCG design tokens with light, dark and density modes, exports for CSS variables and Tailwind (with Figma, Paper, Swift and Compose planned in the same engine), a `DESIGN.md` that people and AI tools can read, a `decisions.md` log with the reason for every choice, a `state.json` to continue later, and a preview page. See [what lands in your repo](HOW-IT-WORKS.md#8-export-and-what-lands-in-your-repo) and the README for which exporters have shipped.
+Files in your repo: DTCG design tokens with their modes in one resolver file, exports for CSS variables, Tailwind, Figma, Paper, Swift and Jetpack Compose, a `DESIGN.md` that people and AI tools can read, a `decisions.md` log with the reason for every choice, a `state.json` to continue later, a preview page, and a snippet for your `AGENTS.md` so later agents read the system first. See [what lands in your repo](HOW-IT-WORKS.md#8-export-and-what-lands-in-your-repo); the README's status table says which exporters have shipped.
 
 ### I already have a design system. Is this useful?
 
@@ -46,7 +46,7 @@ Partly. The L07 research found Figma imports DTCG with limits (one mode per file
 
 ### Does it work with Claude and Claude Code?
 
-Yes. Claude Code loads it as a plugin or from `.claude/skills/`. The Claude app (claude.ai, Desktop) loads the skill as an uploaded zip. Claude can show choices visually through artifacts. Install steps are in the [README](../README.md#quickstart).
+Yes. In Claude Code, add this repo as a plugin marketplace and install the plugin (`/plugin marketplace add ckryptickunal/OpenDesigner`, then `/plugin install opendesigner@opendesigner`). In the Claude app (claude.ai, Desktop), upload the skill zip that `python3 tools/build_dist.py` builds, under Customize > Skills. Claude can show choices visually through custom visuals and artifacts. Full steps: [README](../README.md#quickstart).
 
 ### Does it work with ChatGPT?
 

@@ -22,7 +22,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use dense for tables, dashboards and editors people work in all day; avoid dense on touch-first, occasional or public surfaces, where it hurts legibility and forces the targets out of step with the visuals [DC-L09-04, DC-L15-04].
 - **Skip:** yes, defaults to regular. Target sizes do not shrink with density; they follow input precision (Q-space-03, DC-L14-03).
 - **Decides:** DC-L09-04 · **Changes downstream:** DC-L02-08, DC-L03-07, DC-L03-10, DC-L08-13, DC-L15-04, DC-L15-09
-- **Record:** `OD:pick Q-aud-01=<value>`
+- **Record:** `OD:set Q-aud-01=<json-value> --why "..."`
 
 ## Q-aud-02 · What is at stake for users, and what state are they usually in?
 *Mode:* Standard · *weight:* medium (fan-out 0) · *kind:* input · *class:* I · *control:* single choice (category) + multi-select (states)
@@ -40,7 +40,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Contrast a banking transfer screen with a game reward screen.
 - **Skip:** yes.
 - **Decides:** - · **Changes downstream:** DC-L06-03, DC-L06-19, DC-L13-17
-- **Record:** `OD:pick Q-aud-02=<value>`
+- **Record:** `OD:set Q-aud-02=<json-value> --why "..."`
 
 ## Q-aud-03 · What accessibility standard must the system meet?
 *Mode:* Standard · *weight:* medium (fan-out 1) · *kind:* decision · *class:* I · *control:* single choice
@@ -56,7 +56,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show a text pair that passes 4.5:1 and one that fails.
 - **Skip:** yes, AA. The builder also generates the system-vs-product-team responsibility statement GOV.UK publishes [S-L11-092].
 - **Decides:** DC-L11-19 · **Changes downstream:** DC-L01-22, DC-L02-08, DC-L03-12, DC-L04-09, DC-L14-03
-- **Record:** `OD:pick Q-aud-03=<value>`
+- **Record:** `OD:set Q-aud-03=<json-value> --why "..."`
 
 ## Q-aud-04 · Which settings should users be able to adjust, and which situations must you design for?
 *Mode:* Standard · *weight:* medium (fan-out 1) · *kind:* decision · *class:* I · *control:* multi-select (settings) + multi-select (situations)
@@ -74,4 +74,4 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show the preview with a mode switcher gaining one toggle per setting.
 - **Skip:** yes.
 - **Decides:** DC-L13-14 · **Changes downstream:** DC-L01-20, DC-L02-21, DC-L03-11, DC-L04-25, DC-L07-15, DC-L11-25
-- **Record:** `OD:pick Q-aud-04=<value>`
+- **Record:** `OD:set Q-aud-04=<json-value> --why "..."`

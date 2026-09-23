@@ -62,5 +62,13 @@ jobs:
             echo "tools/sync_skills.py not present yet; skipping"
           fi
 
+      - name: Skill frontmatter is portable (tools/build_dist.py --check)
+        run: |
+          if [ -f tools/build_dist.py ]; then
+            python3 tools/build_dist.py --check
+          else
+            echo "tools/build_dist.py not present yet; skipping"
+          fi
+
       - name: Relative Markdown links resolve (offline)
         run: python3 tools/check_links.py

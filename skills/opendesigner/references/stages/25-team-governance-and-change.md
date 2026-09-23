@@ -22,7 +22,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use a snowflake path for one-off needs; avoid forcing every product-specific component into the core [DC-L11-03, DC-L11-12].
 - **Skip:** yes.
 - **Decides:** DC-L11-03 · **Changes downstream:** DC-L11-11, DC-L11-12, DC-L11-24
-- **Record:** `OD:pick Q-gov-01=<value>`
+- **Record:** `OD:set Q-gov-01=<json-value> --why "..."`
 
 ## Q-gov-02 · In what order will you build, pilot and roll out?
 *Mode:* Expert · *weight:* medium (fan-out 3) · *kind:* decision · *class:* I · *control:* single choice (order) + scorecard (pilot) + single choice (rollout)
@@ -39,7 +39,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use a second pilot from a different product family to reduce bias; avoid building components no pilot needs [DC-L11-07].
 - **Skip:** yes.
 - **Decides:** DC-L11-06, DC-L11-07, DC-L11-08 · **Changes downstream:** DC-L11-01, DC-L11-22
-- **Record:** `OD:pick Q-gov-02=<value>`
+- **Record:** `OD:set Q-gov-02=<json-value> --why "..."`
 
 ## Q-gov-03 · Who can contribute, and how are decisions made and recorded?
 *Mode:* Expert · *weight:* medium (fan-out 2) · *kind:* decision · *class:* I · *control:* single choice (contribution) + toggle (decision records)
@@ -58,7 +58,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** record why an option was chosen and what it beat; avoid undocumented overrides [DC-L11-12].
 - **Skip:** yes.
 - **Decides:** DC-L11-11, DC-L11-12 · **Changes downstream:** DC-L11-13
-- **Record:** `OD:pick Q-gov-03=<value>`
+- **Record:** `OD:set Q-gov-03=<json-value> --why "..."`
 
 ## Q-gov-04 · How are components labeled, versioned and retired?
 *Mode:* Expert · *weight:* medium (fan-out 2) · *kind:* decision · *class:* I · *control:* single choice per item
@@ -76,7 +76,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** pair every removal with a migration path; avoid breaking changes in minor releases [DC-L11-14, DC-L11-15].
 - **Skip:** yes.
 - **Decides:** DC-L11-13, DC-L11-14, DC-L11-15 · **Changes downstream:** DC-L11-22
-- **Record:** `OD:pick Q-gov-04=<value>`
+- **Record:** `OD:set Q-gov-04=<json-value> --why "..."`
 
 ## Q-gov-05 · What problem is the system solving, and how will you know it worked?
 *Mode:* Expert · *weight:* medium (fan-out 1) · *kind:* decision · *class:* I · *control:* multi-select (pain) + multi-select (metrics)
@@ -93,7 +93,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** add speed or ROI studies only when leadership asks; avoid vanity counts of components [DC-L11-20].
 - **Skip:** yes.
 - **Decides:** DC-L11-20, DC-L11-21 · **Changes downstream:** -
-- **Record:** `OD:pick Q-gov-05=<value>`
+- **Record:** `OD:set Q-gov-05=<json-value> --why "..."`
 
 ## Q-gov-06 · How will you announce the system and communicate changes?
 *Mode:* Expert · *weight:* medium (fan-out 0) · *kind:* decision · *class:* I · *control:* multi-select
@@ -110,7 +110,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use changelogs that name the migration; avoid silent releases [DC-L11-22].
 - **Skip:** yes.
 - **Decides:** DC-L11-22 · **Changes downstream:** -
-- **Record:** `OD:pick Q-gov-06=<value>`
+- **Record:** `OD:set Q-gov-06=<json-value> --why "..."`
 
 ## Q-gov-07 · Which assistive technologies must be tested on each device class, and who owns accessibility?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* T · *control:* matrix (device class x assistive tech) + text (owner)
@@ -126,4 +126,4 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use manual assistive-technology testing on every release candidate; avoid treating automated scans as compliance [DC-L11-19, DC-L14-14].
 - **Skip:** yes.
 - **Decides:** DC-L14-14 · **Changes downstream:** -
-- **Record:** `OD:pick Q-gov-07=<value>`
+- **Record:** `OD:set Q-gov-07=<json-value> --why "..."`

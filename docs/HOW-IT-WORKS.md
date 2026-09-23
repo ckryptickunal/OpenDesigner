@@ -4,63 +4,67 @@ OpenDesigner turns your AI assistant into a patient design-system partner. You l
 
 It does not replace a designer. It generates what can be generated well (spacing, type scales, color ramps, radii, elevation, motion, component states), asks you for what cannot (logo, custom icons, illustration, photography, a brand typeface), and records every decision with its reason so your team, a designer or the next AI session can pick it up.
 
-This page explains the process. The full product specification is being written in `synthesis/OPENDESIGNER-SPEC.md` (copied to `docs/SPEC.md` when it is final). The evidence behind each step is mapped in [RESEARCH.md](RESEARCH.md).
+This page is the human-friendly version. The full product specification is [SPEC.md](SPEC.md); the evidence behind each step is mapped in [RESEARCH.md](RESEARCH.md).
 
 ## The process at a glance
 
+The model runs ten phases. Three of them end at a gate where you approve before it moves on.
+
 ```mermaid
 flowchart TD
-  A["0. Read first<br/>repo, CSS, existing tokens, DESIGN.md, Figma link"] --> B["1. Define the building blocks<br/>map of every block, tagged by who makes it"]
-  B --> C["2. Pick a depth mode<br/>Quick, Standard or Expert"]
-  C --> D["3. Designer hooks<br/>do you have a logo, icons, typeface...?"]
-  D --> E["4. Direction<br/>the eight dials, three named directions"]
-  E --> F["5. Foundations, block by block<br/>color, type, space, shape, depth, motion"]
-  F --> G["6. Components and patterns<br/>states, accessibility, policies"]
-  G --> H["7. Content and voice"]
-  H --> V["8. Validate and check coverage<br/>deterministic checks first, then critique"]
-  V --> X["9. Export<br/>DTCG tokens, CSS, Tailwind, Figma, DESIGN.md"]
-  X --> Z["10. Extend later<br/>read the decision log before any change"]
-  R["Reference intake<br/>a site, screenshot, Figma file or brand book,<br/>at any step"] -.-> B
-  R -.-> E
-  R -.-> F
-  V -. "fails a check" .-> F
+  P0["P0 Orient<br/>read the repo, CSS, tokens, DESIGN.md;<br/>agree the depth mode; show the block map"] --> P1
+  P1["P1 Context and block map<br/>scope, audience, personality, platforms,<br/>where the system lives"] --> G1{{"Gate 1<br/>scope and block map"}}
+  G1 --> P2["P2 Direction<br/>three named directions, one chosen;<br/>the color system"]
+  P2 --> G2{{"Gate 2<br/>direction"}}
+  G2 --> P3["P3 Foundations<br/>color details, type, space, layout,<br/>shape, depth, motion"]
+  P3 --> P4["P4 Assets, imagery, voice<br/>designer hooks for logo, icons,<br/>illustration, photography, voice"]
+  P4 --> G3{{"Gate 3<br/>every asset has a status"}}
+  G3 --> P5["P5 Components and patterns<br/>states, accessibility, policies"]
+  P5 --> P6["P6 Encoding, governance, output"]
+  P6 --> P7["P7 Critique and coverage<br/>deterministic checks first, then critique"]
+  P7 --> P8["P8 Export and hand-off<br/>DTCG tokens, CSS, Tailwind, Figma, DESIGN.md"]
+  P8 --> P9["P9 Extend, in later sessions<br/>read the decision log before any change"]
+  R["Reference intake: a site, screenshot,<br/>Figma file, repo or brand book, at any step"] -.-> P1
+  R -.-> P2
+  R -.-> P3
+  P7 -. "a check fails" .-> P3
 ```
 
-The stages come from [`research/L17-how-systems-get-made.md`](../research/L17-how-systems-get-made.md) Part I. The question order inside them comes from the decision graph, so nothing is asked before the decisions it depends on.
+Each phase wraps screens of the interview in [`synthesis/QUESTIONNAIRE.md`](../synthesis/QUESTIONNAIRE.md), which are ordered by the decision graph, so nothing is asked before the decisions it depends on (zero ordering violations across 465 dependencies). Quick mode keeps only Gate 2. Details: [SPEC.md section 3](SPEC.md#3-the-process-as-a-model-runs-it).
 
 ## 1. Define the building blocks first
 
 Before any color or font question, the model shows the whole map of what a design system contains, in ten layers: context, principles, foundations, tokens, components, patterns, guardrails, delivery, governance, and the builder surface itself. The map is [`synthesis/ontology.json`](../synthesis/ontology.json) (271 nodes; readable version in [`synthesis/ONTOLOGY.md`](../synthesis/ONTOLOGY.md)).
 
-Each design-system block is tagged with who or what should produce it. Of the 207 blocks classified in L17:
+Each of the 207 design-system blocks is tagged with who or what should produce it:
 
 | Class | Blocks | What the model does |
 |---|---|---|
 | **Generatable** | 135 | Derives it from your inputs and the dials, shows it visually, lets you adjust |
 | **Tool-assisted** | 31 | Recommends a named tool or library with its caveat (license, plan, platform) |
-| **Owner input** | 29 | Asks you, because only your team can decide it (scope, platforms, governance) |
+| **Owner input** | 29 | Asks you, because only your team can decide it (scope, platforms, governance); never invents an answer |
 | **Designer-owned** | 7 | Opens a designer hook (below) |
 | **Extractable** | 5 | Reads it from your existing product or files, and asks you to confirm |
 
-Blocks that do not apply (haptics for a web-only product, say) are marked "not applicable" with a reason, so the coverage check counts them as decided instead of missing.
+Every block always has a visible status: pending, default, decided, not applicable, awaiting asset, or assumed. Blocks that do not apply (haptics for a web-only product, say) are marked "not applicable" with a reason, so the coverage check counts them as decided instead of missing.
 
 ## 2. Depth modes: time goes where it matters
 
 | Mode | Questions | For |
 |---|---|---|
-| **Quick** | 10 | "Give me a complete system in a few minutes." Everything else takes a sourced default and stays editable. |
+| **Quick** | 10 | A first look or a prototype. Everything else takes a sourced default and stays editable; business decisions are stored as "assumed" and confirmed before export. |
 | **Standard** | 92 | An engineer setting up a real product's system |
 | **Expert** | 191 | Design-system leads, multi-platform or multi-brand systems |
 
-The questions sit on 27 screens in dependency order, plus a reference panel that is open on every screen ([`synthesis/questionnaire.json`](../synthesis/questionnaire.json)). The model slows down on decisions with the most downstream effect in the decision graph (brand personality affects 15 decisions directly, target platforms 12) and moves quickly through safe defaults. For a high-impact question it explains why it matters, shows two or three options with real systems that use them, recommends one with its source, and says what it changes downstream. For a low-impact one it states the default in one line and asks you to confirm.
+The model slows down on decisions with the most downstream effect in the decision graph (brand personality directly shapes 15 other decisions, target platforms 12) and moves quickly through safe defaults. For a high-impact question it explains why it matters, shows two or three options with real systems that use them, recommends one with its source, and says what it changes downstream. For a low-impact one it states the default in one line and asks you to confirm, grouping up to three small questions per turn.
 
 Every answer is recorded with how it was set: chosen, confirmed default, automatic default, or from a reference. A recommendation you did not answer is never recorded as your decision.
 
 ## 3. Designer hooks: ask, do not fake
 
-Some blocks cannot be generated well. For each, the model asks "do you have this?", accepts the file in useful formats, checks it, and, if the answer is no, offers honest paths: commission a designer (with a written brief), use a named open library or tool (with its license terms), or leave a briefed placeholder slot. A generated stand-in is never presented as a finished brand asset.
+Some blocks cannot be generated well. For each, the model asks "do you have this?", accepts the file in useful formats, checks it, and, if the answer is no, offers honest paths: commission a designer (with a written brief that carries your tokens and direction), use a named open library or tool (with its license terms), or leave a briefed placeholder slot. A placeholder is labeled as a placeholder everywhere it appears.
 
-The asset hooks from L17 Part H: logo and lockups, app icon, favicon set, custom icons, illustration, photography, brand typeface, fixed brand colors, motion signature, graphic motifs, UI sounds, custom haptics, voice and tone guide, and brand book.
+The 14 asset hooks: logo and lockups, app icon, favicon set, custom icons, illustration, photography, brand typeface, fixed brand colors, motion signature, graphic motifs, UI sounds, custom haptics, voice and tone guide, and brand book. Each one's formats, checks and fallbacks are in [SPEC.md section 4](SPEC.md#4-building-block-classes-and-hooks).
 
 ## 4. The eight dials
 
@@ -85,48 +89,52 @@ Some things the model never decides for you: your brand personality and dial pos
 
 Each generatable block gets a detail panel: what it is, where to use it, where not to, its current value and source, a live preview on real components in every mode (light, dark, compact, reduced motion), and which other blocks change if it changes. The interface teaches as you edit.
 
-How that is shown depends on the host. The model picks the highest rung available and says which one it is using ([DC-L18-06](../research/L18-ai-first-distribution.md)):
+How that is shown depends on the host. The model picks the highest rung available, says which one it is using, and never blocks on a visual:
 
-1. An OpenDesigner MCP App view (planned, phase 2)
-2. The host's canvas or artifact (for example Claude artifacts and custom visuals)
+1. An OpenDesigner MCP App view (planned, Phase 2)
+2. HTML the host renders: Claude custom visuals and artifacts, Claude Code artifacts, the Codex desktop browser
 3. Figma or Paper, through their MCP servers
-4. A local HTML preview file the model writes and you open
+4. A local HTML preview file you open in a browser
 5. The host's multiple-choice question tool
-6. Plain text with hex values and numbered options, which works everywhere
+6. Plain text with hex values, ratios and numbered options, which works everywhere
 
-It never blocks on a visual.
+The same HTML templates (palette, type scale, spacing ruler, radius, elevation, motion, component sheet, option gallery and more) feed every surface, and every visual also prints its values as text. Which host gets which surface: [SPEC.md section 3.6](SPEC.md#36-visual-surfaces-per-host).
 
 ## 6. Reference intake, at any point
 
-You can add an example website, screenshot, Figma file, repo or brand book whenever you like. Each reference is tagged as "our product", "inspiration" or "competitor". The model extracts what it can (color, type, spacing, radius, depth model, motion character, components), shows every value with its provenance and confidence, and pre-fills; you accept, adjust or ignore each one.
+You can add an example website, screenshot, Figma file, repo or brand book whenever you like. Each reference is tagged as "our product", "inspiration" or "competitor". The model measures what it can (color, type, spacing, radius, depth model, motion character, components), shows every value with its provenance and confidence, and pre-fills; you accept, adjust or ignore each one. A reference never decides on its own.
 
-Hard rule: a reference contributes structure and quality, never identity. OpenDesigner does not copy another brand's logo, name, brand color as identity, proprietary typeface, photography, illustration or copy.
+Hard rule: a reference contributes structure and quality, never identity. OpenDesigner does not copy another brand's name, logo, brand hue, proprietary typeface, imagery or copy, and it always asks how brand-led you want to be rather than inferring it from the reference.
 
 ## 7. Validate before you trust it
 
-Deterministic checks run before any model critique ([`synthesis/LEVERS.md`](../synthesis/LEVERS.md) section D):
+Deterministic checks run before any model critique ([`synthesis/LEVERS.md`](../synthesis/LEVERS.md) section D). Accessibility rules fail; taste rules warn.
 
 - **Enforced by construction:** WCAG 2.2 AA text contrast (4.5:1 body, 3:1 large), 3:1 non-text contrast for borders and focus rings, minimum target sizes keyed to input type (24 CSS px on the web, 44pt iOS, 48dp Android), a generated focus ring, reduced-motion and reduced-transparency modes, text that scales to 200%, inner spacing smaller than outer spacing.
 - **Lint errors** that block publishing unless waived with a written reason: targets under 24 px, fields with no label, meaning shown by color alone, dialogs with no way out.
 - **Warnings** you can override: too many type sizes or primary actions in one view, very high colorfulness with high density, and similar practitioner guidance, labelled as guidance rather than law.
 
-Then a coverage check shows every block as decided, defaulted, not applicable or pending. Nothing is silently skipped.
+Only on a passing system does the model critique it, on a rubric fixed in advance. Then a coverage check shows every block's status. Nothing is silently skipped.
 
 ## 8. Export, and what lands in your repo
 
+The canonical source is `opendesigner/state.json` plus the DTCG tokens it generates; everything else is a generated view.
+
 | Output | What it is for |
 |---|---|
-| `tokens/` | DTCG 2025.10 design tokens (the canonical format), with modes in a resolver file |
-| CSS variables, Tailwind theme | Use in web code right away |
+| `DESIGN.md` (project root) | The readable view of the system that you, your team and any AI tool can follow |
+| `PRODUCT.md` (project root) | Product truth: audience, purpose, surfaces, principles |
+| `opendesigner/tokens/` | DTCG 2025.10 design tokens (the canonical format), with modes in one resolver file |
+| CSS variables, Tailwind theme | Use in web code right away, including shadcn/ui |
 | Figma variables, Paper tokens | Mirror the system in your design tool |
 | Swift and Jetpack Compose | Native apps |
-| `DESIGN.md` | The readable view of the system that you, your team and any AI session can read |
-| `decisions.md` | Every decision with its reason, source and what it changed |
-| `state.json` | Your answers and dial values, so a later session can continue |
-| `preview.html` | A specimen of every token and a few components |
+| `opendesigner/decisions.md` | Every decision with its reason, source and what it changed, append-only |
+| `opendesigner/RATIONALE.md` | One page for the team: what was chosen, why, and what is still open |
+| `opendesigner/coverage.md`, asset briefs | Every block's status; briefs a designer can act on |
+| `opendesigner/state.json`, `preview.html` | Continue later; see every token and the components on one page |
 
-The export targets follow the engine contract in [`_coordination/REPO-PLAN.md`](../_coordination/REPO-PLAN.md). Check the README's status section for which exporters have shipped.
+This is the full contract from [SPEC.md section 7](SPEC.md#7-outputs). The first release writes the core set (tokens, exports, `DESIGN.md`, the decision log, `state.json` and the preview, plus a snippet for your `AGENTS.md`); the README's status table says what has shipped.
 
 ## 9. Keeping it coherent later
 
-When you come back to change something, the extend flow reads `DESIGN.md`, the tokens and the decision log first, shows the change on the block's detail panel with everything downstream it touches, and records the change as a new decision. Changing the overall direction needs your explicit confirmation. This is what keeps the system harmonious months later, across different people and different AI tools.
+When you come back to change something, possibly in a different AI tool, the extend flow reads `DESIGN.md`, the tokens and the decision log first, shows the change on the block's detail panel with everything downstream it touches, and records it as a new decision that supersedes the old one. Locked decisions change only with your consent. The engine is deterministic: the same `state.json` produces the same tokens on any machine, which is what lets different models extend the same system without drift. Details: [SPEC.md section 9](SPEC.md#9-harmony-and-extension-across-sessions-and-models).

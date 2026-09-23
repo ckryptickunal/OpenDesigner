@@ -23,7 +23,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use expressive motion for page transitions, the primary action and alerts; avoid bounce on everyday controls and in high-trust products [DC-L06-10, DC-L04-19].
 - **Skip:** yes.
 - **Decides:** DC-L09-06, DC-L04-19, DC-L06-10 · **Changes downstream:** DC-L04-20, DC-L04-21, DC-L04-22, DC-L04-23, DC-L10-14
-- **Record:** `OD:pick Q-motion-01=<value>`
+- **Record:** `OD:set Q-motion-01=<json-value> --why "..."`
 
 ## Q-motion-04 · How should springs be defined and exported?
 *Mode:* Expert · *weight:* medium (fan-out 2) · *kind:* decision · *class:* G · *control:* single choice
@@ -40,7 +40,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use springs for spatial moves; avoid overshoot on color and opacity [DC-L04-22; S-L10-024].
 - **Skip:** yes.
 - **Decides:** DC-L04-22 · **Changes downstream:** DC-L04-06, DC-L04-28, DC-L07-14
-- **Record:** `OD:pick Q-motion-04=<value>`
+- **Record:** `OD:set Q-motion-04=<json-value> --why "..."`
 
 ## Q-motion-02 · Which durations should exist, and should exits be faster?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* editable duration list + toggle (interruptible)
@@ -58,7 +58,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** scale duration with distance travelled; avoid standard transitions over 500ms [DC-L04-20; L13 E1].
 - **Skip:** yes.
 - **Decides:** DC-L04-20, DC-L04-24 · **Changes downstream:** DC-L07-14, DC-L13-01
-- **Record:** `OD:pick Q-motion-02=<value>`
+- **Record:** `OD:set Q-motion-02=<json-value> --why "..."`
 
 ## Q-motion-03 · Which easing curves?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice (structure) + curve editor
@@ -74,7 +74,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use linear only for continuous indicators; avoid ease-in for entrances [DC-L04-21].
 - **Skip:** yes.
 - **Decides:** DC-L04-21 · **Changes downstream:** DC-L07-14
-- **Record:** `OD:pick Q-motion-03=<value>`
+- **Record:** `OD:set Q-motion-03=<json-value> --why "..."`
 
 ## Q-motion-05 · Should shapes morph or use an expressive shape library?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -92,7 +92,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use expressive shapes on avatars and hero moments; avoid them on dense controls [DC-L04-06].
 - **Skip:** yes.
 - **Decides:** DC-L04-06 · **Changes downstream:** DC-L05-18
-- **Record:** `OD:pick Q-motion-05=<value>`
+- **Record:** `OD:set Q-motion-05=<json-value> --why "..."`
 
 ## Q-motion-06 · Which named transitions and stagger should the system ship?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* multi-select + number (stagger)
@@ -110,7 +110,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use OS-owned navigation transitions on native platforms; avoid custom page transitions that fight the back gesture [DC-L10-14].
 - **Skip:** yes.
 - **Decides:** DC-L04-23 · **Changes downstream:** DC-L07-14
-- **Record:** `OD:pick Q-motion-06=<value>`
+- **Record:** `OD:set Q-motion-06=<json-value> --why "..."`
 
 ## Q-motion-07 · What happens when users ask for reduced motion, and how much motion does each device allow?
 *Mode:* Standard · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice + per-device table
@@ -127,7 +127,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** keep feedback (color, opacity) and remove travel (translate, scale, parallax); avoid removing feedback entirely [DC-L04-25].
 - **Skip:** yes.
 - **Decides:** DC-L04-25, DC-L14-08 · **Changes downstream:** DC-L07-14, DC-L07-15
-- **Record:** `OD:pick Q-motion-07=<value>`
+- **Record:** `OD:set Q-motion-07=<json-value> --why "..."`
 
 ## Q-motion-08 · Do you have UI sounds or a sonic logo?
 *Mode:* Standard · *weight:* medium (fan-out 0) · *kind:* hook · *class:* D · *control:* single choice + file upload
@@ -146,7 +146,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Hook, if no:** (1) stay silent, the norm for web and productivity apps; (2) use platform system sounds (Android `SoundEffectConstants`, iOS system behavior); (3) commission a sound designer for a sonic logo, noting that repeated identical sounds feel mechanical; no verified open UI-sound library was found [S-L04-074, S-L17-553, S-L17-555].
 - **Skip:** yes, silent.
 - **Decides:** DC-L04-27 · **Changes downstream:** DC-L04-26
-- **Record:** `OD:pick Q-motion-08=<value>`
+- **Record:** `OD:set Q-motion-08=<json-value> --why "..."`
 
 ## Q-motion-09 · On native platforms, whose transitions, back behavior and haptics?
 *Mode:* Expert · *weight:* medium (fan-out 0) · *kind:* hook · *class:* T · *control:* single choice (motion) + single choice (haptics)
@@ -167,7 +167,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Hook, if no:** system patterns first (Apple notification, impact, selection; Android `HapticFeedbackConstants`) [S-L17-547, S-L17-548, S-L17-549].
 - **Skip:** yes.
 - **Decides:** DC-L10-14, DC-L04-26 · **Changes downstream:** DC-L07-14
-- **Record:** `OD:pick Q-motion-09=<value>`
+- **Record:** `OD:set Q-motion-09=<json-value> --why "..."`
 
 ## Q-motion-10 · Which OS accessibility settings must the system honor?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* multi-select
@@ -186,4 +186,4 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** never convey a boundary or focus state with shadow or translucency alone; avoid app-level switches that override these settings [DC-L10-16].
 - **Skip:** yes.
 - **Decides:** DC-L10-16 · **Changes downstream:** DC-L04-09, DC-L07-15
-- **Record:** `OD:pick Q-motion-10=<value>`
+- **Record:** `OD:set Q-motion-10=<json-value> --why "..."`

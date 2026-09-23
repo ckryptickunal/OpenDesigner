@@ -22,7 +22,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use style, not size, to mark the preferred choice (Apple); avoid two primary buttons in one group [S-L08-039; L13 E1].
 - **Skip:** yes.
 - **Decides:** DC-L08-05, DC-L13-18 · **Changes downstream:** DC-L08-06, DC-L08-14, DC-L13-15
-- **Record:** `OD:pick Q-state-01=<value>`
+- **Record:** `OD:set Q-state-01=<json-value> --why "..."`
 
 ## Q-state-02 · How obvious should clickable things be?
 *Mode:* Standard · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice (pre-filled from Q-dir-02)
@@ -39,7 +39,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use stronger signifiers as density rises; avoid minimal signifiers in dense layouts [DC-L15-09; S-L15-004].
 - **Skip:** yes.
 - **Decides:** DC-L15-09 · **Changes downstream:** DC-L08-09, DC-L08-16
-- **Record:** `OD:pick Q-state-02=<value>`
+- **Record:** `OD:set Q-state-02=<json-value> --why "..."`
 
 ## Q-state-03 · What should the keyboard focus ring look like?
 *Mode:* Standard · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice + width/offset numbers
@@ -57,7 +57,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** show focus only for keyboard (`:focus-visible`); avoid rings that the element's own fill hides [DC-L08-11, DC-L04-09].
 - **Skip:** yes.
 - **Decides:** DC-L04-09, DC-L08-11 · **Changes downstream:** DC-L07-13
-- **Record:** `OD:pick Q-state-03=<value>`
+- **Record:** `OD:set Q-state-03=<json-value> --why "..."`
 
 ## Q-state-04 · Which states get their own styling, per input type?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* multi-select (states) + single choice (method)
@@ -73,7 +73,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** make hover content dismissible and persistent (WCAG 1.4.13); avoid hover-only affordances on touch [DC-L14-06].
 - **Skip:** yes.
 - **Decides:** DC-L08-09, DC-L14-06 · **Changes downstream:** DC-L07-02
-- **Record:** `OD:pick Q-state-04=<value>`
+- **Record:** `OD:set Q-state-04=<json-value> --why "..."`
 
 ## Q-state-05 · How should selected and active items look?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -90,7 +90,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use two cues for selection; avoid selection states that look like primary buttons [DC-L08-14].
 - **Skip:** yes.
 - **Decides:** DC-L08-14 · **Changes downstream:** -
-- **Record:** `OD:pick Q-state-05=<value>`
+- **Record:** `OD:set Q-state-05=<json-value> --why "..."`
 
 ## Q-state-06 · How should destructive actions look?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -106,7 +106,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use undo instead of confirmation for reversible actions (Q-form-05); avoid solid red buttons in dense lists [DC-L08-06].
 - **Skip:** yes.
 - **Decides:** DC-L08-06 · **Changes downstream:** DC-L13-08
-- **Record:** `OD:pick Q-state-06=<value>`
+- **Record:** `OD:set Q-state-06=<json-value> --why "..."`
 
 ## Q-state-07 · Where do icons go inside buttons?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -122,7 +122,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use trailing icons for direction (next, external); avoid icon-only buttons without an accessible name [DC-L08-08].
 - **Skip:** yes.
 - **Decides:** DC-L08-08 · **Changes downstream:** -
-- **Record:** `OD:pick Q-state-07=<value>`
+- **Record:** `OD:set Q-state-07=<json-value> --why "..."`
 
 ## Q-state-08 · How should the product show that it is working?
 *Mode:* Standard · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice + threshold numbers
@@ -138,4 +138,4 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use optimistic UI only when failure is rare and reversible; avoid spinners for waits under a second [DC-L13-01].
 - **Skip:** yes.
 - **Decides:** DC-L13-01, DC-L08-12 · **Changes downstream:** DC-L07-14
-- **Record:** `OD:pick Q-state-08=<value>`
+- **Record:** `OD:set Q-state-08=<json-value> --why "..."`

@@ -25,7 +25,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Hook, if no:** (1) the builder drafts traits and examples from the sliders for review; (2) have a content designer review them (22% of teams have none) [S-L11-030]; the draft is labeled as a draft until someone owns it [inferred].
 - **Skip:** yes.
 - **Decides:** DC-L06-18 · **Changes downstream:** DC-L06-19, DC-L06-20, DC-L06-21, DC-L06-22, DC-L06-23
-- **Record:** `OD:pick Q-voice-01=<value>`
+- **Record:** `OD:set Q-voice-01=<json-value> --why "..."`
 
 ## Q-voice-02 · How should tone change for errors, success and first use?
 *Mode:* Standard · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* tone matrix (situation x dial)
@@ -41,7 +41,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use warmth after trust is earned (success, completion); avoid humor in errors and in high-trust categories [DC-L06-19; S-L06-060].
 - **Skip:** yes.
 - **Decides:** DC-L06-19 · **Changes downstream:** DC-L13-07, DC-L13-10
-- **Record:** `OD:pick Q-voice-02=<value>`
+- **Record:** `OD:set Q-voice-02=<json-value> --why "..."`
 
 ## Q-voice-03 · Sentence case or title case?
 *Mode:* Standard · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -58,7 +58,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use one rule per element type everywhere; avoid all caps for sentences [DC-L06-20, DC-L02-18].
 - **Skip:** yes.
 - **Decides:** DC-L06-20 · **Changes downstream:** DC-L06-22
-- **Record:** `OD:pick Q-voice-03=<value>`
+- **Record:** `OD:set Q-voice-03=<json-value> --why "..."`
 
 ## Q-voice-04 · What reading level and label length should copy target?
 *Mode:* Standard · *weight:* medium (fan-out 2) · *kind:* decision · *class:* G · *control:* single choice + number (max words per button)
@@ -74,7 +74,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use verbs that name the result ("Save changes"); avoid branded or clever button labels [DC-L13-13, DC-L06-22].
 - **Skip:** yes.
 - **Decides:** DC-L13-13 · **Changes downstream:** DC-L13-07, DC-L13-16
-- **Record:** `OD:pick Q-voice-04=<value>`
+- **Record:** `OD:set Q-voice-04=<json-value> --why "..."`
 
 ## Q-voice-05 · Which grammar and punctuation rules?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* toggles
@@ -91,7 +91,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** keep mechanics identical across products; avoid mixing date and number formats (see Q-voice-06) [DC-L06-21].
 - **Skip:** yes.
 - **Decides:** DC-L06-21 · **Changes downstream:** DC-L06-22
-- **Record:** `OD:pick Q-voice-05=<value>`
+- **Record:** `OD:set Q-voice-05=<json-value> --why "..."`
 
 ## Q-voice-06 · Which microcopy patterns and word list should components ship with?
 *Mode:* Expert · *weight:* medium (fan-out 0) · *kind:* decision · *class:* I · *control:* text list (glossary) + toggles (patterns)
@@ -108,4 +108,4 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use the glossary term everywhere; avoid synonyms for the same object [DC-L06-23].
 - **Skip:** yes.
 - **Decides:** DC-L06-22, DC-L06-23 · **Changes downstream:** DC-L11-18
-- **Record:** `OD:pick Q-voice-06=<value>`
+- **Record:** `OD:set Q-voice-06=<json-value> --why "..."`

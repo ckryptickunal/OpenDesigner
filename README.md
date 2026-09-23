@@ -20,26 +20,33 @@ Everything it recommends traces to a cited research base: 352 Decision Cards acr
 
 ## Quickstart
 
-> **Status:** the skills, engine and host manifests are being built right now (see [Status and roadmap](#status-and-roadmap)). The install steps below are marked **coming soon** until each one has been tested against its manifest. The research base is complete and usable today.
+**Claude Code** (plugin, from this repo's marketplace):
 
-| Host | How you load OpenDesigner | Status |
-|---|---|---|
-| **Claude Code** | Install the plugin from this repo's marketplace | coming soon |
-| **Claude app** (claude.ai, Desktop) | Upload the skill zip under Customize > Skills | coming soon |
-| **Codex** (CLI, IDE, ChatGPT desktop) | Clone the repo; Codex reads `AGENTS.md` and `.agents/skills/` | coming soon |
-| **ChatGPT** (web, any plan) | Create a Project with the instructions and knowledge files in `chatgpt-project/` | coming soon |
-| **Cursor, Copilot, Gemini CLI, other agents** | Clone the repo; agents read `AGENTS.md` and `.agents/skills/` | coming soon |
+```
+/plugin marketplace add ckryptickunal/OpenDesigner
+/plugin install opendesigner@opendesigner
+```
 
-Then say: **"Create a design system for this project."**
+**Claude app** (claude.ai, Desktop): build the skill zip, then upload `dist/opendesigner.zip` under Customize > Skills (code execution must be on).
 
-Explore the research today, with no install and no API key:
+```bash
+git clone https://github.com/ckryptickunal/OpenDesigner && cd OpenDesigner
+python3 tools/build_dist.py        # writes dist/opendesigner.zip and the three helper skills
+```
+
+**Codex, Cursor, VS Code with Copilot, Gemini CLI and other agents:** these read Agent Skills from `.agents/skills/`. Copy the four skills into your project (hosts that support Agent Plugins can also read the root `plugin.json`):
 
 ```bash
 git clone https://github.com/ckryptickunal/OpenDesigner
-cd OpenDesigner
-python3 tools/jev_nav.py status                                   # lanes, cards, sources
-python3 tools/jev_nav.py find "how many steps should a color ramp have"
+mkdir -p your-project/.agents/skills
+cp -R OpenDesigner/.agents/skills/opendesigner* your-project/.agents/skills/
 ```
+
+**ChatGPT** (web, any plan, no install): create a Project, paste [`chatgpt-project/instructions.md`](chatgpt-project/instructions.md) (below its line) into the Project instructions, and upload the five files in [`chatgpt-project/knowledge/`](chatgpt-project/knowledge/).
+
+Then say: **"Create a design system for this project."**
+
+> **Status:** the skills, manifests and ChatGPT bundle are in the repo, and the Claude plugin manifests pass `claude plugin validate`. The engine that generates and exports tokens is still being finished, and the plugin install needs the repository to be public. See [Status and roadmap](#status-and-roadmap).
 
 ## What a session looks like
 
@@ -48,17 +55,20 @@ An illustrative example of the flow (not a recorded transcript), condensed:
 ```
 You:    Create a design system for this project.
 Model:  I read package.json (Next.js, Tailwind), app/globals.css (14 colors, 3 radii)
-        and found no DESIGN.md. Quick mode is 10 questions; Standard is 92. Which one?
-You:    Quick.
+        and found no DESIGN.md. Quick mode is 10 questions; Standard is about 92.
+        What is the one thing people should remember about this product?
+You:    Standard. It should feel calm and fast.
 Model:  Here are the building blocks and who makes each one. Do you have a logo,
         an icon set or a brand typeface? [checklist]
 You:    Logo yes (SVG). No icons, no typeface.
 Model:  Logo checked: outlined text, readable at 16 px on light and dark.
         For icons I suggest Lucide (ISC license) matched to your type weight.
-        Personality first, because it shapes 15 other decisions. [3 directions, rendered]
+        Brand personality next: it directly shapes 15 other decisions. [dials, live preview]
         ...
-Model:  Wrote opendesigner/tokens (DTCG), css/tokens.css, tailwind/theme.css,
-        DESIGN.md and decisions.md. Validation: 0 errors, 2 warnings (explained).
+Model:  Three directions for "calm and fast", light and dark side by side. [A] [B] [C]
+        ...
+Model:  Wrote DTCG tokens, CSS and Tailwind exports, DESIGN.md and the decision log.
+        Validation: 0 errors, 2 warnings (explained). Still open: the brand typeface (placeholder marked).
 ```
 
 ## How it works
@@ -71,21 +81,24 @@ Model:  Wrote opendesigner/tokens (DTCG), css/tokens.css, tailwind/theme.css,
 6. **Validate.** WCAG 2.2 contrast, target sizes, focus rings and reduced motion are enforced by construction; lint rules and a coverage check follow. Nothing is silently skipped.
 7. **Export and extend.** Tokens and docs land in your repo; later sessions read the decision log before changing anything.
 
-The full walkthrough, with a diagram, is in [docs/HOW-IT-WORKS.md](docs/HOW-IT-WORKS.md). The product specification is being written in [`synthesis/OPENDESIGNER-SPEC.md`](synthesis/OPENDESIGNER-SPEC.md).
+The full walkthrough, with a diagram, is in [docs/HOW-IT-WORKS.md](docs/HOW-IT-WORKS.md); the complete product specification is [docs/SPEC.md](docs/SPEC.md).
 
 ## What you get
 
+Written into your project, in files any person or AI tool can read:
+
 | Output | For |
 |---|---|
-| `tokens/` in **DTCG 2025.10** format, with light, dark, density and reduced-motion modes | The single source of truth for code and design tools |
-| `css/tokens.css` and a **Tailwind** theme | Use the system in web code right away, including shadcn/ui |
+| `opendesigner/tokens/` in **DTCG 2025.10** format, with modes (light, dark and more) in one resolver file | The single source of truth for code and design tools |
+| CSS variables and a **Tailwind** theme | Use the system in web code right away, including shadcn/ui |
 | **Figma** variables and **Paper** tokens | Mirror the system in your design tool |
 | **Swift** and **Jetpack Compose** files | Native iOS and Android apps |
 | `DESIGN.md` | A readable description of the system that people and AI tools can follow |
-| `decisions.md` | Every decision with its reason, source and what it changed |
-| `state.json` and `preview.html` | Continue later; see every token and a few components on one page |
+| `decisions.md` | Every decision with its reason, source and how it was set, append-only |
+| `state.json` and `preview.html` | Continue later; see every token and the core components on one page |
+| A snippet for your `AGENTS.md` and a team summary | Every later agent reads the system first; your team sees what was chosen, why, and what is still open |
 
-These follow the engine contract in [`_coordination/REPO-PLAN.md`](_coordination/REPO-PLAN.md); [Status and roadmap](#status-and-roadmap) says which exporters have shipped.
+The full output contract is in [docs/SPEC.md](docs/SPEC.md#7-outputs); [Status and roadmap](#status-and-roadmap) says what has shipped.
 
 ## The eight dials
 
@@ -135,14 +148,15 @@ Start with [docs/RESEARCH.md](docs/RESEARCH.md). Every claim cites a source id o
 
 | Piece | Status |
 |---|---|
-| Research base (18 lanes) and synthesis (ontology, interview, dials, decision graph) | Done |
-| Product specification | In progress: [`synthesis/OPENDESIGNER-SPEC.md`](synthesis/OPENDESIGNER-SPEC.md) |
-| Skills, knowledge files and visual templates | In progress: [`skills/`](skills/) |
-| Engine (generate, validate, export) and worked examples | In progress: [`skills/opendesigner/scripts/engine.py`](skills/opendesigner/scripts/engine.py) |
-| Host manifests (Claude plugin, Agent Plugins, ChatGPT Project) | In progress |
-| Figma hands-on research (L12) and independent verification (V1) | Open |
-| Phase 2: an MCP server with MCP Apps views, so choices can be clicked in Claude and ChatGPT | Planned |
-| Round-trip writers for Figma and Paper | Planned |
+| Research base (18 lanes), synthesis (ontology, interview, dials, decision graph) and [product specification](docs/SPEC.md) | Done |
+| Four skills (`opendesigner`, `-extract`, `-extend`, `-export`), knowledge files and 8 visual templates | First version in [`skills/`](skills/) |
+| Host packaging: Claude plugin and marketplace, Agent Plugins `plugin.json`, claude.ai zips, ChatGPT Project bundle | In the repo; Claude manifests pass `claude plugin validate` |
+| Engine: generate, validate, export (DTCG, CSS, Tailwind, Figma, Paper, Swift, Compose) | Being finished: [`engine.py`](skills/opendesigner/scripts/engine.py) |
+| Worked examples | Being built |
+| Figma hands-on research (L12) and independent verification of the research (V1) | Open, [help wanted](docs/SEED-ISSUES.md) |
+| Figma and Paper round-trip writers | Planned, last step of phase 1 |
+| Phase 2: a stateless MCP server with MCP Apps views, so choices can be clicked inside Claude, ChatGPT, VS Code and Cursor | Planned |
+| Phase 3 (optional): a standalone visual canvas | Idea |
 
 ## Contributing
 
@@ -152,9 +166,12 @@ OpenDesigner is built by many parallel sessions, human and AI, that coordinate t
 
 Questions go to [Discussions](https://github.com/ckryptickunal/OpenDesigner/discussions); see [SUPPORT.md](SUPPORT.md). Everyone follows the [Code of Conduct](CODE_OF_CONDUCT.md). Security issues: [SECURITY.md](SECURITY.md).
 
-## Sponsorship
+## Sponsors
 
-OpenDesigner is free and volunteer-run. Ways to support it are in [docs/SPONSORSHIP.md](docs/SPONSORSHIP.md).
+OpenDesigner is free and open source. Sponsorship funds maintenance, model credits for testing across AI hosts, and the hosted MCP server. [Sponsor OpenDesigner](docs/SPONSORSHIP.md#for-sponsors)
+
+<!-- Partners: large logos. Companies: small logos. Backers: names. Supported by: in-kind credit programs (never leave the wall empty). -->
+<!-- When GitHub Sponsors is approved, point the link above at https://github.com/sponsors/ckryptickunal (see docs/SPONSORSHIP.md). -->
 
 ## License
 

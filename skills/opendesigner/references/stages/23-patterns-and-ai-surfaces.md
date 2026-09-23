@@ -21,7 +21,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use a dismiss path on every dialog (missing one is a lint error); avoid stacking modals [DC-L08-20; L13 E1].
 - **Skip:** yes.
 - **Decides:** DC-L08-20 · **Changes downstream:** DC-L04-18
-- **Record:** `OD:pick Q-pattern-01=<value>`
+- **Record:** `OD:set Q-pattern-01=<json-value> --why "..."`
 
 ## Q-pattern-02 · How should long lists load: pages, "load more", or infinite scroll?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* mapping (collection type to pattern)
@@ -38,7 +38,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use pagination where people need to return to a position; avoid infinite scroll above a footer people need [DC-L08-21].
 - **Skip:** yes.
 - **Decides:** DC-L08-21 · **Changes downstream:** -
-- **Record:** `OD:pick Q-pattern-02=<value>`
+- **Record:** `OD:set Q-pattern-02=<json-value> --why "..."`
 
 ## Q-pattern-03 · How much should be visible up front, and how much behind "more"?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -56,7 +56,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use steppers that show position and total; avoid more than two disclosure levels (a lint warning) [DC-L13-03; L13 E1].
 - **Skip:** yes.
 - **Decides:** DC-L13-03 · **Changes downstream:** -
-- **Record:** `OD:pick Q-pattern-03=<value>`
+- **Record:** `OD:set Q-pattern-03=<json-value> --why "..."`
 
 ## Q-pattern-04 · How should empty states and first-time use work?
 *Mode:* Standard · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice (onboarding) + checklist (empty-state kinds)
@@ -73,7 +73,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use an empty state on every collection (missing one is a lint warning); avoid tours without a skip control [DC-L13-10, DC-L13-11; L13 E1].
 - **Skip:** yes.
 - **Decides:** DC-L13-10, DC-L13-11 · **Changes downstream:** -
-- **Record:** `OD:pick Q-pattern-04=<value>`
+- **Record:** `OD:set Q-pattern-04=<json-value> --why "..."`
 
 ## Q-pattern-05 · Which deceptive patterns should the builder block?
 *Mode:* Standard · *weight:* medium (fan-out 1) · *kind:* decision · *class:* I · *control:* single choice
@@ -90,7 +90,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use equal emphasis for accept and reject; avoid nagging and fake urgency (the Zeigarnik effect does not justify nags) [DC-L13-15; L13 E2].
 - **Skip:** yes.
 - **Decides:** DC-L13-15 · **Changes downstream:** DC-L13-16
-- **Record:** `OD:pick Q-pattern-05=<value>`
+- **Record:** `OD:set Q-pattern-05=<json-value> --why "..."`
 
 ## Q-pattern-06 · What should appear on glanceable surfaces (widgets, tiles, complications)?
 *Mode:* Expert · *weight:* medium (fan-out 0) · *kind:* decision · *class:* I · *control:* text (metric) + single choice (surfaces)
@@ -106,7 +106,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use tiles that are "immediate, predictable, relevant"; avoid shrinking app screens into widgets [S-L14-020; DC-L14-07].
 - **Skip:** yes.
 - **Decides:** DC-L14-07 · **Changes downstream:** -
-- **Record:** `OD:pick Q-pattern-06=<value>`
+- **Record:** `OD:set Q-pattern-06=<json-value> --why "..."`
 
 ## Q-ai-01 · Does the product have AI features, and how should AI content be marked?
 *Mode:* Standard · *weight:* medium (fan-out 0) · *kind:* decision · *class:* I · *control:* single choice + multi-select (surfaces)
@@ -125,4 +125,4 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use AI styling only on AI-generated content (Carbon warns against decoration); avoid human-sounding anthropomorphic framing and reasoning traces presented as explanations [DC-L14-12, DC-L13-16].
 - **Skip:** yes, none.
 - **Decides:** DC-L08-22, DC-L13-16, DC-L14-12 · **Changes downstream:** DC-L05-18
-- **Record:** `OD:pick Q-ai-01=<value>`
+- **Record:** `OD:set Q-ai-01=<json-value> --why "..."`

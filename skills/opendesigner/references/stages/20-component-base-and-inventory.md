@@ -23,7 +23,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use accessible primitives so keyboard and ARIA behavior come for free; avoid assuming re-themed colors inherit contrast (they don't) [DC-L11-01].
 - **Skip:** yes.
 - **Decides:** DC-L08-03 · **Changes downstream:** DC-L08-04
-- **Record:** `OD:pick Q-comp-01=<value>`
+- **Record:** `OD:set Q-comp-01=<json-value> --why "..."`
 
 ## Q-comp-02 · Which components are in version 1?
 *Mode:* Standard · *weight:* medium (fan-out 1) · *kind:* decision · *class:* I · *control:* multi-select (catalog, core pre-checked)
@@ -40,7 +40,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use the audit (Q-scope-02) and pilot to pick extras; avoid building components no product has asked for [DC-L08-01, DC-L11-07].
 - **Skip:** yes.
 - **Decides:** DC-L08-01 · **Changes downstream:** DC-L11-18
-- **Record:** `OD:pick Q-comp-02=<value>`
+- **Record:** `OD:set Q-comp-02=<json-value> --why "..."`
 
 ## Q-comp-03 · Configuration props or composable parts?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice (code) + single choice (Figma)
@@ -56,7 +56,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use slots for cards, modals and lists so instances keep receiving updates; avoid variant explosions for optional content [DC-L07-22].
 - **Skip:** yes.
 - **Decides:** DC-L08-04, DC-L07-22 · **Changes downstream:** DC-L11-18
-- **Record:** `OD:pick Q-comp-03=<value>`
+- **Record:** `OD:set Q-comp-03=<json-value> --why "..."`
 
 ## Q-comp-04 · How should components be grouped and named?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -73,7 +73,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use one canonical name with aliases; avoid two components for one job [DC-L08-02].
 - **Skip:** yes.
 - **Decides:** DC-L08-02 · **Changes downstream:** DC-L11-18
-- **Record:** `OD:pick Q-comp-04=<value>`
+- **Record:** `OD:set Q-comp-04=<json-value> --why "..."`
 
 ## Q-comp-05 · One component set for every device, or separate sets?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -90,4 +90,4 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** split a library when the input model changes (focus, crown, templates); avoid stretching phone components onto TV [DC-L14-02].
 - **Skip:** yes.
 - **Decides:** DC-L14-02 · **Changes downstream:** -
-- **Record:** `OD:pick Q-comp-05=<value>`
+- **Record:** `OD:set Q-comp-05=<json-value> --why "..."`

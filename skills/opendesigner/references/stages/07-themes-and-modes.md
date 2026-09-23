@@ -23,7 +23,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use system-following modes on Apple platforms; offer an in-app toggle only on web and only in addition; avoid an app-only appearance switch on Apple, which reads as broken [DC-L10-17; S-L10-089].
 - **Skip:** yes.
 - **Decides:** DC-L10-17, DC-L14-09 · **Changes downstream:** DC-L01-18, DC-L01-19, DC-L04-13, DC-L07-15, DC-L07-17
-- **Record:** `OD:pick Q-theme-01=<value>`
+- **Record:** `OD:set Q-theme-01=<json-value> --why "..."`
 
 ## Q-theme-02 · Which other theme axes should exist?
 *Mode:* Expert · *weight:* medium (fan-out 3) · *kind:* decision · *class:* G · *control:* multi-select (pre-filled from Q-aud-04)
@@ -40,7 +40,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show the palette count, e.g. '2 modes x 2 contrasts = 4 palettes to test'.
 - **Skip:** yes.
 - **Decides:** DC-L07-15, DC-L11-25 · **Changes downstream:** DC-L01-20, DC-L07-01, DC-L07-17, DC-L07-18
-- **Record:** `OD:pick Q-theme-02=<value>`
+- **Record:** `OD:set Q-theme-02=<json-value> --why "..."`
 
 ## Q-theme-03 · Will other brands, products or clients re-skin this system?
 *Mode:* Standard · *weight:* medium (fan-out 0) · *kind:* decision · *class:* I · *control:* single choice
@@ -57,7 +57,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show the preview re-skinned with two sample brand colors.
 - **Skip:** yes.
 - **Decides:** DC-L09-07 · **Changes downstream:** DC-L06-06, DC-L06-16, DC-L06-17, DC-L07-01, DC-L07-16
-- **Record:** `OD:pick Q-theme-03=<value>`
+- **Record:** `OD:set Q-theme-03=<json-value> --why "..."`
 
 ## Q-theme-04 · What may differ between brands, and how is that stored?
 *Mode:* Expert · *weight:* medium (fan-out 4) · *kind:* decision · *class:* G · *control:* multi-select (what flexes) + single choice (storage)
@@ -75,4 +75,4 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show a table of brandable tokens per brand.
 - **Skip:** yes.
 - **Decides:** DC-L07-16, DC-L06-16 · **Changes downstream:** DC-L06-17, DC-L07-17, DC-L07-18
-- **Record:** `OD:pick Q-theme-04=<value>`
+- **Record:** `OD:set Q-theme-04=<json-value> --why "..."`

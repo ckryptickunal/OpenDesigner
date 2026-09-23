@@ -23,7 +23,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use shape variety only in hero moments; avoid shrinking essential actions into small shapes ("smaller shapes can result in essential actions looking less important") [S-L06-009].
 - **Skip:** yes.
 - **Decides:** DC-L06-09 · **Changes downstream:** DC-L06-11, DC-L06-13
-- **Record:** `OD:pick Q-shape-05=<value>`
+- **Record:** `OD:set Q-shape-05=<json-value> --why "..."`
 
 ## Q-shape-01 · How soft should corners feel?
 *Mode:* Quick · *weight:* high (fan-out 4) · *kind:* decision · *class:* G · *control:* single choice + radius factor slider (0, 0.75, 1, 1.5, full)
@@ -41,7 +41,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use sharp corners when density and precision are brand values (data, developer tools) and pill when the brand is consumer and touch-first; avoid pill on dense, short controls, which need taller heights [DC-L04-02, DC-L09-01].
 - **Skip:** yes, 6px.
 - **Decides:** DC-L09-01, DC-L04-02 · **Changes downstream:** DC-L04-01, DC-L04-03, DC-L04-04, DC-L04-06, DC-L04-09, DC-L04-19, DC-L05-18
-- **Record:** `OD:pick Q-shape-01=<value>`
+- **Record:** `OD:set Q-shape-01=<json-value> --why "..."`
 
 ## Q-shape-02 · Which radius steps should exist?
 *Mode:* Expert · *weight:* medium (fan-out 4) · *kind:* decision · *class:* G · *control:* editable step list
@@ -58,7 +58,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** grow radius with component size; delete any step you cannot name a component for [DC-L04-01].
 - **Skip:** yes.
 - **Decides:** DC-L04-01 · **Changes downstream:** DC-L04-03, DC-L04-05, DC-L04-09, DC-L15-10
-- **Record:** `OD:pick Q-shape-02=<value>`
+- **Record:** `OD:set Q-shape-02=<json-value> --why "..."`
 
 ## Q-shape-03 · Which components get which radius?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* mapping table
@@ -75,7 +75,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use full radius for people and pills; avoid giving small badges and large dialogs the same radius [DC-L04-03].
 - **Skip:** yes.
 - **Decides:** DC-L04-03 · **Changes downstream:** DC-L04-05, DC-L07-04
-- **Record:** `OD:pick Q-shape-03=<value>`
+- **Record:** `OD:set Q-shape-03=<json-value> --why "..."`
 
 ## Q-shape-04 · Circular corners, or Apple-style continuous corners?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -92,4 +92,4 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use continuous corners only where brand parity with iOS matters; avoid relying on `corner-shape` for anything functional [DC-L04-04].
 - **Skip:** yes.
 - **Decides:** DC-L04-04 · **Changes downstream:** DC-L07-13
-- **Record:** `OD:pick Q-shape-04=<value>`
+- **Record:** `OD:set Q-shape-04=<json-value> --why "..."`

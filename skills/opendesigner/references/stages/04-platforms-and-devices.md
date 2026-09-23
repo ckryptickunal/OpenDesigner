@@ -23,7 +23,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show one screen in browser, iOS and Android chrome.
 - **Skip:** yes, web.
 - **Decides:** DC-L10-01 · **Changes downstream:** DC-L10-02, DC-L10-08, DC-L10-09, DC-L10-10, DC-L10-11, DC-L10-15, DC-L10-17, DC-L10-19, DC-L10-20, DC-L10-22, DC-L10-24, DC-L14-01
-- **Record:** `OD:pick Q-plat-01=<value>`
+- **Record:** `OD:set Q-plat-01=<json-value> --why "..."`
 
 ## Q-plat-05 · Should your native apps look like the platform, like your brand, or a mix?
 *Mode:* Standard · *weight:* high (fan-out 11) · *kind:* decision · *class:* I · *control:* single choice
@@ -40,7 +40,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show one screen native-first, hybrid and brand-first.
 - **Skip:** yes.
 - **Decides:** DC-L10-02, DC-L06-14 · **Changes downstream:** DC-L06-07, DC-L10-03, DC-L10-04, DC-L10-06, DC-L10-09, DC-L10-12, DC-L10-13, DC-L10-14, DC-L10-21, DC-L10-25, DC-L15-01
-- **Record:** `OD:pick Q-plat-05=<value>`
+- **Record:** `OD:set Q-plat-05=<json-value> --why "..."`
 
 ## Q-plat-10 · How closely should interactions follow familiar conventions?
 *Mode:* Standard · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice
@@ -56,7 +56,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show a standard dropdown beside a custom one.
 - **Skip:** yes.
 - **Decides:** DC-L13-17 · **Changes downstream:** DC-L08-03, DC-L10-13
-- **Record:** `OD:pick Q-plat-10=<value>`
+- **Record:** `OD:set Q-plat-10=<json-value> --why "..."`
 
 ## Q-plat-06 · On native platforms, use system controls or custom-branded ones?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice
@@ -73,7 +73,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show switches and sliders: system vs custom.
 - **Skip:** yes.
 - **Decides:** DC-L10-13 · **Changes downstream:** DC-L10-12, DC-L10-14
-- **Record:** `OD:pick Q-plat-06=<value>`
+- **Record:** `OD:set Q-plat-06=<json-value> --why "..."`
 
 ## Q-plat-07 · What do the platforms share?
 *Mode:* Expert · *weight:* high (fan-out 5) · *kind:* decision · *class:* I · *control:* single choice
@@ -91,7 +91,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show one card component rendered per platform under each option.
 - **Skip:** yes.
 - **Decides:** DC-L10-03 · **Changes downstream:** DC-L10-19, DC-L10-21, DC-L10-22, DC-L10-24, DC-L14-02
-- **Record:** `OD:pick Q-plat-07=<value>`
+- **Record:** `OD:set Q-plat-07=<json-value> --why "..."`
 
 ## Q-plat-08 · What will you build the UI with?
 *Mode:* Standard · *weight:* medium (fan-out 3) · *kind:* decision · *class:* I · *control:* multi-select
@@ -109,7 +109,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show a generated Button in each selected stack.
 - **Skip:** yes.
 - **Decides:** DC-L10-21, DC-L10-20, DC-L10-19 · **Changes downstream:** DC-L08-03, DC-L10-01, DC-L10-03, DC-L10-22
-- **Record:** `OD:pick Q-plat-08=<value>`
+- **Record:** `OD:set Q-plat-08=<json-value> --why "..."`
 
 ## Q-plat-02 · Which device classes must work great on day one, which only need to work, and which are out?
 *Mode:* Standard · *weight:* high (fan-out 10) · *kind:* decision · *class:* I · *control:* tier picker per class (first-class / works / out)
@@ -129,7 +129,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show a device row: phone, tablet, laptop, TV, watch.
 - **Skip:** yes.
 - **Decides:** DC-L14-01, DC-L10-24 · **Changes downstream:** DC-L14-02, DC-L14-03, DC-L14-04, DC-L14-05, DC-L14-07, DC-L14-08, DC-L14-10, DC-L14-11, DC-L14-12, DC-L14-14
-- **Record:** `OD:pick Q-plat-02=<value>`
+- **Record:** `OD:set Q-plat-02=<json-value> --why "..."`
 
 ## Q-plat-03 · What do people touch or press with?
 *Mode:* Standard · *weight:* medium (fan-out 0) · *kind:* decision · *class:* I · *control:* multi-select
@@ -148,7 +148,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use the touch target size for anything a finger can reach, including web; use pointer-sized visuals only with a hit area padded to the floor; avoid drag-only interactions without a non-drag alternative (WCAG 2.5.7) [DC-L10-15; S-L10-083].
 - **Skip:** yes.
 - **Decides:** DC-L10-15 · **Changes downstream:** DC-L03-12, DC-L03-13, DC-L14-03, DC-L14-06
-- **Record:** `OD:pick Q-plat-03=<value>`
+- **Record:** `OD:set Q-plat-03=<json-value> --why "..."`
 
 ## Q-plat-04 · Will anyone use the product while driving, moving, or wearing a headset?
 *Mode:* Standard · *weight:* medium (fan-out 0) · *kind:* decision · *class:* I · *control:* multi-select
@@ -166,7 +166,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show which elements would fail the 2-second glance rule.
 - **Skip:** yes.
 - **Decides:** DC-L14-11 · **Changes downstream:** DC-L04-19, DC-L14-08
-- **Record:** `OD:pick Q-plat-04=<value>`
+- **Record:** `OD:set Q-plat-04=<json-value> --why "..."`
 
 ## Q-plat-09 · Which OS versions do you support?
 *Mode:* Expert · *weight:* medium (fan-out 4) · *kind:* decision · *class:* I · *control:* single choice per platform
@@ -184,4 +184,4 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show a matrix of assumed features: glass, dynamic color, edge-to-edge.
 - **Skip:** yes.
 - **Decides:** DC-L10-23 · **Changes downstream:** DC-L10-05, DC-L10-11, DC-L10-12, DC-L10-14
-- **Record:** `OD:pick Q-plat-09=<value>`
+- **Record:** `OD:set Q-plat-09=<json-value> --why "..."`

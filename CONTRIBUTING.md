@@ -38,7 +38,8 @@ synthesis/                ontology, questionnaire, levers (dials and formulas), 
 skills/                   the product: Agent Skills that run the interview (source of truth)
 data/                     knowledge chunks built from synthesis/ for the skills
 examples/                 complete worked design systems
-tools/                    od.py (coordination), jev_nav.py (research navigation and checks)
+tools/                    od.py (coordination), jev_nav.py (research navigation and checks),
+                          build_data.py, sync_skills.py, build_dist.py, check_links.py
 _coordination/            brief, protocol, board, decision log, session heartbeats, inbox
 ```
 
@@ -72,11 +73,15 @@ python3 -c "import json,pathlib; [json.loads(p.read_text()) for p in pathlib.Pat
 # citation integrity: every cited source id is in a trace, every card id exists
 python3 tools/jev_nav.py check
 
-# engine tests (once the engine is in the repo)
+# engine tests (once they are in the repo)
 python3 skills/opendesigner/scripts/test_engine.py
 
-# generated skill copies match skills/ (once the sync tool is in the repo)
+# generated skill copies match skills/, and skill frontmatter stays portable
 python3 tools/sync_skills.py --check
+python3 tools/build_dist.py --check
+
+# relative links in Markdown files resolve (offline)
+python3 tools/check_links.py
 ```
 
 CI runs the same checks on every pull request (see `.github/workflows/ci.yml`).

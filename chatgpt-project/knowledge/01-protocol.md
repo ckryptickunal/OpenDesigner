@@ -16,7 +16,7 @@ The knowledge lives in `references/` (built from 325 research Decision Cards). D
 ## Files in this skill
 | Path | Read it when |
 |---|---|
-| `references/rules.md` | Before the first question. Interview rules, the question card, decision classes, the `OD:` grammar |
+| `references/rules.md` | Before the first question. Interview rules, the question card, decision classes, answer statuses |
 | `references/stages/NN-*.md` | At the start of each stage. Questions in order: ask line, options with visual effect and real systems, default and source, time weight, what to show, skip rule |
 | `references/pacing.json` | At the start: modes, question counts per stage, the highest fan-out decisions, gates |
 | `references/hooks.md`, `hooks.json` | Stage 03 asset checklist, and whenever an asset comes up |
@@ -53,7 +53,7 @@ The knowledge lives in `references/` (built from 325 research Decision Cards). D
 Ask one high-weight decision per turn. Write it like this, in plain words:
 
 ```
-D7 · Corner softness  (Q-shape-01, weight high, changes 4 decisions)
+Q-shape-01 · Corner softness  (weight high, changes 4 decisions)
 <one sentence tying it to their product>
 <two or three plain sentences on what this choice does and where it shows>
 Stakes: <what goes wrong if we pick badly>
@@ -64,7 +64,7 @@ Stakes: <what goes wrong if we pick badly>
 Recommendation: A because <reason tied to their answers and a source>.
 Reply with a letter, a value, "show me", or your own answer.
 ```
-- D-numbers are stable ids for the session so the person can say "change D7" later.
+- The question id is the stable handle: the person can say "change Q-shape-01" in this or any later session. The engine numbers log entries D-001, D-002 in `opendesigner/decisions.md`.
 - 2 to 4 options, recommended first, the rest behind "more options". Word the question neutrally; the recommendation belongs in the options.
 - Offer only option values from the stage file. Anything else is recorded as a custom value with the person's reason.
 - Full rules, pushback, and what to do when someone says "you decide": `references/rules.md`.
@@ -85,57 +85,60 @@ Use the highest rung the host supports and say which one you are using. Never bl
 5. **Host question tool** (Claude AskUserQuestion, Codex `request_user_input`), up to 4 options.
 6. **Plain text**: numbered options with values and one-line effects.
 
-Templates: `palette.html` (stages 07-09), `type-scale.html` (10-11), `spacing.html` (12-13), `radius.html` (14), `elevation.html` (15), `motion.html` (16), `component-sheet.html` (17, 20-23), `option-gallery.html` ("show me options", stages 03 and 06; 3 to 8 cards). Each file's sample payload documents its fields. Fill payloads with engine output (`engine.py resolve`, `tokens/`), never with invented values.
+Templates: `palette.html` (stages 07-09), `type-scale.html` (10-11), `spacing-ruler.html` (12-13), `radius.html` (14), `elevation.html` (15), `motion.html` (16), `component-sheet.html` (17, 20-23), `option-gallery.html` ("show me options", stages 03 and 06; 3 to 8 cards). Each file's sample payload documents its fields. Fill payloads with engine output (`engine.py resolve`, `tokens/`), never with invented values. For a full specimen of the current system use `engine.py preview --open`.
 
-Every template has a **Copy my choice** button that produces `OD:` lines. When the person pastes them, apply each line with the engine (table below) and confirm in one sentence.
+Every template has a **Copy my choice** button that produces `OD:` lines. When the person pastes them, apply each line with the engine and confirm in one sentence.
 
 ## `OD:` lines and engine commands
-Grammar: `OD:<action> <target>=<value> <status>`; status is `confirmed` (default), `default`, `delegated` or `locked`. Several lines may arrive at once; apply them in order.
+One grammar for every channel (template button, widget, click, typed reply); each line maps one-to-one onto the engine:
 
 | Line | Run |
 |---|---|
-| `OD:pick Q-shape-01=subtle confirmed` | `engine.py pick Q-shape-01 subtle --why "<their reason or 'chosen in radius template'>"` |
-| `OD:set dials.roundness=70 confirmed` | `engine.py set dials.roundness 70 --why "..."` |
-| `OD:set raw.brandColor=#167874 confirmed` | `engine.py set raw.brandColor '"#167874"' --why "..."` |
-| any line ending in `locked` | the command above, then `engine.py lock <path>` (for a pick, the path is `answers.<Q-id>`) |
-| `OD:remix color=soft` | take that dimension's values from the named option in the payload, then `set` them one by one |
-| `OD:note Q-dir-01="liked: soft"` | pass the text as `--why` on the related command, or record it in the stage summary |
+| `OD:set Q-shape-01="subtle" --why "dense tool"` | `engine.py set 'Q-shape-01="subtle"' --why "dense tool"` (a question id records an answer; `pick Q-shape-01 subtle` is the same) |
+| `OD:set dials.roundness=45` | `engine.py set dials.roundness=45 --why "<their reason, or 'chosen in radius template'>"` |
+| `OD:set raw.brandColor="#167874"` | `engine.py set 'raw.brandColor="#167874"' --why "..."` |
+| `OD:lock Q-shape-01` / `OD:unlock ...` | `engine.py lock Q-shape-01` (unlock only with the person's consent) |
+| `OD:accept <ref-id>:<path>` / `OD:ignore ...` | from reference intake: `engine.py set <path> <value> --set-by reference --source-ref <ref-id>`; ignore records nothing |
+| `OD:remix color="soft"` | from the option gallery: take that dimension's values from the named option and `set` them one by one |
+
+Record honestly with `--set-by`: `chosen` (default), `confirmed_default` (they accepted your default), `delegated` ("you decide"), `assumed` (owner input you could not ask), `reference`, `asset`. Out-of-mode questions need no command: the default stands as `auto_default`.
 
 Engine commands (run from the person's project; state lives in `./opendesigner/`):
 ```
 python3 <skill>/scripts/engine.py init [--name "Acme"] [--from path/state.json]
-python3 <skill>/scripts/engine.py set <dotted.path> <json-value> --why "reason"
+python3 <skill>/scripts/engine.py set <path> <json-value> --why "reason" [--set-by delegated] [--lock]
 python3 <skill>/scripts/engine.py pick <Q-id> <option-value> --why "reason"
-python3 <skill>/scripts/engine.py lock <dotted.path>        (and unlock)
-python3 <skill>/scripts/engine.py resolve                   effective dials and derived values, for payloads
-python3 <skill>/scripts/engine.py generate                  tokens/ (DTCG 2025.10 + resolver)
-python3 <skill>/scripts/engine.py validate [--json]         contrast, targets, lint; exit 1 on errors
-python3 <skill>/scripts/engine.py export --format css|tailwind|figma|paper|swift|compose|dtcg|all
-python3 <skill>/scripts/engine.py design-md                 DESIGN.md from state + tokens + decisions
-python3 <skill>/scripts/engine.py preview [--open]          preview.html with every token and core components
-python3 <skill>/scripts/engine.py build                     generate + export all + design-md + preview + validate
+python3 <skill>/scripts/engine.py lock <path>                (unlock needs consent)
+python3 <skill>/scripts/engine.py resolve                    effective dials and derived values, for payloads
+python3 <skill>/scripts/engine.py intake <measurements.json> [--accept]   reference values -> proposed dials
+python3 <skill>/scripts/engine.py generate                   opendesigner/tokens/ (DTCG 2025.10 + resolver)
+python3 <skill>/scripts/engine.py validate [--json]          contrast, targets, lint; exit 1 on errors
+python3 <skill>/scripts/engine.py export --format css|tailwind|figma|paper|swift|compose|dtcg|all   -> opendesigner/build/
+python3 <skill>/scripts/engine.py design-md                  DESIGN.md and PRODUCT.md at the project root
+python3 <skill>/scripts/engine.py preview [--open]           opendesigner/preview.html
+python3 <skill>/scripts/engine.py build                      generate + export all + design-md + preview + validate
 ```
 Run `generate` and `validate` after each stage that changes values. Fix every validation error before showing results; the report cites the rule it applied. Deterministic checks come before your own critique.
 
 ## Designer hooks (Stage 03 and whenever an asset comes up)
-Some blocks need a human creator: logo and marks, app icon, favicon, custom icons, illustration, photography, brand typeface, fixed brand colors, motion signature, motifs, sound, haptics, voice guide, brand book. For each: ask "do you have this?" (grouped as one checklist, Q-brand-08), accept the formats in `references/hooks.md`, and if the answer is no, offer the paths in order (commission a designer with a written brief, an open library with its licence terms, a named tool with its caveats, or leave it out) and keep a briefed placeholder slot. Record `engine.py set hooks.<H-id>.status '"have|commissioning|tool|open-library|placeholder|not-needed"'`. Never present a generated stand-in as a finished brand asset.
+Some blocks need a human creator: logo and marks, app icon, favicon, custom icons, illustration, photography, brand typeface, fixed brand colors, motion signature, motifs, sound, haptics, voice guide, brand book. For each: ask "do you have this?" (grouped as one checklist, Q-brand-08), accept the formats in `references/hooks.md`, and if the answer is no, offer the paths in order (commission a designer with a written brief, an open library with its licence terms, a named tool with its caveats, or leave it out) and keep a briefed placeholder slot. Record `engine.py set hooks.<H-id>.status '"have"'` (or `commissioning`, `tool`, `open-library`, `placeholder`, `not-needed`; `pending` until asked). Never present a generated stand-in as a finished brand asset.
 
 ## References the person brings
 At any point, if the person offers a site, screenshot, Figma file, repo or brand book, hand off to **opendesigner-extract**: confirm each URL before opening it, read values, map them to dials, and come back with pre-filled answers marked "from reference" until confirmed. Copy structure and quality, never identity (no logo, brand name, exact brand hue, proprietary typeface, photography, illustration or copy).
 
 ## Gates
-Pause for explicit approval: after scope (stages 01-05, show the block map with classes G/E/D/T/I and what is out of scope), after direction (06-08), and after the asset checklist. Quick mode keeps only the direction gate. At each gate, play back the decisions as a short list with D-numbers and a change option for each.
+Pause for explicit approval: after scope (stages 01-05, show the block map with classes G/E/D/T/I and what is out of scope), after direction (06-08), and after the asset checklist. Quick mode keeps only the direction gate. At each gate, play back the decisions as a short list (question id, value, status, D-number from the log) with a change option for each.
 
 ## Finish
 1. `engine.py build`; the validation must pass (or every remaining warning has a written waiver).
 2. **Coverage check**: every block in `ontology-slim.json` is decided, defaulted, not applicable (with reason) or pending. Show the counts and the pending list; nothing is skipped silently.
-3. **Write the outputs** to the person's repo (ask before touching files outside `opendesigner/`):
-   - `opendesigner/tokens/*.tokens.json` (canonical, DTCG 2025.10) and the exports they asked for;
-   - `opendesigner/DESIGN.md` (readable view; offer to copy it to the repo root);
-   - `opendesigner/decisions.md` (append-only log, written by the engine);
-   - `opendesigner/state.json` (answers, statuses, hooks, locks);
-   - the snippet from `assets/output/AGENTS-snippet.md`, appended to their `AGENTS.md` (or `CLAUDE.md`) so every later agent reads the system first.
-4. Send a team summary in plain language: what we chose and why (the five highest-impact decisions), what is still open (assumed owner inputs, pending assets with their briefs), and how to change something later ("ask your agent to use opendesigner-extend").
+3. **Check the outputs** (the engine writes them; ask before touching anything else in the person's repo):
+   - `opendesigner/tokens/` (canonical, DTCG 2025.10) and `opendesigner/build/` (the exports they asked for);
+   - `DESIGN.md` and `PRODUCT.md` at the project root (readable views; text inside `<!-- od:keep -->` blocks survives regeneration);
+   - `opendesigner/decisions.md` (append-only log) and `opendesigner/state.json` (answers, dials, hooks, locks);
+   - `opendesigner/RATIONALE.md`, one page for the team, written by you from `assets/output/RATIONALE.md`;
+   - the snippet from `assets/output/AGENTS-snippet.md`, appended to their `AGENTS.md` (or `CLAUDE.md`) after asking, so every later agent reads the system first.
+4. Send the team summary (the RATIONALE.md content in a few lines): what we chose and why, what is still open (assumed owner inputs, pending assets with their briefs), and how to change something later ("ask your agent to use opendesigner-extend").
 5. If the conversation got long, suggest building components from the written spec in a fresh session.
 
 ## Guardrails (details in `references/guardrails.md`)
@@ -160,14 +163,14 @@ How to run the OpenDesigner interview well. Sources: `research/L18-ai-first-dist
 7. **Ask for examples, including one they dislike.** At the start of each visual stage (direction, color, type, shape, motion), ask for 1 to 3 references they like and 1 they don't.
 8. **Word questions neutrally.** The recommendation lives in the options, not in the question.
 9. **Record honestly.** A recommendation you made is not an answer you received (statuses below).
-10. **Play back before writing.** At each gate list the decisions with their D-numbers and a way to change each one.
+10. **Play back before writing.** At each gate list the decisions (question id, value, status) and a way to change each one.
 11. **Stay short.** Essential answer first; detail on request; do not re-offer something the person declined.
 12. **Interview in one session, build in a fresh one** when the conversation is long; the written spec carries the decisions.
 13. **Hold the data, not a script.** Use the stage files for facts; phrase questions for this person and this product.
 
 ## 2. The question card
 See SKILL.md for the layout. Details:
-- **Header:** `D<n> · <short title> (<Q-id>, weight <w>, changes <fan-out> decisions)`. Number decisions from D1 in the order you ask; keep numbers stable.
+- **Header:** `<Q-id> · <short title> (weight <w>, changes <fan-out> decisions)`. The question id is the stable handle across sessions ("change Q-shape-01"); the engine's log numbers entries D-001, D-002.
 - **Grounding:** one sentence connecting the choice to their product ("Your dashboard shows dense tables, so...").
 - **Plain explanation:** two or three sentences a newcomer can follow. No jargon without a gloss.
 - **Stakes:** one line on what goes wrong with a bad pick.
@@ -175,16 +178,19 @@ See SKILL.md for the layout. Details:
 - **Recommendation:** "A because ..." tied to their earlier answers and the default's source.
 - **Close:** "Reply with a letter, a value, 'show me', or your own answer."
 
-## 3. Answer statuses
-| Status | Meaning | How it gets recorded |
+## 3. Answer statuses (`--set-by`)
+| Status | Meaning | Record with |
 |---|---|---|
-| `confirmed` | The person chose or explicitly accepted it | `engine.py pick/set ... --why "<their words>"` |
-| `default` | Out of mode, or a Mechanical decision; nobody chose it | The engine's default; listed in the stage summary |
-| `delegated` | The person said "you decide" | Recorded with your reason; listed at the direction gate and in the final summary |
-| `assumed` | Owner input you could not ask (Quick mode) | Listed at the end for confirmation; never presented as decided |
-| `locked` | Must not change without explicit consent (brand hexes, accessibility floors, anything they lock) | `engine.py lock <path>` |
-| `from reference` | Pre-filled by opendesigner-extract | Becomes `confirmed` only when the person accepts it |
-| custom | A value outside the listed options | Recorded with the person's reason |
+| `chosen` | The person picked it (default) | `engine.py set <path> <value> --why "<their words>"` |
+| `confirmed_default` | The person accepted your recommended default | `--set-by confirmed_default` |
+| `auto_default` | Out of mode, or a Mechanical decision nobody looked at | nothing to run: the default stands; list it in the stage summary |
+| `delegated` | The person said "you decide" | `--set-by delegated --why "<your reason>"`; list it at the next gate and in the final summary |
+| `assumed` | Owner input you could not ask (Quick mode) | `--set-by assumed`; list it at the end for confirmation; never present it as decided |
+| `reference` | Accepted from a reference | `--set-by reference --source-ref <ref-id>` (opendesigner-extract) |
+| `asset` | Derived from an asset the person supplied (for example brand color from the logo) | `--set-by asset` |
+| locked | Must not change without explicit consent (brand hexes, accessibility floors, anything they lock) | `--lock` on the set, or `engine.py lock <path>` |
+
+A value outside the listed options is recorded as given, with the person's reason in `--why`.
 
 ## 4. Sorting decisions
 - **Mechanical:** one right answer given earlier choices or a rule (nested radius, on-color text, contrast steps). Decide silently with the default; mention it in the stage summary.
@@ -202,17 +208,17 @@ See SKILL.md for the layout. Details:
 After each stage, write 2 to 5 plain sentences a teammate could read ("We chose subtle 6 px corners because the product is a dense work tool; cards use 8 px."). The engine appends each `pick`/`set` with its `--why` to `opendesigner/decisions.md`; add the summary to your reply.
 Gates: after stages 01-05 (scope, with the block map tagged G/E/D/T/I), after 06-08 (direction), after the asset checklist (03). Quick mode keeps only the direction gate. End with the coverage check.
 
-## 7. The `OD:` copy-back grammar (DC-L18-07)
-One line per decision, identical whether it arrives from a template button, a widget or typed by hand:
+## 7. The `OD:` copy-back grammar (spec 3.7, DC-L18-07)
+One line per decision, identical whether it arrives from a template button, a widget, a click or a typed reply, and mapped one-to-one onto `engine.py`:
 ```
-OD:<action> <target>=<value> <status>
+OD:set <path>=<json-value> [--why "reason"]     path: a question id (Q-shape-01), dials.<name>, raw.<input>, hooks.<H-id>.status, or a token path
+OD:lock <path>          OD:unlock <path>          protect or release a decision (unlock only with consent)
+OD:accept <ref-id>:<path>    OD:ignore <ref-id>:<path>    act on a value pre-filled from a reference
+OD:remix <dimension>=<option-value>             option gallery only: take color, type, shape or depth from another option
 ```
-- `action`: `pick` (answer a question), `set` (write a state path), `lock`, `remix`, `note`.
-- `target`: a question id (`Q-shape-01`) for `pick` and `note`; a dotted state path for `set` and `lock` (`dials.roundness`, `raw.brandColor`, `raw.baseSize`, `hooks.H-logo.status`, `answers.Q-shape-01`); a dimension (`color`, `type`, `shape`, `depth`) for `remix`.
-- `value`: an option value, a number, a hex color, or a JSON string in double quotes when it contains spaces or `=`.
-- `status`: `confirmed`, `default`, `delegated` or `locked`; omitted on `note` and `remix`.
+- Values are JSON: strings in double quotes (`"subtle"`, `"#167874"`), numbers bare (`45`). The engine also accepts a bare word.
 - Parse defensively: ignore text outside `OD:` lines, apply lines in order, and if a value is not a listed option, confirm it as a custom value before recording it.
-- Examples: `OD:pick Q-depth-01=ring-shadow confirmed` · `OD:set raw.brandColor=#167874 locked` · `OD:remix color=soft` · `OD:note Q-dir-01="liked: soft, disliked: neo-brutalist"`.
+- Examples: `OD:set Q-depth-01="ring-shadow"` · `OD:set dials.roundness=45 --why "a bit softer"` · `OD:lock raw.brandColor` · `OD:remix color="soft"`.
 
 ## 8. Avoiding the generic AI look
 Vendors and NN/g have documented that AI-made interfaces converge on the same few looks (L17 finding 4). Flag it once when a choice lands there; do not ban anything.
@@ -283,7 +289,7 @@ Some blocks need a human creator or a named tool. OpenDesigner asks for them ins
 6. **The commission path ships a brief** (required files and sizes from `hooks.json`, the system's tokens and direction) plus a reminder that a contractor's logo needs a written copyright assignment.
 7. **A generated stand-in is never presented as final.** Placeholders are labelled as placeholders.
 
-Record each hook: `engine.py set hooks.<H-id>.status '"<status>"' --why "..."` with status `have`, `commissioning`, `tool`, `open-library`, `placeholder` or `not-needed`.
+Record each hook: `engine.py set hooks.<H-id>.status '"<status>"' --why "..."` with status `have`, `commissioning`, `tool`, `open-library`, `placeholder` or `not-needed` (`pending` until asked). Use `--set-by asset` for values derived from a supplied asset.
 
 ## Asset hooks
 | Hook | Ask | Master format | If no (in order) |
@@ -316,7 +322,7 @@ Record each hook: `engine.py set hooks.<H-id>.status '"<status>"' --why "..."` w
 ```
 Asset: <hook name>            Needed by: <date or milestone>
 Files: <formats and sizes from hooks.json>
-System: <link to opendesigner/DESIGN.md>; palette <accent + neutrals>; type <faces>; radius <control/container>
+System: <link to DESIGN.md>; palette <accent + neutrals>; type <faces>; radius <control/container>
 Direction: <the chosen direction in one line>; memorable thing: <from Stage 0>
 Constraints: <licence, platforms, dark mode, reduced motion>
 Rights: written copyright assignment to <owner> on delivery
@@ -390,28 +396,25 @@ components:
 ## Output template: decisions.md
 
 ```
-# Design decisions: {{name}}
+# Decisions
 
-Append-only log written by `engine.py` (every `pick` and `set` with its `--why`) and by the interviewing model (stage summaries). A change adds a new entry that supersedes the old one; nothing is deleted. Statuses: confirmed (the owner chose it), default (nobody chose it), delegated (the owner said "you decide"), assumed (owner input not yet confirmed), locked (changes need explicit consent).
+One entry per decision, newest last. Superseded decisions stay; a later entry replaces them.
 
-## Stage summaries
-<!-- one short paragraph per stage, written for a teammate -->
-### {{date}} · Stage 06 · Visual direction
-{{We chose ... because ... . Rejected: ... because ... .}}
+<!-- engine.py writes one entry per init, set and lock, in this shape (spec 7.9): -->
+## D-{{nnnn}} · {{answers.Q-shape-01 | dials.roundness | raw.brandColor | hooks.H-logo.status}} = {{value}}
+- set_by: {{chosen | confirmed_default | auto_default | assumed | delegated | reference | asset}} · locked: {{yes | no}} · date: {{YYYY-MM-DD}} · supersedes: {{D-nnnn | none}} · source_ref: {{ref-id | none}}
+- reason: {{the owner's words, or the source of the default}}
+- also set: {{derived path}} = {{value}} (from {{Q-id}})
 
-## Log
-<!-- one entry per decision, newest last -->
-### D{{n}} · {{title}} · {{date}}
-- Question: `{{Q-id}}` · Value: `{{value}}` · Status: {{confirmed|default|delegated|assumed|locked}}
-- Why: {{reason in the owner's words or the default's source}}
-- Changes: {{downstream decisions or tokens that moved}}
-- Source: {{person | default (levers.json) | reference <url> | designer}}
-- Supersedes: {{D-id or none}}
+<!-- The interviewing model adds a plain-language summary after each stage, for teammates: -->
+## Stage {{NN}} summary · {{YYYY-MM-DD}} · {{stage title}}
+{{2 to 5 sentences: what we chose, why, what we rejected and why. References used: what was taken and what was substituted.}}
 
-## Open items
-- Assumed owner inputs to confirm: {{list}}
-- Pending assets and their briefs: {{hook ids}}
-- Waived warnings and reasons: {{list}}
+<!-- And at the end of the interview: -->
+## Open items · {{YYYY-MM-DD}}
+- Assumed answers to confirm: {{question ids}}
+- Pending assets and their briefs: {{hook ids and owners}}
+- Warnings waived, with reasons: {{rule ids}}
 ```
 
 ## Output template: AGENTS-snippet.md
@@ -419,9 +422,242 @@ Append-only log written by `engine.py` (every `pick` and `set` with its `--why`)
 ```
 ## Design system (OpenDesigner)
 This project's design system lives in `opendesigner/`. Before any UI, styling or visual work:
-1. Read `opendesigner/DESIGN.md`. Use the tokens in `opendesigner/tokens/` (DTCG, canonical) or their exports (`opendesigner/css/tokens.css`, `opendesigner/tailwind/theme.css`). Do not hard-code colors, font sizes, spacing, radii, shadows or durations.
+1. Read `DESIGN.md` and `PRODUCT.md` at the project root. Use the tokens in `opendesigner/tokens/` (DTCG, canonical) or their exports in `opendesigner/build/` (for example `build/css/tokens.css`, `build/tailwind/theme.css`). Do not hard-code colors, font sizes, spacing, radii, shadows or durations.
 2. Check `opendesigner/decisions.md` for why a value is what it is. Decisions listed under `locks` in `opendesigner/state.json` change only with the owner's explicit consent.
-3. To change or extend the system, use the `opendesigner-extend` skill. Without it: read `state.json`, `decisions.md` and the tokens first, change one decision at a time with `engine.py set` or `engine.py pick` and a `--why`, then run `engine.py generate` and `engine.py validate`.
+3. To change or extend the system, use the `opendesigner-extend` skill. Without it: read `state.json`, `decisions.md` and the tokens first, change one decision at a time with `engine.py set <path> <value> --why "..."`, then run `engine.py generate` and `engine.py validate`.
 4. New components reuse existing tokens. If a value is missing, add a token through the engine instead of inventing one inline.
 5. Accessibility floors (WCAG 2.2 AA contrast, 24 px minimum targets, visible focus, reduced motion) are part of the system, not options.
+```
+
+## Output template: state.json
+
+```
+{
+  "$schema": "opendesigner-state/1",
+  "schema_version": 1,
+  "engine_version": "1.0.0",
+  "levers_version": "levers/1.0 2026-09-23",
+  "mode": "standard",
+  "name": "Acme Invoicing",
+  "summary": "",
+  "context": {
+    "product": "",
+    "audience": "",
+    "surfaces": [],
+    "entryPath": "",
+    "memorable": "",
+    "scope": {
+      "in": [],
+      "out": []
+    },
+    "constraints": [],
+    "team": ""
+  },
+  "dials": {
+    "expression": null,
+    "brandPresence": null,
+    "density": null,
+    "energy": null,
+    "roundness": {
+      "value": 40,
+      "set_by": "chosen",
+      "detached": true,
+      "decision": "D-0002"
+    },
+    "depth": null,
+    "colorfulness": null,
+    "warmth": null
+  },
+  "preset": null,
+  "macros": [],
+  "raw": {
+    "brandColor": "#167874",
+    "primaryActionColor": null,
+    "focusColor": null,
+    "neutralBase": null,
+    "contrastTarget": "AA",
+    "textFace": "system",
+    "displayFace": "=textFace",
+    "baseSize": null,
+    "spaceUnit": 4,
+    "platforms": [
+      "web"
+    ],
+    "inputs": [
+      "pointer",
+      "touch"
+    ],
+    "productType": "work-tool",
+    "marketingSurfaces": false,
+    "flags": {
+      "brandExact": false,
+      "tintTowardBrand": false,
+      "motionOff": false,
+      "darkMode": true
+    },
+    "overrides": {},
+    "secondaryColors": [],
+    "monoFace": "ui-monospace",
+    "scripts": [
+      "Latn"
+    ],
+    "domain": null,
+    "defaultTheme": "system"
+  },
+  "overrides": {},
+  "answers": {
+    "Q-shape-01": {
+      "value": "subtle",
+      "set_by": "chosen",
+      "decision": "D-0002",
+      "locked": false
+    },
+    "Q-type-01": {
+      "value": "system",
+      "set_by": "delegated",
+      "decision": "D-0004",
+      "locked": false
+    }
+  },
+  "principles": [],
+  "components": {
+    "base": null,
+    "inventory": [
+      "button",
+      "icon-button",
+      "link",
+      "text-field",
+      "textarea",
+      "select",
+      "checkbox",
+      "radio",
+      "switch",
+      "card",
+      "dialog",
+      "menu",
+      "tooltip",
+      "toast",
+      "tabs",
+      "table",
+      "badge",
+      "avatar",
+      "banner",
+      "progress",
+      "skeleton",
+      "navigation"
+    ],
+    "notes": {}
+  },
+  "hooks": {
+    "H-logo": {
+      "status": "placeholder",
+      "name": "Logo, wordmark, symbol, lockups",
+      "question": "Q-brand-03",
+      "files": [],
+      "note": ""
+    },
+    "H-appicon": {
+      "status": "pending",
+      "name": "App icon",
+      "question": "Q-icon-06",
+      "files": [],
+      "note": ""
+    },
+    "H-favicon": {
+      "status": "pending",
+      "name": "Favicon set",
+      "question": "Q-brand-03",
+      "files": [],
+      "note": ""
+    },
+    "H-icons": {
+      "status": "pending",
+      "name": "Custom icons, pictograms, spot icons",
+      "question": "Q-icon-01",
+      "files": [],
+      "note": ""
+    },
+    "H-illus": {
+      "status": "pending",
+      "name": "Illustration, characters, empty-state art",
+      "question": "Q-img-04",
+      "files": [],
+      "note": ""
+    },
+    "H-photo": {
+      "status": "pending",
+      "name": "Photography and art direction",
+      "question": "Q-img-01",
+      "files": [],
+      "note": ""
+    },
+    "H-type": {
+      "status": "pending",
+      "name": "Brand typeface files",
+      "question": "Q-type-02",
+      "files": [],
+      "note": ""
+    },
+    "H-color": {
+      "status": "pending",
+      "name": "Fixed brand colors",
+      "question": "Q-color-01",
+      "files": [],
+      "note": ""
+    },
+    "H-motion": {
+      "status": "pending",
+      "name": "Motion signature and rich media",
+      "question": "Q-img-06",
+      "files": [],
+      "note": ""
+    },
+    "H-motif": {
+      "status": "pending",
+      "name": "Graphic devices, patterns, textures, brand gradients, signature shape",
+      "question": "Q-img-07",
+      "files": [],
+      "note": ""
+    },
+    "H-sound": {
+      "status": "pending",
+      "name": "UI sounds and sonic logo",
+      "question": "Q-motion-08",
+      "files": [],
+      "note": ""
+    },
+    "H-haptic": {
+      "status": "pending",
+      "name": "Custom haptic patterns",
+      "question": "Q-motion-09",
+      "files": [],
+      "note": ""
+    },
+    "H-voice": {
+      "status": "pending",
+      "name": "Voice and tone guide",
+      "question": "Q-voice-01",
+      "files": [],
+      "note": ""
+    },
+    "H-brandbook": {
+      "status": "pending",
+      "name": "Brand guidelines PDF",
+      "question": "Q-ref-01",
+      "files": [],
+      "note": ""
+    }
+  },
+  "blocks": {},
+  "references": {},
+  "taste": {},
+  "hashes": {},
+  "exports": {
+    "prefix": "ds",
+    "figmaPlan": "professional"
+  },
+  "locks": [
+    "raw.brandColor"
+  ]
+}
 ```

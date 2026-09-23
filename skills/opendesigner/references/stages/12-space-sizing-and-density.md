@@ -4,7 +4,7 @@
 
 Screen: the spacing scale, target sizes and control heights, shown on a live component sheet with spacing overlays (padding in one tint, gaps in another). Graph step 0-6. Pre-filled from Q-aud-01, Q-plat-03 and Q-dir-02.
 
-**Questions:** 10 (Expert 5, Standard 5). **Visual template:** `assets/templates/spacing.html`.
+**Questions:** 10 (Expert 5, Standard 5). **Visual template:** `assets/templates/spacing-ruler.html`.
 Ask in the order below. Skip a question when its mode is above the chosen depth or its *Show if* is false; it then takes its default, recorded with status `default`.
 
 ## Q-space-01 · What should the base spacing unit be?
@@ -22,7 +22,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use the 2/4/6 sub-steps inside components (icon-to-label, chip padding); avoid them between layout sections [DC-L03-01, DC-L03-04].
 - **Skip:** yes.
 - **Decides:** DC-L03-01 · **Changes downstream:** DC-L03-02, DC-L03-03, DC-L03-06, DC-L03-07, DC-L03-15
-- **Record:** `OD:pick Q-space-01=<value>`
+- **Record:** `OD:set Q-space-01=<json-value> --why "..."`
 
 ## Q-space-02 · How should spacing steps grow?
 *Mode:* Standard · *weight:* high (fan-out 5) · *kind:* decision · *class:* G · *control:* single choice + editable step list
@@ -39,7 +39,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** keep adjacent steps at least about 25% apart above 8px so the difference is visible; avoid adding steps nobody can tell apart [DC-L03-02].
 - **Skip:** yes.
 - **Decides:** DC-L03-02 · **Changes downstream:** DC-L03-03, DC-L03-04, DC-L03-11, DC-L03-24
-- **Record:** `OD:pick Q-space-02=<value>`
+- **Record:** `OD:set Q-space-02=<json-value> --why "..."`
 
 ## Q-space-03 · How big must tap and click targets be?
 *Mode:* Standard · *weight:* medium (fan-out 2) · *kind:* decision · *class:* G · *control:* single choice (pre-filled from Q-plat-03 and Q-aud-03)
@@ -56,7 +56,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** decouple hit area from visual size (padding, pseudo-elements); avoid shrinking hit areas in compact mode [DC-L03-12; S-L03-035].
 - **Skip:** yes.
 - **Decides:** DC-L03-12, DC-L14-03, DC-L03-13 · **Changes downstream:** DC-L03-07, DC-L05-05, DC-L08-07
-- **Record:** `OD:pick Q-space-03=<value>`
+- **Record:** `OD:set Q-space-03=<json-value> --why "..."`
 
 ## Q-space-09 · Who controls density, and how is it stored?
 *Mode:* Expert · *weight:* medium (fan-out 3) · *kind:* decision · *class:* G · *control:* single choice (who) + single choice (storage)
@@ -74,7 +74,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use a compact mode for tables, lists, menus and trees; avoid a type-only density mode that leaves oversized padding [DC-L03-11; S-L03-070].
 - **Skip:** yes.
 - **Decides:** DC-L03-10, DC-L03-11, DC-L14-13 · **Changes downstream:** DC-L07-15, DC-L07-17
-- **Record:** `OD:pick Q-space-09=<value>`
+- **Record:** `OD:set Q-space-09=<json-value> --why "..."`
 
 ## Q-space-04 · How tall should buttons and inputs be?
 *Mode:* Standard · *weight:* medium (fan-out 2) · *kind:* decision · *class:* G · *control:* single choice (pre-filled from Q-dir-02)
@@ -91,7 +91,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** keep sizes on multiples of 8 and never mix sizes in one group; avoid heights below the target floor without padded hit areas [DC-L08-07, DC-L03-12].
 - **Skip:** yes.
 - **Decides:** DC-L03-07, DC-L08-07 · **Changes downstream:** DC-L04-03, DC-L05-05, DC-L08-16
-- **Record:** `OD:pick Q-space-04=<value>`
+- **Record:** `OD:set Q-space-04=<json-value> --why "..."`
 
 ## Q-space-05 · How much breathing room between groups versus inside them?
 *Mode:* Standard · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* slider (inner:outer ratio)
@@ -108,7 +108,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use space as the default grouping cue; add borders only where interactivity or scanning needs them [DC-L03-24].
 - **Skip:** yes.
 - **Decides:** DC-L03-24 · **Changes downstream:** DC-L03-04, DC-L08-15
-- **Record:** `OD:pick Q-space-05=<value>`
+- **Record:** `OD:set Q-space-05=<json-value> --why "..."`
 
 ## Q-space-06 · How should spacing tokens be organized by purpose?
 *Mode:* Expert · *weight:* medium (fan-out 2) · *kind:* decision · *class:* G · *control:* single choice + table (inset shapes)
@@ -125,7 +125,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use padding and gap on parents; avoid margins on reusable components [DC-L03-04; S-L03-030].
 - **Skip:** yes.
 - **Decides:** DC-L03-04, DC-L03-05 · **Changes downstream:** DC-L03-03, DC-L07-04
-- **Record:** `OD:pick Q-space-06=<value>`
+- **Record:** `OD:set Q-space-06=<json-value> --why "..."`
 
 ## Q-space-07 · Do you need tiny nudges and negative spacing?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* multi-select
@@ -141,7 +141,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use negatives for deliberate overlaps; avoid using nudges to patch layout bugs [DC-L03-06, inferred].
 - **Skip:** yes.
 - **Decides:** DC-L03-06 · **Changes downstream:** DC-L07-03
-- **Record:** `OD:pick Q-space-07=<value>`
+- **Record:** `OD:set Q-space-07=<json-value> --why "..."`
 
 ## Q-space-08 · How should vertical rhythm be kept?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -157,7 +157,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use a strict baseline grid only for multi-column editorial pages; avoid it for app UI on the web [DC-L03-25].
 - **Skip:** yes.
 - **Decides:** DC-L03-25 · **Changes downstream:** DC-L02-16
-- **Record:** `OD:pick Q-space-08=<value>`
+- **Record:** `OD:set Q-space-08=<json-value> --why "..."`
 
 ## Q-space-10 · Which icon and avatar sizes should exist?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* editable size lists
@@ -174,4 +174,4 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** keep the icon-to-text ratio fixed ("Don't alter the icon-text size ratio", Carbon) [S-L03-062]; avoid in-between icon sizes that blur the pixel grid [inferred].
 - **Skip:** yes.
 - **Decides:** DC-L03-08 · **Changes downstream:** DC-L05-05, DC-L05-18
-- **Record:** `OD:pick Q-space-10=<value>`
+- **Record:** `OD:set Q-space-10=<json-value> --why "..."`

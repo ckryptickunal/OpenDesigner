@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "opendesigner",
+  "displayName": "OpenDesigner",
+  "version": "0.1.0",
+  "description": "Open-source, AI-first design-system builder. Interviews you one decision at a time with visual options, recommends sourced defaults, asks for designer-owned assets, and writes DTCG tokens, CSS, Tailwind, DESIGN.md and a decision log.",
+  "author": { "name": "ckryptickunal", "url": "https://github.com/ckryptickunal" },
+  "homepage": "https://github.com/ckryptickunal/OpenDesigner",
+  "repository": "https://github.com/ckryptickunal/OpenDesigner",
+  "license": "MIT",
+  "keywords": ["design-system", "design-tokens", "dtcg", "theme", "ui-kit", "design-md", "figma", "tailwind", "accessibility"]
+}

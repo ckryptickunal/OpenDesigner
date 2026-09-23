@@ -22,7 +22,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use semantic tokens in every component; avoid components referencing a raw hex or px (L09: 24 of 25 systems forbid it) [L09 A1 row 1].
 - **Skip:** yes.
 - **Decides:** DC-L07-01, DC-L07-02, DC-L01-26, DC-L02-27 · **Changes downstream:** DC-L07-04, DC-L07-18, DC-L07-19
-- **Record:** `OD:pick Q-token-01=<value>`
+- **Record:** `OD:set Q-token-01=<json-value> --why "..."`
 
 ## Q-token-04 · Which units should the source use?
 *Mode:* Expert · *weight:* medium (fan-out 2) · *kind:* decision · *class:* G · *control:* single choice + toggle (spacing scales with text)
@@ -39,7 +39,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** question any value not divisible by 4 (except 2, 6, 10 for icon nudges); avoid sp or rem for spacing that must not scale with text on Android [DC-L10-08; L10 baked-in rule 4].
 - **Skip:** yes.
 - **Decides:** DC-L07-11, DC-L10-08, DC-L03-26 · **Changes downstream:** DC-L10-22
-- **Record:** `OD:pick Q-token-04=<value>`
+- **Record:** `OD:set Q-token-04=<json-value> --why "..."`
 
 ## Q-token-08 · Which file format and build pipeline should produce platform code?
 *Mode:* Expert · *weight:* medium (fan-out 3) · *kind:* decision · *class:* T · *control:* single choice (pipeline) + multi-select (outputs)
@@ -58,7 +58,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use one canonical export and generate everything else from it; avoid hand-edited platform files [DC-L07-25].
 - **Skip:** yes.
 - **Decides:** DC-L07-09, DC-L07-25, DC-L10-22, DC-L10-18 · **Changes downstream:** DC-L16-12
-- **Record:** `OD:pick Q-token-08=<value>`
+- **Record:** `OD:set Q-token-08=<json-value> --why "..."`
 
 ## Q-token-02 · How should tokens be named?
 *Mode:* Expert · *weight:* medium (fan-out 2) · *kind:* decision · *class:* G · *control:* grammar builder + text (prefix)
@@ -76,7 +76,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use role names at the semantic tier; avoid `padding` or `margin` in primitive names and ordinal scales that look proportional but aren't [DC-L03-03].
 - **Skip:** yes.
 - **Decides:** DC-L07-03, DC-L07-04, DC-L07-05, DC-L07-06, DC-L03-03 · **Changes downstream:** DC-L07-20
-- **Record:** `OD:pick Q-token-02=<value>`
+- **Record:** `OD:set Q-token-02=<json-value> --why "..."`
 
 ## Q-token-03 · Which properties become tokens?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice + checklist
@@ -93,7 +93,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use tokens for anything a lint rule should check; avoid tokenizing one-off art values [DC-L07-07].
 - **Skip:** yes.
 - **Decides:** DC-L07-07 · **Changes downstream:** -
-- **Record:** `OD:pick Q-token-03=<value>`
+- **Record:** `OD:set Q-token-03=<json-value> --why "..."`
 
 ## Q-token-05 · How should composite values (type, shadows, motion) be encoded?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice per type
@@ -109,7 +109,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use variables for single values that change by mode and styles for bundles; avoid hard-coded style values [DC-L07-21].
 - **Skip:** yes.
 - **Decides:** DC-L07-12, DC-L07-13, DC-L07-14, DC-L04-28, DC-L02-28 · **Changes downstream:** DC-L07-25
-- **Record:** `OD:pick Q-token-05=<value>`
+- **Record:** `OD:set Q-token-05=<json-value> --why "..."`
 
 ## Q-token-06 · How should themes and modes be structured so combinations don't explode?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -127,7 +127,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use additive collections to stay within the plan's mode limit; avoid putting brand and scheme in one flattened axis [DC-L07-18, DC-L07-27].
 - **Skip:** yes.
 - **Decides:** DC-L07-17, DC-L07-18, DC-L07-28 · **Changes downstream:** -
-- **Record:** `OD:pick Q-token-06=<value>`
+- **Record:** `OD:set Q-token-06=<json-value> --why "..."`
 
 ## Q-token-07 · How should the Figma library be kept clean?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* T · *control:* toggles
@@ -145,7 +145,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use scopes so a spacing token cannot be picked for a color; avoid "show in all" scopes [DC-L07-19].
 - **Skip:** yes.
 - **Decides:** DC-L07-19, DC-L07-20, DC-L07-21, DC-L07-26 · **Changes downstream:** DC-L07-23
-- **Record:** `OD:pick Q-token-07=<value>`
+- **Record:** `OD:set Q-token-07=<json-value> --why "..."`
 
 ## Q-token-09 · How should tokens be described and retired?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* toggles
@@ -161,7 +161,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use descriptions written for agents as well as people; avoid deleting tokens without a replacement [DC-L07-23].
 - **Skip:** yes.
 - **Decides:** DC-L07-23 · **Changes downstream:** DC-L11-15
-- **Record:** `OD:pick Q-token-09=<value>`
+- **Record:** `OD:set Q-token-09=<json-value> --why "..."`
 
 ## Q-token-10 · Which inputs should re-skin the theme, and what may other brands or clients customize?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* multi-select (knobs) + single choice (surface)
@@ -182,4 +182,4 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use generated on-colors so client colors keep contrast; avoid exposing raw token editing to clients [DC-L06-17, DC-L06-16].
 - **Skip:** yes.
 - **Decides:** DC-L06-06, DC-L06-17 · **Changes downstream:** -
-- **Record:** `OD:pick Q-token-10=<value>`
+- **Record:** `OD:set Q-token-10=<json-value> --why "..."`

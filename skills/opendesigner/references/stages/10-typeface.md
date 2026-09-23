@@ -24,7 +24,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use system fonts when the product lives inside another OS's chrome; use a brand face when recognition is a stated goal; avoid a brand face in body text if it needs size bumps to match system legibility at 13pt [DC-L02-01, DC-L10-06].
 - **Skip:** yes, system.
 - **Decides:** DC-L09-05, DC-L02-01, DC-L06-07, DC-L10-06 · **Changes downstream:** DC-L02-02, DC-L02-03, DC-L02-04, DC-L02-06, DC-L02-21, DC-L02-24, DC-L10-07
-- **Record:** `OD:pick Q-type-01=<value>`
+- **Record:** `OD:set Q-type-01=<json-value> --why "..."`
 
 ## Q-type-02 · Do you have the brand typeface files and a license that covers web and apps?
 *Mode:* Standard · *weight:* medium (fan-out 1) · *kind:* hook · *class:* T · *control:* single choice + file upload + license checkboxes (web, iOS/Android apps, embedding)
@@ -43,7 +43,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Hook, if no:** (1) pick an open-source face under the SIL OFL with a similar personality (Inter, Roboto Flex, Noto, Google Sans Flex, IBM Plex) [S-L02-026, S-L02-012]; (2) license a commercial face, noting per-domain, per-app or per-pageview terms [inferred]; (3) commission a custom face from a type foundry, with the caveat that it is slow and costly (Google needed three iterations to make one brand face work at small sizes) [S-L06-031].
 - **Skip:** yes; the system stack stands in until files arrive.
 - **Decides:** DC-L02-06 · **Changes downstream:** DC-L02-04, DC-L02-24, DC-L10-22
-- **Record:** `OD:pick Q-type-02=<value>`
+- **Record:** `OD:set Q-type-02=<json-value> --why "..."`
 
 ## Q-type-03 · Which kind of typeface fits the personality?
 *Mode:* Standard · *weight:* medium (fan-out 3) · *kind:* decision · *class:* G · *control:* single choice (pre-filled from sliders F, B, A and D)
@@ -63,7 +63,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use geometric faces for headlines, humanist or neo-grotesque for body; avoid any face that fails the confusable-pairs test at 12-14px or lacks your scripts [DC-L02-02].
 - **Skip:** yes.
 - **Decides:** DC-L02-02, DC-L06-08 · **Changes downstream:** DC-L02-03, DC-L02-14, DC-L05-03
-- **Record:** `OD:pick Q-type-03=<value>`
+- **Record:** `OD:set Q-type-03=<json-value> --why "..."`
 
 ## Q-type-04 · Which languages and scripts must the product support, now and within two years?
 *Mode:* Standard · *weight:* medium (fan-out 4) · *kind:* decision · *class:* I · *control:* multi-select (scripts) + toggle (right-to-left)
@@ -82,7 +82,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use logical (start/end) spacing and mirrored directional icons when RTL is on; avoid fixing a label width to its English length [DC-L06-24; S-L06-101].
 - **Skip:** yes, Latin.
 - **Decides:** DC-L02-24, DC-L06-24 · **Changes downstream:** DC-L02-13, DC-L02-25, DC-L03-04, DC-L05-09
-- **Record:** `OD:pick Q-type-04=<value>`
+- **Record:** `OD:set Q-type-04=<json-value> --why "..."`
 
 ## Q-type-05 · One type family, or a pair?
 *Mode:* Expert · *weight:* medium (fan-out 2) · *kind:* decision · *class:* G · *control:* single choice
@@ -99,7 +99,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** add a second face only for a change of job (display vs text, code); avoid near-identical pairs that read as a mistake [DC-L02-03; L15 P49].
 - **Skip:** yes.
 - **Decides:** DC-L02-03 · **Changes downstream:** DC-L02-06, DC-L02-15
-- **Record:** `OD:pick Q-type-05=<value>`
+- **Record:** `OD:set Q-type-05=<json-value> --why "..."`
 
 ## Q-type-06 · Which font for code and numbers?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice + toggle (tabular numbers in tables)
@@ -115,7 +115,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use tabular figures in tables, clocks and anything that updates; avoid mono for body text [DC-L02-05; S-L02-052].
 - **Skip:** yes.
 - **Decides:** DC-L02-05, DC-L02-26 · **Changes downstream:** DC-L02-26, DC-L05-24
-- **Record:** `OD:pick Q-type-06=<value>`
+- **Record:** `OD:set Q-type-06=<json-value> --why "..."`
 
 ## Q-type-07 · Should the font use variable weights and automatic optical sizing?
 *Mode:* Expert · *weight:* high (fan-out 5) · *kind:* decision · *class:* G · *control:* single choice
@@ -132,4 +132,4 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use opsz tied to size; avoid setting display sizes in a text cut without tracking adjustments [DC-L02-04, DC-L02-14].
 - **Skip:** yes.
 - **Decides:** DC-L02-04 · **Changes downstream:** DC-L02-06, DC-L02-14, DC-L02-15
-- **Record:** `OD:pick Q-type-07=<value>`
+- **Record:** `OD:set Q-type-07=<json-value> --why "..."`

@@ -1,0 +1,64 @@
+{
+  "version": "v1.1.0",
+  "entity": {
+    "type": "individual",
+    "role": "maintainer",
+    "name": "Kunal Bairwa",
+    "email": "",
+    "description": "Kunal Bairwa maintains OpenDesigner, an open-source, AI-first design system builder. No funding accounts exist yet; the channel and plan below are planned and inactive.",
+    "webpageUrl": {
+      "url": "https://github.com/ckryptickunal"
+    }
+  },
+  "projects": [
+    {
+      "guid": "opendesigner",
+      "name": "OpenDesigner",
+      "description": "An open-source, AI-first design system builder: Agent Skills, knowledge files and a small offline Python engine that let Claude, ChatGPT, Codex, Cursor and other agents interview a person and build a complete, accessible design system (DTCG design tokens, CSS, Tailwind, DESIGN.md and a decision log). Its recommendations come from a cited research base of 352 Decision Cards and a benchmark of 25 public design systems.",
+      "webpageUrl": {
+        "url": "https://github.com/ckryptickunal/OpenDesigner"
+      },
+      "repositoryUrl": {
+        "url": "https://github.com/ckryptickunal/OpenDesigner"
+      },
+      "licenses": [
+        "spdx:MIT",
+        "spdx:CC-BY-4.0"
+      ],
+      "tags": [
+        "design",
+        "design-system",
+        "design-tokens",
+        "accessibility",
+        "ai",
+        "llm",
+        "developer-tools",
+        "documentation"
+      ]
+    }
+  ],
+  "funding": {
+    "channels": [
+      {
+        "guid": "github-sponsors",
+        "type": "payment-provider",
+        "address": "https://github.com/sponsors/ckryptickunal",
+        "description": "Planned. The GitHub Sponsors account has not been set up yet, so this channel cannot receive funds today."
+      }
+    ],
+    "plans": [
+      {
+        "guid": "maintenance",
+        "status": "inactive",
+        "name": "Maintenance and cross-host testing",
+        "description": "Planned: maintainer time, model credits for testing the skills across AI hosts, and hosting for the planned MCP server. Inactive until the GitHub Sponsors channel exists.",
+        "amount": 0,
+        "currency": "USD",
+        "frequency": "monthly",
+        "channels": [
+          "github-sponsors"
+        ]
+      }
+    ]
+  }
+}

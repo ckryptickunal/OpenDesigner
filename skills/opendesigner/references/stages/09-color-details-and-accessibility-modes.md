@@ -22,7 +22,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use overlays for components that sit on user or dynamic colors; avoid state changes that rely on a hue shift alone [DC-L01-17, DC-L01-23].
 - **Skip:** yes.
 - **Decides:** DC-L01-17 · **Changes downstream:** DC-L04-17, DC-L08-09, DC-L14-06
-- **Record:** `OD:pick Q-color-20=<value>`
+- **Record:** `OD:set Q-color-20=<json-value> --why "..."`
 
 ## Q-color-21 · How dark should dark mode be?
 *Mode:* Standard · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice + toggle (dimmed theme)
@@ -40,7 +40,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use "dimmed" only for audiences that read long-form at night (developer tools, reading apps); avoid bright objects on pure black in immersive views [DC-L01-19; S-L01-013].
 - **Skip:** yes.
 - **Decides:** DC-L01-19 · **Changes downstream:** DC-L04-12, DC-L04-13
-- **Record:** `OD:pick Q-color-21=<value>`
+- **Record:** `OD:set Q-color-21=<json-value> --why "..."`
 
 ## Q-color-22 · How many text colors, and are they solid or transparent?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -56,7 +56,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use 2-3 text colors per view; avoid placeholder-grey for anything users must read [DC-L01-14; BOARD L15 note].
 - **Skip:** yes.
 - **Decides:** DC-L01-14 · **Changes downstream:** DC-L02-23
-- **Record:** `OD:pick Q-color-22=<value>`
+- **Record:** `OD:set Q-color-22=<json-value> --why "..."`
 
 ## Q-color-23 · How strong should borders be, and what color is the focus ring?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice (borders) + single choice (focus color)
@@ -73,7 +73,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use the 3:1 border token whenever an input's only boundary is its border; avoid decorative borders to mark interactive boundaries [DC-L01-16; S-L01-023].
 - **Skip:** yes.
 - **Decides:** DC-L01-16 · **Changes downstream:** DC-L04-09, DC-L08-11, DC-L08-16
-- **Record:** `OD:pick Q-color-23=<value>`
+- **Record:** `OD:set Q-color-23=<json-value> --why "..."`
 
 ## Q-color-24 · Which accessibility color themes should ship?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* multi-select (pre-filled from Q-aud-04 and Q-theme-02)
@@ -92,7 +92,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use a border or icon wherever status or selection is conveyed by fill; avoid focus rings drawn only with box-shadow (forced colors removes shadows) [DC-L01-20; S-L10-031].
 - **Skip:** yes.
 - **Decides:** DC-L01-20 · **Changes downstream:** DC-L04-09, DC-L07-15, DC-L07-17
-- **Record:** `OD:pick Q-color-24=<value>`
+- **Record:** `OD:set Q-color-24=<json-value> --why "..."`
 
 ## Q-color-25 · Where are gradients allowed?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -109,7 +109,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use a sequential palette, not a gradient, when color carries data meaning (Carbon) [S-L01-056]; avoid P3 gradients without an sRGB variant [S-L01-013].
 - **Skip:** yes.
 - **Decides:** DC-L01-25 · **Changes downstream:** DC-L05-19, DC-L06-11
-- **Record:** `OD:pick Q-color-25=<value>`
+- **Record:** `OD:set Q-color-25=<json-value> --why "..."`
 
 ## Q-color-26 · Should the system include transparent colors?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -127,4 +127,4 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use alpha when the background varies; use solid when the pair must be contrast-certified [DC-L01-27].
 - **Skip:** yes.
 - **Decides:** DC-L01-27 · **Changes downstream:** DC-L04-17, DC-L04-18
-- **Record:** `OD:pick Q-color-26=<value>`
+- **Record:** `OD:set Q-color-26=<json-value> --why "..."`

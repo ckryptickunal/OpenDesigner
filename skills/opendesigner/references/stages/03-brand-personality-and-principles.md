@@ -24,7 +24,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show 2-3 style tiles updating live; ask for traits in 'X, but not Y' form, e.g. 'Fun, but not childish'.
 - **Skip:** yes; all sliders at 50 give the neutral-toolkit look that L09 warns every generated app starts from [L09 A3].
 - **Decides:** DC-L06-02 · **Changes downstream:** DC-L01-06, DC-L01-10, DC-L02-02, DC-L04-02, DC-L06-01, DC-L06-03, DC-L06-04, DC-L06-09, DC-L06-10, DC-L06-14, DC-L06-18, DC-L15-01
-- **Record:** `OD:pick Q-brand-01=<value>`
+- **Record:** `OD:set Q-brand-01=<json-value> --why "..."`
 
 ## Q-brand-02 · Which products should yours feel like, and what one thing should people recognize it by?
 *Mode:* Standard · *weight:* medium (fan-out 0) · *kind:* input · *class:* I · *control:* text (up to 5 reference products or URLs) + single choice (signature lever)
@@ -42,7 +42,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Ask for 1-5 product names or URLs; place them on the personality map.
 - **Skip:** yes.
 - **Decides:** - · **Changes downstream:** DC-L06-02, DC-L06-07, DC-L06-11, DC-L06-12
-- **Record:** `OD:pick Q-brand-02=<value>`
+- **Record:** `OD:set Q-brand-02=<json-value> --why "..."`
 
 ## Q-brand-08 · Which of these assets do you already have?
 *Mode:* Standard · *weight:* medium (fan-out 0) · *kind:* hook · *class:* D · *control:* multi-select checklist + drop zone
@@ -70,7 +70,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Pre-answers:** Q-brand-03, Q-color-01, Q-type-02, Q-icon-01, Q-icon-06, Q-img-01, Q-img-04, Q-img-06, Q-img-07, Q-shape-05, Q-motion-08, Q-voice-01
 - **Skip:** yes; Quick mode applies all fallbacks.
 - **Decides:** - · **Changes downstream:** -
-- **Record:** `OD:pick Q-brand-08=<value>`
+- **Record:** `OD:set Q-brand-08=<json-value> --why "..."`
 
 ## Q-brand-03 · Do you have a logo and brand mark?
 *Mode:* Standard · *weight:* medium (fan-out 0) · *kind:* hook · *class:* D · *control:* single choice + file upload
@@ -89,7 +89,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Hook, if no:** (1) commission a designer with the generated brief and a reminder that a contractor's logo needs a written copyright assignment, the recommended path for anything customers will recognize; (2) a wordmark set in the chosen typeface (OFL, Google Fonts, Adobe Fonts and ITF FFL allow fonts in logos), generated and labeled "placeholder"; (3) AI logo generators (Looka, Brandmark) with caveats: Looka's icons and fonts come from a shared database available to others, and a trademark search is needed before adoption [S-L17-534, S-L17-535, S-L17-564, S-L17-579].
 - **Skip:** yes; the placeholder wordmark is applied.
 - **Decides:** - · **Changes downstream:** DC-L04-27, DC-L05-12, DC-L05-13
-- **Record:** `OD:pick Q-brand-03=<value>`
+- **Record:** `OD:set Q-brand-03=<json-value> --why "..."`
 
 ## Q-brand-04 · How expressive should the product be?
 *Mode:* Standard · *weight:* high (fan-out 5) · *kind:* decision · *class:* G · *control:* single choice
@@ -105,7 +105,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show one success moment animated three ways.
 - **Skip:** yes.
 - **Decides:** DC-L06-03 · **Changes downstream:** DC-L06-04, DC-L06-10, DC-L06-11, DC-L15-01, DC-L15-03
-- **Record:** `OD:pick Q-brand-04=<value>`
+- **Record:** `OD:set Q-brand-04=<json-value> --why "..."`
 
 ## Q-brand-05 · How do marketing pages relate to the product?
 *Mode:* Standard · *weight:* medium (fan-out 1) · *kind:* decision · *class:* I · *control:* single choice
@@ -123,7 +123,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show a marketing hero next to a product table under each option.
 - **Skip:** yes.
 - **Decides:** DC-L06-01 · **Changes downstream:** DC-L02-11, DC-L06-16
-- **Record:** `OD:pick Q-brand-05=<value>`
+- **Record:** `OD:set Q-brand-05=<json-value> --why "..."`
 
 ## Q-brand-06 · Should marketing and editorial pages get their own, more dramatic type set?
 *Mode:* Expert · *weight:* high (fan-out 5) · *kind:* decision · *class:* G · *control:* single choice
@@ -140,7 +140,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use fluid, expressive display styles on marketing and editorial pages; avoid them inside product containers (Carbon: "Do not use these styles inside a container") [S-L02-011].
 - **Skip:** yes.
 - **Decides:** DC-L02-11 · **Changes downstream:** DC-L02-03, DC-L02-09, DC-L02-15, DC-L02-19, DC-L15-02
-- **Record:** `OD:pick Q-brand-06=<value>`
+- **Record:** `OD:set Q-brand-06=<json-value> --why "..."`
 
 ## Q-brand-07 · What are your 3-5 design principles, and which one wins a tie?
 *Mode:* Standard · *weight:* medium (fan-out 0) · *kind:* decision · *class:* I · *control:* text list (3-5) + drag to rank + single choice (format)
@@ -158,4 +158,4 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show GOV.UK-style imperatives and a do/don't pair per principle.
 - **Skip:** yes.
 - **Decides:** DC-L06-15, DC-L11-05 · **Changes downstream:** DC-L11-12
-- **Record:** `OD:pick Q-brand-07=<value>`
+- **Record:** `OD:set Q-brand-07=<json-value> --why "..."`

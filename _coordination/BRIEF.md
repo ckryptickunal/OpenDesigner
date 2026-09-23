@@ -30,3 +30,14 @@ Requirements this adds:
 9. **Harmony over time.** Outputs must let people extend the system later without breaking coherence (tokens, rules, DESIGN.md-style context the next session can read).
 10. **A team communication tool.** Outputs should also help engineers explain design decisions to their teams, and help non-experts talk to designers.
 11. **Everything traceable.** Every trace and decision is kept in the repo, and parallel sessions (Claude or otherwise) can collaborate through it (see `_coordination/PROTOCOL.md`).
+
+## Ease of use for everyone (added 2026-09-23, 19:40 IST)
+> "Make and keep the entire app as easy to use as it can be, so that even somebody who is in a school can use it. It should be so functional that a designer can use it, and so useful that an engineer can also use it. It should mention terms in three different styles: one in very simple layman language, second in a designer's language, third in an engineer's language. ... It should keep its messages concise and clear. It should also have instructions for improving itself, reporting issues, and highlighting things that need improvement. If it realizes something was missing and needs implementation, it should push it back to the dedicated GitHub or skill file to keep it correct. ... It should not feel cluttered at any moment. It should escalate step by step: first figure things out at a lower resolution, then at a higher resolution, the way we first define the broad picture and then go deep into each thing, so people who only need the high-level things can stop there. When details come, keep updating that person's DESIGN.md, and at the end of any implementation, review the DESIGN.md."
+
+Requirements this adds:
+12. **Three voices for every term.** Plain (a school student understands it), Designer, Engineer. Plain comes first; the other two are one tap or one line away. Never all three as a wall of text.
+13. **Concise, uncluttered messages.** One idea per message, short sentences, one question at a time, no jargon without its plain meaning.
+14. **Zoom, not modes.** Everyone starts with a low-resolution sketch of the whole system (a few questions, a complete but coarse result). Each area can then be zoomed into, and people can stop at any level with something that works.
+15. **DESIGN.md is a living document.** Every decision updates it, each section shows how far it has been zoomed (sketch, defined, detailed), and it is reviewed at the end of every implementation.
+16. **Self-improvement loop.** When the model finds a gap, bug or confusing step, it records it and routes it back: in a user's project as a ready-to-file issue (the person approves before anything is posted); inside the OpenDesigner repo as a direct fix to the skill or data files, checked and synced.
+17. **Many sessions, one plan.** Parallel sessions given the same request claim different lanes on the board instead of repeating each other.

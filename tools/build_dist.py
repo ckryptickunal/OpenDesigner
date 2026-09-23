@@ -17,6 +17,10 @@ ROOT = Path(__file__).resolve().parent.parent
 SRC, DIST = ROOT / "skills", ROOT / "dist"
 ALLOWED = {"name", "description", "license", "compatibility", "metadata", "allowed-tools"}
 IGNORE = {"__pycache__", ".DS_Store"}
+# claude.ai installs each uploaded skill on its own, so the sub-skills' zips carry the engine and the data it
+# reads (spec 8.2). In the repo and in plugin installs they use the sibling opendesigner skill instead.
+BUNDLE = {"scripts/engine.py": "scripts/engine.py", "references/levers.json": "references/levers.json",
+          "references/hooks.json": "references/hooks.json", "references/graph.json": "references/graph.json"}
 
 
 def check(skill):
@@ -71,6 +75,10 @@ def main():
                 rel = f.relative_to(s)
                 if f.is_file() and not (set(rel.parts) & IGNORE) and f.suffix != ".pyc":
                     z.write(f, Path(s.name) / rel)
+            if s.name != "opendesigner":
+                for src, dst in BUNDLE.items():
+                    if (SRC / "opendesigner" / src).exists() and not (s / dst).exists():
+                        z.write(SRC / "opendesigner" / src, Path(s.name) / dst)
         print(f"wrote {out.relative_to(ROOT)} ({out.stat().st_size // 1024} KB)")
     sys.exit(1 if failed else 0)
 

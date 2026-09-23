@@ -25,7 +25,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show the mode-budget meter, e.g. '6 of 10 modes used'.
 - **Skip:** yes.
 - **Decides:** DC-L07-27 · **Changes downstream:** DC-L07-08, DC-L07-16, DC-L07-17, DC-L07-18, DC-L07-24, DC-L07-26
-- **Record:** `OD:pick Q-tool-03=<value>`
+- **Record:** `OD:set Q-tool-03=<json-value> --why "..."`
 
 ## Q-tool-01 · Where should the master copy of the system live?
 *Mode:* Quick · *weight:* high (fan-out 9) · *kind:* decision · *class:* I · *control:* single choice
@@ -42,7 +42,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show a round-trip diagram for the chosen option.
 - **Skip:** yes, builder.
 - **Decides:** DC-L16-02, DC-L07-08, DC-L11-16, DC-L16-13 · **Changes downstream:** DC-L07-09, DC-L07-25, DC-L11-14, DC-L16-12
-- **Record:** `OD:pick Q-tool-01=<value>`
+- **Record:** `OD:set Q-tool-01=<json-value> --why "..."`
 
 ## Q-tool-02 · How will engineers consume the system?
 *Mode:* Standard · *weight:* medium (fan-out 0) · *kind:* decision · *class:* I · *control:* multi-select
@@ -61,7 +61,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show the exported file tree per option.
 - **Skip:** yes.
 - **Decides:** DC-L09-08 · **Changes downstream:** DC-L08-03, DC-L11-14, DC-L16-12
-- **Record:** `OD:pick Q-tool-02=<value>`
+- **Record:** `OD:set Q-tool-02=<json-value> --why "..."`
 
 ## Q-tool-04 · Should Figma components be linked to code for AI tools?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* T · *control:* single choice
@@ -79,4 +79,4 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show one MCP response with and without Code Connect.
 - **Skip:** yes.
 - **Decides:** DC-L07-24 · **Changes downstream:** DC-L11-23
-- **Record:** `OD:pick Q-tool-04=<value>`
+- **Record:** `OD:set Q-tool-04=<json-value> --why "..."`

@@ -25,7 +25,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use flat 2.0 or tonal for app surfaces people use daily; use glass only on the functional layer (bars, controls, sheets) and never on reading surfaces; keep neo-brutalist and maximal for marketing or indie products; avoid soft/neumorphic for anything interactive unless borders are added to reach 3:1 [DC-L15-01; S-L10-008 via DC-L10-12].
 - **Skip:** yes; Quick maps sliders A, C and E to a preset [inferred from L06 section 4.2].
 - **Decides:** DC-L15-01 · **Changes downstream:** DC-L01-10, DC-L04-02, DC-L04-07, DC-L04-10, DC-L04-15, DC-L15-05, DC-L15-08, DC-L15-09
-- **Record:** `OD:pick Q-dir-01=<value>`
+- **Record:** `OD:set Q-dir-01=<json-value> --why "..."`
 
 ## Q-dir-02 · How much should fit on a screen?
 *Mode:* Standard · *weight:* high (fan-out 8) · *kind:* decision · *class:* G · *control:* single choice (pre-filled from Q-aud-01)
@@ -43,7 +43,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use compact for data-heavy components (tables, lists, menus, trees); use spacious for marketing and focused tasks; avoid shrinking targets with density; they stay at the floor in every mode [DC-L15-04, DC-L08-13; S-L08-070].
 - **Skip:** yes.
 - **Decides:** DC-L15-04, DC-L08-13 · **Changes downstream:** DC-L02-08, DC-L03-10, DC-L03-11, DC-L15-02, DC-L15-05, DC-L15-09
-- **Record:** `OD:pick Q-dir-02=<value>`
+- **Record:** `OD:set Q-dir-02=<json-value> --why "..."`
 
 ## Q-dir-03 · How dramatic should the difference between headings and body text be?
 *Mode:* Standard · *weight:* medium (fan-out 4) · *kind:* decision · *class:* G · *control:* single choice + Expert sub-choice (lead lever: size, weight or color)
@@ -60,7 +60,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use subtle hierarchy in dense tools where color and weight lead; use dramatic hierarchy on editorial and marketing pages; avoid color-only hierarchy and avoid levels that almost match [DC-L15-02; S-L15-002, S-L15-070].
 - **Skip:** yes.
 - **Decides:** DC-L15-02 · **Changes downstream:** DC-L01-14, DC-L02-09, DC-L02-15, DC-L03-24
-- **Record:** `OD:pick Q-dir-03=<value>`
+- **Record:** `OD:set Q-dir-03=<json-value> --why "..."`
 
 ## Q-dir-04 · How should related things be grouped?
 *Mode:* Standard · *weight:* medium (fan-out 3) · *kind:* decision · *class:* G · *control:* single choice
@@ -77,7 +77,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use space for simple groups, containers for mixed content or grids, lines for long homogeneous lists; avoid nesting containers inside containers [DC-L15-05; S-L15-012].
 - **Skip:** yes.
 - **Decides:** DC-L15-05 · **Changes downstream:** DC-L01-13, DC-L03-24, DC-L04-08, DC-L08-15
-- **Record:** `OD:pick Q-dir-04=<value>`
+- **Record:** `OD:set Q-dir-04=<json-value> --why "..."`
 
 ## Q-dir-05 · Should layouts be start-aligned or centered?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice
@@ -94,4 +94,4 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use centered layouts for single-focus moments with short text (empty states, dialogs, sign-in); avoid centering multi-line body text [DC-L15-08].
 - **Skip:** yes.
 - **Decides:** DC-L15-08 · **Changes downstream:** DC-L02-18
-- **Record:** `OD:pick Q-dir-05=<value>`
+- **Record:** `OD:set Q-dir-05=<json-value> --why "..."`

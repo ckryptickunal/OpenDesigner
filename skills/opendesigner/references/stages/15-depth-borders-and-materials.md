@@ -23,7 +23,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use tonal or borders for data-dense tools; avoid shadows on static in-page cards when the same color steps would do [DC-L09-02, DC-L04-10].
 - **Skip:** yes.
 - **Decides:** DC-L09-02, DC-L04-10, DC-L08-15 · **Changes downstream:** DC-L04-11, DC-L04-12, DC-L04-13, DC-L04-15, DC-L07-13
-- **Record:** `OD:pick Q-depth-01=<value>`
+- **Record:** `OD:set Q-depth-01=<json-value> --why "..."`
 
 ## Q-depth-02 · How many elevation levels, and how do they look in dark mode?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* number + mapping table
@@ -39,7 +39,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** components at the same level never overlap each other; avoid pure-black shadows as the only dark-mode depth cue [DC-L04-11, DC-L04-13].
 - **Skip:** yes.
 - **Decides:** DC-L04-11, DC-L04-13 · **Changes downstream:** DC-L04-14, DC-L07-13
-- **Record:** `OD:pick Q-depth-02=<value>`
+- **Record:** `OD:set Q-depth-02=<json-value> --why "..."`
 
 ## Q-depth-03 · What should shadows look like?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice + alpha slider
@@ -57,7 +57,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use one light source for every shadow; avoid single hard shadows [DC-L04-12; L15 P62].
 - **Skip:** yes.
 - **Decides:** DC-L04-12 · **Changes downstream:** DC-L07-13
-- **Record:** `OD:pick Q-depth-03=<value>`
+- **Record:** `OD:set Q-depth-03=<json-value> --why "..."`
 
 ## Q-depth-04 · Should any surfaces be translucent (glass, blur)?
 *Mode:* Standard · *weight:* medium (fan-out 2) · *kind:* decision · *class:* T · *control:* single choice + per-platform chrome table
@@ -74,7 +74,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use glass on the functional layer (bars, controls, sheets) only; avoid glass on reading surfaces and any translucent token without an opaque twin [S-L10-008; DC-L04-16].
 - **Skip:** yes.
 - **Decides:** DC-L04-15, DC-L10-12, DC-L10-11 · **Changes downstream:** DC-L04-16, DC-L05-16, DC-L10-16
-- **Record:** `OD:pick Q-depth-04=<value>`
+- **Record:** `OD:set Q-depth-04=<json-value> --why "..."`
 
 ## Q-depth-05 · How thick are borders, and when do dividers appear?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* editable width list + single choice (divider policy)
@@ -91,7 +91,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use lines in dense tables; avoid stacking dividers and card borders on the same edge [DC-L04-08; L15 P64].
 - **Skip:** yes.
 - **Decides:** DC-L04-07, DC-L03-09, DC-L04-08 · **Changes downstream:** DC-L04-09, DC-L07-13
-- **Record:** `OD:pick Q-depth-05=<value>`
+- **Record:** `OD:set Q-depth-05=<json-value> --why "..."`
 
 ## Q-depth-06 · How dark should modal backdrops be, and how strong are state overlays?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* slider (scrim) + number set (overlays)
@@ -108,4 +108,4 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use lighter scrims for non-blocking sheets; avoid scrims so light that the dialog's modality is unclear [DC-L04-18].
 - **Skip:** yes.
 - **Decides:** DC-L04-18, DC-L04-17 · **Changes downstream:** DC-L08-09, DC-L08-20
-- **Record:** `OD:pick Q-depth-06=<value>`
+- **Record:** `OD:set Q-depth-06=<json-value> --why "..."`

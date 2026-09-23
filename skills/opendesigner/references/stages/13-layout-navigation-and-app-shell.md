@@ -4,7 +4,7 @@
 
 Screen: how pages reorganize across widths, shown on a resizable frame the person can drag from phone to wide desktop. Graph step 0-4. Safe areas and edge insets (DC-L03-20, DC-L14-10) are not asked; they are platform rules applied by construction (see "Auto-applied rules").
 
-**Questions:** 6 (Expert 3, Standard 3). **Visual template:** `assets/templates/spacing.html`.
+**Questions:** 6 (Expert 3, Standard 3). **Visual template:** `assets/templates/spacing-ruler.html`.
 Ask in the order below. Skip a question when its mode is above the chosen depth or its *Show if* is false; it then takes its default, recorded with status `default`.
 
 ## Q-layout-01 · At which widths should layouts reorganize?
@@ -23,7 +23,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** decide layout by window size, never by device type or orientation [DC-L10-10; S-L10-013]; avoid breakpoints that only nudge padding.
 - **Skip:** yes.
 - **Decides:** DC-L03-14 · **Changes downstream:** DC-L03-15, DC-L03-16, DC-L03-17, DC-L03-18, DC-L03-19, DC-L07-28
-- **Record:** `OD:pick Q-layout-01=<value>`
+- **Record:** `OD:set Q-layout-01=<json-value> --why "..."`
 
 ## Q-layout-02 · Should layouts stretch fluidly, switch between fixed designs, or both?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice
@@ -40,7 +40,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use adaptive changes for pane count and navigation; avoid device-type checks that break in split view and resizable windows [S-L10-013].
 - **Skip:** yes.
 - **Decides:** DC-L03-22, DC-L10-10 · **Changes downstream:** DC-L03-18, DC-L03-21, DC-L10-09
-- **Record:** `OD:pick Q-layout-02=<value>`
+- **Record:** `OD:set Q-layout-02=<json-value> --why "..."`
 
 ## Q-layout-04 · How should top-level navigation work at each size?
 *Mode:* Standard · *weight:* medium (fan-out 2) · *kind:* decision · *class:* G · *control:* number (destinations) + single choice (pattern)
@@ -58,7 +58,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** keep destinations identical across devices and swap only the container; avoid hiding primary navigation on wide layouts [DC-L14-05; S-L13-097].
 - **Skip:** yes.
 - **Decides:** DC-L08-19, DC-L13-02, DC-L10-09, DC-L14-05, DC-L03-19 · **Changes downstream:** DC-L03-20, DC-L10-11
-- **Record:** `OD:pick Q-layout-04=<value>`
+- **Record:** `OD:set Q-layout-04=<json-value> --why "..."`
 
 ## Q-layout-03 · Are your pages mostly for reading, working, or data?
 *Mode:* Standard · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* multi-select (page types) + single choice (default pane template)
@@ -76,7 +76,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use fluid width for tables and dashboards; avoid full-width paragraphs [DC-L03-16, DC-L02-17].
 - **Skip:** yes.
 - **Decides:** DC-L03-16, DC-L03-18 · **Changes downstream:** DC-L02-17, DC-L03-15
-- **Record:** `OD:pick Q-layout-03=<value>`
+- **Record:** `OD:set Q-layout-03=<json-value> --why "..."`
 
 ## Q-layout-05 · Which column grid and composition style?
 *Mode:* Expert · *weight:* medium (fan-out 2) · *kind:* decision · *class:* G · *control:* single choice (grid) + single choice (composition)
@@ -93,7 +93,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** make every grid break nameable ("this hero breaks the grid to signal X"); avoid changing component spacing by breakpoint [DC-L15-07, DC-L03-17].
 - **Skip:** yes.
 - **Decides:** DC-L03-15, DC-L15-07, DC-L03-17 · **Changes downstream:** DC-L07-28
-- **Record:** `OD:pick Q-layout-05=<value>`
+- **Record:** `OD:set Q-layout-05=<json-value> --why "..."`
 
 ## Q-layout-06 · Should components respond to their container or to the window?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -109,4 +109,4 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use container queries for reusable components; avoid viewport queries inside components placed in panes [DC-L03-21].
 - **Skip:** yes.
 - **Decides:** DC-L03-21 · **Changes downstream:** DC-L10-18
-- **Record:** `OD:pick Q-layout-06=<value>`
+- **Record:** `OD:set Q-layout-06=<json-value> --why "..."`

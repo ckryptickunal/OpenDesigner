@@ -1,0 +1,296 @@
+{
+  "$schema": "opendesigner-state/1",
+  "schema_version": 1,
+  "engine_version": "1.0.0",
+  "levers_version": "levers/1.0 2026-09-23",
+  "mode": "standard",
+  "name": "Public Service Accessible",
+  "summary": "A plain, high-contrast system for a fictional city benefits service: AAA text, generous targets, no motion.",
+  "context": {
+    "product": "Apply for and track council benefits online.",
+    "audience": "Everyone, including people with low vision, low literacy, old devices and assistive technology.",
+    "surfaces": [
+      {
+        "name": "Application form",
+        "mode": "Operate"
+      },
+      {
+        "name": "Guidance pages",
+        "mode": "Read"
+      }
+    ],
+    "entryPath": "",
+    "memorable": "Nothing to learn: one question per page.",
+    "scope": {
+      "in": [],
+      "out": []
+    },
+    "constraints": [
+      "Legal: public-sector accessibility regulations",
+      "Works without JavaScript"
+    ],
+    "team": ""
+  },
+  "dials": {
+    "expression": {
+      "value": 10,
+      "set_by": "chosen",
+      "detached": true,
+      "decision": "D-0014"
+    },
+    "brandPresence": {
+      "value": 85,
+      "set_by": "chosen",
+      "detached": true,
+      "decision": "D-0015"
+    },
+    "density": {
+      "value": 8,
+      "set_by": "chosen",
+      "detached": true,
+      "decision": "D-0016"
+    },
+    "energy": {
+      "value": 0,
+      "set_by": "chosen",
+      "detached": true,
+      "decision": "D-0012"
+    },
+    "roundness": {
+      "value": 0,
+      "set_by": "chosen",
+      "detached": true,
+      "decision": "D-0017"
+    },
+    "depth": {
+      "value": 5,
+      "set_by": "chosen",
+      "detached": true,
+      "decision": "D-0018"
+    },
+    "colorfulness": {
+      "value": 35,
+      "set_by": "chosen",
+      "detached": true,
+      "decision": "D-0019"
+    },
+    "warmth": {
+      "value": 45,
+      "set_by": "chosen",
+      "detached": true,
+      "decision": "D-0020"
+    }
+  },
+  "preset": null,
+  "macros": [],
+  "raw": {
+    "brandColor": "#075c63",
+    "primaryActionColor": null,
+    "focusColor": null,
+    "neutralBase": null,
+    "contrastTarget": "AAA",
+    "textFace": "Atkinson Hyperlegible",
+    "displayFace": "=textFace",
+    "baseSize": null,
+    "spaceUnit": 5,
+    "platforms": [
+      "web"
+    ],
+    "inputs": [
+      "touch",
+      "pointer"
+    ],
+    "productType": "work-tool",
+    "marketingSurfaces": false,
+    "flags": {
+      "brandExact": true,
+      "tintTowardBrand": false,
+      "motionOff": true,
+      "darkMode": false
+    },
+    "overrides": {},
+    "secondaryColors": [],
+    "monoFace": "ui-monospace",
+    "scripts": [
+      "Latn"
+    ],
+    "domain": null,
+    "defaultTheme": "system",
+    "minTarget": 48,
+    "focusWidth": 3
+  },
+  "overrides": {},
+  "answers": {
+    "Q-aud-01": {
+      "value": "large",
+      "set_by": "chosen",
+      "decision": "D-0009",
+      "locked": false
+    },
+    "Q-plat-01": {
+      "value": [
+        "web"
+      ],
+      "set_by": "chosen",
+      "decision": "D-0010",
+      "locked": false
+    },
+    "Q-theme-01": {
+      "value": "light-only",
+      "set_by": "chosen",
+      "decision": "D-0011",
+      "locked": false
+    },
+    "Q-motion-01": {
+      "value": "none",
+      "set_by": "chosen",
+      "decision": "D-0012",
+      "locked": false
+    }
+  },
+  "principles": [
+    "Start with user needs.",
+    "Do less, but make it work for everyone.",
+    "Plain over clever."
+  ],
+  "components": {
+    "base": null,
+    "inventory": [
+      "button",
+      "icon-button",
+      "link",
+      "text-field",
+      "textarea",
+      "select",
+      "checkbox",
+      "radio",
+      "switch",
+      "card",
+      "dialog",
+      "menu",
+      "tooltip",
+      "toast",
+      "tabs",
+      "table",
+      "badge",
+      "avatar",
+      "banner",
+      "progress",
+      "skeleton",
+      "navigation"
+    ],
+    "notes": {}
+  },
+  "hooks": {
+    "H-logo": {
+      "status": "have",
+      "name": "Logo, wordmark, symbol, lockups",
+      "question": "Q-brand-03",
+      "files": [],
+      "note": ""
+    },
+    "H-appicon": {
+      "status": "pending",
+      "name": "App icon",
+      "question": "Q-icon-06",
+      "files": [],
+      "note": ""
+    },
+    "H-favicon": {
+      "status": "pending",
+      "name": "Favicon set",
+      "question": "Q-brand-03",
+      "files": [],
+      "note": ""
+    },
+    "H-icons": {
+      "status": "not-needed",
+      "name": "Custom icons, pictograms, spot icons",
+      "question": "Q-icon-01",
+      "files": [],
+      "note": ""
+    },
+    "H-illus": {
+      "status": "not-needed",
+      "name": "Illustration, characters, empty-state art",
+      "question": "Q-img-04",
+      "files": [],
+      "note": ""
+    },
+    "H-photo": {
+      "status": "not-needed",
+      "name": "Photography and art direction",
+      "question": "Q-img-01",
+      "files": [],
+      "note": ""
+    },
+    "H-type": {
+      "status": "open-library",
+      "name": "Brand typeface files",
+      "question": "Q-type-02",
+      "files": [],
+      "note": ""
+    },
+    "H-color": {
+      "status": "pending",
+      "name": "Fixed brand colors",
+      "question": "Q-color-01",
+      "files": [],
+      "note": ""
+    },
+    "H-motion": {
+      "status": "pending",
+      "name": "Motion signature and rich media",
+      "question": "Q-img-06",
+      "files": [],
+      "note": ""
+    },
+    "H-motif": {
+      "status": "pending",
+      "name": "Graphic devices, patterns, textures, brand gradients, signature shape",
+      "question": "Q-img-07",
+      "files": [],
+      "note": ""
+    },
+    "H-sound": {
+      "status": "pending",
+      "name": "UI sounds and sonic logo",
+      "question": "Q-motion-08",
+      "files": [],
+      "note": ""
+    },
+    "H-haptic": {
+      "status": "pending",
+      "name": "Custom haptic patterns",
+      "question": "Q-motion-09",
+      "files": [],
+      "note": ""
+    },
+    "H-voice": {
+      "status": "have",
+      "name": "Voice and tone guide",
+      "question": "Q-voice-01",
+      "files": [],
+      "note": ""
+    },
+    "H-brandbook": {
+      "status": "pending",
+      "name": "Brand guidelines PDF",
+      "question": "Q-ref-01",
+      "files": [],
+      "note": ""
+    }
+  },
+  "blocks": {},
+  "references": {},
+  "taste": {},
+  "hashes": {
+    "DESIGN.md": "7163f4ba74780902",
+    "PRODUCT.md": "a81ffc203d2818c4"
+  },
+  "exports": {
+    "prefix": "ds",
+    "figmaPlan": "professional"
+  },
+  "locks": []
+}

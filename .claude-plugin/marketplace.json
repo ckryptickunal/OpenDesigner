@@ -1,0 +1,14 @@
+{
+  "name": "opendesigner",
+  "owner": { "name": "ckryptickunal", "url": "https://github.com/ckryptickunal" },
+  "description": "OpenDesigner: create a design system with your own AI, one sourced decision at a time.",
+  "plugins": [
+    {
+      "name": "opendesigner",
+      "source": "./",
+      "description": "Four skills: opendesigner (the interview), opendesigner-extract (learn from a reference without copying identity), opendesigner-extend (change a system safely), opendesigner-export (code, Figma, Paper).",
+      "category": "design",
+      "tags": ["design-system", "design-tokens", "theme", "figma"]
+    }
+  ]
+}

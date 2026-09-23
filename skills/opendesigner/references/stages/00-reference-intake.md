@@ -24,4 +24,4 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Pre-answers:** Q-scope-02, Q-brand-01, Q-brand-02, Q-plat-01, Q-color-01, Q-color-06, Q-color-09, Q-color-14, Q-type-01, Q-type-03, Q-type-06, Q-space-01, Q-space-02, Q-space-04, Q-layout-01, Q-shape-01, Q-shape-02, Q-depth-01, Q-depth-02, Q-motion-01, Q-motion-02, Q-icon-02, Q-icon-03, Q-comp-01, Q-state-01, Q-form-01
 - **Skip:** yes; always optional.
 - **Decides:** - · **Changes downstream:** -
-- **Record:** `OD:pick Q-ref-01=<value>`
+- **Record:** `OD:set Q-ref-01=<json-value> --why "..."`

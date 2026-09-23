@@ -25,7 +25,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Hook, if no:** (1) adopt an open-source set whose stroke and corners match the type (the default); (2) commission a designer only for domain icons the library lacks, drawn on the library's template; (3) use AI icon generators only as sketches, with the caveat that stroke, keylines and optical size rarely match across a set [inferred]. Apple's terms forbid SF Symbols or look-alikes in app icons and logos [S-L05-010].
 - **Skip:** yes; the default library is applied.
 - **Decides:** DC-L05-01, DC-L10-25 · **Changes downstream:** DC-L05-02, DC-L05-03, DC-L05-05, DC-L05-10
-- **Record:** `OD:pick Q-icon-01=<value>`
+- **Record:** `OD:set Q-icon-01=<json-value> --why "..."`
 
 ## Q-icon-02 · Outlined or filled icons, rounded or sharp?
 *Mode:* Standard · *weight:* medium (fan-out 3) · *kind:* decision · *class:* G · *control:* single choice (style) + single choice (corners)
@@ -43,7 +43,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** keep hover and pressed feedback on the container, not the glyph; avoid color-only selected states [DC-L05-06].
 - **Skip:** yes.
 - **Decides:** DC-L05-02, DC-L05-06, DC-L06-13 · **Changes downstream:** DC-L05-03
-- **Record:** `OD:pick Q-icon-02=<value>`
+- **Record:** `OD:set Q-icon-02=<json-value> --why "..."`
 
 ## Q-icon-03 · How heavy should icon strokes be?
 *Mode:* Expert · *weight:* medium (fan-out 3) · *kind:* decision · *class:* G · *control:* slider (stroke) + single choice (terminals)
@@ -60,7 +60,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use heavier strokes on busy or photographic backgrounds; avoid sub-1.5px strokes below 20px [DC-L05-03].
 - **Skip:** yes.
 - **Decides:** DC-L05-03 · **Changes downstream:** DC-L15-10
-- **Record:** `OD:pick Q-icon-03=<value>`
+- **Record:** `OD:set Q-icon-03=<json-value> --why "..."`
 
 ## Q-icon-04 · Which icon sizes, and on which construction grid?
 *Mode:* Expert · *weight:* medium (fan-out 3) · *kind:* decision · *class:* G · *control:* editable size list + single choice (grid)
@@ -76,7 +76,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** pixel-align at the smallest shipped size; avoid 12px icons for anything interactive [DC-L05-04, DC-L05-05].
 - **Skip:** yes.
 - **Decides:** DC-L05-05, DC-L05-04 · **Changes downstream:** DC-L03-08
-- **Record:** `OD:pick Q-icon-04=<value>`
+- **Record:** `OD:set Q-icon-04=<json-value> --why "..."`
 
 ## Q-icon-05 · When do icons need labels, and what color are they?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice (labels) + single choice (color)
@@ -94,7 +94,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** give every icon-only control an accessible label; avoid decorative multicolor icons in UI chrome [DC-L05-07, DC-L05-08; L10 baked-in rule 9].
 - **Skip:** yes.
 - **Decides:** DC-L05-07, DC-L05-08 · **Changes downstream:** DC-L08-08
-- **Record:** `OD:pick Q-icon-05=<value>`
+- **Record:** `OD:set Q-icon-05=<json-value> --why "..."`
 
 ## Q-icon-06 · Do you have an app icon?
 *Mode:* Standard · *weight:* medium (fan-out 1) · *kind:* hook · *class:* D · *control:* single choice + file upload
@@ -113,7 +113,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Hook, if no:** (1) the builder generates a placeholder from the logo glyph and labels it "placeholder"; (2) commission a designer, the recommended path for a shipped app; photos, fine lines, text and baked-in effects render poorly under system lighting [DC-L05-12]. SF Symbols may not be used in app icons [S-L05-010].
 - **Skip:** yes; a placeholder is generated.
 - **Decides:** DC-L05-12 · **Changes downstream:** DC-L10-05
-- **Record:** `OD:pick Q-icon-06=<value>`
+- **Record:** `OD:set Q-icon-06=<json-value> --why "..."`
 
 ## Q-icon-07 · How should icons be named and shipped?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* T · *control:* single choice (delivery) + single choice (naming)
@@ -130,7 +130,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** mirror directional icons in RTL; avoid mirroring icons that depict real objects (clocks, checkmarks) [DC-L05-09, inferred].
 - **Skip:** yes.
 - **Decides:** DC-L05-10, DC-L05-09 · **Changes downstream:** DC-L07-09, DC-L16-12
-- **Record:** `OD:pick Q-icon-07=<value>`
+- **Record:** `OD:set Q-icon-07=<json-value> --why "..."`
 
 ## Q-icon-08 · How should the logo appear inside the product?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice (placement) + single choice (appearance)
@@ -147,4 +147,4 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** give a logo that acts as a link an accessible name; avoid repeating the logo throughout the UI (Apple) [DC-L05-13; S-L10-009].
 - **Skip:** yes.
 - **Decides:** DC-L05-13 · **Changes downstream:** DC-L08-01
-- **Record:** `OD:pick Q-icon-08=<value>`
+- **Record:** `OD:set Q-icon-08=<json-value> --why "..."`

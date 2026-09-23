@@ -25,7 +25,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Hook, if no:** (1) the builder drafts the photo brief from the personality sliders for you to edit; (2) commission a photographer (best for recognizability); (3) stock against the brief: Unsplash (free commercial, no competing service) or Pexels (no implied endorsement); (4) AI images with ownership and uniqueness caveats per tool, marked as synthetic under EU AI Act Art. 50; NN/g found AI images close to stock but failing on visible artifacts and stereotypes [S-L17-529, S-L17-530, S-L17-531, S-L17-578, S-L17-126]. Neutral placeholders are used until real images arrive.
 - **Skip:** yes.
 - **Decides:** DC-L05-14 · **Changes downstream:** DC-L05-15, DC-L05-16, DC-L05-17
-- **Record:** `OD:pick Q-img-01=<value>`
+- **Record:** `OD:set Q-img-01=<json-value> --why "..."`
 
 ## Q-img-02 · Which aspect ratios, and can text sit on images?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* multi-select (ratios) + single choice (text on images)
@@ -42,7 +42,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use art-directed crops per breakpoint for heroes; avoid text over busy image regions without a scrim [DC-L05-15, DC-L05-16].
 - **Skip:** yes.
 - **Decides:** DC-L05-15, DC-L05-16 · **Changes downstream:** DC-L04-18
-- **Record:** `OD:pick Q-img-02=<value>`
+- **Record:** `OD:set Q-img-02=<json-value> --why "..."`
 
 ## Q-img-03 · Which avatar shapes should mean what?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -58,7 +58,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** keep shape meaning consistent everywhere; avoid using the person circle for bots [DC-L05-18].
 - **Skip:** yes.
 - **Decides:** DC-L05-18 · **Changes downstream:** DC-L08-22
-- **Record:** `OD:pick Q-img-03=<value>`
+- **Record:** `OD:set Q-img-03=<json-value> --why "..."`
 
 ## Q-img-04 · Do you have illustrations or a mascot, and where should illustration appear?
 *Mode:* Standard · *weight:* medium (fan-out 3) · *kind:* hook · *class:* D · *control:* single choice (style) + multi-select (where) + file upload
@@ -79,7 +79,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Hook, if no:** (1) ship honest icon-plus-text empty states; (2) commission an illustrator with a brief derived from the icon stroke and palette; (3) open sets under their exact terms: unDraw (free commercial, bans AI training and competing packs), Open Peeps and Humaaans (CC0), Blush (no resale), Storyset (credit required, no logos); (4) AI tools such as Recraft or Firefly, where ownership depends on plan, and style drifts between pieces unless one artist or a strict guide owns it [S-L17-519, S-L17-521, S-L17-522, S-L17-523, S-L17-525; inferred for drift].
 - **Skip:** yes.
 - **Decides:** DC-L05-19, DC-L06-12, DC-L05-20 · **Changes downstream:** DC-L05-11, DC-L13-10, DC-L13-11
-- **Record:** `OD:pick Q-img-04=<value>`
+- **Record:** `OD:set Q-img-04=<json-value> --why "..."`
 
 ## Q-img-05 · Do you need pictograms between UI icons and illustrations?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -96,7 +96,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use pictograms on marketing and onboarding; avoid them inside dense product UI [DC-L05-11].
 - **Skip:** yes.
 - **Decides:** DC-L05-11 · **Changes downstream:** -
-- **Record:** `OD:pick Q-img-05=<value>`
+- **Record:** `OD:set Q-img-05=<json-value> --why "..."`
 
 ## Q-img-06 · Do you have animated icons, Lottie files, 3D assets or custom emoji?
 *Mode:* Expert · *weight:* medium (fan-out 0) · *kind:* hook · *class:* D · *control:* multi-select + file upload
@@ -115,7 +115,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Hook, if no:** motion comes from the system's motion tokens only (no signature animation); commission a motion designer for celebration moments; community Lottie assets only under their stated licenses [S-L17-544, S-L17-546].
 - **Skip:** yes.
 - **Decides:** DC-L05-21 · **Changes downstream:** DC-L04-25
-- **Record:** `OD:pick Q-img-06=<value>`
+- **Record:** `OD:set Q-img-06=<json-value> --why "..."`
 
 ## Q-img-07 · Where may brand graphic devices and motifs appear?
 *Mode:* Expert · *weight:* medium (fan-out 0) · *kind:* hook · *class:* D · *control:* single choice
@@ -134,7 +134,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Hook, if no:** commission, or ship none; NN/g and gstack both warn that decoration standing in for content reads as generic [S-L17-004, S-L17-021].
 - **Skip:** yes.
 - **Decides:** DC-L06-11 · **Changes downstream:** DC-L13-10, DC-L13-11
-- **Record:** `OD:pick Q-img-07=<value>`
+- **Record:** `OD:set Q-img-07=<json-value> --why "..."`
 
 ## Q-viz-01 · Which chart types and chart library?
 *Mode:* Standard · *weight:* low (fan-out 1) · *kind:* decision · *class:* T · *control:* multi-select (types) + text (library)
@@ -152,4 +152,4 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use bars for comparison and lines for trends; avoid pie charts with more than a few slices and 3D charts [DC-L05-22, inferred].
 - **Skip:** yes.
 - **Decides:** DC-L05-22 · **Changes downstream:** DC-L05-24, DC-L05-25
-- **Record:** `OD:pick Q-viz-01=<value>`
+- **Record:** `OD:set Q-viz-01=<json-value> --why "..."`

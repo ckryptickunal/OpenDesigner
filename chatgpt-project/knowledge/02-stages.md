@@ -24,7 +24,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Pre-answers:** Q-scope-02, Q-brand-01, Q-brand-02, Q-plat-01, Q-color-01, Q-color-06, Q-color-09, Q-color-14, Q-type-01, Q-type-03, Q-type-06, Q-space-01, Q-space-02, Q-space-04, Q-layout-01, Q-shape-01, Q-shape-02, Q-depth-01, Q-depth-02, Q-motion-01, Q-motion-02, Q-icon-02, Q-icon-03, Q-comp-01, Q-state-01, Q-form-01
 - **Skip:** yes; always optional.
 - **Decides:** - · **Changes downstream:** -
-- **Record:** `OD:pick Q-ref-01=<value>`
+- **Record:** `OD:set Q-ref-01=<json-value> --why "..."`
 
 
 # Stage 01: Scope and team (S01)
@@ -53,7 +53,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show two thumbnails, an app screen and a marketing page, drawn from the same tokens.
 - **Skip:** yes, defaults to a single product app.
 - **Decides:** DC-L11-02 · **Changes downstream:** DC-L06-01, DC-L11-03, DC-L11-07, DC-L11-14, DC-L11-16, DC-L11-25
-- **Record:** `OD:pick Q-scope-01=<value>`
+- **Record:** `OD:set Q-scope-01=<json-value> --why "..."`
 
 ## Q-scope-02 · Is there existing UI to consolidate, or is this a new product?
 *Mode:* Standard · *weight:* medium (fan-out 2) · *kind:* decision · *class:* I · *control:* single choice (+ URL or CSS import when existing)
@@ -70,7 +70,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** If existing, ask for a URL or CSS file; show a count like '38 grays, 14 button styles found'.
 - **Skip:** yes, defaults to greenfield.
 - **Decides:** DC-L11-04 · **Changes downstream:** DC-L11-02, DC-L11-07
-- **Record:** `OD:pick Q-scope-02=<value>`
+- **Record:** `OD:set Q-scope-02=<json-value> --why "..."`
 
 ## Q-scope-03 · Who will consume the system?
 *Mode:* Expert · *weight:* high (fan-out 8) · *kind:* decision · *class:* I · *control:* multi-select
@@ -88,7 +88,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show the output list per audience, e.g. 'AI agents get DESIGN.md and an MCP manifest'.
 - **Skip:** yes.
 - **Decides:** DC-L11-02 · **Changes downstream:** DC-L11-18, DC-L11-23, DC-L16-12
-- **Record:** `OD:pick Q-scope-03=<value>`
+- **Record:** `OD:set Q-scope-03=<json-value> --why "..."`
 
 ## Q-scope-04 · How many people will build and maintain the system, and how are they organized?
 *Mode:* Expert · *weight:* medium (fan-out 3) · *kind:* decision · *class:* I · *control:* single choice (size) + single choice (model)
@@ -108,7 +108,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Give the survey split: most teams are 1-5 people.
 - **Skip:** yes.
 - **Decides:** DC-L11-09, DC-L11-10 · **Changes downstream:** DC-L11-01, DC-L11-11, DC-L11-12
-- **Record:** `OD:pick Q-scope-04=<value>`
+- **Record:** `OD:set Q-scope-04=<json-value> --why "..."`
 
 ## Q-scope-05 · How are you starting: from an existing product, a UI kit or library, a reference you admire, or just a brief?
 *Mode:* Standard · *weight:* medium (fan-out 2) · *kind:* decision · *class:* I · *control:* single choice (entry) + single choice (build posture) + single choice (reference fidelity, shown for the reference path)
@@ -127,7 +127,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use a kit for components and a reference for structure; avoid letting either become the brand ("websites made with shadcn/ui famously look the same") [DC-L11-01; S-L11-073].
 - **Skip:** yes, brief first.
 - **Decides:** DC-L17-02, DC-L11-01, DC-L17-03 · **Changes downstream:** DC-L08-03, DC-L11-20
-- **Record:** `OD:pick Q-scope-05=<value>`
+- **Record:** `OD:set Q-scope-05=<json-value> --why "..."`
 
 
 # Stage 02: Audience and commitments (S02)
@@ -154,7 +154,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use dense for tables, dashboards and editors people work in all day; avoid dense on touch-first, occasional or public surfaces, where it hurts legibility and forces the targets out of step with the visuals [DC-L09-04, DC-L15-04].
 - **Skip:** yes, defaults to regular. Target sizes do not shrink with density; they follow input precision (Q-space-03, DC-L14-03).
 - **Decides:** DC-L09-04 · **Changes downstream:** DC-L02-08, DC-L03-07, DC-L03-10, DC-L08-13, DC-L15-04, DC-L15-09
-- **Record:** `OD:pick Q-aud-01=<value>`
+- **Record:** `OD:set Q-aud-01=<json-value> --why "..."`
 
 ## Q-aud-02 · What is at stake for users, and what state are they usually in?
 *Mode:* Standard · *weight:* medium (fan-out 0) · *kind:* input · *class:* I · *control:* single choice (category) + multi-select (states)
@@ -172,7 +172,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Contrast a banking transfer screen with a game reward screen.
 - **Skip:** yes.
 - **Decides:** - · **Changes downstream:** DC-L06-03, DC-L06-19, DC-L13-17
-- **Record:** `OD:pick Q-aud-02=<value>`
+- **Record:** `OD:set Q-aud-02=<json-value> --why "..."`
 
 ## Q-aud-03 · What accessibility standard must the system meet?
 *Mode:* Standard · *weight:* medium (fan-out 1) · *kind:* decision · *class:* I · *control:* single choice
@@ -188,7 +188,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show a text pair that passes 4.5:1 and one that fails.
 - **Skip:** yes, AA. The builder also generates the system-vs-product-team responsibility statement GOV.UK publishes [S-L11-092].
 - **Decides:** DC-L11-19 · **Changes downstream:** DC-L01-22, DC-L02-08, DC-L03-12, DC-L04-09, DC-L14-03
-- **Record:** `OD:pick Q-aud-03=<value>`
+- **Record:** `OD:set Q-aud-03=<json-value> --why "..."`
 
 ## Q-aud-04 · Which settings should users be able to adjust, and which situations must you design for?
 *Mode:* Standard · *weight:* medium (fan-out 1) · *kind:* decision · *class:* I · *control:* multi-select (settings) + multi-select (situations)
@@ -206,7 +206,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show the preview with a mode switcher gaining one toggle per setting.
 - **Skip:** yes.
 - **Decides:** DC-L13-14 · **Changes downstream:** DC-L01-20, DC-L02-21, DC-L03-11, DC-L04-25, DC-L07-15, DC-L11-25
-- **Record:** `OD:pick Q-aud-04=<value>`
+- **Record:** `OD:set Q-aud-04=<json-value> --why "..."`
 
 
 # Stage 03: Brand personality and principles (S03)
@@ -235,7 +235,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show 2-3 style tiles updating live; ask for traits in 'X, but not Y' form, e.g. 'Fun, but not childish'.
 - **Skip:** yes; all sliders at 50 give the neutral-toolkit look that L09 warns every generated app starts from [L09 A3].
 - **Decides:** DC-L06-02 · **Changes downstream:** DC-L01-06, DC-L01-10, DC-L02-02, DC-L04-02, DC-L06-01, DC-L06-03, DC-L06-04, DC-L06-09, DC-L06-10, DC-L06-14, DC-L06-18, DC-L15-01
-- **Record:** `OD:pick Q-brand-01=<value>`
+- **Record:** `OD:set Q-brand-01=<json-value> --why "..."`
 
 ## Q-brand-02 · Which products should yours feel like, and what one thing should people recognize it by?
 *Mode:* Standard · *weight:* medium (fan-out 0) · *kind:* input · *class:* I · *control:* text (up to 5 reference products or URLs) + single choice (signature lever)
@@ -253,7 +253,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Ask for 1-5 product names or URLs; place them on the personality map.
 - **Skip:** yes.
 - **Decides:** - · **Changes downstream:** DC-L06-02, DC-L06-07, DC-L06-11, DC-L06-12
-- **Record:** `OD:pick Q-brand-02=<value>`
+- **Record:** `OD:set Q-brand-02=<json-value> --why "..."`
 
 ## Q-brand-08 · Which of these assets do you already have?
 *Mode:* Standard · *weight:* medium (fan-out 0) · *kind:* hook · *class:* D · *control:* multi-select checklist + drop zone
@@ -281,7 +281,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Pre-answers:** Q-brand-03, Q-color-01, Q-type-02, Q-icon-01, Q-icon-06, Q-img-01, Q-img-04, Q-img-06, Q-img-07, Q-shape-05, Q-motion-08, Q-voice-01
 - **Skip:** yes; Quick mode applies all fallbacks.
 - **Decides:** - · **Changes downstream:** -
-- **Record:** `OD:pick Q-brand-08=<value>`
+- **Record:** `OD:set Q-brand-08=<json-value> --why "..."`
 
 ## Q-brand-03 · Do you have a logo and brand mark?
 *Mode:* Standard · *weight:* medium (fan-out 0) · *kind:* hook · *class:* D · *control:* single choice + file upload
@@ -300,7 +300,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Hook, if no:** (1) commission a designer with the generated brief and a reminder that a contractor's logo needs a written copyright assignment, the recommended path for anything customers will recognize; (2) a wordmark set in the chosen typeface (OFL, Google Fonts, Adobe Fonts and ITF FFL allow fonts in logos), generated and labeled "placeholder"; (3) AI logo generators (Looka, Brandmark) with caveats: Looka's icons and fonts come from a shared database available to others, and a trademark search is needed before adoption [S-L17-534, S-L17-535, S-L17-564, S-L17-579].
 - **Skip:** yes; the placeholder wordmark is applied.
 - **Decides:** - · **Changes downstream:** DC-L04-27, DC-L05-12, DC-L05-13
-- **Record:** `OD:pick Q-brand-03=<value>`
+- **Record:** `OD:set Q-brand-03=<json-value> --why "..."`
 
 ## Q-brand-04 · How expressive should the product be?
 *Mode:* Standard · *weight:* high (fan-out 5) · *kind:* decision · *class:* G · *control:* single choice
@@ -316,7 +316,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show one success moment animated three ways.
 - **Skip:** yes.
 - **Decides:** DC-L06-03 · **Changes downstream:** DC-L06-04, DC-L06-10, DC-L06-11, DC-L15-01, DC-L15-03
-- **Record:** `OD:pick Q-brand-04=<value>`
+- **Record:** `OD:set Q-brand-04=<json-value> --why "..."`
 
 ## Q-brand-05 · How do marketing pages relate to the product?
 *Mode:* Standard · *weight:* medium (fan-out 1) · *kind:* decision · *class:* I · *control:* single choice
@@ -334,7 +334,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show a marketing hero next to a product table under each option.
 - **Skip:** yes.
 - **Decides:** DC-L06-01 · **Changes downstream:** DC-L02-11, DC-L06-16
-- **Record:** `OD:pick Q-brand-05=<value>`
+- **Record:** `OD:set Q-brand-05=<json-value> --why "..."`
 
 ## Q-brand-06 · Should marketing and editorial pages get their own, more dramatic type set?
 *Mode:* Expert · *weight:* high (fan-out 5) · *kind:* decision · *class:* G · *control:* single choice
@@ -351,7 +351,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use fluid, expressive display styles on marketing and editorial pages; avoid them inside product containers (Carbon: "Do not use these styles inside a container") [S-L02-011].
 - **Skip:** yes.
 - **Decides:** DC-L02-11 · **Changes downstream:** DC-L02-03, DC-L02-09, DC-L02-15, DC-L02-19, DC-L15-02
-- **Record:** `OD:pick Q-brand-06=<value>`
+- **Record:** `OD:set Q-brand-06=<json-value> --why "..."`
 
 ## Q-brand-07 · What are your 3-5 design principles, and which one wins a tie?
 *Mode:* Standard · *weight:* medium (fan-out 0) · *kind:* decision · *class:* I · *control:* text list (3-5) + drag to rank + single choice (format)
@@ -369,7 +369,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show GOV.UK-style imperatives and a do/don't pair per principle.
 - **Skip:** yes.
 - **Decides:** DC-L06-15, DC-L11-05 · **Changes downstream:** DC-L11-12
-- **Record:** `OD:pick Q-brand-07=<value>`
+- **Record:** `OD:set Q-brand-07=<json-value> --why "..."`
 
 
 # Stage 04: Platforms and devices (S04)
@@ -397,7 +397,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show one screen in browser, iOS and Android chrome.
 - **Skip:** yes, web.
 - **Decides:** DC-L10-01 · **Changes downstream:** DC-L10-02, DC-L10-08, DC-L10-09, DC-L10-10, DC-L10-11, DC-L10-15, DC-L10-17, DC-L10-19, DC-L10-20, DC-L10-22, DC-L10-24, DC-L14-01
-- **Record:** `OD:pick Q-plat-01=<value>`
+- **Record:** `OD:set Q-plat-01=<json-value> --why "..."`
 
 ## Q-plat-05 · Should your native apps look like the platform, like your brand, or a mix?
 *Mode:* Standard · *weight:* high (fan-out 11) · *kind:* decision · *class:* I · *control:* single choice
@@ -414,7 +414,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show one screen native-first, hybrid and brand-first.
 - **Skip:** yes.
 - **Decides:** DC-L10-02, DC-L06-14 · **Changes downstream:** DC-L06-07, DC-L10-03, DC-L10-04, DC-L10-06, DC-L10-09, DC-L10-12, DC-L10-13, DC-L10-14, DC-L10-21, DC-L10-25, DC-L15-01
-- **Record:** `OD:pick Q-plat-05=<value>`
+- **Record:** `OD:set Q-plat-05=<json-value> --why "..."`
 
 ## Q-plat-10 · How closely should interactions follow familiar conventions?
 *Mode:* Standard · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice
@@ -430,7 +430,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show a standard dropdown beside a custom one.
 - **Skip:** yes.
 - **Decides:** DC-L13-17 · **Changes downstream:** DC-L08-03, DC-L10-13
-- **Record:** `OD:pick Q-plat-10=<value>`
+- **Record:** `OD:set Q-plat-10=<json-value> --why "..."`
 
 ## Q-plat-06 · On native platforms, use system controls or custom-branded ones?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice
@@ -447,7 +447,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show switches and sliders: system vs custom.
 - **Skip:** yes.
 - **Decides:** DC-L10-13 · **Changes downstream:** DC-L10-12, DC-L10-14
-- **Record:** `OD:pick Q-plat-06=<value>`
+- **Record:** `OD:set Q-plat-06=<json-value> --why "..."`
 
 ## Q-plat-07 · What do the platforms share?
 *Mode:* Expert · *weight:* high (fan-out 5) · *kind:* decision · *class:* I · *control:* single choice
@@ -465,7 +465,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show one card component rendered per platform under each option.
 - **Skip:** yes.
 - **Decides:** DC-L10-03 · **Changes downstream:** DC-L10-19, DC-L10-21, DC-L10-22, DC-L10-24, DC-L14-02
-- **Record:** `OD:pick Q-plat-07=<value>`
+- **Record:** `OD:set Q-plat-07=<json-value> --why "..."`
 
 ## Q-plat-08 · What will you build the UI with?
 *Mode:* Standard · *weight:* medium (fan-out 3) · *kind:* decision · *class:* I · *control:* multi-select
@@ -483,7 +483,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show a generated Button in each selected stack.
 - **Skip:** yes.
 - **Decides:** DC-L10-21, DC-L10-20, DC-L10-19 · **Changes downstream:** DC-L08-03, DC-L10-01, DC-L10-03, DC-L10-22
-- **Record:** `OD:pick Q-plat-08=<value>`
+- **Record:** `OD:set Q-plat-08=<json-value> --why "..."`
 
 ## Q-plat-02 · Which device classes must work great on day one, which only need to work, and which are out?
 *Mode:* Standard · *weight:* high (fan-out 10) · *kind:* decision · *class:* I · *control:* tier picker per class (first-class / works / out)
@@ -503,7 +503,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show a device row: phone, tablet, laptop, TV, watch.
 - **Skip:** yes.
 - **Decides:** DC-L14-01, DC-L10-24 · **Changes downstream:** DC-L14-02, DC-L14-03, DC-L14-04, DC-L14-05, DC-L14-07, DC-L14-08, DC-L14-10, DC-L14-11, DC-L14-12, DC-L14-14
-- **Record:** `OD:pick Q-plat-02=<value>`
+- **Record:** `OD:set Q-plat-02=<json-value> --why "..."`
 
 ## Q-plat-03 · What do people touch or press with?
 *Mode:* Standard · *weight:* medium (fan-out 0) · *kind:* decision · *class:* I · *control:* multi-select
@@ -522,7 +522,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use the touch target size for anything a finger can reach, including web; use pointer-sized visuals only with a hit area padded to the floor; avoid drag-only interactions without a non-drag alternative (WCAG 2.5.7) [DC-L10-15; S-L10-083].
 - **Skip:** yes.
 - **Decides:** DC-L10-15 · **Changes downstream:** DC-L03-12, DC-L03-13, DC-L14-03, DC-L14-06
-- **Record:** `OD:pick Q-plat-03=<value>`
+- **Record:** `OD:set Q-plat-03=<json-value> --why "..."`
 
 ## Q-plat-04 · Will anyone use the product while driving, moving, or wearing a headset?
 *Mode:* Standard · *weight:* medium (fan-out 0) · *kind:* decision · *class:* I · *control:* multi-select
@@ -540,7 +540,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show which elements would fail the 2-second glance rule.
 - **Skip:** yes.
 - **Decides:** DC-L14-11 · **Changes downstream:** DC-L04-19, DC-L14-08
-- **Record:** `OD:pick Q-plat-04=<value>`
+- **Record:** `OD:set Q-plat-04=<json-value> --why "..."`
 
 ## Q-plat-09 · Which OS versions do you support?
 *Mode:* Expert · *weight:* medium (fan-out 4) · *kind:* decision · *class:* I · *control:* single choice per platform
@@ -558,7 +558,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show a matrix of assumed features: glass, dynamic color, edge-to-edge.
 - **Skip:** yes.
 - **Decides:** DC-L10-23 · **Changes downstream:** DC-L10-05, DC-L10-11, DC-L10-12, DC-L10-14
-- **Record:** `OD:pick Q-plat-09=<value>`
+- **Record:** `OD:set Q-plat-09=<json-value> --why "..."`
 
 
 # Stage 05: Where the system lives (S05)
@@ -588,7 +588,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show the mode-budget meter, e.g. '6 of 10 modes used'.
 - **Skip:** yes.
 - **Decides:** DC-L07-27 · **Changes downstream:** DC-L07-08, DC-L07-16, DC-L07-17, DC-L07-18, DC-L07-24, DC-L07-26
-- **Record:** `OD:pick Q-tool-03=<value>`
+- **Record:** `OD:set Q-tool-03=<json-value> --why "..."`
 
 ## Q-tool-01 · Where should the master copy of the system live?
 *Mode:* Quick · *weight:* high (fan-out 9) · *kind:* decision · *class:* I · *control:* single choice
@@ -605,7 +605,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show a round-trip diagram for the chosen option.
 - **Skip:** yes, builder.
 - **Decides:** DC-L16-02, DC-L07-08, DC-L11-16, DC-L16-13 · **Changes downstream:** DC-L07-09, DC-L07-25, DC-L11-14, DC-L16-12
-- **Record:** `OD:pick Q-tool-01=<value>`
+- **Record:** `OD:set Q-tool-01=<json-value> --why "..."`
 
 ## Q-tool-02 · How will engineers consume the system?
 *Mode:* Standard · *weight:* medium (fan-out 0) · *kind:* decision · *class:* I · *control:* multi-select
@@ -624,7 +624,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show the exported file tree per option.
 - **Skip:** yes.
 - **Decides:** DC-L09-08 · **Changes downstream:** DC-L08-03, DC-L11-14, DC-L16-12
-- **Record:** `OD:pick Q-tool-02=<value>`
+- **Record:** `OD:set Q-tool-02=<json-value> --why "..."`
 
 ## Q-tool-04 · Should Figma components be linked to code for AI tools?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* T · *control:* single choice
@@ -642,7 +642,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show one MCP response with and without Code Connect.
 - **Skip:** yes.
 - **Decides:** DC-L07-24 · **Changes downstream:** DC-L11-23
-- **Record:** `OD:pick Q-tool-04=<value>`
+- **Record:** `OD:set Q-tool-04=<json-value> --why "..."`
 
 
 # Stage 06: Visual direction (S06)
@@ -672,7 +672,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use flat 2.0 or tonal for app surfaces people use daily; use glass only on the functional layer (bars, controls, sheets) and never on reading surfaces; keep neo-brutalist and maximal for marketing or indie products; avoid soft/neumorphic for anything interactive unless borders are added to reach 3:1 [DC-L15-01; S-L10-008 via DC-L10-12].
 - **Skip:** yes; Quick maps sliders A, C and E to a preset [inferred from L06 section 4.2].
 - **Decides:** DC-L15-01 · **Changes downstream:** DC-L01-10, DC-L04-02, DC-L04-07, DC-L04-10, DC-L04-15, DC-L15-05, DC-L15-08, DC-L15-09
-- **Record:** `OD:pick Q-dir-01=<value>`
+- **Record:** `OD:set Q-dir-01=<json-value> --why "..."`
 
 ## Q-dir-02 · How much should fit on a screen?
 *Mode:* Standard · *weight:* high (fan-out 8) · *kind:* decision · *class:* G · *control:* single choice (pre-filled from Q-aud-01)
@@ -690,7 +690,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use compact for data-heavy components (tables, lists, menus, trees); use spacious for marketing and focused tasks; avoid shrinking targets with density; they stay at the floor in every mode [DC-L15-04, DC-L08-13; S-L08-070].
 - **Skip:** yes.
 - **Decides:** DC-L15-04, DC-L08-13 · **Changes downstream:** DC-L02-08, DC-L03-10, DC-L03-11, DC-L15-02, DC-L15-05, DC-L15-09
-- **Record:** `OD:pick Q-dir-02=<value>`
+- **Record:** `OD:set Q-dir-02=<json-value> --why "..."`
 
 ## Q-dir-03 · How dramatic should the difference between headings and body text be?
 *Mode:* Standard · *weight:* medium (fan-out 4) · *kind:* decision · *class:* G · *control:* single choice + Expert sub-choice (lead lever: size, weight or color)
@@ -707,7 +707,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use subtle hierarchy in dense tools where color and weight lead; use dramatic hierarchy on editorial and marketing pages; avoid color-only hierarchy and avoid levels that almost match [DC-L15-02; S-L15-002, S-L15-070].
 - **Skip:** yes.
 - **Decides:** DC-L15-02 · **Changes downstream:** DC-L01-14, DC-L02-09, DC-L02-15, DC-L03-24
-- **Record:** `OD:pick Q-dir-03=<value>`
+- **Record:** `OD:set Q-dir-03=<json-value> --why "..."`
 
 ## Q-dir-04 · How should related things be grouped?
 *Mode:* Standard · *weight:* medium (fan-out 3) · *kind:* decision · *class:* G · *control:* single choice
@@ -724,7 +724,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use space for simple groups, containers for mixed content or grids, lines for long homogeneous lists; avoid nesting containers inside containers [DC-L15-05; S-L15-012].
 - **Skip:** yes.
 - **Decides:** DC-L15-05 · **Changes downstream:** DC-L01-13, DC-L03-24, DC-L04-08, DC-L08-15
-- **Record:** `OD:pick Q-dir-04=<value>`
+- **Record:** `OD:set Q-dir-04=<json-value> --why "..."`
 
 ## Q-dir-05 · Should layouts be start-aligned or centered?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice
@@ -741,7 +741,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use centered layouts for single-focus moments with short text (empty states, dialogs, sign-in); avoid centering multi-line body text [DC-L15-08].
 - **Skip:** yes.
 - **Decides:** DC-L15-08 · **Changes downstream:** DC-L02-18
-- **Record:** `OD:pick Q-dir-05=<value>`
+- **Record:** `OD:set Q-dir-05=<json-value> --why "..."`
 
 
 # Stage 07: Themes and modes (S07)
@@ -769,7 +769,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use system-following modes on Apple platforms; offer an in-app toggle only on web and only in addition; avoid an app-only appearance switch on Apple, which reads as broken [DC-L10-17; S-L10-089].
 - **Skip:** yes.
 - **Decides:** DC-L10-17, DC-L14-09 · **Changes downstream:** DC-L01-18, DC-L01-19, DC-L04-13, DC-L07-15, DC-L07-17
-- **Record:** `OD:pick Q-theme-01=<value>`
+- **Record:** `OD:set Q-theme-01=<json-value> --why "..."`
 
 ## Q-theme-02 · Which other theme axes should exist?
 *Mode:* Expert · *weight:* medium (fan-out 3) · *kind:* decision · *class:* G · *control:* multi-select (pre-filled from Q-aud-04)
@@ -786,7 +786,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show the palette count, e.g. '2 modes x 2 contrasts = 4 palettes to test'.
 - **Skip:** yes.
 - **Decides:** DC-L07-15, DC-L11-25 · **Changes downstream:** DC-L01-20, DC-L07-01, DC-L07-17, DC-L07-18
-- **Record:** `OD:pick Q-theme-02=<value>`
+- **Record:** `OD:set Q-theme-02=<json-value> --why "..."`
 
 ## Q-theme-03 · Will other brands, products or clients re-skin this system?
 *Mode:* Standard · *weight:* medium (fan-out 0) · *kind:* decision · *class:* I · *control:* single choice
@@ -803,7 +803,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show the preview re-skinned with two sample brand colors.
 - **Skip:** yes.
 - **Decides:** DC-L09-07 · **Changes downstream:** DC-L06-06, DC-L06-16, DC-L06-17, DC-L07-01, DC-L07-16
-- **Record:** `OD:pick Q-theme-03=<value>`
+- **Record:** `OD:set Q-theme-03=<json-value> --why "..."`
 
 ## Q-theme-04 · What may differ between brands, and how is that stored?
 *Mode:* Expert · *weight:* medium (fan-out 4) · *kind:* decision · *class:* G · *control:* multi-select (what flexes) + single choice (storage)
@@ -821,7 +821,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Example:** Show a table of brandable tokens per brand.
 - **Skip:** yes.
 - **Decides:** DC-L07-16, DC-L06-16 · **Changes downstream:** DC-L06-17, DC-L07-17, DC-L07-18
-- **Record:** `OD:pick Q-theme-04=<value>`
+- **Record:** `OD:set Q-theme-04=<json-value> --why "..."`
 
 
 # Stage 08: Color system (S08)
@@ -849,7 +849,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Hook, accepts:** hex, RGB or OKLCH values, a brand book PDF, or a reference from Q-ref-01. If no brand color exists: the builder suggests seeds weighted by the personality sliders (blue reads competent, red excitement, per Labrecque & Milne) and labels the choice as a starting point, not a brand decision [S-L06-072]
 - **Skip:** yes, a seed is suggested.
 - **Decides:** DC-L09-03, DC-L01-09 · **Changes downstream:** DC-L01-01, DC-L01-03, DC-L01-04, DC-L06-06, DC-L15-06
-- **Record:** `OD:pick Q-color-01=<value>`
+- **Record:** `OD:set Q-color-01=<json-value> --why "..."`
 
 ## Q-color-02 · Where should your brand color appear?
 *Mode:* Quick · *weight:* high (fan-out 3) · *kind:* decision · *class:* G · *control:* single choice (with platform overrides in Expert)
@@ -868,7 +868,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use brand color on the one element per view that matters most; avoid tinting several control backgrounds at once ("Using your brand color too broadly can overwhelm your interface") [S-L06-008].
 - **Skip:** yes, accent.
 - **Decides:** DC-L06-04, DC-L10-04 · **Changes downstream:** DC-L01-08, DC-L01-13, DC-L08-05, DC-L15-03
-- **Record:** `OD:pick Q-color-02=<value>`
+- **Record:** `OD:set Q-color-02=<json-value> --why "..."`
 
 ## Q-color-03 · How colorful should the palette be?
 *Mode:* Standard · *weight:* high (fan-out 5) · *kind:* decision · *class:* G · *control:* single choice (pre-filled from sliders A and D)
@@ -887,7 +887,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use low chroma on large areas (surfaces) and spend chroma on small, high-meaning elements (primary action, status, selection); avoid vivid surfaces in high-trust categories [DC-L01-10; S-L01-013, S-L06-010].
 - **Skip:** yes.
 - **Decides:** DC-L01-10, DC-L06-05 · **Changes downstream:** DC-L01-15, DC-L01-24, DC-L15-06
-- **Record:** `OD:pick Q-color-03=<value>`
+- **Record:** `OD:set Q-color-03=<json-value> --why "..."`
 
 ## Q-color-04 · How many accent colors does the product need?
 *Mode:* Standard · *weight:* medium (fan-out 4) · *kind:* decision · *class:* G · *control:* single choice
@@ -906,7 +906,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** add an accent only when it has a job (a second action tier, discovery, categories); avoid adding one for decoration or picking wheel presets (triadic, complementary) as a palette [DC-L01-08; S-L15-025].
 - **Skip:** yes.
 - **Decides:** DC-L01-08, DC-L15-06 · **Changes downstream:** DC-L01-11, DC-L01-24, DC-L08-05
-- **Record:** `OD:pick Q-color-04=<value>`
+- **Record:** `OD:set Q-color-04=<json-value> --why "..."`
 
 ## Q-color-05 · How much of a screen may use accent color and emphasis?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice (pre-filled from Q-brand-04)
@@ -923,7 +923,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use accent for the one thing the user should do next; avoid two primary buttons in one group ("if you need two primaries, one of them is secondary") [DC-L15-03].
 - **Skip:** yes.
 - **Decides:** DC-L15-03 · **Changes downstream:** DC-L08-05, DC-L13-18, DC-L15-11
-- **Record:** `OD:pick Q-color-05=<value>`
+- **Record:** `OD:set Q-color-05=<json-value> --why "..."`
 
 ## Q-color-06 · Should colors follow the user's wallpaper or system accent?
 *Mode:* Standard · *weight:* high (fan-out 5) · *kind:* decision · *class:* T · *control:* single choice
@@ -940,7 +940,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** let dynamic color own surfaces and secondary accents; avoid letting it change error and brand-critical colors [DC-L01-21; S-L01-004].
 - **Skip:** yes.
 - **Decides:** DC-L10-05, DC-L01-21 · **Changes downstream:** DC-L01-15, DC-L05-12
-- **Record:** `OD:pick Q-color-06=<value>`
+- **Record:** `OD:set Q-color-06=<json-value> --why "..."`
 
 ## Q-color-07 · How should color ramps be built?
 *Mode:* Expert · *weight:* high (fan-out 6) · *kind:* decision · *class:* G · *control:* single choice (space) + single choice (step rule) + single choice (generator)
@@ -960,7 +960,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use contrast-indexing when users can recolor the accent, so every accent passes the same pairings; avoid HSL-based lightness steps [DC-L01-03, DC-L01-01].
 - **Skip:** yes.
 - **Decides:** DC-L01-01, DC-L01-03, DC-L01-04 · **Changes downstream:** DC-L01-02, DC-L01-18, DC-L01-24, DC-L07-10
-- **Record:** `OD:pick Q-color-07=<value>`
+- **Record:** `OD:set Q-color-07=<json-value> --why "..."`
 
 ## Q-color-08 · How many steps should each ramp have, and how are they numbered?
 *Mode:* Expert · *weight:* medium (fan-out 2) · *kind:* decision · *class:* G · *control:* single choice
@@ -978,7 +978,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use numbers with gaps (50-950) if steps may be inserted later, 1-12 if every step has a fixed job; avoid more steps than distinct UI jobs plus two hover/pressed shifts [DC-L01-02].
 - **Skip:** yes.
 - **Decides:** DC-L01-02 · **Changes downstream:** DC-L01-07, DC-L01-11, DC-L07-03
-- **Record:** `OD:pick Q-color-08=<value>`
+- **Record:** `OD:set Q-color-08=<json-value> --why "..."`
 
 ## Q-color-09 · Should grays be pure, or tinted warm or cool?
 *Mode:* Standard · *weight:* medium (fan-out 3) · *kind:* decision · *class:* G · *control:* single choice + hue/chroma slider
@@ -996,7 +996,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use pure gray where color judgment matters (photo, data, charts); keep chroma lowest at the lightest and darkest steps; avoid strong tints that make status colors look off [DC-L01-06; S-L01-036].
 - **Skip:** yes.
 - **Decides:** DC-L01-06 · **Changes downstream:** DC-L01-07, DC-L01-13, DC-L15-06
-- **Record:** `OD:pick Q-color-09=<value>`
+- **Record:** `OD:set Q-color-09=<json-value> --why "..."`
 
 ## Q-color-10 · How many gray steps, and should there be transparent grays?
 *Mode:* Expert · *weight:* medium (fan-out 3) · *kind:* decision · *class:* G · *control:* number (solid steps) + number (alpha steps)
@@ -1012,7 +1012,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use alpha neutrals for hover fills and overlays that must work on any surface; avoid using alpha for text [inferred].
 - **Skip:** yes.
 - **Decides:** DC-L01-07 · **Changes downstream:** DC-L01-13, DC-L01-14, DC-L01-27
-- **Record:** `OD:pick Q-color-10=<value>`
+- **Record:** `OD:set Q-color-10=<json-value> --why "..."`
 
 ## Q-color-11 · Which color gamut should the system target?
 *Mode:* Expert · *weight:* medium (fan-out 2) · *kind:* decision · *class:* G · *control:* single choice
@@ -1030,7 +1030,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use P3 where saturation carries brand or status meaning; avoid P3 for neutrals, where it adds nothing [DC-L01-05, inferred].
 - **Skip:** yes.
 - **Decides:** DC-L01-05, DC-L07-10 · **Changes downstream:** DC-L07-25, DC-L10-22
-- **Record:** `OD:pick Q-color-11=<value>`
+- **Record:** `OD:set Q-color-11=<json-value> --why "..."`
 
 ## Q-color-12 · How should color roles be named?
 *Mode:* Expert · *weight:* medium (fan-out 3) · *kind:* decision · *class:* G · *control:* single choice
@@ -1046,7 +1046,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use paired fg/bg tokens so each pair is contrast-tested; avoid tokens named after a hue ("blue-button") at the semantic tier [DC-L01-11; DC-L07-04].
 - **Skip:** yes.
 - **Decides:** DC-L01-11 · **Changes downstream:** DC-L01-12, DC-L01-14, DC-L07-04
-- **Record:** `OD:pick Q-color-12=<value>`
+- **Record:** `OD:set Q-color-12=<json-value> --why "..."`
 
 ## Q-color-13 · How many emphasis levels should each color role have?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice
@@ -1064,7 +1064,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use subtle levels on large areas (banners) and bold for small, urgent elements; avoid bold fills on page-size areas [DC-L01-12].
 - **Skip:** yes.
 - **Decides:** DC-L01-12 · **Changes downstream:** DC-L01-14, DC-L01-17
-- **Record:** `OD:pick Q-color-13=<value>`
+- **Record:** `OD:set Q-color-13=<json-value> --why "..."`
 
 ## Q-color-14 · How should surfaces be layered?
 *Mode:* Standard · *weight:* high (fan-out 5) · *kind:* decision · *class:* G · *control:* single choice (pre-filled from Q-dir-04)
@@ -1082,7 +1082,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use lighter-when-higher surfaces in dark mode; avoid separating interactive surfaces by tone alone when the edge carries meaning (needs 3:1) [DC-L01-13; S-L01-023].
 - **Skip:** yes.
 - **Decides:** DC-L01-13 · **Changes downstream:** DC-L04-10, DC-L04-13, DC-L08-15
-- **Record:** `OD:pick Q-color-14=<value>`
+- **Record:** `OD:set Q-color-14=<json-value> --why "..."`
 
 ## Q-color-15 · Which status colors do you need?
 *Mode:* Standard · *weight:* medium (fan-out 3) · *kind:* decision · *class:* G · *control:* multi-select
@@ -1098,7 +1098,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use dark text on yellow and amber fills, which fail 4.5:1 with white (Atlassian `warning.inverse`); avoid conveying status by color alone [DC-L01-15; S-L01-030, S-L01-024].
 - **Skip:** yes.
 - **Decides:** DC-L01-15 · **Changes downstream:** DC-L05-23, DC-L08-18, DC-L13-07
-- **Record:** `OD:pick Q-color-15=<value>`
+- **Record:** `OD:set Q-color-15=<json-value> --why "..."`
 
 ## Q-color-16 · How should dark mode be derived from light?
 *Mode:* Expert · *weight:* high (fan-out 5) · *kind:* decision · *class:* G · *control:* single choice
@@ -1115,7 +1115,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use role-based mapping so each token keeps its contrast relationship; avoid inverting colors [DC-L01-18; S-L10-089].
 - **Skip:** yes.
 - **Decides:** DC-L01-18 · **Changes downstream:** DC-L01-19, DC-L01-24, DC-L04-13
-- **Record:** `OD:pick Q-color-16=<value>`
+- **Record:** `OD:set Q-color-16=<json-value> --why "..."`
 
 ## Q-color-17 · Which contrast rule should the builder enforce on every color pair?
 *Mode:* Standard · *weight:* high (fan-out 5) · *kind:* decision · *class:* G · *control:* single choice (pre-filled from Q-aud-03)
@@ -1131,7 +1131,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** test tokens as pairs, in every mode, at build time; avoid judging a single color by eye [DC-L01-22].
 - **Skip:** yes.
 - **Decides:** DC-L01-22 · **Changes downstream:** DC-L01-14, DC-L01-16, DC-L01-20, DC-L02-23
-- **Record:** `OD:pick Q-color-17=<value>`
+- **Record:** `OD:set Q-color-17=<json-value> --why "..."`
 
 ## Q-color-18 · How should meaning survive when color can't be seen?
 *Mode:* Expert · *weight:* medium (fan-out 2) · *kind:* decision · *class:* G · *control:* single choice (links) + toggle (CVD themes)
@@ -1148,7 +1148,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use a second channel whenever two meanings differ only in hue; avoid red/green-only status pairs [DC-L01-23].
 - **Skip:** yes.
 - **Decides:** DC-L01-23 · **Changes downstream:** DC-L01-20, DC-L01-24, DC-L05-25
-- **Record:** `OD:pick Q-color-18=<value>`
+- **Record:** `OD:set Q-color-18=<json-value> --why "..."`
 
 ## Q-color-19 · Does the product show charts, and which chart colors does it need?
 *Mode:* Standard · *weight:* medium (fan-out 3) · *kind:* decision · *class:* I · *control:* single choice
@@ -1166,7 +1166,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use direct labels or grouping beyond 8 categories; avoid adding more hues [DC-L01-24; S-L05-075].
 - **Skip:** yes, none unless Q-scope-01 includes internal-tools.
 - **Decides:** DC-L01-24, DC-L05-23 · **Changes downstream:** DC-L05-22, DC-L05-24, DC-L05-25
-- **Record:** `OD:pick Q-color-19=<value>`
+- **Record:** `OD:set Q-color-19=<json-value> --why "..."`
 
 
 # Stage 09: Color details and accessibility modes (S09)
@@ -1193,7 +1193,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use overlays for components that sit on user or dynamic colors; avoid state changes that rely on a hue shift alone [DC-L01-17, DC-L01-23].
 - **Skip:** yes.
 - **Decides:** DC-L01-17 · **Changes downstream:** DC-L04-17, DC-L08-09, DC-L14-06
-- **Record:** `OD:pick Q-color-20=<value>`
+- **Record:** `OD:set Q-color-20=<json-value> --why "..."`
 
 ## Q-color-21 · How dark should dark mode be?
 *Mode:* Standard · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice + toggle (dimmed theme)
@@ -1211,7 +1211,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use "dimmed" only for audiences that read long-form at night (developer tools, reading apps); avoid bright objects on pure black in immersive views [DC-L01-19; S-L01-013].
 - **Skip:** yes.
 - **Decides:** DC-L01-19 · **Changes downstream:** DC-L04-12, DC-L04-13
-- **Record:** `OD:pick Q-color-21=<value>`
+- **Record:** `OD:set Q-color-21=<json-value> --why "..."`
 
 ## Q-color-22 · How many text colors, and are they solid or transparent?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -1227,7 +1227,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use 2-3 text colors per view; avoid placeholder-grey for anything users must read [DC-L01-14; BOARD L15 note].
 - **Skip:** yes.
 - **Decides:** DC-L01-14 · **Changes downstream:** DC-L02-23
-- **Record:** `OD:pick Q-color-22=<value>`
+- **Record:** `OD:set Q-color-22=<json-value> --why "..."`
 
 ## Q-color-23 · How strong should borders be, and what color is the focus ring?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice (borders) + single choice (focus color)
@@ -1244,7 +1244,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use the 3:1 border token whenever an input's only boundary is its border; avoid decorative borders to mark interactive boundaries [DC-L01-16; S-L01-023].
 - **Skip:** yes.
 - **Decides:** DC-L01-16 · **Changes downstream:** DC-L04-09, DC-L08-11, DC-L08-16
-- **Record:** `OD:pick Q-color-23=<value>`
+- **Record:** `OD:set Q-color-23=<json-value> --why "..."`
 
 ## Q-color-24 · Which accessibility color themes should ship?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* multi-select (pre-filled from Q-aud-04 and Q-theme-02)
@@ -1263,7 +1263,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use a border or icon wherever status or selection is conveyed by fill; avoid focus rings drawn only with box-shadow (forced colors removes shadows) [DC-L01-20; S-L10-031].
 - **Skip:** yes.
 - **Decides:** DC-L01-20 · **Changes downstream:** DC-L04-09, DC-L07-15, DC-L07-17
-- **Record:** `OD:pick Q-color-24=<value>`
+- **Record:** `OD:set Q-color-24=<json-value> --why "..."`
 
 ## Q-color-25 · Where are gradients allowed?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -1280,7 +1280,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use a sequential palette, not a gradient, when color carries data meaning (Carbon) [S-L01-056]; avoid P3 gradients without an sRGB variant [S-L01-013].
 - **Skip:** yes.
 - **Decides:** DC-L01-25 · **Changes downstream:** DC-L05-19, DC-L06-11
-- **Record:** `OD:pick Q-color-25=<value>`
+- **Record:** `OD:set Q-color-25=<json-value> --why "..."`
 
 ## Q-color-26 · Should the system include transparent colors?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -1298,7 +1298,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use alpha when the background varies; use solid when the pair must be contrast-certified [DC-L01-27].
 - **Skip:** yes.
 - **Decides:** DC-L01-27 · **Changes downstream:** DC-L04-17, DC-L04-18
-- **Record:** `OD:pick Q-color-26=<value>`
+- **Record:** `OD:set Q-color-26=<json-value> --why "..."`
 
 
 # Stage 10: Typeface (S10)
@@ -1327,7 +1327,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use system fonts when the product lives inside another OS's chrome; use a brand face when recognition is a stated goal; avoid a brand face in body text if it needs size bumps to match system legibility at 13pt [DC-L02-01, DC-L10-06].
 - **Skip:** yes, system.
 - **Decides:** DC-L09-05, DC-L02-01, DC-L06-07, DC-L10-06 · **Changes downstream:** DC-L02-02, DC-L02-03, DC-L02-04, DC-L02-06, DC-L02-21, DC-L02-24, DC-L10-07
-- **Record:** `OD:pick Q-type-01=<value>`
+- **Record:** `OD:set Q-type-01=<json-value> --why "..."`
 
 ## Q-type-02 · Do you have the brand typeface files and a license that covers web and apps?
 *Mode:* Standard · *weight:* medium (fan-out 1) · *kind:* hook · *class:* T · *control:* single choice + file upload + license checkboxes (web, iOS/Android apps, embedding)
@@ -1346,7 +1346,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Hook, if no:** (1) pick an open-source face under the SIL OFL with a similar personality (Inter, Roboto Flex, Noto, Google Sans Flex, IBM Plex) [S-L02-026, S-L02-012]; (2) license a commercial face, noting per-domain, per-app or per-pageview terms [inferred]; (3) commission a custom face from a type foundry, with the caveat that it is slow and costly (Google needed three iterations to make one brand face work at small sizes) [S-L06-031].
 - **Skip:** yes; the system stack stands in until files arrive.
 - **Decides:** DC-L02-06 · **Changes downstream:** DC-L02-04, DC-L02-24, DC-L10-22
-- **Record:** `OD:pick Q-type-02=<value>`
+- **Record:** `OD:set Q-type-02=<json-value> --why "..."`
 
 ## Q-type-03 · Which kind of typeface fits the personality?
 *Mode:* Standard · *weight:* medium (fan-out 3) · *kind:* decision · *class:* G · *control:* single choice (pre-filled from sliders F, B, A and D)
@@ -1366,7 +1366,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use geometric faces for headlines, humanist or neo-grotesque for body; avoid any face that fails the confusable-pairs test at 12-14px or lacks your scripts [DC-L02-02].
 - **Skip:** yes.
 - **Decides:** DC-L02-02, DC-L06-08 · **Changes downstream:** DC-L02-03, DC-L02-14, DC-L05-03
-- **Record:** `OD:pick Q-type-03=<value>`
+- **Record:** `OD:set Q-type-03=<json-value> --why "..."`
 
 ## Q-type-04 · Which languages and scripts must the product support, now and within two years?
 *Mode:* Standard · *weight:* medium (fan-out 4) · *kind:* decision · *class:* I · *control:* multi-select (scripts) + toggle (right-to-left)
@@ -1385,7 +1385,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use logical (start/end) spacing and mirrored directional icons when RTL is on; avoid fixing a label width to its English length [DC-L06-24; S-L06-101].
 - **Skip:** yes, Latin.
 - **Decides:** DC-L02-24, DC-L06-24 · **Changes downstream:** DC-L02-13, DC-L02-25, DC-L03-04, DC-L05-09
-- **Record:** `OD:pick Q-type-04=<value>`
+- **Record:** `OD:set Q-type-04=<json-value> --why "..."`
 
 ## Q-type-05 · One type family, or a pair?
 *Mode:* Expert · *weight:* medium (fan-out 2) · *kind:* decision · *class:* G · *control:* single choice
@@ -1402,7 +1402,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** add a second face only for a change of job (display vs text, code); avoid near-identical pairs that read as a mistake [DC-L02-03; L15 P49].
 - **Skip:** yes.
 - **Decides:** DC-L02-03 · **Changes downstream:** DC-L02-06, DC-L02-15
-- **Record:** `OD:pick Q-type-05=<value>`
+- **Record:** `OD:set Q-type-05=<json-value> --why "..."`
 
 ## Q-type-06 · Which font for code and numbers?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice + toggle (tabular numbers in tables)
@@ -1418,7 +1418,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use tabular figures in tables, clocks and anything that updates; avoid mono for body text [DC-L02-05; S-L02-052].
 - **Skip:** yes.
 - **Decides:** DC-L02-05, DC-L02-26 · **Changes downstream:** DC-L02-26, DC-L05-24
-- **Record:** `OD:pick Q-type-06=<value>`
+- **Record:** `OD:set Q-type-06=<json-value> --why "..."`
 
 ## Q-type-07 · Should the font use variable weights and automatic optical sizing?
 *Mode:* Expert · *weight:* high (fan-out 5) · *kind:* decision · *class:* G · *control:* single choice
@@ -1435,7 +1435,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use opsz tied to size; avoid setting display sizes in a text cut without tracking adjustments [DC-L02-04, DC-L02-14].
 - **Skip:** yes.
 - **Decides:** DC-L02-04 · **Changes downstream:** DC-L02-06, DC-L02-14, DC-L02-15
-- **Record:** `OD:pick Q-type-07=<value>`
+- **Record:** `OD:set Q-type-07=<json-value> --why "..."`
 
 
 # Stage 11: Type scale and text (S11)
@@ -1463,7 +1463,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use 16px or more where users mostly read paragraphs; use 14px where they mostly operate controls and tables; avoid anything people must read below 12px on web or 11pt on mobile [DC-L02-08, DC-L02-20].
 - **Skip:** yes.
 - **Decides:** DC-L02-08 · **Changes downstream:** DC-L02-09, DC-L02-13, DC-L02-17, DC-L03-07
-- **Record:** `OD:pick Q-type-08=<value>`
+- **Record:** `OD:set Q-type-08=<json-value> --why "..."`
 
 ## Q-type-15 · Should text sizes change with screen width?
 *Mode:* Expert · *weight:* medium (fan-out 2) · *kind:* decision · *class:* G · *control:* single choice
@@ -1480,7 +1480,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use fluid type for marketing heroes; avoid fluid styles inside cards, tables or forms [DC-L02-19; S-L02-011].
 - **Skip:** yes.
 - **Decides:** DC-L02-19 · **Changes downstream:** DC-L03-17, DC-L07-28
-- **Record:** `OD:pick Q-type-15=<value>`
+- **Record:** `OD:set Q-type-15=<json-value> --why "..."`
 
 ## Q-type-17 · How far must layouts support users' larger-text settings?
 *Mode:* Standard · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice
@@ -1497,7 +1497,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use containers that grow with text; avoid truncating at the largest sizes [DC-L02-21, DC-L10-07].
 - **Skip:** yes.
 - **Decides:** DC-L02-21, DC-L10-07 · **Changes downstream:** DC-L03-07, DC-L05-05, DC-L08-07
-- **Record:** `OD:pick Q-type-17=<value>`
+- **Record:** `OD:set Q-type-17=<json-value> --why "..."`
 
 ## Q-type-09 · Which ratio should generate the size scale?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice + manual override per step
@@ -1515,7 +1515,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use a formula to start and hand-tune the result; avoid keeping two sizes that differ by less than about 10% [DC-L02-10].
 - **Skip:** yes.
 - **Decides:** DC-L02-09 · **Changes downstream:** DC-L02-10, DC-L02-13
-- **Record:** `OD:pick Q-type-09=<value>`
+- **Record:** `OD:set Q-type-09=<json-value> --why "..."`
 
 ## Q-type-10 · How many text styles, and how are they named?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice (naming) + number (styles)
@@ -1532,7 +1532,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** name semantic styles by job and primitives by number; avoid more than about 3 type sizes in a single view [DC-L02-07; BOARD L15 note].
 - **Skip:** yes.
 - **Decides:** DC-L02-07, DC-L02-10 · **Changes downstream:** DC-L02-27, DC-L07-12, DC-L13-04
-- **Record:** `OD:pick Q-type-10=<value>`
+- **Record:** `OD:set Q-type-10=<json-value> --why "..."`
 
 ## Q-type-11 · How should line heights be set?
 *Mode:* Expert · *weight:* medium (fan-out 3) · *kind:* decision · *class:* G · *control:* single choice + table of script categories
@@ -1549,7 +1549,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use smaller ratios as text gets larger; avoid fixed-height components that hold text [DC-L02-13, DC-L02-25].
 - **Skip:** yes.
 - **Decides:** DC-L02-13, DC-L02-25 · **Changes downstream:** DC-L02-16, DC-L03-07, DC-L03-25
-- **Record:** `OD:pick Q-type-11=<value>`
+- **Record:** `OD:set Q-type-11=<json-value> --why "..."`
 
 ## Q-type-12 · Which font weights, and how is emphasis shown?
 *Mode:* Expert · *weight:* medium (fan-out 3) · *kind:* decision · *class:* G · *control:* single choice (weights) + single choice (emphasis)
@@ -1567,7 +1567,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use weight first, color second, italics only inside running text; avoid light (300) below 32px [DC-L02-12, DC-L02-15].
 - **Skip:** yes.
 - **Decides:** DC-L02-15, DC-L02-12 · **Changes downstream:** DC-L02-06, DC-L08-14
-- **Record:** `OD:pick Q-type-12=<value>`
+- **Record:** `OD:set Q-type-12=<json-value> --why "..."`
 
 ## Q-type-13 · Should letter spacing change with size?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice
@@ -1583,7 +1583,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use em-based tracking so it scales; let optical-size fonts do most of the work; avoid tracking non-Latin scripts [DC-L02-14, DC-L02-25].
 - **Skip:** yes.
 - **Decides:** DC-L02-14 · **Changes downstream:** DC-L07-12
-- **Record:** `OD:pick Q-type-13=<value>`
+- **Record:** `OD:set Q-type-13=<json-value> --why "..."`
 
 ## Q-type-14 · How should running text be laid out: line length, alignment, truncation and paragraph spacing?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* number (max characters per line) + single choice (overflow) + number (paragraph spacing)
@@ -1600,7 +1600,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** constrain the container before touching font size when lines exceed about 10-12 words; avoid full justification and centered paragraphs [DC-L02-17, DC-L02-18].
 - **Skip:** yes.
 - **Decides:** DC-L02-17, DC-L02-18, DC-L02-16 · **Changes downstream:** DC-L03-16, DC-L03-25
-- **Record:** `OD:pick Q-type-14=<value>`
+- **Record:** `OD:set Q-type-14=<json-value> --why "..."`
 
 ## Q-type-16 · Should type sizes differ by platform or viewing distance?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice
@@ -1618,7 +1618,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** keep roles and roughly the visual angle when moving to a farther device; avoid reusing desktop sizes on phones [DC-L14-04, DC-L02-20].
 - **Skip:** yes.
 - **Decides:** DC-L02-20, DC-L14-04 · **Changes downstream:** DC-L07-15, DC-L14-13
-- **Record:** `OD:pick Q-type-16=<value>`
+- **Record:** `OD:set Q-type-16=<json-value> --why "..."`
 
 
 # Stage 12: Space, sizing and density (S12)
@@ -1627,7 +1627,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 
 Screen: the spacing scale, target sizes and control heights, shown on a live component sheet with spacing overlays (padding in one tint, gaps in another). Graph step 0-6. Pre-filled from Q-aud-01, Q-plat-03 and Q-dir-02.
 
-**Questions:** 10 (Expert 5, Standard 5). **Visual template:** `assets/templates/spacing.html`.
+**Questions:** 10 (Expert 5, Standard 5). **Visual template:** `assets/templates/spacing-ruler.html`.
 Ask in the order below. Skip a question when its mode is above the chosen depth or its *Show if* is false; it then takes its default, recorded with status `default`.
 
 ## Q-space-01 · What should the base spacing unit be?
@@ -1645,7 +1645,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use the 2/4/6 sub-steps inside components (icon-to-label, chip padding); avoid them between layout sections [DC-L03-01, DC-L03-04].
 - **Skip:** yes.
 - **Decides:** DC-L03-01 · **Changes downstream:** DC-L03-02, DC-L03-03, DC-L03-06, DC-L03-07, DC-L03-15
-- **Record:** `OD:pick Q-space-01=<value>`
+- **Record:** `OD:set Q-space-01=<json-value> --why "..."`
 
 ## Q-space-02 · How should spacing steps grow?
 *Mode:* Standard · *weight:* high (fan-out 5) · *kind:* decision · *class:* G · *control:* single choice + editable step list
@@ -1662,7 +1662,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** keep adjacent steps at least about 25% apart above 8px so the difference is visible; avoid adding steps nobody can tell apart [DC-L03-02].
 - **Skip:** yes.
 - **Decides:** DC-L03-02 · **Changes downstream:** DC-L03-03, DC-L03-04, DC-L03-11, DC-L03-24
-- **Record:** `OD:pick Q-space-02=<value>`
+- **Record:** `OD:set Q-space-02=<json-value> --why "..."`
 
 ## Q-space-03 · How big must tap and click targets be?
 *Mode:* Standard · *weight:* medium (fan-out 2) · *kind:* decision · *class:* G · *control:* single choice (pre-filled from Q-plat-03 and Q-aud-03)
@@ -1679,7 +1679,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** decouple hit area from visual size (padding, pseudo-elements); avoid shrinking hit areas in compact mode [DC-L03-12; S-L03-035].
 - **Skip:** yes.
 - **Decides:** DC-L03-12, DC-L14-03, DC-L03-13 · **Changes downstream:** DC-L03-07, DC-L05-05, DC-L08-07
-- **Record:** `OD:pick Q-space-03=<value>`
+- **Record:** `OD:set Q-space-03=<json-value> --why "..."`
 
 ## Q-space-09 · Who controls density, and how is it stored?
 *Mode:* Expert · *weight:* medium (fan-out 3) · *kind:* decision · *class:* G · *control:* single choice (who) + single choice (storage)
@@ -1697,7 +1697,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use a compact mode for tables, lists, menus and trees; avoid a type-only density mode that leaves oversized padding [DC-L03-11; S-L03-070].
 - **Skip:** yes.
 - **Decides:** DC-L03-10, DC-L03-11, DC-L14-13 · **Changes downstream:** DC-L07-15, DC-L07-17
-- **Record:** `OD:pick Q-space-09=<value>`
+- **Record:** `OD:set Q-space-09=<json-value> --why "..."`
 
 ## Q-space-04 · How tall should buttons and inputs be?
 *Mode:* Standard · *weight:* medium (fan-out 2) · *kind:* decision · *class:* G · *control:* single choice (pre-filled from Q-dir-02)
@@ -1714,7 +1714,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** keep sizes on multiples of 8 and never mix sizes in one group; avoid heights below the target floor without padded hit areas [DC-L08-07, DC-L03-12].
 - **Skip:** yes.
 - **Decides:** DC-L03-07, DC-L08-07 · **Changes downstream:** DC-L04-03, DC-L05-05, DC-L08-16
-- **Record:** `OD:pick Q-space-04=<value>`
+- **Record:** `OD:set Q-space-04=<json-value> --why "..."`
 
 ## Q-space-05 · How much breathing room between groups versus inside them?
 *Mode:* Standard · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* slider (inner:outer ratio)
@@ -1731,7 +1731,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use space as the default grouping cue; add borders only where interactivity or scanning needs them [DC-L03-24].
 - **Skip:** yes.
 - **Decides:** DC-L03-24 · **Changes downstream:** DC-L03-04, DC-L08-15
-- **Record:** `OD:pick Q-space-05=<value>`
+- **Record:** `OD:set Q-space-05=<json-value> --why "..."`
 
 ## Q-space-06 · How should spacing tokens be organized by purpose?
 *Mode:* Expert · *weight:* medium (fan-out 2) · *kind:* decision · *class:* G · *control:* single choice + table (inset shapes)
@@ -1748,7 +1748,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use padding and gap on parents; avoid margins on reusable components [DC-L03-04; S-L03-030].
 - **Skip:** yes.
 - **Decides:** DC-L03-04, DC-L03-05 · **Changes downstream:** DC-L03-03, DC-L07-04
-- **Record:** `OD:pick Q-space-06=<value>`
+- **Record:** `OD:set Q-space-06=<json-value> --why "..."`
 
 ## Q-space-07 · Do you need tiny nudges and negative spacing?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* multi-select
@@ -1764,7 +1764,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use negatives for deliberate overlaps; avoid using nudges to patch layout bugs [DC-L03-06, inferred].
 - **Skip:** yes.
 - **Decides:** DC-L03-06 · **Changes downstream:** DC-L07-03
-- **Record:** `OD:pick Q-space-07=<value>`
+- **Record:** `OD:set Q-space-07=<json-value> --why "..."`
 
 ## Q-space-08 · How should vertical rhythm be kept?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -1780,7 +1780,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use a strict baseline grid only for multi-column editorial pages; avoid it for app UI on the web [DC-L03-25].
 - **Skip:** yes.
 - **Decides:** DC-L03-25 · **Changes downstream:** DC-L02-16
-- **Record:** `OD:pick Q-space-08=<value>`
+- **Record:** `OD:set Q-space-08=<json-value> --why "..."`
 
 ## Q-space-10 · Which icon and avatar sizes should exist?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* editable size lists
@@ -1797,7 +1797,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** keep the icon-to-text ratio fixed ("Don't alter the icon-text size ratio", Carbon) [S-L03-062]; avoid in-between icon sizes that blur the pixel grid [inferred].
 - **Skip:** yes.
 - **Decides:** DC-L03-08 · **Changes downstream:** DC-L05-05, DC-L05-18
-- **Record:** `OD:pick Q-space-10=<value>`
+- **Record:** `OD:set Q-space-10=<json-value> --why "..."`
 
 
 # Stage 13: Layout, navigation and app shell (S13)
@@ -1806,7 +1806,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 
 Screen: how pages reorganize across widths, shown on a resizable frame the person can drag from phone to wide desktop. Graph step 0-4. Safe areas and edge insets (DC-L03-20, DC-L14-10) are not asked; they are platform rules applied by construction (see "Auto-applied rules").
 
-**Questions:** 6 (Expert 3, Standard 3). **Visual template:** `assets/templates/spacing.html`.
+**Questions:** 6 (Expert 3, Standard 3). **Visual template:** `assets/templates/spacing-ruler.html`.
 Ask in the order below. Skip a question when its mode is above the chosen depth or its *Show if* is false; it then takes its default, recorded with status `default`.
 
 ## Q-layout-01 · At which widths should layouts reorganize?
@@ -1825,7 +1825,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** decide layout by window size, never by device type or orientation [DC-L10-10; S-L10-013]; avoid breakpoints that only nudge padding.
 - **Skip:** yes.
 - **Decides:** DC-L03-14 · **Changes downstream:** DC-L03-15, DC-L03-16, DC-L03-17, DC-L03-18, DC-L03-19, DC-L07-28
-- **Record:** `OD:pick Q-layout-01=<value>`
+- **Record:** `OD:set Q-layout-01=<json-value> --why "..."`
 
 ## Q-layout-02 · Should layouts stretch fluidly, switch between fixed designs, or both?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice
@@ -1842,7 +1842,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use adaptive changes for pane count and navigation; avoid device-type checks that break in split view and resizable windows [S-L10-013].
 - **Skip:** yes.
 - **Decides:** DC-L03-22, DC-L10-10 · **Changes downstream:** DC-L03-18, DC-L03-21, DC-L10-09
-- **Record:** `OD:pick Q-layout-02=<value>`
+- **Record:** `OD:set Q-layout-02=<json-value> --why "..."`
 
 ## Q-layout-04 · How should top-level navigation work at each size?
 *Mode:* Standard · *weight:* medium (fan-out 2) · *kind:* decision · *class:* G · *control:* number (destinations) + single choice (pattern)
@@ -1860,7 +1860,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** keep destinations identical across devices and swap only the container; avoid hiding primary navigation on wide layouts [DC-L14-05; S-L13-097].
 - **Skip:** yes.
 - **Decides:** DC-L08-19, DC-L13-02, DC-L10-09, DC-L14-05, DC-L03-19 · **Changes downstream:** DC-L03-20, DC-L10-11
-- **Record:** `OD:pick Q-layout-04=<value>`
+- **Record:** `OD:set Q-layout-04=<json-value> --why "..."`
 
 ## Q-layout-03 · Are your pages mostly for reading, working, or data?
 *Mode:* Standard · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* multi-select (page types) + single choice (default pane template)
@@ -1878,7 +1878,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use fluid width for tables and dashboards; avoid full-width paragraphs [DC-L03-16, DC-L02-17].
 - **Skip:** yes.
 - **Decides:** DC-L03-16, DC-L03-18 · **Changes downstream:** DC-L02-17, DC-L03-15
-- **Record:** `OD:pick Q-layout-03=<value>`
+- **Record:** `OD:set Q-layout-03=<json-value> --why "..."`
 
 ## Q-layout-05 · Which column grid and composition style?
 *Mode:* Expert · *weight:* medium (fan-out 2) · *kind:* decision · *class:* G · *control:* single choice (grid) + single choice (composition)
@@ -1895,7 +1895,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** make every grid break nameable ("this hero breaks the grid to signal X"); avoid changing component spacing by breakpoint [DC-L15-07, DC-L03-17].
 - **Skip:** yes.
 - **Decides:** DC-L03-15, DC-L15-07, DC-L03-17 · **Changes downstream:** DC-L07-28
-- **Record:** `OD:pick Q-layout-05=<value>`
+- **Record:** `OD:set Q-layout-05=<json-value> --why "..."`
 
 ## Q-layout-06 · Should components respond to their container or to the window?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -1911,7 +1911,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use container queries for reusable components; avoid viewport queries inside components placed in panes [DC-L03-21].
 - **Skip:** yes.
 - **Decides:** DC-L03-21 · **Changes downstream:** DC-L10-18
-- **Record:** `OD:pick Q-layout-06=<value>`
+- **Record:** `OD:set Q-layout-06=<json-value> --why "..."`
 
 
 # Stage 14: Shape (S14)
@@ -1939,7 +1939,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use shape variety only in hero moments; avoid shrinking essential actions into small shapes ("smaller shapes can result in essential actions looking less important") [S-L06-009].
 - **Skip:** yes.
 - **Decides:** DC-L06-09 · **Changes downstream:** DC-L06-11, DC-L06-13
-- **Record:** `OD:pick Q-shape-05=<value>`
+- **Record:** `OD:set Q-shape-05=<json-value> --why "..."`
 
 ## Q-shape-01 · How soft should corners feel?
 *Mode:* Quick · *weight:* high (fan-out 4) · *kind:* decision · *class:* G · *control:* single choice + radius factor slider (0, 0.75, 1, 1.5, full)
@@ -1957,7 +1957,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use sharp corners when density and precision are brand values (data, developer tools) and pill when the brand is consumer and touch-first; avoid pill on dense, short controls, which need taller heights [DC-L04-02, DC-L09-01].
 - **Skip:** yes, 6px.
 - **Decides:** DC-L09-01, DC-L04-02 · **Changes downstream:** DC-L04-01, DC-L04-03, DC-L04-04, DC-L04-06, DC-L04-09, DC-L04-19, DC-L05-18
-- **Record:** `OD:pick Q-shape-01=<value>`
+- **Record:** `OD:set Q-shape-01=<json-value> --why "..."`
 
 ## Q-shape-02 · Which radius steps should exist?
 *Mode:* Expert · *weight:* medium (fan-out 4) · *kind:* decision · *class:* G · *control:* editable step list
@@ -1974,7 +1974,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** grow radius with component size; delete any step you cannot name a component for [DC-L04-01].
 - **Skip:** yes.
 - **Decides:** DC-L04-01 · **Changes downstream:** DC-L04-03, DC-L04-05, DC-L04-09, DC-L15-10
-- **Record:** `OD:pick Q-shape-02=<value>`
+- **Record:** `OD:set Q-shape-02=<json-value> --why "..."`
 
 ## Q-shape-03 · Which components get which radius?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* mapping table
@@ -1991,7 +1991,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use full radius for people and pills; avoid giving small badges and large dialogs the same radius [DC-L04-03].
 - **Skip:** yes.
 - **Decides:** DC-L04-03 · **Changes downstream:** DC-L04-05, DC-L07-04
-- **Record:** `OD:pick Q-shape-03=<value>`
+- **Record:** `OD:set Q-shape-03=<json-value> --why "..."`
 
 ## Q-shape-04 · Circular corners, or Apple-style continuous corners?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -2008,7 +2008,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use continuous corners only where brand parity with iOS matters; avoid relying on `corner-shape` for anything functional [DC-L04-04].
 - **Skip:** yes.
 - **Decides:** DC-L04-04 · **Changes downstream:** DC-L07-13
-- **Record:** `OD:pick Q-shape-04=<value>`
+- **Record:** `OD:set Q-shape-04=<json-value> --why "..."`
 
 
 # Stage 15: Depth, borders and materials (S15)
@@ -2036,7 +2036,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use tonal or borders for data-dense tools; avoid shadows on static in-page cards when the same color steps would do [DC-L09-02, DC-L04-10].
 - **Skip:** yes.
 - **Decides:** DC-L09-02, DC-L04-10, DC-L08-15 · **Changes downstream:** DC-L04-11, DC-L04-12, DC-L04-13, DC-L04-15, DC-L07-13
-- **Record:** `OD:pick Q-depth-01=<value>`
+- **Record:** `OD:set Q-depth-01=<json-value> --why "..."`
 
 ## Q-depth-02 · How many elevation levels, and how do they look in dark mode?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* number + mapping table
@@ -2052,7 +2052,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** components at the same level never overlap each other; avoid pure-black shadows as the only dark-mode depth cue [DC-L04-11, DC-L04-13].
 - **Skip:** yes.
 - **Decides:** DC-L04-11, DC-L04-13 · **Changes downstream:** DC-L04-14, DC-L07-13
-- **Record:** `OD:pick Q-depth-02=<value>`
+- **Record:** `OD:set Q-depth-02=<json-value> --why "..."`
 
 ## Q-depth-03 · What should shadows look like?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice + alpha slider
@@ -2070,7 +2070,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use one light source for every shadow; avoid single hard shadows [DC-L04-12; L15 P62].
 - **Skip:** yes.
 - **Decides:** DC-L04-12 · **Changes downstream:** DC-L07-13
-- **Record:** `OD:pick Q-depth-03=<value>`
+- **Record:** `OD:set Q-depth-03=<json-value> --why "..."`
 
 ## Q-depth-04 · Should any surfaces be translucent (glass, blur)?
 *Mode:* Standard · *weight:* medium (fan-out 2) · *kind:* decision · *class:* T · *control:* single choice + per-platform chrome table
@@ -2087,7 +2087,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use glass on the functional layer (bars, controls, sheets) only; avoid glass on reading surfaces and any translucent token without an opaque twin [S-L10-008; DC-L04-16].
 - **Skip:** yes.
 - **Decides:** DC-L04-15, DC-L10-12, DC-L10-11 · **Changes downstream:** DC-L04-16, DC-L05-16, DC-L10-16
-- **Record:** `OD:pick Q-depth-04=<value>`
+- **Record:** `OD:set Q-depth-04=<json-value> --why "..."`
 
 ## Q-depth-05 · How thick are borders, and when do dividers appear?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* editable width list + single choice (divider policy)
@@ -2104,7 +2104,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use lines in dense tables; avoid stacking dividers and card borders on the same edge [DC-L04-08; L15 P64].
 - **Skip:** yes.
 - **Decides:** DC-L04-07, DC-L03-09, DC-L04-08 · **Changes downstream:** DC-L04-09, DC-L07-13
-- **Record:** `OD:pick Q-depth-05=<value>`
+- **Record:** `OD:set Q-depth-05=<json-value> --why "..."`
 
 ## Q-depth-06 · How dark should modal backdrops be, and how strong are state overlays?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* slider (scrim) + number set (overlays)
@@ -2121,7 +2121,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use lighter scrims for non-blocking sheets; avoid scrims so light that the dialog's modality is unclear [DC-L04-18].
 - **Skip:** yes.
 - **Decides:** DC-L04-18, DC-L04-17 · **Changes downstream:** DC-L08-09, DC-L08-20
-- **Record:** `OD:pick Q-depth-06=<value>`
+- **Record:** `OD:set Q-depth-06=<json-value> --why "..."`
 
 
 # Stage 16: Motion, haptics and sound (S16)
@@ -2149,7 +2149,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use expressive motion for page transitions, the primary action and alerts; avoid bounce on everyday controls and in high-trust products [DC-L06-10, DC-L04-19].
 - **Skip:** yes.
 - **Decides:** DC-L09-06, DC-L04-19, DC-L06-10 · **Changes downstream:** DC-L04-20, DC-L04-21, DC-L04-22, DC-L04-23, DC-L10-14
-- **Record:** `OD:pick Q-motion-01=<value>`
+- **Record:** `OD:set Q-motion-01=<json-value> --why "..."`
 
 ## Q-motion-04 · How should springs be defined and exported?
 *Mode:* Expert · *weight:* medium (fan-out 2) · *kind:* decision · *class:* G · *control:* single choice
@@ -2166,7 +2166,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use springs for spatial moves; avoid overshoot on color and opacity [DC-L04-22; S-L10-024].
 - **Skip:** yes.
 - **Decides:** DC-L04-22 · **Changes downstream:** DC-L04-06, DC-L04-28, DC-L07-14
-- **Record:** `OD:pick Q-motion-04=<value>`
+- **Record:** `OD:set Q-motion-04=<json-value> --why "..."`
 
 ## Q-motion-02 · Which durations should exist, and should exits be faster?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* editable duration list + toggle (interruptible)
@@ -2184,7 +2184,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** scale duration with distance travelled; avoid standard transitions over 500ms [DC-L04-20; L13 E1].
 - **Skip:** yes.
 - **Decides:** DC-L04-20, DC-L04-24 · **Changes downstream:** DC-L07-14, DC-L13-01
-- **Record:** `OD:pick Q-motion-02=<value>`
+- **Record:** `OD:set Q-motion-02=<json-value> --why "..."`
 
 ## Q-motion-03 · Which easing curves?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice (structure) + curve editor
@@ -2200,7 +2200,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use linear only for continuous indicators; avoid ease-in for entrances [DC-L04-21].
 - **Skip:** yes.
 - **Decides:** DC-L04-21 · **Changes downstream:** DC-L07-14
-- **Record:** `OD:pick Q-motion-03=<value>`
+- **Record:** `OD:set Q-motion-03=<json-value> --why "..."`
 
 ## Q-motion-05 · Should shapes morph or use an expressive shape library?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -2218,7 +2218,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use expressive shapes on avatars and hero moments; avoid them on dense controls [DC-L04-06].
 - **Skip:** yes.
 - **Decides:** DC-L04-06 · **Changes downstream:** DC-L05-18
-- **Record:** `OD:pick Q-motion-05=<value>`
+- **Record:** `OD:set Q-motion-05=<json-value> --why "..."`
 
 ## Q-motion-06 · Which named transitions and stagger should the system ship?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* multi-select + number (stagger)
@@ -2236,7 +2236,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use OS-owned navigation transitions on native platforms; avoid custom page transitions that fight the back gesture [DC-L10-14].
 - **Skip:** yes.
 - **Decides:** DC-L04-23 · **Changes downstream:** DC-L07-14
-- **Record:** `OD:pick Q-motion-06=<value>`
+- **Record:** `OD:set Q-motion-06=<json-value> --why "..."`
 
 ## Q-motion-07 · What happens when users ask for reduced motion, and how much motion does each device allow?
 *Mode:* Standard · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice + per-device table
@@ -2253,7 +2253,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** keep feedback (color, opacity) and remove travel (translate, scale, parallax); avoid removing feedback entirely [DC-L04-25].
 - **Skip:** yes.
 - **Decides:** DC-L04-25, DC-L14-08 · **Changes downstream:** DC-L07-14, DC-L07-15
-- **Record:** `OD:pick Q-motion-07=<value>`
+- **Record:** `OD:set Q-motion-07=<json-value> --why "..."`
 
 ## Q-motion-08 · Do you have UI sounds or a sonic logo?
 *Mode:* Standard · *weight:* medium (fan-out 0) · *kind:* hook · *class:* D · *control:* single choice + file upload
@@ -2272,7 +2272,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Hook, if no:** (1) stay silent, the norm for web and productivity apps; (2) use platform system sounds (Android `SoundEffectConstants`, iOS system behavior); (3) commission a sound designer for a sonic logo, noting that repeated identical sounds feel mechanical; no verified open UI-sound library was found [S-L04-074, S-L17-553, S-L17-555].
 - **Skip:** yes, silent.
 - **Decides:** DC-L04-27 · **Changes downstream:** DC-L04-26
-- **Record:** `OD:pick Q-motion-08=<value>`
+- **Record:** `OD:set Q-motion-08=<json-value> --why "..."`
 
 ## Q-motion-09 · On native platforms, whose transitions, back behavior and haptics?
 *Mode:* Expert · *weight:* medium (fan-out 0) · *kind:* hook · *class:* T · *control:* single choice (motion) + single choice (haptics)
@@ -2293,7 +2293,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Hook, if no:** system patterns first (Apple notification, impact, selection; Android `HapticFeedbackConstants`) [S-L17-547, S-L17-548, S-L17-549].
 - **Skip:** yes.
 - **Decides:** DC-L10-14, DC-L04-26 · **Changes downstream:** DC-L07-14
-- **Record:** `OD:pick Q-motion-09=<value>`
+- **Record:** `OD:set Q-motion-09=<json-value> --why "..."`
 
 ## Q-motion-10 · Which OS accessibility settings must the system honor?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* multi-select
@@ -2312,7 +2312,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** never convey a boundary or focus state with shadow or translucency alone; avoid app-level switches that override these settings [DC-L10-16].
 - **Skip:** yes.
 - **Decides:** DC-L10-16 · **Changes downstream:** DC-L04-09, DC-L07-15
-- **Record:** `OD:pick Q-motion-10=<value>`
+- **Record:** `OD:set Q-motion-10=<json-value> --why "..."`
 
 
 # Stage 17: Icons, app icon and logo use (S17)
@@ -2342,7 +2342,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Hook, if no:** (1) adopt an open-source set whose stroke and corners match the type (the default); (2) commission a designer only for domain icons the library lacks, drawn on the library's template; (3) use AI icon generators only as sketches, with the caveat that stroke, keylines and optical size rarely match across a set [inferred]. Apple's terms forbid SF Symbols or look-alikes in app icons and logos [S-L05-010].
 - **Skip:** yes; the default library is applied.
 - **Decides:** DC-L05-01, DC-L10-25 · **Changes downstream:** DC-L05-02, DC-L05-03, DC-L05-05, DC-L05-10
-- **Record:** `OD:pick Q-icon-01=<value>`
+- **Record:** `OD:set Q-icon-01=<json-value> --why "..."`
 
 ## Q-icon-02 · Outlined or filled icons, rounded or sharp?
 *Mode:* Standard · *weight:* medium (fan-out 3) · *kind:* decision · *class:* G · *control:* single choice (style) + single choice (corners)
@@ -2360,7 +2360,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** keep hover and pressed feedback on the container, not the glyph; avoid color-only selected states [DC-L05-06].
 - **Skip:** yes.
 - **Decides:** DC-L05-02, DC-L05-06, DC-L06-13 · **Changes downstream:** DC-L05-03
-- **Record:** `OD:pick Q-icon-02=<value>`
+- **Record:** `OD:set Q-icon-02=<json-value> --why "..."`
 
 ## Q-icon-03 · How heavy should icon strokes be?
 *Mode:* Expert · *weight:* medium (fan-out 3) · *kind:* decision · *class:* G · *control:* slider (stroke) + single choice (terminals)
@@ -2377,7 +2377,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use heavier strokes on busy or photographic backgrounds; avoid sub-1.5px strokes below 20px [DC-L05-03].
 - **Skip:** yes.
 - **Decides:** DC-L05-03 · **Changes downstream:** DC-L15-10
-- **Record:** `OD:pick Q-icon-03=<value>`
+- **Record:** `OD:set Q-icon-03=<json-value> --why "..."`
 
 ## Q-icon-04 · Which icon sizes, and on which construction grid?
 *Mode:* Expert · *weight:* medium (fan-out 3) · *kind:* decision · *class:* G · *control:* editable size list + single choice (grid)
@@ -2393,7 +2393,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** pixel-align at the smallest shipped size; avoid 12px icons for anything interactive [DC-L05-04, DC-L05-05].
 - **Skip:** yes.
 - **Decides:** DC-L05-05, DC-L05-04 · **Changes downstream:** DC-L03-08
-- **Record:** `OD:pick Q-icon-04=<value>`
+- **Record:** `OD:set Q-icon-04=<json-value> --why "..."`
 
 ## Q-icon-05 · When do icons need labels, and what color are they?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice (labels) + single choice (color)
@@ -2411,7 +2411,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** give every icon-only control an accessible label; avoid decorative multicolor icons in UI chrome [DC-L05-07, DC-L05-08; L10 baked-in rule 9].
 - **Skip:** yes.
 - **Decides:** DC-L05-07, DC-L05-08 · **Changes downstream:** DC-L08-08
-- **Record:** `OD:pick Q-icon-05=<value>`
+- **Record:** `OD:set Q-icon-05=<json-value> --why "..."`
 
 ## Q-icon-06 · Do you have an app icon?
 *Mode:* Standard · *weight:* medium (fan-out 1) · *kind:* hook · *class:* D · *control:* single choice + file upload
@@ -2430,7 +2430,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Hook, if no:** (1) the builder generates a placeholder from the logo glyph and labels it "placeholder"; (2) commission a designer, the recommended path for a shipped app; photos, fine lines, text and baked-in effects render poorly under system lighting [DC-L05-12]. SF Symbols may not be used in app icons [S-L05-010].
 - **Skip:** yes; a placeholder is generated.
 - **Decides:** DC-L05-12 · **Changes downstream:** DC-L10-05
-- **Record:** `OD:pick Q-icon-06=<value>`
+- **Record:** `OD:set Q-icon-06=<json-value> --why "..."`
 
 ## Q-icon-07 · How should icons be named and shipped?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* T · *control:* single choice (delivery) + single choice (naming)
@@ -2447,7 +2447,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** mirror directional icons in RTL; avoid mirroring icons that depict real objects (clocks, checkmarks) [DC-L05-09, inferred].
 - **Skip:** yes.
 - **Decides:** DC-L05-10, DC-L05-09 · **Changes downstream:** DC-L07-09, DC-L16-12
-- **Record:** `OD:pick Q-icon-07=<value>`
+- **Record:** `OD:set Q-icon-07=<json-value> --why "..."`
 
 ## Q-icon-08 · How should the logo appear inside the product?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice (placement) + single choice (appearance)
@@ -2464,7 +2464,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** give a logo that acts as a link an accessible name; avoid repeating the logo throughout the UI (Apple) [DC-L05-13; S-L10-009].
 - **Skip:** yes.
 - **Decides:** DC-L05-13 · **Changes downstream:** DC-L08-01
-- **Record:** `OD:pick Q-icon-08=<value>`
+- **Record:** `OD:set Q-icon-08=<json-value> --why "..."`
 
 
 # Stage 18: Imagery, illustration and charts (S18)
@@ -2494,7 +2494,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Hook, if no:** (1) the builder drafts the photo brief from the personality sliders for you to edit; (2) commission a photographer (best for recognizability); (3) stock against the brief: Unsplash (free commercial, no competing service) or Pexels (no implied endorsement); (4) AI images with ownership and uniqueness caveats per tool, marked as synthetic under EU AI Act Art. 50; NN/g found AI images close to stock but failing on visible artifacts and stereotypes [S-L17-529, S-L17-530, S-L17-531, S-L17-578, S-L17-126]. Neutral placeholders are used until real images arrive.
 - **Skip:** yes.
 - **Decides:** DC-L05-14 · **Changes downstream:** DC-L05-15, DC-L05-16, DC-L05-17
-- **Record:** `OD:pick Q-img-01=<value>`
+- **Record:** `OD:set Q-img-01=<json-value> --why "..."`
 
 ## Q-img-02 · Which aspect ratios, and can text sit on images?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* multi-select (ratios) + single choice (text on images)
@@ -2511,7 +2511,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use art-directed crops per breakpoint for heroes; avoid text over busy image regions without a scrim [DC-L05-15, DC-L05-16].
 - **Skip:** yes.
 - **Decides:** DC-L05-15, DC-L05-16 · **Changes downstream:** DC-L04-18
-- **Record:** `OD:pick Q-img-02=<value>`
+- **Record:** `OD:set Q-img-02=<json-value> --why "..."`
 
 ## Q-img-03 · Which avatar shapes should mean what?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -2527,7 +2527,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** keep shape meaning consistent everywhere; avoid using the person circle for bots [DC-L05-18].
 - **Skip:** yes.
 - **Decides:** DC-L05-18 · **Changes downstream:** DC-L08-22
-- **Record:** `OD:pick Q-img-03=<value>`
+- **Record:** `OD:set Q-img-03=<json-value> --why "..."`
 
 ## Q-img-04 · Do you have illustrations or a mascot, and where should illustration appear?
 *Mode:* Standard · *weight:* medium (fan-out 3) · *kind:* hook · *class:* D · *control:* single choice (style) + multi-select (where) + file upload
@@ -2548,7 +2548,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Hook, if no:** (1) ship honest icon-plus-text empty states; (2) commission an illustrator with a brief derived from the icon stroke and palette; (3) open sets under their exact terms: unDraw (free commercial, bans AI training and competing packs), Open Peeps and Humaaans (CC0), Blush (no resale), Storyset (credit required, no logos); (4) AI tools such as Recraft or Firefly, where ownership depends on plan, and style drifts between pieces unless one artist or a strict guide owns it [S-L17-519, S-L17-521, S-L17-522, S-L17-523, S-L17-525; inferred for drift].
 - **Skip:** yes.
 - **Decides:** DC-L05-19, DC-L06-12, DC-L05-20 · **Changes downstream:** DC-L05-11, DC-L13-10, DC-L13-11
-- **Record:** `OD:pick Q-img-04=<value>`
+- **Record:** `OD:set Q-img-04=<json-value> --why "..."`
 
 ## Q-img-05 · Do you need pictograms between UI icons and illustrations?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -2565,7 +2565,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use pictograms on marketing and onboarding; avoid them inside dense product UI [DC-L05-11].
 - **Skip:** yes.
 - **Decides:** DC-L05-11 · **Changes downstream:** -
-- **Record:** `OD:pick Q-img-05=<value>`
+- **Record:** `OD:set Q-img-05=<json-value> --why "..."`
 
 ## Q-img-06 · Do you have animated icons, Lottie files, 3D assets or custom emoji?
 *Mode:* Expert · *weight:* medium (fan-out 0) · *kind:* hook · *class:* D · *control:* multi-select + file upload
@@ -2584,7 +2584,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Hook, if no:** motion comes from the system's motion tokens only (no signature animation); commission a motion designer for celebration moments; community Lottie assets only under their stated licenses [S-L17-544, S-L17-546].
 - **Skip:** yes.
 - **Decides:** DC-L05-21 · **Changes downstream:** DC-L04-25
-- **Record:** `OD:pick Q-img-06=<value>`
+- **Record:** `OD:set Q-img-06=<json-value> --why "..."`
 
 ## Q-img-07 · Where may brand graphic devices and motifs appear?
 *Mode:* Expert · *weight:* medium (fan-out 0) · *kind:* hook · *class:* D · *control:* single choice
@@ -2603,7 +2603,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Hook, if no:** commission, or ship none; NN/g and gstack both warn that decoration standing in for content reads as generic [S-L17-004, S-L17-021].
 - **Skip:** yes.
 - **Decides:** DC-L06-11 · **Changes downstream:** DC-L13-10, DC-L13-11
-- **Record:** `OD:pick Q-img-07=<value>`
+- **Record:** `OD:set Q-img-07=<json-value> --why "..."`
 
 ## Q-viz-01 · Which chart types and chart library?
 *Mode:* Standard · *weight:* low (fan-out 1) · *kind:* decision · *class:* T · *control:* multi-select (types) + text (library)
@@ -2621,7 +2621,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use bars for comparison and lines for trends; avoid pie charts with more than a few slices and 3D charts [DC-L05-22, inferred].
 - **Skip:** yes.
 - **Decides:** DC-L05-22 · **Changes downstream:** DC-L05-24, DC-L05-25
-- **Record:** `OD:pick Q-viz-01=<value>`
+- **Record:** `OD:set Q-viz-01=<json-value> --why "..."`
 
 
 # Stage 19: Content and voice (S19)
@@ -2651,7 +2651,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Hook, if no:** (1) the builder drafts traits and examples from the sliders for review; (2) have a content designer review them (22% of teams have none) [S-L11-030]; the draft is labeled as a draft until someone owns it [inferred].
 - **Skip:** yes.
 - **Decides:** DC-L06-18 · **Changes downstream:** DC-L06-19, DC-L06-20, DC-L06-21, DC-L06-22, DC-L06-23
-- **Record:** `OD:pick Q-voice-01=<value>`
+- **Record:** `OD:set Q-voice-01=<json-value> --why "..."`
 
 ## Q-voice-02 · How should tone change for errors, success and first use?
 *Mode:* Standard · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* tone matrix (situation x dial)
@@ -2667,7 +2667,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use warmth after trust is earned (success, completion); avoid humor in errors and in high-trust categories [DC-L06-19; S-L06-060].
 - **Skip:** yes.
 - **Decides:** DC-L06-19 · **Changes downstream:** DC-L13-07, DC-L13-10
-- **Record:** `OD:pick Q-voice-02=<value>`
+- **Record:** `OD:set Q-voice-02=<json-value> --why "..."`
 
 ## Q-voice-03 · Sentence case or title case?
 *Mode:* Standard · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -2684,7 +2684,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use one rule per element type everywhere; avoid all caps for sentences [DC-L06-20, DC-L02-18].
 - **Skip:** yes.
 - **Decides:** DC-L06-20 · **Changes downstream:** DC-L06-22
-- **Record:** `OD:pick Q-voice-03=<value>`
+- **Record:** `OD:set Q-voice-03=<json-value> --why "..."`
 
 ## Q-voice-04 · What reading level and label length should copy target?
 *Mode:* Standard · *weight:* medium (fan-out 2) · *kind:* decision · *class:* G · *control:* single choice + number (max words per button)
@@ -2700,7 +2700,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use verbs that name the result ("Save changes"); avoid branded or clever button labels [DC-L13-13, DC-L06-22].
 - **Skip:** yes.
 - **Decides:** DC-L13-13 · **Changes downstream:** DC-L13-07, DC-L13-16
-- **Record:** `OD:pick Q-voice-04=<value>`
+- **Record:** `OD:set Q-voice-04=<json-value> --why "..."`
 
 ## Q-voice-05 · Which grammar and punctuation rules?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* toggles
@@ -2717,7 +2717,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** keep mechanics identical across products; avoid mixing date and number formats (see Q-voice-06) [DC-L06-21].
 - **Skip:** yes.
 - **Decides:** DC-L06-21 · **Changes downstream:** DC-L06-22
-- **Record:** `OD:pick Q-voice-05=<value>`
+- **Record:** `OD:set Q-voice-05=<json-value> --why "..."`
 
 ## Q-voice-06 · Which microcopy patterns and word list should components ship with?
 *Mode:* Expert · *weight:* medium (fan-out 0) · *kind:* decision · *class:* I · *control:* text list (glossary) + toggles (patterns)
@@ -2734,7 +2734,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use the glossary term everywhere; avoid synonyms for the same object [DC-L06-23].
 - **Skip:** yes.
 - **Decides:** DC-L06-22, DC-L06-23 · **Changes downstream:** DC-L11-18
-- **Record:** `OD:pick Q-voice-06=<value>`
+- **Record:** `OD:set Q-voice-06=<json-value> --why "..."`
 
 
 # Stage 20: Component base and inventory (S20)
@@ -2762,7 +2762,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use accessible primitives so keyboard and ARIA behavior come for free; avoid assuming re-themed colors inherit contrast (they don't) [DC-L11-01].
 - **Skip:** yes.
 - **Decides:** DC-L08-03 · **Changes downstream:** DC-L08-04
-- **Record:** `OD:pick Q-comp-01=<value>`
+- **Record:** `OD:set Q-comp-01=<json-value> --why "..."`
 
 ## Q-comp-02 · Which components are in version 1?
 *Mode:* Standard · *weight:* medium (fan-out 1) · *kind:* decision · *class:* I · *control:* multi-select (catalog, core pre-checked)
@@ -2779,7 +2779,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use the audit (Q-scope-02) and pilot to pick extras; avoid building components no product has asked for [DC-L08-01, DC-L11-07].
 - **Skip:** yes.
 - **Decides:** DC-L08-01 · **Changes downstream:** DC-L11-18
-- **Record:** `OD:pick Q-comp-02=<value>`
+- **Record:** `OD:set Q-comp-02=<json-value> --why "..."`
 
 ## Q-comp-03 · Configuration props or composable parts?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice (code) + single choice (Figma)
@@ -2795,7 +2795,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use slots for cards, modals and lists so instances keep receiving updates; avoid variant explosions for optional content [DC-L07-22].
 - **Skip:** yes.
 - **Decides:** DC-L08-04, DC-L07-22 · **Changes downstream:** DC-L11-18
-- **Record:** `OD:pick Q-comp-03=<value>`
+- **Record:** `OD:set Q-comp-03=<json-value> --why "..."`
 
 ## Q-comp-04 · How should components be grouped and named?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -2812,7 +2812,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use one canonical name with aliases; avoid two components for one job [DC-L08-02].
 - **Skip:** yes.
 - **Decides:** DC-L08-02 · **Changes downstream:** DC-L11-18
-- **Record:** `OD:pick Q-comp-04=<value>`
+- **Record:** `OD:set Q-comp-04=<json-value> --why "..."`
 
 ## Q-comp-05 · One component set for every device, or separate sets?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -2829,7 +2829,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** split a library when the input model changes (focus, crown, templates); avoid stretching phone components onto TV [DC-L14-02].
 - **Skip:** yes.
 - **Decides:** DC-L14-02 · **Changes downstream:** -
-- **Record:** `OD:pick Q-comp-05=<value>`
+- **Record:** `OD:set Q-comp-05=<json-value> --why "..."`
 
 
 # Stage 21: Actions, states and focus (S21)
@@ -2856,7 +2856,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use style, not size, to mark the preferred choice (Apple); avoid two primary buttons in one group [S-L08-039; L13 E1].
 - **Skip:** yes.
 - **Decides:** DC-L08-05, DC-L13-18 · **Changes downstream:** DC-L08-06, DC-L08-14, DC-L13-15
-- **Record:** `OD:pick Q-state-01=<value>`
+- **Record:** `OD:set Q-state-01=<json-value> --why "..."`
 
 ## Q-state-02 · How obvious should clickable things be?
 *Mode:* Standard · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice (pre-filled from Q-dir-02)
@@ -2873,7 +2873,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use stronger signifiers as density rises; avoid minimal signifiers in dense layouts [DC-L15-09; S-L15-004].
 - **Skip:** yes.
 - **Decides:** DC-L15-09 · **Changes downstream:** DC-L08-09, DC-L08-16
-- **Record:** `OD:pick Q-state-02=<value>`
+- **Record:** `OD:set Q-state-02=<json-value> --why "..."`
 
 ## Q-state-03 · What should the keyboard focus ring look like?
 *Mode:* Standard · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice + width/offset numbers
@@ -2891,7 +2891,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** show focus only for keyboard (`:focus-visible`); avoid rings that the element's own fill hides [DC-L08-11, DC-L04-09].
 - **Skip:** yes.
 - **Decides:** DC-L04-09, DC-L08-11 · **Changes downstream:** DC-L07-13
-- **Record:** `OD:pick Q-state-03=<value>`
+- **Record:** `OD:set Q-state-03=<json-value> --why "..."`
 
 ## Q-state-04 · Which states get their own styling, per input type?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* multi-select (states) + single choice (method)
@@ -2907,7 +2907,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** make hover content dismissible and persistent (WCAG 1.4.13); avoid hover-only affordances on touch [DC-L14-06].
 - **Skip:** yes.
 - **Decides:** DC-L08-09, DC-L14-06 · **Changes downstream:** DC-L07-02
-- **Record:** `OD:pick Q-state-04=<value>`
+- **Record:** `OD:set Q-state-04=<json-value> --why "..."`
 
 ## Q-state-05 · How should selected and active items look?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -2924,7 +2924,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use two cues for selection; avoid selection states that look like primary buttons [DC-L08-14].
 - **Skip:** yes.
 - **Decides:** DC-L08-14 · **Changes downstream:** -
-- **Record:** `OD:pick Q-state-05=<value>`
+- **Record:** `OD:set Q-state-05=<json-value> --why "..."`
 
 ## Q-state-06 · How should destructive actions look?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -2940,7 +2940,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use undo instead of confirmation for reversible actions (Q-form-05); avoid solid red buttons in dense lists [DC-L08-06].
 - **Skip:** yes.
 - **Decides:** DC-L08-06 · **Changes downstream:** DC-L13-08
-- **Record:** `OD:pick Q-state-06=<value>`
+- **Record:** `OD:set Q-state-06=<json-value> --why "..."`
 
 ## Q-state-07 · Where do icons go inside buttons?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -2956,7 +2956,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use trailing icons for direction (next, external); avoid icon-only buttons without an accessible name [DC-L08-08].
 - **Skip:** yes.
 - **Decides:** DC-L08-08 · **Changes downstream:** -
-- **Record:** `OD:pick Q-state-07=<value>`
+- **Record:** `OD:set Q-state-07=<json-value> --why "..."`
 
 ## Q-state-08 · How should the product show that it is working?
 *Mode:* Standard · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice + threshold numbers
@@ -2972,7 +2972,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use optimistic UI only when failure is rare and reversible; avoid spinners for waits under a second [DC-L13-01].
 - **Skip:** yes.
 - **Decides:** DC-L13-01, DC-L08-12 · **Changes downstream:** DC-L07-14
-- **Record:** `OD:pick Q-state-08=<value>`
+- **Record:** `OD:set Q-state-08=<json-value> --why "..."`
 
 
 # Stage 22: Forms, validation and feedback (S22)
@@ -3001,7 +3001,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use a visible label on every field; avoid placeholder-only labels (a lint warning) [DC-L13-05; L13 E1].
 - **Skip:** yes.
 - **Decides:** DC-L08-16, DC-L13-05 · **Changes downstream:** DC-L08-17
-- **Record:** `OD:pick Q-form-01=<value>`
+- **Record:** `OD:set Q-form-01=<json-value> --why "..."`
 
 ## Q-form-02 · When should forms show errors, and should the submit button ever be disabled?
 *Mode:* Standard · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice (timing) + single choice (disabled policy)
@@ -3019,7 +3019,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use on-blur validation for format checks; avoid flagging a field before the person has finished typing [DC-L13-06].
 - **Skip:** yes.
 - **Decides:** DC-L13-06, DC-L08-17, DC-L08-10 · **Changes downstream:** DC-L13-07
-- **Record:** `OD:pick Q-form-02=<value>`
+- **Record:** `OD:set Q-form-02=<json-value> --why "..."`
 
 ## Q-form-03 · How should error messages be shown and written?
 *Mode:* Expert · *weight:* medium (fan-out 2) · *kind:* decision · *class:* G · *control:* mapping (severity to pattern)
@@ -3037,7 +3037,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use a fix-it sentence in every error; avoid blame and jargon codes [DC-L13-07, DC-L06-22].
 - **Skip:** yes.
 - **Decides:** DC-L13-07 · **Changes downstream:** DC-L11-18
-- **Record:** `OD:pick Q-form-03=<value>`
+- **Record:** `OD:set Q-form-03=<json-value> --why "..."`
 
 ## Q-form-04 · Where should confirmations and notifications appear: inline, toast, banner or dialog?
 *Mode:* Standard · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice + per-status table
@@ -3054,7 +3054,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use toasts only for reversible, low-stakes results; avoid a toast as the only record of an error [DC-L13-09].
 - **Skip:** yes.
 - **Decides:** DC-L08-18, DC-L13-09 · **Changes downstream:** DC-L13-08
-- **Record:** `OD:pick Q-form-04=<value>`
+- **Record:** `OD:set Q-form-04=<json-value> --why "..."`
 
 ## Q-form-05 · For destructive actions, undo or confirm?
 *Mode:* Standard · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice
@@ -3071,7 +3071,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use verb labels on confirmations; avoid "Are you sure?" dialogs for reversible actions [DC-L13-08].
 - **Skip:** yes.
 - **Decides:** DC-L13-08 · **Changes downstream:** DC-L13-09
-- **Record:** `OD:pick Q-form-05=<value>`
+- **Record:** `OD:set Q-form-05=<json-value> --why "..."`
 
 
 # Stage 23: Patterns and AI surfaces (S23)
@@ -3097,7 +3097,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use a dismiss path on every dialog (missing one is a lint error); avoid stacking modals [DC-L08-20; L13 E1].
 - **Skip:** yes.
 - **Decides:** DC-L08-20 · **Changes downstream:** DC-L04-18
-- **Record:** `OD:pick Q-pattern-01=<value>`
+- **Record:** `OD:set Q-pattern-01=<json-value> --why "..."`
 
 ## Q-pattern-02 · How should long lists load: pages, "load more", or infinite scroll?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* mapping (collection type to pattern)
@@ -3114,7 +3114,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use pagination where people need to return to a position; avoid infinite scroll above a footer people need [DC-L08-21].
 - **Skip:** yes.
 - **Decides:** DC-L08-21 · **Changes downstream:** -
-- **Record:** `OD:pick Q-pattern-02=<value>`
+- **Record:** `OD:set Q-pattern-02=<json-value> --why "..."`
 
 ## Q-pattern-03 · How much should be visible up front, and how much behind "more"?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -3132,7 +3132,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use steppers that show position and total; avoid more than two disclosure levels (a lint warning) [DC-L13-03; L13 E1].
 - **Skip:** yes.
 - **Decides:** DC-L13-03 · **Changes downstream:** -
-- **Record:** `OD:pick Q-pattern-03=<value>`
+- **Record:** `OD:set Q-pattern-03=<json-value> --why "..."`
 
 ## Q-pattern-04 · How should empty states and first-time use work?
 *Mode:* Standard · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice (onboarding) + checklist (empty-state kinds)
@@ -3149,7 +3149,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use an empty state on every collection (missing one is a lint warning); avoid tours without a skip control [DC-L13-10, DC-L13-11; L13 E1].
 - **Skip:** yes.
 - **Decides:** DC-L13-10, DC-L13-11 · **Changes downstream:** -
-- **Record:** `OD:pick Q-pattern-04=<value>`
+- **Record:** `OD:set Q-pattern-04=<json-value> --why "..."`
 
 ## Q-pattern-05 · Which deceptive patterns should the builder block?
 *Mode:* Standard · *weight:* medium (fan-out 1) · *kind:* decision · *class:* I · *control:* single choice
@@ -3166,7 +3166,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use equal emphasis for accept and reject; avoid nagging and fake urgency (the Zeigarnik effect does not justify nags) [DC-L13-15; L13 E2].
 - **Skip:** yes.
 - **Decides:** DC-L13-15 · **Changes downstream:** DC-L13-16
-- **Record:** `OD:pick Q-pattern-05=<value>`
+- **Record:** `OD:set Q-pattern-05=<json-value> --why "..."`
 
 ## Q-pattern-06 · What should appear on glanceable surfaces (widgets, tiles, complications)?
 *Mode:* Expert · *weight:* medium (fan-out 0) · *kind:* decision · *class:* I · *control:* text (metric) + single choice (surfaces)
@@ -3182,7 +3182,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use tiles that are "immediate, predictable, relevant"; avoid shrinking app screens into widgets [S-L14-020; DC-L14-07].
 - **Skip:** yes.
 - **Decides:** DC-L14-07 · **Changes downstream:** -
-- **Record:** `OD:pick Q-pattern-06=<value>`
+- **Record:** `OD:set Q-pattern-06=<json-value> --why "..."`
 
 ## Q-ai-01 · Does the product have AI features, and how should AI content be marked?
 *Mode:* Standard · *weight:* medium (fan-out 0) · *kind:* decision · *class:* I · *control:* single choice + multi-select (surfaces)
@@ -3201,7 +3201,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use AI styling only on AI-generated content (Carbon warns against decoration); avoid human-sounding anthropomorphic framing and reasoning traces presented as explanations [DC-L14-12, DC-L13-16].
 - **Skip:** yes, none.
 - **Decides:** DC-L08-22, DC-L13-16, DC-L14-12 · **Changes downstream:** DC-L05-18
-- **Record:** `OD:pick Q-ai-01=<value>`
+- **Record:** `OD:set Q-ai-01=<json-value> --why "..."`
 
 
 # Stage 24: Tokens and encoding (S24)
@@ -3228,7 +3228,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use semantic tokens in every component; avoid components referencing a raw hex or px (L09: 24 of 25 systems forbid it) [L09 A1 row 1].
 - **Skip:** yes.
 - **Decides:** DC-L07-01, DC-L07-02, DC-L01-26, DC-L02-27 · **Changes downstream:** DC-L07-04, DC-L07-18, DC-L07-19
-- **Record:** `OD:pick Q-token-01=<value>`
+- **Record:** `OD:set Q-token-01=<json-value> --why "..."`
 
 ## Q-token-04 · Which units should the source use?
 *Mode:* Expert · *weight:* medium (fan-out 2) · *kind:* decision · *class:* G · *control:* single choice + toggle (spacing scales with text)
@@ -3245,7 +3245,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** question any value not divisible by 4 (except 2, 6, 10 for icon nudges); avoid sp or rem for spacing that must not scale with text on Android [DC-L10-08; L10 baked-in rule 4].
 - **Skip:** yes.
 - **Decides:** DC-L07-11, DC-L10-08, DC-L03-26 · **Changes downstream:** DC-L10-22
-- **Record:** `OD:pick Q-token-04=<value>`
+- **Record:** `OD:set Q-token-04=<json-value> --why "..."`
 
 ## Q-token-08 · Which file format and build pipeline should produce platform code?
 *Mode:* Expert · *weight:* medium (fan-out 3) · *kind:* decision · *class:* T · *control:* single choice (pipeline) + multi-select (outputs)
@@ -3264,7 +3264,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use one canonical export and generate everything else from it; avoid hand-edited platform files [DC-L07-25].
 - **Skip:** yes.
 - **Decides:** DC-L07-09, DC-L07-25, DC-L10-22, DC-L10-18 · **Changes downstream:** DC-L16-12
-- **Record:** `OD:pick Q-token-08=<value>`
+- **Record:** `OD:set Q-token-08=<json-value> --why "..."`
 
 ## Q-token-02 · How should tokens be named?
 *Mode:* Expert · *weight:* medium (fan-out 2) · *kind:* decision · *class:* G · *control:* grammar builder + text (prefix)
@@ -3282,7 +3282,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use role names at the semantic tier; avoid `padding` or `margin` in primitive names and ordinal scales that look proportional but aren't [DC-L03-03].
 - **Skip:** yes.
 - **Decides:** DC-L07-03, DC-L07-04, DC-L07-05, DC-L07-06, DC-L03-03 · **Changes downstream:** DC-L07-20
-- **Record:** `OD:pick Q-token-02=<value>`
+- **Record:** `OD:set Q-token-02=<json-value> --why "..."`
 
 ## Q-token-03 · Which properties become tokens?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice + checklist
@@ -3299,7 +3299,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use tokens for anything a lint rule should check; avoid tokenizing one-off art values [DC-L07-07].
 - **Skip:** yes.
 - **Decides:** DC-L07-07 · **Changes downstream:** -
-- **Record:** `OD:pick Q-token-03=<value>`
+- **Record:** `OD:set Q-token-03=<json-value> --why "..."`
 
 ## Q-token-05 · How should composite values (type, shadows, motion) be encoded?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice per type
@@ -3315,7 +3315,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use variables for single values that change by mode and styles for bundles; avoid hard-coded style values [DC-L07-21].
 - **Skip:** yes.
 - **Decides:** DC-L07-12, DC-L07-13, DC-L07-14, DC-L04-28, DC-L02-28 · **Changes downstream:** DC-L07-25
-- **Record:** `OD:pick Q-token-05=<value>`
+- **Record:** `OD:set Q-token-05=<json-value> --why "..."`
 
 ## Q-token-06 · How should themes and modes be structured so combinations don't explode?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* single choice
@@ -3333,7 +3333,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use additive collections to stay within the plan's mode limit; avoid putting brand and scheme in one flattened axis [DC-L07-18, DC-L07-27].
 - **Skip:** yes.
 - **Decides:** DC-L07-17, DC-L07-18, DC-L07-28 · **Changes downstream:** -
-- **Record:** `OD:pick Q-token-06=<value>`
+- **Record:** `OD:set Q-token-06=<json-value> --why "..."`
 
 ## Q-token-07 · How should the Figma library be kept clean?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* T · *control:* toggles
@@ -3351,7 +3351,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use scopes so a spacing token cannot be picked for a color; avoid "show in all" scopes [DC-L07-19].
 - **Skip:** yes.
 - **Decides:** DC-L07-19, DC-L07-20, DC-L07-21, DC-L07-26 · **Changes downstream:** DC-L07-23
-- **Record:** `OD:pick Q-token-07=<value>`
+- **Record:** `OD:set Q-token-07=<json-value> --why "..."`
 
 ## Q-token-09 · How should tokens be described and retired?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* G · *control:* toggles
@@ -3367,7 +3367,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use descriptions written for agents as well as people; avoid deleting tokens without a replacement [DC-L07-23].
 - **Skip:** yes.
 - **Decides:** DC-L07-23 · **Changes downstream:** DC-L11-15
-- **Record:** `OD:pick Q-token-09=<value>`
+- **Record:** `OD:set Q-token-09=<json-value> --why "..."`
 
 ## Q-token-10 · Which inputs should re-skin the theme, and what may other brands or clients customize?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* multi-select (knobs) + single choice (surface)
@@ -3388,7 +3388,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use generated on-colors so client colors keep contrast; avoid exposing raw token editing to clients [DC-L06-17, DC-L06-16].
 - **Skip:** yes.
 - **Decides:** DC-L06-06, DC-L06-17 · **Changes downstream:** -
-- **Record:** `OD:pick Q-token-10=<value>`
+- **Record:** `OD:set Q-token-10=<json-value> --why "..."`
 
 
 # Stage 25: Team, governance and change (S25)
@@ -3415,7 +3415,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use a snowflake path for one-off needs; avoid forcing every product-specific component into the core [DC-L11-03, DC-L11-12].
 - **Skip:** yes.
 - **Decides:** DC-L11-03 · **Changes downstream:** DC-L11-11, DC-L11-12, DC-L11-24
-- **Record:** `OD:pick Q-gov-01=<value>`
+- **Record:** `OD:set Q-gov-01=<json-value> --why "..."`
 
 ## Q-gov-02 · In what order will you build, pilot and roll out?
 *Mode:* Expert · *weight:* medium (fan-out 3) · *kind:* decision · *class:* I · *control:* single choice (order) + scorecard (pilot) + single choice (rollout)
@@ -3432,7 +3432,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use a second pilot from a different product family to reduce bias; avoid building components no pilot needs [DC-L11-07].
 - **Skip:** yes.
 - **Decides:** DC-L11-06, DC-L11-07, DC-L11-08 · **Changes downstream:** DC-L11-01, DC-L11-22
-- **Record:** `OD:pick Q-gov-02=<value>`
+- **Record:** `OD:set Q-gov-02=<json-value> --why "..."`
 
 ## Q-gov-03 · Who can contribute, and how are decisions made and recorded?
 *Mode:* Expert · *weight:* medium (fan-out 2) · *kind:* decision · *class:* I · *control:* single choice (contribution) + toggle (decision records)
@@ -3451,7 +3451,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** record why an option was chosen and what it beat; avoid undocumented overrides [DC-L11-12].
 - **Skip:** yes.
 - **Decides:** DC-L11-11, DC-L11-12 · **Changes downstream:** DC-L11-13
-- **Record:** `OD:pick Q-gov-03=<value>`
+- **Record:** `OD:set Q-gov-03=<json-value> --why "..."`
 
 ## Q-gov-04 · How are components labeled, versioned and retired?
 *Mode:* Expert · *weight:* medium (fan-out 2) · *kind:* decision · *class:* I · *control:* single choice per item
@@ -3469,7 +3469,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** pair every removal with a migration path; avoid breaking changes in minor releases [DC-L11-14, DC-L11-15].
 - **Skip:** yes.
 - **Decides:** DC-L11-13, DC-L11-14, DC-L11-15 · **Changes downstream:** DC-L11-22
-- **Record:** `OD:pick Q-gov-04=<value>`
+- **Record:** `OD:set Q-gov-04=<json-value> --why "..."`
 
 ## Q-gov-05 · What problem is the system solving, and how will you know it worked?
 *Mode:* Expert · *weight:* medium (fan-out 1) · *kind:* decision · *class:* I · *control:* multi-select (pain) + multi-select (metrics)
@@ -3486,7 +3486,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** add speed or ROI studies only when leadership asks; avoid vanity counts of components [DC-L11-20].
 - **Skip:** yes.
 - **Decides:** DC-L11-20, DC-L11-21 · **Changes downstream:** -
-- **Record:** `OD:pick Q-gov-05=<value>`
+- **Record:** `OD:set Q-gov-05=<json-value> --why "..."`
 
 ## Q-gov-06 · How will you announce the system and communicate changes?
 *Mode:* Expert · *weight:* medium (fan-out 0) · *kind:* decision · *class:* I · *control:* multi-select
@@ -3503,7 +3503,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use changelogs that name the migration; avoid silent releases [DC-L11-22].
 - **Skip:** yes.
 - **Decides:** DC-L11-22 · **Changes downstream:** -
-- **Record:** `OD:pick Q-gov-06=<value>`
+- **Record:** `OD:set Q-gov-06=<json-value> --why "..."`
 
 ## Q-gov-07 · Which assistive technologies must be tested on each device class, and who owns accessibility?
 *Mode:* Expert · *weight:* low (fan-out 0) · *kind:* decision · *class:* T · *control:* matrix (device class x assistive tech) + text (owner)
@@ -3519,7 +3519,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use manual assistive-technology testing on every release candidate; avoid treating automated scans as compliance [DC-L11-19, DC-L14-14].
 - **Skip:** yes.
 - **Decides:** DC-L14-14 · **Changes downstream:** -
-- **Record:** `OD:pick Q-gov-07=<value>`
+- **Record:** `OD:set Q-gov-07=<json-value> --why "..."`
 
 
 # Stage 26: Output, documentation and AI channels (S26)
@@ -3548,7 +3548,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use one canonical source for every channel (Q-tool-01); avoid channels that fork the source [DC-L16-02].
 - **Skip:** yes.
 - **Decides:** DC-L16-12 · **Changes downstream:** -
-- **Record:** `OD:pick Q-dist-01=<value>`
+- **Record:** `OD:set Q-dist-01=<json-value> --why "..."`
 
 ## Q-dist-04 · Where do docs live, and what goes on each component page?
 *Mode:* Expert · *weight:* low (fan-out 1) · *kind:* decision · *class:* G · *control:* single choice (platform) + template editor
@@ -3565,7 +3565,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use generated "use it for / avoid it for" notes from this questionnaire on every page; avoid docs that repeat props without guidance [DC-L11-18].
 - **Skip:** yes.
 - **Decides:** DC-L11-17, DC-L11-18, DC-L08-23 · **Changes downstream:** -
-- **Record:** `OD:pick Q-dist-04=<value>`
+- **Record:** `OD:set Q-dist-04=<json-value> --why "..."`
 
 ## Q-dist-02 · How should AI coding tools read the system?
 *Mode:* Standard · *weight:* low (fan-out 1) · *kind:* decision · *class:* T · *control:* multi-select
@@ -3583,7 +3583,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use evals to check agents follow the files; avoid assuming docs changes alone steer agents [DC-L11-23; S-L11-108].
 - **Skip:** yes.
 - **Decides:** DC-L11-23 · **Changes downstream:** DC-L11-24
-- **Record:** `OD:pick Q-dist-02=<value>`
+- **Record:** `OD:set Q-dist-02=<json-value> --why "..."`
 
 ## Q-dist-03 · How should the system check that people and agents follow it?
 *Mode:* Standard · *weight:* low (fan-out 1) · *kind:* decision · *class:* T · *control:* multi-select (pre-filled from Q-gov-01 and Q-pref-01)
@@ -3601,7 +3601,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use lint errors for Tier A rules and warnings for context-dependent ones (L13 E1); avoid automating the misapplied laws in L13 E2 (no seven-item caps) [L13 E1, E2].
 - **Skip:** yes.
 - **Decides:** DC-L11-24 · **Changes downstream:** -
-- **Record:** `OD:pick Q-dist-03=<value>`
+- **Record:** `OD:set Q-dist-03=<json-value> --why "..."`
 
 
 # Stage 27: Builder preferences (S27)
@@ -3629,7 +3629,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** accessibility failures are at least warnings in every mode; avoid silent mode for production exports [DC-L15-11].
 - **Skip:** yes.
 - **Decides:** DC-L15-11 · **Changes downstream:** DC-L11-24
-- **Record:** `OD:pick Q-pref-01=<value>`
+- **Record:** `OD:set Q-pref-01=<json-value> --why "..."`
 
 ## Q-pref-02 · How should AI edits and variations work?
 *Mode:* Expert · *weight:* medium (fan-out 3) · *kind:* decision · *class:* I · *control:* toggles
@@ -3647,7 +3647,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use variations for open, taste-driven questions (color, type, radius); avoid shuffling locked or accessibility-bound values [DC-L16-05].
 - **Skip:** yes.
 - **Decides:** DC-L16-04, DC-L16-05 · **Changes downstream:** -
-- **Record:** `OD:pick Q-pref-02=<value>`
+- **Record:** `OD:set Q-pref-02=<json-value> --why "..."`
 
 ## Q-pref-03 · Should the builder apply optical corrections automatically?
 *Mode:* Expert · *weight:* medium (fan-out 0) · *kind:* decision · *class:* I · *control:* single choice
@@ -3664,4 +3664,4 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use formulas where they exist; avoid correcting brand assets without approval [DC-L15-10].
 - **Skip:** yes.
 - **Decides:** DC-L15-10 · **Changes downstream:** -
-- **Record:** `OD:pick Q-pref-03=<value>`
+- **Record:** `OD:set Q-pref-03=<json-value> --why "..."`

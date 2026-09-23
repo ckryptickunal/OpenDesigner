@@ -1,0 +1,396 @@
+{
+  "color": {
+    "$type": "color",
+    "$description": "Semantic color roles, light mapping. Names never change across modes; only values do. Dark is a separate mapping, never an inversion (DC-L01-18).",
+    "$extensions": {
+      "opendesigner": {
+        "mode": "light",
+        "evidence": [
+          "DC-L01-11",
+          "DC-L01-12",
+          "DC-L01-17",
+          "DC-L01-18",
+          "DC-L01-19",
+          "DC-L04-12",
+          "DC-L04-13"
+        ]
+      }
+    },
+    "surface": {
+      "sunken": {
+        "$value": "{color.neutral.light.2}",
+        "$description": "Wells, code blocks, page gutters."
+      },
+      "base": {
+        "$value": "{color.neutral.light.1}",
+        "$description": "The page background."
+      },
+      "raised": {
+        "$value": "{color.white}",
+        "$description": "Cards and panels on the page."
+      },
+      "overlay": {
+        "$value": "{color.white}",
+        "$description": "Menus, popovers, dialogs; always with elevation.floating or elevation.overlay."
+      },
+      "nav": {
+        "$value": "{color.accent.light.9}",
+        "$description": "Colored navigation (Energy 67+ with brand chrome allowed by Expression 67+)."
+      },
+      "tinted": {
+        "$value": "{color.accent.light.2}",
+        "$description": "Tinted container (Colorfulness 50+, L09 X rubric)."
+      }
+    },
+    "text": {
+      "primary": {
+        "$value": "{color.neutral.light.12}",
+        "$description": "Body copy, headings, labels (guaranteed >= 7:1 on steps 1-5)."
+      },
+      "secondary": {
+        "$value": "{color.neutral.light.11}",
+        "$description": "Supporting text (guaranteed >= the text minimum on surfaces and neutral fills 1-4)."
+      },
+      "tertiary": {
+        "$value": "{color.neutral.light.10}",
+        "$description": "Captions and placeholders (still meets the text minimum on surfaces 1-4)."
+      },
+      "disabled": {
+        "$value": "{color.neutral.light.8}",
+        "$description": "Disabled labels; exempt from contrast minimums (WCAG 1.4.3 exception)."
+      },
+      "inverse": {
+        "$value": "{color.white}",
+        "$description": "Text on color.bg.inverse (tooltips, toasts)."
+      },
+      "link": {
+        "$value": "{color.accent.light.11}",
+        "$description": "Links. Underline them in running text so color is not the only cue."
+      },
+      "accent": {
+        "$value": "{color.accent.light.11}",
+        "$description": "Accent text and selected labels."
+      },
+      "onAccent": {
+        "$value": "{color.neutral.light.12}",
+        "$description": "Text and icons on color.bg.accent.bold* (auto-picked light or dark, S-L06-094)."
+      },
+      "onAction": {
+        "$value": "{color.neutral.light.12}",
+        "$description": "Text on the primary action fill."
+      },
+      "onBrand": {
+        "$value": "{color.neutral.light.12}",
+        "$description": "Text on color.bg.brand."
+      },
+      "accent2": {
+        "$value": "{color.accent2.light.11}",
+        "$description": "accent2 text."
+      },
+      "onAccent2": {
+        "$value": "{color.white}",
+        "$description": "Text on accent2 solid."
+      },
+      "accent3": {
+        "$value": "{color.accent3.light.11}",
+        "$description": "accent3 text."
+      },
+      "onAccent3": {
+        "$value": "{color.white}",
+        "$description": "Text on accent3 solid."
+      },
+      "success": {
+        "$value": "{color.success.light.11}",
+        "$description": "Success text and icons; pair with an icon or label (DC-L01-15)."
+      },
+      "onSuccess": {
+        "$value": "{color.white}",
+        "$description": "Text on bg.success.bold."
+      },
+      "warning": {
+        "$value": "{color.warning.light.11}",
+        "$description": "Warning text and icons; pair with an icon or label (DC-L01-15)."
+      },
+      "onWarning": {
+        "$value": "{color.neutral.light.12}",
+        "$description": "Text on bg.warning.bold."
+      },
+      "danger": {
+        "$value": "{color.danger.light.11}",
+        "$description": "Danger text and icons; pair with an icon or label (DC-L01-15)."
+      },
+      "onDanger": {
+        "$value": "{color.white}",
+        "$description": "Text on bg.danger.bold."
+      },
+      "info": {
+        "$value": "{color.info.light.11}",
+        "$description": "Info text and icons; pair with an icon or label (DC-L01-15)."
+      },
+      "onInfo": {
+        "$value": "{color.white}",
+        "$description": "Text on bg.info.bold."
+      }
+    },
+    "bg": {
+      "neutral": {
+        "subtle": {
+          "$value": "{color.neutral.light.3}",
+          "$description": "Secondary buttons, chips, hovered rows."
+        },
+        "subtleHover": {
+          "$value": "{color.neutral.light.4}",
+          "$description": "Hover: +1 step (DC-L01-17)."
+        },
+        "subtlePressed": {
+          "$value": "{color.neutral.light.5}",
+          "$description": "Pressed or selected: +2 steps (DC-L01-17)."
+        }
+      },
+      "accent": {
+        "subtle": {
+          "$value": "{color.accent.light.3}",
+          "$description": "Selected rows, accent badges."
+        },
+        "subtleHover": {
+          "$value": "{color.accent.light.4}",
+          "$description": "Hover on accent subtle fills."
+        },
+        "subtlePressed": {
+          "$value": "{color.accent.light.5}",
+          "$description": "Pressed accent subtle fills."
+        },
+        "bold": {
+          "$value": "{color.accent.light.9}",
+          "$description": "Solid accent fill."
+        },
+        "boldHover": {
+          "$value": "{color.accent.light.10}",
+          "$description": "Hover on the solid accent (+1 step)."
+        },
+        "boldPressed": {
+          "$value": "{color.accent.light.solidPressed}",
+          "$description": "Pressed solid accent (+2 steps)."
+        }
+      },
+      "disabled": {
+        "$value": "{color.neutral.light.3}",
+        "$description": "Disabled control fill."
+      },
+      "inverse": {
+        "$value": "{color.neutral.light.12}",
+        "$description": "Tooltips and toasts: the inverted surface."
+      },
+      "action": {
+        "primary": {
+          "$value": "{color.accent.light.9}",
+          "$description": "Primary action. One per view (DC-L15-03, L15 P08)."
+        },
+        "primaryHover": {
+          "$value": "{color.accent.light.10}",
+          "$description": "Primary action hover."
+        },
+        "primaryPressed": {
+          "$value": "{color.accent.light.solidPressed}",
+          "$description": "Primary action pressed."
+        }
+      },
+      "brand": {
+        "$value": "{color.accent.light.9}",
+        "$description": "Brand fill for signature surfaces; carries text.onBrand (brandAnchor rule, DC-L01-09)."
+      },
+      "accent2": {
+        "subtle": {
+          "$value": "{color.accent2.light.3}",
+          "$description": "accent2 subtle fill."
+        },
+        "bold": {
+          "$value": "{color.accent2.light.9}",
+          "$description": "accent2 solid fill."
+        }
+      },
+      "accent3": {
+        "subtle": {
+          "$value": "{color.accent3.light.3}",
+          "$description": "accent3 subtle fill."
+        },
+        "bold": {
+          "$value": "{color.accent3.light.9}",
+          "$description": "accent3 solid fill."
+        }
+      },
+      "success": {
+        "subtle": {
+          "$value": "{color.success.light.3}",
+          "$description": "Success banner and badge background."
+        },
+        "bold": {
+          "$value": "{color.success.light.9}",
+          "$description": "Success solid fill."
+        },
+        "boldHover": {
+          "$value": "{color.success.light.10}",
+          "$description": "Success solid hover."
+        }
+      },
+      "warning": {
+        "subtle": {
+          "$value": "{color.warning.light.3}",
+          "$description": "Warning banner and badge background."
+        },
+        "bold": {
+          "$value": "{color.warning.light.9}",
+          "$description": "Warning solid fill."
+        },
+        "boldHover": {
+          "$value": "{color.warning.light.10}",
+          "$description": "Warning solid hover."
+        }
+      },
+      "danger": {
+        "subtle": {
+          "$value": "{color.danger.light.3}",
+          "$description": "Danger banner and badge background."
+        },
+        "bold": {
+          "$value": "{color.danger.light.9}",
+          "$description": "Danger solid fill."
+        },
+        "boldHover": {
+          "$value": "{color.danger.light.10}",
+          "$description": "Danger solid hover."
+        }
+      },
+      "info": {
+        "subtle": {
+          "$value": "{color.info.light.3}",
+          "$description": "Info banner and badge background."
+        },
+        "bold": {
+          "$value": "{color.info.light.9}",
+          "$description": "Info solid fill."
+        },
+        "boldHover": {
+          "$value": "{color.info.light.10}",
+          "$description": "Info solid hover."
+        }
+      }
+    },
+    "border": {
+      "subtle": {
+        "$value": "{color.neutral.light.5}",
+        "$description": "Dividers (soft borders: Warmth 67+, Linear 2026 S-L06-067)."
+      },
+      "default": {
+        "$value": "{color.neutral.light.6}",
+        "$description": "Outlines (soft borders)."
+      },
+      "strong": {
+        "$value": "{color.neutral.light.8}",
+        "$description": "Boundaries that are the only cue: inputs, checkboxes, switches (3:1, WCAG 1.4.11)."
+      },
+      "input": {
+        "$value": "{color.neutral.light.8}",
+        "$description": "Text field and select borders (3:1, DC-L01-16)."
+      },
+      "focus": {
+        "$value": "{color.accent.light.11}",
+        "$description": "Focus ring (3:1 against every surface, DC-L04-09)."
+      },
+      "accent": {
+        "$value": "{color.accent.light.8}",
+        "$description": "Selected card or accent outline."
+      },
+      "success": {
+        "$value": "{color.success.light.8}",
+        "$description": "Success boundary, for example an invalid field (3:1)."
+      },
+      "warning": {
+        "$value": "{color.warning.light.8}",
+        "$description": "Warning boundary, for example an invalid field (3:1)."
+      },
+      "danger": {
+        "$value": "{color.danger.light.8}",
+        "$description": "Danger boundary, for example an invalid field (3:1)."
+      },
+      "info": {
+        "$value": "{color.info.light.8}",
+        "$description": "Info boundary, for example an invalid field (3:1)."
+      }
+    },
+    "icon": {
+      "default": {
+        "$value": "{color.neutral.light.11}",
+        "$description": "Icons beside text; same color as secondary text (DC-L05-08)."
+      },
+      "subtle": {
+        "$value": "{color.neutral.light.10}",
+        "$description": "Decorative icons."
+      },
+      "accent": {
+        "$value": "{color.accent.light.11}",
+        "$description": "Selected and interactive icons."
+      },
+      "onAccent": {
+        "$value": "{color.neutral.light.12}",
+        "$description": "Icons on solid accent fills."
+      }
+    },
+    "overlay": {
+      "scrim": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1529,
+            0.1373,
+            0.1294
+          ],
+          "hex": "#272321",
+          "alpha": 0.45
+        },
+        "$description": "Modal backdrop (DC-L04-18)."
+      }
+    },
+    "shadow": {
+      "key": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1529,
+            0.1373,
+            0.1294
+          ],
+          "hex": "#272321",
+          "alpha": 0.168
+        },
+        "$description": "Key shadow color; alpha doubles in dark (DC-L04-12)."
+      },
+      "ambient": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1529,
+            0.1373,
+            0.1294
+          ],
+          "hex": "#272321",
+          "alpha": 0.143
+        },
+        "$description": "Ambient shadow color."
+      },
+      "ring": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1529,
+            0.1373,
+            0.1294
+          ],
+          "hex": "#272321",
+          "alpha": 0.1
+        },
+        "$description": "1px ring for ring-and-shadow depth and dark overlays (#BDBDBD at 12% pattern, DC-L04-12)."
+      }
+    }
+  }
+}

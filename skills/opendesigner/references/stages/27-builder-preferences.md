@@ -23,7 +23,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** accessibility failures are at least warnings in every mode; avoid silent mode for production exports [DC-L15-11].
 - **Skip:** yes.
 - **Decides:** DC-L15-11 · **Changes downstream:** DC-L11-24
-- **Record:** `OD:pick Q-pref-01=<value>`
+- **Record:** `OD:set Q-pref-01=<json-value> --why "..."`
 
 ## Q-pref-02 · How should AI edits and variations work?
 *Mode:* Expert · *weight:* medium (fan-out 3) · *kind:* decision · *class:* I · *control:* toggles
@@ -41,7 +41,7 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use variations for open, taste-driven questions (color, type, radius); avoid shuffling locked or accessibility-bound values [DC-L16-05].
 - **Skip:** yes.
 - **Decides:** DC-L16-04, DC-L16-05 · **Changes downstream:** -
-- **Record:** `OD:pick Q-pref-02=<value>`
+- **Record:** `OD:set Q-pref-02=<json-value> --why "..."`
 
 ## Q-pref-03 · Should the builder apply optical corrections automatically?
 *Mode:* Expert · *weight:* medium (fan-out 0) · *kind:* decision · *class:* I · *control:* single choice
@@ -58,4 +58,4 @@ Ask in the order below. Skip a question when its mode is above the chosen depth 
 - **Use / avoid:** use formulas where they exist; avoid correcting brand assets without approval [DC-L15-10].
 - **Skip:** yes.
 - **Decides:** DC-L15-10 · **Changes downstream:** -
-- **Record:** `OD:pick Q-pref-03=<value>`
+- **Record:** `OD:set Q-pref-03=<json-value> --why "..."`

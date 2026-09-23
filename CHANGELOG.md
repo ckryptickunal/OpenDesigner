@@ -14,6 +14,9 @@ The first public version: the research base, the synthesis that turns it into an
 - **Starter design artifacts** in `design/`: a DTCG 2025.10 token set with 126 contrast-checked pairs, and four HTML artboards.
 - **Coordination system** for parallel human and AI sessions: `tools/od.py`, `_coordination/PROTOCOL.md`, the board, heartbeats, inbox and decision log.
 - **Research tools:** `tools/jev_nav.py` (status, search, citation check, card export, decision graph) and `tools/check_links.py` (offline Markdown link check).
-- **Skills, knowledge files, visual templates and the engine** (in progress): `skills/opendesigner/`, `data/`, `chatgpt-project/`.
-- **Community and repository health:** README, CONTRIBUTING, Code of Conduct (Contributor Covenant 2.1), security policy, support, governance, citation file, issue forms, pull request template, labels, CI, `llms.txt`, and docs (`docs/HOW-IT-WORKS.md`, `docs/RESEARCH.md`, `docs/FAQ.md`).
+- **Product specification:** `docs/SPEC.md` (copied from `synthesis/OPENDESIGNER-SPEC.md`).
+- **Skills:** `opendesigner` (the interview), `opendesigner-extract`, `opendesigner-extend` and `opendesigner-export`, in the Agent Skills format, with generated copies in `.agents/skills/` and `.claude/skills/`, knowledge files built from the synthesis, and 8 JSON-fed visual templates.
+- **Host packaging:** a Claude plugin and marketplace (`.claude-plugin/`), an Agent Plugins manifest (`plugin.json`), claude.ai skill zips built by `tools/build_dist.py`, and a ChatGPT Project bundle (`chatgpt-project/`).
+- **Engine** (being finished): `skills/opendesigner/scripts/engine.py` for state, generation, validation and exports.
+- **Community and repository health:** README, CONTRIBUTING, Code of Conduct (Contributor Covenant 2.1), security policy, support, governance, citation file, issue forms, pull request template, labels, CI, `llms.txt`, `funding.json`, a social preview image, a sponsorship plan, and docs (`docs/HOW-IT-WORKS.md`, `docs/RESEARCH.md`, `docs/FAQ.md`, `docs/GITHUB-SETTINGS.md`, `docs/SEED-ISSUES.md`).
 - **Licenses:** MIT for code, skills and data; CC BY 4.0 for research and documentation.
