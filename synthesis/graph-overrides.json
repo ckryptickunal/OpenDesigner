@@ -1,0 +1,17 @@
+{
+  "_about": "Hand corrections merged by `jev_nav.py graph`. Source: synthesis/DECISION-GRAPH.md section 8 (S1c). Each edge points from a decision to one it constrains.",
+  "add": [
+    ["DC-L06-10", "DC-L04-19", "brand motion personality drives token motion personality"],
+    ["DC-L10-02", "DC-L06-14", "platform posture and platform deference are one decision seen from two lanes"],
+    ["DC-L10-02", "DC-L13-17", "platform posture drives convention vs novelty"],
+    ["DC-L15-04", "DC-L02-08", "density voice drives body size"],
+    ["DC-L06-09", "DC-L04-02", "brand shape language drives the roundness dial"],
+    ["DC-L06-05", "DC-L01-10", "scheme colorfulness drives chroma level"],
+    ["DC-L02-15", "DC-L05-03", "icon stroke follows type weight"],
+    ["DC-L06-13", "DC-L05-02", "iconography as brand translation drives icon style"],
+    ["DC-L14-03", "DC-L08-07", "target policy drives control sizes"]
+  ],
+  "remove": [
+    ["DC-L04-02", "DC-L04-19", "roundness does not drive motion personality; wording artifact in the card"]
+  ]
+}

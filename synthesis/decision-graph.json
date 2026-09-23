@@ -277,7 +277,7 @@
    "lane": "L02",
    "title": "Base body size",
    "block": "Foundations > Typography > Type scale > Base size",
-   "step": 0,
+   "step": 3,
    "fan_out": 3
   },
   {
@@ -334,7 +334,7 @@
    "title": "Weight palette and the job of each weight",
    "block": "Foundations > Typography > Metrics > Weights",
    "step": 4,
-   "fan_out": 2
+   "fan_out": 3
   },
   {
    "id": "DC-L02-16",
@@ -349,7 +349,7 @@
    "lane": "L02",
    "title": "Line length (measure)",
    "block": "Foundations > Typography > Layout of text > Measure",
-   "step": 2,
+   "step": 4,
    "fan_out": 0
   },
   {
@@ -662,7 +662,7 @@
    "title": "Overall roundness level (the \"shape personality\" dial)",
    "block": "Foundations > Shape > Shape personality",
    "step": 3,
-   "fan_out": 5
+   "fan_out": 4
   },
   {
    "id": "DC-L04-03",
@@ -693,7 +693,7 @@
    "lane": "L04",
    "title": "Pill, full-round and expressive shape library (incl. shape morphing)",
    "block": "Foundations > Shape > Full round and expressive shapes",
-   "step": 6,
+   "step": 5,
    "fan_out": 0
   },
   {
@@ -797,7 +797,7 @@
    "lane": "L04",
    "title": "Motion personality (productive vs expressive; snappy vs bouncy)",
    "block": "Foundations > Motion > Motion personality",
-   "step": 4,
+   "step": 3,
    "fan_out": 5
   },
   {
@@ -805,7 +805,7 @@
    "lane": "L04",
    "title": "Duration scale",
    "block": "Foundations > Motion > Duration scale",
-   "step": 5,
+   "step": 4,
    "fan_out": 1
   },
   {
@@ -813,7 +813,7 @@
    "lane": "L04",
    "title": "Easing set",
    "block": "Foundations > Motion > Easing curves",
-   "step": 5,
+   "step": 4,
    "fan_out": 1
   },
   {
@@ -821,7 +821,7 @@
    "lane": "L04",
    "title": "Springs vs duration-based motion",
    "block": "Foundations > Motion > Physics (springs)",
-   "step": 5,
+   "step": 4,
    "fan_out": 2
   },
   {
@@ -829,7 +829,7 @@
    "lane": "L04",
    "title": "Choreography and transition patterns",
    "block": "Patterns > Motion > Transitions and choreography",
-   "step": 6,
+   "step": 5,
    "fan_out": 0
   },
   {
@@ -837,7 +837,7 @@
    "lane": "L04",
    "title": "Enter/exit asymmetry and interruptibility",
    "block": "Foundations > Motion > Interruptibility",
-   "step": 6,
+   "step": 5,
    "fan_out": 0
   },
   {
@@ -853,7 +853,7 @@
    "lane": "L04",
    "title": "Haptic feedback vocabulary",
    "block": "Foundations > Haptics > Semantic haptic map",
-   "step": 5,
+   "step": 4,
    "fan_out": 0
   },
   {
@@ -885,7 +885,7 @@
    "lane": "L05",
    "title": "Icon style (outline, filled, duotone; rounded, sharp)",
    "block": "Foundations > Iconography > Style",
-   "step": 0,
+   "step": 5,
    "fan_out": 3
   },
   {
@@ -893,7 +893,7 @@
    "lane": "L05",
    "title": "Stroke weight, corners and terminals (matching type)",
    "block": "Foundations > Iconography > Stroke and corner metrics",
-   "step": 0,
+   "step": 5,
    "fan_out": 3
   },
   {
@@ -917,7 +917,7 @@
    "lane": "L05",
    "title": "Icon state conventions (selected, active, disabled, emphasis)",
    "block": "Foundations > Iconography > States",
-   "step": 1,
+   "step": 6,
    "fan_out": 0
   },
   {
@@ -933,7 +933,7 @@
    "lane": "L05",
    "title": "Icon color and rendering mode",
    "block": "Foundations > Iconography > Color",
-   "step": 1,
+   "step": 6,
    "fan_out": 0
   },
   {
@@ -957,7 +957,7 @@
    "lane": "L05",
    "title": "Icon tiers beyond UI icons (pictograms and spot icons)",
    "block": "Foundations > Iconography > Tiers (UI icon, pictogram, spot icon)",
-   "step": 2,
+   "step": 7,
    "fan_out": 0
   },
   {
@@ -1021,7 +1021,7 @@
    "lane": "L05",
    "title": "Illustration style and brand personality",
    "block": "Foundations > Illustration > Style",
-   "step": 1,
+   "step": 6,
    "fan_out": 3
   },
   {
@@ -1029,7 +1029,7 @@
    "lane": "L05",
    "title": "Illustration tiers and where they appear (hero, spot, empty state, patterns)",
    "block": "Foundations > Illustration > Types and usage",
-   "step": 2,
+   "step": 7,
    "fan_out": 0
   },
   {
@@ -1037,7 +1037,7 @@
    "lane": "L05",
    "title": "Emoji, stickers, 3D assets, animated icons and Lottie (summary)",
    "block": "Foundations > Rich media > Emoji, 3D, animated assets",
-   "step": 2,
+   "step": 7,
    "fan_out": 0
   },
   {
@@ -1061,7 +1061,7 @@
    "lane": "L05",
    "title": "Chart anatomy and chart tokens (axes, gridlines, labels, legends, tooltips)",
    "block": "Foundations > Data visualization > Chart anatomy",
-   "step": 1,
+   "step": 6,
    "fan_out": 0
   },
   {
@@ -1110,7 +1110,7 @@
    "title": "Color scheme source and colorfulness (static brand vs dynamic; scheme variant)",
    "block": "Foundations > Color > Scheme strategy",
    "step": 3,
-   "fan_out": 2
+   "fan_out": 3
   },
   {
    "id": "DC-L06-06",
@@ -1142,7 +1142,7 @@
    "title": "Shape language and signature shape",
    "block": "Foundations > Shape > Brand shape language",
    "step": 1,
-   "fan_out": 1
+   "fan_out": 2
   },
   {
    "id": "DC-L06-10",
@@ -1150,7 +1150,7 @@
    "title": "Motion personality",
    "block": "Foundations > Motion > Personality",
    "step": 2,
-   "fan_out": 0
+   "fan_out": 1
   },
   {
    "id": "DC-L06-11",
@@ -1174,7 +1174,7 @@
    "title": "Iconography as brand translation",
    "block": "Foundations > Iconography > Brand match",
    "step": 4,
-   "fan_out": 0
+   "fan_out": 1
   },
   {
    "id": "DC-L06-14",
@@ -1541,7 +1541,7 @@
    "lane": "L08",
    "title": "Control size scale and shape",
    "block": "Components > Sizing; Foundations > Shape (L04)",
-   "step": 0,
+   "step": 3,
    "fan_out": 0
   },
   {
@@ -1750,7 +1750,7 @@
    "title": "Platform posture: native-first, brand-first, or coherent hybrid",
    "block": "Platforms > Strategy > Native vs brand posture",
    "step": 0,
-   "fan_out": 9
+   "fan_out": 11
   },
   {
    "id": "DC-L10-03",
@@ -2221,7 +2221,7 @@
    "lane": "L13",
    "title": "Onboarding approach",
    "block": "Patterns > Guidance > Onboarding",
-   "step": 1,
+   "step": 2,
    "fan_out": 0
   },
   {
@@ -2269,7 +2269,7 @@
    "lane": "L13",
    "title": "Convention vs novelty (the Jakob's-law dial)",
    "block": "Principles > Familiarity",
-   "step": 0,
+   "step": 1,
    "fan_out": 1
   },
   {
@@ -2302,7 +2302,7 @@
    "title": "Target-size policy by input modality",
    "block": "Foundations > Sizing > Targets > By input",
    "step": 2,
-   "fan_out": 1
+   "fan_out": 2
   },
   {
    "id": "DC-L14-04",
@@ -2422,7 +2422,7 @@
    "title": "Density voice (compact, comfortable, spacious)",
    "block": "Foundations > Visual language > Density voice",
    "step": 2,
-   "fan_out": 7
+   "fan_out": 8
   },
   {
    "id": "DC-L15-05",
@@ -2991,6 +2991,10 @@
    "target": "DC-L02-23"
   },
   {
+   "source": "DC-L02-15",
+   "target": "DC-L05-03"
+  },
+  {
    "source": "DC-L02-19",
    "target": "DC-L02-09"
   },
@@ -3185,10 +3189,6 @@
   {
    "source": "DC-L04-02",
    "target": "DC-L04-06"
-  },
-  {
-   "source": "DC-L04-02",
-   "target": "DC-L04-19"
   },
   {
    "source": "DC-L04-03",
@@ -3460,6 +3460,10 @@
   },
   {
    "source": "DC-L06-05",
+   "target": "DC-L01-10"
+  },
+  {
+   "source": "DC-L06-05",
    "target": "DC-L06-06"
   },
   {
@@ -3488,7 +3492,19 @@
   },
   {
    "source": "DC-L06-09",
+   "target": "DC-L04-02"
+  },
+  {
+   "source": "DC-L06-09",
    "target": "DC-L06-13"
+  },
+  {
+   "source": "DC-L06-10",
+   "target": "DC-L04-19"
+  },
+  {
+   "source": "DC-L06-13",
+   "target": "DC-L05-02"
   },
   {
    "source": "DC-L06-14",
@@ -3720,6 +3736,10 @@
   },
   {
    "source": "DC-L10-02",
+   "target": "DC-L06-14"
+  },
+  {
+   "source": "DC-L10-02",
    "target": "DC-L10-03"
   },
   {
@@ -3753,6 +3773,10 @@
   {
    "source": "DC-L10-02",
    "target": "DC-L10-25"
+  },
+  {
+   "source": "DC-L10-02",
+   "target": "DC-L13-17"
   },
   {
    "source": "DC-L10-03",
@@ -4092,6 +4116,10 @@
   },
   {
    "source": "DC-L14-03",
+   "target": "DC-L08-07"
+  },
+  {
+   "source": "DC-L14-03",
    "target": "DC-L14-13"
   },
   {
@@ -4165,6 +4193,10 @@
   {
    "source": "DC-L15-03",
    "target": "DC-L01-15"
+  },
+  {
+   "source": "DC-L15-04",
+   "target": "DC-L02-08"
   },
   {
    "source": "DC-L15-04",
@@ -4372,12 +4404,12 @@
    "DC-L02-24"
   ],
   [
-   "DC-L15-01",
-   "DC-L15-04"
-  ],
-  [
    "DC-L06-07",
    "DC-L06-24"
+  ],
+  [
+   "DC-L15-01",
+   "DC-L15-04"
   ],
   [
    "DC-L08-10",

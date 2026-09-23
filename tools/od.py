@@ -152,6 +152,7 @@ def cmd_log(a):
 
 def cmd_sync(a):
     """Commit everything under the repo (secrets are git-ignored), rebase on the remote, push."""
+    heartbeat_line(a.by, f"synced: {a.m.splitlines()[0]}")
     git("add", "-A")
     if git("diff", "--cached", "--quiet", check=False).returncode:
         git("commit", "-q", "-m", f"{a.m}\n\nSession: {a.by}")
@@ -162,7 +163,6 @@ def cmd_sync(a):
                      "BOARD.md: keep both sides' rows), then run `git rebase --continue` and sync again.\n" + pulled.stderr)
         pushed = git("push", "-q", check=False)
         print("Pushed." if pushed.returncode == 0 else "Push failed:\n" + pushed.stderr)
-    heartbeat_line(a.by, f"synced: {a.m.splitlines()[0]}")
 
 
 if __name__ == "__main__":

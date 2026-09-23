@@ -2,7 +2,7 @@
 """Navigate the design-system research with Jev (TypeSafe's System One model).
 
   python3 tools/jev_nav.py status            lane progress, Decision Cards, sources
-  python3 tools/jev_nav.py find "question"   Jev routes the question to lanes, then ranks Decision Cards
+  python3 tools/jev_nav.py find "question"   gathers candidate cards, then Jev ranks them for the question
   python3 tools/jev_nav.py html              writes navigator.html, a visual map of the research
   python3 tools/jev_nav.py export            writes synthesis/cards.json, every Decision Card split into its fields
   python3 tools/jev_nav.py graph             writes synthesis/decision-graph.json from the cards' depends/affects links
@@ -186,6 +186,11 @@ def graph(_):
     for r in rows:
         edges |= {(d, r["id"]) for d in ref.findall(r.get("depends on", "")) if d in ids and d != r["id"]}
         edges |= {(r["id"], a) for a in ref.findall(r.get("affects", "")) if a in ids and a != r["id"]}
+    overrides = ROOT / "synthesis/graph-overrides.json"
+    if overrides.exists():
+        o = json.loads(overrides.read_text())
+        edges |= {(a, b) for a, b, _ in o.get("add", []) if a in ids and b in ids}
+        edges -= {(a, b) for a, b, _ in o.get("remove", [])}
     succ = {i: set() for i in ids}
     for a, b in edges:
         succ[a].add(b)
