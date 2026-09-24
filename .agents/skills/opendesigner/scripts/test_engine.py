@@ -35,6 +35,21 @@ def state_with(**raw):
     return s
 
 
+class IllustrationFallbackOrder(unittest.TestCase):
+    def test_hook_and_questionnaire_share_the_documented_order(self):
+        references = os.path.join(os.path.dirname(__file__), "..", "references")
+        with open(os.path.join(references, "hooks.json"), encoding="utf-8") as f:
+            hook = next(h for h in json.load(f)["hooks"] if h["id"] == "H-illus")
+        with open(os.path.join(references, "hooks.md"), encoding="utf-8") as f:
+            row = next(line for line in f if line.startswith("| `H-illus`"))
+        for text in (row, hook["if_no"], hook["questionnaire"]["Q-img-04"]["if_no"]):
+            with self.subTest(text=text):
+                text = text.lower()
+                patterns = (r"\bcommission\b", r"\bopen sets\b", r"\bai\b", r"no illustration|ship honest")
+                positions = [re.search(pattern, text).start() for pattern in patterns]
+                self.assertEqual(positions, sorted(positions))
+
+
 class ColorMath(unittest.TestCase):
     def test_wcag_contrast_known_values(self):
         self.assertAlmostEqual(e.contrast("#000000", "#ffffff"), 21.0, places=6)
