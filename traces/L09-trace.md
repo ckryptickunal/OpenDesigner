@@ -568,3 +568,20 @@ Append-only. One row per source opened, including rejected ones. Id ranges: S-L0
 | 14:31 | S-L09-764 | https://report.zeroheight.com/ | zeroheight | 2026 edition (live) | A | used | n=147; tokens 86%; primitive 90 / semantic 85 / component 52 |
 | 14:31 | S-L09-765 | https://atlassian.design/sitemap.xml ; /sitemap-index.xml ; /robots.txt | Atlassian | n/a | A | rejected (all return the Gatsby 404 shell) | nothing |
 | 14:32 | S-L09-766 | https://ds-cdn.prod-east.frontend.public.atl-paas.net/assets/font-rules/v6/atlassian-fonts.css | Atlassian | undated (live) | A | rejected (only @font-face rules, no provenance text) | nothing |
+
+## Elastic EUI follow-up, 2026-09-25
+
+| Time | ID | URL | Publisher | Date / version | Tier | Status | Used for |
+|---|---|---|---|---|---|---|---|
+| 2026-09-25 | S-L09-777 | https://registry.npmjs.org/@elastic/eui-theme-borealis/8.1.0 | Elastic | 8.1.0 | A | used | Release metadata |
+| 2026-09-25 | S-L09-778 | https://github.com/elastic/eui/blob/57dd70bc43f1f8b03a192b76f45570efd502f140/packages/eui-theme-borealis/README.md | Elastic | 57dd70bc43f1 | A | used | Theme export identity |
+| 2026-09-25 | S-L09-779 | https://cdn.jsdelivr.net/npm/@elastic/eui-theme-borealis@8.1.0/lib/eui_theme_borealis_light.json | Elastic | 8.1.0 | A | used | Published light colors, typography and role radii |
+| 2026-09-25 | S-L09-780 | https://github.com/elastic/eui/blob/57dd70bc43f1f8b03a192b76f45570efd502f140/packages/eui-theme-borealis/src/variables/_typography.ts | Elastic | 57dd70bc43f1 | A | used | Type scale and weights |
+| 2026-09-25 | S-L09-781 | https://github.com/elastic/eui/blob/57dd70bc43f1f8b03a192b76f45570efd502f140/packages/eui-theme-borealis/src/variables/_borders.ts | Elastic | 57dd70bc43f1 | A | used | Computed border and radius roles; license header |
+| 2026-09-25 | S-L09-782 | https://github.com/elastic/eui/blob/57dd70bc43f1f8b03a192b76f45570efd502f140/packages/eui-theme-borealis/src/variables/_size.ts | Elastic | 57dd70bc43f1 | A | used | Base and sizing factors |
+| 2026-09-25 | S-L09-783 | https://cdn.jsdelivr.net/npm/@elastic/eui-theme-borealis@8.1.0/lib/eui_theme_borealis_dark.json | Elastic | 8.1.0 | A | used | Published dark colors |
+| 2026-09-25 | S-L09-784 | https://github.com/elastic/eui/blob/57dd70bc43f1f8b03a192b76f45570efd502f140/packages/eui-theme-borealis/src/variables/_animation.ts | Elastic | 57dd70bc43f1 | A | used | Timing and curves |
+| 2026-09-25 | S-L09-785 | https://eui.elastic.co/docs/getting-started/theming/tokens/sizing/ | Elastic | live | A | used | Resolved spacing values |
+| 2026-09-25 | S-L09-786 | https://eui.elastic.co/docs/getting-started/theming/high-contrast-mode/ | Elastic | live | A | used | Independent contrast preference |
+| 2026-09-25 | S-L09-837 | https://eui.elastic.co/docs/getting-started/theming/tokens/borders/ | Elastic | live | A | used | Border example differs from Borealis release context |
+| 2026-09-25 | S-L09-838 | https://eui.elastic.co/docs/getting-started/accessibility/ | Elastic | live | A | used | Accessibility target and integration responsibilities |
