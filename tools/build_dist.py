@@ -81,6 +81,12 @@ def main():
                 for src, dst in BUNDLE.items():
                     if (SRC / "opendesigner" / src).exists() and not (s / dst).exists():
                         z.write(SRC / "opendesigner" / src, Path(s.name) / dst)
+                # The bundled engine's `show` command reads templates relative to its skill root.
+                # Sub-skill zips include the engine, so they need its templates as well.
+                for template in sorted((SRC / "opendesigner" / "assets" / "templates").glob("*.html")):
+                    dst = Path("assets/templates") / template.name
+                    if not (s / dst).exists():
+                        z.write(template, Path(s.name) / dst)
         print(f"wrote {out.relative_to(ROOT)} ({out.stat().st_size // 1024} KB)")
     sys.exit(1 if failed else 0)
 
