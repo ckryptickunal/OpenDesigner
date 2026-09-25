@@ -568,3 +568,17 @@ Append-only. One row per source opened, including rejected ones. Id ranges: S-L0
 | 14:31 | S-L09-764 | https://report.zeroheight.com/ | zeroheight | 2026 edition (live) | A | used | n=147; tokens 86%; primitive 90 / semantic 85 / component 52 |
 | 14:31 | S-L09-765 | https://atlassian.design/sitemap.xml ; /sitemap-index.xml ; /robots.txt | Atlassian | n/a | A | rejected (all return the Gatsby 404 shell) | nothing |
 | 14:32 | S-L09-766 | https://ds-cdn.prod-east.frontend.public.atl-paas.net/assets/font-rules/v6/atlassian-fonts.css | Atlassian | undated (live) | A | rejected (only @font-face rules, no provenance text) | nothing |
+
+## GC Design System follow-up, 2026-09-25
+
+| Time | ID | URL | Publisher | Date / version | Tier | Status | Used for |
+|---|---|---|---|---|---|---|---|
+| 2026-09-25 | S-L09-827 | https://registry.npmjs.org/@cdssnc/gcds-tokens/2.14.0 | Canadian Digital Service | 2.14.0 | A | used | Package identity, license and version |
+| 2026-09-25 | S-L09-828 | https://cdn.jsdelivr.net/npm/@cdssnc/gcds-tokens@2.14.0/README.md | Canadian Digital Service | 2.14.0 | A | used | Build, distribution, bilingual documentation and historical doc host |
+| 2026-09-25 | S-L09-829 | https://design-system.canada.ca/en/styles/design-tokens/ | Canadian Digital Service | live | A | used | Token tiers and intended reuse |
+| 2026-09-25 | S-L09-830 | https://cdn.jsdelivr.net/npm/@cdssnc/gcds-tokens@2.14.0/build/web/css/global/color.css | Canadian Digital Service | 2.14.0 | A | used | Semantic colors and focus roles |
+| 2026-09-25 | S-L09-831 | https://cdn.jsdelivr.net/npm/@cdssnc/gcds-tokens@2.14.0/build/web/css/global/typography/fontFamilies.css | Canadian Digital Service | 2.14.0 | A | used | Typeface stacks |
+| 2026-09-25 | S-L09-832 | https://cdn.jsdelivr.net/npm/@cdssnc/gcds-tokens@2.14.0/build/web/css/global/typography/fontSizes.css | Canadian Digital Service | 2.14.0 | A | used | Desktop and mobile type scales |
+| 2026-09-25 | S-L09-833 | https://cdn.jsdelivr.net/npm/@cdssnc/gcds-tokens@2.14.0/build/web/css/global/typography/lineHeights.css | Canadian Digital Service | 2.14.0 | A | used | Desktop and mobile line-height ratios |
+| 2026-09-25 | S-L09-834 | https://cdn.jsdelivr.net/npm/@cdssnc/gcds-tokens@2.14.0/build/web/css/global/spacing.css | Canadian Digital Service | 2.14.0 | A | used | Spacing scale |
+| 2026-09-25 | S-L09-835 | https://cdn.jsdelivr.net/npm/@cdssnc/gcds-tokens@2.14.0/build/web/css/global/border.css | Canadian Digital Service | 2.14.0 | A | used | Radius and width values |
