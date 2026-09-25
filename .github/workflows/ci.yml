@@ -76,5 +76,8 @@ jobs:
             echo "tools/build_dist.py not present yet; skipping"
           fi
 
+      - name: Standalone skill zips include visual templates
+        run: python3 tools/test_build_dist.py
+
       - name: Relative Markdown links resolve (offline)
         run: python3 tools/check_links.py
