@@ -568,3 +568,17 @@ Append-only. One row per source opened, including rejected ones. Id ranges: S-L0
 | 14:31 | S-L09-764 | https://report.zeroheight.com/ | zeroheight | 2026 edition (live) | A | used | n=147; tokens 86%; primitive 90 / semantic 85 / component 52 |
 | 14:31 | S-L09-765 | https://atlassian.design/sitemap.xml ; /sitemap-index.xml ; /robots.txt | Atlassian | n/a | A | rejected (all return the Gatsby 404 shell) | nothing |
 | 14:32 | S-L09-766 | https://ds-cdn.prod-east.frontend.public.atl-paas.net/assets/font-rules/v6/atlassian-fonts.css | Atlassian | undated (live) | A | rejected (only @font-face rules, no provenance text) | nothing |
+
+## Duet follow-up, 2026-09-25
+
+| Time | ID | URL | Publisher | Date / version | Tier | Status | Used for |
+|---|---|---|---|---|---|---|---|
+| 2026-09-25 | S-L09-807 | https://www.duetds.com/about/ | LocalTapiola | live | A | used | Ownership, two brands, intended use and accessibility target |
+| 2026-09-25 | S-L09-808 | https://registry.npmjs.org/@duetds/tokens/5.1.5 | LocalTapiola | 5.1.5 | A | used | Token package version |
+| 2026-09-25 | S-L09-809 | https://cdn.jsdelivr.net/npm/@duetds/tokens@5.1.5/LICENSE.md | LocalTapiola | 5.1.5 | A | used | Restricted package license |
+| 2026-09-25 | S-L09-810 | https://www.duetds.com/tokens/ | LocalTapiola | live | A | used | Token names and export formats |
+| 2026-09-25 | S-L09-811 | https://cdn.jsdelivr.net/npm/@duetds/tokens@5.1.5/lib/tokens.json | LocalTapiola | 5.1.5 | A | used | Published values and extra 94px spacing step |
+| 2026-09-25 | S-L09-812 | https://www.duetds.com/typography/ | LocalTapiola | live | A | used | Type scale, base and typeface distribution |
+| 2026-09-25 | S-L09-813 | https://www.duetds.com/spacing/ | LocalTapiola | live | A | used | Recommended spacing scale and patterns |
+| 2026-09-25 | S-L09-814 | https://www.duetds.com/using-components/ | LocalTapiola | live | A | used | Web Components and React wrapper |
+| 2026-09-25 | S-L09-815 | https://www.duetds.com/accessibility/ | LocalTapiola | live | A | used | Checklist categories, not a conformance result |
