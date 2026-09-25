@@ -568,3 +568,17 @@ Append-only. One row per source opened, including rejected ones. Id ranges: S-L0
 | 14:31 | S-L09-764 | https://report.zeroheight.com/ | zeroheight | 2026 edition (live) | A | used | n=147; tokens 86%; primitive 90 / semantic 85 / component 52 |
 | 14:31 | S-L09-765 | https://atlassian.design/sitemap.xml ; /sitemap-index.xml ; /robots.txt | Atlassian | n/a | A | rejected (all return the Gatsby 404 shell) | nothing |
 | 14:32 | S-L09-766 | https://ds-cdn.prod-east.frontend.public.atl-paas.net/assets/font-rules/v6/atlassian-fonts.css | Atlassian | undated (live) | A | rejected (only @font-face rules, no provenance text) | nothing |
+
+## Cloudscape follow-up, 2026-09-25
+
+| Time | ID | URL | Publisher | Date / version | Tier | Status | Used for |
+|---|---|---|---|---|---|---|---|
+| 2026-09-25 | S-L09-797 | https://cdn.jsdelivr.net/npm/@cloudscape-design/design-tokens@3.0.113/README.md | AWS Cloudscape | 3.0.113 | A | used | History, ownership, governance and license |
+| 2026-09-25 | S-L09-798 | https://registry.npmjs.org/@cloudscape-design/design-tokens/3.0.113 | AWS Cloudscape | 3.0.113 | A | used | Published metadata |
+| 2026-09-25 | S-L09-799 | https://cdn.jsdelivr.net/npm/@cloudscape-design/design-tokens@3.0.113/index-visual-refresh.json | AWS Cloudscape | 3.0.113 | A | used | Resolved tokens and mode/context maps |
+| 2026-09-25 | S-L09-800 | https://cloudscape.design/foundation/visual-foundation/typography/ | AWS Cloudscape | live | A | used | Font family and hierarchy |
+| 2026-09-25 | S-L09-801 | https://cloudscape.design/foundation/visual-foundation/spacing/ | AWS Cloudscape | live | A | used | Documented spacing scale and grid |
+| 2026-09-25 | S-L09-802 | https://cloudscape.design/foundation/visual-foundation/motion/ | AWS Cloudscape | live | A | used | Motion semantics |
+| 2026-09-25 | S-L09-803 | https://cloudscape.design/foundation/core-principles/accessibility/ | AWS Cloudscape | live | A | used | Consumer accessibility responsibilities |
+| 2026-09-25 | S-L09-804 | https://cloudscape.design/foundation/visual-foundation/design-tokens/ | AWS Cloudscape | live | A | used | Token consumption guidance |
+| 2026-09-25 | S-L09-805 | https://github.com/cloudscape-design/components | AWS Cloudscape | live | A | used | React implementation |
