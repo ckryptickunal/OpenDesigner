@@ -58,9 +58,15 @@ class Project(unittest.TestCase):
 class Consent(Project):
     def test_nothing_is_logged_until_they_say_yes(self):
         self.assertIsNone(self.log("step_shown", step="Q-aud-01"))
-        code, out = run(["--dir", self.d, "log", "step_shown", "--step", "Q-aud-01"])
+        with mock.patch.dict(os.environ, {"CLAUDECODE": "", "CLAUDE_CODE_REMOTE": ""}):
+            code, out = run(["--dir", self.d, "log", "step_shown", "--step", "Q-aud-01"])
         self.assertEqual(code, 0)
-        self.assertIn(j.CONSENT_QUESTION, out)
+        self.assertIn(j.CONSENT_QUESTIONS["web"], out)
+        self.assertFalse(os.path.exists(j.jpath(self.d, "events.jsonl")))
+        with mock.patch.dict(os.environ, {"CLAUDECODE": "1", "CLAUDE_CODE_REMOTE": ""}):
+            code, out = run(["--dir", self.d, "log", "step_shown", "--step", "Q-aud-01"])
+        self.assertEqual(code, 0)
+        self.assertIn(j.CONSENT_QUESTIONS["local"], out)
         self.assertFalse(os.path.exists(j.jpath(self.d, "events.jsonl")))
 
     def test_off_logs_nothing_and_says_nothing(self):
