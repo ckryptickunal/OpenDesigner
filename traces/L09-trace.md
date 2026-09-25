@@ -568,3 +568,15 @@ Append-only. One row per source opened, including rejected ones. Id ranges: S-L0
 | 14:31 | S-L09-764 | https://report.zeroheight.com/ | zeroheight | 2026 edition (live) | A | used | n=147; tokens 86%; primitive 90 / semantic 85 / component 52 |
 | 14:31 | S-L09-765 | https://atlassian.design/sitemap.xml ; /sitemap-index.xml ; /robots.txt | Atlassian | n/a | A | rejected (all return the Gatsby 404 shell) | nothing |
 | 14:32 | S-L09-766 | https://ds-cdn.prod-east.frontend.public.atl-paas.net/assets/font-rules/v6/atlassian-fonts.css | Atlassian | undated (live) | A | rejected (only @font-face rules, no provenance text) | nothing |
+
+## Workday Canvas follow-up, 2026-09-25
+
+| Time | ID | URL | Publisher | Date / version | Tier | Status | Used for |
+|---|---|---|---|---|---|---|---|
+| 2026-09-25 | S-L09-767 | https://registry.npmjs.org/@workday/canvas-tokens-web/4.5.0 | Workday | 4.5.0 | A | used | Package version, license and exports |
+| 2026-09-25 | S-L09-768 | https://github.com/Workday/canvas-tokens/blob/e62a99610bbc0cc59f146781bcca6825cfb1028f/README.md | Workday | e62a99610bbc | A | used | Support policy and token license |
+| 2026-09-25 | S-L09-769 | https://github.com/Workday/canvas-tokens/blob/e62a99610bbc0cc59f146781bcca6825cfb1028f/packages/canvas-tokens/tokens/base.json | Workday | e62a99610bbc | A | used | Base palette, sizes and font families |
+| 2026-09-25 | S-L09-770 | https://github.com/Workday/canvas-tokens/blob/e62a99610bbc0cc59f146781bcca6825cfb1028f/packages/canvas-tokens/tokens/web/sys.json | Workday | e62a99610bbc | A | used | System aliases, gaps, shape, type and migration names |
+| 2026-09-25 | S-L09-771 | https://github.com/Workday/canvas-tokens/blob/e62a99610bbc0cc59f146781bcca6825cfb1028f/packages/canvas-tokens/tokens/web/brand.json | Workday | e62a99610bbc | A | used | Brand primary aliases |
+| 2026-09-25 | S-L09-772 | https://unpkg.com/@workday/canvas-tokens-web@4.5.0/css/base/_variables.css | Workday | 4.5.0 | A | used | Published base CSS; inspected in npm archive |
+| 2026-09-25 | S-L09-773 | https://unpkg.com/@workday/canvas-tokens-web@4.5.0/css/system/_variables.css | Workday | 4.5.0 | A | used | Published system CSS; inspected in npm archive |
