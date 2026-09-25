@@ -568,3 +568,18 @@ Append-only. One row per source opened, including rejected ones. Id ranges: S-L0
 | 14:31 | S-L09-764 | https://report.zeroheight.com/ | zeroheight | 2026 edition (live) | A | used | n=147; tokens 86%; primitive 90 / semantic 85 / component 52 |
 | 14:31 | S-L09-765 | https://atlassian.design/sitemap.xml ; /sitemap-index.xml ; /robots.txt | Atlassian | n/a | A | rejected (all return the Gatsby 404 shell) | nothing |
 | 14:32 | S-L09-766 | https://ds-cdn.prod-east.frontend.public.atl-paas.net/assets/font-rules/v6/atlassian-fonts.css | Atlassian | undated (live) | A | rejected (only @font-face rules, no provenance text) | nothing |
+
+## Porsche Design System follow-up, 2026-09-25
+
+| Time | ID | URL | Publisher | Date / version | Tier | Status | Used for |
+|---|---|---|---|---|---|---|---|
+| 2026-09-25 | S-L09-817 | https://registry.npmjs.org/@porsche-design-system/components-js/4.7.0 | Porsche | 4.7.0 | A | used | Package version and publisher |
+| 2026-09-25 | S-L09-818 | https://cdn.jsdelivr.net/npm/@porsche-design-system/components-js@4.7.0/LICENSE.md | Porsche | 4.7.0 | A | used | Separate code and asset licenses |
+| 2026-09-25 | S-L09-819 | https://designsystem.porsche.com/v4/ | Porsche | v4 live | A | used | Framework support, coded source of truth and earlier-release banner |
+| 2026-09-25 | S-L09-820 | https://registry.npmjs.org/@porsche-design-system/components-js/-/components-js-4.7.0.tgz | Porsche | 4.7.0 | A | used | Published token modules and package layout |
+| 2026-09-25 | S-L09-821 | https://cdn.jsdelivr.net/npm/@porsche-design-system/components-js@4.7.0/tokens/esm/color/light-dark/background/colorCanvas.mjs | Porsche | 4.7.0 | A | used | Mode-combining role; imports followed in archive |
+| 2026-09-25 | S-L09-822 | https://designsystem.porsche.com/v4/tokens/font/ | Porsche | v4 live | A | used | Type, family, line-height and weights; cross-checked with archive font modules |
+| 2026-09-25 | S-L09-823 | https://designsystem.porsche.com/v4/tokens/spacing/ | Porsche | v4 live | A | used | Static/fluid spacing; cross-checked with archive |
+| 2026-09-25 | S-L09-824 | https://designsystem.porsche.com/v4/tokens/border/ | Porsche | v4 live | A | used | Radius scale; cross-checked with archive |
+| 2026-09-25 | S-L09-825 | https://designsystem.porsche.com/v4/stylesheets/css-variables/api/ | Porsche | v4 live | A | used | Shadows and motion; cross-checked with archive |
+| 2026-09-25 | S-L09-826 | https://designsystem.porsche.com/v4/news/migration-guide/scss/ | Porsche | v4 live | A | used | Large radius migration 12 to 8px |
