@@ -568,3 +568,17 @@ Append-only. One row per source opened, including rejected ones. Id ranges: S-L0
 | 14:31 | S-L09-764 | https://report.zeroheight.com/ | zeroheight | 2026 edition (live) | A | used | n=147; tokens 86%; primitive 90 / semantic 85 / component 52 |
 | 14:31 | S-L09-765 | https://atlassian.design/sitemap.xml ; /sitemap-index.xml ; /robots.txt | Atlassian | n/a | A | rejected (all return the Gatsby 404 shell) | nothing |
 | 14:32 | S-L09-766 | https://ds-cdn.prod-east.frontend.public.atl-paas.net/assets/font-rules/v6/atlassian-fonts.css | Atlassian | undated (live) | A | rejected (only @font-face rules, no provenance text) | nothing |
+
+## NYPL Reservoir follow-up, 2026-09-25
+
+| Time | ID | URL | Publisher | Date / version | Tier | Status | Used for |
+|---|---|---|---|---|---|---|---|
+| 2026-09-25 | S-L09-787 | https://github.com/NYPL/nypl-design-system/blob/3a425277959ca46eabecdfe3f5e6cecd73a160ab/README.md | NYPL | 3a425277959c | A | used | Identity, setup, documentation and accessibility process |
+| 2026-09-25 | S-L09-788 | https://github.com/NYPL/nypl-design-system/blob/3a425277959ca46eabecdfe3f5e6cecd73a160ab/package.json | NYPL | 3a425277959c | A | used | Version, license, dependencies and peer range |
+| 2026-09-25 | S-L09-789 | https://github.com/NYPL/nypl-design-system/blob/3a425277959ca46eabecdfe3f5e6cecd73a160ab/src/theme/foundations/colors.ts | NYPL | 3a425277959c | A | used | Primitives, UI modes and Figma references |
+| 2026-09-25 | S-L09-790 | https://github.com/NYPL/nypl-design-system/blob/3a425277959ca46eabecdfe3f5e6cecd73a160ab/src/theme/foundations/typography.ts | NYPL | 3a425277959c | A | used | Responsive type, weights and mismatched comment |
+| 2026-09-25 | S-L09-791 | https://github.com/NYPL/nypl-design-system/blob/3a425277959ca46eabecdfe3f5e6cecd73a160ab/src/theme/foundations/spacing.ts | NYPL | 3a425277959c | A | used | Preferred subset and component spacing |
+| 2026-09-25 | S-L09-792 | https://github.com/NYPL/nypl-design-system/blob/3a425277959ca46eabecdfe3f5e6cecd73a160ab/src/theme/foundations/radii.ts | NYPL | 3a425277959c | A | used | Component and shape radii |
+| 2026-09-25 | S-L09-793 | https://github.com/NYPL/nypl-design-system/blob/3a425277959ca46eabecdfe3f5e6cecd73a160ab/src/theme/foundations/shadows.ts | NYPL | 3a425277959c | A | used | Local shadow override |
+| 2026-09-25 | S-L09-794 | https://github.com/NYPL/nypl-design-system/blob/3a425277959ca46eabecdfe3f5e6cecd73a160ab/src/theme/foundations/breakpoints.ts | NYPL | 3a425277959c | A | used | Responsive breakpoint values |
+| 2026-09-25 | S-L09-795 | https://registry.npmjs.org/@nypl/design-system-react-components/4.5.1 | NYPL | 4.5.1 | A | used | Published release metadata |
