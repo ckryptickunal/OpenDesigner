@@ -11,7 +11,7 @@ _Lane L09 teardown. Checked on 2026-09-25 against public documentation and `@due
 | License | Restricted use for work on behalf of LocalTapiola; not a generally reusable open-source token library | [S-L09-809] [S-L09-807] |
 | Platforms | Web Components; documentation describes framework-independent use and a React wrapper | [S-L09-807] [S-L09-814] |
 | Token names / outputs | CSS custom properties and Sass, Less, Stylus, CommonJS, JSON, iOS JSON, Android XML and Figma Tokens Studio exports. JS uses camelCase; JSON snake_case | [S-L09-810] |
-| Color | Published legacy `color_primary`: rgb(0,119,179); Turva counterpart rgb(230,23,64). Dark variants rgb(0,75,129) and rgb(140,0,30). These are brand variants, not a light/dark UI mode | [S-L09-811] |
+| Color | Published `color_primary`: rgb(0,119,179); Turva counterpart rgb(230,23,64). Dark variants rgb(0,75,129) and rgb(140,0,30). These are brand variants, not a light/dark UI mode | [S-L09-811] |
 | Typeface | Heading and body begin with `localtapiola-sans`, or `turva-sans` for Turva; system-font fallbacks follow. Typeface files are not copied here | [S-L09-811] [S-L09-812] |
 | Type scale | Base 16px. Sizes .75 / .875 / 1 / 1.25 / 1.5 / 2.25 / 3 / 4.5rem; paragraph 1rem. At the documented root this is 12 / 14 / 16 / 20 / 24 / 36 / 48 / 72px | [S-L09-812] |
 | Weight | normal 400, semi-bold 600, bold 700, extra-bold 800 | [S-L09-811] |
