@@ -38,32 +38,60 @@
     }
   ],
   "pages": [
-    {"name": "Sonner docs", "urls": [
-      "https://sonner.emilkowal.ski/",
-      "https://sonner.emilkowal.ski/getting-started",
-      "https://sonner.emilkowal.ski/toast",
-      "https://sonner.emilkowal.ski/toaster",
-      "https://sonner.emilkowal.ski/styling",
-      "https://sonner.emilkowal.ski/other"
-    ], "folder": "raw/sonner", "id_prefix": "sonner", "authority": "non-negotiable"},
-    {"name": "animations.dev (public pages only; the course itself is paid and closed)", "urls": [
-      "https://animations.dev/",
-      "https://animations.dev/changelog"
-    ], "folder": "raw/animations-dev", "id_prefix": "adev", "authority": "non-negotiable"},
-    {"name": "Vaul docs", "urls": [
-      "https://vaul.emilkowal.ski/",
-      "https://vaul.emilkowal.ski/getting-started",
-      "https://vaul.emilkowal.ski/api",
-      "https://vaul.emilkowal.ski/default",
-      "https://vaul.emilkowal.ski/snap-points",
-      "https://vaul.emilkowal.ski/inputs",
-      "https://vaul.emilkowal.ski/other"
-    ], "folder": "raw/vaul", "id_prefix": "vaul", "authority": "good-to-have",
-     "note": "The vaul GitHub README says the library is unmaintained (checked 2026-09-24). Use its drawer craft as guidance; flag the maintenance status before recommending it as a dependency."}
+    {
+      "name": "Sonner docs",
+      "urls": [
+        "https://sonner.emilkowal.ski/",
+        "https://sonner.emilkowal.ski/getting-started",
+        "https://sonner.emilkowal.ski/toast",
+        "https://sonner.emilkowal.ski/toaster",
+        "https://sonner.emilkowal.ski/styling",
+        "https://sonner.emilkowal.ski/other"
+      ],
+      "folder": "raw/sonner",
+      "id_prefix": "sonner",
+      "authority": "non-negotiable"
+    },
+    {
+      "name": "animations.dev (public pages only; the course itself is paid and closed)",
+      "urls": [
+        "https://animations.dev/",
+        "https://animations.dev/changelog"
+      ],
+      "folder": "raw/animations-dev",
+      "id_prefix": "adev",
+      "authority": "non-negotiable"
+    },
+    {
+      "name": "Vaul docs",
+      "urls": [
+        "https://vaul.emilkowal.ski/",
+        "https://vaul.emilkowal.ski/getting-started",
+        "https://vaul.emilkowal.ski/api",
+        "https://vaul.emilkowal.ski/default",
+        "https://vaul.emilkowal.ski/snap-points",
+        "https://vaul.emilkowal.ski/inputs",
+        "https://vaul.emilkowal.ski/other"
+      ],
+      "folder": "raw/vaul",
+      "id_prefix": "vaul",
+      "authority": "good-to-have",
+      "note": "The vaul GitHub README says the library is unmaintained (checked 2026-09-24). Use its drawer craft as guidance; flag the maintenance status before recommending it as a dependency."
+    }
   ],
   "github_repos": [
-    {"name": "emilkowalski/skills", "url": "https://github.com/emilkowalski/skills", "license": "MIT",
-     "include": ["README.md", "performance-cheatsheet.md", "skills/*/*.md"],
-     "folder": "raw/emil-skills", "id_prefix": "eks", "authority": "non-negotiable"}
+    {
+      "name": "emilkowalski/skills",
+      "url": "https://github.com/emilkowalski/skills",
+      "license": "MIT",
+      "include": [
+        "README.md",
+        "performance-cheatsheet.md",
+        "skills/*/*.md"
+      ],
+      "folder": "raw/emil-skills",
+      "id_prefix": "eks",
+      "authority": "non-negotiable"
+    }
   ]
 }

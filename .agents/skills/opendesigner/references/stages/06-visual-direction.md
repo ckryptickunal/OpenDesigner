@@ -8,7 +8,7 @@ Screen: the overall look before any single foundation. Graph step 2-3. Cycle kep
 
 Zoom 3 (detailed) questions: `06-visual-direction.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-dir-01 · Which overall visual style fits the product?
 Zoom 1 broad · weight high · changes 13 decisions · class G · cards DC-L15-01

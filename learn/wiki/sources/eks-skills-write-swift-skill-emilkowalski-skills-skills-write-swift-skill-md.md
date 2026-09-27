@@ -27,8 +27,8 @@ tags:
 
 ## Metadata
 
-- Video ID: `eks-skills-write-swift-skill`
-- Channel: emilkowalski/skills (GitHub, MIT)
+- Page ID: `eks-skills-write-swift-skill`
+- Publisher: emilkowalski/skills (GitHub, MIT)
 - Published: commit 85e8e23
 - URL: https://github.com/emilkowalski/skills/blob/85e8e23/skills/write-swift/SKILL.md
 

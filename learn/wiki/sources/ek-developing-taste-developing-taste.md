@@ -24,8 +24,8 @@ tags:
 
 ## Metadata
 
-- Video ID: `ek-developing-taste`
-- Channel: Emil Kowalski (web)
+- Page ID: `ek-developing-taste`
+- Publisher: Emil Kowalski (web)
 - Published: Unknown
 - URL: https://emilkowal.ski/ui/developing-taste
 

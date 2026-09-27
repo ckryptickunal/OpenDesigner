@@ -1377,6 +1377,69 @@
    "decision": "confirmed",
    "note": "The source supports the standard as written. The Actor reentrancy section of learn/raw/emil-skills/eks-skills-write-swift-skill.txt (line 133) says actors are not FIFO and run the highest-priority work first to avoid priority inversion. It then says to use a task or an AsyncStream, not an actor, whe",
    "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "d4MF6pdAZNw",
+   "source": "10",
+   "hash": "e3eef0853659",
+   "decision": "confirmed",
+   "note": "The raw transcript (learn/raw/kole-jain/d4MF6pdAZNw.txt, lines 408-440) supports every step: the text-wipe width is set to 0%, then animated to 100% over duration 1 with expo.inOut; the big text is set to opacity 1; the wipe is set to right: 0 (and left: auto if needed); then width goes back to 0% o",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-prototype-skill",
+   "source": "24",
+   "hash": "b1e806acd4a1",
+   "decision": "confirmed",
+   "note": "Line 64 of learn/raw/emil-skills/eks-skills-prototype-skill.txt says 'Before writing any code, list the set: a name and an axis for each.' Hard Rule 2 (line 38) supports strength 'must' ('Before building, you must be able to state each variant's axis'). The old evidence was only the heading 'Phase 3",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-performance-properties-12",
+   "source": "eks-skills-animation-vocabulary-skill",
+   "hash": "1f7cf0bdc912",
+   "decision": "fixed",
+   "note": "The standard stays. The performance cheatsheet ('Element shifts 1px as motion starts | will-change: transform (only once you see it)') and ek-agents-with-taste ('Shaky/jittery animations | Add will-change: transform') both support it. The vocabulary skill only defines will-change (line 179). It says",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-components-toasts-drawers-15",
+   "source": "sonner-other",
+   "hash": "9a44ecbb3eca",
+   "decision": "confirmed",
+   "note": "sonner-other line 42 says 'If you want a toast to never disappear, you can set the duration to Infinity'. That backs the rule's Sonner step (duration: Infinity on that toast() call). The 4000ms default is backed by ek-building-a-toast-component ('By default the toast disappears after 4 seconds'), th",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-visual-details-24",
+   "source": "eks-skills-apple-design-skill",
+   "hash": "89e95e081f15",
+   "decision": "confirmed",
+   "note": "Line 267 (section 16, principle 7, Craft) says attention to detail builds trust and lists 'colors that adapt to light/dark'. That supports the rule, and 'should' is the right strength. The evidence had a made-up section prefix, so I replaced it with the verbatim phrase 'Beautiful typography, colors ",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-process-review-taste-20",
+   "source": "eks-skills-improve-animations-skill",
+   "hash": "6cab87c7a328",
+   "decision": "confirmed",
+   "note": "The skill says 'One plan per selected finding' (line 100) and 'Finish by creating or updating `plans/README.md`: recommended execution order, dependencies between plans, and a status column' (line 104). The plan template (lines 80 and 83) adds the merge exception and the table columns. The skill's e",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-swift-54",
+   "source": "eks-skills-write-swift-skill",
+   "hash": "b41ade0ef6c3",
+   "decision": "confirmed",
+   "note": "Line 217 says you cannot call a method that takes an associated type on an any P. It says erasure works in producing position but not in consuming position, and that the fix is to pass the existential into a function taking some P, which the compiler unboxes. The rule and 'why' match this. The evide",
+   "date": "2026-09-27"
   }
  ]
 }

@@ -1,3 +1,11 @@
+---
+type: synthesis
+title: "Motion: Decision Cards (lane L19)"
+tags:
+  - decision-cards
+  - motion
+---
+
 # Motion: Decision Cards (lane L19)
 
 Area `motion` (OpenDesigner stage 16; wiki topics Motion principles, Easing and timing, Spring animation, Animation performance, Gestures and drag, Micro-interactions and Reduced motion). Cards DC-L19-81 to DC-L19-99, written 2026-09-24. Each card adds something the existing L04, L06, L07, L09, L10, L13 and L14 cards do not have, or flags where the trusted sources disagree with them.

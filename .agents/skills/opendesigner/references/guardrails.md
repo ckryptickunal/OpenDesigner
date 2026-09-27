@@ -33,9 +33,14 @@ Hard rules for every OpenDesigner skill. Sources: `_coordination/BRIEF.md` requi
 
 ## 4b. Standards (locked unless the person explicitly asks)
 - House standards (`standards.md`) come from sources the OpenDesigner owner marked non-negotiable. Project standards come from sources the person marked non-negotiable. Both are applied and locked.
-- Change one only when the person explicitly asks to improve, remove or change it. Restate the rule and its reason once, then `engine.py standard override <id> --why "<their words>"`. Never override one to make your own recommendation fit.
+- Change one only when the person explicitly asks to improve, remove or change it. Restate the rule and its reason once, then record it the way their words say (`docs/KNOWLEDGE.md` section 4):
+  - "It's our brand", "we always do this", "non-negotiable for us": a project standard that beats the house one, `engine.py standard add ... --beats STD-...` (`rules.md` section 12). Their rule wins in this project, and the house standard's checks stop flagging it.
+  - "Just this value", "just here": `engine.py standard override <id> --why "<their words>"`.
+  - Never override one to make your own recommendation fit.
+- `engine.py set --force` is for values the person locked. It never changes a value a standard holds; only `standard override` does.
+- Questions a standard settles are not asked (stage files: **Settled by: STD-...**), and options marked **(breaks STD-...)** are never recommended.
 - Order when rules collide: accessibility floors, then the person's explicit choice, then project standards, then house standards, then recommended defaults, then research defaults (`docs/KNOWLEDGE.md` section 2). Say it in one line when a higher rule wins.
-- When OpenDesigner's standards are newer than the project's (`engine.py validate` says so), tell the person in one line and run `engine.py standards --update`. Their overrides stay.
+- When OpenDesigner's standards are newer than the project's (`engine.py validate` says so), tell the person in one line, run `engine.py standards --update`, then `engine.py build`. Their overrides and project standards stay.
 
 ## 5. Honesty
 - Never invent owner inputs (scope, audience, governance, terminology). Never invent facts about the person's brand or licences they hold. Mark assumptions `assumed` and list them.

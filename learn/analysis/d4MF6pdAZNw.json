@@ -314,7 +314,7 @@
         "right: 0",
         "left: auto"
       ],
-      "evidence": "it starts in the left and then it's going to finish on the right"
+      "evidence": "width of that to 100% um we'll set the duration to be equal to 1"
     },
     {
       "rule": "If right: 0 alone does not move the wipe block's anchor to the right, also set left to auto.",

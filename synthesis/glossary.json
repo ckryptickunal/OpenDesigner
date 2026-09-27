@@ -855,13 +855,15 @@
   "id": "core.reduced-motion",
   "term": "reduced motion",
   "plain": "A setting on your phone or computer that asks apps to move less, for people who get dizzy.",
-  "designer": "Keep feedback (color and opacity changes, crossfades) and remove travel: sliding, scaling, parallax and bounce. A good reduced mode still feels polished, not broken.",
+  "designer": "Treat WCAG 2.3.3 as required, though it is AAA. Keep feedback (color and opacity changes, crossfades); remove travel: sliding, scaling, parallax and bounce.",
   "engineer": "Web @media (prefers-reduced-motion: reduce); iOS Reduce Motion, Android Remove animations. OpenDesigner's motion mode (motion.reduced.tokens.json): short fades, movement at 0ms, no translate or scale.",
   "designer_says": "reduced motion, no travel",
   "code_name": "prefers-reduced-motion, motion.reduced.tokens.json",
+  "example": "With Reduce Motion on, a sliding panel fades in place.",
   "source": [
    "research/L04-shape-depth-motion.md DC-L04-25",
-   "synthesis/OPENDESIGNER-SPEC.md 7.4"
+   "synthesis/OPENDESIGNER-SPEC.md 7.4",
+   "synthesis/ontology.json found.motion.reduced"
   ],
   "layer": "core",
   "aliases": [
@@ -1785,6 +1787,29 @@
   "layer": "use"
  },
  {
+  "id": "use.house-standard",
+  "term": "house standard",
+  "plain": "A rule OpenDesigner follows in every project, taken from experts its makers trust. You can still ask to change it.",
+  "designer": "Craft rules from the sources the OpenDesigner owner marked non-negotiable. They are applied and locked from the start; your explicit override or your own project standard wins.",
+  "engineer": "Kept in synthesis/standards.json, versioned, shipped as references/standards.json. A project follows the ones whose applies_to tags match its platforms and stack.",
+  "designer_says": "house rules, locked by default",
+  "code_name": "STD-<theme>-<nn> ids",
+  "example": "A house standard stops menus from growing out of nothing.",
+  "see_also": [
+   "use.standard"
+  ],
+  "source": [
+   "docs/KNOWLEDGE.md sections 1 and 2",
+   "synthesis/standards.json",
+   "skills/opendesigner/references/standards.md"
+  ],
+  "layer": "use",
+  "aliases": [
+   "OpenDesigner standard",
+   "STD"
+  ]
+ },
+ {
   "id": "use.interview",
   "term": "interview",
   "plain": "The step-by-step chat where the AI asks you one big question at a time and saves your answers.",
@@ -1866,6 +1891,28 @@
    "skills/opendesigner/SKILL.md"
   ],
   "layer": "use"
+ },
+ {
+  "id": "use.standard",
+  "term": "standard",
+  "plain": "A rule your design always follows. It is set for you, and only you can ask to change it.",
+  "designer": "A non-negotiable rule from a source you or OpenDesigner trust, such as your brand book. It is applied without asking and locked; changing it takes your explicit request.",
+  "engineer": "A record with an id, rule, reason, sources and platform tags. It can lock values, add code checks, settle questions and rule out options. Project ids start PRJ-.",
+  "designer_says": "non-negotiable rule",
+  "code_name": "STD- and PRJ- ids",
+  "example": "Your brand book says buttons use 6 px corners, so they always do.",
+  "see_also": [
+   "use.house-standard"
+  ],
+  "source": [
+   "docs/KNOWLEDGE.md section 1",
+   "skills/opendesigner/references/rules.md section 12"
+  ],
+  "layer": "use",
+  "aliases": [
+   "project standard",
+   "non-negotiable rule"
+  ]
  },
  {
   "id": "use.status-assumed",
@@ -4485,25 +4532,6 @@
   "aliases": [
    "motion budget",
    "system transitions"
-  ]
- },
- {
-  "id": "found.motion.reduced",
-  "term": "Reduced motion",
-  "plain": "If you ask your phone for less motion, things fade in place instead of sliding or zooming.",
-  "designer": "Treat WCAG 2.3.3 as required even though it is AAA. Keep feedback such as color and opacity changes; remove travel like slide, scale and parallax, and use crossfades instead.",
-  "engineer": "A reduced motion mode (motion.reduced.tokens.json) points transitions at short fades with zero travel. Web reads @media (prefers-reduced-motion: reduce); each major OS has a matching setting.",
-  "designer_says": "reduced motion: fades, no travel",
-  "code_name": "prefers-reduced-motion: reduce",
-  "example": "With Reduce Motion on, a sliding panel fades in place.",
-  "source": [
-   "found.motion.reduced",
-   "DC-L04-25"
-  ],
-  "layer": "found",
-  "aliases": [
-   "Reduce Motion",
-   "prefers-reduced-motion"
   ]
  },
  {

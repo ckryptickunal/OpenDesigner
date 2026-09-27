@@ -6,7 +6,7 @@ Area: `any` · open on every screen · visual: text or the host question tool
 
 Not a step in the sequence. The panel sits beside every stage; anything added here is read once and offered as pre-filled answers on the stages that follow, each marked "from reference" until the person confirms it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-ref-01 · Do you have a website, screenshot, Figma file or other example to learn from?
 Zoom any · weight medium · changes 0 decisions · class E
@@ -34,7 +34,7 @@ Screen: what the system is for and who builds it. Graph step 0-2. Cycle kept tog
 
 Zoom 3 (detailed) questions: `01-scope-and-team.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-scope-01 · Which products and pages should this system cover, and which should it leave out?
 Zoom 0 sketch · weight high · changes 8 decisions · class I · cards DC-L11-02
@@ -110,7 +110,7 @@ Area: `overview` · zoom 3 detailed: 2 · visual: text or the host question tool
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-scope-03 · Who will use the system itself?
 Zoom 3 detailed · weight high · changes 8 decisions · class I · cards DC-L11-02
@@ -157,7 +157,7 @@ Area: `accessibility` · zoom 0 sketch: 1, zoom 2 defined: 3 · visual: text or 
 
 Screen: who the product is for and what it promises them. Graph step 0. These answers bound every later option.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-aud-01 · Who uses the product, and how often?
 Zoom 0 sketch · weight high · changes 0 decisions · class I · cards DC-L09-04
@@ -226,7 +226,7 @@ Screen: who the brand is, and which brand assets already exist. Graph step 0-1. 
 
 Zoom 3 (detailed) questions: `03-brand-personality-and-principles.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-brand-01 · Where does your brand sit on these scales?
 Zoom 0 sketch · weight high · changes 15 decisions · class I · cards DC-L06-02
@@ -354,7 +354,7 @@ Area: `overview` · zoom 3 detailed: 1 · visual: `assets/templates/option-galle
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-brand-06 · Should marketing and article pages get their own, bolder set of text styles?
 Zoom 3 detailed · weight high · changes 5 decisions · class G · cards DC-L02-11
@@ -385,7 +385,7 @@ Screen: where the product runs and what people touch it with. Graph step 0-2. Cy
 
 Zoom 3 (detailed) questions: `04-platforms-and-devices.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-plat-01 · Which platforms ship in the first release?
 Zoom 0 sketch · weight high · changes 12 decisions · class I · cards DC-L10-01
@@ -509,7 +509,7 @@ Area: `platforms` · zoom 3 detailed: 3 · visual: text or the host question too
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-plat-06 · In your iOS, Android or desktop apps, use built-in controls or your own?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L10-13
@@ -567,7 +567,7 @@ Screen: design tool, source of truth and how engineers consume the output. Graph
 
 Zoom 3 (detailed) questions: `05-where-the-system-lives.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-tool-03 · Which design tool does your team use, and on which plan?
 Zoom 2 defined · weight medium · changes 3 decisions · class I · cards DC-L07-27
@@ -627,7 +627,7 @@ Area: `delivery` · zoom 3 detailed: 1 · visual: text or the host question tool
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-tool-04 · Should Figma components be linked to code for AI tools?
 Zoom 3 detailed · weight low · changes 0 decisions · class T · cards DC-L07-24
@@ -654,7 +654,7 @@ Screen: the overall look before any single foundation. Graph step 2-3. Cycle kep
 
 Zoom 3 (detailed) questions: `06-visual-direction.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-dir-01 · Which overall visual style fits the product?
 Zoom 1 broad · weight high · changes 13 decisions · class G · cards DC-L15-01
@@ -731,7 +731,7 @@ Area: `overview` · zoom 3 detailed: 1 · visual: `assets/templates/option-galle
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-dir-05 · Should layouts line up on the side where reading starts, or be centered?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L15-08
@@ -757,7 +757,7 @@ Screen: which variations of the system exist. Graph step 0-2. Asked before color
 
 Zoom 3 (detailed) questions: `07-themes-and-modes.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-theme-01 · Which appearance modes does the product support?
 Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L10-17, DC-L14-09
@@ -766,9 +766,9 @@ Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L10-1
 - **Options:**
   - `system-light-dark` Light and dark, matching the device setting: blends with the OS at night (Apple expects apps to respect the preference).
   - `light-dark-toggle` Light and dark, plus a switch in the app: web only, in addition to system-follow [DC-L10-17].
-  - `light-only` Light only [DC-L07-15].
-  - `dark-only` Dark only: brand colors glow, fewer and brighter accents (watch, TV, car at night) [DC-L14-09].
-- **Default:** `system-light-dark`: system-light-dark on phone, tablet, desktop and web; dark-only on watch; day/night auto in cars *Source:* L09 shared default row 6 (21 of 25 systems) and platform convention [L09 A1; DC-L10-17, DC-L14-09].
+  - `light-only` Light only [DC-L07-15]. (breaks STD-visual-details-24)
+  - `dark-only` Dark only (breaks STD-visual-details-24): brand colors glow, fewer and brighter accents (watch, TV, car at night) [DC-L14-09].
+- **Default:** `system-light-dark`: system-light-dark on every platform, a watch included (house standard STD-visual-details-24 gives each color role a light and a dark value; a watch app can still open in dark); day/night auto in cars *Source:* L09 shared default row 6 (21 of 25 systems) and platform convention [L09 A1; DC-L10-17, DC-L14-09].
 - **Show:** the draft screen split diagonally, light and dark.
 - **Use / avoid:** use system-following modes on Apple platforms; offer an in-app toggle only on web and only in addition; avoid an app-only appearance switch on Apple, which reads as broken [DC-L10-17].
 - **Skip:** yes.
@@ -795,7 +795,7 @@ Area: `modes` · zoom 3 detailed: 2 · visual: `assets/templates/palette.html`
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-theme-02 · Besides light and dark, which other theme switches should exist?
 Zoom 3 detailed · weight medium · changes 3 decisions · class G · cards DC-L07-15, DC-L11-25
@@ -837,7 +837,7 @@ Screen: one screen with four sections (brand input, strategy, ramps and neutrals
 
 Zoom 3 (detailed) questions: `08-color-system.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-color-01 · Do you have fixed brand colors, or should the builder generate the palette from one color?
 Zoom 0 sketch · weight high · changes 3 decisions · class E · cards DC-L09-03, DC-L01-09
@@ -1014,7 +1014,7 @@ Area: `color` · zoom 3 detailed: 9 · visual: `assets/templates/palette.html`
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-color-05 · How much of a screen may use accent color and emphasis?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L15-03
@@ -1161,7 +1161,7 @@ Screen: the fine-grained color roles that follow from Stage 08, on the same live
 
 Zoom 3 (detailed) questions: `09-color-details-and-accessibility-modes.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-color-20 · How should hover and pressed states change color?
 Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L01-17
@@ -1200,7 +1200,7 @@ Area: `color` · zoom 3 detailed: 5 · visual: `assets/templates/palette.html`
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-color-22 · How many text colors, and are they solid or transparent?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L01-14
@@ -1282,7 +1282,7 @@ Screen: which fonts, for which scripts. Graph step 2-4. Cycles kept together: DC
 
 Zoom 3 (detailed) questions: `10-typeface.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-type-01 · Should the product use the platform's font, a neutral open font, or your own brand typeface?
 Zoom 1 broad · weight high · changes 6 decisions · class T · cards DC-L09-05, DC-L02-01, DC-L06-07, DC-L10-06
@@ -1361,7 +1361,7 @@ Area: `typography` · zoom 3 detailed: 3 · visual: `assets/templates/type-scale
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-type-05 · One type family, or a pair?
 Zoom 3 detailed · weight medium · changes 2 decisions · class G · cards DC-L02-03
@@ -1417,7 +1417,7 @@ Screen: sizes, line heights, weights and text behavior, on a live type ladder ne
 
 Zoom 3 (detailed) questions: `11-type-scale-and-text.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-type-08 · What size should body text be?
 Zoom 2 defined · weight medium · changes 3 decisions · class G · cards DC-L02-08
@@ -1441,7 +1441,7 @@ Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L02-2
 - **Options:**
   - `capped-chrome` Full for content, capped at about 1.5x for fixed parts like tab labels [DC-L10-07].
   - `full` Full scaling, no cap on body text: iOS AX1-AX5, Android nonlinear to 200%, web rem.
-  - `none` No scaling support: fails platform guidance (Apple asks for at least 200%).
+  - `none` No scaling support (breaks STD-accessibility-motion-13): fails platform guidance (Apple asks for at least 200%).
 - **Default:** `capped-chrome`: capped-chrome, with every text token in scalable units and no fixed-height text containers *Source:* platform convention and accessibility rule [DC-L10-07, DC-L02-21].
 - **Show:** a list row and a tab bar at default, 200% and AX5, restacking live.
 - **Use / avoid:** use containers that grow with text; avoid truncating at the largest sizes [DC-L02-21, DC-L10-07].
@@ -1456,7 +1456,7 @@ Area: `typography` · zoom 3 detailed: 8 · visual: `assets/templates/type-scale
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-type-15 · Should text sizes change with screen width?
 Zoom 3 detailed · weight medium · changes 2 decisions · class G · cards DC-L02-19
@@ -1535,7 +1535,7 @@ Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L02-
 - **Options:**
   - `size-table` A size-specific table (SF Pro: +41/1000 em at 6pt, 0 at 12pt, -26/1000 em at 17pt), applied automatically by the OS.
   - `per-style` Per-style tracking tokens (Material: Display Large -0.2sp, Body Large 0.5sp).
-  - `zero` No extra letter spacing beyond the font's defaults [DC-L02-14].
+  - `zero` No extra letter spacing beyond the font's defaults [DC-L02-14]. (breaks STD-visual-details-04, STD-visual-details-05)
 - **Default:** 0 at body sizes, +0.02 to +0.05em at 11-12px and all caps, -0.01 to -0.02em from about 32px, in em units *Source:* card heuristic [DC-L02-14].
 - **Show:** a headline and an all-caps label with tracking on and off.
 - **Use / avoid:** use em-based tracking so it scales; let optical-size fonts do most of the work; avoid tracking non-Latin scripts [DC-L02-14, DC-L02-25].
@@ -1546,7 +1546,7 @@ Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L02-
 - **Ask:** "How wide can paragraphs get, and how should long text be cut off?"
 - **Why:** Very long lines make readers lose their place. Centered or justified text (stretched to both edges) slows reading [DC-L02-17, DC-L02-18].
 - **Options:**
-  - `measure-45-75` 45-75 characters (Bringhurst) or 50-60 (Windows); WCAG 1.4.8 AAA caps at 80, 40 for CJK.
+  - `measure-45-75` 45-75 characters (Bringhurst) or 50-60 (Windows); WCAG 1.4.8 AAA caps at 80, 40 for CJK. (breaks STD-visual-details-01)
   - `wrap-then-ellipsis` Wrap first, then cut off with an ellipsis (...) and a way to read it all [DC-L02-18].
   - `para-1x` Paragraph spacing equal to the body size (Atlassian body 12px, body large 16px) [DC-L02-16].
   - `text-box-trim` Trim half-leading so spacing measures from cap height (CSS `text-box: trim-both`) [DC-L02-16].
@@ -1581,7 +1581,7 @@ Screen: the spacing scale, target sizes and control heights, shown on a live com
 
 Zoom 3 (detailed) questions: `12-space-sizing-and-density.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-space-01 · What should the base spacing unit be?
 Zoom 2 defined · weight high · changes 5 decisions · class G · cards DC-L03-01
@@ -1666,7 +1666,7 @@ Area: `layout` · zoom 3 detailed: 5 · visual: `assets/templates/spacing-ruler.
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-space-09 · Who controls density, and how is it stored?
 Zoom 3 detailed · weight medium · changes 3 decisions · class G · cards DC-L03-10, DC-L03-11, DC-L14-13
@@ -1748,7 +1748,7 @@ Screen: how pages reorganize across widths, shown on a resizable frame the perso
 
 Zoom 3 (detailed) questions: `13-layout-navigation-and-app-shell.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-layout-01 · At which widths should layouts reorganize?
 Zoom 2 defined · weight high · changes 5 decisions · class G · cards DC-L03-14
@@ -1805,7 +1805,7 @@ Area: `layout` · zoom 3 detailed: 3 · visual: `assets/templates/spacing-ruler.
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-layout-02 · Should layouts stretch fluidly, switch between fixed designs, or both?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L03-22, DC-L10-10
@@ -1858,7 +1858,7 @@ Screen: corner radius, on a live component sheet (button, input, card, dialog, m
 
 Zoom 3 (detailed) questions: `14-shape.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-shape-01 · How soft should corners feel?
 Zoom 1 broad · weight high · changes 4 decisions · class G · cards DC-L09-01, DC-L04-02
@@ -1889,7 +1889,7 @@ Area: `shape` · zoom 3 detailed: 4 · visual: `assets/templates/radius.html`
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-shape-05 · Should a signature shape from your brand appear in the UI?
 Zoom 3 detailed · weight medium · changes 2 decisions · class D · cards DC-L06-09
@@ -1957,7 +1957,7 @@ Screen: how surfaces separate and float, on a live stack (page, card, menu, dial
 
 Zoom 3 (detailed) questions: `15-depth-borders-and-materials.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-depth-01 · How should surfaces separate from each other?
 Zoom 1 broad · weight high · changes 5 decisions · class G · cards DC-L09-02, DC-L04-10, DC-L08-15
@@ -1984,9 +1984,9 @@ Zoom 2 defined · weight medium · changes 2 decisions · class T · cards DC-L0
 - **Ask:** "Should menus, bars and pop-ups be see-through glass, or stay solid?"
 - **Why:** Glass looks premium and matches 2025-26 operating systems, and keeps what is behind in view. The cost is lower contrast that shifts with the background [DC-L04-15, DC-L10-12].
 - **Options:**
-  - `none` Opaque surfaces: most legible and cheapest [DC-L04-15].
+  - `none` Opaque surfaces (breaks STD-visual-details-16): most legible and cheapest [DC-L04-15].
   - `control-layer` Glass on navigation and controls only, never on content (Apple Liquid Glass: regular for text-heavy parts, clear over media with a 35% dim).
-  - `transient` See-through menus and flyouts only; Mica for the window base (Fluent Acrylic).
+  - `transient` See-through menus and flyouts only; Mica for the window base (Fluent Acrylic). (breaks STD-visual-details-16)
   - `decorative` Decorative glass effect on cards: flagged for legibility (NN/g) [DC-L04-15].
 - **Default:** platform material for native chrome (glass on Apple, Mica on Windows, tonal surfaces on Android); opaque on web with optional blur plus an opaque fallback; content edge-to-edge under the bars with inset-aware components *Source:* platform convention [DC-L10-12, DC-L10-11, DC-L04-15].
 - **Show:** the toolbar and a sheet over a busy photo with live contrast readouts; the opaque fallback shown beside it.
@@ -2002,7 +2002,7 @@ Area: `elevation` · zoom 3 detailed: 4 · visual: `assets/templates/elevation.h
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-depth-02 · How many elevation levels, and how do they look in dark mode?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L04-11, DC-L04-13
@@ -2071,7 +2071,7 @@ Screen: motion feel on live interactions the person can trigger (open a menu, na
 
 Zoom 3 (detailed) questions: `16-motion-haptics-and-sound.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-motion-01 · Should motion feel quick and quiet, or physical and playful?
 Zoom 1 broad · weight high · changes 5 decisions · class G · cards DC-L09-06, DC-L04-19, DC-L06-10
@@ -2084,7 +2084,7 @@ Zoom 1 broad · weight high · changes 5 decisions · class G · cards DC-L09-06
     - Now: Almost nothing moves; press feedback and quick fades that explain a change stay. Still and calm, like GOV.UK. As it grows: Stays consistent as screens grow, but rare moments like a first success get no extra life. [inferred]
   - `productive` Quick, plain curves: fast, competent, no bounce (Carbon productive `cubic-bezier(0.2, 0, 0.38, 0.9)`).
     - Now: Quick, plain movements with no bounce: fast and competent. As it grows: Fits frequent actions as features grow; things done 100+ times a day still get no animation at all.
-  - `springs` Springs throughout: alive, physical, interruptible (Material spring tokens, Apple duration + bounce, Airbnb) [DC-L09-06].
+  - `springs` Springs throughout (breaks STD-springs-gestures-01): alive, physical, interruptible (Material spring tokens, Apple duration + bounce, Airbnb) [DC-L09-06].
     - Now: Movement feels physical and can be caught mid-way; bounce stays for flicks, drags and rare playful moments, per house standards. As it grows: Springs drive whatever a finger moves; motion nobody touched keeps plain timing curves, and the web needs a JavaScript spring library.
 - **Default:** `two-mode`: two-mode: 7 durations 50-500ms, ease-out to enter and to exit (never ease-in on UI: house standards STD-easing-duration-01 and -03), springs only for spatial moves in the expressive mode, bounce at or below 0.2 *Source:* L09 shared default row 5 (all 16 systems with motion tokens stay in 100-300ms) and card heuristics [DC-L09-06, DC-L04-19]; capped at productive when Q-aud-02 is high-trust.
 - **Show:** the live interactions replay on every change, with a slow-motion button.
@@ -2093,11 +2093,12 @@ Zoom 1 broad · weight high · changes 5 decisions · class G · cards DC-L09-06
 
 ## Q-motion-07 · What happens when people ask for reduced motion, and how much motion fits each device?
 Zoom 2 defined · weight low · changes 0 decisions · class G · cards DC-L04-25, DC-L14-08
+- **Settled by:** STD-accessibility-motion-02: Under reduced motion, remove movement (translation, scale, slides, springs, parallax, elastic and overshoot) and replace it with a short opacity cross-fade (the sources use 200ms, ease) or a static transition, while keeping the opacity and color changes that explain a state change; never remove all animation or feedback. Don't ask; the value is locked. Change it only through engine.py standard override when the person explicitly asks.
 - **Ask:** "When someone turns on reduced motion, should things fade gently or stop moving?"
 - **Why:** A good reduced motion mode still feels polished, with crossfades instead of jumps. Where people have less attention to spare, motion shrinks, down to none in cars [DC-L04-25, DC-L14-08].
 - **Options:**
   - `replace` Replace movement with fades and color changes (MDN; WCAG's motion rule leaves out color, blur and opacity).
-  - `remove` Remove all non-essential motion (WCAG 2.3.3 AAA, technique C39) [DC-L04-25].
+  - `remove` Remove all non-essential motion (WCAG 2.3.3 AAA, technique C39) [DC-L04-25]. (breaks STD-accessibility-motion-02)
   - `per-device` Per device: system transitions plus brand micro-motion on phone and desktop; subtle focus scale on TV; minimal on watch; none in cars; slow and grounded in headsets [DC-L14-08].
 - **Default:** `replace`: replace, built as a token mode; 2.3.3 treated as a requirement although it is AAA; per-device budgets applied *Source:* accessibility rule and card heuristics [DC-L04-25, DC-L14-08].
 - **Show:** the reduced-motion toggle on every live interaction.
@@ -2111,7 +2112,7 @@ Zoom 2 defined · weight medium · changes 0 decisions · class D · cards DC-L0
 - **Options:**
   - `silent` Silent by default (most web systems; tvOS plays no alert sounds).
   - `rare-events` Sounds for rare, meaningful events, always behind mute and silent mode.
-  - `sound-forward` Lots of sound (games, spatial computing) [DC-L04-27].
+  - `sound-forward` Lots of sound (games, spatial computing) [DC-L04-27]. (breaks STD-springs-gestures-61)
 - **Default:** `silent`: silent on web and productivity apps *Source:* card heuristic [DC-L04-27].
 - **Show:** the event list with a play button per sound and the mute state.
 - **Use / avoid:** use sound only for rare, meaningful events that honor silent mode; avoid sounds on web and in shared-space products [DC-L04-27].
@@ -2127,17 +2128,18 @@ Area: `motion` · zoom 3 detailed: 7 · visual: `assets/templates/motion.html`
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-motion-04 · How should springs be defined and exported?
 Zoom 3 detailed · weight medium · changes 2 decisions · class G · cards DC-L04-22
+- **Settled by:** STD-springs-gestures-02: Specify each spring with two designer parameters, damping ratio (or bounce) and response (or duration), rather than mass, stiffness and damping, and never treat response as a fixed duration; STD-springs-gestures-04: Default every UI spring to critically damped (damping ratio 1.0, no overshoot) with a response of 0.3–0.4 s, and move or reposition elements with damping 1.0 and response 0.4 s; only a spring that follows a momentum gesture (STD-springs-gestures-06) or a deliberately playful or decorative moment (STD-springs-gestures-07, STD-springs-gestures-45) may be under-damped. Don't ask; the value is locked. Change it only through engine.py standard override when the person explicitly asks.
 - **Show if:** Q-motion-01 is two-mode or springs
 - **Ask:** "How should springy motion be set up: time and easing only, spring physics, or Apple's bounce?"
 - **Why:** Spring animations keep their speed when cut off and come to rest in a natural way. The DTCG format has no spring type, so how you store them matters [DC-L04-22; BOARD L04/L07 note].
 - **Options:**
-  - `durations-only` Duration + easing only (Carbon, Fluent, Polaris, Primer).
-  - `spatial-effects` Two kinds of spring. Moves may overshoot; color and fade effects never do (Material fast/default/slow).
-  - `apple-bounce` Duration + bounce 0 / 0.15 / 0.3 (Apple) [DC-L09-06].
+  - `durations-only` Duration + easing only (Carbon, Fluent, Polaris, Primer). (breaks STD-springs-gestures-01)
+  - `spatial-effects` Two kinds of spring. Moves may overshoot; color and fade effects never do (Material fast/default/slow). (breaks STD-springs-gestures-04, STD-springs-gestures-05)
+  - `apple-bounce` Duration + bounce 0 / 0.15 / 0.3 (Apple) [DC-L09-06]. (breaks STD-springs-gestures-04)
 - **Default:** (dampingRatio, stiffness) plus derived (duration, bounce) for Apple and pre-sampled `linear()` for CSS; critically damped springs for effects *Source:* card heuristic [DC-L04-22].
 - **Show:** a switch and a sheet driven by the spring, dragged and released mid-flight.
 - **Use / avoid:** use springs for spatial moves; avoid overshoot on color and opacity [DC-L04-22].
@@ -2145,12 +2147,13 @@ Zoom 3 detailed · weight medium · changes 2 decisions · class G · cards DC-L
 
 ## Q-motion-02 · Which durations should exist, and should exits be faster?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L04-20, DC-L04-24
+- **Settled by:** STD-easing-duration-07: Time each UI animation within its element's budget: button press feedback 100-160ms, tooltips and small popovers 125-200ms, dropdowns and selects 150-250ms, modals and drawers 200-500ms; on iOS and Android, press feedback 100-150ms, toggles, chips and small state changes 150-200ms, and sheets, modals and drawers a spring of about 300ms perceived; STD-easing-duration-11: Make exits faster than entrances, typically about 20% shorter (a 300ms toast entrance leaves in 250ms), rather than at the same speed. Don't ask; the value is locked. Change it only through engine.py standard override when the person explicitly asks.
 - **Ask:** "How many animation lengths should there be, and should things leave faster than they arrive?"
 - **Why:** Past about 500ms, motion starts to feel slow. Quick exits that people can cut short respect their time [DC-L04-20, DC-L04-24].
 - **Options:**
-  - `6-steps` 6 steps: instant 0, micro 100, short 150-200, medium 250-300, long 400-500, extra 700 [DC-L04-20].
+  - `6-steps` 6 steps (breaks STD-easing-duration-06, STD-easing-duration-07): instant 0, micro 100, short 150-200, medium 250-300, long 400-500, extra 700 [DC-L04-20].
   - `4-semantic` 4 steps: micro, short, medium, long (Primer).
-  - `16-steps` 16 steps (Material 3).
+  - `16-steps` 16 steps (Material 3). (breaks STD-easing-duration-06, STD-easing-duration-07)
   - `asymmetric` Exits 20-35% shorter than entrances (Atlassian modal 250/200; Primer 300/200).
 - **Default:** `6-steps`: 6 steps; exits about 70-80% of the entrance; motion is interruptible and never blocks input longer than about 100ms *Source:* card heuristics [DC-L04-20, DC-L04-24]; Apple: "don't make people wait for an animation to complete".
 - **Show:** a timeline of each transition with its duration; clicking mid-animation shows retargeting.
@@ -2159,12 +2162,13 @@ Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L04-
 
 ## Q-motion-03 · Which easing curves?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L04-21, DC-L19-85
+- **Settled by:** STD-easing-duration-01: Choose each animation's easing by asking in order whether it enters or exits the screen (ease-out), moves or morphs on screen (ease-in-out), is a hover or color change (ease), or is constant motion such as a spinner, marquee or progress fill (linear), and use ease-out when none applies. Never put linear on an entrance, and put bare ease on one only when the component's personality calls for it, as the toast recipe does (STD-easing-duration-13); STD-easing-duration-02: Use the strong custom curves cubic-bezier(0.23, 1, 0.32, 1) for ease-out and cubic-bezier(0.77, 0, 0.175, 1) for ease-in-out instead of the built-in CSS or Reanimated easings (only the ease and linear keywords stay allowed), and take any other curve from easing.dev or easings.co rather than hand-rolling one. Don't ask; the value is locked. Change it only through engine.py standard override when the person explicitly asks.
 - **Ask:** "How should speed-up and slow-down curves be grouped: by job, strength or mood?"
 - **Why:** Easing curves that slow down hard make things feel fast as they arrive. Curves named by job are the easiest to use the same way everywhere [DC-L04-21].
 - **Options:**
   - `role-based` By job: entering or leaving, moving on screen, hover and color, constant motion; one curve each, the house set. Carbon, Primer and Windows also name curves by role (standard / enter / exit).
-  - `intensity-based` Min / mid / max intensity (Fluent).
-  - `personality-based` Practical vs bold (Atlassian); productive vs expressive (Carbon).
+  - `intensity-based` Min / mid / max intensity (Fluent). (breaks STD-easing-duration-01, STD-easing-duration-02)
+  - `personality-based` Practical vs bold (Atlassian); productive vs expressive (Carbon). (breaks STD-easing-duration-01, STD-easing-duration-02)
 - **Default:** `role-based`: by job, one curve each: ease-out cubic-bezier(0.23, 1, 0.32, 1) for entering and leaving, cubic-bezier(0.77, 0, 0.175, 1) for moves on screen, CSS `ease` for hover and color changes, the drawer curve cubic-bezier(0.32, 0.72, 0, 1) for drawers and sheets, linear only for spinners and progress; no ease-in anywhere *Source:* house standards STD-easing-duration-01, STD-easing-duration-02, STD-easing-duration-03 and STD-components-toasts-drawers-40 [DC-L19-85]; replaces the accelerate exit (0.3, 0, 1, 1) of DC-L04-21.
 - **Show:** the curve editor with a live card.
 - **Use / avoid:** use linear only for spinners, progress and other constant motion; never ease-in on UI (STD-easing-duration-03) [DC-L19-85].
@@ -2189,8 +2193,8 @@ Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L04-
 - **Ask:** "Which of the four standard ways to change screens should we use, and should list items show up one by one?"
 - **Why:** Using the same screen transitions every time helps people follow the app. They can feel whether they went deeper or sideways [DC-L04-23].
 - **Options:**
-  - `fade` Fade for in-screen enter and exit (dialogs, menus) [DC-L04-23].
-  - `fade-through` Fade through for unrelated destinations such as tabs [DC-L04-23].
+  - `fade` Fade for in-screen enter and exit (dialogs, menus) [DC-L04-23]. (breaks STD-enter-exit-origin-02)
+  - `fade-through` Fade through for unrelated destinations such as tabs [DC-L04-23]. (breaks STD-when-to-animate-05, STD-when-to-animate-14)
   - `shared-axis` Shared axis x, y or z to show where screens sit (onboarding x, stepper y, parent-child z) [DC-L04-23].
   - `container-transform` Container transform, where an item grows into a full page [DC-L04-23].
   - `stagger` A stagger (small delay between items) of 20-50ms, total at most 500ms [DC-L04-23].
@@ -2206,10 +2210,10 @@ Zoom 3 detailed · weight medium · changes 0 decisions · class T · cards DC-L
 - **Why:** When the system owns back gestures and transitions, the app feels native; Android's predictive back peeks at the screen behind. Custom vibrations (haptics) feel cheap if you use too many [DC-L10-14, DC-L04-26].
 - **Options:**
   - `os-nav-brand-micro` System screen changes and back gesture, with small brand springs inside content [DC-L10-14].
-  - `one-language` One brand motion language everywhere [DC-L10-14].
-  - `haptics-system` System haptics only (standard controls already play them).
+  - `one-language` One brand motion language everywhere [DC-L10-14]. (breaks STD-mobile-touch-42)
+  - `haptics-system` System haptics only (standard controls already play them). (breaks STD-mobile-touch-62)
   - `haptics-semantic` About 6 named vibrations (success, warning, error, selection, toggle, light impact).
-- **Default:** `os-nav-brand-micro`: os-nav-brand-micro and haptics-system; a semantic map only for products with frequent confirmations *Source:* card heuristics [DC-L10-14, DC-L04-26].
+- **Default:** `os-nav-brand-micro`: os-nav-brand-micro and haptics-semantic: house standard STD-mobile-touch-62 maps each moment (a value ticking past a step, a snap, a commit) to one system haptic *Source:* card heuristics [DC-L10-14, DC-L04-26].
 - **Show:** the event list with each haptic's platform mapping.
 - **Use / avoid:** use haptics sparingly ("less is more"); avoid long "buzzy" vibrations [DC-L04-26].
 - **Hook:** accepts Custom haptics accept Apple AHAP (.ahap JSON, intensity and sharpness 0-1) and Android `VibrationEffect` compositions If no: system patterns first (Apple notification, impact, selection; Android `HapticFeedbackConstants`).
@@ -2217,6 +2221,7 @@ Zoom 3 detailed · weight medium · changes 0 decisions · class T · cards DC-L
 
 ## Q-motion-10 · Which accessibility settings on the device must the system follow?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L10-16
+- **Settled by:** STD-accessibility-motion-01: Ship the prefers-reduced-motion variant of every animation that moves something (and, on the web, its hover gating) in the same change as the animation itself, including every prototype variant and every proposed motion recipe, never as a follow-up; STD-accessibility-motion-11: Handle prefers-reduced-transparency: reduce as its own signal, separate from reduced motion: make translucent surfaces frostier or solid by raising their background opacity and dropping the blur; STD-accessibility-motion-12: Handle prefers-contrast: more as its own signal: give surfaces near-solid backgrounds with a defined, contrasting border; STD-accessibility-motion-13: Respect the user's text-size setting (Dynamic Type) by scaling layout with the text; on the web write spacing in rem or em, not fixed px. Don't ask; the value is locked. Change it only through engine.py standard override when the person explicitly asks.
 - **Ask:** "Which device settings should the design follow, like screen readers, bigger text or less motion?"
 - **Why:** Following these settings changes the look for that person. With high contrast on, borders get thicker; with reduced transparency on, bars turn solid [DC-L10-16].
 - **Options:**
@@ -2242,7 +2247,7 @@ Screen: an icon sheet in the product's own buttons, tabs and lists, next to body
 
 Zoom 3 (detailed) questions: `17-icons-app-icon-and-logo-use.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-icon-01 · Do you have a custom icon set, or should the system adopt a library?
 Zoom 2 defined · weight medium · changes 3 decisions · class T · cards DC-L05-01, DC-L10-25
@@ -2297,7 +2302,7 @@ Area: `iconography` · zoom 3 detailed: 5 · visual: `assets/templates/component
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-icon-03 · How thick should icon lines be?
 Zoom 3 detailed · weight medium · changes 3 decisions · class G · cards DC-L05-03
@@ -2378,7 +2383,7 @@ Screen: an empty state, onboarding card, hero and dashboard, with the person's o
 
 Zoom 3 (detailed) questions: `18-imagery-illustration-and-charts.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-img-01 · Does the product use photography, and do you have photos or a photo brief?
 Zoom 2 defined · weight medium · changes 3 decisions · class D · cards DC-L05-14
@@ -2435,7 +2440,7 @@ Area: `iconography` · zoom 3 detailed: 5 · visual: text or the host question t
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-img-02 · Which image shapes, and can text sit on top of images?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L05-15, DC-L05-16
@@ -2517,7 +2522,7 @@ Screen: the product's own buttons, errors, empty states and a success message, r
 
 Zoom 3 (detailed) questions: `19-content-and-voice.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-voice-01 · Do you have a voice and tone guide? If not, what 3-4 traits describe how the product talks?
 Zoom 2 defined · weight high · changes 5 decisions · class T · cards DC-L06-18
@@ -2588,7 +2593,7 @@ Area: `content` · zoom 3 detailed: 2 · visual: text or the host question tool
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-voice-05 · Which grammar and punctuation rules?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L06-21
@@ -2629,7 +2634,7 @@ Screen: the component catalog, rendered with every foundation chosen so far; eac
 
 Zoom 3 (detailed) questions: `20-component-base-and-inventory.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-comp-01 · What should your components be built on?
 Zoom 2 defined · weight low · changes 1 decisions · class T · cards DC-L08-03
@@ -2668,7 +2673,7 @@ Area: `components` · zoom 3 detailed: 3 · visual: `assets/templates/component-
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-comp-03 · Should components use settings, or be built from smaller pieces?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L08-04, DC-L07-22
@@ -2722,7 +2727,7 @@ Screen: a live component sheet where every control can be hovered, pressed, focu
 
 Zoom 3 (detailed) questions: `21-actions-states-and-focus.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-state-01 · How many button styles, and how many main buttons in each area?
 Zoom 2 defined · weight medium · changes 2 decisions · class G · cards DC-L08-05, DC-L13-18
@@ -2786,7 +2791,7 @@ Area: `components` · zoom 3 detailed: 4 · visual: `assets/templates/component-
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-state-04 · Which states get their own styling, per input type?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L08-09, DC-L14-06, DC-L19-102, DC-L19-93
@@ -2853,7 +2858,7 @@ Screen: a live sign-up form and a list with delete actions; the person fills fie
 
 Zoom 3 (detailed) questions: `22-forms-validation-and-feedback.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-form-01 · What style should form fields have, and where do labels go?
 Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L08-16, DC-L13-05
@@ -2876,7 +2881,7 @@ Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L13-0
 - **Why:** Errors that show too early feel hostile, and checking on submit keeps forms calm. A disabled button hides why the action can't run [DC-L13-06, DC-L08-17, DC-L08-10].
 - **Options:**
   - `on-blur` When you leave a field ("reward early, punish late"): clear the error on the keystroke that fixes it; validate at complete length for ZIP and phone.
-  - `on-submit-summary` On submit, a list of errors at the top that takes focus, "Error:" prefix, notes by each field (GOV.UK).
+  - `on-submit-summary` On submit, a list of errors at the top that takes focus, "Error:" prefix, notes by each field (GOV.UK). (breaks STD-visual-details-49)
   - `disable-short-forms` Turn off submit on short forms until all is right, never on long ones (Carbon).
   - `never-disable` Never turn off submit; explain the problem instead (Atlassian).
 - **Default:** `on-blur`: on-blur for format checks, on submit otherwise, summary plus inline for forms over about 5 fields; never-disable, with `aria-disabled` and helper text when an action truly cannot run *Source:* card heuristics [DC-L13-06, DC-L08-17, DC-L08-10]; systems disagree (see Disagreements).
@@ -2899,12 +2904,13 @@ Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L08-1
 
 ## Q-form-05 · For deletes and other risky steps, offer undo or ask first?
 Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L13-08
+- **Settled by:** STD-visual-details-40: Give easy undo for slips, and use a confirmation dialog only for genuinely destructive, irreversible actions, sparingly. Don't ask; the value is locked. Change it only through engine.py standard override when the person explicitly asks.
 - **Ask:** "When people delete something, should they get an undo button, an 'Are you sure?' step, or both?"
 - **Why:** Undo keeps work fast and calm. Asking "Are you sure?" too often feels like red tape, and people stop reading it [DC-L13-08].
 - **Options:**
   - `both` Undo when it can be undone, ask first when it can't or costs a lot [DC-L13-08].
   - `undo-first` Undo with trash or soft delete for actions you can reverse (NN/g calls undo superior; Shneiderman rule 6).
-  - `confirm` An 'Are you sure?' box with clear verb buttons, and Cancel as the safe choice [DC-L13-08].
+  - `confirm` An 'Are you sure?' box with clear verb buttons, and Cancel as the safe choice [DC-L13-08]. (breaks STD-visual-details-40)
 - **Default:** `both`: both *Source:* card heuristic [DC-L13-08].
 - **Show:** the list delete flow per option.
 - **Use / avoid:** use verb labels on confirmations; avoid "Are you sure?" dialogs for reversible actions [DC-L13-08].
@@ -2919,7 +2925,7 @@ Area: `components` · zoom 3 detailed: 1 · visual: `assets/templates/component-
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-form-03 · How should error messages be shown and written?
 Zoom 3 detailed · weight medium · changes 2 decisions · class G · cards DC-L13-07
@@ -2947,7 +2953,7 @@ Screen: small flows the person can click through: open a dialog and a side sheet
 
 Zoom 3 (detailed) questions: `23-patterns-and-ai-surfaces.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-pattern-01 · When should the product use a dialog, a sheet or a popover?
 Zoom 2 defined · weight low · changes 0 decisions · class G · cards DC-L08-20
@@ -3014,7 +3020,7 @@ Area: `components` · zoom 3 detailed: 3 · visual: `assets/templates/component-
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-pattern-02 · How should long lists load: pages, "load more", or infinite scroll?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L08-21
@@ -3067,7 +3073,7 @@ Screen: a token browser beside the product preview; clicking any element shows i
 
 Zoom 3 (detailed) questions: `24-tokens-and-encoding.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-token-01 · How many token layers should sit between raw values and components?
 Zoom 2 defined · weight medium · changes 4 decisions · class G · cards DC-L07-01, DC-L07-02, DC-L01-26, DC-L02-27
@@ -3091,7 +3097,7 @@ Area: `delivery` · zoom 3 detailed: 9 · visual: text or the host question tool
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-token-04 · Which units should the source use?
 Zoom 3 detailed · weight medium · changes 2 decisions · class G · cards DC-L07-11, DC-L10-08, DC-L03-26
@@ -3099,7 +3105,7 @@ Zoom 3 detailed · weight medium · changes 2 decisions · class G · cards DC-L
 - **Why:** px maps cleanly to pt, dp and Figma. rem follows browser zoom, and plain numbers carry over 1:1 to every platform [DC-L07-11, DC-L10-08].
 - **Options:**
   - `px-to-rem` px in source, rem on the web (DTCG allows px and rem only; Figma imports px).
-  - `unitless` Plain numbers in steps of 4, output 1:1 as pt, dp, epx or px; rem for web font sizes (Fluent's ramp).
+  - `unitless` Plain numbers in steps of 4, output 1:1 as pt, dp, epx or px; rem for web font sizes (Fluent's ramp). (breaks STD-accessibility-motion-13)
   - `rem-source` rem in the source, turned into dp, sp or CGFloat by the build [DC-L10-08].
 - **Default:** `px-to-rem`: px-to-rem (equivalently unitless numbers), rem for web type and breakpoints; "spacing scales with text size" is an explicit toggle, off by default; line height unitless *Source:* card heuristics [DC-L07-11, DC-L10-08, DC-L03-26].
 - **Show:** one value converted per platform.
@@ -3232,7 +3238,7 @@ Screen: a governance plan generated from earlier answers (team size, scope, plat
 
 Zoom 3 (detailed) questions: `25-team-governance-and-change.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-gov-01 · How strict should the system be: can product teams override or extend it?
 Zoom 2 defined · weight medium · changes 3 decisions · class I · cards DC-L11-03
@@ -3256,7 +3262,7 @@ Area: `delivery` · zoom 3 detailed: 6 · visual: text or the host question tool
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-gov-02 · In what order will you build, pilot and roll out?
 Zoom 3 detailed · weight medium · changes 3 decisions · class I · cards DC-L11-06, DC-L11-07, DC-L11-08
@@ -3353,7 +3359,7 @@ Screen: the export menu and a preview of every file the builder will produce: to
 
 Zoom 3 (detailed) questions: `26-output-documentation-and-ai-channels.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-dist-01 · How should the system leave the builder?
 Zoom 2 defined · weight low · changes 0 decisions · class T · cards DC-L16-12
@@ -3412,7 +3418,7 @@ Area: `delivery` · zoom 3 detailed: 1 · visual: text or the host question tool
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-dist-04 · Where do docs live, and what goes on each component page?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L11-17, DC-L11-18, DC-L08-23
@@ -3439,7 +3445,7 @@ Screen: how the builder (or the interviewing model) behaves while the person kee
 
 Zoom 3 (detailed) questions: `27-builder-preferences.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-pref-01 · How strict should the builder's critique be?
 Zoom 2 defined · weight medium · changes 0 decisions · class I · cards DC-L15-11
@@ -3465,7 +3471,7 @@ Area: `delivery` · zoom 3 detailed: 2 · visual: text or the host question tool
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-pref-02 · How should AI edits and variations work?
 Zoom 3 detailed · weight medium · changes 3 decisions · class I · cards DC-L16-04, DC-L16-05

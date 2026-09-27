@@ -23,8 +23,8 @@ tags:
 
 ## Metadata
 
-- Video ID: `vaul-api`
-- Channel: Vaul docs (web)
+- Page ID: `vaul-api`
+- Publisher: Vaul docs (web)
 - Published: Unknown
 - URL: https://vaul.emilkowal.ski/api
 

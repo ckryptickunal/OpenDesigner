@@ -27,8 +27,8 @@ tags:
 
 ## Metadata
 
-- Video ID: `ek-you-dont-need-animations`
-- Channel: Emil Kowalski (web)
+- Page ID: `ek-you-dont-need-animations`
+- Publisher: Emil Kowalski (web)
 - Published: Unknown
 - URL: https://emilkowal.ski/ui/you-dont-need-animations
 

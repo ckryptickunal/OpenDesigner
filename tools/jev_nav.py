@@ -6,7 +6,8 @@
   python3 tools/jev_nav.py html              writes navigator.html, a visual map of the research
   python3 tools/jev_nav.py export            writes synthesis/cards.json, every Decision Card split into its fields
   python3 tools/jev_nav.py graph             writes synthesis/decision-graph.json from the cards' depends/affects links
-  python3 tools/jev_nav.py check             flags cited source ids missing from traces, unknown card ids and unknown standard ids
+  python3 tools/jev_nav.py check             flags cited source ids missing from traces, unknown card ids and unknown standard ids,
+                                             and quotes in the standards' conflicts that the file they name no longer contains
 
 `find` needs JEV_API_KEY (or TYPESAFE_API_KEY) in the environment or in the project's .env;
 without it, it falls back to keyword (BM25) ranking.
@@ -19,7 +20,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 API = "https://api.typesafe.ai/v1/systemone"
 CARDS_PER_REQUEST = 20
-KEYWORD_CANDIDATES = 40
+KEYWORD_CANDIDATES = 60  # 40 left the right cards out of the pool for broad questions (persona triage R34)
+CONFIDENT = 0.6  # below this best score, find says it has no confident answer
+CITING_OF_TOP = 20  # L19 cards pooled because they cite one of the 20 keyword-top older cards
 STANDARD_CANDIDATES = 18  # keyword-top house standards always judged, whatever lane Jev picks (doubled for the STD lane)
 DCID = re.compile(r"DC-L\d+-\d+")
 STDID = re.compile(r"STD-[a-z]+(?:-[a-z]+)*-\d+")
@@ -110,6 +113,10 @@ def standards_as_cards(doc):
 STOPWORDS = set("""a about all an and any are as at be been but by can could did do does for from get had has have
 how i if in into is it its just me more most my need no not of on or our should so some than that the their them
 then there these they this those to up use using was we were what when where which who why will with would you your""".split())
+# Words that fill broad questions ("make my app look good") and appear on hundreds of cards in a design-system corpus:
+# counted, they rank cards on "design" and "user" instead of the question's subject. Compared after stemming, so
+# "makes", "looking" and "users" go too.
+DOMAIN_STOPWORDS = set("ui ux make look design good app user".split())
 
 
 def stem(word):
@@ -131,8 +138,12 @@ def stem(word):
     return word[:-1] if word.endswith("e") and len(word) > 3 else word
 
 
+DOMAIN_STEMS = {stem(w) for w in DOMAIN_STOPWORDS}
+
+
 def terms(text):
-    return [stem(w) for w in re.findall(r"[a-z0-9]+", text.lower()) if len(w) > 1 and w not in STOPWORDS]
+    stems = (stem(w) for w in re.findall(r"[a-z0-9]+", text.lower()) if len(w) > 1 and w not in STOPWORDS)
+    return [s for s in stems if s not in DOMAIN_STEMS]
 
 
 def keyword_rank(query, pool, k1=1.2, b=0.75, title_weight=3):
@@ -165,7 +176,9 @@ def named_standards(card):
 
 
 def house_overrides(all_cards, doc):
-    """Older card id -> ids of the L19 cards ("differs from DC-...") and standards ("conflicts") that the house prefers."""
+    """Older card id -> ids of the L19 cards ("differs from DC-..." on their Default line) and the standards ("supersedes")
+    that the house prefers. A standard's "conflicts" only records where OpenDesigner differs today; a card named there is
+    not replaced unless the standard lists it under "supersedes" (a card the house keeps, such as DC-L08-18, stays)."""
     out = {}
     for c in all_cards:
         if not c["id"].startswith("DC-L19-"):
@@ -179,20 +192,50 @@ def house_overrides(all_cards, doc):
                 if not old.startswith("DC-L19-"):
                     out.setdefault(old, set()).add(c["id"])
     for s in doc.get("standards", []):
-        for old in DCID.findall(" ".join(s.get("conflicts") or [])):
-            out.setdefault(old, set()).add(s["id"])
+        for old in s.get("supersedes") or []:
+            if DCID.fullmatch(old):
+                out.setdefault(old, set()).add(s["id"])
     return out
 
 
+def options_digest(text, per_option=160, limit=900):
+    """A card's Options field, shortened for the judge: each option's first words, so a card whose default is about one
+    thing but whose options cover the question (a list of color mistakes, say) is still recognised."""
+    rows = [re.sub(r"\*\*", "", l.strip().lstrip("-").strip()) for l in text.splitlines() if l.strip()]
+    rows = [r if len(r) <= per_option else r[:per_option].rsplit(" ", 1)[0] + "…" for r in rows]
+    out = " | ".join(rows)
+    return out if len(out) <= limit else out[:limit].rsplit(" ", 1)[0] + "…"
+
+
 def judge_text(c):
-    """What the judge reads: a standard's rule and values; a card's Questions, Default and Standards lines."""
+    """What the judge reads: a standard's rule and values; a card's Questions, Options (shortened), Default and Standards lines."""
     if "std" in c:
         s = c["std"]
         return (f"House standard ({s['strength']}): {s['rule']} Values: "
                 + "; ".join(f"{k}: {v}" for k, v in (s.get("values") or {}).items()))
     f = fields(c)
-    parts = [f"{label}: {re.sub(r'^[(][^)]*[)] ', '', f[key])}" for key, label in (("questions", "Questions"), ("default", "Default"), ("standards", "Standards")) if f.get(key)]
+    clean = lambda v: re.sub(r'^[(][^)]*[)] ', '', v)
+    parts = [f"{label}: {options_digest(clean(f[key])) if key == 'options' else clean(f[key])}"
+             for key, label in (("questions", "Questions"), ("options", "Options"), ("default", "Default"), ("standards", "Standards"))
+             if f.get(key)]
     return "\n".join(parts) if parts else c["text"][:900]
+
+
+def with_overriders(rows, overrides, by_id, order, score=lambda _id: None, relevant=lambda _id: True):
+    """rows [(score, card)] -> rows plus, for each overridden card none of whose overriders is listed, its best overrider
+    (order: id -> sort key, best first), so a card shown as superseded has what supersedes it on screen. An overrider the
+    judge found off the question (relevant false) is not pulled in: the card then keeps its "house differs" note."""
+    listed = {c["id"] for _, c in rows}
+    out = list(rows)
+    for _, c in rows:
+        by = overrides.get(c["id"])
+        if not by or by & listed:
+            continue
+        pick = min((b for b in by if b in by_id and relevant(b)), key=order, default=None)
+        if pick:
+            out.append((score(pick), by_id[pick]))
+            listed.add(pick)
+    return out
 
 
 def find(args):
@@ -202,13 +245,21 @@ def find(args):
     everything = [c for l in research for f in lane_files(l["id"]) for c in cards(f)] + std
     overrides = house_overrides(everything, doc)
     ranked = keyword_rank(query, everything)
+    by_id = {}
+    for c in everything:
+        by_id.setdefault(c["id"], c)
+    kw_pos = {}
+    for n, c in enumerate(ranked):
+        kw_pos.setdefault(c["id"], n)
+    kw_order = lambda i: kw_pos.get(i, len(ranked))
     if not api_key():
         print("No JEV_API_KEY or TYPESAFE_API_KEY found: using keyword ranking instead of Jev.\n", file=sys.stderr)
-        return show(ranked[: args.top], None, overrides)
+        return show(with_overriders([(None, c) for c in ranked[: args.top]], overrides, by_id, kw_order), overrides)
 
     # 1. Candidates: code retrieves, Jev judges. The keyword-top (BM25) cards across all lanes, the keyword-top
     #    house standards, every card in the research lane Jev picks (catches questions that share no words
-    #    with the right card), and the standards named on the pooled L19 cards' `Standards:` lines.
+    #    with the right card), the L19 cards that cite that lane's cards or the keyword-top older cards (the
+    #    newer research on the same decisions), and the standards named on the pooled L19 cards' `Standards:` lines.
     themes = "; ".join(f"{t['title']} ({t['summary']})" for t in doc.get("themes", []))
     lane = jev({"question": query}, {"lane": {
         "type": "choice",
@@ -222,12 +273,23 @@ def find(args):
             pool.setdefault(key(c), c)
     add([c for c in ranked if "std" not in c][:KEYWORD_CANDIDATES])
     add([c for c in ranked if "std" in c][: STANDARD_CANDIDATES * (2 if lane == "STD" else 1)])
+    # L19 cards are the newer research on older decisions: pool the ones that cite the chosen lane's cards, and up to
+    # CITING_OF_TOP that cite the keyword-top older cards (a card on the same decision that shares few words with the question).
+    l19_cite = lambda ids: sorted((c for c in everything if c["id"].startswith("DC-L19-") and ids & set(DCID.findall(c["text"]))),
+                                  key=lambda c: kw_order(c["id"]))
+    older_top = set([c["id"] for c in ranked if c["id"].startswith("DC-") and not c["id"].startswith("DC-L19-")][:20])
+    citing = l19_cite(older_top)[:CITING_OF_TOP]
     if lane != "STD":
-        add(c for f in lane_files(lane) for c in cards(f))
+        lane_cards = [c for f in lane_files(lane) for c in cards(f)]
+        add(lane_cards)
+        if lane != "L19":
+            citing += [c for c in l19_cite({c["id"] for c in lane_cards}) if c not in citing]
+    add(citing)
     # Standards named on pooled L19 cards, in keyword order; capped so that picking the L19 lane (164 cards)
     # does not pull in nearly every standard.
     std_by_id = {c["id"]: c for c in std}
     l19 = [c for c in ranked if c["id"].startswith("DC-L19-") and key(c) in pool][:KEYWORD_CANDIDATES]
+    l19 += [c for c in citing if c not in l19]
     add(std_by_id[s] for c in l19 for s in named_standards(c) if s in std_by_id)
     pool = list(pool.values())
 
@@ -254,14 +316,22 @@ def find(args):
     n_std = sum(1 for c in pool if "std" in c)
     print(f"Judged {len(pool) - n_std} cards and {n_std} house standards (Jev's lane pick: {lane}); answers from "
           + (", ".join(lanes_hit + ([f"STD ({', '.join(themes_hit)})"] if themes_hit else [])) or "nothing above 0.5") + "\n")
-    show([c for _, c in top], [s for s, _ in top], overrides)
+    if not top or top[0][0] < CONFIDENT:
+        print(f"No confident answer: the best card scores {top[0][0] if top else 0:.2f}, under {CONFIDENT}. "
+              "The closest cards follow; treat them as leads, not answers.\n")
+    judged = {}
+    for s, c in scored:
+        judged.setdefault(c["id"], s)
+    show(with_overriders(top, overrides, by_id, lambda i: (-judged.get(i, -1.0), kw_order(i)), judged.get,
+                         lambda i: judged.get(i, 1.0) >= 0.5), overrides)
 
 
-def show(ranked, scores, overrides=None):
-    """Print the results. A card the house differs from is marked, and moved just below the card or standard
-    that supersedes it when both are in the list."""
+def show(rows, overrides=None):
+    """Print the results, rows [(score or None, card)]. A card the house differs from is marked. When the card or standard
+    that supersedes it is in the list too, the card moves just below it and is labelled superseded (its score then sits
+    out of order on purpose)."""
     overrides = overrides or {}
-    rows = list(zip(scores or [None] * len(ranked), ranked))
+    rows = list(rows)
     for _ in range(len(rows)):
         moved = False
         for i, (_, c) in enumerate(rows):
@@ -272,10 +342,15 @@ def show(ranked, scores, overrides=None):
                 break
         if not moved:
             break
+    listed = {c["id"] for _, c in rows}
+    short = lambda ids: ", ".join(ids[:3]) + (f" +{len(ids) - 3}" if len(ids) > 3 else "")
+    scored = any(s is not None for s, _ in rows)
     for s, c in rows:
-        tag = f"{s:.2f}  " if s is not None else ""
+        tag = f"{s:.2f}  " if s is not None else ("  -   " if scored else "")
         by = sorted(overrides.get(c["id"], ()))
-        note = f"  (house differs: {', '.join(by[:3])}{f' +{len(by) - 3}' if len(by) > 3 else ''})" if by else ""
+        shown = [b for b in by if b in listed]
+        note = (f"  (superseded by {short(shown)})" if shown
+                else f"  (house differs: {short(by)})" if by else "")
         where = f"{c['file']}:{c['line']}" if c["line"] else f"{c['file']} ({c['id']}; readable in skills/opendesigner/references/standards/)"
         print(f"{tag}{c['id']}: {c['title']}{note}\n      {where}")
 
@@ -415,8 +490,52 @@ def check(_):
             problems = [f"{len(ids)} {what} {ids[:6]}" for ids, what in ((missing_s, "source ids not in any trace"),
                         (missing_dc, "unknown card ids"), (missing_std, "unknown standard ids")) if ids]
             print(f"{p.relative_to(ROOT)}: " + "; ".join(problems))
+    stale = stale_conflict_quotes(doc)
+    for sid, files, quote in stale:
+        print(f"synthesis/standards.json {sid} conflicts: '{quote}' is no longer in {' or '.join(files)}")
     print(f"\n{len(set(docs) | set(std_docs))} files checked, {len(defined)} source ids logged, {len(cards_known)} cards, "
-          f"{len(std_known)} standards; {bad} files with dangling references")
+          f"{len(std_known)} standards; {bad} files with dangling references; {len(stale)} standards' conflict quotes "
+          "no longer in the file they name")
+
+
+STAGES = "skills/opendesigner/references/stages"
+PATH_REF = re.compile(r"(?<![\w.-])((?:skills|synthesis|research|learn|tools|docs|benchmarks)/[\w./-]*?\w\.(?:py|md|json|html|js))(?![\w-])")
+STAGE_REF = re.compile(r"(?<![\w.-])(\d\d-[a-z0-9-]+?)(?:\.detailed)?\.md\b")
+ROOT_DOC = re.compile(r"(?<![\w./-])((?:AGENTS|README|CLAUDE|CHANGELOG)\.md)\b")
+QUOTE = re.compile(r"(?<![\w'])'([^'\n]{12,}?)'(?![\w'])")
+
+
+def stale_conflict_quotes(doc):
+    """(standard id, files, quote) for each quoted fragment in a standard's "conflicts" that no file the entry names still
+    contains, so a conflict about text that has since changed is caught (R32). Cheap by design: exact text after folding
+    case, spaces, backticks and escapes; fragments with <placeholders>, an ellipsis or no readable file are skipped."""
+    cache = {}
+    def text(rel):
+        if rel not in cache:
+            p = ROOT / rel
+            raw = p.read_text(errors="replace") if p.is_file() else None
+            cache[rel] = fold(raw.replace('\\"', '"').replace("\\'", "'")) if raw is not None else None
+        return cache[rel]
+    fold = lambda s: re.sub(r"\s+", " ", s.replace("`", "").replace("’", "'").replace("“", '"').replace("”", '"')).lower()
+    out = []
+    for s in doc.get("standards", []):
+        for entry in s.get("conflicts") or []:
+            files = set(PATH_REF.findall(entry))
+            files |= {"skills/opendesigner/scripts/engine.py"} if re.search(r"(?<![\w/.-])engine\.py\b", entry) else set()
+            for stem_ in STAGE_REF.findall(entry):  # a stage file named bare or by its folder, with its detailed twin
+                files |= {f"{STAGES}/{stem_}.md", f"{STAGES}/{stem_}.detailed.md"}
+            files |= set(ROOT_DOC.findall(entry))
+            for lane in {m.split("-")[1] for m in DCID.findall(entry)}:  # a quote from a card the entry names
+                files |= {str(p.relative_to(ROOT)) for p in lane_files(lane)}
+            files = sorted(f for f in files if text(f) is not None)
+            if not files:
+                continue
+            for quote in QUOTE.findall(entry):
+                if re.search(r"<[a-z][\w.-]*>|\.\.\.|…", quote):
+                    continue
+                if not any(fold(quote) in text(f) for f in files):
+                    out.append((s["id"], files, quote))
+    return out
 
 
 def build_html(_):

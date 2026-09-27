@@ -8,7 +8,7 @@ Screen: how the builder (or the interviewing model) behaves while the person kee
 
 Zoom 3 (detailed) questions: `27-builder-preferences.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-pref-01 · How strict should the builder's critique be?
 Zoom 2 defined · weight medium · changes 0 decisions · class I · cards DC-L15-11

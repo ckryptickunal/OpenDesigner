@@ -27,8 +27,8 @@ tags:
 
 ## Metadata
 
-- Video ID: `ek-7-practical-animation-tips`
-- Channel: Emil Kowalski (web)
+- Page ID: `ek-7-practical-animation-tips`
+- Publisher: Emil Kowalski (web)
 - Published: Unknown
 - URL: https://emilkowal.ski/ui/7-practical-animation-tips
 

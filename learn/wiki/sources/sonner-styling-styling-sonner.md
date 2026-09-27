@@ -23,8 +23,8 @@ tags:
 
 ## Metadata
 
-- Video ID: `sonner-styling`
-- Channel: Sonner docs (web)
+- Page ID: `sonner-styling`
+- Publisher: Sonner docs (web)
 - Published: Unknown
 - URL: https://sonner.emilkowal.ski/styling
 

@@ -43,6 +43,7 @@ Take facts from `references/`, not from memory. Use `scripts/engine.py` for all 
 
 ## Start
 1. **Look before you ask.** Check for `opendesigner/`, `DESIGN.md`, `PRODUCT.md`, token files, `tailwind.config.*`, CSS custom properties, `package.json`, and logo or font files. Never ask something a file already answers. If `opendesigner/state.json` exists, switch to opendesigner-extend.
+   - `package.json` tells you the stack (React, React Native and so on). The stack and the platforms decide which house standards apply. The engine reads it at `init` and `sketch` and records it as `raw.stack`. Ask once which framework they use only when no file settles it (`rules.md` section 3).
 2. **Set up.** Run `python3 <skill>/scripts/engine.py init --name "<product or folder name>"`. Here `<skill>` means this skill's folder. The product name from the sketch (`sketch --name`) replaces the folder name later. `init` also applies the house standards (`references/standards.md`) and locks them. Don't ask about them; mention them once, in the first result.
 3. **Greet in 3 lines at most** (`rules.md` section 1). There is no mode to choose.
    - If `profile.tracking` in `opendesigner/state.json` is not set, the greeting's one question is the log question from `rules.md` section 11, word for word. It says "on this computer" only when the scripts run on the person's own computer, and "in your project files" in a web chat. Record the answer with `journey.py consent on` or `journey.py consent off`. Then ask the first sketch question.
@@ -55,6 +56,7 @@ Details are in `references/zoom.md`.
 - **People in a hurry** ("just pick") get the sketch with `--delegated` and no optional questions. People who talk in plain words get fewer questions (`zoom.md`).
 - **Level 1, broad:** one short screen per foundation.
 - **Level 2, defined, and level 3, detailed:** one area at a time, only if the person wants it.
+- **Skip what a standard settles.** A question marked **Settled by: STD-...** in its stage file is skipped like a **Planned** one: ask nothing, record nothing. Never recommend an option marked **(breaks STD-...)** (`rules.md` section 6).
 - **After every level,** offer "Stop here, or zoom into X". Stopping is fine at any level.
 - The accessibility floors (`guardrails.md` section 4) are set at level 0 and never skipped.
 
@@ -92,9 +94,9 @@ python3 <skill>/scripts/engine.py build [--force]            generate and valida
 python3 <skill>/scripts/engine.py review [--project src/]    end-of-implementation check: hard-coded colors, sizes, radii, shadows, durations; stale DESIGN.md sections
 python3 <skill>/scripts/engine.py feedback "..." --kind gap|bug|confusing|idea [--from-journey]
 python3 <skill>/scripts/engine.py standards [--update]       house and project standards; --update applies newer house standards (overrides stay)
-python3 <skill>/scripts/engine.py standard override <id> --why "<their words>" [--value <json>]   only when the person explicitly asks
-python3 <skill>/scripts/engine.py standard restore <id>      undo an override
-python3 <skill>/scripts/engine.py standard add --rule "..." --why "..." --source <url> [--path P --value <json>] [--authority good-to-have]
+python3 <skill>/scripts/engine.py standard override <id> --why "<their words>" [--path P [--value <json>]]...   only when the person explicitly asks; --path releases only that value, without it every value the standard sets
+python3 <skill>/scripts/engine.py standard restore <id> [--why "..."]      undo an override
+python3 <skill>/scripts/engine.py standard add --rule "..." --why "..." --source <url or "person, <date>"> [--path P --value <json>]... [--values '{...}'] [--review-pattern RE --review-message "..."] [--authority good-to-have] [--beats STD-a,STD-b]
 python3 <skill>/scripts/engine.py standard remove PRJ-<nn> --why "..."   project standards only
 ```
 After every change, run `build` before showing results, so the exports and preview are never stale. Fix every error first. The report cites the rule it applied. When `pick` or `set` says an answer changes no tokens, it is still saved (as a DESIGN.md rule or a PRODUCT.md fact). Tell the person so, in a few words.
@@ -126,7 +128,7 @@ When they name a brand font, ask where its licence lets them use it: websites, a
 ## References the person brings
 If they share a site, screenshot, Figma file, repo or brand book to copy a look from, hand off to **opendesigner-extract**.
 
-If they share a source to **follow** or **learn from** (a style guide, an article, a talk, their company's UI rules), follow `rules.md` section 12. Ask how much weight it gets when they didn't say (rule, recommendation, or learning material). Then read it with their OK and record the rules they keep as project standards.
+If they share a source to **follow** or **learn from** (a style guide, an article, a talk, their company's UI rules), follow `rules.md` section 12. Ask how much weight it gets when they didn't say (rule, recommendation, or learning material). Then read it with their OK and record the rules they keep as project standards. When one clashes with a house standard, their words decide the route: "it's our brand" or "always" is a project standard with `--beats STD-...`; "just this value" is `standard override`.
 
 ## Finish (at whatever level they stop)
 One question per message here, as everywhere.

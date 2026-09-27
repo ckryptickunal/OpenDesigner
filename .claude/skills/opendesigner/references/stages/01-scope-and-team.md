@@ -8,7 +8,7 @@ Screen: what the system is for and who builds it. Graph step 0-2. Cycle kept tog
 
 Zoom 3 (detailed) questions: `01-scope-and-team.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-scope-01 · Which products and pages should this system cover, and which should it leave out?
 Zoom 0 sketch · weight high · changes 8 decisions · class I · cards DC-L11-02

@@ -22,8 +22,8 @@ tags:
 
 ## Metadata
 
-- Video ID: `sonner-home`
-- Channel: Sonner docs (web)
+- Page ID: `sonner-home`
+- Publisher: Sonner docs (web)
 - Published: Unknown
 - URL: https://sonner.emilkowal.ski/
 

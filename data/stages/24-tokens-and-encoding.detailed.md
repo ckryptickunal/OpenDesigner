@@ -6,7 +6,7 @@ Area: `delivery` · zoom 3 detailed: 9 · visual: text or the host question tool
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-token-04 · Which units should the source use?
 Zoom 3 detailed · weight medium · changes 2 decisions · class G · cards DC-L07-11, DC-L10-08, DC-L03-26
@@ -14,7 +14,7 @@ Zoom 3 detailed · weight medium · changes 2 decisions · class G · cards DC-L
 - **Why:** px maps cleanly to pt, dp and Figma. rem follows browser zoom, and plain numbers carry over 1:1 to every platform [DC-L07-11, DC-L10-08].
 - **Options:**
   - `px-to-rem` px in source, rem on the web (DTCG allows px and rem only; Figma imports px).
-  - `unitless` Plain numbers in steps of 4, output 1:1 as pt, dp, epx or px; rem for web font sizes (Fluent's ramp).
+  - `unitless` Plain numbers in steps of 4, output 1:1 as pt, dp, epx or px; rem for web font sizes (Fluent's ramp). (breaks STD-accessibility-motion-13)
   - `rem-source` rem in the source, turned into dp, sp or CGFloat by the build [DC-L10-08].
 - **Default:** `px-to-rem`: px-to-rem (equivalently unitless numbers), rem for web type and breakpoints; "spacing scales with text size" is an explicit toggle, off by default; line height unitless *Source:* card heuristics [DC-L07-11, DC-L10-08, DC-L03-26].
 - **Show:** one value converted per platform.

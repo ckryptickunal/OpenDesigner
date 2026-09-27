@@ -730,9 +730,11 @@ Designers: reduced motion, no travel · Code: `prefers-reduced-motion, motion.re
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Keep feedback (color and opacity changes, crossfades) and remove travel: sliding, scaling, parallax and bounce. A good reduced mode still feels polished, not broken.
+**Designer:** Treat WCAG 2.3.3 as required, though it is AAA. Keep feedback (color and opacity changes, crossfades); remove travel: sliding, scaling, parallax and bounce.
 
 **Engineer:** Web @media (prefers-reduced-motion: reduce); iOS Reduce Motion, Android Remove animations. OpenDesigner's motion mode (motion.reduced.tokens.json): short fades, movement at 0ms, no translate or scale.
+
+**Example:** With Reduce Motion on, a sliding panel fades in place.
 
 **Also called:** prefers-reduced-motion, Reduce Motion
 
@@ -1476,6 +1478,23 @@ Designers: asset status: have, commissioning, placeholder · Code: `hooks.<H-id>
 
 </details>
 
+### house standard
+
+A rule OpenDesigner follows in every project, taken from experts its makers trust. You can still ask to change it.  
+Designers: house rules, locked by default · Code: `STD-<theme>-<nn> ids`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** Craft rules from the sources the OpenDesigner owner marked non-negotiable. They are applied and locked from the start; your explicit override or your own project standard wins.
+
+**Engineer:** Kept in synthesis/standards.json, versioned, shipped as references/standards.json. A project follows the ones whose applies_to tags match its platforms and stack.
+
+**Example:** A house standard stops menus from growing out of nothing.
+
+**Also called:** OpenDesigner standard, STD
+
+</details>
+
 ### interview
 
 The step-by-step chat where the AI asks you one big question at a time and saves your answers.  
@@ -1535,6 +1554,23 @@ Designers: recommended option with a reason · Code: `--set-by confirmed_default
 **Engineer:** Listed first among 2 to 4 options on the question card, with its reason in brackets. Accepting records --set-by confirmed_default; a recommendation is never logged as chosen.
 
 **Example:** Subtle corners, because your app is a busy work tool.
+
+</details>
+
+### standard
+
+A rule your design always follows. It is set for you, and only you can ask to change it.  
+Designers: non-negotiable rule · Code: `STD- and PRJ- ids`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** A non-negotiable rule from a source you or OpenDesigner trust, such as your brand book. It is applied without asking and locked; changing it takes your explicit request.
+
+**Engineer:** A record with an id, rule, reason, sources and platform tags. It can lock values, add code checks, settle questions and rule out options. Project ids start PRJ-.
+
+**Example:** Your brand book says buttons use 6 px corners, so they always do.
+
+**Also called:** project standard, non-negotiable rule
 
 </details>
 
@@ -3775,23 +3811,6 @@ Designers: motion budget by device class · Code: `motion context modifier (prop
 **Example:** Back swipes use the phone's own slide; the brand animates only in-screen controls.
 
 **Also called:** motion budget, system transitions
-
-</details>
-
-### Reduced motion
-
-If you ask your phone for less motion, things fade in place instead of sliding or zooming.  
-Designers: reduced motion: fades, no travel · Code: `prefers-reduced-motion: reduce`
-
-<details><summary>Designer and engineer</summary>
-
-**Designer:** Treat WCAG 2.3.3 as required even though it is AAA. Keep feedback such as color and opacity changes; remove travel like slide, scale and parallax, and use crossfades instead.
-
-**Engineer:** A reduced motion mode (motion.reduced.tokens.json) points transitions at short fades with zero travel. Web reads @media (prefers-reduced-motion: reduce); each major OS has a matching setting.
-
-**Example:** With Reduce Motion on, a sliding panel fades in place.
-
-**Also called:** Reduce Motion, prefers-reduced-motion
 
 </details>
 

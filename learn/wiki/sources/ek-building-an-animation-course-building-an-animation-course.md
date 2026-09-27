@@ -26,8 +26,8 @@ tags:
 
 ## Metadata
 
-- Video ID: `ek-building-an-animation-course`
-- Channel: Emil Kowalski (web)
+- Page ID: `ek-building-an-animation-course`
+- Publisher: Emil Kowalski (web)
 - Published: Unknown
 - URL: https://emilkowal.ski/ui/building-an-animation-course
 

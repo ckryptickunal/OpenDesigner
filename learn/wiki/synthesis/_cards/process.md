@@ -1,3 +1,11 @@
+---
+type: synthesis
+title: "Decision Cards: process (lane L19)"
+tags:
+  - decision-cards
+  - process
+---
+
 # Decision Cards: process (lane L19)
 
 Area `process`: OpenDesigner stages 00 (reference intake), 03 (brand personality and principles), 25 (team, governance and change), 26 (output, documentation and AI channels) and 27 (builder preferences). Topics: Design taste and judgement, Design process, Presenting designs, Portfolio and case studies, AI-assisted design, Figma and design tools, Prototyping, Freelancing and pricing work, Design resources. Cards DC-L19-161 to DC-L19-177. Written 2026-09-24.

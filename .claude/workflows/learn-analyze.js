@@ -1,6 +1,6 @@
 export const meta = {
   name: 'learn-analyze',
-  whenToUse: 'New sources were fetched into learn/raw/ and need analysis JSON. Pass the output of: python3 tools/wiki.py pending --work-items',
+  whenToUse: 'New sources were fetched into learn/raw/ and need analysis JSON. Pass the output of: python3 tools/wiki.py pending --work-items (it is {"root": ..., "items": [...]})',
   description: 'Analyse each learning-wiki source into OpenDesigner analysis JSON, then adversarially verify it against the source',
   phases: [
     { title: 'Analyze', detail: 'one agent per source or small group writes learn/analysis/<id>.json' },
@@ -8,9 +8,11 @@ export const meta = {
   ],
 }
 
-// args: the output of `python3 tools/wiki.py pending --work-items`, or {root: '<repo path>', items: [...]}
-const ITEMS = Array.isArray(args) ? args : args.items
-const ROOT = (!Array.isArray(args) && args.root) || '/Users/Kunal/Desktop/Design-System'
+// args: the output of `python3 tools/wiki.py pending --work-items`, run in the checkout to work in: {root: '<repo path>', items: [...]}
+if (!args || Array.isArray(args) || typeof args.root !== 'string' || !args.root || !Array.isArray(args.items))
+  throw new Error('learn-analyze needs args {"root": "<repo path>", "items": [...]}. Pass the output of `python3 tools/wiki.py pending --work-items`, run in the checkout you want to work in.')
+const ITEMS = args.items
+const ROOT = args.root
 
 const SCHEMA_DOC = `
 Write ONE JSON file per raw source at ${ROOT}/learn/analysis/<source id>.json (the id is the "Video ID:" header line of the raw file). Shape:
@@ -23,7 +25,7 @@ Write ONE JSON file per raw source at ${ROOT}/learn/analysis/<source id>.json (t
   "quotes": ["at most 3 verbatim quotes, each 15 words or fewer"],
   "tags": ["short-lowercase-tags"],
   "authority": "<the authority given to you>",
-  "rules": [{"rule": "imperative, specific rule", "why": "the reason the source gives", "kind": "do|dont", "strength": "must|should|consider", "area": "color|typography|layout|shape|elevation|motion|components|patterns|content|accessibility|platforms|process|tokens|tooling", "applies_to": "all|web|ios|android|desktop|react|css", "values": ["exact values the source states, e.g. 200ms, cubic-bezier(0.23, 1, 0.32, 1), scale(0.95)"], "evidence": "section heading or short phrase near it"}],
+  "rules": [{"rule": "imperative, specific rule", "why": "the reason the source gives", "kind": "do|dont", "strength": "must|should|consider", "area": "color|typography|layout|shape|elevation|motion|iconography|components|patterns|content|accessibility|platforms|process|tokens|tooling", "applies_to": "all|web|css|react|react-native|ios|swift|android|compose|desktop", "values": ["exact values the source states, e.g. 200ms, cubic-bezier(0.23, 1, 0.32, 1), scale(0.95)"], "evidence": "section heading or short phrase near it"}],
   "decisions": [{"question": "a design decision in plain words", "options": [{"name": "...", "effect": "what it looks/feels like, or what it does to the product", "when": "when to pick it"}], "recommendation": "what the source recommends and why, or null", "maps_to": "Q-xxx-nn id from skills/opendesigner/references/questions.json if one clearly matches, else null", "evidence": "..."}],
   "process": [{"step": "short name", "detail": "how to do it"}],
   "examples": [{"what": "a concrete example, product or visual shown", "where": "which product/site/app, if named", "visual_note": "what it looks like and what it demonstrates"}],
@@ -31,6 +33,7 @@ Write ONE JSON file per raw source at ${ROOT}/learn/analysis/<source id>.json (t
   "caveats": ["sponsor segments, self-promotion, dated info (e.g. a Figma feature list from a given year), opinion vs. fact, auto-caption errors that matter"]
 }
 Topic names must come from learn/taxonomy.json exactly. If nothing fits, add {"name": "...", "summary": "...", "new": true}.
+"numbers" and "caveats" are lists even when they hold one item; every "values" entry is a string. python3 tools/wiki.py check enforces the types and the listed values.
 Empty arrays are fine when a source has nothing of that kind; never pad.`
 
 const FAITHFUL = `

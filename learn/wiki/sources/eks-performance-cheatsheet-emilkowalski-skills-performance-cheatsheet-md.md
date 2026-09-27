@@ -24,8 +24,8 @@ tags:
 
 ## Metadata
 
-- Video ID: `eks-performance-cheatsheet`
-- Channel: emilkowalski/skills (GitHub, MIT)
+- Page ID: `eks-performance-cheatsheet`
+- Publisher: emilkowalski/skills (GitHub, MIT)
 - Published: commit 85e8e23
 - URL: https://github.com/emilkowalski/skills/blob/85e8e23/performance-cheatsheet.md
 

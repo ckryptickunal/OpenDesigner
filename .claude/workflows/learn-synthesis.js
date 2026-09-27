@@ -1,6 +1,6 @@
 export const meta = {
   name: 'learn-synthesis',
-  whenToUse: 'Reference sources were analysed (new or changed) and the topic pages, L19 Decision Cards, decide-or-ask page or impact notes need to catch up. `python3 tools/wiki.py next` says when.',
+  whenToUse: 'Reference sources were analysed (new or changed) and the topic pages, L19 Decision Cards, decide-or-ask page or impact notes need to catch up. `python3 tools/wiki.py next` says when, with the args.',
   description: 'Cross-source topic pages, L19 Decision Cards, the decide-or-ask process and impact notes, each verified, then research/L19 assembled',
   phases: [
     { title: 'Topics', detail: 'one agent per OpenDesigner area writes the wiki synthesis pages for its topics' },
@@ -11,10 +11,13 @@ export const meta = {
   ],
 }
 
-// args (all optional): {root, topics, cards, verify: area keys or "all" or [], process: bool, merge: bool}
-// Example, to redo one area after new sources: {"topics": ["motion"], "cards": ["motion"], "verify": ["motion"], "process": false, "merge": true}
+// args: {root: "<repo path>", topics, cards, verify: area keys or "all" or [], process: bool, merge: bool}; all but root are optional.
+// Example, to redo one area after new sources: {"root": "<repo path>", "topics": ["motion"], "cards": ["motion"], "verify": ["motion"], "process": false, "merge": true}
+// python3 tools/wiki.py next prints these args for the areas whose sources are not used yet (it reads AREAS below).
 const A = args || {}
-const ROOT = A.root || '/Users/Kunal/Desktop/Design-System'
+if (typeof A.root !== 'string' || !A.root)
+  throw new Error('learn-synthesis needs args {"root": "<repo path>", ...}: the checkout whose wiki it synthesises. python3 tools/wiki.py next prints the full args.')
+const ROOT = A.root
 const SYN = `${ROOT}/learn/wiki/synthesis`
 
 // OpenDesigner areas; each area owns a block of card ids so parallel agents never collide. New cards take the next free id in the block.
@@ -79,7 +82,7 @@ Goal: make OpenDesigner's interview better at this area using what the trusted s
 
 Read every analysis for your topics (and their raw text where you rely on a detail), the matching stage files, the questions for this area in questions.json, and the existing cards they cite.
 
-The cards live in ${SYN}/_cards/${a.key}.md, numbered in this area's block from DC-L19-${String(a.start).padStart(2, '0')} to DC-L19-${a.start + 18} (at most 19 cards). If the file exists, keep its cards and ids, update the ones new sources change, and add new cards at the next free id; if a card no longer holds, mark it "**Withdrawn:** <why>" instead of deleting it, so its id is never reused. Use exactly this template (from _coordination/SCHEMA.md) plus the three extra fields at the end:
+The cards live in ${SYN}/_cards/${a.key}.md, numbered in this area's block from DC-L19-${String(a.start).padStart(2, '0')} to DC-L19-${a.start + 18} (at most 19 cards). If the file exists, keep its cards and ids, update the ones new sources change, and add new cards at the next free id; if a card no longer holds, mark it "**Withdrawn:** <why>" instead of deleting it, so its id is never reused. Keep the front matter at the top of the file (a new file starts with one: ---, type: synthesis, title: "<the file's # heading>", tags: decision-cards and the area key, ---), which OpenWiki's lint needs. Use exactly this template (from _coordination/SCHEMA.md) plus the three extra fields at the end:
 ### DC-L19-<nn>: <Decision name>
 - **Block path:** e.g. Foundations > Color > Neutral ramp
 - **Questions the designer answers:** 1-4 plain-language questions
@@ -149,7 +152,7 @@ if (A.merge !== false) {
   phase('Merge')
   merged = await agent(`${COMMON}
 
-Assemble ${ROOT}/research/L19-learning-wiki.md from ${SYN}/_cards/*.md (areas in id order; the _cards files stay the source you edit, this file is the repo's research copy). Structure:
+Assemble ${ROOT}/research/L19-learning-wiki.md from ${SYN}/_cards/*.md (areas in id order, leaving out each file's front matter; the _cards files stay the source you edit, this file is the repo's research copy). Structure:
 # L19: Learning wiki (trusted sources)
 <lane overview: sources and their authority (learn/sources.json), how they were processed (learn/README.md), counts, and how this lane feeds OpenDesigner: synthesis/standards.json (house standards), these cards, synthesis/impact.json, learn/wiki/>
 ## Part A: Decision Cards (every card, text unchanged, withdrawn ones included with their note)

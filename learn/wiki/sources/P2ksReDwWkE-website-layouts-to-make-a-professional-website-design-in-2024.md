@@ -61,7 +61,7 @@ Kole Jain walks through nine website section layouts he calls trending in 2024. 
 - [[entities/studio-vi-caption-spelling|Studio VI (caption spelling)]] (company): Example of giant text at the top, nav links in the middle and a giant image or video beneath.
 - [[entities/cream|cream]] (company): Website with the multi-image layout the source calls the most unique of the nine.
 - [[entities/tapaku-maru-caption-spelling|tapaku Maru (caption spelling)]] (company): Website with stacked cards revealed on hover instead of on scroll.
-- [[entities/ami-caption-spelling-a-calendar-scheduling-app-likely-amie-inferred|Ami (caption spelling; a calendar scheduling app, likely Amie [inferred])]] (product): Example of a horizontal card carousel navigated with small buttons.
+- [[entities/ami-caption-spelling|Ami (caption spelling)]] (product): A calendar scheduling app (likely Amie [inferred]); example of a horizontal card carousel navigated with small buttons.
 - [[entities/linear|Linear]] (company): Example of a compact bento layout that the source adapts to full width.
 - [[entities/dribbble|Dribbble]] (product): Where the source found examples of the trendy cut-out image text effect.
 - [[entities/figma|Figma]] (tool): Where the source builds each wireframe and finished section; subtract is used for the cut-out text effect.

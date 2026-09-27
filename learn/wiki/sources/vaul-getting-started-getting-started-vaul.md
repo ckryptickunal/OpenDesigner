@@ -21,8 +21,8 @@ tags:
 
 ## Metadata
 
-- Video ID: `vaul-getting-started`
-- Channel: Vaul docs (web)
+- Page ID: `vaul-getting-started`
+- Publisher: Vaul docs (web)
 - Published: Unknown
 - URL: https://vaul.emilkowal.ski/getting-started
 

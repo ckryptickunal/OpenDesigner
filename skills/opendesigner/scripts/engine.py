@@ -8,8 +8,8 @@ choices this engine makes where the research gives a range or a direction but no
 
 Commands (run from the user's project; state lives in ./opendesigner/ unless --dir is given):
     engine.py init [--name "Acme"] [--from path/to/state.json]
-    engine.py sketch [--brand HEX] [--audience dense|regular|large] [--platforms web,ios] [--feel playful,...] [--theme ...]
-                                          Level 0: a complete, coarse system from about five answers
+    engine.py sketch [--brand HEX] [--audience dense|regular|large] [--platforms web,ios] [--stack react] [--feel playful,...]
+                     [--theme ...]        Level 0: a complete, coarse system from about five answers
     engine.py set <dotted.path> <json-value> [--why "reason"] [--set-by S] [--lock] [--source-ref R]
                                           also: set path=value; set Q-shape-01 '"soft"'; a status word may start --why
     engine.py pick <question-id> <option-value> [--why "reason"]
@@ -26,18 +26,25 @@ Commands (run from the user's project; state lives in ./opendesigner/ unless --d
     engine.py build                       generate + export all + design-md + preview + validate
     engine.py show <template> [--open]    a visual template filled with real values (palette, radius, option-gallery, ...)
     engine.py feel [words...]             how plain feel words (fun, calm, techy) map to the feel settings
-    engine.py standards [--json] [--update]   standards followed (by theme), overridden, project ones, not mapped, house updates;
+    engine.py standards [--json] [--update] [--all]   project standards and overrides, then the standards followed (by
+                                          theme; --all adds the ones for other platforms), not mapped, house updates;
                                           --update applies new and changed house standards (overridden ones stay the person's),
                                           unlocks retired ones and ones for other platforms, and retries values not mapped
-    engine.py standard override <id> --why "<their words>" [--value <json>]   the person explicitly changes a house standard
-    engine.py standard restore <id>       follow a house standard again (re-applied and locked)
-    engine.py standard add --rule "..." --why "..." --source <url-or-file> [--authority non-negotiable|good-to-have]
-                           [--area A] [--values '{...}'] [--path P --value <json>] [--review-pattern RE --review-message M] [--title T]
+    engine.py standard override <id> --why "<their words>" [--path P [--value <json>]]... [--all-holders]
+                                          the person explicitly changes a house standard: the whole of it, or only the values
+                                          named with --path (--all-holders: also from the other standards that set them)
+    engine.py standard restore <id> [--why "<their words>"] [--all-holders]   follow a standard again (re-applied, locked)
+    engine.py standard add --rule "..." --why "..." --source <url, file or "person, 2026-09-27"> [--authority non-negotiable|good-to-have]
+                           [--area A] [--values '{...}'] [--path P --value <json>]... [--beats STD-a,STD-b]
+                           [--review-pattern RE --review-message M] [--title T]
     engine.py standard remove PRJ-<nn> --why "..."   remove a project standard (house standards are only overridden)
 
 Standards (docs/KNOWLEDGE.md): house standards ship as references/standards.json (OD_STANDARDS_FILE points elsewhere). init
-applies every one that maps to a token or setting, locked, with set_by "standard", as one grouped decision. Without that file
-every command behaves exactly as before.
+applies every one that maps to a token or setting, locked, with set_by "standard", as one grouped decision; a standard
+applies when one of its applies_to tags is a project tag (its platforms, mapped, plus raw.stack read from package.json).
+They are re-scoped whenever the platforms or the stack change. `set --force` never passes a standard. The copy of each
+standard a system follows lives in standards-state.json next to state.json. Without the house file every command behaves
+exactly as before.
 
 When the person said yes to the private journey log (profile.tracking "on", see journey.py), the engine logs its own
 steps there: answers and changed answers from set/pick/sketch, the finished sketch, validation errors, exports, reviews
@@ -55,6 +62,7 @@ from __future__ import annotations
 import argparse
 import copy
 import datetime as _dt
+import fnmatch
 import json
 import math
 import os
@@ -109,8 +117,54 @@ def snap_to(value, steps):
     return min(steps, key=lambda s: (abs(s - value), s))
 
 
+STATE_FILE = "state.json"
+STD_SIDECAR = "standards-state.json"  # the copies of the standards a system follows, kept out of state.json (R29)
+
+
+def _split_snapshots(path, state):
+    """state.json without the standards' kept copies, which go to standards-state.json next to it (state.json points to
+    it). The caller's state is not changed."""
+    st = state.get("standards")
+    recs = st.get("records") if isinstance(st, dict) else None
+    side = os.path.join(os.path.dirname(path) or ".", STD_SIDECAR)
+    snaps = {sid: r["std"] for sid, r in recs.items() if isinstance(r, dict) and isinstance(r.get("std"), dict)} \
+        if isinstance(recs, dict) else {}
+    if not snaps:
+        if isinstance(st, dict) and st.get("snapshots") == STD_SIDECAR:
+            if os.path.exists(side):
+                os.remove(side)
+            return dict(state, standards={k: v for k, v in st.items() if k != "snapshots"})
+        return state
+    dump_json(side, {"$comment": "Generated by engine.py: the copy of each standard this system follows, as it follows it. "
+                                 "state.json points here (standards.snapshots). Keep it next to state.json.", "snapshots": snaps},
+              compact=True)
+    lean = {sid: ({k: v for k, v in r.items() if k != "std"} if isinstance(r, dict) else r) for sid, r in recs.items()}
+    return dict(state, standards=dict(st, records=lean, snapshots=STD_SIDECAR))
+
+
+def _join_snapshots(path, state):
+    """The other half of _split_snapshots: each record gets its kept copy back from standards-state.json."""
+    st = state.get("standards") if isinstance(state, dict) else None
+    if not (isinstance(st, dict) and st.get("snapshots") == STD_SIDECAR):
+        return state
+    st.pop("snapshots")
+    try:
+        with open(os.path.join(os.path.dirname(path) or ".", STD_SIDECAR), encoding="utf-8") as f:
+            snaps = json.load(f).get("snapshots")
+    except (OSError, ValueError, AttributeError):  # a missing copy falls back to the house file, never a crash
+        return state
+    recs = st.get("records")
+    if isinstance(snaps, dict) and isinstance(recs, dict):
+        for sid, r in recs.items():
+            if isinstance(r, dict) and "std" not in r and isinstance(snaps.get(sid), dict):
+                r["std"] = snaps[sid]
+    return state
+
+
 def dump_json(path, data, compact=False):
     os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+    if os.path.basename(path) == STATE_FILE and isinstance(data, dict):
+        data = _split_snapshots(path, data)
     text = (json.dumps(data, separators=(",", ":"), ensure_ascii=False) if compact else json.dumps(data, indent=2, ensure_ascii=False)) + "\n"
     write_text(path, text)
 
@@ -123,7 +177,8 @@ def write_text(path, text):
 
 def read_json(path):
     with open(path, encoding="utf-8") as f:
-        return json.load(f)
+        data = json.load(f)
+    return _join_snapshots(path, data) if os.path.basename(path) == STATE_FILE else data
 
 
 def slug(s):
@@ -1848,20 +1903,26 @@ def build_space_density(ctx, density):
 def build_shape(ctx):
     p = ctx.params
     control = ctx.P("radius.control", p["radius.control"])
-    full = control == "full" or (isinstance(control, (int, float)) and control >= FULL)
     rough = ctx.dials["roundness"]
-    if full:
-        control_v = FULL
-        container = snap_to(16 + (rough - 93) / 7 * 12, SNAP_RADII) if rough >= 93 else 20
-        detail = 4  # [inferred]: pill controls keep small square-ish details (M3 checkbox 2dp)
-    else:
-        control_v = int(control)
-        container = snap_to(control_v * 1.5, SNAP_RADII)
-        if control_v > 0:
-            container = max(container, 8)
+
+    def corners(c):
+        """(control, container, detail) for a control radius."""
+        if c == "full" or (isinstance(c, (int, float)) and c >= FULL):
+            # [inferred]: pill controls keep small square-ish details (M3 checkbox 2dp)
+            return FULL, (snap_to(16 + (rough - 93) / 7 * 12, SNAP_RADII) if rough >= 93 else 20), 4
+        cv = int(c)
+        cont = snap_to(cv * 1.5, SNAP_RADII)
+        if cv > 0:
+            cont = max(cont, 8)
         # LEVERS B9 says detail = max(2, control/2); a sharp system (control 0) keeps 0, the same guard
         # container already has (correction logged in NOTES)
-        detail = 0 if control_v == 0 else snap_to(max(2, control_v / 2), SNAP_RADII)
+        return cv, cont, (0 if cv == 0 else snap_to(max(2, cv / 2), SNAP_RADII))
+    control_v, container, detail = corners(control)
+    full = control_v >= FULL
+    drv = lever_index().get("radius.control")
+    if drv and std_has_records(ctx.state) and "overrides.radius.control" in std_held(ctx.state):
+        # a standard that fixes the control radius says nothing about cards and dialogs: they keep following the Roundness dial
+        _c, container, detail = corners(eval_map(drv["map"], ctx.dials[drv["dial"]]))
     container = ctx.P("radius.container", container)
     overlay = ctx.P("radius.overlay", snap_to(min(32, container * 1.5), SNAP_RADII) if container else 0)
     detail = ctx.P("radius.detail", detail)
@@ -1963,15 +2024,21 @@ def spring_curve(damping, stiffness, samples=24):
     """Step response of a mass-1 spring, sampled into CSS linear() (DC-L04-22). Returns (linear(), ms)."""
     w = math.sqrt(stiffness)
     z = damping
+    over = z > 1 + 1e-6
     if z < 1:
         t_end = math.log(1000) / (z * w)
+    elif over:  # overdamped: the slower of the two decays sets the settle time
+        t_end = 9.2 / (w * (z - math.sqrt(z * z - 1)))
     else:
         t_end = 9.2 / w
     wd = w * math.sqrt(max(1e-9, 1 - z * z))
+    r1, r2 = (-w * (z - math.sqrt(z * z - 1)), -w * (z + math.sqrt(z * z - 1))) if over else (0.0, 0.0)
 
     def x(t):
         if z < 1:
             return 1 - math.exp(-z * w * t) * (math.cos(wd * t) + (z * w / wd) * math.sin(wd * t))
+        if over:
+            return 1 - (r2 * math.exp(r1 * t) - r1 * math.exp(r2 * t)) / (r2 - r1)
         return 1 - math.exp(-w * t) * (1 + w * t)
     pts = [rnd(x(t_end * i / samples), 3) for i in range(samples + 1)]
     pts[0], pts[-1] = 0, 1
@@ -1991,12 +2058,28 @@ def spring_params(value):
 def spring_token(z, stiff, standard):
     """A spring as DTCG 2025.10 stores it (no spring type, S-L07-002 issue #429): a transition $value with a cubic-bezier
     fallback, and $extensions holding dampingRatio and stiffness, Apple duration and bounce, and a CSS linear() sample
-    (DC-L04-22). Returns ($value, extensions)."""
+    (DC-L04-22), for a critically damped spring too, since a cubic-bezier cannot draw its settle (R19). The $value keeps
+    the standard curve as the fallback for tools that read no $extensions. Returns ($value, extensions)."""
     lin, dur = spring_curve(z, stiff)
     ext = {"spring": {"dampingRatio": z, "stiffness": stiff, "mass": 1},
            "apple": {"duration": rnd(2 * math.pi / math.sqrt(stiff), 3), "bounce": rnd(max(0.0, 1 - z), 3)},
-           "css": {"easing": lin if z < 1 else "cubic-bezier(" + ", ".join(f"{v:g}" for v in standard) + ")", "durationMs": dur}}
+           "css": {"easing": lin, "durationMs": dur}}
     return {"duration": ms(dur), "delay": ms(0), "timingFunction": A("motion.easing.standard")}, ext
+
+
+DURATION_NOTES = {"extra": "Illustrative and marketing motion only: UI animations stay under 300ms (house standard STD-easing-duration-06).",
+                  "medium-exit": "About 0.8 x medium, the entrance in force (STD-easing-duration-11).",
+                  "long-exit": "About 0.8 x long, the entrance in force (STD-easing-duration-11)."}
+
+
+def _entrance_ms(state, step, computed):
+    """The entrance duration in force for motion.duration.<step>: a value set for the token (by a standard or the person),
+    else the ladder's own."""
+    v = (state.get("overrides") or {}).get(f"motion.duration.{step}")
+    v = coerce_token_value(v, "duration") if v is not None else None
+    if isinstance(v, dict) and isinstance(v.get("value"), (int, float)) and not isinstance(v.get("value"), bool) and v["value"] > 0:
+        return v["value"] * (1000 if v.get("unit") == "s" else 1)
+    return computed
 
 
 def build_motion(ctx):
@@ -2006,8 +2089,10 @@ def build_motion(ctx):
     r10 = lambda v: int(round(v / 10) * 10)
     d = {"instant": 0, "micro": 100, "short": 150, "medium": r10(250 * mult), "long": r10(400 * mult), "extra": r10(700 * mult)}
     exit_k = 0.8  # exits about 20% shorter than entrances: house standard STD-easing-duration-11 (Atlassian 250/200, Primer 300/200)
-    d["medium-exit"] = r10(d["medium"] * exit_k)
-    d["long-exit"] = r10(d["long"] * exit_k)
+    # derived from the entrance in force, so a value a standard or the person set for medium or long keeps its exit coherent
+    # (D05); an exit a standard or the person sets directly still wins, through the token overrides
+    d["medium-exit"] = r10(_entrance_ms(ctx.state, "medium", d["medium"]) * exit_k)
+    d["long-exit"] = r10(_entrance_ms(ctx.state, "long", d["long"]) * exit_k)
     std = p["motion.easing.standard"]
     if energy <= 33:
         enter, exit_ = [0, 0, 0.38, 0.9], [0, 0, 0.38, 0.9]     # Carbon productive enter curve (S-L06-002); exits too (below)
@@ -2033,7 +2118,7 @@ def build_motion(ctx):
     motion = {
         "duration": {"$type": "duration",
                      "$description": f"Duration ladder (DC-L04-20); Energy multiplies medium and longer by {mult:.2f} (0.8-1.2, A4). Exits about 20% shorter (STD-easing-duration-11).",
-                     **{kk: tok(ms(v)) for kk, v in d.items()}},
+                     **{kk: tok(ms(v), DURATION_NOTES.get(kk)) for kk, v in d.items()}},
         "easing": {"$type": "cubicBezier", "$description": "Standard, enter (decelerate) and exit curves; linear only for spinners and progress (DC-L04-21).",
                    "standard": tok(std, "Moving and morphing on screen."), "enter": tok(enter, "Entering: decelerate."),
                    "exit": tok(exit_, "Leaving the screen."), "linear": tok([0, 0, 1, 1], "Spinners and progress only.")},
@@ -2055,15 +2140,18 @@ def build_motion_context(ctx, context):
 
     def t(dur, ease, desc):
         return tok({"duration": A(f"motion.duration.{dur}"), "delay": ms(0), "timingFunction": A(f"motion.easing.{ease}")}, desc)
+    # hover and color changes take the hover curve when the system has one (house standard STD-easing-duration-01: ease for
+    # hover and color changes, never the ease-in-out that moves things on screen); else the standard curve
+    fb_ease = "hover" if "motion.easing.hover" in (ctx.state.get("overrides") or {}) else "standard"
     if reduced:
         fb = "instant" if off else "micro"
-        body = {"feedback": t(fb, "standard", "Color and opacity feedback stays (reduced motion keeps feedback, DC-L04-25)."),
+        body = {"feedback": t(fb, fb_ease, "Color and opacity feedback stays (reduced motion keeps feedback, DC-L04-25)."),
                 "enter": t(fb, "standard", "Fade only: no translate or scale."),
                 "exit": t(fb, "standard", "Fade only."),
                 "move": t("instant", "standard", "Travel removed: position changes are instant."),
                 "expand": t(fb, "standard", "Fade only.")}
     else:
-        body = {"feedback": t("micro", "standard", "Hover, press, color changes."),
+        body = {"feedback": t("micro", fb_ease, "Hover, press, color changes."),
                 "enter": t("medium", "enter", "Menus, popovers, toasts entering."),
                 "exit": t("medium-exit", "exit", "Leaving the screen, shorter than entering (exit durations: STD-easing-duration-11)."),
                 "move": tok(A("motion.spring.spatial.default"), "On-screen movement: spatial spring (web: linear() sample)."),
@@ -2226,6 +2314,8 @@ def infer_token_type(value, path):
             return "duration"
         if path.startswith("font.family."):
             return "fontFamily"
+        if "easing" in path and css_easing(v):
+            return "cubicBezier"
         return None
     if isinstance(value, dict) and "unit" in value:
         return "duration" if value["unit"] in ("ms", "s") else "dimension"
@@ -2245,6 +2335,26 @@ def infer_token_type(value, path):
         if head in ("space", "size", "radius", "border", "focus", "font", "icon", "material"):
             return "dimension"
     return None
+
+
+CSS_EASINGS = {"linear": [0, 0, 1, 1], "ease": [0.25, 0.1, 0.25, 1], "ease-in": [0.42, 0, 1, 1], "ease-out": [0, 0, 0.58, 1],
+               "ease-in-out": [0.42, 0, 0.58, 1]}  # the CSS keyword curves (CSS Easing Functions Level 1)
+
+
+def css_easing(text):
+    """'ease-out' or 'cubic-bezier(0.23, 1, 0.32, 1)' -> its four numbers; None when the text is neither."""
+    if not isinstance(text, str):
+        return None
+    t = text.strip().lower()
+    if t in CSS_EASINGS:
+        return list(CSS_EASINGS[t])
+    m = re.fullmatch(r"cubic-bezier\(\s*(-?[\d.]+)\s*,\s*(-?[\d.]+)\s*,\s*(-?[\d.]+)\s*,\s*(-?[\d.]+)\s*\)", t)
+    if not m:
+        return None
+    try:
+        return [float(x) if "." in x else int(x) for x in m.groups()]
+    except ValueError:
+        return None
 
 
 def coerce_token_value(value, typ):
@@ -2278,6 +2388,8 @@ def coerce_token_value(value, typ):
     if typ == "fontFamily":
         return value if isinstance(value, (str, list)) else None
     if typ == "cubicBezier":
+        if isinstance(value, str):
+            return css_easing(value)
         return value if isinstance(value, list) and len(value) == 4 else None
     if typ == "transition" and isinstance(value, dict) and ({"dampingRatio", "stiffness"} & set(value)):
         return value if spring_params(value) else None  # a spring: apply_token_overrides writes it as a transition
@@ -2364,10 +2476,12 @@ def override_plan(files, key, value, default_density, typ=None):
 def std_token_types(state):
     """{override key: DTCG $type} from the engine mappings of the standards this system keeps records for (a house
     standard by the copy kept with its record, a project one by its own entry). A new token a standard adds keeps its
-    type on every build, also after the person overrode the standard; a higher-ranked standard's type wins."""
+    type on every build, also after the person overrode the standard; a higher-ranked standard's type wins. The types kept
+    when a standard was released or retired (standards.types) come last, so its token keeps exporting."""
     st = state.get("standards")
+    kept = st.get("types") if isinstance(st, dict) and isinstance(st.get("types"), dict) else {}
     if not std_has_records(state):
-        return {}
+        return {k: v for k, v in kept.items() if isinstance(v, str)}
     proj = st.get("project")
     project = {s.get("id"): s for s in proj if isinstance(s, dict)} if isinstance(proj, list) else {}
     out = {}
@@ -2379,6 +2493,9 @@ def std_token_types(state):
                 sp = normalize_path(path.strip())
                 if sp.startswith("overrides.") and not is_param_override(sp.split(".", 1)[1]):
                     out.setdefault(sp.split(".", 1)[1], typ)
+    for k, v in kept.items():
+        if isinstance(v, str):
+            out.setdefault(k, v)
     return out
 
 
@@ -2392,6 +2509,8 @@ def apply_token_overrides(ctx, files, token_types=None):
     ov = ctx.state.get("overrides") or {}
     default_density = ctx.params["space.densityMode"]
     held = std_held(ctx.state) if std_has_records(ctx.state) else {}
+    sts = ctx.state.get("standards")
+    untouched = sts.get("untouched") if isinstance(sts, dict) and isinstance(sts.get("untouched"), dict) else {}
     types = dict(std_token_types(ctx.state), **(token_types or {}))
     # unprefixed keys first, so a mode-prefixed value for the same token wins in its mode
     for key in sorted((k for k in ov if not is_param_override(k)), key=lambda k: (":" in k, k)):
@@ -2406,7 +2525,9 @@ def apply_token_overrides(ctx, files, token_types=None):
                 node = node.setdefault(q, {})
             leaf = node.get(parts[-1])
             sid = held.get("overrides." + key)
-            src = {"source": "standard", "standard": sid} if sid else {"source": "person"}
+            freed = untouched.get("overrides." + key)
+            src = {"source": "standard", "standard": sid} if sid else \
+                {"source": "standard-overridden", "standard": freed} if freed else {"source": "person"}
             val, ext = copy.deepcopy(plan["values"][fn]), {}
             spring = spring_params(val) if plan["type"] == "transition" else None
             if spring:
@@ -2416,9 +2537,20 @@ def apply_token_overrides(ctx, files, token_types=None):
                 leaf.setdefault("$extensions", {}).setdefault(NS, {}).update(ext, **src)
             else:
                 node[parts[-1]] = {"$value": val, "$type": plan["type"],
-                                   "$description": f"Added by standard {sid}." if sid else "Added by a person (engine.py set).",
+                                   "$description": f"Added by standard {sid}." if sid else f"Added by standard {freed} (overridden)."
+                                   if freed else "Added by a person (engine.py set).",
                                    "$extensions": {NS: dict(ext, **src)}}
             applied.append(f"{fn}:{plan['path']}")
+    # a lever parameter a standard holds (motion.easing.standard) is a token too: it says which standard set it
+    for key in (k for k in ov if is_param_override(k)):
+        sid, freed = held.get("overrides." + key), untouched.get("overrides." + key)
+        if not (sid or freed):
+            continue
+        for fn, tree in files.items():
+            leaf = _node_at(tree, key.split(".")) if fn.endswith(".tokens.json") else None
+            if isinstance(leaf, dict) and "$value" in leaf:
+                leaf.setdefault("$extensions", {}).setdefault(NS, {}).update(
+                    {"source": "standard", "standard": sid} if sid else {"source": "standard-overridden", "standard": freed})
     return applied
 
 
@@ -3038,6 +3170,22 @@ def validate_files(files, state, rep):
     dur = [toks[f"motion.duration.{k}"]["resolved"]["value"] for k in ("instant", "micro", "short", "medium", "long", "extra")
            if f"motion.duration.{k}" in toks]
     mono(dur, "motion.duration ladder", strict=False)
+    # ---- a coherent motion scale (R31): medium below long, exits about 0.8 x their entrance (STD-easing-duration-11)
+    dms = {k: duration_ms(toks[f"motion.duration.{k}"]["resolved"]) for k in ("medium", "long", "medium-exit", "long-exit")
+           if f"motion.duration.{k}" in toks}
+    if dms.get("medium") and dms.get("long") and dms["medium"] >= dms["long"]:
+        rep.add("warning", "lint", f"motion.duration.medium ({fmt_num(dms['medium'])}ms) is not shorter than motion.duration.long "
+                f"({fmt_num(dms['long'])}ms), so bigger moves are not slower than small ones", "Durations grow with the distance moved",
+                "DC-L04-20", "motion.duration.medium", measured=dms["medium"], threshold=dms["long"],
+                fix="set medium below long, for example engine.py set motion.duration.medium 200ms")
+    for ent, ex in (("medium", "medium-exit"), ("long", "long-exit")):
+        if dms.get(ent) and dms.get(ex):
+            r = dms[ex] / dms[ent]
+            if not 0.695 <= r <= 0.905:
+                rep.add("warning", "lint", f"motion.duration.{ex} ({fmt_num(dms[ex])}ms) is {r:.2f} x motion.duration.{ent} "
+                        f"({fmt_num(dms[ent])}ms); an exit takes about 0.8 x its entrance (0.7 to 0.9)", "Exits are faster than entrances",
+                        "STD-easing-duration-11", f"motion.duration.{ex}", measured=round(r, 2), threshold="0.7-0.9",
+                        fix=f"engine.py set motion.duration.{ex} {int(round(dms[ent] * 0.8 / 10) * 10)}ms")
     for mode in modes:
         t2 = pick(theme=mode)
         ramps_ = sorted({k.split(".")[1] for k in t2 if re.fullmatch(rf"color\.[a-zA-Z0-9-]+\.{mode}\.\d+", k)} - {"neutral-alpha"})
@@ -3056,7 +3204,8 @@ def validate_files(files, state, rep):
     prim_tree = files.get("primitives.tokens.json")
     if prim_tree:
         pp = set(flatten(prim_tree))
-        orphans = sorted(p for p in pp - used if re.match(r"(space|radius|font\.size|border\.width|motion\.(duration|easing))\.", p))
+        by_std = {shown_path(x) for x in std_held(state)} if std_has_records(state) else set()  # a standard's token is on purpose
+        orphans = sorted(p for p in pp - used - by_std if re.match(r"(space|radius|font\.size|border\.width|motion\.(duration|easing))\.", p))
         rep.stats["orphans"] = orphans
         if orphans:
             rep.add("advisory", "lint", f"{len(orphans)} scale steps are not used by any named value yet (for example {', '.join(orphans[:3])}). "
@@ -3097,9 +3246,22 @@ def validate_dir(d, write_state_hash=True):
     files = load_token_dir(tokdir)
     meta = files.get("opendesigner.meta.json") or {}
     if os.path.exists(state_path) and meta.get("stateHash") and meta["stateHash"] != state_hash(read_json(state_path)):
-        rep.add("warning", "setup", "the tokens are older than state.json. Run `engine.py generate`", "", "")
+        # check what state.json says now, so a value a check refuses shows here and not first in build (R30)
+        try:
+            files = generate_system(read_json(state_path))[0]
+            meta = files["opendesigner.meta.json"]
+            rep.add("warning", "setup", "the files in tokens/ are older than state.json, so this check used the current state.json. "
+                    "Run `engine.py build` to write the tokens, exports and DESIGN.md", "", "", fix="engine.py build")
+        except Exception:
+            rep.add("warning", "setup", "the tokens are older than state.json. Run `engine.py build`", "", "", fix="engine.py build")
     validate_files(files, state, rep)
-    std_validate(state, rep)
+    for note in meta.get("notes") or []:  # a token the engine could not write is missing from every export (R03)
+        m = re.match(r"^override (\S+) skipped: (.*)$", str(note))
+        if m:
+            rep.add("warning", "tokens", f"{m.group(1)} is missing from every export: its value could not be written ({m.group(2)})",
+                    "Every recorded value reaches the tokens", "", where=m.group(1),
+                    fix=f"give it a value with a unit or a type: engine.py set {m.group(1)} <value>, for example \"200ms\" or \"12px\"")
+    std_validate(state, rep, files)
     return rep
 
 
@@ -3850,8 +4012,10 @@ def token_diff(old_state, new_state):
     return sorted(changed, key=lambda x: (bool(PRIMITIVE_RE.match(x)), x != "color.bg.action.primary", x))  # named roles first
 
 
-def change_lines(path, value, old_state, new_state, effects=None):
-    """Plain lines saying what an answer or a setting changed: tokens, or what it shapes instead (U5: never silent)."""
+def change_lines(path, value, old_state, new_state, effects=None, skipped=False, held_notes=None):
+    """Plain lines saying what an answer or a setting changed: tokens, or what it shapes instead (U5: never silent).
+    skipped: some of an answer's effects were not applied (locked), so the tokens do not 'already match'. held_notes:
+    values a dial drives that a standard holds, said instead of 'no token changed'."""
     changed = token_diff(old_state, new_state)
     lines = []
     qid = path.split(".", 1)[1] if path.startswith("answers.") else ANSWER_PATHS.get(path, (None, None))[0]
@@ -3866,14 +4030,17 @@ def change_lines(path, value, old_state, new_state, effects=None):
             lines.append(RECORD_KINDS["export"] + ".")
         elif kind:
             lines.append(RECORD_KINDS[kind] + ".")
+        elif eff and skipped:
+            lines.append("recorded; no token changed, because the values it would change are locked (see skipped above).")
         elif eff:
             lines.append("recorded; the tokens already match this answer.")
         else:
             lines.append(RECORD_KINDS["rule"] + ".")
     elif path.startswith(EXPORT_ONLY):
         lines.append(RECORD_KINDS["export"] + ".")
-    elif path.split(".")[0] in ("dials", "raw", "overrides", "preset", "macros"):
+    elif path.split(".")[0] in ("dials", "raw", "overrides", "preset", "macros") and not held_notes:
         lines.append("no token changed: the system already had this value.")
+    lines += ["note: " + n for n in held_notes or []]
     if qid:
         _e, _k, note = answer_outcome(qid, value)
         if note:
@@ -3881,7 +4048,64 @@ def change_lines(path, value, old_state, new_state, effects=None):
     return lines
 
 
-def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, lock=False, source_ref=None, via=None):
+def _touch(state, path):
+    """The person set this path: a value an override released is theirs now, no longer the standard's (provenance)."""
+    sts = state.get("standards")
+    if isinstance(sts, dict) and isinstance(sts.get("untouched"), dict):
+        sts["untouched"].pop(path, None)
+
+
+def _effect_result(state, epath, evalue):
+    """The value an answer's effect would leave at its path ('+' appends to a list; UNSET puts the default back)."""
+    path = epath.rstrip("+")
+    if epath.endswith("+"):
+        cur = std_current(state, path)
+        lst = list(cur) if isinstance(cur, list) else []
+        for x in (evalue if isinstance(evalue, list) else [evalue]):
+            if x not in lst:
+                lst.append(x)
+        return lst
+    if evalue == UNSET:
+        return None if path.split(".")[0] in ("overrides", "dials") else _default_at(path)
+    return evalue
+
+
+def std_answer_blocks(state, qid, value, effects, house=None):
+    """Why a standard refuses an answer, in plain words, or None: the question is settled by a standard, the option is
+    marked as breaking one, or the answer would change a value a standard holds or forbids (R11)."""
+    house = house or load_standards()
+    settled = std_settled_by(state, qid, house)
+    if settled:
+        return (f"{qid} is settled by " + "; ".join(_std_says(state, x["id"], house) for x in settled)
+                + " The interview does not ask it, and nothing was recorded. Change it only if the person explicitly asked: "
+                + "; ".join(f"engine.py standard remove {x['id']} --why \"<their words>\"" if x["id"].startswith("PRJ-") else
+                            f"engine.py standard override {x['id']} --why \"<their words>\"" for x in settled))
+    bad = std_option_breaks(state, qid, value, house)
+    if bad:
+        return (f"Nothing was changed: the option {bad[0][1]} for {qid} breaks a standard.\n"
+                + std_lock_message(state, [], house, value=bad[0][1],
+                                   breaks=[(x["id"], f"the standard lists {v} for {qid} as an option that breaks it", x) for x, v in bad]))
+    msgs = []
+    for epath, evalue in effects.items():
+        ep = epath.rstrip("+")
+        new = _effect_result(state, epath, evalue)
+        holders = std_holders(state, ep)
+        if holders and not _same(new, std_current(state, ep)):
+            msgs.append(std_lock_message(state, holders, house, path=ep, value=new))
+        elif ep.startswith("overrides.") and new is not None:
+            br = std_constraint_breaks(state, ep, new, house)
+            if br:
+                msgs.append(std_lock_message(state, [], house, path=ep, value=new, breaks=br))
+    if msgs:
+        return (f"Nothing was changed: {qid} = {json.dumps(value, ensure_ascii=False)} would change a value a standard holds.\n"
+                + "\n".join(msgs))
+    return None
+
+
+def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, lock=False, source_ref=None, via=None, resync=True):
+    """Record one decision. A value a standard holds or forbids is refused, also with force (force opens only the person's
+    own locks); the refusal names every standard involved and how to change it. After the platforms (Q-plat-01) or the
+    stack (raw.stack) change, the house standards are re-scoped to them (resync)."""
     sp = os.path.join(d, "state.json")
     if not os.path.exists(sp):
         raise SystemExit(f"no state at {sp}; run `engine.py init --dir {d}` first")
@@ -3895,11 +4119,18 @@ def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, loc
         raise SystemExit("--set-by standard is written only by the standard commands, so each such value traces to a real standard. "
                          "For the person's own choice use --set-by chosen; to make it a rule: engine.py standard add --rule \"...\" "
                          "--why \"...\" --source <url> --path <path> --value <json>")
+    holders = std_holders(state, path)
+    if holders:  # --force is for the person's own locks, never a standard's (R05); the refusal names every rule involved (R06)
+        shown_v = css_easing(value) if isinstance(value, str) and "easing" in path and css_easing(value) else value
+        br = std_constraint_breaks(state, path, shown_v, exclude=holders) if path.startswith("overrides.") and shown_v is not None else []
+        raise SystemExit(std_lock_message(state, holders, path=path, value=shown_v, breaks=br))
     if is_locked(state, path) and not force:
-        holder = std_holder(state, path)
-        if holder:
-            raise SystemExit(std_lock_message(state, holder))
         raise SystemExit(f"{path} is locked. Ask the owner before changing it, then run `engine.py unlock {path}` (or pass --force).")
+    if path == "raw.stack":  # D01: react, react-native, ... from the project's package.json or the person
+        items = value.split(",") if isinstance(value, str) else value if isinstance(value, list) else None
+        if items is None or not all(isinstance(x, str) for x in items):
+            raise SystemExit("raw.stack takes a list of stack names, for example '[\"react\"]' or react,react-native")
+        value = [x.strip().lower() for x in items if x.strip()]
     if path.startswith("dials."):
         if value is not None and not (isinstance(value, (int, float)) and 0 <= value <= 100):
             raise SystemExit("A dial takes a number from 0 to 100, or null to follow the other dials.")
@@ -3927,13 +4158,31 @@ def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, loc
             raise SystemExit(f"Nothing was changed: {plan['error']}.")
         value = next(iter(plan["values"].values()))  # stored in DTCG form, so the tokens stay valid
         plan_note = plan.get("note") or ""
+    if path.startswith("overrides.") and value is not None:
+        breaks = std_constraint_breaks(state, path, value)
+        if breaks:
+            raise SystemExit("Nothing was changed. " + std_lock_message(state, [], path=path, value=value, breaks=breaks))
+    if path.startswith("answers."):
+        trial = copy.deepcopy(state)
+        _store(trial, path, value, set_by, "D-0000", lock, via)
+        blocked = std_answer_blocks(state, path.split(".", 1)[1], value, answer_effects(path.split(".", 1)[1], value, trial))
+        if blocked:
+            raise SystemExit(blocked)
+    held_notes = []
+    if path.startswith("dials.") and std_has_records(state):  # values this dial drives that a standard holds stay (R25)
+        for pid, drv in lever_index().items():
+            hs = std_holders(state, "overrides." + pid) if drv.get("dial") == path.split(".")[1] else []
+            if hs:
+                held_notes.append(f"{pid} stays {_vw(std_current(state, 'overrides.' + pid))}: "
+                                  f"{'project' if hs[0].startswith('PRJ-') else 'house'} standard {hs[0]} holds it; "
+                                  "everything else this dial drives follows the new value")
     entries = _decision_entries(d)
     did = f"D-{len(entries) + 1:04d}"
     last = next((e for e, pth in reversed(entries) if pth == path), None)
     by_std = std_path_decision(state, path)  # a standard's grouped decision set this path after the last entry that names it
     sup = by_std if by_std and _dnum(by_std) > _dnum(last) else None
     prev = _store(state, path, value, set_by, did, lock, via)
-    extra = []
+    extra, skipped = [], False
     if prev is not None:
         extra.append(f"previous value: {json.dumps(prev, ensure_ascii=False)}")
     if plan_note:
@@ -3950,13 +4199,19 @@ def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, loc
             extra.append(f"note: {', '.join(custom)} is not one of the listed options for {qid}; kept as your own answer")
         effects = answer_effects(qid, value, state)
         for epath, evalue in effects.items():
+            holder = std_holder(state, epath.rstrip("+"))
+            if holder:  # std_answer_blocks let it through, so the standard's value already matches
+                extra.append(f"{epath.rstrip('+')} already follows standard {holder}")
+                continue
             if is_locked(state, epath.rstrip("+")) and not force:
-                holder = std_holder(state, epath.rstrip("+"))
-                extra.append(f"skipped {epath} (locked{' by standard ' + holder if holder else ''})")
+                extra.append(f"skipped {epath} (locked)")
+                skipped = True
                 continue
             _store(state, epath, evalue, set_by, did, False)
+            _touch(state, epath.rstrip("+"))
             shown = "back to the default" if evalue == UNSET else json.dumps(evalue, ensure_ascii=False)
             extra.append(f"also set: {epath.rstrip('+')} = {shown} (from {qid})")
+    _touch(state, path)
     dump_json(sp, state)
     log_decision(d, path, value, why, set_by, lock, source_ref, extra, supersedes=sup)
     qid, how = (path.split(".", 1)[1], None) if path.startswith("answers.") else ANSWER_PATHS.get(path, (None, None))
@@ -3968,12 +4223,11 @@ def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, loc
         print(f"{did} set {path} = {json.dumps(value, ensure_ascii=False)} ({set_by}{', locked' if lock else ''})")
         for e in extra:
             print("  " + e)
-        for line in change_lines(path, value, old_state, state, effects):
+        for line in change_lines(path, value, old_state, state, effects, skipped, held_notes):
             print("  " + line)
-        if path == "answers.Q-plat-01":
-            hint = std_platform_hint(state)
-            if hint:
-                print("  " + hint)
+    if resync and path in ("answers.Q-plat-01", "raw.stack"):
+        std_rescope(d, quiet=quiet)
+        state = merge_defaults(read_json(sp))
     return state
 
 
@@ -4023,8 +4277,27 @@ def cmd_init(d, src=None, name=None, force=False, standards=True):
         log_decision(d, "init", None, "Start of the design system; every default traces to references/levers.json.", "auto_default",
                      title="init" + (f" from {os.path.basename(src)}" if src else " with defaults"))
     print(f"initialized {sp}")
+    record_stack(d, quiet=False)
     if standards:  # house standards (docs/KNOWLEDGE.md 3): applied, locked, said once; nothing when none ship
         std_sync(d, initial=True)
+
+
+def record_stack(d, quiet=True):
+    """Look before you ask (D01): read the stack (react, react-native, ...) from package.json in the project root and record
+    it as raw.stack, set_by assumed, unless a stack is already recorded. With no package.json nothing is recorded, and the
+    agent asks once. Returns the tags, or None."""
+    state = merge_defaults(load_state(d))
+    if (state.get("raw") or {}).get("stack") is not None:
+        return None
+    tags, seen = detect_stack(doc_dir(d))
+    if tags is None:
+        return None
+    why = (f"detected from package.json ({', '.join(seen)})" if seen else "package.json names no UI framework") + \
+        "; say if the stack is different"
+    cmd_set(d, "raw.stack", tags, why, quiet=True, set_by="assumed", resync=False)
+    if not quiet:
+        print(f"  stack: {', '.join(tags) or 'no UI framework'} (from package.json)")
+    return tags
 
 
 # =============================================================================================
@@ -4040,7 +4313,7 @@ STD_RESERVED = ("locks", "standards", "hashes", "$schema", "schema_version", "en
 # the fields of a house standard a system keeps with its record, so what it follows (rule text, values, review check) stays
 # consistent until `standards --update`, and still reads right when the house file is missing (another install)
 STD_SNAPSHOT = ("id", "theme", "area", "title", "rule", "why", "strength", "values", "applies_to", "sources", "engine", "review",
-                "design_md", "since", "changed")
+                "design_md", "since", "changed", "settles", "breaks_options", "constraints", "supersedes")
 REVIEW_LINE_CAP = 2000  # characters of one line a standard's pattern reads (minified files have very long lines)
 _QUANT = r"(?:[+*]|\{\d*,\d*\})"
 NESTED_QUANTIFIER = re.compile(r"\((?:[^()\\]|\\.)*?" + _QUANT + r"(?:[^()\\]|\\.)*\)" + _QUANT)
@@ -4105,6 +4378,16 @@ def _clean_standard(s, version):
     s["values"] = s["values"] if isinstance(s.get("values"), dict) else {}
     s["sources"] = [x for x in s["sources"] if isinstance(x, dict)] if isinstance(s.get("sources"), list) else []
     s["design_md"] = s.get("design_md", True) is not False
+    # optional fields of the shared schema: questions a standard settles, options that break it, values it forbids, and the
+    # Decision Cards it replaces. A field of the wrong shape is dropped, never fatal.
+    ids = lambda v: [x for x in v if isinstance(x, str) and x.strip()] if isinstance(v, list) else []
+    s["settles"] = ids(s.get("settles"))
+    bo = s.get("breaks_options")
+    s["breaks_options"] = {q: [str(x) for x in (v if isinstance(v, list) else [v]) if isinstance(x, (str, int, float))]
+                           for q, v in bo.items() if isinstance(q, str)} if isinstance(bo, dict) else {}
+    s["constraints"] = [c for c in s["constraints"] if _constraint_kind(c)[0] and isinstance(c.get("path"), str) and c["path"].strip()] \
+        if isinstance(s.get("constraints"), list) else []
+    s["supersedes"] = ids(s.get("supersedes"))
     problem = None
     rv = s.get("review")
     if not isinstance(rv, dict) or rv.get("pattern") in (None, ""):
@@ -4190,6 +4473,15 @@ def std_state(state):
             rec["kept"] = {}
         if "prelocked" in rec and not isinstance(rec["prelocked"], list):
             rec["prelocked"] = []
+    # released: {id: {state path: {why, decision, date}}}, values the person took back from a standard one by one;
+    # untouched: {state path: id}, values an override released that nobody has set since; types: {token path: $type} of
+    # tokens standards added, kept when the standard is released so the token keeps exporting
+    v = st.get("released")
+    st["released"] = {k: {p: x for p, x in r.items() if isinstance(x, dict)} for k, r in v.items() if isinstance(r, dict)} \
+        if isinstance(v, dict) else {}
+    for k in ("untouched", "types"):
+        v = st.get(k)
+        st[k] = {p: x for p, x in v.items() if isinstance(x, str)} if isinstance(v, dict) else {}
     return st
 
 
@@ -4216,12 +4508,62 @@ def known_platforms(state):
     return {str(x).strip().lower() for x in (v if isinstance(v, list) else [v]) if x} or None
 
 
+# the applies_to tags each platform brings (owner decision D01): a desktop app is built with web tech unless the stack says more
+PLATFORM_TAGS = {"web": ("web", "css"), "ios": ("ios", "swift"), "android": ("android", "compose"), "desktop": ("desktop", "web", "css")}
+# package.json dependencies -> stack tags (D01: look before you ask); the first match of each tag is the evidence
+STACK_DEPS = (("react-native", "react-native"), ("expo", "react-native"), ("react", "react"), ("react-dom", "react"), ("next", "react"),
+              ("vue", "vue"), ("nuxt", "vue"), ("svelte", "svelte"), ("@sveltejs/kit", "svelte"), ("@angular/core", "angular"),
+              ("solid-js", "solid"))
+
+
+def stack_of(state):
+    """The recorded stack (raw.stack: react, react-native, ...), as lowercase tags."""
+    v = (state.get("raw") or {}).get("stack")
+    v = [v] if isinstance(v, str) else v if isinstance(v, list) else []
+    return [x.strip().lower() for x in v if isinstance(x, str) and x.strip()]
+
+
+def project_tags(state):
+    """The applies_to tags this project matches: its platforms mapped (web -> web, css; ios -> ios, swift; android ->
+    android, compose; desktop -> desktop, web, css) plus its recorded stack. None while nobody named the platforms."""
+    plats = known_platforms(state)
+    if plats is None:
+        return None
+    tags = set()
+    for p in plats:
+        tags |= set(PLATFORM_TAGS.get(p, (p,)))
+    return tags | set(stack_of(state))
+
+
+def detect_stack(root):
+    """(tags, dependencies seen) from package.json in the project root; (None, []) when there is none or it cannot be read."""
+    fp = os.path.join(root, "package.json")
+    try:
+        with open(fp, encoding="utf-8") as f:
+            data = json.load(f)
+    except (OSError, ValueError):
+        return None, []
+    if not isinstance(data, dict):
+        return None, []
+    deps = {}
+    for k in ("dependencies", "devDependencies", "peerDependencies"):
+        if isinstance(data.get(k), dict):
+            deps.update(data[k])
+    tags, seen = [], []
+    for dep, tag in STACK_DEPS:
+        if dep in deps:
+            seen.append(dep)
+            if tag not in tags:
+                tags.append(tag)
+    return tags, seen
+
+
 def std_applies(s, state):
-    """False only when the standard names platforms and the person's platforms are known and all outside them."""
+    """False only when the standard names platforms or stacks and this project's tags are known and all outside them."""
     to = s.get("applies_to") or ["all"]
     to = {str(x).strip().lower() for x in (to if isinstance(to, list) else [to])}
-    plats = known_platforms(state)
-    return "all" in to or not plats or bool(to & plats)
+    tags = project_tags(state)
+    return "all" in to or tags is None or bool(to & tags)
 
 
 def std_current(state, path):
@@ -4237,7 +4579,16 @@ def std_current(state, path):
 
 
 def _same(a, b):
-    return json.dumps(a, sort_keys=True) == json.dumps(b, sort_keys=True)
+    """True when two values are equal, numbers by value (1 and 1.0 are the same), lists and objects item by item."""
+    if isinstance(a, bool) or isinstance(b, bool):
+        return type(a) is type(b) and a == b
+    if isinstance(a, (int, float)) and isinstance(b, (int, float)):
+        return a == b
+    if isinstance(a, dict) and isinstance(b, dict):
+        return set(a) == set(b) and all(_same(a[k], b[k]) for k in a)
+    if isinstance(a, (list, tuple)) and isinstance(b, (list, tuple)):
+        return len(a) == len(b) and all(_same(x, y) for x, y in zip(a, b))
+    return a == b
 
 
 def _finite(v):
@@ -4427,24 +4778,189 @@ def _std_rank(sid):
 
 
 def std_held(state, exclude=None):
-    """{state path: standard id} for every path an active standard locks (house ones not overridden, project ones);
-    when two hold one path, the higher-ranked one is named."""
+    """{state path: standard id} for every path an active standard locks (house ones not overridden, project ones), less
+    the values the person took back one by one; when two hold one path, the higher-ranked one is named."""
     st = std_state(state)
     held = {}
     for sid, rec in sorted(st["records"].items(), key=lambda kv: _std_rank(kv[0])):
         if sid == exclude or sid in st["overridden"] or not rec.get("locked", True):
             continue
+        rel = st["released"].get(sid) or {}
         for p in rec.get("paths") or {}:
-            held.setdefault(p, sid)
+            if p not in rel:
+                held.setdefault(p, sid)
     return held
+
+
+def std_holders(state, path, exclude=()):
+    """Every active standard that locks this path (or a path above it), highest-ranked first."""
+    st = std_state(state)
+    out = []
+    for sid, rec in sorted(st["records"].items(), key=lambda kv: _std_rank(kv[0])):
+        if sid in exclude or sid in st["overridden"] or not rec.get("locked", True):
+            continue
+        rel = st["released"].get(sid) or {}
+        if any(p not in rel and (path == p or path.startswith(p + ".")) for p in rec.get("paths") or {}):
+            out.append(sid)
+    return out
 
 
 def std_holder(state, path):
     """The id of the active standard that locks this path (or a path above it), else None."""
-    for p, sid in std_held(state).items():
-        if path == p or path.startswith(p + "."):
-            return sid
+    got = std_holders(state, path)
+    return got[0] if got else None
+
+
+def std_beaten(state):
+    """{house standard id: project standard id} for house standards a project standard beats (standard add --beats): the
+    person's source always wins, so their review checks and constraints are off in this project (owner decision D03)."""
+    out = {}
+    for s in std_state(state)["project"]:
+        for sid in s.get("beats") or [] if isinstance(s.get("beats"), list) else []:
+            if isinstance(sid, str):
+                out.setdefault(sid, s["id"])
+    return out
+
+
+def std_followed(state, house=None, all_platforms=False):
+    """The house standards this system follows now, as it follows them: applied, not overridden as a whole, and (unless
+    all_platforms) for its platforms."""
+    house = house or load_standards()
+    st = std_state(state)
+    out = [std_copy(state, i, house) for i in st["applied"] if i not in st["overridden"]]
+    return [s for s in out if s and (all_platforms or std_applies(s, state))]
+
+
+# ---- constraints: values a token may not take while a standard applies (shared schema, R06)
+
+def _constraint_kind(c):
+    """(kind, limit) of one constraint: ('accelerating-curve', None) or ('max-duration-ms', 300.0); (None, None) when it
+    cannot be read. The limit may sit in forbid ({"max-duration-ms": {"value": 300}}), in value, or next to forbid."""
+    if not isinstance(c, dict):
+        return None, None
+    f = c.get("forbid")
+    if isinstance(f, dict) and len(f) == 1:
+        kind, lim = next(iter(f.items()))
+    elif isinstance(f, str):
+        kind, lim = f, c.get("value", c.get(f))
+    else:
+        kind = next((k for k in ("accelerating-curve", "max-duration-ms") if k in c), None)
+        lim = c.get(kind) if kind else None
+    if kind == "accelerating-curve":
+        return kind, None
+    if kind == "max-duration-ms":
+        lim = lim.get("value") if isinstance(lim, dict) else lim
+        if isinstance(lim, (int, float)) and not isinstance(lim, bool) and math.isfinite(lim):
+            return kind, float(lim)
+    return None, None
+
+
+def _end_slope(x1, y1, x2, y2):
+    for x, y in ((x2, y2), (x1, y1), (0, 0)):  # a control point on the end point leaves the slope to the one before it
+        if (x, y) != (1, 1):
+            return (1 - y) / (1 - x) if x != 1 else (math.inf if y < 1 else -math.inf)
+    return 1.0
+
+
+def _start_slope(x1, y1, x2, y2):
+    for x, y in ((x1, y1), (x2, y2), (1, 1)):
+        if (x, y) != (0, 0):
+            return y / x if x != 0 else (math.inf if y > 0 else -math.inf)
+    return 1.0
+
+
+def curve_accelerates(v):
+    """True for a cubic-bezier that ends faster than it starts, like ease-in [0.42, 0, 1, 1] or [0.3, 0, 1, 1]: its end
+    slope is over 1 and over its start slope. ease-out, ease-in-out, ease and linear are not."""
+    v = css_easing(v) if isinstance(v, str) else v
+    if not (isinstance(v, list) and len(v) == 4 and all(isinstance(x, (int, float)) and not isinstance(x, bool) for x in v)):
+        return False
+    end, start = _end_slope(*v), _start_slope(*v)
+    return end > 1 and end > start
+
+
+def duration_ms(v):
+    """Milliseconds of a duration value ({value, unit}, 250, '250ms', '0.3s'), else None."""
+    if isinstance(v, dict) and isinstance(v.get("value"), (int, float)) and not isinstance(v.get("value"), bool):
+        return float(v["value"]) * (1000 if v.get("unit") == "s" else 1) if v.get("unit") in ("ms", "s", None) else None
+    if isinstance(v, (int, float)) and not isinstance(v, bool):
+        return float(v)
+    m = re.fullmatch(r"\s*(\d+(?:\.\d+)?)(ms|s)\s*", v) if isinstance(v, str) else None
+    return float(m.group(1)) * (1000 if m.group(2) == "s" else 1) if m else None
+
+
+def constraint_problem(c, value):
+    """Why a value breaks one constraint, in plain words, or None. A transition is read by its curve and duration."""
+    kind, lim = _constraint_kind(c)
+    parts = [value]
+    if isinstance(value, dict) and ("timingFunction" in value or "duration" in value):
+        parts = [value.get("timingFunction"), value.get("duration")]
+    if kind == "accelerating-curve":
+        for x in parts:
+            if curve_accelerates(x):
+                return f"{_vw(css_easing(x) if isinstance(x, str) else x)} speeds up as it ends, like ease-in"
+    elif kind == "max-duration-ms":
+        for x in parts:
+            n = duration_ms(x) if not isinstance(x, list) else None
+            if n is not None and n > lim:
+                return f"{fmt_num(n)}ms is longer than {fmt_num(lim)}ms"
     return None
+
+
+def _token_key(path):
+    """overrides.dark:motion.easing.exit -> motion.easing.exit: the token path a constraint's pattern reads."""
+    return split_mode_key(shown_path(path))[1]
+
+
+def std_constraints(state, house=None):
+    """[(standard id, constraint, standard)] for the standards this system follows now: applied house ones (not overridden,
+    not beaten by a project standard) and project ones."""
+    st = std_state(state)
+    beaten = std_beaten(state)
+    stds = [s for s in std_followed(state, house) if s["id"] not in beaten] + list(st["project"])
+    out = []
+    for s in stds:
+        for c in s.get("constraints") or [] if isinstance(s.get("constraints"), list) else []:
+            if _constraint_kind(c)[0] and isinstance(c.get("path"), str) and c["path"].strip():
+                out.append((s["id"], c, s))
+    return out
+
+
+def std_constraint_breaks(state, path, value, house=None, exclude=(), constraints=None):
+    """[(standard id, why, standard)] for every constraint the value at this path breaks. A value the person took back
+    from a standard (standard override --path) is not held to that standard's constraints."""
+    st = std_state(state)
+    key = _token_key(path)
+    out = []
+    for sid, c, s in (constraints if constraints is not None else std_constraints(state, house)):
+        if sid in exclude or not fnmatch.fnmatchcase(key, c["path"].strip()):
+            continue
+        rel = st["released"].get(sid) or {}
+        if any(_token_key(p) == key for p in rel):
+            continue
+        why = constraint_problem(c, value)
+        if why and not any(x[0] == sid for x in out):
+            out.append((sid, why, s))
+    return out
+
+
+def std_settled_by(state, qid, house=None):
+    """The standards this system follows that settle a question (their answer fixes it, so the interview does not ask it)."""
+    st = std_state(state)
+    return [s for s in std_followed(state, house) + list(st["project"]) if qid in (s.get("settles") or [])]
+
+
+def std_option_breaks(state, qid, value, house=None):
+    """[(standard, option)] for each chosen option of a question that a standard this system follows lists as breaking it."""
+    st = std_state(state)
+    vals = [str(x) for x in (value if isinstance(value, list) else [value]) if not isinstance(x, (dict, list))]
+    out = []
+    for s in std_followed(state, house) + list(st["project"]):
+        bad = (s.get("breaks_options") or {}).get(qid) if isinstance(s.get("breaks_options"), dict) else None
+        for v in vals:
+            if isinstance(bad, list) and v in [str(x) for x in bad]:
+                out.append((s, v))
+    return out
 
 
 def std_path_decision(state, path):
@@ -4459,17 +4975,47 @@ def std_path_decision(state, path):
     return best
 
 
-def std_lock_message(state, sid, house=None):
-    house = house or load_standards()
-    if sid.startswith("PRJ-"):
-        s = std_find(state, sid, house)[0] or {}
-        rule = (s.get("rule") or "").strip().rstrip(".")
-        return (f"This follows your project standard {sid}" + (f": {rule}" if rule else "") + ". Change it only if the person "
-                f"explicitly asked: engine.py standard remove {sid} --why \"<their words>\", then set the new value.")
-    s = std_copy(state, sid, house) or std_find(state, sid, house)[0] or {}
+def _std_says(state, sid, house):
+    """'house standard STD-x: its rule. Why: its reason.' for one standard."""
+    kind = "your project standard" if sid.startswith("PRJ-") else "house standard"
+    s = (std_find(state, sid, house)[0] if sid.startswith("PRJ-") else std_copy(state, sid, house) or std_find(state, sid, house)[0]) or {}
     rule = (s.get("rule") or "").strip().rstrip(".")
-    return (f"This follows house standard {sid}" + (f": {rule}" if rule else "") + ". Change it only if the person explicitly asked: "
-            f"engine.py standard override {sid} --why \"<their words>\"")
+    why = (s.get("why") or "").strip().rstrip(".")
+    return f"{kind} {sid}" + (f": {rule}." if rule else ".") + (f" Why: {why}." if why else "")
+
+
+def std_lock_message(state, sid=None, house=None, path=None, value=None, breaks=None):
+    """Why a value cannot change, in plain words: every standard that holds the path and every standard whose rule the new
+    value breaks, each with its rule and why, then the command that changes it, only when the person explicitly asks. sid
+    is one id or a list of them (the holders); with path alone the holders are looked up."""
+    house = house or load_standards()
+    holders = [sid] if isinstance(sid, str) else list(sid or [])
+    if path and not holders and not breaks:
+        holders = std_holders(state, path)
+    breaks = list(breaks or [])
+    shown = shown_path(path) if path else None
+    val = f" --value '{json.dumps(value, ensure_ascii=False)}'" if value is not None and shown else ""
+    prj = [h for h in holders if h.startswith("PRJ-")]
+    out = []
+    if len(holders) == 1:
+        out.append(f"This follows {_std_says(state, holders[0], house)}")
+    elif holders:
+        out.append(f"{shown or 'This value'} follows {len(holders)} standards:")
+        out += [f"  - {_std_says(state, h, house)}" for h in holders]
+    for bsid, why, _s in breaks:
+        out.append(f"{_vw(value) if value is not None else 'This value'} breaks {_std_says(state, bsid, house)} ({why})")
+    how = []
+    if prj:
+        how.append(f"engine.py standard remove {prj[0]} --why \"<their words>\", then set the new value"
+                   + (" (the house standards above take the value back unless they are overridden too)" if len(holders) > len(prj) else ""))
+    elif holders:
+        how.append(f"engine.py standard override {holders[0]} --why \"<their words>\"" + (f" --path {shown}{val}" if shown else "")
+                   + (" --all-holders" if len(holders) > 1 else ""))
+    for bsid, _w, _s in breaks:
+        how.append(f"engine.py standard remove {bsid} --why \"<their words>\"" if bsid.startswith("PRJ-") else
+                   f"engine.py standard override {bsid} --why \"<their words>\"")
+    out.append("Change it only if the person explicitly asked: " + "; then ".join(how) + ("." if prj else ""))
+    return (" " if len(out) == 2 else "\n").join(out)
 
 
 def _set_lock(state, path, on):
@@ -4533,13 +5079,15 @@ def _kept_note(who, sp, cur):
     return f"the person's own value {_vw(cur)} is kept for {path} ({who})"
 
 
-def std_apply(d, state, stds, did, force=False, locked=True, set_by="standard", only=None):
+def std_apply(d, state, stds, did, force=False, locked=True, set_by="standard", only=None, show_old=False):
     """Store each standard's engine values (locked, unless it is a recommended default) and record which decision holds
     them. Precedence follows KNOWLEDGE.md 2, and every conflict is said in a line, never settled silently:
     - a higher-ranked standard that locks the path keeps it (a newer project standard, or a project one over a house one);
     - a recommended default (locked=False) never moves a value a standard locks;
-    - unless force, a value the person chose after any standard last set it, or locked themselves, stays theirs.
-    only: the state paths to (re)apply; the rest of each record stays as it is. Returns (lines, unmapped)."""
+    - unless force, a value the person chose after any standard last set it, locked themselves, or took back from this
+      standard (standard override --path), stays theirs.
+    only: the state paths to (re)apply; the rest of each record stays as it is. show_old: say the value each one replaced
+    ('= new (was old)'). Returns (lines, unmapped)."""
     st = std_state(state)
     decs = _decisions(d)
     lines, unmapped, cache = [], [], {}
@@ -4564,7 +5112,10 @@ def std_apply(d, state, stds, did, force=False, locked=True, set_by="standard", 
             if mine and _dnum(mine["id"]) <= _dnum(std_path_decision(state, sp)):
                 mine = None  # a standard set this path after the person's choice (a restore, a project standard)
             person_lock = is_locked(state, sp) and ((not other and sp not in own) or sp in pre)
-            if other and not locked:
+            taken = (st["released"].get(s["id"]) or {}).get(sp)
+            if taken and not force:
+                plan[(si, ei)] = ("kept", sp, v, taken.get("decision") or "locked")
+            elif other and not locked:
                 plan[(si, ei)] = ("kept", sp, v, other)
             elif other and _std_rank(other) < _std_rank(s["id"]) and not same:
                 plan[(si, ei)] = ("kept", sp, v, other)
@@ -4611,6 +5162,10 @@ def std_apply(d, state, stds, did, force=False, locked=True, set_by="standard", 
             if locked and sp not in pre and is_locked(state, sp) and sp not in std_held(state):
                 pre.append(sp)  # the person locked it before this standard: releasing the standard leaves their lock
             _store(state, sp, v, set_by, did, False)
+            st["untouched"].pop(sp, None)
+            typ = eng.get("type")
+            if isinstance(typ, str) and typ in DTCG_TYPES and sp.startswith("overrides.") and not is_param_override(sp.split(".", 1)[1]):
+                st["types"][sp.split(".", 1)[1]] = typ  # kept after a release, so a token the standard added keeps exporting
             if sp.startswith("answers."):
                 for epath, evalue in answer_effects(sp.split(".", 1)[1], v, state).items():
                     if not is_locked(state, epath.rstrip("+")):
@@ -4623,7 +5178,9 @@ def std_apply(d, state, stds, did, force=False, locked=True, set_by="standard", 
                         orec.setdefault("kept", {})[sp] = sid
                         lines.append(f"{sid}: {shown_path(sp)} follows this standard; it outranks the recommended default {osid}")
             rec["paths"][sp] = v
-            lines.append(f"{sid}: {shown_path(sp)} = {_vw(v)}{'' if locked else ' (unlocked)'}")
+            old = cur if cur is not None or not isinstance(show_old, dict) else show_old.get(sp)
+            was = f" (was {_vw(old)})" if show_old is not False and old is not None and not _same(old, v) else ""
+            lines.append(f"{sid}: {shown_path(sp)} = {_vw(v)}{was}{'' if locked else ' (unlocked)'}")
         if only is None:
             rec.pop("unmapped", None)
             if bad:
@@ -4653,33 +5210,51 @@ def _maps_now(state, s, rec, cache):
     return False
 
 
+def std_differs(snap, s):
+    """True when a house standard says something different from the copy a system keeps: its rule, the values it sets, or
+    what it forbids, settles or marks as breaking it. Other fields (wording of why, sources, review message) do not count."""
+    if not isinstance(snap, dict):
+        return True
+    eng = lambda x: [(m.get("path"), m.get("value"), m.get("type")) for m in std_engine(x)]
+    return not (_same(snap.get("rule"), s.get("rule")) and _same(eng(snap), eng(s))
+                and all(_same(snap.get(k) or [], s.get(k) or []) for k in ("constraints", "settles"))
+                and _same(snap.get("breaks_options") or {}, s.get("breaks_options") or {}))
+
+
 def std_pending(state, house, retry=False):
     """What the house file asks of this system that it does not do yet:
     new      applicable standards not applied (and not overridden), for example after the platforms changed;
-    changed  applied ones changed after the system's house version;
+    changed  applied ones whose rule, values or constraints changed after the system's house version;
+    refresh  applied ones the house file moved to a newer version without changing any of those (their copy is refreshed
+             quietly, with no decision);
     retired  retired entries this system still follows, and (when the house file is present) ids it follows that the file
              no longer lists: a standard never simply disappears, so its lock is released;
     off      applied ones that no longer apply to the person's platforms (unlocked, not reverted);
     kept     overridden ones that changed (they stay the person's);
-    retry    (retry=True only, it runs trial builds) applied ones with a value not mapped that the engine can apply now."""
+    retry    (retry=True only, it runs trial builds) applied ones with a value not mapped that the engine can apply now;
+    older    True when the house file here is older than the one this system follows (an older skill install): then
+             nothing is pending, so nothing is released or downgraded."""
     st = std_state(state)
     hv = st["house_version"] or 0
+    out = {"new": [], "changed": [], "refresh": [], "retired": [], "kept": [], "off": [], "retry": [], "older": False}
+    if house["version"] is not None and st["house_version"] is not None and house["version"] < st["house_version"]:
+        return dict(out, older=True)
     applied, over = set(st["applied"]), st["overridden"]
-    new, changed, kept, off, again, cache = [], [], [], [], [], {}
+    cache = {}
     for s in house["standards"]:
         rec = st["records"].get(s["id"]) or {}
         if s["id"] in over:
             if st["house_version"] is not None and max(s["since"], s["changed"]) > hv:
-                kept.append(s)
+                out["kept"].append(s)
         elif s["id"] not in applied:
             if std_applies(s, state):
-                new.append(s)
+                out["new"].append(s)
         elif not std_applies(s, state):
-            off.append(s)
+            out["off"].append(s)
         elif s["changed"] > hv:
-            changed.append(s)
+            out["changed" if std_differs(rec.get("std"), s) else "refresh"].append(s)
         elif retry and rec.get("unmapped") and _maps_now(state, s, rec, cache):
-            again.append(s)
+            out["retry"].append(s)
     live = {s["id"] for s in house["standards"]}
     listed = {r["id"] for r in house["retired"]}
     retired = [r for r in house["retired"] if r["id"] not in live and r["id"] not in st["retired_seen"]
@@ -4687,28 +5262,141 @@ def std_pending(state, house, retry=False):
     if house["version"] is not None and not house["error"]:
         retired += [{"id": sid, "why": "it is no longer in the house standards file"} for sid in list(st["applied"]) + list(over)
                     if sid not in live and sid not in listed and not sid.startswith("PRJ-") and sid not in st["retired_seen"]]
-    seen, uniq = set(), []
+    seen = set()
     for r in retired:
         if r["id"] not in seen:
             seen.add(r["id"])
-            uniq.append(r)
-    return {"new": new, "changed": changed, "retired": uniq, "kept": kept, "off": off, "retry": again}
+            out["retired"].append(r)
+    return out
+
+
+def std_older_words(hv, sv):
+    return (f"Your OpenDesigner skill is older than this design system: it ships house standards v{hv}, and this system follows "
+            f"v{sv}. Update the skill (AGENTS.md, \"Installing it in each host\"), then run engine.py standards --update")
 
 
 def _plural(n, one, many):
     return f"{n} {one if n == 1 else many}"
 
 
-def std_sync(d, initial=False, quiet=False):
+def _keep_types(st, s):
+    """Keep the $type of each token a standard added, so the token keeps exporting after the standard is released."""
+    for eng in std_engine(s or {}):
+        path, typ = eng.get("path"), eng.get("type")
+        if isinstance(path, str) and path.strip() and isinstance(typ, str) and typ in DTCG_TYPES:
+            sp = normalize_path(path.strip())
+            if sp.startswith("overrides.") and not is_param_override(sp.split(".", 1)[1]):
+                st["types"].setdefault(sp.split(".", 1)[1], typ)
+
+
+def _last_decision(decs, state, sp):
+    """The decision that last set a state path: its own entry in decisions.md or a standard's grouped decision."""
+    a, b = (decs.get(sp) or {}).get("id"), std_path_decision(state, sp)
+    return a if _dnum(a) >= _dnum(b) else b
+
+
+def supersedes_words(by_path):
+    """{state path: decision id} -> 'D-0002 (motion.easing.exit), D-0005 (motion.duration.medium)'; many paths of one
+    decision are counted instead of listed."""
+    by_id = {}
+    for p, did in by_path.items():
+        if did:
+            by_id.setdefault(did, []).append(shown_path(p))
+    if not by_id:
+        return None
+    if len(by_id) == 1 and len(by_path) == 1:
+        return next(iter(by_id))
+    return ", ".join(f"{did} ({', '.join(ps) if len(ps) <= 3 else _plural(len(ps), 'value', 'values')})"
+                     for did, ps in sorted(by_id.items(), key=lambda kv: _dnum(kv[0])))
+
+
+def _ids_words(ids, limit=6):
+    """A short id list inline; a long one only counted (the full list goes in a folded line of the decision)."""
+    return f" ({', '.join(ids)})" if ids and len(ids) <= limit else ""
+
+
+def _ids_folded(ids, limit=6):
+    return [f"<details><summary>{_plural(len(ids), 'standard', 'standards')}</summary> {', '.join(ids)}</details>"] \
+        if len(ids) > limit else []
+
+
+def _theme_of(house, st):
+    """{standard id: (theme title, area)} from the house file, and from the copies kept for standards it no longer lists."""
+    titles = {t["key"]: t.get("title") or t["key"] for t in house["themes"]}
+    out = {}
+    for sid, rec in st["records"].items():
+        snap = rec.get("std") if isinstance(rec.get("std"), dict) else {}
+        if snap.get("theme"):
+            out[sid] = (titles.get(snap["theme"], snap["theme"]), snap.get("area"))
+    for s in house["standards"]:
+        key = s.get("theme") if isinstance(s.get("theme"), str) and s.get("theme") else "other"
+        out[s["id"]] = (titles.get(key, key), s.get("area"))
+    return out
+
+
+def group_lines(lines, themes, counts):
+    """Standard lines ('STD-x: ...') under one heading per theme, with its areas and counts, in the order they came."""
+    order, groups, areas = [], {}, {}
+    for line in lines:
+        sid = line.split(":", 1)[0]
+        title, area = themes.get(sid, ("Other", None))
+        if title not in groups:
+            order.append(title)
+            groups[title], areas[title] = [], []
+        groups[title].append(line)
+        if area and area not in areas[title]:
+            areas[title].append(area)
+    out = []
+    for title in order:
+        words = ", ".join(f"{n} {k}" for k, n in (counts.get(title) or {}).items() if n)
+        out.append(title + (f" ({', '.join(areas[title])})" if areas[title] else "") + (f": {words}" if words else ""))
+        out += ["  " + x for x in groups[title]]
+    return out
+
+
+def std_scope_lines(state, house, now, gone):
+    """After the platforms or the stack changed: one line of counts for the project, then one per theme."""
+    tags = project_tags(state) or set()
+    themes = _theme_of(house, std_state(state))
+    per = {}
+    for s in house["standards"]:
+        key = themes.get(s["id"], ("Other", None))[0]
+        c = per.setdefault(key, {"apply": 0, "do not": 0, "now apply": 0, "no longer apply": 0})
+        c["apply" if std_applies(s, state) else "do not"] += 1
+        c["now apply"] += s["id"] in now
+        c["no longer apply"] += s["id"] in gone
+    total = sum(c["apply"] for c in per.values())
+    head = (f"House standards for {', '.join(sorted(tags)) or 'these platforms'}: {total} apply"
+            + (f", {len(now)} newly applied" if now else "") + (f"; {len(gone)} no longer apply (their values stay, unlocked)" if gone else "")
+            + ". By theme:")
+    return [head] + [f"  {title}: " + ", ".join(f"{n} {k}" for k, n in c.items() if n) for title, c in per.items()]
+
+
+def _token_values(state):
+    """{state path of a token: its resolved value}, to say what a standard replaced ('was 150ms'). {} when the system cannot
+    be built."""
+    try:
+        files = generate_system(state)[0]
+        return {"overrides." + p: t.get("resolved") for p, t in resolve_all(files, {}).items()}
+    except Exception:  # only the 'was' part of a line is lost, never the update
+        return {}
+
+
+def std_sync(d, initial=False, quiet=False, scope_only=False, result=None):
     """Bring a system up to the house standards: apply new and changed ones (locked, set_by standard), never touch an
     overridden one, unlock (not revert) retired ones and ones the person's platforms left, retry values that were not
-    mapped, and record it all as one grouped decision. Returns the lines."""
+    mapped, and record it all as one grouped decision. Returns the lines.
+    scope_only: after the platforms or the stack changed, only apply the standards that now apply and release the ones that
+    no longer do (a newer house file still waits for --update), and say it in one line per theme.
+    result: a dict that gets changed (True when state.json changed) and summary (the lines said for scope_only)."""
+    result = {} if result is None else result
+    result.setdefault("changed", False)
     say = (lambda *a: None) if quiet else print
     house = load_standards()
-    if house["error"]:
+    if house["error"] and not scope_only:
         say("Note: " + house["error"] + ".")
     if house["version"] is None:
-        if not initial and not house["error"]:
+        if not initial and not house["error"] and not scope_only:
             n = len(std_state(merge_defaults(read_json(os.path.join(d, "state.json"))))["applied"]) \
                 if os.path.exists(os.path.join(d, "state.json")) else 0
             say(f"The house standards file is missing here ({standards_file()}), so there is nothing to update. This system keeps "
@@ -4719,17 +5407,29 @@ def std_sync(d, initial=False, quiet=False):
     state = merge_defaults(load_state(d))
     st = std_state(state)
     if not house["standards"] and not house["retired"] and not st["applied"] and not st["overridden"]:
-        if not initial:
+        if not initial and not scope_only:
             say("No house standards ship with this skill yet (references/standards.json), so there is nothing to update.")
         return []
-    p = std_pending(state, house, retry=not initial)
-    hv = house["version"]
+    p = std_pending(state, house, retry=not initial and not scope_only)
+    hv, sv = house["version"], st["house_version"]
+    if p["older"]:
+        if initial or scope_only:
+            return []
+        raise SystemExit(std_older_words(hv, sv) + " again. Nothing was changed.")
+    if scope_only:
+        p = dict(p, new=[s for s in p["new"] if s["since"] <= (sv or 0)], changed=[], refresh=[], retired=[], retry=[], kept=[])
+    for s in p["refresh"]:
+        st["records"][s["id"]]["std"] = std_snapshot(s)
     if not (p["new"] or p["changed"] or p["retired"] or p["off"] or p["retry"]):
-        if (st["house_version"] or 0) < hv or st["house_version"] is None:
-            st["house_version"] = hv
+        bump = not scope_only and (sv is None or sv < hv)
+        if bump or p["refresh"]:
+            st["house_version"] = hv if bump else sv
             dump_json(sp, state)
-        if not initial:
+            result["changed"] = True
+        if not initial and not scope_only:
             say(f"This system already follows OpenDesigner's house standards v{hv}."
+                + (f" {_plural(len(p['refresh']), 'standard was', 'standards were')} reworded, with the same rule and values."
+                   if p["refresh"] else "")
                 + (f" {_plural(len(p['kept']), 'standard you overrode has', 'standards you overrode have')} changed since "
                    f"({', '.join(s['id'] for s in p['kept'])}); {'it stays' if len(p['kept']) == 1 else 'they stay'} yours."
                    if p["kept"] else ""))
@@ -4737,74 +5437,113 @@ def std_sync(d, initial=False, quiet=False):
     did = _next_did(d)
     todo = p["new"] + p["changed"] + p["retry"]
     before = {sid: set(rec.get("paths") or {}) for sid, rec in st["records"].items()}
-    lines, unmapped = std_apply(d, state, todo, did)
+    themes = _theme_of(house, st)  # before any record is dropped, so a retired standard keeps its theme
+    decs = _decisions(d)
+    targets, cache = set(), {}
+    for s in todo:
+        for eng in std_engine(s):
+            try:
+                targets.add(std_target(state, eng.get("path"), eng.get("value"), eng.get("type"), cache, trial=False)[0])
+            except Exception:
+                continue
+    prev = {x: _last_decision(decs, state, x) for x in targets}
+    old = {x: std_current(state, x) for x in targets}
+    changed_rules = [s for s in p["changed"] if not _same((st["records"].get(s["id"], {}).get("std") or {}).get("rule"), s.get("rule"))]
+    lines, unmapped = std_apply(d, state, todo, did, show_old=_token_values(state) if not initial else False)
+    lines += [f"{s['id']}: the rule now reads: {s.get('rule')}" for s in changed_rules]
     for s in p["changed"] + p["retry"]:
         rec = st["records"].get(s["id"]) or {}
         _release(state, before.get(s["id"], set()) - set(rec.get("paths") or {}) - set(rec.get("kept") or {}), s["id"], rec)
     for s in p["off"]:
         rec = st["records"].pop(s["id"], {}) or {}
+        _keep_types(st, rec.get("std") or s)
         _release(state, rec.get("paths") or {}, s["id"], rec)
         st["applied"].remove(s["id"])
+        st["released"].pop(s["id"], None)
         lines.append(f"{s['id']}: no longer applies to your platforms ({', '.join(s.get('applies_to') or [])} only); "
                      "its values stay, unlocked")
     for r in p["retired"]:
         rec = st["records"].pop(r["id"], {}) or {}
+        _keep_types(st, rec.get("std"))
         _release(state, rec.get("paths") or {}, r["id"], rec)
         if r["id"] in st["applied"]:
             st["applied"].remove(r["id"])
         st["overridden"].pop(r["id"], None)
+        st["released"].pop(r["id"], None)
         st["retired_seen"].append(r["id"])
         lines.append(f"{r['id']}: retired ({r.get('why') or 'no reason given'}); its values stay, unlocked")
     for s in p["kept"]:
         lines.append(f"{s['id']}: changed in the house file, but the person overrode it, so it stays theirs")
-    st["house_version"] = hv
+    if not scope_only:
+        st["house_version"] = hv
     dump_json(sp, state)
+    result["changed"] = True
     failed = {}
     for u in unmapped:
         failed[u["id"]] = failed.get(u["id"], 0) + 1
     none_mapped = [s for s in todo if std_engine(s) and failed.get(s["id"], 0) >= len(std_engine(s))]
     k = len(todo) - len(none_mapped)
     ids = [s["id"] for s in todo] + [s["id"] for s in p["off"]] + [r["id"] for r in p["retired"]]
+    sup = supersedes_words({x: prev[x] for x in sorted(targets) if prev.get(x) and not _same(old.get(x), std_current(state, x))})
     if initial:
-        title = (f"House standards v{hv}: {k} applied" + (f", {len(none_mapped)} not mapped" if none_mapped else "")
-                 + f" ({', '.join(ids)})")
+        title = (f"House standards v{hv}: {k} applied" + (f", {len(none_mapped)} not mapped" if none_mapped else "") + _ids_words(ids))
         why = ("OpenDesigner's house standards (sources marked non-negotiable) are applied without asking and locked. Change one "
                "only when the person asks: engine.py standard override <id> --why \"<their words>\".")
+        counts = ""
+    elif scope_only:
+        counts = (f"{len(p['new'])} now apply, {len(p['off'])} no longer apply")
+        title = f"House standards v{sv} for {', '.join(sorted(project_tags(state) or [])) or 'these platforms'}: {counts}" + _ids_words(ids)
+        why = ("The platforms or the stack changed, so the house standards were re-scoped: the ones that now apply are applied and "
+               "locked; the ones that no longer apply are unlocked, not reverted.")
     else:
         counts = (f"{len(p['new'])} new, {len(p['changed'])} changed, {len(p['retired'])} retired"
                   + (f", {len(p['off'])} no longer for these platforms" if p["off"] else "")
                   + (f", {len(p['retry'])} now mapped" if p["retry"] else ""))
-        title = f"House standards v{hv}: {counts}" + (f" ({', '.join(ids)})" if ids else "")
+        title = f"House standards v{hv}: {counts}" + _ids_words(ids)
         why = ("House standards update (engine.py standards --update). Overridden standards stay the person's; retired ones, and "
                "ones for other platforms, are unlocked, not reverted.")
-    log_decision(d, "standards", None, why, "standard", True, source_ref=f"standards.json v{hv}", extra=lines, title=title)
+    log_decision(d, "standards", None, why, "standard", True, source_ref=f"standards.json v{hv}", extra=_ids_folded(ids) + lines,
+                 title=title, supersedes=sup)
     areas = sorted({s.get("area") for s in todo if s.get("area") and s not in none_mapped})
+    tcounts = {}
+    for label, group in (("new", p["new"]), ("changed", p["changed"]), ("now mapped", p["retry"]),
+                         ("no longer for these platforms", p["off"]), ("retired", p["retired"])):
+        for x in group:
+            c = tcounts.setdefault(themes.get(x["id"], ("Other", None))[0], {})
+            c[label] = c.get(label, 0) + 1
     if initial:
         say(f"Applied {_plural(k, 'OpenDesigner house standard', 'OpenDesigner house standards')} (v{hv})"
             + (f" for {', '.join(areas)}" if areas else "") + ". They are locked; say if you want to change one "
             "(`engine.py standards` lists them).")
+    elif scope_only:
+        result["summary"] = [f"{did}: " + x if i == 0 else x
+                             for i, x in enumerate(std_scope_lines(state, house, {s["id"] for s in p["new"]}, {s["id"] for s in p["off"]}))]
+        for line in result["summary"]:
+            say(line)
     else:
-        say(f"{did} house standards v{hv}: {counts}" + (f" ({', '.join(areas)})" if areas else "") + ".")
-        for line in lines:
+        say(f"{did} house standards v{hv}: {counts}" + (f" ({', '.join(areas)})" if areas else "") + ". By theme:")
+        for line in group_lines(lines, themes, tcounts):
             say("  " + line)
+        say("  Run `engine.py build` to put the new values in the tokens and exports.")
     if unmapped:
         say(f"  {_plural(len(unmapped), 'standard value', 'standard values')} could not be applied; "
             "`engine.py standards` lists them as not mapped.")
     return lines
 
 
-def std_platform_hint(state):
-    """After the platforms change: one line when house standards now apply, or no longer apply, to them."""
-    house = load_standards()
-    if house["version"] is None or not house["standards"]:
-        return ""
-    p = std_pending(state, house)
-    n, off = len(p["new"]), len(p["off"])
-    if not (n or off):
-        return ""
-    parts = ([f"{_plural(n, 'house standard now applies', 'house standards now apply')}"] if n else []) + \
-            ([f"{_plural(off, 'house standard no longer applies', 'house standards no longer apply')}"] if off else [])
-    return "note: " + " and ".join(parts) + " to these platforms; run `engine.py standards --update`."
+def std_rescope(d, quiet=False):
+    """After Q-plat-01 or raw.stack is recorded: re-scope the house standards to the project's tags (only when the system
+    already follows them), quietly, and return the per-theme lines to say."""
+    state = merge_defaults(load_state(d))
+    if std_state(state)["house_version"] is None:
+        return []
+    res = {}
+    std_sync(d, quiet=True, scope_only=True, result=res)
+    lines = res.get("summary") or []
+    if not quiet:
+        for line in lines:
+            print("  " + line)
+    return lines
 
 
 def std_unmapped(state, house):
@@ -4845,11 +5584,12 @@ def std_by_theme(house, stds):
     return [(title, [s for s in stds if key_of(s) == key]) for key, title in order if any(key_of(s) == key for s in stds)]
 
 
-def cmd_standards(d, as_json=False, update=False):
-    """engine.py standards: what this system follows, what the person overrode, their project standards, values the
-    engine could not map, and house updates still to apply."""
+def cmd_standards(d, as_json=False, update=False, show_all=False, result=None):
+    """engine.py standards: the person's project standards and overrides first, then the house standards this system
+    follows (only the ones for its platforms, unless show_all), values the engine could not map, and house updates still
+    to apply. update: apply them (result gets changed: True when state.json changed)."""
     if update:
-        std_sync(d)
+        std_sync(d, result=result)
         return 0
     state = merge_defaults(load_state(d))
     st = std_state(state)
@@ -4858,29 +5598,38 @@ def cmd_standards(d, as_json=False, update=False):
     pending = std_pending(state, house, retry=True)
     no_file = house["version"] is None
     followed = [s for s in (std_copy(state, i, house) for i in st["applied"] if i not in st["overridden"]) if s]
+    hidden = [] if show_all else [s for s in followed if not std_applies(s, state)]
+    followed = [s for s in followed if s not in hidden]
     gone = [i for i in st["applied"] if i not in by_id and i not in st["overridden"]] if no_file else []
     unmapped = std_unmapped(state, house) + list(house["skipped"])
-    rec, held = st["records"], std_held(state)
+    rec, held, beaten = st["records"], std_held(state), std_beaten(state)
 
     def locked_of(sid):  # the values this standard holds now
         return {shown_path(p): v for p, v in ((rec.get(sid) or {}).get("paths") or {}).items() if held.get(p) == sid}
 
     def notes_of(sid):  # paths where a higher rule holds the value instead
         r = rec.get(sid) or {}
-        out = [_kept_note(held[p], p, std_current(state, p)) for p in r.get("paths") or {} if held.get(p) not in (None, sid)]
+        out = [_kept_note(held[p], p, std_current(state, p)) for p in r.get("paths") or {} if held.get(p) not in (None, sid)
+               and p not in (st["released"].get(sid) or {})]
+        out += [f"the person took back {shown_path(p)} ({x.get('decision')}): \"{x.get('why')}\"; it holds {_vw(std_current(state, p))}"
+                for p, x in (st["released"].get(sid) or {}).items()]
+        if sid in beaten:
+            out.append(f"project standard {beaten[sid]} wins over it in this project, so review and validate do not check it")
         return out + [_kept_note(held.get(p, who) if str(who).startswith(("PRJ-", "STD-")) else who, p, std_current(state, p))
-                      for p, who in (r.get("kept") or {}).items()]
+                      for p, who in (r.get("kept") or {}).items() if p not in (st["released"].get(sid) or {})]
 
     out = {"house": {"version": house["version"], "updated": house["updated"], "file": standards_file(), "error": house["error"]},
-           "systemVersion": st["house_version"],
+           "systemVersion": st["house_version"], "skillOlder": pending["older"],
            "followed": [{"id": s["id"], "theme": s.get("theme"), "area": s.get("area"), "title": s.get("title"), "rule": s.get("rule"),
                          "why": s.get("why"), "sources": s.get("sources") or [], "strength": s.get("strength"),
                          "values": s.get("values") or {}, "locked": locked_of(s["id"]), "notes": notes_of(s["id"]),
-                         "kept": (rec.get(s["id"]) or {}).get("kept") or {}} for s in followed],
+                         "kept": (rec.get(s["id"]) or {}).get("kept") or {},
+                         "released": {shown_path(p): x for p, x in (st["released"].get(s["id"]) or {}).items()},
+                         "beatenBy": beaten.get(s["id"])} for s in followed],
            "overridden": [dict({"id": sid, "title": (std_copy(state, sid, house) or {}).get("title"),
                                 "rule": (std_copy(state, sid, house) or {}).get("rule")}, **o) for sid, o in st["overridden"].items()],
            "project": [dict(s, locked=locked_of(s["id"]), notes=notes_of(s["id"])) for s in st["project"]],
-           "notInHouseFile": gone, "unmapped": unmapped,
+           "notForPlatforms": [s["id"] for s in hidden], "notInHouseFile": gone, "unmapped": unmapped,
            "pending": {"new": [s["id"] for s in pending["new"]], "changed": [s["id"] for s in pending["changed"]],
                        "retired": [r["id"] for r in pending["retired"]], "keptOverrides": [s["id"] for s in pending["kept"]],
                        "notForPlatforms": [s["id"] for s in pending["off"]], "nowMapped": [s["id"] for s in pending["retry"]]}}
@@ -4898,6 +5647,37 @@ def cmd_standards(d, as_json=False, update=False):
     if not no_file:
         print(f"OpenDesigner house standards: v{house['version']}" + (f" ({house['updated']})" if house["updated"] else "")
               + f". This system follows {'v' + str(st['house_version']) if st['house_version'] is not None else 'none of them yet'}.")
+    if pending["older"]:
+        print(std_older_words(house["version"], st["house_version"]) + ". Until then nothing is released or changed.")
+    if st["project"]:
+        print("Project standards (the person's own; house updates never touch them):")
+        for s in st["project"]:
+            src = ", ".join(x.get("url") or x.get("id") or "" for x in s.get("sources") or [] if isinstance(x, dict))
+            print(f"  {s['id']}  {s.get('authority', 'non-negotiable')}: {s.get('rule')}" + (f"  (source: {src})" if src else ""))
+            if s.get("beats"):
+                print(f"        wins over house standard{'s' if len(s['beats']) > 1 else ''} {', '.join(s['beats'])} in this project")
+            if s.get("authority", "non-negotiable") == "non-negotiable":
+                vals = locked_of(s["id"])
+                label = "        locked: "
+            else:
+                vals = {shown_path(p): v for p, v in ((rec.get(s["id"]) or {}).get("paths") or {}).items()}
+                label = "        recommended: "
+            if vals:
+                print(label + "; ".join(f"{p} = {_vw(v)}" for p, v in vals.items()))
+            for n in notes_of(s["id"]):
+                print("        " + n)
+    if st["overridden"]:
+        print("Overridden by the person (their choice outranks a standard):")
+        for sid, o in st["overridden"].items():
+            print(f"  {sid}  {(std_copy(state, sid, house) or {}).get('title') or ''}: \"{o.get('why')}\" ({o.get('decision')}, "
+                  f"{o.get('date')}). To follow it again: engine.py standard restore {sid}")
+    part = [(sid, r) for sid, r in st["released"].items() if r and sid not in st["overridden"]]
+    if part:
+        print("Values the person took back from a standard it otherwise follows:")
+        for sid, r in part:
+            for p, x in r.items():
+                print(f"  {sid}  {shown_path(p)} = {_vw(std_current(state, p))}: \"{x.get('why')}\" ({x.get('decision')}). "
+                      f"To follow it again: engine.py standard restore {sid}")
     if followed:
         print(f"Followed ({len(followed)}; locked, change one only when the person asks):")
         for title, group in std_by_theme(house, followed):
@@ -4910,26 +5690,14 @@ def cmd_standards(d, as_json=False, update=False):
                     print("        locked: " + "; ".join(f"{p} = {_vw(v)}" for p, v in lk.items()))
                 for n in notes_of(s["id"]):
                     print("        " + n)
-    if st["overridden"]:
-        print("Overridden by the person (their choice outranks a standard):")
-        for sid, o in st["overridden"].items():
-            print(f"  {sid}  {(std_copy(state, sid, house) or {}).get('title') or ''}: \"{o.get('why')}\" ({o.get('decision')}, "
-                  f"{o.get('date')}). To follow it again: engine.py standard restore {sid}")
-    if st["project"]:
-        print("Project standards (the person's own; house updates never touch them):")
-        for s in st["project"]:
-            src = ", ".join(x.get("url") or x.get("id") or "" for x in s.get("sources") or [] if isinstance(x, dict))
-            print(f"  {s['id']}  {s.get('authority', 'non-negotiable')}: {s.get('rule')}" + (f"  (source: {src})" if src else ""))
-            if s.get("authority", "non-negotiable") == "non-negotiable":
-                vals = locked_of(s["id"])
-                label = "        locked: "
-            else:
-                vals = {shown_path(p): v for p, v in ((rec.get(s["id"]) or {}).get("paths") or {}).items()}
-                label = "        recommended: "
-            if vals:
-                print(label + "; ".join(f"{p} = {_vw(v)}" for p, v in vals.items()))
-            for n in notes_of(s["id"]):
-                print("        " + n)
+    if hidden:
+        print(f"{_plural(len(hidden), 'standard is', 'standards are')} for other platforms and not shown (engine.py standards --all lists them).")
+    if show_all and not no_file:
+        other = [s for s in house["standards"] if not std_applies(s, state)]
+        if other:
+            print(f"House standards for other platforms or stacks ({len(other)}; not followed here):")
+            for s in other:
+                print(f"  {s['id']}  ({', '.join(s.get('applies_to') or [])}) {s.get('title') or ''}".rstrip())
     if gone:
         print(f"The house standards file is missing here ({standards_file()}), so these cannot be checked against it: "
               f"{', '.join(gone)}. They stay as recorded; to change one: engine.py standard override <id> --why \"<their words>\".")
@@ -4966,30 +5734,63 @@ def _std_project_id(d, state):
 
 
 def std_restore_needed(state, s):
-    """True when restoring a standard that is not overridden would change something: a value it sets is not in place,
-    not locked by it, or the person's own value was kept (a project standard winning is not undone by a restore)."""
+    """True when restoring a standard would change something: it is not applied, the person took values back from it, a
+    value it sets is not in place or not locked by it, or the person's own value was kept. A project standard that wins
+    is not undone by a restore, and a standard that is already in place gives False, so a second restore is a no-op."""
     st = std_state(state)
-    if s["id"] not in st["applied"]:
+    sid = s["id"]
+    if not sid.startswith("PRJ-") and sid not in st["applied"]:
         return True
-    rec = st["records"].get(s["id"]) or {}
-    if any(not str(w).startswith("PRJ-") for w in (rec.get("kept") or {}).values()):
+    if st["released"].get(sid):
         return True
-    held, cache = std_held(state), {}
+    rec = st["records"].get(sid) or {}
+    if any(not str(w).startswith(("PRJ-", "STD-")) for w in (rec.get("kept") or {}).values()):
+        return True
+    cache = {}
     for eng in std_engine(s):
         try:
             sp, v = std_target(state, eng.get("path"), eng.get("value"), eng.get("type"), cache, trial=False)
         except Exception:
             continue
-        if (held.get(sp) or "").startswith("PRJ-"):
+        hs = std_holders(state, sp)
+        if hs and hs[0].startswith("PRJ-") and hs[0] != sid:
             continue
-        if held.get(sp) != s["id"] or not _same(std_current(state, sp), v):
+        if sid not in hs or not _same(std_current(state, sp), v):
             return True
     return False
 
 
+def _pairs(pairs, path=None, value=None):
+    """[[path, value], ...] from repeated --path/--value (value may be None), or from one path and value."""
+    if pairs is not None:
+        return [list(x) for x in pairs]
+    if isinstance(path, (list, tuple)):
+        vals = list(value) if isinstance(value, (list, tuple)) and len(value) == len(path) else [None] * len(path)
+        return [[p, v] for p, v in zip(path, vals)]
+    return [[path, value]] if path is not None or value is not None else []
+
+
+def _others_on(state, sid, paths):
+    """{path: [ids]} of the other standards that set these paths and are overridden, or that the person took the path
+    back from: a restore of this standard leaves them as they are unless --all-holders."""
+    st = std_state(state)
+    out = {}
+    for osid, rec in st["records"].items():
+        if osid == sid:
+            continue
+        for p in paths:
+            if p in (rec.get("paths") or {}) and (osid in st["overridden"] or p in (st["released"].get(osid) or {})):
+                out.setdefault(p, []).append(osid)
+    return out
+
+
 def cmd_standard(d, action, sid=None, why=None, value=None, rule=None, source=None, authority="non-negotiable", area=None,
-                 values=None, path=None, review_pattern=None, review_message=None, title=None, quiet=False):
-    """engine.py standard override|restore|add|remove: change one standard, always with a recorded decision."""
+                 values=None, path=None, review_pattern=None, review_message=None, title=None, quiet=False, pairs=None,
+                 all_holders=False, beats=None):
+    """engine.py standard override|restore|add|remove: change one standard, always with a recorded decision.
+    override --path P [--value V] (repeatable) takes back only those values; without --path the whole standard. restore
+    follows it again (--why records the person's words). --all-holders applies either to every standard that sets the same
+    values. add --path P --value V (repeatable, paired) and --beats STD-a,STD-b (the project's rule always wins over them)."""
     sp = os.path.join(d, "state.json")
     if not os.path.exists(sp):
         raise SystemExit(f"no state at {sp}; run `engine.py init --dir {d}` first")
@@ -4998,6 +5799,8 @@ def cmd_standard(d, action, sid=None, why=None, value=None, rule=None, source=No
     house = load_standards()
     today = _dt.date.today().isoformat()
     say = (lambda *a: None) if quiet else print
+    pairs = _pairs(pairs, path, value)
+    decs = _decisions(d)
     if action in ("override", "restore", "remove"):
         s, kind = std_find(state, sid, house)
         retired = {r["id"]: r for r in house["retired"]}
@@ -5005,83 +5808,9 @@ def cmd_standard(d, action, sid=None, why=None, value=None, rule=None, source=No
             hint = f" It was retired ({retired[sid].get('why') or 'no reason given'})." if sid in retired else ""
             raise SystemExit(f"There is no standard {sid}.{hint} `engine.py standards` lists them.")
     if action == "override":
-        if not (why or "").strip():
-            raise SystemExit("Give the person's own words with --why: a standard changes only when they explicitly ask.")
-        if kind == "project":
-            raise SystemExit(f"{sid} is the person's own project standard. To change it: engine.py standard remove {sid} --why \"...\", "
-                             "then add the new rule with engine.py standard add.")
-        if sid in st["overridden"]:
-            raise SystemExit(f"{sid} is already overridden ({st['overridden'][sid].get('decision')}); its values are unlocked, so change "
-                             "them with engine.py set, or follow it again with engine.py standard restore " + sid)
-        s = std_copy(state, sid, house) or s  # the rule as this system follows it
-        rec = st["records"].get(sid) or {}
-        paths = list(rec.get("paths") or {})
-        did = _next_did(d)
-        extra = [f"house standard {sid}: {s.get('rule')}", "why the house follows it: " + (s.get("why") or "not given")]
-        if value is not None:
-            targets = paths or [normalize_path(x["path"].strip()) for x in std_engine(s) if isinstance(x.get("path"), str) and x["path"].strip()]
-            if not targets:
-                raise SystemExit(f"{sid} sets no values (only code review checks it), so there is nothing for --value to change. "
-                                 "Override it without --value.")
-            if len(targets) != 1:
-                raise SystemExit(f"{sid} sets {len(targets)} values, so --value cannot say which one. Override it without --value, "
-                                 "then change each value with engine.py set.")
-            try:
-                tpath, v = std_target(state, shown_path(targets[0]), value)
-            except ValueError as ex:
-                raise SystemExit(f"Nothing was changed: {ex}.")
-            other = std_held(state, exclude=sid).get(tpath)
-            if other:
-                raise SystemExit(f"Nothing was changed: {shown_path(tpath)} follows {'project' if other.startswith('PRJ-') else 'house'} "
-                                 f"standard {other}, which wins in this project. " + std_lock_message(state, other, house))
-        unlocked = _release(state, paths, sid, rec)
-        if value is not None:
-            prev = std_current(state, tpath)
-            _store(state, tpath, v, "chosen", did, False)
-            extra.append(f"previous value: {json.dumps(prev, ensure_ascii=False)}")
-            head = f"{tpath} = {json.dumps(v, ensure_ascii=False)}"
-        else:
-            head = f"override {sid} (house standard)"
-        held, mine = std_held(state, exclude=sid), set(rec.get("prelocked") or [])
-        still = [f"{shown_path(p)} ({'the person locked it themselves' if p in mine else 'standard ' + held[p] + ' holds it'})"
-                 for p in paths if p not in unlocked and (p in mine or p in held)]
-        freed = ", ".join(shown_path(p) for p in unlocked) or ("nothing (it sets no values)" if not paths else "nothing")
-        extra.append("unlocked: " + freed)
-        if still:
-            extra.append("still locked: " + "; ".join(still))
-        st["overridden"][sid] = {"why": why.strip(), "decision": did, "date": today}
-        dump_json(sp, state)
-        log_decision(d, "standards." + sid, value, why.strip(), "chosen", False, extra=extra, title=head,
-                     supersedes=rec.get("decision"))
-        say(f"{did} overrode house standard {sid}: {s.get('rule')}")
-        say(f"  The person's reason is recorded: \"{why.strip()}\". Unlocked: {freed}." + (f" Still locked: {'; '.join(still)}." if still else ""))
-        if value is not None:
-            say(f"  set {shown_path(tpath)} = {_vw(v)}")
-        say(f"  To follow it again: engine.py standard restore {sid}")
-        return did
+        return _std_override(d, state, st, house, sid, s, kind, why, pairs, all_holders, decs, today, say)
     if action == "restore":
-        if kind == "project":
-            raise SystemExit(f"{sid} is a project standard; it is never overridden, so there is nothing to restore.")
-        if not s or kind == "gone":
-            reason = (retired.get(sid) or {}).get("why") or "it is not in this skill's house standards file"
-            raise SystemExit(f"{sid} is no longer a house standard ({reason}), so there is nothing to restore.")
-        if sid not in st["overridden"] and not std_restore_needed(state, s):
-            say(f"{sid} is already followed: its values are in place and locked, so there is nothing to restore.")
-            return None
-        did = _next_did(d)
-        old = st["overridden"].pop(sid, None)
-        before = set((st["records"].get(sid) or {}).get("paths") or {})
-        lines, unmapped = std_apply(d, state, [s], did, force=True)
-        rec = st["records"].get(sid) or {}
-        _release(state, before - set(rec.get("paths") or {}) - set(rec.get("kept") or {}), sid, rec)
-        dump_json(sp, state)
-        log_decision(d, "standards." + sid, None, "The person asked to follow the house standard again." if old else
-                     "Put the house standard's values back and locked them again.", "standard", True, extra=lines,
-                     title=f"restore {sid} (house standard)", supersedes=(old or {}).get("decision"))
-        say(f"{did} restored house standard {sid}: {s.get('rule')}")
-        for line in lines:
-            say("  " + line)
-        return did
+        return _std_restore(d, state, st, house, sid, s, kind, why, all_holders, decs, say)
     if action == "remove":
         if kind in ("house", "gone") or (sid or "").startswith("STD-"):
             raise SystemExit(f"{sid} is a house standard. House standards cannot be removed, only overridden, and only when the person "
@@ -5090,6 +5819,7 @@ def cmd_standard(d, action, sid=None, why=None, value=None, rule=None, source=No
             raise SystemExit("Give the person's own words with --why.")
         did = _next_did(d)
         rec = st["records"].pop(sid, {}) or {}
+        _keep_types(st, s)
         st["project"] = [x for x in st["project"] if x.get("id") != sid]
         paths = list(rec.get("paths") or {})
         unlocked = _release(state, paths, sid, rec)
@@ -5117,6 +5847,10 @@ def cmd_standard(d, action, sid=None, why=None, value=None, rule=None, source=No
         if back:
             extra.append("back to the next rule in line:")
             extra += ["  " + b for b in back]
+        again = [b for b in s.get("beats") or [] if b not in std_beaten(state)]
+        if again:
+            extra.append(f"house standard{'s' if len(again) > 1 else ''} {', '.join(again)} {'are' if len(again) > 1 else 'is'} "
+                         "checked again (review and validate)")
         if not paths and not back:
             extra.append("it set no values" if rec.get("locked", True) else "it recommended no values")
         elif not rec.get("locked", True):
@@ -5130,9 +5864,206 @@ def cmd_standard(d, action, sid=None, why=None, value=None, rule=None, source=No
         return did
     if action != "add":
         raise SystemExit("engine.py standard takes override, restore, add or remove")
+    return _std_add(d, state, st, house, rule, why, source, authority, area, values, pairs, review_pattern, review_message,
+                    title, beats, today, say)
+
+
+def _std_override(d, state, st, house, sid, s, kind, why, pairs, all_holders, decs, today, say):
+    """standard override: the person takes back the whole standard, or only the values named with --path."""
+    if not (why or "").strip():
+        raise SystemExit("Give the person's own words with --why: a standard changes only when they explicitly ask.")
+    if kind == "project":
+        raise SystemExit(f"{sid} is the person's own project standard. To change it: engine.py standard remove {sid} --why \"...\", "
+                         "then add the new rule with engine.py standard add.")
+    if sid in st["overridden"]:
+        raise SystemExit(f"{sid} is already overridden ({st['overridden'][sid].get('decision')}); its values are unlocked, so change "
+                         "them with engine.py set, or follow it again with engine.py standard restore " + sid)
+    s = std_copy(state, sid, house) or s  # the rule as this system follows it
+    rec = st["records"].get(sid) or {}
+    paths = [p for p in rec.get("paths") or {} if p not in (st["released"].get(sid) or {})]
+    did = _next_did(d)
+    extra = [f"house standard {sid}: {s.get('rule')}", "why the house follows it: " + (s.get("why") or "not given")]
+    named = [x for x in pairs if x[0] is not None]
+    if named and any(x[0] is None for x in pairs):
+        raise SystemExit("Give each --value after its --path, for example --path motion.easing.exit --value '[0.23, 1, 0.32, 1]'.")
+    if not named and len(pairs) == 1:  # --value alone: a standard that sets one value
+        targets = paths or [normalize_path(x["path"].strip()) for x in std_engine(s) if isinstance(x.get("path"), str) and x["path"].strip()]
+        if not targets:
+            raise SystemExit(f"{sid} sets no values (only code review checks it), so there is nothing for --value to change. "
+                             "Override it without --value.")
+        if len(targets) != 1:
+            raise SystemExit(f"{sid} sets {len(targets)} values, so --value cannot say which one. Name it with --path, for example: "
+                             f"engine.py standard override {sid} --why \"<their words>\" --path {shown_path(targets[0])} --value <new value>")
+        named = [[shown_path(targets[0]), pairs[0][1]]]
+        whole = True
+    else:
+        whole = not named
+    # the values to take back, as state paths, and the new value for each (None: keep the value, only unlock it)
+    want = {}
+    for pth, val in named:
+        tp = normalize_path(str(pth).strip())
+        if tp in (rec.get("kept") or {}):
+            who = rec["kept"][tp]
+            if str(who).startswith(("PRJ-", "STD-")):
+                who = std_holder(state, tp) or who
+            raise SystemExit(f"{sid} does not hold {shown_path(tp)} in this project: {_kept_note(who, tp, std_current(state, tp))}. "
+                             "Nothing was changed.")
+        if tp not in (rec.get("paths") or {}) and not (whole and not paths):
+            if tp in (st["released"].get(sid) or {}):
+                raise SystemExit(f"{shown_path(tp)} was already taken back from {sid} "
+                                 f"({st['released'][sid][tp].get('decision')}); change it with engine.py set.")
+            held_now = ", ".join(shown_path(x) for x in paths) or "no values in this system"
+            raise SystemExit(f"{sid} does not set {shown_path(tp)}; it sets {held_now}.")
+        if val is not None:
+            try:
+                tp, val = std_target(state, shown_path(tp), val)
+            except ValueError as ex:
+                raise SystemExit(f"Nothing was changed: {ex}.")
+        want[tp] = val
+    scope = paths if whole else list(want)
+    others = {p: std_holders(state, p, exclude=(sid,)) for p in scope}
+    others = {p: hs for p, hs in others.items() if hs}
+    prj = sorted({h for hs in others.values() for h in hs if h.startswith("PRJ-")})
+    if prj and any(v is not None for v in want.values()):
+        p0 = next(p for p, hs in others.items() if any(h.startswith("PRJ-") for h in hs))
+        raise SystemExit(f"Nothing was changed: {shown_path(p0)} follows project standard {prj[0]}, which wins in this project. "
+                         + std_lock_message(state, prj[0], house))
+    if others and not all_holders and any(v is not None for v in want.values()):
+        p0 = next(iter(others))
+        raise SystemExit("Nothing was changed.\n" + std_lock_message(state, [sid] + others[p0], house, path=p0, value=want.get(p0)))
+    free = sorted({h for hs in others.values() for h in hs if not h.startswith("PRJ-")}) if all_holders else []
+    for tp, val in want.items():
+        if val is not None:
+            br = std_constraint_breaks(state, tp, val, house, exclude=(sid, *free))
+            if br:
+                raise SystemExit("Nothing was changed. " + std_lock_message(state, [], house, path=tp, value=val, breaks=br))
+    sup = supersedes_words({p: _last_decision(decs, state, p) for p in scope})
+    if whole:
+        st["released"].pop(sid, None)
+        unlocked = _release(state, paths, sid, rec) if paths else []
+        st["overridden"][sid] = {"why": why.strip(), "decision": did, "date": today}
+    else:
+        for tp in want:
+            st["released"].setdefault(sid, {})[tp] = {"why": why.strip(), "decision": did, "date": today}
+        unlocked = []
+    for osid in free:  # --all-holders: the same values are taken back from every other standard that sets them
+        for p, hs in others.items():
+            if osid in hs:
+                st["released"].setdefault(osid, {})[p] = {"why": why.strip(), "decision": did, "date": today}
+    if not whole or free:
+        unlocked = sorted(set(unlocked) | set(_release(state, [p for p in scope if p not in unlocked], sid, rec)))
+    set_now = []
+    for tp, val in want.items():
+        if val is not None:
+            prev = std_current(state, tp)
+            _store(state, tp, val, "chosen", did, False)
+            _touch(state, tp)
+            extra.append(f"previous value of {shown_path(tp)}: {json.dumps(prev, ensure_ascii=False)}")
+            set_now.append((tp, val))
+    for p in unlocked:
+        if p not in want or want[p] is None:
+            st["untouched"][p] = sid  # still the standard's value until the person sets one (provenance)
+    held, mine = std_held(state, exclude=sid), set(rec.get("prelocked") or [])
+    still = [f"{shown_path(p)} ({'the person locked it themselves' if p in mine else 'standard ' + held[p] + ' holds it'})"
+             for p in scope if p not in unlocked and (p in mine or p in held)]
+    if paths or not std_engine(s):
+        freed = ", ".join(shown_path(p) for p in unlocked) or ("nothing (it sets no values)" if not paths else "nothing")
+    else:
+        freed = "nothing yet (its values were not applied in this system)"
+    extra.append("unlocked: " + freed)
+    if free:
+        extra.append(f"also taken back from {', '.join(free)} (--all-holders)")
+    if still:
+        extra.append("still locked: " + "; ".join(still))
+    dump_json(os.path.join(d, "state.json"), state)
+    if len(set_now) == 1 and len(want) == 1:
+        head = f"{set_now[0][0]} = {json.dumps(set_now[0][1], ensure_ascii=False)}"
+    elif whole:
+        head = f"override {sid} (house standard)"
+    else:
+        head = f"override {sid} for {', '.join(shown_path(p) for p in want)} (house standard)"
+    for tp, val in set_now if len(set_now) > 1 else []:
+        extra.append(f"set: {shown_path(tp)} = {json.dumps(val, ensure_ascii=False)}")
+    log_decision(d, "standards." + sid, set_now[0][1] if len(set_now) == 1 and len(want) == 1 else None, why.strip(), "chosen",
+                 False, extra=extra, title=head, supersedes=sup or rec.get("decision"))
+    say(f"{did} overrode house standard {sid}" + ("" if whole else f" for {', '.join(shown_path(p) for p in want)}") + f": {s.get('rule')}")
+    say(f"  The person's reason is recorded: \"{why.strip()}\". Unlocked: {freed}." + (f" Still locked: {'; '.join(still)}." if still else ""))
+    for tp, val in set_now:
+        say(f"  set {shown_path(tp)} = {_vw(val)}")
+    if free:
+        say(f"  Also taken back from {', '.join(free)}, which set the same value{'s' if len(scope) > 1 else ''}.")
+    elif others and not prj:
+        say(f"  {'; '.join(shown_path(p) + ' is also set by ' + ', '.join(hs) for p, hs in others.items())}. "
+            "Add --all-holders to take it back from them too.")
+    if whole:
+        say(f"  To follow it again: engine.py standard restore {sid}")
+    else:
+        say(f"  The rest of {sid} still applies. To follow it fully again: engine.py standard restore {sid}")
+    return did
+
+
+def _std_restore(d, state, st, house, sid, s, kind, why, all_holders, decs, say):
+    """standard restore: follow a standard again (house), or put a project standard's values back after a hand edit."""
+    if kind == "project":
+        if not std_restore_needed(state, s):
+            raise SystemExit(f"{sid} is a project standard and its values are in place; it is never overridden, so there is "
+                             "nothing to restore.")
+    elif not s or kind == "gone":
+        reason = ({r["id"]: r for r in house["retired"]}.get(sid) or {}).get("why") or "it is not in this skill's house standards file"
+        raise SystemExit(f"{sid} is no longer a house standard ({reason}), so there is nothing to restore.")
+    if sid not in st["overridden"] and not std_restore_needed(state, s):
+        say(f"{sid} is already followed: its values are in place and locked, so there is nothing to restore.")
+        return None
+    did = _next_did(d)
+    todo = [(sid, s)]
+    targets = set((st["records"].get(sid) or {}).get("paths") or {}) | set((st["records"].get(sid) or {}).get("kept") or {})
+    others = _others_on(state, sid, targets)
+    if all_holders:
+        for osid in sorted({x for xs in others.values() for x in xs}):
+            so = std_copy(state, osid, house) or std_find(state, osid, house)[0]
+            if so:
+                todo.append((osid, so))
+    lines, olds, sup = [], {}, {}
+    for xid, xs in todo:
+        old = st["overridden"].pop(xid, None)
+        olds[xid] = old
+        st["released"].pop(xid, None)
+        rec0 = st["records"].get(xid) or {}
+        before = set(rec0.get("paths") or {})
+        for p in before | set(rec0.get("kept") or {}):
+            sup[p] = _last_decision(decs, state, p)
+        soft = xid.startswith("PRJ-") and xs.get("authority", "non-negotiable") != "non-negotiable"
+        got, _u = std_apply(d, state, [xs], did, force=True, show_old=True, locked=not soft, set_by="reference" if soft else "standard")
+        lines += got
+        rec = st["records"].get(xid) or {}
+        _release(state, before - set(rec.get("paths") or {}) - set(rec.get("kept") or {}), xid, rec)
+    left = {p: [x for x in xs if x not in dict(todo)] for p, xs in others.items()}
+    left = {p: xs for p, xs in left.items() if xs}
+    note = [f"{shown_path(p)} is also set by {', '.join(xs)}, which stay{'s' if len(xs) == 1 else ''} overridden or taken back for it; "
+            f"the value now follows {sid}" for p, xs in left.items()]
+    dump_json(os.path.join(d, "state.json"), state)
+    reason = (why or "").strip() or ("The person asked to follow the house standard again." if olds.get(sid) else
+                                     "Put the standard's values back and locked them again.")
+    log_decision(d, "standards." + sid, None, reason, "standard", True, extra=lines + ["note: " + n for n in note],
+                 title=f"restore {sid} ({'project' if kind == 'project' else 'house'} standard)"
+                       + (f" and {', '.join(x for x, _s in todo[1:])}" if len(todo) > 1 else ""),
+                 supersedes=supersedes_words(sup) or (olds.get(sid) or {}).get("decision"))
+    say(f"{did} restored {'project' if kind == 'project' else 'house'} standard {sid}: {s.get('rule')}")
+    for line in lines:
+        say("  " + line)
+    for n in note:
+        say("  note: " + n + ". To follow those too: engine.py standard restore " + sid + " --all-holders")
+    return did
+
+
+def _std_add(d, state, st, house, rule, why, source, authority, area, values, pairs, review_pattern, review_message, title,
+             beats, today, say):
+    """standard add: a project standard from a source the person trusts (non-negotiable: locked; good-to-have: recommended)."""
+    sp = os.path.join(d, "state.json")
     missing = [f for f, v in (("--rule", rule), ("--why", why), ("--source", source)) if not (v or "").strip()]
     if missing:
-        raise SystemExit(f"engine.py standard add needs {', '.join(missing)}: the rule in plain words, why it matters, and where it comes from.")
+        raise SystemExit(f"engine.py standard add needs {', '.join(missing)}: the rule in plain words, why it matters, and where it "
+                         "comes from (a URL, a file, or the person's own words and the date, such as \"person, 2026-09-27\").")
     if authority not in ("non-negotiable", "good-to-have"):
         raise SystemExit("--authority is non-negotiable (a locked standard) or good-to-have (a recommended default)")
     if isinstance(values, str):
@@ -5142,54 +6073,93 @@ def cmd_standard(d, action, sid=None, why=None, value=None, rule=None, source=No
             values = False
     if values is not None and not isinstance(values, dict):
         raise SystemExit("--values takes a JSON object, for example '{\"exit-easing\": \"ease-out\"}'")
-    if (path is None) != (value is None):
-        raise SystemExit("--path and --value go together: the setting or token path, and the value it must hold")
+    if any(p is None or v is None for p, v in pairs):
+        raise SystemExit("--path and --value go together: give each --path the value it must hold, right after it, for example "
+                         "--path focus.ring.width --value 2 --path focus.ring.offset --value 2")
     if review_pattern:
         problem = regex_problem(review_pattern)
         if problem:
             raise SystemExit(f"--review-pattern cannot be used: {problem}. Nothing was written.")
+    beats = [x.strip() for x in (beats.split(",") if isinstance(beats, str) else beats or []) if isinstance(x, str) and x.strip()]
+    for b in beats:
+        if std_find(state, b, house)[1] not in ("house", "gone"):
+            raise SystemExit(f"--beats takes house standard ids (`engine.py standards` lists them); {b} is not one. Nothing was written.")
+    must = authority == "non-negotiable"
+    if beats and not must:
+        raise SystemExit("--beats is for a non-negotiable rule: a recommended default never wins over a house standard.")
     nid = _std_project_id(d, state)
-    target = None
-    if path is not None:
+    targets = []
+    for pth, val in pairs:
         try:
-            target = std_target(state, path, value)
+            targets.append(std_target(state, pth, val))
         except ValueError as ex:
             raise SystemExit(f"Nothing was written: {ex}.")
+    if len({t[0] for t in targets}) != len(targets):
+        raise SystemExit("Each --path may appear once. Nothing was written.")
+    for tp, tv in targets if must else []:
+        br = [x for x in std_constraint_breaks(state, tp, tv, house) if x[0] not in beats]
+        if br:
+            raise SystemExit(f"Nothing was written: {_vw(tv)} for {shown_path(tp)} breaks "
+                             + "; ".join(_std_says(state, x[0], house) + f" ({x[1]})" for x in br)
+                             + f" If the person's source always wins over it (their brand, always): add --beats {','.join(x[0] for x in br)}. "
+                             f"For just this value: engine.py standard override {br[0][0]} --why \"<their words>\" --path {shown_path(tp)} "
+                             f"--value '{json.dumps(tv, ensure_ascii=False)}'")
     did = _next_did(d)
-    must = authority == "non-negotiable"
+    engine = [{"path": p, "value": v} for p, v in pairs]
     std = {"id": nid, "title": title or rule.strip()[:80], "rule": rule.strip(), "why": why.strip(), "authority": authority,
            "strength": "must" if must else "should", "area": area, "values": values or {}, "applies_to": ["all"],
            "sources": [{"url": source} if re.match(r"^https?://", source) else {"id": source}],
-           "engine": {"path": path, "value": value} if path is not None else None,
+           "engine": engine[0] if len(engine) == 1 else engine or None,
            "review": {"pattern": review_pattern, "message": review_message or rule.strip()} if review_pattern else None,
            "design_md": True, "added": today, "decision": did}
+    if beats:
+        std["beats"] = beats
     st["project"].append(std)
     lines = []
-    beats = std_held(state).get(target[0]) if target and must else None
-    if target:
+    outranked = {tp: std_held(state).get(tp) for tp, _v in targets} if must else {}
+    if targets:
         lines, _u = std_apply(d, state, [std], did, force=must, locked=must, set_by="standard" if must else "reference")
     else:
         st["records"][nid] = {"paths": {}, "decision": did, "locked": must}
-    if beats and target[0] in (st["records"].get(nid) or {}).get("paths", {}):
-        other = std_find(state, beats, house)[0] or {}
-        lines.append(f"wins over {'your older project' if beats.startswith('PRJ-') else 'house'} standard {beats} for "
-                     f"{shown_path(target[0])} in this project ({'its' if beats.startswith('PRJ-') else 'house'} rule: {other.get('rule')})")
+    for tp, other in outranked.items():
+        if other and tp in (st["records"].get(nid) or {}).get("paths", {}):
+            so = std_find(state, other, house)[0] or {}
+            lines.append(f"wins over {'your older project' if other.startswith('PRJ-') else 'house'} standard {other} for "
+                         f"{shown_path(tp)} in this project ({'its' if other.startswith('PRJ-') else 'house'} rule: {so.get('rule')})")
+    if beats:
+        lines.append(f"wins over house standard{'s' if len(beats) > 1 else ''} {', '.join(beats)} in this project (project wins): "
+                     "their review checks and constraints are off here until this standard is removed")
     dump_json(sp, state)
-    log_decision(d, "standards." + nid, None, why.strip(), "standard" if must else "reference", must and bool(target), source_ref=source,
+    log_decision(d, "standards." + nid, None, why.strip(), "standard" if must else "reference", must and bool(targets), source_ref=source,
                  title=f"project standard {nid} ({authority}): {rule.strip()}", extra=lines)
     say(f"{did} added project standard {nid} ({authority}): {rule.strip()}")
     for line in lines:
         say("  " + line)
-    if must:
-        say("  It is locked like a house standard, written into DESIGN.md and checked by validate"
-            + (" and review" if review_pattern else "") + ".")
+    if must and targets:
+        say("  It is locked like a house standard, written into DESIGN.md and checked by validate" + (" and review" if review_pattern else "") + ".")
+    elif must:
+        say("  It locks no value; it is written into DESIGN.md" + (" and checked by review" if review_pattern else
+                                                                   " (add --review-pattern so review can check code against it)") + ".")
+    else:
+        say("  It is a recommended default: unlocked, so the person may change it" + (", and review checks it" if review_pattern else "") + ".")
     return nid
 
 
-def std_validate(state, rep):
-    """validate: an advisory when the house standards file is broken, when it moved past this system's version, or when
-    standards now apply (or no longer apply) to the person's platforms; a warning when a value a standard locked no
-    longer holds it (drift)."""
+def _source_ids(s):
+    """A standard's source ids, each once."""
+    out = []
+    for x in s.get("sources") or []:
+        v = (x.get("id") or x.get("url") or "") if isinstance(x, dict) else ""
+        if v and v not in out:
+            out.append(v)
+    return ", ".join(out)
+
+
+def std_validate(state, rep, files=None):
+    """validate: an advisory when the house standards file is broken, when it moved past this system's version (or is
+    older, from an older skill install), or when standards now apply (or no longer apply) to the person's platforms; a
+    warning when a value a standard locked no longer holds it (drift), and when a token takes a value a standard forbids
+    (its constraints). files: the tokens to check the constraints against (else the values stored in state.json)."""
     house = load_standards()
     st = std_state(state)
     if house["error"]:
@@ -5201,20 +6171,22 @@ def std_validate(state, rep):
         n, c, r, off = len(p["new"]), len(p["changed"]), len(p["retired"]), len(p["off"])
         kept = (f"; {_plural(len(p['kept']), 'standard you overrode has', 'standards you overrode have')} changed, and "
                 f"{'it stays' if len(p['kept']) == 1 else 'they stay'} yours" if p["kept"] else "")
-        msg = None
-        if sv is None or hv > sv:
+        msg, fix = None, "engine.py standards --update"
+        if p["older"]:
+            msg, fix = std_older_words(hv, sv) + ". Until then nothing is released or changed", "update the OpenDesigner skill"
+        elif sv is None or hv > sv:
             msg = (f"OpenDesigner's house standards moved to v{hv} (this system follows {'v' + str(sv) if sv is not None else 'none yet'}): "
                    + (f"{n} new, {c} changed, {r} retired" if n or c or r else "none of the changes touch it")
-                   + (f", {off} no longer for your platforms" if off else "") + kept)
+                   + (f", {off} no longer for your platforms" if off else "") + kept + ". Run `engine.py standards --update`")
         elif n or r or off:
             msg = "; ".join(x for x in (
                 f"{_plural(n, 'house standard applies', 'house standards apply')} to this system but {'is' if n == 1 else 'are'} not "
                 "applied yet (for example after the platforms changed)" if n else "",
                 f"{_plural(off, 'house standard no longer applies', 'house standards no longer apply')} to your platforms" if off else "",
-                f"{_plural(r, 'standard', 'standards')} this system follows left the house file" if r else "") if x)
+                f"{_plural(r, 'standard', 'standards')} this system follows left the house file" if r else "") if x) \
+                + ". Run `engine.py standards --update`"
         if msg:
-            rep.add("advisory", "standards", msg + ". Run `engine.py standards --update`", "House standards (docs/KNOWLEDGE.md 6)",
-                    f"standards.json v{hv}", fix="engine.py standards --update")
+            rep.add("advisory", "standards", msg, "House standards (docs/KNOWLEDGE.md 6)", f"standards.json v{hv}", fix=fix)
     for sid, path in sorted((sid, p) for p, sid in std_held(state).items()):
         want = st["records"][sid]["paths"][path]
         cur = std_current(state, path)
@@ -5225,12 +6197,120 @@ def std_validate(state, rep):
         rep.add("warning", "standards",
                 f"{kind.capitalize()} standard {sid} sets {shown_path(path)} to {_vw(want)}, but it is now {_vw(cur)}"
                 + (f" ({(s.get('rule') or '').rstrip('.')})" if s.get("rule") else ""),
-                f"{kind} standard {sid}", ", ".join(x.get("id") or x.get("url") or "" for x in s.get("sources") or [] if isinstance(x, dict)),
-                where=path, measured=cur, threshold=want,
+                f"{kind} standard {sid}", _source_ids(s), where=path, measured=cur, threshold=want,
                 fix=(f"engine.py standard restore {sid}, or if the person asked for this change: "
-                     f"engine.py standard override {sid} --why \"<their words>\"") if kind == "house"
-                else f"put it back: engine.py set {shown_path(path)} '{json.dumps(want, ensure_ascii=False)}' --force, or "
-                     f"engine.py standard remove {sid} --why \"<their words>\"")
+                     f"engine.py standard override {sid} --why \"<their words>\" --path {shown_path(path)}") if kind == "house"
+                else f"put it back: engine.py standard restore {sid}, or engine.py standard remove {sid} --why \"<their words>\"")
+    if files:
+        std_motion_budget(state, rep, files, house)
+    cons = std_constraints(state, house)
+    if not cons:
+        return
+    if files:
+        pats = [c["path"].strip() for _sid, c, _s in cons]
+        seen, values = set(), []
+        for fn in files:
+            if fn.endswith(".tokens.json"):
+                for pth, v in _flat_resolved(files, fn, pats):
+                    key = (pth, json.dumps(v, sort_keys=True))
+                    if key not in seen:
+                        seen.add(key)
+                        values.append(("overrides." + pth, v))
+    else:
+        values = [("overrides." + k, v) for k, v in (state.get("overrides") or {}).items()]
+    found = set()
+    for pth, v in values:
+        for sid, why, s in std_constraint_breaks(state, pth, v, house, constraints=cons):
+            key = (sid, _token_key(pth))
+            if key in found:
+                continue
+            found.add(key)
+            kind = "project" if sid.startswith("PRJ-") else "house"
+            rep.add("warning", "standards",
+                    f"{_token_key(pth)} breaks {kind} standard {sid}: {why} ({(s.get('rule') or '').rstrip('.')})",
+                    f"{kind} standard {sid}", _source_ids(s), where=_token_key(pth), measured=v,
+                    fix=(f"set a value the rule allows (engine.py set {_token_key(pth)} <value>), or if the person asked for it: "
+                         + (f"engine.py standard override {sid} --why \"<their words>\"" if kind == "house"
+                            else f"engine.py standard remove {sid} --why \"<their words>\"")
+                         + ("; for their own rule that always wins: engine.py standard add ... --beats " + sid if kind == "house" else "")))
+
+
+UI_MOTION_RULE = "STD-easing-duration-06"  # house standard: UI motion under 300ms unless a stated reason justifies it
+UI_MOTION_MAX_MS = 300
+
+
+def transition_ms(t, flat):
+    """(milliseconds, 'response' or 'duration') of a resolved transition token. A spring is judged by its response
+    (2 pi / sqrt(stiffness / mass), Apple's duration), not by the time it takes to settle completely (R19)."""
+    sp = spring_ext(t, flat)
+    sp = (sp or {}).get("spring")
+    if isinstance(sp, dict) and isinstance(sp.get("stiffness"), (int, float)) and sp["stiffness"] > 0:
+        return 2 * math.pi / math.sqrt(sp["stiffness"] / (sp.get("mass") or 1)) * 1000, "response"
+    v = t.get("resolved")
+    return (duration_ms(v.get("duration")) if isinstance(v, dict) else None), "duration"
+
+
+def _timing_sources(path, flat, depth=0):
+    """The token paths a transition's timing comes from: itself, the token it aliases whole or the duration it names
+    (recursively) and, for a spring built from the lever parameters, those parameters (motion.spring.spatial.stiffness
+    and dampingRatio). Its easing is left out: a curve does not make motion slower."""
+    out = [path]
+    m = re.match(r"^(motion\.spring\.[a-z]+)\.(fast|default|slow)$", path)
+    if m:
+        out += [f"{m.group(1)}.stiffness", f"{m.group(1)}.dampingRatio"]
+    v = (flat.get(path) or {}).get("$value")
+    nxt = v if isinstance(v, str) else v.get("duration") if isinstance(v, dict) else None
+    if depth < 6 and isinstance(nxt, str) and nxt.startswith("{") and nxt.endswith("}"):
+        out += [x for x in _timing_sources(nxt[1:-1], flat, depth + 1) if x not in out]
+    return out
+
+
+def std_motion_budget(state, rep, files, house=None):
+    """validate (R19): a warning for each semantic transition over 300ms that no standard justifies, while this system
+    follows STD-easing-duration-06. A standard that sets the transition, a token it points to or the spring behind it (a
+    drawer's 500ms, a sheet spring) is the stated reason the rule asks for."""
+    house = house or load_standards()
+    if UI_MOTION_RULE not in {s["id"] for s in std_followed(state, house)} or UI_MOTION_RULE in std_beaten(state):
+        return
+    try:
+        flat = resolve_all(files, {"motion": "standard"})
+    except Exception:  # broken tokens are validate's own errors elsewhere
+        return
+    held = std_held(state)
+    for path in sorted(p for p in flat if p.startswith("motion.transition.") and flat[p]["type"] == "transition"):
+        v, how = transition_ms(flat[path], flat)
+        if v is None or v <= UI_MOTION_MAX_MS + 0.5:
+            continue
+        why = next((held["overrides." + x] for x in _timing_sources(path, flat) if held.get("overrides." + x)), None)
+        if why:
+            continue
+        rep.add("warning", "standards", f"{path} takes {fmt_num(rnd(v, 0))}ms ({'spring response' if how == 'response' else 'duration'}); "
+                f"UI motion stays under {UI_MOTION_MAX_MS}ms unless a standard gives a reason (house standard {UI_MOTION_RULE})",
+                f"house standard {UI_MOTION_RULE}", "", where=path, measured=rnd(v, 0), threshold=UI_MOTION_MAX_MS,
+                fix=(f"stiffen the spring: engine.py set {next((x for x in _timing_sources(path, flat) if x.endswith('.stiffness')), 'motion.spring.spatial.stiffness')} "
+                     f"{fmt_num(rnd((2 * math.pi / (UI_MOTION_MAX_MS / 1000)) ** 2, 0))} gives a {UI_MOTION_MAX_MS}ms response"
+                     if how == "response" else "use a step of 150 to 250ms for UI motion (for example engine.py set motion.duration.long 250ms)")
+                + f", or if the person asked for slower motion: engine.py standard override {UI_MOTION_RULE} --why \"<their words>\"")
+
+
+def _flat_resolved(files, fn, patterns):
+    """(token path, resolved value) for the tokens of one token file whose path matches one of the patterns, aliases
+    resolved across the foundation files and this one."""
+    flat = {}
+    for f2, tree in files.items():
+        if f2.endswith(".tokens.json") and (f2 == fn or not re.search(r"\.(light|dark|spacious|comfortable|compact|standard|reduced)\.", f2)):
+            flatten(tree, "", None, flat)
+    mine = {}
+    flatten(files[fn], "", None, mine)
+    out = []
+    for pth, t in mine.items():
+        if not any(fnmatch.fnmatchcase(pth, x) for x in patterns):
+            continue
+        try:
+            out.append((pth, deep_resolve(t["$value"], flat, [pth])))
+        except Exception:  # a broken alias is validate's own error elsewhere
+            continue
+    return out
 
 
 def std_review_rules(state):
@@ -5238,12 +6318,34 @@ def std_review_rules(state):
     project standards. A pattern that cannot be used safely is skipped, never fatal."""
     house = load_standards()
     st = std_state(state)
-    stds = [s for s in (std_copy(state, i, house) for i in st["applied"] if i not in st["overridden"]) if s and std_applies(s, state)]
+    beaten = std_beaten(state)  # a project standard that always wins turns the house one's check off (D03)
+    stds = [s for s in std_followed(state, house) if s["id"] not in beaten]
     out = []
     for s in stds + list(st["project"]):
         rv = s.get("review")
         if isinstance(rv, dict) and not regex_problem(rv.get("pattern")):
             out.append((re.compile(rv["pattern"]), s))
+    return out
+
+
+def std_locked_literals(state):
+    """[(token path, component regex, property regex, value, standard)] for component values a standard locks that code
+    writes as a number (toast.success(msg, { duration: 3000 }) while component.toast.duration is locked at 4000ms). Only
+    durations and plain numbers, read in milliseconds; anything else is left to the standard's own review pattern."""
+    out = []
+    if not std_has_records(state):
+        return out
+    house = load_standards()
+    for sp, sid in std_held(state).items():
+        m = re.match(r"^overrides\.component\.([a-z0-9]+(?:-[a-z0-9]+)*)\.([a-z0-9]+(?:-[a-z0-9]+)*)$", sp)
+        val = std_current(state, sp)
+        want = duration_ms(val) if isinstance(val, (dict, int, float)) and not isinstance(val, bool) else None
+        if not m or want is None:
+            continue
+        comp = re.compile(r"\b" + re.escape(m.group(1).replace("-", "")) + r"\b", re.I)
+        prop = re.compile(r"\b" + re.escape(camel(m.group(2).split("-"))) + r"\s*[:=]\s*(\d+(?:\.\d+)?)\b(?!\s*(?:s|ms)\b)")
+        std = (std_find(state, sid, house)[0] if sid.startswith("PRJ-") else std_copy(state, sid, house)) or {"id": sid}
+        out.append((shown_path(sp), comp, prop, want, std))
     return out
 
 
@@ -5258,10 +6360,16 @@ def std_design_md_lead(state):
 def std_notes(state, sid, st, held):
     """' Your project standard PRJ-01 wins here.' and the like: where a higher rule holds a standard's value instead."""
     r = st["records"].get(sid) or {}
-    kept = {p: (held.get(p, w) if str(w).startswith(("PRJ-", "STD-")) else w) for p, w in (r.get("kept") or {}).items()}
+    taken = st["released"].get(sid) or {}
+    kept = {p: (held.get(p, w) if str(w).startswith(("PRJ-", "STD-")) else w) for p, w in (r.get("kept") or {}).items() if p not in taken}
     beaten = sorted({held[p] for p in r.get("paths") or {} if held.get(p, sid) != sid and held[p].startswith("PRJ-")}
                     | {w for w in kept.values() if str(w).startswith("PRJ-")})
+    over = std_beaten(state).get(sid)
+    if over and over not in beaten:
+        beaten.append(over)
     out = [f"Your project standard {', '.join(beaten)} wins here."] if beaten else []
+    for p, x in taken.items():
+        out.append(f"The person took `{shown_path(p)}` back ({x.get('decision')}): \"{x.get('why')}\"; it is `{_vw(std_current(state, p))}`.")
     wins = sorted({w for w in kept.values() if str(w).startswith("STD-")})
     if wins:
         out.append(f"House standard {', '.join(wins)} wins here.")
@@ -5275,89 +6383,181 @@ def std_notes(state, sid, st, held):
 STD_MD_FILE = "standards.md"  # the full list, next to state.json; DESIGN.md carries the summary
 
 
-def std_design_md(state):
-    """DESIGN.md 'Standards' body, or '' when there are none. DESIGN.md is read before every UI task, so it stays short:
-    each theme in one line (its must rules by title, and the values it locks), overrides and project standards in full,
-    and a pointer to opendesigner/standards.md for every rule with its values and reasons."""
-    full = std_full_md(state)
-    if not full:
-        return ""
+def _values_full(values):
+    """Every value of a standard, in full (standards.md never cuts one short, R22)."""
+    items = list((values or {}).items()) if isinstance(values, dict) else []
+    return "; ".join(f"{k} `{v if isinstance(v, str) else json.dumps(v, ensure_ascii=False)}`" for k, v in items)
+
+
+def std_version_words(state, house=None):
+    """'house standards v3' for the version this system follows (else the installed file's), or ''."""
+    house = house or load_standards()
+    hv = std_state(state)["house_version"] or house["version"]
+    return f"house standards v{hv}" if hv is not None else ""
+
+
+def std_now_words(state, sid, st):
+    """' Now: `motion.easing.exit` [0.4, 0, 1, 1].' for the values an overridden standard used to set (R23)."""
+    paths = list(((st["records"].get(sid) or {}).get("paths") or {}))
+    return (" Now: " + "; ".join(f"`{shown_path(p)}` {_vw(std_current(state, p))}" for p in paths) + ".") if paths else ""
+
+
+def std_lock_words(state, group, st, held, full=False):
+    """The values a theme's standards lock, each as it is in force: '`component.toast.duration` 5000ms (PRJ-01 wins)'.
+    full: composite values in full too (standards.md), not pointed to."""
+    locked = {}
+    for g in group:
+        for p, v in ((st["records"].get(g["id"]) or {}).get("paths") or {}).items():
+            if p in (st["released"].get(g["id"]) or {}) or shown_path(p) in locked:
+                continue  # the person took this value back (standard override --path), or a rule above already named it
+            holder = held.get(p)
+            cur = std_current(state, p) if holder and holder != g["id"] else v
+            words = "a composite value (see standards.md)" if not full and isinstance(cur, dict) and "value" not in cur and "hex" not in cur \
+                else _vw(cur)
+            locked[shown_path(p)] = words + (f" ({holder} wins)" if holder and holder != g["id"] else "")
+    return [f"`{p}` {v}" for p, v in locked.items()]
+
+
+PROHIBIT = re.compile(r"^(Never|No|Don't|Do not|Avoid)\b")
+
+
+def std_donts(state, followed, limit=5):
+    """3 to 5 rules for the top of DESIGN.md's Standards section: the 'never' rules first (one per theme, then the rest),
+    those review can check before the others, then other must rules with a check."""
+    beaten = std_beaten(state)
+    cands = [s for s in followed if s.get("strength") != "should" and s["id"] not in beaten and s.get("design_md", True)]
+    ranked = sorted(cands, key=lambda s: (not PROHIBIT.match(s.get("title") or ""), not s.get("review")))
+    ranked = [s for s in ranked if PROHIBIT.match(s.get("title") or "") or s.get("review")]
+    out, themes = [], set()
+    for s in ranked:  # one per theme first, so the list covers the ground
+        if len(out) < limit and s.get("theme") not in themes:
+            out.append(s)
+            themes.add(s.get("theme"))
+    out += [s for s in ranked if s not in out][:limit - len(out)]
+    return out
+
+
+def std_design_md(state, md_path=None):
+    """DESIGN.md 'Standards' body, or '' when there are none (R23). DESIGN.md is read before every UI task, so it stays
+    short: one plain line with the counts and the house version, 3 to 5 rules not to break, what is different in this
+    project (another rule wins, overrides with the value now in force, the person's own standards), and every theme in one
+    line folded under <details>. md_path: where the full list is, as seen from DESIGN.md."""
     house = load_standards()
     st = std_state(state)
-    shown = [s for s in (std_copy(state, i, house) for i in st["applied"]) if s and s.get("design_md", True) and std_applies(s, state)
-             and s["id"] not in st["overridden"]]
-    lines = []
-    for title, group in std_by_theme(house, shown):
-        must = [g.get("title") or g["id"] for g in group if g.get("strength") != "should"]
-        locked = {}
-        for g in group:
-            for p, v in ((st["records"].get(g["id"]) or {}).get("paths") or {}).items():
-                locked.setdefault(shown_path(p), "a composite value (see standards.md)" if isinstance(v, dict) and "value" not in v else _vw(v))
-        locked = [f"`{p}` {v}" for p, v in locked.items()]
-        head = f"- **{title}** ({len(group)} rule{'' if len(group) == 1 else 's'}): " + ("; ".join(must[:8]) + (f"; and {len(must) - 8} more" if len(must) > 8 else "")
-                                                      if must else "recommended practice only")
-        lines.append(head + "." + (f" Locks {', '.join(locked)}." if locked else ""))
     held = std_held(state)
+    followed = std_followed(state, house)
+    over = [s for s in (std_copy(state, i, house) for i in st["overridden"]) if s]
+    proj_all = list(st["project"])
+    if not followed and not over and not proj_all:
+        return ""
+    md_path = md_path or f"opendesigner/{STD_MD_FILE}"
+    ver = std_version_words(state, house)
+    shown = [s for s in followed if s.get("design_md", True)]
+    head = (f"{ver[:1].upper() + ver[1:]}: " if ver and (followed or over) else "") + \
+        (f"{len(followed)} rule{'s' if len(followed) != 1 else ''} followed in this project" if followed else "none followed in this project" if over else "")
+    mine = f"{len(proj_all)} of your own" if followed or over else f"{len(proj_all)} project standard{'s' if len(proj_all) != 1 else ''} of your own"
+    lines = [head + (", plus " if head and proj_all else "") + (mine if proj_all else "") + (f"; {len(over)} overridden" if over else "") + "."]
+    donts = std_donts(state, followed)
+    if donts:
+        lines += ["", "**Don't break these:**"] + [f"- {s.get('title') or s['id']} ({s['id']})." for s in donts]
     exc = [(g, std_notes(state, g["id"], st, held)) for g in shown]
     exc = [(g, n) for g, n in exc if n]
     if exc:
         lines += ["", "**Where another rule wins in this project**"]
         lines += [f"- {g.get('title') or g['id']} ({g['id']}).{n}" for g, n in exc]
-    over = [s for s in (std_copy(state, i, house) for i in st["overridden"]) if s]
     if over:
         lines += ["", "**Overridden in this project**"]
         for s in over:
             o = st["overridden"][s["id"]]
             lines.append(f"- ~~{s.get('title') or s['id']}~~ Overridden in this project: \"{o.get('why')}\" ({o.get('decision')}). "
-                         f"The house rule: {s.get('rule')} ({s['id']})")
-    proj = [s for s in st["project"] if s.get("design_md", True)]
+                         f"The house rule: {s.get('rule')} ({s['id']}).{std_now_words(state, s['id'], st)}")
+    proj = [s for s in proj_all if s.get("design_md", True)]
     if proj:
         lines += ["", "**Project standards** (from sources the owner chose)"]
         for s in proj:
             vals = _values_words(s.get("values"))
-            lines.append(f"- {s.get('rule')}" + (f" Values: {vals}." if vals else "")
+            locks = std_lock_words(state, [s], st, held)
+            lines.append(f"- {s.get('rule')}" + (f" Values: {vals}." if vals else "") + (f" Locks {', '.join(locks)}." if locks else "")
                          + f" ({s['id']}{', recommended' if s.get('authority') == 'good-to-have' else ''})" + std_notes(state, s["id"], st, held))
-    lines += ["", f"Every rule, with its values, reasons and sources: `opendesigner/{STD_MD_FILE}`. Read the themes you touch before you build."]
+    if shown:
+        lines += ["", f"<details><summary>Every theme ({len(shown)} rule{'s' if len(shown) != 1 else ''})</summary>", ""]
+        for title, group in std_by_theme(house, shown):
+            must = [g.get("title") or g["id"] for g in group if g.get("strength") != "should"]
+            cnt = f"{len(group)} rule{'' if len(group) == 1 else 's'}" + ("" if len(must) == len(group) else f", {len(must)} must")
+            names = ("; ".join(must[:8]) + (f"; and {len(must) - 8} more must rule{'s' if len(must) > 9 else ''}" if len(must) > 8 else "")) if must \
+                else "recommended practice only"
+            locks = std_lock_words(state, group, st, held)
+            lines.append(f"- **{title}** ({cnt}): {names}." + (f" Locks {', '.join(locks)}." if locks else ""))
+        lines += ["", "</details>"]
+    rest = len(followed) - len(shown)
+    lines += ["", f"Every rule, with its values, reasons and sources: `{md_path}`"
+              + (f" (it also has the {rest} rule{'s' if rest != 1 else ''} this file leaves out)" if rest > 0 else "")
+              + ". Read the themes you touch before you build."]
     return "\n".join(lines).rstrip()
 
 
 def std_full_md(state):
-    """The full standards list (opendesigner/standards.md), or '' when there are none: house standards with design_md true
-    grouped by theme (as this system follows them), overridden ones with the person's reason, then project standards. A
-    value a higher rule holds instead (a project standard, the person's own value) is said next to the rule."""
+    """The full standards list (opendesigner/standards.md), or '' when there are none (R22): every house standard this
+    system follows, grouped by theme, with its rule, every value, why and sources (design_md only filters DESIGN.md);
+    overridden ones with the person's reason and the value now in force; then the project standards. A value a higher
+    rule holds instead (a project standard, the person's own value) is said next to the rule."""
     house = load_standards()
     st = std_state(state)
-    shown = [s for s in (std_copy(state, i, house) for i in st["applied"]) if s and s.get("design_md", True) and std_applies(s, state)]
+    followed = std_followed(state, house)
+    shown = list(followed)
     for sid in st["overridden"]:
         s = std_copy(state, sid, house)
-        if sid not in st["applied"] and s and s.get("design_md", True):
+        if s and s not in shown:
             shown.append(s)
-    proj = [s for s in st["project"] if s.get("design_md", True)]
+    proj = list(st["project"])
     if not shown and not proj:
         return ""
+    ver = std_version_words(state, house)
     lines, held = [], std_held(state)
     notes = lambda sid: std_notes(state, sid, st, held)
+    parts = ([f"{len(followed)} house rule{'s' if len(followed) != 1 else ''}"] if followed else []) \
+        + ([f"{len(st['overridden'])} overridden"] if st["overridden"] else []) \
+        + ([f"{len(proj)} project standard{'s' if len(proj) != 1 else ''} of its own"] if proj else [])
+    lines += [(f"This system follows OpenDesigner's {ver}: " if ver and (followed or st["overridden"]) else "This system follows ")
+              + (", ".join(parts[:-1]) + " and " + parts[-1] if len(parts) > 1 else parts[0]) + ".", ""]
 
+    def more(s):
+        out = []
+        sets = std_lock_words(state, [s], st, held, full=True) if s["id"] not in st["overridden"] else []
+        if sets:
+            out.append(f"  - Sets: {', '.join(sets)}.")
+        if s.get("why"):
+            out.append(f"  - Why: {s['why']}")
+        src = _source_ids(s)
+        if src:
+            out.append(f"  - Sources: {src}.")
+        return out
     for title, group in std_by_theme(house, shown):
         lines += [f"**{title}**"]
         for s in group:
-            vals = _values_words(s.get("values"))
+            vals = _values_full(s.get("values"))
             if s["id"] in st["overridden"]:
                 o = st["overridden"][s["id"]]
                 lines.append(f"- ~~{s.get('title') or s['id']}~~ Overridden in this project: \"{o.get('why')}\" ({o.get('decision')}). "
-                             f"The house rule: {s.get('rule')} ({s['id']})")
+                             f"The house rule: {s.get('rule')}" + (f" Values: {vals}." if vals else "") + f" ({s['id']}).{std_now_words(state, s['id'], st)}")
             else:
                 lines.append(f"- **{s.get('title') or s['id']}.** {s.get('rule')}" + (f" Values: {vals}." if vals else "")
                              + f" ({s['id']}{', should' if s.get('strength') == 'should' else ''})" + notes(s["id"]))
+            lines += more(s)
         lines.append("")
     if proj:
         lines.append("**Project standards** (from sources the owner chose)")
         for s in proj:
-            vals = _values_words(s.get("values"))
+            vals = _values_full(s.get("values"))
             src = ", ".join(x.get("url") or x.get("id") or "" for x in s.get("sources") or [] if isinstance(x, dict))
             lines.append(f"- {s.get('rule')}" + (f" Values: {vals}." if vals else "")
                          + f" ({s['id']}{', recommended' if s.get('authority') == 'good-to-have' else ''}" + (f"; source: {src}" if src else "") + ")"
                          + notes(s["id"]))
+            sets = std_lock_words(state, [s], st, held, full=True)
+            if sets:
+                lines.append(f"  - Sets: {', '.join(sets)}.")
+            if s.get("why"):
+                lines.append(f"  - Why: {s['why']}")
         lines.append("")
     return "\n".join(lines).rstrip()
 
@@ -5693,8 +6893,11 @@ def export_tailwind(files, meta, prefix, reset=True):
         lines.append(f"  --radius-{kebab(r)}: var({css_var(prefix, 'radius.' + r)});")
     for e in ("raised", "floating", "overlay"):
         lines.append(f"  --shadow-{e}: var({css_var(prefix, 'elevation.' + e)});")
-    for e in ("standard", "enter", "exit", "linear"):
-        lines.append(f"  --ease-{e}: var({css_var(prefix, 'motion.easing.' + e)});")
+    first = ("standard", "enter", "exit", "linear")
+    curves = sorted((p_ for p_ in flat if p_.startswith("motion.easing.") and flat[p_]["type"] == "cubicBezier"),
+                    key=lambda p_: (first.index(p_[14:]) if p_[14:] in first else len(first), p_))
+    for path in curves:  # every curve, so hover, drawer and toast get classes too (R09)
+        lines.append(f"  --ease-{'-'.join(kebab(s_) for s_ in path[14:].split('.'))}: var({css_var(prefix, path)});")
     lines += ["}", ""]
     lines += ["/* Semantic motion helpers (durations follow the reduced-motion mode automatically). */",
               "@utility transition-feedback {", f"  transition-duration: var({css_var(prefix, 'motion.transition.feedback')}-duration);",
@@ -6324,6 +7527,54 @@ def _decisions(d):
     return out
 
 
+def _decision_log(d):
+    """Every entry of decisions.md in order: {id, head, path, value, set_by, locked, reason}. path is '' for an entry whose
+    title names no single path (a standards batch, an override of a whole standard)."""
+    fp = os.path.join(d, "decisions.md")
+    if not os.path.exists(fp):
+        return []
+    with open(fp, encoding="utf-8") as f:
+        text = f.read()
+    out = []
+    for block in re.split(r"^(?=## D-\d+ · )", text, flags=re.M):
+        m = re.match(r"## (D-\d+) · (.*?)\n- set_by: (\S+) · locked: (\S+).*?\n- reason: (.*?)\n", block)
+        if not m:
+            continue
+        did, head, set_by, locked, reason = m.groups()
+        path, _, val = head.partition(" = ")
+        over = re.search(r"^- house standard (STD-[\w-]+): ", block, flags=re.M) if set_by in PERSON_SET_BY else None
+        out.append({"id": did, "head": head.strip(), "path": path.strip() if val else "", "value": val.strip(), "set_by": set_by,
+                    "locked": locked == "yes", "reason": reason.strip(), "overrides": over.group(1) if over else None})
+    return out
+
+
+PERSON_SET_BY = ("chosen", "confirmed_default", "assumed", "delegated", "reference", "asset")
+
+
+def decision_table_rows(d, limit=40):
+    """DESIGN.md's Decisions table (R21): the person's own decisions first (chosen, confirmed, assumed, delegated, from a
+    reference or an asset; the newest value per path) and their changes to standards, then one row per standards batch,
+    never one row per value a standard set. Returns (rows, how many were left out)."""
+    log = _decision_log(d)
+    latest = {}
+    for e_ in log:
+        if e_["path"]:
+            latest[e_["path"]] = e_
+    cut = lambda t: t if len(t) <= 160 else t[:157].rsplit(" ", 1)[0] + "..."
+    mine = [e_ for e_ in log if e_["path"] and latest.get(e_["path"]) is e_ and e_["set_by"] in PERSON_SET_BY
+            and not e_["path"].startswith("standards.")]
+    std_person = [e_ for e_ in log if e_["set_by"] in PERSON_SET_BY and (e_["path"].startswith("standards.") or not e_["path"])
+                  and e_["path"] != "init"]
+    batches = [e_ for e_ in log if e_["set_by"] == "standard"]
+    rows = [(e_["id"], f"`{shown_path(e_['path'])}`", e_["value"], e_["set_by"] + (" (locked)" if e_["locked"] else "")
+             + (f", overrides {e_['overrides']}" if e_.get("overrides") else ""), cut(e_["reason"])) for e_ in mine]
+    rows += [(e_["id"], "standards", e_["head"] if not e_["path"] else f"{e_['path']} = {e_['value']}",
+              e_["set_by"] + (f", overrides {e_['overrides']}" if e_.get("overrides") else ""), cut(e_["reason"])) for e_ in std_person]
+    rows += [(e_["id"], "standards", e_["head"] if not e_["path"] else f"{e_['path']} = {e_['value']}",
+              "standard" + (" (locked)" if e_["locked"] else ""), cut(e_["reason"])) for e_ in batches]
+    return rows[:limit], max(0, len(rows) - limit)
+
+
 def _keep_blocks(text):
     """od:keep blocks by section heading, so hand-written prose survives regeneration (spec 7.2)."""
     keeps = {}
@@ -6490,20 +7741,25 @@ def render_summary(d, state, meta, zoom):
     decided and what is next, in plain words and at most about 15 lines."""
     name = state.get("name") or "This design system"
     ans = state.get("answers") or {}
+    latest = _decisions(d)  # each path's latest decision: who set it now, not who set it first (R20)
     by = {}
-    for rec in ans.values():
-        sb = rec.get("set_by", "chosen") if isinstance(rec, dict) else "chosen"
+    for qid, rec in ans.items():
+        sb = (latest.get(f"answers.{qid}") or {}).get("set_by") or (rec.get("set_by", "chosen") if isinstance(rec, dict) else "chosen")
         by[sb] = by.get(sb, 0) + 1
     for path, (_q, _h) in ANSWER_PATHS.items():
         if get_path(state, path) not in (None, "", [], {}, "pending") and _q not in ans:
-            by["chosen"] = by.get("chosen", 0) + 1
+            sb = (latest.get(path) or {}).get("set_by") or "chosen"
+            by[sb] = by.get(sb, 0) + 1
     mine = by.get("chosen", 0) + by.get("confirmed_default", 0) + by.get("reference", 0) + by.get("asset", 0)
     picked = by.get("delegated", 0) + by.get("assumed", 0)
     sketchy = [t for k, t in ZOOM_AREAS if k != "overview" and zoom[k]["level"] == "sketch"]
     feel_own = (state.get("taste") or {}).get("feelWords") or []
     macros = [m if isinstance(m, str) else m.get("id") for m in state.get("macros") or []]
-    feel = ", ".join(feel_own) + (f" ({', '.join(macros)})" if macros and [w.lower().strip('!.') for w in feel_own] != macros else "") \
-        if feel_own else ", ".join(macros)
+    picked_feel = "delegated" in ((latest.get("macros") or {}).get("set_by"), (latest.get("taste.feelWords") or {}).get("set_by"))
+    notes = ([", ".join(macros)] if feel_own and macros and [w.lower().strip('!.') for w in feel_own] != macros else []) \
+        + (["picked for you"] if picked_feel else [])
+    feel = (", ".join(feel_own) if feel_own else ", ".join(macros))
+    feel += f" ({'; '.join(notes)})" if feel and notes else ""
     risks = licence_risks(state, meta)
     what = product_words(state)
     if what and what.lower().startswith(name.lower()):
@@ -6519,31 +7775,35 @@ def render_summary(d, state, meta, zoom):
             ("Screens", surface_words(state) or "not asked yet"),
             ("Runs on", ", ".join(state.get("raw", {}).get("platforms") or ["web"])),
             ("Feel", feel or "not asked yet"),
-            ("Brand color", brand_line(meta, state) or "none yet: a stand-in blue is used"),
-            ("Decided", f"{mine} answer{'s' if mine != 1 else ''} you gave" + (f", {picked} picked for you" if picked else "")
+            ("Brand color", brand_line(meta, state, plain=True, delegated=brand_delegated(d), hexes=True) or "none yet: a stand-in blue is used"),
+            ("Decided", (f"{mine} answer{'s' if mine != 1 else ''} you gave" if mine or not picked else "")
+             + (", " if mine and picked else "") + (f"{picked} picked for you" if picked else "")
              + "; everything else uses sourced defaults"),
             ("Next", (f"zoom into {', '.join(sketchy[:3])}, or stop here: each level works" if sketchy
                       else "every area is past the sketch; zoom deeper where it matters, or stop here")),
             ("Licence risks", " ".join(risks[:2]) + (f" (+{len(risks) - 2} more in Open Items)" if len(risks) > 2 else "") if risks else "none found")]
     sts = std_state(state) if isinstance(state.get("standards"), dict) else {}
     over = sts.get("overridden") or {}
-    n_std, n_prj = len([i for i in sts.get("applied") or [] if i not in over]), len(sts.get("project") or [])
+    n_std = len(std_followed(state)) if sts.get("applied") else 0  # the same count as the Standards section (R23)
+    n_prj = len(sts.get("project") or [])
     if n_std or n_prj or over:
         rows.insert(-2, ("Standards", ", ".join(x for x in (
-            f"{n_std} house standard{'s' if n_std != 1 else ''} followed (locked)" if n_std else "",
+            f"{n_std} house standard{'s' if n_std != 1 else ''} followed (locked, {std_version_words(state)})" if n_std else "",
             f"{len(over)} overridden by you" if over else "", f"{n_prj} of your own" if n_prj else "") if x)
             + "; see the Standards section"))
     lines += [f"- **{k}:** {v}" for k, v in rows]
     return "\n".join(lines)
 
 
-def colors_lead(meta, state, light):
+def colors_lead(meta, state, light, delegated=False):
     ci = meta["color"]
     brand = (state.get("raw") or {}).get("brandColor")
     extra = [x for x in ("accent2", "accent3") if x in ci.get("ramps", [])]
     if ci.get("scheme") == "monochrome" and "action" not in ci.get("ramps", []):
         return "**Buttons use near-black ink; color is kept for status, links and focus.** Everything else stays neutral."
-    if brand:
+    if brand and delegated:
+        first = f"{color_words(brand)} picked for you (`{brand}`) marks buttons, links and focus"
+    elif brand:
         how = "exactly" if ci.get("pinnedStep") else "as a readable shade"
         first = f"your brand color `{brand}` ({how}) marks buttons, links and focus"
     else:
@@ -6574,11 +7834,13 @@ def tailwind_classes(files):
     out["shape"] = ["rounded-control", "rounded-container", "rounded-overlay", "rounded-full"]
     out["elevation"] = ["shadow-raised", "shadow-floating", "shadow-overlay"]
     out["type"] = [f"text-{'-'.join(p.split('.')[1:])}" for p in ("text.body.md", "text.label.lg", "text.title.md", "text.headline.md") if has(p)]
-    out["motion"] = ["transition-feedback", "ease-standard"]
+    out["motion"] = ["transition-feedback"] + [f"ease-{k}" for k in ("enter", "exit", "hover") if has(f"motion.easing.{k}")]
     return out
 
 
-def render_design_md(d, files, meta, state, existing=""):
+def render_design_md(d, files, meta, state, existing="", out_dir=None):
+    rel = os.path.relpath(os.path.abspath(d), os.path.abspath(out_dir or doc_dir(d))).replace(os.sep, "/")
+    R = lambda p: p if rel in (".", "") else f"{rel}/{p}"  # paths as seen from DESIGN.md, which sits at the project root (R21)
     res = files["opendesigner.resolver.json"]
     mods = res.get("modifiers", {})
     has_dark = "theme" in mods and "dark" in mods["theme"]["contexts"]
@@ -6598,7 +7860,13 @@ def render_design_md(d, files, meta, state, existing=""):
         rx = SECTION_PATHS.get(sec)
         if not rx:
             return ""
-        ids = [f"{v['id']} ({k})" for k, v in decs.items() if re.match(rx, k)]
+        by_id = {}  # each decision once, however many of the section's values it set (a standards batch sets dozens, R29)
+        for k, v in decs.items():
+            if re.match(rx, k):
+                by_id.setdefault(v["id"], []).append(k)
+        ids = [f"{i} ({ks[0]})" if len(ks) == 1 else
+               f"{i} ({len(ks)} values" + (", standards" if all(decs[k]["set_by"] == "standard" for k in ks) else "") + ")"
+               for i, ks in sorted(by_id.items(), key=lambda kv: _dnum(kv[0]))]
         return "Decisions: " + (", ".join(ids) if ids else "none recorded yet; values are defaults from references/levers.json") + "."
 
     zoom = zoom_levels(d, state)
@@ -6669,7 +7937,8 @@ def render_design_md(d, files, meta, state, existing=""):
     ci = meta["color"]
     brand = raw.get("brandColor")
     out = ["\n".join(fm), f"# {state.get('name') or 'Design system'}", "", render_summary(d, state, meta, zoom), "",
-           f"> Generated by the OpenDesigner engine {ENGINE_VERSION} from `state.json` and `decisions.md`; `tokens/` is the source of truth. "
+           f"> Generated by the OpenDesigner engine {ENGINE_VERSION} from `{R('state.json')}` and `{R('decisions.md')}`; `{R('tokens/')}` is "
+           "the source of truth. "
            "Change the system with `engine.py set ...` and `engine.py build`, not by editing this file (notes inside "
            "`<!-- od:keep -->` blocks survive). Each section opens with one plain sentence; open **More** for the designer and engineer detail.", ""]
 
@@ -6687,13 +7956,14 @@ def render_design_md(d, files, meta, state, existing=""):
             f"- Platforms: {', '.join(raw.get('platforms') or [])}; inputs: {', '.join(raw.get('inputs') or [])}",
             f"- Direction: {_direction_words(state)}"
             + (f"; feel {', '.join((m if isinstance(m, str) else m['id'] + ' x' + str(m.get('strength', 1))) for m in state['macros'])}" if state.get("macros") else "")
-            + (f" (your words: {', '.join((state.get('taste') or {}).get('feelWords') or [])})" if (state.get("taste") or {}).get("feelWords") else ""),
+            + ((" (words picked for you: " if (_decisions(d).get("taste.feelWords") or {}).get("set_by") == "delegated" else " (your words: ")
+               + f"{', '.join((state.get('taste') or {}).get('feelWords') or [])})" if (state.get("taste") or {}).get("feelWords") else ""),
             "", "**Principles (ranked).**", pl, "", "**Dial positions.** Three posture dials set the overall stance. Five character dials fine-tune it.", ""]
     body += [f"- {dial_words(k, dials[k], params, ci)}" for k in DIALS]
     body += ["", "**Zoom by area** (sketch, broad, defined, detailed). You can stop at any level; each one works.", "",
              _md_table(["Area", "Zoom", "Next questions"], [(t, zoom[k]["level"], ", ".join(zoom[k]["next"]) if zoom[k]["next"] else "-")
                                                            for k, t in ZOOM_AREAS if k != "overview"])]
-    body += ["", "The tokens in `tokens/` (DTCG 2025.10 with `opendesigner.resolver.json`) are the source of truth. This file is a generated view."]
+    body += ["", f"The tokens in `{R('tokens/')}` (DTCG 2025.10 with `opendesigner.resolver.json`) are the source of truth. This file is a generated view."]
     dw = "roomy" if dials["density"] <= 33 else "comfortable" if dials["density"] <= 66 else "compact"
     style = {"flat2": "a flat", "tonal": "a tonal", "glass": "a glass", "neobrutal": "a bold, blocky", "soft": "a soft 3D",
              "maximal": "a loud, busy"}.get(effective_preset(state)[0] or "", "its own")
@@ -6721,7 +7991,7 @@ def render_design_md(d, files, meta, state, existing=""):
     body = [f"**Intent.** {('Brand color `' + brand + '`') if brand else 'No brand color yet: the accent uses a placeholder blue hue'} "
             f"drives the accent ramp's hue; the Colorfulness dial ({dials['colorfulness']}) sets its chroma "
             f"(scheme {ci['scheme']}, peak HCT chroma {ci['peakHct']}). The brand's role is **{params['color.brandRole']}** and it sits "
-            f"closest to accent step {ci.get('brandAnchorStep') or '-'}. " + (brand_line(meta, state) or ""),
+            f"closest to accent step {ci.get('brandAnchorStep') or '-'}. " + (brand_line(meta, state, delegated=brand_delegated(d)) or ""),
             "", "**How ramps are built.** Each hue gets twelve steps in OKLCH, placed by contrast. Step 8 reaches at least 3:1 (edges and focus). "
             "Steps 10 and 11 reach the text minimum on backgrounds 1-4. Step 12 reaches at least 7:1. Steps 2-6 are spaced evenly in lightness "
             "between step 1 and step 7. Light and dark ramps are solved separately. Dark solids are lighter and carry dark text "
@@ -6744,7 +8014,7 @@ def render_design_md(d, files, meta, state, existing=""):
     tw = tailwind_classes(files)
     if tw.get("color"):
         body += ["", "**Tailwind classes:** " + ", ".join(f"`{c}`" for c in tw["color"]) + "."]
-    out.append(section("Colors", "\n".join(body), lead=colors_lead(meta, state, light), term_key="accent color"))
+    out.append(section("Colors", "\n".join(body), lead=colors_lead(meta, state, light, delegated=brand_delegated(d)), term_key="accent color"))
 
     # 3 Typography
     rows = []
@@ -6878,33 +8148,66 @@ def render_design_md(d, files, meta, state, existing=""):
     out.append(section("Do's and Don'ts", "\n".join(body), lead="**These rules keep screens clear and easy to read.** The engine checks the ones it can.", term_key="Guardrails and validation"))
 
     # 8b Standards (docs/KNOWLEDGE.md 3): rules from sources marked non-negotiable; no section while there are none
-    std_body = std_design_md(state)
+    std_body = std_design_md(state, md_path=R(STD_MD_FILE))
     if std_body:
         out.append(section("Standards", std_body, lead=std_design_md_lead(state), fold=False))
 
     # 9 Motion: values from the resolved tokens, so an override (the person's or a standard's) shows, not the lever's value
-    def _ms(k, v):
-        t = (light.get(f"motion.duration.{k}") or {}).get("resolved")
+    def _res_ms(path):
+        t = (light.get(path) or {}).get("resolved")
         if not (isinstance(t, dict) and isinstance(t.get("value"), (int, float))):
-            return v
-        ms = t["value"] * 1000 if t.get("unit") == "s" else t["value"]
-        return v if ms == v else (int(ms) if float(ms).is_integer() else ms)
+            return None
+        v = t["value"] * 1000 if t.get("unit") == "s" else t["value"]
+        return int(v) if float(v).is_integer() else v
 
     def _ease(k):
         t = (light.get(f"motion.easing.{k}") or {}).get("resolved")
-        return t if isinstance(t, list) and t != mot[k] else mot[k]
-    durs = {k: _ms(k, v) for k, v in mot["durations"].items()}
+        return t if isinstance(t, list) else mot[k]
+    order = list(mot["durations"])
+    dpaths = sorted((p_ for p_ in light if p_.startswith("motion.duration.") and light[p_]["type"] == "duration"),
+                    key=lambda p_: (order.index(p_[16:]) if p_[16:] in order else len(order), p_))
+    durs = {p_[16:]: _res_ms(p_) for p_ in dpaths}
+    durs = {k: (v if v is not None else mot["durations"].get(k)) for k, v in durs.items()}
+    for k, v in mot["durations"].items():
+        durs.setdefault(k, v)
     ease = {k: _ease(k) for k in ("standard", "enter", "exit")}
-    rows = [(f"`motion.duration.{k}`", f"{v}ms") for k, v in durs.items()]
+    held = std_held(state) if std_has_records(state) else {}
+    ovr = state.get("overrides") or {}
+    r10 = lambda v: int(round(v / 10) * 10)
+
+    def _who(k):
+        sid = held.get(f"overrides.motion.duration.{k}")
+        return f"set by {'project' if sid.startswith('PRJ-') else 'house'} standard {sid}" if sid else \
+            ("your value" if f"motion.duration.{k}" in ovr else "")
+
+    def _note(k):
+        if k == "extra":
+            return "illustrative and marketing motion only, never UI (STD-easing-duration-06)"
+        if k.endswith("-exit") and k[:-5] in durs:
+            want = r10(durs[k[:-5]] * 0.8)
+            return (f"derived: about 0.8 x {k[:-5]}" if durs[k] == want else f"set directly ({_who(k) or 'your value'}); "
+                    f"0.8 x {k[:-5]} would be {want}ms")
+        return _who(k)
+    rows = [(f"`motion.duration.{k}`", f"{v}ms", _note(k)) for k, v in durs.items()]
+    steps = ("medium", "long", "extra")
+    moved = [k for k in steps if f"motion.duration.{k}" not in ovr]
+    fixed = [k for k in steps if k not in moved]
+    fixers = {"standards" if held.get(f"overrides.motion.duration.{k}") else "your own values" for k in fixed}
+    mult_words = (f"the duration multiplier x{mot['multiplier']:.2f} scales the {', '.join(moved)} step{'s' if len(moved) != 1 else ''}"
+                  + (f" ({' and '.join(sorted(fixers))} fix {', '.join(fixed)})" if fixed else "")) if moved else \
+        f"the duration multiplier would be x{mot['multiplier']:.2f}, but {' and '.join(sorted(fixers))} fix every step it scales (medium, long and extra)"
+    exits = [k for k in ("medium-exit", "long-exit") if k in durs]
     sp = light.get("motion.spring.spatial.default")
     spx = (sp.get("$extensions") or {}).get(NS, {}) if sp else {}
-    body = [f"**Intent.** Energy {dials['energy']}/100: durations x{mot['multiplier']:.2f} on medium and longer steps; standard easing "
-            f"`cubic-bezier({', '.join(fmt_num(x) for x in ease['standard'])})`, enter `{ease['enter']}`, exit `{ease['exit']}`. "
-            f"Spatial spring: damping {mot['spatial']['dampingRatio']}, stiffness {mot['spatial']['stiffness']} "
+    cb = lambda v: css_bezier(v) if isinstance(v, list) else str(v)
+    body = [f"**Intent.** Energy {dials['energy']}/100: {mult_words}. Standard easing `{cb(ease['standard'])}`, enter `{cb(ease['enter'])}`, "
+            f"exit `{cb(ease['exit'])}`. Spatial spring: damping {mot['spatial']['dampingRatio']}, stiffness {mot['spatial']['stiffness']} "
             f"(Apple duration {spx.get('apple', {}).get('duration')}s, bounce {spx.get('apple', {}).get('bounce')}; web `linear()` sample over "
             f"{spx.get('css', {}).get('durationMs')}ms)." + (" Motion is off (flags.motionOff): standard equals reduced." if mot.get("motionOff") else ""),
-            "", _md_table(["Token", "Value"], rows),
-            "", "- Exits are about 20% shorter than entrances; linear easing only for spinners and progress.",
+            "", _md_table(["Token", "Value", "Note"], rows),
+            "", "- Exits are derived, not set on their own: each is about 20% shorter than the entrance in force ("
+            + ", ".join(f"{k} {durs[k]}ms from {k[:-5]} {durs[k[:-5]]}ms" for k in exits if k[:-5] in durs)
+            + "; STD-easing-duration-11). Change an entrance and its exit follows. Linear easing only for spinners and progress.",
             "- Reduced motion (`prefers-reduced-motion` or `data-motion=\"reduced\"`): travel becomes opacity, feedback stays, `motion.transition.move` is 0ms.",
             "- Springs are stored as damping and stiffness in `$extensions.opendesigner.spring` because DTCG 2025.10 has no spring type.",
             f"- Haptics: {params['haptics.intensity']} intensity where the platform has them; sound: hook H-sound is "
@@ -6913,9 +8216,9 @@ def render_design_md(d, files, meta, state, existing=""):
 
     # 10 Modes and Themes
     rows = [(n, ", ".join(m["contexts"]), m.get("default")) for n, m in mods.items()]
-    body = ["**Intent.** Modes live in the DTCG resolver (`tokens/opendesigner.resolver.json`); modifiers are orthogonal, so no two set the same token.",
+    body = [f"**Intent.** Modes live in the DTCG resolver (`{R('tokens/opendesigner.resolver.json')}`); modifiers are orthogonal, so no two set the same token.",
             "", _md_table(["Modifier", "Contexts", "Default"], rows) if rows else "Single theme.",
-            "", f"- Web: `prefers-color-scheme` with a `[data-theme]` override; `[data-density]`; `prefers-reduced-motion` with `[data-motion]` (see `build/css/tokens.css`).",
+            "", f"- Web: `prefers-color-scheme` with a `[data-theme]` override; `[data-density]`; `prefers-reduced-motion` with `[data-motion]` (see `{R('build/css/tokens.css')}`).",
             "- High-contrast themes are not generated; set `raw.contrastTarget` to AAA for 7:1 text everywhere.",
             "- A second brand or a client re-skin may override the color primitives and `color.bg.brand`; semantic names never change."]
     out.append(section("Modes and Themes", "\n".join(body), lead=f"**The system has {'light and dark' if has_dark else 'one'} color {'modes' if has_dark else 'mode'}, three spacing densities and a reduced-motion mode.**", term_key="Modes and theming axes"))
@@ -6961,16 +8264,19 @@ def render_design_md(d, files, meta, state, existing=""):
             f"{'yes' if params['platform.overridesShapeAndMaterial'] else 'no'}; each platform keeps its own body text size: "
             f"{'yes' if params['platform.useNativeBaseSize'] else 'no'}.",
             "", "- Navigation, back, sheets and pickers stay native on every platform (DC-L10-02).",
-            "- Swift and Compose files in `build/` use the same names as the CSS variables (Figma code syntax matches them).",
+            f"- Swift and Compose files in `{R('build/')}` use the same names as the CSS variables (Figma code syntax matches them).",
             "- Fonts by platform: " + face_licence_words(tinfo.get("faces") or {}, raw)]
     out.append(section("Platforms and Devices", "\n".join(body), lead=f"**It runs on {', '.join(raw.get('platforms') or ['web'])}, and each platform keeps its own navigation.**", term_key="Target platforms"))
 
     # 15 Decisions
-    rows = [(v["id"], f"`{k}`", v["value"], v["set_by"] + (" (locked)" if v["locked"] else ""), v["reason"])
-            for k, v in sorted(decs.items(), key=lambda kv: kv[1]["id"])][-20:]
-    body = ["The highest-reach decisions, newest value per path. Full log: [decisions.md](decisions.md).", "",
+    rows, more = decision_table_rows(d)
+    body = [f"Your own decisions first (the newest value per path), then your changes to standards, then one row per standards "
+            f"batch. Full log: [{R('decisions.md')}]({R('decisions.md')}).", "",
             _md_table(["Id", "Path", "Value", "Set by", "Reason"], rows) if rows else "No decisions recorded yet."]
-    out.append(section("Decisions", "\n".join(body), lead=f"**{len(decs)} decision{'s' if len(decs) != 1 else ''} so far.** Each one says who set it and why.", term_key="decisions.md"))
+    if more:
+        body += ["", f"{more} more in the full log."]
+    n_dec = len({x for x, _p in _decision_entries(d)}) or len(decs)  # unique decision ids, not paths (R07)
+    out.append(section("Decisions", "\n".join(body), lead=f"**{n_dec} decision{'s' if n_dec != 1 else ''} so far.** Each one says who set it and why.", term_key="decisions.md"))
 
     # 16 Open Items
     pend = [f"{v.get('name', h)} ({h}): {v.get('status')}" for h, v in hooks.items() if v.get("status") in ("pending", "placeholder", "commissioning")]
@@ -6985,8 +8291,8 @@ def render_design_md(d, files, meta, state, existing=""):
     out.append(section("Open Items", "\n".join(body), lead="**These parts are still defaults, guesses, or waiting for a person.**", fold=False))
 
     # 17 For Agents
-    body = ["1. Before any visual work, read this file, PRODUCT.md and `tokens/` (start at `tokens/opendesigner.resolver.json`).",
-            f"2. Use tokens, never raw values: CSS `var(--{prefix}-...)`, Tailwind classes from `build/tailwind/theme.css`, `{prefix.upper()}.*` in Swift, "
+    body = [f"1. Before any visual work, read this file, PRODUCT.md and `{R('tokens/')}` (start at `{R('tokens/opendesigner.resolver.json')}`).",
+            f"2. Use tokens, never raw values: CSS `var(--{prefix}-...)`, Tailwind classes from `{R('build/tailwind/theme.css')}`, `{prefix.upper()}.*` in Swift, "
             f"`{prefix.capitalize()}Theme` in Compose.",
             "3. Do not change a locked decision without asking the owner.",
             "4. To change the system: `engine.py set <path> <value> --why \"...\"`, then `engine.py generate`, `engine.py validate`, `engine.py design-md`.",
@@ -7065,7 +8371,7 @@ def cmd_design_md(d, out_dir=None, files=None, meta=None, quiet=False):
         out_dir = os.path.dirname(os.path.abspath(d)) if os.path.basename(os.path.abspath(d)) == DEFAULT_DIR else d
     written = []
     hashes = state.setdefault("hashes", {})
-    for name, render in (("DESIGN.md", lambda ex: render_design_md(d, files, meta, state, ex)),
+    for name, render in (("DESIGN.md", lambda ex: render_design_md(d, files, meta, state, ex, out_dir=out_dir)),
                          ("PRODUCT.md", lambda ex: render_product_md(state, ex))):
         path = os.path.join(out_dir, name)
         existing = ""
@@ -7610,7 +8916,12 @@ def fit_reference(ref, state=None):
 
 
 def cmd_intake(d, path, accept=False, as_json=False):
-    ref = read_json(path)
+    if not os.path.isfile(path):
+        raise SystemExit(f"File not found: {path}. Give the path of a reference JSON file (see opendesigner-extract).")
+    try:
+        ref = read_json(path)
+    except ValueError as ex:
+        raise SystemExit(f"{path} is not a JSON file the intake can read ({ex}).")
     sp0 = os.path.join(d, "state.json")
     fit = fit_reference(ref, merge_defaults(read_json(sp0)) if os.path.exists(sp0) else None)
     rid = fit["id"] if fit["id"] != "ref" else slug(os.path.splitext(os.path.basename(path))[0])
@@ -7630,8 +8941,13 @@ def cmd_intake(d, path, accept=False, as_json=False):
                     pr["status"] = "skipped (standard)"
                     fit["notes"].append(f"{pr['path']} was not changed: it follows standard {holder}")
                     continue
-                cmd_set(d, pr["path"], pr["value"], why=f"from reference {rid} ({pr['confidence']} confidence): {pr['basis']}",
-                        set_by="reference", source_ref=rid, quiet=True)
+                try:
+                    cmd_set(d, pr["path"], pr["value"], why=f"from reference {rid} ({pr['confidence']} confidence): {pr['basis']}",
+                            set_by="reference", source_ref=rid, quiet=True)
+                except SystemExit as ex:  # a value a standard forbids (or the engine refuses) is skipped, and said
+                    pr["status"] = "skipped"
+                    fit["notes"].append(f"{pr['path']} was not changed: {str(ex).splitlines()[0]}")
+                    continue
                 pr["status"] = "accepted"
     if as_json:
         print(json.dumps(fit, indent=2))
@@ -7680,6 +8996,20 @@ def cmd_build(d, force=False):
     return 1 if errors else 0
 
 
+class PairAction(argparse.Action):
+    """--path and --value in the order given: each --value belongs to the --path right before it."""
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        pairs = [list(x) for x in getattr(namespace, self.dest, None) or []]
+        if option_string == "--path":
+            pairs.append([values, None])
+        elif pairs and pairs[-1][0] is not None and pairs[-1][1] is None:
+            pairs[-1][1] = values
+        else:
+            pairs.append([None, values])
+        setattr(namespace, self.dest, pairs)
+
+
 def main(argv=None):
     top = argparse.ArgumentParser(add_help=False)
     top.add_argument("--dir", default=None, help=f"state directory (default ./{DEFAULT_DIR})")
@@ -7726,6 +9056,7 @@ def main(argv=None):
     p.add_argument("--brand", help="brand color hex")
     p.add_argument("--audience", choices=["dense", "regular", "large"])
     p.add_argument("--platforms", help="comma list: web,ios,android,desktop,secondary")
+    p.add_argument("--stack", help="comma list of the code stack (react, react-native, vue, ...); read from package.json when not given")
     p.add_argument("--feel", help="comma list of feel words in the person's own words (fun, calm, bold, techy, ...); `engine.py feel` lists them")
     p.add_argument("--delegated", nargs="?", const="all", default=None,
                    help="the person said 'just pick': record the sketch answers as delegated (all, or a comma list such as feel,brand)")
@@ -7752,31 +9083,41 @@ def main(argv=None):
     p.add_argument("--question", default=None)
     p = sub.add_parser("standards", parents=[common], help="the standards this system follows, overridden ones and house updates")
     p.add_argument("--json", action="store_true")
+    p.add_argument("--all", dest="show_all", action="store_true", help="also list the house standards for other platforms or stacks")
     p.add_argument("--update", action="store_true", help="apply new and changed house standards; overridden ones stay the person's")
     p.add_argument("--no-doc", dest="no_doc", action="store_true")
     p = sub.add_parser("standard", parents=[common], help="override, restore, add or remove one standard (always recorded)")
     ssub = p.add_subparsers(dest="action", required=True)
     q = ssub.add_parser("override", parents=[common], help="the person explicitly changes a house standard")
     q.add_argument("id")
-    q.add_argument("--why", default=None, help="the person's own words (required)")
-    q.add_argument("--value", default=None, help="a new value, for a standard that sets one value")
+    q.add_argument("--why", required=True, help="the person's own words")
+    q.add_argument("--path", dest="pairs", action=PairAction, default=None,
+                   help="take back only this value (repeatable); without --path the whole standard")
+    q.add_argument("--value", dest="pairs", action=PairAction, default=None,
+                   help="the new value for the --path before it (JSON); alone, for a standard that sets one value")
+    q.add_argument("--all-holders", dest="all_holders", action="store_true",
+                   help="also take the same values back from the other standards that set them")
     q = ssub.add_parser("restore", parents=[common], help="follow a house standard again")
     q.add_argument("id")
+    q.add_argument("--why", default=None, help="the person's own words")
+    q.add_argument("--all-holders", dest="all_holders", action="store_true",
+                   help="also follow again the other standards that set the same values")
     q = ssub.add_parser("add", parents=[common], help="a project standard from a source the person trusts")
     q.add_argument("--rule", default=None)
     q.add_argument("--why", default=None)
-    q.add_argument("--source", default=None, help="a URL or file the rule comes from")
+    q.add_argument("--source", default=None, help="a URL or file the rule comes from, or the person's words and date: \"person, 2026-09-27\"")
     q.add_argument("--authority", default="non-negotiable", choices=["non-negotiable", "good-to-have"])
     q.add_argument("--area", default=None)
     q.add_argument("--values", default=None, help="key values as a JSON object")
-    q.add_argument("--path", default=None, help="a token or setting path the standard sets")
-    q.add_argument("--value", default=None, help="the value for --path (JSON)")
+    q.add_argument("--path", dest="pairs", action=PairAction, default=None, help="a token or setting path the standard sets (repeatable)")
+    q.add_argument("--value", dest="pairs", action=PairAction, default=None, help="the value for the --path before it (JSON)")
+    q.add_argument("--beats", default=None, help="house standard ids this rule always wins over in this project (comma list)")
     q.add_argument("--review-pattern", dest="review_pattern", default=None, help="a regular expression that finds code breaking it")
     q.add_argument("--review-message", dest="review_message", default=None)
     q.add_argument("--title", default=None)
     q = ssub.add_parser("remove", parents=[common], help="remove a project standard")
     q.add_argument("id")
-    q.add_argument("--why", default=None)
+    q.add_argument("--why", required=True, help="the person's own words")
     for q in ssub.choices.values():
         q.add_argument("--no-doc", dest="no_doc", action="store_true")
     a = ap.parse_args(argv)
@@ -7820,7 +9161,8 @@ def main(argv=None):
     elif a.cmd == "build":
         return cmd_build(d, a.force)
     elif a.cmd == "sketch":
-        return cmd_sketch(d, a.name, a.brand, a.audience, a.platforms, a.feel, a.theme, surfaces=a.surfaces, delegated=a.delegated)
+        return cmd_sketch(d, a.name, a.brand, a.audience, a.platforms, a.feel, a.theme, surfaces=a.surfaces, delegated=a.delegated,
+                          stack=a.stack)
     elif a.cmd == "feel":
         return cmd_feel(a.words)
     elif a.cmd == "show":
@@ -7828,15 +9170,17 @@ def main(argv=None):
     elif a.cmd == "review":
         return cmd_review(d, a.project, a.strict, a.json)
     elif a.cmd == "standards":
-        cmd_standards(d, a.json, a.update)
-        if a.update and not a.no_doc:
+        res = {}
+        cmd_standards(d, a.json, a.update, a.show_all, result=res)
+        if a.update and not a.no_doc and res.get("changed"):  # a no-op update rewrites nothing (R26)
             refresh_docs(d)
     elif a.cmd == "standard":
-        val = parse_value(a.value) if getattr(a, "value", None) is not None else None
-        cmd_standard(d, a.action, sid=getattr(a, "id", None), why=getattr(a, "why", None), value=val, rule=getattr(a, "rule", None),
+        pairs = [[p, parse_value(v) if v is not None else None] for p, v in getattr(a, "pairs", None) or []]
+        cmd_standard(d, a.action, sid=getattr(a, "id", None), why=getattr(a, "why", None), rule=getattr(a, "rule", None),
                      source=getattr(a, "source", None), authority=getattr(a, "authority", "non-negotiable"), area=getattr(a, "area", None),
-                     values=getattr(a, "values", None), path=getattr(a, "path", None), review_pattern=getattr(a, "review_pattern", None),
-                     review_message=getattr(a, "review_message", None), title=getattr(a, "title", None))
+                     values=getattr(a, "values", None), review_pattern=getattr(a, "review_pattern", None),
+                     review_message=getattr(a, "review_message", None), title=getattr(a, "title", None), pairs=pairs,
+                     all_holders=getattr(a, "all_holders", False), beats=getattr(a, "beats", None))
         if not a.no_doc:
             refresh_docs(d)
     elif a.cmd == "feedback":
@@ -7928,13 +9272,73 @@ def normalize_hex(v):
     return t if re.fullmatch(r"#[0-9a-f]{6}", t) else None
 
 
-def brand_line(meta, state):
-    """One plain line on what happened to the person's brand color (U5 F10): kept exactly, or changed and why."""
+def color_words(hx):
+    """A color in plain words, 'a deep blue' or 'an orange', from its OKLCH lightness, chroma and hue (R44)."""
+    L, C, H = hex_to_oklch(hx)
+    if C < 0.03:
+        name = "near-black" if L < 0.3 else "off-white" if L > 0.93 else ("dark " if L < 0.45 else "light " if L > 0.8 else "") + \
+            (("cool " if 180 <= H < 300 else "warm ") if C >= 0.012 else "") + "gray"
+    else:
+        name = next(n for top, n in ((18, "pink"), (40, "red"), (75, "orange"), (120, "yellow"), (165, "green"), (215, "teal"),
+                                     (280, "blue"), (315, "purple"), (345, "magenta"), (361, "pink")) if H < top)
+        name = {("pink", True): "crimson", ("orange", True): "brown", ("yellow", True): "olive", ("blue", True): "navy"}.get(
+            (name, L < (0.65 if name in ("pink", "yellow") else 0.6 if name == "orange" else 0.4)), name)
+        if name not in ("crimson", "brown", "olive", "navy"):
+            name = ("deep " if L < 0.45 else "light " if L > 0.8 else "bright " if C > 0.2 else "") + name
+    return ("an " if name[0] in "aeiou" else "a ") + name
+
+
+def readable_shade(hx, ratio=4.5):
+    """hx, or the shade of it (same hue and chroma where the gamut allows) that white text reads on at ratio, with the
+    engine's 2% margin."""
+    if contrast(hx, "#ffffff") >= ratio * MARGIN:
+        return hx
+    L, C, H = hex_to_oklch(hx)
+    L2, C2 = solve_L(H, C, target_y(ratio * MARGIN, 1.0, True))
+    out = oklch_to_hex(L2, C2, H)
+    while contrast(out, "#ffffff") < ratio * MARGIN and L2 > 0:  # 8-bit rounding can land a hair short
+        L2 -= 0.002
+        out = oklch_to_hex(L2, min(C2, max_chroma(L2, H)), H)
+    return out.lower()
+
+
+def brand_delegated(d):
+    """True when the model picked the brand color for the person (sketch --delegated brand): the latest decision says so."""
+    return (_decisions(d).get("raw.brandColor") or {}).get("set_by") == "delegated"
+
+
+def brand_line(meta, state, plain=False, delegated=False, hexes=False):
+    """One line on what happened to the person's brand color (U5 F10): kept exactly, or changed and why. plain: no ratio or
+    token name, and no hex unless hexes (DESIGN.md's summary names the colors), so a chat reply can pass it on as it is in the
+    plain voice (zoom.md, R44). delegated: the model picked the color, so the line describes it in words instead of calling
+    it theirs."""
     brand = (state.get("raw") or {}).get("brandColor")
     ci = (meta or {}).get("color") or {}
     if not brand:
         return ""
     B = brand.upper()
+    hx = lambda h: f" ({h.upper()})" if hexes or not plain else ""
+    if delegated:  # a chat line when plain without hexes, else a line for the documents
+        shown = brand if ci.get("pinnedStep") else (ci.get("brandAdjustedTo") or brand)
+        cw = contrast(shown, "#ffffff")
+        text = ", with white text that reads clearly on it" if cw >= ci.get("textMin", 4.5) else ", with dark text on it"
+        if plain and not hexes:
+            return f"I picked {color_words(shown)} for buttons, links and focus{text}. Say if you want another color."
+        return f"Picked for you, not chosen by you: {color_words(shown)}{hx(shown)} on buttons, links and focus{text}."
+    if plain:
+        if ci.get("pinnedStep"):
+            cw = ci.get("brandContrastWhite") or contrast(brand, "#ffffff")
+            return f"Your brand color{hx(brand)} is on the buttons exactly" + (
+                ", with white text that reads clearly on it." if cw >= ci.get("textMin", 4.5) else ", with dark text on it, because white text would be too faint.")
+        if ci.get("brandPinFailed"):
+            adj = ci.get("brandAdjustedTo") or brand
+            cw = ci.get("brandContrastWhite") or contrast(brand, "#ffffff")
+            return (f"Your brand color{hx(brand)} is {'too light' if cw < 3 else 'not quite dark enough'} for button text to be easy to read, "
+                    f"so buttons use a {'darker' if luminance(adj) < luminance(brand) else 'lighter'} shade of it{hx(adj)}. "
+                    "Your exact color is kept for the logo.")
+        if ci.get("brandExact") is False:
+            return f"Buttons use a shade{hx(ci.get('brandAdjustedTo') or brand)} made from your brand color."
+        return ""
     if ci.get("pinnedStep"):
         cw = ci.get("brandContrastWhite") or contrast(brand, "#ffffff")
         tail = f"white text on it reads at {cw:.2f}:1" if cw >= ci.get("textMin", 4.5) else "dark text on it, because white text would be too faint"
@@ -7974,7 +9378,8 @@ def cmd_feel(words):
     return 0
 
 
-def cmd_sketch(d, name=None, brand=None, audience=None, platforms=None, feel=None, theme=None, quiet=False, surfaces=None, delegated=None):
+def cmd_sketch(d, name=None, brand=None, audience=None, platforms=None, feel=None, theme=None, quiet=False, surfaces=None, delegated=None,
+               stack=None):
     """Level 0: about five answers give a complete, coarse system; everything else stays on defaults.
     Every input is checked before anything is written. delegated names the answers the person left to the model
     ('all' or a comma list of sketch flags); they are recorded as set_by delegated."""
@@ -7994,33 +9399,60 @@ def cmd_sketch(d, name=None, brand=None, audience=None, platforms=None, feel=Non
 
     def sb(flag):
         return "delegated" if ("all" in deleg or flag in deleg) else None
+
+    def why_of(flag):  # a delegated answer is the model's pick, never "their words" (R20)
+        return "sketch: picked for them" if sb(flag) else "sketch: Level 0 answer"
     fresh = not os.path.exists(os.path.join(d, "state.json"))
+    if theme:  # a new sketch applies the house standards after its answers, so a theme one rules out is refused here (D02)
+        trial = merge_defaults(default_state() if fresh else load_state(d))
+        if platforms:
+            trial.setdefault("answers", {})["Q-plat-01"] = {"value": [p.strip() for p in platforms.split(",") if p.strip()]}
+        trial["raw"]["stack"] = (str(stack).split(",") if stack is not None else stack_of(trial) or detect_stack(doc_dir(d))[0] or [])
+        house, st_ = load_standards(), std_state(trial)
+        bad = [s for s in [s for s in house["standards"] if s["id"] not in st_["overridden"] and std_applies(s, trial)] + st_["project"]
+               if theme in [str(x) for x in ((s.get("breaks_options") or {}).get("Q-theme-01") or [])]]
+        if bad:
+            raise SystemExit(f"Nothing was written: the theme {theme} breaks a standard.\n" + std_lock_message(
+                trial, [], house, value=theme, breaks=[(s["id"], f"the standard lists {theme} for Q-theme-01 as an option that breaks it", s)
+                                                       for s in bad]))
     if fresh:
         cmd_init(d, name=name, standards=False)  # house standards follow the answers, so platform-only ones can be skipped
     elif name and load_state(d).get("name") != name:
         cmd_set(d, "name", name, "sketch: the product's name", quiet=True, set_by=sb("name"))  # --name wins over init's folder name
-    why = "sketch: Level 0 answer"
     if audience:
-        cmd_set(d, "answers.Q-aud-01", audience, why, quiet=True, set_by=sb("audience"), via="sketch")
+        cmd_set(d, "answers.Q-aud-01", audience, why_of("audience"), quiet=True, set_by=sb("audience"), via="sketch")
         if not (load_state(d).get("context") or {}).get("audience"):
-            cmd_set(d, "context.audience", AUDIENCE_WORDS.get(audience, audience), "sketch: plain words for Q-aud-01", quiet=True,
+            cmd_set(d, "context.audience", AUDIENCE_WORDS.get(audience, audience),
+                    "sketch: plain words for Q-aud-01" + (", picked for them" if sb("audience") else ""), quiet=True,
                     set_by=sb("audience") or "assumed")
     if brand:
-        cmd_set(d, "raw.brandColor", brand, why, quiet=True, set_by=sb("brand"))
+        cmd_set(d, "raw.brandColor", brand, why_of("brand"), quiet=True, set_by=sb("brand"))
+        if sb("brand"):  # the model picked it, so it picks a shade white text reads on, rather than keep a hex nobody chose (R44)
+            adj = readable_shade(brand, 7.0 if (load_state(d).get("raw") or {}).get("contrastTarget") == "AAA" else 4.5)
+            if adj != brand:
+                cmd_set(d, "raw.brandColor", adj, f"sketch: picked for them, a readable shade of {brand} ({color_words(adj)})",
+                        quiet=True, set_by="delegated")
     if platforms:
-        cmd_set(d, "answers.Q-plat-01", [p.strip() for p in platforms.split(",") if p.strip()], why, quiet=True, set_by=sb("platforms"),
-                via="sketch")
+        cmd_set(d, "answers.Q-plat-01", [p.strip() for p in platforms.split(",") if p.strip()], why_of("platforms"), quiet=True,
+                set_by=sb("platforms"), via="sketch", resync=False)
+    if stack is not None:
+        cmd_set(d, "raw.stack", stack, "sketch: the code stack the person named", quiet=True, resync=False)
+    elif not fresh:
+        record_stack(d)
     if macros:
-        cmd_set(d, "macros", macros, why + (f" (their words: {', '.join(mapping)})" if mapping else ""), quiet=True, set_by=sb("feel"))
-        cmd_set(d, "taste.feelWords", [w.strip("!.?,;: ").lower() for w in mapping], "sketch: the person's own feel words", quiet=True,
-                set_by=sb("feel"))
+        cmd_set(d, "macros", macros, why_of("feel") + (f" ({'feel words' if sb('feel') else 'their words'}: {', '.join(mapping)})"
+                                                         if mapping else ""), quiet=True, set_by=sb("feel"))
+        cmd_set(d, "taste.feelWords", [w.strip("!.?,;: ").lower() for w in mapping],
+                "sketch: feel words picked for them" if sb("feel") else "sketch: the person's own feel words", quiet=True, set_by=sb("feel"))
     if theme:
-        cmd_set(d, "answers.Q-theme-01", theme, why, quiet=True, set_by=sb("theme"), via="sketch")
+        cmd_set(d, "answers.Q-theme-01", theme, why_of("theme"), quiet=True, set_by=sb("theme"), via="sketch")
     if items:
-        cmd_set(d, "answers.Q-scope-06", items if len(items) > 1 or ":" in items[0] else items[0], why, quiet=True, set_by=sb("surfaces"),
-                via="sketch")
+        cmd_set(d, "answers.Q-scope-06", items if len(items) > 1 or ":" in items[0] else items[0], why_of("surfaces"), quiet=True,
+                set_by=sb("surfaces"), via="sketch")
     if fresh:
         std_sync(d, initial=True, quiet=quiet)
+    elif platforms or stack is not None:  # the standards follow the platforms and stack (R02), quietly, one line per theme
+        std_rescope(d, quiet=quiet)
     code = cmd_build(d) if not quiet else 0
     if not quiet:
         if mapping and any([w] != ids for w, ids in mapping.items()):
@@ -8032,7 +9464,9 @@ def cmd_sketch(d, name=None, brand=None, audience=None, platforms=None, feel=Non
             else:
                 print(f"I don't know the feel word '{w}' yet, so I left it out. Is it closer to playful, calm, bold, friendly or serious?")
         mp = os.path.join(d, "tokens", "opendesigner.meta.json")
-        line = brand_line(read_json(mp), load_state(d)) if os.path.exists(mp) else ""
+        st_ = load_state(d)
+        line = brand_line(read_json(mp), st_, plain=((st_.get("profile") or {}).get("voice") or "plain") == "plain",
+                          delegated=brand_delegated(d)) if os.path.exists(mp) else ""
         if line:
             print(line)
         print("This is a sketch: every part works, and most choices are still defaults. Zoom into any area later (see the Zoom lines in DESIGN.md).")
@@ -8121,9 +9555,46 @@ def ROLE_RANK(path):
 
 
 def _nearest_duration(ms_val, durations):
-    """Closest duration token name for a raw time in ms (instant only for 0)."""
-    cands = {k: v for k, v in durations.items() if v > 0} or durations
+    """Duration token name for a raw time in ms: the one with exactly that value first (in ladder order), else the closest
+    (instant only for 0). extra is for illustrative and marketing motion only, so it is never suggested for another value."""
+    exact = [k for k, v in durations.items() if v == ms_val]
+    if exact:
+        return exact[0]
+    cands = {k: v for k, v in durations.items() if v > 0 and k != "extra"} or durations
     return min(cands.items(), key=lambda kv: (abs(kv[1] - ms_val), kv[1]))[0]
+
+
+def mask_vars(line):
+    """The line with every var(...) replaced by spaces (nested ones too), so review reads the literals around it, and a
+    fallback inside var() is not taken for a bypass (R18). Positions stay the same."""
+    prev = None
+    while prev != line:
+        prev = line
+        line = re.sub(r"var\([^()]*\)", lambda m: " " * len(m.group(0)), line)
+    return line
+
+
+RX_ROLE_EXIT = re.compile(r"exit|clos(?:e|ing)|leav(?:e|ing)|\bhid(?:e|ing)|dismiss|fade-?out|slide-?out|FadeOut|SlideOut", re.I)
+RX_ROLE_ENTER = re.compile(r"menu|popover|dropdown|popup|\benter|appear|fade-?in\b|slide-?in\b|FadeIn|SlideIn", re.I)
+RX_ROLE_FEEDBACK = re.compile(r"hover|focus|:active|pressed|button|btn", re.I)
+RX_COLOR_PROP = re.compile(r"\b(?:color|background(?:-color)?|border(?:-color)?|box-shadow|boxShadow|fill|outline)\b", re.I)
+DURATION_ROLES = (("modal", r"modal|dialog"), ("drawer", r"drawer|sheet"), ("toast", r"toast|snackbar"), ("tooltip", r"tooltip"))
+RADIUS_ROLES = (("control", r"button|btn|input|field|select|textarea|chip|tag|toggle|switch|checkbox|control"),
+                ("overlay", r"modal|dialog|popover|menu|dropdown|sheet|drawer|tooltip|toast|overlay"),
+                ("container", r"card|panel|container|section|tile|box"), ("person", r"avatar"))
+
+
+def css_selector_context(lines, i):
+    """The selector of the CSS rule that line i (1-based) sits in: the text before '{' on the line itself, else before the
+    nearest '{' above that is still open; '' when there is none within 80 lines."""
+    if "{" in lines[i - 1]:
+        return lines[i - 1].split("{", 1)[0].strip()
+    depth = 0
+    for j in range(i - 2, max(-1, i - 82), -1):
+        depth += lines[j].count("}") - lines[j].count("{")
+        if depth < 0:
+            return lines[j].rsplit("{", 1)[0].strip()
+    return ""
 
 
 def _shadow_role(value):
@@ -8174,10 +9645,30 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
         project = os.path.dirname(os.path.abspath(d)) if os.path.basename(os.path.abspath(d)) == DEFAULT_DIR else os.getcwd()
     light = resolve_all(files, {"theme": meta["modes"][0]} if "theme" in files["opendesigner.resolver.json"].get("modifiers", {}) else {})
     ladder = meta["space"]["ladder"]
-    radii = {k: v for k, v in (("detail", meta["shape"]["detail"]), ("control", meta["shape"]["control"]),
-                               ("container", meta["shape"]["container"]), ("overlay", meta["shape"]["overlay"])) if isinstance(v, int)}
+    # radii and durations as the tokens have them (after the person's values and the standards), not the lever ladder (R18)
+    radii = {}
+    for k in ("detail", "control", "container", "overlay", "person"):
+        v = (light.get(f"radius.{k}") or {}).get("resolved")
+        if isinstance(v, dict) and isinstance(v.get("value"), (int, float)) and v["value"] < FULL:
+            radii[k] = v["value"]
     sizes = meta["type"]["sizes"]
-    durations = meta["motion"]["durations"]
+    order = list(meta["motion"]["durations"])
+    durations = {p_[16:]: duration_ms(t["resolved"]) for p_, t in sorted(
+        light.items(), key=lambda kv: (order.index(kv[0][16:]) if kv[0][16:] in order else len(order), kv[0]))
+        if p_.startswith("motion.duration.") and t["type"] == "duration" and duration_ms(t["resolved"]) is not None}
+    durations = {k: (int(v) if float(v).is_integer() else v) for k, v in durations.items()} or dict(meta["motion"]["durations"])
+    trans = {}
+    for r in ("feedback", "enter", "exit", "expand"):
+        t = light.get(f"motion.transition.{r}")
+        v = transition_ms(t, light)[0] if t and not spring_ext(t, light) else None
+        if v is not None:
+            trans[r] = int(v) if float(v).is_integer() else v
+    held = std_held(state) if std_has_records(state) else {}
+
+    def cite(path):
+        """'; house standard STD-x sets it' for a token a standard holds (R18)."""
+        sid = held.get("overrides." + path) or held.get(path)
+        return f"; {'project' if sid.startswith('PRJ-') else 'house'} standard {sid} sets it" if sid else ""
     depth_model = meta["elevation"]["model"]
     P, K = prefix.upper(), prefix.capitalize()
     tw_on = os.path.exists(os.path.join(d, "build", "tailwind", "theme.css"))
@@ -8192,6 +9683,10 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
         if not pal:
             return "use a color token"
         tokn, dd = _nearest_color(hx.lower(), pal)
+        a1, a2 = oklch_to_oklab(*hex_to_oklch(hx.lower())), oklch_to_oklab(*hex_to_oklch(pal[tokn]))
+        if ((a1[1] - a2[1]) ** 2 + (a1[2] - a2[2]) ** 2) ** 0.5 > 0.12:  # another hue altogether: naming a token would mislead (R18)
+            return (f"no color token is close to {hx.lower()}: use the {'class' if tw else 'token'} for the role it plays, or add this color "
+                    f"as a decision (engine.py set color.<role>.<name> '\"{hx.lower()}\"' --why \"...\")")
         close = "" if dd <= 0.02 else " (closest match)"
         return (f"use {tw_class_for(tokn)}" if tw else f"use var({css_var(prefix, tokn)})") + close
 
@@ -8216,21 +9711,64 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
             return (f"use p-inset-{sem} / gap-inline-{sem}" if sem else f"use the {near}px step") + ("" if near == val else f" ({val:g} is off the {meta['space']['unit']}px ladder)")
         return f"use var({css_var(prefix, 'space.' + str(near))})" + ("" if near == val else f" ({val:g} is off the {meta['space']['unit']}px ladder)")
 
-    def radius_fix(val, tw=False):
-        near = min(radii.items(), key=lambda kv: (abs(kv[1] - val), kv[0])) if radii else None
-        if not near:
+    def radius_fix(val, tw=False, ctx=""):
+        """The radius by the element's role (a button gets the control radius, R18), else the token with exactly that value,
+        else the closest."""
+        if not radii:
             return "use a radius token"
-        return f"use rounded-{near[0]}" if tw else f"use var({css_var(prefix, 'radius.' + near[0])})"
+        role = next((r for r, rx in RADIUS_ROLES if r in radii and re.search(rx, ctx, re.I)), None)
+        exact = next((k for k, v in radii.items() if v == val), None)
+        k = role or exact or min(radii.items(), key=lambda kv: (abs(kv[1] - val), kv[0]))[0]
+        why = f" ({fmt_num(radii[k])}px, the {k} radius{cite('radius.' + k)})"
+        return (f"use rounded-{k}" if tw else f"use var({css_var(prefix, 'radius.' + k)})") + why
 
-    def motion_fix(line, v_ms, tw=False):
-        feedback = v_ms <= 200 or re.search(r"hover|focus|active|color|background|border|opacity|box-shadow|fill", line, re.I)
-        role = "feedback" if feedback else ("enter" if v_ms <= 320 else "expand")
+    TR_WORDS = {"feedback": "hover, press and color changes", "enter": "things entering", "exit": "things leaving",
+                "expand": "panels and dialogs entering"}
+
+    def motion_fix(line, v_ms, tw=False, ctx="", animation=False):
+        """The duration by the element's role first (exit, close and leave get the exit transition; a modal, drawer, toast
+        or tooltip its own duration; a menu the enter transition; hover, buttons and color changes feedback), then the
+        token with exactly that value, then the closest one under 300ms (R18). Cites the standard that sets it."""
+        text = f"{ctx} {line}"
+        role = tok = None
+        if RX_ROLE_EXIT.search(text) and "exit" in trans:
+            role = "exit"
+        else:
+            tok = next((f"motion.duration.{k}" for k, rx in DURATION_ROLES if k in durations and re.search(rx, text, re.I)), None)
+        if not role and not tok:
+            if "feedback" in trans and (RX_ROLE_FEEDBACK.search(text) or (RX_COLOR_PROP.search(line)
+                                                                        and not re.search(r"\b(opacity|transform)\b", line))):
+                role = "feedback"
+            elif RX_ROLE_ENTER.search(text) and "enter" in trans:
+                role = "enter"
+        if not role and not tok:
+            ex_tr = [r for r, v in trans.items() if v == v_ms]
+            ex_d = [k for k, v in durations.items() if v == v_ms and k != "extra"]
+            if animation and ex_d:
+                tok = f"motion.duration.{ex_d[0]}"
+            elif ex_tr:
+                role = ex_tr[0]
+            elif ex_d:
+                tok = f"motion.duration.{ex_d[0]}"
+            elif trans and not animation:
+                role = min(trans, key=lambda r: (abs(trans[r] - v_ms), -trans[r]))
+            else:
+                tok = f"motion.duration.{_nearest_duration(v_ms, durations)}"
+        # a raw value over 300ms is too slow for UI, unless the token suggested for its role is itself longer (a drawer's 500ms)
+        want = durations.get(tok[16:]) if tok else trans.get(role)
+        slow = f"; {fmt_num(v_ms)}ms is over the 300ms UI limit (STD-easing-duration-06)" if v_ms > 300 and (want or 0) <= 300 else ""
+        if tok:
+            k = tok[16:]
+            return (f"use the {tok} token" if tw else f"use var({css_var(prefix, tok)})") + f" ({fmt_num(durations[k])}ms{cite(tok)}{slow})"
+        dur_tok = next((f"motion.duration.{k}" for k, v in durations.items() if v == trans[role]), "")
+        why = f"{fmt_num(trans[role])}ms{cite(dur_tok) if dur_tok else ''}{slow}"
         if tw:
-            return "use transition-feedback" if role == "feedback" else f"use duration and easing from motion.transition.{role}"
+            return ("use transition-feedback" if role == "feedback" else f"use duration and easing from motion.transition.{role}") + f" ({why})"
         return (f"use var({css_var(prefix, 'motion.transition.' + role)}-duration) and its -easing "
-                f"(the {role} transition: {'hover, press and color changes' if role == 'feedback' else 'things entering' if role == 'enter' else 'panels and dialogs'})")
+                f"(the {role} transition: {TR_WORDS[role]}; {why})")
     findings, scanned = [], 0
     std_rules = std_review_rules(state)  # house standards followed and project standards that carry a review pattern
+    locked_literals = std_locked_literals(state)
     stateroot = os.path.abspath(d)
     for root, dirs, fnames in os.walk(project):
         dirs[:] = sorted(x for x in dirs if x not in REVIEW_SKIP and not x.startswith("."))
@@ -8254,14 +9792,28 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
             for i, line in enumerate(lines, 1):
                 if re.search(r"^\s*(//|/\*|\*|<!--)", line) or "od-ignore" in line:
                     continue
+                hits = []  # every standard this line breaks, merged into one finding (R28)
                 for rx, std in std_rules:  # the first match that is not empty, in the first REVIEW_LINE_CAP characters
                     ms_ = next((m_ for m_ in rx.finditer(line[:REVIEW_LINE_CAP]) if m_.end() > m_.start()), None)
                     if ms_:
-                        findings.append({"kind": "standard", "file": rel, "line": i, "value": ms_.group(0).strip()[:80],
-                                         "fix": (std.get("review") or {}).get("message") or std.get("rule"), "standard": std["id"],
-                                         "strength": std.get("strength") or "should", "severity": "warning"})
-                if "var(--" in line and not RX_HEX.search(line) and not RX_TW_CONTEXT.search(line):
-                    continue
+                        hits.append((ms_.group(0).strip()[:80], (std.get("review") or {}).get("message") or std.get("rule"), std))
+                for key, comp, prop, want, std in locked_literals:  # a locked component value written as a literal
+                    if comp.search(line[:REVIEW_LINE_CAP]):
+                        for m_ in prop.finditer(line[:REVIEW_LINE_CAP]):
+                            if float(m_.group(1)) != want:
+                                hits.append((m_.group(0).strip()[:80], f"{key} is {fmt_num(want)} in this system; use the "
+                                             f"{css_var(prefix, key)} token instead of {m_.group(1)}", std))
+                                break
+                if hits:
+                    ids = list(dict.fromkeys(h[2]["id"] for h in hits))
+                    findings.append({"kind": "standard", "file": rel, "line": i, "value": hits[0][0],
+                                     "fix": "; ".join(dict.fromkeys(h[1].rstrip(" .") if len(hits) > 1 else h[1] for h in hits if h[1])),
+                                     "standard": ids[0], "standards": ids,
+                                     "strength": "must" if any(h[2].get("strength") == "must" for h in hits) else "should",
+                                     "severity": "warning"})
+                line = mask_vars(line)  # every literal is read, even next to a var(); a var() and its fallback are tokens at work (R18)
+                ctx = (css_selector_context(lines, i) if ext in (".css", ".scss", ".sass", ".less") else
+                       (lines[i - 2] if i > 1 else "")) + " " + line  # the selector or the line above names the element's role
                 custom_prop = bool(re.match(r"\s*--", line))  # a custom property definition is a token source, not a bypass
                 tw_ctx = bool(RX_TW_CONTEXT.search(line)) or (ext in (".css", ".scss") and "@apply" in line)
                 add = lambda kind, value, fix: findings.append({"kind": kind, "file": rel, "line": i, "value": value, "fix": fix})
@@ -8278,7 +9830,7 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
                             add("color", cls, color_fix(hx, role, line, tw=True) if hx and re.fullmatch(r"#[0-9a-fA-F]{6}", hx) else "use a color class from the theme")
                         elif util.startswith("rounded"):
                             mv = re.match(r"(\d+(?:\.\d+)?)px", val)
-                            add("radius", cls, radius_fix(float(mv.group(1)), tw=True) if mv else "use rounded-control or rounded-container")
+                            add("radius", cls, radius_fix(float(mv.group(1)), tw=True, ctx=ctx) if mv else "use rounded-control or rounded-container")
                         elif util == "text":
                             mv = re.match(r"(\d+(?:\.\d+)?)(px|rem)", val)
                             add("size", cls, text_fix(float(mv.group(1)) * (16 if mv.group(2) == "rem" else 1), tw=True) if mv else "use a text style class")
@@ -8287,7 +9839,7 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
                         elif util in ("duration", "delay"):
                             mv = RX_TIME.search(val)
                             v_ms = float(mv.group(1)) * (1 if mv.group(2) == "ms" else 1000) if mv else 0
-                            add("duration", cls, motion_fix(line, v_ms, tw=True))
+                            add("duration", cls, motion_fix(line, v_ms, tw=True, ctx=ctx))
                         elif util in ("leading", "tracking"):
                             add("size", cls, "use a text style class; it sets line height and letter spacing together")
                         else:
@@ -8302,7 +9854,7 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
                                 else "icon" if util in ("fill", "stroke") else "border"
                             add("color", m.group(0), color_fix(hx, role, line, tw=True) + gone if hx else "use a color class from the theme" + gone)
                         for m in RX_TW_RADIUS.finditer(line):
-                            add("radius", m.group(0), radius_fix(TW_RADIUS_PX.get(m.group(2), 4), tw=True) + gone)
+                            add("radius", m.group(0), radius_fix(TW_RADIUS_PX.get(m.group(2), 4), tw=True, ctx=ctx) + gone)
                         for m in RX_TW_SHADOW.finditer(line):
                             add("shadow", m.group(0), f"use shadow-{TW_SHADOW_ROLE.get(m.group(2), 'raised')}" + gone)
                         for m in RX_TW_TEXT.finditer(line):
@@ -8329,7 +9881,7 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
                     if val == 0 or (prop in ("width", "height", "top", "left", "right", "bottom", "inset") and val not in ladder):
                         continue
                     if prop == "border-radius":
-                        add("radius", f"{prop}: {val:g}px", radius_fix(val))
+                        add("radius", f"{prop}: {val:g}px", radius_fix(val, ctx=ctx))
                     elif prop == "font-size":
                         add("size", f"{prop}: {val:g}px", text_fix(val))
                     else:
@@ -8340,7 +9892,7 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
                         if val == 0 or (prop in ("width", "height", "top", "left", "right", "bottom", "inset") and val not in ladder):
                             continue
                         if prop.startswith("border") and prop.endswith("Radius"):
-                            add("radius", f"{prop}: {m.group(3)}", radius_fix(val))
+                            add("radius", f"{prop}: {m.group(3)}", radius_fix(val, ctx=ctx))
                         elif prop == "fontSize":
                             add("size", f"{prop}: {m.group(3)}", text_fix(val))
                         else:
@@ -8354,12 +9906,8 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
                     if tm:
                         v_ms = float(tm.group(1)) * (1 if tm.group(2) == "ms" else 1000)
                         if v_ms > 0:
-                            near = _nearest_duration(v_ms, durations)
-                            if m.group(1) in ("transition", "transitionDuration", "transition-duration"):
-                                fix = motion_fix(line, v_ms)
-                            else:
-                                fix = (f"use var({css_var(prefix, 'motion.duration.' + near)})"
-                                       + ("" if durations[near] == v_ms else f" ({durations[near]}ms, the closest step)"))
+                            fix = motion_fix(line, v_ms, ctx=ctx,
+                                             animation=m.group(1) not in ("transition", "transitionDuration", "transition-duration"))
                             add("duration", f"{m.group(1)}: {tm.group(0)}", fix)
                 native = ext in (".swift", ".kt", ".kts") and "DesignTokens" not in rel
                 if native and RX_SHADOW_NATIVE.search(line):
@@ -8429,10 +9977,11 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
         if stdf:
             print(f"{len(stdf)} line{'s' if len(stdf) != 1 else ''} break{'s' if len(stdf) == 1 else ''} a standard:")
             for f_ in stdf[:limit]:
-                print(f"  {f_['file']}:{f_['line']}  {f_['value']}  ->  {f_['fix']} ({f_['standard']}, {f_['strength']})")
+                print(f"  {f_['file']}:{f_['line']}  {f_['value']}  ->  {f_['fix']} ({', '.join(f_.get('standards') or [f_['standard']])}, "
+                      f"{f_['strength']})")
             if len(stdf) > limit:
                 print(f"  ... and {len(stdf) - limit} more (use --json for all).")
-            ids_ = {f_["standard"] for f_ in stdf}
+            ids_ = {x for f_ in stdf for x in f_.get("standards") or [f_["standard"]]}
             if any(not i.startswith("PRJ-") for i in ids_):
                 print("  Fix the code. A house standard changes only when the person asks: engine.py standard override <id> --why \"<their words>\".")
             if any(i.startswith("PRJ-") for i in ids_):
@@ -8465,12 +10014,17 @@ TEMPLATE_QUESTIONS = {"palette": ("Q-color-03", ["tonal", "vivid", "monochrome",
                       "option-gallery": ("Q-dir-01", ["flat2", "tonal", "glass"])}
 
 
-def what_if(state, qid=None, value=None):
-    """A generated system for the state with one answer applied; the state on disk is never touched."""
+def what_if(state, qid=None, value=None, keep_locked=False):
+    """A generated system for the state with one answer applied; the state on disk is never touched. keep_locked: the
+    answer does not move a value the person locked or a standard holds, so the option shows only what it can still
+    change (R10)."""
     s2 = merge_defaults(copy.deepcopy(state))
+    held = std_held(s2) if keep_locked and std_has_records(s2) else {}
     if qid:
         s2.setdefault("answers", {})[qid] = {"value": value, "set_by": "chosen"}
         for pth, v in answer_effects(qid, value, s2).items():
+            if keep_locked and (is_locked(s2, pth) or pth in held):
+                continue
             _store(s2, pth, v, "chosen", "what-if", False)
     files, meta, ctx = generate_system(s2)
     return files, meta, s2
@@ -8519,6 +10073,33 @@ def template_vars(files, meta):
     if "dark" not in out:
         out["dark"] = dict(out.get("light", {}))
     return out
+
+
+def motion_option(files, meta):
+    """The motion template's numbers for one generated system, read from its resolved tokens (after the person's values
+    and the standards), never from the lever ladder: durations, the exit that goes with the long step, curves as CSS,
+    the enter scale, and off when motion is off (R10)."""
+    fl = resolve_all(files, {"motion": "standard"} if "motion" in files["opendesigner.resolver.json"].get("modifiers", {}) else {})
+    dur = lambda k, dflt: duration_ms((fl.get(f"motion.duration.{k}") or {}).get("resolved")) or dflt
+    ease = lambda k: (fl.get(f"motion.easing.{k}") or {}).get("resolved")
+    mo = meta["motion"]
+    out = {"durations": {"short": dur("short", mo["durations"]["short"]), "medium": dur("medium", mo["durations"]["medium"]),
+                         "long": dur("long", mo["durations"]["long"]), "long-exit": dur("long-exit", mo["durations"]["long-exit"])},
+           "easing": {k: css_easing_text(ease(k) if isinstance(ease(k), list) else mo[k]) for k in ("standard", "enter", "exit")},
+           "scale": (fl.get("motion.scale.enter") or {}).get("resolved") if isinstance((fl.get("motion.scale.enter") or {}).get("resolved"), (int, float)) else 0.95}
+    out["durations"] = {k: int(v) if float(v).is_integer() else v for k, v in out["durations"].items()}
+    sp = spring_ext(fl.get("motion.spring.spatial.fast") or {}, fl)  # a switch knob moves on the small-component spring
+    if sp and "css" in sp:
+        out["toggle"] = {"duration": sp["css"]["durationMs"], "easing": sp["css"]["easing"]}
+    if mo.get("motionOff"):
+        out["off"] = True
+        out["durations"] = {k: 0 for k in out["durations"]}
+    return out
+
+
+def css_easing_text(v):
+    """cubic-bezier(...) for a curve list; a string (a CSS keyword or linear()) as it is."""
+    return css_bezier(v) if isinstance(v, list) else str(v)
 
 
 def build_payload(state, template):
@@ -8597,19 +10178,32 @@ def build_payload(state, template):
                 levels[mode] = row
             payload["options"].append({"value": v, "label": label(v), "note": meta["elevation"]["model"], "levels": levels})
     elif template == "motion":
-        payload.update(title=f"{name}: motion", subtitle="Press Play to feel each option. Things leave a little faster than they arrive.", options=[])
-        for v in values:
-            files, meta, s2 = what_if(state, qid, v)
-            mo = meta["motion"]
-            payload["options"].append({"value": v, "label": label(v), "note": "springs throughout" if v == "springs" else "no overshoot",
-                                       "durations": {"short": mo["durations"]["short"], "medium": mo["durations"]["medium"], "long": mo["durations"]["long"]},
-                                       "easing": {k: css_bezier(mo[k]) for k in ("standard", "enter", "exit")}})
+        payload.update(title=f"{name}: motion", subtitle="Press Play to feel each option. Each one is built from your own tokens, with the "
+                       "house standards and anything you locked kept, so only what the answer can still change differs. Things leave "
+                       "about 20% faster than they arrive." + note_fixed, options=[])
+        notes = {"none": "nothing moves; changes happen in place", "productive": "quick, no overshoot", "two-mode": "quick, a few bolder moments",
+                 "springs": "springs where a finger moves things"}
+        now = motion_option(*what_if(state)[:2])
+        payload["options"].append(dict(now, value="current", label=f"{name} as it is now", od=[],
+                                       keep="(no change: keep the motion as it is)", note="your tokens today"))
+        for v in ["none"] + values:
+            files, meta, s2 = what_if(state, qid, v, keep_locked=True)
+            breaks = [s_["id"] for s_, _v in std_option_breaks(state, qid, v)]
+            opt = motion_option(files, meta)
+            same = " (the same as now: standards or your locks fix these values)" if opt == now else ""
+            payload["options"].append(dict(opt, value=v, label=label(v),
+                                           note=notes.get(v, "") + same + (f" (breaks {', '.join(breaks)})" if breaks else ""),
+                                           **({"breaks": breaks} if breaks else {})))
+        rec = payload["recommended"]
+        if any(o["value"] == rec and o.get("breaks") for o in payload["options"]):
+            payload["recommended"] = "current"  # never recommend an option a standard rules out
     elif template == "component-sheet":
         files, meta, s2 = what_if(state)
         pid = effective_preset(state)[0] or "custom"
         payload.update(title=f"{name}: components", subtitle="Every part here uses only your tokens. Hover, press Tab to move the focus, "
                        "and flip the switch.", recommended=pid,
-                       options=[{"value": pid, "label": f"{name} as it is now", "note": brand_line(meta, s2) or "", "vars": template_vars(files, meta)}])
+                       options=[{"value": pid, "label": f"{name} as it is now", "note": brand_line(meta, s2, plain=True) or "",
+                                 "vars": template_vars(files, meta)}])
     elif template == "option-gallery":
         payload.update(title=f"{name}: three directions", subtitle="Each direction is built for real from your answers. Pick one, or take one "
                        "part from another. The logo spot stays empty on purpose." + note_fixed, remix=["color", "type", "shape", "depth"], options=[])

@@ -790,3 +790,11 @@
 ## [2026-09-27] ingest | Vibe Coding a Pro UI in SECONDS With AI
 - Source: `raw/kole-jain/xHD01_Onac0.txt`
 - Wiki page: `wiki/sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai.md`
+
+## [2026-09-27] ingest | Developing Premium Load animations (HTML, CSS & JS): Part 2
+- Source: `raw/kole-jain/d4MF6pdAZNw.txt`
+- Wiki page: `wiki/sources/d4MF6pdAZNw-developing-premium-load-animations-html-css-js-part-2.md`
+
+## [2026-09-27] ingest | emilkowalski/skills: skills/prototype/SKILL.md
+- Source: `raw/emil-skills/eks-skills-prototype-skill.txt`
+- Wiki page: `wiki/sources/eks-skills-prototype-skill-emilkowalski-skills-skills-prototype-skill-md.md`

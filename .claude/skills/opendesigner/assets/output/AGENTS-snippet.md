@@ -6,7 +6,7 @@ This project's design system lives in `opendesigner/`, and `DESIGN.md` is its li
 2. Use the tokens in `opendesigner/tokens/` (DTCG, canonical) or their exports in `opendesigner/build/` (for example `build/css/tokens.css` or `build/tailwind/theme.css`).
 3. Never hard-code colors, font sizes, spacing, radii, shadows or durations.
 4. Check `opendesigner/decisions.md` for why a value is what it is. Locked decisions (`locks` in `opendesigner/state.json`) change only with the owner's consent.
-5. Follow the standards listed in DESIGN.md (for example: which easing, which properties to animate, which library for toasts). They are rules, not suggestions. Only the owner can change one: `engine.py standard override <id> --why "..."`.
+5. Follow the standards listed in DESIGN.md (for example: which easing, which properties to animate, which library for toasts). They are rules, not suggestions. Only the owner can change one, and only when they ask: `engine.py standard override <id> --why "<their words>"` for one value, or `engine.py standard add ... --beats <id>` when their own rule always wins. `engine.py set --force` never changes a standard's value.
 
 **At the end of every implementation** (a page, a component, a refactor)
 1. Run `python3 <opendesigner skill>/scripts/engine.py review`. It lists hard-coded values that skip the tokens, code that breaks a standard, and DESIGN.md sections that are out of date.

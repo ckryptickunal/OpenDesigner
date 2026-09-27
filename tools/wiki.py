@@ -11,15 +11,16 @@ sources, a media list per page, an analysis schema with rules / decisions / proc
     python3 tools/wiki.py next                        what is out of date, in pipeline order, with the command for each step
     python3 tools/wiki.py map [--check]               learn/MAP.md: the knowledge by area, standard, card and question
     python3 tools/wiki.py proposals [--check]         list cards no question has adopted yet in synthesis/QUESTIONNAIRE.md
-    python3 tools/wiki.py status                      every source: fetched, analysed, ingested
+    python3 tools/wiki.py status [--json]             every source: analysed, in the wiki, raw text on this machine
     python3 tools/wiki.py add <url> --authority reference [--name "Name"]
-    .venv-wiki/bin/python tools/wiki.py fetch [--only "Name"]    raw text into learn/raw/ (git-ignored)
-    python3 tools/wiki.py pending                     raw files that have no analysis JSON yet
+    python3 tools/wiki.py remove <name or url>        take a source (or one page of it) off the list
+    .venv-wiki/bin/python tools/wiki.py fetch [--only "Name"]    raw text into learn/raw/ (git-ignored); exit 1 when a source gets nothing
+    python3 tools/wiki.py pending [--work-items]      raw files that have no analysis JSON yet ({"root", "items"}: the learn-analyze args)
     .venv-wiki/bin/python tools/wiki.py ingest        analysis JSON -> learn/wiki/ pages, then rebuild the index
-    python3 tools/wiki.py check                       schema, quote length, authority, coverage; exit 1 on errors
+    python3 tools/wiki.py check                       schema, types, quote length, authority, coverage; exit 1 on errors
     python3 tools/wiki.py trace                       append new sources to traces/L19-trace.md (S-L19 ids, learn/sids.json)
     .venv-wiki/bin/python tools/wiki.py upstream [--upgrade]    is OpenWiki ahead of learn/openwiki.lock.json?
-    python3 tools/wiki.py standards [--bump "what changed"]   check synthesis/standards.json, or version a change
+    python3 tools/wiki.py standards [--bump "what changed"] [--built-from]   check synthesis/standards.json, or version a change
     python3 tools/wiki.py cite-check [ids] [--limit N]  Jev (TypeSafe) checks each rule against its source passage
     python3 tools/wiki.py flagged [--json]            what the citation check left for review (args of learn-escalate.js)
     python3 tools/wiki.py review-log < decisions.json record review decisions so settled items stop being flagged
@@ -45,6 +46,13 @@ TAXONOMY = LEARN / "taxonomy.json"
 AUTHORITY = ("non-negotiable", "good-to-have", "reference")
 MARK_START, MARK_END = "<!-- od:learn -->", "<!-- /od:learn -->"
 QUOTE_MAX_WORDS, QUOTE_MAX = 15, 3
+QUESTIONS = ROOT / "skills" / "opendesigner" / "references" / "questions.json"  # Q-ids and option values (maps_to, settles)
+CARDS = ROOT / "synthesis" / "cards.json"                                        # Decision Card ids (supersedes)
+WORK_ITEM_MAX = 5                 # files one learn-analyze agent reads together
+# Platform and stack tags a rule or standard can apply to (a project's tags: its platforms plus its recorded stack).
+TAGS = ("all", "web", "css", "react", "react-native", "ios", "swift", "android", "compose", "desktop")
+RULE_AREAS = ("color", "typography", "layout", "shape", "elevation", "motion", "iconography", "components", "patterns",
+              "content", "accessibility", "platforms", "process", "tokens", "tooling")
 
 
 def load(path):
@@ -60,6 +68,30 @@ def all_sources(cfg):
     for kind in ("youtube_channels", "youtube_videos", "essay_sources", "pages", "github_repos"):
         for entry in cfg.get(kind, []):
             yield kind, entry
+
+
+def some(items, n=4):
+    """The first n items, with "..." only when some were left out."""
+    items = list(items)
+    return ", ".join(items[:n]) + ("..." if len(items) > n else "")
+
+
+def question_ids():
+    """{Q-id: [option values as strings]} from the skill's questions.json (list values joined with |)."""
+    if not QUESTIONS.exists():
+        return {}
+    val = lambda v: "|".join(map(str, v)) if isinstance(v, list) else str(v)
+    return {q["id"]: [val(o["v"]) for o in q.get("options", [])] for q in load(QUESTIONS).get("questions", [])}
+
+
+def manifest_of_wiki():
+    """learn/wiki/ingested.json: what OpenWiki ingested, plus the analysis hash each page was built from."""
+    return load(WIKI / "ingested.json") if (WIKI / "ingested.json").exists() else {}
+
+
+def skipped_file():
+    """Pages fetch could not use, on this machine only (learn/raw/ is git-ignored)."""
+    return RAW / "_skipped.json"
 
 
 def authority_by_folder(cfg):
@@ -113,25 +145,88 @@ def slug(text):
     return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")[:60] or "source"
 
 
+def norm_url(url):
+    """One spelling per page, so the same page is never listed twice: no scheme, no www., no trailing slash,
+    a lower-case host. A YouTube video is its id, however the link is written."""
+    url = (url or "").strip()
+    if re.search(r"(youtube\.com/(watch|shorts)|youtu\.be/)", url) and video_id(url):
+        return f"youtube:{video_id(url)}"
+    u = re.sub(r"^[a-z][a-z0-9+.-]*://", "", url, flags=re.I)
+    u = re.sub(r"^www\.", "", u, flags=re.I).split("#")[0]
+    host, _, path = u.partition("/")
+    path = path.rstrip("/")
+    return host.lower() + ("/" + path if path else "")
+
+
+def entry_urls(e):
+    return [u for u in (e.get("url"), e.get("query"), e.get("index_url"), *e.get("urls", [])) if u]
+
+
 def cmd_add(args):
-    if args.authority not in AUTHORITY:
-        sys.exit(f"--authority must be one of {', '.join(AUTHORITY)}")
     cfg = load(SOURCES)
     kind = classify(args.url)
-    known = json.dumps(cfg)
-    if args.url in known:
-        sys.exit(f"Already listed: {args.url}")
-    name = args.name or re.sub(r"^https?://(www\.)?", "", args.url).rstrip("/")
-    folder = f"raw/{slug(name)}"
+    key = norm_url(args.url)
+    for k, e in all_sources(cfg):
+        if key in {norm_url(u) for u in entry_urls(e)}:
+            sys.exit(f"Already listed: {args.url} is part of \"{e['name']}\" ({k}, authority {e.get('authority', 'reference')}). "
+                     "To change its authority, edit that entry in learn/sources.json; to take it off the list, run "
+                     f"python3 tools/wiki.py remove \"{e['name']}\".")
+    if kind == "github_repos":  # one folder and id prefix per repository, named after owner/repo
+        owner, repo = re.match(r"https://github\.com/([^/]+)/([^/]+?)(?:\.git)?/?$", args.url).groups()
+        name, base = args.name or f"{owner}/{repo}", slug(f"{owner}-{repo}")
+    else:
+        name = args.name or re.sub(r"^https?://(www\.)?", "", args.url).rstrip("/")
+        base = slug(name)
+    folder, prefix = ("raw/videos" if kind == "youtube_videos" else f"raw/{base}"), base[:24].rstrip("-")
+    for k, e in all_sources(cfg):
+        if e["name"] == name:
+            sys.exit(f"A source is already called \"{name}\" ({k}). Pass a different --name.")
+        if kind != "youtube_videos" and e["folder"] == folder:
+            sys.exit(f"The folder learn/{folder} already belongs to \"{e['name']}\" ({e.get('authority', 'reference')}). "
+                     "Pass a different --name.")
+        p = e.get("id_prefix")
+        if kind in ("pages", "github_repos") and p and (p == prefix or prefix.startswith(p + "-") or p.startswith(prefix + "-")):
+            sys.exit(f"The id prefix {prefix!r} would mix this source's ids with \"{e['name']}\" (prefix {p!r}). Pass a different --name.")
     entry = {"youtube_channels": {"name": name, "query": args.url, "channel_id": None, "folder": folder},
-             "youtube_videos": {"name": name, "url": args.url, "folder": "raw/videos"},
+             "youtube_videos": {"name": name, "url": args.url, "folder": folder},
              "github_repos": {"name": name, "url": args.url, "include": ["README.md", "**/*.md"],
-                              "folder": folder, "id_prefix": slug(name)[:12]},
-             "pages": {"name": name, "urls": [args.url], "folder": folder, "id_prefix": slug(name)[:12]}}[kind]
+                              "folder": folder, "id_prefix": prefix},
+             "pages": {"name": name, "urls": [args.url], "folder": folder, "id_prefix": prefix}}[kind]
     entry["authority"] = args.authority
     cfg.setdefault(kind, []).append(entry)
     save_sources(cfg)
     print(f"Added to {kind}: {name} ({args.authority}). Next: .venv-wiki/bin/python tools/wiki.py fetch --only \"{name}\"")
+    if args.authority != "reference":
+        print("It is a house source: follow learn/IMPROVING.md section 4, \"A new house source\".")
+
+
+def cmd_remove(args):
+    """Take a source off the list, or one page of a multi-page source. What was learned from it stays until removed by hand."""
+    cfg, key = load(SOURCES), norm_url(args.what)
+    folders = source_folders(cfg)
+    for kind, e in all_sources(cfg):
+        urls = [u for u in entry_urls(e) if norm_url(u) == key]
+        if e["name"] != args.what and not urls:
+            continue
+        ids = []
+        if kind == "pages" and e["name"] != args.what and len(e["urls"]) > 1:
+            e["urls"] = [u for u in e["urls"] if norm_url(u) != key]
+            what = f"{urls[0]} (one page of \"{e['name']}\"; {len(e['urls'])} pages stay)"
+        else:
+            cfg[kind].remove(e)
+            what = f"\"{e['name']}\" ({kind}, {e.get('authority', 'reference')})"
+            ids = sorted(i for i in source_ids(kind, e, folders) if (ANALYSIS / f"{i}.json").exists())
+        save_sources(cfg)
+        print(f"Removed {what} from learn/sources.json.")
+        if ids:
+            print(f"What was learned from it stays: {len(ids)} analysis files ({some(ids)}), their wiki pages and trace rows "
+                  "(the trace is append-only). To take it out of the wiki too, delete those learn/analysis files, then run "
+                  "python3 tools/wiki.py next." + (" House standards cite it: re-run the learn-standards workflow."
+                                                     if e.get("authority") != "reference" else ""))
+        return 0
+    names = "\n  ".join(e["name"] for _, e in all_sources(cfg))
+    print(f"No source is called {args.what!r} and none lists that URL. The names are:\n  {names}")
+    return 1
 
 
 # ---------------------------------------------------------------------------------------------- fetch
@@ -182,13 +277,14 @@ def fetch_page(url, folder, prefix, channel):
                                    prefix=prefix, min_chars=200)
     if path is None:
         print(f"SKIP (too little text) {url}")
-        return
+        return None
     text = path.read_text(encoding="utf-8").replace(f"Title: {ident}\n", f"Title: {title}\n", 1)
     path.write_text(text, encoding="utf-8")
     media = media_list(page, url)
     if media:
         path.with_suffix(".media.json").write_text(json.dumps(media, indent=1) + "\n", encoding="utf-8")
     print(f"OK {url} -> {path.relative_to(ROOT)} ({len(media)} media)")
+    return path
 
 
 def fetch_github(entry, folder):
@@ -210,12 +306,38 @@ def fetch_github(entry, folder):
             print(f"OK {rel} -> {ident}.txt")
 
 
+def entry_raw(kind, e):
+    """The raw files one source has on this machine (a single video: only its own file in the shared folder)."""
+    folder = LEARN / e["folder"]
+    have = sorted(p for p in folder.glob("*.txt") if not p.name.startswith("_")) if folder.exists() else []
+    return [p for p in have if p.stem == video_id(e["url"])] if kind == "youtube_videos" else have
+
+
 def cmd_fetch(args):
     warn_if_unlocked()
     cfg = load(SOURCES)
-    for kind, e in all_sources(cfg):
-        if args.only and e["name"] != args.only:
-            continue
+    chosen = [(k, e) for k, e in all_sources(cfg) if not args.only or e["name"] == args.only]
+    if not chosen:
+        names = "\n  ".join(e["name"] for _, e in all_sources(cfg))
+        print(f"No source is called {args.only!r}. Use one of these names exactly:\n  {names}")
+        return 1
+    import datetime
+    skipped = load(skipped_file()) if skipped_file().exists() else {}
+
+    def page(url, folder, e):
+        try:
+            got = fetch_page(url, folder, e["id_prefix"], f"{e['name']} (web)")
+            why = None if got else "too little text on the page"
+        except Exception as exc:  # one bad page must not stop the rest
+            print(f"FAILED {url}: {exc}")
+            why = f"failed: {str(exc)[:200]}"
+        if why:
+            skipped[url] = {"source": e["name"], "why": why, "date": datetime.date.today().isoformat()}
+        else:
+            skipped.pop(url, None)
+
+    empty = []
+    for kind, e in chosen:
         folder = LEARN / e["folder"]
         folder.mkdir(parents=True, exist_ok=True)
         if kind == "youtube_channels":
@@ -229,21 +351,54 @@ def cmd_fetch(args):
             have = {header(f).get("source") for f in folder.glob("*.txt")}
             for url in links:
                 if url not in have:
-                    try:
-                        fetch_page(url, folder, e["id_prefix"], f"{e['name']} (web)")
-                    except Exception as exc:
-                        print(f"FAILED {url}: {exc}")
+                    page(url, folder, e)
         elif kind == "pages":
             for url in e["urls"]:
-                try:
-                    fetch_page(url, folder, e["id_prefix"], f"{e['name']} (web)")
-                except Exception as exc:  # one bad page must not stop the rest
-                    print(f"FAILED {url}: {exc}")
+                page(url, folder, e)
         elif kind == "github_repos":
             fetch_github(e, folder)
+        if not entry_raw(kind, e):
+            empty.append(e["name"])
+    if skipped or skipped_file().exists():
+        skipped_file().parent.mkdir(parents=True, exist_ok=True)
+        skipped_file().write_text(json.dumps(skipped, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
+    if empty:
+        print(f"Nothing was fetched for: {'; '.join(empty)}. Skipped pages are listed in {skipped_file().relative_to(ROOT)}. "
+              "Check the URL, or take the source off the list: python3 tools/wiki.py remove \"<name>\".")
+        return 1
+    return 0
 
 
 # ---------------------------------------------------------------------------------------------- pending / status
+def repo_path(raw):
+    """The file's path inside its GitHub repository (fetch writes the blob URL into the header)."""
+    m = re.search(r"/blob/[^/]+/(.+)$", header(raw).get("source") or header(raw).get("url") or "")
+    return m.group(1) if m else raw.stem
+
+
+def work_items(rows, cfg):
+    """The args for .claude/workflows/learn-analyze.js. One item per video or article. The pages of one site, and the
+    files of one folder of a GitHub repo, go to one agent, at most WORK_ITEM_MAX files per item."""
+    by_folder = {e["folder"].split("/")[-1]: (k, e) for k, e in all_sources(cfg) if k != "youtube_videos"}
+    groups = {}
+    for r in rows:
+        folder = r["raw"].split("/")[2]
+        kind, e = by_folder.get(folder, (None, {}))
+        if kind == "pages":
+            key = folder
+        elif kind == "github_repos":
+            parent = repo_path(ROOT / r["raw"]).rpartition("/")[0]
+            key = f"{e.get('id_prefix') or folder}-{slug(parent)}" if parent else f"{folder}-root"
+        else:
+            key = r["id"]
+        groups.setdefault(key, {"a": r["authority"], "d": folder, "ids": []})["ids"].append(r["id"])
+    items = []
+    for key, g in groups.items():
+        for n, i in enumerate(range(0, len(g["ids"]), WORK_ITEM_MAX)):
+            items.append({"k": key if n == 0 else f"{key}-{n + 1}", "a": g["a"], "d": g["d"], "ids": g["ids"][i:i + WORK_ITEM_MAX]})
+    return items
+
+
 def cmd_pending(args):
     cfg = load(SOURCES)
     rows = []
@@ -254,39 +409,55 @@ def cmd_pending(args):
                          "media": str(p.with_suffix(".media.json").relative_to(ROOT)) if p.with_suffix(".media.json").exists() else None,
                          "title": header(p).get("title", sid)})
     if args.work_items:
-        # The args for .claude/workflows/learn-analyze.js: one item per video or article; small pages and the
-        # files of one GitHub skill are grouped so one agent reads them together.
-        kind_of = {e["folder"].split("/")[-1]: k for k, e in all_sources(cfg)}
-        groups = {}
-        for r in rows:
-            folder = r["raw"].split("/")[2]
-            kind = kind_of.get(folder)
-            if kind == "pages":
-                key = folder
-            elif kind == "github_repos":
-                m = re.match(r"(.+?)-(skill|recipes|api|audit|plan-template|picker|standards)$", r["id"])
-                key = m.group(1) if m else f"{folder}-root"
-            else:
-                key = r["id"]
-            g = groups.setdefault(key, {"k": key, "a": r["authority"], "d": folder, "ids": []})
-            g["ids"].append(r["id"])
-        print(json.dumps(list(groups.values()), separators=(",", ":")))
+        print(json.dumps({"root": str(ROOT), "items": work_items(rows, cfg)}, separators=(",", ":")))
         return
     print(json.dumps(rows, indent=1) if args.json else "\n".join(f"{r['id']}\t{r['authority']}\t{r['title']}" for r in rows))
 
 
+def source_folders(cfg):
+    """{source id: raw folder} for every id this repo knows, with or without its raw text on this machine: raw files
+    first, then the wiki manifest (it records each page's raw path), then the id prefixes in sources.json."""
+    out = {source_id(p): f"raw/{p.parent.name}" for p in raw_files()}
+    for i, m in manifest_of_wiki().items():
+        out.setdefault(i, "/".join(m.get("source_file", "").split("/")[:2]))
+    prefixes = sorted(((e["id_prefix"], e["folder"]) for _, e in all_sources(cfg) if e.get("id_prefix")), key=lambda x: -len(x[0]))
+    for aj in ANALYSIS.glob("*.json") if ANALYSIS.exists() else []:
+        if aj.stem not in out:
+            out[aj.stem] = next((f for p, f in prefixes if aj.stem.startswith(p + "-")), None)
+    for e in cfg.get("youtube_videos", []):
+        out[video_id(e["url"])] = e["folder"]
+    return out
+
+
+def source_ids(kind, e, folders):
+    """The ids that belong to one source."""
+    if kind == "youtube_videos":  # single videos share raw/videos: each owns only its own id
+        return [video_id(e["url"])]
+    return sorted(i for i, f in folders.items() if f == e["folder"])
+
+
 def cmd_status(args):
     cfg = load(SOURCES)
-    manifest = load(WIKI / "ingested.json") if (WIKI / "ingested.json").exists() else {}
-    print(f"{'source':44} {'authority':15} raw  analysed  ingested")
+    manifest, folders = manifest_of_wiki(), source_folders(cfg)
+    rows = []
     for kind, e in all_sources(cfg):
-        folder = LEARN / e["folder"]
-        ids = [source_id(p) for p in folder.glob("*.txt") if not p.name.startswith("_")] if folder.exists() else []
-        if kind == "youtube_videos":  # a single video: count only its own file in the shared folder
-            ids = [i for i in ids if i == video_id(e["url"])]
-        done = sum((ANALYSIS / f"{i}.json").exists() for i in ids)
-        ing = sum(i in manifest for i in ids)
-        print(f"{e['name'][:44]:44} {e.get('authority', '?'):15} {len(ids):3}  {done:8}  {ing:8}")
+        ids = source_ids(kind, e, folders)
+        rows.append({"name": e["name"], "kind": kind, "authority": e.get("authority", "reference"), "folder": f"learn/{e['folder']}",
+                     "id_prefix": e.get("id_prefix"), "urls": entry_urls(e),
+                     "analysed": sum((ANALYSIS / f"{i}.json").exists() for i in ids),
+                     "in_wiki": sum(i in manifest for i in ids), "raw_here": len(entry_raw(kind, e))})
+    if args.json:
+        print(json.dumps({"root": str(ROOT), "sources": rows}, indent=1, ensure_ascii=False))
+        return 0
+    print(f"{'source':44} {'authority':15} analysed  in wiki  raw here")
+    for r in rows:
+        print(f"{r['name'][:44]:44} {r['authority']:15} {r['analysed']:8}  {r['in_wiki']:7}  {r['raw_here']:8}")
+    missing = [r["name"] for r in rows if r["analysed"] and not r["raw_here"]]
+    if missing:
+        print(f"\nRaw text not on this machine for {len(missing)} analysed sources ({some(missing)}). learn/raw/ is git-ignored, "
+              "and the committed analyses are what the app uses. Fetch it again only to re-analyse or citation-check: "
+              '.venv-wiki/bin/python tools/wiki.py fetch --only "<name>"')
+    return 0
 
 
 # ---------------------------------------------------------------------------------------------- ingest
@@ -321,10 +492,28 @@ def learn_section(a):
     return "\n".join(out + ["", MARK_END, ""])
 
 
+def analysis_changed(aj, entry):
+    """True when a source's wiki page was built from a different analysis than the one on disk. Pages ingested before
+    the manifest recorded analysis hashes fall back to comparing file times."""
+    if not entry:
+        return False
+    if entry.get("analysis_hash"):
+        return entry["analysis_hash"] != file_hash(aj)
+    page = WIKI / entry.get("wiki_page", "x").removeprefix("wiki/")
+    return not page.exists() or aj.stat().st_mtime > page.stat().st_mtime
+
+
+def page_labels(text):
+    """OpenWiki labels every source like a video. A web page or a repository file gets page labels instead."""
+    if re.search(r"^url: https?://(www\.)?(youtube\.com|youtu\.be)/", text, re.M):
+        return text
+    return text.replace("\n- Video ID: `", "\n- Page ID: `", 1).replace("\n- Channel: ", "\n- Publisher: ", 1)
+
+
 def cmd_ingest(args):
     warn_if_unlocked()
     from openwiki.textfmt import parse_source_file
-    from openwiki.wiki import ingest_path, load_manifest, rebuild_index, source_stem
+    from openwiki.wiki import ingest_path, load_manifest, rebuild_index, save_manifest, source_stem
     from openwiki.workspace import Workspace
     ws = Workspace.resolve(LEARN)
     manifest = load_manifest(ws)
@@ -336,14 +525,18 @@ def cmd_ingest(args):
         if raw is None:
             counts["no_raw"] += 1
             continue
-        state = ingest_path(raw, ws, manifest, force=args.force, analysis=a)
+        # OpenWiki skips a raw file it has seen; an edited analysis must still rebuild the page.
+        state = ingest_path(raw, ws, manifest, force=args.force or analysis_changed(aj, manifest.get(aj.stem)), analysis=a)
         counts[state] += 1
+        if aj.stem in manifest:
+            manifest[aj.stem]["analysis_hash"] = file_hash(aj)
         page = ws.sources_dir / f"{source_stem(parse_source_file(raw))}.md"
         if page.exists():
             text = page.read_text(encoding="utf-8")
             text = re.sub(re.escape(MARK_START) + r".*?" + re.escape(MARK_END) + r"\n?", "", text, flags=re.S)
             text = text.replace("\ntags:", f"\nauthority: {a['authority']}\ntags:", 1) if "\nauthority:" not in text else text
-            page.write_text(text.rstrip("\n") + "\n\n" + learn_section(a), encoding="utf-8")
+            page.write_text(page_labels(text).rstrip("\n") + "\n\n" + learn_section(a), encoding="utf-8")
+    save_manifest(ws, manifest)
     rebuild_index(ws)
     print(json.dumps(counts))
     openwiki("lint", "--fix-index")
@@ -372,7 +565,7 @@ def cmd_trace(args):
     nums = [int(s.split("-")[-1]) for s, _ in logged]
     nxt = max(nums, default=0) + 1
     cfg = load(SOURCES)
-    now = datetime.datetime.now().strftime("%H:%M")
+    now = datetime.datetime.now().isoformat(timespec="minutes")
     rows = []
     for p in raw_files():
         sid = source_id(p)
@@ -404,6 +597,9 @@ def cmd_trace(args):
 STANDARDS = ROOT / "synthesis" / "standards.json"
 STD_FIELDS = {"id": str, "theme": str, "area": str, "title": str, "rule": str, "why": str, "strength": str,
               "values": dict, "applies_to": list, "sources": list, "design_md": bool, "conflicts": list}
+# Optional fields: what a standard settles in the interview, and what it forbids (the shared schema in docs/KNOWLEDGE.md).
+STD_OPTIONAL = {"settles": list, "breaks_options": dict, "constraints": list, "supersedes": list}
+CONSTRAINT_KINDS = ("accelerating-curve", "max-duration-ms")
 
 
 def standards_hash(doc):
@@ -414,6 +610,23 @@ def standards_hash(doc):
     return "sha256:" + hashlib.sha256(body.encode("utf-8")).hexdigest()[:16]
 
 
+def constraint_kind(c):
+    """(kind, params) of one constraint: {"path": P, "forbid": "accelerating-curve"}, or a kind with parameters,
+    {"forbid": {"max-duration-ms": {"value": 300}}} (the parameters may also sit next to "forbid")."""
+    f = c.get("forbid") if isinstance(c, dict) else None
+    if isinstance(f, str):
+        return f, {k: v for k, v in c.items() if k not in ("path", "forbid")}
+    if isinstance(f, dict) and len(f) == 1:
+        kind, params = next(iter(f.items()))
+        return kind, params if isinstance(params, dict) else {"value": params}
+    return None, {}
+
+
+def engine_entries(s):
+    eng = s.get("engine")
+    return eng if isinstance(eng, list) else [eng] if eng else []
+
+
 def check_standards(doc):
     errs = []
     ids = [s.get("id") for s in doc.get("standards", [])]
@@ -422,24 +635,33 @@ def check_standards(doc):
         errs.append(f"duplicate ids: {sorted(dup)}")
     themes = {t["key"] for t in doc.get("themes", [])}
     retired = {r.get("id") for r in doc.get("retired", [])}
+    questions = cards = None
+    setters = {}
     for s in doc.get("standards", []):
         sid = s.get("id", "?")
         for f, t in STD_FIELDS.items():
             if not isinstance(s.get(f), t):
                 errs.append(f"{sid}: missing or wrong type: {f}")
+        for f, t in STD_OPTIONAL.items():
+            if f in s and not isinstance(s[f], t):
+                errs.append(f"{sid}: {f} must be a {t.__name__}")
         if s.get("strength") not in ("must", "should"):
             errs.append(f"{sid}: strength must be must or should")
         if themes and s.get("theme") not in themes:
             errs.append(f"{sid}: theme {s.get('theme')!r} not in themes")
         if sid in retired:
             errs.append(f"{sid}: listed as both active and retired")
+        for tag in s.get("applies_to") or []:
+            if tag not in TAGS:
+                errs.append(f"{sid}: applies_to {tag!r} is not one of {', '.join(TAGS)}")
         for src in s.get("sources", []):
             if not (ANALYSIS / f"{src.get('id')}.json").exists():
                 errs.append(f"{sid}: source {src.get('id')!r} has no learn/analysis file")
-        eng = s.get("engine")
-        for e in (eng if isinstance(eng, list) else [eng] if eng else []):
+        for e in engine_entries(s):
             if not isinstance(e, dict) or not e.get("path") or "value" not in e:
                 errs.append(f"{sid}: engine entries need path and value")
+            else:
+                setters.setdefault(e["path"], []).append((sid, json.dumps(e["value"], sort_keys=True)))
         rev = s.get("review")
         if rev:
             try:
@@ -451,6 +673,38 @@ def check_standards(doc):
         for f in ("since", "changed"):
             if not isinstance(s.get(f), int) or s[f] > doc.get("version", 0):
                 errs.append(f"{sid}: {f} must be a version number <= {doc.get('version')}")
+        if isinstance(s.get("settles"), list) or isinstance(s.get("breaks_options"), dict):
+            questions = question_ids() if questions is None else questions
+            for q in s.get("settles") if isinstance(s.get("settles"), list) else []:
+                if q not in questions:
+                    errs.append(f"{sid}: settles {q!r}, which is not a question in skills/opendesigner/references/questions.json")
+            for q, opts in (s.get("breaks_options") or {}).items() if isinstance(s.get("breaks_options"), dict) else []:
+                if q not in questions:
+                    errs.append(f"{sid}: breaks_options names {q!r}, which is not a question")
+                elif not isinstance(opts, list) or not opts:
+                    errs.append(f"{sid}: breaks_options[{q!r}] must be a list of option values")
+                else:
+                    errs += [f"{sid}: {q} has no option {o!r} (options: {', '.join(questions[q])})"
+                             for o in opts if str(o) not in questions[q]]
+        for c in s.get("constraints") if isinstance(s.get("constraints"), list) else []:
+            kind, params = constraint_kind(c)
+            if not isinstance(c, dict) or not isinstance(c.get("path"), str) or not c.get("path"):
+                errs.append(f"{sid}: each constraint needs a token path, for example {{\"path\": \"motion.easing.*\", \"forbid\": \"accelerating-curve\"}}")
+            elif kind not in CONSTRAINT_KINDS:
+                errs.append(f"{sid}: constraint on {c['path']} forbids {c.get('forbid')!r}; the kinds are {', '.join(CONSTRAINT_KINDS)}")
+            elif kind == "max-duration-ms" and (isinstance(params.get("value"), bool) or not isinstance(params.get("value"), (int, float))
+                                                or params["value"] <= 0):
+                errs.append(f"{sid}: constraint max-duration-ms on {c['path']} needs a positive number, "
+                            "for example {\"max-duration-ms\": {\"value\": 300}}")
+        if isinstance(s.get("supersedes"), list) and s["supersedes"]:
+            if cards is None:
+                cards = {c["id"] for c in load(CARDS)} if CARDS.exists() else set()
+            for dc in s["supersedes"]:
+                if dc not in cards:
+                    errs.append(f"{sid}: supersedes {dc!r}, which is not a card in synthesis/cards.json")
+    for path, who in setters.items():  # one token path, one value: 1 and 1.0 differ as JSON, and the engine compares JSON
+        if len({v for _, v in who}) > 1:
+            errs.append(f"{path} is set to different values: " + ", ".join(f"{i} {v}" for i, v in who))
     if doc.get("content_hash") != standards_hash(doc):
         errs.append("standards changed without a version bump: run python3 tools/wiki.py standards --bump \"what changed\"")
     return errs
@@ -461,60 +715,122 @@ def file_hash(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()[:12]
 
 
+def standard_substance(a):
+    """What a standards synthesis reads from an analysis: rules, decisions and numbers without their evidence strings.
+    A reviewer re-anchoring evidence to a verbatim phrase changes no standard, so it must not ask for a rebuild."""
+    import hashlib
+    strip = lambda items: [{k: v for k, v in x.items() if k != "evidence"} for x in items if isinstance(x, dict)]
+    body = {"authority": a.get("authority"), "rules": strip(a.get("rules", [])), "decisions": strip(a.get("decisions", [])),
+            "numbers": strip(a.get("numbers", []))}
+    return "s:" + hashlib.sha256(json.dumps(body, sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()[:12]
+
+
 def standard_inputs():
-    """The analyses a standards synthesis must cover: every non-negotiable and good-to-have source, with its hash."""
+    """The analyses a standards synthesis must cover: every non-negotiable and good-to-have source, with the hash of
+    what the synthesis reads from it (standard_substance)."""
     out = {}
     for aj in sorted(ANALYSIS.glob("*.json")):
         try:
-            if load(aj).get("authority") in ("non-negotiable", "good-to-have"):
-                out[aj.stem] = file_hash(aj)
+            a = load(aj)
         except json.JSONDecodeError:
             continue
+        if a.get("authority") in ("non-negotiable", "good-to-have"):
+            out[aj.stem] = standard_substance(a)
     return out
 
 
-def cmd_standards(args):
+def head_standards():
+    """synthesis/standards.json as committed at HEAD, or None when git or that commit cannot show it."""
+    try:
+        r = subprocess.run(["git", "-C", str(ROOT), "show", f"HEAD:{STANDARDS.relative_to(ROOT).as_posix()}"],
+                           capture_output=True, text=True)
+    except OSError:
+        return None
+    if r.returncode:
+        return None
+    try:
+        return json.loads(r.stdout)
+    except json.JSONDecodeError:
+        return None
+
+
+def bump(doc, why, head):
+    """Version a change to the standards, in place. Returns (message, exit code).
+    - No history in the file: the first release. It keeps its version and gets one history entry; git is not needed.
+    - Otherwise the change is measured against HEAD's file. Nothing changed (content hash): refused.
+    - The file already has a version above HEAD's (a bump nobody committed yet): that history entry is amended,
+      so two bumps before a commit record one change."""
     import datetime
+    today = datetime.date.today().isoformat()
+    if not doc.get("history"):
+        v = max(doc.get("version") or 1, 1)
+        for s in doc["standards"]:
+            s["since"] = s["changed"] = v
+        doc["history"] = [{"version": v, "date": today, "why": why, "added": [s["id"] for s in doc["standards"]],
+                           "changed": [], "retired": [r.get("id") for r in doc.get("retired", [])]}]
+        doc["version"], doc["updated"] = v, today
+        doc["content_hash"] = standards_hash(doc)
+        return f"standards v{v}: first release, {len(doc['standards'])} standards", 0
+    if doc.get("content_hash") == standards_hash(doc):
+        return (f"Nothing to bump: the standards have not changed since v{doc.get('version')} (the content hash matches). "
+                "A bump records a change to a rule, a value, a check or the retired list."), 1
+    if head is None:
+        return ("Cannot bump: git could not show synthesis/standards.json at HEAD, and a bump measures the change against "
+                "the last commit. Run it in the repository's git checkout, with git installed."), 1
+    hv, cur = head.get("version", 0), doc.get("version", 0)
+    if cur < hv:
+        return f"Cannot bump: this file says v{cur}, but HEAD has v{hv}. Start from HEAD's file, then make the change again.", 1
+    v, amend = hv + 1, cur > hv
+    old = {s["id"]: s for s in head.get("standards", [])}
+    strip = lambda s: {k: x for k, x in s.items() if k not in ("since", "changed")}
+    added, changed = [], []
+    for s in doc["standards"]:
+        o = old.get(s["id"])
+        if o is None:
+            s["since"] = s["changed"] = v
+            added.append(s["id"])
+        elif strip(o) != strip(s):
+            s["since"], s["changed"] = o.get("since", v), v
+            changed.append(s["id"])
+        else:
+            s["since"], s["changed"] = o.get("since", v), o.get("changed", v)
+    active = {s["id"] for s in doc["standards"]}
+    gone = [i for i in old if i not in active]
+    doc["retired"] = [r for r in doc.get("retired", []) if r.get("id") not in active]
+    have = {r.get("id") for r in doc["retired"]}
+    doc["retired"] += [{"id": i, "version": v, "why": why} for i in gone if i not in have]
+    entry = {"version": v, "date": today, "why": why, "added": added, "changed": changed, "retired": gone}
+    if amend:
+        prev = next((h for h in doc["history"] if h.get("version") == cur), None)
+        if prev and prev.get("why") and prev["why"] != why:
+            entry["why"] = f"{prev['why']}; {why}"
+    doc["history"] = [h for h in doc["history"] if h.get("version", 0) <= hv] + [entry]
+    doc["version"], doc["updated"] = v, today
+    doc["content_hash"] = standards_hash(doc)
+    return (f"standards v{v}: {len(added)} added, {len(changed)} changed, {len(gone)} retired, compared with HEAD (v{hv})"
+            + (f"; amended the uncommitted v{v} history entry" if amend else "")), 0
+
+
+def cmd_standards(args):
     if not STANDARDS.exists():
         print("synthesis/standards.json does not exist yet")
         return 0
     doc = load(STANDARDS)
-    if args.bump:
-        old = {}
-        try:
-            prev = subprocess.run(["git", "-C", str(ROOT), "show", "HEAD:synthesis/standards.json"], capture_output=True, text=True)
-            old = {s["id"]: s for s in json.loads(prev.stdout).get("standards", [])} if prev.returncode == 0 else {}
-        except (json.JSONDecodeError, KeyError):
-            old = {}
-        new_version = doc.get("version", 0) + 1 if old else max(doc.get("version", 1), 1)
-        added, changed = [], []
-        strip = lambda s: {k: v for k, v in s.items() if k not in ("since", "changed")}
-        for s in doc["standards"]:
-            if s["id"] not in old:
-                s["since"] = s["changed"] = new_version
-                added.append(s["id"])
-            elif strip(old[s["id"]]) != strip(s):
-                s["changed"] = new_version
-                changed.append(s["id"])
-            else:
-                s.setdefault("since", old[s["id"]].get("since", new_version))
-                s.setdefault("changed", old[s["id"]].get("changed", new_version))
-        gone = [i for i in old if i not in {s["id"] for s in doc["standards"]}]
-        known_retired = {r["id"] for r in doc.get("retired", [])}
-        for i in gone:
-            if i not in known_retired:
-                doc.setdefault("retired", []).append({"id": i, "version": new_version, "why": args.bump})
-        doc["version"], doc["updated"] = new_version, datetime.date.today().isoformat()
-        doc["built_from"] = standard_inputs()
-        entry = {"version": new_version, "date": doc["updated"], "why": args.bump, "added": added, "changed": changed, "retired": gone}
-        if old:
-            doc.setdefault("history", []).append(entry)
-        else:  # not in git yet: this is the first release, so it has one history entry however often it is re-stamped
-            doc["history"] = [entry]
-        doc["content_hash"] = standards_hash(doc)
+    if args.bump or args.built_from:
+        code = 0
+        if args.bump:
+            msg, code = bump(doc, args.bump, head_standards())
+            print(msg)
+            if code:
+                return code
+        if args.built_from:  # the learn-standards merge: which analyses these standards were built from
+            doc["built_from"] = standard_inputs()
+            print(f"built_from: {len(doc['built_from'])} non-negotiable and good-to-have analyses recorded")
         STANDARDS.write_text(json.dumps(doc, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-        print(f"standards v{new_version}: {len(added)} added, {len(changed)} changed, {len(gone)} retired. "
-              f"Next: python3 tools/build_data.py, add a CHANGELOG line, commit.")
+        if args.bump:
+            print("Next: python3 tools/wiki.py cite-check --standards (needs JEV_API_KEY or TYPESAFE_API_KEY), then the "
+                  f"learn-escalate workflow with {json.dumps({'root': str(ROOT)})} if it flags anything; python3 tools/build_data.py; "
+                  "python3 tools/sync_skills.py; python3 tools/wiki.py map; a CHANGELOG line; commit.")
         return 0
     errs = check_standards(doc)
     for e in errs:
@@ -881,13 +1197,19 @@ def cmd_review_log(args):
     print(f"recorded {added} review decisions in {REVIEW_LOG.relative_to(ROOT)}")
 
 
-def cmd_flagged(args):
-    """What the citation check left for review, as the args of .claude/workflows/learn-escalate.js."""
-    if not CITE_JSON.exists():
-        sys.exit("no learn/citation-check.json yet: run python3 tools/wiki.py cite-check first")
+def raw_path_of(sid, folders):
+    """Where a source's raw text lives, relative to the repo (it may not be on this machine: learn/raw/ is git-ignored)."""
+    f = folders.get(sid)
+    return f"learn/{f}/{sid}.txt" if f else None
+
+
+def flagged_items():
+    """What the citation check left for review: {"rules": [...], "standards": [...]}, each with the raw file to read."""
     c = load(CITE_JSON)
     done = reviewed_keys()
-    rules = [{"source": r["source"], "n": r["n"], "rule": r["rule"][:200], "verdict": r["verdict"], "confidence": r["confidence"]}
+    folders = source_folders(load(SOURCES))
+    rules = [{"source": r["source"], "n": r["n"], "rule": r["rule"][:200], "verdict": r["verdict"], "confidence": r["confidence"],
+              "raw": raw_path_of(r["source"], folders)}
              for r in c.get("results", []) if (r["verdict"] != "supports" or r["confidence"] < AUTO_ACCEPT)
              and ("rule", r["source"], str(r["n"]), text_hash(r["rule"])) not in done]
     std_rule = {x["id"]: x["rule"] for x in load(STANDARDS).get("standards", [])} if STANDARDS.exists() else {}
@@ -900,38 +1222,76 @@ def cmd_flagged(args):
             w = sorted(xs, key=lambda x: (x["verdict"] == "supports", x["confidence"]))[0]
             if ("standard", sid, w["source"].split(" <- ")[1], text_hash(std_rule.get(sid))) in done:
                 continue
-            std.append({"std": sid, "source": w["source"].split(" <- ")[1], "verdict": w["verdict"], "confidence": w["confidence"]})
-    print(json.dumps({"rules": rules, "standards": std}, separators=(",", ":")) if args.json
-          else f"{len(rules)} analysis rules and {len(std)} standards need review (python3 tools/wiki.py flagged --json)")
+            src = w["source"].split(" <- ")[1]
+            std.append({"std": sid, "source": src, "verdict": w["verdict"], "confidence": w["confidence"], "raw": raw_path_of(src, folders)})
+    return {"rules": rules, "standards": std}
+
+
+def cmd_flagged(args):
+    """What the citation check left for review, as the args of .claude/workflows/learn-escalate.js."""
+    if not CITE_JSON.exists():
+        sys.exit("no learn/citation-check.json yet: run python3 tools/wiki.py cite-check first")
+    f = flagged_items()
+    print(json.dumps(f, separators=(",", ":")) if args.json
+          else f"{len(f['rules'])} analysis rules and {len(f['standards'])} standards need review (python3 tools/wiki.py flagged --json)")
 
 
 # ---------------------------------------------------------------------------------------------- next
+def synthesis_areas():
+    """{area key: topic names} of the learn-synthesis workflow (its AREAS list is the one place that mapping lives)."""
+    js = ROOT / ".claude" / "workflows" / "learn-synthesis.js"
+    text = js.read_text(encoding="utf-8") if js.exists() else ""
+    return {k: re.findall(r"'([^']*)'", topics)
+            for k, topics in re.findall(r"\{ key: '([\w-]+)', start: \d+, topics: \[([^\]]*)\]", text)}
+
+
+def workflow(name, args):
+    return f"run the saved workflow {name} (.claude/workflows/{name}.js) with args {json.dumps(args, separators=(',', ':'))}"
+
+
 def pipeline_state():
-    """What is out of date, in pipeline order. Each item: (step, why, command)."""
+    """What is out of date, in pipeline order. Each item: (step, why, command). Real work comes first; the last item,
+    step "raw", only notes analysed sources whose raw text is not on this machine."""
     cfg, todo = load(SOURCES), []
+    root = {"root": str(ROOT)}
+    problems, _, _ = analysis_problems(cfg)
+    for name, err, fix in problems:  # a broken analysis poisons every later step, so it comes first
+        todo.append(("check", f"learn/analysis/{name}: {err}", fix))
     by_id = {source_id(p): p for p in raw_files()}
+    folders = source_folders(cfg)
+    analyses = {}
+    for aj in sorted(ANALYSIS.glob("*.json")):
+        try:
+            analyses[aj.stem] = (aj, load(aj))
+        except json.JSONDecodeError:
+            continue
+    skipped = load(skipped_file()) if skipped_file().exists() else {}
+    no_raw = []
     for kind, e in all_sources(cfg):
-        folder = LEARN / e["folder"]
-        have = [p for p in folder.glob("*.txt")] if folder.exists() else []
-        if kind == "youtube_videos":
-            have = [p for p in have if p.stem == video_id(e["url"])]
-        if not have:
+        if entry_raw(kind, e):
+            continue
+        if any(i in analyses for i in source_ids(kind, e, folders)):
+            no_raw.append(e["name"])  # already learned from; the raw text is only needed to redo or re-check it
+            continue
+        bad = [f"{u} ({skipped[u]['why']}, {skipped[u].get('date', '')})" for u in entry_urls(e) if u in skipped]
+        if bad:
+            todo.append(("fetch", f"{e['name']}: fetched, but nothing usable came back: {some(bad, 3)}",
+                         f'check the URL; to drop it: python3 tools/wiki.py remove "{e["name"]}"'))
+        else:
             todo.append(("fetch", f"{e['name']}: nothing fetched yet", f'.venv-wiki/bin/python tools/wiki.py fetch --only "{e["name"]}"'))
     pending = [i for i in by_id if not (ANALYSIS / f"{i}.json").exists()]
     if pending:
-        todo.append(("analyse", f"{len(pending)} fetched sources have no analysis ({', '.join(pending[:5])}{'...' if len(pending) > 5 else ''})",
-                     "run .claude/workflows/learn-analyze.js with: python3 tools/wiki.py pending --work-items"))
-    manifest = load(WIKI / "ingested.json") if (WIKI / "ingested.json").exists() else {}
-    analysed = [aj for aj in sorted(ANALYSIS.glob("*.json"))]
-    not_ingested = [aj.stem for aj in analysed if aj.stem in by_id and aj.stem not in manifest]
-    stale_pages = [aj.stem for aj in analysed if aj.stem in manifest
-                   and aj.stat().st_mtime > (WIKI / manifest[aj.stem].get("wiki_page", "x").removeprefix("wiki/")).stat().st_mtime
-                   if (WIKI / manifest[aj.stem].get("wiki_page", "x").removeprefix("wiki/")).exists()]
+        todo.append(("analyse", f"{len(pending)} fetched sources have no analysis ({some(pending, 5)})",
+                     "run the saved workflow learn-analyze (.claude/workflows/learn-analyze.js) with args = the output of: "
+                     "python3 tools/wiki.py pending --work-items"))
+    manifest = manifest_of_wiki()
+    not_ingested = [i for i in analyses if i in by_id and i not in manifest]
+    stale_pages = [i for i, (aj, _) in analyses.items() if i in by_id and analysis_changed(aj, manifest.get(i))]
     if not_ingested or stale_pages:
-        todo.append(("ingest", f"{len(not_ingested)} analyses not in the wiki, {len(stale_pages)} wiki pages older than their analysis",
-                     ".venv-wiki/bin/python tools/wiki.py ingest" + (" --force" if stale_pages else "")))
+        todo.append(("ingest", f"{len(not_ingested)} analyses not in the wiki, {len(stale_pages)} wiki pages built from an older analysis",
+                     ".venv-wiki/bin/python tools/wiki.py ingest"))
     sids = load(LEARN / "sids.json") if (LEARN / "sids.json").exists() else {}
-    untraced = [aj.stem for aj in analysed if aj.stem not in sids]
+    untraced = [i for i in analyses if i not in sids]
     if untraced:
         todo.append(("trace", f"{len(untraced)} analyses have no S-L19 id yet", "python3 tools/wiki.py trace"))
     if STANDARDS.exists():
@@ -941,32 +1301,40 @@ def pipeline_state():
         changed = [i for i in now if i in built and built[i] != now[i]]
         if new or changed:
             todo.append(("standards", f"standards were built before {len(new)} new and {len(changed)} changed non-negotiable/good-to-have "
-                         f"analyses ({', '.join((new + changed)[:4])}...)", "re-run the standards synthesis (lane L19 step 6), then "
-                         'python3 tools/wiki.py standards --bump "<what changed>"'))
+                         f"analyses ({some(new + changed)})", workflow("learn-standards", root) + '; it ends with python3 tools/wiki.py '
+                         'standards --built-from. Then: python3 tools/wiki.py standards --bump "<what changed>"'))
         if doc.get("content_hash") != standards_hash(doc):
             todo.append(("standards", "synthesis/standards.json was edited without a version bump",
                          'python3 tools/wiki.py standards --bump "<what changed>"'))
     elif standard_inputs():
         todo.append(("standards", "non-negotiable sources are analysed but synthesis/standards.json does not exist",
-                     "run the standards synthesis (lane L19 step 6)"))
+                     workflow("learn-standards", root)))
     used = set()
     l19 = ROOT / "research" / "L19-learning-wiki.md"
     cited = set(re.findall(r"S-L19-\d+", l19.read_text(encoding="utf-8"))) if l19.exists() else set()
     for page in (WIKI / "synthesis").glob("*.md"):
         m = re.search(r"^sources:\n((?:\s+- .+\n)+)", page.read_text(encoding="utf-8"), re.M)
         used |= set(re.findall(r"- (\S+)", m.group(1))) if m else set()
-    refs = [aj.stem for aj in analysed if load(aj).get("authority") == "reference"]
-    unused = [i for i in refs if i not in used and sids.get(i) not in cited]
+    unused = [i for i, (_, a) in analyses.items() if a.get("authority") == "reference" and i not in used and sids.get(i) not in cited]
     if unused:
-        todo.append(("synthesis", f"{len(unused)} reference sources feed no Decision Card or topic page yet ({', '.join(unused[:4])}...)",
-                     "re-run the cards and topic synthesis (lane L19 step 6) for their areas"))
+        topics = {t.get("name") for i in unused for t in analyses[i][1].get("topics", []) if isinstance(t, dict)}
+        areas = [k for k, names in synthesis_areas().items() if topics & set(names)] or "all"
+        todo.append(("synthesis", f"{len(unused)} reference sources feed no Decision Card or topic page yet ({some(unused)})",
+                     workflow("learn-synthesis", {**root, "topics": areas, "cards": areas, "verify": areas, "process": False, "merge": True})))
     if CITE_JSON.exists():
-        checked = {r["source"] for r in load(CITE_JSON).get("results", [])}
-        has_rules = lambda aj: any(r.get("strength") in ("must", "should") for r in load(aj).get("rules", []))
-        newer = [aj.stem for aj in analysed if has_rules(aj)
-                 and (aj.stem not in checked or aj.stat().st_mtime > CITE_JSON.stat().st_mtime)]
+        # A rule needs a (new) check when its text is not the text Jev judged: an edit elsewhere in the file does not.
+        checked = {(r["source"], r["n"]): r["rule"] for r in load(CITE_JSON).get("results", [])}
+        unchecked = lambda i, a: any(isinstance(r, dict) and r.get("strength") in ("must", "should") and checked.get((i, n)) != r.get("rule")
+                                     for n, r in enumerate(a.get("rules", [])))
+        newer = [i for i, (aj, a) in analyses.items() if i in by_id and unchecked(i, a)]
         if newer:
-            todo.append(("cite-check", f"{len(newer)} analyses not citation-checked since they changed", "python3 tools/wiki.py cite-check " + " ".join(newer[:20])))
+            key = "" if jev_key() else " (it needs JEV_API_KEY or TYPESAFE_API_KEY in the environment or .env; none is set here)"
+            todo.append(("cite-check", f"{len(newer)} analyses not citation-checked since they changed",
+                         "python3 tools/wiki.py cite-check " + " ".join(newer[:20]) + key))
+        f = flagged_items()
+        if f["rules"] or f["standards"]:
+            todo.append(("escalate", f"the citation check flagged {len(f['rules'])} analysis rules and {len(f['standards'])} standards "
+                         "for review", workflow("learn-escalate", root)))
     if CARDS_DIR.exists() and QUESTIONNAIRE.exists():
         q = QUESTIONNAIRE.read_text(encoding="utf-8")
         cur = re.search(re.escape(PROP_START) + r".*?" + re.escape(PROP_END), q, re.S)
@@ -978,22 +1346,27 @@ def pipeline_state():
     for tool, why in (("build_data.py", "the skills' references are older than synthesis/"), ("sync_skills.py", "the skill copies differ from skills/")):
         r = subprocess.run([sys.executable, str(ROOT / "tools" / tool), "--check"], capture_output=True, text=True)
         if r.returncode:
-            todo.append(("build", why, f"python3 tools/{tool}"))
+            said = (r.stdout.strip().splitlines() or r.stderr.strip().splitlines() or [""])[0][:160]
+            todo.append(("build", why + (f" ({said})" if said else ""), f"python3 tools/{tool}"))
     if LOCK.exists():
         inst = installed_openwiki()
         if inst and inst.get("commit") != load(LOCK)["commit"]:
             todo.append(("openwiki", "the installed OpenWiki is not the tested commit", ".venv-wiki/bin/python tools/wiki.py upstream --upgrade"))
+    if no_raw:
+        todo.append(("raw", f"raw text is not on this machine for {len(no_raw)} analysed sources ({some(no_raw, 3)}). Nothing to do unless "
+                     "you re-analyse or citation-check them: learn/raw/ is git-ignored",
+                     '.venv-wiki/bin/python tools/wiki.py fetch --only "<name>"'))
     return todo
 
 
 def cmd_next(args):
     todo = pipeline_state()
-    if not todo:
+    work = [t for t in todo if t[0] != "raw"]
+    if not work:
         print("Everything is up to date: sources fetched, analysed, in the wiki, traced, synthesised and built.")
-        return 0
     for step, why, cmd in todo:
         print(f"[{step}] {why}\n    -> {cmd}")
-    return 1 if args.strict else 0
+    return 1 if args.strict and work else 0
 
 
 # ---------------------------------------------------------------------------------------------- upstream (OpenWiki)
@@ -1101,90 +1474,190 @@ def cmd_upstream(args):
 # ---------------------------------------------------------------------------------------------- check
 REQUIRED = {"summary": str, "key_ideas": list, "entities": list, "topics": list, "claims": list, "quotes": list,
             "tags": list, "authority": str, "rules": list, "decisions": list, "process": list, "examples": list}
+OPTIONAL = {"numbers": list, "caveats": list}   # a string here would be rendered one line per character
 
 
-def check_analysis(a, topics):
+def check_analysis(a, topics, questions=None):
+    """(errors, notes) for one analysis. questions: {Q-id: option values}, for maps_to (default: the skill's questions.json)."""
     errs, notes = [], []
     for k, t in REQUIRED.items():
         if not isinstance(a.get(k), t):
             errs.append(f"missing or wrong type: {k}")
+    for k, t in OPTIONAL.items():
+        if k in a and not isinstance(a[k], t):
+            errs.append(f"{k} must be a list, not a {type(a[k]).__name__}")
     if errs:
         return errs, notes
+    questions = question_ids() if questions is None else questions
     if a["authority"] not in AUTHORITY:
         errs.append(f"authority {a['authority']!r}")
     if len(a["quotes"]) > QUOTE_MAX:
         errs.append(f"{len(a['quotes'])} quotes (max {QUOTE_MAX})")
     for q in a["quotes"]:
-        if len(q.split()) > QUOTE_MAX_WORDS:
+        if not isinstance(q, str):
+            errs.append(f"quotes must be strings: {str(q)[:40]}")
+        elif len(q.split()) > QUOTE_MAX_WORDS:
             errs.append(f"quote over {QUOTE_MAX_WORDS} words: {q[:40]}...")
     for t in a["topics"]:
-        if t.get("name") not in topics and not t.get("new"):
+        if not isinstance(t, dict):
+            errs.append(f"topics must be objects with a name: {str(t)[:40]}")
+        elif t.get("name") not in topics and not t.get("new"):
             errs.append(f"topic not in taxonomy: {t.get('name')!r} (copy a name exactly, or mark it new)")
         elif t.get("new"):
             notes.append(f"proposed topic: {t.get('name')}")
+    for c in a.get("caveats", []):
+        if not isinstance(c, str):
+            errs.append(f"caveats must be strings: {str(c)[:40]}")
+    for n in a.get("numbers", []):
+        if not isinstance(n, dict) or not isinstance(n.get("value"), (str, int, float)) or not isinstance(n.get("context"), str):
+            errs.append(f"numbers need a value and a context: {str(n)[:60]}")
     for r in a["rules"]:
+        if not isinstance(r, dict):
+            errs.append(f"rules must be objects: {str(r)[:60]}")
+            continue
         for f in ("rule", "why", "strength", "area"):
             if not r.get(f):
                 errs.append(f"rule without {f}: {str(r)[:60]}")
         if r.get("strength") not in ("must", "should", "consider"):
             errs.append(f"rule strength {r.get('strength')!r}")
+        if r.get("area") and r["area"] not in RULE_AREAS:
+            errs.append(f"rule area {r['area']!r} is not one of {', '.join(RULE_AREAS)}")
+        if r.get("kind") is not None and r["kind"] not in ("do", "dont"):
+            errs.append(f"rule kind {r['kind']!r} (do or dont)")
+        tags = r.get("applies_to", "all")
+        for tag in tags if isinstance(tags, list) else [tags]:
+            if tag not in TAGS:
+                errs.append(f"rule applies_to {tag!r} is not one of {', '.join(TAGS)}")
+        if "values" in r and (not isinstance(r["values"], list) or not all(isinstance(v, (str, int, float)) for v in r["values"])):
+            errs.append(f"rule values must be a list of strings: {str(r.get('values'))[:60]}")
     for d in a["decisions"]:
+        if not isinstance(d, dict):
+            errs.append(f"decisions must be objects: {str(d)[:60]}")
+            continue
         if not d.get("question") or not d.get("options"):
             errs.append(f"decision without question/options: {str(d)[:60]}")
+        elif not isinstance(d["options"], list) or not all(isinstance(o, dict) and o.get("name") for o in d["options"]):
+            errs.append(f"decision options must be objects with a name: {str(d['options'])[:60]}")
+        m = d.get("maps_to")
+        if m is not None and (not isinstance(m, str) or (questions and m not in questions)):
+            errs.append(f"maps_to {m!r} is not a question id in skills/opendesigner/references/questions.json")
     return errs, notes
 
 
-def cmd_check(args):
+def authority_of_id(sid, cfg, folders):
+    """What sources.json says a source id's authority is, with or without its raw text on this machine."""
+    for e in cfg.get("youtube_videos", []):
+        if video_id(e["url"]) == sid:
+            return e.get("authority", "reference")
+    return authority_by_folder(cfg).get(folders.get(sid), "reference") if folders.get(sid) else None
+
+
+def name_of_folder(cfg, folder):
+    return next((e["name"] for k, e in all_sources(cfg) if k != "youtube_videos" and e["folder"] == folder), None)
+
+
+def analysis_problems(cfg=None):
+    """Every error in learn/analysis/, each with the command or edit that fixes it: [(file, error, fix)], notes, raw count."""
+    cfg = cfg or load(SOURCES)
     topics = {t["name"] for t in load(TAXONOMY)["topics"]}
-    cfg = load(SOURCES)
-    errors = 0
-    by_id = {source_id(p): p for p in raw_files()}
+    questions, folders = question_ids(), source_folders(cfg)
+    raw_ids = {source_id(p) for p in raw_files()}
+    problems, notes = [], []
     for aj in sorted(ANALYSIS.glob("*.json")):
+        edit = f"fix learn/analysis/{aj.name} (learn/README.md, \"The analysis schema\"), then python3 tools/wiki.py check"
         try:
             a = load(aj)
         except json.JSONDecodeError as exc:
-            print(f"ERROR {aj.name}: bad JSON ({exc})")
-            errors += 1
+            problems.append((aj.name, f"bad JSON ({exc})", f"fix the JSON syntax in learn/analysis/{aj.name}"))
             continue
-        errs, notes = check_analysis(a, topics)
-        raw = by_id.get(aj.stem)
-        if raw is not None and a.get("authority") != authority_of(raw, cfg):
-            errs.append(f"authority {a.get('authority')!r} but sources.json says {authority_of(raw, cfg)!r}")
+        errs, ns = check_analysis(a, topics, questions)
+        notes += [(aj.name, n) for n in ns]
         for e in errs:
-            print(f"ERROR {aj.name}: {e}")
-        for n in notes:
-            print(f"note  {aj.name}: {n}")
-        errors += len(errs)
-    missing = [i for i in by_id if not (ANALYSIS / f"{i}.json").exists()]
+            fix = edit
+            if e.startswith("topic not in taxonomy"):
+                fix = f"copy a topic name exactly from learn/taxonomy.json, or add \"new\": true, in learn/analysis/{aj.name}"
+            elif e.startswith("maps_to"):
+                fix = f"set maps_to to a question id from skills/opendesigner/references/questions.json, or null, in learn/analysis/{aj.name}"
+            elif "quote" in e:
+                fix = f"shorten or drop quotes in learn/analysis/{aj.name} (at most {QUOTE_MAX}, each {QUOTE_MAX_WORDS} words or fewer)"
+            problems.append((aj.name, e, fix))
+        want = authority_of_id(aj.stem, cfg, folders)
+        if want and a.get("authority") != want:
+            # The authority decides how completely rules are extracted, so the analysis is redone, not relabelled.
+            item = {"k": aj.stem, "a": want, "d": folders[aj.stem].removeprefix("raw/"), "ids": [aj.stem]}
+            fix = ("re-run the learn-analyze workflow for it (the authority decides how completely rules are extracted), with args "
+                   + json.dumps({"root": str(ROOT), "items": [item]}, separators=(",", ":")))
+            if aj.stem not in raw_ids:
+                fix = (f"fetch its raw text first (.venv-wiki/bin/python tools/wiki.py fetch --only "
+                       f"\"{name_of_folder(cfg, folders[aj.stem]) or aj.stem}\"), then " + fix)
+            problems.append((aj.name, f"authority {a.get('authority')!r} but sources.json says {want!r}", fix))
+    return problems, notes, raw_ids
+
+
+def cmd_check(args):
+    problems, notes, raw_ids = analysis_problems()
+    for name, e, _ in problems:
+        print(f"ERROR {name}: {e}")
+    for name, n in notes:
+        print(f"note  {name}: {n}")
+    missing = [i for i in raw_ids if not (ANALYSIS / f"{i}.json").exists()]
     if RAW.exists():
-        print(f"{len(by_id)} raw files, {len(by_id) - len(missing)} analysed, {len(missing)} pending")
-    print("check: " + ("OK" if not errors else f"{errors} errors"))
-    return 1 if errors else 0
+        print(f"{len(raw_ids)} raw files, {len(raw_ids) - len(missing)} analysed, {len(missing)} pending")
+    print("check: " + ("OK" if not problems else f"{len(problems)} errors (python3 tools/wiki.py next gives the fix for each)"))
+    return 1 if problems else 0
 
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    sub = ap.add_subparsers(dest="cmd", required=True)
-    a = sub.add_parser("add"); a.add_argument("url"); a.add_argument("--authority", required=True); a.add_argument("--name")
-    f = sub.add_parser("fetch"); f.add_argument("--only")
-    p = sub.add_parser("pending"); p.add_argument("--json", action="store_true"); p.add_argument("--work-items", action="store_true")
-    sub.add_parser("status")
-    i = sub.add_parser("ingest"); i.add_argument("--force", action="store_true")
-    sub.add_parser("check")
-    sub.add_parser("trace")
-    nx = sub.add_parser("next"); nx.add_argument("--strict", action="store_true")
-    fg = sub.add_parser("flagged"); fg.add_argument("--json", action="store_true")
-    sub.add_parser("review-log")
-    mp = sub.add_parser("map"); mp.add_argument("--check", action="store_true")
-    pp = sub.add_parser("proposals"); pp.add_argument("--check", action="store_true")
-    cc = sub.add_parser("cite-check"); cc.add_argument("ids", nargs="*"); cc.add_argument("--limit", type=int)
-    cc.add_argument("--strength", nargs="+", default=["must", "should"])
+    sub = ap.add_subparsers(dest="cmd", required=True, metavar="command")
+    a = sub.add_parser("add", help="add a source to learn/sources.json",
+                       description="Add a source: a YouTube channel or video, a web page, or a GitHub repo. The same page is never "
+                                   "listed twice (links are compared without scheme, www. or a trailing slash).")
+    a.add_argument("url", help="the channel, video, page or https://github.com/<owner>/<repo> link")
+    a.add_argument("--authority", required=True, choices=AUTHORITY,
+                   help="non-negotiable: house standards, locked in every project; good-to-have: recommended defaults; "
+                        "reference: learning material (docs/KNOWLEDGE.md section 1)")
+    a.add_argument("--name", help="the name fetch --only uses; it also names the raw folder and id prefix "
+                                  "(default: the link, or owner/repo for GitHub)")
+    rm = sub.add_parser("remove", help="take a source, or one page of it, off the list")
+    rm.add_argument("what", help="the source's exact name, or one of its links")
+    f = sub.add_parser("fetch", help="raw text into learn/raw/ (run with .venv-wiki/bin/python)")
+    f.add_argument("--only", metavar="NAME", help="fetch one source, by its exact name in learn/sources.json")
+    p = sub.add_parser("pending", help="raw files that have no analysis yet")
+    p.add_argument("--json", action="store_true", help="one row per file, as JSON")
+    p.add_argument("--work-items", action="store_true", help='the learn-analyze workflow args: {"root": ..., "items": [...]}')
+    stt = sub.add_parser("status", help="every source: analysed, in the wiki, raw text on this machine")
+    stt.add_argument("--json", action="store_true", help="the same, with each source's folder, id prefix and links")
+    i = sub.add_parser("ingest", help="analysis JSON into learn/wiki/ pages (run with .venv-wiki/bin/python)")
+    i.add_argument("--force", action="store_true", help="rebuild every page, even when its analysis did not change")
+    sub.add_parser("check", help="check every analysis file; exit 1 on errors")
+    sub.add_parser("trace", help="append new sources to traces/L19-trace.md")
+    nx = sub.add_parser("next", help="what is out of date, in order, with the command for each step")
+    nx.add_argument("--strict", action="store_true", help="exit 1 when anything needs doing")
+    fg = sub.add_parser("flagged", help="what the citation check left for review")
+    fg.add_argument("--json", action="store_true", help="the learn-escalate workflow's input")
+    sub.add_parser("review-log", help="record review decisions (a JSON list on stdin)")
+    mp = sub.add_parser("map", help="write learn/MAP.md")
+    mp.add_argument("--check", action="store_true", help="exit 1 when learn/MAP.md is out of date")
+    pp = sub.add_parser("proposals", help="refresh the pending-proposals table in synthesis/QUESTIONNAIRE.md")
+    pp.add_argument("--check", action="store_true", help="exit 1 when the table is out of date")
+    cc = sub.add_parser("cite-check", help="Jev checks each rule against its source passage (needs JEV_API_KEY)")
+    cc.add_argument("ids", nargs="*", help="analysis ids (default: all)")
+    cc.add_argument("--limit", type=int, help="check at most this many rules")
+    cc.add_argument("--strength", nargs="+", default=["must", "should"], help="rule strengths to check")
     cc.add_argument("--standards", action="store_true", help="check synthesis/standards.json against its cited sources")
-    st = sub.add_parser("standards"); st.add_argument("--bump", metavar="WHY", help="bump the version, stamp since/changed, record history")
-    u = sub.add_parser("upstream"); u.add_argument("--upgrade", action="store_true"); u.add_argument("--strict", action="store_true")
+    st = sub.add_parser("standards", help="check synthesis/standards.json, or version a change")
+    st.add_argument("--bump", metavar="WHY", help="version a change: stamp since/changed, record history, retire removed ids")
+    st.add_argument("--built-from", action="store_true", dest="built_from",
+                    help="record which analyses the standards were built from (the learn-standards merge runs this)")
+    u = sub.add_parser("upstream", help="is OpenWiki ahead of learn/openwiki.lock.json?")
+    u.add_argument("--upgrade", action="store_true", help="install the new commit, run both test suites, move the lock if they pass")
+    u.add_argument("--strict", action="store_true", help="exit 1 when OpenWiki moved")
     args = ap.parse_args()
-    sys.exit({"add": cmd_add, "fetch": cmd_fetch, "pending": cmd_pending, "status": cmd_status,
-              "ingest": cmd_ingest, "check": cmd_check, "trace": cmd_trace, "upstream": cmd_upstream, "standards": cmd_standards, "cite-check": cmd_cite_check, "next": cmd_next, "flagged": cmd_flagged, "map": cmd_map, "review-log": cmd_review_log, "proposals": cmd_proposals}[args.cmd](args) or 0)
+    sys.exit({"add": cmd_add, "remove": cmd_remove, "fetch": cmd_fetch, "pending": cmd_pending, "status": cmd_status,
+              "ingest": cmd_ingest, "check": cmd_check, "trace": cmd_trace, "upstream": cmd_upstream, "standards": cmd_standards,
+              "cite-check": cmd_cite_check, "next": cmd_next, "flagged": cmd_flagged, "map": cmd_map, "review-log": cmd_review_log,
+              "proposals": cmd_proposals}[args.cmd](args) or 0)
 
 
 if __name__ == "__main__":

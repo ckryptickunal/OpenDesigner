@@ -1,6 +1,6 @@
 {
   "$comment": "House standards from the owner's non-negotiable sources (learn/sources.json). Applied and locked in every OpenDesigner project; changed only when the person explicitly asks. Built by lane L19 from learn/analysis/; see learn/README.md.",
-  "version": 1,
+  "version": 2,
   "updated": "2026-09-27",
   "policy": {
     "non-negotiable": "A standard backed by a non-negotiable source (Emil Kowalski's site, the Sonner docs, the public animations.dev pages, the emilkowalski/skills repo) is applied and locked in every project without asking, written into DESIGN.md and checked by engine.py validate and review.",
@@ -106,10 +106,10 @@
       "design_md": true,
       "conflicts": [
         "skills/opendesigner/scripts/engine.py design-md: the DESIGN.md Motion section opens with 'Most movements take <motion.duration.medium>ms' and states no whether-to-animate check, so an implementing agent learns how long things move but not when nothing should move [inferred]",
-        "skills/opendesigner/references/stages/16-motion-haptics-and-sound.md and .detailed.md ask how motion should feel (Q-motion-01), which durations, curves, springs and transitions exist, and what reduced motion does, but no question or default says which interactions get no motion [inferred]"
+        "skills/opendesigner/references/stages/16-motion-haptics-and-sound.md: Q-motion-01's option notes say core navigation and actions done 100+ times a day get no animation, but no question or default records which interactions get no motion; the frequency gate proposed as Q-motion-11 (DC-L19-81) is not built [inferred]"
       ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-when-to-animate-03",
@@ -284,8 +284,16 @@
         "skills/opendesigner/references/stages/16-motion-haptics-and-sound.md Q-motion-01 Use/avoid: 'use expressive motion for page transitions, the primary action and alerts'; page transitions (core navigation) and the primary action are high-frequency surfaces that the sources give no animation or only near-imperceptible motion [inferred]",
         "skills/opendesigner/references/stages/16-motion-haptics-and-sound.detailed.md Q-motion-06 default 'all four plus stagger', including `fade-through` 'for unrelated destinations such as tabs'; the sources put tab switches and core navigation in the 100+ times/day tier (no animation; Expo: animation: 'none') [inferred]"
       ],
+      "breaks_options": {
+        "Q-motion-06": [
+          "fade-through"
+        ]
+      },
+      "supersedes": [
+        "DC-L06-10"
+      ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-when-to-animate-06",
@@ -512,8 +520,12 @@
         "synthesis/levers.json dials.expression drives motion.expressiveScope to 'throughout' at 67-100, which puts expressive motion everywhere rather than only on rare or first-time moments [inferred]",
         "skills/opendesigner/references/stages/16-motion-haptics-and-sound.md Q-motion-01: the default option two-mode is 'bold for 1-3 key moments per flow', and Use/avoid says 'use expressive motion for page transitions, the primary action and alerts'; page transitions and the primary action recur far more often than the rare/first-time tier [inferred]"
       ],
+      "supersedes": [
+        "DC-L04-19",
+        "DC-L06-03"
+      ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-when-to-animate-10",
@@ -659,8 +671,13 @@
       "conflicts": [
         "skills/opendesigner/references/stages/16-motion-haptics-and-sound.detailed.md Q-motion-06: the default 'all four plus stagger' includes `fade-through` 'for unrelated destinations such as tabs' with no platform condition, while this standard gives tab switches no animation (the same question's Use/avoid line does ask for OS-owned navigation transitions on native platforms) [inferred]"
       ],
+      "breaks_options": {
+        "Q-motion-06": [
+          "fade-through"
+        ]
+      },
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-when-to-animate-15",
@@ -925,15 +942,25 @@
       "review": null,
       "design_md": true,
       "conflicts": [
-        "skills/opendesigner/scripts/engine.py build_motion_context: motion.transition.feedback ('Hover, press, color changes') uses motion.easing.standard ([0.2, 0, 0, 1] at the default energy), not ease for hover and color or ease-out for press [inferred].",
+        "skills/opendesigner/scripts/engine.py build_motion_context: motion.transition.feedback ('Hover, press, color changes') now uses motion.easing.hover (ease), which fits hover and color changes, but press shares it: there is no separate press transition on an ease-out curve [inferred].",
         "skills/opendesigner/scripts/engine.py build_motion_context: motion.transition.move ('On-screen movement') is the spatial spring motion.spring.spatial.default, while the sources give timed on-screen moves ease-in-out and keep springs for motion a finger drives [inferred].",
-        "skills/opendesigner/scripts/engine.py build_motion: motion.easing.exit is an accelerate (ease-in) curve, [0.3, 0, 1, 1] at energy 34-66, [0.2, 0, 1, 0.9] at energy 0-33 and [0.4, 0.14, 1, 1] at energy 67-100 ('Leaving: accelerate out of the way'), and semantic motion.transition.exit uses it",
-        "skills/opendesigner/references/stages/16-motion-haptics-and-sound.md Q-motion-01 default: 'ease-out to enter, ease-in to exit'",
-        "16-motion-haptics-and-sound.detailed.md Q-motion-03 default and synthesis/cards.json DC-L04-21: exit (0.3, 0, 1, 1); DC-L04-24 default: the exit 'uses the accelerate curve'",
-        "skills/opendesigner/scripts/engine.py build_motion: motion.easing.enter is [0, 0, 0, 1] at energy 34-66, [0, 0, 0.38, 0.9] at 0-33 and [0, 0, 0.3, 1] at 67-100, and 16-motion-haptics-and-sound.detailed.md Q-motion-03 with synthesis/cards.json DC-L04-21 default the enter curve to (0, 0, 0, 1) or (0.05, 0.7, 0.1, 1), not the sourced cubic-bezier(0.23, 1, 0.32, 1)"
+        "synthesis/cards.json DC-L04-21 default: standard (0.2, 0, 0, 1), enter (0, 0, 0, 1) or (0.05, 0.7, 0.1, 1) and exit/accelerate (0.3, 0, 1, 1); DC-L04-24 default: the exit 'uses the accelerate curve' (both listed under supersedes; the stage 16 Q-motion-01 and Q-motion-03 defaults already follow the house curves, DC-L19-85)"
+      ],
+      "settles": [
+        "Q-motion-03"
+      ],
+      "breaks_options": {
+        "Q-motion-03": [
+          "intensity-based",
+          "personality-based"
+        ]
+      },
+      "supersedes": [
+        "DC-L04-21",
+        "DC-L04-24"
       ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-easing-duration-02",
@@ -1033,17 +1060,28 @@
       ],
       "review": {
         "pattern": "\\b(?:transition|animation)(?:-timing-function)?\\s*:[^;{}]*(?<![\\w-])ease-(?:in-)?out(?![\\w-])|\\btransitionTimingFunction\\s*:\\s*['\\\"`]ease-(?:in-)?out['\\\"`]|\\bEasing\\.(?:out|inOut)\\(|\\bease\\s*:\\s*['\\\"`]?ease(?:In)?Out\\b|\\bEasing\\.(?:quad|cubic|poly|sin|circle|exp|elastic|back|bounce)\\b",
-        "message": "Built-in easings (CSS ease-out and ease-in-out, Reanimated's Easing presets) are too weak: use cubic-bezier(0.23, 1, 0.32, 1) to enter or exit, or cubic-bezier(0.77, 0, 0.175, 1) to move on screen, through the motion.easing tokens."
+        "message": "Built-in easing keywords and Reanimated's Easing presets are too weak: use the house curves through their tokens, motion.easing.enter or motion.easing.exit to enter or leave (var(--ds-motion-easing-enter), var(--ds-motion-easing-exit)) and motion.easing.standard to move on screen (var(--ds-motion-easing-standard))."
       },
       "design_md": true,
       "conflicts": [
-        "skills/opendesigner/scripts/engine.py build_motion: motion.easing.enter is [0, 0, 0.38, 0.9] (energy 0-33), [0, 0, 0, 1] (34-66, the default) or [0, 0, 0.3, 1] (67-100), not cubic-bezier(0.23, 1, 0.32, 1).",
-        "synthesis/levers.json dial energy drives motion.easing.standard through bands [0.2, 0, 0.38, 0.9] / [0.2, 0, 0, 1] / [0.4, 0.14, 0.3, 1] (the default energy 35 gives [0.2, 0, 0, 1]), not cubic-bezier(0.77, 0, 0.175, 1); the sources fix one curve per job instead of swapping curves with a dial [inferred].",
-        "synthesis/questionnaire.json Q-motion-03 default (stage 16 detailed): standard (0.2, 0, 0, 1), enter (0, 0, 0, 1) or (0.05, 0.7, 0.1, 1); Q-motion-01 option productive offers Carbon cubic-bezier(0.2, 0, 0.38, 0.9).",
-        "skills/opendesigner/assets/templates/motion.html presets: two-mode standard cubic-bezier(0.2,0,0,1) and enter cubic-bezier(0,0,0,1); productive standard cubic-bezier(0.2,0,0.38,0.9); springs standard cubic-bezier(0.34,1.4,0.64,1) and enter cubic-bezier(0.34,1.56,0.64,1), none of them from the sources' curve table."
+        "skills/opendesigner/scripts/engine.py build_motion: motion.easing.enter and motion.easing.exit are [0, 0, 0.38, 0.9] (energy 0-33), [0, 0, 0, 1] (34-66) or [0, 0, 0.3, 1] (67-100), not cubic-bezier(0.23, 1, 0.32, 1); this standard's lock replaces it in every project; it returns only when the person overrides the standard.",
+        "synthesis/levers.json dial energy drives motion.easing.standard through bands [0.2, 0, 0.38, 0.9] / [0.2, 0, 0, 1] / [0.4, 0.14, 0.3, 1] (energy 35 and the dial default 50 both give [0.2, 0, 0, 1]), not cubic-bezier(0.77, 0, 0.175, 1); the sources fix one curve per job instead of swapping curves with a dial, and this standard's lock replaces it in every project; it returns only when the person overrides the standard [inferred].",
+        "synthesis/questionnaire.json Q-motion-01 option productive cites Carbon's cubic-bezier(0.2, 0, 0.38, 0.9) (the Q-motion-03 default already names the house curves)."
+      ],
+      "settles": [
+        "Q-motion-03"
+      ],
+      "breaks_options": {
+        "Q-motion-03": [
+          "intensity-based",
+          "personality-based"
+        ]
+      },
+      "supersedes": [
+        "DC-L04-21"
       ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-easing-duration-03",
@@ -1122,16 +1160,25 @@
       "engine": null,
       "review": {
         "pattern": "\\b(?:transition|animation)(?:-timing-function)?\\s*:[^;{}]*(?<![\\w-])ease-in(?![\\w-])|\\btransitionTimingFunction\\s*:\\s*['\\\"`]ease-in['\\\"`]|\\bease\\s*:\\s*['\\\"`]?easeIn\\b|\\bEasing\\.in\\(|\\.easeIn\\b|\\.curveEaseIn\\b|\\bFastOutLinearInEasing\\b",
-        "message": "ease-in delays the moment the user is watching: use ease-out, cubic-bezier(0.23, 1, 0.32, 1)."
+        "message": "An accelerating curve delays the moment the user is watching: use the house decelerating curve through its token, motion.easing.exit or motion.easing.enter (var(--ds-motion-easing-exit), var(--ds-motion-easing-enter))."
       },
       "design_md": true,
       "conflicts": [
-        "skills/opendesigner/scripts/engine.py build_motion: motion.easing.exit is an accelerate (ease-in) curve at every energy, [0.2, 0, 1, 0.9], [0.3, 0, 1, 1] (the default) or [0.4, 0.14, 1, 1], described as 'Leaving: accelerate out of the way', and motion.transition.exit uses it.",
-        "synthesis/questionnaire.json Q-motion-01 default (stage 16): 'ease-out to enter, ease-in to exit'; Q-motion-03 default exit (0.3, 0, 1, 1).",
-        "skills/opendesigner/assets/templates/motion.html presets: exit cubic-bezier(0.2,0,1,0.9), cubic-bezier(0.3,0,1,1) and cubic-bezier(0.4,0,1,1)."
+        "synthesis/cards.json DC-L04-21 default: exit/accelerate (0.3, 0, 1, 1); DC-L04-24 default: the exit 'uses the accelerate curve'; DC-L09-06 default: 'ease-in exit' (all three listed under supersedes)"
+      ],
+      "constraints": [
+        {
+          "path": "motion.easing.*",
+          "forbid": "accelerating-curve"
+        }
+      ],
+      "supersedes": [
+        "DC-L04-21",
+        "DC-L04-24",
+        "DC-L09-06"
       ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-easing-duration-06",
@@ -1209,18 +1256,57 @@
       "engine": null,
       "review": {
         "pattern": "\\b(?:transition|animation)(?:-duration)?\\s*:(?![^;{}]*(?:ease-drawer|0\\.32,\\s*0\\.72|linear|infinite))[^;{}]*?(?<![\\w.-])(?:(?:3(?:0[1-9]|[1-9]\\d)|[4-9]\\d\\d|[1-9]\\d{3,})ms|(?:0?\\.(?:3[1-9]|[4-9])\\d*|[1-9]\\d*(?:\\.\\d+)?)s)\\b",
-        "message": "UI animation over 300ms: use 150-250ms unless there is a stated reason (a web drawer's 500ms, a toast tuned to its personality, marketing or illustrative motion), and say why."
+        "message": "UI animation over the 300-millisecond budget: use a duration token such as motion.duration.medium (var(--ds-motion-duration-medium)) unless there is a stated reason (a web drawer on motion.duration.drawer, a toast tuned to its personality, marketing or illustrative motion), and say why."
       },
       "design_md": true,
       "conflicts": [
-        "skills/opendesigner/scripts/engine.py validate: a motion.transition.* token gets an advisory only above 400ms and a warning only above 500ms, not above 300ms.",
+        "skills/opendesigner/scripts/engine.py validate: the general lint still says 'Changes feel instant only up to 400ms' and warns only above 500ms; the 300ms warning (std_motion_budget) applies only while a system follows this standard.",
         "synthesis/levers.json formulas.motion: standardMax 400 and warnAbove 500; durations long [400, 500] and extra 700.",
-        "synthesis/questionnaire.json Q-motion-02 default (stage 16 detailed): 6 steps with long 400-500 and extra 700, and 'avoid standard transitions over 500ms'; Q-motion-01 default: '7 durations 50-500ms'.",
-        "skills/opendesigner/scripts/engine.py build_motion: motion.duration.long is 380ms and extra 660ms at the default energy (480ms and 840ms at energy 100, through motion.durationMultiplier 0.8-1.2), and motion.transition.expand (dialogs, sheets, side panels) uses long.",
-        "skills/opendesigner/assets/templates/motion.html presets: two-mode long 400; springs medium 320 and long 480."
+        "synthesis/questionnaire.json Q-motion-02 default (stage 16 detailed): 6 steps with long 400-500 and extra 700, and 'avoid standard transitions over 500ms'; Q-motion-01 default: '7 durations 50-500ms'."
+      ],
+      "breaks_options": {
+        "Q-motion-02": [
+          "6-steps",
+          "16-steps"
+        ]
+      },
+      "constraints": [
+        {
+          "path": "motion.duration.micro",
+          "forbid": "max-duration-ms",
+          "value": 300
+        },
+        {
+          "path": "motion.duration.short",
+          "forbid": "max-duration-ms",
+          "value": 300
+        },
+        {
+          "path": "motion.duration.medium",
+          "forbid": "max-duration-ms",
+          "value": 300
+        },
+        {
+          "path": "motion.duration.medium-exit",
+          "forbid": "max-duration-ms",
+          "value": 300
+        },
+        {
+          "path": "motion.duration.tooltip",
+          "forbid": "max-duration-ms",
+          "value": 300
+        },
+        {
+          "path": "motion.duration.reduced-fade",
+          "forbid": "max-duration-ms",
+          "value": 300
+        }
+      ],
+      "supersedes": [
+        "DC-L04-20"
       ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-easing-duration-07",
@@ -1320,12 +1406,24 @@
       "review": null,
       "design_md": true,
       "conflicts": [
-        "skills/opendesigner/scripts/engine.py build_motion: medium = 250ms x motion.durationMultiplier (240ms at the default energy, up to 300ms) and long = 400ms x multiplier (380ms default, up to 480ms): the energy dial stretches durations past the dropdown and modal budgets.",
+        "skills/opendesigner/scripts/engine.py build_motion: medium = 250ms x motion.durationMultiplier (240ms at energy 35, up to 300ms) and long = 400ms x multiplier (380ms at energy 35, up to 480ms): the energy dial stretches durations past the dropdown and modal budgets; this standard's lock replaces it in every project; it returns only when the person overrides the standard.",
         "synthesis/levers.json formulas.motion.durations: short [150, 200], medium [250, 300], long [400, 500].",
         "skills/opendesigner/scripts/engine.py build_motion_context: motion.transition.enter ('Menus, popovers, toasts entering') gives tooltips, dropdowns and toasts one medium duration, although their budgets differ (125-200ms vs 150-250ms) [inferred]."
       ],
+      "settles": [
+        "Q-motion-02"
+      ],
+      "breaks_options": {
+        "Q-motion-02": [
+          "6-steps",
+          "16-steps"
+        ]
+      },
+      "supersedes": [
+        "DC-L04-20"
+      ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-easing-duration-09",
@@ -1438,27 +1536,15 @@
           "evidence": "Dropdown, Tooltip, Modal: one transition covers [data-starting-style] and [data-ending-style]; Dropdown, Tooltip and Modal recipes: one transition (200ms, 125ms, 250ms) for both [data-starting-style] and [data-ending-style]"
         }
       ],
-      "engine": [
-        {
-          "path": "motion.duration.medium-exit",
-          "value": "160ms",
-          "type": "duration",
-          "note": "0.8 x the 200ms medium set by STD-easing-duration-07; motion.transition.exit uses it."
-        },
-        {
-          "path": "motion.duration.long-exit",
-          "value": "200ms",
-          "type": "duration",
-          "note": "0.8 x the 250ms long set by STD-easing-duration-07."
-        }
-      ],
+      "engine": null,
       "review": null,
       "design_md": true,
-      "conflicts": [
-        "skills/opendesigner/scripts/engine.py build_motion: medium-exit and long-exit are 0.75 x the energy-scaled ladder (exit_k), not of the stored medium and long, so they do not follow a locked value: in a test run with medium set to 200ms, medium-exit stayed 180ms (10% faster)."
+      "conflicts": [],
+      "settles": [
+        "Q-motion-02"
       ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-easing-duration-12",
@@ -1566,10 +1652,10 @@
       "review": null,
       "design_md": true,
       "conflicts": [
-        "skills/opendesigner/scripts/engine.py build_motion_context: toasts share motion.transition.enter (medium duration, enter curve) with menus and popovers, so a toast cannot get its own ease and timing [inferred]."
+        "skills/opendesigner/scripts/engine.py build_motion_context: toasts still share motion.transition.enter ('Menus, popovers, toasts entering': medium duration, enter curve) with menus and popovers; STD-components-toasts-drawers-07 adds motion.duration.toast and motion.easing.toast, but no semantic transition uses them [inferred]."
       ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-easing-duration-15",
@@ -1745,7 +1831,7 @@
         "path": "motion.scale.enter",
         "value": 0.95,
         "type": "number",
-        "note": "Default entrance start scale, always paired with opacity 0. New token. engine.py set cannot create it yet: it infers a number type only under opacity.*, so 'set motion.scale.* 0.95' is refused [tested]"
+        "note": "Default entrance start scale, always paired with opacity 0. New token, created in every export from this mapping's number type (engine.py std_token_types)."
       },
       "review": {
         "pattern": "scale\\(\\s*0(?:\\.0*)?\\s*(?:,\\s*0(?:\\.0*)?\\s*)?\\)|(?<![\\w-])scale:\\s*['\"]?0(?![.\\d])",
@@ -1754,7 +1840,7 @@
       "design_md": true,
       "conflicts": [],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-enter-exit-origin-02",
@@ -1794,8 +1880,13 @@
       "conflicts": [
         "skills/opendesigner/references/stages/16-motion-haptics-and-sound.detailed.md Q-motion-06: the default ships the option 'Fade for in-screen enter and exit (dialogs, menus)' with no initial transform, while its card synthesis/cards.json DC-L04-23 records Material's fade pattern as 'Fade + Scale'; the stage text drops the scale the card keeps"
       ],
+      "breaks_options": {
+        "Q-motion-06": [
+          "fade"
+        ]
+      },
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-enter-exit-origin-03",
@@ -2036,28 +2127,26 @@
           "path": "motion.duration.medium",
           "value": "200ms",
           "type": "duration",
-          "note": "Semantic motion.transition.enter ('Menus, popovers, toasts entering') reads motion.duration.medium [tested with engine.py set]. The override does not move motion.duration.medium-exit, which stays at 75% of the energy-derived medium (180ms at energy 35) [tested]"
+          "note": "Semantic motion.transition.enter ('Menus, popovers, toasts entering') reads motion.duration.medium [tested with engine.py set]. The exit durations follow the entrance (STD-easing-duration-11)."
         },
         {
           "path": "motion.scale.enter",
           "value": 0.95,
           "type": "number",
-          "note": "New token. engine.py set cannot create it yet: it infers a number type only under opacity.*, so 'set motion.scale.* 0.95' is refused [tested]"
+          "note": "New token, created in every export from this mapping's number type (engine.py std_token_types)."
         }
       ],
       "review": {
         "pattern": "\\.(?=[\\w-]*(?:dropdown|popover|menu|select(?!ed|ion)))(?![\\w-]*(?:trigger|button|btn|item|icon|arrow))[\\w-]+(?![\\w-])[^{}]*\\{[^}]*\\btransition(?:-duration)?\\s*:[^;{}]*?(?:\\b(?:[3-9]\\d{2}|\\d{4,})ms\\b|(?<![\\d.])(?:0?\\.[3-9]\\d*|[1-9](?:\\.\\d+)?)s\\b)",
-        "message": "Keep dropdowns, popovers, menus and selects at 150–250ms (house value 200ms)."
+        "message": "Time dropdowns, popovers, menus and selects with the motion.duration.medium token (var(--ds-motion-duration-medium)); the house budget is 150 to 250 milliseconds."
       },
       "design_md": true,
       "conflicts": [
-        "skills/opendesigner/scripts/engine.py build_motion: motion.duration.medium = 250ms × motion.durationMultiplier (0.8 at energy 0, 1.0 at 50, 1.2 at 100 in synthesis/levers.json), rounded to 10ms: 240ms at energy 35 (a friendly, minimal sketch), 250ms at 50, and 260–300ms from energy 55 to 100, where the menu and popover entrance (semantic motion.transition.enter) leaves the 150–250ms range [tested]",
-        "skills/opendesigner/scripts/engine.py build_motion_context: motion.transition.exit leaves on motion.easing.exit [0.3, 0, 1, 1], an accelerating curve, while the recipe exits popovers on the same 200ms ease-out [inferred]",
-        "skills/opendesigner/references/stages/16-motion-haptics-and-sound.md Q-motion-01 default says 'ease-in to exit' [inferred]",
+        "skills/opendesigner/scripts/engine.py build_motion: motion.duration.medium = 250ms × motion.durationMultiplier (0.8 at energy 0, 1.0 at 50, 1.2 at 100 in synthesis/levers.json), rounded to 10ms: 240ms at energy 35, 250ms at 50 and 260–300ms from energy 55 to 100, outside the 150–250ms range; this standard's lock replaces it in every project; it returns only when the person overrides the standard (and STD-easing-duration-07's) [tested]",
         "skills/opendesigner/references/stages/16-motion-haptics-and-sound.detailed.md Q-motion-06 option fade (a default) is a plain fade for dialogs and menus; the recipe adds scale(0.95) from the trigger [inferred]"
       ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-enter-exit-origin-09",
@@ -2122,16 +2211,16 @@
           "path": "motion.scale.enter-tooltip",
           "value": 0.97,
           "type": "number",
-          "note": "New token. engine.py set cannot create it yet: it infers a number type only under opacity.*, so 'set motion.scale.* 0.95' is refused [tested]"
+          "note": "New token, created in every export from this mapping's number type (engine.py std_token_types)."
         }
       ],
       "review": null,
       "design_md": true,
       "conflicts": [
-        "skills/opendesigner/scripts/engine.py build_motion: there is no 125ms step (motion.duration.micro 100ms, short 150ms), and the semantic transition for things entering (motion.transition.enter: 'Menus, popovers, toasts entering') runs motion.duration.medium, 240ms at energy 35, above the 125–200ms tooltip range [tested]"
+        "skills/opendesigner/scripts/engine.py build_motion_context: no semantic transition uses the 125ms motion.duration.tooltip this standard adds; tooltips fall under motion.transition.enter ('Menus, popovers, toasts entering'), which runs motion.duration.medium, 200ms under STD-easing-duration-07, the top of the 125–200ms range [inferred]"
       ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-enter-exit-origin-10",
@@ -2255,17 +2344,16 @@
           "path": "motion.scale.enter-modal",
           "value": 0.96,
           "type": "number",
-          "note": "New token. engine.py set cannot create it yet: it infers a number type only under opacity.*, so 'set motion.scale.* 0.95' is refused [tested]"
+          "note": "New token, created in every export from this mapping's number type (engine.py std_token_types)."
         }
       ],
       "review": null,
       "design_md": true,
       "conflicts": [
-        "skills/opendesigner/scripts/engine.py build_motion_context: semantic motion.transition.expand ('Dialogs, sheets, side panels entering') runs motion.duration.long = 400ms × durationMultiplier, 380ms at energy 35 (320–480ms across the energy range), on the enter curve: inside the 200–500ms modal band but above the 250ms modal recipe and the general under-300ms rule for UI motion; the same token also serves sheets, whose drawer recipe is 500ms on cubic-bezier(0.32, 0.72, 0, 1) [tested]",
-        "skills/opendesigner/scripts/engine.py build_motion_context: motion.transition.exit uses motion.easing.exit [0.3, 0, 1, 1] while the modal recipe exits on the same ease-out [inferred]"
+        "skills/opendesigner/scripts/engine.py build_motion_context: semantic motion.transition.expand ('Dialogs, sheets, side panels entering') runs motion.duration.long on motion.easing.enter, 250ms on the strong ease-out under STD-easing-duration-07 and -02, which matches the modal recipe; but no transition uses motion.duration.modal, and the same token also serves sheets, whose drawer recipe is 500ms on cubic-bezier(0.32, 0.72, 0, 1) (motion.duration.drawer, motion.easing.drawer) [inferred]"
       ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-enter-exit-origin-12",
@@ -2375,7 +2463,7 @@
       },
       "review": {
         "pattern": "\\bstaggerChildren:\\s*(?:0?\\.(?:08[1-9]|09|[1-9]|0[12]|00[1-9])\\d*|[1-9]\\d*(?:\\.\\d+)?)\\b|\\bstagger\\(\\s*0?\\.(?:08[1-9]|09|[1-9]|0[12]|00[1-9])\\d*\\s*[,)]|\\.delay\\(\\s*(?:index|idx|i)\\s*\\*\\s*(?:8[1-9]|9\\d|[1-9]\\d{2,}|[12]\\d|[1-9])\\s*\\)|\\bcalc\\(\\s*var\\(--(?:index|idx|i)\\)\\s*\\*\\s*(?:8[1-9]|9\\d|[1-9]\\d{2,}|[12]\\d|[1-9])\\s*ms\\s*\\)",
-        "message": "Stagger steps stay between 30ms and 80ms per item (Motion takes seconds: 0.03–0.08)."
+        "message": "Keep each stagger step between 30 and 80 milliseconds per item: use the motion.duration.stagger token (var(--ds-motion-duration-stagger)); Motion's stagger() takes seconds."
       },
       "design_md": true,
       "conflicts": [
@@ -2383,7 +2471,7 @@
         "synthesis/questionnaire.json Q-motion-06 (stage 16 detailed): stagger of 20-50ms with a total of at most 500ms; 20-29ms is below the sources' 30ms floor."
       ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-enter-exit-origin-16",
@@ -2568,10 +2656,10 @@
       "review": null,
       "design_md": true,
       "conflicts": [
-        "engine.py review (motion_fix in cmd_review) tells `transition: height 400ms ease` to use motion.transition.expand (motion.duration.long, 380ms in a sample system, 'panels and dialogs') instead of asking for a short accordion transition (checked by running review on a sample file with no house standards loaded)"
+        "engine.py review (motion_fix in cmd_review) tells `transition: height 400ms ease` to use motion.transition.expand (motion.duration.long, 'panels and dialogs'; 250ms under STD-easing-duration-07) instead of asking for a short accordion transition (checked by running review on a sample file with no house standards loaded)"
       ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-enter-exit-origin-24",
@@ -2702,13 +2790,13 @@
         "path": "motion.duration.reveal",
         "value": "600ms",
         "type": "duration",
-        "note": "New token for marketing scroll reveals [tested with engine.py set: created in primitives.tokens.json]; OpenDesigner has no ease-in-out token matching cubic-bezier(0.77, 0, 0.175, 1) [inferred]"
+        "note": "New token for marketing scroll reveals [tested with engine.py set: created in primitives.tokens.json]; the ease-in-out cubic-bezier(0.77, 0, 0.175, 1) is motion.easing.standard under STD-easing-duration-02."
       },
       "review": null,
       "design_md": true,
       "conflicts": [],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-enter-exit-origin-27",
@@ -3092,11 +3180,10 @@
       "review": null,
       "design_md": true,
       "conflicts": [
-        "skills/opendesigner/scripts/engine.py build_motion: motion.easing.exit is not the mirror of motion.easing.enter (at energy 34–66 enter [0, 0, 0, 1] and exit [0.3, 0, 1, 1]; the point-reversed mirror of enter is [1, 0, 1, 1]) [inferred]",
-        "Tension between sources, not an OpenDesigner default: a mirrored ease-out is ease-in shaped on the way back, while Emil's easing rules say never use ease-in on UI; the easing-duration theme should settle which wins [inferred]"
+        "Tension between sources, not an OpenDesigner default: a mirrored ease-out is ease-in shaped on the way back, while Emil's easing rules never use ease-in on UI; this rule's own exception settles it for UI entrances and exits, where STD-easing-duration-01 and -03 win, and the engine exits on the same ease-out it enters on [inferred]"
       ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-enter-exit-origin-40",
@@ -3187,11 +3274,11 @@
       "review": null,
       "design_md": true,
       "conflicts": [
-        "skills/opendesigner/scripts/engine.py build_motion_context: semantic motion.transition.expand ('Dialogs, sheets, side panels entering') runs motion.duration.long, 380ms at energy 35 (320–480ms), on the enter curve [0, 0, 0, 1] at energy 34-66, not 500ms on cubic-bezier(0.32, 0.72, 0, 1) [tested]",
+        "skills/opendesigner/scripts/engine.py build_motion_context: sheets fall under semantic motion.transition.expand ('Dialogs, sheets, side panels entering'), which runs motion.duration.long (250ms under STD-easing-duration-07) on motion.easing.enter, not 500ms on the drawer curve; this standard adds motion.duration.drawer and motion.easing.drawer, but no transition uses them [inferred]",
         "synthesis/levers.json formulas.motion.standardMax is 400, below the 500ms drawer transition [inferred]"
       ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-enter-exit-origin-42",
@@ -3354,8 +3441,19 @@
         "synthesis/levers.json formulas.motion.web = 'if dampingRatio<1 emit sampled linear() spring; else cubic-bezier by energy band': the web form of every spring token is a fixed-duration CSS curve, which the source says cannot be smoothly grabbed and reversed mid-flight, and which cannot take a release velocity [inferred]",
         "skills/opendesigner/scripts/engine.py build_motion_context points motion.transition.move (all on-screen movement) at motion.spring.spatial.default whether or not a finger is involved, where animate-expo uses timing with ease-in-out for motion without a finger [inferred]"
       ],
+      "breaks_options": {
+        "Q-motion-01": [
+          "springs"
+        ],
+        "Q-motion-04": [
+          "durations-only"
+        ]
+      },
+      "supersedes": [
+        "DC-L09-06"
+      ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-springs-gestures-02",
@@ -3402,8 +3500,14 @@
       "conflicts": [
         "skills/opendesigner/references/stages/16-motion-haptics-and-sound.detailed.md Q-motion-04 default: '(dampingRatio, stiffness) plus derived (duration, bounce) for Apple': stiffness, not response, is the stored parameter, and the Apple pair is only derived [inferred]"
       ],
+      "settles": [
+        "Q-motion-04"
+      ],
+      "supersedes": [
+        "DC-L04-22"
+      ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-springs-gestures-04",
@@ -3458,11 +3562,20 @@
       "review": null,
       "design_md": true,
       "conflicts": [
-        "synthesis/levers.json dials 'energy' drives motion.spring.spatial.dampingRatio through anchors [[0, 1.0], [33, 1.0], [50, 0.9], [75, 0.8], [100, 0.6]], so above energy 33 every spatial spring is under-damped (0.9 at the dial default 50); motion.transition.move aliases motion.spring.spatial.default, so plain on-screen moves overshoot",
-        "skills/opendesigner/scripts/engine.py build_motion: at energy ≤ 50 motion.spring.spatial.default has stiffness 700 (levers anchors [[0, 700], [50, 700], [75, 380], [100, 380]]), a derived Apple duration of 0.237 s, faster than the 0.3–0.4 s response [inferred]"
+        "synthesis/levers.json dials 'energy' drives motion.spring.spatial.dampingRatio through anchors [[0, 1.0], [33, 1.0], [50, 0.9], [75, 0.8], [100, 0.6]], so above energy 33 every spatial spring is under-damped (0.9 at the dial default 50) and plain on-screen moves overshoot (motion.transition.move aliases motion.spring.spatial.default); this standard's lock replaces it in every project; it returns only when the person overrides the standard",
+        "skills/opendesigner/scripts/engine.py build_motion: at energy ≤ 50 motion.spring.spatial.default has stiffness 700 (levers anchors [[0, 700], [50, 700], [75, 380], [100, 380]]), a derived Apple duration of 0.237 s, faster than the 0.3–0.4 s response; this standard's lock replaces it in every project; it returns only when the person overrides the standard (246.7, a 0.4 s response) [inferred]"
       ],
+      "settles": [
+        "Q-motion-04"
+      ],
+      "breaks_options": {
+        "Q-motion-04": [
+          "spatial-effects",
+          "apple-bounce"
+        ]
+      },
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-springs-gestures-05",
@@ -3502,11 +3615,16 @@
       "review": null,
       "design_md": true,
       "conflicts": [
-        "synthesis/levers.json dials 'energy' drives motion.spring.spatial.dampingRatio through anchors [[0, 1.0], [33, 1.0], [50, 0.9], [75, 0.8], [100, 0.6]], so above energy 33 every spatial spring is under-damped (0.9 at the dial default 50); motion.transition.move (on-screen moves with no gesture behind them) resolves to that spring",
+        "synthesis/levers.json dials 'energy' drives motion.spring.spatial.dampingRatio through anchors [[0, 1.0], [33, 1.0], [50, 0.9], [75, 0.8], [100, 0.6]], so above energy 33 every spatial spring is under-damped (0.9 at the dial default 50), and motion.transition.move (on-screen moves with no gesture behind them) resolves to that spring; STD-springs-gestures-04's lock (1.0) replaces it in every project and it returns only when the person overrides that standard",
         "skills/opendesigner/references/stages/16-motion-haptics-and-sound.md Q-motion-01 default two-mode: 'springs only for spatial moves in the expressive mode, bounce at or below 0.2' ties bounce to the motion mode, not to a momentum gesture [inferred]"
       ],
+      "breaks_options": {
+        "Q-motion-04": [
+          "spatial-effects"
+        ]
+      },
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-springs-gestures-06",
@@ -3560,10 +3678,10 @@
       "review": null,
       "design_md": true,
       "conflicts": [
-        "skills/opendesigner/scripts/engine.py build_motion has no momentum spring: motion.spring.spatial.* serve both plain moves and post-gesture settles with one energy-driven damping ratio [inferred]"
+        "skills/opendesigner/scripts/engine.py build_motion creates no momentum spring itself: motion.spring.momentum exists only through this standard's mapping, and no semantic transition, export note or DESIGN.md line points released drags at it, while motion.spring.spatial.* serve plain moves [inferred]"
       ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-springs-gestures-07",
@@ -3608,11 +3726,11 @@
       },
       "design_md": true,
       "conflicts": [
-        "synthesis/levers.json dials 'energy' → motion.spring.spatial.dampingRatio reaches 0.6 at energy 100, bounce 0.4 by the file's own conversion bounce = 1 - dampingRatio",
+        "synthesis/levers.json dials 'energy' → motion.spring.spatial.dampingRatio reaches 0.6 at energy 100, bounce 0.4 by the file's own conversion bounce = 1 - dampingRatio; STD-springs-gestures-04's lock (1.0) replaces it in every project and it returns only when the person overrides that standard",
         "synthesis/levers.json formulas.motion.springSpeeds.expressive.spatial.fast = [0.6, 800] (dampingRatio 0.6, bounce 0.4)"
       ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-springs-gestures-08",
@@ -3671,11 +3789,10 @@
       "review": null,
       "design_md": true,
       "conflicts": [
-        "skills/opendesigner/scripts/engine.py build_motion labels motion.spring.spatial.default 'partial-screen (sheets, drawers)' but gives it the energy-driven damping ratio (1.0 at energy ≤ 33, 0.9 at 50) and stiffness 700, a derived Apple duration of 0.237 s, not 0.8 / 0.3 s [inferred]",
-        "skills/opendesigner/scripts/engine.py build_motion: motion.spring.spatial.default, labelled 'partial-screen (sheets, drawers)', has dampingRatio 0.988 and stiffness 700 at default dials (Apple bounce 0.012, css durationMs 260), not damping 0.8 with a 0.3 response"
+        "skills/opendesigner/scripts/engine.py build_motion labels motion.spring.spatial.default 'partial-screen (sheets, drawers)', but under STD-springs-gestures-04 it is critically damped with a 0.4 s response, not damping 0.8 with a 0.3 s response; the sheet spring this standard adds, motion.spring.sheet, is not the one that label points sheets to [inferred]"
       ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-springs-gestures-09",
@@ -3852,8 +3969,11 @@
       "conflicts": [
         "skills/opendesigner/references/stages/16-motion-haptics-and-sound.detailed.md Q-motion-02 default: 'motion is interruptible and never blocks input longer than about 100ms', which still allows about 100ms of blocked input"
       ],
+      "supersedes": [
+        "DC-L04-24"
+      ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-springs-gestures-14",
@@ -4698,8 +4818,13 @@
       "review": null,
       "design_md": true,
       "conflicts": [],
+      "breaks_options": {
+        "Q-motion-08": [
+          "sound-forward"
+        ]
+      },
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-springs-gestures-63",
@@ -4806,10 +4931,10 @@
       },
       "design_md": true,
       "conflicts": [
-        "engine.py review (motion_fix in cmd_review) checks a hard-coded transition only for its duration and points it to a motion.transition.* token whatever property it animates: `transition: width 200ms ease-out` is told to use the feedback token ('hover, press and color changes'), and animated layout properties are never flagged (checked by running review on a sample file with no house standards loaded)"
+        "engine.py review (motion_fix in cmd_review) checks a hard-coded transition for its duration and points it to a motion.transition.* token by duration and selector, whatever property it animates: `transition: width 200ms ease-out` is told to use the enter transition token, and with no house standards loaded animated layout properties are never flagged"
       ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-performance-properties-02",
@@ -4874,7 +4999,7 @@
       "why": "transition: all animates unintended properties off the GPU; the animate skill lists it among the automatic blocks in review-animations.",
       "strength": "must",
       "values": {
-        "instead": "transition: transform 200ms ease-out"
+        "instead": "transition: transform var(--ds-motion-duration-medium) var(--ds-motion-easing-enter)"
       },
       "applies_to": [
         "web",
@@ -4910,14 +5035,14 @@
       "engine": null,
       "review": {
         "pattern": "\\btransition(?:-property|Property)?\\s*:\\s*['\\\"`]?\\s*all\\b|(?<![\\w-])transition-all(?![\\w-])",
-        "message": "Name the exact properties, for example transition: transform 200ms ease-out."
+        "message": "Name the exact properties and take the timing from the motion tokens, for example transition: transform var(--ds-motion-duration-medium) var(--ds-motion-easing-enter)."
       },
       "design_md": true,
       "conflicts": [
         "engine.py review (motion_fix in cmd_review) answers `transition: all 300ms` only with a duration fix (use the motion.transition.enter token) and never flags the `all` (checked by running review on a sample file with no house standards loaded)"
       ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-performance-properties-09",
@@ -5088,7 +5213,7 @@
       "area": "motion",
       "title": "Add will-change once you see the glitch",
       "rule": "Add will-change: transform as the fix for an element you have seen shift 1px or jitter as its motion starts, rather than adding it by default.",
-      "why": "The cheatsheet gives will-change: transform as the fix for an element that shifts 1px as motion starts, 'only once you see it', and the practical tips give it for shaky or jittery animations. will-change asks the browser to promote the element to its own layer ahead of time; the apple-design skill instead hints it wherever motion is imminent, so this is a should.",
+      "why": "The cheatsheet gives will-change: transform as the fix for an element that shifts 1px as motion starts, 'only once you see it', and the practical tips give it for shaky or jittery animations. The apple-design skill instead hints it wherever motion is imminent, so this is a should.",
       "strength": "should",
       "values": {
         "fix": "will-change: transform",
@@ -5102,15 +5227,11 @@
       "sources": [
         {
           "id": "eks-performance-cheatsheet",
-          "evidence": "Element shifts 1px as motion starts: will-change: transform (only once you see it)"
+          "evidence": "Element shifts 1px as motion starts | `will-change: transform` (only once you see it)"
         },
         {
           "id": "ek-agents-with-taste",
-          "evidence": "Practical Tips: Shaky/jittery animations, Add will-change: transform"
-        },
-        {
-          "id": "eks-skills-animation-vocabulary-skill",
-          "evidence": "will-change: A CSS hint that an element is about to animate, so the browser can promote it to its own layer ahead of time"
+          "evidence": "Shaky/jittery animations | Add `will-change: transform`"
         }
       ],
       "engine": null,
@@ -5118,7 +5239,7 @@
       "design_md": true,
       "conflicts": [],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-performance-properties-13",
@@ -5245,10 +5366,10 @@
       "review": null,
       "design_md": true,
       "conflicts": [
-        "synthesis/levers.json formulas.motion.web ('if dampingRatio<1 emit sampled linear() spring; else cubic-bezier by energy band') and the motion.transition.move token ('On-screen movement: spatial spring (web: linear() sample).') ship the web's on-screen movement spring as a fixed CSS linear() transition; the sources keep gesture-driven, interruptible movement on JS springs (Motion), because CSS transitions cannot be smoothly grabbed and reversed mid-flight [inferred]"
+        "synthesis/levers.json formulas.motion.web ('if dampingRatio<1 emit sampled linear() spring; else cubic-bezier by energy band') and the motion.transition.move token in skills/opendesigner/scripts/engine.py ('On-screen movement: spatial spring (web: linear() sample).') ship the web's on-screen movement spring as a fixed CSS transition; the sources keep gesture-driven, interruptible movement on JS springs (Motion), because CSS transitions cannot be smoothly grabbed and reversed mid-flight [inferred]"
       ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-performance-properties-16",
@@ -5569,8 +5690,11 @@
       "review": null,
       "design_md": true,
       "conflicts": [],
+      "settles": [
+        "Q-motion-10"
+      ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-accessibility-motion-02",
@@ -5693,16 +5817,23 @@
       ],
       "review": {
         "pattern": "(?:animation|transition)-duration\\s*:\\s*(?:0|0?\\.0+1)m?s\\s*!important",
-        "message": "This reset zeroes every animation under reduced motion; keep opacity and color changes (a 200ms fade) and drop only movement."
+        "message": "This reset zeroes every animation under reduced motion; keep opacity and color changes (a fade on the motion.duration.reduced-fade token, var(--ds-motion-duration-reduced-fade)) and drop only movement."
       },
       "design_md": true,
       "conflicts": [
-        "skills/opendesigner/scripts/engine.py build_motion_context gives the reduced context's motion.transition.enter, .exit and .expand motion.duration.micro (100ms) with motion.easing.standard (cubic-bezier(0.2, 0, 0, 1) at the default Energy; the Energy dial changes it), so build/css/tokens.css emits --ds-motion-transition-enter-duration: 100ms under prefers-reduced-motion; the sources' reduced-motion cross-fade is 200ms ease",
-        "skills/opendesigner/references/stages/16-motion-haptics-and-sound.md Q-motion-07 offers 'remove' (Remove all non-essential motion, WCAG 2.3.3); engine.py maps it to raw.reducedMotion = remove, which makes the reduced feedback, enter, exit and expand transitions motion.duration.instant (0ms): zero motion, which the sources reject",
-        "skills/opendesigner/scripts/engine.py build_motion_context: when flags.motionOff is set (Q-motion-01 'none'), the reduced context's feedback, enter, exit and expand transitions are motion.duration.instant (0ms) as well, so no animation at all is left under reduced motion"
+        "skills/opendesigner/scripts/engine.py build_motion_context builds the reduced context's motion.transition.enter, .exit and .expand from motion.duration.micro (100ms) on motion.easing.standard, not the sources' 200ms ease cross-fade; this standard's mapping replaces them with that cross-fade in every project, and the engine's own values return only when the person overrides the standard",
+        "skills/opendesigner/references/stages/16-motion-haptics-and-sound.md Q-motion-07 still offers 'remove' (Remove all non-essential motion, WCAG 2.3.3); engine.py maps it to raw.reducedMotion = remove, which would make the reduced feedback, enter, exit and expand transitions motion.duration.instant (0ms), zero motion that the sources reject; this standard locks raw.reducedMotion to replace, so the option can only be refused (listed under breaks_options)"
       ],
+      "settles": [
+        "Q-motion-07"
+      ],
+      "breaks_options": {
+        "Q-motion-07": [
+          "remove"
+        ]
+      },
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-accessibility-motion-03",
@@ -5891,12 +6022,12 @@
       "engine": null,
       "review": {
         "pattern": "animation\\s*:(?![^;{}]*\\blinear\\b)[^;{}]*?(?<![\\d.])(?:[45](?:\\.\\d+)?s|6s|[45]\\d{3}ms|6000ms)\\b(?:[^;{},(]|\\([^)]*\\))*\\binfinite\\b",
-        "message": "An infinite loop of about one cycle per 5s (0.2 Hz) is motion to avoid; drop the loop or make it faster and finite."
+        "message": "An infinite loop of about one cycle every 5 seconds (0.2 Hz) is motion to avoid; drop the loop or make it faster and finite."
       },
       "design_md": true,
       "conflicts": [],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-accessibility-motion-09",
@@ -5977,8 +6108,11 @@
         "skills/opendesigner/scripts/engine.py CSS export (build/css/tokens.css) writes no @media (prefers-reduced-transparency: reduce) block; color.surface.glass-fallback exists only as a token (when glass is on) and as DESIGN.md text, so the swap is left to each implementer",
         "skills/opendesigner/references/stages/16-motion-haptics-and-sound.detailed.md Q-motion-10 default calls reduced transparency a token mode, but engine.py generate writes no transparency mode file (only motion.standard and motion.reduced) and no export emits a prefers-reduced-transparency rule; color.surface.glass-fallback exists but nothing switches to it [inferred]"
       ],
+      "settles": [
+        "Q-motion-10"
+      ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-accessibility-motion-12",
@@ -6008,8 +6142,11 @@
         "skills/opendesigner/scripts/engine.py generates only light and dark color modes (semantic.color.light and .dark) and its CSS export has no @media (prefers-contrast: more) block (only forced-colors: active for the focus ring), although skills/opendesigner/references/stages/16-motion-haptics-and-sound.detailed.md Q-motion-10 defaults to high contrast and reduced transparency 'as token modes'",
         "skills/opendesigner/scripts/engine.py color.surface.glass-fallback gives the solid twin for Increase Contrast but no contrasting border token goes with it, no export emits a prefers-contrast: more rule, and DESIGN.md says high-contrast themes are not generated [inferred]"
       ],
+      "settles": [
+        "Q-motion-10"
+      ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-accessibility-motion-13",
@@ -6040,8 +6177,22 @@
       "conflicts": [
         "skills/opendesigner/scripts/engine.py CSS export writes spacing tokens in px (--ds-space-16: 16px) while font sizes are rem, so layout built from the spacing tokens does not scale with the user's text size"
       ],
+      "settles": [
+        "Q-motion-10"
+      ],
+      "breaks_options": {
+        "Q-type-17": [
+          "none"
+        ],
+        "Q-token-04": [
+          "unitless"
+        ]
+      },
+      "supersedes": [
+        "DC-L03-26"
+      ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-accessibility-motion-15",
@@ -6599,10 +6750,10 @@
       "review": null,
       "design_md": true,
       "conflicts": [
-        "skills/opendesigner/scripts/engine.py build_motion_context: motion.transition.enter ('Menus, popovers, toasts entering') uses motion.duration.medium (240ms at default dials) with motion.easing.enter [0, 0, 0, 1]; Sonner's web toast enters over 400ms with ease."
+        "skills/opendesigner/scripts/engine.py build_motion_context: motion.transition.enter ('Menus, popovers, toasts entering') gives toasts motion.duration.medium (200ms under STD-easing-duration-07) on motion.easing.enter; this standard adds motion.duration.toast (400ms) and motion.easing.toast (ease), but no semantic transition uses them."
       ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-components-toasts-drawers-08",
@@ -6805,24 +6956,25 @@
         "path": "component.toast.visible",
         "value": 3,
         "type": "number",
-        "note": "new token; `engine.py set` cannot create a number token on this path yet (it asks for a type), so the engine needs a number rule for it"
+        "note": "New token, created in every export from this mapping's number type (engine.py std_token_types)."
       },
       "review": null,
       "design_md": true,
       "conflicts": [],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-components-toasts-drawers-15",
       "theme": "components-toasts-drawers",
       "area": "components",
-      "title": "Auto-dismiss toasts after 4 seconds",
-      "rule": "Auto-close toasts after 4000ms by default.",
-      "why": "4000ms is Sonner's default duration: by default the toast disappears after 4 seconds unless you hover over it.",
+      "title": "Auto-dismiss toasts after 4 seconds, except action toasts",
+      "rule": "Auto-close toasts after 4000ms by default, except a toast that carries an action button (Undo, Retry): it stays until the person acts on it or dismisses it (Sonner: duration: Infinity on that toast() call).",
+      "why": "4000ms is Sonner's default duration: by default the toast disappears after 4 seconds unless you hover over it. A toast with an action is the exception: closing it on a timer puts a time limit on the action, and the accessibility floors outrank every house standard (docs/KNOWLEDGE.md section 2; WCAG 2.2.1 Timing Adjustable), so it persists; this agrees with DC-L08-18 and the Q-form-04 option inline-banner [inferred: no source states the exception].",
       "strength": "should",
       "values": {
-        "duration": "4000ms"
+        "duration": "4000ms",
+        "action-toast": "no auto-close: duration: Infinity on that toast() call, until the person acts or dismisses it [inferred]"
       },
       "applies_to": [
         "all"
@@ -6834,11 +6986,15 @@
         },
         {
           "id": "eks-skills-ask-sonner-api",
-          "evidence": "Milliseconds before auto-close"
+          "evidence": "Milliseconds before auto-close. `Infinity` persists the toast."
         },
         {
           "id": "sonner-toast",
           "evidence": "API Reference"
+        },
+        {
+          "id": "sonner-other",
+          "evidence": "If you want a toast to never disappear, you can set the duration to Infinity"
         }
       ],
       "engine": {
@@ -6849,11 +7005,9 @@
       },
       "review": null,
       "design_md": true,
-      "conflicts": [
-        "synthesis/cards.json DC-L08-18 default and skills/opendesigner/references/stages/22-forms-validation-and-feedback.md Q-form-04 option inline-banner say to 'never auto-dismiss toasts that contain actions', while Sonner closes action toasts after the same 4000ms unless duration is changed [inferred]"
-      ],
+      "conflicts": [],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-components-toasts-drawers-16",
@@ -7656,11 +7810,10 @@
       "review": null,
       "design_md": true,
       "conflicts": [
-        "skills/opendesigner/scripts/engine.py build_motion_context: motion.transition.expand ('Dialogs, sheets, side panels entering') uses motion.easing.enter [0, 0, 0, 1], not the drawer curve",
-        "skills/opendesigner/references/stages/16-motion-haptics-and-sound.detailed.md Q-motion-03 default names standard (0.2, 0, 0, 1), enter (0, 0, 0, 1) or (0.05, 0.7, 0.1, 1), exit (0.3, 0, 1, 1) and linear for spinners and progress; it has no drawer curve"
+        "skills/opendesigner/scripts/engine.py build_motion_context: motion.transition.expand ('Dialogs, sheets, side panels entering') uses motion.easing.enter (the strong ease-out under STD-easing-duration-02), not the drawer curve this standard adds as motion.easing.drawer"
       ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-components-toasts-drawers-44",
@@ -8152,7 +8305,7 @@
           "path": "motion.scale.press",
           "value": 0.97,
           "type": "number",
-          "note": "New token for the pressed scale of every pressable; engine.py set refuses a new number token when no type is given (tested), so this mapping needs the type field honoured"
+          "note": "New token for the pressed scale of every pressable, created in every export from this mapping's number type (engine.py std_token_types)."
         },
         {
           "path": "motion.duration.micro",
@@ -8167,11 +8320,14 @@
       },
       "design_md": true,
       "conflicts": [
-        "skills/opendesigner/references/stages/21-actions-states-and-focus.detailed.md Q-state-04 defaults press styling to a tint overlay (opacity.state.pressed 0.1) and the engine has no press-scale token, so nothing generated scales a pressed control [inferred]",
-        "skills/opendesigner/scripts/engine.py build_motion_context: motion.transition.feedback ('Hover, press, color changes') uses motion.easing.standard [0.2, 0, 0, 1] rather than an ease-out curve [inferred]"
+        "skills/opendesigner/scripts/engine.py render_preview styles .ds-btn.primary:active with the pressed background only: nothing generated applies motion.scale.press, so the preview's buttons do not scale when pressed (the Q-state-04 default already asks for press-scale) [inferred]",
+        "skills/opendesigner/scripts/engine.py build_motion_context: motion.transition.feedback ('Hover, press, color changes') uses motion.easing.hover (ease) for press as well, rather than an ease-out curve: there is no separate press transition [inferred]"
+      ],
+      "supersedes": [
+        "DC-L08-09"
       ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-mobile-touch-06",
@@ -8403,10 +8559,10 @@
       },
       "design_md": true,
       "conflicts": [
-        "skills/opendesigner/references/stages/11-type-scale-and-text.md Q-type-08 defaults a web app to a 14px UI body (text.body.md = font.size.14), and skills/opendesigner/scripts/engine.py render_preview styles .ds-input with text.body.md, so the preview's inputs are 14px and fields built from text.body.md would make iOS Safari zoom on focus [inferred]"
+        "skills/opendesigner/references/stages/11-type-scale-and-text.md Q-type-08 defaults a web app to a 14px UI body (text.body.md = font.size.14), and skills/opendesigner/scripts/engine.py render_preview styles .ds-input with text.body.md, so the preview's inputs are 14px; font.size.input (16px), which this standard adds, is used by no generated style [inferred]"
       ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-mobile-touch-13",
@@ -9116,8 +9272,13 @@
       "review": null,
       "design_md": true,
       "conflicts": [],
+      "breaks_options": {
+        "Q-motion-09": [
+          "one-language"
+        ]
+      },
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-mobile-touch-44",
@@ -9212,17 +9373,17 @@
       ],
       "engine": {
         "path": "motion.spring.spatial.dampingRatio",
-        "value": 1,
+        "value": 1.0,
         "type": "number",
         "note": "The default settle has no overshoot (dampingRatio 1); the 0.8 configs belong to momentum-carrying gestures, which have no token, so they stay in code (tested: engine.py set accepts it and changes the three spatial springs) [inferred]"
       },
       "review": null,
       "design_md": true,
       "conflicts": [
-        "synthesis/levers.json dials.energy drives motion.spring.spatial.dampingRatio from 1.0 (energy 0–33) down to 0.9 (50), 0.8 (75) and 0.6 (100), and motion.transition.move uses motion.spring.spatial.default for every on-screen move, so above energy 33 every move overshoots without a momentum-carrying gesture (a fresh engine.py init gives 0.988) [inferred]"
+        "synthesis/levers.json dials.energy drives motion.spring.spatial.dampingRatio from 1.0 (energy 0–33) down to 0.9 (50), 0.8 (75) and 0.6 (100), and motion.transition.move uses motion.spring.spatial.default for every on-screen move, so above energy 33 every move would overshoot without a momentum-carrying gesture; this standard's lock and STD-springs-gestures-04's (1.0) replace it in every project [inferred]"
       ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-mobile-touch-60",
@@ -9325,11 +9486,15 @@
       "review": null,
       "design_md": true,
       "conflicts": [
-        "synthesis/levers.json dials.energy sets one app-wide haptics.intensity (light at 0–33, medium at 34–66, strong at 67–100), which DESIGN.md states as the haptics intensity; the source picks the call per moment instead [inferred]",
-        "skills/opendesigner/references/stages/16-motion-haptics-and-sound.detailed.md Q-motion-09 default is haptics-system (system haptics only; a semantic map only for products with frequent confirmations) [inferred]"
+        "synthesis/levers.json dials.energy sets one app-wide haptics.intensity (light at 0–33, medium at 34–66, strong at 67–100), which DESIGN.md states as the haptics intensity; the source picks the call per moment instead [inferred]"
       ],
+      "breaks_options": {
+        "Q-motion-09": [
+          "haptics-system"
+        ]
+      },
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-mobile-touch-67",
@@ -9411,8 +9576,13 @@
       "conflicts": [
         "13-layout-navigation-and-app-shell.md Q-layout-03 `reading` allows a text measure of 40-80 characters and 11-type-scale-and-text.detailed.md Q-type-14 offers `measure-45-75`, so a measure of 75-80 characters is allowed, above the source's about 65ch; Q-type-14's default (about 65-70ch) agrees [inferred]"
       ],
+      "breaks_options": {
+        "Q-type-14": [
+          "measure-45-75"
+        ]
+      },
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-visual-details-02",
@@ -9502,8 +9672,13 @@
       "conflicts": [
         "With Q-type-13 `zero` (11-type-scale-and-text.detailed.md), engine.py tracking() returns 0.0 before its caps branch, so the uppercase text.label.sm style loses its default 0.05em [inferred]"
       ],
+      "breaks_options": {
+        "Q-type-13": [
+          "zero"
+        ]
+      },
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-visual-details-05",
@@ -9533,8 +9708,13 @@
         "11-type-scale-and-text.detailed.md Q-type-13 offers `zero` (no letter spacing beyond the font's defaults), and engine.py tracking() then returns 0.0 for every size, which is one value for all sizes",
         "engine.py tracking() gives 0em to every size from 13px to 31px, so the default title.lg (22px) and headline.sm (27px) headings get no tightening, while the source says to tighten headings [inferred]"
       ],
+      "breaks_options": {
+        "Q-type-13": [
+          "zero"
+        ]
+      },
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-visual-details-06",
@@ -9818,8 +9998,18 @@
         "15-depth-borders-and-materials.md Q-depth-04 default is 'opaque on web with optional blur plus an opaque fallback', and color.surface.nav is the opaque color.neutral.light.1, while the source wants translucent bars with content scrolling under them on the web",
         "skills/opendesigner/scripts/engine.py emits color.surface.glass and material.glass.blur only for the 'materials' depth model or raw.glass = true, so a default web system has no translucent chrome tokens"
       ],
+      "breaks_options": {
+        "Q-depth-04": [
+          "none",
+          "transient"
+        ]
+      },
+      "supersedes": [
+        "DC-L04-15",
+        "DC-L10-12"
+      ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-visual-details-17",
@@ -9967,17 +10157,23 @@
       "sources": [
         {
           "id": "eks-skills-apple-design-skill",
-          "evidence": "16. Design foundations, 7. Craft: colors that adapt to light/dark"
+          "evidence": "Beautiful typography, colors that adapt to light/dark"
         }
       ],
       "engine": null,
       "review": null,
       "design_md": true,
       "conflicts": [
-        "07-themes-and-modes.md Q-theme-01 offers `light-only` and `dark-only`, which give colors one mode only; its default `system-light-dark` agrees [inferred]"
+        "07-themes-and-modes.md Q-theme-01 offers `light-only` and `dark-only`, which give colors one mode only (listed under breaks_options); its default, `system-light-dark` on every platform, follows this standard, although watch apps are conventionally dark only [inferred]"
       ],
+      "breaks_options": {
+        "Q-theme-01": [
+          "light-only",
+          "dark-only"
+        ]
+      },
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-visual-details-25",
@@ -10414,8 +10610,16 @@
       "review": null,
       "design_md": true,
       "conflicts": [],
+      "settles": [
+        "Q-form-05"
+      ],
+      "breaks_options": {
+        "Q-form-05": [
+          "confirm"
+        ]
+      },
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-visual-details-41",
@@ -10651,8 +10855,16 @@
       "conflicts": [
         "22-forms-validation-and-feedback.md Q-form-02 default validates on blur only for format checks and 'on submit otherwise', while the source says to validate inline, not on submit [inferred]"
       ],
+      "breaks_options": {
+        "Q-form-02": [
+          "on-submit-summary"
+        ]
+      },
+      "supersedes": [
+        "DC-L08-17"
+      ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-visual-details-50",
@@ -11098,10 +11310,10 @@
       "review": null,
       "design_md": true,
       "conflicts": [
-        "skills/opendesigner/scripts/engine.py cmd_review prints each finding as a 'file:line  value  ->  fix' line, not as a Before | After | Why table [inferred]"
+        "skills/opendesigner/scripts/engine.py cmd_review prints each finding as one line (file and line, the value found, an arrow, the fix), not as a Before | After | Why table [inferred]"
       ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-process-review-taste-05",
@@ -11129,11 +11341,10 @@
       "review": null,
       "design_md": true,
       "conflicts": [
-        "skills/opendesigner/scripts/engine.py cmd_review gives every standard finding severity 'warning' whatever its strength, returns a non-zero exit only with --strict, and never closes with an explicit Block or Approve decision [inferred]",
-        "skills/opendesigner/scripts/engine.py build_motion sets motion.easing.exit to an accelerating (ease-in) curve (default [0.3, 0, 1, 1]; [0.2, 0, 1, 0.9] or [0.4, 0.14, 1, 1] at low or high Energy) and stages/16-motion-haptics-and-sound.md Q-motion-01 defaults to 'ease-in to exit', which these Block criteria (ease-in on UI) would block"
+        "skills/opendesigner/scripts/engine.py cmd_review gives every standard finding severity 'warning' whatever its strength, returns a non-zero exit only with --strict, and never closes with an explicit Block or Approve decision [inferred]"
       ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-process-review-taste-06",
@@ -11634,11 +11845,11 @@
       "sources": [
         {
           "id": "eks-skills-improve-animations-plan-template",
-          "evidence": "Notes for the plan author: One plan per finding; create or update plans/README.md"
+          "evidence": "One plan per finding. If two findings share every file and the same fix pattern"
         },
         {
           "id": "eks-skills-improve-animations-skill",
-          "evidence": "Finish by creating or updating plans/README.md: recommended execution order, dependencies between plans, and a status column"
+          "evidence": "Finish by creating or updating `plans/README.md`: recommended execution order, dependencies between plans, and a status column"
         }
       ],
       "engine": null,
@@ -11646,7 +11857,7 @@
       "design_md": false,
       "conflicts": [],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-process-review-taste-21",
@@ -12840,10 +13051,10 @@
       "review": null,
       "design_md": false,
       "conflicts": [
-        "skills/opendesigner/scripts/engine.py std_design_md writes each house standard into DESIGN.md as its title, rule and values but leaves out its 'why', so agents get the rule without the reason"
+        "skills/opendesigner/scripts/engine.py std_design_md gives DESIGN.md one line per theme and points to opendesigner/standards.md for 'every rule, with its values, reasons and sources', but std_full_md writes each rule with its values and no 'why' or sources, so agents get the rule without the reason"
       ],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-process-review-taste-56",
@@ -14663,7 +14874,7 @@
       "sources": [
         {
           "id": "eks-skills-write-swift-skill",
-          "evidence": "§7 You cannot call a method that takes an associated type on an any P"
+          "evidence": "You cannot call a method that takes an associated type on an `any P`"
         }
       ],
       "engine": null,
@@ -14671,7 +14882,7 @@
       "design_md": false,
       "conflicts": [],
       "since": 1,
-      "changed": 1
+      "changed": 2
     },
     {
       "id": "STD-swift-55",
@@ -16311,52 +16522,52 @@
     }
   ],
   "built_from": {
-    "adev-changelog": "ed4f1df20b48",
-    "adev-home": "f40248d2d2fd",
-    "ek-7-practical-animation-tips": "aceb950360c6",
-    "ek-agents-with-taste": "9a7954d27c98",
-    "ek-building-a-drawer-component": "606ad8a1d9be",
-    "ek-building-a-toast-component": "3fbc8f6e9d0d",
-    "ek-building-an-animation-course": "b3a69867c608",
-    "ek-developing-taste": "a0bf29ba8f71",
-    "ek-friction-as-a-feature": "104351394645",
-    "ek-the-magic-of-clip-path": "e75e30177fc2",
-    "ek-train-your-judgement": "b97a37cda834",
-    "ek-you-dont-need-animations": "5abae41c998f",
-    "eks-performance-cheatsheet": "68eeb428a4a6",
-    "eks-readme": "72937fcb2e5d",
-    "eks-skills-animate-expo-recipes": "6e9b3ac03d96",
-    "eks-skills-animate-expo-skill": "a337f8b05628",
-    "eks-skills-animate-recipes": "cf8291971044",
-    "eks-skills-animate-skill": "bc058fe2469c",
-    "eks-skills-animation-vocabulary-skill": "f0de7daa2b49",
-    "eks-skills-apple-design-skill": "ef2f7a3e42de",
-    "eks-skills-ask-sonner-api": "6eaf5ed0b226",
-    "eks-skills-ask-sonner-skill": "b74766fb73cf",
-    "eks-skills-emil-design-eng-skill": "a5d364ae7975",
-    "eks-skills-find-animation-opportunities-skill": "2d5dca4119b5",
-    "eks-skills-improve-animations-audit": "8812c32ae98c",
-    "eks-skills-improve-animations-plan-template": "30aca612211c",
-    "eks-skills-improve-animations-skill": "b7f391295fb0",
-    "eks-skills-mobile-native-skill": "0596d59b86f5",
-    "eks-skills-pick-ui-library-skill": "a53f558fcca1",
-    "eks-skills-prototype-picker": "7736ad703189",
-    "eks-skills-prototype-skill": "338941a731db",
-    "eks-skills-review-animations-skill": "0ecd3ed06f2d",
-    "eks-skills-review-animations-standards": "055ac38018df",
-    "eks-skills-write-swift-skill": "06b7a4819bdc",
-    "sonner-getting-started": "c81b16f1f1fc",
-    "sonner-home": "a8eccec92cdd",
-    "sonner-other": "f93dba6e3a12",
-    "sonner-styling": "08b50de3138a",
-    "sonner-toast": "4723c40f4219",
-    "sonner-toaster": "7ed6a5314a48",
-    "vaul-api": "4372584b4329",
-    "vaul-default": "e7dc7a293ca9",
-    "vaul-getting-started": "4eef593eaa2f",
-    "vaul-inputs": "a853402fcaa0",
-    "vaul-other": "9ef2f2f496e0",
-    "vaul-snap-points": "aaf960518252"
+    "adev-changelog": "s:204a6f919e36",
+    "adev-home": "s:8d9ccdb581cc",
+    "ek-7-practical-animation-tips": "s:73456c01fa2d",
+    "ek-agents-with-taste": "s:ebfa9ca76968",
+    "ek-building-a-drawer-component": "s:658ea176c4fa",
+    "ek-building-a-toast-component": "s:1d3d956f5f31",
+    "ek-building-an-animation-course": "s:ff32a7f85de3",
+    "ek-developing-taste": "s:c3925124cff9",
+    "ek-friction-as-a-feature": "s:2bd272659712",
+    "ek-the-magic-of-clip-path": "s:4771ffa3ad61",
+    "ek-train-your-judgement": "s:96da224ae4e4",
+    "ek-you-dont-need-animations": "s:ac64c9829d9b",
+    "eks-performance-cheatsheet": "s:ff7c61e07972",
+    "eks-readme": "s:8e8b39b3759e",
+    "eks-skills-animate-expo-recipes": "s:e608b8400b95",
+    "eks-skills-animate-expo-skill": "s:c732b39c040d",
+    "eks-skills-animate-recipes": "s:ca75e2a31765",
+    "eks-skills-animate-skill": "s:8bd9d2be4674",
+    "eks-skills-animation-vocabulary-skill": "s:912d0c3bf1c3",
+    "eks-skills-apple-design-skill": "s:e715c35123e0",
+    "eks-skills-ask-sonner-api": "s:de97d0a68489",
+    "eks-skills-ask-sonner-skill": "s:eaff88bf701b",
+    "eks-skills-emil-design-eng-skill": "s:9cb12dd753f3",
+    "eks-skills-find-animation-opportunities-skill": "s:0485b1a41387",
+    "eks-skills-improve-animations-audit": "s:d5d15ccbc429",
+    "eks-skills-improve-animations-plan-template": "s:2eca3bd0e76b",
+    "eks-skills-improve-animations-skill": "s:de8fa393f4b2",
+    "eks-skills-mobile-native-skill": "s:7228d43d85e8",
+    "eks-skills-pick-ui-library-skill": "s:5f75e7f22a38",
+    "eks-skills-prototype-picker": "s:e2133d24959b",
+    "eks-skills-prototype-skill": "s:78d09d98d984",
+    "eks-skills-review-animations-skill": "s:4c2623268dd9",
+    "eks-skills-review-animations-standards": "s:0b0219658c03",
+    "eks-skills-write-swift-skill": "s:b05ac28e5357",
+    "sonner-getting-started": "s:b3222e0e89cd",
+    "sonner-home": "s:d52427f9495a",
+    "sonner-other": "s:7c950d51239e",
+    "sonner-styling": "s:479ef02388bc",
+    "sonner-toast": "s:f4e87e68febf",
+    "sonner-toaster": "s:116afd1ecbe0",
+    "vaul-api": "s:8b60874fcbd8",
+    "vaul-default": "s:3e1a25b01e2a",
+    "vaul-getting-started": "s:decae281dbe7",
+    "vaul-inputs": "s:30866da074cd",
+    "vaul-other": "s:b84d31f066ca",
+    "vaul-snap-points": "s:a60a50b328ff"
   },
   "history": [
     {
@@ -16822,7 +17033,78 @@
       ],
       "changed": [],
       "retired": []
+    },
+    {
+      "version": 2,
+      "date": "2026-09-27",
+      "why": "v2: persona-test fixes: settles, breaks_options, constraints and supersedes fields; review messages name tokens; conflicts refreshed; action toasts persist (accessibility floor); exit durations derived, not locked; v2: persona-test fixes: settles, breaks_options, constraints and supersedes fields; review messages name tokens; conflicts refreshed; action toasts persist (accessibility floor); exit durations derived, not locked; citation review",
+      "added": [],
+      "changed": [
+        "STD-when-to-animate-01",
+        "STD-when-to-animate-05",
+        "STD-when-to-animate-09",
+        "STD-when-to-animate-14",
+        "STD-easing-duration-01",
+        "STD-easing-duration-02",
+        "STD-easing-duration-03",
+        "STD-easing-duration-06",
+        "STD-easing-duration-07",
+        "STD-easing-duration-11",
+        "STD-easing-duration-13",
+        "STD-enter-exit-origin-01",
+        "STD-enter-exit-origin-02",
+        "STD-enter-exit-origin-08",
+        "STD-enter-exit-origin-09",
+        "STD-enter-exit-origin-11",
+        "STD-enter-exit-origin-13",
+        "STD-enter-exit-origin-23",
+        "STD-enter-exit-origin-26",
+        "STD-enter-exit-origin-39",
+        "STD-enter-exit-origin-41",
+        "STD-springs-gestures-01",
+        "STD-springs-gestures-02",
+        "STD-springs-gestures-04",
+        "STD-springs-gestures-05",
+        "STD-springs-gestures-06",
+        "STD-springs-gestures-07",
+        "STD-springs-gestures-08",
+        "STD-springs-gestures-13",
+        "STD-springs-gestures-61",
+        "STD-performance-properties-01",
+        "STD-performance-properties-06",
+        "STD-performance-properties-12",
+        "STD-performance-properties-15",
+        "STD-accessibility-motion-01",
+        "STD-accessibility-motion-02",
+        "STD-accessibility-motion-08",
+        "STD-accessibility-motion-11",
+        "STD-accessibility-motion-12",
+        "STD-accessibility-motion-13",
+        "STD-components-toasts-drawers-07",
+        "STD-components-toasts-drawers-14",
+        "STD-components-toasts-drawers-15",
+        "STD-components-toasts-drawers-40",
+        "STD-mobile-touch-05",
+        "STD-mobile-touch-11",
+        "STD-mobile-touch-42",
+        "STD-mobile-touch-51",
+        "STD-mobile-touch-62",
+        "STD-visual-details-01",
+        "STD-visual-details-04",
+        "STD-visual-details-05",
+        "STD-visual-details-16",
+        "STD-visual-details-24",
+        "STD-visual-details-40",
+        "STD-visual-details-49",
+        "STD-process-review-taste-04",
+        "STD-process-review-taste-05",
+        "STD-process-review-taste-20",
+        "STD-process-review-taste-55",
+        "STD-swift-54"
+      ],
+      "retired": []
     }
   ],
-  "content_hash": "sha256:df7631172ebc9b20"
+  "content_hash": "sha256:abe5acb543f750bd",
+  "retired": []
 }

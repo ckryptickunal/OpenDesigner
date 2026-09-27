@@ -8,7 +8,7 @@ Screen: how surfaces separate and float, on a live stack (page, card, menu, dial
 
 Zoom 3 (detailed) questions: `15-depth-borders-and-materials.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-depth-01 · How should surfaces separate from each other?
 Zoom 1 broad · weight high · changes 5 decisions · class G · cards DC-L09-02, DC-L04-10, DC-L08-15
@@ -35,9 +35,9 @@ Zoom 2 defined · weight medium · changes 2 decisions · class T · cards DC-L0
 - **Ask:** "Should menus, bars and pop-ups be see-through glass, or stay solid?"
 - **Why:** Glass looks premium and matches 2025-26 operating systems, and keeps what is behind in view. The cost is lower contrast that shifts with the background [DC-L04-15, DC-L10-12].
 - **Options:**
-  - `none` Opaque surfaces: most legible and cheapest [DC-L04-15].
+  - `none` Opaque surfaces (breaks STD-visual-details-16): most legible and cheapest [DC-L04-15].
   - `control-layer` Glass on navigation and controls only, never on content (Apple Liquid Glass: regular for text-heavy parts, clear over media with a 35% dim).
-  - `transient` See-through menus and flyouts only; Mica for the window base (Fluent Acrylic).
+  - `transient` See-through menus and flyouts only; Mica for the window base (Fluent Acrylic). (breaks STD-visual-details-16)
   - `decorative` Decorative glass effect on cards: flagged for legibility (NN/g) [DC-L04-15].
 - **Default:** platform material for native chrome (glass on Apple, Mica on Windows, tonal surfaces on Android); opaque on web with optional blur plus an opaque fallback; content edge-to-edge under the bars with inset-aware components *Source:* platform convention [DC-L10-12, DC-L10-11, DC-L04-15].
 - **Show:** the toolbar and a sheet over a busy photo with live contrast readouts; the opaque fallback shown beside it.

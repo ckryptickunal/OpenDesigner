@@ -1,3 +1,11 @@
+---
+type: synthesis
+title: "Decision Cards: layout (lane L19)"
+tags:
+  - decision-cards
+  - layout
+---
+
 # Decision Cards: layout (lane L19)
 
 Area `layout`: OpenDesigner stages 06 (visual direction), 12 (space, sizing and density) and 13 (layout, navigation and app shell). Topics: Spacing and layout, Visual hierarchy, Cards and sections. Cards DC-L19-41 to DC-L19-56.

@@ -1,3 +1,11 @@
+---
+type: synthesis
+title: "L19 Decision Cards: platforms (stages 02, 04)"
+tags:
+  - decision-cards
+  - platforms
+---
+
 # L19 Decision Cards: platforms (stages 02, 04)
 
 Lane: L19 (learning wiki). Area: platforms, covering the topics Mobile app patterns, Desktop and macOS apps and Accessibility (OpenDesigner stages 02 audience and commitments, 04 platforms and devices). Written 2026-09-24.

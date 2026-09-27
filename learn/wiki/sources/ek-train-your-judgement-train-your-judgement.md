@@ -24,8 +24,8 @@ tags:
 
 ## Metadata
 
-- Video ID: `ek-train-your-judgement`
-- Channel: Emil Kowalski (web)
+- Page ID: `ek-train-your-judgement`
+- Publisher: Emil Kowalski (web)
 - Published: Unknown
 - URL: https://emilkowal.ski/ui/train-your-judgement
 

@@ -958,7 +958,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
   - `light-dark-toggle` Light and dark, plus a switch in the app: web only, in addition to system-follow [DC-L10-17].
   - `light-only` Light only [DC-L07-15].
   - `dark-only` Dark only: brand colors glow, fewer and brighter accents (watch, TV, car at night) [DC-L14-09].
-- **Default:** system-light-dark on phone, tablet, desktop and web; dark-only on watch; day/night auto in cars. *Source:* L09 shared default row 6 (21 of 25 systems) and platform convention [L09 A1; DC-L10-17, DC-L14-09].
+- **Default:** system-light-dark on every platform, a watch included (house standard STD-visual-details-24 gives each color role a light and a dark value; a watch app can still open in dark); day/night auto in cars. *Source:* L09 shared default row 6 (21 of 25 systems) and platform convention [L09 A1; DC-L10-17, DC-L14-09].
 - **Decides:** DC-L10-17, DC-L14-09
 - **Changes:** DC-L01-18, DC-L01-19, DC-L04-13, DC-L07-15, DC-L07-17 · blocks: Foundations > Color > Appearance modes
 - **Preview:** the draft screen split diagonally, light and dark.
@@ -2665,7 +2665,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
   - `one-language` One brand motion language everywhere [DC-L10-14].
   - `haptics-system` System haptics only (standard controls already play them) [S-L04-043].
   - `haptics-semantic` About 6 named vibrations (success, warning, error, selection, toggle, light impact) [S-L04-044, S-L04-047].
-- **Default:** os-nav-brand-micro and haptics-system; a semantic map only for products with frequent confirmations. *Source:* card heuristics [DC-L10-14, DC-L04-26].
+- **Default:** os-nav-brand-micro and haptics-semantic: house standard STD-mobile-touch-62 maps each moment (a value ticking past a step, a snap, a commit) to one system haptic. *Source:* card heuristics [DC-L10-14, DC-L04-26].
 - **Decides:** DC-L10-14, DC-L04-26
 - **Changes:** DC-L07-14 · blocks: Foundations > Motion > Platform motion; Haptics > Semantic haptic map
 - **Hook:** Custom haptics accept Apple AHAP (.ahap JSON, intensity and sharpness 0-1) and Android `VibrationEffect` compositions. If no: system patterns first (Apple notification, impact, selection; Android `HapticFeedbackConstants`) [S-L17-547, S-L17-548, S-L17-549].

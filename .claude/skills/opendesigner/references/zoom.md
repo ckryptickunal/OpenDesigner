@@ -12,7 +12,7 @@ People never pick a mode. Everyone starts with a quick sketch of the whole syste
 ## Level 0: sketch (a few questions, one per message)
 Five answers shape the sketch. Ask only what their words and files don't already tell you.
 
-1. **What are you making?** Take a free answer and record it: `engine.py set context.product '"<their words>"'`. If the product has a name, pass it as `sketch --name`. It replaces the folder name that `init` used.
+1. **What are you making?** Take a free answer and record it in the third person, so DESIGN.md and PRODUCT.md read well to a teammate: "my school coding club" becomes `engine.py set context.product '"a website for a school coding club"'`. Keep their words otherwise. If the product has a name, pass it as `sketch --name`. It replaces the folder name that `init` used.
    - Take each surface's kind (Q-scope-06) from their words. Say it plainly, like "a site that shows off your club". Pass it with `--surfaces`. When you inferred it, record it before the sketch instead (below, "Assumed answers"). Name the kinds (Persuade, Operate, Read, Experience) only when the designer or engineer voice leads.
    - If they name several surfaces (an app and a landing page), confirm Q-scope-01 in one line. The main surface goes first.
 2. **Who is it for?** This is Q-aud-01. Ask whether people use it all day (`dense`), regularly (`regular`), or now and then on the go (`large`).
@@ -76,12 +76,12 @@ Go in this order, with the listed templates:
 - Q-motion-01, motion feel (`motion`)
 - Q-tool-01, where the master copy lives (text)
 
-Each screen is one message with one question. The person can say "skip", and the default stays. After the last screen, run `engine.py build`. The engine marks each area it touched as `broad` by itself.
+Each screen is one message with one question. The person can say "skip", and the default stays. Leave out a screen whose question its stage file marks **Settled by: STD-...**. After the last screen, run `engine.py build`. The engine marks each area it touched as `broad` by itself.
 
 ## Levels 2 and 3: one area at a time
 There are 14 areas: overview, accessibility, platforms, modes, color, typography, layout, shape, elevation, motion, iconography, content, components and delivery. Their plain names are in `pacing.json`. The ids match the engine's, except `delivery`: the engine does not track its zoom level.
 1. Zooming into an area asks its skipped lower-level questions first (for Color after the sketch: Q-color-02 from level 1).
-2. Open the area's stage files. Ask its level-2 questions in stage order, and skip any marked **Planned** (not built yet). Then run `engine.py build` and show the change.
+2. Open the area's stage files. Ask its level-2 questions in stage order. Skip any marked **Planned** (not built yet) or **Settled by: STD-...** (a standard already locked the answer), and never recommend an option marked **(breaks STD-...)**. Then run `engine.py build` and show the change.
 3. **Plain voice: ask fewer.** When the plain voice leads, ask only three kinds of question: weight `high`, asset hooks, and owner inputs (block class I). Also ask a `medium` question when their words or assets make it matter: a logo with two colors makes Q-color-04 matter. The rest keep their defaults (`auto_default`: nothing to run). Name them in one line of the level summary, like "I also picked the grays and hover colors for you." They can say "ask me everything".
 4. Sometimes `pick` says an answer shapes DESIGN.md rules, not tokens. Then say it is saved as a rule, so they don't expect the preview to change.
 5. Record the level: `engine.py set zoom.color '"defined"'` (level names: `sketch`, `broad`, `defined`, `detailed`). The engine also infers the level from the decisions made in an area.

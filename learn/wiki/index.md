@@ -1,6 +1,6 @@
 # Wiki Index
 
-Last updated: 2026-09-27T20:47:03
+Last updated: 2026-09-27T23:21:01
 
 This index is maintained by the wiki ingest scripts.
 
@@ -127,7 +127,7 @@ This index is maintained by the wiki ingest scripts.
 - [[entities/airbnb|Airbnb]]
 - [[entities/amazon-comprehend|Amazon Comprehend]]
 - [[entities/amazon|Amazon]]
-- [[entities/ami-caption-spelling-a-calendar-scheduling-app-likely-amie-inferred|Ami (caption spelling; a calendar scheduling app, likely Amie [inferred])]]
+- [[entities/ami-caption-spelling|Ami (caption spelling)]]
 - [[entities/amigo-ai|Amigo AI]]
 - [[entities/anchor|Anchor]]
 - [[entities/android-chrome|Android Chrome]]
@@ -869,6 +869,7 @@ This index is maintained by the wiki ingest scripts.
 - [[synthesis/color|Color]]
 - [[synthesis/content-and-microcopy|Content and microcopy]]
 - [[synthesis/dark-mode-and-themes|Dark mode and themes]]
+- [[synthesis/dark-patterns-and-user-hostile-design|Dark patterns and user-hostile design]]
 - [[synthesis/dashboards-and-data-display|Dashboards and data display]]
 - [[synthesis/decide-or-ask|Decide or ask]]
 - [[synthesis/depth-shadows-and-borders|Depth, shadows and borders]]
@@ -884,13 +885,16 @@ This index is maintained by the wiki ingest scripts.
 - [[synthesis/forms-and-inputs|Forms and inputs]]
 - [[synthesis/freelancing-and-pricing-work|Freelancing and pricing work]]
 - [[synthesis/gestures-and-drag|Gestures and drag]]
+- [[synthesis/gradients-blend-modes-and-texture-effects|Gradients, blend modes and texture effects]]
 - [[synthesis/house-standards|House standards]]
 - [[synthesis/icons-and-imagery|Icons and imagery]]
 - [[synthesis/landing-pages|Landing pages]]
+- [[synthesis/launch-and-marketing|Launch and marketing]]
 - [[synthesis/micro-interactions|Micro-interactions]]
 - [[synthesis/mobile-app-patterns|Mobile app patterns]]
 - [[synthesis/modals-and-popovers|Modals and popovers]]
 - [[synthesis/motion-principles|Motion principles]]
+- [[synthesis/native-implementation-swift-and-swiftui|Native implementation (Swift and SwiftUI)]]
 - [[synthesis/navigation-and-sidebars|Navigation and sidebars]]
 - [[synthesis/onboarding|Onboarding]]
 - [[synthesis/paywalls-and-pricing-pages|Paywalls and pricing pages]]

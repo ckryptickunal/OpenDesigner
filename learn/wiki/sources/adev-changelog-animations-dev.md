@@ -27,8 +27,8 @@ tags:
 
 ## Metadata
 
-- Video ID: `adev-changelog`
-- Channel: animations.dev (public pages only; the course itself is paid and closed) (web)
+- Page ID: `adev-changelog`
+- Publisher: animations.dev (public pages only; the course itself is paid and closed) (web)
 - Published: Unknown
 - URL: https://animations.dev/changelog
 

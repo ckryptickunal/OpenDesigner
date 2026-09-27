@@ -22,10 +22,10 @@ The engine is `scripts/engine.py` in this skill when it was installed from a rel
    - `opendesigner/tokens/`.
    - `git log --oneline -15 -- opendesigner/ DESIGN.md`, if the project uses git.
 2. If `DESIGN.md.hand-edited` exists, someone edited the generated file by hand. Offer to turn each edit into a decision.
-3. Run `engine.py review`. If it reports errors or drift, say so first. Fixing them may be the real task.
-   If `engine.py validate` says OpenDesigner's house standards are newer than this system's, say so in one line, run `engine.py standards --update`, and show what changed by area. Their overrides and project standards stay as they are.
-4. Tell the person in three lines or fewer: the direction, the zoom level of the area they care about, and anything locked or open.
-5. Ask only about what is new. Never re-run the whole interview.
+3. Run `engine.py validate`. It checks the system and reports the house standards version. If it says OpenDesigner's house standards are newer than this system's, say so in one line, run `engine.py standards --update`, then `engine.py build`, and show what changed by area. Their overrides and project standards stay as they are.
+4. Run `engine.py review`. If it reports errors or drift, say so first. Fixing them may be the real task.
+5. Tell the person in three lines or fewer: the direction, the zoom level of the area they care about, and anything locked or open.
+6. Ask only about what is new. Never re-run the whole interview.
 
 In a chat-only host, ask the person to upload `state.json`, `decisions.md` and DESIGN.md before changing anything.
 
@@ -47,13 +47,16 @@ In a chat-only host, ask the person to upload `state.json`, `decisions.md` and D
 - "You decide" is recorded with `--set-by delegated`.
 
 ### Standards
-- A value locked by a standard (house `STD-...` or project `PRJ-...`) changes only when the person explicitly asks to improve, remove or change that standard. Restate the rule and its reason once. Then run `engine.py standard override <id> --why "<their words>" [--value <json>]`. `engine.py standard restore <id>` undoes it.
+- A value locked by a standard (house `STD-...` or project `PRJ-...`) changes only when the person explicitly asks to improve, remove or change that standard. Restate the rule and its reason once. Then their words pick the route:
+  - "Just this value", "just here": `engine.py standard override <id> --why "<their words>" --path <path> [--value <json>]` (it releases only that value; without `--path`, every value the standard sets). `engine.py standard restore <id>` undoes it.
+  - "It's our brand", "we always do it this way": a project standard that beats the house one, `engine.py standard add ... --beats STD-...` (`<opendesigner>/references/rules.md` section 12).
+- `engine.py set --force` never changes a value a standard holds. It is only for locks the person set.
 - "Follow this guide" or "this is non-negotiable for us": add it as a project standard (`<opendesigner>/references/rules.md` section 12).
 - `engine.py standards` lists what applies, what was overridden and why, and any pending house updates.
 
 ## 4. Make the change
 1. Show it first: the current value, the new value, and what else moves (`graph.json`). Use a template from `<opendesigner>/assets/templates/` when the host can show one.
-2. Apply it with `engine.py set <Q-id or path> <value> --why "..."`. Add `--lock` if the owner wants it locked. Use `--force` only with consent to change a locked value.
+2. Apply it with `engine.py set <Q-id or path> <value> --why "..."`. Add `--lock` if the owner wants it locked. `--force` is for person locks, never standards: use it only with the owner's consent to change a value they locked. A value a standard holds changes only through `standard override` (section 3, "Standards").
 3. Refresh with `engine.py build`. It generates, validates (fix errors first), and rewrites the exports, DESIGN.md and the preview.
 4. Show what changed: `git diff --stat opendesigner/ DESIGN.md` and a short table of changed values. Refresh `opendesigner/RATIONALE.md` if a big decision changed.
 

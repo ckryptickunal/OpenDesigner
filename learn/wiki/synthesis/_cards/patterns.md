@@ -1,3 +1,11 @@
+---
+type: synthesis
+title: "Decision Cards: patterns (lane L19)"
+tags:
+  - decision-cards
+  - patterns
+---
+
 # Decision Cards: patterns (lane L19)
 
 Area `patterns`: OpenDesigner stage 23 (patterns and AI surfaces), plus the neighbouring questions that decide feedback, loading and marketing pages (Q-state-08, Q-form-04, Q-viz-01, Q-brand-04). Topics: Dashboards and data display; Landing pages; Onboarding; Paywalls and pricing pages; Retention and gamification; SaaS product UI; Feedback, empty and loading states; A/B testing and conversion. Cards DC-L19-121 to DC-L19-138.

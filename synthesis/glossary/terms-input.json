@@ -1140,16 +1140,6 @@
   ]
  },
  {
-  "id": "found.motion.reduced",
-  "term": "Reduced motion",
-  "kind": "building block",
-  "layer": "found",
-  "context": "What happens to motion when the user asks the OS to reduce it.",
-  "source": [
-   "found.motion.reduced"
-  ]
- },
- {
   "id": "found.motion.platform",
   "term": "Motion by platform and device class",
   "kind": "building block",
@@ -3977,6 +3967,26 @@
   "context": "What a kind of screen is for: Persuade (marketing), Operate (app UI), Read (docs) or Experience (showcases). Asked by Q-scope-06, stored per surface; it sets body size, display reach, density and hero rules per surface",
   "source": [
    "synthesis/QUESTIONNAIRE.md Q-scope-06; research/L17-how-systems-get-made.md A2 [S-L17-007]; skills/opendesigner/scripts/engine.py"
+  ]
+ },
+ {
+  "id": "use.house-standard",
+  "term": "house standard",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "A non-negotiable rule from OpenDesigner's own trusted sources (synthesis/standards.json), applied and locked in every project it fits",
+  "source": [
+   "docs/KNOWLEDGE.md; synthesis/standards.json; skills/opendesigner/references/rules.md section 12"
+  ]
+ },
+ {
+  "id": "use.standard",
+  "term": "standard",
+  "kind": "using OpenDesigner",
+  "layer": "use",
+  "context": "A non-negotiable rule, house or project (PRJ-), applied without asking and locked until the person overrides it",
+  "source": [
+   "docs/KNOWLEDGE.md; synthesis/standards.json; skills/opendesigner/references/rules.md section 12"
   ]
  }
 ]

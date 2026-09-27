@@ -21,8 +21,8 @@ tags:
 
 ## Metadata
 
-- Video ID: `vaul-inputs`
-- Channel: Vaul docs (web)
+- Page ID: `vaul-inputs`
+- Publisher: Vaul docs (web)
 - Published: Unknown
 - URL: https://vaul.emilkowal.ski/inputs
 

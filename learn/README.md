@@ -27,8 +27,9 @@ The extraction and ingest engine is [OpenWiki](https://github.com/ckryptickunal/
 | `wiki/sources/`, `topics/`, `entities/`, `index.md` | yes (generated: `wiki.py ingest`) | OpenWiki pages: one per source, per topic and per person, company or product |
 | `wiki/synthesis/` | yes | cross-source topic pages, "Decide or ask", the house standards page, the citation check report |
 | `wiki/synthesis/_cards/`, `_standards/` | yes | the Decision Cards by area (the source for `research/L19-learning-wiki.md`), and the standards drafts by theme |
-| `sids.json`, `citation-check.json`, `openwiki.lock.json` | yes | source id to `S-L19` citation id; Jev's verdicts (no source text); the tested OpenWiki commit |
-| `raw/` | **no** (git-ignored) | full transcripts and page text. Third-party content stays on the machine that fetched it; `wiki.py fetch` gets it again |
+| `sids.json`, `citation-check.json`, `citation-review.json`, `openwiki.lock.json` | yes | source id to `S-L19` citation id; Jev's verdicts (no source text); the review decisions that settle flagged items (`wiki.py review-log`, written by learn-escalate); the tested OpenWiki commit |
+| `wiki/ingested.json` | yes (generated: `wiki.py ingest`) | what is in the wiki, and the hash of the analysis each page was built from. An edited analysis is re-ingested on the next `ingest` |
+| `raw/` | **no** (git-ignored) | full transcripts and page text. Third-party content stays on the machine that fetched it; `wiki.py fetch` gets it again. `raw/_skipped.json` lists the pages fetch could not use on this machine |
 
 What the wiki produces for the app lives where the app's build expects it:
 - `synthesis/standards.json` and `synthesis/impact.json`;
@@ -74,17 +75,28 @@ sources.json ─ fetch ─> raw/<folder>/<id>.txt (+ <id>.media.json for pages)
 
 Each step that needs judgement runs as a saved Claude Code workflow in `.claude/workflows/`. Any other agent can follow the same prompts by hand: read the file.
 
+Every workflow takes `root`: the absolute path of the checkout it works in. Without it, the workflow stops at once with a message saying which args it needs; it never falls back to someone else's folder. `python3 tools/wiki.py next` prints the exact args for each step that is due.
+
 | Workflow | Run it when | Args |
 |---|---|---|
-| `learn-analyze` | sources were fetched but not analysed | the output of `python3 tools/wiki.py pending --work-items` |
-| `learn-standards` | non-negotiable or good-to-have sources changed | optional `{"themes": [...]}` |
-| `learn-synthesis` | reference sources changed, or topic pages and cards need to catch up | optional `{"topics": [...], "cards": [...], "verify": [...], "process": true, "merge": true}` |
-| `learn-escalate` | `cite-check` flagged items | none: it reads `wiki.py flagged --json` |
-| `learn-personas` | after any change to standards, skills text or the pipeline | optional `{"only": ["student", ...]}` |
+| `learn-analyze` | sources were fetched but not analysed | the output of `python3 tools/wiki.py pending --work-items`: `{"root": "<repo path>", "items": [...]}`. One item per video or article; the pages of one site, and the files of one folder of a GitHub repo, share an item, at most 5 files each |
+| `learn-standards` | non-negotiable or good-to-have sources changed | `{"root": "<repo path>"}`, optionally `"themes": [...]`. It reads the house sources and their raw folders from `sources.json`, may add a theme when rules fit none, and ends with `wiki.py standards --built-from` |
+| `learn-synthesis` | reference sources changed, or topic pages and cards need to catch up | `{"root": "<repo path>", "topics": [...], "cards": [...], "verify": [...], "process": true, "merge": true}`; all but `root` are optional |
+| `learn-escalate` | `cite-check` flagged items | `{"root": "<repo path>"}`. It reads `wiki.py flagged --json`, where each item names its raw file |
+| `learn-personas` | after any change to standards, skills text or the pipeline | `{"root": "<repo path>"}`, optionally `"only": ["student", ...]` |
 
 ## What to do next
 
-`python3 tools/wiki.py next` checks the whole pipeline and prints each step that is out of date, in order, with the command to run: sources not fetched, fetched but not analysed, analysed but not in the wiki or the trace, standards built before a non-negotiable source changed, reference sources no card or topic page uses yet, rules not citation-checked, skill files older than `synthesis/`, and an untested OpenWiki. Start every session in this folder with it.
+`python3 tools/wiki.py next` checks the whole pipeline and prints each step that is out of date, in order, with the exact command or workflow args to run:
+1. analysis files that fail `check`, each with its fix (an analysis whose authority changed is redone with learn-analyze, because the authority decides how completely rules are extracted);
+2. sources nothing was fetched or learned from yet, including pages fetch had to skip;
+3. fetched but not analysed; analysed but not in the wiki (or its page was built from an older analysis) or the trace;
+4. standards built before a non-negotiable or good-to-have analysis changed, or edited without a version bump;
+5. reference sources no card or topic page uses yet (with the learn-synthesis args for their areas);
+6. rules whose text Jev has not checked, and flagged items waiting for learn-escalate;
+7. skill files older than `synthesis/`, and an untested OpenWiki.
+
+Last, as a note and not as work, it lists analysed sources whose raw text is not on this machine. That is normal in a fresh clone: `raw/` is git-ignored and the committed analyses are what the app uses. Fetch it again only to re-analyse or citation-check. `python3 tools/wiki.py status` counts the same way: analysed, in the wiki, and raw text here. Start every session in this folder with `next`.
 
 ## Add a source
 
@@ -92,14 +104,19 @@ Each step that needs judgement runs as a saved Claude Code workflow in `.claude/
 python3 tools/wiki.py add https://www.youtube.com/@somechannel --authority reference
 python3 tools/wiki.py add https://example.com/article --authority non-negotiable --name "Example"
 .venv-wiki/bin/python tools/wiki.py fetch --only "Example"
-python3 tools/wiki.py pending --work-items        # the args for the analysis workflow
+python3 tools/wiki.py pending --work-items        # the args for the analysis workflow: {"root": ..., "items": [...]}
 ```
+
+- `add` compares links without the scheme, `www.` or a trailing slash, so a page already on the list is refused, with the source that has it and its authority. It also refuses a name, raw folder or id prefix another source uses; pass a different `--name`. A GitHub repo is named after `owner/repo`. `add --help` lists the authorities.
+- `fetch` exits 1 when a source ends up with no raw text (a page with too little text, a failed download) and records the skipped pages in `raw/_skipped.json`, which `next` reports. `fetch --only` with a name that matches nothing lists the valid names.
+- `python3 tools/wiki.py remove "<name or link>"` takes a source, or one page of a multi-page source, off the list. What was learned from it stays until you delete its analysis files.
+- A non-negotiable or good-to-have source is a house source: follow [IMPROVING.md](IMPROVING.md) section 4, "A new house source".
 
 Then, in Claude Code, run the saved workflow `.claude/workflows/learn-analyze.js` with those args (or ask: "run the learn-analyze workflow on the pending sources"). Any other agent can follow the same two prompts by hand: they are in that file.
 
 ```bash
-python3 tools/wiki.py check                         # schema, quote limits, authority, topic names
-.venv-wiki/bin/python tools/wiki.py ingest          # wiki pages and index
+python3 tools/wiki.py check                         # schema and types, quote limits, authority, topic names, maps_to
+.venv-wiki/bin/python tools/wiki.py ingest          # wiki pages and index; an edited analysis is re-ingested by itself
 python3 tools/wiki.py trace                         # S-L19 ids in traces/L19-trace.md
 python3 tools/wiki.py cite-check <ids>              # Jev checks every must/should rule against its source passage
 python3 tools/wiki.py cite-check --standards        # and every house standard against the sources it cites
@@ -149,3 +166,10 @@ OpenWiki's fields (`summary`, `key_ideas`, `entities`, `topics`, `claims`, `quot
 | `caveats` | sponsor segments, dated information, opinion versus fact |
 
 Topic names come from `taxonomy.json` exactly, so each topic gets one wiki page. Everything must come from the source; anything an agent connects itself ends with `[inferred]`.
+
+`wiki.py check` enforces the types and the allowed values:
+- `numbers` and `caveats` are lists, even with one item, and each rule's `values` is a list of strings.
+- A rule's `area` is one of color, typography, layout, shape, elevation, motion, iconography, components, patterns, content, accessibility, platforms, process, tokens or tooling.
+- `kind` is `do` or `dont`.
+- `applies_to` is one of the platform and stack tags that standards use: all, web, css, react, react-native, ios, swift, android, compose or desktop.
+- A decision's `maps_to` is `null` or a question id that exists in `skills/opendesigner/references/questions.json`.

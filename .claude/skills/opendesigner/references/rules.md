@@ -31,6 +31,7 @@ Search `glossary.json` for each term (one term per line; match the term or one o
 
 ## 3. The rules, in the order they matter
 1. **Look before you ask.** Read the repo, CSS, tokens, brand files and any reference first. Ask only about taste, trade-offs and facts no file holds. If there are several candidates (two blues in the CSS), list them and recommend one.
+   - **The stack comes from `package.json`.** Its dependencies say whether the project uses React, React Native and so on. The stack, with the platforms, decides which standards apply (`docs/KNOWLEDGE.md` section 3). `engine.py init` and `sketch` record it as `raw.stack`. Only when no file settles it, and the project has code to write, ask once which framework they use, then record it: `engine.py set raw.stack '["react"]' --why "<their words>"`.
 2. **Every question must do one of three things:** change the system, lock an assumption, or pick a trade-off. For small gaps, don't ask: assume, and label the assumption.
 3. **Zoom, don't march** (`zoom.md`).
 4. **Order by downstream reach.** Product truth first (what it is, who it's for, where it runs, how it feels), then foundations, then components.
@@ -79,11 +80,13 @@ A value outside the listed options is recorded as given, with the person's reaso
 - **User challenge:** your recommendation would override something the person said. Never decide it. Present what they said, what you suggest, why, what you might be missing, and the cost if you are wrong. Their answer wins.
 - If an override makes two choices clash (for example a brutalist direction with bouncy motion), flag it once. Never block it.
 - **Standard:** a house or project standard already settles it (`references/standards.md`). Apply it, never ask it, and never recommend an option that breaks it. Mention the standards once, in the first result.
+  - A question marked **Settled by: STD-...** in its stage file (`settled_by` in `questions.json`) is skipped like a **Planned** one: ask nothing and record nothing. The standard already locked its value.
+  - An option marked **(breaks STD-...)** (`breaks` in `questions.json`) is never recommended or shown as the default. If the person asks for it, restate the standard and its reason once. Only their explicit ask to change the standard allows it: `engine.py standard override <id> --why "<their words>"`. Until then `engine.py pick` refuses it.
 
 ### Decide or ask
 | The decision is... | Do this | Say |
 |---|---|---|
-| Settled by a standard | Apply it (the engine already did at `init`) | Once, in the first result: which areas the standards cover, and that the person can ask to change one |
+| Settled by a standard (the stage file says **Settled by: STD-...**) | Skip it like a Planned question: the engine already applied the standard | Once, in the first result: which areas the standards cover, and that the person can ask to change one |
 | Mechanical, or low impact (weight low in `pacing.json`) | Keep the default (`auto_default`) | List it in the stage summary |
 | Handed over ("you pick") | Decide with a reason (`delegated`) | One line now, and again at the next gate |
 | Taste, identity, or high impact (weight high, or it changes many decisions) | Ask. Show 2-4 options as visual samples of the **same** real screen, recommended first | For each option, one **Now:** line (what changes today) and one **As it grows:** line (more screens, people, platforms, content), from the stage file when it has them |
@@ -204,9 +207,15 @@ When the person shares a link or file and says to follow it or learn from it:
 1. If they did not say how much weight it gets, ask one question: "Should I follow this as a rule, recommend it, or just learn from it?" (non-negotiable, good to have, reference).
 2. Show the URL and get a yes before reading it (`guardrails.md` section 2).
 3. Read it. Pull out rules with exact values, and show them in plain words, at most 10 per message. Ask which to keep.
-4. Record each kept rule:
-   - Non-negotiable: `engine.py standard add --rule "..." --why "..." --source <url> [--path <token path> --value <json>] [--review-pattern <regex> --review-message "..."]`. It is locked like a house standard.
-   - Good to have: the same command with `--authority good-to-have` (unlocked), or `engine.py set <path> <value> --set-by reference --source-ref <url>`.
-   - Reference: it shapes options and examples only. Record nothing unless a value is chosen.
-5. If the source disagrees with a house standard, say so once. Their project standard wins in their project, and the engine records it.
-6. Once per session, offer: "Want to suggest this source to OpenDesigner for everyone?" After a yes: `engine.py feedback "source: <url> (<authority>): <why>" --kind idea`.
+4. Record each kept rule with one command, the same everywhere:
+   ```
+   engine.py standard add --rule "..." --why "..." --source <url, or "person, 2026-09-27"> [--path P --value <json>]... [--values '{...}'] [--review-pattern <regex> --review-message "..."] [--authority good-to-have] [--beats STD-a,STD-b]
+   ```
+   - **Non-negotiable:** the command as it is. It is locked like a house standard. Repeat `--path` and `--value` for each token the rule fixes. Add `--review-pattern` and `--review-message` when code that breaks it can be found on one line. The source can be their own words with the date ("person, 2026-09-27") when there is no link.
+   - **Good to have:** the same command with `--authority good-to-have`. It is recommended first and stays unlocked.
+   - **Reference:** record nothing. It shapes options and examples only. When the person picks a value from it, record that value: `engine.py set <path> <value> --set-by reference --source-ref <url>`.
+   - When a token covers more than the rule (the rule is about buttons, the token sets every control's corners), say so in one line before recording it.
+5. If the source disagrees with a house standard, say so once, then follow their words (`guardrails.md` section 4b):
+   - "It's our brand", "always", "non-negotiable for us": a project standard with `--beats STD-...`. Their rule wins in this project, and the engine stops the house standard's checks and constraints here.
+   - "Just this value", "just here": `engine.py standard override <id> --why "<their words>"`.
+6. Once per session, offer: "Want to suggest this source to OpenDesigner for everyone?" After a yes: `engine.py feedback "source: <url> (<authority>): <why>" --kind idea`. Skip the offer for a local file, a company-internal document, or anything private: those stay in their project.

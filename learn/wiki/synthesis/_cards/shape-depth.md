@@ -1,3 +1,11 @@
+---
+type: synthesis
+title: "L19 Decision Cards: shape and depth (stages 14, 15, 17, 18)"
+tags:
+  - decision-cards
+  - shape-depth
+---
+
 # L19 Decision Cards: shape and depth (stages 14, 15, 17, 18)
 
 Lane: L19 (learning wiki). Area: shape-depth, covering the topics Shape and corner radius; Depth, shadows and borders; and Icons and imagery (OpenDesigner stages 14 shape, 15 depth, borders and materials, 17 icons, app icon and logo use, 18 imagery, illustration and charts). Written 2026-09-24.

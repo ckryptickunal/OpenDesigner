@@ -52,9 +52,9 @@
       "description": "Website with stacked cards revealed on hover instead of on scroll."
     },
     {
-      "name": "Ami (caption spelling; a calendar scheduling app, likely Amie [inferred])",
+      "name": "Ami (caption spelling)",
       "type": "product",
-      "description": "Example of a horizontal card carousel navigated with small buttons."
+      "description": "A calendar scheduling app (likely Amie [inferred]); example of a horizontal card carousel navigated with small buttons."
     },
     {
       "name": "Linear",

@@ -1,3 +1,11 @@
+---
+type: synthesis
+title: "L19 Decision Cards: tokens (stages 05, 24)"
+tags:
+  - decision-cards
+  - tokens
+---
+
 # L19 Decision Cards: tokens (stages 05, 24)
 
 Lane: L19 (learning wiki). Area: tokens, covering the topics Design systems and tokens, and Web implementation (CSS and React) (OpenDesigner stages 05 where the system lives, and 24 tokens and encoding). Cards DC-L19-181 to DC-L19-190. Written 2026-09-24.

@@ -6,7 +6,7 @@ Area: `typography` · zoom 3 detailed: 8 · visual: `assets/templates/type-scale
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-type-15 · Should text sizes change with screen width?
 Zoom 3 detailed · weight medium · changes 2 decisions · class G · cards DC-L02-19
@@ -85,7 +85,7 @@ Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L02-
 - **Options:**
   - `size-table` A size-specific table (SF Pro: +41/1000 em at 6pt, 0 at 12pt, -26/1000 em at 17pt), applied automatically by the OS.
   - `per-style` Per-style tracking tokens (Material: Display Large -0.2sp, Body Large 0.5sp).
-  - `zero` No extra letter spacing beyond the font's defaults [DC-L02-14].
+  - `zero` No extra letter spacing beyond the font's defaults [DC-L02-14]. (breaks STD-visual-details-04, STD-visual-details-05)
 - **Default:** 0 at body sizes, +0.02 to +0.05em at 11-12px and all caps, -0.01 to -0.02em from about 32px, in em units *Source:* card heuristic [DC-L02-14].
 - **Show:** a headline and an all-caps label with tracking on and off.
 - **Use / avoid:** use em-based tracking so it scales; let optical-size fonts do most of the work; avoid tracking non-Latin scripts [DC-L02-14, DC-L02-25].
@@ -96,7 +96,7 @@ Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L02-
 - **Ask:** "How wide can paragraphs get, and how should long text be cut off?"
 - **Why:** Very long lines make readers lose their place. Centered or justified text (stretched to both edges) slows reading [DC-L02-17, DC-L02-18].
 - **Options:**
-  - `measure-45-75` 45-75 characters (Bringhurst) or 50-60 (Windows); WCAG 1.4.8 AAA caps at 80, 40 for CJK.
+  - `measure-45-75` 45-75 characters (Bringhurst) or 50-60 (Windows); WCAG 1.4.8 AAA caps at 80, 40 for CJK. (breaks STD-visual-details-01)
   - `wrap-then-ellipsis` Wrap first, then cut off with an ellipsis (...) and a way to read it all [DC-L02-18].
   - `para-1x` Paragraph spacing equal to the body size (Atlassian body 12px, body large 16px) [DC-L02-16].
   - `text-box-trim` Trim half-leading so spacing measures from cap height (CSS `text-box: trim-both`) [DC-L02-16].

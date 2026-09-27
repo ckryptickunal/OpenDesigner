@@ -8,7 +8,7 @@ Screen: a live sign-up form and a list with delete actions; the person fills fie
 
 Zoom 3 (detailed) questions: `22-forms-validation-and-feedback.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-form-01 · What style should form fields have, and where do labels go?
 Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L08-16, DC-L13-05
@@ -31,7 +31,7 @@ Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L13-0
 - **Why:** Errors that show too early feel hostile, and checking on submit keeps forms calm. A disabled button hides why the action can't run [DC-L13-06, DC-L08-17, DC-L08-10].
 - **Options:**
   - `on-blur` When you leave a field ("reward early, punish late"): clear the error on the keystroke that fixes it; validate at complete length for ZIP and phone.
-  - `on-submit-summary` On submit, a list of errors at the top that takes focus, "Error:" prefix, notes by each field (GOV.UK).
+  - `on-submit-summary` On submit, a list of errors at the top that takes focus, "Error:" prefix, notes by each field (GOV.UK). (breaks STD-visual-details-49)
   - `disable-short-forms` Turn off submit on short forms until all is right, never on long ones (Carbon).
   - `never-disable` Never turn off submit; explain the problem instead (Atlassian).
 - **Default:** `on-blur`: on-blur for format checks, on submit otherwise, summary plus inline for forms over about 5 fields; never-disable, with `aria-disabled` and helper text when an action truly cannot run *Source:* card heuristics [DC-L13-06, DC-L08-17, DC-L08-10]; systems disagree (see Disagreements).
@@ -54,12 +54,13 @@ Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L08-1
 
 ## Q-form-05 · For deletes and other risky steps, offer undo or ask first?
 Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L13-08
+- **Settled by:** STD-visual-details-40: Give easy undo for slips, and use a confirmation dialog only for genuinely destructive, irreversible actions, sparingly. Don't ask; the value is locked. Change it only through engine.py standard override when the person explicitly asks.
 - **Ask:** "When people delete something, should they get an undo button, an 'Are you sure?' step, or both?"
 - **Why:** Undo keeps work fast and calm. Asking "Are you sure?" too often feels like red tape, and people stop reading it [DC-L13-08].
 - **Options:**
   - `both` Undo when it can be undone, ask first when it can't or costs a lot [DC-L13-08].
   - `undo-first` Undo with trash or soft delete for actions you can reverse (NN/g calls undo superior; Shneiderman rule 6).
-  - `confirm` An 'Are you sure?' box with clear verb buttons, and Cancel as the safe choice [DC-L13-08].
+  - `confirm` An 'Are you sure?' box with clear verb buttons, and Cancel as the safe choice [DC-L13-08]. (breaks STD-visual-details-40)
 - **Default:** `both`: both *Source:* card heuristic [DC-L13-08].
 - **Show:** the list delete flow per option.
 - **Use / avoid:** use verb labels on confirmations; avoid "Are you sure?" dialogs for reversible actions [DC-L13-08].

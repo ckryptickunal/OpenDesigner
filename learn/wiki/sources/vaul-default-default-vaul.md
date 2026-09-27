@@ -22,8 +22,8 @@ tags:
 
 ## Metadata
 
-- Video ID: `vaul-default`
-- Channel: Vaul docs (web)
+- Page ID: `vaul-default`
+- Publisher: Vaul docs (web)
 - Published: Unknown
 - URL: https://vaul.emilkowal.ski/default
 

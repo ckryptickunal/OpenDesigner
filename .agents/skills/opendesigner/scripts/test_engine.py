@@ -535,7 +535,7 @@ class ReviewAndFeedback(unittest.TestCase):
             got = {(f_["file"].split(os.sep)[-1], f_["line"], f_["kind"]): f_["fix"] for f_ in res["findings"]}
             self.assertIn("--ds-elevation-overlay", got[("b.css", 1, "shadow")])      # 24px blur -> overlay role
             self.assertIn("--ds-elevation-raised", got[("b.css", 6, "shadow")])       # 4px blur -> raised role
-            self.assertIn("--ds-motion-transition-feedback-duration", got[("b.css", 2, "duration")])  # a 200ms opacity change is feedback
+            self.assertIn("--ds-motion-transition-enter-duration", got[("b.css", 2, "duration")])  # a menu's fade enters (R18)
             self.assertIn("DSMotion.duration", got[("S.swift", 2, "duration")].replace(".Motion.", "Motion."))
             self.assertTrue(got[("C.kt", 1, "duration")].endswith("Ms"))
             self.assertNotIn(("b.css", 3, "duration"), got)
@@ -1365,7 +1365,11 @@ class Standards(unittest.TestCase):
                 self.assertEqual([i["severity"] for i in adv], ["info"])
                 self.assertIn("(this system follows none yet): 5 new, 0 changed, 0 retired", adv[0]["message"])
                 quiet(e.cmd_standards, d, update=True)
-                quiet(e.cmd_set, d, "motion.easing.exit", [0, 0, 1, 1], "forced", force=True)
+                got = std_run(e.cmd_set, d, "motion.easing.exit", [0, 0, 1, 1], "forced", force=True)[0]   # R05: never past a standard
+                self.assertEqual(got[0], "EXIT")
+                state = std_read(d)                                         # a hand edit of state.json drifts instead
+                state["overrides"]["motion.easing.exit"] = [0, 0, 1, 1]
+                e.dump_json(os.path.join(d, "state.json"), state)
                 quiet(e.cmd_generate, d)
                 drift = [i for i in e.validate_dir(d).items if i["category"] == "standards"]
                 self.assertEqual([i["severity"] for i in drift], ["warn"])
@@ -1708,11 +1712,13 @@ class StandardsPrecedence(unittest.TestCase):
             d = os.path.join(t, "opendesigner")
             quiet(e.cmd_init, d, name="Platforms")
             quiet(e.cmd_generate, d)
-            _r, out = std_run(e.cmd_set, d, "Q-plat-01", ["ios"], "iOS only")
-            self.assertIn("note: 2 house standards no longer apply to these platforms; run `engine.py standards --update`", out)
-            self.assertIn("2 house standards no longer apply to your platforms", std_findings(d)[0]["message"])
-            _r, out = std_run(e.cmd_standards, d, update=True)
-            self.assertIn("STD-easing-duration-01: no longer applies to your platforms (web only); its values stay, unlocked", out)
+            _r, out = std_run(e.cmd_set, d, "Q-plat-01", ["ios"], "iOS only")   # R02: re-scoped at once, one line per theme
+            self.assertIn("House standards for ios, swift: 3 apply; 2 no longer apply (their values stay, unlocked). By theme:", out)
+            self.assertIn("    Easing and duration: 2 do not, 2 no longer apply", out)
+            self.assertFalse(std_findings(d))
+            with open(os.path.join(d, "decisions.md"), encoding="utf-8") as f:
+                self.assertIn("STD-easing-duration-01: no longer applies to your platforms (web only); its values stay, unlocked", f.read())
+            self.assertIn("already follows", std_run(e.cmd_standards, d, update=True)[1])
             state = std_read(d)
             self.assertNotIn("overrides.motion.easing.exit", state["locks"])
             self.assertEqual(std_exit(state), [0.23, 1, 0.32, 1])
@@ -1720,9 +1726,8 @@ class StandardsPrecedence(unittest.TestCase):
             quiet(e.cmd_generate, d)
             self.assertFalse(std_findings(d))
             _r, out = std_run(e.cmd_set, d, "Q-plat-01", ["ios", "web"], "web too")
-            self.assertIn("2 house standards now apply to these platforms", out)
-            self.assertIn("2 house standards apply to this system but are not applied yet", std_findings(d)[0]["message"])
-            quiet(e.cmd_standards, d, update=True)
+            self.assertIn("5 apply, 2 newly applied. By theme:", out)
+            self.assertFalse(std_findings(d))
             state = std_read(d)
             self.assertIn("overrides.motion.easing.exit", state["locks"])
             self.assertIn("STD-easing-duration-02", state["standards"]["applied"])
@@ -1741,9 +1746,9 @@ class StandardsPrecedence(unittest.TestCase):
                 motion = text.split("\n## Motion", 1)[1].split("\n## ", 1)[0]
                 self.assertIn("**Most movements take 250ms.**", motion)                 # the standard's value, from the tokens
                 self.assertIn("| `motion.duration.medium` | 250ms |", motion)
-                self.assertIn("enter `[0, 0, 0.2, 1]`, exit `[0.4, 0, 1, 1]`", motion)
+                self.assertIn("enter `cubic-bezier(0, 0, 0.2, 1)`, exit `cubic-bezier(0.4, 0, 1, 1)`", motion)  # CSS, as code writes it
                 self.assertIn("D-0002 (overrides.motion.easing.exit)", motion)
-                self.assertIn("D-0003 (overrides.motion.duration.medium)", motion)
+                self.assertIn("D-0003 (2 values, standards)", motion)                   # a standards batch is cited once (R29)
                 _r, out = std_run(e.cmd_standards, d)
                 self.assertIn("the person's own value [0.4, 0, 1, 1] is kept for motion.easing.exit (D-0002)", out)
                 self.assertIn("locked: motion.duration.medium = 250ms", out)
@@ -1882,6 +1887,795 @@ class StandardsPrecedence(unittest.TestCase):
             self.assertIn("dials.roundness was not changed: it follows standard STD-shape-01", fit["notes"])
             self.assertEqual(e.dial_value(std_read(d)["dials"]["roundness"]), 30)
             self.assertEqual(std_read(d)["raw"]["spaceUnit"], 4)
+
+def std_triage():
+    """STD_V1 plus the shared-schema fields (constraints, settles, breaks_options), two standards on one path, a raw value,
+    a component token and a React-only rule: the fixture for the persona triage fixes (R01-R43, D01-D05)."""
+    data = copy.deepcopy(STD_V1)
+    data["standards"] += [
+        {"id": "STD-easing-duration-03", "theme": "easing-duration", "area": "motion", "title": "No ease-in",
+         "rule": "Never use ease-in on UI animations.", "why": "It feels sluggish.", "strength": "must", "engine": None,
+         "review": {"pattern": r"\bease-in\b(?!-out)", "message": "use ease-out"},
+         "constraints": [{"path": "motion.easing.*", "forbid": "accelerating-curve"}], "since": 1, "changed": 1},
+        {"id": "STD-misc-05", "theme": "misc", "area": "motion", "title": "Modal timing", "rule": "Modals open in 250ms.",
+         "why": "The modal recipe.", "strength": "must", "engine": {"path": "motion.duration.modal", "value": "250ms", "type": "duration"},
+         "sources": [{"id": "src-a"}, {"id": "src-a"}, {"id": "src-b"}], "since": 1, "changed": 1},
+        {"id": "STD-misc-06", "theme": "misc", "area": "motion", "title": "Backdrop timing", "rule": "Backdrops fade with the modal.",
+         "why": "One surface.", "strength": "must", "engine": {"path": "motion.duration.modal", "value": "250ms", "type": "duration"},
+         "since": 1, "changed": 1},
+        {"id": "STD-misc-07", "theme": "misc", "area": "motion", "title": "Fixed ladder", "rule": "The duration ladder is fixed.",
+         "why": "One ladder everywhere.", "strength": "must", "engine": None, "settles": ["Q-motion-02"],
+         "breaks_options": {"Q-motion-06": ["fade"]}, "since": 1, "changed": 1},
+        {"id": "STD-misc-08", "theme": "misc", "area": "motion", "title": "Reduced motion fades", "strength": "must",
+         "rule": "Reduced motion replaces movement with fades.", "why": "Vestibular safety.",
+         "engine": {"path": "raw.reducedMotion", "value": "replace"}, "since": 1, "changed": 1},
+        {"id": "STD-misc-09", "theme": "misc", "area": "components", "title": "Toast time", "rule": "Toasts stay 4000ms.",
+         "why": "Time to read.", "strength": "should", "since": 1, "changed": 1,
+         "engine": {"path": "component.toast.duration", "value": "4000ms", "type": "duration"}},
+        {"id": "STD-misc-10", "theme": "misc", "area": "motion", "title": "React only", "rule": "Use the reduced-motion hook.",
+         "why": "One source of truth.", "strength": "should", "engine": None, "applies_to": ["react"], "since": 1, "changed": 1},
+    ]
+    return data
+
+
+def triage_init(t, data=None, name="Triage"):
+    """A project at t/opendesigner that follows the fixture (house file at t/std.json); returns (dir, house file)."""
+    path = write_std(t, "std.json", data or std_triage())
+    d = os.path.join(t, "opendesigner")
+    with house_standards(path):
+        quiet(e.cmd_init, d, name=name)
+    return d, path
+
+
+def decision_text(d):
+    with open(os.path.join(d, "decisions.md"), encoding="utf-8") as f:
+        return f.read()
+
+
+class PersonaTriageFixes(unittest.TestCase):
+    """_coordination/reviews/L19-persona-triage-2026-09-27.md: the engine's standards logic and state."""
+
+    def test_r01_numbers_compare_by_value(self):
+        self.assertTrue(e._same(1, 1.0))
+        self.assertTrue(e._same({"a": [1, {"b": 2.0}]}, {"a": [1.0, {"b": 2}]}))
+        self.assertFalse(e._same(True, 1))
+        self.assertFalse(e._same("1", 1))
+        self.assertFalse(e._same([1, 2], [1, 2, 3]))
+        data = {"version": 1, "themes": [], "standards": [
+            {"id": "STD-a-01", "theme": "a", "title": "Damped", "rule": "Springs are critically damped.", "strength": "must",
+             "engine": {"path": "motion.spring.spatial.dampingRatio", "value": 1.0, "type": "number"}, "since": 1, "changed": 1},
+            {"id": "STD-a-02", "theme": "a", "title": "Damped too", "rule": "Settle with damping 1.", "strength": "must",
+             "engine": {"path": "motion.spring.spatial.dampingRatio", "value": 1, "type": "number"}, "since": 1, "changed": 1}]}
+        with tempfile.TemporaryDirectory() as t:
+            d, path = triage_init(t, data)
+            with house_standards(path):
+                quiet(e.cmd_generate, d)
+                self.assertFalse(std_findings(d))                              # no "1.0 vs 1" drift warning
+
+    def test_r02_platforms_rescope_at_once_and_update_groups_by_theme(self):
+        with tempfile.TemporaryDirectory() as t:
+            d, path = triage_init(t)
+            with house_standards(path):
+                _r, out = std_run(e.cmd_set, d, "Q-plat-01", ["ios"], "iOS only")
+                self.assertIn("House standards for ios, swift:", out)
+                self.assertIn("  Easing and duration: 2 apply, 1 do not, 1 no longer apply", out)
+                self.assertIn("  Misc: ", out)
+                self.assertNotIn("STD-misc-10", std_read(d)["standards"]["applied"])        # react only; no stack recorded
+                quiet(e.cmd_generate, d)
+                self.assertFalse(std_findings(d))
+                self.assertRegex(decision_text(d), r"## D-\d+ · House standards v1 for ios, swift: 0 now apply, 2 no longer apply")
+        with tempfile.TemporaryDirectory() as t:
+            v2 = std_v2()
+            d, v1 = triage_init(t, STD_V1)
+            with house_standards(write_std(t, "v2.json", v2)):
+                _r, out = std_run(e.cmd_standards, d, update=True)
+            self.assertIn(". By theme:", out)
+            self.assertIn("  Easing and duration (motion): 1 changed", out)
+            self.assertIn("  Misc (motion): 1 new, 1 changed, 1 retired", out)
+            self.assertIn("STD-misc-04: motion.duration.short = 120ms (was 150ms)", out)                 # R26: old -> new
+            self.assertIn("STD-easing-duration-01: the rule now reads: Use a strong ease-out", out)
+            self.assertIn("Run `engine.py build`", out)
+
+    def test_r03_a_released_token_keeps_exporting_and_skipped_overrides_warn(self):
+        v1 = {"version": 1, "themes": [], "standards": [
+            {"id": "STD-t-01", "theme": "t", "title": "Press", "rule": "Pressables scale to 0.97.", "strength": "must",
+             "engine": {"path": "motion.scale.press", "value": 0.97, "type": "number"}, "since": 1, "changed": 1}]}
+        v2 = {"version": 2, "themes": [], "standards": [], "retired": [{"id": "STD-t-01", "version": 2, "why": "merged"}]}
+        with tempfile.TemporaryDirectory() as t:
+            d, _p = triage_init(t, v1)
+            with house_standards(write_std(t, "v2.json", v2)):
+                quiet(e.cmd_standards, d, update=True)
+                self.assertNotIn("STD-t-01", std_read(d)["standards"]["records"])
+                self.assertEqual(std_read(d)["standards"]["types"], {"motion.scale.press": "number"})
+                files, meta, _c = quiet(e.cmd_generate, d)
+                press = files["semantic.tokens.json"]["motion"]["scale"]["press"]
+                self.assertEqual((press["$type"], press["$value"]), ("number", 0.97))
+                self.assertEqual([n for n in meta["notes"] if "skipped" in n], [])
+                state = std_read(d)
+                state["overrides"]["motion.gesture.fraction"] = 0.4            # a number no standard types: skipped...
+                e.dump_json(os.path.join(d, "state.json"), state)
+                quiet(e.cmd_generate, d)
+                warn = [i for i in e.validate_dir(d).items if i["category"] == "tokens"]
+                self.assertEqual(len(warn), 1)                                  # ...and said as a warning
+                self.assertIn("motion.gesture.fraction is missing from every export", warn[0]["message"])
+                self.assertEqual(warn[0]["severity"], "warn")
+
+    def test_r04_an_older_skill_changes_nothing(self):
+        with tempfile.TemporaryDirectory() as t:
+            v2 = std_v2()
+            d, _p = triage_init(t, v2)
+            locks = std_read(d)["locks"]
+            with house_standards(write_std(t, "v1.json", STD_V1)):
+                quiet(e.cmd_generate, d)
+                adv = [i for i in std_findings(d) if i["severity"] == "info"]
+                self.assertEqual(len(adv), 1)
+                self.assertIn("Your OpenDesigner skill is older than this design system: it ships house standards v1, and this "
+                              "system follows v2", adv[0]["message"])
+                got = std_run(e.cmd_standards, d, update=True)[0]
+                self.assertEqual(got[0], "EXIT")
+                self.assertIn("Nothing was changed", got[1])
+                self.assertIn("older than this design system", std_run(e.cmd_standards, d)[1])
+                self.assertEqual(std_read(d)["standards"]["house_version"], 2)
+                self.assertEqual(std_read(d)["locks"], locks)                   # nothing released
+                self.assertEqual(std_run(e.cmd_set, d, "Q-plat-01", ["ios"], "iOS")[0]["standards"]["house_version"], 2)
+
+    def test_r05_r06_force_never_passes_a_standard_and_the_refusal_names_every_rule(self):
+        with tempfile.TemporaryDirectory() as t:
+            d, path = triage_init(t)
+            with house_standards(path):
+                got = std_run(e.cmd_set, d, "motion.duration.modal", 450, "slower", force=True)[0]
+                self.assertEqual(got[0], "EXIT")
+                self.assertIn("motion.duration.modal follows 2 standards:", got[1])
+                self.assertIn("  - house standard STD-misc-05: Modals open in 250ms. Why: The modal recipe.", got[1])
+                self.assertIn("  - house standard STD-misc-06: Backdrops fade with the modal. Why: One surface.", got[1])
+                self.assertIn("engine.py standard override STD-misc-05 --why \"<their words>\" --path motion.duration.modal "
+                              "--value '450' --all-holders", got[1])
+                msg = std_run(e.cmd_set, d, "motion.easing.exit", "ease-in", "brand")[0][1]
+                self.assertIn("This follows house standard STD-easing-duration-01", msg)
+                self.assertIn("[0.42, 0, 1, 1] breaks house standard STD-easing-duration-03: Never use ease-in on UI animations. "
+                              "Why: It feels sluggish. ([0.42, 0, 1, 1] speeds up as it ends, like ease-in)", msg)
+                self.assertIn("engine.py standard override STD-easing-duration-03", msg)
+                quiet(e.cmd_standard, d, "override", sid="STD-easing-duration-01", why="we pick our own exit")
+                got = std_run(e.cmd_set, d, "motion.easing.exit", [0.3, 0, 1, 1], "brand")[0]        # the constraint still holds
+                self.assertEqual(got[0], "EXIT")
+                self.assertIn("Nothing was changed. [0.3, 0, 1, 1] breaks house standard STD-easing-duration-03", got[1])
+                quiet(e.cmd_set, d, "motion.easing.exit", [0.2, 0, 0, 1], "brand")                   # decelerating: fine
+                state = std_read(d)
+                state["overrides"]["motion.easing.standard"] = [0.4, 0, 1, 1]  # a hand edit validate catches
+                e.dump_json(os.path.join(d, "state.json"), state)
+                quiet(e.cmd_generate, d)
+                warn = [i for i in std_findings(d) if "STD-easing-duration-03" in i["message"]]
+                self.assertEqual(len(warn), 1)
+                self.assertIn("motion.easing.standard breaks house standard STD-easing-duration-03", warn[0]["message"])
+        for c, bad in (([0.42, 0, 1, 1], True), ([0.3, 0, 1, 1], True), ("ease-in", True), ([0, 0, 0.58, 1], False),
+                       ([0.42, 0, 0.58, 1], False), ([0, 0, 1, 1], False), ("ease", False), ([0.23, 1, 0.32, 1], False)):
+            self.assertEqual(e.curve_accelerates(c), bad, c)
+        for c in ({"path": "x", "forbid": "max-duration-ms", "value": 300}, {"path": "x", "forbid": {"max-duration-ms": {"value": 300}}},
+                  {"path": "x", "max-duration-ms": {"value": 300}}):
+            self.assertEqual(e.constraint_problem(c, {"value": 450, "unit": "ms"}), "450ms is longer than 300ms")
+            self.assertIsNone(e.constraint_problem(c, "250ms"))
+
+    def test_r07_override_one_value_and_provenance(self):
+        data = {"version": 1, "themes": [], "standards": [
+            {"id": "STD-t-01", "theme": "t", "title": "Curves", "rule": "Enter and exit curves are fixed.", "strength": "must",
+             "engine": [{"path": "motion.easing.enter", "value": [0, 0, 0.2, 1]}, {"path": "motion.easing.exit", "value": [0.2, 0, 0, 1]}],
+             "since": 1, "changed": 1}]}
+        with tempfile.TemporaryDirectory() as t:
+            d, path = triage_init(t, data)
+            with house_standards(path):
+                code, out = run_cli("standard", "override", "STD-t-01", "--why", "our brand exit", "--path", "motion.easing.exit",
+                                    "--value", "[0.1, 0, 0, 1]", "--dir", d, "--no-doc")
+                self.assertEqual(code, 0)
+                self.assertIn("overrode house standard STD-t-01 for motion.easing.exit", out)
+                state = std_read(d)
+                self.assertEqual(std_exit(state), [0.1, 0, 0, 1])
+                self.assertNotIn("overrides.motion.easing.exit", state["locks"])
+                self.assertIn("overrides.motion.easing.enter", state["locks"])                  # only that value was released
+                self.assertNotIn("STD-t-01", state["standards"]["overridden"])
+                self.assertEqual(std_run(e.cmd_set, d, "motion.easing.enter", [0, 0, 0.3, 1], "try")[0][0], "EXIT")
+                quiet(e.cmd_standard, d, "override", sid="STD-t-01", why="enter too", path="motion.easing.enter")
+                prim = quiet(e.cmd_generate, d)[0]["primitives.tokens.json"]["motion"]["easing"]
+                self.assertEqual(prim["enter"]["$extensions"]["opendesigner"], {"source": "standard-overridden", "standard": "STD-t-01"})
+                self.assertEqual(prim["exit"]["$extensions"]["opendesigner"]["source"], "person")
+                quiet(e.cmd_set, d, "motion.easing.enter", [0, 0, 0.3, 1], "now theirs")
+                prim = quiet(e.cmd_generate, d)[0]["primitives.tokens.json"]["motion"]["easing"]
+                self.assertEqual(prim["enter"]["$extensions"]["opendesigner"]["source"], "person")
+                got = std_run(e.cmd_standard, d, "add", rule="r", why="w", source="s", pairs=[["size.row.md", 40], ["size.row.lg", None]])[0]
+                self.assertIn("--path and --value go together", got[1])
+                quiet(e.cmd_build, d)
+                with open(os.path.join(t, "DESIGN.md"), encoding="utf-8") as f:
+                    n = int(re.search(r"\*\*(\d+) decisions? so far", f.read()).group(1))
+                self.assertEqual(n, len(e._decision_entries(d)))                      # unique decision ids, not paths
+
+    def test_r08_restore_names_other_holders_and_repeats_are_no_ops(self):
+        with tempfile.TemporaryDirectory() as t:
+            d, path = triage_init(t)
+            with house_standards(path):
+                got = std_run(e.cmd_standard, d, "override", sid="STD-misc-05", why="slow modals", path="motion.duration.modal",
+                              value="450ms")[0]
+                self.assertEqual(got[0], "EXIT")
+                self.assertIn("STD-misc-06", got[1])
+                self.assertIn("--all-holders", got[1])
+                _r, out = std_run(e.cmd_standard, d, "override", sid="STD-misc-05", why="slow modals", path="motion.duration.modal",
+                                  value="450ms", all_holders=True)
+                self.assertIn("Also taken back from STD-misc-06", out)
+                state = std_read(d)
+                self.assertEqual(state["overrides"]["motion.duration.modal"], {"value": 450, "unit": "ms"})
+                self.assertEqual(set(state["standards"]["released"]), {"STD-misc-05", "STD-misc-06"})
+                n = len(e._decision_entries(d))
+                _r, out = std_run(e.cmd_standard, d, "restore", sid="STD-misc-05", why="the modal felt slow after all")
+                self.assertIn("motion.duration.modal = 250ms (was 450ms)", out)
+                self.assertIn("also set by STD-misc-06", out)
+                self.assertIn("engine.py standard restore STD-misc-05 --all-holders", out)
+                text = decision_text(d)
+                self.assertIn("- reason: the modal felt slow after all", text)
+                self.assertRegex(text, r"restore STD-misc-05 \(house standard\)\n- set_by: standard · locked: yes · date: [\d-]+ · "
+                                       rf"supersedes: D-{n:04d} · ")
+                self.assertIn("already followed", std_run(e.cmd_standard, d, "restore", sid="STD-misc-05")[1])
+                self.assertEqual(len(e._decision_entries(d)), n + 1)                   # the second restore logged nothing
+                quiet(e.cmd_standard, d, "restore", sid="STD-misc-06")
+                self.assertIn("already followed", std_run(e.cmd_standard, d, "restore", sid="STD-misc-06")[1])
+                self.assertEqual(std_read(d)["standards"]["released"], {})
+                with self.assertRaises(SystemExit), contextlib.redirect_stderr(io.StringIO()):
+                    run_cli("standard", "remove", "PRJ-01", "--dir", d)               # --why is required (R43)
+
+    def test_r11_settled_questions_and_breaking_options(self):
+        with tempfile.TemporaryDirectory() as t:
+            d, path = triage_init(t)
+            with house_standards(path):
+                got = std_run(e.cmd_set, d, "answers.Q-motion-02", "6-steps", "try")[0]
+                self.assertEqual(got[0], "EXIT")
+                self.assertIn("Q-motion-02 is settled by house standard STD-misc-07: The duration ladder is fixed.", got[1])
+                got = std_run(e.cmd_set, d, "answers.Q-motion-06", "fade", "try", force=True)[0]
+                self.assertIn("the option fade for Q-motion-06 breaks a standard", got[1])
+                quiet(e.cmd_set, d, "answers.Q-motion-06", "shared-axis", "fine")
+                got = std_run(e.cmd_set, d, "answers.Q-motion-07", "remove", "try", force=True)[0]
+                self.assertEqual(got[0], "EXIT")
+                self.assertIn("would change a value a standard holds", got[1])
+                self.assertIn("house standard STD-misc-08", got[1])
+                self.assertNotIn("Q-motion-07", std_read(d)["answers"])
+                _r, out = std_run(e.cmd_set, d, "answers.Q-motion-07", "replace", "same as the standard")
+                self.assertIn("raw.reducedMotion already follows standard STD-misc-08", out)
+                quiet(e.cmd_standard, d, "override", sid="STD-misc-07", why="we want 6 steps")
+                quiet(e.cmd_set, d, "answers.Q-motion-02", "6-steps", "now allowed")
+        with tempfile.TemporaryDirectory() as t:                           # a skip by the person's own lock
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="Own lock")
+            quiet(e.cmd_lock, d, "raw.reducedMotion")
+            _r, out = std_run(e.cmd_set, d, "answers.Q-motion-07", "remove", "try")
+            self.assertIn("skipped raw.reducedMotion (locked)", out)
+            self.assertNotIn("tokens already match", out)
+
+    def test_d02_sketch_refuses_a_theme_a_standard_breaks(self):
+        data = std_triage()
+        data["standards"].append({"id": "STD-misc-11", "theme": "misc", "area": "color", "title": "Both modes",
+                                  "rule": "Give each color role a light and a dark value.", "why": "Trust.", "strength": "must",
+                                  "engine": None, "breaks_options": {"Q-theme-01": ["light-only"]}, "since": 1, "changed": 1})
+        with tempfile.TemporaryDirectory() as t, house_standards(write_std(t, "std.json", data)):
+            d = os.path.join(t, "opendesigner")
+            got = std_run(e.cmd_sketch, d, name="Sketch", platforms="web", theme="light-only", quiet=True)[0]
+            self.assertEqual(got[0], "EXIT")                                    # a new sketch applies standards after its answers
+            self.assertIn("breaks house standard STD-misc-11", got[1])
+            self.assertFalse(os.path.exists(os.path.join(d, "state.json")))     # nothing was written
+            quiet(e.cmd_sketch, d, name="Sketch", platforms="web", theme="system-light-dark", quiet=True)
+            quiet(e.cmd_standard, d, "override", sid="STD-misc-11", why="we only ship light")
+            quiet(e.cmd_sketch, d, theme="light-only", quiet=True)
+            self.assertEqual(std_read(d)["answers"]["Q-theme-01"]["value"], "light-only")
+
+    def test_r24_r25_paired_values_and_the_control_radius(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="Corners")
+            base = quiet(e.cmd_generate, d)[1]["shape"]
+            code, out = run_cli("standard", "add", "--rule", "Buttons have 6px corners and a 1px ring offset.", "--why", "brand book",
+                                "--source", "person, 2026-09-27", "--path", "radius.control", "--value", "6",
+                                "--path", "focus.ring.offset", "--value", "1", "--dir", d, "--no-doc")
+            self.assertEqual(code, 0)
+            state = std_read(d)
+            self.assertEqual((state["overrides"]["radius.control"], state["overrides"]["focus.ring.offset"]), (6, {"value": 1, "unit": "px"}))
+            self.assertEqual(len(e.std_engine(state["standards"]["project"][0])), 2)
+            shape = quiet(e.cmd_generate, d)[1]["shape"]
+            self.assertEqual((shape["control"], shape["container"], shape["overlay"]), (6, base["container"], base["overlay"]))
+            _r, out = std_run(e.cmd_set, d, "dials.roundness", 90, "rounder")
+            self.assertIn("note: radius.control stays 6: project standard PRJ-01 holds it", out)
+            self.assertNotIn("no token changed", out)
+            shape = quiet(e.cmd_generate, d)[1]["shape"]
+            self.assertEqual(shape["control"], 6)
+            self.assertGreater(shape["container"], base["container"])             # the other corners follow the dial
+            got = std_run(e.cmd_standard, d, "add", rule="r", why="w", source="s", pairs=[[None, 4]])[0]
+            self.assertIn("--path and --value go together", got[1])
+
+    def test_r26_changed_means_rule_or_values_and_no_op_updates_rewrite_nothing(self):
+        with tempfile.TemporaryDirectory() as t:
+            d, v1 = triage_init(t, STD_V1)
+            with house_standards(v1):
+                quiet(e.cmd_build, d)
+            reworded = copy.deepcopy(STD_V1)
+            reworded["version"] = 2
+            reworded["standards"][0].update(why="It feels quick.", changed=2)    # same rule and values
+            with house_standards(write_std(t, "v2.json", reworded)):
+                n = len(e._decision_entries(d))
+                _r, out = std_run(e.cmd_standards, d, update=True)
+                self.assertIn("1 standard was reworded, with the same rule and values", out)
+                self.assertEqual(len(e._decision_entries(d)), n)                  # no decision
+                state = e.merge_defaults(std_read(d))
+                self.assertEqual(e.std_copy(state, "STD-easing-duration-01", e.load_standards())["why"], "It feels quick.")
+                self.assertEqual(state["standards"]["house_version"], 2)
+                code, out = run_cli("standards", "--update", "--dir", d)
+                self.assertIn("already follows", out)
+                self.assertNotIn("DESIGN.md and PRODUCT.md updated", out)
+            v3 = std_v2()
+            v3["version"] = 3
+            for x in v3["standards"]:
+                if x["id"] in ("STD-easing-duration-01", "STD-misc-02"):
+                    x["changed"] = 3
+            with house_standards(write_std(t, "v3.json", v3)):
+                quiet(e.cmd_standards, d, update=True)
+                self.assertRegex(decision_text(d), r"House standards v3: 1 new, 2 changed, 1 retired .*\n- set_by: standard · locked: yes · "
+                                                   r"date: [\d-]+ · supersedes: D-0002 \(motion\.duration\.medium, motion\.easing\.exit\)")
+
+    def test_r28_review_merges_a_line_and_reads_locked_component_numbers(self):
+        with tempfile.TemporaryDirectory() as t:
+            d, path = triage_init(t)
+            with house_standards(path):
+                quiet(e.cmd_standard, d, "add", rule="No transition all.", why="brand", source="guide.md",
+                      review_pattern=r"transition:\s*all")
+                os.makedirs(os.path.join(t, "src"))
+                with open(os.path.join(t, "src", "a.jsx"), "w") as f:
+                    f.write(".a { transition: all 200ms ease-in; }\ntoast.success(msg, { duration: 3000 });\n"
+                            "toast(msg, { duration: 4000 });\n")
+                out = io.StringIO()
+                with contextlib.redirect_stdout(out):
+                    e.cmd_review(d, as_json=True)
+                got = [f_ for f_ in json.loads(out.getvalue())["findings"] if f_["kind"] == "standard"]
+                self.assertEqual([(f_["line"], f_["standards"]) for f_ in got],
+                                 [(1, ["STD-easing-duration-02", "STD-easing-duration-03", "PRJ-01"]), (2, ["STD-misc-09"])])
+                self.assertEqual(got[0]["strength"], "must")
+                self.assertIn("component.toast.duration is 4000 in this system", got[1]["fix"])
+                _r, text = std_run(e.cmd_review, d)
+                self.assertIn("(STD-easing-duration-02, STD-easing-duration-03, PRJ-01, must)", text)
+
+    def test_r29_lean_state_and_folded_headings(self):
+        with tempfile.TemporaryDirectory() as t:
+            d, path = triage_init(t)
+            with open(os.path.join(d, "state.json"), encoding="utf-8") as f:
+                raw = json.load(f)
+            self.assertEqual(raw["standards"]["snapshots"], "standards-state.json")
+            self.assertFalse([sid for sid, r in raw["standards"]["records"].items() if "std" in r])
+            self.assertTrue(os.path.exists(os.path.join(d, "standards-state.json")))
+            state = std_read(d)                                                 # read back whole
+            self.assertEqual(state["standards"]["records"]["STD-misc-05"]["std"]["rule"], "Modals open in 250ms.")
+            self.assertNotIn("snapshots", state["standards"])
+            text = decision_text(d)
+            self.assertRegex(text, r"## D-0002 · House standards v1: \d+ applied, 1 not mapped\n")   # counted, not listed
+            self.assertIn("- <details><summary>12 standards</summary> STD-easing-duration-01, ", text)
+            with house_standards(os.path.join(t, "missing.json")):             # another install still reads the rule
+                os.remove(os.path.join(d, "standards-state.json"))
+                self.assertIn("This follows house standard STD-misc-08", std_run(e.cmd_set, d, "raw.reducedMotion", "remove", "x")[0][1])
+
+    def test_r30_r31_validate_reads_the_current_state_and_the_motion_scale(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="Stale")
+            quiet(e.cmd_build, d)
+            quiet(e.cmd_set, d, "focus.ring.width", 1, "thin")
+            rep = e.validate_dir(d)
+            self.assertGreaterEqual(rep.count("error"), 1)
+            self.assertIn("the focus ring is thinner than 2px", [i["message"] for i in rep.items])
+            self.assertTrue([i for i in rep.items if "older than state.json" in i["message"]])
+            quiet(e.cmd_set, d, "focus.ring.width", 2, "back")
+            quiet(e.cmd_set, d, "motion.duration.medium", "400ms", "slow")
+            quiet(e.cmd_set, d, "motion.duration.long", "400ms", "slow")
+            quiet(e.cmd_set, d, "motion.duration.long-exit", "400ms", "same as entering")
+            quiet(e.cmd_generate, d)
+            msgs = [i["message"] for i in e.validate_dir(d).items if i["severity"] == "warn"]
+            self.assertTrue([m for m in msgs if m.startswith("motion.duration.medium (400ms) is not shorter than motion.duration.long")])
+            self.assertTrue([m for m in msgs if m.startswith("motion.duration.long-exit (400ms) is 1.00 x motion.duration.long")])
+            self.assertFalse([m for m in msgs if m.startswith("motion.duration.medium-exit")])     # derived: 320ms, 0.8 x
+
+    def test_r43_small_items(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="Small")                                   # no house standards when it was made
+            quiet(e.cmd_set, d, "motion.easing.enter", "ease-out", "keyword")
+            self.assertEqual(std_read(d)["overrides"]["motion.easing.enter"], [0, 0, 0.58, 1])
+            got = std_run(e.cmd_intake, d, os.path.join(t, "nope.json"))[0]
+            self.assertEqual(got[0], "EXIT")
+            self.assertIn("File not found", got[1])
+            path = write_std(t, "std.json", std_triage())
+            with house_standards(path):
+                _r, out = std_run(e.cmd_standard, d, "override", sid="STD-misc-05", why="not yet")
+                self.assertIn("Unlocked: nothing yet (its values were not applied in this system)", out)
+                _r, out = std_run(e.cmd_standard, d, "add", rule="Say it plainly.", why="voice", source="voice.md")
+                self.assertIn("It locks no value", out)
+                self.assertNotIn("locked like a house standard", out)
+        with tempfile.TemporaryDirectory() as t:
+            data = std_triage()
+            data["standards"].append({"id": "STD-misc-11", "theme": "misc", "title": "Drawer", "rule": "Drawers take 500ms.",
+                                      "strength": "must", "engine": {"path": "motion.duration.drawer", "value": "500ms", "type": "duration"},
+                                      "since": 1, "changed": 1})
+            d, path = triage_init(t, data)
+            with house_standards(path):
+                quiet(e.cmd_standard, d, "add", rule="Our own.", why="brand", source="guide.md")
+                quiet(e.cmd_set, d, "Q-plat-01", ["ios"], "iOS")
+                quiet(e.cmd_generate, d)
+                rep = e.validate_dir(d)
+                self.assertNotIn("motion.duration.drawer", rep.stats.get("orphans", []))
+                state = std_read(d)
+                state["overrides"]["motion.duration.modal"] = "300ms"
+                e.dump_json(os.path.join(d, "state.json"), state)
+                quiet(e.cmd_generate, d)
+                drift = [i for i in std_findings(d) if "STD-misc-05" in i["message"]]
+                self.assertEqual(drift[0]["evidence"], "src-a, src-b")          # each source once
+                _r, out = std_run(e.cmd_standards, d)
+                self.assertLess(out.index("Project standards"), out.index("Followed ("))
+                self.assertIn("for other platforms and not shown", out) if "not these platforms" in out else None
+                _r, out_all = std_run(e.cmd_standards, d, show_all=True)
+                self.assertIn("House standards for other platforms or stacks (2; not followed here):", out_all)
+                self.assertIn("STD-easing-duration-02  (web)", out_all)
+
+    def test_d01_platform_tags_and_the_stack_from_package_json(self):
+        st = lambda plats, stack=None: {"answers": {"Q-plat-01": {"value": plats}}, "raw": {"stack": stack} if stack else {}}
+        self.assertEqual(e.project_tags(st(["web"])), {"web", "css"})
+        self.assertEqual(e.project_tags(st(["ios"])), {"ios", "swift"})
+        self.assertEqual(e.project_tags(st(["android"])), {"android", "compose"})
+        self.assertEqual(e.project_tags(st(["desktop"], ["react"])), {"desktop", "web", "css", "react"})
+        self.assertIsNone(e.project_tags({"answers": {}}))
+        with tempfile.TemporaryDirectory() as t:
+            with open(os.path.join(t, "package.json"), "w") as f:
+                json.dump({"dependencies": {"react": "19", "react-dom": "19"}, "devDependencies": {"vite": "7"}}, f)
+            path = write_std(t, "std.json", std_triage())
+            d = os.path.join(t, "opendesigner")
+            with house_standards(path):
+                quiet(e.cmd_sketch, d, "React app", None, "regular", "web", "calm", quiet=True)
+                state = std_read(d)
+                self.assertEqual(state["raw"]["stack"], ["react"])
+                self.assertIn("STD-misc-10", state["standards"]["applied"])         # react only, and this is a React project
+                self.assertIn("raw.stack = [\"react\"]\n- set_by: assumed", decision_text(d))
+                self.assertIn("detected from package.json (react, react-dom)", decision_text(d))
+                _r, out = std_run(e.cmd_set, d, "raw.stack", "vue", "the person said vue")
+                self.assertIn("1 no longer apply", out)
+                self.assertNotIn("STD-misc-10", std_read(d)["standards"]["applied"])
+        with tempfile.TemporaryDirectory() as t:                            # no package.json: nothing assumed, the agent asks
+            path = write_std(t, "std.json", std_triage())
+            d = os.path.join(t, "opendesigner")
+            with house_standards(path):
+                quiet(e.cmd_sketch, d, "Web app", None, "regular", "web", "calm", quiet=True)
+                self.assertNotIn("stack", std_read(d)["raw"])
+                self.assertNotIn("STD-misc-10", std_read(d)["standards"]["applied"])
+
+    def test_d03_a_project_rule_that_always_wins(self):
+        with tempfile.TemporaryDirectory() as t:
+            d, path = triage_init(t)
+            with house_standards(path):
+                got = std_run(e.cmd_standard, d, "add", rule="Exits ease in, per our brand.", why="brand", source="person, 2026-09-27",
+                              path="motion.easing.exit", value=[0.4, 0, 1, 1])[0]
+                self.assertEqual(got[0], "EXIT")
+                self.assertIn("breaks house standard STD-easing-duration-03", got[1])
+                self.assertIn("add --beats STD-easing-duration-03", got[1])
+                self.assertIn("engine.py standard override STD-easing-duration-03", got[1])
+                code, out = run_cli("standard", "add", "--rule", "Exits ease in, per our brand.", "--why", "brand",
+                                    "--source", "person, 2026-09-27", "--path", "motion.easing.exit", "--value", "[0.4, 0, 1, 1]",
+                                    "--beats", "STD-easing-duration-03", "--dir", d, "--no-doc")
+                self.assertEqual(code, 0)
+                self.assertIn("wins over house standard STD-easing-duration-03 in this project (project wins)", out)
+                self.assertEqual(std_exit(std_read(d)), [0.4, 0, 1, 1])
+                quiet(e.cmd_generate, d)
+                self.assertFalse([i for i in std_findings(d) if "STD-easing-duration-03" in i["message"]])
+                os.makedirs(os.path.join(t, "src"))
+                with open(os.path.join(t, "src", "a.css"), "w") as f:
+                    f.write(".a { transition: opacity 200ms ease-in; }\n")
+
+                def ids():
+                    out_ = io.StringIO()
+                    with contextlib.redirect_stdout(out_):
+                        e.cmd_review(d, as_json=True)
+                    return [x for f_ in json.loads(out_.getvalue())["findings"] if f_["kind"] == "standard" for x in f_["standards"]]
+                self.assertNotIn("STD-easing-duration-03", ids())
+                self.assertIn("Your project standard PRJ-01 wins here.",
+                              e.std_notes(e.merge_defaults(std_read(d)), "STD-easing-duration-03",
+                                          e.std_state(e.merge_defaults(std_read(d))), {}))
+                _r, out = std_run(e.cmd_standard, d, "remove", sid="PRJ-01", why="the brand changed")
+                self.assertIn("house standard STD-easing-duration-03 is checked again", out)
+                self.assertIn("STD-easing-duration-03", ids())
+            got = std_run(e.cmd_standard, d, "add", rule="r", why="w", source="s", beats="STD-nope")[0]
+            self.assertIn("--beats takes house standard ids", got[1])
+
+    def test_d05_exits_follow_the_entrance_in_force(self):
+        data = {"version": 1, "themes": [], "standards": [
+            {"id": "STD-t-01", "theme": "t", "title": "Durations", "rule": "Medium 200ms, long 250ms.", "strength": "must",
+             "engine": [{"path": "motion.duration.medium", "value": "200ms", "type": "duration"},
+                        {"path": "motion.duration.long", "value": "250ms", "type": "duration"}], "since": 1, "changed": 1}]}
+        with tempfile.TemporaryDirectory() as t:
+            d, path = triage_init(t, data)
+            with house_standards(path):
+                dur = quiet(e.cmd_generate, d)[0]["primitives.tokens.json"]["motion"]["duration"]
+                self.assertEqual((dur["medium-exit"]["$value"], dur["long-exit"]["$value"]), ({"value": 160, "unit": "ms"}, {"value": 200, "unit": "ms"}))
+                self.assertIn("marketing", dur["extra"]["$description"])
+                self.assertFalse([i for i in e.validate_dir(d).items if "exit" in i["message"] and i["severity"] == "warn"])
+
+
+
+def std_outputs():
+    """The triage fixture plus what the output fixes need: the hover and drawer curves, the 300ms rule, a standard that
+    breaks the springs option, and one with many values."""
+    data = std_triage()
+    data["standards"] += [
+        {"id": "STD-easing-duration-12", "theme": "easing-duration", "area": "motion", "title": "Hover curve", "strength": "must",
+         "rule": "Hover and color changes use ease.", "why": "It is gentle.", "since": 1, "changed": 1,
+         "engine": [{"path": "motion.easing.hover", "value": [0.25, 0.1, 0.25, 1], "type": "cubicBezier"},
+                    {"path": "motion.easing.drawer", "value": [0.32, 0.72, 0, 1], "type": "cubicBezier"}]},
+        {"id": "STD-easing-duration-06", "theme": "easing-duration", "area": "motion", "title": "UI motion under 300ms unless justified",
+         "rule": "Keep UI animations under 300ms.", "why": "Fast feels responsive.", "strength": "must", "engine": None,
+         "values": {"ui-max": "under 300ms", "a": "1", "b": "2", "c": "3", "d": "4", "e": "the sixth value, in full"},
+         "sources": [{"id": "src-speed"}], "since": 1, "changed": 1},
+        {"id": "STD-misc-11", "theme": "misc", "area": "motion", "title": "No bouncy springs", "rule": "No springs throughout.",
+         "why": "Calm.", "strength": "must", "engine": None, "breaks_options": {"Q-motion-01": ["springs"]}, "since": 1, "changed": 1},
+    ]
+    return data
+
+
+def review_json(d):
+    out = io.StringIO()
+    with contextlib.redirect_stdout(out):
+        e.cmd_review(d, as_json=True)
+    return json.loads(out.getvalue())
+
+
+def design_text(t):
+    with open(os.path.join(t, "DESIGN.md"), encoding="utf-8") as f:
+        return f.read()
+
+
+def design_section(t, title):
+    with open(os.path.join(t, "DESIGN.md"), encoding="utf-8") as f:
+        text = f.read()
+    return text.split(f"\n## {title}\n", 1)[1].split("\n## ", 1)[0]
+
+
+class PersonaOutputFixes(unittest.TestCase):
+    """_coordination/reviews/L19-persona-triage-2026-09-27.md: what the engine writes (tokens, exports, DESIGN.md,
+    standards.md, show, review)."""
+
+    def test_r09_feedback_takes_the_hover_curve_and_every_curve_exports(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="No hover")
+            files = quiet(e.cmd_generate, d)[0]
+            fb = files["motion.standard.tokens.json"]["motion"]["transition"]["feedback"]["$value"]
+            self.assertEqual(fb["timingFunction"], "{motion.easing.standard}")      # no hover curve: the standard one
+        with tempfile.TemporaryDirectory() as t:
+            d, path = triage_init(t, std_outputs())
+            with house_standards(path):
+                quiet(e.cmd_build, d)
+                files = quiet(e.cmd_generate, d)[0]
+                for c in ("standard", "reduced"):
+                    fb = files[f"motion.{c}.tokens.json"]["motion"]["transition"]["feedback"]["$value"]
+                    self.assertEqual(fb["timingFunction"], "{motion.easing.hover}", c)
+                with open(os.path.join(d, "build", "css", "tokens.css"), encoding="utf-8") as f:
+                    self.assertIn("--ds-motion-transition-feedback-easing: cubic-bezier(0.25, 0.1, 0.25, 1);", f.read())
+                with open(os.path.join(d, "build", "tailwind", "theme.css"), encoding="utf-8") as f:
+                    tw = f.read()
+                for k in ("standard", "enter", "exit", "linear", "hover", "drawer"):
+                    self.assertIn(f"--ease-{k}: var(--ds-motion-easing-{k});", tw)
+                agents = design_section(t, "For Agents")
+                self.assertIn("`transition-feedback`, `ease-enter`, `ease-exit`, `ease-hover`", agents)
+                self.assertNotIn("`ease-standard`", agents)
+
+    def test_r10_show_motion_is_built_from_the_tokens_in_force(self):
+        with tempfile.TemporaryDirectory() as t:
+            d, path = triage_init(t, std_outputs(), name="Show")
+            with house_standards(path):
+                state = e.merge_defaults(std_read(d))
+                pay = e.build_payload(state, "motion")
+                by = {o["value"]: o for o in pay["options"]}
+                self.assertEqual(list(by), ["current", "none", "productive", "two-mode", "springs"])
+                for v, o in by.items():
+                    if v != "none":
+                        self.assertEqual(o["durations"]["medium"], 250, v)          # STD-misc-02 holds it in every option
+                        self.assertEqual(o["easing"]["exit"], "cubic-bezier(0.23, 1, 0.32, 1)", v)
+                        self.assertEqual(o["durations"]["long-exit"], round(o["durations"]["long"] * 0.8 / 10) * 10, v)
+                self.assertTrue(by["none"]["off"])
+                self.assertEqual(set(by["none"]["durations"].values()), {0})
+                self.assertEqual(by["current"]["od"], [])
+                self.assertEqual(by["springs"]["breaks"], ["STD-misc-11"])
+                self.assertIn("breaks STD-misc-11", by["springs"]["note"])
+                self.assertNotEqual(by["productive"]["durations"]["long"], by["springs"]["durations"]["long"])  # energy moves long
+                quiet(e.cmd_lock, d, "dials.energy")
+                pay = e.build_payload(e.merge_defaults(std_read(d)), "motion")
+                by = {o["value"]: o for o in pay["options"]}
+                self.assertEqual(by["productive"]["durations"], by["current"]["durations"])    # a locked dial never moves
+                self.assertIn("the same as now", by["productive"]["note"])
+                self.assertEqual(quiet(e.cmd_show, d, "motion").endswith("motion.html"), True)
+        with open(os.path.join(e.SKILL_ROOT, "assets", "templates", "motion.html"), encoding="utf-8") as f:
+            html = f.read()
+        data = json.loads(re.search(r'<script type="application/json" id="od-data">(.*?)</script>', html, re.S).group(1))
+        for o in data["options"]:
+            for k, v in o["easing"].items():
+                nums = [float(x) for x in re.findall(r"-?\d*\.?\d+", v)]
+                self.assertFalse(e.curve_accelerates(nums), (o["value"], k, v))              # no ease-in exits
+                self.assertTrue(all(0 <= y <= 1 for y in (nums[1], nums[3])), (o["value"], k, v))  # no overshoot
+            self.assertLessEqual(max(o["durations"].values()), 300, o["value"])
+
+    def test_r18_review_reads_every_literal_and_suggests_by_role(self):
+        with tempfile.TemporaryDirectory() as t:
+            d, path = triage_init(t, std_outputs(), name="Review roles")
+            with house_standards(path):
+                quiet(e.cmd_build, d)
+                os.makedirs(os.path.join(t, "src"))
+                with open(os.path.join(t, "src", "a.css"), "w") as f:
+                    f.write(".panel { transition: opacity 250ms var(--ds-motion-easing-enter); }\n"   # 1 a literal next to var()
+                            ".toast-close {\n  transition: opacity 160ms;\n}\n"                      # 3 leaving: exit
+                            ".modal { animation-duration: 450ms; }\n"                                  # 5 the modal's own token
+                            ".fade { transition: opacity 180ms; }\n"                                   # 6 not feedback
+                            ".x { color: #ff0000; }\n"                                                # 7 no token is close
+                            ".y { padding: var(--ds-space-4, 16px); }\n")                              # 8 a fallback, not a bypass
+                with open(os.path.join(t, "src", "B.jsx"), "w") as f:
+                    f.write("export const B = () => <Button style={{ borderRadius: 12 }}>Save</Button>;\n")
+                got = {(f_["file"].split(os.sep)[-1], f_["line"], f_["kind"]): f_["fix"] for f_ in review_json(d)["findings"]}
+                self.assertIn(("a.css", 1, "duration"), got)
+                self.assertIn("motion-transition-exit-duration", got[("a.css", 3, "duration")])
+                self.assertIn("--ds-motion-duration-modal", got[("a.css", 5, "duration")])
+                self.assertRegex(got[("a.css", 5, "duration")], r"house standard STD-misc-0[56] sets it")
+                self.assertIn("over the 300ms UI limit", got[("a.css", 5, "duration")])
+                self.assertNotIn("feedback", got[("a.css", 6, "duration")])
+                self.assertIn("no color token is close to #ff0000", got[("a.css", 7, "color")])
+                self.assertNotIn("var(--ds-color", got[("a.css", 7, "color")])
+                self.assertFalse([k for k in got if k[:2] == ("a.css", 8)])
+                self.assertIn("--ds-radius-control", got[("B.jsx", 1, "radius")])
+                self.assertIn("the control radius", got[("B.jsx", 1, "radius")])
+
+    def test_r19_springs_budget_and_the_extra_step(self):
+        for z in (0.8, 1.0, 1.4):
+            self.assertTrue(e.spring_token(z, 400.0, [0.2, 0, 0, 1])[1]["css"]["easing"].startswith("linear("), z)
+        curve = e.spring_curve(1.4, 400.0)[0]
+        pts = [float(x) for x in curve[7:-1].split(",")]
+        self.assertEqual((pts[0], pts[-1]), (0, 1))
+        self.assertEqual(pts, sorted(pts))                                                  # overdamped: no overshoot
+        with tempfile.TemporaryDirectory() as t:
+            d, path = triage_init(t, std_outputs(), name="Budget")
+            with house_standards(path):
+                quiet(e.cmd_build, d)
+                slow = [i for i in std_findings(d) if "UI motion stays under 300ms" in i["message"]]
+                self.assertEqual([i["where"] for i in slow], ["motion.transition.expand"])    # the long step, 380ms at this energy
+                self.assertIn("380ms (duration)", slow[0]["message"])
+                self.assertIn("scales the long, extra steps (standards fix medium)", design_section(t, "Motion"))
+                quiet(e.cmd_set, d, "motion.spring.spatial.stiffness", 200, "floaty")
+                quiet(e.cmd_set, d, "motion.duration.long", "250ms", "quick panels")
+                quiet(e.cmd_build, d)
+                slow = [i for i in std_findings(d) if "UI motion stays under 300ms" in i["message"]]
+                self.assertEqual([i["where"] for i in slow], ["motion.transition.move"])      # the spring, judged by its response
+                self.assertIn("444ms (spring response)", slow[0]["message"])
+                self.assertIn("engine.py set motion.spring.spatial.stiffness 439", slow[0]["fix"])
+                motion = design_section(t, "Motion")
+                self.assertIn("illustrative and marketing motion only, never UI (STD-easing-duration-06)", motion)
+                self.assertIn("scales the extra step (standards and your own values fix medium, long)", motion)
+                self.assertIn("| `motion.duration.medium` | 250ms | set by house standard STD-misc-02 |", motion)
+            with house_standards(write_std(t, "held.json", dict(std_outputs(), standards=std_outputs()["standards"] + [
+                    {"id": "STD-misc-12", "theme": "misc", "title": "Slow panels", "rule": "Panels take 400ms.", "strength": "must",
+                     "engine": {"path": "motion.duration.long", "value": "400ms", "type": "duration"}, "since": 1, "changed": 1}]))):
+                d2 = os.path.join(t, "held", "opendesigner")
+                quiet(e.cmd_init, d2, name="Held")
+                quiet(e.cmd_build, d2)
+                flat = e.resolve_all(e.load_token_dir(os.path.join(d2, "tokens")), {})
+                self.assertEqual(e.duration_ms(flat["motion.transition.expand"]["resolved"]["duration"]), 400)  # over 300ms, but
+                self.assertFalse([i for i in std_findings(d2) if "UI motion stays under 300ms" in i["message"]])  # a standard's reason
+
+    def test_r20_decided_counts_who_set_each_answer_now(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Club", "#2563eb", "large", "web", "fun,friendly", delegated="feel,brand")
+            summary = design_text(t).split("\n> Generated", 1)[0]
+            self.assertIn("**Decided:** 2 answers you gave, 2 picked for you", summary)
+            self.assertIn("(playful, friendly; picked for you)", summary)
+            log = decision_text(d)
+            self.assertRegex(log, r"macros = .*\n- set_by: delegated.*\n- reason: sketch: picked for them \(feel words: fun, friendly\)")
+            self.assertRegex(log, r"taste.feelWords = .*\n- set_by: delegated.*\n- reason: sketch: feel words picked for them")
+            self.assertNotIn("their words: fun", log)
+            quiet(e.cmd_set, d, "macros", ["calm"], "their words: calm")
+            quiet(e.cmd_design_md, d)
+            summary = design_text(t).split("\n> Generated", 1)[0]
+            self.assertIn("**Decided:** 3 answers you gave, 1 picked for you", summary)
+
+    def test_r21_decisions_table_and_links(self):
+        with tempfile.TemporaryDirectory() as t:
+            d, path = triage_init(t, std_outputs(), name="Table")
+            with house_standards(path):
+                quiet(e.cmd_sketch, d, "Table", "#2563eb", "regular", "web", "calm")
+                quiet(e.cmd_standard, d, "override", sid="STD-misc-02", why="our motion lead wants 200ms", value="200ms")
+                quiet(e.cmd_build, d)
+                with open(os.path.join(t, "DESIGN.md"), encoding="utf-8") as f:
+                    text = f.read()
+                sec = design_section(t, "Decisions")
+                rows = [x for x in sec.splitlines() if x.startswith("| D-")]
+                kinds = [r.split(" | ")[3] for r in rows]
+                self.assertEqual(kinds[0], "chosen")                                  # the person's own decisions first
+                batches = [x for x in e._decision_log(d) if x["set_by"] == "standard"]
+                self.assertEqual([r.split(" | ")[1] for r in rows if "standard (locked)" in r], ["standards"] * len(batches))  # one row each
+                self.assertIn("chosen, overrides STD-misc-02", kinds)
+                self.assertLess(kinds.index("chosen, overrides STD-misc-02"), kinds.index("standard (locked)"))
+                n = len({x for x, _p in e._decision_entries(d)})
+                self.assertIn(f"**{n} decisions so far.**", sec)
+                self.assertIn("[opendesigner/decisions.md](opendesigner/decisions.md)", sec)
+                self.assertNotIn("](decisions.md)", text)
+                self.assertIn("`opendesigner/tokens/` (start at `opendesigner/tokens/opendesigner.resolver.json`)", text)
+                self.assertIn("`opendesigner/build/tailwind/theme.css`", text)
+
+    def test_r22_standards_md_has_every_rule_in_full(self):
+        with tempfile.TemporaryDirectory() as t:
+            d, path = triage_init(t, std_outputs(), name="Full")
+            with house_standards(path):
+                quiet(e.cmd_build, d)
+                with open(os.path.join(d, "standards.md"), encoding="utf-8") as f:
+                    full = f.read()
+                state = e.merge_defaults(std_read(d))
+                for s_ in e.std_followed(state):
+                    self.assertIn(f"({s_['id']}", full, s_["id"])                          # design_md false ones too
+                self.assertIn("Unmappable", full)
+                self.assertIn("  - Why: It feels responsive.", full)
+                self.assertIn("  - Sources: src-a, src-b.", full)
+                self.assertIn("e `the sixth value, in full`", full)                         # never cut short
+                self.assertNotIn(", ...", full)
+                self.assertIn("house standards v1", full)
+                self.assertIn("House standards v1:", design_section(t, "Standards"))
+
+    def test_r23_standards_section_is_short_and_says_what_is_in_force(self):
+        with tempfile.TemporaryDirectory() as t:
+            d, path = triage_init(t, std_outputs(), name="Short")
+            with house_standards(path):
+                std_run(e.cmd_standard, d, "add", rule="Toasts stay 5 seconds.", why="our support team", source="person, 2026-09-27",
+                        path="component.toast.duration", value="5000ms")
+                quiet(e.cmd_standard, d, "override", sid="STD-misc-02", why="our motion lead wants 200ms", value="200ms")
+                quiet(e.cmd_build, d)
+                sec = design_section(t, "Standards")
+                state = e.merge_defaults(std_read(d))
+                n = len(e.std_followed(state))
+                self.assertIn(f"House standards v1: {n} rules followed in this project, plus 1 of your own; 1 overridden.", sec)
+                with open(os.path.join(t, "DESIGN.md"), encoding="utf-8") as f:
+                    self.assertIn(f"{n} house standards followed", f.read().split("\n> Generated", 1)[0])  # the same count
+                donts = sec.split("**Don't break these:**", 1)[1].split("\n\n", 1)[0].strip().splitlines()
+                self.assertTrue(1 <= len(donts) <= 5, donts)
+                self.assertIn("- No ease-in (STD-easing-duration-03).", donts)
+                self.assertIn("<details><summary>Every theme", sec)
+                self.assertLess(sec.index("**Overridden in this project**"), sec.index("<details>"))
+                self.assertIn("`component.toast.duration` 5000ms (PRJ-01 wins)", sec)
+                self.assertIn("Now: `motion.duration.medium` 200ms.", sec)
+                self.assertRegex(sec, r"\*\*Misc\*\* \(\d+ rules, \d+ must\)")
+
+    def test_r44_brand_line_in_plain_words(self):
+        s = u5_state(brandColor="#7a7a7a")
+        _f, meta, _c = e.generate_system(s)
+        line = e.brand_line(meta, s, plain=True)
+        for bad in ("#", ":1", "color.brand.seed"):
+            self.assertNotIn(bad, line)
+        self.assertIn("darker shade", line)
+        self.assertEqual(e.color_words("#1e3a8a"), "a navy")
+        self.assertEqual(e.color_words("#ff8000"), "an orange")
+        self.assertEqual(e.color_words("#7a7a7a"), "a gray")
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            out = std_run(e.cmd_sketch, d, "Picked", "#ffd54f", "large", "web", "fun", delegated="brand")[1]
+            brand = std_read(d)["raw"]["brandColor"]
+            self.assertNotEqual(brand, "#ffd54f")                                         # a readable shade, picked for them
+            self.assertGreaterEqual(e.contrast(brand, "#ffffff"), 4.5)
+            self.assertIn("I picked an olive for buttons, links and focus, with white text", out)
+            self.assertNotIn("#", out.split("I picked", 1)[1].split("\n", 1)[0])
+            summary = design_text(t).split("\n> Generated", 1)[0]
+            self.assertIn("**Brand color:** Picked for you, not chosen by you: an olive (#", summary)
+            self.assertNotIn("Your brand color", summary)
+
+    def test_d05_design_md_says_exits_are_derived(self):
+        with tempfile.TemporaryDirectory() as t:
+            d, path = triage_init(t, std_outputs(), name="Exits")
+            with house_standards(path):
+                quiet(e.cmd_build, d)
+                motion = design_section(t, "Motion")
+                self.assertIn("Exits are derived, not set on their own: each is about 20% shorter than the entrance in force "
+                              "(medium-exit 200ms from medium 250ms", motion)
+                self.assertIn("| `motion.duration.medium-exit` | 200ms | derived: about 0.8 x medium |", motion)
+                self.assertEqual(motion.count("Decisions: "), 1)
+                ids = re.findall(r"D-\d{4}", motion.split("Decisions: ", 1)[1])
+                self.assertEqual(len(ids), len(set(ids)))                                   # each decision once (R29)
 
 if __name__ == "__main__":
     unittest.main(verbosity=1)

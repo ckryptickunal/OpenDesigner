@@ -33,6 +33,7 @@ Take facts from `references/`, not from memory. Use `scripts/engine.py` for all 
 
 ## Start
 1. **Look before you ask.** Check for `opendesigner/`, `DESIGN.md`, `PRODUCT.md`, token files, `tailwind.config.*`, CSS custom properties, `package.json`, and logo or font files. Never ask something a file already answers. If `opendesigner/state.json` exists, switch to opendesigner-extend.
+   - `package.json` tells you the stack (React, React Native and so on). The stack and the platforms decide which house standards apply. The engine reads it at `init` and `sketch` and records it as `raw.stack`. Ask once which framework they use only when no file settles it (`rules.md` section 3).
 2. **Set up.** Run `python3 <skill>/scripts/engine.py init --name "<product or folder name>"`. Here `<skill>` means this skill's folder. The product name from the sketch (`sketch --name`) replaces the folder name later. `init` also applies the house standards (`references/standards.md`) and locks them. Don't ask about them; mention them once, in the first result.
 3. **Greet in 3 lines at most** (`rules.md` section 1). There is no mode to choose.
    - If `profile.tracking` in `opendesigner/state.json` is not set, the greeting's one question is the log question from `rules.md` section 11, word for word. It says "on this computer" only when the scripts run on the person's own computer, and "in your project files" in a web chat. Record the answer with `journey.py consent on` or `journey.py consent off`. Then ask the first sketch question.
@@ -45,6 +46,7 @@ Details are in `references/zoom.md`.
 - **People in a hurry** ("just pick") get the sketch with `--delegated` and no optional questions. People who talk in plain words get fewer questions (`zoom.md`).
 - **Level 1, broad:** one short screen per foundation.
 - **Level 2, defined, and level 3, detailed:** one area at a time, only if the person wants it.
+- **Skip what a standard settles.** A question marked **Settled by: STD-...** in its stage file is skipped like a **Planned** one: ask nothing, record nothing. Never recommend an option marked **(breaks STD-...)** (`rules.md` section 6).
 - **After every level,** offer "Stop here, or zoom into X". Stopping is fine at any level.
 - The accessibility floors (`guardrails.md` section 4) are set at level 0 and never skipped.
 
@@ -82,9 +84,9 @@ python3 <skill>/scripts/engine.py build [--force]            generate and valida
 python3 <skill>/scripts/engine.py review [--project src/]    end-of-implementation check: hard-coded colors, sizes, radii, shadows, durations; stale DESIGN.md sections
 python3 <skill>/scripts/engine.py feedback "..." --kind gap|bug|confusing|idea [--from-journey]
 python3 <skill>/scripts/engine.py standards [--update]       house and project standards; --update applies newer house standards (overrides stay)
-python3 <skill>/scripts/engine.py standard override <id> --why "<their words>" [--value <json>]   only when the person explicitly asks
-python3 <skill>/scripts/engine.py standard restore <id>      undo an override
-python3 <skill>/scripts/engine.py standard add --rule "..." --why "..." --source <url> [--path P --value <json>] [--authority good-to-have]
+python3 <skill>/scripts/engine.py standard override <id> --why "<their words>" [--path P [--value <json>]]...   only when the person explicitly asks; --path releases only that value, without it every value the standard sets
+python3 <skill>/scripts/engine.py standard restore <id> [--why "..."]      undo an override
+python3 <skill>/scripts/engine.py standard add --rule "..." --why "..." --source <url or "person, <date>"> [--path P --value <json>]... [--values '{...}'] [--review-pattern RE --review-message "..."] [--authority good-to-have] [--beats STD-a,STD-b]
 python3 <skill>/scripts/engine.py standard remove PRJ-<nn> --why "..."   project standards only
 ```
 After every change, run `build` before showing results, so the exports and preview are never stale. Fix every error first. The report cites the rule it applied. When `pick` or `set` says an answer changes no tokens, it is still saved (as a DESIGN.md rule or a PRODUCT.md fact). Tell the person so, in a few words.
@@ -116,7 +118,7 @@ When they name a brand font, ask where its licence lets them use it: websites, a
 ## References the person brings
 If they share a site, screenshot, Figma file, repo or brand book to copy a look from, hand off to **opendesigner-extract**.
 
-If they share a source to **follow** or **learn from** (a style guide, an article, a talk, their company's UI rules), follow `rules.md` section 12. Ask how much weight it gets when they didn't say (rule, recommendation, or learning material). Then read it with their OK and record the rules they keep as project standards.
+If they share a source to **follow** or **learn from** (a style guide, an article, a talk, their company's UI rules), follow `rules.md` section 12. Ask how much weight it gets when they didn't say (rule, recommendation, or learning material). Then read it with their OK and record the rules they keep as project standards. When one clashes with a house standard, their words decide the route: "it's our brand" or "always" is a project standard with `--beats STD-...`; "just this value" is `standard override`.
 
 ## Finish (at whatever level they stop)
 One question per message here, as everywhere.
@@ -153,7 +155,7 @@ People never pick a mode. Everyone starts with a quick sketch of the whole syste
 ## Level 0: sketch (a few questions, one per message)
 Five answers shape the sketch. Ask only what their words and files don't already tell you.
 
-1. **What are you making?** Take a free answer and record it: `engine.py set context.product '"<their words>"'`. If the product has a name, pass it as `sketch --name`. It replaces the folder name that `init` used.
+1. **What are you making?** Take a free answer and record it in the third person, so DESIGN.md and PRODUCT.md read well to a teammate: "my school coding club" becomes `engine.py set context.product '"a website for a school coding club"'`. Keep their words otherwise. If the product has a name, pass it as `sketch --name`. It replaces the folder name that `init` used.
    - Take each surface's kind (Q-scope-06) from their words. Say it plainly, like "a site that shows off your club". Pass it with `--surfaces`. When you inferred it, record it before the sketch instead (below, "Assumed answers"). Name the kinds (Persuade, Operate, Read, Experience) only when the designer or engineer voice leads.
    - If they name several surfaces (an app and a landing page), confirm Q-scope-01 in one line. The main surface goes first.
 2. **Who is it for?** This is Q-aud-01. Ask whether people use it all day (`dense`), regularly (`regular`), or now and then on the go (`large`).
@@ -217,12 +219,12 @@ Go in this order, with the listed templates:
 - Q-motion-01, motion feel (`motion`)
 - Q-tool-01, where the master copy lives (text)
 
-Each screen is one message with one question. The person can say "skip", and the default stays. After the last screen, run `engine.py build`. The engine marks each area it touched as `broad` by itself.
+Each screen is one message with one question. The person can say "skip", and the default stays. Leave out a screen whose question its stage file marks **Settled by: STD-...**. After the last screen, run `engine.py build`. The engine marks each area it touched as `broad` by itself.
 
 ## Levels 2 and 3: one area at a time
 There are 14 areas: overview, accessibility, platforms, modes, color, typography, layout, shape, elevation, motion, iconography, content, components and delivery. Their plain names are in `pacing.json`. The ids match the engine's, except `delivery`: the engine does not track its zoom level.
 1. Zooming into an area asks its skipped lower-level questions first (for Color after the sketch: Q-color-02 from level 1).
-2. Open the area's stage files. Ask its level-2 questions in stage order, and skip any marked **Planned** (not built yet). Then run `engine.py build` and show the change.
+2. Open the area's stage files. Ask its level-2 questions in stage order. Skip any marked **Planned** (not built yet) or **Settled by: STD-...** (a standard already locked the answer), and never recommend an option marked **(breaks STD-...)**. Then run `engine.py build` and show the change.
 3. **Plain voice: ask fewer.** When the plain voice leads, ask only three kinds of question: weight `high`, asset hooks, and owner inputs (block class I). Also ask a `medium` question when their words or assets make it matter: a logo with two colors makes Q-color-04 matter. The rest keep their defaults (`auto_default`: nothing to run). Name them in one line of the level summary, like "I also picked the grays and hover colors for you." They can say "ask me everything".
 4. Sometimes `pick` says an answer shapes DESIGN.md rules, not tokens. Then say it is saved as a rule, so they don't expect the preview to change.
 5. Record the level: `engine.py set zoom.color '"defined"'` (level names: `sketch`, `broad`, `defined`, `detailed`). The engine also infers the level from the decisions made in an area.
@@ -275,6 +277,7 @@ Search `glossary.json` for each term (one term per line; match the term or one o
 
 ## 3. The rules, in the order they matter
 1. **Look before you ask.** Read the repo, CSS, tokens, brand files and any reference first. Ask only about taste, trade-offs and facts no file holds. If there are several candidates (two blues in the CSS), list them and recommend one.
+   - **The stack comes from `package.json`.** Its dependencies say whether the project uses React, React Native and so on. The stack, with the platforms, decides which standards apply (`docs/KNOWLEDGE.md` section 3). `engine.py init` and `sketch` record it as `raw.stack`. Only when no file settles it, and the project has code to write, ask once which framework they use, then record it: `engine.py set raw.stack '["react"]' --why "<their words>"`.
 2. **Every question must do one of three things:** change the system, lock an assumption, or pick a trade-off. For small gaps, don't ask: assume, and label the assumption.
 3. **Zoom, don't march** (`zoom.md`).
 4. **Order by downstream reach.** Product truth first (what it is, who it's for, where it runs, how it feels), then foundations, then components.
@@ -323,11 +326,13 @@ A value outside the listed options is recorded as given, with the person's reaso
 - **User challenge:** your recommendation would override something the person said. Never decide it. Present what they said, what you suggest, why, what you might be missing, and the cost if you are wrong. Their answer wins.
 - If an override makes two choices clash (for example a brutalist direction with bouncy motion), flag it once. Never block it.
 - **Standard:** a house or project standard already settles it (`references/standards.md`). Apply it, never ask it, and never recommend an option that breaks it. Mention the standards once, in the first result.
+  - A question marked **Settled by: STD-...** in its stage file (`settled_by` in `questions.json`) is skipped like a **Planned** one: ask nothing and record nothing. The standard already locked its value.
+  - An option marked **(breaks STD-...)** (`breaks` in `questions.json`) is never recommended or shown as the default. If the person asks for it, restate the standard and its reason once. Only their explicit ask to change the standard allows it: `engine.py standard override <id> --why "<their words>"`. Until then `engine.py pick` refuses it.
 
 ### Decide or ask
 | The decision is... | Do this | Say |
 |---|---|---|
-| Settled by a standard | Apply it (the engine already did at `init`) | Once, in the first result: which areas the standards cover, and that the person can ask to change one |
+| Settled by a standard (the stage file says **Settled by: STD-...**) | Skip it like a Planned question: the engine already applied the standard | Once, in the first result: which areas the standards cover, and that the person can ask to change one |
 | Mechanical, or low impact (weight low in `pacing.json`) | Keep the default (`auto_default`) | List it in the stage summary |
 | Handed over ("you pick") | Decide with a reason (`delegated`) | One line now, and again at the next gate |
 | Taste, identity, or high impact (weight high, or it changes many decisions) | Ask. Show 2-4 options as visual samples of the **same** real screen, recommended first | For each option, one **Now:** line (what changes today) and one **As it grows:** line (more screens, people, platforms, content), from the stage file when it has them |
@@ -448,12 +453,18 @@ When the person shares a link or file and says to follow it or learn from it:
 1. If they did not say how much weight it gets, ask one question: "Should I follow this as a rule, recommend it, or just learn from it?" (non-negotiable, good to have, reference).
 2. Show the URL and get a yes before reading it (`guardrails.md` section 2).
 3. Read it. Pull out rules with exact values, and show them in plain words, at most 10 per message. Ask which to keep.
-4. Record each kept rule:
-   - Non-negotiable: `engine.py standard add --rule "..." --why "..." --source <url> [--path <token path> --value <json>] [--review-pattern <regex> --review-message "..."]`. It is locked like a house standard.
-   - Good to have: the same command with `--authority good-to-have` (unlocked), or `engine.py set <path> <value> --set-by reference --source-ref <url>`.
-   - Reference: it shapes options and examples only. Record nothing unless a value is chosen.
-5. If the source disagrees with a house standard, say so once. Their project standard wins in their project, and the engine records it.
-6. Once per session, offer: "Want to suggest this source to OpenDesigner for everyone?" After a yes: `engine.py feedback "source: <url> (<authority>): <why>" --kind idea`.
+4. Record each kept rule with one command, the same everywhere:
+   ```
+   engine.py standard add --rule "..." --why "..." --source <url, or "person, 2026-09-27"> [--path P --value <json>]... [--values '{...}'] [--review-pattern <regex> --review-message "..."] [--authority good-to-have] [--beats STD-a,STD-b]
+   ```
+   - **Non-negotiable:** the command as it is. It is locked like a house standard. Repeat `--path` and `--value` for each token the rule fixes. Add `--review-pattern` and `--review-message` when code that breaks it can be found on one line. The source can be their own words with the date ("person, 2026-09-27") when there is no link.
+   - **Good to have:** the same command with `--authority good-to-have`. It is recommended first and stays unlocked.
+   - **Reference:** record nothing. It shapes options and examples only. When the person picks a value from it, record that value: `engine.py set <path> <value> --set-by reference --source-ref <url>`.
+   - When a token covers more than the rule (the rule is about buttons, the token sets every control's corners), say so in one line before recording it.
+5. If the source disagrees with a house standard, say so once, then follow their words (`guardrails.md` section 4b):
+   - "It's our brand", "always", "non-negotiable for us": a project standard with `--beats STD-...`. Their rule wins in this project, and the engine stops the house standard's checks and constraints here.
+   - "Just this value", "just here": `engine.py standard override <id> --why "<their words>"`.
+6. Once per session, offer: "Want to suggest this source to OpenDesigner for everyone?" After a yes: `engine.py feedback "source: <url> (<authority>): <why>" --kind idea`. Skip the offer for a local file, a company-internal document, or anything private: those stay in their project.
 
 # Improving OpenDesigner (the self-improvement loop)
 
@@ -530,9 +541,14 @@ Hard rules for every OpenDesigner skill. Sources: `_coordination/BRIEF.md` requi
 
 ## 4b. Standards (locked unless the person explicitly asks)
 - House standards (`standards.md`) come from sources the OpenDesigner owner marked non-negotiable. Project standards come from sources the person marked non-negotiable. Both are applied and locked.
-- Change one only when the person explicitly asks to improve, remove or change it. Restate the rule and its reason once, then `engine.py standard override <id> --why "<their words>"`. Never override one to make your own recommendation fit.
+- Change one only when the person explicitly asks to improve, remove or change it. Restate the rule and its reason once, then record it the way their words say (`docs/KNOWLEDGE.md` section 4):
+  - "It's our brand", "we always do this", "non-negotiable for us": a project standard that beats the house one, `engine.py standard add ... --beats STD-...` (`rules.md` section 12). Their rule wins in this project, and the house standard's checks stop flagging it.
+  - "Just this value", "just here": `engine.py standard override <id> --why "<their words>"`.
+  - Never override one to make your own recommendation fit.
+- `engine.py set --force` is for values the person locked. It never changes a value a standard holds; only `standard override` does.
+- Questions a standard settles are not asked (stage files: **Settled by: STD-...**), and options marked **(breaks STD-...)** are never recommended.
 - Order when rules collide: accessibility floors, then the person's explicit choice, then project standards, then house standards, then recommended defaults, then research defaults (`docs/KNOWLEDGE.md` section 2). Say it in one line when a higher rule wins.
-- When OpenDesigner's standards are newer than the project's (`engine.py validate` says so), tell the person in one line and run `engine.py standards --update`. Their overrides stay.
+- When OpenDesigner's standards are newer than the project's (`engine.py validate` says so), tell the person in one line, run `engine.py standards --update`, then `engine.py build`. Their overrides and project standards stay.
 
 ## 5. Honesty
 - Never invent owner inputs (scope, audience, governance, terminology). Never invent facts about the person's brand or licences they hold. Mark assumptions `assumed` and list them.
@@ -627,7 +643,7 @@ Constraints: <licence, platforms, dark mode, reduced motion>
 Rights: written copyright assignment to <owner> on delivery
 ```
 
-# House standards (version 1)
+# House standards (version 2)
 
 <!-- generated by tools/build_data.py from synthesis/; edit the source, not this file -->
 
@@ -667,8 +683,6 @@ Rights: written copyright assignment to <owner> on delivery
 | `motion.duration.short` | 150ms | STD-easing-duration-07 | all |
 | `motion.duration.medium` | 200ms | STD-easing-duration-07 | all |
 | `motion.duration.long` | 250ms | STD-easing-duration-07 | all |
-| `motion.duration.medium-exit` | 160ms | STD-easing-duration-11 | all |
-| `motion.duration.long-exit` | 200ms | STD-easing-duration-11 | all |
 | `motion.scale.enter` | 0.95 | STD-enter-exit-origin-01 | all |
 | `motion.duration.medium` | 200ms | STD-enter-exit-origin-08 | web, css, react |
 | `motion.scale.enter` | 0.95 | STD-enter-exit-origin-08 | web, css, react |
@@ -713,7 +727,7 @@ Rights: written copyright assignment to <owner> on delivery
 | `size.target.touch` | 44px | STD-mobile-touch-09 | all |
 | `size.target.min` | 44px | STD-mobile-touch-09 | all |
 | `font.size.input` | 16px | STD-mobile-touch-11 | web, css |
-| `motion.spring.spatial.dampingRatio` | 1 | STD-mobile-touch-51 | react-native, ios, android |
+| `motion.spring.spatial.dampingRatio` | 1.0 | STD-mobile-touch-51 | react-native, ios, android |
 
 ## Output template: DESIGN.md
 
@@ -859,7 +873,7 @@ This project's design system lives in `opendesigner/`, and `DESIGN.md` is its li
 2. Use the tokens in `opendesigner/tokens/` (DTCG, canonical) or their exports in `opendesigner/build/` (for example `build/css/tokens.css` or `build/tailwind/theme.css`).
 3. Never hard-code colors, font sizes, spacing, radii, shadows or durations.
 4. Check `opendesigner/decisions.md` for why a value is what it is. Locked decisions (`locks` in `opendesigner/state.json`) change only with the owner's consent.
-5. Follow the standards listed in DESIGN.md (for example: which easing, which properties to animate, which library for toasts). They are rules, not suggestions. Only the owner can change one: `engine.py standard override <id> --why "..."`.
+5. Follow the standards listed in DESIGN.md (for example: which easing, which properties to animate, which library for toasts). They are rules, not suggestions. Only the owner can change one, and only when they ask: `engine.py standard override <id> --why "<their words>"` for one value, or `engine.py standard add ... --beats <id>` when their own rule always wins. `engine.py set --force` never changes a standard's value.
 
 **At the end of every implementation** (a page, a component, a refactor)
 1. Run `python3 <opendesigner skill>/scripts/engine.py review`. It lists hard-coded values that skip the tokens, code that breaks a standard, and DESIGN.md sections that are out of date.

@@ -90,7 +90,7 @@ Use the skill's own folder path when it is installed elsewhere (for example a pl
 | `data/`, `skills/*/references/*.json`, `references/stages/`, `references/cards/`, `chatgpt-project/knowledge/` | Generated from `synthesis/` (including `glossary.json`) by `python3 tools/build_data.py`. Edit the source instead |
 | `.claude-plugin/`, `plugin.json` | Claude plugin and marketplace manifests, and the Agent Plugins 1.0 manifest. Keep `version` in step |
 | `design/` | Tokens and artboards written to Figma and Paper for review |
-| `tools/` | `od.py` (coordination), `jev_nav.py` (research navigation, Jev search, card export, decision graph, citation check), `wiki.py` (the learning wiki: add, fetch, check, ingest, trace, cite-check, standards, map, next, upstream), `build_questionnaire.py`, `build_data.py`, `sync_skills.py`, `build_dist.py` |
+| `tools/` | `od.py` (coordination), `jev_nav.py` (research navigation, Jev search, card export, decision graph, citation check), `wiki.py` (the learning wiki: add, remove, fetch, check, ingest, trace, cite-check, standards, map, next, upstream), `build_questionnaire.py`, `build_data.py`, `sync_skills.py`, `build_dist.py` |
 | `.claude/workflows/` | Saved Claude Code workflows for the learning wiki: `learn-analyze`, `learn-standards`, `learn-synthesis`, `learn-escalate`, `learn-personas` |
 | `dist/` | Release zips (git-ignored) |
 
@@ -109,13 +109,15 @@ Never commit `.env` or other secrets. Never edit another owner's files. Use mess
 
 ### Before you commit
 ```
-python3 tools/build_data.py --check      generated knowledge matches synthesis/
+python3 tools/build_data.py --check      generated knowledge matches synthesis/, and standards changes are version-bumped
 python3 tools/sync_skills.py --check     skill copies match skills/
 python3 tools/build_dist.py --check      skill frontmatter is portable
 python3 tools/jev_nav.py check           no dangling citations
-python3 tools/wiki.py check              learning wiki: analysis schema, quotes, authority
-python3 tools/wiki.py standards          house standards valid and versioned
-python3 tools/test_wiki.py               learning wiki tests
+python3 tools/wiki.py check              learning wiki: analysis schema and types, quotes, authority
+python3 tools/wiki.py standards          house standards valid and versioned (else: wiki.py standards --bump "what changed")
+python3 tools/wiki.py map --check        learn/MAP.md is current (else: wiki.py map)
+python3 tools/wiki.py proposals --check  the pending-proposals table in synthesis/QUESTIONNAIRE.md is current
+python3 tools/test_wiki.py               learning wiki tests (.venv-wiki/bin/python also runs the OpenWiki ones)
 ```
 Improving the app from the learning wiki? Read `learn/IMPROVING.md` first. `python3 tools/wiki.py next` lists what in the wiki is out of date.
 

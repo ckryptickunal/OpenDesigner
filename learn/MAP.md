@@ -9,7 +9,7 @@ Everything OpenDesigner has learned from the sources its owner trusts, and where
 - **Sources:** 99 analysed (6 good-to-have, 40 non-negotiable, 53 reference), listed in [sources.json](sources.json); citations in [../traces/L19-trace.md](../traces/L19-trace.md).
 - **Extracted:** 2768 rules, 601 decisions, 686 process steps, 802 examples ([analysis/](analysis/), one file per source).
 - **Wiki:** 99 source pages, 50 topics, 53 synthesis pages ([wiki/index.md](wiki/index.md)).
-- **House standards:** 455 rules in 11 themes, version 1 ([../synthesis/standards.json](../synthesis/standards.json)).
+- **House standards:** 455 rules in 11 themes, version 2 ([../synthesis/standards.json](../synthesis/standards.json)).
 - **Decision Cards:** 164 in [wiki/synthesis/_cards/](wiki/synthesis/_cards/) (assembled into [../research/L19-learning-wiki.md](../research/L19-learning-wiki.md)).
 - **Impact notes:** "Now / As it grows" for 30 high-impact questions ([../synthesis/impact.json](../synthesis/impact.json)).
 - **Process:** [Decide or ask](wiki/synthesis/decide-or-ask.md) · [Citation check](wiki/synthesis/citation-check.md) · [House standards](wiki/synthesis/house-standards.md)
@@ -42,7 +42,7 @@ Rules from non-negotiable sources. The app applies and locks them in every proje
 | Theme | Rules | Must | Lock a value | Checked in code | Read |
 |---|---|---|---|---|---|
 | When to animate | 17 | 14 | 1 | 3 | [standards/when-to-animate.md](../skills/opendesigner/references/standards/when-to-animate.md) |
-| Easing and duration | 13 | 10 | 4 | 3 | [standards/easing-duration.md](../skills/opendesigner/references/standards/easing-duration.md) |
+| Easing and duration | 13 | 10 | 3 | 3 | [standards/easing-duration.md](../skills/opendesigner/references/standards/easing-duration.md) |
 | Enter, exit and origin | 34 | 18 | 11 | 10 | [standards/enter-exit-origin.md](../skills/opendesigner/references/standards/enter-exit-origin.md) |
 | Springs and gestures | 36 | 23 | 9 | 3 | [standards/springs-gestures.md](../skills/opendesigner/references/standards/springs-gestures.md) |
 | Performance and properties | 17 | 11 | 0 | 8 | [standards/performance-properties.md](../skills/opendesigner/references/standards/performance-properties.md) |

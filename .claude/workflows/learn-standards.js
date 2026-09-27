@@ -1,8 +1,9 @@
 export const meta = {
   name: 'learn-standards',
-  whenToUse: 'Non-negotiable or good-to-have sources were added or changed (`python3 tools/wiki.py next` says "standards"). Rebuilds synthesis/standards.json by theme; ids stay stable.',
+  whenToUse: 'Non-negotiable or good-to-have sources were added or changed (`python3 tools/wiki.py next` says "standards"). Rebuilds synthesis/standards.json by theme; ids stay stable. Args: {"root": "<repo path>"}, optionally "themes".',
   description: 'Turn the non-negotiable sources into verified, deduplicated house standards (draft by theme, verify, merge, completeness critic)',
   phases: [
+    { title: 'Collect', detail: 'the house sources and their raw folders from learn/sources.json, and the current themes' },
     { title: 'Draft', detail: 'one agent per theme drafts standards from every non-negotiable analysis' },
     { title: 'Verify', detail: 'independent skeptics check each theme against the raw sources' },
     { title: 'Merge', detail: 'dedupe across themes into synthesis/standards.json, keeping existing ids' },
@@ -10,13 +11,16 @@ export const meta = {
   ],
 }
 
-// args (optional): {root, themes: ["easing-duration", ...] to redo only some themes (default all)}
+// args: {root: "<repo path>", themes: ["easing-duration", ...] to redo only some themes (default all)}
 // Afterwards, by hand: python3 tools/wiki.py standards --bump "<what changed>", cite-check --standards, build_data.py.
 const A = args || {}
-const ROOT = A.root || '/Users/Kunal/Desktop/Design-System'
+if (typeof A.root !== 'string' || !A.root)
+  throw new Error('learn-standards needs args {"root": "<repo path>"} (optionally "themes": [...]): the checkout whose synthesis/standards.json it rebuilds.')
+const ROOT = A.root
 const OUT = `${ROOT}/learn/wiki/synthesis/_standards`
 
-const THEMES = [
+// What each known theme covers. Themes in synthesis/standards.json that are not listed here (new ones) use their summary.
+const SCOPES = [
   { key: 'easing-duration', scope: 'Easing curves (exact cubic-bezier values), durations and duration limits, when to use ease-out / ease-in-out / linear, asymmetric enter vs exit timing, speed of UI vs marketing motion.' },
   { key: 'when-to-animate', scope: 'Whether to animate at all: frequency of use, keyboard-initiated actions, purpose of animation, "you do not need animations", friction as a feature, delight budget, first-time vs repeated interactions.' },
   { key: 'enter-exit-origin', scope: 'How things enter and leave: starting scale (never from 0), opacity, blur, transform-origin from the trigger, popovers/dropdowns/tooltips/modals, stagger, height/layout animations, exits.' },
@@ -29,7 +33,24 @@ const THEMES = [
   { key: 'process-review-taste', scope: 'Process and craft: developing taste, training judgement, reviewing animations (review/improve/find-opportunities checklists), prototyping several versions with a switcher, building a course/learning, slow-motion review, animation vocabulary for prompting.' },
   { key: 'swift', scope: 'Writing Swift (write-swift skill): value types, concurrency, generics, performance, testing. These apply when OpenDesigner exports to Swift/SwiftUI.' },
 ]
+
+// The house sources come from learn/sources.json, so a newly added non-negotiable or good-to-have source is picked up.
+const HOUSE = { type: 'object', properties: {
+  sources: { type: 'array', items: { type: 'object', properties: {
+    name: { type: 'string' }, authority: { type: 'string' }, folder: { type: 'string' }, analysed: { type: 'integer' } },
+    required: ['name', 'authority', 'folder', 'analysed'] } },
+  themes: { type: 'array', items: { type: 'object', properties: { key: { type: 'string' }, title: { type: 'string' }, summary: { type: 'string' } },
+    required: ['key', 'title', 'summary'] } } },
+  required: ['sources', 'themes'] }
+phase('Collect')
+const house = await agent(`From ${ROOT}, run: python3 tools/wiki.py status --json. Return every source whose authority is "non-negotiable" or "good-to-have" (name, authority, folder exactly as printed, and its "analysed" count). Also read ${ROOT}/synthesis/standards.json (if it exists) and return its "themes" array as it is (key, title, summary). Do nothing else.`,
+  { label: 'collect', phase: 'Collect', schema: HOUSE, effort: 'low' })
+if (!house.sources.length) throw new Error('learn/sources.json lists no non-negotiable or good-to-have source: there is nothing to build standards from.')
+const THEMES = [...SCOPES, ...house.themes.filter(t => !SCOPES.some(s => s.key === t.key)).map(t => ({ key: t.key, scope: t.summary }))]
 const todo = A.themes ? THEMES.filter(t => A.themes.includes(t.key)) : THEMES
+const NONNEG = house.sources.filter(s => s.authority === 'non-negotiable')
+const GOOD = house.sources.filter(s => s.authority === 'good-to-have')
+log(`${NONNEG.length} non-negotiable and ${GOOD.length} good-to-have sources; ${todo.length} themes`)
 
 const STD_SCHEMA_DOC = `Each standard:
 {
@@ -41,17 +62,23 @@ const STD_SCHEMA_DOC = `Each standard:
   "why": "the source's reason, one or two sentences",
   "strength": "must|should",               // only source rules with strength must/should become standards; 'consider' stays in the wiki
   "values": {"name": "exact value"},        // {} if none
-  "applies_to": ["web", "ios", "android", "react", "css", "react-native", "swift", "all"],
+  "applies_to": ["all" | "web" | "css" | "react" | "react-native" | "ios" | "swift" | "android" | "compose" | "desktop"],   // a project follows a rule when its platforms or recorded stack match one tag
   "sources": [{"id": "<analysis id>", "evidence": "a short phrase that appears verbatim in the raw source"}],
   "engine": null | {"path": "<DTCG token path>", "value": <value>, "type": "<DTCG $type>", "note": "..."} | [several of those],
   "review": null | {"pattern": "a Python regex that finds a violation on one line of CSS/JS/TSX", "message": "short fix hint"},
   "design_md": true | false,                // true if an implementing agent must follow it
-  "conflicts": ["an existing OpenDesigner default that disagrees, with the file and value"]
+  "conflicts": ["an existing OpenDesigner default that disagrees, with the file and value"],
+  // Optional (docs/KNOWLEDGE.md, "How knowledge is used in a session"); python3 tools/wiki.py standards checks each:
+  "settles": ["Q-motion-02"],               // questions in skills/opendesigner/references/questions.json whose answer this standard fixes: the interview skips them
+  "breaks_options": {"Q-motion-06": ["fade"]},   // option values of a question that contradict this standard: never recommended
+  "constraints": [{"path": "motion.easing.*", "forbid": "accelerating-curve"}, {"path": "motion.transition.*", "forbid": {"max-duration-ms": {"value": 300}}}],   // values no matching token may take
+  "supersedes": ["DC-L04-21"]               // older Decision Cards (synthesis/cards.json) this standard replaces; a card only named in "conflicts" is not replaced
 }`
 
+const names = (xs) => xs.map(s => s.name).join('; ') || 'none'
 const COMMON = `Scratch work: put any helper script or temp file in a directory of your own (mktemp -d), and never run a script you did not write in this task (other agents share the scratch space).
-Repo ${ROOT}. House standards come from sources the owner marked NON-NEGOTIABLE (learn/sources.json: Emil Kowalski's articles, the emilkowalski/skills repo, the Sonner docs, animations.dev) and, at strength "should" at most, the GOOD-TO-HAVE Vaul docs (unmaintained per its README). The rules for what a standard is and how projects use it: docs/KNOWLEDGE.md.
-Inputs: ${ROOT}/learn/analysis/*.json with "authority" non-negotiable or good-to-have (read "rules", "numbers", "decisions"); the raw text in ${ROOT}/learn/raw/{emil-kowalski,emil-skills,sonner,animations-dev,vaul}/ for exact wording and values; the current ${ROOT}/synthesis/standards.json (keep existing ids and wording that is still right).
+Repo ${ROOT}. House standards come from the sources the owner marked NON-NEGOTIABLE in learn/sources.json (${names(NONNEG)}) and, at strength "should" at most, the GOOD-TO-HAVE ones (${names(GOOD)}; read each entry's "note" in learn/sources.json, for example an unmaintained library). The rules for what a standard is and how projects use it: docs/KNOWLEDGE.md.
+Inputs: ${ROOT}/learn/analysis/*.json with "authority" non-negotiable or good-to-have (read "rules", "numbers", "decisions"); the raw text in ${house.sources.map(s => `${ROOT}/${s.folder}/`).join(', ')} for exact wording and values (git-ignored: if a folder is missing, fetch it with ${ROOT}/.venv-wiki/bin/python tools/wiki.py fetch --only "<name>"); the current ${ROOT}/synthesis/standards.json (keep existing ids and wording that is still right).
 OpenDesigner's defaults, for conflicts and engine mappings: ${ROOT}/synthesis/levers.json, skills/opendesigner/references/stages/*.md, and the generated tokens (in a temp dir: python3 ${ROOT}/skills/opendesigner/scripts/engine.py init --name T && python3 ${ROOT}/skills/opendesigner/scripts/engine.py generate; read opendesigner/tokens/*.json). Test an engine mapping with engine.py set <path> '<json value>' --why test in that temp dir.`
 
 function draftPrompt(t) {
@@ -63,7 +90,8 @@ ${STD_SCHEMA_DOC}
 - One standard per distinct rule; merge duplicates across sources (list every source). Only what the sources say; values exact; mark your own inference " [inferred]".
 - Be complete for the theme: every must/should rule the sources state is covered.
 - "engine" only for a value the standard fixes (existing tokens such as motion.easing.*, motion.duration.*, or a new reusable token with its type). "review" only for mechanically detectable violations, precise enough to avoid false positives.
-Return: the number of standards, new ones, changed ones, and the three most important conflicts with current OpenDesigner defaults.`
+- A rule that fits no theme is not dropped: list it at the end of your answer as "NEW THEME <key>: <one-sentence summary>: <the rules>", for the merge.
+Return: the number of standards, new ones, changed ones, the three most important conflicts with current OpenDesigner defaults, and any NEW THEME lines.`
 }
 
 function verifyPrompt(t) {
@@ -79,7 +107,7 @@ const VERDICT = { type: 'object', properties: {
 const drafts = await pipeline(
   todo,
   t => agent(draftPrompt(t), { label: `draft:${t.key}`, phase: 'Draft' }),
-  (_d, t) => agent(verifyPrompt(t), { label: `verify:${t.key}`, phase: 'Verify', schema: VERDICT }).then(v => ({ key: t.key, verify: v })),
+  (d, t) => agent(verifyPrompt(t), { label: `verify:${t.key}`, phase: 'Verify', schema: VERDICT }).then(v => ({ key: t.key, draft: d, verify: v })),
 )
 
 phase('Merge')
@@ -90,14 +118,18 @@ Merge the verified theme files ${OUT}/{${todo.map(t => t.key).join(',')}}.json i
 - Keep ids stable: an existing standard keeps its id; a new one takes the next free number in its theme; never reuse a removed id.
 - Deduplicate across themes (the same rule in two themes becomes one standard; merge sources; the stronger strength wins).
 - Keep "version", "history", "retired", "since" and "changed" as they are: \`python3 tools/wiki.py standards --bump\` stamps new and changed standards and retires removed ones. New standards get "since" and "changed" equal to the current version for now.
-- Keep "themes" (key, title, one-sentence summary) matching every standard's theme.
-- Validate: ids unique; every sources[].id exists as learn/analysis/<id>.json; every review.pattern compiles.
+- Keep "themes" (key, title, one-sentence summary) matching every standard's theme. You may create a new theme when rules fit none of the existing ones (the drafts list them as NEW THEME lines, and so may you): a lower-case key, a title, a one-sentence summary, ids STD-<key>-01 and up. Never force a rule into a theme it does not belong to.
+- Keep the optional fields (settles, breaks_options, constraints, supersedes) of standards you keep, unless the rule changed so that they no longer hold.
+- Validate: python3 tools/wiki.py standards must report no error other than the content-hash one (the maintainer's bump fixes that): ids unique, every sources[].id exists as learn/analysis/<id>.json, every review.pattern compiles, settles and breaks_options name real questions and options, one token path has one value.
+- Then run python3 tools/wiki.py standards --built-from, which records the analyses these standards were built from (python3 tools/wiki.py next compares it with the analyses on disk).
 Also refresh ${ROOT}/learn/wiki/synthesis/house-standards.md (OpenWiki synthesis page listing every standard by theme in plain words).
-Return: counts per theme (before -> after), new ids, removed ids, and conflicts with current OpenDesigner defaults.`, { label: 'merge', phase: 'Merge' })
+Rules the drafts found no theme for:
+${drafts.filter(Boolean).flatMap(d => String(d.draft || '').split('\n').filter(l => l.includes('NEW THEME')).map(l => `- (from ${d.key}) ${l.trim()}`)).join('\n') || '- none'}
+Return: counts per theme (before -> after), new themes, new ids, removed ids, and conflicts with current OpenDesigner defaults.`, { label: 'merge', phase: 'Merge' })
 
 phase('Critic')
 const critic = await agent(`${COMMON}
 
-Completeness critic. Read ${ROOT}/synthesis/standards.json, then every non-negotiable and good-to-have analysis in ${ROOT}/learn/analysis/ and every rule with strength must or should. Decide whether a standard covers each. For each uncovered rule that is real (check the raw text) and is a rule for a person's project (not a skill's own start-up behaviour or repo upkeep), add a standard in the right theme with the next free id. No duplicates. Return: rules checked, uncovered found, standards added.`, { label: 'critic', phase: 'Critic' })
+Completeness critic. Read ${ROOT}/synthesis/standards.json, then every non-negotiable and good-to-have analysis in ${ROOT}/learn/analysis/ and every rule with strength must or should. Decide whether a standard covers each. For each uncovered rule that is real (check the raw text) and is a rule for a person's project (not a skill's own start-up behaviour or repo upkeep), add a standard in the right theme with the next free id; when no theme fits, add a new theme to "themes" (key, title, one-sentence summary). No duplicates. If you added anything, run python3 tools/wiki.py standards --built-from again. Return: rules checked, uncovered found, standards added, themes added.`, { label: 'critic', phase: 'Critic' })
 
 return { drafts, merged, critic }

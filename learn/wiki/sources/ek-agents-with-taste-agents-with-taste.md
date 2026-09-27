@@ -27,8 +27,8 @@ tags:
 
 ## Metadata
 
-- Video ID: `ek-agents-with-taste`
-- Channel: Emil Kowalski (web)
+- Page ID: `ek-agents-with-taste`
+- Publisher: Emil Kowalski (web)
 - Published: Unknown
 - URL: https://emilkowal.ski/ui/agents-with-taste
 

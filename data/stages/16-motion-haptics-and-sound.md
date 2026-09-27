@@ -8,7 +8,7 @@ Screen: motion feel on live interactions the person can trigger (open a menu, na
 
 Zoom 3 (detailed) questions: `16-motion-haptics-and-sound.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-motion-01 · Should motion feel quick and quiet, or physical and playful?
 Zoom 1 broad · weight high · changes 5 decisions · class G · cards DC-L09-06, DC-L04-19, DC-L06-10
@@ -21,7 +21,7 @@ Zoom 1 broad · weight high · changes 5 decisions · class G · cards DC-L09-06
     - Now: Almost nothing moves; press feedback and quick fades that explain a change stay. Still and calm, like GOV.UK. As it grows: Stays consistent as screens grow, but rare moments like a first success get no extra life. [inferred]
   - `productive` Quick, plain curves: fast, competent, no bounce (Carbon productive `cubic-bezier(0.2, 0, 0.38, 0.9)`).
     - Now: Quick, plain movements with no bounce: fast and competent. As it grows: Fits frequent actions as features grow; things done 100+ times a day still get no animation at all.
-  - `springs` Springs throughout: alive, physical, interruptible (Material spring tokens, Apple duration + bounce, Airbnb) [DC-L09-06].
+  - `springs` Springs throughout (breaks STD-springs-gestures-01): alive, physical, interruptible (Material spring tokens, Apple duration + bounce, Airbnb) [DC-L09-06].
     - Now: Movement feels physical and can be caught mid-way; bounce stays for flicks, drags and rare playful moments, per house standards. As it grows: Springs drive whatever a finger moves; motion nobody touched keeps plain timing curves, and the web needs a JavaScript spring library.
 - **Default:** `two-mode`: two-mode: 7 durations 50-500ms, ease-out to enter and to exit (never ease-in on UI: house standards STD-easing-duration-01 and -03), springs only for spatial moves in the expressive mode, bounce at or below 0.2 *Source:* L09 shared default row 5 (all 16 systems with motion tokens stay in 100-300ms) and card heuristics [DC-L09-06, DC-L04-19]; capped at productive when Q-aud-02 is high-trust.
 - **Show:** the live interactions replay on every change, with a slow-motion button.
@@ -30,11 +30,12 @@ Zoom 1 broad · weight high · changes 5 decisions · class G · cards DC-L09-06
 
 ## Q-motion-07 · What happens when people ask for reduced motion, and how much motion fits each device?
 Zoom 2 defined · weight low · changes 0 decisions · class G · cards DC-L04-25, DC-L14-08
+- **Settled by:** STD-accessibility-motion-02: Under reduced motion, remove movement (translation, scale, slides, springs, parallax, elastic and overshoot) and replace it with a short opacity cross-fade (the sources use 200ms, ease) or a static transition, while keeping the opacity and color changes that explain a state change; never remove all animation or feedback. Don't ask; the value is locked. Change it only through engine.py standard override when the person explicitly asks.
 - **Ask:** "When someone turns on reduced motion, should things fade gently or stop moving?"
 - **Why:** A good reduced motion mode still feels polished, with crossfades instead of jumps. Where people have less attention to spare, motion shrinks, down to none in cars [DC-L04-25, DC-L14-08].
 - **Options:**
   - `replace` Replace movement with fades and color changes (MDN; WCAG's motion rule leaves out color, blur and opacity).
-  - `remove` Remove all non-essential motion (WCAG 2.3.3 AAA, technique C39) [DC-L04-25].
+  - `remove` Remove all non-essential motion (WCAG 2.3.3 AAA, technique C39) [DC-L04-25]. (breaks STD-accessibility-motion-02)
   - `per-device` Per device: system transitions plus brand micro-motion on phone and desktop; subtle focus scale on TV; minimal on watch; none in cars; slow and grounded in headsets [DC-L14-08].
 - **Default:** `replace`: replace, built as a token mode; 2.3.3 treated as a requirement although it is AAA; per-device budgets applied *Source:* accessibility rule and card heuristics [DC-L04-25, DC-L14-08].
 - **Show:** the reduced-motion toggle on every live interaction.
@@ -48,7 +49,7 @@ Zoom 2 defined · weight medium · changes 0 decisions · class D · cards DC-L0
 - **Options:**
   - `silent` Silent by default (most web systems; tvOS plays no alert sounds).
   - `rare-events` Sounds for rare, meaningful events, always behind mute and silent mode.
-  - `sound-forward` Lots of sound (games, spatial computing) [DC-L04-27].
+  - `sound-forward` Lots of sound (games, spatial computing) [DC-L04-27]. (breaks STD-springs-gestures-61)
 - **Default:** `silent`: silent on web and productivity apps *Source:* card heuristic [DC-L04-27].
 - **Show:** the event list with a play button per sound and the mute state.
 - **Use / avoid:** use sound only for rare, meaningful events that honor silent mode; avoid sounds on web and in shared-space products [DC-L04-27].

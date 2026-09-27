@@ -1,3 +1,11 @@
+---
+type: synthesis
+title: "Components: Decision Cards from the learning wiki (lane L19)"
+tags:
+  - decision-cards
+  - components
+---
+
 # Components: Decision Cards from the learning wiki (lane L19)
 
 Area `components`: stages 20, 21 and 22, plus Q-pattern-01 and Q-pattern-03, which `pacing.json` files under the same area. Topics: toasts and notifications, drawers and sheets, buttons and actions, forms and inputs, navigation and sidebars, modals and popovers, UI libraries. Cards DC-L19-101 to DC-L19-119.

@@ -21,8 +21,8 @@ tags:
 
 ## Metadata
 
-- Video ID: `sonner-getting-started`
-- Channel: Sonner docs (web)
+- Page ID: `sonner-getting-started`
+- Publisher: Sonner docs (web)
 - Published: Unknown
 - URL: https://sonner.emilkowal.ski/getting-started
 

@@ -27,8 +27,8 @@ tags:
 
 ## Metadata
 
-- Video ID: `ek-building-a-toast-component`
-- Channel: Emil Kowalski (web)
+- Page ID: `ek-building-a-toast-component`
+- Publisher: Emil Kowalski (web)
 - Published: Unknown
 - URL: https://emilkowal.ski/ui/building-a-toast-component
 

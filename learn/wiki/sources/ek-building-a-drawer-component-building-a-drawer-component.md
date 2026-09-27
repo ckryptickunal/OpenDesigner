@@ -27,8 +27,8 @@ tags:
 
 ## Metadata
 
-- Video ID: `ek-building-a-drawer-component`
-- Channel: Emil Kowalski (web)
+- Page ID: `ek-building-a-drawer-component`
+- Publisher: Emil Kowalski (web)
 - Published: Unknown
 - URL: https://emilkowal.ski/ui/building-a-drawer-component
 

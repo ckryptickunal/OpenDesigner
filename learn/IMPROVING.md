@@ -44,10 +44,29 @@ Rules:
 
 House standards come from sources the owner marked non-negotiable. To change one:
 1. Change the source list or its authority in [sources.json](sources.json). If the source itself changed, fetch and analyse it again.
-2. Re-run the standards synthesis: the saved workflow `.claude/workflows/learn-standards.js`, or lane L19 step 6 by hand.
-3. Run `python3 tools/wiki.py standards --bump "what changed"`. It stamps the version, records the history, and moves removed rules to `retired`.
-4. Run `python3 tools/wiki.py cite-check --standards`, then `.claude/workflows/learn-escalate.js` for anything flagged.
-5. Run `python3 tools/build_data.py` and every check. Existing projects pick up the change with `engine.py standards --update`, and their overrides stay (`docs/KNOWLEDGE.md` section 6).
+2. Re-run the standards synthesis: the saved workflow `.claude/workflows/learn-standards.js` with `{"root": "<repo path>"}`, or lane L19 step 6 by hand. It ends with `python3 tools/wiki.py standards --built-from`, which records the analyses the standards were built from.
+3. Run `python3 tools/wiki.py standards --bump "what changed"`. It compares the file with the last commit (so it needs git), stamps `since` and `changed`, records the history, and moves removed rules to `retired`. It refuses when nothing changed, and a second bump before you commit amends the same version instead of adding one. Until the bump, `tools/build_data.py` refuses to build.
+4. Run `python3 tools/wiki.py cite-check --standards` (it needs `JEV_API_KEY`), then `.claude/workflows/learn-escalate.js` with `{"root": "<repo path>"}` for anything flagged.
+5. Run `python3 tools/build_data.py`, `python3 tools/sync_skills.py`, `python3 tools/wiki.py map` and every check in AGENTS.md ("Before you commit"). Existing projects pick up the change with `engine.py standards --update`, and their overrides stay (`docs/KNOWLEDGE.md` section 6).
+
+A standard can also say what it does to the interview and to values (`docs/KNOWLEDGE.md` section 3). `wiki.py standards` checks each field:
+- `settles`: the questions it answers, which the interview then skips.
+- `breaks_options`: the options that would break it, which are never recommended.
+- `constraints`: values a token may not take, such as an accelerating curve on `motion.easing.*`.
+- `supersedes`: the older Decision Cards it replaces.
+
+### A new house source
+
+When a non-negotiable or good-to-have source joins the list, work through these steps in order:
+1. **Add it.** `python3 tools/wiki.py add <url> --authority non-negotiable` (or `good-to-have`). Check the name, raw folder and id prefix it prints. `add` refuses one another source already uses.
+2. **Scope and licence.** Public pages only: nothing paid, behind a login or paywalled. For a GitHub repo, add its licence (`"license"`) to the entry. Put any warning a project needs, such as an unmaintained library, in a `"note"`.
+3. **Fetch.** `.venv-wiki/bin/python tools/wiki.py fetch --only "<name>"`. Exit 1 means nothing usable came back: fix the link, or take it off with `wiki.py remove`.
+4. **Analyse.** Run the learn-analyze workflow with the output of `python3 tools/wiki.py pending --work-items`. For a house source the analysis must be complete, not a sample.
+5. **Into the wiki.** `python3 tools/wiki.py check`, `.venv-wiki/bin/python tools/wiki.py ingest`, `python3 tools/wiki.py trace`.
+6. **Standards.** Run the learn-standards workflow with `{"root": "<repo path>"}`. It reads the house sources and their raw folders from `sources.json`, so the workflow needs no edit. It may add a theme when the new rules fit none.
+7. **Name the source where the prose lists them.** These are the "Current sources" in [README.md](README.md), the `policy` text in `synthesis/standards.json` (editing `policy` does not change the content hash), and the Tiers line at the top of `traces/L19-trace.md`.
+8. **Version and check.** Follow steps 3 to 5 above: the bump, the citation check with learn-escalate, then the build and the checks. Add a CHANGELOG line, and log the decision with `python3 tools/od.py log "..."`.
+9. **Try it.** Run the learn-personas workflow with `{"root": "<repo path>"}`, so the new rules are met the way a person meets them.
 
 ## 5. Keep the wiki fresh
 

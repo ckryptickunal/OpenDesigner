@@ -838,5 +838,48 @@
    "synthesis/QUESTIONNAIRE.md Q-scope-06",
    "S-L17-007"
   ]
+ },
+ {
+  "id": "use.house-standard",
+  "term": "house standard",
+  "plain": "A rule OpenDesigner follows in every project, taken from experts its makers trust. You can still ask to change it.",
+  "designer": "Craft rules from the sources the OpenDesigner owner marked non-negotiable. They are applied and locked from the start; your explicit override or your own project standard wins.",
+  "engineer": "Kept in synthesis/standards.json, versioned, shipped as references/standards.json. A project follows the ones whose applies_to tags match its platforms and stack.",
+  "designer_says": "house rules, locked by default",
+  "code_name": "STD-<theme>-<nn> ids",
+  "example": "A house standard stops menus from growing out of nothing.",
+  "see_also": [
+   "use.standard"
+  ],
+  "source": [
+   "docs/KNOWLEDGE.md sections 1 and 2",
+   "synthesis/standards.json",
+   "skills/opendesigner/references/standards.md"
+  ],
+  "aka": [
+   "OpenDesigner standard",
+   "STD"
+  ]
+ },
+ {
+  "id": "use.standard",
+  "term": "standard",
+  "plain": "A rule your design always follows. It is set for you, and only you can ask to change it.",
+  "designer": "A non-negotiable rule from a source you or OpenDesigner trust, such as your brand book. It is applied without asking and locked; changing it takes your explicit request.",
+  "engineer": "A record with an id, rule, reason, sources and platform tags. It can lock values, add code checks, settle questions and rule out options. Project ids start PRJ-.",
+  "designer_says": "non-negotiable rule",
+  "code_name": "STD- and PRJ- ids",
+  "example": "Your brand book says buttons use 6 px corners, so they always do.",
+  "see_also": [
+   "use.house-standard"
+  ],
+  "source": [
+   "docs/KNOWLEDGE.md section 1",
+   "skills/opendesigner/references/rules.md section 12"
+  ],
+  "aka": [
+   "project standard",
+   "non-negotiable rule"
+  ]
  }
 ]

@@ -362,24 +362,6 @@
   ]
  },
  {
-  "id": "found.motion.reduced",
-  "term": "Reduced motion",
-  "aka": [
-   "Reduce Motion",
-   "prefers-reduced-motion"
-  ],
-  "plain": "If you ask your phone for less motion, things fade in place instead of sliding or zooming.",
-  "designer": "Treat WCAG 2.3.3 as required even though it is AAA. Keep feedback such as color and opacity changes; remove travel like slide, scale and parallax, and use crossfades instead.",
-  "engineer": "A reduced motion mode (motion.reduced.tokens.json) points transitions at short fades with zero travel. Web reads @media (prefers-reduced-motion: reduce); each major OS has a matching setting.",
-  "designer_says": "reduced motion: fades, no travel",
-  "code_name": "prefers-reduced-motion: reduce",
-  "example": "With Reduce Motion on, a sliding panel fades in place.",
-  "source": [
-   "found.motion.reduced",
-   "DC-L04-25"
-  ]
- },
- {
   "id": "found.motion.platform",
   "term": "Motion by platform and device class",
   "aka": [

@@ -8,7 +8,7 @@ Screen: which variations of the system exist. Graph step 0-2. Asked before color
 
 Zoom 3 (detailed) questions: `07-themes-and-modes.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-theme-01 · Which appearance modes does the product support?
 Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L10-17, DC-L14-09
@@ -17,9 +17,9 @@ Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L10-1
 - **Options:**
   - `system-light-dark` Light and dark, matching the device setting: blends with the OS at night (Apple expects apps to respect the preference).
   - `light-dark-toggle` Light and dark, plus a switch in the app: web only, in addition to system-follow [DC-L10-17].
-  - `light-only` Light only [DC-L07-15].
-  - `dark-only` Dark only: brand colors glow, fewer and brighter accents (watch, TV, car at night) [DC-L14-09].
-- **Default:** `system-light-dark`: system-light-dark on phone, tablet, desktop and web; dark-only on watch; day/night auto in cars *Source:* L09 shared default row 6 (21 of 25 systems) and platform convention [L09 A1; DC-L10-17, DC-L14-09].
+  - `light-only` Light only [DC-L07-15]. (breaks STD-visual-details-24)
+  - `dark-only` Dark only (breaks STD-visual-details-24): brand colors glow, fewer and brighter accents (watch, TV, car at night) [DC-L14-09].
+- **Default:** `system-light-dark`: system-light-dark on every platform, a watch included (house standard STD-visual-details-24 gives each color role a light and a dark value; a watch app can still open in dark); day/night auto in cars *Source:* L09 shared default row 6 (21 of 25 systems) and platform convention [L09 A1; DC-L10-17, DC-L14-09].
 - **Show:** the draft screen split diagonally, light and dark.
 - **Use / avoid:** use system-following modes on Apple platforms; offer an in-app toggle only on web and only in addition; avoid an app-only appearance switch on Apple, which reads as broken [DC-L10-17].
 - **Skip:** yes.

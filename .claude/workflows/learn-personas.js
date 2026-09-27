@@ -1,6 +1,6 @@
 export const meta = {
   name: 'learn-personas',
-  whenToUse: 'After a change to house standards, project-standard commands, the skills text or the learning pipeline: end-to-end acceptance tests played by five personas, plus a Jev retrieval check.',
+  whenToUse: 'After a change to house standards, project-standard commands, the skills text or the learning pipeline: end-to-end acceptance tests played by five personas, plus a Jev retrieval check. Args: {"root": "<repo path>"}.',
   description: 'End-to-end tests of house standards, project sources and the learning pipeline, played by five personas, plus Jev retrieval checks',
   phases: [
     { title: 'Personas', detail: 'student, designer, engineer, maintainer, returning project' },
@@ -9,9 +9,11 @@ export const meta = {
   ],
 }
 
-// args (optional): {root, only: ["student", ...]}
+// args: {root: "<repo path>", only: ["student", ...] (optional)}
 const A = args || {}
-const ROOT = A.root || '/Users/Kunal/Desktop/Design-System'
+if (typeof A.root !== 'string' || !A.root)
+  throw new Error('learn-personas needs args {"root": "<repo path>"} (optionally "only": [...]): the checkout to test.')
+const ROOT = A.root
 const SKILL = `${ROOT}/skills/opendesigner`
 
 const COMMON = `Scratch work: put any helper script or temp file in a directory of your own (mktemp -d), and never run a script you did not write in this task (other agents share the scratch space).

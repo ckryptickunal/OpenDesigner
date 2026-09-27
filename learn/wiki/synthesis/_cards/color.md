@@ -1,3 +1,11 @@
+---
+type: synthesis
+title: "L19 Decision Cards: color (stages 07, 08, 09)"
+tags:
+  - decision-cards
+  - color
+---
+
 # L19 Decision Cards: color (stages 07, 08, 09)
 
 Lane: L19 (learning wiki). Area: color, covering the topics Color and Dark mode and themes (OpenDesigner stages 07 themes and modes, 08 color system, 09 color details and accessibility modes). Written 2026-09-24.

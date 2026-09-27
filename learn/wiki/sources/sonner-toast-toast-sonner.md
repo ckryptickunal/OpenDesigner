@@ -23,8 +23,8 @@ tags:
 
 ## Metadata
 
-- Video ID: `sonner-toast`
-- Channel: Sonner docs (web)
+- Page ID: `sonner-toast`
+- Publisher: Sonner docs (web)
 - Published: Unknown
 - URL: https://sonner.emilkowal.ski/toast
 

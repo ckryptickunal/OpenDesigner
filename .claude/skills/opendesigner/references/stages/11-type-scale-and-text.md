@@ -8,7 +8,7 @@ Screen: sizes, line heights, weights and text behavior, on a live type ladder ne
 
 Zoom 3 (detailed) questions: `11-type-scale-and-text.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-type-08 · What size should body text be?
 Zoom 2 defined · weight medium · changes 3 decisions · class G · cards DC-L02-08
@@ -32,7 +32,7 @@ Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L02-2
 - **Options:**
   - `capped-chrome` Full for content, capped at about 1.5x for fixed parts like tab labels [DC-L10-07].
   - `full` Full scaling, no cap on body text: iOS AX1-AX5, Android nonlinear to 200%, web rem.
-  - `none` No scaling support: fails platform guidance (Apple asks for at least 200%).
+  - `none` No scaling support (breaks STD-accessibility-motion-13): fails platform guidance (Apple asks for at least 200%).
 - **Default:** `capped-chrome`: capped-chrome, with every text token in scalable units and no fixed-height text containers *Source:* platform convention and accessibility rule [DC-L10-07, DC-L02-21].
 - **Show:** a list row and a tab bar at default, 200% and AX5, restacking live.
 - **Use / avoid:** use containers that grow with text; avoid truncating at the largest sizes [DC-L02-21, DC-L10-07].

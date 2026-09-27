@@ -22,8 +22,8 @@ tags:
 
 ## Metadata
 
-- Video ID: `vaul-snap-points`
-- Channel: Vaul docs (web)
+- Page ID: `vaul-snap-points`
+- Publisher: Vaul docs (web)
 - Published: Unknown
 - URL: https://vaul.emilkowal.ski/snap-points
 

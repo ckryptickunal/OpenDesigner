@@ -1,3 +1,11 @@
+---
+type: synthesis
+title: "Typography and content: Decision Cards (lane L19)"
+tags:
+  - decision-cards
+  - typography
+---
+
 # Typography and content: Decision Cards (lane L19)
 
 Area `typography` (OpenDesigner stages 10, 11 and 19; wiki topics Typography, and Content and microcopy). Cards DC-L19-21 to DC-L19-39. Each card adds something the existing L02, L06, L13 and L15 cards do not have, or flags where the trusted sources disagree with them.

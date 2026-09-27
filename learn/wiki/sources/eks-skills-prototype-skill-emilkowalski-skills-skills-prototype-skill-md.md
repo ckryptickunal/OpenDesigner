@@ -25,8 +25,8 @@ tags:
 
 ## Metadata
 
-- Video ID: `eks-skills-prototype-skill`
-- Channel: emilkowalski/skills (GitHub, MIT)
+- Page ID: `eks-skills-prototype-skill`
+- Publisher: emilkowalski/skills (GitHub, MIT)
 - Published: commit 85e8e23
 - URL: https://github.com/emilkowalski/skills/blob/85e8e23/skills/prototype/SKILL.md
 
@@ -140,7 +140,7 @@ The prototype skill from Emil Kowalski's skills repository turns one described p
 - **must** (tokens, all): With no project (an empty directory, or the user is just exploring), use the standalone branch and a restrained default look: neutral grays, one accent and the system font stack. Why: There are no project tokens to build on [inferred]. Values: neutral grays, one accent, system font stack. [choose a restrained default look: neutral grays, one accent, system font stack]
 - **must** (process, all): Build 3 variants by default; go up to 5 only when the user asks or the design space is genuinely wide. Why: The source gives no reason for 3; more than 5 dilutes the comparison. Values: 3, 5. [Phase 3 — Choose directions]
 - **must** (process, all): Never build more than 5 variants, even when asked for more (a request like '<description> x5' is capped at 5). Why: More than 5 dilutes the comparison. Values: 5, x5. [Phase 3; Invocation Variants: capped at 5]
-- **must** (process, all): Before writing any code, list the set of variants with a name and an axis for each. Why: Directions are chosen before building. [Phase 3 — Choose directions]
+- **must** (process, all): Before writing any code, list the set of variants with a name and an axis for each. Why: Directions are chosen before building. [Before writing any code, list the set: a name and an axis for each]
 - **must** (content, all): Name each variant for its direction, such as 'Quiet', 'Editorial', 'Playful' or 'Dense', never 'Option A/B/C'. Why: Names describe the direction. Values: Quiet, Editorial, Playful, Dense. [Phase 3 — Choose directions]
 - **must** (process, all): Do not count two directions that would differ only in accent color or copy as two: they are one direction, so replace one with a real alternative (a different layout, interaction model or motion story). Why: Differing only in accent color or copy is one direction, not two. [Phase 3 — Choose directions]
 - **must** (process, all): Do not start building until every variant has a name and a stated axis and no two variants share an axis position. Why: This is the completion criterion for choosing directions. [Phase 3: Completion criterion]

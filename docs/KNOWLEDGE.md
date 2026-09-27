@@ -41,8 +41,10 @@ A conflict is never settled silently.
 
 | Moment | What the skill does | Where it comes from |
 |---|---|---|
-| Start (`engine.py init`) | Applies every house standard that maps to a token or setting, locked, with `set_by: standard`. It says so once, in the first result: "I applied OpenDesigner's house standards for motion and components; say if you want to change one" | `references/standards.json` |
+| Start (`engine.py init`, `sketch`) | Applies every house standard that fits the project and maps to a token or setting, locked, with `set_by: standard`. It says so once, in the first result: "I applied OpenDesigner's house standards for motion and components; say if you want to change one" | `references/standards.json` |
+| Which standards fit | A standard applies when one of its `applies_to` tags is one of the project's tags. The project's tags are its platforms (web gives web and css; ios gives ios and swift; android gives android and compose; desktop gives desktop, web and css) plus its recorded stack (`raw.stack`, such as react or react-native). The stack is read from the project's `package.json` first; the agent asks once only when that file does not settle it | `rules.md` section 3 |
 | Each question | Recommends one option. The recommendation never contradicts a standard. Each option shows a visual sample of the same real screen, with **Now:** (what changes today) and **As it grows:** (what it means with more screens, people, platforms and content) | `questions.json` options, `synthesis/impact.json`, Decision Cards |
+| A question a standard settles | Not asked, like a Planned one: the stage file says **Settled by:** STD-..., and `questions.json` has `settled_by`. An option that would break a standard is marked "(breaks STD-...)", is never recommended, and `engine.py pick` refuses it unless the person has overridden that standard | the standard's `settles` and `breaks_options` |
 | Deciding without asking | Standards: apply, and mention once. Mechanical and low-impact questions: default, and list them at the next gate. "You pick": delegate, and give the reason | `rules.md` section 6, `learn/wiki/synthesis/decide-or-ask.md` |
 | "Why?" | Cites the card or standard, and its source | `cards/*.json`, `standards.json` |
 | Implementation | DESIGN.md lists the standards to follow. `engine.py review` flags code that breaks one (for example `transition: all`, or an enter animation from `scale(0)`) | `standards.json` → DESIGN.md, review checks |
@@ -54,11 +56,17 @@ This happens when the person shares a link or file and says to follow it, or to 
 1. **Authority.** If they did not say, ask the one question from section 1.
 2. **Consent to read.** Show the URL and get a yes (`guardrails.md` section 2). Paid, logged-in and paywalled content stays out of scope.
 3. **Read and extract.** Read it the way the repo does (`learn/README.md`, "The analysis schema"): rules with exact values, decisions, and examples. Show the person the extracted rules in plain words, 10 at most per message, and ask which to keep.
-4. **Record.**
-   - A non-negotiable rule: `engine.py standard add --rule "..." --why "..." --source <url> [--values '{...}'] [--path <token path> --value <json>]`. It becomes a project standard, locked like a house standard.
-   - A good-to-have rule: `engine.py set <path> <value> --set-by reference --source-ref <url>`, unlocked.
-   - A reference: `engine.py set references.<id> ...` (the reference intake of opendesigner-extract), which shapes options only.
-5. **Offer it upstream, once.** "Want to suggest this source to OpenDesigner for everyone?" After a yes, run `engine.py feedback "source: <url> (<authority>, why)" --kind idea`. It is sent only with their OK (`improve.md`).
+4. **Record.** One command records every kept rule, the same in every doc:
+   ```
+   engine.py standard add --rule "..." --why "..." --source <url, or "person, 2026-09-27"> [--path P --value V]... [--values '{...}'] [--review-pattern <regex> --review-message "..."] [--authority good-to-have] [--beats STD-a,STD-b]
+   ```
+   - **Non-negotiable:** the command as it is. It becomes a project standard, locked like a house standard. Repeat `--path` and `--value` once for each token the rule fixes. Add `--review-pattern` when code that breaks it can be found line by line. The source can be a link, a file name, or the person's own words with the date.
+   - **Good to have:** the same command with `--authority good-to-have`. OpenDesigner recommends it first, and it stays unlocked.
+   - **Reference:** record nothing. It shapes options, examples and explanations only. When the person picks a value from it, record that value with `engine.py set <path> <value> --set-by reference --source-ref <url>`.
+5. **When it clashes with a house standard,** say so once, then follow the person's words:
+   - **"It's our brand", "always", "non-negotiable for us":** a project standard that beats the house one. Add `--beats STD-...` to the command. The engine records "project wins", and it turns off those house standards' review checks and constraints for this project. `standard remove` turns them back on.
+   - **"Just this value", "just here":** an override of the house standard, not a new rule: `engine.py standard override <id> --why "<their words>"`.
+6. **Offer it upstream, once.** "Want to suggest this source to OpenDesigner for everyone?" Skip this for a local file or anything internal to their company. After a yes, run `engine.py feedback "source: <url> (<authority>, why)" --kind idea`. It is sent only with their OK (`improve.md`).
 
 ## 5. How the repo reacts to new knowledge
 
@@ -74,9 +82,12 @@ new link ─> learn/sources.json (authority) ─> fetch ─> analyse ─> verify
 
 Rules for every change:
 - **Standards are versioned.**
-  - `synthesis/standards.json` has a `version` and a content hash. Changing a standard without bumping the version fails the build: run `python3 tools/wiki.py standards --bump "what changed"`.
+  - `synthesis/standards.json` has a `version` and a content hash. Changing a standard without bumping the version fails the build: `tools/build_data.py` (and its `--check`) and `tools/wiki.py standards` exit 1 until you run `python3 tools/wiki.py standards --bump "what changed"`.
+  - The bump compares the file with the last commit, so it needs git. It refuses when nothing changed. A second bump before the commit amends the same version.
   - Each standard records the version it arrived in (`since`) and the version it last changed in (`changed`).
   - A removed standard moves to `retired`, with the reason. It never simply disappears.
+  - `built_from` records the analyses the standards were built from. Only the learn-standards merge sets it (`wiki.py standards --built-from`), so `wiki.py next` can say when a house source changed since.
+  - A standard may also carry `settles` (questions it answers), `breaks_options` (options that contradict it), `constraints` (values a token may not take, such as an accelerating curve) and `supersedes` (older Decision Cards it replaces). `wiki.py standards` checks that each names something real, and that no two standards set one token to different values.
 - **Reference material can't change a default by itself.** It proposes a change in a Decision Card (Part B of the lane file). That change needs to be verified and then applied to the source files in `synthesis/`. Only then does the build pick it up.
 - **Every claim traces to a source.**
   - Cards cite `S-L19-nnn` ids, and `jev_nav.py check` fails on a dangling one.
@@ -92,16 +103,17 @@ Rules for every change:
 
 A design system made with an older version keeps working. When the house standards change:
 - `engine.py validate` reports, as an advisory, that the house standards moved since this system was made. It lists how many are new, changed or retired.
-- `engine.py standards --update` applies the new and changed ones. Anything the person overrode stays overridden: their explicit choice outranks a standard (section 2). Retired standards are unlocked, not reverted.
-- The extend skill tells the person in one line, then shows what changed, grouped by area.
+- `engine.py standards --update` applies the new and changed ones. Anything the person overrode stays overridden: their explicit choice outranks a standard (section 2). Retired standards are unlocked, not reverted. Then `engine.py build` rebuilds the tokens, exports and DESIGN.md.
+- The extend skill runs `engine.py validate` first when it opens a project, so it notices. It tells the person in one line, then shows what changed, grouped by area.
+- `engine.py set --force` is for values the person locked. It never changes a value a standard holds; that takes `standard override`.
 - Project standards (section 4) belong to the person. House updates never touch them.
 
 ## 7. Who does what
 
 | Task | Who | Tool |
 |---|---|---|
-| Add a house source, pick its authority | the repo owner | `tools/wiki.py add` |
+| Add a house source, pick its authority | the repo owner | `tools/wiki.py add`, then the checklist in `learn/IMPROVING.md` section 4, "A new house source" |
 | Analyse, verify, synthesise | lane L19 (any agent following `_coordination/lanes/L19-learning-wiki.md`) | `.claude/workflows/learn-analyze.js`, `tools/wiki.py` |
 | Change a house standard | a maintainer, with a verified source | edit `synthesis/standards.json`, then `wiki.py standards --bump` |
-| Add a project source or standard | the person, in their project | the skill (section 4), `engine.py standard add` |
+| Add a project source or standard | the person, in their project | the skill (section 4), `engine.py standard add` (with `--beats` when it outranks a house standard) |
 | Override a standard in a project | the person, explicitly | `engine.py standard override <id> --why "<their words>"` |

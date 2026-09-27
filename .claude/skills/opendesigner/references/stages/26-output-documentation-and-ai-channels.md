@@ -8,7 +8,7 @@ Screen: the export menu and a preview of every file the builder will produce: to
 
 Zoom 3 (detailed) questions: `26-output-documentation-and-ai-channels.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
 ## Q-dist-01 · How should the system leave the builder?
 Zoom 2 defined · weight low · changes 0 decisions · class T · cards DC-L16-12

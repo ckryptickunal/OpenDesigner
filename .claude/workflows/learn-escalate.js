@@ -1,6 +1,6 @@
 export const meta = {
   name: 'learn-escalate',
-  whenToUse: 'After `python3 tools/wiki.py cite-check` (and `cite-check --standards`) leaves items flagged: a reasoning agent reads each against the raw source and confirms, fixes or removes it.',
+  whenToUse: 'After `python3 tools/wiki.py cite-check` (and `cite-check --standards`) leaves items flagged: a reasoning agent reads each against the raw source and confirms, fixes or removes it. Args: {"root": "<repo path>"}.',
   description: 'Review every rule and standard Jev flagged against the raw source, fix or confirm it, then re-check',
   phases: [
     { title: 'Collect', detail: 'read the flagged list from tools/wiki.py flagged --json' },
@@ -9,11 +9,13 @@ export const meta = {
   ],
 }
 
-// args (optional): {root}
-const ROOT = (args && args.root) || '/Users/Kunal/Desktop/Design-System'
+// args: {root: "<repo path>"}, the checkout whose flagged items it reviews
+if (!args || typeof args.root !== 'string' || !args.root)
+  throw new Error('learn-escalate needs args {"root": "<repo path>"}: the checkout whose citation-check items it reviews.')
+const ROOT = args.root
 
 const RULES = `Scratch work: put any helper script or temp file in a directory of your own (mktemp -d), and never run a script you did not write in this task (other agents share the scratch space).
-You are the escalation step of OpenDesigner's citation check (repo ${ROOT}; see learn/README.md, "cite-check"). TypeSafe's Jev judged each item below against the passage its evidence points to, and flagged it: its verdict was not "supports", or its confidence was under 0.8. A flag is NOT proof of an error: the passage finder may have looked in the wrong place. Decide by reading the raw source yourself (learn/raw/<folder>/<id>.txt; ids starting ek- are in emil-kowalski/, eks- in emil-skills/, sonner- in sonner/, adev- in animations-dev/, vaul- in vaul/, 11-character YouTube ids in kole-jain/, mobbin/ or videos/).
+You are the escalation step of OpenDesigner's citation check (repo ${ROOT}; see learn/README.md, "cite-check"). TypeSafe's Jev judged each item below against the passage its evidence points to, and flagged it: its verdict was not "supports", or its confidence was under 0.8. A flag is NOT proof of an error: the passage finder may have looked in the wrong place. Decide by reading the raw source yourself: each item names its raw file (from learn/sources.json, via python3 tools/wiki.py flagged --json). The raw text is git-ignored; if the file is missing, fetch it first with ${ROOT}/.venv-wiki/bin/python tools/wiki.py fetch --only "<source name>" (python3 tools/wiki.py status lists the names and folders).
 For each item decide one of:
 - confirmed: the source supports it as written. If its "evidence" string does not appear verbatim in the raw text, replace it with a short verbatim phrase that does, so the next check finds the right passage.
 - fixed: the source supports a different wording, value or strength. Edit it to match the source exactly.
@@ -26,9 +28,9 @@ const VERDICT = { type: 'object', properties: { items: { type: 'array', items: {
   required: ['item', 'decision', 'note'] } } }, required: ['items'] }
 const FLAGGED = { type: 'object', properties: {
   rules: { type: 'array', items: { type: 'object', properties: { source: { type: 'string' }, n: { type: 'integer' }, rule: { type: 'string' },
-    verdict: { type: 'string' }, confidence: { type: 'number' } }, required: ['source', 'n', 'rule', 'verdict', 'confidence'] } },
+    verdict: { type: 'string' }, confidence: { type: 'number' }, raw: { type: ['string', 'null'] } }, required: ['source', 'n', 'rule', 'verdict', 'confidence', 'raw'] } },
   standards: { type: 'array', items: { type: 'object', properties: { std: { type: 'string' }, source: { type: 'string' },
-    verdict: { type: 'string' }, confidence: { type: 'number' } }, required: ['std', 'source', 'verdict', 'confidence'] } } },
+    verdict: { type: 'string' }, confidence: { type: 'number' }, raw: { type: ['string', 'null'] } }, required: ['std', 'source', 'verdict', 'confidence', 'raw'] } } },
   required: ['rules', 'standards'] }
 
 phase('Collect')
@@ -53,7 +55,7 @@ phase('Review')
 const ruleResults = parallel(ruleGroups.map((g, i) => () => agent(`${RULES}
 
 Items (analysis rules; the file is ${ROOT}/learn/analysis/<source>.json and n is the index in its "rules" array; indices shift when you delete, so work from the highest n down):
-${g.map(x => x.items.map(r => `- ${x.src} rule ${r.n} [Jev: ${r.verdict} ${r.confidence}]: ${r.rule}`).join('\n')).join('\n')}`,
+${g.map(x => x.items.map(r => `- ${x.src} rule ${r.n} [Jev: ${r.verdict} ${r.confidence}; raw: ${r.raw ? `${ROOT}/${r.raw}` : 'not known: ls ' + ROOT + '/learn/raw/*/' + x.src + '.txt'}]: ${r.rule}`).join('\n')).join('\n')}`,
   { label: `rules:${i + 1}`, phase: 'Review', schema: VERDICT })))
 const stdResults = (async () => {
   const out = []
@@ -61,7 +63,7 @@ const stdResults = (async () => {
     out.push(await agent(`${RULES}
 
 Items (house standards in ${ROOT}/synthesis/standards.json; find each by id). Each names the source Jev could not confirm it against, but check ALL of the standard's sources before deciding: a standard stands if any cited source supports it, and a cited source that does not support it should be dropped from its "sources":
-${g.map(s => `- ${s.std} vs ${s.source} [Jev: ${s.verdict} ${s.confidence}]`).join('\n')}`,
+${g.map(s => `- ${s.std} vs ${s.source} [Jev: ${s.verdict} ${s.confidence}; raw: ${s.raw ? `${ROOT}/${s.raw}` : 'not known: ls ' + ROOT + '/learn/raw/*/' + s.source + '.txt'}]`).join('\n')}`,
       { label: `standards:${i + 1}`, phase: 'Review', schema: VERDICT }))
   }
   return out

@@ -824,18 +824,20 @@
  {
   "id": "core.reduced-motion",
   "term": "reduced motion",
-  "aka": [
-   "prefers-reduced-motion",
-   "Reduce Motion"
-  ],
   "plain": "A setting on your phone or computer that asks apps to move less, for people who get dizzy.",
-  "designer": "Keep feedback (color and opacity changes, crossfades) and remove travel: sliding, scaling, parallax and bounce. A good reduced mode still feels polished, not broken.",
+  "designer": "Treat WCAG 2.3.3 as required, though it is AAA. Keep feedback (color and opacity changes, crossfades); remove travel: sliding, scaling, parallax and bounce.",
   "engineer": "Web @media (prefers-reduced-motion: reduce); iOS Reduce Motion, Android Remove animations. OpenDesigner's motion mode (motion.reduced.tokens.json): short fades, movement at 0ms, no translate or scale.",
   "designer_says": "reduced motion, no travel",
   "code_name": "prefers-reduced-motion, motion.reduced.tokens.json",
+  "example": "With Reduce Motion on, a sliding panel fades in place.",
   "source": [
    "research/L04-shape-depth-motion.md DC-L04-25",
-   "synthesis/OPENDESIGNER-SPEC.md 7.4"
+   "synthesis/OPENDESIGNER-SPEC.md 7.4",
+   "synthesis/ontology.json found.motion.reduced"
+  ],
+  "aka": [
+   "prefers-reduced-motion",
+   "Reduce Motion"
   ]
  },
  {

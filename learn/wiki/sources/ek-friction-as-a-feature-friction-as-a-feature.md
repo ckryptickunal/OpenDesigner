@@ -23,8 +23,8 @@ tags:
 
 ## Metadata
 
-- Video ID: `ek-friction-as-a-feature`
-- Channel: Emil Kowalski (web)
+- Page ID: `ek-friction-as-a-feature`
+- Publisher: Emil Kowalski (web)
 - Published: Unknown
 - URL: https://emilkowal.ski/ui/friction-as-a-feature
 
