@@ -568,3 +568,110 @@ Append-only. One row per source opened, including rejected ones. Id ranges: S-L0
 | 14:31 | S-L09-764 | https://report.zeroheight.com/ | zeroheight | 2026 edition (live) | A | used | n=147; tokens 86%; primitive 90 / semantic 85 / component 52 |
 | 14:31 | S-L09-765 | https://atlassian.design/sitemap.xml ; /sitemap-index.xml ; /robots.txt | Atlassian | n/a | A | rejected (all return the Gatsby 404 shell) | nothing |
 | 14:32 | S-L09-766 | https://ds-cdn.prod-east.frontend.public.atl-paas.net/assets/font-rules/v6/atlassian-fonts.css | Atlassian | undated (live) | A | rejected (only @font-face rules, no provenance text) | nothing |
+
+## Porsche Design System follow-up, 2026-09-25
+
+| Time | ID | URL | Publisher | Date / version | Tier | Status | Used for |
+|---|---|---|---|---|---|---|---|
+| 2026-09-25 | S-L09-817 | https://registry.npmjs.org/@porsche-design-system/components-js/4.7.0 | Porsche | 4.7.0 | A | used | Package version and publisher |
+| 2026-09-25 | S-L09-818 | https://cdn.jsdelivr.net/npm/@porsche-design-system/components-js@4.7.0/LICENSE.md | Porsche | 4.7.0 | A | used | Separate code and asset licenses |
+| 2026-09-25 | S-L09-819 | https://designsystem.porsche.com/v4/ | Porsche | v4 live | A | used | Framework support, coded source of truth and earlier-release banner |
+| 2026-09-25 | S-L09-820 | https://registry.npmjs.org/@porsche-design-system/components-js/-/components-js-4.7.0.tgz | Porsche | 4.7.0 | A | used | Published token modules and package layout |
+| 2026-09-25 | S-L09-821 | https://cdn.jsdelivr.net/npm/@porsche-design-system/components-js@4.7.0/tokens/esm/color/light-dark/background/colorCanvas.mjs | Porsche | 4.7.0 | A | used | Mode-combining role; imports followed in archive |
+| 2026-09-25 | S-L09-822 | https://designsystem.porsche.com/v4/tokens/font/ | Porsche | v4 live | A | used | Type, family, line-height and weights; cross-checked with archive font modules |
+| 2026-09-25 | S-L09-823 | https://designsystem.porsche.com/v4/tokens/spacing/ | Porsche | v4 live | A | used | Static/fluid spacing; cross-checked with archive |
+| 2026-09-25 | S-L09-824 | https://designsystem.porsche.com/v4/tokens/border/ | Porsche | v4 live | A | used | Radius scale; cross-checked with archive |
+| 2026-09-25 | S-L09-825 | https://designsystem.porsche.com/v4/stylesheets/css-variables/api/ | Porsche | v4 live | A | used | Shadows and motion; cross-checked with archive |
+| 2026-09-25 | S-L09-826 | https://designsystem.porsche.com/v4/news/migration-guide/scss/ | Porsche | v4 live | A | used | Large radius migration 12 to 8px |
+## Duet follow-up, 2026-09-25
+
+| Time | ID | URL | Publisher | Date / version | Tier | Status | Used for |
+|---|---|---|---|---|---|---|---|
+| 2026-09-25 | S-L09-807 | https://www.duetds.com/about/ | LocalTapiola | live | A | used | Ownership, two brands, intended use and accessibility target |
+| 2026-09-25 | S-L09-808 | https://registry.npmjs.org/@duetds/tokens/5.1.5 | LocalTapiola | 5.1.5 | A | used | Token package version |
+| 2026-09-25 | S-L09-809 | https://cdn.jsdelivr.net/npm/@duetds/tokens@5.1.5/LICENSE.md | LocalTapiola | 5.1.5 | A | used | Restricted package license |
+| 2026-09-25 | S-L09-810 | https://www.duetds.com/tokens/ | LocalTapiola | live | A | used | Token names and export formats |
+| 2026-09-25 | S-L09-811 | https://cdn.jsdelivr.net/npm/@duetds/tokens@5.1.5/lib/tokens.json | LocalTapiola | 5.1.5 | A | used | Published values and extra 94px spacing step |
+| 2026-09-25 | S-L09-812 | https://www.duetds.com/typography/ | LocalTapiola | live | A | used | Type scale, base and typeface distribution |
+| 2026-09-25 | S-L09-813 | https://www.duetds.com/spacing/ | LocalTapiola | live | A | used | Recommended spacing scale and patterns |
+| 2026-09-25 | S-L09-814 | https://www.duetds.com/using-components/ | LocalTapiola | live | A | used | Web Components and React wrapper |
+| 2026-09-25 | S-L09-815 | https://www.duetds.com/accessibility/ | LocalTapiola | live | A | used | Checklist categories, not a conformance result |
+## GC Design System follow-up, 2026-09-25
+
+| Time | ID | URL | Publisher | Date / version | Tier | Status | Used for |
+|---|---|---|---|---|---|---|---|
+| 2026-09-25 | S-L09-827 | https://registry.npmjs.org/@cdssnc/gcds-tokens/2.14.0 | Canadian Digital Service | 2.14.0 | A | used | Package identity, license and version |
+| 2026-09-25 | S-L09-828 | https://cdn.jsdelivr.net/npm/@cdssnc/gcds-tokens@2.14.0/README.md | Canadian Digital Service | 2.14.0 | A | used | Build, distribution, bilingual documentation and historical doc host |
+| 2026-09-25 | S-L09-829 | https://design-system.canada.ca/en/styles/design-tokens/ | Canadian Digital Service | live | A | used | Token tiers and intended reuse |
+| 2026-09-25 | S-L09-830 | https://cdn.jsdelivr.net/npm/@cdssnc/gcds-tokens@2.14.0/build/web/css/global/color.css | Canadian Digital Service | 2.14.0 | A | used | Semantic colors and focus roles |
+| 2026-09-25 | S-L09-831 | https://cdn.jsdelivr.net/npm/@cdssnc/gcds-tokens@2.14.0/build/web/css/global/typography/fontFamilies.css | Canadian Digital Service | 2.14.0 | A | used | Typeface stacks |
+| 2026-09-25 | S-L09-832 | https://cdn.jsdelivr.net/npm/@cdssnc/gcds-tokens@2.14.0/build/web/css/global/typography/fontSizes.css | Canadian Digital Service | 2.14.0 | A | used | Desktop and mobile type scales |
+| 2026-09-25 | S-L09-833 | https://cdn.jsdelivr.net/npm/@cdssnc/gcds-tokens@2.14.0/build/web/css/global/typography/lineHeights.css | Canadian Digital Service | 2.14.0 | A | used | Desktop and mobile line-height ratios |
+| 2026-09-25 | S-L09-834 | https://cdn.jsdelivr.net/npm/@cdssnc/gcds-tokens@2.14.0/build/web/css/global/spacing.css | Canadian Digital Service | 2.14.0 | A | used | Spacing scale |
+| 2026-09-25 | S-L09-835 | https://cdn.jsdelivr.net/npm/@cdssnc/gcds-tokens@2.14.0/build/web/css/global/border.css | Canadian Digital Service | 2.14.0 | A | used | Radius and width values |
+
+## GC Design System update to @gcds-core/tokens, 2026-09-27
+
+| Time | ID | URL | Publisher | Date / version | Tier | Status | Used for |
+|---|---|---|---|---|---|---|---|
+| 2026-09-27 | S-L09-839 | https://registry.npmjs.org/@gcds-core/tokens/1.6.0 ; https://registry.npmjs.org/@cdssnc/gcds-tokens | Canadian Digital Service | 1.6.0 | A | used | Package version, date, MIT license; deprecation notice on the old package |
+| 2026-09-27 | S-L09-840 | https://cdn.jsdelivr.net/npm/@gcds-core/tokens@1.6.0/README.md | Canadian Digital Service | 1.6.0 | A | used | Identity, distribution, bilingual README and contribution section |
+| 2026-09-27 | S-L09-841 | https://cdn.jsdelivr.net/npm/@gcds-core/tokens@1.6.0/build/web/css/global/color.css | Canadian Digital Service | 1.6.0 | A | used | Semantic colors and focus roles (five changed since 2.14.0) |
+| 2026-09-27 | S-L09-842 | https://cdn.jsdelivr.net/npm/@gcds-core/tokens@1.6.0/build/web/css/global/typography/fontFamilies.css | Canadian Digital Service | 1.6.0 | A | used | Typeface stacks |
+| 2026-09-27 | S-L09-843 | https://cdn.jsdelivr.net/npm/@gcds-core/tokens@1.6.0/build/web/css/global/typography/fontSizes.css | Canadian Digital Service | 1.6.0 | A | used | Desktop and mobile type scales (unchanged) |
+| 2026-09-27 | S-L09-844 | https://cdn.jsdelivr.net/npm/@gcds-core/tokens@1.6.0/build/web/css/global/typography/lineHeights.css | Canadian Digital Service | 1.6.0 | A | used | Line heights (unchanged) |
+| 2026-09-27 | S-L09-845 | https://cdn.jsdelivr.net/npm/@gcds-core/tokens@1.6.0/build/web/css/global/spacing.css | Canadian Digital Service | 1.6.0 | A | used | Spacing scale (unchanged) |
+| 2026-09-27 | S-L09-846 | https://cdn.jsdelivr.net/npm/@gcds-core/tokens@1.6.0/build/web/css/global/border.css | Canadian Digital Service | 1.6.0 | A | used | Radius and width (unchanged) |
+## Cloudscape follow-up, 2026-09-25
+
+| Time | ID | URL | Publisher | Date / version | Tier | Status | Used for |
+|---|---|---|---|---|---|---|---|
+| 2026-09-25 | S-L09-797 | https://cdn.jsdelivr.net/npm/@cloudscape-design/design-tokens@3.0.113/README.md | AWS Cloudscape | 3.0.113 | A | used | History, ownership, governance and license |
+| 2026-09-25 | S-L09-798 | https://registry.npmjs.org/@cloudscape-design/design-tokens/3.0.113 | AWS Cloudscape | 3.0.113 | A | used | Published metadata |
+| 2026-09-25 | S-L09-799 | https://cdn.jsdelivr.net/npm/@cloudscape-design/design-tokens@3.0.113/index-visual-refresh.json | AWS Cloudscape | 3.0.113 | A | used | Resolved tokens and mode/context maps |
+| 2026-09-25 | S-L09-800 | https://cloudscape.design/foundation/visual-foundation/typography/ | AWS Cloudscape | live | A | used | Font family and hierarchy |
+| 2026-09-25 | S-L09-801 | https://cloudscape.design/foundation/visual-foundation/spacing/ | AWS Cloudscape | live | A | used | Documented spacing scale and grid |
+| 2026-09-25 | S-L09-802 | https://cloudscape.design/foundation/visual-foundation/motion/ | AWS Cloudscape | live | A | used | Motion semantics |
+| 2026-09-25 | S-L09-803 | https://cloudscape.design/foundation/core-principles/accessibility/ | AWS Cloudscape | live | A | used | Consumer accessibility responsibilities |
+| 2026-09-25 | S-L09-804 | https://cloudscape.design/foundation/visual-foundation/design-tokens/ | AWS Cloudscape | live | A | used | Token consumption guidance |
+| 2026-09-25 | S-L09-805 | https://github.com/cloudscape-design/components | AWS Cloudscape | live | A | used | React implementation |
+## NYPL Reservoir follow-up, 2026-09-25
+
+| Time | ID | URL | Publisher | Date / version | Tier | Status | Used for |
+|---|---|---|---|---|---|---|---|
+| 2026-09-25 | S-L09-787 | https://github.com/NYPL/nypl-design-system/blob/3a425277959ca46eabecdfe3f5e6cecd73a160ab/README.md | NYPL | 3a425277959c | A | used | Identity, setup, documentation and accessibility process |
+| 2026-09-25 | S-L09-788 | https://github.com/NYPL/nypl-design-system/blob/3a425277959ca46eabecdfe3f5e6cecd73a160ab/package.json | NYPL | 3a425277959c | A | used | Version, license, dependencies and peer range |
+| 2026-09-25 | S-L09-789 | https://github.com/NYPL/nypl-design-system/blob/3a425277959ca46eabecdfe3f5e6cecd73a160ab/src/theme/foundations/colors.ts | NYPL | 3a425277959c | A | used | Primitives, UI modes and Figma references |
+| 2026-09-25 | S-L09-790 | https://github.com/NYPL/nypl-design-system/blob/3a425277959ca46eabecdfe3f5e6cecd73a160ab/src/theme/foundations/typography.ts | NYPL | 3a425277959c | A | used | Responsive type, weights and mismatched comment |
+| 2026-09-25 | S-L09-791 | https://github.com/NYPL/nypl-design-system/blob/3a425277959ca46eabecdfe3f5e6cecd73a160ab/src/theme/foundations/spacing.ts | NYPL | 3a425277959c | A | used | Preferred subset and component spacing |
+| 2026-09-25 | S-L09-792 | https://github.com/NYPL/nypl-design-system/blob/3a425277959ca46eabecdfe3f5e6cecd73a160ab/src/theme/foundations/radii.ts | NYPL | 3a425277959c | A | used | Component and shape radii |
+| 2026-09-25 | S-L09-793 | https://github.com/NYPL/nypl-design-system/blob/3a425277959ca46eabecdfe3f5e6cecd73a160ab/src/theme/foundations/shadows.ts | NYPL | 3a425277959c | A | used | Local shadow override |
+| 2026-09-25 | S-L09-794 | https://github.com/NYPL/nypl-design-system/blob/3a425277959ca46eabecdfe3f5e6cecd73a160ab/src/theme/foundations/breakpoints.ts | NYPL | 3a425277959c | A | used | Responsive breakpoint values |
+| 2026-09-25 | S-L09-795 | https://registry.npmjs.org/@nypl/design-system-react-components/4.5.1 | NYPL | 4.5.1 | A | used | Published release metadata |
+## Elastic EUI follow-up, 2026-09-25
+
+| Time | ID | URL | Publisher | Date / version | Tier | Status | Used for |
+|---|---|---|---|---|---|---|---|
+| 2026-09-25 | S-L09-777 | https://registry.npmjs.org/@elastic/eui-theme-borealis/8.1.0 | Elastic | 8.1.0 | A | used | Release metadata |
+| 2026-09-25 | S-L09-778 | https://github.com/elastic/eui/blob/57dd70bc43f1f8b03a192b76f45570efd502f140/packages/eui-theme-borealis/README.md | Elastic | 57dd70bc43f1 | A | used | Theme export identity |
+| 2026-09-25 | S-L09-779 | https://cdn.jsdelivr.net/npm/@elastic/eui-theme-borealis@8.1.0/lib/eui_theme_borealis_light.json | Elastic | 8.1.0 | A | used | Published light colors, typography and role radii |
+| 2026-09-25 | S-L09-780 | https://github.com/elastic/eui/blob/57dd70bc43f1f8b03a192b76f45570efd502f140/packages/eui-theme-borealis/src/variables/_typography.ts | Elastic | 57dd70bc43f1 | A | used | Type scale and weights |
+| 2026-09-25 | S-L09-781 | https://github.com/elastic/eui/blob/57dd70bc43f1f8b03a192b76f45570efd502f140/packages/eui-theme-borealis/src/variables/_borders.ts | Elastic | 57dd70bc43f1 | A | used | Computed border and radius roles; license header |
+| 2026-09-25 | S-L09-782 | https://github.com/elastic/eui/blob/57dd70bc43f1f8b03a192b76f45570efd502f140/packages/eui-theme-borealis/src/variables/_size.ts | Elastic | 57dd70bc43f1 | A | used | Base and sizing factors |
+| 2026-09-25 | S-L09-783 | https://cdn.jsdelivr.net/npm/@elastic/eui-theme-borealis@8.1.0/lib/eui_theme_borealis_dark.json | Elastic | 8.1.0 | A | used | Published dark colors |
+| 2026-09-25 | S-L09-784 | https://github.com/elastic/eui/blob/57dd70bc43f1f8b03a192b76f45570efd502f140/packages/eui-theme-borealis/src/variables/_animation.ts | Elastic | 57dd70bc43f1 | A | used | Timing and curves |
+| 2026-09-25 | S-L09-785 | https://eui.elastic.co/docs/getting-started/theming/tokens/sizing/ | Elastic | live | A | used | Resolved spacing values |
+| 2026-09-25 | S-L09-786 | https://eui.elastic.co/docs/getting-started/theming/high-contrast-mode/ | Elastic | live | A | used | Independent contrast preference |
+| 2026-09-25 | S-L09-837 | https://eui.elastic.co/docs/getting-started/theming/tokens/borders/ | Elastic | live | A | used | Border sample `#E3E8F2` (matches 8.1.0 `euiBorderColor`); prose names `colors.lightShade`, source uses `borderBaseSubdued` |
+| 2026-09-25 | S-L09-838 | https://eui.elastic.co/docs/getting-started/accessibility/ | Elastic | live | A | used | Accessibility target and integration responsibilities |
+## Workday Canvas follow-up, 2026-09-25
+
+| Time | ID | URL | Publisher | Date / version | Tier | Status | Used for |
+|---|---|---|---|---|---|---|---|
+| 2026-09-25 | S-L09-767 | https://registry.npmjs.org/@workday/canvas-tokens-web/4.5.0 | Workday | 4.5.0 | A | used | Package version, license and exports |
+| 2026-09-25 | S-L09-768 | https://github.com/Workday/canvas-tokens/blob/e62a99610bbc0cc59f146781bcca6825cfb1028f/README.md | Workday | e62a99610bbc | A | used | Support policy and token license |
+| 2026-09-25 | S-L09-769 | https://github.com/Workday/canvas-tokens/blob/e62a99610bbc0cc59f146781bcca6825cfb1028f/packages/canvas-tokens/tokens/base.json | Workday | e62a99610bbc | A | used | Base palette, sizes and font families |
+| 2026-09-25 | S-L09-770 | https://github.com/Workday/canvas-tokens/blob/e62a99610bbc0cc59f146781bcca6825cfb1028f/packages/canvas-tokens/tokens/web/sys.json | Workday | e62a99610bbc | A | used | System aliases, gaps, shape, type and migration names |
+| 2026-09-25 | S-L09-771 | https://github.com/Workday/canvas-tokens/blob/e62a99610bbc0cc59f146781bcca6825cfb1028f/packages/canvas-tokens/tokens/web/brand.json | Workday | e62a99610bbc | A | used | Brand primary aliases |
+| 2026-09-25 | S-L09-772 | https://unpkg.com/@workday/canvas-tokens-web@4.5.0/css/base/_variables.css | Workday | 4.5.0 | A | used | Published base CSS; inspected in npm archive |
+| 2026-09-25 | S-L09-773 | https://unpkg.com/@workday/canvas-tokens-web@4.5.0/css/system/_variables.css | Workday | 4.5.0 | A | used | Published system CSS; inspected in npm archive |
