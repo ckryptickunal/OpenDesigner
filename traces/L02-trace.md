@@ -69,3 +69,10 @@ Append-only. One row per source opened, including rejected ones.
 | 14:40 | S-L02-032 (re-read) | https://www.designtokens.org/tr/2025.10/format/ (local copy, sections 8.2, 8.4) | W3C DTCG | Final CG Report 2025-10-28 | A | used | confirms in the stable report: fontWeight number 1-1000 or aliases 100 thin/hairline ... 950 extra-black/ultra-black, invalid otherwise; dimension units only px and rem (px = dp on Android, pt on iOS) |
 | 14:41 | S-L02-063 | /Users/Kunal/Desktop/Design-System/sources/COMMUNITY-SIGNAL.md | L00 lane (this project) | 2026-09-23 | C (community pulse, with Tier A checks) | used for reconciliation | DTCG 2025.10 is stable (matches S-L02-032); code is the source of truth, Figma variables mirror it; Style Dictionary v5; "Figma supports DTCG" claim needs care; no typography-specific disputes listed |
 | 14:41 | S-L02-064 | WebSearch "iOS Safari zooms input font-size less than 16px..." | n/a | n/a | n/a | rejected (session web-search budget of 200 exhausted) | nothing; claim left as [inferred] |
+
+## 2026-09-25: issue #2 verification
+
+| Time | ID | URL | Publisher | Date | Tier | Status | Used for |
+|---|---|---|---|---|---|---|---|
+| 2026-09-25 | S-L02-065 | https://registry.npmjs.org/@fluentui/react-theme/9.2.2 ; https://registry.npmjs.org/@fluentui/tokens/-/tokens-1.0.0-alpha.24.tgz | Microsoft Fluent UI (published packages) | exact versions 9.2.2 / 1.0.0-alpha.24 | A | used | react-theme dependency; lib/global/fonts.js and typographyStyles.js: subtitle1 maps to 20px/28px/600 |
+| 2026-09-25 | S-L02-066 | https://fluent2.microsoft.design/typography | Microsoft Fluent | live, checked 2026-09-25 | A | used, conflict retained | Web Subtitle 1 remains semibold 20px/26px; not the published React v9 line height |
