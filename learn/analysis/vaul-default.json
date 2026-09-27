@@ -1,0 +1,73 @@
+{
+  "summary": "This Vaul docs page shows the basic drawer setups: the default bottom drawer, a side drawer, nested drawers, a scrollable drawer and a controlled drawer. A side drawer is made by setting direction to \"right\" or \"left\", and the --initial-transform CSS variable adjusts its animation, which is useful when the drawer does not touch the screen edge. The scrollable drawer's behaviour mimics Apple's Sheet component. A controlled drawer uses the open prop to open or close programmatically, and onOpenChange lets it react to Escape and outside clicks. For a design system it lists the drawer variants a drawer component can offer, and a CSS variable for adjusting the animation of drawers that do not touch the screen edge.",
+  "key_ideas": [
+    "The default drawer is the most basic setup.",
+    "Setting direction to \"right\" or \"left\" turns the drawer into a side drawer.",
+    "The --initial-transform CSS variable adjusts the drawer's animation.",
+    "--initial-transform is useful when the drawer does not touch the edge of the screen.",
+    "Drawers can be nested inside each other.",
+    "A scrollable drawer can mimic the behaviour of Apple's Sheet component.",
+    "The open prop opens or closes the drawer programmatically.",
+    "onOpenChange is called when the open state changes, so a controlled drawer can react to Escape and outside clicks."
+  ],
+  "entities": [
+    {"name": "Vaul", "type": "library", "description": "Drawer component whose basic setups this page demonstrates."},
+    {"name": "Apple Sheet", "type": "product", "description": "Apple's Sheet component, whose behaviour the scrollable drawer mimics."},
+    {"name": "--initial-transform", "type": "concept", "description": "CSS variable that adjusts the drawer's animation, for drawers that do not touch the screen edge."},
+    {"name": "onOpenChange", "type": "concept", "description": "Callback fired when the drawer's open state changes; used to react to Escape and outside clicks when controlled."},
+    {"name": "aiforui.dev", "type": "product", "description": "Course advertised in the page banner; not part of the docs content."}
+  ],
+  "topics": [
+    {"name": "Drawers and sheets", "summary": "Variants of a drawer: default bottom, side (right or left), nested, scrollable like Apple's Sheet, and controlled."},
+    {"name": "Motion principles", "summary": "The --initial-transform CSS variable adjusts the drawer's animation, useful when the drawer does not touch the screen edge."},
+    {"name": "Web implementation (CSS and React)", "summary": "The direction prop, the --initial-transform CSS variable, and the controlled open / onOpenChange pattern."}
+  ],
+  "claims": [
+    {"claim": "Setting the direction prop to \"right\" or \"left\" changes the drawer's position.", "evidence": "Side drawer"},
+    {"claim": "The --initial-transform CSS variable adjusts the drawer's animation and is useful when the drawer does not touch the edge of the screen.", "evidence": "Side drawer"},
+    {"claim": "Vaul drawers can be nested inside each other.", "evidence": "Nested Drawers"},
+    {"claim": "The scrollable drawer's behaviour mimics Apple's Sheet component.", "evidence": "Scrollable"},
+    {"claim": "onOpenChange is called when the open state changes and lets a controlled drawer react to Escape and outside clicks.", "evidence": "Controlled"},
+    {"claim": "The open prop opens or closes the drawer programmatically.", "evidence": "Controlled"}
+  ],
+  "quotes": [
+    "The behavior here mimics Apple's Sheet component.",
+    "The most basic setup for a drawer."
+  ],
+  "tags": ["vaul", "drawer", "side-drawer", "nested-drawers", "scrollable", "controlled", "react"],
+  "authority": "good-to-have",
+  "rules": [
+    {"rule": "Make a side drawer by setting direction to \"right\" or \"left\".", "why": "The direction prop changes the position of the drawer.", "kind": "do", "strength": "consider", "area": "components", "applies_to": "react", "values": ["direction", "\"right\"", "\"left\""], "evidence": "Side drawer"},
+    {"rule": "When a drawer does not touch the edge of the screen, adjust its animation with the --initial-transform CSS variable.", "why": "The variable adjusts the animation, which the source calls useful when the drawer does not touch the screen edge.", "kind": "do", "strength": "should", "area": "motion", "applies_to": "css", "values": ["--initial-transform"], "evidence": "Side drawer"},
+    {"rule": "For a scrollable drawer, consider mimicking the behaviour of Apple's Sheet component, as Vaul's scrollable demo does.", "why": "The source's scrollable drawer mimics Apple's Sheet.", "kind": "do", "strength": "consider", "area": "components", "applies_to": "all", "values": [], "evidence": "Scrollable"},
+    {"rule": "When you control the drawer with the open prop and need to react to Escape or outside clicks, also pass onOpenChange.", "why": "onOpenChange is called when the open state changes, which the source says is useful for reacting to esc/outside clicks when controlled.", "kind": "do", "strength": "should", "area": "components", "applies_to": "react", "values": ["open", "onOpenChange"], "evidence": "Controlled"},
+    {"rule": "To open a drawer from inside another drawer, nest one drawer inside the other.", "why": "The source shows nesting drawers inside each other as a supported setup.", "kind": "do", "strength": "consider", "area": "components", "applies_to": "react", "values": [], "evidence": "Nested Drawers"}
+  ],
+  "decisions": [
+    {"question": "Which edge should the drawer slide in from?", "options": [
+      {"name": "Bottom", "effect": "The default drawer.", "when": "The default setup."},
+      {"name": "Right", "effect": "A side drawer on the right.", "when": "Not stated by the source."},
+      {"name": "Left", "effect": "A side drawer on the left.", "when": "Not stated by the source."}
+    ], "recommendation": null, "maps_to": null, "evidence": "Default; Side drawer"},
+    {"question": "Should the app control when the drawer opens and closes?", "options": [
+      {"name": "Uncontrolled", "effect": "The drawer manages its own open state [inferred].", "when": "When code does not need to open or close the drawer [inferred]."},
+      {"name": "Controlled (open + onOpenChange)", "effect": "Code opens or closes the drawer and can react to Escape and outside clicks.", "when": "When you need to open or close the drawer programmatically."}
+    ], "recommendation": null, "maps_to": null, "evidence": "Default; Controlled"}
+  ],
+  "process": [],
+  "examples": [
+    {"what": "Default drawer demo", "where": "Vaul docs, Default", "visual_note": "An 'Open Drawer' button opening the most basic drawer; visuals and code were not captured in the raw text."},
+    {"what": "Side drawer demo", "where": "Vaul docs, Default", "visual_note": "A drawer opened from the side that does not touch the screen edge, which is why the page points to --initial-transform."},
+    {"what": "Nested drawers demo", "where": "Vaul docs, Default", "visual_note": "A drawer opened from inside another drawer."},
+    {"what": "Scrollable drawer demo", "where": "Vaul docs, Default", "visual_note": "A drawer with scrolling content that behaves like Apple's Sheet."},
+    {"what": "Controlled drawer demo", "where": "Vaul docs, Default", "visual_note": "A drawer opened and closed through the open prop."}
+  ],
+  "numbers": [],
+  "caveats": [
+    "Every page carries a banner advertising the aiforui.dev course ('31 minutes left to join'); it is self-promotion and time-sensitive.",
+    "The demos' code and visuals were not captured in the raw text; only the prose under each heading is available.",
+    "The page does not give values for --initial-transform or say when to prefer a side drawer.",
+    "Published date is unknown.",
+    "Not in this page: learn/sources.json records that the Vaul README says the library is unmaintained (checked 2026-09-24); flag that before recommending it as a dependency."
+  ]
+}

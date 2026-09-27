@@ -16,10 +16,15 @@ Zoom 2 defined · weight high · changes 5 decisions · class T · cards DC-L06-
 - **Why:** Your voice stays the same everywhere, while tone changes with the moment. The product's words and its look must match [DC-L06-18].
 - **Options:**
   - `upload` Upload an existing guide [DC-L06-18].
+    - Now: Your existing guide becomes the rules for all product words. As it grows: Every new screen, error and empty state follows it, and copy arguments settle by pointing to it.
   - `plainspoken` Plainspoken and genuine, dry humor (Mailchimp).
+    - Now: Plainspoken and genuine, with dry humor, like Mailchimp. As it grows: Voice stays the same everywhere while tone softens for errors and serious moments, so humor gets rationed. [inferred]
   - `warm-crisp` Warm and relaxed, crisp and clear, ready to lend a hand (Microsoft).
+    - Now: Warm and relaxed, crisp and clear, ready to help, like Microsoft. As it grows: Holds up as more writers join, as long as each trait has a 'but not' so it isn't vague. [inferred]
   - `bold-optimistic` Bold, optimistic, practical with a wink (Atlassian).
+    - Now: Bold, optimistic and practical with a wink, like Atlassian. As it grows: Optimism must not hide bad news, so error and billing messages need a plainer tone. [inferred]
   - `custom` Your own traits, set on NN/g's four tone scales, with words to avoid.
+    - Now: Your own 3-4 traits in 'X, but not Y' form, with words to avoid. As it grows: Example lines per trait let new writers and AI tools match it; a content designer should review it. [inferred]
 - **Default:** drafted from the personality sliders: 3-4 traits with "but not", 3 copy examples per trait *Source:* card heuristic [DC-L06-18].
 - **Show:** the error, empty state and success message rewritten in the chosen voice.
 - **Use / avoid:** use the traits to decide copy disputes; avoid traits every product could claim ("simple", "friendly") without a "but not" [DC-L06-18; DC-L11-05].

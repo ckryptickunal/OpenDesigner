@@ -16,9 +16,13 @@ Zoom 0 sketch · weight high · changes 3 decisions · class E · cards DC-L09-0
 - **Why:** Hand-picked colors keep the brand's exact feel; a seed color gives even shades. Contrast targets make text on every color easy to read, in a way you can predict [L09 divergence 6; DC-L09-03].
 - **Options:**
   - `keep-hex` Keep your exact brand colors and tune the shades by hand (Carbon, Primer, Atlassian, GOV.UK) [DC-L09-03].
+    - Now: Your exact brand colors stay, and a person tunes each shade by hand. As it grows: Keeps the brand's nuance, but every new color, mode or theme needs hand-tuning again. [inferred]
   - `seed` Generate from one seed color (Material HCT, Ant, Blade `createTheme`, Fluent brand ramp) [DC-L09-03].
+    - Now: One color generates even, matching shades for everything, like Material and Ant. As it grows: New colors and dark mode come out consistent; still check contrast, since Ant's own default blue fails with white text.
   - `seed-3` Generate from three inputs: brand color, neutral base and contrast (Linear replaced 98 per-theme variables with 3) [DC-L06-06].
+    - Now: Three inputs (brand color, gray base and contrast) generate the whole palette. As it grows: Easy to retheme later: Linear replaced 98 per-theme variables with these three.
   - `contrast-targets` Set each step by a contrast goal (Spectrum Leonardo, USWDS grades, Radix APCA steps) [DC-L09-03].
+    - Now: Each shade is set by a contrast goal, so text on every color stays readable. As it grows: Readability stays predictable across every new color and theme you add.
 - **Default:** seed-3 in OKLCH with contrast-checked steps; locked brand hexes are pinned to the nearest step, and the UI fill uses the step that reaches 4.5:1 with its text *Source:* card heuristics [DC-L09-03, DC-L06-06, DC-L01-09].
 - **Show:** the seed becomes ramps live; locked hexes show a pin on their step; a light brand color (yellow, cyan, lime) visibly switches its button text to dark (Spectrum does this) [S-L01-036].
 - **Use / avoid:** use the brand hex as a ramp anchor and pick UI steps by contrast; avoid using a brand color whose ratio with white is below 3:1 for small text; use it as a fill with dark text or as a tint [DC-L01-09].
@@ -31,10 +35,15 @@ Zoom 1 broad · weight high · changes 3 decisions · class G · cards DC-L06-04
 - **Why:** Where brand color goes (on actions only, on containers, or on whole surfaces) shapes the look. It is third on L09's (inferred) ranking of visual differences [L09 divergence 3; DC-L06-04].
 - **Options:**
   - `accent` Only on main actions, links, status and the selected tab: calm, content-first (Apple HIG, Carbon).
+    - Now: Brand color only on main buttons, links, status and the selected tab: calm and content-first. As it grows: Stays calm as screens multiply and suits Apple's glass look; each view gives the color to one key element.
   - `signature-surface` One standout area carries the brand: instantly recognizable silhouette (Slack aubergine sidebar).
+    - Now: One standout area, like Slack's purple sidebar, carries the brand: instantly recognizable. As it grows: Every new layout must keep room for that area, or the recognition fades. [inferred]
   - `flooded-chrome` Brand color on the app bars and floating buttons: playful, louder (M2 style, rated more playful).
+    - Now: Brand color on the app bars and floating buttons: louder and more playful. As it grows: Normal on Android, but on iOS 26 a tinted bar reads as dated and 'fighting the glass'. [inferred]
   - `content-layer` Brand color in the content, scrolling under glass controls: modern, dynamic (Apple 2026).
+    - Now: Brand color lives in the content, which scrolls under clear glass controls: modern, Apple 2026 style. As it grows: Each new screen needs colorful content to show the brand, and glass over bright content needs dimming for contrast. [inferred]
   - `neutral-first` Mostly gray, with a faint brand tint on bars and menus (Linear limited its blue there).
+    - Now: Mostly gray, with a faint brand tint on bars and menus, as Linear did with its blue. As it grows: Very calm at any size; the brand then relies on logo, type and words more than color. [inferred]
 - **Default:** `accent`: accent, with signature-surface optional; on Apple glass platforms brand color moves into content, on Android a brand seed, freer on web *Source:* card heuristics [DC-L06-04, DC-L10-04]; L09 shared pattern row 3 (neutral surfaces + one accent in all but one of 24 systems).
 - **Show:** the preview screen re-renders per option; on iOS, a tinted nav bar is flagged as "fighting the glass" [S-L10-009, S-L10-010].
 - **Use / avoid:** use brand color on the one element per view that matters most; avoid tinting several control backgrounds at once ("Using your brand color too broadly can overwhelm your interface").
@@ -46,10 +55,15 @@ Zoom 2 defined · weight high · changes 5 decisions · class G · cards DC-L01-
 - **Why:** Color strength (chroma) sets how calm or lively the product feels. If all colors are strong, status colors lose their punch, because everything shouts [DC-L01-10].
 - **Options:**
   - `tonal` Tonal, low to medium color: friendly, balanced (Material TonalSpot, primary chroma 32-36).
+    - Now: Low to medium color: friendly and balanced, Material's default. As it grows: The safe default for work products: keep big surfaces soft and spend strong color on small, meaningful parts.
   - `monochrome` All gray or nearly gray: calm, premium, technical (Material Monochrome and Neutral variants, chroma 0 and 8-12; Polaris black brand).
+    - Now: All gray or nearly gray: calm, premium and technical, like Polaris's black brand. As it grows: Status colors stand out clearly because little else is colorful; charts still need their own colors. [inferred]
   - `vivid` Vivid: energetic, consumer-grade (Material Vibrant; Tailwind v4 P3-leaning OKLCH, blue-500 chroma 0.214).
+    - Now: Strong, saturated colors: energetic and consumer-grade. As it grows: As screens fill, everything shouts and status colors lose punch, so status also needs icons or words. [inferred]
   - `expressive` Hues turned away from the source color (Material Expressive).
+    - Now: Colors turned away from your brand hue: surprising and playful, like Material Expressive. As it grows: Your exact brand hue may barely appear, so recognition must come from other parts. [inferred]
   - `fidelity` Fidelity: the brand hue stays exact in containers; for hues that are a legal or recognition asset [DC-L06-05].
+    - Now: Your brand hue stays exact in containers and fills. As it grows: Best when the hue is a legal or recognition asset; light brand colors will need dark text on buttons.
 - **Default:** `tonal`: tonal for productivity products, vivid for consumer and marketing *Source:* card heuristic [DC-L01-10, DC-L06-05].
 - **Show:** a chroma slider under the five named stops; surfaces, accent and status chips update together.
 - **Use / avoid:** use low chroma on large areas (surfaces) and spend chroma on small, high-meaning elements (primary action, status, selection); avoid vivid surfaces in high-trust categories [DC-L01-10].
@@ -77,8 +91,11 @@ Zoom 2 defined · weight high · changes 5 decisions · class T · cards DC-L10-
 - **Why:** Taking colors from the device feels personal and native. But people remember the brand less, and screenshots look different for each user [DC-L10-05].
 - **Options:**
   - `static` Fixed brand color (Material static baseline; best for work apps and iOS).
+    - Now: Your brand colors stay fixed on every device; best for work apps and iOS. As it grows: Screenshots and brand recall stay the same for everyone as the product spreads. [inferred]
   - `dynamic-optional` Fixed, but people can turn on Android dynamic color (API 31+) [DC-L01-21].
+    - Now: Fixed brand colors by default; Android users can switch on colors from their wallpaper. As it grows: Brand and error colors stay fixed, but testing grows: each wallpaper and mode can change the colors.
   - `follow-os` Follow the device: Android dynamic color, Wear OS watch-face color, macOS accent.
+    - Now: Colors follow the wallpaper or device accent: personal and native. As it grows: Every user's screenshots differ and brand recall weakens; keep brand-critical and status colors fixed. [inferred]
 - **Default:** dynamic on Android for utility apps, fixed brand for brand-led consumer apps; brand-critical and status colors stay fixed; on Apple, design icon layers for all four icon looks *Source:* card heuristics [DC-L10-05, DC-L01-21].
 - **Show:** the Android preview recolored with three sample wallpapers; brand-critical colors stay put.
 - **Use / avoid:** let dynamic color own surfaces and secondary accents; avoid letting it change error and brand-critical colors [DC-L01-21].
@@ -104,9 +121,13 @@ Zoom 2 defined · weight high · changes 5 decisions · class G · cards DC-L01-
 - **Why:** This decides how the page, cards and pop-ups stand apart: by shade steps, alternating layers or names by height. It also sets how dark mode shows depth [DC-L01-13].
 - **Options:**
   - `role-tiers` 4-5 layers named by job (base, raised, overlay, sunken), with their own colors in each mode [DC-L01-13].
+    - Now: 4-5 layers named by job (base, raised, overlay, sunken), each with its own light and dark color. As it grows: New parts pick a layer by its job, and dark mode shows depth with lighter surfaces, not glowing shadows.
   - `container-tiers` Named layers, not tied to shadow height: flat, calm, modern (Material 3 `surface-container-lowest` to `-highest`).
+    - Now: Named layers from lowest to highest, not tied to shadows: flat, calm and modern, like Material 3. As it grows: Works without shadows in both modes; clickable layers still need visible edges. [inferred]
   - `alternating` Alternating layers in light, stepping lighter in dark: crisp, grid-like enterprise (Carbon White/Gray 10, then Gray 100/90/80).
+    - Now: Layers alternate shades in light mode and step lighter in dark: crisp and grid-like, like Carbon. As it grows: Clear on dense enterprise screens; deep nesting needs care so layers don't blur together. [inferred]
   - `elevation-named` Layers named by height (Atlassian).
+    - Now: Layers named by height, like Atlassian's raised and overlay levels. As it grows: Names tie color to shadow height, so changing the depth style later touches both. [inferred]
 - **Default:** `role-tiers`: role-tiers; light mode separates with shadow or border plus a subtle tone, dark mode with lighter tones *Source:* card heuristic [DC-L01-13]; L09 shared pattern row 12.
 - **Show:** a page, card, popover and dialog stack in light and dark, with the tier of each labeled.
 - **Use / avoid:** use lighter-when-higher surfaces in dark mode; avoid separating interactive surfaces by tone alone when the edge carries meaning (needs 3:1) [DC-L01-13].
@@ -131,8 +152,11 @@ Zoom 2 defined · weight high · changes 5 decisions · class G · cards DC-L01-
 - **Why:** AA allows mid-gray text for less important words and softer tints. AAA forces darker text and deeper accent colors [DC-L01-22].
 - **Options:**
   - `aa` WCAG 2.2 AA: text 4.5:1, large text 3:1, UI parts 3:1; no rounding (4.499:1 fails).
+    - Now: Text needs 4.5:1 contrast, large text and parts 3:1, which allows softer gray text and lighter tints. As it grows: Every new color pair is tested against it in every mode, at every build.
   - `aaa` WCAG 2.2 AAA: text 7:1, large text 4.5:1 (target for high-contrast themes: Primer, Material).
+    - Now: Text needs 7:1 contrast: darker gray text and deeper accents, which feels heavier and starker. [inferred] As it grows: Primer and Material keep it for high-contrast modes; applied everywhere, it limits every new color choice. [inferred]
   - `aa-apca` AA must pass, plus APCA as advice on body text (Radix and Geist use it) [DC-L01-22; L09 A1 row 11].
+    - Now: AA must pass, plus APCA advice on body text, as Radix and Geist do. As it grows: Keeps you at AA today and closer to WCAG 3, which is still a draft. [inferred]
 - **Default:** aa-apca: AA on all pairs in every mode, AAA for high-contrast modes, APCA advisory *Source:* accessibility rule [DC-L01-22]; WCAG 3 is still a draft [BOARD L01 note].
 - **Show:** the contrast matrix of all role pairs, pass/fail per mode, with the nearest passing step suggested for failures.
 - **Use / avoid:** test tokens as pairs, in every mode, at build time; avoid judging a single color by eye [DC-L01-22].

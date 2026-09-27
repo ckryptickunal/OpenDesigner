@@ -1,0 +1,203 @@
+{
+  "summary": "Kole Jain designs a dashboard for a link-tracking product from scratch and explains the reasoning behind each part. He starts with the sidebar as the spine of the product: profile management at the top, links with an icon and a short title, links grouped by relevance, rarely used links at the bottom, dropdowns as the list grows, and a clear active state. For the main area he says dashboards need smaller text styles with less spacing between sizes than landing pages, stricter grids, and a main section that shows what matters most to the user, and he warns against cramming in too much. He then covers when to use a popover, a modal or a new page, toasts for confirmations, warnings and errors, and the four building blocks he says make up almost any dashboard page: lists and tables, cards, user input and tabs. For a design system, this gives a density stance for product screens, a sidebar recipe, clear rules for choosing between overlays, and a short list of dashboard components and patterns (empty states, bulk actions, chart hover and optimistic UI).",
+  "key_ideas": [
+    "Most dashboards fail not because they are ugly but because they are disorganized and messy.",
+    "The sidebar is the spine of the product and holds persistent, globally relevant elements such as navigation, profile management and search.",
+    "Navigation is about reducing cognitive load: group links by relevance and move rarely used ones (settings, help center) to the bottom.",
+    "Sidebar links need a recognizable icon and a short title, which also makes a collapsible sidebar and notification counts or 'new' chips work.",
+    "A dashboard should do one thing well; if it looks like it needs a PhD to operate, it is too complex.",
+    "Dashboards use smaller text styles with less spacing between sizes than landing pages, and follow grids more strictly because they fill most of the screen.",
+    "The main section should show what matters most to the user, such as project status in a project tool or investments in a finance tool.",
+    "Keep displayed data minimal, think about the empty state, and let people select many items to reveal bulk actions.",
+    "Charts should be familiar (line and bar), with grid lines, numbers, a short summary and a date range selector.",
+    "Use a popover for simple, non-blocking context, a modal for more complex context that stays on the same page, and a new page for permanent or very large context.",
+    "Toasts are the dashboard's notification system: they confirm changes made in a modal and surface warnings and errors that often get missed.",
+    "Almost any dashboard page can be built from four components: lists and tables, cards, user input and tabs.",
+    "A good list comes down to separation by space, lines or color; a good table comes down to search, filter and sort.",
+    "Dashboard motion is tame and user focused; charts are where hover effects can be more creative.",
+    "Optimistic UI makes a dashboard feel snappy by updating the screen instantly on the assumption that the server request will succeed."
+  ],
+  "entities": [
+    {"name": "Kole Jain", "type": "person", "description": "Creator of the video, published on his Kole Jain YouTube channel."},
+    {"name": "Mobbin", "type": "product", "description": "Library of real app screenshots that sponsors the video (auto-captions spell it 'Mvin' and 'Mobin')."},
+    {"name": "Dub", "type": "company", "description": "Named as putting notifications in the empty space of its sidebar."},
+    {"name": "Linear", "type": "company", "description": "Named alongside Dub as adding notifications to the sidebar."},
+    {"name": "GitHub", "type": "product", "description": "Cited as similar to the brief description added to each item in the link list."},
+    {"name": "Vercel", "type": "product", "description": "Example of tables with forms inside cards (auto-captions spell it 'Versel')."},
+    {"name": "Notion", "type": "product", "description": "Example of tabs showing different views of related tables, and of a settings modal built from lists, inputs and cards."},
+    {"name": "Gmail", "type": "product", "description": "Example of optimistic UI: a deleted email disappears instantly."},
+    {"name": "Optimistic UI", "type": "concept", "description": "Updating the interface immediately on the assumption the server request will succeed."},
+    {"name": "Popover", "type": "concept", "description": "A non-blocking overlay for simple context that people can click away from."},
+    {"name": "Modal", "type": "concept", "description": "A blocking overlay for more complex context that keeps the user on the same page."},
+    {"name": "Toast", "type": "concept", "description": "The dashboard's notification system for confirmations, warnings and errors."},
+    {"name": "Bulk actions", "type": "concept", "description": "A contextual button revealed when the user selects multiple items."}
+  ],
+  "topics": [
+    {"name": "Dashboards and data display", "summary": "Walks through a full dashboard: focus on one job, show what matters most in the main section, keep data minimal, use a simple grid, clear charts with grid lines and numbers, and four core components (lists and tables, cards, user input, tabs)."},
+    {"name": "Navigation and sidebars", "summary": "The sidebar is the product's spine: profile management at the top, icon plus short title links grouped by relevance, settings and help at the bottom, dropdowns as links grow, an active state, and optional highlighted features or notifications."},
+    {"name": "SaaS product UI", "summary": "Uses a link-tracking SaaS as the demo and argues dashboards matter more as AI makes software easier to produce; covers page actions at the top, bulk actions, tabs and optimistic UI."},
+    {"name": "Modals and popovers", "summary": "Popovers suit simple, non-blocking context such as display settings; modals suit more complex, blocking context that should stay on the same page, such as creating a link; very large or permanent context gets a new page."},
+    {"name": "Toasts and notifications", "summary": "Toasts are the notification system of a dashboard: confirm changes made in a modal, raise awareness without taking over the screen, prompt action, and surface warning and error states."},
+    {"name": "Cards and sections", "summary": "Most dashboards are made of many cards; keep card margins well spaced and choose a border or background color (he prefers outlines in dark mode and fills in light mode)."},
+    {"name": "Feedback, empty and loading states", "summary": "Think about the empty state for a list with no data to display; use toasts for confirmation, warning and error feedback."},
+    {"name": "Typography", "summary": "Dashboard text styles are much smaller than a landing page's, with less spacing between sizes, because more has to fit."},
+    {"name": "Spacing and layout", "summary": "Dashboards follow grids more strictly than landing pages because they use most or all of the screen; the demo uses a two column, two row grid."},
+    {"name": "Depth, shadows and borders", "summary": "Items and cards can be separated by their own border, dividers, background color or space; stacking items in a list gives less clutter than bordering each one."},
+    {"name": "Dark mode and themes", "summary": "His personal preference is outlined cards in dark mode and background-colored cards in light mode."},
+    {"name": "Micro-interactions", "summary": "Selecting multiple items reveals a bulk-actions button; chart hover shows a value with a percent bubble or dims the other bars."},
+    {"name": "Motion principles", "summary": "Animation on dashboards is tame and user focused compared with websites and landing pages; people want a snappy, fast dashboard."},
+    {"name": "Forms and inputs", "summary": "User input is one of the four core dashboard components, found in modals such as 'create link' and in settings pages."},
+    {"name": "Portfolio and case studies", "summary": "Dashboards are a staple of design portfolios, but most are disorganized and messy."}
+  ],
+  "claims": [
+    {"claim": "Most portfolio dashboards are bad because they are disorganized and messy, not because they are ugly.", "evidence": "Not because they're ugly, but because they're disorganized and messy"},
+    {"claim": "The sidebar houses most of the persistent and globally relevant elements, such as navigation, profile management and search.", "evidence": "houses most of the persistent and globally relevant elements"},
+    {"claim": "A recognizable icon with a short title helps when the sidebar is collapsible and when a notification number or 'new' chip is added.", "evidence": "This is especially helpful if you plan on making your sidebar collapsible"},
+    {"claim": "Navigation is about reducing cognitive load, which is done by grouping links by relevance.", "evidence": "Navigation is all about reducing cognitive load"},
+    {"claim": "Settings and help center are rarely used, so they can go to the bottom of the sidebar.", "evidence": "since settings and help center are rarely used"},
+    {"claim": "Dub and Linear have started putting notifications in the sidebar.", "evidence": "Companies like Dub and Linear have already started doing this"},
+    {"claim": "Dashboard features are much smaller than a landing page's because many more things must fit.", "evidence": "the features of a dashboard are much smaller"},
+    {"claim": "Dashboards use many smaller font sizes without much spacing between sizes.", "evidence": "We've got a lot of smaller font sizes without much spacing in between sizes"},
+    {"claim": "Grids and layouts are followed more strictly on dashboards than on landing pages because dashboards use most or all of the screen.", "evidence": "Grids and layouts are also much more strictly followed for dashboards"},
+    {"claim": "What goes in the main section of a dashboard reflects what is most important to the user.", "evidence": "reflects what is most important to the user"},
+    {"claim": "The very top of a dashboard is generally reserved for important page actions or simple navigation.", "evidence": "is generally reserved for important page actions or simple navigation"},
+    {"claim": "Stacking items into a list makes it easier to add an empty state than bordering each item.", "evidence": "This layout also makes it easier to add an empty state"},
+    {"claim": "People often forget grid lines and numbers on charts.", "evidence": "Add some grid lines and numbers since everyone forgets those"},
+    {"claim": "A popover is best when context is simple and it is non-blocking, meaning the user can click away without consequences.", "evidence": "best used when the context is simple"},
+    {"claim": "A modal is blocking because the user must click create or cancel before doing anything else.", "evidence": "A modal is considered blocking"},
+    {"claim": "Because the page cannot be seen while changes are made in a modal, a toast confirming the changes is generally good practice.", "evidence": "a toast notification confirming the changes is generally a good practice"},
+    {"claim": "Warning and error states frequently get missed, and toasts are good for them.", "evidence": "toasts are great for a warning or error states"},
+    {"claim": "When sending the user to a new page, a back button or breadcrumb is pretty much required.", "evidence": "having a back button or breadcrumb is pretty much required"},
+    {"claim": "There are really only four main dashboard components: lists and tables, cards, user input and tabs.", "evidence": "there are really only four main dashboard components"},
+    {"claim": "Making a good list mostly comes down to separation, done with space, lines or dividers, or color.", "evidence": "Making a good list mostly comes down to separation"},
+    {"claim": "Search, filter and sort transform a table into an interactive tool.", "evidence": "transforms it into an interactive tool"},
+    {"claim": "Tabs add new pages without cluttering the sidebar.", "evidence": "adding new pages without cluttering the sidebar"},
+    {"claim": "Animation and interaction on dashboards are tame and user focused compared with websites and landing pages.", "evidence": "animation and interaction on dashboards is pretty tame and user focused"},
+    {"claim": "Optimistic UI removes awkward pauses by acting as if the server request will succeed.", "evidence": "The app is optimistic that it will succeed"}
+  ],
+  "quotes": [
+    "If your dashboard looks like it requires a PhD to operate, then it's too complex.",
+    "Just do one thing well with your dashboard.",
+    "Navigation is all about reducing cognitive load."
+  ],
+  "tags": ["dashboard", "saas", "sidebar", "navigation", "data-tables", "charts", "modals", "popovers", "toasts", "empty-states", "bulk-actions", "optimistic-ui", "cards", "tabs", "density", "kole-jain"],
+  "authority": "reference",
+  "rules": [
+    {"rule": "Put persistent, globally relevant elements (navigation, profile management, search) in the sidebar; profile management and search may instead go in the top bar.", "why": "The sidebar is the spine of the product.", "kind": "do", "strength": "should", "area": "layout", "applies_to": "all", "values": [], "evidence": "Think about it as the spine of your product"},
+    {"rule": "Put profile management at the top of the sidebar, with a profile picture and arrows that show it is clickable, rather than a logo.", "why": "The creator finds it a more convenient spot; the picture makes it easy to identify and the arrows show it can be clicked.", "kind": "do", "strength": "consider", "area": "components", "applies_to": "all", "values": [], "evidence": "I find this a more convenient spot for profile management"},
+    {"rule": "Give every sidebar link a recognizable icon and a short title.", "why": "It is especially helpful if the sidebar is collapsible, and if you want to add a notification number or a 'new' chip.", "kind": "do", "strength": "should", "area": "components", "applies_to": "all", "values": [], "evidence": "We want to start with a recognizable icon and a short title"},
+    {"rule": "Group sidebar links by what is relevant to each other.", "why": "Navigation is about reducing cognitive load.", "kind": "do", "strength": "should", "area": "patterns", "applies_to": "all", "values": [], "evidence": "group our links by what's relevant"},
+    {"rule": "Move rarely used links such as settings and help center to the bottom of the sidebar.", "why": "They are rarely used.", "kind": "do", "strength": "should", "area": "patterns", "applies_to": "all", "values": [], "evidence": "since settings and help center are rarely used, we can send them down to the bottom"},
+    {"rule": "Nest sidebar links into dropdowns once the number of links grows.", "why": "The source gives it as the step to take as the amount of links expands.", "kind": "do", "strength": "should", "area": "patterns", "applies_to": "all", "values": [], "evidence": "you'll want to start nesting links into drop downs"},
+    {"rule": "Show an active state on the current sidebar link, for example a rectangle indicator.", "why": "The source says to make sure the active state is there.", "kind": "do", "strength": "must", "area": "components", "applies_to": "all", "values": [], "evidence": "make sure to have an active state"},
+    {"rule": "Optionally use the sidebar to highlight features, search or integrations, and use its empty space for notifications.", "why": "Both are optional; Dub and Linear already put notifications there.", "kind": "do", "strength": "consider", "area": "patterns", "applies_to": "all", "values": [], "evidence": "if you want to highlight features, search or integrations"},
+    {"rule": "Give the dashboard one clear job; if it looks like it needs a PhD to operate, cut it back.", "why": "A dashboard that looks like it requires a PhD to operate is too complex; the cluttered counterexample feels like someone emptied a drawer onto the screen.", "kind": "do", "strength": "should", "area": "patterns", "applies_to": "all", "values": [], "evidence": "Just do one thing well with your dashboard"},
+    {"rule": "Use smaller text styles for dashboards than for landing pages, with less spacing between sizes.", "why": "A dashboard has to fit many more things.", "kind": "do", "strength": "should", "area": "typography", "applies_to": "all", "values": [], "evidence": "We've got a lot of smaller font sizes without much spacing in between sizes"},
+    {"rule": "Follow the grid and layout more strictly on dashboards than on landing pages.", "why": "Dashboards use most or all of the space on screen.", "kind": "do", "strength": "should", "area": "layout", "applies_to": "all", "values": [], "evidence": "Grids and layouts are also much more strictly followed for dashboards"},
+    {"rule": "Put what matters most to the user in the main section of the dashboard, such as project status in a project management tool or investments at the top of a financial dashboard.", "why": "The main section reflects what is most important to the user.", "kind": "do", "strength": "should", "area": "layout", "applies_to": "all", "values": [], "evidence": "you should show investments right at the top"},
+    {"rule": "Reserve the very top of the dashboard for important page actions or simple navigation, such as a dropdown and a primary 'create' button.", "why": "That area is generally reserved for them.", "kind": "do", "strength": "should", "area": "layout", "applies_to": "all", "values": [], "evidence": "The very top of the dashboard is generally reserved for important page actions"},
+    {"rule": "Keep data shown on the dashboard home page to a few essential fields per item.", "why": "Data displayed on the homepage should be kept super simple; the demo shows only favicon, short link, full link, creation date and clicks.", "kind": "do", "strength": "should", "area": "content", "applies_to": "all", "values": [], "evidence": "you'll want to keep it super simple"},
+    {"rule": "Add a brief description to each list item, similar to GitHub, to use the space in the middle of the row.", "why": "The source adds it to fill the space in the middle of each row; no other reason is given.", "kind": "do", "strength": "consider", "area": "content", "applies_to": "all", "values": [], "evidence": "we can add a brief description, kind of similar to GitHub"},
+    {"rule": "Stack items into a single list for less clutter; give each item its own border only when you want stronger visual separation.", "why": "A stacked list is less cluttered and makes adding an empty state easier.", "kind": "do", "strength": "consider", "area": "components", "applies_to": "all", "values": [], "evidence": "But for less clutter, we'll stack them into a list"},
+    {"rule": "Design an empty state for lists, for when there is no data to display.", "why": "The source calls it important to be thinking about.", "kind": "do", "strength": "should", "area": "patterns", "applies_to": "all", "values": [], "evidence": "which is important to be thinking about"},
+    {"rule": "Let users select multiple items and reveal a contextual bulk-actions button when they do.", "why": "Real-world applications need to manage data efficiently.", "kind": "do", "strength": "should", "area": "patterns", "applies_to": "all", "values": [], "evidence": "Letting the user select multiple links which reveals a new contextual button, bulk actions"},
+    {"rule": "Do not use unfamiliar, unreadable chart shapes; start from a basic line graph.", "why": "Nobody can tell what the unusual charts are.", "kind": "dont", "strength": "should", "area": "components", "applies_to": "all", "values": [], "evidence": "I don't know what these are, and neither does anyone else"},
+    {"rule": "Add grid lines and numbers to charts.", "why": "Everyone forgets them.", "kind": "do", "strength": "should", "area": "components", "applies_to": "all", "values": [], "evidence": "Add some grid lines and numbers since everyone forgets those"},
+    {"rule": "Add a short summary and a date range selector to charts.", "why": "With them the source calls the line chart good to go, and it gives the bar chart the same range selector.", "kind": "do", "strength": "should", "area": "components", "applies_to": "all", "values": [], "evidence": "Pop in a quick summary and date selector"},
+    {"rule": "In a bar chart that breaks data down per item, show each item's icon (such as its favicon) beside its bar.", "why": "It makes each item easy to identify.", "kind": "do", "strength": "consider", "area": "components", "applies_to": "all", "values": [], "evidence": "with the favicon on the side to make them easily identifiable"},
+    {"rule": "Use a popover for simple context that should not block the page, such as display settings.", "why": "It is non-blocking: the user can click away without any consequences.", "kind": "do", "strength": "should", "area": "components", "applies_to": "all", "values": [], "evidence": "best used when the context is simple, like these display settings"},
+    {"rule": "Use a modal for more complex context when the user should stay on the same page, such as creating an item that belongs to the list on screen.", "why": "The task is directly related to what is displayed; the modal is blocking, so the user must create or cancel first.", "kind": "do", "strength": "should", "area": "components", "applies_to": "all", "values": [], "evidence": "A modal is best used when the context is more complex"},
+    {"rule": "Show a toast confirming the changes after a modal closes.", "why": "The user cannot see the page while the changes are being made.", "kind": "do", "strength": "should", "area": "patterns", "applies_to": "all", "values": [], "evidence": "a toast notification confirming the changes is generally a good practice"},
+    {"rule": "Use toasts to make users aware of something or prompt them to act without taking over the screen, including warning and error states.", "why": "Toasts are the dashboard's notification system, and warnings and errors frequently get missed.", "kind": "do", "strength": "should", "area": "patterns", "applies_to": "all", "values": [], "evidence": "without taking over the entire screen or prompt them to take action"},
+    {"rule": "Send the user to a new page when the context is more permanent or very large, such as opening an existing item.", "why": "The source calls a new page reasonable for permanent or very large context.", "kind": "do", "strength": "consider", "area": "patterns", "applies_to": "all", "values": [], "evidence": "it's reasonable to direct the user to a new page"},
+    {"rule": "When you send the user from the dashboard to a new page, include a back button or breadcrumb.", "why": "The source says a back button or breadcrumb is pretty much required when you send the user to a new page.", "kind": "do", "strength": "must", "area": "patterns", "applies_to": "all", "values": [], "evidence": "having a back button or breadcrumb is pretty much required"},
+    {"rule": "Separate list items with space, lines or dividers, or color.", "why": "Making a good list mostly comes down to separation.", "kind": "do", "strength": "should", "area": "components", "applies_to": "all", "values": [], "evidence": "Making a good list mostly comes down to separation with three ways to do it"},
+    {"rule": "Give tables search, filter or sort controls.", "why": "Displaying data is only half the battle; these controls turn the table into an interactive tool.", "kind": "do", "strength": "should", "area": "components", "applies_to": "all", "values": [], "evidence": "Giving the user the options to search, filter, or sort the table"},
+    {"rule": "Keep card margins well spaced so content is not packed too tightly.", "why": "So content isn't too tightly packed; most dashboards are made of many cards together.", "kind": "do", "strength": "should", "area": "layout", "applies_to": "all", "values": [], "evidence": "Keep the margins well spaced so content isn't too tightly packed"},
+    {"rule": "Separate cards with either a border or a background color; the source's preference is outlines in dark mode and background colors in light mode.", "why": "Personal preference, which the source says is totally up to you.", "kind": "do", "strength": "consider", "area": "elevation", "applies_to": "all", "values": [], "evidence": "I prefer outlines on dark modes and background colors on light mode"},
+    {"rule": "Use tabs to add closely related views or pages without adding items to the sidebar.", "why": "Tabs add new pages without cluttering the sidebar and keep the user in the page's context.", "kind": "do", "strength": "should", "area": "components", "applies_to": "all", "values": [], "evidence": "These are fantastic for essentially adding new pages without cluttering the sidebar"},
+    {"rule": "On chart hover, show the value (for example with a bubble showing a percent) or dim all the other bars in a bar chart.", "why": "Charts are where dashboard motion can get a little more creative.", "kind": "do", "strength": "consider", "area": "motion", "applies_to": "all", "values": [], "evidence": "when we hover, all of the other bars dim out"},
+    {"rule": "Keep dashboard animation tame and user focused, and save more creative motion for chart hover states.", "why": "Dashboard animation is tame compared with websites and landing pages, and charts are where you can get more creative.", "kind": "do", "strength": "consider", "area": "motion", "applies_to": "all", "values": [], "evidence": "Starting with our chart animations, here is where we can get a little more creative"},
+    {"rule": "Use optimistic UI: update the screen immediately (for example remove a deleted item) on the assumption the server request will succeed.", "why": "Everyone wants a snappy, fast dashboard without awkward pauses before an item disappears.", "kind": "do", "strength": "should", "area": "patterns", "applies_to": "all", "values": [], "evidence": "That's where optimistic UI comes into play"}
+  ],
+  "decisions": [
+    {"question": "Where should profile management and search live: in the sidebar or in the top bar?", "options": [
+      {"name": "Sidebar", "effect": "Profile sits at the top of the sidebar with a picture and arrows, next to navigation, as part of the product's spine.", "when": "The creator's preferred spot for profile management."},
+      {"name": "Top bar", "effect": "Profile management and search move out of the sidebar into the bar above the page.", "when": "The source says this is sometimes done; no condition is given."}
+    ], "recommendation": "The creator puts profile management at the top of the sidebar because he finds it more convenient; both are accepted.", "maps_to": null, "evidence": "sometimes profile management and search can go in the top bar, too"},
+    {"question": "How dense should a product dashboard's text and layout be compared with a landing page?", "options": [
+      {"name": "Landing-page scale", "effect": "Larger features and text styles, with grids and layouts followed less strictly.", "when": "Landing pages."},
+      {"name": "Dashboard scale", "effect": "Many smaller font sizes without much spacing between sizes, and a strictly followed grid that uses most or all of the screen.", "when": "Dashboards, where many more things have to fit."}
+    ], "recommendation": "Use the smaller, tighter dashboard scale for dashboards because many more things must fit.", "maps_to": "Q-dir-02", "evidence": "These are the textiles for the landing page, and these are the textiles for the dashboard"},
+    {"question": "How should items in the main list be set apart from each other?", "options": [
+      {"name": "Each item in its own border", "effect": "Stronger visual separation between items.", "when": "When you want visual separation."},
+      {"name": "Stacked into one list", "effect": "Less clutter, and an empty state is easier to add.", "when": "The default in the demo."}
+    ], "recommendation": "Stack items into a list for less clutter.", "maps_to": null, "evidence": "If we wanted visual separation, we can make each link have its own border"},
+    {"question": "How should the rows of a list be separated?", "options": [
+      {"name": "Space", "effect": "Rows are separated only by gaps.", "when": "Not stated in the source."},
+      {"name": "Lines or dividers", "effect": "A line sits between rows.", "when": "Not stated in the source."},
+      {"name": "Color", "effect": "Rows are separated by background color.", "when": "Not stated in the source."}
+    ], "recommendation": null, "maps_to": "Q-depth-05", "evidence": "The first is just space. The second is lines or dividers. And the third is with color"},
+    {"question": "How should cards stand out from the page: a border or a background color?", "options": [
+      {"name": "Border (outline)", "effect": "Cards are outlined.", "when": "The creator's preference in dark mode."},
+      {"name": "Background color", "effect": "Cards are filled with a different color from the page.", "when": "The creator's preference in light mode."}
+    ], "recommendation": "Outlines in dark mode and background colors in light mode, as a personal preference that is 'totally up to you'.", "maps_to": "Q-depth-01", "evidence": "you can choose between a border or background colors"},
+    {"question": "Which chart types should the dashboard use?", "options": [
+      {"name": "Unusual chart shapes", "effect": "Nobody can tell what they show.", "when": "Never, according to the source."},
+      {"name": "Line graph", "effect": "A basic line with grid lines, numbers, a quick summary and a date selector.", "when": "The starting point for the main metric in the demo."},
+      {"name": "Bar chart", "effect": "Breaks the metric down per item, with each item's favicon on the side, a range selector and switchable metrics (signups, conversion).", "when": "Comparing items against each other in the demo."}
+    ], "recommendation": "Use basic, familiar charts (line and bar) and add grid lines, numbers, a summary and a date range selector.", "maps_to": "Q-viz-01", "evidence": "Instead, let's start with a basic line graph"},
+    {"question": "When an action needs more UI, should it open a popover, a modal or a new page?", "options": [
+      {"name": "Popover", "effect": "Non-blocking: the user can click away without any consequences.", "when": "Simple context, such as display settings."},
+      {"name": "Modal", "effect": "Blocking: the user must create or cancel before doing anything else, and the page is hidden while they work, so a confirming toast follows.", "when": "More complex context that is directly related to the current page, such as creating a link."},
+      {"name": "New page", "effect": "Moves the user away, so a back button or breadcrumb is needed.", "when": "Permanent or very large context, such as opening an existing link."}
+    ], "recommendation": "Match the surface to the size and permanence of the context: popover for simple, modal for complex but same-page, new page for permanent or very large.", "maps_to": null, "evidence": "That's where modals, popovers, and even new pages come into play"},
+    {"question": "Should the screen wait for the server before showing the result of an action?", "options": [
+      {"name": "Wait for the server", "effect": "Awkward pauses before, for example, a deleted link disappears.", "when": "The source does not recommend it."},
+      {"name": "Optimistic UI", "effect": "The item disappears instantly, on the assumption that the request will succeed, so the dashboard feels snappy.", "when": "When you want a snappy, fast dashboard (Gmail's delete)."}
+    ], "recommendation": "Use optimistic UI so there are no awkward pauses.", "maps_to": null, "evidence": "it disappears instantly, assuming that the server request will succeed"}
+  ],
+  "process": [
+    {"step": "Build the sidebar first", "detail": "Treat it as the product's spine: profile management at the top, links with a recognizable icon and short title, grouped by relevance, settings and help center at the bottom, dropdowns as links grow, an active state, and optionally highlighted features or notifications."},
+    {"step": "Decide what matters most", "detail": "Pick the one job the dashboard does well and put what matters most to the user in the main section (project status, investments and so on)."},
+    {"step": "Set up a simple grid", "detail": "Use dashboard-sized text styles and a strict grid; the demo uses a two column, two row grid with link management at the top and a few important metrics below."},
+    {"step": "Place page actions at the top", "detail": "Reserve the very top for important page actions or simple navigation, such as a dropdown and a 'create link' button."},
+    {"step": "Build the main list", "detail": "Show only essential fields per item, add a brief description if there is space, choose bordered items or a stacked list, and design the empty state."},
+    {"step": "Add bulk actions", "detail": "Let the user select multiple items and reveal a contextual bulk-actions button."},
+    {"step": "Build clear charts", "detail": "Start with a basic line graph, add grid lines, numbers, a quick summary and a date selector; add a per-item bar chart with icons, the same range selector and switchable metrics."},
+    {"step": "Add functionality through overlays and pages", "detail": "Use popovers for simple non-blocking settings, modals for complex same-page tasks, and new pages with a back button or breadcrumb for large or permanent context; confirm modal changes with a toast."},
+    {"step": "Lay out other pages from four components", "detail": "Compose remaining pages from lists and tables (with search, filter, sort), cards (well-spaced margins, border or fill), user input and tabs."},
+    {"step": "Add tame, user-focused motion", "detail": "Add chart hover effects and use optimistic UI so actions feel instant."}
+  ],
+  "examples": [
+    {"what": "Link-tracking dashboard built in the video", "where": null, "visual_note": "A sidebar plus a two column, two row grid: link management at the top and a few important metrics (charts) below."},
+    {"what": "Collapsible sidebar with icon and short-title links", "where": null, "visual_note": "Links collapse to their icons [inferred], and can carry a notification number or a 'new' chip; the active link is marked with a rectangle indicator."},
+    {"what": "Notifications in the sidebar's empty space", "where": "Dub, Linear", "visual_note": "The spare space in the sidebar holds notifications."},
+    {"what": "A cluttered dashboard", "where": null, "visual_note": "Shown as a counterexample that 'feels like someone emptied a drawer onto the screen'."},
+    {"what": "Landing page vs dashboard text styles", "where": null, "visual_note": "Side-by-side text styles: the dashboard's are much smaller, with little spacing between sizes."},
+    {"what": "Link list items", "where": null, "visual_note": "Each row shows a favicon, the short link, the full link, the creation date and the click count, with a brief description like GitHub's; rows can be bordered or stacked in one list."},
+    {"what": "Bulk selection", "where": null, "visual_note": "Selecting several links reveals a new contextual 'bulk actions' button."},
+    {"what": "Line chart and per-link bar chart", "where": null, "visual_note": "The line chart has grid lines, numbers, a quick summary and a date selector; the bar chart lists each link with its favicon, a range selector and signups and conversion options."},
+    {"what": "Chart hover effects", "where": null, "visual_note": "Hovering the line chart shows the number and a bubble with a percent; hovering the bar chart dims all the other bars."},
+    {"what": "Display settings popover", "where": null, "visual_note": "A non-blocking overlay for simple display settings that the user can click away from without consequences."},
+    {"what": "Create link modal followed by a toast", "where": null, "visual_note": "A blocking modal with create and cancel; after creating, a toast confirms the change because the page was hidden."},
+    {"what": "Link detail page", "where": null, "visual_note": "Clicking an existing link opens a new page with a back button or breadcrumb."},
+    {"what": "Tables with forms inside cards", "where": "Vercel", "visual_note": "Cards contain tables that include form inputs."},
+    {"what": "Tabs for related table views and a settings modal", "where": "Notion", "visual_note": "Tabs switch between views of related tables without leaving the page; the settings modal is mostly lists with some inputs, and cards in the connections section."},
+    {"what": "Optimistic delete", "where": "Gmail", "visual_note": "A deleted email disappears instantly, before the server confirms."}
+  ],
+  "numbers": [
+    {"value": "two column, two row grid", "context": "The grid used for the demo dashboard: link management at the top, metrics below.", "evidence": "we'll be using a very simple two column, two row grid"},
+    {"value": "four", "context": "Main dashboard components: lists and tables, cards, user input, tabs.", "evidence": "there are really only four main dashboard components"},
+    {"value": "three", "context": "Ways to separate list items: space, lines or dividers, color.", "evidence": "with three ways to do it"}
+  ],
+  "caveats": [
+    "Sponsor segment for Mobbin (a 20% discount link, 'hundreds of thousands' of screenshots) in the middle and at the end of the video; excluded from rules. Auto-captions spell it 'Mvin' and 'Mobin'.",
+    "The description links the creator's own Figma files for the dashboard (self-promotion).",
+    "No exact values are given: no font sizes, spacing, radii, colors, grid measurements or animation timings. The text-style comparison and most charts are only shown on screen.",
+    "Several points are personal preference, not tested findings: outlines in dark mode and fills in light mode ('totally up to you'), profile at the top of the sidebar, and 'only four main dashboard components'.",
+    "Auto-caption fixes: 'textiles' read as 'text styles', 'Versel' as Vercel, and 'shorten link' as the shortened link. A word is missing in 'don't make weird  like this', so the kind of chart he rejects is only shown on screen.",
+    "It does not cover loading states, accessibility, keyboard use, responsive or mobile layouts, or chart colors.",
+    "Published 2025-08-30; auto-generated English transcript."
+  ]
+}

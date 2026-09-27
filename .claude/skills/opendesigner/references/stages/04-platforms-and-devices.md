@@ -16,10 +16,15 @@ Zoom 0 sketch · weight high · changes 12 decisions · class I · cards DC-L10-
 - **Why:** Each platform brings habits your brand must live with. It also has its own units, smallest target sizes and export files [DC-L10-01].
 - **Options:**
   - `web` Web: one delivery layer (CSS custom properties); the brand can show in every pixel (Polaris calls Shopify's platform "the web platform").
+    - Now: One set of CSS files, and your brand can show in every pixel. As it grows: Adding apps later brings each platform's own habits, units and screen readers to design and test for.
   - `ios` iOS/iPadOS: Liquid Glass chrome, pt units, Dynamic Type; bars, controls and sheets are styled by the OS.
+    - Now: Apple styles the bars, controls and sheets (Liquid Glass); sizes are in points, and text follows Dynamic Type. As it grows: Apple's redesigns reach standard parts for free; parts you custom-build must be updated by hand.
   - `android` Android: Material 3 conventions, dp/sp units, large-screen layouts mandatory at 600dp+.
+    - Now: Material 3 habits and dp units; layouts for large screens (600 dp and up) are required. As it grows: Tablets and foldables come with it, so wider layouts with panes are needed from day one.
   - `desktop` Desktop app (macOS, Windows, or built with web tech) [DC-L10-24].
+    - Now: A desktop app; built with web tech, it must respect the native window frame or it feels like a website. [inferred] As it grows: Windows resize freely, so layouts must change by window size, never by device type.
   - `secondary` Watch, TV, car or headset: see Q-plat-02 [DC-L10-24].
+    - Now: Watch, TV, car or headset: only colors, text roles and icons carry over, inside platform templates. As it grows: Each device adds its own text sizes and focus styles; the smaller or farther the screen, the less custom UI survives. [inferred]
 - **Default:** `web`: web *Source:* survey, 94% of systems support web, 35% iOS, 34% Android [DC-L11-01]. L10's own default for consumer products is web + iOS + Android phones with large-screen layouts [DC-L10-01] (see Disagreements).
 - **Show:** the same screen rendered in each platform's chrome (browser, iOS glass bars, Material top bar), side by side.
 - **Skip:** yes, web.
@@ -31,8 +36,11 @@ Zoom 2 defined · weight high · changes 11 decisions · class I · cards DC-L10
 - **Why:** Apps that look like the platform feel at home and get OS updates for free. Brand-first apps look the same everywhere but must redo every OS change [DC-L10-02].
 - **Options:**
   - `hybrid` A mix of both: shared brand foundations and signature moments, native navigation and controls (Fluent reuses native patterns 80% of the time).
+    - Now: Brand colors, type and signature moments, with native navigation, back gestures, sheets and pickers. As it grows: Share what people see as the brand, keep how the phone works native: about 80% native, 20% signature.
   - `native-first` Like the platform: system components almost everywhere; brand shows in content, accents, imagery and voice (Apple: "Express your brand with familiar components").
+    - Now: Uses the platform's own controls almost everywhere; your brand shows in content, accents, images and words. As it grows: OS updates and accessibility come built in, but the app looks more like other apps on the device.
   - `brand-first` Like your brand: identical custom UI on every platform (CRED NeoPOP); can feel foreign and must rebuild accessibility [DC-L06-14].
+    - Now: The same custom look on every platform; it can feel foreign, with the wrong back gestures or sheets. As it grows: Every OS change must be rebuilt by hand, and screen reader and text-size support must be rebuilt too.
 - **Default:** `hybrid`: hybrid *Source:* card heuristic, share what users perceive as the brand, adopt the platform's version of "how the phone works" [DC-L10-02, DC-L06-14].
 - **Show:** one screen as native-first, hybrid and brand-first on iOS and Android.
 - **Skip:** yes.
@@ -69,12 +77,19 @@ Zoom 2 defined · weight high · changes 10 decisions · class I · cards DC-L14
 - **Why:** Each device you fully design for adds a visibly different layout shape. Devices you only adapt look stretched. Google now penalizes that on large screens [DC-L14-01].
 - **Options:**
   - `phone` Phone [DC-L14-01].
+    - Now: Phones get layouts designed for them, because core tasks happen there. As it grows: Devices that only adapt the phone layout look stretched, which Google now penalizes on large screens.
   - `tablet-foldable` Tablet and foldable: rails, sidebars, 2-3 panes; Android ignores orientation locks at 600dp+.
+    - Now: Adds rails, sidebars and two or three panes; Android ignores orientation locks at 600 dp and up. As it grows: Android forces this size on apps anyway, so skipping it means a stretched phone layout there.
   - `desktop-web` Desktop and web [DC-L14-01].
+    - Now: Wide layouts for desktop and web are designed properly, not stretched from the phone. As it grows: Big screens add panes and sidebars that change the product's shape; iPad windows make any size normal.
   - `watch` Watch: dark, glanceable, Crown lists; foundations only travel [DC-L10-24].
+    - Now: A dark, glanceable version with scrolling lists; only colors, type and icons travel. As it grows: Adds its own watch text sizes and motion values to maintain alongside the main system.
   - `tv` TV: big type, focus rows, 66pt targets, overscan safe area.
+    - Now: Big type, focus rows you move through with a remote, 66 pt targets and a safe border. As it grows: Adds a TV text scale and focus styles to every component that appears there.
   - `car` Car: system templates, large sparse high-contrast screens.
+    - Now: Uses the car system's templates: large, sparse, high-contrast screens with little room for your brand. As it grows: Templates limit custom UI, so only colors, type and icons carry over from the main system.
   - `spatial` Headset: glass windows at a distance, 60pt targets.
+    - Now: Glass windows floating at a distance, with 60 pt targets. As it grows: Adds comfort rules, such as no motion at the edge of vision, to every animated part.
 - **Default:** `phone`: phone + tablet/foldable + desktop/web first-class; TV, watch, car and spatial out until a named use case exists *Source:* card heuristic [DC-L14-01, DC-L10-24].
 - **Show:** a device row (watch, phone, tablet, laptop, TV) showing the draft screen at each first-class size.
 - **Skip:** yes.

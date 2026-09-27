@@ -1,0 +1,558 @@
+{
+  "summary": "The toast() page documents every way to render a Sonner toast and lists the per-toast options with their defaults. A plain string becomes the title, and an options object passed as the second argument overrides any options set on <Toaster />. The typed variants add meaning: success shows a checkmark icon, error shows an error icon, action and cancel render primary and secondary buttons that close the toast, promise toasts move from loading to a result automatically, loading toasts show a spinner, and custom and headless toasts let you supply your own JSX. The API reference lists the per-toast defaults, including duration 4000, position bottom-right, dismissible true, closeButton false and containerAriaLabel 'Notifications'. For a design system this is the catalogue of toast variants and the baseline values to lock. [inferred]",
+  "key_ideas": [
+    "Calling toast() with just a string makes that string the title.",
+    "Options passed to toast() override the options set on <Toaster />.",
+    "Success toasts show a checkmark icon in front of the message, and error toasts show an error icon.",
+    "An action is a primary button: clicking it runs onClick and closes the toast, unless onClick calls event.preventDefault().",
+    "A cancel is a secondary button that also runs onClick and closes the toast.",
+    "Both action and cancel can be JSX, such as your own <Button>.",
+    "A promise toast starts in a loading state and updates itself when the promise resolves or fails; its messages can be functions of the result or error.",
+    "A loading toast shows a spinner and is for when you handle the states yourself instead of using a promise toast.",
+    "Custom toasts take JSX as the first argument and keep the default styling.",
+    "Headless toasts are unstyled custom JSX that keep the functionality and receive the Toast as an argument.",
+    "Default per-toast values: duration 4000, position bottom-right, dismissible true, closeButton false, invert false, containerAriaLabel Notifications."
+  ],
+  "entities": [
+    {
+      "name": "Sonner",
+      "type": "library",
+      "description": "The React toast library whose toast() function this page documents."
+    },
+    {
+      "name": "toast()",
+      "type": "concept",
+      "description": "The function that renders a toast, with success, error, action, cancel, promise, loading, custom and headless forms."
+    },
+    {
+      "name": "Toaster",
+      "type": "concept",
+      "description": "The container component whose options are overridden by per-toast options."
+    },
+    {
+      "name": "Headless toast",
+      "type": "concept",
+      "description": "An unstyled toast rendered from your own JSX that keeps Sonner's behaviour."
+    },
+    {
+      "name": "Promise toast",
+      "type": "concept",
+      "description": "A toast that starts loading and updates automatically when a promise resolves or fails."
+    },
+    {
+      "name": "aiforui.dev",
+      "type": "product",
+      "description": "A course promoted in the site-wide banner."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Toasts and notifications",
+      "summary": "Documents every toast variant (success, error, action, cancel, promise, loading, custom, headless) and the per-toast API defaults."
+    },
+    {
+      "name": "Feedback, empty and loading states",
+      "summary": "Promise toasts show loading and then success or error automatically; loading toasts show a spinner when you manage the states yourself."
+    },
+    {
+      "name": "Buttons and actions",
+      "summary": "Action renders a primary button and cancel a secondary one; both close the toast on click, and event.preventDefault() keeps it open."
+    },
+    {
+      "name": "Accessibility",
+      "summary": "The toast container has an aria label, containerAriaLabel, which defaults to 'Notifications'."
+    },
+    {
+      "name": "Web implementation (CSS and React)",
+      "summary": "Shows JSX actions and cancels, per-toast style objects (actionButtonStyle, cancelButtonStyle) and the typed API table."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "When toast() is called with just a string, the string becomes the title.",
+      "evidence": "Rendering the toast"
+    },
+    {
+      "claim": "Options passed as the second argument to toast() override options passed to <Toaster />.",
+      "evidence": "These will override the options passed to <Toaster />"
+    },
+    {
+      "claim": "A success toast renders a checkmark icon in front of the message.",
+      "evidence": "Renders a checkmark icon in front of the message."
+    },
+    {
+      "claim": "An error toast renders an error icon in front of the message.",
+      "evidence": "Renders an error icon in front of the message."
+    },
+    {
+      "claim": "Clicking an action button closes the toast and runs its onClick callback; calling event.preventDefault() in onClick prevents the close.",
+      "evidence": "Action"
+    },
+    {
+      "claim": "Clicking a cancel button closes the toast and runs its onClick callback.",
+      "evidence": "Cancel"
+    },
+    {
+      "claim": "A promise toast starts in a loading state and updates automatically after the promise resolves or fails.",
+      "evidence": "Promise"
+    },
+    {
+      "claim": "A promise toast's success and error messages can be functions that use the promise's result or error, and can return an object of toast options.",
+      "evidence": "You can pass a function to the success/error messages"
+    },
+    {
+      "claim": "A loading toast renders a loading spinner and is useful when you handle the states yourself instead of using a promise toast.",
+      "evidence": "Loading"
+    },
+    {
+      "claim": "Passing JSX as the first argument renders a custom toast that keeps the default styling.",
+      "evidence": "Custom"
+    },
+    {
+      "claim": "A headless toast is unstyled, keeps the functionality, and its function receives the Toast as an argument.",
+      "evidence": "Headless"
+    },
+    {
+      "claim": "The default toast duration is 4000.",
+      "evidence": "duration number 4000"
+    },
+    {
+      "claim": "The default containerAriaLabel is 'Notifications'.",
+      "evidence": "containerAriaLabel string Notifications"
+    }
+  ],
+  "quotes": [
+    "You can call it with just a string, that will become the title.",
+    "These will override the options passed to <Toaster /> if you have provided any.",
+    "Starts in a loading state and will update automatically after the promise resolves or fails."
+  ],
+  "tags": [
+    "sonner",
+    "toast",
+    "react",
+    "toast-types",
+    "promise-toast",
+    "loading-state",
+    "toast-actions",
+    "api-defaults"
+  ],
+  "authority": "non-negotiable",
+  "rules": [
+    {
+      "rule": "Call toast() with just a string when the toast only needs a title.",
+      "why": "A string passed on its own becomes the title.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "react",
+      "values": [],
+      "evidence": "Rendering the toast"
+    },
+    {
+      "rule": "Set shared toast options on <Toaster />, and pass per-toast options as an object in toast()'s second argument; per-toast options win.",
+      "why": "Options given to toast() override the options passed to <Toaster />.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "react",
+      "values": [],
+      "evidence": "These will override the options passed to <Toaster />"
+    },
+    {
+      "rule": "Use the success toast for success messages so a checkmark icon appears in front of the message.",
+      "why": "Success renders a checkmark icon in front of the message.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "react",
+      "values": [],
+      "evidence": "Renders a checkmark icon in front of the message."
+    },
+    {
+      "rule": "Use the error toast for failures so an error icon appears in front of the message.",
+      "why": "Error renders an error icon in front of the message.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "react",
+      "values": [],
+      "evidence": "Renders an error icon in front of the message."
+    },
+    {
+      "rule": "Use the action option to put a primary button in the toast; clicking it closes the toast and runs the callback passed via onClick.",
+      "why": "Action renders a primary button, and clicking it closes the toast and runs the callback passed via onClick.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "action"
+      ],
+      "evidence": "Renders a primary button, clicking it will close the toast and run the callback passed via onClick"
+    },
+    {
+      "rule": "Call event.preventDefault() inside the action's onClick when the toast must stay open after the action is clicked.",
+      "why": "By default clicking the action closes the toast; preventDefault stops that.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "event.preventDefault()"
+      ],
+      "evidence": "You can prevent the toast from closing by calling event.preventDefault()"
+    },
+    {
+      "rule": "Pass your own JSX, such as a <Button> component, as the action when the default action button is not enough.",
+      "why": "The docs show that you can render JSX as your action.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "action: <Button onClick={() => console.log('Action!')}>Action</Button>"
+      ],
+      "evidence": "You can also render jsx as your action."
+    },
+    {
+      "rule": "Use the cancel option to put a secondary button in the toast; clicking it closes the toast and runs the callback passed via onClick.",
+      "why": "Cancel renders a secondary button, and clicking it closes the toast and runs the callback passed via onClick.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "cancel"
+      ],
+      "evidence": "Renders a secondary button, clicking it will close the toast and run the callback passed via onClick"
+    },
+    {
+      "rule": "Pass your own JSX as the cancel when the default cancel button is not enough.",
+      "why": "The docs show that you can render JSX in the cancel option.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "cancel: <Button onClick={() => console.log('Cancel!')}>Cancel</Button>"
+      ],
+      "evidence": "You can also render jsx in the cancel option."
+    },
+    {
+      "rule": "Use a promise toast for async work, so the toast starts loading and switches to success or error on its own when the promise settles.",
+      "why": "A promise toast starts in a loading state and updates automatically after the promise resolves or fails.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "react",
+      "values": [],
+      "evidence": "Starts in a loading state and will update automatically after the promise resolves or fails."
+    },
+    {
+      "rule": "Pass functions as a promise toast's success and error messages so the message includes the promise's result or error.",
+      "why": "The docs say you can pass a function to the success/error messages to incorporate the result or error.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "react",
+      "values": [],
+      "evidence": "You can pass a function to the success/error messages"
+    },
+    {
+      "rule": "Return an object of toast options from a promise toast's success or error function when the result toast needs more detail.",
+      "why": "The docs say you can return an object with toast options if you need more detailed toasts.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "react",
+      "values": [],
+      "evidence": "If you need more detailed toasts, you can return an object with toast options."
+    },
+    {
+      "rule": "Use a loading toast (spinner) only when you handle the loading, success and error states yourself; otherwise use a promise toast.",
+      "why": "The loading toast is useful when you want to handle various states yourself instead of using a promise toast.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "react",
+      "values": [],
+      "evidence": "Useful when you want to handle various states yourself instead of using a promise toast."
+    },
+    {
+      "rule": "For custom content that keeps Sonner's default styling, pass JSX as the first argument instead of a string.",
+      "why": "This renders a custom toast while keeping the default styling.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "react",
+      "values": [],
+      "evidence": "You can pass jsx as the first argument instead of a string to render a custom toast while maintaining default styling."
+    },
+    {
+      "rule": "For a fully custom look, use the headless toast: render your own unstyled JSX, which keeps the functionality and receives the Toast as an argument.",
+      "why": "Headless renders an unstyled toast with custom JSX while keeping the functionality and giving access to all toast properties.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "react",
+      "values": [],
+      "evidence": "Use it to render an unstyled toast with custom jsx while maintaining the functionality."
+    },
+    {
+      "rule": "Set how long a toast stays on screen with the duration option; the default is 4000.",
+      "why": "The API reference lists duration with a default of 4000.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "react",
+      "values": [
+        "4000"
+      ],
+      "evidence": "duration number 4000"
+    },
+    {
+      "rule": "Give the toast container its accessible label through containerAriaLabel, which defaults to 'Notifications'.",
+      "why": "The API reference lists containerAriaLabel with the default 'Notifications'.",
+      "kind": "do",
+      "strength": "should",
+      "area": "accessibility",
+      "applies_to": "react",
+      "values": [
+        "Notifications"
+      ],
+      "evidence": "containerAriaLabel string Notifications"
+    },
+    {
+      "rule": "Show a close button on a toast with closeButton; it is off (false) by default.",
+      "why": "The API reference lists closeButton with a default of false.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "false"
+      ],
+      "evidence": "closeButton boolean false"
+    },
+    {
+      "rule": "Control whether a toast can be dismissed with dismissible, which defaults to true.",
+      "why": "The API reference lists dismissible with a default of true.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "true"
+      ],
+      "evidence": "dismissible boolean true"
+    },
+    {
+      "rule": "Set a toast's position with the position option; the default is bottom-right.",
+      "why": "The API reference lists position with a default of bottom-right.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "react",
+      "values": [
+        "bottom-right"
+      ],
+      "evidence": "position string bottom-right"
+    },
+    {
+      "rule": "Put secondary text in the description option (a ReactNode) and a custom icon in the icon option (a ReactNode).",
+      "why": "The API reference lists description and icon as ReactNode options.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "description",
+        "icon"
+      ],
+      "evidence": "description ReactNode"
+    },
+    {
+      "rule": "Style a toast's action and cancel buttons with actionButtonStyle and cancelButtonStyle objects; both default to {}.",
+      "why": "The API reference lists both as objects with a default of {}.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "actionButtonStyle",
+        "cancelButtonStyle",
+        "{}"
+      ],
+      "evidence": "actionButtonStyle object {}"
+    },
+    {
+      "rule": "Give a toast an id to refer to it later and a toasterId to send it to a specific Toaster; a testId option also exists, but this page does not describe it. [inferred]",
+      "why": "The API reference lists id, testId and toasterId as string options; what toasterId does is explained on the Toaster page.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "id",
+        "testId",
+        "toasterId"
+      ],
+      "evidence": "toasterId string"
+    },
+    {
+      "rule": "Attach onDismiss and onAutoClose callbacks to a toast when code must react to it closing.",
+      "why": "The API reference lists onDismiss and onAutoClose as function options; the Other page explains when each fires.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "onDismiss",
+        "onAutoClose"
+      ],
+      "evidence": "onDismiss function"
+    },
+    {
+      "rule": "Leave invert at its default of false unless a toast should be inverted.",
+      "why": "The API reference lists invert with a default of false; the page does not describe the inverted look.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "color",
+      "applies_to": "react",
+      "values": [
+        "false"
+      ],
+      "evidence": "invert boolean false"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "For async work, should the toast follow the promise automatically or be driven by hand?",
+      "options": [
+        {
+          "name": "Promise toast",
+          "effect": "Starts in a loading state and switches to success or error automatically when the promise settles; messages can use the result or error.",
+          "when": "When the work is a promise."
+        },
+        {
+          "name": "Loading toast",
+          "effect": "Shows a spinner; your code updates the toast to each state itself.",
+          "when": "When you want to handle the various states yourself instead of using a promise toast."
+        }
+      ],
+      "recommendation": "Use the promise toast by default; the page positions the loading toast for cases where you handle the states yourself. [inferred]",
+      "maps_to": null,
+      "evidence": "Promise / Loading"
+    },
+    {
+      "question": "When a toast needs custom content, should it keep Sonner's styling or be fully custom?",
+      "options": [
+        {
+          "name": "Custom",
+          "effect": "Your JSX is rendered inside the toast with the default styling kept.",
+          "when": "When you need custom content but want the standard look."
+        },
+        {
+          "name": "Headless",
+          "effect": "An unstyled toast made from your own JSX that keeps the functionality and receives the Toast as an argument.",
+          "when": "When you need full control of the look."
+        }
+      ],
+      "recommendation": null,
+      "maps_to": null,
+      "evidence": "Custom / Headless"
+    },
+    {
+      "question": "Should clicking a toast's action button close the toast?",
+      "options": [
+        {
+          "name": "Close on click (default)",
+          "effect": "The onClick callback runs and the toast closes.",
+          "when": "Default behaviour."
+        },
+        {
+          "name": "Stay open",
+          "effect": "Calling event.preventDefault() in onClick keeps the toast on screen after the action runs.",
+          "when": "When the toast must remain visible after the action."
+        }
+      ],
+      "recommendation": null,
+      "maps_to": null,
+      "evidence": "Action"
+    }
+  ],
+  "process": [
+    {
+      "step": "Pick the variant",
+      "detail": "Choose plain, success, error, action, cancel, promise, loading, custom or headless based on what the message needs."
+    },
+    {
+      "step": "Pass options",
+      "detail": "Add an options object as the second argument (description, icon, action, cancel, duration, position and so on); these override the <Toaster /> options."
+    },
+    {
+      "step": "Wire async feedback",
+      "detail": "For a promise, use the promise toast: it shows loading, then success or error. Pass functions for the success and error messages to include the result or error, and return an object of toast options for more detail."
+    },
+    {
+      "step": "Handle actions",
+      "detail": "Give action and cancel an onClick. Both close the toast after running; call event.preventDefault() in the action's onClick to keep it open."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Action toast with a JSX button",
+      "where": "Sonner docs, Action section",
+      "visual_note": "Code only: toast('My action toast', { action: <Button onClick={() => console.log('Action!')}>Action</Button> }), showing a custom primary button inside a toast."
+    },
+    {
+      "what": "Cancel toast with a JSX button",
+      "where": "Sonner docs, Cancel section",
+      "visual_note": "Code only: toast('My cancel toast', { cancel: <Button onClick={() => console.log('Cancel!')}>Cancel</Button> }), showing a custom secondary button."
+    },
+    {
+      "what": "Live 'Render toast' previews",
+      "where": "Sonner docs, each variant section",
+      "visual_note": "Each section has a preview/code tab with a 'Render toast' button. The rendered visuals and most code were not captured in the text."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "4000",
+      "context": "Default toast duration (the unit is not stated on the page)",
+      "evidence": "API Reference: duration number 4000"
+    },
+    {
+      "value": "bottom-right",
+      "context": "Default toast position",
+      "evidence": "API Reference: position string bottom-right"
+    },
+    {
+      "value": "Notifications",
+      "context": "Default containerAriaLabel for the toast container",
+      "evidence": "API Reference: containerAriaLabel string Notifications"
+    },
+    {
+      "value": "false",
+      "context": "Default for closeButton and invert",
+      "evidence": "API Reference"
+    },
+    {
+      "value": "true",
+      "context": "Default for dismissible",
+      "evidence": "API Reference"
+    },
+    {
+      "value": "{}",
+      "context": "Default for actionButtonStyle and cancelButtonStyle",
+      "evidence": "API Reference"
+    }
+  ],
+  "caveats": [
+    "Most sections were live previews with preview/code tabs, and their code did not survive text extraction ('Cop y ied Code' artifacts). The exact call names for the success, error, promise, loading, custom and headless variants are not shown on this page.",
+    "The page does not state the unit for the duration default of 4000.",
+    "The page lists invert, testId and toasterId without describing their effect, so their behaviour here comes only from their names and the Toaster page.",
+    "A site-wide banner promotes the author's aiforui.dev course with a countdown: self-promotion, time-sensitive.",
+    "The page's publish date is unknown, so the API may have changed since it was fetched."
+  ]
+}

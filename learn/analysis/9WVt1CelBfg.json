@@ -1,0 +1,714 @@
+{
+  "summary": "Kole Jain lays out how he would learn UI/UX design from scratch, ending in a 28-day plan. He first trains the design eye by pulling apart one landing page (the Superpower site) into four zones and pointing out the exact spacing, word counts and opacity that create its grouping and hierarchy. He then argues that learners should copy designs exactly rather than redesign them, shows the handful of hero layout options and says the choice depends on what the content is trying to do. He separates UI (the flavor: the same layout restyled as warm and friendly or modern and premium) from UX (the thinking behind a flow such as an onboarding that branches on team size). For a design system this gives concrete grouping and hierarchy values, a way to show one layout in two personalities as a visual sample, and a model for branching product flows [inferred].",
+  "key_ideas": [
+    "Landing pages that look different often share one skeleton: main text block, navbar, stats and image.",
+    "Spacing creates grouping: the closer two elements sit, the more closely people associate them.",
+    "Short hero copy communicates fastest; the example uses seven words in the heading and 14 below.",
+    "A high-quality image makes or breaks a landing page; keep its focal point clear and its background calm.",
+    "Hierarchy can come from color and opacity, not only from font size.",
+    "To learn, copy a design exactly instead of redesigning it, so you are forced to notice the small details.",
+    "At any point there are only a handful of layout options; the right one depends on what the content is trying to do.",
+    "UI is the flavor of a design; the same layout can feel friendly or premium through styling alone.",
+    "UX (product design) is about the user's journey, not spacing or typography.",
+    "Even a simple onboarding hides many decisions, such as whether to block on email verification and whether to branch by team size.",
+    "Do not start a portfolio while learning, because your taste will start to change over the next one to two months.",
+    "The 28-day plan moves from training the eye, to cloning designs, to restyling (UI), to designing a branching flow (UX)."
+  ],
+  "entities": [
+    {
+      "name": "Kole Jain",
+      "type": "person",
+      "description": "Designer and YouTuber presenting the video and his 28-day learning plan."
+    },
+    {
+      "name": "Superpower",
+      "type": "company",
+      "description": "Its website is the landing page pulled apart to show spacing, hierarchy and image placement."
+    },
+    {
+      "name": "Mobbin",
+      "type": "product",
+      "description": "Library of app and website screenshots; the video's sponsor and a suggested swipe-file source."
+    },
+    {
+      "name": "Figma",
+      "type": "tool",
+      "description": "Design tool the learner moves into after training their eye; Mobbin screenshots export to it."
+    },
+    {
+      "name": "Dribbble",
+      "type": "product",
+      "description": "Suggested source for swipe-file inspiration."
+    },
+    {
+      "name": "Pinterest",
+      "type": "product",
+      "description": "Suggested source for swipe-file inspiration."
+    },
+    {
+      "name": "Swipe file",
+      "type": "concept",
+      "description": "A personal collection of about 20 inspiring hero and feature sections used to train the eye."
+    },
+    {
+      "name": "Eyebrow text",
+      "type": "concept",
+      "description": "Text above the hero heading; 12 px from it in the example."
+    },
+    {
+      "name": "Bento grid",
+      "type": "concept",
+      "description": "Layout suggested for a features list that would otherwise run off the screen, so nothing is lost as the user scrolls."
+    },
+    {
+      "name": "UI vs UX",
+      "type": "concept",
+      "description": "UI is the flavor or look and feel; UX, also called product design, is the thinking behind the user's journey."
+    },
+    {
+      "name": "Escape hatch",
+      "type": "concept",
+      "description": "A link out of the sign-up flow to the login page for people who arrived by mistake."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Visual hierarchy",
+      "summary": "Hierarchy comes from spacing-based grouping and from color: two 15 px lines differ in prominence because the second is at 55% opacity."
+    },
+    {
+      "name": "Spacing and layout",
+      "summary": "Hero spacing of 8, 12 and 32 px sets which elements read as a group; layout choices come from a handful of options chosen by what the content is trying to do."
+    },
+    {
+      "name": "Landing pages",
+      "summary": "Breaks a landing page into text block, navbar, stats and image, and lists hero arrangements, text alignments and visual treatments."
+    },
+    {
+      "name": "Icons and imagery",
+      "summary": "A high-quality asset makes or breaks a landing page; the image's focal point must stay unobstructed and its background calm enough to keep text readable."
+    },
+    {
+      "name": "Content and microcopy",
+      "summary": "The example hero uses seven words in the heading and 14 in the subtext to communicate as quickly as possible."
+    },
+    {
+      "name": "Cards and sections",
+      "summary": "A features list whose items would run off the screen can become a bento grid so nothing is lost while scrolling."
+    },
+    {
+      "name": "Shape and corner radius",
+      "summary": "Rounded corners and large bubbly buttons make a site feel friendly; much less rounded corners help it feel modern and professional."
+    },
+    {
+      "name": "Onboarding",
+      "summary": "Walks through a five-screen onboarding: name and email with a login escape hatch, email verification (blocking or a gentle reminder), workspace creation with a team-size question, and a branch where teams invite members and individuals skip that step."
+    },
+    {
+      "name": "Design process",
+      "summary": "Deconstruct designs before opening Figma, clone designs exactly to learn, then practise UI by restyling and UX by designing branching screens."
+    },
+    {
+      "name": "Design taste and judgement",
+      "summary": "Pulling designs apart makes proximity, contrast, consistency and hierarchy easier to recognise; taste changes a lot while learning, as the presenter's old and new portfolios show."
+    },
+    {
+      "name": "Portfolio and case studies",
+      "summary": "Starting a portfolio while still learning is called the biggest mistake, because taste will change over the next one to two months."
+    },
+    {
+      "name": "Design resources",
+      "summary": "Mobbin, Dribbble and Pinterest are named as sources for a swipe file of hero and feature sections."
+    },
+    {
+      "name": "Navigation and sidebars",
+      "summary": "The example navbar is pretty small and stays out of the way like most modern navs, with a 'Become a member' item as its most prominent feature [inferred from a caption error]."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Designs that look totally different at first glance can share the same skeleton of four zones and the same flow.",
+      "evidence": "every single one of them has the same skeleton"
+    },
+    {
+      "claim": "Putting the subtext 8 px from the heading, the eyebrow 12 px away and the buttons 32 px away makes people associate heading and subtext most closely, then the eyebrow, then the buttons.",
+      "evidence": "The subtext is only 8 pixels away"
+    },
+    {
+      "claim": "Having a high-quality asset is what makes or breaks most landing pages.",
+      "evidence": "makes or breaks most landing pages"
+    },
+    {
+      "claim": "Swapping in an image with a busy background makes things a little more chaotic and the text harder to read; with another image the text on the left is basically gone.",
+      "evidence": "the background of the image isn't too busy"
+    },
+    {
+      "claim": "Two lines at the same 15 px size differ in prominence when the second has 55% opacity, because it blends into the background.",
+      "evidence": "it only has 55% opacity"
+    },
+    {
+      "claim": "Copying a design exactly forces you to notice details such as card spacing, nav height and button padding, and after a few sites you see there are only a handful of layout options at any point.",
+      "evidence": "there are only a handful of options"
+    },
+    {
+      "claim": "All hero layout decisions come down to what the content is trying to do.",
+      "evidence": "what is the content trying to do"
+    },
+    {
+      "claim": "The same product and nearly identical layout can feel friendly or modern and professional depending on background, imagery, corner rounding, button style and background noise.",
+      "evidence": "This is exactly what I mean when I say flavor"
+    },
+    {
+      "claim": "Many people reach a sign-up page unintentionally, so it needs a route to the login page.",
+      "evidence": "Many people end up on this page unintentionally"
+    },
+    {
+      "claim": "Blocking users until they enter an email code and letting them continue with a gentle reminder are both valid choices.",
+      "evidence": "neither of those decisions is wrong"
+    },
+    {
+      "claim": "Asking for team size during workspace creation shapes how the next onboarding steps work.",
+      "evidence": "ask them what their team size is"
+    },
+    {
+      "claim": "Starting a portfolio while learning is the biggest mistake, because a learner's taste will start to change over the next one to two months.",
+      "evidence": "the biggest mistake that you could make"
+    }
+  ],
+  "quotes": [
+    "Having a highquality asset is what makes or breaks most landing pages.",
+    "pick a design you like and don't redesign it. Literally copy it.",
+    "each of these decisions wasn't about the spacing or the typography."
+  ],
+  "tags": [
+    "learning-design",
+    "roadmap",
+    "visual-hierarchy",
+    "spacing",
+    "grouping",
+    "hero-section",
+    "landing-page",
+    "imagery",
+    "opacity",
+    "swipe-file",
+    "copying-designs",
+    "ui-vs-ux",
+    "brand-feel",
+    "onboarding",
+    "user-flow",
+    "portfolio"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "In a hero text block, put the subtext closest to the heading (8 px), the eyebrow slightly farther (12 px) and the buttons farthest (32 px).",
+      "why": "The spacing makes people read heading and subtext as one group, then the eyebrow, then the buttons.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [
+        "8 pixels",
+        "12 pixels",
+        "32 pixels"
+      ],
+      "evidence": "The subtext is only 8 pixels away"
+    },
+    {
+      "rule": "Keep hero copy very short, as in the example's seven-word heading and 14-word subtext.",
+      "why": "It communicates the message as quickly as possible.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "web",
+      "values": [
+        "seven words",
+        "14"
+      ],
+      "evidence": "It's only seven words in the header"
+    },
+    {
+      "rule": "Keep the navbar small and out of the way; in the example its most prominent item is a 'Become a member' call to action [inferred].",
+      "why": "It stays out of your way, like most modern navs.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "stays out of your way just like most modern navs"
+    },
+    {
+      "rule": "Use a high-quality image asset on a landing page.",
+      "why": "The source says a high-quality asset makes or breaks most landing pages.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "makes or breaks most landing pages"
+    },
+    {
+      "rule": "Keep the hero image's focal point unobstructed: place text, nav and stats around it (in the example, above, below or to the left, leaving the center and right open).",
+      "why": "Everything sits around the focal point, leaving the center and right wide open for the imagery.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "the focal point of the image is never obstructed"
+    },
+    {
+      "rule": "Do not use a hero image with a busy background behind or next to the text.",
+      "why": "A busy image makes things a little more chaotic and the text harder to read; with one image the text on the left is basically gone.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "the background of the image isn't too busy"
+    },
+    {
+      "rule": "Create hierarchy with color as well as size: for example, set two lines at the same size and lower the secondary line's opacity.",
+      "why": "The lower-opacity line blends into the background and does not jump out as much.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [
+        "15 pixels",
+        "55% opacity"
+      ],
+      "evidence": "using color, not just size, to create some hierarchy"
+    },
+    {
+      "rule": "Choose a layout by first asking what the content is trying to do.",
+      "why": "All the hero layout decisions come down to that one thing.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "what is the content trying to do"
+    },
+    {
+      "rule": "For a profound statement, center the text, increase the font size and give it a lot of space.",
+      "why": "Layout decisions come down to what the content is trying to do, and a profound statement needs a lot of space to breathe.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "if you're trying to have a profound statement"
+    },
+    {
+      "rule": "When a features list has more items than fit on the screen, show them in a bento grid.",
+      "why": "The user should see all the features, and nothing is lost as they scroll down.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "swap this out for a bento grid"
+    },
+    {
+      "rule": "To make a product feel friendly and welcoming, use a warm background, colorful visuals, rounded corners and large, bubbly buttons.",
+      "why": "Styling changes how the same layout feels (its flavor).",
+      "kind": "do",
+      "strength": "consider",
+      "area": "shape",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "make this feel very friendly and welcoming"
+    },
+    {
+      "rule": "To make a product feel modern and professional, use much less rounded corners, less colorful and more premium imagery, and optionally add noise to the background.",
+      "why": "Styling changes how the same layout feels (its flavor).",
+      "kind": "do",
+      "strength": "consider",
+      "area": "shape",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "more modern and professional"
+    },
+    {
+      "rule": "Give sign-up screens an escape hatch link to the login page.",
+      "why": "Many people end up on the sign-up page unintentionally.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "escape hatch to the login page"
+    },
+    {
+      "rule": "Ask for team size during workspace creation and branch onboarding on it: teams get an invite-members step, individuals skip it.",
+      "why": "Team size is important because it shapes how the next onboarding steps function.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "we split into two flows"
+    },
+    {
+      "rule": "When learning, copy an existing design exactly instead of redesigning it, measuring details like card spacing, nav height and button padding.",
+      "why": "Copying forces you to notice the small details, and after a few sites the layout patterns emerge.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "don't redesign it. Literally copy it"
+    },
+    {
+      "rule": "Before designing in Figma, pull apart a site you like into its zones, spacing, text length and hierarchy.",
+      "why": "You start to see the decisions behind the design, and proximity, contrast, consistency and hierarchy become easier to recognise.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "before you ever even get into Figma"
+    },
+    {
+      "rule": "Do not start a portfolio while you are still learning design.",
+      "why": "The presenter calls it the biggest mistake a learner could make, because taste will start to change over the next one to two months.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [
+        "one to two months"
+      ],
+      "evidence": "the biggest mistake that you could make"
+    },
+    {
+      "rule": "Keep the hero's main text block from dominating the page, and set the spacing around it intentionally.",
+      "why": "The source points to this as one of the design details to notice in a good landing page.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "doesn't dominate the page"
+    },
+    {
+      "rule": "In a features list, let the visuals lead and use the text only to support them.",
+      "why": "Layout follows what the content is trying to do, and a features list is about the visuals.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "the text is really just there to support the visuals"
+    },
+    {
+      "rule": "When learning, build a swipe file of 20 or so inspiring hero and feature sections, then annotate a couple for spacing, hierarchy and what is grouped with what.",
+      "why": "Week one of the plan is all about training your eye.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [
+        "20 or so"
+      ],
+      "evidence": "Start by building yourself a swipe file"
+    },
+    {
+      "rule": "To practise UI, restyle one layout you have already built twice: once warm and friendly, once modern and premium.",
+      "why": "That is how you develop different flavors of website.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "restyle it twice"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "How should text and image be arranged in the hero section?",
+      "options": [
+        {
+          "name": "Text left, image right",
+          "effect": "Text and image side by side.",
+          "when": "Not specified in the source."
+        },
+        {
+          "name": "Full-screen image under the text",
+          "effect": "The image fills the screen underneath the text.",
+          "when": "Not specified in the source."
+        },
+        {
+          "name": "Text on top, image below",
+          "effect": "Text stacked above the visual.",
+          "when": "The source says more modern designs sometimes do this."
+        },
+        {
+          "name": "Text below the image",
+          "effect": "The visual leads and the text follows.",
+          "when": "Rare occurrences only."
+        }
+      ],
+      "recommendation": "No single winner; pick by what the content is trying to do.",
+      "maps_to": null,
+      "evidence": "we might start with an image and text pair"
+    },
+    {
+      "question": "How should the hero text be aligned?",
+      "options": [
+        {
+          "name": "Centered",
+          "effect": "Text centered on the page.",
+          "when": "Most common; suits a profound statement with larger type and lots of space."
+        },
+        {
+          "name": "Left-aligned",
+          "effect": "Text runs from the left edge.",
+          "when": "Alternative to centering."
+        },
+        {
+          "name": "Split: body and CTA pushed to the right",
+          "effect": "Heading on one side, body and call to action kicked out to the right.",
+          "when": "Alternative arrangement named in the source."
+        }
+      ],
+      "recommendation": "Centered is the most common; for a profound statement center it, increase the size and give it space.",
+      "maps_to": null,
+      "evidence": "This can be centered most commonly"
+    },
+    {
+      "question": "How should the hero visual be treated?",
+      "options": [
+        {
+          "name": "Image with defined borders",
+          "effect": "The image sits in a clearly bounded frame.",
+          "when": "Not specified in the source."
+        },
+        {
+          "name": "Full-width image bleeding into the background",
+          "effect": "The image spans the width and merges with the page background.",
+          "when": "Not specified in the source."
+        },
+        {
+          "name": "Carousel of images",
+          "effect": "Several images, possibly rotating slowly through them.",
+          "when": "Not specified in the source."
+        }
+      ],
+      "recommendation": null,
+      "maps_to": null,
+      "evidence": "We could have the image where the borders are defined"
+    },
+    {
+      "question": "How should a features section show its features?",
+      "options": [
+        {
+          "name": "Text supporting visuals",
+          "effect": "Visuals lead and the text is just there to support them.",
+          "when": "A features list that fits on screen."
+        },
+        {
+          "name": "Bento grid",
+          "effect": "Features packed into tiles so all of them are visible.",
+          "when": "Many features that would otherwise run off the screen."
+        }
+      ],
+      "recommendation": "Swap to a bento grid when many features would run off the screen, so nothing is lost as the user scrolls.",
+      "maps_to": "Q-layout-05",
+      "evidence": "swap this out for a bento grid"
+    },
+    {
+      "question": "Which flavor should the same layout have: friendly and welcoming, or modern and professional?",
+      "options": [
+        {
+          "name": "Friendly and welcoming",
+          "effect": "Warm background, very colorful visuals, rounded corners, large and bubbly buttons.",
+          "when": "You want the site to feel friendly and welcoming."
+        },
+        {
+          "name": "Modern and professional (premium)",
+          "effect": "Much less rounded corners, less colorful and more premium imagery, maybe noise in the background.",
+          "when": "You want the site to feel modern, professional and premium."
+        }
+      ],
+      "recommendation": null,
+      "maps_to": "Q-brand-01",
+      "evidence": "This is exactly what I mean when I say flavor"
+    },
+    {
+      "question": "Should onboarding block users until they verify their email?",
+      "options": [
+        {
+          "name": "Block until the code is entered",
+          "effect": "The user cannot finish onboarding without verifying.",
+          "when": "Not specified in the source."
+        },
+        {
+          "name": "Gentle reminder, allow continuing",
+          "effect": "The user is reminded to verify but can carry on.",
+          "when": "Not specified in the source."
+        }
+      ],
+      "recommendation": "The source says neither decision is wrong.",
+      "maps_to": null,
+      "evidence": "neither of those decisions is wrong"
+    }
+  ],
+  "process": [
+    {
+      "step": "Deconstruct a design",
+      "detail": "Pick any site you like and break it into zones (main text block, navbar, stats, image); note spacing, word counts, what is grouped with what, and how hierarchy is made."
+    },
+    {
+      "step": "Build a swipe file",
+      "detail": "Week one: collect 20 or so hero and feature sections that inspire you from Mobbin, Dribbble, Pinterest or elsewhere."
+    },
+    {
+      "step": "Annotate",
+      "detail": "Pick a couple from the swipe file and annotate spacing, hierarchy and what is grouped with what."
+    },
+    {
+      "step": "Clone a hero exactly",
+      "detail": "Pick one design you love from the swipe file and clone its hero section exactly."
+    },
+    {
+      "step": "Clone its feature section",
+      "detail": "Clone the feature section from the same site."
+    },
+    {
+      "step": "Clone a different site",
+      "detail": "Pick a second site with a totally different layout and clone it too."
+    },
+    {
+      "step": "Practise UI flavor",
+      "detail": "Restyle one of the layouts you built twice: once warm and friendly, once modern and premium."
+    },
+    {
+      "step": "Practise UX",
+      "detail": "Design the two screens where the onboarding journey splits: an invite-your-team page for the manager and a setup page for the solo user."
+    },
+    {
+      "step": "Hold off on the portfolio",
+      "detail": "Keep focusing on the skill rather than a portfolio while your taste develops."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Hero deconstruction of a landing page",
+      "where": "Superpower website",
+      "visual_note": "Four zones (text block, navbar, stats, image). Subtext 8 px from the heading, eyebrow text 12 px, buttons 32 px away; seven-word heading and 14-word subtext; a small nav whose most prominent item is probably a 'Become a member' call to action [inferred]; all content sits above, below or left of the image's focal point, leaving the center and right open for imagery."
+    },
+    {
+      "what": "Busy image swap",
+      "where": "Superpower website (modified)",
+      "visual_note": "Replacing the calm hero image with a busy one makes things a little more chaotic and the text harder to read; with another image the text on the left is basically gone. A before/after for choosing hero imagery [inferred]."
+    },
+    {
+      "what": "Stats row hierarchy",
+      "where": "Superpower website",
+      "visual_note": "Two lines both at 15 px; the second at 55% opacity blends into the background, showing hierarchy through color rather than size."
+    },
+    {
+      "what": "Hero layout variations",
+      "where": null,
+      "visual_note": "The same hero shown as text left and image right, full-screen image under text, text above image, and text below image; then text centered, left-aligned or with body and CTA pushed right; then a bordered image, a full-bleed image or a slowly rotating carousel. A ready set for a visual option gallery [inferred]."
+    },
+    {
+      "what": "Features list turned into a bento grid",
+      "where": null,
+      "visual_note": "A features list that runs off the screen is rearranged into a bento grid so every feature stays visible."
+    },
+    {
+      "what": "Same site in two flavors",
+      "where": null,
+      "visual_note": "One layout styled friendly (warm background, colorful visuals, round corners, large bubbly buttons) and again modern and professional (less rounded corners, less colorful premium imagery, background noise). Demonstrates that UI styling alone changes the feel."
+    },
+    {
+      "what": "Branching onboarding flow",
+      "where": null,
+      "visual_note": "Five screens: name and email with a link to login; email verification by link or code; workspace creation with a team-size question; then a split where teams get an invite-members screen and individuals skip it."
+    },
+    {
+      "what": "Presenter's portfolio then and now",
+      "where": "Kole Jain's portfolio",
+      "visual_note": "About 3 years ago: in-your-face, huge animations, giant text, everything moving. Now: more refined with smaller, more tasteful animations. Shows how much taste shifts."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "8 pixels",
+      "context": "Gap between hero heading and subtext in the example",
+      "evidence": "The subtext is only 8 pixels away"
+    },
+    {
+      "value": "12 pixels",
+      "context": "Gap between the eyebrow text and the heading",
+      "evidence": "the eyebrow text above is 12 pixels"
+    },
+    {
+      "value": "32 pixels",
+      "context": "Gap between the text block and the buttons",
+      "evidence": "the buttons are 32 pixels away"
+    },
+    {
+      "value": "seven words",
+      "context": "Length of the example hero heading",
+      "evidence": "It's only seven words in the header"
+    },
+    {
+      "value": "14",
+      "context": "Words in the example hero subtext",
+      "evidence": "and 14 below"
+    },
+    {
+      "value": "15 pixels",
+      "context": "Font size of both lines in the stats row",
+      "evidence": "These two font sizes are the same 15 pixels"
+    },
+    {
+      "value": "55% opacity",
+      "context": "Opacity of the secondary stats line",
+      "evidence": "it only has 55% opacity"
+    },
+    {
+      "value": "four zones",
+      "context": "Parts every example landing page breaks into",
+      "evidence": "the same four zones"
+    },
+    {
+      "value": "20 or so",
+      "context": "Hero and feature sections to collect in the week-one swipe file",
+      "evidence": "20 or so hero sections and feature sections"
+    },
+    {
+      "value": "28 days",
+      "context": "Length of the learning roadmap, split into four stretches",
+      "evidence": "It's 28 days broken into four main stretches"
+    },
+    {
+      "value": "five screens",
+      "context": "Screens in the onboarding walkthrough",
+      "evidence": "just the five screens we went through"
+    },
+    {
+      "value": "one to two months",
+      "context": "Period over which a learner's taste changes a lot",
+      "evidence": "over the next one to two months"
+    },
+    {
+      "value": "about 3 years ago",
+      "context": "When the presenter's in-your-face portfolio (huge animations, giant text) was made",
+      "evidence": "this is my portfolio from about 3 years ago"
+    }
+  ],
+  "caveats": [
+    "Sponsor segment for Mobbin (browsing screenshots, exporting to Figma, over 3,000 feature-section examples, 20% off link); Mobbin is also listed first as a swipe-file source.",
+    "The spacing (8, 12, 32 px), word counts and 55% opacity come from one example site, not a general standard.",
+    "Much of the lesson is visual; the transcript only partly describes the on-screen examples, and no media list was available for this source.",
+    "Auto-caption errors corrected: 'Mobin' is Mobbin and 'Dribble' is Dribbble. The line 'the navbar has become a member as its most prominent feature' probably refers to a 'Become a member' button [inferred].",
+    "In the transcript only week one is named as a week; the description calls the plan 28 days in 4 weeks, and the other three stretches are described in order without week labels.",
+    "Copying instead of redesigning, and the portfolio timing, are the presenter's opinions; he says neither choice is wrong for email-verification blocking and for his old vs new portfolio style.",
+    "Published 2026-07-18 and framed as a plan for learning design 'in 2026'."
+  ]
+}

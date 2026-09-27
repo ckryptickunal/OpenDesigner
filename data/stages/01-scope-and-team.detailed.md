@@ -14,10 +14,15 @@ Zoom 3 detailed · weight high · changes 8 decisions · class I · cards DC-L11
 - **Why:** Each group that uses the system needs its own docs and file formats. AI coding agents need files a machine can read [DC-L11-02].
 - **Options:**
   - `engineers` Engineers: component API docs and code packages (DC-L11-18).
+    - Now: Adds component docs and code packages that engineers can install. As it grows: More engineers and projects mean more packages to version and keep in step. [inferred]
   - `designers` Designers: a design-tool library (DC-L16-13).
+    - Now: Adds a design-tool library, such as Figma, that mirrors the tokens. As it grows: Without automatic sync, the design library and the code drift apart, a common team complaint.
   - `content-pm` Writers and people in product or marketing: usage and voice guidance (DC-L06-18).
+    - Now: Adds usage and voice guidance, so writers know how the product talks. As it grows: As more people write copy, the shared voice traits settle arguments and keep screens sounding alike.
   - `partners` External partners: public docs and stricter versioning (DC-L11-14).
+    - Now: Adds public docs and stricter version numbers, because outside teams build on the system. As it grows: Every breaking change then affects people outside your team, so changes slow down and need notice. [inferred]
   - `ai-agents` AI coding agents: MCP server, DESIGN.md, llms.txt (12 of 25 benchmarked systems ship one) [L09 A1 row 10; DC-L11-23].
+    - Now: Adds files AI coding tools can read, such as DESIGN.md, so they follow the system. As it grows: Every screen an AI writes later reads the same written rules, so it needs less re-explaining. [inferred]
 - **Default:** `engineers`: engineers + designers + ai-agents *Source:* L09 shared pattern row 10 (agent-readable exports in 12 of 25 systems) [inferred choice].
 - **Show:** a list of the output files the builder will generate for each checked audience.
 - **Skip:** yes.

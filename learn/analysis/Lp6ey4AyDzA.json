@@ -1,0 +1,807 @@
+{
+  "summary": "Kole Jain gives eight quick fixes for web designs. Text hierarchy should come from font weight and text color as well as size, with at most two weights and two text colors (the primary color plus a 45 to 70% opacity version). Space should separate content instead of cards and dividers, icons should come from one consistent pack, muted colors (off-whites in light mode, bluish blacks in dark mode) beat pure saturated ones, and a header should have only one primary call to action. He also recommends giant display text as a visual element, dropping gradients and shadows that aren't working, a drop-shadow recipe, and previewing designs on the screen they are made for. For a design system, these become concrete defaults for text weights and colors, grouping by space, icon sets, neutral tints, button hierarchy and shadow tokens [inferred].",
+  "key_ideas": [
+    "Hierarchy is the thing designers most often get wrong, and size is only one of three tools for it; weight and color are the other two.",
+    "Too many font weights or text colors looks as bad as too many font sizes, so cap each at two.",
+    "A second text color can be the primary text color at reduced opacity, somewhere between 45 and 70%.",
+    "Many separators and containers make a design feel cluttered even when there is little in it.",
+    "Cards take up a much larger footprint, especially in multi-column layouts like an e-commerce store; space alone can separate content.",
+    "People read things that are close together as related and things far apart as unrelated.",
+    "Icons from one pack or library share a style; hunting icons one at a time on a mixed-style site makes matching hard.",
+    "Simpler icons are generally better, and detail should scale with icon size.",
+    "Beginners treat color as all or nothing; subtle, muted colors such as off-whites and bluish blacks signal a more experienced designer.",
+    "Not every button needs a background: a header should have one primary call to action, and secondary buttons can drop their fill.",
+    "In a delete dialog the destructive action is the primary one and gets the fill, preferably red; cancel is demoted.",
+    "A good display font can be as visually important as an image, but giant text should appear only once or twice per page.",
+    "Gradients and drop shadows often detract; if they aren't working, removing them can make a site feel more professional.",
+    "Designing zoomed out in Figma leads to oversized fonts and spacing, so preview on the real target screen."
+  ],
+  "entities": [
+    {
+      "name": "Kole Jain",
+      "type": "person",
+      "description": "Designer and YouTuber presenting the eight tips."
+    },
+    {
+      "name": "Flaticon",
+      "type": "product",
+      "description": "Icon site named as an example of where mixed icon styles overwhelm people (captioned as 'flat icon')."
+    },
+    {
+      "name": "Feather Icons",
+      "type": "library",
+      "description": "The author's go-to minimal icon pack, used inside Figma; limited selection but covers the basics."
+    },
+    {
+      "name": "Figma",
+      "type": "tool",
+      "description": "Design tool whose drop-shadow preset (25% opacity) he lowers, and whose app can mirror prototypes so they can be tried like a real app."
+    },
+    {
+      "name": "Google Fonts",
+      "type": "product",
+      "description": "Where he suggests filtering for display fonts to find more options."
+    },
+    {
+      "name": "Unbounded",
+      "type": "product",
+      "description": "Display typeface named as one of his favourites for giant text."
+    },
+    {
+      "name": "Cabinet Grotesk",
+      "type": "product",
+      "description": "Display typeface named as one of his favourites (captioned as 'cabinet grotesque')."
+    },
+    {
+      "name": "Bento layout",
+      "type": "concept",
+      "description": "Layout trend whose rise he says makes boxed sections understandable to want; he doesn't forbid it but warns that many separators and containers clutter a design. Usually a grid of boxed tiles [inferred]."
+    },
+    {
+      "name": "Visual hierarchy",
+      "type": "concept",
+      "description": "The ordering of what catches the eye first, built with size, weight and color."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Visual hierarchy",
+      "summary": "Hierarchy is the most common mistake; use size, weight and color for text, and give a header only one primary call to action."
+    },
+    {
+      "name": "Typography",
+      "summary": "At most two font weights separated by at least one weight step; display fonts used large can act as a visual element, once or twice per page."
+    },
+    {
+      "name": "Color",
+      "summary": "At most two text colors (primary plus 45-70% opacity); muted colors such as baby blue, beige and lavender are your friend."
+    },
+    {
+      "name": "Dark mode and themes",
+      "summary": "Use off-whites in light mode and bluish blacks in dark mode instead of pure white and black."
+    },
+    {
+      "name": "Spacing and layout",
+      "summary": "Let space, not dividers and containers, separate content; closeness signals relation."
+    },
+    {
+      "name": "Cards and sections",
+      "summary": "Cards and bento containers take a larger footprint and can make a design feel cluttered; removing them lets content breathe."
+    },
+    {
+      "name": "Icons and imagery",
+      "summary": "Use one icon pack so styles match, keep icons simple, and scale detail with icon size."
+    },
+    {
+      "name": "Buttons and actions",
+      "summary": "Not all buttons need backgrounds; demote secondary buttons by removing the fill, using a border, or reducing opacity."
+    },
+    {
+      "name": "Modals and popovers",
+      "summary": "In a delete modal, the delete button gets the primary fill (preferably red) and cancel gets no background, a border or reduced opacity."
+    },
+    {
+      "name": "Depth, shadows and borders",
+      "summary": "Drop shadows that aren't working; otherwise keep x offset at or below y, blur at 1.3-2x y, and opacity at 15-20%."
+    },
+    {
+      "name": "Landing pages",
+      "summary": "Header sections should have one primary call to action, and giant display text is a rising website feature."
+    },
+    {
+      "name": "Design process",
+      "summary": "Take an honest look at gradients and shadows and remove them if they don't work; preview designs on the screen they are meant for."
+    },
+    {
+      "name": "Figma and design tools",
+      "summary": "Figma's 25% drop-shadow preset opacity can almost always be lowered to 15-20%, and the Figma app can mirror prototypes so they can be tried like a real app."
+    },
+    {
+      "name": "Design taste and judgement",
+      "summary": "Using subtle, muted colors rather than all-or-nothing color is a sign of a more experienced designer."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Hierarchy, or the lack of it, is the thing designers most often mess up.",
+      "evidence": "if there's one thing designers mess up it's hierarchy"
+    },
+    {
+      "claim": "Most people use size exclusively to create text hierarchy; this is okay but can be done better.",
+      "evidence": "most people use this exclusively as a way to create hierarchy"
+    },
+    {
+      "claim": "Designers have three tools for text hierarchy: size, font weight and font color.",
+      "evidence": "we really have three tools to help us create hierarchy within text"
+    },
+    {
+      "claim": "Adding two font weights and two text colors to a size-only design makes a big difference.",
+      "evidence": "we add two different font weights and two different font colors we can see a big difference"
+    },
+    {
+      "claim": "Many separators and containers make a design feel cluttered even if there is not much in it.",
+      "evidence": "your design can feel cluttered even if there's not that much in it"
+    },
+    {
+      "claim": "Cards take up a significantly larger footprint, especially on layouts with several columns.",
+      "evidence": "cards in general take up a significantly larger footprint"
+    },
+    {
+      "claim": "People intrinsically understand that things farther apart aren't related and things closer together are.",
+      "evidence": "things that are farther away aren't related"
+    },
+    {
+      "claim": "Searching mixed-style icon sites makes it hard to find multiple icons in the same style.",
+      "evidence": "finding multiple icons that are styled the same way really difficult"
+    },
+    {
+      "claim": "Larger icons need more detail and smaller icons need less.",
+      "evidence": "the larger the icon the more detail it needs"
+    },
+    {
+      "claim": "Off-whites in light mode and bluish blacks in dark mode indicate a more experienced designer.",
+      "evidence": "bluish blacks into your dark mode is a clear indication"
+    },
+    {
+      "claim": "AI and auto-generated palettes are fine, but finding just the right extra color requires experience and knowledge.",
+      "evidence": "finding just the right one requires experience and knowledge"
+    },
+    {
+      "claim": "Two equally prominent buttons in a header compete for attention, which is bad.",
+      "evidence": "two buttons that are equally as important and draw just as much attention"
+    },
+    {
+      "claim": "A good display font can be as visually important as an image.",
+      "evidence": "a really good display font can be just as visually important as an image"
+    },
+    {
+      "claim": "Gradients and drop shadows more often than not detract from a design.",
+      "evidence": "more times than not they actually detract from the design"
+    },
+    {
+      "claim": "Removing gradients and shadows that aren't working often makes a website feel more professional.",
+      "evidence": "often this will actually make your website feel more professional"
+    },
+    {
+      "claim": "Darker backgrounds need a stronger shadow for it to appear.",
+      "evidence": "with a darker background needing a stronger shadow for it to appear"
+    },
+    {
+      "claim": "Not viewing designs on their target screen led the author to extra large font sizes and spacing because he was zoomed out in Figma.",
+      "evidence": "led to extra large font sizings and spacings since I was zoomed out"
+    }
+  ],
+  "quotes": [
+    "designs need buttons but not all buttons need backgrounds",
+    "muted colors are your friend",
+    "any good website with a gradient can be a good website without a gradient too"
+  ],
+  "tags": [
+    "visual-hierarchy",
+    "font-weight",
+    "text-color",
+    "whitespace",
+    "cards",
+    "icons",
+    "muted-colors",
+    "off-white",
+    "button-hierarchy",
+    "destructive-action",
+    "display-type",
+    "gradients",
+    "drop-shadow",
+    "device-preview",
+    "beginner-tips"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "Build text hierarchy with font weight and text color as well as size, instead of relying on size alone.",
+      "why": "Most people use size exclusively; weight and color add more differentiation and drastically improve a design without changing much else.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "we can use font weights and font colors to create more differentiation"
+    },
+    {
+      "rule": "Use at most two font weights in a design.",
+      "why": "Having too many font weights, like too many sizes, is not visually appealing.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [
+        "two font weights"
+      ],
+      "evidence": "at most I like to use two font weights"
+    },
+    {
+      "rule": "When a font family offers many weights, pick two that are separated by at least one weight step.",
+      "why": "The two weights need to be distinct enough to create differentiation [inferred].",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [
+        "separated by at least one weight"
+      ],
+      "evidence": "make sure the two you choose are separated by at least one weight"
+    },
+    {
+      "rule": "Use at most two text colors: the primary text color (black or white) and that same color at 45 to 70% opacity.",
+      "why": "Too many text colors is not visually appealing; the reduced-opacity color creates hierarchy.",
+      "kind": "do",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [
+        "two",
+        "45 and 70%"
+      ],
+      "evidence": "anywhere between 45 and 70% is good depending on the circumstance"
+    },
+    {
+      "rule": "Separate content with space instead of dividers and cards, especially in multi-column layouts such as an e-commerce store.",
+      "why": "Removing dividers and cards lets everything breathe, and the added space is what separates each piece of content.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "removing the dividers and cards lets everything breathe more"
+    },
+    {
+      "rule": "Don't pile on separators and containers; bento-style sections are fine, but many of them make a design feel cluttered.",
+      "why": "Many separators and containers make a design feel cluttered even when there is little in it.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "with many separators and containers your design can feel cluttered"
+    },
+    {
+      "rule": "Place related items close together and unrelated items farther apart so spacing shows grouping.",
+      "why": "People intrinsically read distance as unrelated and closeness as related.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "things that are farther away aren't related and things that are closer together are"
+    },
+    {
+      "rule": "Take icons from one icon pack or library rather than searching a mixed-style icon site for each one.",
+      "why": "Mixed-style sites like Flaticon make it very hard to find multiple icons styled the same way.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "using icon packs and libraries is a great way to get around the different styles"
+    },
+    {
+      "rule": "Keep icons simple, and match detail to size: more detail for large icons, less for small ones.",
+      "why": "You don't need a piece of art as an icon; generally the simpler the better.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "the larger the icon the more detail it needs"
+    },
+    {
+      "rule": "Incorporate off-whites into light mode and bluish blacks into dark mode rather than only pure white and pure black.",
+      "why": "It is a clear indication of a designer who has been designing longer; beginners treat color as all or nothing (pure saturated colors plus black and white).",
+      "kind": "do",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "incorporating off- whites into your light mode and bluish blacks into your dark mode"
+    },
+    {
+      "rule": "Don't be afraid of muted colors such as baby blue, beige and lavender, especially when adding one more color beyond an AI or auto-generated palette; don't limit color to pure saturated hues plus black and white.",
+      "why": "Getting better with color means being aware of subtle, muted colors, and finding just the right extra color requires experience and knowledge.",
+      "kind": "do",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "don't be afraid of muted colors they're your friend"
+    },
+    {
+      "rule": "When several buttons sit close together, give a background only to the primary action; not every button needs one.",
+      "why": "Buttons that are equally important draw just as much attention and compete; removing or reducing the others' backgrounds manipulates the hierarchy.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "this mostly pertains to multiple buttons being in close proximity to one another"
+    },
+    {
+      "rule": "Give a header section only one primary call to action.",
+      "why": "Two equally important buttons draw just as much attention and compete.",
+      "kind": "do",
+      "strength": "must",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [
+        "one primary call to action"
+      ],
+      "evidence": "only ever have one primary call to action"
+    },
+    {
+      "rule": "If a header must keep a second button, remove its background so it no longer competes with the primary one; otherwise drop the second button.",
+      "why": "Removing the background manipulates the hierarchy so the buttons are no longer equally prominent.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "the first is to remove the background completely"
+    },
+    {
+      "rule": "In a delete dialog, give the delete button the primary fill, preferably red, and demote cancel with no background, only a border, or reduced opacity.",
+      "why": "Delete is the primary action despite being destructive, and the demoted cancel button then doesn't compete with it.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [
+        "red"
+      ],
+      "evidence": "it should get the primary color preferably red"
+    },
+    {
+      "rule": "Treat large display type as a visual element, and pick a good display font for it.",
+      "why": "A really good display font can be just as visually important as an image.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "typography",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "use text as a visual element and grab a display font"
+    },
+    {
+      "rule": "Don't use giant text more than once or twice on a page.",
+      "why": "He says not to overdo giant text: once or maybe twice per page is enough (no further reason given).",
+      "kind": "dont",
+      "strength": "must",
+      "area": "typography",
+      "applies_to": "web",
+      "values": [
+        "once or maybe twice in a page"
+      ],
+      "evidence": "you certainly shouldn't do it more than than that"
+    },
+    {
+      "rule": "Review gradients and drop shadows honestly, and remove them entirely if they aren't working.",
+      "why": "They more often than not detract from the design, and removing them often makes a site feel more professional.",
+      "kind": "do",
+      "strength": "should",
+      "area": "elevation",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "if it isn't working with them just remove them entirely"
+    },
+    {
+      "rule": "Keep a drop shadow's x offset less than or equal to its y offset.",
+      "why": "No reason given beyond it being his basic drop-shadow strategy for shadows that are hard to simply remove.",
+      "kind": "do",
+      "strength": "should",
+      "area": "elevation",
+      "applies_to": "all",
+      "values": [
+        "x value should always be less than or equal to your y value"
+      ],
+      "evidence": "your x value should always be less than or equal to your y value"
+    },
+    {
+      "rule": "Set a drop shadow's blur to 1.3 to 2 times its y offset.",
+      "why": "No reason given beyond it being his basic drop-shadow strategy for shadows that are hard to simply remove.",
+      "kind": "do",
+      "strength": "should",
+      "area": "elevation",
+      "applies_to": "all",
+      "values": [
+        "1.3 to 2 times your y value"
+      ],
+      "evidence": "your blur should be 1.3 to 2 times your y value"
+    },
+    {
+      "rule": "Lower shadow opacity from Figma's 25% preset to 15 to 20%, using the stronger end on darker backgrounds.",
+      "why": "He says you can almost always decrease it; the right value depends on the background, and a darker background needs a stronger shadow for it to appear.",
+      "kind": "do",
+      "strength": "should",
+      "area": "elevation",
+      "applies_to": "all",
+      "values": [
+        "25%",
+        "15 to 20%"
+      ],
+      "evidence": "almost always you can decrease the opacity of the figma preset from 25% down to 15 to 20%"
+    },
+    {
+      "rule": "Preview designs on the screen they are meant for, on desktop or by mirroring prototypes in the Figma app, before settling font sizes and spacing.",
+      "why": "Designing zoomed out in Figma led the author to extra large font sizes and spacing.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "view your designs on the screen that they were meant to be viewed on"
+    },
+    {
+      "rule": "Account for the browser bar taking up screen room on both mobile and desktop when sizing layouts.",
+      "why": "The browser bar takes up some room on both mobile and desktop.",
+      "kind": "do",
+      "strength": "should",
+      "area": "platforms",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "the browser bar will take up some room"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "How should important text stand out from the rest?",
+      "options": [
+        {
+          "name": "Size only",
+          "effect": "Works, but gives less differentiation; the 'before' in his comparison.",
+          "when": "The source says this is okay but we can do better."
+        },
+        {
+          "name": "Size plus two font weights and two text colors",
+          "effect": "A big, quick improvement in hierarchy without changing much else.",
+          "when": "Default for text hierarchy."
+        }
+      ],
+      "recommendation": "Add two font weights (separated by at least one weight step) and two text colors on top of size; too many weights or colors is not visually appealing.",
+      "maps_to": "Q-type-12",
+      "evidence": "use font weights and colors to create hierarchy"
+    },
+    {
+      "question": "How many text colors should there be, and how is the secondary one made?",
+      "options": [
+        {
+          "name": "Primary text color only",
+          "effect": "Less hierarchy between text levels [inferred].",
+          "when": "Not recommended by the source [inferred]."
+        },
+        {
+          "name": "Primary plus the same color at reduced opacity",
+          "effect": "Two text colors, the second at 45 to 70% opacity, giving clear hierarchy.",
+          "when": "Generally; two is the maximum he recommends."
+        }
+      ],
+      "recommendation": "Two text colors at most: the primary (black or white) and a reduced-opacity version at 45 to 70%, depending on the circumstance.",
+      "maps_to": "Q-color-22",
+      "evidence": "anywhere between 45 and 70% is good depending on the circumstance"
+    },
+    {
+      "question": "Should related content be grouped with space, or with cards and dividers?",
+      "options": [
+        {
+          "name": "Cards, containers and dividers (bento-style)",
+          "effect": "Takes a significantly larger footprint and can feel cluttered even with little content.",
+          "when": "Acceptable for bento sections; he doesn't say never, but warns against many of them."
+        },
+        {
+          "name": "Space",
+          "effect": "Everything breathes more; distance alone separates content.",
+          "when": "Especially multi-column layouts such as an e-commerce store."
+        }
+      ],
+      "recommendation": "Use more space and fewer containers and lines, because people read closeness as relation.",
+      "maps_to": "Q-dir-04",
+      "evidence": "more space fewer containers and fewer lines"
+    },
+    {
+      "question": "Where should icons come from?",
+      "options": [
+        {
+          "name": "Search a mixed-style icon site for each icon (e.g. Flaticon)",
+          "effect": "Overwhelming number of styles; hard to find multiple icons styled the same way.",
+          "when": "Not recommended."
+        },
+        {
+          "name": "One icon pack or library (e.g. Feather Icons)",
+          "effect": "Consistent, minimal icons; selection may be limited but covers the basics.",
+          "when": "Default."
+        }
+      ],
+      "recommendation": "Use icon packs and libraries to avoid mismatched styles; his go-to is Feather Icons in Figma.",
+      "maps_to": "Q-icon-01",
+      "evidence": "my go-to is feather icons on figma"
+    },
+    {
+      "question": "Should light and dark backgrounds be pure white and black, or tinted?",
+      "options": [
+        {
+          "name": "Pure white and pure black",
+          "effect": "The all-or-nothing approach he associates with beginners.",
+          "when": "Not recommended."
+        },
+        {
+          "name": "Off-white in light mode, bluish black in dark mode",
+          "effect": "Subtler, muted look that signals a more experienced designer.",
+          "when": "Default."
+        }
+      ],
+      "recommendation": "Use off-whites in light mode and bluish blacks in dark mode; muted colors are your friend.",
+      "maps_to": "Q-color-09",
+      "evidence": "incorporating off- whites into your light mode"
+    },
+    {
+      "question": "How dark should dark mode be: pure black or a tinted black?",
+      "options": [
+        {
+          "name": "Pure black",
+          "effect": "The all-or-nothing black-and-white approach he associates with beginners.",
+          "when": "Not recommended."
+        },
+        {
+          "name": "Bluish black",
+          "effect": "A muted dark that signals a designer who has been designing longer.",
+          "when": "Default for dark mode."
+        }
+      ],
+      "recommendation": "Use bluish blacks in dark mode rather than pure black; muted colors are your friend.",
+      "maps_to": "Q-color-21",
+      "evidence": "bluish blacks into your dark mode"
+    },
+    {
+      "question": "What should happen to a second button next to the primary call to action in a header?",
+      "options": [
+        {
+          "name": "Discard it",
+          "effect": "One clear primary call to action.",
+          "when": "The logical choice when the second button isn't essential."
+        },
+        {
+          "name": "Remove its background",
+          "effect": "It stays available but no longer competes with the primary button.",
+          "when": "When the second button is a must-have; his recommendation for the header case."
+        },
+        {
+          "name": "Keep both filled",
+          "effect": "Two equally important buttons draw the same attention and compete.",
+          "when": "Never; he calls this bad."
+        }
+      ],
+      "recommendation": "Header sections should only ever have one primary call to action; drop the second button or remove its background.",
+      "maps_to": "Q-state-01",
+      "evidence": "the logical choice here is to simply discard the second button"
+    },
+    {
+      "question": "In a delete dialog, which button gets the fill?",
+      "options": [
+        {
+          "name": "Delete gets the primary fill, preferably red",
+          "effect": "The destructive action reads as the primary action.",
+          "when": "Delete confirmation dialogs."
+        },
+        {
+          "name": "Cancel with no background",
+          "effect": "Signals cancel is not the primary action.",
+          "when": "Demoting the secondary button."
+        },
+        {
+          "name": "Cancel with just a border",
+          "effect": "Signals cancel is not the primary action.",
+          "when": "Demoting the secondary button."
+        },
+        {
+          "name": "Cancel at reduced opacity",
+          "effect": "Signals cancel is not the primary action.",
+          "when": "Demoting the secondary button."
+        }
+      ],
+      "recommendation": "The delete button is the primary action despite being destructive, so it gets the primary color, preferably red; cancel gets no background, a border or reduced opacity.",
+      "maps_to": "Q-state-06",
+      "evidence": "since the delete button is the primary action"
+    },
+    {
+      "question": "Should the site use a separate display font for giant headline text?",
+      "options": [
+        {
+          "name": "Text only as explanation",
+          "effect": "Text does its job of explaining but adds little visually.",
+          "when": "Not what he recommends [inferred]."
+        },
+        {
+          "name": "Giant text in a good display font",
+          "effect": "Text becomes a visual element as important as an image.",
+          "when": "Once or maybe twice per page, never more."
+        }
+      ],
+      "recommendation": "Use giant text as a visual element with a good display font (his favourites include Unbounded and Cabinet Grotesk), but only once or twice per page.",
+      "maps_to": "Q-type-05",
+      "evidence": "grab a display font while you're at it"
+    },
+    {
+      "question": "Should the design keep its gradients and drop shadows?",
+      "options": [
+        {
+          "name": "Keep them",
+          "effect": "Can work, but more often than not they detract from the design.",
+          "when": "Only when an honest look shows they work; experiment to get better."
+        },
+        {
+          "name": "Remove them",
+          "effect": "Often makes the website feel more professional.",
+          "when": "When they aren't working."
+        }
+      ],
+      "recommendation": "Experiment, but if they aren't working remove them entirely; if shadows stay, follow the x/y, blur and opacity recipe.",
+      "maps_to": null,
+      "evidence": "if you're having issues with shadows and gradients drop them"
+    }
+  ],
+  "process": [
+    {
+      "step": "Set text hierarchy",
+      "detail": "Start from size, then add two font weights separated by at least one weight step and two text colors (primary plus 45 to 70% opacity); compare before and after."
+    },
+    {
+      "step": "Strip extra containers",
+      "detail": "Remove dividers and cards that aren't needed and let the added space separate content, keeping related items close."
+    },
+    {
+      "step": "Pick one icon set",
+      "detail": "Choose an icon pack or library (his go-to is Feather Icons in Figma), keep icons simple, and match detail to icon size."
+    },
+    {
+      "step": "Review colors for muted options",
+      "detail": "Swap pure white and black for off-whites and bluish blacks, and look at muted colors such as baby blue, beige and lavender."
+    },
+    {
+      "step": "Audit button groups",
+      "detail": "Where buttons sit close together, keep one primary action; discard or remove the background from the others, and in delete dialogs make delete the red primary and demote cancel."
+    },
+    {
+      "step": "Find a display font",
+      "detail": "Filter Google Fonts for display fonts and scroll; use giant text once or maybe twice per page."
+    },
+    {
+      "step": "Honest review of gradients and shadows",
+      "detail": "Remove them if they aren't working; for shadows that stay, keep x at or below y, blur at 1.3 to 2 times y, and opacity at 15 to 20% instead of Figma's 25% preset."
+    },
+    {
+      "step": "Preview on the target screen",
+      "detail": "Preview on desktop or mirror the prototype with the Figma app, and leave room for the browser bar on mobile and desktop."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Before and after of a text block: size as the only differentiator, then two font weights and two font colors added",
+      "where": null,
+      "visual_note": "Shown on screen, not described in the transcript; demonstrates a big hierarchy improvement from weight and color alone."
+    },
+    {
+      "what": "Multi-column e-commerce store layout with and without cards and dividers",
+      "where": null,
+      "visual_note": "Cards take a larger footprint; removing them lets everything breathe and space separates each item."
+    },
+    {
+      "what": "Searching Flaticon for an icon",
+      "where": "Flaticon",
+      "visual_note": "Many different styles and types appear at once, making a matching set hard to assemble."
+    },
+    {
+      "what": "Feather Icons used in Figma",
+      "where": "Feather Icons",
+      "visual_note": "Minimal, consistent icons with limited but basic coverage."
+    },
+    {
+      "what": "Header section with two equally prominent buttons, then the second button's background removed",
+      "where": null,
+      "visual_note": "Two filled buttons compete; removing one background leaves a single primary call to action."
+    },
+    {
+      "what": "Delete modal with delete and cancel buttons",
+      "where": null,
+      "visual_note": "Delete gets the primary color, preferably red; cancel is shown with no background, just a border, or reduced opacity."
+    },
+    {
+      "what": "Giant display text as a website feature, with favourite display fonts",
+      "where": "Unbounded, Cabinet Grotesk",
+      "visual_note": "Large display type acting as a visual element as strong as an image."
+    },
+    {
+      "what": "The author's junior-designer mistake of designing zoomed out in Figma",
+      "where": "Figma",
+      "visual_note": "Resulted in extra large font sizes and spacing when seen on the real screen."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "three tools",
+      "context": "Size, font weight and font color: the tools for text hierarchy.",
+      "evidence": "we really have three tools to help us create hierarchy within text"
+    },
+    {
+      "value": "two font weights",
+      "context": "Maximum number of font weights he likes to use.",
+      "evidence": "at most I like to use two font weights"
+    },
+    {
+      "value": "16 different weights",
+      "context": "Example of a font with many weights; still pick two separated by at least one weight.",
+      "evidence": "if your font has like 16 different weights"
+    },
+    {
+      "value": "at least one weight",
+      "context": "How far apart the two chosen font weights should be.",
+      "evidence": "make sure the two you choose are separated by at least one weight"
+    },
+    {
+      "value": "two",
+      "context": "Generally the maximum number of text colors.",
+      "evidence": "when it comes to color two is generally the maximum"
+    },
+    {
+      "value": "45 and 70%",
+      "context": "Opacity range for the secondary text color relative to the primary text color.",
+      "evidence": "anywhere between 45 and 70% is good"
+    },
+    {
+      "value": "one primary call to action",
+      "context": "The most a header section should ever have.",
+      "evidence": "only ever have one primary call to action"
+    },
+    {
+      "value": "once or maybe twice",
+      "context": "How often giant text should appear on a page.",
+      "evidence": "once or maybe twice in a page is enough"
+    },
+    {
+      "value": "1.3 to 2 times",
+      "context": "Drop-shadow blur relative to the y offset.",
+      "evidence": "your blur should be 1.3 to 2 times your y value"
+    },
+    {
+      "value": "25%",
+      "context": "Figma's preset drop-shadow opacity, which he lowers.",
+      "evidence": "the figma preset from 25%"
+    },
+    {
+      "value": "15 to 20%",
+      "context": "Recommended drop-shadow opacity, depending on the background.",
+      "evidence": "down to 15 to 20% depending on the background"
+    }
+  ],
+  "caveats": [
+    "Auto-captions: 'redu opacity' is reduced opacity, 'destru Ive' is destructive, 'delete Model' is delete modal, 'flat icon' is Flaticon and 'cabinet grotesque' is Cabinet Grotesk. The third favourite display font is captioned 'gourd' and could not be identified with certainty.",
+    "The before/after visuals are shown on screen and not described in the transcript, so their exact values (sizes, colors, layouts) are unknown.",
+    "The shadow recipe, the two-weight cap, Feather Icons and the favourite display fonts are the author's personal preferences, not measured findings.",
+    "Published April 2024; bento layouts and giant text are described as current trends, and the 25% shadow opacity refers to Figma's preset at that time.",
+    "Ends with a subscribe request; no sponsor segment.",
+    "The 45% end of the secondary text opacity range may fall below WCAG 2.2 AA 4.5:1 contrast for body text (black at 45% on white is about 3.4:1); check contrast before adopting it as a default [inferred]."
+  ]
+}

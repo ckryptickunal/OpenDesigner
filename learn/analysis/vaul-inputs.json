@@ -1,0 +1,52 @@
+{
+  "summary": "This Vaul docs page covers text inputs inside a drawer, which are traditionally hard to get right because the keyboard pushes the content up. Vaul fixes this by correcting the drawer's position when the keyboard opens. Setting repositionInputs to false turns the correction off and falls back to the browser's default behaviour. For a design system it names a failure mode for drawers that contain inputs (most likely on touch devices with an on-screen keyboard [inferred]) and the switch that turns Vaul's fix off.",
+  "key_ideas": [
+    "Inputs inside a drawer are traditionally tricky because the keyboard pushes the content up.",
+    "Vaul corrects the drawer's position when the keyboard opens.",
+    "repositionInputs set to false disables the repositioning.",
+    "With repositioning off, the drawer falls back to the default browser behaviour."
+  ],
+  "entities": [
+    {"name": "Vaul", "type": "library", "description": "Drawer component that repositions itself when the keyboard opens."},
+    {"name": "repositionInputs", "type": "concept", "description": "Prop that turns the keyboard repositioning on or off."},
+    {"name": "aiforui.dev", "type": "product", "description": "Course advertised in the page banner; not part of the docs content."}
+  ],
+  "topics": [
+    {"name": "Drawers and sheets", "summary": "Vaul corrects the drawer's position when the keyboard opens; repositionInputs false turns this off."},
+    {"name": "Forms and inputs", "summary": "Inputs inside drawers are tricky because the keyboard pushes content up; Vaul repositions the drawer."},
+    {"name": "Mobile app patterns", "summary": "Keyboard handling for drawers that contain inputs; the page does not name mobile, but a keyboard that pushes content up points to on-screen keyboards [inferred]."}
+  ],
+  "claims": [
+    {"claim": "Inputs in drawers are tricky because the keyboard pushes the content up.", "evidence": "Inputs intro"},
+    {"claim": "Vaul corrects the drawer's position when the keyboard is opened.", "evidence": "Inputs intro"},
+    {"claim": "Setting repositionInputs to false disables repositioning and falls back to the default browser behaviour.", "evidence": "No repositioning"}
+  ],
+  "quotes": [
+    "Traditionally tricky to get right, because keyboard is pushing the content up."
+  ],
+  "tags": ["vaul", "drawer", "inputs", "keyboard", "mobile", "forms"],
+  "authority": "good-to-have",
+  "rules": [
+    {"rule": "Keep the drawer's position corrected when the keyboard opens for an input inside it.", "why": "Otherwise the keyboard pushes the drawer's content up.", "kind": "do", "strength": "should", "area": "components", "applies_to": "all", "values": ["repositionInputs"], "evidence": "Inputs intro"},
+    {"rule": "Turn repositioning off only when you want the browser's default keyboard behaviour.", "why": "Setting repositionInputs to false disables repositioning and falls back to default browser behaviour.", "kind": "do", "strength": "consider", "area": "components", "applies_to": "react", "values": ["repositionInputs", "false"], "evidence": "No repositioning"}
+  ],
+  "decisions": [
+    {"question": "When the keyboard opens for an input in a drawer, should the drawer reposition itself?", "options": [
+      {"name": "Reposition", "effect": "The drawer's position is corrected when the keyboard opens.", "when": "Inputs inside a drawer (the source's main setup)."},
+      {"name": "Browser default (repositionInputs false)", "effect": "No repositioning; the default browser behaviour applies, where the keyboard can push content up [inferred].", "when": "When you want the default browser behaviour."}
+    ], "recommendation": "Reposition: the source presents it as Vaul's fix for content being pushed up by the keyboard.", "maps_to": null, "evidence": "Inputs; No repositioning"}
+  ],
+  "process": [],
+  "examples": [
+    {"what": "Drawer with an input, repositioned for the keyboard", "where": "Vaul docs, Inputs", "visual_note": "Demo behind an 'Open Drawer' button; visuals and code were not captured in the raw text."},
+    {"what": "No repositioning demo", "where": "Vaul docs, Inputs", "visual_note": "The same drawer with repositionInputs false, showing the default browser behaviour."}
+  ],
+  "numbers": [],
+  "caveats": [
+    "Every page carries a banner advertising the aiforui.dev course ('31 minutes left to join'); it is self-promotion and time-sensitive.",
+    "The page does not explain how the repositioning works.",
+    "The demos' code and visuals were not captured in the raw text.",
+    "Published date is unknown.",
+    "Not in this page: learn/sources.json records that the Vaul README says the library is unmaintained (checked 2026-09-24); flag that before recommending it as a dependency."
+  ]
+}

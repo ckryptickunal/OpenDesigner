@@ -1,0 +1,2075 @@
+{
+  "theme": "springs-gestures",
+  "standards": [
+    {
+      "id": "STD-springs-gestures-01",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Springs for anything a finger drives",
+      "rule": "Animate drags, flicks, swipes and any other gesture the user can interrupt or reverse mid-motion with a spring, not with a fixed-duration transition or @keyframes.",
+      "why": "Springs start from the current value and carry velocity through an interruption, while timing curves restart; a pre-scripted, fixed-duration animation cannot respond to new input. Non-gesture UI that is triggered rapidly only needs a CSS transition (STD-springs-gestures-15).",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "5. Timing or spring: 'If a finger was involved, use a spring. Springs carry velocity through an interruption; timing curves restart.'"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "4. Behavior over animation — use springs: 'Reach for springs for anything a user can touch.'"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "3. Interruptibility: 'Avoid CSS transitions and @keyframes for anything gesture-driven'"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "5. 'Reach for a spring instead when the motion is drag with momentum, an element that should feel alive, a gesture the user can interrupt or reverse'; 6. 'Springs for gestures'"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Spring Animations: 'Drag interactions with momentum'; 'Gestures that can be interrupted mid-animation'; 'Springs maintain velocity when interrupted'"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Springs: 'Use for: drag with momentum, \"alive\" elements (Dynamic Island), interruptible gestures'"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "4. Interruptibility: 'Gesture-driven motion should use springs — they carry velocity when interrupted.'"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Drag to dismiss: 'Springs, not durations, because the user can reverse mid-motion.'"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "Gesture seams: 'Draggable/swipeable elements that snap with no physics → springs'"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "Remedial Preference Hierarchy 5: 'a spring for gesture-driven motion'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/references/stages/16-motion-haptics-and-sound.md Q-motion-01 default two-mode: 'springs only for spatial moves in the expressive mode'; the sources want a spring for gesture-driven motion in every mode",
+        "synthesis/levers.json formulas.motion.web = 'if dampingRatio<1 emit sampled linear() spring; else cubic-bezier by energy band': the web form of every spring token is a fixed-duration CSS curve, which the source says cannot be smoothly grabbed and reversed mid-flight, and which cannot take a release velocity [inferred]"
+      ]
+    },
+    {
+      "id": "STD-springs-gestures-02",
+      "theme": "springs-gestures",
+      "area": "tokens",
+      "title": "Define springs by damping and response",
+      "rule": "Specify each spring with two designer parameters, damping ratio (or bounce) and response (or duration), rather than mass, stiffness and damping, and never treat response as a fixed duration.",
+      "why": "Apple deliberately replaced the physics triplet with these two designer-friendly parameters, and Emil recommends the duration-and-bounce form as easier to reason about. A spring has no fixed duration: its settle time emerges from the parameters.",
+      "strength": "should",
+      "values": {
+        "damping-ratio": "1.0 = critically damped, no bounce, smooth settle. < 1.0 = overshoots and oscillates.",
+        "response": "how quickly the value reaches the target, in seconds",
+        "motion-apple-style": "{ type: \"spring\", duration: 0.5, bounce: 0.2 }",
+        "motion-traditional-physics (only for more control)": "{ type: \"spring\", mass: 1, stiffness: 100, damping: 10 }"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "4. 'Apple deliberately replaced the physics triplet (mass/stiffness/damping) with two designer-friendly parameters'; 'This is not \"duration\"'"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Spring configuration: 'Apple's approach (recommended — easier to reason about)'"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Springs: '// Apple-style (easier to reason about) — recommended'"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "4. 'Spring configs, Apple-style (recommended)'"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "5. '{ type: \"spring\", duration: 0.5, bounce: 0.2 } // Apple-style — easier to reason about'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/references/stages/16-motion-haptics-and-sound.detailed.md Q-motion-04 default: '(dampingRatio, stiffness) plus derived (duration, bounce) for Apple': stiffness, not response, is the stored parameter, and the Apple pair is only derived [inferred]"
+      ]
+    },
+    {
+      "id": "STD-springs-gestures-03",
+      "theme": "springs-gestures",
+      "area": "tokens",
+      "title": "Reanimated springs take duration and dampingRatio",
+      "rule": "In React Native Reanimated, configure every spring with duration and dampingRatio from the spring table, never with mass, stiffness and damping.",
+      "why": "Reanimated's spring takes Apple's two designer parameters directly, and the skill's hard rule is that spring configs come from its tables, never approximated.",
+      "strength": "must",
+      "values": {
+        "parameters": "duration, dampingRatio",
+        "example": "{ duration: 400, dampingRatio: 1 }"
+      },
+      "applies_to": [
+        "react-native"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "5. Timing or spring: 'Reanimated's spring takes Apple's two designer parameters directly — use this form, not mass/stiffness/damping'"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Hard Rules 3: 'No approximated values. Curves and spring configs come from the tables below.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-04",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Default springs are critically damped",
+      "rule": "Default every UI spring to critically damped (damping ratio 1.0, no overshoot) with a response of 0.3–0.4 s, and move or reposition elements with damping 1.0 and response 0.4 s; only a spring that follows a momentum gesture (STD-springs-gestures-06) or a deliberately playful or decorative moment (STD-springs-gestures-07, STD-springs-gestures-45) may be under-damped.",
+      "why": "Critically damped motion is graceful and non-distracting; the source calls damping 1.0 springs everywhere by default a safe house style, and 1.0 / 0.4 is what Apple ships for move / reposition.",
+      "strength": "must",
+      "values": {
+        "damping-ratio": "1.0",
+        "response": "0.3–0.4",
+        "move-reposition": "Move / reposition (e.g. PiP) | 1.0 | 0.4",
+        "motion": "{ type: 'spring', bounce: 0, duration: 0.4 }",
+        "reanimated": "{ duration: 400, dampingRatio: 1 }"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "Defaults: 'Start most UI at damping 1.0 (critically damped) — graceful and non-distracting.'"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "Concrete values Apple ships: 'Move / reposition (e.g. PiP) | 1.0 | 0.4'"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "Web mapping: 'A safe house style is damping: 1.0 springs everywhere by default'; Quick Reference 'Default UI spring | Critically damped, no overshoot | damping 1.0, response 0.3–0.4'"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "5. Timing or spring: 'Default settle, no overshoot | { duration: 400, dampingRatio: 1 }'"
+        }
+      ],
+      "engine": [
+        {
+          "path": "motion.spring.spatial.dampingRatio",
+          "value": 1.0,
+          "type": "number",
+          "note": "Engine param override (overrides.motion.spring.spatial.dampingRatio), tested with engine.py set; it rewrites $extensions.opendesigner.spring.dampingRatio on motion.spring.spatial.fast/default/slow. motion.transition.move aliases motion.spring.spatial.default."
+        },
+        {
+          "path": "motion.spring.spatial.stiffness",
+          "value": 246.7,
+          "type": "number",
+          "note": "Response 0.4 s at mass 1: (2π/0.4)² ≈ 246.7, the inverse of levers.json springConversion duration = 2*pi/sqrt(stiffness); tested with engine.py set, after which the engine reports apple duration 0.4, bounce 0 [inferred]. The fast and slow variants derive from it (×2 and ×0.45)."
+        }
+      ],
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "synthesis/levers.json dials 'energy' drives motion.spring.spatial.dampingRatio through anchors [[0, 1.0], [33, 1.0], [50, 0.9], [75, 0.8], [100, 0.6]], so above energy 33 every spatial spring is under-damped (0.9 at the dial default 50); motion.transition.move aliases motion.spring.spatial.default, so plain on-screen moves overshoot",
+        "skills/opendesigner/scripts/engine.py build_motion: at energy ≤ 50 motion.spring.spatial.default has stiffness 700 (levers anchors [[0, 700], [50, 700], [75, 380], [100, 380]]), a derived Apple duration of 0.237 s, faster than the 0.3–0.4 s response [inferred]"
+      ]
+    },
+    {
+      "id": "STD-springs-gestures-05",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Bounce only after a momentum gesture",
+      "rule": "Never let a spring overshoot on UI that appears or moves without a gesture behind it (a menu fading in, a dialog, a plain reposition); keep bounce for motion that follows a gesture that carried momentum (a flick, a throw, a drag release) and, beyond that, only for deliberately playful interactions.",
+      "why": "Overshoot on a menu that just faded in feels wrong; overshoot on a card you flicked feels right. Emil's skills also reserve bounce for drag-to-dismiss and playful interactions and keep it out of most UI.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "Defaults: 'Add bounce (damping ~0.8) only when the gesture itself carried momentum (a flick, a throw, a drag release).'"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "'Overshoot on a menu that just faded in feels wrong; overshoot on a card you flicked feels right.'"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "5. Timing or spring: 'Bounce only when the gesture carried momentum.'"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "avoid bounce in most UI — reserve it for drag-to-dismiss and playful interactions"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "synthesis/levers.json dials 'energy' drives motion.spring.spatial.dampingRatio through anchors [[0, 1.0], [33, 1.0], [50, 0.9], [75, 0.8], [100, 0.6]], so above energy 33 every spatial spring is under-damped (0.9 at the dial default 50); motion.transition.move (on-screen moves with no gesture behind them) resolves to that spring",
+        "skills/opendesigner/references/stages/16-motion-haptics-and-sound.md Q-motion-01 default two-mode: 'springs only for spatial moves in the expressive mode, bounce at or below 0.2' ties bounce to the motion mode, not to a momentum gesture [inferred]"
+      ]
+    },
+    {
+      "id": "STD-springs-gestures-06",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Momentum spring for released drags",
+      "rule": "Settle or snap back a released drag with a slightly under-damped spring (damping ratio about 0.8, bounce 0.2) started from the release velocity; a settle that must stop at a hard edge, such as a sheet dismissing off-screen, stays critically damped and clamped instead (STD-springs-gestures-10).",
+      "why": "Settling with a spring lets an interrupted drag keep its velocity, and a little bounce is right only because a flick preceded it. The sources give 0.4 s (Apple, Reanimated) and 0.5 s (Emil's web recipe) for this spring, and the Expo recipes spring a dismissed sheet and a swipe-to-delete row that returns home at dampingRatio 1, so 0.8 is the default, not a rule.",
+      "strength": "should",
+      "values": {
+        "apple": "damping ~0.8, response 0.3–0.4",
+        "motion-apple-design": "{ type: 'spring', bounce: 0.2, duration: 0.4 }",
+        "motion-animate-recipe": "{ type: \"spring\", duration: 0.5, bounce: 0.2 }",
+        "reanimated": "{ duration: 400, dampingRatio: 0.8, velocity }"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "Quick Reference: 'Momentum / flick spring | Under-damped, slight bounce | damping ~0.8, response 0.3–0.4'"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "Web mapping: '// Momentum interaction — a little bounce, only because a flick preceded it'"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Drag to dismiss: 'Settle with a spring so an interrupted drag keeps its velocity'; '{ type: \"spring\", duration: 0.5, bounce: 0.2 }'"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "5. Timing or spring: 'Reposition / snap back after a drag | { duration: 400, dampingRatio: 0.8, velocity }'"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "Gesture seams: 'springs ({ type: \"spring\", duration: 0.5, bounce: 0.2 }, bounce 0.1–0.3)'"
+        }
+      ],
+      "engine": {
+        "path": "motion.spring.momentum",
+        "value": {
+          "dampingRatio": 0.8,
+          "stiffness": 246.7,
+          "mass": 1
+        },
+        "type": "transition",
+        "note": "New token. DTCG has no spring type, so store it the way engine.py build_motion stores motion.spring.spatial.*: a transition token whose $extensions.opendesigner.spring holds these values. Stiffness is (2π/response)² at mass 1, the inverse of levers.json springConversion duration = 2*pi/sqrt(stiffness); the engine then derives Apple duration 0.4 and bounce 0.2 [inferred]"
+      },
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py build_motion has no momentum spring: motion.spring.spatial.* serve both plain moves and post-gesture settles with one energy-driven damping ratio [inferred]"
+      ]
+    },
+    {
+      "id": "STD-springs-gestures-07",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Keep bounce subtle, 0.1 to 0.3",
+      "rule": "When a spring bounces, keep bounce between 0.1 and 0.3, and keep bounce out of most UI, reserving it for drag-to-dismiss and playful interactions.",
+      "why": "The sources ask for subtle bounce and say to avoid it in most UI contexts.",
+      "strength": "must",
+      "values": {
+        "bounce": "0.1–0.3"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "5. 'Keep bounce at 0.1–0.3, and avoid bounce in most UI — reserve it for drag-to-dismiss and playful interactions.'"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Spring configuration: 'Keep bounce subtle (0.1-0.3) when used. Avoid bounce in most UI contexts.'"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Springs: 'Keep bounce subtle (0.1–0.3); avoid bounce in most UI — reserve for drag-to-dismiss and playful interactions.'"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "4. 'Keep bounce subtle (0.1–0.3); reserve visible bounce for drag-to-dismiss and playful moments.'"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "Gesture seams: 'bounce 0.1–0.3'"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "\\bbounce\\s*:\\s*(?:0?\\.(?:[4-9]|3\\d*[1-9])\\d*|[1-9]\\d*(?:\\.\\d+)?)\\b",
+        "message": "Spring bounce above 0.3: keep it at 0.1–0.3, and only after a momentum gesture."
+      },
+      "design_md": true,
+      "conflicts": [
+        "synthesis/levers.json dials 'energy' → motion.spring.spatial.dampingRatio reaches 0.6 at energy 100, bounce 0.4 by the file's own conversion bounce = 1 - dampingRatio",
+        "synthesis/levers.json formulas.motion.springSpeeds.expressive.spatial.fast = [0.6, 800] (dampingRatio 0.6, bounce 0.4)"
+      ]
+    },
+    {
+      "id": "STD-springs-gestures-08",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Sheet and drawer spring values",
+      "rule": "Drive a sheet or drawer's spring with damping ratio 0.8 and response 0.3 s (Reanimated: { duration: 300, dampingRatio: 0.8, velocity }), about 300ms perceived; the dismissal spring is the exception and stays critically damped and clamped at the screen edge (STD-springs-gestures-10).",
+      "why": "These are the values Apple ships for drawer / sheet, and the animate-expo spring and duration tables give sheets and drawers a spring of about 300ms perceived; the Expo sheet recipe dismisses with dampingRatio 1 and overshootClamping. On the web, Emil's drawer (Vaul) opens and closes with a 500ms cubic-bezier(0.32, 0.72, 0, 1) CSS transition instead, so this spring is not the web drawer's open and close motion.",
+      "strength": "must",
+      "values": {
+        "apple": "Drawer / sheet | 0.8 | 0.3",
+        "reanimated": "{ duration: 300, dampingRatio: 0.8, velocity }",
+        "perceived-duration": "~300ms",
+        "dismissal": "{ duration: 300, dampingRatio: 1, velocity: e.velocityY, overshootClamping: true }"
+      },
+      "applies_to": [
+        "react-native",
+        "ios"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "Concrete values Apple ships: 'Drawer / sheet | 0.8 | 0.3'"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "5. Timing or spring: 'Sheet, drawer | { duration: 300, dampingRatio: 0.8, velocity }'"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Duration: 'Sheet, modal, drawer | spring, ~300ms perceived'"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Bottom sheet you can drag to dismiss: 'withSpring(0, { duration: 300, dampingRatio: 0.8, velocity: e.velocityY })'"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "duration: 300, dampingRatio: 1, velocity: e.velocityY, overshootClamping: true"
+        }
+      ],
+      "engine": {
+        "path": "motion.spring.sheet",
+        "value": {
+          "dampingRatio": 0.8,
+          "stiffness": 438.6,
+          "mass": 1
+        },
+        "type": "transition",
+        "note": "New token. DTCG has no spring type, so store it the way engine.py build_motion stores motion.spring.spatial.*: a transition token whose $extensions.opendesigner.spring holds these values. Stiffness is (2π/response)² at mass 1, the inverse of levers.json springConversion duration = 2*pi/sqrt(stiffness); the engine then derives Apple duration 0.3 and bounce 0.2 [inferred]"
+      },
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py build_motion labels motion.spring.spatial.default 'partial-screen (sheets, drawers)' but gives it the energy-driven damping ratio (1.0 at energy ≤ 33, 0.9 at 50) and stiffness 700, a derived Apple duration of 0.237 s, not 0.8 / 0.3 s [inferred]"
+      ]
+    },
+    {
+      "id": "STD-springs-gestures-09",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Spring values for rotating elements",
+      "rule": "Rotate elements with a spring of damping ratio 0.8 and response 0.4 s.",
+      "why": "These are the values Apple ships for rotation.",
+      "strength": "should",
+      "values": {
+        "damping": "0.8",
+        "response": "0.4"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "Concrete values Apple ships: 'Rotation | 0.8 | 0.4'"
+        }
+      ],
+      "engine": {
+        "path": "motion.spring.rotation",
+        "value": {
+          "dampingRatio": 0.8,
+          "stiffness": 246.7,
+          "mass": 1
+        },
+        "type": "transition",
+        "note": "New token. DTCG has no spring type, so store it the way engine.py build_motion stores motion.spring.spatial.*: a transition token whose $extensions.opendesigner.spring holds these values. Stiffness is (2π/response)² at mass 1, the inverse of levers.json springConversion duration = 2*pi/sqrt(stiffness); the engine then derives Apple duration 0.4 and bounce 0.2 [inferred]"
+      },
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-10",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Clamp springs at hard edges",
+      "rule": "Add overshootClamping: true to any spring that must not pass a hard edge, including a sheet's dismissal spring.",
+      "why": "Otherwise the sheet springs past the bottom of the screen and flashes a gap.",
+      "strength": "must",
+      "values": {
+        "clamp": "overshootClamping: true",
+        "sheet-dismissal": "withSpring(HEIGHT, { duration: 300, dampingRatio: 1, velocity: e.velocityY, overshootClamping: true })"
+      },
+      "applies_to": [
+        "react-native"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "5. Timing or spring: 'Must not pass a hard edge | add overshootClamping: true'"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Bottom sheet: 'overshootClamping on dismissal — otherwise the sheet springs past the bottom of the screen and flashes a gap.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-11",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Independent X and Y springs",
+      "rule": "Animate two-dimensional motion with two independent springs, one for X and one for Y, not one spring on the 2D distance.",
+      "why": "A single spring on a 2D distance desyncs when X and Y have different velocities.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "3. Interruptibility: 'Decompose 2D motion into independent X and Y springs.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-12",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Every animation can be grabbed mid-flight",
+      "rule": "Make every animation the user triggers or touches interruptible and redirectable at any moment: a user can grab a moving element mid-flight and reverse it, and a closing modal or sheet that is grabbed again follows the finger instead of finishing its close first.",
+      "why": "Interruptibility is the single most important principle, because the thought and the gesture happen in parallel; for anything a finger touches it is the baseline, not polish.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "3. Interruptibility — the single most important principle: 'A closing modal the user grabs again should follow the finger — not finish closing first, then reopen.'"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "'The user's finger is on the element. Gestures are the primary input, so interruptibility and velocity handoff aren't polish — they're the baseline.'"
+        },
+        {
+          "id": "ek-train-your-judgement",
+          "evidence": "Handling interruptions: 'Open and close each menu rapidly. Which handles interruptions better?'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-13",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Never block input during transitions",
+      "rule": "Never lock out input while a transition runs.",
+      "why": "Every animation must be interruptible and redirectable at any moment.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "3. Interruptibility: 'Never lock out input during a transition.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/references/stages/16-motion-haptics-and-sound.detailed.md Q-motion-02 default: 'motion is interruptible and never blocks input longer than about 100ms', which still allows about 100ms of blocked input"
+      ]
+    },
+    {
+      "id": "STD-springs-gestures-14",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Start from the on-screen value",
+      "rule": "When an animation is interrupted or a drag begins, start from the element's live on-screen (presentation) value, never from its target or logical value.",
+      "why": "Starting from the logical or target value causes a visible jump; without it, grabbing a sheet mid-animation teleports it.",
+      "strength": "must",
+      "values": {
+        "reanimated-onStart": "context.set(translateY.get())"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "3. Interruptibility: 'Always animate from the presentation (current) value, never the target value.'"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Bottom sheet: 'onStart captures the current value. Without it, grabbing a sheet mid-animation teleports it'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-15",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Transitions, not keyframes, for rapid UI",
+      "rule": "Animate anything that can be triggered rapidly or reversed mid-motion (stacking toasts, toggles, expand/collapse, list add and remove) with CSS transitions or springs, never @keyframes.",
+      "why": "Transitions retarget from the current value while keyframes restart from zero; with keyframes, older toasts jump into their new position instead of moving smoothly.",
+      "strength": "must",
+      "values": {
+        "example": "transition: transform 400ms ease"
+      },
+      "applies_to": [
+        "css",
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-toast-component",
+          "evidence": "'I initially used CSS keyframes for the animations, but they aren't interruptible'"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "6. Interruption and exit: 'Transitions, not keyframes, for anything triggered rapidly'"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Use CSS transitions over keyframes for interruptible UI"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "4. Interruptibility: 'must use transitions or springs'"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "6. Interruptibility: 'CSS transitions or springs that retarget from current state, not keyframes that restart from zero'"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Interruptibility: 'Not interruptible — avoid for dynamic UI'"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "Teleporting state: 'CSS transitions, not keyframes, so rapid triggers retarget smoothly'"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "(?i)@keyframes\\s+[\\w-]*(?:toast|toggle|snackbar)[\\w-]*",
+        "message": "Keyframes restart from zero: animate toasts and toggles with a CSS transition or a spring."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-16",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Carry velocity through a reversal",
+      "rule": "When a gesture reverses direction mid-animation, carry the current velocity through the re-target instead of cutting to a new animation (on the web, use a spring library that re-targets from the current velocity).",
+      "why": "Replacing one animation with another at a reversal creates a velocity discontinuity, a 'brick wall'; iOS avoids it natively with additive animations.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "3. Interruptibility: 'When a gesture reverses, blend velocity — don't hard-cut it.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "synthesis/levers.json formulas.motion.web = 'if dampingRatio<1 emit sampled linear() spring; else cubic-bezier by energy band': the web form of every spring token is a fixed-duration CSS curve that cannot be grabbed mid-flight or take a release velocity [inferred]"
+      ]
+    },
+    {
+      "id": "STD-springs-gestures-17",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Hand the release velocity to the spring",
+      "rule": "When a gesture ends, pass the pointer's release velocity to the spring as its initial velocity, so the motion continues at the finger's exact speed.",
+      "why": "Then there is no visible seam between dragging and animating; the sources call it the detail that most separates 'fluid' from 'fine'.",
+      "strength": "must",
+      "values": {
+        "motion": "absolute px/s velocity directly (velocity option)",
+        "relative-velocity": "relativeVelocity = gestureVelocity / (targetValue − currentValue)",
+        "relative-example": "element at y=50, target y=150 (100px to go), finger moving 50px/s → initial spring velocity = 50 / 100 = 0.5",
+        "reanimated": "velocity: e.velocityY"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "5. Velocity handoff — the seam between drag and animation"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "'Framer Motion / Motion take absolute px/s velocity directly (velocity option)'"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Bottom sheet: 'Velocity is handed to the spring, so there's no seam between the finger releasing and the animation continuing.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "synthesis/levers.json formulas.motion.web = 'if dampingRatio<1 emit sampled linear() spring; else cubic-bezier by energy band': the web form of every spring token is a fixed-duration CSS curve that cannot be grabbed mid-flight or take a release velocity [inferred]"
+      ]
+    },
+    {
+      "id": "STD-springs-gestures-18",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Record pointer history for velocity",
+      "rule": "While dragging, record the positions and timestamps of the last few pointermove events, not just the current point, so the velocity is known at release.",
+      "why": "You will need the velocity at release.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "2. Direct manipulation: 'Track a short velocity/position history (last few pointermove events), not just the current point'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-19",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Project the flick, then snap",
+      "rule": "On release, project where the flick would come to rest with Apple's exponential-decay function and snap to the target nearest that projected point, not the one nearest the release point.",
+      "why": "This is what makes a flick feel like it throws the element, like scroll deceleration: a fast short swipe commits and a slow long one does not. The physics-textbook v²/(2·decel) is not what Apple ships.",
+      "strength": "must",
+      "values": {
+        "project": "(initialVelocity / 1000) * decelerationRate / (1 - decelerationRate)",
+        "projected-endpoint": "currentPosition + project(releaseVelocity)",
+        "decelerationRate": "≈ 0.998 for normal scroll feel; 0.99 for snappier",
+        "do-not-use": "v²/(2·decel)"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "6. Momentum projection — animate to where the gesture is going: 'Apple's exact projection function'"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Two worklets you'll need everywhere: 'Momentum projection decides where a flick was going, so a fast short swipe commits and a slow long one doesn't.'"
+        },
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "Snap points: 'This is also momentum based ... If you flick hard enough, the drawer will skip some points or even close completely'"
+        }
+      ],
+      "engine": {
+        "path": "motion.gesture.deceleration-rate",
+        "value": 0.998,
+        "type": "number",
+        "note": "New token: the projection's decelerationRate for release velocity in px/s; 0.99 gives a snappier landing."
+      },
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-20",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Velocity sign decides commit or reverse",
+      "rule": "At release, decide whether a gesture commits or reverses by the sign of its velocity, not by its position.",
+      "why": "The source's quick reference gives velocity sign, not position, as the way to decide reverse versus commit.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "Quick Reference: 'Decide reverse vs. commit | Use velocity sign, not position | at release'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "Tension between sources, not an OpenDesigner default: the Expo sheet and swipe-to-delete recipes decide commit by projected position (STD-springs-gestures-22, STD-springs-gestures-23), which can reverse a slow release still moving toward commit; where a projection threshold exists, the projection decides [inferred]"
+      ]
+    },
+    {
+      "id": "STD-springs-gestures-21",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "A flick is enough to dismiss",
+      "rule": "Dismiss a swiped or dragged element when its distance passes the threshold OR its velocity (absolute distance divided by the milliseconds since the drag started) exceeds about 0.11; never require distance alone.",
+      "why": "A quick, short swipe should dismiss: people should not have to drag past a fixed point. Sonner's 0.11 was found by trial and error, against the average speed since the drag started, not the instantaneous release velocity [inferred].",
+      "strength": "must",
+      "values": {
+        "velocity": "Math.abs(swipeAmount) / timeTaken",
+        "condition": "Math.abs(swipeAmount) >= SWIPE_THRESHOLD || velocity > 0.11",
+        "velocity-threshold": "0.11"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-toast-component",
+          "evidence": "'The swipe is momentum-based, meaning you don't have to drag the toast past a specific threshold to dismiss it.'"
+        },
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "'I added momentum based dragging next. That way you don't need to drag until a certain point to close the drawer, you can just flick it.'"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Momentum-based dismissal: 'If velocity exceeds ~0.11, dismiss regardless of distance.'"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Drag to dismiss: '// Dismiss on a flick, not just on distance'"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Gestures & drag: 'Momentum dismissal: don't require crossing a distance threshold'"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "4. Hunt for: 'drags without velocity-based dismissal'"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "Gesture seams: 'velocity-based dismissal (Math.abs(distance)/elapsedMs > ~0.11)'"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Never Ship: 'Distance-only dismissal threshold | velocity or distance — a flick is enough'"
+        }
+      ],
+      "engine": {
+        "path": "motion.gesture.dismiss-velocity",
+        "value": 0.11,
+        "type": "number",
+        "note": "New token: distance per elapsed millisecond (px/ms [inferred]) above which a swipe dismisses whatever its distance."
+      },
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-22",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Sheets dismiss on projected position",
+      "rule": "Decide a draggable sheet's dismissal by its projected position (current position plus project(velocityY)), not by the distance travelled: dismiss when the projection passes 40% of the sheet's height.",
+      "why": "Velocity decides, not distance: a quick flick dismisses even a few pixels down, while requiring 40% travel makes the sheet feel heavy.",
+      "strength": "must",
+      "values": {
+        "projected": "translateY.get() + project(e.velocityY)",
+        "threshold": "HEIGHT * 0.4"
+      },
+      "applies_to": [
+        "react-native"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Bottom sheet: 'Velocity decides, not distance. project() means a quick flick dismisses even a few pixels down. Requiring 40% travel makes the sheet feel heavy.'"
+        }
+      ],
+      "engine": {
+        "path": "motion.gesture.sheet-dismiss-fraction",
+        "value": 0.4,
+        "type": "number",
+        "note": "New token: share of the sheet's height the projected position must pass to dismiss."
+      },
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-23",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Swipe-to-delete commits on projection",
+      "rule": "For a row that reveals action buttons, use gesture-handler's ReanimatedSwipeable; build the gesture yourself only for swipe-to-commit. Commit a swipe-to-delete row when its projected position passes the threshold, sliding it out with withTiming(-WIDTH, { duration: 200, easing: EASE_OUT }) and deleting only when that finishes; otherwise spring it home with { duration: 300, dampingRatio: 1, velocity: e.velocityX }.",
+      "why": "ReanimatedSwipeable already handles thresholds, overshoot and open/close on the UI thread. A committed swipe slides off with a short ease-out and the delete runs only when it finishes; an uncommitted one springs home with the release velocity.",
+      "strength": "should",
+      "values": {
+        "commit": "withTiming(-WIDTH, { duration: 200, easing: EASE_OUT }, (f) => { if (f) scheduleOnRN(onDelete, id); })",
+        "EASE_OUT": "Easing.bezier(0.23, 1, 0.32, 1)",
+        "spring-back": "withSpring(0, { duration: 300, dampingRatio: 1, velocity: e.velocityX })",
+        "swipe-to-reveal": "ReanimatedSwipeable (react-native-gesture-handler)"
+      },
+      "applies_to": [
+        "react-native"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Swipe to delete a row"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Reach for it when the row reveals action buttons. Build the gesture yourself only when the interaction is different in kind"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-24",
+      "theme": "springs-gestures",
+      "area": "components",
+      "title": "Sequential snap points when all matter",
+      "rule": "When every snap point of a drawer is equally important, disable velocity-based snapping (Vaul: snapToSequentialPoint) so a fast drag cannot skip a point.",
+      "why": "The Vaul docs offer it for drawers whose snap points are all equally important. This is a good-to-have source, and learn/sources.json records that Vaul's README says the library is unmaintained, so treat this as a pattern, not a dependency recommendation.",
+      "strength": "should",
+      "values": {
+        "vaul-prop": "snapToSequentialPoint"
+      },
+      "applies_to": [
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "vaul-snap-points",
+          "evidence": "Snap to sequential points: 'a snap point won't be skipped even if the velocity is high enough. Useful if each snap point in a drawer is equally important.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-25",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Rubber-band at edges, never hard-stop",
+      "rule": "When a drag goes past a boundary, or in a direction that does not dismiss, let the element follow with progressively rising resistance (rubberband with constant 0.55) instead of stopping it dead.",
+      "why": "A hard stop reads as frozen, while continuous resistance reads as responsive but with nothing more there; real things slow down before they stop.",
+      "strength": "must",
+      "values": {
+        "rubberband": "(overshoot * dimension * constant) / (dimension + constant * Math.abs(overshoot))",
+        "constant": "0.55"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "9. Rubber-banding — soft boundaries: 'A hard stop reads as \"frozen\"'"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Two worklets you'll need everywhere: 'Rubber-banding makes a boundary resist instead of stopping dead.'; Bottom sheet: 'downward is free; upward past the top resists'"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Never Ship: 'Hard stop at a boundary | rubber-band resistance'"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Drag to dismiss: 'Damping past boundaries'; 'Friction, not a wall'"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Damping at boundaries: 'The more they drag, the less the element moves.'; Friction instead of hard stops: 'allow it with increasing friction'"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Gestures & drag: 'Damping at boundaries'; 'Friction over hard stops'"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "4. Hunt for: 'hard stops at drag boundaries instead of rising friction'"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "Gesture seams: 'rubber-banding at boundaries instead of hard stops'"
+        },
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "'When you drag upwards while already at the top of the drawer, the drawer will damp the drag'"
+        },
+        {
+          "id": "ek-building-a-toast-component",
+          "evidence": "'Instead of just not allowing the toast to be dragged upwards, you can still drag it, but it will slow down and eventually stop.'"
+        }
+      ],
+      "engine": {
+        "path": "motion.gesture.rubberband-constant",
+        "value": 0.55,
+        "type": "number",
+        "note": "New token: the constant in rubberband(overshoot, dimension, constant)."
+      },
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-26",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Track the pointer 1:1 throughout",
+      "rule": "For a drag, slider or drawer, update the UI 1:1 with the pointer for the whole interaction; never animate only when the gesture completes.",
+      "why": "Feedback must be continuous during the interaction, not just at the end.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "1. Response: 'Feedback must be continuous during the interaction, not just at the end.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-27",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Keep the grab offset",
+      "rule": "Keep a dragged element glued to the finger at the offset where it was grabbed; never snap its center to the pointer.",
+      "why": "Touch and content should move together, and snapping to the element's center on grab breaks the illusion immediately.",
+      "strength": "must",
+      "values": {
+        "grab-offset": "grabOffset = e.clientY - el.getBoundingClientRect().top"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "2. Direct manipulation — 1:1 tracking: 'Snapping to the element's center on grab breaks the illusion immediately.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-28",
+      "theme": "springs-gestures",
+      "area": "components",
+      "title": "Capture the pointer during a drag",
+      "rule": "Once a drag starts, capture the pointer (setPointerCapture on pointerdown) so the drag continues when the pointer leaves the element.",
+      "why": "Otherwise the drag stops as soon as the mouse or thumb moves outside the element.",
+      "strength": "must",
+      "values": {
+        "api": "el.setPointerCapture(e.pointerId)"
+      },
+      "applies_to": [
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-toast-component",
+          "evidence": "'Once I start dragging, I set the toast to capture all future pointer events.'"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Drag to dismiss: 'Pointer capture once the drag starts'"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Pointer capture for drag"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Gestures & drag: 'Pointer capture once dragging starts'"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "2. Direct manipulation: 'Use Pointer Events with setPointerCapture'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-29",
+      "theme": "springs-gestures",
+      "area": "components",
+      "title": "Ignore extra touches while dragging",
+      "rule": "Ignore every touch after the first until the user releases (if (isDragging) return).",
+      "why": "Otherwise switching or adding a finger mid-drag makes the element jump to the new position.",
+      "strength": "must",
+      "values": {
+        "guard": "if (isDragging) return"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "Multi touch: 'We simply ignore all touches after the initial one until the user releases'"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Drag to dismiss: 'Multi-touch protection'"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Multi-touch protection"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Gestures & drag: 'Multi-touch protection'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-30",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Commit to a drag axis after 10px",
+      "rule": "Require about 10px of movement along the gesture's axis before a drag or swipe takes over, then track 1:1, and always declare that axis on a pan inside a scroll view.",
+      "why": "The threshold requires intent before committing and lets a swipe on the other axis win; a pan with no axis inside a scroll view steals vertical scrolls and the list feels broken.",
+      "strength": "must",
+      "values": {
+        "threshold": "~10px",
+        "vertical-pan": "activeOffsetY([-10, 10])",
+        "horizontal-pan": "activeOffsetX([-10, 10])"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "10. Gesture design details: 'Drag/swipe: require a small movement threshold (hysteresis, ~10px) before committing to a direction, then track 1:1.'"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Bottom sheet: '.activeOffsetY([-10, 10]) // let a horizontal swipe win; require intent before committing'"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Swipe to delete a row: 'A pan handler inside a scroll view with no axis declared will steal vertical scrolls'"
+        }
+      ],
+      "engine": {
+        "path": "motion.gesture.direction-threshold",
+        "value": "10px",
+        "type": "dimension",
+        "note": "New token: movement along the axis before a drag commits (the source says about 10px)."
+      },
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-31",
+      "theme": "springs-gestures",
+      "area": "components",
+      "title": "Scroll first, then drag, in sheets",
+      "rule": "In a scrollable drawer, allow dragging only when its content is scrolled to the top, and block dragging for 100ms after scrolling reaches the top.",
+      "why": "Being scrollable and draggable at once is tricky; native iOS drawers work this way, and fast scrolling past the top can carry enough velocity to close the drawer by accident.",
+      "strength": "should",
+      "values": {
+        "drag-lock-after-reaching-top": "100ms"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "Scrolling: 'I've written a shouldDrag function that doesn't allow you to drag unless you are scrolled to the top'; 'I added a timeout of 100ms'"
+        }
+      ],
+      "engine": {
+        "path": "motion.gesture.drag-lock-after-scroll",
+        "value": "100ms",
+        "type": "duration",
+        "note": "New token: time after the content reaches the top during which a drag cannot start."
+      },
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-32",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Drag offset goes on the transform",
+      "rule": "Write the drag offset straight to the moving element's transform, not through a CSS variable set on it or its parent.",
+      "why": "CSS variables are inherited, so every change recalculates styles for all children; Vaul's drag became laggy past about 20 list items until the style was set directly. (Emil's earlier toast article drives Sonner's swipe through --swipe-amount; the drawer article and the skills replace that with a direct transform.)",
+      "strength": "must",
+      "values": {
+        "do": "element.style.transform = `translateY(${distance}px)`",
+        "avoid": "element.style.setProperty('--swipe-amount', `${distance}px`)"
+      },
+      "applies_to": [
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "Drag gesture: 'Since CSS Variables are inheritable ... Updating the style directly on the element fixed the issue.'"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Drag to dismiss: '// Set transform on the dragged element directly.'"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Performance Rules: 'CSS variables are inheritable'"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "'Don't drive child transforms via a CSS variable on the parent'"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "[\\\"'`]--[\\w-]*(?:swipe|drag)[\\w-]*[\\\"'`]\\s*[,:]",
+        "message": "Drag offset set through a CSS variable: write element.style.transform on the dragged element instead."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-33",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "No re-render per drag frame",
+      "rule": "Update drag and other per-frame values without a React render per frame: write to ref.current.style or a Reanimated shared value, never setState from a gesture or scroll handler.",
+      "why": "The drag must not drop frames, and one React render per frame is the single biggest cause of jank in React Native apps.",
+      "strength": "must",
+      "values": {
+        "web": "ref.current.style",
+        "react-native": "shared value → useAnimatedStyle"
+      },
+      "applies_to": [
+        "react",
+        "react-native"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "Drag gesture: 'Not losing frames while dragging is a good start'; 'Dragging was done without any re-renders'"
+        },
+        {
+          "id": "eks-performance-cheatsheet",
+          "evidence": "'React re-renders every frame | Write to ref.current.style, not state'"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "6. Keep it off the JS thread: 'Never setState from a gesture or scroll handler.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-34",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Derive linked visuals from the drag",
+      "rule": "Drive everything that follows a drag (backdrop opacity, the background's scale and corner radius) from the same drag value or drag progress, not from separate animations.",
+      "why": "Values tied to drag progress stay in sync and cost nothing extra.",
+      "strength": "should",
+      "values": {
+        "example": "Dragging the drawer down by 40% will change the border radius to 60% of its max value",
+        "reanimated": "interpolate(translateY.get(), [0, HEIGHT], [1, 0], Extrapolation.CLAMP)"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "Background animation: 'all the values are based on the drag progress'"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Bottom sheet: 'The backdrop derives from the same value, so it's always in sync and costs nothing'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-35",
+      "theme": "springs-gestures",
+      "area": "components",
+      "title": "Swipe to dismiss toasts and drawers",
+      "rule": "Let people dismiss toasts and drawers by swiping or dragging them away, on touch devices and on desktop.",
+      "why": "People are already used to swiping notifications away on their devices; the drawer Vaul replaced lacked drag-to-dismiss.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-toast-component",
+          "evidence": "'Another Sonner feature is the swipe gesture ... You can also swipe on desktop.'"
+        },
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "'it lacked drag-to-dismiss functionality'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-36",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Leave along the path you entered",
+      "rule": "Make a dismissable element leave along the same path and edge it entered from, so its swipe-to-dismiss direction matches its entrance.",
+      "why": "If something disappears one way, we expect it to emerge from where it came; symmetric paths make swipe-to-dismiss feel obvious.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "7. Spatial consistency: 'Enter and exit along the same path.'"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "6. 'Exit the way it entered. ... Symmetric paths are what make swipe-to-dismiss feel obvious.'"
+        },
+        {
+          "id": "ek-you-dont-need-animations",
+          "evidence": "'Because it comes from and leaves in the same direction, it creates spatial consistency'"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "'Spatial consistency: toast enters and exits from the same direction'"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "'Dismissable surfaces (toasts, sheets) that exit a different way than they entered → symmetric paths'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-37",
+      "theme": "springs-gestures",
+      "area": "components",
+      "title": "Feedback on press, commit on release",
+      "rule": "Show press feedback the instant the pointer or finger goes down, and commit the action on release.",
+      "why": "Waiting for click or touch-up to show feedback feels dead and reads as lag even at 0ms.",
+      "strength": "must",
+      "values": {
+        "css": ":active",
+        "javascript": "pointerdown, not click",
+        "react-native": "feedback on press-in, commit on press-out"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "1. Response: 'Respond on pointer-down, not on release.'; 10. 'Tap: highlight on touch-down (instant), commit on touch-up.'"
+        },
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "5. Tap feels laggy: 'Feedback on release instead of press.'"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "7. Press, not hover: 'Feedback on press-in, commit on press-out.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-38",
+      "theme": "springs-gestures",
+      "area": "components",
+      "title": "Forgiving taps with hysteresis",
+      "rule": "Give tap targets about 10px of hysteresis or hit padding and let a tap be cancelled by dragging away and restored by dragging back; on React Native set pressRetentionOffset.",
+      "why": "A finger drifting a few pixels should not cancel a press the user meant.",
+      "strength": "should",
+      "values": {
+        "hysteresis": "~10px",
+        "react-native-recipe": "pressRetentionOffset={16}"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "10. Gesture design details: 'Add ~10px of hysteresis/hit padding around the target, and allow cancel-by-dragging-away and back.'"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "7. Press, not hover: 'pressRetentionOffset so a finger drifting a few pixels doesn't cancel a press the user meant.'"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Press feedback: 'pressRetentionOffset stops a slight finger drift from cancelling.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-39",
+      "theme": "springs-gestures",
+      "area": "components",
+      "title": "Recognize gestures continuously, in parallel",
+      "rule": "Track every plausible gesture in parallel from the first move and cancel the losers once intent is clear; do not use recognizers that only report a final state (swipeleft-type events).",
+      "why": "Final-state recognizers throw away the continuous tracking you need for feedback.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "10. 'Detect all plausible gestures in parallel from the first move ... Avoid recognizers that only report a final state'"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "(?i)[\\\"']swipe(?:left|right|up|down)\\b|\\bonSwiped?(?:Left|Right|Up|Down)\\b|\\bGesture\\.Fling\\(\\)|\\bFlingGestureHandler\\b",
+        "message": "Final-state swipe recognizer: track the pointer continuously (a pan) and decide on release."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-40",
+      "theme": "springs-gestures",
+      "area": "components",
+      "title": "Double-tap only where it exists",
+      "rule": "Add double-tap detection only where a double-tap action exists.",
+      "why": "Double-tap detection unavoidably delays single taps.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "10. 'Minimize disambiguation delays. Double-tap detection unavoidably delays single taps'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-41",
+      "theme": "springs-gestures",
+      "area": "process",
+      "title": "Remove latency from the input path",
+      "rule": "Audit every latency on the input path (debounces, artificial timers, transition waits, the ~300ms tap delay) and remove anything that is not essential.",
+      "why": "The moment lag appears, the feeling of directness falls off a cliff; anything non-essential on the input path is a regression.",
+      "strength": "must",
+      "values": {
+        "tap-delay": "~300ms"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "1. Response — kill latency: 'Be vigilant about every latency.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-42",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Hint in the gesture's direction",
+      "rule": "Make intermediate frames point toward the outcome (for example growing up and out toward the finger) rather than interpolating blindly to the end state.",
+      "why": "Humans predict a final state from a trajectory.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "8. Hint in the direction of the gesture"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-43",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Keep per-frame movement imperceptible",
+      "rule": "Keep each frame's positional change below the perception threshold so motion does not strobe.",
+      "why": "Smoothness is about what is in the frames, not just the frame rate.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "11. Frame-level smoothness: 'Keep the per-frame positional change below the perception threshold to avoid strobing.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-44",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Mirror easing on reversible transitions",
+      "rule": "On a reversible transition, mirror the easing so the return path matches the outbound path, using inverse cubic-bézier control points for the two directions.",
+      "why": "Part of spatial consistency: the outbound path should match the return path.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "7. Spatial consistency: 'Mirror the easing on reversible transitions'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py build_motion: motion.easing.exit is not the mirror of motion.easing.enter (at energy 34–66 enter [0, 0, 0, 1] and exit [0.3, 0, 1, 1]; the point-reversed mirror of enter is [1, 0, 1, 1]) [inferred]",
+        "Tension between sources, not an OpenDesigner default: a mirrored ease-out is ease-in shaped on the way back, while Emil's easing rules say never use ease-in on UI; the easing-duration theme should settle which wins [inferred]"
+      ]
+    },
+    {
+      "id": "STD-springs-gestures-45",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Spring-smooth decorative mouse tracking",
+      "rule": "Pass decorative mouse-tracking values through a spring (Motion's useSpring) instead of tying the visual directly to the pointer position.",
+      "why": "Tying visual changes directly to mouse position feels artificial because it lacks motion; a spring adds momentum.",
+      "strength": "should",
+      "values": {
+        "example": "useSpring(mouseX * 0.1, { stiffness: 100, damping: 10 })"
+      },
+      "applies_to": [
+        "react",
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Spring-based mouse interactions"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "'Mouse interactions: interpolate with useSpring rather than tying value directly to mouse position'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-46",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "No decorative springs on functional displays",
+      "rule": "Spring-smooth pointer-tied motion only when it is decorative; keep it off functional displays such as data charts.",
+      "why": "The spring effect works only because it is decorative: for a functional graph no animation would be better, and the useSpring graph interaction is meant for illustrations, not functional graphs like stock charts.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "'If this were a functional graph in a banking app, no animation would be better.'"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Mouse interactions: 'Only do this when the motion is decorative.'"
+        },
+        {
+          "id": "adev-changelog",
+          "evidence": "'this type of interaction is meant for illustrations, not functional graphs like stock charts'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-47",
+      "theme": "springs-gestures",
+      "area": "elevation",
+      "title": "Translucent chrome over scrolling content",
+      "rule": "Build nav bars, toolbars and sheets as translucent layers (backdrop-filter: blur() over a semi-transparent background) with content scrolling underneath, not as opaque bars that take a fixed strip.",
+      "why": "Translucent materials act as a floating functional layer that brings structure without stealing focus.",
+      "strength": "should",
+      "values": {
+        "example-light-toolbar": "background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(20px) saturate(180%); border-top: 1px solid rgba(255, 255, 255, 0.4)"
+      },
+      "applies_to": [
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "12. Materials & depth: 'Build nav/toolbars/sheets as translucent layers'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/references/stages/15-depth-borders-and-materials.md Q-depth-04 default: 'opaque on web with optional blur plus an opaque fallback'",
+        "skills/opendesigner/scripts/engine.py emits color.surface.glass and material.glass.blur only for the 'materials' depth model or raw.glass = true, so a default web system has no translucent chrome tokens"
+      ]
+    },
+    {
+      "id": "STD-springs-gestures-48",
+      "theme": "springs-gestures",
+      "area": "elevation",
+      "title": "Material weight encodes hierarchy",
+      "rule": "Use darker, heavier materials to separate structural regions such as sidebars, and lighter materials to draw attention to interactive elements such as buttons.",
+      "why": "Material weight encodes hierarchy.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "12. 'Material weight encodes hierarchy'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-49",
+      "theme": "springs-gestures",
+      "area": "elevation",
+      "title": "Never stack light glass on light glass",
+      "rule": "Never place a light translucent surface on top of another light translucent surface.",
+      "why": "Legibility collapses.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "12. 'Never stack a light translucent surface on another — legibility collapses.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-50",
+      "theme": "springs-gestures",
+      "area": "elevation",
+      "title": "Bigger surfaces read as thicker",
+      "rule": "Give bigger translucent surfaces a stronger blur and a deeper shadow than small chips.",
+      "why": "Bigger surfaces should read as thicker material.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "12. 'Bigger surfaces should read as thicker: stronger blur + a deeper shadow than small chips.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py emits one material.glass.blur (24px) for every glass surface, whatever its size [inferred]"
+      ]
+    },
+    {
+      "id": "STD-springs-gestures-51",
+      "theme": "springs-gestures",
+      "area": "elevation",
+      "title": "Modal surfaces dim and push back",
+      "rule": "Pair a modal task's surface with a dimming scrim and push the background back or down, and with stacked sheets dim and push back each parent layer progressively.",
+      "why": "Dim to focus: the scrim and the pushed-back background show that the task has taken over.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "12. 'Dim to focus, separate to keep flow. A modal task pairs the surface with a dimming scrim and pushes the background back/down. ... For stacked sheets, progressively dim and push back each parent layer.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py emits a single color.overlay.scrim alpha, with nothing for progressive dimming of stacked sheets [inferred]"
+      ]
+    },
+    {
+      "id": "STD-springs-gestures-52",
+      "theme": "springs-gestures",
+      "area": "elevation",
+      "title": "Non-blocking panels skip the scrim",
+      "rule": "Give a parallel, non-blocking panel translucency and an offset but no scrim.",
+      "why": "Separate to keep flow: without a scrim the flow is not broken.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "12. 'A parallel, non-blocking panel uses translucency and offset without a scrim so the flow isn't broken.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/references/stages/15-depth-borders-and-materials.detailed.md Q-depth-06 use/avoid: 'use lighter scrims for non-blocking sheets'",
+        "skills/opendesigner/scripts/engine.py elevation.overlay description: 'Dialogs and sheets (with color.overlay.scrim)' pairs every sheet with the scrim [inferred]"
+      ]
+    },
+    {
+      "id": "STD-springs-gestures-53",
+      "theme": "springs-gestures",
+      "area": "typography",
+      "title": "Vibrant text over translucent surfaces",
+      "rule": "Over blurred or translucent surfaces, set text in higher contrast, a slightly heavier weight and a small letter-spacing increase, not flat gray.",
+      "why": "Vibrancy keeps text legible over changing backgrounds.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "12. 'Vibrancy keeps text legible over changing backgrounds.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-54",
+      "theme": "springs-gestures",
+      "area": "color",
+      "title": "Color on a solid layer",
+      "rule": "Put color on a solid layer, not on the translucent foreground.",
+      "why": "Part of keeping content legible over translucent materials.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "12. 'Put color on a solid layer, not the translucent foreground.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-55",
+      "theme": "springs-gestures",
+      "area": "elevation",
+      "title": "Scroll edge effects, not dividers",
+      "rule": "Separate floating chrome from scrolling content with a small fading blur or gradient mask, only where the floating UI actually overlaps content, instead of a 1px border under a sticky header.",
+      "why": "Scroll edge effects, not hard dividers.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "12. 'Scroll edge effects, not hard dividers. Instead of a 1px border under a sticky header, fade a small blur/gradient mask'"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "\\{(?=[^}\\n]*position\\s*:\\s*sticky)(?=[^}\\n]*border-bottom\\s*:\\s*1px\\b)[^}\\n]*\\}|[\\\"'`](?=[^\\\"'`\\n]*\\bsticky\\b)(?=[^\\\"'`\\n]*\\bborder-b\\b(?!-))[^\\\"'`\\n]*[\\\"'`]",
+        "message": "1px divider under a sticky header: fade a scroll-edge blur or gradient mask where content passes under it."
+      },
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py build_elevation: in the ring+faint-shadow model (Depth 16–35; the default Depth 40 is tonal) elevation.raised ('Cards that lift on hover, sticky headers, dragged rows.') starts with a 1px alpha ring (color.shadow.ring), a hard hairline around sticky headers [inferred]"
+      ]
+    },
+    {
+      "id": "STD-springs-gestures-56",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Materialize glass, don't just fade",
+      "rule": "Bring glass or blur surfaces in and out by animating blur radius and scale together, not with a plain opacity fade.",
+      "why": "The surface then reads as a real material arriving rather than a plain opacity fade.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "12. 'Materialize, don't just fade.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py material.glass.blur is 24px; animating the blur up to that radius would break the sources' must rule to keep animated blur under 20px (eks-performance-cheatsheet) [inferred]"
+      ]
+    },
+    {
+      "id": "STD-springs-gestures-57",
+      "theme": "springs-gestures",
+      "area": "accessibility",
+      "title": "Solid surfaces under reduced transparency",
+      "rule": "Under prefers-reduced-transparency: reduce, make translucent surfaces frostier or solid by raising the background opacity and dropping the blur.",
+      "why": "Components should respond to the three independent signals (reduced motion, reduced transparency, increased contrast) with the fallback built in.",
+      "strength": "must",
+      "values": {
+        "css": "@media (prefers-reduced-transparency: reduce) { .toolbar { background: white; backdrop-filter: none; } }"
+      },
+      "applies_to": [
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "14. 'prefers-reduced-transparency: reduce — make translucent surfaces frostier/solid: raise background opacity, drop the blur.'"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "14. 'Respond to three independent signals and bake them into your components'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/references/stages/16-motion-haptics-and-sound.detailed.md Q-motion-10 default calls reduced transparency a token mode, but engine.py generate writes no transparency mode file (only motion.standard and motion.reduced) and no export emits a prefers-reduced-transparency rule; color.surface.glass-fallback exists but nothing switches to it [inferred]"
+      ]
+    },
+    {
+      "id": "STD-springs-gestures-58",
+      "theme": "springs-gestures",
+      "area": "accessibility",
+      "title": "Near-solid glass under increased contrast",
+      "rule": "Under prefers-contrast: more, give translucent surfaces a near-solid background and a defined, contrasting border.",
+      "why": "It is one of the three independent signals the source says to bake into components.",
+      "strength": "must",
+      "values": {
+        "media-query": "prefers-contrast: more"
+      },
+      "applies_to": [
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "14. 'prefers-contrast: more — near-solid backgrounds with a defined, contrasting border.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py color.surface.glass-fallback gives the solid twin for Increase Contrast but no contrasting border token goes with it, no export emits a prefers-contrast: more rule, and DESIGN.md says high-contrast themes are not generated [inferred]"
+      ]
+    },
+    {
+      "id": "STD-springs-gestures-59",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Feedback fires on the causal event",
+      "rule": "Fire motion, sound and haptic feedback on the actual causal event (the toggle flipping, the item snapping home, the detent catching), not when an animation finishes, and match its character to the physicality of the action.",
+      "why": "It must be obvious what caused the feedback.",
+      "strength": "must",
+      "values": {
+        "react-native-tab-example": "Haptics.selectionAsync() on the press, not when the pill lands"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "13. Multimodal feedback: '1. Causality — it must be obvious what caused the feedback.'"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "8. Haptics: 'Fire it at the causal moment — the detent catching — not when the animation finishes.'"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Tab indicator: 'Fire Haptics.selectionAsync() on the press, not when the pill lands.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-60",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Visual, sound and haptic share a frame",
+      "rule": "Fire the visual, the sound and the haptic in the same frame; never let a CSS transition lag the audio or haptic.",
+      "why": "Latency between them destroys the illusion, and a haptic that lags its animation reads as a glitch, not as feedback.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "13. '2. Harmony — the visual, the sound, and the haptic must fire on the same frame.'"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "8. Haptics: 'Same frame as the visual. A haptic that lags its animation reads as a glitch, not as feedback.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-61",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Haptics and sound only when meaningful",
+      "rule": "Reserve haptics and sound for meaningful moments (success, error, commit, snap), and fire at most one haptic per user action: never on scroll, never per frame, never on an entrance animation the user did not cause.",
+      "why": "Over-feedback trains users to ignore all of it; used everywhere, users turn haptics off.",
+      "strength": "must",
+      "values": {
+        "moments": "success, error, commit, snap"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "13. '3. Utility — add feedback only where it earns its place.'"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "8. Haptics: 'One per user action. Never on scroll, never per frame, never on an entrance animation the user didn't cause.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-62",
+      "theme": "springs-gestures",
+      "area": "accessibility",
+      "title": "Haptics never stand alone",
+      "rule": "Never make a haptic the only feedback; pair it with a visual that stands on its own.",
+      "why": "Haptics are off system-wide for many users and silent on most Android hardware.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "8. Haptics: 'Never the only feedback. Haptics are off system-wide for many users, and silent on most Android hardware.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-springs-gestures-63",
+      "theme": "springs-gestures",
+      "area": "motion",
+      "title": "Blur or stretch very fast motion",
+      "rule": "For very fast motion, add a subtle motion blur or stretch along the direction of travel rather than moving a hard, sharp edge.",
+      "why": "A subtle blur or stretch encodes speed and reads better than a hard sharp streak; smoothness is about what is in the frames, not just the frame rate.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "For very fast motion, a subtle motion blur / stretch encodes speed and reads better than a hard sharp streak."
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    }
+  ]
+}

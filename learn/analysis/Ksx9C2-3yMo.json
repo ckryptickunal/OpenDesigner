@@ -1,0 +1,144 @@
+{
+  "summary": "Kole Jain names three flaws that show a designer has never built a real dashboard, and how to fix each. First, the data should drive the form: columns with a fixed set of values become chips, numbers are right-aligned, long text is truncated, inactive rows are shaded, time-based data becomes a timeline, and color comes from what the data means rather than decoration. Second, hierarchy is also about what you show and hide (progressive disclosure): rarely used features go into popovers, secondary actions appear on hover, and onboarding sequences features, starting with a single tooltip, instead of explaining everything at once. Third, much of a finished product is UI you cannot see at first, such as copy chips over cells, comment indicators, hidden states and tooltips, which beginner dashboards almost always miss. For a design system, this gives rules for table and data display, a 'spectrum of explicitness' for deciding how visible an action should be, and a reminder to design hidden states and tooltips as part of every component.",
+  "key_ideas": [
+    "Dashboards exist to display data, so the UI should be shaped around the data it shows.",
+    "Columns that only have a set number of values, like department or employment status, read better as chips.",
+    "Right-aligning numbers lines digits up by place value.",
+    "Truncating long text frees room for the other columns, and shading inactive or deactivated rows sets them apart.",
+    "Data that is split by time may not belong in a table at all; a timeline is easier to follow than a time-sorted table.",
+    "Landing pages can get away with a lot, but dashboard color should come from the data, such as red for an urgent action.",
+    "Avatars let the eye link who did what faster than reading a name, and a chart can summarise data that has a time dimension.",
+    "Progressive disclosure is a kind of hierarchy based on what you show and what you hide.",
+    "The spectrum of explicitness runs from a global, always-visible button (high) to an icon that appears on hover (low).",
+    "Onboarding is progressive disclosure: sequence features so the user is never overwhelmed, rather than hiding them.",
+    "A dense design gets its extra functionality from UI you cannot immediately see, and there is a lot of it.",
+    "New features often do not need a dedicated page; they need to be better thought through in how they are implemented.",
+    "Putting the pieces together (spacing, sizing) is not that hard; orchestrating them, including components with hidden parts and states, takes thought.",
+    "Tooltips are missing on nearly all beginner dashboards; assume users will not understand every icon or ambiguous label."
+  ],
+  "entities": [
+    {"name": "Kole Jain", "type": "person", "description": "Presenter of the video and owner of the channel."},
+    {"name": "Mobbin", "type": "company", "description": "Library of real app screens that sponsors the video (auto-captions spell it 'Mavin'); it also launched an MCP."},
+    {"name": "Apple Reminders", "type": "product", "description": "Cited as doing progressive disclosure well: swiping left and right reveals secondary actions."},
+    {"name": "Progressive disclosure", "type": "concept", "description": "Hierarchy based on what you show and what you hide; the second of the three flaws."},
+    {"name": "Spectrum of explicitness", "type": "concept", "description": "The presenter's scale for how visible an action is, from an always-visible global button to a hover-only icon."},
+    {"name": "Figma", "type": "tool", "description": "The video's assets are offered as Figma files through a link in the description."}
+  ],
+  "topics": [
+    {"name": "Dashboards and data display", "summary": "Let the data drive the form: chips for fixed-value columns, right-aligned numbers, truncated long text, shaded inactive rows, timelines for time-based data, and summary charts for data with a time dimension."},
+    {"name": "Visual hierarchy", "summary": "Besides strong versus poor hierarchy in a card, there is hierarchy by what you show and hide (progressive disclosure), placed along a spectrum of explicitness."},
+    {"name": "Onboarding", "summary": "Start with a single tooltip on the most important action, then a second one or a simple checklist in a corner; avoid a login modal that explains the whole product in six bullet points."},
+    {"name": "Modals and popovers", "summary": "Put infrequent features like sharing into a popover rather than a permanent panel or a new page; put the popover's primary action (a search box) at the top and reveal secondary actions on hover."},
+    {"name": "Color", "summary": "In dashboards, color should come from the data itself, for example a red icon in a chip to draw the eye to an urgent action, not be sprinkled in to look nice."},
+    {"name": "Icons and imagery", "summary": "Avatars in activity logs speed up recognising who did what; icons need tooltips because users will not understand all of them."},
+    {"name": "Gestures and drag", "summary": "Apple Reminders reveals secondary actions on swipe left and right, keeping the main action (checking off a reminder) primary."},
+    {"name": "AI-assisted design", "summary": "The presenter says AI struggles with the idea that UI is as much about what you cannot see as what you can."}
+  ],
+  "claims": [
+    {"claim": "Building the UI around the data a dashboard needs to display gives a much more usable experience.", "evidence": "we end up with a much more usable experience"},
+    {"claim": "Department and employment status suit chips because there is only a set number of them.", "evidence": "there's only a set number of departments or employment statuses"},
+    {"claim": "Right-aligning numbers makes the digits align by place value.", "evidence": "right align the numbers so the digits align by place value"},
+    {"claim": "Truncating long text gives more breathing room to the other columns.", "evidence": "truncating long text to give more breathing room to the other columns"},
+    {"claim": "Time-delineated data is easier to follow as a timeline than as a time-sorted table.", "evidence": "arrange this as a timeline, it starts to become a lot easier to follow"},
+    {"claim": "Landing pages can get away with a lot, but dashboard colors should come from the data itself.", "evidence": "Landing pages, you can get away with a lot"},
+    {"claim": "An avatar lets the eye associate who did what much faster than reading a name in a column.", "evidence": "The avatar is there because your eye can associate who did what way faster"},
+    {"claim": "A chart shows the time dimension of data instantly instead of making the user hunt through a timestamp column.", "evidence": "instead of making you hunt through a timestamp column"},
+    {"claim": "Progressive disclosure is a type of hierarchy based on what you show and what you hide.", "evidence": "another type of hierarchy based on what you show and what you hide"},
+    {"claim": "A modal that explains the entire product at login is forgotten the moment it is dismissed.", "evidence": "instantly forgetting the moment you dismiss"},
+    {"claim": "AI has a hard time grasping that UI is as much about what you cannot see as what you can.", "evidence": "A really important concept that AI has a hard time wrapping its figurative head around"},
+    {"claim": "Tooltips are missing on pretty much all beginner dashboards.", "evidence": "what's missing pretty much unequivocally on all beginner dashboards are tooltips"},
+    {"claim": "New features or elements often do not require a dedicated page.", "evidence": "new features or elements often don't require a dedicated page"}
+  ],
+  "quotes": [
+    "UI is as much about what you can see as what you can't see.",
+    "dashboard colors shouldn't just be sprinkled in to look nice.",
+    "You're not hiding functionality, you're sequencing it so that the user is never overwhelmed."
+  ],
+  "tags": ["dashboards", "data-tables", "progressive-disclosure", "spectrum-of-explicitness", "onboarding", "tooltips", "popovers", "hidden-ui", "data-driven-color", "timeline", "kole-jain"],
+  "authority": "reference",
+  "rules": [
+    {"rule": "Display table columns that have a fixed set of values, such as department or employment status, as chips.", "why": "There is only a set number of departments or employment statuses, and chips let the data drive the form.", "kind": "do", "strength": "should", "area": "components", "applies_to": "all", "values": [], "evidence": "turned the department and employment into chips"},
+    {"rule": "Right-align numeric columns in tables.", "why": "Digits then align by place value.", "kind": "do", "strength": "should", "area": "layout", "applies_to": "all", "values": [], "evidence": "right align the numbers so the digits align by place value"},
+    {"rule": "Truncate long text in table cells.", "why": "It gives more breathing room to the other columns.", "kind": "do", "strength": "should", "area": "components", "applies_to": "all", "values": [], "evidence": "truncating long text to give more breathing room"},
+    {"rule": "Shade out table rows that are inactive or deactivated.", "why": "It lets the row's status shape how the table looks, part of letting the data drive the form.", "kind": "do", "strength": "consider", "area": "components", "applies_to": "all", "values": [], "evidence": "shade out rows of the table that are inactive or deactivated"},
+    {"rule": "Show time-delineated data as a timeline, placed in a sidebar pop-out or as a wider second column beside the table, instead of a time-sorted table.", "why": "A timeline is a lot easier to follow and lets the data determine the shape of the UI.", "kind": "do", "strength": "should", "area": "patterns", "applies_to": "all", "values": [], "evidence": "if we were to arrange this as a timeline"},
+    {"rule": "Do not add color to a dashboard for decoration; derive it from the data, such as a red icon in a chip for an urgent action.", "why": "Dashboard color should come from the data itself; the red draws the eye because the action is urgent.", "kind": "dont", "strength": "should", "area": "color", "applies_to": "all", "values": [], "evidence": "dashboard colors shouldn't just be sprinkled in to look nice"},
+    {"rule": "Show an avatar next to the actor in activity logs.", "why": "The eye associates who did what much faster than by reading a name in the column.", "kind": "do", "strength": "should", "area": "patterns", "applies_to": "all", "values": [], "evidence": "The avatar is there because your eye can associate who did what"},
+    {"rule": "Add a summary chart when the data has a time dimension.", "why": "The chart shows the change over time instantly instead of making users hunt through a timestamp column.", "kind": "do", "strength": "consider", "area": "patterns", "applies_to": "all", "values": [], "evidence": "adding a chart to roll up the data into a summary"},
+    {"rule": "Put infrequently used features, such as sharing, in a popover rather than permanently in the layout or on a separate page.", "why": "They are not accessed often or important enough to be always visible, and a popover avoids taking the user to an entirely different page.", "kind": "do", "strength": "should", "area": "patterns", "applies_to": "all", "values": [], "evidence": "we tuck it into a popover so we don't have to rip the user to an entirely different page"},
+    {"rule": "Place a popover's primary action, such as the search box in a share popover, at the top where it is immediately visible.", "why": "It is the primary action of the popover.", "kind": "do", "strength": "should", "area": "components", "applies_to": "all", "values": [], "evidence": "the primary action is of course the search box"},
+    {"rule": "When space is tight, reveal secondary actions such as removing a user as an icon on hover, with a tooltip.", "why": "The action is not a main one, so it is progressively revealed as soon as the user starts to look for it.", "kind": "do", "strength": "should", "area": "patterns", "applies_to": "all", "values": [], "evidence": "we show the remove button on hover along with a tooltip"},
+    {"rule": "Onboard new users with a single tooltip pointing at the most important action, then a second tooltip or a simple checklist in the corner once they have done it.", "why": "Sequencing features means the user is never overwhelmed, without hiding functionality.", "kind": "do", "strength": "should", "area": "patterns", "applies_to": "all", "values": [], "evidence": "A good onboarding might start with a single tooltip"},
+    {"rule": "Do not explain the entire product in a modal of bullet points the moment a user first logs in, and do not drop first-time users onto a fully loaded dashboard.", "why": "Users forget the modal instantly once they dismiss it, and a fully loaded dashboard leaves them wondering where to start.", "kind": "dont", "strength": "should", "area": "patterns", "applies_to": "all", "values": ["six bullet points"], "evidence": "explaining the entire product in a modal with six bullet points"},
+    {"rule": "Add tooltips to icons and to ambiguous labels.", "why": "Assume users will not understand all of the icons, or may want more detail; tooltips are missing on nearly all beginner dashboards.", "kind": "do", "strength": "must", "area": "components", "applies_to": "all", "values": [], "evidence": "what's missing pretty much unequivocally on all beginner dashboards are tooltips"},
+    {"rule": "Design the hidden UI of dense components, such as a copy chip over table cells on hover and a small triangle indicator for comments, along with the hidden components and states of drawers and modals.", "why": "In a dense design, additional functionality has to come from parts of the UI you cannot immediately see, and the table needs all of it to function.", "kind": "do", "strength": "should", "area": "components", "applies_to": "all", "values": [], "evidence": "a copy chip over the cells or perhaps comment functionality with a small triangle indicator"},
+    {"rule": "Before giving a new feature its own page, check whether it can live in existing UI through hidden components and states, such as those of a drawer or modal.", "why": "New features or elements often don't require a dedicated page, just to be better thought through in how they are implemented.", "kind": "do", "strength": "consider", "area": "process", "applies_to": "all", "values": [], "evidence": "new features or elements often don't require a dedicated page"},
+    {"rule": "Design the rarely seen moments too, such as new-feature announcements and onboarding pop-ups that explain part of the product.", "why": "There is a lot of hidden UI that is important for a finished product.", "kind": "do", "strength": "consider", "area": "patterns", "applies_to": "all", "values": [], "evidence": "Think about moments in software that you almost never see"},
+    {"rule": "Place each action on the spectrum of explicitness by how important and frequently used it is: a global, always-visible button (such as share) sits high, and a minor action (such as copying a cell) can be an icon revealed on hover.", "why": "The spectrum runs from a global, always-visible share button (quite high) to an icon to copy a cell on hover (much lower); actions that are not frequently accessed or not main actions are revealed progressively.", "kind": "do", "strength": "should", "area": "patterns", "applies_to": "all", "values": [], "evidence": "what I've just described is called the spectrum of explicitness"},
+    {"rule": "Consider revealing useful but secondary list-item actions on swipe left and right, as Apple Reminders does, keeping them apart from the primary action of checking the item off.", "why": "The source cites it as progressive disclosure done really well: swiping reveals useful but secondary actions compared to checking off the reminder.", "kind": "do", "strength": "consider", "area": "patterns", "applies_to": "all", "values": [], "evidence": "On swipe left and right, it reveals useful but secondary actions"}
+  ],
+  "decisions": [
+    {"question": "How should a table column with only a few possible values, like department or status, be shown?", "options": [
+      {"name": "Plain text", "effect": "The table looks logically laid out, but nothing is driving the form.", "when": "Not recommended by the source for fixed-value columns."},
+      {"name": "Chips", "effect": "The table starts to shape up around its data.", "when": "When there is only a set number of possible values."}
+    ], "recommendation": "Chips, because there is only a set number of departments or employment statuses.", "maps_to": null, "evidence": "turned the department and employment into chips"},
+    {"question": "How should data that is ordered by time be displayed?", "options": [
+      {"name": "Time-sorted table", "effect": "Works and can be used, but is harder to follow and does not let the data shape the UI.", "when": "The source says it works but is not the best format."},
+      {"name": "Timeline in a sidebar pop-out", "effect": "Easier to follow, tucked away beside the main view.", "when": "When the time-based view is secondary to the table [inferred]."},
+      {"name": "Timeline as a wider second column beside the table", "effect": "Easier to follow and shown alongside the table.", "when": "When there is room and the timeline deserves to be visible [inferred]."}
+    ], "recommendation": "A timeline, in either placement, so the data drives the UI.", "maps_to": null, "evidence": "the time delineated nature means that this isn't the best format"},
+    {"question": "How should color be used on a dashboard?", "options": [
+      {"name": "Decorative color sprinkled in to look nice", "effect": "Sprinkled in to look nice rather than coming from the data.", "when": "Landing pages can get away with this; dashboards should not."},
+      {"name": "Color that comes from the data", "effect": "Color draws the eye to what matters, such as a red icon in a chip for an urgent action.", "when": "Dashboards and data-heavy views."}
+    ], "recommendation": "Derive color from the data itself.", "maps_to": null, "evidence": "It should come from the data itself"},
+    {"question": "How visible should a secondary action be (where does it sit on the spectrum of explicitness)?", "options": [
+      {"name": "Icon revealed on hover, with a tooltip", "effect": "Low on the spectrum: saves space, and the action is revealed as soon as the user starts to look for it.", "when": "Space is tight and the action is not a main one, such as removing a user from sharing or copying a cell."},
+      {"name": "Icon always visible", "effect": "More explicit; the action is always on screen.", "when": "When the action should be more explicit and space allows [inferred]."},
+      {"name": "Always visible with a full text label", "effect": "Still more explicit; the action is spelled out.", "when": "When the action should be as explicit as possible [inferred]."},
+      {"name": "Global, always-visible button", "effect": "Quite high on the spectrum, like a global, always-visible share button.", "when": "Main, frequently used actions [inferred]."}
+    ], "recommendation": "For a secondary action with little space, reveal it on hover with a tooltip.", "maps_to": "Q-pattern-03", "evidence": "what I've just described is called the spectrum of explicitness"},
+    {"question": "Where should an infrequently used feature, like sharing, live?", "options": [
+      {"name": "Permanently in the side of the table", "effect": "Permanently ingrained in the layout for something not frequently accessed or important enough.", "when": "The source advises against it for infrequent features."},
+      {"name": "A separate page", "effect": "Rips the user away to an entirely different page.", "when": "The source advises against it here."},
+      {"name": "A popover", "effect": "Available in context without leaving the page; its primary action sits at the top.", "when": "The feature is not frequently accessed or important enough to be always visible."}
+    ], "recommendation": "A popover, because sharing is not frequently accessed and a popover avoids a page change.", "maps_to": "Q-pattern-03", "evidence": "this share functionality isn't permanently ingrained in the side of the table"},
+    {"question": "How should first-time users be introduced to the product?", "options": [
+      {"name": "A fully loaded dashboard with no guidance", "effect": "Users stare at it wondering where to start.", "when": "The source advises against it."},
+      {"name": "A modal explaining the whole product at login", "effect": "Six bullet points that are forgotten the moment the modal is dismissed.", "when": "The source advises against it."},
+      {"name": "Sequenced tooltips and a checklist", "effect": "A single tooltip on the most important action, then a second one or a simple checklist in the corner; the user is never overwhelmed.", "when": "Recommended onboarding approach."}
+    ], "recommendation": "Sequence features with tooltips and a simple checklist so the user is never overwhelmed.", "maps_to": "Q-pattern-04", "evidence": "A good onboarding might start with a single tooltip pointing at the most important action"}
+  ],
+  "process": [
+    {"step": "Start from the data", "detail": "Focus on the data the dashboard has to display and build the UI around it, so the data drives the form."},
+    {"step": "Shape each column to its data", "detail": "Turn fixed-value columns into chips, right-align numbers, truncate long text and shade inactive or deactivated rows."},
+    {"step": "Question the container", "detail": "If the data is split by time, consider a timeline in a sidebar pop-out or a second column instead of a time-sorted table."},
+    {"step": "Add meaning, not decoration", "detail": "Use color that comes from the data (red for urgent), avatars for who did what, and a summary chart when the data has a time dimension."},
+    {"step": "Place actions on the spectrum of explicitness", "detail": "Keep main actions visible, move infrequent features into popovers with the primary action at the top, and reveal secondary actions on hover with a tooltip."},
+    {"step": "Design the hidden UI", "detail": "Add hover copy chips, comment indicators, tooltips for icons and ambiguous labels, and the hidden states of drawers and modals; plan announcements and onboarding pop-ups."},
+    {"step": "Sequence onboarding", "detail": "Start with one tooltip on the most important action, then a second tooltip or a simple checklist in the corner."},
+    {"step": "Compare before and after", "detail": "Put the original and revised versions side by side to see which is letting the data drive the form."},
+    {"step": "Study real software", "detail": "Look at a lot of real software to get a feel for progressive disclosure, the spectrum of explicitness and onboarding flows (this advice leads into the sponsor read)."}
+  ],
+  "examples": [
+    {"what": "Table with department and employment status columns, before and after", "where": null, "visual_note": "The before is a logically laid out table where nothing drives the form; the after turns department and employment status into chips, right-aligns numbers, truncates long text and shades inactive rows."},
+    {"what": "Time-sorted table turned into a timeline", "where": null, "visual_note": "Time-delineated records shown as a timeline, either tucked into a sidebar pop-out or as a wider second column beside the table."},
+    {"what": "Activity log with meaningful color and avatars", "where": null, "visual_note": "A red icon in a chip flags an urgent action, avatars show who did what, and a chart rolls the log up into a summary over time."},
+    {"what": "Card with poor versus strong hierarchy", "where": null, "visual_note": "Mentioned briefly as the usual way hierarchy is shown, before introducing hierarchy by showing and hiding."},
+    {"what": "Share popover", "where": null, "visual_note": "Sharing opens in a popover from the table; a search box sits at the top as the primary action, and a remove button appears on hover with a tooltip."},
+    {"what": "Swipe to reveal secondary actions", "where": "Apple Reminders", "visual_note": "Swiping left and right reveals useful but secondary actions, while checking off a reminder stays the primary action."},
+    {"what": "Ends of the spectrum of explicitness", "where": null, "visual_note": "A global, always-visible share button is high on the spectrum; an icon to copy a cell on hover is low."},
+    {"what": "Visible versus hidden UI of a dense table", "where": null, "visual_note": "The video overlays everything visible and then all the hidden UI (copy chip over cells, comment triangle indicator, states); the hidden part is not a small amount."},
+    {"what": "Onboarding with a single tooltip and a checklist", "where": null, "visual_note": "A first tooltip points at the most important action, followed by a second tooltip or a simple checklist in a corner, contrasted with a login modal of six bullet points."}
+  ],
+  "numbers": [
+    {"value": "3", "context": "Dashboard flaws covered: data driving the form, the right things hidden until needed, and the invisible UI that makes it function.", "evidence": "those are the three subtle flaws"},
+    {"value": "six bullet points", "context": "The anti-pattern onboarding modal that explains the entire product at login.", "evidence": "a modal with six bullet points the second you log in"}
+  ],
+  "caveats": [
+    "Sponsor segment for Mobbin (auto-captions say 'Mavin'): hundreds of thousands of curated screens, a new MCP, a banking mood board made in about 2 minutes, and 20% off; excluded from rules. The advice to study real software leads directly into this read.",
+    "No exact values are given: no spacing, sizes, colors, row heights, hover delays or tooltip timings. The before-and-after comparisons are shown visually only; the Figma files linked in the description were not reviewed.",
+    "The 'three tells' framing and the claim that AI struggles with hidden UI are the presenter's opinion, not backed by evidence in the video.",
+    "Hover-only reveals and hover tooltips assume a pointer; the video does not discuss touch or keyboard access to hidden actions [inferred].",
+    "Auto-caption error: 'larger drawers, models' almost certainly means modals [inferred]."
+  ]
+}

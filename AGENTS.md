@@ -25,11 +25,13 @@ Load the **`opendesigner`** skill and follow it: `skills/opendesigner/SKILL.md`.
 | `skills/opendesigner/references/stages/` | 28 stage files (zoom 0-2) plus `*.detailed.md` (zoom 3). Questions in order, with options, visual effects, real systems, defaults and skip rules |
 | `skills/opendesigner/references/*.json` | `questions` (193, each with an area and, except the reference panel, a zoom level; 6 are planned and skipped until built), `levers` (8 dials and formulas), `graph` (decision fan-out), `ontology-slim` (271 building blocks), `hooks`, `pacing` (areas, questions per level, minutes), `glossary` (terms in plain, designer and engineer voices, when shipped), `cards/` (Decision Cards, slim) |
 | `skills/opendesigner/references/rules.md`, `hooks.md`, `guardrails.md`, `improve.md` | Message style and three voices, asset hooks, hard rules, the self-improvement loop |
+| `skills/opendesigner/references/standards.md`, `standards/<theme>.md` | House standards: rules from sources the owner marked non-negotiable, applied and locked in every project, changed only when the person explicitly asks ([docs/KNOWLEDGE.md](docs/KNOWLEDGE.md)) |
 | `skills/opendesigner/assets/templates/` | 8 visual templates (palette, type scale, spacing ruler, radius, elevation, motion, component sheet, option gallery). Each is JSON-fed, and its "Copy my choice" button produces `OD:` lines |
 | `skills/opendesigner/scripts/engine.py` | State, ramps, scales, contrast, validation and exports. Python 3.10+, standard library, no network |
 | `skills/opendesigner/scripts/journey.py` | The private journey log (asked first), its report, and opt-in anonymous sharing ([docs/PRIVACY.md](docs/PRIVACY.md)) |
 | `data/` | The same JSON and stage files, for tools that are not skills |
 | `synthesis/`, `research/` | The full sources, if a reference file is not enough |
+| `learn/` | The learning wiki: what OpenDesigner learned from trusted sources, by concept ([learn/MAP.md](learn/MAP.md)) |
 
 ### Engine (run from the person's project; state lives in `./opendesigner/`)
 ```
@@ -81,13 +83,15 @@ Use the skill's own folder path when it is installed elsewhere (for example a pl
 | `benchmarks/` | Teardown of 25 famous design systems with real values |
 | `sources/` | Community signal from /last30days and the registry of vetted sources |
 | `traces/` | Append-only log of every source each lane opened |
-| `synthesis/` | Combined outputs: ontology, questionnaire, levers (dials and formulas), decision graph, cards, builder spec |
+| `synthesis/` | Combined outputs: ontology, questionnaire, levers (dials and formulas), decision graph, cards, builder spec, house standards (`standards.json`) and impact notes (`impact.json`) |
+| `learn/` | **The learning wiki** (lane L19), kept on its own: trusted sources and their authority, one analysis per source, an OpenWiki Markdown wiki with cross-source topic pages and Decision Cards. Start at `learn/MAP.md`; to change the app from it, `learn/IMPROVING.md`; the rules, `docs/KNOWLEDGE.md`. Third-party text (`learn/raw/`) is never committed |
 | `skills/` | **Source of truth** for the four skills (Agent Skills format, portable frontmatter only) |
 | `.agents/skills/`, `.claude/skills/` | Generated copies of `skills/`. Never edit them. Run `python3 tools/sync_skills.py` |
 | `data/`, `skills/*/references/*.json`, `references/stages/`, `references/cards/`, `chatgpt-project/knowledge/` | Generated from `synthesis/` (including `glossary.json`) by `python3 tools/build_data.py`. Edit the source instead |
 | `.claude-plugin/`, `plugin.json` | Claude plugin and marketplace manifests, and the Agent Plugins 1.0 manifest. Keep `version` in step |
 | `design/` | Tokens and artboards written to Figma and Paper for review |
-| `tools/` | `od.py` (coordination), `jev_nav.py` (research navigation, Jev search, card export, decision graph, citation check), `build_questionnaire.py`, `build_data.py`, `sync_skills.py`, `build_dist.py` |
+| `tools/` | `od.py` (coordination), `jev_nav.py` (research navigation, Jev search, card export, decision graph, citation check), `wiki.py` (the learning wiki: add, fetch, check, ingest, trace, cite-check, standards, map, next, upstream), `build_questionnaire.py`, `build_data.py`, `sync_skills.py`, `build_dist.py` |
+| `.claude/workflows/` | Saved Claude Code workflows for the learning wiki: `learn-analyze`, `learn-standards`, `learn-synthesis`, `learn-escalate`, `learn-personas` |
 | `dist/` | Release zips (git-ignored) |
 
 ### How to work here
@@ -109,7 +113,11 @@ python3 tools/build_data.py --check      generated knowledge matches synthesis/
 python3 tools/sync_skills.py --check     skill copies match skills/
 python3 tools/build_dist.py --check      skill frontmatter is portable
 python3 tools/jev_nav.py check           no dangling citations
+python3 tools/wiki.py check              learning wiki: analysis schema, quotes, authority
+python3 tools/wiki.py standards          house standards valid and versioned
+python3 tools/test_wiki.py               learning wiki tests
 ```
+Improving the app from the learning wiki? Read `learn/IMPROVING.md` first. `python3 tools/wiki.py next` lists what in the wiki is out of date.
 
 ### Reviewing and merging pull requests
 Follow `.claude/skills/od-pr-review/SKILL.md` (any agent can read it; Claude Code loads it as a skill). It covers the static security scan (`scripts/scan_pr.py`, which never runs PR code), relevance to the goal, the project rules, fact-checking, testing the merged result, and merging only after the maintainer says yes. Results go in `_coordination/PR-RESOLUTION-LOG.md`.
@@ -124,6 +132,7 @@ These documents describe things that keep changing. Update them in the same chan
 | `_coordination/PR-RESOLUTION-LOG.md` | After every PR review or merge (append; never rewrite past entries) |
 | `benchmarks/L09-benchmark-matrix.md` "Extended systems" | A teardown is added, or a benchmarked package changes version, licence or deprecation status |
 | `docs/PRODUCT-VISION.md` | Only when Kunal restates the vision; `tools/test_product_vision.py` guards its repo facts |
+| `docs/KNOWLEDGE.md`, `learn/README.md`, `learn/IMPROVING.md` | The rules for sources, authority or precedence change, or the learning pipeline gains or loses a step. `learn/MAP.md` is generated (`python3 tools/wiki.py map`; CI checks it) |
 
 `python3 tools/living_docs.py` compares the facts these documents rely on (stars, CI runs, open PRs, cited issues, npm versions) with `_coordination/living-docs.json` and names the documents to revisit. Update those documents, then run it with `--accept`.
 

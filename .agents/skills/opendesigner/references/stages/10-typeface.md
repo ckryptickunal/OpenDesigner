@@ -16,10 +16,15 @@ Zoom 1 broad · weight high · changes 6 decisions · class T · cards DC-L09-05
 - **Why:** After color, the typeface may shape your brand's look the most; L09 infers this (L09 divergence 5). A system font feels native and fades away; a custom font is recognized at once [DC-L09-05].
 - **Options:**
   - `system` The device's built-in font: SF Pro, Roboto, Segoe UI Variable; native, content leads (Apple, Fluent, Ant, Radix, Mantine, SLDS) [; DC-L09-05].
+    - Now: Each device's own font, such as SF Pro or Roboto: native and invisible, so content leads. As it grows: Nothing to load or license, and native text-size settings work for free; the brand must show elsewhere.
   - `open-neutral` A free, plain font: the neutral SaaS look (Inter: Polaris, Chakra, Paste, Linear; Roboto: Material) [DC-L09-05].
+    - Now: A free, plain font like Inter: the neutral SaaS look. As it grows: Looks the same on every platform with no license cost, but many products share it. [inferred]
   - `open-custom` A free font with character: IBM Plex, Geist, Public Sans, Mona Sans [DC-L09-05].
+    - Now: A free font with character, like IBM Plex or Geist: recognizable without license fees. As it grows: Consistent across platforms; native apps must bundle it and support text-size settings themselves. [inferred]
   - `brand-display` Brand font for headlines, system font for body (Apple's advice).
+    - Now: Your brand font for headlines and the system font for body text, as Apple advises. As it grows: Headlines stay recognizable while small text stays legible on every new platform.
   - `brand-everywhere` Your own brand font everywhere: Uber Move, Adobe Clean, Cereal, Spotify Mix [DC-L09-05].
+    - Now: Your own font everywhere, like Uber Move or Airbnb Cereal: the strongest identity. As it grows: Every platform must bundle it and rebuild text scaling; keep it out of body text if it looks weak at 13 pt.
 - **Default:** `system`: system for productivity and internal tools; on native platforms any brand face goes in display roles only *Source:* card heuristics [DC-L02-01, DC-L10-06]; L09 suggests Inter or the system stack for a neutral start [DC-L09-05].
 - **Show:** the same screen set in each option, side by side with the OS chrome, so the "foreign next to OS chrome" effect is visible [DC-L02-01].
 - **Use / avoid:** use system fonts when the product lives inside another OS's chrome; use a brand face when recognition is a stated goal; avoid a brand face in body text if it needs size bumps to match system legibility at 13pt [DC-L02-01, DC-L10-06].

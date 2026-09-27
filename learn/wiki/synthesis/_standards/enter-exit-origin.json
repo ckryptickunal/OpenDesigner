@@ -1,0 +1,1875 @@
+{
+  "theme": "enter-exit-origin",
+  "standards": [
+    {
+      "id": "STD-enter-exit-origin-01",
+      "theme": "enter-exit-origin",
+      "area": "motion",
+      "title": "Never enter from scale(0)",
+      "rule": "Never animate an element in from scale(0) or out to scale(0); start from scale(0.9–0.97) together with opacity: 0, and use scale(0.95) + opacity: 0 as the replacement.",
+      "why": "scale(0) looks like the element comes out of nowhere; nothing in the real world appears from nothing (or disappears and reappears completely), and a higher start scale is like a balloon, which keeps a visible shape even when deflated.",
+      "strength": "must",
+      "values": {
+        "forbidden-start": "scale(0)",
+        "start-scale-range": "0.9–0.97",
+        "start-scale-min": "0.9",
+        "start-scale-default": "0.95",
+        "start-opacity": "0",
+        "article-demo-start-scale": "0.93"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-7-practical-animation-tips",
+          "evidence": "2. Don't animate from scale(0): 'Try animating from a higher initial scale instead (0.9+)'; demo uses 0.93"
+        },
+        {
+          "id": "ek-agents-with-taste",
+          "evidence": "Practical Tips: 'Element appears from nowhere | Start from scale(0.95), not scale(0)'"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "4. Pick the properties: 'Never scale(0). Start from scale(0.9–0.97) + opacity: 0'; Never Ship table"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Never animate from scale(0): 'Nothing in the real world disappears and reappears completely'; 'Start from scale(0.9) or higher, combined with opacity'"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Physicality: 'Never scale(0). Start from scale(0.9–0.97) + opacity: 0'"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "Aggressive Escalation Triggers; remedial step 4 'replace scale(0) with scale(0.95)+opacity'"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "3. Physicality & origin: 'Target: scale(0.9–0.97) + opacity: 0'"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "Teleporting state: 'never scale(0)'"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "'Never scale(0). Start from scale(0.9–0.97) + opacity: 0'; Never Ship table"
+        }
+      ],
+      "engine": {
+        "path": "motion.scale.enter",
+        "value": 0.95,
+        "type": "number",
+        "note": "Default entrance start scale, always paired with opacity 0. New token. engine.py set cannot create it yet: it infers a number type only under opacity.*, so 'set motion.scale.* 0.95' is refused [tested]"
+      },
+      "review": {
+        "pattern": "scale\\(\\s*0(?:\\.0*)?\\s*(?:,\\s*0(?:\\.0*)?\\s*)?\\)|(?<![\\w-])scale:\\s*['\"]?0(?![.\\d])",
+        "message": "Never animate from scale(0): start from scale(0.95) with opacity: 0 (range 0.9–0.97)."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-02",
+      "theme": "enter-exit-origin",
+      "area": "motion",
+      "title": "No opacity-only fade entrances",
+      "rule": "Give every entering element an initial transform (a slightly smaller scale or a small translate) alongside opacity: 0; do not ship opacity-only entrances. The sources show two exceptions: under prefers-reduced-motion keep the opacity and drop the transform, and a modal's backdrop fades with opacity alone.",
+      "why": "review-animations lists pure-fade entrances next to scale(0) as an escalation trigger to flag on sight, and the audit files them under physicality, whose premise is that nothing in the real world appears from nothing.",
+      "strength": "must",
+      "values": {
+        "entrance-start": "opacity: 0 + transform: scale(0.95) (or a translate)"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "3. Physicality & origin, Hunt for: 'pure-fade entrances with no initial transform'"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "Aggressive Escalation Triggers: 'scale(0) or pure-fade entrances with no initial transform'"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "Teleporting state: 'fade/scale entrances from scale(0.95–0.97) + opacity: 0'"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Modal: '.backdrop { transition: opacity 250ms var(--ease-out); }' (the backdrop is the opacity-only exception)"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/references/stages/16-motion-haptics-and-sound.detailed.md Q-motion-06: the default ships the option 'Fade for in-screen enter and exit (dialogs, menus)' with no initial transform, while its card synthesis/cards.json DC-L04-23 records Material's fade pattern as 'Fade + Scale'; the stage text drops the scale the card keeps"
+      ]
+    },
+    {
+      "id": "STD-enter-exit-origin-03",
+      "theme": "enter-exit-origin",
+      "area": "motion",
+      "title": "Scale popovers from their trigger",
+      "rule": "Set transform-origin to the trigger for popovers, dropdowns, menus, selects and tooltips so they scale out of the element that opened them, never from the default center (Base UI: transform-origin: var(--transform-origin); Radix dropdown: var(--radix-dropdown-menu-content-transform-origin)).",
+      "why": "The panel should look like it came out of the thing you clicked; CSS's default origin, center, is wrong for almost every popover, and anchoring content to its source makes the spatial relationship between button and content obvious.",
+      "strength": "must",
+      "values": {
+        "base-ui": "transform-origin: var(--transform-origin)",
+        "radix-dropdown-menu": "transform-origin: var(--radix-dropdown-menu-content-transform-origin)",
+        "forbidden": "transform-origin: center on a trigger-anchored surface"
+      },
+      "applies_to": [
+        "web",
+        "css",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "ek-7-practical-animation-tips",
+          "evidence": "5. Make your animations origin-aware: 'They should scale in from the trigger'; Radix and Base UI CSS variables"
+        },
+        {
+          "id": "ek-agents-with-taste",
+          "evidence": "Practical Tips: 'Popover scales from wrong point | Set transform-origin to trigger location'"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "'transform-origin at the trigger for popovers, dropdowns, menus, tooltips — var(--transform-origin) in Base UI'"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Dropdown, popover, menu, select: 'The transform-origin is the whole point'"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Make popovers origin-aware: 'The default transform-origin: center is wrong for almost every popover'"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Physicality: 'Origin-aware popovers. Scale from the trigger, not center'"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "5. Origin & physical correctness"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "3. Physicality & origin; 8. Missed opportunities: 'Spatially-connected UI (a panel that appears from a trigger)'"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "Missing spatial story: 'scale in with transform-origin at the trigger'"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "7. Spatial consistency: 'Anchor interactions to their source'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-04",
+      "theme": "enter-exit-origin",
+      "area": "motion",
+      "title": "Keep modals scaling from center",
+      "rule": "Keep modals at transform-origin: center; they are exempt from trigger-origin scaling and a centered modal is not a finding.",
+      "why": "Modals are not anchored to a specific trigger; they appear centered in the viewport.",
+      "strength": "must",
+      "values": {
+        "modal-transform-origin": "center"
+      },
+      "applies_to": [
+        "web",
+        "css",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Modal: 'transform-origin: center; /* exempt — not anchored to a trigger */'"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "'Modals are exempt; they're not anchored to a trigger, so they stay centered'"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Make popovers origin-aware: 'Exception: modals'"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Physicality: 'Modals are exempt — ... keep transform-origin: center'"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "5. Origin & physical correctness: 'Modals are exempt'"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "3. Physicality & origin: 'transform-origin: center is correct there. Do not report it.'"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "Missing spatial story: 'modals are exempt — they stay centered'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-05",
+      "theme": "enter-exit-origin",
+      "area": "motion",
+      "title": "Ease-out for entrances and exits",
+      "rule": "Use ease-out, as the strong curve cubic-bezier(0.23, 1, 0.32, 1), for every element entering or exiting; never use ease-in on any UI element, and do not put bare ease or linear on an entrance. The one sourced exception is the web toast recipe (Sonner), which uses ease at 400ms to match the component's personality; the React Native toast recipe keeps the ease-out curve.",
+      "why": "Ease-out starts fast, which feels responsive; ease-in starts slow and delays the exact moment the user is watching, so a 300ms ease-in dropdown feels slower than a 300ms ease-out one. Built-in CSS easings are too weak.",
+      "strength": "must",
+      "values": {
+        "ease-out": "cubic-bezier(0.23, 1, 0.32, 1)",
+        "forbidden": "ease-in on any UI element; bare ease or linear on entrances",
+        "toast-exception": "web only: opacity and transform 400ms ease (Sonner recipe)"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-7-practical-animation-tips",
+          "evidence": "4. Choose the right easing: 'If you are animating something that is entering or exiting the screen, use ease-out'"
+        },
+        {
+          "id": "ek-agents-with-taste",
+          "evidence": "Easing Decision Flowchart: 'Is the element entering or exiting the viewport? Yes → ease-out'"
+        },
+        {
+          "id": "ek-building-an-animation-course",
+          "evidence": "easing flowchart: entering or exiting → ease-out"
+        },
+        {
+          "id": "eks-readme",
+          "evidence": "'An ease-in easing for an enter animation when it's supposed to be ease-out'"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "5. Easing and duration: 'Entering or exiting | ease-out'; 'Never ease-in on UI'; --ease-out token"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "3. What easing should it use?; 'Never use ease-in for UI animations'"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Easing: 'Entering or exiting → ease-out'; 'Never ease-in on UI'"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "Aggressive Escalation Triggers: 'ease-in on any UI interaction'"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "2. Easing & duration: 'Hunt for: ease-in anywhere, bare ease/linear on entrances'"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "easing table: 'Entering or exiting | ease-out'"
+        },
+        {
+          "id": "eks-skills-prototype-skill",
+          "evidence": "'right easing (ease-out on entrances, never ease-in)'"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Toast: 'ease rather than ease-out, slightly slower than typical UI'"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Toast: TOAST_ENTER = FadeInDown.duration(300).easing(EASE_OUT); 'The 300ms cap holds here too. A toast isn't an exception'"
+        },
+        {
+          "id": "adev-changelog",
+          "evidence": "Animations Guidelines: 'Default to use ease-out for most animations.'"
+        }
+      ],
+      "engine": [
+        {
+          "path": "motion.easing.enter",
+          "value": [
+            0.23,
+            1,
+            0.32,
+            1
+          ],
+          "type": "cubicBezier",
+          "note": "Entering curve; semantic motion.transition.enter reads it [tested with engine.py set]"
+        },
+        {
+          "path": "motion.easing.exit",
+          "value": [
+            0.23,
+            1,
+            0.32,
+            1
+          ],
+          "type": "cubicBezier",
+          "note": "Exits use the same ease-out curve, not an accelerate curve; semantic motion.transition.exit reads it [tested with engine.py set]"
+        }
+      ],
+      "review": {
+        "pattern": "\\bease-in(?!-out)\\b|\\bEasing\\.in\\(|\\b[eE]aseIn\\b|\\.curveEaseIn\\b|\\bFastOutLinearInEasing\\b",
+        "message": "No ease-in on UI: entrances and exits use ease-out (cubic-bezier(0.23, 1, 0.32, 1))."
+      },
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py build_motion: motion.easing.exit is an accelerate (ease-in) curve, [0.3, 0, 1, 1] at energy 34-66, [0.2, 0, 1, 0.9] at energy 0-33 and [0.4, 0.14, 1, 1] at energy 67-100 ('Leaving: accelerate out of the way'), and semantic motion.transition.exit uses it",
+        "skills/opendesigner/references/stages/16-motion-haptics-and-sound.md Q-motion-01 default: 'ease-out to enter, ease-in to exit'",
+        "16-motion-haptics-and-sound.detailed.md Q-motion-03 default and synthesis/cards.json DC-L04-21: exit (0.3, 0, 1, 1); DC-L04-24 default: the exit 'uses the accelerate curve'",
+        "skills/opendesigner/scripts/engine.py build_motion: motion.easing.enter is [0, 0, 0, 1] at energy 34-66, [0, 0, 0.38, 0.9] at 0-33 and [0, 0, 0.3, 1] at 67-100, and 16-motion-haptics-and-sound.detailed.md Q-motion-03 with synthesis/cards.json DC-L04-21 default the enter curve to (0, 0, 0, 1) or (0.05, 0.7, 0.1, 1), not the sourced cubic-bezier(0.23, 1, 0.32, 1)"
+      ]
+    },
+    {
+      "id": "STD-enter-exit-origin-06",
+      "theme": "enter-exit-origin",
+      "area": "motion",
+      "title": "Exit the way it entered",
+      "rule": "Make an element leave along the same path and edge it entered from: a toast or panel that slides in from the bottom or right dismisses to the bottom or right. The web recipes express this by giving the entrance and the exit one shared state ([data-starting-style], [data-ending-style]).",
+      "why": "Symmetric paths create spatial consistency and are what make swipe-to-dismiss feel obvious; entering from one edge and leaving to another reads as two unrelated elements.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "6. Interruption and exit: 'Exit the way it entered.'"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "7. Spatial consistency: 'Enter and exit along the same path.'"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Toast: 'It exits the way it entered.'"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Valid purposes: 'toast enters and exits from the same direction'"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "'Dismissable surfaces (toasts, sheets) that exit a different way than they entered → symmetric paths'"
+        },
+        {
+          "id": "ek-you-dont-need-animations",
+          "evidence": "Sonner: 'it comes from and leaves in the same direction'"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Dropdown and Modal recipes share one [data-starting-style], [data-ending-style] state"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-07",
+      "theme": "enter-exit-origin",
+      "area": "motion",
+      "title": "Exits faster than entrances",
+      "rule": "Make exits faster than entrances, about 20% faster (the React Native toast enters in 300ms and leaves in 250ms), rather than running both at the same speed.",
+      "why": "The user has finished reading, so the arrival deserves the time and the departure does not; emil-design-eng lists same-speed enter and exit as a review-checklist issue. It is a should, not a must: agents-with-taste says exits 'can be' about 20% faster, and the web popover, tooltip and modal recipes run one transition both ways.",
+      "strength": "should",
+      "values": {
+        "exit-vs-enter": "about 20% faster",
+        "react-native-toast-enter": "FadeInDown.duration(300).easing(EASE_OUT)",
+        "react-native-toast-exit": "FadeOutDown.duration(250).easing(EASE_OUT)"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Review Checklist: 'Same enter/exit transition speed | Make exit faster than enter (e.g., enter 2s, exit 200ms)'"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Toast: 'Exit ~20% faster than entry.'"
+        },
+        {
+          "id": "ek-agents-with-taste",
+          "evidence": "Duration Guidelines: 'Exit animations can be ~20% faster than entrance'"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Dropdown, Tooltip and Modal recipes: one transition (200ms, 125ms, 250ms) for both [data-starting-style] and [data-ending-style]"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-08",
+      "theme": "enter-exit-origin",
+      "area": "components",
+      "title": "Dropdowns and popovers: scale 0.95, 200ms",
+      "rule": "Enter and exit dropdowns, popovers, menus and selects between opacity: 0 plus a slightly smaller scale (recipe: scale(0.95)) and their resting state, transitioning opacity and transform together within 150–250ms (recipe: 200ms) on the strong ease-out curve.",
+      "why": "The panel scales out of its trigger, not out of thin air, and a short duration keeps it responsive: a 180ms dropdown feels more responsive than a 400ms one.",
+      "strength": "must",
+      "values": {
+        "start-and-end-opacity": "0",
+        "start-and-end-scale": "0.95",
+        "duration": "200ms",
+        "duration-range": "150–250ms",
+        "easing": "cubic-bezier(0.23, 1, 0.32, 1)",
+        "states": "[data-starting-style], [data-ending-style]"
+      },
+      "applies_to": [
+        "web",
+        "css",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Dropdown, popover, menu, select: opacity 200ms var(--ease-out), transform: scale(0.95)"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "Duration table: 'Dropdowns, selects | 150–250ms'"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Duration table: 'Dropdowns, selects | 150–250ms'"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "Duration budgets: 'Dropdowns, selects | 150–250ms'"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "speed table: dropdowns and selects 150–250ms"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "4. How fast should it be?: dropdowns and selects 150-250ms"
+        },
+        {
+          "id": "ek-7-practical-animation-tips",
+          "evidence": "'A 180ms select animation feels more responsive than a 400ms one'"
+        },
+        {
+          "id": "ek-you-dont-need-animations",
+          "evidence": "'A 180ms dropdown animation feels more responsive than a 400ms one'"
+        },
+        {
+          "id": "ek-agents-with-taste",
+          "evidence": "Duration Guidelines: 'Standard UI (tooltips, dropdowns) | 150-250ms'"
+        }
+      ],
+      "engine": [
+        {
+          "path": "motion.duration.medium",
+          "value": "200ms",
+          "type": "duration",
+          "note": "Semantic motion.transition.enter ('Menus, popovers, toasts entering') reads motion.duration.medium [tested with engine.py set]. The override does not move motion.duration.medium-exit, which stays at 75% of the energy-derived medium (180ms at energy 35) [tested]"
+        },
+        {
+          "path": "motion.scale.enter",
+          "value": 0.95,
+          "type": "number",
+          "note": "New token. engine.py set cannot create it yet: it infers a number type only under opacity.*, so 'set motion.scale.* 0.95' is refused [tested]"
+        }
+      ],
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py build_motion: motion.duration.medium = 250ms × motion.durationMultiplier (0.8 at energy 0, 1.0 at 50, 1.2 at 100 in synthesis/levers.json), rounded to 10ms: 240ms at energy 35 (a friendly, minimal sketch), 250ms at 50, and 260–300ms from energy 55 to 100, where the menu and popover entrance (semantic motion.transition.enter) leaves the 150–250ms range [tested]"
+      ]
+    },
+    {
+      "id": "STD-enter-exit-origin-09",
+      "theme": "enter-exit-origin",
+      "area": "components",
+      "title": "Tooltips: scale 0.97, 125ms",
+      "rule": "Enter and exit tooltips between opacity: 0 + transform: scale(0.97) and their resting state, scaling from the trigger (transform-origin: var(--transform-origin)), in 125ms on the ease-out curve; tooltips and small popovers stay within 125–200ms.",
+      "why": "A tooltip is the same shape as a popover, only faster.",
+      "strength": "must",
+      "values": {
+        "start-and-end-opacity": "0",
+        "start-and-end-scale": "0.97",
+        "duration": "125ms",
+        "duration-range": "125–200ms",
+        "easing": "cubic-bezier(0.23, 1, 0.32, 1)",
+        "transform-origin": "var(--transform-origin)"
+      },
+      "applies_to": [
+        "web",
+        "css",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Tooltip: transform 125ms var(--ease-out), opacity 0, scale(0.97)"
+        },
+        {
+          "id": "ek-7-practical-animation-tips",
+          "evidence": "3. tooltip CSS: 'transform 0.125s ease-out, opacity 0.125s ease-out', scale(0.97)"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Tooltips: skip delay on subsequent hovers (tooltip CSS, scale(0.97))"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "Duration table: 'Tooltips, small popovers | 125–200ms'"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Duration table: 'Tooltips, small popovers | 125–200ms'"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "Duration budgets: 'Tooltips, small popovers | 125–200ms'"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "speed table: tooltips and small popovers 125–200ms"
+        }
+      ],
+      "engine": [
+        {
+          "path": "motion.duration.tooltip",
+          "value": "125ms",
+          "type": "duration",
+          "note": "New token [tested with engine.py set: created in primitives.tokens.json]"
+        },
+        {
+          "path": "motion.scale.enter-tooltip",
+          "value": 0.97,
+          "type": "number",
+          "note": "New token. engine.py set cannot create it yet: it infers a number type only under opacity.*, so 'set motion.scale.* 0.95' is refused [tested]"
+        }
+      ],
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py build_motion: there is no 125ms step (motion.duration.micro 100ms, short 150ms), and the semantic transition for things entering (motion.transition.enter: 'Menus, popovers, toasts entering') runs motion.duration.medium, 240ms at energy 35, above the 125–200ms tooltip range [tested]"
+      ]
+    },
+    {
+      "id": "STD-enter-exit-origin-10",
+      "theme": "enter-exit-origin",
+      "area": "components",
+      "title": "Delay only the first tooltip",
+      "rule": "Give the first tooltip in a group a delay before it appears, then open neighbouring tooltips instantly with no delay and no animation while one is open (Base UI: transition-duration: 0ms on [data-instant]).",
+      "why": "The initial delay prevents accidental activation; skipping both the delay and the animation afterwards makes the whole toolbar feel faster without defeating the purpose of the delay.",
+      "strength": "must",
+      "values": {
+        "subsequent-tooltip-transition-duration": "0ms",
+        "selector": ".tooltip[data-instant]"
+      },
+      "applies_to": [
+        "web",
+        "css",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "ek-7-practical-animation-tips",
+          "evidence": "3. Don't delay subsequent tooltips; 'target the data-instant attribute and set the transition duration to 0ms'"
+        },
+        {
+          "id": "ek-you-dont-need-animations",
+          "evidence": "'tooltips should have a slight delay before appearing ... no delay and no animation'"
+        },
+        {
+          "id": "ek-agents-with-taste",
+          "evidence": "Practical Tips: 'Sequential tooltips feel slow | Skip delay/animation after first tooltip'"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Tooltip: '.tooltip[data-instant] { transition-duration: 0ms; }'"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Tooltips: skip delay on subsequent hovers"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Duration: 'Instant tooltips after the first (skip delay + animation)'"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "2. Hunt for: 'tooltip delay + animation on every tooltip in a toolbar'"
+        }
+      ],
+      "engine": {
+        "path": "motion.duration.instant",
+        "value": "0ms",
+        "type": "duration",
+        "note": "Already 0ms in the generated tokens; use it for [data-instant] tooltips. No change needed"
+      },
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-11",
+      "theme": "enter-exit-origin",
+      "area": "components",
+      "title": "Modals: centered scale 0.96, 250ms",
+      "rule": "Enter and exit modals between opacity: 0 plus a slightly smaller scale (recipe: scale(0.96)) and their resting state, kept centered, within 200–500ms (recipe: 250ms) on the ease-out curve.",
+      "why": "The modal is the one popover that stays centered, because it is not anchored to a trigger; the duration tables give modals and drawers 200–500ms, and the modal recipe uses 250ms.",
+      "strength": "must",
+      "values": {
+        "start-and-end-opacity": "0",
+        "start-and-end-scale": "0.96",
+        "duration": "250ms",
+        "duration-range": "200–500ms",
+        "article-duration-range": "200-300ms (Agents with taste)",
+        "easing": "cubic-bezier(0.23, 1, 0.32, 1)",
+        "transform-origin": "center"
+      },
+      "applies_to": [
+        "web",
+        "css",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Modal: opacity 250ms var(--ease-out), transform 250ms var(--ease-out), scale(0.96)"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "Duration table: 'Modals, drawers | 200–500ms'"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Duration table: 'Modals, drawers | 200–500ms'"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "Duration budgets: 'Modals, drawers | 200–500ms'"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "speed table: modals and drawers 200–500ms"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "4. How fast should it be?: modals and drawers 200-500ms"
+        },
+        {
+          "id": "ek-agents-with-taste",
+          "evidence": "Duration Guidelines: 'Modals, drawers | 200-300ms'"
+        }
+      ],
+      "engine": [
+        {
+          "path": "motion.duration.modal",
+          "value": "250ms",
+          "type": "duration",
+          "note": "New token [tested with engine.py set: created in primitives.tokens.json]"
+        },
+        {
+          "path": "motion.scale.enter-modal",
+          "value": 0.96,
+          "type": "number",
+          "note": "New token. engine.py set cannot create it yet: it infers a number type only under opacity.*, so 'set motion.scale.* 0.95' is refused [tested]"
+        }
+      ],
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py build_motion_context: semantic motion.transition.expand ('Dialogs, sheets, side panels entering') runs motion.duration.long = 400ms × durationMultiplier, 380ms at energy 35 (320–480ms across the energy range), on the enter curve: inside the 200–500ms modal band but above the 250ms modal recipe and the general under-300ms rule for UI motion; the same token also serves sheets, whose drawer recipe is 500ms on cubic-bezier(0.32, 0.72, 0, 1) [tested]"
+      ]
+    },
+    {
+      "id": "STD-enter-exit-origin-12",
+      "theme": "enter-exit-origin",
+      "area": "components",
+      "title": "Fade the backdrop with the modal",
+      "rule": "Pair a modal with a dimming backdrop and transition the backdrop's opacity alongside the modal with the same timing (opacity 250ms on the ease-out curve).",
+      "why": "Animating the backdrop's opacity with the modal makes them read as one surface; a modal task pairs the surface with a dimming scrim.",
+      "strength": "should",
+      "values": {
+        "backdrop-transition": "opacity 250ms var(--ease-out)"
+      },
+      "applies_to": [
+        "web",
+        "css",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Modal: '.backdrop { transition: opacity 250ms var(--ease-out); }'; 'so they read as one surface'"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "Materials: 'A modal task pairs the surface with a dimming scrim'"
+        }
+      ],
+      "engine": {
+        "path": "motion.duration.modal",
+        "value": "250ms",
+        "type": "duration",
+        "note": "Same token as the modal (STD-enter-exit-origin-11)"
+      },
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-13",
+      "theme": "enter-exit-origin",
+      "area": "motion",
+      "title": "Stagger group entrances 30–80ms",
+      "rule": "When several items enter together (a list or grid seen occasionally, STD-enter-exit-origin-15), stagger them by 30–80ms each instead of bringing everything in at once (web recipe: each item from opacity: 0 and translateY(8px) over 300ms ease-out, delays 0, 50, 100, 150ms; React Native recipe: FadeInDown.duration(250).delay(index * 40)).",
+      "why": "A cascade feels more natural than everything appearing at once; longer delays make the interface feel slow, and shorter ones read as simultaneous.",
+      "strength": "must",
+      "values": {
+        "step-range": "30–80ms",
+        "web-recipe-step": "50ms",
+        "web-recipe-delays": "0ms, 50ms, 100ms, 150ms",
+        "item-start": "opacity: 0; transform: translateY(8px)",
+        "item-duration": "300ms",
+        "item-easing": "ease-out (var(--ease-out))",
+        "react-native-recipe": "FadeInDown.duration(250).delay(index * 40)"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "Never Ship: 'Everything entering at once | 30–80ms stagger'"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Stagger a group entrance: translateY(8px), fadeIn 300ms var(--ease-out), animation-delay 50ms/100ms/150ms"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Stagger Animations: 'Keep stagger delays short (30-80ms between items)'"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Stagger: '30–80ms between items. Longer delays feel slow.'"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "Aggressive Escalation Triggers: 'Everything-at-once entrance where a 30–80ms stagger belongs'"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "7. Cohesion & tokens: '30–80ms stagger'"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "Group entrances: '30–80ms stagger'"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "List entrances: 'Stagger 30–80ms. Longer feels slow, shorter reads as simultaneous.'"
+        }
+      ],
+      "engine": {
+        "path": "motion.duration.stagger",
+        "value": "50ms",
+        "type": "duration",
+        "note": "New token: the per-item step of the web recipe [tested with engine.py set: created in primitives.tokens.json]"
+      },
+      "review": {
+        "pattern": "\\bstaggerChildren:\\s*(?:0?\\.(?:08[1-9]|09|[1-9]|0[12]|00[1-9])\\d*|[1-9]\\d*(?:\\.\\d+)?)\\b|\\bstagger\\(\\s*0?\\.(?:08[1-9]|09|[1-9]|0[12]|00[1-9])\\d*\\s*[,)]|\\.delay\\(\\s*(?:index|idx|i)\\s*\\*\\s*(?:8[1-9]|9\\d|[1-9]\\d{2,}|[12]\\d|[1-9])\\s*\\)|\\bcalc\\(\\s*var\\(--(?:index|idx|i)\\)\\s*\\*\\s*(?:8[1-9]|9\\d|[1-9]\\d{2,}|[12]\\d|[1-9])\\s*ms\\s*\\)",
+        "message": "Stagger steps stay between 30ms and 80ms per item (Motion takes seconds: 0.03–0.08)."
+      },
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/references/stages/16-motion-haptics-and-sound.detailed.md Q-motion-06 and synthesis/cards.json DC-L04-23: a stagger token of 20-50ms (total at most 500ms); the sources set 30–80ms per item"
+      ]
+    },
+    {
+      "id": "STD-enter-exit-origin-14",
+      "theme": "enter-exit-origin",
+      "area": "motion",
+      "title": "Stagger never blocks interaction",
+      "rule": "Never block interaction while a stagger animation plays; the items must be usable before the cascade finishes.",
+      "why": "Stagger is decorative.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Stagger a group entrance: 'it must never block interaction while it plays'"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Stagger Animations: 'never block interaction while stagger animations are playing'"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Stagger: 'never block interaction while it plays'"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "7. Cohesion & tokens: 'it must never block interaction'"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "Group entrances: 'decorative, must never block interaction'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-15",
+      "theme": "enter-exit-origin",
+      "area": "motion",
+      "title": "List entrances only for occasional lists",
+      "rule": "Use list and grid entrance animations, and their stagger, only for content seen occasionally that the user asked for and is waiting on; a list people scroll past all day appears without them.",
+      "why": "Entrance animations are for content the user is waiting on; a list they scroll past all day should already be there.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Stagger a group entrance: 'not for a list they scroll past all day'"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "List entrances: 'Entrance animations are for content the user asked for and is waiting on.'"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "Group entrances: 'a page users see occasionally'; 'List items added/removed with no bridge (and the list isn't high-frequency)'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-16",
+      "theme": "enter-exit-origin",
+      "area": "motion",
+      "title": "Bridge appearing and disappearing content",
+      "rule": "Give content that appears, vanishes or swaps (conditional renders, route content, expanding sections, toasts) a short enter and exit transition instead of letting it pop in or out, unless the frequency rules say not to animate it at all.",
+      "why": "Elements appearing or disappearing without a transition feel broken; preventing a jarring change is a valid purpose for motion.",
+      "strength": "should",
+      "values": {
+        "entrance": "scale(0.95–0.97) + opacity: 0, ease-out"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Valid purposes: 'Preventing jarring changes: elements appearing or disappearing without transition feel broken'"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "Teleporting state: 'Content that swaps, appears, or vanishes instantly'"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "8. Missed opportunities: 'State changes that teleport (content swaps, layout jumps)'"
+        },
+        {
+          "id": "ek-you-dont-need-animations",
+          "evidence": "'Having a toast suddenly appear would feel off, so we animate it in.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-17",
+      "theme": "enter-exit-origin",
+      "area": "motion",
+      "title": "Use @starting-style for mount entry",
+      "rule": "Animate an element's entry on mount with CSS @starting-style where browser support allows, and fall back to a data-mounted attribute set to true in a useEffect after the first render.",
+      "why": "@starting-style animates entry without JavaScript and replaces the useEffect mounted-flag pattern, which still works everywhere.",
+      "strength": "should",
+      "values": {
+        "css": "@starting-style { opacity: 0; transform: ... }",
+        "fallback": "useEffect(() => { setMounted(true); }, []); <div data-mounted={mounted}>"
+      },
+      "applies_to": [
+        "web",
+        "css",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "3. Pick the tool: 'Entry animation on mount, no JS state | CSS @starting-style'"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Animate enter states with @starting-style"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Interruptibility: 'Use @starting-style for entry without JS'; 'Legacy fallback'"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "'Entry without JS: @starting-style (legacy fallback: a data-mounted attribute set in useEffect)'"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "Teleporting state: '@starting-style for entry without JS'"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Toast: 'If @starting-style isn't available, fall back to the mount flag'"
+        },
+        {
+          "id": "ek-building-a-toast-component",
+          "evidence": "'I use a useEffect hook to set mounted to true after the initial render'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-18",
+      "theme": "enter-exit-origin",
+      "area": "motion",
+      "title": "Transitions, not keyframes, for rapid enters",
+      "rule": "Animate the entry, exit and repositioning of elements that can be added or toggled rapidly (toasts, list items, toggles) with CSS transitions or springs, never @keyframes.",
+      "why": "Transitions can be interrupted and retargeted mid-flight; keyframes restart from zero, so older toasts jump to their new position when more are added.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "web",
+        "css",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-toast-component",
+          "evidence": "'I initially used CSS keyframes ... but they aren't interruptible'"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "6. Interruption and exit: 'Transitions, not keyframes, for anything triggered rapidly'"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Review Checklist: 'Keyframes on rapidly-triggered element | Use CSS transitions'"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Interruptibility: 'For anything triggered rapidly (toasts being added, toggles), transitions are smoother'"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "Aggressive Escalation Triggers: 'Keyframes on toasts, toggles, or anything added/triggered rapidly'"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "Interruptibility: 'Anything triggered rapidly or reversible mid-motion (toasts stacking, toggles, drags, expand/collapse) must use transitions or springs'"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "List items added/removed: 'CSS transitions, not keyframes, so rapid triggers retarget smoothly'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-19",
+      "theme": "enter-exit-origin",
+      "area": "tooling",
+      "title": "No motion library for a fade",
+      "rule": "Use the cheapest tool that works: a CSS transition for a hover, fade or state toggle and @starting-style for entry on mount; add Motion (motion.dev) only when the motion needs springs, layout animations, exit animations or gesture-driven values, and never install it for a hover or a fade.",
+      "why": "Use the cheapest tool that works: plain CSS transitions are the right tool for a simple hover or fade.",
+      "strength": "must",
+      "values": {
+        "library": "motion (motion.dev)"
+      },
+      "applies_to": [
+        "web",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "3. Pick the tool: 'Springs, layout animations, exit animations, gesture-driven values | Motion'; 'Don't install a motion library for a fade.'"
+        },
+        {
+          "id": "eks-skills-pick-ui-library-skill",
+          "evidence": "'Reach for motion when you need springs, layout animations, exit animations, or gesture-driven values.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-20",
+      "theme": "enter-exit-origin",
+      "area": "motion",
+      "title": "No overshoot on non-gesture entrances",
+      "rule": "Do not overshoot (bounce) when an element appears without a gesture, such as a menu, popover or dialog fading in; add bounce only when the gesture itself carried momentum (a flick, a throw, a drag release). The web skills also allow subtle bounce for drag-to-dismiss, playful interactions and rare delight moments.",
+      "why": "Overshoot on a menu that just faded in feels wrong; overshoot on a card you flicked feels right.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "Springs: 'Overshoot on a menu that just faded in feels wrong'"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "'Bounce only when the gesture carried momentum.'"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "5. Easing and duration: 'avoid bounce in most UI — reserve it for drag-to-dismiss and playful interactions'"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "The delight budget: 'These are the only places bounce, stagger generosity, or a longer beat are welcome.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-21",
+      "theme": "enter-exit-origin",
+      "area": "motion",
+      "title": "Slide by percentages, not pixels",
+      "rule": "When an element slides fully in or out by its own size (a toast, drawer or sheet), express the distance as a percentage of that size, such as translateY(100%), rather than a hardcoded pixel offset. Small nudges stay in pixels in the recipes (the stagger's translateY(8px), the collapsing header's -12).",
+      "why": "Percentages in translate() are relative to the element's own size, so translateY(100%) moves it by its own height whatever the content; this is how Sonner positions toasts and Vaul hides a drawer.",
+      "strength": "should",
+      "values": {
+        "example": "translateY(100%)"
+      },
+      "applies_to": [
+        "web",
+        "css",
+        "react-native"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "4. Pick the properties: 'Percentages in translate() ... Prefer over hardcoded pixels.'"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "translateY with percentages"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Transforms & clip-path: 'Prefer over hardcoded px.'"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "8. Missed opportunities: 'no hardcoded pixel offsets'"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "'translateY(100%) percentages, not hardcoded pixels'"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "'Percentages work in translate'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-22",
+      "theme": "enter-exit-origin",
+      "area": "motion",
+      "title": "Animate height only for accordions",
+      "rule": "On the web, animate height only for accordions and collapsible sections; reveal, hide or resize anything else with transform, opacity or clip-path. React Native is stricter (STD-enter-exit-origin-25).",
+      "why": "height triggers layout, paint and composite on every frame; the sources tolerate it only for accordions, where there is no transform equivalent, and clip-path reveals without a layout shift.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "4. Pick the properties: 'height is tolerated only for accordions, where there's no transform equivalent'"
+        },
+        {
+          "id": "ek-the-magic-of-clip-path",
+          "evidence": "Animating images: clip-path instead of 'a height animation'"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "Aggressive Escalation Triggers: 'Animating layout properties (width/height/margin/padding/top/left)'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-23",
+      "theme": "enter-exit-origin",
+      "area": "motion",
+      "title": "Accordions: short height and opacity",
+      "rule": "Animate accordions and collapses with overflow: hidden and a short height plus opacity transition (recipe: height 200ms and opacity 200ms on the ease-out curve).",
+      "why": "An accordion that snaps open needs a transition, but it is one of the few animations that costs layout on every frame, so a long duration is expensive as well as sluggish.",
+      "strength": "must",
+      "values": {
+        "properties": "height, opacity",
+        "duration": "200ms",
+        "easing": "cubic-bezier(0.23, 1, 0.32, 1)",
+        "overflow": "hidden"
+      },
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Accordion / collapse: 'height 200ms var(--ease-out), opacity 200ms var(--ease-out)'; 'Keep it short'"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "'Accordions/collapses that snap open → height + opacity transition'"
+        }
+      ],
+      "engine": {
+        "path": "motion.duration.medium",
+        "value": "200ms",
+        "type": "duration",
+        "note": "Shares the 200ms step with dropdowns (STD-enter-exit-origin-08) [inferred]; tested with engine.py set"
+      },
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-24",
+      "theme": "enter-exit-origin",
+      "area": "motion",
+      "title": "Measure heights, never animate to auto",
+      "rule": "Measure the content height before animating a collapse or expansion, and never animate to a hardcoded height (React Native) or to auto (web): measure with onLayout in React Native, and in JavaScript or through a headless primitive that supplies it on the web; or animate a transform instead.",
+      "why": "In React Native allowFontScaling is on by default, so a height measured at the default text size is wrong at 200%; on the web the accordion recipe measures the content height rather than animating to auto.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "web",
+        "react",
+        "react-native"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Accordion / collapse: 'Measure the content height in JS ... rather than animating to auto'"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "9. Reduced motion and accessibility: 'Text scales ... Never animate to a hardcoded height — measure with onLayout, or animate a transform instead.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-25",
+      "theme": "enter-exit-origin",
+      "area": "motion",
+      "title": "React Native: never animate header height",
+      "rule": "In React Native, never animate height to collapse or reveal anything, a header on scroll least of all: give the container a fixed height, translate the content inside it and clip with overflow: 'hidden'. The only element the source lets animate a layout property is an absolutely positioned one with no children, such as a tab pill or progress fill.",
+      "why": "Animating height runs a layout pass on the header and everything below it on every scroll frame, the one animation guaranteed to stutter because it competes with the scroll; width, height, margin, padding, flex, top and left re-run Yoga for the node and its siblings on every frame.",
+      "strength": "must",
+      "values": {
+        "collapse-recipe": "opacity 1 → 0 and translateY 0 → -12 over scroll 0 → 60, Extrapolation.CLAMP"
+      },
+      "applies_to": [
+        "react-native"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Collapsing header on scroll: 'Never animate the header's height to collapse it.'"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "4. Pick the properties: 'Everything else is a layout pass'; Never Ship: 'Animating height / width / margin / flex / top | transform + opacity (absolute, childless elements exempt)'"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "\\b(?:height|minHeight|maxHeight):\\s*(?:interpolate|withTiming|withSpring|withDelay|withSequence)\\(",
+        "message": "Don't animate height in React Native: translate the content inside a fixed-height, overflow-hidden container (only absolute, childless elements are exempt)."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-26",
+      "theme": "enter-exit-origin",
+      "area": "motion",
+      "title": "Reveal with clip-path inset",
+      "rule": "Reveal or hide part of an element (images, scroll reveals, comparison sliders) by animating clip-path: inset(), from inset(0 0 100% 0) to inset(0 0 0 0) on the ease-in-out curve, not by animating width, height or an overflow-hidden wrapper.",
+      "why": "clip-path is hardware-accelerated, needs no extra DOM elements and causes no layout shift when the image is revealed.",
+      "strength": "should",
+      "values": {
+        "hidden": "clip-path: inset(0 0 100% 0)",
+        "shown": "clip-path: inset(0 0 0 0)",
+        "easing": "cubic-bezier(0.77, 0, 0.175, 1)",
+        "scroll-reveal-duration": "600ms",
+        "image-reveal-duration": "1000ms (1s)"
+      },
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "ek-the-magic-of-clip-path",
+          "evidence": "Animating images: inset(0 0 100% 0), 1s, cubic-bezier(0.77, 0, 0.175, 1); comparison slider vs 'change their width'"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Scroll reveal: 'transition: clip-path 600ms var(--ease-in-out)'; Programmatic: duration 1000"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "'clip-path is the sanctioned fourth'"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Transforms & clip-path: 'reveal-on-scroll (inset(0 0 100% 0) → inset(0 0 0 0))'"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "8. Missed opportunities: 'clip-path: inset() reveals'"
+        }
+      ],
+      "engine": {
+        "path": "motion.duration.reveal",
+        "value": "600ms",
+        "type": "duration",
+        "note": "New token for marketing scroll reveals [tested with engine.py set: created in primitives.tokens.json]; OpenDesigner has no ease-in-out token matching cubic-bezier(0.77, 0, 0.175, 1) [inferred]"
+      },
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-27",
+      "theme": "enter-exit-origin",
+      "area": "motion",
+      "title": "Scroll reveals on marketing pages only",
+      "rule": "Use scroll-triggered reveals only on marketing surfaces, never on functional UI a user visits daily.",
+      "why": "The recipe limits scroll reveals to marketing surfaces; a surface visited daily falls under the frequency gate, where repeated motion makes the interface feel slow, and data the user reads or acts on should not move for style.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Scroll reveal: 'Marketing surfaces only. Don't do this to functional UI a user visits daily.'"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "4. Function: 'Data the user is trying to read or act on should not move for style.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-28",
+      "theme": "enter-exit-origin",
+      "area": "motion",
+      "title": "Fire scroll reveals once, 100px in",
+      "rule": "Trigger a scroll reveal when the element enters the viewport and fire it only once (IntersectionObserver, or Motion's useInView with { once: true, margin: \"-100px\" }, which fires once at least 100px of the element is in view).",
+      "why": "The reveal must run where the user can see it, or they never see it animate; re-animating on every scroll-by is an interface fighting its reader.",
+      "strength": "must",
+      "values": {
+        "useInView": "{ once: true, margin: \"-100px\" }"
+      },
+      "applies_to": [
+        "web",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Scroll reveal: 'useInView with { once: true, margin: \"-100px\" }. Fire it once'"
+        },
+        {
+          "id": "ek-the-magic-of-clip-path",
+          "evidence": "Scroll animations: 'The image reveal effect must be triggered when the image enters the viewport'; 'triggered only once' and 'when at least 100px of the image is in view'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-29",
+      "theme": "enter-exit-origin",
+      "area": "motion",
+      "title": "Blur a crossfade that won't settle",
+      "rule": "When a crossfade still shows two overlapping states after you have tried other easings and durations, add filter: blur(2px) during the transition (recipe: opacity 0.7, filter and opacity over 200ms ease).",
+      "why": "Without blur the eye reads two distinct objects swapping; blur blends them into one perceived transformation.",
+      "strength": "must",
+      "values": {
+        "blur": "2px",
+        "opacity-during": "0.7",
+        "duration": "200ms",
+        "easing": "ease"
+      },
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "ek-7-practical-animation-tips",
+          "evidence": "7. Use blur when nothing else works: 'adds 2px of blur'"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Masking a crossfade that won't settle: filter 200ms ease, blur(2px), opacity 0.7"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Use blur to mask imperfect transitions: 'add subtle filter: blur(2px)'"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Masking imperfect crossfades"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "10. Cohesion: 'a jarring crossfade where a subtle blur would bridge two states, is a finding'"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "7. Cohesion & tokens: 'masked with subtle filter: blur(2px)'"
+        }
+      ],
+      "engine": {
+        "path": "motion.blur.crossfade",
+        "value": "2px",
+        "type": "dimension",
+        "note": "New token [tested with engine.py set: created as a dimension in semantic.tokens.json]"
+      },
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-30",
+      "theme": "enter-exit-origin",
+      "area": "motion",
+      "title": "Keep animated blur under 20px",
+      "rule": "Keep any animated or transition-time blur() under 20px.",
+      "why": "Heavy blur is expensive, especially in Safari, and causes performance issues.",
+      "strength": "must",
+      "values": {
+        "max-animated-blur": "under 20px"
+      },
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "eks-performance-cheatsheet",
+          "evidence": "'Keep animated blur() under 20px'"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Masking a crossfade: 'Keep it under 20px'"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "'Keep blur under 20px. Heavy blur is expensive, especially in Safari.'"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "'Keep blur < 20px'"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "5. Performance: 'Keep transition-time filter: blur() under 20px'"
+        },
+        {
+          "id": "ek-agents-with-taste",
+          "evidence": "Practical Tips: 'Add subtle blur (under 20px)'"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "(?:\\b(?:initial|animate|exit|whileInView|whileHover|whileTap)\\s*[=:(]|(?:\\bfrom|\\bto|\\d%)\\s*\\{)[^\\n]*?(?<![\\w-])filter:\\s*[\\\"'`]?blur\\(\\s*(?:[2-9]\\d|[1-9]\\d{2,})(?:\\.\\d+)?px",
+        "message": "Keep animated blur under 20px (the crossfade mask uses 2px)."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-31",
+      "theme": "enter-exit-origin",
+      "area": "motion",
+      "title": "Materialize glass surfaces, don't fade",
+      "rule": "When a glass or blurred surface enters or exits, animate its blur radius and scale together rather than using a plain opacity fade.",
+      "why": "The surface then reads as a real material arriving rather than a plain opacity fade.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "Materials: 'Materialize, don't just fade.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-32",
+      "theme": "enter-exit-origin",
+      "area": "motion",
+      "title": "React Native: never animate BlurView",
+      "rule": "In React Native, never animate BlurView intensity; crossfade the opacity of a static BlurView instead.",
+      "why": "On Android, animating intensity re-renders the blur every frame.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "react-native"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "'Never animate BlurView intensity. On Android it re-renders the blur each frame.'"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "\\bintensity:\\s*(?:interpolate|withTiming|withSpring|withDelay)\\(",
+        "message": "Don't animate BlurView intensity: crossfade the opacity of a static BlurView."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-33",
+      "theme": "enter-exit-origin",
+      "area": "motion",
+      "title": "No entering on virtualized rows",
+      "rule": "Never put an entering animation on a row inside FlatList, FlashList or any virtualized list; animate the list container once on mount, or use itemLayoutAnimation for reflow only.",
+      "why": "Rows are recycled, so the animation re-fires every time one scrolls back into view and the list appears to flicker while the user scrolls.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "react-native"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "List entrances: 'Never put entering on a row inside FlatList, FlashList, or any virtualized list.'"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Never Ship: 'entering on a virtualized list row | animate the container, or itemLayoutAnimation'"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "\\brenderItem=\\{[^\\n]*=>\\s*\\(?\\s*<Animated\\.\\w+[^>\\n]*\\bentering=",
+        "message": "No entering on virtualized list rows: animate the container once, or use itemLayoutAnimation for reflow."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-34",
+      "theme": "enter-exit-origin",
+      "area": "motion",
+      "title": "The list closes a removed row's gap",
+      "rule": "When a row is removed, let the list close the gap with itemLayoutAnimation={LinearTransition.duration(200)}, the builder defined at module scope, rather than animating the row.",
+      "why": "Closing the gap the deleted row left is the list's job, not the row's.",
+      "strength": "should",
+      "values": {
+        "itemLayoutAnimation": "LinearTransition.duration(200)"
+      },
+      "applies_to": [
+        "react-native"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Swipe to delete: 'Closing the gap the deleted row left is the list's job, not the row's'; ROW_CLOSE = LinearTransition.duration(200)"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-35",
+      "theme": "enter-exit-origin",
+      "area": "motion",
+      "title": "Layout animations for mount and unmount",
+      "rule": "In React Native, animate elements mounting or unmounting and lists reflowing with Reanimated layout animations (entering, exiting, itemLayoutAnimation).",
+      "why": "The animate-expo tool table, walked from the top to the cheapest tool that fits, assigns mounting, unmounting and list reflow to layout animations.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "react-native"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "tool table: 'An element mounting or unmounting, or a list reflowing | Layout animations'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-36",
+      "theme": "enter-exit-origin",
+      "area": "motion",
+      "title": "Build layout-animation builders once",
+      "rule": "Define Reanimated layout-animation builders at module scope or in useMemo, never inline in JSX; a per-index delay is memoized inside the row.",
+      "why": "The Reanimated docs recommend building layout animations outside components or in useMemo, because an inline builder chain in JSX rebuilds the builder on every render.",
+      "strength": "should",
+      "values": {
+        "per-row": "useMemo(() => FadeInDown.duration(250).delay(index * 40), [index])"
+      },
+      "applies_to": [
+        "react-native"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "List entrances: 'The Reanimated docs recommend building layout animations outside components, or in useMemo'; Toast: 'Module scope — layout-animation builders live outside the component.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-37",
+      "theme": "enter-exit-origin",
+      "area": "motion",
+      "title": "Tune opacity against height by eye",
+      "rule": "When items enter or exit a list with a height change (including reflowing toast stacks), tune the opacity change against the height animation by eye and check it again the next day.",
+      "why": "The opacity change has to work with the height change and there is no formula for that pair; imperfections show up with fresh eyes.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "The opacity + height combination: 'There is no formula'"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Toast: 'When toasts stack and the list reflows, the opacity change has to work against the height change'"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Cohesion: 'Opacity + height in entering/exiting lists is trial and error'"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Toast: 'expect to tune the opacity against the reflow by eye — there's no formula for that pair. Look at it again the next day.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": false,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-38",
+      "theme": "enter-exit-origin",
+      "area": "motion",
+      "title": "Set every transform-origin on purpose",
+      "rule": "Check the transform-origin of every scaled or rotated element, SVG elements included, and set it to where the motion should grow from instead of relying on the default; verify it in slow motion.",
+      "why": "Every element transforms from an anchor point whose default is center, and slow-motion review checks whether an element scales from the wrong point.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "transform-origin: 'Every element has an anchor point ... The default is center.'; slow motion: 'Is the transform-origin correct'"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Debugging: 'transform-origin is right'"
+        },
+        {
+          "id": "eks-skills-prototype-skill",
+          "evidence": "'correct transform-origin' on every variant"
+        },
+        {
+          "id": "adev-changelog",
+          "evidence": "SVG lessons: 'How to use transform origins correctly for SVG transforms.'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-39",
+      "theme": "enter-exit-origin",
+      "area": "motion",
+      "title": "Mirror easing on reversible transitions",
+      "rule": "On a reversible transition, mirror the easing so the outbound path matches the return path (inverse cubic-bézier control points for the two directions); for UI entrances and exits the ease-out rule (STD-enter-exit-origin-05) still applies, since the inverse of an ease-out is an ease-in [inferred].",
+      "why": "Apple: if something disappears one way, we expect it to emerge from where it came.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "7. Spatial consistency: 'Mirror the easing on reversible transitions'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": false,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-40",
+      "theme": "enter-exit-origin",
+      "area": "components",
+      "title": "Vaul: --initial-transform off the edge",
+      "rule": "When a Vaul side drawer does not touch the screen edge, adjust its enter and exit animation with the --initial-transform CSS variable.",
+      "why": "The Vaul docs name --initial-transform as the way to adjust the animation when the drawer does not touch the edge. Vaul is good-to-have only: its README says the library is unmaintained (learn/sources.json, checked 2026-09-24).",
+      "strength": "should",
+      "values": {
+        "css-variable": "--initial-transform"
+      },
+      "applies_to": [
+        "web",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "vaul-default",
+          "evidence": "Side drawer: 'Use the --initial-transform CSS variable to adjust the animation'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": false,
+      "conflicts": []
+    },
+    {
+      "id": "STD-enter-exit-origin-41",
+      "theme": "enter-exit-origin",
+      "area": "components",
+      "title": "Drawers: 500ms on the drawer curve",
+      "rule": "Hide a drawer or sheet at transform: translateY(100%) and open and close it with transition: transform 500ms var(--ease-drawer), where --ease-drawer is cubic-bezier(0.32, 0.72, 0, 1); once a drag is involved it becomes a gesture and settles with a spring instead.",
+      "why": "The curve closely matches iOS (it comes from the Ionic Framework) and 500ms is meant to mimic iOS's sheet; translateY(100%) hides the drawer by its own height whatever its content, which is how Vaul hides a drawer before animating it in.",
+      "strength": "should",
+      "values": {
+        "closed": "[data-closed] { transform: translateY(100%) }",
+        "open": "transform: translateY(0)",
+        "transition": "transform 500ms var(--ease-drawer)",
+        "--ease-drawer": "cubic-bezier(0.32, 0.72, 0, 1)",
+        "article": "transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1)"
+      },
+      "applies_to": [
+        "web",
+        "css",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Drawer / sheet: 'transition: transform 500ms var(--ease-drawer)'; '.drawer[data-closed] { transform: translateY(100%) }'; 'This is how Vaul hides a drawer before animating it in.'"
+        },
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "Motion: 'The curve used in Vaul closely matches the one used in iOS'; 'Duration of 500ms is also supposed to mimic iOS's Sheet'"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "--ease-drawer: cubic-bezier(0.32, 0.72, 0, 1) /* iOS-like drawer curve (Ionic) */; 'Modals, drawers | 200–500ms'"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "'/* iOS-like drawer curve (from Ionic Framework) */ --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1)'"
+        }
+      ],
+      "engine": [
+        {
+          "path": "motion.easing.drawer",
+          "value": [
+            0.32,
+            0.72,
+            0,
+            1
+          ],
+          "type": "cubicBezier",
+          "note": "New token [tested with engine.py set: created as a cubicBezier token in primitives.tokens.json]"
+        },
+        {
+          "path": "motion.duration.drawer",
+          "value": "500ms",
+          "type": "duration",
+          "note": "New token [tested with engine.py set: created in primitives.tokens.json]"
+        }
+      ],
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py build_motion_context: semantic motion.transition.expand ('Dialogs, sheets, side panels entering') runs motion.duration.long, 380ms at energy 35 (320–480ms), on the enter curve [0, 0, 0, 1] at energy 34-66, not 500ms on cubic-bezier(0.32, 0.72, 0, 1) [tested]"
+      ]
+    },
+    {
+      "id": "STD-enter-exit-origin-42",
+      "theme": "enter-exit-origin",
+      "area": "components",
+      "title": "Web toasts: 400ms ease from below",
+      "rule": "On the web, enter a toast from opacity: 0 and transform: translateY(100%) to its resting position with transition: opacity 400ms ease, transform 400ms ease, set through @starting-style (or a mounted flag set in useEffect where @starting-style is unavailable).",
+      "why": "A toast that suddenly appears would feel off; ease at 400ms, slightly slower than typical UI, is tuned to Sonner's personality and is part of why it reads as elegant, and translateY(100%) moves the toast by its own height whatever its content.",
+      "strength": "should",
+      "values": {
+        "from": "opacity: 0; transform: translateY(100%)",
+        "transition": "opacity 400ms ease, transform 400ms ease",
+        "entry": "@starting-style",
+        "fallback": "useEffect(() => { setMounted(true); }, []); <div data-mounted={mounted}>"
+      },
+      "applies_to": [
+        "web",
+        "css",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Toast: 'transition: opacity 400ms ease, transform 400ms ease; @starting-style { opacity: 0; transform: translateY(100%); }'; 'ease rather than ease-out, slightly slower than typical UI'"
+        },
+        {
+          "id": "ek-building-a-toast-component",
+          "evidence": "'This makes the toast start at translateY(100%) and transition to translateY(0)'; '.sonner-toast { transition: transform 400ms ease; }'"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Cohesion matters: 'slightly slower than typical UI animations and uses ease rather than ease-out to feel more elegant'; @starting-style toast example"
+        },
+        {
+          "id": "ek-you-dont-need-animations",
+          "evidence": "'Having a toast suddenly appear would feel off, so we animate it in.'"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "Opportunities table example: 'Enter via @starting-style: opacity: 0; translateY(100%) → settled, transition: 400ms ease, exit same edge'"
+        }
+      ],
+      "engine": [
+        {
+          "path": "motion.duration.toast",
+          "value": "400ms",
+          "type": "duration",
+          "note": "New token [tested with engine.py set: created in primitives.tokens.json]"
+        },
+        {
+          "path": "motion.easing.toast",
+          "value": [
+            0.25,
+            0.1,
+            0.25,
+            1
+          ],
+          "type": "cubicBezier",
+          "note": "CSS ease written as its cubic-bezier; new token [tested with engine.py set]"
+        }
+      ],
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py build_motion_context: semantic motion.transition.enter ('Menus, popovers, toasts entering') gives toasts motion.duration.medium, 240ms at energy 35, on the enter curve [0, 0, 0, 1], not 400ms ease [tested]"
+      ]
+    }
+  ]
+}

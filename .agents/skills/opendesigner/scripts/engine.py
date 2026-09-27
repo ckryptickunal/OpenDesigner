@@ -26,6 +26,18 @@ Commands (run from the user's project; state lives in ./opendesigner/ unless --d
     engine.py build                       generate + export all + design-md + preview + validate
     engine.py show <template> [--open]    a visual template filled with real values (palette, radius, option-gallery, ...)
     engine.py feel [words...]             how plain feel words (fun, calm, techy) map to the feel settings
+    engine.py standards [--json] [--update]   standards followed (by theme), overridden, project ones, not mapped, house updates;
+                                          --update applies new and changed house standards (overridden ones stay the person's),
+                                          unlocks retired ones and ones for other platforms, and retries values not mapped
+    engine.py standard override <id> --why "<their words>" [--value <json>]   the person explicitly changes a house standard
+    engine.py standard restore <id>       follow a house standard again (re-applied and locked)
+    engine.py standard add --rule "..." --why "..." --source <url-or-file> [--authority non-negotiable|good-to-have]
+                           [--area A] [--values '{...}'] [--path P --value <json>] [--review-pattern RE --review-message M] [--title T]
+    engine.py standard remove PRJ-<nn> --why "..."   remove a project standard (house standards are only overridden)
+
+Standards (docs/KNOWLEDGE.md): house standards ship as references/standards.json (OD_STANDARDS_FILE points elsewhere). init
+applies every one that maps to a token or setting, locked, with set_by "standard", as one grouped decision. Without that file
+every command behaves exactly as before.
 
 When the person said yes to the private journey log (profile.tracking "on", see journey.py), the engine logs its own
 steps there: answers and changed answers from set/pick/sketch, the finished sketch, validation errors, exports, reviews
@@ -443,7 +455,10 @@ CHARACTER = ("energy", "roundness", "depth", "colorfulness", "warmth")
 DIALS = POSTURE + CHARACTER
 
 HOOK_STATUSES = ["pending", "have", "commissioning", "tool", "open-library", "placeholder", "not-needed"]
-SET_BY = ["chosen", "confirmed_default", "auto_default", "assumed", "delegated", "reference", "asset"]  # spec 7.9
+SET_BY = ["chosen", "confirmed_default", "auto_default", "assumed", "delegated", "reference", "asset", "standard"]  # spec 7.9; standard: KNOWLEDGE.md 1
+# state["standards"] (docs/KNOWLEDGE.md): house_version, applied ids, overridden {id: {why, decision, date}}, project standards,
+# retired ids already handled, and records {id: {paths: {state path: value}, decision, locked, kept}} so each value points at its decision
+STD_STATE = {"house_version": None, "applied": [], "overridden": {}, "project": [], "retired_seen": [], "records": {}}
 SET_BY_ALIASES = {"confirmed": "chosen", "default": "confirmed_default", "pending": "assumed"}
 FALLBACK_HOOKS = [
     ("H-logo", "Logo, wordmark, symbol, lockups", "Q-brand-03"), ("H-appicon", "App icon", "Q-icon-06"),
@@ -516,6 +531,7 @@ def default_state(name="Untitled design system"):
         "hashes": {},
         "exports": {"prefix": "ds", "figmaPlan": "professional", "tailwindReset": True},
         "locks": [],
+        "standards": copy.deepcopy(STD_STATE),
     }
 
 
@@ -2328,6 +2344,7 @@ def apply_token_overrides(ctx, files):
     applied = []
     ov = ctx.state.get("overrides") or {}
     default_density = ctx.params["space.densityMode"]
+    held = std_held(ctx.state) if std_has_records(ctx.state) else {}
     # unprefixed keys first, so a mode-prefixed value for the same token wins in its mode
     for key in sorted((k for k in ov if not is_param_override(k)), key=lambda k: (":" in k, k)):
         plan = override_plan(files, key, ov[key], default_density)
@@ -2340,12 +2357,15 @@ def apply_token_overrides(ctx, files):
             for q in parts[:-1]:
                 node = node.setdefault(q, {})
             leaf = node.get(parts[-1])
+            sid = held.get("overrides." + key)
+            src = {"source": "standard", "standard": sid} if sid else {"source": "person"}
             if isinstance(leaf, dict) and "$value" in leaf:
                 leaf["$value"] = copy.deepcopy(plan["values"][fn])
-                leaf.setdefault("$extensions", {}).setdefault(NS, {})["source"] = "person"
+                leaf.setdefault("$extensions", {}).setdefault(NS, {}).update(src)
             else:
                 node[parts[-1]] = {"$value": copy.deepcopy(plan["values"][fn]), "$type": plan["type"],
-                                   "$description": "Added by a person (engine.py set).", "$extensions": {NS: {"source": "person"}}}
+                                   "$description": f"Added by standard {sid}." if sid else "Added by a person (engine.py set).",
+                                   "$extensions": {NS: src}}
             applied.append(f"{fn}:{plan['path']}")
     return applied
 
@@ -3025,6 +3045,7 @@ def validate_dir(d, write_state_hash=True):
     if os.path.exists(state_path) and meta.get("stateHash") and meta["stateHash"] != state_hash(read_json(state_path)):
         rep.add("warning", "setup", "the tokens are older than state.json. Run `engine.py generate`", "", "")
     validate_files(files, state, rep)
+    std_validate(state, rep)
     return rep
 
 
@@ -3648,8 +3669,9 @@ def _decision_entries(d):
     return [(did, rest.split(" = ")[0].strip() if " = " in rest else "") for did, rest in heads]
 
 
-def log_decision(d, path, value, why, set_by="chosen", locked=False, source_ref=None, extra=None, title=None):
-    """Append one decision in the spec 7.9 shape. Returns the decision id."""
+def log_decision(d, path, value, why, set_by="chosen", locked=False, source_ref=None, extra=None, title=None, supersedes=None):
+    """Append one decision in the spec 7.9 shape. Returns the decision id. supersedes names the entry it replaces when
+    that entry has another path (a standard's grouped decision)."""
     fp = os.path.join(d, "decisions.md")
     if not os.path.exists(fp):
         write_text(fp, DECISIONS_HEADER)
@@ -3659,7 +3681,7 @@ def log_decision(d, path, value, why, set_by="chosen", locked=False, source_ref=
     head = title or f"{path} = {json.dumps(value, ensure_ascii=False)}"
     lines = [f"\n## {did} · {head}\n",
              f"- set_by: {set_by} · locked: {'yes' if locked else 'no'} · date: {_dt.date.today().isoformat()} · "
-             f"supersedes: {prev[-1] if prev else 'none'} · source_ref: {source_ref or 'none'}\n",
+             f"supersedes: {supersedes or (prev[-1] if prev else 'none')} · source_ref: {source_ref or 'none'}\n",
              f"- reason: {why or '(no reason given)'}\n"]
     for e in extra or []:
         lines.append(f"- {e}\n")
@@ -3670,7 +3692,7 @@ def log_decision(d, path, value, why, set_by="chosen", locked=False, source_ref=
 
 DECISIONS_HEADER = ("# Decisions\n\nAppend-only, ADR-style (spec 7.9): one entry per decision, newest last. A later entry for the same "
                     "path supersedes an earlier one; nothing is edited or deleted. set_by is chosen, confirmed_default, auto_default, "
-                    "assumed, delegated, reference or asset.\n")
+                    "assumed, delegated, reference, asset or standard.\n")
 
 
 def split_status(why, set_by):
@@ -3814,7 +3836,14 @@ def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, loc
     why, set_by = split_status(why, set_by)
     if set_by not in SET_BY:
         raise SystemExit(f"--set-by must be one of {', '.join(SET_BY)}")
+    if set_by == "standard":  # only the standard commands write it, so every such value traces to a real standard
+        raise SystemExit("--set-by standard is written only by the standard commands, so each such value traces to a real standard. "
+                         "For the person's own choice use --set-by chosen; to make it a rule: engine.py standard add --rule \"...\" "
+                         "--why \"...\" --source <url> --path <path> --value <json>")
     if is_locked(state, path) and not force:
+        holder = std_holder(state, path)
+        if holder:
+            raise SystemExit(std_lock_message(state, holder))
         raise SystemExit(f"{path} is locked. Ask the owner before changing it, then run `engine.py unlock {path}` (or pass --force).")
     if path.startswith("dials."):
         if value is not None and not (isinstance(value, (int, float)) and 0 <= value <= 100):
@@ -3843,7 +3872,11 @@ def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, loc
             raise SystemExit(f"Nothing was changed: {plan['error']}.")
         value = next(iter(plan["values"].values()))  # stored in DTCG form, so the tokens stay valid
         plan_note = plan.get("note") or ""
-    did = f"D-{len(_decision_entries(d)) + 1:04d}"
+    entries = _decision_entries(d)
+    did = f"D-{len(entries) + 1:04d}"
+    last = next((e for e, pth in reversed(entries) if pth == path), None)
+    by_std = std_path_decision(state, path)  # a standard's grouped decision set this path after the last entry that names it
+    sup = by_std if by_std and _dnum(by_std) > _dnum(last) else None
     prev = _store(state, path, value, set_by, did, lock, via)
     extra = []
     if prev is not None:
@@ -3863,13 +3896,14 @@ def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, loc
         effects = answer_effects(qid, value, state)
         for epath, evalue in effects.items():
             if is_locked(state, epath.rstrip("+")) and not force:
-                extra.append(f"skipped {epath} (locked)")
+                holder = std_holder(state, epath.rstrip("+"))
+                extra.append(f"skipped {epath} (locked{' by standard ' + holder if holder else ''})")
                 continue
             _store(state, epath, evalue, set_by, did, False)
             shown = "back to the default" if evalue == UNSET else json.dumps(evalue, ensure_ascii=False)
             extra.append(f"also set: {epath.rstrip('+')} = {shown} (from {qid})")
     dump_json(sp, state)
-    log_decision(d, path, value, why, set_by, lock, source_ref, extra)
+    log_decision(d, path, value, why, set_by, lock, source_ref, extra, supersedes=sup)
     qid, how = (path.split(".", 1)[1], None) if path.startswith("answers.") else ANSWER_PATHS.get(path, (None, None))
     if qid and journey:
         if prev not in (None, "", [], {}) and prev != value:
@@ -3881,6 +3915,10 @@ def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, loc
             print("  " + e)
         for line in change_lines(path, value, old_state, state, effects):
             print("  " + line)
+        if path == "answers.Q-plat-01":
+            hint = std_platform_hint(state)
+            if hint:
+                print("  " + hint)
     return state
 
 
@@ -3889,6 +3927,9 @@ def cmd_lock(d, path, on=True):
     state = merge_defaults(read_json(sp))
     path = normalize_path(path)
     parts = path.split(".")
+    holder = None if on else std_holder(state, path)
+    if holder:  # a standard's lock opens only through an override that records the person's words
+        raise SystemExit(std_lock_message(state, holder))
     if parts[0] in ("dials", "answers") and len(parts) == 2:
         node = state[parts[0]].get(parts[1])
         rec = node if isinstance(node, dict) else {"value": node}
@@ -3909,7 +3950,7 @@ def cmd_lock(d, path, on=True):
     print(f"{'locked' if on else 'unlocked'} {path}")
 
 
-def cmd_init(d, src=None, name=None, force=False):
+def cmd_init(d, src=None, name=None, force=False, standards=True):
     sp = os.path.join(d, "state.json")
     if os.path.exists(sp) and not force:
         raise SystemExit(f"{sp} already exists (use --force to replace it)")
@@ -3927,6 +3968,1356 @@ def cmd_init(d, src=None, name=None, force=False):
         log_decision(d, "init", None, "Start of the design system; every default traces to references/levers.json.", "auto_default",
                      title="init" + (f" from {os.path.basename(src)}" if src else " with defaults"))
     print(f"initialized {sp}")
+    if standards:  # house standards (docs/KNOWLEDGE.md 3): applied, locked, said once; nothing when none ship
+        std_sync(d, initial=True)
+
+
+# =============================================================================================
+# Standards: rules from sources an owner marked non-negotiable (docs/KNOWLEDGE.md, sections 1-6)
+# =============================================================================================
+
+def standards_file():
+    """House standards ship with the skill as references/standards.json; OD_STANDARDS_FILE points elsewhere (tests)."""
+    return os.environ.get("OD_STANDARDS_FILE") or os.path.join(REFERENCES, "standards.json")
+
+
+STD_RESERVED = ("locks", "standards", "hashes", "$schema", "schema_version", "engine_version", "levers_version")
+# the fields of a house standard a system keeps with its record, so what it follows (rule text, values, review check) stays
+# consistent until `standards --update`, and still reads right when the house file is missing (another install)
+STD_SNAPSHOT = ("id", "theme", "area", "title", "rule", "why", "strength", "values", "applies_to", "sources", "engine", "review",
+                "design_md", "since", "changed")
+REVIEW_LINE_CAP = 2000  # characters of one line a standard's pattern reads (minified files have very long lines)
+_QUANT = r"(?:[+*]|\{\d*,\d*\})"
+NESTED_QUANTIFIER = re.compile(r"\((?:[^()\\]|\\.)*?" + _QUANT + r"(?:[^()\\]|\\.)*\)" + _QUANT)
+
+
+def _int_or(v, default):
+    if isinstance(v, bool):
+        return default
+    if isinstance(v, int):
+        return v
+    if isinstance(v, float) and math.isfinite(v) and v.is_integer():
+        return int(v)
+    if isinstance(v, str) and v.strip().isdigit():
+        return int(v.strip())
+    return default
+
+
+def _dnum(did):
+    m = re.match(r"^D-(\d+)$", did or "") if isinstance(did, str) else None
+    return int(m.group(1)) if m else 0
+
+
+def _vw(v):
+    """A value in plain words: 250ms, a hex color, and everything else (cubic-bezier lists, numbers) as JSON."""
+    if isinstance(v, dict) and set(v) == {"value", "unit"} and isinstance(v["value"], (int, float)) and not isinstance(v["value"], bool):
+        return f"{fmt_num(v['value'])}{v['unit']}"
+    if isinstance(v, dict) and isinstance(v.get("hex"), str):
+        return v["hex"]
+    return json.dumps(v, ensure_ascii=False)
+
+
+def regex_problem(pattern):
+    """Why a review pattern cannot be used, in plain words, or None."""
+    if not isinstance(pattern, str) or not pattern:
+        return "it is not text"
+    try:
+        rx = re.compile(pattern)
+    except re.error as ex:
+        return f"it is not a valid regular expression ({ex})"
+    if rx.search("") is not None:
+        return "it matches an empty line, so it would flag every line"
+    if NESTED_QUANTIFIER.search(pattern):
+        return "it repeats a group that already repeats (like (\\w+)+), which can take minutes on one long line"
+    return None
+
+
+def _clean_standard(s, version):
+    """A house standard with each field the engine reads in the shape it expects: a hand-edited file may hold anything,
+    and one odd field never crashes a command. Returns (standard, why its review check cannot be used, or None)."""
+    s = dict(s)
+    since = _int_or(s.get("since"), 0)
+    changed = _int_or(s.get("changed"), since)
+    if isinstance(version, int):  # nothing changes after the file's own version, or --update would never settle
+        since, changed = min(since, version), min(changed, version)
+    s["since"], s["changed"] = since, changed
+    for k in ("title", "rule", "why", "area", "strength", "theme"):
+        if s.get(k) is not None and not isinstance(s[k], str):
+            s[k] = None if k == "theme" else json.dumps(s[k], ensure_ascii=False)
+    to = s.get("applies_to")
+    to = [to] if isinstance(to, str) else to if isinstance(to, list) else []
+    s["applies_to"] = [x for x in to if isinstance(x, str) and x.strip()] or ["all"]
+    s["values"] = s["values"] if isinstance(s.get("values"), dict) else {}
+    s["sources"] = [x for x in s["sources"] if isinstance(x, dict)] if isinstance(s.get("sources"), list) else []
+    s["design_md"] = s.get("design_md", True) is not False
+    problem = None
+    rv = s.get("review")
+    if not isinstance(rv, dict) or rv.get("pattern") in (None, ""):
+        s["review"] = None
+    else:
+        problem = regex_problem(rv["pattern"])
+        if problem:
+            s["review"] = None
+        elif rv.get("message") is not None and not isinstance(rv["message"], str):
+            s["review"] = dict(rv, message=None)
+    return s, problem
+
+
+def load_standards():
+    """House standards: {version, updated, themes, standards, retired, error, skipped}. A missing or empty file means no
+    standards, and then every command behaves exactly as it did before standards existed. skipped lists review checks
+    that cannot be used (a broken or unsafe pattern); the rest of that standard still applies."""
+    out = {"version": None, "updated": None, "themes": [], "standards": [], "retired": [], "error": None, "skipped": []}
+    path = standards_file()
+    try:
+        with open(path, encoding="utf-8") as f:
+            text = f.read()
+    except OSError:
+        return out
+    if not text.strip():
+        return out
+    try:
+        data = json.loads(text)
+    except ValueError as ex:
+        return dict(out, error=f"{path} is not valid JSON ({ex}), so no house standards were used")
+    if not isinstance(data, dict):
+        return dict(out, error=f"{path} is not a standards file, so no house standards were used")
+    raw, seen = [], set()
+    for s in data.get("standards") if isinstance(data.get("standards"), list) else []:
+        if isinstance(s, dict) and isinstance(s.get("id"), str) and s["id"].strip() and s["id"] not in seen:
+            seen.add(s["id"])
+            raw.append(s)
+    ver = data.get("version")
+    ver = ver if isinstance(ver, int) and not isinstance(ver, bool) else (0 if raw else None)
+    stds, skipped = [], []
+    for s in raw:
+        clean, problem = _clean_standard(s, ver)
+        stds.append(clean)
+        if problem:
+            skipped.append({"id": s["id"], "path": "review", "reason": f"its review pattern cannot be used: {problem}"})
+    themes = [dict(t, title=t.get("title") if isinstance(t.get("title"), str) else t["key"])
+              for t in (data.get("themes") if isinstance(data.get("themes"), list) else [])
+              if isinstance(t, dict) and isinstance(t.get("key"), str) and t["key"]]
+    retired = [dict(r, why=r.get("why") if isinstance(r.get("why"), str) else None)
+               for r in (data.get("retired") if isinstance(data.get("retired"), list) else [])
+               if isinstance(r, dict) and isinstance(r.get("id"), str)]
+    return {"version": ver, "updated": data.get("updated") if isinstance(data.get("updated"), str) else None, "standards": stds,
+            "themes": themes, "retired": retired, "error": None, "skipped": skipped}
+
+
+def std_state(state):
+    """state['standards'] with every key present and of the right kind. Older states have none; a hand-edited one may hold
+    anything, and a value of the wrong kind is replaced by the default rather than crash a command."""
+    st = state.get("standards")
+    if not isinstance(st, dict):
+        st = state["standards"] = {}
+    hv = st.get("house_version")
+    if not (hv is None or (isinstance(hv, int) and not isinstance(hv, bool))):
+        st["house_version"] = None
+    st.setdefault("house_version", None)
+    for k in ("applied", "retired_seen"):
+        v = st.get(k)
+        if not isinstance(v, list) or not all(isinstance(x, str) for x in v):
+            st[k] = [x for x in v if isinstance(x, str)] if isinstance(v, list) else []
+    v = st.get("overridden")
+    if not isinstance(v, dict) or not all(isinstance(x, dict) for x in v.values()):
+        st["overridden"] = {k: x for k, x in v.items() if isinstance(x, dict)} if isinstance(v, dict) else {}
+    v = st.get("project")
+    if not isinstance(v, list) or not all(isinstance(x, dict) and isinstance(x.get("id"), str) for x in v):
+        st["project"] = [x for x in v if isinstance(x, dict) and isinstance(x.get("id"), str)] if isinstance(v, list) else []
+    v = st.get("records")
+    if not isinstance(v, dict) or not all(isinstance(x, dict) for x in v.values()):
+        st["records"] = {k: x for k, x in v.items() if isinstance(x, dict)} if isinstance(v, dict) else {}
+    for rec in st["records"].values():
+        if not isinstance(rec.get("paths"), dict):
+            rec["paths"] = {}
+        if "kept" in rec and not isinstance(rec["kept"], dict):
+            rec["kept"] = {}
+        if "prelocked" in rec and not isinstance(rec["prelocked"], list):
+            rec["prelocked"] = []
+    return st
+
+
+def std_has_records(state):
+    """True when standards put values in this state (a cheap check for code that runs on every build)."""
+    st = state.get("standards")
+    return isinstance(st, dict) and isinstance(st.get("records"), dict) and bool(st["records"])
+
+
+def std_engine(s):
+    """A standard's engine mappings as a list (one standard may set several values)."""
+    eng = s.get("engine")
+    if isinstance(eng, dict):
+        return [eng]
+    return [x for x in eng if isinstance(x, dict)] if isinstance(eng, list) else []
+
+
+def known_platforms(state):
+    """The platforms the person named (Q-plat-01), or None while nobody has said."""
+    rec = (state.get("answers") or {}).get("Q-plat-01")
+    if rec is None:
+        return None
+    v = answer_value(rec)
+    return {str(x).strip().lower() for x in (v if isinstance(v, list) else [v]) if x} or None
+
+
+def std_applies(s, state):
+    """False only when the standard names platforms and the person's platforms are known and all outside them."""
+    to = s.get("applies_to") or ["all"]
+    to = {str(x).strip().lower() for x in (to if isinstance(to, list) else [to])}
+    plats = known_platforms(state)
+    return "all" in to or not plats or bool(to & plats)
+
+
+def std_current(state, path):
+    """The value a state path holds now (overrides are keyed by the whole token path; dials and answers are records)."""
+    parts = path.split(".")
+    if parts[0] == "overrides" and len(parts) > 1:
+        return (state.get("overrides") or {}).get(path.split(".", 1)[1])
+    if parts[0] == "dials" and len(parts) == 2:
+        return dial_value((state.get("dials") or {}).get(parts[1]))
+    if parts[0] == "answers" and len(parts) == 2:
+        return answer_value((state.get("answers") or {}).get(parts[1]))
+    return get_path(state, path)
+
+
+def _same(a, b):
+    return json.dumps(a, sort_keys=True) == json.dumps(b, sort_keys=True)
+
+
+def _finite(v):
+    if isinstance(v, float):
+        return math.isfinite(v)
+    if isinstance(v, dict):
+        return all(_finite(x) for x in v.values())
+    if isinstance(v, list):
+        return all(_finite(x) for x in v)
+    return True
+
+
+def shown_path(path):
+    """overrides.motion.easing.exit -> motion.easing.exit: the name a person types with `engine.py set`."""
+    return path.split(".", 1)[1] if path.startswith("overrides.") else path
+
+
+OPEN_STATE_MAPS = ("references.", "taste.", "blocks.", "zoom.", "profile.", "waivers.", "components.notes.")
+
+
+def _state_path_known(path):
+    node = default_state()
+    for q in path.split("."):
+        if not isinstance(node, dict):
+            return False
+        if q not in node:
+            return not node or path.startswith(OPEN_STATE_MAPS)
+        node = node[q]
+    return True
+
+
+def _std_base(state, cache):
+    """Tokens and validation errors of the state before a standard's value is tried (computed once per batch)."""
+    if "files" not in cache:
+        try:
+            cache["files"] = generate_system(state)[0]
+            rep = Report()
+            validate_files(cache["files"], state, rep)
+        except Exception as ex:  # a state the generator cannot read: every value is reported as not mapped, never a crash
+            raise ValueError(f"the engine cannot build this system's tokens ({ex})")
+        cache["errors"] = {i["message"] for i in rep.items if i["severity"] == "error"}
+    return cache["files"]
+
+
+def _std_trial(state, sp, value, cache):
+    """Build the system with the value in place: a value the generator cannot use, or one that breaks a check the engine
+    enforces (accessibility floors outrank every standard, KNOWLEDGE.md 2), is refused."""
+    _std_base(state, cache)
+    trial = copy.deepcopy(state)
+    try:
+        _store(trial, sp, value, "standard", "D-0000", False)
+        files = generate_system(trial)[0]
+        rep = Report()
+        validate_files(files, trial, rep)
+    except Exception as ex:  # a bad value is reported as not mapped, never a crash
+        raise ValueError(f"the engine cannot build the tokens with {json.dumps(value, ensure_ascii=False)} at {shown_path(sp)} ({ex})")
+    new = [i["message"] for i in rep.items if i["severity"] == "error" and i["message"] not in cache["errors"]]
+    if new:
+        raise ValueError(f"it would break a check the engine enforces: {new[0]}")
+
+
+def std_target(state, path, value, typ=None, cache=None, trial=True):
+    """Where one engine value of a standard goes: (state path, value as stored). Token paths go through the same plan as
+    `engine.py set` (existing tokens keep their type; new tokens land in the files of their group), and every value is
+    tried in a trial build. Raises ValueError, in plain words, when the engine cannot take it: an unknown path, a value
+    of the wrong kind, or one that breaks a validation check."""
+    if not isinstance(path, str) or not path.strip():
+        raise ValueError("the mapping has no path")
+    if not _finite(value):
+        raise ValueError("the value is not a finite number")
+    sp = normalize_path(path.strip())
+    parts = sp.split(".")
+    if parts[0] in STD_RESERVED or any(not q.strip() for q in parts):
+        raise ValueError(f"{sp} is not a setting a standard can hold")
+    if parts[0] in ("overrides", "dials", "answers") and len(parts) < 2:
+        raise ValueError(f"{sp} is a group of settings; name one of them")
+    cache = {} if cache is None else cache
+    if parts[0] == "overrides" and not is_param_override(sp.split(".", 1)[1]):
+        key = sp.split(".", 1)[1]
+        files = _std_base(state, cache)
+        try:
+            plan = override_plan(files, key, value, files["opendesigner.meta.json"]["params"]["space.densityMode"]["value"])
+        except Exception as ex:
+            raise ValueError(f"the engine cannot read {json.dumps(value, ensure_ascii=False)} for {key} ({ex})")
+        if "error" in plan:
+            raise ValueError(plan["error"])
+        if typ and plan.get("type") and typ != plan["type"]:
+            raise ValueError(f"{plan['path']} is a {plan['type']} token, but the standard gives a {typ}")
+        value = next(iter(plan["values"].values()))
+        if trial:
+            _std_trial(state, sp, value, cache)
+        return sp, value
+    if parts[0] == "overrides":
+        pass  # a lever parameter: the trial build below checks the value
+    elif parts[0] == "dials":
+        if len(parts) != 2 or parts[1] not in DIALS:
+            raise ValueError(f"{sp} is not a dial; the dials are {', '.join(DIALS)}")
+        if value is not None and not (isinstance(value, (int, float)) and not isinstance(value, bool) and 0 <= value <= 100):
+            raise ValueError("a dial takes a number from 0 to 100")
+    elif parts[0] == "answers":
+        if len(parts) != 2 or (questions() and parts[1] not in questions()):
+            raise ValueError(f"{sp} is not a question in questions.json")
+    elif not _state_path_known(sp):
+        raise ValueError(f"{sp} is not a setting in state.json")
+    else:
+        default = _default_at(sp)
+        if isinstance(default, dict) and not isinstance(value, dict):
+            raise ValueError(f"{sp} is a group of settings; name one of them")
+        if isinstance(default, list) and not isinstance(value, list):
+            raise ValueError(f"{sp} takes a list")
+    if trial:
+        _std_trial(state, sp, value, cache)
+    return sp, value
+
+
+def _std_batch_check(state, items, cache):
+    """items [(key, state path, value)] -> {key: reason} for the values a trial build refuses. One build when they all
+    pass; otherwise each is tried on top of the ones accepted before it, so a bad pair is caught too."""
+    if not items:
+        return {}
+    try:
+        _std_base(state, cache)
+    except ValueError as ex:
+        return {k: str(ex) for k, _sp, _v in items}
+    try:
+        trial = copy.deepcopy(state)
+        for _k, sp, v in items:
+            _store(trial, sp, v, "standard", "D-0000", False)
+        rep = Report()
+        validate_files(generate_system(trial)[0], trial, rep)
+        if not [i for i in rep.items if i["severity"] == "error" and i["message"] not in cache["errors"]]:
+            return {}
+    except Exception:  # found one by one below
+        pass
+    bad, acc = {}, copy.deepcopy(state)
+    for k, sp, v in items:
+        try:
+            _std_trial(acc, sp, v, cache)
+            _store(acc, sp, v, "standard", "D-0000", False)
+        except Exception as ex:
+            bad[k] = str(ex)
+    return bad
+
+
+def std_snapshot(s):
+    return {k: copy.deepcopy(s[k]) for k in STD_SNAPSHOT if k in s}
+
+
+def std_copy(state, sid, house):
+    """A house standard as this system follows it: the copy kept when it was last applied (so rule text and locked values
+    agree until `standards --update`), else the house file's."""
+    snap = (std_state(state)["records"].get(sid) or {}).get("std")
+    if isinstance(snap, dict) and snap.get("id") == sid:
+        return snap
+    return next((s for s in house["standards"] if s["id"] == sid), None)
+
+
+def std_find(state, sid, house=None):
+    """(standard, kind) for an id. kind is 'project', 'house', or 'gone': a house standard this system still follows by its
+    recorded copy although the house file here does not list it. (None, None) when unknown."""
+    st = std_state(state)
+    for s in st["project"]:
+        if s.get("id") == sid:
+            return s, "project"
+    for s in (house or load_standards())["standards"]:
+        if s["id"] == sid:
+            return s, "house"
+    rec = st["records"].get(sid)
+    if isinstance(rec, dict) and not str(sid).startswith("PRJ-"):
+        snap = rec.get("std") if isinstance(rec.get("std"), dict) else {}
+        return dict(snap, id=sid, rule=snap.get("rule") or rec.get("rule") or ""), "gone"
+    return None, None
+
+
+def _std_rank(sid):
+    """Project standards outrank house ones, and a newer project standard outranks an older one (KNOWLEDGE.md 2)."""
+    m = re.match(r"^PRJ-(\d+)$", sid)
+    return (0, -int(m.group(1))) if m else (1, 0)
+
+
+def std_held(state, exclude=None):
+    """{state path: standard id} for every path an active standard locks (house ones not overridden, project ones);
+    when two hold one path, the higher-ranked one is named."""
+    st = std_state(state)
+    held = {}
+    for sid, rec in sorted(st["records"].items(), key=lambda kv: _std_rank(kv[0])):
+        if sid == exclude or sid in st["overridden"] or not rec.get("locked", True):
+            continue
+        for p in rec.get("paths") or {}:
+            held.setdefault(p, sid)
+    return held
+
+
+def std_holder(state, path):
+    """The id of the active standard that locks this path (or a path above it), else None."""
+    for p, sid in std_held(state).items():
+        if path == p or path.startswith(p + "."):
+            return sid
+    return None
+
+
+def std_path_decision(state, path):
+    """The latest decision in which a standard put a value at this path, or None. The grouped decisions do not name paths
+    in their titles, so the supersede chain and DESIGN.md read them from the records."""
+    if not std_has_records(state):
+        return None
+    best = None
+    for rec in state["standards"]["records"].values():
+        if isinstance(rec, dict) and isinstance(rec.get("paths"), dict) and path in rec["paths"] and _dnum(rec.get("decision")) > _dnum(best):
+            best = rec["decision"]
+    return best
+
+
+def std_lock_message(state, sid, house=None):
+    house = house or load_standards()
+    if sid.startswith("PRJ-"):
+        s = std_find(state, sid, house)[0] or {}
+        rule = (s.get("rule") or "").strip().rstrip(".")
+        return (f"This follows your project standard {sid}" + (f": {rule}" if rule else "") + ". Change it only if the person "
+                f"explicitly asked: engine.py standard remove {sid} --why \"<their words>\", then set the new value.")
+    s = std_copy(state, sid, house) or std_find(state, sid, house)[0] or {}
+    rule = (s.get("rule") or "").strip().rstrip(".")
+    return (f"This follows house standard {sid}" + (f": {rule}" if rule else "") + ". Change it only if the person explicitly asked: "
+            f"engine.py standard override {sid} --why \"<their words>\"")
+
+
+def _set_lock(state, path, on):
+    locks = state.setdefault("locks", [])
+    if not isinstance(locks, list):
+        locks = state["locks"] = []
+    if on and path not in locks:
+        locks.append(path)
+    elif not on and path in locks:
+        locks.remove(path)
+    parts = path.split(".")
+    if parts[0] in ("dials", "answers") and len(parts) == 2 and isinstance((state.get(parts[0]) or {}).get(parts[1]), dict):
+        state[parts[0]][parts[1]]["locked"] = on
+
+
+def _release(state, paths, sid, rec=None):
+    """Unlock (never revert) the paths a standard held. A path stays locked when another active standard still holds it,
+    or when the person had locked it before the standard arrived; a recommended default never locked anything. Returns
+    the paths it unlocked."""
+    rec = rec or {}
+    if rec.get("locked", True) is False:
+        return []
+    held = std_held(state, exclude=sid)
+    mine = set(rec.get("prelocked") or [])
+    out = []
+    for p in paths:
+        if p in held or p in mine:
+            continue
+        _set_lock(state, p, False)
+        out.append(p)
+    return out
+
+
+def _next_did(d):
+    return f"D-{len(_decision_entries(d)) + 1:04d}"
+
+
+def _kept_words(who, sp, v, cur, recommended=False):
+    """One line for a value a standard did not set because a higher rule holds it (KNOWLEDGE.md 2: said, never silent)."""
+    path = shown_path(sp)
+    if who.startswith(("PRJ-", "STD-")):
+        kind = "project" if who.startswith("PRJ-") else "house"
+        if recommended:
+            return (f"{path} already holds this value under {kind} standard {who}" if _same(cur, v) else
+                    f"{kind} standard {who} wins over this recommended default for {path}; it stays {_vw(cur)}")
+        return f"kept {kind} standard {who}'s value for {path}; the standard gives {_vw(v)}"
+    if who == "locked":
+        return f"kept the person's own locked value for {path}; the standard gives {_vw(v)}"
+    return f"kept the person's own value ({who}) for {path}; the standard gives {_vw(v)}"
+
+
+def _kept_note(who, sp, cur):
+    """The same, for listings: what holds the path instead of the standard."""
+    path = shown_path(sp)
+    if who.startswith("PRJ-"):
+        return f"project standard {who} wins for {path} (it holds {_vw(cur)})"
+    if who.startswith("STD-"):
+        return f"house standard {who} wins for {path} (it holds {_vw(cur)})"
+    if who == "locked":
+        return f"the person's own locked value {_vw(cur)} is kept for {path}"
+    return f"the person's own value {_vw(cur)} is kept for {path} ({who})"
+
+
+def std_apply(d, state, stds, did, force=False, locked=True, set_by="standard", only=None):
+    """Store each standard's engine values (locked, unless it is a recommended default) and record which decision holds
+    them. Precedence follows KNOWLEDGE.md 2, and every conflict is said in a line, never settled silently:
+    - a higher-ranked standard that locks the path keeps it (a newer project standard, or a project one over a house one);
+    - a recommended default (locked=False) never moves a value a standard locks;
+    - unless force, a value the person chose after any standard last set it, or locked themselves, stays theirs.
+    only: the state paths to (re)apply; the rest of each record stays as it is. Returns (lines, unmapped)."""
+    st = std_state(state)
+    decs = _decisions(d)
+    lines, unmapped, cache = [], [], {}
+    plan = {}  # (standard index, mapping index) -> ("ok", path, value) | ("kept", path, value, who) | ("bad", reason) | ("skip",)
+    for si, s in enumerate(stds):
+        held = std_held(state, exclude=s["id"])
+        rec0 = st["records"].get(s["id"]) or {}
+        own = set(rec0.get("paths") or {}) if s["id"] not in st["overridden"] else set()
+        pre = set(rec0.get("prelocked") or [])
+        for ei, eng in enumerate(std_engine(s)):
+            try:
+                sp, v = std_target(state, eng.get("path"), eng.get("value"), eng.get("type"), cache, trial=False)
+            except Exception as ex:  # a bad mapping in a house file is reported as not mapped, never a crash
+                plan[(si, ei)] = ("bad", str(ex) if isinstance(ex, ValueError) else f"the engine cannot use it ({ex})")
+                continue
+            if only is not None and sp not in only:
+                plan[(si, ei)] = ("skip",)
+                continue
+            same = _same(std_current(state, sp), v)
+            other = held.get(sp)
+            mine = decs.get(sp) if (decs.get(sp) or {}).get("set_by") == "chosen" else None
+            if mine and _dnum(mine["id"]) <= _dnum(std_path_decision(state, sp)):
+                mine = None  # a standard set this path after the person's choice (a restore, a project standard)
+            person_lock = is_locked(state, sp) and ((not other and sp not in own) or sp in pre)
+            if other and not locked:
+                plan[(si, ei)] = ("kept", sp, v, other)
+            elif other and _std_rank(other) < _std_rank(s["id"]) and not same:
+                plan[(si, ei)] = ("kept", sp, v, other)
+            elif not force and not same and (person_lock or mine):
+                plan[(si, ei)] = ("kept", sp, v, mine["id"] if mine else "locked")
+            else:
+                plan[(si, ei)] = ("ok", sp, v)
+    for k, reason in _std_batch_check(state, [(k, x[1], x[2]) for k, x in plan.items() if x[0] == "ok"], cache).items():
+        plan[k] = ("bad", reason)
+    for si, s in enumerate(stds):
+        sid = s["id"]
+        rec0 = st["records"].get(sid) or {}
+        if only is None:
+            rec = {"paths": {}, "decision": did, "locked": locked}
+        else:
+            rec = copy.deepcopy(rec0) if rec0 else {"paths": {}, "locked": locked}
+            rec["decision"] = did
+        if not sid.startswith("PRJ-"):
+            rec["std"] = std_snapshot(s)
+        pre = [p for p in rec0.get("prelocked") or [] if p in (rec0.get("paths") or {})]
+        bad = []
+        if not std_engine(s) and only is None:
+            carriers = [x for x, on in (("DESIGN.md", s.get("design_md", True)), ("review", bool(s.get("review")))) if on]
+            lines.append(f"{sid}: followed; it sets no values" + (f" ({' and '.join(carriers)} carr{'y' if len(carriers) > 1 else 'ies'} it)"
+                                                                   if carriers else ""))
+        for ei, eng in enumerate(std_engine(s)):
+            step = plan[(si, ei)]
+            if step[0] == "skip" or (step[0] == "bad" and only is not None):
+                continue
+            if step[0] == "bad":
+                unmapped.append({"id": sid, "path": eng.get("path"), "reason": step[1]})
+                bad.append({"path": eng.get("path"), "reason": step[1]})
+                lines.append(f"{sid}: not mapped ({eng.get('path')}: {step[1]})")
+                continue
+            sp, v = step[1], step[2]
+            rec["paths"].pop(sp, None)
+            rec.get("kept", {}).pop(sp, None)
+            cur = std_current(state, sp)
+            if step[0] == "kept":
+                rec.setdefault("kept", {})[sp] = step[3]
+                lines.append(f"{sid}: " + _kept_words(step[3], sp, v, cur, recommended=not locked))
+                continue
+            if locked and sp not in pre and is_locked(state, sp) and sp not in std_held(state):
+                pre.append(sp)  # the person locked it before this standard: releasing the standard leaves their lock
+            _store(state, sp, v, set_by, did, False)
+            if sp.startswith("answers."):
+                for epath, evalue in answer_effects(sp.split(".", 1)[1], v, state).items():
+                    if not is_locked(state, epath.rstrip("+")):
+                        _store(state, epath, evalue, set_by, did, False)
+            if locked:
+                _set_lock(state, sp, True)
+                for osid, orec in st["records"].items():  # a recommended default this standard now outranks
+                    if osid != sid and orec.get("locked", True) is False and sp in orec["paths"] and not _same(orec["paths"][sp], v):
+                        orec["paths"].pop(sp)
+                        orec.setdefault("kept", {})[sp] = sid
+                        lines.append(f"{sid}: {shown_path(sp)} follows this standard; it outranks the recommended default {osid}")
+            rec["paths"][sp] = v
+            lines.append(f"{sid}: {shown_path(sp)} = {_vw(v)}{'' if locked else ' (unlocked)'}")
+        if only is None:
+            rec.pop("unmapped", None)
+            if bad:
+                rec["unmapped"] = bad
+        if pre:
+            rec["prelocked"] = pre
+        else:
+            rec.pop("prelocked", None)
+        if not rec.get("kept"):
+            rec.pop("kept", None)
+        st["records"][sid] = rec
+        if sid not in st["applied"] and not sid.startswith("PRJ-"):
+            st["applied"].append(sid)
+    return lines, unmapped
+
+
+def _maps_now(state, s, rec, cache):
+    """True when a value of this standard that was not mapped can be applied now (the engine or the mapping was fixed)."""
+    failed = {str(u.get("path")) for u in rec.get("unmapped") or [] if isinstance(u, dict)}
+    for eng in std_engine(s):
+        if str(eng.get("path")) in failed:
+            try:
+                std_target(state, eng.get("path"), eng.get("value"), eng.get("type"), cache)
+                return True
+            except Exception:
+                continue
+    return False
+
+
+def std_pending(state, house, retry=False):
+    """What the house file asks of this system that it does not do yet:
+    new      applicable standards not applied (and not overridden), for example after the platforms changed;
+    changed  applied ones changed after the system's house version;
+    retired  retired entries this system still follows, and (when the house file is present) ids it follows that the file
+             no longer lists: a standard never simply disappears, so its lock is released;
+    off      applied ones that no longer apply to the person's platforms (unlocked, not reverted);
+    kept     overridden ones that changed (they stay the person's);
+    retry    (retry=True only, it runs trial builds) applied ones with a value not mapped that the engine can apply now."""
+    st = std_state(state)
+    hv = st["house_version"] or 0
+    applied, over = set(st["applied"]), st["overridden"]
+    new, changed, kept, off, again, cache = [], [], [], [], [], {}
+    for s in house["standards"]:
+        rec = st["records"].get(s["id"]) or {}
+        if s["id"] in over:
+            if st["house_version"] is not None and max(s["since"], s["changed"]) > hv:
+                kept.append(s)
+        elif s["id"] not in applied:
+            if std_applies(s, state):
+                new.append(s)
+        elif not std_applies(s, state):
+            off.append(s)
+        elif s["changed"] > hv:
+            changed.append(s)
+        elif retry and rec.get("unmapped") and _maps_now(state, s, rec, cache):
+            again.append(s)
+    live = {s["id"] for s in house["standards"]}
+    listed = {r["id"] for r in house["retired"]}
+    retired = [r for r in house["retired"] if r["id"] not in live and r["id"] not in st["retired_seen"]
+               and (r["id"] in applied or r["id"] in over)]
+    if house["version"] is not None and not house["error"]:
+        retired += [{"id": sid, "why": "it is no longer in the house standards file"} for sid in list(st["applied"]) + list(over)
+                    if sid not in live and sid not in listed and not sid.startswith("PRJ-") and sid not in st["retired_seen"]]
+    seen, uniq = set(), []
+    for r in retired:
+        if r["id"] not in seen:
+            seen.add(r["id"])
+            uniq.append(r)
+    return {"new": new, "changed": changed, "retired": uniq, "kept": kept, "off": off, "retry": again}
+
+
+def _plural(n, one, many):
+    return f"{n} {one if n == 1 else many}"
+
+
+def std_sync(d, initial=False, quiet=False):
+    """Bring a system up to the house standards: apply new and changed ones (locked, set_by standard), never touch an
+    overridden one, unlock (not revert) retired ones and ones the person's platforms left, retry values that were not
+    mapped, and record it all as one grouped decision. Returns the lines."""
+    say = (lambda *a: None) if quiet else print
+    house = load_standards()
+    if house["error"]:
+        say("Note: " + house["error"] + ".")
+    if house["version"] is None:
+        if not initial and not house["error"]:
+            n = len(std_state(merge_defaults(read_json(os.path.join(d, "state.json"))))["applied"]) \
+                if os.path.exists(os.path.join(d, "state.json")) else 0
+            say(f"The house standards file is missing here ({standards_file()}), so there is nothing to update. This system keeps "
+                f"the {_plural(n, 'standard', 'standards')} it follows." if n else
+                "No house standards ship with this skill yet (references/standards.json), so there is nothing to update.")
+        return []
+    sp = os.path.join(d, "state.json")
+    state = merge_defaults(load_state(d))
+    st = std_state(state)
+    if not house["standards"] and not house["retired"] and not st["applied"] and not st["overridden"]:
+        if not initial:
+            say("No house standards ship with this skill yet (references/standards.json), so there is nothing to update.")
+        return []
+    p = std_pending(state, house, retry=not initial)
+    hv = house["version"]
+    if not (p["new"] or p["changed"] or p["retired"] or p["off"] or p["retry"]):
+        if (st["house_version"] or 0) < hv or st["house_version"] is None:
+            st["house_version"] = hv
+            dump_json(sp, state)
+        if not initial:
+            say(f"This system already follows OpenDesigner's house standards v{hv}."
+                + (f" {_plural(len(p['kept']), 'standard you overrode has', 'standards you overrode have')} changed since "
+                   f"({', '.join(s['id'] for s in p['kept'])}); {'it stays' if len(p['kept']) == 1 else 'they stay'} yours."
+                   if p["kept"] else ""))
+        return []
+    did = _next_did(d)
+    todo = p["new"] + p["changed"] + p["retry"]
+    before = {sid: set(rec.get("paths") or {}) for sid, rec in st["records"].items()}
+    lines, unmapped = std_apply(d, state, todo, did)
+    for s in p["changed"] + p["retry"]:
+        rec = st["records"].get(s["id"]) or {}
+        _release(state, before.get(s["id"], set()) - set(rec.get("paths") or {}) - set(rec.get("kept") or {}), s["id"], rec)
+    for s in p["off"]:
+        rec = st["records"].pop(s["id"], {}) or {}
+        _release(state, rec.get("paths") or {}, s["id"], rec)
+        st["applied"].remove(s["id"])
+        lines.append(f"{s['id']}: no longer applies to your platforms ({', '.join(s.get('applies_to') or [])} only); "
+                     "its values stay, unlocked")
+    for r in p["retired"]:
+        rec = st["records"].pop(r["id"], {}) or {}
+        _release(state, rec.get("paths") or {}, r["id"], rec)
+        if r["id"] in st["applied"]:
+            st["applied"].remove(r["id"])
+        st["overridden"].pop(r["id"], None)
+        st["retired_seen"].append(r["id"])
+        lines.append(f"{r['id']}: retired ({r.get('why') or 'no reason given'}); its values stay, unlocked")
+    for s in p["kept"]:
+        lines.append(f"{s['id']}: changed in the house file, but the person overrode it, so it stays theirs")
+    st["house_version"] = hv
+    dump_json(sp, state)
+    failed = {}
+    for u in unmapped:
+        failed[u["id"]] = failed.get(u["id"], 0) + 1
+    none_mapped = [s for s in todo if std_engine(s) and failed.get(s["id"], 0) >= len(std_engine(s))]
+    k = len(todo) - len(none_mapped)
+    ids = [s["id"] for s in todo] + [s["id"] for s in p["off"]] + [r["id"] for r in p["retired"]]
+    if initial:
+        title = (f"House standards v{hv}: {k} applied" + (f", {len(none_mapped)} not mapped" if none_mapped else "")
+                 + f" ({', '.join(ids)})")
+        why = ("OpenDesigner's house standards (sources marked non-negotiable) are applied without asking and locked. Change one "
+               "only when the person asks: engine.py standard override <id> --why \"<their words>\".")
+    else:
+        counts = (f"{len(p['new'])} new, {len(p['changed'])} changed, {len(p['retired'])} retired"
+                  + (f", {len(p['off'])} no longer for these platforms" if p["off"] else "")
+                  + (f", {len(p['retry'])} now mapped" if p["retry"] else ""))
+        title = f"House standards v{hv}: {counts}" + (f" ({', '.join(ids)})" if ids else "")
+        why = ("House standards update (engine.py standards --update). Overridden standards stay the person's; retired ones, and "
+               "ones for other platforms, are unlocked, not reverted.")
+    log_decision(d, "standards", None, why, "standard", True, source_ref=f"standards.json v{hv}", extra=lines, title=title)
+    areas = sorted({s.get("area") for s in todo if s.get("area") and s not in none_mapped})
+    if initial:
+        say(f"Applied {_plural(k, 'OpenDesigner house standard', 'OpenDesigner house standards')} (v{hv})"
+            + (f" for {', '.join(areas)}" if areas else "") + ". They are locked; say if you want to change one "
+            "(`engine.py standards` lists them).")
+    else:
+        say(f"{did} house standards v{hv}: {counts}" + (f" ({', '.join(areas)})" if areas else "") + ".")
+        for line in lines:
+            say("  " + line)
+    if unmapped:
+        say(f"  {_plural(len(unmapped), 'standard value', 'standard values')} could not be applied; "
+            "`engine.py standards` lists them as not mapped.")
+    return lines
+
+
+def std_platform_hint(state):
+    """After the platforms change: one line when house standards now apply, or no longer apply, to them."""
+    house = load_standards()
+    if house["version"] is None or not house["standards"]:
+        return ""
+    p = std_pending(state, house)
+    n, off = len(p["new"]), len(p["off"])
+    if not (n or off):
+        return ""
+    parts = ([f"{_plural(n, 'house standard now applies', 'house standards now apply')}"] if n else []) + \
+            ([f"{_plural(off, 'house standard no longer applies', 'house standards no longer apply')}"] if off else [])
+    return "note: " + " and ".join(parts) + " to these platforms; run `engine.py standards --update`."
+
+
+def std_unmapped(state, house):
+    """Dry run: every engine value (house and project) the engine cannot take now, as {id, path, reason}. Values already
+    applied at this house version are not tried again."""
+    st = std_state(state)
+    out, cache, items = [], {}, []
+    followed = [s for s in (std_copy(state, i, house) for i in st["applied"]) if s]
+    ids = {s["id"] for s in followed}
+    for s in followed + [s for s in house["standards"] if s["id"] not in ids] + st["project"]:
+        rec = st["records"].get(s["id"]) or {}
+        for eng in std_engine(s):
+            try:
+                sp, v = std_target(state, eng.get("path"), eng.get("value"), eng.get("type"), cache, trial=False)
+            except Exception as ex:
+                out.append({"id": s["id"], "path": eng.get("path"), "reason": str(ex)})
+                continue
+            done = sp in (rec.get("paths") or {}) or sp in (rec.get("kept") or {})
+            if not (done and _int_or(s.get("changed"), 0) <= (st["house_version"] or 0)):
+                items.append(((s["id"], eng.get("path")), sp, v))
+    for (sid, path), reason in _std_batch_check(state, items, cache).items():
+        out.append({"id": sid, "path": path, "reason": reason})
+    return out
+
+
+def _values_words(values, limit=4):
+    items = list((values or {}).items()) if isinstance(values, dict) else []
+    words = ", ".join(f"{k} `{v if isinstance(v, str) else json.dumps(v, ensure_ascii=False)}`" for k, v in items[:limit])
+    return words + (", ..." if len(items) > limit else "")
+
+
+def std_by_theme(house, stds):
+    """[(theme title, [standards])] in the order of the house file's themes."""
+    order = [(t["key"], t.get("title") or t["key"]) for t in house["themes"]]
+    known = {k for k, _t in order}
+    key_of = lambda s: s.get("theme") if isinstance(s.get("theme"), str) and s.get("theme") else "other"
+    order += [(k, k) for k in sorted({key_of(s) for s in stds} - known)]
+    return [(title, [s for s in stds if key_of(s) == key]) for key, title in order if any(key_of(s) == key for s in stds)]
+
+
+def cmd_standards(d, as_json=False, update=False):
+    """engine.py standards: what this system follows, what the person overrode, their project standards, values the
+    engine could not map, and house updates still to apply."""
+    if update:
+        std_sync(d)
+        return 0
+    state = merge_defaults(load_state(d))
+    st = std_state(state)
+    house = load_standards()
+    by_id = {s["id"]: s for s in house["standards"]}
+    pending = std_pending(state, house, retry=True)
+    no_file = house["version"] is None
+    followed = [s for s in (std_copy(state, i, house) for i in st["applied"] if i not in st["overridden"]) if s]
+    gone = [i for i in st["applied"] if i not in by_id and i not in st["overridden"]] if no_file else []
+    unmapped = std_unmapped(state, house) + list(house["skipped"])
+    rec, held = st["records"], std_held(state)
+
+    def locked_of(sid):  # the values this standard holds now
+        return {shown_path(p): v for p, v in ((rec.get(sid) or {}).get("paths") or {}).items() if held.get(p) == sid}
+
+    def notes_of(sid):  # paths where a higher rule holds the value instead
+        r = rec.get(sid) or {}
+        out = [_kept_note(held[p], p, std_current(state, p)) for p in r.get("paths") or {} if held.get(p) not in (None, sid)]
+        return out + [_kept_note(held.get(p, who) if str(who).startswith(("PRJ-", "STD-")) else who, p, std_current(state, p))
+                      for p, who in (r.get("kept") or {}).items()]
+
+    out = {"house": {"version": house["version"], "updated": house["updated"], "file": standards_file(), "error": house["error"]},
+           "systemVersion": st["house_version"],
+           "followed": [{"id": s["id"], "theme": s.get("theme"), "area": s.get("area"), "title": s.get("title"), "rule": s.get("rule"),
+                         "why": s.get("why"), "sources": s.get("sources") or [], "strength": s.get("strength"),
+                         "values": s.get("values") or {}, "locked": locked_of(s["id"]), "notes": notes_of(s["id"]),
+                         "kept": (rec.get(s["id"]) or {}).get("kept") or {}} for s in followed],
+           "overridden": [dict({"id": sid, "title": (std_copy(state, sid, house) or {}).get("title"),
+                                "rule": (std_copy(state, sid, house) or {}).get("rule")}, **o) for sid, o in st["overridden"].items()],
+           "project": [dict(s, locked=locked_of(s["id"]), notes=notes_of(s["id"])) for s in st["project"]],
+           "notInHouseFile": gone, "unmapped": unmapped,
+           "pending": {"new": [s["id"] for s in pending["new"]], "changed": [s["id"] for s in pending["changed"]],
+                       "retired": [r["id"] for r in pending["retired"]], "keptOverrides": [s["id"] for s in pending["kept"]],
+                       "notForPlatforms": [s["id"] for s in pending["off"]], "nowMapped": [s["id"] for s in pending["retry"]]}}
+    if as_json:
+        print(json.dumps(out, indent=2, ensure_ascii=False))
+        return 0
+    if house["error"]:
+        print("Note: " + house["error"] + ".")
+    if no_file and not st["project"] and not st["applied"] and not st["overridden"]:
+        if not house["error"]:
+            print("No standards yet. No house standards ship with this skill (references/standards.json), and there are no "
+                  "project standards.")
+        print("Add one the person marks non-negotiable with: engine.py standard add --rule \"...\" --why \"...\" --source <url>")
+        return 0
+    if not no_file:
+        print(f"OpenDesigner house standards: v{house['version']}" + (f" ({house['updated']})" if house["updated"] else "")
+              + f". This system follows {'v' + str(st['house_version']) if st['house_version'] is not None else 'none of them yet'}.")
+    if followed:
+        print(f"Followed ({len(followed)}; locked, change one only when the person asks):")
+        for title, group in std_by_theme(house, followed):
+            print(f"  {title}")
+            for s in group:
+                print(f"    {s['id']}  {s.get('title') or ''}: {s.get('rule') or ''}".rstrip()
+                      + ("" if std_applies(s, state) else f"  (for {', '.join(s.get('applies_to') or [])} only; not these platforms)"))
+                lk = locked_of(s["id"])
+                if lk:
+                    print("        locked: " + "; ".join(f"{p} = {_vw(v)}" for p, v in lk.items()))
+                for n in notes_of(s["id"]):
+                    print("        " + n)
+    if st["overridden"]:
+        print("Overridden by the person (their choice outranks a standard):")
+        for sid, o in st["overridden"].items():
+            print(f"  {sid}  {(std_copy(state, sid, house) or {}).get('title') or ''}: \"{o.get('why')}\" ({o.get('decision')}, "
+                  f"{o.get('date')}). To follow it again: engine.py standard restore {sid}")
+    if st["project"]:
+        print("Project standards (the person's own; house updates never touch them):")
+        for s in st["project"]:
+            src = ", ".join(x.get("url") or x.get("id") or "" for x in s.get("sources") or [] if isinstance(x, dict))
+            print(f"  {s['id']}  {s.get('authority', 'non-negotiable')}: {s.get('rule')}" + (f"  (source: {src})" if src else ""))
+            if s.get("authority", "non-negotiable") == "non-negotiable":
+                vals = locked_of(s["id"])
+                label = "        locked: "
+            else:
+                vals = {shown_path(p): v for p, v in ((rec.get(s["id"]) or {}).get("paths") or {}).items()}
+                label = "        recommended: "
+            if vals:
+                print(label + "; ".join(f"{p} = {_vw(v)}" for p, v in vals.items()))
+            for n in notes_of(s["id"]):
+                print("        " + n)
+    if gone:
+        print(f"The house standards file is missing here ({standards_file()}), so these cannot be checked against it: "
+              f"{', '.join(gone)}. They stay as recorded; to change one: engine.py standard override <id> --why \"<their words>\".")
+    if unmapped:
+        print("Not mapped (the engine could not apply these values; for a house standard, maintainers fix its engine mapping in "
+              "synthesis/standards.json):")
+        for u in unmapped:
+            print(f"  {u['id']}  {u['path']}: {u['reason']}")
+    n, c, r = len(pending["new"]), len(pending["changed"]), len(pending["retired"])
+    o, a = len(pending["off"]), len(pending["retry"])
+    if n or c or r or o or a:
+        print(f"House updates to apply: {n} new, {c} changed, {r} retired" + (f", {o} no longer for these platforms" if o else "")
+              + (f", {a} now mapped" if a else "") + ". Run `engine.py standards --update`.")
+        for label, items in (("new", pending["new"]), ("changed", pending["changed"]), ("not for these platforms", pending["off"]),
+                             ("now mapped", pending["retry"])):
+            for s in items:
+                print(f"  {label}: {s['id']}  {s.get('title') or s.get('rule') or ''}")
+        for x in pending["retired"]:
+            print(f"  retired: {x['id']}  ({x.get('why') or 'no reason given'})")
+    elif not no_file and st["house_version"] == house["version"]:
+        print("Up to date with the house standards.")
+    if pending["kept"]:
+        print("Changed in the house file but overridden here (they stay the person's): " + ", ".join(s["id"] for s in pending["kept"]))
+    return 0
+
+
+def _std_project_id(d, state):
+    nums = [int(m) for s in std_state(state)["project"] for m in re.findall(r"^PRJ-(\d+)$", s.get("id") or "")]
+    fp = os.path.join(d, "decisions.md")
+    if os.path.exists(fp):
+        with open(fp, encoding="utf-8") as f:
+            nums += [int(m) for m in re.findall(r"\bPRJ-(\d+)\b", f.read())]  # ids are never reused after a removal
+    return f"PRJ-{max(nums, default=0) + 1:02d}"
+
+
+def std_restore_needed(state, s):
+    """True when restoring a standard that is not overridden would change something: a value it sets is not in place,
+    not locked by it, or the person's own value was kept (a project standard winning is not undone by a restore)."""
+    st = std_state(state)
+    if s["id"] not in st["applied"]:
+        return True
+    rec = st["records"].get(s["id"]) or {}
+    if any(not str(w).startswith("PRJ-") for w in (rec.get("kept") or {}).values()):
+        return True
+    held, cache = std_held(state), {}
+    for eng in std_engine(s):
+        try:
+            sp, v = std_target(state, eng.get("path"), eng.get("value"), eng.get("type"), cache, trial=False)
+        except Exception:
+            continue
+        if (held.get(sp) or "").startswith("PRJ-"):
+            continue
+        if held.get(sp) != s["id"] or not _same(std_current(state, sp), v):
+            return True
+    return False
+
+
+def cmd_standard(d, action, sid=None, why=None, value=None, rule=None, source=None, authority="non-negotiable", area=None,
+                 values=None, path=None, review_pattern=None, review_message=None, title=None, quiet=False):
+    """engine.py standard override|restore|add|remove: change one standard, always with a recorded decision."""
+    sp = os.path.join(d, "state.json")
+    if not os.path.exists(sp):
+        raise SystemExit(f"no state at {sp}; run `engine.py init --dir {d}` first")
+    state = merge_defaults(read_json(sp))
+    st = std_state(state)
+    house = load_standards()
+    today = _dt.date.today().isoformat()
+    say = (lambda *a: None) if quiet else print
+    if action in ("override", "restore", "remove"):
+        s, kind = std_find(state, sid, house)
+        retired = {r["id"]: r for r in house["retired"]}
+        if not s and not (action == "restore" and sid in st["overridden"]):
+            hint = f" It was retired ({retired[sid].get('why') or 'no reason given'})." if sid in retired else ""
+            raise SystemExit(f"There is no standard {sid}.{hint} `engine.py standards` lists them.")
+    if action == "override":
+        if not (why or "").strip():
+            raise SystemExit("Give the person's own words with --why: a standard changes only when they explicitly ask.")
+        if kind == "project":
+            raise SystemExit(f"{sid} is the person's own project standard. To change it: engine.py standard remove {sid} --why \"...\", "
+                             "then add the new rule with engine.py standard add.")
+        if sid in st["overridden"]:
+            raise SystemExit(f"{sid} is already overridden ({st['overridden'][sid].get('decision')}); its values are unlocked, so change "
+                             "them with engine.py set, or follow it again with engine.py standard restore " + sid)
+        s = std_copy(state, sid, house) or s  # the rule as this system follows it
+        rec = st["records"].get(sid) or {}
+        paths = list(rec.get("paths") or {})
+        did = _next_did(d)
+        extra = [f"house standard {sid}: {s.get('rule')}", "why the house follows it: " + (s.get("why") or "not given")]
+        if value is not None:
+            targets = paths or [normalize_path(x["path"].strip()) for x in std_engine(s) if isinstance(x.get("path"), str) and x["path"].strip()]
+            if not targets:
+                raise SystemExit(f"{sid} sets no values (only code review checks it), so there is nothing for --value to change. "
+                                 "Override it without --value.")
+            if len(targets) != 1:
+                raise SystemExit(f"{sid} sets {len(targets)} values, so --value cannot say which one. Override it without --value, "
+                                 "then change each value with engine.py set.")
+            try:
+                tpath, v = std_target(state, shown_path(targets[0]), value)
+            except ValueError as ex:
+                raise SystemExit(f"Nothing was changed: {ex}.")
+            other = std_held(state, exclude=sid).get(tpath)
+            if other:
+                raise SystemExit(f"Nothing was changed: {shown_path(tpath)} follows {'project' if other.startswith('PRJ-') else 'house'} "
+                                 f"standard {other}, which wins in this project. " + std_lock_message(state, other, house))
+        unlocked = _release(state, paths, sid, rec)
+        if value is not None:
+            prev = std_current(state, tpath)
+            _store(state, tpath, v, "chosen", did, False)
+            extra.append(f"previous value: {json.dumps(prev, ensure_ascii=False)}")
+            head = f"{tpath} = {json.dumps(v, ensure_ascii=False)}"
+        else:
+            head = f"override {sid} (house standard)"
+        held, mine = std_held(state, exclude=sid), set(rec.get("prelocked") or [])
+        still = [f"{shown_path(p)} ({'the person locked it themselves' if p in mine else 'standard ' + held[p] + ' holds it'})"
+                 for p in paths if p not in unlocked and (p in mine or p in held)]
+        freed = ", ".join(shown_path(p) for p in unlocked) or ("nothing (it sets no values)" if not paths else "nothing")
+        extra.append("unlocked: " + freed)
+        if still:
+            extra.append("still locked: " + "; ".join(still))
+        st["overridden"][sid] = {"why": why.strip(), "decision": did, "date": today}
+        dump_json(sp, state)
+        log_decision(d, "standards." + sid, value, why.strip(), "chosen", False, extra=extra, title=head,
+                     supersedes=rec.get("decision"))
+        say(f"{did} overrode house standard {sid}: {s.get('rule')}")
+        say(f"  The person's reason is recorded: \"{why.strip()}\". Unlocked: {freed}." + (f" Still locked: {'; '.join(still)}." if still else ""))
+        if value is not None:
+            say(f"  set {shown_path(tpath)} = {_vw(v)}")
+        say(f"  To follow it again: engine.py standard restore {sid}")
+        return did
+    if action == "restore":
+        if kind == "project":
+            raise SystemExit(f"{sid} is a project standard; it is never overridden, so there is nothing to restore.")
+        if not s or kind == "gone":
+            reason = (retired.get(sid) or {}).get("why") or "it is not in this skill's house standards file"
+            raise SystemExit(f"{sid} is no longer a house standard ({reason}), so there is nothing to restore.")
+        if sid not in st["overridden"] and not std_restore_needed(state, s):
+            say(f"{sid} is already followed: its values are in place and locked, so there is nothing to restore.")
+            return None
+        did = _next_did(d)
+        old = st["overridden"].pop(sid, None)
+        before = set((st["records"].get(sid) or {}).get("paths") or {})
+        lines, unmapped = std_apply(d, state, [s], did, force=True)
+        rec = st["records"].get(sid) or {}
+        _release(state, before - set(rec.get("paths") or {}) - set(rec.get("kept") or {}), sid, rec)
+        dump_json(sp, state)
+        log_decision(d, "standards." + sid, None, "The person asked to follow the house standard again." if old else
+                     "Put the house standard's values back and locked them again.", "standard", True, extra=lines,
+                     title=f"restore {sid} (house standard)", supersedes=(old or {}).get("decision"))
+        say(f"{did} restored house standard {sid}: {s.get('rule')}")
+        for line in lines:
+            say("  " + line)
+        return did
+    if action == "remove":
+        if kind in ("house", "gone") or (sid or "").startswith("STD-"):
+            raise SystemExit(f"{sid} is a house standard. House standards cannot be removed, only overridden, and only when the person "
+                             f"explicitly asks: engine.py standard override {sid} --why \"<their words>\"")
+        if not (why or "").strip():
+            raise SystemExit("Give the person's own words with --why.")
+        did = _next_did(d)
+        rec = st["records"].pop(sid, {}) or {}
+        st["project"] = [x for x in st["project"] if x.get("id") != sid]
+        paths = list(rec.get("paths") or {})
+        unlocked = _release(state, paths, sid, rec)
+        # the next rule in line takes the paths back: a standard that still holds one, or one that kept it for this standard
+        heirs, held = {}, std_held(state)
+        for p in paths:
+            if held.get(p):
+                heirs.setdefault(held[p], set()).add(p)
+        for osid, orec in st["records"].items():
+            if osid not in st["overridden"] and orec.get("locked", True):
+                for p, who in (orec.get("kept") or {}).items():
+                    if who == sid:
+                        heirs.setdefault(osid, set()).add(p)
+        back = []
+        for osid in sorted(heirs, key=_std_rank):
+            so = std_find(state, osid, house)[0]
+            if so:
+                back += std_apply(d, state, [so], did, force=True, only=heirs[osid])[0]
+        mine = [p for p in paths if p not in unlocked and p in set(rec.get("prelocked") or [])]
+        extra = [f"rule was: {s.get('rule')}"]
+        if unlocked:
+            extra.append("unlocked (values stay): " + ", ".join(shown_path(p) for p in unlocked))
+        if mine:
+            extra.append("still locked by the person: " + ", ".join(shown_path(p) for p in mine))
+        if back:
+            extra.append("back to the next rule in line:")
+            extra += ["  " + b for b in back]
+        if not paths and not back:
+            extra.append("it set no values" if rec.get("locked", True) else "it recommended no values")
+        elif not rec.get("locked", True):
+            extra.append("its recommended values stay, as they were never locked")
+        dump_json(sp, state)
+        log_decision(d, "standards." + sid, None, why.strip(), "chosen", False, title=f"remove {sid} (project standard)",
+                     supersedes=rec.get("decision") or s.get("decision"), extra=extra)
+        say(f"{did} removed project standard {sid}: {s.get('rule')}")
+        for e_ in extra[1:]:
+            say("  " + e_)
+        return did
+    if action != "add":
+        raise SystemExit("engine.py standard takes override, restore, add or remove")
+    missing = [f for f, v in (("--rule", rule), ("--why", why), ("--source", source)) if not (v or "").strip()]
+    if missing:
+        raise SystemExit(f"engine.py standard add needs {', '.join(missing)}: the rule in plain words, why it matters, and where it comes from.")
+    if authority not in ("non-negotiable", "good-to-have"):
+        raise SystemExit("--authority is non-negotiable (a locked standard) or good-to-have (a recommended default)")
+    if isinstance(values, str):
+        try:
+            values = json.loads(values)
+        except ValueError:
+            values = False
+    if values is not None and not isinstance(values, dict):
+        raise SystemExit("--values takes a JSON object, for example '{\"exit-easing\": \"ease-out\"}'")
+    if (path is None) != (value is None):
+        raise SystemExit("--path and --value go together: the setting or token path, and the value it must hold")
+    if review_pattern:
+        problem = regex_problem(review_pattern)
+        if problem:
+            raise SystemExit(f"--review-pattern cannot be used: {problem}. Nothing was written.")
+    nid = _std_project_id(d, state)
+    target = None
+    if path is not None:
+        try:
+            target = std_target(state, path, value)
+        except ValueError as ex:
+            raise SystemExit(f"Nothing was written: {ex}.")
+    did = _next_did(d)
+    must = authority == "non-negotiable"
+    std = {"id": nid, "title": title or rule.strip()[:80], "rule": rule.strip(), "why": why.strip(), "authority": authority,
+           "strength": "must" if must else "should", "area": area, "values": values or {}, "applies_to": ["all"],
+           "sources": [{"url": source} if re.match(r"^https?://", source) else {"id": source}],
+           "engine": {"path": path, "value": value} if path is not None else None,
+           "review": {"pattern": review_pattern, "message": review_message or rule.strip()} if review_pattern else None,
+           "design_md": True, "added": today, "decision": did}
+    st["project"].append(std)
+    lines = []
+    beats = std_held(state).get(target[0]) if target and must else None
+    if target:
+        lines, _u = std_apply(d, state, [std], did, force=must, locked=must, set_by="standard" if must else "reference")
+    else:
+        st["records"][nid] = {"paths": {}, "decision": did, "locked": must}
+    if beats and target[0] in (st["records"].get(nid) or {}).get("paths", {}):
+        other = std_find(state, beats, house)[0] or {}
+        lines.append(f"wins over {'your older project' if beats.startswith('PRJ-') else 'house'} standard {beats} for "
+                     f"{shown_path(target[0])} in this project ({'its' if beats.startswith('PRJ-') else 'house'} rule: {other.get('rule')})")
+    dump_json(sp, state)
+    log_decision(d, "standards." + nid, None, why.strip(), "standard" if must else "reference", must and bool(target), source_ref=source,
+                 title=f"project standard {nid} ({authority}): {rule.strip()}", extra=lines)
+    say(f"{did} added project standard {nid} ({authority}): {rule.strip()}")
+    for line in lines:
+        say("  " + line)
+    if must:
+        say("  It is locked like a house standard, written into DESIGN.md and checked by validate"
+            + (" and review" if review_pattern else "") + ".")
+    return nid
+
+
+def std_validate(state, rep):
+    """validate: an advisory when the house standards file is broken, when it moved past this system's version, or when
+    standards now apply (or no longer apply) to the person's platforms; a warning when a value a standard locked no
+    longer holds it (drift)."""
+    house = load_standards()
+    st = std_state(state)
+    if house["error"]:
+        rep.add("advisory", "standards", house["error"] + ". Reinstall the skill or fix the file", "House standards (docs/KNOWLEDGE.md 6)",
+                standards_file())
+    hv, sv = house["version"], st["house_version"]
+    if hv is not None and (house["standards"] or house["retired"] or st["applied"] or st["overridden"]):
+        p = std_pending(state, house)
+        n, c, r, off = len(p["new"]), len(p["changed"]), len(p["retired"]), len(p["off"])
+        kept = (f"; {_plural(len(p['kept']), 'standard you overrode has', 'standards you overrode have')} changed, and "
+                f"{'it stays' if len(p['kept']) == 1 else 'they stay'} yours" if p["kept"] else "")
+        msg = None
+        if sv is None or hv > sv:
+            msg = (f"OpenDesigner's house standards moved to v{hv} (this system follows {'v' + str(sv) if sv is not None else 'none yet'}): "
+                   + (f"{n} new, {c} changed, {r} retired" if n or c or r else "none of the changes touch it")
+                   + (f", {off} no longer for your platforms" if off else "") + kept)
+        elif n or r or off:
+            msg = "; ".join(x for x in (
+                f"{_plural(n, 'house standard applies', 'house standards apply')} to this system but {'is' if n == 1 else 'are'} not "
+                "applied yet (for example after the platforms changed)" if n else "",
+                f"{_plural(off, 'house standard no longer applies', 'house standards no longer apply')} to your platforms" if off else "",
+                f"{_plural(r, 'standard', 'standards')} this system follows left the house file" if r else "") if x)
+        if msg:
+            rep.add("advisory", "standards", msg + ". Run `engine.py standards --update`", "House standards (docs/KNOWLEDGE.md 6)",
+                    f"standards.json v{hv}", fix="engine.py standards --update")
+    for sid, path in sorted((sid, p) for p, sid in std_held(state).items()):
+        want = st["records"][sid]["paths"][path]
+        cur = std_current(state, path)
+        if _same(cur, want):
+            continue
+        s = (std_find(state, sid, house)[0] if sid.startswith("PRJ-") else std_copy(state, sid, house)) or {}
+        kind = "project" if sid.startswith("PRJ-") else "house"
+        rep.add("warning", "standards",
+                f"{kind.capitalize()} standard {sid} sets {shown_path(path)} to {_vw(want)}, but it is now {_vw(cur)}"
+                + (f" ({(s.get('rule') or '').rstrip('.')})" if s.get("rule") else ""),
+                f"{kind} standard {sid}", ", ".join(x.get("id") or x.get("url") or "" for x in s.get("sources") or [] if isinstance(x, dict)),
+                where=path, measured=cur, threshold=want,
+                fix=(f"engine.py standard restore {sid}, or if the person asked for this change: "
+                     f"engine.py standard override {sid} --why \"<their words>\"") if kind == "house"
+                else f"put it back: engine.py set {shown_path(path)} '{json.dumps(want, ensure_ascii=False)}' --force, or "
+                     f"engine.py standard remove {sid} --why \"<their words>\"")
+
+
+def std_review_rules(state):
+    """[(compiled pattern, standard)] for review: applied house standards not overridden (as this system follows them), and
+    project standards. A pattern that cannot be used safely is skipped, never fatal."""
+    house = load_standards()
+    st = std_state(state)
+    stds = [s for s in (std_copy(state, i, house) for i in st["applied"] if i not in st["overridden"]) if s and std_applies(s, state)]
+    out = []
+    for s in stds + list(st["project"]):
+        rv = s.get("review")
+        if isinstance(rv, dict) and not regex_problem(rv.get("pattern")):
+            out.append((re.compile(rv["pattern"]), s))
+    return out
+
+
+def std_design_md_lead(state):
+    if any(s.get("authority") == "good-to-have" for s in std_state(state)["project"]):
+        return ("**Follow these rules when you build.** Rules from sources marked non-negotiable lock their values; rules marked "
+                "recommended are defaults the person may change. `engine.py review` checks the ones it can.")
+    return ("**Follow these rules when you build.** They come from sources marked non-negotiable, their values are locked, and "
+            "`engine.py review` checks the ones it can.")
+
+
+def std_notes(state, sid, st, held):
+    """' Your project standard PRJ-01 wins here.' and the like: where a higher rule holds a standard's value instead."""
+    r = st["records"].get(sid) or {}
+    kept = {p: (held.get(p, w) if str(w).startswith(("PRJ-", "STD-")) else w) for p, w in (r.get("kept") or {}).items()}
+    beaten = sorted({held[p] for p in r.get("paths") or {} if held.get(p, sid) != sid and held[p].startswith("PRJ-")}
+                    | {w for w in kept.values() if str(w).startswith("PRJ-")})
+    out = [f"Your project standard {', '.join(beaten)} wins here."] if beaten else []
+    wins = sorted({w for w in kept.values() if str(w).startswith("STD-")})
+    if wins:
+        out.append(f"House standard {', '.join(wins)} wins here.")
+    for p, w in kept.items():
+        if not str(w).startswith(("PRJ-", "STD-")):
+            out.append(f"Your own value `{_vw(std_current(state, p))}` for `{shown_path(p)}` is kept here"
+                       + (f" ({w})." if str(w).startswith("D-") else "."))
+    return (" " + " ".join(out)) if out else ""
+
+
+STD_MD_FILE = "standards.md"  # the full list, next to state.json; DESIGN.md carries the summary
+
+
+def std_design_md(state):
+    """DESIGN.md 'Standards' body, or '' when there are none. DESIGN.md is read before every UI task, so it stays short:
+    each theme in one line (its must rules by title, and the values it locks), overrides and project standards in full,
+    and a pointer to opendesigner/standards.md for every rule with its values and reasons."""
+    full = std_full_md(state)
+    if not full:
+        return ""
+    house = load_standards()
+    st = std_state(state)
+    shown = [s for s in (std_copy(state, i, house) for i in st["applied"]) if s and s.get("design_md", True) and std_applies(s, state)
+             and s["id"] not in st["overridden"]]
+    lines = []
+    for title, group in std_by_theme(house, shown):
+        must = [g.get("title") or g["id"] for g in group if g.get("strength") != "should"]
+        locked = {}
+        for g in group:
+            for p, v in ((st["records"].get(g["id"]) or {}).get("paths") or {}).items():
+                locked.setdefault(shown_path(p), "a composite value (see standards.md)" if isinstance(v, dict) and "value" not in v else _vw(v))
+        locked = [f"`{p}` {v}" for p, v in locked.items()]
+        head = f"- **{title}** ({len(group)} rule{'' if len(group) == 1 else 's'}): " + ("; ".join(must[:8]) + (f"; and {len(must) - 8} more" if len(must) > 8 else "")
+                                                      if must else "recommended practice only")
+        lines.append(head + "." + (f" Locks {', '.join(locked)}." if locked else ""))
+    held = std_held(state)
+    exc = [(g, std_notes(state, g["id"], st, held)) for g in shown]
+    exc = [(g, n) for g, n in exc if n]
+    if exc:
+        lines += ["", "**Where another rule wins in this project**"]
+        lines += [f"- {g.get('title') or g['id']} ({g['id']}).{n}" for g, n in exc]
+    over = [s for s in (std_copy(state, i, house) for i in st["overridden"]) if s]
+    if over:
+        lines += ["", "**Overridden in this project**"]
+        for s in over:
+            o = st["overridden"][s["id"]]
+            lines.append(f"- ~~{s.get('title') or s['id']}~~ Overridden in this project: \"{o.get('why')}\" ({o.get('decision')}). "
+                         f"The house rule: {s.get('rule')} ({s['id']})")
+    proj = [s for s in st["project"] if s.get("design_md", True)]
+    if proj:
+        lines += ["", "**Project standards** (from sources the owner chose)"]
+        for s in proj:
+            vals = _values_words(s.get("values"))
+            lines.append(f"- {s.get('rule')}" + (f" Values: {vals}." if vals else "")
+                         + f" ({s['id']}{', recommended' if s.get('authority') == 'good-to-have' else ''})" + std_notes(state, s["id"], st, held))
+    lines += ["", f"Every rule, with its values, reasons and sources: `opendesigner/{STD_MD_FILE}`. Read the themes you touch before you build."]
+    return "\n".join(lines).rstrip()
+
+
+def std_full_md(state):
+    """The full standards list (opendesigner/standards.md), or '' when there are none: house standards with design_md true
+    grouped by theme (as this system follows them), overridden ones with the person's reason, then project standards. A
+    value a higher rule holds instead (a project standard, the person's own value) is said next to the rule."""
+    house = load_standards()
+    st = std_state(state)
+    shown = [s for s in (std_copy(state, i, house) for i in st["applied"]) if s and s.get("design_md", True) and std_applies(s, state)]
+    for sid in st["overridden"]:
+        s = std_copy(state, sid, house)
+        if sid not in st["applied"] and s and s.get("design_md", True):
+            shown.append(s)
+    proj = [s for s in st["project"] if s.get("design_md", True)]
+    if not shown and not proj:
+        return ""
+    lines, held = [], std_held(state)
+    notes = lambda sid: std_notes(state, sid, st, held)
+
+    for title, group in std_by_theme(house, shown):
+        lines += [f"**{title}**"]
+        for s in group:
+            vals = _values_words(s.get("values"))
+            if s["id"] in st["overridden"]:
+                o = st["overridden"][s["id"]]
+                lines.append(f"- ~~{s.get('title') or s['id']}~~ Overridden in this project: \"{o.get('why')}\" ({o.get('decision')}). "
+                             f"The house rule: {s.get('rule')} ({s['id']})")
+            else:
+                lines.append(f"- **{s.get('title') or s['id']}.** {s.get('rule')}" + (f" Values: {vals}." if vals else "")
+                             + f" ({s['id']}{', should' if s.get('strength') == 'should' else ''})" + notes(s["id"]))
+        lines.append("")
+    if proj:
+        lines.append("**Project standards** (from sources the owner chose)")
+        for s in proj:
+            vals = _values_words(s.get("values"))
+            src = ", ".join(x.get("url") or x.get("id") or "" for x in s.get("sources") or [] if isinstance(x, dict))
+            lines.append(f"- {s.get('rule')}" + (f" Values: {vals}." if vals else "")
+                         + f" ({s['id']}{', recommended' if s.get('authority') == 'good-to-have' else ''}" + (f"; source: {src}" if src else "") + ")"
+                         + notes(s["id"]))
+        lines.append("")
+    return "\n".join(lines).rstrip()
+
+
+def std_decision_rows(state, decs):
+    """decisions.md's latest entry per path, plus the values standards put in place after it: grouped decisions do not name
+    paths in their titles, so DESIGN.md's Decisions lines and table read them from the records."""
+    if not std_has_records(state):
+        return decs
+    st = std_state(state)
+    house = load_standards()
+    held, out = std_held(state), dict(decs)
+    for sid, rec in st["records"].items():
+        if sid in st["overridden"]:
+            continue
+        soft = rec.get("locked", True) is False
+        for p, v in (rec.get("paths") or {}).items():
+            if (not soft and held.get(p) != sid) or _dnum((out.get(p) or {}).get("id")) >= _dnum(rec.get("decision")):
+                continue
+            s = (std_find(state, sid, house)[0] if sid.startswith("PRJ-") else std_copy(state, sid, house)) or {}
+            out[p] = {"id": rec.get("decision"), "value": json.dumps(v, ensure_ascii=False), "set_by": "reference" if soft else "standard",
+                      "locked": not soft, "reason": f"{'project' if sid.startswith('PRJ-') else 'house'} standard {sid}: "
+                                                    + (s.get("rule") or "").strip()}
+    return out
 
 
 # =============================================================================================
@@ -4821,7 +6212,7 @@ SECTION_PATHS = {  # which decisions each DESIGN.md section rests on
     "Elevation & Depth": r"^(dials\.depth|answers\.Q-depth-)",
     "Shapes": r"^(dials\.roundness|overrides\.radius|answers\.Q-shape-)",
     "Components": r"^(components|answers\.Q-(comp|state|form|pattern)-)",
-    "Motion": r"^(dials\.energy|raw\.flags\.motionOff|answers\.Q-motion-)",
+    "Motion": r"^(dials\.energy|raw\.flags\.motionOff|overrides\.motion|answers\.Q-motion-)",
     "Modes and Themes": r"^(raw\.(defaultTheme|flags\.darkMode)|answers\.Q-(theme|token)-)",
     "Iconography and Imagery": r"^(hooks\.H-(logo|appicon|favicon|icons|illus|photo|motif)|answers\.Q-(icon|img|viz)-)",
     "Content and Voice": r"^(hooks\.H-voice|answers\.Q-voice-)",
@@ -5066,6 +6457,14 @@ def render_summary(d, state, meta, zoom):
             ("Next", (f"zoom into {', '.join(sketchy[:3])}, or stop here: each level works" if sketchy
                       else "every area is past the sketch; zoom deeper where it matters, or stop here")),
             ("Licence risks", " ".join(risks[:2]) + (f" (+{len(risks) - 2} more in Open Items)" if len(risks) > 2 else "") if risks else "none found")]
+    sts = std_state(state) if isinstance(state.get("standards"), dict) else {}
+    over = sts.get("overridden") or {}
+    n_std, n_prj = len([i for i in sts.get("applied") or [] if i not in over]), len(sts.get("project") or [])
+    if n_std or n_prj or over:
+        rows.insert(-2, ("Standards", ", ".join(x for x in (
+            f"{n_std} house standard{'s' if n_std != 1 else ''} followed (locked)" if n_std else "",
+            f"{len(over)} overridden by you" if over else "", f"{n_prj} of your own" if n_prj else "") if x)
+            + "; see the Standards section"))
     lines += [f"- **{k}:** {v}" for k, v in rows]
     return "\n".join(lines)
 
@@ -5119,7 +6518,7 @@ def render_design_md(d, files, meta, state, existing=""):
     dark = resolve_all(files, {"theme": "dark"}) if has_dark else None
     params = {k: v["value"] for k, v in meta["params"].items()}
     dials = meta["dials"]
-    decs = _decisions(d)
+    decs = std_decision_rows(state, _decisions(d))  # plus values standards set (their grouped titles name no path)
     keeps = _keep_blocks(existing)
     raw = state["raw"]
     ctx = state.get("context") or {}
@@ -5410,12 +6809,29 @@ def render_design_md(d, files, meta, state, existing=""):
             "", "**Waivers:** " + ("; ".join(f"{k}: {v}" for k, v in (state.get("waivers") or {}).items()) or "none.")]
     out.append(section("Do's and Don'ts", "\n".join(body), lead="**These rules keep screens clear and easy to read.** The engine checks the ones it can.", term_key="Guardrails and validation"))
 
-    # 9 Motion
-    rows = [(f"`motion.duration.{k}`", f"{v}ms") for k, v in mot["durations"].items()]
+    # 8b Standards (docs/KNOWLEDGE.md 3): rules from sources marked non-negotiable; no section while there are none
+    std_body = std_design_md(state)
+    if std_body:
+        out.append(section("Standards", std_body, lead=std_design_md_lead(state), fold=False))
+
+    # 9 Motion: values from the resolved tokens, so an override (the person's or a standard's) shows, not the lever's value
+    def _ms(k, v):
+        t = (light.get(f"motion.duration.{k}") or {}).get("resolved")
+        if not (isinstance(t, dict) and isinstance(t.get("value"), (int, float))):
+            return v
+        ms = t["value"] * 1000 if t.get("unit") == "s" else t["value"]
+        return v if ms == v else (int(ms) if float(ms).is_integer() else ms)
+
+    def _ease(k):
+        t = (light.get(f"motion.easing.{k}") or {}).get("resolved")
+        return t if isinstance(t, list) and t != mot[k] else mot[k]
+    durs = {k: _ms(k, v) for k, v in mot["durations"].items()}
+    ease = {k: _ease(k) for k in ("standard", "enter", "exit")}
+    rows = [(f"`motion.duration.{k}`", f"{v}ms") for k, v in durs.items()]
     sp = light.get("motion.spring.spatial.default")
     spx = (sp.get("$extensions") or {}).get(NS, {}) if sp else {}
     body = [f"**Intent.** Energy {dials['energy']}/100: durations x{mot['multiplier']:.2f} on medium and longer steps; standard easing "
-            f"`cubic-bezier({', '.join(fmt_num(x) for x in mot['standard'])})`, enter `{mot['enter']}`, exit `{mot['exit']}`. "
+            f"`cubic-bezier({', '.join(fmt_num(x) for x in ease['standard'])})`, enter `{ease['enter']}`, exit `{ease['exit']}`. "
             f"Spatial spring: damping {mot['spatial']['dampingRatio']}, stiffness {mot['spatial']['stiffness']} "
             f"(Apple duration {spx.get('apple', {}).get('duration')}s, bounce {spx.get('apple', {}).get('bounce')}; web `linear()` sample over "
             f"{spx.get('css', {}).get('durationMs')}ms)." + (" Motion is off (flags.motionOff): standard equals reduced." if mot.get("motionOff") else ""),
@@ -5425,7 +6841,7 @@ def render_design_md(d, files, meta, state, existing=""):
             "- Springs are stored as damping and stiffness in `$extensions.opendesigner.spring` because DTCG 2025.10 has no spring type.",
             f"- Haptics: {params['haptics.intensity']} intensity where the platform has them; sound: hook H-sound is "
             f"{(state.get('hooks') or {}).get('H-sound', {}).get('status', 'pending')}."]
-    out.append(section("Motion", "\n".join(body), lead=("**Motion is off: things change in place without moving.**" if mot.get("motionOff") else f"**Most movements take {mot['durations']['medium']}ms.** They turn into fades when a person asks for less motion."), term_key="Motion"))
+    out.append(section("Motion", "\n".join(body), lead=("**Motion is off: things change in place without moving.**" if mot.get("motionOff") else f"**Most movements take {durs['medium']}ms.** They turn into fades when a person asks for less motion."), term_key="Motion"))
 
     # 10 Modes and Themes
     rows = [(n, ", ".join(m["contexts"]), m.get("default")) for n, m in mods.items()]
@@ -5508,6 +6924,9 @@ def render_design_md(d, files, meta, state, existing=""):
             "4. To change the system: `engine.py set <path> <value> --why \"...\"`, then `engine.py generate`, `engine.py validate`, `engine.py design-md`.",
             "5. To extend: add a decision (never hand-edit tokens or this file). Keep semantic names the same across modes. Deprecate instead of deleting.",
             "6. After any implementation, run `engine.py review` and re-read this file."]
+    if std_body:
+        body.append("7. Follow the Standards section. Change a standard only when the person explicitly asks: "
+                    "`engine.py standard override <id> --why \"<their words>\"`.")
     if tw:
         body += ["", "**Tailwind v4 classes** (one import: `@import \"tailwindcss\"; @import \"<path>/opendesigner/build/tailwind/theme.css\";`"
                  + ("; Tailwind's default colors, text sizes, radii and shadows are switched off, so only these exist" if (state.get("exports") or {}).get("tailwindReset", True) else "")
@@ -5595,6 +7014,14 @@ def cmd_design_md(d, out_dir=None, files=None, meta=None, quiet=False):
         write_text(path, text)
         hashes[name] = _sha(text)
         written.append(path)
+    full = std_full_md(state)
+    std_path = os.path.join(d, STD_MD_FILE)
+    if full:
+        write_text(std_path, f"# Standards this system follows\n\n<!-- generated by engine.py design-md from opendesigner/state.json; "
+                             f"change a standard with engine.py standard ..., not here -->\n\n{std_design_md_lead(state)}\n\n{full}\n")
+        written.append(std_path)
+    elif os.path.exists(std_path):
+        os.remove(std_path)
     raw_state = load_state(d)
     raw_state["hashes"] = hashes
     dump_json(os.path.join(d, "state.json"), raw_state)
@@ -6130,6 +7557,11 @@ def cmd_intake(d, path, accept=False, as_json=False):
         dump_json(sp, state)
         if accept:
             for pr in fit["proposals"]:
+                holder = std_holder(merge_defaults(read_json(sp)), normalize_path(pr["path"]))
+                if holder:  # a standard outranks a reference (docs/KNOWLEDGE.md 2): say so and go on
+                    pr["status"] = "skipped (standard)"
+                    fit["notes"].append(f"{pr['path']} was not changed: it follows standard {holder}")
+                    continue
                 cmd_set(d, pr["path"], pr["value"], why=f"from reference {rid} ({pr['confidence']} confidence): {pr['basis']}",
                         set_by="reference", source_ref=rid, quiet=True)
                 pr["status"] = "accepted"
@@ -6196,7 +7628,7 @@ def main(argv=None):
         p.add_argument("path")
         p.add_argument("value", nargs="?")
         p.add_argument("--why", default=None)
-        p.add_argument("--set-by", dest="set_by", default=None, help="chosen (default), confirmed_default, auto_default, assumed, delegated, reference, asset")
+        p.add_argument("--set-by", dest="set_by", default=None, help="chosen (default), confirmed_default, auto_default, assumed, delegated, reference, asset, standard")
         p.add_argument("--source-ref", dest="source_ref", default=None)
         p.add_argument("--lock", action="store_true")
         p.add_argument("--force", action="store_true", help="change a locked decision (only with the owner's consent)")
@@ -6250,6 +7682,35 @@ def main(argv=None):
                    help="add the hotspots from the journey log: question ids and counts only, never notes")
     p.add_argument("--area", default=None)
     p.add_argument("--question", default=None)
+    p = sub.add_parser("standards", parents=[common], help="the standards this system follows, overridden ones and house updates")
+    p.add_argument("--json", action="store_true")
+    p.add_argument("--update", action="store_true", help="apply new and changed house standards; overridden ones stay the person's")
+    p.add_argument("--no-doc", dest="no_doc", action="store_true")
+    p = sub.add_parser("standard", parents=[common], help="override, restore, add or remove one standard (always recorded)")
+    ssub = p.add_subparsers(dest="action", required=True)
+    q = ssub.add_parser("override", parents=[common], help="the person explicitly changes a house standard")
+    q.add_argument("id")
+    q.add_argument("--why", default=None, help="the person's own words (required)")
+    q.add_argument("--value", default=None, help="a new value, for a standard that sets one value")
+    q = ssub.add_parser("restore", parents=[common], help="follow a house standard again")
+    q.add_argument("id")
+    q = ssub.add_parser("add", parents=[common], help="a project standard from a source the person trusts")
+    q.add_argument("--rule", default=None)
+    q.add_argument("--why", default=None)
+    q.add_argument("--source", default=None, help="a URL or file the rule comes from")
+    q.add_argument("--authority", default="non-negotiable", choices=["non-negotiable", "good-to-have"])
+    q.add_argument("--area", default=None)
+    q.add_argument("--values", default=None, help="key values as a JSON object")
+    q.add_argument("--path", default=None, help="a token or setting path the standard sets")
+    q.add_argument("--value", default=None, help="the value for --path (JSON)")
+    q.add_argument("--review-pattern", dest="review_pattern", default=None, help="a regular expression that finds code breaking it")
+    q.add_argument("--review-message", dest="review_message", default=None)
+    q.add_argument("--title", default=None)
+    q = ssub.add_parser("remove", parents=[common], help="remove a project standard")
+    q.add_argument("id")
+    q.add_argument("--why", default=None)
+    for q in ssub.choices.values():
+        q.add_argument("--no-doc", dest="no_doc", action="store_true")
     a = ap.parse_args(argv)
     d = a.dir or DEFAULT_DIR
     if a.cmd == "init":
@@ -6298,6 +7759,18 @@ def main(argv=None):
         cmd_show(d, a.template, a.out, a.open, a.json)
     elif a.cmd == "review":
         return cmd_review(d, a.project, a.strict, a.json)
+    elif a.cmd == "standards":
+        cmd_standards(d, a.json, a.update)
+        if a.update and not a.no_doc:
+            refresh_docs(d)
+    elif a.cmd == "standard":
+        val = parse_value(a.value) if getattr(a, "value", None) is not None else None
+        cmd_standard(d, a.action, sid=getattr(a, "id", None), why=getattr(a, "why", None), value=val, rule=getattr(a, "rule", None),
+                     source=getattr(a, "source", None), authority=getattr(a, "authority", "non-negotiable"), area=getattr(a, "area", None),
+                     values=getattr(a, "values", None), path=getattr(a, "path", None), review_pattern=getattr(a, "review_pattern", None),
+                     review_message=getattr(a, "review_message", None), title=getattr(a, "title", None))
+        if not a.no_doc:
+            refresh_docs(d)
     elif a.cmd == "feedback":
         os.makedirs(d, exist_ok=True)
         text = a.text
@@ -6351,7 +7824,7 @@ def zoom_levels(d, state):
         for k in (1, 2, 3):
             if not by[k]:
                 continue
-            done = [q for q in by[k] if counted.get(q) not in (None, "auto_default")]
+            done = [q for q in by[k] if counted.get(q) not in (None, "auto_default", "standard")]
             if len(done) * 2 >= len(by[k]):
                 lvl = k
             else:
@@ -6455,7 +7928,7 @@ def cmd_sketch(d, name=None, brand=None, audience=None, platforms=None, feel=Non
         return "delegated" if ("all" in deleg or flag in deleg) else None
     fresh = not os.path.exists(os.path.join(d, "state.json"))
     if fresh:
-        cmd_init(d, name=name)
+        cmd_init(d, name=name, standards=False)  # house standards follow the answers, so platform-only ones can be skipped
     elif name and load_state(d).get("name") != name:
         cmd_set(d, "name", name, "sketch: the product's name", quiet=True, set_by=sb("name"))  # --name wins over init's folder name
     why = "sketch: Level 0 answer"
@@ -6478,6 +7951,8 @@ def cmd_sketch(d, name=None, brand=None, audience=None, platforms=None, feel=Non
     if items:
         cmd_set(d, "answers.Q-scope-06", items if len(items) > 1 or ":" in items[0] else items[0], why, quiet=True, set_by=sb("surfaces"),
                 via="sketch")
+    if fresh:
+        std_sync(d, initial=True, quiet=quiet)
     code = cmd_build(d) if not quiet else 0
     if not quiet:
         if mapping and any([w] != ids for w, ids in mapping.items()):
@@ -6687,6 +8162,7 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
         return (f"use var({css_var(prefix, 'motion.transition.' + role)}-duration) and its -easing "
                 f"(the {role} transition: {'hover, press and color changes' if role == 'feedback' else 'things entering' if role == 'enter' else 'panels and dialogs'})")
     findings, scanned = [], 0
+    std_rules = std_review_rules(state)  # house standards followed and project standards that carry a review pattern
     stateroot = os.path.abspath(d)
     for root, dirs, fnames in os.walk(project):
         dirs[:] = sorted(x for x in dirs if x not in REVIEW_SKIP and not x.startswith("."))
@@ -6710,6 +8186,12 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
             for i, line in enumerate(lines, 1):
                 if re.search(r"^\s*(//|/\*|\*|<!--)", line) or "od-ignore" in line:
                     continue
+                for rx, std in std_rules:  # the first match that is not empty, in the first REVIEW_LINE_CAP characters
+                    ms_ = next((m_ for m_ in rx.finditer(line[:REVIEW_LINE_CAP]) if m_.end() > m_.start()), None)
+                    if ms_:
+                        findings.append({"kind": "standard", "file": rel, "line": i, "value": ms_.group(0).strip()[:80],
+                                         "fix": (std.get("review") or {}).get("message") or std.get("rule"), "standard": std["id"],
+                                         "strength": std.get("strength") or "should", "severity": "warning"})
                 if "var(--" in line and not RX_HEX.search(line) and not RX_TW_CONTEXT.search(line):
                     continue
                 custom_prop = bool(re.match(r"\s*--", line))  # a custom property definition is a token source, not a bypass
@@ -6860,20 +8342,34 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
     if as_json:
         print(json.dumps(result, indent=2))
     else:
-        total = len(findings)
+        tokf = [f_ for f_ in findings if f_["kind"] != "standard"]
+        stdf = [f_ for f_ in findings if f_["kind"] == "standard"]
+        total = len(tokf)
         print(f"Review of {project}: {scanned} files scanned.")
         if not scanned:
             print("No code yet, so there is nothing to check.")
         elif total:
             print(f"{total} hard-coded value{'s' if total != 1 else ''} skip the tokens: "
-                  + ", ".join(f"{n} {k}{'s' if n != 1 else ''}" for k, n in sorted(by.items())) + ".")
-            for f_ in findings[:limit]:
+                  + ", ".join(f"{n} {k}{'s' if n != 1 else ''}" for k, n in sorted(by.items()) if k != "standard") + ".")
+            for f_ in tokf[:limit]:
                 print(f"  {f_['file']}:{f_['line']}  {f_['value']}  ->  {f_['fix']}")
             if total > limit:
                 print(f"  ... and {total - limit} more (use --json for all).")
             print("  To keep a raw value on purpose, add the comment od-ignore on that line.")
         else:
             print("No hard-coded colors, sizes, radii, shadows or durations found: the code uses the tokens.")
+        if stdf:
+            print(f"{len(stdf)} line{'s' if len(stdf) != 1 else ''} break{'s' if len(stdf) == 1 else ''} a standard:")
+            for f_ in stdf[:limit]:
+                print(f"  {f_['file']}:{f_['line']}  {f_['value']}  ->  {f_['fix']} ({f_['standard']}, {f_['strength']})")
+            if len(stdf) > limit:
+                print(f"  ... and {len(stdf) - limit} more (use --json for all).")
+            ids_ = {f_["standard"] for f_ in stdf}
+            if any(not i.startswith("PRJ-") for i in ids_):
+                print("  Fix the code. A house standard changes only when the person asks: engine.py standard override <id> --why \"<their words>\".")
+            if any(i.startswith("PRJ-") for i in ids_):
+                print("  Fix the code. A project standard (PRJ-...) is the person's own rule; it goes only when they ask: "
+                      "engine.py standard remove <id> --why \"<their words>\".")
         for u in sorted(set(untrue)):
             print(f"Untrue: {u}. Fix: run `engine.py design-md`.")
         if missing == ["DESIGN.md"]:
@@ -7126,4 +8622,8 @@ def cmd_feedback(d, text, kind="idea", quiet=False, area=None, question=None):
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    try:
+        sys.exit(main())
+    except BrokenPipeError:  # output piped into head or less that closed early
+        os.dup2(os.open(os.devnull, os.O_WRONLY), sys.stdout.fileno())
+        sys.exit(1)

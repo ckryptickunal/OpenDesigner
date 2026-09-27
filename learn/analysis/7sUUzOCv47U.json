@@ -1,0 +1,243 @@
+{
+  "summary": "Kole Jain walks through web typography from the basics to a sizing formula. He covers font categories (serif, sans-serif, display, handwritten), the parts of a letter that matter to designers (baseline, x-height, cap height, letter spacing), and how many fonts to pair (one is entirely acceptable, two is the limit). He shows that font weight and text color (opacity) both control hierarchy, and argues that size should carry the heading, bold should make subheadings scannable, and paragraphs should stay at full opacity. For sizes he derives a type scale from the golden ratio (1.62), recommends its square root (1.27) for a full style guide and its cube root for dense or small-screen interfaces, then describes a fluid formula that scales each size between a 320 and a 1920 wide screen, optionally capped with min and max. Font colors, weights and pairings stay the same on every screen; only sizes change. For a design system this gives concrete defaults for font count, weight and opacity levels, the scale ratio, fluid sizing and line height.",
+  "key_ideas": [
+    "Fonts fall into serif and sans-serif, plus two growing subgroups: display fonts for giant text and handwritten fonts that imitate handwriting.",
+    "Most everyday interfaces use sans-serif fonts because they read as cleaner and more modern.",
+    "Letter spacing should shrink proportionately as text grows and grow as text shrinks.",
+    "One font is entirely acceptable, two is the limit, three is pushing it and four invites problems.",
+    "Display and handwritten fonts must never be used for small paragraph text.",
+    "At small sizes, a thinner weight and a lighter color look alike because both reduce dark pixels, so either can set hierarchy.",
+    "Rank every text element first, then style it: size gives the heading attention, bold makes subheadings scannable, and paragraphs keep full opacity.",
+    "Making the smallest text also the lowest-contrast text hurts both usability and looks.",
+    "Eyeballing one page and building a style guide around it is not wrong, but a ratio-based type scale improves on it.",
+    "Multiplying by the golden ratio (1.62) at every step grows too fast; its square root (1.27) works across a whole style guide.",
+    "The cube root of the golden ratio gives a tighter scale for dashboards with many text styles or for mobile screens with less room.",
+    "Font colors, weights and pairings can stay constant on any screen; only font sizes change with screen size.",
+    "One fluid formula can scale each text size between the smallest and largest screen width without breakpoints.",
+    "Cap fluid sizes with min and max unless growing past the design widths works for the design.",
+    "Line height should rise as text gets smaller or lines get longer, and fall as text gets larger.",
+    "Always check text on the screens the design is intended for."
+  ],
+  "entities": [
+    {"name": "Kole Jain", "type": "person", "description": "YouTube designer presenting his approach to typography and his fluid sizing formula."},
+    {"name": "Leonardo Bonacci (Fibonacci)", "type": "person", "description": "Better known as Fibonacci; his sequence is used to explain where the golden ratio comes from."},
+    {"name": "Golden ratio", "type": "concept", "description": "Approximated as 1.62 from the Fibonacci sequence; the base of the proposed type scale."},
+    {"name": "Fibonacci sequence", "type": "concept", "description": "Number sequence whose neighbouring terms divide to approximate the golden ratio."},
+    {"name": "Serif font", "type": "concept", "description": "Font with small ticks on letter ends; presented as older, more authoritative and used in books and magazines."},
+    {"name": "Sans-serif font", "type": "concept", "description": "Font without ticks; presented as cleaner and more modern and the default for interfaces."},
+    {"name": "Display font", "type": "concept", "description": "Ornamented font meant for giant text, impractical at paragraph size."},
+    {"name": "Handwritten font", "type": "concept", "description": "Font imitating human handwriting; can stand in for a display font."},
+    {"name": "Baseline", "type": "concept", "description": "The line letters sit on and extend up or down from."},
+    {"name": "X-height", "type": "concept", "description": "The lower of the two main letter heights, measured off the letter x."},
+    {"name": "Cap height", "type": "concept", "description": "The height of taller letters, measured off flat-bottomed letters like the capital E."},
+    {"name": "Letter spacing", "type": "concept", "description": "Space between letters, adjusted mainly by text size."},
+    {"name": "Line height", "type": "concept", "description": "Space between lines; set per size, with suggested percentages for paragraphs and headings."},
+    {"name": "Google Fonts", "type": "product", "description": "Source of many of the free fonts mentioned in the video."},
+    {"name": "Courier Prime", "type": "product", "description": "Font Kole uses for small details and image captions on his three-font portfolio."},
+    {"name": "Comic Sans", "type": "product", "description": "Font mentioned as a joke that all designers dislike."},
+    {"name": "Arial", "type": "product", "description": "Mentioned as the fallback designers settle on after searching Google Fonts."},
+    {"name": "YouTube, Instagram and X (Twitter)", "type": "product", "description": "Examples of everyday interfaces that use sans-serif fonts."}
+  ],
+  "topics": [
+    {"name": "Typography", "summary": "Font categories, anatomy (baseline, x-height, cap height), letter spacing, font pairing limits, weight and opacity ranges, a golden-ratio type scale, a fluid size formula with min and max caps, and line-height percentages."},
+    {"name": "Visual hierarchy", "summary": "List every text element's rank, then use size, weight and color. Let size carry the heading, bold the subheadings for scanning, and keep paragraphs at full opacity rather than making the smallest text the faintest."},
+    {"name": "Design systems and tokens", "summary": "Build the style guide's font sizes from a ratio (square root of the golden ratio, 1.27, from a 16 pixel base) instead of eyeballing one page and deriving the rest."},
+    {"name": "Web implementation (CSS and React)", "summary": "Describes a single CSS line that scales text linearly between the smallest (320) and largest (1920) screen widths, bounded with max() for the lower limit and min() for the upper limit."},
+    {"name": "Design process", "summary": "Replace 'eyeball one page, then build a style guide' with a systematic scale, and always review designs on the screens they are meant for."},
+    {"name": "Dashboards and data display", "summary": "Suggests the cube root of the golden ratio as a tighter scale for dashboards that need many different font styles."}
+  ],
+  "claims": [
+    {"claim": "Serif fonts date back to ancient Greek times, so they are seen as older and perhaps more authoritative.", "evidence": "Sara fonts date back to ancient Greek times"},
+    {"claim": "Serif fonts are easier to read at smaller font sizes, which is why books and magazines use them.", "evidence": "easier to read at smaller font sizes which is why books and magazines use them"},
+    {"claim": "Sans-serif fonts are more common now because they are cleaner and more modern; YouTube, Instagram and X use them.", "evidence": "most interfaces you use on a daily basis use sansera fonts"},
+    {"claim": "Display fonts carry ornamentation and detail that would be impractical scaled down to paragraph size.", "evidence": "display fonts are used for giant text elements"},
+    {"claim": "The x-height is measured off the letter x because letters like e extend just above the line.", "evidence": "X is always the letter that the lower height is measured off of"},
+    {"claim": "Larger text needs proportionately less letter spacing and smaller text proportionately more.", "evidence": "larger text requiring proportionately less space"},
+    {"claim": "Many industry-standard sites use just one font.", "evidence": "many industry standard sites use one font"},
+    {"claim": "At small sizes, reducing weight and reducing opacity look very similar because both mean fewer dark pixels.", "evidence": "fewer dark pixels through reducing the weight or reducing the opacity"},
+    {"claim": "If the smallest text also has the least contrast, the layout is neither very usable nor attractive.", "evidence": "with the smallest text also having the least contrast"},
+    {"claim": "Making the heading large already gives it the most attention regardless of weight or opacity.", "evidence": "by making the heading text large we already give it the most attention"},
+    {"claim": "Dividing the larger of two consecutive Fibonacci numbers by the smaller approximates the golden ratio, 1.62.", "evidence": "an approximation of the golden ratio which is 1.62"},
+    {"claim": "Starting at 16 pixels and multiplying each size by 1.62 gives a largest header of 110 pixels with only four header sizes and a paragraph.", "evidence": "our largest header is 110 pixels large"},
+    {"claim": "The square root of the golden ratio is 1.27 and works as a scaling system for a full style guide.", "evidence": "square rooted it to get 1.27"},
+    {"claim": "Applying the square-rooted golden ratio to a design is not a massive change but looks subtly better.", "evidence": "not a massive change but it definitely looks subtly better"},
+    {"claim": "Adjusting each text size at breakpoints could be messy, especially if close control over the sizes is required (captioned as 'Min control'; the exact word is unclear).", "evidence": "the previous solution was to have break points"},
+    {"claim": "A linear formula based on the current screen width scales text between the smallest and largest sizes without breakpoints, and keeps growing or shrinking past the chosen widths unless capped.", "evidence": "our line extends past our smallest and largest size"},
+    {"claim": "Most designers keep line height on auto about 95% of the time, but auto falls off a little for extremely large text.", "evidence": "keep line height on auto for like 95% of the time"},
+    {"claim": "You will probably reuse the same three fonts for 90% of your projects, and that is okay.", "evidence": "the same three fonts for 90% of your projects and that's okay"},
+    {"claim": "Font colors, weights and pairings can stay constant on any screen, while font sizes change with screen size.", "evidence": "fonts change size based on the screen size"}
+  ],
+  "quotes": [
+    "never ever use a display font or a handwritten font for small paragraph text",
+    "three is pushing the envelope and four is asking for problems",
+    "always remember to view your designs on the screen they were intended for"
+  ],
+  "tags": ["typography", "font-pairing", "type-scale", "golden-ratio", "fluid-type", "line-height", "letter-spacing", "font-weight", "text-hierarchy", "responsive", "kole-jain"],
+  "authority": "reference",
+  "rules": [
+    {"rule": "Use one or two font families; treat a third as a rare edge case and avoid four.", "why": "One font is entirely acceptable and used by many industry-standard sites; three pushes the envelope and four invites problems.", "kind": "do", "strength": "should", "area": "typography", "applies_to": "all", "values": [], "evidence": "one font is entirely acceptable"},
+    {"rule": "If the system uses a single font, make it a sans-serif.", "why": "A single-font site is generally sans-serif unless it deliberately wants an old-timey, medieval feel.", "kind": "do", "strength": "consider", "area": "typography", "applies_to": "all", "values": [], "evidence": "if you opt for one it's generally going to be a sanser font"},
+    {"rule": "For a two-font pairing, pair a display font with a sans-serif, or a sans-serif with a serif; a handwritten font may replace the display font.", "why": "These are the pairings seen on most modern websites.", "kind": "do", "strength": "consider", "area": "typography", "applies_to": "all", "values": [], "evidence": "usually it's either a display font and a sansera font"},
+    {"rule": "Never set small paragraph text in a display font or a handwritten font; keep them for giant text elements.", "why": "Their extra ornamentation and detail become impractical at paragraph size; the source calls it a design sin.", "kind": "dont", "strength": "must", "area": "typography", "applies_to": "all", "values": [], "evidence": "that is 100% a design sin"},
+    {"rule": "Reduce letter spacing proportionately as text gets larger, and increase it as text gets smaller.", "why": "Letter spacing is adjusted mostly by text size: larger text needs proportionately less space, smaller text more.", "kind": "do", "strength": "should", "area": "typography", "applies_to": "all", "values": [], "evidence": "larger text requiring proportionately less space and smaller text requiring proportionately more"},
+    {"rule": "Avoid ultra bold and ultra thin weights for regular text.", "why": "Stay away from extremes when choosing weights for regular text.", "kind": "dont", "strength": "should", "area": "typography", "applies_to": "all", "values": [], "evidence": "try and stay away from extremes with ultra bold and ultra thin"},
+    {"rule": "Set primary text at 100% opacity and secondary text somewhere between 40 and 70% opacity.", "why": "Avoid extremes with font colors just as with weights; these two levels work for creating hierarchy.", "kind": "do", "strength": "should", "area": "typography", "applies_to": "all", "values": ["100%", "40 to 70%"], "evidence": "100% opacity and somewhere between 40 to 70% is good"},
+    {"rule": "Make weight and color steps visually different enough that each level reads as a distinct level of hierarchy.", "why": "Weights and colors only create hierarchy if the difference is visible.", "kind": "do", "strength": "should", "area": "typography", "applies_to": "all", "values": [], "evidence": "things are visually different enough to actually create hierarchy"},
+    {"rule": "Use either weight or color (opacity) to push small text forward or back; both work because each reduces the number of dark pixels.", "why": "At small sizes a thinner weight and a lighter color look very similar.", "kind": "do", "strength": "consider", "area": "typography", "applies_to": "all", "values": [], "evidence": "we can use both color and weights to manipulate hierarchy"},
+    {"rule": "Before styling, list every text element in order of importance (for example header first, subheadings second, paragraphs third), then apply font styles to match that order.", "why": "You should literally be able to list the hierarchy of all text elements and style them accordingly.", "kind": "do", "strength": "should", "area": "process", "applies_to": "all", "values": [], "evidence": "you should literally be able to list the hierarchy of all the text elements"},
+    {"rule": "Do not make paragraph text lighter than the rest; keep paragraphs at 100% opacity so the smallest text is not also the lowest-contrast text.", "why": "Smallest text with the least contrast is neither very usable nor aesthetic.", "kind": "dont", "strength": "should", "area": "typography", "applies_to": "all", "values": ["100%"], "evidence": "we want the opacity to be 100%"},
+    {"rule": "Let a large size carry the heading's emphasis instead of automatically also making it bold and full-strength.", "why": "Making the heading large already gives it the most attention regardless of thickness or opacity.", "kind": "do", "strength": "consider", "area": "typography", "applies_to": "all", "values": [], "evidence": "the header doesn't automatically become bolded"},
+    {"rule": "Make subheadings bold so they are easy to scan and stand out more than paragraph text.", "why": "Subheadings should be easily scannable and pop more than the paragraph.", "kind": "do", "strength": "consider", "area": "typography", "applies_to": "all", "values": [], "evidence": "we'll make it bold"},
+    {"rule": "Derive font sizes from a scale ratio instead of eyeballing one page and building the style guide around it.", "why": "Eyeballing one page is not wrong but can be improved with a ratio-based scale.", "kind": "do", "strength": "consider", "area": "typography", "applies_to": "all", "values": [], "evidence": "it's not wrong but it can be improved"},
+    {"rule": "With only a heading and body text, make the heading the body size multiplied by 1.62.", "why": "Multiplying body text by the golden ratio gives a heading size that looks pretty good in the most basic layouts.", "kind": "do", "strength": "consider", "area": "typography", "applies_to": "all", "values": ["1.62"], "evidence": "multiply the body text by 1.62 to get the size of the header text"},
+    {"rule": "Do not multiply every step of a multi-size scale by the full golden ratio (1.62) from a 16 px base.", "why": "Sizes grow too large too quickly: with four header sizes and a paragraph the largest header reaches 110 pixels.", "kind": "dont", "strength": "should", "area": "typography", "applies_to": "all", "values": ["16 pixel", "1.62", "110 pixels"], "evidence": "our font sizes start to get very large a little too quickly"},
+    {"rule": "Use the square root of the golden ratio, 1.27, as the ratio between consecutive font sizes in a full style guide.", "why": "It leaves room for an in-between size such as a subheading and works across many font sizes.", "kind": "do", "strength": "consider", "area": "typography", "applies_to": "all", "values": ["1.27"], "evidence": "square rooted it to get 1.27"},
+    {"rule": "Use the cube root of the golden ratio for a tighter scale when the interface has many font styles (such as a dashboard) or little room (such as mobile).", "why": "It gives smaller scaling steps when you need them.", "kind": "do", "strength": "consider", "area": "typography", "applies_to": "all", "values": [], "evidence": "Cube rooting the golden ratio"},
+    {"rule": "Scale each font size fluidly: smallest size + (largest size - smallest size) x (current screen width - smallest width) / (largest width - smallest width), instead of setting sizes at breakpoints.", "why": "Adjusting each size at breakpoints could be messy; one line of CSS scales text for every screen size.", "kind": "do", "strength": "should", "area": "typography", "applies_to": "web", "values": ["1920", "320"], "evidence": "with this single line of CSS we can have scale text"},
+    {"rule": "Use 320 as the smallest and 1920 as the largest screen width in the fluid formula, adjusting if needed.", "why": "These are the widths the source generally uses, while noting you can play with them.", "kind": "do", "strength": "consider", "area": "typography", "applies_to": "web", "values": ["1920", "320"], "evidence": "I generally use 1920 as the largest width and 320 as the smallest width"},
+    {"rule": "Cap fluid font sizes: wrap the formula in max() with the lower bound and min() with the upper bound, unless letting text keep growing on larger screens works for the design.", "why": "The linear formula keeps producing larger or smaller sizes past the chosen widths.", "kind": "do", "strength": "consider", "area": "typography", "applies_to": "css", "values": [], "evidence": "set a cap on the size with a simple Min and Max"},
+    {"rule": "Increase line height as text gets smaller or lines get longer, and reduce it as text gets larger.", "why": "It makes text easier to read.", "kind": "do", "strength": "should", "area": "typography", "applies_to": "all", "values": [], "evidence": "the line height should increase to make things easier to read"},
+    {"rule": "Set paragraph line height around 150% and heading line height around 110 to 130%.", "why": "A rule of thumb for readable text; automatic line height falls off toward extremely large text.", "kind": "do", "strength": "should", "area": "typography", "applies_to": "all", "values": ["150 %", "110 to 130%"], "evidence": "for paragraph text line height should be around 150 %"},
+    {"rule": "Do not leave line height on auto for very large text.", "why": "Most designers leave line height on auto, but it falls off a little for extremely large text.", "kind": "dont", "strength": "consider", "area": "typography", "applies_to": "all", "values": [], "evidence": "especially towards extremely large text it falls off"},
+    {"rule": "Review designs on the screen sizes they were intended for to check text size, colors and fonts.", "why": "It is the way to see whether the typography actually makes sense.", "kind": "do", "strength": "should", "area": "process", "applies_to": "all", "values": [], "evidence": "view your designs on the screen they were intended for"},
+    {"rule": "Keep font pairings, weights and colors the same on every screen size; let only font sizes change with the screen.", "why": "Colors, weights and pairings can stay constant on any screen, while sizes change with screen size.", "kind": "do", "strength": "consider", "area": "typography", "applies_to": "all", "values": [], "evidence": "font colors weights and pairings can stay constant on any screen"},
+    {"rule": "If a third font is used, pair a display font and a sans-serif with a third font reserved for small details or captions under images.", "why": "That is the three-font pattern the source has seen elsewhere and uses on his own portfolio, framed as an edge case.", "kind": "do", "strength": "consider", "area": "typography", "applies_to": "all", "values": [], "evidence": "a s font for small details or captions under images"}
+  ],
+  "decisions": [
+    {
+      "question": "How many fonts should the system use, and how should they be paired?",
+      "options": [
+        {"name": "One font (usually sans-serif)", "effect": "Clean and consistent; hierarchy comes from size, weight and color.", "when": "Default; many industry-standard sites do this."},
+        {"name": "Two fonts: display + sans-serif", "effect": "Headlines get personality from an ornamented display font while body text stays clean.", "when": "Most modern websites that want expressive headings."},
+        {"name": "Two fonts: sans-serif + serif", "effect": "Mixes a modern sans with a more traditional, authoritative serif.", "when": "When some text should read as more classic or editorial [inferred]."},
+        {"name": "Two fonts: handwritten + sans-serif", "effect": "A handwritten font takes the display role for a personal, human feel.", "when": "Acceptable in place of a display font."},
+        {"name": "Three fonts: display + sans-serif + small-detail font", "effect": "A third font (Courier Prime on Kole's portfolio) marks small details or image captions.", "when": "Edge case; pushing the envelope."}
+      ],
+      "recommendation": "One font is entirely acceptable and two is the limit; three is pushing it and four is asking for problems.",
+      "maps_to": "Q-type-05",
+      "evidence": "one font is entirely acceptable"
+    },
+    {
+      "question": "Which font category should the main text use?",
+      "options": [
+        {"name": "Sans-serif", "effect": "Cleaner and more modern; what most everyday interfaces use (YouTube, Instagram, X).", "when": "Most interfaces."},
+        {"name": "Serif", "effect": "Reads as older and perhaps more authoritative; said to be easier to read at small sizes.", "when": "Books, magazines, or an old-timey, medieval style site."},
+        {"name": "Display", "effect": "Extra ornamentation and detail for giant text.", "when": "Only for large headline elements, never paragraphs."},
+        {"name": "Handwritten", "effect": "Imitates human handwriting with varying success.", "when": "As a display font substitute, never for small paragraph text."}
+      ],
+      "recommendation": "Use a sans-serif when there is only one font; keep display and handwritten fonts for large text.",
+      "maps_to": "Q-type-03",
+      "evidence": "fonts are divided into two categories serif and Sans serif"
+    },
+    {
+      "question": "Should hierarchy between text levels come from weight, color, or both?",
+      "options": [
+        {"name": "Color (opacity) only", "effect": "Same weight throughout; lower levels are lighter (for example 40 to 70% opacity against 100%).", "when": "When a single weight should be kept; shown in a layout that only uses color."},
+        {"name": "Weight only", "effect": "Same color throughout; levels differ by thickness.", "when": "When all text should stay at full opacity; shown in a layout that only uses weights."},
+        {"name": "Both", "effect": "Weight and color changes used together across levels.", "when": "The source says both can manipulate hierarchy but does not show a combined layout."}
+      ],
+      "recommendation": "Both work because at small sizes thinner weight and lighter color look similar; avoid extremes (ultra bold, ultra thin) and make each level visibly different.",
+      "maps_to": "Q-type-12",
+      "evidence": "in this layout I'm only using color and here I'm only using weights"
+    },
+    {
+      "question": "How should a heading, subheadings and paragraphs be styled to show their order?",
+      "options": [
+        {"name": "Bold full-opacity heading, plain subheadings, lighter paragraphs", "effect": "The predictable approach; the smallest text ends up with the least contrast.", "when": "Not recommended: neither very usable nor aesthetic."},
+        {"name": "Large plain heading, bold subheadings, full-opacity paragraphs", "effect": "Size alone makes the heading lead, subheadings are easy to scan, and body text stays readable.", "when": "Recommended starting point."}
+      ],
+      "recommendation": "Let size carry the heading, bold the subheadings for scanning, and keep paragraphs at 100% opacity.",
+      "maps_to": null,
+      "evidence": "instead let's start over"
+    },
+    {
+      "question": "What ratio should separate each font size from the one below it?",
+      "options": [
+        {"name": "Golden ratio, 1.62", "effect": "Strong jumps; from 16 px, four header sizes reach 110 px, which is too large too quickly.", "when": "Only a heading and body text."},
+        {"name": "Square root of the golden ratio, 1.27", "effect": "Gentler steps that leave room for in-between sizes like subheadings; looks subtly better applied to a design.", "when": "A full style guide with several sizes."},
+        {"name": "Cube root of the golden ratio", "effect": "Even smaller steps between sizes.", "when": "Dashboards with many font styles, or mobile interfaces with less room."},
+        {"name": "Eyeball one page", "effect": "Sizes set by feel on one page, then a style guide built around it.", "when": "The source's old method: not wrong, but can be improved."}
+      ],
+      "recommendation": "Use the square root of the golden ratio (1.27) from a 16 px base for a full style guide; use the cube root for dense or small-screen interfaces.",
+      "maps_to": "Q-type-09",
+      "evidence": "what if we took the golden ratio square rooted it"
+    },
+    {
+      "question": "Should text sizes change with screen width, and how?",
+      "options": [
+        {"name": "Breakpoints", "effect": "Each text size is adjusted at set screen widths; could be messy when close control over sizes is needed.", "when": "The previous common approach."},
+        {"name": "Fluid formula", "effect": "Each size scales linearly from its smallest value at a 320 wide screen to its largest at a 1920 wide screen, with no breakpoints.", "when": "When text should look right on every screen size."}
+      ],
+      "recommendation": "Use the single-line fluid formula so text scales from mobile to desktop without breakpoints.",
+      "maps_to": "Q-type-15",
+      "evidence": "without the need for any break points"
+    },
+    {
+      "question": "Should fluid text keep growing or shrinking beyond the chosen smallest and largest screen widths?",
+      "options": [
+        {"name": "Uncapped", "effect": "Larger screens than the largest width get even larger text; smaller screens get smaller text.", "when": "If that works in the design."},
+        {"name": "Capped with min and max", "effect": "Text stops at the lower and upper bounds regardless of screen size.", "when": "Otherwise."}
+      ],
+      "recommendation": "Cap it unless growth works for the design: max() holds the lower bound and min() holds the upper bound.",
+      "maps_to": null,
+      "evidence": "if that works in the design fantastic otherwise you can set a cap"
+    },
+    {
+      "question": "How should line height be set?",
+      "options": [
+        {"name": "Auto", "effect": "What most designers use about 95% of the time; falls off a little toward extremely large text.", "when": "The common habit the source moves away from."},
+        {"name": "Percentage by role", "effect": "Around 150% for paragraphs and 110 to 130% for headings; higher for smaller text or longer lines, lower for larger text.", "when": "The source's rule of thumb."}
+      ],
+      "recommendation": "Set line height explicitly: around 150% for paragraph text and 110 to 130% for heading text.",
+      "maps_to": "Q-type-11",
+      "evidence": "A good rule of thumb is that for paragraph text line height should be around 150 %"
+    }
+  ],
+  "process": [
+    {"step": "Choose font categories and pairing", "detail": "Start with one sans-serif font; add a second (display, serif or handwritten) only if needed. Keep display and handwritten fonts away from paragraph text."},
+    {"step": "Rank the text elements", "detail": "List every text element in order of importance, for example header first, subheadings second, paragraphs third."},
+    {"step": "Build the size scale", "detail": "Start from a 16 px base and multiply by the square root of the golden ratio (1.27) for each step; use the cube root for dashboards or mobile, or 1.62 when there is only a heading and body text."},
+    {"step": "Assign weight and color", "detail": "Avoid ultra bold and ultra thin. Use 100% opacity and a second level between 40 and 70%. Let size carry the heading, bold the subheadings and keep paragraphs at 100% opacity."},
+    {"step": "Set letter spacing by size", "detail": "Tighten proportionately for large text and loosen for small text."},
+    {"step": "Make sizes fluid", "detail": "For each style, pick its size on the smallest screen (320 wide) and the largest (1920 wide), then compute smallest size + (largest size - smallest size) x (current width - 320) / (1920 - 320)."},
+    {"step": "Cap the fluid sizes", "detail": "Unless growth past those widths suits the design, wrap the formula in max() with the lower bound and min() with the upper bound."},
+    {"step": "Set line heights", "detail": "About 150% for paragraphs and 110 to 130% for headings; raise it for smaller text or longer lines, lower it for larger text."},
+    {"step": "Check on real screens", "detail": "View the design on the screens it is intended for to confirm sizes, colors and fonts make sense."}
+  ],
+  "examples": [
+    {"what": "Everyday apps using sans-serif fonts", "where": "YouTube, Instagram, X (Twitter)", "visual_note": "Cited as interfaces people use daily that rely on sans-serif fonts."},
+    {"what": "Serif fonts in print", "where": "Books and magazines", "visual_note": "Cited as the reason serifs are associated with readability at small sizes."},
+    {"what": "Font anatomy diagram", "where": null, "visual_note": "Baseline, x-height (measured off x, with e slightly above it) and cap height (measured off a flat-bottomed capital E) marked on sample letters."},
+    {"what": "Three-font portfolio", "where": "Kole Jain's portfolio website", "visual_note": "A display font, a sans-serif, and Courier Prime for small details and image captions; discussed as an edge case for using three fonts."},
+    {"what": "Weight versus color demo", "where": null, "visual_note": "The same text made thinner and, separately, lighter in color; at small sizes the two look similar. Two versions of one layout, one using only color and one using only weights, for hierarchy."},
+    {"what": "Two ways to style a heading, subheadings and paragraphs", "where": null, "visual_note": "First: bold full-opacity heading, plain subheadings and lighter paragraphs, where the smallest text has the least contrast. Second: large plain heading, bold subheadings and full-opacity paragraphs, which reads better."},
+    {"what": "Golden-ratio scale growing too fast", "where": null, "visual_note": "A style guide from 16 px multiplied by 1.62 per step; with four header sizes the largest reaches 110 px."},
+    {"what": "Square-root golden ratio applied to a design", "where": null, "visual_note": "Before and after of one design re-sized with the 1.27 ratio; a subtle improvement, flipped back and forth for comparison."},
+    {"what": "Fluid font-size graph", "where": null, "visual_note": "A straight line of font size against screen width, extending past the smallest and largest sizes, used to show why min and max caps may be needed."}
+  ],
+  "numbers": [
+    {"value": "1.62", "context": "Approximation of the golden ratio; body size x 1.62 gives a heading size", "evidence": "the golden ratio which is 1.62"},
+    {"value": "1.27", "context": "Square root of the golden ratio, proposed as the scale ratio for a full style guide", "evidence": "square rooted it to get 1.27"},
+    {"value": "16 pixel", "context": "Base font size for the example scale", "evidence": "if we start with the 16 pixel base font size"},
+    {"value": "110 pixels", "context": "Largest header when a 16 px base is multiplied by 1.62 across four header sizes", "evidence": "our largest header is 110 pixels large"},
+    {"value": "1920", "context": "Largest screen width used in the fluid formula", "evidence": "I generally use 1920 as the largest width"},
+    {"value": "320", "context": "Smallest screen width used in the fluid formula", "evidence": "320 as the smallest width"},
+    {"value": "100%", "context": "Opacity for primary text, and for paragraphs in the recommended hierarchy", "evidence": "100% opacity and somewhere between 40 to 70% is good"},
+    {"value": "40 to 70%", "context": "Opacity range for lighter secondary text", "evidence": "somewhere between 40 to 70% is good"},
+    {"value": "150 %", "context": "Rule-of-thumb line height for paragraph text", "evidence": "for paragraph text line height should be around 150 %"},
+    {"value": "110 to 130%", "context": "Rule-of-thumb line height for heading text", "evidence": "for heading text line height should be around 110 to 130%"},
+    {"value": "90%", "context": "Share of projects where you will likely reuse the same three fonts", "evidence": "the same three fonts for 90% of your projects"},
+    {"value": "95%", "context": "How often designers leave line height on auto, per the source's guess", "evidence": "keep line height on auto for like 95% of the time"},
+    {"value": "four", "context": "Number of fonts that is 'asking for problems' (one is acceptable, two is the limit, three is pushing the envelope)", "evidence": "four is asking for problems"}
+  ],
+  "caveats": [
+    "Opinion framed as 'mathematically perfect': the golden-ratio scale and fluid formula are the creator's personal method ('my magic equation'), not a standard.",
+    "The actual CSS line is described in words, not shown in the transcript; the transcript does not name clamp() or viewport units.",
+    "The cube-root value of the golden ratio is recommended but never stated as a number (about 1.17 [inferred]).",
+    "Historical and readability claims about serif fonts (ancient Greek origin, easier to read small) are stated without evidence.",
+    "The Comic Sans remark is a joke, not guidance.",
+    "Auto-caption errors: 'seraps' is serifs, 'sansera/sanser' is sans-serif, 'aial' is Arial, 'Comic Sands' is Comic Sans, 'Sara fonts' and 'serf' are serif, 'US designers' is 'us designers', 'Min'/'mint' in the min and max passage is min(); 'Min control over the sizes' is unclear (possibly 'minute control'). The portfolio's display and sans-serif font names ('fola 1', 'AXA Forma') and the word before Courier Prime ('a s font') are garbled and should not be treated as font names.",
+    "Visuals (layouts, graph, before/after) are described from narration only; no media list exists for this video.",
+    "Published 2024-06-09; closes with a standard subscribe request. The stored video description is truncated. No sponsor segment appears in the transcript."
+  ]
+}

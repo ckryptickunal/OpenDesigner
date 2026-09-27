@@ -1,0 +1,64 @@
+{
+  "summary": "The getting-started page introduces Vaul as a drawer component for React, installed with pnpm, npm or yarn. It gives a minimal client component that composes Root, Trigger, Portal, Overlay and Content, and notes the drawer can be placed anywhere in the app. The example's styling gives concrete starting values: an overlay styled fixed inset-0 bg-black/40, and content styled fixed bottom-0 left-0 right-0 h-fit on bg-gray-100 with a p-4 bg-white inner block (read as utility classes: a full-screen black overlay at 40% and a full-width bottom sheet as tall as its content [inferred]). For a design system it is the smallest working drawer, with a concrete overlay dim value and bottom-sheet layout to start from.",
+  "key_ideas": [
+    "Vaul is a drawer component for React.",
+    "Install it with pnpm, npm or yarn (pnpm i vaul).",
+    "The drawer component file is marked 'use client'.",
+    "A minimal drawer composes Root, Trigger, Portal, Overlay and Content.",
+    "The example overlay is styled fixed inset-0 bg-black/40, a full-screen black layer at 40% [inferred].",
+    "The example content is styled bg-gray-100 h-fit fixed bottom-0 left-0 right-0 outline-none: pinned to the bottom, full width, as tall as its content [inferred].",
+    "Vaul is imported as { Drawer } from 'vaul'.",
+    "The drawer component can be placed anywhere in the app."
+  ],
+  "entities": [
+    {"name": "Vaul", "type": "library", "description": "Drawer component for React introduced on this page."},
+    {"name": "React", "type": "library", "description": "Framework Vaul is built for."},
+    {"name": "pnpm / npm / yarn", "type": "tool", "description": "Package managers named for installing Vaul."},
+    {"name": "aiforui.dev", "type": "product", "description": "Course advertised in the page banner; not part of the docs content."}
+  ],
+  "topics": [
+    {"name": "Drawers and sheets", "summary": "The smallest working drawer: a trigger, a dimmed overlay and bottom-pinned content."},
+    {"name": "UI libraries", "summary": "Vaul is installed as a package (pnpm i vaul) and imported as { Drawer } from 'vaul'."},
+    {"name": "Web implementation (CSS and React)", "summary": "A 'use client' React component styled with utility classes: fixed inset-0 bg-black/40 overlay and fixed bottom-0 left-0 right-0 h-fit content."},
+    {"name": "Depth, shadows and borders", "summary": "The example overlay behind the drawer is black at /40 (bg-black/40)."}
+  ],
+  "claims": [
+    {"claim": "Vaul is a drawer component for React.", "evidence": "Getting Started intro"},
+    {"claim": "Vaul installs with pnpm, npm or yarn.", "evidence": "Installation"},
+    {"claim": "The drawer component can be placed anywhere in the app.", "evidence": "Create a Drawer component"}
+  ],
+  "quotes": [
+    "Vaul is a drawer component for React.",
+    "It can be placed anywhere in your app."
+  ],
+  "tags": ["vaul", "drawer", "react", "install", "overlay", "bottom-sheet"],
+  "authority": "good-to-have",
+  "rules": [
+    {"rule": "Style the overlay behind a drawer as fixed inset-0 bg-black/40, a fixed full-screen black layer at 40% [inferred].", "why": "The starter example styles Drawer.Overlay this way.", "kind": "do", "strength": "consider", "area": "elevation", "applies_to": "css", "values": ["fixed inset-0", "bg-black/40"], "evidence": "Create a Drawer component (MyDrawer.tsx)"},
+    {"rule": "Style bottom-drawer content as fixed bottom-0 left-0 right-0 h-fit outline-none on bg-gray-100: pinned to the bottom edge, full width, as tall as its content [inferred].", "why": "The starter example styles Drawer.Content this way.", "kind": "do", "strength": "consider", "area": "layout", "applies_to": "css", "values": ["fixed bottom-0 left-0 right-0", "h-fit", "outline-none", "bg-gray-100"], "evidence": "Create a Drawer component (MyDrawer.tsx)"},
+    {"rule": "Put the drawer's content in a padded inner block (p-4 on white) inside Drawer.Content.", "why": "The starter example wraps its content this way.", "kind": "do", "strength": "consider", "area": "layout", "applies_to": "css", "values": ["p-4", "bg-white"], "evidence": "Create a Drawer component (MyDrawer.tsx)"},
+    {"rule": "Mark the drawer component file as a client component with 'use client'.", "why": "The starter MyDrawer.tsx begins with it; the source gives no further reason.", "kind": "do", "strength": "consider", "area": "tooling", "applies_to": "react", "values": ["'use client'"], "evidence": "MyDrawer.tsx"}
+  ],
+  "decisions": [],
+  "process": [
+    {"step": "Install", "detail": "Install the package with pnpm, npm or yarn: pnpm i vaul."},
+    {"step": "Create the component", "detail": "Create MyDrawer.tsx, mark it 'use client' and import { Drawer } from 'vaul'."},
+    {"step": "Compose the parts", "detail": "Drawer.Root > Drawer.Trigger ('Open Drawer') and Drawer.Portal > Drawer.Overlay + Drawer.Content, with your content in an inner div."},
+    {"step": "Style overlay and content", "detail": "Overlay: fixed inset-0 bg-black/40. Content: bg-gray-100 h-fit fixed bottom-0 left-0 right-0 outline-none. Inner block: p-4 bg-white."},
+    {"step": "Place it", "detail": "Render the component anywhere in the app."}
+  ],
+  "examples": [
+    {"what": "MyDrawer.tsx starter component", "where": "Vaul docs, Getting Started", "visual_note": "Code only: an 'Open Drawer' trigger opens a bottom drawer on a gray-100 surface with a white padded content block, over a black overlay at /40."}
+  ],
+  "numbers": [
+    {"value": "bg-black/40", "context": "Overlay colour behind the drawer in the starter example; close to the 'scrim-fluent' option of Q-depth-06 (black 40% in light mode) [inferred]", "evidence": "Drawer.Overlay className in MyDrawer.tsx"}
+  ],
+  "caveats": [
+    "Every page carries a banner advertising the aiforui.dev course ('31 minutes left to join'); it is self-promotion and time-sensitive.",
+    "The styling uses utility class names without naming the CSS framework; they look like Tailwind CSS classes [inferred].",
+    "The example is a minimal starter, not a styling recommendation the page argues for; the colours and spacing are example values.",
+    "The page links to an article on how Vaul was built; that article is not part of this raw text.",
+    "Published date is unknown.",
+    "Not in this page: learn/sources.json records that the Vaul README says the library is unmaintained (checked 2026-09-24); flag that before recommending it as a dependency."
+  ]
+}

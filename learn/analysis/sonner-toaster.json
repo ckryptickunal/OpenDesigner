@@ -1,0 +1,585 @@
+{
+  "summary": "The Toaster page documents the component that renders all toasts and can be placed anywhere in the app. It explains that toasts expand on hover, that expand makes that the default, and that visibleToasts changes how many are shown (default 3). It covers the six positions, multiple toasters routed with id and toasterId, and spacing from the screen edge: offset defaults to 32px on desktop and mobileOffset to 16px below a 600px screen width. It also shows how to make the toaster follow the app's light or dark theme through next-themes. The API table lists the container defaults: theme light, richColors false, expand false, visibleToasts 3, position bottom-right, closeButton false, gap 14, dir ltr and hotkey ⌥/alt + T.",
+  "key_ideas": [
+    "Toaster renders every toast and can be placed anywhere in the app.",
+    "Hovering one toast expands the pile; expand makes the expanded state the default.",
+    "Three toasts are visible by default; visibleToasts changes that number.",
+    "Six positions are available, and bottom-right is the default.",
+    "Several toasters can coexist when you need a clear separation; each has an id and toasts pick one with toasterId.",
+    "Toasts sit 32px from the screen edge on desktop and 16px on mobile by default.",
+    "mobileOffset applies when the screen is narrower than 600px.",
+    "offset and mobileOffset accept a number, a string such as 10vh, or an object of individual sides.",
+    "The toaster's theme defaults to light; pass the resolved app theme (for example from next-themes) to follow dark mode.",
+    "Swipe directions are derived from the position unless swipeDirections is set.",
+    "Other container defaults: gap 14, dir ltr, hotkey ⌥/alt + T, richColors false, closeButton false, invert false."
+  ],
+  "entities": [
+    {
+      "name": "Sonner",
+      "type": "library",
+      "description": "The React toast library whose Toaster component this page documents."
+    },
+    {
+      "name": "Toaster",
+      "type": "concept",
+      "description": "The component that renders all toasts and holds container settings such as position, offsets and theme."
+    },
+    {
+      "name": "next-themes",
+      "type": "library",
+      "description": "A theme provider whose resolvedTheme is passed to Toaster so toasts follow the app theme."
+    },
+    {
+      "name": "React",
+      "type": "library",
+      "description": "The framework Sonner is built for."
+    },
+    {
+      "name": "aiforui.dev",
+      "type": "product",
+      "description": "A course promoted in the site-wide banner."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Toasts and notifications",
+      "summary": "Documents the Toaster container: expand on hover, visible count, positions, multiple toasters, offsets, theme and all container defaults."
+    },
+    {
+      "name": "Spacing and layout",
+      "summary": "Toasts sit 32px from the screen edge on desktop and 16px on mobile, with mobile applying below a 600px screen width; offsets can be set per side."
+    },
+    {
+      "name": "Dark mode and themes",
+      "summary": "The toaster's theme defaults to light; pass resolvedTheme from a theme provider such as next-themes so toasts follow the app theme."
+    },
+    {
+      "name": "Gestures and drag",
+      "summary": "Swipe directions default to being based on the position and can be set with swipeDirections."
+    },
+    {
+      "name": "Accessibility",
+      "summary": "The API lists a keyboard hotkey (default ⌥/alt + T) and a dir setting (default ltr)."
+    },
+    {
+      "name": "Web implementation (CSS and React)",
+      "summary": "Shows the React props, a 'use client' Toaster wrapper using next-themes, and offsets as numbers, strings or per-side objects."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Toaster renders all the toasts and can be placed anywhere in the app.",
+      "evidence": "This component renders all the toasts"
+    },
+    {
+      "claim": "Hovering one of the toasts expands them; setting expand to true makes that the default behaviour.",
+      "evidence": "When you hover on one of the toasts, they will expand."
+    },
+    {
+      "claim": "By default 3 toasts are visible.",
+      "evidence": "9 toasts will be visible instead of the default, which is 3."
+    },
+    {
+      "claim": "The available positions are top-left, top-center, top-right, bottom-left, bottom-center and bottom-right.",
+      "evidence": "Available positions"
+    },
+    {
+      "claim": "Multiple toasters can be rendered, and a toast can be pointed to a specific toaster.",
+      "evidence": "Multiple Toasters"
+    },
+    {
+      "claim": "The default desktop offset is 32px and the default mobile offset is 16px.",
+      "evidence": "Customizing offsets"
+    },
+    {
+      "claim": "mobileOffset is applied when the screen width is less than 600px.",
+      "evidence": "mobileOffset will be applied when the screen width is less than 600px"
+    },
+    {
+      "claim": "The toaster's theme can adapt to the app's theme by passing a theme prop from a theme provider such as next-themes.",
+      "evidence": "Dynamic theme"
+    },
+    {
+      "claim": "The theme prop defaults to light.",
+      "evidence": "theme string light"
+    },
+    {
+      "claim": "swipeDirections defaults to being based on position.",
+      "evidence": "swipeDirections [] based on position"
+    },
+    {
+      "claim": "The default gap is 14.",
+      "evidence": "gap number 14"
+    }
+  ],
+  "quotes": [
+    "This component renders all the toasts, you can place it anywhere in your app.",
+    "When you hover on one of the toasts, they will expand.",
+    "mobileOffset will be applied when the screen width is less than 600px"
+  ],
+  "tags": [
+    "sonner",
+    "toaster",
+    "react",
+    "toast-position",
+    "toast-offset",
+    "dark-mode",
+    "next-themes",
+    "api-defaults"
+  ],
+  "authority": "non-negotiable",
+  "rules": [
+    {
+      "rule": "Render the <Toaster /> component to display toasts; it can be placed anywhere in the app.",
+      "why": "This component renders all the toasts.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "react",
+      "values": [],
+      "evidence": "This component renders all the toasts, you can place it anywhere in your app."
+    },
+    {
+      "rule": "Toasts expand when the user hovers one of them; set the expand prop to true to make the expanded state the default (expand is false by default).",
+      "why": "When you hover on one of the toasts they expand, and setting expand to true makes that the default behaviour; the API table lists expand as false by default.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "expand",
+        "false"
+      ],
+      "evidence": "You can make that the default behavior by setting the expand prop to true"
+    },
+    {
+      "rule": "Visible toasts default to 3; change the count with the visibleToasts prop (the example uses 9).",
+      "why": "The default number of visible toasts is 3; visibleToasts customizes it.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "3",
+        "<Toaster expand visibleToasts={9} />"
+      ],
+      "evidence": "9 toasts will be visible instead of the default, which is 3."
+    },
+    {
+      "rule": "Place toasts with the position prop, choosing top-left, top-center, top-right, bottom-left, bottom-center or bottom-right; the default is bottom-right.",
+      "why": "Position changes where all toasts are rendered; the API table lists bottom-right as the default.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "react",
+      "values": [
+        "top-left",
+        "top-center",
+        "top-right",
+        "bottom-left",
+        "bottom-center",
+        "bottom-right",
+        "<Toaster position=\"top-center\" />"
+      ],
+      "evidence": "Changes the place where all toasts will be rendered."
+    },
+    {
+      "rule": "Render more than one Toaster only when you need a clear separation; give each an id and send each toast to one with toasterId.",
+      "why": "Multiple toasters are for when you need this clear separation, and they let you point a toast to a specific toaster.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "<Toaster id=\"global\" position=\"top-right\" />",
+        "<Toaster id=\"canvas\" position=\"bottom-left\" />",
+        "toast('Global toast', { toasterId: 'global' })",
+        "toast('Canvas toast', { toasterId: 'canvas' })"
+      ],
+      "evidence": "Multiple Toasters"
+    },
+    {
+      "rule": "Offsets default to 32px on desktop and 16px on mobile; change them with the offset and mobileOffset props.",
+      "why": "The docs give a default desktop offset of 32px and a default mobile offset of 16px, both customizable through offset and mobileOffset.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "react",
+      "values": [
+        "32px",
+        "16px"
+      ],
+      "evidence": "Default desktop offset is 32px and default mobile offset is 16px"
+    },
+    {
+      "rule": "Set mobile spacing with mobileOffset, which applies when the screen width is less than 600px.",
+      "why": "mobileOffset is applied below a 600px screen width.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [
+        "600px"
+      ],
+      "evidence": "mobileOffset will be applied when the screen width is less than 600px"
+    },
+    {
+      "rule": "Give offset a number for the same spacing on all sides, a string such as \"10vh\" for relative units, or an object to set individual sides.",
+      "why": "The page shows all three forms of offset.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "react",
+      "values": [
+        "<Toaster offset={16} />",
+        "<Toaster offset=\"10vh\" />",
+        "<Toaster offset={{ bottom: '24px', right: \"16px\", left: \"16px\" }} />"
+      ],
+      "evidence": "Customizing offsets"
+    },
+    {
+      "rule": "To change only some mobile sides, pass mobileOffset an object with just those sides; the rest keep their default values.",
+      "why": "The example sets only bottom and says the rest use default values.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "react",
+      "values": [
+        "<Toaster mobileOffset={{ bottom: '16px' }} />"
+      ],
+      "evidence": "mobile offset will be 16px from the bottom, default values for the rest"
+    },
+    {
+      "rule": "Make the toaster follow the app's theme by wrapping it in a 'use client' component that passes the theme provider's resolvedTheme (for example from next-themes) to the theme prop.",
+      "why": "This makes the toaster's theme adapt to the app's theme; theme otherwise defaults to light, so dark-mode apps would show light toasts. [inferred]",
+      "kind": "do",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "react",
+      "values": [
+        "'use client'",
+        "theme={resolvedTheme as ToasterProps['theme']}",
+        "light"
+      ],
+      "evidence": "Dynamic theme"
+    },
+    {
+      "rule": "Let swipe directions follow the toaster's position (the default), and set swipeDirections only to override them.",
+      "why": "The API table lists swipeDirections with a default that is based on position.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "react",
+      "values": [
+        "swipeDirections"
+      ],
+      "evidence": "swipeDirections [] based on position"
+    },
+    {
+      "rule": "Turn on richColors on the Toaster when typed toasts should use rich colors; it is false by default.",
+      "why": "The API table lists richColors as a boolean defaulting to false.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "color",
+      "applies_to": "react",
+      "values": [
+        "false"
+      ],
+      "evidence": "richColors boolean false"
+    },
+    {
+      "rule": "Turn on closeButton on the Toaster to show close buttons; it is false by default.",
+      "why": "The API table lists closeButton as a boolean defaulting to false.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "false"
+      ],
+      "evidence": "closeButton boolean false"
+    },
+    {
+      "rule": "Set the dir prop for right-to-left interfaces; it defaults to ltr. [inferred]",
+      "why": "The API table lists dir as a string defaulting to ltr.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "accessibility",
+      "applies_to": "react",
+      "values": [
+        "ltr"
+      ],
+      "evidence": "dir string ltr"
+    },
+    {
+      "rule": "Set the toaster's keyboard shortcut with the hotkey prop; the default is ⌥/alt + T.",
+      "why": "The API table lists hotkey with the default ⌥/alt + T.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "accessibility",
+      "applies_to": "react",
+      "values": [
+        "⌥/alt + T"
+      ],
+      "evidence": "hotkey string ⌥/alt + T"
+    },
+    {
+      "rule": "Space the toasts with the gap prop, which defaults to 14. [inferred]",
+      "why": "The API table lists gap as a number defaulting to 14; the page does not describe what it spaces or its unit.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "react",
+      "values": [
+        "14"
+      ],
+      "evidence": "gap number 14"
+    },
+    {
+      "rule": "Set shared per-toast defaults through toastOptions and default icons through icons on the Toaster.",
+      "why": "The API table lists toastOptions and icons as Toaster props.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "toastOptions",
+        "icons"
+      ],
+      "evidence": "toastOptions object"
+    },
+    {
+      "rule": "Leave invert at its default of false unless toasts should be inverted.",
+      "why": "The API table lists invert as a boolean defaulting to false; the page does not describe the inverted look.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "color",
+      "applies_to": "react",
+      "values": [
+        "false"
+      ],
+      "evidence": "invert boolean false"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "Should the toast pile expand only on hover, or stay expanded?",
+      "options": [
+        {
+          "name": "Expand on hover (default)",
+          "effect": "The toasts expand when the user hovers one of them.",
+          "when": "Default: expand is false."
+        },
+        {
+          "name": "Always expanded",
+          "effect": "The expanded state becomes the default; combine with visibleToasts to show more than 3.",
+          "when": "When every visible toast should be expanded without hovering."
+        }
+      ],
+      "recommendation": null,
+      "maps_to": null,
+      "evidence": "Expand"
+    },
+    {
+      "question": "Where should the toaster sit on screen?",
+      "options": [
+        {
+          "name": "top-left",
+          "effect": "All toasts render at the top left.",
+          "when": "When the layout calls for it."
+        },
+        {
+          "name": "top-center",
+          "effect": "All toasts render centred at the top.",
+          "when": "The page's code example uses this position."
+        },
+        {
+          "name": "top-right",
+          "effect": "All toasts render at the top right.",
+          "when": "When the layout calls for it; the multiple-toasters example puts its 'global' toaster here."
+        },
+        {
+          "name": "bottom-left",
+          "effect": "All toasts render at the bottom left.",
+          "when": "When the layout calls for it; the multiple-toasters example puts its 'canvas' toaster here."
+        },
+        {
+          "name": "bottom-center",
+          "effect": "All toasts render centred at the bottom.",
+          "when": "When the layout calls for it."
+        },
+        {
+          "name": "bottom-right",
+          "effect": "All toasts render at the bottom right.",
+          "when": "The default."
+        }
+      ],
+      "recommendation": null,
+      "maps_to": null,
+      "evidence": "Position"
+    },
+    {
+      "question": "One toaster for the whole app, or several?",
+      "options": [
+        {
+          "name": "One toaster",
+          "effect": "All toasts appear in a single place.",
+          "when": "When no separation between kinds of toasts is needed. [inferred]"
+        },
+        {
+          "name": "Multiple toasters",
+          "effect": "Each Toaster has an id and position, and toasts are routed with toasterId, for example a 'global' toaster top-right and a 'canvas' toaster bottom-left.",
+          "when": "When you need this clear separation."
+        }
+      ],
+      "recommendation": "Render multiple toasters only if you need the clear separation.",
+      "maps_to": null,
+      "evidence": "Multiple Toasters"
+    },
+    {
+      "question": "Should toasts use a fixed theme or follow the app's theme?",
+      "options": [
+        {
+          "name": "Fixed light (default)",
+          "effect": "The toaster uses the light theme regardless of the app.",
+          "when": "Default when no theme prop is passed."
+        },
+        {
+          "name": "Follow the app theme",
+          "effect": "The toaster adapts to the app's theme using the resolved theme from a provider such as next-themes.",
+          "when": "When the app has a theme provider."
+        }
+      ],
+      "recommendation": null,
+      "maps_to": null,
+      "evidence": "Dynamic theme"
+    },
+    {
+      "question": "Should toasts show a close button?",
+      "options": [
+        {
+          "name": "No close button (default)",
+          "effect": "Toasts render without a close button; closeButton is false.",
+          "when": "Default when closeButton is not set."
+        },
+        {
+          "name": "Close button",
+          "effect": "Every toast from this Toaster shows a close button.",
+          "when": "Set closeButton on the Toaster; clicking it fires onDismiss (Other page). [inferred]"
+        }
+      ],
+      "recommendation": null,
+      "maps_to": null,
+      "evidence": "closeButton boolean false"
+    }
+  ],
+  "process": [
+    {
+      "step": "Mount the toaster",
+      "detail": "Render <Toaster /> anywhere in the app; it renders all toasts."
+    },
+    {
+      "step": "Set placement and spacing",
+      "detail": "Choose a position, and adjust offset (default 32px) and mobileOffset (default 16px, applied below 600px) as a number, a string or a per-side object if the defaults do not fit."
+    },
+    {
+      "step": "Wire the theme",
+      "detail": "Create a 'use client' Toaster wrapper that reads resolvedTheme from useTheme() (next-themes) and passes it to Sonner's Toaster as theme={resolvedTheme as ToasterProps['theme']}."
+    },
+    {
+      "step": "Separate toasters if needed",
+      "detail": "Render additional <Toaster id=\"...\" position=\"...\" /> instances and pass toasterId in toast() options to route each toast."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Global and canvas toasters",
+      "where": "Sonner docs, Multiple Toasters",
+      "visual_note": "A 'global' toaster top-right and a 'canvas' toaster bottom-left, with buttons that send toasts to each through toasterId."
+    },
+    {
+      "what": "Offset variations",
+      "where": "Sonner docs, Customizing offsets",
+      "visual_note": "offset={16} (16px on all sides), offset=\"10vh\" (10vh on all sides), a per-side object of 24px bottom and 16px right and left, and mobileOffset={{ bottom: '16px' }}."
+    },
+    {
+      "what": "Theme-aware Toaster wrapper",
+      "where": "Sonner docs, Dynamic theme (next-themes)",
+      "visual_note": "A client component that imports Toaster as SonnerToaster and ToasterProps from 'sonner', and useTheme from 'next-themes', then passes resolvedTheme to the theme prop."
+    },
+    {
+      "what": "Expanded pile with 9 visible toasts",
+      "where": "Sonner docs, Expand",
+      "visual_note": "<Toaster expand visibleToasts={9} /> shows 9 toasts instead of the default 3."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "3",
+      "context": "Default number of visible toasts (visibleToasts)",
+      "evidence": "the default, which is 3"
+    },
+    {
+      "value": "9",
+      "context": "Example visibleToasts value",
+      "evidence": "9 toasts will be visible instead of the default"
+    },
+    {
+      "value": "32px",
+      "context": "Default desktop offset from the screen edge",
+      "evidence": "Default desktop offset is 32px"
+    },
+    {
+      "value": "16px",
+      "context": "Default mobile offset from the screen edge",
+      "evidence": "default mobile offset is 16px"
+    },
+    {
+      "value": "600px",
+      "context": "Screen width below which mobileOffset applies",
+      "evidence": "less than 600px"
+    },
+    {
+      "value": "10vh",
+      "context": "Example string offset applied to all sides",
+      "evidence": "all sides will have 10vh offset"
+    },
+    {
+      "value": "24px",
+      "context": "Example bottom offset in a per-side offset object",
+      "evidence": "24px from the bottom, 16px from the right and left"
+    },
+    {
+      "value": "14",
+      "context": "Default gap (unit not stated)",
+      "evidence": "API Reference: gap number 14"
+    },
+    {
+      "value": "⌥/alt + T",
+      "context": "Default toaster hotkey",
+      "evidence": "API Reference: hotkey"
+    },
+    {
+      "value": "light",
+      "context": "Default toaster theme",
+      "evidence": "API Reference: theme string light"
+    },
+    {
+      "value": "ltr",
+      "context": "Default dir",
+      "evidence": "API Reference: dir string ltr"
+    },
+    {
+      "value": "bottom-right",
+      "context": "Default toaster position",
+      "evidence": "API Reference: position string bottom-right"
+    }
+  ],
+  "caveats": [
+    "The API table lists toastOptions with a default of 4000, which looks like a documentation slip, since toastOptions is an object and 4000 is the toast duration default. [inferred]",
+    "The page does not state the unit for gap (14), and it does not say what the hotkey does.",
+    "The page says you can see examples on the homepage, but those interactive demos are not in this text.",
+    "A site-wide banner promotes the author's aiforui.dev course with a countdown: self-promotion, time-sensitive.",
+    "The page's publish date is unknown, so the API may have changed since it was fetched."
+  ]
+}

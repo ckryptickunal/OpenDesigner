@@ -1,0 +1,223 @@
+{
+  "summary": "Kole Jain argues that a well-made website that follows all the right principles can still be boring, and that a good design and an interesting one are different things. He walks through ways to make a site more interesting: vary the column layout from the wireframe stage, break the box with overlaps and elements that extend past the frame, treat photos (remove backgrounds, crop and zoom, overlay text, mask into shapes), use size for attention and variety, and add depth with offset elements and adjusted section backgrounds. He then covers changing the page background (dark mode with lighter accents and frosted glass, or off-whites and textured backgrounds) and adding simple motion such as photos slightly zooming in or out, accordions, marquee text and staggered entrances. He ends by reworking one of his own old portfolio designs with these ideas. For a design system, it offers a set of website layout, imagery, depth, background and motion choices, with the recurring point that interesting sites have more variety.",
+  "key_ideas": [
+    "A good design and an interesting design are different; a site can follow every principle and still be boring.",
+    "Layout starts at the wireframe: a boring, average wireframe usually leads to a boring site.",
+    "Boring sites repeat the same column layout, namely image on one side and text on the other; mixing in a full-screen section, cards and three columns already makes it look much better.",
+    "Breaking the box means elements overlap or extend outside the frame instead of lining up perfectly in columns and rows.",
+    "Start breaking the box with small changes, such as shifting cards up and down to add a feeling of movement.",
+    "Images make up a significant portion of a website, so their quality can make or break it; AI images are an option but don't fit every circumstance.",
+    "Image treatments that make a layout more unique: remove the background of a single-object photo, crop and zoom into a product image, overlay text on a wide shot, or mask images into shapes that match the site's style.",
+    "Making an element bigger draws attention to it and adds variety; interesting websites have more variety in layouts, colors and sizes.",
+    "Stacking a two-column horizontal layout into a one-column vertical one, with larger elements, keeps focus on one feature at a time.",
+    "Depth does not have to come from shadows: offset buttons on backgrounds or images, sections with adjusted backgrounds, and a dark background behind lighter cards also add depth.",
+    "Dark mode won't suit every site but should work on most modern-themed ones; it is more than a new background: text flips to white and over-saturated primary and accent colors need lighter versions.",
+    "Replacing plain white with off-whites, or an image background with a noise overlay, adds color, texture and cohesion without a change as drastic as dark mode.",
+    "Motion is one of the most foolproof ways to make a site feel unique and alive, but sections like marquee text come with reduced usability."
+  ],
+  "entities": [
+    {"name": "Kole Jain", "type": "person", "description": "Channel host presenting the techniques and reworking one of his own old portfolio designs."},
+    {"name": "Shopify", "type": "company", "description": "Shopify's website is cited for varied content layouts and for sections with adjusted backgrounds that add depth."},
+    {"name": "Apple", "type": "company", "description": "Cited for cropping and zooming into product images and for stacking two-column layouts into one column."},
+    {"name": "DVLP Medicines", "type": "company", "description": "Site (dvlpmedicines.com, captioned as 'develop medicines') cited for variety in layout and size and for originality."},
+    {"name": "Breaking the box", "type": "concept", "description": "Layout technique where elements overlap or extend outside the frame instead of sitting neatly in columns and rows."},
+    {"name": "Wireframing", "type": "concept", "description": "The first step of creating a website, where a boring layout sets up a boring site."},
+    {"name": "Dark mode", "type": "concept", "description": "Presented as a way to spice up a site; needs white text and lighter primary and accent colors, not just a darker background."},
+    {"name": "Frosted glass", "type": "concept", "description": "Effect added to cards and a blue background in the dark mode example because it still looked like it was lacking something."},
+    {"name": "Noise overlay", "type": "concept", "description": "Texture laid over a nondescript image background as an alternative to plain white."},
+    {"name": "Accordion", "type": "concept", "description": "Section that requires interaction to function, presented as an interactive way to display information."},
+    {"name": "Marquee text", "type": "concept", "description": "Cool and trendy section that incorporates motion but comes with reduced usability."},
+    {"name": "Prototyping mode", "type": "concept", "description": "Design-tool mode used to connect two frames with a hover effect for the offset-button demo; the tool is not named in the transcript, presumably Figma [inferred]."}
+  ],
+  "topics": [
+    {"name": "Spacing and layout", "summary": "Most desktop sites use 1 to 4 columns; vary them with full-screen sections, cards and three columns, break the box with overlaps and elements past the frame, and stack two columns into one to focus on a single feature."},
+    {"name": "Landing pages", "summary": "The video is about making websites captivating rather than merely well made, using layout, imagery, depth, background and motion variety; examples include Shopify, Apple and dvlpmedicines.com."},
+    {"name": "Cards and sections", "summary": "Mix in full-screen sections and cards, shift cards up and down, let a sliding card section extend past the frame, and separate sections with adjusted backgrounds."},
+    {"name": "Icons and imagery", "summary": "Image quality can make or break a site; remove backgrounds, crop and zoom, overlay text on wide shots, mask into shapes, and consider AI images where they fit."},
+    {"name": "Depth, shadows and borders", "summary": "Shadows are the obvious option but not the only one: offset buttons on backgrounds or images, sections with adjusted backgrounds, and a dark background behind lighter cards add depth."},
+    {"name": "Dark mode and themes", "summary": "Dark mode won't suit all sites but should work on most modern-themed ones; flip text to white, lighten over-saturated primary and accent colors, and consider frosted glass on cards. It entirely changes the look and feel."},
+    {"name": "Color", "summary": "Replace plain white backgrounds with off-whites or a textured image background with noise to add color and cohesion; primary and accent colors are often too saturated for dark mode and need lighter versions."},
+    {"name": "Visual hierarchy", "summary": "Making an element bigger draws attention to it; a one-column stacked layout keeps focus on one feature at a time."},
+    {"name": "Motion principles", "summary": "Motion is presented as one of the most foolproof ways to make a site feel alive: photos slightly zooming in or out, accordions, marquee text and staggered slide-up entrances, with a warning about marquee-style usability."},
+    {"name": "Micro-interactions", "summary": "Offset buttons on backgrounds or images can be animated easily with a hover effect."},
+    {"name": "Prototyping", "summary": "Builds an offset-button hover by duplicating the frame, moving the background, and connecting the two frames with a hover effect in prototyping mode."},
+    {"name": "Design process", "summary": "Start a website by wireframing, and make the wireframe's layout varied, since a boring and average wireframe usually leads to a boring site."},
+    {"name": "Portfolio and case studies", "summary": "Reworks an old, pretty average portfolio design: centered text, a larger name, rearranged stats, mobile screens below and a staggered slide-up entrance."},
+    {"name": "Design taste and judgement", "summary": "Distinguishes a good design from an interesting one and argues interesting sites have more variety in layouts, colors and sizes, and more originality."}
+  ],
+  "claims": [
+    {"claim": "A site can be well made and follow all the right principles yet still be boring.", "evidence": "following all the right principles nav looks good spacing looks good"},
+    {"claim": "As attention spans get shorter and technology advances, captivating and interesting websites are all the rage.", "evidence": "captivating and interesting websites are all the rage"},
+    {"claim": "If the wireframe's layout is boring and average, the rest of the website usually follows suit.", "evidence": "if you start by wireframing a website and the layout is boring"},
+    {"claim": "Most desktop websites have 1, 2, 3 or 4 columns of content.", "evidence": "most desktop websites have 1 2 three or four columns"},
+    {"claim": "Boring websites repeat one column layout, namely image on the left and text on the right or the reverse.", "evidence": "boring websites have a column layout that repeats over and over"},
+    {"claim": "Mixing in a full-screen section, some cards and three columns already makes a site look much better.", "evidence": "throwing in a full screen section and some cards and three columns"},
+    {"claim": "Breaking the box can be difficult to pull off without things looking wonky.", "evidence": "Breaking the Box can be difficult to pull off correctly"},
+    {"claim": "Images make up a significant portion of a website, so their quality can make or break it.", "evidence": "the quality of the images on your website Can Make It or Break It"},
+    {"claim": "AI images are becoming high quality enough to use, but they don't fit all circumstances.", "evidence": "with AI images becoming more and more high quality"},
+    {"claim": "Removing the background of a single-object photo draws attention to it and breaks the box at the same time.", "evidence": "removing the background can be a great way to draw attention"},
+    {"claim": "Masking images into shapes that match the site's style makes a layout more unique.", "evidence": "masking your images so they have different shapes"},
+    {"claim": "Making an element bigger draws attention to it and adds variety.", "evidence": "making an element bigger draws attention to it"},
+    {"claim": "Interesting websites have more variety in layouts, colors, sizes and everything else.", "evidence": "interesting websites are those with more variety"},
+    {"claim": "Stacking a two-column horizontal layout into a one-column vertical layout means only one feature is in focus at a time.", "evidence": "we're only ever focused on one feature at a time"},
+    {"claim": "Offset buttons on backgrounds or images add a lot of depth and can be animated super easily.", "evidence": "offset buttons on backgrounds or images add a lot of depth"},
+    {"claim": "Sections with adjusted backgrounds separate content and add depth.", "evidence": "adding sections with adjusted backgrounds on them"},
+    {"claim": "In dark mode, the dark background reads as farther back than light foreground cards, creating depth.", "evidence": "this dark background being farther back than the light foreground"},
+    {"claim": "Dark mode won't be applicable to all sites but should work well on most modern-themed websites.", "evidence": "should work well on most modern themed websites"},
+    {"claim": "Primary and accent colors are often far too saturated to use in dark mode.", "evidence": "often our primary and accent colors are far too saturated"},
+    {"claim": "Switching to dark mode with a few quick changes entirely changes the look and feel of a website.", "evidence": "we've entirely changed the whole look and feel of this website"},
+    {"claim": "Replacing white backgrounds with off-whites adds color and makes a design feel more cohesive.", "evidence": "replace your white background with some off whites"},
+    {"claim": "Incorporating movement is one of the most foolproof ways to make a website feel unique and alive.", "evidence": "one of the most foolproof ways to make a website feel unique and alive"},
+    {"claim": "Photos slightly zooming in or out are classy and very easy to implement.", "evidence": "animations like photos slightly zooming in or out are classy"},
+    {"claim": "Sections like marquee text come with reduced usability.", "evidence": "consider the reduced usability when using sections like these"}
+  ],
+  "quotes": [
+    "a good design and an interesting one are two very different things",
+    "not everything needs to be a boring white background",
+    "interesting websites are those with more variety"
+  ],
+  "tags": ["web-design", "landing-pages", "layout", "breaking-the-box", "imagery", "depth", "dark-mode", "backgrounds", "motion", "portfolio", "kole-jain"],
+  "authority": "reference",
+  "rules": [
+    {"rule": "Start a website by wireframing, and make the wireframe's layout varied rather than boring and average.", "why": "If the wireframed layout is boring and average, the rest of the website usually follows suit.", "kind": "do", "strength": "should", "area": "process", "applies_to": "web", "values": [], "evidence": "hopefully you start by wireframing"},
+    {"rule": "Do not repeat the same image-on-one-side, text-on-the-other column layout section after section; mix in a full-screen section, cards and a three-column section.", "why": "Boring websites repeat one column layout over and over; mixing it up will already make the site look much better.", "kind": "dont", "strength": "should", "area": "layout", "applies_to": "web", "values": ["three columns"], "evidence": "boring websites have a column layout that repeats over and over"},
+    {"rule": "Break the box: let some sections overlap, or let elements such as a sliding card section extend outside the frame.", "why": "When everything is lined up perfectly in columns and rows the layout is less interesting; breaking the box is a common technique to make layouts more interesting.", "kind": "do", "strength": "consider", "area": "layout", "applies_to": "web", "values": [], "evidence": "a common technique to make layouts more interesting is called breaking the Box"},
+    {"rule": "Start breaking the box with small changes, such as shifting a row of cards up and down relative to each other.", "why": "Breaking the box is difficult to pull off without things looking wonky; shifting cards adds the feeling of some movement.", "kind": "do", "strength": "consider", "area": "layout", "applies_to": "web", "values": [], "evidence": "take these cards and shift them up and down"},
+    {"rule": "Use high-quality images.", "why": "Images make up a significant portion of a website, so their quality can make it or break it.", "kind": "do", "strength": "should", "area": "content", "applies_to": "all", "values": [], "evidence": "the quality of the images on your website Can Make It or Break It"},
+    {"rule": "Use AI-generated images only where they fit the circumstances; otherwise work with the photos you have.", "why": "AI images are becoming more and more high quality, but they don't fit in all circumstances.", "kind": "do", "strength": "consider", "area": "content", "applies_to": "all", "values": [], "evidence": "they don't fit in all circumstances"},
+    {"rule": "For a photo with a single object as its focus, remove the background.", "why": "It draws attention to the object and breaks the box at the same time.", "kind": "do", "strength": "consider", "area": "content", "applies_to": "all", "values": [], "evidence": "removing the background can be a great way to draw attention"},
+    {"rule": "For product images, crop and zoom into a portion of the image.", "why": "Presented as a technique Apple always does a great job of.", "kind": "do", "strength": "consider", "area": "content", "applies_to": "all", "values": [], "evidence": "crop and zoom into a portion of that image"},
+    {"rule": "For landscape or wide-angle shots, add an overlay and place text on it to make a brand messaging section.", "why": "It makes an impactful brand messaging section.", "kind": "do", "strength": "consider", "area": "content", "applies_to": "web", "values": [], "evidence": "add an overlay and pop some text on it"},
+    {"rule": "Mask images into shapes that match the style of the website.", "why": "It is a great way to make a layout more unique.", "kind": "do", "strength": "consider", "area": "shape", "applies_to": "all", "values": [], "evidence": "masking your images so they have different shapes"},
+    {"rule": "Make an element bigger to draw attention to it and to add variety in sizes.", "why": "Making an element bigger draws attention to it and adds variety, and interesting websites have more variety in sizes.", "kind": "do", "strength": "should", "area": "layout", "applies_to": "all", "values": [], "evidence": "making an element bigger draws attention to it"},
+    {"rule": "Do not default to the conventional arrangement (shrunk text, text moved aside, an image beside it); vary layouts, colors and sizes for originality.", "why": "Interesting websites are those with more variety when it comes to layouts, colors, sizes and everything else; the conventional arrangement lacks originality.", "kind": "dont", "strength": "consider", "area": "layout", "applies_to": "web", "values": [], "evidence": "but where would the originality be"},
+    {"rule": "To showcase features one at a time, stack a two-column horizontal layout into a one-column vertical layout with larger elements.", "why": "The viewer is only ever focused on one feature at a time.", "kind": "do", "strength": "consider", "area": "layout", "applies_to": "web", "values": ["two column", "one column"], "evidence": "stacking it into a one column vertical layout"},
+    {"rule": "Add depth with offset buttons on backgrounds or images, not only with shadows, and animate the offset with a hover effect.", "why": "Shadows are the obvious option but not the only one; offset buttons add a lot of depth and can be animated super easily.", "kind": "do", "strength": "consider", "area": "elevation", "applies_to": "all", "values": [], "evidence": "offset buttons on backgrounds or images add a lot of depth"},
+    {"rule": "Separate page sections with adjusted backgrounds to add depth.", "why": "Sections with adjusted backgrounds separate content and add some depth, as on Shopify's site.", "kind": "do", "strength": "consider", "area": "elevation", "applies_to": "web", "values": [], "evidence": "adding sections with adjusted backgrounds on them"},
+    {"rule": "In dark mode, set lighter cards in the foreground over a darker background to create depth.", "why": "The dark background reads as farther back than the light foreground of the cards.", "kind": "do", "strength": "consider", "area": "elevation", "applies_to": "all", "values": [], "evidence": "this dark background being farther back than the light foreground"},
+    {"rule": "Consider dark mode for a modern-themed website, but not for every site.", "why": "It certainly won't be applicable to all sites but should work well on most modern-themed websites, and it entirely changes the look and feel.", "kind": "do", "strength": "consider", "area": "color", "applies_to": "web", "values": [], "evidence": "should work well on most modern themed websites"},
+    {"rule": "When making a dark mode, do not only change the background: flip the text to white and replace over-saturated primary and accent colors with lighter versions.", "why": "Primary and accent colors are often far too saturated for dark mode; the example blue definitely needs to become a lighter blue.", "kind": "do", "strength": "should", "area": "color", "applies_to": "all", "values": [], "evidence": "it's not as simple as just changing the background"},
+    {"rule": "If a dark mode still looks like it is lacking something, add a frosted glass effect to the cards and to the colored background.", "why": "In the example, adding it to the cards and the blue background made the dark design look a lot better.", "kind": "do", "strength": "consider", "area": "elevation", "applies_to": "all", "values": [], "evidence": "adding a frosted glass effect to the cards"},
+    {"rule": "Replace plain white backgrounds with off-whites, or with a nondescript image background with a noise overlay for texture.", "why": "It adds color and makes the design feel more cohesive, without changes as drastic as dark mode.", "kind": "do", "strength": "should", "area": "color", "applies_to": "web", "values": [], "evidence": "replace your white background with some off whites"},
+    {"rule": "Add simple motion such as photos slightly zooming in or out.", "why": "These animations are classy and very easy to implement, and incorporating movement is one of the most foolproof ways to make a site feel unique and alive.", "kind": "do", "strength": "consider", "area": "motion", "applies_to": "web", "values": [], "evidence": "photos slightly zooming in or out are classy"},
+    {"rule": "Use interactive sections like accordions as a way to display information.", "why": "Sections that require interaction to function can be an interactive way to display information.", "kind": "do", "strength": "consider", "area": "components", "applies_to": "web", "values": [], "evidence": "sections like accordion that require interaction to function"},
+    {"rule": "Weigh the reduced usability before adding motion sections like marquee text.", "why": "Marquee text is cool and trendy but comes with reduced usability.", "kind": "do", "strength": "should", "area": "motion", "applies_to": "web", "values": [], "evidence": "consider the reduced usability when using sections like these"},
+    {"rule": "Have a group of images, such as mobile screens, slide up in a staggered sequence when the page loads.", "why": "In the portfolio example this motion was called a definite improvement.", "kind": "do", "strength": "consider", "area": "motion", "applies_to": "web", "values": [], "evidence": "slide up in a staggered fashion"}
+  ],
+  "decisions": [
+    {
+      "question": "How should the sections of a marketing page be laid out?",
+      "options": [
+        {"name": "Repeat one two-column layout", "effect": "Image on one side, text on the other, over and over; well made but boring.", "when": "When a business only needs a plain, well-made site."},
+        {"name": "Vary the layout", "effect": "Mix in full-screen sections, cards and three columns; the page feels much more interesting, as on Shopify's site.", "when": "Most sites that need to be captivating."},
+        {"name": "Break the box", "effect": "Overlapping sections, cards shifted up and down, and card sections that extend past the frame add a feeling of movement.", "when": "When you want more interest and can execute it without looking wonky; start with small changes."}
+      ],
+      "recommendation": "Vary the layout at minimum, then break the box with small changes first; the source says repeated column layouts make sites boring.",
+      "maps_to": "Q-layout-05",
+      "evidence": "if nothing else just try and mix it up a little"
+    },
+    {
+      "question": "How should features be presented: side by side in two columns, or stacked in one column?",
+      "options": [
+        {"name": "Two-column horizontal", "effect": "Image and text sit next to each other in rows.", "when": "The common layout; repeated over and over it becomes boring."},
+        {"name": "One-column vertical stack with larger elements", "effect": "Each feature is shown large, one after another, so only one is in focus at a time.", "when": "Feature showcases where each item deserves full attention, as Apple does."}
+      ],
+      "recommendation": null,
+      "maps_to": null,
+      "evidence": "taking your two column horizontal layout and stacking it"
+    },
+    {
+      "question": "How should photos be treated to make the layout more unique?",
+      "options": [
+        {"name": "Remove the background", "effect": "The single object stands out and breaks the box.", "when": "A photo with a single object as its focus."},
+        {"name": "Crop and zoom", "effect": "A close crop of part of the product.", "when": "Product images."},
+        {"name": "Overlay with text", "effect": "An overlay on the image carries text for an impactful brand messaging section.", "when": "Landscape or wide-angle shots."},
+        {"name": "Mask into shapes", "effect": "Images take shapes that match the site's style.", "when": "When you want a more unique layout."},
+        {"name": "AI-generated images", "effect": "New high-quality imagery.", "when": "Where they fit; they don't fit all circumstances."}
+      ],
+      "recommendation": "Match the treatment to the photo you have: background removal for single objects, crop and zoom for products, overlay text for wide shots.",
+      "maps_to": "Q-img-02",
+      "evidence": "sometimes you're stuck with the photos that you have"
+    },
+    {
+      "question": "How should the design add depth?",
+      "options": [
+        {"name": "Shadows", "effect": "The obvious option.", "when": "Always available, but not the only choice."},
+        {"name": "Offset buttons on backgrounds or images", "effect": "A shifted layer behind the button adds a lot of depth and animates super easily with a hover effect.", "when": "Buttons on backgrounds or images, especially when you want an easy hover animation."},
+        {"name": "Sections with adjusted backgrounds", "effect": "Sections are separated by background, adding some depth.", "when": "Separating page sections, as on Shopify."},
+        {"name": "Dark background behind light cards", "effect": "The dark background reads as farther back than the lighter cards.", "when": "Dark mode designs."},
+        {"name": "Frosted glass", "effect": "Applied to cards and the blue background, it made the dark example look a lot better; listing it as a depth option is an inference, the source adds it in the dark mode section [inferred].", "when": "A dark mode that still looks like it is lacking something."}
+      ],
+      "recommendation": null,
+      "maps_to": "Q-depth-01",
+      "evidence": "Shadows are of course the obvious option here but they aren't our only choice"
+    },
+    {
+      "question": "What should the page background be?",
+      "options": [
+        {"name": "Plain white", "effect": "Can feel boring.", "when": "Not recommended as the only choice; the source says not everything needs a boring white background."},
+        {"name": "Off-whites", "effect": "Adds some color and makes the design feel more cohesive.", "when": "When you want an improvement that isn't drastic."},
+        {"name": "Nondescript image background with a noise overlay", "effect": "Adds texture.", "when": "When you want texture, mixed with off-whites."},
+        {"name": "Dark mode", "effect": "Entirely changes the look and feel; needs white text, lighter primary and accent colors and possibly frosted glass.", "when": "Most modern-themed websites, though not all sites."}
+      ],
+      "recommendation": "For a less drastic change, the source recommends switching up the background, replacing white with off-whites; dark mode is the drastic option and needs lighter accents, not just a new background.",
+      "maps_to": null,
+      "evidence": "if you aren't looking to make changes that are as drastic"
+    },
+    {
+      "question": "Which kind of motion should the site use?",
+      "options": [
+        {"name": "Photos slightly zooming in or out", "effect": "Classy, subtle movement.", "when": "When you want something simple; very easy to implement."},
+        {"name": "Accordions", "effect": "Information is revealed through interaction.", "when": "Content that benefits from an interactive display."},
+        {"name": "Marquee text", "effect": "A cool and trendy section that incorporates motion.", "when": "Only after weighing its reduced usability."},
+        {"name": "Staggered slide-up entrance", "effect": "Items such as mobile screens slide up one after another on load.", "when": "A group of images, as in the portfolio example."},
+        {"name": "Hover on offset elements", "effect": "A hover effect built between two frames, one with the background moved.", "when": "Offset buttons or images."}
+      ],
+      "recommendation": "The source calls photos slightly zooming in or out classy and very easy to implement, and says to consider the reduced usability of sections like marquee text.",
+      "maps_to": null,
+      "evidence": "animations like photos slightly zooming in or out are classy"
+    }
+  ],
+  "process": [
+    {"step": "Wireframe first", "detail": "Start with a wireframe and make sure the layout itself is varied, since a boring wireframe leads to a boring site."},
+    {"step": "Vary the layouts", "detail": "Replace repeated image-and-text rows with a mix of full-screen sections, cards and different column counts."},
+    {"step": "Break the box", "detail": "Outlining everything with boxes shows whether anything overlaps; introduce overlaps, shift cards up and down, or let a card section extend outside the frame."},
+    {"step": "Treat the visuals", "detail": "Use high-quality images and apply a treatment suited to each photo: background removal, crop and zoom, overlay text, or shape masks."},
+    {"step": "Use size", "detail": "Make key elements bigger for attention and variety; consider stacking features into one column."},
+    {"step": "Add depth", "detail": "Use shadows, offset buttons on backgrounds or images, and sections with adjusted backgrounds."},
+    {"step": "Rethink the background", "detail": "Try dark mode (white text, lighter accents, frosted glass) or, for smaller changes, off-whites and textured backgrounds."},
+    {"step": "Add motion", "detail": "Add simple movement such as photos slightly zooming in or out, accordions, marquee text or staggered entrances, weighing usability."},
+    {"step": "Build an offset-button hover in prototyping mode", "detail": "Duplicate the frame, move the background in the copy, switch to prototyping mode, connect the two frames and add a hover effect."},
+    {"step": "Rework a portfolio design (example)", "detail": "Remove the image and stats, center the text and enlarge the name, bring the stats back rearranged, cut text to free vertical space and move everything up, show mobile screens below, then make them slide up in a staggered sequence on reload."}
+  ],
+  "examples": [
+    {"what": "Varied content layout", "where": "Shopify website", "visual_note": "Sections vary between layouts, which makes the site seem much more interesting than repeated columns."},
+    {"what": "Sections with adjusted backgrounds", "where": "Shopify website", "visual_note": "Background changes between sections separate them and add some depth."},
+    {"what": "Layout outlined with boxes to show overlap", "where": null, "visual_note": "Outlining every element shows overlapping sections (box broken) versus a layout where nothing overlaps."},
+    {"what": "Cards shifted up and down, and a sliding card section extending past the frame", "where": null, "visual_note": "Two small ways to break the box that add a feeling of movement."},
+    {"what": "Image treatments: background removed, overlay text on a wide shot, masked shapes", "where": null, "visual_note": "A single-object photo with its background removed breaks the box; a landscape shot with an overlay and text becomes a brand messaging section; images masked into shapes match the site's style."},
+    {"what": "Cropped and zoomed product image; one-column stacked feature layout", "where": "Apple", "visual_note": "Close crops of product photos, and features stacked vertically so one is in focus at a time."},
+    {"what": "Large, varied elements", "where": "DVLP Medicines (dvlpmedicines.com)", "visual_note": "Uses varied sizes and layout instead of a conventional shrunk-text-plus-image arrangement."},
+    {"what": "Light site converted to dark mode", "where": null, "visual_note": "Background darkened, text flipped to white, a saturated blue lightened, then frosted glass added to cards and the blue background."},
+    {"what": "Off-white and textured background", "where": null, "visual_note": "An unnamed site mixing off-whites with a nondescript image background under a noise overlay."},
+    {"what": "Offset button with hover animation", "where": null, "visual_note": "A button with a shifted background layer; a hover effect connects the two frames."},
+    {"what": "Portfolio before and after", "where": "Kole Jain's old portfolio", "visual_note": "Before: a pretty average design with an image and stats. After: centered text, larger name, rearranged stats and a row of mobile screens that slide up in a staggered sequence on reload."}
+  ],
+  "numbers": [
+    {"value": "1 2 three or four", "context": "Number of content columns most desktop websites have (1, 2, 3 or 4).", "evidence": "most desktop websites have 1 2 three or four columns"},
+    {"value": "three columns", "context": "Adding a three-column section, with a full-screen section and cards, to vary a repetitive layout.", "evidence": "some cards and three columns"},
+    {"value": "two column", "context": "The two-column horizontal layout that can be stacked into one column.", "evidence": "two column horizontal layout"},
+    {"value": "one column", "context": "The one-column vertical layout that keeps focus on one feature at a time.", "evidence": "one column vertical layout"}
+  ],
+  "caveats": [
+    "Opinion-led: claims like 'interesting websites are those with more variety' are the creator's view, not tested results.",
+    "No exact values are given: no colors, blur amounts, noise strength, durations, easing curves or stagger delays.",
+    "The prototyping-mode demo does not name the tool; it is presumably Figma [inferred]. The captions say 'drag a node', read here as connecting the two frames.",
+    "The description links custo.io, intercom.com and rose-island.co, but the transcript does not say which on-screen examples they are; the off-white/noise site is unnamed.",
+    "Captions read 'develop medicines'; this was taken as dvlpmedicines.com from the description.",
+    "Marquee usability is flagged but not explained; the video does not discuss accessibility, contrast checks for dark mode, or reduced motion.",
+    "The AI-images advice is dated to the time of publishing ('now could be a good time').",
+    "Ends with a subscribe request; no sponsor segment.",
+    "Published 2024-05-03; auto-generated English transcript without timestamps beyond the intro."
+  ]
+}

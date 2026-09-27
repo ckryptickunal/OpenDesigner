@@ -1,0 +1,88 @@
+{
+  "summary": "A short essay arguing that friction, usually treated as something to remove, also did a second job: the cost of building forced people to decide what was worth making. AI removed that cost, so ideas can become apps in minutes and the bar for what gets built has dropped. Cheap building can be a way of thinking, since prototyping options A and B and comparing them often validates better than theorizing, but only if the idea is actually validated. Without that filter the output feels meaningless and undesigned, which is why people dislike the wave of vibe-coded apps and UI libraries. For a design system process this means keeping a deliberate judgement step between generating options and shipping them [inferred].",
+  "key_ideas": [
+    "Friction is usually treated as bad (slow, inefficient, messy) and products brag about removing it; the author agrees that is mostly right.",
+    "Removing friction is mostly right, but friction also made people think before they built.",
+    "The effort of writing code used to act as a filter on which ideas survived long enough to be built.",
+    "AI removed the cost of building, so the bar for what is worth building fell sharply.",
+    "Building option A and option B and comparing them is often better validation than theorizing; prototyping is thinking.",
+    "Cheap prototypes only count as thinking if the idea is actually validated afterwards.",
+    "With no friction, nothing stops you from shipping both A and B.",
+    "Vibe-coded apps and UI libraries are disliked because there is rarely a thought behind them; they do not feel designed.",
+    "When friction is gone only the output remains, and it feels empty, without texture.",
+    "Friction forces judgement and filters out ideas that do not deserve to be built: it is a feature, not a bug.",
+    "For OpenDesigner, generating many options cheaply is not enough; a person still has to judge and pick before anything ships [inferred]"
+  ],
+  "entities": [
+    {"name": "Emil Kowalski", "type": "person", "description": "Design engineer and author of the essay"},
+    {"name": "aiforui.dev", "type": "product", "description": "Emil Kowalski's course, plugged in the page banner (early access closed)"},
+    {"name": "Swami", "type": "person", "description": "Author of a tweet the essay credits for the 'they just exist' idea"},
+    {"name": "Drazen", "type": "person", "description": "Author of a tweet the essay credits for the 'feature, not a bug' framing and the idea for the piece"},
+    {"name": "Friction", "type": "concept", "description": "The effort and cost of building, which the essay says filters ideas and forces judgement"},
+    {"name": "Vibe-coded apps and UI libraries", "type": "concept", "description": "AI-generated products the essay uses as the example of output with no thought behind it"},
+    {"name": "Prototyping", "type": "concept", "description": "Building options to compare them, framed as a way of thinking when followed by validation"}
+  ],
+  "topics": [
+    {"name": "Design process", "summary": "Keep a judgement step that decides what is worth building; prototype options and validate them before shipping."},
+    {"name": "AI-assisted design", "summary": "AI removed the cost of building, which lowered the bar for what gets built and produced a flood of undesigned apps and UI libraries."},
+    {"name": "Prototyping", "summary": "Building A and B and comparing them is often better validation than theorizing, but only if the comparison actually happens."},
+    {"name": "Design taste and judgement", "summary": "Friction forces judgement; without it the output feels meaningless and does not feel designed."}
+  ],
+  "claims": [
+    {"claim": "Friction is usually treated as bad because it makes us slow, inefficient and messy; products brag about removing it and entire companies exist to be frictionless.", "evidence": "Entire companies exist just to be “frictionless”."},
+    {"claim": "Removing friction is, mostly, the right goal.", "evidence": "And mostly, that’s right."},
+    {"claim": "Friction was quietly doing a second job: it made people think before they built.", "evidence": "it made us think before we built."},
+    {"claim": "Before AI, the expense of writing code set a higher threshold on which ideas were built, forcing people to be selective.", "evidence": "Before AI, writing code was expensive"},
+    {"claim": "AI removed the cost of building, so an idea can become an app in minutes and the bar for what is worth building lowered drastically.", "evidence": "AI removed that cost"},
+    {"claim": "Building option A and B and comparing them is often better validation than theorizing about it.", "evidence": "Building option A and B and comparing them is often better validation than just theorizing about it."},
+    {"claim": "Cheap building only works as thinking if the idea is actually validated; with no friction nothing stops you from shipping both A and B.", "evidence": "But only if you actually validate the idea."},
+    {"claim": "People dislike the recent influx of vibe-coded apps and UI libraries because there is rarely a thought behind them.", "evidence": "That’s why people dislike the recent influx"},
+    {"claim": "When friction is removed only the output is left, and it feels meaningless, empty, without texture.", "evidence": "That’s what happens when we remove friction."},
+    {"claim": "Friction forces judgement and filters out ideas that do not deserve to be built.", "evidence": "So we still need friction."}
+  ],
+  "quotes": [
+    "friction was quietly doing a second job: it made us think before we built.",
+    "Prototyping is thinking.",
+    "They don’t feel designed, they just exist."
+  ],
+  "tags": ["friction", "ai", "vibe-coding", "prototyping", "validation", "judgement", "process", "essay"],
+  "authority": "non-negotiable",
+  "rules": [
+    {"rule": "Before building an idea, decide deliberately whether it deserves to be built; the fact that AI can build it in minutes is not a reason to build it.", "why": "The cost of building used to force this choice; with the cost gone, judgement has to filter out ideas that do not deserve to be built.", "kind": "do", "strength": "should", "area": "process", "applies_to": "all", "values": [], "evidence": "So we still need friction. It forces us to use our judgement"},
+    {"rule": "When choosing between directions, build option A and option B and compare them instead of only theorizing about them.", "why": "Building and comparing options is often better validation than theorizing; prototyping is thinking.", "kind": "do", "strength": "should", "area": "process", "applies_to": "all", "values": [], "evidence": "Building option A and B and comparing them"},
+    {"rule": "Validate a prototyped idea before shipping it; do not treat having built it as the validation.", "why": "Cheap building is a way of thinking only if you actually validate the idea.", "kind": "do", "strength": "must", "area": "process", "applies_to": "all", "values": [], "evidence": "But only if you actually validate the idea."},
+    {"rule": "Do not ship option A and option B just because building them took little effort; let validation and judgement, not the low cost, decide what ships.", "why": "With no friction nothing stops you from shipping both, and output without a thought behind it feels meaningless.", "kind": "dont", "strength": "should", "area": "process", "applies_to": "all", "values": [], "evidence": "Nothing stops you from shipping A and B"},
+    {"rule": "Do not release apps or UI libraries that were generated without a thought behind them.", "why": "People dislike vibe-coded apps and UI libraries because there is rarely a thought behind them; they don't feel designed, they just exist.", "kind": "dont", "strength": "should", "area": "process", "applies_to": "all", "values": [], "evidence": "the recent influx of vibe-coded apps and UI libraries"},
+    {"rule": "Remove friction that only makes work slow or messy, but keep the friction that forces judgement about what is worth building; treat that friction as a feature, not a bug.", "why": "Removing friction is mostly right, but friction was quietly doing a second job: it made people think before they built and filtered out ideas that do not deserve to be built.", "kind": "do", "strength": "should", "area": "process", "applies_to": "all", "values": [], "evidence": "It’s a feature, not a bug."}
+  ],
+  "decisions": [
+    {
+      "question": "When there are two possible directions and AI makes building both cheap, how do we choose what to ship?",
+      "options": [
+        {"name": "Theorize only", "effect": "Decide by discussion without building anything; the source says this is often weaker validation than building and comparing.", "when": "The source gives no case where this wins when building is cheap [inferred]"},
+        {"name": "Prototype A and B, validate, ship what passes", "effect": "Both options are built and compared, and judgement filters out what does not deserve to be built before anything ships.", "when": "Whenever the choice is unclear and building is cheap."},
+        {"name": "Ship both A and B", "effect": "Output with no thought behind it; the product feels meaningless and does not feel designed.", "when": "The source presents this as the failure mode, not a choice."}
+      ],
+      "recommendation": "Prototype both options and compare them, because prototyping is thinking, but actually validate and ship only what judgement says deserves to be built.",
+      "maps_to": null,
+      "evidence": "Building option A and B and comparing them is often better validation than just theorizing about it."
+    }
+  ],
+  "process": [
+    {"step": "Filter the idea", "detail": "Use judgement to decide whether the idea is worth making before building it, since the effort of building no longer does this for you."},
+    {"step": "Prototype the options", "detail": "Build option A and option B cheaply rather than only theorizing about which is better."},
+    {"step": "Validate", "detail": "Compare the prototypes and actually validate the idea; building alone is not validation."},
+    {"step": "Ship only what passed", "detail": "Ship the option that survived validation instead of shipping both because it cost little effort."}
+  ],
+  "examples": [
+    {"what": "The recent influx of vibe-coded apps and UI libraries", "where": "Not named; described generally", "visual_note": "No image. Used as the example of friction-free output: they rarely have a thought behind them, don't feel designed, and feel empty, without texture."}
+  ],
+  "numbers": [],
+  "caveats": [
+    "Opens with a plug for the author's course aiforui.dev (banner says early access has closed); not a rule.",
+    "Publication date is unknown in the raw file.",
+    "Short opinion essay with no data; the claims about why people dislike vibe-coded apps are the author's view.",
+    "The two central framings are credited to tweets by Swami and Drazen, so they are secondhand ideas the author endorses.",
+    "The essay does not say how to validate an idea (who, with what method, or what counts as passing)."
+  ]
+}

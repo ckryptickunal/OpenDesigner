@@ -1,0 +1,60 @@
+name: OpenWiki upstream
+
+# OpenWiki (the engine behind learn/) changes often. Weekly, and on demand, this job installs its latest
+# commit, runs OpenWiki's own tests and ours (tools/test_wiki.py, including the integration tests), and
+# opens an issue when it has moved past learn/openwiki.lock.json. Adopting it stays a human step:
+# `.venv-wiki/bin/python tools/wiki.py upstream --upgrade`, which moves the lock only when both suites pass.
+
+on:
+  schedule:
+    - cron: "17 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  upstream:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+
+      - name: Compare the lock with OpenWiki HEAD
+        id: cmp
+        run: |
+          locked=$(python3 -c "import json;print(json.load(open('learn/openwiki.lock.json'))['commit'])")
+          head=$(git ls-remote https://github.com/ckryptickunal/OpenWiki.git HEAD | cut -f1)
+          echo "locked=$locked" >> "$GITHUB_OUTPUT"
+          echo "head=$head" >> "$GITHUB_OUTPUT"
+          echo "OpenWiki: tested ${locked:0:7}, HEAD ${head:0:7}" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Test OpenWiki HEAD against this repo
+        if: steps.cmp.outputs.locked != steps.cmp.outputs.head
+        id: test
+        continue-on-error: true
+        run: |
+          pip install -q "git+https://github.com/ckryptickunal/OpenWiki.git@${{ steps.cmp.outputs.head }}" pytest
+          git clone -q https://github.com/ckryptickunal/OpenWiki.git /tmp/openwiki
+          git -C /tmp/openwiki checkout -q ${{ steps.cmp.outputs.head }}
+          (cd /tmp/openwiki && python -m pytest -o addopts= -q -m "not live") | tail -3 | tee -a "$GITHUB_STEP_SUMMARY"
+          python tools/test_wiki.py 2>&1 | tail -3 | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: Open or update an issue
+        if: steps.cmp.outputs.locked != steps.cmp.outputs.head
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          result="${{ steps.test.outcome }}"
+          title="OpenWiki moved to ${{ steps.cmp.outputs.head }}"
+          body="OpenWiki HEAD is ${{ steps.cmp.outputs.head }}; learn/openwiki.lock.json has ${{ steps.cmp.outputs.locked }}. Tests against HEAD: ${result}. Adopt it with: .venv-wiki/bin/python tools/wiki.py upstream --upgrade (see docs/KNOWLEDGE.md section 5). Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          if gh issue list --state open --search "$title in:title" --json number --jq '.[0].number' | grep -q .; then
+            echo "issue already open"
+          else
+            gh issue create --title "$title" --body "$body" --label "area: tooling" || gh issue create --title "$title" --body "$body"
+          fi

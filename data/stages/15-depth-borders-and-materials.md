@@ -16,10 +16,15 @@ Zoom 1 broad · weight high · changes 5 decisions · class G · cards DC-L09-02
 - **Why:** Shadows feel real to the touch, color steps feel calm, borders feel technical, and glass feels premium. In L09's (inferred) ranking, this is the second biggest way systems differ in look (divergence 2) [DC-L09-02].
 - **Options:**
   - `shadow` Shadow ladder: tactile, layered (Fluent dual shadows, Polaris 7 levels, Tailwind 7) [DC-L09-02].
+    - Now: A ladder of shadows: tactile and clearly layered, like Fluent and Polaris. As it grows: Best kept for things that float, like menus and dialogs; static cards can use color steps instead.
   - `tonal` Tonal layers: flat, calm, color-forward (Carbon layers, Material surface containers, Linear) [DC-L09-02].
+    - Now: Layers separate by color steps: flat, calm and color-forward, like Carbon and Linear. As it grows: Suits data-dense tools; needs 4-5 close gray steps, and clickable card edges need 3:1 contrast.
   - `borders` Borders only: dense, technical (GOV.UK, Primer) [DC-L09-02].
+    - Now: Thin lines only: dense and technical, like GOV.UK and Primer. As it grows: A house standard prefers see-through shadows to solid borders, and clickable card edges need 3:1 contrast.
   - `ring-shadow` 1px ring plus soft shadow (Radix, Geist, Chakra, Airbnb) [DC-L09-02].
+    - Now: A faint 1 px ring plus a soft shadow: crisp edges, like Radix, Geist and Airbnb. As it grows: Matches the house standard's see-through edges; in dark mode, lighter surfaces replace shadows.
   - `glass` Materials and glass: premium, content-first (Apple Liquid Glass, Airbnb) [DC-L09-02].
+    - Now: Frosted, see-through materials: premium and content-first, like Apple's Liquid Glass. As it grows: Every glass surface needs a solid version for people who reduce transparency or raise contrast; large blurs may also slow drawing. [inferred]
 - **Default:** in-page containers flat with a border or tinted fill; shadows only for things that float (menus, popovers, dialogs, drag states); in light mode a 1px ring plus soft shadow, in dark mode a lighter surface per level *Source:* card heuristics [DC-L04-10, DC-L08-15]; L09 shared pattern row 12.
 - **Show:** the live stack re-rendered per option, light and dark.
 - **Use / avoid:** use tonal or borders for data-dense tools; avoid shadows on static in-page cards when the same color steps would do [DC-L09-02, DC-L04-10].

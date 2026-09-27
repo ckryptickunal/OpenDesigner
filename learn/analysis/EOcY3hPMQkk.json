@@ -1,0 +1,863 @@
+{
+  "summary": "Kole Jain redesigns a file management app to show the common color mistakes that make beginner UIs look cheap or confusing, arguing that less color is almost always better. He covers cutting competing accent colors, keeping backgrounds neutral (which he calls neutral balance), stretching a small brand palette with analogous and complementary hues, and using grays instead of pure black and white to build hierarchy. He shows that dark mode should be designed on purpose rather than made by inverting light mode, that destructive actions need red even when it is off-brand, and that hover, press and disabled states can be made from lighter, darker and desaturated versions of the base color. For a design system, this gives concrete rules for accent use, neutral surfaces, text grays, dark-mode adjustments, semantic colors and state colors, plus brand examples (Lemon Squeezy, Headspace, Dribbble, Mailchimp, Airbnb).",
+  "key_ideas": [
+    "Less is almost always more with color: not everything should be a different color.",
+    "Several accent colors on one screen compete for attention; reducing the palette creates clarity.",
+    "The 60-30-10 rule splits a screen into 60% dominant neutral, 30% secondary and 10% accent color.",
+    "A brand color on an unimportant element can dominate the page; lighten it and switch its text to black.",
+    "Icons are recognizable symbols and mostly need no color; color on icons should signal status, such as an active tab.",
+    "Neutral balance works like white space: backgrounds should stay in the background, so start with a neutral gray background and a white or very light foreground.",
+    "A neutral gray can carry a hint of the brand hue to add color without overpowering the visuals.",
+    "Sometimes the cleanest way to separate a card is a simple border rather than another background layer.",
+    "A limited brand palette can be extended by rotating the brand hue slightly (analogous) or crossing the color wheel (complementary).",
+    "Brand colors can be adapted, for example darkened, to pass contrast checks and serve good design.",
+    "Pure black and white are not wrong, but grays are often the better option for hierarchy; less important text, labels and borders can be gray.",
+    "Dark mode is not the inverse of light mode: borders and surfaces need more separation, text should be light gray, and pure white is kept for the most important items.",
+    "Destructive actions use red even when the brand color is different, which is why red and green sit in many brand palettes.",
+    "Hover is slightly lighter or brighter, press is slightly darker and disabled is desaturated; mobile has no hover, so it relies on press effects.",
+    "The seven mistakes the title promises are, in order: too many colors, no neutral balance, being stuck with brand colors, overusing pure black and white, inverting for dark mode, on-brand destructive actions, and missing element states [inferred]"
+  ],
+  "entities": [
+    {
+      "name": "Kole Jain",
+      "type": "person",
+      "description": "Creator of the channel; presents the file management app redesign."
+    },
+    {
+      "name": "Lemon Squeezy",
+      "type": "company",
+      "description": "Colorful example of the 60-30-10 rule: purple 60%, yellow 30%, white as the accent in one section."
+    },
+    {
+      "name": "Headspace",
+      "type": "company",
+      "description": "Uses a tint of its bright orange in card backgrounds to add color without overpowering the visuals."
+    },
+    {
+      "name": "Dribbble",
+      "type": "company",
+      "description": "Example of reversing background and foreground in light mode for a small UI feature (its search bar)."
+    },
+    {
+      "name": "Mailchimp",
+      "type": "company",
+      "description": "Bright yellow primary paired with a complementary turquoise secondary."
+    },
+    {
+      "name": "Airbnb",
+      "type": "company",
+      "description": "Very bright pink paired with a much deeper pink."
+    },
+    {
+      "name": "WCAG",
+      "type": "concept",
+      "description": "Contrast checks used to judge whether card colors and brand colors with white text are usable."
+    },
+    {
+      "name": "60-30-10 rule",
+      "type": "concept",
+      "description": "Color proportion guide: 60% dominant neutral, 30% secondary, 10% accent."
+    },
+    {
+      "name": "Neutral balance",
+      "type": "concept",
+      "description": "Using neutral color the way white space is used, so backgrounds recede and hierarchy is clear."
+    },
+    {
+      "name": "Figma",
+      "type": "tool",
+      "description": "The redesign's Figma files are linked in the description."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Color",
+      "summary": "Reduce competing accents, follow 60-30-10 loosely, keep backgrounds neutral, extend a small brand palette with analogous and complementary hues, and use grays instead of pure black and white for hierarchy."
+    },
+    {
+      "name": "Dark mode and themes",
+      "summary": "Do not invert light mode: brighten borders and cards, use light grays for text, reserve pure white for the most important text or actions, lower gray brightness more aggressively, and desaturate the logo a touch."
+    },
+    {
+      "name": "Accessibility",
+      "summary": "Colored cards and brand colors with white text often fail WCAG contrast checks; lighten backgrounds with black text, darken the brand color, or pick a complementary color that passes."
+    },
+    {
+      "name": "Visual hierarchy",
+      "summary": "Neutral balance works like white space; secondary information such as file size, type and labels can be dark or light gray instead of black."
+    },
+    {
+      "name": "Buttons and actions",
+      "summary": "Delete buttons use red rather than the brand color; hover is lighter or brighter, press darker, disabled desaturated, and a light gray button with white text reads as disabled on its own."
+    },
+    {
+      "name": "Icons and imagery",
+      "summary": "Icons mostly need no color; color on an icon should communicate status, such as the active tab."
+    },
+    {
+      "name": "Depth, shadows and borders",
+      "summary": "Instead of adding another colored background layer to cards, a simple border is sometimes the best way to separate them."
+    },
+    {
+      "name": "Cards and sections",
+      "summary": "Do not give each card its own bright accent; lighten a brand-colored card and switch its text to black, use a light brand tint behind cards (Headspace), or drop the card background and use a simple border."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Most of the brightly colored cards in the starting design fail WCAG contrast checks, so they cannot reasonably be used.",
+      "evidence": "they almost all fail the WCAG contrast checks"
+    },
+    {
+      "claim": "The 60-30-10 rule means 60% dominant neutral color, 30% secondary color and 10% accent color.",
+      "evidence": "60% of our dominant neutral color, 30% secondary color, and 10% accent color"
+    },
+    {
+      "claim": "Lemon Squeezy uses purple as the 60%, yellow as the 30%, and white as the accent in one section.",
+      "evidence": "Lemon Squeezy is a good and very colorful example"
+    },
+    {
+      "claim": "Five or more accent colors on the cards compete for attention.",
+      "evidence": "at least five different accent colors on these cards"
+    },
+    {
+      "claim": "Using the bright brand color on the cards makes an unimportant element dominate the page and creates accessibility issues.",
+      "evidence": "The bright purple dominates the page"
+    },
+    {
+      "claim": "Reducing the palette creates more clarity for the user.",
+      "evidence": "By reducing our palette, we've already created more clarity for the user"
+    },
+    {
+      "claim": "Bright colors are almost never right for backgrounds, because backgrounds should stay in the background.",
+      "evidence": "Almost never will you want bright colors for your background"
+    },
+    {
+      "claim": "Headspace uses a tint of its bright orange in card backgrounds to add color without overpowering the visuals.",
+      "evidence": "Headspace does this very thing"
+    },
+    {
+      "claim": "In light mode, reversing background and foreground can give better accessibility for smaller UI features such as Dribbble's search bar.",
+      "evidence": "reversing the background and foreground"
+    },
+    {
+      "claim": "Analogous and complementary colors derived from the brand color work well together in the UI.",
+      "evidence": "they're analogous and complimentary colors"
+    },
+    {
+      "claim": "An orange brand color that fails WCAG with white text passes once darkened, and a complementary blue also passes.",
+      "evidence": "fails WCAG checks with white text"
+    },
+    {
+      "claim": "Mailchimp pairs bright yellow with a complementary turquoise, and Airbnb pairs a very bright pink with a much deeper pink.",
+      "evidence": "Take Mailchimp for example"
+    },
+    {
+      "claim": "Dark colors need to be more different from each other than light colors for the difference to be visible.",
+      "evidence": "dark colors need to be more different than light colors"
+    },
+    {
+      "claim": "Inverting all light-mode colors gives a dark mode that is not awful but not ideal.",
+      "evidence": "If we were to inverse all the colors on our light mode"
+    },
+    {
+      "claim": "A brand-colored delete button draws attention and does not show that the action is destructive.",
+      "evidence": "draws attention to the button and doesn't illustrate its destructive nature"
+    },
+    {
+      "claim": "Red and green are often in a brand's color palette even when they are not brand colors, for usability.",
+      "evidence": "red and green are often in a brand's color palette"
+    },
+    {
+      "claim": "A light gray button with white text reads as disabled without any other visual cue, and this also holds in dark mode.",
+      "evidence": "this button is obviously disabled"
+    },
+    {
+      "claim": "Mobile has no hover effects, so designs rely on press effects; a slightly darker gray on press feels like pressing into something.",
+      "evidence": "we don't have hover effects on mobile"
+    },
+    {
+      "claim": "Using more gray and less black and white is what separates mediocre designers from professional ones (opinion).",
+      "evidence": "Getting comfortable with using more gray"
+    }
+  ],
+  "quotes": [
+    "Less is almost always more with color.",
+    "For the most part, icons need no color.",
+    "dark mode is not just the inverse of light mode."
+  ],
+  "tags": [
+    "color",
+    "palette",
+    "60-30-10",
+    "neutral-balance",
+    "contrast",
+    "wcag",
+    "brand-color",
+    "analogous",
+    "complementary",
+    "grays",
+    "dark-mode",
+    "semantic-color",
+    "destructive-action",
+    "button-states",
+    "icons",
+    "kole-jain"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "Do not give each card or element its own accent color; keep one accent and reduce the palette.",
+      "why": "At least five different accent colors on the cards all compete for attention; reducing the palette creates clarity.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "at least five different accent colors on these cards"
+    },
+    {
+      "rule": "Check colored card and text pairs against WCAG contrast and drop colors that fail.",
+      "why": "Cards that fail the WCAG contrast checks cannot reasonably be used.",
+      "kind": "do",
+      "strength": "must",
+      "area": "accessibility",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "they almost all fail the WCAG contrast checks"
+    },
+    {
+      "rule": "Use the 60-30-10 split as a rough check: about 60% dominant neutral, 30% secondary color, 10% accent.",
+      "why": "Five accents competing for attention is the problem it addresses; the redesign only 'somewhat' hits it, so it works as a guide rather than a strict rule [inferred]",
+      "kind": "do",
+      "strength": "consider",
+      "area": "color",
+      "applies_to": "all",
+      "values": [
+        "60%",
+        "30%",
+        "10%"
+      ],
+      "evidence": "603010 rule"
+    },
+    {
+      "rule": "When a brand-colored surface belongs to an unimportant element, lighten the color and switch its text to black.",
+      "why": "The bright brand color dominates the page for an element that isn't important and causes accessibility issues.",
+      "kind": "do",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "A good fix is to lighten it up"
+    },
+    {
+      "rule": "Leave icons uncolored and reserve icon color for status, such as marking the active tab.",
+      "why": "An icon's job is to be a recognizable symbol; color should communicate status.",
+      "kind": "do",
+      "strength": "should",
+      "area": "iconography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "icons need no color"
+    },
+    {
+      "rule": "Remove colors that are used only for the sake of using color.",
+      "why": "Reducing the palette creates more clarity for the user.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "used just for the sake of using color"
+    },
+    {
+      "rule": "Do not use bright colors or bright gradients for page backgrounds; start with a neutral gray background and a very light or white foreground.",
+      "why": "Backgrounds should stay in the background (neutral balance, the color version of white space); the sandy yellow gradient did not.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Almost never will you want bright colors for your background"
+    },
+    {
+      "rule": "In dark mode, put the darker colors in the background and slightly lighter colors in the foreground.",
+      "why": "Same neutral-balance idea as light mode.",
+      "kind": "do",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "This is the same idea for a dark mode"
+    },
+    {
+      "rule": "Add a hint of the brand hue to neutral grays, or use a light tint of the brand color on card backgrounds, to bring in color without overpowering the visuals.",
+      "why": "It adds a splash of color without overpowering the visuals (Headspace does this with a tint of its orange on cards).",
+      "kind": "do",
+      "strength": "consider",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "adding a hint of purple to it"
+    },
+    {
+      "rule": "In light mode, consider reversing the usual background and foreground for smaller UI features such as a search bar.",
+      "why": "It can give better accessibility for smaller UI features, as in Dribbble's search bar.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "reversing the background and foreground"
+    },
+    {
+      "rule": "To separate cards, prefer a simple border over adding another colored background layer.",
+      "why": "Adding another layer of color to the UI is a lot of clutter; maintaining neutral balance sometimes means removing backgrounds altogether.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "elevation",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "sometimes a simple border is the best solution"
+    },
+    {
+      "rule": "When the brand palette is too small, extend it by rotating the brand hue slightly on the color wheel (analogous) or picking the color across the wheel (complementary), rather than only changing opacity.",
+      "why": "Changing opacity feels bland; analogous and complementary colors work well together on the UI.",
+      "kind": "do",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "rotate our purple slightly on the color wheel"
+    },
+    {
+      "rule": "If a brand color fails WCAG with white text, darken it until it passes or use a complementary color that passes.",
+      "why": "The orange brand color failed with white text; the darker version and a complementary blue both pass.",
+      "kind": "do",
+      "strength": "should",
+      "area": "accessibility",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "fails WCAG checks with white text"
+    },
+    {
+      "rule": "Adapt brand colors when needed to accommodate good design instead of treating brand guidelines as fixed.",
+      "why": "Many brands do this, such as Mailchimp's yellow with turquoise and Airbnb's bright pink with a deeper pink.",
+      "kind": "do",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "don't be afraid to adapt brand colors"
+    },
+    {
+      "rule": "Use dark gray, not pure black, for less important information such as file size and file type, and the same for labels and borders; well-grouped elements can go lighter still.",
+      "why": "Hierarchy: this information isn't super important, and because the elements are well grouped they can be lightened.",
+      "kind": "do",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "we can use a dark gray instead"
+    },
+    {
+      "rule": "In light mode, consider a very dark brand hue (such as dark purple) for text instead of pure black.",
+      "why": "Often there are better options than black or white; most of the redesign's text is light gray or dark purple, not black.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "most of the text is light gray or dark purple, not even black"
+    },
+    {
+      "rule": "In dark mode, lower the brightness of grays more aggressively than in light mode and reserve white for only the most important actions.",
+      "why": "Dark modes have a distinct focus on eye strain.",
+      "kind": "do",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Reserving white only for the most important actions"
+    },
+    {
+      "rule": "Do not make dark mode by inverting the light-mode colors; build the palette with the goals of dark mode in mind.",
+      "why": "Inverting gives a result that is not awful but certainly not ideal.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "dark mode is not just the inverse of light mode"
+    },
+    {
+      "rule": "In dark mode, brighten borders and main card surfaces more than an inversion would.",
+      "why": "Dark colors need to be more different than light colors to see the difference.",
+      "kind": "do",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "brighten up these borders and the main card"
+    },
+    {
+      "rule": "In dark mode, use light grays for text and brighten only the most important text (for example the logo and storage used) to pure white.",
+      "why": "Light grays are easier on the eyes than white.",
+      "kind": "do",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "light grays work best on dark mode"
+    },
+    {
+      "rule": "In dark mode, desaturate the logo a touch.",
+      "why": "The source gives no reason; its redesign does this when converting to dark mode, while saying the other colors are probably fine.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "our logo should be desaturated a touch"
+    },
+    {
+      "rule": "Use red, not the brand color, for destructive actions such as delete.",
+      "why": "A brand-colored delete button draws attention and doesn't illustrate its destructive nature; it wouldn't fly from a usability point of view.",
+      "kind": "do",
+      "strength": "must",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Instead, we use red; wouldn't fly from a usability point of view"
+    },
+    {
+      "rule": "Include red and green in the palette even when they are not brand colors.",
+      "why": "Usability needs them, for example for destructive actions.",
+      "kind": "do",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "red and green are often in a brand's color palette"
+    },
+    {
+      "rule": "Notification indicators may use red or the brand color.",
+      "why": "Notifications are much more flexible than destructive actions.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Red is also often used for notifications"
+    },
+    {
+      "rule": "Make hover states a slightly lighter or brighter version of the base color.",
+      "why": "Hover and press are the most common element states, and color alone can show them.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "For hover states, use a slightly lighter or brighter version"
+    },
+    {
+      "rule": "Make active or pressed states a slightly darker version of the base color.",
+      "why": "Hover and press are the most common element states, and color alone can show them.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "For an active or press state, use a slightly darker version"
+    },
+    {
+      "rule": "Make disabled states by desaturating the color, unless it is already grayscale; a light gray fill with white text reads as disabled on its own.",
+      "why": "The button is obviously disabled without other visual cues, and this is bulletproof for dark mode too.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "for a disabled state, just desaturate the color"
+    },
+    {
+      "rule": "On mobile, where there is no hover, give tappable elements a press state, such as a slightly darker gray on press.",
+      "why": "It makes it feel like you're actually pressing into something.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "we don't have hover effects on mobile"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "How should cards that are not the main focus be colored?",
+      "options": [
+        {
+          "name": "A different bright accent color per card",
+          "effect": "Cards burn the eye, compete for attention and mostly fail WCAG contrast.",
+          "when": "Not recommended."
+        },
+        {
+          "name": "Solid brand color",
+          "effect": "Roughly hits 60-30-10, but the bright brand color dominates the page for an unimportant element and causes accessibility issues.",
+          "when": "Not recommended for low-importance elements."
+        },
+        {
+          "name": "Lightened brand tint with black text",
+          "effect": "Draws less attention and keeps text readable.",
+          "when": "When the element should carry some brand color."
+        },
+        {
+          "name": "No background, just a simple border",
+          "effect": "Avoids adding another cluttering layer of color; keeps neutral balance.",
+          "when": "When cards only need to be separated."
+        }
+      ],
+      "recommendation": "Lighten the brand color and use black text, or drop the background and use a simple border; the source says adding another colored layer is a lot of clutter.",
+      "maps_to": null,
+      "evidence": "swap the cards for our brand color; sometimes a simple border is the best solution"
+    },
+    {
+      "question": "How much of the screen should accent color cover?",
+      "options": [
+        {
+          "name": "Many competing accents",
+          "effect": "At least five accents on the cards all compete for attention, and most fail WCAG contrast.",
+          "when": "Not recommended."
+        },
+        {
+          "name": "Brand color on large secondary surfaces",
+          "effect": "Somewhat hits 60-30-10, but the bright brand color dominates the page for an element that isn't important.",
+          "when": "Not for low-importance elements."
+        },
+        {
+          "name": "60-30-10 split",
+          "effect": "60% dominant neutral, 30% secondary, 10% accent; it also works with bold colors, as Lemon Squeezy shows.",
+          "when": "As a rough check on the balance of a screen."
+        }
+      ],
+      "recommendation": "Use less color: one accent kept off unimportant elements, with 60-30-10 as a loose guide rather than a strict rule.",
+      "maps_to": "Q-color-05",
+      "evidence": "Less is almost always more with color; all competing for attention"
+    },
+    {
+      "question": "Should icons be colored?",
+      "options": [
+        {
+          "name": "Colored icons",
+          "effect": "Adds more competing color to the screen.",
+          "when": "Not recommended by default."
+        },
+        {
+          "name": "Uncolored icons, color only for status",
+          "effect": "Icons read as recognizable symbols, and color signals status such as the active tab.",
+          "when": "Default."
+        }
+      ],
+      "recommendation": "Mostly no color; reserve color for status like the active tab.",
+      "maps_to": "Q-icon-05",
+      "evidence": "icons need no color"
+    },
+    {
+      "question": "What should backgrounds and foregrounds look like?",
+      "options": [
+        {
+          "name": "Bright color or gradient background",
+          "effect": "The background stops staying in the background (the sandy yellow gradient).",
+          "when": "Almost never; the source allows notable exceptions."
+        },
+        {
+          "name": "Neutral gray background, white or very light foreground",
+          "effect": "Backgrounds recede and content stands out, like white space does for hierarchy.",
+          "when": "General starting point in light mode."
+        },
+        {
+          "name": "Reversed background and foreground",
+          "effect": "Small features stand out with better accessibility.",
+          "when": "Light mode, for smaller UI features such as Dribbble's search bar."
+        },
+        {
+          "name": "Neutral gray with a hint of the brand hue",
+          "effect": "Adds a splash of color without overpowering the visuals (Headspace's orange tint on cards).",
+          "when": "When you want a little more brand color in the neutrals."
+        }
+      ],
+      "recommendation": "Start with a neutral gray background and a very light or white foreground; tinting the neutral toward the brand hue is an option.",
+      "maps_to": "Q-color-14",
+      "evidence": "start with a neutral gray background and a very light or white foreground"
+    },
+    {
+      "question": "Should neutral grays be pure or tinted toward the brand color?",
+      "options": [
+        {
+          "name": "Pure neutral gray",
+          "effect": "Backgrounds stay fully neutral.",
+          "when": "The plain starting point."
+        },
+        {
+          "name": "Neutral gray with a hint of the brand hue",
+          "effect": "Brings a little brand color into backgrounds without overpowering visuals.",
+          "when": "To integrate more color, as Headspace does with its orange."
+        }
+      ],
+      "recommendation": null,
+      "maps_to": "Q-color-09",
+      "evidence": "taking our neutral gray and adding a hint of purple to it"
+    },
+    {
+      "question": "The brand guidelines give too few colors. How do you get more colors for things like a storage bar?",
+      "options": [
+        {
+          "name": "Change the brand color's opacity",
+          "effect": "Works but feels a little bland.",
+          "when": "When a quiet variation is enough."
+        },
+        {
+          "name": "Analogous: rotate the brand hue slightly",
+          "effect": "Adds related colors (a blue and a pinkish color from purple) that sit well together.",
+          "when": "To add variety that stays close to the brand."
+        },
+        {
+          "name": "Complementary: cross the color wheel",
+          "effect": "Adds a contrasting color (bright yellow opposite purple) that still works with the brand.",
+          "when": "When you need a color that pops against the brand, or when the brand color fails contrast."
+        }
+      ],
+      "recommendation": "Rotate the hue or pick a complementary color rather than only changing opacity; brands like Mailchimp and Airbnb do this.",
+      "maps_to": "Q-color-04",
+      "evidence": "rotate our purple slightly on the color wheel"
+    },
+    {
+      "question": "The brand color fails WCAG contrast with white text. What do you do?",
+      "options": [
+        {
+          "name": "Darken the brand color",
+          "effect": "The darker version passes with white text.",
+          "when": "When the brand hue must stay."
+        },
+        {
+          "name": "Use a complementary color",
+          "effect": "A complementary blue also passes with white text.",
+          "when": "When a secondary color can carry that job."
+        }
+      ],
+      "recommendation": "Either works; don't be afraid to adapt brand colors to accommodate good design.",
+      "maps_to": null,
+      "evidence": "fails WCAG checks with white text"
+    },
+    {
+      "question": "What color should less important text, labels and borders be?",
+      "options": [
+        {
+          "name": "Pure black (or pure white in dark mode)",
+          "effect": "Everything has the same weight, so hierarchy is weaker.",
+          "when": "Not bad in itself; best kept for the most important items."
+        },
+        {
+          "name": "Dark or light gray (or a very dark brand hue)",
+          "effect": "Secondary information recedes and hierarchy becomes clear.",
+          "when": "File size and type, labels, borders; most text in the redesign is light gray or dark purple."
+        }
+      ],
+      "recommendation": "Use more gray and less black and white; the source says this separates mediocre from professional designers.",
+      "maps_to": null,
+      "evidence": "Using pure white and pure black is not bad"
+    },
+    {
+      "question": "How should dark mode be made from light mode?",
+      "options": [
+        {
+          "name": "Invert the light-mode colors",
+          "effect": "Not awful, but certainly not ideal: borders and cards lack separation and all text turns light purple.",
+          "when": "Not recommended."
+        },
+        {
+          "name": "Build the palette with dark-mode goals in mind",
+          "effect": "Brighter borders and cards, light gray text, pure white only on the most important text, a slightly desaturated logo.",
+          "when": "Recommended."
+        }
+      ],
+      "recommendation": "Build the palette for dark mode on purpose rather than inverting.",
+      "maps_to": "Q-color-16",
+      "evidence": "you shouldn't just inverse your colors from light to dark"
+    },
+    {
+      "question": "Should a delete button use the brand color or red?",
+      "options": [
+        {
+          "name": "Brand color background",
+          "effect": "More on brand, but it draws attention to the button and doesn't show it is destructive.",
+          "when": "Not for destructive actions."
+        },
+        {
+          "name": "Red background",
+          "effect": "Clearly signals a destructive action.",
+          "when": "Delete and other destructive actions."
+        }
+      ],
+      "recommendation": "Use red; a brand-colored destructive action wouldn't fly from a usability point of view.",
+      "maps_to": "Q-state-06",
+      "evidence": "we can either have the delete button have a purple background or a red background"
+    },
+    {
+      "question": "What color should notification indicators be?",
+      "options": [
+        {
+          "name": "Red",
+          "effect": "The common convention for notifications.",
+          "when": "Default choice."
+        },
+        {
+          "name": "Brand color",
+          "effect": "Stays on brand.",
+          "when": "Acceptable, since notifications are much more flexible than destructive actions."
+        }
+      ],
+      "recommendation": "Either; the source says notifications could be swapped to the brand color.",
+      "maps_to": null,
+      "evidence": "Red is also often used for notifications"
+    },
+    {
+      "question": "Which interactive states should be designed, and does it differ on mobile?",
+      "options": [
+        {
+          "name": "Hover, press and disabled",
+          "effect": "Hover is slightly lighter or brighter, press slightly darker, disabled desaturated.",
+          "when": "Pointer devices where hover exists."
+        },
+        {
+          "name": "Press only (plus disabled)",
+          "effect": "A slightly darker gray on press makes it feel like pressing into something.",
+          "when": "Mobile, which has no hover effects."
+        }
+      ],
+      "recommendation": "Use lighter for hover, darker for press, desaturated for disabled; on mobile rely on press effects.",
+      "maps_to": "Q-state-04",
+      "evidence": "because we don't have hover effects on mobile, we usually just resort to click effects"
+    }
+  ],
+  "process": [
+    {
+      "step": "Cut competing colors",
+      "detail": "Replace multiple accent colors with the brand color, lighten it for unimportant elements with black text, strip color from icons except for status, and remove colors used only for the sake of color."
+    },
+    {
+      "step": "Set neutral balance",
+      "detail": "Make backgrounds a neutral gray with white or very light foregrounds (darker background, lighter foreground in dark mode), optionally tint the gray toward the brand hue, and use a simple border instead of another colored layer where possible."
+    },
+    {
+      "step": "Extend the brand palette",
+      "detail": "Where brand guidelines give too few colors, rotate the brand hue slightly for analogous colors or cross the wheel for a complementary one; darken or swap brand colors that fail WCAG with white text."
+    },
+    {
+      "step": "Build hierarchy with grays",
+      "detail": "Move secondary text, labels and borders from black to dark or light grays; keep pure black or white for the most important items."
+    },
+    {
+      "step": "Design dark mode separately",
+      "detail": "Starting from the light palette, brighten borders and main surfaces, use light grays for text, brighten only the most important text to pure white, lower gray brightness more aggressively, and desaturate the logo a touch."
+    },
+    {
+      "step": "Add semantic colors",
+      "detail": "Use red for destructive actions such as delete and keep red and green in the palette; notifications can use red or the brand color."
+    },
+    {
+      "step": "Define element states",
+      "detail": "Hover: slightly lighter or brighter. Press: slightly darker. Disabled: desaturated (light gray with white text). On mobile, add press states, since there is no hover."
+    }
+  ],
+  "examples": [
+    {
+      "what": "File management app redesign, before and after",
+      "where": "Kole Jain's demo design (Figma files linked in the description)",
+      "visual_note": "Starts with brightly colored cards in at least five accents, colored icons and a sandy yellow gradient background; ends with a neutral gray background, white foreground, brand-tinted or bordered cards, uncolored icons and gray secondary text, in both light and dark mode."
+    },
+    {
+      "what": "60-30-10 color split in a colorful section",
+      "where": "Lemon Squeezy",
+      "visual_note": "Purple fills about 60%, yellow about 30%, and white acts as the accent, showing the rule also works with bold colors."
+    },
+    {
+      "what": "Brand tint in card backgrounds",
+      "where": "Headspace",
+      "visual_note": "A tint of the bright orange sits behind cards, adding a splash of color without overpowering the visuals."
+    },
+    {
+      "what": "Reversed background and foreground for a small feature",
+      "where": "Dribbble",
+      "visual_note": "Dribbble's search bar reverses the usual light-mode background and foreground, which the source says can help accessibility for smaller UI features."
+    },
+    {
+      "what": "Storage bar colored with analogous and complementary hues",
+      "where": "Kole Jain's demo design",
+      "visual_note": "Changing the purple's opacity feels bland; slightly rotated blue and pinkish hues plus a complementary bright yellow all work well on the UI."
+    },
+    {
+      "what": "Orange brand color with white text failing contrast",
+      "where": "Kole Jain's demo",
+      "visual_note": "Orange with white text fails WCAG; a darker orange passes, and so does a complementary blue."
+    },
+    {
+      "what": "Complementary and paired brand colors",
+      "where": "Mailchimp and Airbnb",
+      "visual_note": "Mailchimp's bright yellow primary with a turquoise secondary; Airbnb's very bright pink with a much deeper pink."
+    },
+    {
+      "what": "Inverted light mode versus designed dark mode",
+      "where": "Kole Jain's demo design",
+      "visual_note": "The straight inversion has weak borders and all-light-purple text; the designed version brightens borders and cards, uses light gray text, makes the logo and storage-used text pure white and desaturates the logo."
+    },
+    {
+      "what": "Delete confirmation pop-up: purple versus red button",
+      "where": "Kole Jain's demo design",
+      "visual_note": "The purple delete button is on brand but hides the destructive nature; the red one signals it clearly."
+    },
+    {
+      "what": "Disabled and pressed button states",
+      "where": "Kole Jain's demo design",
+      "visual_note": "A light gray button with white text reads as disabled in light and dark mode; on mobile a slightly darker gray on press gives a pressed-in feel."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "60%",
+      "context": "60-30-10 rule: share of the dominant neutral color",
+      "evidence": "60% of our dominant neutral color"
+    },
+    {
+      "value": "30%",
+      "context": "60-30-10 rule: share of the secondary color",
+      "evidence": "30% secondary color"
+    },
+    {
+      "value": "10%",
+      "context": "60-30-10 rule: share of the accent color",
+      "evidence": "10% accent color"
+    },
+    {
+      "value": "at least five",
+      "context": "Number of competing accent colors on the starting design's cards",
+      "evidence": "at least five different accent colors on these cards"
+    },
+    {
+      "value": "7",
+      "context": "Number of color mistakes promised in the video title",
+      "evidence": "Title: The 7 Color Mistakes that RUIN your UI Designs"
+    }
+  ],
+  "caveats": [
+    "Sponsor segment for Final Round AI (job search), repeated at the end; not design advice.",
+    "Self-promotion: a resources page on kolejain.com and the Figma files in the description.",
+    "Auto-caption errors: '603010' is the 60-30-10 rule and the 'BY' before it is a mis-hearing; 'complimentary' means complementary; 'dribble' is Dribbble.",
+    "The seven mistakes are not numbered in the transcript; the list in key_ideas is an inferred grouping.",
+    "The source treats 60-30-10 loosely (the redesign only 'somewhat' hits it); OpenDesigner's Q-color-05 already treats 60-30-10 as a soft check [inferred]",
+    "Several statements are opinion, such as using more gray being what separates mediocre from professional designers.",
+    "Brand examples (Lemon Squeezy, Headspace, Dribbble, Mailchimp, Airbnb) reflect their designs around the September 2025 publish date and may have changed.",
+    "Color values (hex codes, exact contrast ratios, tint amounts) are shown on screen but not stated in the transcript, so none are recorded here.",
+    "The hint of purple in the neutral gray and the Headspace tint are introduced right after the dark-mode point, so it is unclear whether the source means dark mode only or both modes.",
+    "Strength 'must' is used only where the transcript is firm (WCAG failures 'we can't reasonably use', an on-brand delete button 'wouldn't fly'); other points are hedged ('almost always', 'not bad', 'notable exceptions') and kept as should or consider."
+  ]
+}

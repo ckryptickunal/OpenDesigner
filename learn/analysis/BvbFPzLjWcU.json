@@ -1,0 +1,532 @@
+{
+  "summary": "Kole Jain takes a skincare website from Dribbble, critiques it element by element, and redesigns its desktop hero into a split-screen beauty landing page. He removes elements that do not earn their place (social links, a page outline on a short site, a written testimonial in the header, decorative shapes), fixes the layout first, and resizes the design to a real browser viewport of 1920 pixels across by about 1,000 pixels tall instead of the taller canvas Dribbble shots use. He then reworks the nav around a logo placed front and center, turns product photos into a card slider, fixes the hero's contrast by choosing a better photo and adding a subtle overlay, reuses the brand font (Apple's New York) from the logo and packaging, and adds subtext with a primary and a secondary call to action. For a design system, it shows a critique-then-rebuild process for marketing heroes, a realistic viewport check, and the habit of reusing brand typography across logo, packaging and UI. He openly says parts of the result favour looks over usability, so those choices are taste, not rules.",
+  "key_ideas": [
+    "A skincare website should lead with great product photos, a bright white background and lots of white space.",
+    "New and interesting layouts are welcome, but like everything in design they can be taken too far.",
+    "Critique the existing design element by element before changing anything, keeping what works (the top nav and its icons).",
+    "When elements are everywhere with no clear layout, fix the layout first and remove what is not needed.",
+    "An ultrawide layout that splits the screen into two halves is common on modern beauty websites.",
+    "Design a desktop hero for a real browser viewport: about 1920 by 1,000 pixels, not a tall Dribbble canvas that hides what would be cut off.",
+    "Simplify a nav by collapsing secondary links into a menu button, turning the cart into an icon and the profile into 'sign in'.",
+    "When there is not enough room to show every product, turn the product cards into a slider.",
+    "Fix hero contrast by first choosing a better photo (right vibe, nothing in the way, good lighting), then adding a subtle overlay if it is still a little bright.",
+    "Reuse the font already on the logo and packaging for the website heading; he 'may as well use it here too'.",
+    "He finishes the hero with subtext plus a primary and a secondary call to action.",
+    "Use ready-made product mockups instead of making product renders from scratch.",
+    "He finds beauty packaging has too much stuff on it from an aesthetic standpoint; for a minimal look he wants less on the pack."
+  ],
+  "entities": [
+    {
+      "name": "Kole Jain",
+      "type": "person",
+      "description": "Designer and YouTuber who critiques and redesigns the Dribbble shot."
+    },
+    {
+      "name": "Dribbble",
+      "type": "product",
+      "description": "Design showcase site the original skincare design came from; used as the example of looks-over-usability shots."
+    },
+    {
+      "name": "Minimal Mockups",
+      "type": "tool",
+      "description": "Mockup site (minimalmockups.com) he used for the skincare product images."
+    },
+    {
+      "name": "Photoshop",
+      "type": "tool",
+      "description": "Tool he reluctantly uses to make the product look good with ready-made mockups."
+    },
+    {
+      "name": "New York",
+      "type": "product",
+      "description": "One of Apple's custom fonts; used for the logo, the packaging and the hero heading."
+    },
+    {
+      "name": "L'Oreal",
+      "type": "company",
+      "description": "Beauty packaging he looked at for reference and found too busy for a minimal look."
+    },
+    {
+      "name": "Figma",
+      "type": "tool",
+      "description": "Format of the free design file linked in the description."
+    },
+    {
+      "name": "Newform",
+      "type": "company",
+      "description": "Design community whose challenge is promoted in the video description."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Landing pages",
+      "summary": "Redesigns a beauty/skincare landing page hero into a split-screen layout with product slider, subtext and primary plus secondary calls to action."
+    },
+    {
+      "name": "Spacing and layout",
+      "summary": "Fix the layout first; use an ultrawide two-half split; design for a real 1920 by about 1,000 pixel viewport rather than a tall canvas."
+    },
+    {
+      "name": "Design taste and judgement",
+      "summary": "Interesting layouts can be taken too far; Dribbble shots often favour aesthetics over usability, and he admits some of his own choices do too."
+    },
+    {
+      "name": "Icons and imagery",
+      "summary": "Product photos matter most on a skincare site; pick hero images by vibe, clutter and lighting, and add a subtle overlay when too bright; use product mockups."
+    },
+    {
+      "name": "Navigation and sidebars",
+      "summary": "Keeps the top nav, removes social links, puts the logo front and center, collapses favorites and notifications into a menu button, uses a cart icon, 'sign in' and a search bar for balance."
+    },
+    {
+      "name": "Typography",
+      "summary": "Reuses Apple's New York font from the logo and packaging for the hero heading."
+    },
+    {
+      "name": "Cards and sections",
+      "summary": "Product cards with buttons placed in chosen corners, shown as a slider with a 'new arrivals' chip."
+    },
+    {
+      "name": "Buttons and actions",
+      "summary": "Hero gets a primary and a secondary call to action, plus an arrow-only button added mainly for looks."
+    },
+    {
+      "name": "Design process",
+      "summary": "Critique the original element by element, gather assets (mockups, logo, packaging), fix layout, then refine nav, products, imagery, type and calls to action."
+    },
+    {
+      "name": "Design resources",
+      "summary": "Uses minimalmockups.com for product mockups and shares a free Figma file."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "On a full-screen browser with the browser bar, most non-curved monitors give 1920 pixels across but only about 1,000 pixels vertically.",
+      "evidence": "the size of most monitors"
+    },
+    {
+      "claim": "Most Dribbble designers use a trick: a canvas about 50% larger than a real screen, so they can include way more, and much of it would be cut off in reality.",
+      "evidence": "it's a trick that most dribble designers use"
+    },
+    {
+      "claim": "An ultrawide layout splitting the screen into two halves is pretty common on modern beauty websites.",
+      "evidence": "an ultrawide layout where we split the screen into two halves"
+    },
+    {
+      "claim": "A skincare website should have great product photos, a bright white background and lots of white space.",
+      "evidence": "when I think of a skincare website"
+    },
+    {
+      "claim": "Sites like this skincare page are typically not long enough to warrant an on-page site outline.",
+      "evidence": "typically sites like this aren't long enough to Warrant it"
+    },
+    {
+      "claim": "Social proof is good, but a written testimonial in the header is the wrong form for it.",
+      "evidence": "social proof is also good but not in the form of a written testimonial"
+    },
+    {
+      "claim": "Beauty packaging such as L'Oreal's has too much on it from an aesthetic standpoint for a minimal look.",
+      "evidence": "too much stuff on there we're going for minimal and bougie"
+    },
+    {
+      "claim": "Adding a search bar helps visually balance the nav, whether or not it is really needed.",
+      "evidence": "adding a search bar helps balance things out"
+    }
+  ],
+  "quotes": [
+    "like all things in design it can be taken too far",
+    "you have 1920 pixels across but only about 1,000 pixels vertically",
+    "an ultrawide layout where we split the screen into two halves is pretty common"
+  ],
+  "tags": [
+    "redesign",
+    "landing-page",
+    "hero-section",
+    "e-commerce",
+    "beauty",
+    "skincare",
+    "split-layout",
+    "viewport",
+    "navigation",
+    "product-cards",
+    "image-overlay",
+    "brand-typography",
+    "dribbble"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "Design desktop hero sections for a real full-screen browser viewport of 1920 pixels across by about 1,000 pixels tall, not a taller showcase canvas.",
+      "why": "Most non-curved monitors give only about 1,000 pixels vertically with the browser bar; taller Dribbble-style canvases hide content that would be cut off.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [
+        "1920 pixels",
+        "about 1,000 pixels",
+        "50% larger"
+      ],
+      "evidence": "the size of most monitors"
+    },
+    {
+      "rule": "For a skincare or beauty website, lead with great product photos on a bright white background with lots of white space.",
+      "why": "That is what he thinks a skincare website should look like, and the Dribbble original had none of those things.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "when I think of a skincare website"
+    },
+    {
+      "rule": "When elements are scattered with no clear layout, fix the layout first before refining visuals.",
+      "why": "The original had things everywhere with no clear layout, so layout was the first fix.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "no clear layout so let's fix that first"
+    },
+    {
+      "rule": "Try interesting, new layouts instead of boring, repetitive structures, but stop before the page loses a clear layout.",
+      "why": "He calls boring, repetitive website structures the bane of his existence, but says like all things in design new layouts can be taken too far; the original missed the mark and had things everywhere with no clear layout.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "like all things in design it can be taken too far"
+    },
+    {
+      "rule": "Don't put social links in the header of a product landing page [inferred: the exact spot is only shown on screen, next to the top nav].",
+      "why": "Having social links there doesn't really make sense, so he packs them up.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "having Social Links here doesn't really make sense"
+    },
+    {
+      "rule": "Skip an on-page site outline on a short landing page; keep it for pages long enough to warrant it.",
+      "why": "He says it is not a bad idea, but sites like this typically aren't long enough to warrant it.",
+      "kind": "dont",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "aren't long enough to Warrant it"
+    },
+    {
+      "rule": "Don't show social proof as a written testimonial in the header.",
+      "why": "Social proof is good, but not in that form in the header; he removes it from the hero.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "not in the form of a written testimonial in the header"
+    },
+    {
+      "rule": "Don't keep decorative shapes that aren't helping the design.",
+      "why": "The original's shapes (which he says look like the character from Google Dino Run) weren't helping out, so he removes them.",
+      "kind": "dont",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "get rid of the Dino Run shapes too those aren't helping out"
+    },
+    {
+      "rule": "Give the hero a larger image without cutouts.",
+      "why": "He says the original image isn't bad, but it would be nicer if it felt larger and didn't have the cutouts.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "it'd be nice feels larger and didn't have these cutouts"
+    },
+    {
+      "rule": "For a modern beauty website hero, consider an ultrawide split layout: image and text in the left half, product images in the right half.",
+      "why": "Splitting the screen into two halves is pretty common on modern beauty websites.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "split the screen into two halves"
+    },
+    {
+      "rule": "When the logo goes front and center in the nav, collapse secondary links (favorites, notifications) into a menu button, show the cart as just an icon and turn the profile link into 'sign in'.",
+      "why": "The original came without a logo, so he puts one front and center and slims the other nav items around it [inferred: he gives no reason for each change].",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "collapse favorites and notifications into a menu button"
+    },
+    {
+      "rule": "When there isn't room to show every product card, make the cards a slider.",
+      "why": "He wanted to display all the products but didn't have a ton of room.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "we're going to make this into a slider"
+    },
+    {
+      "rule": "When a hero photo hurts contrast, first choose a better photo (right vibe, nothing in the way, good lighting), then add a pretty subtle overlay if it is still a little bright.",
+      "why": "He needed to address the contrast; photos failed when they weren't the vibe, things were in the way or the lighting was way off, and the one he picked was still a little bright. The contrast problem is with the hero text on the photo [inferred].",
+      "kind": "do",
+      "strength": "should",
+      "area": "accessibility",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "we need to address the contrast here"
+    },
+    {
+      "rule": "Reuse the font already used for the logo and packaging for the website's hero heading.",
+      "why": "New York was already used for the logo and on the packaging, so he 'may as well use it here too'.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "we've used it for the logo and on our packaging"
+    },
+    {
+      "rule": "Give the hero heading supporting subtext plus a primary and a secondary call to action.",
+      "why": "He adds them as the last pieces of the hero; he states no rule or reason.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "some subtext and a primary and secondary call to action"
+    },
+    {
+      "rule": "Use ready-made product mockups to show a real-looking product instead of building renders from scratch.",
+      "why": "The page needs an actual product that looks good, and he does not make it from scratch.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "found a few matching mockups on minimal mock ups.com"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "What canvas size should a desktop landing page hero be designed at?",
+      "options": [
+        {
+          "name": "Tall showcase canvas",
+          "effect": "Fits much more content in one shot, but a large part would be cut off on a real screen.",
+          "when": "Showcase shots only; he calls it a trick most Dribbble designers use to include way more."
+        },
+        {
+          "name": "Real browser viewport (1920 by about 1,000 pixels)",
+          "effect": "The hero is squished to what people actually see above the fold on a full-screen browser.",
+          "when": "Whenever the design should match reality."
+        }
+      ],
+      "recommendation": "Real browser viewport: 1920 pixels across but only about 1,000 pixels vertically on most monitors with the browser bar.",
+      "maps_to": null,
+      "evidence": "the size of most monitors"
+    },
+    {
+      "question": "How should a beauty or skincare landing page hero be laid out?",
+      "options": [
+        {
+          "name": "Free-form experimental layout",
+          "effect": "Interesting and new, but taken too far it leaves things everywhere with no clear layout.",
+          "when": "Only with restraint; he likes new layouts but warns they can go too far."
+        },
+        {
+          "name": "Ultrawide two-half split",
+          "effect": "Image and text on the left half, product images on the right half; a clear, familiar structure.",
+          "when": "Modern beauty websites, where it is pretty common."
+        }
+      ],
+      "recommendation": "The ultrawide two-half split, because it is common on modern beauty websites and fixes the lack of a clear layout.",
+      "maps_to": null,
+      "evidence": "an ultrawide layout where we split the screen into two halves"
+    },
+    {
+      "question": "How do you fix contrast when the hero text sits on a photo? [inferred: text on the photo]",
+      "options": [
+        {
+          "name": "Choose a different photo",
+          "effect": "A photo with the right vibe, nothing in the way and good lighting gives the text room.",
+          "when": "First, when the image fights the text."
+        },
+        {
+          "name": "Add a subtle overlay",
+          "effect": "Dims a photo that is still a little bright so text stands out.",
+          "when": "After choosing the photo, if it is still too bright."
+        }
+      ],
+      "recommendation": "Do both in order: find a better image, then add a pretty subtle overlay if it is still bright.",
+      "maps_to": "Q-img-02",
+      "evidence": "we need to address the contrast here"
+    },
+    {
+      "question": "How should many products be shown in a hero with little room?",
+      "options": [
+        {
+          "name": "Show every card at once",
+          "effect": "Displays all products but there isn't a ton of room.",
+          "when": "Only when space allows."
+        },
+        {
+          "name": "Card slider",
+          "effect": "Shows all products one set at a time; he tops it with a 'new arrivals' chip.",
+          "when": "When you want to show them all but lack room."
+        }
+      ],
+      "recommendation": "Make the product cards a slider.",
+      "maps_to": null,
+      "evidence": "we're going to make this into a slider"
+    },
+    {
+      "question": "Which font should the hero heading use?",
+      "options": [
+        {
+          "name": "Keep the original page font",
+          "effect": "He drops it (the caption reads 'this font also pass the go'); he gives no reason beyond the brand font already being in use.",
+          "when": "Not recommended here."
+        },
+        {
+          "name": "The brand font from logo and packaging (New York)",
+          "effect": "Heading, logo and packaging share one typeface, so the brand reads as one.",
+          "when": "When a brand font is already used on the logo and packaging."
+        }
+      ],
+      "recommendation": "Use the font already on the logo and packaging (New York); he 'may as well use it here too'.",
+      "maps_to": "Q-type-01",
+      "evidence": "we may as well use it here too"
+    },
+    {
+      "question": "Where should social proof go on a product landing page?",
+      "options": [
+        {
+          "name": "Written testimonial in the header",
+          "effect": "Clutters the hero; he removes it.",
+          "when": "Not recommended."
+        },
+        {
+          "name": "Out of the header",
+          "effect": "He removes the testimonial from the hero; he does not say where social proof should go instead.",
+          "when": "Default for a hero; social proof itself is still good."
+        }
+      ],
+      "recommendation": "Social proof is good, but not as a written testimonial in the header.",
+      "maps_to": null,
+      "evidence": "social proof is also good but not in the form of a written testimonial"
+    }
+  ],
+  "process": [
+    {
+      "step": "Critique the original",
+      "detail": "Go element by element: keep what works (top nav, fitting icons) and note what doesn't (social links, site outline, cut-out image, header testimonial, decorative shapes, copy like free shipping over $500)."
+    },
+    {
+      "step": "Get product and brand assets",
+      "detail": "Find matching product mockups (minimalmockups.com) and use Photoshop to make the product look good; make a logo and packaging, looking at real packaging (L'Oreal) and aiming for minimal and bougie."
+    },
+    {
+      "step": "Fix the layout first",
+      "detail": "Remove unneeded elements (social links, testimonial, site outline, decorative shapes) and pick a clear structure: an ultrawide two-half split with image and text on the left, products on the right."
+    },
+    {
+      "step": "Resize to a real viewport",
+      "detail": "Squish the design to 1920 pixels across by about 1,000 pixels tall to match a full-screen browser on most monitors."
+    },
+    {
+      "step": "Rework the nav",
+      "detail": "Put the logo front and center, collapse favorites and notifications into a menu button, make the cart an icon, turn profile into 'sign in', and add a search bar for balance."
+    },
+    {
+      "step": "Replace product photos with cards",
+      "detail": "Build a product card (decide which corners hold the buttons), turn the cards into a slider and add a 'new arrivals' chip."
+    },
+    {
+      "step": "Fix image contrast",
+      "detail": "Search for a hero image with the right vibe, no clutter and good lighting; add a subtle overlay if it is still bright."
+    },
+    {
+      "step": "Apply brand typography",
+      "detail": "Use the logo and packaging font (New York) for the hero heading."
+    },
+    {
+      "step": "Add copy and calls to action",
+      "detail": "Add subtext, a primary and a secondary call to action, and (for looks) an arrow-only button that leads to the full product line."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Original Dribbble skincare hero",
+      "where": "Dribbble shot",
+      "visual_note": "Top nav with icons, social links, a page outline, an image with cutouts, a written testimonial in the header, decorative shapes he says look like the Google Dino Run character and a 'free shipping over $500' line; things everywhere with no clear layout."
+    },
+    {
+      "what": "Viewport overlay",
+      "where": "Shown in the video next to the Dribbble design",
+      "visual_note": "The 1920 by about 1,000 pixel dimensions of a full-screen browser laid next to the Dribbble design, showing that a whole part of the shot would be cut off entirely."
+    },
+    {
+      "what": "Redesigned split-screen hero",
+      "where": "Kole Jain's skincare redesign",
+      "visual_note": "Ultrawide two-half layout: hero image with a subtle overlay, New York heading, subtext and primary plus secondary calls to action on the left; product card slider with a 'new arrivals' chip on the right [inferred: he first moves the product images to the right]; logo front and center, menu button, cart icon, 'sign in' and a search bar in the nav; an arrow-only button added for looks."
+    },
+    {
+      "what": "Product card",
+      "where": "Kole Jain's skincare redesign",
+      "visual_note": "Card with the product mockup and buttons placed in chosen corners, used in a slider."
+    },
+    {
+      "what": "Minimal skincare packaging and logo",
+      "where": "Kole Jain's skincare redesign",
+      "visual_note": "Minimal packaging in the New York font with a line borrowed from a super blurry reference photo, contrasted with busy L'Oreal packaging. One element was centered, so the one below could not also be centered; moving it to the side left too much empty space. He changed the color and made many small tweaks over about 5 hours."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "1920 pixels",
+      "context": "Width across on a full-screen browser on most non-curved monitors.",
+      "evidence": "you have 1920 pixels across"
+    },
+    {
+      "value": "about 1,000 pixels",
+      "context": "Usable vertical height on a full-screen browser with the browser bar.",
+      "evidence": "only about 1,000 pixels vertically"
+    },
+    {
+      "value": "50%",
+      "context": "How much larger the Dribbble-style canvas is than a real screen.",
+      "evidence": "the screen's like 50% larger"
+    },
+    {
+      "value": "5 hours",
+      "context": "Time he spent on the logo and packaging.",
+      "evidence": "5 hours later"
+    },
+    {
+      "value": "$500",
+      "context": "Free-shipping threshold in the original design's copy, which he calls nuts.",
+      "evidence": "free shipping over $500 is nuts"
+    }
+  ],
+  "caveats": [
+    "He says he keeps 'the lack of ux' so the redesign stays Dribbble-worthy, favouring aesthetics over usability; the search bar ('regardless of if it's really needed') and the arrow-only button ('it just looks good') are taste, not usability advice.",
+    "The 1920 by about 1,000 pixel viewport is his observation from his own monitor and 'most other monitors', not measured data; it covers desktop only.",
+    "Self-promotion in the description: a free Figma file on his site, a minimalmockups.com link, and a Newform design community challenge with $1500.",
+    "Auto-captions: the invented brand name is unclear ('delis'), the logo line reads 'let's get our T SM front and center', and 'this font also pass the go' likely means the original font had to go.",
+    "Short, informal video (5 minutes 41 seconds, March 2025); it is one redesign of one Dribbble shot, so its layout choices are specific to beauty and skincare sites."
+  ]
+}

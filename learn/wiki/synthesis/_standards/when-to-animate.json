@@ -1,0 +1,881 @@
+{
+  "theme": "when-to-animate",
+  "standards": [
+    {
+      "id": "STD-when-to-animate-01",
+      "theme": "when-to-animate",
+      "area": "motion",
+      "title": "Decide whether to animate first",
+      "rule": "Before choosing any tool, easing or duration, decide whether the element should animate at all (how often it is seen) and name its purpose; if either check fails, ship no animation.",
+      "why": "Steps 1 (should this animate at all) and 2 (what is the purpose) gate everything: don't reach for a curve before you know whether it animates. Done wrong, animation makes an interface feel unpredictable, slow and annoying and can cost user trust.",
+      "strength": "must",
+      "values": {
+        "decision-order": "frequency, then purpose; only then tool, properties, easing and duration"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-you-dont-need-animations",
+          "evidence": "Step one is making sure your animations have a purpose"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "Steps 1 and 2 gate everything. Don't reach for a curve before you know whether it animates at all"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Steps 1 and 2 gate everything"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Before writing any animation code, answer these questions in order"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "Every candidate must survive all four questions, in order"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py design-md: the DESIGN.md Motion section opens with 'Most movements take <motion.duration.medium>ms' and states no whether-to-animate check, so an implementing agent learns how long things move but not when nothing should move [inferred]",
+        "skills/opendesigner/references/stages/16-motion-haptics-and-sound.md and .detailed.md ask how motion should feel (Q-motion-01), which durations, curves, springs and transitions exist, and what reduced motion does, but no question or default says which interactions get no motion [inferred]"
+      ]
+    },
+    {
+      "id": "STD-when-to-animate-02",
+      "theme": "when-to-animate",
+      "area": "motion",
+      "title": "Rare, purposeful motion still needs speed",
+      "rule": "Put every animation that passes the frequency and purpose checks through a speed check too: it has to work inside the UI budget (under 300ms), and a moment that only works as a slow, showy animation gets no animation. Only marketing and explanatory motion may run longer.",
+      "why": "Even if an animation won't be used often and fulfils a clear purpose, you still have to think about its speed: unless you are working on marketing sites, animations have to be fast to improve perceived performance and stay connected to the user's actions. A moment that only works as a slow, showy animation fails the gate.",
+      "strength": "must",
+      "values": {
+        "ui-budget": "under 300ms",
+        "exempt": "marketing / explanatory (can be longer)"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-you-dont-need-animations",
+          "evidence": "it fulfills a clear purpose, you still have to think about its speed; Unless you are working on marketing sites, your animations have to be fast"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "The suggestion must work within the standard budgets (UI under 300ms); as a slow, showy animation, it fails the gate"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "synthesis/levers.json formulas.motion.standardMax is 400 and warnAbove is 500, above the 300ms UI budget the sources use for this check"
+      ]
+    },
+    {
+      "id": "STD-when-to-animate-03",
+      "theme": "when-to-animate",
+      "area": "motion",
+      "title": "Name a valid purpose for every animation",
+      "rule": "Name each animation's purpose as feedback, spatial consistency, state indication, preventing a jarring change, explanation or delight (delight only at the rare/first-time tier); if none fits, including 'it looks cool', do not animate.",
+      "why": "Every animation must answer 'why does this animate?'. Motion should serve a function (orient, give feedback, show relationships), not just decorate, and 'it looks cool' on a frequently seen element is a reason to stop.",
+      "strength": "must",
+      "values": {
+        "valid-purposes": "feedback, spatial consistency, state indication, preventing a jarring change, explanation, delight (rare/first-time only)"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-you-dont-need-animations",
+          "evidence": "Before you start animating, ask yourself"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "Can't name it? Don't build it"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Name it in one word before continuing"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Every animation must have a clear answer to"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "is not on this list. If you can't name the purpose in one of these words, reject the candidate"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "Every animation must answer"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "Every animation must answer; on a frequently-seen element is a block"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Valid purposes for motion: spatial consistency, state indication, explanation, feedback, preventing jarring change"
+        },
+        {
+          "id": "eks-skills-animation-vocabulary-skill",
+          "evidence": "Motion should serve a function — orient, give feedback, show relationships — not just decorate"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-when-to-animate-04",
+      "theme": "when-to-animate",
+      "area": "motion",
+      "title": "Scale motion down as frequency rises",
+      "rule": "Estimate how often a person will see each animation (100+ times a day, tens of times a day, occasionally, or rarely / first time) and make it shorter and subtler the more often it is seen, down to no animation.",
+      "why": "How often users will see an animation is a key factor in deciding whether to animate: the more often it is seen, the shorter and subtler it should be, because repeated animation stops being a pleasant surprise, becomes irritating and slows people down.",
+      "strength": "must",
+      "values": {
+        "tiers": "100+ times/day; tens of times/day; occasional; rare / first-time"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-you-dont-need-animations",
+          "evidence": "How often users will see an animation is a key factor in deciding whether to animate or not"
+        },
+        {
+          "id": "eks-skills-animation-vocabulary-skill",
+          "evidence": "The more often a user sees an animation, the shorter and subtler it should be"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "Match motion to how often it's seen"
+        },
+        {
+          "id": "eks-skills-improve-animations-skill",
+          "evidence": "which animated elements are hit 100+ times/day; This drives severity"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "Build a rough frequency map of the surfaces you'll judge"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-when-to-animate-05",
+      "theme": "when-to-animate",
+      "area": "motion",
+      "title": "No motion on 100+ times-a-day actions",
+      "rule": "Give no animation to anything people trigger or see 100+ times a day, such as a launcher or command palette opening and closing, keyboard shortcuts and core navigation (on iOS and Android also tab switches, keyboard open/close, scrolling and settings toggles: platform default or nothing).",
+      "why": "Raycast is opened hundreds of times a day and has no open or close animation, which is the optimal experience; animating it every time would be very annoying.",
+      "strength": "must",
+      "values": {
+        "frequency": "100+ times/day"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-you-dont-need-animations",
+          "evidence": "I use Raycast hundreds of times a day; If it animated every time I opened it, it would be very annoying"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "100+ times/day (keyboard shortcuts, command palette toggle) | **No animation. Ever.**"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "100+ times/day — tab switches, keyboard open/close, scrolling, toggles in settings | **No animation.** Platform default or nothing"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "100+ times/day (keyboard shortcuts, command palette toggle) | No animation. Ever."
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "100+ times/day (keyboard shortcuts, command palette, core navigation) | **Reject. No animation. Ever.**"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "command palettes with open/close transitions (Raycast has none — correct)"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "Keyboard-initiated and 100+/day actions get **no** animation"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "100+ times/day (keyboard shortcuts, command palette toggle) | No animation. Ever."
+        },
+        {
+          "id": "eks-skills-prototype-skill",
+          "evidence": "flipping is a 100+/session action; by the frequency rule the variant swap gets no animation"
+        },
+        {
+          "id": "eks-skills-prototype-picker",
+          "evidence": "the variant swap stays instant"
+        }
+      ],
+      "engine": {
+        "path": "motion.duration.instant",
+        "value": "0ms",
+        "type": "duration",
+        "note": "No animation maps to the instant duration step (0ms), the step agents should use for these interactions; the generated value is already 0ms, so this pins it rather than changing it [inferred]"
+      },
+      "review": {
+        "pattern": "\\[cmdk-(?:dialog|overlay)\\](?:\\[[^\\]]*\\]|::?[\\w-]+(?:\\([^)]*\\))?)*\\s*\\{[^}]*?\\b(?:transition|animation)(?:-(?:property|duration|name))?\\s*:\\s*(?!none\\b|0m?s\\b|[\\w-]+\\s+0m?s\\s*(?:[;}]|$))[^;}\\s]|<(?:Command\\.Dialog|CommandDialog)\\b[^>]*?\\w*[cC]lass(?:Name)?\\s*=[^>]*?(?:\\banimate-(?!none\\b)[\\w-]+|\\btransition(?!-none\\b)(?:-[a-z]+)?\\b|\\bduration-(?!0\\b)\\d+)",
+        "message": "A command palette opens 100+ times a day: remove the open/close transition or animation (open it instantly)."
+      },
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/references/stages/16-motion-haptics-and-sound.md Q-motion-01 Use/avoid: 'use expressive motion for page transitions, the primary action and alerts'; page transitions (core navigation) and the primary action are high-frequency surfaces that the sources give no animation or only near-imperceptible motion [inferred]",
+        "skills/opendesigner/references/stages/16-motion-haptics-and-sound.detailed.md Q-motion-06 default 'all four plus stagger', including `fade-through` 'for unrelated destinations such as tabs'; the sources put tab switches and core navigation in the 100+ times/day tier (no animation; Expo: animation: 'none') [inferred]"
+      ]
+    },
+    {
+      "id": "STD-when-to-animate-06",
+      "theme": "when-to-animate",
+      "area": "motion",
+      "title": "Never animate keyboard-initiated actions",
+      "rule": "Never animate an action started from the keyboard, including shortcuts, command-palette toggles, focus jumps and moving a list highlight with the arrow keys; the change happens instantly.",
+      "why": "Keyboard actions may be repeated hundreds of times a day, and animation makes them feel slow, delayed and disconnected from the user's actions; an animated highlight lags behind the keys pressed. This is a disqualifier, not a judgment call.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-you-dont-need-animations",
+          "evidence": "You should never animate them; Notice how the highlight feels delayed compared to the keys you press"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "Keyboard-initiated actions are a disqualifier, not a judgment call"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Never animate keyboard-initiated actions"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "Keyboard-initiated actions (command palettes, shortcuts, focus jumps) are a disqualifier"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "Hunt for: animations on keyboard-initiated actions"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "Animation on a keyboard shortcut, command-palette toggle, or 100+/day action"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Never animate keyboard-initiated actions"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "\\[cmdk-item\\](?:\\[[^\\]]*\\]|::?[\\w-]+(?:\\([^)]*\\))?)*\\s*\\{[^}]*?\\b(?:transition|animation)(?:-(?:property|duration|name))?\\s*:\\s*(?!none\\b|0m?s\\b|[\\w-]+\\s+0m?s\\s*(?:[;}]|$))[^;}\\s]|<(?:Command\\.Item|CommandItem)\\b[^>]*?\\w*[cC]lass(?:Name)?\\s*=[^>]*?(?:\\banimate-(?!none\\b)[\\w-]+|\\btransition(?!-none\\b)(?:-[a-z]+)?\\b|\\bduration-(?!0\\b)\\d+)",
+        "message": "Command-menu items are moved through with the arrow keys: remove the item transition so the highlight moves instantly."
+      },
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py build_motion_context describes motion.transition.feedback (motion.duration.micro, 100ms) as 'Hover, press, color changes.' with no keyboard exception, and engine.py review's motion fix sends a raw transition on a line that mentions focus to that feedback transition instead of to no transition [inferred]"
+      ]
+    },
+    {
+      "id": "STD-when-to-animate-07",
+      "theme": "when-to-animate",
+      "area": "motion",
+      "title": "Remove or shrink motion seen tens-of-times daily",
+      "rule": "For things people see tens of times a day (hover effects, list navigation, frequent toggles, press feedback, row selection), remove the animation, or the hover interaction itself, or reduce it to near-imperceptible, fast and subtle motion; in React Native keep it under 150ms. List navigation with the arrow keys is keyboard-initiated and gets no animation.",
+      "why": "Seen tens, maybe even hundreds of times a day, animations and hover interactions stop delighting, quickly become annoying and make the interface feel slower; a hover effect used multiple times a day likely benefits most from no animation at all.",
+      "strength": "must",
+      "values": {
+        "frequency": "tens of times/day",
+        "react-native-ceiling": "under 150ms"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-7-practical-animation-tips",
+          "evidence": "Remove animations or hover interactions altogether if they are seen tens, maybe even hundreds of times a day"
+        },
+        {
+          "id": "ek-you-dont-need-animations",
+          "evidence": "A hover effect is nice, but if used multiple times a day, it would likely benefit the most from having no animation at all"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "Tens of times/day (hover effects, list navigation) | Near-imperceptible only — fast and subtle, or nothing"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Tens of times/day — press feedback, list navigation, row selection | Near-imperceptible only: under 150ms, or nothing"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Tens of times/day (hover effects, list navigation) | Remove or drastically reduce"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "Tens of times/day (hover states, list navigation, frequent toggles) | Reject, or suggest only near-imperceptible motion (fast, subtle)"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "decorative motion on list items or hover states hit constantly"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "Tens/day gets reduced motion"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Tens of times/day (hover effects, list navigation) | Remove or drastically reduce"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-when-to-animate-08",
+      "theme": "when-to-animate",
+      "area": "motion",
+      "title": "Standard motion for occasional surfaces",
+      "rule": "Give surfaces people meet occasionally (modals, drawers, sheets, toasts, settings; onboarding steps in the Expo table) standard animation, not delight motion.",
+      "why": "The frequency tables give occasional UI standard animation and keep the delight budget for the rare/first-time tier. The Expo table lists onboarding steps as occasional, while the web tables put onboarding in the rare tier.",
+      "strength": "should",
+      "values": {
+        "frequency": "occasional"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "Occasional (modals, drawers, toasts) | Standard animation"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Occasional — sheets, modals, toasts, onboarding steps | Standard animation"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Occasional (modals, drawers, toasts) | Standard animation"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "Occasional (modals, drawers, toasts, settings) | Eligible — standard animation"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "Occasional (modals, drawers, toasts) | Standard animation"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "Occasional gets standard"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Occasional (modals, drawers, toasts) | Standard animation"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-when-to-animate-09",
+      "theme": "when-to-animate",
+      "area": "motion",
+      "title": "Spend delight only on rare moments",
+      "rule": "Spend delight motion (motion whose purpose is delight, such as a decorative bounce, a generous stagger or a longer beat) only on rare or first-time, high-emotion moments such as onboarding and first run, empty states, success or completion, feedback forms and celebration, and never on components people use multiple times a day.",
+      "why": "Seen rarely, delight is a pleasant surprise that makes the experience memorable; used multiple times a day the component quickly becomes irritating, the initial delight fades and the animation slows users down. Rare moments rendered flat are where missing delight is worth adding.",
+      "strength": "must",
+      "values": {
+        "frequency": "rare / first-time"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-you-dont-need-animations",
+          "evidence": "This works as long as the user will rarely interact with it; Used multiple times a day, this component would quickly become irritating"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "allowed *only* at the rare/first-time tier; The delight budget lives here"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Rare / first-time — success states, empty-state illustrations, celebration | The delight budget lives here"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Rare/first-time (onboarding, feedback forms, celebrations) | Can add delight"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "allowed *only* at the Rare/first-time frequency tier; These are the only places bounce, stagger generosity, or a longer beat are welcome"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "Rare, high-emotion moments (first-run, success, celebration) rendered with none of the delight budget"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "Rare/first-time can have delight"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Rare / first-time (onboarding, feedback, celebrations) | Can add delight"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "synthesis/levers.json dials.expression drives motion.expressiveScope to 'throughout' at 67-100, which puts expressive motion everywhere rather than only on rare or first-time moments [inferred]",
+        "skills/opendesigner/references/stages/16-motion-haptics-and-sound.md Q-motion-01: the default option two-mode is 'bold for 1-3 key moments per flow', and Use/avoid says 'use expressive motion for page transitions, the primary action and alerts'; page transitions and the primary action recur far more often than the rare/first-time tier [inferred]"
+      ]
+    },
+    {
+      "id": "STD-when-to-animate-10",
+      "theme": "when-to-animate",
+      "area": "motion",
+      "title": "Explanatory motion only in marketing, onboarding",
+      "rule": "Use explanation motion (animation that demonstrates how a feature works) only on marketing and onboarding surfaces.",
+      "why": "Explanation is a valid purpose only on marketing and onboarding surfaces; Linear used an animation instead of a static asset so visitors understand what Product Intelligence does straight in the initial viewport.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "demonstrating how something works (marketing/onboarding only)"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "motion that demonstrates how a feature works (marketing/onboarding only)"
+        },
+        {
+          "id": "ek-you-dont-need-animations",
+          "evidence": "We could have used a static asset, but the animated version helps the user understand what this feature does"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-when-to-animate-11",
+      "theme": "when-to-animate",
+      "area": "motion",
+      "title": "Keep decoration off functional data",
+      "rule": "Do not move data people are reading or acting on for style: keep decorative motion such as mouse-tracking, spring-driven interactive graphs and animated line drawing off functional, information-dense UI and charts, and use it only on marketing pages and illustrations.",
+      "why": "Decoration on functional, information-dense UI hinders; on a functional graph in a banking app no animation is better, and a useSpring interactive graph is meant for illustrations, not functional graphs like stock charts.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "data the user is reading or acting on should not move for style"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "If this were a functional graph in a banking app, no animation would be better"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "Decoration on functional, information-dense UI hinders; animated line drawing on the analytics graph"
+        },
+        {
+          "id": "adev-changelog",
+          "evidence": "this type of interaction is meant for illustrations, not functional graphs like stock charts"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-when-to-animate-12",
+      "theme": "when-to-animate",
+      "area": "motion",
+      "title": "Scroll reveals on marketing surfaces only",
+      "rule": "Use scroll-reveal animation only on marketing surfaces, never on functional UI a person visits daily.",
+      "why": "The scroll-reveal recipe is for marketing surfaces only; functional UI visited daily should not get it.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Marketing surfaces only. Don't do this to functional UI a user visits daily"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-when-to-animate-13",
+      "theme": "when-to-animate",
+      "area": "motion",
+      "title": "No entrance stagger on all-day lists",
+      "rule": "Do not give a stagger or entrance animation to a list people scroll past or use all day: it should already be there. Keep staggered entrances for lists and grids seen occasionally and for content the person asked for and is waiting on.",
+      "why": "The stagger recipe is for a list or grid the user sees occasionally, not one they scroll past all day; entrance animations are for content the user asked for and is waiting on.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "For a list or grid the user sees occasionally — not for a list they scroll past all day"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Entrance animations are for content the user asked for and is waiting on. A list they scroll past all day should already be there"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "A grid or list that pops in all at once on a page users see occasionally"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/references/stages/16-motion-haptics-and-sound.detailed.md Q-motion-06 default ships a stagger (20-50ms, total at most 500ms) with no condition on how often the list is seen [inferred]"
+      ]
+    },
+    {
+      "id": "STD-when-to-animate-14",
+      "theme": "when-to-animate",
+      "area": "motion",
+      "title": "Tab switches never slide",
+      "rule": "Switch between tabs with no animation: set animation: 'none' on Expo Router tabs (NativeTabs keeps the platform's own tab behavior), and never slide, shift or fade between tabs.",
+      "why": "Tabs are peers, not a hierarchy: sliding implies depth that isn't there, and the user pays for it dozens of times a session.",
+      "strength": "must",
+      "values": {
+        "tabs-animation": "'none'"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Tab switches never slide; Tabs are peers, not a hierarchy — sliding implies depth that isn't there, and the user pays for it dozens of times a session"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Between tabs | `animation: 'none'`"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "\\banimation\\s*:\\s*['\"]shift['\"]|<Tabs\\b[^>]*?\\banimation\\s*:\\s*['\"]fade['\"]",
+        "message": "Tabs are peers switched dozens of times a session: set animation: 'none' instead of shifting or fading between them."
+      },
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/references/stages/16-motion-haptics-and-sound.detailed.md Q-motion-06: the default 'all four plus stagger' includes `fade-through` 'for unrelated destinations such as tabs' with no platform condition, while this standard gives tab switches no animation (the same question's Use/avoid line does ask for OS-owned navigation transitions on native platforms) [inferred]"
+      ]
+    },
+    {
+      "id": "STD-when-to-animate-15",
+      "theme": "when-to-animate",
+      "area": "process",
+      "title": "Say no when the gate fails",
+      "rule": "When a requested animation fails the gate, say so plainly, write no animation code, and offer a non-motion alternative such as an instant state change or a static affordance.",
+      "why": "Animating something that shouldn't animate is the worse failure mode; the gate exists to produce zero lines of code sometimes, and sometimes the best animation is no animation.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "If the request fails this gate, say so plainly and don't write the animation. Offer the non-motion alternative"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "The gate below exists to produce zero lines of code sometimes; If the request fails this gate, say so and don't write it"
+        },
+        {
+          "id": "ek-you-dont-need-animations",
+          "evidence": "sometimes the best animation is no animation"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-when-to-animate-16",
+      "theme": "when-to-animate",
+      "area": "process",
+      "title": "Default to restraint when suggesting motion",
+      "rule": "When looking for places to add motion, expect to reject most candidates: suggest at most 5-7 for a whole app and fewer for one view, list 2-4 missed opportunities separately in an audit, and say plainly when nothing survives.",
+      "why": "An opportunity finder that suggests motion everywhere produces sluggish, over-animated interfaces; a short list of high-conviction opportunities beats a long wishlist, and if nothing survives the gate that is a good result.",
+      "strength": "must",
+      "values": {
+        "max-suggestions-whole-app": "5-7",
+        "missed-opportunities-per-audit": "2-4"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "Expect to reject most candidates; At most 5–7 suggestions for a whole app, fewer for a single view; If nothing survives, say so plainly"
+        },
+        {
+          "id": "eks-skills-improve-animations-skill",
+          "evidence": "After the table, list 2–4"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "Report at most a handful, grounded in actual UX seams you observed"
+        },
+        {
+          "id": "eks-readme",
+          "evidence": "places that would genuinely benefit from motion, while also telling you what not to animate"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": false,
+      "conflicts": []
+    },
+    {
+      "id": "STD-when-to-animate-17",
+      "theme": "when-to-animate",
+      "area": "process",
+      "title": "Delete high-frequency motion first",
+      "rule": "Treat animation on a keyboard-initiated or high-frequency action as a blocking, HIGH-severity finding, and fix it (and any animation with no purpose) by deleting the animation before trying any tuning.",
+      "why": "The remedial hierarchy starts with deleting the animation (high-frequency, no purpose, keyboard-triggered); such motion is feel-breaking, and when unsure whether motion feels right the strongest move is often to delete it.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "(high-frequency / no purpose / keyboard-triggered); animation on a keyboard/high-frequency action; the strongest move is often to delete it"
+        },
+        {
+          "id": "eks-skills-improve-animations-skill",
+          "evidence": "animation on keyboard/high-frequency actions"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "The strongest fix is often"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-when-to-animate-18",
+      "theme": "when-to-animate",
+      "area": "process",
+      "title": "Report the gate result with motion",
+      "rule": "When you add or propose motion, state the gate result (frequency tier, named purpose, and what was rejected and why), and when searching for opportunities list 2-5 places deliberately left unanimated with the gate question that rejected each.",
+      "why": "The gate answers go in the report so the decision can be checked; the rejected-candidates section is required, not optional.",
+      "strength": "must",
+      "values": {
+        "rejected-candidates-listed": "2-5"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "frequency tier and the named purpose. If something in the request was rejected, say which and why"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "frequency tier and named purpose. Say what you rejected and why"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "Record the answer — it goes in the report; List 2–5 places you considered and deliberately did"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": false,
+      "conflicts": []
+    },
+    {
+      "id": "STD-when-to-animate-19",
+      "theme": "when-to-animate",
+      "area": "motion",
+      "title": "Bridge state changes that would teleport",
+      "rule": "Give content that would otherwise swap, appear or vanish instantly (conditional renders, route content, expanding sections, layout jumps) a brief transition, unless the frequency or keyboard rules call for no motion.",
+      "why": "Preventing a jarring change is a valid purpose: elements appearing or disappearing without a transition feel broken, and a toast that suddenly appeared would feel off.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "State changes that teleport (content swaps, layout jumps) where a brief transition would prevent a jarring change"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "Content that swaps, appears, or vanishes instantly (conditional renders, route content, expanding sections)"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "elements appearing or disappearing without transition feel broken"
+        },
+        {
+          "id": "ek-you-dont-need-animations",
+          "evidence": "Having a toast suddenly appear would feel off, so we animate it in"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-when-to-animate-20",
+      "theme": "when-to-animate",
+      "area": "motion",
+      "title": "Goal-driven tools need no friction, not delight",
+      "rule": "For tools people open with a clear goal (launchers, command menus, everyday work tools), remove unnecessary friction instead of adding delight motion.",
+      "why": "A person opening such a tool has a clear goal, does not expect or need to be delighted, and just wants to work with no unnecessary friction.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-you-dont-need-animations",
+          "evidence": "When I open Raycast, I have a clear goal in mind; I just want to do my work with no unnecessary friction"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-when-to-animate-21",
+      "theme": "when-to-animate",
+      "area": "motion",
+      "title": "Personality sets how much motion",
+      "rule": "Judge the product's personality before adding or reviewing motion and let it set how much motion there is: a crisp, professional dashboard gets fewer, subtler, crisp and fast animations, a playful consumer app can have more and bouncier ones, and a component whose motion does not match the rest of the product is a finding.",
+      "why": "Cohesion findings depend on the personality: a crisp dashboard earns fewer and subtler animations than a playful consumer app, and one bouncy component in a crisp app breaks the harmony.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "a crisp dashboard earns fewer and subtler suggestions than a playful consumer app"
+        },
+        {
+          "id": "eks-skills-improve-animations-skill",
+          "evidence": "is this a playful consumer app or a crisp dashboard? Cohesion findings depend on it"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "Motion matches the component's personality and the rest of the product; Mismatched personality"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "a professional dashboard should be crisp and fast"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "Mismatched personality across components is a finding; one bouncy component in a crisp app"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "A playful component can be bouncier. A professional dashboard should be crisp and fast"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-when-to-animate-22",
+      "theme": "when-to-animate",
+      "area": "process",
+      "title": "Judge an idea before building it",
+      "rule": "Decide deliberately whether an idea deserves to be built before building it, even when AI makes building cheap; when you build options A and B to compare, validate them and ship the one that wins, not both.",
+      "why": "Friction used to force a decision about what was worth making; without it, vibe-coded apps and UI libraries rarely have a thought behind them and feel meaningless. Building A and B is often better validation than theorizing, but only if you actually validate the idea.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-friction-as-a-feature",
+          "evidence": "It forces us to use our judgement, and it filters out the ideas; Building option A and B and comparing them is often better validation than just theorizing about it; But only if you actually validate the idea. Nothing stops you from shipping A and B"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": false,
+      "conflicts": []
+    }
+  ]
+}

@@ -27,11 +27,17 @@ Zoom 3 detailed · weight high · changes 6 decisions · class G · cards DC-L01
 - **Why:** In HSL, yellow at the same lightness looks lighter than blue. Perceptual or contrast-indexed ramps keep each step just as heavy in every color [DC-L01-01].
 - **Options:**
   - `oklch` OKLCH, perceptual (Tailwind v4 moved its palette to oklch in Jan 2025; CSS `oklch()` Baseline since May 2023).
+    - Now: Shades built so each step looks equally heavy in every color: the modern web method. As it grows: New colors slot in without shifting what looks important; contrast still gets checked after generation. [inferred]
   - `hct` HCT, numbered by tone: same tone gives the same brightness across hues (Material; tones 50 vs 98 give 3:1).
+    - Now: Material's method, numbered by tone, so the same tone gives the same brightness in every hue. As it grows: Needed if the system feeds Android dynamic color, and Material's tools read it on every platform.
   - `contrast-indexed` Steps set by contrast: every step has the same ratio across hues (Spectrum: every 700 is 3.01:1).
+    - Now: Every step has the same contrast in every color, like Spectrum's 700 steps. As it grows: Best if people can recolor the accent: every new accent passes the same text pairings.
   - `hand-tuned` Tuned by hand for each color: more character, less predictable (Tailwind 500 steps range L 62-77%).
+    - Now: Each color is tuned by hand: more character, less predictable. As it grows: Swapping or adding a hue can make buttons suddenly lighter or darker, so each one needs checking. [inferred]
   - `preset` Use a stock palette (Tailwind default, Radix Colors): a recognizable stock look.
+    - Now: A ready-made palette like Tailwind's or Radix's: fast, with a recognizable stock look. As it grows: Quick to extend, but your product shares its colors with many others. [inferred]
   - `lab-hsl` CIELAB/LCH or HSL: Lab was Stripe's 2019 fix; HSL is the legacy default that washes out yellows.
+    - Now: Older methods: Lab was Stripe's 2019 fix, and HSL washes out yellows and muddies blues. As it grows: HSL shades stay uneven with every color you add, so it is best avoided.
 - **Default:** `oklch`: OKLCH with contrast-indexed steps; HCT when the system must feed Material dynamic color *Source:* card heuristics [DC-L01-01, DC-L01-03, DC-L01-04].
 - **Show:** two accents side by side at the same step; switching the method shows whether they stay equally heavy, with the contrast of each step printed.
 - **Use / avoid:** use contrast-indexing when users can recolor the accent, so every accent passes the same pairings; avoid HSL-based lightness steps [DC-L01-03, DC-L01-01].
@@ -113,8 +119,11 @@ Zoom 3 detailed · weight high · changes 5 decisions · class G · cards DC-L01
 - **Why:** A mirrored mapping keeps what looks most important the same in every mode. Separate hand-tuned dark ramps look richer but drift [DC-L01-18].
 - **Options:**
   - `tone-reassign` Same colors, a new shade for each job (Material: primary 40 becomes 80, surface 98 becomes 6).
+    - Now: Same color families, with each job moved to a new shade in dark mode, like Material. As it grows: What looks most important stays the same in both modes as screens are added.
   - `mirrored` Mirrored ramp ("700 in light is 400 in dark") with separate dark neutrals (Atlassian).
+    - Now: A mirrored ramp (700 in light is 400 in dark) with separate dark grays, like Atlassian. As it grows: Each new color gets its dark version by role, and every pair is re-checked for contrast.
   - `separate` Separate dark scales with the same step jobs (Radix, Primer, Spectrum).
+    - Now: Separate hand-tuned dark scales, like Radix and Primer: richer darks. As it grows: Looks richer but drifts over time: every new color needs its own dark scale tuned. [inferred]
 - **Default:** shared hue ramps with a mirrored mapping plus separate dark neutral ramps; map by role, not by value *Source:* card heuristic [DC-L01-18].
 - **Show:** light and dark side by side with every pair re-checked; failing pairs light up in the contrast matrix.
 - **Use / avoid:** use role-based mapping so each token keeps its contrast relationship; avoid inverting colors [DC-L01-18].

@@ -69,6 +69,14 @@ jobs:
       - name: Reference extraction tests (css_scan.py, read_page.js with the runner's Node)
         run: python3 skills/opendesigner-extract/scripts/test_extract.py
 
+      - name: Learning wiki (tools/wiki.py check, standards, tests without OpenWiki)
+        run: |
+          python3 tools/wiki.py check
+          python3 tools/wiki.py standards
+          python3 tools/wiki.py map --check
+          python3 tools/wiki.py proposals --check
+          python3 tools/test_wiki.py
+
       - name: Generated skill copies match skills/
         run: |
           if [ -f tools/sync_skills.py ]; then

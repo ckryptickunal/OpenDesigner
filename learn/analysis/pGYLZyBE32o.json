@@ -1,0 +1,849 @@
+{
+  "summary": "Kole Jain redesigns the Google Gemini landing page from scratch, narrating each section and the choices behind it. He starts from inspiration (Microsoft Copilot, OpenAI, Google Chrome and other Google products), picks a visual recipe of mesh gradients, noise and fully rounded corners, and merges three separate Google landing pages into one. Along the way he shows concrete moves: a typeable search bar instead of a plain button as the hero call to action, a bento section, a gradient trick for adding color to dark mode, hover effects that blur, enlarge and reveal text on image cards, and a privacy section. He also shows iteration openly, walking through about four call-to-action layouts before one felt right, and avoids reusing the same layout twice on one page. For a design system, it gives a worked example of a marketing-page process and of where gradients, hover states and icon choices sit in an AI product's visual language.",
+  "key_ideas": [
+    "Start a redesign by collecting inspiration from competitors and sibling products, then borrow and adapt layouts.",
+    "Mesh gradients are called pretty much synonymous with AI; the redesign pairs them with a healthy dose of noise and fully rounded corners.",
+    "A typeable search bar as the hero call to action gets the visitor into an action, which the author says makes them more likely to follow through.",
+    "Replace decorative background shapes with a product-native animation, such as the chatbot's thinking loader, when the brand style is clean.",
+    "Merge redundant landing pages that sell the same thing into one page built around a few key points.",
+    "Add color to a dark mode by using a darkened two-color gradient of the primary colors as the background, optionally with some noise, but not so much the site looks like TV static.",
+    "Image cards can reveal more on hover by blurring the image, enlarging it and popping up extra text.",
+    "Hide options that matter to few visitors (Enterprise) behind a small button on each plan instead of giving them a section.",
+    "A good layout carries the design before any animation is added.",
+    "Iterate through several layouts for a key section; the final CTA came after about four attempts.",
+    "Do not reuse the same layout for two sections of one page.",
+    "Products that handle user data need a privacy section, and icon metaphors should match the brand (shield vs lock).",
+    "When the hero search bar works, reuse it in the final call to action, with decorative prompt cards moved to the sides.",
+    "For clean, simple icons, search Flaticon by interface icons."
+  ],
+  "entities": [
+    {
+      "name": "Kole Jain",
+      "type": "person",
+      "description": "Designer who presents the redesign on his YouTube channel."
+    },
+    {
+      "name": "Google Gemini",
+      "type": "product",
+      "description": "The AI product whose landing page is redesigned; the author also used it to partly generate the page roadmap and some explore-section content."
+    },
+    {
+      "name": "Gemini Advanced / Gemini for Business",
+      "type": "product",
+      "description": "Paid tiers that Google sells on two separate landing pages; merged into one section in the redesign."
+    },
+    {
+      "name": "Google Chrome",
+      "type": "product",
+      "description": "Its landing page is praised and used as the source of the headline style, an image section and a zoom-in effect."
+    },
+    {
+      "name": "OpenAI",
+      "type": "company",
+      "description": "Its site is critiqued as lopsided and boring, but its header search bar is borrowed."
+    },
+    {
+      "name": "Microsoft Copilot",
+      "type": "product",
+      "description": "Microsoft's AI site: an inspiration source whose landing page flow is partly followed; critiqued for too many tabs and videos and for tiny text in its blog section."
+    },
+    {
+      "name": "Midjourney",
+      "type": "product",
+      "description": "Among the AI websites surveyed at the start, the one the author says looks good ('kind of sick')."
+    },
+    {
+      "name": "Accenture",
+      "type": "company",
+      "description": "Its website is the source of the blur-and-enlarge hover effect."
+    },
+    {
+      "name": "Apple",
+      "type": "company",
+      "description": "Cited for having an entire page devoted to privacy and for generally using a lock icon."
+    },
+    {
+      "name": "Flaticon",
+      "type": "tool",
+      "description": "Icon library; the author filters to interface icons to get clean, simple ones."
+    },
+    {
+      "name": "Figma",
+      "type": "tool",
+      "description": "The design file for all screens is offered as a free download."
+    },
+    {
+      "name": "Mesh gradient",
+      "type": "concept",
+      "description": "Gradient style the author calls pretty much synonymous with AI; used in the header search bar where a search icon could have gone."
+    },
+    {
+      "name": "Bento layout",
+      "type": "concept",
+      "description": "Grid of cards used for the features section."
+    },
+    {
+      "name": "Noise",
+      "type": "concept",
+      "description": "Texture added to the visual recipe ('a healthy dose'), but not so much that the whole site looks like TV static."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Landing pages",
+      "summary": "A full section-by-section landing page redesign for an AI product: search-bar hero, bento features, image showcase, merged pricing/plans, explore section, privacy, CTA, blog and footer."
+    },
+    {
+      "name": "Design process",
+      "summary": "Gather inspiration first, plan a page roadmap, borrow and adapt layouts, iterate openly (about four CTA layouts), and search for assets before starting."
+    },
+    {
+      "name": "Color",
+      "summary": "Uses mesh gradients, gradient strokes and a Google blue instead of gradient icons; tried Google's brand colors on the headline and found they looked off."
+    },
+    {
+      "name": "Dark mode and themes",
+      "summary": "To bring color into dark mode, set the background to a gradient of two primary colors (baby blue and pink) and darken them, optionally with a little noise."
+    },
+    {
+      "name": "Cards and sections",
+      "summary": "Bento cards with headers, descriptions and integrated diagrams; a plans section where the purchase CTA is one of the cards with a gradient stroke."
+    },
+    {
+      "name": "Micro-interactions",
+      "summary": "Hover effects: blur the image, enlarge it and reveal extra text (from the Accenture site); a gradient stroke on hover; a zoom-in effect on the Chrome site inspired making the plans section depend on hover."
+    },
+    {
+      "name": "Buttons and actions",
+      "summary": "A typeable search bar replaces a plain button as the hero CTA and is echoed in the final CTA; the Enterprise option becomes a tiny button on each plan."
+    },
+    {
+      "name": "Icons and imagery",
+      "summary": "Swaps gradient icons for solid Google blue, picks a shield over a lock to feel like Google, and recommends Flaticon's interface icons for clean icons."
+    },
+    {
+      "name": "Spacing and layout",
+      "summary": "Shows how much a good layout does before animation, uses a layout that breaks the box by extending off the page, and avoids repeating a layout on one page."
+    },
+    {
+      "name": "Shape and corner radius",
+      "summary": "Fully rounded corners are part of the chosen AI visual recipe."
+    },
+    {
+      "name": "Design taste and judgement",
+      "summary": "Critiques AI company sites (lopsided layouts, too many tabs, tiny text, redundant pages) and rejects ideas that look messy or lame against the brand's clean style."
+    },
+    {
+      "name": "Content and microcopy",
+      "summary": "Writes a punchy headline in the style of the Chrome site and plays on 'unparalleled privacy' with two non-parallel lines."
+    },
+    {
+      "name": "Design resources",
+      "summary": "Flaticon, filtered to interface icons, as a source of clean simple icons."
+    },
+    {
+      "name": "Paywalls and pricing pages",
+      "summary": "Merges two paid-tier landing pages into one plans section built on three points (cost, a better AI, document uploads), makes the purchase CTA one of the cards with a gradient stroke, and puts Enterprise behind a tiny button on every plan."
+    },
+    {
+      "name": "AI-assisted design",
+      "summary": "The page roadmap was partly generated with Gemini and Gemini generated the explore-section content, while the bento card descriptions were written without AI."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Websites for cutting-edge AI products are firmly average.",
+      "evidence": "these are firmly average websites for literally Cutting Edge technology"
+    },
+    {
+      "claim": "Gemini's landing page is a single unscrollable section that does not describe features and uses two separate pages for pricing.",
+      "evidence": "Description: single unscrollable section"
+    },
+    {
+      "claim": "Mesh gradients are pretty much synonymous with AI.",
+      "evidence": "mesh gradients are pretty much synonymous with AI at this point"
+    },
+    {
+      "claim": "A header search bar that users type into means they are already engaged in an action and more likely to see it through.",
+      "evidence": "the user is already engaged in an action and is more likely to see it through"
+    },
+    {
+      "claim": "Decorative background shapes looked messy against Google's typically clean style.",
+      "evidence": "I tried background shapes but those looked messy"
+    },
+    {
+      "claim": "Google has two separate landing pages for Gemini for Business and Gemini Advanced that seem to sell the same thing.",
+      "evidence": "Google actually has two separate landing pages for Gemini for business"
+    },
+    {
+      "claim": "The key points across both paid-tier pages are the cost, that it is a better AI, and uploading Google Docs, Sheets and PDFs.",
+      "evidence": "only a few key important points number one the cost"
+    },
+    {
+      "claim": "The Gemini Enterprise information is not useful for about 98% of visitors.",
+      "evidence": "this isn't useful for like 98% of people passing through"
+    },
+    {
+      "claim": "Any software or hardware dealing with user data needs a privacy section.",
+      "evidence": "for any software or Hardware dealing with your data you need a privacy section"
+    },
+    {
+      "claim": "A shield icon feels more like Google, while Apple generally uses a lock icon.",
+      "evidence": "the shield seems more like Google whereas I think Apple generally uses the lock icon"
+    },
+    {
+      "claim": "Searching Flaticon by interface icons returns only clean, simple icons.",
+      "evidence": "Pro tip if you can't find any good icons"
+    },
+    {
+      "claim": "The redesigned page looks good before any animation, showing how powerful a good layout is.",
+      "evidence": "this is before any fancy animations"
+    },
+    {
+      "claim": "Google Chrome's landing page is much better than Gemini's.",
+      "evidence": "so much better than gemin"
+    },
+    {
+      "claim": "A call to action needs something eye-catching that draws the user in.",
+      "evidence": "we need something eye-catching that will draw the user in"
+    },
+    {
+      "claim": "Microsoft's blog section is a reasonable option apart from its tiny text.",
+      "evidence": "whatever the hell is going on with this tiny text Microsoft"
+    }
+  ],
+  "quotes": [
+    "goes to show how powerful a good layout is",
+    "if there's one thing designers are it's indecisive",
+    "that is how you iterate through to find the best design"
+  ],
+  "tags": [
+    "landing-page",
+    "redesign",
+    "ai-product",
+    "mesh-gradient",
+    "noise",
+    "bento",
+    "dark-mode",
+    "hover-effects",
+    "cta",
+    "search-bar",
+    "iteration",
+    "inspiration",
+    "privacy-section",
+    "icons",
+    "pricing",
+    "ai-assisted-design"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "Collect inspiration from competitors and sibling products, and search for existing assets, before you start designing.",
+      "why": "As with any good project you need inspiration, and a Google search turned up a way better background image than the one first planned.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "as with any good project we're going to need some inspiration; that is why you do a Google search before you start a project"
+    },
+    {
+      "rule": "On an AI product landing page, use a search or prompt bar the visitor can type into as the hero call to action instead of a plain button.",
+      "why": "The search bar redirects to log in, but the user is already engaged in an action and is more likely to see it through; it also looks cooler than a plain button.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "open AI has the right idea to have a search bar that you can type in"
+    },
+    {
+      "rule": "When a clean hero needs more attention, add a product-native animation (such as the chatbot's thinking loader) rather than decorative background shapes.",
+      "why": "Background shapes looked messy against the brand's clean style, while the loader makes it look like the AI is actually thinking and is eye-catching.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "integrate the chatbot loading screen into the bottom of the header"
+    },
+    {
+      "rule": "Merge landing pages that sell the same thing into one page built around the few key points they share.",
+      "why": "The author hates redundant landing pages; the two paid-tier pages look like they sell exactly the same thing and reduce to three key points: the cost, a better AI, and uploading Google Docs, Sheets and PDFs.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "there's one thing I hate it's redundant landing pages so let's simplify"
+    },
+    {
+      "rule": "To bring color into a dark mode, set the background to a gradient of two primary colors and darken both.",
+      "why": "It is a trick for when you are struggling to incorporate color into dark modes.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "color",
+      "applies_to": "all",
+      "values": [
+        "baby blue",
+        "pink"
+      ],
+      "evidence": "if you're struggling to incorporate color into your dark modes set your background to a gradient"
+    },
+    {
+      "rule": "Use noise on gradients sparingly; do not apply it across the whole site.",
+      "why": "Too much noise makes the site look like TV static.",
+      "kind": "dont",
+      "strength": "consider",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "I don't want our whole site to end up looking like TV static"
+    },
+    {
+      "rule": "Do not put a section title above a bento grid when it feels redundant; let the card headers carry the section.",
+      "why": "The planned title seemed kind of redundant, and the cards got their own headers.",
+      "kind": "dont",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "originally I was thinking of having this title up here but it seems kind of redundant"
+    },
+    {
+      "rule": "Put the found background image under the card and add a duplicate with a bit of background blur to give the card ambiance.",
+      "why": "The blurred duplicate gives some ambiance, and the author says the result looks really good.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "elevation",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "add a bit of background blur to a duplicate to give it some Ambiance"
+    },
+    {
+      "rule": "Make a section work through layout alone; it should already look good before any animation is added.",
+      "why": "The page already looked good before any animation, which shows how powerful a good layout is.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "this is before any fancy animations"
+    },
+    {
+      "rule": "On hover over an image card, blur the image, make it larger and pop up additional text.",
+      "why": "The author calls it a really classy interactive effect (seen on the Accenture website) and it lets the section hold more information.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "on Hover we blur the image make it larger and pop up some additional text"
+    },
+    {
+      "rule": "Put the purchase call to action inside the row of plan cards as one of the cards, marked with a gradient stroke, instead of placing it above them.",
+      "why": "It keeps the section more interesting.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "instead of popping the CTA to purchase Gemini Advanced up here let's make it one of these cards"
+    },
+    {
+      "rule": "Move an option that only a small share of visitors need (such as Enterprise) into a small button on each plan instead of giving it its own section.",
+      "why": "The Enterprise part is not useful for most people passing through.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [
+        "98%"
+      ],
+      "evidence": "let's add this tiny button to all the plans"
+    },
+    {
+      "rule": "Use a solid brand color for feature icons rather than gradient icons, and add brand color through a gradient stroke on hover.",
+      "why": "The author did not like the gradient icons; the hover stroke adds color instead.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "color",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "grab some gradient icons but I don't like that very much so let's switch that to a nice Google blue"
+    },
+    {
+      "rule": "When you cannot find good icons, search Flaticon filtered to interface icons.",
+      "why": "That filter returns only the clean, simple icons.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Pro tip if you can't find any good icons for your projects go to Flat icon"
+    },
+    {
+      "rule": "Include a privacy section on the landing page of any software or hardware that handles user data.",
+      "why": "Products that deal with your data need one; Apple devotes an entire page to it.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "for any software or Hardware dealing with your data you need a privacy section"
+    },
+    {
+      "rule": "Choose icon metaphors that match the brand's own conventions (a shield felt like Google, a lock like Apple).",
+      "why": "The shield seems more like Google, whereas Apple generally uses the lock icon.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "I was thinking about using a lock icon but the shield seems more like Google"
+    },
+    {
+      "rule": "Try several layouts for a key section like the final CTA, and keep changing it until it feels right.",
+      "why": "The CTA went through about four layouts (one felt weird, one's spacing was not right, one still did not feel right) before one worked; that is how you iterate to the best design.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [
+        "four"
+      ],
+      "evidence": "I went through about four different layouts before arriving on one I liked"
+    },
+    {
+      "rule": "Do not reuse the same layout for two sections of one page; pick a different layout for the later section.",
+      "why": "The Microsoft-style blog layout was not a bad option, but the author had already used that layout for the explore section, so he picked another.",
+      "kind": "dont",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "we've kind of already used this layout though for the explore the possibilities section"
+    },
+    {
+      "rule": "Do not use tiny text in content sections such as a blog list.",
+      "why": "The author calls out the tiny text on Microsoft's blog section as a flaw.",
+      "kind": "dont",
+      "strength": "consider",
+      "area": "typography",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "whatever the hell is going on with this tiny text Microsoft"
+    },
+    {
+      "rule": "For an AI product's visual style, pair mesh gradients with a healthy dose of noise and fully rounded corners.",
+      "why": "Mesh gradients are pretty much synonymous with AI at this point.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "mesh gradients are pretty much synonymous with AI"
+    },
+    {
+      "rule": "Write a short, punchy hero headline (here 'Gemini, the only AI by Google').",
+      "why": "The author takes the punchy-headline style from the Chrome website and likes how it sounds.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "content",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "steal some inspiration of a Punchy headline from the Chrome website"
+    },
+    {
+      "rule": "If brand colors applied to headline text look off, bring in the brand through its logo on a white background instead.",
+      "why": "Applying the Google colors made something look off.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "color",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "I was thinking of applying the Google colors but when I do that something looks off"
+    },
+    {
+      "rule": "Build diagrams or real product UI into bento cards instead of leaving them as plain text cards.",
+      "why": "Integrating the diagrams into the cards felt so Google-esque the author did not think he could do much better; two cards reuse Gemini UI with small changes.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "integrating these diagrams into the cards seems so Google esque"
+    },
+    {
+      "rule": "Choose a section layout that leaves room for all the content you need, and drop one that does not, even if it looks good.",
+      "why": "The first image-section layout was good but did not leave enough room for all the content the author wanted.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "it didn't really leave me enough room to fit in all the content"
+    },
+    {
+      "rule": "Add a few real product elements to a showcase so it reads as the actual product (here, chatbot elements around the generated images).",
+      "why": "To make it feel more like an actual chatbot.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "I added a couple more elements to make it feel more like an actual chatbot"
+    },
+    {
+      "rule": "For an explore or browse section, use a layout that breaks the box by letting items extend off the page, with navigation to move through them.",
+      "why": "It keeps the section simple and is one of the author's favorite layouts.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "breaks the Box by extending off the page"
+    },
+    {
+      "rule": "Reuse the hero's typeable search bar as the basis of the final call-to-action section.",
+      "why": "The CTA needs something eye-catching that draws the user in, and the author says the header search bar nailed that.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "I think we nailed it in the header by having a search bar"
+    },
+    {
+      "rule": "In a centered CTA, move purely decorative elements (the prompt cards) to the sides and give them a gradient.",
+      "why": "The cards are really for decoration anyway; this was the change that finished the CTA after the centered layout.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "move these to the side since they're really for decoration anyways"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "What should the hero call to action be on an AI product landing page?",
+      "options": [
+        {
+          "name": "Plain button",
+          "effect": "A standard click-through; the author finds it less engaging and less cool-looking.",
+          "when": "Not recommended here."
+        },
+        {
+          "name": "Typeable search or prompt bar",
+          "effect": "Visitors start typing, which redirects them to log in; they are already engaged in an action. Mesh gradients go where a search icon could have been.",
+          "when": "When the product itself is a prompt or search box, as with an AI chatbot."
+        }
+      ],
+      "recommendation": "Typeable search bar: the user is already engaged in an action and more likely to see it through, and it looks cooler than a plain button.",
+      "maps_to": null,
+      "evidence": "for the header I think open AI has the right idea to have a search bar"
+    },
+    {
+      "question": "How do you add attention to a clean hero section?",
+      "options": [
+        {
+          "name": "Background shapes",
+          "effect": "Looked messy against Google's typically clean style.",
+          "when": "Not for a clean brand."
+        },
+        {
+          "name": "Product-native animation (chatbot thinking loader at the bottom of the header)",
+          "effect": "Looks like the AI is actually thinking; an eye-catching animation.",
+          "when": "When the product has a recognisable loading or working state."
+        }
+      ],
+      "recommendation": "The chatbot loading animation, because background shapes looked messy.",
+      "maps_to": null,
+      "evidence": "I tried background shapes but those looked messy"
+    },
+    {
+      "question": "Where should gradients be used on an AI product site?",
+      "options": [
+        {
+          "name": "Mesh gradient on the hero search bar",
+          "effect": "Signals AI; mesh gradients are called synonymous with AI.",
+          "when": "Hero and key interactive elements."
+        },
+        {
+          "name": "Darkened two-color gradient as the dark-mode background",
+          "effect": "Adds subtle color to a dark page using the brand's primary colors.",
+          "when": "When dark mode feels colorless."
+        },
+        {
+          "name": "Gradient stroke on the purchase card and on hover",
+          "effect": "Highlights the CTA card and adds brand color on interaction.",
+          "when": "For the plan you want people to pick, and hover states."
+        },
+        {
+          "name": "Gradient icons",
+          "effect": "The author did not like them and switched to solid Google blue.",
+          "when": "Rejected in this redesign."
+        }
+      ],
+      "recommendation": "Use gradients on the hero, backgrounds, CTA strokes and hover strokes, but not on icons.",
+      "maps_to": "Q-color-25",
+      "evidence": "start overusing some mesh gradi; we can apply this gradient stroke; switch that to a nice Google blue"
+    },
+    {
+      "question": "Which layout should a marketing feature or showcase section use?",
+      "options": [
+        {
+          "name": "Bento layout",
+          "effect": "Cards with headers, short descriptions and integrated diagrams or product UI.",
+          "when": "Features section with several distinct capabilities."
+        },
+        {
+          "name": "Text on the left, image on the right",
+          "effect": "The author calls it the lame default.",
+          "when": "Fallback when a fancier layout does not fit the content."
+        },
+        {
+          "name": "Multi-image showcase borrowed from the Chrome site",
+          "effect": "Several images (a fourth added) with chatbot elements so it feels like a real chatbot.",
+          "when": "Showing off image generation or visual output."
+        },
+        {
+          "name": "Layout that breaks the box by extending off the page",
+          "effect": "Cards run off the edge of the page, with navigation to move through them.",
+          "when": "An explore or browse section with many items."
+        }
+      ],
+      "recommendation": "Bento for features, the Chrome-style showcase for images, and the off-page layout for exploring; the first image layout was dropped because it did not leave enough room for the content.",
+      "maps_to": "Q-layout-05",
+      "evidence": "a good time to jump on the bandwagon of creating a Bento layout"
+    },
+    {
+      "question": "How should image cards respond on hover?",
+      "options": [
+        {
+          "name": "Zoom-in effect",
+          "effect": "A zoom-in effect the author loves on the Chrome website; it gave him the idea of a hover-driven section.",
+          "when": "The starting idea for a hover-driven section."
+        },
+        {
+          "name": "Blur, enlarge and reveal text",
+          "effect": "The image blurs and grows while additional text pops up; a classy interactive effect.",
+          "when": "When cards need to hold more information than fits at rest."
+        }
+      ],
+      "recommendation": "Blur the image, make it larger and pop up additional text (the Accenture-style effect).",
+      "maps_to": null,
+      "evidence": "on Hover we blur the image make it larger and pop up some additional text"
+    },
+    {
+      "question": "Where should a rarely needed plan (Enterprise) go?",
+      "options": [
+        {
+          "name": "Its own section or card",
+          "effect": "Takes space for information most visitors do not need.",
+          "when": "Not recommended here."
+        },
+        {
+          "name": "A tiny button on every plan",
+          "effect": "Keeps the plans compact while still offering the path.",
+          "when": "When the option is irrelevant to most visitors."
+        }
+      ],
+      "recommendation": "A tiny button on all the plans, because the Enterprise part is not useful for about 98% of visitors.",
+      "maps_to": null,
+      "evidence": "this isn't useful for like 98% of people passing through"
+    },
+    {
+      "question": "How should the final call-to-action section be laid out?",
+      "options": [
+        {
+          "name": "Prompt cards with a typeable card at the bottom",
+          "effect": "Felt weird.",
+          "when": "Rejected."
+        },
+        {
+          "name": "Typeable card just below the text",
+          "effect": "The spacing did not feel right.",
+          "when": "Rejected."
+        },
+        {
+          "name": "Card collapsed into just the search bar",
+          "effect": "Still did not feel right.",
+          "when": "Rejected."
+        },
+        {
+          "name": "Centered layout",
+          "effect": "Better.",
+          "when": "Intermediate step."
+        },
+        {
+          "name": "Centered search bar with the prompt cards moved to the sides as gradient decoration",
+          "effect": "The final version; the cards are there for decoration.",
+          "when": "Chosen."
+        }
+      ],
+      "recommendation": "Centered layout with the decorative prompt cards moved to the side and given a gradient, echoing the search bar from the header.",
+      "maps_to": null,
+      "evidence": "I went through about four different layouts before arriving on one I liked"
+    },
+    {
+      "question": "What visual should carry a privacy section?",
+      "options": [
+        {
+          "name": "Lock icon",
+          "effect": "Feels more like Apple.",
+          "when": "Apple-like brands."
+        },
+        {
+          "name": "Shield icon",
+          "effect": "Feels more like Google.",
+          "when": "Google-like brands."
+        },
+        {
+          "name": "Grid with isometrics and blue concentric circles",
+          "effect": "Replaced a result the author thought looked lame; adds more visual interest.",
+          "when": "When the plain icon treatment looks lame."
+        }
+      ],
+      "recommendation": "The shield for brand fit, then a grid with isometrics and blue concentric circles to make it better.",
+      "maps_to": null,
+      "evidence": "the shield seems more like Google whereas I think Apple generally uses the lock icon"
+    }
+  ],
+  "process": [
+    {
+      "step": "Audit the current and competitor sites",
+      "detail": "Look at OpenAI, Microsoft, Midjourney, Gemini and the Chrome landing page and note what is weak (lopsided layout, too many tabs and videos, neglected page) and what works."
+    },
+    {
+      "step": "Gather inspiration",
+      "detail": "Pull from Microsoft Copilot, OpenAI, Google Chrome and other Google products."
+    },
+    {
+      "step": "Pick the visual recipe",
+      "detail": "Choose mesh gradients, a healthy dose of noise and fully rounded corners."
+    },
+    {
+      "step": "Plan the page roadmap",
+      "detail": "Draft the section order (partly generated with Gemini, loosely following Microsoft's landing page) so three separate Google pages condense into one."
+    },
+    {
+      "step": "Design the header",
+      "detail": "Typeable search bar CTA with a mesh gradient, a punchy headline, the Google logo on a white background and the Gemini star, plus the chatbot loading animation for attention."
+    },
+    {
+      "step": "Build each section by borrowing and adapting",
+      "detail": "Bento features with product UI and diagrams, an image showcase, merged plans with hover effects, an explore section, privacy, CTA, blog and footer."
+    },
+    {
+      "step": "Consolidate redundant content",
+      "detail": "Scroll through overlapping pages and keep only the key points (cost, better AI, document uploads)."
+    },
+    {
+      "step": "Iterate on layouts",
+      "detail": "Try multiple layouts for a section (about four for the CTA) and keep adjusting until spacing and balance feel right."
+    },
+    {
+      "step": "Avoid repeating layouts",
+      "detail": "If a layout is already used on the page, choose another for the next section."
+    },
+    {
+      "step": "Close with a footer that mirrors the header",
+      "detail": "Base the footer on the Gemini website's header and use the same element as the page header, swapping the Google logo for the Gemini one."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Hero search bar with mesh gradient",
+      "where": "Redesigned Gemini landing page (idea from OpenAI)",
+      "visual_note": "A typeable search bar in the header, styled with a mesh gradient, that redirects to login."
+    },
+    {
+      "what": "Punchy headline 'Gemini, the only AI by Google'",
+      "where": "Redesigned Gemini landing page (style from the Chrome site)",
+      "visual_note": "Google brand colors on the text looked off, so the Google logo is set on a white background and the Gemini star sits above the headline."
+    },
+    {
+      "what": "Chatbot loading animation at the bottom of the header",
+      "where": "Redesigned Gemini landing page",
+      "visual_note": "Makes the page look like the AI is thinking; replaced background shapes that looked messy."
+    },
+    {
+      "what": "Bento features section",
+      "where": "Redesigned Gemini landing page",
+      "visual_note": "Cards for draft control, access to live information, Creative Powerhouse and a fourth card, with diagrams and Gemini UI inside; the last card uses a background image found through a Google search plus a blurred duplicate for ambiance."
+    },
+    {
+      "what": "Dark-mode gradient background",
+      "where": "Redesigned Gemini landing page",
+      "visual_note": "Background gradient of baby blue and pink taken from the Gemini website, darkened, with optional light noise."
+    },
+    {
+      "what": "Image showcase section",
+      "where": "Redesigned Gemini landing page (layout from the Chrome site)",
+      "visual_note": "Multiple images, a fourth added, plus chatbot elements so it reads as a real chatbot."
+    },
+    {
+      "what": "Merged Gemini Advanced / Business plans with hover cards",
+      "where": "Redesigned Gemini landing page (hover effect from the Accenture website)",
+      "visual_note": "Cards where hover blurs and enlarges the image and reveals text; the purchase CTA is a card with a gradient stroke; Enterprise is a tiny button on each plan."
+    },
+    {
+      "what": "Explore the possibilities section",
+      "where": "Redesigned Gemini landing page",
+      "visual_note": "Cards extend off the page, icons in Google blue on a bluish gray gradient background, and a Gemini-gradient stroke on hover."
+    },
+    {
+      "what": "Privacy section 'unparalleled privacy and security'",
+      "where": "Redesigned Gemini landing page",
+      "visual_note": "Two deliberately non-parallel lines as a visual pun, a shield icon, a grid with isometrics and blue concentric circles."
+    },
+    {
+      "what": "Final CTA iterations",
+      "where": "Redesigned Gemini landing page",
+      "visual_note": "About four layouts shown in sequence, ending on a centered search bar with gradient prompt cards pushed to the sides as decoration."
+    },
+    {
+      "what": "Blog section and footer",
+      "where": "Redesigned Gemini landing page",
+      "visual_note": "Images with text and maybe arrows so the middle one scrolls (the author says it does not matter); the footer reuses the Gemini site's header, and the page header uses the same design with the Gemini logo."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "98%",
+      "context": "Share of visitors the author says the Enterprise information is not useful for.",
+      "evidence": "this isn't useful for like 98% of people passing through"
+    },
+    {
+      "value": "four",
+      "context": "Number of CTA layouts tried before settling on one.",
+      "evidence": "I went through about four different layouts"
+    },
+    {
+      "value": "three",
+      "context": "Separate Google landing pages condensed into one page.",
+      "evidence": "condense three separate landing pages Google has into one"
+    },
+    {
+      "value": "two",
+      "context": "Separate landing pages for Gemini for Business and Gemini Advanced.",
+      "evidence": "Google actually has two separate landing pages"
+    },
+    {
+      "value": "fourth",
+      "context": "The author added a fourth image to the image showcase borrowed from the Chrome site.",
+      "evidence": "added a fourth image"
+    }
+  ],
+  "caveats": [
+    "Published July 2024; the critiques of OpenAI, Microsoft and Gemini sites describe those sites at that time.",
+    "The author says the finished design is entirely not mobile optimized.",
+    "Self-promotion: the Figma file is offered as a free download via the description link (kolejain.com/resource), plus a subscribe plug.",
+    "Mostly opinion: the claim that a search bar makes users more likely to follow through, and the 98% figure, are stated without data.",
+    "The author openly 'steals' layouts and effects from Chrome, OpenAI, Accenture and Gemini; OpenDesigner treats references as structure, not identity [inferred].",
+    "No media list was available, so visual notes come from the narration only.",
+    "Auto-caption errors corrected where certain: 'RO map' is roadmap, 'I advaned' is Gemini Advanced, 'Flat icon' is Flaticon, 'stock' is stuck, 'gradi in action' is gradients in action; 'Chrome has a bump and landing page' is unclear."
+  ]
+}

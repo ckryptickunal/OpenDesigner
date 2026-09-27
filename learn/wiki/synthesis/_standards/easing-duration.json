@@ -1,0 +1,1128 @@
+{
+  "theme": "easing-duration",
+  "standards": [
+    {
+      "id": "STD-easing-duration-01",
+      "theme": "easing-duration",
+      "area": "motion",
+      "title": "Pick easing by the motion's job",
+      "rule": "Choose each animation's easing by asking in order whether it enters or exits the screen (ease-out), moves or morphs on screen (ease-in-out), is a hover or color change (ease), or is constant motion such as a spinner, marquee or progress fill (linear), and use ease-out when none applies. Never put linear on an entrance, and put bare ease on one only when the component's personality calls for it, as the toast recipe does (STD-easing-duration-13).",
+      "why": "Easing is the most important part of any animation; the decision order is strict so the agent does not guess or make up its own rules, and linear is kept for constant motion because progress shouldn't ease.",
+      "strength": "must",
+      "values": {
+        "entering-or-exiting": "ease-out",
+        "moving-or-morphing-on-screen": "ease-in-out",
+        "hover-or-color-change": "ease",
+        "constant-motion": "linear",
+        "default": "ease-out"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-agents-with-taste",
+          "evidence": "Easing Decision Flowchart"
+        },
+        {
+          "id": "ek-building-an-animation-course",
+          "evidence": "Easing Decision Flowchart"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "5. Easing and duration: easing table, in decision order"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "3. What easing should it use?"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Easing: Decision order"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "Decision order for easing; Hunt for: bare ease/linear on entrances"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Easing, for everything without a finger on it"
+        },
+        {
+          "id": "eks-skills-animation-vocabulary-skill",
+          "evidence": "Ease-out: the default for most UI; Linear: avoid for UI, reserve for spinners or marquees"
+        },
+        {
+          "id": "ek-7-practical-animation-tips",
+          "evidence": "4. Choose the right easing: entering or exiting the screen, use ease-out"
+        },
+        {
+          "id": "adev-changelog",
+          "evidence": "Keep your animations fast: Default to use ease-out for most animations"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Hold to confirm: linear is correct here"
+        }
+      ],
+      "engine": [
+        {
+          "path": "motion.easing.linear",
+          "value": [
+            0,
+            0,
+            1,
+            1
+          ],
+          "type": "cubicBezier",
+          "note": "Constant motion only (spinners, marquees, progress fills); OpenDesigner already has this value."
+        },
+        {
+          "path": "motion.easing.hover",
+          "value": [
+            0.25,
+            0.1,
+            0.25,
+            1
+          ],
+          "type": "cubicBezier",
+          "note": "New token for hover and color changes: the curve CSS defines for the ease keyword [inferred]."
+        }
+      ],
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py build_motion_context: motion.transition.feedback ('Hover, press, color changes') uses motion.easing.standard ([0.2, 0, 0, 1] at the default energy), not ease for hover and color or ease-out for press [inferred].",
+        "skills/opendesigner/scripts/engine.py build_motion_context: motion.transition.move ('On-screen movement') is the spatial spring motion.spring.spatial.default, while the sources give timed on-screen moves ease-in-out and keep springs for motion a finger drives [inferred]."
+      ]
+    },
+    {
+      "id": "STD-easing-duration-02",
+      "theme": "easing-duration",
+      "area": "motion",
+      "title": "Strong custom curves, not built-in keywords",
+      "rule": "Use the strong custom curves cubic-bezier(0.23, 1, 0.32, 1) for ease-out and cubic-bezier(0.77, 0, 0.175, 1) for ease-in-out instead of the built-in CSS or Reanimated easings (only the ease and linear keywords stay allowed), and take any other curve from easing.dev or easings.co rather than hand-rolling one.",
+      "why": "The built-in easing curves are usually not strong enough (Reanimated's are as weak as CSS's); custom curves feel more energetic and give animations the punch that makes them feel intentional.",
+      "strength": "must",
+      "values": {
+        "--ease-out": "cubic-bezier(0.23, 1, 0.32, 1)",
+        "--ease-in-out": "cubic-bezier(0.77, 0, 0.175, 1)",
+        "EASE_OUT": "Easing.bezier(0.23, 1, 0.32, 1)",
+        "EASE_IN_OUT": "Easing.bezier(0.77, 0, 0.175, 1)",
+        "allowed-built-in-keywords": "ease, linear",
+        "curve-sources": "https://easing.dev/, https://easings.co/"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "Built-in CSS easings are too weak. Use these; Never Ship: Built-in ease-out on a deliberate animation -> cubic-bezier(0.23, 1, 0.32, 1)"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Critical: use custom easing curves; Easing curve resources"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Easing: strong custom curves; Find curves at easing.dev or easings.co"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "3. Responsive easing: built-in CSS easings are too weak; expect custom cubic-beziers"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "plans should introduce strong custom curves (as tokens, matching repo conventions)"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "this repo's shared vocabulary"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Reanimated's built-ins are as weak as CSS's; const EASE_OUT, const EASE_IN_OUT"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Imports and constants every recipe below shares"
+        },
+        {
+          "id": "ek-7-practical-animation-tips",
+          "evidence": "The built-in easing curves in CSS are usually not strong enough, which is why I almost never use them"
+        },
+        {
+          "id": "adev-changelog",
+          "evidence": "Easing rules: Don't use built-in CSS easings unless it's ease or linear"
+        }
+      ],
+      "engine": [
+        {
+          "path": "motion.easing.enter",
+          "value": [
+            0.23,
+            1,
+            0.32,
+            1
+          ],
+          "type": "cubicBezier",
+          "note": "Entering: the strong ease-out (--ease-out)."
+        },
+        {
+          "path": "motion.easing.exit",
+          "value": [
+            0.23,
+            1,
+            0.32,
+            1
+          ],
+          "type": "cubicBezier",
+          "note": "Exiting: the same strong ease-out; the sources give exits ease-out and never an accelerate (ease-in) curve."
+        },
+        {
+          "path": "motion.easing.standard",
+          "value": [
+            0.77,
+            0,
+            0.175,
+            1
+          ],
+          "type": "cubicBezier",
+          "note": "OpenDesigner describes standard as 'Moving and morphing on screen', which the sources give the strong ease-in-out. motion.transition.feedback, the reduced-motion fades and the critically damped spring CSS fallbacks also point at standard and would inherit ease-in-out until they are re-pointed [inferred]."
+        }
+      ],
+      "review": {
+        "pattern": "\\b(?:transition|animation)(?:-timing-function)?\\s*:[^;{}]*(?<![\\w-])ease-(?:in-)?out(?![\\w-])|\\btransitionTimingFunction\\s*:\\s*['\\\"`]ease-(?:in-)?out['\\\"`]|\\bEasing\\.(?:out|inOut)\\(|\\bease\\s*:\\s*['\\\"`]?ease(?:In)?Out\\b",
+        "message": "Built-in ease-out/ease-in-out is too weak: use cubic-bezier(0.23, 1, 0.32, 1) to enter or exit, or cubic-bezier(0.77, 0, 0.175, 1) to move on screen, through the motion.easing tokens."
+      },
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py build_motion: motion.easing.enter is [0, 0, 0.38, 0.9] (energy 0-33), [0, 0, 0, 1] (34-66, the default) or [0, 0, 0.3, 1] (67-100), not cubic-bezier(0.23, 1, 0.32, 1).",
+        "synthesis/levers.json dial energy drives motion.easing.standard through bands [0.2, 0, 0.38, 0.9] / [0.2, 0, 0, 1] / [0.4, 0.14, 0.3, 1] (the default energy 35 gives [0.2, 0, 0, 1]), not cubic-bezier(0.77, 0, 0.175, 1); the sources fix one curve per job instead of swapping curves with a dial [inferred].",
+        "synthesis/questionnaire.json Q-motion-03 default (stage 16 detailed): standard (0.2, 0, 0, 1), enter (0, 0, 0, 1) or (0.05, 0.7, 0.1, 1); Q-motion-01 option productive offers Carbon cubic-bezier(0.2, 0, 0.38, 0.9).",
+        "skills/opendesigner/assets/templates/motion.html presets: two-mode standard cubic-bezier(0.2,0,0,1) and enter cubic-bezier(0,0,0,1); productive standard cubic-bezier(0.2,0,0.38,0.9); springs standard cubic-bezier(0.34,1.4,0.64,1) and enter cubic-bezier(0.34,1.56,0.64,1), none of them from the sources' curve table."
+      ]
+    },
+    {
+      "id": "STD-easing-duration-03",
+      "theme": "easing-duration",
+      "area": "motion",
+      "title": "Never use ease-in on UI",
+      "rule": "Never use ease-in (CSS ease-in, Reanimated Easing.in(...)) on any UI animation, entering or exiting, and do not try to rescue it with a shorter duration; switch to ease-out.",
+      "why": "Ease-in starts slow and speeds up at the end, delaying the exact moment the user is watching: a 300ms ease-in dropdown feels slower than the same 300ms with ease-out, and the curve itself is not made for UI animations.",
+      "strength": "must",
+      "values": {
+        "forbidden": "ease-in",
+        "use-instead": "cubic-bezier(0.23, 1, 0.32, 1)",
+        "same-duration-comparison": "ease-out at 200ms feels faster than ease-in at 200ms"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-7-practical-animation-tips",
+          "evidence": "this easing is just not made for UI animations. It speeds up at the end; You could decrease the duration to make ease-in work"
+        },
+        {
+          "id": "eks-readme",
+          "evidence": "An ease-in easing for an enter animation"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "Never ease-in on UI; Never Ship: ease-in on a UI element"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Never use ease-in for UI animations; Review Checklist"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Never ease-in on UI"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "3. Responsive easing: ease-in on UI is a block"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "ease-in on UI is always a finding"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Never ease-in on UI; Never Ship: Easing.in(...) on a UI element"
+        },
+        {
+          "id": "eks-skills-prototype-skill",
+          "evidence": "Operating Posture: right easing (ease-out on entrances, never ease-in)"
+        },
+        {
+          "id": "eks-skills-animation-vocabulary-skill",
+          "evidence": "Ease-in: usually avoided; can feel sluggish"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "\\b(?:transition|animation)(?:-timing-function)?\\s*:[^;{}]*(?<![\\w-])ease-in(?![\\w-])|\\btransitionTimingFunction\\s*:\\s*['\\\"`]ease-in['\\\"`]|\\bease\\s*:\\s*['\\\"`]?easeIn\\b|\\bEasing\\.in\\(|\\.easeIn\\b",
+        "message": "ease-in delays the moment the user is watching: use ease-out, cubic-bezier(0.23, 1, 0.32, 1)."
+      },
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py build_motion: motion.easing.exit is an accelerate (ease-in) curve at every energy, [0.2, 0, 1, 0.9], [0.3, 0, 1, 1] (the default) or [0.4, 0.14, 1, 1], described as 'Leaving: accelerate out of the way', and motion.transition.exit uses it.",
+        "synthesis/questionnaire.json Q-motion-01 default (stage 16): 'ease-out to enter, ease-in to exit'; Q-motion-03 default exit (0.3, 0, 1, 1).",
+        "skills/opendesigner/assets/templates/motion.html presets: exit cubic-bezier(0.2,0,1,0.9), cubic-bezier(0.3,0,1,1) and cubic-bezier(0.4,0,1,1)."
+      ]
+    },
+    {
+      "id": "STD-easing-duration-04",
+      "theme": "easing-duration",
+      "area": "motion",
+      "title": "iOS-like curve for timed drawers",
+      "rule": "When a drawer or sheet opens or closes on a timing curve rather than a spring (every web drawer), use the iOS-like curve cubic-bezier(0.32, 0.72, 0, 1) (--ease-drawer; EASE_SHEET, Easing.bezier(0.32, 0.72, 0, 1), in Reanimated). Sheets and drawers a finger drives on iOS and Android settle with a spring instead.",
+      "why": "The curve, from the Ionic Framework, closely matches the one iOS uses, and using the right easing makes a big difference to how the component feels. The skills list it as the drawer token beside the strong ease-out and ease-in-out, but no source calls another strong curve on a drawer a mistake, so this is a should. The Expo skill gives native sheets, modals and drawers a spring of about 300ms perceived. It is the curve Vaul uses; Vaul itself is unmaintained per its README (learn/sources.json), so this rests on the article and skills, not on Vaul as a dependency.",
+      "strength": "should",
+      "values": {
+        "--ease-drawer": "cubic-bezier(0.32, 0.72, 0, 1)",
+        "EASE_SHEET": "Easing.bezier(0.32, 0.72, 0, 1)",
+        "native-sheet": "spring { duration: 300, dampingRatio: 0.8, velocity }"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "Motion: The curve used in Vaul closely matches the one used in iOS; it's from the Ionic Framework"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "--ease-drawer: cubic-bezier(0.32, 0.72, 0, 1); /* iOS-like drawer curve (Ionic) */"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "iOS-like drawer curve (from Ionic Framework)"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Easing: strong custom curves (--ease-drawer)"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "/* iOS-like drawer curve */"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "this repo's shared vocabulary (--ease-drawer)"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "const EASE_SHEET = Easing.bezier(0.32, 0.72, 0, 1); // iOS sheet curve; Sheet, drawer: { duration: 300, dampingRatio: 0.8, velocity }; Sheet, modal, drawer: spring, ~300ms perceived"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Drawer / sheet: transition: transform 500ms var(--ease-drawer); Curves are the --ease-out, --ease-in-out, and --ease-drawer tokens defined in SKILL.md"
+        }
+      ],
+      "engine": {
+        "path": "motion.easing.drawer",
+        "value": [
+          0.32,
+          0.72,
+          0,
+          1
+        ],
+        "type": "cubicBezier",
+        "note": "New token: OpenDesigner has no drawer or sheet curve today."
+      },
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py build_motion_context: motion.transition.expand ('Dialogs, sheets, side panels entering') gives sheets motion.easing.enter, with no drawer curve [inferred]."
+      ]
+    },
+    {
+      "id": "STD-easing-duration-05",
+      "theme": "easing-duration",
+      "area": "motion",
+      "title": "Web drawers take 500ms",
+      "rule": "Run a web drawer or sheet's transform transition for 500ms on the drawer curve (transition: transform 500ms var(--ease-drawer)).",
+      "why": "The 500ms duration is meant to mimic iOS's Sheet, and the right duration makes a big difference to how the component feels. The modal and drawer budget (200-500ms) allows it, so it is a stated exception to the 300ms UI cap (STD-easing-duration-06).",
+      "strength": "should",
+      "values": {
+        "duration": "500ms",
+        "transition": "transform 500ms var(--ease-drawer)",
+        "article-css": "transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1)"
+      },
+      "applies_to": [
+        "web",
+        "css",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "Duration of 500ms is also supposed to mimic iOS's Sheet"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Drawer / sheet: transform 500ms var(--ease-drawer)"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "Duration table: Modals, drawers 200-500ms"
+        }
+      ],
+      "engine": {
+        "path": "motion.duration.drawer",
+        "value": "500ms",
+        "type": "duration",
+        "note": "New token for drawers and sheets on the web; native sheets use a spring instead."
+      },
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py build_motion_context: sheets enter through motion.transition.expand, which uses motion.duration.long (380ms at the default energy, 480ms at energy 100) [inferred]."
+      ]
+    },
+    {
+      "id": "STD-easing-duration-06",
+      "theme": "easing-duration",
+      "area": "motion",
+      "title": "UI motion under 300ms unless justified",
+      "rule": "Keep UI animations under 300ms. A UI duration over 300ms needs a stated reason, such as a web drawer's 500ms (STD-easing-duration-05) or a toast tuned to its component's personality (STD-easing-duration-13), or it is a finding whose fix is 150-250ms. Marketing and explanatory motion can be longer, and a rarely seen, purposeful animation still has to pass this speed check.",
+      "why": "Fast animations improve perceived performance, stay connected to the user's actions and make the interface feel as if it is truly listening: a 180ms dropdown feels more responsive than a 400ms one.",
+      "strength": "must",
+      "values": {
+        "ui-max": "under 300ms",
+        "fix-when-over-300ms-without-reason": "150-250ms",
+        "most-animations": "0.2s to 0.3s",
+        "faster-example": "180ms dropdown",
+        "slower-example": "400ms dropdown"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-7-practical-animation-tips",
+          "evidence": "6. Keep your animations fast: UI animations should generally stay under 300ms"
+        },
+        {
+          "id": "ek-you-dont-need-animations",
+          "evidence": "Perception of speed: Unless you are working on marketing sites, your animations have to be fast"
+        },
+        {
+          "id": "ek-agents-with-taste",
+          "evidence": "Duration Guidelines Rules: UI animations should stay under 300ms"
+        },
+        {
+          "id": "adev-changelog",
+          "evidence": "Keep your animations fast: most of them should be around 0.2s to 0.3s"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "UI animations stay under 300ms; Never Ship: UI duration over 300ms with no reason -> 150-250ms"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Rule: UI animations should stay under 300ms; Review Checklist: Duration > 300ms on UI element"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "4. Sub-300ms UI: anything slower on a UI element needs justification or it's a finding"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Rule: UI animations stay under 300ms"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "UI animations stay under 300ms"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "3. Speed: The suggestion must work within the standard budgets (UI under 300ms); If the moment only works as a slow, showy animation, it fails the gate"
+        },
+        {
+          "id": "eks-skills-prototype-skill",
+          "evidence": "Operating Posture: sub-300ms UI motion"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "\\b(?:transition|animation)(?:-duration)?\\s*:(?![^;{}]*(?:ease-drawer|0\\.32,\\s*0\\.72|linear|infinite))[^;{}]*?(?<![\\w.-])(?:(?:3(?:0[1-9]|[1-9]\\d)|[4-9]\\d\\d|[1-9]\\d{3,})ms|(?:0?\\.(?:3[1-9]|[4-9])\\d*|[1-9]\\d*(?:\\.\\d+)?)s)\\b",
+        "message": "UI animation over 300ms: use 150-250ms unless there is a stated reason (a web drawer's 500ms, a toast tuned to its personality, marketing or illustrative motion), and say why."
+      },
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py validate: a motion.transition.* token gets an advisory only above 400ms and a warning only above 500ms, not above 300ms.",
+        "synthesis/levers.json formulas.motion: standardMax 400 and warnAbove 500; durations long [400, 500] and extra 700.",
+        "synthesis/questionnaire.json Q-motion-02 default (stage 16 detailed): 6 steps with long 400-500 and extra 700, and 'avoid standard transitions over 500ms'; Q-motion-01 default: '7 durations 50-500ms'.",
+        "skills/opendesigner/scripts/engine.py build_motion: motion.duration.long is 380ms and extra 660ms at the default energy (480ms and 840ms at energy 100, through motion.durationMultiplier 0.8-1.2), and motion.transition.expand (dialogs, sheets, side panels) uses long.",
+        "skills/opendesigner/assets/templates/motion.html presets: two-mode long 400; springs medium 320 and long 480."
+      ]
+    },
+    {
+      "id": "STD-easing-duration-07",
+      "theme": "easing-duration",
+      "area": "motion",
+      "title": "Duration budget for each element",
+      "rule": "Time each UI animation within its element's budget: button press feedback 100-160ms, tooltips and small popovers 125-200ms, dropdowns and selects 150-250ms, modals and drawers 200-500ms; on iOS and Android, press feedback 100-150ms, toggles, chips and small state changes 150-200ms, and sheets, modals and drawers a spring of about 300ms perceived.",
+      "why": "The skills make these tables the only source of durations (no invented or approximated values), and each budget keeps its element responsive: a 180ms dropdown feels more responsive than a 400ms one. The Agents with taste article's own table is tighter for modals and drawers (200-300ms), and the recipes pick one value inside each range.",
+      "strength": "must",
+      "values": {
+        "button-press-feedback": "100-160ms",
+        "tooltip-small-popover": "125-200ms",
+        "dropdown-select": "150-250ms",
+        "modal-drawer": "200-500ms",
+        "native-press-feedback": "100-150ms",
+        "native-toggle-chip-small-state": "150-200ms",
+        "native-sheet-modal-drawer": "spring, ~300ms perceived",
+        "article-micro-interactions": "100-150ms",
+        "article-standard-ui": "150-250ms",
+        "article-modals-drawers": "200-300ms",
+        "recipe-press": "160ms",
+        "recipe-tooltip": "125ms",
+        "recipe-dropdown": "200ms",
+        "recipe-modal": "250ms"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "5. Easing and duration: Duration table"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "4. How fast should it be?"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Duration table"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "Duration budget table"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "3. Speed table"
+        },
+        {
+          "id": "ek-agents-with-taste",
+          "evidence": "Duration Guidelines table"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Duration: Press feedback; Toggle, chip, small state change; Sheet, modal, drawer"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Button press 160ms; Tooltip 125ms; Dropdown, popover, menu, select 200ms; Modal 250ms"
+        },
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "5. Tap feels laggy: Keep press feedback at 100-160ms"
+        }
+      ],
+      "engine": [
+        {
+          "path": "motion.duration.micro",
+          "value": "100ms",
+          "type": "duration",
+          "note": "Press feedback and micro-interactions (100-160ms web, 100-150ms native, under 150ms for tens-of-times-a-day use); OpenDesigner already has 100ms."
+        },
+        {
+          "path": "motion.duration.short",
+          "value": "150ms",
+          "type": "duration",
+          "note": "Tooltips and small popovers (125-200ms), toggles and chips (150-200ms); OpenDesigner already has 150ms."
+        },
+        {
+          "path": "motion.duration.medium",
+          "value": "200ms",
+          "type": "duration",
+          "note": "Dropdowns and selects (150-250ms), the dropdown recipe's 200ms; motion.transition.enter uses it. Today 240ms at the default energy and up to 300ms at energy 100."
+        },
+        {
+          "path": "motion.duration.long",
+          "value": "250ms",
+          "type": "duration",
+          "note": "Modals (200-500ms, 200-300ms in the article), the modal recipe's 250ms; motion.transition.expand uses it. Today 380ms at the default energy. Web drawers use motion.duration.drawer (500ms)."
+        }
+      ],
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py build_motion: medium = 250ms x motion.durationMultiplier (240ms at the default energy, up to 300ms) and long = 400ms x multiplier (380ms default, up to 480ms): the energy dial stretches durations past the dropdown and modal budgets.",
+        "synthesis/levers.json formulas.motion.durations: short [150, 200], medium [250, 300], long [400, 500].",
+        "skills/opendesigner/scripts/engine.py build_motion_context: motion.transition.enter ('Menus, popovers, toasts entering') gives tooltips, dropdowns and toasts one medium duration, although their budgets differ (125-200ms vs 150-250ms) [inferred]."
+      ]
+    },
+    {
+      "id": "STD-easing-duration-08",
+      "theme": "easing-duration",
+      "area": "motion",
+      "title": "Frequent interactions: near-imperceptible or none",
+      "rule": "For interactions people use tens of times a day (hover effects, list navigation, row selection, press feedback), keep motion near-imperceptible, fast and subtle, or remove it. On iOS and Android that means under 150ms, and press feedback stays at or below 120ms and a 3% scale.",
+      "why": "Seen that often, animations quickly become annoying and make the interface feel slower instead of delighting; motion at this frequency passes the gate only because it is near-imperceptible, and anything longer or larger belongs to rarer moments. The web skills give no number here: their press feedback example, 160ms ease-out, counts as subtle enough for this tier.",
+      "strength": "must",
+      "values": {
+        "web": "fast and subtle, or nothing",
+        "web-press-example": "transform 160ms ease-out, scale(0.97)",
+        "native-max-duration": "under 150ms",
+        "native-press-ceiling": "120ms and a 3% scale"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "1. Should this animate at all?: Tens of times/day, near-imperceptible only: under 150ms, or nothing"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Press feedback: 120ms and a 3% scale is the ceiling for something touched this often"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "1. Should this animate at all? (frequency table): Tens of times/day, near-imperceptible only, fast and subtle, or nothing"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "1. Frequency table: Tens of times/day, near-imperceptible motion (fast, subtle); Button.tsx example: 160ms ease-out, subtle enough for the frequency tier"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Should it animate? Tens of times/day: Remove or drastically reduce"
+        },
+        {
+          "id": "ek-7-practical-animation-tips",
+          "evidence": "Remove animations or hover interactions altogether if they are seen tens, maybe even hundreds of times a day"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-easing-duration-09",
+      "theme": "easing-duration",
+      "area": "motion",
+      "title": "Nothing over 1s unless illustrative",
+      "rule": "Never let an animation run longer than 1s unless it is illustrative (marketing or explanatory motion). The 2s linear press phase of a hold-to-confirm (STD-easing-duration-12) is a progress fill the user holds, not an animation they wait for, so it sits outside this cap [inferred].",
+      "why": "The course's guideline 'Keep your animations fast' caps animations at 1s with illustrative motion as the only exception; unless you are working on marketing sites your animations have to be fast, and a long duration on a marketing page can be fine rather than a finding.",
+      "strength": "must",
+      "values": {
+        "absolute-max": "1s",
+        "exception": "illustrative",
+        "marketing-scroll-reveal": "clip-path 600ms var(--ease-in-out)",
+        "marketing-image-reveal": "1s cubic-bezier(0.77, 0, 0.175, 1)",
+        "hold-to-confirm-press": "clip-path 2s linear"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "adev-changelog",
+          "evidence": "Animations should never be longer than 1s (unless it's illustrative)"
+        },
+        {
+          "id": "ek-you-dont-need-animations",
+          "evidence": "Unless you are working on marketing sites, your animations have to be fast"
+        },
+        {
+          "id": "eks-skills-improve-animations-skill",
+          "evidence": "Reject anything that is by-design ... or exempt (e.g. a long duration on a marketing page can be fine)"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "Duration table: Marketing / explanatory, can be longer"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Scroll reveal: marketing surfaces only, clip-path 600ms var(--ease-in-out)"
+        },
+        {
+          "id": "ek-the-magic-of-clip-path",
+          "evidence": "animation: reveal 1s forwards cubic-bezier(0.77, 0, 0.175, 1)"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-easing-duration-10",
+      "theme": "easing-duration",
+      "area": "motion",
+      "title": "Duration grows with size and distance",
+      "rule": "Give larger elements and longer travel distances longer durations than small elements and short moves.",
+      "why": "Stated as duration rules in the article's guidelines: larger elements animate slower than smaller ones, and longer travel means a longer duration.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-agents-with-taste",
+          "evidence": "Duration Guidelines Rules: Larger elements animate slower than smaller ones; Match duration to distance - longer travel = longer duration"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-easing-duration-11",
+      "theme": "easing-duration",
+      "area": "motion",
+      "title": "Exits run about 20% faster",
+      "rule": "Make exits faster than entrances, typically about 20% shorter (a 300ms toast entrance leaves in 250ms), rather than at the same speed.",
+      "why": "The arrival deserves the time and the departure doesn't: the user has finished reading. The Emil design-engineering checklist flags the same enter and exit speed, but the Agents with taste article says exits 'can be' ~20% faster and the web recipes for dropdowns, tooltips and modals use one transition both ways, so this is a should; the must-level case, press and hold interactions, is STD-easing-duration-12.",
+      "strength": "should",
+      "values": {
+        "exit-vs-entrance": "~20% faster",
+        "native-toast-enter": "FadeInDown.duration(300).easing(EASE_OUT)",
+        "native-toast-exit": "FadeOutDown.duration(250).easing(EASE_OUT)",
+        "web-recipes-symmetric": "dropdown 200ms, tooltip 125ms, modal 250ms, same both ways"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Review Checklist: Same enter/exit transition speed -> Make exit faster than enter"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Toast: Exit ~20% faster than entry"
+        },
+        {
+          "id": "ek-agents-with-taste",
+          "evidence": "Duration Guidelines Rules: Exit animations can be ~20% faster than entrance"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Dropdown, Tooltip, Modal: one transition covers [data-starting-style] and [data-ending-style]"
+        }
+      ],
+      "engine": [
+        {
+          "path": "motion.duration.medium-exit",
+          "value": "160ms",
+          "type": "duration",
+          "note": "0.8 x the 200ms medium set by STD-easing-duration-07; motion.transition.exit uses it."
+        },
+        {
+          "path": "motion.duration.long-exit",
+          "value": "200ms",
+          "type": "duration",
+          "note": "0.8 x the 250ms long set by STD-easing-duration-07."
+        }
+      ],
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py build_motion: medium-exit and long-exit are 0.75 x the energy-scaled ladder (exit_k), not of the stored medium and long, so they do not follow a locked value: in a test run with medium set to 200ms, medium-exit stayed 180ms (10% faster)."
+      ]
+    },
+    {
+      "id": "STD-easing-duration-12",
+      "theme": "easing-duration",
+      "area": "motion",
+      "title": "Slow deliberate phase, snappy response",
+      "rule": "Where the user is deciding (press-and-hold, hold-to-confirm, a destructive confirm), make the deliberate phase slow (2s linear) and the system's response snappy (release in 200ms ease-out), never symmetric.",
+      "why": "Pressing should be slow when it needs to be deliberate, but release should always be snappy: slow where the user is deciding, fast where the system is responding. Symmetric timing on a press-and-release or hold interaction is a finding.",
+      "strength": "must",
+      "values": {
+        "deliberate-phase": "clip-path 2s linear",
+        "release": "clip-path 200ms ease-out",
+        "recipe-release": "clip-path 200ms var(--ease-out)"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Asymmetric enter/exit timing"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "6. Interruption and exit: Asymmetric timing where the user is deciding"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "9. Asymmetric enter/exit"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Asymmetric timing"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "Asymmetric timing"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Hold to confirm: Press slow and deliberate; release snappy"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-easing-duration-13",
+      "theme": "easing-duration",
+      "area": "motion",
+      "title": "Motion fits the component's personality",
+      "rule": "Tune each component's easing and duration to its personality and surroundings: crisp and fast for a professional dashboard, bouncier only for a playful component.",
+      "why": "Cohesion makes motion satisfying: Sonner feels right partly because its easing and duration fit the library, slightly slower than typical UI and using ease rather than ease-out to feel elegant. The Expo recipes still hold native toasts to the 300ms cap (300ms in, 250ms out).",
+      "strength": "must",
+      "values": {
+        "sonner-toast": "transition: transform 400ms ease",
+        "sonner-toast-enter": "transition: opacity 400ms ease, transform 400ms ease"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Cohesion: playful can be bouncier; a professional dashboard should be crisp and fast"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Cohesion matters"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Toast: ease rather than ease-out, slightly slower than typical UI"
+        },
+        {
+          "id": "ek-building-a-toast-component",
+          "evidence": "transition: transform 400ms ease"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Toast: The 300ms cap holds here too"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py build_motion_context: toasts share motion.transition.enter (medium duration, enter curve) with menus and popovers, so a toast cannot get its own ease and timing [inferred]."
+      ]
+    },
+    {
+      "id": "STD-easing-duration-14",
+      "theme": "easing-duration",
+      "area": "motion",
+      "title": "Stagger group entrances by 30-80ms",
+      "rule": "When several items of a list or grid the user sees occasionally enter together, stagger them 30-80ms apart instead of showing everything at once or using longer gaps; never stagger a list they scroll past all day.",
+      "why": "A cascade feels more natural than everything appearing at once; longer delays feel slow and shorter ones read as simultaneous. Everything entering at once is an automatic block in review.",
+      "strength": "must",
+      "values": {
+        "step": "30-80ms",
+        "css-recipe": "animation: fadeIn 300ms var(--ease-out) forwards; animation-delay 50ms, 100ms, 150ms",
+        "native-recipe": "FadeInDown.duration(250).delay(index * 40)"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Stagger Animations; Review Checklist: Elements all appear at once"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Stagger: 30-80ms between items. Longer delays feel slow"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "Never Ship: Everything entering at once -> 30-80ms stagger"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "Aggressive Escalation Triggers"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "Everything-at-once group entrances where a 30-80ms stagger belongs"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "List entrances: Stagger 30-80ms. Longer feels slow, shorter reads as simultaneous"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Stagger a group entrance: For a list or grid the user sees occasionally, not for a list they scroll past all day"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "Group entrances"
+        }
+      ],
+      "engine": {
+        "path": "motion.stagger.step",
+        "value": "50ms",
+        "type": "duration",
+        "note": "New token: the CSS recipe's per-item delay, inside the 30-80ms range."
+      },
+      "review": {
+        "pattern": "\\bstaggerChildren\\s*:\\s*(?:0?\\.(?:0[0-2]|09|[1-9])|[1-9])|\\bstagger(?:\\(|\\s*:)\\s*(?:0?\\.(?:0[0-2]|09|[1-9])|[1-9])|\\bdelay\\([^)\\n]{0,40}?\\b(?:index|idx|i)\\s*\\*\\s*(?:[12]?\\d|8[1-9]|9\\d|[1-9]\\d{2,})(?![\\d.])",
+        "message": "Stagger step outside 30-80ms: space items 30-80ms apart (the recipes use 50ms and 40ms)."
+      },
+      "design_md": true,
+      "conflicts": [
+        "synthesis/questionnaire.json Q-motion-06 (stage 16 detailed): stagger of 20-50ms with a total of at most 500ms; 20-29ms is below the sources' 30ms floor."
+      ]
+    },
+    {
+      "id": "STD-easing-duration-15",
+      "theme": "easing-duration",
+      "area": "motion",
+      "title": "Loading spinners spin fast",
+      "rule": "Make loading spinners spin fast.",
+      "why": "A faster-spinning spinner makes the app seem to load faster even though the load time is the same, which improves perceived performance.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-7-practical-animation-tips",
+          "evidence": "A faster-spinning spinner makes the app seem to load faster"
+        },
+        {
+          "id": "ek-you-dont-need-animations",
+          "evidence": "Perception of speed: a faster-spinning spinner makes the app seem to load faster"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Perceived performance: A fast-spinning spinner makes loading feel faster"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Faster spinners make load feel faster (same actual time)"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-easing-duration-16",
+      "theme": "easing-duration",
+      "area": "platforms",
+      "title": "Native UI under 300ms, system navigation",
+      "rule": "On iOS and Android keep UI animations under 300ms as on the web, but leave screen transitions at the platform's default duration (iOS push is 350ms) instead of overriding them.",
+      "why": "The platform's own transitions are longer: match the platform for navigation and beat it everywhere else.",
+      "strength": "must",
+      "values": {
+        "ui-max": "under 300ms",
+        "ios-push": "350ms",
+        "screen-transition": "platform default"
+      },
+      "applies_to": [
+        "ios",
+        "android",
+        "react-native"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Mobile UI animations stay under 300ms, same as web; Duration: Screen transition, the platform default, don't override it"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-easing-duration-17",
+      "theme": "easing-duration",
+      "area": "process",
+      "title": "Decide and state every curve and duration",
+      "rule": "Choose the easing and duration of every animation deliberately while building the component, and state which curve and duration you chose and why.",
+      "why": "A bad easing or duration can ruin an otherwise great animation; which easing and duration were chosen, and why, is often more important than the code itself.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "adev-home",
+          "evidence": "A bad easing or duration can ruin an otherwise great animation; I often talk about which easing and duration I chose and why"
+        },
+        {
+          "id": "adev-changelog",
+          "evidence": "not only focus on the implementation, but also on the easing, duration, and so on"
+        },
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "Using the right easing and duration makes a big difference in terms of how this, and any other component, feels"
+        },
+        {
+          "id": "ek-7-practical-animation-tips",
+          "evidence": "Easing is the most important part of any animation"
+        },
+        {
+          "id": "eks-readme",
+          "evidence": "animate: choosing the correct curve, duration, properties"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "Never present motion options as a menu. Make the call, state the reasoning in one line; Output: The ingredients (tool, properties, curve, duration or spring config)"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Output: The ingredients"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-easing-duration-18",
+      "theme": "easing-duration",
+      "area": "tokens",
+      "title": "Motion values come from shared tokens",
+      "rule": "Take every curve and duration from the project's motion tokens, extend those tokens instead of adding a parallel set, and never hand-type or approximate a value such as cubic-bezier(0.4, 0, 0.2, 1).",
+      "why": "Adding a parallel system is a defect, approximated values are not allowed, and near-identical hand-typed cubic-beziers are a consolidation finding.",
+      "strength": "must",
+      "values": {
+        "forbidden-approximation-example": "cubic-bezier(0.4, 0, 0.2, 1)"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "Hard Rules: 2. No approximated values; 3. Extend the codebase's tokens, don't fork them"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "Curves and durations should live as shared tokens. Five hand-typed cubic-beziers that almost match is a consolidation finding"
+        },
+        {
+          "id": "eks-skills-improve-animations-skill",
+          "evidence": "Conventions: plans must extend these, not invent parallel ones"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "Recon: existing easing/duration tokens (suggestions must extend these)"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Hard Rules 3: no approximated values"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "pull the exact one from STANDARDS.md rather than approximating"
+        },
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "5. Tap feels laggy: don't fork a new curve"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "\\b(?:transition|animation)(?:-timing-function)?\\s*:[^;{}]*cubic-bezier\\(|\\btransitionTimingFunction\\s*:\\s*['\\\"`]cubic-bezier\\(",
+        "message": "Hand-typed cubic-bezier in a transition: use the motion.easing token (its CSS variable) instead."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-easing-duration-19",
+      "theme": "easing-duration",
+      "area": "motion",
+      "title": "Companion values follow the drawer curve",
+      "rule": "When a script-driven value accompanies a bezier-eased transition (such as a drawer's background or theme color), interpolate it along the same curve (for example with bezier-easing), and map it linearly to drag progress only while dragging.",
+      "why": "Interpolating the colors linearly gives a linear transition that does not match a drawer animated with a custom bezier curve; during a drag the value follows the drag progress.",
+      "strength": "should",
+      "values": {
+        "helper": "bezier-easing"
+      },
+      "applies_to": [
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "interpolation is done using the same curve as the drawer with the help of bezier-easing; We also needed a linear interpolation for the drag interaction"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": false,
+      "conflicts": []
+    },
+    {
+      "id": "STD-easing-duration-21",
+      "theme": "easing-duration",
+      "area": "motion",
+      "title": "Feel-check curves in slow motion",
+      "rule": "When a curve or duration can't be judged from code, say so instead of guessing a value, and check it: play it at 2-5x its duration or in the DevTools animation inspector, step through it frame by frame, and look again the next day with fresh eyes.",
+      "why": "Imperfections invisible at full speed show up slowed down and frame by frame (an easing that starts or stops abruptly, colors that don't crossfade cleanly, properties out of sync), and you notice more the next day.",
+      "strength": "should",
+      "values": {
+        "slow-motion": "2-5x duration or the DevTools animation inspector",
+        "frame-by-frame": "Chrome DevTools Animations panel",
+        "fresh-eyes": "the next day"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "Output: What to feel-check, play it at 2-5x duration or in the DevTools animation inspector, step it frame by frame; Tone: say so instead of guessing at a value"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Debugging (recommend in reviews when feel is uncertain): Slow motion: bump duration 2-5x; Frame-by-frame; Fresh eyes next day"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Slow motion testing: Temporarily increase duration to 2-5x normal; Does the easing feel right, or does it start/stop abruptly?"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "Guidelines: recommend reviewing it in slow motion / frame-by-frame and with fresh eyes the next day rather than guessing"
+        },
+        {
+          "id": "adev-changelog",
+          "evidence": "When something about your animation feels off, but you can't figure out what, record it and play it back frame by frame"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    }
+  ]
+}

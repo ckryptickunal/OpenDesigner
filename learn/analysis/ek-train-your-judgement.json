@@ -1,0 +1,372 @@
+{
+  "summary": "Emil Kowalski argues that AI can write animation code but cannot tell what feels right, so it produces motion that works yet feels mediocre, and people who cannot tell the difference ship it. The page is a set of interactive exercises: each shows two animations side by side, the reader picks the better one, writes down why, then reads the author's breakdown. The exercises cover the size of the animated element, easing, entry animations, being intentional, frequency of use, using scale, removing elements, handling interruptions, popovers, stagger and layered motion. For a design system this suggests a review bar: motion is not done when it works, it is done when someone has compared alternatives and can name why one feels better [inferred]. The captured text contains the exercise prompts and demo labels only, not the author's verdicts or values.",
+  "key_ideas": [
+    "AI can write animation code but cannot judge what feels right.",
+    "Motion that merely works but feels mediocre should not be shipped; good enough is not good enough.",
+    "Judgement is a trainable skill: spot what is wrong, name it, then fix it.",
+    "Training method: compare two animations side by side, pick one, write down why, then check an expert breakdown.",
+    "Putting into words why something feels right trains your ability to articulate judgement, which the author says will be incredibly valuable in the AI era.",
+    "The dimensions the author trains are: element size, easing, entry animations, intentionality, frequency of use, scale, removing elements, interruptions, popovers, stagger and layered motion.",
+    "Several exercises can only be judged by interacting with them: hovering through both lists, opening and closing each menu rapidly, and removing chips.",
+    "How often an element is used is part of judging its animation.",
+    "The author's design engineering skill file packages these rules so coding agents can follow them in practice."
+  ],
+  "entities": [
+    {
+      "name": "Emil Kowalski",
+      "type": "person",
+      "description": "Design engineer and author of the exercises and breakdowns."
+    },
+    {
+      "name": "aiforui.dev",
+      "type": "product",
+      "description": "The author's course, plugged at the top of the page (early access noted as closed)."
+    },
+    {
+      "name": "animations.dev",
+      "type": "product",
+      "description": "The author's animation course for designers and engineers, plugged at the end."
+    },
+    {
+      "name": "Design engineering skill file",
+      "type": "tool",
+      "description": "The author's skill file for coding agents, said to cover everything on the page and more."
+    },
+    {
+      "name": "Judgement",
+      "type": "concept",
+      "description": "The ability to spot what is wrong with motion, name it and fix it; the skill the page trains."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Design taste and judgement",
+      "summary": "Frames judgement as the skill AI lacks and trains it through side-by-side comparisons where the reader picks a variant, writes down why, and compares with the author's breakdown."
+    },
+    {
+      "name": "Motion principles",
+      "summary": "Lists the motion dimensions worth judging: element size, entry animations, intentionality, frequency of use, removing elements, interruptions, stagger and layered motion."
+    },
+    {
+      "name": "Easing and timing",
+      "summary": "One exercise is dedicated to choosing the right easing, using a toast as the example; the preferred curve is not in the captured text."
+    },
+    {
+      "name": "Micro-interactions",
+      "summary": "Exercises on a button press ('Using scale properly') and hovering through an options list judged for frequent use."
+    },
+    {
+      "name": "Toasts and notifications",
+      "summary": "A toast animation is the example for choosing the right easing."
+    },
+    {
+      "name": "Modals and popovers",
+      "summary": "Exercises compare dialog entrance animations and popover animations triggered by a button."
+    },
+    {
+      "name": "Navigation and sidebars",
+      "summary": "A mobile menu is used for the element-size and interruption exercises, and a side panel over a dashboard for layered motion."
+    },
+    {
+      "name": "Landing pages",
+      "summary": "A hero section (announcement pill, headline, subtext, two buttons) is the example for judging whether a staggered entrance feels intentional."
+    },
+    {
+      "name": "AI-assisted design",
+      "summary": "AI-generated motion tends to work but feel mediocre; articulating why something feels right is presented as a key skill in the AI era, and the skill file lets coding agents follow the rules."
+    },
+    {
+      "name": "Design process",
+      "summary": "Gives a training loop for motion judgement: compare two variants, interact with them, pick one, write down the reason, then compare with the author's breakdown."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "AI can write animation code but cannot know what feels right.",
+      "evidence": "opening: 'AI can write animation code'"
+    },
+    {
+      "claim": "AI produces motion that works but feels mediocre, and if you cannot tell the difference you will ship it and settle for good enough.",
+      "evidence": "'It produces motion that works, but feels mediocre'"
+    },
+    {
+      "claim": "Putting into words why something feels right trains your ability to articulate judgement, a skill the author says will be incredibly valuable in the AI era.",
+      "evidence": "'Putting into words why something feels right'"
+    },
+    {
+      "claim": "The exercises train the ability to spot what is wrong, name it and fix it.",
+      "evidence": "'This article trains your ability to spot what’s wrong'"
+    },
+    {
+      "claim": "Everything covered on the page, and more, is in the author's design engineering skill file, which can be fed to coding agents.",
+      "evidence": "Going a step further"
+    }
+  ],
+  "quotes": [
+    "What it can’t do is know what feels right",
+    "It produces motion that works, but feels mediocre",
+    "You’ll settle for good enough, and that’s not good enough."
+  ],
+  "tags": [
+    "judgement",
+    "taste",
+    "motion",
+    "animation-review",
+    "easing",
+    "interruptions",
+    "stagger",
+    "layered-motion",
+    "ai"
+  ],
+  "authority": "non-negotiable",
+  "rules": [
+    {
+      "rule": "Do not ship animation code, including AI-written code, just because it works; check that the motion feels right before shipping.",
+      "why": "AI produces motion that works but feels mediocre; if you cannot tell the difference you will ship it and settle for good enough, which is not good enough.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "opening: 'It produces motion that works, but feels mediocre'"
+    },
+    {
+      "rule": "When reviewing motion, spot what is wrong, name the problem in words, and then fix it.",
+      "why": "This is the ability the author says the exercises train.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "'trains your ability to spot what’s wrong, name it, and fix it'"
+    },
+    {
+      "rule": "To train motion judgement, compare two animations side by side and pick the better one.",
+      "why": "This is the format of every exercise the author uses to train judgement.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "'Each exercise shows two animations side by side'"
+    },
+    {
+      "rule": "Write down why you chose a variant before reading an expert breakdown, then compare your reasoning with it.",
+      "why": "Putting into words why something feels right trains your ability to articulate judgement, which the author calls incredibly valuable in the AI era.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "'write down why you chose it, and then see my breakdown'"
+    },
+    {
+      "rule": "Give coding agents Emil Kowalski's design engineering skill file so they follow these animation rules in practice.",
+      "why": "The author says everything on the page, and more, is covered in that skill file for coding agents.",
+      "kind": "do",
+      "strength": "should",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Going a step further"
+    },
+    {
+      "rule": "Test menu animations for interruptions by opening and closing the menu rapidly, and prefer the version that handles interruption better.",
+      "why": "Handling interruptions is one of the author's judgement exercises, and rapid open and close is how he asks readers to test it.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Handling interruptions: 'Open and close each menu rapidly'"
+    },
+    {
+      "rule": "Judge the hover animation of a frequently used list, such as an options menu, by hovering through the whole list and choosing what feels better for frequent use.",
+      "why": "Frequency of use is one of the author's judgement exercises; he asks which feels better for something you would use frequently.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Frequency of use: 'Hover through both lists'"
+    },
+    {
+      "rule": "Take the size of the animated element into account when choosing its animation, for example a mobile menu.",
+      "why": "Size of an element is one of the author's judgement exercises; the preferred variant is not in the captured text.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Size of an element: 'Which mobile menu animation feels better?'"
+    },
+    {
+      "rule": "Choose the easing for a toast animation deliberately, comparing variants and picking the one that feels better.",
+      "why": "Choosing the right easing is one of the author's judgement exercises, shown on a toast; the preferred curve is not in the captured text.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Choosing the right easing: 'Which toast animation feels better?'"
+    },
+    {
+      "rule": "Treat a dialog's entrance animation as its own decision and compare entrances before choosing one.",
+      "why": "Entry animations is one of the author's judgement exercises, shown on an 'Open dialog' button; the preferred variant is not in the captured text.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Entry animations: 'Click both buttons. Which entrance feels better?'"
+    },
+    {
+      "rule": "Be intentional about how an accordion animates when it opens and closes.",
+      "why": "Being intentional is one of the author's judgement exercises, shown on an FAQ accordion; the preferred variant is not in the captured text.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Being intentional: 'Which accordion animation feels better?'"
+    },
+    {
+      "rule": "Use scale deliberately in button press feedback, comparing press variants before choosing one.",
+      "why": "Using scale properly is one of the author's judgement exercises, shown on a Subscribe button; the preferred scale is not in the captured text.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Using scale properly: 'Which press feels better?'"
+    },
+    {
+      "rule": "Make removing elements, such as chips, feel smooth, and judge it by actually removing chips in both variants.",
+      "why": "Removing elements is one of the author's judgement exercises, and smoothness is the criterion he asks readers to judge by.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Removing elements: 'Remove chips on both sides. Which feels smoother?'"
+    },
+    {
+      "rule": "Compare popover animation variants by clicking the trigger button before choosing how a popover animates.",
+      "why": "Animating popovers is one of the author's judgement exercises, shown on a 'Show details' button; the preferred variant is not in the captured text.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Animating popovers: 'Which popover feels better?'"
+    },
+    {
+      "rule": "When staggering a hero section's entrance, judge the stagger by whether the entrance feels intentional.",
+      "why": "Using stagger is one of the author's judgement exercises, and 'more intentional' is the criterion he asks readers to judge by.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Using stagger: 'Which entrance feels more intentional?'"
+    },
+    {
+      "rule": "Consider layered motion when animating a side panel opening over a page such as a dashboard.",
+      "why": "Layered motion is one of the author's judgement exercises, shown on a side panel over a dashboard; the preferred variant is not in the captured text.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Layered motion: 'Open the side panel on both'"
+    }
+  ],
+  "decisions": [],
+  "process": [
+    {
+      "step": "Set up two variants",
+      "detail": "Build or find two versions of the same animation and place them side by side (the source provides the pairs; building your own is an adaptation) [inferred]."
+    },
+    {
+      "step": "Interact with both",
+      "detail": "Use each the way the exercises ask: click the trigger, hover through the list, open and close the menu rapidly, or remove chips."
+    },
+    {
+      "step": "Pick the better one",
+      "detail": "Choose the variant that feels better for the stated criterion, such as smoother, more intentional, better under interruption, or better for frequent use."
+    },
+    {
+      "step": "Write down why",
+      "detail": "Put into words why the chosen variant feels right before looking at any expert opinion."
+    },
+    {
+      "step": "Compare with a breakdown",
+      "detail": "Read an expert breakdown and compare it with your reasoning."
+    },
+    {
+      "step": "Apply to real work",
+      "detail": "In your own motion, spot what is wrong, name it and fix it; give coding agents the design engineering skill file so they follow the same rules."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Mobile menu opening",
+      "where": "demo site labelled 'Acme'",
+      "visual_note": "A mobile menu over page content, used for the element-size exercise and again for handling interruptions (open and close rapidly)."
+    },
+    {
+      "what": "Toast triggered by a 'Show toast' button",
+      "where": null,
+      "visual_note": "Two toast animations compared to teach choosing the right easing."
+    },
+    {
+      "what": "Dialog opened by an 'Open dialog' button",
+      "where": null,
+      "visual_note": "Two dialog entrance animations compared for the entry-animations exercise."
+    },
+    {
+      "what": "FAQ accordion ('How does billing work?')",
+      "where": null,
+      "visual_note": "An accordion revealing a short billing answer, used for the being-intentional exercise."
+    },
+    {
+      "what": "Options menu (Edit, Copy Link, Move to…, Duplicate, Archive, Delete)",
+      "where": null,
+      "visual_note": "Two hover treatments on a menu list, judged for something used frequently."
+    },
+    {
+      "what": "Subscribe button press",
+      "where": null,
+      "visual_note": "Two press animations compared for using scale properly."
+    },
+    {
+      "what": "Removable chips (React, Next.js, Tailwind, Motion)",
+      "where": null,
+      "visual_note": "Chips removed on each side, judged by which feels smoother."
+    },
+    {
+      "what": "Popover from a 'Show details' button",
+      "where": null,
+      "visual_note": "Two popover animations compared for the animating-popovers exercise."
+    },
+    {
+      "what": "Hero section entrance",
+      "where": null,
+      "visual_note": "An announcement pill ('New – Collaborative workspaces →'), headline 'Ship products that matter', two lines of subtext and 'Get started' and 'Explore' buttons, compared for the stagger exercise; judged by which entrance feels more intentional."
+    },
+    {
+      "what": "Side panel over a dashboard",
+      "where": null,
+      "visual_note": "A side panel opening over a page titled 'Dashboard', used for the layered-motion exercise."
+    }
+  ],
+  "numbers": [],
+  "caveats": [
+    "The captured text holds only the exercise headings, prompts and demo labels. The interactive demos and the author's breakdowns (which variant is better, why, and any durations, curves or scale values) were not captured, so the per-exercise rules state the criterion and the test method only, not the preferred answer. A re-capture that includes the revealed breakdowns is needed to extract the actual values.",
+    "Because the verdicts are missing, rules marked 'consider' name a dimension to judge rather than a settled house standard.",
+    "The page opens with a plug for the author's course aiforui.dev (early access noted as closed) and ends with a plug for animations.dev, described as teaching practical animation techniques to make products feel cleaner, faster and more polished; both are self-promotion, not guidance.",
+    "The 'design engineering skill file' is referenced without a link in the captured text; that it is the emilkowalski/skills repository is an assumption [inferred].",
+    "The claim that articulating judgement will be incredibly valuable in the AI era is the author's opinion, not a measured finding.",
+    "Publication date is not given (header says Unknown)."
+  ]
+}

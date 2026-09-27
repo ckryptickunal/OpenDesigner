@@ -1,0 +1,1052 @@
+{
+  "summary": "Emil Kowalski walks through how he built Sonner, the React toast library, and why it beat a crowded field. He explains the animation engineering (interruptible CSS transitions instead of keyframes, a stacked pile of toasts that scale down for depth, hover-to-expand, and momentum-based swipe to dismiss) with the exact values Sonner uses. He then covers developer experience: a single <Toaster /> plus a toast() function backed by an observer pattern, a promise API for loading, success and error states, and a custom documentation site with interactive examples. Finally he lists the small, mostly unnoticed details (pausing the timer on a hidden tab, filling hover gaps, pointer capture while dragging, friction on the wrong drag direction) and argues that good developer experience plus beauty is what made Sonner succeed. For a design system this is a complete, value-level specification of how a notification component should move, respond to gestures and be documented.",
+  "key_ideas": [
+    "Animations that may be retargeted mid-flight (like a toast pile growing) need an interruptible technique: CSS transitions can be interrupted and retargeted, CSS keyframes cannot, so elements jump.",
+    "An enter transition can be faked by rendering the start state and flipping a mounted flag after the first render; @starting-style can now do this more simply.",
+    "A stacked pile gets depth by offsetting each toast by gap times index and scaling it down by 0.05 per step behind the front one.",
+    "In stacked mode every toast should take the front toast's height so the pile sticks out evenly.",
+    "Swipe to dismiss should be momentum-based: a short but fast flick dismisses as well as a long drag.",
+    "Hovering the pile expands it; each toast's expanded offset is the sum of the heights of the toasts before it plus the gaps.",
+    "Developer experience decides adoption: no hooks, no context, insert <Toaster /> once and call toast() from anywhere.",
+    "Interactive documentation with copyable examples lets people try a component before they install it, and should never be an afterthought.",
+    "Small invisible details add up: pause timers on hidden tabs, keep hover alive across gaps, keep dragging when the pointer leaves, add friction instead of hard stops.",
+    "The fewer details users notice, the more intuitive the experience is.",
+    "Nice defaults and good animations are the real differentiator; beauty is underused in software and can be leverage.",
+    "A distinctive name can make a library stand out, at the cost of discoverability.",
+    "Launch a component by showcasing its signature motion."
+  ],
+  "entities": [
+    {
+      "name": "Emil Kowalski",
+      "type": "person",
+      "description": "Design engineer, author of the article and creator of Sonner."
+    },
+    {
+      "name": "Sonner",
+      "type": "library",
+      "description": "The React toast library the article dissects; built in 2023."
+    },
+    {
+      "name": "Sonner docs (sonner.emilkowal.ski/docs)",
+      "type": "product",
+      "description": "Custom documentation site with interactive examples and ready-to-use code snippets."
+    },
+    {
+      "name": "react-hot-toast",
+      "type": "library",
+      "description": "Toast library whose rendering API inspired Sonner's API design."
+    },
+    {
+      "name": "Timo",
+      "type": "person",
+      "description": "Credited with doing a great job on react-hot-toast."
+    },
+    {
+      "name": "Theo",
+      "type": "person",
+      "description": "Developer whose video reaction and tweet praising Sonner's animations and promise API are shown."
+    },
+    {
+      "name": "npm",
+      "type": "tool",
+      "description": "Package registry used to cite Sonner's weekly downloads."
+    },
+    {
+      "name": "Cursor",
+      "type": "company",
+      "description": "Named as a company that uses Sonner."
+    },
+    {
+      "name": "X",
+      "type": "company",
+      "description": "Named as a company that uses Sonner."
+    },
+    {
+      "name": "OpenAI",
+      "type": "company",
+      "description": "Named as a company that uses Sonner."
+    },
+    {
+      "name": "Paul Graham",
+      "type": "person",
+      "description": "Quoted from Hackers and Painters on unseen details combining into something stunning."
+    },
+    {
+      "name": "React",
+      "type": "library",
+      "description": "Framework Sonner is built for; useEffect, useState, useMemo and Context are discussed."
+    },
+    {
+      "name": "CSS transitions",
+      "type": "concept",
+      "description": "Chosen over keyframes because they can be interrupted and retargeted."
+    },
+    {
+      "name": "CSS keyframes",
+      "type": "concept",
+      "description": "First approach for toast animation, dropped because it is not interruptible."
+    },
+    {
+      "name": "@starting-style",
+      "type": "concept",
+      "description": "CSS at-rule that could replace the mounted-flag trick for enter transitions."
+    },
+    {
+      "name": "Observer pattern",
+      "type": "concept",
+      "description": "State management approach that lets toast() notify <Toaster /> without React Context."
+    },
+    {
+      "name": "Promise API (toast.promise)",
+      "type": "concept",
+      "description": "Pass a promise plus messages for loading, success and error states."
+    },
+    {
+      "name": "Pointer capture",
+      "type": "concept",
+      "description": "Making the toast keep receiving pointer events after a drag starts, even outside its bounds."
+    },
+    {
+      "name": "document.hidden / visibilitychange",
+      "type": "concept",
+      "description": "Browser signal used by useIsDocumentHidden to pause the dismiss timer on inactive tabs."
+    },
+    {
+      "name": "animations.dev",
+      "type": "product",
+      "description": "Emil Kowalski's animation course, plugged at the end of the article."
+    },
+    {
+      "name": "aiforui.dev",
+      "type": "product",
+      "description": "Emil Kowalski's course, plugged in a banner at the top of the page."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Toasts and notifications",
+      "summary": "Full anatomy of the Sonner toast: enter transition, stacked pile with depth, hover-to-expand, optional always-expanded mode, swipe to dismiss, 4-second default timer that pauses on hover and on hidden tabs."
+    },
+    {
+      "name": "Motion principles",
+      "summary": "Motion that can be retargeted must be interruptible, so transitions beat keyframes; the stacking animation is what made people love the library."
+    },
+    {
+      "name": "Easing and timing",
+      "summary": "Sonner's enter/stack transition is transform 400ms ease; toasts auto-dismiss after 4 seconds by default."
+    },
+    {
+      "name": "Gestures and drag",
+      "summary": "Swipe down to dismiss, momentum-based with a velocity threshold of 0.11, pointer capture during drag, and friction when dragging the wrong way."
+    },
+    {
+      "name": "Micro-interactions",
+      "summary": "'The big little details': pausing timers on hidden tabs, filling hover gaps with a pseudo-element, pointer capture and drag friction make the component feel right."
+    },
+    {
+      "name": "Feedback, empty and loading states",
+      "summary": "The promise API shows one toast that moves through loading, success and error states from a single call."
+    },
+    {
+      "name": "Web implementation (CSS and React)",
+      "summary": "Code-level techniques: data attributes for state styles, CSS variables for stack transforms, useEffect mounted flag, observer-pattern store, useIsDocumentHidden hook, height-based offset calculation."
+    },
+    {
+      "name": "UI libraries",
+      "summary": "What makes a component library win adoption: a distinctive name, a signature animation, great developer experience and interactive documentation."
+    },
+    {
+      "name": "Design taste and judgement",
+      "summary": "Beauty is an underused lever; unnoticed details add up, and the fewer details users notice the more intuitive the experience."
+    },
+    {
+      "name": "Presenting designs",
+      "summary": "Sonner's launch used announcement videos focused on the stacking animation, the feature most worth showing."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Sonner was built in 2023, is downloaded over 40,000,000 times per week from npm, and is used by companies like Cursor, X and OpenAI.",
+      "evidence": "Back in 2023, I decided to build a toast library called Sonner"
+    },
+    {
+      "claim": "Sonner is a French word meaning 'to ring', chosen because function-based names feel cheap and generic.",
+      "evidence": "I looked up French words related to notifications"
+    },
+    {
+      "claim": "Sonner took off immediately because of its stacking animation, which some companies had built before but never open sourced.",
+      "evidence": "Sonner took off immediately because of the stacking animation"
+    },
+    {
+      "claim": "CSS keyframes are not interruptible: you cannot smoothly change the end position while the animation runs, so older toasts jump into place when new ones are added quickly.",
+      "evidence": "I initially used CSS keyframes for the animations, but they aren’t interruptible"
+    },
+    {
+      "claim": "CSS transitions can be interrupted and retargeted even before the first transition has finished.",
+      "evidence": "CSS transitions, on the other hand, can be interrupted and retargeted"
+    },
+    {
+      "claim": "The @starting-style CSS at-rule can now handle the enter transition and would make the implementation much simpler.",
+      "evidence": "This can now also be solved with the @starting-style CSS at-rule"
+    },
+    {
+      "claim": "Stacking by gap times index breaks with toasts of different heights: they do not stick out evenly.",
+      "evidence": "This works great until you have toasts with different heights"
+    },
+    {
+      "claim": "Swipe to dismiss is especially useful on devices where people are already used to swiping notifications away.",
+      "evidence": "especially useful on devices where people are already used to swiping"
+    },
+    {
+      "claim": "With momentum-based swipe, a short but fast swipe dismisses the toast because the velocity is high enough.",
+      "evidence": "The swipe is momentum-based"
+    },
+    {
+      "claim": "The 0.11 velocity threshold was found through trial and error.",
+      "evidence": "0.11 is just a number that I ended up on through trial and error"
+    },
+    {
+      "claim": "If a component is not easy to use, people give up before they even try it.",
+      "evidence": "people will give up before they even try it"
+    },
+    {
+      "claim": "Good documentation and clear instructions drastically lower the barrier to use any product, yet documentation is often done as an afterthought.",
+      "evidence": "Good documentation and clear instructions can drastically lower the barrier"
+    },
+    {
+      "claim": "Managing state with the observer pattern avoids React's Context and lets toast() be called from anywhere without hooks.",
+      "evidence": "To avoid using React’s Context, I manage the state via the Observer Pattern"
+    },
+    {
+      "claim": "Sonner's API design and toast rendering are inspired by react-hot-toast; its state management is different.",
+      "evidence": "The API design is inspired by react-hot-toast"
+    },
+    {
+      "claim": "Without pausing, a toast triggered while the user is on another tab would time out after 4 seconds and never be seen.",
+      "evidence": "what if a toast is triggered and the user switches to a different tab?"
+    },
+    {
+      "claim": "Gaps between toasts do not belong to any toast, so hovering them would drop the hover state unless they are filled.",
+      "evidence": "Another interesting one is maintaining correct hover state"
+    },
+    {
+      "claim": "Without pointer capture, a drag stops when the pointer leaves the toast.",
+      "evidence": "What if, while dragging the toast, the pointer goes outside of it?"
+    },
+    {
+      "claim": "Letting the toast be dragged the wrong way with friction feels nicer than stopping it immediately.",
+      "evidence": "One thing that can also be seen in the video above is friction"
+    },
+    {
+      "claim": "The fewer details users notice, the more intuitive the experience; users appreciate it more that way, even subconsciously.",
+      "evidence": "The less details users notice, the better"
+    },
+    {
+      "claim": "Sonner succeeded for two reasons: good developer experience, and it looks good with nice defaults and good animations, the latter being the real differentiator.",
+      "evidence": "Why is Sonner successful?"
+    },
+    {
+      "claim": "Beauty is generally underutilized in software, so it can be used as leverage to stand out.",
+      "evidence": "Beauty is generally underutilized in software"
+    }
+  ],
+  "quotes": [
+    "People simply like beautiful things.",
+    "The less details users notice, the better. It means the experience is intuitive."
+  ],
+  "tags": [
+    "toast",
+    "sonner",
+    "notifications",
+    "css-transitions",
+    "interruptible-animation",
+    "stacking",
+    "swipe-to-dismiss",
+    "gestures",
+    "pointer-capture",
+    "hover-state",
+    "developer-experience",
+    "documentation",
+    "react",
+    "observer-pattern",
+    "naming",
+    "details"
+  ],
+  "authority": "non-negotiable",
+  "rules": [
+    {
+      "rule": "Animate toast enter and stack position changes with CSS transitions, not CSS keyframes, so the animation can be interrupted and retargeted mid-flight.",
+      "why": "Keyframes are not interruptible; when toasts are added quickly, older ones jump into their new position instead of moving smoothly.",
+      "kind": "do",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "css",
+      "values": [
+        "transition: transform 400ms ease"
+      ],
+      "evidence": "I initially used CSS keyframes for the animations, but they aren’t interruptible"
+    },
+    {
+      "rule": "Do not use CSS keyframes for any animation whose end position can change while it is running, such as a toast pile that grows.",
+      "why": "You cannot smoothly change the end position of a keyframe animation while it runs, so elements jump.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "css",
+      "values": [],
+      "evidence": "That’s one downside of keyframes"
+    },
+    {
+      "rule": "Enter a toast by transitioning transform from translateY(100%) to translateY(0) over 400ms with ease.",
+      "why": "This is how Sonner mimics its enter keyframes with an interruptible transition.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "css",
+      "values": [
+        "translateY(100%)",
+        "translateY(0)",
+        "transition: transform 400ms ease"
+      ],
+      "evidence": "This makes the toast start at translateY(100%) and transition to translateY(0)"
+    },
+    {
+      "rule": "To get an enter transition in React, render the toast in its start state, then set a mounted flag to true in a useEffect after the first render and drive the styles through a data attribute.",
+      "why": "It lets a transition play on mount, imitating an enter keyframe.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "react",
+      "values": [
+        "setMounted(true)",
+        "data-mounted=\"true\"",
+        "data-mounted=\"false\"",
+        "<li data-mounted={mounted}>"
+      ],
+      "evidence": "I use a useEffect hook to set mounted to true after the initial render"
+    },
+    {
+      "rule": "Consider the @starting-style CSS at-rule for enter transitions instead of a mounted flag.",
+      "why": "It solves the same problem and makes the implementation much simpler.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "css",
+      "values": [
+        "@starting-style"
+      ],
+      "evidence": "This can now also be solved with the @starting-style CSS at-rule"
+    },
+    {
+      "rule": "Apply state-dependent toast styles through data attributes (mounted, expanded, front).",
+      "why": "Sonner applies its enter and stacking styles through data attributes.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "css",
+      "values": [
+        "data-mounted",
+        "data-expanded=\"false\"",
+        "data-front=\"false\"",
+        "data-sonner-toast"
+      ],
+      "evidence": "The styles are applied through data attributes"
+    },
+    {
+      "rule": "Position each toast with position: absolute and set its y position by multiplying the gap between toasts by the toast's index.",
+      "why": "Absolute positioning simplifies the stacking effect.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "css",
+      "values": [
+        "position: absolute",
+        "--lift-amount",
+        "--toasts-before"
+      ],
+      "evidence": "I multiply the gap between toasts by the toast’s index to get the y position"
+    },
+    {
+      "rule": "Scale each toast behind the front one down by 0.05 per step (0.05 * index) to create a sense of depth.",
+      "why": "Scaling down creates a sense of depth in the pile.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "0.05 * index",
+        "Y(0) scale(1)",
+        "Y(-14px) scale(0.95)",
+        "Y(-28px) scale(0.9)"
+      ],
+      "evidence": "I also scale them down by 0.05 * index to create a sense of depth"
+    },
+    {
+      "rule": "Apply the stacked translate and scale only to toasts that are not in front and when the pile is not expanded.",
+      "why": "The simplified Sonner CSS targets only collapsed, non-front toasts with the stacking transform.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "css",
+      "values": [
+        "[data-expanded=\"false\"][data-front=\"false\"]",
+        "--scale: var(--toasts-before) * 0.05 + 1",
+        "scale(calc((-1 * var(--toasts-before) * 0.05) + 1))",
+        "translateY(calc(var(--lift-amount) * var(--toasts-before)))"
+      ],
+      "evidence": "Here’s the simplified CSS for it"
+    },
+    {
+      "rule": "In stacked mode, give every toast the height of the toast in front.",
+      "why": "Toasts with different heights otherwise do not stick out evenly behind the front toast.",
+      "kind": "do",
+      "strength": "must",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "The fix is to make all the toasts the height of the toast in front when in stacked mode"
+    },
+    {
+      "rule": "Let people swipe toasts to dismiss them, on touch devices and on desktop.",
+      "why": "People are already used to swiping to dismiss notifications on their devices.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Another Sonner feature is the swipe gesture"
+    },
+    {
+      "rule": "Let toasts be swiped down to dismiss, and drive the drag with a pointer-move listener that updates a CSS variable controlling translateY.",
+      "why": "The source calls it just a simple event listener on the toast that updates the variable responsible for the translateY value.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [
+        "--swipe-amount",
+        "event.clientY - pointerStartRef.current.y"
+      ],
+      "evidence": "The toasts can be swiped down to dismiss"
+    },
+    {
+      "rule": "Make swipe dismissal momentum-based: remove the toast when the drag distance reaches the threshold OR the velocity (absolute distance divided by elapsed time since drag start) exceeds 0.11.",
+      "why": "A quick, short swipe should dismiss the toast; people should not have to drag past a fixed distance.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [
+        "velocity > 0.11",
+        "Math.abs(swipeAmount) >= SWIPE_THRESHOLD",
+        "velocity = Math.abs(swipeAmount) / timeTaken"
+      ],
+      "evidence": "The swipe is momentum-based"
+    },
+    {
+      "rule": "Tune gesture thresholds such as the dismiss velocity by trial and error.",
+      "why": "Sonner's 0.11 was reached through trial and error.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "process",
+      "applies_to": "all",
+      "values": [
+        "0.11"
+      ],
+      "evidence": "0.11 is just a number that I ended up on through trial and error"
+    },
+    {
+      "rule": "Once a drag starts, capture all future pointer events on the toast so the drag continues when the mouse or thumb leaves it.",
+      "why": "Otherwise the drag event stops as soon as the pointer is no longer over the toast.",
+      "kind": "do",
+      "strength": "must",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Once I start dragging, I set the toast to capture all future pointer events"
+    },
+    {
+      "rule": "When a toast is dragged upwards (a direction that does not dismiss it), let it move with friction so it slows down and eventually stops, instead of blocking it immediately.",
+      "why": "It feels nicer than stopping the toast immediately.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Instead of just not allowing the toast to be dragged upwards"
+    },
+    {
+      "rule": "Expand the stacked pile when the pointer hovers over the toast area so all toasts are visible.",
+      "why": "Stacked mode hides older toasts; hovering reveals them.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "desktop",
+      "values": [],
+      "evidence": "When the toasts are in stacked mode, you can hover over the toast area to expand"
+    },
+    {
+      "rule": "Compute each toast's expanded offset as its index times the gap plus the sum of the heights of all toasts before it, and use it as the translateY value when expanded.",
+      "why": "Toasts can have different heights, so each offset has to add up the real heights of the toasts above it [inferred].",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "all",
+      "values": [
+        "heightIndex * GAP + toastsHeightBefore",
+        "--offset"
+      ],
+      "evidence": "I calculate each toast’s expanded position by adding the heights of all preceding toasts and the gap between them"
+    },
+    {
+      "rule": "Pass per-toast measurements from JavaScript to CSS as custom properties (the live swipe distance, the expanded offset, the number of toasts before this one) and let the CSS build the transform from them.",
+      "why": "Sonner's drag handler sets --swipe-amount on the toast, the expanded offset is used as the --offset CSS variable, and the stacking transform is computed in CSS from --lift-amount and --toasts-before.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "css",
+      "values": [
+        "--swipe-amount",
+        "--offset",
+        "--lift-amount",
+        "--toasts-before"
+      ],
+      "evidence": "We then use this value as a CSS variable"
+    },
+    {
+      "rule": "Offer an option to keep the toasts expanded at all times.",
+      "why": "Some products need all toasts visible at all times; Sonner exposes this as the expand prop on <Toaster />.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "expand",
+        "<Toaster />"
+      ],
+      "evidence": "You can also use this expanded mode as the default behavior"
+    },
+    {
+      "rule": "Fill the gaps between toasts with an :after pseudo-element so the hover state stays on while the pointer crosses a gap.",
+      "why": "Gaps belong to no toast, so hovering them would make the toasts lose their hover state.",
+      "kind": "do",
+      "strength": "must",
+      "area": "components",
+      "applies_to": "css",
+      "values": [
+        ":after"
+      ],
+      "evidence": "I add an :after pseudo-element to fill these gaps"
+    },
+    {
+      "rule": "Auto-dismiss toasts after 4 seconds by default.",
+      "why": "This is Sonner's default duration.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [
+        "4 seconds"
+      ],
+      "evidence": "By default the toast disappears after 4 seconds unless you hover over it"
+    },
+    {
+      "rule": "Pause the dismiss timer while the pointer hovers over the toasts.",
+      "why": "The toast disappears after 4 seconds unless you hover over it.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "unless you hover over it"
+    },
+    {
+      "rule": "Pause the dismiss timer while the document (tab) is hidden, using document.hidden and the visibilitychange event.",
+      "why": "Otherwise a toast fired while the user is on another tab times out and is never seen; an inactive tab should freeze its toasts.",
+      "kind": "do",
+      "strength": "must",
+      "area": "components",
+      "applies_to": "web",
+      "values": [
+        "document.hidden",
+        "visibilitychange",
+        "useIsDocumentHidden"
+      ],
+      "evidence": "That’s why there’s a useIsDocumentHidden hook"
+    },
+    {
+      "rule": "Treat developer experience as key: make the component easy to use.",
+      "why": "If a component is not easy to use, people give up before they even try it.",
+      "kind": "do",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Developer experience is key"
+    },
+    {
+      "rule": "Expose toasts through a plain toast() function that can be called from anywhere, with <Toaster /> inserted once; require no hooks and no context.",
+      "why": "No hooks, no context and one insert is one of the two main reasons Sonner succeeded.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "toast(\"My toast\")",
+        "import { toast } from \"sonner\"",
+        "<Toaster />"
+      ],
+      "evidence": "There’s no need for hooks or context, just a straightforward function call"
+    },
+    {
+      "rule": "Do not rely on React Context for toast state; manage it with an observer pattern where <Toaster /> subscribes and toast() notifies it.",
+      "why": "The observer pattern avoids React's Context and lets toast() work from anywhere.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "ToastState.subscribe"
+      ],
+      "evidence": "To avoid using React’s Context, I manage the state via the Observer Pattern"
+    },
+    {
+      "rule": "Render the toaster as an ordered list (<ol>) that maps the toasts array to list-item toasts keyed by toast id.",
+      "why": "This is how Sonner's <Toaster /> renders all toasts with Array.map().",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "<ol>",
+        "<Toast key={toast.id} toast={toast} />",
+        "Array.map()"
+      ],
+      "evidence": "I can then render all the toasts using Array.map()"
+    },
+    {
+      "rule": "Provide a promise API: pass a promise and the message for each of its 3 states (loading, success, error) and let one toast move through them.",
+      "why": "People often praise it, and most engineers find it pretty intuitive.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [
+        "loading",
+        "success",
+        "error",
+        "toast.promise"
+      ],
+      "evidence": "People often praise Sonner’s promise API"
+    },
+    {
+      "rule": "Reuse a proven API shape when an existing library already does it very well.",
+      "why": "Sonner's rendering API is modeled on react-hot-toast because it is simply very good.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "The API design is inspired by react-hot-toast"
+    },
+    {
+      "rule": "Ship interactive documentation: live examples people can play with, paired with ready-to-use code snippets.",
+      "why": "It lets people touch the product and understand how it works before using it in their own projects, drastically lowering the barrier to use.",
+      "kind": "do",
+      "strength": "should",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [
+        "sonner.emilkowal.ski/docs"
+      ],
+      "evidence": "I built a fully custom documentation site for Sonner"
+    },
+    {
+      "rule": "Do not leave documentation and clear instructions as an afterthought.",
+      "why": "They are often overlooked, yet they drastically lower the barrier to use any product.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "I think it’s often overlooked and done as an afterthought when it shouldn’t be"
+    },
+    {
+      "rule": "Implement the small details users will not consciously notice (hidden-tab timer pause, hover gap fill, pointer capture, drag friction).",
+      "why": "These details add up; together they create a component that feels just right, and the less users notice the more intuitive it is.",
+      "kind": "do",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "The big little details"
+    },
+    {
+      "rule": "Ship nice defaults and good animations; use beauty deliberately as a differentiator.",
+      "why": "Looking good is the real differentiator; beauty is generally underutilized in software.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Two is that it looks good. It has nice defaults and good animations"
+    },
+    {
+      "rule": "Give a library a distinctive, elegant name rather than one that just describes its function.",
+      "why": "Function-based names (react-toast, react-snackbar, react-notifications) feel cheap, boring and generic; a different name helps it stand out, at the cost of discoverability and clarity.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "naming things based on their function feels cheap"
+    },
+    {
+      "rule": "When announcing a component, build the launch material around its signature motion.",
+      "why": "The stacking animation was what made people fall in love with Sonner, so the announcement videos focused on it.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "I knew I had to highlight this motion when introducing the library"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "Should a toast's movement use CSS keyframes or CSS transitions?",
+      "options": [
+        {
+          "name": "CSS keyframes",
+          "effect": "Cannot be interrupted; when toasts arrive quickly, older ones jump into their new position.",
+          "when": "Not recommended for anything whose end position can change mid-animation."
+        },
+        {
+          "name": "CSS transitions",
+          "effect": "Can be interrupted and retargeted before finishing, so the pile moves smoothly as toasts are added.",
+          "when": "Toast enter and stack movement."
+        }
+      ],
+      "recommendation": "CSS transitions, because they are interruptible and retargetable.",
+      "maps_to": null,
+      "evidence": "I initially used CSS keyframes for the animations, but they aren’t interruptible"
+    },
+    {
+      "question": "How should the enter transition be triggered?",
+      "options": [
+        {
+          "name": "Mounted flag",
+          "effect": "useEffect sets mounted to true after the first render; data-mounted switches translateY(100%) to translateY(0).",
+          "when": "Sonner's current implementation."
+        },
+        {
+          "name": "@starting-style",
+          "effect": "CSS defines the start state directly.",
+          "when": "When you want a much simpler implementation."
+        }
+      ],
+      "recommendation": "The author says @starting-style would make the implementation much simpler and he might switch to it.",
+      "maps_to": null,
+      "evidence": "This can now also be solved with the @starting-style CSS at-rule"
+    },
+    {
+      "question": "Should multiple toasts sit in a collapsed stack or all be shown expanded?",
+      "options": [
+        {
+          "name": "Stacked, expand on hover",
+          "effect": "Toasts pile up behind the front one, offset and scaled for depth; hovering expands them.",
+          "when": "Default behavior."
+        },
+        {
+          "name": "Always expanded",
+          "effect": "All toasts are visible at all times (the expand prop on <Toaster />).",
+          "when": "When you want to ensure all toasts are visible at all times."
+        }
+      ],
+      "recommendation": "Stacked is the default; use always-expanded when every toast must stay visible.",
+      "maps_to": null,
+      "evidence": "You can also use this expanded mode as the default behavior"
+    },
+    {
+      "question": "In stacked mode, how should toasts of different heights be sized?",
+      "options": [
+        {
+          "name": "Natural heights",
+          "effect": "Toasts behind do not stick out evenly.",
+          "when": "Not recommended."
+        },
+        {
+          "name": "Match the front toast's height",
+          "effect": "The pile sticks out evenly.",
+          "when": "Always in stacked mode."
+        }
+      ],
+      "recommendation": "Make all toasts the height of the toast in front while stacked.",
+      "maps_to": null,
+      "evidence": "The fix is to make all the toasts the height of the toast in front when in stacked mode"
+    },
+    {
+      "question": "What should count as a swipe that dismisses a toast?",
+      "options": [
+        {
+          "name": "Distance threshold only",
+          "effect": "People must drag past a set distance.",
+          "when": "Not what Sonner does: with distance only, a quick short swipe would not dismiss."
+        },
+        {
+          "name": "Momentum-based",
+          "effect": "Dismiss when distance reaches the threshold or velocity exceeds 0.11, so a quick short flick works.",
+          "when": "Default for swipe-to-dismiss."
+        }
+      ],
+      "recommendation": "Momentum-based, so a fast swipe dismisses even over a short distance.",
+      "maps_to": null,
+      "evidence": "The swipe is momentum-based"
+    },
+    {
+      "question": "What happens when someone drags a toast the wrong way?",
+      "options": [
+        {
+          "name": "Block it",
+          "effect": "The toast stops immediately.",
+          "when": "Not recommended."
+        },
+        {
+          "name": "Friction",
+          "effect": "The toast still moves but slows down and eventually stops.",
+          "when": "Directions that do not dismiss."
+        }
+      ],
+      "recommendation": "Friction, because it is nicer than stopping the toast immediately.",
+      "maps_to": null,
+      "evidence": "Instead of just not allowing the toast to be dragged upwards"
+    },
+    {
+      "question": "How should app code create toasts?",
+      "options": [
+        {
+          "name": "Hooks and React Context",
+          "effect": "Callers need hooks and React Context.",
+          "when": "Avoided by Sonner."
+        },
+        {
+          "name": "Global toast() function with an observer-pattern store",
+          "effect": "Insert <Toaster /> once and call toast() from anywhere; no hooks, no context.",
+          "when": "Recommended."
+        }
+      ],
+      "recommendation": "A global toast() function backed by the observer pattern; it is one of the two main reasons Sonner succeeded.",
+      "maps_to": null,
+      "evidence": "To avoid using React’s Context, I manage the state via the Observer Pattern"
+    },
+    {
+      "question": "Where should component documentation live and what should it show?",
+      "options": [
+        {
+          "name": "Custom documentation site",
+          "effect": "Interactive examples people can play with, plus ready-to-use code snippets.",
+          "when": "When adoption and ease of use matter."
+        },
+        {
+          "name": "Docs as an afterthought",
+          "effect": "Loses what good docs give: a drastically lower barrier to use.",
+          "when": "Not recommended."
+        }
+      ],
+      "recommendation": "A fully custom docs site with interactive examples and copyable code, built with care rather than as an afterthought.",
+      "maps_to": "Q-dist-04",
+      "evidence": "I built a fully custom documentation site for Sonner"
+    },
+    {
+      "question": "Should a component library be named for its function or given a distinctive name?",
+      "options": [
+        {
+          "name": "Functional name",
+          "effect": "Clear and discoverable, but boring and generic (react-toast, react-snackbar, react-notifications).",
+          "when": "When discoverability matters most [inferred]."
+        },
+        {
+          "name": "Distinctive word",
+          "effect": "Elegant and different, helps it stand out, but sacrifices discoverability and clarity.",
+          "when": "When you want it to stand out."
+        }
+      ],
+      "recommendation": "The author chose a distinctive word (Sonner, French for 'to ring') to stand out.",
+      "maps_to": null,
+      "evidence": "While I’m sacrificing discoverability and clarity"
+    }
+  ],
+  "process": [
+    {
+      "step": "Name it",
+      "detail": "Look for a distinctive word related to the component's job (Sonner came from French words about notifications) instead of a function-based name."
+    },
+    {
+      "step": "Choose an interruptible technique",
+      "detail": "Use CSS transitions rather than keyframes so toasts can be retargeted while the pile changes."
+    },
+    {
+      "step": "Build the enter transition",
+      "detail": "Start at translateY(100%), flip a mounted flag after first render (or use @starting-style), transition transform 400ms ease to translateY(0)."
+    },
+    {
+      "step": "Build the stack",
+      "detail": "Absolutely position toasts, offset each by gap times index, scale by 0.05 per step, and give all stacked toasts the front toast's height."
+    },
+    {
+      "step": "Add expand on hover",
+      "detail": "Compute each toast's offset from the heights of preceding toasts plus gaps; fill gaps with an :after pseudo-element; optionally allow always-expanded."
+    },
+    {
+      "step": "Add swipe to dismiss",
+      "detail": "Track pointer movement into a CSS variable, capture the pointer once dragging starts, add friction in the wrong direction, dismiss on distance threshold or velocity above 0.11."
+    },
+    {
+      "step": "Handle timers",
+      "detail": "Dismiss after 4 seconds by default; pause while hovered and while the tab is hidden."
+    },
+    {
+      "step": "Design the API",
+      "detail": "Use an observer-pattern store; insert <Toaster /> once; call toast() anywhere; add a promise API for loading, success and error."
+    },
+    {
+      "step": "Document it",
+      "detail": "Build interactive docs with live examples and ready-to-use code snippets."
+    },
+    {
+      "step": "Launch it",
+      "detail": "Make announcement videos that focus on the signature animation."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Sonner documentation page for toast()",
+      "where": "sonner.emilkowal.ski",
+      "visual_note": "Screenshot of the docs: a left sidebar grouped into Basics, API (toast(), Toaster, Other) and Guides (Styling); a 'Toast' page with Preview and Code tabs and a Copy Code link; a live preview area containing a 'Render toast' button; an 'On this page' list (Rendering the toast, Success, Error, Action, Cancel, Promise, Loading, Custom, Headless, API Reference); and a light/dark/system theme switch at the bottom. It shows the interactive-example-plus-copyable-code approach to documentation."
+    },
+    {
+      "what": "Keyframes vs transitions demo",
+      "where": "Sonner (interactive demo in the article)",
+      "visual_note": "Adding toasts quickly with keyframes makes older toasts jump into place; with transitions they move smoothly to their new position."
+    },
+    {
+      "what": "Stacking illustration",
+      "where": "Sonner",
+      "visual_note": "Three toasts labelled Y(0) scale(1), Y(-14px) scale(0.95) and Y(-28px) scale(0.9), showing the offset and shrink that create depth."
+    },
+    {
+      "what": "Different-heights demo",
+      "where": "Sonner (interactive demo in the article)",
+      "visual_note": "Toasts of different heights in a stack, shown to explain why stacked toasts take the front toast's height."
+    },
+    {
+      "what": "Quick swipe dismissal",
+      "where": "Sonner (video in the article)",
+      "visual_note": "A short, fast swipe is enough to dismiss the toast."
+    },
+    {
+      "what": "Hover gap fill",
+      "where": "Sonner (interactive demo in the article)",
+      "visual_note": "Dark bars mark the :after pseudo-elements that fill the gaps between expanded toasts to keep the hover state."
+    },
+    {
+      "what": "Hidden-tab pause",
+      "where": "Sonner (video in the article)",
+      "visual_note": "The toast does not disappear while the tab is inactive."
+    },
+    {
+      "what": "Pointer capture and friction",
+      "where": "Sonner (video in the article)",
+      "visual_note": "The toast keeps responding to the drag with the pointer outside it, and dragging upwards slows and stops rather than being blocked."
+    },
+    {
+      "what": "Always-expanded mode",
+      "where": "Sonner (interactive demo in the article)",
+      "visual_note": "With the expand prop on <Toaster />, all toasts stay visible."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "2023",
+      "context": "Year Sonner was built.",
+      "evidence": "Back in 2023, I decided to build a toast library called Sonner"
+    },
+    {
+      "value": "40,000,000",
+      "context": "Weekly npm downloads of Sonner (over).",
+      "evidence": "downloaded over 40,000,000 times per week from npm"
+    },
+    {
+      "value": "400ms",
+      "context": "Duration of the transform transition (ease) used for toast enter.",
+      "evidence": "transition : transform 400 ms ease"
+    },
+    {
+      "value": "translateY(100%)",
+      "context": "Start position of the toast enter transition.",
+      "evidence": "This makes the toast start at translateY(100%) and transition to translateY(0)"
+    },
+    {
+      "value": "translateY(0)",
+      "context": "End position of the toast enter transition.",
+      "evidence": "This makes the toast start at translateY(100%) and transition to translateY(0)"
+    },
+    {
+      "value": "0.05",
+      "context": "Scale reduction per toast behind the front one (0.05 * index).",
+      "evidence": "I also scale them down by 0.05 * index"
+    },
+    {
+      "value": "-14px",
+      "context": "Y offset of the first toast behind the front one in the stacking illustration; with -28px for the second, it implies a lift of 14px per step [inferred].",
+      "evidence": "Y(-14px)"
+    },
+    {
+      "value": "-28px",
+      "context": "Y offset of the second toast behind the front one in the stacking illustration.",
+      "evidence": "Y(-28px)"
+    },
+    {
+      "value": "0.95",
+      "context": "Scale of the first toast behind the front one (1 - 0.05).",
+      "evidence": "scale(0.95)"
+    },
+    {
+      "value": "0.9",
+      "context": "Scale of the second toast behind the front one (1 - 2 x 0.05).",
+      "evidence": "scale(0.9)"
+    },
+    {
+      "value": "0.11",
+      "context": "Swipe velocity (distance divided by elapsed time) above which a toast is dismissed; found by trial and error.",
+      "evidence": "velocity is higher than in this case 0.11"
+    },
+    {
+      "value": "4 seconds",
+      "context": "Default time before a toast disappears.",
+      "evidence": "By default the toast disappears after 4 seconds"
+    },
+    {
+      "value": "3",
+      "context": "States the promise API covers: loading, success, error.",
+      "evidence": "specify what the toast should say in all 3 states"
+    },
+    {
+      "value": "2",
+      "context": "Main reasons Sonner succeeded: developer experience and good looks.",
+      "evidence": "There are two main reasons."
+    }
+  ],
+  "caveats": [
+    "Self-promotion: the page opens with a banner for the author's aiforui.dev course and ends with a plug for his animations.dev course.",
+    "Usage figures (over 40,000,000 weekly npm downloads, used by Cursor, X and OpenAI) are self-reported, and the publish date is unknown, so the numbers may be dated.",
+    "Theo's video reaction and tweet are testimonials, not evidence for any rule; the tweet's like count was not used.",
+    "The code shown is explicitly simplified; the real Sonner source may differ.",
+    "The author says he might switch the enter transition to @starting-style, so the mounted-flag technique may no longer match current Sonner.",
+    "The 0.11 velocity threshold is an empirical value from trial and error, and the 400ms ease, 0.05 scale step and 4-second default are Sonner's own values rather than universal constants [inferred].",
+    "Several lessons are carried by interactive demos and videos that do not come through in the page text; only the docs screenshot image was viewed.",
+    "The naming advice is the author's personal taste and he states it trades away discoverability and clarity.",
+    "The page embeds a tweet dated Jul 15, 2024, so it was written after that date [inferred].",
+    "In the simplified stacking CSS, the --scale line reads var(--toasts-before) * 0.05 + 1 with no minus sign, while the transform line uses -1 * var(--toasts-before) * 0.05 + 1; the illustration (0.95, 0.9) shows toasts scaling down, so the transform line is the one to follow [inferred]."
+  ]
+}

@@ -24,7 +24,7 @@ trace_ids = set()
 for f in glob.glob(str(ROOT / "traces" / "*.md")) + glob.glob(str(ROOT / "research" / "*.md")) + [str(ROOT / "benchmarks" / "L09-benchmark-matrix.md")]:
     trace_ids |= set(re.findall(r"S-L\d\d-\d{3}", open(f, errors="ignore").read()))
 
-DC = re.compile(r"DC-L\d\d-\d\d")
+DC = re.compile(r"DC-L\d\d-\d{2,3}\b")  # three digits once a lane passes 99 cards (L19)
 SID = re.compile(r"S-L\d\d-\d{3}")
 QID = re.compile(r"\bQ-[a-z]+-\d\d\b")
 MODES = {"Quick": ["quick", "standard", "expert"], "Standard": ["standard", "expert"],
@@ -125,17 +125,16 @@ def finish(q):
 
 
 def table_section(text, title):
-    m = re.search(r"^## " + re.escape(title) + r".*?\n(.*?)(?=\n## |\Z)", text, re.S | re.M)
+    """Rows of every table under a '## <title>...' heading (several sections may share a title prefix)."""
     rows = []
-    if not m:
-        return rows
-    lines = [l for l in m.group(1).split("\n") if l.startswith("|")]
-    if len(lines) < 3:
-        return rows
-    head = [h.strip().lower() for h in lines[0].strip("|").split("|")]
-    for l in lines[2:]:
-        cells = [c.strip() for c in l.strip("|").split("|")]
-        rows.append(dict(zip(head, cells)))
+    for m in re.finditer(r"^## " + re.escape(title) + r".*?\n(.*?)(?=\n## |\Z)", text, re.S | re.M):
+        lines = [l for l in m.group(1).split("\n") if l.startswith("|")]
+        if len(lines) < 3:
+            continue
+        head = [h.strip().lower() for h in lines[0].strip("|").split("|")]
+        for l in lines[2:]:
+            cells = [c.strip() for c in l.strip("|").split("|")]
+            rows.append(dict(zip(head, cells)))
     return rows
 
 

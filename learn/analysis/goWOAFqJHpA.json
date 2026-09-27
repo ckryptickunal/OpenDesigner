@@ -1,0 +1,582 @@
+{
+  "summary": "Kole Jain redesigns the Spotify Wrapped mobile experience as a critique-then-rebuild exercise. He keeps the familiar highlight-reel format because people have used it for years, but switches from tapping through slides to scrolling (like Reddit Recap), moves the most important controls to the bottom of the screen where they are easier to reach, and makes the share button always visible. He splits the reel into four named chapters with a bottom dropdown chip for skipping, and gives each chapter a 'view summary' screen that works as a dashboard of shareable stats. He then plans features per chapter and replaces per-slide sharing with one button that offers share slide, share chapter or share wrapped. For a design system, the video is a worked example of mobile reach-based control placement, removing controls a gesture already covers, avoiding duplicate buttons, and evolving an established layout instead of replacing it.",
+  "key_ideas": [
+    "A click-through highlight reel is good for a first viewing with music and animation, but bad for checking stats at a quick glance.",
+    "Offering both a highlight reel and a dashboard (as Apple Music does) gives more functionality and insight.",
+    "Changing a layout people have used for years is risky, so evolve the existing format instead of replacing it.",
+    "Scrolling through slides makes more sense than clicking through them.",
+    "Important controls belong at the bottom of a phone screen, where they are easier to reach, even if pushing everything to the top looks good.",
+    "The action a product succeeds on (sharing, for Wrapped) should be immediately and always visible.",
+    "A control can be removed when the audience already knows a gesture that does the same job, such as tap to pause.",
+    "Long sequences become easier to use when split into named chapters with a way to skip straight to one.",
+    "A per-chapter summary screen can act as a dashboard without leaving the story format.",
+    "Two similar buttons on one screen confuse people; one button that opens a few clear options is simpler.",
+    "A personal stat can carry a short comparison with last year, or a friendly note when something is new.",
+    "People prefer being placed into a few recognizable categories over hyper-specific AI-generated labels.",
+    "Shared content should show whose it is, so the recipient does not confuse it with their own."
+  ],
+  "entities": [
+    {
+      "name": "Kole Jain",
+      "type": "person",
+      "description": "Designer and YouTuber presenting the redesign."
+    },
+    {
+      "name": "Spotify",
+      "type": "company",
+      "description": "Music streaming platform whose year-end recap is being redesigned."
+    },
+    {
+      "name": "Spotify Wrapped",
+      "type": "product",
+      "description": "Spotify's yearly listening recap, delivered as a click-through highlight reel in the app."
+    },
+    {
+      "name": "Apple Music",
+      "type": "product",
+      "description": "Cited for offering both a highlight reel and a dashboard, and for being accessible online."
+    },
+    {
+      "name": "Reddit Recap",
+      "type": "product",
+      "description": "Reddit's recap, used as the model for scrolling instead of clicking and for navigation on the right."
+    },
+    {
+      "name": "Audio Aura",
+      "type": "concept",
+      "description": "A past Wrapped feature that matched songs to colors and produced a mesh gradient; the author wants it back."
+    },
+    {
+      "name": "ChatGPT",
+      "type": "tool",
+      "description": "Suggested the chapter names the author used."
+    },
+    {
+      "name": "Figma",
+      "type": "tool",
+      "description": "The redesign files are shared as a Figma file."
+    },
+    {
+      "name": "Newform community",
+      "type": "company",
+      "description": "The author's own design challenge community, plugged in a self-described sponsor segment."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Mobile app patterns",
+      "summary": "Place key controls at the bottom for reach, rely on tap-to-pause instead of a pause button, scroll instead of tapping through slides, and let people swipe through months."
+    },
+    {
+      "name": "Gestures and drag",
+      "summary": "Rely on the tap-to-pause gesture people know from every social media platform instead of a pause button, scroll instead of clicking through slides, and let people swipe through each month."
+    },
+    {
+      "name": "Dashboards and data display",
+      "summary": "A highlight reel is poor for quick-glance stats; a per-chapter 'view summary' screen acts as a dashboard where most stats are visible and shareable."
+    },
+    {
+      "name": "Navigation and sidebars",
+      "summary": "Navigation moves to the right and extends into a progress bar for video slides; a dropdown chip at the bottom lets people skip to any of four chapters."
+    },
+    {
+      "name": "Buttons and actions",
+      "summary": "Keep the share button always visible at the bottom, have it pause the video, and use one share button with three options instead of two competing buttons."
+    },
+    {
+      "name": "Design process",
+      "summary": "The redesign follows a sequence: critique what was lost and what frustrates users, pick the format, fix the layout, then navigation, then features per chapter, then sharing."
+    },
+    {
+      "name": "Content and microcopy",
+      "summary": "Add comparison text such as a percentage increase over last year, or 'you two just met' for a new artist; prefer a few familiar categories over odd AI-generated genre names."
+    },
+    {
+      "name": "Retention and gamification",
+      "summary": "Wrapped's success comes from sharing, so features are chosen for being easily shareable (for example a fruit pie chart built from simple emoji-like symbols) [inferred]."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "The highlight-reel setup lets music play in the background and allows Spotify to add animations.",
+      "evidence": "the highlight reel setup is good in that it allows for music to play in the background"
+    },
+    {
+      "claim": "For looking at stats at a quick glance, clicking through each slide is about the worst possible setup.",
+      "evidence": "this setup is pretty much the worst possible needing to click through each slide"
+    },
+    {
+      "claim": "Apple Music offers both a highlight reel and a dashboard, which gives more functionality and insight.",
+      "evidence": "they have both a highlight reel and a dashboard"
+    },
+    {
+      "claim": "Entirely changing the Wrapped layout after years of use is probably not the best idea because people are used to it.",
+      "evidence": "entirely changing the layout after like eight strong years"
+    },
+    {
+      "claim": "Controls at the bottom of the screen are easier to reach than controls pushed to the top.",
+      "evidence": "at the bottom of the screen where it's easier to reach"
+    },
+    {
+      "claim": "Sharing is the reason Spotify Wrapped is so successful.",
+      "evidence": "literally the reason behind why"
+    },
+    {
+      "claim": "Spotify Wrapped only works in the app, so a browser bar does not get in the way of bottom navigation, unlike Apple Music which is accessible online.",
+      "evidence": "Spotify only works in the app unlike Apple music"
+    },
+    {
+      "claim": "Wrapped is aimed at Gen Z, who know tap-to-pause from every social media platform, so a pause button is unnecessary.",
+      "evidence": "the whole tap to pause feature on every single social media platform"
+    },
+    {
+      "claim": "Replacing genres with hyper-specific AI-generated labels was not well received, because people wanted to be classified into a few select categories.",
+      "evidence": "they decided to represent genres with weird AI garbage it was not well received"
+    },
+    {
+      "claim": "Spotify likely used AI genres because there are not many genres, so plain genres lack specificity and personalization.",
+      "evidence": "there really aren't that many genres and so it lacks specificity and personalization"
+    },
+    {
+      "claim": "Having a chapter share button next to another share button could be confusing.",
+      "evidence": "with another one right here that could absolutely be confusing"
+    },
+    {
+      "claim": "Spotify removed features the author calls good this year, such as the city your music taste is like, audio auras and even top genres.",
+      "evidence": "getting rid of good features like which city your music tast is like or audio auras"
+    }
+  ],
+  "quotes": [
+    "scrolling instead of clicking makes way more sense",
+    "entirely changing the layout after like eight strong years",
+    "being able to share each slide individually kind of sucks"
+  ],
+  "tags": [
+    "redesign",
+    "spotify-wrapped",
+    "mobile",
+    "reachability",
+    "sharing",
+    "story-format",
+    "dashboard",
+    "chapters",
+    "data-storytelling",
+    "kole-jain"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "Place the most important controls (share, volume, chapter navigation) at the bottom of a phone screen, not pushed to the top.",
+      "why": "The bottom of the screen is easier to reach, even though pushing everything to the top looks good.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "at the bottom of the screen where it's easier to reach"
+    },
+    {
+      "rule": "On the mobile web, check that the browser bar does not get in the way of navigation placed at the bottom of the screen; an app-only product does not have this problem.",
+      "why": "Spotify Wrapped only works in the app, unlike Apple Music which is accessible online, so the redesign does not need to worry about a browser bar covering its bottom navigation.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "browser bar getting in the way of our navigation"
+    },
+    {
+      "rule": "Keep the action the product's success depends on (here, share) immediately and always visible.",
+      "why": "Sharing is the reason Wrapped is so successful, yet the original layout did not always show the share button.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "why the share button isn't immediately and always visible"
+    },
+    {
+      "rule": "Automatically pause playing video when the share button is tapped.",
+      "why": "The author builds this into the new share button without giving a reason; presumably so the video does not keep playing while the person shares [inferred].",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "that will automatically pause the video when it's clicked"
+    },
+    {
+      "rule": "Don't add a visible pause button when the audience already knows tap-to-pause from social media platforms; keep the close X at the top and move volume to the bottom.",
+      "why": "Wrapped is aimed at Gen Z, who know tap-to-pause from every social platform, so the button is redundant.",
+      "kind": "dont",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "do we really need this button"
+    },
+    {
+      "rule": "Don't make people click through every slide to see their stats; let them scroll, and give each chapter a summary screen that shows most stats at once.",
+      "why": "Click-through slides are the worst setup for checking stats at a quick glance.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "when it comes to looking at stats at a quick glance"
+    },
+    {
+      "rule": "Don't entirely replace a layout people have used for years; evolve it instead.",
+      "why": "After about eight years people are used to the format, so a full layout change is probably not the best idea.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "entirely changing the layout after like eight strong years"
+    },
+    {
+      "rule": "For a story sequence that includes video, put the navigation on the right and extend it into the progress bar.",
+      "why": "The redesign copies Reddit Recap, which scrolls with navigation on the right; since some slides are videos, the navigation is expanded into their progress bar.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "let's move our navigation to the right"
+    },
+    {
+      "rule": "Split a long sequence into named chapters and put a dropdown chip at the bottom of the screen so people can skip to the part they want.",
+      "why": "So people can easily skip to the part they want.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [
+        "four chapters"
+      ],
+      "evidence": "put these into a drop- down ship at the bottom of the screen"
+    },
+    {
+      "rule": "Give each chapter a 'view summary' button that opens a dashboard of that chapter's stats, shareable without leaving the format.",
+      "why": "It keeps the story format while making most stats readily visible and easy to share.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "a button of view summary it'll act as our dashboard"
+    },
+    {
+      "rule": "Don't place two similar share buttons on one screen; use one share button that opens a short list of scopes (share slide, share chapter, share wrapped).",
+      "why": "A separate chapter share button next to the existing one could be confusing.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [
+        "three options"
+      ],
+      "evidence": "you get three options share slide share chapter or share wrapped"
+    },
+    {
+      "rule": "When someone shares a whole collection of personal content, show the owner's name at the top of what the recipient sees.",
+      "why": "So the recipient does not get confused about whether it is theirs or the sender's.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "will see your name at the top"
+    },
+    {
+      "rule": "Add a short comparison line under a headline stat, such as the percentage change from last year, or a friendly note like 'you two just met' when the item is new.",
+      "why": "The author wants the top-artist stat to show change: this year compared with last, or a note when the artist is brand new.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "content",
+      "applies_to": "all",
+      "values": [
+        "2200 minutes",
+        "1,000",
+        "120% increase"
+      ],
+      "evidence": "add some text below that compares this year to last"
+    },
+    {
+      "rule": "Don't label users with hyper-specific AI-generated categories; place them into a few recognizable categories.",
+      "why": "The AI-generated genres were not well received by people who wanted to be classified into a few select categories.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "represent genres with weird AI garbage"
+    },
+    {
+      "rule": "For a month-by-month timeline, let people swipe through every month rather than showing only some.",
+      "why": "If only some months are shown, there is no point to the timeline.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "give them the option to swipe through each month"
+    },
+    {
+      "rule": "For shareable personality summaries, use universally known symbols that are easy to render as emoji-like icons.",
+      "why": "Fruit is universally known, easy to represent with emojis, quirky, and simple enough to share easily.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "most fruit is pretty universally known very easy to represent"
+    },
+    {
+      "rule": "Don't drop well-liked features or basic features people expect (such as top genres) from a recurring product; bring the good ones back and let people compare with previous years.",
+      "why": "People were unhappy when Spotify got rid of good features like the city match, audio auras and even top genres; the author calls not including audio auras again, with a comparison to previous years' auras, a missed opportunity.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "getting rid of good features"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "What format should a stats recap (like a year in review) use?",
+      "options": [
+        {
+          "name": "Click-through highlight reel",
+          "effect": "Slides with background music and animation; people click through to each next slide.",
+          "when": "A first, watch-it-all-through viewing."
+        },
+        {
+          "name": "Dashboard",
+          "effect": "Most stats visible at once, quick to scan and share.",
+          "when": "Checking or showing off stats at a quick glance."
+        },
+        {
+          "name": "Both reel and dashboard",
+          "effect": "More functionality and insight, as Apple Music does.",
+          "when": "When you can offer both without breaking a format people already know [inferred]."
+        },
+        {
+          "name": "Scrolling reel with chapters and per-chapter summary",
+          "effect": "Keeps the familiar reel but people scroll instead of tapping, skip by chapter, and open a summary dashboard per chapter.",
+          "when": "An established reel format that needs quick-glance access without a full layout change."
+        }
+      ],
+      "recommendation": "Keep the reel people have used for years, switch to scrolling like Reddit Recap, add chapters with a skip dropdown, and give each chapter a 'view summary' dashboard.",
+      "maps_to": null,
+      "evidence": "Formatting; they have both a highlight reel and a dashboard; instead we're going to copy Reddit recap"
+    },
+    {
+      "question": "Where should the key controls sit on a phone screen: top or bottom?",
+      "options": [
+        {
+          "name": "Top",
+          "effect": "Pushing everything to the top looks good, but controls are far away and harder to reach.",
+          "when": "Not recommended for important controls."
+        },
+        {
+          "name": "Bottom",
+          "effect": "Share, volume and chapter navigation are within easy reach.",
+          "when": "Important controls, especially in an app-only product with no browser bar in the way."
+        }
+      ],
+      "recommendation": "Bottom, because it is easier to reach; the close X can stay at the top.",
+      "maps_to": null,
+      "evidence": "all the important should actually be at the bottom of the screen"
+    },
+    {
+      "question": "Should a story-style video screen have a visible pause button?",
+      "options": [
+        {
+          "name": "Visible pause button",
+          "effect": "An extra on-screen control that takes space.",
+          "when": "Audiences that may not know the tap-to-pause convention [inferred]."
+        },
+        {
+          "name": "Tap to pause, no button",
+          "effect": "Fewer controls on screen; the pause gesture matches social media stories.",
+          "when": "Audiences like Gen Z who know tap-to-pause from every social platform."
+        }
+      ],
+      "recommendation": "Remove the pause button for a Gen Z audience and rely on tap-to-pause.",
+      "maps_to": null,
+      "evidence": "speaking of pausing do we really need this button"
+    },
+    {
+      "question": "How should sharing work when content has several levels (slide, chapter, whole recap)?",
+      "options": [
+        {
+          "name": "Share each slide individually",
+          "effect": "Only single slides can be shared.",
+          "when": "Not recommended; the author says it kind of sucks."
+        },
+        {
+          "name": "Separate share buttons per level",
+          "effect": "A chapter share button next to the slide share button.",
+          "when": "Not recommended; two buttons could be confusing."
+        },
+        {
+          "name": "One share button with three options",
+          "effect": "Tapping share opens share slide, share chapter or share wrapped.",
+          "when": "Content with nested levels that people want to share at different sizes."
+        }
+      ],
+      "recommendation": "One share button that opens three options, with the sender's name shown at the top of shared chapters or full recaps.",
+      "maps_to": null,
+      "evidence": "Sharing; so instead let's simplify and just have this one button"
+    },
+    {
+      "question": "How should users be categorized in a personalized summary?",
+      "options": [
+        {
+          "name": "Hyper-specific AI-generated labels",
+          "effect": "Unique but strange category names that people did not relate to.",
+          "when": "Not recommended; it was not well received."
+        },
+        {
+          "name": "A few select familiar categories",
+          "effect": "Recognizable, easy to understand and share, but less specific.",
+          "when": "When people want to be classified rather than be unique."
+        },
+        {
+          "name": "Other lenses on taste",
+          "effect": "Most consistent artists across the year, month-by-month journey, or playful symbols like a fruit pie chart.",
+          "when": "To add personalization without odd labels."
+        }
+      ],
+      "recommendation": "Use a few familiar categories (top genres) and add personalization through other features such as most consistent artists and a month-by-month journey.",
+      "maps_to": null,
+      "evidence": "chapter four The Journey; weird AI garbage it was not well received"
+    }
+  ],
+  "process": [
+    {
+      "step": "Critique the current version",
+      "detail": "List what users are unhappy about: features that were removed (city match, audio auras, top genres) and features that were added but disliked (AI-generated genres)."
+    },
+    {
+      "step": "Decide the format",
+      "detail": "Weigh what the current format is good at (background music, animation) against what it is bad at (quick-glance stats); look at comparable products (Apple Music, Reddit Recap) and avoid changing a layout people are used to."
+    },
+    {
+      "step": "Break down the layout",
+      "detail": "Ask why the key action is not always visible and why controls are far away; move important controls to the bottom for reach and remove controls a known gesture already covers."
+    },
+    {
+      "step": "Design the navigation",
+      "detail": "Split the content into chapters, add a dropdown chip at the bottom to skip between them, and give each chapter a summary dashboard."
+    },
+    {
+      "step": "Plan features per chapter",
+      "detail": "Keep the classics, restore well-liked features, and add new ones per chapter (most skipped song, late night anthem, rising star, your obsession, fruit pie chart, month-by-month journey)."
+    },
+    {
+      "step": "Design sharing",
+      "detail": "Replace per-slide sharing with one share button offering slide, chapter or whole-recap scopes, and label shared recaps with the owner's name."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Click-through highlight reel",
+      "where": "Spotify Wrapped",
+      "visual_note": "Full-screen slides with music; good for a first watch, poor for quick-glance stats because every slide must be clicked through."
+    },
+    {
+      "what": "Highlight reel plus dashboard",
+      "where": "Apple Music",
+      "visual_note": "Shows that a recap can offer both a story and a dashboard for more functionality."
+    },
+    {
+      "what": "Scrolling recap with navigation on the right",
+      "where": "Reddit Recap",
+      "visual_note": "Scrolling instead of tapping through slides; the redesign copies this and extends the right-side navigation into a video progress bar."
+    },
+    {
+      "what": "Bottom control bar",
+      "where": "Spotify Wrapped redesign",
+      "visual_note": "Share button and volume at the bottom of the screen, close X at the top, no pause button."
+    },
+    {
+      "what": "Chapter dropdown chip",
+      "where": "Spotify Wrapped redesign",
+      "visual_note": "A dropdown chip at the bottom of the screen for jumping between four chapters (The Hits, The Voices, The Vibes, The Journey), each with a 'view summary' dashboard button."
+    },
+    {
+      "what": "Top artist with year-over-year comparison text",
+      "where": "Spotify Wrapped redesign",
+      "visual_note": "Text below the top artist compares minutes streamed to last year as a percentage increase, or says 'you two just met' for a new artist."
+    },
+    {
+      "what": "New stat slides per chapter",
+      "where": "Spotify Wrapped redesign",
+      "visual_note": "Most skipped song and a late night anthem in The Hits; in The Voices, a rising star (the artist climbing your personal charts in recent months) and your obsession (an artist you mostly play for one song, e.g. 87% of their streams from one track)."
+    },
+    {
+      "what": "Audio aura mesh gradient",
+      "where": "Spotify Wrapped (previous year)",
+      "visual_note": "Songs are matched to colors to create a mesh gradient; the redesign brings it back and adds comparison with previous years' auras."
+    },
+    {
+      "what": "Fruit pie chart",
+      "where": "Spotify Wrapped redesign",
+      "visual_note": "Represents music vibes as fruit using emoji-like symbols in a pie chart, chosen for being quirky and easily shareable."
+    },
+    {
+      "what": "Share menu with three scopes",
+      "where": "Spotify Wrapped redesign",
+      "visual_note": "One share button opens share slide, share chapter or share wrapped; shared chapters or full recaps show the sender's name at the top."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "626 million",
+      "context": "Spotify Wrapped users cited in the intro.",
+      "evidence": "Spotify wrapped out for the 626 million users"
+    },
+    {
+      "value": "eight strong years",
+      "context": "How long the Wrapped layout has existed, the reason not to change it entirely.",
+      "evidence": "entirely changing the layout after like eight strong years"
+    },
+    {
+      "value": "four chapters",
+      "context": "The redesign splits Wrapped into four chapters.",
+      "evidence": "my plan was to have four chapters"
+    },
+    {
+      "value": "2200 minutes",
+      "context": "Example streaming minutes this year for the year-over-year comparison text.",
+      "evidence": "if you stream them for 2200 minutes this year"
+    },
+    {
+      "value": "120%",
+      "context": "Example increase shown when minutes went from 1,000 last year to 2200 this year.",
+      "evidence": "it was 120% increase from last year"
+    },
+    {
+      "value": "87%",
+      "context": "Example share of one artist's streams coming from a single track, for the 'your obsession' slide.",
+      "evidence": "87% of your passenger streams came from this one track"
+    },
+    {
+      "value": "three options",
+      "context": "Scopes offered by the single share button: slide, chapter, wrapped.",
+      "evidence": "you get three options share slide share chapter or share wrapped"
+    }
+  ],
+  "caveats": [
+    "The mid-video 'sponsor' is the author's own Newform community design challenge (up to $1,500 prize); it is self-promotion, not design advice.",
+    "This is a single designer's concept redesign from January 2025, not a tested or shipped product; claims about user reactions are the author's opinion.",
+    "The chapter names came from ChatGPT suggestions, as the author admits.",
+    "Auto-caption errors: 'drop- down ship' is a dropdown chip, 'Chachi BT' is ChatGPT, 'pie Shir' is a pie chart, 'after 1 p.m.' for a late night anthem is probably '1 a.m.', and 'letg go' is probably the song 'Let Her Go' by the artist Passenger [inferred].",
+    "The advice against a pause button depends on the audience (Gen Z) knowing tap-to-pause; it is not a general rule.",
+    "The recommendation of bottom placement is justified by reach and by Wrapped being app-only; a web product with a browser bar may differ."
+  ]
+}

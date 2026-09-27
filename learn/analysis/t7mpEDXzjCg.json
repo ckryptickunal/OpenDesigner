@@ -1,0 +1,148 @@
+{
+  "summary": "Kole Jain breaks a UX case study into eight steps: define the problem with a short solution snapshot, make the case study look good, build data-backed user personas, map user flows, show lo-fi wireframes, present the final design with the reasoning beside it, reflect honestly, and add style through story, brevity and chapter-like titles. He walks through Emily Shen's portfolio case study as the running example. He says a case study has two goals: to show what problems you found and how you solved them, and to show what someone gets if they hire you. It matters to someone building a design system mainly as guidance on documenting and presenting design decisions and their reasons, not on choosing token values [inferred].",
+  "key_ideas": [
+    "A case study should show the problem you found and how you solved it, and quietly show what a client or employer gets by hiring you.",
+    "Get the problem statement right first: if the problem is wrong or does not exist, the solution does not matter.",
+    "Put a brief summary of the solution at the top, so readers see problem and solution without scrolling to the bottom.",
+    "Research does not need to be hard: a Google Form sent to friends and family works, and an affinity map turns the data into common findings.",
+    "How the case study looks matters as much as what it says; concise text with lots of images and GIFs keeps people reading.",
+    "Charts need clear titles, axis titles and a legend, and circling and annotations help understanding.",
+    "A user persona exists to consolidate data and inform decisions, so focus on goals, frustrations, behaviour and pain points, not the photo or name.",
+    "Keep projects and user flows small; a smaller project lets you put more quality into it.",
+    "Lo-fi wireframes let you ideate rapidly and test assumptions with a couple of people before building a full prototype.",
+    "Show final designs large, with text beside each one explaining why you made those choices.",
+    "A reflection section that admits flaws, lessons and features left out makes the case study more genuine and you a more credible designer.",
+    "Tell the process as a story, keep it readable in one sitting, and use chapter-style titles so it can be skimmed."
+  ],
+  "entities": [
+    {"name": "Kole Jain", "type": "person", "description": "Presenter of the video, on his Kole Jain YouTube channel; he mentions drawing his own wireframes."},
+    {"name": "Emily Shen", "type": "person", "description": "Designer whose portfolio case study (emilykshen.com) is the running example of a good case study."},
+    {"name": "FigJam", "type": "tool", "description": "Kole's preferred tool for mocking up user flows."},
+    {"name": "Figma", "type": "tool", "description": "Named as an alternative to hand drawing for low-fidelity wireframes."},
+    {"name": "Google Forms", "type": "tool", "description": "Suggested as a simple way to collect research data from friends and family."},
+    {"name": "Affinity map", "type": "concept", "description": "Method Emily Shen used to group her data into common findings that became her problem statement."},
+    {"name": "User persona", "type": "concept", "description": "A data-backed picture of the user's goals, frustrations, behaviour and pain points, used to inform design decisions."},
+    {"name": "User flow", "type": "concept", "description": "Diagram of the steps a user takes, drawn with shapes and colors for decisions, processes and inputs or outputs."},
+    {"name": "Low-fidelity wireframe", "type": "concept", "description": "Rough layout sketch used to ideate quickly and test assumptions before a full prototype."},
+    {"name": "Problem statement", "type": "concept", "description": "The short, research-backed definition of the problem that opens a case study."}
+  ],
+  "topics": [
+    {"name": "Portfolio and case studies", "summary": "Gives an eight-step structure for a UX case study: problem and solution snapshot, strong presentation, data-backed personas, small user flows, lo-fi wireframes, final design with reasoning, reflection, and style (story, brevity, chapter-like titles)."},
+    {"name": "Design process", "summary": "Describes the process a case study should reveal: collect data (even a Google Form), synthesise it in an affinity map into a problem statement, build a persona, map the user flow, sketch lo-fi wireframes, test them with a couple of people, tweak and retest, then design and reflect."},
+    {"name": "Presenting designs", "summary": "Presentation is as important as content: concise text, many images and GIFs, final designs shown large with explanatory text beside them, and clickable tabs as one way to organise screens."},
+    {"name": "Dashboards and data display", "summary": "Only in passing: data in a case study should use clear graphs with a title, axis titles and a legend, plus circling and annotations to guide understanding."},
+    {"name": "Figma and design tools", "summary": "Uses FigJam to mock up user flows with colored shapes, mentions Figma or hand drawing for wireframes, and Google Forms for gathering research data."}
+  ],
+  "claims": [
+    {"claim": "Case studies are the cornerstone of many portfolios.", "evidence": "Cornerstone of many portfolios"},
+    {"claim": "A case study has two goals: showing the problems you identified and how you solved them, and showing what people will get if they hire you.", "evidence": "let's start with the goals of a case study"},
+    {"claim": "Without a strong problem statement, identifying the wrong or a non-existent problem means your solution won't matter.", "evidence": "Your solution won't matter at all"},
+    {"claim": "Clients and employers landing on a case study don't want to scroll to the bottom to find the solution.", "evidence": "don't want to have to scroll all the way to the bottom"},
+    {"claim": "Collecting research data can be as simple as a Google Form sent to friends and family.", "evidence": "putting together a Google form"},
+    {"claim": "If a case study doesn't look good, people aren't going to read it.", "evidence": "if it doesn't look good people aren't going to read it"},
+    {"claim": "How data is portrayed strongly affects how much people understand from a case study.", "evidence": "how you portray your data is very important"},
+    {"claim": "Many user personas look good but have no bearing on the final design.", "evidence": "ultimately have no bearing on the final design"},
+    {"claim": "User flows are generally done well because they are fairly objective and not hard to put together.", "evidence": "these are done pretty well generally since they're fairly objective"},
+    {"claim": "Low-fidelity wireframes are a step many people skip.", "evidence": "a step I'm willing to bet many people Skip"},
+    {"claim": "Readers look most at the explanation of why you made your design choices.", "evidence": "what people are going to end up looking at most of all"},
+    {"claim": "Acknowledging your flaws and how you would improve the project makes you seem like a better designer.", "evidence": "make you seem like a much better designer"},
+    {"claim": "People don't like to read, but when they do they love a good story.", "evidence": "they love a good story"}
+  ],
+  "quotes": [
+    "presentation of your case study is just as important as the content",
+    "you don't need a big project to make a good case study",
+    "concision is your friend"
+  ],
+  "tags": ["case-study", "portfolio", "ux-research", "problem-statement", "affinity-mapping", "user-persona", "user-flow", "wireframes", "usability-testing", "reflection", "storytelling", "presentation"],
+  "authority": "reference",
+  "rules": [
+    {"rule": "Nail down a strong problem statement before anything else and open the case study with it; keep it clear and concise and back it with your research, as in the Emily Shen example.", "why": "If you identify the wrong problem or a non-existent one, your solution won't matter at all.", "kind": "do", "strength": "must", "area": "process", "applies_to": "all", "values": [], "evidence": "step number one is going to be to have a strong definition of the problem"},
+    {"rule": "Place a brief summary of the solution at the top, right after the problem, and expand on the process further down.", "why": "Clients and employers don't want to scroll all the way to the bottom to find the solution.", "kind": "do", "strength": "should", "area": "content", "applies_to": "all", "values": [], "evidence": "having a summary of your solution is a fantastic thing to put up top"},
+    {"rule": "Collect data (a Google Form sent to friends and family is enough), group it in an affinity map into common findings that become the problem statement, and show those summarized findings.", "why": "Summarized findings really help to solidify the definition of the problem, and collecting data doesn't need to be difficult.", "kind": "do", "strength": "consider", "area": "process", "applies_to": "all", "values": [], "evidence": "Emily's Affinity map where she took all of her data"},
+    {"rule": "Keep case study text concise and include many images and GIFs that help explain it.", "why": "Presentation is just as important as content; if it doesn't look good people aren't going to read it.", "kind": "do", "strength": "should", "area": "content", "applies_to": "all", "values": [], "evidence": "step number two is to make your case study look nice"},
+    {"rule": "Give every chart a title, titles on the axes and a legend.", "why": "How you portray data is very important and impacts how much people understand from your case study.", "kind": "do", "strength": "must", "area": "patterns", "applies_to": "all", "values": [], "evidence": "include titles for everything to have titles on the axes and to include a legend"},
+    {"rule": "Use very clear graphs, and circle and annotate the parts of the data that matter.", "why": "Clear graphs, circling and annotations help understanding of the data.", "kind": "do", "strength": "consider", "area": "patterns", "applies_to": "all", "values": [], "evidence": "even circling and including annotations is fantastic"},
+    {"rule": "Build user personas from your data and centre them on the user's goals and frustrations as they relate to your problem and solution.", "why": "A persona exists to consolidate data and inform design decisions; otherwise it has no bearing on the final design.", "kind": "do", "strength": "should", "area": "process", "applies_to": "all", "values": [], "evidence": "the biggest points to hit on are the goals and frustrations"},
+    {"rule": "Don't spend time on persona details like finding a photo or picking a name, or on extraneous details unrelated to the problem.", "why": "Extraneous details generally serve no value and just waste time; behaviour, interests and pain points are what shape the design.", "kind": "dont", "strength": "should", "area": "process", "applies_to": "all", "values": [], "evidence": "not to get caught up on small details like finding a photo or picking a name"},
+    {"rule": "In user flows, use different shapes and colors to tell step types apart, for example orange for a decision, blue for a process the user does, and green for an input or output.", "why": "Shapes and colors can be a nice way to differentiate between different pages.", "kind": "do", "strength": "consider", "area": "process", "applies_to": "all", "values": ["orange", "blue", "green"], "evidence": "orange is for a decision variable blue is a process"},
+    {"rule": "Keep the project and its user flow small rather than giant.", "why": "The smaller it is, the more quality you can put into it.", "kind": "do", "strength": "consider", "area": "process", "applies_to": "all", "values": [], "evidence": "look at just how small this user flow is"},
+    {"rule": "Make low-fidelity wireframes (hand-drawn or in Figma) before high fidelity, and include preliminary or incomplete sketches in the case study.", "why": "Lo-fi lets you ideate rapidly toward the best layout, and rough sketches show readers your process.", "kind": "do", "strength": "should", "area": "process", "applies_to": "all", "values": [], "evidence": "low Fidelity wireframes are very important"},
+    {"rule": "Test lo-fi wireframes by having a couple of people go through them, observe whether things are intuitive, tweak, and test again before moving to the final design.", "why": "It lets you test assumptions without committing to a fully fledged prototype.", "kind": "do", "strength": "should", "area": "process", "applies_to": "all", "values": [], "evidence": "grab a couple of people and make them go through your wireframe"},
+    {"rule": "Present each final design with text next to it explaining the design choices and why it solves the problem.", "why": "The explanation of why you made your choices is what people end up looking at most.", "kind": "do", "strength": "should", "area": "content", "applies_to": "all", "values": [], "evidence": "have the design with the text next to it to explain your design choices"},
+    {"rule": "Display design images as large as reasonably possible; don't squish many screens down.", "why": "Squished screens hide the detail, so readers can't understand your design decisions.", "kind": "do", "strength": "should", "area": "layout", "applies_to": "all", "values": [], "evidence": "make sure you display your images nice and large"},
+    {"rule": "End with a brief reflection covering what could be better, difficulties you hit, what you learned, and features or sections left out for time.", "why": "It makes the case study more genuine and makes you seem like a better designer, even if it highlights flaws.", "kind": "do", "strength": "should", "area": "process", "applies_to": "all", "values": [], "evidence": "step seven is the reflection"},
+    {"rule": "If your research used friends and family, note in the reflection that a more diverse, representative sample is an improvement for next time.", "why": "Starting out, friends and family are not a very diverse and representative sample; that is fine but can be improved.", "kind": "do", "strength": "consider", "area": "process", "applies_to": "all", "values": [], "evidence": "generally a good thing to improve on is your research method"},
+    {"rule": "Write the case study as a story, letting real moments (getting stuck, a method you had to use, a breakthrough from a tester) guide it.", "why": "People don't like to read, but they love a good story; it adds personality and interest.", "kind": "do", "strength": "consider", "area": "content", "applies_to": "all", "values": [], "evidence": "making your case study sound like a story"},
+    {"rule": "Keep the case study short enough to read in one sitting, favouring videos and images over text.", "why": "People don't like to read; think of the case study like a web page, where you limit text in favour of videos, images or other media.", "kind": "do", "strength": "should", "area": "content", "applies_to": "all", "values": ["10 to 15 minutes"], "evidence": "it should be readable in one sitting let's say 10 to 15 minutes"},
+    {"rule": "Make the case study skimmable with section titles that, like book chapter titles, summarize the content and make readers want to read more; avoid boring titles.", "why": "Titles let readers skim and intrigue them to read on.", "kind": "do", "strength": "should", "area": "content", "applies_to": "all", "values": [], "evidence": "make your case study skimmable with titles"}
+  ],
+  "decisions": [
+    {"question": "Where should the solution appear in a case study?", "options": [
+      {"name": "Brief solution summary at the top", "effect": "Readers see the problem and then instantly see the solution; the process follows below.", "when": "Always, for clients or employers who skim."},
+      {"name": "Solution revealed only at the end", "effect": "Readers have to scroll all the way to the bottom to learn the outcome.", "when": "Not recommended by the source."}
+    ], "recommendation": "Put a brief solution summary up top, because clients and employers don't want to scroll to the bottom to find it.", "maps_to": null, "evidence": "having a summary of your solution is a fantastic thing to put up top"},
+    {"question": "How big should the project and its user flow be?", "options": [
+      {"name": "Small project, small user flow", "effect": "Fewer screens, each with more care and quality.", "when": "Default; you don't need a big project for a good case study."},
+      {"name": "Large project, giant user flow", "effect": "Massive case studies with giant user flows, and less quality can go into each part.", "when": "Not recommended by the source."}
+    ], "recommendation": "Keep it small; the smaller it is, the more quality you can put into it.", "maps_to": null, "evidence": "you don't need a big project to make a good case study"},
+    {"question": "How should step types be told apart in a user flow diagram?", "options": [
+      {"name": "Color and shape coding", "effect": "Orange marks a decision, blue a process the user does, green an input or output, so the flow reads at a glance.", "when": "Kole's favoured approach, mocked up in FigJam."},
+      {"name": "Uniform shapes", "effect": "All steps look the same, so types must be read from labels [inferred].", "when": "Not discussed; the source only recommends differentiation."}
+    ], "recommendation": "Use different shapes and colors to differentiate steps.", "maps_to": null, "evidence": "using different shapes and colors can also be a nice way to differentiate"},
+    {"question": "How should low-fidelity wireframes be made and shown?", "options": [
+      {"name": "Hand-drawn sketches", "effect": "Rough drawings with arrows and shading; fast to ideate.", "when": "If you prefer to draw, as Kole does."},
+      {"name": "Lo-fi wireframes in Figma", "effect": "Simple digital layouts.", "when": "If you prefer working in Figma."}
+    ], "recommendation": "Either works; include preliminary or even incomplete sketches because they add value and show your process.", "maps_to": null, "evidence": "whether you prefer to draw like me or want to hop on figma"},
+    {"question": "How should final design screens be presented?", "options": [
+      {"name": "Large screens with explanatory text beside each", "effect": "Detail stays visible and the reasoning sits right next to the design; clickable tabs can group screens.", "when": "Default for the final design section."},
+      {"name": "Many screens squished together", "effect": "Detail is lost, so readers can't understand the design decisions.", "when": "Avoid."}
+    ], "recommendation": "Show designs as big as reasonably possible with text next to them explaining the choices.", "maps_to": null, "evidence": "choosing to make it as big as reasonably possible is generally a good idea"},
+    {"question": "What kind of section titles should a case study use?", "options": [
+      {"name": "Chapter-style titles", "effect": "Titles summarize the section and make readers intrigued to read more.", "when": "Recommended."},
+      {"name": "Plain, boring titles", "effect": "Sections are labelled but don't pull the reader in.", "when": "Not recommended by the source."}
+    ], "recommendation": "Take inspiration from book chapter titles.", "maps_to": null, "evidence": "take some inspiration from chapters of books"},
+    {"question": "What should a user persona contain?", "options": [
+      {"name": "Data-backed, problem-specific persona", "effect": "Goals, frustrations, behaviour, interests and pain points tied to the problem and solution; it informs the design.", "when": "Recommended."},
+      {"name": "Detailed persona with photo, name and extraneous details", "effect": "Looks fantastic but ultimately has no bearing on the final design and wastes time.", "when": "Not recommended by the source."}
+    ], "recommendation": "Build the persona from your data and focus on goals and frustrations as they relate to your problem and solution; don't get caught up on the photo or name.", "maps_to": null, "evidence": "the biggest points to hit on are the goals and frustrations"},
+    {"question": "How long should a case study be?", "options": [
+      {"name": "Short, readable in one sitting", "effect": "About 10 to 15 minutes of reading, with text limited in favour of videos and images.", "when": "Recommended."},
+      {"name": "Long and text-heavy", "effect": "Every detail written out; people don't like to read, so fewer will get through it.", "when": "Not recommended by the source."}
+    ], "recommendation": "Keep it short: concision is your friend, and it should be readable in one sitting, around 10 to 15 minutes.", "maps_to": null, "evidence": "it should be readable in one sitting let's say 10 to 15 minutes"}
+  ],
+  "process": [
+    {"step": "Set the two goals", "detail": "Aim to show the problems you identified and how you solved them, and to show what people get if they hire you; every later step serves these."},
+    {"step": "1. Define the problem and snapshot the solution", "detail": "Write a clear, concise problem statement backed by research, with a brief solution summary up top. Collect data (a Google Form to friends and family is enough), group it in an affinity map, and show summarized findings."},
+    {"step": "2. Make it look good", "detail": "Keep text concise and use many images and GIFs. Present data with clear graphs, circling and annotations, and give charts titles, axis titles and a legend."},
+    {"step": "3. Build user personas", "detail": "Make the persona from your data, focused on goals, frustrations, behaviour, interests and pain points tied to the problem; skip time on photo, name and extraneous details."},
+    {"step": "4. Map user flows", "detail": "Mock the flow up (Kole uses FigJam) with shapes and colors for decisions, processes and inputs or outputs, and keep it small."},
+    {"step": "5. Sketch lo-fi wireframes and test them", "detail": "Draw or use Figma to ideate layouts quickly, include rough sketches in the case study, have a couple of people go through them, observe what is intuitive, tweak and test again."},
+    {"step": "6. Show the final design and the problems it solves", "detail": "Show designs large with explanatory text beside them (clickable tabs are one layout) explaining why the design solves the problem best."},
+    {"step": "7. Reflect", "detail": "Briefly cover what could be better, difficulties, what you learned, research-method improvements, and features left out for time."},
+    {"step": "8. Add style", "detail": "Tell it as a story, keep it short enough to read in 10 to 15 minutes, and make it skimmable with chapter-like titles."}
+  ],
+  "examples": [
+    {"what": "A one-sentence problem statement followed by a brief solution summary", "where": "Emily Shen's portfolio case study (emilykshen.com)", "visual_note": "A single simple sentence about New York college students who want to spend less on eating out and prioritize health in their diets, backed up by research shown later, with the solution summarised just below so readers need not scroll. Described verbally; not viewed."},
+    {"what": "Affinity map and summarized findings", "where": "Emily Shen's portfolio case study", "visual_note": "Data grouped into common findings that became the problem statement, then summarized findings on social motivations, priority on health and existing efforts. Demonstrates research feeding the problem definition."},
+    {"what": "An image-rich, concise case study layout", "where": "Emily Shen's portfolio case study", "visual_note": "Many images and GIFs along the way with concise text, shown as the standout example of good presentation."},
+    {"what": "A case-specific user persona", "where": "Emily Shen's portfolio case study", "visual_note": "Almost all information on the persona is specific to the case study's problem, showing a persona that informs design rather than decorating it."},
+    {"what": "Small, color-coded user flow", "where": "Shown in the video right after Kole describes mocking up flows in FigJam; whose flow it is is not stated", "visual_note": "A compact flow where orange shapes are decisions, blue shapes are user processes and green shapes are inputs or outputs; its small size is the point."},
+    {"what": "Rough lo-fi wireframes, including ones tested for intuitiveness", "where": "Kole's hand-drawn sketches and an example set shown in the video (likely from Emily Shen's case study) [inferred]", "visual_note": "Sketches with random arrows and shaded areas, not perfect, plus an example set of wireframes on which some research was done to see whether they were intuitive."},
+    {"what": "Final design with explanatory text and clickable tabs", "where": "Emily Shen's portfolio case study", "visual_note": "Design screens sit next to text explaining each choice, organised with clickable tabs."},
+    {"what": "Brief, honest reflection", "where": "Emily Shen's portfolio case study", "visual_note": "Notes that there is still room for improvement, what she learned and what she wants to improve; the conclusion is short."},
+    {"what": "Storytelling example", "where": "Hypothetical scenario told by Kole Jain", "visual_note": "Stuck on a user flow, a friend uses the prototype and says something that sparks the solution; that moment is woven into the case study to add personality."}
+  ],
+  "numbers": [
+    {"value": "8", "context": "Number of steps in the case study structure", "evidence": "Make A Perfect UX Case Study In 8 Steps"},
+    {"value": "two", "context": "Number of goals of a case study (show problem and solution; show what a hirer gets)", "evidence": "the second and more subtle of the two"},
+    {"value": "10 to 15 minutes", "context": "Target reading time so the case study is readable in one sitting", "evidence": "readable in one sitting let's say 10 to 15 minutes"}
+  ],
+  "caveats": [
+    "The video is about job-seeking portfolio case studies (published 2024-03-24), not about design systems; its relevance to OpenDesigner is indirect, mainly to documenting and presenting decisions [inferred].",
+    "Practitioner opinion throughout, including 'I almost guarantee' a fantastic case study if you follow the eight steps; none of it is backed by data in the video.",
+    "Auto-caption fixes applied: 'low five' and 'Loi' read as lo-fi, 'fig jam' as FigJam, 'gifts' as GIFs, 'K studies' as case studies, 'taxed heavy' as text heavy; 'a good lay for this' is read as layout (best guess).",
+    "The Emily Shen examples are described from the narration only; no media list existed and the images were not viewed.",
+    "The video description's timestamp list is cut off after 'Making it'.",
+    "Ends with a like-and-subscribe request; no sponsor segment."
+  ]
+}

@@ -1,0 +1,582 @@
+# Typography and content: Decision Cards (lane L19)
+
+Area `typography` (OpenDesigner stages 10, 11 and 19; wiki topics Typography, and Content and microcopy). Cards DC-L19-21 to DC-L19-39. Each card adds something the existing L02, L06, L13 and L15 cards do not have, or flags where the trusted sources disagree with them.
+
+How to read the evidence: Emil Kowalski's sources are house standards (STD ids, locked). Kole Jain and Steve Schoger videos are trusted practitioner opinion; a number or an "always/never" from a single video is labelled as opinion unless another source or existing research agrees. My own connections are marked [inferred].
+
+### DC-L19-21: Letter spacing by role, size and case
+- **Block path:** Foundations > Typography > Metrics > Letter spacing
+- **Questions the designer answers:** Should large headings be pulled tighter, and from what size? How much tighter? Do all-capital labels get extra room? Is "leave it as the font sets it" ever enough?
+- **Options:**
+  - **Role- and size-specific tracking (house standard).** Never one value for every size: tighten display text and headings (for example -0.02em), give small text slightly positive tracking, leave body near 0 [S-L19-020]. Uppercase labels get looser spacing than the same text in sentence case [S-L19-004].
+  - **Practitioner thresholds and amounts.** Schoger tightens headlines once they pass about 24-30px [S-L19-103]. Kole tightens "large header text" by about -2% to -3% [S-L19-052], and in another video by -2% to -4% on text over about 70-80px, where zero spacing looks disjointed [S-L19-070]. A Figma percentage is a share of the font size, so -2% equals -0.02em [inferred].
+  - **Uppercase eyebrows with wide tracking.** Schoger widens tracking whenever text is all capitals, as on a monospace, extra-small, gray eyebrow [S-L19-103].
+  - **Existing research and engine.** DC-L02-14 defaults to -0.01 to -0.02em from about 32px. `engine.py` `tracking()` gives +0.05em to capitals, +0.02em at 12px and below, 0 from 13px to 31px, -0.01em from 32px and -0.02em from 48px.
+  - **`zero` (the font's own spacing everywhere).** Today's Q-type-13 option. With it the engine returns 0 for every style, including capitals.
+- **Visual effect:** Tightened large headings look denser and more confident (DC-L02-14); Kole says it makes large text look professional at once [S-L19-052], and Schoger says it gives headlines more impact [S-L19-103]. Side by side the change is subtle, but untightened large text looks disjointed [S-L19-070] or too loose [S-L19-052]. Capitals with too little spacing look cramped [S-L19-004]. `zero` leaves headings loose and capital labels cramped.
+- **Depends on (upstream):** Q-type-01 (the system font already ships tracking tables [S-L19-020]); Q-type-07 (fonts that change shape by size do part of the tightening, DC-L02-14); the size scale (Q-type-08, Q-type-09); scripts (no tracking on non-Latin scripts, DC-L02-25).
+- **Affects (downstream):** `letterSpacing` in every `text.*` style; the capitals label style (`text.label.sm`); eyebrows and overlines; capitalized buttons and tabs; DC-L19-26 display moments.
+- **Token encoding:** DTCG `typography.letterSpacing` is a `dimension` in px or rem only (DC-L02-14), so the em value lives in `$extensions` (the engine already writes `letterSpacingEm`). Example primitives: `font.tracking.caps` = 0.05em, `font.tracking.tight` = -0.02em, referenced by `text.headline.*` and `text.label.sm` [inferred naming].
+- **Platform notes:** The sources give no web versus native difference. DC-L02-14 notes that iOS applies SF tracking automatically for system fonts.
+- **Accessibility constraints:** Layouts must survive a user override to 0.12em letter spacing (WCAG 1.4.12, DC-L02-14). Kole's -4% is one video's upper bound for text over 70-80px [S-L19-070]; tightening that far at ordinary heading sizes is not supported by any source.
+- **Default + heuristic:** Key tracking on the style's role as well as its size [inferred from S-L19-020, which says to tighten headings and leave body near 0]:
+  - capitals at any size: +0.05em (unchanged);
+  - 12px and below: +0.02em;
+  - body and label roles from 13px to 18px: 0;
+  - title and headline roles from about 20px to 31px: -0.01em;
+  - 32px to 69px: -0.02em (Emil's example value);
+  - display text from 70px: -0.03em (inside Kole's -2% to -4%).
+  - Rule of thumb: every heading role gets zero or negative tracking, the bigger it is the tighter, and body text never moves. With an optical-size font, check the table by eye, because the font already tightens some sizes.
+  - Differs from DC-L02-14, which starts at about 32px. The earlier start follows the house standard, which says to tighten headings whatever their size (STD-visual-details-05), and sits just below Schoger's 24-30px [S-L19-103]; the 20px threshold itself is [inferred]. It fixes the recorded conflict in which the default title.lg (22px) and headline.sm (27px) get no tightening, against STD-visual-details-05.
+- **Evidence:** [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]), [S-L19-004] ([[sources/ek-agents-with-taste-agents-with-taste|Agents with Taste]]), [S-L19-052] ([[sources/EcbgbKtOELY-every-ui-ux-concept-explained-in-under-10-minutes|Every UI/UX Concept Explained in Under 10 Minutes]]), [S-L19-070] ([[sources/c1TvOcKdBVE-the-8-ui-ux-cheat-codes-for-instantly-better-designs|The 8 UI/UX Cheat Codes for INSTANTLY Better Designs]]), [S-L19-103] ([[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]). Compared: DC-L02-14, DC-L02-25, DC-L02-04.
+- **Maps to:** Q-type-13:
+  - Remove option `zero`, or reword it as "the font's spacing for body text, with headings still tightened and capitals still loosened", because as written it breaks STD-visual-details-05 and STD-visual-details-04.
+  - New default: the role-and-size table above.
+  - Visual sample: the same large heading at 0 and at -2% [S-L19-070]; a hero heading at -2% to -3% with 110-120% line height [S-L19-052]; a monospace uppercase eyebrow with wide tracking [S-L19-103].
+  - Engine note: `tracking()` should key on heading roles from about 20px and never return 0 for capitals.
+- **Impact now / as it grows:**
+  - *Role-and-size table:* now, headings look tighter and more finished at no layout cost; as it grows, every new heading style gets correct tracking by declaring its role, and new scripts switch it off through DC-L02-25.
+  - *Hand-set value per style (Material style):* now, exact control; as it grows, every added style needs a hand-picked value and teams drift apart.
+  - *Font's own spacing everywhere (`zero`):* now, looser headings and cramped capitals; as it grows, each new display style repeats the problem, and the option breaks two house standards.
+- **Standards:** STD-visual-details-05, STD-visual-details-04, STD-visual-details-11.
+
+### DC-L19-22: Line height falls as size rises, with no inversions
+- **Block path:** Foundations > Typography > Metrics > Line height
+- **Questions the designer answers:** How tight should big headings be? May a bigger style ever get looser line spacing than a smaller one? Can line height stay on "auto"?
+- **Options:**
+  - **Ratio falls as size rises (house standard).** About 1.05 for display text and 1.5 for body; higher for scripts with tall ascenders and descenders; tighter for dense, information-heavy UI [S-L19-020].
+  - **Practitioner percentages.** Paragraphs about 150%, headings about 110-130%, higher for longer lines [S-L19-042]; large headers about 110-120% [S-L19-052].
+  - **Auto.** What most designers leave on most of the time; it falls off for very large text [S-L19-042].
+  - **Snap to a 4px grid (today's engine and DC-L02-13).** Bands of 1.5, 1.4, 1.25 and 1.12, then rounded to 4px. In the default scale this inverts leading: title.lg (22px) gets 1.4545 while body.lg (18px) gets 1.3333, and headline.md (34px) gets 1.2941 while headline.sm (27px) gets 1.1852 (the recorded conflict with STD-visual-details-06).
+  - **Snap to 2px, or keep the unsnapped ratio** (Q-type-11 `2pt` and `ratios`, DC-L02-13).
+- **Visual effect:** Tight display leading makes a headline read as one solid block; 1.5 keeps paragraphs easy to follow. An inverted pair makes the bigger heading look looser than the smaller text beside it [inferred]. Kole says auto line height "falls off" on extremely large text [S-L19-042].
+- **Depends on (upstream):** Q-type-08 base size, Q-type-09 ratio, the spacing grid (4px or 8px), Q-type-04 scripts (DC-L02-25).
+- **Affects (downstream):** `lineHeight` in every `text.*` style; heights of buttons, list rows and inputs where text sets the height; vertical rhythm; DC-L19-26 display moments.
+- **Token encoding:** DTCG `typography.lineHeight` is a unitless `number`; pixel values go in `$extensions` (the engine writes `lineHeightPx`). Example: `text.display.lg` lineHeight 1.05, `text.body.md` 1.5.
+- **Platform notes:** None from these sources. DC-L02-13 covers how Android places the first and last line differently.
+- **Accessibility constraints:** Text must survive a user override to 1.5x line height (WCAG 1.4.12) and WCAG 1.4.8 (AAA) asks for 1.5 inside paragraphs (DC-L02-13). Scripts with tall marks need more height (STD-visual-details-06, DC-L02-25), so a 1.05 display style needs the script-height adjustment before it is used for Indic or Thai text [inferred].
+- **Default + heuristic:** Keep DC-L02-13's bands for body, title and headline (1.5, then 1.4, then 1.25). For display roles use 1.05-1.1 (Emil's display sample, and the low end of Kole's range) instead of DC-L02-13's 1.1-1.15 and the engine's 1.12.
+  - Rule of thumb: after snapping, walk the ladder from small to large; the ratio may stay level or fall but never rise. If a 4px snap breaks that, snap that style to 2px or keep its exact ratio [inferred].
+  - Do not leave display text on auto, because auto falls off for extremely large text [S-L19-042].
+  - Differs from DC-L02-13 in the display band only.
+- **Evidence:** [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]), [S-L19-042] ([[sources/7sUUzOCv47U-mathematically-perfect-typography-for-web-design|Mathematically Perfect Typography for Web Design]]), [S-L19-052] ([[sources/EcbgbKtOELY-every-ui-ux-concept-explained-in-under-10-minutes|Every UI/UX Concept Explained in Under 10 Minutes]]). Compared: DC-L02-13, DC-L02-25.
+- **Maps to:** Q-type-11:
+  - New heuristic: the no-inversion check after snapping, falling back to 2px.
+  - New default for display roles: 1.05-1.1, because the house skill's display sample uses 1.05.
+  - Visual sample: a 64px+ heading on auto next to 110% [S-L19-042]; a paragraph at 150% under a heading at 110-130%.
+- **Impact now / as it grows:**
+  - *Falling ratio with the no-inversion check:* now, it fixes the inverted pairs in the default scale; as it grows, new sizes slot in without anyone re-checking leading by hand.
+  - *4px snapping only:* now, text lines up with a 4px grid; as it grows, every change of base size or ratio can create a new inversion.
+  - *Auto:* now, no effort; as it grows, very large text loosens and changes with every font swap.
+- **Standards:** STD-visual-details-06, STD-visual-details-07.
+
+### DC-L19-23: How heading, subheading and paragraph are told apart
+- **Block path:** Foundations > Typography > Hierarchy > Treatment by role
+- **Questions the designer answers:** In order of importance, what text is on a typical screen? Should the heading lead by size, by boldness, or both? Which text may be made lighter, and how light?
+- **Options:**
+  - **Size only.** Works, but gives little separation; the "before" in Kole's comparison [S-L19-057].
+  - **Bold, full-strength heading, plain subheadings, lighter paragraphs.** The predictable choice. It makes the smallest text also the lowest in contrast, which Kole calls neither usable nor attractive [S-L19-042].
+  - **Large plain heading, bold subheadings, full-strength paragraphs.** Size alone gives the heading the most attention; bold makes subheadings easy to scan; body text stays readable [S-L19-042].
+  - **Size plus two weights plus two text colors.** Kole's "after" [S-L19-057].
+  - **Weight, size and line height as one set (house standard).** Emphasise with weight, because it adds presence without taking space [S-L19-020]. Kole adds that an element also stands out when you change what surrounds it, rather than making its own text bolder [S-L19-080].
+  - **Same size, second line lowered by color.** In one hero teardown, two 15px stat lines differ only by the second line's 55% opacity [S-L19-043].
+- **Visual effect:** At small sizes a thinner weight and a lighter color look almost the same, because both reduce dark pixels, so either can push small text back [S-L19-042]. A large plain heading over bold subheads looks editorial and calm [inferred]. Kole calls faint small paragraphs neither very usable nor attractive [S-L19-042].
+- **Depends on (upstream):** Q-dir-03 (hierarchy strength, DC-L15-02), Q-type-12 (weights, DC-L19-24), Q-color-22 (text colors, DC-L01-14), Q-type-09 (ratio).
+- **Affects (downstream):** which weight each `text.*` role uses; which `color.text.*` each component slot uses (card metadata, captions, helper text, prose); the hierarchy rules in DESIGN.md.
+- **Token encoding:** Text color is not part of the DTCG typography composite (DC-L02-23), so the pairing lives in component tokens, for example `prose.body.color` = `{color.text.primary}` and `card.meta.color` = `{color.text.secondary}`; weights sit in the role composites (`text.headline.md.fontWeight` = `{font.weight.regular}`, `text.title.md.fontWeight` = `{font.weight.semibold}`) [inferred naming].
+- **Platform notes:** None from these sources.
+- **Accessibility constraints:** Secondary text still needs 4.5:1 (3:1 only for large text), which is OpenDesigner's locked floor. Opacity-based secondary text, computed with the WCAG 2 luminance formula [inferred: computed for this card]:
+  - Black on white: 40% gives 2.85:1, 45% gives 3.36:1, 50% gives 3.95:1, 55% gives 4.74:1 and 60% gives 5.74:1. The lowest passing value is 54%, or 59% if the primary text is a near-black such as #171717.
+  - White on black: 45% gives 4.43:1 (fails) and 50% gives 5.32:1. The lowest passing value is 46%, or 48% on a #27272a surface.
+  - So the low ends of Kole's 40-70% [S-L19-042] and 45-70% [S-L19-057] fail for body-size text, while his 55% example passes on white [S-L19-043].
+  - Color-only hierarchy fails people with low vision (DC-L15-02). On blurred or translucent surfaces, avoid flat gray text (STD-visual-details-13).
+- **Default + heuristic:**
+  - Rank the text first, then style it [S-L19-042].
+  - Headings lead by size and tight leading. Subheadings and titles take the stronger weight. Body text stays regular weight in the primary text color.
+  - Paragraphs stay at full strength [S-L19-042]; the secondary color is for metadata such as timestamps, captions and helper text [inferred].
+  - Opacity floor: 60% in light themes and 50% in dark themes, unless the engine checks each surface [inferred].
+  - Rule of thumb: the smallest text on a screen should not also be the faintest.
+  - This confirms DC-L01-14's heuristic (secondary text passes 4.5:1 on the lowest surface) and gives it opacity numbers. It does not conflict with STD-visual-details-07, because the plain heading still differs from its subheads in size, leading and weight contrast [inferred].
+- **Evidence:** [S-L19-042] ([[sources/7sUUzOCv47U-mathematically-perfect-typography-for-web-design|Mathematically Perfect Typography for Web Design]]), [S-L19-057] ([[sources/Lp6ey4AyDzA-8-web-design-hacks-to-actually-make-your-designs-better|8 Web Design Hacks To ACTUALLY Make Your Designs Better]]), [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]), [S-L19-080] ([[sources/neE6wOuBIP8-the-secret-behind-weirdly-perfect-ui-designs|The secret behind weirdly perfect UI designs]]), [S-L19-043] ([[sources/9WVt1CelBfg-the-stupid-simple-way-to-learn-ui-ux-design-in-exactly-10-minutes|The stupid simple way to learn UI/UX design in exactly 10 minutes]]). Compared: DC-L15-02, DC-L01-14, DC-L02-15, DC-L02-23.
+- **Maps to:**
+  - Q-dir-03, visual sample: Kole's two treatments of the same heading, subheadings and paragraphs (bold heading over faint body, against large plain heading, bold subheads and full-strength body) [S-L19-042].
+  - Q-type-12, new heuristic: body copy never takes the secondary text color.
+  - Q-color-22, new heuristic for `opacity-levels`: a floor of 60% (light) and 50% (dark) for secondary text, or a per-surface contrast check, because the low end of the source range fails 4.5:1. Disabled text stays exempt (DC-L01-14).
+- **Impact now / as it grows:**
+  - *Size-led heading, bold subheads, full-strength body:* now, readable and calm; as it grows, long-form pages (docs, help, articles) stay readable and new screens inherit clear roles.
+  - *Bold heading over faint body:* now, the familiar, predictable pattern [S-L19-042]; as it grows, every text-heavy surface gets harder to read, and tinted surfaces push faint text below 4.5:1.
+  - *Size only:* now, quick; as it grows and screens get denser, the levels blur together.
+- **Standards:** STD-visual-details-07, STD-visual-details-29, STD-visual-details-13, STD-visual-details-08.
+
+### DC-L19-24: Weight budget: how many weights, and how far apart
+- **Block path:** Foundations > Typography > Metrics > Weights
+- **Questions the designer answers:** How many font weights may one screen use? How different must two weights be? May we use an in-between weight such as 550?
+- **Options:**
+  - **At most two weights, at least one weight step apart.** Kole: if a family has 16 weights, pick two with at least one weight between them [S-L19-057]; avoid ultra-bold and ultra-thin for regular text [S-L19-042].
+  - **Three weights in the system.** DC-L02-15's default: 400 body, 500-600 labels, 600-700 headings (Carbon, Material, Atlassian).
+  - **In-between variable weights.** Schoger uses 550 when medium (500) feels too thin and semibold (600) too heavy [S-L19-103]; Polaris ships 450, 550 and 650 (DC-L02-15).
+  - **Weight as the emphasis tool.** Bold for interface emphasis, italic only for citations and stress in prose, underline only for links [S-L19-004]; weight adds presence without taking space [S-L19-020].
+- **Visual effect:** Too many weights or text colors are not visually appealing [S-L19-057]; two clearly different weights look deliberate [inferred]. Two neighbouring weights (400 and 500) can read as a mistake rather than a level [inferred]. An in-between weight fine-tunes how heavy a headline feels [S-L19-103].
+- **Depends on (upstream):** Q-type-01 and Q-type-03 (the face), Q-type-07 (a variable font is needed for in-between weights), Q-dir-03 (hierarchy strength).
+- **Affects (downstream):** `font.weight.*` primitives; the weight in each `text.*` role; emphasized variants (DC-L02-12); button and tab labels; how many font files a static family needs.
+- **Token encoding:** `fontWeight` tokens: `font.weight.regular` = 400, `font.weight.strong` = 600, and an optional `font.weight.heading` = 550 for variable fonts only; roles reference them (`text.title.md.fontWeight` = `{font.weight.strong}`) [inferred naming].
+- **Platform notes:** None from these sources. DC-L02-15 notes that iOS's Bold Text setting raises weights. A static font cannot show 550 and falls back to the nearest file [inferred].
+- **Accessibility constraints:** No thin or light weights at small sizes (Kole's "no extremes" [S-L19-042]; HIG in DC-L02-15). Bold, not italic or underline, for emphasis (STD-visual-details-08, STD-visual-details-09).
+- **Default + heuristic:** Three weights in the system (DC-L02-15), but any single view uses at most two, with at least one named weight between them: 400 and 600 [S-L19-057], or 400 and 550 in a variable font (Kole's rule combined with Schoger's in-between weight [S-L19-103] [inferred]).
+  - Rule of thumb: before adding a third weight to a screen, try size, spacing or the surroundings [inferred from S-L19-080, where emphasis comes from changing an element's surroundings].
+  - This reconciles DC-L02-15 (three) with Kole's two and with the BOARD note of two per view already cited in Q-type-12. In a family with weights every 100, Kole's rule of at least one weight between the two means 200 apart, so it gives DC-L15-02's "200 apart" heuristic a source [inferred]. It differs slightly from DC-L15-02: read against a variable font, the rule allows 400 with 550, which is 150 apart [inferred].
+- **Evidence:** [S-L19-057] ([[sources/Lp6ey4AyDzA-8-web-design-hacks-to-actually-make-your-designs-better|8 Web Design Hacks To ACTUALLY Make Your Designs Better]]), [S-L19-042] ([[sources/7sUUzOCv47U-mathematically-perfect-typography-for-web-design|Mathematically Perfect Typography for Web Design]]), [S-L19-103] ([[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]), [S-L19-004] ([[sources/ek-agents-with-taste-agents-with-taste|Agents with Taste]]), [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]), [S-L19-080] ([[sources/neE6wOuBIP8-the-secret-behind-weirdly-perfect-ui-designs|The secret behind weirdly perfect UI designs]]). Compared: DC-L02-15, DC-L02-12, DC-L15-02.
+- **Maps to:**
+  - Q-type-12, new default: "3 weights in the system, at most 2 in any one view, with at least one named weight between them".
+  - Q-type-12, new Use/avoid line: underline only links (STD-visual-details-09).
+  - Q-type-07, visual sample: one headline at 500, 550 and 600 [S-L19-103].
+  - Engine review idea: count distinct weights per preview screen [inferred].
+- **Impact now / as it grows:**
+  - *Two per view from three in the system:* now, calm and deliberate screens; as it grows, new components cannot add weights on a whim, and a static family needs fewer files.
+  - *Three or four in one view:* now, more nuance; as it grows, each team picks its own weights and screens drift apart.
+  - *In-between variable weights:* now, finely tuned headings; as it grows, the look depends on the variable font, and exports to targets without variable support lose the in-between value [inferred].
+- **Standards:** STD-visual-details-07, STD-visual-details-08, STD-visual-details-09.
+
+### DC-L19-25: Size budget per surface: how many sizes, and how big
+- **Block path:** Foundations > Typography > Type scale > Size budget per surface
+- **Questions the designer answers:** How many text sizes may one page use? What is the largest text on the product's working screens? Do marketing pages get a wider range?
+- **Options:**
+  - **Landing and marketing pages: up to six sizes with a large range** [S-L19-052].
+  - **Dashboards: nothing above 24px.** The range shrinks because more information must fit [S-L19-052]; dashboards use many small sizes with small steps between them [S-L19-047].
+  - **A productive scale runs to about 32px** (DC-L02-11: productive sizes 12-32), above Kole's 24px.
+  - **About three sizes per view** (the BOARD L15 note in Q-type-10's Use/avoid).
+  - **Ratio chosen by surface.** Golden ratio (1.62) only when there is just a heading and body, its square root (1.27) for a full style guide, and its cube root for dashboards and mobile [S-L19-042]; the cube root is about 1.17 [inferred]. Kole calls this his own method, and L15 rates golden-ratio scales as weak evidence.
+  - **Avoid mixing extremes on one page.** Giant headline sections next to small spec-text sections split a site into two styles [S-L19-065]; tiny text in a blog list is a flaw [S-L19-082]; the product's name in a 12px corner hides what it is [S-L19-084].
+- **Visual effect:** A small dashboard range looks dense and calm and fits more rows; a wide landing-page range looks dramatic and editorial (DC-L02-11's productive and expressive scales). A page mixing giant and tiny text feels like two different sites [S-L19-065].
+- **Depends on (upstream):** Q-dir-02 (density), Q-dir-03 (hierarchy strength), Q-brand-06 (marketing set), Q-type-09 (ratio).
+- **Affects (downstream):** which `text.*` styles product screens may use (display styles kept out of app screens); an `engine.py review` check; each style's Use/avoid lines in DESIGN.md.
+- **Token encoding:** No new tokens. Surface metadata on styles in `$extensions`, for example `surfaces: ["marketing"]` on `text.display.*`, plus review settings such as `type.maxSizesPerView` [inferred].
+- **Platform notes:** Kole puts mobile with dashboards for the tighter ratio [S-L19-042]; DC-L19-32 covers mobile sizes.
+- **Accessibility constraints:** None directly. Fewer, clearly different sizes help people who rely on visual hierarchy (DC-L02-10); minimum readable sizes still apply (DC-L02-20).
+- **Default + heuristic:**
+  - Product and dashboard screens: about three sizes per view (confirms Q-type-10's note), the largest 24px for `compact` density and up to about 32px for page titles in roomier apps. This reconciles Kole's 24px with DC-L02-11's 32px [inferred].
+  - Marketing pages: at most six sizes per page, with a free range.
+  - The system can still hold 8-10 sizes (DC-L02-10), because each surface uses a different subset [inferred].
+  - Kole's six and 24px are one creator's rules of thumb.
+  - Rule of thumb: count sizes per view in review, and flag any display style used inside the app.
+  - This confirms DC-L02-09's ratio bands (1.125-1.2 dense, 1.25 mixed): Kole's 1.27 and roughly 1.17 fall inside them [inferred].
+- **Evidence:** [S-L19-052] ([[sources/EcbgbKtOELY-every-ui-ux-concept-explained-in-under-10-minutes|Every UI/UX Concept Explained in Under 10 Minutes]]), [S-L19-047] ([[sources/B7k5rOgmOGY-everything-you-need-to-know-to-build-a-dashboard-ui-in-8-minutes-beginner-friendly|EVERYTHING you need to know to build a Dashboard UI in 8 minutes (beginner friendly)]]), [S-L19-042] ([[sources/7sUUzOCv47U-mathematically-perfect-typography-for-web-design|Mathematically Perfect Typography for Web Design]]), [S-L19-065] ([[sources/V3Omp1hm0Sg-i-redesigned-a-failing-tesla-wannabe-full-website-to-save-it|I Redesigned a Failing Tesla WANNABE Full Website To SAVE It]]), [S-L19-082] ([[sources/pGYLZyBE32o-i-redesigned-google-s-ai-website-from-scratch-complete-transformation|I Redesigned Google's AI Website from SCRATCH (complete transformation)]]), [S-L19-084] ([[sources/tNMAFjzapOk-the-formula-behind-truly-captivating-ui-sections|The Formula Behind Truly Captivating UI Sections]]). Compared: DC-L02-09, DC-L02-10, DC-L02-11, DC-L15-02.
+- **Maps to:**
+  - Q-type-10, new heuristic: a size budget per surface plus a review check.
+  - Q-dir-02, new heuristic: `compact` caps product text at 24px [inferred: Kole's cap is for dashboards, not for a density setting].
+  - Q-type-09: confirms the current ratio bands.
+  - Visual sample (Q-type-09 or Q-dir-02): landing-page and dashboard text styles side by side [S-L19-047] [S-L19-052].
+- **Impact now / as it grows:**
+  - *Budget per surface:* now, each surface looks coherent; as it grows, the review check keeps new pages and new teams inside the budget.
+  - *One budget for everything:* now, simpler; as it grows, dashboards pick up marketing sizes or marketing pages look timid.
+- **Standards:** STD-visual-details-29.
+
+### DC-L19-26: Giant display text as a visual element
+- **Block path:** Foundations > Typography > Expressive type > Display moments
+- **Questions the designer answers:** Should any page use giant text as a picture in its own right? How many times per page? In which font, and what sits next to it?
+- **Options:**
+  - **No giant text.** Text only explains the site, the view Kole argues against [S-L19-057].
+  - **One, maybe two giant moments per page in a good display font** [S-L19-057]. His favourite display faces include Unbounded and Cabinet Grotesk [S-L19-057].
+  - **Giant-text hero.** A massive headline (Oswald at 290px) with very small navigation text beneath it, then large images [S-L19-060].
+  - **Text as a story element.** A distinctive or animated display font, or two lines that swap in one spot as you scroll [S-L19-050].
+  - **Headline tucked behind the photo's subject.** Trace the subject's edge and subtract it from the text [S-L19-065].
+  - **Brand face from the logo** used for the hero heading [S-L19-049].
+- **Visual effect:** A good display font can matter as much as an image [S-L19-057]. The size gap against tiny navigation makes the headline feel important [S-L19-060]. Giant text surrounded by too much empty space feels disjointed [S-L19-065]. An overdone headline swallows its sub-line [S-L19-072].
+- **Depends on (upstream):** Q-brand-06 (a marketing set), Q-type-05 (a display face, DC-L19-27), Q-type-15 (fluid sizes, DC-L19-31), Q-type-02 (licence: check it before using a font found on another site [S-L19-050]).
+- **Affects (downstream):** `text.display.*` styles and their fluid values; hero components; the page-level review; tracking and leading of display styles (DC-L19-21, DC-L19-22).
+- **Token encoding:** `text.display.xl` (typography) with `fontFamily` = `{font.family.display}`; the fluid size as a clamp string in `$extensions` (DC-L02-19); a usage note such as `maxPerPage: 2` in `$extensions` [inferred].
+- **Platform notes:** Every example in these sources is a website [S-L19-050]; the sources say nothing about native apps.
+- **Accessibility constraints:** Display text must still scale with the user's text size (STD-accessibility-motion-13, DC-L19-31). Display type follows the tight-leading and negative-tracking standards (STD-visual-details-06, STD-visual-details-05). Keep the sub-line at a readable size and contrast [inferred].
+- **Default + heuristic:** None inside product UI. On marketing pages, at most two giant moments per page. That number comes from one video and is opinion.
+  - Rule of thumb: if a page has more than two giant-text sections, or puts giant sections next to tiny spec text, rework the page rather than the type [S-L19-057] [S-L19-065].
+  - This extends DC-L02-11 (3-4 expressive display styles) with a usage budget.
+- **Evidence:** [S-L19-057] ([[sources/Lp6ey4AyDzA-8-web-design-hacks-to-actually-make-your-designs-better|8 Web Design Hacks To ACTUALLY Make Your Designs Better]]), [S-L19-060] ([[sources/P2ksReDwWkE-website-layouts-to-make-a-professional-website-design-in-2024|Website Layouts To Make A Professional Website Design in 2024]]), [S-L19-050] ([[sources/EHwZzWd-OnQ-7-ui-design-trends-that-are-criminally-slept-on-dont-miss-these|7 ui design trends that are CRIMINALLY slept on (don’t miss these)]]), [S-L19-065] ([[sources/V3Omp1hm0Sg-i-redesigned-a-failing-tesla-wannabe-full-website-to-save-it|I Redesigned a Failing Tesla WANNABE Full Website To SAVE It]]), [S-L19-072] ([[sources/eMMiLeo_UGI-the-4-levels-of-landing-page-ui-ux-design|The 4 Levels of Landing Page UI/UX Design]]), [S-L19-049] ([[sources/BvbFPzLjWcU-redesigning-a-modern-skincare-ui-from-scratch-free-design-files|Redesigning A Modern Skincare UI from SCRATCH (+ free design files)]]). Compared: DC-L02-11, DC-L02-19.
+- **Maps to:**
+  - Q-brand-06, new heuristic: at most two giant-text moments per marketing page.
+  - Q-brand-06, visual sample: a giant-text hero (a 290px display headline with small navigation beneath) [S-L19-060].
+  - Q-type-05 `display-face`: add "for giant text only; check the licence".
+- **Impact now / as it grows:**
+  - *No giant text:* now, a quiet page; as it grows, marketing leans on imagery for identity.
+  - *One or two moments per page:* now, a memorable brand moment; as it grows, the display style needs a rule so product teams do not reuse it inside the app.
+  - *Giant text everywhere:* now, loud; as it grows, pages read as different sites and hierarchy is lost.
+- **Standards:** STD-visual-details-05, STD-visual-details-06, STD-accessibility-motion-13, STD-visual-details-11.
+
+### DC-L19-27: The second typeface's job
+- **Block path:** Foundations > Typography > Typeface > Families and pairing
+- **Questions the designer answers:** Is one font enough? If you add a second, what exactly is its job? Which text must never use it?
+- **Options:**
+  - **One sans for everything.** Kole: one font is entirely acceptable, two is the limit, three is pushing it and four invites problems [S-L19-042]. Pick a nice sans and do not spend long on it [S-L19-052]. One font throughout counts as a strength even on a weak page [S-L19-072].
+  - **Display face plus sans**, with the display face only for giant text [S-L19-042] [S-L19-057].
+  - **Sans plus serif for personality.** Like a printed menu for a restaurant brand, with hero lines split between serif and sans [S-L19-062].
+  - **Serif accent for important words.** The animations.dev site added a serif to emphasise important words; this is a changelog entry, not stated guidance [S-L19-001].
+  - **Handwritten face in the display role** [S-L19-042]; quirky display fonts on stickers [S-L19-075].
+  - **Monospace for details.** Schoger's monospace uppercase eyebrows [S-L19-103]; Kole's portfolio uses a third, monospace font for captions, which he calls an edge case [S-L19-042]; Kole removed a monospace that did not fit a restaurant brand [S-L19-062].
+  - **Pairing help.** A pairing tool such as Fontjoy for beginners, who tend to pair badly [S-L19-073].
+- **Visual effect:** One sans looks clean and consistent. A mixed-in serif adds personality, like a printed menu [S-L19-062]. Monospace eyebrows look more designed and more interesting [S-L19-103]. A display face gives poster-like brand moments [inferred].
+- **Depends on (upstream):** Q-type-01, Q-type-03, Q-brand-01 (personality), Q-type-02 (licence), Q-type-04 (script coverage of each face).
+- **Affects (downstream):** how many `font.family.*` tokens exist and which roles use each; the loading budget; a metric-matched fallback for each added face (STD-visual-details-10).
+- **Token encoding:** `fontFamily` primitives `font.family.text`, `font.family.display`, `font.family.accent` and `font.family.mono`; roles alias them, for example `text.eyebrow.fontFamily` = `{font.family.mono}` [inferred naming].
+- **Platform notes:** None from these sources. DC-L06-07: on iOS a bundled face must support Dynamic Type and Bold Text.
+- **Accessibility constraints:** Never set paragraphs or small text in a display or handwritten face [S-L19-042]. The serif accent belongs in marketing headlines, not interface emphasis, which stays on weight (STD-visual-details-08) [inferred]. Every face passes the confusable-pairs check in Q-type-03.
+- **Default + heuristic:** Confirms DC-L02-03's default: one UI family plus mono, with an optional serif or display face for marketing.
+  - New: a second face must name its job from a short list (giant display, headline accent words, eyebrows and small details, code). It must never be used for body, labels or inputs [inferred from S-L19-042].
+  - Rule of thumb: add a second face only when it echoes something real in the brand, such as the logo, the packaging or the domain's printed world [inferred from S-L19-062 and S-L19-049].
+- **Evidence:** [S-L19-042] ([[sources/7sUUzOCv47U-mathematically-perfect-typography-for-web-design|Mathematically Perfect Typography for Web Design]]), [S-L19-052] ([[sources/EcbgbKtOELY-every-ui-ux-concept-explained-in-under-10-minutes|Every UI/UX Concept Explained in Under 10 Minutes]]), [S-L19-072] ([[sources/eMMiLeo_UGI-the-4-levels-of-landing-page-ui-ux-design|The 4 Levels of Landing Page UI/UX Design]]), [S-L19-057] ([[sources/Lp6ey4AyDzA-8-web-design-hacks-to-actually-make-your-designs-better|8 Web Design Hacks To ACTUALLY Make Your Designs Better]]), [S-L19-062] ([[sources/RCneB_MQ7qs-the-one-thing-vibe-coding-cant-fix-about-your-website|The one thing vibe coding CAN’T fix about your website]]), [S-L19-001] ([[sources/adev-changelog-animations-dev|animations.dev]]), [S-L19-075] ([[sources/gKM6b2EnW1k-upgrading-9-crucial-ui-elements-free-figma-file-included|Upgrading 9 CRUCIAL UI Elements (free figma file included)]]), [S-L19-103] ([[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]), [S-L19-073] ([[sources/eeN7yUcIWbw-20-top-underrated-web-design-resources-for-2025|20 Top Underrated Web Design Resources for 2025]]), [S-L19-049] ([[sources/BvbFPzLjWcU-redesigning-a-modern-skincare-ui-from-scratch-free-design-files|Redesigning A Modern Skincare UI from SCRATCH (+ free design files)]]). Compared: DC-L02-03, DC-L06-07, DC-L02-05.
+- **Maps to:**
+  - Q-type-05, new option `accent-serif`: "Sans everywhere, plus a serif for a few emphasized words or lines in headlines" (animations.dev; Kole's restaurant redesign). It is a narrower use of the existing `sans-serif` option.
+  - Q-type-05, new heuristic: a second face must have a named job; display and handwritten faces never go below heading sizes.
+  - Q-type-05, visual sample: a hero with lines split between serif and sans [S-L19-062].
+  - Q-type-06, visual sample: a monospace uppercase eyebrow [S-L19-103].
+  - Otherwise confirms the current default.
+- **Impact now / as it grows:**
+  - *One sans:* now, the fastest and cheapest to set up; as it grows, it is easy to maintain, but identity must come from color and imagery.
+  - *Serif accent:* now, personality; as it grows, someone must decide which words get the accent, so it needs a written rule and one more font file.
+  - *Monospace eyebrows:* now, a more designed feel [S-L19-103]; as it grows, it may suit developer and tech brands and clash with warm ones, as a monospace did in Kole's restaurant redesign [S-L19-062] [inferred].
+  - *Display face:* now, strong brand moments; as it grows, there is a risk of it leaking into product UI (DC-L19-26).
+- **Standards:** STD-visual-details-11, STD-visual-details-10, STD-visual-details-08.
+
+### DC-L19-28: Setting up an open font: variable file, display cut, letter alternates, fallback
+- **Block path:** Foundations > Typography > Typeface > Font files and features
+- **Questions the designer answers:** If we use a free font such as Inter, which version do we load? Do headings use its display cut? Which alternate letter shapes do we turn on or off? What shows while it loads?
+- **Options:**
+  - **System font (house default).** Nothing to load; it already ships optical sizing, tracking tables and legibility tuning [S-L19-020]. With no project to build on, prototypes use the system stack (STD-visual-details-25).
+  - **Basic default Inter.** What Claude-generated sites typically lean on, in Schoger's experience [S-L19-103]; fonts are one of the three biggest fixes after generating a screen with AI, with alignment and color [S-L19-086].
+  - **Variable Inter from its designer's site (rsms.me), with its feature settings and display cut.** It gives in-between weights such as 550, a display version with more impact, and features such as a single-storey a. Schoger also asked for the tailed lowercase l to be turned off [S-L19-103].
+  - **A brand face already on the logo and packaging**, reused for headings [S-L19-049].
+  - **Metric-matched fallback (house must).** A fallback stack whose x-height and weight match the primary face, so loading causes no layout shift [S-L19-004].
+- **Visual effect:** Plain default Inter is what Claude tends to produce [S-L19-103]. The display cut gives headings a little more impact [S-L19-103]. Letter alternates shift personality in small ways; a single-storey a reads softer [inferred].
+- **Depends on (upstream):** Q-type-01 (`open-neutral` or `open-custom`), Q-type-07 (variable axes).
+- **Affects (downstream):** `font.family.*` values; `@font-face` rules; feature settings per role; the fallback stack; layout shift on first load.
+- **Token encoding:** `fontFamily` arrays with fallbacks (for example `["InterVariable", "Inter", "<metric-matched fallback>", "system-ui", "sans-serif"]`). Features, optical sizing and variable axes are not in the DTCG typography composite (DC-L02-27), so they go in `$extensions` (`fontFeatureSettings`, `fontOpticalSizing: auto`, `fontVariationSettings`) [inferred naming].
+- **Platform notes:** On the web, the house sample sets `font-optical-sizing: auto` on display text [S-L19-020]; with a font that has an optical-size axis, that selects the display design at large sizes [inferred]. The sources give no native equivalent.
+- **Accessibility constraints:** The fallback must match the primary face's metrics (STD-visual-details-10). Turning off Inter's tailed l, as Schoger did, leaves capital I and lowercase l looking alike [inferred]. Keep Q-type-03's confusable-pairs check (Il1) in the specimen, and keep the distinguishing shape in data-heavy or code-heavy products [inferred].
+- **Default + heuristic:** Keep the system font as the default (STD-visual-details-11).
+  - When a variable open font such as Inter is chosen: load the variable file, use its display cut or optical sizing for heading sizes, use the weight axis for in-between weights, and write a metric-matched fallback.
+  - When Inter is chosen, prefer its variable file with the display cut over plain static Inter, as Schoger does [S-L19-103]. This is one practitioner's taste; extending it to other families is [inferred].
+  - The engine writes no `@font-face` rule and no metric overrides today, which is the recorded conflict with STD-visual-details-10.
+- **Evidence:** [S-L19-103] ([[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]), [S-L19-086] ([[sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai|Vibe Coding a Pro UI in SECONDS With AI]]), [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]), [S-L19-004] ([[sources/ek-agents-with-taste-agents-with-taste|Agents with Taste]]), [S-L19-049] ([[sources/BvbFPzLjWcU-redesigning-a-modern-skincare-ui-from-scratch-free-design-files|Redesigning A Modern Skincare UI from SCRATCH (+ free design files)]]), [S-L19-031] ([[sources/eks-skills-prototype-skill-emilkowalski-skills-skills-prototype-skill-md|emilkowalski/skills: skills/prototype/SKILL.md]]). Compared: DC-L02-04, DC-L02-06, DC-L02-27, DC-L10-06.
+- **Maps to:**
+  - Q-type-07, confirms the default `variable-opsz`.
+  - Q-type-07, visual sample: Inter's text cut and display cut on the same 48px heading.
+  - New question (zoom 3, stage 10): "Should any alternate letter shapes be on or off (single-storey a, tailed l)?", with the confusable-pairs specimen as its preview.
+  - Q-type-02: also show it for `open-neutral` and `open-custom` when the face is loaded from files, so loading and the metric-matched fallback get decided.
+  - Engine: write `@font-face` and a metric-matched fallback (STD-visual-details-10).
+- **Impact now / as it grows:**
+  - *System font:* now, nothing to load and a native feel; as it grows, it stays consistent across platforms automatically but is less recognizable.
+  - *Default static Inter:* now, quick to set up; as it grows, the product looks like the default AI-generated sites Schoger describes [S-L19-103] [inferred].
+  - *Variable Inter with features:* now, higher-impact headings; as it grows, one file covers every weight, but feature choices must be written down so code and Figma match [inferred].
+- **Standards:** STD-visual-details-11, STD-visual-details-10, STD-visual-details-25.
+
+### DC-L19-29: Measure for paragraphs and headings, set in characters
+- **Block path:** Foundations > Typography > Layout of text > Measure
+- **Questions the designer answers:** How wide can a paragraph get? How wide can a heading get? In what unit do we set those widths?
+- **Options:**
+  - **Body capped at about 65ch (house must)** [S-L19-004].
+  - **Wider ranges in today's questions.** Q-type-14 `measure-45-75` and Q-layout-03 `reading` (40-80 characters) allow lines above 65ch, the recorded conflict with STD-visual-details-01.
+  - **Headings set in ch.** Schoger tried 45ch and 35ch and chose 40ch for section headings, replacing a fixed max width [S-L19-103].
+  - **Fixed max width** (a rem or px container such as max-w-3xl), which Schoger replaced [S-L19-103].
+  - **The ch width goes on the element that sets the font size.** When it sat on another element, the text came out too narrow [S-L19-103].
+- **Visual effect:** Paragraphs at about 65ch are comfortable to read [S-L19-004]. Headings at about 40ch wrap into a few even lines and look composed [inferred]. Schoger prefers a width set in characters because it is more flexible than a fixed width [S-L19-103]; a fixed width holds a different number of characters whenever the font or size changes [inferred].
+- **Depends on (upstream):** Q-type-08 (base size); the chosen face (ch depends on its glyph widths); Q-layout-03 (containers); Q-type-04 (CJK needs about half the character count, DC-L02-17).
+- **Affects (downstream):** `size.measure.*` tokens; prose containers; hero and section heading components; card text.
+- **Token encoding:** `size.measure.body` = 65ch and `size.measure.heading` = 40ch. DTCG `dimension` allows only px and rem, so the ch value goes in `$extensions` with a rem approximation (DC-L02-17) [inferred].
+- **Platform notes:** The sources give only CSS; nothing on native apps.
+- **Accessibility constraints:** WCAG 1.4.8 (AAA) caps lines at 80 characters, or 40 for CJK, and text must reflow at 200% (DC-L02-17).
+- **Default + heuristic:** Body max 65ch and heading max about 40ch, each set on the element that sets the font size. The 40ch comes from one video and was chosen by eye.
+  - Rule of thumb: if a heading needs more than three lines at 40ch, shorten the copy before widening the measure [inferred].
+  - Differs from DC-L02-17 (65-70ch) and from Q-type-14's 45-75: the house standard caps body at about 65ch.
+- **Evidence:** [S-L19-004] ([[sources/ek-agents-with-taste-agents-with-taste|Agents with Taste]]), [S-L19-103] ([[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]). Compared: DC-L02-17.
+- **Maps to:**
+  - Q-type-14: change option `measure-45-75` to `measure-65`, "45-65 characters, capped at about 65ch", because of STD-visual-details-01.
+  - Q-type-14: new option `heading-40ch`.
+  - Q-type-14, new default: body 65ch and headings 40ch.
+  - Q-type-14, visual sample: one heading at 35, 40 and 45ch.
+  - Flag for the layout area: Q-layout-03 `reading` should cap at 65 characters.
+- **Impact now / as it grows:**
+  - *65ch body with 40ch headings:* now, comfortable paragraphs and composed headings; as it grows, docs and help pages stay readable on wide screens, but translated headings get longer (DC-L06-24) and need a long-string test (DC-L19-35).
+  - *Fixed px or rem widths:* now, simple; as it grows, line lengths break whenever fonts or sizes change.
+- **Standards:** STD-visual-details-01.
+
+### DC-L19-30: How headings and short text break across lines
+- **Block path:** Foundations > Typography > Layout of text > Line breaking
+- **Questions the designer answers:** Should a heading avoid a single word alone on its last line? Should heading lines be balanced? Should a headline of several sentences start each sentence on a new line?
+- **Options:**
+  - **The browser's default wrapping**, which can leave an orphan word [S-L19-103].
+  - **`text-wrap: pretty`**, which removed the orphan in Schoger's stats heading [S-L19-103].
+  - **`text-wrap: balance`**, which evens out line lengths; it wrapped his call-to-action heading better than `pretty` did [S-L19-103].
+  - **One sentence per line** in a multi-sentence headline [S-L19-103].
+  - **Truncation** with the ellipsis character (DC-L02-18, DC-L19-39).
+- **Visual effect:** Schoger dislikes orphan words, and `balance` looked better than `pretty` on his call-to-action heading [S-L19-103]. That orphans look careless and balanced headings look composed is [inferred].
+- **Depends on (upstream):** DC-L19-29 (measure), DC-L19-36 (copy length).
+- **Affects (downstream):** headings, heroes, call-to-action blocks and card titles; the base CSS in the export.
+- **Token encoding:** None in DTCG. It can be a per-role hint in `$extensions`, such as `textWrap: "balance"` on `text.headline.*`, emitted as CSS [inferred].
+- **Platform notes:** `text-wrap` is CSS; the sources give no native equivalent.
+- **Accessibility constraints:** Hard line breaks can misbehave when text is enlarged or reflows at 200%, so prefer CSS wrapping over manual breaks, except at sentence boundaries [inferred].
+- **Default + heuristic:** `balance` on headings and short centered text; `pretty` on paragraphs [inferred split]. Schoger tried `pretty` first and switched to `balance` where `pretty` still wrapped oddly, so the preview should show both.
+  - Rule of thumb: when a heading still breaks badly, first try the other wrap mode, then edit the copy.
+- **Evidence:** [S-L19-103] ([[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]). Compared: DC-L02-18.
+- **Maps to:**
+  - Q-type-14, new option `wrap-balance-pretty`, on by default for the web export.
+  - Q-type-14, visual sample: a stats heading with an orphan word next to the `pretty` fix; a call-to-action heading with `pretty` against `balance` [S-L19-103].
+- **Impact now / as it grows:**
+  - *`balance` and `pretty` by default:* now, polished headings for free; as it grows, new headings and translated strings wrap well without manual work.
+  - *Manual breaks:* now, exact control; as it grows, every locale and screen width needs its own breaks.
+- **Standards:** none (STD-visual-details-03 governs the ellipsis when text is cut).
+
+### DC-L19-31: Which text sizes follow the screen width
+- **Block path:** Foundations > Typography > Responsive type > Fluid scope
+- **Questions the designer answers:** Which text changes size with the screen width: all of it, only big headings, or none? Between which widths? Does it stop growing at some point?
+- **Options:**
+  - **Every size fluid.** Kole's one-line formula scales each size in a straight line from its smallest value at a 320px-wide screen to its largest at 1920px, capped with max() and min() unless growth works for the design. Only sizes change with the screen; colors, weights and pairings stay the same [S-L19-042].
+  - **Display only.** The house skill's sample makes display text fluid with `clamp(2rem, 5vw, 4rem)` and keeps body at `100%/1.5` [S-L19-020].
+  - **Fixed.** DC-L02-19 and Q-type-15's default, for body and UI text.
+  - **Steps at breakpoints.** Kole calls adjusting every size at breakpoints messy [S-L19-042].
+- **Visual effect:** Fluid heroes fill wide screens and shrink smoothly (DC-L02-19). Fluid body and UI text makes components change size with the window, which looks less app-like [inferred].
+- **Depends on (upstream):** Q-type-08, Q-brand-06, breakpoints and containers (layout), Q-type-17 (text scaling).
+- **Affects (downstream):** size values of `text.display.*` and `text.headline.*`; clamp strings in the CSS export; hero layouts.
+- **Token encoding:** min and max as rem `dimension` tokens, with the clamp string in `$extensions` (DC-L02-19).
+- **Platform notes:** Web only; native apps follow the user's text size setting instead (DC-L02-19).
+- **Accessibility constraints:** A size that is only a viewport unit ignores the user's text-size setting in its middle range (STD-accessibility-motion-13). The house sample's middle value (5vw) is viewport-only, so keep the min and max in rem and add a rem term to the middle value, for example `clamp(2rem, 1rem + 3vw, 4rem)` [inferred]. Keep the max at or below 2.5 times the min (DC-L02-19); the house sample is 2 times.
+- **Default + heuristic:** Confirms DC-L02-19 and Q-type-15: fixed body and UI text, fluid display and headline styles on the web.
+  - New: Kole's endpoints (320px to 1920px) as a starting range, against Utopia's 360px to 1240px in DC-L02-19. Pick the layout's own narrowest and widest container instead [inferred].
+  - Rule of thumb: a style used inside a card, table or form stays fixed (DC-L02-19).
+  - Differs from Kole, who makes every size fluid [S-L19-042].
+- **Evidence:** [S-L19-042] ([[sources/7sUUzOCv47U-mathematically-perfect-typography-for-web-design|Mathematically Perfect Typography for Web Design]]), [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]). Compared: DC-L02-19, DC-L02-11.
+- **Maps to:**
+  - Q-type-15: confirms the default `fixed`.
+  - Q-type-15 `fluid`: add "display and headline only, interpolated between the layout's narrowest and widest container, with a rem term in the middle value".
+  - Q-type-15, visual sample: Kole's graph of font size against screen width, with its min and max caps [S-L19-042].
+- **Impact now / as it grows:**
+  - *Fluid display only:* now, heroes adapt to any width; as it grows, each new display style needs a min and max pair, while app text stays stable.
+  - *Everything fluid:* now, smooth everywhere; as it grows, component sizes vary with the window, Figma specs get harder and zoom testing grows.
+  - *Fixed everywhere:* now, simplest; as it grows, marketing heroes need breakpoints.
+- **Standards:** STD-accessibility-motion-13, STD-visual-details-06.
+
+### DC-L19-32: Text size on phones and inside form fields
+- **Block path:** Foundations > Typography > Type scale > Mobile and input sizes
+- **Questions the designer answers:** Should phone text be smaller than desktop text? What size is the text inside inputs? Does a 14px desktop body carry over to phones?
+- **Options:**
+  - **Same as desktop or larger on phones.** A squished mobile design looks fine alone but small next to real apps; iOS's base font is 17 against 13 on macOS [S-L19-053]. Apple states these in points; the source says pixels.
+  - **Shrink to fit more.** Not recommended [S-L19-053].
+  - **Inputs at 16px or more (house must).** Set input, textarea and select to at least 16px, or apply the 16px only under `@media (pointer: coarse)` when desktop wants smaller input text. Never disable zoom, and set `-webkit-text-size-adjust: 100%` [S-L19-028].
+  - **Mobile about 1.15-1.2 times desktop** (DC-L02-20; Spectrum 14px to 17px).
+- **Visual effect:** Phone type at desktop size or larger matches real apps, while squished type looks small beside them [S-L19-053]. Input text under 16px makes iOS Safari zoom the page on focus and leave it drifted [S-L19-028].
+- **Depends on (upstream):** Q-plat-01 (platforms), Q-type-08 (base size), Q-dir-02 (density).
+- **Affects (downstream):** platform modes on `text.body.*`; a dedicated input text style; input, textarea and select components; the engine preview, which styles `.ds-input` with `text.body.md`.
+- **Token encoding:** `text.input.md` (typography) with `fontSize` 1rem [inferred name]; a platform mode on `font.size.*` (DC-L02-20).
+- **Platform notes:** iOS Safari zooms on focus below 16px [S-L19-028]. iOS base 17 and macOS base 13 [S-L19-053].
+- **Accessibility constraints:** Never block pinch zoom (STD-accessibility-motion-27); text must follow the user's text size (STD-accessibility-motion-13).
+- **Default + heuristic:** Keep Q-type-08's 14px UI body for pointer devices, and add:
+  - inputs, textareas and selects use a 16px style everywhere, or at least under coarse pointers;
+  - mobile web body text is 16px or more [inferred from DC-L02-20's 1.15-1.2x and S-L19-053];
+  - native iOS uses 17pt.
+  - Rule of thumb: a phone screen should not use smaller type than the same desktop screen; Kole says phone type stays about the same or grows [S-L19-053].
+  - This settles two things. DC-L02-20 marked the "16px on mobile web" rule as unverified; its input half is now a house standard [S-L19-028], while 16px mobile body text still rests on DC-L02-20 and Kole [S-L19-053]. It also fixes the recorded STD-mobile-touch-11 conflict, in which the preview's inputs are 14px.
+- **Evidence:** [S-L19-053] ([[sources/Gfsd8NNuD9g-everything-you-need-to-know-about-mobile-app-uis-in-8-minutes-beginner-friendly|Everything you need to know about Mobile App UI’s in 8 minutes (beginner friendly)]]), [S-L19-028] ([[sources/eks-skills-mobile-native-skill-emilkowalski-skills-skills-mobile-native-skill-md|emilkowalski/skills: skills/mobile-native/SKILL.md]]). Compared: DC-L02-08, DC-L02-20.
+- **Maps to:**
+  - Q-type-08, new default: "14px UI body on desktop; 16px input text (on coarse pointers at minimum); body of at least 16px on mobile web; 17pt on iOS", because of STD-mobile-touch-11.
+  - Engine: add a `text.input` style.
+  - Q-type-16: confirms `platform-modes`.
+  - Visual sample (Q-type-08 or Q-type-16): a squished mobile screen next to real app sizes [S-L19-053].
+- **Impact now / as it grows:**
+  - *16px inputs and no smaller phone type:* now, no zoom jump on focus; as it grows, every new form inherits it.
+  - *14px everywhere:* now, denser; as it grows, every mobile form zooms on iOS and teams are tempted to disable zoom, which is forbidden.
+- **Standards:** STD-mobile-touch-11, STD-accessibility-motion-27, STD-accessibility-motion-13, STD-mobile-touch-21.
+
+### DC-L19-33: Key numbers: style, alignment, label and context
+- **Block path:** Foundations > Typography > Details > Numbers (stats, prices, metrics)
+- **Questions the designer answers:** How do headline stats and prices look? Do numbers that change keep their width? What words go with a number?
+- **Options:**
+  - **Tabular digits on price columns and on numbers that change in place (house must)** [S-L19-004] [S-L19-019].
+  - **Large value in regular weight.** Schoger found the generated stat numbers clunky and reset them large (5XL) in regular weight, with labels in gray 600, left-aligned, with a divider between stats [S-L19-103].
+  - **Two stat lines at the same size**, the second lowered by opacity (15px, 55%) [S-L19-043].
+  - **Price larger than the plan name** on pricing cards, because people care about the cost, not the name [S-L19-061].
+  - **Text hard left, values hard right** in lists and line items [S-L19-080].
+  - **A dedicated metric style** (Atlassian `font.metric.large` 28/32, DC-L02-05).
+  - **Words around numbers.** Label every chart and number [S-L19-068]; show an actual percentage instead of "in progress" [S-L19-086]; add context to a headline stat, such as a 120% increase on last year or "you two just met" for something new [S-L19-076]; show the figure that matters for the real object, such as a minimum payment and due date [S-L19-068].
+- **Visual effect:** Large regular-weight stats replaced numbers Schoger called clunky [S-L19-103]; that they read calmer is [inferred]. Tabular digits stop numbers jumping as they change [S-L19-019]. Unlabeled numbers mean nothing [S-L19-068].
+- **Depends on (upstream):** Q-type-06, Q-voice-05 (numbers mechanics), product type (a data-heavy tool).
+- **Affects (downstream):** `text.numeric.*` styles; stat tiles, tables, pricing cards, chart axis labels, counters and timers.
+- **Token encoding:** `text.numeric.md` and `text.numeric.lg` with `$extensions.fontVariantNumeric` = `tabular-nums`. The engine already writes this, but only when `numericStyles` is set.
+- **Platform notes:** `font-variant-numeric` on the web (STD-visual-details-02); native monospaced digits are not verified (DC-L02-26).
+- **Accessibility constraints:** Labels give meaning to both sighted and screen-reader users [inferred]; label contrast follows DC-L19-23.
+- **Default + heuristic:**
+  - Always generate `text.numeric.*` with tabular digits. This fixes the recorded STD-visual-details-02 conflict, where the engine creates them only for Q-type-06 `numeric-face` or Q-layout-03 `data`.
+  - Stat values are regular weight at a large size, with a short label in the secondary color. This is Schoger's treatment [S-L19-103], one practitioner's taste.
+  - Every number gets a label [S-L19-068]. Headline stats get one comparison line; this comes from one Kole redesign [S-L19-076] and is opinion.
+  - Rule of thumb: if a number can change while someone watches it, or sits in a column, it is tabular (DC-L02-26).
+- **Evidence:** [S-L19-004] ([[sources/ek-agents-with-taste-agents-with-taste|Agents with Taste]]), [S-L19-019] ([[sources/eks-skills-animation-vocabulary-skill-emilkowalski-skills-skills-animation-vocabulary-skill-md|emilkowalski/skills: skills/animation-vocabulary/SKILL.md]]), [S-L19-103] ([[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]), [S-L19-043] ([[sources/9WVt1CelBfg-the-stupid-simple-way-to-learn-ui-ux-design-in-exactly-10-minutes|The stupid simple way to learn UI/UX design in exactly 10 minutes]]), [S-L19-061] ([[sources/PDcQJOPby1k-5-saas-ui-ux-mistakes-that-scream-you-vibe-code|5 SaaS UI/UX mistakes that SCREAM you Vibe Code]]), [S-L19-080] ([[sources/neE6wOuBIP8-the-secret-behind-weirdly-perfect-ui-designs|The secret behind weirdly perfect UI designs]]), [S-L19-068] ([[sources/Yr2uIcFZDDQ-redesigning-a-finance-dashboard-ui-from-scratch-ft-dribbble|Redesigning a Finance Dashboard UI from SCRATCH (ft. Dribbble)]]), [S-L19-086] ([[sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai|Vibe Coding a Pro UI in SECONDS With AI]]), [S-L19-076] ([[sources/goWOAFqJHpA-i-redesigned-spotify-wrapped-entirely-from-scratch|I Redesigned Spotify Wrapped Entirely From SCRATCH]]). Compared: DC-L02-05, DC-L02-26, DC-L06-21.
+- **Maps to:**
+  - Q-type-06, new default: tabular numeric styles whatever the option; `numeric-face` then only adds a large metric style.
+  - Q-type-06, visual sample: Schoger's stats row, and a ticking counter with proportional against tabular digits.
+  - Q-voice-05, extend option `numbers`: "every number has a label; progress as a percentage, not 'in progress'; headline stats carry a comparison".
+- **Impact now / as it grows:**
+  - *Tabular numbers always:* now, columns line up; as it grows, every new table, counter and timer is right by default.
+  - *Tabular only when chosen:* now, fewer styles; as it grows, data screens added later jitter.
+  - *Labels and comparison lines:* now, clearer numbers; as it grows, the product needs a shared rule for comparison periods (week, month, year) [inferred].
+- **Standards:** STD-visual-details-02; STD-visual-details-59 (a counter, price or stat that animates uses NumberFlow) applies to the same numbers [inferred link].
+
+### DC-L19-34: How type choices are previewed: true size, in context
+- **Block path:** Process > Interview > Type preview
+- **Questions the designer answers:** At what size should the person judge text? On which device frame? One option at a time or side by side?
+- **Options:**
+  - **Zoomed-out canvas or thumbnails.** Designing zoomed out in Figma led Kole to oversized fonts and spacing [S-L19-057]. For prototypes, the house standard forbids judging at thumbnail size, because thumbnails distort spacing and scale [S-L19-031].
+  - **True size on the intended screen.** Always view designs on the screens they are meant for [S-L19-042]; check on a desktop, or mirror a prototype to a phone [S-L19-057].
+  - **One option at a time, full size, in realistic context** (a toast needs a page behind it) [S-L19-031].
+  - **A zoomed-out comparison with real apps**, to catch a squished mobile design [S-L19-053].
+- **Visual effect:** True-size previews lead to sensibly sized type. Scaled previews make text look small, so people oversize it [S-L19-057].
+- **Depends on (upstream):** Q-plat-01 (platforms).
+- **Affects (downstream):** `assets/templates/type-scale.html`, the option gallery, the engine preview, `show.py`.
+- **Token encoding:** none (process decision).
+- **Platform notes:** Show a phone-width frame for mobile and a desktop-width frame for web [inferred].
+- **Accessibility constraints:** Previews should also show the 200% text-size state, which Q-type-17's Show line already asks for.
+- **Default + heuristic:** The type-scale template keeps rendering at 1:1 CSS pixels with no scale-to-fit (true of `type-scale.html` when checked on 2026-09-24). It shows one option at a time, full size, on a real screen, and labels any view that a host has scaled [inferred from S-L19-031, S-L19-042 and S-L19-057].
+  - Rule of thumb: never ask someone to choose a type size from a shrunken thumbnail.
+- **Evidence:** [S-L19-057] ([[sources/Lp6ey4AyDzA-8-web-design-hacks-to-actually-make-your-designs-better|8 Web Design Hacks To ACTUALLY Make Your Designs Better]]), [S-L19-042] ([[sources/7sUUzOCv47U-mathematically-perfect-typography-for-web-design|Mathematically Perfect Typography for Web Design]]), [S-L19-031] ([[sources/eks-skills-prototype-skill-emilkowalski-skills-skills-prototype-skill-md|emilkowalski/skills: skills/prototype/SKILL.md]]), [S-L19-053] ([[sources/Gfsd8NNuD9g-everything-you-need-to-know-about-mobile-app-uis-in-8-minutes-beginner-friendly|Everything you need to know about Mobile App UI’s in 8 minutes (beginner friendly)]]). Compared: DC-L02-08 and Q-type-08's Show line.
+- **Maps to:**
+  - Q-type-08, Q-type-09 and Q-type-10, visual sample change: render each option at 100% in a phone-width and a desktop-width frame, one at a time.
+  - Template change to `type-scale.html`: keep the current 1:1 rendering, add phone-width and desktop-width frames, and show a "scaled" badge whenever the host displays the page at other than 1:1 [inferred].
+- **Impact now / as it grows:**
+  - *True size, one at a time:* now, choices match what ships; as it grows, fewer "why does this look huge on my phone" fixes after launch [inferred].
+  - *Thumbnails side by side:* now, fast comparison; as it grows, sizes chosen at the wrong scale spread into every screen.
+- **Standards:** STD-process-review-taste-43 (applied here by analogy [inferred]), STD-process-review-taste-40.
+
+### DC-L19-35: Sample content in previews: realistic, with stress cases
+- **Block path:** Process > Previews > Sample content
+- **Questions the designer answers:** What words and numbers fill the previews? Do we test with the longest and messiest real content?
+- **Options:**
+  - **Lorem ipsum or placeholder text.** Banned in designs by Kole [S-L19-037] and in prototype variants by the house standard [S-L19-031].
+  - **Realistic, product-shaped copy** with plausible names and numbers [S-L19-031], starting from a written brief [S-L19-037].
+  - **Realistic plus imperfect content.** A destination with a very long name gets truncated, and a save icon on a bright photo gets a circle behind it; Kole warns that designs built only on perfect, short content have unintended consequences [S-L19-054].
+  - **Plus translated lengths.** Labels under 10 characters budgeted at 2-3 times their English length (DC-L06-24) [inferred link].
+- **Visual effect:** Realistic copy shows true line lengths and wraps. Stress cases show truncation and overflow before launch [S-L19-054].
+- **Depends on (upstream):** the product description from the scope questions, Q-voice-01 (voice), Q-type-04 (languages).
+- **Affects (downstream):** engine previews; the sample strings in each template's `od-data`; the component sheet; examples in DESIGN.md.
+- **Token encoding:** none (content decision).
+- **Platform notes:** None from these sources.
+- **Accessibility constraints:** Stress long strings together with 200% text size (Q-type-17) [inferred]. Truncated text needs a way to reach the full content (DC-L02-18).
+- **Default + heuristic:** Previews use copy built from the person's own product description (their nouns, verbs, names and numbers). Each component sheet includes one long-string case and one empty case [inferred from S-L19-054].
+  - Rule of thumb: if a preview only looks right with short words, it is not finished [inferred from S-L19-054].
+  - This confirms the current state: a text search on 2026-09-24, recorded in the content synthesis, found no lorem ipsum in the engine or templates.
+- **Evidence:** [S-L19-037] ([[sources/59XWYgN00nQ-create-a-portfolio-with-no-experience-or-clients-needed|Create A Portfolio With No Experience (or clients) Needed]]), [S-L19-031] ([[sources/eks-skills-prototype-skill-emilkowalski-skills-skills-prototype-skill-md|emilkowalski/skills: skills/prototype/SKILL.md]]), [S-L19-054] ([[sources/HE4rLEQpiXY-how-to-think-like-a-genius-ui-ux-designer|How to think like a GENIUS UI/UX designer]]). Compared: DC-L06-24, DC-L02-18.
+- **Maps to:**
+  - Q-voice-06, new heuristic: component examples come with a long-string case and an empty case.
+  - Q-type-04, Show line: add a long-label row to the button row.
+  - Visual sample: a listing card with a very long destination name, first overflowing, then truncated [S-L19-054].
+- **Impact now / as it grows:**
+  - *Realistic content with stress cases:* now, previews show real problems early; as it grows, new components ship with their overflow behavior already decided.
+  - *Realistic content only:* now, believable; as it grows, long names, translations and user content still break layouts after launch.
+- **Standards:** STD-process-review-taste-40, STD-visual-details-03.
+
+### DC-L19-36: Marketing copy: length and focus
+- **Block path:** Content > Voice > Marketing copy
+- **Questions the designer answers:** How long should hero headlines and subtext be? Should the copy say what the product does, or how it helps? How much text should a section carry?
+- **Options:**
+  - **Long, vague blocks.** Nobody stops to read them [S-L19-072].
+  - **Short, punchy headline with a related subtext** [S-L19-072]. One example page uses a seven-word heading and a 14-word subtext [S-L19-043]; another redesign borrows the Chrome site's punchy headline style [S-L19-082].
+  - **What it does against how it helps.** Kole's step from level three to level four rewrites copy about collecting and analysing data quickly into a promise to turn that data into decisions [S-L19-072].
+  - **Friendly and natural, not corporate.** "We sweat the details" beats a formal line about attention to detail; Basecamp's site is written in plain, natural language [S-L19-063].
+  - **One actionable heading** that promises exactly what the software does [S-L19-062].
+  - **Cut repetition.** Remove text that repeats an image or stats shown above, and do not repeat the company name when it is already on screen [S-L19-065] [S-L19-072]. Put long but important text behind "see more", or paraphrase it and link to full specs [S-L19-065]. Break a wall of text into bullets or a table [S-L19-080].
+- **Visual effect:** Short copy leaves room for visuals and larger type; long blocks push type smaller and sections denser [inferred]. Friendly copy makes a page feel human [S-L19-063].
+- **Depends on (upstream):** Q-voice-01 (voice traits), the product and audience from the scope questions, Q-brand-06 (display moments, DC-L19-26).
+- **Affects (downstream):** copy slots in hero and section components; the voice section of DESIGN.md; heading measure (DC-L19-29).
+- **Token encoding:** None. It is a content rule, with an optional lint setting such as `content.hero.headline.maxWords` [inferred].
+- **Platform notes:** None from these sources.
+- **Accessibility constraints:** Plain language with no jargon (STD-visual-details-35); reading level targets (DC-L13-13).
+- **Default + heuristic:** A headline carries one idea and fits in two or three lines at the heading measure; the subtext is one or two sentences; the benefit comes first; nothing repeats the brand name or what an image already shows [inferred from S-L19-072 and S-L19-043, sized to DC-L19-29].
+  - The 7-word and 14-word counts come from one example page and are opinion, not a rule.
+  - Adds a marketing-copy rule next to DC-L13-13, whose limits cover only buttons and reading grade.
+- **Evidence:** [S-L19-072] ([[sources/eMMiLeo_UGI-the-4-levels-of-landing-page-ui-ux-design|The 4 Levels of Landing Page UI/UX Design]]), [S-L19-043] ([[sources/9WVt1CelBfg-the-stupid-simple-way-to-learn-ui-ux-design-in-exactly-10-minutes|The stupid simple way to learn UI/UX design in exactly 10 minutes]]), [S-L19-082] ([[sources/pGYLZyBE32o-i-redesigned-google-s-ai-website-from-scratch-complete-transformation|I Redesigned Google's AI Website from SCRATCH (complete transformation)]]), [S-L19-063] ([[sources/SfX43uIubj4-4-ui-design-hacks-to-kill-boring-designs|4 UI Design Hacks to KILL boring designs]]), [S-L19-062] ([[sources/RCneB_MQ7qs-the-one-thing-vibe-coding-cant-fix-about-your-website|The one thing vibe coding CAN’T fix about your website]]), [S-L19-065] ([[sources/V3Omp1hm0Sg-i-redesigned-a-failing-tesla-wannabe-full-website-to-save-it|I Redesigned a Failing Tesla WANNABE Full Website To SAVE It]]), [S-L19-080] ([[sources/neE6wOuBIP8-the-secret-behind-weirdly-perfect-ui-designs|The secret behind weirdly perfect UI designs]]), [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]). Compared: DC-L06-18, DC-L13-13.
+- **Maps to:**
+  - Q-voice-04, new option `hero-short`: "one short idea per headline, one or two sentences of subtext, benefit first".
+  - Q-voice-01, visual samples: a corporate line against a friendly one [S-L19-063]; the same feature written as "what it does" and as "how it helps" [S-L19-072].
+- **Impact now / as it grows:**
+  - *Short and benefit-first:* now, scannable pages with room for larger type; as it grows, every new page follows the same pattern, which needs someone who owns the copy.
+  - *Long and descriptive:* now, complete; as it grows, pages get longer and denser, and type shrinks to fit.
+- **Standards:** STD-visual-details-35.
+
+### DC-L19-37: Where playfulness belongs, and never at the user
+- **Block path:** Content > Tone > Where personality appears
+- **Questions the designer answers:** Where may the product joke or show personality? May copy ever comment on how much someone uses the product? How should a "page not found" screen sound?
+- **Options:**
+  - **Serious everywhere.**
+  - **Playful in low-stakes moments.** A 404 page is the best place to be quirky because the visitor does not belong there (Mobbin's interface quiz, Pixar's character) [S-L19-063]. A line of personality on a portfolio [S-L19-064]. A warm context line for good news [S-L19-076].
+  - **Sass or guilt aimed at the user's own behavior.** Kole's deliberately infuriating examples: a message about 342 watched videos that offers only an upsell or more notifications, and a step-goal message saying you would need to run a marathon today. He held back from adding more because it would turn from passive-aggressive to plainly aggressive [S-L19-048].
+  - **DC-L06-19's matrix.** Errors are serious and humor must never hide the meaning.
+- **Visual effect:** A playful 404 or success moment feels human [S-L19-063]; shaming copy makes people angry [S-L19-048].
+- **Depends on (upstream):** Q-voice-01, Q-voice-02, Q-brand-01 (how playful the brand is).
+- **Affects (downstream):** 404 and not-found pages; empty states; success toasts; usage, streak and limit nudges; upsell dialogs; notification copy.
+- **Token encoding:** None. Add rows to DC-L06-19's tone matrix for "not found" and "usage or progress nudge".
+- **Platform notes:** None from these sources.
+- **Accessibility constraints:** A playful 404 still needs a plain way back (search or a home link), because a screen must never trap the user (STD-visual-details-33) and errors must say how to fix (DC-L06-19). A 404 game that redirects on its own may take control away from the visitor [inferred]; the source does not discuss it [S-L19-063].
+- **Default + heuristic:** Aim humor at the situation, never at the person [inferred from S-L19-063 against S-L19-048].
+  - A 404 is a low-stakes navigation miss, so it may use the brand's playful tone, with a way back. Errors that cost people work stay serious.
+  - Usage and progress nudges state facts neutrally and offer a real choice, not just an upsell [inferred from S-L19-048, which shows the opposite as a joke].
+  - Differs from DC-L06-19 for 404 pages only: its "errors serious" default would make them serious too.
+- **Evidence:** [S-L19-063] ([[sources/SfX43uIubj4-4-ui-design-hacks-to-kill-boring-designs|4 UI Design Hacks to KILL boring designs]]), [S-L19-048] ([[sources/BUDipdbKK7Y-i-made-the-most-unhinged-ui-upgrades-downgrades|I Made The Most UNHINGED UI Upgrades (downgrades?)]]), [S-L19-064] ([[sources/ToJiXPTNnLY-professional-portfolio-breakdown-why-is-theirs-so-much-better|Professional Portfolio Breakdown — Why Is Theirs So Much Better?]]), [S-L19-076] ([[sources/goWOAFqJHpA-i-redesigned-spotify-wrapped-entirely-from-scratch|I Redesigned Spotify Wrapped Entirely From SCRATCH]]). Compared: DC-L06-19, DC-L13-07.
+- **Maps to:**
+  - Q-voice-02, new tone rows: "not found (404): may be playful, with a way back" and "usage and progress nudges: neutral, with a real choice".
+  - Q-voice-02, new heuristic: never shame or guilt the user.
+  - Q-voice-02, visual samples: the 342-videos and marathon messages as "don't" examples; a playful 404 with a clear way back as the "do".
+- **Impact now / as it grows:**
+  - *Humor aimed at the situation:* now, warmth in rare moments; as it grows, the rule keeps many writers consistent.
+  - *Serious everywhere:* now, safe; as it grows, the brand can feel generic.
+  - *Sass aimed at the user:* now, "edgy"; as it grows, it wears away trust, worst in paywall and usage flows.
+- **Standards:** STD-visual-details-35, STD-visual-details-33; STD-when-to-animate-09 is the motion counterpart, keeping delight for rare moments [inferred link].
+
+### DC-L19-38: Naming navigation, actions and screens
+- **Block path:** Content > Microcopy > Labels and names
+- **Questions the designer answers:** What do we call navigation items? Do two buttons that lead to the same place share a label? When does an icon need a word? Should a screen announce what it is?
+- **Options:**
+  - **Name items for their contents** ("Progress", "Library"), not with vague umbrellas like "Home" (house standard). If a control needs a label to explain it, its placement is weak [S-L19-020].
+  - **Same destination, same label.** A navigation button and a hero button that go to the same place share a label [S-L19-072].
+  - **Actionable button labels**, and each pricing plan with a name and short description [S-L19-075].
+  - **A labelled button instead of an unclear icon** ("all activities" instead of a minimize icon) [S-L19-068]. Tab-bar labels when icons are obscure, dark enough to read [S-L19-075].
+  - **Do not title a screen with what it obviously is** ("financial dashboard") [S-L19-068]; drop section labels such as "Menu" [S-L19-086].
+  - **Drop labels the layout already makes clear**, but keep them where values could be confused, such as check-in and check-out [S-L19-070].
+  - **A few familiar category names** rather than invented, hyper-specific ones [S-L19-076].
+- **Visual effect:** Specific labels make the product predictable [S-L19-020]. Matching labels build the right mental model [S-L19-072]. Fewer redundant labels reduce clutter [inferred from S-L19-068 and S-L19-070].
+- **Depends on (upstream):** Q-voice-01, the word list (DC-L06-23), Q-icon-05.
+- **Affects (downstream):** navigation items, calls to action, tab bars, section headers, card titles, the word list.
+- **Token encoding:** None. Default strings as i18n keys plus the word list (DC-L06-22, DC-L06-23).
+- **Platform notes:** None from these sources.
+- **Accessibility constraints:** Icon-only controls need an accessible name (DC-L05-07); tab labels need enough contrast to read [S-L19-075].
+- **Default + heuristic:**
+  - Name navigation by contents (STD-visual-details-34).
+  - One label per destination across the product; review warns when the same link target has different labels [inferred].
+  - Actions are verb-first (DC-L06-22). No screen title that just names the screen's type.
+  - Icon-only navigation only for familiar icons. Kole accepts it for an Instagram-style tab bar [S-L19-075], which differs from DC-L05-07's "label everything in navigation". Keep DC-L05-07 as the default and offer icon-only as an option for consumer apps with familiar icons [inferred].
+- **Evidence:** [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]), [S-L19-072] ([[sources/eMMiLeo_UGI-the-4-levels-of-landing-page-ui-ux-design|The 4 Levels of Landing Page UI/UX Design]]), [S-L19-075] ([[sources/gKM6b2EnW1k-upgrading-9-crucial-ui-elements-free-figma-file-included|Upgrading 9 CRUCIAL UI Elements (free figma file included)]]), [S-L19-068] ([[sources/Yr2uIcFZDDQ-redesigning-a-finance-dashboard-ui-from-scratch-ft-dribbble|Redesigning a Finance Dashboard UI from SCRATCH (ft. Dribbble)]]), [S-L19-086] ([[sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai|Vibe Coding a Pro UI in SECONDS With AI]]), [S-L19-070] ([[sources/c1TvOcKdBVE-the-8-ui-ux-cheat-codes-for-instantly-better-designs|The 8 UI/UX Cheat Codes for INSTANTLY Better Designs]]), [S-L19-076] ([[sources/goWOAFqJHpA-i-redesigned-spotify-wrapped-entirely-from-scratch|I Redesigned Spotify Wrapped Entirely From SCRATCH]]). Compared: DC-L06-22, DC-L06-23, DC-L05-07.
+- **Maps to:**
+  - Q-voice-06, new options `specific-nav` ("name navigation for its contents", STD-visual-details-34) and `one-label-per-destination`.
+  - Q-icon-05: note Kole's familiar-icons exception for tab bars.
+  - Visual samples: navigation reading "Progress, Library" against "Home"; a navigation button and a hero button with matching labels [S-L19-072].
+- **Impact now / as it grows:**
+  - *Specific, consistent labels:* now, clear; as it grows, the word list keeps new features' names consistent.
+  - *Generic umbrellas:* now, easy; as it grows, "Home" and "Dashboard" turn into junk drawers [inferred].
+- **Standards:** STD-visual-details-34, STD-visual-details-35; STD-visual-details-36 (things that look the same behave the same) is the matching consistency rule [inferred link].
+
+### DC-L19-39: Typographic punctuation in interface text
+- **Block path:** Content > Mechanics > Punctuation characters
+- **Questions the designer answers:** Do strings use the real ellipsis character? Curly quotes and apostrophes?
+- **Options:**
+  - **The real ellipsis (…), never three periods (house must).** The source says truncation then follows the container instead of snapping at a fixed character count [S-L19-004].
+  - **Typographically correct punctuation.** Nicer commas and quotes were a polish item on the animations.dev platform; that is a changelog entry, not stated guidance [S-L19-001].
+  - **Plain keyboard characters** (straight quotes, three periods), which is what text typed without care produces [inferred].
+- **Visual effect:** Proper punctuation looks finished and typeset; keyboard characters look unpolished [inferred].
+- **Depends on (upstream):** Q-voice-05; the language list (quote marks differ by language) [inferred].
+- **Affects (downstream):** every UI string; i18n files; copy lint; CSS truncation.
+- **Token encoding:** none (a content lint rule).
+- **Platform notes:** None from these sources.
+- **Accessibility constraints:** None stated by the sources.
+- **Default + heuristic:** The ellipsis character is locked on (STD-visual-details-03). Curly quotes and apostrophes are on by default in UI copy, as a recommendation. Lint flags "..." in strings.
+  - Adds a mechanics row that DC-L06-21 does not have.
+- **Evidence:** [S-L19-004] ([[sources/ek-agents-with-taste-agents-with-taste|Agents with Taste]]), [S-L19-001] ([[sources/adev-changelog-animations-dev|animations.dev]]). Compared: DC-L06-21, DC-L13-13 (an ellipsis when more input follows), DC-L02-18.
+- **Maps to:**
+  - Q-voice-05, new option `typographic-punctuation`, on by default, with the ellipsis locked by STD-visual-details-03.
+  - Q-voice-05, Show line: sample strings with "..." against "…", and straight against curly quotes.
+- **Impact now / as it grows:**
+  - *Typographic punctuation with lint:* now, a small polish; as it grows, the lint stops drift as more people write copy, and each new locale needs its own quote marks [inferred].
+  - *Keyboard characters:* now, no effort; as it grows, mixed styles pile up across writers and features.
+- **Standards:** STD-visual-details-03.

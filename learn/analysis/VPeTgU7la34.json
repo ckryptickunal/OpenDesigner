@@ -1,0 +1,768 @@
+{
+  "summary": "Kole Jain looks at 50 landing pages, mostly software sites (the description admits a few are not), and pulls out seven recurring section layouts, then rebuilds each one in a Figma file offered as a free download. The seven are: a customer logo strip, a hero with big text and a big image, a tabbed 'clickable multisection', simple and tasteful hover animations, a 'simple bento' grid, a 'straight line grid' with visible grid lines, and images inside the navigation menu. He names real sites that use each one and gives practical tips, such as a plain or a marquee version of the logo strip, designing every tab before handoff, and keeping bento grids simple so developers can build them. For a design system, the video works as a catalogue of marketing-page section patterns with options that could be offered as visual samples, plus a steady push toward simple, well-built motion over heavy graphics [inferred].",
+  "key_ideas": [
+    "Most software landing pages share the same few section layouts, so the job is to use them well and add a distinctive touch.",
+    "Customer logos are the most common section: 41 of the 50 sites showed well-known logos as social proof.",
+    "A logo strip can be a simple static row or a marquee that slides the logos across, with a gradient and progressive blur at the edges.",
+    "The standard hero is big text, a big image and lots of space, which pulls people into scrolling for more.",
+    "When everyone uses the same hero, set yours apart with a distinctive font, an inline diagram, an interactive product image or a subtle background gradient.",
+    "A tabbed 'clickable multisection' can switch automatically on a timer or use a simpler layout; whichever you pick, design every tab before handoff.",
+    "Software sites are moving away from heavy graphics toward simple, tasteful animations, and those animations have to be done well.",
+    "An imported third-party effect can look blurry and give itself away; simple hover effects built with care look better.",
+    "A 'simple bento' built on plain grids gives the bento trend without the build cost of an Apple-style bento.",
+    "A 'straight line grid' keeps visible grid lines between feature cells instead of floating cards.",
+    "Images in the navigation menu give people context at a glance before they click, which beats plain lists of links.",
+    "People don't pay attention for long and don't read all the copy, so adding images to the nav makes their life easier."
+  ],
+  "entities": [
+    {
+      "name": "Kole Jain",
+      "type": "person",
+      "description": "YouTuber who makes websites and runs a design community; he presents the teardown and rebuilds the layouts in Figma."
+    },
+    {
+      "name": "Figma",
+      "type": "tool",
+      "description": "Where the seven layouts are rebuilt; the file is offered as a free download."
+    },
+    {
+      "name": "Smart Animate",
+      "type": "tool",
+      "description": "Used to make the simple hover effects shown; a Figma prototyping feature [inferred]."
+    },
+    {
+      "name": "Linear",
+      "type": "company",
+      "description": "Example of a landing page with left-aligned hero text, unlike the common layout."
+    },
+    {
+      "name": "Magier",
+      "type": "company",
+      "description": "Sets its hero apart with a distinctive font and a small inline diagram."
+    },
+    {
+      "name": "ClickUp",
+      "type": "company",
+      "description": "Made its full-size hero image interactive."
+    },
+    {
+      "name": "DesignJoy",
+      "type": "company",
+      "description": "Shows client logos in two separate places on the same page."
+    },
+    {
+      "name": "Coda",
+      "type": "company",
+      "description": "Positions against competitors through a testimonial; its scroll interaction looks slightly blurry, suggesting a third-party import. Name heard as 'Koda'/'Kota' in the captions [inferred]."
+    },
+    {
+      "name": "Basecamp",
+      "type": "company",
+      "description": "Openly tells visitors to drop other tools, a blunt form of competitor call-out."
+    },
+    {
+      "name": "Miro",
+      "type": "company",
+      "description": "Uses horizontal and vertical clickable multisections four times on its homepage."
+    },
+    {
+      "name": "Webflow",
+      "type": "company",
+      "description": "Clickable multisection with automatic switching and a timer."
+    },
+    {
+      "name": "MongoDB",
+      "type": "company",
+      "description": "Simpler clickable multisection layout, suggested for people who want less work."
+    },
+    {
+      "name": "Klaviyo",
+      "type": "company",
+      "description": "Named as using simple, tasteful animations."
+    },
+    {
+      "name": "Pipe",
+      "type": "company",
+      "description": "Named for simple animations and for a small image-based navigation menu that looks professional."
+    },
+    {
+      "name": "Apple",
+      "type": "company",
+      "description": "Said to have arguably popularized bento layouts."
+    },
+    {
+      "name": "Butter",
+      "type": "company",
+      "description": "Collaboration software that uses simple bentos in many layouts across its site."
+    },
+    {
+      "name": "Kit",
+      "type": "company",
+      "description": "Named as having a simple bento similar to Butter's."
+    },
+    {
+      "name": "Ramp",
+      "type": "company",
+      "description": "The presenter's favourite simple bento, which includes a slightly tilted card."
+    },
+    {
+      "name": "Vercel",
+      "type": "company",
+      "description": "Example of the straight line grid in a six-section feature block."
+    },
+    {
+      "name": "Qatalog",
+      "type": "company",
+      "description": "Uses line grids with tasteful animations."
+    },
+    {
+      "name": "Intercom",
+      "type": "company",
+      "description": "Example of a giant navigation dropdown with images."
+    },
+    {
+      "name": "Clickable multisection",
+      "type": "concept",
+      "description": "The presenter's name for a tabbed section where clicking a tab swaps the content panel."
+    },
+    {
+      "name": "Simple bento",
+      "type": "concept",
+      "description": "A bento layout built on plain grids so it is easy to build."
+    },
+    {
+      "name": "Straight line grid",
+      "type": "concept",
+      "description": "A feature grid that keeps visible grid lines between cells instead of letting them float apart."
+    },
+    {
+      "name": "Progressive blur",
+      "type": "concept",
+      "description": "An edge blur that grows gradually, used with a gradient to fade logos out at the ends of a marquee."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Landing pages",
+      "summary": "Seven recurring sections on software landing pages: logo strip, hero, clickable multisection, simple animations, simple bento, straight line grid and images in the nav."
+    },
+    {
+      "name": "Cards and sections",
+      "summary": "Section patterns with plain and fancy versions: a static or marquee logo strip, tabbed multisections, simple bentos, and line grids instead of cells floating apart."
+    },
+    {
+      "name": "Spacing and layout",
+      "summary": "The hero relies on big text, a big image and lots of space; bentos should stay on simple grids; line grids keep the grid structure visible."
+    },
+    {
+      "name": "Navigation and sidebars",
+      "summary": "Adding images to navigation dropdowns, large (Intercom) or small (Pipe), gives context at a glance and is predicted to stick as a trend."
+    },
+    {
+      "name": "Motion principles",
+      "summary": "Software sites are moving away from heavy graphics toward simple, tasteful animations that must be executed well; don't go overboard."
+    },
+    {
+      "name": "Micro-interactions",
+      "summary": "Simple hover effects made with Smart Animate are presented as enough; a blurry imported scroll interaction is the counter-example."
+    },
+    {
+      "name": "Design taste and judgement",
+      "summary": "Use the common layouts but add one distinctive touch; simple and well put together beats flashy."
+    },
+    {
+      "name": "Design process",
+      "summary": "Study many real sites to see which sections recur and why they look better, make your own interpretation, and design every tab or section before handoff."
+    },
+    {
+      "name": "Figma and design tools",
+      "summary": "The layouts are rebuilt in a downloadable Figma file, and hover effects are prototyped with Smart Animate."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "41 of the 50 software sites reviewed showed well-recognized customer logos.",
+      "evidence": "41 of the 50 softwares I looked at"
+    },
+    {
+      "claim": "With no other context, visitors automatically assume the logos shown are important companies that use the software.",
+      "evidence": "we just automatically assume that these are important companies"
+    },
+    {
+      "claim": "DesignJoy shows the logos of clients it has worked with in two separate places on the same page.",
+      "evidence": "in two separate places on the same page"
+    },
+    {
+      "claim": "A long list of software companies use exactly the same hero layout, not counting sites with left-aligned text like Linear.",
+      "evidence": "all using exactly the same layout"
+    },
+    {
+      "claim": "Big text, a big image and lots of space get people scrolling for more information without realising it.",
+      "evidence": "big text Big Image lots of space"
+    },
+    {
+      "claim": "Turning off the subtle background gradient makes the hero more bland and boring.",
+      "evidence": "I added a very subtle gradient here"
+    },
+    {
+      "claim": "Miro uses horizontal and vertical versions of the clickable multisection four times on its homepage.",
+      "evidence": "horizontal and vertical versions of this four times in their homepage"
+    },
+    {
+      "claim": "Modern software site designs are shifting away from heavy graphics toward simple and tasteful animations.",
+      "evidence": "modern designs are shifting away from Graphics"
+    },
+    {
+      "claim": "Coda's scroll interaction looks slightly blurry, which suggests it was imported from a third party.",
+      "evidence": "slightly blurry on my screen"
+    },
+    {
+      "claim": "Apple arguably popularized bento layouts, and complex bentos are hard to put together and suited to marketing.",
+      "evidence": "Apple arguably popularized these"
+    },
+    {
+      "claim": "People don't pay attention for long and mostly don't read all the copy.",
+      "evidence": "people don't really pay attention very long"
+    },
+    {
+      "claim": "Most SaaS sites have giant navigation dropdowns, like Intercom's.",
+      "evidence": "giant dropdowns like intercom"
+    },
+    {
+      "claim": "Images in the nav are more appealing than lists of links and give context about where a link goes before you click it.",
+      "evidence": "at a quick glance you get some more context"
+    },
+    {
+      "claim": "SaaS websites are arguably some of the nicest websites out there.",
+      "evidence": "arguably some of the nicest out there"
+    },
+    {
+      "claim": "Openly calling out competitors is more common than you would think.",
+      "evidence": "it's more common than you think"
+    },
+    {
+      "claim": "Complex bentos like Apple's are better suited to marketing purposes, while software sites use the simple bento.",
+      "evidence": "better for marketing purposes"
+    },
+    {
+      "claim": "Pipe's small image menu looks really professional and works well.",
+      "evidence": "looks really professional and works well"
+    },
+    {
+      "claim": "Of all the 2025 design trends, the presenter thinks images in the nav is the one that will really stick.",
+      "evidence": "I think this one's really going to stick"
+    }
+  ],
+  "quotes": [
+    "big text Big Image lots of space",
+    "simple and well put together is always better",
+    "make them simple and make them well"
+  ],
+  "tags": [
+    "landing-pages",
+    "saas",
+    "social-proof",
+    "logo-marquee",
+    "progressive-blur",
+    "hero",
+    "tabs",
+    "bento",
+    "line-grid",
+    "hover-effects",
+    "navigation",
+    "mega-menu",
+    "figma",
+    "kole-jain"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "Consider a customer logo section on a software landing page, using well-recognized logos as social proof.",
+      "why": "41 of the 50 sites had one, and visitors automatically assume the logos are important companies that use the product.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "41 of the 50 softwares I looked at"
+    },
+    {
+      "rule": "For a plain logo strip, lay only your most important logos across the screen, without animation.",
+      "why": "It is the simple way, and the one the presenter likes.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "take your most important logos throw them across the screen"
+    },
+    {
+      "rule": "For a fancier logo strip, slide the logos across the screen left to right in a marquee and fade them out at the edges with a gradient plus a progressive blur.",
+      "why": "The presenter says that if you are getting fancy, and you probably should, this is the version to build.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "web",
+      "values": [
+        "left to right"
+      ],
+      "evidence": "the bougie one where we would have a marquee animation"
+    },
+    {
+      "rule": "Build the hero with big text, a big image and generous space around them.",
+      "why": "This makes people start scrolling for more information without realising it.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "big text Big Image lots of space"
+    },
+    {
+      "rule": "Give a standard hero a distinctive element, such as a distinctive font, a small inline diagram or an interactive product image.",
+      "why": "When everyone uses the same layout, you need to be more creative to set yourself apart.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "get a little more creative to differentiate ourselves"
+    },
+    {
+      "rule": "Consider a very subtle gradient behind the hero rather than a flat background.",
+      "why": "Without the gradient the hero becomes more bland and boring.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "color",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "I added a very subtle gradient here"
+    },
+    {
+      "rule": "When designing a tabbed section (clickable multisection), design the content of every tab before handing off to a developer or client.",
+      "why": "Otherwise the developer or client receives it with half the site missing.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "make sure to design all the tabs"
+    },
+    {
+      "rule": "If you don't want the extra work, use a simpler tabbed layout like MongoDB's instead of automatic switching with a timer like Webflow's.",
+      "why": "Automatic switching with a timer is more complex; if you don't want to do all of that, a MongoDB-style layout is probably a little better.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "something like mongod DBS layout is probably a little better"
+    },
+    {
+      "rule": "Use simple, tasteful animations on software marketing pages instead of heavy, render-intensive graphics.",
+      "why": "Modern software designs are shifting away from heavy graphics, and software sites typically prefer simple, tasteful animations.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "softwares typically prefer simple and tasteful animations"
+    },
+    {
+      "rule": "Don't ship an animation that renders blurry, such as a scroll effect imported from a third party; build each animation cleanly.",
+      "why": "The blur gives away that it was imported, and the key is to actually do these animations well.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "slightly blurry on my screen"
+    },
+    {
+      "rule": "Keep hover effects simple and well built; don't go overboard with them.",
+      "why": "Simple and well put together is always better.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "don't go overboard don't make it crazy"
+    },
+    {
+      "rule": "Build bento sections on simple grids (a 'simple bento') rather than a complex Apple-style bento.",
+      "why": "Complex bentos are very hard to put together, while simple grids keep developers happy and still follow the trend.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "sticking to some pretty simple grids so our Dev doesn't rip us a new one"
+    },
+    {
+      "rule": "Consider one slightly tilted card inside a simple bento.",
+      "why": "Ramp's bento, the presenter's favourite, does this.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "ramps Bento that has a slightly tilted card"
+    },
+    {
+      "rule": "Consider a straight line grid for feature blocks: keep visible grid lines between cells instead of letting them float apart.",
+      "why": "The presenter sees it more and more, for example on Vercel's six-section block; Qatalog pairs its line grids with tasteful animations.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "what I've termed the straight line grid"
+    },
+    {
+      "rule": "Add images to navigation dropdown menus instead of showing only lists of links.",
+      "why": "People skim and rarely read copy, and images give context about where a link goes at a glance before they click.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "images in the Nav"
+    },
+    {
+      "rule": "Even on a small website, use a small image menu (like Pipe's); most SaaS sites use giant image dropdowns (like Intercom's).",
+      "why": "Pipe's small image menu looks really professional and works well.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "even if you've got a small website"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "How should the customer logo strip look?",
+      "options": [
+        {
+          "name": "Simple static strip",
+          "effect": "Your most important logos laid across the screen, and you're good to go.",
+          "when": "You want the simple way; the presenter's own preference."
+        },
+        {
+          "name": "Marquee with edge fade",
+          "effect": "Logos slide across the screen, and a gradient plus progressive blur fades them out at the edges.",
+          "when": "You want a fancier, moving section; the presenter says you probably should."
+        }
+      ],
+      "recommendation": "Both are offered. The presenter likes the simple row but says getting fancy with the marquee is probably worth it.",
+      "maps_to": null,
+      "evidence": "there are two main ways of going about this"
+    },
+    {
+      "question": "How should the page show social proof: customer logos, or a direct comparison with competitors?",
+      "options": [
+        {
+          "name": "Well-known customer logos",
+          "effect": "Visitors assume important companies use the product.",
+          "when": "The most common choice (41 of 50 sites)."
+        },
+        {
+          "name": "Competitor call-out through a testimonial",
+          "effect": "A customer quote does the comparing for you.",
+          "when": "You want to position against rivals without saying it yourself (Coda)."
+        },
+        {
+          "name": "Direct competitor call-out",
+          "effect": "The page openly tells people to drop other tools.",
+          "when": "You want a blunt, confident tone (Basecamp)."
+        }
+      ],
+      "recommendation": null,
+      "maps_to": null,
+      "evidence": "on the complete other side of social proof"
+    },
+    {
+      "question": "How should the hero be aligned?",
+      "options": [
+        {
+          "name": "The common hero layout",
+          "effect": "The layout shared by dozens of software sites, with big text, a big image and lots of space; likely centered, since the source contrasts it with left-aligned heroes [inferred]",
+          "when": "You want the familiar, proven structure."
+        },
+        {
+          "name": "Left-aligned text",
+          "effect": "Hero text lined up on the left, as on Linear.",
+          "when": "An alternative the presenter left out of his count (Linear); choosing it to stand apart is [inferred]."
+        }
+      ],
+      "recommendation": "The source does not choose between them; it explains the common layout as big text, a big image and lots of space, then says to add a distinctive touch.",
+      "maps_to": null,
+      "evidence": "landing pages that had left Al line text like linear"
+    },
+    {
+      "question": "How do you make a standard hero stand out?",
+      "options": [
+        {
+          "name": "Distinctive font and inline diagram",
+          "effect": "A nifty, characterful typeface and a small inline diagram in the hero.",
+          "when": "You want personality without changing the layout (Magier)."
+        },
+        {
+          "name": "Interactive product image",
+          "effect": "The full-size hero image responds to the visitor.",
+          "when": "You can invest in interaction (ClickUp)."
+        },
+        {
+          "name": "Subtle background gradient",
+          "effect": "Removes the bland, flat feel of a plain background.",
+          "when": "When the hero looks flat; the presenter uses it on his own hero."
+        }
+      ],
+      "recommendation": "Get a little creative to set yourself apart, since everyone uses the same layout.",
+      "maps_to": null,
+      "evidence": "get a little more creative to differentiate ourselves"
+    },
+    {
+      "question": "How should a tabbed feature section (clickable multisection) behave?",
+      "options": [
+        {
+          "name": "Automatic switching with a timer",
+          "effect": "Tabs advance by themselves on a timer.",
+          "when": "You want a more complex, self-running section (Webflow)."
+        },
+        {
+          "name": "Simpler layout",
+          "effect": "A simpler tabbed section without automatic switching.",
+          "when": "You don't want all that extra work (MongoDB)."
+        },
+        {
+          "name": "Horizontal or vertical tab layout",
+          "effect": "Horizontal and vertical versions of the section.",
+          "when": "Either works; Miro uses both, four times on one page."
+        }
+      ],
+      "recommendation": "The simpler MongoDB-style layout is probably better if you don't want the extra work, and design every tab either way.",
+      "maps_to": null,
+      "evidence": "some are more complex with automatic switching and a timer"
+    },
+    {
+      "question": "How complex should a bento section be?",
+      "options": [
+        {
+          "name": "Complex bento (Apple-style)",
+          "effect": "Rich, irregular tiles; very hard to put together.",
+          "when": "Marketing purposes, per the source."
+        },
+        {
+          "name": "Simple bento",
+          "effect": "Tiles on plain grids that still read as a bento; easy for developers.",
+          "when": "Software sites (Butter, Kit)."
+        },
+        {
+          "name": "Simple bento with a tilted card",
+          "effect": "One slightly tilted card breaks the grid for interest.",
+          "when": "You want a little more character (Ramp)."
+        }
+      ],
+      "recommendation": "Use a simple bento on simple grids so it can be built, while still following the trend.",
+      "maps_to": "Q-layout-05",
+      "evidence": "what I've proclaimed to be the simple Bento"
+    },
+    {
+      "question": "Should feature cells float apart, or sit in a grid with visible lines?",
+      "options": [
+        {
+          "name": "Floating cells",
+          "effect": "Separate blocks floating apart on the page.",
+          "when": "The approach the line grid replaces."
+        },
+        {
+          "name": "Straight line grid",
+          "effect": "Cells share visible grid lines, like Vercel's six-section block or Qatalog.",
+          "when": "You want the structured look the presenter sees more and more, often with tasteful animations."
+        }
+      ],
+      "recommendation": null,
+      "maps_to": "Q-dir-04",
+      "evidence": "instead of having these floating around we keep these grids in there"
+    },
+    {
+      "question": "What should navigation dropdown menus show?",
+      "options": [
+        {
+          "name": "Plain lists of links",
+          "effect": "Text only; people don't know where a link goes until they click.",
+          "when": "Not recommended by the source."
+        },
+        {
+          "name": "Giant image dropdown",
+          "effect": "A large menu with images, as on Intercom.",
+          "when": "What most SaaS sites have (Intercom)."
+        },
+        {
+          "name": "Small image menu",
+          "effect": "A compact menu with images that looks professional.",
+          "when": "Even a small website (Pipe)."
+        }
+      ],
+      "recommendation": "Add images to the nav: they are more appealing and give context at a glance, and the presenter expects this 2025 trend to stick.",
+      "maps_to": null,
+      "evidence": "images in the Nav"
+    },
+    {
+      "question": "How much visual effect should a software marketing page use?",
+      "options": [
+        {
+          "name": "Heavy graphics",
+          "effect": "Render-intensive visuals that the presenter mocks as needing an expensive GPU.",
+          "when": "Not recommended by the source."
+        },
+        {
+          "name": "Simple, tasteful animations",
+          "effect": "Simple hover effects, done cleanly.",
+          "when": "What software sites typically prefer (Welcome, Pipe, Klaviyo)."
+        }
+      ],
+      "recommendation": "Simple, tasteful animations, done well; don't go overboard.",
+      "maps_to": null,
+      "evidence": "modern designs are shifting away from Graphics"
+    }
+  ],
+  "process": [
+    {
+      "step": "Collect many real references",
+      "detail": "Look through a large set of comparable sites (here 50 software landing pages) and note which sections keep recurring."
+    },
+    {
+      "step": "Note what recurs and why",
+      "detail": "Note how often a section appears (41 of 50 sites had logos) and try to get to the bottom of why these sites look better than your own designs."
+    },
+    {
+      "step": "Make your own interpretation",
+      "detail": "Build your own version of each layout (for the logo strip, both a simple and a fancier version) and add a distinctive touch so it doesn't look like everyone else's."
+    },
+    {
+      "step": "Design every state before handoff",
+      "detail": "Fill in every tab and section so the developer or client doesn't receive a design with half the site missing."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Two logo strip versions",
+      "where": "Presenter's Figma file",
+      "visual_note": "Top: static logos laid across the screen. Bottom: a marquee sliding left to right with a gradient and progressive blur fading the logos at the edges."
+    },
+    {
+      "what": "Client logos shown twice on one page",
+      "where": "DesignJoy",
+      "visual_note": "The same kind of logo social proof appears in two separate places on the page."
+    },
+    {
+      "what": "Competitor call-outs",
+      "where": "Coda, Basecamp",
+      "visual_note": "Coda uses a testimonial to compare itself with rivals; Basecamp openly tells visitors to get rid of other tools."
+    },
+    {
+      "what": "The shared hero layout",
+      "where": "Magier, Better Stack, Qatalog, Dropbox, Monday, GitHub, ClickUp, Miro, Intercom, Mercury, Superhuman, Ghost, Pitch, beehiiv and others",
+      "visual_note": "Many software homepages share one hero structure: big text, a big image and lots of space. Linear is the counter-example with left-aligned text."
+    },
+    {
+      "what": "Hero with a distinctive font and inline diagram",
+      "where": "Magier",
+      "visual_note": "A distinctive typeface and a small diagram inside the hero area set it apart from the standard layout."
+    },
+    {
+      "what": "Interactive hero image",
+      "where": "ClickUp",
+      "visual_note": "The full-size product image in the hero is made interactive."
+    },
+    {
+      "what": "Hero with and without a subtle gradient",
+      "where": "Presenter's Figma file",
+      "visual_note": "A dashboard hero on a very subtle gradient; with the background turned off it looks more bland and boring. A good before/after visual sample."
+    },
+    {
+      "what": "Clickable multisection variants",
+      "where": "Miro, Webflow, MongoDB",
+      "visual_note": "Miro uses horizontal and vertical versions four times; Webflow's switches automatically with a timer; MongoDB's is a simpler layout."
+    },
+    {
+      "what": "Blurry imported scroll interaction",
+      "where": "Coda",
+      "visual_note": "A cool scroll effect that looks slightly blurry on screen, a sign it was imported from a third party. A counter-example for motion quality."
+    },
+    {
+      "what": "Simple hover effects",
+      "where": "Presenter's Figma file (Smart Animate); Welcome, Pipe, Klaviyo",
+      "visual_note": "Small, tasteful hover animations rather than heavy graphics."
+    },
+    {
+      "what": "Simple bento layouts",
+      "where": "Butter, Kit, Ramp",
+      "visual_note": "Bento tiles on simple grids in many arrangements; Ramp's includes one slightly tilted card."
+    },
+    {
+      "what": "Straight line grid",
+      "where": "Vercel, Qatalog",
+      "visual_note": "Vercel's six-section feature block keeps visible grid lines instead of cells floating apart, with interactions that 'must have taken forever'; Qatalog pairs line grids with tasteful animations."
+    },
+    {
+      "what": "Images in the navigation",
+      "where": "Intercom, Pipe",
+      "visual_note": "Intercom has a giant dropdown with images; Pipe has a small image menu that looks professional on a small site."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "50",
+      "context": "Number of software landing pages reviewed for the teardown.",
+      "evidence": "steel from 50 software landing pages"
+    },
+    {
+      "value": "41 of the 50",
+      "context": "Sites that showed well-recognized customer logos.",
+      "evidence": "on 41 of the 50 softwares I looked at"
+    },
+    {
+      "value": "7",
+      "context": "Number of modern layouts presented (from the title).",
+      "evidence": "7 Modern UI Layouts"
+    },
+    {
+      "value": "four times",
+      "context": "How often Miro uses horizontal and vertical clickable multisections on its homepage.",
+      "evidence": "four times in their homepage"
+    },
+    {
+      "value": "2025",
+      "context": "The year of design trends in which images in the nav are predicted to stick.",
+      "evidence": "of all of the design trends of 2025"
+    },
+    {
+      "value": "$30,000",
+      "context": "Mock price of the Nvidia GPU that heavy graphics seem to need, used to ridicule render-heavy visuals.",
+      "evidence": "require a $30,000 Nvidia GPU to render"
+    },
+    {
+      "value": "six",
+      "context": "Sections in Vercel's straight line grid feature block.",
+      "evidence": "this six section on versel"
+    },
+    {
+      "value": "two separate places",
+      "context": "Where DesignJoy shows client logos on the same page.",
+      "evidence": "in two separate places on the same page"
+    }
+  ],
+  "caveats": [
+    "Self-promotion: a free Figma file download on the presenter's site, a design challenge with $2k in prizes on newform.community, a plug for his design community, and a pointer to an earlier video where the hero dashboard was designed.",
+    "The sample of 50 is personal and informal; the description says it includes a few non-software sites, and the counts (such as 41 of 50) are from that sample only.",
+    "Dated: published February 2025 and framed around 2025 design trends.",
+    "'Clickable multisection', 'simple bento' and 'straight line grid' are names the presenter made up, not industry terms.",
+    "Mostly opinion and observation with humour and some crude language; no exact values (sizes, colors, timings) are given in the transcript, so the visuals are only on screen.",
+    "Auto-caption name fixes applied: 'mag'/'magier' is Magier, 'catalog' is Qatalog, and 'better stack' is Better Stack (magier.com, qatalog.com and betterstack.com are in the truncated description); the rest are [inferred]: 'Kota'/'Koda' is Coda, 'versel' is Vercel, 'mongod DBS' is MongoDB, 'mirro'/'Muro' is Miro, 'clavio' is Klaviyo, 'web flow' is Webflow, 'design Joy' is DesignJoy, 'beehive' is beehiiv, 'SAS' is SaaS, 'Beno' is bento. 'welcome' in the animation list is kept as heard. Some names in the long hero list ('siif', 'forell', 'SE steam Juno', 'Loop mail trimp') are unclear and were left out.",
+    "The phrase before 'on your competitors' appears to be a censored word in the captions; the section is about openly calling out competitors.",
+    "The competitor call-out is a brief aside; the presenter says they are getting sidetracked and moves on to the hero."
+  ]
+}

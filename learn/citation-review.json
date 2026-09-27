@@ -1,0 +1,1382 @@
+{
+ "$comment": "Citation-check items a reviewer settled (tools/wiki.py review-log). `wiki.py flagged` skips them while the reviewed text is unchanged.",
+ "reviewed": [
+  {
+   "kind": "rule",
+   "id": "eks-skills-prototype-skill",
+   "source": "5",
+   "hash": "94091825e888",
+   "decision": "confirmed",
+   "note": "Supported: under Operating Posture, every variant must meet the standards, including 'sub-300ms UI motion'. The old evidence was a heading plus a phrase and was not verbatim, so it now reads 'sub-300ms UI motion'.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-prototype-skill",
+   "source": "6",
+   "hash": "e0cd43cfc156",
+   "decision": "confirmed",
+   "note": "Supported by the same craft-bar list, which includes 'correct `transform-origin`'. The old evidence was not verbatim, so it now reads 'correct `transform-origin`'.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-prototype-skill",
+   "source": "11",
+   "hash": "f8a08a705586",
+   "decision": "confirmed",
+   "note": "Supported by Phase 2, Recon: 'Tokens: colors, radii, spacing, fonts, easing/duration variables. Variants use these'. The old evidence joined two separate passages, so the checker landed on Hard Rule 2 instead. It now reads 'Variants use these — every variant should look like it could ship in this pr",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-prototype-skill",
+   "source": "15",
+   "hash": "f8fd945423ec",
+   "decision": "confirmed",
+   "note": "Hard Rule 5 says this word for word. The evidence was already verbatim, so nothing changed.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-prototype-skill",
+   "source": "34",
+   "hash": "78e9ed617b4e",
+   "decision": "confirmed",
+   "note": "Phase 4 says 'Switching is **instant**' and 'the variant swap gets no animation'. The old evidence was not verbatim because the source has bold markup around 'instant'. It now reads 'by the frequency rule the variant swap gets no animation'.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-prototype-skill",
+   "source": "42",
+   "hash": "2418991db4a5",
+   "decision": "confirmed",
+   "note": "The Tone section says this word for word. The evidence was already verbatim, so nothing changed.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-review-animations-skill",
+   "source": "5",
+   "hash": "1bcc6477038b",
+   "decision": "confirmed",
+   "note": "Standard 1 says '\"It looks cool\" on a frequently-seen element is a block.' The old evidence '1. Justified motion' did not match because the source has bold markup. It now reads '\"It looks cool\" on a frequently-seen element is a block'.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-review-animations-skill",
+   "source": "25",
+   "hash": "1d92d0d4e37f",
+   "decision": "confirmed",
+   "note": "Standard 8 says prefers-reduced-motion 'is honored (gentler, not zero — keep opacity/color, drop movement)'. The old evidence only matched the escalation-triggers heading. It now reads 'is honored (gentler, not zero — keep opacity/color, drop movement)'.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-review-animations-skill",
+   "source": "32",
+   "hash": "4d3587165e33",
+   "decision": "confirmed",
+   "note": "The last escalation trigger is 'Everything-at-once entrance where a 30–80ms stagger belongs'. Jev said unsupported because the checker's passage window started at the heading and ended before that bullet. The evidence is now that exact bullet text.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-review-animations-skill",
+   "source": "40",
+   "hash": "bd0c0dd81769",
+   "decision": "confirmed",
+   "note": "Part 2 lists the six tiers exactly as the rule does. The old evidence was a verbatim heading, but it now reads 'Group remaining commentary by impact tier, highest first. Omit empty tiers.' so the checker lands on the sentence itself.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-review-animations-skill",
+   "source": "47",
+   "hash": "14b159eed14c",
+   "decision": "fixed",
+   "note": "The source tells the reviewer to recommend reviewing it this way, not to do the review itself. The rule now reads 'When unsure whether motion feels right, recommend reviewing it in slow motion or frame-by-frame and with fresh eyes the next day rather than guessing.' The evidence is the verbatim Guid",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-review-animations-standards",
+   "source": "0",
+   "hash": "c765de5dc8dc",
+   "decision": "confirmed",
+   "note": "The opening says 'The precise values, curves, and rules behind the review. Cite these in findings instead of approximating.' The old evidence, the title, was verbatim, but it now reads 'Cite these in findings instead of approximating' so the checker lands on the sentence.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-review-animations-standards",
+   "source": "76",
+   "hash": "3122c711152c",
+   "decision": "confirmed",
+   "note": "The Debugging section, which the source recommends in reviews when feel is uncertain, lists 'Fresh eyes next day — imperfections invisible during development surface later.' The old evidence was not verbatim, so it now reads 'imperfections invisible during development surface later'.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-readme",
+   "source": "7",
+   "hash": "2e30b02c6e28",
+   "decision": "confirmed",
+   "note": "The README describes animation-vocabulary as a way to get better animations from an AI by \"telling it exactly what you want by using the right words\" (line 59), so the rule is supported. The old evidence was only the skill name and matched just the link. It now reads \"telling it exactly what you wan",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-animate-expo-recipes",
+   "source": "5",
+   "hash": "95127569bb42",
+   "decision": "confirmed",
+   "note": "The recipes list \"Gestures are wrapped in `useMemo`\" as a convention and give the reason: a rebuilt gesture can drop a drag that is mid-flight (line 61). Line 63 says to drop useMemo on v3, which backs the v2 qualifier. The old evidence was not verbatim because the source wraps useMemo in backticks.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-animate-expo-recipes",
+   "source": "9",
+   "hash": "db689f88c660",
+   "decision": "confirmed",
+   "note": "The Press feedback recipe (lines 97-127) has scale 0.97, transitionProperty 'transform', transitionDuration '120ms' and cubic-bezier(0.23, 1, 0.32, 1). It also says 120ms and a 3% scale is the ceiling for something touched this often. The old evidence was the section heading \"Press feedback\". It now",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-animate-expo-recipes",
+   "source": "14",
+   "hash": "bad3039447a8",
+   "decision": "confirmed",
+   "note": "Supported by lines 145-149 and 170 (the value is captured in onStart; without it, grabbing a sheet mid-animation teleports it). The old evidence was not verbatim because of backticks. It now reads \"start from the current on-screen value, not from 0\".",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-animate-expo-recipes",
+   "source": "17",
+   "hash": "364ced18c44f",
+   "decision": "confirmed",
+   "note": "Matches the code exactly at lines 156-158, including the finished callback that calls scheduleOnRN(onClose). The why is backed by line 173. The old evidence was the section heading. It now reads \"duration: 300, dampingRatio: 1, velocity: e.velocityY, overshootClamping: true\".",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-animate-expo-recipes",
+   "source": "18",
+   "hash": "e5e4f18defb0",
+   "decision": "confirmed",
+   "note": "Matches lines 160-161: the withSpring(0, ...) config, then scheduleOnRN(Haptics.impactAsync, Haptics.ImpactFeedbackStyle.Light) with the comment \"it snapped home\". The old evidence was the section heading. It now reads \"it snapped home\".",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-animate-expo-recipes",
+   "source": "20",
+   "hash": "41877977a360",
+   "decision": "confirmed",
+   "note": "Line 173 is one of the four details that separate a good drag from a bad one, with the stated reason (the sheet otherwise springs past the bottom and flashes a gap). The old evidence was not verbatim because of backticks. It now reads \"otherwise the sheet springs past the bottom of the screen and fl",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-animate-expo-recipes",
+   "source": "24",
+   "hash": "926ee986518d",
+   "decision": "confirmed",
+   "note": "Matches lines 198-205 exactly. The old evidence was the section heading. It now reads \"if (projected < -SWIPE_THRESHOLD)\".",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-animate-expo-skill",
+   "source": "7",
+   "hash": "3ebd60921486",
+   "decision": "confirmed",
+   "note": "Hard Rule 2 (line 46), repeated in the Never Ship table at line 248. The old evidence \"Hard Rules 2\" is not text in the source. It now reads \"Reanimated worklets run on the UI thread and keep running while JS is busy\". File: /Users/Kunal/Desktop/Design-System/learn/analysis/eks-skills-animate-expo-s",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-animate-expo-skill",
+   "source": "25",
+   "hash": "8d85a050380c",
+   "decision": "confirmed",
+   "note": "The \"Pick the tool\" table at line 84 maps Tab bar to NativeTabs from expo-router/unstable-native-tabs, described as the platform's real tab bar. The old evidence was a made-up section label. It now reads \"the platform's real tab bar, its behaviors and transitions included\".",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-animate-expo-skill",
+   "source": "52",
+   "hash": "5b3fb450096b",
+   "decision": "confirmed",
+   "note": "Line 140 says never use ease-in on UI, and line 254 in the Never Ship table covers Easing.in(...) on a UI element. The old evidence was not verbatim because of backticks and the \"; Never Ship table\" label. It now reads \"It starts slow, delaying the exact moment the user is watching\".",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-animate-expo-skill",
+   "source": "70",
+   "hash": "6b926aa1dd64",
+   "decision": "confirmed",
+   "note": "Line 176 says to scale to 0.97 in 100-150ms on any pressable, using Pressable plus a CSS transition, and gives the stated reason. The old evidence was not verbatim because of backticks. It now reads \"on any pressable, `Pressable` + a CSS transition\". After the edits, `tools/wiki.py check` and `tools",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-improve-animations-audit",
+   "source": "31",
+   "hash": "31cd019f24b1",
+   "decision": "confirmed",
+   "note": "AUDIT.md section 3 gives exactly transform: scale(0.97) on :active with transition: transform 160ms ease-out, and lists pressable elements with no press feedback as a finding. The old evidence 'Press feedback' first matched the duration table ('Button press feedback'), so it was replaced with the ve",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-improve-animations-audit",
+   "source": "41",
+   "hash": "086dbb728a7e",
+   "decision": "confirmed",
+   "note": "Section 4 lists 'hard stops at drag boundaries instead of rising friction' as a finding. The evidence is already verbatim and unchanged.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-improve-animations-audit",
+   "source": "50",
+   "hash": "3f8f8dfd1bd6",
+   "decision": "confirmed",
+   "note": "Section 6 says: in JS, use useReducedMotion() and branch transform values. The evidence was not verbatim because the source wraps useReducedMotion() in backticks, so the checker could not find it. Replaced with: In JS: `useReducedMotion()` and branch transform values.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-improve-animations-plan-template",
+   "source": "15",
+   "hash": "0f25d15b8d6a",
+   "decision": "confirmed",
+   "note": "The template's Boundaries section contains 'Do NOT touch <files/components out of scope>'. The evidence is already verbatim and unchanged.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-mobile-native-skill",
+   "source": "6",
+   "hash": "4bb0ecc5c53a",
+   "decision": "confirmed",
+   "note": "Operating Posture failure mode 2 says JS is the wrong tool when CSS or a meta tag works: a media query, not a useIsTouchDevice() hook, should hide hover states. The evidence was not verbatim, so it was replaced with: Reaching for JavaScript when CSS or a meta tag does it.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-mobile-native-skill",
+   "source": "30",
+   "hash": "2a6ddb1460b1",
+   "decision": "confirmed",
+   "note": "The Baseline section says to drop overscroll-behavior: none from html if the app is a scrolling document where pull-to-refresh is welcome. The evidence was not verbatim (it had a 'Baseline:' prefix and was missing backticks), so it was replaced with the exact source sentence.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-mobile-native-skill",
+   "source": "43",
+   "hash": "5fb200d56489",
+   "decision": "confirmed",
+   "note": "The Never Ship table lists touch-action: none on something the user needs to scroll past, with pan-x / pan-y as the replacement. Section 9 says the same. The evidence was a section label, not source text, so it was replaced with: on something the user needs to scroll past.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-mobile-native-skill",
+   "source": "48",
+   "hash": "2f9bf026fbf1",
+   "decision": "confirmed",
+   "note": "Section 10, which is about theme-color, says: if the app switches theme with a class rather than the OS setting, update the tag from JavaScript on toggle. The evidence was not verbatim, so it was replaced with that exact sentence.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-mobile-native-skill",
+   "source": "49",
+   "hash": "ba8eb91de8c9",
+   "decision": "confirmed",
+   "note": "Section 10 says that for an installed PWA, apple-mobile-web-app-status-bar-style and the manifest's theme_color/background_color are the same decision. The evidence was not verbatim, so it was replaced with the exact backticked source sentence.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-mobile-native-skill",
+   "source": "54",
+   "hash": "586d8b00722e",
+   "decision": "confirmed",
+   "note": "Section 11 says the Xcode Simulator is a step up from emulation but still misses touch feel, and that real hardware is the bar. The old heading evidence pointed to a passage that stopped before this line, so the evidence was replaced with: The Xcode Simulator is a step up from emulation but still mi",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-mobile-native-skill",
+   "source": "58",
+   "hash": "41b5df673eb0",
+   "decision": "confirmed",
+   "note": "The Baseline CSS sets touch-action: manipulation, user-select: none and -webkit-user-select: none on button, a, [role=\"button\"], and says all :hover rules live inside @media (hover: hover) and (pointer: fine). The old evidence 'Baseline' was too short for the checker's minimum match length, so it wa",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-prototype-picker",
+   "source": "13",
+   "hash": "27601535026e",
+   "decision": "confirmed",
+   "note": "The .proto-picker-highlight CSS matches every value: position absolute, top 4px, left 0, height 28px, border-radius 999px, background rgba(255, 255, 255, 0.12), will-change: transform. The old evidence first matched the HTML markup, so it was replaced with '.proto-picker-highlight {' to point at the",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-prototype-picker",
+   "source": "15",
+   "hash": "873715472d3a",
+   "decision": "confirmed",
+   "note": "The transition applies only under [data-ready]. The wiring adds data-ready after two nested requestAnimationFrame calls, with the comment 'Enable the slide only after first paint, so load doesn't animate.' The evidence was moved to that JS comment so the passage includes the double requestAnimationF",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-prototype-picker",
+   "source": "18",
+   "hash": "1616fec31910",
+   "decision": "confirmed",
+   "note": "The Rules section says the width transition is a deliberate exception to the transform/opacity rule, because the element is 28px tall, absolutely positioned and has no layout dependents. The evidence was not verbatim because the source puts width in backticks, so it was replaced with: transition is ",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-prototype-picker",
+   "source": "19",
+   "hash": "23c001e8fcba",
+   "decision": "confirmed",
+   "note": "The .proto-picker-item CSS matches every value: position relative, display flex, align-items center, height 28px, padding 0 12px, border 0, border-radius 999px, background transparent, font inherit, cursor pointer. The old evidence first matched the markup, so it was replaced with: position: relativ",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-prototype-picker",
+   "source": "24",
+   "hash": "f9aceffeda1e",
+   "decision": "confirmed",
+   "note": "The .proto-picker-divider CSS is width 1px, height 16px, margin 0 4px, background rgba(255, 255, 255, 0.12). The old evidence first matched the markup, so it was replaced with '.proto-picker-divider {'.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-prototype-picker",
+   "source": "25",
+   "hash": "f26a0b804840",
+   "decision": "confirmed",
+   "note": "The .proto-picker-replay CSS is padding 0 10px, font-size 14px. The old evidence first matched the markup, so it was replaced with '.proto-picker-replay {'.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-prototype-picker",
+   "source": "27",
+   "hash": "77eafe3415ee",
+   "decision": "confirmed",
+   "note": "The Rules section allows one modification (data-position=\"top\") and adds 'Nothing else about it may move or change.' The evidence was a paraphrased label, so it was replaced with that verbatim sentence.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-prototype-picker",
+   "source": "28",
+   "hash": "720f00c9247b",
+   "decision": "confirmed",
+   "note": "The source says to render the replay button and its divider only when at least one variant has an entrance or state animation worth re-triggering, and that a static comparison gets a shorter pill. The evidence was not verbatim (the source bolds 'Replay is conditional.'), so it was replaced with the ",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-prototype-picker",
+   "source": "31",
+   "hash": "ca4589d47d76",
+   "decision": "confirmed",
+   "note": "The reference keydown handler wraps both ways: ArrowRight uses (current + 1) % variants.length and ArrowLeft uses (current - 1 + variants.length) % variants.length. The wiring must be copied verbatim. The old evidence was a label, so it was replaced with the verbatim ArrowRight line; its passage als",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-prototype-picker",
+   "source": "32",
+   "hash": "99acbe51d3ec",
+   "decision": "confirmed",
+   "note": "The Behavior contract says to ignore key events when focus is in an input, textarea, select or contenteditable, or when a modifier is held, and the code checks metaKey, ctrlKey and altKey. The evidence was not verbatim, so it was replaced with the exact contract sentence.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-prototype-picker",
+   "source": "38",
+   "hash": "467ed5230260",
+   "decision": "confirmed",
+   "note": "setActive() opens with 'if (i < 0 || i >= variants.length) return;'. The evidence was a label, so it was replaced with that verbatim guard line.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "adev-home",
+   "source": "9",
+   "hash": "14eb1de66c20",
+   "decision": "confirmed",
+   "note": "Module 4 'Good vs Great animations' lists transferring feelings, orchestration, accessibility and performance, and says after it 'you'll know how to take your animations from good to great'. Evidence is verbatim; unchanged.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "d4MF6pdAZNw",
+   "source": "1",
+   "hash": "dfb2aa986baf",
+   "decision": "confirmed",
+   "note": "The transcript sets opacity 0 in CSS (logo container), uses gsap.set for the navbar's opacity 0 ('you can also do it in CSS'), width 0% for the text wipe and max-width 0 pixels for the nav, all before paused timelines play. Evidence is verbatim after whitespace normalization; unchanged.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "d4MF6pdAZNw",
+   "source": "6",
+   "hash": "029af4d25b49",
+   "decision": "confirmed",
+   "note": "The values match the transcript: fromTo scale 0 to 1 over 0.8 ('shrinks down to a tiny little dot'), then max-width from the measured nav height (gsap.getProperty) to 500px over 1.3 with Expo in out. The evidence changed to the verbatim 'max width okay so make sure to remember' so the checked passag",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eMMiLeo_UGI",
+   "source": "12",
+   "hash": "05a1d349e244",
+   "decision": "confirmed",
+   "note": "Level one: 'Every item looks virtually identical. There's no hierarchy drawing our eye to the most important action of all, to sign up, or to the more important links like product.' Level two: 'the most important buttons have an outline'. Evidence is verbatim; unchanged.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eMMiLeo_UGI",
+   "source": "16",
+   "hash": "7043ef58fb3c",
+   "decision": "fixed",
+   "note": "The rule now reads 'Do not apply the accent color haphazardly to everything that will reasonably take it.' This matches the source, which says the blue is 'applied pretty haphazardly to anything that will reasonably take it' and dominates the text. Evidence is verbatim.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eMMiLeo_UGI",
+   "source": "17",
+   "hash": "61dd44c0f043",
+   "decision": "fixed",
+   "note": "The rule now reads 'Do not rely largely on images to supply the page's color.' The source criticises pages that 'rely largely on images' for color, but level four still uses 'well-placed images where they make sense', so the absolute wording overstated it. Evidence is verbatim.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "ek-7-practical-animation-tips",
+   "source": "22",
+   "hash": "36015e9c10a6",
+   "decision": "confirmed",
+   "note": "Source: 'whether you or your users notice it doesn't matter that much. In the aggregate, unseen details become visible, they compound.' Evidence is verbatim; unchanged.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "ek-building-a-drawer-component",
+   "source": "35",
+   "hash": "a71a42e0cb04",
+   "decision": "confirmed",
+   "note": "The Debugging section says 'you can't just simply open the dev tools and make the window smaller. You need to have the same environment as an actual mobile device' (a physical phone or the Xcode Simulator). 'Must' fits 'need'. The evidence changed from the heading 'Debugging', which was not found, t",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "ek-building-an-animation-course",
+   "source": "17",
+   "hash": "d6486f5a14e4",
+   "decision": "confirmed",
+   "note": "Source: 'your code is automatically saved, so if you ever stop in the middle of an exercise, your progress won't be lost.' Jev's 'unsupported' verdict came from a keyword window that missed this passage. The evidence changed to that verbatim phrase.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "ek-friction-as-a-feature",
+   "source": "0",
+   "hash": "78a14b9cb52e",
+   "decision": "confirmed",
+   "note": "Source: AI lowered the cost of building, so 'the bar for what's worth building lowered drastically', and friction 'forces us to use our judgement, and it filters out the ideas that don't deserve to be built.' Evidence is verbatim; unchanged.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "ek-the-magic-of-clip-path",
+   "source": "0",
+   "hash": "60cffd38ffaf",
+   "decision": "confirmed",
+   "note": "The source says clip-path 'has no effect on layout', is hardware-accelerated, needs no additional DOM element (unlike the width approach) and prevents layout shift (unlike a height animation). The evidence changed from 'The Basics: \"This has no effect on layout\"', whose heading prefix was not verbat",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "ek-the-magic-of-clip-path",
+   "source": "1",
+   "hash": "5945e31e40f7",
+   "decision": "confirmed",
+   "note": "Source: 'we are going to focus on inset as that's what we'll be using for all animations in this post', where inset(100%, 100%, 100%, 100%) or inset(100%) hides the whole element and the reveal keyframe ends at inset(0 0 0 0). The note that the comma form is invalid CSS is marked [inferred]. The evi",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "ek-the-magic-of-clip-path",
+   "source": "6",
+   "hash": "dc38c3290ff3",
+   "decision": "fixed",
+   "note": "The rule now reads 'Do not build comparison (before and after) sliders by changing the width of overflow-hidden divs; clip one of two overlaid elements with clip-path instead.' The source discusses the width approach only for comparison sliders and the Tuple example, so 'or reveals' was dropped (ima",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "66oOi9OLMCw",
+   "source": "0",
+   "hash": "a44cab95ab21",
+   "decision": "confirmed",
+   "note": "The transcript names four layers: neutral foundation, a functional accent, semantic communication and theming. It also says 'in product design, things change' about the 603010 rule. The old evidence was quoted from the description, which the passage finder does not search, so it now reads 'the four ",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "BUDipdbKK7Y",
+   "source": "10",
+   "hash": "dcd872965ef4",
+   "decision": "confirmed",
+   "note": "This is a satire video whose stated aim is to make apps 'borderline infuriating', so the 'dont' reading is the intended lesson. Jev's contradicts verdict comes from reading the satire literally. Evidence changed to the verbatim 'when you break your streak as sort of a punishment it makes you guess',",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "BUDipdbKK7Y",
+   "source": "8",
+   "hash": "ab57a0df14b6",
+   "decision": "confirmed",
+   "note": "Source: a recipe 'restricted with either a pay wall or requiring you to make an account ... that would make me mad'. Evidence changed to the verbatim 'restricted with either a pay wall or requiring you to make an account'.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "BUDipdbKK7Y",
+   "source": "7",
+   "hash": "d5e18a6ee3d6",
+   "decision": "confirmed",
+   "note": "Source: Gmail 'no longer available on Safari or any other browser' plus 'an option to watch a minute long ad', presented as one of the changes meant to make users mad. Evidence changed to the verbatim 'an option to watch a minute long ad to get access to your Gmail'.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "BUDipdbKK7Y",
+   "source": "6",
+   "hash": "2acbba3924e4",
+   "decision": "fixed",
+   "note": "The source says 'adding a button to change the goal and suggesting that they do so'. It says change, not lower. Rule now reads 'Do not pair a progress warning with a button that suggests the user change their goal.' Evidence changed to the verbatim 'adding a button to change the goal and suggesting ",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "BUDipdbKK7Y",
+   "source": "5",
+   "hash": "0e6860962a55",
+   "decision": "confirmed",
+   "note": "Source: 'you'd need to run a marathon today to hit your goal' and 'that would go from passive aggressive to Simply aggressive'. The old evidence was two fragments with a prefix, so the finder never matched it. It is now the verbatim 'you'd need to run a marathon today to hit your goal'.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "BUDipdbKK7Y",
+   "source": "4",
+   "hash": "fe0a71d6efcc",
+   "decision": "confirmed",
+   "note": "Source: a 'brutally honest' YouTube message about 342 videos with the options 'subscribe to YouTube premium or keep getting these notifications', and a 'sassy message' on Amazon after long browsing. Evidence changed to the verbatim 'you can either subscribe to YouTube premium or keep getting these n",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "BUDipdbKK7Y",
+   "source": "3",
+   "hash": "fa75a9147285",
+   "decision": "confirmed",
+   "note": "Source: 'this model that won't let you do anything else until you name it', with designers who 'would despise this feature'. Evidence changed to that verbatim phrase, without the 'Figma:' prefix.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "BUDipdbKK7Y",
+   "source": "0",
+   "hash": "067d5600cc3a",
+   "decision": "confirmed",
+   "note": "Source opens with 'endless pop-ups pay walls blocking or content or just pointless premium subscriptions websites can be annoying'. The old evidence split into fragments the finder could not match, so it is now the verbatim 'endless pop-ups pay walls blocking or content'.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "EcbgbKtOELY",
+   "source": "0",
+   "hash": "7bbff2543352",
+   "decision": "confirmed",
+   "note": "Source gives all three examples: a container around drinks and food shows they are related, a container around drinks shows it is selected, and gray text shows it is inactive, then says 'the UI was signifying how things worked'. The old evidence was verbatim, but the passage it pulled started after ",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "P2ksReDwWkE",
+   "source": "4",
+   "hash": "872e144c8e50",
+   "decision": "confirmed",
+   "note": "Thin photo section: 'pick your image carefully we actually need to crop this image a lot in order to get a good aspect ratio'. Multi-image section: 'consider here is the orientation of the images ... had to crop these images quite a bit'. The evidence is verbatim and left unchanged. Jev's confidence",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "adev-changelog",
+   "source": "0",
+   "hash": "70666d1a046e",
+   "decision": "confirmed",
+   "note": "The first sentence matches 'Default to use `ease-out` for most animations.' under the Animations Guidelines heading, so 'must' fits. The second sentence is marked [inferred]. It reconciles that line with the guideline in the same source, 'Don't use built-in CSS easings unless it's `ease` or `linear`",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "adev-changelog",
+   "source": "4",
+   "hash": "d144b7d43ece",
+   "decision": "fixed",
+   "note": "The source only says 'Use the following easings for their described use case:' and the list is cut off. It does not tell you to write a use case for each curve, or to avoid one curve everywhere. Rule reworded to 'Use each easing curve for its described use case.' The why and the verbatim evidence ar",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-write-swift-skill",
+   "source": "49",
+   "hash": "da9e4d55b673",
+   "decision": "confirmed",
+   "note": "Source section 5 says Task { } only when the work's lifetime doesn't fit a scope (delegate callback, button tap, view appearing), that it inherits isolation and priority, and that you must manage cancellation yourself. The Quick Reference row gives 'Task { } inside the callback, not making the callb",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-write-swift-skill",
+   "source": "54",
+   "hash": "9cb7f31c713d",
+   "decision": "confirmed",
+   "note": "Source: 'Task-local values (@TaskLocal) propagate context — a request ID, a trace span — down the task tree without threading a parameter... Make them optional so unbound reads have a sensible default.' The old evidence 'Task-local values' first matched an earlier structured-tasks paragraph, so the ",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-write-swift-skill",
+   "source": "71",
+   "hash": "d3f5e5bbaf76",
+   "decision": "confirmed",
+   "note": "The Quick Reference row reads 'Heterogeneous collection | [any P] | (not) a class hierarchy', and line 216 says any P is needed for heterogeneous collections. The old evidence first matched line 216, which does not mention the class hierarchy. Evidence is now \"| Heterogeneous collection\", which land",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "vaul-api",
+   "source": "4",
+   "hash": "a4c37a5292fa",
+   "decision": "confirmed",
+   "note": "The Root prop table lists 'handleOnly boolean false', and Handle is 'An optional handle to drag the drawer'. The behaviour ('a drag is not limited to the handle') is read from the prop's name and is already marked [inferred]. The rule follows the same default-as-rule pattern as the unflagged sibling",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "vaul-api",
+   "source": "7",
+   "hash": "5e5113195dae",
+   "decision": "confirmed",
+   "note": "Source: 'Overlay: A layer that covers the inert portion of the view when the drawer is open.' The Anatomy tells you to import every part, Drawer.Overlay included, and piece them together. The old evidence 'Overlay' is shorter than the finder's 12-character minimum, so the checker fell back to a keyw",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "vaul-other",
+   "source": "2",
+   "hash": "c9357a21cd2e",
+   "decision": "confirmed",
+   "note": "Source: dismissible=false stops closing by clicking outside, Escape or dragging down, and says 'Don't open this one or else you'll have to refresh the page to close it.' The why is supported, and the rule itself is correctly marked [inferred]. The evidence 'Non-dismissible' is in the raw text and fi",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "xHD01_Onac0",
+   "source": "11",
+   "hash": "61dfeb0d3202",
+   "decision": "confirmed",
+   "note": "Transcript: 'This is really picky, but if this is the completed color and this is the uncompleted color, then why are all the rectangles down here in the completed color? We'll update that.' The evidence matches once the line wraps are collapsed to spaces, which is how the checker compares text, so ",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "lkKGQVHrXzE",
+   "source": "30",
+   "hash": "0cadff3535d4",
+   "decision": "confirmed",
+   "note": "The screenshot outline starts at gray 950 at 5%, 'inset so it's on top of the image', which gives 'a nice crisp border'. After the container is tinted gray 950 at 5%, the border 'just matches the color of the background', so it is raised to 10% opacity. The source supports the rule as written. The 1",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-animate-recipes",
+   "source": "8",
+   "hash": "7e0a1a02fbd9",
+   "decision": "confirmed",
+   "note": "The tooltip recipe says the initial delay prevents accidental activation. The evidence string is already verbatim, so nothing changed.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-animate-skill",
+   "source": "59",
+   "hash": "4ce0f6b46b4e",
+   "decision": "confirmed",
+   "note": "The Never Ship section says to self-check before finishing and calls each item an automatic block. The old evidence was not verbatim. It is now \"Self-check before you finish. Each of these is an automatic block in `review-animations`\".",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-ask-sonner-api",
+   "source": "1",
+   "hash": "5c95296910af",
+   "decision": "fixed",
+   "note": "The API reference only lists the theme values ('light', 'dark', 'system') and the 'light' default. It makes no recommendation, and the dark-mode fix is already rule 29 in the ask-sonner-skill file. The rule is reworded to \"Set the Toaster's theme to 'light', 'dark' or 'system'; it defaults to 'light",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-ask-sonner-api",
+   "source": "3",
+   "hash": "91e4a1af259d",
+   "decision": "fixed",
+   "note": "The API reference documents expand (default false; otherwise toasts expand on hover) but does not recommend keeping toasts collapsed. The rule is reworded to \"Set expand on the Toaster to show toasts expanded by default; left at its default (false), toasts expand on hover.\" Strength drops from shoul",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-ask-sonner-skill",
+   "source": "18",
+   "hash": "ed2a14cf340f",
+   "decision": "confirmed",
+   "note": "The Multiple toasters recipe supports it. The old evidence \"Multiple toasters\" first matched the skill's front-matter description, so the check read the wrong passage. It is now \"Without `toasterId`, every toaster renders the toast\".",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-emil-design-eng-skill",
+   "source": "54",
+   "hash": "664d678871ed",
+   "decision": "confirmed",
+   "note": "This matches the \"Tabs with perfect color transitions\" paragraph step by step. The evidence (the section heading) is verbatim and unique, so nothing changed.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-emil-design-eng-skill",
+   "source": "88",
+   "hash": "56eb4516ba23",
+   "decision": "confirmed",
+   "note": "All 11 issues and values match the Review Checklist table exactly. The evidence \"Review Checklist\" is verbatim, so nothing changed. The low confidence probably comes from the passage window: it is 933 characters and ends partway through the hover row. The last four rows (keyframes, Motion x/y, enter",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-find-animation-opportunities-skill",
+   "source": "4",
+   "hash": "428abc64e5ac",
+   "decision": "confirmed",
+   "note": "Two passages support it: the frequency table (\"Rare / first-time ... where the delight budget lives\") and the delight-budget section (\"the only places bounce, stagger generosity, or a longer beat are welcome\"). The old evidence was not verbatim. It is now \"These are the only places bounce, stagger g",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-find-animation-opportunities-skill",
+   "source": "8",
+   "hash": "e26d866ee9a6",
+   "decision": "confirmed",
+   "note": "The source says \"The suggestion must work within the standard budgets (UI under 300ms)\", and that phrase is now the evidence. The old evidence was not verbatim. The same table allows 200-500ms for modals, but the rule follows the source's own wording.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-find-animation-opportunities-skill",
+   "source": "9",
+   "hash": "55a8d9f46726",
+   "decision": "confirmed",
+   "note": "The Speed table has the row \"Press feedback | 100–160ms\". Jev's \"unsupported\" came from a keyword window, because the old evidence (\"3. Speed table: Press feedback\") is not in the text. The evidence is now \"Press feedback | 100–160ms\".",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-find-animation-opportunities-skill",
+   "source": "11",
+   "hash": "4dcb74099acc",
+   "decision": "confirmed",
+   "note": "The Speed table has the row \"Dropdowns, selects | 150–250ms\". The evidence now uses that verbatim row.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-find-animation-opportunities-skill",
+   "source": "12",
+   "hash": "ed3c9a529f6b",
+   "decision": "confirmed",
+   "note": "The Speed table has the row \"Modals, drawers | 200–500ms\". The evidence now uses that verbatim row.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-find-animation-opportunities-skill",
+   "source": "21",
+   "hash": "c047f6115e12",
+   "decision": "confirmed",
+   "note": "The teleporting-state recipe says entrances start from scale(0.95–0.97) with opacity 0 and \"never `scale(0)`\". Jev's \"unsupported\" came from a keyword window, because the old evidence was not verbatim. The evidence is now \"fade/scale entrances from `scale(0.95–0.97)` + `opacity: 0`, `ease-out`, neve",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-find-animation-opportunities-skill",
+   "source": "22",
+   "hash": "9830185a0b85",
+   "decision": "confirmed",
+   "note": "The teleporting-state recipe names \"`@starting-style` for entry without JS\". Jev's \"unsupported\" came from a keyword window, because the old evidence was not verbatim. The evidence is now that exact phrase.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-find-animation-opportunities-skill",
+   "source": "24",
+   "hash": "a0075576d5b2",
+   "decision": "confirmed",
+   "note": "The source says \"List items added/removed with no bridge (and the list isn't high-frequency) → enter/exit transitions\", and that phrase is now the evidence. The old evidence was not verbatim.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-when-to-animate-22",
+   "source": "ek-friction-as-a-feature",
+   "hash": "43e93fe6e9d6",
+   "decision": "fixed",
+   "note": "The source supports judging ideas before building them and building A and B as validation, but only if you actually validate. It never says to ship 'the one that wins', so that phrase was replaced with 'only if you actually validate the idea instead of shipping both because it costs little'. The evi",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-easing-duration-03",
+   "source": "eks-skills-animate-recipes",
+   "hash": "f0836730e192",
+   "decision": "fixed",
+   "note": "The standard stays. ek-7-practical-animation-tips, the animate, review, improve, expo and prototype skills, emil-design-eng and animation-vocabulary all say never use ease-in on UI. RECIPES.md never mentions ease-in, and the cited toast line ('ease rather than ease-out') is not about ease-in, so eks",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-easing-duration-06",
+   "source": "adev-changelog",
+   "hash": "c8db085f6d41",
+   "decision": "confirmed",
+   "note": "The source's 'Keep your animations fast' guideline says most animations should be around 0.2s to 0.3s. That matches the standard's under-300ms rule and its 'most-animations' value. The evidence was not verbatim; it is now 'most of them should be around 0.2s to 0.3s'.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-easing-duration-09",
+   "source": "eks-skills-animate-skill",
+   "hash": "86c412face33",
+   "decision": "confirmed",
+   "note": "The skill's duration table backs the standard's exception: marketing and explanatory motion can be longer. The 1s cap itself comes from adev-changelog, which says verbatim 'never be longer than 1s (unless it's illustrative)'. The evidence was not verbatim; it is now the table row 'Marketing / explan",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-easing-duration-13",
+   "source": "ek-building-a-toast-component",
+   "hash": "f906311eafb9",
+   "decision": "confirmed",
+   "note": "The article contains Sonner's .sonner-toast CSS, which is the standard's 'sonner-toast' value (transform 400ms ease). The personality rule itself is backed by review-animations, emil-design-eng, improve-animations and the animate recipes. The old evidence failed to match because the article has extr",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-enter-exit-origin-43",
+   "source": "ek-the-magic-of-clip-path",
+   "hash": "cf2ca8a2534c",
+   "decision": "fixed",
+   "note": "The source builds the inset() with useMotionTemplate`inset(0 0 ${clipPathY} 0)` before using it as an inline style. It warns that a value saved in a plain variable would not update; it does not mention React state. The rule, the 'why' and values.style now say this. The evidence now starts with 'I ba",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-enter-exit-origin-44",
+   "source": "ek-the-magic-of-clip-path",
+   "hash": "a898ff4ac4d4",
+   "decision": "confirmed",
+   "note": "The source says the theme switch 'was a bit hacky, as I duplicated the whole page' and that 'you can achieve the same effect with View Transitions API'. The old evidence had a label prefix, so it never matched the text. It is now the verbatim sentence about View Transitions, plus 'I basically animat",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-springs-gestures-19",
+   "source": "eks-skills-animate-expo-skill",
+   "hash": "b594b42cc99e",
+   "decision": "confirmed",
+   "note": "The skill's Never Ship table lists 'Distance-only dismissal threshold | velocity **or** distance — a flick is enough'. That backs the standard's 'never a distance-only threshold' clause. The projection formula comes from eks-skills-apple-design-skill and eks-skills-animate-expo-recipes (project(), '",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-springs-gestures-22",
+   "source": "eks-skills-review-animations-standards",
+   "hash": "d738041b4d51",
+   "decision": "confirmed",
+   "note": "The rule (sheet dismissal by projected position translateY.get() + project(e.velocityY), threshold HEIGHT * 0.4, react-native) is stated only by eks-skills-animate-expo-recipes (sheet recipe code plus 'Velocity decides, not distance... Requiring 40% travel makes the sheet feel heavy'). I dropped the",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-springs-gestures-26",
+   "source": "ek-building-a-drawer-component",
+   "hash": "14739cf6062d",
+   "decision": "confirmed",
+   "note": "The standard stands on eks-skills-apple-design-skill, which says 'For a drag, slider, or drawer, update the UI 1:1 with the pointer the whole way through', 'stay glued to the finger', 'respect the offset from where they grabbed it', 'Snapping to the element's center on grab breaks the illusion', and",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-accessibility-motion-05",
+   "source": "eks-skills-improve-animations-plan-template",
+   "hash": "6cb528b32c7b",
+   "decision": "confirmed",
+   "note": "The plan template's Verification > Feel check says to toggle prefers-reduced-motion (Rendering panel) and confirm that movement is dropped but opacity feedback remains. Its Notes say 'The feel check is not optional.' The old evidence lacked the source's backticks, so the finder anchored on the Notes",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-accessibility-motion-12",
+   "source": "eks-skills-apple-design-skill",
+   "hash": "81c3fa8169e1",
+   "decision": "confirmed",
+   "note": "Section 14 of the source says 'Respond to three independent signals and bake them into your components' and lists 'prefers-contrast: more — near-solid backgrounds with a defined, contrasting border.' The old evidence was not verbatim (hyphen instead of em dash, and concatenated fragments). I replace",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-components-toasts-drawers-12",
+   "source": "eks-skills-ask-sonner-api",
+   "hash": "379ba7963b6a",
+   "decision": "confirmed",
+   "note": "Each source backs part of the rule, and together they cover all of it. eks-skills-ask-sonner-api gives 'expand' default false ('otherwise they expand on hover') and 'gap' 14 ('Gap between toasts when expanded'). ek-building-a-toast-component covers hover over the toast area to expand, plus the expan",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-components-toasts-drawers-16",
+   "source": "ek-building-a-toast-component",
+   "hash": "a92feb1b6a8d",
+   "decision": "confirmed",
+   "note": "The source says 'By default the toast disappears after 4 seconds unless you hover over it', which means the auto-dismiss does not run out while the toast is hovered. The same passage frames the hidden-tab case as 'pause the timer'. The rule as written (should) is supported. The evidence 'unless you ",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-components-toasts-drawers-65",
+   "source": "ek-building-a-drawer-component",
+   "hash": "947b7132c315",
+   "decision": "fixed",
+   "note": "The source interpolates along the drawer's bezier curve only for the opening transition ('update the meta tag value every 10ms after I open the drawer'). While dragging it uses 'a linear interpolation', picking the color by drag progress, and it never mentions closing. I edited the rule to: 'precomp",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-mobile-touch-19",
+   "source": "eks-skills-mobile-native-skill",
+   "hash": "85c47e8f7d85",
+   "decision": "confirmed",
+   "note": "Section 9 of the source says 'If the carousel is native scroll rather than a JS gesture, prefer scroll-snap-type: x mandatory on the track and scroll-snap-align: start on slides — the browser's own physics beat a hand-rolled spring, and touch-action becomes unnecessary.' That matches the rule, value",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-visual-details-02",
+   "source": "eks-skills-animation-vocabulary-skill",
+   "hash": "ed3f87c06611",
+   "decision": "confirmed",
+   "note": "Both sources support the rule. The vocabulary skill says fixed-width digits stop numbers shifting and are essential for tickers, timers and counters. ek-agents-with-taste says to apply tabular-nums to price columns. Neither evidence string was verbatim, so both now quote the raw text exactly (one be",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-visual-details-06",
+   "source": "eks-skills-apple-design-skill",
+   "hash": "bbc903c1efe9",
+   "decision": "confirmed",
+   "note": "Section 15 of the Apple skill says leading tracks size inversely: tight on headings, looser on body, higher for scripts with tall ascenders and descenders, tighter for dense UI. Its code gives line-height 1.05 for display text and 1.5 for body. The old evidence was not verbatim, and it pointed only ",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-visual-details-21",
+   "source": "eks-skills-apple-design-skill",
+   "hash": "3f189503d54b",
+   "decision": "fixed",
+   "note": "The rule is in the source word for word: 'Put color on a solid layer, not the translucent foreground'. Jev looked at the wrong passage because the evidence was not verbatim; it now quotes that sentence. The 'why' said vibrancy keeps 'content' legible. The source says 'text', so it now says text.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-process-review-taste-03",
+   "source": "eks-skills-mobile-native-skill",
+   "hash": "20e2c2f57519",
+   "decision": "confirmed",
+   "note": "The mobile-native skill has a 'Never Ship' section that opens 'Self-check before you finish.', and its table matches the never-ship-mobile-web value item for item. Its description gives the 'website on a phone' framing used in the 'why'. The animate skill supports the rest: its Never Ship list, the ",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-process-review-taste-24",
+   "source": "eks-skills-animate-skill",
+   "hash": "513f3be00ed3",
+   "decision": "fixed",
+   "note": "The standard stands on eks-skills-find-animation-opportunities-skill. That source's Required Output Format gives everything the rule and values say: the six-column table ordered by leverage, 2 to 5 rejected candidates each with the gate question that killed it, a verdict paragraph with the improve-a",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-process-review-taste-64",
+   "source": "adev-home",
+   "hash": "0ccc111b8c99",
+   "decision": "confirmed",
+   "note": "The Walkthroughs section of adev-home says the author shows his exact thought process. It reads: 'We'll start by just thinking and talking about the animation we want to make, then move to the code, improve it and iterate', and it adds that learners see the reasons behind his decisions. The old evid",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-swift-07",
+   "source": "eks-skills-write-swift-skill",
+   "hash": "d2c76f1e9c82",
+   "decision": "confirmed",
+   "note": "Two passages of the Swift skill support the rule. Section 1 says to replace the optional properties (isSharing, selectedRows, shareTarget) with one enum State, which makes invalid combinations unrepresentable and state changes atomic. Section 8 says 'Design the model so illegal states can't be spell",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-swift-22",
+   "source": "eks-skills-write-swift-skill",
+   "hash": "b0a518055c03",
+   "decision": "confirmed",
+   "note": "Two passages of the Swift skill support the rule. Section 3 says await is a suspension point that breaks atomicity, that state can change and you may resume on a different thread, to re-check assumptions after every await, and never to hold a lock or rely on thread-local storage across one. The Quic",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-swift-25",
+   "source": "eks-skills-write-swift-skill",
+   "hash": "38d75024eef1",
+   "decision": "confirmed",
+   "note": "The Quick Reference row supports the rule exactly: 'Shared mutable state | actor, or @MainActor class | not class + a lock you must remember'. Section 4 supports the why ('Actors and @MainActor classes are implicitly Sendable, because their state is isolated'). The old evidence was not verbatim, so ",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-swift-75",
+   "source": "eks-skills-write-swift-skill",
+   "hash": "6b7fee89891e",
+   "decision": "fixed",
+   "note": "Section 11 says 'Use Swift Testing for new tests. XCTest remains required for exactly three things: UI automation (XCUIApplication), performance metrics (XCTMetric), and tests that must be written in Objective-C or that catch Objective-C exceptions.' The rule and the 'must' strength hold, because th",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-swift-108",
+   "source": "eks-skills-write-swift-skill",
+   "hash": "0380c48b65a4",
+   "decision": "confirmed",
+   "note": "The section 15 table row reads '`Rocket.SaturnV` when a type shadows a module | module selector `Rocket::SaturnV` | 6.3'. The section intro supports the why: 'Agents routinely write the older, longer form of all of these.' SE-0491 in swift-evolution also lists Implemented (Swift 6.3). Jev's 'unsuppo",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-swift-109",
+   "source": "eks-skills-write-swift-skill",
+   "hash": "10df1734b10b",
+   "decision": "fixed",
+   "note": "The source row reads 'Awkward test function names | raw identifiers: @Test func `fruits have a tropical climate`() | 6.0'. The rule said 'camel-case', which the source does not say, so I changed it to 'instead of awkward test function names'. Replaced the evidence with the verbatim 'Awkward test fun",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "d4MF6pdAZNw",
+   "source": "2",
+   "hash": "a1d03e51fbc3",
+   "decision": "confirmed",
+   "note": "The transcript says to add quotes and a back arrow so the header spacer tween 'is going to start at the same time as the one above', with y% 100 to 0, 1.3s and Expo in-out. That is GSAP's \"<\" position parameter. The old evidence was found, but its passage left out the setup, so evidence is now 'we c",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "ek-7-practical-animation-tips",
+   "source": "14",
+   "hash": "7049ba3c2bfe",
+   "decision": "confirmed",
+   "note": "Source: 'You could decrease the duration to make ease-in work, but this easing is just not made for UI animations.' The advice around it is to use ease-out. The evidence is verbatim and was found, so it is unchanged.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "ek-building-a-drawer-component",
+   "source": "4",
+   "hash": "6efbfd72b193",
+   "decision": "confirmed",
+   "note": "Source: 'Not losing frames while dragging is a good start, but I already failed there', followed by how he fixed the dropped frames. The evidence is verbatim and unchanged. Must matches the project convention because he calls his own lapse a failure.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "ek-building-a-drawer-component",
+   "source": "14",
+   "hash": "fa850b9beeda",
+   "decision": "confirmed",
+   "note": "Source: Vaul's curve 'closely matches the one used in iOS; it’s from the Ionic Framework', with transition transform 0.5s cubic-bezier(0.32, 0.72, 0, 1). The old evidence was the heading 'Motion', too short for the passage finder, so the check looked in the wrong place. Evidence is now 'The curve us",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "ek-building-a-drawer-component",
+   "source": "18",
+   "hash": "b963a013ef23",
+   "decision": "confirmed",
+   "note": "The code sets height to visualViewportHeight - OFFSET and bottom to Math.max(window.innerHeight - visualViewportHeight, 0) in px, inside a visualViewport 'resize' listener. The old evidence passage stopped before those lines. Evidence is now 'We then use this information to update the drawer’s heigh",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "ek-building-an-animation-course",
+   "source": "20",
+   "hash": "6a19277be36a",
+   "decision": "fixed",
+   "note": "The old evidence ('The work, ...') was not verbatim. It is now 'A mistake I made previously with a project called ui.land was teasing that I was working on it'. The contrast clause said the presale was announced 'before any work began'. The source says he offered it 'when I had zero content for it' ",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-animate-expo-recipes",
+   "source": "11",
+   "hash": "34067b0b6540",
+   "decision": "fixed",
+   "note": "The source only explains the recipe: hitSlop={12} and pressRetentionOffset={16}, with '`hitSlop` brings a small icon up to the 44pt target without growing it'. It never states this as a rule, so strength went from must to should. The old evidence was the heading 'Press feedback'. It is now 'pressRet",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-animate-expo-recipes",
+   "source": "23",
+   "hash": "88fb64d462ad",
+   "decision": "confirmed",
+   "note": "The code comment reads 'must declare the axis, or it fights the vertical scroll'. The prose says a pan with no axis declared 'will steal vertical scrolls'. The old evidence was not verbatim (the source has backticks around activeOffsetX). It is now 'A pan handler inside a scroll view with no axis de",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-animate-expo-recipes",
+   "source": "38",
+   "hash": "abb29fdc3af2",
+   "decision": "confirmed",
+   "note": "The tab/segmented indicator section says: 'Fire `Haptics.selectionAsync()` on the press, not when the pill lands.' Jev's 'unsupported' came from a wrong passage: the evidence lacked the backticks, so it was not found. Evidence is now 'on the press, not when the pill lands'.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-emil-design-eng-skill",
+   "source": "29",
+   "hash": "d21082f11d4b",
+   "decision": "confirmed",
+   "note": "Source: 'Rule: UI animations should stay under 300ms.' Its review checklist says 'Duration > 300ms on UI element' should be reduced to 150-250ms, and the 180ms versus 400ms example is there too. The evidence is verbatim and was found, so it is unchanged. The source's own duration table allows 200-50",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-find-animation-opportunities-skill",
+   "source": "5",
+   "hash": "2887fe6f0a38",
+   "decision": "fixed",
+   "note": "The source says 'The answer must be one of these, named explicitly' and 'If you can't name the purpose in one of these words, reject the candidate'. It does not say 'exactly one', so the rule now reads 'explicitly as one of ...; if you cannot name one, do not animate.' The old evidence was not verba",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-find-animation-opportunities-skill",
+   "source": "36",
+   "hash": "7c52c270303f",
+   "decision": "confirmed",
+   "note": "The Required Output Format says: 'Animate `transform` and `opacity` only'. The old evidence joined the heading to the phrase, so it was not verbatim. It is now 'Animate `transform` and `opacity` only'. The same file's hunt list suggests clip-path and height+opacity transitions, but the explicit requ",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-mobile-native-skill",
+   "source": "44",
+   "hash": "3e7270cd143b",
+   "decision": "confirmed",
+   "note": "Section 9 of the source says this almost word for word. The old evidence was not verbatim, so it now reads 'If the carousel is native scroll rather than a JS gesture, prefer'.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-prototype-picker",
+   "source": "34",
+   "hash": "4dd0378f9272",
+   "decision": "confirmed",
+   "note": "The behavior contract says selection persists across reload via ?v=2 and falls back to variant 1. The reference code sets v to i + 1, which makes it 1-based, and writes it with history.replaceState. The old evidence was not verbatim, so it now reads 'Selection persists across reload via a URL param'",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-prototype-skill",
+   "source": "32",
+   "hash": "57e74515bb00",
+   "decision": "confirmed",
+   "note": "Phase 4 has this text word for word, including the toast, card and button examples and 'the harness must render'. The old evidence was not verbatim, so it now reads 'one variant at a time, full size, in realistic surrounding context'.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-review-animations-skill",
+   "source": "12",
+   "hash": "5c80aa5f6667",
+   "decision": "confirmed",
+   "note": "Standard 3 says built-in CSS easings are too weak and to expect custom cubic-beziers. The escalation trigger flags weak built-in easing on a deliberate animation, and the source says to pull exact curves from STANDARDS.md. Evidence now reads 'Built-in CSS easings are too weak; expect custom cubic-be",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-review-animations-skill",
+   "source": "22",
+   "hash": "035853cbf611",
+   "decision": "confirmed",
+   "note": "The escalation trigger names Framer Motion x/y/scale props on motion that runs while the page is busy, and fix step 6 says 'shorthand → full transform string'. Evidence now reads 'props on motion that runs while the page is busy'.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-review-animations-skill",
+   "source": "23",
+   "hash": "29710b3ffb42",
+   "decision": "confirmed",
+   "note": "The escalation trigger says 'Updating a CSS variable on a parent to drive a child transform (style recalc storm)'. Jev's 'unsupported' verdict came from evidence that pointed only at the section heading. Evidence now reads 'Updating a CSS variable on a parent to drive a child transform'.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-review-animations-skill",
+   "source": "24",
+   "hash": "d49c7195c31f",
+   "decision": "confirmed",
+   "note": "The escalation triggers list transition: all. The findings table rewrites 'transition: all 300ms' as 'transition: transform 200ms ease-out' and says to specify exact properties. Evidence now reads 'Specify exact properties; `all` animates unintended properties off-GPU'.",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "eks-skills-review-animations-skill",
+   "source": "31",
+   "hash": "295c71c968cb",
+   "decision": "fixed",
+   "note": "The source only says 'When unsure whether motion feels right, the strongest move is often to delete it'. It says nothing about deleting 'before tuning it further', so I dropped that part. The rule now reads 'When unsure whether motion feels right, consider deleting it.' Evidence is that source sente",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-easing-duration-07",
+   "source": "eks-skills-animate-expo-recipes",
+   "hash": "2b8ec153f9a1",
+   "decision": "confirmed",
+   "note": "The recipes use the native budget the rule sets. The bottom sheet springs with duration 300 (dampingRatio 1 to dismiss, 0.8 to snap home), which matches 'spring, ~300ms perceived'. Press feedback is 120ms, inside the 100-150ms range. The toast keeps the 300ms cap. The old evidence, 'Toast: The 300ms",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-enter-exit-origin-24",
+   "source": "eks-skills-animate-expo-skill",
+   "hash": "1375df262877",
+   "decision": "confirmed",
+   "note": "Section 9 of the source says: 'Text scales. allowFontScaling is on by default, so any height you measured at default type size is wrong at 200%. Never animate to a hardcoded height — measure with onLayout, or animate a transform instead.' The old evidence was not verbatim because the raw text has ma",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-springs-gestures-04",
+   "source": "eks-skills-animate-expo-skill",
+   "hash": "8ccbd890abcd",
+   "decision": "confirmed",
+   "note": "The source's spring table starts with 'Default settle, no overshoot | { duration: 400, dampingRatio: 1 }' and adds 'Bounce only when the gesture carried momentum.' That backs a critically damped default with a 0.4s response. The table's under-damped rows are 'Reposition / snap back after a drag' and",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-performance-properties-20",
+   "source": "eks-skills-animate-expo-recipes",
+   "hash": "01eaaa93b3c7",
+   "decision": "confirmed",
+   "note": "The source backs every part of the rule. 'The Reanimated docs recommend building layout animations outside components, or in useMemo — an inline chain in JSX rebuilds the builder on every render'. The per-index delay is memoized inside the Row. ROW_CLOSE is 'module scope — builders rebuilt in render",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-accessibility-motion-24",
+   "source": "vaul-other",
+   "hash": "359328bcb58e",
+   "decision": "confirmed",
+   "note": "The page says that setting dismissible to false stops the user closing the drawer by clicking outside, pressing Escape or dragging it down. It adds: 'Don't open this one or else you'll have to refresh the page to close it'. That is the fact the rule and its 'why' rest on. The close-control pairing i",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-mobile-touch-33",
+   "source": "eks-skills-animate-expo-skill",
+   "hash": "44ddb12cf732",
+   "decision": "confirmed",
+   "note": "The source names PanResponder as an example of animating on the wrong thread and says the result 'drops to 20fps on a three-year-old Android'. Its Never Ship table has the row '`PanResponder` | `Gesture.Pan()` from gesture-handler'. The old evidence was not verbatim. It is now '`PanResponder` | `Ges",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-visual-details-02",
+   "source": "ek-agents-with-taste",
+   "hash": "ed3f87c06611",
+   "decision": "confirmed",
+   "note": "The article's Typography rules include, verbatim: 'Apply `tabular-nums` to price columns so digits align and the column reads cleanly.' The existing evidence is already verbatim and finds that passage, so it is unchanged. The confidence was 0.77 because this source covers only the price-column half ",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-process-review-taste-19",
+   "source": "eks-skills-improve-animations-skill",
+   "hash": "a94d2896b94d",
+   "decision": "confirmed",
+   "note": "In Phase 4 the skill requires every plan to include 'a verification section including how to *feel-check* the result (slow motion, frame-by-frame, real device for gestures)'. That backs the feel-check requirement and the real-device value for gestures. The mechanical commands, 10% playback, the redu",
+   "date": "2026-09-27"
+  },
+  {
+   "kind": "standard",
+   "id": "STD-swift-24",
+   "source": "eks-skills-write-swift-skill",
+   "hash": "0600d23b6456",
+   "decision": "confirmed",
+   "note": "The source supports the standard as written. The Actor reentrancy section of learn/raw/emil-skills/eks-skills-write-swift-skill.txt (line 133) says actors are not FIFO and run the highest-priority work first to avoid priority inversion. It then says to use a task or an AsyncStream, not an actor, whe",
+   "date": "2026-09-27"
+  }
+ ]
+}

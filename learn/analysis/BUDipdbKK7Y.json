@@ -1,0 +1,423 @@
+{
+  "summary": "Kole Jain redesigns common apps (YouTube, Amazon, Gmail, a fitness app, Uber, Figma, Instacart, Apple Books, a recipe site and a smart home app) with deliberately passive-aggressive or infuriating features, as a comedy piece. Most of the ideas are anti-patterns: usage-shaming pop-ups with an upsell, locking Gmail to one browser unless you watch an ad, a modal that blocks everything until you name a layer, paywalls or account walls on a simple recipe, and punishments for breaking a reading streak. Even while being annoying, he keeps one good-UX habit in three of them (the Figma naming modal, the Apple Books streak punishment and the smart home pairing): a notice, a button or a setting to turn the feature off. He also points out where a joke idea could turn useful, such as a driver chattiness rating, or a one-click cart if it were based on past orders and showed a cart total. For someone building a design system, the video works mainly as a list of patterns to avoid and a reminder that any forcing feature needs an escape hatch [inferred].",
+  "key_ideas": [
+    "Endless pop-ups, paywalls that block content and pointless premium subscriptions can make websites annoying as hell.",
+    "A message that shames users about their usage, then offers only an upsell or more notifications, might help someone controlling screen time but mostly just made the presenter angry.",
+    "Guilt-tripping copy can slide from passive-aggressive to simply aggressive; the presenter deliberately held back.",
+    "Suggesting that a struggling user lower their goal makes a guilt pop-up even worse.",
+    "Being annoying is no excuse to ignore good UX: tell users how to turn an intrusive feature off.",
+    "A modal that blocks every other action until a chore is done (naming a layer) is something designers would despise about a minute into using it.",
+    "Three of the hostile features come with a way out: the optional Figma naming feature has a notice on how to turn it off, the Apple Books streak punishment has a button to turn it off, and smart home pairing can be turned off in settings.",
+    "A random one-click cart is useless; basing it on past orders and showing a cart total could make it useful.",
+    "Some joke ideas turn out useful, like rating an Uber driver's chattiness so riders can plan the trip.",
+    "Requiring a subscription or an account for something as simple as a recipe would make the presenter mad.",
+    "Punishing a broken streak (making readers guess where they were in a book) is presented as a feature users will hate.",
+    "Letting other people control your smart home devices needs an off switch in settings, and would be far worse for smart locks."
+  ],
+  "entities": [
+    {
+      "name": "Kole Jain",
+      "type": "person",
+      "description": "Designer and YouTuber who made the deliberately infuriating redesigns."
+    },
+    {
+      "name": "YouTube Premium",
+      "type": "product",
+      "description": "The upsell offered in the usage-shaming YouTube message."
+    },
+    {
+      "name": "Amazon",
+      "type": "company",
+      "description": "Gets a sassy pop-up after long browsing that suggests buying a book instead."
+    },
+    {
+      "name": "Gmail",
+      "type": "product",
+      "description": "Imagined as available only on Chrome, with a minute-long ad to get in from other browsers."
+    },
+    {
+      "name": "Google Drive",
+      "type": "product",
+      "description": "Given the same browser lock-in treatment as Gmail."
+    },
+    {
+      "name": "Uber",
+      "type": "company",
+      "description": "Gets a driver chattiness rating, which the presenter thinks could be useful."
+    },
+    {
+      "name": "Figma",
+      "type": "tool",
+      "description": "Gets an optional forced layer-naming feature with a blocking modal."
+    },
+    {
+      "name": "Instacart",
+      "type": "company",
+      "description": "Gets a randomized cart button and a pay-for-the-person-behind-you checkout option."
+    },
+    {
+      "name": "Apple Books",
+      "type": "product",
+      "description": "Its reading streak counter is turned into a punishment when the streak breaks."
+    },
+    {
+      "name": "Yummly",
+      "type": "product",
+      "description": "Named in the video timestamps for the recipe paywall segment; not named in the spoken transcript."
+    },
+    {
+      "name": "Newform",
+      "type": "company",
+      "description": "The presenter's design community, promoted in the video description."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Content and microcopy",
+      "summary": "Shows how sassy, brutally honest or guilt-tripping messages (342 videos watched, run a marathon today) make users angry, and notes that tone can escalate from passive-aggressive to aggressive."
+    },
+    {
+      "name": "Modals and popovers",
+      "summary": "A forced layer-naming modal that blocks all other actions is used as an example of an infuriating pattern; a notice explaining how to turn it off is added as the one piece of good UX."
+    },
+    {
+      "name": "Paywalls and pricing pages",
+      "summary": "Paywalls that block content, pointless premium subscriptions, ad-gated access and account walls on simple content like a recipe are presented as what makes sites maddening."
+    },
+    {
+      "name": "Retention and gamification",
+      "summary": "Satirises engagement mechanics: usage-shaming notifications, step-goal guilt pop-ups and punishing a broken reading streak."
+    },
+    {
+      "name": "Toasts and notifications",
+      "summary": "A recurring YouTube notification about watch time that only stops if you subscribe to Premium is used as an annoying example."
+    },
+    {
+      "name": "Dark patterns and user-hostile design",
+      "summary": "The whole video imagines apps that try on purpose to make users mad, and shows that even these should offer a way to switch the feature off."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Endless pop-ups, paywalls blocking content and pointless premium subscriptions make websites annoying.",
+      "evidence": "Intro: whether it's endless pop-ups pay walls"
+    },
+    {
+      "claim": "A message about excessive YouTube time could help someone controlling screen time, but mostly it is irritating.",
+      "evidence": "YouTube: if you're trying to control your screen time I guess this could be useful"
+    },
+    {
+      "claim": "Adding a button that suggests changing the goal would make the fitness guilt pop-up even worse.",
+      "evidence": "Fitness App: we could make it even worse by adding a button to change the goal"
+    },
+    {
+      "claim": "A driver chattiness rating could actually be pretty useful for riders.",
+      "evidence": "Uber: this one could actually be pretty useful"
+    },
+    {
+      "claim": "Designers would despise a forced layer-naming feature about a minute into using it.",
+      "evidence": "Figma: I'm sure designers would despise this feature about a minute into using it"
+    },
+    {
+      "claim": "Even an annoying feature should not ignore good UX, so it should say how to turn it off.",
+      "evidence": "Figma: just because we're being annoying doesn't mean we should ignore good ux"
+    },
+    {
+      "claim": "A randomized grocery cart is entirely useless, but one based on past orders might be sort of useful.",
+      "evidence": "Instacart: if this was based on your past orders then this might actually be sort of useful"
+    },
+    {
+      "claim": "Paying for the person behind you at a drive-thru is annoying for the people handling the orders.",
+      "evidence": "Instacart checkout: it's super annoying to the people handling the orders"
+    },
+    {
+      "claim": "Requiring a paywall or an account to get a dinner recipe would make the presenter mad.",
+      "evidence": "Yummly: even something as simple as making a meal requires a subscription"
+    },
+    {
+      "claim": "A driver chattiness rating lets riders plan the trip and not feel awkward in silent moments.",
+      "evidence": "Uber: so now you can plan your trip accordingly"
+    },
+    {
+      "claim": "Without a way to turn off neighbour pairing, there is no limit to the trouble a neighbour could cause, and smart locks would make it bad.",
+      "evidence": "Smart Home: there's no limit to the hell your neighbor can cause"
+    }
+  ],
+  "quotes": [
+    "just because we're being annoying doesn't mean we should ignore good ux",
+    "that would go from passive aggressive to Simply aggressive",
+    "this one could actually be pretty useful"
+  ],
+  "tags": [
+    "dark-patterns",
+    "satire",
+    "pop-ups",
+    "paywalls",
+    "modals",
+    "notifications",
+    "streaks",
+    "microcopy",
+    "opt-out",
+    "user-hostile-design"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "Do not fill a site with endless pop-ups, paywalls in front of content or premium subscriptions that add nothing.",
+      "why": "The video opens by naming these as what makes websites annoying.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "endless pop-ups pay walls blocking or content"
+    },
+    {
+      "rule": "Give every intrusive feature a visible way to turn it off: a button beside it or a switch in settings.",
+      "why": "Even the deliberately annoying features keep this piece of good UX; the presenter expects users to hate them.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Apple Books: an even handier button below that to turn this feature off; Smart Home: we need to be able to turn this off in settings"
+    },
+    {
+      "rule": "When a feature blocks the user with a modal, include a notice in it that explains how to turn the feature off.",
+      "why": "Being annoying does not mean ignoring good UX.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Figma: I added a notice here to let the user know how to turn it off"
+    },
+    {
+      "rule": "Do not use a modal that blocks every other action until the user finishes a chore such as naming a layer.",
+      "why": "It is presented as infuriating; designers would despise it about a minute into using it.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "this model that won't let you do anything else until you name it"
+    },
+    {
+      "rule": "Do not shame users about how much they use the product (videos watched, time spent browsing), especially when the only choices offered are an upsell or continued notifications.",
+      "why": "The YouTube message could help someone controlling screen time but mostly just made the presenter angry; the Amazon browsing-time pop-up is another of the deliberately infuriating changes.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "you can either subscribe to YouTube premium or keep getting these notifications"
+    },
+    {
+      "rule": "Do not write guilt-tripping or passive-aggressive messages about a user's progress, such as telling them they would need to run a marathon today to hit their step goal.",
+      "why": "The video uses this tone on purpose to make apps infuriating; the presenter held back from adding more because it would go from passive-aggressive to simply aggressive.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "you'd need to run a marathon today to hit your goal"
+    },
+    {
+      "rule": "Do not pair a progress warning with a button that suggests the user change their goal.",
+      "why": "The presenter says this would make the fitness pop-up even worse.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "adding a button to change the goal and suggesting that they do so"
+    },
+    {
+      "rule": "Do not lock a web app to one browser or make users watch an ad to get access.",
+      "why": "It is one of the imagined changes designed to make users mad.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "platforms",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "an option to watch a minute long ad to get access to your Gmail"
+    },
+    {
+      "rule": "Do not put a paywall or an account requirement in front of simple content such as a recipe.",
+      "why": "The presenter says requiring a subscription just to make a meal would make him mad.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "restricted with either a pay wall or requiring you to make an account"
+    },
+    {
+      "rule": "Base one-click shortcuts, like an auto-filled cart, on the user's past behaviour rather than randomness, and show a running total.",
+      "why": "A random cart is entirely useless; one based on past orders might be useful, and a cart total helps people keep on budget.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Instacart: if this was based on your past orders ... add a cart total to help you keep on budget"
+    },
+    {
+      "rule": "Do not punish users for breaking a streak, for example by making them guess where they were in a book.",
+      "why": "It is presented as a punishment feature the presenter expects users to hate; even so, he adds a button to jump to the actual page and one to turn the feature off.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "when you break your streak as sort of a punishment it makes you guess"
+    },
+    {
+      "rule": "Consider showing a crowd-sourced rating of a trait that helps users plan, such as a driver's chattiness rating with the number of reviews it is based on.",
+      "why": "The presenter says this one could actually be pretty useful: riders can plan the trip and not feel awkward in silent moments.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Uber: there's this chattin rating based on 134 reviews"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "Should an intrusive or opinionated feature be forced on everyone, or optional with an easy way to turn it off?",
+      "options": [
+        {
+          "name": "Forced, always on",
+          "effect": "Users cannot switch it off, or can escape only by paying or watching an ad, as with the YouTube watch-time notifications and the Gmail browser lock; the video presents these as infuriating.",
+          "when": "Never, according to the video's framing [inferred]."
+        },
+        {
+          "name": "Optional, with a way out",
+          "effect": "The feature is switched on by choice and shows a notice, a button or a setting to turn it off, so even an annoying feature respects good UX.",
+          "when": "When a feature blocks, restricts or nags the user; the video does this for the Figma naming modal, the Apple Books streak punishment and the smart home pairing."
+        }
+      ],
+      "recommendation": "Give it a way out: the presenter adds a turn-off notice, button or setting because being annoying does not mean ignoring good UX.",
+      "maps_to": null,
+      "evidence": "Figma: I added a notice here to let the user know how to turn it off"
+    },
+    {
+      "question": "What should a one-click smart shortcut, like an auto-filled grocery cart, be based on?",
+      "options": [
+        {
+          "name": "Random picks",
+          "effect": "One click pulls up a random cart of goods; the presenter calls it entirely useless in practice.",
+          "when": "Only as a joke."
+        },
+        {
+          "name": "The user's past orders, with a cart total",
+          "effect": "The cart reflects what the user actually buys, and a visible total helps them keep on budget.",
+          "when": "When you want the shortcut to save real time."
+        }
+      ],
+      "recommendation": "Base it on past orders and add a cart total; that version might actually be sort of useful.",
+      "maps_to": null,
+      "evidence": "Instacart: if this was based on your past orders then this might actually be sort of useful"
+    }
+  ],
+  "process": [],
+  "examples": [
+    {
+      "what": "Usage-shaming watch-time message",
+      "where": "YouTube",
+      "visual_note": "A brutally honest message about the excessive time spent on YouTube (342 videos is a lot), and the only choices are to subscribe to YouTube Premium or keep getting these notifications. It shows a guilt message paired with an upsell."
+    },
+    {
+      "what": "Browsing-time pop-up",
+      "where": "Amazon",
+      "visual_note": "After an exorbitant amount of browsing, a pop-up with a sassy message prompts the user to buy a book instead of spending so much time on Amazon."
+    },
+    {
+      "what": "Browser lock-in with ad-gated access",
+      "where": "Gmail and Google Drive",
+      "visual_note": "Gmail is shown as no longer available on Safari or any browser other than Chrome, with an option to watch a minute-long ad to get access. The same screen is applied to Google Drive."
+    },
+    {
+      "what": "Step-goal guilt pop-up",
+      "where": "A fitness app",
+      "visual_note": "A phone pop-up says you would need to run a marathon today to hit your goal of 10,000 steps a day for the week; a worse version adds a button suggesting you change the goal."
+    },
+    {
+      "what": "Driver chattiness rating",
+      "where": "Uber",
+      "visual_note": "While Uber looks for drivers, the driver pops up with a chattiness rating below, based on 134 reviews, saying he is a 3 out of five in chattiness, so riders can plan for silent moments. The presenter thinks this could be useful."
+    },
+    {
+      "what": "Forced layer naming with a blocking modal",
+      "where": "Figma",
+      "visual_note": "When switched on, new layers get a blank name; clicking anywhere except the name field brings up a modal that blocks everything until the layer is named, with a notice explaining how to turn the feature off."
+    },
+    {
+      "what": "Randomized cart button",
+      "where": "Instacart",
+      "visual_note": "One click fills a random cart of goods. The presenter says it would only be useful if based on past orders, ideally with a cart total."
+    },
+    {
+      "what": "Pay for the person behind you at checkout",
+      "where": "Instacart",
+      "visual_note": "A checkout option borrowed from drive-thrus, applied to orders that are usually 20 plus items for over $100."
+    },
+    {
+      "what": "Streak-break punishment",
+      "where": "Apple Books",
+      "visual_note": "Apple Books has a streak counter at the bottom; after a broken streak the reader drags a slider to guess where they were in the book, with a button to jump to the actual page and another to turn the feature off."
+    },
+    {
+      "what": "Recipe behind a paywall or account wall",
+      "where": "Yummly (named in timestamps)",
+      "visual_note": "A dinner recipe is restricted by a paywall or a make-an-account requirement, mirroring finance sites that charge to read articles."
+    },
+    {
+      "what": "Neighbours pairing to your smart home devices",
+      "where": "A smart home app",
+      "visual_note": "Other people can pair to your outlets and light bulbs and turn them on or off; the feature can be turned off in settings, and the presenter notes it would be far worse for smart locks."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "342 videos",
+      "context": "Watch count shown in the usage-shaming YouTube message",
+      "evidence": "YouTube: 342 videos is a lot"
+    },
+    {
+      "value": "10,000 steps a day",
+      "context": "Weekly step goal in the fitness pop-up",
+      "evidence": "Fitness App: hit your goal of 10,000 steps a day for the week"
+    },
+    {
+      "value": "3 out of five",
+      "context": "Example driver chattiness rating",
+      "evidence": "Uber: Mr s is a 3 out of five in chattiness"
+    },
+    {
+      "value": "134 reviews",
+      "context": "Number of reviews behind the chattiness rating",
+      "evidence": "Uber: based on 134 reviews"
+    },
+    {
+      "value": "20 plus items for over $100",
+      "context": "Typical Instacart order size, used to show why paying for the next person is a bad idea",
+      "evidence": "Instacart checkout: the order sizes usually of 20 plus items for over $100"
+    },
+    {
+      "value": "minute long ad",
+      "context": "Ad users must watch to open Gmail outside Chrome",
+      "evidence": "Gmail: an option to watch a minute long ad"
+    }
+  ],
+  "caveats": [
+    "This is a comedy video: every feature is deliberately bad. The rules here are drawn from what the presenter frames as infuriating, plus the few places he names good UX, not from a stated guideline.",
+    "Self-promotion: the description promotes the presenter's Newform design community (11k+ designers), the presenter jokes that Uber should hire him, and he asks viewers to subscribe.",
+    "The presenter credits inspiration to a person the captions spell 'saurin', who has written a book on this sort of thing; the name is not verified.",
+    "The mockups are only described in narration; no media list exists for this video, so visual details come from the transcript alone.",
+    "Yummly appears only in the description timestamps; the spoken transcript just says 'a recipe'.",
+    "Auto-caption errors: 'model' means modal, 'street counter' means streak counter, 'chattin rating' means chattiness rating, 'random card of goods' means random cart of goods, 'pass aggressive' means passive-aggressive, and 'Mr s' is an unclear driver name.",
+    "Published 2024-07-30; the app behaviours described are imagined, not real features of those products, except the Apple Books reading streak counter, which the presenter describes as already there."
+  ]
+}

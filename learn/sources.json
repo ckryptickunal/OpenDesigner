@@ -1,0 +1,69 @@
+{
+  "_comment": "Live source list for the learning wiki. youtube_channels and essay_sources are read by OpenWiki (wikiblocks). The other keys are read by tools/wiki.py. authority: non-negotiable = house standard, applied and locked in every project, changed only when the person explicitly asks; good-to-have = recommended default; reference = trusted learning material that informs options, heuristics, visual samples and process. Raw transcripts and page text live in learn/raw/ and are git-ignored (third-party content is never committed); the wiki pages and analysis JSON derived from them are committed.",
+  "youtube_channels": [
+    {
+      "name": "Kole Jain",
+      "query": "https://www.youtube.com/@KoleJain",
+      "channel_id": null,
+      "folder": "raw/kole-jain",
+      "authority": "reference",
+      "scope": "every video on the channel"
+    },
+    {
+      "name": "Mobbin",
+      "query": "https://www.youtube.com/@mobbindesign",
+      "channel_id": null,
+      "folder": "raw/mobbin",
+      "authority": "reference",
+      "scope": "every video and short on the channel"
+    }
+  ],
+  "youtube_videos": [
+    {
+      "name": "Steve Schoger: Designing with Claude Code",
+      "url": "https://www.youtube.com/watch?v=lkKGQVHrXzE",
+      "folder": "raw/videos",
+      "authority": "reference"
+    }
+  ],
+  "essay_sources": [
+    {
+      "name": "Emil Kowalski",
+      "kind": "generic",
+      "index_url": "https://emilkowal.ski/",
+      "base_url": "https://emilkowal.ski/ui/",
+      "folder": "raw/emil-kowalski",
+      "id_prefix": "ek",
+      "authority": "non-negotiable"
+    }
+  ],
+  "pages": [
+    {"name": "Sonner docs", "urls": [
+      "https://sonner.emilkowal.ski/",
+      "https://sonner.emilkowal.ski/getting-started",
+      "https://sonner.emilkowal.ski/toast",
+      "https://sonner.emilkowal.ski/toaster",
+      "https://sonner.emilkowal.ski/styling",
+      "https://sonner.emilkowal.ski/other"
+    ], "folder": "raw/sonner", "id_prefix": "sonner", "authority": "non-negotiable"},
+    {"name": "animations.dev (public pages only; the course itself is paid and closed)", "urls": [
+      "https://animations.dev/",
+      "https://animations.dev/changelog"
+    ], "folder": "raw/animations-dev", "id_prefix": "adev", "authority": "non-negotiable"},
+    {"name": "Vaul docs", "urls": [
+      "https://vaul.emilkowal.ski/",
+      "https://vaul.emilkowal.ski/getting-started",
+      "https://vaul.emilkowal.ski/api",
+      "https://vaul.emilkowal.ski/default",
+      "https://vaul.emilkowal.ski/snap-points",
+      "https://vaul.emilkowal.ski/inputs",
+      "https://vaul.emilkowal.ski/other"
+    ], "folder": "raw/vaul", "id_prefix": "vaul", "authority": "good-to-have",
+     "note": "The vaul GitHub README says the library is unmaintained (checked 2026-09-24). Use its drawer craft as guidance; flag the maintenance status before recommending it as a dependency."}
+  ],
+  "github_repos": [
+    {"name": "emilkowalski/skills", "url": "https://github.com/emilkowalski/skills", "license": "MIT",
+     "include": ["README.md", "performance-cheatsheet.md", "skills/*/*.md"],
+     "folder": "raw/emil-skills", "id_prefix": "eks", "authority": "non-negotiable"}
+  ]
+}

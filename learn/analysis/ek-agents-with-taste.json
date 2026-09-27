@@ -1,0 +1,839 @@
+{
+  "summary": "Emil Kowalski argues that agents make engineers more leveraged than ever, but coding agents do not quite know what great visual work, such as animation, feels like, and that you can fix this by writing your taste down as strict rules in a skill file for each part of the interface. He shows that most taste decisions have a logical reason (for example, an element should grow from scale(0.95) rather than scale(0) because nothing in the real world appears from nothing). The article includes the exact rules from his own skills: a Practical Tips table for animation fixes, an easing decision flowchart, duration tiers with rules, and seven typography rules. For a design system this matters twice: the values themselves are concrete motion and typography defaults, and the method (articulate the why, set strict rules, hand them to agents) is how house standards get applied consistently by AI tools. [inferred]",
+  "key_ideas": [
+    "Coding agents lack a sense of what great visual work feels like, so taste must be written down for them.",
+    "Write one skill file per aspect of the interface and give it to your agents.",
+    "Almost every taste decision has a logical reason; experience lets you name it, not just feel it.",
+    "Rules must be strict so the agent follows them instead of guessing or inventing its own.",
+    "Elements should enter from a slightly smaller scale (0.95), never from scale(0).",
+    "Easing is the most important part of an animation and is chosen with a fixed flowchart: enter or exit uses ease-out, on-screen movement uses ease-in-out, hover uses ease, constant motion uses linear.",
+    "UI animations stay under 300ms, scale with element size and travel distance, and exits can be about 20% faster than entrances.",
+    "Small CSS fixes solve common animation problems: scale(0.97) on press, will-change for jitter, animating a child to stop hover flicker, transform-origin at the trigger.",
+    "Typography taste can be packaged the same way: about 65ch body width, tabular numbers in price columns, loosened uppercase tracking, matched fallback fonts.",
+    "Underline only links, and use bold rather than italic for interface emphasis.",
+    "The creative part stays with the human; the more you package into a skill, the more leverage you get from agents."
+  ],
+  "entities": [
+    {
+      "name": "Emil Kowalski",
+      "type": "person",
+      "description": "Design engineer and author; the rules come from his own skill files."
+    },
+    {
+      "name": "Claude Code",
+      "type": "tool",
+      "description": "Coding agent he used to build an interactive Linear logo and to improve a dialog animation with his animation skill."
+    },
+    {
+      "name": "Anthropic",
+      "type": "company",
+      "description": "Maker of the skill-creator skill he uses to package rules into skills."
+    },
+    {
+      "name": "skill-creator",
+      "type": "tool",
+      "description": "Anthropic skill he uses to make writing a skill file easier."
+    },
+    {
+      "name": "Skill file",
+      "type": "concept",
+      "description": "A file of strict rules describing taste for one aspect of the interface, fed to coding agents."
+    },
+    {
+      "name": "Linear",
+      "type": "company",
+      "description": "Its logo was the subject of an interactive demo he built with Claude Code."
+    },
+    {
+      "name": "Sonner",
+      "type": "library",
+      "description": "One of his open-source projects; its principles are included in his design engineering skill (a toast library [inferred])."
+    },
+    {
+      "name": "Easing Decision Flowchart",
+      "type": "concept",
+      "description": "A decision tree from his skill that picks ease-out, ease-in-out, ease or linear by scenario."
+    }
+  ],
+  "topics": [
+    {
+      "name": "AI-assisted design",
+      "summary": "Encode taste as strict rules in one skill file per interface aspect so coding agents produce better visual work; use Anthropic's skill-creator; ask agents to review work against the skill."
+    },
+    {
+      "name": "Design taste and judgement",
+      "summary": "Taste is explainable: with experience you can say why something feels better, and almost every taste decision has a logical reason."
+    },
+    {
+      "name": "Motion principles",
+      "summary": "Entering elements grow from scale(0.95), not scale(0), because real objects never appear from nothing (the balloon analogy)."
+    },
+    {
+      "name": "Easing and timing",
+      "summary": "Easing is chosen by a strict flowchart (ease-out for enter/exit and default, ease-in-out for on-screen movement, ease for hover, linear for constant motion); durations are 100-150ms, 150-250ms or 200-300ms by element type, under 300ms overall, longer for larger elements and longer travel, exits about 20% faster."
+    },
+    {
+      "name": "Micro-interactions",
+      "summary": "Buttons get transform: scale(0.97) on :active; micro-interactions run 100-150ms; tooltips after the first one in a sequence skip their delay and animation."
+    },
+    {
+      "name": "Animation performance",
+      "summary": "Add will-change: transform to fix shaky or jittery animations; a subtle blur under 20px can mask animations that still feel off."
+    },
+    {
+      "name": "Modals and popovers",
+      "summary": "Popovers should scale from the trigger by setting transform-origin; modals and drawers animate in 200-300ms; he used his skill to have Claude Code improve a dialog animation."
+    },
+    {
+      "name": "Buttons and actions",
+      "summary": "Pressed buttons scale to 0.97 to feel responsive; small buttons get a 44px minimum hit area through a pseudo-element."
+    },
+    {
+      "name": "Accessibility",
+      "summary": "Small buttons need a 44px minimum hit area; underlines are reserved for links so they stay a reliable affordance."
+    },
+    {
+      "name": "Typography",
+      "summary": "Cap body text at about 65ch, use tabular-nums in price columns, use the ellipsis character, loosen uppercase letter-spacing, match fallback font metrics to avoid layout shift, reserve underline for links, prefer bold over italic for UI emphasis."
+    },
+    {
+      "name": "Web implementation (CSS and React)",
+      "summary": "Rules are expressed as CSS: transform, :active, will-change, transform-origin, pseudo-element hit areas, blur, tabular-nums, ch units and the … character in markup."
+    },
+    {
+      "name": "Design process",
+      "summary": "Step back, ask why you made each decision, articulate it, set the rule and be strict, then feed the packaged rules to agents."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "An engineer has never been more leveraged than today thanks to a fleet of agents.",
+      "evidence": "intro: \"never been more leveraged than today\""
+    },
+    {
+      "claim": "Coding agents do not quite know what great feels like for visual work such as animations.",
+      "evidence": "intro: \"coding agents don’t quite know what great feels like\""
+    },
+    {
+      "claim": "Giving agents a skill that holds your taste and knowledge can produce significantly better results.",
+      "evidence": "intro: \"can produce significantly better results, like the interactive Linear logo\""
+    },
+    {
+      "claim": "With enough experience you can tell not only what feels better but also why, and articulate it.",
+      "evidence": "Transferring taste"
+    },
+    {
+      "claim": "Animating from a higher initial scale makes movement feel more gentle, natural and elegant.",
+      "evidence": "Transferring taste: \"animates from a higher initial scale value\""
+    },
+    {
+      "claim": "scale(0) feels wrong because the element looks like it comes out of nowhere; a higher initial value resembles the real world, like a deflated balloon that still has a visible shape.",
+      "evidence": "Transferring taste: balloon"
+    },
+    {
+      "claim": "Almost every taste decision has a logical reason if you look closely, in any discipline.",
+      "evidence": "\"That’s the why\"; \"This applies to any other discipline really\""
+    },
+    {
+      "claim": "The more creative part of the job is still up to the human; the more you package into a skill, the more leverage you get from agents.",
+      "evidence": "\"the more creative part of the job is still up to you\""
+    },
+    {
+      "claim": "Easing is the most important part of any animation.",
+      "evidence": "\"choosing the right easing, the most important part of any animation\""
+    },
+    {
+      "claim": "A strict easing flowchart means the agent does not have to guess or make up its own rules.",
+      "evidence": "Easing Decision Flowchart intro: \"This is strict\""
+    },
+    {
+      "claim": "Any taste decision (layout, icons, color theory, typography) can be packaged into a skill the same way.",
+      "evidence": "\"whether it’s layout, icons, or color theory\""
+    },
+    {
+      "claim": "Tight uppercase text reads cramped.",
+      "evidence": "Typography rule 4"
+    },
+    {
+      "claim": "Declaring a fallback stack whose x-height and weight match the primary face keeps font loading from causing layout shift.",
+      "evidence": "Typography rule 5"
+    },
+    {
+      "claim": "Underlining non-link text weakens underline as an affordance and tempts people to click inert copy.",
+      "evidence": "Typography rule 6"
+    },
+    {
+      "claim": "Italic used for hierarchy reads like print editorial, not UI hierarchy.",
+      "evidence": "Typography rule 7"
+    },
+    {
+      "claim": "Given his animation skill, Claude Code returns a clear list of issues based on the defined rules and a before and after table of changes.",
+      "evidence": "\"improve a dialog animation using my animation skill\""
+    },
+    {
+      "claim": "Once you can articulate why something feels good, you can guide agents with it just like you would guide a less experienced designer.",
+      "evidence": "\"just like you would guide a less experienced designer\""
+    }
+  ],
+  "quotes": [
+    "Almost every “taste” decision has a logical reason if you look close enough.",
+    "coding agents don’t quite know what great feels like.",
+    "set the rules, be strict"
+  ],
+  "tags": [
+    "agents",
+    "skills",
+    "taste",
+    "animation",
+    "easing",
+    "duration",
+    "scale",
+    "typography",
+    "hit-area",
+    "css",
+    "claude-code",
+    "design-engineering"
+  ],
+  "authority": "non-negotiable",
+  "rules": [
+    {
+      "rule": "Make buttons feel responsive by adding transform: scale(0.97) on :active.",
+      "why": "Makes buttons feel responsive (the Practical Tips scenario it solves).",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "css",
+      "values": [
+        "transform: scale(0.97)",
+        ":active"
+      ],
+      "evidence": "Practical Tips: Make buttons feel responsive"
+    },
+    {
+      "rule": "Animate entering elements from scale(0.95), never from scale(0).",
+      "why": "scale(0) looks like the element comes out of nowhere; a higher initial scale resembles the real world (a deflated balloon still has a visible shape) and feels more gentle, natural and elegant.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "scale(0.95)",
+        "scale(0)"
+      ],
+      "evidence": "Practical Tips: Element appears from nowhere; Transferring taste"
+    },
+    {
+      "rule": "Fix shaky or jittery animations by adding will-change: transform.",
+      "why": "It is the listed fix for shaky or jittery animations; the source gives no further reason.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "css",
+      "values": [
+        "will-change: transform"
+      ],
+      "evidence": "Practical Tips: Shaky/jittery animations"
+    },
+    {
+      "rule": "When a hover effect causes flicker, animate a child element instead of the hovered parent.",
+      "why": "It is the listed fix for hover-caused flicker; the source gives no further reason.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "css",
+      "values": [],
+      "evidence": "Practical Tips: Hover causes flicker"
+    },
+    {
+      "rule": "Set a popover's transform-origin to the location of its trigger so it scales out from the trigger.",
+      "why": "Otherwise the popover scales from the wrong point.",
+      "kind": "do",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "css",
+      "values": [
+        "transform-origin"
+      ],
+      "evidence": "Practical Tips: Popover scales from wrong point"
+    },
+    {
+      "rule": "When tooltips open one after another, skip the delay and the animation for every tooltip after the first.",
+      "why": "Sequential tooltips feel slow when each one waits and animates.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Practical Tips: Sequential tooltips feel slow"
+    },
+    {
+      "rule": "Give small buttons a 44px minimum hit area, built with a pseudo-element.",
+      "why": "Small buttons are hard to tap.",
+      "kind": "do",
+      "strength": "should",
+      "area": "accessibility",
+      "applies_to": "css",
+      "values": [
+        "44px"
+      ],
+      "evidence": "Practical Tips: Small buttons hard to tap"
+    },
+    {
+      "rule": "If an animation still feels off after other fixes, add a subtle blur under 20px to mask it.",
+      "why": "Listed as the fix when something still feels off.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "css",
+      "values": [
+        "under 20px"
+      ],
+      "evidence": "Practical Tips: Something still feels off"
+    },
+    {
+      "rule": "Choose easing with the fixed decision flowchart every time, checking in order: entering or exiting the viewport, moving or morphing on screen, hover change, constant motion, then the default; do not improvise or invent easing rules.",
+      "why": "Easing is the most important part of any animation; the flowchart is strict so the agent doesn't have to guess or make up its own rules.",
+      "kind": "do",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "ease-out",
+        "ease-in-out",
+        "ease",
+        "linear"
+      ],
+      "evidence": "Easing Decision Flowchart intro"
+    },
+    {
+      "rule": "Use ease-out for any element entering or exiting the viewport.",
+      "why": "First branch of the easing flowchart.",
+      "kind": "do",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "ease-out"
+      ],
+      "evidence": "Easing Decision Flowchart: entering or exiting the viewport"
+    },
+    {
+      "rule": "Use ease-in-out for elements moving or morphing on screen.",
+      "why": "Easing flowchart branch for on-screen movement.",
+      "kind": "do",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "ease-in-out"
+      ],
+      "evidence": "Easing Decision Flowchart: moving/morphing on screen"
+    },
+    {
+      "rule": "Use ease for hover changes.",
+      "why": "Easing flowchart branch for hover changes.",
+      "kind": "do",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "ease"
+      ],
+      "evidence": "Easing Decision Flowchart: hover change"
+    },
+    {
+      "rule": "Use linear for constant motion (the only flowchart branch that picks linear).",
+      "why": "Easing flowchart branch for constant motion.",
+      "kind": "do",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "linear"
+      ],
+      "evidence": "Easing Decision Flowchart: constant motion"
+    },
+    {
+      "rule": "When no flowchart branch applies, default to ease-out.",
+      "why": "The flowchart's default outcome.",
+      "kind": "do",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "ease-out"
+      ],
+      "evidence": "Easing Decision Flowchart: Default → ease-out"
+    },
+    {
+      "rule": "Run micro-interactions for 100-150ms.",
+      "why": "Duration Guidelines table value for micro-interactions.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "100-150ms"
+      ],
+      "evidence": "Duration Guidelines: Micro-interactions"
+    },
+    {
+      "rule": "Run standard UI animations such as tooltips and dropdowns for 150-250ms.",
+      "why": "Duration Guidelines table value for standard UI.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "150-250ms"
+      ],
+      "evidence": "Duration Guidelines: Standard UI (tooltips, dropdowns)"
+    },
+    {
+      "rule": "Run modal and drawer animations for 200-300ms.",
+      "why": "Duration Guidelines table value for modals and drawers.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "200-300ms"
+      ],
+      "evidence": "Duration Guidelines: Modals, drawers"
+    },
+    {
+      "rule": "Keep every UI animation under 300ms.",
+      "why": "Stated as a duration rule.",
+      "kind": "do",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "under 300ms"
+      ],
+      "evidence": "Duration Guidelines Rules: UI animations should stay under 300ms"
+    },
+    {
+      "rule": "Give larger elements longer durations than smaller ones.",
+      "why": "Stated as a duration rule: larger elements animate slower than smaller ones.",
+      "kind": "do",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Duration Guidelines Rules: Larger elements animate slower"
+    },
+    {
+      "rule": "Make exit animations about 20% faster than the matching entrance.",
+      "why": "Stated as a duration rule: exits can be ~20% faster than entrance.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "~20%"
+      ],
+      "evidence": "Duration Guidelines Rules: Exit animations can be ~20% faster"
+    },
+    {
+      "rule": "Match duration to distance: the longer the element travels, the longer the duration.",
+      "why": "Stated as a duration rule.",
+      "kind": "do",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Duration Guidelines Rules: Match duration to distance"
+    },
+    {
+      "rule": "Cap body text at about 65ch instead of letting it stretch full width.",
+      "why": "Keeps line length comfortable to read.",
+      "kind": "do",
+      "strength": "must",
+      "area": "typography",
+      "applies_to": "web",
+      "values": [
+        "65ch"
+      ],
+      "evidence": "Typography rule 1"
+    },
+    {
+      "rule": "Apply tabular-nums to price columns.",
+      "why": "Digits align and the column reads cleanly.",
+      "kind": "do",
+      "strength": "must",
+      "area": "typography",
+      "applies_to": "css",
+      "values": [
+        "tabular-nums"
+      ],
+      "evidence": "Typography rule 2"
+    },
+    {
+      "rule": "Use the … character in markup instead of three periods (...).",
+      "why": "The source says truncation then follows the container instead of snapping at a fixed character count.",
+      "kind": "do",
+      "strength": "must",
+      "area": "typography",
+      "applies_to": "web",
+      "values": [
+        "…",
+        "..."
+      ],
+      "evidence": "Typography rule 3"
+    },
+    {
+      "rule": "Loosen letter-spacing on uppercase labels.",
+      "why": "Tight uppercase reads cramped.",
+      "kind": "do",
+      "strength": "must",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Typography rule 4"
+    },
+    {
+      "rule": "Declare a fallback font stack whose x-height and weight match the primary face.",
+      "why": "Font loading then does not cause layout shift.",
+      "kind": "do",
+      "strength": "must",
+      "area": "typography",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "Typography rule 5"
+    },
+    {
+      "rule": "Reserve underlines for links; emphasize non-link text with weight or color, never an underline.",
+      "why": "Underline stays a reliable affordance and people are not tempted to click inert copy.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Typography rule 6"
+    },
+    {
+      "rule": "Use bold for interface emphasis; keep italic for citations and linguistic stress in prose.",
+      "why": "Italic hierarchy reads like print editorial, not UI hierarchy.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Typography rule 7"
+    },
+    {
+      "rule": "Write a skill file for each aspect of the interface (for example animation, layout, icons, color theory, typography) and give it to your coding agents.",
+      "why": "Agents don't know what great feels like for visual work; with your taste packaged as rules they produce significantly better results.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "\"create a skill file for each aspect of the interface\""
+    },
+    {
+      "rule": "For every taste rule, state why it has to be done that way, and phrase the rule strictly rather than as loose advice.",
+      "why": "Almost every taste decision has a logical reason; strict rules mean the agent doesn't guess or invent its own, the way you would guide a less experienced designer.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "\"articulate clearly why something has to be done this way, set the rules, be strict\""
+    },
+    {
+      "rule": "Use Anthropic's skill-creator skill to package your rules into a skill.",
+      "why": "He says it makes the process easier.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "\"I use the skill-creator skill from Anthropic\""
+    }
+  ],
+  "decisions": [
+    {
+      "question": "Which easing curve should an animation use?",
+      "options": [
+        {
+          "name": "ease-out",
+          "effect": "Starts fast and settles [inferred]; the flowchart's choice for entering and exiting.",
+          "when": "The element is entering or exiting the viewport, or no other branch applies (default)."
+        },
+        {
+          "name": "ease-in-out",
+          "effect": "Speeds up then slows down [inferred].",
+          "when": "The element is moving or morphing on screen."
+        },
+        {
+          "name": "ease",
+          "effect": "The CSS ease keyword curve.",
+          "when": "A hover change."
+        },
+        {
+          "name": "linear",
+          "effect": "Constant speed [inferred].",
+          "when": "Constant motion."
+        }
+      ],
+      "recommendation": "Pick by the job of the animation using the strict flowchart, defaulting to ease-out; easing is the most important part of any animation. Grouping curves by job matches the role-based option [inferred].",
+      "maps_to": "Q-motion-03",
+      "evidence": "Easing Decision Flowchart"
+    },
+    {
+      "question": "What scale should an element start from when it appears?",
+      "options": [
+        {
+          "name": "scale(0)",
+          "effect": "Looks like the element comes out of nowhere; feels wrong.",
+          "when": "Never, per the source."
+        },
+        {
+          "name": "scale(0.95)",
+          "effect": "Gentle, natural and elegant, like a deflated balloon that still has a shape.",
+          "when": "Any element that appears or enters."
+        }
+      ],
+      "recommendation": "Start from scale(0.95), not scale(0), because a higher initial value resembles the real world.",
+      "maps_to": null,
+      "evidence": "Transferring taste; Practical Tips: Element appears from nowhere"
+    },
+    {
+      "question": "How long should a UI animation run?",
+      "options": [
+        {
+          "name": "100-150ms",
+          "effect": "The shortest tier; quick feedback [inferred].",
+          "when": "Micro-interactions."
+        },
+        {
+          "name": "150-250ms",
+          "effect": "The middle tier; a short, noticeable transition [inferred].",
+          "when": "Standard UI such as tooltips and dropdowns."
+        },
+        {
+          "name": "200-300ms",
+          "effect": "The longest tier; larger elements animate slower than smaller ones.",
+          "when": "Modals and drawers."
+        }
+      ],
+      "recommendation": "Use the tier for the element type, stay under 300ms, go longer for larger elements and longer travel, and make exits about 20% faster than entrances.",
+      "maps_to": "Q-motion-02",
+      "evidence": "Duration Guidelines"
+    },
+    {
+      "question": "How wide can body text run?",
+      "options": [
+        {
+          "name": "Full width",
+          "effect": "Lines stretch across the container and become uncomfortable to read.",
+          "when": "Not recommended for body text."
+        },
+        {
+          "name": "About 65ch",
+          "effect": "Comfortable line length.",
+          "when": "Body text."
+        }
+      ],
+      "recommendation": "Cap body text at about 65ch so line length stays comfortable to read.",
+      "maps_to": "Q-type-14",
+      "evidence": "Typography rule 1"
+    },
+    {
+      "question": "Should digits in price columns all be the same width?",
+      "options": [
+        {
+          "name": "Default digits",
+          "effect": "Digits may not line up down the column [inferred].",
+          "when": "Not recommended for price columns [inferred]."
+        },
+        {
+          "name": "tabular-nums",
+          "effect": "Digits align and the column reads cleanly.",
+          "when": "Price columns."
+        }
+      ],
+      "recommendation": "Apply tabular-nums to price columns.",
+      "maps_to": "Q-type-06",
+      "evidence": "Typography rule 2"
+    },
+    {
+      "question": "How should important non-link text stand out?",
+      "options": [
+        {
+          "name": "Underline",
+          "effect": "Looks clickable; weakens underline as the link affordance and tempts clicks on inert copy.",
+          "when": "Links only."
+        },
+        {
+          "name": "Weight or color",
+          "effect": "Emphasis without implying a link.",
+          "when": "Emphasizing non-link text."
+        },
+        {
+          "name": "Bold",
+          "effect": "Reads as interface hierarchy.",
+          "when": "Interface emphasis."
+        },
+        {
+          "name": "Italic",
+          "effect": "Reads like print editorial, not UI hierarchy.",
+          "when": "Citations and linguistic stress in prose."
+        }
+      ],
+      "recommendation": "Use weight or color (bold) for emphasis, underline only for links, italic only for citations and stress in prose.",
+      "maps_to": "Q-type-12",
+      "evidence": "Typography rules 6 and 7"
+    },
+    {
+      "question": "How big should the tappable area of a small button be?",
+      "options": [
+        {
+          "name": "Same as the visible button",
+          "effect": "Small buttons are hard to tap.",
+          "when": "Not recommended for small buttons."
+        },
+        {
+          "name": "44px minimum hit area",
+          "effect": "Easier to tap; built with a pseudo-element so the visible size can stay small [inferred].",
+          "when": "Any small button."
+        }
+      ],
+      "recommendation": "Use a 44px minimum hit area via a pseudo-element.",
+      "maps_to": "Q-space-03",
+      "evidence": "Practical Tips: Small buttons hard to tap"
+    }
+  ],
+  "process": [
+    {
+      "step": "Build and name your taste",
+      "detail": "With experience, work out not only which version feels better but why, until you can articulate it."
+    },
+    {
+      "step": "Ask why",
+      "detail": "Step back from each decision and ask why you made it; almost every taste decision has a logical reason."
+    },
+    {
+      "step": "Write one skill per aspect",
+      "detail": "Create a skill file for each aspect of the interface (animation, layout, icons, color theory, typography) that describes the rules."
+    },
+    {
+      "step": "Make the rules strict",
+      "detail": "State each rule so the agent does not have to guess, as in his examples: a scenario and solution table (Practical Tips), a decision flowchart (easing), a duration table with rules, and numbered typography rules each with its reason."
+    },
+    {
+      "step": "Package with skill-creator",
+      "detail": "Use Anthropic's skill-creator skill to make packaging the rules easier."
+    },
+    {
+      "step": "Feed the skill to agents",
+      "detail": "Give the skill to your coding agents and ask them to improve work, e.g. a dialog animation; the agent returns a list of issues based on your rules and a before and after table of what changed."
+    },
+    {
+      "step": "Keep the creative part",
+      "detail": "The more creative part of the job stays with you; package everything else to get more leverage from agents."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Interactive Linear logo built with Claude Code guided by his skills",
+      "where": "Linear logo, built with Claude Code",
+      "visual_note": "Embedded demo shown as proof that skills produce better results; its visuals are not described in the text."
+    },
+    {
+      "what": "Side-by-side comparison of two 'Options' elements appearing",
+      "where": "emilkowal.ski article demo",
+      "visual_note": "The left one animates from scale(0) and looks like it comes out of nowhere; the correct one starts from a higher scale and feels gentle, natural and elegant."
+    },
+    {
+      "what": "Balloon analogy for initial scale",
+      "where": null,
+      "visual_note": "Even deflated, a balloon has a visible shape and never disappears completely, which is why an element should not start from scale(0)."
+    },
+    {
+      "what": "Practical Tips table from his animation skill",
+      "where": "His animation skill",
+      "visual_note": "Eight scenario and solution rows, from scale(0.97) on :active to a blur under 20px, showing the format that makes rules easy for agents to follow."
+    },
+    {
+      "what": "Easing Decision Flowchart",
+      "where": "His animation skill",
+      "visual_note": "A text tree: enter or exit leads to ease-out, on-screen movement to ease-in-out, hover to ease, constant motion to linear, default ease-out."
+    },
+    {
+      "what": "Claude Code improving a dialog animation using his animation skill",
+      "where": "Claude Code (video in the article)",
+      "visual_note": "The agent lists issues based on his rules and shows a before and after table of the changes."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "scale(0.97)",
+      "context": "Button scale on :active to feel responsive",
+      "evidence": "Practical Tips"
+    },
+    {
+      "value": "scale(0.95)",
+      "context": "Starting scale for an appearing element, instead of scale(0)",
+      "evidence": "Practical Tips"
+    },
+    {
+      "value": "scale(0)",
+      "context": "Starting scale to avoid: the element looks like it comes out of nowhere",
+      "evidence": "Practical Tips; Transferring taste"
+    },
+    {
+      "value": "44px",
+      "context": "Minimum hit area for small buttons, via a pseudo-element",
+      "evidence": "Practical Tips"
+    },
+    {
+      "value": "under 20px",
+      "context": "Maximum subtle blur used to mask an animation that still feels off",
+      "evidence": "Practical Tips"
+    },
+    {
+      "value": "100-150ms",
+      "context": "Duration for micro-interactions",
+      "evidence": "Duration Guidelines"
+    },
+    {
+      "value": "150-250ms",
+      "context": "Duration for standard UI (tooltips, dropdowns)",
+      "evidence": "Duration Guidelines"
+    },
+    {
+      "value": "200-300ms",
+      "context": "Duration for modals and drawers",
+      "evidence": "Duration Guidelines"
+    },
+    {
+      "value": "300ms",
+      "context": "Upper limit: UI animations should stay under it",
+      "evidence": "Duration Guidelines Rules"
+    },
+    {
+      "value": "~20%",
+      "context": "How much faster exit animations can be than entrances",
+      "evidence": "Duration Guidelines Rules"
+    },
+    {
+      "value": "65ch",
+      "context": "Approximate cap on body text line length",
+      "evidence": "Typography rule 1"
+    }
+  ],
+  "caveats": [
+    "Opens with a plug for his course aiforui.dev (early access closed) and ends with a 'Get the skill' plug for one big design engineering skill made from his blog articles (animations, component design, principles from open-source projects like Sonner); neither is a rule.",
+    "Publication date is unknown, so tool references (Claude Code, Anthropic's skill-creator) may be dated.",
+    "Several demos (the Linear logo, the Options scale comparison, the Claude Code dialog video) are embedded media; the text only describes them, so their exact motion values are not captured.",
+    "Some rules are worded permissively in the source: exits 'can be' ~20% faster, and the blur under 20px is a masking fix for when 'something still feels off', not a default.",
+    "The easing flowchart is presented as 'my philosophy'; it names only CSS keyword curves (ease-out, ease-in-out, ease, linear) and gives no cubic-bezier values.",
+    "The stated reason for the … character (truncation following the container instead of a fixed character count) is copied as given and not explained further in the text.",
+    "Small tension in the source: the rule says UI animations should stay under 300ms, while the modal and drawer tier is 200-300ms, whose top end equals 300ms.",
+    "The article shows excerpts of his skill files ('some rules on typography', 'many others live under Practical Tips'), not the complete skills.",
+    "Strengths follow the source's framing: Practical Tips rows are problem and fix tips (should), except where the alternative is called wrong (scale(0), popover scaling from the wrong point); the easing flowchart is called strict and the duration 'Rules' and typography 'rules' are labelled rules (must), except permissive wording ('can be', 'Prefer')."
+  ]
+}

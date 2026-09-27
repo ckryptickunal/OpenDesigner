@@ -1,0 +1,624 @@
+{
+  "summary": "Kole Jain sorts mobile swipe interactions into three groups: movement within a page, movement between pages, and swipe gestures that replace a button or reveal more context. Within a page, he takes swipeable scrolling cards from rigid to natural by opening up the easing curve for more bounce, skewing cards at the screen edge so they read as a 3D ring, and adding page indicators with a fluid, magnetic effect. Between pages, he argues transitions should follow the direction of the swipe and keep continuity, for example a card expanding to fill the screen or an image zooming in to become the next page's hero image, instead of sliding a new page in. For gestures, he recommends swipe-to-dismiss for popovers and pages, swipe-to-confirm sliders for high-impact or irreversible actions, and offering a button as well for people who don't know the gesture. For a design system, this gives a motion stance (almost never linear, the easing curve sets the tone), a set of mobile transition patterns, and the habit of pairing gestures with a visible button fallback.",
+  "key_ideas": [
+    "It's the interactions that turn a UI into an experience.",
+    "Mobile swipe interactions fall into three groups: within-page navigation, between-page navigation and swipe gestures.",
+    "Because a phone is much smaller than a desktop, its screen edges can be used for unique effects, such as skewing cards off the edge or shrinking items as they approach it.",
+    "Swipeable scrolling cards beat stacking things vertically, but swiping through them feels rigid until the easing curve is opened up for more bounce, which lets them carry momentum.",
+    "A linear ease is almost never right, because things in real life speed up and slow down.",
+    "The easing curve sets the tone of the product: snappy and performant, fun and springy, or slow and smooth.",
+    "Swipeable content needs indicators, and the indicator itself can be animated with a fluid, magnetic effect.",
+    "Swipes are intuitive for people who know them, but a button should also be offered for people who don't (Gmail's swipe or tap to delete).",
+    "Page transitions feel seamless when the new background and content move in the direction of the swipe.",
+    "Continuity, such as an image zooming in to become the next page's hero image, beats sliding a new page in.",
+    "Swipe-to-dismiss is quick and often intuitive for popovers and pages; zooming the background out and moving it down when a popover opens adds to the effect.",
+    "A swipe-to-confirm slider is harder to trigger by accident than a button, so it suits high-impact or irreversible actions.",
+    "Swipe gestures can replace a button or reveal more context; once users understand they can swipe, it is generally a faster, more seamless way to use the app."
+  ],
+  "entities": [
+    {
+      "name": "Kole Jain",
+      "type": "person",
+      "description": "Creator of the YouTube channel that published the video, who presents it."
+    },
+    {
+      "name": "Zero To Mastery",
+      "type": "company",
+      "description": "Online course provider that sponsors the video."
+    },
+    {
+      "name": "Gmail",
+      "type": "product",
+      "description": "Example of offering the same action (delete) by swipe or by tapping a button."
+    },
+    {
+      "name": "Apple",
+      "type": "company",
+      "description": "Named as using swipe gestures, especially swipe-to-dismiss, throughout its apps."
+    },
+    {
+      "name": "Resend",
+      "type": "product",
+      "description": "Email sending service cited for using a swipe to confirm sending an email."
+    },
+    {
+      "name": "Linear",
+      "type": "company",
+      "description": "Named in the video description as an inspiration for the animations shown."
+    },
+    {
+      "name": "Swipe-to-confirm slider",
+      "type": "concept",
+      "description": "A control that must be slid all the way across to confirm a high-impact action."
+    },
+    {
+      "name": "Easing curve",
+      "type": "concept",
+      "description": "The speed-up and slow-down shape of an animation, which the video says sets the product's tone."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Gestures and drag",
+      "summary": "Groups mobile swipes into within-page, between-page and gesture types; recommends swipe-to-dismiss, swipe-to-confirm for risky actions, and swipes that replace a button once users learn them."
+    },
+    {
+      "name": "Easing and timing",
+      "summary": "Almost never use a linear ease; open the curve up for bounce so swiped cards carry momentum; the curve sets tone (snappy, springy or smooth)."
+    },
+    {
+      "name": "Spring animation",
+      "summary": "Bounce in the easing curve and an elastic snap at the end of a page transition make swipes feel natural and fluid."
+    },
+    {
+      "name": "Motion principles",
+      "summary": "Interactions turn a UI into an experience; transitions should follow the swipe direction and keep continuity between pages."
+    },
+    {
+      "name": "Mobile app patterns",
+      "summary": "Uses the phone's screen edges for effects (3D card ring, a horizon that shrinks items) and pairs gestures with visible buttons for people who don't know them."
+    },
+    {
+      "name": "Micro-interactions",
+      "summary": "Carousel page indicators can go from a plain highlight to a fluid, magnetic effect on swipe, which is reused for a swipe-to-add interaction."
+    },
+    {
+      "name": "Cards and sections",
+      "summary": "Swipeable scrolling cards are presented as better than stacking vertically, improved with bounce, edge skew and indicators."
+    },
+    {
+      "name": "Navigation and sidebars",
+      "summary": "Navigation between pages can be a swipe with a card expanding to full screen or an image becoming the next hero, instead of a plain page slide."
+    },
+    {
+      "name": "Onboarding",
+      "summary": "An onboarding flow uses a button that can be tapped or swiped, with a circle that expands, swaps and shrinks to wrap into the next slide."
+    },
+    {
+      "name": "Drawers and sheets",
+      "summary": "A popup from the bottom is dismissed by swiping down, with buttons included, while the background zooms out and moves down when it opens."
+    },
+    {
+      "name": "Modals and popovers",
+      "summary": "Swipe gestures are a quick, often intuitive way to dismiss popovers and pages, which is why Apple uses them widely."
+    },
+    {
+      "name": "Buttons and actions",
+      "summary": "Swipes can replace a button (swipe to add a friend instead of a plus button) and a slider can replace a confirm button for irreversible actions."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Interactions are what turn a UI into an experience.",
+      "evidence": "it's the interactions that turn a UI into an experience"
+    },
+    {
+      "claim": "Because a phone is much smaller than a desktop, designers can use the display's edges for unique effects.",
+      "evidence": "we get to use the edges of the display for some pretty unique effects"
+    },
+    {
+      "claim": "Scrolling cards are better than stacking things vertically, but swiping through them feels very rigid.",
+      "evidence": "These are better than stacking things vertically, but swiping through these feels very rigid"
+    },
+    {
+      "claim": "Opening up the easing curve to give more bounce makes swiping cards feel more natural and lets them carry more momentum.",
+      "evidence": "Opening up the easing curve to give it some more bounce"
+    },
+    {
+      "claim": "Easing and bounce are remarkably important for lifelike interactions because real things speed up and slow down.",
+      "evidence": "Easing and bounce are remarkably important to make lifelike interactions"
+    },
+    {
+      "claim": "The easing curve provides tone, such as snappy and performant, fun and springy, or slow and smooth.",
+      "evidence": "It also helps provide tone like snappy and performant"
+    },
+    {
+      "claim": "Skewing cards off the edge of the screen gives the effect of a three-dimensional ring of cards.",
+      "evidence": "Skewing the cards like this off the edge of the screen"
+    },
+    {
+      "claim": "Swipe interactions are readily available and intuitive, but buttons give options to people who don't know them.",
+      "evidence": "But for the uninitiated, there are also buttons"
+    },
+    {
+      "claim": "Transitions feel seamless when the background and new content follow the direction of the swipe.",
+      "evidence": "following the direction of the swipe with a background and new content sliding up and in"
+    },
+    {
+      "claim": "An image zooming in to become the new hero image creates continuity and is much better than sliding a new page in.",
+      "evidence": "This swipe creates continuity"
+    },
+    {
+      "claim": "Once users understand they can swipe, it is generally a more seamless and faster way to interact than a button.",
+      "evidence": "once users understand that they can swipe"
+    },
+    {
+      "claim": "Apple uses swipe-to-dismiss widely because it is quick and often intuitive.",
+      "evidence": "why Apple uses this gesture everywhere"
+    },
+    {
+      "claim": "It is much easier to accidentally click a button than to slide a slider all the way across, so sliders suit high-impact or irreversible actions.",
+      "evidence": "much easier to accidentally click a button than it is to slide a slider all the way across"
+    },
+    {
+      "claim": "Swipe gestures provide functionality that could replace a button or reveal more context, and Apple uses them all the time in its applications.",
+      "evidence": "These are used to provide functionality that could replace a button or reveal more context"
+    },
+    {
+      "claim": "A page transition can be completed with an elastic snap at the very top to give it a fluid look.",
+      "evidence": "we complete the fluid look with this elastic snap at the very top"
+    }
+  ],
+  "quotes": [
+    "it's the interactions that turn a UI into an experience",
+    "Almost never do you want a linear ease.",
+    "much easier to accidentally click a button than it is to slide a slider"
+  ],
+  "tags": [
+    "swipe",
+    "gestures",
+    "mobile",
+    "easing",
+    "bounce",
+    "page-transitions",
+    "carousel",
+    "continuity",
+    "swipe-to-dismiss",
+    "swipe-to-confirm",
+    "onboarding",
+    "kole-jain"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "Avoid a linear ease for swipe and UI animations; use a curve that speeds up and slows down.",
+      "why": "Things in real life speed up and slow down, and easing and bounce are what make interactions feel lifelike.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Almost never do you want a linear ease"
+    },
+    {
+      "rule": "Give swiped cards an easing curve with bounce so they carry momentum after the swipe.",
+      "why": "Swiping through the cards feels very rigid; opening the curve up for more bounce makes it feel much more natural.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Opening up the easing curve to give it some more bounce"
+    },
+    {
+      "rule": "Pick the easing curve deliberately to set the product's tone: snappy and performant, fun and springy, or slow and smooth.",
+      "why": "Playing with the curve transforms animations and gives them tone.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "It also helps provide tone like snappy and performant, fun and springy, or slow and smooth"
+    },
+    {
+      "rule": "On mobile, prefer swipeable scrolling cards over stacking the same items vertically.",
+      "why": "The source says scrolling cards are better than stacking things vertically.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "These are better than stacking things vertically"
+    },
+    {
+      "rule": "Add page indicators to any swipeable set of cards.",
+      "why": "The source says good UX calls for adding indicators under swipeable cards.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "taking into account good UX, we should add some indicators"
+    },
+    {
+      "rule": "Pair swipe actions with a visible button (or a long-press menu) for people who don't know the gesture.",
+      "why": "Swipes are readily available and intuitive, but the uninitiated need another way to do the same thing.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "But for the uninitiated, there are also buttons to give the user options"
+    },
+    {
+      "rule": "Make page transitions follow the direction of the swipe, with the new background and content moving in from that direction.",
+      "why": "Following the swipe direction makes the motion feel natural and the transition seamless.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "following the direction of the swipe with a background and new content sliding up and in"
+    },
+    {
+      "rule": "When navigating between pages, carry an element across, such as an image that zooms in to become the new page's hero image, instead of sliding a new page in.",
+      "why": "It creates continuity and makes navigation much more seamless.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "This swipe creates continuity because we have this image actually zooming in to become the new hero image"
+    },
+    {
+      "rule": "Let people dismiss popovers, bottom popups and pages by swiping (swipe down for a popup from the bottom), and still include a close button.",
+      "why": "Swiping to dismiss is quick and often intuitive, and buttons cover the cases where it is not immediately obvious.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Another great use of gestures is for dismissing popovers and pages"
+    },
+    {
+      "rule": "When a popover appears from the bottom, zoom the background out and move it down, and reverse that movement when the popover is dismissed.",
+      "why": "The source says this background movement is what really adds to the effect.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "the zoom out and move down of the background when the popover appears"
+    },
+    {
+      "rule": "Use a swipe-to-confirm slider instead of a button for high-impact or irreversible actions, such as sending an email or buying crypto.",
+      "why": "It is much easier to click a button by accident than to slide a slider all the way across.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "These are great for high impact or irreversible actions"
+    },
+    {
+      "rule": "Consider a swipe gesture in place of a button (such as swiping to add a friend instead of a plus button), with a fallback for people who don't know it.",
+      "why": "Once users understand they can swipe, it is generally a more seamless and faster way to use the app.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Or we could have a swipe interaction like this to add them"
+    },
+    {
+      "rule": "On phones, use the screen edges for depth effects, such as skewing cards off the edge or shrinking items as they approach it, to suggest a ring or spool of content.",
+      "why": "A phone is much smaller than desktop, so its edges can carry unique effects that give the feeling of a spool of data under the finger.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "treat it as a type of horizon that shrinks things that get closer to it"
+    },
+    {
+      "rule": "Consider animating page indicators with a fluid, magnetic effect on swipe instead of a plain highlight.",
+      "why": "The source calls indicators that just highlight on swipe boring.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "these can be boring, just highlighting on swipe, or let's add a fluid effect on swipe that feels kind of magnetic"
+    },
+    {
+      "rule": "When a card opens into a full page on swipe up, expand the card and background to screen size, fade the content up and in, and finish with an elastic snap.",
+      "why": "The source says this makes page navigation more fluid than a plain page change.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "we complete the fluid look with this elastic snap at the very top"
+    },
+    {
+      "rule": "In step-by-step flows such as onboarding, make the next control tappable or swipeable, with motion that follows the swipe direction and wraps into the next slide.",
+      "why": "Making the motion follow the swipe and wrap into the next slide makes the flow super fluid.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "we have a button that is clickable or swipeable"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "What easing should swiped content use?",
+      "options": [
+        {
+          "name": "Linear ease",
+          "effect": "Swiping through cards feels very rigid.",
+          "when": "Almost never, according to the source."
+        },
+        {
+          "name": "A curve opened up with bounce",
+          "effect": "Cards feel much more natural and carry more momentum after the swipe.",
+          "when": "Swipeable cards and other lifelike interactions."
+        }
+      ],
+      "recommendation": "Use a curve with bounce; the source says a linear ease is almost never wanted because real things speed up and slow down.",
+      "maps_to": null,
+      "evidence": "Opening up the easing curve to give it some more bounce"
+    },
+    {
+      "question": "What tone should the product's motion have?",
+      "options": [
+        {
+          "name": "Snappy and performant",
+          "effect": "Motion feels snappy and performant.",
+          "when": "Not stated in the source."
+        },
+        {
+          "name": "Fun and springy",
+          "effect": "Motion feels fun and springy.",
+          "when": "Not stated in the source."
+        },
+        {
+          "name": "Slow and smooth",
+          "effect": "Motion feels slow and smooth.",
+          "when": "Not stated in the source."
+        }
+      ],
+      "recommendation": null,
+      "maps_to": "Q-motion-01",
+      "evidence": "It also helps provide tone like snappy and performant, fun and springy, or slow and smooth"
+    },
+    {
+      "question": "How should page indicators react when someone swipes through cards?",
+      "options": [
+        {
+          "name": "Plain highlight",
+          "effect": "The current dot just highlights on swipe; the source calls this boring.",
+          "when": "Not stated in the source."
+        },
+        {
+          "name": "Fluid, magnetic effect",
+          "effect": "The indicator animates with a fluid effect on swipe that feels magnetic.",
+          "when": "When the swipe itself should feel polished; the same effect is reused for a swipe-to-add interaction."
+        }
+      ],
+      "recommendation": "The source favours the fluid, magnetic indicator over the plain highlight.",
+      "maps_to": null,
+      "evidence": "Now, these can be boring, just highlighting on swipe, or let's add a fluid effect"
+    },
+    {
+      "question": "How should the app move from one page to the next?",
+      "options": [
+        {
+          "name": "Slide a new page in",
+          "effect": "A plain page change; the source calls it lame.",
+          "when": "The source does not recommend it."
+        },
+        {
+          "name": "Swipe up to expand",
+          "effect": "The card underneath expands to screen size, a tab expands to fill the screen, content fades up and in, and an elastic snap finishes at the top.",
+          "when": "Opening a detail page (a recipe page in the example) from a card."
+        },
+        {
+          "name": "Circle wrap",
+          "effect": "A circle expands very large and pushes the content out, circles swap, the new one shrinks back and new content moves in, wrapping into the next slide.",
+          "when": "Step-by-step flows such as onboarding, with a button that can be tapped or swiped."
+        },
+        {
+          "name": "Shared image zoom",
+          "effect": "The image zooms in to become the new page's hero image, keeping continuity.",
+          "when": "When a simpler option is needed; the source says even this is much better than sliding a page in."
+        }
+      ],
+      "recommendation": "Make transitions follow the swipe direction and keep continuity; even a simple image zoom into the hero is much better than sliding a new page in.",
+      "maps_to": "Q-motion-06",
+      "evidence": "Navigation between pages doesn't need to be as lame as this"
+    },
+    {
+      "question": "Should an action be done by a swipe gesture, a button, or both?",
+      "options": [
+        {
+          "name": "Button only",
+          "effect": "Works for people who don't know the gesture, but is slower than a learned swipe (a plus button to add a friend).",
+          "when": "Not stated as a recommendation in the source."
+        },
+        {
+          "name": "Swipe only",
+          "effect": "A more seamless, faster flow once users understand they can swipe.",
+          "when": "Not recommended alone; the source keeps a fallback."
+        },
+        {
+          "name": "Swipe plus a button or long-press menu",
+          "effect": "Fast for people who know the gesture and still usable for people who don't (Gmail delete by swipe or tap).",
+          "when": "The default the source shows across its examples."
+        }
+      ],
+      "recommendation": "Both: swipes are quicker once learned, but buttons or a long-press menu should cover the uninitiated.",
+      "maps_to": null,
+      "evidence": "providing multiple ways to interact with the same UI"
+    },
+    {
+      "question": "How should people confirm a high-impact or irreversible action?",
+      "options": [
+        {
+          "name": "Tap a button",
+          "effect": "Much easier to trigger by accident.",
+          "when": "Not stated in the source for risky actions."
+        },
+        {
+          "name": "Slide a swipe-to-confirm slider all the way across",
+          "effect": "Takes a deliberate movement, so it is hard to trigger by accident.",
+          "when": "High-impact or irreversible actions, such as sending an email (Resend) or purchasing crypto."
+        }
+      ],
+      "recommendation": "Use the slider for high-impact or irreversible actions because it is much harder to trigger by accident.",
+      "maps_to": null,
+      "evidence": "These are great for high impact or irreversible actions such as purchasing crypto"
+    },
+    {
+      "question": "How should a step-by-step flow such as onboarding move to the next slide?",
+      "options": [
+        {
+          "name": "A button that slides the next slide over",
+          "effect": "A plain slide to the next step.",
+          "when": "Not recommended in the source."
+        },
+        {
+          "name": "A button that can be tapped or swiped, with a circle wrap",
+          "effect": "Motion follows the swipe direction and wraps around into the next slide, which the source calls super fluid.",
+          "when": "Onboarding and other slide-by-slide flows."
+        }
+      ],
+      "recommendation": "The source favours the tappable-or-swipeable button whose motion follows the swipe and wraps into the next slide.",
+      "maps_to": null,
+      "evidence": "instead of just a button to slide us over, we have a button that is clickable or swipeable"
+    },
+    {
+      "question": "How should a popup from the bottom be dismissed?",
+      "options": [
+        {
+          "name": "Swipe down only",
+          "effect": "Quick and often intuitive.",
+          "when": "Not recommended alone; the source includes buttons too."
+        },
+        {
+          "name": "Swipe down plus buttons, with the background zooming out and moving down",
+          "effect": "Clear to swipe, still usable when the gesture is not obvious, and the background movement adds to the effect.",
+          "when": "Popups from the bottom, as in the example."
+        }
+      ],
+      "recommendation": "Swipe down to dismiss, include buttons in case it is not obvious, and zoom the background out and down on open, reversing on dismiss.",
+      "maps_to": null,
+      "evidence": "buttons are included just in case it's not immediately obvious"
+    }
+  ],
+  "process": [
+    {
+      "step": "Sort the swipe",
+      "detail": "Decide which of the three groups the interaction belongs to: within-page navigation, between-page navigation, or a swipe gesture that replaces a button or reveals context."
+    },
+    {
+      "step": "Fix the easing first",
+      "detail": "Starting from swipeable scrolling cards, replace the rigid curve with one that has more bounce so the cards carry momentum."
+    },
+    {
+      "step": "Add depth at the edges",
+      "detail": "Skew cards as they leave the screen edge, or shrink items as they approach it, so the content feels like a ring or spool under the finger."
+    },
+    {
+      "step": "Add indicators",
+      "detail": "Add page indicators under the cards, and animate them with a fluid, magnetic effect rather than a plain highlight."
+    },
+    {
+      "step": "Build a page change in the swipe direction",
+      "detail": "On swipe up: expand the card underneath to screen size, expand the tab behind it to fill the screen, fade the content up and in, then finish with an elastic snap at the top."
+    },
+    {
+      "step": "Build a circle wrap for step flows",
+      "detail": "Expand a circle very large while moving the content out, swap the circles, shrink the new one back down and move the new content in, following the direction of the swipe."
+    },
+    {
+      "step": "Give gestures a fallback",
+      "detail": "Keep a button (or possibly a long-press menu) for swipe actions, such as the buttons included on a swipe-dismissable popup."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Scrolling cards skewed off the screen edge",
+      "where": null,
+      "visual_note": "Cards bounce as they are swiped and skew at the edge, reading as a three-dimensional ring of cards."
+    },
+    {
+      "what": "Page indicators with a fluid, magnetic effect",
+      "where": null,
+      "visual_note": "Instead of simply highlighting on swipe, the indicator animates with a fluid effect that feels kind of magnetic."
+    },
+    {
+      "what": "Screen edge as a horizon with a circular swipe",
+      "where": null,
+      "visual_note": "Items shrink as they near the side of the phone while moving on a circular path, suggesting a spool of data; swiping down goes full screen and a black background can be tapped or swiped to change modes."
+    },
+    {
+      "what": "Delete by swipe or by button",
+      "where": "Gmail",
+      "visual_note": "The same delete action is available by swiping a message or by clicking and hitting delete."
+    },
+    {
+      "what": "Swipe up from a card into a recipe page",
+      "where": null,
+      "visual_note": "The card expands to fill the screen, a black tab expands to full screen, content fades up and in, and an elastic snap finishes at the top."
+    },
+    {
+      "what": "Onboarding with a tappable or swipeable button",
+      "where": null,
+      "visual_note": "A circle grows very large and pushes content out, swaps for another circle that shrinks back, and the next slide's content moves in, wrapping around in the swipe direction."
+    },
+    {
+      "what": "Image zooming into the next page's hero image",
+      "where": null,
+      "visual_note": "The image zooms in to become the hero of the new page, showing continuity instead of a plain page slide."
+    },
+    {
+      "what": "Swipe to add a friend to a group",
+      "where": null,
+      "visual_note": "A swipe replaces a plus button, reusing the magnetic indicator effect from the scrolling cards."
+    },
+    {
+      "what": "Bottom popup dismissed by swiping down",
+      "where": null,
+      "visual_note": "When the popup opens the background zooms out and moves down, and reverses on dismiss; buttons are also included."
+    },
+    {
+      "what": "Swipe to confirm sending an email",
+      "where": "Resend",
+      "visual_note": "A slider must be slid all the way across to send, which is much harder to trigger by accident than a button."
+    },
+    {
+      "what": "Swipe to confirm a crypto purchase",
+      "where": null,
+      "visual_note": "A slide-to-confirm control guards a high-impact, irreversible purchase."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "3",
+      "context": "Broad categories of mobile swipe interactions: within-page navigation, between-page navigation and swipe gestures.",
+      "evidence": "we'll be breaking these down into three broad categories"
+    }
+  ],
+  "caveats": [
+    "Sponsor segment for Zero To Mastery (seven courses, 137 hours, over half a million Discord students, a 10% promo code); excluded from rules.",
+    "The video shows the animations on screen but states no exact values: no durations, curves, spring settings or skew angles, so 'more bounce' is qualitative.",
+    "Much of it is the creator's opinion (scrolling cards are 'better' than stacking, plain page slides are 'lame'), not tested results.",
+    "The long-press fallback is hedged in the source ('Probably'), so the fallback rule is a recommendation, not a firm requirement.",
+    "The auto-captions say 'the email sender resend'; this was read as Resend, the email sending service.",
+    "The video does not discuss reduced motion, accessibility of gestures or how swipe-only actions work with assistive tech.",
+    "The video description is cut off after 'inspired by Apple, Linear,'.",
+    "Published 2025-10-17; auto-generated English transcript."
+  ]
+}

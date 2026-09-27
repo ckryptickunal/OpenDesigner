@@ -1,0 +1,68 @@
+{
+  "summary": "A seven-row lookup table from Emil Kowalski's skills repository that pairs a common animation or rendering performance problem with its fix. It says to animate transform and opacity instead of width or top, to virtualize long lists, to keep animated blur under 20px, and to animate Motion's full transform string instead of its x/y props. It also bans transition: all, tells React code to write per-frame values to ref.current.style instead of state, and allows will-change: transform only once a 1px shift is actually seen. For a design system these become locked implementation rules for motion tokens and components, so every project's animations stay smooth by default.",
+  "key_ideas": [
+    "Smooth animation depends on which CSS properties move: transform and opacity, not width or top.",
+    "Long lists should only render what is visible (virtualization).",
+    "Animated blur is expensive; keep it under 20px.",
+    "Motion's x/y props drop frames; animating the full transform string instead is the fix.",
+    "transition: all animates properties you did not mean to animate; name each property instead.",
+    "Per-frame values in React state cause a re-render every frame; write to the DOM style through a ref instead.",
+    "will-change: transform fixes a 1px shift at the start of motion, but should only be added once that shift is seen.",
+    "Each fix is keyed to a visible symptom, so the table works as a troubleshooting checklist [inferred]."
+  ],
+  "entities": [
+    {"name": "Emil Kowalski", "type": "person", "description": "Author of the emilkowalski/skills repository this cheatsheet belongs to"},
+    {"name": "emilkowalski/skills", "type": "product", "description": "MIT-licensed GitHub repository of agent skills; source of this cheatsheet (commit 85e8e23)"},
+    {"name": "Motion", "type": "library", "description": "Animation library whose x/y props the cheatsheet says drop frames; animate the full transform string instead"},
+    {"name": "React", "type": "library", "description": "UI library whose per-frame state updates cause re-renders every frame"},
+    {"name": "transform", "type": "concept", "description": "CSS property recommended for animation instead of width/top, and as a full string in Motion"},
+    {"name": "opacity", "type": "concept", "description": "CSS property recommended, with transform, for smooth animation"},
+    {"name": "Virtualization", "type": "concept", "description": "Rendering only the visible part of a long list so it scrolls quickly"},
+    {"name": "blur()", "type": "concept", "description": "CSS filter function whose animated value should stay under 20px for performance"},
+    {"name": "transition: all", "type": "concept", "description": "CSS declaration the cheatsheet bans because it animates unintended properties"},
+    {"name": "ref.current.style", "type": "concept", "description": "Direct DOM style write in React used instead of state for per-frame values"},
+    {"name": "will-change: transform", "type": "concept", "description": "CSS hint that fixes a 1px shift when motion starts, used only after the shift is seen"}
+  ],
+  "topics": [
+    {"name": "Animation performance", "summary": "Seven problem-to-fix pairs: animate transform/opacity, virtualize long lists, keep animated blur under 20px, animate Motion's full transform string, avoid transition: all, write per-frame values to ref.current.style, and add will-change: transform only when a 1px shift appears."},
+    {"name": "Web implementation (CSS and React)", "summary": "CSS-level rules (which properties to animate, no transition: all, blur limit, will-change) and React-level rules (ref style writes instead of state, virtualized lists)."},
+    {"name": "UI libraries", "summary": "Motion's x/y props can drop frames; animate the full transform string instead."}
+  ],
+  "claims": [
+    {"claim": "Animating width or top makes animations stutter; animating transform or opacity avoids it.", "evidence": "Animation stutters"},
+    {"claim": "A long list scrolls slowly when everything is rendered; virtualizing so only visible items render fixes it.", "evidence": "Long list scrolls slowly"},
+    {"claim": "Animated blur causes performance issues, which keeping it under 20px avoids.", "evidence": "Blur causes perf issues"},
+    {"claim": "Motion's x/y props drop frames; the fix is to animate the full transform string instead.", "evidence": "Motion's `x`/`y` drops frames"},
+    {"claim": "transition: all makes random, unintended properties animate.", "evidence": "Random properties animate"},
+    {"claim": "Storing per-frame animation values in React state re-renders the component every frame.", "evidence": "React re-renders every frame"},
+    {"claim": "An element can shift 1px as its motion starts, and will-change: transform fixes it.", "evidence": "Element shifts 1px as motion starts"}
+  ],
+  "quotes": [
+    "Virtualize — only render what's visible",
+    "Animate the full `transform` string instead",
+    "Write to `ref.current.style`, not state"
+  ],
+  "tags": ["performance", "animation", "css", "react", "motion-library", "will-change", "blur", "virtualization", "transitions"],
+  "authority": "non-negotiable",
+  "rules": [
+    {"rule": "Animate transform and opacity, not width or top.", "why": "Animating width/top makes the animation stutter.", "kind": "do", "strength": "must", "area": "motion", "applies_to": "css", "values": ["transform", "opacity", "width", "top"], "evidence": "Animation stutters"},
+    {"rule": "Virtualize long lists so only the visible items are rendered.", "why": "A long list that renders everything scrolls slowly.", "kind": "do", "strength": "must", "area": "components", "applies_to": "web", "values": [], "evidence": "Long list scrolls slowly"},
+    {"rule": "Keep any animated blur() value under 20px.", "why": "Animated blur causes performance issues.", "kind": "do", "strength": "must", "area": "motion", "applies_to": "css", "values": ["blur()", "20px"], "evidence": "Blur causes perf issues"},
+    {"rule": "In Motion, animate the full transform string instead of the x/y props.", "why": "Motion's x/y props can drop frames.", "kind": "do", "strength": "must", "area": "motion", "applies_to": "web", "values": ["x", "y", "transform"], "evidence": "Motion's `x`/`y` drops frames"},
+    {"rule": "Never write transition: all; list the exact properties that should transition.", "why": "transition: all makes random, unintended properties animate.", "kind": "dont", "strength": "must", "area": "motion", "applies_to": "css", "values": ["transition: all"], "evidence": "Random properties animate"},
+    {"rule": "For per-frame animation values in React, write to ref.current.style instead of setting state.", "why": "Setting state every frame re-renders the component every frame.", "kind": "do", "strength": "must", "area": "motion", "applies_to": "react", "values": ["ref.current.style"], "evidence": "React re-renders every frame"},
+    {"rule": "Add will-change: transform only after you actually see an element shift 1px as its motion starts; do not add it pre-emptively.", "why": "It fixes the 1px shift at the start of motion, and the source limits it to when that shift is seen.", "kind": "do", "strength": "must", "area": "motion", "applies_to": "css", "values": ["will-change: transform", "1px"], "evidence": "Element shifts 1px as motion starts"}
+  ],
+  "decisions": [],
+  "process": [],
+  "examples": [],
+  "numbers": [
+    {"value": "20px", "context": "Upper limit for an animated blur() value before it causes performance issues", "evidence": "Keep animated `blur()` under 20px"},
+    {"value": "1px", "context": "The shift an element can make as motion starts, which will-change: transform fixes", "evidence": "Element shifts 1px as motion starts"}
+  ],
+  "caveats": [
+    "The table gives symptoms and fixes only, with no measurements or browser details behind them; the 20px blur limit is stated as a rule of thumb without a benchmark [inferred].",
+    "The Motion x/y advice reflects the Motion library as of this cheatsheet (skills repo commit 85e8e23); later Motion versions may behave differently [inferred].",
+    "The will-change rule is conditional: the source says to add it only once the 1px shift is seen, so it should not become a blanket default."
+  ]
+}

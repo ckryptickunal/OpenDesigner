@@ -1,0 +1,554 @@
+{
+  "summary": "Kole Jain shows how to get a project management dashboard out of Claude with one prompt and one reference image, then pull it into Figma as an editable design. He compares reference images: busy Dribbble dashboards lose their small details because the AI cannot see them, while a screenshot of a real product such as Linear or a realistic site from SiteInspire works better. He gives a four-part prompt: say you want a design written in HTML and CSS, state the purpose and intended use, name specific elements, and require an icon library so the AI does not use emojis. He imports the downloaded HTML into Figma with the HTML to design plugin, then makes the fixes he says AI output usually needs: fonts, alignment and color, plus sidebar structure, chip contrast and honest status colors. For a design system, it gives a repeatable brief for AI-generated screens and a checklist of what to review before trusting them.",
+  "key_ideas": [
+    "A single prompt and one reference image can produce a well laid out dashboard, but the output still needs a design pass.",
+    "Busy Dribbble shots make poor AI references because the AI cannot see the small details and drops them.",
+    "A screenshot of a real product, or a realistic site from SiteInspire, gives the AI a clearer aesthetic to follow.",
+    "Say explicitly that you want a design, and ask for HTML and CSS if the result must go into Figma.",
+    "State the screen's purpose and intended use, because it gives the AI a lot of extra context.",
+    "Name the specific elements you want, such as a sidebar with icons or a Gantt chart with colorful bars.",
+    "Require an icon library in the prompt, or the AI fills the UI with emojis.",
+    "Leave small tweaks such as a sticky sidebar or exact left alignment for Figma instead of re-prompting.",
+    "Importing HTML rather than an image keeps every element editable and free of glitches.",
+    "Fonts, alignment and color are the biggest fixes, and the same things that go wrong on most real websites.",
+    "Status colors should match the state: completed-colored bars should only mean completed work.",
+    "An actual percentage tells people more than an 'in progress' label.",
+    "Once one screen is polished, it can serve as the reference for a landing page or the remaining screens."
+  ],
+  "entities": [
+    {
+      "name": "Kole Jain",
+      "type": "person",
+      "description": "Presenter of the video and owner of the Kole Jain YouTube channel."
+    },
+    {
+      "name": "Claude",
+      "type": "product",
+      "description": "The multi-purpose LLM used to generate the dashboard UI as code."
+    },
+    {
+      "name": "Figma",
+      "type": "tool",
+      "description": "Where the generated HTML is imported and the small fixes are made."
+    },
+    {
+      "name": "HTML to design plugin",
+      "type": "tool",
+      "description": "Figma plugin used to import the downloaded HTML file as an editable design."
+    },
+    {
+      "name": "Dribbble",
+      "type": "product",
+      "description": "Site the author searched for dashboard references; its busy dashboard shots made weak AI references."
+    },
+    {
+      "name": "SiteInspire",
+      "type": "product",
+      "description": "Site the author likes for references of more realistic sites."
+    },
+    {
+      "name": "Linear",
+      "type": "product",
+      "description": "Project management tool whose screenshot was used as the style reference."
+    },
+    {
+      "name": "21st.dev",
+      "type": "library",
+      "description": "Library of UI components built with or for AI, offering plain code or a copyable prompt."
+    },
+    {
+      "name": "Vibe coding",
+      "type": "concept",
+      "description": "Using AI coding LLMs to create applications without much knowledge of code."
+    },
+    {
+      "name": "Vibe designing",
+      "type": "concept",
+      "description": "The author's test of whether the vibe coding approach works for UI design."
+    }
+  ],
+  "topics": [
+    {
+      "name": "AI-assisted design",
+      "summary": "A four-part prompt (design in HTML and CSS, purpose and use, specific elements, icon library) plus one well-chosen reference image produces a usable dashboard from Claude."
+    },
+    {
+      "name": "Figma and design tools",
+      "summary": "Download the AI result as HTML, import it with the HTML to design plugin (File tab, components on for hover effects), then do small fixes in Figma."
+    },
+    {
+      "name": "Design resources",
+      "summary": "Compares reference sources: busy Dribbble dashboards confuse the AI, SiteInspire and real products like Linear work better; 21st.dev supplies AI-ready components."
+    },
+    {
+      "name": "UI libraries",
+      "summary": "21st.dev offers components built with or for AI, as plain code or as a prompt to paste into the AI."
+    },
+    {
+      "name": "Dashboards and data display",
+      "summary": "Builds a project management dashboard with a Gantt chart; fixes progress bars that used the completed color for unfinished work and replaces 'in progress' with a percent."
+    },
+    {
+      "name": "Navigation and sidebars",
+      "summary": "Sidebar fixes: a line the author found too low is moved, the user's name and icon with an arrow to switch accounts added, items lined up, 'Menu' and other labels removed, settings and help center moved to the bottom."
+    },
+    {
+      "name": "Color",
+      "summary": "Color is one of the three biggest fixes: purples made bluer, backgrounds darker and more purplish gray, chip contrast fixed, status colors made to match state."
+    },
+    {
+      "name": "Icons and imagery",
+      "summary": "Without an icon library in the prompt the AI uses emojis; ask for an icon library and add icons during the Figma pass."
+    },
+    {
+      "name": "Spacing and layout",
+      "summary": "Alignment is one of the three biggest fixes after generation, such as lining up sidebar items and exact left alignment."
+    },
+    {
+      "name": "Typography",
+      "summary": "Fonts are named as one of the three biggest changes needed after AI generation, without further detail."
+    },
+    {
+      "name": "Accessibility",
+      "summary": "Contrast on the generated chips needed fixing during the Figma pass."
+    },
+    {
+      "name": "Design process",
+      "summary": "Reference, prompt, generate, check responsiveness, import to Figma, polish fonts, alignment and color, then reuse the screen to generate more screens or a landing page."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "With a recent update, Claude has gotten really good at creating UI by writing code.",
+      "evidence": "with a recent update has gotten really good at creating UI by writing code"
+    },
+    {
+      "claim": "Busy Dribbble dashboards confuse the AI: it has a hard time seeing the little details and misses the point.",
+      "evidence": "Claude typically has a hard time seeing all those little details"
+    },
+    {
+      "claim": "Given a Dribbble design with the same prompt, the AI could not copy the small details and excluded them entirely.",
+      "evidence": "it can't effectively copy these small details, so it just excludes them entirely"
+    },
+    {
+      "claim": "The busyness of Dribbble dashboards is probably what makes them look good.",
+      "evidence": "there is a lot going on. That's probably what makes them look good"
+    },
+    {
+      "claim": "The AI occasionally does not recognize that you want it to design something unless you say so.",
+      "evidence": "occasionally it won't recognize that's what you want"
+    },
+    {
+      "claim": "If you do not specify an icon library, the AI uses emojis.",
+      "evidence": "otherwise it'll start using emojis"
+    },
+    {
+      "claim": "Claude typically includes elements like charts, sidebars and navbars well even when not asked.",
+      "evidence": "Claude typically does a pretty good job of this, even if you don't ask"
+    },
+    {
+      "claim": "Claude's result built from pasted 21st.dev component material could not be imported into Figma because of its code format.",
+      "evidence": "you can't because of the code format here"
+    },
+    {
+      "claim": "Because the import is HTML rather than an image, the elements come in exactly as they should, without glitches.",
+      "evidence": "since it's HTML and not an image, all of the elements are exactly how they should be"
+    },
+    {
+      "claim": "The generated dashboard was relatively responsive when the browser was resized.",
+      "evidence": "if I resize the browser, it's actually relatively responsive"
+    },
+    {
+      "claim": "Fonts, alignment and color were the biggest changes, the same things that go wrong on most real websites.",
+      "evidence": "The biggest changes, fonts, alignment, and color"
+    }
+  ],
+  "quotes": [
+    "Claude typically has a hard time seeing all those little details",
+    "small tweaks like that are better left for Figma",
+    "the same stuff that screws with most actual websites, too"
+  ],
+  "tags": [
+    "ai-design",
+    "vibe-coding",
+    "prompting",
+    "claude",
+    "figma",
+    "html-to-figma",
+    "reference-images",
+    "dashboard",
+    "icon-library",
+    "sidebar",
+    "21st-dev"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "Upload a reference image when you want the AI to hit a specific style.",
+      "why": "The author calls it definitely a good idea when aiming for a specific style.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "if you're aiming for a specific style, then uploading a reference image is definitely a good idea"
+    },
+    {
+      "rule": "Do not use a busy Dribbble dashboard shot as the AI's reference; use a screenshot of a real product (such as Linear) or a realistic site from SiteInspire.",
+      "why": "The AI cannot see all the little details in busy shots, so it misses the point and drops those details entirely.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "The issue with many Dribble dashboards in particular is there is a lot going on"
+    },
+    {
+      "rule": "State explicitly in the prompt that you want the AI to design something.",
+      "why": "Occasionally the AI will not recognize that a design is what you want.",
+      "kind": "do",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "First, you need to make it quite clear that you want it to design something"
+    },
+    {
+      "rule": "Ask the AI to write the design in HTML and CSS when you plan to import it into Figma.",
+      "why": "The author's Claude result built from a pasted 21st.dev component could not be imported into Figma because of its code format.",
+      "kind": "do",
+      "strength": "should",
+      "area": "tooling",
+      "applies_to": "web",
+      "values": [
+        "HTML and CSS"
+      ],
+      "evidence": "we want to add for it to write in HTML and CSS if you want to export this to Figma later"
+    },
+    {
+      "rule": "State the screen's purpose and intended use in the prompt, for example a project management dashboard UI that lets users track ongoing projects and see tasks.",
+      "why": "It gives the AI a lot of extra context.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Second, we want to specify the purpose and intended use"
+    },
+    {
+      "rule": "Name the specific elements you want in the prompt, such as a sidebar with icons or a Gantt chart with colorful bars.",
+      "why": "It is a good time to mention them, although Claude usually includes sensible elements even when not asked.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Third, if you want any specific elements like bar charts, sidebars, navbars"
+    },
+    {
+      "rule": "Tell the AI to use an icon library.",
+      "why": "Otherwise it uses emojis, which do not give the intended look.",
+      "kind": "do",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Finally, it's important to specify that you want it to use an icon library"
+    },
+    {
+      "rule": "Resize the browser after generation to check how responsive the result is.",
+      "why": "The author resizes the browser to show the result is relatively responsive; he states no rule.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "process",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "if I resize the browser, it's actually relatively responsive"
+    },
+    {
+      "rule": "Make small tweaks, such as a sticky sidebar or exact left alignment, in Figma instead of re-prompting the AI.",
+      "why": "The author finds small tweaks like that are better left for Figma.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "small tweaks like that are better left for Figma"
+    },
+    {
+      "rule": "Import AI output into Figma as HTML with the HTML to design plugin, using the File tab and default settings, but turn the components setting on so hover effects come across.",
+      "why": "Because it is HTML and not an image, every element comes in as it should, with no glitchy bits.",
+      "kind": "do",
+      "strength": "should",
+      "area": "tooling",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "open up the HTML to design plugin here and switch to the file tab"
+    },
+    {
+      "rule": "After generating a screen, expect to fix fonts, alignment and color in Figma.",
+      "why": "They were the biggest changes in the author's before-and-after, and the same things that go wrong on most real websites.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "The biggest changes, fonts, alignment, and color"
+    },
+    {
+      "rule": "Use the completed color only for the completed part of a progress or status display; show unfinished parts in the uncompleted color.",
+      "why": "If one color means completed and another means uncompleted, coloring every rectangle in the completed color contradicts them; the author calls this fix really picky.",
+      "kind": "do",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "then why are all the rectangles down here in the completed color?"
+    },
+    {
+      "rule": "Show an actual percentage instead of an 'in progress' label.",
+      "why": "'In progress' tells the user nothing.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "change the in progress to an actual percent since that tells us nothing"
+    },
+    {
+      "rule": "Check and fix the contrast of chips in AI-generated screens.",
+      "why": "The generated chips needed a contrast fix in the author's Figma pass.",
+      "kind": "do",
+      "strength": "should",
+      "area": "accessibility",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "We'll also fix the contrast on these chips down below"
+    },
+    {
+      "rule": "In a dashboard sidebar, put the user's name and icon with an arrow to switch accounts, line up the menu items, drop section labels such as 'Menu', and move settings and help center to the bottom.",
+      "why": "The author's own fixes to the generated sidebar; no further reason is given.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "this should actually be the user's name and icon with an arrow to switch through accounts"
+    },
+    {
+      "rule": "Once a screen is polished, export it as an image and give it to the AI as the reference for a landing page or the remaining screens.",
+      "why": "The author offers this as the next step once the screen is virtually done; no further reason is given.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "you could export this as an image and ask Claude to make you a landing page"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "What should you give the AI as a style reference?",
+      "options": [
+        {
+          "name": "Your own Figma design",
+          "effect": "The author used one he made in Figma for the first dashboard, which came out well laid out but with too many emojis.",
+          "when": "When you already have a design you like; the author says you do not have to make your own."
+        },
+        {
+          "name": "A busy Dribbble dashboard shot",
+          "effect": "The AI cannot see the small details, misses the point and leaves those details out.",
+          "when": "The author advises against it for dashboards."
+        },
+        {
+          "name": "A realistic site from SiteInspire",
+          "effect": "Could work out really well, according to the author.",
+          "when": "When you want a realistic site look."
+        },
+        {
+          "name": "A screenshot of a real product, such as Linear",
+          "effect": "Gave a result the author called not bad, relatively responsive, with the aesthetic he was looking for.",
+          "when": "When a real product has the aesthetic you are after."
+        }
+      ],
+      "recommendation": "Use a screenshot of a real product such as Linear or a realistic site, because busy Dribbble shots have details the AI cannot see and drops.",
+      "maps_to": "Q-ref-01",
+      "evidence": "instead, I'm going to go for an actual project management tool called Linear"
+    },
+    {
+      "question": "Should the prompt specify an icon library?",
+      "options": [
+        {
+          "name": "Specify an icon library",
+          "effect": "The UI uses real icons.",
+          "when": "Always, according to the author."
+        },
+        {
+          "name": "Leave icons unspecified",
+          "effect": "The AI fills the UI with emojis, which the author dislikes.",
+          "when": "Not recommended."
+        }
+      ],
+      "recommendation": "Specify an icon library, because otherwise the AI uses emojis.",
+      "maps_to": null,
+      "evidence": "Finally, it's important to specify that you want it to use an icon library"
+    },
+    {
+      "question": "What code format should the AI produce?",
+      "options": [
+        {
+          "name": "HTML and CSS",
+          "effect": "Can be downloaded as HTML and imported into Figma as an editable design.",
+          "when": "When you want to keep working in Figma."
+        },
+        {
+          "name": "The format the AI or a component library picks by default",
+          "effect": "The author's 21st.dev-based result could not be imported into Figma because of its code format.",
+          "when": "When you only need the coded result [inferred]."
+        }
+      ],
+      "recommendation": "Ask for HTML and CSS if you want to export to Figma later.",
+      "maps_to": null,
+      "evidence": "we want to add for it to write in HTML and CSS if you want to export this to Figma later"
+    },
+    {
+      "question": "Where should small fixes to an AI-generated screen be made?",
+      "options": [
+        {
+          "name": "Re-prompt the AI",
+          "effect": "Could make the sidebar sticky or align everything perfectly left.",
+          "when": "The author does not prefer this for small tweaks."
+        },
+        {
+          "name": "Fix it in Figma",
+          "effect": "A few minutes of tweaking fixed fonts, alignment and color in the author's before-and-after.",
+          "when": "For small tweaks like these."
+        }
+      ],
+      "recommendation": "Leave small tweaks for Figma.",
+      "maps_to": null,
+      "evidence": "small tweaks like that are better left for Figma"
+    },
+    {
+      "question": "How should a dashboard show a task's progress?",
+      "options": [
+        {
+          "name": "An 'in progress' label",
+          "effect": "Tells the user nothing about how far along the task is.",
+          "when": "Not recommended."
+        },
+        {
+          "name": "An actual percentage",
+          "effect": "Shows how far along the task is.",
+          "when": "The author's fix for the dashboard."
+        }
+      ],
+      "recommendation": "Use an actual percent, because 'in progress' tells us nothing.",
+      "maps_to": null,
+      "evidence": "change the in progress to an actual percent since that tells us nothing"
+    }
+  ],
+  "process": [
+    {
+      "step": "Pick a reference image",
+      "detail": "Use your own Figma design, a realistic site from SiteInspire, or a screenshot of a real product such as Linear; avoid busy Dribbble dashboards."
+    },
+    {
+      "step": "Optionally pull AI-ready components",
+      "detail": "On 21st.dev, open a component and copy its code or its prompt, then paste it into Claude."
+    },
+    {
+      "step": "Write the prompt",
+      "detail": "Say you want a design written in HTML and CSS, state the purpose and intended use, name specific elements (sidebar with icons, Gantt chart with colorful bars), and require an icon library."
+    },
+    {
+      "step": "Generate and check",
+      "detail": "Submit with the reference image, wait a minute or two, then resize the browser to see how responsive the result is."
+    },
+    {
+      "step": "Download as HTML",
+      "detail": "In the Claude result, open the drop-down and choose download as HTML."
+    },
+    {
+      "step": "Import into Figma",
+      "detail": "Open the HTML to design plugin, switch to the File tab, drag the HTML file in, keep default settings except turning the components setting on for hover effects, and run it."
+    },
+    {
+      "step": "Polish in Figma",
+      "detail": "Fix fonts, alignment and color first, then details: sidebar structure, chip contrast, status colors that match state, percentages instead of vague labels, and missing icons."
+    },
+    {
+      "step": "Extend",
+      "detail": "Export the polished screen as an image and ask Claude for a landing page for the dashboard or the remaining screens."
+    }
+  ],
+  "examples": [
+    {
+      "what": "First dashboard from one prompt and one image",
+      "where": "Claude",
+      "visual_note": "Well laid out, appealing, with micro-interactions and somewhat responsive, but with too many emojis."
+    },
+    {
+      "what": "Same prompt with a Dribbble dashboard as reference",
+      "where": "Claude, Dribbble",
+      "visual_note": "The small details of the reference are left out entirely, showing that busy shots make weak references."
+    },
+    {
+      "what": "Linear screenshot as reference",
+      "where": "Linear, Claude",
+      "visual_note": "A project management dashboard with a sidebar with icons and a Gantt chart with colorful bars; relatively responsive when the browser is resized."
+    },
+    {
+      "what": "Component pasted from 21st.dev",
+      "where": "21st.dev, Claude",
+      "visual_note": "Claude builds the component from what was pasted from 21st.dev, but the result's code format cannot be imported into Figma."
+    },
+    {
+      "what": "Before and after a few minutes of Figma tweaking",
+      "where": "Figma",
+      "visual_note": "The biggest differences are fonts, alignment and color; a good candidate for a before-and-after visual sample."
+    },
+    {
+      "what": "Sidebar cleanup",
+      "where": "Figma",
+      "visual_note": "A line the author found too low is moved, the user's name and icon with an arrow to switch accounts added, items lined up, 'Menu' and other labels removed, settings and help center moved to the bottom."
+    },
+    {
+      "what": "Color rework of the dashboard",
+      "where": "Figma",
+      "visual_note": "Purples shifted bluer, backgrounds darker and more purplish gray instead of bluish, chip contrast fixed and a subtle grid pattern added."
+    },
+    {
+      "what": "Progress display fix",
+      "where": "Figma",
+      "visual_note": "Rectangles that were all in the completed color are recolored to match completed and uncompleted work, and 'in progress' becomes an actual percent."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "a single prompt and one image",
+      "context": "All the input the first dashboard needed",
+      "evidence": "With a single prompt and one image, it spat out this masterpiece"
+    },
+    {
+      "value": "a minute or two",
+      "context": "How long Claude takes to generate the dashboard",
+      "evidence": "just hit enter and sit back and relax for a minute or two"
+    },
+    {
+      "value": "a few minutes",
+      "context": "Time spent tweaking the imported design in Figma for the before-and-after",
+      "evidence": "just a few minutes of tweaking in Figma"
+    }
+  ],
+  "caveats": [
+    "Dated: published 2025-05-16. Claude's UI abilities, its 'download as HTML' menu and the HTML to design plugin's settings may have changed since.",
+    "The import settings are ambiguous in the captions ('except for components here. For hover effects, make sure to turn that on'); turning the components setting on for hover effects is the most likely reading.",
+    "21st.dev is the author's own tool recommendation; the transcript does not describe it as a sponsor.",
+    "The color changes (bluer purples, purplish gray backgrounds, grid pattern) and the sidebar changes are the author's personal taste for this one dashboard, not general rules.",
+    "The Dribbble finding is shown with one side-by-side comparison in one model (Claude), though the author says Claude 'typically' has this problem.",
+    "Auto-caption fixes: 'Dribble' is Dribbble, 'site inspire.com' is siteinspire.com, 'clawed' is Claude, 'Gant chart' is Gantt chart.",
+    "The 'Claude Results' link in the video description is cut off in the raw text.",
+    "Q-icon-01 (which icon set to use) is related but does not clearly match the prompt decision, so the icon decision is left unmapped; the answer to Q-icon-01 is what a prompt would name as its icon library [inferred]."
+  ]
+}

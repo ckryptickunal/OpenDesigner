@@ -9,9 +9,11 @@ for consumers that are not skills (an MCP server, other tools).
     python3 tools/build_data.py --check    exit 1 if any generated file is out of date
 
 Inputs:  synthesis/questionnaire.json, levers.json, decision-graph.json, ontology.json,
-         cards.json, glossary.json (when U1 has written it), research/L17 Part H (hook tables)
+         cards.json, glossary.json (when U1 has written it), research/L17 Part H (hook tables),
+         standards.json and impact.json (lane L19, when they exist; source URLs from traces/L19-trace.md)
 Outputs: skills/opendesigner/references/{stages/*.md, questions.json, levers.json, graph.json,
-         ontology-slim.json, hooks.json, pacing.json, cards/*.json}; glossary.json in every skill
+         ontology-slim.json, hooks.json, pacing.json, cards/*.json, standards.json, standards.md, standards/*.md};
+         glossary.json in every skill
          skills/opendesigner-extract/references/reference-intake.json
          data/ (copy of the above), chatgpt-project/knowledge/ (at most 5 files)
 Standard library only.
@@ -77,6 +79,12 @@ def zoom_of(x):
 
 def load(name):
     return json.loads((SYN / name).read_text(encoding="utf-8"))
+
+
+def impact():
+    """synthesis/impact.json (lane L19): per question and option, what the choice changes now and as the product grows."""
+    p = SYN / "impact.json"
+    return json.loads(p.read_text(encoding="utf-8")).get("questions", {}) if p.exists() else {}
 
 
 def slug(text):
@@ -151,12 +159,15 @@ def default_value(x):
 
 
 def build_questions(q):
-    out = []
+    out, imp = [], impact()
     for x in q["questions"]:
+        io = (imp.get(x["id"]) or {}).get("options", {})
         out.append({"id": x["id"], "stage": x["stage"], "zoom": zoom_of(x), "area": AREA_OF.get(x["stage"]),
                     "mode": x["mode"], "kind": x["kind"],
                     "class": x["block_class"], "weight": x["time_weight"], "fan": x["fan_out"],
-                    "ask": x["ask"], "options": [{"v": o["value"], "l": o["label"]} for o in x["options"]],
+                    "ask": x["ask"], "options": [{"v": o["value"], "l": o["label"],
+                                                  **({"now": io[val(o["value"])]["now"], "grows": io[val(o["value"])]["as_it_grows"]}
+                                                     if val(o["value"]) in io else {})} for o in x["options"]],
                     "default_value": default_value(x), "show_if": x["show_if"],
                     "decides": x["decides"], "changes": x["changes"], "template": TEMPLATES.get(x["stage"]),
                     **({"status": "planned"} if x.get("status") == "planned" else {})})
@@ -173,6 +184,7 @@ def stage_md(stage, qs, n_total, note="", detailed=False):
     for x in qs:
         counts[zoom_of(x)] += 1
     zc = ", ".join(f"zoom {k} {ZOOM_NAMES[k]}: {counts[k]}" for k in sorted(k for k in counts if k is not None))
+    imp = impact()
     lines = [f"# Stage {stage['n']:02d}: {stage['title']}" + (" (zoom 3, detailed)" if detailed else ""), "",
              f"<!-- {STAMP} -->", "",
              f"Area: `{AREA_OF.get(stage['id'], 'any')}` · {zc or 'open on every screen'} · visual: "
@@ -197,9 +209,13 @@ def stage_md(stage, qs, n_total, note="", detailed=False):
         lines.append(f"- **Why:** {trim_sources(x['why'])}")
         lines.append("- **Options:**")
         opts = sorted(x["options"], key=lambda o: 0 if dv is not None and o["value"] == dv else 1)
+        io = (imp.get(x["id"]) or {}).get("options", {})
         for o in opts:
             eff = trim_sources(o.get("effect"))
             lines.append(f"  - `{val(o['value'])}` {trim_sources(o['label'])}" + (f": {eff}" if eff else ""))
+            if val(o["value"]) in io:
+                lines.append(f"    - Now: {trim_sources(io[val(o['value'])]['now'])} "
+                             f"As it grows: {trim_sources(io[val(o['value'])]['as_it_grows'])}")
         lines.append(f"- **Default:** {('`' + str(dv) + '`: ') if dv is not None else ''}{trim_sources(x['default'])} "
                      f"*Source:* {trim_sources(x['default_source']) or '[inferred]'}")
         lines.append(f"- **Show:** {x['preview']}")
@@ -344,6 +360,93 @@ def build_glossary():
             'Voices: plain first; designer and engineer on request.",\n"terms":[\n' + body + "\n]}\n")
 
 
+# ---------- house standards (lane L19; the rules are in docs/KNOWLEDGE.md) ----------
+def source_urls():
+    """analysis id -> {sid, url}, read from traces/L19-trace.md (the raw text is not in git)."""
+    tr = ROOT / "traces" / "L19-trace.md"
+    out = {}
+    if tr.exists():
+        for line in tr.read_text(encoding="utf-8").splitlines():
+            m = re.match(r"\| [^|]* \| (S-L19-\d+) \| (\S+) \|.*<!-- (\S+) -->", line)
+            if m:
+                out[m.group(3)] = {"sid": m.group(1), "url": m.group(2)}
+    return out
+
+
+def fmt_values(v):
+    return "; ".join(f"{k}: {x}" for k, x in v.items()) if isinstance(v, dict) else ""
+
+
+def build_standards():
+    """standards.json (for the engine), standards.md (a short index read at the start) and standards/<theme>.md (every rule of a
+    theme, read when working in that area or implementing). Returns {relative path: text}, or {} when there are no standards."""
+    src = SYN / "standards.json"
+    if not src.exists():
+        return {}
+    doc = json.loads(src.read_text(encoding="utf-8"))
+    urls = source_urls()
+    std = []
+    for x in doc["standards"]:
+        x = {k: v for k, v in x.items() if k != "conflicts"}
+        x["sources"] = [{"id": s["id"], **urls.get(s["id"], {})} for s in x["sources"]]  # evidence stays in synthesis/
+        std.append(x)
+    slim = {"_about": STAMP + ". House standards: engine.py init applies and locks them; they change only when the person "
+                              "explicitly asks (docs/KNOWLEDGE.md). standards.md and standards/<theme>.md are the readable version.",
+            **{k: doc[k] for k in ("version", "updated", "content_hash", "policy", "themes") if k in doc},
+            "standards": std, "retired": doc.get("retired", []), "history": doc.get("history", [])}
+    titles = {t["key"]: t for t in doc.get("themes", [])}
+    by_theme = defaultdict(list)
+    for x in std:
+        by_theme[x["theme"]].append(x)
+    out = {"standards.json": dump(slim)}
+    index = [f"# House standards (version {doc['version']})", "", f"<!-- {STAMP} -->", "",
+             f"{len(std)} rules from sources the OpenDesigner owner marked non-negotiable (`docs/KNOWLEDGE.md`). They hold in every project.",
+             "- **Apply, don't ask.** `engine.py init` already locked the ones that set a value (table below). Mention the standards once, in the first result.",
+             "- **Never recommend an option that breaks one.** Before you offer options in an area, read that area's theme file.",
+             "- **Changing one:** only when the person explicitly asks to improve, remove or change it. Restate the rule and its reason "
+             "once, then `engine.py standard override <id> --why \"<their words>\"`. `engine.py standard restore <id>` undoes it.",
+             "- **Implementing:** read the theme files for what you build. `engine.py review` flags code that breaks a standard with a check.",
+             "- **Order when rules collide:** accessibility floors, then the person's explicit choice, then their project standards, "
+             "then these, then recommended defaults, then research defaults.",
+             "- A rule applies only on the platforms it names (`applies_to`); `engine.py standards` lists the ones this project follows.", "",
+             "| Theme | Read when | Rules (must / should) | File |", "|---|---|---|---|"]
+    for key, items in by_theme.items():
+        t = titles.get(key, {"title": key, "summary": ""})
+        must = sum(1 for x in items if x["strength"] == "must")
+        index.append(f"| {t['title']} | {t.get('summary', '')} | {len(items)} ({must} / {len(items) - must}) | `standards/{key}.md` |")
+    locks = [(x["id"], e) for x in std for e in (x["engine"] if isinstance(x.get("engine"), list) else [x["engine"]] if x.get("engine") else [])]
+    index += ["", "## Values the standards lock", "", "| Token | Value | Standard | Applies to |", "|---|---|---|---|"]
+    seen = set()
+    for sid, e in locks:
+        if (e["path"], sid) in seen:
+            continue
+        seen.add((e["path"], sid))
+        v = e["value"]
+        v = f"{v['value']}{v.get('unit', '')}" if isinstance(v, dict) and "value" in v else (json.dumps(v) if not isinstance(v, str) else v)
+        where = ", ".join(next(x for x in std if x["id"] == sid)["applies_to"])
+        index.append(f"| `{e['path']}` | {v if len(v) < 60 else 'composite (see theme file)'} | {sid} | {where} |")
+    out["standards.md"] = "\n".join(index) + "\n"
+    for key, items in by_theme.items():
+        t = titles.get(key, {"title": key, "summary": ""})
+        lines = [f"# {t['title']} (house standards, version {doc['version']})", "", f"<!-- {STAMP} -->", "",
+                 *([t["summary"], ""] if t.get("summary") else []),
+                 "Rules from non-negotiable sources. **must**: never break it without the person's explicit override. "
+                 "**should**: the default; say so when you depart from it. How to change one: `../standards.md`.", ""]
+        for x in items:
+            vals = fmt_values(x.get("values"))
+            where = "" if x.get("applies_to") in (["all"], []) else f" · {', '.join(x['applies_to'])}"
+            srcs = ", ".join(s.get("sid") or s["id"] for s in x["sources"])
+            lines += [f"### {x['id']}: {x['title']}", f"**{x['strength']}**{where}. {x['rule']}"]
+            if vals:
+                lines.append(f"- Values: {vals}")
+            lines.append(f"- Why: {x['why']}")
+            if x.get("review"):
+                lines.append(f"- `engine.py review` checks it: {x['review'].get('message', '')}")
+            lines += [f"- Sources: {srcs}", ""]
+        out[f"standards/{key}.md"] = "\n".join(lines)
+    return out
+
+
 # ---------- write ----------
 def outputs():
     q = load("questionnaire.json")
@@ -370,6 +473,7 @@ def outputs():
     files["pacing.json"] = dump(build_pacing(q, graph))
     for lane, cards in sorted(build_cards().items()):
         files[f"cards/{lane}.json"] = dump({"_about": STAMP, "cards": cards})
+    files.update(build_standards())
     return files
 
 
@@ -379,6 +483,8 @@ def gpt_files(ref_files, glossary=None):
         return p.read_text(encoding="utf-8") if p.exists() else ""
     skill = re.sub(r"^---.*?---\n", "", read(SKILL / "SKILL.md"), flags=re.S)
     parts = [skill] + [read(REF / n) for n in ("zoom.md", "rules.md", "improve.md", "guardrails.md", "hooks.md")]
+    if "standards.md" in ref_files:
+        parts.append(ref_files["standards.md"])
     for n in ("DESIGN.md", "decisions.md", "RATIONALE.md", "AGENTS-snippet.md", "state.json"):
         body = read(SKILL / "assets" / "output" / n)
         if body:
@@ -425,7 +531,7 @@ def main():
     args = ap.parse_args()
     t = targets()
     stale = [p for p, v in t.items() if not p.exists() or p.read_text(encoding="utf-8") != v]
-    managed = [REF / "stages", REF / "cards", DATA / "stages", DATA / "cards", GPT]
+    managed = [REF / "stages", REF / "cards", REF / "standards", DATA / "stages", DATA / "cards", DATA / "standards", GPT]
     extra = [f for d in managed if d.exists() for f in d.iterdir() if f.is_file() and f not in t]
     if args.check:
         for p in stale + extra:

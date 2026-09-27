@@ -1,0 +1,91 @@
+{
+  "summary": "The Vaul API reference lists the parts of a drawer and the props of each part. A drawer is assembled from Root, Trigger, Portal, Overlay, Content, Handle, Title, Description and Close. Root's defaults describe a drawer's out-of-the-box behaviour: modal, dismissible, opening from the bottom, handleOnly off (so, by the prop's name, a drag is not limited to the handle [inferred]), repositioning for inputs, and portalled into document.body. Extra Root props control snap points (snapPoints, activeSnapPoint, setActiveSnapPoint, fadeFromIndex, snapToSequentialPoint). For a design system this is a ready-made anatomy and a set of default behaviours for a drawer or bottom-sheet component, including optional accessible Title and Description text that is announced when the drawer opens.",
+  "key_ideas": [
+    "A drawer is built from separate parts that you import and compose: Root, Trigger, Portal, Overlay, Content, Handle, Title, Description, Close.",
+    "Root holds all the parts and carries the behaviour props.",
+    "By default a drawer is modal, dismissible and opens from the bottom.",
+    "handleOnly defaults to false; read from the prop's name, a drag is not limited to the handle by default [inferred].",
+    "Root also takes defaultOpen, open, onOpenChange and onAnimationEnd, with no default listed.",
+    "By default the drawer repositions itself for inputs (repositionInputs is true).",
+    "The Portal renders the overlay and content into the body; the default container is document.body.",
+    "The Overlay covers the inert part of the view while the drawer is open.",
+    "Title and Description are optional accessible text announced when the drawer opens.",
+    "The Handle is an optional grip for dragging the drawer.",
+    "Snap points are configured on Root with snapPoints, activeSnapPoint, setActiveSnapPoint, fadeFromIndex and snapToSequentialPoint.",
+    "Trigger, Overlay, Content, Close, Title and Description each accept asChild, which defaults to false."
+  ],
+  "entities": [
+    {"name": "Vaul", "type": "library", "description": "Drawer component whose parts and props this page documents."},
+    {"name": "Drawer.Root", "type": "concept", "description": "Container for all drawer parts; holds modal, direction, dismissible, handleOnly, repositionInputs and snap-point props."},
+    {"name": "Drawer.Overlay", "type": "concept", "description": "Layer covering the inert portion of the view while the drawer is open."},
+    {"name": "Drawer.Handle", "type": "concept", "description": "Optional handle used to drag the drawer; takes no props."},
+    {"name": "Drawer.Title and Drawer.Description", "type": "concept", "description": "Optional accessible text announced when the drawer opens."},
+    {"name": "Snap points", "type": "concept", "description": "Root props that let the drawer rest at defined points; listed as additional props."},
+    {"name": "aiforui.dev", "type": "product", "description": "Course advertised in the page banner; not part of the API content."}
+  ],
+  "topics": [
+    {"name": "Drawers and sheets", "summary": "Full anatomy of a drawer component and the default behaviour of each prop: modal, dismissible, bottom direction, drag from anywhere, input repositioning."},
+    {"name": "UI libraries", "summary": "Vaul's component API: nine composable parts, Root props with defaults, and additional snap-point props."},
+    {"name": "Web implementation (CSS and React)", "summary": "React compound-component anatomy (Drawer.Root, Drawer.Portal, Drawer.Content...) and prop types such as HTMLElement container and asChild booleans."},
+    {"name": "Accessibility", "summary": "Title and Description are optional accessible text announced when the drawer opens; the overlay covers the inert portion of the view while the drawer is open."},
+    {"name": "Gestures and drag", "summary": "An optional Handle drags the drawer; handleOnly defaults to false, which by its name decides whether only the handle starts a drag [inferred]."}
+  ],
+  "claims": [
+    {"claim": "Vaul's drawer is composed of Root, Trigger, Portal, Overlay, Content, Handle, Title, Description and Close.", "evidence": "Anatomy"},
+    {"claim": "Root's modal prop defaults to true.", "evidence": "Root prop table: modal boolean true"},
+    {"claim": "Root's container prop defaults to document.body.", "evidence": "Root prop table: container HTMLElement document.body"},
+    {"claim": "Root's direction prop defaults to bottom.", "evidence": "Root prop table: direction directionType bottom"},
+    {"claim": "Root's dismissible prop defaults to true and handleOnly defaults to false.", "evidence": "Root prop table"},
+    {"claim": "Root's repositionInputs prop defaults to true.", "evidence": "Root prop table: repositionInputs boolean true"},
+    {"claim": "Snap points are controlled by snapPoints, activeSnapPoint, setActiveSnapPoint, fadeFromIndex and snapToSequentialPoint.", "evidence": "Additional props for snap points"},
+    {"claim": "Portal renders the overlay and content parts into the body and has no props.", "evidence": "Portal"},
+    {"claim": "Title and Description are announced when the drawer is opened.", "evidence": "Title; Description"},
+    {"claim": "Handle is optional, drags the drawer and has no props.", "evidence": "Handle"},
+    {"claim": "Root also takes defaultOpen, open, onOpenChange and onAnimationEnd; the table lists no default for them.", "evidence": "Root prop table"},
+    {"claim": "Trigger is the button that opens the drawer and Close is the button that closes it.", "evidence": "Trigger; Close"},
+    {"claim": "Content contains the content rendered in the open drawer.", "evidence": "Content"}
+  ],
+  "quotes": [
+    "Import all parts and piece them together.",
+    "A layer that covers the inert portion of the view when the drawer is open.",
+    "An optional accessible title to be announced when the drawer is opened."
+  ],
+  "tags": ["vaul", "drawer", "bottom-sheet", "react", "api", "anatomy", "snap-points", "accessibility"],
+  "authority": "good-to-have",
+  "rules": [
+    {"rule": "Build the drawer component from separate composable parts: Root, Trigger, Portal, Overlay, Content, Handle, Title, Description and Close.", "why": "The API is designed so you import all parts and piece them together.", "kind": "do", "strength": "should", "area": "components", "applies_to": "react", "values": ["Drawer.Root", "Drawer.Trigger", "Drawer.Portal", "Drawer.Overlay", "Drawer.Content", "Drawer.Handle", "Drawer.Title", "Drawer.Description", "Drawer.Close"], "evidence": "Anatomy"},
+    {"rule": "Make drawers modal by default.", "why": "Vaul's Root defaults modal to true.", "kind": "do", "strength": "should", "area": "components", "applies_to": "all", "values": ["modal", "true"], "evidence": "Root prop table"},
+    {"rule": "Open drawers from the bottom edge by default.", "why": "Vaul's Root defaults direction to bottom.", "kind": "do", "strength": "should", "area": "components", "applies_to": "all", "values": ["direction", "bottom"], "evidence": "Root prop table"},
+    {"rule": "Make drawers dismissible by default.", "why": "Vaul's Root defaults dismissible to true.", "kind": "do", "strength": "should", "area": "components", "applies_to": "all", "values": ["dismissible", "true"], "evidence": "Root prop table"},
+    {"rule": "Keep handleOnly false by default, so a drag is not limited to the handle [inferred].", "why": "Vaul's Root defaults handleOnly to false; the page does not define the prop beyond its name.", "kind": "do", "strength": "should", "area": "components", "applies_to": "all", "values": ["handleOnly", "false"], "evidence": "handleOnly boolean"},
+    {"rule": "Reposition the drawer for inputs by default.", "why": "Vaul's Root defaults repositionInputs to true.", "kind": "do", "strength": "should", "area": "components", "applies_to": "all", "values": ["repositionInputs", "true"], "evidence": "Root prop table"},
+    {"rule": "Portal the drawer's overlay and content into document.body by default.", "why": "Portal renders the overlay and content into the body, and Root's container defaults to document.body.", "kind": "do", "strength": "should", "area": "components", "applies_to": "react", "values": ["container", "document.body"], "evidence": "Portal; Root prop table"},
+    {"rule": "Render an Overlay that covers the inert part of the view while the drawer is open.", "why": "The Overlay is the layer that covers the inert portion of the view when the drawer is open.", "kind": "do", "strength": "should", "area": "components", "applies_to": "all", "values": [], "evidence": "A layer that covers the inert portion of the view"},
+    {"rule": "Give the drawer a Title and Description so they are announced when it opens.", "why": "Title and Description are the optional accessible text announced when the drawer is opened.", "kind": "do", "strength": "consider", "area": "accessibility", "applies_to": "all", "values": ["Drawer.Title", "Drawer.Description"], "evidence": "Title; Description"},
+    {"rule": "Add a Handle when the drawer should show a grip for dragging.", "why": "The Handle is an optional part used to drag the drawer.", "kind": "do", "strength": "consider", "area": "components", "applies_to": "all", "values": ["Drawer.Handle"], "evidence": "Handle"},
+    {"rule": "Place a Close button inside the drawer's Content.", "why": "The anatomy puts Drawer.Close, the button that closes the drawer, inside Drawer.Content.", "kind": "do", "strength": "consider", "area": "components", "applies_to": "react", "values": ["Drawer.Close", "Drawer.Content"], "evidence": "Anatomy; Close"}
+  ],
+  "decisions": [
+    {"question": "Should a drag start anywhere on the drawer, or only on its handle?", "options": [
+      {"name": "Anywhere on the drawer (handleOnly false)", "effect": "The whole drawer can be dragged [inferred].", "when": "The default."},
+      {"name": "Handle only (handleOnly true)", "effect": "Only the handle starts a drag [inferred].", "when": "Not stated by the source."}
+    ], "recommendation": "No recommendation; the source's default is handleOnly false and it gives no reason.", "maps_to": null, "evidence": "Root prop table: handleOnly boolean false"}
+  ],
+  "process": [
+    {"step": "Wrap in Root", "detail": "Drawer.Root contains all the parts of the drawer and carries the behaviour props."},
+    {"step": "Add the Trigger", "detail": "Drawer.Trigger is the button that opens the drawer."},
+    {"step": "Portal the layers", "detail": "Inside Drawer.Portal place Drawer.Overlay and Drawer.Content."},
+    {"step": "Fill the Content", "detail": "Inside Drawer.Content place Drawer.Handle, Drawer.Title, Drawer.Description and Drawer.Close alongside your content."}
+  ],
+  "examples": [
+    {"what": "Anatomy snippet: a MyDrawer component nesting Root > Trigger, Portal > Overlay, Content > Handle, Title, Description, Close.", "where": "Vaul docs, API Reference", "visual_note": "Code only; shows the nesting order of every drawer part."}
+  ],
+  "numbers": [],
+  "caveats": [
+    "Every page carries a banner advertising the aiforui.dev course ('31 minutes left to join'); it is self-promotion and time-sensitive.",
+    "The prop table lists activeSnapPoint with type boolean while snapPoints is an array; the type may be a docs error [inferred].",
+    "The page lists asChild on several parts but does not explain what it does.",
+    "Published date is unknown.",
+    "Not in this page: learn/sources.json records that the Vaul README says the library is unmaintained (checked 2026-09-24); flag that before recommending it as a dependency."
+  ]
+}

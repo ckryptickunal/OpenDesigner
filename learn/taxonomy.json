@@ -1,0 +1,215 @@
+{
+  "_comment": "Controlled vocabulary for learn/ analysis JSON. Topic names must be copied exactly so OpenWiki upserts one page per topic. A source may propose a new topic with {\"name\": ..., \"new\": true}; tools/wiki.py check lists proposals for review. od_area is the OpenDesigner area (build_data.py AREAS) a topic feeds.",
+  "authority": {
+    "non-negotiable": "House standard. Applied and locked in every project. Changed only when the person explicitly asks to improve, remove or change it; the change is recorded with their reason.",
+    "good-to-have": "Recommended default. Offered as the recommendation; the person can change it freely.",
+    "reference": "Trusted learning material (the owner vouches for it). Informs options, heuristics, visual samples and process. Corroborate numbers before they become defaults."
+  },
+  "rule_strength": {
+    "must": "Stated as a rule by the source, or breaking it is called a mistake",
+    "should": "Recommended with a reason",
+    "consider": "A technique or option that fits some cases"
+  },
+  "topics": [
+    {
+      "name": "Color",
+      "od_area": "color"
+    },
+    {
+      "name": "Typography",
+      "od_area": "typography"
+    },
+    {
+      "name": "Spacing and layout",
+      "od_area": "layout"
+    },
+    {
+      "name": "Visual hierarchy",
+      "od_area": "overview"
+    },
+    {
+      "name": "Shape and corner radius",
+      "od_area": "shape"
+    },
+    {
+      "name": "Depth, shadows and borders",
+      "od_area": "elevation"
+    },
+    {
+      "name": "Dark mode and themes",
+      "od_area": "modes"
+    },
+    {
+      "name": "Icons and imagery",
+      "od_area": "iconography"
+    },
+    {
+      "name": "Accessibility",
+      "od_area": "accessibility"
+    },
+    {
+      "name": "Motion principles",
+      "od_area": "motion"
+    },
+    {
+      "name": "Easing and timing",
+      "od_area": "motion"
+    },
+    {
+      "name": "Spring animation",
+      "od_area": "motion"
+    },
+    {
+      "name": "Animation performance",
+      "od_area": "motion"
+    },
+    {
+      "name": "Gestures and drag",
+      "od_area": "motion"
+    },
+    {
+      "name": "Micro-interactions",
+      "od_area": "motion"
+    },
+    {
+      "name": "Reduced motion",
+      "od_area": "motion"
+    },
+    {
+      "name": "Toasts and notifications",
+      "od_area": "components"
+    },
+    {
+      "name": "Drawers and sheets",
+      "od_area": "components"
+    },
+    {
+      "name": "Buttons and actions",
+      "od_area": "components"
+    },
+    {
+      "name": "Forms and inputs",
+      "od_area": "components"
+    },
+    {
+      "name": "Navigation and sidebars",
+      "od_area": "components"
+    },
+    {
+      "name": "Modals and popovers",
+      "od_area": "components"
+    },
+    {
+      "name": "Cards and sections",
+      "od_area": "components"
+    },
+    {
+      "name": "Dashboards and data display",
+      "od_area": "patterns"
+    },
+    {
+      "name": "Landing pages",
+      "od_area": "patterns"
+    },
+    {
+      "name": "Onboarding",
+      "od_area": "patterns"
+    },
+    {
+      "name": "Paywalls and pricing pages",
+      "od_area": "patterns"
+    },
+    {
+      "name": "Retention and gamification",
+      "od_area": "patterns"
+    },
+    {
+      "name": "Mobile app patterns",
+      "od_area": "platforms"
+    },
+    {
+      "name": "Desktop and macOS apps",
+      "od_area": "platforms"
+    },
+    {
+      "name": "SaaS product UI",
+      "od_area": "patterns"
+    },
+    {
+      "name": "Feedback, empty and loading states",
+      "od_area": "patterns"
+    },
+    {
+      "name": "Content and microcopy",
+      "od_area": "content"
+    },
+    {
+      "name": "Design taste and judgement",
+      "od_area": "process"
+    },
+    {
+      "name": "Design process",
+      "od_area": "process"
+    },
+    {
+      "name": "Presenting designs",
+      "od_area": "process"
+    },
+    {
+      "name": "Portfolio and case studies",
+      "od_area": "process"
+    },
+    {
+      "name": "AI-assisted design",
+      "od_area": "process"
+    },
+    {
+      "name": "Figma and design tools",
+      "od_area": "process"
+    },
+    {
+      "name": "Prototyping",
+      "od_area": "process"
+    },
+    {
+      "name": "A/B testing and conversion",
+      "od_area": "patterns"
+    },
+    {
+      "name": "Freelancing and pricing work",
+      "od_area": "process"
+    },
+    {
+      "name": "Design resources",
+      "od_area": "process"
+    },
+    {
+      "name": "Design systems and tokens",
+      "od_area": "tokens"
+    },
+    {
+      "name": "UI libraries",
+      "od_area": "components"
+    },
+    {
+      "name": "Web implementation (CSS and React)",
+      "od_area": "tokens"
+    },
+    {
+      "name": "Dark patterns and user-hostile design",
+      "od_area": "patterns"
+    },
+    {
+      "name": "Gradients, blend modes and texture effects",
+      "od_area": "elevation"
+    },
+    {
+      "name": "Launch and marketing",
+      "od_area": "process"
+    },
+    {
+      "name": "Native implementation (Swift and SwiftUI)",
+      "od_area": "platforms"
+    }
+  ]
+}

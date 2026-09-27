@@ -1,0 +1,966 @@
+{
+  "theme": "accessibility-motion",
+  "standards": [
+    {
+      "id": "STD-accessibility-motion-01",
+      "theme": "accessibility-motion",
+      "area": "accessibility",
+      "title": "Ship reduced motion with the animation",
+      "rule": "Ship the prefers-reduced-motion variant of every animation that moves something (and, on the web, its hover gating) in the same change as the animation itself, including every prototype variant and every proposed motion recipe, never as a follow-up.",
+      "why": "Animations can cause motion sickness, so reduced motion and hover gating ship with the animation every time; missing reduced-motion handling on movement is flagged on sight.",
+      "strength": "must",
+      "values": {
+        "css": "@media (prefers-reduced-motion: reduce)",
+        "react": "useReducedMotion()",
+        "react-native": "useReducedMotion() or reduceMotion: ReduceMotion.System"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "Hard Rules 4: Reduced motion and hover gating ship with the animation, not as a follow-up"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Hard Rules 4: Reduced motion ships with the animation, not as a follow-up"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "include reduced-motion handling (gentler, not zero)"
+        },
+        {
+          "id": "eks-skills-prototype-skill",
+          "evidence": "Operating Posture: Every variant individually meets Emil Kowalski's standards ... reduced-motion handled"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "8. Accessibility. prefers-reduced-motion is honored; Missing prefers-reduced-motion handling on movement"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "prefers-reduced-motion: Animations can cause motion sickness"
+        },
+        {
+          "id": "eks-skills-animation-vocabulary-skill",
+          "evidence": "Reduced motion: Respecting the user's prefers-reduced-motion setting"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-accessibility-motion-02",
+      "theme": "accessibility-motion",
+      "area": "accessibility",
+      "title": "Reduced motion is gentler, never zero",
+      "rule": "Under reduced motion, remove movement (translation, scale, slides, springs, parallax, elastic and overshoot) and replace it with a short opacity cross-fade (the sources use 200ms, ease) or a static transition, while keeping the opacity and color changes that explain a state change; never remove all animation or feedback.",
+      "why": "Reduced motion means fewer and gentler animations, not zero: a gentler, non-vestibular equivalent that keeps the transitions that aid comprehension, not the removal of feedback.",
+      "strength": "must",
+      "values": {
+        "remove": "translation, scale, slides, springs, parallax, elastic, overshoot",
+        "keep": "opacity and color changes that aid comprehension",
+        "cross-fade": "200ms ease",
+        "css-example": ".element { animation: fade 0.2s ease; }",
+        "sheet-example": ".sheet { transition: opacity 200ms ease; transform: none !important; }"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "7. Reduced motion and pointer gating: animation: fade 0.2s ease; keep opacity/color, drop transform-based motion; fewer and gentler animations, not zero"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "9. Reduced motion: keep opacity and color changes that explain a state change, drop translation, scale, parallax and overshoot"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "14. Reduced motion & accessibility: replace slides/springs/parallax with short opacity cross-fades or static transitions. Drop elastic/overshoot; .sheet { transition: opacity 200ms ease; transform: none !important; }"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Reduced motion means fewer and gentler animations, not zero. Keep opacity and color transitions that aid comprehension."
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "6. Accessibility: Reduced motion means fewer and gentler animations, not zero; reduced-motion implementations that nuke all feedback"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "8. Accessibility. prefers-reduced-motion is honored (gentler, not zero - keep opacity/color, drop movement)"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Accessibility: animation: fade 0.2s ease; keep opacity/color, drop transform-based motion"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "include reduced-motion handling (gentler, not zero)"
+        }
+      ],
+      "engine": [
+        {
+          "path": "raw.reducedMotion",
+          "value": "replace",
+          "note": "Q-motion-07 'replace' (movement becomes fades and color changes); 'remove' makes the reduced feedback, enter, exit and expand transitions 0ms."
+        },
+        {
+          "path": "motion.duration.reduced-fade",
+          "value": "200ms",
+          "type": "duration",
+          "note": "New token: the short cross-fade the sources use under reduced motion (animation: fade 0.2s ease; transition: opacity 200ms ease)."
+        },
+        {
+          "path": "reduced:motion.transition.enter",
+          "value": {
+            "duration": "{motion.duration.reduced-fade}",
+            "delay": {
+              "value": 0,
+              "unit": "ms"
+            },
+            "timingFunction": [
+              0.25,
+              0.1,
+              0.25,
+              1
+            ]
+          },
+          "type": "transition",
+          "note": "Reduced-motion enter becomes a 200ms fade (was motion.duration.micro, 100ms). CSS ease is cubic-bezier(0.25, 0.1, 0.25, 1) [inferred]."
+        },
+        {
+          "path": "reduced:motion.transition.exit",
+          "value": {
+            "duration": "{motion.duration.reduced-fade}",
+            "delay": {
+              "value": 0,
+              "unit": "ms"
+            },
+            "timingFunction": [
+              0.25,
+              0.1,
+              0.25,
+              1
+            ]
+          },
+          "type": "transition",
+          "note": "Reduced-motion exit becomes a 200ms fade (was 100ms)."
+        },
+        {
+          "path": "reduced:motion.transition.expand",
+          "value": {
+            "duration": "{motion.duration.reduced-fade}",
+            "delay": {
+              "value": 0,
+              "unit": "ms"
+            },
+            "timingFunction": [
+              0.25,
+              0.1,
+              0.25,
+              1
+            ]
+          },
+          "type": "transition",
+          "note": "Dialogs, sheets and side panels fade in 200ms under reduced motion, like the source's .sheet example (was 100ms). motion.transition.move stays 0ms (static)."
+        }
+      ],
+      "review": {
+        "pattern": "(?:animation|transition)-duration\\s*:\\s*(?:0|0?\\.0+1)m?s\\s*!important",
+        "message": "This reset zeroes every animation under reduced motion; keep opacity and color changes (a 200ms fade) and drop only movement."
+      },
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py build_motion_context gives the reduced context's motion.transition.enter, .exit and .expand motion.duration.micro (100ms) with motion.easing.standard (cubic-bezier(0.2, 0, 0, 1) at the default Energy; the Energy dial changes it), so build/css/tokens.css emits --ds-motion-transition-enter-duration: 100ms under prefers-reduced-motion; the sources' reduced-motion cross-fade is 200ms ease",
+        "skills/opendesigner/references/stages/16-motion-haptics-and-sound.md Q-motion-07 offers 'remove' (Remove all non-essential motion, WCAG 2.3.3); engine.py maps it to raw.reducedMotion = remove, which makes the reduced feedback, enter, exit and expand transitions motion.duration.instant (0ms): zero motion, which the sources reject",
+        "skills/opendesigner/scripts/engine.py build_motion_context: when flags.motionOff is set (Q-motion-01 'none'), the reduced context's feedback, enter, exit and expand transitions are motion.duration.instant (0ms) as well, so no animation at all is left under reduced motion"
+      ]
+    },
+    {
+      "id": "STD-accessibility-motion-03",
+      "theme": "accessibility-motion",
+      "area": "accessibility",
+      "title": "Branch JS motion values on reduced motion",
+      "rule": "In JavaScript-driven motion, read the reduced-motion setting (useReducedMotion(), or Reanimated's reduceMotion: ReduceMotion.System on each animation) and swap movement values for static ones when it is on, for example closedX = reduce ? 0 : '-100%'.",
+      "why": "Reduced motion removes movement and position changes, and the sources' JS route is to read useReducedMotion() and branch the transform values on it.",
+      "strength": "must",
+      "values": {
+        "react": "const reduce = useReducedMotion(); const closedX = reduce ? 0 : '-100%';",
+        "react-native": "const reduced = useReducedMotion(); const y = useSharedValue(reduced ? 0 : SHEET_HEIGHT); or withSpring(0, { duration: 300, dampingRatio: 0.8, reduceMotion: ReduceMotion.System })"
+      },
+      "applies_to": [
+        "react",
+        "react-native"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "In JS: useReducedMotion() and branch transform values."
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "const reduce = useReducedMotion(); const closedX = reduce ? 0 : '-100%';"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "const shouldReduceMotion = useReducedMotion(); const closedX = shouldReduceMotion ? 0 : '-100%';"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Accessibility: const reduce = useReducedMotion();"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "9. Reduced motion and accessibility: useReducedMotion ... reduceMotion: ReduceMotion.System"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-accessibility-motion-04",
+      "theme": "accessibility-motion",
+      "area": "accessibility",
+      "title": "Native screen transitions fade when reduced",
+      "rule": "When reduced motion is on, switch native stack screen transitions to a crossfade: screenOptions={{ animation: reduced ? 'fade' : 'default' }}.",
+      "why": "Reduced motion means fewer and gentler, not zero, so screen transitions become animation: 'fade' instead of the push.",
+      "strength": "must",
+      "values": {
+        "screenOptions": "animation: reduced ? 'fade' : 'default'"
+      },
+      "applies_to": [
+        "react-native"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Screen transitions become animation: 'fade'."
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Screen transitions (Expo Router): Reduced motion | animation: 'fade'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-accessibility-motion-05",
+      "theme": "accessibility-motion",
+      "area": "process",
+      "title": "Check reduced motion by toggling it",
+      "rule": "Put a reduced-motion step in the verification (feel check) of every motion change: toggle prefers-reduced-motion in DevTools' Rendering panel and confirm that movement is dropped while opacity feedback remains.",
+      "why": "It is a fixed line in the feel check of the implementation-plan template, and the source says the feel check is not optional: motion can be mechanically correct and still feel wrong.",
+      "strength": "must",
+      "values": {
+        "tool": "Rendering panel: prefers-reduced-motion"
+      },
+      "applies_to": [
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-improve-animations-plan-template",
+          "evidence": "Toggle prefers-reduced-motion (Rendering panel) and confirm movement is dropped but opacity feedback remains.; The feel check is not optional."
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-accessibility-motion-06",
+      "theme": "accessibility-motion",
+      "area": "process",
+      "title": "Missing reduced motion blocks approval",
+      "rule": "In motion reviews and audits, rate movement without prefers-reduced-motion handling as a MEDIUM finding, also report reduced-motion code that removes all feedback, and approve a change only when reduced motion is respected.",
+      "why": "The audit rates missing reduced-motion 'noticeably off' (MEDIUM) and hunts both failure modes; the review flags missing reduced-motion handling on movement on sight and lists 'reduced-motion respected' among the Approve criteria.",
+      "strength": "must",
+      "values": {
+        "severity": "MEDIUM"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-improve-animations-skill",
+          "evidence": "MEDIUM = noticeably off (wrong origin, non-interruptible dynamic UI, missing reduced-motion)"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "Hunt for: movement with no prefers-reduced-motion handling, ungated :hover motion, reduced-motion implementations that nuke all feedback."
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "Aggressive Escalation Triggers: Flag these on sight, hard: Missing prefers-reduced-motion handling on movement; Approve: ... reduced-motion respected"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": false,
+      "conflicts": []
+    },
+    {
+      "id": "STD-accessibility-motion-07",
+      "theme": "accessibility-motion",
+      "area": "accessibility",
+      "title": "No full-viewport moving backgrounds",
+      "rule": "Do not put a moving background behind the full viewport.",
+      "why": "The Apple design guidance lists full-viewport moving backgrounds among the motion to avoid in its reduced-motion and accessibility section, whose aim is a gentler, non-vestibular experience.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "14. Reduced motion & accessibility: Also: avoid full-viewport moving backgrounds"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-accessibility-motion-08",
+      "theme": "accessibility-motion",
+      "area": "accessibility",
+      "title": "No slow looping oscillations near 0.2 Hz",
+      "rule": "Do not loop a slow oscillation near 0.2 Hz (about one cycle every 5 seconds).",
+      "why": "The Apple design guidance lists slow looping oscillations near 0.2 Hz among the motion to avoid in its reduced-motion and accessibility section.",
+      "strength": "should",
+      "values": {
+        "frequency": "0.2 Hz",
+        "period": "one cycle per 5s"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "slow looping oscillations (near 0.2 Hz / one cycle per 5s)"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "animation\\s*:(?![^;{}]*\\blinear\\b)[^;{}]*?(?<![\\d.])(?:[45](?:\\.\\d+)?s|6s|[45]\\d{3}ms|6000ms)\\b(?:[^;{},(]|\\([^)]*\\))*\\binfinite\\b",
+        "message": "An infinite loop of about one cycle per 5s (0.2 Hz) is motion to avoid; drop the loop or make it faster and finite."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-accessibility-motion-09",
+      "theme": "accessibility-motion",
+      "area": "accessibility",
+      "title": "Ease theme changes, no brightness jumps",
+      "rule": "Ease the switch between dark and light themes instead of letting brightness jump abruptly.",
+      "why": "The Apple design guidance lists abrupt brightness jumps among the changes to avoid and says to ease dark/light theme changes.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "abrupt brightness jumps (ease dark↔light theme changes)"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-accessibility-motion-10",
+      "theme": "accessibility-motion",
+      "area": "accessibility",
+      "title": "Soften large surfaces while they move",
+      "rule": "Make large moving objects semi-transparent while they travel, and during a large reposition fade big surfaces out and back in once they settle.",
+      "why": "Part of the Apple design guidance for reduced motion and accessibility: large moving areas are softened rather than shown travelling at full strength.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "Make large moving objects semi-transparent while they travel, and fade big surfaces out during a large reposition and back in once settled."
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-accessibility-motion-11",
+      "theme": "accessibility-motion",
+      "area": "accessibility",
+      "title": "Reduced transparency makes surfaces solid",
+      "rule": "Handle prefers-reduced-transparency: reduce as its own signal, separate from reduced motion: make translucent surfaces frostier or solid by raising their background opacity and dropping the blur.",
+      "why": "Components respond to three independent signals (reduced motion, reduced transparency, increased contrast), and each one gets its own treatment baked into the component.",
+      "strength": "must",
+      "values": {
+        "css": "@media (prefers-reduced-transparency: reduce)",
+        "example": ".toolbar { background: white; backdrop-filter: none; }"
+      },
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "prefers-reduced-transparency: reduce - make translucent surfaces frostier/solid: raise background opacity, drop the blur."
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py CSS export (build/css/tokens.css) writes no @media (prefers-reduced-transparency: reduce) block; color.surface.glass-fallback exists only as a token (when glass is on) and as DESIGN.md text, so the swap is left to each implementer"
+      ]
+    },
+    {
+      "id": "STD-accessibility-motion-12",
+      "theme": "accessibility-motion",
+      "area": "accessibility",
+      "title": "Increased contrast gets solid, bordered surfaces",
+      "rule": "Handle prefers-contrast: more as its own signal: give surfaces near-solid backgrounds with a defined, contrasting border.",
+      "why": "It is one of the three independent signals the source says to bake into components.",
+      "strength": "must",
+      "values": {
+        "css": "@media (prefers-contrast: more)"
+      },
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "prefers-contrast: more - near-solid backgrounds with a defined, contrasting border."
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py generates only light and dark color modes (semantic.color.light and .dark) and its CSS export has no @media (prefers-contrast: more) block (only forced-colors: active for the focus ring), although skills/opendesigner/references/stages/16-motion-haptics-and-sound.detailed.md Q-motion-10 defaults to high contrast and reduced transparency 'as token modes'"
+      ]
+    },
+    {
+      "id": "STD-accessibility-motion-13",
+      "theme": "accessibility-motion",
+      "area": "accessibility",
+      "title": "Scale layout with the user's text size",
+      "rule": "Respect the user's text-size setting (Dynamic Type) by scaling layout with the text; on the web write spacing in rem or em, not fixed px.",
+      "why": "So a larger font does not break the layout.",
+      "strength": "must",
+      "values": {
+        "spacing-units": "rem, em (not px)"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "Respect the user's text-size setting (Dynamic Type). Scale layout with the text - spacing in rem/em, not fixed px"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "\\b(?:margin|padding|gap)[a-zA-Z-]*\\s*:[^;{}]*?(?<![\\w.-])[1-9]\\d*px\\b",
+        "message": "Write spacing in rem or em so the layout scales with the user's text size."
+      },
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py CSS export writes spacing tokens in px (--ds-space-16: 16px) while font sizes are rem, so layout built from the spacing tokens does not scale with the user's text size"
+      ]
+    },
+    {
+      "id": "STD-accessibility-motion-14",
+      "theme": "accessibility-motion",
+      "area": "accessibility",
+      "title": "Never animate to a hardcoded height",
+      "rule": "Never animate to a hardcoded height in React Native; measure the content with onLayout, or animate a transform instead.",
+      "why": "allowFontScaling is on by default, so any height measured at the default type size is wrong at 200%.",
+      "strength": "must",
+      "values": {
+        "font-scale": "200%",
+        "measure": "onLayout"
+      },
+      "applies_to": [
+        "react-native"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Text scales. allowFontScaling is on by default ... Never animate to a hardcoded height - measure with onLayout, or animate a transform instead."
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "\\bheight(?:(?:\\.value)?\\s*[:=]|\\.set\\()\\s*with(?:Timing|Spring)\\(\\s*[1-9]",
+        "message": "Animating height to a fixed number breaks when text scales; measure with onLayout or animate a transform."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-accessibility-motion-15",
+      "theme": "accessibility-motion",
+      "area": "accessibility",
+      "title": "Gate hover motion to fine pointers",
+      "rule": "Put every :hover animation (and, for mobile web, every :hover style) inside @media (hover: hover) and (pointer: fine), with both conditions, in the same change as the hover, and leave :active press feedback ungated.",
+      "why": "Touch has no hover, so browsers fake one: the first tap applies :hover and leaves it there until the user taps elsewhere. (hover: hover) means the primary input can hover and (pointer: fine) rules out styluses and Android devices that claim hover; :active is a real press on touch, so it needs no gate.",
+      "strength": "must",
+      "values": {
+        "css": "@media (hover: hover) and (pointer: fine)",
+        "tailwind-v4": "the hover: variant already compiles to @media (hover: hover)",
+        "tailwind-v3": "future.hoverOnlyWhenSupported"
+      },
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "Never Ship: Ungated :hover motion -> @media (hover: hover) and (pointer: fine)"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "No hover gating needed here: :active is a real press on touch. Gate any :hover styling separately."
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Touch device hover states"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "touch fires false hovers on tap"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "8. Accessibility: Hover animations are gated behind @media (hover: hover) and (pointer: fine)"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "gate hover motion - touch fires false hovers on tap"
+        },
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "1. Hover state stuck after tap: Gate every hover style behind a capability query. Both conditions matter.; Baseline: all :hover rules live here"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "@media (hover: hover) and (pointer: fine) gating when the suggestion involves hover"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py writes opendesigner/preview.html with .pv-card:hover .motion-box.m-std { transform: translateX(420px) } (and .m-spring) and no @media (hover: hover) and (pointer: fine) gate, so on a touch screen the demo box stays moved after a tap"
+      ]
+    },
+    {
+      "id": "STD-accessibility-motion-16",
+      "theme": "accessibility-motion",
+      "area": "components",
+      "title": "Build overlays on accessible primitives",
+      "rule": "Build dialogs, drawers, popovers, dropdown menus, selects and tabs on an accessible primitive (base-ui, or Radix such as Radix Dialog and Radix Tabs) that handles focus management, focus trapping and dismissal; never hand-roll a <div>-based dropdown or dialog with manual focus handling.",
+      "why": "Hand-rolling those is how you end up with a <div> dropdown and no focus management; the primitive makes the component accessible and handles focus trapping and dismissal.",
+      "strength": "must",
+      "values": {
+        "primitives": "base-ui (https://base-ui.com)",
+        "radix": "Radix Dialog (Vaul is built on it), Radix Tabs"
+      },
+      "applies_to": [
+        "web",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-pick-ui-library-skill",
+          "evidence": "A <div>-based dropdown/dialog with manual focus handling -> base-ui, which handles accessibility, focus trapping, and dismissal."
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "Hand-rolling those is how you end up with a <div> dropdown and no focus management."
+        },
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "Radix ensures the component is accessible, handles focus management etc."
+        },
+        {
+          "id": "ek-the-magic-of-clip-path",
+          "evidence": "to make it more accessible, I'd reach for Radix's Tabs"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "<div\\b[^>]*\\brole\\s*=\\s*\\{?\\s*[\\\"'](?:dialog|alertdialog|menu|listbox)[\\\"']",
+        "message": "A <div> with a dialog, menu or listbox role is a hand-built overlay; build it on base-ui (or Radix) so focus trapping and dismissal come with it."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-accessibility-motion-17",
+      "theme": "accessibility-motion",
+      "area": "accessibility",
+      "title": "Hide decorative duplicate layers",
+      "rule": "When a component stacks a visual-only duplicate of its content (a clip-path overlay copy of tabs or of a button label), mark the duplicate's container aria-hidden and give any buttons inside it tabIndex={-1}.",
+      "why": "The duplicated layer is only visual and the real, focusable controls sit underneath; the source code does this without stating a reason, which is presumably to keep assistive technology and keyboard focus on the real controls [inferred].",
+      "strength": "should",
+      "values": {
+        "container": "aria-hidden",
+        "buttons": "tabIndex={-1}"
+      },
+      "applies_to": [
+        "web",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "ek-the-magic-of-clip-path",
+          "evidence": "Tabs transition: <div aria-hidden className=\"clip-path-container\" ...; tabIndex={-1} on the overlay buttons"
+        },
+        {
+          "id": "ek-building-an-animation-course",
+          "evidence": "ClipPathButton: aria-hidden=\"true\" className=\"hold-overlay\""
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-accessibility-motion-18",
+      "theme": "accessibility-motion",
+      "area": "accessibility",
+      "title": "Prototype picker: accessible markup and focus",
+      "rule": "Build the prototype variant picker with its fixed accessible markup: <nav aria-label=\"Prototype variants\">, aria-hidden=\"true\" on the highlight and divider spans, aria-label=\"Replay animation (R)\" on the icon-only replay button, exactly one item carrying data-active and aria-current=\"true\", a :focus-visible outline of 2px solid rgba(255, 255, 255, 0.4) with outline-offset 2px, and transition: none on the highlight under prefers-reduced-motion: reduce.",
+      "why": "The picker's appearance is not a design decision; it is the spec, copied verbatim so it always reads as harness chrome.",
+      "strength": "must",
+      "values": {
+        "nav": "aria-label=\"Prototype variants\"",
+        "decorative-spans": "aria-hidden=\"true\"",
+        "replay": "aria-label=\"Replay animation (R)\"",
+        "active-item": "data-active + aria-current=\"true\"",
+        "focus-visible": "outline: 2px solid rgba(255, 255, 255, 0.4); outline-offset: 2px",
+        "reduced-motion": ".proto-picker[data-ready] .proto-picker-highlight { transition: none; }"
+      },
+      "applies_to": [
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-prototype-picker",
+          "evidence": "<nav class=\"proto-picker\" aria-label=\"Prototype variants\">; .proto-picker-item:focus-visible; @media (prefers-reduced-motion: reduce); exactly one item carries data-active and aria-current=\"true\""
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": false,
+      "conflicts": []
+    },
+    {
+      "id": "STD-accessibility-motion-19",
+      "theme": "accessibility-motion",
+      "area": "accessibility",
+      "title": "Prototype picker: keyboard contract",
+      "rule": "Wire the prototype picker's keys: number keys 1–N select a variant, the left and right arrows step through variants and wrap at the ends, R (either case) replays, and every key is ignored while focus is in an input, textarea, select or contenteditable element or while Meta, Ctrl or Alt is held.",
+      "why": "The behavior contract is fixed regardless of how the harness renders.",
+      "strength": "must",
+      "values": {
+        "select": "1–N",
+        "step": "ArrowLeft / ArrowRight, wrapping",
+        "replay": "r or R",
+        "ignore-targets": "INPUT, TEXTAREA, SELECT, isContentEditable",
+        "ignore-modifiers": "metaKey, ctrlKey, altKey"
+      },
+      "applies_to": [
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-prototype-picker",
+          "evidence": "Behavior contract: Number keys 1–N and ←/→ switch variants; R replays. Ignore key events when focus is in an input, textarea, select, or contenteditable, or when a modifier is held."
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": false,
+      "conflicts": []
+    },
+    {
+      "id": "STD-accessibility-motion-20",
+      "theme": "accessibility-motion",
+      "area": "accessibility",
+      "title": "Never rely on haptics alone",
+      "rule": "Never make a haptic the only feedback for an action; pair it with a visual change that works on its own.",
+      "why": "Haptics are off system-wide for many users and silent on most Android hardware, so the visual has to stand alone.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Never the only feedback. Haptics are off system-wide for many users, and silent on most Android hardware."
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-accessibility-motion-21",
+      "theme": "accessibility-motion",
+      "area": "accessibility",
+      "title": "44pt iOS and 48dp Android touch targets",
+      "rule": "Make every touch target at least 44×44pt on iOS and 48dp on Android; when the visual is smaller, extend the hit area with hitSlop instead of growing the visual, and set pressRetentionOffset so a drifting finger does not cancel the press.",
+      "why": "hitSlop brings a small icon up to the 44pt target without growing it, and pressRetentionOffset stops a slight finger drift from cancelling.",
+      "strength": "must",
+      "values": {
+        "ios": "44×44pt",
+        "android": "48dp",
+        "hitSlop": "hitSlop={12} (press recipe)",
+        "pressRetentionOffset": "pressRetentionOffset={16} (press recipe)"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "44×44pt minimum touch target (48dp Android). If the visual is smaller, add hitSlop - don't grow the visual."
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Press feedback: hitSlop={12} pressRetentionOffset={16}"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-accessibility-motion-22",
+      "theme": "accessibility-motion",
+      "area": "accessibility",
+      "title": "44px hit area for small buttons",
+      "rule": "Give small buttons a hit area of at least 44px, built with a pseudo-element so the visible button keeps its size.",
+      "why": "Small buttons are hard to tap.",
+      "strength": "should",
+      "values": {
+        "hit-area": "44px",
+        "technique": "pseudo-element"
+      },
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "ek-agents-with-taste",
+          "evidence": "Small buttons hard to tap | Use 44px minimum hit area (pseudo-element)"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py TARGETS pointer = 24 and the CSS export sets --ds-size-target-min to 24px under @media (pointer: fine) (WCAG 2.5.8; AGENTS.md floor '24 px minimum targets'); the source gives 44px for small buttons without naming an input, though its reason ('hard to tap') is about touch, where OpenDesigner already uses 44px (48px on Android) [inferred]"
+      ]
+    },
+    {
+      "id": "STD-accessibility-motion-23",
+      "theme": "accessibility-motion",
+      "area": "components",
+      "title": "Keep the toaster labelled and reachable",
+      "rule": "Keep Sonner's accessibility defaults on: the toast container's ARIA label ('Notifications', localised through containerAriaLabel), the Alt+T hotkey that focuses the toaster area, and dismissible: true, setting dismissible: false only when the user must not be able to close that toast.",
+      "why": "Sonner's API gives the toast container an ARIA label and a keyboard shortcut that focuses the toaster area, and with dismissible: false the user cannot dismiss the toast; keeping these defaults as the house default is a reading of the API reference [inferred].",
+      "strength": "should",
+      "values": {
+        "containerAriaLabel": "Notifications",
+        "hotkey": "⌥/alt + T",
+        "dismissible": "true"
+      },
+      "applies_to": [
+        "react",
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "sonner-toast",
+          "evidence": "containerAriaLabel string Notifications; dismissible boolean true"
+        },
+        {
+          "id": "sonner-toaster",
+          "evidence": "hotkey string ⌥/alt + T"
+        },
+        {
+          "id": "eks-skills-ask-sonner-api",
+          "evidence": "hotkey: Keyboard shortcut that focuses the toaster area; containerAriaLabel: ARIA label for the toast container; If false, the user cannot dismiss the toast."
+        },
+        {
+          "id": "eks-skills-ask-sonner-skill",
+          "evidence": "Toast never closes: duration: Infinity, dismissible: false, or a toast.promise whose promise never settles"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-accessibility-motion-24",
+      "theme": "accessibility-motion",
+      "area": "accessibility",
+      "title": "Never trap the user in an overlay",
+      "rule": "Give every screen and overlay a way out: keep drawers dismissible by outside click, Escape and drag by default, and if one must be non-dismissible, give it an explicit close control such as Drawer.Close [inferred].",
+      "why": "Every screen should answer 'How do I get out?'; never trap the user. A non-dismissible Vaul drawer blocks outside click, Escape and drag, and the docs' own demo can then only be closed by refreshing the page; pairing it with Vaul's Close part ('the button that closes the drawer') is our connection [inferred]. (Vaul is good-to-have and unmaintained per its README, recorded in learn/sources.json on 2026-09-24.)",
+      "strength": "must",
+      "values": {
+        "drawer-default": "dismissible: true",
+        "explicit-close": "Drawer.Close"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "Wayfinding. Every screen should answer: Where am I? Where can I go? What's there? How do I get out? Never trap the user."
+        },
+        {
+          "id": "vaul-api",
+          "evidence": "dismissible boolean true; Close: The button that closes the drawer."
+        },
+        {
+          "id": "vaul-other",
+          "evidence": "Non-dismissible: Set the dismissible prop to false to prevent the user from closing the drawer by clicking outside of it, pressing the escape key, or dragging it down. Don't open this one or else you'll have to refresh the page to close it."
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-accessibility-motion-25",
+      "theme": "accessibility-motion",
+      "area": "components",
+      "title": "Controlled drawers still react to Escape",
+      "rule": "When a Vaul drawer is controlled with the open prop, also pass onOpenChange so the app reacts to Escape and outside clicks.",
+      "why": "onOpenChange is called when the open state changes, which the docs call useful for reacting to esc/outside clicks when the drawer is controlled. (Vaul is good-to-have and unmaintained per its README, recorded in learn/sources.json on 2026-09-24.)",
+      "strength": "should",
+      "values": {
+        "props": "open + onOpenChange"
+      },
+      "applies_to": [
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "vaul-default",
+          "evidence": "Controlled: it's useful if you want to react to esc/outside clicks when controlled."
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-accessibility-motion-26",
+      "theme": "accessibility-motion",
+      "area": "components",
+      "title": "Cover the inert page behind a drawer",
+      "rule": "While a modal drawer or sheet is open, render its overlay so a layer covers the inert rest of the view.",
+      "why": "Vaul's Overlay is the layer that covers the inert portion of the view when the drawer is open, and a modal task pairs its surface with a dimming scrim. (Vaul is good-to-have and unmaintained per its README, recorded in learn/sources.json on 2026-09-24.)",
+      "strength": "should",
+      "values": {
+        "vaul": "<Drawer.Overlay />"
+      },
+      "applies_to": [
+        "web",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "vaul-api",
+          "evidence": "Overlay: A layer that covers the inert portion of the view when the drawer is open."
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "Dim to focus: A modal task pairs the surface with a dimming scrim"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-accessibility-motion-27",
+      "theme": "accessibility-motion",
+      "area": "accessibility",
+      "title": "Never disable pinch zoom",
+      "rule": "Never set user-scalable=no or maximum-scale=1 in the viewport meta tag; when the page zooms into an input, fix the input's font size (16px at the minimum) instead.",
+      "why": "user-scalable=no and maximum-scale=1 are accessibility failures; the zoom they are used to stop comes from iOS Safari zooming into inputs under 16px, so the font size is the thing to fix.",
+      "strength": "must",
+      "values": {
+        "forbidden": "user-scalable=no, maximum-scale=1",
+        "input-font-size": "16px at the minimum"
+      },
+      "applies_to": [
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "4. Never disable zoom. user-scalable=no and maximum-scale=1 are accessibility failures. Fix the input font size instead; 4. Page zooms into the input: iOS Safari zooms the page when focus lands on an input whose font size is under 16px"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "user-scalable\\s*=\\s*(?:no|0)\\b|userScalable\\s*:\\s*false\\b|maximum-scale\\s*=\\s*1(?:\\.0+)?\\b(?!\\.)|maximumScale\\s*:\\s*1(?:\\.0+)?\\b(?!\\.)",
+        "message": "Disabling zoom is an accessibility failure; remove it and set inputs to at least 16px so iOS does not zoom into them."
+      },
+      "design_md": true,
+      "conflicts": []
+    }
+  ]
+}

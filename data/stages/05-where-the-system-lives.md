@@ -32,9 +32,13 @@ Zoom 1 broad · weight high · changes 9 decisions · class I · cards DC-L16-02
 - **Why:** Any copy that is not the master (the source of truth) drifts out of date unless it syncs on its own. 60% of teams have no token automation [DC-L07-08].
 - **Options:**
   - `builder` In the builder. It makes DTCG, CSS, native code and design files at once, and sends to design tools [DC-L16-02, DC-L11-16].
+    - Now: OpenDesigner's files are the master copy; one step writes tokens, CSS, native code and design-tool files. As it grows: Design tools stay mirrors refreshed from one master; 60% of teams have no such token automation.
   - `token-file` Git token file (DTCG plus Resolver). It feeds code and Figma (Tokens Studio, Penpot write DTCG) [DC-L07-08].
+    - Now: A token file in git is the master; code and Figma are fed from it. As it grows: Best once two or more code platforms exist, and it keeps colors Figma cannot hold, like OKLCH. [inferred]
   - `code` Code: tokens and components in code, design tools mirror it; the 2026 practitioner majority ("code is the source of truth") [DC-L11-16; COMMUNITY-SIGNAL].
+    - Now: Tokens and components live in code, and design tools copy from it, as most practitioners now work. As it grows: Real components can be tested automatically, but visual exploration becomes a second-class copy.
   - `design-file` In Figma, as variables: designers own tokens; fits a single web platform [DC-L07-08].
+    - Now: Figma variables are the master, and designers own the tokens. As it grows: Fits one web platform; Figma drops some color formats, so with more platforms the master should move to files. [inferred]
 - **Default:** `builder`: builder; design tools are mirrors: write to Figma through its remote MCP when a Full seat exists, otherwise emit one DTCG file per mode Figma imports natively; write to Paper through its MCP *Source:* card heuristics of L16 and L11 [DC-L16-02, DC-L11-16, DC-L16-13]; L07 prefers token-file (see Disagreements).
 - **Show:** a round-trip diagram: which targets are generated, which only mirror, and which direction sync runs.
 - **Skip:** yes, builder.

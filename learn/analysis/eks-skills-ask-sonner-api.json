@@ -1,0 +1,189 @@
+{
+  "summary": "This is the exact API reference for Sonner, the React toast library, taken from the ask-sonner skill in the emilkowalski/skills repository. It lists every prop of the <Toaster /> component and every option of the toast() function, with types and defaults, plus the helper functions for typed, loading, promise, custom and dismissed toasts. The defaults form a concrete, value-level spec for a notification component: 3 visible toasts, bottom-right placement, a 32px screen offset (16px under 600px wide), a 14 gap when expanded, 4000 ms auto-close, an Alt+T hotkey and a 'Notifications' ARIA label. It also defines the override model (per-toast options beat Toaster-wide toastOptions) and how update-by-id, headless rendering and multiple toasters work. For a design system it gives the exact knobs a toast component should expose and the default values to start from.",
+  "key_ideas": [
+    "Options passed to a single toast() call override the same options set on the Toaster through toastOptions.",
+    "The <Toaster /> holds global behavior: theme, position, offsets, number of visible toasts, gap, hotkey, icons and default toast options.",
+    "toast() returns the toast's id, and calling toast() again with the same id updates that toast instead of adding a new one.",
+    "A toast auto-closes after 4000 ms by default; duration Infinity keeps it on screen.",
+    "By default toasts expand on hover; expand: true shows them expanded by default.",
+    "Only 3 toasts are visible at once by default.",
+    "Offsets differ by screen size: 32px from the edges normally, 16px when the screen is narrower than 600px, and each side can be set separately.",
+    "Swipe-to-dismiss directions follow the toaster's position unless swipeDirections overrides them.",
+    "Keyboard and ARIA hooks come with defaults: the ⌥/alt + T hotkey focuses the toaster area and the container's ARIA label is 'Notifications'.",
+    "Status toasts (success, error, info, warning) get matching icons; richColors makes success and error more colorful.",
+    "Clicking the action button closes the toast unless its onClick calls event.preventDefault(); clicking the secondary cancel button closes the toast.",
+    "Class names on toast parts need !important unless the toast is unstyled.",
+    "toast.custom() is headless: your JSX with Sonner's behavior.",
+    "onDismiss (close button or swipe) and onAutoClose (duration ran out) are separate callbacks.",
+    "Several toasters can coexist: each gets an id, and toasterId sends a toast to one of them.",
+    "toast(message, options) takes a string, JSX, or a function returning JSX as the message, and returns the toast's id.",
+    "Setting an icon to null removes it, per type in the Toaster's icons object or per toast with icon."
+  ],
+  "entities": [
+    {"name": "Sonner", "type": "library", "description": "React toast library whose props, options and defaults this reference lists."},
+    {"name": "Emil Kowalski", "type": "person", "description": "Owner of the emilkowalski/skills repository this file comes from; author of Sonner [inferred: stated in the sibling ask-sonner SKILL.md, not in this file]."},
+    {"name": "<Toaster />", "type": "concept", "description": "The single mounted component that sets global toast behavior and renders toasts."},
+    {"name": "toast()", "type": "concept", "description": "The function that creates, types, updates and dismisses toasts and returns a toast id."},
+    {"name": "useSonner()", "type": "concept", "description": "React hook that returns the list of active toasts."},
+    {"name": "emilkowalski/skills", "type": "product", "description": "MIT-licensed GitHub repository of agent skills; this is skills/ask-sonner/API.md at commit 85e8e23."}
+  ],
+  "topics": [
+    {"name": "Toasts and notifications", "summary": "Full prop and option list for a toast system, with defaults for count, placement, offsets, gap, duration, dismissal, actions and callbacks."},
+    {"name": "UI libraries", "summary": "Reference API of Sonner, the React toast library, including headless rendering via toast.custom()."},
+    {"name": "Web implementation (CSS and React)", "summary": "React props and functions, class names per toast part that need !important unless unstyled, inline style objects, data-testid output for e2e tests, and toast.getActiveToasts() for code outside React."},
+    {"name": "Accessibility", "summary": "Alt+T hotkey focuses the toaster area; the container ARIA label defaults to 'Notifications'; dir supports text direction; dismissible controls whether the user can close a toast."},
+    {"name": "Dark mode and themes", "summary": "theme accepts 'light', 'dark' or 'system' and defaults to 'light'; invert gives dark toasts in light mode and the reverse."},
+    {"name": "Gestures and drag", "summary": "Swipe-to-dismiss directions default to ones based on position and can be overridden with swipeDirections; onDismiss fires when a toast is swiped away."},
+    {"name": "Feedback, empty and loading states", "summary": "toast.loading shows a spinner and is updated by id; toast.promise moves from loading to success or error when the promise settles."},
+    {"name": "Spacing and layout", "summary": "Six positions, a 32px edge offset, a 16px mobile offset under 600px, per-side offset objects, and a 14 gap between expanded toasts."}
+  ],
+  "claims": [
+    {"claim": "Options passed to toast() override the same options set via the Toaster's toastOptions.", "evidence": "Options passed to `toast()` override the same options set via the Toaster's `toastOptions`"},
+    {"claim": "The Toaster's theme defaults to 'light'.", "evidence": "`theme` | `string` | `'light'`"},
+    {"claim": "By default toasts are collapsed and expand on hover; expand: true keeps them expanded.", "evidence": "Toasts expanded by default (otherwise they expand on hover)"},
+    {"claim": "Three toasts are visible by default.", "evidence": "`visibleToasts` | `number` | `3`"},
+    {"claim": "The default position is bottom-right, out of six positions.", "evidence": "`top-left`, `top-center`, `top-right`, `bottom-left`, `bottom-center`, `bottom-right`"},
+    {"claim": "The default offset from screen edges is 32px, and the object form sets each side separately.", "evidence": "Offset from screen edges. Object form is per-side"},
+    {"claim": "mobileOffset applies when the screen is narrower than 600px and defaults to 16px.", "evidence": "Offset when screen width < 600px"},
+    {"claim": "Allowed swipe-to-dismiss directions are based on position by default.", "evidence": "`swipeDirections` | `array` | based on position"},
+    {"claim": "The keyboard shortcut Alt+T focuses the toaster area by default.", "evidence": "Keyboard shortcut that focuses the toaster area"},
+    {"claim": "The gap between expanded toasts defaults to 14.", "evidence": "Gap between toasts when expanded"},
+    {"claim": "Setting an icon to null removes it, either in the Toaster's icons object or in a toast's icon option.", "evidence": "`null` removes one"},
+    {"claim": "Toasts auto-close after 4000 milliseconds by default and Infinity keeps them on screen.", "evidence": "Milliseconds before auto-close. `Infinity` persists the toast."},
+    {"claim": "With dismissible: false the user cannot dismiss the toast.", "evidence": "If `false`, the user cannot dismiss the toast."},
+    {"claim": "Clicking the action button closes the toast unless onClick calls event.preventDefault().", "evidence": "Primary button; clicking closes the toast unless"},
+    {"claim": "Calling toast() again with the same custom id updates the existing toast.", "evidence": "calling `toast()` again with the same id updates the existing toast"},
+    {"claim": "classNames on toast parts need !important unless the toast is unstyled.", "evidence": "Needs `!important` unless `unstyled`."},
+    {"claim": "onDismiss fires on the close button or a swipe; onAutoClose fires when the duration runs out.", "evidence": "Fires when the close button is clicked or the toast is swiped away."},
+    {"claim": "The container's ARIA label defaults to 'Notifications'.", "evidence": "ARIA label for the toast container."},
+    {"claim": "toast.dismiss() without an id dismisses all toasts.", "evidence": "Dismiss one toast, or all when called without an id."},
+    {"claim": "toast.getActiveToasts() works outside React.", "evidence": "All active toasts, usable outside React."},
+    {"claim": "toast.custom() renders your JSX with Sonner's behavior (headless).", "evidence": "Headless toast — your JSX, Sonner's behavior."},
+    {"claim": "toast() accepts a string, JSX, or a function returning JSX as its message and returns the toast's id.", "evidence": "message is a string, JSX, or a function returning JSX. Returns the toast's id"},
+    {"claim": "A single toast can set its own position through toast()'s position option, which defaults to 'bottom-right'.", "evidence": "Position of this toast."},
+    {"claim": "toast.promise's success and error accept strings, JSX, functions of the result, or objects of toast options.", "evidence": "`success`/`error` accept strings, JSX, functions of the result, or objects of toast options"},
+    {"claim": "useSonner() is a React hook that returns { toasts }.", "evidence": "React hook returning `{ toasts }`"}
+  ],
+  "quotes": [
+    "Options passed to `toast()` override the same options set via the Toaster's `toastOptions`.",
+    "Headless toast — your JSX, Sonner's behavior.",
+    "calling `toast()` again with the same id updates the existing toast."
+  ],
+  "tags": [
+    "sonner",
+    "toast",
+    "notifications",
+    "react",
+    "api-reference",
+    "defaults",
+    "headless",
+    "swipe-to-dismiss",
+    "accessibility",
+    "theming"
+  ],
+  "authority": "non-negotiable",
+  "rules": [
+    {"rule": "Put app-wide toast defaults in the Toaster's toastOptions and override them per toast() call; per-call options win over toastOptions.", "why": "Options passed to toast() override the same options set via the Toaster's toastOptions.", "kind": "do", "strength": "should", "area": "components", "applies_to": "react", "values": ["toastOptions"], "evidence": "Options passed to `toast()` override the same options set via the Toaster's `toastOptions`"},
+    {"rule": "Set the Toaster's theme to 'light', 'dark' or 'system'; it defaults to 'light'.", "why": "The API reference lists theme as 'light', 'dark' or 'system' with 'light' as the default; it states no recommendation (the dark-mode fix is a rule in the sibling SKILL.md).", "kind": "do", "strength": "consider", "area": "color", "applies_to": "react", "values": ["'light'", "'dark'", "'system'", "default 'light'"], "evidence": "`theme` | `string` | `'light'` | `'light'`, `'dark'`, or `'system'`"},
+    {"rule": "Turn on richColors when success and error toasts must read as colored states rather than neutral ones.", "why": "richColors makes error and success states more colorful; it is off by default.", "kind": "do", "strength": "consider", "area": "color", "applies_to": "react", "values": ["richColors: false (default)"], "evidence": "Makes error and success states more colorful."},
+    {"rule": "Set expand on the Toaster to show toasts expanded by default; left at its default (false), toasts expand on hover.", "why": "The API reference documents expand as a boolean defaulting to false: toasts expanded by default, otherwise they expand on hover. It states no recommendation.", "kind": "do", "strength": "consider", "area": "components", "applies_to": "react", "values": ["expand: false (default)"], "evidence": "Toasts expanded by default (otherwise they expand on hover)"},
+    {"rule": "Show at most 3 toasts at once by default (visibleToasts).", "why": "Sonner's documented default amount of visible toasts is 3 [inferred: adopted as house default].", "kind": "do", "strength": "should", "area": "components", "applies_to": "all", "values": ["visibleToasts: 3"], "evidence": "Amount of visible toasts."},
+    {"rule": "Place toasts bottom-right by default, choosing only from top-left, top-center, top-right, bottom-left, bottom-center or bottom-right.", "why": "bottom-right is the documented default position and these are the six supported positions [inferred: adopted as house default].", "kind": "do", "strength": "should", "area": "layout", "applies_to": "web", "values": ["'bottom-right'", "top-left", "top-center", "top-right", "bottom-left", "bottom-center"], "evidence": "`position` | `string` | `'bottom-right'`"},
+    {"rule": "Offset the toaster 32px from the screen edges on desktop.", "why": "The default offset from screen edges is '32px' [inferred: adopted as house default].", "kind": "do", "strength": "should", "area": "layout", "applies_to": "web", "values": ["offset: '32px'"], "evidence": "Offset from screen edges."},
+    {"rule": "Use a smaller 16px edge offset when the screen is narrower than 600px (mobileOffset).", "why": "mobileOffset is the offset used when screen width < 600px and defaults to '16px' [inferred: adopted as house default].", "kind": "do", "strength": "should", "area": "layout", "applies_to": "web", "values": ["mobileOffset: '16px'", "< 600px"], "evidence": "Offset when screen width < 600px."},
+    {"rule": "When one edge needs a different distance, pass the offset as a per-side object instead of a single value.", "why": "The object form of offset is per-side.", "kind": "do", "strength": "consider", "area": "layout", "applies_to": "react", "values": ["{ bottom: '24px', right: '16px' }"], "evidence": "Object form is per-side"},
+    {"rule": "Let swipe-to-dismiss directions follow the toaster position, and set swipeDirections only when they must differ.", "why": "swipeDirections defaults to directions based on position [inferred: adopted as house default].", "kind": "do", "strength": "should", "area": "motion", "applies_to": "react", "values": ["swipeDirections: based on position"], "evidence": "Allowed swipe-to-dismiss directions."},
+    {"rule": "Set dir to match the app's text direction (default 'ltr') [inferred].", "why": "dir controls text directionality and defaults to 'ltr'.", "kind": "do", "strength": "consider", "area": "accessibility", "applies_to": "react", "values": ["dir: 'ltr'"], "evidence": "Text directionality."},
+    {"rule": "Keep a keyboard shortcut that moves focus to the toaster area, Alt+T by default.", "why": "hotkey is the keyboard shortcut that focuses the toaster area, default ⌥/alt + T [keeping it enabled is inferred].", "kind": "do", "strength": "should", "area": "accessibility", "applies_to": "web", "values": ["⌥/alt + T"], "evidence": "Keyboard shortcut that focuses the toaster area."},
+    {"rule": "Use invert (Toaster-wide or per toast) to show dark toasts in light mode and light toasts in dark mode.", "why": "invert gives dark toasts in light mode and vice versa; default false.", "kind": "do", "strength": "consider", "area": "color", "applies_to": "react", "values": ["invert: false (default)"], "evidence": "Dark toasts in light mode and vice versa."},
+    {"rule": "Space expanded toasts with a gap of 14 by default.", "why": "gap is the gap between toasts when expanded and defaults to 14 [inferred: adopted as house default].", "kind": "do", "strength": "should", "area": "layout", "applies_to": "react", "values": ["gap: 14"], "evidence": "Gap between toasts when expanded."},
+    {"rule": "Replace status icons for the whole system through the Toaster's icons object (success, info, warning, error, loading), and use null to remove one.", "why": "icons replaces default icons per type; null removes one.", "kind": "do", "strength": "consider", "area": "components", "applies_to": "react", "values": ["{ success, info, warning, error, loading }", "null"], "evidence": "Replace default icons"},
+    {"rule": "Add a close button to all toasts with closeButton on the Toaster, or to one toast with closeButton in toast(); it is off by default.", "why": "closeButton adds a close button and defaults to false at both levels.", "kind": "do", "strength": "consider", "area": "components", "applies_to": "react", "values": ["closeButton: false (default)"], "evidence": "Adds a close button to all toasts."},
+    {"rule": "Auto-close toasts after 4000 ms by default.", "why": "duration is the milliseconds before auto-close and defaults to 4000 [inferred: adopted as house default].", "kind": "do", "strength": "should", "area": "motion", "applies_to": "all", "values": ["duration: 4000"], "evidence": "Milliseconds before auto-close."},
+    {"rule": "Use duration: Infinity to keep a toast on screen until it is dismissed.", "why": "Infinity persists the toast.", "kind": "do", "strength": "consider", "area": "components", "applies_to": "react", "values": ["Infinity"], "evidence": "`Infinity` persists the toast."},
+    {"rule": "Leave toasts dismissible by the user; set dismissible: false only when the user must not be able to close it.", "why": "dismissible defaults to true; if false, the user cannot dismiss the toast [inferred: keeping the default as house default].", "kind": "do", "strength": "should", "area": "accessibility", "applies_to": "react", "values": ["dismissible: true (default)"], "evidence": "If `false`, the user cannot dismiss the toast."},
+    {"rule": "Pass icon: null on a toast to remove its default icon, or a ReactNode to replace it.", "why": "icon renders in front of the text; null removes the default.", "kind": "do", "strength": "consider", "area": "components", "applies_to": "react", "values": ["icon: null"], "evidence": "Icon in front of the text"},
+    {"rule": "Give a toast a primary action via action ({ label, onClick } or a ReactNode); clicking it closes the toast, so call event.preventDefault() in onClick when the toast must stay open.", "why": "Clicking the action closes the toast unless onClick calls event.preventDefault().", "kind": "do", "strength": "consider", "area": "components", "applies_to": "react", "values": ["{ label, onClick }", "event.preventDefault()"], "evidence": "Primary button; clicking closes the toast unless `onClick` calls `event.preventDefault()`"},
+    {"rule": "Use cancel ({ label, onClick } or a ReactNode) for the secondary button; clicking it closes the toast.", "why": "cancel is the secondary button and clicking it closes the toast.", "kind": "do", "strength": "consider", "area": "components", "applies_to": "react", "values": ["{ label, onClick }"], "evidence": "Secondary button; clicking closes the toast."},
+    {"rule": "Style the action and cancel buttons through actionButtonStyle and cancelButtonStyle objects.", "why": "These options hold styles for the action and cancel buttons; both default to {}.", "kind": "do", "strength": "consider", "area": "components", "applies_to": "react", "values": ["actionButtonStyle: {}", "cancelButtonStyle: {}"], "evidence": "Styles for the action button."},
+    {"rule": "Give a toast a custom id when it will be updated later, and call toast() again with that id to update it instead of adding a new toast.", "why": "Calling toast() again with the same id updates the existing toast.", "kind": "do", "strength": "should", "area": "components", "applies_to": "react", "values": ["id"], "evidence": "Custom id; calling `toast()` again with the same id updates the existing toast."},
+    {"rule": "Set testId on toasts that end-to-end tests need to find; it renders as data-testid.", "why": "testId is rendered as data-testid for e2e tests.", "kind": "do", "strength": "consider", "area": "tooling", "applies_to": "react", "values": ["data-testid"], "evidence": "Rendered as `data-testid` for e2e tests."},
+    {"rule": "When more than one Toaster exists, give each an id and send each toast to one with toasterId.", "why": "The Toaster id is targeted by toast()'s toasterId option.", "kind": "do", "strength": "should", "area": "components", "applies_to": "react", "values": ["id", "toasterId"], "evidence": "Toaster id, targeted by `toast()`'s `toasterId` option."},
+    {"rule": "Style individual toast parts with classNames (toast, title, description, actionButton, cancelButton, closeButton) and mark those classes !important unless the toast is unstyled.", "why": "classNames need !important unless unstyled.", "kind": "do", "strength": "must", "area": "components", "applies_to": "css", "values": ["{ toast, title, description, actionButton, cancelButton, closeButton }", "!important"], "evidence": "Needs `!important` unless `unstyled`."},
+    {"rule": "Use unstyled: true to remove all default toast styles when the design system supplies its own.", "why": "unstyled removes all default styles; default false.", "kind": "do", "strength": "consider", "area": "components", "applies_to": "react", "values": ["unstyled: false (default)"], "evidence": "Removes all default styles."},
+    {"rule": "Handle manual closes in onDismiss and timeouts in onAutoClose; they are different events.", "why": "onDismiss fires on the close button or a swipe; onAutoClose fires when the toast closes after duration.", "kind": "do", "strength": "should", "area": "components", "applies_to": "react", "values": ["onDismiss", "onAutoClose"], "evidence": "Fires when the toast closes automatically after `duration`."},
+    {"rule": "Keep an ARIA label on the toast container, 'Notifications' by default, and localise it with containerAriaLabel.", "why": "containerAriaLabel is the ARIA label for the toast container and defaults to 'Notifications' [keeping and localising it is inferred].", "kind": "do", "strength": "should", "area": "accessibility", "applies_to": "web", "values": ["'Notifications'"], "evidence": "ARIA label for the toast container."},
+    {"rule": "Use toast.success, toast.error, toast.info and toast.warning for status messages so each gets its matching icon.", "why": "These are typed toasts with a matching icon.", "kind": "do", "strength": "should", "area": "components", "applies_to": "react", "values": ["toast.success", "toast.error", "toast.info", "toast.warning"], "evidence": "Typed toast with matching icon."},
+    {"rule": "Use toast.loading for a spinner toast and update it later by its id.", "why": "toast.loading is a toast with a spinner that you update by id.", "kind": "do", "strength": "consider", "area": "components", "applies_to": "react", "values": ["toast.loading"], "evidence": "Toast with a spinner; update it by id."},
+    {"rule": "Use toast.promise(promise, { loading, success, error }) for async work, where success and error can be strings, JSX, functions of the result, or objects of toast options.", "why": "It shows a loading toast that resolves with the promise.", "kind": "do", "strength": "should", "area": "components", "applies_to": "react", "values": ["{ loading, success, error }"], "evidence": "Loading toast that resolves with the promise"},
+    {"rule": "Use toast.custom((t) => jsx) when the toast's look must be fully your own but the behavior should stay Sonner's.", "why": "toast.custom is a headless toast: your JSX, Sonner's behavior.", "kind": "do", "strength": "consider", "area": "components", "applies_to": "react", "values": ["toast.custom((t) => jsx, opts?)"], "evidence": "Headless toast — your JSX, Sonner's behavior."},
+    {"rule": "Dismiss one toast with toast.dismiss(id) and all toasts with toast.dismiss() without an id.", "why": "toast.dismiss dismisses one toast, or all when called without an id.", "kind": "do", "strength": "consider", "area": "components", "applies_to": "react", "values": ["toast.dismiss(id?)"], "evidence": "Dismiss one toast, or all when called without an id."},
+    {"rule": "Read active toasts with useSonner() inside React and toast.getActiveToasts() outside React.", "why": "useSonner returns { toasts }; getActiveToasts is usable outside React.", "kind": "do", "strength": "consider", "area": "components", "applies_to": "react", "values": ["useSonner()", "toast.getActiveToasts()"], "evidence": "All active toasts, usable outside React."},
+    {"rule": "Pass a description (ReactNode or a function returning JSX) for a second line under the title.", "why": "description renders underneath the title and accepts a function returning JSX.", "kind": "do", "strength": "consider", "area": "content", "applies_to": "react", "values": ["description"], "evidence": "Renders underneath the title"},
+    {"rule": "Override one toast's placement with toast()'s position option (default 'bottom-right') when it must differ from the Toaster.", "why": "position is also a per-toast option: the position of this toast.", "kind": "do", "strength": "consider", "area": "layout", "applies_to": "react", "values": ["position: 'bottom-right'"], "evidence": "Position of this toast."},
+    {"rule": "Use style on a toast() call (or in toastOptions) for inline styles on the toast.", "why": "style holds inline styles for the toast.", "kind": "do", "strength": "consider", "area": "components", "applies_to": "react", "values": ["style"], "evidence": "Inline styles for the toast."},
+    {"rule": "Pass the toast message as a string, JSX, or a function returning JSX, and keep the id toast() returns when the toast will be updated or dismissed later.", "why": "toast(message, options) accepts those message forms and returns the toast's id; updates and toast.dismiss(id) work by id.", "kind": "do", "strength": "consider", "area": "components", "applies_to": "react", "values": ["toast(message, options)"], "evidence": "message is a string, JSX, or a function returning JSX. Returns the toast's id"},
+    {"rule": "Use toast.promise's success and error as functions of the result (or objects of toast options) when the result toast needs the resolved value or extra options.", "why": "success/error accept strings, JSX, functions of the result, or objects of toast options.", "kind": "do", "strength": "consider", "area": "content", "applies_to": "react", "values": ["success", "error"], "evidence": "`success`/`error` accept strings, JSX, functions of the result, or objects of toast options"}
+  ],
+  "decisions": [
+    {"question": "Where on the screen should toasts appear?", "options": [
+      {"name": "bottom-right", "effect": "Toasts appear in the bottom-right corner; this is the default.", "when": "Default."},
+      {"name": "bottom-center", "effect": "Toasts appear centered at the bottom.", "when": "When a centered placement is wanted [inferred]."},
+      {"name": "bottom-left", "effect": "Toasts appear in the bottom-left corner.", "when": "When the bottom-right is occupied [inferred]."},
+      {"name": "top-left", "effect": "Toasts appear in the top-left corner.", "when": "When toasts should sit at the top [inferred]."},
+      {"name": "top-center", "effect": "Toasts appear centered at the top.", "when": "When toasts should sit at the top [inferred]."},
+      {"name": "top-right", "effect": "Toasts appear in the top-right corner.", "when": "When toasts should sit at the top [inferred]."}
+    ], "recommendation": "The source recommends no position; its default is 'bottom-right'. Swipe directions default to ones based on position.", "maps_to": null, "evidence": "`position` | `string` | `'bottom-right'`"},
+    {"question": "Should the toast pile be collapsed until hovered, or always expanded?", "options": [
+      {"name": "Collapsed, expand on hover", "effect": "Toasts stack and expand when the pointer hovers them.", "when": "Default (expand: false)."},
+      {"name": "Always expanded", "effect": "Toasts are expanded by default, separated by the gap (14 by default).", "when": "When every toast must be readable without hovering [inferred]."}
+    ], "recommendation": "The default is collapsed with expand on hover.", "maps_to": null, "evidence": "Toasts expanded by default (otherwise they expand on hover)."},
+    {"question": "Should success and error toasts use neutral styling or rich colors?", "options": [
+      {"name": "Neutral (default)", "effect": "Status toasts keep the base look and differ by their matching icon.", "when": "Default (richColors: false)."},
+      {"name": "richColors", "effect": "Error and success states become more colorful.", "when": "When status must read by color as well as icon [inferred]."}
+    ], "recommendation": null, "maps_to": null, "evidence": "Makes error and success states more colorful."},
+    {"question": "Which color theme should toasts use?", "options": [
+      {"name": "'light'", "effect": "Light toasts; the default.", "when": "Light-only apps [inferred]."},
+      {"name": "'dark'", "effect": "Dark toasts.", "when": "Dark-only apps [inferred]."},
+      {"name": "'system'", "effect": "Toasts follow the system setting.", "when": "Apps that follow the device's light or dark mode [inferred]."},
+      {"name": "invert", "effect": "Dark toasts in light mode and light toasts in dark mode.", "when": "When toasts should contrast with the page [inferred]."}
+    ], "recommendation": null, "maps_to": null, "evidence": "`'light'`, `'dark'`, or `'system'`."},
+    {"question": "How long should a toast stay, and can the user close it?", "options": [
+      {"name": "Auto-close after 4000 ms", "effect": "The toast disappears after four seconds.", "when": "Default."},
+      {"name": "Persist (duration: Infinity)", "effect": "The toast stays until it is dismissed.", "when": "When the message must stay until acted on or dismissed [inferred]."},
+      {"name": "Not dismissible (dismissible: false)", "effect": "The user cannot dismiss the toast.", "when": "Only when the user must not close it."},
+      {"name": "Close button (closeButton: true)", "effect": "A visible close button on each toast.", "when": "When an explicit close control is wanted [inferred]."}
+    ], "recommendation": "Defaults are duration 4000, dismissible true and no close button.", "maps_to": null, "evidence": "Milliseconds before auto-close."},
+    {"question": "How much styling control does the toast need?", "options": [
+      {"name": "Default styles", "effect": "Sonner's look, tuned with style, invert and richColors.", "when": "No custom look needed [inferred]."},
+      {"name": "classNames per part", "effect": "Your classes on toast, title, description and buttons; they need !important.", "when": "Small visual changes [inferred]."},
+      {"name": "unstyled: true", "effect": "All default styles removed.", "when": "Your own styles on the default structure [inferred]."},
+      {"name": "toast.custom()", "effect": "Your JSX, Sonner's behavior (headless).", "when": "A fully custom toast [inferred]."}
+    ], "recommendation": null, "maps_to": null, "evidence": "Removes all default styles."}
+  ],
+  "process": [],
+  "examples": [
+    {"what": "Per-side offset object", "where": "Sonner <Toaster /> offset prop", "visual_note": "{ bottom: '24px', right: '16px' } sets the bottom and right distances separately instead of one value for every edge."},
+    {"what": "Typed toasts with matching icons", "where": "Sonner toast.success / .error / .info / .warning", "visual_note": "Each status call renders its own icon in front of the text; richColors additionally tints success and error."},
+    {"what": "Loading toast updated by id", "where": "Sonner toast.loading", "visual_note": "A spinner toast that is later updated in place by calling toast() with the same id, instead of stacking a second toast."}
+  ],
+  "numbers": [
+    {"value": "3", "context": "Default number of visible toasts (visibleToasts)", "evidence": "Amount of visible toasts."},
+    {"value": "'32px'", "context": "Default offset of the toaster from screen edges", "evidence": "Offset from screen edges."},
+    {"value": "{ bottom: '24px', right: '16px' }", "context": "Example of a per-side offset object", "evidence": "Object form is per-side"},
+    {"value": "'16px'", "context": "Default mobileOffset", "evidence": "Offset when screen width < 600px."},
+    {"value": "600px", "context": "Screen width below which mobileOffset applies", "evidence": "Offset when screen width < 600px."},
+    {"value": "14", "context": "Default gap between toasts when expanded", "evidence": "Gap between toasts when expanded."},
+    {"value": "4000", "context": "Default duration in milliseconds before a toast auto-closes", "evidence": "Milliseconds before auto-close."},
+    {"value": "Infinity", "context": "Duration value that keeps a toast on screen", "evidence": "`Infinity` persists the toast."},
+    {"value": "⌥/alt + T", "context": "Default hotkey that focuses the toaster area", "evidence": "Keyboard shortcut that focuses the toaster area."},
+    {"value": "'Notifications'", "context": "Default ARIA label for the toast container", "evidence": "ARIA label for the toast container."},
+    {"value": "6", "context": "Number of supported positions (top-left, top-center, top-right, bottom-left, bottom-center, bottom-right) [inferred count]", "evidence": "`top-left`, `top-center`, `top-right`"}
+  ],
+  "caveats": [
+    "This is a library reference pinned to commit 85e8e23 of emilkowalski/skills; defaults and prop names can change in later Sonner versions.",
+    "It documents React-specific APIs; the values carry over to other platforms only as design defaults, not as code.",
+    "The source lists defaults without saying why they were chosen; rules that adopt them as house defaults are marked [inferred].",
+    "Units are given as written: offsets are CSS strings ('32px', '16px') while gap is a bare number (14)."
+  ]
+}

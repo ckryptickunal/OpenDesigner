@@ -16,10 +16,14 @@ Zoom 1 broad · weight high · changes 5 decisions · class G · cards DC-L09-06
 - **Why:** Motion sets how lively the product feels (L09 divergence 7). Short, smooth moves feel efficient, bouncy springs feel alive, and no motion feels still but calm [DC-L09-06].
 - **Options:**
   - `two-mode` Plain for most actions, bold for 1-3 key moments per flow (Carbon expressive; Material standard vs expressive schemes) [DC-L04-19].
+    - Now: Quick, plain motion for most actions, with bolder motion kept for a few key moments. As it grows: Bold moments stay rare, like onboarding or a first success; daily actions stay quick and quiet, and core navigation doesn't animate.
   - `none` Minimal motion (GOV.UK) [DC-L09-06].
+    - Now: Almost nothing moves; press feedback and quick fades that explain a change stay. Still and calm, like GOV.UK. As it grows: Stays consistent as screens grow, but rare moments like a first success get no extra life. [inferred]
   - `productive` Quick, plain curves: fast, competent, no bounce (Carbon productive `cubic-bezier(0.2, 0, 0.38, 0.9)`).
+    - Now: Quick, plain movements with no bounce: fast and competent. As it grows: Fits frequent actions as features grow; things done 100+ times a day still get no animation at all.
   - `springs` Springs throughout: alive, physical, interruptible (Material spring tokens, Apple duration + bounce, Airbnb) [DC-L09-06].
-- **Default:** `two-mode`: two-mode: 7 durations 50-500ms, ease-out to enter, ease-in to exit, springs only for spatial moves in the expressive mode, bounce at or below 0.2 *Source:* L09 shared default row 5 (all 16 systems with motion tokens stay in 100-300ms) and card heuristics [DC-L09-06, DC-L04-19]; capped at productive when Q-aud-02 is high-trust.
+    - Now: Movement feels physical and can be caught mid-way; bounce stays for flicks, drags and rare playful moments, per house standards. As it grows: Springs drive whatever a finger moves; motion nobody touched keeps plain timing curves, and the web needs a JavaScript spring library.
+- **Default:** `two-mode`: two-mode: 7 durations 50-500ms, ease-out to enter and to exit (never ease-in on UI: house standards STD-easing-duration-01 and -03), springs only for spatial moves in the expressive mode, bounce at or below 0.2 *Source:* L09 shared default row 5 (all 16 systems with motion tokens stay in 100-300ms) and card heuristics [DC-L09-06, DC-L04-19]; capped at productive when Q-aud-02 is high-trust.
 - **Show:** the live interactions replay on every change, with a slow-motion button.
 - **Use / avoid:** use expressive motion for page transitions, the primary action and alerts; avoid bounce on everyday controls and in high-trust products [DC-L06-10, DC-L04-19].
 - **Skip:** yes.

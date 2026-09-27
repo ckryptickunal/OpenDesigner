@@ -1,0 +1,735 @@
+{
+  "summary": "Kole Jain argues that the 60-30-10 color rule suits beginners and websites but does not cover most product design, where a product like Vercel is mostly black and white with a tiny amount of red. He replaces it with four layers of color: a neutral foundation (backgrounds, strokes, text), a functional accent built as a ramp, semantic colors for meaning and charts, and theming. He gives concrete lightness targets for backgrounds, borders, buttons and text, and a rule for dark mode: dark colors look more alike, so the gaps between neutral steps must roughly double and raised surfaces must get lighter. For charts he uses OKLCH, fixing lightness and chroma while stepping the hue, so every color has the same perceived brightness; for themes he shifts every neutral in OKLCH (slightly lower lightness, slightly higher chroma, new hue). For a design system this maps directly onto neutral ramp steps, surface and text tokens, accent ramp step assignments, a dark-mode derivation rule, a categorical chart palette and a theme generator.",
+  "key_ideas": [
+    "The 60-30-10 rule is great for beginners and websites but does not cover most use cases in product design.",
+    "Product color comes in four layers: neutral foundation, functional accent, semantic communication, theming.",
+    "A product UI needs more neutrals than a landing page: about four background layers, one or two strokes and about three text colors, before hover states.",
+    "The app frame or sidebar acts as a slightly darker anchor; because it is large, it needs only a very small shift.",
+    "In light mode, cards can be lighter than the background, darker than it, or a monochrome layer; if cards are pure white, the background should not be.",
+    "Define card edges with a light gray border (about 85% white), not a thin black border; a subtle shadow alone helps only a little.",
+    "The more important a button is, the darker it is, from ghost buttons up to black buttons with white text.",
+    "Text should not be pure black: headings about 11% white, body text 15 to 20%, subtext 30 to 40%.",
+    "Treat the accent as a ramp, not one color: main at 500 or 600, hover at 700, links at 400 or 500.",
+    "Dark mode is not a mirror of light mode: dark colors look more alike, so double the distance between neutral steps.",
+    "In dark mode, surfaces always get lighter as they elevate, text is dimmed, borders are brightened and the primary moves to 300 or 400.",
+    "Semantic colors override the brand system: status must stay readable and destructive actions should be red even with a purple brand.",
+    "Chart colors need a full spectrum at equal perceived brightness, which OKLCH provides by fixing lightness and chroma and stepping hue by about 25 to 30.",
+    "A whole design can be re-themed by shifting every neutral in OKLCH: lower lightness slightly, raise chroma slightly, then change hue."
+  ],
+  "entities": [
+    {
+      "name": "Kole Jain",
+      "type": "person",
+      "description": "Channel host presenting the four-layer color approach for product design"
+    },
+    {
+      "name": "60-30-10 rule",
+      "type": "concept",
+      "description": "Classic color-proportion rule the video says is too simple for product design"
+    },
+    {
+      "name": "Vercel",
+      "type": "company",
+      "description": "Example of a near-monochrome product (about 90% black, 8% white, 2% red) that still uses semantic build-status colors; dark background with lighter cards"
+    },
+    {
+      "name": "Linear",
+      "type": "company",
+      "description": "Example background at 99% white and a blue-purple accent"
+    },
+    {
+      "name": "Notion",
+      "type": "company",
+      "description": "Example of a 100% white background with darker cards"
+    },
+    {
+      "name": "Supabase",
+      "type": "company",
+      "description": "Example of monochromatic surface layers and a bright green accent"
+    },
+    {
+      "name": "Mercury",
+      "type": "company",
+      "description": "Example of a sidebar tinted with 2% blue as a darker anchor"
+    },
+    {
+      "name": "OKLCH",
+      "type": "concept",
+      "description": "Perceptual color model used to get equal perceived brightness across hues for charts and to re-theme neutrals"
+    },
+    {
+      "name": "oklch.com",
+      "type": "tool",
+      "description": "Site used to set lightness and chroma and step the hue for chart colors"
+    },
+    {
+      "name": "UI colors",
+      "type": "tool",
+      "description": "Tool the creator used to generate the accent color ramp (name as spoken; no URL given)"
+    },
+    {
+      "name": "Zero To Mastery",
+      "type": "company",
+      "description": "Video sponsor selling UI/UX courses"
+    },
+    {
+      "name": "Figma",
+      "type": "tool",
+      "description": "The creator offers a Figma file with the colors and variables from the video"
+    }
+  ],
+  "topics": [
+    {
+      "name": "Color",
+      "summary": "Replaces the 60-30-10 rule with four layers for product UI (neutrals, accent ramp, semantic colors, theming) and gives lightness targets for backgrounds, borders, buttons and text."
+    },
+    {
+      "name": "Dark mode and themes",
+      "summary": "Dark mode needs about double the step distance between neutrals, a lighter primary step (300 or 400), dimmer text, brighter borders and lighter raised surfaces; themes can be generated by shifting neutrals in OKLCH."
+    },
+    {
+      "name": "Depth, shadows and borders",
+      "summary": "On light backgrounds, card edges read best with a roughly 85% white border rather than a thin black border or a shadow alone; in dark mode elevation is shown by lighter surfaces or a border."
+    },
+    {
+      "name": "Visual hierarchy",
+      "summary": "Darkness signals importance: the most important buttons and headings are darkest, body and subtext progressively lighter."
+    },
+    {
+      "name": "Buttons and actions",
+      "summary": "Button importance maps to darkness, from ghost to black with white text; most multi-purpose buttons sit around 90 to 95% white; destructive actions should be red."
+    },
+    {
+      "name": "Dashboards and data display",
+      "summary": "Charts need a full-spectrum palette at equal perceived brightness, made in OKLCH by stepping hue by about 25 to 30; a neutral chart is 'super lame' and a single brand ramp makes series look too similar."
+    },
+    {
+      "name": "SaaS product UI",
+      "summary": "Product and dashboard UIs need far more neutral roles than landing pages: several background layers, strokes, text variants and interaction states."
+    },
+    {
+      "name": "Design resources",
+      "summary": "Mentions UI colors for generating ramps and oklch.com for perceptually even chart hues."
+    },
+    {
+      "name": "Cards and sections",
+      "summary": "In light mode cards can be lighter than the page (can be pure white), darker than it (often the sidebar color) or monochromatic layers; card edges on light backgrounds read best with a roughly 85% white border; in dark mode raised cards must be lighter or bordered."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "The 60-30-10 rule is good for beginners but does not cover most use cases in product design.",
+      "evidence": "Description: 'while great for beginners, doesn't really cover most of the use cases'"
+    },
+    {
+      "claim": "Vercel's interface is roughly 90% black, 8% white and 2% red.",
+      "evidence": "Opening: 'It's like 90% black, 8% white, and 2% red'"
+    },
+    {
+      "claim": "Linear uses a 99% white background, Notion 100% and Vercel 98%.",
+      "evidence": "Layer one: 'let's talk backgrounds first'"
+    },
+    {
+      "claim": "A landing page works with 3 to 5 neutrals, but product design generally needs four background layers, one or two strokes and about three text variants.",
+      "evidence": "'for a landing page, 3 to five neutrals works great'"
+    },
+    {
+      "claim": "Cards on a light background look washed out, and a subtle drop shadow makes this only slightly better.",
+      "evidence": "'it looks very washed out'"
+    },
+    {
+      "claim": "Dark colors look more similar to each other, so they need more distance to look as different as light colors.",
+      "evidence": "'when you turn down the lights for dark mode, the rules change'"
+    },
+    {
+      "claim": "Simply reflecting the light palette for dark mode makes background elements lose their distinction.",
+      "evidence": "'if you just reflect your light palette'"
+    },
+    {
+      "claim": "Light mode is flexible about card and background arrangement; dark mode is not, because surfaces must get lighter as they elevate.",
+      "evidence": "'where light mode was more flexible, dark mode is not'"
+    },
+    {
+      "claim": "Using a brand color ramp alone for charts makes the series look too similar.",
+      "evidence": "Layer 3: 'if we just use our brand color ramp, things look a bit too similar'"
+    },
+    {
+      "claim": "At the same nominal brightness, bright green looks more neon than bright blue.",
+      "evidence": "'bright green seems so much more neon than bright blue'"
+    },
+    {
+      "claim": "OKLCH is based on human perception, so it can give the same perceived brightness across different hues.",
+      "evidence": "'the solution is the OKLCH palette'"
+    },
+    {
+      "claim": "Shifting neutrals in OKLCH themes a design reliably, and works as well or better in dark mode.",
+      "evidence": "Layer four, theming: 'works super well, maybe even better for dark mode'"
+    }
+  ],
+  "quotes": [
+    "You might reach for a thin black border. Don't.",
+    "the more important a button is, the darker it is.",
+    "Surfaces always get lighter as they elevate."
+  ],
+  "tags": [
+    "color",
+    "neutrals",
+    "dark-mode",
+    "color-ramps",
+    "oklch",
+    "semantic-color",
+    "chart-colors",
+    "theming",
+    "borders",
+    "buttons",
+    "text-color",
+    "product-design",
+    "saas",
+    "60-30-10"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "For product UI, do not rely on the 60-30-10 rule; plan color as four layers: neutral foundation, functional accent, semantic colors, theming.",
+      "why": "60-30-10 is fine for beginners and simple sites but does not cover most product design cases, where products can be almost entirely neutral.",
+      "kind": "do",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [
+        "60-30-10",
+        "four layers"
+      ],
+      "evidence": "the four layers of color theory for product design"
+    },
+    {
+      "rule": "A pure white page background is acceptable; real products sit between 98% and 100% white.",
+      "why": "Linear uses 99% white, Notion 100% and Vercel 98%: 'There is some variance, but nothing to say you can't use pure white.'",
+      "kind": "do",
+      "strength": "consider",
+      "area": "color",
+      "applies_to": "all",
+      "values": [
+        "99% white",
+        "100%",
+        "98%"
+      ],
+      "evidence": "'nothing to say you can't use pure white'"
+    },
+    {
+      "rule": "Budget neutrals by product type: 3 to 5 neutrals for a landing page; for a product, about four background layers, at least one stroke (often two) and about three text colors, before hover and interactive states.",
+      "why": "Product UIs have more surfaces and states than a landing page.",
+      "kind": "do",
+      "strength": "should",
+      "area": "tokens",
+      "applies_to": "all",
+      "values": [
+        "3 to five neutrals",
+        "four layers of backgrounds",
+        "at least one stroke, often two",
+        "about three text variants"
+      ],
+      "evidence": "'for a product design, you'll generally want four layers of backgrounds'"
+    },
+    {
+      "rule": "Make the app frame or sidebar a slightly darker anchor than the main content, keeping the shift very small, especially in light mode (for example a 2% blue tint).",
+      "why": "It is a large element, so a small change is enough to separate it.",
+      "kind": "do",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [
+        "2% blue"
+      ],
+      "evidence": "'Mercury adds 2% blue to their sidebar'"
+    },
+    {
+      "rule": "If cards are pure white, do not make the page background pure white as well; darker cards can reuse the sidebar color.",
+      "why": "The source says pure-white cards are 'a good reason not to have pure white as your background'; darker cards are often the sidebar color.",
+      "kind": "dont",
+      "strength": "consider",
+      "area": "color",
+      "applies_to": "all",
+      "values": [
+        "pure white"
+      ],
+      "evidence": "'which is a good reason not to have pure white as your background'"
+    },
+    {
+      "rule": "Define card edges on a light background with a border of roughly 85% white; do not use a thin black border.",
+      "why": "Cards alone look washed out and a subtle drop shadow is only slightly better; roughly 85% white defines the edge without overpowering it. The source says 'Don't' to the thin black border and calls this kind of guidance a rule ('Another great rule').",
+      "kind": "dont",
+      "strength": "must",
+      "area": "elevation",
+      "applies_to": "all",
+      "values": [
+        "roughly 85% white"
+      ],
+      "evidence": "'You might reach for a thin black border. Don't.'"
+    },
+    {
+      "rule": "Make buttons darker the more important they are, from ghost buttons up to black buttons with white text, with everything else in between.",
+      "why": "The source states it as a rule: 'the more important a button is, the darker it is'.",
+      "kind": "do",
+      "strength": "must",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "'Another great rule is the more important a button is, the darker it is'"
+    },
+    {
+      "rule": "Put most multi-purpose buttons around 90 to 95% white.",
+      "why": "The source gives this as where most multi-purpose buttons sit within the ghost-to-black range; no further reason is given.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [
+        "90 to 95% white"
+      ],
+      "evidence": "'most multi-purpose buttons sit around 90 to 95% white'"
+    },
+    {
+      "rule": "Set text colors by importance: reserve the darkest (about 11% white) for important headings, most body text at 15 to 20% white, subtext at 30 to 40%.",
+      "why": "The source reserves the darkest text for important headings, and even those are only about 11% white rather than pure black; most text and subtext sit lighter.",
+      "kind": "do",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [
+        "11% white",
+        "15 to 20% white",
+        "30 to 40%"
+      ],
+      "evidence": "'Finally, text. The darkest colors are reserved for important headings'"
+    },
+    {
+      "rule": "Build the accent as a full ramp from lightest to darkest and assign steps by job: main color at 500 or 600, hover at 700, links at 400 or 500.",
+      "why": "The source says not to think of the accent as a single color: main, hover and link use different steps of one scale, and the ramp also helps when switching to dark mode.",
+      "kind": "do",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [
+        "500 or 600",
+        "700",
+        "400 or 500"
+      ],
+      "evidence": "Layer 2: 'don't think of your color as a single color'"
+    },
+    {
+      "rule": "Do not derive dark mode by reflecting the light palette; roughly double the lightness distance between neutral steps (about 2% apart in light becomes four to 6% in dark).",
+      "why": "Dark colors look more similar, so reflected steps lose their distinction.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [
+        "double the distance",
+        "2% white",
+        "four to 6%"
+      ],
+      "evidence": "'a good rule of thumb is double the distance'"
+    },
+    {
+      "rule": "In dark mode, move the primary brand color to step 300 or 400 with hover at 400 or 500, dim the text and brighten the borders.",
+      "why": "The light-mode steps and contrasts do not carry over; the difference is noticeable to anyone staring at the screen all day.",
+      "kind": "do",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [
+        "300 or 400",
+        "400 or 500"
+      ],
+      "evidence": "'choose a 300 or 400 as our primary brand color on dark mode'"
+    },
+    {
+      "rule": "In dark mode, make raised surfaces lighter than what they sit on, or give them only a border (like a search bar).",
+      "why": "Unlike light mode, dark mode is not flexible: surfaces always get lighter as they elevate.",
+      "kind": "do",
+      "strength": "must",
+      "area": "elevation",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "'Surfaces always get lighter as they elevate'"
+    },
+    {
+      "rule": "Always include semantic colors for states such as success, failure and in progress, even when the brand is black and white.",
+      "why": "Colors convey meaning, so the semantic layer has to break the neutral system; Vercel still shows build status in color.",
+      "kind": "do",
+      "strength": "must",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Layer 3: 'you'll always need some semantic colors'"
+    },
+    {
+      "rule": "Make destructive actions red regardless of the brand color.",
+      "why": "The source calls a non-red destructive action 'pretty much a design sin', even with a purple brand.",
+      "kind": "do",
+      "strength": "must",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "'it's pretty much a design sin to make destructive actions anything other than red'"
+    },
+    {
+      "rule": "Build chart colors in OKLCH: fix lightness and chroma, then step the hue by about 25 to 30 for each series, instead of using neutrals or only the brand ramp.",
+      "why": "Neutral charts look dull, a single brand ramp looks too similar, and hues at the same nominal brightness look unequal (green looks more neon than blue); OKLCH gives equal perceived brightness.",
+      "kind": "do",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [
+        "25 to 30"
+      ],
+      "evidence": "'increment the hue by about 25 to 30'"
+    },
+    {
+      "rule": "To create a color-themed version of a design, convert every neutral to OKLCH, drop lightness by 003 (as captioned) and raise chroma by 0.02, then set the hue to the theme color.",
+      "why": "Instead of guessing each neutral, the OKLCH shift themes any design to red, green or blue 'bang on the money every single time', and works super well, maybe even better, for dark mode.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "color",
+      "applies_to": "all",
+      "values": [
+        "003",
+        "0.02"
+      ],
+      "evidence": "Layer four, theming: 'drop the lightness by 003 and increase the chroma by 0.02'"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "In light mode, how should cards relate to the page background?",
+      "options": [
+        {
+          "name": "Dark background, lighter cards",
+          "effect": "Cards are lighter than the page and can be pure white, which is a reason not to make the page pure white.",
+          "when": "When cards should be the brightest surface (the source's example is Vercel)."
+        },
+        {
+          "name": "Light background, darker cards",
+          "effect": "Cards are darker than the page and are often the same color as the sidebar.",
+          "when": "When the page is pure white (the source's example is Notion)."
+        },
+        {
+          "name": "Monochromatic layers",
+          "effect": "Surfaces are stacked shades of one color [inferred: the source names this option without describing it].",
+          "when": "The source's example is Supabase; it gives no rule for when to pick it."
+        }
+      ],
+      "recommendation": "No single option; the source says light mode is flexible here, while dark mode is not (surfaces always get lighter as they elevate).",
+      "maps_to": "Q-color-14",
+      "evidence": "'light mode is very flexible because we can have a dark background with lighter cards'"
+    },
+    {
+      "question": "Should the page background be pure white or slightly off-white?",
+      "options": [
+        {
+          "name": "Pure white (100%)",
+          "effect": "Brightest possible canvas, as in Notion.",
+          "when": "When cards are darker than the background."
+        },
+        {
+          "name": "Near white (98 to 99%)",
+          "effect": "A barely visible gray that lets pure-white cards stand out, as in Linear (99%) and Vercel (98%).",
+          "when": "When cards or raised elements will be pure white."
+        }
+      ],
+      "recommendation": "The source says nothing rules out pure white, but if cards are pure white the background should not be.",
+      "maps_to": null,
+      "evidence": "'Linear uses 99% white. Notion is 100%. Versella is 98%.'"
+    },
+    {
+      "question": "How should card edges be defined on a light background?",
+      "options": [
+        {
+          "name": "No edge",
+          "effect": "Cards look washed out against the background.",
+          "when": "Not recommended by the source."
+        },
+        {
+          "name": "Subtle drop shadow",
+          "effect": "Only slightly better than no edge.",
+          "when": "Not enough on its own, per the source."
+        },
+        {
+          "name": "Thin black border",
+          "effect": "Too strong for the edge [inferred: the source says the 85% border defines the edge 'but not overpower it', implying black does].",
+          "when": "Never: the source says 'Don't.'"
+        },
+        {
+          "name": "Light gray border (about 85% white)",
+          "effect": "Defines the edge without overpowering it.",
+          "when": "Default for cards on light backgrounds."
+        }
+      ],
+      "recommendation": "Use roughly 85% white for the border, because it defines the edge without overpowering it.",
+      "maps_to": "Q-depth-01",
+      "evidence": "'Instead, use roughly 85% white to define the edge'"
+    },
+    {
+      "question": "Should the product add a colored accent, or stay neutral?",
+      "options": [
+        {
+          "name": "Stay neutral",
+          "effect": "Black, white and grays carry the UI; color appears only where meaning needs it (Vercel).",
+          "when": "When the brand is monochrome."
+        },
+        {
+          "name": "Functional accent",
+          "effect": "One hue becomes recognisable across the product and drives main actions, hovers and links (Linear blue-purple, Supabase bright green).",
+          "when": "When the brand has a signature color."
+        }
+      ],
+      "recommendation": null,
+      "maps_to": "Q-color-02",
+      "evidence": "Layer 2: 'Some products stay neutral like Versel'"
+    },
+    {
+      "question": "How should dark mode be derived from the light palette?",
+      "options": [
+        {
+          "name": "Reflect the light palette",
+          "effect": "Background elements lose almost all distinction because dark colors look more alike.",
+          "when": "The source advises against it."
+        },
+        {
+          "name": "Stretch the neutral steps (double the distance)",
+          "effect": "Surfaces stay distinct: about 2% steps in light become 4 to 6% in dark; primary moves to 300 or 400, text dims, borders brighten.",
+          "when": "Default."
+        }
+      ],
+      "recommendation": "Double the distance between neutral steps rather than reflecting, because dark colors need more separation to look as different.",
+      "maps_to": "Q-color-16",
+      "evidence": "'if you just reflect your light palette, the background elements will lose all of their distinction'"
+    },
+    {
+      "question": "Which colors should charts use?",
+      "options": [
+        {
+          "name": "Neutral chart",
+          "effect": "Grays only; the source calls it 'super lame'.",
+          "when": "Not recommended."
+        },
+        {
+          "name": "Brand color ramp",
+          "effect": "Series look too similar to tell apart easily.",
+          "when": "Not recommended for multi-series charts."
+        },
+        {
+          "name": "Full spectrum at equal perceived brightness (OKLCH)",
+          "effect": "Every hue looks equally bright, so no series (e.g. green) looks more neon than another.",
+          "when": "Default for charts."
+        }
+      ],
+      "recommendation": "Use a full spectrum from OKLCH with fixed lightness and chroma, stepping hue by about 25 to 30.",
+      "maps_to": "Q-color-19",
+      "evidence": "'we need a full spectrum'"
+    },
+    {
+      "question": "How should a color-themed version of the design (red, green, blue) be produced?",
+      "options": [
+        {
+          "name": "Guess each neutral by eye",
+          "effect": "Possible, but the source presents the OKLCH shift as the better way.",
+          "when": "The source mentions it only as the alternative to the OKLCH method."
+        },
+        {
+          "name": "Shift every neutral in OKLCH",
+          "effect": "Lower lightness slightly, raise chroma by 0.02 and set a new hue; the whole design tints consistently, in light and dark mode.",
+          "when": "When the design needs themed variants."
+        }
+      ],
+      "recommendation": "Use the OKLCH shift for every neutral, which the source says lands 'bang on the money every single time'.",
+      "maps_to": null,
+      "evidence": "Layer four, theming"
+    }
+  ],
+  "process": [
+    {
+      "step": "Lay the neutral foundation",
+      "detail": "Pick the page background (pure or near white), a slightly darker frame or sidebar anchor, card surfaces, one or two strokes (about 85% white for card edges) and about three text colors (headings about 11% white, body 15 to 20%, subtext 30 to 40%)."
+    },
+    {
+      "step": "Set button emphasis",
+      "detail": "Order buttons from ghost to black with white text by importance; most multi-purpose buttons around 90 to 95% white."
+    },
+    {
+      "step": "Add a functional accent ramp",
+      "detail": "Generate a full ramp for the accent (the creator used UI colors); use 500 or 600 as the main color, 700 for hover and 400 or 500 for links."
+    },
+    {
+      "step": "Derive dark mode",
+      "detail": "Stretch the neutral steps to about double the distance (2% becomes 4 to 6%), move the primary to 300 or 400 with hover at 400 or 500, dim text, brighten borders, and make raised surfaces lighter or bordered."
+    },
+    {
+      "step": "Add semantic colors",
+      "detail": "Add status colors (success, failed, in progress) and make destructive actions red, regardless of the brand color."
+    },
+    {
+      "step": "Build the chart palette",
+      "detail": "On oklch.com set a lightness and chroma, then increment hue by about 25 to 30 for each chart color."
+    },
+    {
+      "step": "Generate themes",
+      "detail": "For each neutral, plug its hex into OKLCH, drop lightness by 003 (as captioned), raise chroma by 0.02 and set the hue to the theme color; the same trick works for dark mode."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Near-monochrome product palette",
+      "where": "Vercel",
+      "visual_note": "About 90% black, 8% white and 2% red, showing a product that barely uses an accent yet still shows build success, failure and in-progress states in color."
+    },
+    {
+      "what": "Background lightness comparison",
+      "where": "Linear, Notion, Vercel",
+      "visual_note": "Backgrounds at 99%, 100% and 98% white: small variance, showing pure white is acceptable."
+    },
+    {
+      "what": "Tinted sidebar anchor",
+      "where": "Mercury",
+      "visual_note": "Sidebar with 2% blue added, a barely darker frame around the content."
+    },
+    {
+      "what": "Three light-mode card arrangements",
+      "where": "Vercel, Notion, Supabase",
+      "visual_note": "Dark background with lighter cards (Vercel), light background with darker cards (Notion), monochromatic layers (Supabase)."
+    },
+    {
+      "what": "Card edge treatments compared",
+      "where": null,
+      "visual_note": "Cards on a light background shown washed out, then with a subtle shadow (slightly better), then with a roughly 85% white border that defines the edge; a good before/after visual sample [inferred]."
+    },
+    {
+      "what": "Button darkness range",
+      "where": null,
+      "visual_note": "Buttons from ghost to black with white text, darker as they get more important; most multi-purpose buttons around 90 to 95% white."
+    },
+    {
+      "what": "Accent colors as brand identity",
+      "where": "Linear, Supabase",
+      "visual_note": "Linear is recognised by blue-purple, Supabase by bright green."
+    },
+    {
+      "what": "Dark-mode raised element with only a border",
+      "where": null,
+      "visual_note": "A search bar in dark mode defined by a border rather than a lighter fill."
+    },
+    {
+      "what": "Uneven perceived brightness across hues",
+      "where": null,
+      "visual_note": "Bright green looks more neon than bright blue, motivating OKLCH chart colors with equal perceived brightness."
+    },
+    {
+      "what": "One design themed red, green and blue",
+      "where": null,
+      "visual_note": "Every neutral shifted in OKLCH (lightness down, chroma up by 0.02, new hue) to produce red, green and blue themed versions, in light and dark mode."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "60-30-10",
+      "context": "The classic color-proportion rule the video argues against for product UI",
+      "evidence": "Title and opening ('603010' in the caption)"
+    },
+    {
+      "value": "90% black, 8% white, and 2% red",
+      "context": "Vercel's approximate color proportions",
+      "evidence": "Opening"
+    },
+    {
+      "value": "99% / 100% / 98%",
+      "context": "Background whiteness of Linear, Notion and Vercel",
+      "evidence": "Layer one, backgrounds"
+    },
+    {
+      "value": "3 to five",
+      "context": "Neutrals that work for a landing page",
+      "evidence": "'3 to five neutrals works great'"
+    },
+    {
+      "value": "four layers of backgrounds",
+      "context": "Background layers typically needed in product design, plus at least one stroke (often two) and about three text variants",
+      "evidence": "Layer one"
+    },
+    {
+      "value": "at least one stroke, often two",
+      "context": "Strokes needed in product design",
+      "evidence": "Layer one"
+    },
+    {
+      "value": "about three text variants",
+      "context": "Text colors needed in product design",
+      "evidence": "Layer one"
+    },
+    {
+      "value": "2% blue",
+      "context": "Tint Mercury adds to its sidebar",
+      "evidence": "'Mercury adds 2% blue'"
+    },
+    {
+      "value": "roughly 85% white",
+      "context": "Border color to define card edges on light backgrounds",
+      "evidence": "'use roughly 85% white to define the edge'"
+    },
+    {
+      "value": "90 to 95% white",
+      "context": "Where most multi-purpose buttons sit",
+      "evidence": "Button rule"
+    },
+    {
+      "value": "about 11% white",
+      "context": "Darkest text, for important headings",
+      "evidence": "Text section"
+    },
+    {
+      "value": "15 to 20% white",
+      "context": "Most body text",
+      "evidence": "Text section"
+    },
+    {
+      "value": "30 to 40%",
+      "context": "Subtext",
+      "evidence": "Text section"
+    },
+    {
+      "value": "500 or 600 / 700 / 400 or 500",
+      "context": "Light-mode accent ramp steps for main color / hover / link",
+      "evidence": "Layer 2"
+    },
+    {
+      "value": "2% / four to 6%",
+      "context": "Distance between neutral steps in light mode vs dark mode",
+      "evidence": "'double the distance'"
+    },
+    {
+      "value": "300 or 400 / 400 or 500",
+      "context": "Dark-mode primary step / hover step",
+      "evidence": "Dark mode section"
+    },
+    {
+      "value": "25 to 30",
+      "context": "Hue increment between chart colors in OKLCH",
+      "evidence": "Layer 3, charts"
+    },
+    {
+      "value": "003 and 0.02",
+      "context": "OKLCH lightness drop and chroma increase for theming neutrals",
+      "evidence": "Layer four, theming"
+    }
+  ],
+  "caveats": [
+    "Sponsor read for Zero To Mastery (UI/UX design career path, seven courses, 139 hours, a Discord of over half a million students, 10% promo code, free cheat sheet); not part of the lesson.",
+    "Plug for a downloadable Figma file with the video's colors and variables.",
+    "Auto-caption spellings: Vercel appears as 'versel', 'Verscell' and 'Versella'; Supabase as 'superbase'; oklch.com as 'oklcch.com'; OKLCH as 'okay LCH'; 60-30-10 as '603010'.",
+    "The theming step is captioned 'drop the lightness by 003'; since the chroma step is given as 0.02, this is probably 0.03, but the number is kept as captioned [inferred].",
+    "Lightness values are given as '% white' without naming a color model (HSL, HSB or OKLCH lightness), so exact conversion to tokens needs checking [inferred].",
+    "Product color proportions and background values (Vercel, Linear, Notion, Mercury) are the creator's approximations as of a January 2026 video and may change.",
+    "Some statements are taste rather than fact, e.g. a neutral chart being 'super lame'; the video shows its examples visually, which the transcript does not capture.",
+    "The source's view that a neutral chart is 'super lame' and a brand ramp looks too similar runs against Q-color-19's current default 'brand-gray' (one brand chart color plus gray) [inferred]."
+  ]
+}

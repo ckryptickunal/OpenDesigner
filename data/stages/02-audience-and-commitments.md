@@ -14,8 +14,11 @@ Zoom 0 sketch · weight high · changes 0 decisions · class I · cards DC-L09-0
 - **Why:** Who uses it sets density (how packed the screen is) and base text size. Across systems, body text runs 13-19px. Our L09 study puts this fourth on its list of ways systems look most different (an inferred ranking) [DC-L09-04; L09 A2 row 4].
 - **Options:**
   - `regular` Often, in an everyday app: body 16px, controls 36-40px (Radix, shadcn, Mantine, Chakra) [DC-L09-04; L09 A3 density].
+    - Now: Body text 16 px and controls 36-40 px: balanced for an everyday app. As it grows: The safe middle: data-heavy pages can add a compact mode later instead of a second system.
   - `dense` All day, in tools full of data: body 13-14px, controls 28-32px; compact and utilitarian (Polaris 13px, SLDS 13px, Carbon, Atlassian, Primer, Ant 14px) [DC-L09-04].
+    - Now: Body text 13-14 px and controls 28-32 px, so more rows fit; it looks professional and packed. As it grows: Fits data tools as they grow, but touch and occasional use need a roomier mode; tap targets never shrink.
   - `large` Now and then, on a phone or in public: body 17px or more, controls and targets 44-48px (iOS 17pt, GOV.UK 19px, Material, USWDS 48px targets) [DC-L09-04].
+    - Now: Body text 17 px or more and 44-48 px targets: calm and easy to read and tap on phones. As it grows: Suits public and phone use; dense admin screens added later would need a compact mode. [inferred]
 - **Default:** `regular`: regular *Source:* L09 shared default row 8 (body 16px general, 14px tools) [L09 A1].
 - **Show:** the same table-plus-form screen at the three densities side by side; hovering a row shows its height, padding and text size.
 - **Use / avoid:** use dense for tables, dashboards and editors people work in all day; avoid dense on touch-first, occasional or public surfaces, where it hurts legibility and forces the targets out of step with the visuals [DC-L09-04, DC-L15-04].

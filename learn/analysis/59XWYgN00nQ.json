@@ -1,0 +1,330 @@
+{
+  "summary": "Kole Jain explains how a designer with no clients can still build a portfolio by making realistic fake projects. The process is: get a unique prompt from a site such as Good Brief or Sharpen Design, make sure it fits the niche you want to work in, expand it into a full brief with ChatGPT, collect inspiration, then design with the brief in mind and no placeholder text. He compares where to show the work (Dribbble, Behance, Notion sites, a personal website) and says how many projects are enough. For someone building a design system this is mostly career advice, but the steps of starting from a written brief and using realistic content instead of lorem ipsum carry over to any design work [inferred].",
+  "key_ideas": [
+    "Without client work, a portfolio can be built from fake projects.",
+    "A good fake project starts with a good idea; get a unique prompt from a site such as Good Brief or Sharpen Design.",
+    "Pick project ideas that match the niche you want to end up working in.",
+    "Making work for everyone targets no one; without a niche you are the expert of everything and therefore nothing.",
+    "Choose a niche by what you are passionate about and whether products could reasonably be sold in it.",
+    "Turn the prompt into a full project brief (the video uses ChatGPT) and keep it in mind while designing.",
+    "Gather inspiration from Dribbble, Pinterest, Instagram or Behance before designing.",
+    "Make the design as realistic as possible, with no lorem ipsum.",
+    "Dribbble suits interfaces and Behance suits case studies; a personal website seems much more professional but costs a lot of time and energy; Notion sites are quick to set up and can be more personal than Dribbble or Behance.",
+    "Two to three case studies, or three to four interface-only projects, are enough; focus on very high-quality work that shows off your skills."
+  ],
+  "entities": [
+    {
+      "name": "Kole Jain",
+      "type": "person",
+      "description": "Creator of the channel, presenting the video."
+    },
+    {
+      "name": "Good Brief",
+      "type": "tool",
+      "description": "Site the video recommends for getting a unique fake-project prompt."
+    },
+    {
+      "name": "Sharpen Design",
+      "type": "tool",
+      "description": "Site the video recommends for getting a unique fake-project prompt."
+    },
+    {
+      "name": "ChatGPT",
+      "type": "product",
+      "description": "Used to expand a short prompt into a full project brief."
+    },
+    {
+      "name": "Dribbble",
+      "type": "product",
+      "description": "Inspiration source and portfolio host, better suited to showing interfaces."
+    },
+    {
+      "name": "Pinterest",
+      "type": "product",
+      "description": "One of the presenter's favourite inspiration sources."
+    },
+    {
+      "name": "Instagram",
+      "type": "product",
+      "description": "Alternative inspiration source."
+    },
+    {
+      "name": "Behance",
+      "type": "product",
+      "description": "Inspiration source and portfolio host, better suited to case studies."
+    },
+    {
+      "name": "Notion",
+      "type": "product",
+      "description": "Used to build quick, personal portfolio websites."
+    },
+    {
+      "name": "Lorem ipsum",
+      "type": "concept",
+      "description": "Placeholder text the video says to avoid so the design stays realistic."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Portfolio and case studies",
+      "summary": "How to fill a portfolio with fake projects, where to host it (Dribbble, Behance, Notion, personal site) and how many projects to include (2-3 case studies or 3-4 interfaces)."
+    },
+    {
+      "name": "Design process",
+      "summary": "A short project workflow: unique prompt, niche fit, full brief, inspiration gathering, then a realistic design kept true to the brief."
+    },
+    {
+      "name": "Content and microcopy",
+      "summary": "Use realistic content in designs; absolutely no lorem ipsum."
+    },
+    {
+      "name": "Design resources",
+      "summary": "Names prompt sites (Good Brief, Sharpen Design) and inspiration sites (Dribbble, Pinterest, Instagram, Behance)."
+    },
+    {
+      "name": "AI-assisted design",
+      "summary": "ChatGPT is used to write a full project brief from a short prompt."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Making websites for everyone instead of choosing a niche means you target no one.",
+      "evidence": "By not having one and making websites for everyone, you target no one"
+    },
+    {
+      "claim": "Dribbble is more suited to interfaces, while Behance is much better for case studies.",
+      "evidence": "Dribbble being more suited to interfaces, while Behance is much better for case studies"
+    },
+    {
+      "claim": "A personal website makes you seem more professional than Dribbble or Behance, but it takes a lot of time and energy.",
+      "evidence": "having a personal website will make you seem much more professional"
+    },
+    {
+      "claim": "Notion websites are quick and easy to set up and can be more personal than Dribbble and Behance.",
+      "evidence": "quick and easy to set up and can be more personal than Dribbble and Behance"
+    },
+    {
+      "claim": "Two to three case studies, or three to four interface-only projects, are enough for a portfolio.",
+      "evidence": "you really only should need two to three"
+    }
+  ],
+  "quotes": [
+    "By not having one and making websites for everyone, you target no one.",
+    "This means absolutely no lorem ipsum.",
+    "you got to fake it till you make it"
+  ],
+  "tags": [
+    "portfolio",
+    "case-studies",
+    "fake-projects",
+    "design-brief",
+    "niche",
+    "inspiration",
+    "lorem-ipsum",
+    "career"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "When you have no client work, fill the portfolio with self-initiated (fake) projects.",
+      "why": "A designer who has not worked with any clients otherwise has nothing to put in the portfolio.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Projects. We need fake projects."
+    },
+    {
+      "rule": "Start a practice or portfolio project from a unique prompt taken from a site such as Good Brief or Sharpen Design.",
+      "why": "A good fake project always starts with a good idea.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Head over to Good Brief or Sharpen Design to get yourself a unique prompt"
+    },
+    {
+      "rule": "Choose project ideas that line up with the niche you want to end up working in.",
+      "why": "Making work for everyone targets no one; you become the expert of everything and therefore nothing.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "We want this idea to line up with the niche"
+    },
+    {
+      "rule": "Pick a niche by checking two things: you are passionate about it, and products could reasonably be sold in it.",
+      "why": "The source gives this as the simple test for choosing a niche.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Choosing a niche is as simple as figuring out what you're passionate about"
+    },
+    {
+      "rule": "Write a full project brief before designing, keep it in mind throughout, and make the design as realistic as possible.",
+      "why": "The aim is a project as realistic as possible even without a real client.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Make sure to keep your brief in mind and make it as realistic as possible"
+    },
+    {
+      "rule": "Gather inspiration (for example from Dribbble, Pinterest, Instagram or Behance) before starting the design.",
+      "why": "The source's process collects inspiration once the brief is written.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "let's grab some inspiration"
+    },
+    {
+      "rule": "Do not use lorem ipsum; fill designs with realistic content.",
+      "why": "The design should be as realistic as possible.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "This means absolutely no lorem ipsum"
+    },
+    {
+      "rule": "Show 2-3 projects when presenting them as case studies, or 3-4 when showing only the resulting interfaces.",
+      "why": "That is plenty.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [
+        "two to three",
+        "three to four"
+      ],
+      "evidence": "you really only should need two to three"
+    },
+    {
+      "rule": "Focus on making very high-quality work for the portfolio.",
+      "why": "You really want to show off your skills.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Make sure to focus on making very high-quality work"
+    },
+    {
+      "rule": "Prefer a personal portfolio website; use a Notion website as the quick fallback when there is no time to build one.",
+      "why": "A personal website makes you seem much more professional, though it takes a lot of time and energy; Notion sites are quick and easy to set up.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Looks like Notion it is, but a personal portfolio is best"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "Where should the portfolio work be displayed?",
+      "options": [
+        {
+          "name": "Dribbble",
+          "effect": "A typical choice that is more suited to interfaces.",
+          "when": "Showing finished interfaces rather than full case studies."
+        },
+        {
+          "name": "Behance",
+          "effect": "A typical choice that is much better for case studies.",
+          "when": "Presenting projects as case studies."
+        },
+        {
+          "name": "Notion website",
+          "effect": "Quick and easy to set up and can feel more personal than Dribbble or Behance.",
+          "when": "You want something personal without the time cost of building a site."
+        },
+        {
+          "name": "Personal website",
+          "effect": "Makes you seem much more professional, but needs a lot of time and energy.",
+          "when": "You can invest the time; the source calls it the best option."
+        }
+      ],
+      "recommendation": "A personal portfolio website is best because it looks much more professional; a Notion website is the quick fallback when there is no time for one.",
+      "maps_to": null,
+      "evidence": "Hmm. Looks like Notion it is, but a personal portfolio is best."
+    },
+    {
+      "question": "How should projects be presented and how many should be included?",
+      "options": [
+        {
+          "name": "Case studies",
+          "effect": "Each project is turned into a case study (the presenter points to a separate video that walks through how).",
+          "when": "Presenting projects as case studies; two to three are enough."
+        },
+        {
+          "name": "Resulting interface only",
+          "effect": "Only the finished interface is shown.",
+          "when": "Displaying just the resulting interface; three to four are plenty."
+        }
+      ],
+      "recommendation": "The source does not prefer one format; it sets the count (2-3 case studies or 3-4 interfaces) and stresses very high-quality work.",
+      "maps_to": null,
+      "evidence": "If you're turning your work into case studies"
+    }
+  ],
+  "process": [
+    {
+      "step": "Get a unique prompt",
+      "detail": "Use a site such as Good Brief or Sharpen Design to get a unique project prompt."
+    },
+    {
+      "step": "Check the niche fit",
+      "detail": "Make sure the idea lines up with the niche you want to work in, chosen by passion and whether products could reasonably be sold in it."
+    },
+    {
+      "step": "Write a full brief",
+      "detail": "Expand the prompt into a full project brief; the video uses ChatGPT."
+    },
+    {
+      "step": "Gather inspiration",
+      "detail": "Collect references from Dribbble, Pinterest, Instagram, Behance or similar sites."
+    },
+    {
+      "step": "Design realistically",
+      "detail": "Create the design with the brief in mind, as realistic as possible, with no lorem ipsum."
+    },
+    {
+      "step": "Choose where to display it",
+      "detail": "Pick Dribbble (interfaces), Behance (case studies), a Notion website (quick) or a personal website (most professional)."
+    },
+    {
+      "step": "Curate the set",
+      "detail": "Keep 2-3 case studies or 3-4 interface projects and focus on very high quality."
+    }
+  ],
+  "examples": [],
+  "numbers": [
+    {
+      "value": "two to three",
+      "context": "Number of case studies needed in a portfolio.",
+      "evidence": "you really only should need two to three"
+    },
+    {
+      "value": "three to four",
+      "context": "Number of projects needed when only the resulting interface is shown.",
+      "evidence": "three to four is plenty"
+    }
+  ],
+  "caveats": [
+    "Career advice for new designers rather than guidance on design-system decisions; only the brief-first and no-lorem-ipsum steps transfer directly [inferred].",
+    "Short (2 minutes 30 seconds) and opinion-based; the platform comparisons are the presenter's views, not measured.",
+    "Points viewers to another of the presenter's videos for the full case-study walkthrough (self-promotion).",
+    "Published March 2024; the named tools and platforms may have changed since.",
+    "Auto-generated captions; no mis-hearings that change meaning were found."
+  ]
+}

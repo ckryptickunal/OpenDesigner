@@ -1,0 +1,661 @@
+{
+  "summary": "Emil Kowalski explains how to decide when to animate and when not to. Every animation needs a purpose: explaining how a feature works, making a button press feel alive and responsive, avoiding a sudden appearance, keeping spatial consistency, or, for rarely used parts, delight. How often people will see an animation is a key factor: things used many times a day, hover effects and every keyboard-initiated action are best with no animation (keyboard actions should never animate). Unless it is a marketing site, animations have to be fast (UI animations generally under 300ms) because speed improves perceived performance and keeps the interface connected to the user's actions. For a design system this becomes a gate before any motion token is used (purpose, frequency, speed) plus concrete component behaviour for toasts, tooltips, dropdowns, command menus and spinners [inferred].",
+  "key_ideas": [
+    "Animations done right make an interface feel predictable, faster and more enjoyable; done wrong they feel unpredictable, slow and annoying and can cost user trust.",
+    "Before animating anything, name its purpose.",
+    "An animation can replace a static marketing asset when it explains how a feature works right in the first viewport.",
+    "A subtle scale-down when pressing a button is a purposeful animation: it makes the interface feel alive and responsive.",
+    "Toasts should animate in, and entering and leaving in the same direction makes swipe-to-dismiss feel intuitive.",
+    "Delight animations work only on things people rarely use; used daily, the delight fades into irritation.",
+    "Frequency of use is a key factor in deciding whether to animate: something opened hundreds of times a day, like Raycast, is best with no animation.",
+    "Keyboard-initiated actions should never be animated because animation makes them feel delayed and disconnected.",
+    "Outside marketing sites, animations must be fast; they improve perceived performance and make the interface feel like it is listening.",
+    "A faster spinner makes loading feel faster even when the load time is the same.",
+    "Keep UI animations under 300ms as a rule of thumb; a 180ms dropdown feels more responsive than a 400ms one.",
+    "Tooltips need a slight first delay, but once one is open, neighbouring tooltips should open instantly with no animation.",
+    "Even a rarely used, purposeful animation still has to be checked for speed.",
+    "The goal is a great interface, not animation for its own sake; sometimes the best animation is no animation."
+  ],
+  "entities": [
+    {
+      "name": "Emil Kowalski",
+      "type": "person",
+      "description": "Design engineer and author of the article"
+    },
+    {
+      "name": "Linear",
+      "type": "company",
+      "description": "Company where the author built the marketing animation used as the example of a purposeful animation"
+    },
+    {
+      "name": "Product Intelligence",
+      "type": "product",
+      "description": "Linear feature explained by the animation on linear.app/ai"
+    },
+    {
+      "name": "Sonner",
+      "type": "library",
+      "description": "Toast component whose enter animation is the example of an animation with two purposes"
+    },
+    {
+      "name": "Raycast",
+      "type": "product",
+      "description": "App the author opens hundreds of times a day; it has no open animation, cited as the optimal experience"
+    },
+    {
+      "name": "Command menu",
+      "type": "concept",
+      "description": "Interactive demo (with and without animation) used to show why frequently opened UI and arrow-key navigation should not animate"
+    },
+    {
+      "name": "Perceived performance",
+      "type": "concept",
+      "description": "How fast the app seems; fast animations and faster spinners improve it"
+    },
+    {
+      "name": "Spatial consistency",
+      "type": "concept",
+      "description": "An element entering and leaving in the same direction, which makes its dismiss gesture feel intuitive"
+    },
+    {
+      "name": "animations.dev",
+      "type": "product",
+      "description": "The author's animation course, plugged at the end of the article"
+    },
+    {
+      "name": "aiforui.dev",
+      "type": "product",
+      "description": "The author's course, plugged in a banner at the top of the page"
+    }
+  ],
+  "topics": [
+    {
+      "name": "Motion principles",
+      "summary": "Animate only with a purpose, weigh how often the animation will be seen, and remember that the best animation is sometimes none."
+    },
+    {
+      "name": "Easing and timing",
+      "summary": "Product UI animations must be fast: generally under 300ms; a 180ms dropdown feels more responsive than a 400ms one. Marketing sites are the exception."
+    },
+    {
+      "name": "Micro-interactions",
+      "summary": "A subtle scale-down on button press makes the interface feel alive and responsive; a hover effect used many times a day would likely be best with no animation; a morphing feedback component is delightful only if rarely used."
+    },
+    {
+      "name": "Toasts and notifications",
+      "summary": "Sonner animates toasts in because a sudden appearance feels off, and enters and exits in the same direction so swipe-down-to-dismiss feels intuitive."
+    },
+    {
+      "name": "Modals and popovers",
+      "summary": "Tooltips get a slight initial delay to prevent accidental activation, then open with no delay and no animation while another is open; a 180ms dropdown feels more responsive than a 400ms one."
+    },
+    {
+      "name": "Feedback, empty and loading states",
+      "summary": "A faster-spinning spinner makes the app seem to load faster at the same load time."
+    },
+    {
+      "name": "Landing pages",
+      "summary": "On marketing pages an animation can explain a feature in the first viewport better than a static asset (Linear's Product Intelligence), and marketing sites are exempt from the need for fast animation."
+    },
+    {
+      "name": "Gestures and drag",
+      "summary": "Matching enter and exit direction to the dismiss direction makes a swipe-to-dismiss gesture feel intuitive."
+    },
+    {
+      "name": "Buttons and actions",
+      "summary": "A subtle scale-down when pressing a button is cited as a purposeful animation that makes the interface feel alive and responsive."
+    },
+    {
+      "name": "Design taste and judgement",
+      "summary": "Deciding when not to animate is part of craft: think about what the user wants to achieve and how often they will see the motion."
+    },
+    {
+      "name": "Design process",
+      "summary": "Deciding whether to animate follows an order: name the purpose, weigh how often it will be seen and what the user wants to achieve, then check the speed."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "When done right, animations make an interface feel predictable, faster and more enjoyable to use and help a product stand out.",
+      "evidence": "opening paragraph: \"When done right, animations make an interface feel predictable\""
+    },
+    {
+      "claim": "Badly used animations can make an interface feel unpredictable, slow and annoying, and can make users lose trust in the product.",
+      "evidence": "opening: \"But they can also do the opposite\""
+    },
+    {
+      "claim": "Linear could have used a static asset for Product Intelligence, but the animated version helps users understand what the feature does straight in the initial viewport.",
+      "evidence": "Purposeful animations: \"We could have used a static asset\""
+    },
+    {
+      "claim": "A subtle scale-down when pressing a button helps the interface feel more alive and responsive.",
+      "evidence": "Purposeful animations: \"subtle scale down effect when pressing a button\""
+    },
+    {
+      "claim": "A toast that suddenly appears would feel off.",
+      "evidence": "Sonner's enter animation, first purpose"
+    },
+    {
+      "claim": "A toast that comes from and leaves in the same direction creates spatial consistency, which makes the swipe-down-to-dismiss gesture feel more intuitive.",
+      "evidence": "Sonner's enter animation, second purpose"
+    },
+    {
+      "claim": "A morphing feedback component is a pleasant surprise when rarely used but becomes irritating and slows users down when used multiple times a day.",
+      "evidence": "\"Used multiple times a day, this component would quickly become irritating\""
+    },
+    {
+      "claim": "How often users will see an animation is a key factor in deciding whether to animate.",
+      "evidence": "end of Purposeful animations, lead-in to Frequency of use"
+    },
+    {
+      "claim": "Raycast, used hundreds of times a day, has no animation at all when opened, and that is the optimal experience.",
+      "evidence": "Frequency of use: \"I use Raycast hundreds of times a day\""
+    },
+    {
+      "claim": "Animating keyboard-initiated actions makes them feel slow, delayed and disconnected from the user's actions.",
+      "evidence": "Frequency of use: \"The same goes for keyboard-initiated actions\""
+    },
+    {
+      "claim": "When opening a tool like Raycast the user has a clear goal, does not expect or need to be delighted, and wants no unnecessary friction.",
+      "evidence": "Frequency of use: \"I just want to do my work with no unnecessary friction\""
+    },
+    {
+      "claim": "A hover effect is nice, but if used multiple times a day it would likely benefit most from having no animation at all.",
+      "evidence": "Frequency of use: \"A hover effect is nice, but if used multiple times a day\""
+    },
+    {
+      "claim": "Animating the highlight during arrow-key list navigation makes it feel delayed compared to the key presses.",
+      "evidence": "\"Notice how the highlight feels delayed compared to the keys you press\""
+    },
+    {
+      "claim": "Fast animations improve the perceived performance of an app, stay connected to user actions and make the interface feel as if it is listening.",
+      "evidence": "Perception of speed"
+    },
+    {
+      "claim": "A faster-spinning spinner makes the app seem to load faster even though the load time is the same.",
+      "evidence": "Perception of speed: spinner example"
+    },
+    {
+      "claim": "A 180ms dropdown animation feels more responsive than a 400ms one.",
+      "evidence": "Perception of speed: \"A 180ms dropdown animation feels more responsive\""
+    },
+    {
+      "claim": "UI animations should generally stay under 300ms.",
+      "evidence": "\"As a rule of thumb\""
+    },
+    {
+      "claim": "A slight delay before a tooltip appears prevents accidental activation; opening subsequent tooltips instantly feels faster without defeating the purpose of that delay.",
+      "evidence": "Perception of speed: tooltip example"
+    },
+    {
+      "claim": "The goal is not to animate for animation's sake but to build great interfaces users will happily use daily; sometimes the best animation is no animation.",
+      "evidence": "Building great interfaces: \"The goal is not to animate for animation’s sake\""
+    }
+  ],
+  "quotes": [
+    "Sometimes this requires animations, but sometimes the best animation is no animation.",
+    "As a rule of thumb, UI animations should generally stay under 300ms",
+    "How often users will see an animation is a key factor"
+  ],
+  "tags": [
+    "animation",
+    "motion",
+    "when-to-animate",
+    "purposeful-animation",
+    "frequency-of-use",
+    "perceived-performance",
+    "duration",
+    "keyboard",
+    "tooltips",
+    "toasts",
+    "delight",
+    "emil-kowalski"
+  ],
+  "authority": "non-negotiable",
+  "rules": [
+    {
+      "rule": "Before adding any animation, state its purpose (explain how something works, make an interaction feel alive and responsive, avoid a sudden appearance, keep spatial consistency, or delight); if it has none, do not animate.",
+      "why": "Done wrong, animations make an interface feel unpredictable, slow and annoying and can cost user trust; making sure an animation has a purpose is step one of knowing when to animate.",
+      "kind": "do",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Purposeful animations: \"Step one is making sure your animations have a purpose\"; \"what’s the purpose of this animation?\""
+    },
+    {
+      "rule": "Do not animate for animation's sake; when an animation does not make the interface better to use daily, ship no animation.",
+      "why": "The goal is to build interfaces users will happily use daily; sometimes the best animation is no animation.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Building great interfaces: \"The goal is not to animate for animation’s sake\""
+    },
+    {
+      "rule": "Decide whether to animate by estimating how often the user will see the animation; the more often it is seen, the stronger the case for no animation.",
+      "why": "Frequency of use is a key factor: repeated animations turn from pleasant into annoying and slow users down.",
+      "kind": "do",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "\"How often users will see an animation is a key factor in deciding whether to animate or not\"; \"Think about what the user wants to achieve and how often they will see an animation\""
+    },
+    {
+      "rule": "Do not animate the opening of UI that people open hundreds of times a day, such as Raycast or a command menu; show it instantly.",
+      "why": "If it animated every time it opened it would be very annoying; Raycast has no animation at all and the author calls that the optimal experience. The source illustrates this rather than stating it as a rule; when the open is triggered from the keyboard, the must rule on keyboard-initiated actions applies.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Frequency of use: \"I use Raycast hundreds of times a day\"; \"That’s the optimal experience\""
+    },
+    {
+      "rule": "For goal-driven tools, design for the user's goal with no unnecessary friction instead of trying to delight them.",
+      "why": "When the user opens such a tool they have a clear goal and do not expect or need to be delighted.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "\"I don’t expect to be “delighted”, I don’t need to be\""
+    },
+    {
+      "rule": "Do not animate hover effects on elements users interact with multiple times a day.",
+      "why": "A hover effect is nice, but used multiple times a day it would likely benefit the most from having no animation at all.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "\"A hover effect is nice, but if used multiple times a day\""
+    },
+    {
+      "rule": "Never animate keyboard-initiated actions.",
+      "why": "They may be repeated hundreds of times a day, and animation makes them feel slow, delayed and disconnected from the user's actions.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "\"The same goes for keyboard-initiated actions ... You should never animate them.\""
+    },
+    {
+      "rule": "Do not animate the highlight when navigating a list with arrow keys (for example in a command menu); move it instantly.",
+      "why": "Arrow-key navigation is a keyboard-initiated action, which should never be animated; an animated highlight feels delayed compared to the keys the user presses.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "\"use arrow keys to navigate through the list. Notice how the highlight feels delayed\""
+    },
+    {
+      "rule": "Give buttons a subtle scale-down effect while they are pressed.",
+      "why": "It helps the interface feel more alive and responsive.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Purposeful animations: \"subtle scale down effect when pressing a button\""
+    },
+    {
+      "rule": "Animate toasts in rather than making them appear suddenly.",
+      "why": "A toast suddenly appearing would feel off.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Sonner’s enter animation: \"Having a toast suddenly appear would feel off, so we animate it in\""
+    },
+    {
+      "rule": "Make a toast come from and leave in the same direction, matching its swipe-to-dismiss gesture (Sonner: swipe down to dismiss).",
+      "why": "Coming from and leaving in the same direction creates spatial consistency, which makes the swipe-down-to-dismiss gesture feel more intuitive.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Sonner’s enter animation: \"comes from and leaves in the same direction\""
+    },
+    {
+      "rule": "Use delight animations (such as a morphing component) only on components users rarely interact with.",
+      "why": "Rarely seen, the animation is a pleasant surprise and makes the experience unique and memorable.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "\"This works as long as the user will rarely interact with it\""
+    },
+    {
+      "rule": "Do not put delight animations on components used multiple times a day.",
+      "why": "Used multiple times a day the component would quickly become irritating; the initial delight fades and the animation slows users down. Stated as a consequence rather than a rule.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "\"Used multiple times a day, this component would quickly become irritating\""
+    },
+    {
+      "rule": "On marketing pages, consider an animation instead of a static asset when it explains how a feature works in the initial viewport.",
+      "why": "The animated version helps the user understand what the feature does straight in the initial viewport.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "Purposeful animations: Linear Product Intelligence, linear.app/ai"
+    },
+    {
+      "rule": "Keep every product UI animation fast; only marketing sites are exempt.",
+      "why": "Fast animations improve perceived performance, stay connected to the user's actions and make the interface feel as if it is truly listening.",
+      "kind": "do",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Perception of speed: \"Unless you are working on marketing sites, your animations have to be fast\""
+    },
+    {
+      "rule": "Keep UI animation durations under 300ms.",
+      "why": "Stated rule of thumb; fast animations improve perceived performance and stay connected to the user's actions.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "300ms"
+      ],
+      "evidence": "\"As a rule of thumb, UI animations should generally stay under 300ms\""
+    },
+    {
+      "rule": "Keep dropdown animations fast: a 180ms dropdown feels more responsive than a 400ms one.",
+      "why": "A 180ms dropdown animation feels more responsive than a 400ms one.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "180ms",
+        "400ms"
+      ],
+      "evidence": "\"A 180ms dropdown animation feels more responsive than a 400ms one\""
+    },
+    {
+      "rule": "Even when an animation is rarely seen and has a clear purpose, still check its speed; passing the purpose and frequency checks does not exempt it.",
+      "why": "The article orders the decision as purpose, then frequency, then speed, and says a rare, purposeful animation still has to be thought about for speed.",
+      "kind": "do",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "\"even if your animation won’t be used too often and it fulfills a clear purpose, you still have to think about its speed\""
+    },
+    {
+      "rule": "Use a faster-spinning spinner for loading indicators.",
+      "why": "A faster spinner makes the app seem to load faster even though the load time is the same, improving perceived performance.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Perception of speed: \"a faster-spinning spinner makes the app seem to load faster\""
+    },
+    {
+      "rule": "Give tooltips a slight delay before they first appear.",
+      "why": "It prevents accidental activation.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "\"tooltips should have a slight delay before appearing\""
+    },
+    {
+      "rule": "While a tooltip is open, open other tooltips on hover with no delay and no animation.",
+      "why": "It feels faster without defeating the purpose of the initial delay.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "\"hovering over other tooltips should open them with no delay and no animation\""
+    },
+    {
+      "rule": "Judge a frequently used animation by toggling it against a no-animation version and asking which feels better if used hundreds of times a day. [inferred]",
+      "why": "The article's own demos pose this comparison to show how animation feels when repeated.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Command menu demo: \"Which one feels better if used hundreds of times a day?\""
+    }
+  ],
+  "decisions": [
+    {
+      "question": "Should this interaction animate at all?",
+      "options": [
+        {
+          "name": "Animate",
+          "effect": "Can explain a feature, make an interaction feel alive and responsive, avoid a sudden appearance, keep spatial consistency or bring delight.",
+          "when": "The animation has a clear purpose and users see it rarely, or it prevents something from appearing abruptly (e.g. a toast)."
+        },
+        {
+          "name": "No animation",
+          "effect": "The UI responds instantly and feels connected to the user's actions with no friction.",
+          "when": "Users see it multiple or hundreds of times a day (launcher, command menu, frequent hover), or it is keyboard-initiated."
+        }
+      ],
+      "recommendation": "Animate only with a purpose; use no animation for every keyboard-initiated action, and lean to no animation for anything seen many times a day; sometimes the best animation is no animation.",
+      "maps_to": null,
+      "evidence": "Purposeful animations; Frequency of use"
+    },
+    {
+      "question": "How long should a product UI animation such as a dropdown take?",
+      "options": [
+        {
+          "name": "180ms",
+          "effect": "Feels responsive and connected to the click.",
+          "when": "Product UI such as dropdowns."
+        },
+        {
+          "name": "400ms",
+          "effect": "Feels less responsive than 180ms.",
+          "when": "Not recommended for product UI; the article only exempts marketing sites from the need to be fast [inferred]."
+        }
+      ],
+      "recommendation": "Keep UI animations generally under 300ms; the 180ms dropdown feels more responsive than the 400ms one.",
+      "maps_to": null,
+      "evidence": "Perception of speed"
+    },
+    {
+      "question": "Should a component get a delight animation, such as morphing?",
+      "options": [
+        {
+          "name": "Delight animation",
+          "effect": "Makes the experience unique and memorable; a pleasant surprise.",
+          "when": "The user will rarely interact with the component."
+        },
+        {
+          "name": "Plain, unanimated",
+          "effect": "No irritation or slowdown with repeated use.",
+          "when": "The component is used multiple times a day."
+        }
+      ],
+      "recommendation": "Use delight only on rarely used components; used daily, the delight fades and the animation slows users down.",
+      "maps_to": null,
+      "evidence": "Feedback component morph example"
+    },
+    {
+      "question": "How should tooltips open when the user moves between several of them?",
+      "options": [
+        {
+          "name": "Slight delay on the first tooltip, then instant",
+          "effect": "Prevents accidental activation, then feels fast while browsing neighbouring tooltips.",
+          "when": "Default."
+        },
+        {
+          "name": "Same delay and animation every time",
+          "effect": "Each subsequent tooltip waits and animates again, which feels slower [inferred].",
+          "when": "Not recommended by the source [inferred]."
+        }
+      ],
+      "recommendation": "A slight delay before the first tooltip, then open other tooltips with no delay and no animation while one is open.",
+      "maps_to": null,
+      "evidence": "Perception of speed: tooltip example"
+    },
+    {
+      "question": "How should a toast arrive and leave?",
+      "options": [
+        {
+          "name": "Animate in, enter and leave in the same direction",
+          "effect": "Creates spatial consistency and makes swipe-down-to-dismiss feel intuitive.",
+          "when": "Default for toasts."
+        },
+        {
+          "name": "Appear suddenly",
+          "effect": "Feels off.",
+          "when": "Not recommended."
+        }
+      ],
+      "recommendation": "Animate the toast in and have it come from and leave in the same direction.",
+      "maps_to": null,
+      "evidence": "Sonner’s enter animation"
+    },
+    {
+      "question": "On a marketing page, should a feature be shown with a static asset or an animation?",
+      "options": [
+        {
+          "name": "Static asset",
+          "effect": "Shows the feature without motion.",
+          "when": "When motion would not help explain the feature [inferred]."
+        },
+        {
+          "name": "Explanatory animation",
+          "effect": "Helps the user understand what the feature does straight in the initial viewport.",
+          "when": "The feature's workings are easier to understand when shown in motion (Linear's Product Intelligence)."
+        }
+      ],
+      "recommendation": "Use the animation when its purpose is to explain how the feature works, as Linear did for Product Intelligence.",
+      "maps_to": null,
+      "evidence": "Purposeful animations: linear.app/ai"
+    }
+  ],
+  "process": [
+    {
+      "step": "Name the purpose",
+      "detail": "Ask what the animation is for: explaining a feature, feedback on a press, avoiding an abrupt appearance, spatial consistency for a gesture, or delight. No purpose means no animation."
+    },
+    {
+      "step": "Estimate frequency of use",
+      "detail": "Work out how often users will see it. Rare: animation (even delight) is fine. Multiple or hundreds of times a day, or any keyboard-initiated action: no animation."
+    },
+    {
+      "step": "Consider the user's goal",
+      "detail": "Think about what the user wants to achieve; goal-driven tools should have no unnecessary friction rather than delight."
+    },
+    {
+      "step": "Check the speed",
+      "detail": "Unless it is a marketing site, make the animation fast, generally under 300ms (a 180ms dropdown beats a 400ms one)."
+    },
+    {
+      "step": "Compare with no animation",
+      "detail": "Toggle the animated and unanimated versions and ask which feels better if used hundreds of times a day, as the article's demos do [inferred]."
+    },
+    {
+      "step": "Handle tooltips in sequence",
+      "detail": "Keep a slight delay before the first tooltip, but while one is open, open the others with no delay and no animation."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Animated marketing asset explaining Product Intelligence",
+      "where": "Linear (linear.app/ai)",
+      "visual_note": "An animation in the initial viewport that explains how the feature works, used instead of a static asset."
+    },
+    {
+      "what": "Button press scale-down",
+      "where": null,
+      "visual_note": "A demo button labelled Paste with a subtle scale-down while it is pressed; small feedback that makes the interface feel alive and responsive."
+    },
+    {
+      "what": "Toast enter animation",
+      "where": "Sonner",
+      "visual_note": "The toast animates in from the same direction it leaves, making swipe-down-to-dismiss feel intuitive."
+    },
+    {
+      "what": "Morphing feedback component",
+      "where": null,
+      "visual_note": "A Feedback button that morphs when pressed; delightful only because it is used rarely."
+    },
+    {
+      "what": "Command menu open with and without animation",
+      "where": null,
+      "visual_note": "Shown alongside the Raycast example: a command menu listing apps (Linear, ChatGPT, Cursor, Figma, Obsidian) and commands (Clipboard History, Emoji Picker), toggled open with J and K in an Animation and a No animation version; shows why something opened hundreds of times a day should not animate."
+    },
+    {
+      "what": "Frequently used list with a hover effect",
+      "where": null,
+      "visual_note": "A list demo captioned \"Imagine you interact with this list often during the day.\"; shows why a hover effect used many times a day is better without animation."
+    },
+    {
+      "what": "Arrow-key list navigation with and without animation",
+      "where": null,
+      "visual_note": "The same command menu navigated with arrow keys; the animated highlight lags behind the key presses, and pressing Shift toggles to the instant version."
+    },
+    {
+      "what": "Two spinners at different speeds",
+      "where": null,
+      "visual_note": "Asks which one works harder to load the data; the faster spinner makes loading seem faster."
+    },
+    {
+      "what": "Dropdown at 180ms versus 400ms",
+      "where": null,
+      "visual_note": "Two dropdown triggers labelled Options at 180ms and 400ms; the 180ms one feels more responsive."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "300ms",
+      "context": "Rule-of-thumb upper limit for UI animation duration",
+      "evidence": "\"UI animations should generally stay under 300ms\""
+    },
+    {
+      "value": "180ms",
+      "context": "Dropdown animation duration that feels more responsive",
+      "evidence": "Perception of speed"
+    },
+    {
+      "value": "400ms",
+      "context": "Dropdown animation duration that feels less responsive than 180ms",
+      "evidence": "Perception of speed"
+    },
+    {
+      "value": "hundreds of times a day",
+      "context": "How often the author uses Raycast and how often keyboard actions may repeat; the frequency at which animation should be removed",
+      "evidence": "Frequency of use"
+    },
+    {
+      "value": "multiple times a day",
+      "context": "Frequency at which a delight animation or hover animation becomes irritating",
+      "evidence": "Feedback morph example; hover effect paragraph"
+    }
+  ],
+  "caveats": [
+    "Self-promotion: a banner for the author's aiforui.dev course opens the page and the article ends with a plug for animations.dev; neither is a rule.",
+    "The page's interactive demos (morphing feedback, command menu toggle with J/K and Shift, spinners, dropdowns) do not survive text extraction; only their labels and surrounding text are available, so their exact motion values are unknown.",
+    "This article gives no numeric values for the button press scale, the tooltip delay or the spinner speed; other Emil Kowalski articles may.",
+    "300ms is stated as a rule of thumb (\"generally\"), and marketing sites are explicitly exempt from the need for fast animation. The 180ms versus 400ms dropdown is a comparison, not a prescribed exact value.",
+    "The Raycast example is the author's personal usage, offered as an illustration rather than measured data.",
+    "Publication date unknown. Some demo captions appear twice in the extracted text (\"Imagine you interact with this list often during the day.\", the Paste button label); this may be two demo variants or an extraction artifact.",
+    "The only media item is an Obsidian app icon from the demo list, which carries no design lesson and was not downloaded."
+  ]
+}

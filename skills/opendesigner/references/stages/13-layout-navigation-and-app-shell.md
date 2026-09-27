@@ -16,9 +16,13 @@ Zoom 2 defined · weight high · changes 5 decisions · class G · cards DC-L03-
 - **Why:** At each breakpoint the layout changes: panes appear, the menu swaps and columns double [DC-L03-14].
 - **Options:**
   - `material` Material width breakpoints 600 / 840 / 1200 / 1600dp plus height classes 480 / 900 (Android and web).
+    - Now: Layouts change at 600, 840, 1200 and 1600: works for Android and the web. As it grows: One set shared across platforms; Material notes some products never need the largest sizes.
   - `tailwind` Tailwind 640 / 768 / 1024 / 1280 / 1536 (web-only products).
+    - Now: Layouts change at 640, 768, 1024, 1280 and 1536: the common web-only set. As it grows: Fine while you stay on the web; adding native apps later means mapping to their own size classes. [inferred]
   - `bootstrap` Bootstrap 576 / 768 / 992 / 1200 / 1400.
+    - Now: Layouts change at 576, 768, 992, 1200 and 1400: Bootstrap's set. As it grows: Familiar to Bootstrap teams; more breakpoints mean smoother changes but more design and testing. [inferred]
   - `apple-size-classes` Apple size classes, compact or regular for width and height, set by the system.
+    - Now: The system reports compact or regular width and height, and the layout follows that. As it grows: Handles any iPad window size, because layout follows window size, never device type.
 - **Default:** `material`: material for cross-platform products, tailwind for web-only; web values in rem; design compact first *Source:* card heuristic [DC-L03-14]; BOARD L03 note (Material renamed window size classes to breakpoints, May 2026).
 - **Show:** the resizable frame with breakpoint ticks; the layout snaps at each one.
 - **Use / avoid:** decide layout by window size, never by device type or orientation [DC-L10-10]; avoid breakpoints that only nudge padding.

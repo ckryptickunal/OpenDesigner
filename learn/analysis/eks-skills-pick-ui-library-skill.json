@@ -1,0 +1,939 @@
+{
+  "summary": "This is Emil Kowalski's pick-ui-library agent skill: a lookup table that matches a frontend task to one library from his curated, taste-driven list, covering UI primitives, command menus, toasts, OTP inputs, animation, number and text animation, charts, drag and drop, virtualization, state, class names, variants and theme switching. It sets a short procedure: identify the task rather than the library the person named, check package.json first, recommend a single library in one sentence, and say plainly when the task falls outside the list. It also warns against churning an installed competitor without being asked. A closing list of common mismatches names the hand-rolled patterns (hand-built toasts, div-based dialogs, re-rendered number text, huge unvirtualized lists, prop-drilled state, nested className ternaries) that should be replaced by a listed library. For a design system it fixes the default building blocks and states when a heavier tool is not needed, such as plain CSS transitions for a simple hover or fade.",
+  "key_ideas": [
+    "Choose a library by the underlying task, not by the library name the person happened to mention.",
+    "Look at package.json before recommending anything; if a listed library is already installed, use it.",
+    "If a competitor is already installed, mention the recommended pick but do not swap dependencies unless asked.",
+    "Give one library and a one-sentence reason, not a menu of options, whenever the curated list has a clear answer.",
+    "Stay inside the curated list; leave it only when asked or when the task is not covered, and say so explicitly.",
+    "Unstyled, accessible primitives (base-ui) replace hand-built dropdowns and dialogs with manual focus handling.",
+    "Use a general animation library only for springs, layout animations, exit animations and gesture-driven values; a simple hover or fade is plain CSS.",
+    "Chart choice has one split: live, time-scrolling data uses Liveline, and everything else uses recharts.",
+    "clsx is for ad-hoc conditional classes; cva is for components with real variants (size, intent, state) that deserve a typed API, and the two compose.",
+    "Long lists of 1,000+ rows should be virtualized with Virtuoso before resorting to pagination hacks.",
+    "Shared state spread across per-component useState and props should move to zustand.",
+    "Theme switching and dark mode should use a tool that avoids a flash on load (next-themes).",
+    "Toasts built by hand or with a modal library are a mismatch to catch; Sonner exists for exactly that job."
+  ],
+  "entities": [
+    {
+      "name": "Emil Kowalski",
+      "type": "person",
+      "description": "Curator of the library list the skill draws on; the skill lives in the emilkowalski/skills repo."
+    },
+    {
+      "name": "pick-ui-library",
+      "type": "tool",
+      "description": "The agent skill itself; a lookup that only runs when explicitly invoked."
+    },
+    {
+      "name": "base-ui",
+      "type": "library",
+      "description": "Pick for unstyled, accessible UI components such as dialogs, popovers, menus and selects."
+    },
+    {
+      "name": "cmdk",
+      "type": "library",
+      "description": "Pick for command menus (⌘K palettes)."
+    },
+    {
+      "name": "Sonner",
+      "type": "library",
+      "description": "Pick for toasts and notifications; linked at sonner.emilkowal.ski, so likely Emil Kowalski's own library [inferred]."
+    },
+    {
+      "name": "input-otp",
+      "type": "library",
+      "description": "Pick for one-time password and verification code inputs."
+    },
+    {
+      "name": "Leva",
+      "type": "library",
+      "description": "Pick for customizable GUIs and control panels."
+    },
+    {
+      "name": "dialkit",
+      "type": "library",
+      "description": "Named alternative to Leva for control panels."
+    },
+    {
+      "name": "motion (Framer Motion)",
+      "type": "library",
+      "description": "Pick for general-purpose animation: springs, layout animations, enter and exit."
+    },
+    {
+      "name": "NumberFlow",
+      "type": "library",
+      "description": "Pick for animating numbers such as counters, prices and stats; handles digit transitions."
+    },
+    {
+      "name": "torph",
+      "type": "library",
+      "description": "Pick for animated text components."
+    },
+    {
+      "name": "Cobe",
+      "type": "library",
+      "description": "Pick for 3D globes."
+    },
+    {
+      "name": "Satori",
+      "type": "library",
+      "description": "Pick for dynamic OG images, turning HTML/CSS into SVG/PNG."
+    },
+    {
+      "name": "shiki",
+      "type": "library",
+      "description": "Pick for syntax highlighting."
+    },
+    {
+      "name": "Liveline",
+      "type": "library",
+      "description": "Pick for real-time or streaming charts that scroll with time."
+    },
+    {
+      "name": "recharts",
+      "type": "library",
+      "description": "Pick for general charts, static or interactive dashboards."
+    },
+    {
+      "name": "dnd kit",
+      "type": "library",
+      "description": "Pick for drag and drop."
+    },
+    {
+      "name": "Virtuoso",
+      "type": "library",
+      "description": "Pick for virtualization of long lists and large tables."
+    },
+    {
+      "name": "react-window",
+      "type": "library",
+      "description": "Named as an example of an installed competitor to Virtuoso that should not be churned unasked."
+    },
+    {
+      "name": "zustand",
+      "type": "library",
+      "description": "Pick for state management."
+    },
+    {
+      "name": "clsx",
+      "type": "library",
+      "description": "Pick for constructing className strings conditionally."
+    },
+    {
+      "name": "cva",
+      "type": "library",
+      "description": "Pick for type-safe, variant-driven styling with Tailwind."
+    },
+    {
+      "name": "next-themes",
+      "type": "library",
+      "description": "Pick for theme switching and dark mode with no flash on load."
+    },
+    {
+      "name": "Tailwind",
+      "type": "tool",
+      "description": "The styling system cva's variant-driven styling targets."
+    }
+  ],
+  "topics": [
+    {
+      "name": "UI libraries",
+      "summary": "Gives a curated, one-pick-per-task library list for frontend work and a procedure for recommending from it without churning existing dependencies."
+    },
+    {
+      "name": "Web implementation (CSS and React)",
+      "summary": "Covers className composition (clsx, cva), state management (zustand), virtualization, and using plain CSS transitions instead of an animation library for simple hovers and fades."
+    },
+    {
+      "name": "Toasts and notifications",
+      "summary": "Sonner is the pick for toasts; building toasts by hand or with a modal library is a mismatch to catch."
+    },
+    {
+      "name": "Modals and popovers",
+      "summary": "base-ui is the pick for dialogs, popovers, menus and selects, replacing div-based versions with manual focus handling because it handles accessibility, focus trapping and dismissal."
+    },
+    {
+      "name": "Forms and inputs",
+      "summary": "input-otp is the pick for one-time password and verification code inputs."
+    },
+    {
+      "name": "Dashboards and data display",
+      "summary": "Liveline for live, time-scrolling charts, recharts for all other charts, and Virtuoso for long lists and large tables of 1,000+ rows."
+    },
+    {
+      "name": "Gestures and drag",
+      "summary": "dnd kit is the pick for drag and drop; motion is the pick when gesture-driven values are needed."
+    },
+    {
+      "name": "Dark mode and themes",
+      "summary": "next-themes is the pick for theme switching and dark mode because it avoids a flash on load."
+    },
+    {
+      "name": "Motion principles",
+      "summary": "Reach for motion only for springs, layout animations, exit animations or gesture-driven values; NumberFlow for number transitions and torph for animated text."
+    },
+    {
+      "name": "AI-assisted design",
+      "summary": "Written as instructions for an AI agent: fixed initial response, identify the task, check package.json, recommend one library, and flag when leaving the curated list."
+    },
+    {
+      "name": "Accessibility",
+      "summary": "base-ui is the pick because it handles accessibility, focus trapping and dismissal; a div-based dropdown or dialog with manual focus handling is a mismatch to catch."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "The picks are deliberate, taste-driven choices from Emil Kowalski's curated list.",
+      "evidence": "These are deliberate, taste-driven picks"
+    },
+    {
+      "claim": "The skill only runs when explicitly invoked and does not trigger on its own.",
+      "evidence": "Only runs when explicitly invoked; disable-model-invocation: true"
+    },
+    {
+      "claim": "A dropdown request is a UI-primitives task served by base-ui, even if the person asked about something else.",
+      "evidence": "How to use this, step 1"
+    },
+    {
+      "claim": "base-ui handles accessibility, focus trapping and dismissal.",
+      "evidence": "Common mismatches to catch"
+    },
+    {
+      "claim": "NumberFlow handles digit transitions properly, unlike re-rendering text.",
+      "evidence": "Animating a number by re-rendering text"
+    },
+    {
+      "claim": "A simple hover or fade does not need the motion library; plain CSS transitions are the right tool.",
+      "evidence": "Reach for motion when you need springs"
+    },
+    {
+      "claim": "If data points arrive live and the chart scrolls with time, Liveline fits; everything else is recharts.",
+      "evidence": "The split: if data points arrive live"
+    },
+    {
+      "claim": "clsx and cva compose, because cva uses clsx-style inputs internally.",
+      "evidence": "The styling split"
+    },
+    {
+      "claim": "next-themes switches themes and dark mode without a flash on load.",
+      "evidence": "Theme switching / dark mode (no flash on load)"
+    },
+    {
+      "claim": "Satori turns HTML/CSS into SVG/PNG for dynamic OG images.",
+      "evidence": "Dynamic OG images (HTML/CSS → SVG/PNG)"
+    },
+    {
+      "claim": "Sonner exists for exactly the job of toasts.",
+      "evidence": "Toasts built by hand or with a modal library"
+    }
+  ],
+  "quotes": [
+    "Identify the task, not the library the user named.",
+    "Don't present a menu of options when the list has a clear answer.",
+    "plain CSS transitions are the right tool there."
+  ],
+  "tags": [
+    "ui-libraries",
+    "library-selection",
+    "react",
+    "frontend",
+    "sonner",
+    "base-ui",
+    "motion",
+    "charts",
+    "virtualization",
+    "state-management",
+    "tailwind",
+    "dark-mode",
+    "agent-skill",
+    "emil-kowalski"
+  ],
+  "authority": "non-negotiable",
+  "rules": [
+    {
+      "rule": "Identify the underlying task before picking a library, not the library the person named; for example, treat 'I need to show a dropdown' as a UI-primitives task and pick base-ui.",
+      "why": "The curated list is organised by task (a Task and Library table), so the task, not the named library, decides the pick.",
+      "kind": "do",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "web",
+      "values": [
+        "base-ui"
+      ],
+      "evidence": "not the library the user named"
+    },
+    {
+      "rule": "Read package.json before recommending a library, and if the project already uses a listed library, use that one.",
+      "why": "The source says to look at package.json first and use a listed library the project already has.",
+      "kind": "do",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "web",
+      "values": [
+        "package.json"
+      ],
+      "evidence": "Check what's already installed"
+    },
+    {
+      "rule": "Do not replace an installed competitor library (for example react-window instead of Virtuoso) unless asked; flag the recommended pick instead.",
+      "why": "The source gives no further reason; it states the instruction to flag the recommendation but not churn the dependency without being asked.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "web",
+      "values": [
+        "react-window",
+        "Virtuoso"
+      ],
+      "evidence": "flag the recommendation but don't churn the dependency"
+    },
+    {
+      "rule": "Recommend exactly one library, state what it is for in one sentence, and install and wire it up when that is part of the request.",
+      "why": "The list has a clear answer per task, so one pick is enough.",
+      "kind": "do",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "web",
+      "values": [
+        "one library",
+        "one sentence"
+      ],
+      "evidence": "Recommend one library"
+    },
+    {
+      "rule": "Do not present a menu of library options when the curated list has a clear answer.",
+      "why": "The list has a clear answer for the task, and its picks are deliberate and taste-driven.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "Don't present a menu of options"
+    },
+    {
+      "rule": "Do not substitute alternatives from outside the curated list unless the person asks for one or the task is genuinely not covered.",
+      "why": "The list holds deliberate, taste-driven picks.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "don't substitute alternatives outside this list"
+    },
+    {
+      "rule": "When a task is not covered by the list, say so explicitly, then recommend from general knowledge while making clear you have left the curated list.",
+      "why": "The person should know when a pick is not from the curated list.",
+      "kind": "do",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "say so explicitly and recommend from your own knowledge"
+    },
+    {
+      "rule": "When the skill is invoked without a specific question, reply only with the fixed ready line and give no other information until a question is asked.",
+      "why": "The source describes the skill as a lookup that answers a task; it says to give no other information until the user asks a question.",
+      "kind": "do",
+      "strength": "must",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [
+        "I'm ready to pick the right library for your task, my picks come from Emil Kowalski's curated list."
+      ],
+      "evidence": "When this skill is first invoked without a specific question"
+    },
+    {
+      "rule": "Run the library-picking lookup only when it is explicitly invoked; it must not trigger on its own.",
+      "why": "The skill is configured with disable-model-invocation: true and says it does not trigger on its own.",
+      "kind": "do",
+      "strength": "must",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [
+        "disable-model-invocation: true"
+      ],
+      "evidence": "Only runs when explicitly invoked"
+    },
+    {
+      "rule": "Use base-ui for unstyled, accessible UI components such as dialogs, popovers, menus and selects.",
+      "why": "It is the curated pick for UI primitives and handles accessibility, focus trapping and dismissal.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "web",
+      "values": [
+        "base-ui",
+        "https://base-ui.com"
+      ],
+      "evidence": "Unstyled, accessible UI components"
+    },
+    {
+      "rule": "Use cmdk for command menus (⌘K palettes).",
+      "why": "It is the curated pick for command menus.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "web",
+      "values": [
+        "cmdk",
+        "⌘K",
+        "https://cmdk.paco.me"
+      ],
+      "evidence": "Command menus (⌘K palettes)"
+    },
+    {
+      "rule": "Use Sonner for toasts and notifications.",
+      "why": "It is the curated pick for toasts.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "web",
+      "values": [
+        "Sonner",
+        "https://sonner.emilkowal.ski"
+      ],
+      "evidence": "Toasts / notifications"
+    },
+    {
+      "rule": "Use input-otp for one-time password and verification code inputs.",
+      "why": "It is the curated pick for OTP inputs.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "web",
+      "values": [
+        "input-otp",
+        "https://input-otp.rodz.dev"
+      ],
+      "evidence": "One-time password / verification code inputs"
+    },
+    {
+      "rule": "Use Leva for customizable GUIs and control panels, with dialkit as the named alternative.",
+      "why": "Leva is the curated pick; dialkit is listed as an alternative.",
+      "kind": "do",
+      "strength": "should",
+      "area": "tooling",
+      "applies_to": "web",
+      "values": [
+        "Leva",
+        "https://github.com/pmndrs/leva",
+        "dialkit",
+        "https://joshpuckett.me/dialkit"
+      ],
+      "evidence": "Customizable GUIs / control panels"
+    },
+    {
+      "rule": "Use motion (Framer Motion) for general-purpose animation: springs, layout animations, and enter and exit animations.",
+      "why": "It is the curated pick for general-purpose animation.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "web",
+      "values": [
+        "motion",
+        "Framer Motion",
+        "https://motion.dev"
+      ],
+      "evidence": "General-purpose animation (springs, layout animations, enter/exit)"
+    },
+    {
+      "rule": "Reach for motion when you need springs, layout animations, exit animations or gesture-driven values.",
+      "why": "Those are the cases the source names as needing it; a simple hover or fade does not.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "web",
+      "values": [
+        "springs",
+        "layout animations",
+        "exit animations",
+        "gesture-driven values"
+      ],
+      "evidence": "Reach for motion when you need springs"
+    },
+    {
+      "rule": "Do not reach for motion for a simple hover or fade; use plain CSS transitions.",
+      "why": "A simple hover or fade doesn't need it; plain CSS transitions are the right tool there.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "css",
+      "values": [
+        "plain CSS transitions"
+      ],
+      "evidence": "A simple hover or fade doesn't need it"
+    },
+    {
+      "rule": "Use NumberFlow to animate numbers such as counters, prices and stats.",
+      "why": "It is the curated pick and handles digit transitions properly.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "web",
+      "values": [
+        "NumberFlow",
+        "https://number-flow.barvian.me"
+      ],
+      "evidence": "Animating numbers (counters, prices, stats)"
+    },
+    {
+      "rule": "Use torph for animated text components.",
+      "why": "It is the curated pick for animated text.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "web",
+      "values": [
+        "torph",
+        "https://torph.lochie.me/"
+      ],
+      "evidence": "Animated text components"
+    },
+    {
+      "rule": "Use Cobe for 3D globes.",
+      "why": "It is the curated pick for 3D globes.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "web",
+      "values": [
+        "Cobe",
+        "https://cobe.vercel.app"
+      ],
+      "evidence": "cobe.vercel.app"
+    },
+    {
+      "rule": "Use Satori to generate dynamic OG images from HTML/CSS to SVG/PNG.",
+      "why": "It is the curated pick for dynamic OG images.",
+      "kind": "do",
+      "strength": "should",
+      "area": "tooling",
+      "applies_to": "web",
+      "values": [
+        "Satori",
+        "https://github.com/vercel/satori",
+        "HTML/CSS → SVG/PNG"
+      ],
+      "evidence": "Dynamic OG images"
+    },
+    {
+      "rule": "Use shiki for syntax highlighting.",
+      "why": "It is the curated pick for syntax highlighting.",
+      "kind": "do",
+      "strength": "should",
+      "area": "tooling",
+      "applies_to": "web",
+      "values": [
+        "shiki",
+        "https://shiki.style"
+      ],
+      "evidence": "Syntax highlighting"
+    },
+    {
+      "rule": "Use Liveline for real-time or streaming charts where data points arrive live and the chart scrolls with time.",
+      "why": "That is the one split in the chart picks.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "web",
+      "values": [
+        "Liveline",
+        "https://github.com/benjitaylor/liveline"
+      ],
+      "evidence": "The split: if data points arrive live"
+    },
+    {
+      "rule": "Use recharts for every other chart, static or interactive dashboards.",
+      "why": "Everything that is not live, time-scrolling data goes to recharts.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "web",
+      "values": [
+        "recharts",
+        "https://recharts.org"
+      ],
+      "evidence": "Everything else is recharts"
+    },
+    {
+      "rule": "Use dnd kit for drag and drop.",
+      "why": "It is the curated pick for drag and drop.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [
+        "dnd kit",
+        "https://dndkit.com"
+      ],
+      "evidence": "Drag and drop | [dnd kit]"
+    },
+    {
+      "rule": "Use Virtuoso for virtualization of long lists and large tables.",
+      "why": "It is the curated pick for virtualization.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [
+        "Virtuoso",
+        "https://virtuoso.dev"
+      ],
+      "evidence": "Virtualization (long lists, large tables)"
+    },
+    {
+      "rule": "Use zustand for state management.",
+      "why": "It is the curated pick for state management.",
+      "kind": "do",
+      "strength": "should",
+      "area": "tooling",
+      "applies_to": "react",
+      "values": [
+        "zustand",
+        "https://zustand.docs.pmnd.rs"
+      ],
+      "evidence": "State management"
+    },
+    {
+      "rule": "Use clsx to construct className strings conditionally for ad-hoc conditional classes.",
+      "why": "It is the curated pick for building className strings conditionally, meant for ad-hoc conditional classes.",
+      "kind": "do",
+      "strength": "should",
+      "area": "tooling",
+      "applies_to": "web",
+      "values": [
+        "clsx",
+        "https://github.com/lukeed/clsx"
+      ],
+      "evidence": "clsx for ad-hoc conditional classes"
+    },
+    {
+      "rule": "Use cva when a component has real variants (size, intent, state) that deserve a typed API, for type-safe, variant-driven Tailwind styling.",
+      "why": "cva is the pick for variant-shaped styling; clsx stays for ad-hoc classes and the two compose.",
+      "kind": "do",
+      "strength": "should",
+      "area": "tooling",
+      "applies_to": "web",
+      "values": [
+        "cva",
+        "https://cva.style",
+        "size",
+        "intent",
+        "state"
+      ],
+      "evidence": "cva when a component has real variants"
+    },
+    {
+      "rule": "Use next-themes for theme switching and dark mode so there is no flash on load.",
+      "why": "It is the curated pick for theme switching without a flash on load.",
+      "kind": "do",
+      "strength": "should",
+      "area": "tooling",
+      "applies_to": "web",
+      "values": [
+        "next-themes",
+        "https://github.com/pacocoursey/next-themes",
+        "no flash on load"
+      ],
+      "evidence": "Theme switching / dark mode (no flash on load)"
+    },
+    {
+      "rule": "Do not build toasts by hand or with a modal library; use Sonner.",
+      "why": "Sonner exists for exactly this.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "components",
+      "applies_to": "web",
+      "values": [
+        "Sonner"
+      ],
+      "evidence": "Toasts built by hand or with a modal library"
+    },
+    {
+      "rule": "Do not build a <div>-based dropdown or dialog with manual focus handling; use base-ui.",
+      "why": "base-ui handles accessibility, focus trapping and dismissal.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "accessibility",
+      "applies_to": "web",
+      "values": [
+        "<div>",
+        "base-ui"
+      ],
+      "evidence": "manual focus handling"
+    },
+    {
+      "rule": "Do not animate a number by re-rendering its text; use NumberFlow.",
+      "why": "NumberFlow handles digit transitions properly.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "web",
+      "values": [
+        "NumberFlow"
+      ],
+      "evidence": "Animating a number by re-rendering text"
+    },
+    {
+      "rule": "Do not render a list of 1,000+ rows directly; virtualize it with Virtuoso before reaching for pagination hacks.",
+      "why": "The source says to reach for Virtuoso before pagination hacks; it gives no further reason.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [
+        "1,000+",
+        "Virtuoso"
+      ],
+      "evidence": "Rendering a 1,000+ row list directly"
+    },
+    {
+      "rule": "Do not share state through a useState-per-component web of props; use zustand.",
+      "why": "The source names zustand as the fix for shared state held in a useState-per-component web of props.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "tooling",
+      "applies_to": "react",
+      "values": [
+        "useState",
+        "zustand"
+      ],
+      "evidence": "per-component web of props for shared state"
+    },
+    {
+      "rule": "Do not write template-literal className ternaries three conditions deep; use clsx, or cva if the styling is variant-shaped.",
+      "why": "clsx handles conditional classes and cva handles variants.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "tooling",
+      "applies_to": "react",
+      "values": [
+        "three conditions deep",
+        "clsx",
+        "cva"
+      ],
+      "evidence": "Template-literal className ternaries three conditions deep"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "Should components start from unstyled, accessible primitives or be hand-built?",
+      "options": [
+        {
+          "name": "Unstyled, accessible primitives (base-ui)",
+          "effect": "Dialogs, popovers, menus and selects come with accessibility, focus trapping and dismissal handled; you add the styling.",
+          "when": "Any dropdown, dialog, popover, menu or select."
+        },
+        {
+          "name": "Hand-built <div> components with manual focus handling",
+          "effect": "Accessibility, focus and dismissal must be written and maintained by hand.",
+          "when": "Listed as a mismatch to catch, not a recommended path."
+        }
+      ],
+      "recommendation": "base-ui, because it handles accessibility, focus trapping and dismissal.",
+      "maps_to": "Q-comp-01",
+      "evidence": "UI components & primitives; Common mismatches to catch"
+    },
+    {
+      "question": "Should an animation use a motion library or plain CSS transitions?",
+      "options": [
+        {
+          "name": "motion (Framer Motion)",
+          "effect": "Springs, layout animations, exit animations and gesture-driven values.",
+          "when": "When any of those are needed."
+        },
+        {
+          "name": "Plain CSS transitions",
+          "effect": "A simple hover or fade with no extra dependency.",
+          "when": "A simple hover or fade."
+        }
+      ],
+      "recommendation": "Plain CSS for simple hovers and fades; motion only for springs, layout, exit or gesture-driven animation.",
+      "maps_to": null,
+      "evidence": "Reach for motion when you need springs"
+    },
+    {
+      "question": "Which chart library should draw the charts?",
+      "options": [
+        {
+          "name": "Liveline",
+          "effect": "Charts where data points arrive live and the chart scrolls with time.",
+          "when": "Real-time or streaming data."
+        },
+        {
+          "name": "recharts",
+          "effect": "General charts, static or interactive dashboards.",
+          "when": "Everything that is not live, time-scrolling data."
+        }
+      ],
+      "recommendation": "Liveline for live, time-scrolling data; recharts for everything else.",
+      "maps_to": "Q-viz-01",
+      "evidence": "Charts: The split"
+    },
+    {
+      "question": "How should conditional and variant styling be composed?",
+      "options": [
+        {
+          "name": "clsx",
+          "effect": "Builds className strings from ad-hoc conditions.",
+          "when": "Ad-hoc conditional classes."
+        },
+        {
+          "name": "cva",
+          "effect": "A type-safe, variant-driven API for Tailwind styling.",
+          "when": "A component has real variants (size, intent, state) that deserve a typed API."
+        }
+      ],
+      "recommendation": "clsx for ad-hoc classes and cva for real variants; they compose because cva uses clsx-style inputs internally.",
+      "maps_to": null,
+      "evidence": "The styling split"
+    },
+    {
+      "question": "What should happen when the project already uses a competitor to the listed library?",
+      "options": [
+        {
+          "name": "Keep the installed library and flag the recommendation",
+          "effect": "No dependency churn; the person learns the curated pick.",
+          "when": "Default, unless the person asks for a change."
+        },
+        {
+          "name": "Switch to the listed library",
+          "effect": "Replaces the dependency.",
+          "when": "Only when the person asks."
+        }
+      ],
+      "recommendation": "Flag the recommendation but do not churn the dependency without being asked.",
+      "maps_to": null,
+      "evidence": "Check what's already installed"
+    },
+    {
+      "question": "Which library should power customizable GUIs and control panels?",
+      "options": [
+        {
+          "name": "Leva",
+          "effect": "The curated pick for control panels.",
+          "when": "Default choice."
+        },
+        {
+          "name": "dialkit",
+          "effect": "The named alternative.",
+          "when": "When an alternative to Leva is wanted."
+        }
+      ],
+      "recommendation": "Leva, with dialkit as the alternative.",
+      "maps_to": null,
+      "evidence": "Customizable GUIs / control panels"
+    },
+    {
+      "question": "How should toasts and notifications be built?",
+      "options": [
+        {
+          "name": "Sonner",
+          "effect": "A library that exists for exactly this job.",
+          "when": "Any toast or notification."
+        },
+        {
+          "name": "Built by hand or with a modal library",
+          "effect": "The source flags this as a mismatch and points to Sonner instead; it gives no further detail.",
+          "when": "Listed as a mismatch to catch, not a recommended path."
+        }
+      ],
+      "recommendation": "Sonner, because it exists for exactly this.",
+      "maps_to": null,
+      "evidence": "Toasts built by hand or with a modal library"
+    },
+    {
+      "question": "How should a very long list (1,000+ rows) be shown?",
+      "options": [
+        {
+          "name": "Virtualize it with Virtuoso",
+          "effect": "Long lists and large tables are virtualized instead of rendered row by row.",
+          "when": "A list of 1,000+ rows, or a large table."
+        },
+        {
+          "name": "Render every row directly",
+          "effect": "Every row is rendered at once.",
+          "when": "Listed as a mismatch to catch, not a recommended path."
+        },
+        {
+          "name": "Pagination hacks",
+          "effect": "The list is split up to avoid rendering it all.",
+          "when": "Only after virtualization; the source ranks it behind Virtuoso."
+        }
+      ],
+      "recommendation": "Virtuoso before reaching for pagination hacks.",
+      "maps_to": null,
+      "evidence": "Rendering a 1,000+ row list directly"
+    }
+  ],
+  "process": [
+    {
+      "step": "Wait for a task",
+      "detail": "If invoked with no question, reply only with the fixed ready line and nothing else until the person asks."
+    },
+    {
+      "step": "Identify the task",
+      "detail": "Work out the underlying task rather than the library the person named; a dropdown is a UI-primitives task (base-ui)."
+    },
+    {
+      "step": "Check what is installed",
+      "detail": "Read package.json first. Use a listed library if it is already there; if a competitor is installed, flag the recommendation without churning the dependency unless asked."
+    },
+    {
+      "step": "Recommend one library",
+      "detail": "Name one library from the list, say what it is for in one sentence, and install and wire it up if the request includes that. Do not present a menu when the list has a clear answer."
+    },
+    {
+      "step": "Handle uncovered tasks",
+      "detail": "If the task is not on the list, say so explicitly and recommend from general knowledge, making clear the pick is outside the curated list."
+    },
+    {
+      "step": "Catch mismatches",
+      "detail": "Look for hand-built toasts, div-based dropdowns or dialogs, numbers animated by re-rendering text, 1,000+ row lists rendered directly, useState-per-component prop webs, and className ternaries three conditions deep, and point each to its listed library."
+    }
+  ],
+  "examples": [
+    {
+      "what": "A request to show a dropdown is treated as a UI-primitives task and answered with base-ui.",
+      "where": null,
+      "visual_note": "Shows task-first matching: the named need, not the named library, decides the pick."
+    },
+    {
+      "what": "A project that already uses react-window instead of Virtuoso.",
+      "where": null,
+      "visual_note": "Shows the no-churn rule: flag Virtuoso as the recommendation but keep react-window unless asked."
+    },
+    {
+      "what": "Sample invocations such as 'I need toasts' and 'what should I use for drag and drop?'.",
+      "where": null,
+      "visual_note": "Shows the lookup being driven by a task phrase, answered with Sonner and dnd kit from the list."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "1,000+",
+      "context": "Row count at which a list should be virtualized with Virtuoso instead of rendered directly.",
+      "evidence": "Rendering a 1,000+ row list directly"
+    },
+    {
+      "value": "three conditions deep",
+      "context": "Depth of template-literal className ternaries that signals a switch to clsx or cva.",
+      "evidence": "Template-literal className ternaries three conditions deep"
+    },
+    {
+      "value": "one",
+      "context": "Number of libraries to recommend per task, with a one-sentence reason.",
+      "evidence": "Recommend one library"
+    }
+  ],
+  "caveats": [
+    "Self-promotion: Sonner, the toast pick, is linked at sonner.emilkowal.ski, so it is likely Emil Kowalski's own library [inferred].",
+    "The list is explicitly opinionated and taste-driven, not a benchmark; the source gives no performance or bundle-size comparisons.",
+    "Pinned to commit 85e8e23 of the skills repo; library picks may change in later versions.",
+    "The list is web and React-centric (package.json, useState, className, Tailwind) and says nothing about native iOS or Android choices [inferred].",
+    "The skill has disable-model-invocation: true, so an agent should use it only when explicitly invoked, not automatically.",
+    "The fixed initial-response line is behaviour for this skill only, not a design rule for products."
+  ]
+}

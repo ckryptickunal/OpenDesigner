@@ -1,0 +1,258 @@
+{
+  "summary": "Kole Jain redesigns the website of Fisker, an electric car maker that was going bankrupt, and walks section by section through what was wrong and how he fixed it. He starts by diagnosing the old site: whitespace overused alongside giant text, a sideways label that sticks while scrolling, a split between giant text and small spec text that reads as two different styles, and a page far longer than needed. He then restructures the content (no separate homepage for a one-product company), builds a hero with the headline tucked behind the car, and reworks each section with sliders, a bento layout, hover reveals, a lightbox card and a dealer search bar. For a design system, it gives concrete landing-page rules on hierarchy through proximity, layout variety between sections, image choice and text placement over images, reserving a bright accent for hover, and tucking long but important text behind a 'see more' control.",
+  "key_ideas": [
+    "Diagnose why the existing page fails before redesigning it.",
+    "Too much whitespace combined with giant text makes a page feel disjointed; moving related elements closer together creates hierarchy.",
+    "When giant text above and small spec text below make a page read as two styles, fix the information architecture, not just the type.",
+    "Besides looking good, a website must be structured in a way that makes sense; a page whose only job is to redirect elsewhere is weak structure.",
+    "A company with one product can skip the homepage and lead with that product, keeping other pages in the nav.",
+    "For a full-screen hero, choose a zoomed-out image so the subject does not overwhelm the screen and an info bar does not overlap it.",
+    "Never let text cover an image's focal point; when a small shift no longer clears it, the headline can be placed behind the subject instead.",
+    "Keep images in a set consistent, and move titles off images when visibility over the photo is a worry.",
+    "Introduce a bright accent color only on hover of the call to action so it does not overpower the page.",
+    "Tasteful hover animations, such as an image zooming out while the CTA pops up, add a premium feel.",
+    "Cut sections that repeat images or stats already shown higher on the page.",
+    "Variety in layout between sections is a must; a second features section should not repeat the first one's layout.",
+    "Pick the bento arrangement to fit the images' orientation.",
+    "Replace long accordion text with pictures and paraphrased copy, and tuck lengthy but important text behind a 'see more' control.",
+    "Present an add-on as buttons on the models it applies to, opening a lightbox card, rather than as its own section.",
+    "When stacked sections line up too uniformly, flip one of them to add variety."
+  ],
+  "entities": [
+    {"name": "Kole Jain", "type": "person", "description": "Designer and YouTuber who presents the redesign."},
+    {"name": "Fisker", "type": "company", "description": "Electric car maker going bankrupt whose website is redesigned."},
+    {"name": "Fisker Ocean", "type": "product", "description": "Fisker's only production car; its landing page is the base for the redesign."},
+    {"name": "Tesla", "type": "company", "description": "Cited as the source of the stacked full-screen image approach most EV sites copy."},
+    {"name": "Arrival", "type": "company", "description": "EV maker whose site is named as using the same stacked full-screen approach."},
+    {"name": "Polestar", "type": "company", "description": "EV maker named alongside Arrival as copying the same approach (auto-caption reads 'postar')."},
+    {"name": "Lucid", "type": "company", "description": "EV maker whose site has a nicer design; its feature slider is borrowed."},
+    {"name": "Rivian", "type": "company", "description": "The presenter's favorite EV site; its nav bar with images and its lightbox idea are borrowed."},
+    {"name": "Dribbble", "type": "product", "description": "Design showcase site where the bento layout used in the redesign was found."},
+    {"name": "Google Images", "type": "tool", "description": "Used to find a hero photo, filtered through Tools to large images only."},
+    {"name": "Figma", "type": "tool", "description": "The redesign is shared as a Figma project file."},
+    {"name": "Extreme E", "type": "company", "description": "Electric off-road racing series Fisker joined; the topic of the new blog section."},
+    {"name": "Bento layout", "type": "concept", "description": "Layout used for the second features section, arranged to fit vertical images; a grid of tiles of different sizes [inferred]."},
+    {"name": "Lightbox", "type": "concept", "description": "An idea borrowed from Rivian: clicking a button brings up a card with details; used for the off-road package."},
+    {"name": "Information architecture", "type": "concept", "description": "Adjusted to fix the split between giant text and small spec text; how content is structured across the page [inferred]."}
+  ],
+  "topics": [
+    {"name": "Landing pages", "summary": "A full product landing page redesign: skip a redirect-only homepage, a giant hero with text behind the subject, a CTA section, sliders, bento, mission, trims, add-on lightbox, dealer search CTA, blog and newsletter."},
+    {"name": "Spacing and layout", "summary": "Overused whitespace makes a page disjointed; pushing elements closer creates hierarchy; vary layouts between sections and flip one section when things line up too uniformly."},
+    {"name": "Visual hierarchy", "summary": "Hierarchy comes from pushing elements closer together so none sits by itself; a features section that is too spread out also has much too large a difference in text sizes."},
+    {"name": "Typography", "summary": "Giant text above small spec text makes the page read as two styles; the features text is shrunk, and the blog heading font is changed because the section felt a little boring."},
+    {"name": "Icons and imagery", "summary": "Filter image searches to large images, pick a zoomed-out hero photo, keep a set of images consistent, and extend a photo's sky by duplicating, flipping and cropping it."},
+    {"name": "Color", "summary": "The bright orange accent appears only when hovering the CTA; a section background is a gradient sampled from the image above because black blended with the product image."},
+    {"name": "Micro-interactions", "summary": "Hovering a CTA card zooms the image out and pops up the CTA; hovering a trim-level image makes something slide up (the transcript does not say which element)."},
+    {"name": "Navigation and sidebars", "summary": "A sideways label that sticks while scrolling is distracting; the logo goes at the top and the links collapse into a hamburger; Rivian's nav bar with images is praised."},
+    {"name": "Modals and popovers", "summary": "An add-on's details open in a lightbox card with a full-size photo, a text overlay, a gradient for legibility and a close X."},
+    {"name": "Cards and sections", "summary": "CTA cards with titles above the images, a feature slider, a bento section, trim columns, and a blog section whose middle item is flipped for variety."},
+    {"name": "Buttons and actions", "summary": "Without a CTA in the header, the CTA section matters more; the final CTA is a dealer search bar instead of a button; long specs sit behind a 'see more' button."},
+    {"name": "Content and microcopy", "summary": "Remove text that repeats earlier images and stats, paraphrase accordion content and link to the tech specs, and tuck lengthy but important text away."},
+    {"name": "Design process", "summary": "Diagnose the current site, gather inspiration from competitors, Dribbble and past work, restructure the content, then rebuild section by section."},
+    {"name": "Design taste and judgement", "summary": "Calls the Tesla-style stacked full-screen approach lazy, prefers Rivian's site, and treats tasteful hover animations as a source of premium feel."}
+  ],
+  "claims": [
+    {"claim": "Overusing whitespace together with giant text makes a website feel disjointed.", "evidence": "a rare case of overusing whites space along with the giant text"},
+    {"claim": "Pushing some elements closer together creates hierarchy so each element is not sitting by itself.", "evidence": "just by pushing some of the elements closer together we create hierarchy"},
+    {"claim": "Smaller spec text below the giant text almost separates the website into two completely different styles, which needs an information architecture change to fix.", "evidence": "we'll need to adjust the information architecture"},
+    {"claim": "Having a sideways text label stick with you as you scroll is distracting.", "evidence": "having it stick with you as you scroll is kind of distracting"},
+    {"claim": "Most EV websites copy Tesla's stacked full-screen image approach.", "evidence": "they mostly copy Tesla with this stacked fullscreen image approach"},
+    {"claim": "Besides being well-designed, websites need to be structured in a way that makes sense.", "evidence": "websites need to be structured in a way that makes sense"},
+    {"claim": "Filtering a Google image search to large images avoids a grainy image when it is enlarged.", "evidence": "hit tools and filter for only large images"},
+    {"claim": "An image whose subject is too large feels overwhelming when made full screen, and would let the info bar overlap the car.", "evidence": "this is why we needed a zoomed out image"},
+    {"claim": "Text overlapping the focal point of an image is bad, and sliding the text over slightly can fix it.", "evidence": "this text overlaps with a F focal point of the image that's bad"},
+    {"claim": "The call-to-action section is very important when there is no CTA in the header.", "evidence": "very important since we don't have a CTA in our header"},
+    {"claim": "Using one image with a background and one without feels very disjointed.", "evidence": "having one with a background and one without feels very disjointed"},
+    {"claim": "Introducing the bright orange only on CTA hover keeps it from being overpowering.", "evidence": "only when we hover on the CTA do we introduce our bright orange"},
+    {"claim": "Tasteful hover animations add to a website's premium feel.", "evidence": "tasteful animations like these that'll add to your website's premium feel"},
+    {"claim": "A slider shows each feature's images in a more compact format than a spread-out layout.", "evidence": "get a slider going just like on the Lucid site"},
+    {"claim": "People will not read through accordion tabs of text; they prefer looking at pictures.", "evidence": "people aren't going to want to read through all these accordion tabs"},
+    {"claim": "Duplicating an image, flipping it vertically and cropping it adds more sky at the top without using AI.", "evidence": "duplicate this image flip it vertically and crop it down"},
+    {"claim": "A gradient over a full-size photo makes overlaid text easier to read.", "evidence": "a gradient to make the text a little easier to read"},
+    {"claim": "With the number of links a footer must hold, there is not much a redesign can change there.", "evidence": "I'm going to 100% copy the footer"},
+    {"claim": "Most automotive websites start with a giant hero of their most popular car.", "evidence": "most Automotive websites start off with the giant hero"},
+    {"claim": "Images in the nav bar, as on Rivian's site, should be a regular thing.", "evidence": "images and nav bar should be a regular thing"},
+    {"claim": "Fisker's trim levels all look the same; Fisker and other brands use different car colors to signify different trims.", "evidence": "use different colors of their card to signify different trims"},
+    {"claim": "Moving key information from lower on the page into a hero info bar puts it in a more convenient spot.", "evidence": "move it up into a more convenient spot"}
+  ],
+  "quotes": [
+    "just by pushing some of the elements closer together we create hierarchy",
+    "websites need to be structured in a way that makes sense",
+    "tasteful animations like these that'll add to your website's premium feel"
+  ],
+  "tags": ["landing-page", "redesign", "whitespace", "hierarchy", "hero", "information-architecture", "imagery", "text-over-image", "accent-color", "hover", "bento", "layout-variety", "progressive-disclosure", "lightbox", "cta", "kole-jain"],
+  "authority": "reference",
+  "rules": [
+    {"rule": "Do not overuse whitespace around giant text; push related elements closer together so they form groups.", "why": "Overused whitespace with giant text makes the page feel disjointed, and grouping creates hierarchy so no element sits alone.", "kind": "dont", "strength": "should", "area": "layout", "applies_to": "web", "values": [], "evidence": "overusing whites space along with the giant text"},
+    {"rule": "Do not pair giant headline sections with small spec-text sections on the same page; rework the information architecture so the page reads as one style.", "why": "The size gap almost separates the website into two completely different styles.", "kind": "dont", "strength": "should", "area": "typography", "applies_to": "web", "values": [], "evidence": "separates the website into two completely different styles"},
+    {"rule": "Do not make a sideways text label stick to the screen while the user scrolls.", "why": "Having it stick with you as you scroll is distracting.", "kind": "dont", "strength": "should", "area": "patterns", "applies_to": "web", "values": [], "evidence": "having it stick with you as you scroll is kind of distracting"},
+    {"rule": "Cut a page down to the length it needs and remove text that repeats an image or stats already shown higher on the page.", "why": "The original page was way longer than it realistically needed to be, and the removed text sat by an image and stats already used above.", "kind": "do", "strength": "should", "area": "content", "applies_to": "web", "values": [], "evidence": "this text is useless we've already used this image and these stats are above too"},
+    {"rule": "For a company with a single product, skip a homepage that only redirects, lead with the product page, and keep the other pages as nav links.", "why": "A page whose only point is to redirect to another page is poorly structured; websites need to be structured in a way that makes sense.", "kind": "do", "strength": "consider", "area": "patterns", "applies_to": "web", "values": [], "evidence": "there's honestly no need to have a homepage"},
+    {"rule": "When searching Google for photos, use Tools to filter to large images only.", "why": "So the image is not grainy when blown up.", "kind": "do", "strength": "should", "area": "process", "applies_to": "all", "values": [], "evidence": "hit tools and filter for only large images"},
+    {"rule": "For a full-screen hero, pick a zoomed-out photo rather than one where the subject fills the frame.", "why": "A subject that is too large will 'punch you in the face' at full screen, and with the first image the info bar would have overlapped the car.", "kind": "do", "strength": "should", "area": "layout", "applies_to": "web", "values": [], "evidence": "the subject is a little too large"},
+    {"rule": "Do not place hero text over the focal point of the image; slide it clear of the subject.", "why": "The source calls text overlapping the focal point bad, a problem that sliding the text over a little would fix.", "kind": "dont", "strength": "must", "area": "layout", "applies_to": "all", "values": [], "evidence": "this text overlaps with a F focal point of the image that's bad"},
+    {"rule": "If the header has no call to action, give the page a dedicated CTA section.", "why": "The CTA section is very important when the header carries no CTA.", "kind": "do", "strength": "should", "area": "patterns", "applies_to": "web", "values": [], "evidence": "very important since we don't have a CTA in our header"},
+    {"rule": "Keep images within one set consistent; do not mix a photo with a background and a cut-out without one side by side.", "why": "Having one with a background and one without feels very disjointed.", "kind": "dont", "strength": "should", "area": "content", "applies_to": "all", "values": [], "evidence": "having one with a background and one without feels very disjointed"},
+    {"rule": "Place card titles above the images instead of on them when legibility over the photo is uncertain.", "why": "Moving the titles out means not needing to worry about their visibility in the images.", "kind": "do", "strength": "consider", "area": "components", "applies_to": "all", "values": [], "evidence": "move these titles up here so we don't need to worry about visibility"},
+    {"rule": "Reserve the bright accent color for the hover state of the call to action instead of showing it at rest.", "why": "Introducing the bright orange only on hover keeps it from being overpowering.", "kind": "do", "strength": "consider", "area": "color", "applies_to": "web", "values": [], "evidence": "only when we hover on the CTA do we introduce our bright orange"},
+    {"rule": "On image CTA cards, add a hover animation that zooms the image out and pops up the CTA.", "why": "Tasteful animations like this add to the website's premium feel.", "kind": "do", "strength": "consider", "area": "motion", "applies_to": "web", "values": [], "evidence": "a little hover animation that zooms out the image and pops up the CTA"},
+    {"rule": "Do not spread a features section out with a large gap between text sizes; shrink the text and show features in a slider.", "why": "The layout was way too spread out and the text size difference much too large; a slider shows each feature's images in a more compact format.", "kind": "dont", "strength": "should", "area": "layout", "applies_to": "web", "values": [], "evidence": "the difference in text sizes is much too large"},
+    {"rule": "Vary the layout between sections; do not repeat the same section layout with different content.", "why": "The source says variety in layout is a must.", "kind": "do", "strength": "must", "area": "layout", "applies_to": "web", "values": [], "evidence": "variety and layout is a must"},
+    {"rule": "Choose the bento arrangement to suit the images' orientation, switching layouts for vertical images.", "why": "The first bento layout did not work once the images turned out to be vertical.", "kind": "do", "strength": "should", "area": "layout", "applies_to": "web", "values": [], "evidence": "the image are in a vertical orientation I need to switch up the layout"},
+    {"rule": "Replace long accordion text with pictures and short paraphrased copy, and send readers who need detail to the tech specs page.", "why": "People are not going to read through accordion tabs; they like looking at pictures.", "kind": "do", "strength": "should", "area": "content", "applies_to": "web", "values": [], "evidence": "people aren't going to want to read through all these accordion tabs"},
+    {"rule": "When a black section background looks too similar to the product in its image, sample colors from the image above to build a gradient background instead.", "why": "Black seemed too similar to the audio system shown in the image.", "kind": "do", "strength": "consider", "area": "color", "applies_to": "all", "values": [], "evidence": "sampling from the image above until I found a gradient I liked"},
+    {"rule": "To extend a photo's top edge (here, to get more blue at the top), duplicate the image, flip it vertically and crop it, instead of using AI.", "why": "The presenter wanted more blue at the top of the photo, and that area is not solid blue.", "kind": "do", "strength": "consider", "area": "tooling", "applies_to": "all", "values": [], "evidence": "duplicate this image flip it vertically and crop it down"},
+    {"rule": "Tuck lengthy but important text, such as trim-level specs, behind a 'see more' button.", "why": "Compared with the rest of the website it is an awful lot of text, albeit important.", "kind": "do", "strength": "should", "area": "patterns", "applies_to": "web", "values": [], "evidence": "we'll tuck it into a little C more button"},
+    {"rule": "Present an add-on as buttons on the models it is available for, opening a lightbox card, rather than giving it its own section.", "why": "It is more of an add-on than a standalone offering.", "kind": "do", "strength": "consider", "area": "patterns", "applies_to": "web", "values": [], "evidence": "since it's more of an add-on let's add buttons for the models"},
+    {"rule": "In a lightbox card with text over a full-size photo, add a gradient behind the text and include a close X.", "why": "The gradient makes the text easier to read, and the X was nearly forgotten.", "kind": "do", "strength": "should", "area": "components", "applies_to": "all", "values": [], "evidence": "a gradient to make the text a little easier to read and I almost forgot an X"},
+    {"rule": "For a 'find a dealer' call to action, use a search bar instead of a button.", "why": "It lets visitors find dealers near them to check out the car.", "kind": "do", "strength": "consider", "area": "patterns", "applies_to": "web", "values": [], "evidence": "instead of a button we're going to have a search bar to find dealers"},
+    {"rule": "When stacked sections all line up the same way, flip one of them (such as the middle one) to add variety.", "why": "Everything felt a little too lined up.", "kind": "do", "strength": "consider", "area": "layout", "applies_to": "web", "values": [], "evidence": "take this middle one and flip it to add some variety"},
+    {"rule": "Do not default to the stacked full-screen image page structure that most EV sites copy from Tesla.", "why": "The source calls it lazy designing.", "kind": "dont", "strength": "consider", "area": "layout", "applies_to": "web", "values": [], "evidence": "stacked fullscreen image approach which in my humble opinion is kind of lazy"},
+    {"rule": "Place the logo at the top of the page in a conventional header rather than in a side element.", "why": "The presenter removes the side element (caption: 'side rimen') and places the logo at the top 'like normal people'.", "kind": "do", "strength": "should", "area": "patterns", "applies_to": "web", "values": [], "evidence": "place the logo up here like normal people"},
+    {"rule": "When one product is the most important thing on the site, collapse the other nav links into a hamburger.", "why": "The source collapses the links because this is the most important car for right now.", "kind": "do", "strength": "consider", "area": "patterns", "applies_to": "web", "values": [], "evidence": "collapse these links into a hamburger since this is the most important car"},
+    {"rule": "Consider showing images in the navigation bar.", "why": "The source praises Rivian's nav bar and says images in the nav bar should be a regular thing.", "kind": "do", "strength": "consider", "area": "patterns", "applies_to": "web", "values": [], "evidence": "images and nav bar should be a regular thing"},
+    {"rule": "Add an info bar to the hero that brings key product information up from lower on the page.", "why": "It moves that information up into a more convenient spot and leaves room to add a little more.", "kind": "do", "strength": "consider", "area": "layout", "applies_to": "web", "values": [], "evidence": "take this information from down here and move it up into a more convenient spot"},
+    {"rule": "For a playful full-screen hero, place the headline behind the subject: trace the subject's top edge, position the text, then subtract the traced shape from it.", "why": "Sliding the text clear of the focal point stopped working with the new image, and the presenter wanted to have a little more fun with the giant hero.", "kind": "do", "strength": "consider", "area": "tooling", "applies_to": "all", "values": [], "evidence": "position our text subtract our shape and voila we've got text behind the car"},
+    {"rule": "Avoid a dark theme across the entire page.", "why": "The presenter does not love the all-dark theme; no further reason is given.", "kind": "dont", "strength": "consider", "area": "color", "applies_to": "web", "values": [], "evidence": "I don't love this dark theme for the entire page"},
+    {"rule": "Show product variants such as trim levels as columns with photos and specs instead of tabs.", "why": "The trim level section was meant to be pretty simple.", "kind": "do", "strength": "consider", "area": "layout", "applies_to": "web", "values": [], "evidence": "take these tabs and turn them into columns with some photos and some specs"},
+    {"rule": "Keep a mission section simple: one image, some text and a button.", "why": "The presenter set out to make the mission section very simple.", "kind": "do", "strength": "consider", "area": "layout", "applies_to": "web", "values": [], "evidence": "grab an image I found online add some text in a button and that's it"},
+    {"rule": "When a section modelled on an earlier one feels boring, move its images to the other side and change the heading font.", "why": "The blog section borrowed from the first CTA section felt a little boring.", "kind": "do", "strength": "consider", "area": "layout", "applies_to": "web", "values": [], "evidence": "moved the images to the right and changed up the font of our heading"}
+  ],
+  "decisions": [
+    {
+      "question": "Does a company with one main product need a separate homepage?",
+      "options": [
+        {"name": "Keep a homepage that links to the product page", "effect": "The homepage has little on it and its only point is to redirect to a page with more information.", "when": "Not recommended by the source for a one-product company."},
+        {"name": "Skip the homepage and lead with the product page", "effect": "Visitors land straight on the product's perks; other pages stay in the nav without being the focus.", "when": "When the company really only has one product in production."}
+      ],
+      "recommendation": "Skip the homepage and lead with the product, adding mission and blog sections to the bottom of the product page, because websites need to be structured in a way that makes sense.",
+      "maps_to": null,
+      "evidence": "there's honestly no need to have a homepage"
+    },
+    {
+      "question": "What kind of photo should a full-screen hero use?",
+      "options": [
+        {"name": "Close-up with a large subject", "effect": "At full screen it 'punches you in the face', and an info bar would overlap the subject.", "when": "Not recommended for this hero."},
+        {"name": "Zoomed-out shot", "effect": "Does not overwhelm at full screen, and the info bar does not overlap the subject.", "when": "When the hero carries an info bar over the image."}
+      ],
+      "recommendation": "Use a zoomed-out photo so the info bar does not overlap the car.",
+      "maps_to": null,
+      "evidence": "instead we need something more zoomed out"
+    },
+    {
+      "question": "Where should the hero headline sit relative to the photo's subject?",
+      "options": [
+        {"name": "Over the focal point", "effect": "The text covers the most important part of the image.", "when": "Never; the source calls it bad."},
+        {"name": "Slid clear of the focal point", "effect": "The subject stays visible; a small shift fixes the problem.", "when": "When a small shift clears the subject, as it would have on the original image (it stopped working with the new one)."},
+        {"name": "Behind the subject", "effect": "The headline appears to sit behind the car, made by tracing the car's top edge and subtracting that shape from the text.", "when": "When shifting the text no longer works with the new image and a more playful hero is wanted."}
+      ],
+      "recommendation": "Never cover the focal point; for the redesign the source puts the text behind the car to have more fun with the giant hero.",
+      "maps_to": null,
+      "evidence": "we've got text behind the car"
+    },
+    {
+      "question": "Should titles and text sit on top of images?",
+      "options": [
+        {"name": "Titles on the images", "effect": "Legibility depends on the photo, so visibility has to be managed.", "when": "Not chosen for the CTA cards."},
+        {"name": "Titles moved above the images", "effect": "No need to worry about text visibility in the images.", "when": "Cards where the image is the visual and the title can live outside it."},
+        {"name": "Text overlay with a gradient", "effect": "A full-size photo with text on top, with a gradient making the text easier to read.", "when": "A lightbox or detail card built around one full-size photo."}
+      ],
+      "recommendation": "Move titles off the images on the CTA cards; where text must sit on a full-size photo, add a gradient under it.",
+      "maps_to": "Q-img-02",
+      "evidence": "move these titles up here so we don't need to worry about visibility"
+    },
+    {
+      "question": "How should feature sections on a marketing page be laid out?",
+      "options": [
+        {"name": "Spread out with giant text and images", "effect": "Way too spread out, with much too large a difference in text sizes.", "when": "Not recommended."},
+        {"name": "Slider", "effect": "Shows each feature's images in a more compact, aesthetic format (as on Lucid's site).", "when": "A set of features that each have an image."},
+        {"name": "Bento layout", "effect": "Tiles of different sizes that add layout variety; the arrangement must fit the images' orientation.", "when": "A second features section that would otherwise repeat the first one's layout."},
+        {"name": "Repeat the same section layout", "effect": "Basically the exact same section with different features.", "when": "Not recommended; variety in layout is a must."}
+      ],
+      "recommendation": "Use a slider for one features section and a bento layout for the next, because variety in layout is a must.",
+      "maps_to": "Q-layout-05",
+      "evidence": "variety and layout is a must"
+    },
+    {
+      "question": "How much long but important text should a section show at once?",
+      "options": [
+        {"name": "Show all of it", "effect": "An awful lot of text compared with the rest of the website.", "when": "Not chosen for the trim-level specs."},
+        {"name": "Accordion tabs", "effect": "People are not going to want to read through them.", "when": "Not recommended by the source."},
+        {"name": "Behind a 'see more' button", "effect": "The text is tucked away behind a small button.", "when": "Text that is important but long compared with the rest of the page."},
+        {"name": "Paraphrase and link to a specs page", "effect": "Short copy next to pictures, with full detail on the tech specs page.", "when": "Detailed specs most visitors will not read."}
+      ],
+      "recommendation": "Tuck important long text behind a 'see more' control and paraphrase accordion content, because people prefer pictures to reading tabs of text.",
+      "maps_to": "Q-pattern-03",
+      "evidence": "we'll tuck it into a little C more button"
+    },
+    {
+      "question": "How should an add-on (such as an off-road package) be presented?",
+      "options": [
+        {"name": "Its own section", "effect": "The add-on gets a standalone section on the page.", "when": "The source's original plan, dropped because it is more of an add-on."},
+        {"name": "Buttons on the eligible models that open a lightbox card", "effect": "Clicking a button brings up a card with a full-size photo, text overlay, a gradient and a close X.", "when": "An option available only for some models."}
+      ],
+      "recommendation": "Use buttons on the models it applies to and a lightbox card, borrowing the lightbox idea from Rivian.",
+      "maps_to": null,
+      "evidence": "we'll still the idea of a light box from rivian"
+    },
+    {
+      "question": "What form should the final call to action take?",
+      "options": [
+        {"name": "A button", "effect": "A single action to click.", "when": "Not chosen here."},
+        {"name": "A dealer search bar", "effect": "Visitors search for dealers near them to check out the car.", "when": "When the next step is finding a physical location."}
+      ],
+      "recommendation": "Use a search bar to find nearby dealers instead of a button.",
+      "maps_to": null,
+      "evidence": "instead of a button we're going to have a search bar"
+    },
+    {
+      "question": "How should navigation work on a single-product landing page?",
+      "options": [
+        {"name": "Logo in a side element (caption: 'side rimen')", "effect": "The original placement, removed in the redesign.", "when": "Not chosen; the source moves the logo to the top 'like normal people'."},
+        {"name": "Logo at the top with links collapsed into a hamburger", "effect": "A conventional header; the links are collapsed because this car is the most important thing right now.", "when": "When one product is the most important thing on the site right now."},
+        {"name": "Nav bar with images", "effect": "Menu entries shown with images, as on Rivian's site.", "when": "The source says images in the nav bar should be a regular thing."}
+      ],
+      "recommendation": "For this redesign, the logo goes at the top and the links collapse into a hamburger; the source also praises Rivian's nav bar with images.",
+      "maps_to": "Q-layout-04",
+      "evidence": "collapse these links into a hamburger since this is the most important car"
+    }
+  ],
+  "process": [
+    {"step": "Diagnose the existing page", "detail": "Walk through the current site and name why each part is poorly designed: empty homepage, distracting sticky text, overused whitespace with giant text, two clashing text styles, and excess length."},
+    {"step": "Gather inspiration", "detail": "Review competitors (Tesla, Arrival, Polestar, Lucid, Rivian), pick favorites to borrow from, and also use Dribbble and your own past designs."},
+    {"step": "Restructure the content", "detail": "Decide what pages are needed; for one product, drop the homepage, lead with the product's perks, keep other pages in the nav, and add mission and blog sections at the bottom."},
+    {"step": "Find the hero image", "detail": "Search Google Images with Tools set to large images, and pick a zoomed-out shot so the subject does not overwhelm the screen and the info bar will not overlap it."},
+    {"step": "Build text behind the subject", "detail": "Trace the top edge of the subject, position the headline, then subtract the traced shape so the text appears behind the subject."},
+    {"step": "Fix the header", "detail": "Remove the side element (caption: 'side rimen'), place the logo at the top and collapse the links into a hamburger; move information from lower on the page up into an info bar in the hero."},
+    {"step": "Rebuild each section in order", "detail": "For each section, remove repeated content, tighten text sizes, choose a layout that differs from the previous section (slider, bento, columns), and use images and short copy instead of long text."},
+    {"step": "Refine color and imagery", "detail": "Swap mismatched images for consistent ones, keep the bright accent for CTA hover, sample gradients from nearby images for backgrounds, and extend photos by duplicating, flipping and cropping."},
+    {"step": "Finish with CTA, blog and footer", "detail": "Use a dealer search bar as the final CTA, vary the blog section's layout and heading font, flip one row when things line up too much, and keep the footer when it must hold many links."},
+    {"step": "Compare with the original", "detail": "Put the original site next to the redesign to show the difference."}
+  ],
+  "examples": [
+    {"what": "Original Ocean EV page with overused whitespace", "where": "Fisker website", "visual_note": "Giant text with lots of empty space leaves each element on its own; small spec text lower down makes the page read as two styles."},
+    {"what": "Sideways sticky text on the homepage", "where": "Fisker website", "visual_note": "Vertical side text that stays on screen while scrolling, shown as distracting."},
+    {"what": "Stacked full-screen image approach", "where": "Tesla, Arrival, Polestar websites", "visual_note": "Pages built from full-screen car images stacked one after another, called lazy by the source."},
+    {"what": "Nav bar with images", "where": "Rivian website", "visual_note": "Navigation entries shown with images, praised as something that should be a regular thing."},
+    {"what": "Hero headline behind the car", "where": "Fisker redesign", "visual_note": "A zoomed-out car photo with the giant headline tucked behind the top of the car, a top logo, a hamburger and an info bar."},
+    {"what": "CTA cards with hover reveal", "where": "Fisker redesign", "visual_note": "Two image cards with titles above them; on hover the image zooms out, the CTA pops up and the bright orange appears only then."},
+    {"what": "Features slider", "where": "Fisker redesign, borrowed from Lucid", "visual_note": "Smaller text and a slider showing each feature's image, replacing a spread-out layout."},
+    {"what": "Bento features section", "where": "Fisker redesign, layout found on Dribbble", "visual_note": "Tiles arranged for vertical images with paraphrased copy, on a gradient background sampled from the image above."},
+    {"what": "Mission section with extended sky", "where": "Fisker redesign", "visual_note": "A single photo, text and a button; the photo was duplicated, flipped vertically and cropped to add more blue at the top."},
+    {"what": "Trim levels as columns", "where": "Fisker redesign", "visual_note": "Tabs turned into columns with photos and specs; good-enough photos hidden behind the next section, specs tucked into a 'see more' button, and a slide-up when the image is hovered."},
+    {"what": "Off-road package lightbox", "where": "Fisker redesign, idea from Rivian", "visual_note": "Buttons on eligible models open a card with a full-size photo, overlaid text, a gradient for legibility and a close X."},
+    {"what": "Dealer search CTA", "where": "Fisker redesign", "visual_note": "A search bar to find nearby dealers in place of a CTA button."},
+    {"what": "Blog and newsletter section", "where": "Fisker redesign", "visual_note": "Images moved to the right, a different heading font, a newsletter sign-up below, and the middle item flipped so rows do not all line up."}
+  ],
+  "numbers": [],
+  "caveats": [
+    "Self-promotion: free Figma design files, a Discord design community of over 11,000 designers and a design challenge with $2,000 in prizes; excluded from rules.",
+    "Dated and time-bound: published 2024-08-19 while Fisker was going through bankruptcy; the original site may no longer exist.",
+    "No exact values are given: no spacing, type sizes, colors, durations or easing, so all layout and motion rules are qualitative.",
+    "Several rules are the presenter's opinion rather than tested findings (Tesla-style stacked images as lazy, dislike of an all-dark theme, people preferring pictures to text).",
+    "Some choices are workarounds for weak assets, such as hiding not-quite-good images behind the next section, not general advice.",
+    "Much of the redesign is shown on screen rather than described; this analysis uses only what the transcript says.",
+    "Auto-caption corrections applied: 'postar' read as Polestar, 'fiser' as Fisker, 'extremee' as Extreme E, 'text speex' as tech specs, 'C more' as see more, 'anesthetic' as aesthetic, 'Navar' as nav bar; quotes and evidence keep the original caption text. 'side rimen' (the element replaced by a top logo) is left uninterpreted.",
+    "Ambiguous caption: after tucking the trim specs into a 'see more' button, the transcript says 'when we hover on the image it'll slide up' without saying whether the image or the text moves, so no rule relies on it."
+  ]
+}

@@ -1,0 +1,1410 @@
+{
+  "summary": "This is Emil Kowalski's animation-vocabulary skill: a reverse-lookup glossary that turns a loose description of a web motion effect into its exact name, so the person knows what to ask an AI or a designer for. It groups its terms into families (entrances and exits, sequencing, transforms, state transitions, scroll, feedback, easing, springs, looping, polish, performance and principles) and tells the agent how to answer: read for intent, quote the glossary verbatim, contrast close terms and never invent new ones. Many definitions carry firm guidance, for example ease-out as the default for UI, linear only for spinners and marquees, animating transform and opacity so the GPU keeps motion smooth, tabular numbers for counters, and shorter, subtler motion the more often it is seen. For a design system this supplies a shared, precise motion vocabulary for tokens, component specs and prompts, plus a compact set of motion and performance rules.",
+  "key_ideas": [
+    "People describe motion by what they see or feel, so a naming tool must map sensations like 'springy' or 'draws itself in' to terms.",
+    "A precise shared vocabulary lets people ask for the exact motion they want from an AI or a designer.",
+    "Close terms need contrasting (clip-path vs mask, pop in vs bounce, shared element transition vs layout animation) so the person can choose.",
+    "If no term fits, name the closest one and say it is an approximation, or combine glossary terms; do not invent new words.",
+    "Ease-out is the default for UI and anything responding to the user; ease-in is usually avoided and linear is kept for spinners and marquees.",
+    "Springs are physics-based (stiffness, damping, mass) instead of fixed-duration, and they carry velocity into the next animation when interrupted.",
+    "60fps is the baseline for smooth motion (120fps on newer displays); animating transform and opacity keeps it smooth, while animating properties like width, height, top or left forces layout every frame and causes jank.",
+    "Motion should have a job (orient, give feedback, show relationships), not decorate.",
+    "The more often an animation is seen, the shorter and subtler it should be.",
+    "An origin-aware popover grows out of the trigger that opened it instead of from its own center, which is the CSS default.",
+    "Spatial consistency keeps an element's identity and position across states so users never lose track of it.",
+    "Tabular (fixed-width) digits are essential for tickers, timers and counters so numbers do not jump around.",
+    "Respect the reduced-motion setting by toning motion down or removing it.",
+    "The right animation can make an interface feel faster even when it is not."
+  ],
+  "entities": [
+    {
+      "name": "Emil Kowalski",
+      "type": "person",
+      "description": "Design engineer whose animation philosophy the glossary is based on"
+    },
+    {
+      "name": "emilkowalski/skills",
+      "type": "product",
+      "description": "MIT-licensed GitHub repository of agent skills that contains this animation-vocabulary skill"
+    },
+    {
+      "name": "/vocabulary page",
+      "type": "product",
+      "description": "The project's vocabulary page that this glossary mirrors as a curated snapshot"
+    },
+    {
+      "name": "Dynamic Island",
+      "type": "product",
+      "description": "Given as the example of a morph, where one shape smoothly turns into another"
+    },
+    {
+      "name": "iOS overscroll",
+      "type": "concept",
+      "description": "The reference feel for rubber-banding: resistance and snap-back when dragging past a boundary"
+    },
+    {
+      "name": "Origin-aware animation",
+      "type": "concept",
+      "description": "An element animates out of its trigger instead of from its own center"
+    },
+    {
+      "name": "Ease-out",
+      "type": "concept",
+      "description": "Starts fast and ends slow; the default for most UI"
+    },
+    {
+      "name": "Spring",
+      "type": "concept",
+      "description": "Physics-driven motion (tension, mass, damping) as an alternative to fixed-duration easing"
+    },
+    {
+      "name": "Perceptual duration",
+      "type": "concept",
+      "description": "How long a spring feels until it is finished, although it keeps micro-settling"
+    },
+    {
+      "name": "Tabular numbers",
+      "type": "concept",
+      "description": "Fixed-width digits that stop numbers shifting as they change"
+    },
+    {
+      "name": "will-change",
+      "type": "concept",
+      "description": "CSS hint that lets the browser promote an element to its own layer before it animates"
+    },
+    {
+      "name": "Layout thrashing",
+      "type": "concept",
+      "description": "Animating width, height, top or left, which forces layout recalculation every frame and causes jank"
+    },
+    {
+      "name": "prefers-reduced-motion",
+      "type": "concept",
+      "description": "The user setting that reduced-motion handling must respect"
+    },
+    {
+      "name": "Clip-path",
+      "type": "concept",
+      "description": "Clips an element to a shape; used for reveals, masks and before/after sliders"
+    },
+    {
+      "name": "Mask",
+      "type": "concept",
+      "description": "Like clip-path but with soft, fadeable edges"
+    }
+  ],
+  "topics": [
+    {
+      "name": "Motion principles",
+      "summary": "Principles to know: purposeful animation, anticipation, follow-through, squash and stretch, perceived performance, frequency of use, spatial consistency, hardware acceleration and reduced motion; plus a full naming glossary for entrances, transitions, loops and polish effects."
+    },
+    {
+      "name": "Easing and timing",
+      "summary": "Ease-out is the default for UI and user responses, ease-in is usually avoided, ease-in-out suits on-screen A-to-B moves, linear is only for spinners or marquees, and asymmetric curves feel more alive; also defines keyframes, tweening, stagger, orchestration, delay, duration, fill mode and stepped animation."
+    },
+    {
+      "name": "Spring animation",
+      "summary": "Springs are driven by stiffness, damping and mass; higher stiffness is snappier, lower damping bouncier, more mass slower; springs carry velocity into the next animation, support interruption and have a perceptual duration."
+    },
+    {
+      "name": "Animation performance",
+      "summary": "60fps is the baseline and 120fps on newer displays; jank is visible stutter from dropped frames; animating transform and opacity lets the GPU composite motion without redoing layout or paint, will-change is a hint to promote a layer ahead of time, and animating properties like width, height, top or left causes layout thrashing."
+    },
+    {
+      "name": "Gestures and drag",
+      "summary": "Defines drag with momentum, drag to reorder where other items shift to make room, swipe to dismiss for drawers and toasts, and rubber-banding past a boundary."
+    },
+    {
+      "name": "Micro-interactions",
+      "summary": "Hover effects, a subtle scale-down on press, hold to confirm with a filling progress, shake for errors, ripple from the tap point, text morph and number tickers."
+    },
+    {
+      "name": "Reduced motion",
+      "summary": "Respect prefers-reduced-motion by toning down or removing motion."
+    },
+    {
+      "name": "Modals and popovers",
+      "summary": "Origin-aware animation: a popover grows from the button that opened it instead of from its own center, which is the default in CSS; this is the skill's first worked example."
+    },
+    {
+      "name": "Feedback, empty and loading states",
+      "summary": "Skeleton or shimmer placeholders with a moving sheen while content loads; shake signals rejected input."
+    },
+    {
+      "name": "Typography",
+      "summary": "Tabular numbers (fixed-width digits) are essential for tickers, timers and counters; text morph and typewriter effects animate text."
+    },
+    {
+      "name": "Web implementation (CSS and React)",
+      "summary": "CSS-level terms: keyframes, fill mode (forwards), transform origin, perspective, cubic-bezier, clip-path, mask, will-change, compositing, view transitions and scroll-driven animation."
+    },
+    {
+      "name": "AI-assisted design",
+      "summary": "The skill exists so people can name a motion effect precisely when prompting an AI or briefing a designer, and it prescribes how an agent answers naming questions."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Users describe motion effects by what they see or feel, not by the technical name.",
+      "evidence": "Read for intent, not keywords."
+    },
+    {
+      "claim": "In CSS an element animates from its own center by default, not from the trigger that opened it.",
+      "evidence": "Origin-aware animation — ... instead of from its own center which is the default in CSS."
+    },
+    {
+      "claim": "Ease-in starts slow and can feel sluggish.",
+      "evidence": "Ease-in — Starts slow, ends fast. Usually avoided; can feel sluggish."
+    },
+    {
+      "claim": "Asymmetric easing feels more alive than a symmetric curve.",
+      "evidence": "Asymmetric easing — ... Feels more alive than a symmetric one."
+    },
+    {
+      "claim": "Higher spring stiffness feels snappier.",
+      "evidence": "Stiffness / Tension — ... Higher feels snappier."
+    },
+    {
+      "claim": "Lower damping gives more bounce and oscillation.",
+      "evidence": "Damping — ... Lower damping means more bounce and oscillation."
+    },
+    {
+      "claim": "More mass makes a spring slower and more sluggish.",
+      "evidence": "Mass — ... More mass makes it slower and more sluggish."
+    },
+    {
+      "claim": "A spring keeps micro-settling after it already feels finished.",
+      "evidence": "Perceptual duration"
+    },
+    {
+      "claim": "When interrupted, a spring carries the element's velocity into the next animation, so a flicked element keeps its speed.",
+      "evidence": "Velocity — ... A spring carries it into the next animation when interrupted"
+    },
+    {
+      "claim": "A lower perspective value exaggerates 3D depth, as if the viewer is closer.",
+      "evidence": "Perspective — ... a lower value exaggerates depth"
+    },
+    {
+      "claim": "Mask differs from clip-path by having soft, fadeable edges.",
+      "evidence": "Mask — ... like clip-path, but with soft, fadeable edges."
+    },
+    {
+      "claim": "Fixed-width digits stop numbers shifting around as they change.",
+      "evidence": "Tabular numbers — Fixed-width digits so numbers don't shift around as they change."
+    },
+    {
+      "claim": "60fps is the baseline for smooth motion, and newer displays run at 120fps.",
+      "evidence": "Frame rate (FPS)"
+    },
+    {
+      "claim": "Jank is visible stutter caused by the browser dropping frames.",
+      "evidence": "Jank — Visible stutter when the browser drops frames"
+    },
+    {
+      "claim": "Animating width, height, top or left forces the browser to recalculate layout every frame, causing jank.",
+      "evidence": "Layout thrashing"
+    },
+    {
+      "claim": "Animating transform and opacity lets the GPU keep motion smooth, without redoing layout or paint.",
+      "evidence": "Hardware acceleration; Compositing"
+    },
+    {
+      "claim": "will-change lets the browser promote an element to its own layer ahead of time.",
+      "evidence": "will-change — A CSS hint that an element is about to animate"
+    },
+    {
+      "claim": "The right animation makes an interface feel faster even when it is not.",
+      "evidence": "Perceived performance"
+    },
+    {
+      "claim": "The more often an animation is seen, the shorter and subtler it should be.",
+      "evidence": "Frequency of use"
+    },
+    {
+      "claim": "Direction-aware transitions give navigation a sense of direction.",
+      "evidence": "Direction-aware transition"
+    },
+    {
+      "claim": "A subtle scale-down on click makes an element feel physical.",
+      "evidence": "Press / Tap feedback"
+    },
+    {
+      "claim": "The glossary is a curated snapshot of the project's /vocabulary page.",
+      "evidence": "A curated snapshot mirroring the project's `/vocabulary` page"
+    },
+    {
+      "claim": "A dropped frame is one the browser missed its deadline to draw, causing a tiny hitch in motion.",
+      "evidence": "Dropped frame"
+    },
+    {
+      "claim": "Momentum is motion that carries velocity, especially after a drag or interruption.",
+      "evidence": "Momentum"
+    },
+    {
+      "claim": "In a view transition the browser morphs between two states or pages, connecting shared elements.",
+      "evidence": "View transition"
+    },
+    {
+      "claim": "Pop in is an entrance with a slight overshoot, while bounce is a spring that overshoots and settles; the skill lists them as close terms to contrast.",
+      "evidence": "Pop in; Bounce; 3. Disambiguate close terms."
+    }
+  ],
+  "quotes": [
+    "Motion should serve a function — orient, give feedback, show relationships — not just decorate.",
+    "The more often a user sees an animation, the shorter and subtler it should be.",
+    "Avoid for UI; reserve for spinners or marquees."
+  ],
+  "tags": [
+    "animation",
+    "motion",
+    "glossary",
+    "vocabulary",
+    "easing",
+    "springs",
+    "performance",
+    "micro-interactions",
+    "gestures",
+    "reduced-motion",
+    "transitions",
+    "ai-prompting",
+    "emil-kowalski"
+  ],
+  "authority": "non-negotiable",
+  "rules": [
+    {
+      "rule": "Answer a naming question by mapping what the person sees or feels ('springy', 'slides off', 'draws itself in') to the glossary term, not by matching keywords.",
+      "why": "Users describe what they see or feel, not the technical name.",
+      "kind": "do",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "1. Read for intent, not keywords."
+    },
+    {
+      "rule": "Quote glossary descriptions verbatim when naming an effect; do not paraphrase them.",
+      "why": "The glossary's descriptions are authoritative.",
+      "kind": "do",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "2. Quote the glossary verbatim."
+    },
+    {
+      "rule": "Format a naming answer as the bold term, an em dash, then its description, for example '**Stagger** — ...'.",
+      "why": "This is the skill's defined output format.",
+      "kind": "do",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Quick Start"
+    },
+    {
+      "rule": "When several terms could fit, list the best match first, then 1–2 alternates (under 'Close alternates:'), each with a one-line note on how it differs.",
+      "why": "Several terms can fit one description; the note on how each differs lets the user pick. [inferred]",
+      "kind": "do",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [
+        "1–2 alternates",
+        "Close alternates:"
+      ],
+      "evidence": "If several terms could fit, list the best match first"
+    },
+    {
+      "rule": "When two close terms compete, such as Clip-path vs Mask, Pop in vs Bounce, or Shared element transition vs Layout animation, contrast them so the person can pick.",
+      "why": "Contrasting them lets the user pick.",
+      "kind": "do",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "3. Disambiguate close terms."
+    },
+    {
+      "rule": "When nothing matches exactly, name the closest term and say plainly it is an approximation, or describe the effect by combining glossary terms (e.g. 'a stagger of scale-in entrances').",
+      "why": "The source gives no reason; saying plainly it is an approximation stops the user taking it as the exact name. [inferred]",
+      "kind": "do",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "4. When nothing matches exactly"
+    },
+    {
+      "rule": "Do not invent a motion term that is not in the glossary; say it is not there, though you may explain the concept using glossary words.",
+      "why": "The glossary is the authority (its descriptions are called authoritative); if a term genuinely isn't there, the skill says so. [inferred]",
+      "kind": "dont",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "5. Stay within this glossary."
+    },
+    {
+      "rule": "Lead a naming answer with the term and expand only if asked.",
+      "why": "A naming question wants a name, not an essay.",
+      "kind": "do",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "6. Keep it tight."
+    },
+    {
+      "rule": "When the vocabulary skill is invoked without a specific question, reply only with its ready message and give no other information until asked.",
+      "why": "Stated as the skill's fixed opening; the source gives no further reason.",
+      "kind": "do",
+      "strength": "must",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Initial Response"
+    },
+    {
+      "rule": "Use the vocabulary lookup when someone asks \"what's it called when…\" or describes a motion effect without its name; use it to name an effect, not to design or build one.",
+      "why": "The skill's description scopes it to finding the right word to prompt an AI or designer with.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "description: For naming an effect, not designing or building one."
+    },
+    {
+      "rule": "Keep the glossary and the project's /vocabulary page in sync whenever either changes.",
+      "why": "The glossary is a curated snapshot mirroring that page.",
+      "kind": "do",
+      "strength": "must",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "keep the two in sync when either changes"
+    },
+    {
+      "rule": "Use ease-out as the default easing for most UI and for anything responding to the user.",
+      "why": "Ease-out starts fast and ends slow; the source names it the default without a further reason.",
+      "kind": "do",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "Ease-out"
+      ],
+      "evidence": "Ease-out — Starts fast, ends slow. The default for most UI"
+    },
+    {
+      "rule": "Usually avoid ease-in for UI motion.",
+      "why": "It starts slow and can feel sluggish.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "Ease-in"
+      ],
+      "evidence": "Ease-in — ... Usually avoided; can feel sluggish."
+    },
+    {
+      "rule": "Use ease-in-out for elements already on screen moving from A to B.",
+      "why": "Slow, fast, slow suits an on-screen move between two points.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "Ease-in-out"
+      ],
+      "evidence": "Ease-in-out — Slow, fast, slow. Good for elements already on screen"
+    },
+    {
+      "rule": "Do not use linear easing for UI; reserve it for spinners or marquees.",
+      "why": "Linear is constant speed; the source says to avoid it for UI and reserve it for spinners or marquees, without a further reason.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "Linear"
+      ],
+      "evidence": "Linear — Constant speed. Avoid for UI"
+    },
+    {
+      "rule": "Prefer an asymmetric easing curve, which accelerates and decelerates at different rates, over a symmetric one.",
+      "why": "It feels more alive than a symmetric curve.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Asymmetric easing"
+    },
+    {
+      "rule": "Define a custom cubic-bezier curve when you need precise control over easing.",
+      "why": "A custom curve gives precise control.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "css",
+      "values": [
+        "Cubic-bezier"
+      ],
+      "evidence": "Cubic-bezier — A custom easing curve you define for precise control."
+    },
+    {
+      "rule": "Consider spring animation (stiffness, damping, mass) as an alternative to fixed-duration easing.",
+      "why": "Springs are driven by physics rather than a set duration.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "tension",
+        "mass",
+        "damping"
+      ],
+      "evidence": "Spring Animations — physics-based motion as an alternative to fixed-duration easing"
+    },
+    {
+      "rule": "Raise spring stiffness (tension) to make motion feel snappier.",
+      "why": "Stiffness is how strongly the spring pulls toward its target; higher feels snappier.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Stiffness / Tension"
+    },
+    {
+      "rule": "Lower spring damping for more bounce and oscillation; damping sets how quickly the spring settles.",
+      "why": "Damping sets how quickly a spring settles; lower means more bounce.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Damping"
+    },
+    {
+      "rule": "Add spring mass to make an element feel heavier, knowing it also becomes slower and more sluggish.",
+      "why": "More mass makes motion slower and more sluggish.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Mass — How heavy the animated element feels."
+    },
+    {
+      "rule": "Use a bouncing spring (overshoot, then settle) when the moment should feel playful.",
+      "why": "Bounce adds playfulness.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Bounce — A spring that overshoots and settles, adding playfulness."
+    },
+    {
+      "rule": "Judge a spring's length by when it feels finished (its perceptual duration), not by when it stops micro-settling. [inferred]",
+      "why": "A spring keeps micro-settling underneath after it feels finished.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Perceptual duration"
+    },
+    {
+      "rule": "When an animation is interrupted, carry the element's current velocity into the next animation (for example with a spring) so a flicked element keeps its speed.",
+      "why": "A spring carries velocity into the next animation when interrupted.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Velocity; Momentum"
+    },
+    {
+      "rule": "Make animations interruptible so they can be smoothly redirected mid-flight instead of finishing first.",
+      "why": "It can be smoothly redirected mid-flight instead of finishing first.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Interruptible animation"
+    },
+    {
+      "rule": "Pair a scale-in entrance with a fade.",
+      "why": "Scale in is often paired with a fade.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Scale in — ... often paired with a fade."
+    },
+    {
+      "rule": "Make popovers origin-aware: animate them out of the trigger that opened them instead of from their own center.",
+      "why": "In CSS the default is to grow from the element's own center, not from the trigger.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Origin-aware animation"
+    },
+    {
+      "rule": "Set the transform origin to the anchor point a scale or rotation should grow or spin from.",
+      "why": "Transform origin is the anchor for scale and rotation.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "css",
+      "values": [
+        "Transform origin"
+      ],
+      "evidence": "Transform origin"
+    },
+    {
+      "rule": "Lower the perspective value to exaggerate 3D depth, as if the viewer is closer.",
+      "why": "A lower value exaggerates depth, like the viewer is closer.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "css",
+      "values": [
+        "Perspective",
+        "rotateX",
+        "rotateY"
+      ],
+      "evidence": "Perspective"
+    },
+    {
+      "rule": "When an element's size or position changes, animate it to the new spot instead of letting it snap.",
+      "why": "That is what a layout animation does.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Layout animation"
+    },
+    {
+      "rule": "Slide content one way when navigating forward and the opposite way when going back.",
+      "why": "It gives navigation a sense of direction.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Direction-aware transition"
+    },
+    {
+      "rule": "Visually connect the before and after states of a change, for example by growing and shrinking the same rectangle.",
+      "why": "A continuity transition keeps the user oriented.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Continuity transition"
+    },
+    {
+      "rule": "Keep an element's identity and position consistent across states when animating.",
+      "why": "So users never lose track of where things went.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Spatial consistency"
+    },
+    {
+      "rule": "Use a shared element transition when an element travels and transforms from one position into another, like a thumbnail expanding into a card.",
+      "why": "The element travels and transforms from one position into another, like a thumbnail expanding into a card.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Shared element transition"
+    },
+    {
+      "rule": "Use a crossfade when one element replaces another in the same spot.",
+      "why": "One fades out as the other fades in, in the same spot.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Crossfade"
+    },
+    {
+      "rule": "Coordinate the timing of multiple animations so they read as one motion.",
+      "why": "Orchestration makes several animations feel like one coordinated motion.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Orchestration"
+    },
+    {
+      "rule": "Animate a group of items one after another with a small delay between each to create a cascade.",
+      "why": "That is a stagger.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Stagger"
+    },
+    {
+      "rule": "Use a fill mode such as forwards when an element must keep its last frame's styles after the animation ends.",
+      "why": "Fill mode decides whether first or last frame styles apply outside the animation.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "css",
+      "values": [
+        "forwards"
+      ],
+      "evidence": "Fill mode"
+    },
+    {
+      "rule": "Use a stepped animation for motion that moves in discrete steps, like a countdown timer.",
+      "why": "The motion is divided into discrete steps.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Stepped animation"
+    },
+    {
+      "rule": "Give clickable elements a subtle scale-down on press.",
+      "why": "It makes the element feel physical.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Press / Tap feedback"
+    },
+    {
+      "rule": "For hold-to-confirm buttons, show a progress effect that fills while the user holds the button.",
+      "why": "That is how hold to confirm is defined.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Hold to confirm"
+    },
+    {
+      "rule": "Let dragged elements carry momentum when released.",
+      "why": "Drag is often paired with momentum on release.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Drag — ... often with momentum when released."
+    },
+    {
+      "rule": "In drag to reorder, shift the other list items to make room while an item is dragged.",
+      "why": "That is how drag to reorder is defined.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Drag to reorder"
+    },
+    {
+      "rule": "Let drawers and toasts be closed by swiping them off-screen.",
+      "why": "Swipe to dismiss is defined with drawers and toasts as examples.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Swipe to dismiss"
+    },
+    {
+      "rule": "Add resistance and snap-back when the user drags past a boundary.",
+      "why": "Rubber-banding gives the iOS overscroll feel.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Rubber-banding"
+    },
+    {
+      "rule": "Use a quick side-to-side shake to signal an error or rejected input.",
+      "why": "That is the defined meaning of shake or wiggle.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Shake / Wiggle"
+    },
+    {
+      "rule": "Use a ripple expanding from the tap point to confirm a press.",
+      "why": "A ripple confirms the press.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Ripple"
+    },
+    {
+      "rule": "Use alternate (yoyo) when a loop should play forward then reverse each iteration instead of jumping back to the start.",
+      "why": "That is how the glossary defines alternate (yoyo).",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "Alternate (yoyo)"
+      ],
+      "evidence": "Alternate (yoyo)"
+    },
+    {
+      "rule": "Use a gentle repeating scale or opacity pulse to draw attention.",
+      "why": "That is what a pulse is for.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Pulse"
+    },
+    {
+      "rule": "Use a gentle float or idle animation to make a static, waiting element feel alive.",
+      "why": "Float makes a static element feel alive and weightless.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Float; Idle animation"
+    },
+    {
+      "rule": "Use a blur filter to soften an element or mask tiny imperfections.",
+      "why": "Blur can mask tiny imperfections.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "blur"
+      ],
+      "evidence": "Blur"
+    },
+    {
+      "rule": "Use clip-path for reveals, masks and before/after sliders.",
+      "why": "Clip-path clips an element to a shape.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "css",
+      "values": [
+        "clip-path"
+      ],
+      "evidence": "Clip-path"
+    },
+    {
+      "rule": "Use a mask instead of clip-path when a reveal needs soft, fadeable edges.",
+      "why": "Mask is like clip-path but with soft, fadeable edges.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "css",
+      "values": [
+        "mask"
+      ],
+      "evidence": "Mask"
+    },
+    {
+      "rule": "Animate changing text character by character (text morph) when attention should go to the new value.",
+      "why": "Text morph draws attention to the new value.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Text morph"
+    },
+    {
+      "rule": "Show a skeleton placeholder with a moving shimmer while content loads.",
+      "why": "That is the skeleton or shimmer loading pattern.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Skeleton / Shimmer"
+    },
+    {
+      "rule": "Use tabular (fixed-width) numbers for tickers, timers and counters.",
+      "why": "Numbers don't shift around as they change; described as essential.",
+      "kind": "do",
+      "strength": "must",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [
+        "Tabular numbers"
+      ],
+      "evidence": "Tabular numbers — ... Essential for tickers, timers, and counters."
+    },
+    {
+      "rule": "Treat 60fps as the baseline for smooth motion; newer displays run at 120fps.",
+      "why": "60fps is the baseline for smooth motion; 120fps on newer displays.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "60fps",
+        "120fps"
+      ],
+      "evidence": "Frame rate (FPS)"
+    },
+    {
+      "rule": "Animate transform and opacity so the GPU can move or fade the element on its own layer.",
+      "why": "Animating transform and opacity lets the GPU keep motion smooth, without redoing layout or paint.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "web",
+      "values": [
+        "transform",
+        "opacity"
+      ],
+      "evidence": "Hardware acceleration; Compositing"
+    },
+    {
+      "rule": "Avoid animating layout properties like width, height, top or left.",
+      "why": "They force the browser to recalculate layout every frame, causing jank.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "web",
+      "values": [
+        "width",
+        "height",
+        "top",
+        "left"
+      ],
+      "evidence": "Layout thrashing"
+    },
+    {
+      "rule": "Add will-change to an element that is about to animate so the browser can promote it to its own layer ahead of time.",
+      "why": "It is a hint that lets the browser prepare a layer.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "css",
+      "values": [
+        "will-change"
+      ],
+      "evidence": "will-change"
+    },
+    {
+      "rule": "Give every animation a function (orient, give feedback or show relationships); do not animate only to decorate.",
+      "why": "Motion should orient, give feedback or show relationships, not just decorate (Principles to Know).",
+      "kind": "do",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Purposeful animation"
+    },
+    {
+      "rule": "Make an animation shorter and subtler the more often a user sees it.",
+      "why": "Listed under Principles to Know; the source gives no further reason.",
+      "kind": "do",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Frequency of use"
+    },
+    {
+      "rule": "Respect prefers-reduced-motion by toning down or removing motion.",
+      "why": "Listed under Principles to Know, the concepts that guide when and how to animate.",
+      "kind": "do",
+      "strength": "should",
+      "area": "accessibility",
+      "applies_to": "all",
+      "values": [
+        "prefers-reduced-motion"
+      ],
+      "evidence": "Reduced motion"
+    },
+    {
+      "rule": "Use the right animation to make the interface feel faster.",
+      "why": "The right animation makes an interface feel faster, even when it isn't.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Perceived performance"
+    },
+    {
+      "rule": "Add a small wind-up in the opposite direction before a move to hint at what is about to happen.",
+      "why": "Anticipation hints at the coming motion.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Anticipation"
+    },
+    {
+      "rule": "Let parts of an element keep moving and settle slightly after the main motion stops.",
+      "why": "Follow-through adds weight.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Follow-through"
+    },
+    {
+      "rule": "Deform an element as it moves (squash and stretch) to convey weight, speed and flexibility.",
+      "why": "That is what squash and stretch conveys.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Squash & stretch"
+    },
+    {
+      "rule": "Show or hide a section by smoothly expanding and collapsing its height (accordion / collapse).",
+      "why": "That is how the glossary defines accordion / collapse.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Accordion / Collapse"
+    },
+    {
+      "rule": "Use a morph when one shape should smoothly turn into another, as in Dynamic Island.",
+      "why": "That is how the glossary defines morph.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Morph — One shape smoothly turns into another shape, e.g. Dynamic Island."
+    }
+  ],
+  "decisions": [
+    {
+      "question": "Which easing curve should a given motion use?",
+      "options": [
+        {
+          "name": "Ease-out",
+          "effect": "Starts fast, ends slow.",
+          "when": "The default for most UI and anything responding to the user."
+        },
+        {
+          "name": "Ease-in",
+          "effect": "Starts slow, ends fast; can feel sluggish.",
+          "when": "Usually avoided."
+        },
+        {
+          "name": "Ease-in-out",
+          "effect": "Slow, fast, slow.",
+          "when": "Elements already on screen moving from A to B."
+        },
+        {
+          "name": "Linear",
+          "effect": "Constant speed.",
+          "when": "Only spinners or marquees; avoid for UI."
+        },
+        {
+          "name": "Asymmetric easing",
+          "effect": "Accelerates and decelerates at different rates; feels more alive than a symmetric curve.",
+          "when": "When a curve should feel more alive."
+        },
+        {
+          "name": "Custom cubic-bezier",
+          "effect": "A curve you define yourself.",
+          "when": "When you need precise control."
+        }
+      ],
+      "recommendation": "Ease-out by default for UI and user responses; ease-in-out for on-screen A-to-B moves; linear only for spinners and marquees.",
+      "maps_to": null,
+      "evidence": "Easing — how speed changes over an animation"
+    },
+    {
+      "question": "Should motion use fixed-duration easing or spring physics?",
+      "options": [
+        {
+          "name": "Fixed-duration easing",
+          "effect": "Motion runs for a set duration along an easing curve.",
+          "when": "When a set duration is wanted. [inferred]"
+        },
+        {
+          "name": "Spring physics",
+          "effect": "Motion is driven by tension, mass and damping; it carries velocity into the next animation when interrupted and has a perceptual duration.",
+          "when": "When motion should keep velocity after a drag or interruption. [inferred]"
+        }
+      ],
+      "recommendation": null,
+      "maps_to": "Q-motion-04",
+      "evidence": "Spring Animations — physics-based motion as an alternative to fixed-duration easing"
+    },
+    {
+      "question": "How should a spring feel?",
+      "options": [
+        {
+          "name": "Snappy",
+          "effect": "Higher stiffness pulls harder toward the target and feels snappier.",
+          "when": "When the element should arrive quickly. [inferred]"
+        },
+        {
+          "name": "Bouncy",
+          "effect": "Lower damping gives more bounce and oscillation; bounce overshoots and settles.",
+          "when": "When the moment should feel playful."
+        },
+        {
+          "name": "Heavy",
+          "effect": "More mass makes it slower and more sluggish.",
+          "when": "When the element should feel heavy."
+        }
+      ],
+      "recommendation": null,
+      "maps_to": null,
+      "evidence": "Stiffness / Tension; Damping; Mass; Bounce"
+    },
+    {
+      "question": "How should an element appear or disappear?",
+      "options": [
+        {
+          "name": "Fade in / fade out",
+          "effect": "Changes opacity only.",
+          "when": "Simple appear and disappear."
+        },
+        {
+          "name": "Slide in",
+          "effect": "Enters from off-screen left, right, top or bottom.",
+          "when": "When the element comes from an edge."
+        },
+        {
+          "name": "Scale in",
+          "effect": "Grows from smaller to full size, often with a fade.",
+          "when": "When the element should grow into view."
+        },
+        {
+          "name": "Pop in",
+          "effect": "Appears with a slight overshoot, as if bouncing into place.",
+          "when": "When a playful overshoot fits. [inferred]"
+        },
+        {
+          "name": "Reveal",
+          "effect": "Content is uncovered gradually with a clip-path or mask.",
+          "when": "When content should be uncovered rather than moved."
+        }
+      ],
+      "recommendation": null,
+      "maps_to": null,
+      "evidence": "Entrances & Exits — how elements appear and disappear"
+    },
+    {
+      "question": "How should one state, view or element connect to the next?",
+      "options": [
+        {
+          "name": "Crossfade",
+          "effect": "One element fades out as another fades in, in the same spot.",
+          "when": "Replacing content in place."
+        },
+        {
+          "name": "Continuity transition",
+          "effect": "Visually connects before and after, e.g. the same rectangle growing and shrinking.",
+          "when": "When the user must stay oriented."
+        },
+        {
+          "name": "Morph",
+          "effect": "One shape smoothly turns into another, e.g. Dynamic Island.",
+          "when": "When one shape becomes another."
+        },
+        {
+          "name": "Shared element transition",
+          "effect": "An element travels and transforms from one position into another, like a thumbnail expanding into a card.",
+          "when": "When an item grows into a larger view, like a thumbnail expanding into a card."
+        },
+        {
+          "name": "Layout animation",
+          "effect": "Size or position changes animate to the new spot instead of snapping.",
+          "when": "When an element's size or position changes."
+        },
+        {
+          "name": "Direction-aware transition",
+          "effect": "Slides one way going forward and the opposite way going back.",
+          "when": "Navigation that should feel directional."
+        },
+        {
+          "name": "Page or view transition",
+          "effect": "Plays when navigating between pages or routes; a view transition has the browser morph between states and connect shared elements.",
+          "when": "Route and page changes."
+        }
+      ],
+      "recommendation": null,
+      "maps_to": "Q-motion-06",
+      "evidence": "Transitions Between States; Page transition; View transition"
+    },
+    {
+      "question": "When reduced motion is on, should motion be toned down or removed?",
+      "options": [
+        {
+          "name": "Tone down",
+          "effect": "Motion stays but is reduced.",
+          "when": "Respecting prefers-reduced-motion while keeping some motion."
+        },
+        {
+          "name": "Remove",
+          "effect": "Motion is removed.",
+          "when": "Respecting prefers-reduced-motion fully."
+        }
+      ],
+      "recommendation": "Either, as long as the prefers-reduced-motion setting is respected.",
+      "maps_to": "Q-motion-07",
+      "evidence": "Reduced motion — Respecting the user's prefers-reduced-motion setting by toning down or removing motion."
+    },
+    {
+      "question": "Should a reveal use clip-path or a mask?",
+      "options": [
+        {
+          "name": "Clip-path",
+          "effect": "Clips the element to a shape.",
+          "when": "Reveals, masks and before/after sliders."
+        },
+        {
+          "name": "Mask",
+          "effect": "Like clip-path but with soft, fadeable edges, using a shape or gradient.",
+          "when": "When the edge should be soft."
+        }
+      ],
+      "recommendation": null,
+      "maps_to": null,
+      "evidence": "Clip-path; Mask"
+    },
+    {
+      "question": "How should a looping animation repeat?",
+      "options": [
+        {
+          "name": "Loop",
+          "effect": "Repeats a set number of times or infinitely, jumping back to the start.",
+          "when": "Continuous motion such as a marquee. [inferred]"
+        },
+        {
+          "name": "Alternate (yoyo)",
+          "effect": "Plays forward then reverses each iteration.",
+          "when": "When the loop should reverse instead of jumping back to the start."
+        }
+      ],
+      "recommendation": null,
+      "maps_to": null,
+      "evidence": "Looping & Ambient Motion"
+    },
+    {
+      "question": "How should motion relate to scrolling?",
+      "options": [
+        {
+          "name": "Scroll reveal",
+          "effect": "Elements fade or slide into place as they enter the viewport.",
+          "when": "Content appearing on scroll."
+        },
+        {
+          "name": "Scroll-driven animation",
+          "effect": "Animation progress is tied directly to scroll position.",
+          "when": "When scroll should scrub the animation."
+        },
+        {
+          "name": "Parallax",
+          "effect": "Background and foreground move at different speeds, creating depth.",
+          "when": "When scrolling should show depth."
+        }
+      ],
+      "recommendation": null,
+      "maps_to": null,
+      "evidence": "Scroll — motion tied to scrolling or navigating between views"
+    },
+    {
+      "question": "Where should a popover or menu grow from?",
+      "options": [
+        {
+          "name": "Its own center",
+          "effect": "The CSS default: the element animates from its own center.",
+          "when": "Not stated; it is simply what happens without setting an origin. [inferred]"
+        },
+        {
+          "name": "Its trigger (origin-aware)",
+          "effect": "The element animates out of its trigger, like a popover growing from the button that opened it.",
+          "when": "Elements opened from a trigger, such as popovers."
+        }
+      ],
+      "recommendation": null,
+      "maps_to": null,
+      "evidence": "Origin-aware animation; Transform origin; Example 1 — feel-based"
+    },
+    {
+      "question": "How should a press be acknowledged?",
+      "options": [
+        {
+          "name": "Press / tap feedback",
+          "effect": "A subtle scale-down when the element is clicked, so it feels physical.",
+          "when": "When the element should feel physical."
+        },
+        {
+          "name": "Ripple",
+          "effect": "A circle expanding from the point of the tap, confirming the press.",
+          "when": "When the press should be confirmed from the exact tap point. [inferred]"
+        }
+      ],
+      "recommendation": null,
+      "maps_to": null,
+      "evidence": "Press / Tap feedback; Ripple"
+    }
+  ],
+  "process": [
+    {
+      "step": "Wait for a question",
+      "detail": "When invoked without a question, reply only with the ready line and nothing else until the person asks."
+    },
+    {
+      "step": "Read for intent",
+      "detail": "Map what the person sees or feels ('springy', 'slides off', 'draws itself in') to a glossary term rather than matching keywords."
+    },
+    {
+      "step": "Answer with the term",
+      "detail": "Reply as '**Term** — description', quoting the glossary description verbatim."
+    },
+    {
+      "step": "Offer alternates",
+      "detail": "If several terms fit, give the best match first, then 1–2 alternates with a one-line note on how each differs."
+    },
+    {
+      "step": "Disambiguate close terms",
+      "detail": "Contrast competing terms such as Clip-path vs Mask, Pop in vs Bounce, Shared element transition vs Layout animation."
+    },
+    {
+      "step": "Handle no exact match",
+      "detail": "Name the closest term and say it is an approximation, or combine glossary words (e.g. 'a stagger of scale-in entrances')."
+    },
+    {
+      "step": "Stay within the glossary",
+      "detail": "If a term is not in the glossary, say so rather than inventing one; explain the concept with glossary words."
+    },
+    {
+      "step": "Keep it tight",
+      "detail": "Lead with the name and expand only if asked."
+    },
+    {
+      "step": "Keep sources in sync",
+      "detail": "Update the glossary and the project's /vocabulary page together when either changes."
+    }
+  ],
+  "examples": [
+    {
+      "what": "A popover that grows out of the button that was clicked, answered as 'Origin-aware animation'",
+      "where": null,
+      "visual_note": "Shows a feel-based description mapped to a term; the popover scales from its trigger instead of its own center."
+    },
+    {
+      "what": "'The thing where one image turns into another image', answered as Morph with Crossfade and Shared element transition as alternates",
+      "where": null,
+      "visual_note": "Demonstrates disambiguation: crossfade if they fade over each other in place, shared element transition if the element travels and transforms."
+    },
+    {
+      "what": "An iOS scroll that resists and snaps back when pulled too far, answered as Rubber-banding",
+      "where": "iOS",
+      "visual_note": "Physics feel mapped to a term: resistance and snap-back past a boundary."
+    },
+    {
+      "what": "Dynamic Island as the example of a morph",
+      "where": "Dynamic Island",
+      "visual_note": "One shape smoothly turns into another shape."
+    },
+    {
+      "what": "A thumbnail expanding into a card",
+      "where": null,
+      "visual_note": "The example of a shared element transition."
+    },
+    {
+      "what": "The same rectangle getting bigger and smaller",
+      "where": null,
+      "visual_note": "The example of a continuity transition that keeps the user oriented."
+    },
+    {
+      "what": "A countdown timer",
+      "where": null,
+      "visual_note": "The example of a stepped animation divided into discrete steps."
+    },
+    {
+      "what": "A before/after slider",
+      "where": null,
+      "visual_note": "A draggable divider that wipes between two overlaid images; one use of clip-path."
+    },
+    {
+      "what": "'A stagger of scale-in entrances'",
+      "where": null,
+      "visual_note": "Shows how to describe an effect with no exact name by combining glossary terms."
+    },
+    {
+      "what": "A drawer or toast dragged off-screen to close it",
+      "where": null,
+      "visual_note": "The examples given for swipe to dismiss."
+    },
+    {
+      "what": "Spinners and marquees",
+      "where": null,
+      "visual_note": "The only places the glossary reserves linear (constant-speed) easing for."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "60fps",
+      "context": "Baseline frame rate for smooth motion",
+      "evidence": "Frame rate (FPS)"
+    },
+    {
+      "value": "120fps",
+      "context": "Frame rate on newer displays",
+      "evidence": "Frame rate (FPS)"
+    },
+    {
+      "value": "0%, 50%, 100%",
+      "context": "Example keyframe points the browser fills the gaps between",
+      "evidence": "Keyframes"
+    },
+    {
+      "value": "1–2",
+      "context": "Number of alternate terms to list after the best match",
+      "evidence": "then 1–2 alternates with a one-line note"
+    }
+  ],
+  "caveats": [
+    "This is a naming glossary, not a spec: it gives almost no durations, curves or scale values, so exact motion tokens must come from Emil Kowalski's other sources. [inferred]",
+    "The glossary is described as a curated snapshot of the project's /vocabulary page and this copy is pinned to commit 85e8e23, so it can drift from the live page.",
+    "The Accordion / Collapse entry animates height, while the Performance section lists height among properties that cause layout thrashing; the glossary does not reconcile the two. [inferred]",
+    "Most entries are neutral definitions (hover effect, parallax, typewriter, orbit, press feedback, layout animation); rules drawn from them are marked consider. Must is kept for explicit instructions to the agent and for entries worded as rules: ease-out as the default, linear avoided for UI, tabular numbers called essential, and the two principles phrased with 'should' (purposeful animation, frequency of use). Principles worded as facts (spatial consistency, hardware acceleration, reduced motion, the 60fps baseline, layout thrashing) are marked should.",
+    "The initial-response line attributes the knowledge to Emil Kowalski's animation philosophy; it is self-description, not independent evidence.",
+    "Reduced motion is only listed as a principle here; OpenDesigner locks it as an accessibility floor regardless of this source's wording. [inferred]"
+  ]
+}

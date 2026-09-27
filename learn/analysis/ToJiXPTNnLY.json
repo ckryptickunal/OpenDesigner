@@ -1,0 +1,464 @@
+{
+  "summary": "Kole Jain walks through professional designer portfolio websites and pulls out seven tips they share: a headshot above the fold, a concise intro, a simple site architecture, large and flashy imagery, visual case studies, a genuine about page, and personality. He shows a real portfolio for each tip and stresses that these are best practices, not rules every portfolio follows. The core argument is that visitors see before they read, so the work should lead and text should be secondary, while your face and story build trust and a touch of personality makes you memorable to potential clients. For someone building a design system this is mostly about a portfolio or personal landing page: page count, what goes above the fold, image-first layout and a voice with personality [inferred].",
+  "key_ideas": [
+    "Put your headshot somewhere on the site, ideally above the fold; a video of yourself goes a step further.",
+    "Keep the intro concise: visitors want your name and what you do as soon as they land.",
+    "A portfolio needs two, maybe three pages at most; a single page with links to its sections works when there is little content.",
+    "Visitors see a portfolio before they read it, so large, full-width imagery should lead and text should be secondary.",
+    "A good case study can be understood from its images alone, with a visual or GIF every couple of paragraphs.",
+    "Ending a case study with what you learned and what you would improve is a good way to present that to potential clients.",
+    "Case studies matter most when your field emphasises process, such as UX design, and less for graphic designers, copywriters or UI designers.",
+    "An about page is the place to be genuine; sharing your face and story creates trustworthiness.",
+    "Personality, even brutal honesty, makes a portfolio memorable and gives visitors something to relate to.",
+    "These tips are best practices: several of the example portfolios skip some of them, it is a good idea to follow most or some of them, and you should do what works best for you."
+  ],
+  "entities": [
+    {
+      "name": "Kole Jain",
+      "type": "person",
+      "description": "Presenter of the video (Kole Jain channel), who mentions his own portfolio: a homepage and a contact page, no case studies."
+    },
+    {
+      "name": "Julia Fernandez",
+      "type": "person",
+      "description": "Designer whose portfolio shows herself as a video instead of a photo, the example for the headshot tip."
+    },
+    {
+      "name": "Stephanie",
+      "type": "person",
+      "description": "Designer whose portfolio states her name and what she does without fluff, the example for a concise intro."
+    },
+    {
+      "name": "Minam",
+      "type": "person",
+      "description": "Designer (name as heard in auto-captions) whose single-page portfolio links to its sections, the example for simple architecture."
+    },
+    {
+      "name": "Luca Schultz",
+      "type": "person",
+      "description": "Designer whose portfolio uses full-width imagery and bright colors, the example for large, flashy imagery."
+    },
+    {
+      "name": "Emily Shen",
+      "type": "person",
+      "description": "Designer whose case study adds a visual or GIF every couple of paragraphs and ends with learnings, the example for visual case studies."
+    },
+    {
+      "name": "Lee Dave",
+      "type": "person",
+      "description": "Designer (name as heard in auto-captions) whose about page includes an honest personal update, the example for a genuine about page."
+    },
+    {
+      "name": "Robert K",
+      "type": "person",
+      "description": "Designer (name as heard in auto-captions) whose portfolio says he is fueled by \"Simplicity Ikea plants and the world\" (punctuation unclear in captions), an example of personality."
+    },
+    {
+      "name": "Devan",
+      "type": "person",
+      "description": "Designer (name as heard in auto-captions) whose portfolio admits it has not been updated in 3 years, an example of personality through honesty."
+    },
+    {
+      "name": "Above the fold",
+      "type": "concept",
+      "description": "Where the source says the headshot ideally goes; the part of the page visible before scrolling [inferred]."
+    },
+    {
+      "name": "Case study",
+      "type": "concept",
+      "description": "A write-up of how you got to a final solution; the source recommends it when your area of expertise strongly emphasises process, such as UX design."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Portfolio and case studies",
+      "summary": "Seven tips from professional portfolios: headshot above the fold, concise intro, two or three pages at most, image-first layout, visual case studies with learnings at the end, a genuine about page, and personality."
+    },
+    {
+      "name": "Icons and imagery",
+      "summary": "Large, full-width imagery and bright colors should grab attention before any text; case studies should carry a visual or GIF every couple of paragraphs."
+    },
+    {
+      "name": "Visual hierarchy",
+      "summary": "Visitors see before they read, so the work's visuals should dominate and text should be secondary."
+    },
+    {
+      "name": "Content and microcopy",
+      "summary": "The intro should state your name and what you do without fluff; the about page and small lines of copy should be honest and show personality."
+    },
+    {
+      "name": "Navigation and sidebars",
+      "summary": "Keep site architecture simple: avoid confusing pages, use two or three pages at most, or one page with links to its sections."
+    },
+    {
+      "name": "Freelancing and pricing work",
+      "summary": "A face, a genuine story and personality build the trust that makes potential clients want to work with you."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Professional portfolios share common principles that others can adopt.",
+      "evidence": "are there any common principles or themes that you can steal"
+    },
+    {
+      "claim": "People want to know your name and what you do as soon as they land on the page.",
+      "evidence": "people want to know what your name is and what you do"
+    },
+    {
+      "claim": "A portfolio generally needs two, maybe three pages maximum.",
+      "evidence": "generally on a portfolio you need two maybe three pages maximum"
+    },
+    {
+      "claim": "A single-page layout makes sense when you do not have a lot of content.",
+      "evidence": "that makes sense if you don't have a"
+    },
+    {
+      "claim": "When scrolling a portfolio, people see things before they read them.",
+      "evidence": "you don't read things first you see them"
+    },
+    {
+      "claim": "Being able to understand a designer's process from the images alone is the key sign of a great case study.",
+      "evidence": "that is the key sign of a great case study"
+    },
+    {
+      "claim": "Case studies are strongly worth including for UX design but less needed for graphic designers, copywriters or UI designers.",
+      "evidence": "then I would say absolutely include them the best example of this is ux design"
+    },
+    {
+      "claim": "Being forthcoming with your face and story creates a sense of trustworthiness that people gravitate to.",
+      "evidence": "creates a sense of trustworthiness"
+    },
+    {
+      "claim": "Honesty on an about page, such as a personal update, creates a connection and makes the designer more memorable.",
+      "evidence": "it's this honesty that really creates a connection"
+    },
+    {
+      "claim": "A personal detail gives visitors something to relate to and remember, even if they do not fully agree with it.",
+      "evidence": "even if they don't fully agree with it they'll still remember it"
+    },
+    {
+      "claim": "Several of the example portfolios do not follow all of these tips, and that is okay.",
+      "evidence": "we're going to run into several portfolios that don't follow all of these tips"
+    }
+  ],
+  "quotes": [
+    "people want to know what your name is and what you do",
+    "people want to come to our portfolio to see what we can build",
+    "it is your portfolio so you should do whatever works best for you"
+  ],
+  "tags": [
+    "portfolio",
+    "case-studies",
+    "headshot",
+    "above-the-fold",
+    "about-page",
+    "personality",
+    "imagery",
+    "site-architecture",
+    "single-page",
+    "trust",
+    "kole-jain"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "Place your headshot on the portfolio, ideally above the fold; a video of yourself is a step further if you are comfortable with it.",
+      "why": "Being forthcoming with your face (and your story) creates a sense of trustworthiness that people gravitate to.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "have your head shot somewhere in your website ideally above the fold"
+    },
+    {
+      "rule": "Open the portfolio with a concise intro that states your name and what you do, with no fluff or distracting pieces.",
+      "why": "People want to know your name and what you do as soon as they land on the page.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "the use of a very concise intro"
+    },
+    {
+      "rule": "Limit the portfolio to two, maybe three pages at most, such as a homepage and a contact page, with an optional about page.",
+      "why": "A simple site architecture avoids confusing pages and layouts; you don't need pages upon pages.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [
+        "two maybe three pages maximum"
+      ],
+      "evidence": "have a simple site architecture"
+    },
+    {
+      "rule": "Use a single-page layout with links to its sections when you do not have much content or want to keep things simple.",
+      "why": "It makes sense when there isn't a lot of content, and visitors never have to leave the page.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "many people even opt for a single page layout"
+    },
+    {
+      "rule": "Lead with large, flashy imagery of your work (for example full-width images and bright colors, as in Luca Schultz's portfolio) and keep text secondary to the visuals.",
+      "why": "Visitors see things before they read them, the imagery grabs their attention, and they come to see what you can build, not to read about it.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "have large and flashy imagery"
+    },
+    {
+      "rule": "Add a visual or GIF every couple of paragraphs in a case study so the process can be understood from the images alone.",
+      "why": "Being able to understand the process just by looking at the images is the key sign of a great case study.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "web",
+      "values": [
+        "every couple of paragraphs"
+      ],
+      "evidence": "have visual case studies"
+    },
+    {
+      "rule": "End each case study with what you learned and what you would improve in the future.",
+      "why": "Designers often find halfway through a project that they would do something differently, and this presents that to people who might hire you.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "content",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "what she learned from the case study and something she wants to improve"
+    },
+    {
+      "rule": "Include case studies when your area of expertise strongly emphasises the process of reaching a final solution, such as UX design; for graphic designers, copywriters or more UI-focused designers they are not necessarily needed.",
+      "why": "The presenter says to absolutely include them where the process of how you get to a final solution is emphasised; otherwise there isn't as much need.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "then I would say absolutely include them"
+    },
+    {
+      "rule": "If you include an about page, use it to be genuine and share your story, including honest personal updates, not only a list of work.",
+      "why": "Honesty creates a real connection with potential clients and makes you more memorable.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "the about page"
+    },
+    {
+      "rule": "Add a line of personality to the portfolio, such as what fuels you or an honest aside, so visitors have something to relate to.",
+      "why": "Even visitors who don't fully agree will remember it and want to come back, and it makes people want to work with you.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "add personality to your portfolio"
+    },
+    {
+      "rule": "Do not build a portfolio with confusing pages and layouts or pages upon pages.",
+      "why": "Confusing pages and layouts that don't make sense work against a simple site architecture, and a portfolio generally needs only two, maybe three pages.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "not having confusing pages and layouts that don't make sense"
+    },
+    {
+      "rule": "Put content on the portfolio that reflects the kind of work you do; if your work is visual, show it visually.",
+      "why": "Most designers produce something visual, and people come to a portfolio to see what you can build, not to read about it.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "we want to put content on our portfolio that reflects the kind of work that we do"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "How should you show yourself at the top of your portfolio?",
+      "options": [
+        {
+          "name": "A video of yourself",
+          "effect": "Goes a step above a photo: the person appears as a video instead of a still headshot.",
+          "when": "When you are comfortable being on video (Julia Fernandez's portfolio)."
+        },
+        {
+          "name": "A headshot photo",
+          "effect": "Puts your face on the site, ideally above the fold; being forthcoming with your face builds trust.",
+          "when": "The default when a video is not comfortable."
+        },
+        {
+          "name": "No headshot",
+          "effect": "Stephanie's portfolio has no headshot and leads with her name and what she does; the source says that's okay.",
+          "when": "Acceptable; the source says not every portfolio follows every tip."
+        }
+      ],
+      "recommendation": "Have a headshot somewhere on the site, ideally above the fold; a video is a cool step further if you are comfortable with it.",
+      "maps_to": null,
+      "evidence": "have your head shot somewhere in your website ideally above the fold"
+    },
+    {
+      "question": "How many pages should the portfolio have?",
+      "options": [
+        {
+          "name": "Single page with section links",
+          "effect": "Links jump to different parts of the portfolio and the visitor never leaves the page.",
+          "when": "When you don't have much content or want to keep things simple (Minam's website)."
+        },
+        {
+          "name": "Homepage and contact page",
+          "effect": "Two pages; the setup the presenter uses on his own portfolio.",
+          "when": "The common minimal setup."
+        },
+        {
+          "name": "Homepage, about page and contact page",
+          "effect": "Three pages, adding space to tell your story.",
+          "when": "When you want an about page, which the source calls totally fine."
+        }
+      ],
+      "recommendation": "Two, maybe three pages maximum; a single page is a great idea with less content. Avoid pages upon pages.",
+      "maps_to": null,
+      "evidence": "generally on a portfolio you need two maybe three pages maximum"
+    },
+    {
+      "question": "Should your portfolio include case studies?",
+      "options": [
+        {
+          "name": "Include visual case studies",
+          "effect": "Shows how you reach a final solution, with a visual or GIF every couple of paragraphs and learnings at the end.",
+          "when": "When your field strongly emphasises process, such as UX design."
+        },
+        {
+          "name": "Skip case studies",
+          "effect": "The portfolio shows the finished work without process write-ups, as on the presenter's own portfolio.",
+          "when": "For graphic designers, copywriters or more UI-focused designers."
+        }
+      ],
+      "recommendation": "Include them if your area of expertise emphasises process (UX design is the best example); otherwise they are not necessarily needed.",
+      "maps_to": null,
+      "evidence": "you don't necessarily need them in your portfolio"
+    },
+    {
+      "question": "Should the portfolio have an about page, and what should it say?",
+      "options": [
+        {
+          "name": "A genuine about page with your story",
+          "effect": "Creates a real connection and trustworthiness; honest updates make you memorable (Lee Dave's website).",
+          "when": "When you choose to include an about page."
+        },
+        {
+          "name": "No about page",
+          "effect": "Keeps the site to a homepage and contact page.",
+          "when": "When you want the simplest architecture; the about page is optional."
+        }
+      ],
+      "recommendation": "Optional, but if you include it, be as genuine as possible; the source says sharing your story is well worth the time and effort.",
+      "maps_to": null,
+      "evidence": "number six is the about page"
+    }
+  ],
+  "process": [
+    {
+      "step": "Gather inspiration",
+      "detail": "Scroll through professional portfolios, such as the ones shown in the video, before working on your own."
+    },
+    {
+      "step": "Take a headshot",
+      "detail": "Hunt for a good spot to take the photo: a blank wall, by some bookshelves, or in front of your computer."
+    },
+    {
+      "step": "Structure a visual case study",
+      "detail": "Explain the process with a visual or GIF every couple of paragraphs, so it can be followed from the images alone, and finish with what you learned and what you would improve."
+    }
+  ],
+  "examples": [
+    {
+      "what": "A video of the designer instead of a headshot photo",
+      "where": "Julia Fernandez's portfolio",
+      "visual_note": "The designer puts herself on the site as a video instead of just a photo; the source calls it a step above a headshot."
+    },
+    {
+      "what": "A concise intro stating name and role",
+      "where": "Stephanie's portfolio",
+      "visual_note": "Name and exactly what she does, without fluff or distracting pieces; it has no headshot, showing tips are optional."
+    },
+    {
+      "what": "Single-page portfolio with links to its sections",
+      "where": "Minam's website (name as heard in captions)",
+      "visual_note": "Links point to parts of the same page and the visitor never leaves it; demonstrates simple architecture for little content."
+    },
+    {
+      "what": "Full-width imagery with bright colors",
+      "where": "Luca Schultz's portfolio",
+      "visual_note": "Project visuals fill the width and text is clearly secondary; demonstrates an image-first portfolio."
+    },
+    {
+      "what": "Visual case study with learnings at the end",
+      "where": "Emily Shen's portfolio",
+      "visual_note": "A visual or GIF every couple of paragraphs so the process reads from images alone, ending with what she learned and wants to improve."
+    },
+    {
+      "what": "About page with an honest personal update",
+      "where": "Lee Dave's website (name as heard in captions)",
+      "visual_note": "A first half about work, then an update about being laid off, going on trips and getting shingles; demonstrates honesty creating a connection."
+    },
+    {
+      "what": "A personality line about what fuels the designer",
+      "where": "Robert K's website (name as heard in captions)",
+      "visual_note": "Says he is fueled by \"Simplicity Ikea plants and the world\"; demonstrates a memorable, relatable detail."
+    },
+    {
+      "what": "A brutally honest note that the portfolio is out of date",
+      "where": "Devan's portfolio (name as heard in captions)",
+      "visual_note": "Says it hasn't been updated in the last 3 years; demonstrates honesty as personality."
+    },
+    {
+      "what": "The presenter's own minimal portfolio",
+      "where": "Kole Jain's portfolio",
+      "visual_note": "Only a homepage and a contact page, with no case studies."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "seven",
+      "context": "Number of portfolio tips the video gives.",
+      "evidence": "today I'm going to give you seven different tips"
+    },
+    {
+      "value": "two maybe three pages maximum",
+      "context": "How many pages a portfolio generally needs.",
+      "evidence": "generally on a portfolio you need two maybe three pages maximum"
+    },
+    {
+      "value": "every couple of paragraphs",
+      "context": "How often Emily Shen's case study adds a visual or GIF.",
+      "evidence": "every couple of paragraphs she has a visual or a gif"
+    },
+    {
+      "value": "3 years",
+      "context": "How long Devan's portfolio says it has gone without an update, cited as brutal honesty.",
+      "evidence": "he hasn't updated this in the last 3 years"
+    }
+  ],
+  "caveats": [
+    "The seven tips are the presenter's opinion drawn from examples; he calls them best practices and says many good portfolios skip some.",
+    "Several names come from auto-captions and may be misspelled (Minam, Lee Dave, Devan, Robert K); 'aort portfolio' was read as 'a portfolio'.",
+    "The headshot how-to is cut short in the transcript: only the first step (hunt for a good spot) is given.",
+    "Published 2024-03-07; the portfolios shown may have changed since.",
+    "The video is about personal portfolio websites, not product UI, so its rules apply to a portfolio or personal landing page [inferred].",
+    "The video gives no concrete design values (sizes, spacing, colors or type); its only numbers are the tip count, the page count, the visual frequency in a case study and one anecdote."
+  ]
+}

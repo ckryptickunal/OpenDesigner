@@ -1,0 +1,798 @@
+{
+  "summary": "Kole Jain redesigns a real vibe-coded URL shortener to show the UI and UX mistakes that give away an AI-built SaaS app, and how to fix each one. The fixes are: replace emojis with an interface icon library, don't let AI pick colors (add color through charts instead of buttons and icons), and don't let AI pick the layout (no repeated KPIs, a focused sidebar, an account card with a popover, calmer cards). He also covers product features: a modal instead of a sparse flyout, advanced options collapsed by default, and tabs that scale as features grow. On the billing and pricing side, he removes dead cards, cuts the number of plans, makes price bigger than plan name, shows the discount and what the next plan adds. Finally he argues that landing pages need real product graphics, because presentation builds trust and conversion. For a design system this gives a checklist of anti-patterns to catch in AI-generated UI, plus concrete component and pattern choices for SaaS dashboards, pricing and marketing pages.",
+  "key_ideas": [
+    "Emojis in product UI are an obvious sign of AI-built software; a professional interface icon library looks better (Notion is an exception that uses emojis well).",
+    "AI tends to pick bright colors that don't work together, so a human should choose the colors.",
+    "Color can come from charts that carry real information rather than from colored buttons and icons.",
+    "Repeating the same KPIs in several places of a small app is a giveaway, like too many dashes in AI-written text.",
+    "AI is generally bad at complex layouts and cards, so reworking layout is where little time brings the largest improvement.",
+    "The sidebar should hold navigation, not stats; detailed numbers belong on the dashboard or an analytics tab.",
+    "Busy cards get calmer when their buttons collapse into a triple-dot menu and chips collapse to icons.",
+    "Pick the container for a form by how much it holds: a sparse flyout with lots of empty space works better as a modal.",
+    "AI sets up logic and features well if you tell it to, so missing options and dead cards need a human pass.",
+    "Tabs let a settings or billing area grow: new sections like documents, integrations or AI become another tab.",
+    "On pricing cards, size by what people care about: the plan name smaller (no one cares), the cost per month larger (people do); also show the actual discount and what the next plan adds.",
+    "Too many plans (five) is not ideal; drop at least one.",
+    "Cheap, low-hanging features (like splitting analytics by individual link to compare them) can make an app much better.",
+    "Landing pages are where a vibe-coded product loses most customers; a quality bar builds trust even subconsciously.",
+    "Landing pages are about presentation, not complexity: product imagery and simple graphics beat generic icons."
+  ],
+  "entities": [
+    {
+      "name": "Kole Jain",
+      "type": "person",
+      "description": "Designer and YouTuber presenting the redesign."
+    },
+    {
+      "name": "Builder.io",
+      "type": "product",
+      "description": "Sponsor of the video (sponsor segment excluded from rules and claims); also named in the intro alongside Cursor and Replit as a tool to build a first version."
+    },
+    {
+      "name": "Cursor",
+      "type": "tool",
+      "description": "Named as a tool people use to vibe code a first version."
+    },
+    {
+      "name": "Replit",
+      "type": "tool",
+      "description": "Named as a vibe-coding tool (auto-captioned as 'replet')."
+    },
+    {
+      "name": "Notion",
+      "type": "product",
+      "description": "Cited as an app that uses emojis successfully."
+    },
+    {
+      "name": "Phosphor Icons",
+      "type": "library",
+      "description": "The icon library the presenter prefers for replacing emojis."
+    },
+    {
+      "name": "Lucide",
+      "type": "library",
+      "description": "An alternative interface icon library he says also works well."
+    },
+    {
+      "name": "Resend",
+      "type": "company",
+      "description": "Cited as a software company using the pricing pattern he recommends."
+    },
+    {
+      "name": "Supabase",
+      "type": "company",
+      "description": "Cited as using the same pricing pattern (auto-captioned as 'superbase')."
+    },
+    {
+      "name": "Figma",
+      "type": "tool",
+      "description": "The redesign files are shared as Figma files."
+    },
+    {
+      "name": "Vibe coding",
+      "type": "concept",
+      "description": "Building software by prompting AI tools; the source of the UI mistakes discussed."
+    },
+    {
+      "name": "KPI cards",
+      "type": "concept",
+      "description": "Metric tiles that AI repeats across pages; replaced with charts and two-column layouts."
+    },
+    {
+      "name": "Micro charts",
+      "type": "concept",
+      "description": "Small charts added to KPIs to add relevant information and color."
+    }
+  ],
+  "topics": [
+    {
+      "name": "SaaS product UI",
+      "summary": "The whole video is a redesign of a vibe-coded SaaS URL shortener: dashboard, sidebar, cards, create-link form, billing and usage, analytics and landing page."
+    },
+    {
+      "name": "AI-assisted design",
+      "summary": "Lists tell-tale signs of AI-generated UI (emojis, bright clashing colors, repeated KPIs, gradient letter avatars, cards that do nothing) and says not to let AI choose colors or layout; AI handles logic well if told to."
+    },
+    {
+      "name": "Icons and imagery",
+      "summary": "Replace emojis with an interface icon library such as Phosphor or Lucide; use icons in info rows for a splash of color; use product imagery instead of generic icons on landing pages."
+    },
+    {
+      "name": "Color",
+      "summary": "Don't let AI pick colors; the dashboard changes backgrounds from dark blue to dark green and moves color into charts rather than buttons and icons."
+    },
+    {
+      "name": "Dashboards and data display",
+      "summary": "Don't repeat KPIs across pages; add micro charts to KPIs; use a two-column layout with small donut charts for usage; replace a plain bar chart with a shaded region map plus the data listed beside it."
+    },
+    {
+      "name": "Navigation and sidebars",
+      "summary": "Strip stats like click counts from sidebar items, left-align and tighten spacing, replace the gradient letter avatar with an account card whose links open in a popover, and group settings with billing and usage."
+    },
+    {
+      "name": "Modals and popovers",
+      "summary": "A sparse create-link flyout becomes a modal; account links are tucked into a popover opened on click."
+    },
+    {
+      "name": "Cards and sections",
+      "summary": "Busy link cards get calmer by collapsing buttons into a triple-dot menu, collapsing chips to icons, centering the date and moving clicks to the right; cards that do nothing are removed."
+    },
+    {
+      "name": "Forms and inputs",
+      "summary": "Collapse advanced options by default in the create-link form and add the missing options (custom domain switch, description) in a layout that lets more fields slot in."
+    },
+    {
+      "name": "Paywalls and pricing pages",
+      "summary": "Cut five plans down, drop unnecessary elements, shrink plan names and enlarge monthly cost, show the actual discount, show what the next plan adds, rename the business plan to enterprise, and add billing email and payment method."
+    },
+    {
+      "name": "Visual hierarchy",
+      "summary": "Size elements by what users care about: plan name smaller, cost per month larger; drop unnecessary elements."
+    },
+    {
+      "name": "Landing pages",
+      "summary": "Vibe-coded landing pages lose most customers; add graphics such as skewed link cards and edited images of the product's own screens instead of generic icons, because better presentation means better conversion."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Swapping emojis for professional icons already makes a card look better.",
+      "evidence": "already starts looking better"
+    },
+    {
+      "claim": "AI always goes for bright colors that don't work well together.",
+      "evidence": "They always go for bright colors"
+    },
+    {
+      "claim": "The same four KPIs appear three times in a small app, which gives away that AI built it.",
+      "evidence": "these four KPIs at the top"
+    },
+    {
+      "claim": "AI loves to make gradient profile circles with letters in them.",
+      "evidence": "gradient profile circles with letters"
+    },
+    {
+      "claim": "AI sets up logic and features well if you tell it to.",
+      "evidence": "AI sets up logic well if you tell it to"
+    },
+    {
+      "claim": "Layout is where you can spend the least time and see the largest changes, because AI is generally bad at complex layouts and cards.",
+      "evidence": "least amount of time and see the largest"
+    },
+    {
+      "claim": "Cards that don't do anything are a common pattern in AI-built apps.",
+      "evidence": "this card doesn't do anything"
+    },
+    {
+      "claim": "A tabbed billing and usage layout scales: documents, integrations or AI can each become another tab.",
+      "evidence": "easy to add another tab and go"
+    },
+    {
+      "claim": "The pricing pattern of showing the discount and what the next plan adds is common in software like Resend and Supabase.",
+      "evidence": "extremely common for softwares like resend"
+    },
+    {
+      "claim": "Landing pages are where a vibe-coded product loses most of its customers.",
+      "evidence": "This is where you'll lose most of your customers"
+    },
+    {
+      "claim": "SaaS landing pages have a standard of quality that establishes trust, even subconsciously.",
+      "evidence": "establishes trust, even subconsciously"
+    },
+    {
+      "claim": "Generally, the better the presentation, the better the conversion.",
+      "evidence": "the better the conversion"
+    },
+    {
+      "claim": "On the analytics page alone, changing a few charts and adding some icons created a big change.",
+      "evidence": "just by changing a few charts"
+    }
+  ],
+  "quotes": [
+    "never let an AI choose any of your colors",
+    "AI is generally pretty bad at putting together complex layouts and cards",
+    "Landing pages aren't about complexity, they're about presentation."
+  ],
+  "tags": [
+    "saas",
+    "vibe-coding",
+    "ai-generated-ui",
+    "dashboard",
+    "icons",
+    "sidebar",
+    "pricing",
+    "landing-page",
+    "charts",
+    "redesign"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "Don't use emojis as interface icons in product UI; use an interface icon library such as Phosphor or Lucide instead.",
+      "why": "Emojis are the first, painfully obvious giveaway of AI-built UI; swapping to more professional icons makes the card start looking better right away. He admits some apps, like Notion, use emojis successfully.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Get rid of the emojis"
+    },
+    {
+      "rule": "Never let an AI tool choose your colors; choose the palette yourself.",
+      "why": "AI always goes for bright colors that don't really work well together.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "never let an AI choose any of your colors"
+    },
+    {
+      "rule": "Add color to a dashboard through charts that carry information (for example micro charts on KPIs) rather than through colored buttons and icons.",
+      "why": "In the redesign this added much more relevant information and color at the same time.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "color through charts instead of buttons and icons"
+    },
+    {
+      "rule": "Don't repeat the same KPI cards on several pages of the app.",
+      "why": "Just as too many dashes give away AI-written text, the same four KPIs showing up three times in a small app gives away that AI built it.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "show up not once, not twice, but three"
+    },
+    {
+      "rule": "Never let an AI tool choose your layout; design it yourself.",
+      "why": "AI is generally pretty bad at putting together complex layouts and cards, so this is where little time gives the largest change.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "layout",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Never let an AI choose your layout either"
+    },
+    {
+      "rule": "Keep sidebar items to navigation labels; remove stats such as click or link counts from them.",
+      "why": "In a section like custom domains or teams those numbers don't matter; if people need them they visit the dashboard or analytics tab.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "the amount of clicks and links"
+    },
+    {
+      "rule": "Replace a gradient initial-letter profile circle with an account card, and tuck account links into a popover that opens on click.",
+      "why": "Gradient letter circles are a pattern AI loves; the account card frees the sidebar from extra links, and settings, billing and usage can be collapsed together.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "swap this for an account card"
+    },
+    {
+      "rule": "When list cards feel busy, collapse their action buttons into a triple-dot menu and reduce chips to icons.",
+      "why": "The cards were feeling a little busy.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "collapse these buttons into a triple dot menu"
+    },
+    {
+      "rule": "Use a modal instead of a side flyout when a form has only a few fields and leaves lots of empty space.",
+      "why": "The create-link flyout was sparse with fields even though there was a ton of space, so a modal was more fitting.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "a modal is probably more fitting"
+    },
+    {
+      "rule": "Collapse advanced options by default in creation forms.",
+      "why": "He pairs it with giving the create-link form a more modern look; the new layout also lets more features slot in easily.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "collapse down the advanced options by default"
+    },
+    {
+      "rule": "Don't keep cards that don't do anything; remove them.",
+      "why": "Cards with no function are a pattern you see a lot with AI.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "this card doesn't do anything"
+    },
+    {
+      "rule": "Organize account areas like billing and usage into tabs.",
+      "why": "As things scale and you need to add documents, integrations or AI, it's easy to add another tab.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "easy to add another tab and go"
+    },
+    {
+      "rule": "Present usage figures in a simple two-column layout with small donut charts instead of generic KPI cards.",
+      "why": "The KPIs were very vibe-coded; the two-column layout really elevates things.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "a real simple two column layout"
+    },
+    {
+      "rule": "Offer fewer than five pricing plans; drop at least one.",
+      "why": "Having five plans is really not ideal.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [
+        "five plans"
+      ],
+      "evidence": "having five plans is really not ideal"
+    },
+    {
+      "rule": "On pricing cards, make the plan name smaller and the cost per month larger.",
+      "why": "No one cares about the name, and people do care about the cost.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Drop the size of the name"
+    },
+    {
+      "rule": "Show the actual discount the user is getting on a discounted plan.",
+      "why": "It is very important; without it plan prices look out of order (standard cheaper than hobby) until you realize the plan is discounted.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Showing the actual discount the user is getting"
+    },
+    {
+      "rule": "On the pricing page, show what the next plan includes that the current plan doesn't have.",
+      "why": "He presents it as part of a pricing pattern that is extremely common for software like Resend or Supabase.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "what the next plan includes"
+    },
+    {
+      "rule": "Add a billing email and payment method to the billing tab.",
+      "why": "Added 'for good measure'; the source gives no other reason.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "billing email and payment method"
+    },
+    {
+      "rule": "In analytics, add a toggle that splits totals into individual items (for example individual links) so they can be compared.",
+      "why": "It is super easy to implement and genuinely useful: low-hanging fruit that makes the app better.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "add a toggle to split into individual links"
+    },
+    {
+      "rule": "For location data, use a map with shaded regions and list the actual data beside it instead of a plain bar chart.",
+      "why": "It gives a much richer experience than a boring bar chart.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "show them a map with shaded regions"
+    },
+    {
+      "rule": "On SaaS landing pages, use graphics such as images of your own product screens or simple skewed cards instead of generic icons.",
+      "why": "Landing pages are where you lose most customers if vibe-coded; a standard of quality establishes trust, and better presentation generally means better conversion.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "what we really need are some graphics"
+    },
+    {
+      "rule": "Tell the AI exactly which logic and features you need, and check for missing options, instead of expecting it to add them on its own.",
+      "why": "AI sets up logic well if you tell it to, and the same is true for features; the vibe-coded create-link form was missing options like custom domain and description.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "AI sets up logic well if you tell it to"
+    },
+    {
+      "rule": "In a sidebar, left-align the items and tighten the spacing.",
+      "why": "Part of the sidebar cleanup in the redesign; the source gives no further reason.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "align this to the left and tighten up the spacing"
+    },
+    {
+      "rule": "On pricing cards, drop unnecessary elements and use spare width to tune the hierarchy.",
+      "why": "The hierarchy wasn't bad but could be tuned up with the extra width available.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "drop some of the unnecessary elements"
+    },
+    {
+      "rule": "Rename a high-volume plan to Enterprise when customers at that volume probably need more than a fixed plan.",
+      "why": "Business became enterprise because if you need 50,000 links per month, you probably need more.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [
+        "50,000 links per month"
+      ],
+      "evidence": "Business has become enterprise"
+    },
+    {
+      "rule": "Add helpful icons to dense information rows so they carry more useful information and a splash of color.",
+      "why": "In the analytics redesign the icons made the row more useful and also added a splash of color.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "helpful icons that also add a splash of color"
+    },
+    {
+      "rule": "When creating features for a SaaS app, look for low-hanging fruit: simple features that are easy to build and make the app much better.",
+      "why": "Simple features like splitting analytics into individual links are super easy to implement and genuinely useful.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "don't forget about the lowhanging fruit"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "Where should the interface icons come from?",
+      "options": [
+        {
+          "name": "Emojis",
+          "effect": "An obvious sign the UI was generated by AI.",
+          "when": "The source gives no rule; it only notes some apps, like Notion, use them successfully."
+        },
+        {
+          "name": "Interface icon library (Phosphor, Lucide or similar)",
+          "effect": "Looks more professional right away.",
+          "when": "The source's recommendation for SaaS product UI."
+        }
+      ],
+      "recommendation": "Use an interface icon library; he likes Phosphor, and Lucide or others work well too.",
+      "maps_to": "Q-icon-01",
+      "evidence": "I like phosphor icons, but Lucide"
+    },
+    {
+      "question": "Should a create form open in a side flyout or a modal?",
+      "options": [
+        {
+          "name": "Side flyout",
+          "effect": "A panel that slides in; with only a few fields it looks sparse, with lots of empty space.",
+          "when": "Not recommended here for a form with few fields [inferred]."
+        },
+        {
+          "name": "Modal",
+          "effect": "Fits a form with few fields; the new layout also lets more features slot in easily.",
+          "when": "When the form has few fields relative to the space a flyout gives."
+        }
+      ],
+      "recommendation": "Modal, because the flyout was sparse with fields even though there was a ton of space.",
+      "maps_to": "Q-pattern-01",
+      "evidence": "a modal is probably more fitting"
+    },
+    {
+      "question": "How should the signed-in account show in the sidebar?",
+      "options": [
+        {
+          "name": "Gradient profile circle with a letter",
+          "effect": "A common AI-generated look.",
+          "when": "Not recommended."
+        },
+        {
+          "name": "Account card with a popover",
+          "effect": "A card that opens a popover on click holding account links, with settings, billing and usage grouped together.",
+          "when": "When the sidebar has extra account links to tidy away."
+        }
+      ],
+      "recommendation": "Swap the gradient letter circle for an account card and move links into a popover.",
+      "maps_to": null,
+      "evidence": "swap this for an account card"
+    },
+    {
+      "question": "How should actions on busy list cards be shown?",
+      "options": [
+        {
+          "name": "Separate buttons and chips on each card",
+          "effect": "The card feels busy.",
+          "when": "Not recommended when cards already hold a lot."
+        },
+        {
+          "name": "Triple-dot menu, chips as icons",
+          "effect": "Calmer cards: actions tucked into a menu, chips reduced to icons, date centered and clicks moved to the right.",
+          "when": "When cards feel busy."
+        }
+      ],
+      "recommendation": "Collapse the buttons into a triple-dot menu and chips to icons.",
+      "maps_to": null,
+      "evidence": "collapse these buttons into a triple dot menu"
+    },
+    {
+      "question": "How should usage figures be shown on a billing and usage page?",
+      "options": [
+        {
+          "name": "KPI cards",
+          "effect": "Looks vibe-coded and lame.",
+          "when": "Not recommended here."
+        },
+        {
+          "name": "Two-column layout with small donut charts",
+          "effect": "Simple and really elevates the page.",
+          "when": "For usage against limits."
+        }
+      ],
+      "recommendation": "A simple two-column layout with a few small donut charts.",
+      "maps_to": null,
+      "evidence": "a real simple two column layout"
+    },
+    {
+      "question": "How should location analytics be shown?",
+      "options": [
+        {
+          "name": "Bar chart",
+          "effect": "Boring.",
+          "when": "Not recommended here."
+        },
+        {
+          "name": "Map with shaded regions and the data listed beside it",
+          "effect": "A much richer experience.",
+          "when": "When the data is about places."
+        }
+      ],
+      "recommendation": "A map with shaded regions and the actual data to the left.",
+      "maps_to": null,
+      "evidence": "show them a map with shaded regions"
+    },
+    {
+      "question": "How should a growing account area (billing, usage and more) be structured?",
+      "options": [
+        {
+          "name": "No tabs (the AI-generated page) [inferred]",
+          "effect": "The page the redesign nuked and rebuilt from scratch.",
+          "when": "Not recommended here."
+        },
+        {
+          "name": "Tabs",
+          "effect": "Each area gets its own tab; new sections like documents, integrations or AI can be added as another tab.",
+          "when": "When the product will keep adding sections."
+        }
+      ],
+      "recommendation": "Tabs, because the layout scales easily.",
+      "maps_to": null,
+      "evidence": "create a few tabs"
+    },
+    {
+      "question": "How many pricing plans should be offered?",
+      "options": [
+        {
+          "name": "Five plans",
+          "effect": "A bit of a mess.",
+          "when": "Not recommended."
+        },
+        {
+          "name": "Fewer plans, with Business renamed Enterprise",
+          "effect": "Hobby probably makes the most sense to drop; Business becomes Enterprise because anyone needing 50,000 links per month probably needs more.",
+          "when": "Here, where five plans is too many."
+        }
+      ],
+      "recommendation": "Drop at least one plan (hobby probably makes most sense to drop).",
+      "maps_to": null,
+      "evidence": "having five plans is really not ideal"
+    },
+    {
+      "question": "What visuals should a SaaS landing page use?",
+      "options": [
+        {
+          "name": "Generic feature icons",
+          "effect": "Looks vibe-coded; he calls them lame.",
+          "when": "Not recommended."
+        },
+        {
+          "name": "Product graphics",
+          "effect": "Skewed link cards and slightly edited images of the product's own screens elevate the page.",
+          "when": "For feature sections on a SaaS landing page."
+        }
+      ],
+      "recommendation": "Use graphics made from the product itself, because presentation drives trust and conversion.",
+      "maps_to": null,
+      "evidence": "what we really need are some graphics"
+    },
+    {
+      "question": "Should advanced options in a create form show by default?",
+      "options": [
+        {
+          "name": "All options visible",
+          "effect": "The vibe-coded starting point before the redesign [inferred].",
+          "when": "Not recommended here."
+        },
+        {
+          "name": "Advanced options collapsed by default",
+          "effect": "Part of giving the create-link form a more modern look.",
+          "when": "For creation forms with advanced options."
+        }
+      ],
+      "recommendation": "Collapse the advanced options by default.",
+      "maps_to": "Q-pattern-03",
+      "evidence": "collapse down the advanced options by default"
+    },
+    {
+      "question": "Where should a dashboard get its color?",
+      "options": [
+        {
+          "name": "Colored buttons and icons",
+          "effect": "The AI-chosen bright colors that don't really work well together.",
+          "when": "Not recommended."
+        },
+        {
+          "name": "Charts that carry information",
+          "effect": "Micro charts on expanded KPIs add much more relevant information and color at the same time.",
+          "when": "On dashboards with KPIs."
+        }
+      ],
+      "recommendation": "Add color through charts instead of buttons and icons.",
+      "maps_to": null,
+      "evidence": "color through charts instead of buttons and icons"
+    }
+  ],
+  "process": [
+    {
+      "step": "Swap emojis for icons",
+      "detail": "Replace emojis with an interface icon library such as Phosphor or Lucide."
+    },
+    {
+      "step": "Take over the colors",
+      "detail": "Replace AI-chosen bright colors (the example changes backgrounds from dark blue to dark green), remove some icons, and add color through charts such as micro charts on expanded KPIs."
+    },
+    {
+      "step": "Rework the layout",
+      "detail": "Remove repeated KPIs, clean the sidebar of stats, add missing sections like analytics, left-align and tighten spacing, swap the letter avatar for an account card with a popover, and simplify busy cards."
+    },
+    {
+      "step": "Fill in the features",
+      "detail": "Tell the AI what logic and options you need; pick the right container (modal vs flyout), collapse advanced options, and add missing options like custom domain or description."
+    },
+    {
+      "step": "Rebuild billing and usage",
+      "detail": "Remove cards that do nothing, retitle, split into tabs, show usage with a two-column layout and donut charts, and fix pricing plans (fewer plans, price over name, visible discount, next plan's extras, billing email and payment method)."
+    },
+    {
+      "step": "Improve analytics with low-hanging features",
+      "detail": "Remove the repeated KPIs and tabs, move actions, add a toggle to compare individual items, add icons to info rows, and replace a plain bar chart with a shaded map and the data beside it."
+    },
+    {
+      "step": "Finish the landing page",
+      "detail": "Apply the same color and layout principles and add graphics made from the product (skewed cards, edited screenshots) instead of generic icons."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Redesign of a vibe-coded URL shortener",
+      "where": "The presenter's example app",
+      "visual_note": "Before and after of a whole SaaS app: dashboard, sidebar, link cards, create-link form, billing and usage, analytics and landing page."
+    },
+    {
+      "what": "Dashboard color and KPI fix",
+      "where": "URL shortener dashboard",
+      "visual_note": "Backgrounds changed from dark blue to dark green, icons removed, KPIs expanded with micro charts, so color comes from data rather than buttons."
+    },
+    {
+      "what": "Emojis used well",
+      "where": "Notion",
+      "visual_note": "Named as an app that successfully uses emojis, the exception to the rule."
+    },
+    {
+      "what": "Account card with popover",
+      "where": "URL shortener sidebar",
+      "visual_note": "Replaces a gradient letter avatar; account links open in a popover on click, with settings, billing and usage grouped."
+    },
+    {
+      "what": "Calmer link cards",
+      "where": "URL shortener links list",
+      "visual_note": "Buttons collapsed into a triple-dot menu, date centered, chips reduced to icons, clicks moved to the right."
+    },
+    {
+      "what": "Create-link modal",
+      "where": "URL shortener",
+      "visual_note": "A sparse flyout turned into a modal with advanced options collapsed and new options for switching custom domain and adding a description."
+    },
+    {
+      "what": "Usage tab",
+      "where": "URL shortener billing and usage page",
+      "visual_note": "Two-column layout with small donut charts in place of KPI cards."
+    },
+    {
+      "what": "Pricing pattern with discount and next-plan extras",
+      "where": "Resend, Supabase",
+      "visual_note": "Named as software where this pricing pattern is extremely common: showing the actual discount and what the next plan includes that the current plan doesn't."
+    },
+    {
+      "what": "Location analytics map",
+      "where": "URL shortener analytics tab",
+      "visual_note": "Map with shaded regions and the data listed to the left, replacing a bar chart; a toggle splits totals into individual links."
+    },
+    {
+      "what": "Landing page graphics",
+      "where": "URL shortener landing page",
+      "visual_note": "Skewed link cards and a slightly edited image of the analytics page (and of password protection) instead of generic icons."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "four KPIs",
+      "context": "The same four KPIs appear at the top and show up three times in a small AI-built app.",
+      "evidence": "these four KPIs at the top"
+    },
+    {
+      "value": "three times",
+      "context": "How often the same four KPIs appear in the small vibe-coded app.",
+      "evidence": "not once, not twice, but three times"
+    },
+    {
+      "value": "five plans",
+      "context": "Number of pricing plans in the vibe-coded app; he says this is not ideal.",
+      "evidence": "having five plans is really not ideal"
+    },
+    {
+      "value": "50,000 links per month",
+      "context": "The business plan's limit, which he says means the tier should be enterprise.",
+      "evidence": "if you need 50,000 links per month"
+    }
+  ],
+  "caveats": [
+    "Sponsor segment for Builder.io in the middle of the video and in the description; excluded from rules.",
+    "Self-promotion: points to his previous video on software color theory and to Figma files on kolejain.com.",
+    "Opinion from a single redesign of one URL shortener; the claims about trust and conversion are not backed by data in the video.",
+    "Most changes are shown on screen; the transcript does not give exact colors, sizes or spacing values.",
+    "He assumes the standard and team plans are discounted ('At least we're going to assume that it is').",
+    "Auto-caption errors: 'replet' is Replit, 'flyyou' is flyout, 'SAS' is SaaS, 'doughut' is donut, 'superbase' is Supabase.",
+    "Published 2026-02-12; the tools named (Cursor, Replit, Builder.io) reflect that date."
+  ]
+}

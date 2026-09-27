@@ -1,0 +1,998 @@
+{
+  "summary": "Kole Jain runs through the core UI concepts in under ten minutes: signifiers, visual hierarchy, grids and white space, typography, color, dark mode, shadows, icons and buttons, interaction states, micro interactions and text over images. Each concept comes with a quick before-and-after fix, such as turning a spreadsheet-like card into one with clear hierarchy, or tightening a loose headline. He gives concrete rules of thumb: a four-point grid, 32 pixels between items in a simple section, one sans serif font, headings tightened by -2% to -3% letter spacing with 110% to 120% line height, at most six font sizes on landing pages and normally nothing above 24 pixels on dashboards. He treats grids and hierarchy as guidelines rather than laws, and insists that color has a purpose and every interaction gets a response. For a design system, this is a compact list of beginner defaults for spacing, type, color, depth, button and input states, and feedback.",
+  "key_ideas": [
+    "Good UI uses signifiers (containers, selected states, grayed-out text, hover and press states, tooltips) so people know how it works without instructions.",
+    "Hierarchy comes from contrast in size, position and color: the most important thing goes near the top, bigger and more colorful.",
+    "Hierarchy is not an exact science; more than one layout can be right if the same ideas apply.",
+    "A 12-column grid and exact 8-pixel spacing are guidelines, useful for structured, repeating pages but often ignored on custom landing pages.",
+    "White space matters more than elaborate grids, and grouping elements that go together is another form of hierarchy.",
+    "A four-point grid works because every value can be split in half, which keeps a design consistent.",
+    "One sans serif font is enough for almost any design, and font choice shouldn't take much time.",
+    "Tightening letter spacing and line height on large headings makes them look professional fast.",
+    "The type scale depends on the product: landing pages can use up to six sizes with a large range, while dashboards normally stay at or below 24 pixels.",
+    "Start color from one primary brand color, lighten it for backgrounds and darken it for text, which is already halfway to a color ramp.",
+    "Color should carry meaning (semantic colors) rather than decorate.",
+    "Dark mode needs its own adjustments: softer borders, cards lighter than the background for depth, and dimmer chips.",
+    "Most shadows are too strong; cards need less than popovers, and a shadow shouldn't be the first thing you notice.",
+    "Every user action needs a response: button and input states, loading spinners, success messages and micro interactions.",
+    "Text over an image reads best with a linear gradient, optionally with a progressive blur, rather than a full-screen overlay."
+  ],
+  "entities": [
+    {
+      "name": "Kole Jain",
+      "type": "person",
+      "description": "Designer and YouTube creator presenting the video; says he has been designing for seven years."
+    },
+    {
+      "name": "Mobbin",
+      "type": "company",
+      "description": "Video sponsor (paid read with a discount link); see caveats."
+    },
+    {
+      "name": "Uber",
+      "type": "company",
+      "description": "Cited as an example of using an image in a card to add color and make scanning easy."
+    },
+    {
+      "name": "Figma",
+      "type": "tool",
+      "description": "The Figma files used in the video are offered through a link in the description."
+    },
+    {
+      "name": "Signifiers",
+      "type": "concept",
+      "description": "Visual cues (containers, states, highlights, tooltips) that tell users what a UI affords."
+    },
+    {
+      "name": "Visual hierarchy",
+      "type": "concept",
+      "description": "Ordering importance through contrast in size, position and color."
+    },
+    {
+      "name": "Four-point grid",
+      "type": "concept",
+      "description": "Spacing system where every value is a multiple of four so it can always be halved."
+    },
+    {
+      "name": "Color ramp",
+      "type": "concept",
+      "description": "Lighter and darker steps of a color, used by large companies for chips, states and charts."
+    },
+    {
+      "name": "Semantic colors",
+      "type": "concept",
+      "description": "Colors with meaning: blue for trust, red for danger or urgency, yellow for warning, green for success."
+    },
+    {
+      "name": "Ghost button",
+      "type": "concept",
+      "description": "A button without a background until hover, such as a sidebar link."
+    },
+    {
+      "name": "Micro interaction",
+      "type": "concept",
+      "description": "A step-up form of feedback, like a chip sliding up to confirm a copy."
+    },
+    {
+      "name": "Progressive blur",
+      "type": "concept",
+      "description": "A blur layered on top of an image gradient for a more modern text-over-image treatment."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Visual hierarchy",
+      "summary": "Hierarchy comes from contrast in size, position and color; the most important item goes at the top, large and bold, and grouping related elements is another form of hierarchy. It is not an exact science."
+    },
+    {
+      "name": "Spacing and layout",
+      "summary": "Grids (12 columns, eight on tablet, four on mobile) are guidelines that help structured, repeating pages; white space matters more; a simple section uses 32 pixels between items, with elements that go together grouped; a four-point grid keeps values divisible in half."
+    },
+    {
+      "name": "Typography",
+      "summary": "Use one sans serif font; tighten large headings by -2% to -3% letter spacing and 110% to 120% line height; landing pages use at most six font sizes, dashboards rarely go above 24 pixels."
+    },
+    {
+      "name": "Color",
+      "summary": "Start from one primary brand color, lighten it for backgrounds and darken it for text, building toward a color ramp; use semantic colors with meaning and color for purpose, not decoration."
+    },
+    {
+      "name": "Dark mode and themes",
+      "summary": "In dark mode, lower border contrast, make cards lighter than the background for depth because shadows don't work the same, dim bright chips, and consider deep purples, reds or greens as well as navy or gray."
+    },
+    {
+      "name": "Depth, shadows and borders",
+      "summary": "Most shadows are too strong: lower opacity and raise blur; cards need less shadow than popovers; inner and outer shadows make tactile buttons; a shadow should never be the first thing you notice."
+    },
+    {
+      "name": "Icons and imagery",
+      "summary": "Size icons to the text's line height (24 pixels in the example); use images in cards whenever possible; put text over images with a linear gradient, optionally plus a progressive blur."
+    },
+    {
+      "name": "Buttons and actions",
+      "summary": "Sidebar links are ghost buttons; ghost buttons pair with a primary CTA; padding guideline is double the height for the width; every button needs default, hover, pressed and disabled states, sometimes loading."
+    },
+    {
+      "name": "Forms and inputs",
+      "summary": "Inputs need a focus state, error states with red borders and messages, and sometimes warning states for optional issues."
+    },
+    {
+      "name": "Micro-interactions",
+      "summary": "Micro interactions step feedback up a notch, e.g. a chip sliding up to confirm a copy; they range from practical to playful."
+    },
+    {
+      "name": "Feedback, empty and loading states",
+      "summary": "Every interaction needs a response: loading spinners while data fetches, success messages when an action completes, micro animations on scroll or swipe."
+    },
+    {
+      "name": "Navigation and sidebars",
+      "summary": "Highlights on active nav items are signifiers; sidebar links are ghost buttons with no background until hover."
+    },
+    {
+      "name": "Cards and sections",
+      "summary": "A card walkthrough turns a spreadsheet-like card into one with an image, a large bold key item, smaller secondary details, a standout price and icons for a route."
+    },
+    {
+      "name": "Dashboards and data display",
+      "summary": "Dashboards shrink the type range so text is normally not larger than 24 pixels, because of information density."
+    },
+    {
+      "name": "Landing pages",
+      "summary": "Custom landing pages often don't line up with grid columns, and landing pages can use up to six font sizes with a large range."
+    },
+    {
+      "name": "Design taste and judgement",
+      "summary": "Hierarchy is not an exact science: a different layout can still be right if the key ideas hold."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Good UI signals how things work, so users don't need written instructions.",
+      "evidence": "the UI was signifying how things worked"
+    },
+    {
+      "claim": "The contrast between small and big, or colorful and not, is what creates hierarchy.",
+      "evidence": "it's this contrast, the difference between small and big"
+    },
+    {
+      "claim": "Many designs, especially custom landing pages, don't line up with any grid column, and that's not uncommon.",
+      "evidence": "this design doesn't line up with any of the columns"
+    },
+    {
+      "claim": "Grids help structured pages such as galleries and blogs by guiding responsive behavior on tablet and mobile.",
+      "evidence": "useful for responsiveness by giving guidelines for responsive behavior"
+    },
+    {
+      "claim": "A four-point grid is used not because multiples of four look better but because values can always be split in half.",
+      "evidence": "not because it inherently looks better"
+    },
+    {
+      "claim": "Design is mostly just text.",
+      "evidence": "design is mostly just text"
+    },
+    {
+      "claim": "Tightening letter spacing and line height instantly makes larger text look professional.",
+      "evidence": "it instantly makes any larger text look super pro"
+    },
+    {
+      "claim": "Dashboards use a narrower type range than landing pages because of higher information density.",
+      "evidence": "because of the increase in information density"
+    },
+    {
+      "claim": "Large companies use color ramps to build chips, states, charts and more.",
+      "evidence": "which is what large companies use to build out chips"
+    },
+    {
+      "claim": "Dark mode doesn't have shadows the way light mode does, so depth comes from lighter cards.",
+      "evidence": "in dark mode, we don't have shadows like light mode"
+    },
+    {
+      "claim": "Most shadows are too strong and most icons are too large.",
+      "evidence": "most icons are generally too large"
+    },
+    {
+      "claim": "Sidebar links are ghost buttons: buttons without a background until hover.",
+      "evidence": "sidebar links like this are actually just buttons without a background"
+    },
+    {
+      "claim": "A full-screen overlay makes text readable but doesn't do the image justice.",
+      "evidence": "doesn't do the image justice"
+    }
+  ],
+  "quotes": [
+    "Typography is really interesting because design is mostly just text.",
+    "Make sure you use color for purpose, not just for decoration.",
+    "Every interaction needs a response."
+  ],
+  "tags": [
+    "ui-fundamentals",
+    "visual-hierarchy",
+    "signifiers",
+    "grids",
+    "four-point-grid",
+    "whitespace",
+    "typography",
+    "color",
+    "semantic-color",
+    "dark-mode",
+    "shadows",
+    "icons",
+    "buttons",
+    "interaction-states",
+    "micro-interactions",
+    "image-overlays",
+    "beginner"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "Use signifiers so the UI explains itself: wrap related items in a shared container, put a container on the selected item, and gray out inactive items.",
+      "why": "Users then understand how the UI works without written instructions.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "put a container around drinks and food"
+    },
+    {
+      "rule": "Give interactive elements signifiers such as a button press state, highlights on active nav items, hover states and tooltips.",
+      "why": "They tell the user what a UI affords or what it can do.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "good ui has many signifiers"
+    },
+    {
+      "rule": "Put the most important item at the top, large and bold, and place secondary details such as time and date below it, much smaller.",
+      "why": "Otherwise the key item blends in; contrast between small and big, or colorful and not, is what creates hierarchy.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "we want that large and bold and at the top"
+    },
+    {
+      "rule": "Make one key value (the price in the card example) different from everything else: at the top, right-aligned and in color (blue).",
+      "why": "Being different from the rest draws the eye to it.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "all",
+      "values": [
+        "blue"
+      ],
+      "evidence": "price should be at the top, right aligned, and blue"
+    },
+    {
+      "rule": "Add an image to cards whenever possible.",
+      "why": "An image adds a great pop of color and makes scanning super easy, as in Uber.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "an image always adds a great pop of color"
+    },
+    {
+      "rule": "Show relationships like a route with icons and alignment instead of text labels such as 'from' and 'to'.",
+      "why": "The layout demonstrates the meaning without having to say it.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "we can use icons and align to demonstrate"
+    },
+    {
+      "rule": "Don't treat a 12-column grid and exact eight-pixel spacing as laws; let custom layouts such as landing pages sit off the columns.",
+      "why": "These are just guidelines, and designs that don't line up with any column are not uncommon, especially custom landing pages.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [
+        "12-column grid",
+        "eight pixels"
+      ],
+      "evidence": "these are just guidelines"
+    },
+    {
+      "rule": "Consider a column grid for highly structured pages such as galleries, blogs or other repeating content, with eight columns on tablet and four on mobile.",
+      "why": "Grids can actually be useful for responsiveness by giving guidelines for responsive behavior.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [
+        "12-column grid",
+        "eight columns",
+        "mobile with four"
+      ],
+      "evidence": "useful for responsiveness by giving guidelines for responsive behavior"
+    },
+    {
+      "rule": "Prioritize white space, letting things breathe, over excessive grids and layouts.",
+      "why": "The source calls white space much more important than excessive grids and layouts.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "much more important than using excessive grids"
+    },
+    {
+      "rule": "In a simple section, put 32 pixels between every item, and group elements that just go together, such as the announcement and text or the text and subtext; grouped elements sit closer than 32 pixels [inferred]",
+      "why": "Grouping elements that go together is another form of visual hierarchy.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "all",
+      "values": [
+        "32 pixels"
+      ],
+      "evidence": "simply 32 pixels between every item"
+    },
+    {
+      "rule": "Use a four-point grid: make every spacing value a multiple of four.",
+      "why": "Not because it inherently looks better, but because you can always split things in half, which creates consistency.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "all",
+      "values": [
+        "four-point grid"
+      ],
+      "evidence": "four-point grid system"
+    },
+    {
+      "rule": "Use one font for the whole design: pick a nice sans serif and stick to it, without spending lots of time on the choice.",
+      "why": "You'll almost never need more than one for any design; the creator has rarely used other fonts in seven years.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "you'll never need more than one for any design"
+    },
+    {
+      "rule": "Tighten large header text: letter spacing by about -2% to -3%, and drop line height to about 110% to 120%.",
+      "why": "Header text can feel a little too loose; this instantly makes any larger text look super pro.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [
+        "-2% to -3%",
+        "110% to 120%"
+      ],
+      "evidence": "tighten up the letter spacing"
+    },
+    {
+      "rule": "On landing pages and websites, use no more than six font sizes; the range between them can be large.",
+      "why": "The source gives no reason for the cap; it only notes that hierarchy with typography is more nuanced and text sizes can vary wildly.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "web",
+      "values": [
+        "six font sizes"
+      ],
+      "evidence": "you generally don't want more than six font sizes"
+    },
+    {
+      "rule": "On dashboards, shrink the type range so text sizes are normally not larger than 24 pixels.",
+      "why": "Dashboards have higher information density.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [
+        "24 pixels"
+      ],
+      "evidence": "you don't normally have text sizes larger than 24 pixels"
+    },
+    {
+      "rule": "Start the palette from one primary color, usually the brand color; lighten it for backgrounds and darken it for text colors.",
+      "why": "Both add subtle color that makes an otherwise drab design more interesting, and get you halfway to a color ramp.",
+      "kind": "do",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "starting with one primary color"
+    },
+    {
+      "rule": "Extend the primary color into a color ramp and build chips, states and charts from it.",
+      "why": "This is what large companies use to build out chips, states, charts and anything else.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "halfway to a color ramp"
+    },
+    {
+      "rule": "Use semantic colors with fixed meanings: blue for trust, red for danger or urgency, yellow for warning, green for success.",
+      "why": "Semantic colors have meaning and act as signifiers to the user.",
+      "kind": "do",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [
+        "blue",
+        "red",
+        "yellow",
+        "green"
+      ],
+      "evidence": "these are all semantic colors"
+    },
+    {
+      "rule": "Don't use color only as decoration; give it a purpose, such as an announcement bar that grabs attention, a focus state on an input, or a green 'new' chip on a link.",
+      "why": "Color should have meaning; as a beginner, 'let the color find you'.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "use color for purpose, not just for decoration"
+    },
+    {
+      "rule": "In dark mode, lower the contrast of light card borders.",
+      "why": "A light border in dark mode creates a bit too much contrast.",
+      "kind": "do",
+      "strength": "should",
+      "area": "elevation",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "light border, which creates a bit too much contrast"
+    },
+    {
+      "rule": "In dark mode, create depth by making cards lighter than the background instead of relying on shadows.",
+      "why": "Dark mode doesn't have shadows like light mode.",
+      "kind": "do",
+      "strength": "should",
+      "area": "elevation",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "we need to have a lighter card than the background"
+    },
+    {
+      "rule": "In dark mode, dim the saturation and brightness of bright chips, and flip that treatment for the chip text.",
+      "why": "Chips can be far too bright in dark mode; flipping for the text creates hierarchy.",
+      "kind": "do",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "dim down the saturation and brightness"
+    },
+    {
+      "rule": "Consider deep purples, reds or greens in dark mode, not only navy blue or gray.",
+      "why": "There is a ton of flexibility in dark mode color.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "deep purples, reds, or greens"
+    },
+    {
+      "rule": "Soften shadows by reducing their opacity and increasing their blur.",
+      "why": "Most shadows are too strong.",
+      "kind": "do",
+      "strength": "should",
+      "area": "elevation",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "reducing the opacity and dialing up the blur"
+    },
+    {
+      "rule": "Match shadow strength to the layer: light shadows for cards, stronger shadows for content that sits above other content, such as popovers.",
+      "why": "The strength needed depends on the foreground and background.",
+      "kind": "do",
+      "strength": "should",
+      "area": "elevation",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "cards require less while content that sits above other content"
+    },
+    {
+      "rule": "Combine inner and outer shadows to make raised, tactile buttons.",
+      "why": "The same shadow techniques can create effects like raised tactile buttons.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "elevation",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "inner and outer shadows to create effects like raised tactile buttons"
+    },
+    {
+      "rule": "Don't let a shadow be the first thing people notice in a design.",
+      "why": "If the shadow is the first thing you notice, you're not using it right.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "elevation",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "if the shadow is the first thing you notice"
+    },
+    {
+      "rule": "Size icons to the line height of your font (24 pixels in the example), then tighten up the text.",
+      "why": "Most icons are generally too large.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [
+        "24 pixels"
+      ],
+      "evidence": "most icons are generally too large"
+    },
+    {
+      "rule": "Build sidebar links as ghost buttons (no background until hover), and reuse the same ghost button as a standalone secondary CTA beside the primary one.",
+      "why": "Isolated and centered, a sidebar link is a standalone button; these are super common when a primary and secondary CTA sit side by side.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "which are often called ghost buttons"
+    },
+    {
+      "rule": "Set button padding by the guideline 'double the height for the width', read here as horizontal padding twice the vertical padding [inferred]",
+      "why": "Given as a good guideline for padding on these buttons, with or without icons.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [
+        "double the height for the width"
+      ],
+      "evidence": "double the height for the width"
+    },
+    {
+      "rule": "Give every button at least four states: default, hovered, active or pressed, and disabled; add a loading state with a spinner when needed.",
+      "why": "When a user does anything, there should be a response.",
+      "kind": "do",
+      "strength": "must",
+      "area": "components",
+      "applies_to": "all",
+      "values": [
+        "four states"
+      ],
+      "evidence": "every button needs at least four states"
+    },
+    {
+      "rule": "Give inputs a focus state when the user clicks in, error states with red borders and messages when something is wrong, and warning states for optional issues where needed.",
+      "why": "Inputs are even more critical than buttons for giving a response.",
+      "kind": "do",
+      "strength": "must",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "you'll need a focus state when the user clicks in"
+    },
+    {
+      "rule": "Make every user action produce a response: loading spinners while data fetches, success messages when an action completes, micro animations on scroll or swipe.",
+      "why": "Every interaction needs a response.",
+      "kind": "do",
+      "strength": "must",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "every interaction needs a response"
+    },
+    {
+      "rule": "Confirm an action with a micro interaction, for example a chip that slides up after the copy button is clicked.",
+      "why": "Hover and click states alone don't tell users they've actually copied anything.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "if we have this chip slide up"
+    },
+    {
+      "rule": "Don't cover an image with a full-screen overlay just to make text readable.",
+      "why": "It doesn't do the image justice; a bad overlay ruins both the image and the text.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "doesn't do the image justice"
+    },
+    {
+      "rule": "For text over an image, add a linear gradient that shows the image and then smoothly converges into a text-readable background.",
+      "why": "It keeps the image visible and the text readable.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "add in a linear gradient"
+    },
+    {
+      "rule": "For an extra fancy, more modern look, add a progressive blur on top of the image gradient.",
+      "why": "It gives an even more modern look.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "progressive blur on top of the gradient"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "How many fonts should the design use?",
+      "options": [
+        {
+          "name": "One sans serif font",
+          "effect": "All text in one family; font choice shouldn't be where you spend tons of time.",
+          "when": "Almost any design; the source says you'll never need more than one."
+        },
+        {
+          "name": "More than one font",
+          "effect": "The source gives no case for it; it says you'll almost never need more than one for any design.",
+          "when": "Not recommended by the source."
+        }
+      ],
+      "recommendation": "One nice sans serif font, used throughout; font picking shouldn't take much time.",
+      "maps_to": "Q-type-05",
+      "evidence": "you'll never need more than one for any design"
+    },
+    {
+      "question": "Should the layout follow a strict column grid?",
+      "options": [
+        {
+          "name": "Column grid (12 columns, eight on tablet, four on mobile)",
+          "effect": "Content lines up to columns and the grid guides responsive behavior.",
+          "when": "Highly structured pages: galleries, blogs, any repeating content."
+        },
+        {
+          "name": "Free layout off the columns",
+          "effect": "Content doesn't line up with any column; the source says this is not uncommon.",
+          "when": "Custom landing pages."
+        }
+      ],
+      "recommendation": "Treat grids as guidelines: use them for structured pages, and put white space ahead of excessive grids.",
+      "maps_to": "Q-layout-05",
+      "evidence": "especially for custom landing pages"
+    },
+    {
+      "question": "Should large headings keep the font's default letter spacing and line height, or be tightened?",
+      "options": [
+        {
+          "name": "Default spacing",
+          "effect": "Header text feels a little too loose.",
+          "when": "Not recommended for large text."
+        },
+        {
+          "name": "Tightened: letter spacing about -2% to -3%, line height about 110% to 120%",
+          "effect": "Instantly makes larger text look super pro.",
+          "when": "Large header text."
+        }
+      ],
+      "recommendation": "Tighten large headings; the source calls it close to a hack.",
+      "maps_to": "Q-type-13",
+      "evidence": "our header text feels a little too loose"
+    },
+    {
+      "question": "How wide should the range of text sizes be?",
+      "options": [
+        {
+          "name": "Wide range, up to six sizes",
+          "effect": "Up to six font sizes, which can have a really large range.",
+          "when": "Landing pages and websites."
+        },
+        {
+          "name": "Narrow range, normally nothing above 24 pixels",
+          "effect": "Smaller headings that fit a denser screen.",
+          "when": "Dashboards, because of the increase in information density."
+        }
+      ],
+      "recommendation": "Choose by product type: wide for landing pages, narrow for dashboards.",
+      "maps_to": "Q-dir-03",
+      "evidence": "for things like dashboards, that range shrinks dramatically"
+    },
+    {
+      "question": "How should cards show depth from the page?",
+      "options": [
+        {
+          "name": "Shadows",
+          "effect": "Soft shadow under the card; stronger shadows for content that sits above other content, like popovers.",
+          "when": "Light mode."
+        },
+        {
+          "name": "Card lighter than the background",
+          "effect": "The card surface steps up in lightness to show it is raised.",
+          "when": "Dark mode, which doesn't have shadows like light mode."
+        }
+      ],
+      "recommendation": "Shadows in light mode (softened, never the first thing noticed); a lighter card than the background in dark mode.",
+      "maps_to": "Q-depth-01",
+      "evidence": "in dark mode, we don't have shadows like light mode"
+    },
+    {
+      "question": "How should text sit on top of an image?",
+      "options": [
+        {
+          "name": "No treatment",
+          "effect": "The source says you can't leave it as is; a bad overlay ruins the image and the text.",
+          "when": "Never, in the source's example."
+        },
+        {
+          "name": "Full-screen overlay",
+          "effect": "A full-screen overlay over the image; the source says it doesn't do the image justice.",
+          "when": "Not recommended by the source."
+        },
+        {
+          "name": "Linear gradient",
+          "effect": "The image shows, then smoothly converges into a text-readable background.",
+          "when": "The default for text over images."
+        },
+        {
+          "name": "Gradient plus progressive blur",
+          "effect": "An even more modern, extra fancy look.",
+          "when": "When going for extra fancy."
+        }
+      ],
+      "recommendation": "A linear gradient, optionally with a progressive blur on top.",
+      "maps_to": "Q-img-02",
+      "evidence": "overlays are really important"
+    },
+    {
+      "question": "How should the UI confirm an action such as copying?",
+      "options": [
+        {
+          "name": "Hover and click states only",
+          "effect": "The button reacts, but users still don't know they've copied anything.",
+          "when": "Not enough on its own."
+        },
+        {
+          "name": "Micro interaction, such as a chip that slides up",
+          "effect": "Confirms the action; can range from highly practical to fun and playful.",
+          "when": "Actions whose result isn't otherwise visible."
+        }
+      ],
+      "recommendation": "Add a micro interaction that confirms the action.",
+      "maps_to": null,
+      "evidence": "we still don't know that we've copied anything"
+    },
+    {
+      "question": "What base unit should spacing use?",
+      "options": [
+        {
+          "name": "Exactly eight pixels between everything, as a hard rule",
+          "effect": "The source calls this a misconception; eight-pixel spacing is just a guideline.",
+          "when": "Not as a law."
+        },
+        {
+          "name": "Four-point grid",
+          "effect": "Every value is a multiple of four, so you can always split things in half, which creates consistency throughout a design.",
+          "when": "The source's default, for example 32 pixels between items in a simple section."
+        }
+      ],
+      "recommendation": "A four-point grid, not because it inherently looks better but because values can always be split in half.",
+      "maps_to": "Q-space-01",
+      "evidence": "you can always split things in half"
+    },
+    {
+      "question": "How should related things be shown as related?",
+      "options": [
+        {
+          "name": "A container around them",
+          "effect": "A container around drinks and food shows they are related and dessert is not.",
+          "when": "Small sets of items such as text-and-icon pairs, in the source's signifiers example."
+        },
+        {
+          "name": "Space: group them and keep other items apart",
+          "effect": "Items that go together, like the announcement and text or the text and subtext, are grouped, with 32 pixels between the other items.",
+          "when": "A simple section such as a hero, in the source's white space example."
+        }
+      ],
+      "recommendation": null,
+      "maps_to": "Q-dir-04",
+      "evidence": "group elements that just go together"
+    },
+    {
+      "question": "What color should a dark mode base on?",
+      "options": [
+        {
+          "name": "Navy blue or gray",
+          "effect": "The usual dark mode colors.",
+          "when": "The source does not limit dark mode to these."
+        },
+        {
+          "name": "Deep purples, reds or greens",
+          "effect": "A dark mode tinted with a deep color instead of navy or gray.",
+          "when": "The source says there is a ton of flexibility here."
+        }
+      ],
+      "recommendation": "The source says dark mode has a ton of flexibility for deep purples, reds or greens, not just navy blue or gray.",
+      "maps_to": null,
+      "evidence": "not just navy blue or gray"
+    }
+  ],
+  "process": [
+    {
+      "step": "Give a flat card hierarchy",
+      "detail": "Start with an image at the top; make the most important item large and bold at the top; put time and date below and much smaller; place the price at the top, right-aligned and blue; make the location smaller and below, using icons and alignment instead of 'from' and 'to'."
+    },
+    {
+      "step": "Space a simple section",
+      "detail": "Set font size and line height for the large text and the subtext, add buttons and an optional announcement bar, and put 32 pixels between every item. Keep every value a multiple of four. Group elements that go together (announcement and text, text and subtext) closer than the rest [inferred]"
+    },
+    {
+      "step": "Tighten large headings",
+      "detail": "Reduce letter spacing by about -2% to -3% and drop line height to about 110% to 120%."
+    },
+    {
+      "step": "Build color from one primary",
+      "detail": "Pick the primary (usually the brand color), lighten it for a background, darken it for text colors, then extend into a color ramp for chips, states and charts. Add semantic colors for meaning."
+    },
+    {
+      "step": "Adapt a card for dark mode",
+      "detail": "Lower the contrast of the light border, make the card lighter than the background for depth, and dim the chip's saturation and brightness while flipping that for its text."
+    },
+    {
+      "step": "Tune shadows",
+      "detail": "Reduce opacity and increase blur; use less for cards and more for popovers; check that the shadow is not the first thing you notice."
+    },
+    {
+      "step": "Size icons with text",
+      "detail": "Take the text's line height (24 pixels in the example), make the icons the same size, then tighten up the text."
+    },
+    {
+      "step": "Define interaction states",
+      "detail": "Give buttons default, hovered, active or pressed and disabled states, plus loading with a spinner when needed; give inputs focus, error (red border and message) and warning states; add spinners, success messages and micro interactions so every interaction gets a response."
+    },
+    {
+      "step": "Put text over an image",
+      "detail": "Skip the full-screen overlay; add a linear gradient that fades from the image into a text-readable background, and optionally a progressive blur on top."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Three text-and-icon pairs: drinks, food and dessert",
+      "where": null,
+      "visual_note": "A container around drinks and food shows they are related and dessert is not; a container on drinks shows it is selected; grayed-out text shows an item is inactive. Demonstrates signifiers."
+    },
+    {
+      "what": "Trip card redesign from spreadsheet to hierarchy",
+      "where": null,
+      "visual_note": "Before: all information in a logical but spreadsheet-like format. After: image on top, key item large and bold, time and date smaller below, price at top right in blue, and a route from Jamesville to Syracuse shown with icons and alignment."
+    },
+    {
+      "what": "Image in a card for color and scanning",
+      "where": "Uber",
+      "visual_note": "Cited as an example of an image adding a pop of color and making scanning easy."
+    },
+    {
+      "what": "Alternative card layout",
+      "where": null,
+      "visual_note": "A differently arranged card shown to make the point that hierarchy is not an exact science and this version wouldn't be wrong."
+    },
+    {
+      "what": "Landing page design off the grid",
+      "where": null,
+      "visual_note": "A custom landing page layout that doesn't line up with any of the 12 columns."
+    },
+    {
+      "what": "Simple hero section",
+      "where": null,
+      "visual_note": "Announcement bar, large heading, subtext and buttons, with 32 pixels between items and elements that go together (announcement and text, text and subtext) grouped."
+    },
+    {
+      "what": "Dark mode card fix",
+      "where": null,
+      "visual_note": "A card whose light border has a bit too much contrast and whose chip is far too bright is fixed by lowering the border contrast, making the card lighter than the background, and dimming the chip's saturation and brightness."
+    },
+    {
+      "what": "Raised tactile buttons",
+      "where": null,
+      "visual_note": "Buttons built with inner and outer shadows to look raised and physical."
+    },
+    {
+      "what": "Sidebar links to ghost buttons",
+      "where": null,
+      "visual_note": "Sidebar links shown as buttons without a background until hover; one isolated and centered becomes a standalone button beside a primary CTA."
+    },
+    {
+      "what": "Copy button with slide-up chip",
+      "where": null,
+      "visual_note": "The copy button has hover and click states, but a chip sliding up is what confirms the copy happened."
+    },
+    {
+      "what": "Color that finds you",
+      "where": null,
+      "visual_note": "An announcement bar grabbing attention, a focus state on an input, and a green 'new' chip on a link as examples of purposeful, semantic color."
+    },
+    {
+      "what": "Text over an image, three treatments",
+      "where": null,
+      "visual_note": "A full-screen overlay (which doesn't do the image justice), a linear gradient that smoothly converges into a text-readable background, and the gradient with a progressive blur on top."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "12-column grid",
+      "context": "The grid people wrongly think all content must align to; it's a guideline.",
+      "evidence": "align to a 12-column grid"
+    },
+    {
+      "value": "eight pixels",
+      "context": "The exact spacing people wrongly think everything must use.",
+      "evidence": "be exactly eight pixels apart"
+    },
+    {
+      "value": "eight columns",
+      "context": "Grid columns on tablet for structured pages.",
+      "evidence": "with eight columns and mobile with four"
+    },
+    {
+      "value": "four",
+      "context": "Grid columns on mobile for structured pages.",
+      "evidence": "mobile with four"
+    },
+    {
+      "value": "32 pixels",
+      "context": "Space between every item in a simple section.",
+      "evidence": "simply 32 pixels between every item"
+    },
+    {
+      "value": "four-point grid",
+      "context": "Spacing values are multiples of four so they can always be split in half.",
+      "evidence": "four-point grid system"
+    },
+    {
+      "value": "-2% to -3%",
+      "context": "Letter spacing reduction for large header text.",
+      "evidence": "by about -2% to -3%"
+    },
+    {
+      "value": "110% to 120%",
+      "context": "Line height for large header text.",
+      "evidence": "drop the line height to about 110% to 120%"
+    },
+    {
+      "value": "six font sizes",
+      "context": "Maximum number of font sizes for landing pages and websites.",
+      "evidence": "more than six font sizes"
+    },
+    {
+      "value": "24 pixels",
+      "context": "Dashboards normally have no text sizes larger than this.",
+      "evidence": "text sizes larger than 24 pixels"
+    },
+    {
+      "value": "24 pixels",
+      "context": "Line height of the example font, used as the icon size.",
+      "evidence": "in this case 24 pixels"
+    },
+    {
+      "value": "four states",
+      "context": "Minimum button states: default, hovered, active or pressed, disabled.",
+      "evidence": "at least four states"
+    },
+    {
+      "value": "seven years",
+      "context": "How long the creator has been designing, rarely using fonts beyond those shown.",
+      "evidence": "over the last seven years of designing"
+    }
+  ],
+  "caveats": [
+    "Sponsor segment: Mobbin, with a 20% discount link; the claim that inspiration and research from a good source is one of the most important concepts is delivered inside this read.",
+    "Many specifics are only on screen and not in the transcript: the recommended sans serif fonts, the example font sizes and line heights, and the exact shadow and color values.",
+    "Values such as 32 pixels, -2% to -3% and 110% to 120% are one creator's rules of thumb (the type values are stated with 'about'); he says hierarchy is not an exact science.",
+    "The button padding guideline ('double the height for the width') is ambiguous in the transcript; reading it as horizontal padding twice the vertical is an interpretation.",
+    "Semantic color meanings (blue trust, red danger, yellow warning, green success) are presented as conventions, not tested facts.",
+    "The title's 'every UI/UX concept' is a broad survey; each concept gets only a few sentences.",
+    "Auto-generated captions with [music] markers; published 2026-03-14. The Figma files link in the description is self-promotion."
+  ]
+}

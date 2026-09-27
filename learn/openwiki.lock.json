@@ -1,0 +1,8 @@
+{
+  "repo": "https://github.com/ckryptickunal/OpenWiki",
+  "commit": "f730cdb88d67f490990fef15ea070ffaa97ad583",
+  "version": "0.2.0",
+  "tested": "2026-09-24",
+  "tests": {"openwiki": "62 passed, 2 deselected (live smoke tests)", "opendesigner": "pending: tools/test_wiki.py"},
+  "commits_adopted": ["c903164 Rename to OpenWiki, fix extraction bugs, add providers and open-source setup (#1)", "f730cdb Add a script to publish the website while Actions is unavailable"]
+}

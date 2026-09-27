@@ -1,0 +1,117 @@
+{
+  "summary": "The README of Emil Kowalski's skills repository explains why the skills exist and lists what each one does. Its core argument is that AI agents lack taste: they pick ease-in for an enter animation where ease-out is right, or a solid border where a semi-transparent shadow is right, and these small mistakes compound. The skills encode the author's experience at Vercel and Linear as lists of such mistakes and their fixes, so agents reach the right design and animation decisions faster. It frames AI as an amplifier of domain expertise, not a replacement. For a design system, it supplies two concrete defaults (ease-out for enter, shadows over solid borders), a map of which skill handles which job (build, review, audit, find opportunities, name effects, pick libraries, prototype, mobile polish), and the install command.",
+  "key_ideas": [
+    "Knowing whether an animation or design choice is right is hard; these skills aim to shorten the path to the right decision.",
+    "AI agents do not have great taste and often pick the wrong ingredients for an animation.",
+    "Enter animations should use ease-out; agents often wrongly use ease-in.",
+    "A semi-transparent shadow is the better choice where agents reach for a solid border.",
+    "Small wrong choices compound until an interface is either amazing or just not that great.",
+    "The skills list the small mistakes agents make and explain how to fix them.",
+    "AI amplifies domain expertise rather than replacing it, so learning to code or design stays valuable.",
+    "Each skill covers one job: build an animation, review strictly, audit a codebase, find where motion helps, name effects, pick a library, prototype variants, or make web apps feel native on phones.",
+    "Agents should use trusted libraries instead of hand-rolling components like toasts or installing abandoned packages."
+  ],
+  "entities": [
+    {"name": "Emil Kowalski", "type": "person", "description": "Author of the skills, drawing on years at Vercel and Linear"},
+    {"name": "Vercel", "type": "company", "description": "Company where the author gained the experience the skills are based on"},
+    {"name": "Linear", "type": "company", "description": "Company where the author gained the experience the skills are based on"},
+    {"name": "emilkowalski/skills", "type": "product", "description": "MIT-licensed GitHub repository of agent skills described by this README (commit 85e8e23)"},
+    {"name": "animations.dev", "type": "product", "description": "The author's site, linked from the header image and hosting the skills newsletter signup"},
+    {"name": "skills.sh", "type": "tool", "description": "Badge at the top of the README linking to skills.sh/emilkowalski/skills; the install command uses the npx package skills@latest"},
+    {"name": "Agents with Taste", "type": "product", "description": "The author's piece at emilkowal.ski/ui/agents-with-taste, cited for the point that these skills list agents' little mistakes and how to fix them"},
+    {"name": "7 Practical Animation Tips", "type": "product", "description": "The author's piece at emilkowal.ski/ui/7-practical-animation-tips, linked (section 4, choose the right easing) for why enter animations use ease-out"},
+    {"name": "Sonner", "type": "library", "description": "The author's toast library, covered by the ask-sonner skill"},
+    {"name": "emil-design-eng", "type": "tool", "description": "Main skill, mostly animation plus some design advice"},
+    {"name": "animate", "type": "tool", "description": "Skill that builds an animation from scratch, choosing curve, duration and properties"},
+    {"name": "animate-expo", "type": "tool", "description": "Same bar for React Native and Expo: gestures, sheets, haptics, screen transitions, motion off the JS thread"},
+    {"name": "review-animations", "type": "tool", "description": "Skill that reviews animations strictly against the author's rules"},
+    {"name": "improve-animations", "type": "tool", "description": "Skill that audits all animations in a codebase and writes prioritized, self-contained plans"},
+    {"name": "find-animation-opportunities", "type": "tool", "description": "Skill that finds where motion genuinely helps and says what not to animate"},
+    {"name": "animation-vocabulary", "type": "tool", "description": "Skill that gives the right words to describe an animation to an AI"},
+    {"name": "apple-design", "type": "tool", "description": "Apple's interface and fluid-motion principles from WWDC design talks, translated for the web"},
+    {"name": "write-swift", "type": "tool", "description": "Skill for modern Swift: value types, Swift 6 concurrency, generics, performance, Swift Testing"},
+    {"name": "pick-ui-library", "type": "tool", "description": "Skill that picks a trusted library instead of hand-rolling components or installing abandoned packages"},
+    {"name": "prototype", "type": "tool", "description": "Skill that builds several versions of a UI piece and lets you compare them with a switcher"},
+    {"name": "mobile-native", "type": "tool", "description": "Skill with small fixes that make a web app feel native on a phone"},
+    {"name": "ask-sonner", "type": "tool", "description": "Guide to Sonner: setup, styling, recipes and common fixes"},
+    {"name": "ease-out", "type": "concept", "description": "Easing the README says enter animations should use"},
+    {"name": "ease-in", "type": "concept", "description": "Easing agents wrongly pick for enter animations"}
+  ],
+  "topics": [
+    {"name": "AI-assisted design", "summary": "Agents lack taste and make small, compounding mistakes; the skills list those mistakes and their fixes, and AI amplifies expertise rather than replacing it."},
+    {"name": "Design taste and judgement", "summary": "Judging whether a choice is right is hard; small ingredients compound into an amazing or mediocre interface."},
+    {"name": "Easing and timing", "summary": "Enter animations should use ease-out, not ease-in, which agents often get wrong."},
+    {"name": "Depth, shadows and borders", "summary": "Agents choose a solid border where a semi-transparent shadow is the better ingredient."},
+    {"name": "Motion principles", "summary": "Skills exist to build animations (curve, duration, properties), review them strictly, audit them, find where motion genuinely helps and decide what not to animate."},
+    {"name": "UI libraries", "summary": "Agents should pick trusted libraries instead of hand-rolling a toast component or installing an abandoned package; Sonner is the author's toast library."},
+    {"name": "Toasts and notifications", "summary": "A toast component should come from a trusted library such as Sonner rather than be hand-rolled by AI [inferred]."},
+    {"name": "Mobile app patterns", "summary": "Web apps on phones need fixes for sticky hover states, tap highlight flashes, the 100vh bug, zooming inputs, laggy taps and safe areas; React Native/Expo motion should stay off the JS thread."},
+    {"name": "Prototyping", "summary": "Build several versions of a UI piece and switch between them to compare."},
+    {"name": "Design resources", "summary": "Index of the author's skills, with install command and newsletter."}
+  ],
+  "claims": [
+    {"claim": "Knowing whether you made the right choice in animation or design is hard, and the skills aim to get you to the right decisions faster.", "evidence": "Knowing whether you made a right choice"},
+    {"claim": "The skills are based on the author's years of experience working at companies like Vercel and Linear.", "evidence": "They are based on my years of experience"},
+    {"claim": "AI does not replace domain expertise; it amplifies what you can get out of it and makes you better relative to others.", "evidence": "All the skills here are a side-effect of domain-expertise"},
+    {"claim": "Agents don't have great taste and often don't pick the right ingredients for an animation.", "evidence": "Why use it?"},
+    {"claim": "Agents use ease-in for enter animations when they should use ease-out.", "evidence": "An `ease-in` easing for an enter animation"},
+    {"claim": "Agents choose a solid border instead of a semi-transparent shadow for UIs.", "evidence": "solid border instead of a semi-transparent shadow"},
+    {"claim": "Small choices compound and make an interface either amazing or just not that great.", "evidence": "All these small things compound"},
+    {"claim": "The skills list the little mistakes agents can make and explain how to fix them.", "evidence": "As explained in [Agents with Taste]"},
+    {"claim": "Left alone, AI may hand-roll a toast component or install an abandoned package; pick-ui-library makes the agent pick from libraries the author uses and trusts instead.", "evidence": "pick-ui-library"},
+    {"claim": "The apple-design skill is distilled from Apple's WWDC design talks and translated for the web.", "evidence": "apple-design"},
+    {"claim": "Sticky hover states, tap highlight flashes, the 100vh bug, inputs that zoom the page, laggy taps and safe areas are among the small fixes that separate a website from an app on a phone.", "evidence": "mobile-native"}
+  ],
+  "quotes": [
+    "Agents don’t have great taste",
+    "AI doesn’t replace such expertise, it amplifies what you can get out of it",
+    "A shortcut to stand out in a sea of slop."
+  ],
+  "tags": ["agent-skills", "ai-taste", "easing", "ease-out", "shadows", "borders", "ui-libraries", "mobile-web", "react-native", "prototyping", "animation-review"],
+  "authority": "non-negotiable",
+  "rules": [
+    {"rule": "Use ease-out, not ease-in, for enter animations.", "why": "The README names ease-in on an enter animation as one of the little mistakes agents make, when it is 'supposed to be ease-out'; the reason itself is in the linked 7 Practical Animation Tips article, not in the README.", "kind": "do", "strength": "must", "area": "motion", "applies_to": "all", "values": ["ease-out", "ease-in"], "evidence": "An `ease-in` easing for an enter animation"},
+    {"rule": "Prefer a semi-transparent shadow over a solid border in UIs (the README gives no narrower scope or values).", "why": "Choosing a solid border instead of a semi-transparent shadow is one of the small agent mistakes that compound.", "kind": "do", "strength": "should", "area": "elevation", "applies_to": "all", "values": ["semi-transparent shadow", "solid border"], "evidence": "solid border instead of a semi-transparent shadow"},
+    {"rule": "Pick the library for a task from libraries the author uses and trusts, instead of letting an agent hand-roll a component such as a toast or install an abandoned package.", "why": "The pick-ui-library skill exists so the agent picks the right library instead of hand-rolling a toast component or installing an abandoned package.", "kind": "dont", "strength": "should", "area": "tooling", "applies_to": "all", "values": [], "evidence": "pick-ui-library"},
+    {"rule": "When building an animation from scratch, explicitly choose its curve, duration and properties.", "why": "The animate skill exists to pick the correct curve, duration and properties.", "kind": "do", "strength": "should", "area": "motion", "applies_to": "all", "values": [], "evidence": "animate"},
+    {"rule": "Add motion only where it genuinely benefits the UI, and state explicitly what should not be animated.", "why": "find-animation-opportunities searches for places that would genuinely benefit from motion while also saying what not to animate.", "kind": "do", "strength": "should", "area": "motion", "applies_to": "all", "values": [], "evidence": "find-animation-opportunities"},
+    {"rule": "Review animations strictly against the author's rules.", "why": "review-animations reviews animations in a strict way based on the author's rules.", "kind": "do", "strength": "should", "area": "process", "applies_to": "all", "values": [], "evidence": "review-animations"},
+    {"rule": "When auditing a codebase's animations, produce prioritized, self-contained plans that any agent can execute.", "why": "improve-animations audits all animations and returns prioritized, self-contained plans.", "kind": "do", "strength": "should", "area": "process", "applies_to": "all", "values": [], "evidence": "improve-animations"},
+    {"rule": "Describe an animation to an AI with its exact term rather than a vague description.", "why": "Using the right words gets better animations from an AI.", "kind": "do", "strength": "should", "area": "process", "applies_to": "all", "values": [], "evidence": "telling it exactly what you want by using the right words"},
+    {"rule": "Build several different versions of a UI piece you describe and go through them with a switcher.", "why": "The prototype skill builds multiple versions of a described UI piece to go through with a switcher.", "kind": "do", "strength": "consider", "area": "process", "applies_to": "all", "values": [], "evidence": "prototype"},
+    {"rule": "When a web app runs on a phone, fix sticky hover states, tap highlight flashes, the 100vh bug, inputs that zoom the page, laggy taps and safe areas.", "why": "These small fixes separate a website from an app and make it feel native on a phone.", "kind": "do", "strength": "should", "area": "platforms", "applies_to": "web", "values": ["100vh"], "evidence": "mobile-native"},
+    {"rule": "In React Native and Expo, hold gestures, sheets, haptics and screen transitions to the same bar as the other animation skills, and keep motion off the JS thread.", "why": "animate-expo is described as 'the same bar' for React Native and Expo, and names keeping motion off the JS thread.", "kind": "do", "strength": "should", "area": "motion", "applies_to": "react", "values": [], "evidence": "animate-expo"},
+    {"rule": "Write modern Swift: value types, Swift 6 concurrency, generics, attention to performance, and Swift Testing.", "why": "The write-swift skill defines modern Swift by these practices.", "kind": "do", "strength": "consider", "area": "tooling", "applies_to": "ios", "values": ["Swift 6"], "evidence": "write-swift"},
+    {"rule": "Keep developing real design or engineering expertise and use AI to amplify it, not to replace it.", "why": "The skills are a side-effect of domain expertise; AI amplifies expertise and makes you better relative to others.", "kind": "do", "strength": "should", "area": "process", "applies_to": "all", "values": [], "evidence": "So learn to code, design, or develop expertise"}
+  ],
+  "decisions": [
+    {"question": "What easing should an enter animation use?", "options": [{"name": "ease-out", "effect": "The curve the README says enter animations are supposed to use", "when": "Any element entering the screen"}, {"name": "ease-in", "effect": "The curve agents wrongly pick; the README counts it as a mistake", "when": "Not for enter animations"}], "recommendation": "ease-out; the README names ease-in on an enter animation as a typical agent mistake and links the 7 Practical Animation Tips article for the reason.", "maps_to": null, "evidence": "An `ease-in` easing for an enter animation"},
+    {"question": "Should a UI separate things with a solid border or a semi-transparent shadow?", "options": [{"name": "Solid border", "effect": "What agents tend to choose; the README treats it as a wrong ingredient", "when": "Not given by the source"}, {"name": "Semi-transparent shadow", "effect": "The ingredient the README treats as correct", "when": "Setting UI surfaces apart"}], "recommendation": "Semi-transparent shadow; the README lists a solid border in its place as a small mistake that compounds.", "maps_to": "Q-depth-01", "evidence": "solid border instead of a semi-transparent shadow"},
+    {"question": "Which of the author's skills fits the job at hand?", "options": [{"name": "animate", "effect": "Builds a new animation with the right curve, duration and properties", "when": "Creating an animation from scratch"}, {"name": "review-animations", "effect": "Strict review against the author's rules", "when": "Checking animations that already exist"}, {"name": "improve-animations", "effect": "Codebase-wide audit with prioritized, self-contained plans any agent can execute", "when": "Improving all animations in a codebase"}, {"name": "find-animation-opportunities", "effect": "Finds places that genuinely benefit from motion and says what not to animate", "when": "Deciding where to add motion"}, {"name": "animation-vocabulary", "effect": "Supplies the exact words for an effect", "when": "Prompting an AI for a specific animation"}, {"name": "pick-ui-library", "effect": "Chooses a trusted library instead of hand-rolled code or an abandoned package", "when": "A component like a toast is needed"}, {"name": "prototype", "effect": "Several versions of a UI piece with a switcher", "when": "Comparing directions before committing"}, {"name": "mobile-native", "effect": "Fixes that make a web app feel native on a phone", "when": "A web app is used on phones"}, {"name": "animate-expo", "effect": "Same motion bar for React Native and Expo", "when": "Building in React Native or Expo"}, {"name": "apple-design", "effect": "Apple's interface and fluid-motion principles for the web", "when": "Aiming for Apple-style interaction and motion"}, {"name": "emil-design-eng", "effect": "Main skill, mostly animation plus some design advice", "when": "General design-engineering guidance"}, {"name": "ask-sonner", "effect": "Setup, styling, recipes and fixes for Sonner toasts", "when": "Working with Sonner"}, {"name": "write-swift", "effect": "Modern Swift practices", "when": "Writing Swift"}], "recommendation": null, "maps_to": null, "evidence": "## Reference"}
+  ],
+  "process": [
+    {"step": "Install the skills", "detail": "Run npx skills@latest add emilkowalski/skills."},
+    {"step": "Name the effect", "detail": "Use animation-vocabulary to find the exact term for an effect before asking an AI to build it [inferred order]."},
+    {"step": "Prototype variants", "detail": "Build several versions of the UI piece and go through them with a switcher [inferred order]."},
+    {"step": "Build the animation", "detail": "Use animate to choose the correct curve, duration and properties [inferred order]."},
+    {"step": "Review and audit", "detail": "Review animations strictly with review-animations; for a whole codebase, run improve-animations to get prioritized, self-contained plans any agent can execute. The ordering of these steps is not given by the source [inferred]."}
+  ],
+  "examples": [
+    {"what": "An agent using ease-in on an enter animation", "where": "AI agents generally", "visual_note": "No visual; the README's first example of an agent picking the wrong animation ingredient, where ease-out is correct."},
+    {"what": "An agent using a solid border instead of a semi-transparent shadow", "where": "AI agents generally", "visual_note": "No visual; the README's second example of a small wrong choice that compounds across an interface."}
+  ],
+  "numbers": [
+    {"value": "100vh", "context": "The '100vh bug' named among mobile web problems the mobile-native skill fixes", "evidence": "mobile-native"},
+    {"value": "Swift 6", "context": "The concurrency model the write-swift skill targets", "evidence": "write-swift"}
+  ],
+  "caveats": [
+    "Contains self-promotion: a newsletter signup at animations.dev/skills and a header image linking to animations.dev.",
+    "The README only summarizes each skill; the detailed rules live in the individual skill files, which are separate sources.",
+    "The skill list and install command reflect commit 85e8e23 and may change.",
+    "The authority rests on the author's experience at Vercel and Linear, not on cited studies.",
+    "write-swift is a general coding skill, not a design rule; it is kept for iOS projects only.",
+    "The README states that enter animations should be ease-out but not why; the reason is in the linked 7 Practical Animation Tips article, a separate source.",
+    "The shadow-over-border example gives no scope (which elements) and no values (opacity, blur), so it is recorded as a should, not a locked must; the detailed rule should come from the skill files.",
+    "Skill descriptions are summaries of what each skill does, so the rules drawn from them (review strictly, audit into plans, name effects, prototype variants) are recorded as should or consider, not must."
+  ]
+}

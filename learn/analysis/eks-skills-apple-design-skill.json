@@ -1,0 +1,2305 @@
+{
+  "summary": "This agent skill from emilkowalski/skills distils Apple's WWDC design talks, chiefly Designing Fluid Interfaces (WWDC 2018), and translates them to the web with CSS, Pointer Events, requestAnimationFrame and spring libraries such as Motion. Its core idea is that an interface feels alive when motion starts from the current on-screen value, inherits the user's velocity, projects momentum forward and can be grabbed and reversed at any moment, with springs as the tool that makes this natural. It gives exact values: Apple's spring damping and response pairs, a momentum projection function, a rubber-band formula, ~10px gesture hysteresis, press feedback at scale(0.97) over 100ms, and type tracking of -0.02em for display text. It also covers translucent materials and depth, audio-haptic feedback, three accessibility media queries (reduced motion, reduced transparency, more contrast), size-specific typography, Apple's eight design principles and a short design process. For a design system it is a ready set of motion, material, typography and interaction standards that can be written as tokens and component rules.",
+  "key_ideas": [
+    "Fluid means motion starts from the current on-screen value, inherits the user's velocity, projects momentum and can be grabbed and reversed at any instant.",
+    "Response is the foundation: give feedback on pointer-down and remove every non-essential delay on the input path.",
+    "Direct manipulation means 1:1 tracking that respects where the user grabbed the element.",
+    "Interruptibility is the single most important principle; never lock out input and always animate from the live presentation value.",
+    "Use springs for anything a user can touch, described by damping ratio and response rather than mass, stiffness and damping.",
+    "Critically damped springs (damping 1.0) are the default; bounce (damping ~0.8) is reserved for interactions that carried momentum.",
+    "Hand the release velocity to the spring and project the resting point from velocity before choosing a snap target.",
+    "Keep spatial consistency: enter and exit along the same path, and anchor popovers and sheets to their trigger.",
+    "Rubber-band at boundaries instead of stopping hard.",
+    "Translucent materials express hierarchy; heavier materials for structure, lighter for interactive elements, and never light glass on light glass.",
+    "Sound, haptics and visuals must be causal, fire on the same frame, and be used only where they earn their place.",
+    "Reduced motion means a gentler, non-vestibular equivalent (cross-fades), not no feedback; also honour reduced transparency and more contrast.",
+    "Typography changes with size: size-specific tracking, leading inverse to size, hierarchy from weight, size and leading together, and respect for the user's text size.",
+    "Apple's eight principles (purpose, agency, responsibility, familiarity, flexibility, simplicity, craft, delight) are the names to reason with.",
+    "Prototype interactively, design interaction and visuals together, and review motion frame by frame."
+  ],
+  "entities": [
+    {
+      "name": "Apple",
+      "type": "company",
+      "description": "Source of the design approach, values and principles the skill translates for the web."
+    },
+    {
+      "name": "Designing Fluid Interfaces (WWDC 2018)",
+      "type": "product",
+      "description": "The main WWDC talk the skill draws on; its sample code supplies the momentum projection function."
+    },
+    {
+      "name": "The Details of UI Typography (WWDC 2020)",
+      "type": "product",
+      "description": "WWDC talk cited for the optical sizing, tracking and leading guidance."
+    },
+    {
+      "name": "Designing Audio-Haptic Experiences",
+      "type": "product",
+      "description": "Apple talk cited for the three rules of multimodal feedback: causality, harmony, utility."
+    },
+    {
+      "name": "Principles of Great Design (WWDC 2026)",
+      "type": "product",
+      "description": "Apple talk cited for the eight design principles."
+    },
+    {
+      "name": "emilkowalski/skills",
+      "type": "product",
+      "description": "The MIT-licensed GitHub repository of agent skills that contains this apple-design skill."
+    },
+    {
+      "name": "Motion / Framer Motion",
+      "type": "library",
+      "description": "Spring animation library whose bounce and duration API maps closely to Apple's damping and response, and which takes absolute px/s velocity."
+    },
+    {
+      "name": "Pointer Events",
+      "type": "tool",
+      "description": "Web input API used with setPointerCapture for 1:1 drag tracking."
+    },
+    {
+      "name": "requestAnimationFrame",
+      "type": "tool",
+      "description": "The web's display-synced clock, the counterpart of Apple's CADisplayLink."
+    },
+    {
+      "name": "CADisplayLink",
+      "type": "tool",
+      "description": "Apple's display-synced timer, named as the native equivalent of requestAnimationFrame."
+    },
+    {
+      "name": "backdrop-filter",
+      "type": "tool",
+      "description": "CSS property used to approximate Apple's translucent materials on the web."
+    },
+    {
+      "name": "Vibration API",
+      "type": "tool",
+      "description": "Web API for haptics that must fire on the same frame as the visual change."
+    },
+    {
+      "name": "Vaul",
+      "type": "library",
+      "description": "Bottom-sheet library named as an example of momentum projection done well."
+    },
+    {
+      "name": "Embla",
+      "type": "library",
+      "description": "Carousel library named as an example of momentum projection done well."
+    },
+    {
+      "name": "Control Center",
+      "type": "product",
+      "description": "iOS feature whose modules grow up and out toward the finger, the example of hinting in the direction of a gesture."
+    },
+    {
+      "name": "Dynamic Type",
+      "type": "concept",
+      "description": "Apple's user text-size setting; the skill says layouts should scale with it."
+    },
+    {
+      "name": "Damping ratio",
+      "type": "concept",
+      "description": "Spring parameter that controls overshoot; 1.0 is critically damped, below 1.0 bounces."
+    },
+    {
+      "name": "Response",
+      "type": "concept",
+      "description": "Spring parameter in seconds for how quickly the value reaches the target; not a duration."
+    },
+    {
+      "name": "Presentation value",
+      "type": "concept",
+      "description": "The live on-screen value an interrupted animation must start from."
+    },
+    {
+      "name": "Additive animations",
+      "type": "concept",
+      "description": "iOS's native way of carrying velocity through a re-targeted animation."
+    },
+    {
+      "name": "Momentum projection",
+      "type": "concept",
+      "description": "Using release velocity to predict where a flicked element would come to rest, then snapping near that point."
+    },
+    {
+      "name": "Rubber-banding",
+      "type": "concept",
+      "description": "Progressive resistance past a boundary instead of a hard stop."
+    },
+    {
+      "name": "Hysteresis",
+      "type": "concept",
+      "description": "A small movement threshold or hit padding (~10px) before a gesture commits or a tap cancels."
+    },
+    {
+      "name": "Vibrancy",
+      "type": "concept",
+      "description": "Keeping text legible over translucent surfaces with higher contrast, heavier weight and slightly wider letter-spacing."
+    },
+    {
+      "name": "Scroll edge effect",
+      "type": "concept",
+      "description": "A small blur or gradient mask where content meets floating chrome, used instead of a hard divider."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Motion principles",
+      "summary": "Motion should start from the current value, inherit velocity, project momentum and be interruptible; enter and exit along the same path; hint toward the outcome; motion is designed together with visuals."
+    },
+    {
+      "name": "Spring animation",
+      "summary": "Use springs for anything touchable, described by damping ratio and response; damping 1.0 by default, ~0.8 only after momentum; Apple's values for move (1.0/0.4), rotation (0.8/0.4) and drawer (0.8/0.3); Motion mapping bounce 0 or 0.2 with duration 0.4."
+    },
+    {
+      "name": "Easing and timing",
+      "summary": "Press feedback transitions transform over 100ms ease-out; reversible transitions mirror their easing with inverse cubic-bezier control points; a spring's response is not a duration."
+    },
+    {
+      "name": "Gestures and drag",
+      "summary": "1:1 tracking with pointer capture and grab offset, velocity history, velocity handoff, momentum projection with deceleration rate 0.998 or 0.99, rubber-banding with constant 0.55, ~10px hysteresis, parallel gesture detection and commit-or-reverse by velocity sign."
+    },
+    {
+      "name": "Micro-interactions",
+      "summary": "Buttons highlight instantly on press with scale(0.97); taps commit on release and can be cancelled by dragging away; feedback is continuous during a gesture."
+    },
+    {
+      "name": "Animation performance",
+      "summary": "Animate only transform and opacity, use requestAnimationFrame, hint with will-change, keep per-frame change below the perception threshold, and use subtle motion blur or stretch for very fast motion."
+    },
+    {
+      "name": "Reduced motion",
+      "summary": "Reduced motion swaps slides, springs and parallax for short opacity cross-fades and drops overshoot while keeping helpful opacity and colour changes; also avoid full-viewport moving backgrounds, ~0.2 Hz loops and abrupt brightness jumps."
+    },
+    {
+      "name": "Accessibility",
+      "summary": "Components respond to prefers-reduced-motion, prefers-reduced-transparency and prefers-contrast: more, respect the user's text size with rem/em spacing, and keep text legible over translucent surfaces."
+    },
+    {
+      "name": "Depth, shadows and borders",
+      "summary": "Translucent materials convey hierarchy; bigger surfaces get stronger blur and deeper shadow; context-aware shadows; scrims for modal tasks only; scroll edge effects instead of 1px dividers; a bright top border as light catching the material."
+    },
+    {
+      "name": "Typography",
+      "summary": "Tracking is size-specific (negative for display, e.g. -0.02em; near 0 for body); leading tightens as size grows (1.05 display, 1.5 body); hierarchy from weight, size and leading together; system font by default; font-optical-sizing: auto."
+    },
+    {
+      "name": "Visual hierarchy",
+      "summary": "Build hierarchy with order, spacing and contrast so the most important thing is the most obvious, and in type with weight, size and leading as a set."
+    },
+    {
+      "name": "Spacing and layout",
+      "summary": "Proximity implies relationship; place controls near what they affect and mirror what they change; use rem/em spacing so layouts grow with text size."
+    },
+    {
+      "name": "Drawers and sheets",
+      "summary": "Sheets use a spring of damping 0.8 and response 0.3; flicks project to a snap point; a grabbed closing sheet follows the finger; stacked sheets progressively dim and push back their parents."
+    },
+    {
+      "name": "Modals and popovers",
+      "summary": "Popovers and menus originate from their trigger via transform-origin; modal tasks pair the surface with a dimming scrim while non-blocking panels use translucency without a scrim; confirmation dialogs are only for destructive, irreversible actions."
+    },
+    {
+      "name": "Buttons and actions",
+      "summary": "Buttons respond on pointer-down with an instant scale(0.97) press state and commit on release, with ~10px hit padding."
+    },
+    {
+      "name": "Feedback, empty and loading states",
+      "summary": "Feedback comes in four kinds (status, completion, warning, error); confirm meaningful actions, expose ongoing status, warn before problems; sound and haptics only for meaningful moments."
+    },
+    {
+      "name": "Forms and inputs",
+      "summary": "Validate inline rather than on submit."
+    },
+    {
+      "name": "Navigation and sidebars",
+      "summary": "Every screen answers where am I, where can I go, what's there and how do I get out; nav items get specific names like Progress or Library rather than Home; sidebars use heavier materials."
+    },
+    {
+      "name": "Content and microcopy",
+      "summary": "Plain language without jargon, fewer steps, and direct, specific labels over safe generic ones."
+    },
+    {
+      "name": "Dark mode and themes",
+      "summary": "Colours should adapt to light and dark, and theme changes between dark and light should be eased to avoid abrupt brightness jumps."
+    },
+    {
+      "name": "Design taste and judgement",
+      "summary": "Apple's eight principles; craft means every spacing, timing and alignment value is a deliberate, defensible choice; delight comes from getting the other seven right."
+    },
+    {
+      "name": "Design process",
+      "summary": "Prototype interactively, design interaction and visuals together, test with real people in real context and review motion in slow motion."
+    },
+    {
+      "name": "Prototyping",
+      "summary": "An interactive demo is worth a million static designs and sets a concrete bar that prevents a mediocre final build."
+    },
+    {
+      "name": "Web implementation (CSS and React)",
+      "summary": "Code for press feedback, pointer capture with grab offset, Motion springs, projection and rubber-band functions, a backdrop-filter toolbar, reduced-motion and reduced-transparency media queries, and a display type style."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "An interface feels alive when motion starts from the current on-screen value, inherits the user's velocity, projects momentum forward and can be grabbed and reversed at any instant.",
+      "evidence": "The through-line"
+    },
+    {
+      "claim": "Springs make fluid motion natural because they are inherently interruptible and velocity-aware.",
+      "evidence": "The through-line"
+    },
+    {
+      "claim": "Apple frames design as serving four human needs: safety/predictability, understanding, achievement and joy.",
+      "evidence": "The Core Idea"
+    },
+    {
+      "claim": "The moment lag appears, the feeling of directness falls off a cliff.",
+      "evidence": "1. Response — kill latency"
+    },
+    {
+      "claim": "Waiting for click or touch-up to show feedback feels dead.",
+      "evidence": "Respond on pointer-down, not on release"
+    },
+    {
+      "claim": "Snapping a dragged element to its center on grab breaks the illusion immediately.",
+      "evidence": "2. Direct manipulation — 1:1 tracking"
+    },
+    {
+      "claim": "Starting an interrupted animation from the logical or target value causes a visible jump.",
+      "evidence": "Always animate from the presentation (current) value"
+    },
+    {
+      "claim": "CSS transitions and @keyframes cannot be smoothly grabbed and reversed mid-flight, while springs animate from the current value by default.",
+      "evidence": "Avoid CSS transitions and @keyframes for anything gesture-driven"
+    },
+    {
+      "claim": "Replacing one animation with another at a reversal creates a velocity discontinuity, a brick wall.",
+      "evidence": "When a gesture reverses, blend velocity"
+    },
+    {
+      "claim": "A single spring on a 2D distance desyncs when X and Y have different velocities.",
+      "evidence": "Decompose 2D motion into independent X and Y springs"
+    },
+    {
+      "claim": "A pre-scripted fixed-duration animation cannot respond to new input; a spring can, because new input just changes the target.",
+      "evidence": "4. Behavior over animation — use springs"
+    },
+    {
+      "claim": "Apple deliberately replaced mass, stiffness and damping with two designer-friendly parameters, damping ratio and response.",
+      "evidence": "Apple deliberately replaced the physics triplet"
+    },
+    {
+      "claim": "A spring has no fixed duration; its settle time emerges from its parameters.",
+      "evidence": "This is not \"duration\""
+    },
+    {
+      "claim": "Overshoot on a menu that just faded in feels wrong; overshoot on a card you flicked feels right.",
+      "evidence": "Add bounce (damping ~0.8) only when the gesture itself carried momentum"
+    },
+    {
+      "claim": "Apple ships damping 1.0 / response 0.4 for move or reposition (e.g. PiP), 0.8 / 0.4 for rotation and 0.8 / 0.3 for drawer or sheet.",
+      "evidence": "Concrete values Apple ships"
+    },
+    {
+      "claim": "Motion's bounce and duration spring API maps closely to Apple's damping and response.",
+      "evidence": "Web mapping (Motion / Framer Motion)"
+    },
+    {
+      "claim": "Continuing the animation at the finger's exact velocity after release is the detail that most separates fluid from fine.",
+      "evidence": "5. Velocity handoff"
+    },
+    {
+      "claim": "Framer Motion and Motion take absolute px/s velocity directly through the velocity option.",
+      "evidence": "Framer Motion / Motion take absolute px/s velocity directly"
+    },
+    {
+      "claim": "Projecting the resting position from velocity is what makes a flick feel like it throws the element.",
+      "evidence": "6. Momentum projection"
+    },
+    {
+      "claim": "Apple ships an exponential-decay projection, not the textbook v²/(2·decel).",
+      "evidence": "Note: the physics-textbook"
+    },
+    {
+      "claim": "Momentum projection is standard behaviour in good bottom-sheets and carousels such as Vaul and Embla.",
+      "evidence": "This is the standard behavior in good bottom-sheets and carousels"
+    },
+    {
+      "claim": "Entering from the right and exiting out the bottom feels disconnected and confusing.",
+      "evidence": "Enter and exit along the same path"
+    },
+    {
+      "claim": "Humans predict a final state from a trajectory.",
+      "evidence": "8. Hint in the direction of the gesture"
+    },
+    {
+      "claim": "A hard stop at an edge reads as frozen, while continuous resistance reads as responsive but with nothing more there.",
+      "evidence": "9. Rubber-banding — soft boundaries"
+    },
+    {
+      "claim": "Recognizers that only report a final state throw away the continuous tracking needed for feedback.",
+      "evidence": "Detect all plausible gestures in parallel"
+    },
+    {
+      "claim": "Double-tap detection unavoidably delays single taps.",
+      "evidence": "Minimize disambiguation delays"
+    },
+    {
+      "claim": "Smoothness is about what is in the frames, not just the frame rate.",
+      "evidence": "11. Frame-level smoothness"
+    },
+    {
+      "claim": "For very fast motion, a subtle motion blur or stretch encodes speed and reads better than a hard sharp streak.",
+      "evidence": "11. Frame-level smoothness"
+    },
+    {
+      "claim": "Stacking a light translucent surface on another makes legibility collapse.",
+      "evidence": "Never stack a light translucent surface on another"
+    },
+    {
+      "claim": "Over-feedback trains users to ignore all feedback.",
+      "evidence": "Utility"
+    },
+    {
+      "claim": "Latency between visual, sound and haptic destroys the illusion.",
+      "evidence": "Harmony"
+    },
+    {
+      "claim": "Large display text reads with letters too far apart as it grows, so it wants negative tracking; small text wants slightly positive tracking.",
+      "evidence": "Tracking (letter-spacing) is size-specific"
+    },
+    {
+      "claim": "Weight adds presence without taking more space.",
+      "evidence": "Emphasize with weight"
+    },
+    {
+      "claim": "The platform system font already ships optical sizing, tracking tables and legibility tuning.",
+      "evidence": "Default to the platform's system font"
+    },
+    {
+      "claim": "Overusing confirmation dialogs trains people to click through.",
+      "evidence": "Agency"
+    },
+    {
+      "claim": "Burying everything in one place looks minimal but isn't simple.",
+      "evidence": "Simplicity — not minimalism"
+    },
+    {
+      "claim": "Jittery scroll, misaligned icons and layouts that break on rotation read as carelessness.",
+      "evidence": "Craft"
+    },
+    {
+      "claim": "If you need a label to explain a control, the mapping is weak.",
+      "evidence": "Grouping & mapping"
+    },
+    {
+      "claim": "Specific labels create predictability.",
+      "evidence": "Direct, specific labels beat safe generic ones"
+    },
+    {
+      "claim": "A working prototype sets a concrete bar that prevents a mediocre final implementation.",
+      "evidence": "17. Process"
+    },
+    {
+      "claim": "An interface is fluid when it behaves like the physical world: things respond instantly, move continuously, carry momentum, resist at boundaries and can be redirected mid-motion.",
+      "evidence": "The Core Idea"
+    }
+  ],
+  "quotes": [
+    "Touch and content should move together.",
+    "The thought and the gesture happen in parallel.",
+    "If something disappears one way, we expect it to emerge from where it came."
+  ],
+  "tags": [
+    "apple",
+    "wwdc",
+    "fluid-interfaces",
+    "springs",
+    "interruptibility",
+    "velocity-handoff",
+    "momentum-projection",
+    "rubber-banding",
+    "gestures",
+    "pointer-events",
+    "hysteresis",
+    "materials",
+    "backdrop-filter",
+    "haptics",
+    "reduced-motion",
+    "reduced-transparency",
+    "prefers-contrast",
+    "typography",
+    "tracking",
+    "leading",
+    "design-principles",
+    "prototyping"
+  ],
+  "authority": "non-negotiable",
+  "rules": [
+    {
+      "rule": "Respond on pointer-down, not on release: highlight a button the instant it is pressed.",
+      "why": "Waiting for click or touch-up to show feedback feels dead; response is the foundation everything else is built on.",
+      "kind": "do",
+      "strength": "must",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Respond on pointer-down, not on release"
+    },
+    {
+      "rule": "Give buttons an instant press state: on :active apply transform: scale(0.97) with transition: transform 100ms ease-out.",
+      "why": "Feedback lives on the press, and it's instant.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "css",
+      "values": [
+        "scale(0.97)",
+        "100ms",
+        "ease-out",
+        "transition: transform 100ms ease-out"
+      ],
+      "evidence": "Feedback lives on the press, and it's instant"
+    },
+    {
+      "rule": "Audit every latency on the input path (debounces, artificial timers, transition waits, the ~300ms tap delay) and remove anything that is not essential.",
+      "why": "The moment lag appears, the feeling of directness falls off a cliff; anything non-essential on the input path is a regression.",
+      "kind": "do",
+      "strength": "must",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [
+        "~300ms"
+      ],
+      "evidence": "Be vigilant about every latency"
+    },
+    {
+      "rule": "For a drag, slider or drawer, update the UI 1:1 with the pointer the whole way through the interaction; never animate only when the gesture completes.",
+      "why": "Feedback must be continuous during the interaction, not just at the end.",
+      "kind": "do",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "update the UI 1:1 with the pointer the whole way through"
+    },
+    {
+      "rule": "Keep a dragged element glued to the finger and preserve the offset from where the user grabbed it; do not snap the element's center to the pointer on grab.",
+      "why": "Touch and content should move together; snapping to the center breaks the illusion immediately.",
+      "kind": "do",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "grabOffset = e.clientY - el.getBoundingClientRect().top"
+      ],
+      "evidence": "2. Direct manipulation — 1:1 tracking"
+    },
+    {
+      "rule": "Track drags with Pointer Events and call setPointerCapture on pointerdown.",
+      "why": "Tracking then continues even when the pointer leaves the element's bounds.",
+      "kind": "do",
+      "strength": "should",
+      "area": "tooling",
+      "applies_to": "web",
+      "values": [
+        "setPointerCapture(e.pointerId)"
+      ],
+      "evidence": "so tracking continues even when the pointer leaves the element's bounds"
+    },
+    {
+      "rule": "Record a short position and timestamp history (the last few pointermove events), not just the current point.",
+      "why": "You will need velocity at release.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "not just the current point — you'll need velocity at release"
+    },
+    {
+      "rule": "Make every animation interruptible and redirectable at any moment, so a user can grab a moving element mid-flight and reverse it without waiting.",
+      "why": "Interruptibility is the single most important principle; the thought and the gesture happen in parallel.",
+      "kind": "do",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "3. Interruptibility — the single most important principle"
+    },
+    {
+      "rule": "When a user grabs a closing modal or sheet again, make it follow the finger immediately rather than finishing the close and then reopening.",
+      "why": "Every animation must be interruptible and redirectable at any moment.",
+      "kind": "do",
+      "strength": "must",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "A closing modal the user grabs again should follow the finger"
+    },
+    {
+      "rule": "Never lock out input during a transition.",
+      "why": "Users must be able to redirect motion at any instant.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Never lock out input during a transition"
+    },
+    {
+      "rule": "On interrupt, read the element's live on-screen (presentation) transform and start the new animation from there, never from the target or logical value.",
+      "why": "Starting from the logical or target value causes a visible jump.",
+      "kind": "do",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "read the element's live on-screen transform and start the new animation from there"
+    },
+    {
+      "rule": "Do not use CSS transitions or @keyframes for anything gesture-driven; use springs.",
+      "why": "They cannot be smoothly grabbed and reversed mid-flight, while springs animate from the current value by default.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "css",
+      "values": [],
+      "evidence": "they can't be smoothly grabbed and reversed mid-flight"
+    },
+    {
+      "rule": "When a gesture reverses, blend velocity through the re-target instead of hard-cutting to a new animation; choose a spring library that re-targets from the current velocity.",
+      "why": "Replacing one animation with another at a reversal creates a velocity discontinuity, a brick wall (iOS does this natively with additive animations).",
+      "kind": "do",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "When a gesture reverses, blend velocity — don't hard-cut it"
+    },
+    {
+      "rule": "Animate 2D motion with two independent springs, one for X and one for Y, not one spring on the 2D distance.",
+      "why": "A single spring on a 2D distance desyncs when X and Y have different velocities.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Decompose 2D motion into independent X and Y springs"
+    },
+    {
+      "rule": "Use springs, not pre-scripted fixed-duration animations, for anything a user can touch.",
+      "why": "A fixed-duration animation cannot respond to new input; with a spring, new input just changes the target and motion stays continuous.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "4. Behavior over animation — use springs"
+    },
+    {
+      "rule": "Specify springs with two parameters, damping ratio and response, rather than mass, stiffness and damping.",
+      "why": "Apple deliberately replaced the physics triplet with these two designer-friendly parameters.",
+      "kind": "do",
+      "strength": "should",
+      "area": "tokens",
+      "applies_to": "all",
+      "values": [
+        "1.0 = critically damped",
+        "< 1.0 = overshoots and oscillates"
+      ],
+      "evidence": "Apple deliberately replaced the physics triplet"
+    },
+    {
+      "rule": "Do not treat a spring's response as a duration; its settle time emerges from the parameters.",
+      "why": "A spring has no fixed duration; response is how quickly the value reaches the target, in seconds.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "tokens",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "This is not \"duration\""
+    },
+    {
+      "rule": "Default UI springs to damping 1.0 (critically damped, no overshoot) with response 0.3-0.4.",
+      "why": "Critically damped motion is graceful and non-distracting; the source calls damping 1.0 everywhere by default a safe house style.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "damping 1.0",
+        "response 0.3–0.4"
+      ],
+      "evidence": "(critically damped) — graceful and non-distracting"
+    },
+    {
+      "rule": "Add bounce (damping ~0.8, response 0.3-0.4) only when the gesture itself carried momentum, such as a flick, a throw or a drag release.",
+      "why": "Overshoot on a card you flicked feels right.",
+      "kind": "do",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "damping ~0.8",
+        "response 0.3–0.4"
+      ],
+      "evidence": "only when the gesture itself carried momentum"
+    },
+    {
+      "rule": "Do not overshoot on elements that appear without a gesture, such as a menu that just faded in.",
+      "why": "Overshoot on a menu that just faded in feels wrong.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Overshoot on a menu that just faded in feels wrong"
+    },
+    {
+      "rule": "For moving or repositioning an element (e.g. picture-in-picture), use a spring with damping 1.0 and response 0.4.",
+      "why": "These are the values Apple ships for move/reposition.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "1.0",
+        "0.4"
+      ],
+      "evidence": "Move / reposition (e.g. PiP)"
+    },
+    {
+      "rule": "For rotation, use a spring with damping 0.8 and response 0.4.",
+      "why": "These are the values Apple ships for rotation.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "0.8",
+        "0.4"
+      ],
+      "evidence": "Rotation | `0.8` | `0.4`"
+    },
+    {
+      "rule": "For drawers and sheets, use a spring with damping 0.8 and response 0.3.",
+      "why": "These are the values Apple ships for drawer/sheet.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "0.8",
+        "0.3"
+      ],
+      "evidence": "Drawer / sheet | `0.8` | `0.3`"
+    },
+    {
+      "rule": "In Motion / Framer Motion, express the default spring as { type: 'spring', bounce: 0, duration: 0.4 } and a momentum spring as { type: 'spring', bounce: 0.2, duration: 0.4 }.",
+      "why": "Motion's bounce + duration API maps closely to Apple's damping + response; bounce is reserved for momentum-driven, physical interactions.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "web",
+      "values": [
+        "type: 'spring', bounce: 0, duration: 0.4",
+        "type: 'spring', bounce: 0.2, duration: 0.4"
+      ],
+      "evidence": "Web mapping (Motion / Framer Motion)"
+    },
+    {
+      "rule": "When a gesture ends, pass the pointer's release velocity as the spring's initial velocity so the animation continues at the finger's exact speed.",
+      "why": "There is then no visible seam between dragging and animating; this detail most separates fluid from fine.",
+      "kind": "do",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "5. Velocity handoff — the seam between drag and animation"
+    },
+    {
+      "rule": "If the spring API wants relative velocity, normalise the release velocity by the remaining distance: relativeVelocity = gestureVelocity / (targetValue − currentValue).",
+      "why": "Some spring APIs take relative velocity; e.g. at y=50 with target y=150 and the finger moving 50px/s, the initial velocity is 50 / 100 = 0.5.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "relativeVelocity = gestureVelocity / (targetValue − currentValue)",
+        "50 / 100 = 0.5"
+      ],
+      "evidence": "normalize it by the remaining distance to the target"
+    },
+    {
+      "rule": "In Motion / Framer Motion, hand the raw absolute px/s release velocity to the velocity option instead of normalising it.",
+      "why": "Framer Motion / Motion take absolute px/s velocity directly.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "web",
+      "values": [
+        "velocity"
+      ],
+      "evidence": "Framer Motion / Motion take absolute px/s velocity directly"
+    },
+    {
+      "rule": "Do not snap to the boundary nearest the release point; project the resting position from the release velocity and snap to the target nearest that projected point.",
+      "why": "This is what makes a flick feel like it throws the element, like scroll deceleration.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "6. Momentum projection — animate to where the gesture is going"
+    },
+    {
+      "rule": "Project momentum with Apple's exponential-decay function: (initialVelocity / 1000) * decelerationRate / (1 - decelerationRate), with decelerationRate ≈ 0.998 for normal scroll feel or 0.99 for snappier, then add it to the current position.",
+      "why": "It is Apple's exact projection function from the Designing Fluid Interfaces sample code.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "(initialVelocity / 1000) * decelerationRate / (1 - decelerationRate)",
+        "decelerationRate ≈ 0.998",
+        "0.99",
+        "current + (v/1000)·d/(1−d)"
+      ],
+      "evidence": "Apple's exact projection function"
+    },
+    {
+      "rule": "Do not use the physics-textbook projection v²/(2·decel).",
+      "why": "It is not what Apple ships; use the exponential-decay form.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "v²/(2·decel)"
+      ],
+      "evidence": "use the exponential-decay form above"
+    },
+    {
+      "rule": "Decide whether to reverse or commit a gesture at release by the sign of the velocity, not by the position.",
+      "why": "Listed in the Quick Reference as the way to decide reverse vs. commit.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Decide reverse vs. commit"
+    },
+    {
+      "rule": "Make elements enter and exit along the same path: a panel that slides in from the right must dismiss to the right.",
+      "why": "In-from-right / out-the-bottom feels disconnected and confusing; if something disappears one way, we expect it to emerge from where it came.",
+      "kind": "do",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Enter and exit along the same path"
+    },
+    {
+      "rule": "Make menus, popovers and sheets originate from the element that triggered them by setting transform-origin to the trigger, so popovers scale from their trigger, not their center.",
+      "why": "The spatial relationship between button and content becomes obvious.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "transform-origin"
+      ],
+      "evidence": "Anchor interactions to their source"
+    },
+    {
+      "rule": "Mirror the easing on reversible transitions using inverse cubic-bézier control points for the two directions.",
+      "why": "The outbound path then matches the return path.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "inverse cubic-bézier"
+      ],
+      "evidence": "Mirror the easing on reversible transitions"
+    },
+    {
+      "rule": "Make intermediate frames telegraph where the motion is going, e.g. growing up and out toward the finger, rather than interpolating blindly.",
+      "why": "Humans predict a final state from a trajectory, as with Control Center modules.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "8. Hint in the direction of the gesture"
+    },
+    {
+      "rule": "At a boundary, rubber-band with progressively increasing resistance instead of stopping hard.",
+      "why": "A hard stop reads as frozen; continuous resistance reads as responsive but with nothing more there.",
+      "kind": "do",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "9. Rubber-banding — soft boundaries"
+    },
+    {
+      "rule": "Compute rubber-band displacement as (overshoot * dimension * constant) / (dimension + constant * Math.abs(overshoot)) with constant = 0.55.",
+      "why": "The further past the bound, the less the element follows; real things slow before they stop.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "constant = 0.55",
+        "(overshoot * dimension * constant) / (dimension + constant * Math.abs(overshoot))"
+      ],
+      "evidence": "function rubberband"
+    },
+    {
+      "rule": "For taps, highlight on touch-down and commit on touch-up.",
+      "why": "Feedback is instant on press while the action waits for release.",
+      "kind": "do",
+      "strength": "must",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "highlight on touch-*down* (instant), commit on touch-*up*"
+    },
+    {
+      "rule": "Add ~10px of hysteresis or hit padding around tap targets, and let users cancel a tap by dragging away and back.",
+      "why": "Part of the tap feel checklist.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [
+        "~10px"
+      ],
+      "evidence": "Add ~10px of hysteresis/hit padding"
+    },
+    {
+      "rule": "For drags and swipes, require a small movement threshold (~10px) before committing to a direction, then track 1:1.",
+      "why": "Part of the drag/swipe feel checklist.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "~10px"
+      ],
+      "evidence": "require a small movement threshold (hysteresis, ~10px) before committing to a direction"
+    },
+    {
+      "rule": "Detect all plausible gestures in parallel from the first move, then confidently cancel the losers once intent is clear.",
+      "why": "Recognizers that only report a final state throw away the continuous tracking needed for feedback.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Detect all plausible gestures in parallel from the first move"
+    },
+    {
+      "rule": "Do not use gesture recognizers that only report a final state (swipeleft-type events).",
+      "why": "They throw away the continuous tracking you need for feedback.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "tooling",
+      "applies_to": "web",
+      "values": [
+        "swipeleft"
+      ],
+      "evidence": "Avoid recognizers that only report a final state"
+    },
+    {
+      "rule": "Only add double-tap detection where a double-tap action truly exists.",
+      "why": "Double-tap detection unavoidably delays single taps.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Minimize disambiguation delays"
+    },
+    {
+      "rule": "Keep the per-frame positional change below the perception threshold.",
+      "why": "It avoids strobing; smoothness is about what is in the frames, not just frame rate.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "11. Frame-level smoothness"
+    },
+    {
+      "rule": "For very fast motion, add a subtle motion blur or stretch.",
+      "why": "It encodes speed and reads better than a hard sharp streak.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "encodes speed and reads better than a hard sharp streak"
+    },
+    {
+      "rule": "Drive frame-by-frame animation with requestAnimationFrame.",
+      "why": "It is the web's display-synced clock (Apple uses CADisplayLink).",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "web",
+      "values": [
+        "requestAnimationFrame"
+      ],
+      "evidence": "is the web's display-synced clock"
+    },
+    {
+      "rule": "Animate only compositor-friendly properties: transform and opacity.",
+      "why": "Part of frame-level smoothness.",
+      "kind": "do",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "web",
+      "values": [
+        "transform",
+        "opacity"
+      ],
+      "evidence": "Animate only compositor-friendly properties"
+    },
+    {
+      "rule": "Hint with will-change where motion is imminent.",
+      "why": "Part of frame-level smoothness.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "css",
+      "values": [
+        "will-change"
+      ],
+      "evidence": "where motion is imminent"
+    },
+    {
+      "rule": "Build nav bars, toolbars and sheets as translucent layers (backdrop-filter: blur() plus a semi-transparent background) with content scrolling underneath, not opaque bars that consume a fixed strip.",
+      "why": "Translucent materials act as a floating functional layer that brings structure without stealing focus.",
+      "kind": "do",
+      "strength": "should",
+      "area": "elevation",
+      "applies_to": "web",
+      "values": [
+        "backdrop-filter: blur()"
+      ],
+      "evidence": "Build nav/toolbars/sheets as translucent layers"
+    },
+    {
+      "rule": "Use darker, heavier materials to separate structural regions such as sidebars, and lighter materials to draw attention to interactive elements such as buttons.",
+      "why": "Material weight encodes hierarchy.",
+      "kind": "do",
+      "strength": "should",
+      "area": "elevation",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Material weight encodes hierarchy"
+    },
+    {
+      "rule": "Never stack a light translucent surface on another.",
+      "why": "Legibility collapses.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "elevation",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Never stack a light translucent surface on another"
+    },
+    {
+      "rule": "Make bigger surfaces read as thicker: give them stronger blur and a deeper shadow than small chips.",
+      "why": "Bigger surfaces should read as thicker material.",
+      "kind": "do",
+      "strength": "should",
+      "area": "elevation",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Bigger surfaces should read as thicker"
+    },
+    {
+      "rule": "Use context-aware shadow: heavier over busy or text content for separation, lighter over plain backgrounds.",
+      "why": "A heavier shadow over busy or text content gives separation.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "elevation",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Consider context-aware shadow"
+    },
+    {
+      "rule": "For a modal task, pair the surface with a dimming scrim and push the background back or down.",
+      "why": "Dim to focus.",
+      "kind": "do",
+      "strength": "should",
+      "area": "elevation",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Dim to focus, separate to keep flow"
+    },
+    {
+      "rule": "For a parallel, non-blocking panel, use translucency and offset without a scrim.",
+      "why": "Separate to keep flow, so the flow is not broken.",
+      "kind": "do",
+      "strength": "should",
+      "area": "elevation",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "A parallel, non-blocking panel uses translucency and offset without a scrim"
+    },
+    {
+      "rule": "For stacked sheets, progressively dim and push back each parent layer.",
+      "why": "Part of dimming to focus.",
+      "kind": "do",
+      "strength": "should",
+      "area": "elevation",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "For stacked sheets, progressively dim and push back each parent layer"
+    },
+    {
+      "rule": "Over blurred or translucent surfaces, do not use flat gray text; use higher contrast, a slightly heavier weight and a small letter-spacing bump.",
+      "why": "Vibrancy keeps text legible over changing backgrounds.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Vibrancy keeps text legible over changing backgrounds"
+    },
+    {
+      "rule": "Put color on a solid layer, not on the translucent foreground.",
+      "why": "Part of keeping content legible over translucent materials.",
+      "kind": "do",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Put color on a solid layer, not the translucent foreground"
+    },
+    {
+      "rule": "Instead of a 1px border under a sticky header, fade a small blur or gradient mask where content meets floating chrome, and only where floating UI actually overlaps content.",
+      "why": "Scroll edge effects, not hard dividers.",
+      "kind": "do",
+      "strength": "should",
+      "area": "elevation",
+      "applies_to": "all",
+      "values": [
+        "1px"
+      ],
+      "evidence": "Scroll edge effects, not hard dividers"
+    },
+    {
+      "rule": "For glass or blur surfaces, animate blur radius and scale together on enter and exit rather than a plain opacity fade.",
+      "why": "The surface reads as a real material arriving.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Materialize, don't just fade"
+    },
+    {
+      "rule": "Style a light translucent toolbar as background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(20px) saturate(180%); border-top: 1px solid rgba(255, 255, 255, 0.4).",
+      "why": "The bright top edge reads as light catching the material.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "elevation",
+      "applies_to": "css",
+      "values": [
+        "rgba(255, 255, 255, 0.6)",
+        "blur(20px) saturate(180%)",
+        "1px solid rgba(255, 255, 255, 0.4)"
+      ],
+      "evidence": "bright top edge = light catching the material"
+    },
+    {
+      "rule": "Trigger multimodal feedback on the actual causal event (the toggle flipping, the item snapping home) and match its character to the physicality of the action.",
+      "why": "Causality: it must be obvious what caused the feedback.",
+      "kind": "do",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "it must be obvious what caused the feedback"
+    },
+    {
+      "rule": "Fire the visual, the sound and the haptic on the same frame; do not let a CSS transition lag the audio or Vibration API haptic.",
+      "why": "Harmony: latency between them destroys the illusion.",
+      "kind": "do",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Latency between them destroys the illusion"
+    },
+    {
+      "rule": "Reserve haptics and sound for meaningful moments (success, error, commit, snap).",
+      "why": "Utility: over-feedback trains users to ignore all of it.",
+      "kind": "do",
+      "strength": "must",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [
+        "success",
+        "error",
+        "commit",
+        "snap"
+      ],
+      "evidence": "add feedback only where it earns its place"
+    },
+    {
+      "rule": "Treat reduced motion as a gentler, non-vestibular equivalent, not as removing feedback.",
+      "why": "Reduced motion doesn't mean no feedback.",
+      "kind": "do",
+      "strength": "must",
+      "area": "accessibility",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "14. Reduced motion & accessibility"
+    },
+    {
+      "rule": "Respond to three independent signals and bake them into your components: prefers-reduced-motion, prefers-reduced-transparency and prefers-contrast.",
+      "why": "Reduced motion doesn't mean no feedback; it means a gentler, non-vestibular equivalent, and each signal needs its own treatment.",
+      "kind": "do",
+      "strength": "must",
+      "area": "accessibility",
+      "applies_to": "web",
+      "values": [
+        "prefers-reduced-motion: reduce",
+        "prefers-reduced-transparency: reduce",
+        "prefers-contrast: more"
+      ],
+      "evidence": "Respond to three independent signals"
+    },
+    {
+      "rule": "Under prefers-reduced-motion: reduce, replace slides, springs and parallax with short opacity cross-fades or static transitions, drop elastic and overshoot, and keep opacity and colour changes that aid comprehension.",
+      "why": "It gives a gentler, non-vestibular equivalent.",
+      "kind": "do",
+      "strength": "must",
+      "area": "accessibility",
+      "applies_to": "web",
+      "values": [
+        ".sheet { transition: opacity 200ms ease; transform: none !important; }",
+        "200ms"
+      ],
+      "evidence": "prefers-reduced-motion: reduce"
+    },
+    {
+      "rule": "Under prefers-reduced-transparency: reduce, make translucent surfaces frostier or solid: raise background opacity and drop the blur.",
+      "why": "It is one of the three independent signals the source says to bake into components.",
+      "kind": "do",
+      "strength": "must",
+      "area": "accessibility",
+      "applies_to": "web",
+      "values": [
+        ".toolbar { background: white; backdrop-filter: none; }"
+      ],
+      "evidence": "prefers-reduced-transparency: reduce"
+    },
+    {
+      "rule": "Under prefers-contrast: more, use near-solid backgrounds with a defined, contrasting border.",
+      "why": "It is one of the three independent signals the source says to bake into components.",
+      "kind": "do",
+      "strength": "must",
+      "area": "accessibility",
+      "applies_to": "web",
+      "values": [
+        "prefers-contrast: more"
+      ],
+      "evidence": "prefers-contrast: more"
+    },
+    {
+      "rule": "Avoid full-viewport moving backgrounds.",
+      "why": "Listed among motion to avoid for accessibility.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "accessibility",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "avoid full-viewport moving backgrounds"
+    },
+    {
+      "rule": "Avoid slow looping oscillations near 0.2 Hz (one cycle per 5s).",
+      "why": "Listed among motion to avoid for accessibility.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "accessibility",
+      "applies_to": "all",
+      "values": [
+        "0.2 Hz",
+        "one cycle per 5s"
+      ],
+      "evidence": "slow looping oscillations (near 0.2 Hz / one cycle per 5s)"
+    },
+    {
+      "rule": "Avoid abrupt brightness jumps; ease theme changes between dark and light.",
+      "why": "Listed among changes to avoid for accessibility.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "accessibility",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "abrupt brightness jumps (ease dark↔light theme changes)"
+    },
+    {
+      "rule": "Make large moving objects semi-transparent while they travel.",
+      "why": "Part of the reduced-motion and accessibility guidance.",
+      "kind": "do",
+      "strength": "should",
+      "area": "accessibility",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Make large moving objects semi-transparent while they travel"
+    },
+    {
+      "rule": "During a large reposition, fade big surfaces out and fade them back in once settled.",
+      "why": "Part of the reduced-motion and accessibility guidance.",
+      "kind": "do",
+      "strength": "should",
+      "area": "accessibility",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "fade big surfaces out during a large reposition"
+    },
+    {
+      "rule": "Make tracking (letter-spacing) size-specific; never use one letter-spacing value for all sizes.",
+      "why": "A fixed letter-spacing is wrong somewhere.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Tracking (letter-spacing) is size-specific — never one value for all sizes"
+    },
+    {
+      "rule": "Give large display text negative tracking (e.g. letter-spacing: -0.02em) and small text slightly positive tracking; leave body text near 0.",
+      "why": "Letters read too far apart as text grows; small text needs slightly positive tracking for legibility.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [
+        "-0.02em",
+        "near 0"
+      ],
+      "evidence": "letters read too far apart as they grow"
+    },
+    {
+      "rule": "Set leading (line-height) inversely to size: tight on large headings (e.g. 1.05 for display), looser on body copy (e.g. 1.5).",
+      "why": "Leading tracks size inversely.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [
+        "line-height: 1.05",
+        "100%/1.5"
+      ],
+      "evidence": "Leading (line-height) tracks size inversely"
+    },
+    {
+      "rule": "Increase line-height for scripts with tall ascenders and descenders.",
+      "why": "Part of the leading guidance.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Increase it for scripts with tall ascenders/descenders"
+    },
+    {
+      "rule": "Tighten line-height for dense, information-heavy UI.",
+      "why": "Part of the leading guidance.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "tighten it for dense, information-heavy UI"
+    },
+    {
+      "rule": "Build type hierarchy from weight, size and leading as a set, not from size alone, and emphasise with weight.",
+      "why": "Weight adds presence without taking more space.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Build hierarchy from weight + size + leading as a set"
+    },
+    {
+      "rule": "Respect the user's text-size setting (Dynamic Type): scale layout with the text by using rem/em for spacing, not fixed px.",
+      "why": "A larger font then does not break the layout.",
+      "kind": "do",
+      "strength": "must",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [
+        "rem",
+        "em"
+      ],
+      "evidence": "Respect the user's text-size setting (Dynamic Type)"
+    },
+    {
+      "rule": "Default to the platform's system font (e.g. font: 100%/1.5 system-ui, sans-serif) before a custom face; override only with a reason.",
+      "why": "The system font already ships optical sizing, tracking tables and legibility tuning.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [
+        "font: 100%/1.5 system-ui, sans-serif"
+      ],
+      "evidence": "Default to the platform's system font"
+    },
+    {
+      "rule": "Style display text with fluid size, tight leading, negative tracking and optical sizing, e.g. font-size: clamp(2rem, 5vw, 4rem); line-height: 1.05; letter-spacing: -0.02em; font-optical-sizing: auto.",
+      "why": "Apple designs type to change shape with size; the same discipline applies on the web.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "typography",
+      "applies_to": "css",
+      "values": [
+        "clamp(2rem, 5vw, 4rem)",
+        "line-height: 1.05",
+        "letter-spacing: -0.02em",
+        "font-optical-sizing: auto"
+      ],
+      "evidence": "font-optical-sizing: auto"
+    },
+    {
+      "rule": "Decide what not to build; spend the user's time, attention and trust only on features that pay off.",
+      "why": "Purpose: every feature asks for the user's time, attention and trust.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Every feature asks for the user's time, attention, and trust"
+    },
+    {
+      "rule": "Keep people in control by offering choices instead of forcing a single path.",
+      "why": "Agency.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Keep people in control: offer choices, don't force a single path"
+    },
+    {
+      "rule": "Provide easy undo for slips, and use a confirmation dialog only for genuinely destructive, irreversible actions, sparingly.",
+      "why": "Forgiveness backs agency; overusing confirmations trains people to click through.",
+      "kind": "do",
+      "strength": "must",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "easy undo for slips, a confirmation dialog only for genuinely destructive, irreversible actions"
+    },
+    {
+      "rule": "Ask for private data at the right moment, only for what is needed, and transparently.",
+      "why": "Responsibility: act in the user's interest.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Privacy: ask at the right moment, only for what's needed, transparently"
+    },
+    {
+      "rule": "Anticipate misuse and harm, especially with AI features: add previews, confirmations and disclaimers, and cut a feature whose risk outweighs its value.",
+      "why": "Responsibility: e.g. an allergy-aware recipe app must not suggest a harmful ingredient.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Safety: anticipate misuse and harm"
+    },
+    {
+      "rule": "Use metaphors that are neither too literal nor too abstract (a trash can means delete) and honour their physics.",
+      "why": "Familiarity: build on what people already know.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Use metaphors that are neither too literal nor too abstract"
+    },
+    {
+      "rule": "Keep things that look the same behaving the same and living in the same place (e.g. close is always top-left on macOS).",
+      "why": "People can then predict what happens next.",
+      "kind": "do",
+      "strength": "must",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Be consistent: things that look the same must behave the same"
+    },
+    {
+      "rule": "Only break a familiar pattern if you can prove the new one is better, and test it rather than assume.",
+      "why": "Familiarity.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Only break a familiar pattern if you can prove it's better"
+    },
+    {
+      "rule": "Adapt to the platform and situation: quick touch on iPhone, deep workflows with precise pointer control on desktop.",
+      "why": "Flexibility: design for different contexts, devices and abilities.",
+      "kind": "do",
+      "strength": "should",
+      "area": "platforms",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "desktop = deep workflows with precise pointer control"
+    },
+    {
+      "rule": "Design inclusively for age, language, expertise and accessibility.",
+      "why": "Flexibility: the full range of abilities.",
+      "kind": "do",
+      "strength": "should",
+      "area": "accessibility",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Design inclusively (age, language, expertise, accessibility)"
+    },
+    {
+      "rule": "When no single layout fits everyone, let people personalise: rearrange controls and hide what they do not use.",
+      "why": "Flexibility.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "let people personalize"
+    },
+    {
+      "rule": "Do not bury everything in one place to look minimal; strip the unnecessary so the core purpose shines.",
+      "why": "Simplicity is not minimalism; burying everything looks minimal but isn't simple.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Simplicity — not minimalism"
+    },
+    {
+      "rule": "Be concise: plain language, no jargon, fewer steps.",
+      "why": "Simplicity.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Be concise (plain language, no jargon, fewer steps)"
+    },
+    {
+      "rule": "Use hierarchy (order, spacing, contrast) so the most important thing is the most obvious.",
+      "why": "Simplicity: be clear.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "clear (use hierarchy — order, spacing, contrast)"
+    },
+    {
+      "rule": "Make every element earn its place, and add context where it simplifies (e.g. a video scrubber that shows time remaining).",
+      "why": "Sometimes adding context simplifies.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Every element earns its place"
+    },
+    {
+      "rule": "Show the common path first and put advanced options one level deeper.",
+      "why": "Simplicity.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Show the common path first, advanced options one level deeper"
+    },
+    {
+      "rule": "Make every spacing, timing and alignment value a deliberate choice you can defend; nothing is random.",
+      "why": "Craft: uncompromising attention to detail builds trust.",
+      "kind": "do",
+      "strength": "must",
+      "area": "tokens",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Nothing is random"
+    },
+    {
+      "rule": "Use colours that adapt to light and dark, clear iconography and responsive animations that give immediate, natural feedback.",
+      "why": "Craft: uncompromising attention to detail builds trust.",
+      "kind": "do",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "colors that adapt to light/dark, clear iconography"
+    },
+    {
+      "rule": "Do not ship jittery scroll, misaligned icons or layouts that break on rotation.",
+      "why": "They read as carelessness.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "layout",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Jittery scroll, misaligned icons, and layouts that break on rotation read as carelessness"
+    },
+    {
+      "rule": "Keep evolving the design as features and hardware change.",
+      "why": "Craft needs iteration and longevity.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Craft needs iteration and longevity"
+    },
+    {
+      "rule": "Decide the emotion you want people to feel (calm, confident, excited) and reinforce it in every decision, instead of tacking delight on top.",
+      "why": "Delight is the result of getting the other seven principles right, not confetti.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [
+        "calm",
+        "confident",
+        "excited"
+      ],
+      "evidence": "Decide the emotion you want people to feel"
+    },
+    {
+      "rule": "Cover the four kinds of feedback (status, completion, warning, error): confirm meaningful actions, expose ongoing status and warn before problems.",
+      "why": "Feedback comes in four kinds: status, completion, warning, error.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [
+        "status",
+        "completion",
+        "warning",
+        "error"
+      ],
+      "evidence": "Feedback comes in four kinds"
+    },
+    {
+      "rule": "Validate form input inline, not on submit.",
+      "why": "Listed as a tactical feedback rule.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "validate inline (not on submit)"
+    },
+    {
+      "rule": "Make every screen answer: Where am I? Where can I go? What's there? How do I get out? Never trap the user.",
+      "why": "Wayfinding.",
+      "kind": "do",
+      "strength": "must",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Every screen should answer: Where am I?"
+    },
+    {
+      "rule": "Place a control near what it affects and arrange controls to mirror what they change.",
+      "why": "Proximity implies relationship; if you need a label to explain a control, the mapping is weak.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Grouping & mapping"
+    },
+    {
+      "rule": "Name navigation items for their contents (e.g. \"Progress\", \"Library\"), not with vague umbrellas like \"Home\".",
+      "why": "Direct, specific labels create predictability.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "all",
+      "values": [
+        "Progress",
+        "Library",
+        "Home"
+      ],
+      "evidence": "Direct, specific labels beat safe generic ones"
+    },
+    {
+      "rule": "Prototype interactively rather than relying on static designs.",
+      "why": "You discover the interface by building and playing with it, and a working prototype sets a concrete bar that prevents a mediocre final implementation.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Prototype interactively"
+    },
+    {
+      "rule": "Design interaction and visuals together; do not add motion as a layer after the pixels.",
+      "why": "You shouldn't be able to tell where one ends and the other begins.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Design interaction and visuals together"
+    },
+    {
+      "rule": "Test with real people in real context.",
+      "why": "Part of the process guidance.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Test with real people in real context"
+    },
+    {
+      "rule": "Review motion with fresh eyes by playing it in slow motion or frame by frame.",
+      "why": "It catches what is invisible at full speed.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "play it in slow motion / frame-by-frame"
+    },
+    {
+      "rule": "Reason with Apple's eight principles by name (purpose, agency, responsibility, familiarity, flexibility, simplicity, craft, delight) when making and defending design decisions.",
+      "why": "The motion and craft guidance serves these eight principles; the source says to use them as the names you reason with.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Use these as the names you reason with"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "Should touchable UI animate with fixed-duration transitions or with springs?",
+      "options": [
+        {
+          "name": "Fixed-duration animations (CSS transitions, @keyframes)",
+          "effect": "Pre-scripted motion that cannot respond to new input or be smoothly grabbed and reversed mid-flight.",
+          "when": "The source does not recommend it for anything gesture-driven."
+        },
+        {
+          "name": "Springs",
+          "effect": "New input just changes the target and motion stays continuous; they animate from the current value and carry velocity.",
+          "when": "Anything a user can touch."
+        }
+      ],
+      "recommendation": "Springs for anything a user can touch, because they are interruptible and velocity-aware.",
+      "maps_to": "Q-motion-01",
+      "evidence": "4. Behavior over animation — use springs"
+    },
+    {
+      "question": "How should spring settings be expressed?",
+      "options": [
+        {
+          "name": "Mass, stiffness and damping",
+          "effect": "The physics triplet that Apple deliberately replaced.",
+          "when": "Not recommended by the source."
+        },
+        {
+          "name": "Damping ratio and response",
+          "effect": "Damping controls overshoot (1.0 no bounce, lower bouncier); response in seconds controls snappiness; settle time emerges rather than being a set duration.",
+          "when": "Default; on the web, Motion's bounce + duration maps closely."
+        }
+      ],
+      "recommendation": "Think in damping ratio and response, designer-friendly parameters Apple adopted.",
+      "maps_to": "Q-motion-04",
+      "evidence": "Apple deliberately replaced the physics triplet"
+    },
+    {
+      "question": "How much bounce should springs have?",
+      "options": [
+        {
+          "name": "Critically damped (damping 1.0, bounce 0)",
+          "effect": "Smooth settle with no overshoot; graceful and non-distracting.",
+          "when": "Most UI, by default."
+        },
+        {
+          "name": "Under-damped (damping ~0.8, bounce 0.2)",
+          "effect": "Slight overshoot that feels like physical momentum.",
+          "when": "Only after a gesture that carried momentum: a flick, throw or drag release."
+        }
+      ],
+      "recommendation": "damping 1.0 everywhere by default; reserve bounce for momentum-driven, physical interactions.",
+      "maps_to": null,
+      "evidence": "Defaults"
+    },
+    {
+      "question": "Where should a flicked element land on release?",
+      "options": [
+        {
+          "name": "Nearest boundary from the release point",
+          "effect": "Ignores the flick's speed, so a throw does not feel like a throw.",
+          "when": "Not recommended."
+        },
+        {
+          "name": "Nearest snap point to the momentum-projected endpoint",
+          "effect": "Uses velocity to predict the resting point like scroll deceleration, so a flick throws the element.",
+          "when": "Bottom sheets and carousels (the source names Vaul and Embla); any flickable element [inferred]."
+        }
+      ],
+      "recommendation": "Project with Apple's exponential-decay function (decelerationRate ≈ 0.998, or 0.99 for snappier) and snap to the point nearest the projection, then hand off velocity.",
+      "maps_to": null,
+      "evidence": "6. Momentum projection"
+    },
+    {
+      "question": "At release, how do you decide whether a gesture commits or reverses?",
+      "options": [
+        {
+          "name": "By position",
+          "effect": "Decides from where the element is at release.",
+          "when": "Not recommended by the source."
+        },
+        {
+          "name": "By the sign of the velocity",
+          "effect": "Decides from the direction the finger was moving at release.",
+          "when": "Default."
+        }
+      ],
+      "recommendation": "Use velocity sign, not position.",
+      "maps_to": null,
+      "evidence": "Quick Reference: Decide reverse vs. commit"
+    },
+    {
+      "question": "Should bars, toolbars and sheets be opaque or translucent?",
+      "options": [
+        {
+          "name": "Opaque bars",
+          "effect": "Consume a fixed strip of the screen.",
+          "when": "The source does not recommend them for chrome; also the fallback under reduced transparency."
+        },
+        {
+          "name": "Translucent layers (backdrop-filter blur + semi-transparent background)",
+          "effect": "A floating functional layer with content scrolling underneath that brings structure without stealing focus.",
+          "when": "Nav, toolbars and sheets by default."
+        }
+      ],
+      "recommendation": "Translucent layers, with heavier materials for structure and lighter ones for interactive elements, never light on light.",
+      "maps_to": "Q-depth-04",
+      "evidence": "12. Materials & depth"
+    },
+    {
+      "question": "Should a secondary panel dim the content behind it?",
+      "options": [
+        {
+          "name": "Dimming scrim and push the background back or down",
+          "effect": "Focuses the user on a modal task.",
+          "when": "Modal tasks; stacked sheets progressively dim and push back each parent."
+        },
+        {
+          "name": "Translucency and offset without a scrim",
+          "effect": "Separates the panel while keeping the flow unbroken.",
+          "when": "Parallel, non-blocking panels."
+        }
+      ],
+      "recommendation": "Dim to focus, separate to keep flow.",
+      "maps_to": null,
+      "evidence": "Dim to focus, separate to keep flow"
+    },
+    {
+      "question": "How should a sticky header be separated from scrolling content?",
+      "options": [
+        {
+          "name": "1px border",
+          "effect": "A hard divider line under the header.",
+          "when": "Not recommended by the source."
+        },
+        {
+          "name": "Scroll edge effect",
+          "effect": "A small blur or gradient mask fades where content meets floating chrome, only where it overlaps content.",
+          "when": "Default for floating chrome."
+        }
+      ],
+      "recommendation": "Scroll edge effects, not hard dividers.",
+      "maps_to": null,
+      "evidence": "Scroll edge effects, not hard dividers"
+    },
+    {
+      "question": "When people turn on reduced motion, what should happen?",
+      "options": [
+        {
+          "name": "Replace with gentler equivalents",
+          "effect": "Slides, springs and parallax become short opacity cross-fades or static transitions; overshoot is dropped; helpful opacity and colour changes stay.",
+          "when": "Default."
+        },
+        {
+          "name": "Remove all feedback",
+          "effect": "No motion or feedback at all.",
+          "when": "The source says reduced motion does not mean no feedback."
+        }
+      ],
+      "recommendation": "Replace with a gentler, non-vestibular equivalent such as a 200ms opacity cross-fade.",
+      "maps_to": "Q-motion-07",
+      "evidence": "14. Reduced motion & accessibility"
+    },
+    {
+      "question": "Which user settings should components respond to?",
+      "options": [
+        {
+          "name": "prefers-reduced-motion: reduce",
+          "effect": "Cross-fades instead of slides and springs.",
+          "when": "Always."
+        },
+        {
+          "name": "prefers-reduced-transparency: reduce",
+          "effect": "Frostier or solid surfaces with higher background opacity and no blur.",
+          "when": "Always."
+        },
+        {
+          "name": "prefers-contrast: more",
+          "effect": "Near-solid backgrounds with a defined, contrasting border.",
+          "when": "Always."
+        },
+        {
+          "name": "Text size (Dynamic Type)",
+          "effect": "Layout scales with the text through rem/em spacing.",
+          "when": "Always."
+        }
+      ],
+      "recommendation": "All of them, baked into components.",
+      "maps_to": "Q-motion-10",
+      "evidence": "Respond to three independent signals"
+    },
+    {
+      "question": "Should letter spacing be one value or change with text size?",
+      "options": [
+        {
+          "name": "One fixed letter-spacing",
+          "effect": "Wrong somewhere: too loose on large text or too tight on small text.",
+          "when": "Never, per the source."
+        },
+        {
+          "name": "Size-specific tracking",
+          "effect": "Negative on large display text (e.g. -0.02em), near 0 for body, slightly positive for small text.",
+          "when": "Default."
+        }
+      ],
+      "recommendation": "Size-specific tracking: tighten headings, leave body near 0.",
+      "maps_to": "Q-type-13",
+      "evidence": "Tracking (letter-spacing) is size-specific"
+    },
+    {
+      "question": "Should the UI use the system font or a custom typeface?",
+      "options": [
+        {
+          "name": "Platform system font (system-ui)",
+          "effect": "Ships with optical sizing, tracking tables and legibility tuning.",
+          "when": "Default."
+        },
+        {
+          "name": "Custom typeface",
+          "effect": "A brand face that needs its own tuning [inferred].",
+          "when": "Only with a reason."
+        }
+      ],
+      "recommendation": "Default to the system font; override only with a reason.",
+      "maps_to": "Q-type-01",
+      "evidence": "Default to the platform's system font"
+    },
+    {
+      "question": "Should layouts grow when people turn up their text size?",
+      "options": [
+        {
+          "name": "Scale layout with text (rem/em spacing)",
+          "effect": "A larger font does not break the layout.",
+          "when": "Default."
+        },
+        {
+          "name": "Fixed px spacing",
+          "effect": "Larger text can break the layout.",
+          "when": "Not recommended by the source."
+        }
+      ],
+      "recommendation": "Respect the user's text-size setting and scale layout with it.",
+      "maps_to": "Q-type-17",
+      "evidence": "Respect the user's text-size setting (Dynamic Type)"
+    },
+    {
+      "question": "How should people recover from mistakes and destructive actions?",
+      "options": [
+        {
+          "name": "Easy undo",
+          "effect": "Slips can be reversed without interruption.",
+          "when": "Slips and reversible actions."
+        },
+        {
+          "name": "Confirmation dialog",
+          "effect": "An extra step before acting; overuse trains people to click through.",
+          "when": "Only genuinely destructive, irreversible actions, sparingly."
+        }
+      ],
+      "recommendation": "Both, each in its place: undo for slips, confirmation only for destructive, irreversible actions.",
+      "maps_to": "Q-form-05",
+      "evidence": "Agency"
+    },
+    {
+      "question": "How much sound and haptic feedback should the product use?",
+      "options": [
+        {
+          "name": "Feedback on many interactions",
+          "effect": "Over-feedback trains users to ignore all of it.",
+          "when": "Not recommended."
+        },
+        {
+          "name": "Only meaningful moments",
+          "effect": "Sound and haptics on success, error, commit and snap, fired on the same frame as the visual.",
+          "when": "Default."
+        }
+      ],
+      "recommendation": "Reserve haptics and sound for meaningful moments.",
+      "maps_to": "Q-motion-08",
+      "evidence": "13. Multimodal feedback"
+    },
+    {
+      "question": "When should form input be validated?",
+      "options": [
+        {
+          "name": "Inline",
+          "effect": "Problems are shown as people type or leave a field [inferred].",
+          "when": "Default."
+        },
+        {
+          "name": "On submit",
+          "effect": "Problems appear only after submitting.",
+          "when": "Not recommended by the source."
+        }
+      ],
+      "recommendation": "Validate inline, not on submit.",
+      "maps_to": "Q-form-02",
+      "evidence": "validate inline (not on submit)"
+    },
+    {
+      "question": "How should navigation items be labelled?",
+      "options": [
+        {
+          "name": "Specific labels (\"Progress\", \"Library\")",
+          "effect": "Creates predictability about what is behind each item.",
+          "when": "Default."
+        },
+        {
+          "name": "Generic umbrellas (\"Home\")",
+          "effect": "Safe but vague.",
+          "when": "Not recommended by the source."
+        }
+      ],
+      "recommendation": "Direct, specific labels beat safe generic ones.",
+      "maps_to": null,
+      "evidence": "Direct, specific labels beat safe generic ones"
+    }
+  ],
+  "process": [
+    {
+      "step": "Respond on press",
+      "detail": "Show feedback on pointer-down (e.g. scale(0.97) over 100ms ease-out), commit on release, and remove debounces, artificial timers and the ~300ms tap delay from the input path."
+    },
+    {
+      "step": "Capture and track",
+      "detail": "On pointerdown call setPointerCapture, record the grab offset, and keep a short history of positions and timestamps from pointermove."
+    },
+    {
+      "step": "Disambiguate quickly",
+      "detail": "Wait for ~10px of movement before committing to a direction, detect plausible gestures in parallel from the first move, cancel the losers once intent is clear, and only delay taps where double-tap exists."
+    },
+    {
+      "step": "Follow 1:1 and rubber-band",
+      "detail": "Update the element with the pointer every frame via transform, and past a boundary apply the rubber-band formula with constant 0.55."
+    },
+    {
+      "step": "Decide at release",
+      "detail": "Compute release velocity from the history, decide commit or reverse by the velocity's sign, project the resting point with (v/1000)·d/(1−d) using d ≈ 0.998 (or 0.99), and pick the nearest snap point to that projection."
+    },
+    {
+      "step": "Hand off to a spring",
+      "detail": "Animate to the target with a spring given the release velocity (normalised by remaining distance if the API wants relative velocity); damping 1.0 by default, ~0.8 only after momentum; use separate X and Y springs for 2D."
+    },
+    {
+      "step": "Stay interruptible",
+      "detail": "Never lock input; on a new grab read the live on-screen transform and re-target from there, carrying velocity through reversals."
+    },
+    {
+      "step": "Keep space consistent",
+      "detail": "Exit along the entry path, set transform-origin to the trigger, mirror easing for reversible transitions, and let intermediate frames point at the outcome."
+    },
+    {
+      "step": "Add multimodal feedback carefully",
+      "detail": "Fire sound or haptics on the causal event, on the same frame as the visual, and only for success, error, commit or snap."
+    },
+    {
+      "step": "Bake in accessibility variants",
+      "detail": "Add prefers-reduced-motion (cross-fades, no overshoot), prefers-reduced-transparency (solid, no blur) and prefers-contrast: more (near-solid with a contrasting border) styles to each component."
+    },
+    {
+      "step": "Prototype and review",
+      "detail": "Build an interactive prototype, design interaction and visuals together, test with real people in real context, and review motion in slow motion or frame by frame."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Button press state",
+      "where": null,
+      "visual_note": "CSS sample: .button:active { transform: scale(0.97); transition: transform 100ms ease-out; } shows instant feedback on press."
+    },
+    {
+      "what": "Apple's shipped spring values",
+      "where": "Apple platforms",
+      "visual_note": "Table: move/reposition such as picture-in-picture uses damping 1.0 / response 0.4, rotation 0.8 / 0.4, drawer or sheet 0.8 / 0.3."
+    },
+    {
+      "what": "Motion spring calls",
+      "where": "Motion (web)",
+      "visual_note": "animate(el, { y: 0 }, { type: 'spring', bounce: 0, duration: 0.4 }) for the no-overshoot default, and bounce: 0.2 for a flick-driven move."
+    },
+    {
+      "what": "Relative velocity worked example",
+      "where": null,
+      "visual_note": "An element at y=50 heading to y=150 with the finger at 50px/s gets an initial relative spring velocity of 50 / 100 = 0.5."
+    },
+    {
+      "what": "Momentum projection in bottom sheets and carousels",
+      "where": "Vaul, Embla",
+      "visual_note": "Named as good implementations that project a flick's resting point before snapping."
+    },
+    {
+      "what": "Control Center modules",
+      "where": "iOS Control Center",
+      "visual_note": "Modules grow up and out toward the finger, so intermediate frames hint at the final state."
+    },
+    {
+      "what": "Additive animations",
+      "where": "iOS",
+      "visual_note": "iOS natively carries velocity through a re-targeted animation, avoiding the brick wall at a reversal."
+    },
+    {
+      "what": "Translucent toolbar",
+      "where": null,
+      "visual_note": "CSS sample: 60% white background, blur(20px) saturate(180%), and a 1px rgba(255, 255, 255, 0.4) top border as light catching the material."
+    },
+    {
+      "what": "Reduced motion and reduced transparency overrides",
+      "where": null,
+      "visual_note": "CSS sample: the sheet becomes a 200ms opacity transition with transform: none; the toolbar becomes solid white with no backdrop-filter."
+    },
+    {
+      "what": "Display type style",
+      "where": null,
+      "visual_note": "CSS sample: body at 100%/1.5 system-ui; display at clamp(2rem, 5vw, 4rem), line-height 1.05, letter-spacing -0.02em, font-optical-sizing: auto."
+    },
+    {
+      "what": "Trash can metaphor",
+      "where": null,
+      "visual_note": "A metaphor neither too literal nor too abstract: a trash can means delete."
+    },
+    {
+      "what": "Close button placement",
+      "where": "macOS",
+      "visual_note": "Close is always top-left on macOS, an example of things that look the same living in the same place."
+    },
+    {
+      "what": "Allergy-aware recipe app",
+      "where": null,
+      "visual_note": "An AI feature that must not suggest a harmful ingredient, illustrating responsibility and anticipating harm."
+    },
+    {
+      "what": "Video scrubber with time remaining",
+      "where": null,
+      "visual_note": "Adding context that simplifies rather than clutters."
+    },
+    {
+      "what": "Specific navigation labels",
+      "where": null,
+      "visual_note": "\"Progress\" and \"Library\" instead of a vague \"Home\"."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "scale(0.97)",
+      "context": "Button press transform",
+      "evidence": ".button:active code sample"
+    },
+    {
+      "value": "100ms ease-out",
+      "context": "Press feedback transition",
+      "evidence": ".button:active code sample"
+    },
+    {
+      "value": "~300ms",
+      "context": "Tap delay to audit and remove from the input path",
+      "evidence": "Be vigilant about every latency"
+    },
+    {
+      "value": "1.0",
+      "context": "Damping ratio for critically damped, no-bounce springs; the default for most UI",
+      "evidence": "Damping ratio"
+    },
+    {
+      "value": "~0.8",
+      "context": "Damping ratio for bounce, only after momentum",
+      "evidence": "Defaults"
+    },
+    {
+      "value": "1.0",
+      "context": "Damping Apple ships for move / reposition (e.g. PiP), paired with response 0.4",
+      "evidence": "Move / reposition (e.g. PiP)"
+    },
+    {
+      "value": "0.4",
+      "context": "Response (seconds) Apple ships for move / reposition (e.g. PiP) and for rotation",
+      "evidence": "Concrete values Apple ships"
+    },
+    {
+      "value": "0.8",
+      "context": "Damping Apple ships for rotation (response 0.4) and for drawer / sheet (response 0.3)",
+      "evidence": "Concrete values Apple ships"
+    },
+    {
+      "value": "0.3",
+      "context": "Response (seconds) Apple ships for drawer / sheet, paired with damping 0.8",
+      "evidence": "Drawer / sheet"
+    },
+    {
+      "value": "0.3–0.4",
+      "context": "Response range for both default and momentum springs",
+      "evidence": "Quick Reference"
+    },
+    {
+      "value": "bounce: 0, duration: 0.4",
+      "context": "Motion default spring (critically damped)",
+      "evidence": "Web mapping code sample"
+    },
+    {
+      "value": "bounce: 0.2, duration: 0.4",
+      "context": "Motion momentum spring",
+      "evidence": "Web mapping code sample"
+    },
+    {
+      "value": "50 / 100 = 0.5",
+      "context": "Relative velocity for an element at y=50, target y=150, finger at 50px/s",
+      "evidence": "5. Velocity handoff"
+    },
+    {
+      "value": "0.998",
+      "context": "Deceleration rate for normal scroll feel in the projection function",
+      "evidence": "6. Momentum projection"
+    },
+    {
+      "value": "0.99",
+      "context": "Deceleration rate for a snappier projection",
+      "evidence": "6. Momentum projection"
+    },
+    {
+      "value": "1000",
+      "context": "Divisor converting px/s velocity in the projection function",
+      "evidence": "function project"
+    },
+    {
+      "value": "0.55",
+      "context": "Default rubber-band constant",
+      "evidence": "function rubberband"
+    },
+    {
+      "value": "~10px",
+      "context": "Hysteresis or hit padding for taps, and movement threshold before a drag commits to a direction",
+      "evidence": "10. Gesture design details"
+    },
+    {
+      "value": "0.2 Hz / one cycle per 5s",
+      "context": "Slow looping oscillation rate to avoid",
+      "evidence": "14. Reduced motion & accessibility"
+    },
+    {
+      "value": "200ms",
+      "context": "Opacity cross-fade under reduced motion",
+      "evidence": "@media (prefers-reduced-motion: reduce) code sample"
+    },
+    {
+      "value": "rgba(255, 255, 255, 0.6)",
+      "context": "Translucent toolbar background",
+      "evidence": ".toolbar code sample"
+    },
+    {
+      "value": "blur(20px) saturate(180%)",
+      "context": "Toolbar backdrop-filter",
+      "evidence": ".toolbar code sample"
+    },
+    {
+      "value": "1px solid rgba(255, 255, 255, 0.4)",
+      "context": "Bright top border on the toolbar",
+      "evidence": ".toolbar code sample"
+    },
+    {
+      "value": "100%/1.5",
+      "context": "Body font size and line-height with system-ui",
+      "evidence": ":root code sample"
+    },
+    {
+      "value": "clamp(2rem, 5vw, 4rem)",
+      "context": "Display font size",
+      "evidence": ".display code sample"
+    },
+    {
+      "value": "1.05",
+      "context": "Display line-height",
+      "evidence": ".display code sample"
+    },
+    {
+      "value": "-0.02em",
+      "context": "Display letter-spacing",
+      "evidence": ".display code sample"
+    },
+    {
+      "value": "four",
+      "context": "Human needs design serves: safety/predictability, understanding, achievement, joy",
+      "evidence": "The Core Idea"
+    },
+    {
+      "value": "eight",
+      "context": "Apple design principles from Principles of Great Design (WWDC 2026)",
+      "evidence": "16. Design foundations"
+    },
+    {
+      "value": "four",
+      "context": "Kinds of feedback: status, completion, warning, error",
+      "evidence": "Feedback comes in four kinds"
+    }
+  ],
+  "caveats": [
+    "This is an agent skill file, not an Apple document: it says it distils and translates WWDC talks for the web, so quotes and values attributed to Apple are second-hand and were not checked against the talks here.",
+    "The Initial Response section tells the agent what to say when invoked; it is skill behaviour, not design guidance, and was left out of the rules.",
+    "The Motion bounce + duration mapping is described as mapping 'closely' to Apple's damping + response, not exactly; library APIs may change between versions.",
+    "Many values are approximate in the source (~0.8 damping, ~10px hysteresis, ~300ms tap delay, near 0.2 Hz), and the code snippets use undefined helpers (nearestSnapPoint, animateSpringTo).",
+    "The source is pinned to commit 85e8e23 of emilkowalski/skills; later commits may change it.",
+    "The toolbar CSS is a light-theme sample (white at 60%); the source gives no dark-theme values.",
+    "No media list exists for this source, so no images were reviewed."
+  ]
+}

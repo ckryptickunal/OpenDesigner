@@ -1,0 +1,792 @@
+{
+  "summary": "Kole Jain walks through nine website section layouts he calls trending in 2024. For most of them he shows real websites (or Dribbble shots) that use it, then his Figma wireframe and a finished design; the ninth has no live example. The sections are: cards on a dark background, a thin cropped photo with profound text, giant headline text over a huge image, a scrollable multi-image layout, stacked cards that slide up on scroll, a horizontal card carousel, a bento grid, an image with cut-out lettering, and a text-only section with lots of white space. Each section comes with practical notes: keep spacing precise, put a gradient under text on photos, crop and pick images carefully, match the layout to how much content you have, and give text-only sections enough body copy. For a design system, this is a catalogue of landing-page section patterns, with notes on when each fits, that could be offered to people as visual options.",
+  "key_ideas": [
+    "Cards sitting on a dark background work as a header and can carry a whole website's theme, but the cards must sit very close together with precise spacing.",
+    "A thin, cropped photo with really profound text on it works as an interlude or spacer between text-heavy sections.",
+    "Text placed on a photo needs a gradient under it, or it is hard to read.",
+    "A giant-text hero gets its impact from the contrast between huge headline text and very small navbar text, and placing the navbar beneath the headline makes the headline feel more important.",
+    "In the giant-text section, what really brings it together is the massive images, slideshow or video beneath the text.",
+    "Images that are blown up large should be large, high-resolution photos so they do not look pixelated, and the thin photo band and the multi-image layout need heavy cropping, so check orientation and aspect ratio when choosing images.",
+    "A multi-image layout can show one main large image with more to scroll through, and dot indicators help show how many images there are and how far along you are.",
+    "Stacked cards that slide up over each other as you scroll suit a list of three to five options that need some detail.",
+    "The horizontal card section is simple and useful but is not used on most websites.",
+    "A horizontal card carousel shows a lot of information in a small space; it works for 3 to about 10 cards and should not rely only on small navigation buttons.",
+    "Bento grid box sizes change as the content plan develops, and a bento grid needs enough content to fill it.",
+    "A cut-out lettering effect over a big image is easy in Figma with subtracts, but the image should not have anything important in the corner the cut-out removes.",
+    "A text-only section can open the page up with white space instead of filling the empty area with an image, but it needs three or more lines of body text so it does not feel too empty."
+  ],
+  "entities": [
+    {
+      "name": "Kole Jain",
+      "type": "person",
+      "description": "Designer and YouTuber who presents the nine section layouts, with wireframes and finished designs in Figma."
+    },
+    {
+      "name": "Huddle",
+      "type": "company",
+      "description": "Website shown twice: cards on a dark background used across the whole site, and stacked cards that slide up on scroll."
+    },
+    {
+      "name": "TOA (caption spelling 'toa')",
+      "type": "company",
+      "description": "Website shown with cards sitting on top of a background, used throughout the site."
+    },
+    {
+      "name": "One Nil (caption spelling 'one nil')",
+      "type": "company",
+      "description": "Named as the best example of a cropped photo with profound text on it."
+    },
+    {
+      "name": "Studio VI (caption spelling)",
+      "type": "company",
+      "description": "Example of giant text at the top, nav links in the middle and a giant image or video beneath."
+    },
+    {
+      "name": "cream",
+      "type": "company",
+      "description": "Website with the multi-image layout the source calls the most unique of the nine."
+    },
+    {
+      "name": "tapaku Maru (caption spelling)",
+      "type": "company",
+      "description": "Website with stacked cards revealed on hover instead of on scroll."
+    },
+    {
+      "name": "Ami (caption spelling; a calendar scheduling app, likely Amie [inferred])",
+      "type": "product",
+      "description": "Example of a horizontal card carousel navigated with small buttons."
+    },
+    {
+      "name": "Linear",
+      "type": "company",
+      "description": "Example of a compact bento layout that the source adapts to full width."
+    },
+    {
+      "name": "Dribbble",
+      "type": "product",
+      "description": "Where the source found examples of the trendy cut-out image text effect."
+    },
+    {
+      "name": "Figma",
+      "type": "tool",
+      "description": "Where the source builds each wireframe and finished section; subtract is used for the cut-out text effect."
+    },
+    {
+      "name": "Wix",
+      "type": "tool",
+      "description": "Named as a third-party tool that makes the stacked scroll-card effect straightforward."
+    },
+    {
+      "name": "Framer",
+      "type": "tool",
+      "description": "Named as a third-party tool that makes the stacked scroll-card effect straightforward."
+    },
+    {
+      "name": "Oswald",
+      "type": "product",
+      "description": "Display font used very large, at 290 pixels, in the giant-text section."
+    },
+    {
+      "name": "Bento layout",
+      "type": "concept",
+      "description": "A compact grid of boxes of different sizes; the source says a website section video is not complete without one."
+    },
+    {
+      "name": "Cut-out image text effect",
+      "type": "concept",
+      "description": "A big image with a cut-out where uppercase letters fit in, made with subtract in Figma."
+    },
+    {
+      "name": "maa (caption spelling)",
+      "type": "company",
+      "description": "Website shown with massive text up top and a slideshow of massive images, as a giant-text example."
+    },
+    {
+      "name": "rinse f F (caption spelling)",
+      "type": "company",
+      "description": "A second, 'perhaps a little less good' example of the thin cropped photo with profound text."
+    },
+    {
+      "name": "Evolve",
+      "type": "product",
+      "description": "The name of the source's own finished bento-grid design."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Landing pages",
+      "summary": "Nine website section layouts for headers and body sections, each with real site examples, a wireframe and a finished design."
+    },
+    {
+      "name": "Cards and sections",
+      "summary": "Cards on a dark background, stacked scroll cards, horizontal card carousels and bento boxes, with when each fits (for example 3-5 detailed options for stacked cards, 3 to about 10 cards in a carousel)."
+    },
+    {
+      "name": "Spacing and layout",
+      "summary": "Precise, tight spacing between cards on a dark background; bento box sizes that change with the content plan; a text-only section that uses white space and needs three or more lines of body text."
+    },
+    {
+      "name": "Visual hierarchy",
+      "summary": "The contrast between massive headline text and very small navbar text, with the navbar placed beneath the headline, makes the headline feel important."
+    },
+    {
+      "name": "Typography",
+      "summary": "Giant display text is a 2024 trend; the example uses Oswald at 290 pixels; uppercase letters can sit in a cut-out in an image."
+    },
+    {
+      "name": "Icons and imagery",
+      "summary": "Use large, high-resolution photos when blowing them up, crop carefully for aspect ratio and orientation, add a gradient under text on photos, and avoid important content in areas a cut-out will remove."
+    },
+    {
+      "name": "Gestures and drag",
+      "summary": "A horizontal card carousel would be better if the cards were draggable with the mouse instead of only using small buttons."
+    },
+    {
+      "name": "Figma and design tools",
+      "summary": "Each section is wireframed and then designed in Figma; the cut-out text effect is made with subtracts; the scroll effect is straightforward in development or in Wix or Framer."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Cards sitting on top of a dark background are not uncommon; Huddle and TOA use this treatment throughout their websites.",
+      "evidence": "huddle and TOA actually use this theme throughout the entirety of their website"
+    },
+    {
+      "claim": "Without a gradient under text on a photo, the text is pretty difficult to see.",
+      "evidence": "the gradient that sits under the text without it the text is pretty difficult to see"
+    },
+    {
+      "claim": "A very thin photo acts as an interlude or spacer between two text-heavy sections.",
+      "evidence": "it acts as a bit of an interlude or a spacer between two other sections"
+    },
+    {
+      "claim": "The giant-text section looks good because of the discrepancy between massive headline text and very small navbar text.",
+      "evidence": "the discrepancy between the massive text up here and very small navbar text"
+    },
+    {
+      "claim": "Positioning the navbar beneath the giant text makes the giant text feel very important.",
+      "evidence": "the positioning of the Navar beneath the giant text makes the giant text feel very important"
+    },
+    {
+      "claim": "Large photos that are blown up need to be high quality, or they appear pixelated.",
+      "evidence": "we don't want it to appear pixelated"
+    },
+    {
+      "claim": "The stacked slide-up card effect looks complicated but is straightforward if you develop it or use a tool like Wix or Framer.",
+      "evidence": "in practice is pretty straightforward if you're developing it or using a thirdparty tool"
+    },
+    {
+      "claim": "A horizontal card carousel is good for displaying a large amount of information in a fairly small section.",
+      "evidence": "displaying a large amount of information in a fairly small section"
+    },
+    {
+      "claim": "More than 10 cards in a carousel is cumbersome to click through, and other formats might be better.",
+      "evidence": "anything more than 10 is a bit cumbersome to click through"
+    },
+    {
+      "claim": "Bento box sizes often change as you work out your content plan.",
+      "evidence": "as you go along and figure out your content plan often the size of your boxes is going to change"
+    },
+    {
+      "claim": "A bento layout requires a fair amount of content because it displays information compactly.",
+      "evidence": "it requires a fair amount of content to be able to do a Bento layout"
+    },
+    {
+      "claim": "The cut-out image text effect is easy to make in Figma with subtracts.",
+      "evidence": "very easy to accomplish in figma with some subtracts"
+    },
+    {
+      "claim": "Body text in a text-only section generally looks better with three or more lines; with less, the section has too much white space.",
+      "evidence": "it generally looks better if you have three or more lines to display"
+    },
+    {
+      "claim": "In the giant-text section, the images or a slideshow displaying massive images are what really bring it together.",
+      "evidence": "what really brings it together is the images or a slideshow"
+    },
+    {
+      "claim": "The multi-image layout is a fantastic way to display multiple images while also getting a bit of text in.",
+      "evidence": "a fantastic way to display multiple images"
+    },
+    {
+      "claim": "The horizontal card section is pretty simple but is not used on most websites, and could be.",
+      "evidence": "isn't used on most websites and definitely could be"
+    },
+    {
+      "claim": "The nine sections are beginner friendly, except maybe section 5 (the stacked scroll cards), which the source calls a little complex.",
+      "evidence": "These sections are entirely beginner friendly (except maybe #5)"
+    }
+  ],
+  "quotes": [
+    "without it the text is pretty difficult to see",
+    "the discrepancy between the massive text up here and very small navbar text",
+    "it requires a fair amount of content to be able to do a Bento layout"
+  ],
+  "tags": [
+    "landing-pages",
+    "website-sections",
+    "hero",
+    "layout",
+    "cards",
+    "bento-grid",
+    "carousel",
+    "stacked-cards",
+    "text-on-image",
+    "giant-typography",
+    "white-space",
+    "imagery",
+    "figma",
+    "wireframe",
+    "kole-jain"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "When cards sit on top of a dark background, place the rectangles very close to one another and keep the spacing between them precise.",
+      "why": "The source calls it an important thing to consider for this section; it gives no further reason.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "these rectangles need to come very close to one another"
+    },
+    {
+      "rule": "Consider carrying the cards-on-a-dark-background treatment through the whole website, not just the header.",
+      "why": "Huddle and TOA use it throughout their sites; the source calls it very versatile and easy to work with.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "use this theme throughout the entirety of their website"
+    },
+    {
+      "rule": "Put a gradient under text that sits on a photo.",
+      "why": "Without it the text is pretty difficult to see, which is why the source adds it.",
+      "kind": "do",
+      "strength": "should",
+      "area": "accessibility",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "the gradient that sits under the text"
+    },
+    {
+      "rule": "When you have something really profound to say, use a thin, cropped photo with that text on it, as an interlude between two text-heavy sections.",
+      "why": "A very thin photo acts as a spacer between sections that might be very text heavy.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "an interlude or a spacer between two other sections"
+    },
+    {
+      "rule": "Pick images for thin photo bands and multi-image layouts with their crop, aspect ratio and orientation in mind.",
+      "why": "These layouts need images cropped a lot to fit, so a poorly chosen image will not work.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "we actually need to crop this image a lot in order to get a good aspect ratio"
+    },
+    {
+      "rule": "In a giant-text hero, make the headline massive and the navbar text very small, and place the navbar beneath the headline.",
+      "why": "The size discrepancy is what makes the section look good, and the navbar underneath makes the giant text feel very important.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "the discrepancy between the massive text up here and very small navbar text"
+    },
+    {
+      "rule": "Use a display font for giant hero text.",
+      "why": "The source's giant-text section relies on a nice display font set very large.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "typography",
+      "applies_to": "web",
+      "values": [
+        "Oswald",
+        "290 pixels"
+      ],
+      "evidence": "using a nice display font in this case I'm using Oswald and it's very large at 290 pixels"
+    },
+    {
+      "rule": "Use a large, high-resolution photo when an image is blown up to fill a hero or section.",
+      "why": "A small image blown up big appears pixelated.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "use a nice large photo since we are blowing it up quite big"
+    },
+    {
+      "rule": "Add dot indicators to a scrollable multi-image layout to show how many images there are and how far along the viewer is.",
+      "why": "They indicate how many images there are and how far along you are; the source suggests them as an improvement to his own design.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "have some circles down here to indicate how many images there are"
+    },
+    {
+      "rule": "Use stacked cards that slide up over each other as the page scrolls when you have a list of three to five options to go through in some detail.",
+      "why": "The effect lays out the steps of a process right in front of the viewer.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [
+        "three to five"
+      ],
+      "evidence": "if you have a list of three to five options that you want to go through in some good detail"
+    },
+    {
+      "rule": "Do not make small navigation buttons the only way to move through a horizontal card carousel; add a bigger button or make the cards draggable with the mouse.",
+      "why": "The source's criticism of Ami is that the only way to navigate is by hitting small buttons.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "the only way of navigating through is by hitting these small little buttons"
+    },
+    {
+      "rule": "Keep a horizontal card carousel to 3 to about 10 cards; above 10, consider a different format.",
+      "why": "Anything more than 10 is a bit cumbersome to click through, and different formats might be better.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "web",
+      "values": [
+        "3 to about 10 cards",
+        "more than 10"
+      ],
+      "evidence": "you can display anywhere from 3 to about 10 cards"
+    },
+    {
+      "rule": "Expect to resize and re-split bento boxes as the content plan takes shape, and let the content decide the layout.",
+      "why": "Box sizes often change as content is worked out; in the example, the top row became three boxes instead of two because that suited the content.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [
+        "three boxes instead of just two"
+      ],
+      "evidence": "often the size of your boxes is going to change"
+    },
+    {
+      "rule": "Only use a bento layout when you have enough content, whether text, images or both, to fill every box.",
+      "why": "A bento layout displays information compactly, so it needs a fair amount of content.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "it requires a fair amount of content to be able to do a Bento layout"
+    },
+    {
+      "rule": "For a cut-out lettering effect over an image, choose an image that fits the space and has nothing important in the top corner that the cut-out would remove.",
+      "why": "Whatever sits in the cut-out area gets cut off.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "an image that doesn't have anything important in the top Corner"
+    },
+    {
+      "rule": "In Figma, make a cut-out image text effect with subtract.",
+      "why": "The source says it is very easy to accomplish this way.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "very easy to accomplish in figma with some subtracts"
+    },
+    {
+      "rule": "In a text-only section, leave the unused area empty rather than filling it with an image, so the text speaks for itself.",
+      "why": "The section is meant to emphasise text and open up the website with more white space.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "we want to let the text speak for itself"
+    },
+    {
+      "rule": "Give the body text in a text-only section three or more lines.",
+      "why": "Without the extra text the section is too spacious, with too much white space.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "web",
+      "values": [
+        "three or more lines"
+      ],
+      "evidence": "it generally looks better if you have three or more lines to display"
+    },
+    {
+      "rule": "In a giant-text hero, put massive images, a slideshow or a video beneath the giant text.",
+      "why": "The source says the images, or a slideshow displaying massive images, are what really bring the section together.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "what really brings it together is the images or a slideshow"
+    },
+    {
+      "rule": "Use a multi-image layout, one main large image with more to scroll through, when you need to show several images plus a bit of text.",
+      "why": "The source calls it a fantastic way to display multiple images as well as getting a bit of text in.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "a fantastic way to display multiple images"
+    },
+    {
+      "rule": "Use a horizontal card carousel to show a large amount of information in a fairly small section.",
+      "why": "The source calls it a really good section for that, and simple.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "displaying a large amount of information in a fairly small section"
+    },
+    {
+      "rule": "After several photo-heavy sections, add a text-only section with the photos taken out to emphasise the text.",
+      "why": "The source's sections so far had been photo heavy, and he wanted to emphasise the text and open up the website with more white space.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "so far our sections have been pretty photo heavy"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "Which layout should this website section use?",
+      "options": [
+        {
+          "name": "Cards on a dark background",
+          "effect": "Rounded rectangles sit tightly together on a dark background; works as a header and as a site-wide theme.",
+          "when": "A header or a consistent look across the whole site, when you can keep spacing very precise."
+        },
+        {
+          "name": "Thin cropped photo with profound text",
+          "effect": "A very thin cropped photo with really profound text on it and a gradient under the text; acts as a spacer between sections.",
+          "when": "You have something really profound to say, or need a spacer between two text-heavy sections."
+        },
+        {
+          "name": "Giant text over a giant image",
+          "effect": "Massive display headline, small nav links beneath it, then a giant image, slideshow or video; the headline feels very important.",
+          "when": "You want the giant-text trend and have large, high-resolution photos, a slideshow or a video to blow up."
+        },
+        {
+          "name": "Multi-image scroll layout",
+          "effect": "One main large image plus more you scroll through with an arrow, with a bit of text; can grow each image as it scrolls past.",
+          "when": "You want to show multiple images and some text together."
+        },
+        {
+          "name": "Stacked scroll cards",
+          "effect": "Each card slides up over the previous one as you scroll, laying out steps of a process in front of the viewer.",
+          "when": "A list of three to five options or steps that need some detail."
+        },
+        {
+          "name": "Horizontal card carousel",
+          "effect": "A row of cards the viewer moves through with buttons; shows a lot of information in a small space.",
+          "when": "3 to about 10 cards; more than 10 is cumbersome."
+        },
+        {
+          "name": "Bento grid",
+          "effect": "A compact grid of boxes of different sizes (Linear-style), full width or compact.",
+          "when": "You have a fair amount of text and image content to fill the boxes."
+        },
+        {
+          "name": "Cut-out image text",
+          "effect": "A big image with uppercase letters sitting in a cut-out; trendy on Dribbble.",
+          "when": "You have an image that fits the space with nothing important in the cut-out corner."
+        },
+        {
+          "name": "Text-only with white space",
+          "effect": "No photos; text leads and the empty area opens up the page.",
+          "when": "After several photo-heavy sections, when you have three or more lines of body text."
+        }
+      ],
+      "recommendation": null,
+      "maps_to": null,
+      "evidence": "nine trending website sections of 2024"
+    },
+    {
+      "question": "How should text that sits on a photo stay readable?",
+      "options": [
+        {
+          "name": "Text directly on the photo",
+          "effect": "The text is pretty difficult to see.",
+          "when": "The source does not recommend it."
+        },
+        {
+          "name": "Gradient under the text",
+          "effect": "The text becomes readable against the photo.",
+          "when": "Any time text sits on an image, as in the cropped photo section."
+        }
+      ],
+      "recommendation": "Add a gradient under the text; without it the text is pretty difficult to see.",
+      "maps_to": "Q-img-02",
+      "evidence": "the gradient that sits under the text"
+    },
+    {
+      "question": "How should a multi-image section show its images?",
+      "options": [
+        {
+          "name": "One main large image with more to scroll through",
+          "effect": "A large lead image and an arrow button to scroll through more images.",
+          "when": "The simpler version of the layout."
+        },
+        {
+          "name": "Images that grow as you scroll",
+          "effect": "Each image becomes larger as you scroll through before it leaves the page.",
+          "when": "If you want to get fancier."
+        }
+      ],
+      "recommendation": null,
+      "maps_to": null,
+      "evidence": "either you'll have one main large image and more that you can scroll through"
+    },
+    {
+      "question": "How should stacked cards be revealed?",
+      "options": [
+        {
+          "name": "On scroll (Huddle)",
+          "effect": "The next card slides up as you scroll, revealing the content underneath step by step.",
+          "when": "Walking people through the steps of a process."
+        },
+        {
+          "name": "On hover (tapaku Maru)",
+          "effect": "You hover to access each card in the stack.",
+          "when": "The source shows it as an alternative without saying when to choose it."
+        }
+      ],
+      "recommendation": "The source's own design takes more inspiration from Huddle's scroll version, and borrows tapaku Maru's detail of text slightly cut off by the next container; no further reason is given.",
+      "maps_to": null,
+      "evidence": "instead of scrolling in order to get this stacked effect you simply have to hover"
+    },
+    {
+      "question": "How should people move through a horizontal card carousel?",
+      "options": [
+        {
+          "name": "Small navigation buttons only",
+          "effect": "Works, but moving through is limited to hitting small buttons.",
+          "when": "The source says this is what Ami could do better."
+        },
+        {
+          "name": "Small navigation buttons plus a big button",
+          "effect": "Two ways to interact: small nav buttons below and a big button that moves to the right.",
+          "when": "The source's own vineyard design."
+        },
+        {
+          "name": "Cards draggable with the mouse",
+          "effect": "People can drag the cards directly.",
+          "when": "Suggested as an improvement to Ami's carousel."
+        }
+      ],
+      "recommendation": "Do not rely on small buttons alone: add a bigger button or make the cards draggable with the mouse.",
+      "maps_to": null,
+      "evidence": "have a button here or make these dragable with the mouse"
+    },
+    {
+      "question": "Should a marketing section use a bento grid, and how wide should it be?",
+      "options": [
+        {
+          "name": "Compact bento (Linear)",
+          "effect": "A tight, compact bento block.",
+          "when": "Linear's approach."
+        },
+        {
+          "name": "Full-width bento",
+          "effect": "The bento grid stretches the full width of the page.",
+          "when": "The source's adaptation for the Evolve example."
+        },
+        {
+          "name": "No bento",
+          "effect": "A different section layout.",
+          "when": "You do not have a fair amount of content to fill the boxes."
+        }
+      ],
+      "recommendation": "Use bento only with enough content, and let box sizes change to fit the content plan.",
+      "maps_to": "Q-layout-05",
+      "evidence": "ours is going to be full width whereas theirs is much more compact"
+    },
+    {
+      "question": "In a text-heavy section, should the empty area hold an image or stay as white space?",
+      "options": [
+        {
+          "name": "Add an image",
+          "effect": "Fills the unused area.",
+          "when": "The source says an image could go there."
+        },
+        {
+          "name": "Leave it as white space",
+          "effect": "The text speaks for itself and the website opens up with more white space.",
+          "when": "After photo-heavy sections, when you have three or more lines of body text."
+        }
+      ],
+      "recommendation": "Leave it empty and let the text speak for itself, with three or more lines of body text so it is not too spacious.",
+      "maps_to": null,
+      "evidence": "we could have put in an image there but instead we want to let the text speak for itself"
+    },
+    {
+      "question": "How many items do you have to show, and which section pattern fits that count?",
+      "options": [
+        {
+          "name": "Stacked scroll cards",
+          "effect": "Each card slides up over the one before, walking through the items in some detail.",
+          "when": "A list of three to five options that you want to go through in some good detail."
+        },
+        {
+          "name": "Horizontal card carousel",
+          "effect": "A row of cards moved through with buttons (or dragging); lots of information in a small space.",
+          "when": "Anywhere from 3 to about 10 cards."
+        },
+        {
+          "name": "A different format",
+          "effect": "Avoids a carousel that is cumbersome to click through.",
+          "when": "More than 10 items; the source says different formats might be better but does not name one."
+        }
+      ],
+      "recommendation": "Stacked cards for three to five detailed options; a carousel for 3 to about 10 cards; for more than 10, a different format might be better.",
+      "maps_to": null,
+      "evidence": "anything more than 10 is a bit cumbersome to click through"
+    }
+  ],
+  "process": [
+    {
+      "step": "Collect live examples",
+      "detail": "For each section type, find real websites (or Dribbble shots) that use it and note what makes it work."
+    },
+    {
+      "step": "Wireframe in Figma",
+      "detail": "Build a simple wireframe of the section's structure before designing it."
+    },
+    {
+      "step": "Design a finished version for a real use",
+      "detail": "Apply the wireframe to a specific site, such as a wine tour or vineyard site or a site called Evolve."
+    },
+    {
+      "step": "Let content reshape the layout",
+      "detail": "As the content plan firms up, adjust box sizes and splits; the bento top row became three boxes instead of two."
+    },
+    {
+      "step": "Choose and crop images for the layout",
+      "detail": "Pick high-resolution images whose orientation and aspect ratio suit the layout, expecting heavy cropping."
+    },
+    {
+      "step": "Critique and note improvements",
+      "detail": "Review the finished design for gaps, such as adding dot indicators to a multi-image layout."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Cards sitting on top of a dark background",
+      "where": "TOA (caption spelling) and Huddle",
+      "visual_note": "Rounded rectangles very close together on a dark background, used as a header and across the whole site."
+    },
+    {
+      "what": "Cropped photo with profound text",
+      "where": "One Nil (caption spelling); a weaker example on rinse f F's website (caption spelling)",
+      "visual_note": "A very thin photo band with a strong line of text and a gradient under the text, acting as a spacer between text-heavy sections."
+    },
+    {
+      "what": "Giant text hero",
+      "where": "maa (caption spelling) and Studio VI (caption spelling)",
+      "visual_note": "Massive headline text at the top, small nav links beneath it, then a giant image, slideshow or video; the source's version uses Oswald at 290 pixels."
+    },
+    {
+      "what": "Multi-image layout with scroll arrow",
+      "where": "cream",
+      "visual_note": "One main large image plus more images reached with an arrow, with some text; the source suggests adding dot indicators."
+    },
+    {
+      "what": "Stacked cards that slide up on scroll",
+      "where": "Huddle; hover version on tapaku Maru (caption spelling)",
+      "visual_note": "Each card slides up over the one before as you scroll, laying out process steps; the source's version uses a two-column layout in each card with text slightly cut off by the next container."
+    },
+    {
+      "what": "Horizontal card carousel",
+      "where": "Ami (caption spelling), a calendar scheduling app; the source's vineyard design",
+      "visual_note": "A row of cards moved through with small nav buttons; the source's version adds a big button that moves to the right."
+    },
+    {
+      "what": "Bento layout",
+      "where": "Linear; the source's design for Evolve",
+      "visual_note": "Linear's compact bento adapted to full width, with the top row split into three boxes instead of two."
+    },
+    {
+      "what": "Cut-out image text effect",
+      "where": "Dribbble examples",
+      "visual_note": "A big image with a cut-out that uppercase letters fit into, made with subtracts in Figma; the source says you could add more text at the bottom, nav bars or buttons that cut out of the image."
+    },
+    {
+      "what": "Text-only section",
+      "where": "No live example; the source's own wireframe and design",
+      "visual_note": "Text-led section with no photos and an intentionally empty area of white space, with body text of three or more lines."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "nine",
+      "context": "Number of trending website section layouts covered",
+      "evidence": "nine trending website sections of 2024"
+    },
+    {
+      "value": "290 pixels",
+      "context": "Size of the Oswald display font in the giant-text hero",
+      "evidence": "it's very large at 290 pixels"
+    },
+    {
+      "value": "three to five",
+      "context": "Number of options that suits the stacked scroll-card section",
+      "evidence": "a list of three to five options"
+    },
+    {
+      "value": "3 to about 10",
+      "context": "Number of cards that suits a horizontal card carousel",
+      "evidence": "you can display anywhere from 3 to about 10 cards"
+    },
+    {
+      "value": "more than 10",
+      "context": "Carousel card count that becomes cumbersome to click through",
+      "evidence": "anything more than 10 is a bit cumbersome"
+    },
+    {
+      "value": "three boxes instead of just two",
+      "context": "How the top row of the bento grid changed to fit the content",
+      "evidence": "I actually split into three boxes instead of just two"
+    },
+    {
+      "value": "three or more lines",
+      "context": "Minimum body text length for the text-only section to look right",
+      "evidence": "if you have three or more lines to display"
+    }
+  ],
+  "caveats": [
+    "The video frames these as trends for 2024; trend status is dated and opinion, not tested evidence.",
+    "Many site names come from auto-captions and may be misspelled: 'toa', 'one nil', 'rinse f F', 'maa', 'Studio VI', 'cream', 'tapaku Maru' and 'Ami' (the calendar app is likely Amie [inferred]).",
+    "Most judgments are personal taste ('one of my favorites', 'doesn't look too bad'); no data or user testing is given.",
+    "No exact spacing, radius, color, gradient or animation values are stated, apart from Oswald at 290 pixels.",
+    "The ninth section has no live website example, and the Dribbble screenshots were blurry, per the source.",
+    "The source says the Figma file is linked in the video description (the fetched description text does not show the link) and asks viewers to subscribe; this is self-promotion.",
+    "No media list was available for this source, so the visuals are described from the narration only.",
+    "The auto-caption repeats a sentence about navbar placement, and 'Navar' means navbar."
+  ]
+}

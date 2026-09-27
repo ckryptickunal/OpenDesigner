@@ -1,0 +1,1096 @@
+{
+  "theme": "performance-properties",
+  "standards": [
+    {
+      "id": "STD-performance-properties-01",
+      "theme": "performance-properties",
+      "area": "motion",
+      "title": "Animate only transform and opacity",
+      "rule": "Animate movement, size and visibility with transform and opacity only; never animate width, height, margin, padding, top or left (in React Native, also flex and gap), outside the clip-path, accordion-height and childless-width exceptions in the next standard.",
+      "why": "transform and opacity skip layout and paint and run on the GPU, while width, height, margin, padding, top and left trigger all three rendering steps (layout, paint and composite), so the animation stutters. In React Native those properties re-run Yoga on every frame for the node and its siblings.",
+      "strength": "must",
+      "values": {
+        "animate": "transform, opacity",
+        "never-animate-web": "width, height, margin, padding, top, left",
+        "never-animate-react-native": "width, height, margin, padding, flex, top, left, gap"
+      },
+      "applies_to": [
+        "web",
+        "css",
+        "react",
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-performance-cheatsheet",
+          "evidence": "Animation stutters: Animate transform/opacity, not width/top"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "4. Pick the properties: transform and opacity only"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Performance Rules: Only animate transform and opacity"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "7. GPU-only properties; Aggressive Escalation Triggers"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Performance: Only animate transform and opacity"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "5. Performance: Animate transform and opacity only"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "Required Output Format: Animate transform and opacity only"
+        },
+        {
+          "id": "eks-skills-prototype-skill",
+          "evidence": "Operating Posture: transform/opacity only"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "11. Frame-level smoothness: compositor-friendly properties"
+        },
+        {
+          "id": "eks-skills-animation-vocabulary-skill",
+          "evidence": "Hardware acceleration; Compositing; Layout thrashing"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "4. Pick the properties: transform and opacity are free"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Never animate the header's height to collapse it"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "\\btransition(?:-property|Property)?\\s*:\\s*['\\\"`]?[^;{}'\\\"`]*?(?<![\\w-])(?:(?:min|max)-)?(?:width|height|margin|padding|top|left)(?:-(?:top|right|bottom|left|inline|block)(?:-(?:start|end))?)?(?![\\w-])|(?<![\\w-])transition-\\[[^\\]\\s]*?(?<![\\w-])(?:(?:min|max)-)?(?:width|height|margin|padding|top|left)(?![\\w-])|\\b(?:animate|initial|exit|while[A-Z]\\w*)=\\{\\{[^}]*(?<![\\w.$-])(?:width|height|top|left|margin|padding)\\s*:|(?<![\\w.$-])(?:width|height|top|left|margin\\w*|padding\\w*|flex|gap)\\s*:\\s*(?:withTiming|withSpring|withDecay)\\(",
+        "message": "Animate transform and opacity instead (clip-path for reveals); height only for accordions, width only for an absolutely positioned element with no children."
+      },
+      "design_md": true,
+      "conflicts": [
+        "engine.py review (motion_fix in cmd_review) checks a hard-coded transition only for its duration and points it to a motion.transition.* token whatever property it animates: `transition: width 200ms ease-out` is told to use the feedback token ('hover, press and color changes'), and animated layout properties are never flagged (checked by running review on a sample file with no house standards loaded)"
+      ]
+    },
+    {
+      "id": "STD-performance-properties-02",
+      "theme": "performance-properties",
+      "area": "motion",
+      "title": "Only clip-path, accordion height, childless width",
+      "rule": "For movement, size and reveals, the only exceptions to transform and opacity are clip-path and accordion height on the web, and width on an absolutely positioned element with no children (a tab pill, a progress fill).",
+      "why": "clip-path does not affect layout, just like transform, and is hardware-accelerated; accordions have no transform equivalent. An absolutely positioned element with no children is out of flow with no layout dependents, so nothing else re-lays-out, and animating its width keeps the corner radius that scaleX would smear.",
+      "strength": "must",
+      "values": {
+        "fourth-property": "clip-path",
+        "height-exception": "accordions only",
+        "width-exception": "absolutely positioned element with no children"
+      },
+      "applies_to": [
+        "web",
+        "css",
+        "react",
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "clip-path is the sanctioned fourth; height is tolerated only for accordions"
+        },
+        {
+          "id": "ek-the-magic-of-clip-path",
+          "evidence": "The Basics: This has no effect on layout"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "The one exception: an absolutely positioned element with no children"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "This is the sanctioned width animation"
+        },
+        {
+          "id": "eks-skills-prototype-picker",
+          "evidence": "The width transition is a deliberate exception to the transform/opacity rule"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-performance-properties-03",
+      "theme": "performance-properties",
+      "area": "motion",
+      "title": "Keep accordion height animations short",
+      "rule": "When an accordion animates height, keep the transition short: the recipe runs height and opacity over 200ms var(--ease-out) with overflow: hidden.",
+      "why": "An accordion is one of the few animations that costs layout on every frame, so a long duration is expensive as well as sluggish.",
+      "strength": "should",
+      "values": {
+        "accordion-transition": "height 200ms var(--ease-out), opacity 200ms var(--ease-out)",
+        "overflow": "hidden"
+      },
+      "applies_to": [
+        "web",
+        "css",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Accordion / collapse: Keep it short"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "engine.py review (motion_fix in cmd_review) tells `transition: height 400ms ease` to use motion.transition.expand (motion.duration.long, 380ms in a sample system, 'panels and dialogs') instead of asking for a short accordion transition (checked by running review on a sample file with no house standards loaded)"
+      ]
+    },
+    {
+      "id": "STD-performance-properties-04",
+      "theme": "performance-properties",
+      "area": "motion",
+      "title": "Measure height instead of animating to auto",
+      "rule": "Do not animate height to auto; measure the content height in JavaScript, or use a headless primitive that supplies it.",
+      "why": "Stated in the accordion recipe next to the warning that height costs layout on every frame; the source gives no further reason.",
+      "strength": "should",
+      "values": {
+        "never-animate-to": "auto"
+      },
+      "applies_to": [
+        "web",
+        "css",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Measure the content height in JS (or use a headless primitive that supplies it) rather than animating to auto"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-performance-properties-05",
+      "theme": "performance-properties",
+      "area": "motion",
+      "title": "Reveal with clip-path, not size changes",
+      "rule": "Build reveals, image reveals and before/after comparison sliders by animating clip-path: inset() instead of animating width or height or adding an overflow-hidden wrapper.",
+      "why": "clip-path is hardware-accelerated, so it is more performant than a width or height animation, needs no extra overflow-hidden element, and prevents layout shift because the element already occupies its space, just clipped.",
+      "strength": "should",
+      "values": {
+        "reveal-from": "clip-path: inset(0 0 100% 0)",
+        "reveal-to": "clip-path: inset(0 0 0 0)",
+        "comparison-slider": "clip-path: inset(0 50% 0 0)"
+      },
+      "applies_to": [
+        "web",
+        "css",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "ek-the-magic-of-clip-path",
+          "evidence": "Comparison Sliders: a more performant approach with clip-path"
+        },
+        {
+          "id": "ek-the-magic-of-clip-path",
+          "evidence": "Animating images: clip-path is hardware-accelerated ... prevents a layout shift"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Comparison sliders: No extra DOM elements needed, fully hardware-accelerated"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Transforms & clip-path: clip-path: inset(t r b l)"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-performance-properties-06",
+      "theme": "performance-properties",
+      "area": "motion",
+      "title": "Never use transition: all",
+      "rule": "Never write transition: all (or Tailwind's transition-all); name the exact properties that transition.",
+      "why": "transition: all animates unintended properties off the GPU; the animate skill lists it among the automatic blocks in review-animations.",
+      "strength": "must",
+      "values": {
+        "instead": "transition: transform 200ms ease-out"
+      },
+      "applies_to": [
+        "web",
+        "css",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-performance-cheatsheet",
+          "evidence": "Random properties animate: Don't do transition: all"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "Never Ship: transition: all"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Review Checklist: transition: all"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "transition: all animates unintended properties off-GPU"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "Aggressive Escalation Triggers: transition: all"
+        },
+        {
+          "id": "eks-skills-improve-animations-skill",
+          "evidence": "Useful sweeps: transition: all"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "\\btransition(?:-property|Property)?\\s*:\\s*['\\\"`]?\\s*all\\b|(?<![\\w-])transition-all(?![\\w-])",
+        "message": "Name the exact properties, for example transition: transform 200ms ease-out."
+      },
+      "design_md": true,
+      "conflicts": [
+        "engine.py review (motion_fix in cmd_review) answers `transition: all 300ms` only with a duration fix (use the motion.transition.enter token) and never flags the `all` (checked by running review on a sample file with no house standards loaded)"
+      ]
+    },
+    {
+      "id": "STD-performance-properties-07",
+      "theme": "performance-properties",
+      "area": "motion",
+      "title": "Keep animated blur under 20px",
+      "rule": "Keep every animated or transition-time blur() under 20px.",
+      "why": "Animated blur causes performance issues; heavy blur is expensive, especially in Safari.",
+      "strength": "must",
+      "values": {
+        "max-animated-blur": "under 20px"
+      },
+      "applies_to": [
+        "web",
+        "css",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-performance-cheatsheet",
+          "evidence": "Blur causes perf issues: Keep animated blur() under 20px"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Keep it under 20px, heavy blur is expensive, especially in Safari"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "Keep transition-time filter: blur() under 20px"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Masking imperfect crossfades: Keep blur < 20px"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Keep blur under 20px. Heavy blur is expensive, especially in Safari"
+        },
+        {
+          "id": "ek-agents-with-taste",
+          "evidence": "Practical Tips: Add subtle blur (under 20px)"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "(?:\\b(?:animate|initial|exit|while[A-Z]\\w*)=\\{\\{[^}]*|\\.animate\\(\\s*\\[[^\\]]*|(?:\\bfrom|\\bto|\\d%)\\s*\\{[^}]*)(?<![\\w-])filter\\s*:\\s*['\\\"`]?[^;'\\\"`{}]*\\bblur\\(\\s*(?:[2-9]\\d|[1-9]\\d{2,})(?:\\.\\d+)?px",
+        "message": "Keep animated blur under 20px (heavy blur is expensive, especially in Safari)."
+      },
+      "design_md": true,
+      "conflicts": [
+        "engine.py build_elevation emits material.glass.blur = 24px ('Backdrop blur for glass controls and bars.') whenever the depth model is materials (and glass is not turned off) or glass is on, and card DC-L04-15 asks for 'at least 16-20px blur' on glass; the apple-design skill says to animate blur radius on glass enter and exit, so a glass surface that does so animates past the 20px cap [inferred]"
+      ]
+    },
+    {
+      "id": "STD-performance-properties-08",
+      "theme": "performance-properties",
+      "area": "motion",
+      "title": "Blur the seam of a stubborn crossfade",
+      "rule": "When a crossfade still shows two overlapping states after easing and duration tuning, blur the seam: transition filter and opacity and set filter: blur(2px) and opacity: 0.7 while transitioning.",
+      "why": "Without blur the eye reads two distinct objects swapping; blur bridges the old and new states so they read as one smooth transformation. Try other easings and durations first.",
+      "strength": "should",
+      "values": {
+        "blur": "blur(2px)",
+        "opacity-while-transitioning": "0.7",
+        "transition": "filter 200ms ease, opacity 200ms ease"
+      },
+      "applies_to": [
+        "web",
+        "css",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "ek-7-practical-animation-tips",
+          "evidence": "7. Use blur when nothing else works: adds 2px of blur"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Masking imperfect crossfades: filter: blur(2px)"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "10. Cohesion: a jarring crossfade where a subtle blur would bridge two states is a finding"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Masking a crossfade that won't settle"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Use blur to mask imperfect transitions"
+        }
+      ],
+      "engine": {
+        "path": "motion.blur.crossfade",
+        "value": "2px",
+        "type": "dimension",
+        "note": "New token: the blur held during a crossfade that will not settle (the recipe pairs it with opacity 0.7 and 200ms filter and opacity transitions). Any animated blur stays under 20px."
+      },
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-performance-properties-09",
+      "theme": "performance-properties",
+      "area": "motion",
+      "title": "Motion: animate the full transform string",
+      "rule": "In Motion (Framer Motion), animate the full transform string (animate={{ transform: \"translateX(100px)\" }}) instead of the x, y or scale shorthand props.",
+      "why": "The shorthands are not hardware-accelerated: they run on the main thread through requestAnimationFrame and drop frames when the browser is loading, scripting or painting, while the full transform string stays smooth.",
+      "strength": "must",
+      "values": {
+        "do": "animate={{ transform: \"translateX(100px)\" }}",
+        "dont": "animate={{ x: 100 }}"
+      },
+      "applies_to": [
+        "web",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-performance-cheatsheet",
+          "evidence": "Motion's x/y drops frames: Animate the full transform string instead"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "In Motion, use the full transform string"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Framer Motion hardware acceleration caveat"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "Framer Motion x/y/scale shorthands are not hardware-accelerated"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "7. GPU-only properties: Framer Motion x/y/scale shorthands under load"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Framer Motion shorthands are NOT hardware-accelerated"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "\\b(?:animate|initial|exit|whileHover|whileTap|whileFocus|whileDrag|whileInView)=\\{\\{[^}]*(?<![\\w.$-])(?:x|y|scale|scaleX|scaleY)\\s*:",
+        "message": "Use the full transform string, for example animate={{ transform: \"translateX(100px)\" }}."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-performance-properties-10",
+      "theme": "performance-properties",
+      "area": "motion",
+      "title": "Keep per-frame values out of React state",
+      "rule": "Write per-frame animation values (drag, scroll or pointer position) to ref.current.style or a Motion motion value on the web, or to a Reanimated shared value in React Native; never set React state per frame.",
+      "why": "Setting state every frame re-renders the component every frame, the single biggest cause of jank in React Native apps. Motion values update inline styles without re-rendering, so keep scroll-driven values as motion values end to end: copied into a const they stop receiving updates.",
+      "strength": "must",
+      "values": {
+        "web": "ref.current.style",
+        "motion": "motion values (useTransform, useMotionTemplate) passed as inline style",
+        "react-native": "shared value + useAnimatedStyle"
+      },
+      "applies_to": [
+        "react",
+        "web",
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-performance-cheatsheet",
+          "evidence": "React re-renders every frame: Write to ref.current.style, not state"
+        },
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "Dragging was done without any re-renders"
+        },
+        {
+          "id": "ek-the-magic-of-clip-path",
+          "evidence": "Scroll progress: If I saved it in a const variable for example, it would not receive updates"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "6. Keep it off the JS thread: Never setState from a gesture or scroll handler"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "\\bon(?:PointerMove|MouseMove|TouchMove|Drag|Pan|Scroll)=\\{[^}]*\\bset(?!(?:Timeout|Interval|Immediate|Property|Attribute|PointerCapture)\\()[A-Z]\\w*\\(|addEventListener\\(\\s*['\\\"](?:pointermove|mousemove|touchmove|scroll)['\\\"][^;}]*\\bset(?!(?:Timeout|Interval|Immediate|Property|Attribute|PointerCapture)\\()[A-Z]\\w*\\(",
+        "message": "Per-frame value in React state: write it to ref.current.style, a motion value or a shared value."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-performance-properties-11",
+      "theme": "performance-properties",
+      "area": "motion",
+      "title": "Set drag transforms on the moving element",
+      "rule": "During drags and other per-frame updates, set transform directly on the moving element (element.style.transform = `translateY(${distance}px)`); never drive it through a CSS variable set on a parent or container.",
+      "why": "CSS variables are inheritable, so changing one recalculates styles for every child; the drawer's drag became laggy once it held more than about 20 list items, and setting the transform on the element fixed it.",
+      "strength": "must",
+      "values": {
+        "do": "element.style.transform = `translateY(${distance}px)`",
+        "dont": "element.style.setProperty('--swipe-amount', `${distance}px`)",
+        "lag-seen-at": "~20 list items"
+      },
+      "applies_to": [
+        "web",
+        "css",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "Drag gesture: Since CSS Variables are inheritable"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Drag to dismiss: Set transform on the dragged element directly"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "Never drive a child's transform from a CSS variable on the parent"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Performance Rules: CSS variables are inheritable"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "Don't drive child transforms via a CSS variable on the parent"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "Aggressive Escalation Triggers: style recalc storm"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Don't drive child transforms via a CSS variable on the parent"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-performance-properties-12",
+      "theme": "performance-properties",
+      "area": "motion",
+      "title": "Add will-change once you see the glitch",
+      "rule": "Add will-change: transform as the fix for an element you have seen shift 1px or jitter as its motion starts, rather than adding it by default.",
+      "why": "The cheatsheet gives will-change: transform as the fix for an element that shifts 1px as motion starts, 'only once you see it', and the practical tips give it for shaky or jittery animations. will-change asks the browser to promote the element to its own layer ahead of time; the apple-design skill instead hints it wherever motion is imminent, so this is a should.",
+      "strength": "should",
+      "values": {
+        "fix": "will-change: transform",
+        "symptom": "element shifts 1px as motion starts"
+      },
+      "applies_to": [
+        "web",
+        "css",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-performance-cheatsheet",
+          "evidence": "Element shifts 1px as motion starts: will-change: transform (only once you see it)"
+        },
+        {
+          "id": "ek-agents-with-taste",
+          "evidence": "Practical Tips: Shaky/jittery animations, Add will-change: transform"
+        },
+        {
+          "id": "eks-skills-animation-vocabulary-skill",
+          "evidence": "will-change: A CSS hint that an element is about to animate, so the browser can promote it to its own layer ahead of time"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-performance-properties-13",
+      "theme": "performance-properties",
+      "area": "tooling",
+      "title": "Pick the cheapest animation tool",
+      "rule": "Pick the cheapest tool that fits and stop there: on the web a CSS transition, then CSS @starting-style, then a CSS animation, then WAAPI (element.animate()), then Motion; in React Native a Reanimated CSS transition, then a Reanimated CSS animation, then layout animations, then a shared value with a gesture.",
+      "why": "Cheapest tool that works: don't install a motion library for a fade, and using a worklet for a two-state toggle is the mobile equivalent. Motion is for springs, layout animations, exit animations and gesture-driven values; a simple hover or fade needs only a CSS transition.",
+      "strength": "must",
+      "values": {
+        "web": "CSS transition (hover, press, color, state toggle) > CSS @starting-style (entry, no JS state) > CSS animation (predetermined, page busy) > WAAPI element.animate() (programmatic, no library) > Motion motion.dev (springs, layout, exit, gesture-driven values)",
+        "react-native": "Reanimated CSS transition (transitionProperty) > Reanimated CSS animation (animationName) > layout animations (entering / exiting / itemLayoutAnimation) > useSharedValue + Gesture + useAnimatedStyle (anything a finger touches or derived from scroll)"
+      },
+      "applies_to": [
+        "web",
+        "css",
+        "react",
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "3. Pick the tool: cheapest that works; Hard Rules 5"
+        },
+        {
+          "id": "eks-skills-pick-ui-library-skill",
+          "evidence": "Reach for motion when you need springs, layout animations, exit animations, or gesture-driven values"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "3. Pick the tool: cheapest that works; Reach for a shared value only when"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-performance-properties-14",
+      "theme": "performance-properties",
+      "area": "tooling",
+      "title": "Use IntersectionObserver instead of adding Motion",
+      "rule": "If Motion (Framer Motion) is not already in the project, detect viewport entry with the Intersection Observer API instead of adding Motion for useInView.",
+      "why": "Framer Motion is quite heavy.",
+      "strength": "should",
+      "values": {
+        "api": "Intersection Observer API"
+      },
+      "applies_to": [
+        "web",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "ek-the-magic-of-clip-path",
+          "evidence": "Scroll animations: Framer Motion is quite heavy"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-performance-properties-15",
+      "theme": "performance-properties",
+      "area": "motion",
+      "title": "CSS for predetermined motion, JS for dynamic",
+      "rule": "Run predetermined motion as CSS (transitions, @starting-style, keyframe animations) or WAAPI, and keep JavaScript animation (requestAnimationFrame-driven libraries or springs) for dynamic, interruptible or gesture-driven motion.",
+      "why": "CSS animations run off the main thread and stay smooth while the browser loads, scripts or paints, while requestAnimationFrame-based animation drops frames (a Vercel dashboard tab animation using Shared Layout Animations dropped frames during page loads until it moved to CSS). WAAPI gives JavaScript control with CSS performance: hardware-accelerated, interruptible, no library.",
+      "strength": "should",
+      "values": {
+        "waapi-example": "element.animate([{ clipPath: 'inset(0 0 100% 0)' }, { clipPath: 'inset(0 0 0 0)' }], { duration: 1000, fill: 'forwards', easing: 'cubic-bezier(0.77, 0, 0.175, 1)' })"
+      },
+      "applies_to": [
+        "web",
+        "css",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "CSS animations beat JS under load"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "CSS animations beat JS under load; Use WAAPI for programmatic CSS animations"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "CSS (and WAAPI) beat rAF-based JS under load; rAF loops doing what CSS could"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "Guidelines: CSS transitions/@starting-style/WAAPI for predetermined motion"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Performance: CSS animations beat JS under load; WAAPI"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Programmatic, without a library"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "4. Avoid CSS transitions and @keyframes for anything gesture-driven: they can't be smoothly grabbed and reversed mid-flight"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "synthesis/levers.json formulas.motion.web ('if dampingRatio<1 emit sampled linear() spring; else cubic-bezier by energy band') and the motion.transition.move token ('On-screen movement: spatial spring (web: linear() sample).') ship the web's on-screen movement spring as a fixed CSS linear() transition; the sources keep gesture-driven, interruptible movement on JS springs (Motion), because CSS transitions cannot be smoothly grabbed and reversed mid-flight [inferred]"
+      ]
+    },
+    {
+      "id": "STD-performance-properties-16",
+      "theme": "performance-properties",
+      "area": "motion",
+      "title": "Treat dropped frames as a regression",
+      "rule": "Treat any animation, drag or scroll that drops frames as a failed review, measured against 60fps (120fps on displays that support it, an 8ms frame budget instead of 16ms).",
+      "why": "A transition that works but drops frames is a regression, not a pass; not losing frames while dragging is the starting bar, and jittery scroll reads as carelessness. 60fps is the baseline for smooth motion; newer displays run at 120fps.",
+      "strength": "must",
+      "values": {
+        "baseline": "60fps",
+        "high-refresh": "120fps",
+        "frame-budget-at-120fps": "8ms"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "Drag gesture: Not losing frames while dragging is a good start"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "Operating Posture: drops frames is a regression, not a pass"
+        },
+        {
+          "id": "eks-skills-improve-animations-skill",
+          "evidence": "Severity: HIGH = feel-breaking (dropped frames)"
+        },
+        {
+          "id": "eks-skills-animation-vocabulary-skill",
+          "evidence": "Frame rate (FPS): 60fps is the baseline; 120fps on newer displays"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "7. Craft: Jittery scroll ... read as carelessness"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "120fps: the frame budget is 8ms, not 16"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-performance-properties-17",
+      "theme": "performance-properties",
+      "area": "components",
+      "title": "Virtualize long lists and large tables",
+      "rule": "Virtualize long lists and large tables so only visible rows render; never render a 1,000+ row list directly.",
+      "why": "A long list that renders everything scrolls slowly; reach for virtualization (Virtuoso) before pagination hacks.",
+      "strength": "must",
+      "values": {
+        "threshold": "1,000+ rows",
+        "library": "Virtuoso (https://virtuoso.dev); if the project already uses another virtualizer such as react-window, keep it"
+      },
+      "applies_to": [
+        "web",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-performance-cheatsheet",
+          "evidence": "Long list scrolls slowly: Virtualize, only render what's visible"
+        },
+        {
+          "id": "eks-skills-pick-ui-library-skill",
+          "evidence": "Rendering a 1,000+ row list directly: Virtuoso before reaching for pagination hacks"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-performance-properties-18",
+      "theme": "performance-properties",
+      "area": "motion",
+      "title": "Keep React Native motion on the UI thread",
+      "rule": "In React Native, run animation on the UI runtime with Reanimated worklets and Gesture.Pan(), never core Animated or PanResponder, and call back to the React Native runtime (scheduleOnRN) only in onEnd or a useAnimatedReaction at a threshold, never per frame.",
+      "why": "Animation that touches the React Native runtime stutters the moment the app does anything else and drops to 20fps on a three-year-old Android; core Animated can't follow a gesture without crossing the bridge, and scheduleOnRN in onUpdate queues a call 60 to 120 times per second.",
+      "strength": "must",
+      "values": {
+        "animation": "react-native-reanimated + react-native-worklets",
+        "gesture": "Gesture.Pan() from react-native-gesture-handler",
+        "js-callback": "scheduleOnRN in onEnd or useAnimatedReaction",
+        "wrong-thread-result": "20fps on a three-year-old Android"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Hard Rules 2: Reanimated, not core Animated"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Operating Posture: Animating the right thing on the wrong thread"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "6. Keep it off the JS thread: Never schedule back to the RN runtime inside onUpdate"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Never Ship: PanResponder; core Animated for anything a finger touches"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Firing something once at a threshold: useAnimatedReaction"
+        },
+        {
+          "id": "eks-readme",
+          "evidence": "animate-expo: keeping motion off the JS thread"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "\\bPanResponder\\.create\\(|\\bAnimated\\.(?:timing|spring|decay)\\(|\\buseNativeDriver\\s*:|\\.onUpdate\\(.*\\bscheduleOnRN\\(",
+        "message": "Use Reanimated (withTiming, withSpring, useAnimatedStyle) and Gesture.Pan(); core Animated and PanResponder run on the JS thread, and scheduleOnRN belongs in onEnd or a useAnimatedReaction, not onUpdate."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-performance-properties-19",
+      "theme": "performance-properties",
+      "area": "motion",
+      "title": "Crossfade static layers, not elevation or blur",
+      "rule": "In React Native, never animate Android elevation or BlurView intensity; crossfade the opacity of a pre-shadowed layer or a static BlurView instead.",
+      "why": "Animating elevation re-renders the Android shadow every frame, and animating BlurView intensity re-renders the blur each frame on Android.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "4. Pick the properties: Android shadows are elevation"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "4. Pick the properties: Never animate BlurView intensity"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "createAnimatedComponent\\(\\s*BlurView\\s*\\)|(?<![\\w.$-])(?:elevation|intensity)\\s*:\\s*(?:withTiming|withSpring|withDecay|interpolate)\\(",
+        "message": "Crossfade the opacity of a static BlurView or a pre-shadowed layer instead of animating blur intensity or elevation."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-performance-properties-20",
+      "theme": "performance-properties",
+      "area": "motion",
+      "title": "Build layout-animation builders outside render",
+      "rule": "Define Reanimated layout-animation builders at module scope or in useMemo (a per-index delay memoized inside the row), never as an inline chain in JSX.",
+      "why": "The Reanimated docs recommend building layout animations outside components or in useMemo: an inline chain in JSX rebuilds the builder on every render, and builders rebuilt in render cost every re-render.",
+      "strength": "should",
+      "values": {
+        "module-scope": "const ROW_CLOSE = LinearTransition.duration(200)",
+        "per-index": "useMemo(() => FadeInDown.duration(250).delay(index * 40), [index])"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "List entrances: an inline chain in JSX rebuilds the builder on every render"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "module scope: builders rebuilt in render cost every re-render"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "\\b(?:entering|exiting|itemLayoutAnimation|layout)=\\{\\s*[A-Z]\\w*\\.\\w+\\(",
+        "message": "Move the layout-animation builder to module scope or useMemo."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-performance-properties-21",
+      "theme": "performance-properties",
+      "area": "motion",
+      "title": "No entering animation on virtualized rows",
+      "rule": "Never put an entering animation on a row inside FlatList, FlashList or any virtualized list; animate the list container once on mount, or use itemLayoutAnimation for reflow only.",
+      "why": "Rows are recycled, so the animation re-fires every time one scrolls back into view and the list appears to flicker while the user scrolls.",
+      "strength": "must",
+      "values": {
+        "reflow-only": "itemLayoutAnimation"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Never put entering on a row inside FlatList, FlashList, or any virtualized list"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Never Ship: entering on a virtualized list row"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-performance-properties-22",
+      "theme": "performance-properties",
+      "area": "platforms",
+      "title": "Unlock 120fps on ProMotion iPhones",
+      "rule": "In Expo and React Native apps, confirm expo.ios.infoPlist sets CADisableMinimumFrameDurationOnPhone to true, and add it if it is missing.",
+      "why": "On ProMotion iPhones third-party animations are capped at 60fps unless it is set; recent Expo SDKs set it by default. With it the frame budget is 8ms, not 16.",
+      "strength": "should",
+      "values": {
+        "infoPlist": "\"CADisableMinimumFrameDurationOnPhone\": true",
+        "cap-without-it": "60fps"
+      },
+      "applies_to": [
+        "react-native",
+        "ios"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "120fps: CADisableMinimumFrameDurationOnPhone"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "CADisableMinimumFrameDurationOnPhone['\\\"]?\\s*:\\s*false",
+        "message": "Set CADisableMinimumFrameDurationOnPhone to true so animations can run at 120fps."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-performance-properties-23",
+      "theme": "performance-properties",
+      "area": "process",
+      "title": "Judge mobile motion on a release build",
+      "rule": "Judge React Native animation feel and performance only on a release build on the slowest device you support, never in Expo Go, a dev build or the simulator.",
+      "why": "A dev build's JS thread is slow enough to hide exactly the problems you are looking for; wrong-thread motion looks fine in dev on your phone and drops to 20fps on a three-year-old Android.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Hard Rules 5: Feel is judged on a release build on the slowest device you support"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Expo Go is not a performance environment"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-performance-properties-24",
+      "theme": "performance-properties",
+      "area": "motion",
+      "title": "Animate a child to stop hover flicker",
+      "rule": "When a hover effect flickers, animate a child element instead of the hovered parent.",
+      "why": "It is the listed fix for hover-caused flicker; the source gives no further reason.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "web",
+        "css",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "ek-agents-with-taste",
+          "evidence": "Practical Tips: Hover causes flicker, Animate child element, not parent"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": false,
+      "conflicts": []
+    },
+    {
+      "id": "STD-performance-properties-25",
+      "theme": "performance-properties",
+      "area": "motion",
+      "title": "Keep per-frame movement small enough",
+      "rule": "Keep the per-frame positional change below the perception threshold to avoid strobing.",
+      "why": "Smoothness is about what is in the frames, not just the frame rate.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "11. Frame-level smoothness"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": false,
+      "conflicts": []
+    },
+    {
+      "id": "STD-performance-properties-27",
+      "theme": "performance-properties",
+      "area": "motion",
+      "title": "React Native: collapse headers by translating",
+      "rule": "In React Native, never animate a header's height to collapse it on scroll; give the container a fixed height and translate the content inside it, clipping with overflow: 'hidden' (or use headerLargeTitleEnabled on the native stack for a large title).",
+      "why": "Animating the header's height runs a layout pass on the header and everything below it on every scroll frame, the one animation guaranteed to stutter because it competes with the scroll itself.",
+      "strength": "must",
+      "values": {
+        "container": "fixed height, overflow: 'hidden'",
+        "content": "transform: [{ translateY }]",
+        "large-title": "headerLargeTitleEnabled (iOS only)"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Collapsing header on scroll: Never animate the header's height to collapse it ... translate the content inside it, clipping with overflow: 'hidden'"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "3. Pick the tool: Header that collapses into a large title, headerLargeTitleEnabled on the native stack, not a scroll worklet"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "(?<![\\w.$-])height\\s*:\\s*interpolate\\(\\s*(?:scroll\\w*|\\w*[sS]croll\\w*)",
+        "message": "Keep the header a fixed height and translate its content (overflow: 'hidden'); animating height re-lays out everything below it on every scroll frame."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-performance-properties-28",
+      "theme": "performance-properties",
+      "area": "platforms",
+      "title": "No touchmove preventDefault to stop scrolling",
+      "rule": "On the mobile web, stop scroll chaining with overscroll-behavior (none on the root, contain on inner scrollables), never with a touchmove listener that calls preventDefault().",
+      "why": "A touchmove + preventDefault() listener blocks scrolling entirely and makes the listener non-passive, which costs frames.",
+      "strength": "must",
+      "values": {
+        "root": "overscroll-behavior: none",
+        "inner-scrollables": "overflow-y: auto; overscroll-behavior: contain"
+      },
+      "applies_to": [
+        "web",
+        "css",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "6. Pull-to-refresh hijacks scroll: Never reach for a touchmove + preventDefault() listener for this, it blocks scrolling entirely and makes the listener non-passive, which costs frames"
+        },
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "Never Ship: touchmove + preventDefault() to stop overscroll, instead overscroll-behavior"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "addEventListener\\(\\s*['\\\"`]touchmove['\\\"`].*(?:\\bpassive\\s*:\\s*false|\\bpreventDefault\\(\\))",
+        "message": "Use overscroll-behavior: contain on the scrollable instead; a non-passive touchmove listener blocks scrolling and costs frames."
+      },
+      "design_md": true,
+      "conflicts": []
+    }
+  ]
+}

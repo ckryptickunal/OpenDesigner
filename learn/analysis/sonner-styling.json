@@ -1,0 +1,383 @@
+{
+  "summary": "The Styling page explains how to style Sonner beyond its default theme and ranks the approaches. Headless (no default styles, full control of the JSX, which also suits Tailwind) is the recommended approach, because people usually either keep the defaults or go fully custom. It also suggests wrapping toast() in your own function with props that fit your codebase. For small changes, such as a background color, toastOptions.style styles every toast, and the same style option styles a single toast. Per-element classNames need !important (including Tailwind's ! prefix), and unstyled removes all styles but gets messy, so it is only a compromise for a few changes. Icons can be replaced globally with the icons prop, set per toast with icon, or removed with null. For a design system this sets the house policy for toasts: keep the defaults or go headless, and avoid piling up overrides. [inferred]",
+  "key_ideas": [
+    "Headless (no default styles, full JSX control) is the recommended way to style Sonner, including with Tailwind.",
+    "People usually either keep the defaults or go fully custom, which is why headless is recommended.",
+    "Wrap toast() in your own function whose props fit your codebase.",
+    "For small changes such as a background color, toastOptions.style on the Toaster styles every toast the same way.",
+    "The same style option on a single toast() call styles just that toast.",
+    "Class-based styling is best done through headless; per-element classNames need !important to beat the defaults.",
+    "Tailwind classes in classNames must use the important modifier, for example !text-red-900.",
+    "unstyled removes all styles so classes work without !important, but headless gives more control and a nicer developer experience.",
+    "classNames overrides get messy quickly and are only a compromise for a few changes.",
+    "Default icons (success, info, warning, error, loading) are replaced with the icons prop, set per toast with icon, or removed with null."
+  ],
+  "entities": [
+    {
+      "name": "Sonner",
+      "type": "library",
+      "description": "The React toast library whose styling options this page documents."
+    },
+    {
+      "name": "Tailwind CSS",
+      "type": "library",
+      "description": "A utility CSS framework; its classes work in classNames only when marked important."
+    },
+    {
+      "name": "Headless toast",
+      "type": "concept",
+      "description": "The recommended styling approach: no default styles and full control of the JSX."
+    },
+    {
+      "name": "toastOptions",
+      "type": "concept",
+      "description": "A Toaster prop that applies the same style or classNames to every toast."
+    },
+    {
+      "name": "aiforui.dev",
+      "type": "product",
+      "description": "A course promoted in the site-wide banner."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Toasts and notifications",
+      "summary": "How to restyle Sonner toasts: headless, global styles, per-element classNames, unstyled and icon changes."
+    },
+    {
+      "name": "Web implementation (CSS and React)",
+      "summary": "Explains style objects, classNames with !important, Tailwind's ! modifier, the unstyled prop and wrapping toast() in your own function."
+    },
+    {
+      "name": "Design systems and tokens",
+      "summary": "Recommends headless because people usually either use the defaults or go fully custom, and shows abstracting toast() into your own function with props that fit the codebase."
+    },
+    {
+      "name": "Icons and imagery",
+      "summary": "Default success, info, warning, error and loading icons can be swapped globally, per toast, or removed with null."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Headless is the recommended styling approach because people usually either use the defaults or go fully custom.",
+      "evidence": "Headless / TailwindCSS"
+    },
+    {
+      "claim": "The toast() function can be abstracted to accept different props that better fit your codebase.",
+      "evidence": "You can also abstract the toast() function"
+    },
+    {
+      "claim": "Using the toastOptions prop gives every toast the same styling.",
+      "evidence": "Global styles"
+    },
+    {
+      "claim": "The preferred way to style toasts with classes is the headless approach.",
+      "evidence": "Styling specific elements"
+    },
+    {
+      "claim": "Classes applied to toast elements through classNames need !important to override the default styles.",
+      "evidence": "You will need to use !important in order to override the default styles."
+    },
+    {
+      "claim": "The unstyled prop removes all styles so your own styles apply without !important, but headless gives more control and a nicer developer experience.",
+      "evidence": "You can also use the unstyled prop"
+    },
+    {
+      "claim": "Styling through classNames can get messy quickly but is a good compromise for a few changes.",
+      "evidence": "This can get quite messy quickly"
+    },
+    {
+      "claim": "Default icons can be changed with the icons prop, set per toast with icon, or removed by passing null.",
+      "evidence": "Changing Icons"
+    }
+  ],
+  "quotes": [
+    "people usually either use the defaults or go fully custom.",
+    "You will need to use !important in order to override the default styles.",
+    "using headless will provide more control and a nicer developer experience."
+  ],
+  "tags": [
+    "sonner",
+    "toast",
+    "styling",
+    "headless",
+    "tailwind",
+    "classnames",
+    "icons",
+    "react"
+  ],
+  "authority": "non-negotiable",
+  "rules": [
+    {
+      "rule": "Style toasts beyond the default theme with the headless approach: no default styles and full control of the JSX (this is also the route for Tailwind).",
+      "why": "It is the recommended approach, as people usually either use the defaults or go fully custom.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "react",
+      "values": [],
+      "evidence": "This is the recommended approach as people usually either use the defaults or go fully custom."
+    },
+    {
+      "rule": "Either keep Sonner's default look or go fully custom with headless; do not settle in between unless the change is small. [inferred]",
+      "why": "People usually either use the defaults or go fully custom, and the in-between options get messy quickly.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "react",
+      "values": [],
+      "evidence": "people usually either use the defaults or go fully custom"
+    },
+    {
+      "rule": "Wrap toast() in your own function that accepts the props your codebase needs, instead of calling Sonner directly everywhere. [inferred]",
+      "why": "The page says you can abstract the toast() function to accept different props that fit your codebase's needs better.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "react",
+      "values": [],
+      "evidence": "You can also abstract the toast() function"
+    },
+    {
+      "rule": "For small changes such as the background color, set style in the Toaster's toastOptions so every toast gets the same styling.",
+      "why": "toastOptions applies the same styling to every toast.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "toastOptions={{ style: { background: 'red', }, }}"
+      ],
+      "evidence": "If you only need to make smaller changes like changing the background color, you can use the toastOptions prop."
+    },
+    {
+      "rule": "To style one specific toast, pass style in that toast() call's options.",
+      "why": "The same props used in toastOptions also work when calling toast.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "toast('Hello World', { style: { background: 'red', }, })"
+      ],
+      "evidence": "You can also use the same props when calling toast to style a specific toast."
+    },
+    {
+      "rule": "Prefer the headless approach when styling toasts with classes.",
+      "why": "The page calls headless the preferred way to style the toasts with classes.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "react",
+      "values": [],
+      "evidence": "The preferred way to style the toasts with classes is through the headless approach."
+    },
+    {
+      "rule": "When you only need to change a few things with classes, target the toast's elements through toastOptions.classNames (toast, title, description, actionButton, cancelButton, closeButton) and mark those styles !important.",
+      "why": "You will need to use !important in order to override the default styles.",
+      "kind": "do",
+      "strength": "must",
+      "area": "components",
+      "applies_to": "css",
+      "values": [
+        "toast",
+        "title",
+        "description",
+        "actionButton",
+        "cancelButton",
+        "closeButton",
+        "!important"
+      ],
+      "evidence": "Styling specific elements"
+    },
+    {
+      "rule": "When using Tailwind classes in classNames, mark each one important with the ! prefix.",
+      "why": "This makes sure the styles are applied correctly over the defaults.",
+      "kind": "do",
+      "strength": "must",
+      "area": "components",
+      "applies_to": "css",
+      "values": [
+        "'!text-red-900'"
+      ],
+      "evidence": "you need to mark them as !important"
+    },
+    {
+      "rule": "Use unstyled: true with classNames to drop all default styles and style without !important, only for a few changes; beyond that, switch to headless.",
+      "why": "unstyled removes all styles, but at that point headless provides more control and a nicer developer experience; the approach gets messy quickly and is only a good compromise for a few changes.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "unstyled: true"
+      ],
+      "evidence": "You can also use the unstyled prop"
+    },
+    {
+      "rule": "Do not pile up many classNames or unstyled overrides; move to headless once the changes stop being small.",
+      "why": "This can get quite messy quickly; it is only a good compromise as long as it is just a few changes.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "react",
+      "values": [],
+      "evidence": "This can get quite messy quickly"
+    },
+    {
+      "rule": "Replace the default toast icons for the whole app with the Toaster's icons prop (success, info, warning, error, loading).",
+      "why": "The icons prop changes the default icons.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "success",
+        "info",
+        "warning",
+        "error",
+        "loading"
+      ],
+      "evidence": "Changing Icons"
+    },
+    {
+      "rule": "Set a different icon on a single toast with the icon option.",
+      "why": "You can set an icon for each toast.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "icon: <Icon />"
+      ],
+      "evidence": "You can also set an icon for each toast"
+    },
+    {
+      "rule": "Remove an icon by passing null: icon: null on one toast, or icons={{ success: null }} on the Toaster for every toast of that type.",
+      "why": "Passing null removes the icon completely.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "icon: null",
+        "icons={{ success: null, }}"
+      ],
+      "evidence": "Or remove the icon completely by passing null"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "How should toasts be styled to match the design system?",
+      "options": [
+        {
+          "name": "Keep the defaults",
+          "effect": "Sonner's default theme, with no styling work.",
+          "when": "When the default look fits; the page notes people usually either use the defaults or go fully custom."
+        },
+        {
+          "name": "Global styles (toastOptions.style)",
+          "effect": "Every toast gets the same small change, such as a background color.",
+          "when": "For smaller changes like the background color."
+        },
+        {
+          "name": "Per-element classNames with !important",
+          "effect": "Classes on toast, title, description and the buttons override the defaults; Tailwind classes need the ! prefix.",
+          "when": "When only a few things need to change; it gets messy quickly."
+        },
+        {
+          "name": "unstyled with classNames",
+          "effect": "All default styles are removed, so classes apply without !important.",
+          "when": "A compromise for a few changes; headless gives more control."
+        },
+        {
+          "name": "Headless",
+          "effect": "No default styles and full control of the JSX, with Sonner's behaviour kept.",
+          "when": "When going fully custom, including with Tailwind; this is the recommended approach."
+        }
+      ],
+      "recommendation": "Headless, because people usually either keep the defaults or go fully custom, and headless gives more control and a nicer developer experience than stacking overrides.",
+      "maps_to": null,
+      "evidence": "Headless / TailwindCSS; Styling specific elements"
+    },
+    {
+      "question": "Which icons should toasts show?",
+      "options": [
+        {
+          "name": "Default icons",
+          "effect": "Sonner's built-in success, info, warning, error and loading icons.",
+          "when": "When no icons prop is set."
+        },
+        {
+          "name": "Custom icon set",
+          "effect": "The Toaster's icons prop swaps each default icon for your own components.",
+          "when": "When the design system has its own icons. [inferred]"
+        },
+        {
+          "name": "Per-toast icon",
+          "effect": "A single toast shows a different icon through icon.",
+          "when": "When one toast needs a special icon."
+        },
+        {
+          "name": "No icon",
+          "effect": "Passing null removes the icon from one toast or from every toast of a type.",
+          "when": "When the icon should be removed completely."
+        }
+      ],
+      "recommendation": null,
+      "maps_to": null,
+      "evidence": "Changing Icons"
+    }
+  ],
+  "process": [
+    {
+      "step": "Decide defaults or custom",
+      "detail": "If the default look fits, keep it. If not, the recommended path is headless: no default styles and full control of the JSX."
+    },
+    {
+      "step": "Abstract toast()",
+      "detail": "Wrap toast() in your own function whose props fit your codebase."
+    },
+    {
+      "step": "Small global tweak",
+      "detail": "For a small change such as the background, set style in the Toaster's toastOptions; use style in a toast() call for one toast."
+    },
+    {
+      "step": "Few element tweaks",
+      "detail": "Set toastOptions.classNames for toast, title, description, actionButton, cancelButton and closeButton with !important (Tailwind: the ! prefix), or use unstyled: true to drop the defaults. Switch to headless if the list grows."
+    },
+    {
+      "step": "Icons",
+      "detail": "Swap icons globally with the icons prop, per toast with icon, or remove them with null."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Global red background",
+      "where": "Sonner docs, Global styles",
+      "visual_note": "Code only: <Toaster toastOptions={{ style: { background: 'red' } }} /> gives every toast the same background; 'red' is only an example value."
+    },
+    {
+      "what": "Element class map",
+      "where": "Sonner docs, Styling specific elements",
+      "visual_note": "Code only: classNames keys toast, title, description, actionButton, cancelButton and closeButton, each mapped to a class."
+    },
+    {
+      "what": "Tailwind override",
+      "where": "Sonner docs, Styling specific elements",
+      "visual_note": "Code only: classNames: { description: '!text-red-900' }, showing Tailwind's important modifier."
+    },
+    {
+      "what": "Custom icon set",
+      "where": "Sonner docs, Changing Icons",
+      "visual_note": "Code only: icons={{ success: <SuccessIcon />, info: <InfoIcon />, warning: <WarningIcon />, error: <ErrorIcon />, loading: <LoadingIcon /> }}."
+    }
+  ],
+  "numbers": [],
+  "caveats": [
+    "The headless example was a live preview, and its code did not survive text extraction ('Cop y ied Code'), so this page does not show the headless call itself.",
+    "The background: 'red' and '!text-red-900' values are illustrations of the technique, not recommended colors.",
+    "A site-wide banner promotes the author's aiforui.dev course with a countdown: self-promotion, time-sensitive.",
+    "The page's publish date is unknown, so the API may have changed since it was fetched."
+  ]
+}

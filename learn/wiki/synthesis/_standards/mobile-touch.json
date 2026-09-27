@@ -1,0 +1,2359 @@
+{
+  "theme": "mobile-touch",
+  "standards": [
+    {
+      "id": "STD-mobile-touch-01",
+      "theme": "mobile-touch",
+      "area": "platforms",
+      "title": "Gate hover styles behind a capability query",
+      "rule": "Put every :hover style and hover animation inside @media (hover: hover) and (pointer: fine), with both conditions, and ship the gate in the same change as the hover style.",
+      "why": "Touch browsers fake hover on the first tap and leave it applied, so a button that scales up on hover stays scaled up after a tap; (pointer: fine) also rules out styluses and the odd Android device that claims hover support.",
+      "strength": "must",
+      "values": {
+        "hover-gate": "@media (hover: hover) and (pointer: fine)",
+        "tailwind-v4": "the hover: variant already compiles to @media (hover: hover)",
+        "tailwind-v3": "future.hoverOnlyWhenSupported"
+      },
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "1. Hover state stuck after tap; Baseline; Never Ship: Ungated :hover"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "7. Reduced motion and pointer gating; Never Ship: Ungated :hover motion"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Touch device hover states"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "touch fires false hovers on tap"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Accessibility: gate hover motion"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "8. Accessibility"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "Required Output Format: gating when the suggestion involves hover"
+        },
+        {
+          "id": "eks-readme",
+          "evidence": "mobile-native: sticky hover states"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py render_preview writes ungated :hover rules (.ds-btn.primary:hover, .ds-btn.secondary:hover, and .pv-card:hover moving .motion-box with transform), so the generated preview.html keeps a hover state after a tap on a phone [inferred]"
+      ]
+    },
+    {
+      "id": "STD-mobile-touch-02",
+      "theme": "mobile-touch",
+      "area": "platforms",
+      "title": "Detect touch by capability, never by device",
+      "rule": "Decide touch behavior with media queries and platform features ((hover), (pointer), env(), dvh), written for touch and mouse at the same time; never branch on user-agent strings or screen width to guess at touch, and never reach for a JavaScript touch-detection hook where a media query does it.",
+      "why": "Touch and mouse are not exclusive (iPads with trackpads, laptops with touchscreens, phones with a mouse), and almost every mobile fix is one CSS declaration or meta tag, so a useIsTouchDevice() hook to hide hover states is the wrong tool.",
+      "strength": "must",
+      "values": {
+        "capability-features": "(hover: hover), (pointer: fine), (pointer: coarse), env(), dvh",
+        "never": "user-agent strings, screen width, useIsTouchDevice()"
+      },
+      "applies_to": [
+        "web",
+        "css",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "Hard Rules 2: Media queries over device sniffing; Hard Rules 3: Touch and mouse are not exclusive"
+        },
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "Operating Posture failure mode 2: Reaching for JavaScript when CSS or a meta tag does it; Never Ship: User-agent sniffing to detect touch"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "navigator\\.userAgent[^\\n]*(?:iPhone|iPad|iPod|Android|Mobi)|(?:iPhone|iPad|iPod|Android|Mobi)[^\\n]*navigator\\.userAgent|\\buseIsTouchDevice\\b",
+        "message": "Detect touch with (hover: hover) and (pointer: fine) media queries, not the user agent or a touch-detection hook."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-03",
+      "theme": "mobile-touch",
+      "area": "platforms",
+      "title": "Remove the tap highlight flash globally",
+      "rule": "Set html { -webkit-tap-highlight-color: transparent; } once, globally, and give every tappable element its own :active state in the same change.",
+      "why": "The translucent flash iOS Safari and Android Chrome paint over a tapped element is the loudest 'this is a website' signal and fights the designed press feedback; removing it removes the only feedback the browser gave, so :active has to replace it.",
+      "strength": "must",
+      "values": {
+        "declaration": "html { -webkit-tap-highlight-color: transparent; }",
+        "replacement-feedback": ":active on every tappable element"
+      },
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "2. Gray/blue flash on tap; Baseline"
+        },
+        {
+          "id": "eks-readme",
+          "evidence": "mobile-native: tap highlight flashes"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "-webkit-tap-highlight-color\\s*:\\s*(?!transparent\\b|rgba\\(\\s*0\\s*,\\s*0\\s*,\\s*0\\s*,\\s*0\\s*\\)|#0000(?:0000)?\\b)[^;}\\s]",
+        "message": "Set -webkit-tap-highlight-color: transparent and give the element its own :active state."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-04",
+      "theme": "mobile-touch",
+      "area": "components",
+      "title": "Give press feedback on press, not release",
+      "rule": "Show press feedback the instant the finger lands (:active in CSS, pointerdown in JavaScript, onPressIn in React Native) and commit the action on release; never give feedback on click alone.",
+      "why": "Native buttons respond the instant the finger lands; feedback on click arrives when the finger leaves and reads as lag even at 0ms, and waiting for the tap to complete before showing anything feels dead.",
+      "strength": "must",
+      "values": {
+        "web": ":active, or pointerdown when JavaScript is needed",
+        "react-native": "feedback on onPressIn, commit on press-out",
+        "never": "press feedback on click only"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "5. Tap feels laggy: Feedback on release instead of press; Never Ship: Press feedback on click only"
+        },
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "1. Hover state stuck after tap: Touch users still need press feedback"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "1. Response: Respond on pointer-down, not on release; 10. Gesture design details: Tap"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "7. Press, not hover: Feedback on press-in, commit on press-out"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-05",
+      "theme": "mobile-touch",
+      "area": "motion",
+      "title": "Press feedback scales to 0.97, briefly",
+      "rule": "Scale every pressable element to 0.97 while it is pressed, with a transform transition of 100–160ms ease-out on the web and 100–150ms in React Native (Pressable plus a Reanimated CSS transition), using the codebase's existing ease-out curve rather than a new one.",
+      "why": "Scale takes the label and icons with it, so the press reads as physical and confirms the interface heard the user; the React Native recipe treats 120ms and a 3% scale as the ceiling for something touched this often.",
+      "strength": "must",
+      "values": {
+        "press-scale": "0.97",
+        "web-duration": "100–160ms",
+        "react-native-duration": "100–150ms",
+        "easing": "ease-out (var(--ease-out); don't fork a new curve)",
+        "web-sample": "transition: transform 100ms var(--ease-out), background 100ms; .button:active { transform: scale(0.97); background: var(--gray-4); }",
+        "react-native-recipe": "transitionProperty: 'transform', transitionDuration: '120ms', transitionTimingFunction: 'cubic-bezier(0.23, 1, 0.32, 1)', pressed: transform [{ scale: 0.97 }]",
+        "ceiling": "120ms and a 3% scale for something touched this often",
+        "subtle-range": "0.95–0.98 (improve-animations audit: keep it subtle)"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "5. Tap feels laggy: .button:active code; Keep press feedback at 100–160ms and ease-out; don't fork a new curve"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "7. Press, not hover: scale: 0.97 in 100–150ms; Duration: Press feedback 100–150ms"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Press feedback: 120ms and a 3% scale is the ceiling"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "Feedback lives on the press, and it's instant (.button:active scale(0.97), transform 100ms ease-out)"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Button press: transition: transform 160ms var(--ease-out)"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Buttons must feel responsive"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Physicality: Button press feedback"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "Press feedback"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "Feedback gaps"
+        },
+        {
+          "id": "ek-7-practical-animation-tips",
+          "evidence": "A scale of 0.97 on the :active pseudo-class should do the job"
+        },
+        {
+          "id": "ek-agents-with-taste",
+          "evidence": "Practical Tips: Make buttons feel responsive"
+        }
+      ],
+      "engine": [
+        {
+          "path": "motion.scale.press",
+          "value": 0.97,
+          "type": "number",
+          "note": "New token for the pressed scale of every pressable; engine.py set refuses a new number token when no type is given (tested), so this mapping needs the type field honoured"
+        },
+        {
+          "path": "motion.duration.micro",
+          "value": "100ms",
+          "type": "duration",
+          "note": "Already 100ms (no change, tested); motion.transition.feedback uses it, and 100ms sits inside both press ranges (web 100–160ms, React Native 100–150ms) and matches the mobile-native sample"
+        }
+      ],
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/references/stages/21-actions-states-and-focus.detailed.md Q-state-04 defaults press styling to a tint overlay (opacity.state.pressed 0.1) and the engine has no press-scale token, so nothing generated scales a pressed control [inferred]"
+      ]
+    },
+    {
+      "id": "STD-mobile-touch-06",
+      "theme": "mobile-touch",
+      "area": "platforms",
+      "title": "Remove the tap delay on tappables",
+      "rule": "Apply touch-action: manipulation to button, a, [role=\"button\"] and every other tappable element.",
+      "why": "Browsers wait after a tap (the 300ms click delay) to see whether a double-tap zoom follows, and iOS Safari still delays on some elements even with width=device-width; manipulation says the element never double-tap-zooms, so click fires immediately.",
+      "strength": "must",
+      "values": {
+        "declaration": "touch-action: manipulation",
+        "selectors": "button, a, [role=\"button\"], .tappable",
+        "delay-removed": "300ms"
+      },
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "5. Tap feels laggy: The 300ms click delay; Baseline"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "Be vigilant about every latency: the ~300ms tap delay"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-07",
+      "theme": "mobile-touch",
+      "area": "components",
+      "title": "Add double-tap handling only where needed",
+      "rule": "Add double-tap detection only where a double-tap action truly exists.",
+      "why": "Double-tap detection unavoidably delays single taps, so only pay that cost where a double-tap does something.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "10. Gesture design details: Minimize disambiguation delays"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-08",
+      "theme": "mobile-touch",
+      "area": "components",
+      "title": "Let a drifting finger keep its press",
+      "rule": "Keep a press alive when the finger drifts a little (pressRetentionOffset in React Native, about 10px of hysteresis or hit padding on the web), and let the user cancel a tap by dragging away and back.",
+      "why": "A finger drifting a few pixels should not cancel a press the user meant.",
+      "strength": "should",
+      "values": {
+        "react-native": "pressRetentionOffset (the recipe sets pressRetentionOffset={16})",
+        "web": "~10px of hysteresis/hit padding around the target"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "7. Press, not hover: pressRetentionOffset"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Press feedback: pressRetentionOffset stops a slight finger drift from cancelling"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "10. Gesture design details: Tap: ~10px of hysteresis/hit padding, cancel-by-dragging-away"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-09",
+      "theme": "mobile-touch",
+      "area": "accessibility",
+      "title": "Touch targets 44pt on iOS, 48dp on Android",
+      "rule": "Make every touch target at least 44×44pt on iOS and 48dp on Android, and give small controls on the web a 44px hit area for touch; when the visual is smaller, grow the hit area (hitSlop, or a pseudo-element on the web), never the visual.",
+      "why": "Small buttons are hard to tap; hitSlop brings a small icon up to the 44pt target without growing it.",
+      "strength": "must",
+      "values": {
+        "ios": "44×44pt",
+        "android": "48dp",
+        "web": "44px minimum hit area for touch (pseudo-element)",
+        "react-native": "hitSlop (the recipe sets hitSlop={12})"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "7. Press, not hover: 44×44pt minimum touch target (48dp Android); add hitSlop"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Press feedback: hitSlop brings a small icon up to the 44pt target"
+        },
+        {
+          "id": "ek-agents-with-taste",
+          "evidence": "Practical Tips: Small buttons hard to tap (44px minimum hit area, pseudo-element)"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-10",
+      "theme": "mobile-touch",
+      "area": "layout",
+      "title": "Size full-height layouts with dvh and svh",
+      "rule": "Use height: 100dvh for app shells, drawers and bottom-pinned UI and min-height: 100svh for marketing heroes and first screens; never use 100vh or lvh for them (keep a 100vh line above only as a fallback when the support matrix needs old browsers).",
+      "why": "100vh is the largest viewport, so on load it overflows by the URL bar and a bottom-pinned button sits under it; dvh tracks the visible area as the browser chrome shows and hides, while svh is stable and never cut off, and dvh on a marketing hero causes layout shifts mid-scroll.",
+      "strength": "must",
+      "values": {
+        "app-shell": "height: 100dvh",
+        "hero": "min-height: 100svh",
+        "avoid": "100vh, lvh"
+      },
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "3. Layout has the wrong height; Never Ship: 100vh for an app shell or bottom-pinned UI; 100dvh on a marketing hero"
+        },
+        {
+          "id": "eks-readme",
+          "evidence": "mobile-native: the 100vh bug"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "(?<![\\w-])(?:min-height|height|minHeight)\\s*:\\s*['\\\"]?100l?vh\\b(?![^\\n]*\\b100[ds]vh\\b)|(?<![\\w-])(?:min-)?h-screen(?![\\w-])",
+        "message": "Use height: 100dvh (h-dvh) for app shells and bottom-pinned UI and min-height: 100svh (min-h-svh) for heroes; keep 100vh only as a fallback line above them."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-11",
+      "theme": "mobile-touch",
+      "area": "typography",
+      "title": "Form inputs at 16px or larger",
+      "rule": "Set the text of input, textarea and select to at least 16px (1rem at the default root size); if the design wants smaller input text on desktop, apply the 16px only under @media (pointer: coarse).",
+      "why": "iOS Safari zooms the page when focus lands on an input under 16px and does not zoom back out on blur, leaving the user on a cropped, drifted layout.",
+      "strength": "must",
+      "values": {
+        "input-font-size": "16px",
+        "coarse-only-variant": "@media (pointer: coarse) { input, textarea, select { font-size: 16px; } }"
+      },
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "4. Page zooms into the input; Baseline; Never Ship: user-scalable=no or maximum-scale=1 (16px inputs instead)"
+        },
+        {
+          "id": "eks-readme",
+          "evidence": "mobile-native: inputs that zoom the page"
+        }
+      ],
+      "engine": {
+        "path": "font.size.input",
+        "value": "16px",
+        "type": "dimension",
+        "note": "New token for the text size of inputs, textareas and selects (tested: engine.py set creates a dimension token in primitives.tokens.json); the CSS export writes font sizes in rem, so it becomes 1rem"
+      },
+      "review": {
+        "pattern": "(?<![\\w.#-])(?:input|textarea|select)(?![\\w-])[^{};]*\\{[^}]*font-size\\s*:\\s*(?:(?:\\d|1[0-5])(?:\\.\\d+)?px|0?\\.\\d+rem)|<(?:input|textarea|select)\\b[^>]*fontSize\\s*:\\s*['\\\"]?(?:\\d|1[0-5])(?:\\.\\d+)?(?:px)?['\\\"]?\\s*[,}]",
+        "message": "Make input, textarea and select text at least 16px so iOS Safari does not zoom on focus."
+      },
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/references/stages/11-type-scale-and-text.md Q-type-08 defaults a web app to a 14px UI body (text.body.md = font.size.14), and skills/opendesigner/scripts/engine.py render_preview styles .ds-input with text.body.md, so the preview's inputs are 14px and fields built from text.body.md would make iOS Safari zoom on focus [inferred]"
+      ]
+    },
+    {
+      "id": "STD-mobile-touch-12",
+      "theme": "mobile-touch",
+      "area": "accessibility",
+      "title": "Never disable pinch zoom",
+      "rule": "Never set user-scalable=no or maximum-scale=1 in the viewport meta tag; fix the input font size that causes the zoom instead.",
+      "why": "Disabling zoom is an accessibility failure, and the zoom it is usually meant to stop comes from inputs under 16px.",
+      "strength": "must",
+      "values": {
+        "never": "user-scalable=no, maximum-scale=1",
+        "instead": "16px inputs"
+      },
+      "applies_to": [
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "Hard Rules 4: Never disable zoom; 4. Page zooms into the input; Never Ship"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "user-scalable\\s*=\\s*['\\\"]?(?:no|0)\\b|maximum-scale\\s*=\\s*['\\\"]?1(?:\\.0+)?(?![\\d.])|userScalable\\s*:\\s*false|maximumScale\\s*:\\s*1(?![\\d.])",
+        "message": "Do not disable zoom; make inputs 16px instead."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-13",
+      "theme": "mobile-touch",
+      "area": "components",
+      "title": "Open the right software keyboard per field",
+      "rule": "Give each field the keyboard it needs: inputmode=\"numeric\" for codes, inputmode=\"decimal\" for amounts, type=\"email\" and type=\"tel\" for those fields, autocapitalize=\"none\" and autocorrect=\"off\" on usernames and codes, and an enterkeyhint (\"send\", \"search\" or \"done\") so the return key says what it does.",
+      "why": "A field should open the software keyboard its content needs, and enterkeyhint makes the return key say what it does; the source sets these while fixing inputs for a phone.",
+      "strength": "should",
+      "values": {
+        "codes": "inputmode=\"numeric\"",
+        "amounts": "inputmode=\"decimal\"",
+        "email": "type=\"email\"",
+        "phone": "type=\"tel\"",
+        "usernames-and-codes": "autocapitalize=\"none\" autocorrect=\"off\"",
+        "return-key": "enterkeyhint=\"send\" / \"search\" / \"done\""
+      },
+      "applies_to": [
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "4. Page zooms into the input: set the keyboard"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-14",
+      "theme": "mobile-touch",
+      "area": "platforms",
+      "title": "Contain overscroll in app layouts",
+      "rule": "In apps with their own scroll containers, a drawer the user drags down, or a canvas, set overscroll-behavior: none on html and body and overflow-y: auto with overscroll-behavior: contain on every inner scrollable; keep the page's default overscroll only for a scrolling document where pull-to-refresh is welcome.",
+      "why": "Scrolling past the top triggers pull-to-refresh on Android Chrome and the whole-page rubber band on iOS, which is wrong in an app; contain keeps a container's own native-feeling bounce but stops scroll from chaining to the page behind it.",
+      "strength": "must",
+      "values": {
+        "root": "html, body { overscroll-behavior: none; }",
+        "inner-scrollables": "overflow-y: auto; overscroll-behavior: contain;",
+        "scrolling-document": "drop overscroll-behavior: none from html"
+      },
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "6. Pull-to-refresh hijacks scroll; Baseline: Drop overscroll-behavior: none from html if the app is a scrolling document"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-15",
+      "theme": "mobile-touch",
+      "area": "platforms",
+      "title": "Never stop overscroll with touchmove listeners",
+      "rule": "Never stop overscroll or pull-to-refresh with a touchmove listener that calls preventDefault(); use overscroll-behavior instead.",
+      "why": "The listener blocks scrolling entirely and makes the listener non-passive, which costs frames.",
+      "strength": "must",
+      "values": {
+        "never": "touchmove + preventDefault()",
+        "instead": "overscroll-behavior"
+      },
+      "applies_to": [
+        "web",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "6. Pull-to-refresh hijacks scroll; Never Ship: touchmove + preventDefault() to stop overscroll"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "['\\\"]touchmove['\\\"][^\\n]*preventDefault\\s*\\(|onTouchMove\\s*=\\s*\\{[^\\n]*preventDefault\\s*\\(",
+        "message": "Use overscroll-behavior (none on the root, contain on inner scrollers) instead of preventDefault on touchmove."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-16",
+      "theme": "mobile-touch",
+      "area": "layout",
+      "title": "Paint edge to edge, pad the safe areas",
+      "rule": "Add viewport-fit=cover to the viewport meta tag and pad fixed headers, bottom tab bars, toasts and sheets with env(safe-area-inset-*), with a 0px fallback when the inset is used in calc(); in React Native, offset floating UI such as toasts by the safe-area insets.",
+      "why": "Native apps paint edge to edge and pad their content away from the notch, Dynamic Island and home indicator; without viewport-fit=cover every env() inset is 0px, and a toast at bottom: 16 sits under the home indicator on every modern iPhone.",
+      "strength": "must",
+      "values": {
+        "viewport-meta": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\" />",
+        "header": "padding-top: env(safe-area-inset-top)",
+        "bottom-bar": "padding-bottom: env(safe-area-inset-bottom)",
+        "sheet": "padding-bottom: calc(1rem + env(safe-area-inset-bottom))",
+        "calc-fallback": "env(safe-area-inset-bottom, 0px)",
+        "react-native-toast": "bottom: insets.bottom + 16, left: 16, right: 16"
+      },
+      "applies_to": [
+        "web",
+        "css",
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "7. Content stops at the notch; Never Ship: env(safe-area-inset-*) without viewport-fit=cover"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Toast: Safe area insets, always"
+        },
+        {
+          "id": "eks-readme",
+          "evidence": "mobile-native: safe areas"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-17",
+      "theme": "mobile-touch",
+      "area": "components",
+      "title": "Make controls unselectable, keep content selectable",
+      "rule": "Set user-select: none, -webkit-user-select: none and -webkit-touch-callout: none on controls (button, [role=\"button\"], tabs, chips, drag handles) and never on body or on text that is content.",
+      "why": "Holding a finger on a web button selects its label or pops the copy/share callout, which native controls never do, while users copy addresses, error messages and order numbers from content; the same declaration is correct on a button and a defect on body text.",
+      "strength": "must",
+      "values": {
+        "controls": "user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;",
+        "selectors": "button, [role=\"button\"], .tab, .chip, .drag-handle",
+        "never": "user-select: none on body"
+      },
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "8. Long-press selects button text; Hard Rules 1: Every fix ships with the reason; Baseline; Never Ship: user-select: none on body"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "(?<![\\w.#-])body(?![\\w-])[^{};]*\\{[^}]*user-select\\s*:\\s*none",
+        "message": "Keep content selectable: put user-select: none only on controls."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-18",
+      "theme": "mobile-touch",
+      "area": "components",
+      "title": "Set touch-action per gesture surface",
+      "rule": "On custom gesture surfaces set touch-action to what the browser may still do: pan-y on a horizontal JavaScript carousel, pan-x on a vertical sheet handle, and none only on a surface whose gesture owns every axis (a drag-to-dismiss sheet, a slider), never on something the user must scroll past.",
+      "why": "A horizontal swipe is ambiguous to the browser, which often jitters the page up while the carousel moves; none means the element handles everything, so elsewhere the user cannot scroll past it.",
+      "strength": "must",
+      "values": {
+        "horizontal-carousel": "touch-action: pan-y",
+        "vertical-sheet-handle": "touch-action: pan-x",
+        "owns-every-axis": "touch-action: none"
+      },
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "9. Carousel scrolls vertically: The values name what the browser may still do; Never Ship: touch-action: none on something the user needs to scroll past"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "(?<![\\w.#-])(?:html|body)(?![\\w-])[^{};]*\\{[^}]*touch-action\\s*:\\s*none",
+        "message": "Never put touch-action: none on the page; use it only on a surface whose gesture owns every axis, and pan-x or pan-y elsewhere."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-19",
+      "theme": "mobile-touch",
+      "area": "components",
+      "title": "Prefer native scroll-snap carousels",
+      "rule": "When a carousel can be native scroll, build it with scroll-snap-type: x mandatory on the track and scroll-snap-align: start on the slides instead of a JavaScript gesture.",
+      "why": "The browser's own physics beat a hand-rolled spring, and touch-action becomes unnecessary.",
+      "strength": "should",
+      "values": {
+        "track": "scroll-snap-type: x mandatory",
+        "slide": "scroll-snap-align: start"
+      },
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "9. Carousel scrolls vertically: If the carousel is native scroll rather than a JS gesture"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-20",
+      "theme": "mobile-touch",
+      "area": "color",
+      "title": "One theme-color per color scheme",
+      "rule": "Ship one theme-color meta tag per prefers-color-scheme plus <meta name=\"color-scheme\" content=\"light dark\">, valued at the color at the very top of the page (the header background, not the brand color); update it from JavaScript when the theme switches by class, and make an installed PWA's status-bar style and manifest colors the same decision.",
+      "why": "The status bar and browser chrome take their color from theme-color, so a single value gives light mode a dark bar or dark mode a white one.",
+      "strength": "must",
+      "values": {
+        "light": "<meta name=\"theme-color\" media=\"(prefers-color-scheme: light)\" content=\"<header background>\" />",
+        "dark": "<meta name=\"theme-color\" media=\"(prefers-color-scheme: dark)\" content=\"<header background>\" />",
+        "color-scheme": "<meta name=\"color-scheme\" content=\"light dark\" />",
+        "sample-values": "#ffffff (light), #0a0a0a (dark)",
+        "nextjs": "viewport export themeColor: [{ media, color }]",
+        "pwa": "apple-mobile-web-app-status-bar-style, manifest theme_color and background_color"
+      },
+      "applies_to": [
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "10. Status bar color doesn't match; Never Ship: One theme-color for both schemes"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "<meta\\b(?=[^>]*\\bname\\s*=\\s*['\\\"]theme-color['\\\"])(?![^>]*\\bmedia\\s*=)[^>]*>|\\bthemeColor\\s*:\\s*['\\\"](?:#|rgb|hsl|oklch)",
+        "message": "Give each prefers-color-scheme its own theme-color, set to the header background."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-21",
+      "theme": "mobile-touch",
+      "area": "platforms",
+      "title": "Ship the mobile baseline first",
+      "rule": "Before the first component of a mobile-facing web app, ship the baseline: the viewport meta with width=device-width, initial-scale=1, viewport-fit=cover and interactive-widget=resizes-content; one theme-color per scheme; html with -webkit-tap-highlight-color: transparent, -webkit-text-size-adjust: 100% and overscroll-behavior: none; 16px inputs; touch-action: manipulation and user-select: none on button, a and [role=\"button\"]; and every :hover rule inside @media (hover: hover) and (pointer: fine).",
+      "why": "It is the floor for feeling native on mobile; interactive-widget=resizes-content makes the software keyboard shrink the layout viewport on Android Chrome so 100dvh and bottom-pinned inputs react as they do on iOS, and -webkit-text-size-adjust: 100% prevents font inflation in landscape.",
+      "strength": "must",
+      "values": {
+        "viewport-meta": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content\" />",
+        "html": "-webkit-tap-highlight-color: transparent; -webkit-text-size-adjust: 100%; overscroll-behavior: none;",
+        "inputs": "input, textarea, select { font-size: 16px; }",
+        "controls": "button, a, [role=\"button\"] { touch-action: manipulation; user-select: none; -webkit-user-select: none; }",
+        "hover": "@media (hover: hover) and (pointer: fine) { /* all :hover rules */ }"
+      },
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "Baseline: this is the floor. Ship it before the first component"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py render_preview writes <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"> without viewport-fit=cover or interactive-widget=resizes-content (the preview page only) [inferred]"
+      ]
+    },
+    {
+      "id": "STD-mobile-touch-22",
+      "theme": "mobile-touch",
+      "area": "process",
+      "title": "Verify mobile fixes on a real phone",
+      "rule": "Before calling a mobile web fix or a touch gesture done, test it on a real phone (dev server on 0.0.0.0 opened by the machine's LAN IP, debugged with Safari's Web Inspector or chrome://inspect), never only in device emulation, a shrunk desktop window or the Xcode Simulator, and state which fixes were verified from code and which still need a device.",
+      "why": "Sticky hover, the tap highlight, the URL bar's effect on vh, input zoom, the click delay, overscroll, safe areas and the software keyboard do not reproduce in emulation, and the Simulator still misses touch feel; the phone is the source of truth.",
+      "strength": "must",
+      "values": {
+        "setup": "phone over USB, dev server on 0.0.0.0, opened by the machine's LAN IP",
+        "ios": "Safari > Develop > the device",
+        "android": "chrome://inspect",
+        "matrix": "a phone a few years old, the keyboard open, landscape once, as an installed PWA if that is a target"
+      },
+      "applies_to": [
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "Hard Rules 5: Test on hardware; Operating Posture; 11. Right in Chrome, wrong on phone; Never Ship: Declaring it fixed from device emulation"
+        },
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "Debugging: you can't just open the dev tools and make the window smaller"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Test on real devices"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Debugging: Real devices"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-23",
+      "theme": "mobile-touch",
+      "area": "process",
+      "title": "Self-check mobile work against Never Ship",
+      "rule": "Before finishing mobile web work, check it against the Never Ship list: no disabled zoom, no ungated :hover, no 100vh app shell, no 100dvh hero, no click-only press feedback, no touchmove preventDefault for overscroll, no user-select: none on body, no touch-action: none on content people scroll past, no env(safe-area-inset-*) without viewport-fit=cover, no single theme-color, no user-agent touch sniffing, and no fix declared from device emulation.",
+      "why": "The source makes the Never Ship table the self-check before finishing: each row is a defect that must not ship, paired with its replacement.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "Never Ship: Self-check before you finish"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-24",
+      "theme": "mobile-touch",
+      "area": "process",
+      "title": "Report mobile fixes in a few lines",
+      "rule": "After mobile work, report in a few lines what was wrong (the symptom and a one-line why), what changed (file and declaration) and what still needs a phone or an on-device feel check, without padding it into a report.",
+      "why": "The code is the deliverable, and gestures, velocity handoff and haptic timing cannot be judged from code.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "Output"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Output: The code is the deliverable. Don't pad it into a report."
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": false,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-25",
+      "theme": "mobile-touch",
+      "area": "components",
+      "title": "Prefer drawers over modals on mobile",
+      "rule": "On mobile, present content in a drawer (bottom sheet) rather than a centered modal.",
+      "why": "A drawer gives a more native feel on mobile.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "Why a drawer?: I prefer using a drawer instead of a modal on mobile for a more native feel"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-26",
+      "theme": "mobile-touch",
+      "area": "components",
+      "title": "Keep drawers above the software keyboard",
+      "rule": "When an input inside a drawer gets focus, replace the browser's scroll-into-view with Visual Viewport positioning that keeps the drawer directly above the keyboard: on visualViewport resize, set the drawer's height to the visual viewport height minus an offset and its bottom to max(window.innerHeight - visual viewport height, 0) in px.",
+      "why": "When the keyboard shows, the browser scrolls up and pushes the drawer, potentially hiding important content; sitting right above the keyboard keeps the drawer fully scrollable. Vaul does this by default (repositionInputs); learn/sources.json records that the Vaul README says the library is unmaintained, so treat Vaul as guidance rather than a dependency.",
+      "strength": "should",
+      "values": {
+        "listener": "window.visualViewport resize",
+        "height": "`${visualViewportHeight - OFFSET}px`",
+        "bottom": "`${Math.max(diffFromInitial, 0)}px`, where diffFromInitial = window.innerHeight - visualViewportHeight",
+        "vaul-prop": "repositionInputs (default true; false falls back to the browser's behavior)"
+      },
+      "applies_to": [
+        "web",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "Inputs: we disable this browser behavior and handle it using Visual Viewport"
+        },
+        {
+          "id": "vaul-inputs",
+          "evidence": "Inputs intro: Vaul fixes this by correcting the position of the drawer when the keyboard is opened"
+        },
+        {
+          "id": "vaul-api",
+          "evidence": "Root prop table: repositionInputs, default true"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-27",
+      "theme": "mobile-touch",
+      "area": "components",
+      "title": "Drag a scrolling drawer only from the top",
+      "rule": "Let a drawer with scrollable content be dragged only when its content is scrolled to the top, and block dragging for 100ms after scrolling reaches the top.",
+      "why": "This is very similar to how native drawers work on iOS, and fast mobile scrolling can overshoot the top into a drag with enough velocity to close the drawer by accident.",
+      "strength": "should",
+      "values": {
+        "drag-guard": "100ms"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "shouldDrag: doesn't allow you to drag unless you are scrolled to the top; I added a timeout of 100ms"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-28",
+      "theme": "mobile-touch",
+      "area": "components",
+      "title": "Ignore extra fingers during a drag",
+      "rule": "Once a drag starts, ignore every additional touch point until the user releases (for example, return early from the press handler while isDragging is true).",
+      "why": "Otherwise adding or switching a finger mid-drag makes the element jump to the new position, and the drawer feels off.",
+      "strength": "must",
+      "values": {
+        "guard": "if (isDragging) return"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "Multi touch"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Multi-touch protection"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Multi-touch protection"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Multi-touch protection"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-29",
+      "theme": "mobile-touch",
+      "area": "layout",
+      "title": "Toasts sit 16px from the edge on phones",
+      "rule": "Keep toasts off the screen edge with a 16px offset when the screen is narrower than 600px and 32px on wider screens (Sonner's mobileOffset and offset defaults).",
+      "why": "These are Sonner's documented defaults and the ask-sonner fix for toasts that sit too close to the screen edge on mobile.",
+      "strength": "should",
+      "values": {
+        "mobile-offset": "16px (screen width < 600px)",
+        "desktop-offset": "32px"
+      },
+      "applies_to": [
+        "web",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "sonner-toaster",
+          "evidence": "Default desktop offset is 32px and default mobile offset is 16px; mobileOffset applies below 600px"
+        },
+        {
+          "id": "eks-skills-ask-sonner-skill",
+          "evidence": "Toasts too close to the screen edge on mobile"
+        },
+        {
+          "id": "eks-skills-ask-sonner-api",
+          "evidence": "offset / mobileOffset defaults"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-30",
+      "theme": "mobile-touch",
+      "area": "components",
+      "title": "Redesign hover affordances for touch",
+      "rule": "In a mobile app, move every affordance the web puts in hover into press, position or nothing, redesigning it rather than porting it.",
+      "why": "There is no hover on mobile.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "There is no hover.; 7. Press, not hover"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-31",
+      "theme": "mobile-touch",
+      "area": "motion",
+      "title": "Run React Native motion on the UI thread",
+      "rule": "Build React Native animation with Reanimated, never core Animated, and keep every animation off the React Native runtime.",
+      "why": "An animation that touches the React Native runtime stutters the moment the app does anything else; core Animated cannot be driven by a gesture without crossing the bridge and useNativeDriver refuses anything but transform and opacity, while Reanimated worklets run on the UI thread and keep running while JavaScript is busy.",
+      "strength": "must",
+      "values": {
+        "library": "react-native-reanimated + react-native-worklets"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "There are two runtimes.; Hard Rules 2: Reanimated, not core Animated; Never Ship: Core Animated for anything a finger touches"
+        },
+        {
+          "id": "eks-readme",
+          "evidence": "animate-expo: keep motion off the JS thread"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "import\\s*\\{[^}]*\\bAnimated\\b[^}]*\\}\\s*from\\s*['\\\"]react-native['\\\"]|\\buseNativeDriver\\s*:",
+        "message": "Use react-native-reanimated (worklets on the UI thread) instead of core Animated."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-32",
+      "theme": "mobile-touch",
+      "area": "motion",
+      "title": "Never setState per frame in gestures",
+      "rule": "Never call setState from a gesture or scroll handler; drive the style from a shared value through useAnimatedStyle.",
+      "why": "One React render per frame is the single biggest cause of jank in React Native apps; it looks fine in dev and drops to 20fps on a three-year-old Android.",
+      "strength": "must",
+      "values": {
+        "instead": "useSharedValue + useAnimatedStyle"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "6. Keep it off the JS thread; Two failure modes: Animating the right thing on the wrong thread; Never Ship"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-33",
+      "theme": "mobile-touch",
+      "area": "tooling",
+      "title": "Use Gesture Handler, never PanResponder",
+      "rule": "Build gestures with react-native-gesture-handler (Gesture.Pan()), never PanResponder.",
+      "why": "PanResponder is one of the source's examples of animating on the wrong thread, which drops to 20fps on a three-year-old Android; the Never Ship table replaces it with Gesture.Pan().",
+      "strength": "must",
+      "values": {
+        "instead": "Gesture.Pan() from react-native-gesture-handler"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Two failure modes: a PanResponder; Never Ship: PanResponder"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "\\bPanResponder\\b",
+        "message": "Use Gesture.Pan() from react-native-gesture-handler."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-34",
+      "theme": "mobile-touch",
+      "area": "tooling",
+      "title": "Use scheduleOnRN, not runOnJS",
+      "rule": "Call back to the React Native runtime from a worklet with scheduleOnRN(fn, ...args) from react-native-worklets, not the deprecated runOnJS(fn)(...args).",
+      "why": "runOnJS is deprecated in Reanimated 4 and scheduleOnRN replaces it.",
+      "strength": "must",
+      "values": {
+        "use": "scheduleOnRN(fn, ...args)",
+        "deprecated": "runOnJS(fn)(...args)"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "6. Keep it off the JS thread; Never Ship: runOnJS (deprecated in Reanimated 4)"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Three conventions"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "\\brunOnJS\\s*\\(",
+        "message": "Use scheduleOnRN(fn, ...args) from react-native-worklets."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-35",
+      "theme": "mobile-touch",
+      "area": "motion",
+      "title": "Cross to the JS thread only at thresholds",
+      "rule": "Never schedule a React Native runtime call inside onUpdate or a scroll handler; make it in onEnd, or in a useAnimatedReaction that fires once when a value crosses a threshold (a detent, a snap, pull-to-refresh arming).",
+      "why": "Inside onUpdate the call is queued 60–120 times a second; with useAnimatedReaction the comparison runs on the UI thread every frame and the JS call happens only when the state flips.",
+      "strength": "must",
+      "values": {
+        "never": "scheduleOnRN in onUpdate or a scroll handler (60–120× per second)",
+        "instead": "onEnd, or useAnimatedReaction at a threshold"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Never schedule back to the RN runtime inside onUpdate or a scroll handler; Never Ship: scheduleOnRN per frame"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Firing something once at a threshold"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-36",
+      "theme": "mobile-touch",
+      "area": "motion",
+      "title": "Touch shared values only outside render",
+      "rule": "Read and write shared values only in worklets, handlers and effects, with .get() and .set() (functional form sv.set((v) => v + 1)); never during render and never through .value.",
+      "why": "A read during render is a snapshot that never updates and silently desyncs, a write fires mid-reconciliation and is replayed by re-renders you did not cause, and .value is the form the React Compiler cannot see through.",
+      "strength": "must",
+      "values": {
+        "read": ".get()",
+        "write": ".set(), or sv.set((v) => v + 1)",
+        "never": "translateY.get() in JSX; .value"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Never read a shared value during render; Never write one during render either; Use .get() / .set(), not .value; Never Ship"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Three conventions: Shared values are read and written with .get() / .set()"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-37",
+      "theme": "mobile-touch",
+      "area": "tooling",
+      "title": "Mark worklet helpers with 'worklet'",
+      "rule": "Put 'worklet' as the first line of every function called from a worklet.",
+      "why": "Without it the function throws at runtime on device while working fine in the debugger.",
+      "strength": "must",
+      "values": {
+        "directive": "'worklet'"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "6. Keep it off the JS thread: Functions called from a worklet need 'worklet'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-38",
+      "theme": "mobile-touch",
+      "area": "tooling",
+      "title": "Set up Reanimated so motion runs",
+      "rule": "Install motion packages with npx expo install, wrap the app once in GestureHandlerRootView (style { flex: 1 }, in the Expo Router root _layout), add KeyboardProvider there when react-native-keyboard-controller is used, and run Reanimated 4 on the New Architecture.",
+      "why": "npx expo install resolves the versions that match the project's SDK; without GestureHandlerRootView gestures do nothing with no error, keyboard hooks do nothing without the provider, Reanimated 4 requires the New Architecture, and a missing or misplaced worklets Babel plugin throws 'Failed to create a worklet'.",
+      "strength": "must",
+      "values": {
+        "install": "npx expo install react-native-reanimated react-native-worklets react-native-gesture-handler expo-haptics",
+        "root": "<GestureHandlerRootView style={{ flex: 1 }}> in the root _layout",
+        "keyboard": "KeyboardProvider in the root _layout, next to GestureHandlerRootView",
+        "babel": "babel-preset-expo configures the worklets plugin; a bare React Native project adds it manually, last in the list",
+        "architecture": "New Architecture (required by Reanimated 4)"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Dependencies; Setup that silently breaks motion"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Setup the recipes assume; Keyboard-synced UI"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-39",
+      "theme": "mobile-touch",
+      "area": "platforms",
+      "title": "Unlock 120fps on ProMotion iPhones",
+      "rule": "Confirm that expo.ios.infoPlist sets CADisableMinimumFrameDurationOnPhone to true, and add it if it is missing.",
+      "why": "On ProMotion iPhones third-party animations are capped at 60fps unless it is set; with it the frame budget is 8ms, not 16.",
+      "strength": "must",
+      "values": {
+        "app-config": "{ \"expo\": { \"ios\": { \"infoPlist\": { \"CADisableMinimumFrameDurationOnPhone\": true } } } }",
+        "frame-budget": "8ms"
+      },
+      "applies_to": [
+        "react-native",
+        "ios"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "120fps"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-40",
+      "theme": "mobile-touch",
+      "area": "tooling",
+      "title": "Pick the cheapest React Native motion tool",
+      "rule": "Choose the first tool that fits: a Reanimated CSS transition (transitionProperty) for a state change with no gesture, a Reanimated CSS animation (animationName) for loops and on-mount motion, layout animations (entering, exiting, itemLayoutAnimation) for mounting, unmounting and list reflow, and useSharedValue + Gesture + useAnimatedStyle only for continuous or interruptible values a finger or scroll drives; use Lottie only for illustration, never for UI state.",
+      "why": "Using a worklet for a two-state toggle is the mobile equivalent of installing a motion library for a fade: a press scale is a CSS transition, a drag is a shared value.",
+      "strength": "must",
+      "values": {
+        "state-change": "Reanimated CSS transition (transitionProperty)",
+        "loop-or-mount": "Reanimated CSS animation (animationName)",
+        "mount-unmount-reflow": "entering / exiting / itemLayoutAnimation",
+        "finger-or-scroll": "useSharedValue + Gesture + useAnimatedStyle",
+        "illustration-only": "lottie-react-native",
+        "huge-scene": "@shopify/react-native-skia"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "3. Pick the tool: cheapest that works; Reach for a shared value only when the value is continuous or interruptible"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Press feedback: No gesture, no shared value"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-41",
+      "theme": "mobile-touch",
+      "area": "components",
+      "title": "Use native pieces instead of JS rebuilds",
+      "rule": "Use the platform's own pieces instead of rebuilding them in JavaScript: presentation: 'formSheet' for a bottom sheet that is its own screen, NativeTabs for the tab bar, Link.Menu and Link.Preview for context menus and press-and-hold previews, headerLargeTitleEnabled for a header that collapses into a large title, RefreshControl for pull to refresh, and ReanimatedSwipeable for rows that reveal actions.",
+      "why": "These are the platform's real components with their behaviors and transitions included (formSheet is a real UISheetPresentationController, free and correct); build a custom sheet only when it has to live inside an existing screen, and a custom refresh or swipe only when it is a signature interaction or different in kind.",
+      "strength": "must",
+      "values": {
+        "sheet-screen": "presentation: 'formSheet'",
+        "tab-bar": "NativeTabs (expo-router/unstable-native-tabs)",
+        "menus": "Link.Menu / Link.Preview (iOS-only)",
+        "large-title": "headerLargeTitleEnabled (headerLargeTitle is deprecated)",
+        "pull-to-refresh": "RefreshControl",
+        "row-actions": "ReanimatedSwipeable"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "3. Pick the tool (table)"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Bottom sheet you can drag to dismiss: Before writing this; Swipe to delete a row: ReanimatedSwipeable"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "\\bheaderLargeTitle\\s*(?::|=)",
+        "message": "headerLargeTitle is deprecated: use headerLargeTitleEnabled on the native stack."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-42",
+      "theme": "mobile-touch",
+      "area": "motion",
+      "title": "Screen transitions stay on the native stack",
+      "rule": "Configure screen-to-screen transitions with Expo Router native stack options at the platform's default duration, never rebuilt in JavaScript: animation: 'default' going deeper into a hierarchy, presentation: 'modal' for a self-contained task the user can abandon, and presentation: 'formSheet' with detents for a short interruption such as a picker, filter or share.",
+      "why": "The native transition runs on the platform side, keeps the interactive back gesture and matches every other app on the device; navigation matches the platform (iOS push is 350ms) even though UI motion beats it.",
+      "strength": "must",
+      "values": {
+        "deeper": "animation: 'default'",
+        "abandonable-task": "presentation: 'modal'",
+        "short-interruption": "presentation: 'formSheet' with sheetAllowedDetents",
+        "duration": "platform default (iOS push 350ms)"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "3. Pick the tool: Screen to screen; Duration: Screen transition; Never Ship: A screen transition rebuilt in JS"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Screen transitions (Expo Router)"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-43",
+      "theme": "mobile-touch",
+      "area": "motion",
+      "title": "Never slide between tabs",
+      "rule": "Switch between tabs with animation: 'none'; never slide between them.",
+      "why": "Tabs are peers, not a hierarchy; sliding implies depth that is not there, and the user pays for it dozens of times a session.",
+      "strength": "must",
+      "values": {
+        "tabs": "animation: 'none'"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Tab switches never slide; Never Ship: Sliding between tabs"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Screen transitions: Between tabs"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-44",
+      "theme": "mobile-touch",
+      "area": "motion",
+      "title": "Back swipe mirrors custom transitions",
+      "rule": "Set animationMatchesGesture: true on every screen that sets a custom animation.",
+      "why": "It makes the iOS back swipe run the transition in reverse under the finger; otherwise dragging back looks like a different app than pushing forward.",
+      "strength": "must",
+      "values": {
+        "option": "animationMatchesGesture: true"
+      },
+      "applies_to": [
+        "react-native",
+        "ios"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Screen transitions: animationMatchesGesture: true"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-45",
+      "theme": "mobile-touch",
+      "area": "platforms",
+      "title": "Design form sheets for Android's limits",
+      "rule": "Design form sheets for at most three detents, never rely on sheetGrabberVisible as the only sign that a sheet drags, keep the sheet a single screen (use presentation: 'modal' when it needs its own navigation), and give explicitly sized content to sheetAllowedDetents: 'fitToContents'.",
+      "why": "Android caps detents at three and silently truncates a longer array, shows no grabber, and cannot host native headers or nested stacks in a form sheet; a flex: 1 root has no intrinsic height to fit, so the detent is wrong.",
+      "strength": "must",
+      "values": {
+        "max-detents": "3",
+        "grabber": "sheetGrabberVisible is iOS-only",
+        "nested-navigation": "presentation: 'modal'",
+        "fit": "sheetAllowedDetents: 'fitToContents' with sized content, not a flex: 1 root"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Screen transitions: formSheet is native on both platforms, but not the same on both"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-46",
+      "theme": "mobile-touch",
+      "area": "motion",
+      "title": "Animate only transform and opacity in React Native",
+      "rule": "In React Native animate only transform and opacity, never width, height, margin, padding, flex, top, left or gap (collapse a header by translating content inside a fixed-height container with overflow: 'hidden'); the one exception is width on an absolutely positioned element with no children, such as a tab pill or a progress fill.",
+      "why": "Other properties re-run Yoga layout every frame for the node and its siblings, and animating a header's height competes with the scroll itself; an absolute, childless element re-lays-out nothing, and width keeps the corner radius that scaleX would smear.",
+      "strength": "must",
+      "values": {
+        "animate": "transform, opacity",
+        "never": "width, height, margin, padding, flex, top, left, gap",
+        "exception": "width on an absolutely positioned element with no children",
+        "indicator-sample": "translateX and width with withTiming, duration 250, EASE_IN_OUT, measured once with onLayout"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "4. Pick the properties; Never Ship: Animating height / width / margin / flex / top"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Collapsing header on scroll: Never animate the header's height; Tab / segmented indicator: the sanctioned width animation"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-47",
+      "theme": "mobile-touch",
+      "area": "elevation",
+      "title": "Crossfade shadows and blur, never animate them",
+      "rule": "Never animate Android elevation or BlurView intensity; crossfade the opacity of a pre-shadowed or static blurred layer instead.",
+      "why": "Animating elevation re-renders the shadow every frame, and animating BlurView intensity re-renders the blur every frame on Android.",
+      "strength": "must",
+      "values": {
+        "never": "elevation, BlurView intensity",
+        "instead": "opacity of a pre-shadowed layer or a static BlurView"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "4. Pick the properties: Android shadows are elevation; Never animate BlurView intensity; Never Ship"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-48",
+      "theme": "mobile-touch",
+      "area": "motion",
+      "title": "Translate before scale in transform arrays",
+      "rule": "Put translate before scale in a React Native transform array ([{ translateY }, { scale }]) unless you want the translate multiplied.",
+      "why": "transform is an array and order matters: reversed, the translate gets scaled too.",
+      "strength": "should",
+      "values": {
+        "order": "[{ translateY }, { scale }]"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "4. Pick the properties: transform is an array and order matters"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-49",
+      "theme": "mobile-touch",
+      "area": "accessibility",
+      "title": "Never animate to a hardcoded height",
+      "rule": "Never animate to a hardcoded height; measure with onLayout, or animate a transform instead.",
+      "why": "allowFontScaling is on by default, so any height measured at the default type size is wrong at 200%.",
+      "strength": "must",
+      "values": {
+        "measure": "onLayout"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "9. Reduced motion and accessibility: Text scales."
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-50",
+      "theme": "mobile-touch",
+      "area": "motion",
+      "title": "Spring when a finger is involved",
+      "rule": "Use a spring for any motion a finger started or can interrupt, and timing (an easing curve plus a duration) for everything else.",
+      "why": "Springs carry velocity through an interruption while timing curves restart, and a fixed-duration animation cannot respond to new input.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "5. Timing or spring: If a finger was involved, use a spring"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "4. Behavior over animation: use springs for anything a user can touch"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py build_motion_context points motion.transition.move (all on-screen movement) at motion.spring.spatial.default whether or not a finger is involved, where animate-expo uses timing with ease-in-out for motion without a finger [inferred]"
+      ]
+    },
+    {
+      "id": "STD-mobile-touch-51",
+      "theme": "mobile-touch",
+      "area": "motion",
+      "title": "Reanimated springs use duration and dampingRatio",
+      "rule": "Configure Reanimated springs with duration and dampingRatio from the source's table, never mass, stiffness and damping: { duration: 400, dampingRatio: 1 } for a default settle, { duration: 400, dampingRatio: 0.8, velocity } to reposition or snap back after a drag, { duration: 300, dampingRatio: 0.8, velocity } for sheets and drawers, plus overshootClamping: true wherever motion must not pass a hard edge; allow overshoot only when the gesture carried momentum.",
+      "why": "Reanimated's spring takes Apple's two designer parameters directly and values must not be approximated; overshoot feels right on a card you flicked and wrong on a menu that faded in, and a dismissed sheet without overshootClamping springs past the bottom and flashes a gap.",
+      "strength": "must",
+      "values": {
+        "default-settle": "{ duration: 400, dampingRatio: 1 }",
+        "after-drag": "{ duration: 400, dampingRatio: 0.8, velocity }",
+        "sheet-drawer": "{ duration: 300, dampingRatio: 0.8, velocity }",
+        "hard-edge": "overshootClamping: true",
+        "sheet-dismiss-recipe": "withSpring(HEIGHT, { duration: 300, dampingRatio: 1, velocity: e.velocityY, overshootClamping: true })"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "5. Timing or spring (spring table); Bounce only when the gesture carried momentum; Hard Rules 3: No approximated values"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Bottom sheet you can drag to dismiss: overshootClamping on dismissal"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "Add bounce only when the gesture itself carried momentum"
+        }
+      ],
+      "engine": {
+        "path": "motion.spring.spatial.dampingRatio",
+        "value": 1,
+        "type": "number",
+        "note": "The default settle has no overshoot (dampingRatio 1); the 0.8 configs belong to momentum-carrying gestures, which have no token, so they stay in code (tested: engine.py set accepts it and changes the three spatial springs) [inferred]"
+      },
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "synthesis/levers.json dials.energy drives motion.spring.spatial.dampingRatio from 1.0 (energy 0–33) down to 0.9 (50), 0.8 (75) and 0.6 (100), and motion.transition.move uses motion.spring.spatial.default for every on-screen move, so above energy 33 every move overshoots without a momentum-carrying gesture (a fresh engine.py init gives 0.988) [inferred]"
+      ]
+    },
+    {
+      "id": "STD-mobile-touch-52",
+      "theme": "mobile-touch",
+      "area": "motion",
+      "title": "Reanimated curves are the custom beziers",
+      "rule": "In Reanimated use the source's custom curves and never the built-in easings or Easing.in: Easing.bezier(0.23, 1, 0.32, 1) for entering, exiting and by default, Easing.bezier(0.77, 0, 0.175, 1) for movement on screen, Easing.bezier(0.32, 0.72, 0, 1) for the iOS sheet curve, and linear only for constant motion such as progress.",
+      "why": "Reanimated's built-ins are as weak as CSS's, and ease-in starts slow, delaying the exact moment the user is watching.",
+      "strength": "must",
+      "values": {
+        "EASE_OUT": "Easing.bezier(0.23, 1, 0.32, 1)",
+        "EASE_IN_OUT": "Easing.bezier(0.77, 0, 0.175, 1)",
+        "EASE_SHEET": "Easing.bezier(0.32, 0.72, 0, 1)",
+        "constant-motion": "linear",
+        "never": "Easing.in(...)"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "5. Easing table; Never ease-in on UI; Reanimated's built-ins are as weak as CSS's; Never Ship: Easing.in(...) on a UI element"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Imports and constants every recipe below shares"
+        }
+      ],
+      "engine": [
+        {
+          "path": "motion.easing.enter",
+          "value": [
+            0.23,
+            1,
+            0.32,
+            1
+          ],
+          "type": "cubicBezier",
+          "note": "EASE_OUT: entering (tested)"
+        },
+        {
+          "path": "motion.easing.exit",
+          "value": [
+            0.23,
+            1,
+            0.32,
+            1
+          ],
+          "type": "cubicBezier",
+          "note": "EASE_OUT: the source uses ease-out for exiting too (tested)"
+        },
+        {
+          "path": "motion.easing.standard",
+          "value": [
+            0.77,
+            0,
+            0.175,
+            1
+          ],
+          "type": "cubicBezier",
+          "note": "EASE_IN_OUT: the engine describes standard as moving and morphing on screen (tested)"
+        },
+        {
+          "path": "motion.easing.sheet",
+          "value": [
+            0.32,
+            0.72,
+            0,
+            1
+          ],
+          "type": "cubicBezier",
+          "note": "New token for EASE_SHEET, the iOS sheet curve (tested: engine.py set creates a cubicBezier token)"
+        }
+      ],
+      "review": {
+        "pattern": "\\bEasing\\.(?:in|out|inOut|ease|quad|cubic|poly|sin|circle|exp|elastic|back|bounce)\\b",
+        "message": "Use Easing.bezier(0.23, 1, 0.32, 1), (0.77, 0, 0.175, 1) or (0.32, 0.72, 0, 1) instead of a built-in easing."
+      },
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py build_motion makes motion.easing.exit an accelerate curve ([0.2, 0, 1, 0.9], [0.3, 0, 1, 1] or [0.4, 0.14, 1, 1] by energy) and stage 16 Q-motion-01 defaults to 'ease-in to exit'; the source uses ease-out for exits and never ease-in on UI",
+        "skills/opendesigner/scripts/engine.py build_motion sets motion.easing.enter to [0, 0, 0.38, 0.9], [0, 0, 0, 1] or [0, 0, 0.3, 1] and synthesis/levers.json sets motion.easing.standard to [0.2, 0, 0.38, 0.9], [0.2, 0, 0, 1] or [0.4, 0.14, 0.3, 1] by energy, not Easing.bezier(0.23, 1, 0.32, 1) and Easing.bezier(0.77, 0, 0.175, 1)"
+      ]
+    },
+    {
+      "id": "STD-mobile-touch-53",
+      "theme": "mobile-touch",
+      "area": "motion",
+      "title": "Mobile UI motion stays under 300ms",
+      "rule": "Keep React Native UI animations under 300ms: press feedback 100–150ms, toggles, chips and small state changes 150–200ms, sheets, modals and drawers a spring of about 300ms perceived, and toasts within the same 300ms cap; only navigation keeps the platform's longer default (iOS push 350ms).",
+      "why": "Mobile UI animations stay under 300ms, the same as web: match the platform for navigation and beat it everywhere else; a toast is uninvited, so it should be quicker and quieter than motion the user asked for.",
+      "strength": "must",
+      "values": {
+        "press": "100–150ms",
+        "toggle-chip-small-state": "150–200ms",
+        "sheet-modal-drawer": "spring, ~300ms perceived",
+        "ui-cap": "under 300ms",
+        "navigation": "platform default (iOS push 350ms)"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "5. Duration table; Mobile UI animations stay under 300ms, same as web"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Toast: The 300ms cap holds here too"
+        }
+      ],
+      "engine": {
+        "path": "motion.duration.short",
+        "value": "150ms",
+        "type": "duration",
+        "note": "Already 150ms (no change, tested), the low end of the 150–200ms toggle and small-state range"
+      },
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py build_motion_context gives motion.transition.expand (dialogs, sheets, side panels) motion.duration.long, 380ms at the init defaults and up to 480ms at high energy, and synthesis/levers.json formulas.motion sets long to 400–500ms with standardMax 400; animate-expo keeps sheets and modals to a spring of about 300ms perceived and all mobile UI under 300ms"
+      ]
+    },
+    {
+      "id": "STD-mobile-touch-54",
+      "theme": "mobile-touch",
+      "area": "motion",
+      "title": "Grab from the current value, release with velocity",
+      "rule": "Start every drag from the element's current on-screen value (capture it in onStart) and hand the gesture's release velocity to the settling spring.",
+      "why": "Without the capture, grabbing a sheet mid-animation teleports it; with the velocity there is no seam between the finger releasing and the animation continuing, the single detail that most separates fluid from fine.",
+      "strength": "must",
+      "values": {
+        "capture": "context.set(translateY.get()) in onStart",
+        "handoff": "withSpring(target, { ..., velocity: e.velocityY })"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "onStart captures the current value; Velocity is handed to the spring"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "The user's finger is on the element: interruptibility and velocity handoff are the baseline"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "5. Velocity handoff: the seam between drag and animation"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-55",
+      "theme": "mobile-touch",
+      "area": "motion",
+      "title": "Commit flicks by projected momentum",
+      "rule": "Decide whether a drag commits (dismiss, delete, snap) from its projected resting position, the current position plus project(velocity) using Apple's decay form ((velocity / 1000) * 0.998) / (1 - 0.998), so a quick flick commits; never use a distance-only threshold.",
+      "why": "A fast short swipe should commit and a slow long one should not; requiring 40% travel makes a sheet feel heavy, and the exponential-decay form is what Apple ships, not the v^2/2a from physics class.",
+      "strength": "must",
+      "values": {
+        "project": "((velocity / 1000) * decelerationRate) / (1 - decelerationRate)",
+        "decelerationRate": "0.998",
+        "sheet-dismiss": "translateY + project(e.velocityY) > HEIGHT * 0.4"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Two worklets you'll need everywhere; Velocity decides, not distance"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Never Ship: Distance-only dismissal threshold"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "6. Momentum projection"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-56",
+      "theme": "mobile-touch",
+      "area": "motion",
+      "title": "Rubber-band drags past a boundary",
+      "rule": "Make boundaries resist instead of stopping dead: past an edge, move the element by rubberband(overshoot, dimension, 0.55) = (overshoot * dimension * 0.55) / (dimension + 0.55 * |overshoot|); a bottom sheet moves freely downward and resists upward past its top.",
+      "why": "The further past the edge, the less the element follows, the way real things slow before they stop; a hard stop reads as frozen.",
+      "strength": "must",
+      "values": {
+        "rubberband": "(overshoot * dimension * constant) / (dimension + constant * Math.abs(overshoot))",
+        "constant": "0.55"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Two worklets you'll need everywhere; downward is free, upward past the top resists"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Never Ship: Hard stop at a boundary"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "9. Rubber-banding"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-57",
+      "theme": "mobile-touch",
+      "area": "motion",
+      "title": "Declare the pan axis inside scroll views",
+      "rule": "Give every pan gesture that shares space with a scroll view a movement threshold on its axis before it activates: activeOffsetX([-10, 10]) for a horizontal row swipe and activeOffsetY([-10, 10]) for a vertical sheet.",
+      "why": "With no axis declared a pan steals vertical scrolls and the list feels broken in a way that looks like a scrolling bug; the threshold lets the other direction win and requires intent before committing.",
+      "strength": "must",
+      "values": {
+        "horizontal-row": "activeOffsetX([-10, 10])",
+        "vertical-sheet": "activeOffsetY([-10, 10])",
+        "web-equivalent": "~10px movement threshold before committing to a direction"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "activeOffsetX is the mobile-specific part; .activeOffsetY([-10, 10]) // let a horizontal swipe win"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "10. Gesture design details: Drag/swipe: require a small movement threshold (~10px)"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-58",
+      "theme": "mobile-touch",
+      "area": "tooling",
+      "title": "Memoize gestures and animation builders",
+      "rule": "Wrap Gesture Handler v2 gestures in useMemo (on v3 use the hook form, which manages its own identity) and build layout-animation builders at module scope or in useMemo, never inline in JSX.",
+      "why": "Rebuilding a gesture on every render can reattach the recognizer and drop a drag that is mid-flight, and an inline builder chain rebuilds on every render.",
+      "strength": "should",
+      "values": {
+        "gesture-v2": "useMemo(() => Gesture.Pan()..., [deps])",
+        "gesture-v3": "usePanGesture({...}); onStart -> onActivate, onEnd -> onDeactivate",
+        "builders": "const ROW_CLOSE = LinearTransition.duration(200) at module scope; per-index delay in useMemo"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Three conventions: Gestures are wrapped in useMemo; Gesture Handler v3; List entrances; Swipe to delete a row: module scope"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-59",
+      "theme": "mobile-touch",
+      "area": "motion",
+      "title": "Never put entering on virtualized rows",
+      "rule": "Never put entering on a row inside FlatList, FlashList or any virtualized list; animate the list container once on mount, or use itemLayoutAnimation for reflow only.",
+      "why": "Rows are recycled, so the animation re-fires each time a row scrolls back into view and the list flickers while the user scrolls.",
+      "strength": "must",
+      "values": {
+        "instead": "animate the container once, or itemLayoutAnimation for reflow"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Never Ship: entering on a virtualized list row"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "List entrances: Never put entering on a row inside FlatList"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-60",
+      "theme": "mobile-touch",
+      "area": "motion",
+      "title": "Clamp every scroll-driven interpolation",
+      "rule": "Drive scroll-linked motion from useAnimatedScrollHandler into a shared value (scrollEventThrottle={16}) and pass Extrapolation.CLAMP to every scroll-driven interpolate.",
+      "why": "Without CLAMP, scrolling past the input range keeps driving the output, so a header's opacity goes negative and it reappears inverted at the bottom of a long list.",
+      "strength": "must",
+      "values": {
+        "handler": "useAnimatedScrollHandler",
+        "throttle": "scrollEventThrottle={16}",
+        "extrapolation": "Extrapolation.CLAMP"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Collapsing header on scroll: Extrapolation.CLAMP is not optional"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-61",
+      "theme": "mobile-touch",
+      "area": "motion",
+      "title": "Follow the keyboard frame by frame",
+      "rule": "Move keyboard-following UI with react-native-keyboard-controller's useReanimatedKeyboardAnimation (translateY from its height, 0 to -keyboardHeight, on the UI thread), never with Keyboard.addListener plus a timing animation.",
+      "why": "The keyboard rides a private system curve and the event reaches the JS thread after the keyboard has started moving, so any duration visibly lags or leads it.",
+      "strength": "must",
+      "values": {
+        "hook": "useReanimatedKeyboardAnimation",
+        "never": "Keyboard.addListener + timing"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "3. Pick the tool: UI that tracks the keyboard"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Keyboard-synced UI"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "\\bKeyboard\\.addListener\\s*\\(\\s*['\\\"]keyboard(?:Will|Did)(?:Show|Hide)",
+        "message": "If this moves UI with the keyboard, use useReanimatedKeyboardAnimation from react-native-keyboard-controller."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-62",
+      "theme": "mobile-touch",
+      "area": "motion",
+      "title": "Map haptics to the moment",
+      "rule": "Pick the expo-haptics call by moment: Haptics.selectionAsync() when a value ticks past a step (picker, slider detent, segmented control, tab press), impactAsync(Light) when something snaps home, a sheet detent catches, a drag commits or a pull crosses its refresh threshold, impactAsync(Medium) when a heavy object lands or a destructive action fires, and notificationAsync(Success or Error) when an operation succeeds or fails.",
+      "why": "Used sparingly, haptics make the app feel expensive; used everywhere, users turn them off.",
+      "strength": "should",
+      "values": {
+        "step": "Haptics.selectionAsync()",
+        "snap-detent-commit": "Haptics.impactAsync(ImpactFeedbackStyle.Light)",
+        "heavy-or-destructive": "Haptics.impactAsync(ImpactFeedbackStyle.Medium)",
+        "result": "Haptics.notificationAsync(NotificationFeedbackType.Success / Error)"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "8. Haptics (table)"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Tab / segmented indicator; Bottom sheet: it snapped home; Firing something once at a threshold"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "synthesis/levers.json dials.energy sets one app-wide haptics.intensity (light at 0–33, medium at 34–66, strong at 67–100), which DESIGN.md states as the haptics intensity; the source picks the call per moment instead [inferred]"
+      ]
+    },
+    {
+      "id": "STD-mobile-touch-63",
+      "theme": "mobile-touch",
+      "area": "motion",
+      "title": "Fire haptics on the causal frame",
+      "rule": "Fire a haptic in the same frame as its visual, at the causal moment (the detent catching, the tab pressed), not when the animation finishes; from a worklet, schedule it with scheduleOnRN(Haptics.selectionAsync).",
+      "why": "A haptic that lags its animation reads as a glitch, not as feedback, and haptics must run on the React Native runtime.",
+      "strength": "must",
+      "values": {
+        "from-worklet": "scheduleOnRN(Haptics.selectionAsync)"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "8. Haptics: Same frame as the visual; From a worklet, haptics must be scheduled back"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Tab / segmented indicator: Fire Haptics.selectionAsync() on the press, not when the pill lands"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "13. Multimodal feedback: Harmony"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-64",
+      "theme": "mobile-touch",
+      "area": "motion",
+      "title": "One haptic per user action",
+      "rule": "Fire at most one haptic per user action and only at meaningful moments (success, error, commit, snap); never on scroll, never per frame and never on an entrance animation the user did not cause.",
+      "why": "Over-feedback trains users to ignore all of it, and when haptics are everywhere users turn them off.",
+      "strength": "must",
+      "values": {
+        "moments": "success, error, commit, snap"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "8. Haptics: One per user action; Never Ship: A haptic per frame"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "13. Multimodal feedback: Utility"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-65",
+      "theme": "mobile-touch",
+      "area": "accessibility",
+      "title": "Never make a haptic the only feedback",
+      "rule": "Pair every haptic with a visual that stands on its own.",
+      "why": "Haptics are off system-wide for many users and silent on most Android hardware.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "8. Haptics: Never the only feedback; Never Ship: as the only feedback"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-66",
+      "theme": "mobile-touch",
+      "area": "accessibility",
+      "title": "Ship reduced motion with each RN animation",
+      "rule": "Ship reduced motion with each React Native animation (useReducedMotion(), or reduceMotion: ReduceMotion.System on the animation): keep the opacity and color changes that explain a state change, drop translation, scale, parallax and overshoot, and switch screen transitions to animation: 'fade'.",
+      "why": "Reduced motion means fewer and gentler, not zero, and it ships with the animation, not as a follow-up.",
+      "strength": "must",
+      "values": {
+        "hook": "useReducedMotion()",
+        "per-animation": "reduceMotion: ReduceMotion.System",
+        "screens": "animation: reduced ? 'fade' : 'default'"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Hard Rules 4; 9. Reduced motion and accessibility"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Screen transitions: Reduced motion | animation: 'fade'"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-67",
+      "theme": "mobile-touch",
+      "area": "components",
+      "title": "Same press scale on iOS and Android",
+      "rule": "Use the Android ripple only in a Material-styled app; in a custom-designed app give both platforms the same press scale.",
+      "why": "The same scale on both platforms is more coherent than a ripple on one.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "react-native",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "7. Press, not hover: Android ripple only in a Material-styled app"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-68",
+      "theme": "mobile-touch",
+      "area": "motion",
+      "title": "React Native toasts leave the way they came",
+      "rule": "Make a React Native toast exit the way it entered, about 20% faster than its entrance and within the 300ms cap; the recipe enters with FadeInDown.duration(300).easing(EASE_OUT) and exits with FadeOutDown.duration(250).easing(EASE_OUT), both builders at module scope.",
+      "why": "Entering from the bottom and leaving to the side reads as two unrelated elements, and the arrival deserves the time while the departure does not because the user has finished reading.",
+      "strength": "must",
+      "values": {
+        "enter": "FadeInDown.duration(300).easing(EASE_OUT)",
+        "exit": "FadeOutDown.duration(250).easing(EASE_OUT)",
+        "exit-speed": "~20% faster than entry"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Toast: It exits the way it entered; Exit ~20% faster than entry; The 300ms cap holds here too"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-69",
+      "theme": "mobile-touch",
+      "area": "process",
+      "title": "Judge React Native motion on a release build",
+      "rule": "Judge React Native animation feel only on a release build on the slowest device you support, never in Expo Go, a dev build or the simulator, and feel-check it there by flicking it, interrupting it mid-flight, reversing it and running it on the slowest Android you have.",
+      "why": "A dev build's JS thread is slow enough to hide exactly the problems you are looking for, and gestures, velocity handoff and haptic timing cannot be judged from code.",
+      "strength": "must",
+      "values": {
+        "environment": "release build, slowest supported device",
+        "checks": "flick, interrupt mid-flight, reverse, slowest Android"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Hard Rules 5; Expo Go is not a performance environment; Never Ship: Judging feel in Expo Go or the simulator; Output"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-mobile-touch-70",
+      "theme": "mobile-touch",
+      "area": "process",
+      "title": "Apply each mobile fix where its reason applies",
+      "rule": "Ship every mobile fix with its reason and apply it only where that reason applies, not globally out of habit: user-select: none belongs on a button, never on body text.",
+      "why": "Each fix has a why, and the same declaration is correct in one place and a defect in another; user-select: none on body text is a defect, on a button it is correct.",
+      "strength": "must",
+      "values": {
+        "example": "user-select: none on controls only, never on body"
+      },
+      "applies_to": [
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "Hard Rules 1: Every fix ships with the reason. Apply it where the why applies, not globally out of habit"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    }
+  ]
+}

@@ -1,0 +1,509 @@
+# Decision Cards: layout (lane L19)
+
+Area `layout`: OpenDesigner stages 06 (visual direction), 12 (space, sizing and density) and 13 (layout, navigation and app shell). Topics: Spacing and layout, Visual hierarchy, Cards and sections. Cards DC-L19-41 to DC-L19-56.
+
+How to read these cards:
+- Nearly every source here is reference material (practitioner videos). A number or an "always/never" from one video is opinion unless another source or an existing card agrees, and each card says which.
+- The house standards (STD-...) are locked. Where a source disagrees with a standard, the standard wins.
+- `[inferred]` marks a connection made while writing the card, not something a source says. In "Impact now / as it grows", the growth lines are `[inferred]` unless a source is cited.
+- Where a card differs from an existing card, it says so ("differs from DC-..."). It does not quietly override it.
+- The source key at the end links each S-id to its wiki page.
+
+---
+
+### DC-L19-41: Proximity ladder inside a content block
+- **Block path:** Foundations > Space > Grouping gaps (inner and outer spacing)
+- **Questions the designer answers:** Inside one block (eyebrow, heading, subtext, buttons), how many different gaps do we use? How much farther do the actions sit than the heading and subtext sit from each other? Can there be too much space?
+- **Options:**
+  - **One gap, with pairs pulled closer:** 32 px between every item of a simple section, and elements that belong together (announcement and text, text and subtext) grouped closer, which the source calls another form of visual hierarchy [S-L19-052].
+  - **A three-step ladder:** on one landing page (Superpower) the subtext sits 8 px under the heading, the eyebrow 12 px above it and the buttons 32 px below, so heading and subtext read as one unit, then the eyebrow, then the buttons [S-L19-043]. That is roughly 1 : 1.5 : 4 [inferred from the values]. The values come from one site.
+  - **The "twice" rule:** hero buttons sit at least twice as far below the subtext as the subtext sits below the heading. The source's reason is that a large heading already carries extra space between its baseline and the bottom of its box [S-L19-062]. This is one video's rule of thumb. It agrees with DC-L03-24's floor of 1:2.
+  - **Airy everywhere:** large gaps around giant text. One redesign calls this overusing white space: the page felt disjointed until related elements were pushed closer together [S-L19-065].
+  - Existing: DC-L03-24 (at least 1:2, and 1:3 to 1:4 for airy brands) and Q-space-05's options `1:2`, `1:3-1:4` and `dense`.
+- **Visual effect:** A tight pair with a loose gap before the actions makes people read heading and subtext as one unit, then the eyebrow, then the buttons [S-L19-043]; reading that as one message followed by one decision is [inferred]. One equal gap everywhere reads as a list of unrelated items [inferred]. Gaps that are too large everywhere make a page feel disjointed and leave elements sitting by themselves [S-L19-065]. The source calls the ladder's spacing "very intentional" [S-L19-043].
+- **Depends on (upstream):** the base unit and scale (Q-space-01, Q-space-02; the 8, 12 and 32 steps must exist), the heading line height and text-box trim (Q-space-08), density (Q-dir-02).
+- **Affects (downstream):** semantic stack tokens; hero, section-header and card-header templates; dialogs (title, body, actions); empty states; form field groups (label to input versus field to field) [inferred].
+- **Token encoding:** `dimension` semantic aliases such as `space.stack.pair` → {space.200} (8), `space.stack.label` → {space.300} (12), `space.stack.group` → {space.800} (32). On the web they are written in rem (0.5rem, 0.75rem, 2rem) per STD-accessibility-motion-13. The ladder can be recorded as generator metadata, `$extensions.builder.grouping = { pair: 1, label: 1.5, actions: 4 }` [inferred].
+- **Platform notes:** The sources give none. Measuring gaps from the text box (Q-space-08 `trim` or `box-based`) removes the extra space under a large heading that [S-L19-062] compensates for by eye [inferred].
+- **Accessibility constraints:** Gaps must scale with the user's text size (STD-accessibility-motion-13). Groups must survive WCAG 1.4.12 text-spacing overrides (Q-space-08 default). Visual grouping should match the code's grouping (headings, fieldsets, lists) [inferred].
+- **Default + heuristic:** Keep Q-space-05's default at 1:2 as the floor. This confirms DC-L03-24, and the only concrete example, at about 1:4, sits inside DC-L03-24's range. Heuristic: give every text block three distances. The pair (heading and subtext) gets the smallest gap, the label (eyebrow) one step more, and the actions at least twice the pair gap. Measure from the text box, not the line box. Warn when every gap in a block is equal [inferred], and when spreading things out leaves an element with no neighbour [S-L19-065].
+- **Evidence:** [S-L19-043] [S-L19-052] [S-L19-062] [S-L19-065] [S-L19-057] (closeness reads as related) [S-L19-020] (proximity implies relationship). Compared against DC-L03-24, DC-L15-05 and DC-L03-25.
+- **Maps to:**
+  - Q-space-05: confirms the current default `1:2`. New heuristic: the action gap is at least twice the pair gap [S-L19-062]. Visual sample: the annotated hero (eyebrow 12, heading, subtext 8, buttons 32) with every gap labelled [S-L19-043].
+  - Q-space-08: new heuristic. Hero and section-header gaps are measured from the text box, because large headings carry extra space below the baseline [S-L19-062; link inferred].
+- **Impact now / as it grows:**
+  - *One gap with pairs:* now one token and quick to apply. As it grows, the pair exceptions become one-off values unless they are named.
+  - *Three-step ladder:* now three named stack tokens. As it grows, every new template (dialog, card header, empty state) reuses the same ladder, so screens stay consistent.
+  - *Twice rule only:* now a single check with no new tokens. As it grows, it is easy to lint on generated screens, but it says nothing about the eyebrow.
+  - *Airy everywhere:* now a premium first impression on marketing pages [inferred]. As pages get longer, groups dissolve and the page feels disjointed [S-L19-065].
+- **Standards:** STD-visual-details-26, STD-visual-details-27, STD-visual-details-29, STD-visual-details-32, STD-accessibility-motion-13
+
+### DC-L19-42: When a card earns its place, and how deep cards may nest
+- **Block path:** Foundations > Visual language > Grouping > Containers (Components > Card)
+- **Questions the designer answers:** Is a card the default way to group things, or the exception? May a card sit inside another card? When do we merge or remove cards?
+- **Options:**
+  - **Cards as the main building block on phones:** on mobile nearly everything is a card, because a card groups content where there is little room for white space [S-L19-053].
+  - **Space first, cards only when needed, on wide screens:** in a multi-column layout such as a store, removing cards and dividers lets content breathe, and many containers feel cluttered even with little content [S-L19-057]. On a wide canvas, a single line and a column edge can replace stacked containers and avoid "borders on borders" with three radii stacked together [S-L19-080].
+  - **One card level:** avoid a card inside a card, because it creates padding on padding and cramps the content; group the inner content with space. The source adds that nesting is not always avoidable [S-L19-053].
+  - **Two container levels (the current lint):** DC-L15-05 proposes a builder lint of `maxContainerDepth: 2`, itself marked inferred in that card.
+  - **Prune and merge:** remove cards that do nothing [S-L19-061]. Merge small related cards into the card they belong to (a 12-card dashboard cut to a few modules) [S-L19-068]. Drop background cards and tints that an AI tool adds [S-L19-103].
+- **Visual effect:** Cards first groups content flexibly on phones, where there is little room for white space [S-L19-053]. Space first lets everything breathe and avoids the larger footprint cards take in multi-column grids [S-L19-057]. Nested cards look cramped, with padding on padding and stacked radii [S-L19-053] [S-L19-080].
+- **Depends on (upstream):** grouping strategy (Q-dir-04, DC-L15-05), density (Q-dir-02), platform and compact widths (Q-plat-01, Q-layout-01), how a card is set apart from the page (Q-depth-01, DC-L08-15).
+- **Affects (downstream):** the card component, `space.inset.card`, nested radius (DC-L04-05), surface steps (DC-L01-13), dashboard and list templates, and builder lint.
+- **Token encoding:** no new tokens, only `space.inset.card` (dimension). Builder lint: `$extensions.builder.lint.maxCardDepth: 1` as a warning, alongside `maxContainerDepth: 2` for regions that are not cards, such as a sidebar or a page section [inferred].
+- **Platform notes:** compact (phone) widths lean on cards, and wide multi-column layouts lean on space [S-L19-053] [S-L19-057]. The two sources describe different contexts rather than contradicting each other [inferred].
+- **Accessibility constraints:** if a card's border is the only edge of an interactive card, it needs 3:1 contrast (DC-L08-15, WCAG 1.4.11). Grouping by space alone still needs structure in the code, such as headings, lists or regions [inferred].
+- **Default + heuristic:** On wide layouts, group with space first. On compact widths, cards may be the main way to group. Never put a visible card inside a visible card: group the inside with space. Every card must do something; merge or remove the rest [S-L19-061] [S-L19-068]. This **differs from DC-L15-05**, whose lint allows two container levels. The sources support one card level, so the proposal is `maxCardDepth: 1` as a warning, not a block, because [S-L19-053] says nesting is sometimes unavoidable. Q-dir-04's current use/avoid line already says to avoid nesting containers inside containers, so this tightens the lint, not the guidance.
+- **Evidence:** [S-L19-053] [S-L19-057] [S-L19-080] [S-L19-061] [S-L19-068] [S-L19-103] [S-L19-047] (dashboards are made of many cards, so keep card margins well spaced). Compared against DC-L15-05, DC-L08-15 and DC-L04-05.
+- **Maps to:**
+  - Q-dir-04: new heuristic, one card level, with the inside of a card grouped by space. New default nuance: space on wide layouts, and cards allowed as the main unit on compact widths.
+  - Q-dir-04 visual sample: a card nested in a card (padding on padding) next to the same content grouped with space [S-L19-053], and a wide canvas of stacked containers dissolved into one line and a column edge [S-L19-080].
+  - Q-dist-03: new lint rule that warns on a card inside a card.
+- **Impact now / as it grows:**
+  - *Cards first:* now quick, flexible groups on phones [S-L19-053]. As features are added, each one tends to bring another card, and screens drift toward boxes in boxes unless they are pruned [inferred; S-L19-068 shows a 12-card dashboard that needed pruning].
+  - *Space first:* now lighter pages that breathe [S-L19-057]. As content grows, it depends on strict spacing tokens (DC-L19-41) so that groups stay readable.
+  - *One card level:* now fewer paddings and radii to manage. As it grows, nested content must be designed with space tokens, which makes the proximity ladder more important.
+  - *Two levels:* now more freedom. As it grows, padding on padding and stacked radii pile up and need fixing later [S-L19-053] [S-L19-080].
+  - *Prune and merge:* now fewer modules [S-L19-068]. As it grows, dashboards stay scannable while features keep arriving [inferred].
+- **Standards:** STD-visual-details-30, STD-visual-details-14, STD-process-review-taste-43
+
+### DC-L19-43: How list rows are separated
+- **Block path:** Foundations > Visual language > Grouping > Lists (and Foundations > Borders > Dividers)
+- **Questions the designer answers:** Are list rows separated by space, lines, alternating tints or a border around each item? What do we do when a list gets dense?
+- **Options:**
+  - **Space:** space the rows far enough apart that they read as separate. One source calls this the best option for a list [S-L19-070]. A dashboard source lists space, lines and color as the three ways to separate rows [S-L19-047].
+  - **Alternating tint (zebra):** when rows must sit tight, a subtle background on alternating rows is better than lines everywhere [S-L19-070].
+  - **Lines:** only when lines are the product's chosen style [S-L19-070]. Lines on everything, used instead of spacing, recall old slide decks, though dividers are coming back and can have rounded ends [S-L19-050]. A receipt needs no dividers at all: text hard left, values hard right [S-L19-080]. Existing: DC-L04-08 and DC-L15-05 default to lines for dense or long lists.
+  - **One stacked list, or a border around each item:** a stacked list is less cluttered and makes an empty state easier to add; a border per item is only for stronger separation [S-L19-047].
+  - **Differentiate instead of spacing out:** in a dense list, extra white space helps a little but makes everything longer. Avatars where people are mentioned, and grouping by a key such as the due date, fix it [S-L19-080]. Lines running the full width of the screen spoil an otherwise aligned list [S-L19-080].
+- **Visual effect:** Space uses the fewest elements and keeps rows legible [S-L19-070]; it also looks calm [inferred]. Zebra looks compact and table-like and is easy to scan across columns [inferred]. A few lines look orderly, but many lines look like a spreadsheet (DC-L04-08) and look dated when used on everything [S-L19-050]. A border per item separates items more strongly, while one stacked list is less cluttered [S-L19-047]. A differentiated list lets people find an item in about a second, by the source's own estimate [S-L19-080].
+- **Depends on (upstream):** density (Q-dir-02, Q-space-09), grouping strategy (Q-dir-04), surface steps for the tint (Q-color-14), border widths (Q-depth-05).
+- **Affects (downstream):** lists, tables, menus, sidebars, activity feeds, settings rows and empty states; the tokens `space.list.row-gap`, `color.surface.row-alternate` and `color.border.divider`.
+- **Token encoding:** `space.list.row-gap` (dimension, rem on the web), `color.surface.row-alternate` (color, one low-contrast step from the surface), `color.border.divider` (color with alpha) with `border.width.hairline` (dimension). List component prop `separator: space | zebra | line` [inferred].
+- **Platform notes:** the sources give none. DC-L15-05 notes that the iOS grouped table style uses grouped background colors for regions, so keep platform-native lists native [inferred].
+- **Accessibility constraints:** decorative dividers are exempt from WCAG 1.4.11 (DC-L04-08). Zebra striping should not be the only row cue in a table (DC-L15-05). List and table markup carries the grouping for screen readers [inferred]. Tight rows still keep 24 px targets on the web and 44 or 48 on touch (STD-mobile-touch-09).
+- **Default + heuristic:** Separate list rows with space. Use an alternating tint when rows must sit tight (compact density, dense tables). Use lines only when the product's style is built on lines. For a dense list, add differentiation (group headers, avatars, icons) before adding space. This also confirms DC-L15-04: denser layouts need stronger grouping. This **differs from DC-L04-08 and DC-L15-05**, which default to lines for dense or long lists. The preference for space and zebra comes from one video [S-L19-070], and [S-L19-047] offers all three without choosing, so keep `lines` as an equal option for data tables and change only the default wording for lists [inferred].
+- **Evidence:** [S-L19-070] [S-L19-047] [S-L19-050] [S-L19-080]. Compared against DC-L04-08, DC-L15-05 and DC-L15-04.
+- **Maps to:**
+  - Q-dir-04: new default wording. The part "lines for long lists" becomes "space for lists; alternating tint when rows must sit tight; lines when the style is line-based". This differs from DC-L15-05, so flag it for the owner.
+  - Q-depth-05: new option `zebra-when-tight`. The default "space first, lines in dense data views" becomes "space first; alternating tint or lines in dense tables".
+  - Q-depth-05 visual sample: one list shown three ways, with lines, with space, and tight with alternating rows [S-L19-070]; and a dense checklist before and after grouping by due date with avatars [S-L19-080].
+- **Impact now / as it grows:**
+  - *Space:* now the lightest option. As lists grow long, they need group headers or they become walls of rows [S-L19-080].
+  - *Zebra:* now compact. It scales well to tables with many columns, but the tint must stay subtle in dark mode.
+  - *Lines:* now clear structure. As lists nest inside cards and panels, lines multiply toward "boxes in boxes" (DC-L15-05).
+  - *Bordered items:* now strong separation. At scale they add clutter [S-L19-047].
+  - *Differentiate:* now it needs real data (people, dates, types). As content grows, density starts to help rather than hurt, by the source's account [S-L19-080].
+- **Standards:** STD-visual-details-30, STD-visual-details-14, STD-mobile-touch-09
+
+### DC-L19-44: Edge-built alignment inside compact components
+- **Block path:** Foundations > Layout > Alignment > Component internals
+- **Questions the designer answers:** What does each element inside a card, row or sidebar line up against? Where do values sit? What do we do when an element has no edge to sit on?
+- **Options:**
+  - **Built from edges:** in almost all compact interfaces (chat inputs, Kanban cards, sidebars), every element borders at least two edges. Those are either the card's sides or edges made by other elements, such as the bottom of an avatar and name. On a receipt, text sits hard left and prices hard right, and only what nobody needs to read is centered [S-L19-080].
+  - **Manufacture an edge:** move content to clear an edge, or create a new edge (buttons and avatar lined up into one row) so the content below can stack onto it. When larger icons break a row's bottom edge, add a subline to restore it [S-L19-080].
+  - **Fill empty space with more content:** the instinct the source warns against, because the result looks strange [S-L19-080].
+  - **Hide extras in a corner menu:** this makes the card look better but hides actions. [S-L19-061] does it for busy link cards (a triple-dot menu, chips reduced to icons). [S-L19-080] says hiding is generally not the best fix. The two sources disagree.
+  - Related: right-align numeric table columns so digits line up by place value [S-L19-056]. In menus, alignment and type separate clickable items, non-clickable items and keyboard shortcuts [S-L19-084]. Alignment is one of the three biggest fixes to AI-generated screens [S-L19-086].
+- **Visual effect:** Edge-built layouts look tidy, receipt-like and "weirdly perfect" without dividers [S-L19-080]. Filled space looks strange [S-L19-080]. A hidden menu makes the card look better [S-L19-080], but people cannot see what the card can do [inferred].
+- **Depends on (upstream):** start alignment (Q-dir-05, DC-L15-08), inset shapes (Q-space-06), icon sizes (Q-space-10), card nesting (DC-L19-42).
+- **Affects (downstream):** cards, list items, table cells (numeric columns aligned to the end), sidebar items, chat inputs, Kanban cards, menus (a shortcut column), and builder review.
+- **Token encoding:** none; this is a layout rule. Component props use logical `start` and `end` so right-to-left layouts mirror (DC-L15-08). Table columns get `numeric: true`, which sets `text-align: end` plus tabular numbers (STD-visual-details-02) [inferred].
+- **Platform notes:** the sources give none. Use logical start and end so right-to-left layouts mirror correctly (DC-L15-08).
+- **Accessibility constraints:** when content is rearranged to create edges, the code order must still follow the visual order (WCAG 1.3.2) [inferred]. Truncated text needs a way to reach the full text (DC-L02-18). Moving actions into a menu hides them, so keep the common path visible (STD-visual-details-31) [inferred].
+- **Default + heuristic:** In compact components, every element touches at least two edges; labels align to the start and values to the end. When something floats, manufacture an edge before hiding it in a menu. The disagreement between [S-L19-061] and [S-L19-080] is resolved by frequency: rarely used actions go into a menu (Q-pattern-03 `progressive`), and everything else finds an edge [inferred].
+- **Evidence:** [S-L19-080] [S-L19-061] [S-L19-056] [S-L19-084] [S-L19-086] [S-L19-103] (nav links placed snug with the logo instead of centered). Compared against DC-L15-08, DC-L02-18 and DC-L13-03.
+- **Maps to:**
+  - Q-dir-05: new heuristic for component internals (labels to the start, values to the end, and the two-edge rule), since the question currently covers page and text alignment only.
+  - Q-dir-05 visual sample: the receipt (text hard left, prices hard right, no dividers), and a profile card before and after an edge is manufactured [S-L19-080].
+  - Q-pattern-03: new heuristic. Hiding actions in a menu comes after edges have been tried, not before [S-L19-080].
+  - Q-dist-03: new lint rule, numeric table columns aligned to the end [S-L19-056].
+- **Impact now / as it grows:**
+  - *Built from edges:* now tidy components with no dividers. As content is added, each new element needs an edge to sit on, which pushes components toward defined slots.
+  - *Manufacture edges:* now a redesign step for each crowded component. As it grows, a slot-based anatomy scales to new content.
+  - *Fill space:* now looks strange [S-L19-080], and it gets worse as more content arrives [inferred].
+  - *Hide in a menu:* now looks clean. As more actions are hidden, people find less of what the product can do.
+- **Standards:** STD-visual-details-28, STD-visual-details-32, STD-visual-details-31, STD-visual-details-36, STD-visual-details-02
+
+### DC-L19-45: Axis for heroes and single-message sections (start, centered or split)
+- **Block path:** Foundations > Layout > Balance > Hero and section axis
+- **Questions the designer answers:** Does the main message of a page or section hang on the start edge, sit centered, or split into two columns? When is centering right? Does the text sit beside the visual or above it?
+- **Options:**
+  - **Start-aligned (left in left-to-right languages):** one designer's default. He notes that AI tools center everything by default [S-L19-103]. Linear is cited as a left-aligned software hero [S-L19-066]. This is DC-L15-08's default.
+  - **Split headline, about 3/5 and 2/5:** the headline on the start side and the supporting text and buttons on the other side, with the top of the supporting text level with the top of the headline. It gives the headline more weight [S-L19-103]. Pushing the body and call to action out to one side is also one of the named hero options in [S-L19-043]. The ratio is one designer's value.
+  - **Centered:** the most common choice when text sits above the image [S-L19-043]. It suits a profound statement set larger with a lot of space [S-L19-043], or a centered core message with context elements around it, where the elements pull attention to the center, thin out farther away, and keep good space around the text [S-L19-063].
+  - **Stacked or side by side:** a stacked hero (text above the visual) steps away from the template look of text-left, image-right [S-L19-072]. The common software hero is big text, a big image and lots of space [S-L19-066]. Beauty sites often split the screen into two halves [S-L19-049].
+- **Visual effect:** Start-aligned looks efficient, modern and scannable (DC-L15-08). Split is "a little bit more interesting" than centered or left-aligned, gives the headline more weight and fills the space [S-L19-103]. Centered reads calm and ceremonial (DC-L15-08) and suits a profound statement [S-L19-043]. Stacked lets the page breathe [S-L19-072]. Side by side, repeated down the page, looks like a template [S-L19-072].
+- **Depends on (upstream):** Q-dir-05, what screens are for (Q-scope-06 `persuade` or `operate`), display type sizes (Q-type-09), writing direction.
+- **Affects (downstream):** hero, section-header, empty-state and CTA-section templates; text-alignment props; container width. In [S-L19-103] the page container was widened to 1280 while the split hero was being tuned; the link between the two is inferred.
+- **Token encoding:** template props `align: start | center | split` and `split.ratio = 0.6` (number) [inferred]; `layout.container.max` (dimension). Heroes use `min-height: 100svh` on the web (STD-mobile-touch-10).
+- **Platform notes:** a split hero stacks on compact widths [inferred]. Mobile web heroes use `min-height: 100svh` (STD-mobile-touch-10).
+- **Accessibility constraints:** centered multi-line body text reads poorly (DC-L15-08). Cap body text at about 65ch (STD-visual-details-01). In a split hero, the reading order must be headline first, then supporting text [inferred].
+- **Default + heuristic:** Keep `start` as the default; this confirms DC-L15-08. Add `split` for marketing heroes on wide screens. Center only one short statement or a single-focus moment. When text is centered, decorative elements stay context around it and never crowd it [S-L19-063]. The claim that centering is most common [S-L19-043] fits DC-L15-08, which already lists marketing heroes under centered.
+- **Evidence:** [S-L19-103] [S-L19-043] [S-L19-063] [S-L19-066] [S-L19-072] [S-L19-049]. Compared against DC-L15-08 and DC-L02-18.
+- **Maps to:**
+  - Q-dir-05: new option `split` (headline on the start side at about 3/5, supporting text and actions at about 2/5, tops aligned) [S-L19-103].
+  - Q-dir-05 visual sample: the same hero shown centered, start-aligned and split. The question's "Show" currently uses an empty state and a form; add a hero, because that is where the choice is most visible [inferred].
+- **Impact now / as it grows:**
+  - *Start:* now consistent with product screens. It scales to any length of copy.
+  - *Split:* now more interesting on wide screens. As it grows, it needs a wide container and a stacking rule for phones.
+  - *Centered:* now a strong single statement. Long or growing copy reads poorly centered (DC-L15-08).
+  - *Stacked:* now lets the page breathe [S-L19-072]. It works across widths without a special rule.
+- **Standards:** STD-visual-details-01, STD-visual-details-29, STD-mobile-touch-10
+
+### DC-L19-46: Hierarchy recipe: which lever carries each text level
+- **Block path:** Foundations > Visual language > Hierarchy > Levers per level
+- **Questions the designer answers:** How many text weights and text colors does a screen use? Which lever makes a heading stand out, and which a subheading? How much should the range of sizes shrink on dense screens?
+- **Options:**
+  - **Size only:** it works, but gives less difference [S-L19-057].
+  - **Size plus two weights and two text colors:** a quick, large improvement. At most two weights, at least one weight step apart, and two text colors: the primary color and the same color at 45–70% opacity [S-L19-057]. The two-weight cap agrees with DC-L15-02.
+  - **Rank first, then one lever per level:** list the text elements by rank. Let size carry the heading, without also making it bold and full strength. Make subheadings bold so they scan. Keep paragraphs at full opacity so the smallest text is not also the faintest. Weight or color can each push small text back [S-L19-042]. The source's range for secondary text is 40–70% opacity.
+  - **Darkness bands:** the darkest text for important headings, lighter for body and lighter still for subtext [S-L19-039]. These are one video's lightness values. A second video uses dark gray rather than pure black for secondary information such as file size, file type, labels and borders [S-L19-051].
+  - **A narrow range on dense surfaces:** dashboards normally have no text larger than 24 px, while landing pages can use up to six sizes with a wide range [S-L19-052]. Dashboards use smaller styles with less difference between sizes [S-L19-047].
+  - Warnings: too large a jump between text sizes splits a page into two styles [S-L19-065]. A hierarchy that is "slightly overdone" lets the headline drown out the sub-line [S-L19-072].
+  - Existing: DC-L15-02 (balanced, two weights, three text colors) and DC-L02-15 (three weights).
+- **Visual effect:** Size only gives less difference [S-L19-057]; weak type hierarchy is part of what makes a page look like a template [S-L19-072]. Ranking first and using one lever per level looks clear and scannable and keeps body text readable [S-L19-042]. Opacity tiers look harmonious (DC-L01-14) but can fail contrast (see below). A narrow range reads dense and professional and a wide range reads editorial (DC-L15-02); [S-L19-052] gives the ranges, not the readings.
+- **Depends on (upstream):** Q-dir-03, the size ratio (Q-type-09), weights (Q-type-12), text colors (Q-color-22), page type (Q-layout-03, where `data` means a narrow range).
+- **Affects (downstream):** type roles (heading, subheading, body, caption), text color tokens, card and section-header templates, the dashboard type ramp, and button prominence.
+- **Token encoding:** at most two `fontWeight` tokens used per view (`font.weight.regular`, `font.weight.strong`), drawn from the system's weights (DC-L19-24). `color.text.primary` and `color.text.secondary` are solid colors that pass 4.5:1 (DC-L01-14), not free opacities. Generator metadata: `$extensions.builder.hierarchy = { levers: { heading: "size", subheading: "weight", body: "none" }, maxInAppTextPx: 24 }` for data surfaces [inferred].
+- **Platform notes:** hierarchy must survive Dynamic Type and Android font scaling (DC-L15-02). [S-L19-053] cites a 17 px iOS base size against 13 px on macOS, so phone type does not shrink.
+- **Accessibility constraints:** secondary text needs 4.5:1 on the lowest surface it appears on (DC-L01-14). With the WCAG formula, black on pure white needs about 54% opacity or more to reach 4.5:1: 45% gives about 3.4:1, and the 55% line in [S-L19-043] gives about 4.8:1 [inferred, computed]. On tinted or gray surfaces the minimum is higher. Hierarchy cannot rely on color alone (DC-L15-02).
+- **Default + heuristic:** This confirms DC-L15-02: balanced, with two weights. Heuristic: rank every text element first, then give each step one lever: size for headings, weight for subheadings, and full contrast for body text. Secondary text is a solid token that passes 4.5:1, not a free opacity. On dense or data surfaces (Q-layout-03 `data`, Q-aud-01 `dense`), keep text inside the app at or below about 24 px [S-L19-052]. That number comes from one video; [S-L19-047] agrees only that dashboards use smaller sizes closer together, and it fits DC-L15-02's subtle option [inferred]. DC-L19-25 owns the size budget and reconciles the 24 px with DC-L02-11's 32 px; this card follows it. On weights, [S-L19-057] and DC-L15-02's stated default favour two, while DC-L02-15 defaults to three (and DC-L15-02's own balanced option lists 400/600/700). DC-L19-24 reconciles them as three weights in the system and at most two in any one view; this card follows DC-L19-24 rather than overriding DC-L02-15. The emphasis budget is confirmed too: one primary call to action per header [S-L19-057], one or maybe two things to look at and click [S-L19-040], the nav button smaller than the hero button (28 against 38 px in one build) [S-L19-103], and color only on what matters [S-L19-080], which confirms DC-L15-03 and DC-L13-18.
+- **Evidence:** [S-L19-042] [S-L19-057] [S-L19-039] [S-L19-051] [S-L19-040] [S-L19-052] [S-L19-047] [S-L19-065] [S-L19-072] [S-L19-043] [S-L19-080] [S-L19-103] [S-L19-020]. Compared against DC-L15-02, DC-L02-15, DC-L01-14, DC-L15-03 and DC-L13-18, and the type-area cards DC-L19-23 (the same heading, subheading and paragraph recipe), DC-L19-24 (weights), DC-L19-25 (size budget) and DC-L19-08 (text colors).
+- **Maps to:**
+  - Q-dir-03: new heuristic, rank first, then one lever per level, and the smallest text is never the faintest [S-L19-042].
+  - Q-dir-03 visual sample: a heading, subheading and paragraph set styled the predictable way (bold heading, faint paragraphs) next to the recommended way [S-L19-042]; and a text block with size only next to size plus two weights and two colors [S-L19-057].
+  - Q-dir-03: no separate size cap here. The 24 px ceiling for dense product screens is proposed in DC-L19-25 (one video's number [S-L19-052]); this card only links `data` pages to it.
+  - Q-color-22: confirms DC-L01-14. Text tiers made with opacity are allowed only at values that pass 4.5:1; DC-L19-08 proposes the floor.
+- **Impact now / as it grows:**
+  - *Size only:* now the simplest option. As screens fill up, levels blur together.
+  - *Two weights and two colors:* now a quick improvement [S-L19-057]. It keeps the type ramp small as the product grows.
+  - *One lever per level:* now takes one ranking pass per template. As it grows, new screens inherit a readable default.
+  - *Darkness bands:* now subtle. Each band needs a contrast check on every surface, and more surfaces mean more checks.
+  - *Narrow range for data:* now fits more on a screen. As it grows, marketing and app need two type sets (Q-brand-06).
+- **Standards:** STD-visual-details-07, STD-visual-details-08, STD-visual-details-29, STD-visual-details-13, STD-visual-details-25
+
+### DC-L19-47: Padding grows with the container
+- **Block path:** Foundations > Space > Semantic spacing > Inset scale
+- **Questions the designer answers:** Do small and large containers share one padding? How close can a group of cards sit? What shape are chip and button paddings? How do spacing values step at large sizes?
+- **Options:**
+  - **Padding in proportion to size:** tight insets for small parts and liberal padding for big elements. One build uses an 8 px screenshot inset and an 8 px gap between feature cards, but 64 px of padding around a large hero screenshot [S-L19-103]. These are one designer's values.
+  - **Gap equal to the inset (a snug group):** the gap between sibling feature cards matches the inset around their content, 8 px in the example [S-L19-103]. Cards on a dark background sit very close together, with precise spacing [S-L19-060].
+  - **One padding for everything:** consistent, but the same padding looks cramped on large surfaces and loose on small ones [inferred].
+  - **Squished padding for pills:** a chip's vertical padding is half or a quarter of its horizontal padding (20 px horizontal gives 10 or 5) [S-L19-075]. A button's horizontal padding is about twice its vertical padding, in the analysis's reading of an ambiguous line [S-L19-052]. The half ratio confirms DC-L03-05's squish inset.
+  - **Large values:** at large sizes, round to the nearest 5 or 10, or grow the steps exponentially on an 8 base, because 120 against 128 is not visible [S-L19-070]. Exponential steps confirm DC-L03-02's hybrid scale. Rounding to 5 or 10 creates values that are off the scale [inferred].
+  - Base unit: a 4-point grid, because values can always be halved [S-L19-052]; a 4 or 8 px base [S-L19-070]; sign-up and login modals kept on a 4 px grid [S-L19-075]. All three confirm Q-space-01's `4-grid-8-rhythm`.
+- **Visual effect:** Proportional padding looks balanced at every size [inferred]. A snug group reads as one tray of related items [inferred from S-L19-103]. One padding everywhere makes big media look cramped [inferred]. A squished chip stays a chip; a chip that is too tall starts to look like a button [S-L19-075].
+- **Depends on (upstream):** Q-space-01, Q-space-02, Q-space-06, DC-L03-04, DC-L03-05.
+- **Affects (downstream):** the `space.inset.*` tokens, cards, media wells, chips, buttons, hero media, and the gaps in feature grids.
+- **Token encoding:** `dimension` tokens `space.inset.xs` to `space.inset.xl` (for example sm 8, xl 64), with `space.gap.card-group` → {space.inset.sm} as an alias. Squish is stored as two tokens (`...block`, `...inline`) because DTCG has no padding composite (DC-L03-05). Values are in rem on the web (STD-accessibility-motion-13).
+- **Platform notes:** none from the sources.
+- **Accessibility constraints:** a squished inset must not shrink the hit area below 24 px on the web or 44/48 on touch (STD-mobile-touch-09, DC-L03-05).
+- **Default + heuristic:** Padding grows with the container: pick the inset step from the container's size (chip xs, card sm or md, section media xl [inferred mapping]). A group of snug cards uses a gap equal to their inset. Both rules rest on one designer's build [S-L19-103], with [S-L19-060] agreeing only that grouped cards sit close with precise spacing, so they are a recommended heuristic, not a lock. Chips squish to a half or a quarter. This confirms `4-grid-8-rhythm` and the `hybrid` scale. Large values stay on the scale's steps rather than being rounded to 5 or 10, because hand-typed values break STD-visual-details-26 [inferred].
+- **Evidence:** [S-L19-103] [S-L19-060] [S-L19-075] [S-L19-052] [S-L19-070] [S-L19-045] (auto layout keeps spacing repeated). Compared against DC-L03-01, DC-L03-02, DC-L03-04 and DC-L03-05.
+- **Maps to:**
+  - Q-space-06: new heuristic, padding grows with the container, and a snug card group uses gap equal to inset. Confirms the `insets` squish option [S-L19-075].
+  - Q-space-01: confirms the current default `4-grid-8-rhythm`.
+  - Q-space-02: confirms the current default `hybrid`. Add to use/avoid: do not round large values to 5 or 10 off the scale.
+  - Visual sample: a feature card with an 8 px inset next to a hero screenshot well with 64 px of padding [S-L19-103].
+- **Impact now / as it grows:**
+  - *Proportional:* now needs 4 to 5 named inset steps. As new container types arrive, each one picks a step instead of a new value.
+  - *Gap equals inset:* now one alias. Card groups stay visually consistent as grids grow.
+  - *One padding:* now the simplest option. It breaks down as larger surfaces such as heroes and media wells appear.
+  - *Squished pills:* now two tokens per control size. Chips and buttons stay distinct as the set of components grows [S-L19-075].
+  - *Rounding large values:* now looks fine by eye. As it grows, it adds off-scale values that drift.
+- **Standards:** STD-visual-details-26, STD-visual-details-27, STD-accessibility-motion-13, STD-mobile-touch-09
+
+### DC-L19-48: Priority placement on work surfaces and dashboards
+- **Block path:** Patterns > Layout > Work-surface composition
+- **Questions the designer answers:** What must people see first on the main screen, and what can wait? How are modules ranked and placed? What goes at the very top? How strictly do modules follow the grid?
+- **Options:**
+  - **Priority grid:** rank each module high, mid or low. Treat the dashboard as a grid where more important information sits higher and farther left, and place high-priority modules first, mid next and low at the bottom. Where a module fits two ways, choose the orientation that leaves no awkward gap, and fill a gap that remains with a section the product actually lacks [S-L19-068].
+  - **Main area first, top row for page actions:** the main section shows what matters most to the user (project status, or investments at the top of a finance dashboard). The very top of a dashboard is generally reserved for page actions or simple navigation, such as a dropdown and a create button [S-L19-047].
+  - **A strict grid with the same margins:** dashboards follow grids more strictly than landing pages because they use most of the screen [S-L19-047]. Keep margins consistent across modules even if a module then shows fewer items (two reminders instead of four, plus a "view all" button) [S-L19-068].
+  - **One job, pruned:** give the dashboard one clear job; if it looks like it needs a PhD to operate, cut it back [S-L19-047]. Do not repeat the same KPI cards on several pages [S-L19-061]. Start a redesign by assessing the hierarchy and expect to throw elements away. Move a large header into a sidebar when it pushes important content below the fold [S-L19-068].
+  - **Arranged by each user:** the redesign moves an existing add-widget button into the sidebar [S-L19-068]; that people then arrange the dashboard themselves is [inferred]. STD-visual-details-64 asks for personalisation when no single layout fits everyone.
+  - Related: rarely used features go in popovers and secondary actions are revealed when people look for them (a "spectrum of explicitness") [S-L19-056], which is Q-pattern-03.
+- **Visual effect:** A priority grid puts what matters most at the top start [S-L19-068], so the eye lands on it first [inferred]. Unranked modules read as card soup, like "someone emptied a drawer onto the screen" [S-L19-047]. A strict grid looks calm and orderly [inferred]. Repeated KPI cards make a product look AI-built [S-L19-061].
+- **Depends on (upstream):** page type (Q-layout-03 `data` or `working`), navigation (Q-layout-04), density (Q-dir-02), grouping (Q-dir-04), the content inventory.
+- **Affects (downstream):** dashboard and home templates, module spans, empty states, sidebar composition, builder review of module order, and the phone version (DC-L19-49).
+- **Token encoding:** the existing grid tokens (`grid.columns.*`, `grid.gutter.*`, `grid.margin.*`). Module spans are layout props, not tokens (DC-L15-07). Module priority is template metadata, `$extensions.builder.modules = [{ id, tier: "high" | "mid" | "low" }]` [inferred].
+- **Platform notes:** on phones, pick one panel instead of fitting every module [S-L19-053]. In macOS utility apps, keep roughly the top 50 px clear, because that area drags the window [S-L19-067]. "Farther left" means toward the start edge, so it mirrors in right-to-left layouts [inferred].
+- **Accessibility constraints:** the reading and focus order in code must follow the priority order (WCAG 1.3.2, 2.4.3) [inferred]. Modules that are only reachable by dragging need a keyboard path [inferred].
+- **Default + heuristic:** Rank modules before placing them. The top row holds page actions; high-priority modules go at the top start; every module keeps the same margins. If the same module appears on two pages, one of them is probably wrong [inferred from S-L19-061].
+- **Evidence:** [S-L19-068] [S-L19-047] [S-L19-061] [S-L19-056] [S-L19-053] [S-L19-067]. Compared against DC-L03-16, DC-L03-18, DC-L15-07 and DC-L13-04.
+- **Maps to:**
+  - New question (proposed Q-layout-07, zoom 3, stage 13, show if Q-layout-03 is `data` or `working`, or Q-aud-01 is `dense`): "What must people see first on the main screen, and what can wait?" Options: `priority-grid` (default), `single-focus` (one main module plus a list; one job per screen [S-L19-047] [S-L19-053]), `user-arranged` (STD-visual-details-64 [S-L19-068]).
+  - Visual sample for the new question: the finance dashboard cut from 12 cards to a few tiered modules, placed higher and farther left by priority [S-L19-068].
+  - Both wiki topic pages list this as an open question ("No question records where dashboard modules go by priority").
+- **Impact now / as it grows:**
+  - *Priority grid:* now a clear first look. Every new module must be ranked, and lower tiers get pushed down or out.
+  - *Single focus:* now the calmest option. As features grow, more has to move to other pages.
+  - *User-arranged:* now costs more to build (drag, saving the layout). It scales to different roles and habits (STD-visual-details-64).
+- **Standards:** STD-visual-details-29, STD-visual-details-30, STD-visual-details-31, STD-visual-details-64, STD-visual-details-33
+
+### DC-L19-49: Moving a multi-panel screen to a phone
+- **Block path:** Foundations > Layout > Adaptation > Compact width
+- **Questions the designer answers:** When a desktop screen with several panels reaches a phone, do we stack everything, keep one panel per screen, or scroll some sections sideways? Do type and spacing shrink? What happens to the sidebar?
+- **Options:**
+  - **Stack everything:** every panel in one long column. This is the baseline, and one of Primer's narrow-screen options in DC-L03-19.
+  - **One panel per screen:** where the desktop had an action bar, recent notes, a calendar, tasks and a scratch pad, the phone screen picks one of them. When something new is needed, reach for a different page rather than a different layout [S-L19-053].
+  - **One direction per section:** on a phone, each section either stacks vertically or scrolls horizontally off the page, never both [S-L19-053]. Swipeable cards are better than stacking the same items, and a swipeable set needs page indicators [S-L19-035].
+  - **Keep type and spacing, or go a little larger:** do not squish things down to fit more. The source cites a 17 px iOS base size against 13 px on macOS [S-L19-053], and mobile screens need more space than you think [S-L19-045]. This agrees with DC-L03-17 (component spacing never changes by breakpoint) [inferred]. It **differs from DC-L03-24's** platform note that Material allows more generous spacing on desktop.
+  - **Sidebar to bottom bar, or to a hub home page:** consolidate the sidebar into a bottom bar (three or four links ideal, five the limit), or, when too many sections matter, turn the sidebar into the home page with recent items at the top (as Notion does) [S-L19-053].
+- **Visual effect:** Stacking gives a long scroll where everything is reachable but buried [inferred]. One panel per screen follows the rule that "one screen does one thing" [S-L19-053]. Swipeable rows work better than stacking the same items [S-L19-035] and feel compact [inferred]. Unchanged sizes match native apps; squished layouts look small next to them [S-L19-053].
+- **Depends on (upstream):** breakpoints (Q-layout-01), adaptation strategy (Q-layout-02), page type (Q-layout-03), navigation (Q-layout-04), module priority (DC-L19-48).
+- **Affects (downstream):** page templates, navigation containers, the horizontal scroller or carousel, list-detail behaviour, empty states.
+- **Token encoding:** no new tokens. Only layout-level tokens (margins, pane gaps) get breakpoint modes (DC-L03-17); component spacing does not change. Horizontal rows use CSS scroll snap per STD-mobile-touch-19.
+- **Platform notes:** on the web, horizontal rows use native scroll snap (STD-mobile-touch-19), or `touch-action: pan-y` for a JavaScript carousel (STD-mobile-touch-18). App shells use 100dvh and pad for safe areas (STD-mobile-touch-10, STD-mobile-touch-16). The bottom bar keeps targets over 44 px [S-L19-053].
+- **Accessibility constraints:** at 320 CSS px everything must still be reachable (WCAG 1.4.10, DC-L03-22). Horizontal scrollers need visible indicators [S-L19-035] and a way to move that is not a gesture [inferred]. Targets stay at 44 pt on iOS and 48 dp on Android (STD-mobile-touch-09). Layouts must scale with text size (STD-accessibility-motion-13).
+- **Default + heuristic:** On compact widths, give each screen one job: keep the highest-priority panel and move the others to their own pages. Each section flows in one direction. Type and component spacing never shrink below the desktop values. Heuristic: if a section needs two directions on a phone, split it into two sections or two pages.
+- **Evidence:** [S-L19-053] [S-L19-035] [S-L19-045]. Compared against DC-L03-17, DC-L03-18, DC-L03-19, DC-L03-22 and DC-L03-24.
+- **Maps to:**
+  - Q-layout-02: new heuristic, one direction per section and one panel per screen on compact widths.
+  - Q-layout-04: new option `hub-home` (on phones, the sidebar becomes the home page when too many sections matter for a bottom bar) [S-L19-053]. Confirms the 3–5 bottom-bar range in DC-L03-19.
+  - Q-layout-02 visual sample: in the resizable frame, a desktop dashboard becomes one panel per phone screen.
+  - Q-dir-02 and Q-space-09: new heuristic, a compact width is not a compact density [inferred from S-L19-053].
+- **Impact now / as it grows:**
+  - *Stack:* now no extra design work. As panels are added, the page gets longer and the important parts sink.
+  - *One panel per screen:* now needs extra pages and navigation. It scales, because new features become new pages.
+  - *One direction per section:* now a simple rule to check. It holds up as sections are added.
+  - *Keep sizes:* now shows less per screen. It stays consistent with native apps across devices.
+  - *Hub home:* now one more screen to design. It handles a growing number of sections better than a five-item bar [S-L19-053].
+- **Standards:** STD-mobile-touch-09, STD-mobile-touch-10, STD-mobile-touch-16, STD-mobile-touch-18, STD-mobile-touch-19, STD-accessibility-motion-13, STD-visual-details-28, STD-visual-details-42
+
+### DC-L19-50: Variety between sections on marketing pages
+- **Block path:** Patterns > Marketing page > Section rhythm
+- **Questions the designer answers:** May two sections on one page share a layout? How far may sections go beyond the column grid (overlaps, rows running off the frame)? Where does variety stop?
+- **Options:**
+  - **Repeat one template:** text left and image right, alternating all the way down the page, makes a site look like a template [S-L19-072]. It is well made but boring [S-L19-085].
+  - **Vary the sections:** mix in a full-screen section, cards and three columns [S-L19-085]. Do not reuse a layout for two sections of one page [S-L19-082]. One source calls variety in layout "a must", and flips the middle item of a stacked section when everything lines up too neatly [S-L19-065]. Make each section lead into the next [S-L19-072].
+  - **Vary and break the box:** overlapping sections, cards shifted up and down, a row of cards running past the frame. Start small, because this easily looks wonky [S-L19-085]. An explore row can run off the page with navigation to move through it [S-L19-082].
+  - **Structure plus one surprise:** get the structure clear first, then break the expected pattern once in a while with one well-built moment [S-L19-084]. New layouts can be taken too far and lose a clear structure [S-L19-049].
+  - The counterweight: after 30 years of websites, people expect information to flow top to bottom and left to right with navigation at the top. Make a familiar layout your own through details [S-L19-054]. STD-visual-details-37 asks for proof before a familiar pattern is broken.
+- **Visual effect:** Repeating one template looks like a template and does not encourage scrolling [S-L19-072]. Varied sections look more interesting [S-L19-085] and encourage people to keep scrolling [S-L19-072]. Breaking the box adds a feeling of movement but easily looks wonky [S-L19-085]. One well-built surprise is engaging without tipping into chaos [S-L19-084].
+- **Depends on (upstream):** whether marketing is in scope (Q-scope-01 `marketing`, Q-scope-06 `persuade`), the style preset (Q-dir-01), the grid (Q-layout-05), the content inventory.
+- **Affects (downstream):** the marketing section library (DC-L19-51), page templates, builder review of adjacent sections, and the motion budget for sections.
+- **Token encoding:** none; this is a process and template decision. Builder lint: `$extensions.builder.lint.marketing.noRepeatedSectionLayout: true` [inferred].
+- **Platform notes:** the sources discuss marketing websites only. Product screens stay conventional, because things that look the same must behave the same (STD-visual-details-36) [inferred].
+- **Accessibility constraints:** overlaps and off-frame rows keep the reading order in the code equal to the visual order (WCAG 1.3.2) [inferred]. Rows that run off the frame need a way to reach hidden items without a gesture [inferred]. Scroll effects follow the reduced-motion rules [inferred].
+- **Default + heuristic:** Vary: no two sections of one page share a layout. That strict form is one video's practice [S-L19-082]; the other sources ask for variety without a hard rule ([S-L19-065], [S-L19-085], [S-L19-072], [S-L19-073]), so the builder should warn, not block. Break the box only in small, nameable ways, and at most one well-built surprise per page. The count of one is inferred from "once in a while" [S-L19-084], and the surprise is tested before it ships (STD-visual-details-37). None of this applies to product screens. Choosing different familiar section patterns is variety, not breaking a pattern [inferred].
+- **Evidence:** [S-L19-072] [S-L19-085] [S-L19-082] [S-L19-065] [S-L19-084] [S-L19-049] [S-L19-054] [S-L19-073] (calls layout variety "everything"). Compared against DC-L15-07.
+- **Maps to:**
+  - New question (proposed Q-layout-08, zoom 3, stage 13, show if Q-scope-01 includes `marketing` or Q-scope-06 is `persuade`): "Should each marketing section get its own layout, and how far may sections break the grid?" Options: `repeat`, `vary` (default), `vary-break-box`.
+  - Visual sample: a page of repeated text-and-image rows next to a varied page [S-L19-085] [S-L19-072].
+- **Impact now / as it grows:**
+  - *Repeat:* now the fastest to build. Every new page looks the same as the last.
+  - *Vary:* now needs a section library (DC-L19-51). As pages are added, the library grows rather than one-off layouts.
+  - *Break the box:* now eye-catching. Each break is custom work and harder to test at every width.
+  - *One surprise:* now one special build per page. The special parts stay rare enough to maintain.
+- **Standards:** STD-visual-details-37, STD-visual-details-36, STD-visual-details-30, STD-enter-exit-origin-28
+
+### DC-L19-51: Choosing a section pattern by item count and amount of content
+- **Block path:** Patterns > Marketing page > Section library
+- **Questions the designer answers:** Which section layouts does the marketing kit include? For a set of N items, which pattern fits? How much content does each pattern need?
+- **Options:**
+  - **Logo strip**, static or as a marquee with faded edges: present on 41 of 50 software sites in one informal sample [S-L19-066].
+  - **Big-text, big-image hero with lots of space,** plus one distinctive element such as a characterful font or a small inline diagram [S-L19-066].
+  - **Tabbed section (a "clickable multisection"):** every tab must be designed before handoff [S-L19-066]. It can replace a static row of three cards [S-L19-072].
+  - **Stacked scroll cards:** each card slides up over the one before it; suited to three to five options that need some detail [S-L19-060].
+  - **Horizontal carousel:** suited to about 3 to 10 cards; more than 10 is cumbersome. Do not rely on small buttons alone; add a bigger button or make the cards draggable [S-L19-060]. A product-card slider shows every product when room is short [S-L19-049], and a feature slider suits features that each have an image [S-L19-065].
+  - **Bento:** only with enough content (see DC-L19-52) [S-L19-060] [S-L19-066] [S-L19-072] [S-L19-043].
+  - **Line grid:** feature cells sharing visible grid lines instead of floating apart [S-L19-066].
+  - **Text-only section or photo band:** a text-only section needs three or more lines of body text, or it looks too empty. A thin cropped photo with one strong line works as a pause between text-heavy sections [S-L19-060].
+  - **One-column stack of large features:** only one feature is in focus at a time [S-L19-085].
+- **Visual effect:** A logo strip gives quick social proof [S-L19-066]. Tabs and stacked cards keep a section short while holding detail [S-L19-072] [S-L19-060]. A carousel holds a lot in a small space [S-L19-060]. A line grid keeps cells inside visible lines instead of floating apart [S-L19-066] and looks structured [inferred]. A text-only section opens up a photo-heavy page [S-L19-060]. A one-column stack keeps attention on one feature at a time [S-L19-085].
+- **Depends on (upstream):** section variety (DC-L19-50), the content inventory (item count, image orientation, text length), the grid (Q-layout-05), text on images (Q-img-02).
+- **Affects (downstream):** section components, the carousel or scroller, tabs, the bento grid, the logo strip, and motion (marquee, scroll stack, scroll reveals).
+- **Token encoding:** none; this is a component and template decision. The counts can be builder hints, `$extensions.builder.sections = { carousel: { min: 3, max: 10 }, scrollStack: { min: 3, max: 5 }, textOnly: { minBodyLines: 3 } }` [inferred]. The counts are one presenter's judgement [S-L19-060].
+- **Platform notes:** these are web marketing patterns. Carousels use native scroll snap where they can (STD-mobile-touch-19), or `touch-action: pan-y` for a JavaScript gesture (STD-mobile-touch-18). Marquee text trades away usability [S-L19-085].
+- **Accessibility constraints:** carousels need indicators showing how many items there are [S-L19-060] [S-L19-075] and a bigger button than small dots alone [S-L19-060]; a way to move that is not a drag gesture is [inferred]. A marquee, or tabs that switch automatically on a timer, need a way to pause them (WCAG 2.2.2) [inferred]. Stacked scroll cards and marquees ship with their reduced-motion variant in the same change (STD-accessibility-motion-01). Tabs follow the ARIA tabs pattern [inferred]. Hover effects on section cards are gated to fine pointers (STD-accessibility-motion-15).
+- **Default + heuristic:** Pick the pattern by item count and content amount. Three to five detailed items: stacked cards or tabs. About 3 to 10 comparable items: a carousel. Many features that would run off the screen: a bento [S-L19-043]. More than about 10: a different format, such as a grid or a separate page [inferred; S-L19-060 says only that another format may be better]. A single statement: a text-only section with three or more lines. All counts are opinion from one video [S-L19-060]; no other source or card gives numbers.
+- **Evidence:** [S-L19-060] [S-L19-066] [S-L19-072] [S-L19-043] [S-L19-049] [S-L19-065] [S-L19-085] [S-L19-075]. Compared against DC-L15-07.
+- **Maps to:**
+  - New question (proposed Q-layout-09, zoom 3, stage 13, same show-if as Q-layout-08): "Which section patterns should the marketing kit include?" Multi-select: `logo-strip`, `big-hero`, `tabbed`, `scroll-stack`, `carousel`, `bento`, `line-grid`, `text-interlude`, `one-column-features`. The builder proposes a set from the content inventory using the count heuristic [inferred].
+  - Q-layout-05: new heuristic. `bento` becomes one entry in this library instead of the only named section option.
+  - Visual sample: the section catalogue (cards on a dark background, stacked scroll cards, a carousel, a bento, a text-only section) [S-L19-060], and a simple bento next to a line grid [S-L19-066].
+- **Impact now / as it grows:**
+  - *Logo strip:* now easy. As logos accrue it needs curation; a marquee adds motion to maintain.
+  - *Tabbed:* now compact. Every tab must be designed and kept current as the product changes [S-L19-066].
+  - *Stacked scroll cards:* now vivid for a few items. The source suggests it for three to five items [S-L19-060], so it does not scale much past that [inferred].
+  - *Carousel:* now holds a lot. Past about 10 items it becomes cumbersome [S-L19-060].
+  - *Line grid, text-only, one-column:* now simple to build. They hold up as content changes because they depend less on exact content amounts.
+- **Standards:** STD-mobile-touch-18, STD-mobile-touch-19, STD-accessibility-motion-15, STD-accessibility-motion-01, STD-when-to-animate-13, STD-enter-exit-origin-13, STD-enter-exit-origin-28, STD-process-review-taste-43
+
+### DC-L19-52: How a bento grid is built
+- **Block path:** Foundations > Layout > Composition > Bento
+- **Questions the designer answers:** How complex may bento tiles be? Is there enough content for a bento? Who sets the tile sizes? Does the bento need its own section title?
+- **Options:**
+  - **Complex bento:** rich, irregular tiles in the style Apple popularised; very hard to put together and better suited to marketing [S-L19-066].
+  - **Simple bento on plain grids:** tiles on simple grids so developers can build them, with an optional slightly tilted card for character (Ramp) [S-L19-066].
+  - **Compact or full width:** Linear's compact bento, adapted to full width in one build [S-L19-060].
+  - **Sized from the content:** use a bento only when there is enough content to fill every box, and expect box sizes to change as the content plan develops (a top row became three boxes instead of two) [S-L19-060]. Match the arrangement to the images: vertical images needed a different bento [S-L19-065].
+  - **Tiles that show real UI:** build diagrams or real product UI into the tiles. Card headers can replace a section title that would be redundant [S-L19-082].
+  - When to use one: a features list that would run off the screen [S-L19-043], or a plain row of four cards [S-L19-072]. Too many bento containers make a design feel cluttered [S-L19-057].
+- **Visual effect:** A complex bento is a marketing showpiece that is hard to build [S-L19-066]. A simple bento follows the trend on plain grids [S-L19-066]. Content-first sizing fills every box [S-L19-060]. Tiles showing real diagrams look specific to the product ("so Google-esque" in one build) [S-L19-082]; that they look more credible is [inferred].
+- **Depends on (upstream):** grid columns (Q-layout-05, DC-L03-15), the section library (DC-L19-51), the content inventory, radius and nested radius (Q-shape-01, DC-L04-05), card nesting (DC-L19-42).
+- **Affects (downstream):** the bento component (tile spans), feature sections, how tiles stack on narrow screens [inferred], image crops.
+- **Token encoding:** reuses the grid tokens (`grid.columns.*`, `grid.gutter.*`). Tile spans are component props (`span: { col, row }`), not tokens (DC-L15-07). The gap between tiles uses the card-group gap from DC-L19-47 [inferred].
+- **Platform notes:** web marketing mainly. On compact widths the tiles stack in reading order [inferred].
+- **Accessibility constraints:** the code order equals the visual reading order (DC-L15-07, WCAG 1.3.2). Text over tile images follows the text-on-image rule (Q-img-02) [inferred].
+- **Default + heuristic:** A simple bento on the page's column grid (tiles span whole columns), sized after the content plan. If a tile has nothing real to show, fall back to a plainer layout. This confirms DC-L15-07 (a bento is a hierarchical grid for marketing features) and DC-L03-15's columns.
+- **Evidence:** [S-L19-066] [S-L19-060] [S-L19-065] [S-L19-082] [S-L19-043] [S-L19-072] [S-L19-057]. Compared against DC-L15-07 and DC-L03-15.
+- **Maps to:**
+  - Q-layout-05 `bento` option: new heuristic. Simple whole-column spans, only with enough content, sizes set after the content plan, and tiles holding real product UI.
+  - Visual sample: a row of four cards turned into a bento [S-L19-072], and a simple bento with one tilted card [S-L19-066].
+- **Impact now / as it grows:**
+  - *Complex:* now a showpiece. Every content change becomes custom layout work [inferred from S-L19-066, which calls these very hard to put together].
+  - *Simple:* now quick to build. Tiles can be swapped as features change.
+  - *Content-first:* now needs the content plan before layout [S-L19-060]. The layout stays honest as content changes [inferred].
+  - *Real UI in tiles:* now requires product screenshots or diagrams. Tiles go stale when the product's UI changes and need refreshing.
+- **Standards:** STD-visual-details-30, STD-visual-details-26, STD-process-review-taste-43
+
+### DC-L19-53: How long pages separate their sections
+- **Block path:** Patterns > Marketing page > Section separation
+- **Questions the designer answers:** Between sections, do we rely on space, background bands, a frame of lines, or image breaks? What should we strip out?
+- **Options:**
+  - **Space only:** sections separated by spacing. Lines on everything as a substitute for spacing recall old slide decks [S-L19-050].
+  - **Background bands:** sections on adjusted backgrounds separate content and add depth (Shopify) [S-L19-085], with each section's background matched to what it is for [S-L19-062]. The counterpoint: remove the background tints and background cards an AI tool adds [S-L19-103].
+  - **A frame of lines or a "canvas grid":** vertical lines framing the page's content, which also keep it responsive on very large screens [S-L19-072]. A canvas grid of borders around each section, with full-width dividers between sections, makes a site more interesting when there are no custom graphics [S-L19-103]. Line grids inside a section [S-L19-066]. Dividers are coming back and can have rounded ends [S-L19-050]. The counterweight: [S-L19-072] shows the framing lines at its third level, and at its top level moves from many straight lines to a more flexible layout.
+  - **Image break:** a thin cropped photo with one strong line as a pause between text-heavy sections [S-L19-060].
+  - Motion between sections, such as each section leading into the next [S-L19-072], belongs to the motion area.
+- **Visual effect:** Space alone avoids the "lines on everything" slide-deck look [S-L19-050] and looks calm [inferred]. Background bands separate sections and add depth [S-L19-085]. A frame of lines makes a site more interesting when there are no custom graphics [S-L19-103] and keeps content contained on very large screens [S-L19-072]; that it looks structured or technical is [inferred]. An image break acts as an interlude between text-heavy sections [S-L19-060].
+- **Depends on (upstream):** the grouping strategy and its `lines` option (Q-dir-04), surface steps (Q-color-14), the style preset (Q-dir-01), section variety (DC-L19-50).
+- **Affects (downstream):** the section component (background and border variants), the page frame, divider tokens, marketing templates.
+- **Token encoding:** `color.surface.section-alternate` (color), `color.border.frame` (color with alpha), `border.width.hairline` (dimension). Section prop `separator: space | band | frame | image` [inferred].
+- **Platform notes:** these are web marketing patterns. On very large screens a frame of lines keeps the content visibly contained [S-L19-072].
+- **Accessibility constraints:** decorative lines are exempt from WCAG 1.4.11 (DC-L04-08). Text on each band still needs 4.5:1 [inferred]. Section headings and landmarks carry the structure for screen readers (DC-L13-04) [inferred].
+- **Default + heuristic:** Separate sections with space by default. Add background bands for rhythm on long pages [inferred; S-L19-085 says they separate sections and add depth]. Use a frame of lines or a canvas grid only as a deliberate style, mainly when there are no custom graphics [S-L19-103]. Avoid lines as a substitute for spacing [S-L19-050] (one video's taste, which it says is softening). Strip tints and background cards that do nothing [S-L19-103].
+- **Evidence:** [S-L19-050] [S-L19-085] [S-L19-062] [S-L19-103] [S-L19-072] [S-L19-066] [S-L19-060]. Compared against DC-L04-08 and DC-L15-05.
+- **Maps to:**
+  - Q-dir-04: new heuristic for page sections. Space first, bands for rhythm, and a frame only as a deliberate style.
+  - Q-dir-04 `lines` option, visual sample for marketing pages: a page framed by vertical lines [S-L19-072] and a canvas grid [S-L19-103].
+- **Impact now / as it grows:**
+  - *Space:* now the least to maintain. As pages grow long, they may need bands to keep a rhythm.
+  - *Bands:* now depth and rhythm. Each band color needs contrast checks in light and dark mode.
+  - *Frame or canvas grid:* now structure without illustrations. Every new section has to fit the frame, which constrains layout variety (DC-L19-50).
+  - *Image break:* now emphasis. It depends on a supply of good wide photos [S-L19-060].
+- **Standards:** STD-visual-details-14, STD-visual-details-30
+
+### DC-L19-54: What a card shows first, what it groups and what it drops
+- **Block path:** Components > Card > Content anatomy
+- **Questions the designer answers:** What does a card lead with? Which facts group together? Which labels can go? What is left for the detail page?
+- **Options:**
+  - **The "spreadsheet" card:** every field labelled at equal weight, the "before" state in [S-L19-052].
+  - **The ranked card:** an image whenever possible, the key item large and bold on top, secondary details smaller below, one standout value (the price at the top end, in color), and icons plus alignment instead of "from" and "to" labels [S-L19-052].
+  - **Grouped facts with implied labels:** group related facts (name with location, cost with rating), order the groups by importance, put minor details in one row with icons, and keep labels only where values could be confused (check-in and check-out) [S-L19-070].
+  - **Scan-first listing card:** the specifics people scan by (location, rating, price) go on the card, and descriptions go on the page that opens on click. Test with imperfect content and truncate long names [S-L19-054].
+  - **Real-object card:** only the actions and figures that make sense for the real object (a credit card gets "lock card", a minimum payment and a due date). Retitle the card when its content changes [S-L19-068].
+  - **Calming a busy card:** actions into a triple-dot menu and chips reduced to icons [S-L19-061], or manufactured edges instead (DC-L19-44) [S-L19-080].
+- **Visual effect:** The spreadsheet card "looks like a spreadsheet, not a design" [S-L19-052]. The ranked card is easy to scan, with color from the image [S-L19-052]. Implied labels make a card quieter and shorter [inferred; S-L19-070 shows the before and after]. A scan-first card puts the details people scan by first [S-L19-054].
+- **Depends on (upstream):** the hierarchy recipe (DC-L19-46), edge alignment (DC-L19-44), icon sizes (Q-space-10), the content model.
+- **Affects (downstream):** card templates (listing, product, stat, feature), truncation rules, icon use, the content of detail pages.
+- **Token encoding:** none; this is a content and component-anatomy decision. Card slots: `media`, `lead`, `meta`, `standout`, `actions` [inferred].
+- **Platform notes:** none from the sources.
+- **Accessibility constraints:** implied labels still need accessible names (visually hidden labels or ARIA) [inferred]. Truncated names need a way to reach the full text (DC-L02-18). Icons that replace labels need text alternatives [inferred]. Icons on photos get a circle behind them so contrast holds on any image [S-L19-054].
+- **Default + heuristic:** Rank, group, drop. Each card has one lead fact, grouped secondary facts, and labels only where values could be confused. The card carries what people compare; the detail page carries the rest. This confirms DC-L13-04 (front-load the key information) at card level.
+- **Evidence:** [S-L19-052] [S-L19-070] [S-L19-054] [S-L19-068] [S-L19-061] [S-L19-080]. Compared against DC-L13-04 and DC-L02-18.
+- **Maps to:**
+  - Q-dir-03 visual sample: use real cards to demonstrate hierarchy strength, not only a heading ladder: the trip card before and after [S-L19-052], and the rental listing card before and after [S-L19-070].
+  - Component sheet (`component-sheet.html`): new heuristic for card templates, one lead fact, grouped facts, and labels only where values could be confused.
+- **Impact now / as it grows:**
+  - *Spreadsheet:* now the fastest to fill. As fields are added, cards get longer and flatter.
+  - *Ranked:* now needs a decision about which fact leads. As content types grow, each type needs its own ranking.
+  - *Implied labels:* now shorter cards. New fields that could be confused need their labels back [S-L19-070].
+  - *Scan-first:* now needs a detail page. It scales to long result lists [S-L19-054].
+  - *Real-object:* now per-object thinking. Actions stay meaningful as more object types arrive [S-L19-068].
+- **Standards:** STD-visual-details-29, STD-visual-details-30, STD-visual-details-35
+
+### DC-L19-55: Whole-card link or explicit button
+- **Block path:** Components > Card > Interaction
+- **Questions the designer answers:** Is the whole card the link? When does a card keep its own button? How does a card show that it can be clicked without relying on hover?
+- **Options:**
+  - **The whole card is the link:** when cards repeat over and over, no call-to-action button is needed, because the card itself is the link. An arrow icon can fade in on hover to show this [S-L19-075].
+  - **An explicit button:** keep a call to action when the card has a specific action such as "Try it out" [S-L19-075]. On image CTA cards, one hover zooms the image out and pops up the call to action [S-L19-065]; another blurs and enlarges the image and reveals extra text [S-L19-082].
+  - **Actions revealed on hover:** when space is tight, secondary actions appear on hover with a tooltip [S-L19-056]. A call to action can appear on hover only when it is needed [S-L19-072].
+  - Existing: DC-L08-15 asks "Is the whole card clickable?" but gives no default.
+- **Visual effect:** A whole-card link drops the button from every repeated card [S-L19-075], so a grid of cards looks calmer [inferred]. An explicit button makes the next step obvious but adds visual weight [inferred]. Hover reveals look clean at rest but are invisible on touch screens [inferred; the analysis of S-L19-056 notes touch and keyboard access are not discussed].
+- **Depends on (upstream):** how clearly clickable things show it (Q-state-02), card anatomy (DC-L19-54), the hover policy (STD-accessibility-motion-15).
+- **Affects (downstream):** the card component (link wrapper, focus ring), hover styles, touch affordances, analytics click targets.
+- **Token encoding:** no new tokens; it uses the focus-ring and motion tokens. Component prop `interactive: link | action | static` [inferred].
+- **Platform notes:** on the web, hover styles are gated to `(hover: hover) and (pointer: fine)` (STD-accessibility-motion-15), so on touch the hover arrow never appears. In mobile apps, hover affordances move into press, position or nothing (STD-mobile-touch-30). A card that needs a sign on touch therefore shows it permanently or drops it [inferred]. Press feedback uses `:active`.
+- **Accessibility constraints:** one link per card, and no buttons nested inside the link [inferred]. The whole card gets a visible focus ring (OpenDesigner's locked floor). If the card's border is its only edge, it needs 3:1 (DC-L08-15). Actions revealed on hover need a keyboard and touch path [inferred], and DC-L13-03 already rules out hover-only for anything essential.
+- **Default + heuristic:** Repeated cards that go to one place are one whole-card link, with a sign that does not depend on hover on touch screens. A card with its own specific action keeps an explicit button, and the card itself stays static. Never combine a card link with competing buttons inside it. Keep hover motion for occasional marketing cards, not for cards people use all day (STD-when-to-animate-07) [inferred link].
+- **Evidence:** [S-L19-075] [S-L19-065] [S-L19-082] [S-L19-056] [S-L19-072]. Compared against DC-L08-15 and DC-L13-03.
+- **Maps to:**
+  - Q-state-02: new heuristic for cards, whole-card link for repeated cards and an explicit button for a specific action.
+  - Q-depth-01, which decides DC-L08-15: answers that card's open question ("Is the whole card clickable?") with the rule above.
+  - Visual sample: a whole-card link with a hover arrow next to a card with an explicit button [S-L19-075], shown on a touch frame and a pointer frame.
+- **Impact now / as it grows:**
+  - *Whole-card link:* now fewer buttons. As cards gain secondary actions, it conflicts with nested controls, so those actions move to the detail page or a menu.
+  - *Explicit button:* now clear. In large grids, many buttons compete for attention (DC-L15-03).
+  - *Hover reveals:* now clean. As touch use grows, the hidden actions are unreachable unless another path is added.
+- **Standards:** STD-accessibility-motion-15, STD-mobile-touch-30, STD-when-to-animate-07, STD-visual-details-36, STD-mobile-touch-09
+
+### DC-L19-56: How a layout is judged before it is chosen
+- **Block path:** Process > Review > Layout checks
+- **Questions the designer answers:** At what frame size do we judge a layout? How do we test that its structure works? What do we compare, and with what content?
+- **Options:**
+  - **A real viewport frame:** judge a desktop hero in a real full-screen browser, 1920 px wide but only about 1,000 px tall with the browser bar, not in a tall showcase canvas [S-L19-049]. That size is the presenter's observation, not a measurement. Allow for the browser bar on mobile and desktop [S-L19-057]. Preview on the target screen, because designing zoomed out led one designer to oversized type and spacing [S-L19-057].
+  - **A five-second scroll test:** someone scrolling for 5 seconds should grasp the idea [S-L19-084].
+  - **Wireframe comparison:** compare layouts as wireframes with the content removed and pick the one that is easier to follow [S-L19-084]. Start from a varied wireframe [S-L19-085]. A good layout already works before any animation is added [S-L19-082].
+  - **Real and imperfect content:** test with imperfect content, such as very long names, and truncate them [S-L19-054].
+  - The house standard: show variants one at a time, full size, in realistic context (STD-process-review-taste-43).
+- **Visual effect:** a real frame shows what is actually above the fold, which a tall showcase canvas hides [S-L19-049]. Wireframe tests expose structure without styling [S-L19-084].
+- **Depends on (upstream):** breakpoints (Q-layout-01), the interview's visual templates (option gallery, spacing ruler).
+- **Affects (downstream):** what frames `option-gallery.html` and `spacing-ruler.html` render, the builder's review (`engine.py review`), and `preview.html`.
+- **Token encoding:** none (process decision).
+- **Platform notes:** mobile web heroes use `min-height: 100svh` (STD-mobile-touch-10), so the phone frame should show the browser chrome [inferred].
+- **Accessibility constraints:** include a 320 CSS px reflow frame and a check with larger text (WCAG 1.4.10, STD-accessibility-motion-13) [inferred].
+- **Default + heuristic:** Show every layout option in the interview full size, in a real frame (a 1920 by about 1,000 px desktop fold and a phone with browser chrome), with realistic content, one at a time. Before a layout is chosen, it should pass the 5-second scroll test [S-L19-084].
+- **Evidence:** [S-L19-049] [S-L19-057] [S-L19-084] [S-L19-085] [S-L19-082] [S-L19-054]. Compared against DC-L03-22.
+- **Maps to:**
+  - Q-layout-01 visual sample: the resizable frame gets a fold line at about 1,000 px on the 1920 px desktop and a phone frame with browser chrome [S-L19-049] [S-L19-057].
+  - Q-layout-05 and Q-dir-04: show variants one at a time, full size, next to sibling content (STD-process-review-taste-43), not as a grid of thumbnails. The standards file already records this conflict for `option-gallery.html`.
+- **Impact now / as it grows:**
+  - *Real frame:* now a little more setup per preview. It prevents designs that only work on a showcase canvas as pages multiply.
+  - *5-second test:* now a quick check. It scales to every new page and section.
+  - *Wireframe comparison:* now an extra step. It keeps structure decisions separate from styling as the system grows.
+  - *Real content:* now needs sample data. It catches overflow and truncation before real content arrives [S-L19-054].
+- **Standards:** STD-process-review-taste-43, STD-mobile-touch-10, STD-visual-details-28, STD-accessibility-motion-13
+
+---
+
+## Source key
+
+- [S-L19-020] [[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]] (non-negotiable)
+- [S-L19-035] [[sources/14h1VnkQvIc-master-the-3-types-of-crazy-mobile-ui-swipe-interactions|Master the 3 Types of CRAZY Mobile UI Swipe Interactions]]
+- [S-L19-039] [[sources/66oOi9OLMCw-why-the-60-30-10-rule-is-ruining-your-ui-designs|Why the 60-30-10 Rule is RUINING Your UI Designs]]
+- [S-L19-040] [[sources/6CC8lLnqa28-6-things-you-probably-need-to-hear-as-a-web-designer|6 Things You Probably Need to Hear (as a web designer)]]
+- [S-L19-042] [[sources/7sUUzOCv47U-mathematically-perfect-typography-for-web-design|Mathematically Perfect Typography for Web Design]]
+- [S-L19-043] [[sources/9WVt1CelBfg-the-stupid-simple-way-to-learn-ui-ux-design-in-exactly-10-minutes|The stupid simple way to learn UI/UX design in exactly 10 minutes]]
+- [S-L19-045] [[sources/AH_ugxmLeUM-7-ui-ux-mistakes-that-scream-youre-a-beginner|7 UI/UX mistakes that SCREAM you're a beginner]]
+- [S-L19-047] [[sources/B7k5rOgmOGY-everything-you-need-to-know-to-build-a-dashboard-ui-in-8-minutes-beginner-friendly|EVERYTHING you need to know to build a Dashboard UI in 8 minutes]]
+- [S-L19-049] [[sources/BvbFPzLjWcU-redesigning-a-modern-skincare-ui-from-scratch-free-design-files|Redesigning A Modern Skincare UI from SCRATCH]]
+- [S-L19-050] [[sources/EHwZzWd-OnQ-7-ui-design-trends-that-are-criminally-slept-on-dont-miss-these|7 ui design trends that are CRIMINALLY slept on]]
+- [S-L19-051] [[sources/EOcY3hPMQkk-the-7-color-mistakes-that-ruin-your-ui-designs|The 7 Color Mistakes that RUIN your UI Designs]]
+- [S-L19-052] [[sources/EcbgbKtOELY-every-ui-ux-concept-explained-in-under-10-minutes|Every UI/UX Concept Explained in Under 10 Minutes]]
+- [S-L19-053] [[sources/Gfsd8NNuD9g-everything-you-need-to-know-about-mobile-app-uis-in-8-minutes-beginner-friendly|Everything you need to know about Mobile App UI's in 8 minutes]]
+- [S-L19-054] [[sources/HE4rLEQpiXY-how-to-think-like-a-genius-ui-ux-designer|How to think like a GENIUS UI/UX designer]]
+- [S-L19-056] [[sources/Ksx9C2-3yMo-the-3-dashboard-ui-flaws-that-give-away-you-ve-never-built-one|The 3 dashboard UI flaws that give away you've NEVER built one]]
+- [S-L19-057] [[sources/Lp6ey4AyDzA-8-web-design-hacks-to-actually-make-your-designs-better|8 Web Design Hacks To ACTUALLY Make Your Designs Better]]
+- [S-L19-060] [[sources/P2ksReDwWkE-website-layouts-to-make-a-professional-website-design-in-2024|Website Layouts To Make A Professional Website Design in 2024]]
+- [S-L19-061] [[sources/PDcQJOPby1k-5-saas-ui-ux-mistakes-that-scream-you-vibe-code|5 SaaS UI/UX mistakes that SCREAM you Vibe Code]]
+- [S-L19-062] [[sources/RCneB_MQ7qs-the-one-thing-vibe-coding-cant-fix-about-your-website|The one thing vibe coding CAN'T fix about your website]]
+- [S-L19-063] [[sources/SfX43uIubj4-4-ui-design-hacks-to-kill-boring-designs|4 UI Design Hacks to KILL boring designs]]
+- [S-L19-065] [[sources/V3Omp1hm0Sg-i-redesigned-a-failing-tesla-wannabe-full-website-to-save-it|I Redesigned a Failing Tesla WANNABE Full Website To SAVE It]]
+- [S-L19-066] [[sources/VPeTgU7la34-7-modern-ui-layouts-from-50-top-software-companies-free-figma-file|7 Modern UI Layouts from 50 Top Software Companies]]
+- [S-L19-067] [[sources/Vy0KKvZJRH8-everything-you-need-to-design-macos-apps-exactly-like-apple-beginner-friendly|Everything you need to Design macOS Apps EXACTLY like Apple]]
+- [S-L19-068] [[sources/Yr2uIcFZDDQ-redesigning-a-finance-dashboard-ui-from-scratch-ft-dribbble|Redesigning a Finance Dashboard UI from SCRATCH]]
+- [S-L19-070] [[sources/c1TvOcKdBVE-the-8-ui-ux-cheat-codes-for-instantly-better-designs|The 8 UI/UX Cheat Codes for INSTANTLY Better Designs]]
+- [S-L19-072] [[sources/eMMiLeo_UGI-the-4-levels-of-landing-page-ui-ux-design|The 4 Levels of Landing Page UI/UX Design]]
+- [S-L19-073] [[sources/eeN7yUcIWbw-20-top-underrated-web-design-resources-for-2025|20 Top Underrated Web Design Resources for 2025]]
+- [S-L19-075] [[sources/gKM6b2EnW1k-upgrading-9-crucial-ui-elements-free-figma-file-included|Upgrading 9 CRUCIAL UI Elements]]
+- [S-L19-080] [[sources/neE6wOuBIP8-the-secret-behind-weirdly-perfect-ui-designs|The secret behind weirdly perfect UI designs]]
+- [S-L19-082] [[sources/pGYLZyBE32o-i-redesigned-google-s-ai-website-from-scratch-complete-transformation|I Redesigned Google's AI Website from SCRATCH]]
+- [S-L19-084] [[sources/tNMAFjzapOk-the-formula-behind-truly-captivating-ui-sections|The Formula Behind Truly Captivating UI Sections]]
+- [S-L19-085] [[sources/ulSOdTgoGeY-awful-to-amazing-web-designs-easily|Awful To AMAZING Web Designs Easily]]
+- [S-L19-086] [[sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai|Vibe Coding a Pro UI in SECONDS With AI]]
+- [S-L19-103] [[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]

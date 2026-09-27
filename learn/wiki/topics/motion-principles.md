@@ -1,0 +1,53 @@
+---
+type: topic
+title: Motion principles
+created: 2026-09-24
+updated: 2026-09-24
+sources: []
+tags: []
+---
+
+# Motion principles
+
+## Overview
+
+Interactions turn a UI into an experience; transitions should follow the swipe direction and keep continuity between pages.
+
+## Source Mentions
+
+- [[sources/14h1VnkQvIc-master-the-3-types-of-crazy-mobile-ui-swipe-interactions|Master the 3 Types of CRAZY Mobile UI Swipe Interactions]]: Interactions turn a UI into an experience; transitions should follow the swipe direction and keep continuity between pages.
+- [[sources/6CC8lLnqa28-6-things-you-probably-need-to-hear-as-a-web-designer|6 Things You Probably Need to Hear (as a web designer)]]: Heavy 3D effects and animations are memorable but not required; drop them if they slow loading or make navigation harder.
+- [[sources/B7k5rOgmOGY-everything-you-need-to-know-to-build-a-dashboard-ui-in-8-minutes-beginner-friendly|EVERYTHING you need to know to build a Dashboard UI in 8 minutes (beginner friendly)]]: Animation on dashboards is tame and user focused compared with websites and landing pages; people want a snappy, fast dashboard.
+- [[sources/EHwZzWd-OnQ-7-ui-design-trends-that-are-criminally-slept-on-dont-miss-these|7 ui design trends that are CRIMINALLY slept on (don’t miss these)]]: Text swapping, animated text, morphing images and scroll-driven diagrams add interaction to otherwise static pages.
+- [[sources/HE4rLEQpiXY-how-to-think-like-a-genius-ui-ux-designer|How to think like a GENIUS UI/UX designer]]: Animations should add clarity or functionality; the presenter's old portfolio is shown as an example of animations that did nothing.
+- [[sources/RCneB_MQ7qs-the-one-thing-vibe-coding-cant-fix-about-your-website|The one thing vibe coding CAN’T fix about your website]]: Animation should be part of the brand: repeated motion themes, eye-directing motion, and slide-and-blur transitions that remove hard breaks between sections.
+- [[sources/SfX43uIubj4-4-ui-design-hacks-to-kill-boring-designs|4 UI Design Hacks to KILL boring designs]]: Things that don't have to move still can; give decorative elements entrances and use parallax on scroll for a more lifelike page.
+- [[sources/VPeTgU7la34-7-modern-ui-layouts-from-50-top-software-companies-free-figma-file|7 Modern UI Layouts from 50 Top Software Companies (+ Free Figma File)]]: Software sites are moving away from heavy graphics toward simple, tasteful animations that must be executed well; don't go overboard.
+- [[sources/ZsP20PN14O0-5-trendy-animations-to-steal-for-your-next-web-design|5 Trendy Animations to Steal for Your Next Web Design]]: Sorts web animation into five types and argues for subtle, classy motion over big or flashy effects that slow the site and overwhelm people.
+- [[sources/adev-changelog-animations-dev|animations.dev]]: The refreshed theory module teaches through bad-versus-good examples; a practical tips lesson (15+ tips) is a reference for when you feel stuck. Josh Puckett's guest lesson frames animation as proof of care.
+- [[sources/adev-home-animations-dev|animations.dev]]: Theory module (8 lessons) covers why some animations feel better, easing, springs, timing, purpose, taste and when you should not animate; Module 4 adds conveying feeling, orchestration, accessibility and performance.
+- [[sources/eMMiLeo_UGI-the-4-levels-of-landing-page-ui-ux-design|The 4 Levels of Landing Page UI/UX Design]]: Animation grows from none, to simple load animations, to smooth transitions, to high-quality details; key interactions usually develop later than the other principles.
+- [[sources/ek-7-practical-animation-tips-7-practical-animation-tips|7 Practical Animation Tips]]: Seven practical tips: press feedback, no scale(0), instant subsequent tooltips, ease-out, origin-aware popovers, fast or no animation, and blur as a last resort.
+- [[sources/ek-agents-with-taste-agents-with-taste|Agents with Taste]]: Entering elements grow from scale(0.95), not scale(0), because real objects never appear from nothing (the balloon analogy).
+- [[sources/ek-building-a-toast-component-building-a-toast-component|Building a toast component]]: Motion that can be retargeted must be interruptible, so transitions beat keyframes; the stacking animation is what made people love the library.
+- [[sources/ek-building-an-animation-course-building-an-animation-course|Building an animation course]]: Motion has to be felt to be understood, so the course relies on interactive demos. Through shadcn's endorsement it frames design engineering as mostly deciding what not to animate, and as building great interfaces rather than great demos.
+- [[sources/ek-train-your-judgement-train-your-judgement|Train Your Judgement]]: Lists the motion dimensions worth judging: element size, entry animations, intentionality, frequency of use, removing elements, interruptions, stagger and layered motion.
+- [[sources/ek-you-dont-need-animations-you-don-t-need-animations|You Don't Need Animations]]: Animate only with a purpose, weigh how often the animation will be seen, and remember that the best animation is sometimes none.
+- [[sources/eks-readme-emilkowalski-skills-readme-md|emilkowalski/skills: README.md]]: Skills exist to build animations (curve, duration, properties), review them strictly, audit them, find where motion genuinely helps and decide what not to animate.
+- [[sources/eks-skills-animate-expo-skill-emilkowalski-skills-skills-animate-expo-skill-md|emilkowalski/skills: skills/animate-expo/SKILL.md]]: A gated build order: frequency tier, one-word purpose, cheapest tool, cheap properties, spring vs timing, thread, press, haptics, reduced motion.
+- [[sources/eks-skills-animate-skill-emilkowalski-skills-skills-animate-skill-md|emilkowalski/skills: skills/animate/SKILL.md]]: A gate before any motion: animate only when the frequency tier allows it and a purpose can be named; keyboard actions and 100+/day actions never animate.
+- [[sources/eks-skills-animation-vocabulary-skill-emilkowalski-skills-skills-animation-vocabulary-skill-md|emilkowalski/skills: skills/animation-vocabulary/SKILL.md]]: Principles to know: purposeful animation, anticipation, follow-through, squash and stretch, perceived performance, frequency of use, spatial consistency, hardware acceleration and reduced motion; plus a full naming glossary for entrances, transitions, loops and polish effects.
+- [[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]: Motion should start from the current value, inherit velocity, project momentum and be interruptible; enter and exit along the same path; hint toward the outcome; motion is designed together with visuals.
+- [[sources/eks-skills-emil-design-eng-skill-emilkowalski-skills-skills-emil-design-eng-skill-md|emilkowalski/skills: skills/emil-design-eng/SKILL.md]]: A four-step decision framework (should it animate, purpose, easing, speed), frequency-based rules, valid purposes, no scale(0), cohesion with component personality, and asymmetric timing.
+- [[sources/eks-skills-find-animation-opportunities-skill-emilkowalski-skills-skills-find-animation-opportunities-skill-md|emilkowalski/skills: skills/find-animation-opportunities/SKILL.md]]: Motion is allowed only when it passes frequency, purpose, speed and function checks; the six valid purposes are feedback, spatial consistency, state indication, preventing a jarring change, explanation and delight, and daily use argues for less motion.
+- [[sources/eks-skills-improve-animations-audit-emilkowalski-skills-skills-improve-animations-audit-md|emilkowalski/skills: skills/improve-animations/AUDIT.md]]: Every animation needs a purpose (spatial consistency, state indication, feedback, explanation, preventing a jarring change), and frequency of use decides whether to animate; deleting the animation is often the strongest fix.
+- [[sources/eks-skills-improve-animations-plan-template-emilkowalski-skills-skills-improve-animations-plan-template-md|emilkowalski/skills: skills/improve-animations/PLAN-TEMPLATE.md]]: Motion can be mechanically correct and still feel wrong, so a feel check in slow motion is required.
+- [[sources/eks-skills-improve-animations-skill-emilkowalski-skills-skills-improve-animations-skill-md|emilkowalski/skills: skills/improve-animations/SKILL.md]]: Frequency of use drives severity; animation on keyboard or high-frequency actions is feel-breaking; motion should match product personality.
+- [[sources/eks-skills-pick-ui-library-skill-emilkowalski-skills-skills-pick-ui-library-skill-md|emilkowalski/skills: skills/pick-ui-library/SKILL.md]]: Reach for motion only for springs, layout animations, exit animations or gesture-driven values; NumberFlow for number transitions and torph for animated text.
+- [[sources/eks-skills-prototype-skill-emilkowalski-skills-skills-prototype-skill-md|emilkowalski/skills: skills/prototype/SKILL.md]]: Every variant meets the craft bar (ease-out entrances, never ease-in, sub-300ms UI motion, correct transform-origin, transform/opacity only, reduced motion handled), and switching variants gets no animation because it is a 100+/session action.
+- [[sources/eks-skills-review-animations-skill-emilkowalski-skills-skills-review-animations-skill-md|emilkowalski/skills: skills/review-animations/SKILL.md]]: Ten non-negotiable standards: every animation needs a purpose, motion is matched to frequency of use, and deleting motion is often the strongest move.
+- [[sources/eks-skills-review-animations-standards-emilkowalski-skills-skills-review-animations-standards-md|emilkowalski/skills: skills/review-animations/STANDARDS.md]]: A frequency table decides whether to animate; valid purposes are spatial consistency, state indication, explanation, feedback and preventing jarring change.
+- [[sources/tNMAFjzapOk-the-formula-behind-truly-captivating-ui-sections|The Formula Behind Truly Captivating UI Sections]]: Motion should support clarity, not distract: it should deliberately draw attention to the product, and its direction should situate the user (sliding up from the bottom for temporary, sliding from the left for progress).
+- [[sources/ulSOdTgoGeY-awful-to-amazing-web-designs-easily|Awful To AMAZING Web Designs Easily]]: Motion is presented as one of the most foolproof ways to make a site feel alive: photos slightly zooming in or out, accordions, marquee text and staggered slide-up entrances, with a warning about marquee-style usability.
+- [[sources/vaul-default-default-vaul|Default – Vaul]]: The --initial-transform CSS variable adjusts the drawer's animation, useful when the drawer does not touch the screen edge.
+- See also: [[synthesis/motion-principles|Motion principles synthesis]]

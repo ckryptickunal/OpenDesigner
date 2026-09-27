@@ -1,0 +1,132 @@
+{
+  "summary": "Kole Jain spends a week learning what gamification is, studies Duolingo as a case study, and then designs a gamified savings app called Fin Base in Figma. He names the key traits he found: gamification is more common than expected, it usually hinges on one central currency, it shows what you have done and what is left, it often has a social side such as leaderboards and badges, and its rewards only work when tied to real goals. His app turns saving into a game: users set goals, earn a currency called fin bits for putting money aside and completing goals, keep a streak, and climb a local leaderboard with promotion and demotion ranges. The onboarding shows the app's value (insights into past spending) before any gamification, and the product ends up as four tabs: goals, leaderboard, analytics and education. For a design system, it is a worked example of a retention pattern set (currency, streaks, leagues, badges, quizzes) rather than of visual tokens.",
+  "key_ideas": [
+    "Gamification is more common than it seems: LinkedIn turns profile completion into an achievement hunt and credit card points are gamified.",
+    "Most gamification is built around one central currency (Duolingo XP, Todoist Karma) that shows progress and unlocks features.",
+    "Good gamification makes visible what you have accomplished and what is still left, as Exercism does for a coding language.",
+    "A social layer, such as leaderboards and public badges, lets people see how they stack up against friends.",
+    "Rewards only motivate when they are tied to real goals; a meaningless reward is ignored.",
+    "Duolingo layers XP (ranks you, unlocks quest chests), gems (a second currency for modifiers), hearts (lost on wrong answers), streaks and achievements.",
+    "The creator skipped task managers and learning platforms because other companies had already gamified them very well, and chose money management instead.",
+    "Show the app's value (insights into past spending) in onboarding before you start gamifying.",
+    "Scale the reward to the size of the goal, so bigger goals earn more currency.",
+    "In the money app, people are ranked on a local leaderboard to account for currency and income differences.",
+    "A league leaderboard can have a promotion range, a neutral middle, and a demotion range below.",
+    "An education section with quizzes that pay out the currency links learning back to the leaderboard.",
+    "Challenges would be nice, but an education section on financial literacy was judged more important.",
+    "Designing took far longer than planned: the four main screens took three whole days instead of four to six hours, partly because files kept getting deleted or misplaced."
+  ],
+  "entities": [
+    {"name": "Kole Jain", "type": "person", "description": "Designer and YouTube creator who researches gamification and designs the example app in Figma."},
+    {"name": "Duolingo", "type": "product", "description": "Language app used as the main gamification case study (XP, gems, hearts, streaks, leagues, achievements)."},
+    {"name": "LinkedIn", "type": "product", "description": "Example of turning profile completion into an achievement hunt."},
+    {"name": "Todoist", "type": "product", "description": "Task app cited for its Karma currency."},
+    {"name": "Exercism", "type": "product", "description": "Coding platform cited for showing how much of a language you have completed and how much is left."},
+    {"name": "Wise", "type": "company", "description": "Its color palette ('the wise color palette' in the captions) is the inspiration for the example app's palette, with purple added."},
+    {"name": "Figma", "type": "tool", "description": "Tool used to wireframe and design the whole example app."},
+    {"name": "Fin Base", "type": "product", "description": "The gamified money-management app concept designed in the video."},
+    {"name": "Fin bits", "type": "concept", "description": "The example app's central currency, earned by saving and completing goals and used for leaderboard rank."},
+    {"name": "XP", "type": "concept", "description": "Duolingo's central currency; it cannot buy anything but raises leaderboard rank and unlocks quest chests."},
+    {"name": "Streak", "type": "concept", "description": "A count of consecutive days of activity (a lesson on Duolingo, putting money aside in the example app)."},
+    {"name": "League leaderboard", "type": "concept", "description": "A leaderboard with a promotion range to the next league and a demotion range back to a lower league."}
+  ],
+  "topics": [
+    {"name": "Retention and gamification", "summary": "Lists the traits of gamification (central currency, visible progress, social comparison, meaningful rewards), breaks down Duolingo's system, and designs a savings app with currency, streaks, goals, badges and leagues."},
+    {"name": "Onboarding", "summary": "Onboarding welcomes the user, asks them to connect a bank account with reassurance, shows swipeable insights into past spending to prove value before gamifying, then asks for a savings goal with a slider for the time period."},
+    {"name": "Mobile app patterns", "summary": "The example mobile app uses four tabs: goal overview, leaderboard, spending and saving analytics, and education."},
+    {"name": "Dashboards and data display", "summary": "Analytics about spending and savings are called critical. The analytics tab toggles saving or spending and daily, weekly or monthly views, shows a spending target with overspending marked in purple, recent transactions, and insights on upcoming bill payments so users can prepare."},
+    {"name": "Dark mode and themes", "summary": "Looking at the first day's onboarding screens again the next day, the designer switched the design to dark mode; no reason is given beyond it looking good afterwards."},
+    {"name": "Color", "summary": "The palette takes inspiration from the Wise color palette, with purple worked in."},
+    {"name": "Design process", "summary": "The process runs research, case study, domain choice, feature plan, logo, wireframed onboarding, palette, review and the main app, and took far longer than estimated."},
+    {"name": "Figma and design tools", "summary": "The whole app is wireframed and built in Figma, and the designer admits losing time by deleting and misplacing files."}
+  ],
+  "claims": [
+    {"claim": "There is much more gamification in apps than people expect, such as LinkedIn profile completion and credit card points.", "evidence": "there's way more gamification in apps than you'd expect"},
+    {"claim": "The creator says LinkedIn's profile achievement hunt apparently triggers people's need for completion (he jokes it could just be borderline OCD).", "evidence": "apparently it triggers our need for completion"},
+    {"claim": "Most gamification hinges on a central currency, which gives a sense of progress and unlocks features.", "evidence": "most gamification hinges on a Central currency"},
+    {"claim": "Gamification gives visibility over what you have accomplished and what is still left.", "evidence": "gamification gives you visibility over what you've accomplished"},
+    {"claim": "Gamification often comes with a social aspect, such as leaderboards and public badges.", "evidence": "gamification often comes with a social aspect"},
+    {"claim": "Rewards only matter when they are meaningful; apps tie rewards to real goals.", "evidence": "apps tie the rewards to real goals"},
+    {"claim": "On Duolingo, XP cannot buy anything but raises leaderboard rank and unlocks daily quest chests.", "evidence": "you can't buy anything with XP"},
+    {"claim": "On Duolingo, losing a heart is the punishment for a wrong answer, and one lesson a day keeps the streak alive.", "evidence": "the loss of a heart is the punishment"},
+    {"claim": "Task managers and learning platforms had already been gamified very well by other companies.", "evidence": "had already been done very well by other companies"},
+    {"claim": "A local leaderboard accounts for currency and income differences between users.", "evidence": "local leaderboard to account for currency and income differences"},
+    {"claim": "Most people have one savings account, so the app needs virtual accounts to split savings across goals.", "evidence": "most people have one savings account"},
+    {"claim": "The four-screen app took three whole days instead of the expected four to six hours.", "evidence": "it took me 3 whole days to put this together"},
+    {"claim": "Duolingo is arguably one of the more complex and effective gamification systems.", "evidence": "one of the more complex and effective"},
+    {"claim": "On Duolingo, achievements are earned on milestones, such as gaining a certain amount of XP in a day, and come with a gift of gems.", "evidence": "achievements are earned on Milestones"},
+    {"claim": "Analytics about spending and savings play a critical role in the money app.", "evidence": "would play a critical role in data visualization"}
+  ],
+  "quotes": [
+    "most gamification hinges on a Central currency",
+    "rewards matter but no one cares if the reward is meaningless",
+    "before we start gamifying let's show them the value of the app"
+  ],
+  "tags": ["gamification", "retention", "duolingo", "leaderboard", "streaks", "currency", "badges", "onboarding", "fintech", "dark-mode", "figma", "case-study", "kole-jain"],
+  "authority": "reference",
+  "rules": [
+    {"rule": "Build the gamification around one central currency (like XP, Karma or fin bits) that is earned by the core actions and shows progress.", "why": "Most gamification hinges on a central currency; it gives a sense of progress and unlocks features that keep people going.", "kind": "do", "strength": "should", "area": "patterns", "applies_to": "all", "values": [], "evidence": "most gamification hinges on a Central currency"},
+    {"rule": "Show people both what they have accomplished and how much is left, such as the share of a course or goal completed.", "why": "Gamification gives visibility over progress; Exercism shows exactly how much of a language you have completed and how much is left.", "kind": "do", "strength": "should", "area": "patterns", "applies_to": "all", "values": [], "evidence": "gamification gives you visibility over what you've accomplished and what's still left"},
+    {"rule": "Consider a social layer, such as leaderboards and public badges, so people can compare themselves with friends.", "why": "Gamification often comes with a social aspect that lets you see how you stack up against your friends.", "kind": "do", "strength": "consider", "area": "patterns", "applies_to": "all", "values": [], "evidence": "leaderboards and public badges are the perfect example"},
+    {"rule": "Tie rewards to the user's real goals so they mean something; do not hand out meaningless rewards.", "why": "Rewards matter, but no one cares if the reward is meaningless.", "kind": "do", "strength": "should", "area": "patterns", "applies_to": "all", "values": [], "evidence": "no one cares if the reward is meaningless apps tie the rewards to real goals"},
+    {"rule": "In onboarding, show the app's value first (for example a swipeable breakdown of past spending and average monthly spend) before introducing any gamification.", "why": "The source gives no further reason; the creator says to show the value of the app with a few key insights before gamifying.", "kind": "do", "strength": "consider", "area": "patterns", "applies_to": "all", "values": [], "evidence": "before we start gamifying let's show them the value of the app"},
+    {"rule": "When onboarding asks for a sensitive connection such as a bank account, add a screen or message that reassures the user their money is safe.", "why": "The onboarding prompts users to connect their bank and reassures them the app won't steal their money.", "kind": "do", "strength": "consider", "area": "content", "applies_to": "all", "values": [], "evidence": "reassuring them we won't steal their money"},
+    {"rule": "Scale the reward for completing a goal to the size of the goal.", "why": "In the example app, completing goals earns fin bits with the amount depending on the size of the goal.", "kind": "do", "strength": "consider", "area": "patterns", "applies_to": "all", "values": [], "evidence": "the amount depending on the size of the goal"},
+    {"rule": "When a leaderboard ranks money-related activity, rank people locally rather than globally.", "why": "A local leaderboard accounts for currency and income differences.", "kind": "do", "strength": "consider", "area": "patterns", "applies_to": "all", "values": [], "evidence": "local leaderboard to account for currency and income differences"},
+    {"rule": "Consider a league leaderboard with a promotion range at the top, a neutral middle band, and a demotion range at the bottom.", "why": "The example app copies Duolingo: above the range you move up a league, in the lower section nothing happens, below it you drop back.", "kind": "do", "strength": "consider", "area": "patterns", "applies_to": "all", "values": [], "evidence": "it uh has a promotion range"},
+    {"rule": "Link learning content to the reward loop, for example a quiz at the end of a lesson that pays out the central currency.", "why": "Taking a quiz earns fin bits, which moves the user up the leaderboard.", "kind": "do", "strength": "consider", "area": "patterns", "applies_to": "all", "values": [], "evidence": "taking a quick quiz at the end will make you earn fin bits"},
+    {"rule": "Consider a streak that the core action keeps alive, such as at least one lesson per day on Duolingo, or each time money is put aside in the example app.", "why": "On Duolingo, doing at least one lesson per day keeps your streak alive; in the example app, putting money aside earns fin bits and continues the streak.", "kind": "do", "strength": "consider", "area": "patterns", "applies_to": "all", "values": ["at least one lesson per day"], "evidence": "by doing at least one lesson per day you keep your streak alive"},
+    {"rule": "Add small perks such as badges or achievements for milestones, for example a badge for saving 30 days in a row.", "why": "The creator plans badges as small perks; Duolingo gives achievements on milestones along with a gift of gems.", "kind": "do", "strength": "consider", "area": "patterns", "applies_to": "all", "values": ["30 days in a row"], "evidence": "different badges like one for saving 30 days in a row"},
+    {"rule": "When people hold a single real savings account, let them split it into virtual accounts, one per goal.", "why": "Most people have one savings account, so virtual accounts let them allocate the total amount to various goals.", "kind": "do", "strength": "consider", "area": "patterns", "applies_to": "all", "values": [], "evidence": "we need to make virtual accounts"},
+    {"rule": "In a money app, give spending and saving analytics their own tab, with toggles for saving or spending and for daily, weekly or monthly views.", "why": "The creator says analytics about spending and savings play a critical role.", "kind": "do", "strength": "consider", "area": "patterns", "applies_to": "all", "values": ["daily", "weekly", "monthly"], "evidence": "you can choose between saving and spending and then daily weekly or monthly"},
+    {"rule": "Show insights on when upcoming bill payments are due.", "why": "So users can prepare for those payments.", "kind": "do", "strength": "consider", "area": "patterns", "applies_to": "all", "values": [], "evidence": "insights as to when new bill payments are going to come up"},
+    {"rule": "When onboarding asks for a savings goal, ask whether any amount is already saved and give a slider to set the time period for the goal.", "why": "The slider lets users adjust the period of time they give themselves to complete the goal.", "kind": "do", "strength": "consider", "area": "components", "applies_to": "all", "values": [], "evidence": "a slider to adjust the period of time"}
+  ],
+  "decisions": [
+    {"question": "What should the gamified app's central currency do?", "options": [{"name": "Rank only (like Duolingo XP)", "effect": "It cannot buy anything but raises leaderboard rank and unlocks rewards such as quest chests.", "when": "When the currency should measure effort and drive social comparison."}, {"name": "A second, spendable currency (like Duolingo gems)", "effect": "It buys modifiers such as extra time or more hearts.", "when": "When you want rewards people can spend alongside the ranking currency."}], "recommendation": "The source makes no general recommendation; the example app uses one currency (fin bits), earned by saving, completing goals and quizzes, and used for leaderboard rank.", "maps_to": null, "evidence": "you can't buy anything with XP"},
+    {"question": "How should the leaderboard group people?", "options": [{"name": "Global leaderboard", "effect": "Everyone is ranked together.", "when": "Not discussed in the source; the creator ranks money-related activity locally instead [inferred]."}, {"name": "Local leaderboard", "effect": "People are ranked within a local group, which accounts for currency and income differences.", "when": "Money-related apps, to account for currency and income differences."}, {"name": "Leagues with promotion and demotion", "effect": "Top of the board moves up a league, the middle stays, the bottom drops back to a lower league (Stone League in the example).", "when": "When you want a repeating competitive loop like Duolingo's."}], "recommendation": "The example app ranks locally and adds Duolingo-style leagues with a promotion range.", "maps_to": null, "evidence": "local leaderboard to account for currency and income differences"},
+    {"question": "Should the app be light or dark?", "options": [{"name": "Light", "effect": "The first day's onboarding screens, made before the switch to dark mode, so presumably light [inferred].", "when": "Not stated in the source."}, {"name": "Dark", "effect": "The designer switched the design to dark mode the next day and then said it was looking good.", "when": "Not stated in the source."}], "recommendation": "The designer switched to dark mode but gives no reason beyond it looking better.", "maps_to": "Q-theme-01", "evidence": "I think we got to switch to dark mode"},
+    {"question": "What should onboarding show before asking for a goal?", "options": [{"name": "Go straight to gamification", "effect": "Users meet goals, streaks and currency before seeing any benefit.", "when": "Not discussed in the source; the creator chose to show value first."}, {"name": "Show value first", "effect": "Users swipe through insights into their past spending (where they spend, average per month) before setting a goal.", "when": "When the app needs trust and data (such as a bank connection) before the game starts [inferred]."}], "recommendation": "Show the value of the app with a few key insights before gamifying.", "maps_to": null, "evidence": "before we start gamifying let's show them the value of the app"},
+    {"question": "Beside the core game loop, which extra feature should come first: challenges or an education section?", "options": [{"name": "Challenges", "effect": "On Duolingo, challenges are one of the two activities and earn XP, like lessons.", "when": "The creator calls them cool to incorporate but less important here."}, {"name": "Education section", "effect": "Lessons on financial literacy (saving, investing, getting a mortgage), with a quick quiz at the end that pays out fin bits.", "when": "When learning supports the goal the app is built around, as in the money app."}], "recommendation": "The creator says an education section is probably more important than challenges; the final app's four tabs include education and no challenges tab.", "maps_to": null, "evidence": "probably more importantly would be an education section"}
+  ],
+  "process": [
+    {"step": "Learn what gamification is", "detail": "Research examples across apps (LinkedIn, credit card points, Todoist, Exercism, fitness apps) and distil the key traits."},
+    {"step": "Study one strong case", "detail": "Break down a well-gamified app (Duolingo) into its activities, currencies, rewards, punishments, streaks and achievements, and check it against the traits."},
+    {"step": "Pick an under-served domain", "detail": "Skip domains already gamified very well (task managers, learning platforms) and choose one that is not (money management)."},
+    {"step": "Plan the system", "detail": "Define how data comes in (bank connection), what users set (goals), what earns the currency (saving, completing goals), what the currency does (local leaderboard), plus streaks, virtual accounts, analytics, an education section and badges."},
+    {"step": "Wireframe onboarding", "detail": "Welcome the user, ask them to connect their bank with reassurance, show swipeable spending insights, then ask for a savings goal (and any amount already saved) with a slider for the time period."},
+    {"step": "Pick a palette from a reference", "detail": "Take inspiration from an existing palette (Wise) and add a color of your own (purple)."},
+    {"step": "Review the next day", "detail": "Look at the design again the next day and make bigger changes if needed (here, switching to dark mode)."},
+    {"step": "Design the main tabs", "detail": "Build the core screens: goal overview, leaderboard, spending and saving analytics, and education."}
+  ],
+  "examples": [
+    {"what": "Profile completion as an achievement hunt", "where": "LinkedIn", "visual_note": "Filling out your profile is presented as achievements to complete, which triggers a need for completion."},
+    {"what": "Progress through a coding language", "where": "Exercism", "visual_note": "Shows exactly how much of a language you have completed and how much is left."},
+    {"what": "Leaderboards and public badges", "where": "Fitness apps (the app name is unclear in the captions)", "visual_note": "Shows how you stack up against your friends; the source's example of the social side of gamification."},
+    {"what": "XP, gems, hearts, streaks and achievements", "where": "Duolingo", "visual_note": "Lessons and challenges earn XP for leaderboard rank and quest chests; chests give gems for modifiers; wrong answers cost a heart; one lesson a day keeps the streak; milestones give achievements with gems."},
+    {"what": "Onboarding with value-first spending insights", "where": "Fin Base (the video's concept app)", "visual_note": "After a welcome and a bank-connection screen, swipeable cards show where the user spends and their average monthly spend, then a goal screen with a slider for the time period."},
+    {"what": "Goals home with a sliding rewards strip", "where": "Fin Base (the video's concept app)", "visual_note": "The main page sets new goals and lists current ones; a strip slides along to show how many more rewards you can get."},
+    {"what": "League leaderboard", "where": "Fin Base (the video's concept app)", "visual_note": "Like Duolingo, a promotion range at the top moves you to the next (still hidden) league, the lower section is neutral, and below it you drop back to the Stone League."},
+    {"what": "Spending analytics with overspend highlighted", "where": "Fin Base (the video's concept app)", "visual_note": "Toggles for saving or spending and daily, weekly or monthly; a monthly chart against a spending target marks overspending in purple, with recent transactions and upcoming bill insights below."},
+    {"what": "Education tab with quizzes", "where": "Fin Base (the video's concept app)", "visual_note": "Searchable lessons on financial literacy; a quick quiz at the end earns fin bits that raise leaderboard rank."}
+  ],
+  "numbers": [
+    {"value": "five", "context": "Key things the creator learned about gamification.", "evidence": "let's go over the five key things I learned"},
+    {"value": "two", "context": "Activities on Duolingo: participating in challenges or completing lessons.", "evidence": "there's only two activities you can do on dualingo"},
+    {"value": "30 days in a row", "context": "An example badge for saving 30 days in a row in the app.", "evidence": "one for saving 30 days in a row"},
+    {"value": "four", "context": "Tabs in the main app: goal overview, leaderboard, analytics and education.", "evidence": "we're going to have four tabs"},
+    {"value": "3 whole days", "context": "Time the four main screens actually took, against an estimate of four, five, maybe 6 hours.", "evidence": "it took me 3 whole days to put this together"},
+    {"value": "seven days", "context": "How long the creator spent on the gamification project.", "evidence": "for the next seven days I'm diving head"},
+    {"value": "four five maybe 6 hours", "context": "The creator's original estimate for the main screens, which actually took 3 whole days.", "evidence": "I thought it would take four five maybe 6 hours"}
+  ],
+  "caveats": [
+    "The video description promotes the creator's free Figma files and his design community (13k designers); these are self-promotion and excluded from rules.",
+    "This is one designer's week-long experiment on a concept app, not a tested product; no user research or results are shown.",
+    "The 'five key things' are not clearly numbered in the transcript; the list here is read from the order he talks through them.",
+    "The switch to dark mode and the Wise-inspired palette are shown but not explained, so they are taste, not rules.",
+    "Much of the visual design happens in timelapses, so exact colors, type and spacing are not stated.",
+    "Auto-caption errors corrected: 'dual lingo' and 'dualingo' read as Duolingo, 'exorcism' as Exercism, 'todoist' as Todoist, 'fin base' as Fin Base, and 'the wise color palette' as the Wise brand's palette [inferred]. The phrase 'fitness apps stas' is unclear and was not guessed.",
+    "Jokes about breaking EU privacy laws with bank data are humour; the video does not address privacy or security design.",
+    "The video does not discuss the risks of gamification, such as guilt-tripping, beyond joking about Duolingo's 'intense' mascot and incessant reminders."
+  ]
+}

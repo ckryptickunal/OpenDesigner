@@ -1,0 +1,364 @@
+{
+  "summary": "Emil Kowalski argues that once software that simply works is easy to ship (especially with AI), what sets a product apart is its brand, design, intuitiveness and overall experience, which he sums up as taste. He defines good taste not as personal preference but as a trained instinct for recognising what elevates a design. The essay gives a three-part method to train it: surround yourself with great work from a curated list of respected tastemakers, rationalise why something feels great instead of labelling it good or bad, and practise the craft while seeking critique from the right people. For a design system this sets the process bar: work is judged against the best existing products, preferences must be explained with reasons rather than gut feel, and early imperfect output is expected on the way to quality [inferred].",
+  "key_ideas": [
+    "When a product category becomes commoditised, quality and details become the differentiator; software has reached that point.",
+    "A product that merely works is no longer enough because people expect things to work and anyone can build that, especially with AI.",
+    "Brand, design, intuitiveness and the overall experience are what make a product stand out.",
+    "Taste is a trained instinct, not personal preference: the ability to see beyond the obvious and recognise what elevates a design.",
+    "Train taste by exposing yourself to great work in your own field.",
+    "Build a curated list of tastemakers: find respected people, then look at whom they admire, and study their work.",
+    "Replace good-or-bad labels with reasons: explain why something feels great and look for patterns instead of trusting gut feel alone.",
+    "Study apps rather than just using them, asking why a specific interaction feels good.",
+    "Practise the craft by making things; practice turns you into a good judge of taste and, over time, a tastemaker.",
+    "Critique from the right person speeds up learning more than trial and error alone.",
+    "Early work falling short of your own standard is a good sign that your taste is ahead of your skill; keep going."
+  ],
+  "entities": [
+    {
+      "name": "Emil Kowalski",
+      "type": "person",
+      "description": "Design engineer and author of the essay."
+    },
+    {
+      "name": "Anu Atluru",
+      "type": "person",
+      "description": "Quoted from 'Taste is Eating Silicon Valley' on tools versus taste in scarcity and abundance."
+    },
+    {
+      "name": "Steve Jobs",
+      "type": "person",
+      "description": "Quoted (credited to Apple) on exposing yourself to the best things humans have done and bringing them into your work."
+    },
+    {
+      "name": "Apple",
+      "type": "company",
+      "description": "Named as Steve Jobs' affiliation in the quote attribution."
+    },
+    {
+      "name": "Julie Zhuo",
+      "type": "person",
+      "description": "Footnote 2 source ('On taste, part 3') for the paragraph on building a curated list of tastemakers and learning from the best."
+    },
+    {
+      "name": "Brian Lovin",
+      "type": "person",
+      "description": "Author of App Dissection, cited as a great example of studying apps."
+    },
+    {
+      "name": "App Dissection",
+      "type": "product",
+      "description": "Brian Lovin's series, given as an example of studying why app interactions feel good."
+    },
+    {
+      "name": "Ira Glass",
+      "type": "person",
+      "description": "Footnote source for 'The Taste Gap', the idea behind early work not matching your taste."
+    },
+    {
+      "name": "The Taste Gap",
+      "type": "concept",
+      "description": "The phase where your taste can tell your work is not yet on par; the essay calls it normal."
+    },
+    {
+      "name": "Taste",
+      "type": "concept",
+      "description": "Defined as a trained instinct to see beyond the obvious and recognise what elevates, not personal preference."
+    },
+    {
+      "name": "Tastemakers",
+      "type": "concept",
+      "description": "Respected people in a field whose work (and whose admired peers) you curate and study."
+    },
+    {
+      "name": "Craft and beauty: The business value of form in function",
+      "type": "concept",
+      "description": "Footnoted article (footnote 1) on a similar topic to the car-commoditisation argument; named only."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Design taste and judgement",
+      "summary": "Taste is a trained instinct, not preference. Train it by studying great work from curated tastemakers, rationalising why things feel great instead of labelling them good or bad, and practising with feedback; early work falling short is expected (the taste gap)."
+    },
+    {
+      "name": "Design process",
+      "summary": "Gives a three-step learning loop: surround yourself with great work, think about why you like something (study apps and interactions, analyse patterns), and practise the craft while seeking critique from the right person rather than relying on trial and error alone."
+    },
+    {
+      "name": "AI-assisted design",
+      "summary": "Notes that shipping a product that works is no longer a differentiator because everyone can do it, especially now with AI; brand, design, intuitiveness and experience are what stand out."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "When the first car came out, consumers did not care about its colour or silhouette because the competition was a horse.",
+      "evidence": "the competition was a horse"
+    },
+    {
+      "claim": "Now that cars have been commoditised, quality and details have become more important than ever.",
+      "evidence": "now that cars have been commoditized"
+    },
+    {
+      "claim": "Simply shipping a software product that works is no longer enough because everyone can do that, especially with AI, and people expect things to work.",
+      "evidence": "It’s not the differentiator anymore as people expect things to work"
+    },
+    {
+      "claim": "What makes a product stand out is the brand, design, how intuitive it is and the overall experience.",
+      "evidence": "'What makes a product stand out'"
+    },
+    {
+      "claim": "Quoting Anu Atluru: in a world of scarcity people treasure tools, while in a world of abundance they treasure taste.",
+      "evidence": "Anu Atluru , Taste is Eating Silicon Valley"
+    },
+    {
+      "claim": "Good taste is commonly mistaken for personal preference but is a trained instinct: the ability to see beyond the obvious and recognise what elevates.",
+      "evidence": "It’s commonly mistaken as personal preference"
+    },
+    {
+      "claim": "Taste is why some designs feel effortless.",
+      "evidence": "'It’s why some designs feel effortless'"
+    },
+    {
+      "claim": "Exposing yourself to great work teaches you how greatness looks and feels.",
+      "evidence": "this way you’ll learn how greatness looks and feels like"
+    },
+    {
+      "claim": "Quoting Steve Jobs: it comes down to exposing yourself to the best things humans have done and bringing them into your own work.",
+      "evidence": "expose yourself to the best things that humans have done"
+    },
+    {
+      "claim": "Learning from the best is the best way to learn.",
+      "evidence": "Learning from the best is the best way to learn"
+    },
+    {
+      "claim": "Practising your craft makes you a good judge of taste and, with time, a tastemaker.",
+      "evidence": "not only a good judge of taste, but also, with time, a tastemaker"
+    },
+    {
+      "claim": "Good critique from the right person can accelerate learning more than trial and error alone.",
+      "evidence": "Good critique from the right person can accelerate this process"
+    },
+    {
+      "claim": "Early work not being good is a good sign because it shows your taste is good enough to tell your work is not on par yet; the phase is normal and improves over time.",
+      "evidence": "Your taste is good enough to tell that your work is not on par yet"
+    }
+  ],
+  "quotes": [
+    "Taste is what matters.",
+    "it’s more than that — it’s a trained instinct.",
+    "If you’re a designer, don’t just use apps, study them."
+  ],
+  "tags": [
+    "taste",
+    "judgement",
+    "craft",
+    "design-process",
+    "critique",
+    "practice",
+    "tastemakers",
+    "quality",
+    "differentiation"
+  ],
+  "authority": "non-negotiable",
+  "rules": [
+    {
+      "rule": "Do not treat a product that merely works as finished; invest in brand, design, intuitiveness and the overall experience as the differentiators.",
+      "why": "Shipping a working product is no longer enough: everyone can do it, especially with AI, and people expect things to work.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "'Simply shipping a product that works is no longer enough'"
+    },
+    {
+      "rule": "Treat quality and details as more important, not less, once the basic product category is commoditised.",
+      "why": "Once cars were commoditised, quality and details became more important than ever; the same applies to software.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "quality and details have become more important than ever"
+    },
+    {
+      "rule": "Treat taste as a trained instinct to be developed, not as personal preference.",
+      "why": "Good taste is the ability to see beyond the obvious and recognise what elevates; it is why some designs feel effortless.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "it’s more than that — it’s a trained instinct"
+    },
+    {
+      "rule": "Look at great work in your own discipline: a designer should be looking at great designs (a writer, reading great books).",
+      "why": "Exposure teaches you how greatness looks and feels.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "If you are a designer, you should be looking at great designs"
+    },
+    {
+      "rule": "Bring what you learn from the best existing work into what you are making.",
+      "why": "Steve Jobs: expose yourself to the best things humans have done, then bring those things into your work.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "expose yourself to the best things that humans have done and then try to bring those things into what you’re doing"
+    },
+    {
+      "rule": "Build a curated list of tastemakers: find people respected in their field, then look at whom they admire and add them.",
+      "why": "Learning from the best is the best way to learn.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "'build a curated list of tastemakers'"
+    },
+    {
+      "rule": "Study the tastemakers' work directly: look at their designs, use their apps and read their books.",
+      "why": "Surrounding yourself with their work is how you learn from the best.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "'Look at their designs, use their apps, read their books'"
+    },
+    {
+      "rule": "Do not label things simply as good or bad while calibrating taste; state why something feels great.",
+      "why": "Instead of relying on gut feelings, the source says to rationalise why something feels great while calibrating taste.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "don’t label things as good or bad"
+    },
+    {
+      "rule": "Do not rely purely on intuition; analyse and name the patterns behind work that feels great.",
+      "why": "The source asks you to analyse and understand patterns instead of relying on gut feelings; this is its second step for training the instinct of taste.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "'Analyze and understand patterns, don’t rely purely on your intuition'"
+    },
+    {
+      "rule": "Study apps instead of just using them, and ask why a specific interaction feels good.",
+      "why": "Studying, not just using, is how the source says to think about why you like something; it cites Brian Lovin's App Dissection as a great example of studying apps.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "'don’t just use apps, study them'"
+    },
+    {
+      "rule": "Go beyond the surface level: think deeply and with curiosity about what makes something great.",
+      "why": "The source asks for a mindset of thinking deeply about what makes something great as part of learning why you like things; it gives no further reason.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "'Have a mindset of thinking deeply'"
+    },
+    {
+      "rule": "Practise the craft by creating things: a designer should design.",
+      "why": "Practice makes you a good judge of taste and, with time, a tastemaker.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Practice your craft. Create things. A designer should design"
+    },
+    {
+      "rule": "Seek feedback while practising, from the right person, rather than relying on trial and error alone.",
+      "why": "Good critique from the right person can accelerate the process more than trial and error alone.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "While practicing, seek feedback from others"
+    },
+    {
+      "rule": "Do not quit when early work falls short of your standard; treat the gap as expected and keep practising.",
+      "why": "Your taste being able to see the work is not on par yet is a good sign; this phase is normal and gets better over time (the taste gap).",
+      "kind": "dont",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "'Don’t quit, it’ll get better overtime'"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "Where should the quality bar for a design come from: great work by respected people, or personal preference? [inferred: applies the essay to the reference step]",
+      "options": [
+        {
+          "name": "Great work from a curated list of respected tastemakers",
+          "effect": "You learn how greatness looks and feels and can bring the best things into your own work.",
+          "when": "The source's recommended way to train taste."
+        },
+        {
+          "name": "Personal preference or gut feel alone",
+          "effect": "Things get labelled good or bad without understanding why; the source says taste is commonly mistaken for personal preference.",
+          "when": "The source advises against relying purely on intuition."
+        }
+      ],
+      "recommendation": "Point to the designs and apps of people respected in their field (and the people they admire), then say why each one feels great instead of labelling it good or bad.",
+      "maps_to": "Q-ref-01",
+      "evidence": "Look who they admire and build a curated list of tastemakers"
+    }
+  ],
+  "process": [
+    {
+      "step": "Surround yourself with great work",
+      "detail": "Find people respected in the field, look at whom they admire, and build a curated list of tastemakers. Look at their designs, use their apps and read their books so you learn how greatness looks and feels."
+    },
+    {
+      "step": "Think about why you like something",
+      "detail": "Do not label things good or bad. Rationalise why something feels great, analyse the patterns, and study apps rather than just using them by asking why a specific interaction feels good. Go beyond the surface and stay curious."
+    },
+    {
+      "step": "Practise and seek critique",
+      "detail": "Create things in your discipline. Ask the right person for feedback, which accelerates learning more than trial and error alone. Expect early work to fall short of your taste and keep going; it improves over time."
+    }
+  ],
+  "examples": [
+    {
+      "what": "The first car versus the horse",
+      "where": null,
+      "visual_note": "No image; an analogy. Early buyers ignored a car's colour and silhouette because the alternative was a horse, but once cars were commoditised, quality and details mattered most. Demonstrates why polish becomes the differentiator once software that works is commonplace."
+    },
+    {
+      "what": "Brian Lovin's App Dissection",
+      "where": "App Dissection (Brian Lovin)",
+      "visual_note": "Cited, not shown: a great example of studying apps and asking why their interactions feel good."
+    },
+    {
+      "what": "The filmmaker who studies a director's choices",
+      "where": null,
+      "visual_note": "No image; a parallel showing that studying means asking why choices were made, not just consuming the work."
+    }
+  ],
+  "numbers": [],
+  "caveats": [
+    "The page opens with a plug for the author's course aiforui.dev (noted as early access closed); this is self-promotion, not guidance.",
+    "Publication date is not given on the page (header says Unknown).",
+    "The essay is about training a person's taste; its rules are process guidance and contain no token values, thresholds or UI specifications [inferred].",
+    "The footnoted works (Julie Zhuo's 'On taste, part 3', Brian Lovin's App Dissection, Ira Glass's 'The Taste Gap', and 'Craft and beauty: The business value of form in function') are only named, not summarised; they were not read for this analysis.",
+    "Claims such as 'learning from the best is the best way to learn' are the author's opinion, not measured findings."
+  ]
+}

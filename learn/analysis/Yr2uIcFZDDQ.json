@@ -1,0 +1,742 @@
+{
+  "summary": "Kole Jain takes a finance dashboard shot from Dribbble that looks polished but makes little sense up close, and rebuilds it from the ground up. He starts with a hierarchy assessment: the big header is cut to essentials and moved into a collapsible sidebar, duplicate or pointless elements are removed, and related cards are merged, taking the original 12 cards down to a smaller set of meaningful modules. Each module is then fixed so its actions and content make sense for the object (no 'receive' button on a credit card, labels on unlabeled numbers, real alerts with amount, date and place) and given a priority tier. Finally the modules are placed on a grid with the most important information higher and farther left, choosing orientations that avoid awkward gaps and filling the remaining gap with a missing line-of-credit section shown as a pie chart. For a design system, it gives a repeatable dashboard process (audit, cut, merge, tier, place) and concrete chart and card rules.",
+  "key_ideas": [
+    "A design that looks amazing on Dribbble can fall apart once you check whether each element makes sense.",
+    "Start a dashboard redesign with an assessment of the hierarchy, and expect to throw elements away.",
+    "Do not let a large header push the important content below the fold; header items can move into a sidebar that also handles navigation.",
+    "Remove duplicates and features that do not fit the product, such as a second search bar or text dictation in a finance dashboard.",
+    "Important content should be visible as its own section, not hidden behind a button.",
+    "Merge related cards: a growth rate and a chart belong in the annual profits card, and the system lock belongs with the credit card.",
+    "Every action on a widget must make sense for the real object, so a credit card gets 'lock card', not 'receive' or 'direct deposit'.",
+    "Numbers without labels mean nothing; charts need context.",
+    "Showing a chart and growth percentages for the same data is repetitive; keep one.",
+    "Rank each module into a priority tier as you design it, then place higher-priority modules higher and farther left on the grid.",
+    "Keep margins consistent across modules even if a module shows fewer items, and add a way to view all.",
+    "Choose the data representation carefully (two-sided bars for income and expenses, a pie chart for a line of credit), because it makes or breaks a dashboard.",
+    "Pick module orientations that do not leave gaps that are hard to fill, and fill a remaining gap with a section the product actually lacks."
+  ],
+  "entities": [
+    {
+      "name": "Kole Jain",
+      "type": "person",
+      "description": "Creator of the video (a guy on YouTube with 1500 subscribers at the time, by his own joke) who critiques and redesigns the dashboard."
+    },
+    {
+      "name": "Dribbble",
+      "type": "product",
+      "description": "Design showcase site where the original finance dashboard shot was found; used as an example of looks-good-but-makes-no-sense design."
+    },
+    {
+      "name": "Wise",
+      "type": "company",
+      "description": "The caption says 'the wise card'; its card design is the inspiration for the credit card visual in the redesigned widget (identified as the company Wise [inferred])."
+    },
+    {
+      "name": "Figma",
+      "type": "tool",
+      "description": "The redesign file is offered as a Figma file through the creator's resources page."
+    },
+    {
+      "name": "Priority tier list",
+      "type": "concept",
+      "description": "Ranking each dashboard module as high, mid-level or low priority to decide where it sits on the grid."
+    },
+    {
+      "name": "The fold",
+      "type": "concept",
+      "description": "The point where content gets cut off on screen; the original header wasted space above it."
+    },
+    {
+      "name": "Two-sided bar chart",
+      "type": "concept",
+      "description": "Bars going up for income and down for expenses, used to visualise money in and out."
+    },
+    {
+      "name": "Kebab icon",
+      "type": "concept",
+      "description": "An icon added so the removed interest payment stays reachable for anyone who does care about it."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Dashboards and data display",
+      "summary": "A full finance dashboard redesign: cut and merge cards, add labels and context, pick chart types (percentage chips, two-sided bar chart, pie chart), and place modules on a priority grid."
+    },
+    {
+      "name": "Visual hierarchy",
+      "summary": "Begins with a hierarchy assessment; important information goes higher and farther left, and each module is ranked high, mid-level or low priority."
+    },
+    {
+      "name": "Navigation and sidebars",
+      "summary": "Moves the header content into a sidebar: logo at the top, then the menu icon, the team, settings at the bottom, an add-widget button, and a collapsed state."
+    },
+    {
+      "name": "Cards and sections",
+      "summary": "Merges related cards, removes useless ones, keeps margins consistent across modules, and turns a tasks button into a full section."
+    },
+    {
+      "name": "Spacing and layout",
+      "summary": "Treats the dashboard as a grid, chooses module orientations that avoid awkward gaps, and keeps margins consistent between modules."
+    },
+    {
+      "name": "Design process",
+      "summary": "A step-by-step redesign: assess hierarchy, cut the header, build the sidebar, audit and merge cards, fix each module, tier it, then assemble the grid."
+    },
+    {
+      "name": "Design taste and judgement",
+      "summary": "Warns that Dribbble-style shots can look amazing but not make sense; every element and action should be checked for real meaning."
+    },
+    {
+      "name": "Buttons and actions",
+      "summary": "Replaces actions that do not fit (receive, direct deposit) with lock card, adds all-tasks, add-reminder, compare and full-screen controls, and swaps a slider for a dropdown."
+    },
+    {
+      "name": "Content and microcopy",
+      "summary": "Retitles cards, replaces a monthly fee with minimum payment and due date, adds labels to numbers, and drops a redundant 'financial dashboard' heading."
+    },
+    {
+      "name": "Icons and imagery",
+      "summary": "Starts the fraud alert with an icon ('every good alert starts with this icon', shown on screen only), puts a full-screen icon on chart cards, a kebab icon for hidden detail, and an enlarged low-opacity logo on the card visual."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Many Dribbble designs look amazing but do not make much sense once you zoom in.",
+      "evidence": "in common dribble fashion it looks amazing but doesn't actually make that much sense"
+    },
+    {
+      "claim": "The original layout wastes space at the top while the important content sits below the fold.",
+      "evidence": "things are going to get cut off by the fold"
+    },
+    {
+      "claim": "A dashboard does not need to announce that it is a financial dashboard, since that should be apparent.",
+      "evidence": "we definitely don't need to announce that this is a financial dashboard"
+    },
+    {
+      "claim": "Users should not have to click a button to see their tasks.",
+      "evidence": "we shouldn't have to click on the button to see our tasks"
+    },
+    {
+      "claim": "Of the original 12 cards, many were useless and several belonged inside other cards.",
+      "evidence": "there are 12 cards or elements here and many of them look pretty useless"
+    },
+    {
+      "claim": "You cannot really receive money with a credit card, so a receive or direct deposit button there makes no sense.",
+      "evidence": "you can't really receive money with a credit card"
+    },
+    {
+      "claim": "More important information should sit higher and farther left on a dashboard grid.",
+      "evidence": "the more important information should be higher and farther left"
+    },
+    {
+      "claim": "Chart numbers without labels do not mean anything.",
+      "evidence": "without any labels these numbers don't mean anything"
+    },
+    {
+      "claim": "Having a chart along with the growth percentages is repetitive.",
+      "evidence": "having a chart like this along with the growth percentages is repetitive"
+    },
+    {
+      "claim": "Curving data lines is bad and fading the data line is worse.",
+      "evidence": "curving data lines like this bad and fading of the data line worse"
+    },
+    {
+      "claim": "A decorative diagram and tiny-circle navigation in the activity card give no useful information or usable navigation.",
+      "evidence": "it's a pretty diagram but entirely useless same with this navigation"
+    },
+    {
+      "claim": "One module orientation leaves an awkward gap that is hard to fill, while the other does not.",
+      "evidence": "we have two orientations but this one leaves an awkward Gap"
+    },
+    {
+      "claim": "Data representation will make or break the UI and UX of a dashboard.",
+      "evidence": "data representation people it'll make or break the UI and ux of your dashboard"
+    }
+  ],
+  "quotes": [
+    "the more important information should be higher and farther left",
+    "without any labels these numbers don't mean anything",
+    "data representation people it'll make or break the UI and ux of your dashboard"
+  ],
+  "tags": [
+    "dashboard",
+    "finance-dashboard",
+    "redesign",
+    "hierarchy",
+    "sidebar",
+    "grid-layout",
+    "data-visualization",
+    "charts",
+    "cards",
+    "priority",
+    "dribbble",
+    "kole-jain"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "Begin a dashboard design or redesign with an assessment of the hierarchy, and expect to toss elements that add no value in the process.",
+      "why": "The source calls it the first order of business after seeing that the important content would sit below the fold while space at the top was wasted.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "our first order of business is to do an assessment of the hierarchy"
+    },
+    {
+      "rule": "Do not let a large header take up the space above the fold while the important content sits below it; move the header's essentials (logo, menu, team, settings) into a sidebar.",
+      "why": "Scrolling is fine, but not with all the space at the top while the important content is at the bottom; a sidebar could also be handy for navigation.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "desktop",
+      "values": [],
+      "evidence": "I don't want all this space up here while the important is down at the bottom"
+    },
+    {
+      "rule": "Order a dashboard sidebar with the logo at the very top, then the menu icon, then the team (with a manage-team button), with settings at the very bottom; put an add-widget button there too and give the sidebar a collapsed state.",
+      "why": "This is the layout the source builds once the header is cut to essentials; the add-widget button is a good feature that was in an awkward spot.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "desktop",
+      "values": [],
+      "evidence": "log go at the very top followed by the menu icon then we'll put our team next and the settings all the way at the bottom"
+    },
+    {
+      "rule": "Do not label a dashboard with what it obviously is, such as a 'financial dashboard' heading.",
+      "why": "That should be apparent from the content itself.",
+      "kind": "dont",
+      "strength": "consider",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "we definitely don't need to announce that this is a financial dashboard"
+    },
+    {
+      "rule": "Remove controls that duplicate each other, such as two search bars that do the same thing, and features that do not fit the product, such as text dictation in a finance dashboard.",
+      "why": "The two search bars look like they do exactly the same thing, and the source cannot recall seeing a finance dashboard with a text dictation option.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "we have two search bars that look like they do exactly the same thing"
+    },
+    {
+      "rule": "Show content people need regularly, such as tasks, as its own dashboard section instead of hiding it behind a button.",
+      "why": "People should not have to click a button to see their tasks; the tasks module became the call to action.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "we shouldn't have to click on the button to see our tasks"
+    },
+    {
+      "rule": "Merge small or related cards into the card they belong to, for example the growth rate and a separate chart into the annual profits card, and the system lock into the credit card information.",
+      "why": "Many of the 12 cards looked pretty useless on their own; integrating the system lock with the credit card lets you lock the card online.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "the growth rate should definitely be part of the annual profits card"
+    },
+    {
+      "rule": "Give each widget only the actions that make sense for the real object it represents, for example 'lock card' on a credit card instead of 'receive' or 'direct deposit'.",
+      "why": "You cannot really receive money with a credit card, so those buttons make the design nonsensical.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "you can't really receive money with a credit card"
+    },
+    {
+      "rule": "Place dashboard modules on a grid so that the more important information is higher and farther left.",
+      "why": "Placement should follow importance.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "think about this as a grid where the more important information should be higher and farther left"
+    },
+    {
+      "rule": "Rank every module into a priority tier (high, mid-level or low) as you design it, then place high-priority modules first, mid-level next and low-priority modules at the bottom.",
+      "why": "The tier list decides the layout; frequent, day-to-day functions rank high and things you rarely need to access rank low.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "let's just try ranking the importance of the modals as we make them think about this as our tier list"
+    },
+    {
+      "rule": "Label every chart and number so the values have context.",
+      "why": "Without labels the numbers do not mean anything.",
+      "kind": "do",
+      "strength": "must",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "without any labels these numbers don't mean anything"
+    },
+    {
+      "rule": "Do not show a chart and growth percentages for the same data; keep one, such as percentage chips for each level.",
+      "why": "Having both is repetitive.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "having a chart like this along with the growth percentages is repetitive"
+    },
+    {
+      "rule": "Do not curve the data line in a line chart, and do not fade the data line.",
+      "why": "The source calls curved data lines bad and a fading data line worse.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "curving data lines like this bad and fading of the data line worse"
+    },
+    {
+      "rule": "Give line chart cards grid lines, a time scale selector, a compare button when there may be several portfolios, and an icon that opens a full-screen version of the chart.",
+      "why": "These are the additions made to the investment chart; compare covers multiple portfolios, and the full-screen icon also goes on the revenue and expenses card.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "added some grid lines and a time scale selector"
+    },
+    {
+      "rule": "Replace decorative diagrams and tiny dot navigation that carry no meaning with content that has real context, such as an alert showing amount, date and place.",
+      "why": "A pretty but useless diagram and tiny circles nobody would click give the user nothing.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "it's a pretty diagram but entirely useless"
+    },
+    {
+      "rule": "Start an alert card with a leading icon, then give the amount, the date and the place of the transaction.",
+      "why": "The source says every good alert starts with this icon (which icon is shown on screen only), and the amount, date and place make the alert make sense.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "every good alert starts with this icon"
+    },
+    {
+      "rule": "Keep margins consistent across dashboard modules, even if a module then shows fewer items (two reminder cards instead of four), and add filters plus a button to view all items and one to add a new item.",
+      "why": "Consistency with the other modules' margins wins over fitting more; the view-all button covers the hidden items.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "all",
+      "values": [
+        "four",
+        "two"
+      ],
+      "evidence": "in keeping with the margins from the other models we'll do two cards and add some filters"
+    },
+    {
+      "rule": "Give money-in and money-out data a visual, such as a two-sided bar chart with income bars extending upwards and expense bars extending downwards.",
+      "why": "The income and expenses card had important information but basically no visuals to represent the data.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "a two-sided bar chart with the bars that extend upwards representing income"
+    },
+    {
+      "rule": "When a module can go in more than one orientation, choose the one that does not leave an awkward gap that is hard to fill.",
+      "why": "One orientation left a gap that would be difficult to fill with something, while the other did not.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "this one leaves an awkward Gap that will be difficult to fill"
+    },
+    {
+      "rule": "Keep a secondary detail you cut from a card reachable behind a kebab icon, instead of deleting it entirely.",
+      "why": "Few people care about it (interest payment), but it stays available just in case someone does.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "add this Kabab icon just in case someone actually does care about it"
+    },
+    {
+      "rule": "Replace an unclear icon, such as a minimize icon on a large module, with a labelled button like 'all activities'.",
+      "why": "The source is not sure how the module could be made much smaller, so a minimize icon does not fit it.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "replace that with an all activities button instead"
+    },
+    {
+      "rule": "Retitle a card when its content changes so the title matches what it now shows, for example 'Revenue and expenses' for the income and expenses card.",
+      "why": "After the credit card changes the source says the card needs a better title.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "we need to retitle the card to something better"
+    },
+    {
+      "rule": "Show the figures that matter for the real object, for example a minimum payment and a due date on a credit card instead of a monthly fee.",
+      "why": "Part of making the credit card widget make sense once zoomed in.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "replace the monthly fee with a minimum payment and add the due date"
+    },
+    {
+      "rule": "When a widget can hold more than one item, such as more than one credit card, add a way to scroll to the others.",
+      "why": "So more than one card can be added to the dashboard.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "add a way for us to scroll to more cards"
+    },
+    {
+      "rule": "Keep a good diagram that lacks context, but give it the missing data, for example turning the business plan diagram into a bank loan approval with the loan amount and repayment date.",
+      "why": "The card was missing too much context to make sense, but the diagram itself was worth keeping.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [
+        "90°"
+      ],
+      "evidence": "we're once again missing too much context to make sense of what this is"
+    },
+    {
+      "rule": "Adjust a component brought in from elsewhere to match the dashboard's theme, for example a dropdown instead of a slider for the time scale.",
+      "why": "The source makes these minor tweaks to match the theme of the dashboard a little better.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "in an effort to match the theme of the dashboard a little better"
+    },
+    {
+      "rule": "Cut elements that are not necessary or give no real value, such as the header date or a bulky questionnaire card, and add them back later only if there is room or a way to work them in.",
+      "why": "The date is not entirely necessary and the questionnaire is bulky and provides no real value.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "this questioner at the bottom is bulky and provides no real value to us"
+    },
+    {
+      "rule": "Fill a remaining gap in the dashboard grid with a section the product actually lacks, such as a line of credit section in a finance dashboard.",
+      "why": "The dashboard was clearly lacking a line of credit section, and it slotted perfectly into the empty space.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "it's clearly lacking some sort of line of credit section"
+    },
+    {
+      "rule": "Choose each dashboard module's data representation deliberately, and try another form when the first layout is weak, as with switching the line of credit to a pie chart.",
+      "why": "The source says data representation will make or break the UI and UX of a dashboard.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "data representation people it'll make or break the UI and ux of your dashboard"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "Where should the dashboard's header content and navigation live?",
+      "options": [
+        {
+          "name": "Top header bar",
+          "effect": "Takes up space above the fold and pushes the important content down (the original design).",
+          "when": "The source does not recommend it for this dashboard."
+        },
+        {
+          "name": "Sidebar, collapsible",
+          "effect": "Frees all the space at the top; holds logo, menu icon, team, add-widget button and settings at the bottom, and can collapse.",
+          "when": "Dashboards where the header crowds out important content."
+        }
+      ],
+      "recommendation": "Move the header into a sidebar, which also helps navigation and opens up the space at the top.",
+      "maps_to": "Q-layout-04",
+      "evidence": "for this header I'm thinking we could shove this all into a sidebar"
+    },
+    {
+      "question": "How should modules be arranged on the dashboard?",
+      "options": [
+        {
+          "name": "Priority grid",
+          "effect": "High-priority modules go top left, mid-level next, low-priority at the bottom, so the most used information is seen first.",
+          "when": "Any dashboard; the source ranks each module as it designs it."
+        },
+        {
+          "name": "Original arrangement",
+          "effect": "A big header on top and important content cut off below the fold.",
+          "when": "Not recommended by the source."
+        }
+      ],
+      "recommendation": "Use a priority grid where more important information is higher and farther left.",
+      "maps_to": null,
+      "evidence": "the more important information should be higher and farther left"
+    },
+    {
+      "question": "How should growth over time be shown in a profits card?",
+      "options": [
+        {
+          "name": "Chart plus growth percentages",
+          "effect": "Shows the same information twice.",
+          "when": "The source calls this repetitive."
+        },
+        {
+          "name": "Percentage chips for every level",
+          "effect": "Growth is shown compactly as chips next to each value, with no extra chart.",
+          "when": "When a chart would only repeat the percentages."
+        }
+      ],
+      "recommendation": "Drop the chart and use percentage chips, because having both is repetitive.",
+      "maps_to": null,
+      "evidence": "we're going to use these chips with the percentages for every level"
+    },
+    {
+      "question": "How should the data line in a line chart be drawn?",
+      "options": [
+        {
+          "name": "Curved data line",
+          "effect": "The source calls it bad.",
+          "when": "Not recommended."
+        },
+        {
+          "name": "Faded data line",
+          "effect": "The source calls it worse than curving.",
+          "when": "Not recommended."
+        },
+        {
+          "name": "Line without curving or fading, with grid lines and a time scale selector",
+          "effect": "The redesigned chart from the creator's earlier video.",
+          "when": "The source's redesign."
+        }
+      ],
+      "recommendation": "Avoid curving and fading the data line; add grid lines and a time scale selector.",
+      "maps_to": null,
+      "evidence": "curving data lines like this bad and fading of the data line worse"
+    },
+    {
+      "question": "What control should pick a chart's time scale?",
+      "options": [
+        {
+          "name": "Slider",
+          "effect": "Used in the earlier standalone chart redesign.",
+          "when": "Not stated in the source."
+        },
+        {
+          "name": "Dropdown",
+          "effect": "Matches the theme of the rest of the dashboard better.",
+          "when": "When the chart sits inside this dashboard."
+        }
+      ],
+      "recommendation": "A dropdown, to match the theme of the dashboard a little better.",
+      "maps_to": null,
+      "evidence": "instead of having the slider to select the time scale we'll change this into a drop down"
+    },
+    {
+      "question": "Should tasks sit behind a button or in their own module?",
+      "options": [
+        {
+          "name": "Button",
+          "effect": "People have to click before they can see their tasks.",
+          "when": "The source says they should not have to."
+        },
+        {
+          "name": "Wide, thin tasks module",
+          "effect": "Shows reminder cards with filters, a big red button to view all tasks and a button beside it to add a reminder.",
+          "when": "When tasks are the main call to action; ranked high priority."
+        }
+      ],
+      "recommendation": "Turn the button into a full module, since this was the dashboard's call to action.",
+      "maps_to": null,
+      "evidence": "we're going to take this button and turn it into an entire model"
+    },
+    {
+      "question": "How should income and expenses be represented?",
+      "options": [
+        {
+          "name": "Numbers only",
+          "effect": "Important information with basically no visuals to represent the data.",
+          "when": "The source replaces it."
+        },
+        {
+          "name": "Two-sided bar chart",
+          "effect": "Bars extend upwards for income and downwards for expenses, with the dollar values and a full-screen icon.",
+          "when": "Showing money coming in and going out."
+        }
+      ],
+      "recommendation": "A two-sided bar chart, which the source thinks is the best way to represent money coming in and out.",
+      "maps_to": "Q-viz-01",
+      "evidence": "the best way for us to represent money coming in and out is is by having a two-sided bar chart"
+    },
+    {
+      "question": "How should a line of credit be shown?",
+      "options": [
+        {
+          "name": "The first layout the creator considered",
+          "effect": "Shown briefly on screen; not described in the transcript.",
+          "when": "Abandoned by the source."
+        },
+        {
+          "name": "Pie chart",
+          "effect": "Fills the empty space in the grid, with the interest payment moved behind a kebab icon.",
+          "when": "The source's final choice."
+        }
+      ],
+      "recommendation": "A pie chart; the source stresses that data representation makes or breaks a dashboard.",
+      "maps_to": "Q-viz-01",
+      "evidence": "let's use a pie chart instead"
+    }
+  ],
+  "process": [
+    {
+      "step": "Assess the hierarchy",
+      "detail": "Split the screen into the header and everything else, and check what gets cut off by the fold."
+    },
+    {
+      "step": "Cut the header to essentials",
+      "detail": "Remove redundant titles, duplicate search bars and features that do not fit, and pull hidden content (tasks) out of buttons."
+    },
+    {
+      "step": "Build the sidebar",
+      "detail": "Logo at the very top, then the menu icon, then the team with a manage-team button, an add-widget button, and settings at the bottom; design a collapsed version."
+    },
+    {
+      "step": "Audit the cards",
+      "detail": "Count the cards (12 in the original), remove the useless ones and merge related ones into the cards they belong to."
+    },
+    {
+      "step": "Fix each module",
+      "detail": "Make actions fit the real object, add labels and context, and replace decorative diagrams with meaningful content such as alerts or loan approvals."
+    },
+    {
+      "step": "Tier each module",
+      "detail": "As you finish each module, rank it high, mid-level or low priority; day-to-day activity and calls to action rank high, rarely accessed views rank low."
+    },
+    {
+      "step": "Assemble the grid",
+      "detail": "Place high-priority modules first with the most important at the top left, choose orientations that avoid awkward gaps, then add the mid-level and low-priority modules."
+    },
+    {
+      "step": "Fill the gaps with what is missing",
+      "detail": "Use any remaining gap for a section the product lacks (a line of credit here), and choose its data representation carefully."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Original finance management dashboard",
+      "where": "Dribbble",
+      "visual_note": "A large header with a 'financial dashboard' title, two search bars, a dictation option and a date, above 12 cards; several are decorative (a diagram with tiny dot navigation), unclear (a '13 Days' card) or belong inside other cards, and important content falls below the fold."
+    },
+    {
+      "what": "Collapsible sidebar",
+      "where": null,
+      "visual_note": "Logo at top, menu icon, team avatars with a manage-team button, an add-widget button and settings at the bottom, with a collapsed variant."
+    },
+    {
+      "what": "Credit card widget",
+      "where": "Card visual inspired by Wise",
+      "visual_note": "A real-looking card showing the card number, in the brand colors, with the logo blown up at reduced opacity; 'lock card' replaces direct deposit and receive, minimum payment and due date replace the monthly fee, and a control scrolls to more cards."
+    },
+    {
+      "what": "Annual profits card",
+      "where": null,
+      "visual_note": "The separate chart is dropped and percentage chips show growth for every level; the numbers get labels for context."
+    },
+    {
+      "what": "Investment line chart card",
+      "where": null,
+      "visual_note": "Grid lines, a dropdown time scale selector instead of a slider, a compare button for multiple portfolios and a full-screen icon."
+    },
+    {
+      "what": "Activity manager with fraud alert",
+      "where": null,
+      "visual_note": "The minimize icon becomes an 'all activities' button, wallet verification stays, and a decorative diagram with tiny dot navigation becomes a fraudulent activity alert with a leading icon, amount, date and place."
+    },
+    {
+      "what": "Bank loan approval",
+      "where": null,
+      "visual_note": "The original business plan diagram is flipped 90° and recolored, with the loan amount and repayment date added."
+    },
+    {
+      "what": "Tasks module",
+      "where": null,
+      "visual_note": "Wide and thin, two reminder cards with filters, a big red button to view all tasks and an add-reminder button beside it."
+    },
+    {
+      "what": "Revenue and expenses card",
+      "where": null,
+      "visual_note": "A two-sided bar chart at the bottom of the card, income bars going up and expense bars going down, with the dollar values and a full-screen icon."
+    },
+    {
+      "what": "Line of credit card",
+      "where": null,
+      "visual_note": "A pie chart that fills the leftover gap in the grid, with the interest payment removed from view and reachable from a kebab icon."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "12",
+      "context": "Number of cards or elements in the original dashboard before the cut.",
+      "evidence": "there are 12 cards or elements here"
+    },
+    {
+      "value": "90°",
+      "context": "The business plan diagram is rotated this much to become the bank loan approval visual.",
+      "evidence": "I'm going to flip this 90°"
+    },
+    {
+      "value": "two",
+      "context": "Reminder cards shown in the tasks module, down from the four originally planned, to keep margins consistent with other modules.",
+      "evidence": "we'll do two cards and add some filters too"
+    },
+    {
+      "value": "four",
+      "context": "Reminders the creator first planned for the tasks module before cutting it to two to keep margins consistent.",
+      "evidence": "I was originally thinking we could fit four reminders in here"
+    }
+  ],
+  "caveats": [
+    "Self-promotion: the Figma file is offered through the creator's resources page, and the line chart changes are explained in an earlier video, so the reasons for 'no curved or faded data lines' are not given here.",
+    "Much of the critique is the creator's opinion and humor (jokes about Bill Gates and a placeholder user 'Dwayne Tatum'), not tested results.",
+    "The video states no exact values: no spacing, sizes, colors, grid columns or margins, only the relative priority placement.",
+    "The creator says 'modals' and 'models' when he means dashboard cards or modules, not overlay dialogs.",
+    "Auto-caption fixes made: 'dribble' read as Dribbble, 'log go' as logo, 'questioner' as questionnaire, 'Kabab' as kebab, and 'wise card' as the Wise card.",
+    "The first line-of-credit layout the creator considered is shown on screen but not described in the transcript.",
+    "The 'big red button' for all tasks is shown without any reasoning about color, and no accessibility points (contrast, focus, chart alternatives) are discussed.",
+    "Published 2024-06-29; auto-generated English transcript."
+  ]
+}

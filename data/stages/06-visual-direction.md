@@ -16,11 +16,17 @@ Zoom 1 broad · weight high · changes 13 decisions · class G · cards DC-L15-0
 - **Why:** The style preset sets depth, glass effects, corner radius, borders and color strength all at once. It steers 12 other choices (fan-out 12) [DC-L15-01].
 - **Options:**
   - `flat2` Flat 2.0: mostly flat surfaces, subtle shadows or tonal steps, clear signifiers; neutral, efficient, timeless (Carbon, Primer, Polaris, Fluent).
+    - Now: Mostly flat surfaces, subtle shadows or tone steps, and clear signs of what to click: neutral and efficient. As it grows: A durable base that ages well as screens pile up; keep neo-brutalist and maximal styles for marketing pages.
   - `tonal` Material tonal: tonal surface steps and dynamic color; friendly and systematic (M3; Expressive adds shapes and springs) [DC-L15-01].
+    - Now: Surfaces separate by soft color steps: friendly and systematic, like Material 3. As it grows: Needs 4-5 close gray steps and matches Android's own look as you add platforms. [inferred]
   - `glass` Glass: translucent controls and navigation only, 35% dimming under clear glass; premium and native on Apple, can obscure content (Liquid Glass, Fluent Acrylic).
+    - Now: See-through bars and controls over the content: premium and native on Apple, but it can hide content. As it grows: Every glass surface needs a solid version for people who reduce transparency or raise contrast; large blurs may also slow drawing. [inferred]
   - `neo-brutalist` Neo-brutalist: thick borders, solid 4px offset shadow, 2-3 bold colors, quirky display face; bold, indie, irreverent (Figma and Gumroad brands).
+    - Now: Thick borders, hard offset shadows and 2-3 bold colors: loud, indie and memorable. As it grows: Its solid borders go against a house standard, and research keeps it to marketing or indie products.
   - `soft` Soft 3D (neumorphic): extruded same-color surfaces with paired soft shadows; tactile but vague; offered only with a contrast warning.
+    - Now: Raised same-color surfaces with soft paired shadows: tactile but vague, and edges often fail contrast. As it grows: Every clickable part needs added borders to reach 3:1 contrast, which undoes much of the look. [inferred]
   - `maximal` Loud and busy (maximal): vibrant palettes, overlapping visuals, bold type; energetic but busy; marketing surfaces only.
+    - Now: Vibrant colors, overlapping visuals and bold type: energetic but busy. As it grows: Meant for marketing only; inside the app, the busyness grows with every screen. [inferred]
 - **Default:** `flat2`: flat2 with strong signifiers *Source:* card heuristic; keep the app on a durable base and reserve fashionable styles for marketing [DC-L15-01].
 - **Show:** one product screen (nav, card, form, table) rendered in each style, with contrast warnings on soft and glass.
 - **Use / avoid:** use flat 2.0 or tonal for app surfaces people use daily; use glass only on the functional layer (bars, controls, sheets) and never on reading surfaces; keep neo-brutalist and maximal for marketing or indie products; avoid soft/neumorphic for anything interactive unless borders are added to reach 3:1 [DC-L15-01; via DC-L10-12].
@@ -32,9 +38,13 @@ Zoom 1 broad · weight high · changes 8 decisions · class G · cards DC-L15-04
 - **Why:** Spacious screens look confident but slow down people who come back often. Compact screens look efficient but need strong grouping and clear signs of what you can click [DC-L15-04].
 - **Options:**
   - `comfortable` Comfortable: calmer, touch-friendly, consumer feel [DC-L08-13].
+    - Now: Calmer and touch-friendly, with room around each item. As it grows: A good base for app screens; data-heavy tables and lists can add a compact mode later.
   - `compact` Compact: serious, efficient, expert; more data per screen (Carbon table rows from 24px) [DC-L15-04].
+    - Now: More data per screen with tighter rows: looks efficient and expert. As it grows: Needs strong grouping and clear signs of what to click as screens fill; tap targets keep their minimum size.
   - `spacious` Spacious: calm, premium, focused message [DC-L15-04].
+    - Now: Lots of space: calm, premium and focused on one message. As it grows: Great for marketing and focused tasks, but it slows down people who come back often.
   - `user-selectable` Let people choose: default plus a compact mode (Atlassian `spacing="compact"`, Salesforce comfy/compact) [DC-L03-10].
+    - Now: A default density plus a compact mode people can switch on, like Atlassian and Salesforce. As it grows: Only data-heavy parts (tables, lists, menus, trees) need both sizes; targets never shrink in either mode.
 - **Default:** `comfortable`: comfortable for app surfaces, spacious for marketing, compact as a user option for data-heavy components (tables, lists, menus, trees) *Source:* card heuristic [DC-L15-04, DC-L08-13].
 - **Show:** a data table and a settings form at each density, with the target-size floor drawn so it visibly does not shrink [DC-L15-04].
 - **Use / avoid:** use compact for data-heavy components (tables, lists, menus, trees); use spacious for marketing and focused tasks; avoid shrinking targets with density; they stay at the floor in every mode [DC-L15-04, DC-L08-13].

@@ -1,0 +1,1296 @@
+{
+  "summary": "Steve Schoger designs a marketing home page for a finance app live in Claude Code, starting from a plain prompt and then refining it section by section with short, specific instructions. Most of the video is a stream of concrete polish moves: real app screenshots instead of generated fake UI, neutral grays that match the product, outer rings at low opacity instead of solid borders, the variable display cut of Inter with an in-between weight and tighter headline tracking, left-aligned and split layouts instead of centering everything, and smaller, pill-shaped buttons of equal height. He also shows reusable section treatments: inline section headings, monospace uppercase eyebrows, tinted 'well' containers with inset screenshots and concentric corners, image-backed testimonial cards, and a 'canvas grid' of decorative section borders. For a design system, the video gives exact starting values (for example gray 950 at 10% for rings, 38px hero buttons, 28px nav buttons, 8px insets and gaps, a 40ch heading width) and names the defaults AI tends to fall into, so a guide can steer away from them.",
+  "key_ideas": [
+    "Claude Code can serve as a primary design tool: give a plain first prompt listing the sections, then refine with short, specific instructions.",
+    "AI-generated sites tend to default to an indigo accent, center everything and use the basic default version of Inter.",
+    "A real screenshot of the product is an easy way to add a graphic to a home page when you have no other visuals.",
+    "Solid-color borders next to a shadow look muddy; an outer ring of near-black at low opacity looks crisp and blends into the shadow.",
+    "Match the site's grays and corner radius to what the product screenshot already uses.",
+    "The variable version of Inter gives a display version with more impact, extra font features, and in-between weights such as 550.",
+    "Large headlines read with more impact when their tracking is tightened a little.",
+    "A split hero (headline on the left, supporting text and buttons on the right) fills space more interestingly than a centered or plain left-aligned headline.",
+    "Keep buttons small and consistent: a ring on one button must not make it taller than its neighbour, and the nav button should not compete with the hero button.",
+    "Set text widths in characters (ch) rather than a fixed max width, and put that width on the element that sets the font size.",
+    "Inline section headings, where the title runs into a longer supporting sentence in a softer color, look more interesting than a separate title and subtitle.",
+    "Monospace eyebrows look more designed; the author also sets them uppercase with wider tracking.",
+    "Tinted 'well' containers with tightly inset screenshots, concentric corners and an inset ring on top of the image make product shots pop.",
+    "A 'canvas grid' of decorative borders around each section adds visual interest when you have no custom graphics.",
+    "For fiddly positioning, instead of describing it in words, have the AI build a temporary inline tool, set the values by hand, and bake them into the code."
+  ],
+  "entities": [
+    {
+      "name": "Steve Schoger",
+      "type": "person",
+      "description": "Designer who presents the video and designs the page live."
+    },
+    {
+      "name": "Adam Wathan",
+      "type": "person",
+      "description": "Helped the author get set up initially, devised the span-wrapped button technique that keeps ringed buttons the same height, and is building ui.sh with him."
+    },
+    {
+      "name": "Claude Code",
+      "type": "tool",
+      "description": "The coding agent used as the primary design tool throughout, with no skills loaded."
+    },
+    {
+      "name": "Tailwind Labs",
+      "type": "company",
+      "description": "Company the finance dashboard was made for, to consolidate its revenue streams."
+    },
+    {
+      "name": "Tailwind Play",
+      "type": "tool",
+      "description": "Where the span-wrapped equal-height button snippet is saved (linked in the description)."
+    },
+    {
+      "name": "Tailwind Plus",
+      "type": "product",
+      "description": "Its homepage is the author's earlier example of a split hero headline."
+    },
+    {
+      "name": "Inter",
+      "type": "product",
+      "description": "Typeface used for the page; the variable version with a display cut and font features is preferred over the basic default."
+    },
+    {
+      "name": "Rasmus (rsms.me)",
+      "type": "person",
+      "description": "Owner of rsms.me, the website the variable Inter font is loaded from."
+    },
+    {
+      "name": "Geist Mono",
+      "type": "product",
+      "description": "Monospace font suggested for section eyebrows."
+    },
+    {
+      "name": "Figma",
+      "type": "tool",
+      "description": "Still used by the author to make vector graphics such as the fake logos, exported as SVG."
+    },
+    {
+      "name": "Quiver AI",
+      "type": "tool",
+      "description": "Recently released AI tool the author finds promising for vector graphics but has not tried yet."
+    },
+    {
+      "name": "ChatGPT",
+      "type": "tool",
+      "description": "Used to generate the portrait images for the testimonial cards."
+    },
+    {
+      "name": "Ghostty",
+      "type": "tool",
+      "description": "Terminal app the author runs Claude Code in; the transcript says 'Ghosty', and the name Ghostty is [inferred]."
+    },
+    {
+      "name": "Apple",
+      "type": "company",
+      "description": "Where the author first saw the inline section-heading treatment."
+    },
+    {
+      "name": "Linear",
+      "type": "company",
+      "description": "Named as using the inline section-heading treatment."
+    },
+    {
+      "name": "Stripe",
+      "type": "company",
+      "description": "Named as using inline headings and a canvas grid of section borders."
+    },
+    {
+      "name": "Attio",
+      "type": "company",
+      "description": "Named as using inline headings and a canvas grid; the transcript says 'Adio', and the name Attio is [inferred]."
+    },
+    {
+      "name": "ui.sh",
+      "type": "product",
+      "description": "Set of skills for coding agents the author is building with the Tailwind team; plugged at the end."
+    },
+    {
+      "name": "Refactoring UI",
+      "type": "product",
+      "description": "Design resource linked in the video description."
+    },
+    {
+      "name": "canvas grid",
+      "type": "concept",
+      "description": "The author's name for decorative borders that contain each section and run between sections."
+    },
+    {
+      "name": "well container",
+      "type": "concept",
+      "description": "A softly tinted container (gray 950 at 5%) that holds an inset screenshot."
+    },
+    {
+      "name": "eyebrow",
+      "type": "concept",
+      "description": "Small label above a section heading, styled here as uppercase monospace."
+    },
+    {
+      "name": "text-wrap pretty and balance",
+      "type": "concept",
+      "description": "CSS wrapping modes used to fix orphan words and awkward heading wraps."
+    },
+    {
+      "name": "ch unit max width",
+      "type": "concept",
+      "description": "Character-based max width that sizes a text block by how many characters fit."
+    }
+  ],
+  "topics": [
+    {
+      "name": "AI-assisted design",
+      "summary": "Uses Claude Code as the main design tool: a plain first prompt, then many short, specific refinement prompts, inspecting how elements are built and asking for temporary tools; notes AI defaults (indigo, centering, basic Inter)."
+    },
+    {
+      "name": "Landing pages",
+      "summary": "Builds and polishes a marketing home page: navbar, split hero with product screenshot, logo cloud, feature section, stats, image-backed testimonials, CTA and footer."
+    },
+    {
+      "name": "Typography",
+      "summary": "Variable Inter with the display cut, a 550 weight between medium and semibold, tighter tracking on large headlines, 40ch heading widths, monospace uppercase eyebrows with wide tracking, text-wrap pretty or balance."
+    },
+    {
+      "name": "Depth, shadows and borders",
+      "summary": "Outer rings of gray 950 at 10% instead of solid borders beside shadows; inset rings on top of screenshots; a small shadow to lift secondary buttons; tinted wells instead of bordered containers."
+    },
+    {
+      "name": "Shape and corner radius",
+      "summary": "Match the screenshot frame radius to the product, keep inset screenshots concentric with their container, drop the bottom radius on a cropped screenshot, and try pill buttons site-wide."
+    },
+    {
+      "name": "Buttons and actions",
+      "summary": "Hero buttons at 14px text and 38px tall via padding, nav button 28px with text-sm, no icon, pill shape, secondary button with a small shadow and an outer ring, and a span wrapper so ringed and plain buttons are the same height."
+    },
+    {
+      "name": "Spacing and layout",
+      "summary": "Split 3/5 and 2/5 hero, a wider 1280 page container, full-width screenshots and stats, 8px insets and gaps, 64px padding around the large hero screenshot, and a canvas grid of section borders."
+    },
+    {
+      "name": "Color",
+      "summary": "Swap slate grays for neutral to match the product, and replace the AI-picked emerald accent with gray 950 for a neutral look; use opacity-based near-black for rings and backgrounds."
+    },
+    {
+      "name": "Visual hierarchy",
+      "summary": "Keep the nav button smaller so it does not compete with the hero button; set supporting text and stat labels in gray 600; drop unnecessary section titles, background tints and background cards."
+    },
+    {
+      "name": "Cards and sections",
+      "summary": "Feature cards as tinted wells with inset, cropped screenshots; testimonial cards with a portrait background, white quote at the bottom and a dark gradient; stats separated by dividers."
+    },
+    {
+      "name": "Web implementation (CSS and React)",
+      "summary": "Tailwind utilities and CSS details: ring vs border, inline-flex p-px span wrapper, max width in ch on the font-size element, text-wrap pretty and balance, absolutely positioned inset rings over images."
+    },
+    {
+      "name": "Figma and design tools",
+      "summary": "Figma remains the author's tool for vector graphics such as logos, exported as SVG into the project."
+    },
+    {
+      "name": "Design process",
+      "summary": "Work top to bottom one section at a time, try values and 'Goldilocks' them, apply a finished treatment to all sections, and compare the before and after versions."
+    },
+    {
+      "name": "Navigation and sidebars",
+      "summary": "Left-align nav links next to the logo instead of centering them, make the logo slightly bigger, give sign-in a secondary button treatment, and use a ring for the nav's bottom border."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "AI tends to pick an indigo accent color by default.",
+      "evidence": "indigo, which I find AI kind of defaults to every time"
+    },
+    {
+      "claim": "Sites generated with AI center everything by default.",
+      "evidence": "defaults it centers everything by default"
+    },
+    {
+      "claim": "Claude typically uses the basic default version of Inter when it generates sites.",
+      "evidence": "the sort of basic default version of Inter"
+    },
+    {
+      "claim": "Including a screenshot is a great way to add a graphical element to a home page that has no graphics.",
+      "evidence": "including a screenshot is just a great way to bring a graphical element"
+    },
+    {
+      "claim": "A solid-color border beside a shadow gives a muddy look, while an outer ring at low opacity gives a crisp edge that blends into the shadow.",
+      "evidence": "you get that muddy-looking effect"
+    },
+    {
+      "claim": "The variable version of Inter includes a text and a display version, and the display version has more impact; it also has font features such as a single-story a.",
+      "evidence": "it's got a display version of the font"
+    },
+    {
+      "claim": "A button with a ring around it ends up two pixels taller than a button without one.",
+      "evidence": "technically two pixels taller"
+    },
+    {
+      "claim": "The author thinks a character-based max width sizes the text block by how many zero characters of the current font size fit.",
+      "evidence": "based on like the the zero character"
+    },
+    {
+      "claim": "The inline section-heading style is used by Apple, Linear, Stripe and 'Adio' (most likely Attio [inferred]).",
+      "evidence": "I think I first saw it on Apple"
+    },
+    {
+      "claim": "The canvas grid of section borders is a popular treatment used by Stripe, 'Adio' (Attio [inferred]) and the Tailwind site.",
+      "evidence": "I like to call it a canvas grid"
+    },
+    {
+      "claim": "The author still opens Figma mainly to make vector graphics, because AI is still working on that.",
+      "evidence": "one of the few reasons I still open up Figma"
+    },
+    {
+      "claim": "Claude applied earlier style changes to later sections without being asked again.",
+      "evidence": "it's just kind of learning as it goes here"
+    },
+    {
+      "claim": "text-wrap pretty and text-wrap balance give different results, so sometimes both must be tried.",
+      "evidence": "sometimes you have to play with like text pretty and text balance"
+    }
+  ],
+  "quotes": [
+    "I try to avoid using solid colors cuz you get that muddy-looking effect",
+    "including a screenshot is just a great way to bring a graphical element",
+    "Sometimes you got to Goldilocks it."
+  ],
+  "tags": [
+    "claude-code",
+    "ai-design",
+    "landing-page",
+    "marketing-site",
+    "tailwind",
+    "inter",
+    "rings-vs-borders",
+    "screenshots",
+    "buttons",
+    "section-headings",
+    "canvas-grid",
+    "text-wrap"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "Use a real screenshot of the product in the hero instead of a generated mock UI, especially when the page has no other graphics.",
+      "why": "A screenshot brings a graphical element into the home page and makes it look more splashy and interesting when you have no visual graphics to work with.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "including a screenshot is just a great way to bring a graphical element"
+    },
+    {
+      "rule": "Capture product screenshots at 3x so they stay sharp.",
+      "why": "So the screenshot is high resolution.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [
+        "3x"
+      ],
+      "evidence": "Capture it at 3x so it's high resolution"
+    },
+    {
+      "rule": "Match the site's gray family to the grays the product screenshot uses (switch slate to neutral when the app uses neutral grays).",
+      "why": "The generated page used slate grays that did not match the neutral grays in the app screenshot.",
+      "kind": "do",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [
+        "neutral",
+        "slate"
+      ],
+      "evidence": "update all the grays on the site to use neutral"
+    },
+    {
+      "rule": "Match the corner radius of a screenshot's frame to the radius used inside the screenshot.",
+      "why": "The generated radius did not look right; tightening it made it match the corner radius in the screenshot.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "shape",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "tighten up the corner radius on this screenshot"
+    },
+    {
+      "rule": "Instead of a solid-color border on buttons, screenshots and the nav's bottom edge, use an outer ring of gray 950 at 10% opacity.",
+      "why": "A solid border next to a shadow gives a muddy look; the low-opacity outer ring gives a crisp edge that bleeds into the shadow and looks cleaner.",
+      "kind": "do",
+      "strength": "should",
+      "area": "elevation",
+      "applies_to": "all",
+      "values": [
+        "gray 950",
+        "10%"
+      ],
+      "evidence": "I try to avoid using solid colors cuz you get that muddy-looking effect"
+    },
+    {
+      "rule": "Buttons placed side by side must be the same height: don't let a ring make one button taller. The author's fix wraps the ringed button in a span with inline-flex and p-px (saved in a Tailwind Play).",
+      "why": "A ring on one button made it technically two pixels taller than the button beside it, which the author says 'we can't have'.",
+      "kind": "do",
+      "strength": "must",
+      "area": "components",
+      "applies_to": "css",
+      "values": [
+        "inline flex",
+        "p-px",
+        "two pixels"
+      ],
+      "evidence": "this is technically two pixels taller than this button and we can't have that"
+    },
+    {
+      "rule": "When wrapping a button in a span, put the button's shadow on the button itself, not on the parent span.",
+      "why": "Claude put the shadow on the parent span and the result was wrong until it was moved to the button.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "css",
+      "values": [],
+      "evidence": "Make sure the button shadow is on the button, not the parent span"
+    },
+    {
+      "rule": "Load the variable version of Inter (from rsms.me) with its font feature settings, and use its display version.",
+      "why": "AI-generated sites lean on the basic default Inter; the display version has more impact and the variable version has all the fancy font features, such as a single-story a.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "make sure you're using the variable version of Inter"
+    },
+    {
+      "rule": "With a variable font, pick an in-between weight when medium feels too thin and semibold too bold, for example 550.",
+      "why": "Inter's variable version allows all the in-between weights, so you can land between 500 and 600.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [
+        "550",
+        "500",
+        "600"
+      ],
+      "evidence": "I'm going to say 550. Just somewhere in between medium and semi-bold"
+    },
+    {
+      "rule": "Tighten the letter tracking on headlines once font sizes go above about 24 to 30 pixels.",
+      "why": "Tighter tracking gives large headlines more impact.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [
+        "24 to 30 pixels"
+      ],
+      "evidence": "24 to 30 pixels, I like to make the tracking just a bit tighter"
+    },
+    {
+      "rule": "Don't center everything by default; left-align content or use a split hero with the headline on the left and the supporting text and buttons on the right, in roughly a 3/5 and 2/5 split, with the top of the supporting text lined up with the top of the headline.",
+      "why": "AI centers everything by default; the split gives more weight to the headline, is more interesting than a centered or left-aligned headline, and fills the space nicely.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [
+        "3/5 and 2/5"
+      ],
+      "evidence": "make it like a 3/5 and 2/5 split"
+    },
+    {
+      "rule": "In a split hero, make the supporting text small enough (16 pixels here) that its block is almost the same height as the headline.",
+      "why": "The author wanted the headline and the supporting column to be almost the same height.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "typography",
+      "applies_to": "web",
+      "values": [
+        "16 pixels"
+      ],
+      "evidence": "make the supporting text 16 pixels"
+    },
+    {
+      "rule": "Put each sentence of a multi-sentence headline on its own line.",
+      "why": "Letting it wrap mid-sentence looked awkward.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "typography",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "put each sentence in the headline on its own"
+    },
+    {
+      "rule": "Widen the page container when the layout feels cramped, for example to 1280.",
+      "why": "The author wanted the page a bit wider; no further reason is given.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [
+        "1280"
+      ],
+      "evidence": "make the page container wider. Maybe 1280"
+    },
+    {
+      "rule": "Make the hero screenshot the full width of the page container instead of letting the layout zigzag.",
+      "why": "The author disliked the 'zigzaggy thing' the narrower layout was doing.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "make the screenshot full width in the page container"
+    },
+    {
+      "rule": "Keep hero buttons small: about 14 pixel text and a 38 pixel height reached with padding, not a fixed height.",
+      "why": "The generated buttons looked clunky; the author likes buttons in the 36 to 38 pixel range.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "web",
+      "values": [
+        "14 pixel",
+        "36 38 pixel range",
+        "38 pixels"
+      ],
+      "evidence": "Make the button height 38 pixels"
+    },
+    {
+      "rule": "Remove decorative icons from secondary hero buttons such as 'watch demo'.",
+      "why": "The author wanted the buttons looking clean.",
+      "kind": "dont",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Get rid of the icon in the watch demo button"
+    },
+    {
+      "rule": "Lift the secondary button slightly with a small shadow (plus the outer ring instead of a border).",
+      "why": "It gives the secondary button a bit more elevation and, with the ring, a crisp edge.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "button a bit more elevated to give it a small shadow"
+    },
+    {
+      "rule": "Try pill-shaped buttons, and apply the shape to every button on the site.",
+      "why": "After shrinking the hero buttons the author felt their horizontal padding was a bit much, switched to pill buttons to see what happened, and found it looked pretty good.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "shape",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "make the buttons pill shaped"
+    },
+    {
+      "rule": "Make the navbar button smaller than the hero button (28 pixels tall, text-sm) and give the sign-in link a secondary button treatment.",
+      "why": "So the nav button is not competing with the hero button; 24 pixels was too small.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "web",
+      "values": [
+        "28 pixels",
+        "24 pixels"
+      ],
+      "evidence": "so it's not competing with that button"
+    },
+    {
+      "rule": "Left-align navbar links close to the logo instead of centering them.",
+      "why": "Three separately placed elements made the nav feel busy.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "left align the links in the navbar to be closer to the logo"
+    },
+    {
+      "rule": "In a logo cloud, use real SVG logos in solid gray 950 with no opacity, spread full width in the container, without a section title, background tint or top and bottom borders.",
+      "why": "The title is not necessary; the logos alone make it clear these are likely users of the app.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [
+        "gray 950"
+      ],
+      "evidence": "I don't think the title of that was necessary"
+    },
+    {
+      "rule": "For section headings, run the title inline into the supporting text at the same size so it reads as one block, with the supporting text in a softer color (gray 600) and medium weight.",
+      "why": "It looks more interesting than a stacked title and subtitle and is a current style the author has seen on Apple, Linear, Stripe and 'Adio' (Attio [inferred]).",
+      "kind": "do",
+      "strength": "consider",
+      "area": "typography",
+      "applies_to": "web",
+      "values": [
+        "gray 600",
+        "4XL"
+      ],
+      "evidence": "Make the title inline with the supporting text so it reads like one block"
+    },
+    {
+      "rule": "When using the inline heading style, write a longer supporting sentence.",
+      "why": "This style of title requires a longer sentence to work.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "requires a bit of a longer sentence"
+    },
+    {
+      "rule": "Set the width of heading and text blocks with a character-based max width (40ch here) instead of a fixed max width.",
+      "why": "It is more flexible for typography: you get a nice reading width based on how many characters fit, not a set width.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "css",
+      "values": [
+        "40",
+        "45",
+        "35"
+      ],
+      "evidence": "max width character thing"
+    },
+    {
+      "rule": "Put the ch-based max width on the same element that sets the font size.",
+      "why": "When Claude put the 40-character max width on a different element, the text came out too tight.",
+      "kind": "do",
+      "strength": "must",
+      "area": "typography",
+      "applies_to": "css",
+      "values": [
+        "40 characters"
+      ],
+      "evidence": "on the same line where the font size is set"
+    },
+    {
+      "rule": "Style section eyebrows as monospace (for example Geist Mono), uppercase, text-xs, gray 600, with wider tracking.",
+      "why": "A monospace eyebrow looks a bit more designed and interesting.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [
+        "Geist Mono",
+        "gray 600"
+      ],
+      "evidence": "I like using uh a monospace for these eyebrows"
+    },
+    {
+      "rule": "Widen letter tracking whenever text is set in all uppercase.",
+      "why": "It gives the uppercase text more room to breathe.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "I like to make the tracking a bit wider when I make everything all uppercase"
+    },
+    {
+      "rule": "In feature sections, capture the full product screenshot and crop it inside the card to the feature being described, with the relevant state (such as a chart tooltip) showing.",
+      "why": "It focuses the reader on the specific part of the app the feature text talks about.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "crop it in the space so I can focus on a specific part"
+    },
+    {
+      "rule": "Inset screenshots tightly inside their container (about eight pixels) and make the screenshot's corner radius concentric with the container's radius.",
+      "why": "The inner radius then hugs the outer radius and looks more correct.",
+      "kind": "do",
+      "strength": "should",
+      "area": "shape",
+      "applies_to": "all",
+      "values": [
+        "eight pixels"
+      ],
+      "evidence": "is concentric with the container radius"
+    },
+    {
+      "rule": "Put the screenshot's outline ring on top of the image as an inset ring (gray 950 at 10% on a tinted container).",
+      "why": "An inset ring over the image's edge gives a crisp border; at a lower opacity it matched the tinted background and disappeared.",
+      "kind": "do",
+      "strength": "should",
+      "area": "elevation",
+      "applies_to": "all",
+      "values": [
+        "950",
+        "10%"
+      ],
+      "evidence": "I want it to be inset so it's on top of the image"
+    },
+    {
+      "rule": "Use a softly tinted 'well' container (gray 950 background at 5% opacity, no border) behind product screenshots instead of a plain white bordered card.",
+      "why": "The well helps the image pop more; 2.5% was too soft.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "elevation",
+      "applies_to": "web",
+      "values": [
+        "gray 950",
+        "2 and 1/2%",
+        "five"
+      ],
+      "evidence": "give the containers a background color"
+    },
+    {
+      "rule": "Make the gap between feature cards match the inset around the screenshots (eight pixels).",
+      "why": "The author wanted it snug, the same as the space around the image.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [
+        "eight pixels"
+      ],
+      "evidence": "gap between the two features uh eight pixels"
+    },
+    {
+      "rule": "Set feature-card text (both title and description) at text-sm (14) with a taller line height; the author asked for 20 pixels.",
+      "why": "The feature text looked a little chunky.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "typography",
+      "applies_to": "web",
+      "values": [
+        "14",
+        "20 pixels"
+      ],
+      "evidence": "Make the feature text um text small, maybe"
+    },
+    {
+      "rule": "Give a large hero screenshot more liberal padding inside its well (64 pixels), let it sit on the bottom edge with zero bottom padding, crop about 10 pixels off its bottom, remove its bottom corner radius, and add an inset ring at 5% opacity on the container on top of the screenshot.",
+      "why": "A much bigger element needs more liberal spacing than the tight feature cards, and the inset ring gives definition between the container edge and the cropped screenshot.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [
+        "64 pixel",
+        "10 pixels",
+        "5%"
+      ],
+      "evidence": "64 pixel padding"
+    },
+    {
+      "rule": "Keep sections plain: remove background tints and cards the AI adds, such as the off-white logo-cloud and footer backgrounds, the dark stats background and the CTA background card.",
+      "why": "The author was not crazy about the dark stats background and wanted the page pretty simple.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "get rid of the dark background on the stats section"
+    },
+    {
+      "rule": "Keep a stats section simple: no dark background, left-aligned stats spanning the page container, values in regular weight at a large size (5XL), labels in gray 600, and a divider between stats.",
+      "why": "The author wanted the section pretty simple, and the generated stat numbers looked clunky.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [
+        "5XL",
+        "gray 600"
+      ],
+      "evidence": "Make the values in the stats"
+    },
+    {
+      "rule": "Apply text-wrap pretty to headings to remove orphan words, and switch to text-wrap balance when pretty still wraps awkwardly.",
+      "why": "Pretty fixed the orphan in the stats heading, but balance gave better wrapping in the CTA heading.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "css",
+      "values": [],
+      "evidence": "sometimes you have to play with like text pretty and text balance"
+    },
+    {
+      "rule": "For testimonial cards, use a portrait image as the card background, set the quote in white aligned to the bottom, add a dark gradient from the bottom, drop the star ratings and circular avatar, and set the name and title smaller (text-xs) with a bigger line height.",
+      "why": "It makes the section more visual, and the gradient makes the text stand out more.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "so the text stands out a bit more"
+    },
+    {
+      "rule": "Declutter the footer: remove its off-white background and the text below the logo, use only the logo mark, set links at text-xs, and make social icons smaller and gray 950.",
+      "why": "It was looking busy and the social icons looked clunky.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [
+        "gray 950"
+      ],
+      "evidence": "get rid of the text below the logo"
+    },
+    {
+      "rule": "Consider a 'canvas grid': decorative borders the width of the page container around each section, with dividers between sections running the full viewport width and borders hugging contained elements with an eight pixel gap.",
+      "why": "Like a screenshot, it makes a site more interesting and visual when you have no custom graphics.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [
+        "eight pixel"
+      ],
+      "evidence": "I like to call it a canvas grid"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "What graphic should the hero use?",
+      "options": [
+        {
+          "name": "Generated mock UI",
+          "effect": "A fake interface guessed from the description of the app.",
+          "when": "Not recommended by the source."
+        },
+        {
+          "name": "Real product screenshot",
+          "effect": "Brings a graphical element in and makes the page look more splashy and interesting.",
+          "when": "Whenever you have no other graphics to work with."
+        }
+      ],
+      "recommendation": "Use a real screenshot captured at 3x.",
+      "maps_to": null,
+      "evidence": "including a screenshot is just a great way to bring a graphical element"
+    },
+    {
+      "question": "Which gray family should the site use?",
+      "options": [
+        {
+          "name": "Slate",
+          "effect": "What the AI picked; it did not match the app screenshot.",
+          "when": "When the product itself uses slate grays [inferred]"
+        },
+        {
+          "name": "Neutral",
+          "effect": "Matches the neutral grays used in the product screenshot.",
+          "when": "When the product itself uses neutral grays."
+        }
+      ],
+      "recommendation": "Use the gray family the product already uses; here neutral.",
+      "maps_to": "Q-color-09",
+      "evidence": "update all the grays on the site to use neutral"
+    },
+    {
+      "question": "Should the page use a colored accent or stay neutral?",
+      "options": [
+        {
+          "name": "Emerald accent",
+          "effect": "Colorful; the author liked that it avoided the usual AI indigo.",
+          "when": "When you want color in the accent."
+        },
+        {
+          "name": "Indigo accent",
+          "effect": "What AI defaults to every time.",
+          "when": "The author was glad the AI avoided it."
+        },
+        {
+          "name": "Gray 950 (near-black)",
+          "effect": "A neutral-looking page.",
+          "when": "When you want to keep the page neutral."
+        }
+      ],
+      "recommendation": "The author swapped every use of emerald for gray 950 to keep it neutral.",
+      "maps_to": "Q-color-03",
+      "evidence": "swap all the uses of emerald to"
+    },
+    {
+      "question": "How should the edges of buttons, screenshots and the nav be drawn?",
+      "options": [
+        {
+          "name": "Solid-color border",
+          "effect": "Muddy where the border meets the shadow.",
+          "when": "Not recommended by the source."
+        },
+        {
+          "name": "Outer ring, gray 950 at 10%",
+          "effect": "A crisp edge that bleeds nicely into the shadow and looks cleaner.",
+          "when": "On buttons, screenshots and the nav's bottom border."
+        }
+      ],
+      "recommendation": "Use the low-opacity outer ring instead of a solid border.",
+      "maps_to": "Q-depth-01",
+      "evidence": "use a outer ring on the screenshot instead of a border"
+    },
+    {
+      "question": "Should borders, rings and tinted backgrounds use solid grays or a near-black at low opacity?",
+      "options": [
+        {
+          "name": "Solid gray",
+          "effect": "A muddy-looking effect where the border meets the shadow.",
+          "when": "Not recommended by the source."
+        },
+        {
+          "name": "Gray 950 at low opacity",
+          "effect": "Crisp edges that blend into the shadow: 10% for rings on buttons, screenshots and the nav, 5% for well backgrounds and the hero's inset ring.",
+          "when": "Rings, borders and soft container tints."
+        }
+      ],
+      "recommendation": "Use gray 950 with reduced opacity instead of solid colors.",
+      "maps_to": "Q-color-26",
+      "evidence": "use like a gray 950 and then reduce the opacity to like 10%"
+    },
+    {
+      "question": "Which version of the font should the site load?",
+      "options": [
+        {
+          "name": "Basic default Inter",
+          "effect": "What Claude leans into; no display cut and fewer font features.",
+          "when": "Not recommended by the source."
+        },
+        {
+          "name": "Variable Inter with the display cut",
+          "effect": "Feels more 'displayy', with more impact, and fancy font features such as a single-story a become available.",
+          "when": "When the design uses Inter."
+        }
+      ],
+      "recommendation": "Load variable Inter from rsms.me with its font features and the display version.",
+      "maps_to": "Q-type-05",
+      "evidence": "make sure you're using the variable version of Inter"
+    },
+    {
+      "question": "Which headline weight: medium, semibold, or in between?",
+      "options": [
+        {
+          "name": "Medium (500)",
+          "effect": "Can feel a little too thin.",
+          "when": "Not stated."
+        },
+        {
+          "name": "Semibold (600)",
+          "effect": "Can feel a little too bold.",
+          "when": "Not stated."
+        },
+        {
+          "name": "In-between (550)",
+          "effect": "Sits between the two.",
+          "when": "When the font is variable and neither standard weight feels right."
+        }
+      ],
+      "recommendation": "550, using the variable font's in-between weights.",
+      "maps_to": "Q-type-07",
+      "evidence": "I'm going to say 550. Just somewhere in between medium and semi-bold"
+    },
+    {
+      "question": "Should letter spacing change with text size and case?",
+      "options": [
+        {
+          "name": "Default tracking",
+          "effect": "Large headlines have less impact.",
+          "when": "Text below about 24 to 30 pixels [inferred]"
+        },
+        {
+          "name": "Tighter tracking on large headlines",
+          "effect": "Gives the headline a little more impact.",
+          "when": "Font sizes over about 24 to 30 pixels."
+        },
+        {
+          "name": "Wider tracking on uppercase text",
+          "effect": "Gives the letters a little more room to breathe.",
+          "when": "All-uppercase labels such as monospace eyebrows."
+        }
+      ],
+      "recommendation": "Tighten tracking on large headlines and widen it on uppercase eyebrows.",
+      "maps_to": "Q-type-13",
+      "evidence": "24 to 30 pixels, I like to make the tracking just a bit tighter"
+    },
+    {
+      "question": "How should the hero headline be laid out?",
+      "options": [
+        {
+          "name": "Centered",
+          "effect": "What AI defaults to.",
+          "when": "Not recommended by the source."
+        },
+        {
+          "name": "Left-aligned",
+          "effect": "The author's general preference.",
+          "when": "Default choice for the author."
+        },
+        {
+          "name": "Split headline (3/5 and 2/5)",
+          "effect": "Headline on the left with more weight, supporting text and buttons on the right; more interesting and fills the space nicely.",
+          "when": "Hero sections with a headline and supporting text."
+        }
+      ],
+      "recommendation": "The split layout, with the supporting text's top lined up with the headline's top.",
+      "maps_to": "Q-dir-05",
+      "evidence": "make it like a 3/5 and 2/5 split"
+    },
+    {
+      "question": "How tall should buttons be?",
+      "options": [
+        {
+          "name": "38 pixels (hero)",
+          "effect": "Less clunky than the generated buttons; within the 36 to 38 pixel range the author likes.",
+          "when": "Main hero buttons, with 14 pixel text."
+        },
+        {
+          "name": "28 pixels (navbar)",
+          "effect": "Smaller, so it does not compete with the hero button.",
+          "when": "Buttons in the navbar, with text-sm."
+        },
+        {
+          "name": "24 pixels",
+          "effect": "Too small for the nav button.",
+          "when": "Not recommended here."
+        }
+      ],
+      "recommendation": "38 pixels in the hero and 28 pixels in the nav, reached with padding rather than a fixed height.",
+      "maps_to": "Q-space-04",
+      "evidence": "Make the button height 38 pixels"
+    },
+    {
+      "question": "What shape should buttons be?",
+      "options": [
+        {
+          "name": "The generated shape",
+          "effect": "Its horizontal padding felt a bit much to the author.",
+          "when": "Not stated."
+        },
+        {
+          "name": "Pill, all through the site",
+          "effect": "The author's pick; it looked pretty good.",
+          "when": "Every button on the site."
+        }
+      ],
+      "recommendation": "Pill-shaped buttons everywhere.",
+      "maps_to": "Q-shape-01",
+      "evidence": "make the buttons pill shaped"
+    },
+    {
+      "question": "How should section headings be styled?",
+      "options": [
+        {
+          "name": "Separate title and supporting text (generated default)",
+          "effect": "Title and supporting text at different sizes, not running together [inferred]",
+          "when": "Not stated."
+        },
+        {
+          "name": "Inline title leading into the supporting copy",
+          "effect": "Title and a longer supporting sentence at the same size read as one block, with the supporting text in a different color; looks more interesting.",
+          "when": "When you can write a longer supporting sentence."
+        }
+      ],
+      "recommendation": "The inline style, which the author has seen on Apple, Linear, Stripe and 'Adio' (Attio [inferred]), applied to every section heading.",
+      "maps_to": null,
+      "evidence": "Make the title inline with the supporting text so it reads like one block"
+    },
+    {
+      "question": "How should the width of a text block be limited?",
+      "options": [
+        {
+          "name": "Fixed max width (max-w-3xl)",
+          "effect": "A set width regardless of the text.",
+          "when": "Not recommended by the source."
+        },
+        {
+          "name": "Character-based max width (ch)",
+          "effect": "Width follows how many characters fit, giving a nice reading width; more flexible for typography.",
+          "when": "Headings and text blocks; try values such as 45, 35 and 40 and pick one."
+        }
+      ],
+      "recommendation": "Use a character-based width (40ch here), set on the element that sets the font size.",
+      "maps_to": "Q-type-14",
+      "evidence": "max width character thing"
+    },
+    {
+      "question": "How should headings avoid bad line breaks?",
+      "options": [
+        {
+          "name": "text-wrap: pretty",
+          "effect": "Removes orphaned words.",
+          "when": "First try, as in the stats heading."
+        },
+        {
+          "name": "text-wrap: balance",
+          "effect": "Evens out line lengths; avoided the funky wrapping around the '14-day free trial' text.",
+          "when": "When pretty still wraps awkwardly, as in the CTA heading."
+        }
+      ],
+      "recommendation": "Try both and keep the one that wraps better.",
+      "maps_to": null,
+      "evidence": "sometimes you have to play with like text pretty and text balance"
+    },
+    {
+      "question": "How should a feature card hold its screenshot?",
+      "options": [
+        {
+          "name": "Plain white container with a border",
+          "effect": "The generated default; the image does not pop.",
+          "when": "Not recommended by the source."
+        },
+        {
+          "name": "Tinted well (gray 950 at 5%, no border)",
+          "effect": "A soft, well-styled container that helps the image pop.",
+          "when": "Feature cards and the hero screenshot."
+        }
+      ],
+      "recommendation": "The tinted well, with the screenshot inset about eight pixels and an inset ring on top.",
+      "maps_to": "Q-depth-01",
+      "evidence": "give the containers a background color"
+    },
+    {
+      "question": "How should testimonial cards look?",
+      "options": [
+        {
+          "name": "Card with stars and a circular avatar",
+          "effect": "The generated default.",
+          "when": "Not recommended by the source."
+        },
+        {
+          "name": "Portrait image as the card background",
+          "effect": "More visual; a white quote sits at the bottom over a dark gradient that makes the text stand out.",
+          "when": "When you can supply images."
+        }
+      ],
+      "recommendation": "Use the image background with a dark gradient behind the quote.",
+      "maps_to": "Q-img-02",
+      "evidence": "Use these images in the testimonial section"
+    },
+    {
+      "question": "Should the site add decorative section borders (a canvas grid)?",
+      "options": [
+        {
+          "name": "No decorative borders",
+          "effect": "Plain sections with no containing lines.",
+          "when": "Not stated."
+        },
+        {
+          "name": "Canvas grid",
+          "effect": "Borders contain each section and dividers run between them, making the site more interesting and visual as you scroll.",
+          "when": "When you don't have custom graphics to work with."
+        }
+      ],
+      "recommendation": "The author added it, with horizontal dividers running the full viewport width.",
+      "maps_to": null,
+      "evidence": "I like to call it a canvas grid"
+    }
+  ],
+  "process": [
+    {
+      "step": "Start plain",
+      "detail": "Open a copied project template, start the dev server and Claude Code with no skills, and give one plain prompt describing the product and listing the sections: navbar, hero, logo cloud, two-feature section, stats, testimonials, CTA and footer."
+    },
+    {
+      "step": "Swap in real assets",
+      "detail": "Replace generated visuals with real ones: screenshots of the app captured at 3x, logos drawn in Figma and exported as SVG into the project's public/logos folder, and generated portrait images placed in the public folder."
+    },
+    {
+      "step": "Inspect before changing",
+      "detail": "Check how an element is built (border or ring, max width, grid columns) before giving the fix, so the instruction targets the real cause."
+    },
+    {
+      "step": "Give short, specific instructions",
+      "detail": "Name the exact change and a starting value (pixel sizes, Tailwind colors and opacities, font weights); loosely written sentences are fine."
+    },
+    {
+      "step": "Work top to bottom",
+      "detail": "Refine one section at a time from navbar to footer, fixing spacing between sections last."
+    },
+    {
+      "step": "Goldilocks the values",
+      "detail": "Try a value, look, and adjust (for example 45ch, then 40, then 35, then back to 40)."
+    },
+    {
+      "step": "Build temporary tools",
+      "detail": "When positioning is fiddly, have Claude build a temporary inline tool on the page you are working on, set the positions by hand, copy the values, and have it bake them into the code and remove the tool."
+    },
+    {
+      "step": "Spread finished treatments",
+      "detail": "Once a treatment works in one section (such as the heading style), tell Claude to apply it to all sections below."
+    },
+    {
+      "step": "Compare before and after",
+      "detail": "Have Claude recreate the original version on a separate page to compare it with the result."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Three-tier pricing page with a comparison table, a testimonial and an FAQ section",
+      "where": "Made by the author for practice",
+      "visual_note": "An earlier page designed entirely in Claude Code."
+    },
+    {
+      "what": "Finance dashboard consolidating revenue streams",
+      "where": "Tailwind Labs internal app",
+      "visual_note": "Filled with fake, colorful content; its screenshots become the hero and feature images of the marketing page."
+    },
+    {
+      "what": "Marketing home page for the finance app (renamed from Ledger to Axiom)",
+      "where": "Built in the video",
+      "visual_note": "Neutral gray page with a split hero, full-width screenshot in a tinted well, logo cloud, inline section headings, image-backed testimonials and a canvas grid of section borders."
+    },
+    {
+      "what": "Split hero headline with the subheading on the right, not quite 50/50",
+      "where": "Tailwind Plus homepage",
+      "visual_note": "Shows a hero that gives more weight to the headline while filling the space beside it."
+    },
+    {
+      "what": "Inline section heading where the title leads into the supporting copy in a different color",
+      "where": "Apple, Linear, Stripe, 'Adio' (Attio [inferred])",
+      "visual_note": "Title and supporting sentence at the same size read as one block."
+    },
+    {
+      "what": "Canvas grid of borders around every section",
+      "where": "Stripe, 'Adio' (Attio [inferred]), the Tailwind site",
+      "visual_note": "Visible lines that contain each section and divide sections across the page."
+    },
+    {
+      "what": "Span-wrapped button that keeps ringed and plain buttons the same height",
+      "where": "Tailwind Play link in the video description",
+      "visual_note": "A span with inline-flex and p-px wraps the bordered button so it is not two pixels taller."
+    },
+    {
+      "what": "Feature cards with cropped, zoomed screenshots showing chart tooltips",
+      "where": "Unified revenue tracking and smart forecasting features",
+      "visual_note": "Screenshots zoomed in about 25%, inset eight pixels in tinted wells with concentric corners and an inset ring."
+    },
+    {
+      "what": "Testimonial cards with portrait backgrounds",
+      "where": "Built in the video with ChatGPT-generated images",
+      "visual_note": "White quote at the bottom of each portrait over a dark gradient rising from the bottom."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "3x",
+      "context": "Screenshot capture scale for high resolution",
+      "evidence": "Capture it at 3x so it's high resolution"
+    },
+    {
+      "value": "10%",
+      "context": "Opacity of the gray 950 outer ring used instead of solid borders",
+      "evidence": "gray 950 um at 10%"
+    },
+    {
+      "value": "550",
+      "context": "Headline font weight between medium (500) and semibold (600)",
+      "evidence": "I'm going to say 550"
+    },
+    {
+      "value": "24 to 30 pixels",
+      "context": "Font size above which the author tightens headline tracking",
+      "evidence": "24 to 30 pixels, I like to make the tracking just a bit tighter"
+    },
+    {
+      "value": "3/5 and 2/5",
+      "context": "Split of headline and supporting text in the hero",
+      "evidence": "make it like a 3/5 and 2/5 split"
+    },
+    {
+      "value": "16 pixels",
+      "context": "Hero supporting text size",
+      "evidence": "make the supporting text 16 pixels"
+    },
+    {
+      "value": "1280",
+      "context": "Wider page container width",
+      "evidence": "make the page container wider. Maybe 1280"
+    },
+    {
+      "value": "14 pixel",
+      "context": "Hero button font size",
+      "evidence": "14 pixel font size"
+    },
+    {
+      "value": "38 pixels",
+      "context": "Hero button height (the author likes 36 to 38)",
+      "evidence": "Make the button height 38 pixels"
+    },
+    {
+      "value": "28 pixels",
+      "context": "Navbar button height; 24 pixels was too small",
+      "evidence": "28 pixels tall"
+    },
+    {
+      "value": "two pixels",
+      "context": "Extra height a ring adds to one button compared with its neighbour",
+      "evidence": "technically two pixels taller"
+    },
+    {
+      "value": "40",
+      "context": "Character-based max width (ch) chosen for section headings after trying 45 and 35",
+      "evidence": "I like 40 better"
+    },
+    {
+      "value": "eight pixels",
+      "context": "Inset of screenshots in their containers and gap between feature cards",
+      "evidence": "like eight pixels maybe as a starting point"
+    },
+    {
+      "value": "25%",
+      "context": "Zoom applied to the cropped feature screenshots",
+      "evidence": "Maybe 25% as a starting point"
+    },
+    {
+      "value": "five",
+      "context": "Opacity of the gray 950 well background; 2 and 1/2% was too soft",
+      "evidence": "make it opacity five"
+    },
+    {
+      "value": "64 pixel",
+      "context": "Padding around the large hero screenshot inside its well",
+      "evidence": "64 pixel padding"
+    },
+    {
+      "value": "10 pixels",
+      "context": "Amount cropped off the bottom of the hero screenshot",
+      "evidence": "10 pixels just to get rid of that like gray"
+    },
+    {
+      "value": "5XL",
+      "context": "Size of stat values, set in regular weight",
+      "evidence": "Make the values in the stats"
+    },
+    {
+      "value": "4XL",
+      "context": "Size of the inline section headings",
+      "evidence": "Make it bigger like 4XL"
+    },
+    {
+      "value": "2 and 1/2%",
+      "context": "First try for the gray 950 well background opacity; too soft",
+      "evidence": "like like 2 and 1/2%"
+    },
+    {
+      "value": "5%",
+      "context": "Opacity of the inset ring on the hero well container, on top of the screenshot",
+      "evidence": "5% opacity"
+    },
+    {
+      "value": "20 pixels",
+      "context": "Line height asked for on the text-sm (14) feature text; the instruction is partly garbled",
+      "evidence": "just that big 20 pixels"
+    }
+  ],
+  "caveats": [
+    "Self-promotion: the video ends with a plug for ui.sh, a set of coding-agent skills the author is building with Adam Wathan and the Tailwind team; the description also links ui.sh and Refactoring UI.",
+    "Most rules are the author's personal taste stated as preference (he calls himself more of a left-aligned person; pill buttons and monospace eyebrows are his picks), not tested findings.",
+    "Values use Tailwind's scale and naming (gray 950, gray 600, text-xs, text-sm, 4XL, 5XL, max-w-3xl, p-px), so they assume Tailwind CSS.",
+    "Auto-caption errors (these readings are [inferred]): 'text excess' means text-xs, 'letting' means leading, '95010' means gray 950 at 10%, 'CH45' and 'C35' mean ch values, 'Adio' is most likely Attio, 'Ghosty' is Ghostty, and 'Razmatazzing' is Claude Code's status text.",
+    "The span-wrapper technique for equal button heights is only described in outline; the author says he does not fully understand it and the full code is in a Tailwind Play link, not in the transcript.",
+    "The feature-text leading instruction is garbled (text-sm is 14, 'double it', '20 pixels'), so the exact line-height value is uncertain.",
+    "The explanation that ch widths are based on the zero character is hedged by the author, who says he thinks that is how it works.",
+    "Dated to March 2026: Claude Code workflow, and Quiver AI described as recently released and untested by the author."
+  ]
+}

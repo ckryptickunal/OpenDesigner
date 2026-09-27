@@ -1,0 +1,395 @@
+{
+  "summary": "The Sonner homepage introduces Sonner as an opinionated toast component for React and demonstrates its main options. You install it with npm, render the Toaster at the root of the app, and call toast() with an optional options object as the second argument. The page shows the toast types (default, description, success, info, warning, error, action, promise, custom), the six toaster positions, the expand setting and visibleToasts, and extras such as rich colors, a close button and a headless mode. It also notes that the swipe direction changes depending on the position. For a design system this is the menu of toast variants and placement options the house toast is built from. [inferred]",
+  "key_ideas": [
+    "Sonner is an opinionated toast component for React.",
+    "Render the Toaster in the root of the app, then call toast() wherever a message is needed.",
+    "toast() takes the message first and an options object second.",
+    "Toast types: default, description, success, info, warning, error, action, promise and custom.",
+    "The toaster can sit in six positions: top-left, top-center, top-right, bottom-left, bottom-center, bottom-right.",
+    "The direction you swipe a toast away changes with the toaster's position.",
+    "The expand prop switches between the default and an expanded pile of toasts.",
+    "visibleToasts controls how many toasts are visible.",
+    "richColors adds type-specific rich colors for success, error, info and warning toasts.",
+    "A close button and a headless mode are available.",
+    "The page closes with a plug for the author's animations course."
+  ],
+  "entities": [
+    {
+      "name": "Sonner",
+      "type": "library",
+      "description": "The opinionated React toast component the page presents."
+    },
+    {
+      "name": "Toaster",
+      "type": "concept",
+      "description": "The component rendered at the root of the app that displays toasts; it takes position, expand and richColors props."
+    },
+    {
+      "name": "toast()",
+      "type": "concept",
+      "description": "The function that renders a toast, with typed variants such as toast.success()."
+    },
+    {
+      "name": "Emil Kowalski",
+      "type": "person",
+      "description": "Sonner's author: the page's media list has a profile picture with the alt text \"Emil's profile picture\", and the page promotes his animations course. The surname comes from the site's domain. [inferred]"
+    },
+    {
+      "name": "React",
+      "type": "library",
+      "description": "The framework Sonner is built for."
+    },
+    {
+      "name": "npm",
+      "type": "tool",
+      "description": "The package manager in the homepage install command."
+    },
+    {
+      "name": "Animations course",
+      "type": "product",
+      "description": "The author's course on animations that feel right, promoted at the bottom of the page."
+    },
+    {
+      "name": "aiforui.dev",
+      "type": "product",
+      "description": "A course promoted in the site-wide banner."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Toasts and notifications",
+      "summary": "Lists Sonner's toast types, positions, expand behaviour, rich colors, close button and headless mode."
+    },
+    {
+      "name": "UI libraries",
+      "summary": "Presents Sonner as an opinionated, installable toast component for React."
+    },
+    {
+      "name": "Gestures and drag",
+      "summary": "Notes that the swipe direction for dismissing a toast depends on the toaster's position."
+    },
+    {
+      "name": "Web implementation (CSS and React)",
+      "summary": "Shows the React usage: <Toaster /> at the root and toast('My first toast') in a button onClick."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Sonner is an opinionated toast component for React.",
+      "evidence": "An opinionated toast component for React."
+    },
+    {
+      "claim": "toast() takes an options object as its second argument, and the type of toast can be customized.",
+      "evidence": "pass an options object as the second argument"
+    },
+    {
+      "claim": "Sonner offers default, description, success, info, warning, error, action, promise and custom toasts.",
+      "evidence": "Default Description Success Info Warning Error Action Promise Custom"
+    },
+    {
+      "claim": "The toaster can be placed top-left, top-center, top-right, bottom-left, bottom-center or bottom-right.",
+      "evidence": "top-left top-center top-right bottom-left bottom-center bottom-right"
+    },
+    {
+      "claim": "Swipe direction changes depending on the toaster's position.",
+      "evidence": "Swipe direction changes depending on the position."
+    },
+    {
+      "claim": "The number of visible toasts can be changed with the visibleToasts prop.",
+      "evidence": "You can change the amount of toasts visible through the visibleToasts prop."
+    },
+    {
+      "claim": "Rich colors are available for success, error, info and warning toasts through the richColors prop.",
+      "evidence": "Rich Colors Success Rich Colors Error Rich Colors Info Rich Colors Warning"
+    }
+  ],
+  "quotes": [
+    "An opinionated toast component for React.",
+    "Render the toaster in the root of your app.",
+    "Swipe direction changes depending on the position."
+  ],
+  "tags": [
+    "sonner",
+    "toast",
+    "react",
+    "toast-types",
+    "toast-position",
+    "swipe-to-dismiss",
+    "rich-colors"
+  ],
+  "authority": "non-negotiable",
+  "rules": [
+    {
+      "rule": "Use Sonner as the toast component in React projects. [inferred]",
+      "why": "The page presents Sonner as an opinionated toast component for React, and the owner marked the Sonner docs as a non-negotiable source. [inferred]",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "react",
+      "values": [],
+      "evidence": "An opinionated toast component for React."
+    },
+    {
+      "rule": "Install Sonner with npm install sonner.",
+      "why": "This is the install command on the homepage.",
+      "kind": "do",
+      "strength": "should",
+      "area": "tooling",
+      "applies_to": "react",
+      "values": [
+        "npm install sonner"
+      ],
+      "evidence": "npm install sonner"
+    },
+    {
+      "rule": "Render the <Toaster /> component in the root of the app.",
+      "why": "The usage section says to render the toaster in the root of your app.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "<Toaster />"
+      ],
+      "evidence": "Render the toaster in the root of your app."
+    },
+    {
+      "rule": "Show a toast by calling toast() with the message, and pass extra options as an object in the second argument.",
+      "why": "The page shows toast('My first toast') and says an options object can be passed as the second argument.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "toast('My first toast')",
+        "toast('Event has been created')"
+      ],
+      "evidence": "pass an options object as the second argument"
+    },
+    {
+      "rule": "Pick each toast's type from Sonner's set: default, description, success, info, warning, error, action, promise or custom.",
+      "why": "The page says you can customize the type of toast you render and lists these types.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "Default",
+        "Description",
+        "Success",
+        "Info",
+        "Warning",
+        "Error",
+        "Action",
+        "Promise",
+        "Custom"
+      ],
+      "evidence": "You can customize the type of toast you want to render"
+    },
+    {
+      "rule": "Set where toasts appear with the Toaster position prop, using one of top-left, top-center, top-right, bottom-left, bottom-center or bottom-right.",
+      "why": "These are the positions the page offers; its example uses bottom-right.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "react",
+      "values": [
+        "top-left",
+        "top-center",
+        "top-right",
+        "bottom-left",
+        "bottom-center",
+        "bottom-right",
+        "<Toaster position=\"bottom-right\" />"
+      ],
+      "evidence": "top-left top-center top-right bottom-left bottom-center bottom-right"
+    },
+    {
+      "rule": "When choosing the toaster position, account for the swipe direction, because it changes with the position. [inferred]",
+      "why": "The page says swipe direction changes depending on the position.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "react",
+      "values": [],
+      "evidence": "Swipe direction changes depending on the position."
+    },
+    {
+      "rule": "Control whether the toast pile is expanded with the Toaster expand prop; expand={false} is the default option.",
+      "why": "The page's Expand section offers Expand and Default, and shows <Toaster expand={false} />.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "<Toaster expand={false} />"
+      ],
+      "evidence": "Expand Default"
+    },
+    {
+      "rule": "Change how many toasts are visible with the visibleToasts prop.",
+      "why": "The page says the amount of visible toasts is set through visibleToasts.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "visibleToasts"
+      ],
+      "evidence": "You can change the amount of toasts visible through the visibleToasts prop."
+    },
+    {
+      "rule": "Add the richColors prop to the Toaster when success, error, info and warning toasts should use rich colors, and call the typed function such as toast.success().",
+      "why": "The Other section demonstrates rich-color success, error, info and warning toasts with toast.success() and <Toaster richColors />.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "color",
+      "applies_to": "react",
+      "values": [
+        "<Toaster richColors />",
+        "toast.success('Event has been created')"
+      ],
+      "evidence": "Rich Colors Success"
+    },
+    {
+      "rule": "Use the Close Button option to add a close button to toasts, and the Headless option to render your own markup.",
+      "why": "Close Button and Headless are listed as options in the Other section; that headless means your own unstyled markup comes from the toast page. [inferred]",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "react",
+      "values": [],
+      "evidence": "Close Button Headless"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "Where on the screen should toasts appear?",
+      "options": [
+        {
+          "name": "top-left",
+          "effect": "Toasts appear in the top-left corner; the swipe direction adapts to this position.",
+          "when": "When the top-left corner suits the layout."
+        },
+        {
+          "name": "top-center",
+          "effect": "Toasts appear centred at the top; the swipe direction adapts to this position.",
+          "when": "When the top centre suits the layout."
+        },
+        {
+          "name": "top-right",
+          "effect": "Toasts appear in the top-right corner; the swipe direction adapts to this position.",
+          "when": "When the top-right corner suits the layout."
+        },
+        {
+          "name": "bottom-left",
+          "effect": "Toasts appear in the bottom-left corner; the swipe direction adapts to this position.",
+          "when": "When the bottom-left corner suits the layout."
+        },
+        {
+          "name": "bottom-center",
+          "effect": "Toasts appear centred at the bottom; the swipe direction adapts to this position.",
+          "when": "When the bottom centre suits the layout."
+        },
+        {
+          "name": "bottom-right",
+          "effect": "Toasts appear in the bottom-right corner; the swipe direction adapts to this position.",
+          "when": "The page's code example uses this position."
+        }
+      ],
+      "recommendation": "The page does not recommend one position; its example uses bottom-right, and it notes that the swipe direction follows whichever position you pick.",
+      "maps_to": null,
+      "evidence": "Position"
+    },
+    {
+      "question": "Should the toast pile stay in its default state or be expanded?",
+      "options": [
+        {
+          "name": "Default",
+          "effect": "expand={false}: the pile is not expanded by default.",
+          "when": "The default choice."
+        },
+        {
+          "name": "Expand",
+          "effect": "The toasts are shown expanded [inferred from the demo label]; how many are visible is set with visibleToasts.",
+          "when": "When the toasts should be expanded without the user doing anything. [inferred]"
+        }
+      ],
+      "recommendation": null,
+      "maps_to": null,
+      "evidence": "Expand"
+    },
+    {
+      "question": "Should typed toasts (success, error, info, warning) use rich colors?",
+      "options": [
+        {
+          "name": "Default colors",
+          "effect": "Typed toasts use the standard toast styling.",
+          "when": "When no richColors prop is set."
+        },
+        {
+          "name": "Rich colors",
+          "effect": "Success, error, info and warning toasts get rich, type-specific colors.",
+          "when": "Set <Toaster richColors /> and call typed functions such as toast.success()."
+        }
+      ],
+      "recommendation": null,
+      "maps_to": null,
+      "evidence": "Rich Colors Success Rich Colors Error Rich Colors Info Rich Colors Warning"
+    }
+  ],
+  "process": [
+    {
+      "step": "Install",
+      "detail": "Run npm install sonner."
+    },
+    {
+      "step": "Render the toaster",
+      "detail": "Import { Toaster, toast } from 'sonner' and render <Toaster /> in the root of the app."
+    },
+    {
+      "step": "Fire toasts",
+      "detail": "Call toast('...') from an event handler, choose a type, and pass an options object as the second argument when needed."
+    },
+    {
+      "step": "Configure the toaster",
+      "detail": "Set position, expand, visibleToasts and richColors on <Toaster /> to control placement, stacking and colors."
+    }
+  ],
+  "examples": [
+    {
+      "what": "'Give me a toast' button",
+      "where": "Sonner homepage usage example",
+      "visual_note": "A button whose onClick calls toast('My first toast') next to a <Toaster /> in the same component."
+    },
+    {
+      "what": "Type demos",
+      "where": "Sonner homepage, Types section",
+      "visual_note": "Buttons for Default, Description, Success, Info, Warning, Error, Action, Promise and Custom, each rendering that kind of toast, for example toast('Event has been created')."
+    },
+    {
+      "what": "Position demos",
+      "where": "Sonner homepage, Position section",
+      "visual_note": "Buttons for the six positions, updating <Toaster position=\"...\" />, which show where toasts appear and how the swipe direction changes."
+    },
+    {
+      "what": "Expand vs Default demo",
+      "where": "Sonner homepage, Expand section",
+      "visual_note": "A switch between an expanded pile and the default pile, shown with <Toaster expand={false} />."
+    },
+    {
+      "what": "Rich colors, close button and headless demos",
+      "where": "Sonner homepage, Other section",
+      "visual_note": "Buttons for rich-color success, error, info and warning toasts (toast.success('Event has been created') with <Toaster richColors />), plus Close Button and Headless variants."
+    }
+  ],
+  "numbers": [],
+  "caveats": [
+    "A site-wide banner promotes the author's aiforui.dev course with a countdown ('31 minutes left to join'): self-promotion, time-sensitive.",
+    "The page ends with a plug for the author's animations course ('Check out my animations course'). This is promotion, not guidance.",
+    "The homepage demos are interactive buttons, so the text does not show what each toast looks like. Visual effects described here come from the labels and code.",
+    "The page's publish date is unknown, so the API may have changed since it was fetched.",
+    "The media list contains only the author's profile picture (alt text \"Emil's profile picture\"), which carries no design lesson.",
+    "The homepage says to render the toaster in the root of your app, while the Getting Started and Toaster pages say it can be placed anywhere; the root is where the examples put it, not a hard requirement."
+  ]
+}

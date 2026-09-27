@@ -68,6 +68,7 @@ Pick one, say "show me", or tell me what you want.
 | `assumed` | Owner input you took from their words or files instead of asking (a club website: visitors come now and then, on phones), or could not ask | `--set-by assumed`; say it in one line so they can correct it; list it at the end; never present it as decided |
 | `reference` | Accepted from a reference | `--set-by reference --source-ref <ref-id>` (opendesigner-extract) |
 | `asset` | Derived from an asset the person supplied (for example brand color from the logo) | `--set-by asset` |
+| `standard` | A house standard (`references/standards.md`) or a project standard the person added. Applied and locked without asking | `engine.py init` applies house standards; `engine.py standard add ...` records a project one (section 12) |
 | locked | Must not change without explicit consent (brand hexes, accessibility floors, anything they lock) | `--lock` on the set, or `engine.py lock <path>` |
 
 A value outside the listed options is recorded as given, with the person's reason in `--why`.
@@ -77,6 +78,16 @@ A value outside the listed options is recorded as given, with the person's reaso
 - **Taste:** people can fairly disagree. Ask with a recommendation. If delegated, decide and flag it at the next gate.
 - **User challenge:** your recommendation would override something the person said. Never decide it. Present what they said, what you suggest, why, what you might be missing, and the cost if you are wrong. Their answer wins.
 - If an override makes two choices clash (for example a brutalist direction with bouncy motion), flag it once. Never block it.
+- **Standard:** a house or project standard already settles it (`references/standards.md`). Apply it, never ask it, and never recommend an option that breaks it. Mention the standards once, in the first result.
+
+### Decide or ask
+| The decision is... | Do this | Say |
+|---|---|---|
+| Settled by a standard | Apply it (the engine already did at `init`) | Once, in the first result: which areas the standards cover, and that the person can ask to change one |
+| Mechanical, or low impact (weight low in `pacing.json`) | Keep the default (`auto_default`) | List it in the stage summary |
+| Handed over ("you pick") | Decide with a reason (`delegated`) | One line now, and again at the next gate |
+| Taste, identity, or high impact (weight high, or it changes many decisions) | Ask. Show 2-4 options as visual samples of the **same** real screen, recommended first | For each option, one **Now:** line (what changes today) and one **As it grows:** line (more screens, people, platforms, content), from the stage file when it has them |
+| Owner input (scope, audience, governance) | Always ask; never infer | - |
 
 ## 7. When answers are vague, skipped or conflicting
 - **Their own words.** Take answers in their words ("fun", "calm", "a website") and map them to the nearest option. Never make them pick from a list they didn't ask for. The engine maps common feel words to its own (`zoom.md`, question 4).
@@ -187,3 +198,15 @@ A `--note` is optional: 12 words at most, about the step, never about the person
 - `ask`: ask this line word for word: "Send this session's anonymous report? Say "show me" to see it first." After a yes, run `share --yes`.
 - `never`, or not asked yet: do nothing.
 - Right after they choose `always` in the first session, run `share` once for that session.
+
+## 12. Sources the person trusts (`docs/KNOWLEDGE.md` section 4)
+When the person shares a link or file and says to follow it or learn from it:
+1. If they did not say how much weight it gets, ask one question: "Should I follow this as a rule, recommend it, or just learn from it?" (non-negotiable, good to have, reference).
+2. Show the URL and get a yes before reading it (`guardrails.md` section 2).
+3. Read it. Pull out rules with exact values, and show them in plain words, at most 10 per message. Ask which to keep.
+4. Record each kept rule:
+   - Non-negotiable: `engine.py standard add --rule "..." --why "..." --source <url> [--path <token path> --value <json>] [--review-pattern <regex> --review-message "..."]`. It is locked like a house standard.
+   - Good to have: the same command with `--authority good-to-have` (unlocked), or `engine.py set <path> <value> --set-by reference --source-ref <url>`.
+   - Reference: it shapes options and examples only. Record nothing unless a value is chosen.
+5. If the source disagrees with a house standard, say so once. Their project standard wins in their project, and the engine records it.
+6. Once per session, offer: "Want to suggest this source to OpenDesigner for everyone?" After a yes: `engine.py feedback "source: <url> (<authority>): <why>" --kind idea`.

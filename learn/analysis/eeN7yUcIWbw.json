@@ -1,0 +1,637 @@
+{
+  "summary": "Kole Jain walks through 20 web design resources he considers underrated for 2025, most of them free or mostly free. They cover ready-made UI elements (Uiverse, the Relume Figma kit), logos (Logo System, Logoipsum), animation (Phase), font pairing and display fonts (Fontjoy and a small display-font site), inspiration galleries (trending.design, Design Spells for micro-interactions, Unsectioned for page sections), imagery (Burst stock photos, Durves, Endless Tools 3D, Isocons isometric icons, Photo Gradient mesh gradients, Handy Arrows) and learning or career sources (UX of AI, Design Sphere podcasts, Wall of Portfolios). The video teaches no design method; its value for a design system is a list of where to find inspiration, placeholders and assets, plus a few stated reasons, such as beginners pairing fonts badly, Figma falling short for mesh gradients and for drawing arrows, and layout variety mattering. The picks are the presenter's opinions from January 2025, so availability and pricing may have changed.",
+  "key_ideas": [
+    "Uiverse offers buttons, animations and elements that can be pasted straight into Figma with a Copy to Figma button, which helps when a Figma file is still empty.",
+    "Beginner designers tend to pair fonts badly, so a generator like Fontjoy can suggest a pairing with one button.",
+    "Phase is presented as an easier way to animate Figma designs than Figma plugins or After Effects, with an editor very similar to Figma.",
+    "Figma cannot produce everything a dedicated mesh-gradient tool like Photo Gradient can, so the source suggests using such a tool instead of switching to Photoshop.",
+    "Variety in layout matters, and Unsectioned makes it easier by splitting real websites into searchable sections.",
+    "Micro-interactions are a niche subject, so Design Spells curates the best ones from a ton of brands, including million- and billion-dollar companies.",
+    "Logo libraries (Logo System, Logoipsum) help designers who are weak at logos, giving them many logos to scroll through.",
+    "Burst, Shopify's free stock photo site, is smaller than Pexels but probably better organized, and the source argues you can never have too many stock photo sources.",
+    "Isocons offers isometric icons that can be switched between rounded and sharp and given a thicker or thinner stroke.",
+    "Relume's Figma kit is a very large community file (about 54 pages) that can be found in Figma without signing up to Relume.",
+    "Figma's pencil tool is limited for arrows, so a dedicated arrow library such as Handy Arrows gives more variety.",
+    "Seeing a designer's experience and location next to their portfolio (Wall of Portfolios) puts the work in perspective and discourages unfair self-comparison.",
+    "Because most designers will eventually work with or near AI, studying UX of AI helps build a feel for it.",
+    "3D is often called the next big thing, and Endless Tools offers customizable 3D resources in case it is, though some are limited.",
+    "Display fonts are something the presenter is always short of, which makes a small display-font site one of his favorite resources on the list."
+  ],
+  "entities": [
+    {
+      "name": "Kole Jain",
+      "type": "person",
+      "description": "Designer and YouTuber who presents the list."
+    },
+    {
+      "name": "Uiverse",
+      "type": "product",
+      "description": "Library of buttons, animations and UI elements with a Copy to Figma button (uiverse.io)."
+    },
+    {
+      "name": "Logo System",
+      "type": "product",
+      "description": "Library of logos to browse for inspiration (logosystem.co)."
+    },
+    {
+      "name": "Phase",
+      "type": "tool",
+      "description": "Animation tool for designs, with an editor the presenter calls very similar to Figma (phase.com)."
+    },
+    {
+      "name": "Fontjoy",
+      "type": "tool",
+      "description": "Font-pairing generator that maps fonts on a 3D plane and suggests a pairing with one button (fontjoy.com)."
+    },
+    {
+      "name": "trending.design",
+      "type": "product",
+      "description": "Bento-grid gallery of trending designs, branding and 3D effects collected from Twitter."
+    },
+    {
+      "name": "Logoipsum",
+      "type": "product",
+      "description": "Logo collection the presenter suggests for anyone weak at logos; he also praises an animation on the site (logoipsum.com)."
+    },
+    {
+      "name": "Burst",
+      "type": "product",
+      "description": "Shopify's free stock photo site (burst.shopify.com)."
+    },
+    {
+      "name": "Pexels",
+      "type": "product",
+      "description": "Well-known stock photo site used as the comparison for Burst."
+    },
+    {
+      "name": "Pixabay",
+      "type": "product",
+      "description": "Well-known stock photo site the presenter chose not to feature."
+    },
+    {
+      "name": "Durves",
+      "type": "tool",
+      "description": "Niche tool controlled by sliders, which the presenter could see using for a crypto or modern SaaS landing page (durves.com)."
+    },
+    {
+      "name": "Endless Tools",
+      "type": "tool",
+      "description": "Customizable 3D resources (endlesstools.io)."
+    },
+    {
+      "name": "Design Spells",
+      "type": "product",
+      "description": "Curated collection of micro-interactions from many brands."
+    },
+    {
+      "name": "Isocons",
+      "type": "product",
+      "description": "Customizable isometric icon set with rounded or sharp corners and adjustable stroke."
+    },
+    {
+      "name": "UX of AI",
+      "type": "product",
+      "description": "Resource on the user experience of AI; the presenter says it does exactly what its name suggests."
+    },
+    {
+      "name": "Relume",
+      "type": "company",
+      "description": "AI site builder whose large Figma design kit is available as a Figma community file."
+    },
+    {
+      "name": "Photo Gradient",
+      "type": "tool",
+      "description": "Mesh-gradient generator with many presets and settings."
+    },
+    {
+      "name": "Unsectioned",
+      "type": "product",
+      "description": "Websites split into searchable sections for layout inspiration."
+    },
+    {
+      "name": "Design Sphere",
+      "type": "product",
+      "description": "Collection of web design podcasts; the presenter also praises its hover interaction."
+    },
+    {
+      "name": "Honest UX Talks",
+      "type": "product",
+      "description": "Podcast the presenter has been listening to while designing."
+    },
+    {
+      "name": "Handy Arrows",
+      "type": "product",
+      "description": "Library of arrows with a lot of variety."
+    },
+    {
+      "name": "Wall of Portfolios",
+      "type": "product",
+      "description": "Portfolio showcase that lists each designer's experience, location and type of work."
+    },
+    {
+      "name": "Figma",
+      "type": "tool",
+      "description": "Design tool the other resources plug into or work around (pencil tool, gradients, community files)."
+    },
+    {
+      "name": "After Effects",
+      "type": "tool",
+      "description": "Animation tool the presenter finds harder to use than Phase."
+    },
+    {
+      "name": "Photoshop",
+      "type": "tool",
+      "description": "Named as the alternative to a dedicated tool for making mesh gradients."
+    },
+    {
+      "name": "Dribbble",
+      "type": "product",
+      "description": "Design gallery used as the comparison for trending.design."
+    },
+    {
+      "name": "logo.com",
+      "type": "product",
+      "description": "Extra logo resource mentioned right after Logoipsum, outside the numbered list."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Design resources",
+      "summary": "A list of 20 mostly free resources for UI elements, logos, fonts, inspiration, stock photos, 3D, icons, gradients, arrows, podcasts and portfolios."
+    },
+    {
+      "name": "Figma and design tools",
+      "summary": "Uiverse and the Relume kit paste into Figma; Phase animates designs more easily than Figma plugins or After Effects; Figma falls short for mesh gradients and hand-drawn arrows."
+    },
+    {
+      "name": "Typography",
+      "summary": "Beginners pair fonts badly, so Fontjoy generates pairings; a small display-font site is recommended for better display fonts."
+    },
+    {
+      "name": "Micro-interactions",
+      "summary": "Design Spells curates micro-interactions from many large companies; Design Sphere and Logoipsum are praised for their own hover and animation details."
+    },
+    {
+      "name": "Icons and imagery",
+      "summary": "Burst for stock photos, Isocons for customizable isometric icons, Endless Tools for 3D, Durves for crypto or SaaS landing pages and Handy Arrows for arrows."
+    },
+    {
+      "name": "Color",
+      "summary": "Photo Gradient makes mesh gradients with presets that Figma cannot fully produce, and refreshing the page gives a new color guide."
+    },
+    {
+      "name": "Spacing and layout",
+      "summary": "Layout variety is called essential; Unsectioned splits websites into searchable sections to help find the right layout."
+    },
+    {
+      "name": "AI-assisted design",
+      "summary": "UX of AI is recommended because most designers will work with AI or in AI-adjacent fields."
+    },
+    {
+      "name": "Portfolio and case studies",
+      "summary": "Wall of Portfolios shows each designer's experience and location, which helps put their work in perspective."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Uiverse elements can be copied into Figma with a Copy to Figma button.",
+      "evidence": "hit copy to figma down here"
+    },
+    {
+      "claim": "Phase's editor is very similar to Figma and easier to use than After Effects or earlier Figma animation plugins.",
+      "evidence": "it's actually shockingly similar to figma"
+    },
+    {
+      "claim": "Beginner designers are generally bad at pairing fonts.",
+      "evidence": "beginner designers are pretty awful when it comes to pairing fonts together"
+    },
+    {
+      "claim": "Fontjoy mapped many fonts on a 3D plane so it can produce a font pairing with one button press.",
+      "evidence": "map them out on a 3D plane"
+    },
+    {
+      "claim": "trending.design shows trending and top designs taken from Twitter, including branding and 3D effects.",
+      "evidence": "ripped straight off of Twitter"
+    },
+    {
+      "claim": "Burst is less extensive than Pexels but probably better organized, so it is easier to find things.",
+      "evidence": "less extensive than pixels but probably better organized"
+    },
+    {
+      "claim": "Endless Tools' 3D resources are customizable; some are limited, but more are being added.",
+      "evidence": "some of them can be a little bit limited but they're always adding more"
+    },
+    {
+      "claim": "Design Spells curates micro-interactions from many million- and billion-dollar companies.",
+      "evidence": "curated all of the best micro interactions"
+    },
+    {
+      "claim": "Isocons icons can be switched between rounded and sharp and have adjustable stroke thickness.",
+      "evidence": "you can change if they're rounded or sharp and how fat the stroke is"
+    },
+    {
+      "claim": "Relume's Figma kit has about 54 pages of sections, layouts and elements and is a Figma community file that needs no Relume sign-up.",
+      "evidence": "something like 54 pages in this figma file"
+    },
+    {
+      "claim": "Figma cannot produce all the mesh gradients a dedicated tool like Photo Gradient can.",
+      "evidence": "you definitely couldn't do all of this in figma"
+    },
+    {
+      "claim": "Unsectioned splits websites into searchable sections.",
+      "evidence": "chopped them up into each of their sections"
+    },
+    {
+      "claim": "Figma's pencil tool is limited for drawing arrows.",
+      "evidence": "figma's pencil tool really only gets you so far"
+    },
+    {
+      "claim": "Wall of Portfolios shows each designer's experience, location and kind of work alongside the portfolio.",
+      "evidence": "they break down the experience of the designer"
+    }
+  ],
+  "quotes": [
+    "beginner designers are pretty awful when it comes to pairing fonts together",
+    "Variety in a layout is everything",
+    "figma's pencil tool really only gets you so far"
+  ],
+  "tags": [
+    "design-resources",
+    "figma",
+    "font-pairing",
+    "mesh-gradients",
+    "stock-photos",
+    "logos",
+    "micro-interactions",
+    "isometric-icons",
+    "layout-inspiration",
+    "3d",
+    "animation-tools",
+    "portfolio"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "If you struggle to pair fonts, let a font-pairing tool such as Fontjoy suggest a custom pairing.",
+      "why": "Beginner designers are pretty awful at pairing fonts; Fontjoy maps fonts on a 3D plane and returns a custom pairing with one button.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "beginner designers are pretty awful when it comes to pairing fonts together"
+    },
+    {
+      "rule": "Make mesh gradients in a dedicated gradient tool such as Photo Gradient rather than in Figma.",
+      "why": "You couldn't do all of this in Figma; the alternative is switching to Photoshop, and a dedicated tool keeps it simple with presets and settings.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "you definitely couldn't do all of this in figma"
+    },
+    {
+      "rule": "Animate Figma designs in Phase instead of Figma animation plugins or After Effects.",
+      "why": "Its editor is very similar to Figma, and the presenter found it much easier to use than After Effects and better than earlier plugins.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "it's way easier to do it on this platform"
+    },
+    {
+      "rule": "When looking for a page layout, search real website sections (for example on Unsectioned) to get variety.",
+      "why": "Variety in a layout is everything, but the right one can be hard to find.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "Variety in a layout is everything"
+    },
+    {
+      "rule": "Use a curated collection of micro-interactions from established brands, such as Design Spells, as a reference.",
+      "why": "Micro-interactions are a niche subject, and million- and billion-dollar companies come up with inventive ones.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "curated all of the best micro interactions"
+    },
+    {
+      "rule": "Start an empty Figma file from ready-made buttons, animations and elements, such as Uiverse items pasted with Copy to Figma.",
+      "why": "It helps when your Figma file looks like a big gray abyss, and you don't need to read the code.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "your figma files looking like a big gray Abyss"
+    },
+    {
+      "rule": "Use a dedicated arrow library such as Handy Arrows instead of drawing arrows with Figma's pencil tool.",
+      "why": "Figma's pencil tool only gets you so far, and Handy Arrows has serious variety.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "figma's pencil tool really only gets you so far"
+    },
+    {
+      "rule": "Keep more than one stock photo source, for example Burst alongside Pexels or Pixabay.",
+      "why": "Burst is smaller than Pexels but better organized, and the presenter says you can never have too many stock photo websites.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "you can never have too many stock photo websites"
+    },
+    {
+      "rule": "When comparing your portfolio with showcased ones, take each designer's experience and background into account (Wall of Portfolios lists them).",
+      "why": "It puts their portfolio in perspective so you compare yourself less to professionals with many years of experience.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "they break down the experience of the designer"
+    },
+    {
+      "rule": "Build a feel for AI user experience (for example through UX of AI) before designing AI features.",
+      "why": "Most designers will at some point design with AI or in AI-adjacent fields, and AI can be as stupid as it is smart.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "AI can be as smart as it is stupid"
+    },
+    {
+      "rule": "If you are weak at logos, browse a logo library such as Logo System or Logoipsum for ideas.",
+      "why": "The presenter says he is bad at designing logos, and these libraries give him plenty of logos to scroll through and borrow from.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "great website if you suck at logos"
+    },
+    {
+      "rule": "For isometric icons, use a customizable set such as Isocons and choose rounded or sharp corners and the stroke weight.",
+      "why": "Isocons has a ton of isometric icons, all customizable, and gathers the ones you add in a folder where you can see and customize them together.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "you can change if they're rounded or sharp and how fat the stroke is"
+    },
+    {
+      "rule": "For a large base of sections, layouts and elements in Figma, use the Relume Figma kit from the Figma Community; no Relume sign-up is needed.",
+      "why": "The kit is massive, about 54 pages of sections, layouts and elements, and it is a Figma community file.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "search for it on figma without even needing to sign up"
+    },
+    {
+      "rule": "If you want 3D in a design, start from customizable 3D resources such as Endless Tools.",
+      "why": "Many people say 3D will be the next big thing; Endless Tools has quirky 3D resources you can customize yourself, though some are limited and more are being added.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "3D is going to be the next big thing"
+    },
+    {
+      "rule": "For a crypto or modern SaaS landing page, consider a slider-driven tool such as Durves.",
+      "why": "The presenter calls it a niche tool but could see himself using it for a crypto or modern software-as-a-service landing page.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "tooling",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "crypto or modern software as a service landing page"
+    },
+    {
+      "rule": "Keep a curated source of display fonts, such as the small display-font site the presenter ranks among his favorites (captioned 'typ faces. today').",
+      "why": "He is chronically in need of better display fonts, and the site has some really cool ones, though not many.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "chronically in need of better display fonts"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "Which tool should you use to animate designs made in Figma?",
+      "options": [
+        {
+          "name": "Figma animation plugins",
+          "effect": "Lets you animate inside Figma, but the presenter finds Phase much better.",
+          "when": "Not recommended by the source."
+        },
+        {
+          "name": "Phase",
+          "effect": "An editor very similar to Figma that makes animating a few elements easy.",
+          "when": "Animating Figma designs without learning a heavier tool."
+        },
+        {
+          "name": "After Effects",
+          "effect": "A full animation tool that the presenter found harder to use than Phase.",
+          "when": "Not stated in the source."
+        }
+      ],
+      "recommendation": "Phase, because its editor is shockingly similar to Figma and it is much easier to use than After Effects.",
+      "maps_to": null,
+      "evidence": "it's actually shockingly similar to figma"
+    },
+    {
+      "question": "Where should mesh gradients be made?",
+      "options": [
+        {
+          "name": "Figma",
+          "effect": "Cannot produce all of the gradients a dedicated tool can.",
+          "when": "Not recommended for mesh gradients by the source."
+        },
+        {
+          "name": "Photoshop",
+          "effect": "Can do it, but means switching tools; the source prefers keeping it simple with a dedicated generator.",
+          "when": "Not stated in the source."
+        },
+        {
+          "name": "A dedicated generator such as Photo Gradient",
+          "effect": "Many presets and settings give a mesh gradient in a few clicks; refreshing gives a new color guide.",
+          "when": "When your own gradients aren't cutting it."
+        }
+      ],
+      "recommendation": "Use a dedicated tool such as Photo Gradient to keep it simple.",
+      "maps_to": null,
+      "evidence": "why not just keep it simple and use something like this"
+    },
+    {
+      "question": "Where should stock photos come from?",
+      "options": [
+        {
+          "name": "Pexels or Pixabay",
+          "effect": "Large, well-known libraries; Pexels is more extensive than Burst.",
+          "when": "Not stated in the source."
+        },
+        {
+          "name": "Burst by Shopify",
+          "effect": "Smaller, but better organized, so things are easier to find.",
+          "when": "When you want to find a photo quickly [inferred]."
+        }
+      ],
+      "recommendation": "Use several; the presenter says you can never have too many stock photo websites.",
+      "maps_to": null,
+      "evidence": "less extensive than pixels but probably better organized"
+    }
+  ],
+  "process": [
+    {
+      "step": "Paste a ready-made element from Uiverse",
+      "detail": "Find an element you like, scroll past the code and click Copy to Figma."
+    },
+    {
+      "step": "Collect and tune isometric icons in Isocons",
+      "detail": "Choose rounded or sharp and the stroke thickness, click Add to folder, then view and customize them together in the folder at the top."
+    },
+    {
+      "step": "Get the Relume Figma kit without signing up",
+      "detail": "Search for it in the Figma Community, since it is a community file."
+    },
+    {
+      "step": "Get a new color set in Photo Gradient",
+      "detail": "If you don't like the current colors, refresh the page to get a new color guide."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Library of buttons, animations and UI elements with a Copy to Figma button",
+      "where": "Uiverse (uiverse.io)",
+      "visual_note": "Each element shows its code, which the presenter skips before copying it into Figma."
+    },
+    {
+      "what": "Logo library for inspiration",
+      "where": "Logo System (logosystem.co)",
+      "visual_note": "Logos shown on backgrounds that the presenter finds interesting in their own right."
+    },
+    {
+      "what": "Animation editor for designs",
+      "where": "Phase (phase.com)",
+      "visual_note": "An editor laid out much like Figma; the presenter says he has already animated a couple of things in it."
+    },
+    {
+      "what": "Bento grid of trending designs taken from Twitter",
+      "where": "trending.design",
+      "visual_note": "Includes branding and 3D effects; described as like Dribbble on steroids."
+    },
+    {
+      "what": "Logos to borrow and a site animation",
+      "where": "Logoipsum (logoipsum.com)",
+      "visual_note": "The presenter singles out an animation on the site as beautiful."
+    },
+    {
+      "what": "Free stock photos",
+      "where": "Burst by Shopify (burst.shopify.com)",
+      "visual_note": "A smaller library than Pexels, organized so photos are easier to find."
+    },
+    {
+      "what": "Slider-controlled niche tool",
+      "where": "Durves (durves.com)",
+      "visual_note": "Suggested for a crypto or modern SaaS landing page."
+    },
+    {
+      "what": "Customizable 3D resources",
+      "where": "Endless Tools (endlesstools.io)",
+      "visual_note": "Quirky 3D pieces you can customize; some are limited."
+    },
+    {
+      "what": "Curated micro-interactions from large brands",
+      "where": "Design Spells",
+      "visual_note": "Micro-interactions collected from million- and billion-dollar companies."
+    },
+    {
+      "what": "Playlists put together by professional designers",
+      "where": "Name not clear in the captions",
+      "visual_note": "The presenter points out the site's many unusual interactions."
+    },
+    {
+      "what": "Small collection of display fonts",
+      "where": "Captioned as 'typ faces. today'; exact name unclear",
+      "visual_note": "Display fonts the presenter likes, though the collection is small."
+    },
+    {
+      "what": "Customizable isometric icons",
+      "where": "Isocons",
+      "visual_note": "Icons switch between rounded and sharp with an adjustable stroke, and gather in a folder for batch customizing."
+    },
+    {
+      "what": "Large Figma design kit",
+      "where": "Relume (Figma community file)",
+      "visual_note": "About 54 pages of sections, layouts and elements."
+    },
+    {
+      "what": "Mesh-gradient generator",
+      "where": "Photo Gradient",
+      "visual_note": "Many presets and settings for mesh gradients; refreshing gives a new color guide."
+    },
+    {
+      "what": "Websites split into searchable sections",
+      "where": "Unsectioned",
+      "visual_note": "Page sections chopped out of real websites and made searchable, for layout ideas."
+    },
+    {
+      "what": "Web design podcasts and a hover interaction",
+      "where": "Design Sphere",
+      "visual_note": "The presenter calls its straightforward hover interaction very well implemented."
+    },
+    {
+      "what": "Varied arrows",
+      "where": "Handy Arrows",
+      "visual_note": "An arrow collection with more variety than Figma's pencil tool gives you."
+    },
+    {
+      "what": "Portfolio showcase with designer context",
+      "where": "Wall of Portfolios",
+      "visual_note": "Each portfolio lists the designer's experience, location and kind of work."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "20",
+      "context": "Number of web design resources in the list.",
+      "evidence": "all 20 links will be listed in the description"
+    },
+    {
+      "value": "54",
+      "context": "Approximate number of pages in the Relume Figma kit.",
+      "evidence": "something like 54 pages in this figma file"
+    },
+    {
+      "value": "15 plus years",
+      "context": "Experience of the professionals you might unfairly compare your portfolio to.",
+      "evidence": "a professional with like 15 plus years of experience"
+    }
+  ],
+  "caveats": [
+    "A list of tools and sites, not design guidance; the rules here are the presenter's tool preferences, not tested practice.",
+    "Dated January 2025; the sites, their features and whether they are free ('totally or at least mostly free') may have changed.",
+    "Self-promotion: the description promotes the presenter's web design challenge with a $2,000 prize pool, and the ending promotes his design community of over 13,000 designers.",
+    "Several names are auto-caption mis-hearings: 'UI verse' is Uiverse, 'fonty' is Fontjoy and 'derves' is Durves (confirmed by the description links); 'reloom' is Relume, 'ISO cons' is Isocons and 'pixels' is Pexels [inferred].",
+    "The description's timestamp list is cut off after 4:23, and the names of item 11 (a playlist site, credited in the captions to 'L files') and item 12 (a display-font site captioned 'typ faces. today') are unclear.",
+    "The captions also mention 'logo.com' as an extra logo resource right after Logoipsum; it is not in the numbered list.",
+    "The presenter jokes about stealing logos from Logoipsum; check each resource's license before using its assets in a real product [inferred]."
+  ]
+}

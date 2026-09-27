@@ -28,9 +28,13 @@ Zoom 3 detailed · weight high · changes 5 decisions · class I · cards DC-L10
 - **Why:** The more you share, the more your product looks the same on every platform, and the less it feels native [DC-L10-03].
 - **Options:**
   - `tokens` Same tokens, own components on each platform: same palette and rhythm, platform-shaped components (Spotify Encore, Fluent).
+    - Now: Same colors, type personality and spacing everywhere, with components built to fit each platform. As it grows: Share the what (names and decisions) everywhere and let each platform's code do the how, so it still feels native. [inferred]
   - `principles` Principles only: loosest alignment (Fluent's four principles).
+    - Now: Platforms share only ideas, so each app can look quite different. As it grows: Easiest to start, but the apps drift apart as teams grow, because nothing concrete is shared. [inferred]
   - `specs` Same component plans, own code per platform: one spec for 7 stacks including screen-reader specs (Uber Base).
+    - Now: One plan per component (parts, states, screen reader notes), coded separately per platform, like Uber Base. As it grows: One plan can serve many code stacks, but every plan change must then be built once per platform. [inferred]
   - `code` Shared component code: identical components everywhere [DC-L10-03].
+    - Now: Identical component code on every platform, so everything looks the same. As it grows: Features ship everywhere at once, but the app feels least native, and one bug reaches every platform. [inferred]
 - **Default:** `tokens`: tokens + shared specs, per-platform implementation *Source:* card heuristic [DC-L10-03].
 - **Show:** a diagram of which layers are shared, with the same card component rendered per platform.
 - **Skip:** yes.

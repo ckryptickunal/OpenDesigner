@@ -1,0 +1,5348 @@
+# L19: Learning wiki (trusted sources)
+
+Lane: L19 (learning wiki), session `l19-learning-wiki`. Assembled on 2026-09-27 from the ten area files in `learn/wiki/synthesis/_cards/`, which stay the source: edit a card there, then re-assemble this file. This file is the repository's research copy, read by `tools/jev_nav.py` (`export`, `graph`, `check`) and `tools/build_data.py`.
+Trace: `traces/L19-trace.md` (S-L19-001 to S-L19-103). Status: see `## Open questions / gaps` and `## Confidence` at the end.
+
+## Lane overview
+
+This lane is OpenDesigner's learning wiki: a short list of sources the owner trusts, read in full, turned into one verified analysis per source and a Markdown wiki that ties them together by concept, and then into three things the app uses: house standards, Decision Cards and impact notes. It lives on its own in `learn/` so it can be updated, re-read and used to improve the app without touching the other lanes. `learn/README.md` explains the pipeline, `learn/MAP.md` indexes the knowledge by area, standard, card and question, `learn/IMPROVING.md` explains how to turn it into app changes, and `docs/KNOWLEDGE.md` says what each kind of source may change and which wins.
+
+### Sources and their authority
+
+From `learn/sources.json` and the trace. Authority decides what a source is allowed to do.
+
+| Authority | Sources | S-ids | What it becomes |
+|---|---|---|---|
+| non-negotiable | Emil Kowalski's site (10 essays), the `emilkowalski/skills` repo (22 files, MIT, commit 85e8e23), the Sonner docs (6 pages), animations.dev (2 public pages; the course itself is paid and closed) | S-L19-001 to S-L19-034, S-L19-087 to S-L19-092 | House standards in `synthesis/standards.json`: applied and locked in every project, written into DESIGN.md, checked by `engine.py validate` and `review`; changed only when the person explicitly asks, with their words recorded as the reason |
+| good-to-have | The Vaul docs (6 pages logged). The Vaul README says the library is unmaintained (checked 2026-09-24), so its drawer craft is guidance and that status is flagged before Vaul is suggested as a dependency | S-L19-093 to S-L19-098 | Recommended defaults: the option OpenDesigner recommends first; the person can change it freely |
+| reference | Kole Jain's channel (52 videos), Steve Schoger's "Designing with Claude Code" (1 video), Mobbin's channel (4 videos logged, all rejected because no captions were available) | S-L19-035 to S-L19-086, S-L19-103; rejected S-L19-099 to S-L19-102 | Learning material: Decision Cards, options and their visual effect, process steps, examples for visual samples. It informs choices; it does not make them |
+
+### How the sources were processed
+
+Summarised from `learn/README.md`:
+1. **Fetch.** `tools/wiki.py fetch` saves full transcripts and page text to `learn/raw/<folder>/<id>.txt`. `raw/` is git-ignored: third-party text stays on the machine that fetched it.
+2. **Analyse.** One agent per source reads it in full and writes `learn/analysis/<id>.json`: summary, key ideas, topics (named exactly as in `learn/taxonomy.json`), rules, decisions, process, examples, numbers, caveats and authority, with at most 3 quotes of 15 words or fewer. Anything the agent connects itself ends with [inferred].
+3. **Verify.** A fresh agent tries to refute every rule, value and quote against the source.
+4. **Check, ingest, trace.** `wiki.py check` (schema, quote limits, authority, topic names), `wiki.py ingest` (OpenWiki pages per source, topic and entity), `wiki.py trace` (S-L19 ids in `traces/L19-trace.md`; ids never change).
+5. **Cite-check.** Jev (TypeSafe) judges whether each must or should rule, and each house standard, is supported by the passage it cites; anything else goes to `learn/wiki/synthesis/citation-check.md` for review.
+6. **Synthesise.** Cross-source topic pages in `learn/wiki/synthesis/`, house standards from the non-negotiable and good-to-have sources, and Decision Cards by area in `learn/wiki/synthesis/_cards/`, assembled here.
+
+The judgement steps run as saved workflows in `.claude/workflows/` (`learn-analyze`, `learn-standards`, `learn-synthesis`, `learn-escalate`, `learn-personas`); any other agent can follow the same prompts by hand. `python3 tools/wiki.py next` lists every step that is out of date.
+
+### Counts
+
+| What | Count | Where |
+|---|---|---|
+| Sources logged | 103: 99 analysed, 4 rejected (no captions) | `traces/L19-trace.md` |
+| Analyses by authority | 40 non-negotiable, 6 good-to-have, 53 reference (52 Kole Jain, 1 Steve Schoger) | `learn/analysis/*.json` |
+| Extracted from the analyses | 2,768 rules, 601 decisions, 686 process steps, 802 examples, 851 numbers | `learn/analysis/*.json` |
+| Wiki pages | 99 source pages, 50 topic pages, 695 entity pages, 49 synthesis pages (46 cross-source topic pages, the house-standards page, "Decide or ask" and the citation-check report) | `learn/wiki/` |
+| House standards | 455 (248 must, 207 should) in 11 themes | `synthesis/standards.json` |
+| Decision Cards | 164 in 10 areas, numbered by area with gaps (DC-L19-01 to DC-L19-190); none withdrawn | Part A |
+| Impact notes | 30 high-impact questions, each option's effect now and as the product grows | `synthesis/impact.json` |
+| Proposed questionnaire changes | 225 question rows and 28 engine, template and output rows | Part B |
+| Conflicts with existing research or defaults | 75 | Part C |
+
+### How this lane feeds OpenDesigner
+
+- **House standards** (`synthesis/standards.json`, ids `STD-<theme>-nn`). Built from the non-negotiable and good-to-have sources by the `learn-standards` workflow; readable per theme in `skills/opendesigner/references/standards/<theme>.md`. Every card cites the standards it touches by id, never contradicts one, and says so where a source or an existing card disagrees with one: the standard wins.
+- **Decision Cards** (Part A of this file). Options, visual effects, defaults, heuristics and "Maps to" proposals for the interview. `tools/jev_nav.py export` writes them into `synthesis/cards.json` and `graph` into `synthesis/decision-graph.json`; `tools/build_data.py` carries them into the skills' generated references. Part B collects what they propose for `questions.json`; nothing here changes the questionnaire by itself.
+- **Impact notes** (`synthesis/impact.json`). What each option of the 30 high-impact questions changes today and as the product grows, restating the questions' options, their Decision Cards and the house standards.
+- **The wiki** (`learn/wiki/`). Source, topic, entity and synthesis pages; the place to read a concept in depth. Card links such as `[[sources/<page>|<title>]]` point to `learn/wiki/sources/`, and the source key at the end of this file maps every S-id to its page.
+
+### How to read the cards
+
+- **Authority.** Standards (STD-...) are locked. Vaul gives recommended defaults. The videos are trusted practitioner opinion: a number or an "always/never" from one video is labelled as opinion unless another source or existing research agrees. Nearly all reference material comes from one creator (Kole Jain), so several of his videos agreeing is still one practitioner's view.
+- **[inferred]** marks a connection the card writer made, not something a source says. In "Impact now / as it grows", growth lines are [inferred] unless a source is cited.
+- **Differences are explicit.** Where a card differs from an existing card or default it says so ("differs from DC-..."); it does not override quietly. Part C collects these.
+- **Fields.** Block path; Questions the designer answers; Options; Visual effect; Depends on (upstream); Affects (downstream); Token encoding; Platform notes; Accessibility constraints; Default + heuristic; Evidence; Maps to; Impact now / as it grows; Standards.
+- **Proposed ids** (new Q-ids, token names, lint names) are placeholders for the maintainers to confirm.
+
+### Areas
+
+| Area | Stages | Topics | Cards | Source file |
+|---|---|---|---|---|
+| Color | 07, 08, 09 | Color; Dark mode and themes | DC-L19-01 to DC-L19-17 (17) | `learn/wiki/synthesis/_cards/color.md` |
+| Typography and content | 10, 11, 19 | Typography; Content and microcopy | DC-L19-21 to DC-L19-39 (19) | `learn/wiki/synthesis/_cards/typography.md` |
+| Layout | 06, 12, 13 | Spacing and layout; Visual hierarchy; Cards and sections | DC-L19-41 to DC-L19-56 (16) | `learn/wiki/synthesis/_cards/layout.md` |
+| Shape and depth | 14, 15, 17, 18 | Shape and corner radius; Depth, shadows and borders; Icons and imagery | DC-L19-61 to DC-L19-76 (16) | `learn/wiki/synthesis/_cards/shape-depth.md` |
+| Motion | 16 | Motion principles; Easing and timing; Spring animation; Animation performance; Gestures and drag; Micro-interactions; Reduced motion | DC-L19-81 to DC-L19-99 (19) | `learn/wiki/synthesis/_cards/motion.md` |
+| Components | 20, 21, 22 (plus Q-pattern-01, Q-pattern-03) | Toasts and notifications; Drawers and sheets; Buttons and actions; Forms and inputs; Navigation and sidebars; Modals and popovers; UI libraries | DC-L19-101 to DC-L19-119 (19) | `learn/wiki/synthesis/_cards/components.md` |
+| Patterns | 23 (plus Q-state-08, Q-form-04, Q-viz-01, Q-brand-04) | Dashboards and data display; Landing pages; Onboarding; Paywalls and pricing pages; Retention and gamification; SaaS product UI; Feedback, empty and loading states; A/B testing and conversion | DC-L19-121 to DC-L19-138 (18) | `learn/wiki/synthesis/_cards/patterns.md` |
+| Platforms | 02, 04 | Mobile app patterns; Desktop and macOS apps; Accessibility | DC-L19-141 to DC-L19-153 (13) | `learn/wiki/synthesis/_cards/platforms.md` |
+| Process | 00, 03, 25, 26, 27 | Design taste and judgement; Design process; Presenting designs; Portfolio and case studies; AI-assisted design; Figma and design tools; Prototyping; Freelancing and pricing work; Design resources | DC-L19-161 to DC-L19-177 (17) | `learn/wiki/synthesis/_cards/process.md` |
+| Tokens | 05, 24 | Design systems and tokens; Web implementation (CSS and React) | DC-L19-181 to DC-L19-190 (10) | `learn/wiki/synthesis/_cards/tokens.md` |
+
+---
+
+## Part A: Decision Cards
+
+Every card from the ten area files, in id order by area, text unchanged. No card was withdrawn, so there are no withdrawal notes. 164 cards.
+
+### Area: Color (DC-L19-01 to DC-L19-17)
+
+Area `color`: the topics Color, and Dark mode and themes (OpenDesigner stages 07 themes and modes, 08 color system, 09 color details and accessibility modes). Written 2026-09-24. Built from every verified analysis tagged with these topics, checked against the raw transcripts where a card relies on a detail, and compared with DC-L01-01 to DC-L01-27, DC-L04-12, DC-L04-13, DC-L06-04, DC-L10-17, DC-L14-09, DC-L15-03, DC-L15-06, the L09 benchmark cards DC-L09-03 and DC-L09-07, `questions.json`, the stage files and `synthesis/standards.json`. Brightness percentages for grays ("% white") are read as HSB brightness, which for a pure gray equals HSL lightness, so the hex conversions are the same in both models [inferred]. Synthesis pages: [[synthesis/color|Color synthesis]], [[synthesis/dark-mode-and-themes|Dark mode and themes synthesis]].
+
+### DC-L19-01: What carries color on a screen
+- **Block path:** Foundations > Color > Palette character > Where the color on a screen comes from
+- **Questions the designer answers:** On a normal screen, what should be in color: the buttons, the data, the pictures, or only the things that changed? If the brand is black and white, is there any color at all? Should dashboards and marketing pages follow the same rule as app screens?
+- **Options:**
+  - **Accent on actions** (the current `accent` and `strict` defaults): the accent marks the main action, links, the selected item and status. Linear is recognized by its blue-purple and Supabase by its bright green [S-L19-039]. In a nav bar, active states are a good place to add a pop of brand color [S-L19-075].
+  - **Ink (neutral brand):** black, white and grays carry the interface, the main button is near-black, and color appears only where meaning needs it. Vercel is roughly 90% black, 8% white and 2% red, yet build success, failure and progress still show in color [S-L19-039]. Steve Schoger swapped every use of an AI-picked emerald accent for gray 950 to keep a marketing page neutral [S-L19-103]. Polaris uses a black brand (DC-L01-08, DC-L01-10).
+  - **Data-led (dashboards):** controls stay neutral and the color comes from the data: micro charts on KPIs instead of colored buttons and icons [S-L19-061], a red icon in a chip for an urgent action, not color "sprinkled in to look nice" [S-L19-056].
+  - **Imagery-led (marketing pages):** the color pops come from the product visuals, which lets the buttons be white; a weak page puts its accent on everything that will take it [S-L19-072]. One redesign shows its bright orange accent only on the call to action's hover so it never overpowers the page [S-L19-065] (one video).
+  - **60-30-10 as a rule:** rejected for product UI, where screens can be almost entirely neutral [S-L19-039]; kept only as a loose balance check by the same creator's earlier video [S-L19-051]. This agrees with DC-L15-03 and DC-L15-06 (folk wisdom, soft check).
+- **Visual effect:** Accent on actions reads as "color means click here", focused and calm (DC-L01-08). Ink reads premium, minimal and content-first (DC-L01-08's reading of Polaris), and status colors stand out hardest because nothing else is colored [inferred]. Data-led makes the numbers draw the eye while the interface recedes [inferred]. Imagery-led gives a more vibrant page with quiet controls [S-L19-072], where the screenshots do the talking [inferred].
+- **Depends on (upstream):** Q-color-01 (brand input), Q-scope-01 (which surfaces the product has: app, dashboard, marketing), Q-color-03 (how colorful).
+- **Affects (downstream):** `color.bg.action.primary` and its hover and pressed states (accent step or neutral ink), `color.text.link`, `color.bg.accent.*`, `color.chart.*`, icon color (Q-icon-05), nav active state, chips (chips almost never take the primary call-to-action color [S-L19-075]).
+- **Token encoding:** no new tokens. `color.bg.action.primary` ($type color) aliases the accent solid step, or the neutral text step for ink, which is what the engine's monochrome scheme already does ("Buttons use near-black ink; color is kept for status, links and focus", engine.py). A per-surface accent budget can live in lint config under `$extensions` [inferred].
+- **Platform notes:** The sources give none. Apple's one-accent guidance and "don't color several control backgrounds" are in DC-L01-08.
+- **Accessibility constraints:** Meaning never rides on color alone (WCAG 1.4.1, DC-L01-23): a state that turns colored also needs an icon, a text change or a shape. Status icons need 3:1 and status text 4.5:1 against their surface (DC-L01-15). A near-black ink button with white text is about 17:1 [inferred].
+- **Default + heuristic:** Default: accent on actions for app screens (confirms Q-color-02 `accent` and Q-color-05 `strict`), data-led for dashboard views, imagery-led for marketing pages only when the team has product visuals to show (otherwise the current `moderate` for marketing stays), and ink when the brand is black and white. Heuristic: keep defaults gray and give color to what changed, what needs action, or what the data says: a checkbox is plain when off and gets fill, color and a checkmark when on; in a menu the only blue item is the resubscribe prompt [S-L19-080]; icons in app chrome stay uncolored except for status [S-L19-051], while marketing feature icons and icons in dense data rows may carry color on purpose [S-L19-061] [S-L19-062] [S-L19-082]. The semantic layer is never switched off, even in ink: destructive actions stay red whatever the brand ([S-L19-039] [S-L19-051]; a third video says "preferably red" [S-L19-057]), which is why red and green are often in a brand's palette even when they are not brand colors [S-L19-051].
+- **Evidence:** [S-L19-039] [S-L19-051] [S-L19-056] [S-L19-057] [S-L19-061] [S-L19-062] [S-L19-065] [S-L19-072] [S-L19-075] [S-L19-080] [S-L19-082] [S-L19-103]; compared with DC-L01-08, DC-L01-10, DC-L01-15, DC-L01-23, DC-L06-04, DC-L15-03, DC-L15-06.
+- **Maps to:**
+  - Q-color-05: keeps its options and its default ("strict for app surfaces, moderate for marketing"); adds `data-led` as a named variant of `strict` for dashboard views and `imagery-led` as a variant of `moderate` for marketing pages that have product visuals, so this refines the default rather than replacing it; new heuristic "defaults gray, color marks change, action or data". Imagery-led is close to Q-color-02's existing `content-layer` (brand color lives in the content), and ink to Q-color-02 `neutral-first` plus Q-color-03 `monochrome` [inferred], so no new Q-color-02 option is needed.
+  - Q-color-02: confirms default `accent`; visual sample: Vercel's near-monochrome console with colored build statuses, and a menu whose only blue item is the resubscribe prompt [S-L19-080].
+  - Q-color-03: visual sample for `monochrome`: Vercel and Schoger's gray 950 page [S-L19-039] [S-L19-103]; new Use/avoid line: "monochrome never removes status colors" (confirms what the engine already does).
+- **Impact now / as it grows:**
+  - Accent on actions: now, one hue to manage and a clear "clickable" signal. As it grows, every new feature competes for the same accent, so the emphasis budget has to be enforced (DC-L15-03).
+  - Ink: now, the quickest route to a polished look, with brand recognition carried by type and logo. As it grows, adding a brand hue later means re-deciding every primary button, while status colors stay stable.
+  - Data-led: now, dashboards need a chart palette (DC-L19-10) from day one. As it grows, more metrics and statuses need a categorical palette and color-blind cues.
+  - Imagery-led: now, it depends on having good product visuals (an asset only the team can supply). As it grows, every new page needs curated visuals, and stale screenshots drain the page of color.
+- **Standards:** STD-visual-details-29 (the most important thing is the most obvious), STD-visual-details-25 (neutral grays and one accent when prototyping with no project tokens), STD-process-review-taste-37 (prototype variants that differ only in accent color are not real variants).
+
+### DC-L19-02: Light-mode page and card arrangement
+- **Block path:** Foundations > Color > Surfaces > Light-mode arrangement
+- **Questions the designer answers:** In light mode, are cards lighter than the page (white cards on an off-white page) or darker than it (tinted cards on a white page)? How white is the page? How much darker is the sidebar or app frame?
+- **Options:**
+  - **Cards lighter than the page:** the page sits just below white and the cards are pure white, as in Vercel (page about 98% white) [S-L19-039]. If cards are pure white, the page should not be (one video) [S-L19-039]. This is what the engine already generates in its default (non-tonal) model: page on neutral step 1, raised surfaces on white (engine.py surface mapping).
+  - **Cards darker than the page:** a pure white page with cards darker than it, often the same color as the sidebar, as in Notion (page 100% white) [S-L19-039].
+  - **Monochromatic layers:** stacked shades of one color, as in Supabase [S-L19-039]; the video names this option without describing it.
+  - **Alternating layers** (existing Q-color-14 option): Carbon's White and Gray 10 (DC-L01-13).
+  - **Reversed small features:** for small elements such as a search bar, swap the usual background and foreground, as Dribbble does [S-L19-051].
+  - Real page values: Linear 99%, Notion 100%, Vercel 98% white, so pure white is acceptable [S-L19-039]. The app frame or sidebar is a slightly darker anchor and needs only a very small shift because it is large (Mercury adds 2% blue) [S-L19-039]. A neutral gray background with a white or very light foreground is the general starting point [S-L19-051].
+- **Visual effect:** Cards lighter: crisp, cards come forward, a dashboard feel (Vercel) [inferred]. Cards darker: airy and document-like, cards recede into panels (Notion) [inferred]. Monochromatic layers: soft and tonal [inferred]. Alternating: crisp, grid-like enterprise (DC-L01-13). Cards on a light page with no edge look washed out, and a subtle shadow alone is only slightly better [S-L19-039], so the edge decision (DC-L19-09) comes with this one.
+- **Depends on (upstream):** Q-color-09 (gray tint), Q-color-14 (layer model), Q-color-10 (gray steps), Q-depth-01 (edge or shadow).
+- **Affects (downstream):** `color.surface.base`, `color.surface.raised`, `color.surface.sunken`, the navigation surface, `color.bg.neutral.subtle`; cards, sidebars, popovers, wells; whether cards need a border ring.
+- **Token encoding:** $type color. Cards lighter: `color.surface.base` = `{color.neutral.light.1}`, `color.surface.raised` = `{color.white}`. Cards darker: `color.surface.base` = `{color.white}`, `color.surface.raised` = `{color.neutral.light.2}` and the sidebar on the same step [inferred].
+- **Platform notes:** The sources give none. iOS's system and grouped background sets are the platform's own version of this choice (DC-L01-13) [inferred].
+- **Accessibility constraints:** Surface tones are decorative and need no ratio, but an interactive card defined only by tone needs a 3:1 boundary (WCAG 1.4.11, DC-L01-13). A 98% page against a white card is about 1.04:1, far too little to see an edge without a ring or border [inferred]. Text must pass 4.5:1 on every surface it sits on.
+- **Default + heuristic:** Default: cards lighter than the page (confirms the engine's current output). Offer cards darker for document, note and editor products [inferred from the Notion example]. Heuristic: never make both the page and the cards pure white (one video); make the frame or sidebar a slightly darker anchor, only one small step darker [S-L19-039]; if two surfaces are meant to differ, make the difference visible [S-L19-075]. The neutral budget in [S-L19-039] (about four background layers, at least one and often two strokes, and about three text colors for a product, before hover states; three to five neutrals for a landing page) fits within the engine's four surfaces, three border strengths and three text levels and within Q-color-10's default of 12 to 13 solid neutrals [inferred].
+- **Evidence:** [S-L19-039] [S-L19-051] [S-L19-075]; compared with DC-L01-07, DC-L01-13.
+- **Maps to:**
+  - Q-color-14: keeps `role-tiers` as the default; adds a light-mode sub-choice under it, `cards-lighter` (default, which is the engine's current output) or `cards-darker`, because the existing options name the layers but do not say which way light-mode cards go; visual sample: one dashboard shown Vercel-style (white cards on a 98% page), Notion-style (darker cards on white) and Supabase-style (monochromatic layers), with the dark column showing lighter-when-higher (confirms the current dark default).
+  - Q-color-10: confirms default; new heuristic that a marketing-only system uses only three to five of its neutrals.
+- **Impact now / as it grows:**
+  - Cards lighter: now, cards need an edge (ring or shadow) to avoid looking washed out. As it grows, nested cards need another near-white step, and the page tint becomes the thing that separates too many layers.
+  - Cards darker: now, a white page reads open and calm. As it grows, each nested panel steps darker, and text contrast on the darkest panel needs a check.
+  - Monochromatic layers: now, a soft branded feel. As it grows, status and chart colors must be checked against tinted layers (Q-color-09 warns strong tints make status colors look off).
+- **Standards:** STD-visual-details-14 (separate surfaces with a semi-transparent shadow rather than an opaque border), STD-visual-details-17 (darker, heavier materials for structural regions such as sidebars, which matches the darker frame anchor [inferred]), STD-visual-details-24.
+
+### DC-L19-03: How much hue the grays and backgrounds carry
+- **Block path:** Foundations > Color > Neutrals > Tint strength in both modes
+- **Questions the designer answers:** Should the background be plain white or black, a barely tinted gray, or a clear wash of the brand color? Should the dark background be a neutral near-black, a blue-black, or a deep brand color? If you already have a product, which gray family does it use?
+- **Options:**
+  - **Pure:** zero chroma. Pure white is acceptable [S-L19-039]. Schoger switched a generated page from slate to neutral grays because the product screenshot used neutral grays [S-L19-103].
+  - **Hue-matched, slight** (the current default, OKLCH chroma about 0.01 to 0.03 at mid steps, DC-L01-06): off-whites in light mode and bluish blacks in dark mode signal a more experienced designer [S-L19-057]; a hint of the brand hue in the neutral gray, and Headspace's orange tint behind cards [S-L19-051]; Mercury's 2% blue sidebar [S-L19-039]. Primer's blue-tinted #0D1117 is the research example (DC-L01-19).
+  - **Accent wash (new):** the background is a very light or very dark version of the accent. GitHub uses a really dark blue instead of pure black; a site captioned "Studio rubric" uses a very light orange; as a shortcut, Tailwind's 50 as the light background with its 500 as the accent, or its 950 as the dark background with its 300 as the primary [S-L19-070]. One video; its claim that the pairs work for every Tailwind color comes with no contrast check.
+  - **Deep-colored dark only:** light mode stays near-neutral while the dark base takes a deep hue: deep purples, reds or greens, not only navy or gray [S-L19-052]; a background gradient of two brand colors, darkened, for a dark mode that lacks color (Gemini's baby blue and pink) [S-L19-082].
+  - **Cool or warm** (existing options): unchanged.
+- **Visual effect:** Pure: technical, never competes with photos, data or screenshots (DC-L01-06). Hue-matched: of a piece with the brand (DC-L01-06), the "experienced designer" look [S-L19-057]. Accent wash: strongly branded, the whole page carries color, less neutral [inferred]. Deep-colored dark: moody and distinctive; the dark mode becomes a brand moment [inferred].
+- **Depends on (upstream):** Q-color-01 (seed hue), Q-color-03 (how colorful), Q-color-21 (how dark), the project's existing tokens.
+- **Affects (downstream):** every neutral ramp, surface, border and text token in both modes; how status and chart colors read; screenshots placed on marketing pages.
+- **Token encoding:** the engine's `color.neutral.tint.oklch` parameter carries chroma and hue per mode; accent wash makes the surface tokens alias the accent ramp's lightest steps in light and darkest steps in dark ($type color) [inferred].
+- **Platform notes:** The sources give none. Apple system grays are defined per appearance and should not be hard-coded (DC-L01-06).
+- **Accessibility constraints:** A tint shifts luminance only slightly, but text steps must be re-checked after tinting (DC-L01-06). Strong tints can make status colors look off (Q-color-09's avoid line). With an accent wash, accent text or buttons sit on their own hue, so the 500-on-50 and 300-on-950 pairs must pass the contrast matrix; the source did not check them [S-L19-070].
+- **Default + heuristic:** Default: keep hue-matched (confirms DC-L01-06, now supported by [S-L19-039] [S-L19-051] [S-L19-057]; [S-L19-070] goes further, to an accent-colored background). Use pure when the product shows photos or data, or when a marketing site must match an existing product that uses neutral grays. Offer accent wash and deep-colored dark as expressive options, each with a status-color check. Heuristic: match the gray family the product already uses [S-L19-103], which is also what STD-visual-details-26 asks (extend existing tokens, never a parallel set) [inferred link]. No source here recommends pure black as the dark base [S-L19-052] [S-L19-057] [S-L19-070], which confirms Q-color-21's `near-black` default.
+- **Evidence:** [S-L19-039] [S-L19-051] [S-L19-052] [S-L19-057] [S-L19-070] [S-L19-082] [S-L19-103]; compared with DC-L01-06, DC-L01-19.
+- **Maps to:**
+  - Q-color-09: new option `accent-wash`; new heuristic "match the gray family the product already uses", pre-filled from Q-ref-01 or an extraction; visual sample: pure black against a GitHub-style blue-black, Headspace-style orange-tinted cards, and a Tailwind 50/500 pair.
+  - Q-color-21: new option `tinted-deep` (the dark base takes a deep brand or chosen hue) with an automatic status-color check; confirms the `near-black` default (the stage already notes that `black` smears and halates on OLED).
+- **Impact now / as it grows:**
+  - Pure: now, safe with any content. As it grows, adding or changing a brand barely touches the grays.
+  - Hue-matched: now, cohesive. As it grows, a brand hue change re-tints every gray, so the tint needs one alias point (the engine parameter).
+  - Accent wash: now, very branded. As it grows, a second brand or theme means redoing every surface, status colors must be re-checked against the wash, and text contrast has less headroom.
+  - Deep-colored dark: now, a distinctive dark mode. As it grows, every new status or chart color has to be checked on the colored base.
+- **Standards:** STD-visual-details-26 (reuse and extend existing tokens), STD-visual-details-25 (neutral grays when prototyping with no project), STD-visual-details-24 (a light and a dark value per role).
+
+### DC-L19-04: Spacing between dark-mode background shades
+- **Block path:** Foundations > Color > Modes > Dark neutral step spacing
+- **Questions the designer answers:** When we build the dark palette, how far apart should the dark background shades be so the page, cards, sidebars and popovers still look different? Should the dark steps simply mirror the light ones?
+- **Options:**
+  - **Reflect the light steps:** rejected by the sources. If you just reflect the light palette, the background elements lose all their distinction [S-L19-039]; inverting is "not awful, but certainly not ideal" [S-L19-051]; light and dark should not be exact opposites [S-L19-067] (its captions are muddled; this is the analysis's reading).
+  - **Double the distance:** light background steps about 2% white apart become 4 to 6% in dark, because dark colors look more alike [S-L19-039]. Per dark card layer, raise HSB brightness by about 4 to 6 and lower saturation by 10 to 20, repeating for each layer [S-L19-070]. The two videos (both by the same creator) agree on the size of the step, and so does existing research: DC-L04-13 gives 3 to 5% lightness steps in dark.
+  - **What real systems do** (brightness gaps worked out from the hex values in existing cards [inferred]): Atlassian's dark surfaces #18191A, #1F1F21, #242528, #2B2C2F (DC-L04-13) are about 2.7% apart; Fluent's #141414, #1f1f1f, #292929 (DC-L01-19) about 4%; Carbon's Gray 100 #161616 to Gray 90 #262626 (DC-L01-19) about 6.3%.
+  - **What the engine does today** [inferred, worked out from the constants in engine.py for a pure gray: dark step 1 luminance 0.0075, dark step 7 at 2.0:1, light step 1 at 1.02:1 and light step 7 at 1.65:1 against white, steps 2 to 6 evenly spaced in OKLCH lightness]: dark neutral steps 1 to 4 come out near #151515, #1d1d1d, #252525, #2d2d2d, about 3.1% apart, below the videos' 4 to 6%. The dark surfaces use steps 1 (sunken), 2 (page), 3 (raised) and 4 (overlay). The light neutral steps 1 to 3 come out near #fdfdfd, #f4f4f4, #ebebeb, about 3.5% apart, but the light page (step 1) and its white cards differ by less than 1%, so the gap the videos ask to double is already narrow in light.
+- **Visual effect:** Reflected: flat and muddy, cards melt into the page. Doubled: surfaces stay distinct and the dark mode looks "enterprise-grade" [S-L19-039]. Very wide steps (Carbon): strongly zoned, less subtle [inferred].
+- **Depends on (upstream):** Q-color-16 (separate dark neutral ramps), Q-color-21 (base darkness), Q-color-14 (how many layers).
+- **Affects (downstream):** dark values of `color.surface.*`, `color.bg.neutral.subtle` and its hover and pressed states, borders, popovers and menus.
+- **Token encoding:** dark primitives `color.neutral.dark.1` to `.12` ($type color); semantic dark aliases such as `color.surface.raised` = `{color.neutral.dark.3}`; the gap can be a generator parameter under `$extensions` [inferred].
+- **Platform notes:** iOS switches from base to elevated backgrounds automatically in dark (DC-L01-13); the sources give nothing more.
+- **Accessibility constraints:** Surface steps are decorative. Wider gaps lift the top surface toward mid-gray, which lowers the contrast of light text on it, so text must still pass 4.5:1 on the lightest dark surface it sits on [inferred]. The engine already checks dark text against the lighter dark steps.
+- **Default + heuristic:** Default: adjacent dark surface tiers at least about 4% brightness apart, and never closer in dark than the same tiers are in light [S-L19-039] [S-L19-070], within the 2.7 to 6.3% range real systems use. Heuristic: if you have to squint to see that two dark surfaces differ, double the gap (a visible difference is the point, [S-L19-075]).
+- **Evidence:** [S-L19-039] [S-L19-051] [S-L19-067] [S-L19-070] [S-L19-075]; compared with DC-L01-07, DC-L01-13, DC-L01-18, DC-L01-19, DC-L04-13.
+- **Maps to:**
+  - Q-color-16: new heuristic "double the distance for dark backgrounds"; visual sample: the same dark dashboard with reflected light steps (cards vanish) and with doubled steps.
+  - Q-color-10: confirms `separate-dark` (the wider steps live in the dark neutral ramp).
+  - Engine validate (proposed): an advisory when adjacent dark surface tiers are less than about 4% brightness apart, or closer than the light tiers [inferred].
+- **Impact now / as it grows:**
+  - Reflect: now, quick. As it grows, each new layer (a popover over a card over a panel) becomes indistinguishable.
+  - Double the distance: now, it needs its own dark ramp, which the engine already builds. As it grows, more layers use up the dark range: four or five tiers 4 to 6% apart span about 12 to 24% brightness above the base, which pushes the top surface toward mid-gray and eats into text contrast [inferred], so cap the number of dark tiers.
+- **Standards:** STD-visual-details-24 (a light and a dark value per role), STD-visual-details-29.
+
+### DC-L19-05: How raised surfaces stand out in dark mode
+- **Block path:** Foundations > Color > Modes > Dark elevation cues
+- **Questions the designer answers:** In dark mode, should a card stand out by being lighter, by an outline, or by both? How bright should dark-mode borders be?
+- **Options:**
+  - **Lighter fill:** surfaces always get lighter as they rise [S-L19-039]; dark mode doesn't have shadows the way light mode does, so a card is lighter than the background [S-L19-052]; a dark background reads as farther back than lighter cards [S-L19-085]; layered HSB steps [S-L19-070]. Agrees with DC-L01-13 and DC-L04-13.
+  - **Border only:** a raised element defined by just a border, like a search bar [S-L19-039]. One designer prefers outlined cards in dark and filled cards in light, as taste ("totally up to you") [S-L19-047].
+  - **Fill plus brightened border:** brighten the borders and the main card, because dark colors must differ more to be seen [S-L19-051]; brighten any borders [S-L19-039].
+  - **Softened border:** a light card border had "a bit too much contrast" in dark mode, so it was lowered [S-L19-052]. This differs from the "brighten" advice.
+  - **Frosted glass:** if a dark design still lacks something, add frosted glass to the cards and the colored background [S-L19-085] (one video).
+  - **Shadows:** DC-L04-12 keeps shadows in dark (double the alpha, add a 1px light edge ring on overlays); the videos lean on lighter surfaces instead [S-L19-052] [S-L19-070].
+- **Visual effect:** Lighter fill: soft and dimensional, as if lit from the front (Atlassian's reading in DC-L04-13). Border only: crisp, technical, line-drawn (a developer-tool feel) [inferred]. Fill plus border: the most separation, but busy if borders are too bright [inferred]. Glass: expressive and modern [inferred].
+- **Depends on (upstream):** DC-L19-04 (step spacing), Q-color-14, Q-depth-01, Q-depth-04 (glass).
+- **Affects (downstream):** dark values of `color.surface.raised`, `color.surface.overlay`, `color.border.subtle` and `color.border.default`, and `color.shadow.ring`; cards, popovers, menus, search fields.
+- **Token encoding:** $type color for the dark border and surface values; `color.shadow.ring` (the engine already uses a ring at 10% alpha in light and 12% in dark) inside the $type shadow of overlays.
+- **Platform notes:** The sources give none.
+- **Accessibility constraints:** An input's boundary must stay 3:1 even when decorative borders are softened (DC-L01-16). Forced colors keeps borders and drops fills and shadows, so border-based options survive it (DC-L01-20). Glass needs the solid fallback under reduced transparency.
+- **Default + heuristic:** Default: lighter fill plus a subtle see-through light edge in dark (a low-alpha ring, as in DC-L19-09, rather than an opaque line, which follows STD-visual-details-14). The edge sits brighter than an inverted light palette would give it [S-L19-039] [S-L19-051] but not so bright that it gives the card too much contrast [S-L19-052]; this reconciles the two camps [inferred]. Overlays keep DC-L04-12's edge ring. Heuristic: if a dark border is the first thing you notice on a card, lower it [inferred, after the source's shadow rule of the same shape [S-L19-052]].
+- **Evidence:** [S-L19-039] [S-L19-047] [S-L19-051] [S-L19-052] [S-L19-070] [S-L19-085]; compared with DC-L01-13, DC-L01-16, DC-L01-20, DC-L04-12, DC-L04-13.
+- **Maps to:**
+  - Q-color-14: confirms the dark default ("dark mode with lighter tones"); visual sample in the dark column: a card raised by fill, a search bar raised by border only, and a card with both.
+  - Q-color-23: new heuristic for dark borders (brighter than an inverted palette gives, never so bright that the card gets too much contrast [S-L19-052]); visual sample: a dark card whose too-bright border is lowered and whose chip is dimmed [S-L19-052].
+- **Impact now / as it grows:**
+  - Lighter fill: now, few tokens. As it grows, many layers exhaust the dark ramp (DC-L19-04).
+  - Border only: now, simple and robust in forced colors. As it grows, dense screens become line-heavy, and opaque lines run against STD-visual-details-14.
+  - Fill plus border: now, the clearest separation. As it grows, two cues must be kept in step for every new surface.
+  - Glass: now, a strong look. As it grows, every glass surface needs a solid fallback and legible text rules.
+- **Standards:** STD-visual-details-14, STD-accessibility-motion-11 (glass becomes frostier or solid under reduced transparency), STD-visual-details-21 (color on solid layers), STD-visual-details-13 (text over glass).
+
+### DC-L19-06: Which shade of the accent does each job, in light and dark
+- **Block path:** Foundations > Color > Ramps > Step jobs per mode
+- **Questions the designer answers:** Which shade of the brand color is the main button, the hover and the link? Which shades take over in dark mode? What happens to bright chips and the logo in dark mode?
+- **Options:**
+  - **Light mode (50 to 950 numbering):** main color at 500 or 600, hover at 700, links at 400 or 500 [S-L19-039]. Shortcut: Tailwind's 50 as a light background with its 500 as the accent [S-L19-070].
+  - **Dark mode:** primary at 300 or 400, hover at 400 or 500 [S-L19-039]; Tailwind's 300 as primary on its 950 [S-L19-070]; over-saturated primaries replaced with lighter versions [S-L19-085]. This agrees with Material (primary 40 becomes 80) and Atlassian (700 in light is 400 in dark) in DC-L01-18, and with "accents one or two steps lighter and lower in chroma" in DC-L01-19. Counter-example: Radix keeps its solid step the same in both modes (DC-L01-18).
+  - **Chips and tinted fills in dark:** a chip that is far too bright gets its saturation and brightness dimmed, with the treatment flipped for its text to keep hierarchy [S-L19-052] (read as a dim tinted fill with a bright label of the same hue [inferred]). The logo is desaturated a touch [S-L19-051] (one video each).
+  - **By number or by contrast:** the engine picks each step by contrast (the solid step reaches the text minimum with its on-color, links use a text step), which is the Q-color-07 and Q-color-08 default. In Tailwind, the same number differs in lightness across hues (at 500, blue is L 62.3% and amber L 76.9%, DC-L01-03).
+- **Visual effect:** A 500 to 600 main in light gives a confident, saturated button [inferred]. A 300 to 400 main in dark is softer with less glare (desaturated dark accents avoid neon vibration, DC-L01-19). Saturated chips in dark look far too bright [S-L19-052]; dimmed chips with bright labels look calm and still readable [inferred].
+- **Depends on (upstream):** Q-color-07 (how ramps are built), Q-color-08 (step count and numbering), Q-color-16 (dark mapping), Q-color-20 (states).
+- **Affects (downstream):** `color.bg.action.primary` and its hover and pressed states, `color.text.link`, `color.text.on-action`, `color.bg.accent.subtle` and `.bold`, status subtle fills (`color.bg.success.subtle` and similar); chips, badges, the dark logo asset.
+- **Token encoding:** per-mode semantic aliases, for example `color.bg.action.primary` = `{color.accent.light.9}` in light and `{color.accent.dark.9}` in dark ($type color); a label map from the 12-step jobs to 50 to 950 names for exports [inferred].
+- **Platform notes:** Material's tone reassignment is the Android version (DC-L01-18); the sources give nothing platform-specific.
+- **Accessibility constraints:** Pick steps by contrast, not by number: a link at "400 or 500" can be too light for 4.5:1 body text on white on many hues [inferred, consistent with DC-L01-03's lightness spread]. Dark primaries at 300 to 400 usually carry dark text (the Material 80/20 pattern the engine follows). Logos are exempt from contrast rules (DC-L01-09).
+- **Default + heuristic:** Default: confirms the contrast-indexed steps and Q-color-21's "accents one or two steps lighter and lower in chroma in dark". Heuristic for people who think in 50 to 950 numbers: main at 500 to 600, hover at 700 and links at 400 to 500 in light, and main at 300 to 400 in dark, is a starting map, and the contrast matrix has the final say. New: in dark mode, subtle levels are a dim, low-chroma fill with a bright label [S-L19-052], of the same hue [inferred reading]; ask for a dark-mode logo or apply a slight desaturation [S-L19-051].
+- **Evidence:** [S-L19-039] [S-L19-051] [S-L19-052] [S-L19-070] [S-L19-085]; compared with DC-L01-03, DC-L01-09, DC-L01-18, DC-L01-19.
+- **Maps to:**
+  - Q-color-08: visual sample: the ramp strip labeled with each job in both numberings (1 to 12 and 50 to 950), in light and dark.
+  - Q-color-13: new heuristic for dark subtle levels (dim fill, bright same-hue label).
+  - Q-color-21: confirms the default (accents lighter and lower in chroma in dark).
+  - Logo asset hook: ask for a dark-mode logo variant, or desaturate slightly [inferred].
+- **Impact now / as it grows:**
+  - By number: now, easy to talk about with designers. As it grows, new hues break the pattern (a yellow 500 is much lighter than a blue 500), so contrast-picked steps stay steadier as hues are added.
+  - Lighter accent in dark: now, less glare. As it grows, the brand shows in a different shade in dark, so screenshots and marketing need both.
+- **Standards:** STD-visual-details-24, STD-visual-details-26.
+
+### DC-L19-07: Which way colors move on hover and press
+- **Block path:** Foundations > Color > States > Direction of state changes
+- **Questions the designer answers:** When you hover or press a button, does its color get lighter or darker? Is that the same in dark mode? What does disabled look like, and what happens on touch screens with no hover?
+- **Options:**
+  - **Toward more contrast** (the current default, DC-L01-17): hover one step and pressed two steps toward more contrast with the surface. The engine prefers darker states in light and lighter states in dark (engine.py `fit_states`).
+  - **Always a darker step:** hover steps to 700 from a 500 or 600 main in light, and to 400 or 500 from a 300 or 400 main in dark [S-L19-039]. In dark this moves toward less contrast with the surface [inferred], so it differs from DC-L01-17 in dark mode.
+  - **Lighter hover, darker press:** hover slightly lighter or brighter, press slightly darker [S-L19-051] (the source names no mode, so it reads as a general rule); Windows also lightens on interaction (DC-L01-17). In light mode this differs from DC-L01-17 for hover; in dark mode it agrees [inferred].
+  - **Disabled:** desaturate the color unless it is already gray; a light gray fill with white text reads as disabled in light and dark [S-L19-051]. Graying a button right after it is pressed shows the next screen is coming [S-L19-045] (a loading cue, not disabled).
+  - **Touch:** mobile has no hover, so tappable elements rely on a slightly darker press [S-L19-051].
+- **Visual effect:** Toward more contrast: like pressing into paper on light surfaces and like lighting up on dark ones (DC-L01-17's reading) [inferred]. Always darker: a consistent pressed-into-paper feel, but in dark mode the button dims on hover [inferred]. Lighter hover: the button brightens on hover, and the darker press feels like pressing into something [S-L19-051].
+- **Depends on (upstream):** DC-L19-06 (step jobs), Q-color-20 (steps or overlays), Q-plat-01 (touch).
+- **Affects (downstream):** `color.bg.action.primary-hover` and `-pressed`, `color.bg.neutral.subtle-hover` and `-pressed`, `color.bg.accent.bold-hover` and `-pressed`, `color.bg.disabled`, `color.text.disabled`.
+- **Token encoding:** the existing per-state tokens ($type color); the direction rule as a generator setting under `$extensions` [inferred].
+- **Platform notes:** On the web, hover rules live inside `@media (hover: hover) and (pointer: fine)` and every tappable element gets its own `:active` state (STD-mobile-touch-21, STD-mobile-touch-03), which is the code form of "mobile relies on press" [S-L19-051].
+- **Accessibility constraints:** Hover fills need no contrast minimum, but the label must still pass 4.5:1 on hover and pressed fills (DC-L01-17; the engine keeps on-text at the text minimum). Disabled is exempt from contrast, so it must not be the only way to tell that an action is unavailable when that matters [inferred]. The engine's minimum state differences (1.15:1 for hover, 1.3:1 for pressed) keep states visible.
+- **Default + heuristic:** Default: keep toward more contrast, because it is the only rule of the three that stays visible in both modes [inferred]. Record [S-L19-039]'s dark hover and [S-L19-051]'s light hover as disagreements with DC-L01-17, not overrides. Heuristic: press always moves further than hover, in the same direction; on touch-first products, design the press state first.
+- **Evidence:** [S-L19-039] [S-L19-045] [S-L19-051]; compared with DC-L01-17.
+- **Maps to:**
+  - Q-color-20: new sub-choice at zoom 3, "direction": `toward-contrast` (default), `always-darker`, `lighter-hover`; visual sample: one button in light and dark with each direction, hover and press side by side.
+  - Q-state-04: visual sample for disabled: a light gray fill with a white label in both modes [S-L19-051].
+- **Impact now / as it grows:**
+  - Toward more contrast: now, visible states everywhere. As it grows, new colors inherit the rule automatically.
+  - Always darker: now, simple to explain. As it grows, dark-mode hovers on new components drift toward the surface and can vanish.
+  - Lighter hover: now, a glowing feel. As it grows, light solids such as yellow lose their hover in light mode because they are already close to white [inferred].
+- **Standards:** STD-easing-duration-01 (a hover or color change animates with `ease`), STD-mobile-touch-21, STD-mobile-touch-03, STD-when-to-animate-06 (changes started from the keyboard happen instantly).
+
+### DC-L19-08: How many text colors, and how far from pure black and white
+- **Block path:** Foundations > Color > Foreground > Text ladder
+- **Questions the designer answers:** How many text colors? Should the darkest text be pure black? Is secondary text a solid gray or the main text color made see-through? In dark mode, is text white or light gray?
+- **Options:**
+  - **Three solid levels:** headings about 11% white, body 15 to 20%, subtext 30 to 40% [S-L19-039] (one video). For a pure gray that is about #1c1c1c, #262626 to #333333, and #4d4d4d to #666666 [inferred]. This matches Q-color-22's `solid-levels` default.
+  - **Two colors, the second by opacity:** the primary text color plus the same color at 45 to 70% opacity, with two "generally the maximum" [S-L19-057] (one video). This is Q-color-22's existing `opacity-levels` option.
+  - **Brand ink (new):** a very dark brand hue (a dark purple) for text instead of black; most text in the redesign is light gray or dark purple [S-L19-051].
+  - **Dark mode:** light grays for text because they are easier on the eyes than white, with pure white kept for the most important text such as the logo and the storage-used figure, and gray brightness lowered more aggressively than in light [S-L19-051]; "dim the text" [S-L19-039]. One video flips text to white [S-L19-085], which differs.
+  - Hierarchy uses size, weight and color together, not size alone [S-L19-057]; less important details such as file size and type go gray [S-L19-051].
+- **Visual effect:** Three solid levels: a soft, professional hierarchy with no harsh black [inferred]. Two by opacity: minimal and consistent, and it blends with tinted surfaces (DC-L01-14). Brand ink: warm, branded and cohesive [inferred]. Light gray in dark with white reserved: easier on the eyes [S-L19-051], and the few white items pop [inferred].
+- **Depends on (upstream):** DC-L19-02 (surfaces), DC-L19-03 (tint), Q-color-17 (contrast rule), Q-type-12 (weights).
+- **Affects (downstream):** `color.text.primary`, `.secondary`, `.tertiary`, `.disabled`, `.inverse`, `color.icon.default`, placeholders and labels.
+- **Token encoding:** $type color, solid aliases such as `color.text.primary` = `{color.neutral.light.12}`; the opacity variant uses the DTCG `alpha` component (DC-L01-14).
+- **Platform notes:** Apple's label colors are vibrancy-aware and adapt on their own (DC-L01-14); the sources give nothing more.
+- **Accessibility constraints:** Worked out from the sources' numbers [inferred]: on white, 11% gray is about 17:1, 20% about 12.6:1 and 40% (#666666) about 5.7:1, so all three solid levels pass 4.5:1, and still pass (5.3:1 or more) on a 96% page. By opacity, black at 45% on white is about 3.35:1 and at 50% about 4.0:1, both failing 4.5:1; 55% gives about 4.8:1, so about 54 to 55% is the lowest that passes. White at 45% on #121212 is about 4.5:1 (borderline) and on #1c1c1c about 4.4:1 (fails). Pure white on #121212 is about 18.7:1, the kind of very high contrast DC-L01-19 links to halation discomfort.
+- **Default + heuristic:** Default: keep Q-color-22's solid levels with secondary text passing 4.5:1 on the lowest surface. New: the darkest light-mode text is near-black rather than pure black [S-L19-039] [S-L19-051], and dark-mode text is light gray with pure white reserved for the most important text, such as the logo and a key figure [S-L19-051]. ([S-L19-057] differs: its primary text is plain black or white.) If opacity levels are chosen, the low end for body text is at least 55% in light and 50% in dark; lower values only for large text at 3:1 [inferred]. On the white-versus-light-gray split in dark mode, default to light gray with white reserved (two videos) over all white (one video).
+- **Evidence:** [S-L19-039] [S-L19-051] [S-L19-057] [S-L19-085]; compared with DC-L01-14, DC-L01-19, DC-L01-22.
+- **Maps to:**
+  - Q-color-22: new option `brand-ink`; new floor on `opacity-levels` (55% in light, 50% in dark for body text); visual sample: the text ladder at 11%, 20% and 40% on white and on a 96% page, and the dark version with white only on the logo and one key number.
+  - Q-color-17: confirms the AA default (it catches the 45% case).
+- **Impact now / as it grows:**
+  - Three solid levels: now, three tokens per mode. As it grows, every new surface (tinted panels, wells) needs each level re-checked.
+  - Two by opacity: now, the fewest tokens, and it adapts on any surface. As it grows, effective contrast drifts on tinted and colored panels, so each new surface pairing needs a check.
+  - Brand ink: now, cohesive. As it grows, a brand hue change re-tints all text.
+- **Standards:** STD-visual-details-13 (over translucent surfaces use higher-contrast text, a slightly heavier weight and a little more letter spacing), STD-visual-details-09 (emphasize non-link text with weight or color, never an underline), STD-visual-details-29.
+
+### DC-L19-09: What draws the edge of a card: an opaque gray line or a see-through ring
+- **Block path:** Foundations > Color > Borders > Surface edges
+- **Questions the designer answers:** What draws the edge of a card, a screenshot or the navigation bar: a solid light-gray line or a see-through dark ring? Where do edges have to be stronger?
+- **Options:**
+  - **Opaque light-gray border:** roughly 85% white, not a thin black border; a subtle shadow alone is only slightly better than no edge [S-L19-039] (one video). That is about #d9d9d9, around 1.4:1 on white [inferred].
+  - **See-through ring:** an outer ring of gray 950 at 10% instead of a solid border on buttons, screenshots and the nav's bottom edge, because a solid border next to a shadow looks muddy; an inset ring on top of an image; soft "wells" of gray 950 at 5% behind screenshots (2.5% was too soft) [S-L19-103] (one video). If gray 950 is about #0a0a0a, the 10% ring is about 1.24:1 on white [inferred].
+  - **Subtle outline on nearly everything:** so the palette can stay pure white or near white, with pop-up shadows in a very light gray instead of transparent black [S-L19-059].
+  - **No stroke:** remove strokes that aren't needed, or dim them significantly if contrast is a worry [S-L19-045].
+  - What the engine has today (from the STD-visual-details-14 conflict note): opaque `color.border.subtle`, `.default` and `.strong` (#d2d2d2, #c9c9c9, #868686 in the default light theme) plus a 10%-alpha `color.shadow.ring`.
+- **Visual effect:** Opaque: a flat, drawn edge [inferred] that can look muddy next to a shadow [S-L19-103]. See-through ring: a crisp edge that blends into the shadow [S-L19-103] and works on any background (DC-L01-27's reason for alpha) [inferred]. No stroke: the cleanest look, but surfaces must separate by tone or space [inferred].
+- **Depends on (upstream):** DC-L19-02 (cards on the page), Q-depth-01 (shadows), Q-color-26 (see-through colors).
+- **Affects (downstream):** `color.border.subtle`, `color.shadow.ring`, well backgrounds, cards, screenshot frames, the nav's bottom edge, dividers; not the functional borders of inputs.
+- **Token encoding:** $type color with alpha, for example `color.shadow.ring` = `{"colorSpace": "srgb", "components": [0.04, 0.04, 0.04], "alpha": 0.1}` [inferred values]; decorative borders can alias the alpha neutrals (DC-L01-07, DC-L01-27).
+- **Platform notes:** The sources give none. In forced-colors mode, rings drawn with box-shadow disappear (DC-L01-20), so a real border fallback is needed.
+- **Accessibility constraints:** Decorative edges need no ratio. A control whose only boundary is its edge needs 3:1 (WCAG 1.4.11); neither an 85% gray line (about 1.4:1) nor a 10% ring (about 1.2:1) is enough for inputs [inferred], so inputs keep `color.border.input` at 3:1. Provide a `forced-colors: active` border where the edge is a shadow ring (DC-L01-20).
+- **Default + heuristic:** Default: see-through ring for decorative edges (cards, screenshots, nav edge, popovers), which follows STD-visual-details-14 and [S-L19-103]; functional boundaries keep the 3:1 border token. The opaque 85% border [S-L19-039] stays available as an option, but it differs from STD-visual-details-14 and the standard wins. Heuristic: where a line meets a shadow, make the line see-through.
+- **Evidence:** [S-L19-039] [S-L19-045] [S-L19-059] [S-L19-103]; compared with DC-L01-07, DC-L01-16, DC-L01-20, DC-L01-27, DC-L04-12.
+- **Maps to:**
+  - Q-color-23: new default wording "decorative edges use a see-through ring; interactive boundaries use the 3:1 border"; visual sample: card edges four ways (none and washed out, subtle shadow, 85% border, 10% ring) [S-L19-039] [S-L19-103].
+  - Q-color-26: confirms `alpha-neutrals`; adds the ring (10%) and well (5%) as named uses.
+- **Impact now / as it grows:**
+  - Opaque border: now, a simple hex value. As it grows, the gray line looks dirty on tinted or image backgrounds, and each new surface color needs its own border value.
+  - See-through ring: now, one token works on every surface. As it grows, stacked translucent layers add up (a ring over a well over a tint), so composites need checking, and forced colors needs its fallback.
+  - No stroke: now, the cleanest. As it grows, dense screens lose structure unless tone steps carry it.
+- **Standards:** STD-visual-details-14, STD-accessibility-motion-12 (under increased contrast, a defined contrasting border), STD-visual-details-26.
+
+### DC-L19-10: Chart colors for several series
+- **Block path:** Foundations > Color > Data visualization > Categorical palette
+- **Questions the designer answers:** When a chart has several lines or bars, how are their colors chosen: from the brand, from grays, or from a full spectrum? How is a comparison (last month) shown?
+- **Options:**
+  - **Brand plus gray** (the current default, which already switches to `categorical-6-8` for dashboards): one brand color plus gray. The previous period drawn as a gray line behind the current one works well for business metrics [S-L19-075].
+  - **Brand ramp:** series in shades of the brand look too similar to tell apart [S-L19-039]; an opacity-only storage bar feels bland [S-L19-051].
+  - **Grays only:** "super lame" [S-L19-039] (taste).
+  - **Equal-lightness spectrum (new):** in OKLCH, fix lightness and chroma and step the hue by about 25 to 30 per series, so no color looks more neon than another (bright green versus bright blue) [S-L19-039] (one video). Eight series at that step cover about 175 to 210 degrees of hue [inferred].
+  - **Analogous or complementary for a few segments:** a storage bar colored with slightly rotated hues and a complementary yellow [S-L19-051].
+  - Existing: `categorical-6-8` (Atlassian) and `carbon-14`, ordered so neighbors contrast (DC-L01-24).
+- **Visual effect:** Brand plus gray: calm, branded and focused (Q-color-19's option text). Equal-lightness spectrum: no color looks more neon than another [S-L19-039], lively and balanced [inferred]. Ordered palettes (Carbon): neighbors separate by lightness as well as hue [inferred from DC-L01-24's ordering].
+- **Depends on (upstream):** Q-color-03 (chroma), Q-color-18 (color-blind safety), Q-color-15 (status hues, to avoid clashes), DC-L19-01 (data-led screens).
+- **Affects (downstream):** `color.chart.categorical.1` to `.8`, legends, tooltips, shaded maps, micro charts on KPIs.
+- **Token encoding:** `color.chart.categorical.{n}` per mode ($type color); generator inputs (lightness, chroma, hue step) under `$extensions` [inferred].
+- **Platform notes:** The sources give none.
+- **Accessibility constraints:** Marks need 3:1 against the surface (the engine checks chart colors against `color.surface.base` at 3:1). Equal lightness means neighbors differ only in hue, which fails for color-vision deficiency unless a second cue is added: direct labels, markers or patterns (DC-L01-23) [inferred].
+- **Default + heuristic:** Choose by series count rather than by product type (a change to the current rule, "brand-gray by default, categorical-6-8 for dashboards"): one series plus a comparison uses brand plus gray, with the previous period in gray [S-L19-075]; two or more series use six to eight categorical colors (DC-L01-24), generated with equal OKLCH chroma and lightness kept in a narrow band so no hue looks neon [S-L19-039], but ordered so neighbors still differ a little in lightness. That keeps DC-L01-24's neighbor contrast and differs from [S-L19-039]'s single fixed lightness [inferred reconciliation]. Always label directly or add markers from three series up (the second cue DC-L01-23 requires; the threshold of three is [inferred]).
+- **Evidence:** [S-L19-039] [S-L19-051] [S-L19-075]; compared with DC-L01-23, DC-L01-24.
+- **Maps to:**
+  - Q-color-19: new option `equal-lightness` (a generation method for the categorical set); new heuristic "pick by series count"; default refined to brand-gray for single-series charts and categorical for multi-series; visual sample: a bar chart in a fixed-lightness OKLCH spectrum beside a naive HSL spectrum where green looks neon, and a line chart with a gray previous-period line and a legend.
+- **Impact now / as it grows:**
+  - Brand plus gray: now, calm with few tokens. As it grows, the first multi-series chart forces a new palette decision.
+  - Equal-lightness spectrum: now, six to eight tokens per mode. As it grows, past eight series the hues crowd (at 25 to 30 degrees the wheel runs out at twelve to fourteen) [inferred], so switch to grouping or direct labels (DC-L01-24).
+- **Standards:** none.
+
+### DC-L19-11: Where the first color comes from when there is no brand color
+- **Block path:** Foundations > Color > Brand input > No-brand seed
+- **Questions the designer answers:** If you have no brand color, how should we find one: pick from a few suggestions, pull it from a mood image, explore palettes you like, or stay neutral? What happens if your brand color fails contrast?
+- **Options:**
+  - **Suggested muted seeds** (improves the current hook): beginners stay with white, gray and one super-saturated color [S-L19-040]; muted colors such as baby blue, beige and lavender are "your friend" [S-L19-057]; AI tools reach for bright colors that don't work together [S-L19-061]; AI defaults to an indigo accent [S-L19-103]; color was one of the three biggest fixes to an AI-generated screen [S-L19-086].
+  - **From a mood image:** start from one moody image and pull the earthy base tones from it, then add a few accents [S-L19-062].
+  - **Explore:** online palette pickers, keeping the one or two colors that catch your eye, plus nature and artwork [S-L19-040].
+  - **Borrow structure from a palette you admire:** one app palette takes inspiration from Wise's and works purple in [S-L19-078]. Under OpenDesigner's rules a reference gives structure, never identity, so no exact brand hue is copied.
+  - **Stay neutral:** no seed at all; the ink scheme with status colors (DC-L19-01).
+  - **A brand color that fails contrast:** darken it until white text passes, or use a complementary color that passes (an orange with white text fails; a darker orange and a complementary blue pass) [S-L19-051]. If brand colors look off on headline text, bring the brand in through the logo [S-L19-082].
+- **Visual effect:** Muted seeds: calm and grown-up [inferred]. Mood image: distinctive and tied to the audience [S-L19-062]. An unchosen indigo default: the generic "AI-made" look [inferred from AI defaulting to indigo [S-L19-103] and to bright colors [S-L19-061]].
+- **Depends on (upstream):** Q-brand-01 (personality), Q-ref-01 (references), Q-dir-01.
+- **Affects (downstream):** every accent ramp, the hue of hue-matched grays, status hue spacing (at least 60 degrees from the brand, Q-color-15).
+- **Token encoding:** none (process decision); the seed is recorded with how it was set (`--set-by chosen`, not `delegated`).
+- **Platform notes:** The sources give none.
+- **Accessibility constraints:** Whatever the seed, UI steps are picked by contrast (Q-color-01's default). DC-L01-09 warns that simply darkening a brand color can look "dark and muddy" (Stripe), so a perceptual ramp is safer than a plain darken.
+- **Default + heuristic:** Default: show three candidate seeds, at least one of them muted, recommend one with its reason (OpenDesigner's one-recommendation rule), never default to indigo (or violet [inferred]) without a reason, and ask the person to pick or give their own. Three videos agree that AI-picked palettes need human judgment [S-L19-061] [S-L19-086] [S-L19-103]; the "never let AI choose your colors" wording is one video's [S-L19-061]. Accept a mood image as an input and extract one or two base tones from it. For a failing brand color, the current Q-color-01 default (pin the exact hex, use the ramp step that reaches 4.5:1 for UI fills) already covers [S-L19-051]; add the complementary color as a named fallback.
+- **Evidence:** [S-L19-040] [S-L19-051] [S-L19-057] [S-L19-061] [S-L19-062] [S-L19-078] [S-L19-082] [S-L19-086] [S-L19-103]; compared with DC-L01-09, DC-L09-03 (cited by Q-color-01).
+- **Maps to:**
+  - Q-color-01: new hook input "a mood image" (extract base tones and one or two accents); new heuristic for the no-brand path (three seeds, one muted, one recommended, no silent indigo, the person picks); new named fallback for a failing brand color (complementary action color); visual sample: the same screen with an unchosen saturated indigo and with a muted seed, and the orange-fails, darker-orange-passes, complementary-blue-passes strip [S-L19-051].
+- **Impact now / as it grows:**
+  - Suggested muted seeds: now, quick. As it grows, a real brand later replaces the seed, so the seed stays labeled "a starting point, not a brand decision" (the existing hook).
+  - Mood image: now, distinctive. As it grows, new imagery must keep the mood or the palette drifts away from it.
+  - Stay neutral: now, the easiest. As it grows, adding color later is a clean Q-color-02 change.
+- **Standards:** STD-visual-details-25 (restrained look with no project), STD-process-review-taste-37 (seed candidates are a palette choice; prototype variants must not differ only in accent color) [inferred link].
+
+### DC-L19-12: Where gradients and texture are allowed
+- **Block path:** Foundations > Color > Expressive color > Gradients and noise
+- **Questions the designer answers:** Are gradients allowed? If so, one hue or several, and on what? Is grain or noise allowed on backgrounds?
+- **Options:**
+  - **None:** no gradient is usually the cleaner design [S-L19-045]; look honestly at gradients and remove them if they aren't working [S-L19-057].
+  - **Single hue (new):** if a gradient is really needed, use lighter and darker shades of one color, never two hues such as blue to green [S-L19-045].
+  - **Brand only** (the current default): brand and marketing surfaces (DC-L01-25).
+  - **On components:** for an AI product, mesh gradients with noise on the hero and a gradient stroke on the purchase card and on hover, while feature icons stay a solid brand blue instead of gradient icons [S-L19-082].
+  - **Dark background gradients:** a darkened gradient of two brand colors as a dark background [S-L19-082]; a section background sampled from the image above it when black looks too close to the product [S-L19-065].
+  - **Noise:** use it sparingly so the site doesn't look like TV static [S-L19-082]; a little noise on image or color backgrounds adds texture and helps text contrast, and darkened hero edges draw the eye to the center [S-L19-062]. Recipes: eight to ten or more stacked blurred layers for a vivid mesh, a 20% colored fill to tint metal [S-L19-058]; a dedicated generator such as Photo Gradient makes mesh gradients Figma cannot [S-L19-073].
+- **Visual effect:** None: cleaner and more professional [S-L19-045] [S-L19-057]. Single hue: subtle depth without noise [inferred]. Multi-hue mesh with noise: reads as "AI", since mesh gradients are now almost synonymous with AI [S-L19-082]. Noise: texture on backgrounds [S-L19-062], tactile and less digital [inferred].
+- **Depends on (upstream):** Q-color-03 (how colorful), Q-dir-01 (direction), Q-color-11 (gamut).
+- **Affects (downstream):** heroes, marketing sections, call-to-action cards, hover strokes, dark backgrounds, illustrations; never status or data colors.
+- **Token encoding:** DTCG `gradient` type with stops that alias color primitives, interpolation space under `$extensions` (DC-L01-25); noise as an image asset, not a token.
+- **Platform notes:** The sources give none.
+- **Accessibility constraints:** Text over a gradient must meet 4.5:1 at its lowest-contrast point (DC-L01-25); noise must not lower text contrast below that [inferred].
+- **Default + heuristic:** Default: keep brand only (confirms Q-color-25). Heuristic: one hue per gradient [S-L19-045], unless the brand itself is a gradient [inferred]; noise sparingly [S-L19-082]. For AI and creative products, the `components` option allows a gradient stroke on the one call-to-action card and on hover [S-L19-082], which differs from the default's "never on interactive components", so it stays an explicit choice.
+- **Evidence:** [S-L19-045] [S-L19-057] [S-L19-058] [S-L19-062] [S-L19-065] [S-L19-073] [S-L19-082]; compared with DC-L01-25.
+- **Maps to:**
+  - Q-color-25: new option `single-hue`; new heuristic "one hue per gradient, noise sparingly"; visual samples: a blue-to-green gradient replaced by a flat fill [S-L19-045], and a Gemini-style hero with a mesh gradient, light noise and a gradient-stroke plan card [S-L19-082].
+- **Impact now / as it grows:**
+  - None: now, zero upkeep. As it grows, a later brand moment needs a new token type.
+  - Single hue or brand only: now, contained. As it grows, each new marketing surface reuses the same few gradient tokens.
+  - On components: now, expressive. As it grows, every interactive gradient needs checking in dark mode and forced colors, and gradients start competing with status colors.
+- **Standards:** none.
+
+### DC-L19-13: Color-tinted versions of the same design
+- **Block path:** Foundations > Color > Theming > Tinted variants
+- **Questions the designer answers:** Do you need versions of the product tinted red, green or blue, for example per workspace or as a personal choice? Should a theme change only the accent, or tint every gray as well?
+- **Options:**
+  - **Accent only:** change the accent ramp and leave the grays (what Q-theme-03's `generator-ready` default already provides: brand color generator plus contrast check).
+  - **Shift every gray (new):** convert each neutral to OKLCH, lower lightness slightly (captioned "003", probably 0.03), raise chroma by 0.02 and set the hue to the theme color; the source says it themes any design to red, green or blue and works as well or better in dark mode [S-L19-039] (one video's recipe).
+  - **Tune each gray by eye:** the alternative the source sets aside [S-L19-039].
+  - Research comparisons: Material generates neutrals from the source hue and Radix pairs grays with accents (DC-L01-06); white-label theming (Q-theme-03).
+- **Visual effect:** Accent only: the same product with a different highlight [inferred]. Shift every gray: the whole interface takes on the theme hue [S-L19-039], immersive and personal [inferred]. By eye: inconsistent from theme to theme [inferred].
+- **Depends on (upstream):** Q-theme-03 (who re-skins), Q-color-09 (the base tint the shift is added to), Q-color-17.
+- **Affects (downstream):** every neutral per theme, surfaces, borders, text; status and chart colors must be re-checked on tinted surfaces.
+- **Token encoding:** a DTCG Resolver modifier `tint: none | red | green | blue` combined with `theme: light | dark` (the approach in DC-L01-18 and DC-L01-20), giving two palettes per tint; generator inputs under `$extensions` such as `{ "dL": -0.03, "dC": 0.02, "h": <hue> }` [inferred].
+- **Platform notes:** Android dynamic color is the platform's own version of a tinted theme (Q-color-06, DC-L01-21) [inferred link].
+- **Accessibility constraints:** Equal OKLCH lightness does not guarantee equal WCAG contrast (DC-L01-01), so the contrast matrix runs per variant. Adding 0.02 chroma to already hue-matched grays (0.01 to 0.03) gives 0.03 to 0.05, past the point where grays read as visibly colored (about 0.03, DC-L01-06) and where status colors can start to look off [inferred].
+- **Default + heuristic:** Default: no tinted variants unless they have a job (per-workspace identity, personal choice). When needed, generate them with the gray shift from the existing neutral ramp and re-run the contrast check. Heuristic: apply the shift to pure or lightly tinted grays, not on top of an already strong tint.
+- **Evidence:** [S-L19-039]; compared with DC-L01-01, DC-L01-06, DC-L01-18, DC-L01-20, DC-L01-21, DC-L09-07 (cited by Q-theme-03).
+- **Maps to:**
+  - Q-theme-02: new option `tint` (hue-tinted versions of the whole interface), with the palette count shown (two modes times the number of tints).
+  - Q-theme-03: `generator-ready` gains the gray-shift recipe as its tinting method.
+  - Visual sample: one design themed red, green and blue in light and dark mode [S-L19-039].
+- **Impact now / as it grows:**
+  - Accent only: now, cheap. As it grows, it stays cheap.
+  - Shift every gray: now, two palettes per tint to test. As it grows, every new component color must pass in every tint, and the Figma mode budget (Q-tool-03) caps how many tints fit.
+- **Standards:** STD-visual-details-24, STD-visual-details-26 (derive from the existing neutrals, no parallel set), STD-process-review-taste-37 (tinted versions are not design variants).
+
+### DC-L19-14: Which appearances ship, and which one is the default
+- **Block path:** Foundations > Color > Modes > Appearance set
+- **Questions the designer answers:** Should the product follow the device's light or dark setting? Should it also have its own switch? If one mode is the main look, should the other still be defined?
+- **Options:**
+  - **Follow the system, light and dark** (the current default): respect the device setting as much as possible, since every Mac lets people switch [S-L19-067]; agrees with DC-L10-17.
+  - **Plus an in-app switch:** the macOS example app puts light and dark settings in its settings popover [S-L19-067]. This differs from DC-L10-17, which follows Apple: avoid an app-only appearance setting on Apple platforms and offer an in-app override only on the web, in addition to following the system.
+  - **Light-first (proposed replacement for `light-only`):** light is the only look shipped, but every color role still gets a dark value that is generated and tested, not exposed.
+  - **Dark-first (proposed replacement for `dark-only`):** dark is the default look (watch, TV, car at night, DC-L14-09). Dark mode won't suit every site but should work on most modern-themed ones [S-L19-085]; one designer switched a design to dark because it looked better [S-L19-078]; another dislikes an all-dark page [S-L19-065] (both taste).
+- **Visual effect:** Following the system blends with the device at night (DC-L10-17). An in-app switch gives control but risks a mismatch with the device (DC-L10-17, for app-only toggles on Apple). Light-first or dark-first gives one curated look [inferred].
+- **Depends on (upstream):** Q-plat-01 (platforms), Q-brand-01 (personality).
+- **Affects (downstream):** the value of every color role in each mode, the browser and status-bar colors and toasts (DC-L19-15), the switch transition (DC-L19-16), images that need dark versions (DC-L01-18).
+- **Token encoding:** a `theme: light | dark` Resolver modifier; the engine's `raw.defaultTheme` and `raw.flags.darkMode`; CSS `prefers-color-scheme` with a `[data-theme]` override (the engine's CSS export already writes this).
+- **Platform notes:** Apple: follow the system and avoid an app-only setting (DC-L10-17). watchOS and visionOS have no dark mode switch (DC-L10-17). Web: an in-app switch is fine in addition to following the system, built with next-themes (STD-visual-details-55, [S-L19-029]).
+- **Accessibility constraints:** Every pair passes AA in every mode that ships; test dark mode with Increase Contrast and Reduce Transparency, separately and together (DC-L10-17).
+- **Default + heuristic:** Default: keep following the system with light and dark. Replace `light-only` and `dark-only` with light-first and dark-first, which still generate both values, so STD-visual-details-24 holds and adding the second mode later is a switch rather than a rebuild [inferred]. In the engine today only `light-only` drops the dark values; `dark-only` already generates both modes and only sets dark as the default theme, so for it the change is a rename. The macOS in-app switch in [S-L19-067] is recorded, but DC-L10-17's Apple guidance stays the rule on Apple platforms.
+- **Evidence:** [S-L19-029] [S-L19-065] [S-L19-067] [S-L19-078] [S-L19-085]; compared with DC-L01-18, DC-L10-17, DC-L14-09.
+- **Maps to:**
+  - Q-theme-01: options `light-only` and `dark-only` become `light-first` and `dark-first`, with both modes generated (this resolves the conflict note on STD-visual-details-24). The engine currently maps `light-only` to `raw.flags.darkMode: False`; under this card it would keep generating dark values and mark them as not shipped. The default's "dark-only on watch" becomes "dark-first on watch". The existing visual sample (the screen split diagonally) stays.
+- **Impact now / as it grows:**
+  - Follow the system: now, twice the contrast checks. As it grows, each new color needs both values, which the engine already produces.
+  - In-app switch: now, extra UI and a stored preference. As it grows, extra themes (dimmed, high contrast) join the same switch.
+  - Light-first: now, one look to polish. As it grows, dark mode later is cheap because the values already exist.
+  - Dark-first: now, a strong mood. As it grows, light values already exist for embeds, email and print [inferred].
+- **Standards:** STD-visual-details-24, STD-visual-details-55 (next-themes for theme switching), STD-mobile-touch-20.
+
+### DC-L19-15: What outside the page has to follow the theme
+- **Block path:** Foundations > Color > Modes > Theme propagation to browser chrome and overlays
+- **Questions the designer answers:** When the app is dark, what color is the phone's status bar and the browser toolbar? Do toasts follow the theme or flip against it? Is anything deliberately left out of the theme?
+- **Options:** mostly fixed by house standards.
+  - **Status bar and browser chrome:** one `theme-color` per color scheme, set to the color at the very top of the page (the header background, not the brand color), plus `<meta name="color-scheme" content="light dark">`; the samples are #ffffff and #0a0a0a; update it from JavaScript when the theme switches by class; an installed PWA's status-bar style and manifest colors are the same decision [S-L19-028]. A single `theme-color` gives light mode a dark bar or dark mode a white one, and is never shipped [S-L19-028].
+  - **Toasts:** Sonner's Toaster theme defaults to `'light'` and does not follow the device, so it gets `theme="system"` or the provider's resolved theme [S-L19-022] [S-L19-092]; `invert` flips toasts against the theme and `richColors` makes success and error green and red [S-L19-021] [S-L19-022].
+  - **Inverse surfaces:** the engine describes `color.bg.inverse` as the surface for tooltips and toasts, while Sonner's default does not invert (the conflict note on STD-components-toasts-drawers-23).
+  - **Never follows the theme:** the prototype variant picker, a dark glass pill (rgba(10, 10, 10, 0.82) with a 12px blur) that works on light and dark pages alike [S-L19-030].
+  - **Switching without a flash:** next-themes [S-L19-029].
+- **Visual effect:** Matching chrome makes the page feel native and edge to edge [inferred]; a mismatched status bar is one of the tells that make a web app feel like a website in a browser rather than something installed [S-L19-028]. Light toasts in a dark app flash [inferred].
+- **Depends on (upstream):** DC-L19-14, Q-plat-01 (web and PWA), Q-form-04 (where messages appear).
+- **Affects (downstream):** the `theme-color` and `color-scheme` meta tags, manifest `theme_color` and `background_color`, the Toaster `theme` prop, how `color.bg.inverse` is used, the header surface token.
+- **Token encoding:** no new color. `theme-color` takes the header surface token's value per mode (for example `color.surface.base`, or the navigation surface when it differs), written as `<meta name="theme-color" media="(prefers-color-scheme: light|dark)">` or, in Next.js, `viewport.themeColor` [S-L19-028].
+- **Platform notes:** Web and PWA only. Native status bars are not covered by these sources.
+- **Accessibility constraints:** None beyond the page's own; the header color decides whether the status-bar icons are light or dark [inferred].
+- **Default + heuristic:** Apply automatically, with no question: per-scheme `theme-color` from the header surface token, the `color-scheme` tag, a Toaster that follows the resolved theme, toasts that follow the theme instead of using the inverse surface unless the person asks for `invert`, and the picker left out. Heuristic: anything the device or a library paints has to be told the theme.
+- **Evidence:** [S-L19-021] [S-L19-022] [S-L19-028] [S-L19-029] [S-L19-030] [S-L19-092].
+- **Maps to:**
+  - Q-theme-01: no new question; a new automatic output when Q-plat-01 includes web. `engine.py` writes `color-scheme` into its CSS but contains no `theme-color` output (checked by searching the file), so the export should add the per-scheme tags.
+  - Q-form-04: when toasts are used, a wiring note: the Toaster follows the resolved theme.
+  - Engine description (proposed): `color.bg.inverse` described for tooltips only, which resolves the STD-components-toasts-drawers-23 conflict note [inferred].
+- **Impact now / as it grows:**
+  - Now: a few tags and one prop. As it grows: every new overlay library (drawer, command menu) and a PWA install need the same theme hookup, and class-driven switches need the JavaScript update each time.
+- **Standards:** STD-mobile-touch-20, STD-mobile-touch-21, STD-components-toasts-drawers-22, STD-components-toasts-drawers-23, STD-components-toasts-drawers-65 (sync the Safari theme bar with a drawer overlay only if it stays in step), STD-visual-details-55, STD-process-review-taste-45.
+
+### DC-L19-16: What the switch between light and dark looks like
+- **Block path:** Foundations > Color > Modes > Theme-switch transition
+- **Questions the designer answers:** When someone switches theme, or the device switches at sunset, should the colors snap, fade, or sweep across the screen?
+- **Options:**
+  - **Instant:** the brightness jumps, which the house standards say to avoid (STD-accessibility-motion-09, from [S-L19-020]). The exception is a switch started from the keyboard, which must happen instantly (STD-when-to-animate-06).
+  - **Cross-fade:** ease the color change (colors adapt to light and dark and theme changes are eased [S-L19-020]); a color change uses `ease` (STD-easing-duration-01) and UI motion stays under 300ms (STD-easing-duration-06, whose fix band is 150 to 250ms).
+  - **Reveal:** the new theme uncovers the old one with an animated clip-path from `inset(0 0 100% 0)` to `inset(0 0 0 0)` over 1s with `cubic-bezier(0.77, 0, 0.175, 1)` [S-L19-010], built with the View Transitions API rather than a duplicated page (STD-enter-exit-origin-44). At 1s it is over 300ms, so it needs a stated reason under STD-easing-duration-06 [inferred].
+  - **Under reduced motion:** the sweeping edge is movement and gives way to a short cross-fade, while the color change itself stays (STD-accessibility-motion-02) [inferred mapping].
+- **Visual effect:** Instant: an abrupt brightness jump [S-L19-020]. Cross-fade: calm and barely noticed [inferred]. Reveal: a playful signature moment [inferred].
+- **Depends on (upstream):** DC-L19-14 (whether there is an in-app switch), Q-motion-01 (motion energy).
+- **Affects (downstream):** the theme toggle, a color transition on the root or a View Transition, reduced-motion styles.
+- **Token encoding:** motion tokens only ($type duration and cubicBezier); no color tokens change [inferred].
+- **Platform notes:** Web: View Transitions API for the reveal. System-driven switches on native platforms are handled by the OS [inferred].
+- **Accessibility constraints:** Reduced motion keeps the color change without the sweep; easing avoids a sudden full-screen brightness jump.
+- **Default + heuristic:** Default: a 150 to 250ms cross-fade with `ease` for switches from a pointer or the system, instant for keyboard shortcuts, and a reveal only as a stated signature moment built with View Transitions. Heuristic: the more often people switch, the plainer the transition (STD-when-to-animate-05) [inferred].
+- **Evidence:** [S-L19-010] [S-L19-020].
+- **Maps to:**
+  - New question (proposed, zoom 3, stage 07, shown only if Q-theme-01 is `light-dark-toggle`): "When someone flips the theme in the app, should it fade or sweep across?" with options `cross-fade` (default) and `reveal`; otherwise the cross-fade is applied as an automatic default with no question.
+- **Impact now / as it grows:**
+  - Cross-fade: now, one transition rule. As it grows, nothing more to maintain.
+  - Reveal: now, a signature moment. As it grows, every new page and layer must render correctly in the transition snapshot, and its duration needs a recorded reason [inferred].
+- **Standards:** STD-accessibility-motion-09, STD-easing-duration-01, STD-easing-duration-06, STD-enter-exit-origin-44, STD-accessibility-motion-02, STD-when-to-animate-05, STD-when-to-animate-06.
+
+### DC-L19-17: What changes when someone turns on Increase Contrast or Reduce Transparency
+- **Block path:** Foundations > Color > Modes > User contrast and transparency settings
+- **Questions the designer answers:** When a person turns on Increase Contrast or Reduce Transparency on their device, what should change in the product? Do we also ship a full high-contrast theme?
+- **Options:**
+  - **Increase Contrast (`prefers-contrast: more`):** near-solid backgrounds with a defined, contrasting border [S-L19-020]. Apple asks for an increased-contrast version of each custom color (DC-L01-20).
+  - **Reduce Transparency (`prefers-reduced-transparency: reduce`):** translucent surfaces become frostier or solid by raising the background opacity and dropping the blur; the source's sample is `.toolbar { background: white; backdrop-filter: none; }` [S-L19-020] (a light-theme sample; the source gives no dark value).
+  - **Three separate signals:** reduced motion, reduced transparency and increased contrast are handled independently and built into components [S-L19-020].
+  - **Forced colors** (the current default layer): components still work when the browser forces system colors, with borders rather than fills or shadows (DC-L01-20).
+  - **Full high-contrast theme** (7:1, Primer): an optional extra mode (DC-L01-20).
+- **Visual effect:** Increased contrast: near-solid surfaces with defined borders [S-L19-020], flatter and crisper [inferred]. Reduced transparency: frostier or solid bars and panels with no blur [S-L19-020], calmer [inferred].
+- **Depends on (upstream):** Q-depth-04 (glass), DC-L19-09 (edges), Q-color-24.
+- **Affects (downstream):** `color.surface.glass` and its existing `color.surface.glass-fallback`, a contrasting border token for increased contrast (none exists today), secondary text levels in the contrast mode, focus rings.
+- **Token encoding:** two extra modes, `contrast: more` and `transparency: reduce`, as Resolver modifiers or CSS media blocks; a new `color.border.contrast` ($type color) [inferred name] alongside the existing `color.surface.glass-fallback`.
+- **Platform notes:** Web uses the media queries. Apple has Increase Contrast and Reduce Transparency; test both, separately and together (DC-L10-17). In dark mode, Increase Contrast can reduce contrast between dark text and dark backgrounds (DC-L01-18).
+- **Accessibility constraints:** AAA (7:1 text, 4.5:1 large) is the natural target for a full high-contrast theme (DC-L01-20).
+- **Default + heuristic:** Default on the web: forced-colors-safe components plus an increased-contrast block (near-solid surfaces with a contrasting border) and a reduced-transparency block (the solid fallback), always, because both standards are "must". A full 7:1 high-contrast theme remains the first optional extra mode (confirms the rest of Q-color-24's default).
+- **Evidence:** [S-L19-020]; compared with DC-L01-18, DC-L01-20, DC-L10-17.
+- **Maps to:**
+  - Q-color-24: new default "forced colors, increased contrast and reduced transparency, always on the web"; the `increased` option becomes always on rather than a choice. Engine gap, already recorded in the standards' conflict notes: the CSS export writes no `prefers-contrast: more` or `prefers-reduced-transparency: reduce` block, so `engine.py validate` or `review` should flag it (proposed).
+- **Impact now / as it grows:**
+  - Now: two small CSS blocks and one border token. As it grows: every new translucent or low-contrast component needs its fallback, and a full high-contrast theme later can reuse the same border token.
+- **Standards:** STD-accessibility-motion-11, STD-accessibility-motion-12, STD-visual-details-13, STD-visual-details-21.
+
+### Area: Typography and content (DC-L19-21 to DC-L19-39)
+
+Area `typography`: stages 10, 11 and 19; wiki topics Typography, and Content and microcopy. Each card adds something the existing L02, L06, L13 and L15 cards do not have, or flags where the trusted sources disagree with them.
+
+### DC-L19-21: Letter spacing by role, size and case
+- **Block path:** Foundations > Typography > Metrics > Letter spacing
+- **Questions the designer answers:** Should large headings be pulled tighter, and from what size? How much tighter? Do all-capital labels get extra room? Is "leave it as the font sets it" ever enough?
+- **Options:**
+  - **Role- and size-specific tracking (house standard).** Never one value for every size: tighten display text and headings (for example -0.02em), give small text slightly positive tracking, leave body near 0 [S-L19-020]. Uppercase labels get looser spacing than the same text in sentence case [S-L19-004].
+  - **Practitioner thresholds and amounts.** Schoger tightens headlines once they pass about 24-30px [S-L19-103]. Kole tightens "large header text" by about -2% to -3% [S-L19-052], and in another video by -2% to -4% on text over about 70-80px, where zero spacing looks disjointed [S-L19-070]. A Figma percentage is a share of the font size, so -2% equals -0.02em [inferred].
+  - **Uppercase eyebrows with wide tracking.** Schoger widens tracking whenever text is all capitals, as on a monospace, extra-small, gray eyebrow [S-L19-103].
+  - **Existing research and engine.** DC-L02-14 defaults to -0.01 to -0.02em from about 32px. `engine.py` `tracking()` gives +0.05em to capitals, +0.02em at 12px and below, 0 from 13px to 31px, -0.01em from 32px and -0.02em from 48px.
+  - **`zero` (the font's own spacing everywhere).** Today's Q-type-13 option. With it the engine returns 0 for every style, including capitals.
+- **Visual effect:** Tightened large headings look denser and more confident (DC-L02-14); Kole says it makes large text look professional at once [S-L19-052], and Schoger says it gives headlines more impact [S-L19-103]. Side by side the change is subtle, but untightened large text looks disjointed [S-L19-070] or too loose [S-L19-052]. Capitals with too little spacing look cramped [S-L19-004]. `zero` leaves headings loose and capital labels cramped.
+- **Depends on (upstream):** Q-type-01 (the system font already ships tracking tables [S-L19-020]); Q-type-07 (fonts that change shape by size do part of the tightening, DC-L02-14); the size scale (Q-type-08, Q-type-09); scripts (no tracking on non-Latin scripts, DC-L02-25).
+- **Affects (downstream):** `letterSpacing` in every `text.*` style; the capitals label style (`text.label.sm`); eyebrows and overlines; capitalized buttons and tabs; DC-L19-26 display moments.
+- **Token encoding:** DTCG `typography.letterSpacing` is a `dimension` in px or rem only (DC-L02-14), so the em value lives in `$extensions` (the engine already writes `letterSpacingEm`). Example primitives: `font.tracking.caps` = 0.05em, `font.tracking.tight` = -0.02em, referenced by `text.headline.*` and `text.label.sm` [inferred naming].
+- **Platform notes:** The sources give no web versus native difference. DC-L02-14 notes that iOS applies SF tracking automatically for system fonts.
+- **Accessibility constraints:** Layouts must survive a user override to 0.12em letter spacing (WCAG 1.4.12, DC-L02-14). Kole's -4% is one video's upper bound for text over 70-80px [S-L19-070]; tightening that far at ordinary heading sizes is not supported by any source.
+- **Default + heuristic:** Key tracking on the style's role as well as its size [inferred from S-L19-020, which says to tighten headings and leave body near 0]:
+  - capitals at any size: +0.05em (unchanged);
+  - 12px and below: +0.02em;
+  - body and label roles from 13px to 18px: 0;
+  - title and headline roles from about 20px to 31px: -0.01em;
+  - 32px to 69px: -0.02em (Emil's example value);
+  - display text from 70px: -0.03em (inside Kole's -2% to -4%).
+  - Rule of thumb: every heading role gets zero or negative tracking, the bigger it is the tighter, and body text never moves. With an optical-size font, check the table by eye, because the font already tightens some sizes.
+  - Differs from DC-L02-14, which starts at about 32px. The earlier start follows the house standard, which says to tighten headings whatever their size (STD-visual-details-05), and sits just below Schoger's 24-30px [S-L19-103]; the 20px threshold itself is [inferred]. It fixes the recorded conflict in which the default title.lg (22px) and headline.sm (27px) get no tightening, against STD-visual-details-05.
+- **Evidence:** [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]), [S-L19-004] ([[sources/ek-agents-with-taste-agents-with-taste|Agents with Taste]]), [S-L19-052] ([[sources/EcbgbKtOELY-every-ui-ux-concept-explained-in-under-10-minutes|Every UI/UX Concept Explained in Under 10 Minutes]]), [S-L19-070] ([[sources/c1TvOcKdBVE-the-8-ui-ux-cheat-codes-for-instantly-better-designs|The 8 UI/UX Cheat Codes for INSTANTLY Better Designs]]), [S-L19-103] ([[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]). Compared: DC-L02-14, DC-L02-25, DC-L02-04.
+- **Maps to:** Q-type-13:
+  - Remove option `zero`, or reword it as "the font's spacing for body text, with headings still tightened and capitals still loosened", because as written it breaks STD-visual-details-05 and STD-visual-details-04.
+  - New default: the role-and-size table above.
+  - Visual sample: the same large heading at 0 and at -2% [S-L19-070]; a hero heading at -2% to -3% with 110-120% line height [S-L19-052]; a monospace uppercase eyebrow with wide tracking [S-L19-103].
+  - Engine note: `tracking()` should key on heading roles from about 20px and never return 0 for capitals.
+- **Impact now / as it grows:**
+  - *Role-and-size table:* now, headings look tighter and more finished at no layout cost; as it grows, every new heading style gets correct tracking by declaring its role, and new scripts switch it off through DC-L02-25.
+  - *Hand-set value per style (Material style):* now, exact control; as it grows, every added style needs a hand-picked value and teams drift apart.
+  - *Font's own spacing everywhere (`zero`):* now, looser headings and cramped capitals; as it grows, each new display style repeats the problem, and the option breaks two house standards.
+- **Standards:** STD-visual-details-05, STD-visual-details-04, STD-visual-details-11.
+
+### DC-L19-22: Line height falls as size rises, with no inversions
+- **Block path:** Foundations > Typography > Metrics > Line height
+- **Questions the designer answers:** How tight should big headings be? May a bigger style ever get looser line spacing than a smaller one? Can line height stay on "auto"?
+- **Options:**
+  - **Ratio falls as size rises (house standard).** About 1.05 for display text and 1.5 for body; higher for scripts with tall ascenders and descenders; tighter for dense, information-heavy UI [S-L19-020].
+  - **Practitioner percentages.** Paragraphs about 150%, headings about 110-130%, higher for longer lines [S-L19-042]; large headers about 110-120% [S-L19-052].
+  - **Auto.** What most designers leave on most of the time; it falls off for very large text [S-L19-042].
+  - **Snap to a 4px grid (today's engine and DC-L02-13).** Bands of 1.5, 1.4, 1.25 and 1.12, then rounded to 4px. In the default scale this inverts leading: title.lg (22px) gets 1.4545 while body.lg (18px) gets 1.3333, and headline.md (34px) gets 1.2941 while headline.sm (27px) gets 1.1852 (the recorded conflict with STD-visual-details-06).
+  - **Snap to 2px, or keep the unsnapped ratio** (Q-type-11 `2pt` and `ratios`, DC-L02-13).
+- **Visual effect:** Tight display leading makes a headline read as one solid block; 1.5 keeps paragraphs easy to follow. An inverted pair makes the bigger heading look looser than the smaller text beside it [inferred]. Kole says auto line height "falls off" on extremely large text [S-L19-042].
+- **Depends on (upstream):** Q-type-08 base size, Q-type-09 ratio, the spacing grid (4px or 8px), Q-type-04 scripts (DC-L02-25).
+- **Affects (downstream):** `lineHeight` in every `text.*` style; heights of buttons, list rows and inputs where text sets the height; vertical rhythm; DC-L19-26 display moments.
+- **Token encoding:** DTCG `typography.lineHeight` is a unitless `number`; pixel values go in `$extensions` (the engine writes `lineHeightPx`). Example: `text.display.lg` lineHeight 1.05, `text.body.md` 1.5.
+- **Platform notes:** None from these sources. DC-L02-13 covers how Android places the first and last line differently.
+- **Accessibility constraints:** Text must survive a user override to 1.5x line height (WCAG 1.4.12) and WCAG 1.4.8 (AAA) asks for 1.5 inside paragraphs (DC-L02-13). Scripts with tall marks need more height (STD-visual-details-06, DC-L02-25), so a 1.05 display style needs the script-height adjustment before it is used for Indic or Thai text [inferred].
+- **Default + heuristic:** Keep DC-L02-13's bands for body, title and headline (1.5, then 1.4, then 1.25). For display roles use 1.05-1.1 (Emil's display sample, and the low end of Kole's range) instead of DC-L02-13's 1.1-1.15 and the engine's 1.12.
+  - Rule of thumb: after snapping, walk the ladder from small to large; the ratio may stay level or fall but never rise. If a 4px snap breaks that, snap that style to 2px or keep its exact ratio [inferred].
+  - Do not leave display text on auto, because auto falls off for extremely large text [S-L19-042].
+  - Differs from DC-L02-13 in the display band only.
+- **Evidence:** [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]), [S-L19-042] ([[sources/7sUUzOCv47U-mathematically-perfect-typography-for-web-design|Mathematically Perfect Typography for Web Design]]), [S-L19-052] ([[sources/EcbgbKtOELY-every-ui-ux-concept-explained-in-under-10-minutes|Every UI/UX Concept Explained in Under 10 Minutes]]). Compared: DC-L02-13, DC-L02-25.
+- **Maps to:** Q-type-11:
+  - New heuristic: the no-inversion check after snapping, falling back to 2px.
+  - New default for display roles: 1.05-1.1, because the house skill's display sample uses 1.05.
+  - Visual sample: a 64px+ heading on auto next to 110% [S-L19-042]; a paragraph at 150% under a heading at 110-130%.
+- **Impact now / as it grows:**
+  - *Falling ratio with the no-inversion check:* now, it fixes the inverted pairs in the default scale; as it grows, new sizes slot in without anyone re-checking leading by hand.
+  - *4px snapping only:* now, text lines up with a 4px grid; as it grows, every change of base size or ratio can create a new inversion.
+  - *Auto:* now, no effort; as it grows, very large text loosens and changes with every font swap.
+- **Standards:** STD-visual-details-06, STD-visual-details-07.
+
+### DC-L19-23: How heading, subheading and paragraph are told apart
+- **Block path:** Foundations > Typography > Hierarchy > Treatment by role
+- **Questions the designer answers:** In order of importance, what text is on a typical screen? Should the heading lead by size, by boldness, or both? Which text may be made lighter, and how light?
+- **Options:**
+  - **Size only.** Works, but gives little separation; the "before" in Kole's comparison [S-L19-057].
+  - **Bold, full-strength heading, plain subheadings, lighter paragraphs.** The predictable choice. It makes the smallest text also the lowest in contrast, which Kole calls neither usable nor attractive [S-L19-042].
+  - **Large plain heading, bold subheadings, full-strength paragraphs.** Size alone gives the heading the most attention; bold makes subheadings easy to scan; body text stays readable [S-L19-042].
+  - **Size plus two weights plus two text colors.** Kole's "after" [S-L19-057].
+  - **Weight, size and line height as one set (house standard).** Emphasise with weight, because it adds presence without taking space [S-L19-020]. Kole adds that an element also stands out when you change what surrounds it, rather than making its own text bolder [S-L19-080].
+  - **Same size, second line lowered by color.** In one hero teardown, two 15px stat lines differ only by the second line's 55% opacity [S-L19-043].
+- **Visual effect:** At small sizes a thinner weight and a lighter color look almost the same, because both reduce dark pixels, so either can push small text back [S-L19-042]. A large plain heading over bold subheads looks editorial and calm [inferred]. Kole calls faint small paragraphs neither very usable nor attractive [S-L19-042].
+- **Depends on (upstream):** Q-dir-03 (hierarchy strength, DC-L15-02), Q-type-12 (weights, DC-L19-24), Q-color-22 (text colors, DC-L01-14), Q-type-09 (ratio).
+- **Affects (downstream):** which weight each `text.*` role uses; which `color.text.*` each component slot uses (card metadata, captions, helper text, prose); the hierarchy rules in DESIGN.md.
+- **Token encoding:** Text color is not part of the DTCG typography composite (DC-L02-23), so the pairing lives in component tokens, for example `prose.body.color` = `{color.text.primary}` and `card.meta.color` = `{color.text.secondary}`; weights sit in the role composites (`text.headline.md.fontWeight` = `{font.weight.regular}`, `text.title.md.fontWeight` = `{font.weight.semibold}`) [inferred naming].
+- **Platform notes:** None from these sources.
+- **Accessibility constraints:** Secondary text still needs 4.5:1 (3:1 only for large text), which is OpenDesigner's locked floor. Opacity-based secondary text, computed with the WCAG 2 luminance formula [inferred: computed for this card]:
+  - Black on white: 40% gives 2.85:1, 45% gives 3.36:1, 50% gives 3.95:1, 55% gives 4.74:1 and 60% gives 5.74:1. The lowest passing value is 54%, or 59% if the primary text is a near-black such as #171717.
+  - White on black: 45% gives 4.43:1 (fails) and 50% gives 5.32:1. The lowest passing value is 46%, or 48% on a #27272a surface.
+  - So the low ends of Kole's 40-70% [S-L19-042] and 45-70% [S-L19-057] fail for body-size text, while his 55% example passes on white [S-L19-043].
+  - Color-only hierarchy fails people with low vision (DC-L15-02). On blurred or translucent surfaces, avoid flat gray text (STD-visual-details-13).
+- **Default + heuristic:**
+  - Rank the text first, then style it [S-L19-042].
+  - Headings lead by size and tight leading. Subheadings and titles take the stronger weight. Body text stays regular weight in the primary text color.
+  - Paragraphs stay at full strength [S-L19-042]; the secondary color is for metadata such as timestamps, captions and helper text [inferred].
+  - Opacity floor: 60% in light themes and 50% in dark themes, unless the engine checks each surface [inferred].
+  - Rule of thumb: the smallest text on a screen should not also be the faintest.
+  - This confirms DC-L01-14's heuristic (secondary text passes 4.5:1 on the lowest surface) and gives it opacity numbers. It does not conflict with STD-visual-details-07, because the plain heading still differs from its subheads in size, leading and weight contrast [inferred].
+- **Evidence:** [S-L19-042] ([[sources/7sUUzOCv47U-mathematically-perfect-typography-for-web-design|Mathematically Perfect Typography for Web Design]]), [S-L19-057] ([[sources/Lp6ey4AyDzA-8-web-design-hacks-to-actually-make-your-designs-better|8 Web Design Hacks To ACTUALLY Make Your Designs Better]]), [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]), [S-L19-080] ([[sources/neE6wOuBIP8-the-secret-behind-weirdly-perfect-ui-designs|The secret behind weirdly perfect UI designs]]), [S-L19-043] ([[sources/9WVt1CelBfg-the-stupid-simple-way-to-learn-ui-ux-design-in-exactly-10-minutes|The stupid simple way to learn UI/UX design in exactly 10 minutes]]). Compared: DC-L15-02, DC-L01-14, DC-L02-15, DC-L02-23.
+- **Maps to:**
+  - Q-dir-03, visual sample: Kole's two treatments of the same heading, subheadings and paragraphs (bold heading over faint body, against large plain heading, bold subheads and full-strength body) [S-L19-042].
+  - Q-type-12, new heuristic: body copy never takes the secondary text color.
+  - Q-color-22, new heuristic for `opacity-levels`: a floor of 60% (light) and 50% (dark) for secondary text, or a per-surface contrast check, because the low end of the source range fails 4.5:1. Disabled text stays exempt (DC-L01-14).
+- **Impact now / as it grows:**
+  - *Size-led heading, bold subheads, full-strength body:* now, readable and calm; as it grows, long-form pages (docs, help, articles) stay readable and new screens inherit clear roles.
+  - *Bold heading over faint body:* now, the familiar, predictable pattern [S-L19-042]; as it grows, every text-heavy surface gets harder to read, and tinted surfaces push faint text below 4.5:1.
+  - *Size only:* now, quick; as it grows and screens get denser, the levels blur together.
+- **Standards:** STD-visual-details-07, STD-visual-details-29, STD-visual-details-13, STD-visual-details-08.
+
+### DC-L19-24: Weight budget: how many weights, and how far apart
+- **Block path:** Foundations > Typography > Metrics > Weights
+- **Questions the designer answers:** How many font weights may one screen use? How different must two weights be? May we use an in-between weight such as 550?
+- **Options:**
+  - **At most two weights, at least one weight step apart.** Kole: if a family has 16 weights, pick two with at least one weight between them [S-L19-057]; avoid ultra-bold and ultra-thin for regular text [S-L19-042].
+  - **Three weights in the system.** DC-L02-15's default: 400 body, 500-600 labels, 600-700 headings (Carbon, Material, Atlassian).
+  - **In-between variable weights.** Schoger uses 550 when medium (500) feels too thin and semibold (600) too heavy [S-L19-103]; Polaris ships 450, 550 and 650 (DC-L02-15).
+  - **Weight as the emphasis tool.** Bold for interface emphasis, italic only for citations and stress in prose, underline only for links [S-L19-004]; weight adds presence without taking space [S-L19-020].
+- **Visual effect:** Too many weights or text colors are not visually appealing [S-L19-057]; two clearly different weights look deliberate [inferred]. Two neighbouring weights (400 and 500) can read as a mistake rather than a level [inferred]. An in-between weight fine-tunes how heavy a headline feels [S-L19-103].
+- **Depends on (upstream):** Q-type-01 and Q-type-03 (the face), Q-type-07 (a variable font is needed for in-between weights), Q-dir-03 (hierarchy strength).
+- **Affects (downstream):** `font.weight.*` primitives; the weight in each `text.*` role; emphasized variants (DC-L02-12); button and tab labels; how many font files a static family needs.
+- **Token encoding:** `fontWeight` tokens: `font.weight.regular` = 400, `font.weight.strong` = 600, and an optional `font.weight.heading` = 550 for variable fonts only; roles reference them (`text.title.md.fontWeight` = `{font.weight.strong}`) [inferred naming].
+- **Platform notes:** None from these sources. DC-L02-15 notes that iOS's Bold Text setting raises weights. A static font cannot show 550 and falls back to the nearest file [inferred].
+- **Accessibility constraints:** No thin or light weights at small sizes (Kole's "no extremes" [S-L19-042]; HIG in DC-L02-15). Bold, not italic or underline, for emphasis (STD-visual-details-08, STD-visual-details-09).
+- **Default + heuristic:** Three weights in the system (DC-L02-15), but any single view uses at most two, with at least one named weight between them: 400 and 600 [S-L19-057], or 400 and 550 in a variable font (Kole's rule combined with Schoger's in-between weight [S-L19-103] [inferred]).
+  - Rule of thumb: before adding a third weight to a screen, try size, spacing or the surroundings [inferred from S-L19-080, where emphasis comes from changing an element's surroundings].
+  - This reconciles DC-L02-15 (three) with Kole's two and with the BOARD note of two per view already cited in Q-type-12. In a family with weights every 100, Kole's rule of at least one weight between the two means 200 apart, so it gives DC-L15-02's "200 apart" heuristic a source [inferred]. It differs slightly from DC-L15-02: read against a variable font, the rule allows 400 with 550, which is 150 apart [inferred].
+- **Evidence:** [S-L19-057] ([[sources/Lp6ey4AyDzA-8-web-design-hacks-to-actually-make-your-designs-better|8 Web Design Hacks To ACTUALLY Make Your Designs Better]]), [S-L19-042] ([[sources/7sUUzOCv47U-mathematically-perfect-typography-for-web-design|Mathematically Perfect Typography for Web Design]]), [S-L19-103] ([[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]), [S-L19-004] ([[sources/ek-agents-with-taste-agents-with-taste|Agents with Taste]]), [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]), [S-L19-080] ([[sources/neE6wOuBIP8-the-secret-behind-weirdly-perfect-ui-designs|The secret behind weirdly perfect UI designs]]). Compared: DC-L02-15, DC-L02-12, DC-L15-02.
+- **Maps to:**
+  - Q-type-12, new default: "3 weights in the system, at most 2 in any one view, with at least one named weight between them".
+  - Q-type-12, new Use/avoid line: underline only links (STD-visual-details-09).
+  - Q-type-07, visual sample: one headline at 500, 550 and 600 [S-L19-103].
+  - Engine review idea: count distinct weights per preview screen [inferred].
+- **Impact now / as it grows:**
+  - *Two per view from three in the system:* now, calm and deliberate screens; as it grows, new components cannot add weights on a whim, and a static family needs fewer files.
+  - *Three or four in one view:* now, more nuance; as it grows, each team picks its own weights and screens drift apart.
+  - *In-between variable weights:* now, finely tuned headings; as it grows, the look depends on the variable font, and exports to targets without variable support lose the in-between value [inferred].
+- **Standards:** STD-visual-details-07, STD-visual-details-08, STD-visual-details-09.
+
+### DC-L19-25: Size budget per surface: how many sizes, and how big
+- **Block path:** Foundations > Typography > Type scale > Size budget per surface
+- **Questions the designer answers:** How many text sizes may one page use? What is the largest text on the product's working screens? Do marketing pages get a wider range?
+- **Options:**
+  - **Landing and marketing pages: up to six sizes with a large range** [S-L19-052].
+  - **Dashboards: nothing above 24px.** The range shrinks because more information must fit [S-L19-052]; dashboards use many small sizes with small steps between them [S-L19-047].
+  - **A productive scale runs to about 32px** (DC-L02-11: productive sizes 12-32), above Kole's 24px.
+  - **About three sizes per view** (the BOARD L15 note in Q-type-10's Use/avoid).
+  - **Ratio chosen by surface.** Golden ratio (1.62) only when there is just a heading and body, its square root (1.27) for a full style guide, and its cube root for dashboards and mobile [S-L19-042]; the cube root is about 1.17 [inferred]. Kole calls this his own method, and L15 rates golden-ratio scales as weak evidence.
+  - **Avoid mixing extremes on one page.** Giant headline sections next to small spec-text sections split a site into two styles [S-L19-065]; tiny text in a blog list is a flaw [S-L19-082]; the product's name in a 12px corner hides what it is [S-L19-084].
+- **Visual effect:** A small dashboard range looks dense and calm and fits more rows; a wide landing-page range looks dramatic and editorial (DC-L02-11's productive and expressive scales). A page mixing giant and tiny text feels like two different sites [S-L19-065].
+- **Depends on (upstream):** Q-dir-02 (density), Q-dir-03 (hierarchy strength), Q-brand-06 (marketing set), Q-type-09 (ratio).
+- **Affects (downstream):** which `text.*` styles product screens may use (display styles kept out of app screens); an `engine.py review` check; each style's Use/avoid lines in DESIGN.md.
+- **Token encoding:** No new tokens. Surface metadata on styles in `$extensions`, for example `surfaces: ["marketing"]` on `text.display.*`, plus review settings such as `type.maxSizesPerView` [inferred].
+- **Platform notes:** Kole puts mobile with dashboards for the tighter ratio [S-L19-042]; DC-L19-32 covers mobile sizes.
+- **Accessibility constraints:** None directly. Fewer, clearly different sizes help people who rely on visual hierarchy (DC-L02-10); minimum readable sizes still apply (DC-L02-20).
+- **Default + heuristic:**
+  - Product and dashboard screens: about three sizes per view (confirms Q-type-10's note), the largest 24px for `compact` density and up to about 32px for page titles in roomier apps. This reconciles Kole's 24px with DC-L02-11's 32px [inferred].
+  - Marketing pages: at most six sizes per page, with a free range.
+  - The system can still hold 8-10 sizes (DC-L02-10), because each surface uses a different subset [inferred].
+  - Kole's six and 24px are one creator's rules of thumb.
+  - Rule of thumb: count sizes per view in review, and flag any display style used inside the app.
+  - This confirms DC-L02-09's ratio bands (1.125-1.2 dense, 1.25 mixed): Kole's 1.27 and roughly 1.17 fall inside them [inferred].
+- **Evidence:** [S-L19-052] ([[sources/EcbgbKtOELY-every-ui-ux-concept-explained-in-under-10-minutes|Every UI/UX Concept Explained in Under 10 Minutes]]), [S-L19-047] ([[sources/B7k5rOgmOGY-everything-you-need-to-know-to-build-a-dashboard-ui-in-8-minutes-beginner-friendly|EVERYTHING you need to know to build a Dashboard UI in 8 minutes (beginner friendly)]]), [S-L19-042] ([[sources/7sUUzOCv47U-mathematically-perfect-typography-for-web-design|Mathematically Perfect Typography for Web Design]]), [S-L19-065] ([[sources/V3Omp1hm0Sg-i-redesigned-a-failing-tesla-wannabe-full-website-to-save-it|I Redesigned a Failing Tesla WANNABE Full Website To SAVE It]]), [S-L19-082] ([[sources/pGYLZyBE32o-i-redesigned-google-s-ai-website-from-scratch-complete-transformation|I Redesigned Google's AI Website from SCRATCH (complete transformation)]]), [S-L19-084] ([[sources/tNMAFjzapOk-the-formula-behind-truly-captivating-ui-sections|The Formula Behind Truly Captivating UI Sections]]). Compared: DC-L02-09, DC-L02-10, DC-L02-11, DC-L15-02.
+- **Maps to:**
+  - Q-type-10, new heuristic: a size budget per surface plus a review check.
+  - Q-dir-02, new heuristic: `compact` caps product text at 24px [inferred: Kole's cap is for dashboards, not for a density setting].
+  - Q-type-09: confirms the current ratio bands.
+  - Visual sample (Q-type-09 or Q-dir-02): landing-page and dashboard text styles side by side [S-L19-047] [S-L19-052].
+- **Impact now / as it grows:**
+  - *Budget per surface:* now, each surface looks coherent; as it grows, the review check keeps new pages and new teams inside the budget.
+  - *One budget for everything:* now, simpler; as it grows, dashboards pick up marketing sizes or marketing pages look timid.
+- **Standards:** STD-visual-details-29.
+
+### DC-L19-26: Giant display text as a visual element
+- **Block path:** Foundations > Typography > Expressive type > Display moments
+- **Questions the designer answers:** Should any page use giant text as a picture in its own right? How many times per page? In which font, and what sits next to it?
+- **Options:**
+  - **No giant text.** Text only explains the site, the view Kole argues against [S-L19-057].
+  - **One, maybe two giant moments per page in a good display font** [S-L19-057]. His favourite display faces include Unbounded and Cabinet Grotesk [S-L19-057].
+  - **Giant-text hero.** A massive headline (Oswald at 290px) with very small navigation text beneath it, then large images [S-L19-060].
+  - **Text as a story element.** A distinctive or animated display font, or two lines that swap in one spot as you scroll [S-L19-050].
+  - **Headline tucked behind the photo's subject.** Trace the subject's edge and subtract it from the text [S-L19-065].
+  - **Brand face from the logo** used for the hero heading [S-L19-049].
+- **Visual effect:** A good display font can matter as much as an image [S-L19-057]. The size gap against tiny navigation makes the headline feel important [S-L19-060]. Giant text surrounded by too much empty space feels disjointed [S-L19-065]. An overdone headline swallows its sub-line [S-L19-072].
+- **Depends on (upstream):** Q-brand-06 (a marketing set), Q-type-05 (a display face, DC-L19-27), Q-type-15 (fluid sizes, DC-L19-31), Q-type-02 (licence: check it before using a font found on another site [S-L19-050]).
+- **Affects (downstream):** `text.display.*` styles and their fluid values; hero components; the page-level review; tracking and leading of display styles (DC-L19-21, DC-L19-22).
+- **Token encoding:** `text.display.xl` (typography) with `fontFamily` = `{font.family.display}`; the fluid size as a clamp string in `$extensions` (DC-L02-19); a usage note such as `maxPerPage: 2` in `$extensions` [inferred].
+- **Platform notes:** Every example in these sources is a website [S-L19-050]; the sources say nothing about native apps.
+- **Accessibility constraints:** Display text must still scale with the user's text size (STD-accessibility-motion-13, DC-L19-31). Display type follows the tight-leading and negative-tracking standards (STD-visual-details-06, STD-visual-details-05). Keep the sub-line at a readable size and contrast [inferred].
+- **Default + heuristic:** None inside product UI. On marketing pages, at most two giant moments per page. That number comes from one video and is opinion.
+  - Rule of thumb: if a page has more than two giant-text sections, or puts giant sections next to tiny spec text, rework the page rather than the type [S-L19-057] [S-L19-065].
+  - This extends DC-L02-11 (3-4 expressive display styles) with a usage budget.
+- **Evidence:** [S-L19-057] ([[sources/Lp6ey4AyDzA-8-web-design-hacks-to-actually-make-your-designs-better|8 Web Design Hacks To ACTUALLY Make Your Designs Better]]), [S-L19-060] ([[sources/P2ksReDwWkE-website-layouts-to-make-a-professional-website-design-in-2024|Website Layouts To Make A Professional Website Design in 2024]]), [S-L19-050] ([[sources/EHwZzWd-OnQ-7-ui-design-trends-that-are-criminally-slept-on-dont-miss-these|7 ui design trends that are CRIMINALLY slept on (don’t miss these)]]), [S-L19-065] ([[sources/V3Omp1hm0Sg-i-redesigned-a-failing-tesla-wannabe-full-website-to-save-it|I Redesigned a Failing Tesla WANNABE Full Website To SAVE It]]), [S-L19-072] ([[sources/eMMiLeo_UGI-the-4-levels-of-landing-page-ui-ux-design|The 4 Levels of Landing Page UI/UX Design]]), [S-L19-049] ([[sources/BvbFPzLjWcU-redesigning-a-modern-skincare-ui-from-scratch-free-design-files|Redesigning A Modern Skincare UI from SCRATCH (+ free design files)]]). Compared: DC-L02-11, DC-L02-19.
+- **Maps to:**
+  - Q-brand-06, new heuristic: at most two giant-text moments per marketing page.
+  - Q-brand-06, visual sample: a giant-text hero (a 290px display headline with small navigation beneath) [S-L19-060].
+  - Q-type-05 `display-face`: add "for giant text only; check the licence".
+- **Impact now / as it grows:**
+  - *No giant text:* now, a quiet page; as it grows, marketing leans on imagery for identity.
+  - *One or two moments per page:* now, a memorable brand moment; as it grows, the display style needs a rule so product teams do not reuse it inside the app.
+  - *Giant text everywhere:* now, loud; as it grows, pages read as different sites and hierarchy is lost.
+- **Standards:** STD-visual-details-05, STD-visual-details-06, STD-accessibility-motion-13, STD-visual-details-11.
+
+### DC-L19-27: The second typeface's job
+- **Block path:** Foundations > Typography > Typeface > Families and pairing
+- **Questions the designer answers:** Is one font enough? If you add a second, what exactly is its job? Which text must never use it?
+- **Options:**
+  - **One sans for everything.** Kole: one font is entirely acceptable, two is the limit, three is pushing it and four invites problems [S-L19-042]. Pick a nice sans and do not spend long on it [S-L19-052]. One font throughout counts as a strength even on a weak page [S-L19-072].
+  - **Display face plus sans**, with the display face only for giant text [S-L19-042] [S-L19-057].
+  - **Sans plus serif for personality.** Like a printed menu for a restaurant brand, with hero lines split between serif and sans [S-L19-062].
+  - **Serif accent for important words.** The animations.dev site added a serif to emphasise important words; this is a changelog entry, not stated guidance [S-L19-001].
+  - **Handwritten face in the display role** [S-L19-042]; quirky display fonts on stickers [S-L19-075].
+  - **Monospace for details.** Schoger's monospace uppercase eyebrows [S-L19-103]; Kole's portfolio uses a third, monospace font for captions, which he calls an edge case [S-L19-042]; Kole removed a monospace that did not fit a restaurant brand [S-L19-062].
+  - **Pairing help.** A pairing tool such as Fontjoy for beginners, who tend to pair badly [S-L19-073].
+- **Visual effect:** One sans looks clean and consistent. A mixed-in serif adds personality, like a printed menu [S-L19-062]. Monospace eyebrows look more designed and more interesting [S-L19-103]. A display face gives poster-like brand moments [inferred].
+- **Depends on (upstream):** Q-type-01, Q-type-03, Q-brand-01 (personality), Q-type-02 (licence), Q-type-04 (script coverage of each face).
+- **Affects (downstream):** how many `font.family.*` tokens exist and which roles use each; the loading budget; a metric-matched fallback for each added face (STD-visual-details-10).
+- **Token encoding:** `fontFamily` primitives `font.family.text`, `font.family.display`, `font.family.accent` and `font.family.mono`; roles alias them, for example `text.eyebrow.fontFamily` = `{font.family.mono}` [inferred naming].
+- **Platform notes:** None from these sources. DC-L06-07: on iOS a bundled face must support Dynamic Type and Bold Text.
+- **Accessibility constraints:** Never set paragraphs or small text in a display or handwritten face [S-L19-042]. The serif accent belongs in marketing headlines, not interface emphasis, which stays on weight (STD-visual-details-08) [inferred]. Every face passes the confusable-pairs check in Q-type-03.
+- **Default + heuristic:** Confirms DC-L02-03's default: one UI family plus mono, with an optional serif or display face for marketing.
+  - New: a second face must name its job from a short list (giant display, headline accent words, eyebrows and small details, code). It must never be used for body, labels or inputs [inferred from S-L19-042].
+  - Rule of thumb: add a second face only when it echoes something real in the brand, such as the logo, the packaging or the domain's printed world [inferred from S-L19-062 and S-L19-049].
+- **Evidence:** [S-L19-042] ([[sources/7sUUzOCv47U-mathematically-perfect-typography-for-web-design|Mathematically Perfect Typography for Web Design]]), [S-L19-052] ([[sources/EcbgbKtOELY-every-ui-ux-concept-explained-in-under-10-minutes|Every UI/UX Concept Explained in Under 10 Minutes]]), [S-L19-072] ([[sources/eMMiLeo_UGI-the-4-levels-of-landing-page-ui-ux-design|The 4 Levels of Landing Page UI/UX Design]]), [S-L19-057] ([[sources/Lp6ey4AyDzA-8-web-design-hacks-to-actually-make-your-designs-better|8 Web Design Hacks To ACTUALLY Make Your Designs Better]]), [S-L19-062] ([[sources/RCneB_MQ7qs-the-one-thing-vibe-coding-cant-fix-about-your-website|The one thing vibe coding CAN’T fix about your website]]), [S-L19-001] ([[sources/adev-changelog-animations-dev|animations.dev]]), [S-L19-075] ([[sources/gKM6b2EnW1k-upgrading-9-crucial-ui-elements-free-figma-file-included|Upgrading 9 CRUCIAL UI Elements (free figma file included)]]), [S-L19-103] ([[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]), [S-L19-073] ([[sources/eeN7yUcIWbw-20-top-underrated-web-design-resources-for-2025|20 Top Underrated Web Design Resources for 2025]]), [S-L19-049] ([[sources/BvbFPzLjWcU-redesigning-a-modern-skincare-ui-from-scratch-free-design-files|Redesigning A Modern Skincare UI from SCRATCH (+ free design files)]]). Compared: DC-L02-03, DC-L06-07, DC-L02-05.
+- **Maps to:**
+  - Q-type-05, new option `accent-serif`: "Sans everywhere, plus a serif for a few emphasized words or lines in headlines" (animations.dev; Kole's restaurant redesign). It is a narrower use of the existing `sans-serif` option.
+  - Q-type-05, new heuristic: a second face must have a named job; display and handwritten faces never go below heading sizes.
+  - Q-type-05, visual sample: a hero with lines split between serif and sans [S-L19-062].
+  - Q-type-06, visual sample: a monospace uppercase eyebrow [S-L19-103].
+  - Otherwise confirms the current default.
+- **Impact now / as it grows:**
+  - *One sans:* now, the fastest and cheapest to set up; as it grows, it is easy to maintain, but identity must come from color and imagery.
+  - *Serif accent:* now, personality; as it grows, someone must decide which words get the accent, so it needs a written rule and one more font file.
+  - *Monospace eyebrows:* now, a more designed feel [S-L19-103]; as it grows, it may suit developer and tech brands and clash with warm ones, as a monospace did in Kole's restaurant redesign [S-L19-062] [inferred].
+  - *Display face:* now, strong brand moments; as it grows, there is a risk of it leaking into product UI (DC-L19-26).
+- **Standards:** STD-visual-details-11, STD-visual-details-10, STD-visual-details-08.
+
+### DC-L19-28: Setting up an open font: variable file, display cut, letter alternates, fallback
+- **Block path:** Foundations > Typography > Typeface > Font files and features
+- **Questions the designer answers:** If we use a free font such as Inter, which version do we load? Do headings use its display cut? Which alternate letter shapes do we turn on or off? What shows while it loads?
+- **Options:**
+  - **System font (house default).** Nothing to load; it already ships optical sizing, tracking tables and legibility tuning [S-L19-020]. With no project to build on, prototypes use the system stack (STD-visual-details-25).
+  - **Basic default Inter.** What Claude-generated sites typically lean on, in Schoger's experience [S-L19-103]; fonts are one of the three biggest fixes after generating a screen with AI, with alignment and color [S-L19-086].
+  - **Variable Inter from its designer's site (rsms.me), with its feature settings and display cut.** It gives in-between weights such as 550, a display version with more impact, and features such as a single-storey a. Schoger also asked for the tailed lowercase l to be turned off [S-L19-103].
+  - **A brand face already on the logo and packaging**, reused for headings [S-L19-049].
+  - **Metric-matched fallback (house must).** A fallback stack whose x-height and weight match the primary face, so loading causes no layout shift [S-L19-004].
+- **Visual effect:** Plain default Inter is what Claude tends to produce [S-L19-103]. The display cut gives headings a little more impact [S-L19-103]. Letter alternates shift personality in small ways; a single-storey a reads softer [inferred].
+- **Depends on (upstream):** Q-type-01 (`open-neutral` or `open-custom`), Q-type-07 (variable axes).
+- **Affects (downstream):** `font.family.*` values; `@font-face` rules; feature settings per role; the fallback stack; layout shift on first load.
+- **Token encoding:** `fontFamily` arrays with fallbacks (for example `["InterVariable", "Inter", "<metric-matched fallback>", "system-ui", "sans-serif"]`). Features, optical sizing and variable axes are not in the DTCG typography composite (DC-L02-27), so they go in `$extensions` (`fontFeatureSettings`, `fontOpticalSizing: auto`, `fontVariationSettings`) [inferred naming].
+- **Platform notes:** On the web, the house sample sets `font-optical-sizing: auto` on display text [S-L19-020]; with a font that has an optical-size axis, that selects the display design at large sizes [inferred]. The sources give no native equivalent.
+- **Accessibility constraints:** The fallback must match the primary face's metrics (STD-visual-details-10). Turning off Inter's tailed l, as Schoger did, leaves capital I and lowercase l looking alike [inferred]. Keep Q-type-03's confusable-pairs check (Il1) in the specimen, and keep the distinguishing shape in data-heavy or code-heavy products [inferred].
+- **Default + heuristic:** Keep the system font as the default (STD-visual-details-11).
+  - When a variable open font such as Inter is chosen: load the variable file, use its display cut or optical sizing for heading sizes, use the weight axis for in-between weights, and write a metric-matched fallback.
+  - When Inter is chosen, prefer its variable file with the display cut over plain static Inter, as Schoger does [S-L19-103]. This is one practitioner's taste; extending it to other families is [inferred].
+  - The engine writes no `@font-face` rule and no metric overrides today, which is the recorded conflict with STD-visual-details-10.
+- **Evidence:** [S-L19-103] ([[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]), [S-L19-086] ([[sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai|Vibe Coding a Pro UI in SECONDS With AI]]), [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]), [S-L19-004] ([[sources/ek-agents-with-taste-agents-with-taste|Agents with Taste]]), [S-L19-049] ([[sources/BvbFPzLjWcU-redesigning-a-modern-skincare-ui-from-scratch-free-design-files|Redesigning A Modern Skincare UI from SCRATCH (+ free design files)]]), [S-L19-031] ([[sources/eks-skills-prototype-skill-emilkowalski-skills-skills-prototype-skill-md|emilkowalski/skills: skills/prototype/SKILL.md]]). Compared: DC-L02-04, DC-L02-06, DC-L02-27, DC-L10-06.
+- **Maps to:**
+  - Q-type-07, confirms the default `variable-opsz`.
+  - Q-type-07, visual sample: Inter's text cut and display cut on the same 48px heading.
+  - New question (zoom 3, stage 10): "Should any alternate letter shapes be on or off (single-storey a, tailed l)?", with the confusable-pairs specimen as its preview.
+  - Q-type-02: also show it for `open-neutral` and `open-custom` when the face is loaded from files, so loading and the metric-matched fallback get decided.
+  - Engine: write `@font-face` and a metric-matched fallback (STD-visual-details-10).
+- **Impact now / as it grows:**
+  - *System font:* now, nothing to load and a native feel; as it grows, it stays consistent across platforms automatically but is less recognizable.
+  - *Default static Inter:* now, quick to set up; as it grows, the product looks like the default AI-generated sites Schoger describes [S-L19-103] [inferred].
+  - *Variable Inter with features:* now, higher-impact headings; as it grows, one file covers every weight, but feature choices must be written down so code and Figma match [inferred].
+- **Standards:** STD-visual-details-11, STD-visual-details-10, STD-visual-details-25.
+
+### DC-L19-29: Measure for paragraphs and headings, set in characters
+- **Block path:** Foundations > Typography > Layout of text > Measure
+- **Questions the designer answers:** How wide can a paragraph get? How wide can a heading get? In what unit do we set those widths?
+- **Options:**
+  - **Body capped at about 65ch (house must)** [S-L19-004].
+  - **Wider ranges in today's questions.** Q-type-14 `measure-45-75` and Q-layout-03 `reading` (40-80 characters) allow lines above 65ch, the recorded conflict with STD-visual-details-01.
+  - **Headings set in ch.** Schoger tried 45ch and 35ch and chose 40ch for section headings, replacing a fixed max width [S-L19-103].
+  - **Fixed max width** (a rem or px container such as max-w-3xl), which Schoger replaced [S-L19-103].
+  - **The ch width goes on the element that sets the font size.** When it sat on another element, the text came out too narrow [S-L19-103].
+- **Visual effect:** Paragraphs at about 65ch are comfortable to read [S-L19-004]. Headings at about 40ch wrap into a few even lines and look composed [inferred]. Schoger prefers a width set in characters because it is more flexible than a fixed width [S-L19-103]; a fixed width holds a different number of characters whenever the font or size changes [inferred].
+- **Depends on (upstream):** Q-type-08 (base size); the chosen face (ch depends on its glyph widths); Q-layout-03 (containers); Q-type-04 (CJK needs about half the character count, DC-L02-17).
+- **Affects (downstream):** `size.measure.*` tokens; prose containers; hero and section heading components; card text.
+- **Token encoding:** `size.measure.body` = 65ch and `size.measure.heading` = 40ch. DTCG `dimension` allows only px and rem, so the ch value goes in `$extensions` with a rem approximation (DC-L02-17) [inferred].
+- **Platform notes:** The sources give only CSS; nothing on native apps.
+- **Accessibility constraints:** WCAG 1.4.8 (AAA) caps lines at 80 characters, or 40 for CJK, and text must reflow at 200% (DC-L02-17).
+- **Default + heuristic:** Body max 65ch and heading max about 40ch, each set on the element that sets the font size. The 40ch comes from one video and was chosen by eye.
+  - Rule of thumb: if a heading needs more than three lines at 40ch, shorten the copy before widening the measure [inferred].
+  - Differs from DC-L02-17 (65-70ch) and from Q-type-14's 45-75: the house standard caps body at about 65ch.
+- **Evidence:** [S-L19-004] ([[sources/ek-agents-with-taste-agents-with-taste|Agents with Taste]]), [S-L19-103] ([[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]). Compared: DC-L02-17.
+- **Maps to:**
+  - Q-type-14: change option `measure-45-75` to `measure-65`, "45-65 characters, capped at about 65ch", because of STD-visual-details-01.
+  - Q-type-14: new option `heading-40ch`.
+  - Q-type-14, new default: body 65ch and headings 40ch.
+  - Q-type-14, visual sample: one heading at 35, 40 and 45ch.
+  - Flag for the layout area: Q-layout-03 `reading` should cap at 65 characters.
+- **Impact now / as it grows:**
+  - *65ch body with 40ch headings:* now, comfortable paragraphs and composed headings; as it grows, docs and help pages stay readable on wide screens, but translated headings get longer (DC-L06-24) and need a long-string test (DC-L19-35).
+  - *Fixed px or rem widths:* now, simple; as it grows, line lengths break whenever fonts or sizes change.
+- **Standards:** STD-visual-details-01.
+
+### DC-L19-30: How headings and short text break across lines
+- **Block path:** Foundations > Typography > Layout of text > Line breaking
+- **Questions the designer answers:** Should a heading avoid a single word alone on its last line? Should heading lines be balanced? Should a headline of several sentences start each sentence on a new line?
+- **Options:**
+  - **The browser's default wrapping**, which can leave an orphan word [S-L19-103].
+  - **`text-wrap: pretty`**, which removed the orphan in Schoger's stats heading [S-L19-103].
+  - **`text-wrap: balance`**, which evens out line lengths; it wrapped his call-to-action heading better than `pretty` did [S-L19-103].
+  - **One sentence per line** in a multi-sentence headline [S-L19-103].
+  - **Truncation** with the ellipsis character (DC-L02-18, DC-L19-39).
+- **Visual effect:** Schoger dislikes orphan words, and `balance` looked better than `pretty` on his call-to-action heading [S-L19-103]. That orphans look careless and balanced headings look composed is [inferred].
+- **Depends on (upstream):** DC-L19-29 (measure), DC-L19-36 (copy length).
+- **Affects (downstream):** headings, heroes, call-to-action blocks and card titles; the base CSS in the export.
+- **Token encoding:** None in DTCG. It can be a per-role hint in `$extensions`, such as `textWrap: "balance"` on `text.headline.*`, emitted as CSS [inferred].
+- **Platform notes:** `text-wrap` is CSS; the sources give no native equivalent.
+- **Accessibility constraints:** Hard line breaks can misbehave when text is enlarged or reflows at 200%, so prefer CSS wrapping over manual breaks, except at sentence boundaries [inferred].
+- **Default + heuristic:** `balance` on headings and short centered text; `pretty` on paragraphs [inferred split]. Schoger tried `pretty` first and switched to `balance` where `pretty` still wrapped oddly, so the preview should show both.
+  - Rule of thumb: when a heading still breaks badly, first try the other wrap mode, then edit the copy.
+- **Evidence:** [S-L19-103] ([[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]). Compared: DC-L02-18.
+- **Maps to:**
+  - Q-type-14, new option `wrap-balance-pretty`, on by default for the web export.
+  - Q-type-14, visual sample: a stats heading with an orphan word next to the `pretty` fix; a call-to-action heading with `pretty` against `balance` [S-L19-103].
+- **Impact now / as it grows:**
+  - *`balance` and `pretty` by default:* now, polished headings for free; as it grows, new headings and translated strings wrap well without manual work.
+  - *Manual breaks:* now, exact control; as it grows, every locale and screen width needs its own breaks.
+- **Standards:** none (STD-visual-details-03 governs the ellipsis when text is cut).
+
+### DC-L19-31: Which text sizes follow the screen width
+- **Block path:** Foundations > Typography > Responsive type > Fluid scope
+- **Questions the designer answers:** Which text changes size with the screen width: all of it, only big headings, or none? Between which widths? Does it stop growing at some point?
+- **Options:**
+  - **Every size fluid.** Kole's one-line formula scales each size in a straight line from its smallest value at a 320px-wide screen to its largest at 1920px, capped with max() and min() unless growth works for the design. Only sizes change with the screen; colors, weights and pairings stay the same [S-L19-042].
+  - **Display only.** The house skill's sample makes display text fluid with `clamp(2rem, 5vw, 4rem)` and keeps body at `100%/1.5` [S-L19-020].
+  - **Fixed.** DC-L02-19 and Q-type-15's default, for body and UI text.
+  - **Steps at breakpoints.** Kole calls adjusting every size at breakpoints messy [S-L19-042].
+- **Visual effect:** Fluid heroes fill wide screens and shrink smoothly (DC-L02-19). Fluid body and UI text makes components change size with the window, which looks less app-like [inferred].
+- **Depends on (upstream):** Q-type-08, Q-brand-06, breakpoints and containers (layout), Q-type-17 (text scaling).
+- **Affects (downstream):** size values of `text.display.*` and `text.headline.*`; clamp strings in the CSS export; hero layouts.
+- **Token encoding:** min and max as rem `dimension` tokens, with the clamp string in `$extensions` (DC-L02-19).
+- **Platform notes:** Web only; native apps follow the user's text size setting instead (DC-L02-19).
+- **Accessibility constraints:** A size that is only a viewport unit ignores the user's text-size setting in its middle range (STD-accessibility-motion-13). The house sample's middle value (5vw) is viewport-only, so keep the min and max in rem and add a rem term to the middle value, for example `clamp(2rem, 1rem + 3vw, 4rem)` [inferred]. Keep the max at or below 2.5 times the min (DC-L02-19); the house sample is 2 times.
+- **Default + heuristic:** Confirms DC-L02-19 and Q-type-15: fixed body and UI text, fluid display and headline styles on the web.
+  - New: Kole's endpoints (320px to 1920px) as a starting range, against Utopia's 360px to 1240px in DC-L02-19. Pick the layout's own narrowest and widest container instead [inferred].
+  - Rule of thumb: a style used inside a card, table or form stays fixed (DC-L02-19).
+  - Differs from Kole, who makes every size fluid [S-L19-042].
+- **Evidence:** [S-L19-042] ([[sources/7sUUzOCv47U-mathematically-perfect-typography-for-web-design|Mathematically Perfect Typography for Web Design]]), [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]). Compared: DC-L02-19, DC-L02-11.
+- **Maps to:**
+  - Q-type-15: confirms the default `fixed`.
+  - Q-type-15 `fluid`: add "display and headline only, interpolated between the layout's narrowest and widest container, with a rem term in the middle value".
+  - Q-type-15, visual sample: Kole's graph of font size against screen width, with its min and max caps [S-L19-042].
+- **Impact now / as it grows:**
+  - *Fluid display only:* now, heroes adapt to any width; as it grows, each new display style needs a min and max pair, while app text stays stable.
+  - *Everything fluid:* now, smooth everywhere; as it grows, component sizes vary with the window, Figma specs get harder and zoom testing grows.
+  - *Fixed everywhere:* now, simplest; as it grows, marketing heroes need breakpoints.
+- **Standards:** STD-accessibility-motion-13, STD-visual-details-06.
+
+### DC-L19-32: Text size on phones and inside form fields
+- **Block path:** Foundations > Typography > Type scale > Mobile and input sizes
+- **Questions the designer answers:** Should phone text be smaller than desktop text? What size is the text inside inputs? Does a 14px desktop body carry over to phones?
+- **Options:**
+  - **Same as desktop or larger on phones.** A squished mobile design looks fine alone but small next to real apps; iOS's base font is 17 against 13 on macOS [S-L19-053]. Apple states these in points; the source says pixels.
+  - **Shrink to fit more.** Not recommended [S-L19-053].
+  - **Inputs at 16px or more (house must).** Set input, textarea and select to at least 16px, or apply the 16px only under `@media (pointer: coarse)` when desktop wants smaller input text. Never disable zoom, and set `-webkit-text-size-adjust: 100%` [S-L19-028].
+  - **Mobile about 1.15-1.2 times desktop** (DC-L02-20; Spectrum 14px to 17px).
+- **Visual effect:** Phone type at desktop size or larger matches real apps, while squished type looks small beside them [S-L19-053]. Input text under 16px makes iOS Safari zoom the page on focus and leave it drifted [S-L19-028].
+- **Depends on (upstream):** Q-plat-01 (platforms), Q-type-08 (base size), Q-dir-02 (density).
+- **Affects (downstream):** platform modes on `text.body.*`; a dedicated input text style; input, textarea and select components; the engine preview, which styles `.ds-input` with `text.body.md`.
+- **Token encoding:** `text.input.md` (typography) with `fontSize` 1rem [inferred name]; a platform mode on `font.size.*` (DC-L02-20).
+- **Platform notes:** iOS Safari zooms on focus below 16px [S-L19-028]. iOS base 17 and macOS base 13 [S-L19-053].
+- **Accessibility constraints:** Never block pinch zoom (STD-accessibility-motion-27); text must follow the user's text size (STD-accessibility-motion-13).
+- **Default + heuristic:** Keep Q-type-08's 14px UI body for pointer devices, and add:
+  - inputs, textareas and selects use a 16px style everywhere, or at least under coarse pointers;
+  - mobile web body text is 16px or more [inferred from DC-L02-20's 1.15-1.2x and S-L19-053];
+  - native iOS uses 17pt.
+  - Rule of thumb: a phone screen should not use smaller type than the same desktop screen; Kole says phone type stays about the same or grows [S-L19-053].
+  - This settles two things. DC-L02-20 marked the "16px on mobile web" rule as unverified; its input half is now a house standard [S-L19-028], while 16px mobile body text still rests on DC-L02-20 and Kole [S-L19-053]. It also fixes the recorded STD-mobile-touch-11 conflict, in which the preview's inputs are 14px.
+- **Evidence:** [S-L19-053] ([[sources/Gfsd8NNuD9g-everything-you-need-to-know-about-mobile-app-uis-in-8-minutes-beginner-friendly|Everything you need to know about Mobile App UI’s in 8 minutes (beginner friendly)]]), [S-L19-028] ([[sources/eks-skills-mobile-native-skill-emilkowalski-skills-skills-mobile-native-skill-md|emilkowalski/skills: skills/mobile-native/SKILL.md]]). Compared: DC-L02-08, DC-L02-20.
+- **Maps to:**
+  - Q-type-08, new default: "14px UI body on desktop; 16px input text (on coarse pointers at minimum); body of at least 16px on mobile web; 17pt on iOS", because of STD-mobile-touch-11.
+  - Engine: add a `text.input` style.
+  - Q-type-16: confirms `platform-modes`.
+  - Visual sample (Q-type-08 or Q-type-16): a squished mobile screen next to real app sizes [S-L19-053].
+- **Impact now / as it grows:**
+  - *16px inputs and no smaller phone type:* now, no zoom jump on focus; as it grows, every new form inherits it.
+  - *14px everywhere:* now, denser; as it grows, every mobile form zooms on iOS and teams are tempted to disable zoom, which is forbidden.
+- **Standards:** STD-mobile-touch-11, STD-accessibility-motion-27, STD-accessibility-motion-13, STD-mobile-touch-21.
+
+### DC-L19-33: Key numbers: style, alignment, label and context
+- **Block path:** Foundations > Typography > Details > Numbers (stats, prices, metrics)
+- **Questions the designer answers:** How do headline stats and prices look? Do numbers that change keep their width? What words go with a number?
+- **Options:**
+  - **Tabular digits on price columns and on numbers that change in place (house must)** [S-L19-004] [S-L19-019].
+  - **Large value in regular weight.** Schoger found the generated stat numbers clunky and reset them large (5XL) in regular weight, with labels in gray 600, left-aligned, with a divider between stats [S-L19-103].
+  - **Two stat lines at the same size**, the second lowered by opacity (15px, 55%) [S-L19-043].
+  - **Price larger than the plan name** on pricing cards, because people care about the cost, not the name [S-L19-061].
+  - **Text hard left, values hard right** in lists and line items [S-L19-080].
+  - **A dedicated metric style** (Atlassian `font.metric.large` 28/32, DC-L02-05).
+  - **Words around numbers.** Label every chart and number [S-L19-068]; show an actual percentage instead of "in progress" [S-L19-086]; add context to a headline stat, such as a 120% increase on last year or "you two just met" for something new [S-L19-076]; show the figure that matters for the real object, such as a minimum payment and due date [S-L19-068].
+- **Visual effect:** Large regular-weight stats replaced numbers Schoger called clunky [S-L19-103]; that they read calmer is [inferred]. Tabular digits stop numbers jumping as they change [S-L19-019]. Unlabeled numbers mean nothing [S-L19-068].
+- **Depends on (upstream):** Q-type-06, Q-voice-05 (numbers mechanics), product type (a data-heavy tool).
+- **Affects (downstream):** `text.numeric.*` styles; stat tiles, tables, pricing cards, chart axis labels, counters and timers.
+- **Token encoding:** `text.numeric.md` and `text.numeric.lg` with `$extensions.fontVariantNumeric` = `tabular-nums`. The engine already writes this, but only when `numericStyles` is set.
+- **Platform notes:** `font-variant-numeric` on the web (STD-visual-details-02); native monospaced digits are not verified (DC-L02-26).
+- **Accessibility constraints:** Labels give meaning to both sighted and screen-reader users [inferred]; label contrast follows DC-L19-23.
+- **Default + heuristic:**
+  - Always generate `text.numeric.*` with tabular digits. This fixes the recorded STD-visual-details-02 conflict, where the engine creates them only for Q-type-06 `numeric-face` or Q-layout-03 `data`.
+  - Stat values are regular weight at a large size, with a short label in the secondary color. This is Schoger's treatment [S-L19-103], one practitioner's taste.
+  - Every number gets a label [S-L19-068]. Headline stats get one comparison line; this comes from one Kole redesign [S-L19-076] and is opinion.
+  - Rule of thumb: if a number can change while someone watches it, or sits in a column, it is tabular (DC-L02-26).
+- **Evidence:** [S-L19-004] ([[sources/ek-agents-with-taste-agents-with-taste|Agents with Taste]]), [S-L19-019] ([[sources/eks-skills-animation-vocabulary-skill-emilkowalski-skills-skills-animation-vocabulary-skill-md|emilkowalski/skills: skills/animation-vocabulary/SKILL.md]]), [S-L19-103] ([[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]), [S-L19-043] ([[sources/9WVt1CelBfg-the-stupid-simple-way-to-learn-ui-ux-design-in-exactly-10-minutes|The stupid simple way to learn UI/UX design in exactly 10 minutes]]), [S-L19-061] ([[sources/PDcQJOPby1k-5-saas-ui-ux-mistakes-that-scream-you-vibe-code|5 SaaS UI/UX mistakes that SCREAM you Vibe Code]]), [S-L19-080] ([[sources/neE6wOuBIP8-the-secret-behind-weirdly-perfect-ui-designs|The secret behind weirdly perfect UI designs]]), [S-L19-068] ([[sources/Yr2uIcFZDDQ-redesigning-a-finance-dashboard-ui-from-scratch-ft-dribbble|Redesigning a Finance Dashboard UI from SCRATCH (ft. Dribbble)]]), [S-L19-086] ([[sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai|Vibe Coding a Pro UI in SECONDS With AI]]), [S-L19-076] ([[sources/goWOAFqJHpA-i-redesigned-spotify-wrapped-entirely-from-scratch|I Redesigned Spotify Wrapped Entirely From SCRATCH]]). Compared: DC-L02-05, DC-L02-26, DC-L06-21.
+- **Maps to:**
+  - Q-type-06, new default: tabular numeric styles whatever the option; `numeric-face` then only adds a large metric style.
+  - Q-type-06, visual sample: Schoger's stats row, and a ticking counter with proportional against tabular digits.
+  - Q-voice-05, extend option `numbers`: "every number has a label; progress as a percentage, not 'in progress'; headline stats carry a comparison".
+- **Impact now / as it grows:**
+  - *Tabular numbers always:* now, columns line up; as it grows, every new table, counter and timer is right by default.
+  - *Tabular only when chosen:* now, fewer styles; as it grows, data screens added later jitter.
+  - *Labels and comparison lines:* now, clearer numbers; as it grows, the product needs a shared rule for comparison periods (week, month, year) [inferred].
+- **Standards:** STD-visual-details-02; STD-visual-details-59 (a counter, price or stat that animates uses NumberFlow) applies to the same numbers [inferred link].
+
+### DC-L19-34: How type choices are previewed: true size, in context
+- **Block path:** Process > Interview > Type preview
+- **Questions the designer answers:** At what size should the person judge text? On which device frame? One option at a time or side by side?
+- **Options:**
+  - **Zoomed-out canvas or thumbnails.** Designing zoomed out in Figma led Kole to oversized fonts and spacing [S-L19-057]. For prototypes, the house standard forbids judging at thumbnail size, because thumbnails distort spacing and scale [S-L19-031].
+  - **True size on the intended screen.** Always view designs on the screens they are meant for [S-L19-042]; check on a desktop, or mirror a prototype to a phone [S-L19-057].
+  - **One option at a time, full size, in realistic context** (a toast needs a page behind it) [S-L19-031].
+  - **A zoomed-out comparison with real apps**, to catch a squished mobile design [S-L19-053].
+- **Visual effect:** True-size previews lead to sensibly sized type. Scaled previews make text look small, so people oversize it [S-L19-057].
+- **Depends on (upstream):** Q-plat-01 (platforms).
+- **Affects (downstream):** `assets/templates/type-scale.html`, the option gallery, the engine preview, `show.py`.
+- **Token encoding:** none (process decision).
+- **Platform notes:** Show a phone-width frame for mobile and a desktop-width frame for web [inferred].
+- **Accessibility constraints:** Previews should also show the 200% text-size state, which Q-type-17's Show line already asks for.
+- **Default + heuristic:** The type-scale template keeps rendering at 1:1 CSS pixels with no scale-to-fit (true of `type-scale.html` when checked on 2026-09-24). It shows one option at a time, full size, on a real screen, and labels any view that a host has scaled [inferred from S-L19-031, S-L19-042 and S-L19-057].
+  - Rule of thumb: never ask someone to choose a type size from a shrunken thumbnail.
+- **Evidence:** [S-L19-057] ([[sources/Lp6ey4AyDzA-8-web-design-hacks-to-actually-make-your-designs-better|8 Web Design Hacks To ACTUALLY Make Your Designs Better]]), [S-L19-042] ([[sources/7sUUzOCv47U-mathematically-perfect-typography-for-web-design|Mathematically Perfect Typography for Web Design]]), [S-L19-031] ([[sources/eks-skills-prototype-skill-emilkowalski-skills-skills-prototype-skill-md|emilkowalski/skills: skills/prototype/SKILL.md]]), [S-L19-053] ([[sources/Gfsd8NNuD9g-everything-you-need-to-know-about-mobile-app-uis-in-8-minutes-beginner-friendly|Everything you need to know about Mobile App UI’s in 8 minutes (beginner friendly)]]). Compared: DC-L02-08 and Q-type-08's Show line.
+- **Maps to:**
+  - Q-type-08, Q-type-09 and Q-type-10, visual sample change: render each option at 100% in a phone-width and a desktop-width frame, one at a time.
+  - Template change to `type-scale.html`: keep the current 1:1 rendering, add phone-width and desktop-width frames, and show a "scaled" badge whenever the host displays the page at other than 1:1 [inferred].
+- **Impact now / as it grows:**
+  - *True size, one at a time:* now, choices match what ships; as it grows, fewer "why does this look huge on my phone" fixes after launch [inferred].
+  - *Thumbnails side by side:* now, fast comparison; as it grows, sizes chosen at the wrong scale spread into every screen.
+- **Standards:** STD-process-review-taste-43 (applied here by analogy [inferred]), STD-process-review-taste-40.
+
+### DC-L19-35: Sample content in previews: realistic, with stress cases
+- **Block path:** Process > Previews > Sample content
+- **Questions the designer answers:** What words and numbers fill the previews? Do we test with the longest and messiest real content?
+- **Options:**
+  - **Lorem ipsum or placeholder text.** Banned in designs by Kole [S-L19-037] and in prototype variants by the house standard [S-L19-031].
+  - **Realistic, product-shaped copy** with plausible names and numbers [S-L19-031], starting from a written brief [S-L19-037].
+  - **Realistic plus imperfect content.** A destination with a very long name gets truncated, and a save icon on a bright photo gets a circle behind it; Kole warns that designs built only on perfect, short content have unintended consequences [S-L19-054].
+  - **Plus translated lengths.** Labels under 10 characters budgeted at 2-3 times their English length (DC-L06-24) [inferred link].
+- **Visual effect:** Realistic copy shows true line lengths and wraps. Stress cases show truncation and overflow before launch [S-L19-054].
+- **Depends on (upstream):** the product description from the scope questions, Q-voice-01 (voice), Q-type-04 (languages).
+- **Affects (downstream):** engine previews; the sample strings in each template's `od-data`; the component sheet; examples in DESIGN.md.
+- **Token encoding:** none (content decision).
+- **Platform notes:** None from these sources.
+- **Accessibility constraints:** Stress long strings together with 200% text size (Q-type-17) [inferred]. Truncated text needs a way to reach the full content (DC-L02-18).
+- **Default + heuristic:** Previews use copy built from the person's own product description (their nouns, verbs, names and numbers). Each component sheet includes one long-string case and one empty case [inferred from S-L19-054].
+  - Rule of thumb: if a preview only looks right with short words, it is not finished [inferred from S-L19-054].
+  - This confirms the current state: a text search on 2026-09-24, recorded in the content synthesis, found no lorem ipsum in the engine or templates.
+- **Evidence:** [S-L19-037] ([[sources/59XWYgN00nQ-create-a-portfolio-with-no-experience-or-clients-needed|Create A Portfolio With No Experience (or clients) Needed]]), [S-L19-031] ([[sources/eks-skills-prototype-skill-emilkowalski-skills-skills-prototype-skill-md|emilkowalski/skills: skills/prototype/SKILL.md]]), [S-L19-054] ([[sources/HE4rLEQpiXY-how-to-think-like-a-genius-ui-ux-designer|How to think like a GENIUS UI/UX designer]]). Compared: DC-L06-24, DC-L02-18.
+- **Maps to:**
+  - Q-voice-06, new heuristic: component examples come with a long-string case and an empty case.
+  - Q-type-04, Show line: add a long-label row to the button row.
+  - Visual sample: a listing card with a very long destination name, first overflowing, then truncated [S-L19-054].
+- **Impact now / as it grows:**
+  - *Realistic content with stress cases:* now, previews show real problems early; as it grows, new components ship with their overflow behavior already decided.
+  - *Realistic content only:* now, believable; as it grows, long names, translations and user content still break layouts after launch.
+- **Standards:** STD-process-review-taste-40, STD-visual-details-03.
+
+### DC-L19-36: Marketing copy: length and focus
+- **Block path:** Content > Voice > Marketing copy
+- **Questions the designer answers:** How long should hero headlines and subtext be? Should the copy say what the product does, or how it helps? How much text should a section carry?
+- **Options:**
+  - **Long, vague blocks.** Nobody stops to read them [S-L19-072].
+  - **Short, punchy headline with a related subtext** [S-L19-072]. One example page uses a seven-word heading and a 14-word subtext [S-L19-043]; another redesign borrows the Chrome site's punchy headline style [S-L19-082].
+  - **What it does against how it helps.** Kole's step from level three to level four rewrites copy about collecting and analysing data quickly into a promise to turn that data into decisions [S-L19-072].
+  - **Friendly and natural, not corporate.** "We sweat the details" beats a formal line about attention to detail; Basecamp's site is written in plain, natural language [S-L19-063].
+  - **One actionable heading** that promises exactly what the software does [S-L19-062].
+  - **Cut repetition.** Remove text that repeats an image or stats shown above, and do not repeat the company name when it is already on screen [S-L19-065] [S-L19-072]. Put long but important text behind "see more", or paraphrase it and link to full specs [S-L19-065]. Break a wall of text into bullets or a table [S-L19-080].
+- **Visual effect:** Short copy leaves room for visuals and larger type; long blocks push type smaller and sections denser [inferred]. Friendly copy makes a page feel human [S-L19-063].
+- **Depends on (upstream):** Q-voice-01 (voice traits), the product and audience from the scope questions, Q-brand-06 (display moments, DC-L19-26).
+- **Affects (downstream):** copy slots in hero and section components; the voice section of DESIGN.md; heading measure (DC-L19-29).
+- **Token encoding:** None. It is a content rule, with an optional lint setting such as `content.hero.headline.maxWords` [inferred].
+- **Platform notes:** None from these sources.
+- **Accessibility constraints:** Plain language with no jargon (STD-visual-details-35); reading level targets (DC-L13-13).
+- **Default + heuristic:** A headline carries one idea and fits in two or three lines at the heading measure; the subtext is one or two sentences; the benefit comes first; nothing repeats the brand name or what an image already shows [inferred from S-L19-072 and S-L19-043, sized to DC-L19-29].
+  - The 7-word and 14-word counts come from one example page and are opinion, not a rule.
+  - Adds a marketing-copy rule next to DC-L13-13, whose limits cover only buttons and reading grade.
+- **Evidence:** [S-L19-072] ([[sources/eMMiLeo_UGI-the-4-levels-of-landing-page-ui-ux-design|The 4 Levels of Landing Page UI/UX Design]]), [S-L19-043] ([[sources/9WVt1CelBfg-the-stupid-simple-way-to-learn-ui-ux-design-in-exactly-10-minutes|The stupid simple way to learn UI/UX design in exactly 10 minutes]]), [S-L19-082] ([[sources/pGYLZyBE32o-i-redesigned-google-s-ai-website-from-scratch-complete-transformation|I Redesigned Google's AI Website from SCRATCH (complete transformation)]]), [S-L19-063] ([[sources/SfX43uIubj4-4-ui-design-hacks-to-kill-boring-designs|4 UI Design Hacks to KILL boring designs]]), [S-L19-062] ([[sources/RCneB_MQ7qs-the-one-thing-vibe-coding-cant-fix-about-your-website|The one thing vibe coding CAN’T fix about your website]]), [S-L19-065] ([[sources/V3Omp1hm0Sg-i-redesigned-a-failing-tesla-wannabe-full-website-to-save-it|I Redesigned a Failing Tesla WANNABE Full Website To SAVE It]]), [S-L19-080] ([[sources/neE6wOuBIP8-the-secret-behind-weirdly-perfect-ui-designs|The secret behind weirdly perfect UI designs]]), [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]). Compared: DC-L06-18, DC-L13-13.
+- **Maps to:**
+  - Q-voice-04, new option `hero-short`: "one short idea per headline, one or two sentences of subtext, benefit first".
+  - Q-voice-01, visual samples: a corporate line against a friendly one [S-L19-063]; the same feature written as "what it does" and as "how it helps" [S-L19-072].
+- **Impact now / as it grows:**
+  - *Short and benefit-first:* now, scannable pages with room for larger type; as it grows, every new page follows the same pattern, which needs someone who owns the copy.
+  - *Long and descriptive:* now, complete; as it grows, pages get longer and denser, and type shrinks to fit.
+- **Standards:** STD-visual-details-35.
+
+### DC-L19-37: Where playfulness belongs, and never at the user
+- **Block path:** Content > Tone > Where personality appears
+- **Questions the designer answers:** Where may the product joke or show personality? May copy ever comment on how much someone uses the product? How should a "page not found" screen sound?
+- **Options:**
+  - **Serious everywhere.**
+  - **Playful in low-stakes moments.** A 404 page is the best place to be quirky because the visitor does not belong there (Mobbin's interface quiz, Pixar's character) [S-L19-063]. A line of personality on a portfolio [S-L19-064]. A warm context line for good news [S-L19-076].
+  - **Sass or guilt aimed at the user's own behavior.** Kole's deliberately infuriating examples: a message about 342 watched videos that offers only an upsell or more notifications, and a step-goal message saying you would need to run a marathon today. He held back from adding more because it would turn from passive-aggressive to plainly aggressive [S-L19-048].
+  - **DC-L06-19's matrix.** Errors are serious and humor must never hide the meaning.
+- **Visual effect:** A playful 404 or success moment feels human [S-L19-063]; shaming copy makes people angry [S-L19-048].
+- **Depends on (upstream):** Q-voice-01, Q-voice-02, Q-brand-01 (how playful the brand is).
+- **Affects (downstream):** 404 and not-found pages; empty states; success toasts; usage, streak and limit nudges; upsell dialogs; notification copy.
+- **Token encoding:** None. Add rows to DC-L06-19's tone matrix for "not found" and "usage or progress nudge".
+- **Platform notes:** None from these sources.
+- **Accessibility constraints:** A playful 404 still needs a plain way back (search or a home link), because a screen must never trap the user (STD-visual-details-33) and errors must say how to fix (DC-L06-19). A 404 game that redirects on its own may take control away from the visitor [inferred]; the source does not discuss it [S-L19-063].
+- **Default + heuristic:** Aim humor at the situation, never at the person [inferred from S-L19-063 against S-L19-048].
+  - A 404 is a low-stakes navigation miss, so it may use the brand's playful tone, with a way back. Errors that cost people work stay serious.
+  - Usage and progress nudges state facts neutrally and offer a real choice, not just an upsell [inferred from S-L19-048, which shows the opposite as a joke].
+  - Differs from DC-L06-19 for 404 pages only: its "errors serious" default would make them serious too.
+- **Evidence:** [S-L19-063] ([[sources/SfX43uIubj4-4-ui-design-hacks-to-kill-boring-designs|4 UI Design Hacks to KILL boring designs]]), [S-L19-048] ([[sources/BUDipdbKK7Y-i-made-the-most-unhinged-ui-upgrades-downgrades|I Made The Most UNHINGED UI Upgrades (downgrades?)]]), [S-L19-064] ([[sources/ToJiXPTNnLY-professional-portfolio-breakdown-why-is-theirs-so-much-better|Professional Portfolio Breakdown — Why Is Theirs So Much Better?]]), [S-L19-076] ([[sources/goWOAFqJHpA-i-redesigned-spotify-wrapped-entirely-from-scratch|I Redesigned Spotify Wrapped Entirely From SCRATCH]]). Compared: DC-L06-19, DC-L13-07.
+- **Maps to:**
+  - Q-voice-02, new tone rows: "not found (404): may be playful, with a way back" and "usage and progress nudges: neutral, with a real choice".
+  - Q-voice-02, new heuristic: never shame or guilt the user.
+  - Q-voice-02, visual samples: the 342-videos and marathon messages as "don't" examples; a playful 404 with a clear way back as the "do".
+- **Impact now / as it grows:**
+  - *Humor aimed at the situation:* now, warmth in rare moments; as it grows, the rule keeps many writers consistent.
+  - *Serious everywhere:* now, safe; as it grows, the brand can feel generic.
+  - *Sass aimed at the user:* now, "edgy"; as it grows, it wears away trust, worst in paywall and usage flows.
+- **Standards:** STD-visual-details-35, STD-visual-details-33; STD-when-to-animate-09 is the motion counterpart, keeping delight for rare moments [inferred link].
+
+### DC-L19-38: Naming navigation, actions and screens
+- **Block path:** Content > Microcopy > Labels and names
+- **Questions the designer answers:** What do we call navigation items? Do two buttons that lead to the same place share a label? When does an icon need a word? Should a screen announce what it is?
+- **Options:**
+  - **Name items for their contents** ("Progress", "Library"), not with vague umbrellas like "Home" (house standard). If a control needs a label to explain it, its placement is weak [S-L19-020].
+  - **Same destination, same label.** A navigation button and a hero button that go to the same place share a label [S-L19-072].
+  - **Actionable button labels**, and each pricing plan with a name and short description [S-L19-075].
+  - **A labelled button instead of an unclear icon** ("all activities" instead of a minimize icon) [S-L19-068]. Tab-bar labels when icons are obscure, dark enough to read [S-L19-075].
+  - **Do not title a screen with what it obviously is** ("financial dashboard") [S-L19-068]; drop section labels such as "Menu" [S-L19-086].
+  - **Drop labels the layout already makes clear**, but keep them where values could be confused, such as check-in and check-out [S-L19-070].
+  - **A few familiar category names** rather than invented, hyper-specific ones [S-L19-076].
+- **Visual effect:** Specific labels make the product predictable [S-L19-020]. Matching labels build the right mental model [S-L19-072]. Fewer redundant labels reduce clutter [inferred from S-L19-068 and S-L19-070].
+- **Depends on (upstream):** Q-voice-01, the word list (DC-L06-23), Q-icon-05.
+- **Affects (downstream):** navigation items, calls to action, tab bars, section headers, card titles, the word list.
+- **Token encoding:** None. Default strings as i18n keys plus the word list (DC-L06-22, DC-L06-23).
+- **Platform notes:** None from these sources.
+- **Accessibility constraints:** Icon-only controls need an accessible name (DC-L05-07); tab labels need enough contrast to read [S-L19-075].
+- **Default + heuristic:**
+  - Name navigation by contents (STD-visual-details-34).
+  - One label per destination across the product; review warns when the same link target has different labels [inferred].
+  - Actions are verb-first (DC-L06-22). No screen title that just names the screen's type.
+  - Icon-only navigation only for familiar icons. Kole accepts it for an Instagram-style tab bar [S-L19-075], which differs from DC-L05-07's "label everything in navigation". Keep DC-L05-07 as the default and offer icon-only as an option for consumer apps with familiar icons [inferred].
+- **Evidence:** [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]), [S-L19-072] ([[sources/eMMiLeo_UGI-the-4-levels-of-landing-page-ui-ux-design|The 4 Levels of Landing Page UI/UX Design]]), [S-L19-075] ([[sources/gKM6b2EnW1k-upgrading-9-crucial-ui-elements-free-figma-file-included|Upgrading 9 CRUCIAL UI Elements (free figma file included)]]), [S-L19-068] ([[sources/Yr2uIcFZDDQ-redesigning-a-finance-dashboard-ui-from-scratch-ft-dribbble|Redesigning a Finance Dashboard UI from SCRATCH (ft. Dribbble)]]), [S-L19-086] ([[sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai|Vibe Coding a Pro UI in SECONDS With AI]]), [S-L19-070] ([[sources/c1TvOcKdBVE-the-8-ui-ux-cheat-codes-for-instantly-better-designs|The 8 UI/UX Cheat Codes for INSTANTLY Better Designs]]), [S-L19-076] ([[sources/goWOAFqJHpA-i-redesigned-spotify-wrapped-entirely-from-scratch|I Redesigned Spotify Wrapped Entirely From SCRATCH]]). Compared: DC-L06-22, DC-L06-23, DC-L05-07.
+- **Maps to:**
+  - Q-voice-06, new options `specific-nav` ("name navigation for its contents", STD-visual-details-34) and `one-label-per-destination`.
+  - Q-icon-05: note Kole's familiar-icons exception for tab bars.
+  - Visual samples: navigation reading "Progress, Library" against "Home"; a navigation button and a hero button with matching labels [S-L19-072].
+- **Impact now / as it grows:**
+  - *Specific, consistent labels:* now, clear; as it grows, the word list keeps new features' names consistent.
+  - *Generic umbrellas:* now, easy; as it grows, "Home" and "Dashboard" turn into junk drawers [inferred].
+- **Standards:** STD-visual-details-34, STD-visual-details-35; STD-visual-details-36 (things that look the same behave the same) is the matching consistency rule [inferred link].
+
+### DC-L19-39: Typographic punctuation in interface text
+- **Block path:** Content > Mechanics > Punctuation characters
+- **Questions the designer answers:** Do strings use the real ellipsis character? Curly quotes and apostrophes?
+- **Options:**
+  - **The real ellipsis (…), never three periods (house must).** The source says truncation then follows the container instead of snapping at a fixed character count [S-L19-004].
+  - **Typographically correct punctuation.** Nicer commas and quotes were a polish item on the animations.dev platform; that is a changelog entry, not stated guidance [S-L19-001].
+  - **Plain keyboard characters** (straight quotes, three periods), which is what text typed without care produces [inferred].
+- **Visual effect:** Proper punctuation looks finished and typeset; keyboard characters look unpolished [inferred].
+- **Depends on (upstream):** Q-voice-05; the language list (quote marks differ by language) [inferred].
+- **Affects (downstream):** every UI string; i18n files; copy lint; CSS truncation.
+- **Token encoding:** none (a content lint rule).
+- **Platform notes:** None from these sources.
+- **Accessibility constraints:** None stated by the sources.
+- **Default + heuristic:** The ellipsis character is locked on (STD-visual-details-03). Curly quotes and apostrophes are on by default in UI copy, as a recommendation. Lint flags "..." in strings.
+  - Adds a mechanics row that DC-L06-21 does not have.
+- **Evidence:** [S-L19-004] ([[sources/ek-agents-with-taste-agents-with-taste|Agents with Taste]]), [S-L19-001] ([[sources/adev-changelog-animations-dev|animations.dev]]). Compared: DC-L06-21, DC-L13-13 (an ellipsis when more input follows), DC-L02-18.
+- **Maps to:**
+  - Q-voice-05, new option `typographic-punctuation`, on by default, with the ellipsis locked by STD-visual-details-03.
+  - Q-voice-05, Show line: sample strings with "..." against "…", and straight against curly quotes.
+- **Impact now / as it grows:**
+  - *Typographic punctuation with lint:* now, a small polish; as it grows, the lint stops drift as more people write copy, and each new locale needs its own quote marks [inferred].
+  - *Keyboard characters:* now, no effort; as it grows, mixed styles pile up across writers and features.
+- **Standards:** STD-visual-details-03.
+
+### Area: Layout (DC-L19-41 to DC-L19-56)
+
+Area `layout`: stages 06 (visual direction), 12 (space, sizing and density) and 13 (layout, navigation and app shell); topics Spacing and layout, Visual hierarchy, Cards and sections. Nearly every source here is a practitioner video. In "Impact now / as it grows", the growth lines are [inferred] unless a source is cited.
+
+### DC-L19-41: Proximity ladder inside a content block
+- **Block path:** Foundations > Space > Grouping gaps (inner and outer spacing)
+- **Questions the designer answers:** Inside one block (eyebrow, heading, subtext, buttons), how many different gaps do we use? How much farther do the actions sit than the heading and subtext sit from each other? Can there be too much space?
+- **Options:**
+  - **One gap, with pairs pulled closer:** 32 px between every item of a simple section, and elements that belong together (announcement and text, text and subtext) grouped closer, which the source calls another form of visual hierarchy [S-L19-052].
+  - **A three-step ladder:** on one landing page (Superpower) the subtext sits 8 px under the heading, the eyebrow 12 px above it and the buttons 32 px below, so heading and subtext read as one unit, then the eyebrow, then the buttons [S-L19-043]. That is roughly 1 : 1.5 : 4 [inferred from the values]. The values come from one site.
+  - **The "twice" rule:** hero buttons sit at least twice as far below the subtext as the subtext sits below the heading. The source's reason is that a large heading already carries extra space between its baseline and the bottom of its box [S-L19-062]. This is one video's rule of thumb. It agrees with DC-L03-24's floor of 1:2.
+  - **Airy everywhere:** large gaps around giant text. One redesign calls this overusing white space: the page felt disjointed until related elements were pushed closer together [S-L19-065].
+  - Existing: DC-L03-24 (at least 1:2, and 1:3 to 1:4 for airy brands) and Q-space-05's options `1:2`, `1:3-1:4` and `dense`.
+- **Visual effect:** A tight pair with a loose gap before the actions makes people read heading and subtext as one unit, then the eyebrow, then the buttons [S-L19-043]; reading that as one message followed by one decision is [inferred]. One equal gap everywhere reads as a list of unrelated items [inferred]. Gaps that are too large everywhere make a page feel disjointed and leave elements sitting by themselves [S-L19-065]. The source calls the ladder's spacing "very intentional" [S-L19-043].
+- **Depends on (upstream):** the base unit and scale (Q-space-01, Q-space-02; the 8, 12 and 32 steps must exist), the heading line height and text-box trim (Q-space-08), density (Q-dir-02).
+- **Affects (downstream):** semantic stack tokens; hero, section-header and card-header templates; dialogs (title, body, actions); empty states; form field groups (label to input versus field to field) [inferred].
+- **Token encoding:** `dimension` semantic aliases such as `space.stack.pair` → {space.200} (8), `space.stack.label` → {space.300} (12), `space.stack.group` → {space.800} (32). On the web they are written in rem (0.5rem, 0.75rem, 2rem) per STD-accessibility-motion-13. The ladder can be recorded as generator metadata, `$extensions.builder.grouping = { pair: 1, label: 1.5, actions: 4 }` [inferred].
+- **Platform notes:** The sources give none. Measuring gaps from the text box (Q-space-08 `trim` or `box-based`) removes the extra space under a large heading that [S-L19-062] compensates for by eye [inferred].
+- **Accessibility constraints:** Gaps must scale with the user's text size (STD-accessibility-motion-13). Groups must survive WCAG 1.4.12 text-spacing overrides (Q-space-08 default). Visual grouping should match the code's grouping (headings, fieldsets, lists) [inferred].
+- **Default + heuristic:** Keep Q-space-05's default at 1:2 as the floor. This confirms DC-L03-24, and the only concrete example, at about 1:4, sits inside DC-L03-24's range. Heuristic: give every text block three distances. The pair (heading and subtext) gets the smallest gap, the label (eyebrow) one step more, and the actions at least twice the pair gap. Measure from the text box, not the line box. Warn when every gap in a block is equal [inferred], and when spreading things out leaves an element with no neighbour [S-L19-065].
+- **Evidence:** [S-L19-043] [S-L19-052] [S-L19-062] [S-L19-065] [S-L19-057] (closeness reads as related) [S-L19-020] (proximity implies relationship). Compared against DC-L03-24, DC-L15-05 and DC-L03-25.
+- **Maps to:**
+  - Q-space-05: confirms the current default `1:2`. New heuristic: the action gap is at least twice the pair gap [S-L19-062]. Visual sample: the annotated hero (eyebrow 12, heading, subtext 8, buttons 32) with every gap labelled [S-L19-043].
+  - Q-space-08: new heuristic. Hero and section-header gaps are measured from the text box, because large headings carry extra space below the baseline [S-L19-062; link inferred].
+- **Impact now / as it grows:**
+  - *One gap with pairs:* now one token and quick to apply. As it grows, the pair exceptions become one-off values unless they are named.
+  - *Three-step ladder:* now three named stack tokens. As it grows, every new template (dialog, card header, empty state) reuses the same ladder, so screens stay consistent.
+  - *Twice rule only:* now a single check with no new tokens. As it grows, it is easy to lint on generated screens, but it says nothing about the eyebrow.
+  - *Airy everywhere:* now a premium first impression on marketing pages [inferred]. As pages get longer, groups dissolve and the page feels disjointed [S-L19-065].
+- **Standards:** STD-visual-details-26, STD-visual-details-27, STD-visual-details-29, STD-visual-details-32, STD-accessibility-motion-13
+
+### DC-L19-42: When a card earns its place, and how deep cards may nest
+- **Block path:** Foundations > Visual language > Grouping > Containers (Components > Card)
+- **Questions the designer answers:** Is a card the default way to group things, or the exception? May a card sit inside another card? When do we merge or remove cards?
+- **Options:**
+  - **Cards as the main building block on phones:** on mobile nearly everything is a card, because a card groups content where there is little room for white space [S-L19-053].
+  - **Space first, cards only when needed, on wide screens:** in a multi-column layout such as a store, removing cards and dividers lets content breathe, and many containers feel cluttered even with little content [S-L19-057]. On a wide canvas, a single line and a column edge can replace stacked containers and avoid "borders on borders" with three radii stacked together [S-L19-080].
+  - **One card level:** avoid a card inside a card, because it creates padding on padding and cramps the content; group the inner content with space. The source adds that nesting is not always avoidable [S-L19-053].
+  - **Two container levels (the current lint):** DC-L15-05 proposes a builder lint of `maxContainerDepth: 2`, itself marked inferred in that card.
+  - **Prune and merge:** remove cards that do nothing [S-L19-061]. Merge small related cards into the card they belong to (a 12-card dashboard cut to a few modules) [S-L19-068]. Drop background cards and tints that an AI tool adds [S-L19-103].
+- **Visual effect:** Cards first groups content flexibly on phones, where there is little room for white space [S-L19-053]. Space first lets everything breathe and avoids the larger footprint cards take in multi-column grids [S-L19-057]. Nested cards look cramped, with padding on padding and stacked radii [S-L19-053] [S-L19-080].
+- **Depends on (upstream):** grouping strategy (Q-dir-04, DC-L15-05), density (Q-dir-02), platform and compact widths (Q-plat-01, Q-layout-01), how a card is set apart from the page (Q-depth-01, DC-L08-15).
+- **Affects (downstream):** the card component, `space.inset.card`, nested radius (DC-L04-05), surface steps (DC-L01-13), dashboard and list templates, and builder lint.
+- **Token encoding:** no new tokens, only `space.inset.card` (dimension). Builder lint: `$extensions.builder.lint.maxCardDepth: 1` as a warning, alongside `maxContainerDepth: 2` for regions that are not cards, such as a sidebar or a page section [inferred].
+- **Platform notes:** compact (phone) widths lean on cards, and wide multi-column layouts lean on space [S-L19-053] [S-L19-057]. The two sources describe different contexts rather than contradicting each other [inferred].
+- **Accessibility constraints:** if a card's border is the only edge of an interactive card, it needs 3:1 contrast (DC-L08-15, WCAG 1.4.11). Grouping by space alone still needs structure in the code, such as headings, lists or regions [inferred].
+- **Default + heuristic:** On wide layouts, group with space first. On compact widths, cards may be the main way to group. Never put a visible card inside a visible card: group the inside with space. Every card must do something; merge or remove the rest [S-L19-061] [S-L19-068]. This **differs from DC-L15-05**, whose lint allows two container levels. The sources support one card level, so the proposal is `maxCardDepth: 1` as a warning, not a block, because [S-L19-053] says nesting is sometimes unavoidable. Q-dir-04's current use/avoid line already says to avoid nesting containers inside containers, so this tightens the lint, not the guidance.
+- **Evidence:** [S-L19-053] [S-L19-057] [S-L19-080] [S-L19-061] [S-L19-068] [S-L19-103] [S-L19-047] (dashboards are made of many cards, so keep card margins well spaced). Compared against DC-L15-05, DC-L08-15 and DC-L04-05.
+- **Maps to:**
+  - Q-dir-04: new heuristic, one card level, with the inside of a card grouped by space. New default nuance: space on wide layouts, and cards allowed as the main unit on compact widths.
+  - Q-dir-04 visual sample: a card nested in a card (padding on padding) next to the same content grouped with space [S-L19-053], and a wide canvas of stacked containers dissolved into one line and a column edge [S-L19-080].
+  - Q-dist-03: new lint rule that warns on a card inside a card.
+- **Impact now / as it grows:**
+  - *Cards first:* now quick, flexible groups on phones [S-L19-053]. As features are added, each one tends to bring another card, and screens drift toward boxes in boxes unless they are pruned [inferred; S-L19-068 shows a 12-card dashboard that needed pruning].
+  - *Space first:* now lighter pages that breathe [S-L19-057]. As content grows, it depends on strict spacing tokens (DC-L19-41) so that groups stay readable.
+  - *One card level:* now fewer paddings and radii to manage. As it grows, nested content must be designed with space tokens, which makes the proximity ladder more important.
+  - *Two levels:* now more freedom. As it grows, padding on padding and stacked radii pile up and need fixing later [S-L19-053] [S-L19-080].
+  - *Prune and merge:* now fewer modules [S-L19-068]. As it grows, dashboards stay scannable while features keep arriving [inferred].
+- **Standards:** STD-visual-details-30, STD-visual-details-14, STD-process-review-taste-43
+
+### DC-L19-43: How list rows are separated
+- **Block path:** Foundations > Visual language > Grouping > Lists (and Foundations > Borders > Dividers)
+- **Questions the designer answers:** Are list rows separated by space, lines, alternating tints or a border around each item? What do we do when a list gets dense?
+- **Options:**
+  - **Space:** space the rows far enough apart that they read as separate. One source calls this the best option for a list [S-L19-070]. A dashboard source lists space, lines and color as the three ways to separate rows [S-L19-047].
+  - **Alternating tint (zebra):** when rows must sit tight, a subtle background on alternating rows is better than lines everywhere [S-L19-070].
+  - **Lines:** only when lines are the product's chosen style [S-L19-070]. Lines on everything, used instead of spacing, recall old slide decks, though dividers are coming back and can have rounded ends [S-L19-050]. A receipt needs no dividers at all: text hard left, values hard right [S-L19-080]. Existing: DC-L04-08 and DC-L15-05 default to lines for dense or long lists.
+  - **One stacked list, or a border around each item:** a stacked list is less cluttered and makes an empty state easier to add; a border per item is only for stronger separation [S-L19-047].
+  - **Differentiate instead of spacing out:** in a dense list, extra white space helps a little but makes everything longer. Avatars where people are mentioned, and grouping by a key such as the due date, fix it [S-L19-080]. Lines running the full width of the screen spoil an otherwise aligned list [S-L19-080].
+- **Visual effect:** Space uses the fewest elements and keeps rows legible [S-L19-070]; it also looks calm [inferred]. Zebra looks compact and table-like and is easy to scan across columns [inferred]. A few lines look orderly, but many lines look like a spreadsheet (DC-L04-08) and look dated when used on everything [S-L19-050]. A border per item separates items more strongly, while one stacked list is less cluttered [S-L19-047]. A differentiated list lets people find an item in about a second, by the source's own estimate [S-L19-080].
+- **Depends on (upstream):** density (Q-dir-02, Q-space-09), grouping strategy (Q-dir-04), surface steps for the tint (Q-color-14), border widths (Q-depth-05).
+- **Affects (downstream):** lists, tables, menus, sidebars, activity feeds, settings rows and empty states; the tokens `space.list.row-gap`, `color.surface.row-alternate` and `color.border.divider`.
+- **Token encoding:** `space.list.row-gap` (dimension, rem on the web), `color.surface.row-alternate` (color, one low-contrast step from the surface), `color.border.divider` (color with alpha) with `border.width.hairline` (dimension). List component prop `separator: space | zebra | line` [inferred].
+- **Platform notes:** the sources give none. DC-L15-05 notes that the iOS grouped table style uses grouped background colors for regions, so keep platform-native lists native [inferred].
+- **Accessibility constraints:** decorative dividers are exempt from WCAG 1.4.11 (DC-L04-08). Zebra striping should not be the only row cue in a table (DC-L15-05). List and table markup carries the grouping for screen readers [inferred]. Tight rows still keep 24 px targets on the web and 44 or 48 on touch (STD-mobile-touch-09).
+- **Default + heuristic:** Separate list rows with space. Use an alternating tint when rows must sit tight (compact density, dense tables). Use lines only when the product's style is built on lines. For a dense list, add differentiation (group headers, avatars, icons) before adding space. This also confirms DC-L15-04: denser layouts need stronger grouping. This **differs from DC-L04-08 and DC-L15-05**, which default to lines for dense or long lists. The preference for space and zebra comes from one video [S-L19-070], and [S-L19-047] offers all three without choosing, so keep `lines` as an equal option for data tables and change only the default wording for lists [inferred].
+- **Evidence:** [S-L19-070] [S-L19-047] [S-L19-050] [S-L19-080]. Compared against DC-L04-08, DC-L15-05 and DC-L15-04.
+- **Maps to:**
+  - Q-dir-04: new default wording. The part "lines for long lists" becomes "space for lists; alternating tint when rows must sit tight; lines when the style is line-based". This differs from DC-L15-05, so flag it for the owner.
+  - Q-depth-05: new option `zebra-when-tight`. The default "space first, lines in dense data views" becomes "space first; alternating tint or lines in dense tables".
+  - Q-depth-05 visual sample: one list shown three ways, with lines, with space, and tight with alternating rows [S-L19-070]; and a dense checklist before and after grouping by due date with avatars [S-L19-080].
+- **Impact now / as it grows:**
+  - *Space:* now the lightest option. As lists grow long, they need group headers or they become walls of rows [S-L19-080].
+  - *Zebra:* now compact. It scales well to tables with many columns, but the tint must stay subtle in dark mode.
+  - *Lines:* now clear structure. As lists nest inside cards and panels, lines multiply toward "boxes in boxes" (DC-L15-05).
+  - *Bordered items:* now strong separation. At scale they add clutter [S-L19-047].
+  - *Differentiate:* now it needs real data (people, dates, types). As content grows, density starts to help rather than hurt, by the source's account [S-L19-080].
+- **Standards:** STD-visual-details-30, STD-visual-details-14, STD-mobile-touch-09
+
+### DC-L19-44: Edge-built alignment inside compact components
+- **Block path:** Foundations > Layout > Alignment > Component internals
+- **Questions the designer answers:** What does each element inside a card, row or sidebar line up against? Where do values sit? What do we do when an element has no edge to sit on?
+- **Options:**
+  - **Built from edges:** in almost all compact interfaces (chat inputs, Kanban cards, sidebars), every element borders at least two edges. Those are either the card's sides or edges made by other elements, such as the bottom of an avatar and name. On a receipt, text sits hard left and prices hard right, and only what nobody needs to read is centered [S-L19-080].
+  - **Manufacture an edge:** move content to clear an edge, or create a new edge (buttons and avatar lined up into one row) so the content below can stack onto it. When larger icons break a row's bottom edge, add a subline to restore it [S-L19-080].
+  - **Fill empty space with more content:** the instinct the source warns against, because the result looks strange [S-L19-080].
+  - **Hide extras in a corner menu:** this makes the card look better but hides actions. [S-L19-061] does it for busy link cards (a triple-dot menu, chips reduced to icons). [S-L19-080] says hiding is generally not the best fix. The two sources disagree.
+  - Related: right-align numeric table columns so digits line up by place value [S-L19-056]. In menus, alignment and type separate clickable items, non-clickable items and keyboard shortcuts [S-L19-084]. Alignment is one of the three biggest fixes to AI-generated screens [S-L19-086].
+- **Visual effect:** Edge-built layouts look tidy, receipt-like and "weirdly perfect" without dividers [S-L19-080]. Filled space looks strange [S-L19-080]. A hidden menu makes the card look better [S-L19-080], but people cannot see what the card can do [inferred].
+- **Depends on (upstream):** start alignment (Q-dir-05, DC-L15-08), inset shapes (Q-space-06), icon sizes (Q-space-10), card nesting (DC-L19-42).
+- **Affects (downstream):** cards, list items, table cells (numeric columns aligned to the end), sidebar items, chat inputs, Kanban cards, menus (a shortcut column), and builder review.
+- **Token encoding:** none; this is a layout rule. Component props use logical `start` and `end` so right-to-left layouts mirror (DC-L15-08). Table columns get `numeric: true`, which sets `text-align: end` plus tabular numbers (STD-visual-details-02) [inferred].
+- **Platform notes:** the sources give none. Use logical start and end so right-to-left layouts mirror correctly (DC-L15-08).
+- **Accessibility constraints:** when content is rearranged to create edges, the code order must still follow the visual order (WCAG 1.3.2) [inferred]. Truncated text needs a way to reach the full text (DC-L02-18). Moving actions into a menu hides them, so keep the common path visible (STD-visual-details-31) [inferred].
+- **Default + heuristic:** In compact components, every element touches at least two edges; labels align to the start and values to the end. When something floats, manufacture an edge before hiding it in a menu. The disagreement between [S-L19-061] and [S-L19-080] is resolved by frequency: rarely used actions go into a menu (Q-pattern-03 `progressive`), and everything else finds an edge [inferred].
+- **Evidence:** [S-L19-080] [S-L19-061] [S-L19-056] [S-L19-084] [S-L19-086] [S-L19-103] (nav links placed snug with the logo instead of centered). Compared against DC-L15-08, DC-L02-18 and DC-L13-03.
+- **Maps to:**
+  - Q-dir-05: new heuristic for component internals (labels to the start, values to the end, and the two-edge rule), since the question currently covers page and text alignment only.
+  - Q-dir-05 visual sample: the receipt (text hard left, prices hard right, no dividers), and a profile card before and after an edge is manufactured [S-L19-080].
+  - Q-pattern-03: new heuristic. Hiding actions in a menu comes after edges have been tried, not before [S-L19-080].
+  - Q-dist-03: new lint rule, numeric table columns aligned to the end [S-L19-056].
+- **Impact now / as it grows:**
+  - *Built from edges:* now tidy components with no dividers. As content is added, each new element needs an edge to sit on, which pushes components toward defined slots.
+  - *Manufacture edges:* now a redesign step for each crowded component. As it grows, a slot-based anatomy scales to new content.
+  - *Fill space:* now looks strange [S-L19-080], and it gets worse as more content arrives [inferred].
+  - *Hide in a menu:* now looks clean. As more actions are hidden, people find less of what the product can do.
+- **Standards:** STD-visual-details-28, STD-visual-details-32, STD-visual-details-31, STD-visual-details-36, STD-visual-details-02
+
+### DC-L19-45: Axis for heroes and single-message sections (start, centered or split)
+- **Block path:** Foundations > Layout > Balance > Hero and section axis
+- **Questions the designer answers:** Does the main message of a page or section hang on the start edge, sit centered, or split into two columns? When is centering right? Does the text sit beside the visual or above it?
+- **Options:**
+  - **Start-aligned (left in left-to-right languages):** one designer's default. He notes that AI tools center everything by default [S-L19-103]. Linear is cited as a left-aligned software hero [S-L19-066]. This is DC-L15-08's default.
+  - **Split headline, about 3/5 and 2/5:** the headline on the start side and the supporting text and buttons on the other side, with the top of the supporting text level with the top of the headline. It gives the headline more weight [S-L19-103]. Pushing the body and call to action out to one side is also one of the named hero options in [S-L19-043]. The ratio is one designer's value.
+  - **Centered:** the most common choice when text sits above the image [S-L19-043]. It suits a profound statement set larger with a lot of space [S-L19-043], or a centered core message with context elements around it, where the elements pull attention to the center, thin out farther away, and keep good space around the text [S-L19-063].
+  - **Stacked or side by side:** a stacked hero (text above the visual) steps away from the template look of text-left, image-right [S-L19-072]. The common software hero is big text, a big image and lots of space [S-L19-066]. Beauty sites often split the screen into two halves [S-L19-049].
+- **Visual effect:** Start-aligned looks efficient, modern and scannable (DC-L15-08). Split is "a little bit more interesting" than centered or left-aligned, gives the headline more weight and fills the space [S-L19-103]. Centered reads calm and ceremonial (DC-L15-08) and suits a profound statement [S-L19-043]. Stacked lets the page breathe [S-L19-072]. Side by side, repeated down the page, looks like a template [S-L19-072].
+- **Depends on (upstream):** Q-dir-05, what screens are for (Q-scope-06 `persuade` or `operate`), display type sizes (Q-type-09), writing direction.
+- **Affects (downstream):** hero, section-header, empty-state and CTA-section templates; text-alignment props; container width. In [S-L19-103] the page container was widened to 1280 while the split hero was being tuned; the link between the two is inferred.
+- **Token encoding:** template props `align: start | center | split` and `split.ratio = 0.6` (number) [inferred]; `layout.container.max` (dimension). Heroes use `min-height: 100svh` on the web (STD-mobile-touch-10).
+- **Platform notes:** a split hero stacks on compact widths [inferred]. Mobile web heroes use `min-height: 100svh` (STD-mobile-touch-10).
+- **Accessibility constraints:** centered multi-line body text reads poorly (DC-L15-08). Cap body text at about 65ch (STD-visual-details-01). In a split hero, the reading order must be headline first, then supporting text [inferred].
+- **Default + heuristic:** Keep `start` as the default; this confirms DC-L15-08. Add `split` for marketing heroes on wide screens. Center only one short statement or a single-focus moment. When text is centered, decorative elements stay context around it and never crowd it [S-L19-063]. The claim that centering is most common [S-L19-043] fits DC-L15-08, which already lists marketing heroes under centered.
+- **Evidence:** [S-L19-103] [S-L19-043] [S-L19-063] [S-L19-066] [S-L19-072] [S-L19-049]. Compared against DC-L15-08 and DC-L02-18.
+- **Maps to:**
+  - Q-dir-05: new option `split` (headline on the start side at about 3/5, supporting text and actions at about 2/5, tops aligned) [S-L19-103].
+  - Q-dir-05 visual sample: the same hero shown centered, start-aligned and split. The question's "Show" currently uses an empty state and a form; add a hero, because that is where the choice is most visible [inferred].
+- **Impact now / as it grows:**
+  - *Start:* now consistent with product screens. It scales to any length of copy.
+  - *Split:* now more interesting on wide screens. As it grows, it needs a wide container and a stacking rule for phones.
+  - *Centered:* now a strong single statement. Long or growing copy reads poorly centered (DC-L15-08).
+  - *Stacked:* now lets the page breathe [S-L19-072]. It works across widths without a special rule.
+- **Standards:** STD-visual-details-01, STD-visual-details-29, STD-mobile-touch-10
+
+### DC-L19-46: Hierarchy recipe: which lever carries each text level
+- **Block path:** Foundations > Visual language > Hierarchy > Levers per level
+- **Questions the designer answers:** How many text weights and text colors does a screen use? Which lever makes a heading stand out, and which a subheading? How much should the range of sizes shrink on dense screens?
+- **Options:**
+  - **Size only:** it works, but gives less difference [S-L19-057].
+  - **Size plus two weights and two text colors:** a quick, large improvement. At most two weights, at least one weight step apart, and two text colors: the primary color and the same color at 45–70% opacity [S-L19-057]. The two-weight cap agrees with DC-L15-02.
+  - **Rank first, then one lever per level:** list the text elements by rank. Let size carry the heading, without also making it bold and full strength. Make subheadings bold so they scan. Keep paragraphs at full opacity so the smallest text is not also the faintest. Weight or color can each push small text back [S-L19-042]. The source's range for secondary text is 40–70% opacity.
+  - **Darkness bands:** the darkest text for important headings, lighter for body and lighter still for subtext [S-L19-039]. These are one video's lightness values. A second video uses dark gray rather than pure black for secondary information such as file size, file type, labels and borders [S-L19-051].
+  - **A narrow range on dense surfaces:** dashboards normally have no text larger than 24 px, while landing pages can use up to six sizes with a wide range [S-L19-052]. Dashboards use smaller styles with less difference between sizes [S-L19-047].
+  - Warnings: too large a jump between text sizes splits a page into two styles [S-L19-065]. A hierarchy that is "slightly overdone" lets the headline drown out the sub-line [S-L19-072].
+  - Existing: DC-L15-02 (balanced, two weights, three text colors) and DC-L02-15 (three weights).
+- **Visual effect:** Size only gives less difference [S-L19-057]; weak type hierarchy is part of what makes a page look like a template [S-L19-072]. Ranking first and using one lever per level looks clear and scannable and keeps body text readable [S-L19-042]. Opacity tiers look harmonious (DC-L01-14) but can fail contrast (see below). A narrow range reads dense and professional and a wide range reads editorial (DC-L15-02); [S-L19-052] gives the ranges, not the readings.
+- **Depends on (upstream):** Q-dir-03, the size ratio (Q-type-09), weights (Q-type-12), text colors (Q-color-22), page type (Q-layout-03, where `data` means a narrow range).
+- **Affects (downstream):** type roles (heading, subheading, body, caption), text color tokens, card and section-header templates, the dashboard type ramp, and button prominence.
+- **Token encoding:** at most two `fontWeight` tokens used per view (`font.weight.regular`, `font.weight.strong`), drawn from the system's weights (DC-L19-24). `color.text.primary` and `color.text.secondary` are solid colors that pass 4.5:1 (DC-L01-14), not free opacities. Generator metadata: `$extensions.builder.hierarchy = { levers: { heading: "size", subheading: "weight", body: "none" }, maxInAppTextPx: 24 }` for data surfaces [inferred].
+- **Platform notes:** hierarchy must survive Dynamic Type and Android font scaling (DC-L15-02). [S-L19-053] cites a 17 px iOS base size against 13 px on macOS, so phone type does not shrink.
+- **Accessibility constraints:** secondary text needs 4.5:1 on the lowest surface it appears on (DC-L01-14). With the WCAG formula, black on pure white needs about 54% opacity or more to reach 4.5:1: 45% gives about 3.4:1, and the 55% line in [S-L19-043] gives about 4.8:1 [inferred, computed]. On tinted or gray surfaces the minimum is higher. Hierarchy cannot rely on color alone (DC-L15-02).
+- **Default + heuristic:** This confirms DC-L15-02: balanced, with two weights. Heuristic: rank every text element first, then give each step one lever: size for headings, weight for subheadings, and full contrast for body text. Secondary text is a solid token that passes 4.5:1, not a free opacity. On dense or data surfaces (Q-layout-03 `data`, Q-aud-01 `dense`), keep text inside the app at or below about 24 px [S-L19-052]. That number comes from one video; [S-L19-047] agrees only that dashboards use smaller sizes closer together, and it fits DC-L15-02's subtle option [inferred]. DC-L19-25 owns the size budget and reconciles the 24 px with DC-L02-11's 32 px; this card follows it. On weights, [S-L19-057] and DC-L15-02's stated default favour two, while DC-L02-15 defaults to three (and DC-L15-02's own balanced option lists 400/600/700). DC-L19-24 reconciles them as three weights in the system and at most two in any one view; this card follows DC-L19-24 rather than overriding DC-L02-15. The emphasis budget is confirmed too: one primary call to action per header [S-L19-057], one or maybe two things to look at and click [S-L19-040], the nav button smaller than the hero button (28 against 38 px in one build) [S-L19-103], and color only on what matters [S-L19-080], which confirms DC-L15-03 and DC-L13-18.
+- **Evidence:** [S-L19-042] [S-L19-057] [S-L19-039] [S-L19-051] [S-L19-040] [S-L19-052] [S-L19-047] [S-L19-065] [S-L19-072] [S-L19-043] [S-L19-080] [S-L19-103] [S-L19-020]. Compared against DC-L15-02, DC-L02-15, DC-L01-14, DC-L15-03 and DC-L13-18, and the type-area cards DC-L19-23 (the same heading, subheading and paragraph recipe), DC-L19-24 (weights), DC-L19-25 (size budget) and DC-L19-08 (text colors).
+- **Maps to:**
+  - Q-dir-03: new heuristic, rank first, then one lever per level, and the smallest text is never the faintest [S-L19-042].
+  - Q-dir-03 visual sample: a heading, subheading and paragraph set styled the predictable way (bold heading, faint paragraphs) next to the recommended way [S-L19-042]; and a text block with size only next to size plus two weights and two colors [S-L19-057].
+  - Q-dir-03: no separate size cap here. The 24 px ceiling for dense product screens is proposed in DC-L19-25 (one video's number [S-L19-052]); this card only links `data` pages to it.
+  - Q-color-22: confirms DC-L01-14. Text tiers made with opacity are allowed only at values that pass 4.5:1; DC-L19-08 proposes the floor.
+- **Impact now / as it grows:**
+  - *Size only:* now the simplest option. As screens fill up, levels blur together.
+  - *Two weights and two colors:* now a quick improvement [S-L19-057]. It keeps the type ramp small as the product grows.
+  - *One lever per level:* now takes one ranking pass per template. As it grows, new screens inherit a readable default.
+  - *Darkness bands:* now subtle. Each band needs a contrast check on every surface, and more surfaces mean more checks.
+  - *Narrow range for data:* now fits more on a screen. As it grows, marketing and app need two type sets (Q-brand-06).
+- **Standards:** STD-visual-details-07, STD-visual-details-08, STD-visual-details-29, STD-visual-details-13, STD-visual-details-25
+
+### DC-L19-47: Padding grows with the container
+- **Block path:** Foundations > Space > Semantic spacing > Inset scale
+- **Questions the designer answers:** Do small and large containers share one padding? How close can a group of cards sit? What shape are chip and button paddings? How do spacing values step at large sizes?
+- **Options:**
+  - **Padding in proportion to size:** tight insets for small parts and liberal padding for big elements. One build uses an 8 px screenshot inset and an 8 px gap between feature cards, but 64 px of padding around a large hero screenshot [S-L19-103]. These are one designer's values.
+  - **Gap equal to the inset (a snug group):** the gap between sibling feature cards matches the inset around their content, 8 px in the example [S-L19-103]. Cards on a dark background sit very close together, with precise spacing [S-L19-060].
+  - **One padding for everything:** consistent, but the same padding looks cramped on large surfaces and loose on small ones [inferred].
+  - **Squished padding for pills:** a chip's vertical padding is half or a quarter of its horizontal padding (20 px horizontal gives 10 or 5) [S-L19-075]. A button's horizontal padding is about twice its vertical padding, in the analysis's reading of an ambiguous line [S-L19-052]. The half ratio confirms DC-L03-05's squish inset.
+  - **Large values:** at large sizes, round to the nearest 5 or 10, or grow the steps exponentially on an 8 base, because 120 against 128 is not visible [S-L19-070]. Exponential steps confirm DC-L03-02's hybrid scale. Rounding to 5 or 10 creates values that are off the scale [inferred].
+  - Base unit: a 4-point grid, because values can always be halved [S-L19-052]; a 4 or 8 px base [S-L19-070]; sign-up and login modals kept on a 4 px grid [S-L19-075]. All three confirm Q-space-01's `4-grid-8-rhythm`.
+- **Visual effect:** Proportional padding looks balanced at every size [inferred]. A snug group reads as one tray of related items [inferred from S-L19-103]. One padding everywhere makes big media look cramped [inferred]. A squished chip stays a chip; a chip that is too tall starts to look like a button [S-L19-075].
+- **Depends on (upstream):** Q-space-01, Q-space-02, Q-space-06, DC-L03-04, DC-L03-05.
+- **Affects (downstream):** the `space.inset.*` tokens, cards, media wells, chips, buttons, hero media, and the gaps in feature grids.
+- **Token encoding:** `dimension` tokens `space.inset.xs` to `space.inset.xl` (for example sm 8, xl 64), with `space.gap.card-group` → {space.inset.sm} as an alias. Squish is stored as two tokens (`...block`, `...inline`) because DTCG has no padding composite (DC-L03-05). Values are in rem on the web (STD-accessibility-motion-13).
+- **Platform notes:** none from the sources.
+- **Accessibility constraints:** a squished inset must not shrink the hit area below 24 px on the web or 44/48 on touch (STD-mobile-touch-09, DC-L03-05).
+- **Default + heuristic:** Padding grows with the container: pick the inset step from the container's size (chip xs, card sm or md, section media xl [inferred mapping]). A group of snug cards uses a gap equal to their inset. Both rules rest on one designer's build [S-L19-103], with [S-L19-060] agreeing only that grouped cards sit close with precise spacing, so they are a recommended heuristic, not a lock. Chips squish to a half or a quarter. This confirms `4-grid-8-rhythm` and the `hybrid` scale. Large values stay on the scale's steps rather than being rounded to 5 or 10, because hand-typed values break STD-visual-details-26 [inferred].
+- **Evidence:** [S-L19-103] [S-L19-060] [S-L19-075] [S-L19-052] [S-L19-070] [S-L19-045] (auto layout keeps spacing repeated). Compared against DC-L03-01, DC-L03-02, DC-L03-04 and DC-L03-05.
+- **Maps to:**
+  - Q-space-06: new heuristic, padding grows with the container, and a snug card group uses gap equal to inset. Confirms the `insets` squish option [S-L19-075].
+  - Q-space-01: confirms the current default `4-grid-8-rhythm`.
+  - Q-space-02: confirms the current default `hybrid`. Add to use/avoid: do not round large values to 5 or 10 off the scale.
+  - Visual sample: a feature card with an 8 px inset next to a hero screenshot well with 64 px of padding [S-L19-103].
+- **Impact now / as it grows:**
+  - *Proportional:* now needs 4 to 5 named inset steps. As new container types arrive, each one picks a step instead of a new value.
+  - *Gap equals inset:* now one alias. Card groups stay visually consistent as grids grow.
+  - *One padding:* now the simplest option. It breaks down as larger surfaces such as heroes and media wells appear.
+  - *Squished pills:* now two tokens per control size. Chips and buttons stay distinct as the set of components grows [S-L19-075].
+  - *Rounding large values:* now looks fine by eye. As it grows, it adds off-scale values that drift.
+- **Standards:** STD-visual-details-26, STD-visual-details-27, STD-accessibility-motion-13, STD-mobile-touch-09
+
+### DC-L19-48: Priority placement on work surfaces and dashboards
+- **Block path:** Patterns > Layout > Work-surface composition
+- **Questions the designer answers:** What must people see first on the main screen, and what can wait? How are modules ranked and placed? What goes at the very top? How strictly do modules follow the grid?
+- **Options:**
+  - **Priority grid:** rank each module high, mid or low. Treat the dashboard as a grid where more important information sits higher and farther left, and place high-priority modules first, mid next and low at the bottom. Where a module fits two ways, choose the orientation that leaves no awkward gap, and fill a gap that remains with a section the product actually lacks [S-L19-068].
+  - **Main area first, top row for page actions:** the main section shows what matters most to the user (project status, or investments at the top of a finance dashboard). The very top of a dashboard is generally reserved for page actions or simple navigation, such as a dropdown and a create button [S-L19-047].
+  - **A strict grid with the same margins:** dashboards follow grids more strictly than landing pages because they use most of the screen [S-L19-047]. Keep margins consistent across modules even if a module then shows fewer items (two reminders instead of four, plus a "view all" button) [S-L19-068].
+  - **One job, pruned:** give the dashboard one clear job; if it looks like it needs a PhD to operate, cut it back [S-L19-047]. Do not repeat the same KPI cards on several pages [S-L19-061]. Start a redesign by assessing the hierarchy and expect to throw elements away. Move a large header into a sidebar when it pushes important content below the fold [S-L19-068].
+  - **Arranged by each user:** the redesign moves an existing add-widget button into the sidebar [S-L19-068]; that people then arrange the dashboard themselves is [inferred]. STD-visual-details-64 asks for personalisation when no single layout fits everyone.
+  - Related: rarely used features go in popovers and secondary actions are revealed when people look for them (a "spectrum of explicitness") [S-L19-056], which is Q-pattern-03.
+- **Visual effect:** A priority grid puts what matters most at the top start [S-L19-068], so the eye lands on it first [inferred]. Unranked modules read as card soup, like "someone emptied a drawer onto the screen" [S-L19-047]. A strict grid looks calm and orderly [inferred]. Repeated KPI cards make a product look AI-built [S-L19-061].
+- **Depends on (upstream):** page type (Q-layout-03 `data` or `working`), navigation (Q-layout-04), density (Q-dir-02), grouping (Q-dir-04), the content inventory.
+- **Affects (downstream):** dashboard and home templates, module spans, empty states, sidebar composition, builder review of module order, and the phone version (DC-L19-49).
+- **Token encoding:** the existing grid tokens (`grid.columns.*`, `grid.gutter.*`, `grid.margin.*`). Module spans are layout props, not tokens (DC-L15-07). Module priority is template metadata, `$extensions.builder.modules = [{ id, tier: "high" | "mid" | "low" }]` [inferred].
+- **Platform notes:** on phones, pick one panel instead of fitting every module [S-L19-053]. In macOS utility apps, keep roughly the top 50 px clear, because that area drags the window [S-L19-067]. "Farther left" means toward the start edge, so it mirrors in right-to-left layouts [inferred].
+- **Accessibility constraints:** the reading and focus order in code must follow the priority order (WCAG 1.3.2, 2.4.3) [inferred]. Modules that are only reachable by dragging need a keyboard path [inferred].
+- **Default + heuristic:** Rank modules before placing them. The top row holds page actions; high-priority modules go at the top start; every module keeps the same margins. If the same module appears on two pages, one of them is probably wrong [inferred from S-L19-061].
+- **Evidence:** [S-L19-068] [S-L19-047] [S-L19-061] [S-L19-056] [S-L19-053] [S-L19-067]. Compared against DC-L03-16, DC-L03-18, DC-L15-07 and DC-L13-04.
+- **Maps to:**
+  - New question (proposed Q-layout-07, zoom 3, stage 13, show if Q-layout-03 is `data` or `working`, or Q-aud-01 is `dense`): "What must people see first on the main screen, and what can wait?" Options: `priority-grid` (default), `single-focus` (one main module plus a list; one job per screen [S-L19-047] [S-L19-053]), `user-arranged` (STD-visual-details-64 [S-L19-068]).
+  - Visual sample for the new question: the finance dashboard cut from 12 cards to a few tiered modules, placed higher and farther left by priority [S-L19-068].
+  - Both wiki topic pages list this as an open question ("No question records where dashboard modules go by priority").
+- **Impact now / as it grows:**
+  - *Priority grid:* now a clear first look. Every new module must be ranked, and lower tiers get pushed down or out.
+  - *Single focus:* now the calmest option. As features grow, more has to move to other pages.
+  - *User-arranged:* now costs more to build (drag, saving the layout). It scales to different roles and habits (STD-visual-details-64).
+- **Standards:** STD-visual-details-29, STD-visual-details-30, STD-visual-details-31, STD-visual-details-64, STD-visual-details-33
+
+### DC-L19-49: Moving a multi-panel screen to a phone
+- **Block path:** Foundations > Layout > Adaptation > Compact width
+- **Questions the designer answers:** When a desktop screen with several panels reaches a phone, do we stack everything, keep one panel per screen, or scroll some sections sideways? Do type and spacing shrink? What happens to the sidebar?
+- **Options:**
+  - **Stack everything:** every panel in one long column. This is the baseline, and one of Primer's narrow-screen options in DC-L03-19.
+  - **One panel per screen:** where the desktop had an action bar, recent notes, a calendar, tasks and a scratch pad, the phone screen picks one of them. When something new is needed, reach for a different page rather than a different layout [S-L19-053].
+  - **One direction per section:** on a phone, each section either stacks vertically or scrolls horizontally off the page, never both [S-L19-053]. Swipeable cards are better than stacking the same items, and a swipeable set needs page indicators [S-L19-035].
+  - **Keep type and spacing, or go a little larger:** do not squish things down to fit more. The source cites a 17 px iOS base size against 13 px on macOS [S-L19-053], and mobile screens need more space than you think [S-L19-045]. This agrees with DC-L03-17 (component spacing never changes by breakpoint) [inferred]. It **differs from DC-L03-24's** platform note that Material allows more generous spacing on desktop.
+  - **Sidebar to bottom bar, or to a hub home page:** consolidate the sidebar into a bottom bar (three or four links ideal, five the limit), or, when too many sections matter, turn the sidebar into the home page with recent items at the top (as Notion does) [S-L19-053].
+- **Visual effect:** Stacking gives a long scroll where everything is reachable but buried [inferred]. One panel per screen follows the rule that "one screen does one thing" [S-L19-053]. Swipeable rows work better than stacking the same items [S-L19-035] and feel compact [inferred]. Unchanged sizes match native apps; squished layouts look small next to them [S-L19-053].
+- **Depends on (upstream):** breakpoints (Q-layout-01), adaptation strategy (Q-layout-02), page type (Q-layout-03), navigation (Q-layout-04), module priority (DC-L19-48).
+- **Affects (downstream):** page templates, navigation containers, the horizontal scroller or carousel, list-detail behaviour, empty states.
+- **Token encoding:** no new tokens. Only layout-level tokens (margins, pane gaps) get breakpoint modes (DC-L03-17); component spacing does not change. Horizontal rows use CSS scroll snap per STD-mobile-touch-19.
+- **Platform notes:** on the web, horizontal rows use native scroll snap (STD-mobile-touch-19), or `touch-action: pan-y` for a JavaScript carousel (STD-mobile-touch-18). App shells use 100dvh and pad for safe areas (STD-mobile-touch-10, STD-mobile-touch-16). The bottom bar keeps targets over 44 px [S-L19-053].
+- **Accessibility constraints:** at 320 CSS px everything must still be reachable (WCAG 1.4.10, DC-L03-22). Horizontal scrollers need visible indicators [S-L19-035] and a way to move that is not a gesture [inferred]. Targets stay at 44 pt on iOS and 48 dp on Android (STD-mobile-touch-09). Layouts must scale with text size (STD-accessibility-motion-13).
+- **Default + heuristic:** On compact widths, give each screen one job: keep the highest-priority panel and move the others to their own pages. Each section flows in one direction. Type and component spacing never shrink below the desktop values. Heuristic: if a section needs two directions on a phone, split it into two sections or two pages.
+- **Evidence:** [S-L19-053] [S-L19-035] [S-L19-045]. Compared against DC-L03-17, DC-L03-18, DC-L03-19, DC-L03-22 and DC-L03-24.
+- **Maps to:**
+  - Q-layout-02: new heuristic, one direction per section and one panel per screen on compact widths.
+  - Q-layout-04: new option `hub-home` (on phones, the sidebar becomes the home page when too many sections matter for a bottom bar) [S-L19-053]. Confirms the 3–5 bottom-bar range in DC-L03-19.
+  - Q-layout-02 visual sample: in the resizable frame, a desktop dashboard becomes one panel per phone screen.
+  - Q-dir-02 and Q-space-09: new heuristic, a compact width is not a compact density [inferred from S-L19-053].
+- **Impact now / as it grows:**
+  - *Stack:* now no extra design work. As panels are added, the page gets longer and the important parts sink.
+  - *One panel per screen:* now needs extra pages and navigation. It scales, because new features become new pages.
+  - *One direction per section:* now a simple rule to check. It holds up as sections are added.
+  - *Keep sizes:* now shows less per screen. It stays consistent with native apps across devices.
+  - *Hub home:* now one more screen to design. It handles a growing number of sections better than a five-item bar [S-L19-053].
+- **Standards:** STD-mobile-touch-09, STD-mobile-touch-10, STD-mobile-touch-16, STD-mobile-touch-18, STD-mobile-touch-19, STD-accessibility-motion-13, STD-visual-details-28, STD-visual-details-42
+
+### DC-L19-50: Variety between sections on marketing pages
+- **Block path:** Patterns > Marketing page > Section rhythm
+- **Questions the designer answers:** May two sections on one page share a layout? How far may sections go beyond the column grid (overlaps, rows running off the frame)? Where does variety stop?
+- **Options:**
+  - **Repeat one template:** text left and image right, alternating all the way down the page, makes a site look like a template [S-L19-072]. It is well made but boring [S-L19-085].
+  - **Vary the sections:** mix in a full-screen section, cards and three columns [S-L19-085]. Do not reuse a layout for two sections of one page [S-L19-082]. One source calls variety in layout "a must", and flips the middle item of a stacked section when everything lines up too neatly [S-L19-065]. Make each section lead into the next [S-L19-072].
+  - **Vary and break the box:** overlapping sections, cards shifted up and down, a row of cards running past the frame. Start small, because this easily looks wonky [S-L19-085]. An explore row can run off the page with navigation to move through it [S-L19-082].
+  - **Structure plus one surprise:** get the structure clear first, then break the expected pattern once in a while with one well-built moment [S-L19-084]. New layouts can be taken too far and lose a clear structure [S-L19-049].
+  - The counterweight: after 30 years of websites, people expect information to flow top to bottom and left to right with navigation at the top. Make a familiar layout your own through details [S-L19-054]. STD-visual-details-37 asks for proof before a familiar pattern is broken.
+- **Visual effect:** Repeating one template looks like a template and does not encourage scrolling [S-L19-072]. Varied sections look more interesting [S-L19-085] and encourage people to keep scrolling [S-L19-072]. Breaking the box adds a feeling of movement but easily looks wonky [S-L19-085]. One well-built surprise is engaging without tipping into chaos [S-L19-084].
+- **Depends on (upstream):** whether marketing is in scope (Q-scope-01 `marketing`, Q-scope-06 `persuade`), the style preset (Q-dir-01), the grid (Q-layout-05), the content inventory.
+- **Affects (downstream):** the marketing section library (DC-L19-51), page templates, builder review of adjacent sections, and the motion budget for sections.
+- **Token encoding:** none; this is a process and template decision. Builder lint: `$extensions.builder.lint.marketing.noRepeatedSectionLayout: true` [inferred].
+- **Platform notes:** the sources discuss marketing websites only. Product screens stay conventional, because things that look the same must behave the same (STD-visual-details-36) [inferred].
+- **Accessibility constraints:** overlaps and off-frame rows keep the reading order in the code equal to the visual order (WCAG 1.3.2) [inferred]. Rows that run off the frame need a way to reach hidden items without a gesture [inferred]. Scroll effects follow the reduced-motion rules [inferred].
+- **Default + heuristic:** Vary: no two sections of one page share a layout. That strict form is one video's practice [S-L19-082]; the other sources ask for variety without a hard rule ([S-L19-065], [S-L19-085], [S-L19-072], [S-L19-073]), so the builder should warn, not block. Break the box only in small, nameable ways, and at most one well-built surprise per page. The count of one is inferred from "once in a while" [S-L19-084], and the surprise is tested before it ships (STD-visual-details-37). None of this applies to product screens. Choosing different familiar section patterns is variety, not breaking a pattern [inferred].
+- **Evidence:** [S-L19-072] [S-L19-085] [S-L19-082] [S-L19-065] [S-L19-084] [S-L19-049] [S-L19-054] [S-L19-073] (calls layout variety "everything"). Compared against DC-L15-07.
+- **Maps to:**
+  - New question (proposed Q-layout-08, zoom 3, stage 13, show if Q-scope-01 includes `marketing` or Q-scope-06 is `persuade`): "Should each marketing section get its own layout, and how far may sections break the grid?" Options: `repeat`, `vary` (default), `vary-break-box`.
+  - Visual sample: a page of repeated text-and-image rows next to a varied page [S-L19-085] [S-L19-072].
+- **Impact now / as it grows:**
+  - *Repeat:* now the fastest to build. Every new page looks the same as the last.
+  - *Vary:* now needs a section library (DC-L19-51). As pages are added, the library grows rather than one-off layouts.
+  - *Break the box:* now eye-catching. Each break is custom work and harder to test at every width.
+  - *One surprise:* now one special build per page. The special parts stay rare enough to maintain.
+- **Standards:** STD-visual-details-37, STD-visual-details-36, STD-visual-details-30, STD-enter-exit-origin-28
+
+### DC-L19-51: Choosing a section pattern by item count and amount of content
+- **Block path:** Patterns > Marketing page > Section library
+- **Questions the designer answers:** Which section layouts does the marketing kit include? For a set of N items, which pattern fits? How much content does each pattern need?
+- **Options:**
+  - **Logo strip**, static or as a marquee with faded edges: present on 41 of 50 software sites in one informal sample [S-L19-066].
+  - **Big-text, big-image hero with lots of space,** plus one distinctive element such as a characterful font or a small inline diagram [S-L19-066].
+  - **Tabbed section (a "clickable multisection"):** every tab must be designed before handoff [S-L19-066]. It can replace a static row of three cards [S-L19-072].
+  - **Stacked scroll cards:** each card slides up over the one before it; suited to three to five options that need some detail [S-L19-060].
+  - **Horizontal carousel:** suited to about 3 to 10 cards; more than 10 is cumbersome. Do not rely on small buttons alone; add a bigger button or make the cards draggable [S-L19-060]. A product-card slider shows every product when room is short [S-L19-049], and a feature slider suits features that each have an image [S-L19-065].
+  - **Bento:** only with enough content (see DC-L19-52) [S-L19-060] [S-L19-066] [S-L19-072] [S-L19-043].
+  - **Line grid:** feature cells sharing visible grid lines instead of floating apart [S-L19-066].
+  - **Text-only section or photo band:** a text-only section needs three or more lines of body text, or it looks too empty. A thin cropped photo with one strong line works as a pause between text-heavy sections [S-L19-060].
+  - **One-column stack of large features:** only one feature is in focus at a time [S-L19-085].
+- **Visual effect:** A logo strip gives quick social proof [S-L19-066]. Tabs and stacked cards keep a section short while holding detail [S-L19-072] [S-L19-060]. A carousel holds a lot in a small space [S-L19-060]. A line grid keeps cells inside visible lines instead of floating apart [S-L19-066] and looks structured [inferred]. A text-only section opens up a photo-heavy page [S-L19-060]. A one-column stack keeps attention on one feature at a time [S-L19-085].
+- **Depends on (upstream):** section variety (DC-L19-50), the content inventory (item count, image orientation, text length), the grid (Q-layout-05), text on images (Q-img-02).
+- **Affects (downstream):** section components, the carousel or scroller, tabs, the bento grid, the logo strip, and motion (marquee, scroll stack, scroll reveals).
+- **Token encoding:** none; this is a component and template decision. The counts can be builder hints, `$extensions.builder.sections = { carousel: { min: 3, max: 10 }, scrollStack: { min: 3, max: 5 }, textOnly: { minBodyLines: 3 } }` [inferred]. The counts are one presenter's judgement [S-L19-060].
+- **Platform notes:** these are web marketing patterns. Carousels use native scroll snap where they can (STD-mobile-touch-19), or `touch-action: pan-y` for a JavaScript gesture (STD-mobile-touch-18). Marquee text trades away usability [S-L19-085].
+- **Accessibility constraints:** carousels need indicators showing how many items there are [S-L19-060] [S-L19-075] and a bigger button than small dots alone [S-L19-060]; a way to move that is not a drag gesture is [inferred]. A marquee, or tabs that switch automatically on a timer, need a way to pause them (WCAG 2.2.2) [inferred]. Stacked scroll cards and marquees ship with their reduced-motion variant in the same change (STD-accessibility-motion-01). Tabs follow the ARIA tabs pattern [inferred]. Hover effects on section cards are gated to fine pointers (STD-accessibility-motion-15).
+- **Default + heuristic:** Pick the pattern by item count and content amount. Three to five detailed items: stacked cards or tabs. About 3 to 10 comparable items: a carousel. Many features that would run off the screen: a bento [S-L19-043]. More than about 10: a different format, such as a grid or a separate page [inferred; S-L19-060 says only that another format may be better]. A single statement: a text-only section with three or more lines. All counts are opinion from one video [S-L19-060]; no other source or card gives numbers.
+- **Evidence:** [S-L19-060] [S-L19-066] [S-L19-072] [S-L19-043] [S-L19-049] [S-L19-065] [S-L19-085] [S-L19-075]. Compared against DC-L15-07.
+- **Maps to:**
+  - New question (proposed Q-layout-09, zoom 3, stage 13, same show-if as Q-layout-08): "Which section patterns should the marketing kit include?" Multi-select: `logo-strip`, `big-hero`, `tabbed`, `scroll-stack`, `carousel`, `bento`, `line-grid`, `text-interlude`, `one-column-features`. The builder proposes a set from the content inventory using the count heuristic [inferred].
+  - Q-layout-05: new heuristic. `bento` becomes one entry in this library instead of the only named section option.
+  - Visual sample: the section catalogue (cards on a dark background, stacked scroll cards, a carousel, a bento, a text-only section) [S-L19-060], and a simple bento next to a line grid [S-L19-066].
+- **Impact now / as it grows:**
+  - *Logo strip:* now easy. As logos accrue it needs curation; a marquee adds motion to maintain.
+  - *Tabbed:* now compact. Every tab must be designed and kept current as the product changes [S-L19-066].
+  - *Stacked scroll cards:* now vivid for a few items. The source suggests it for three to five items [S-L19-060], so it does not scale much past that [inferred].
+  - *Carousel:* now holds a lot. Past about 10 items it becomes cumbersome [S-L19-060].
+  - *Line grid, text-only, one-column:* now simple to build. They hold up as content changes because they depend less on exact content amounts.
+- **Standards:** STD-mobile-touch-18, STD-mobile-touch-19, STD-accessibility-motion-15, STD-accessibility-motion-01, STD-when-to-animate-13, STD-enter-exit-origin-13, STD-enter-exit-origin-28, STD-process-review-taste-43
+
+### DC-L19-52: How a bento grid is built
+- **Block path:** Foundations > Layout > Composition > Bento
+- **Questions the designer answers:** How complex may bento tiles be? Is there enough content for a bento? Who sets the tile sizes? Does the bento need its own section title?
+- **Options:**
+  - **Complex bento:** rich, irregular tiles in the style Apple popularised; very hard to put together and better suited to marketing [S-L19-066].
+  - **Simple bento on plain grids:** tiles on simple grids so developers can build them, with an optional slightly tilted card for character (Ramp) [S-L19-066].
+  - **Compact or full width:** Linear's compact bento, adapted to full width in one build [S-L19-060].
+  - **Sized from the content:** use a bento only when there is enough content to fill every box, and expect box sizes to change as the content plan develops (a top row became three boxes instead of two) [S-L19-060]. Match the arrangement to the images: vertical images needed a different bento [S-L19-065].
+  - **Tiles that show real UI:** build diagrams or real product UI into the tiles. Card headers can replace a section title that would be redundant [S-L19-082].
+  - When to use one: a features list that would run off the screen [S-L19-043], or a plain row of four cards [S-L19-072]. Too many bento containers make a design feel cluttered [S-L19-057].
+- **Visual effect:** A complex bento is a marketing showpiece that is hard to build [S-L19-066]. A simple bento follows the trend on plain grids [S-L19-066]. Content-first sizing fills every box [S-L19-060]. Tiles showing real diagrams look specific to the product ("so Google-esque" in one build) [S-L19-082]; that they look more credible is [inferred].
+- **Depends on (upstream):** grid columns (Q-layout-05, DC-L03-15), the section library (DC-L19-51), the content inventory, radius and nested radius (Q-shape-01, DC-L04-05), card nesting (DC-L19-42).
+- **Affects (downstream):** the bento component (tile spans), feature sections, how tiles stack on narrow screens [inferred], image crops.
+- **Token encoding:** reuses the grid tokens (`grid.columns.*`, `grid.gutter.*`). Tile spans are component props (`span: { col, row }`), not tokens (DC-L15-07). The gap between tiles uses the card-group gap from DC-L19-47 [inferred].
+- **Platform notes:** web marketing mainly. On compact widths the tiles stack in reading order [inferred].
+- **Accessibility constraints:** the code order equals the visual reading order (DC-L15-07, WCAG 1.3.2). Text over tile images follows the text-on-image rule (Q-img-02) [inferred].
+- **Default + heuristic:** A simple bento on the page's column grid (tiles span whole columns), sized after the content plan. If a tile has nothing real to show, fall back to a plainer layout. This confirms DC-L15-07 (a bento is a hierarchical grid for marketing features) and DC-L03-15's columns.
+- **Evidence:** [S-L19-066] [S-L19-060] [S-L19-065] [S-L19-082] [S-L19-043] [S-L19-072] [S-L19-057]. Compared against DC-L15-07 and DC-L03-15.
+- **Maps to:**
+  - Q-layout-05 `bento` option: new heuristic. Simple whole-column spans, only with enough content, sizes set after the content plan, and tiles holding real product UI.
+  - Visual sample: a row of four cards turned into a bento [S-L19-072], and a simple bento with one tilted card [S-L19-066].
+- **Impact now / as it grows:**
+  - *Complex:* now a showpiece. Every content change becomes custom layout work [inferred from S-L19-066, which calls these very hard to put together].
+  - *Simple:* now quick to build. Tiles can be swapped as features change.
+  - *Content-first:* now needs the content plan before layout [S-L19-060]. The layout stays honest as content changes [inferred].
+  - *Real UI in tiles:* now requires product screenshots or diagrams. Tiles go stale when the product's UI changes and need refreshing.
+- **Standards:** STD-visual-details-30, STD-visual-details-26, STD-process-review-taste-43
+
+### DC-L19-53: How long pages separate their sections
+- **Block path:** Patterns > Marketing page > Section separation
+- **Questions the designer answers:** Between sections, do we rely on space, background bands, a frame of lines, or image breaks? What should we strip out?
+- **Options:**
+  - **Space only:** sections separated by spacing. Lines on everything as a substitute for spacing recall old slide decks [S-L19-050].
+  - **Background bands:** sections on adjusted backgrounds separate content and add depth (Shopify) [S-L19-085], with each section's background matched to what it is for [S-L19-062]. The counterpoint: remove the background tints and background cards an AI tool adds [S-L19-103].
+  - **A frame of lines or a "canvas grid":** vertical lines framing the page's content, which also keep it responsive on very large screens [S-L19-072]. A canvas grid of borders around each section, with full-width dividers between sections, makes a site more interesting when there are no custom graphics [S-L19-103]. Line grids inside a section [S-L19-066]. Dividers are coming back and can have rounded ends [S-L19-050]. The counterweight: [S-L19-072] shows the framing lines at its third level, and at its top level moves from many straight lines to a more flexible layout.
+  - **Image break:** a thin cropped photo with one strong line as a pause between text-heavy sections [S-L19-060].
+  - Motion between sections, such as each section leading into the next [S-L19-072], belongs to the motion area.
+- **Visual effect:** Space alone avoids the "lines on everything" slide-deck look [S-L19-050] and looks calm [inferred]. Background bands separate sections and add depth [S-L19-085]. A frame of lines makes a site more interesting when there are no custom graphics [S-L19-103] and keeps content contained on very large screens [S-L19-072]; that it looks structured or technical is [inferred]. An image break acts as an interlude between text-heavy sections [S-L19-060].
+- **Depends on (upstream):** the grouping strategy and its `lines` option (Q-dir-04), surface steps (Q-color-14), the style preset (Q-dir-01), section variety (DC-L19-50).
+- **Affects (downstream):** the section component (background and border variants), the page frame, divider tokens, marketing templates.
+- **Token encoding:** `color.surface.section-alternate` (color), `color.border.frame` (color with alpha), `border.width.hairline` (dimension). Section prop `separator: space | band | frame | image` [inferred].
+- **Platform notes:** these are web marketing patterns. On very large screens a frame of lines keeps the content visibly contained [S-L19-072].
+- **Accessibility constraints:** decorative lines are exempt from WCAG 1.4.11 (DC-L04-08). Text on each band still needs 4.5:1 [inferred]. Section headings and landmarks carry the structure for screen readers (DC-L13-04) [inferred].
+- **Default + heuristic:** Separate sections with space by default. Add background bands for rhythm on long pages [inferred; S-L19-085 says they separate sections and add depth]. Use a frame of lines or a canvas grid only as a deliberate style, mainly when there are no custom graphics [S-L19-103]. Avoid lines as a substitute for spacing [S-L19-050] (one video's taste, which it says is softening). Strip tints and background cards that do nothing [S-L19-103].
+- **Evidence:** [S-L19-050] [S-L19-085] [S-L19-062] [S-L19-103] [S-L19-072] [S-L19-066] [S-L19-060]. Compared against DC-L04-08 and DC-L15-05.
+- **Maps to:**
+  - Q-dir-04: new heuristic for page sections. Space first, bands for rhythm, and a frame only as a deliberate style.
+  - Q-dir-04 `lines` option, visual sample for marketing pages: a page framed by vertical lines [S-L19-072] and a canvas grid [S-L19-103].
+- **Impact now / as it grows:**
+  - *Space:* now the least to maintain. As pages grow long, they may need bands to keep a rhythm.
+  - *Bands:* now depth and rhythm. Each band color needs contrast checks in light and dark mode.
+  - *Frame or canvas grid:* now structure without illustrations. Every new section has to fit the frame, which constrains layout variety (DC-L19-50).
+  - *Image break:* now emphasis. It depends on a supply of good wide photos [S-L19-060].
+- **Standards:** STD-visual-details-14, STD-visual-details-30
+
+### DC-L19-54: What a card shows first, what it groups and what it drops
+- **Block path:** Components > Card > Content anatomy
+- **Questions the designer answers:** What does a card lead with? Which facts group together? Which labels can go? What is left for the detail page?
+- **Options:**
+  - **The "spreadsheet" card:** every field labelled at equal weight, the "before" state in [S-L19-052].
+  - **The ranked card:** an image whenever possible, the key item large and bold on top, secondary details smaller below, one standout value (the price at the top end, in color), and icons plus alignment instead of "from" and "to" labels [S-L19-052].
+  - **Grouped facts with implied labels:** group related facts (name with location, cost with rating), order the groups by importance, put minor details in one row with icons, and keep labels only where values could be confused (check-in and check-out) [S-L19-070].
+  - **Scan-first listing card:** the specifics people scan by (location, rating, price) go on the card, and descriptions go on the page that opens on click. Test with imperfect content and truncate long names [S-L19-054].
+  - **Real-object card:** only the actions and figures that make sense for the real object (a credit card gets "lock card", a minimum payment and a due date). Retitle the card when its content changes [S-L19-068].
+  - **Calming a busy card:** actions into a triple-dot menu and chips reduced to icons [S-L19-061], or manufactured edges instead (DC-L19-44) [S-L19-080].
+- **Visual effect:** The spreadsheet card "looks like a spreadsheet, not a design" [S-L19-052]. The ranked card is easy to scan, with color from the image [S-L19-052]. Implied labels make a card quieter and shorter [inferred; S-L19-070 shows the before and after]. A scan-first card puts the details people scan by first [S-L19-054].
+- **Depends on (upstream):** the hierarchy recipe (DC-L19-46), edge alignment (DC-L19-44), icon sizes (Q-space-10), the content model.
+- **Affects (downstream):** card templates (listing, product, stat, feature), truncation rules, icon use, the content of detail pages.
+- **Token encoding:** none; this is a content and component-anatomy decision. Card slots: `media`, `lead`, `meta`, `standout`, `actions` [inferred].
+- **Platform notes:** none from the sources.
+- **Accessibility constraints:** implied labels still need accessible names (visually hidden labels or ARIA) [inferred]. Truncated names need a way to reach the full text (DC-L02-18). Icons that replace labels need text alternatives [inferred]. Icons on photos get a circle behind them so contrast holds on any image [S-L19-054].
+- **Default + heuristic:** Rank, group, drop. Each card has one lead fact, grouped secondary facts, and labels only where values could be confused. The card carries what people compare; the detail page carries the rest. This confirms DC-L13-04 (front-load the key information) at card level.
+- **Evidence:** [S-L19-052] [S-L19-070] [S-L19-054] [S-L19-068] [S-L19-061] [S-L19-080]. Compared against DC-L13-04 and DC-L02-18.
+- **Maps to:**
+  - Q-dir-03 visual sample: use real cards to demonstrate hierarchy strength, not only a heading ladder: the trip card before and after [S-L19-052], and the rental listing card before and after [S-L19-070].
+  - Component sheet (`component-sheet.html`): new heuristic for card templates, one lead fact, grouped facts, and labels only where values could be confused.
+- **Impact now / as it grows:**
+  - *Spreadsheet:* now the fastest to fill. As fields are added, cards get longer and flatter.
+  - *Ranked:* now needs a decision about which fact leads. As content types grow, each type needs its own ranking.
+  - *Implied labels:* now shorter cards. New fields that could be confused need their labels back [S-L19-070].
+  - *Scan-first:* now needs a detail page. It scales to long result lists [S-L19-054].
+  - *Real-object:* now per-object thinking. Actions stay meaningful as more object types arrive [S-L19-068].
+- **Standards:** STD-visual-details-29, STD-visual-details-30, STD-visual-details-35
+
+### DC-L19-55: Whole-card link or explicit button
+- **Block path:** Components > Card > Interaction
+- **Questions the designer answers:** Is the whole card the link? When does a card keep its own button? How does a card show that it can be clicked without relying on hover?
+- **Options:**
+  - **The whole card is the link:** when cards repeat over and over, no call-to-action button is needed, because the card itself is the link. An arrow icon can fade in on hover to show this [S-L19-075].
+  - **An explicit button:** keep a call to action when the card has a specific action such as "Try it out" [S-L19-075]. On image CTA cards, one hover zooms the image out and pops up the call to action [S-L19-065]; another blurs and enlarges the image and reveals extra text [S-L19-082].
+  - **Actions revealed on hover:** when space is tight, secondary actions appear on hover with a tooltip [S-L19-056]. A call to action can appear on hover only when it is needed [S-L19-072].
+  - Existing: DC-L08-15 asks "Is the whole card clickable?" but gives no default.
+- **Visual effect:** A whole-card link drops the button from every repeated card [S-L19-075], so a grid of cards looks calmer [inferred]. An explicit button makes the next step obvious but adds visual weight [inferred]. Hover reveals look clean at rest but are invisible on touch screens [inferred; the analysis of S-L19-056 notes touch and keyboard access are not discussed].
+- **Depends on (upstream):** how clearly clickable things show it (Q-state-02), card anatomy (DC-L19-54), the hover policy (STD-accessibility-motion-15).
+- **Affects (downstream):** the card component (link wrapper, focus ring), hover styles, touch affordances, analytics click targets.
+- **Token encoding:** no new tokens; it uses the focus-ring and motion tokens. Component prop `interactive: link | action | static` [inferred].
+- **Platform notes:** on the web, hover styles are gated to `(hover: hover) and (pointer: fine)` (STD-accessibility-motion-15), so on touch the hover arrow never appears. In mobile apps, hover affordances move into press, position or nothing (STD-mobile-touch-30). A card that needs a sign on touch therefore shows it permanently or drops it [inferred]. Press feedback uses `:active`.
+- **Accessibility constraints:** one link per card, and no buttons nested inside the link [inferred]. The whole card gets a visible focus ring (OpenDesigner's locked floor). If the card's border is its only edge, it needs 3:1 (DC-L08-15). Actions revealed on hover need a keyboard and touch path [inferred], and DC-L13-03 already rules out hover-only for anything essential.
+- **Default + heuristic:** Repeated cards that go to one place are one whole-card link, with a sign that does not depend on hover on touch screens. A card with its own specific action keeps an explicit button, and the card itself stays static. Never combine a card link with competing buttons inside it. Keep hover motion for occasional marketing cards, not for cards people use all day (STD-when-to-animate-07) [inferred link].
+- **Evidence:** [S-L19-075] [S-L19-065] [S-L19-082] [S-L19-056] [S-L19-072]. Compared against DC-L08-15 and DC-L13-03.
+- **Maps to:**
+  - Q-state-02: new heuristic for cards, whole-card link for repeated cards and an explicit button for a specific action.
+  - Q-depth-01, which decides DC-L08-15: answers that card's open question ("Is the whole card clickable?") with the rule above.
+  - Visual sample: a whole-card link with a hover arrow next to a card with an explicit button [S-L19-075], shown on a touch frame and a pointer frame.
+- **Impact now / as it grows:**
+  - *Whole-card link:* now fewer buttons. As cards gain secondary actions, it conflicts with nested controls, so those actions move to the detail page or a menu.
+  - *Explicit button:* now clear. In large grids, many buttons compete for attention (DC-L15-03).
+  - *Hover reveals:* now clean. As touch use grows, the hidden actions are unreachable unless another path is added.
+- **Standards:** STD-accessibility-motion-15, STD-mobile-touch-30, STD-when-to-animate-07, STD-visual-details-36, STD-mobile-touch-09
+
+### DC-L19-56: How a layout is judged before it is chosen
+- **Block path:** Process > Review > Layout checks
+- **Questions the designer answers:** At what frame size do we judge a layout? How do we test that its structure works? What do we compare, and with what content?
+- **Options:**
+  - **A real viewport frame:** judge a desktop hero in a real full-screen browser, 1920 px wide but only about 1,000 px tall with the browser bar, not in a tall showcase canvas [S-L19-049]. That size is the presenter's observation, not a measurement. Allow for the browser bar on mobile and desktop [S-L19-057]. Preview on the target screen, because designing zoomed out led one designer to oversized type and spacing [S-L19-057].
+  - **A five-second scroll test:** someone scrolling for 5 seconds should grasp the idea [S-L19-084].
+  - **Wireframe comparison:** compare layouts as wireframes with the content removed and pick the one that is easier to follow [S-L19-084]. Start from a varied wireframe [S-L19-085]. A good layout already works before any animation is added [S-L19-082].
+  - **Real and imperfect content:** test with imperfect content, such as very long names, and truncate them [S-L19-054].
+  - The house standard: show variants one at a time, full size, in realistic context (STD-process-review-taste-43).
+- **Visual effect:** a real frame shows what is actually above the fold, which a tall showcase canvas hides [S-L19-049]. Wireframe tests expose structure without styling [S-L19-084].
+- **Depends on (upstream):** breakpoints (Q-layout-01), the interview's visual templates (option gallery, spacing ruler).
+- **Affects (downstream):** what frames `option-gallery.html` and `spacing-ruler.html` render, the builder's review (`engine.py review`), and `preview.html`.
+- **Token encoding:** none (process decision).
+- **Platform notes:** mobile web heroes use `min-height: 100svh` (STD-mobile-touch-10), so the phone frame should show the browser chrome [inferred].
+- **Accessibility constraints:** include a 320 CSS px reflow frame and a check with larger text (WCAG 1.4.10, STD-accessibility-motion-13) [inferred].
+- **Default + heuristic:** Show every layout option in the interview full size, in a real frame (a 1920 by about 1,000 px desktop fold and a phone with browser chrome), with realistic content, one at a time. Before a layout is chosen, it should pass the 5-second scroll test [S-L19-084].
+- **Evidence:** [S-L19-049] [S-L19-057] [S-L19-084] [S-L19-085] [S-L19-082] [S-L19-054]. Compared against DC-L03-22.
+- **Maps to:**
+  - Q-layout-01 visual sample: the resizable frame gets a fold line at about 1,000 px on the 1920 px desktop and a phone frame with browser chrome [S-L19-049] [S-L19-057].
+  - Q-layout-05 and Q-dir-04: show variants one at a time, full size, next to sibling content (STD-process-review-taste-43), not as a grid of thumbnails. The standards file already records this conflict for `option-gallery.html`.
+- **Impact now / as it grows:**
+  - *Real frame:* now a little more setup per preview. It prevents designs that only work on a showcase canvas as pages multiply.
+  - *5-second test:* now a quick check. It scales to every new page and section.
+  - *Wireframe comparison:* now an extra step. It keeps structure decisions separate from styling as the system grows.
+  - *Real content:* now needs sample data. It catches overflow and truncation before real content arrives [S-L19-054].
+- **Standards:** STD-process-review-taste-43, STD-mobile-touch-10, STD-visual-details-28, STD-accessibility-motion-13
+
+### Area: Shape and depth (DC-L19-61 to DC-L19-76)
+
+Area `shape-depth`: the topics Shape and corner radius; Depth, shadows and borders; and Icons and imagery (stages 14 shape, 15 depth, borders and materials, 17 icons, app icon and logo use, 18 imagery, illustration and charts). Written 2026-09-24. Built from all 38 verified analyses tagged with these topics, checked against the raw transcripts wherever a card relies on a detail or a number, and compared with DC-L04-01 to DC-L04-18, DC-L05-01 to DC-L05-21, DC-L06-09, DC-L06-11, DC-L06-12, DC-L06-13, DC-L09-01, DC-L09-02, DC-L15-01, DC-L15-05, DC-L15-10, DC-L01-16, DC-L01-27, DC-L10-11, DC-L10-12 and DC-L10-25, with `questions.json`, the stage files and `synthesis/standards.json`. Two cards planned for this area were left out because the color area already wrote them: the edge of a card (DC-L19-09) and how raised surfaces stand out in dark mode (DC-L19-05). The layout area covers list rows, page sections and card nesting (DC-L19-42, DC-L19-43, DC-L19-53).
+
+### DC-L19-61: Corner radius for images, screenshots and chart bars
+- **Block path:** Foundations > Shape > Radius roles > Media and data marks
+- **Questions the designer answers:** Do photos, screenshots and thumbnails get rounded corners, and from which step of the scale? Should a product screenshot's frame match the corners drawn inside the screenshot? Do bars in a bar chart get rounded ends? May marketing images be cut into other shapes?
+- **Options:**
+  - **Square images beside rounded controls.** Kole Jain calls sharp-edged images next to rounded buttons a "disconnect"; it is one of the faults of the landing page he rates 2 out of 10 [S-L19-072]. Not recommended.
+  - **Images take a step from the same radius family.** Mixed corner radii make a design feel amateur; his fix gives every smaller component one shared radius (10px in one recipe app; the value belongs to that app, the lesson is the shared family) [S-L19-045], and images belong to the family too [S-L19-072]. DC-L04-03's roles (detail, control, container, overlay, person) have no role for media, so this is new. Differs from DC-L04-03 and the engine: the builder makes up to three small radii by rule (`radius.detail` at half the control radius, `radius.control-sm` one step down under 32px, `radius.control`), where Kole Jain would use one. The steps stay, because they follow Fluent and Atlassian, but different radii are allowed only by role, never screen by screen [inferred].
+  - **Screenshot frame matches the product's own corners.** Steve Schoger tightened a screenshot's frame until it matched the corner radius used inside the app in the screenshot [S-L19-103] (one video).
+  - **Inset media takes the concentric inner radius.** Screenshots inset about 8px inside a card, with corners concentric with the card's [S-L19-103]. The rule and its exceptions are DC-L19-62.
+  - **Chart bars with square value ends.** A rounded bar top makes it hard to tell where the bar ends [S-L19-045] (one video; another video from the same presenter makes the parallel point that curved chart lines hide where a line's tip is [S-L19-075]). No existing card covers bar corners (DC-L05-24 covers chart chrome only).
+  - **Masked shapes (marketing).** Masking images into shapes that match the site's style makes a layout more unique [S-L19-085]. `clip-path` cuts an element into a circle (`circle(50% at 50% 50%)`), an ellipse, a polygon, a custom SVG shape (`url()`) or a rounded rectangle (`inset(... round 17px)`) without changing layout [S-L19-010].
+- **Visual effect:** Square images next to rounded buttons look unfinished and template-like [S-L19-072]. Images from the same family look like part of one product. A screenshot framed with the product's own corner radius looks built in rather than pasted on [S-L19-103]. Square bar ends read as exact values; rounded tops blur the value [S-L19-045]. Masked shapes make a layout more unique [S-L19-085].
+- **Depends on (upstream):** roundness and scale (Q-shape-01, Q-shape-02; DC-L04-01, DC-L04-02, DC-L09-01); the nested-corner rule (DC-L19-62); image aspect ratios (DC-L05-15); where brand shapes may appear (Q-img-07, DC-L06-11).
+- **Affects (downstream):** image, thumbnail, media card, hero image, screenshot frame, gallery and carousel; the bar chart; avatars keep `radius.person` (full) as before (DC-L05-18).
+- **Token encoding:** `$type: dimension`. A semantic `radius.media` that aliases `{radius.container}` for standalone images; `card.media.radius` computed from the card's radius minus its inset (DC-L19-62); `chart.bar.radius` = `{radius.0}` at the value end [inferred names]. Masks have no DTCG type: an SVG asset or a `clip-path` string in `$extensions`, as DC-L04-06 does for expressive shapes.
+- **Platform notes:** Web: `border-radius` with clipping, or `clip-path: inset(0 round <r>)`; `clip-path` does not affect layout [S-L19-010]. The sources give no iOS or Android details.
+- **Accessibility constraints:** Radius does not change contrast needs. Square bar ends help people read a value exactly [S-L19-045]; charts still need their text alternatives (DC-L05-25), and informative images need alt text (DC-L05-14).
+- **Default + heuristic:** Standalone images and screenshots use `radius.media`, which equals `radius.container` [inferred: the sources only say images and buttons must not clash [S-L19-072]; images are container-sized, so DC-L04-03's size rule points to the container step]; images inset in a card use the concentric inner radius; a product screenshot's frame uses the product's own container radius [inferred from S-L19-103]; chart bars are square at the value end; masked shapes appear only on expressive surfaces such as marketing and onboarding [inferred, in line with DC-L06-11]. Rule of thumb: if an image sits next to a button, their corners must visibly come from one family (one presenter, two videos [S-L19-045] [S-L19-072]). Review flags any radius that is not a step of the scale (STD-visual-details-26) and two components with the same job but a different radius or size [S-L19-045].
+- **Evidence:** [S-L19-010] [S-L19-045] [S-L19-072] [S-L19-085] [S-L19-103]; compared with DC-L04-03, DC-L04-06, DC-L05-15, DC-L05-18, DC-L05-24, DC-L06-11.
+- **Maps to:**
+  - Q-shape-03: new role row "media: standalone images and screenshots use the container radius; images inset in a card use the concentric inner radius" and "data marks: square value ends"; visual sample: the level-one landing page with square images beside rounded buttons, then the same page with matched corners [S-L19-072].
+  - Q-img-02: new option `masked-shapes` ("Images cut into shapes that match the brand, on marketing pages only") [S-L19-085] [S-L19-010].
+  - Q-viz-01: new heuristic "no rounded bar tops; the value end stays square" [S-L19-045].
+- **Impact now / as it grows:**
+  - Square images: now, no clipping to set up. As it grows, every image-heavy page repeats the mismatch, and fixing it later touches every media component [inferred].
+  - Media in the radius family: now, images and controls look like one product. As it grows, a change to `radius.container` carries every image with it [inferred].
+  - Frame matches the screenshot: now, marketing screenshots look native. As it grows, a product radius change means recapturing screenshots, while the frame follows the token [inferred].
+  - Square bar ends: now, values read exactly. As it grows, every new chart inherits a readable mark [inferred].
+  - Masked shapes: now, a distinctive marketing page. As it grows, each shape is an asset to maintain; kept off product screens, it cannot clutter dense UI [inferred].
+- **Standards:** STD-visual-details-26 (radii come from tokens; no hand-typed values), STD-process-review-taste-45 (the prototype picker's 999px pill is fixed chrome, so radius checks skip it).
+
+### DC-L19-62: Nested corners: pills, wide gaps, flush edges and stacked containers
+- **Block path:** Foundations > Shape > Nesting rule > Exceptions
+- **Questions the designer answers:** When a rounded element sits inside another, how round is the inner one? What happens when the gap is wider than the outer radius? Do pills need the rule? What happens to a corner cropped flush against the container's edge? How many rounded containers may stack?
+- **Options:**
+  - **Same radius inside and out.** The gap stays even along the edges but widens at the corners [S-L19-070]. The same as DC-L04-05's first option; not recommended.
+  - **Outer radius minus the gap (concentric).** A 30px outer radius and a 10px gap give a 20px inner corner [S-L19-070]; Steve Schoger insets screenshots about 8px with corners concentric with the container [S-L19-103]. Confirms DC-L04-05.
+  - **Gap wider than the outer radius.** The subtraction breaks down (past 30px in the 30px example), so Kole Jain estimates by eye [S-L19-070]. Differs from DC-L04-05, which floors the inner radius at the smallest non-zero step (after Apple's `concentric(minimum:)`). The floor stays the builder's rule; judging by eye is only for hand-made assets [inferred].
+  - **Pill inside or around a pill.** No correction is needed, because a pill keeps the same distance all the way round [S-L19-070]. New: DC-L04-05 does not say this.
+  - **Corner flush with the container's edge.** A large hero screenshot sits on the container's bottom edge with no bottom padding, cropped about 10px; Schoger removes its bottom corner radius and adds an inset ring at 5% on the container for definition [S-L19-103] (one video). New for container edges; close to DC-L04-03's platform note that Fluent avoids rounded corners at the screen's edge.
+  - **Containers stacked inside containers.** Filling a wide canvas with cards in cards ends with borders on borders and three radii stacked together; a single line and a column edge can do the card's job [S-L19-080].
+- **Visual effect:** Equal radii look thick and clumsy at the corners; concentric corners look machined. A pill in a pill needs nothing. A cropped screenshot with a square bottom edge reads as continuing past the frame [inferred]. Three stacked radii look cluttered [S-L19-080].
+- **Depends on (upstream):** radius scale (DC-L04-01), spacing insets (L03), the optical-correction policy Q-pref-03 (DC-L15-10), media radius (DC-L19-61).
+- **Affects (downstream):** cards with media, sheets with buttons, chips and buttons inside inputs, segmented controls, screenshot wells and hero frames (DC-L19-73), focus rings (radius plus offset, DC-L04-09).
+- **Token encoding:** Computed, not stored (DC-L04-05); the engine already writes `radius.nested` = max(container radius minus `space.inset.lg`, smallest step). Add two cases: when the outer or inner radius is `radius.full`, skip the math and keep `full`; when an element is flush with a container edge, write per-corner values with 0 on that side (CSS `border-bottom-left-radius` and `border-bottom-right-radius`). DTCG has no per-corner radius type, so this lives in component tokens such as `hero.media.radius.bottom = 0` [inferred].
+- **Platform notes:** iOS computes concentric corners with `ConcentricRectangle` and `containerShape()` (DC-L04-05); web and Android need the math. The sources add nothing per platform.
+- **Accessibility constraints:** None directly. Focus rings stay concentric with their control (DC-L04-09).
+- **Default + heuristic:** Keep DC-L04-05's auto-applied rule and add three cases: (1) pills pass through unchanged; (2) a corner that touches or runs off the container's edge gets 0, with an inset ring on the container when that edge needs definition [S-L19-103]; (3) three radii stacked inside each other are the warning sign that containers nest too deep [S-L19-080]; the nesting limit itself (one visible card level) is DC-L19-42 in the layout area, not repeated here. Rule of thumb: every rounded corner either shares a center with its container's corner or sits flush against it [inferred].
+- **Evidence:** [S-L19-070] [S-L19-080] [S-L19-103]; compared with DC-L04-03, DC-L04-05, DC-L04-09, DC-L15-05, DC-L15-10, DC-L19-42.
+- **Maps to:**
+  - Auto-applied rule DC-L04-05 (stage 14): two new exceptions, "pills skip the rule" and "edges flush with the container get 0".
+  - Q-pref-03: confirms `auto-known`; add both cases to the list of known cases.
+  - Q-dir-04: no change here; the nesting limit is DC-L19-42.
+  - Stage 14 visual sample: equal radii, concentric radii, a pill in a pill, and a hero screenshot cropped flush at the bottom [S-L19-070] [S-L19-103].
+- **Impact now / as it grows:**
+  - Same radius: now, the simplest to set. As it grows, every nested card, sheet and input shows thick corners, and each fix is by hand.
+  - Concentric, automatic: now, nested parts look even. As it grows, a radius or spacing change re-derives every inner corner with no manual work [inferred].
+  - Judge by eye past the limit: now, fine for one hand-made asset. As it grows, different people guess differently, so the builder's floor is the only repeatable rule [inferred].
+  - Pill pass-through: now, no wasted correction or false warnings. As it grows, pill-heavy systems stay free of noise in review [inferred].
+  - Flush edge at 0: now, cropped heroes look intentional. As it grows, every full-bleed or cropped media slot reuses the same rule [inferred].
+  - Stacked containers: now, quick structure. As it grows, borders and radii pile up with every new section, which DC-L19-42's nesting limit prevents [S-L19-080] [inferred].
+- **Standards:** STD-visual-details-26 (derived radii come from tokens), STD-process-review-taste-45 (the picker's pill is exempt).
+
+### DC-L19-63: Roundness as part of the product's flavor
+- **Block path:** Foundations > Shape > Shape personality > Visual sample
+- **Questions the designer answers:** Should the product feel friendly and welcoming, or modern and professional? Should buttons become pills, and if so, all of them? Should corners be smoothed?
+- **Options:**
+  - **Friendly and welcoming.** Round corners and large, bubbly buttons, together with a warm background and colorful visuals [S-L19-043]; rounding card corners gives a friendlier look [S-L19-075].
+  - **Modern and professional.** Much less rounded corners, together with calmer, more premium imagery and optional background noise [S-L19-043].
+  - **Fully rounded for an AI look.** One redesign pairs fully rounded corners with mesh gradients and noise [S-L19-082] (one video).
+  - **Pill buttons everywhere.** Steve Schoger turned every button on a marketing site into a pill after the horizontal padding felt like too much, with 38px buttons in the hero and 28px in the nav, and liked the result [S-L19-103] (his taste, one video). He also insists that buttons side by side are exactly the same height [S-L19-103].
+  - **One radius for all small components** (10px in one app) [S-L19-045]: this is the `minimal` scale of Q-shape-02.
+  - **Corner smoothing at the maximum.** Kole Jain turns Figma's iOS corner smoothing to the maximum to lean into rounded corners, and says the difference shows only when two versions are stacked [S-L19-070]. Differs from DC-L04-04 (Figma's 60% iOS preset, and plain circular corners on the web); "maximum" is one presenter's taste.
+- **Visual effect:** In these sources roundness never works alone: it moves together with background warmth, image style and button size [S-L19-043]. Pills read consumer and touch-first; tighter corners read professional; smoothing is nearly invisible on its own [S-L19-070].
+- **Depends on (upstream):** the Q-brand-01 sliders (playful to serious, friendly to authoritative, premium to everyday), the Q-dir-01 style, Q-dir-02 density (pills need taller controls, DC-L04-02).
+- **Affects (downstream):** radius values, button height and padding, icon corners (Q-icon-02), imagery style (DC-L19-75), illustration.
+- **Token encoding:** Confirms DC-L04-02: one "shape mode" swaps semantic aliases (`radius.control` becomes `{radius.full}` in a pill mode). Smoothing has no DTCG type and lives in `$extensions` (DC-L04-04).
+- **Platform notes:** Nothing new; iOS already draws system controls as capsules (DC-L04-02).
+- **Accessibility constraints:** A round or pill control keeps its full touch target however small it looks (STD-mobile-touch-09), and its focus ring follows the shape (DC-L04-09).
+- **Default + heuristic:** Keeps the current default of 6px controls and 8-12px containers (DC-L09-01): the sources give no reason to change it, and their one number (10px) is one app's value [S-L19-045]. The link between brand and roundness already exists: Q-brand-01 answers become macros that push the roundness dial (in `levers.json`, playful +30, friendly +15, serious -25, authoritative -20), so Q-shape-01's preselected option already leans with the brand. The sources back that direction [S-L19-043]; nothing new is needed in the engine. When pill is chosen, buttons side by side keep one height [S-L19-103]; making every button a pill rather than a mix is what the video did, and treating it as the rule is [inferred] (STD-visual-details-36: the same look means the same behavior).
+- **Evidence:** [S-L19-043] [S-L19-045] [S-L19-070] [S-L19-075] [S-L19-082] [S-L19-103]; compared with DC-L04-02, DC-L04-04, DC-L09-01.
+- **Maps to:**
+  - Q-shape-01: visual sample "one layout in two flavors": friendly (round corners, big buttons, warm background, colorful visuals) and professional (tighter corners, premium imagery, light noise) [S-L19-043]; confirms the existing Q-brand-01 macro coupling to the roundness dial; note on `pill`: "buttons side by side keep one height" [S-L19-103]; keeps the default.
+  - Q-shape-02: confirms `minimal` as the reading of "one radius for small components" [S-L19-045].
+  - Q-shape-04: confirms the default `circular`; "maximum smoothing" recorded as one presenter's taste [S-L19-070].
+- **Impact now / as it grows:**
+  - Friendly: now, warm and approachable. As it grows, every new surface has to keep the warm imagery and big controls, or the flavor breaks [inferred].
+  - Professional: now, calm and premium. As it grows, it suits dense data screens added later [inferred].
+  - Fully rounded for AI: now, reads as a current AI product. As it grows, it is tied to a trend and may date sooner [inferred].
+  - Pill buttons: now, soft, touch-friendly buttons. As it grows, short, dense controls in data tools fit pills poorly (DC-L04-02).
+  - One small radius: now, a tight, even look. As it grows, large sheets and dialogs look under-rounded without a container step (DC-L04-01).
+  - Maximum smoothing: now, barely visible. As it grows, one more setting to keep in step between Figma and code for little gain [inferred].
+- **Standards:** STD-mobile-touch-09, STD-visual-details-26, STD-visual-details-36, STD-process-review-taste-45.
+
+### DC-L19-64: Shadow softness, color and strength
+- **Block path:** Foundations > Elevation > Shadow recipe > Softness and color
+- **Questions the designer answers:** Do we keep shadows at all? How soft and how faint are they? What color? How much stronger on menus and dialogs than on cards, and on big surfaces than small ones? What happens to shadows in dark mode?
+- **Options:**
+  - **Remove them.** Most of the time less visual noise makes a better design [S-L19-045]; drop shadows that aren't working [S-L19-057]. On a light page, a subtle shadow alone helps a card only a little [S-L19-039].
+  - **Figma's default** (25% opacity): too harsh [S-L19-045] [S-L19-057].
+  - **Kole Jain's soft recipe.** The x offset at or below the y offset; blur 1.3 to 2 times the y offset; opacity 15-20%, the stronger end on darker backgrounds [S-L19-057] (one video, his own strategy). The 15-20% sits inside DC-L04-12's 8-24%, and "x at or below y" matches every research example, which all use x = 0. His 2x ceiling is not adopted: the house picker (`0 8px 24px`, `0 2px 6px`) [S-L19-030] runs at 3 times y, and the engine's two-layer floating and overlay shadows (`0 4px 12px`, `0 12px 32px`) at about 2.7-3 times y, while its shadow-ladder model stays at 2 times y [inferred arithmetic].
+  - **Light gray instead of see-through black** [S-L19-045] [S-L19-059] (two videos, one presenter). Differs from DC-L04-12 and the house picker, which use near-black at low opacity.
+  - **Strength by layer and size.** Cards need less shadow, and content above other content (popovers) needs more [S-L19-052]; bigger surfaces get a deeper shadow than small chips, and a heavier one over busy or text content (house) [S-L19-020]. A small shadow can lift a secondary button [S-L19-103].
+  - **Dark mode.** Dark cards show depth by being lighter, not by shadows [S-L19-052]; the house picker, a dark floating surface, keeps two dark drop shadows plus an inset white hairline at 8% [S-L19-030]. Together these confirm DC-L19-05 and DC-L04-12: in-page dark cards drop the shadow, floating dark surfaces keep one with a faint light edge.
+- **Visual effect:** Default shadows look harsh and dated; softened ones look calm; none look flat and clean. If the shadow is the first thing you notice, it is being used wrong [S-L19-052]. An opaque light gray looks soft on white but turns into a gray smudge on colored or dark surfaces, where a see-through near-black only darkens what is behind it [inferred].
+- **Depends on (upstream):** Q-depth-01 (shadow or ring plus shadow), Q-depth-02 levels, the neutral ramp, the edge treatment (DC-L19-09).
+- **Affects (downstream):** `shadow.*` primitives, `elevation.raised`, `elevation.floating`, `elevation.overlay`; cards, secondary buttons, menus, popovers, dialogs, toasts, dragged items.
+- **Token encoding:** DTCG `shadow` arrays whose color references a see-through neutral (`{color.shadow.key}` as neutral 950 at the level's alpha), as in DC-L04-12. The engine already uses x = 0 everywhere; its shadow ladder uses a blur of 2 times y and its two-layer shadows about 2.7-3 times y.
+- **Platform notes:** React Native: never animate Android elevation; crossfade a pre-shadowed layer instead (STD-performance-properties-19).
+- **Accessibility constraints:** A shadow is never the only boundary of an interactive control (DC-L04-12, WCAG 1.4.11). Under `prefers-contrast: more`, surfaces get a defined border (STD-accessibility-motion-12).
+- **Default + heuristic:** Confirms DC-L04-12 (two layers, near-black, alpha 8-24% in light mode). Add four review warnings: x offset at or below y; blur at least 1.3 times y [S-L19-057] (one video's ratio; every research example and the house picker already clear it [inferred]); floating layers cast a stronger shadow than in-page cards [S-L19-052]; bigger surfaces deeper (STD-visual-details-19). In-page cards may drop the shadow entirely [S-L19-045]. Keep the color a see-through near-black rather than a light gray: the house asks for a semi-transparent shadow (STD-visual-details-14, whose point is shadow over solid border) [S-L19-014], and a see-through near-black holds on any background [inferred]. The two videos don't say whether their light gray is transparent.
+- **Evidence:** [S-L19-014] [S-L19-020] [S-L19-030] [S-L19-039] [S-L19-045] [S-L19-052] [S-L19-057] [S-L19-059] [S-L19-103]; compared with DC-L04-10, DC-L04-11, DC-L04-12, DC-L19-05, DC-L19-09.
+- **Maps to:**
+  - Q-depth-03: new option `soft-single` ("One soft shadow: x at or below y, blur 1.3-2 times y, 15-20% opacity (Kole Jain)"); new heuristic (the four review checks); visual sample: Figma's default shadow, a softened shadow and no shadow on the same card [S-L19-045]; confirms the default.
+  - Q-depth-01: consistent with "shadows only for things that float": cards need less shadow than content floating above them [S-L19-052], though that video still gives cards a softened shadow rather than none; the default's "border" should read "see-through ring", as DC-L19-09 proposes for Q-color-23, so the stage-15 text follows STD-visual-details-14.
+  - Q-depth-05: no option change. A caution for rings: in the video an outer 1px ring made a button read about 2px taller than the unringed button beside it, so Schoger wraps the buttons in a 1px-padded span to keep side-by-side buttons one height [S-L19-103] (one video).
+- **Impact now / as it grows:**
+  - No shadows: now, flat, quiet screens. As it grows, floating menus and dialogs still need a cue, so the overlay level keeps one (DC-L04-10) [inferred].
+  - Figma default: now, a harsh, dated look. As it grows, the harshness multiplies with every card.
+  - Soft recipe: now, a gentle, even lift. As it grows, new levels follow the same ratios and stay one family [inferred].
+  - Light gray color: now, soft on white. As it grows, it breaks on tinted or dark surfaces, which then each need their own shadow color [inferred].
+  - Strength by layer and size: now, a clear order of what floats above what. As it grows, new floating components get the right depth from their level and size [inferred].
+  - Dark mode split: now, dark cards stay flat and menus still float. As it grows, one rule covers every new dark surface (DC-L19-05).
+- **Standards:** STD-visual-details-14, STD-visual-details-19, STD-performance-properties-19, STD-accessibility-motion-12, STD-process-review-taste-45 (the picker's shadow is fixed chrome, not a product token).
+
+### DC-L19-65: Bars, toolbars and sheets: see-through layers with a scroll edge
+- **Block path:** Foundations > Materials > Translucency > Chrome layer (web)
+- **Questions the designer answers:** Are nav bars, toolbars and sheets solid strips, or see-through layers with content scrolling underneath? What marks the line where content passes under them? How blurry is each surface? What do they become when people ask for less transparency or more contrast?
+- **Options:**
+  - **Opaque bars.** The current web default (DC-L04-15, DC-L10-12). The house source says opaque bars take a fixed strip of the screen; opaque is also what a bar becomes under reduced transparency [S-L19-020].
+  - **See-through chrome (house).** Nav bars, toolbars and sheets as translucent layers; the sample light toolbar is `rgba(255, 255, 255, 0.6)` with `blur(20px) saturate(180%)` and a 1px top edge of `rgba(255, 255, 255, 0.4)`, read as light catching the material [S-L19-020] (STD-visual-details-16). Heavier, darker materials mark structural regions such as sidebars and lighter ones mark interactive elements; light glass never sits on light glass; bigger surfaces blur more (STD-visual-details-17, -18, -19).
+  - **Dark see-through bar.** A dark, blurred, see-through tab bar is the fancier variant of the solid default [S-L19-075]; carousel controls on a dark, blurred background stay readable whatever image is behind them [S-L19-075].
+  - **Dark glass that works on any page.** The picker uses `rgba(10, 10, 10, 0.82)` with `blur(12px) saturate(1.4)` [S-L19-030]; it is fixed chrome, not a product token.
+  - **A scroll edge instead of a divider.** Where content meets floating chrome, fade a small blur or gradient mask, only where they actually overlap, instead of a 1px border under a sticky header (STD-visual-details-15) [S-L19-020].
+- **Visual effect:** See-through chrome feels light and current and keeps content in view; solid bars feel calm and predictable but take a fixed strip. A scroll edge appears only when something passes under it, while a divider is a permanent hard line [S-L19-020].
+- **Depends on (upstream):** Q-depth-01, Q-plat-01 (Apple platforms apply Liquid Glass to system components, DC-L04-15), edge-to-edge layout (DC-L10-11), device settings (Q-motion-10), the fallbacks in DC-L19-17.
+- **Affects (downstream):** nav bar, tab bar, toolbar, sheet, sidebar, carousel controls; `color.surface.glass`, `color.surface.glass-fallback`, `material.glass.blur`; scroll containers (padding under bars); text colors on glass.
+- **Token encoding:** `color.surface.glass` (a color with alpha 0.6), `material.glass.blur.sm`, `.md` and `.lg` (`dimension`, stronger for bigger surfaces), `material.glass.saturate` (`number`, 1.8), `color.border.glass-edge` (alpha 0.4); a reduced-transparency mode swaps in the opaque `color.surface.glass-fallback` with blur 0, and an increased-contrast mode swaps in a near-solid surface with a defined border [inferred names]. Today the engine writes one 24px `material.glass.blur`, and only for the materials model or when glass is switched on. The house sample's 0.6 alpha is an example value (STD-visual-details-16) and sits below DC-L04-15's [inferred] tint of about 70% or more, so the contrast check over busy content, not either number, decides the final alpha [inferred].
+- **Platform notes:** Web: `backdrop-filter`. Apple: system components apply glass themselves (DC-L04-15). React Native: never animate BlurView intensity; crossfade a static blurred layer (STD-performance-properties-19).
+- **Accessibility constraints:** Two musts: `prefers-reduced-transparency: reduce` makes the surface frostier or solid (STD-accessibility-motion-11), and `prefers-contrast: more` makes it near-solid with a contrasting border (STD-accessibility-motion-12); DC-L19-17 already proposes both as always-on blocks on the web. Text over glass uses higher contrast and a slightly heavier weight (STD-visual-details-13), color sits on a solid layer (STD-visual-details-21), and text keeps 4.5:1 over the worst background behind it (DC-L04-15).
+- **Default + heuristic:** New web default: nav bars, toolbars and sheets are see-through layers with the sample values, a scroll edge instead of a divider, and both fallbacks generated as CSS media blocks. Glass stays off reading surfaces and product cards (`decorative` stays flagged, DC-L04-15). Blur grows with surface size, but any blur that animates stays under 20px (STD-enter-exit-origin-30): the 20px toolbar sample is fine while it stands still, and a sheet that materializes with blur and scale (STD-enter-exit-origin-31) needs its blur below 20px [inferred]. Differs from DC-L04-15 and DC-L10-12 (opaque on the web); the house standard wins.
+- **Evidence:** [S-L19-020] [S-L19-030] [S-L19-075]; compared with DC-L04-15, DC-L04-16, DC-L10-11, DC-L10-12, DC-L19-17.
+- **Maps to:**
+  - Q-depth-04: new default on the web, "see-through bars, toolbars and sheets, with solid and high-contrast versions", because STD-visual-details-16 asks for it; `none` reworded "Opaque surfaces (also the reduced-transparency version)"; visual sample: the toolbar over busy content beside its solid twin [S-L19-020].
+  - Auto-applied rules (stage 15): new row "a scroll edge, not a divider, under sticky headers and toolbars" (STD-visual-details-15).
+  - Q-motion-10: `transparency` and `contrast` are always applied wherever glass exists (house musts), not offered as choices.
+- **Impact now / as it grows:**
+  - Opaque bars: now, the most legible and cheapest. As it grows, the product conflicts with the house standard and drifts from current OS chrome (DC-L04-15) [inferred].
+  - See-through chrome: now, content stays in view under the bars. As it grows, every bar and sheet needs its two fallbacks and a contrast check over busy content [inferred].
+  - Dark see-through bar: now, a sleek bar for media. As it grows, it fits photo- and video-heavy screens and needs the same fallbacks [inferred].
+  - Scroll edge: now, no permanent hard line. As it grows, every sticky header, table header and toolbar gets the same edge [inferred].
+- **Standards:** STD-visual-details-13, STD-visual-details-15, STD-visual-details-16, STD-visual-details-17, STD-visual-details-18, STD-visual-details-19, STD-visual-details-21, STD-accessibility-motion-11, STD-accessibility-motion-12, STD-enter-exit-origin-30, STD-enter-exit-origin-31, STD-performance-properties-19, STD-process-review-taste-45.
+
+### DC-L19-66: Which overlays dim the page, and how much
+- **Block path:** Foundations > Opacity > Scrims > When to dim
+- **Questions the designer answers:** Which overlays get a dark layer (a scrim) behind them? How dark is it? What happens when sheets stack? How does the scrim appear?
+- **Options:**
+  - **A scrim for modal tasks.** A modal task pairs its surface with a dimming scrim and pushes the background back or down [S-L19-020].
+  - **No scrim for side panels.** A parallel, non-blocking panel uses translucency and an offset without a scrim, so the flow isn't broken [S-L19-020]. Differs from Q-depth-06's current advice ("use lighter scrims for non-blocking sheets").
+  - **Stacked sheets dim step by step.** Each parent in a stack is dimmed and pushed back a little more [S-L19-020].
+  - **40% black.** Vaul's starter styles the drawer overlay `bg-black/40` [S-L19-095]. Vaul is good-to-have, so this is the recommended value; it equals Q-depth-06 `scrim-fluent` in light mode. The Vaul library itself is unmaintained, so OpenDesigner recommends the value, not the dependency.
+- **Visual effect:** A scrim says "finish this first"; no scrim says "keep working beside it". Step-by-step dimming shows how deep a stack is [inferred].
+- **Depends on (upstream):** the component inventory (dialog, drawer, sheet, side panel), DC-L04-18, Q-depth-04 materials.
+- **Affects (downstream):** `color.overlay.scrim`; dialogs, drawers, bottom sheets, lightboxes, side panels, inspectors.
+- **Token encoding:** `color.overlay.scrim` = near-black with `alpha: 0.4` in light mode, tinted toward the neutral hue as DC-L04-18 asks (Vaul's example uses plain black; the tint is DC-L04-18's, not Vaul's) (DC-L04-18 keeps 50-60% for dark); a per-level step for stacks, such as `opacity.scrim.stack` (`number`) [inferred name]. The backdrop fades with the modal on the same timing, opacity over 250ms on the ease-out curve (STD-enter-exit-origin-12).
+- **Platform notes:** Native sheets manage their own dimming (DC-L04-18). When a drag drives a drawer, the background's scale, corner radius and backdrop opacity follow the drag progress (STD-springs-gestures-34).
+- **Accessibility constraints:** The scrim must not lower the modal's own contrast (DC-L04-18). Under reduced motion the backdrop still fades, because opacity changes are kept (STD-accessibility-motion-02).
+- **Default + heuristic:** The builder decides by component type instead of asking: modal dialogs and blocking drawers (drawers are modal by default, STD-components-toasts-drawers-39) get a 40% near-black scrim in light mode; non-blocking panels get none; each stacked parent dims one more step. Q-depth-06 then asks only about strength. Rule of thumb: dim only when the person must finish or dismiss the layer before going on [S-L19-020].
+- **Evidence:** [S-L19-020] [S-L19-095]; compared with DC-L04-18.
+- **Maps to:**
+  - Q-depth-06: new default "40% near-black (tinted toward the neutral hue) in light mode, for modal tasks only (Vaul starter, same as Fluent's 40%)", narrowing today's 40-50% to Vaul's value; use/avoid changed to "no scrim for non-blocking panels; stacked sheets dim step by step".
+  - Auto-applied rules (stage 15): new row "scrim by task type" (STD-visual-details-20).
+  - Engine: a stack step beside the single `color.overlay.scrim` (standards.json already records the gap).
+- **Impact now / as it grows:**
+  - Scrim for modal tasks: now, focus is clear. As it grows, every new dialog inherits the same cue [inferred].
+  - No scrim for panels: now, people keep working beside the panel. As it grows, inspectors and side panels can multiply without darkening the app [inferred].
+  - Step-by-step dimming: now, the depth of a stack is visible. As it grows, deep stacks darken fast, which discourages stacking more than two or three [inferred].
+  - 40% black: now, a firm but not heavy dim. As it grows, one value across light screens, with dark mode keeping its own (DC-L04-18).
+- **Standards:** STD-visual-details-20, STD-enter-exit-origin-12, STD-enter-exit-origin-02 (a backdrop may fade with opacity alone), STD-springs-gestures-34, STD-accessibility-motion-02, STD-components-toasts-drawers-39 (drawers default to modal, with an overlay, so a default drawer gets the scrim), STD-accessibility-motion-26 (a modal drawer's overlay covers the inert page).
+
+### DC-L19-67: Special surface effects and where they may appear
+- **Block path:** Foundations > Visual language > Decorative effects
+- **Questions the designer answers:** Does the brand use special surface effects: raised tactile buttons, hard sticker shadows, clay, metal, glass cards, offset layers? Where may they appear: product screens, marketing pages, or illustrations only?
+- **Options:**
+  - **None.** The flat default (DC-L15-01, Flat 2.0).
+  - **Tactile raised buttons.** Inner plus outer shadows [S-L19-052]; close to Polaris's bevel shadows (DC-L04-07) [inferred].
+  - **Hard offset shadow.** A darker color at full opacity, offset a little, on a sticker built from a rounded 12-point star [S-L19-075]; close to the neo-brutalist preset in DC-L15-01 [inferred].
+  - **Offset layer.** A shifted layer behind a button on a background or image adds depth and is easy to animate on hover [S-L19-085].
+  - **Clay.** Two inner shadows on opposite edges and a less saturated color, with an optional drop shadow; for isometrics and illustrations that need depth [S-L19-058].
+  - **Metal.** A gradient with a clear color change in the middle, a white radial highlight on Overlay and inner shadows, plus an optional 20% tint layer for rose gold, gold or bronze; for credit cards and mockups and, in the presenter's words, not much else [S-L19-058].
+  - **Dark soft glass card.** A see-through rectangle with a subtle gradient, background blur, a 1px border and a soft inner shadow, optionally with a shimmer along the border: the look of AI startup sites [S-L19-055]. Frosted glass on dark cards [S-L19-085]; a blurred copy of a background image behind a card for "ambiance" [S-L19-082].
+- **Visual effect:** Tactile and clay read physical and playful; hard offset shadows read bold and indie (as DC-L15-01 describes neo-brutalism); metal reads premium [inferred for these three]; dark glass reads high-tech, the "technological supremacy" look of AI startups [S-L19-055]. None of the videos checks contrast, and their Figma values appear only on screen, not in the transcript [S-L19-055] [S-L19-058].
+- **Depends on (upstream):** the Q-dir-01 style preset (DC-L15-01), Q-brand-01, Q-scope-01 (marketing), where brand devices may appear (Q-img-07, DC-L06-11).
+- **Affects (downstream):** button variants, badge and sticker components, marketing cards and heroes, illustration style (DC-L19-75).
+- **Token encoding:** Composite `shadow` arrays with `inset: true` layers, such as `effect.tactile` and `effect.hard-offset` (blur 0, a darker color at full alpha), kept in a decorative group whose allowed surfaces are recorded in `$extensions`, like Q-img-07's brand-expression tokens [inferred names].
+- **Platform notes:** The recipes are Figma-only; the sources give no CSS or native values [S-L19-058].
+- **Accessibility constraints:** An effect drawn only with inner shadows or soft glows cannot be a control's only boundary (3:1, WCAG 1.4.11; DC-L15-01 warns about neumorphism). Glass needs its solid fallback (STD-accessibility-motion-11). A looping shimmer is decorative motion: it stays off functional UI (STD-when-to-animate-11), reduced motion removes it (STD-accessibility-motion-02), and one video gives its shimmer stroke a pause and play control [S-L19-079].
+- **Default + heuristic:** None on product screens. Effects are allowed on marketing, onboarding and celebration surfaces, each within its source's own limit: clay for illustrations, metal for card and mockup visuals, stickers to break up boxy marketing layouts, glass cards as decoration. The tactile button is the only effect that may enter product UI, and only with the `soft` style preset of Q-dir-01, which DC-L15-01 offers with a contrast warning [inferred].
+- **Evidence:** [S-L19-052] [S-L19-055] [S-L19-058] [S-L19-075] [S-L19-079] [S-L19-082] [S-L19-085]; compared with DC-L04-07, DC-L06-11, DC-L15-01.
+- **Maps to:**
+  - New question Q-depth-07 (stage 15, zoom 3; show if Q-dir-01 is not `flat2` or `tonal`, or Q-scope-01 includes marketing): "Do you want any special surface effects, like raised buttons, sticker shadows, clay, metal or glass cards, and where may they appear?" Options `none` (default for product screens), `tactile`, `hard-offset`, `offset-layer`, `clay`, `metal`, `glass-card`; every option except `tactile` is marked marketing-only.
+  - Q-dir-01: visual samples for `neo-brutalist` (the sticker with a hard offset shadow [S-L19-075]) and `soft` (the clay rectangle [S-L19-058] and a tactile button [S-L19-052]).
+- **Impact now / as it grows:**
+  - None: now, a clean, durable base. As it grows, nothing to maintain; brand energy has to come from color, type and imagery [inferred].
+  - Tactile buttons: now, pressable, physical controls. As it grows, every button variant and state needs matching inner and outer shadows [inferred].
+  - Hard offset shadow: now, a bold, indie accent. As it grows, fine on stickers and badges; across a whole product it becomes a full neo-brutalist style (DC-L15-01) [inferred].
+  - Offset layer: now, cheap depth with an easy hover. As it grows, each button on an image needs its own offset rule [inferred].
+  - Clay: now, soft, dimensional illustrations. As it grows, every new illustration must reuse the same two-shadow recipe to match [inferred].
+  - Metal: now, a premium card or mockup. As it grows, it has few other uses, so it stays a one-off asset [S-L19-058].
+  - Glass card: now, the AI-startup look. As it grows, each card needs a solid fallback and a contrast check (DC-L04-15).
+- **Standards:** STD-when-to-animate-11, STD-accessibility-motion-02, STD-accessibility-motion-11, STD-visual-details-18.
+
+### DC-L19-68: One icon library, and no emoji as interface icons
+- **Block path:** Foundations > Iconography > Icon library > Consistency guard
+- **Questions the designer answers:** Where do all the icons come from? May emoji stand in for icons? May two icon styles live in one product? What happens to icons built into third-party components, such as toasts?
+- **Options:**
+  - **One interface icon library.** Phosphor or Lucide [S-L19-061]; Feather and Phosphor as Figma plugins [S-L19-045]; Feather as a go-to pack [S-L19-057]. Phosphor and Lucide are in DC-L05-01's list; Feather is not, so check its license and upkeep before offering it [inferred].
+  - **A mixed icon site, one icon at a time.** It is hard to find several icons in one style there [S-L19-057]; if used, filter to interface icons, sort by stroke, width and corner, and download SVG [S-L19-045] [S-L19-082]. The same presenter argues both ways.
+  - **Emoji as icons.** Emojis are the first, painfully obvious giveaway of AI-built UI in one redesign, and swapping them for an icon library improves a card at once, though some apps like Notion use emojis well [S-L19-061]. An AI tool uses emojis unless the prompt names an icon library [S-L19-086].
+  - **Two styles in separate areas.** Different icon styles can work when each sits in a visually separate area with a different job, such as navbar icons and food icons [S-L19-045]. Consistent with stage 17's "avoid mixing two libraries' strokes in one toolbar" (DC-L05-01).
+  - **Replace third-party defaults.** Sonner's default success, info, warning, error and loading icons can be swapped for the whole app (`icons`), for one toast (`icon`), or removed (`null`) [S-L19-090].
+- **Visual effect:** One library looks deliberate; emoji make product UI look generated [S-L19-061]; icons that differ in fill, line width and style look amateur [S-L19-045].
+- **Depends on (upstream):** Q-plat-01, icon style and stroke (Q-icon-02, Q-icon-03), DC-L05-01, DC-L10-25.
+- **Affects (downstream):** every icon; toasts; empty states; DESIGN.md and the AGENTS snippet (what coding agents are told); review.
+- **Token encoding:** None: `icon.library` is a setting (DC-L05-01). DESIGN.md names the library and says "no emoji as interface icons"; the Sonner `icons` map is generated from the library [inferred].
+- **Platform notes:** Web: SVG gives the best results [S-L19-045] (DC-L05-10). Native: platform glyphs for system actions (DC-L10-25).
+- **Accessibility constraints:** Icon-only controls need accessible names (DC-L05-07). An emoji inside a label is read out by screen readers under its own name [inferred].
+- **Default + heuristic:** Confirms DC-L05-01 (one open-source set on the web). Add: DESIGN.md and the AGENTS snippet name the library and forbid emoji as interface icons, because AI tools fall back to emoji [S-L19-086] (one presenter, two videos, who also grants that Notion uses emoji well [S-L19-061]); review warns about emoji in buttons, navigation, cards and headings, while user content such as reactions or page icons a person picks stays allowed [S-L19-061] [inferred scope]; third-party components take their icons from the library [S-L19-090]. The house list of curated libraries (STD-visual-details-55) has no icon entry, so OpenDesigner says so and then recommends from DC-L05-01 and these sources.
+- **Evidence:** [S-L19-045] [S-L19-057] [S-L19-061] [S-L19-082] [S-L19-086] [S-L19-090]; compared with DC-L05-01, DC-L05-07, DC-L05-10, DC-L10-25.
+- **Maps to:**
+  - Q-icon-01: new heuristic and use/avoid "never emoji as interface icons; name the library for AI tools"; the hook's "If no" path adds "tell the AI which library"; visual sample: a card with emojis beside the same card with Phosphor icons [S-L19-061]; confirms the default.
+  - Engine review: new warning "emoji used as an icon"; the Sonner `icons` map generated from `icon.library`.
+  - AGENTS snippet and DESIGN.md: new line naming the icon library and forbidding emoji as icons.
+- **Impact now / as it grows:**
+  - One library: now, icons match in stroke and corners. As it grows, every new icon comes from the same set, and domain icons are drawn on its template (DC-L05-01).
+  - Mixed icon site: now, any icon can be found. As it grows, styles drift with every new icon [S-L19-057].
+  - Emoji: now, quick and colorful. As it grows, the product looks AI-built, and every emoji has to be replaced later [S-L19-061].
+  - Separate areas: now, some variety where jobs differ. As it grows, the boundary between areas has to be written down, or styles leak [inferred].
+  - Replace third-party defaults: now, toasts match the app. As it grows, each added library is checked for built-in icons [inferred].
+- **Standards:** STD-visual-details-55, STD-visual-details-57 (toasts are built with Sonner), STD-process-review-taste-55 (agents get written rule files, icons among them), STD-visual-details-28 (no misaligned icons).
+
+### DC-L19-69: Icon size next to text: never taller than the line
+- **Block path:** Foundations > Iconography > Sizes > Pairing with text
+- **Questions the designer answers:** How big is an icon beside a label? Should the builder derive it from the text style? How much detail may an icon carry at each size?
+- **Options:**
+  - **Icon as tall as the line height.** Most icons are too large: take the font's line height (24px in the example), make the icons that size, then tighten the text [S-L19-052] (one video).
+  - **Icon sized to the line height, as the existing pairs do it.** DC-L05-05 already says to pair icon size to the line height of the adjacent text [inferred there], with the pairs 16px icons with 14px text, 20px with 16px text, 24px with 20px titles (after Carbon); in those pairs the icon sits at or a little under the text's line height [inferred]. So the video agrees with DC-L05-05; the only question is whether the line height is the target or the ceiling.
+  - **Detail by size.** Keep icons simple; a larger icon can carry more detail and a smaller one less [S-L19-057]; in line with Material's optical sizes in DC-L05-05 [inferred].
+- **Visual effect:** Oversized icons shout over their labels; icons at or under the line height sit inside the text line [S-L19-052].
+- **Depends on (upstream):** type scale and line heights (stage 11), stroke weight (Q-icon-03), density.
+- **Affects (downstream):** `icon.size.*`; buttons, nav items, list rows, sidebar links, chips.
+- **Token encoding:** `icon.size.*` (`dimension`); component aliases such as `nav.item.icon.size = {icon.size.md}`, picked by the builder from the paired text style [inferred].
+- **Platform notes:** On Apple platforms SF Symbols follow the text's point size (DC-L05-05).
+- **Accessibility constraints:** The touch target comes from the hit area, not the glyph (STD-mobile-touch-09).
+- **Default + heuristic:** Keep DC-L05-05's pairs and add a ceiling: an icon is never taller than the line height of the text beside it [S-L19-052], and review flags icons that exceed it. Kole Jain's icon-equals-line-height advice is read as the upper limit, not the target [inferred reconciliation]. Smaller icons carry less detail and larger ones more [S-L19-057]; so custom icons stay simplest at the smallest shipped size (16px) and extra detail belongs at pictogram sizes (DC-L05-11) [inferred sizes].
+- **Evidence:** [S-L19-052] [S-L19-057]; compared with DC-L05-05, DC-L05-11.
+- **Maps to:**
+  - Q-icon-04: new heuristic "icon never taller than the paired line height" and a builder rule that picks the icon size from the text style; visual sample: icons at the 24px line height beside oversized icons [S-L19-052]; confirms the default sizes.
+- **Impact now / as it grows:**
+  - As tall as the line: now, icons carry weight in the row. As it grows, they crowd dense lists and compete with labels [inferred].
+  - A step under: now, icons sit quietly beside text. As it grows, derived sizes follow any change to the type scale [inferred].
+  - Detail by size: now, crisp small icons. As it grows, custom icons stay consistent when pictograms are added (DC-L05-11) [inferred].
+- **Standards:** STD-mobile-touch-09, STD-visual-details-28.
+
+### DC-L19-70: Explaining icon-only controls: a better icon, a label, then a tooltip
+- **Block path:** Foundations > Iconography > Icon with text > Explaining icons
+- **Questions the designer answers:** Which icons may stand alone? When an icon isn't obvious, do we add a label, a tooltip, or pick a better icon or position? How do tooltips appear?
+- **Options:**
+  - **Well-known icons stand alone.** The house, bookmark and user icons need nothing else [S-L19-045]; the magnifying glass is the universally accepted search icon [S-L19-079].
+  - **Tooltips for less familiar icons.** Add a tooltip to less familiar icon-only buttons and avoid bizarre icons [S-L19-045]; tooltips are missing on nearly all beginner dashboards, so assume people won't understand every icon [S-L19-056]; with many icons and little room, show a tooltip only after the pointer rests for a full second [S-L19-079] (one video for the delay).
+  - **Don't depend on tooltips.** Explaining harder makes a screen harder to read; people guess until the tooltip appears; use visuals people recognize at once, or a position that explains the control [S-L19-080]. The same presenter, in a later video.
+  - **Swap an unclear icon for a labelled button.** A minimize icon on a large module becomes an "all activities" button [S-L19-068].
+  - **Labels depend on how obscure the icons are.** Instagram's tab bar has no labels and Apple Music's does; labels must be dark enough to read [S-L19-075].
+  - **Metaphors that fit the brand.** A shield felt like Google, while Apple generally uses a lock [S-L19-082]; in the end that redesign dropped the icon for an isometric graphic.
+- **Visual effect:** Recognizable icons keep a screen quiet; labels make it explicit; tooltips hide the explanation until someone hovers, and do nothing on touch screens [inferred].
+- **Depends on (upstream):** icon library (DC-L19-68), labelling rules (DC-L05-07, DC-L05-09), input type (touch or pointer).
+- **Affects (downstream):** icon buttons, toolbars, tab bars, collapsed sidebars, the tooltip component and its motion tokens.
+- **Token encoding:** Tooltip motion is fixed by the house: opacity 0 and `scale(0.97)` to rest in 125ms on the ease-out curve, no overshoot, and only the first tooltip in a group is delayed (STD-enter-exit-origin-09, -10, STD-springs-gestures-05). A `tooltip.delay.first` duration token holds the delay; its value is open (the sources give only the one-video 1s) [inferred name].
+- **Platform notes:** Hover reveals assume a pointer (a caveat on [S-L19-056]); decide touch behavior with capability queries such as `(hover: hover)`, never by device (STD-mobile-touch-02).
+- **Accessibility constraints:** Every icon-only control has an accessible name (DC-L05-07); the house picker's replay button is one worked example (STD-accessibility-motion-18). Hit areas meet 44pt, 48dp or 44px whatever the icon size (STD-mobile-touch-09). Tab labels need readable contrast [S-L19-075].
+- **Default + heuristic:** Confirms `labels-default` plus `universal-only`. Order of fixes: (1) a universally known icon alone [S-L19-045], still with its accessible name and, on pointer devices, the tooltip that `universal-only` already gives it (DC-L05-07; the video says such icons need nothing else, and keeping DC-L05-07's tooltip is the [inferred] reconciliation); (2) a visible label, a better icon or a telling position; (3) a tooltip only as an extra on pointer devices, never the only explanation [S-L19-080] (in line with DC-L05-07 and NN/g's view that labels should be visible, not hover-only). The delayed tooltip's bouncy easing [S-L19-079] differs from the house tooltip motion, and the house wins.
+- **Evidence:** [S-L19-045] [S-L19-056] [S-L19-068] [S-L19-075] [S-L19-079] [S-L19-080] [S-L19-082]; compared with DC-L05-07, DC-L05-09.
+- **Maps to:**
+  - Q-icon-05: new heuristic (the order of fixes) and use/avoid "a tooltip never replaces a label on touch screens"; visual samples: an action bar where one icon is explained by its position and the rest leave people guessing [S-L19-080], and Instagram's unlabelled tab bar beside Apple Music's labelled one [S-L19-075]; confirms the default.
+  - Open value: the first-tooltip delay (the only number is one video's 1s [S-L19-079]).
+- **Impact now / as it grows:**
+  - Well-known icons alone: now, a clean toolbar. As it grows, only about a dozen icons qualify (DC-L05-07), so new features need labels.
+  - Tooltips: now, extra help on desktop. As it grows, touch users get none, and tooltips pile up as a substitute for clearer design [S-L19-080] [inferred].
+  - Recognizable visuals and position: now, screens explain themselves. As it grows, each new control needs an honest check of whether people get it at a glance [inferred].
+  - Labelled buttons: now, no guessing. As it grows, labels take room in dense tools, which pushes toward fewer, clearer actions [inferred].
+- **Standards:** STD-enter-exit-origin-09, STD-enter-exit-origin-10, STD-springs-gestures-05, STD-visual-details-38, STD-mobile-touch-02, STD-mobile-touch-09, STD-accessibility-motion-18.
+
+### DC-L19-71: Icon color and state, by surface
+- **Block path:** Foundations > Iconography > Color and states > By surface
+- **Questions the designer answers:** Are icons in the product colored? Where does icon color come from? May marketing feature icons use brand accents or gradients? How do active and inactive tabs differ?
+- **Options:**
+  - **Neutral, with color only for status.** For the most part icons need no color; color marks status, such as the active tab [S-L19-051]; on a dashboard color comes from the data, such as a red icon in a chip for an urgent action [S-L19-056]; add color through charts, not buttons and icons [S-L19-061]. Confirms DC-L05-08.
+  - **Icons for "a splash of color".** Helpful icons in dense info rows add information and a splash of color [S-L19-061]. Leans against DC-L05-08 (one remark).
+  - **Accent-colored feature icons (marketing).** One icon per main feature, drawn in the brand's accent colors [S-L19-062]; solid brand color rather than gradient icons, with a gradient stroke on hover [S-L19-082]. Fits DC-L05-11's marketing pictogram tier [inferred].
+  - **Active state by fill.** A saved item's icon fills in and a red dot appears on its tab [S-L19-045]; every tab, the add tab included, uses an icon that has an active version, and inactive icons stay clearly visible instead of fading out [S-L19-075]. Confirms DC-L05-06 (outline at rest, filled plus accent when selected).
+- **Visual effect:** Neutral icons recede and let content and data lead; colored product icons compete with status colors [S-L19-051]; accent feature icons make marketing grids lively [S-L19-062]; a fill change makes the active tab obvious even without color [inferred].
+- **Depends on (upstream):** color roles, icon style (Q-icon-02), icon library (DC-L19-68: it must offer filled versions), Q-scope-01 (marketing).
+- **Affects (downstream):** `color.icon.*`; tab bars, navigation, feature grids, alerts, chips.
+- **Token encoding:** `color.icon.default` aliasing the secondary text color and `color.icon.status.*` (DC-L05-08); `color.icon.feature` aliasing the accent, used only on marketing surfaces [inferred name]; `icon.fill.selected` (DC-L05-06).
+- **Platform notes:** On iOS, tab bars handle the filled selected state themselves (DC-L05-06).
+- **Accessibility constraints:** Meaningful standalone icons need 3:1 (DC-L05-08); inactive tab icons should meet it too, since the source asks that they stay easy to see [S-L19-075] [inferred]. Status is never shown by color alone (WCAG 1.4.1), which is why the fill changes as well (DC-L05-06).
+- **Default + heuristic:** Confirms DC-L05-08 in the product: neutral icons, color only for status and data. Add: on marketing surfaces, feature icons may use solid accent colors, one icon per feature, not gradient icons [S-L19-062] [S-L19-082]; every navigation icon needs an active version [S-L19-075], so the library must provide filled versions [inferred, from DC-L05-06's filled-when-selected rule]; inactive icons keep 3:1 [inferred].
+- **Evidence:** [S-L19-045] [S-L19-051] [S-L19-056] [S-L19-061] [S-L19-062] [S-L19-075] [S-L19-082]; compared with DC-L05-06, DC-L05-08, DC-L05-11.
+- **Maps to:**
+  - Q-icon-05: new option `accent-marketing` ("Feature icons in accent colors, on marketing pages only"); visual sample: a file-storage app's colored tab icons, redone as uncolored icons with color only on the active tab [S-L19-051]; confirms the product default.
+  - Q-icon-02: confirms "filled when selected"; new check "every tab and nav icon has an active version; inactive icons stay at 3:1".
+- **Impact now / as it grows:**
+  - Neutral with status color: now, status stands out at once. As it grows, new features cannot dilute the status colors [inferred].
+  - Splash of color: now, livelier rows. As it grows, color stops meaning status, and dashboards get noisy (DC-L05-08) [inferred].
+  - Accent feature icons: now, a colorful, branded feature grid. As it grows, it stays on marketing pages, so the product keeps its quiet icons [inferred].
+  - Active by fill: now, the current tab is obvious. As it grows, every new tab needs a filled icon, which narrows the choice of library [inferred].
+- **Standards:** STD-visual-details-24 (colors adapt to light and dark), STD-visual-details-36 (the same look means the same behavior).
+
+### DC-L19-72: What the imagery shows: the product, the audience, or nothing
+- **Block path:** Foundations > Imagery > Subject > Product and audience imagery
+- **Questions the designer answers:** Will pages show the real product (screenshots), people and things from the audience's world, stock photos, or no images at all? Where do the images come from, and how sharp must they be?
+- **Options:**
+  - **No images.** A site with no images at all feels robotic; one presenter calls it a telltale sign of a vibe-coded site (his opinion) [S-L19-062].
+  - **Generic stock.** Stock images that have little to do with the product throw a page off, and leaning on stock images for the page's color misses; in the better version the color comes from the product dashboard [S-L19-072].
+  - **Real product screenshots.** Show the product's dashboard instead of stock [S-L19-072]; use images of your own product screens, or simple skewed cards, instead of generic icons [S-L19-061]; a real screenshot in the hero when there are no other graphics, captured at 3x so it stays sharp, and cropped in feature cards to the part the text describes [S-L19-103]; add a few real product elements so a showcase reads as the actual product [S-L19-082].
+  - **Audience imagery.** Images that relate to the audience are how a site connects with its users and builds trust: restaurant items for restaurant owners, laptops and keyboards for freelancers [S-L19-062]. A skincare site leads with product photos on bright white, using ready-made mockups [S-L19-049].
+  - **Work first (portfolios).** Large, bright imagery before any text, and a visual or GIF every couple of paragraphs in a case study [S-L19-064].
+  - **AI images, where they fit** [S-L19-085]; Q-img-01's hook already lists their risks.
+  - Supporting rules for any photo: use large, high-resolution images when they are blown up [S-L19-060]; filter image searches to large images [S-L19-065]; image quality can make or break a site [S-L19-043] [S-L19-085]; keep more than one stock source, such as Burst and Pexels [S-L19-073].
+- **Visual effect:** Screenshots make a product page concrete and trustworthy; audience images make it feel built for someone; stock reads generic; no images reads robotic [S-L19-062] [S-L19-072].
+- **Depends on (upstream):** Q-scope-01 (a marketing site), Q-brand-08 (which assets exist), Q-img-01.
+- **Affects (downstream):** hero, feature sections, testimonials, onboarding; the media radius (DC-L19-61), the screenshot frame (DC-L19-73), text on images (DC-L19-74).
+- **Token encoding:** None (a content decision). The builder can keep an asset manifest of screenshots, such as `assets/screenshots/<feature>@3x.png` [inferred].
+- **Platform notes:** Capture screenshots at 3x for high resolution [S-L19-103].
+- **Accessibility constraints:** Informative images, screenshots included, need alt text that says what they show (DC-L05-14) [inferred for screenshots].
+- **Default + heuristic:** When the product has marketing surfaces, default the imagery to real product screenshots (3x, cropped to each feature) plus audience imagery wherever the page says who it is for; avoid an image-less marketing page (one video calls it robotic [S-L19-062]; another adds a screenshot when a page has no other graphics [S-L19-103]). Stock only against the photo brief; high resolution only. Product tools with no marketing surface keep `none`.
+- **Evidence:** [S-L19-043] [S-L19-049] [S-L19-060] [S-L19-061] [S-L19-062] [S-L19-064] [S-L19-065] [S-L19-072] [S-L19-073] [S-L19-082] [S-L19-085] [S-L19-103]; compared with DC-L05-14.
+- **Maps to:**
+  - Q-img-01: new option `product-ui` ("Real screenshots of your product, captured at 3x and cropped to each feature"); new default `product-ui` when Q-scope-01 includes marketing, because three videos (two presenters) agree real product imagery beats stand-ins: stock photos [S-L19-072], generic icons [S-L19-061] and generated mock UI [S-L19-103]; the hook asks for screenshots or a running build to capture them from; visual sample: a level-one page with stock images beside a level-two page with the product dashboard in the hero [S-L19-072].
+  - Q-brand-08: new tick box "Product screenshots".
+- **Impact now / as it grows:**
+  - No images: now, fast to build. As it grows, the site feels robotic and generic [S-L19-062].
+  - Generic stock: now, easy to fill space. As it grows, the brand looks like everyone else's (DC-L05-14).
+  - Product screenshots: now, concrete and credible pages. As it grows, every UI change means recapturing screenshots, so keep them in the asset manifest [inferred].
+  - Audience imagery: now, the page feels made for its users. As it grows, a photo brief keeps new images consistent (DC-L05-14) [inferred].
+  - Work first: now, the portfolio leads with results. As it grows, each new case study needs its own visuals [inferred].
+  - AI images: now, quick custom imagery. As it grows, artifacts and stereotypes need checking (Q-img-01 hook).
+- **Standards:** none.
+
+### DC-L19-73: How product screenshots are framed
+- **Block path:** Components > Media > Screenshot frame
+- **Questions the designer answers:** What holds a product screenshot on a page: a plain bordered card, a tinted well, or nothing? How far is it inset, with what corners and what edge? Does it show the whole app or the part the text talks about?
+- **Options:**
+  - **A plain white card with a border.** The AI-generated default; the image doesn't pop [S-L19-103].
+  - **A tinted well.** Gray 950 at 5% behind the screenshot, no border (2.5% was too soft); the screenshot inset about 8px with concentric corners and an inset ring at 10% on top of the image; the gap between feature cards equal to the inset [S-L19-103] (one video).
+  - **A hero well.** More generous padding (64px); the screenshot sits on the bottom edge with no bottom padding, cropped about 10px, with no bottom corner radius and a 5% inset ring on the container [S-L19-103].
+  - **Cropped to the feature.** Capture the whole app, then crop and zoom (about 25%) inside the card to the part the text describes, with the relevant state showing, such as a chart tooltip [S-L19-103].
+  - **Full width in the page container** instead of a zigzag layout [S-L19-103].
+  - **Skewed cards or an edited product image** on SaaS landing pages [S-L19-061].
+- **Visual effect:** A tinted well makes the screenshot pop and look well styled; a plain bordered card looks generic; a cropped screenshot focuses the reader on one feature [S-L19-103]; skewed cards read dynamic [S-L19-061].
+- **Depends on (upstream):** DC-L19-72 (product imagery), DC-L19-61 (media radius), DC-L19-62 (concentric and flush corners), DC-L19-09 (see-through rings).
+- **Affects (downstream):** feature cards, the hero, bento tiles, docs pages, changelogs.
+- **Token encoding:** `color.surface.well` = neutral 950 at alpha 0.05; the inset ring as a `shadow` with `inset: true`, spread 1px, neutral 950 at alpha 0.10; `space.media.inset` = 8px; `space.hero.media.padding` = 64px; the media radius computed by DC-L19-62 [inferred names; values from one video].
+- **Platform notes:** Web. The video's values use Tailwind's scale.
+- **Accessibility constraints:** The ring and the tint are decorative, so no contrast ratio applies (DC-L04-08); the screenshot needs alt text (DC-L05-14).
+- **Default + heuristic:** Schoger's well as the recommended starting frame for marketing screenshots (one video's treatment, not a rule; its values stay open until a second product confirms them): a snug inset for feature cards, a generous one for the hero, cropped to what the text describes. Rule of thumb: frame tight for small features, loose for the one big hero [S-L19-103].
+- **Evidence:** [S-L19-061] [S-L19-103]; compared with DC-L04-08, DC-L05-14, DC-L19-09.
+- **Maps to:**
+  - New question Q-img-08 (stage 18, zoom 3; show if Q-img-01 includes `product-ui`): "How should product screenshots sit on your pages?" Options `well` (default), `plain-card`, `full-bleed`, `skewed-cards`; visual sample: the same feature card as a plain bordered card and as a tinted well with an inset screenshot [S-L19-103].
+- **Impact now / as it grows:**
+  - Plain card: now, no setup. As it grows, screenshots keep looking generic [S-L19-103].
+  - Tinted well: now, screenshots pop and look designed. As it grows, one token set frames every new feature card, in light and dark [inferred].
+  - Hero well: now, a strong opening image. As it grows, it is one special case to keep in step with the well tokens [inferred].
+  - Cropped to the feature: now, each card shows exactly what its text says. As it grows, each crop must be redone when the UI changes [inferred].
+  - Skewed cards: now, a lively marketing look. As it grows, skewed images date faster and are harder to update [inferred].
+- **Standards:** STD-visual-details-14 (edges as see-through rings), STD-visual-details-26.
+
+### DC-L19-74: Text and controls over images
+- **Block path:** Foundations > Imagery > Text on images
+- **Questions the designer answers:** When text sits on a photo, what keeps it readable? Where does the text sit relative to the photo's subject? Where do carousel controls go?
+- **Options:**
+  - **Text beside or above the image.** Move card titles above the images so their visibility is never in doubt [S-L19-065]; a standard card with separate image and text areas always works [S-L19-075]. Confirms DC-L05-16's default.
+  - **A full-screen overlay.** Covering the whole image with an overlay doesn't do the image justice [S-L19-052].
+  - **A gradient scrim.** A linear gradient that shows the image and then fades smoothly into a text-readable background [S-L19-052]; a gradient under text on a photo [S-L19-060]; a gradient behind text in a lightbox card, plus a close X [S-L19-065]; an image about 3/4 of the card's height with a smooth gradient rising from its bottom [S-L19-075]; testimonial cards with a portrait background and a dark gradient from the bottom [S-L19-103]. DC-L05-16 listed this option as [inferred] with no source; it is now sourced.
+  - **A gradient plus a progressive blur**, for an extra modern look [S-L19-052].
+  - **A better photo first.** When a hero photo hurts contrast, first find a better one (the right mood, nothing in the way, good light), then add a subtle overlay if it is still too bright [S-L19-049]; a little noise can also help text contrast [S-L19-062] (one video).
+  - **Mind the focal point.** Never put hero text over the photo's focal point; slide it clear, or tuck the headline behind the subject [S-L19-065]; place text and stats around the focal point and pick a photo whose background is calm beside the text [S-L19-043]; choose a zoomed-out photo for a full-screen hero [S-L19-065].
+  - **Controls over images.** Put carousel controls on a dark, blurred background or below the image, so they stay readable whatever the image [S-L19-075].
+- **Visual effect:** Text beside images is clean and keeps photos true; a gradient keeps the image and makes text readable; a full overlay dulls the whole picture [S-L19-052]; text over the subject hides the point of the photo [S-L19-065].
+- **Depends on (upstream):** aspect ratios and crops (DC-L05-15), image subject (DC-L19-72), the blur material (DC-L19-65).
+- **Affects (downstream):** heroes, image cards, testimonials, lightboxes, carousels and their controls.
+- **Token encoding:** `gradient.scrim.bottom` (`$type: gradient`); the sources give no stops or opacities, so the values stay open. `color.overlay.image` (a color with alpha) for the subtle overlay; carousel controls reuse the dark glass surface of DC-L19-65 [inferred names].
+- **Platform notes:** The sources give none.
+- **Accessibility constraints:** Text over an image needs 4.5:1 (3:1 for large text) at the lightest spot behind it (DC-L05-16). Controls over images keep a 3:1 boundary; their blurred background turns solid under reduced transparency (STD-accessibility-motion-11). Text over blurred surfaces uses higher contrast and a slightly heavier weight (STD-visual-details-13).
+- **Default + heuristic:** Order: text beside the image; if it must sit on the image, a better photo first, then a gradient scrim (not a full overlay), with an optional progressive blur; text never over the focal point (one presenter, two videos [S-L19-043] [S-L19-065]); controls on a dark, blurred background or below the image [S-L19-075]. Test contrast at the lightest region behind the text.
+- **Evidence:** [S-L19-043] [S-L19-049] [S-L19-052] [S-L19-060] [S-L19-062] [S-L19-065] [S-L19-075] [S-L19-103]; compared with DC-L05-15, DC-L05-16.
+- **Maps to:**
+  - Q-img-02: split `scrim` into `gradient-scrim` (the treatment whenever text must sit on an image, heroes first; image cards keep text beside the image by default, because the overlaid card works only with some images [S-L19-075], which also keeps DC-L05-16's heroes-only scrim) and `overlay` ("a flat veil, subtle, only after choosing a better photo"); new option `progressive-blur`; new heuristic "never over the focal point"; visual sample: one image with a full overlay, a gradient, and a gradient plus progressive blur [S-L19-052]; confirms `text-beside` as the default for everything else.
+  - Q-img-01: the photo brief adds "a clear focal point, a calm area where text will sit, zoomed out for full-screen heroes" [S-L19-043] [S-L19-065].
+- **Impact now / as it grows:**
+  - Text beside: now, always readable. As it grows, it works with any image anyone uploads later [S-L19-075].
+  - Full overlay: now, readable text over a dull image. As it grows, every photo looks the same shade of dark [inferred].
+  - Gradient scrim: now, readable text with the image intact. As it grows, one scrim token serves every hero and card, but each new image still needs a contrast check [inferred].
+  - Gradient plus progressive blur: now, a modern, polished look. As it grows, it costs rendering time and needs the reduced-transparency fallback [inferred].
+  - Better photo first: now, the image and the text both win. As it grows, the photo brief has to say where text will sit [inferred].
+  - Focal point rule: now, the subject stays visible. As it grows, responsive crops must keep the text clear of the subject at every width (DC-L05-15) [inferred].
+  - Controls on a dark, blurred background: now, controls stay readable on any image. As it grows, the same background serves every carousel and video player [inferred].
+- **Standards:** STD-accessibility-motion-11, STD-visual-details-13, STD-visual-details-21.
+
+### DC-L19-75: How playful the imagery is
+- **Block path:** Foundations > Illustration > Style > Playfulness
+- **Questions the designer answers:** Blobs and fun colors, doodles, or realistic imagery? How many decorative pieces can surround the hero before it becomes clutter? Hand-drawn marks over text? 3D?
+- **Options:**
+  - **Blobs and fun colors:** the most playful end, as on a crypto site [S-L19-063].
+  - **Doodles, twinkles and scribbles:** the middle; Gumroad's neo-brutalist feel sits close to it [S-L19-063]. Hand-drawn circles, underlines and arrows contrast with crisp, bold text [S-L19-050]; ready-made hand-drawn arrows exist (Handy Arrows) [S-L19-073].
+  - **Realistic imagery:** the professional end, as on an invoicing site [S-L19-063]; calm, premium imagery for a modern, professional feel [S-L19-043].
+  - **Clay and isometric illustration.** The clay effect suits isometrics and illustrations that need depth [S-L19-058]; customizable isometric icon sets let you pick rounded or sharp corners and stroke weight (Isocons) [S-L19-073].
+  - **A 3D hero asset.** A logo's SVG from Figma, extruded and lit in Spline or Blender, spinning as the hero; check the lighting for dark spots while it turns [S-L19-046]; 3D resources such as Endless Tools [S-L19-073].
+  - **Context illustrations around the hero,** but stop before the next piece tips the hero into clutter; tilting pieces makes it look off [S-L19-063]. When scattering images, put larger pieces below and smaller ones on top, and keep a safe margin around the text [S-L19-062].
+- **Visual effect:** Blobs read fun and youthful; doodles read friendly and human; realistic imagery reads professional [S-L19-063]; context illustrations say what the product is for before anyone reads, while one too many make the hero cluttered [S-L19-063].
+- **Depends on (upstream):** the Q-brand-01 playful to serious slider, Q-dir-01, roundness (DC-L19-63), illustration style (DC-L05-19).
+- **Affects (downstream):** hero, empty states, onboarding, marketing sections; animated illustrations (Q-img-06).
+- **Token encoding:** None (a content decision); illustration colors alias brand primitives (DC-L05-19).
+- **Platform notes:** A no-code site takes the 3D asset as an exported video; Spline exports video only on paid plans, Blender for free (as of 2024) [S-L19-046]. animations.dev teaches hero illustration motion from SVG basics: the coordinate system and viewBox, path syntax, stroke properties for drawing, and correct transform origins [S-L19-001].
+- **Accessibility constraints:** Decorative illustrations are hidden from assistive tech (DC-L05-20). Keep a safe margin between decoration and text [S-L19-062]. Animated line drawing and similar decoration stay on marketing pages and illustrations, never on functional charts (STD-when-to-animate-11), and reduced motion removes the movement (STD-accessibility-motion-02).
+- **Default + heuristic:** Preselect the point on the scale from Q-brand-01's playful to serious slider: playful leans to blobs, the middle to doodles, serious to realistic imagery (which routes to photography, Q-img-01) [inferred mapping from S-L19-063]. Rule of thumb: add context illustrations until the product's purpose is clear, then stop one piece before the empty space fills [S-L19-063].
+- **Evidence:** [S-L19-001] [S-L19-043] [S-L19-046] [S-L19-050] [S-L19-058] [S-L19-062] [S-L19-063] [S-L19-073]; compared with DC-L05-19, DC-L05-20, DC-L05-21, DC-L06-12.
+- **Maps to:**
+  - Q-img-04: new options `blobs` ("Abstract blobs and fun colors: the most playful") and `realistic` ("Realistic imagery: professional; uses photos, see Q-img-01"); `hand-drawn` gains "marks over bold text: circles, underlines, arrows" [S-L19-050]; new default preselected from Q-brand-01; new heuristic (stop before clutter; large below, small on top, safe margin); visual sample: three heroes with blobs, doodles and realistic imagery [S-L19-063].
+  - Q-img-06: `3d` gains "check the lighting while it rotates" [S-L19-046].
+- **Impact now / as it grows:**
+  - Blobs: now, a fun, young feel. As it grows, hard to carry into dense product screens, so keep it on marketing (DC-L05-20) [inferred].
+  - Doodles: now, friendly and human. As it grows, every new piece needs the same hand, or the style drifts (DC-L05-19) [inferred].
+  - Realistic: now, professional and credible. As it grows, it depends on a steady supply of good photos (DC-L19-72).
+  - Clay or isometric: now, soft depth that explains things. As it grows, every piece reuses the same recipe [inferred].
+  - 3D hero: now, an eye-catching page that needs little else [S-L19-046]. As it grows, each change means re-rendering, and heavy video costs load time [inferred].
+- **Standards:** STD-when-to-animate-11, STD-accessibility-motion-02, STD-enter-exit-origin-38 (SVG transform origins are set on purpose).
+
+### DC-L19-76: Where avatars appear
+- **Block path:** Components > Avatar > Placement
+- **Questions the designer answers:** Where do people's pictures appear: activity logs, assignees, comments, the account menu, the profile tab? What replaces a generic user icon once someone uploads a photo?
+- **Options:**
+  - **Beside every person in logs and lists.** Show an avatar next to each actor in an activity log, because the eye links who did what faster than it reads names [S-L19-056]; show avatars wherever people are referenced, and group items (by due date) so any task can be found in about a second (his estimate) [S-L19-080].
+  - **The profile tab shows the person's photo** once they upload one, instead of a generic user icon [S-L19-075].
+  - **Account at the top of the sidebar.** A profile picture with arrows that show it can be clicked, rather than a logo [S-L19-047]; the user's name and icon with an arrow to switch accounts [S-L19-086].
+  - **Marketing testimonials without round avatars.** One redesign drops the star ratings and circular avatars and uses the person's portrait as the card background [S-L19-103].
+- **Visual effect:** Avatars make lists scannable by person and make a product feel inhabited; a person's own photo in the tab bar makes the app feel personal [inferred].
+- **Depends on (upstream):** avatar shapes, sizes and fallbacks (Q-img-03, DC-L05-18).
+- **Affects (downstream):** activity logs, table cells for assignees, comments, the tab bar, the sidebar account entry, testimonials.
+- **Token encoding:** None new; sizes and radius come from DC-L05-18 (`avatar.size.*`, `radius.person`).
+- **Platform notes:** The sources give none.
+- **Accessibility constraints:** An avatar beside a visible name is decorative (DC-L05-18); an avatar that stands in for a label, such as the profile tab, needs an accessible name and the full touch target (STD-mobile-touch-09) [inferred].
+- **Default + heuristic:** Show avatars next to names wherever a person is the subject of a row (logs, assignees, comments); use the uploaded photo for the profile tab and the account entry, with the initials fallback of DC-L05-18; keep circles for people.
+- **Evidence:** [S-L19-047] [S-L19-056] [S-L19-075] [S-L19-080] [S-L19-086] [S-L19-103]; compared with DC-L05-18.
+- **Maps to:**
+  - Q-img-03: new heuristic "avatars beside every person referenced in lists and logs; the uploaded photo replaces the generic profile icon"; visual sample: an activity log with avatars and a red icon in a chip for an urgent action [S-L19-056]; confirms `circle-square`.
+- **Impact now / as it grows:**
+  - Avatars in logs and lists: now, people are found at a glance. As it grows, every list that names people gets them, so the fallback must be solid for people without photos (DC-L05-18) [inferred].
+  - Photo in the profile tab: now, a personal touch. As it grows, it depends on photo quality, so the initials fallback matters [inferred].
+  - Account at the top of the sidebar: now, account switching is easy to find. As it grows, it scales to several workspaces or accounts [S-L19-086] [inferred].
+  - Portrait testimonials: now, more visual social proof. As it grows, it needs real portraits for every quote [inferred].
+- **Standards:** STD-mobile-touch-09.
+
+### Area: Motion (DC-L19-81 to DC-L19-99)
+
+Area `motion`: stage 16; wiki topics Motion principles, Easing and timing, Spring animation, Animation performance, Gestures and drag, Micro-interactions and Reduced motion. Written 2026-09-24. Each card adds something the existing L04, L06, L07, L09, L10, L13 and L14 cards do not have, or flags where the trusted sources disagree with them. Also read for this area and not cited, because they added nothing beyond the cited sources: S-L19-002, S-L19-029, S-L19-031, S-L19-060, S-L19-073, S-L19-076, S-L19-089, S-L19-093, S-L19-094. The seven topic synthesis pages (`learn/wiki/synthesis/motion-principles.md` and its siblings) hold the longer discussion.
+
+### DC-L19-81: Which interactions get no motion (the frequency gate)
+- **Block path:** Foundations > Motion > When to animate
+- **Questions the designer answers:** Which things will people use all day, and should those move at all? Which actions start from the keyboard? Where is motion allowed to take its time?
+- **Options:**
+  - **Gate by how often it is seen (house standard).** Four tiers decide before any curve is picked [S-L19-018] [S-L19-023] [S-L19-024] [S-L19-033]:
+    - 100+ times a day (keyboard shortcuts, command palette toggle, core navigation; on iOS and Android also tab switches, keyboard open and close, scrolling and settings toggles): no animation; on native, the platform default or nothing [S-L19-016].
+    - Tens of times a day (hover effects, list navigation, frequent toggles, press feedback, row selection): near-imperceptible or none; in React Native under 150ms [S-L19-016].
+    - Occasional (modals, drawers, sheets, toasts, settings, onboarding steps): standard motion.
+    - Rare or first-time (onboarding, first run, empty states, success, celebration): the delight budget (DC-L19-83).
+    - Real example: Raycast opens with no animation at all, which the author calls the optimal experience for something opened hundreds of times a day [S-L19-012].
+  - **Purpose-only test (practitioner videos).** Animate only when motion adds clarity or functionality and remove animation that does nothing [S-L19-054]; motion should support clarity, not distract [S-L19-084]. No video uses frequency as a test [inferred], so on its own this lets frequent surfaces keep motion.
+  - **Animate a little everywhere.** Small hover interactions on almost everything keep a simple site from feeling bland [S-L19-063], and buttons should almost always get a small animation [S-L19-054]. The hover tip comes from a portfolio and marketing-site context [S-L19-063]; the button tip is stated as a general rule that "context matters" qualifies [S-L19-054]. Inside product UI both break STD-when-to-animate-07, except for press feedback, which both sides endorse (DC-L19-93) [inferred].
+  - **OpenDesigner today.** No question or default says what stays still (recorded as a conflict under STD-when-to-animate-01). Differs from DC-L06-10 and the Q-motion-01 use/avoid line, which give expressive motion to page transitions and the primary action, both high-frequency surfaces [inferred].
+- **Visual effect:** Gated: tools people use all day feel instant and wired to their hands, and the few things that do move stand out. Ungated: motion delights at first, then becomes annoying and makes the interface feel slower [S-L19-012] [S-L19-003]. An arrow-key list highlight that animates visibly lags behind the key presses [S-L19-012].
+- **Depends on (upstream):** Q-scope-06 (operate or persuade), Q-plat-03 (keyboard input), Q-aud-02 (stakes), the component inventory (Q-comp-01 and stage 20).
+- **Affects (downstream):** every component's motion spec; command palette, menus, tabs, list rows and hover states; the DESIGN.md Motion section, which should say what never moves; review severity (animation on a keyboard or high-frequency action is a HIGH finding [S-L19-027]).
+- **Token encoding:** none (process decision). Record the tier per component in the component spec, for example `$extensions: {"opendesigner.motion": {"frequency": "100+/day", "animate": false}}` [inferred].
+- **Platform notes:** iOS and Android keep tab switches, keyboard open and close, scrolling and settings toggles at the platform default or instant; Expo Router tabs use `animation: 'none'` [S-L19-016]. On the web, keyboard-initiated actions (shortcuts, focus jumps, arrow-key list highlight) never animate [S-L19-018] [S-L19-023] [S-L19-024] [S-L19-012].
+- **Accessibility constraints:** Removing motion never removes feedback: a keyboard action still shows an immediate state change. The macOS video accepts a state change as the minimum ("micro animations, or at least a state change") [S-L19-067], but its own shortcut-opened quick-save panel slides in, slides away and collapses into a toast, which STD-when-to-animate-06 does not allow; only its state-change minimum carries over. Visible focus stays. Reduced motion is a separate layer (DC-L19-92).
+- **Default + heuristic:** Gate on. Tier every component in the inventory; ship no animation on 100+/day and keyboard-initiated actions; expect to reject most motion ideas (at most 5-7 suggestions for a whole app [S-L19-024]). Rule of thumb: the more often it is seen, the less it moves; when unsure, delete the animation [S-L19-032].
+- **Evidence:** [S-L19-003] [S-L19-012] [S-L19-016] [S-L19-018] [S-L19-023] [S-L19-024] [S-L19-027] [S-L19-032] [S-L19-033] [S-L19-054] [S-L19-063] [S-L19-067] [S-L19-084]; compared with DC-L04-19, DC-L06-10, DC-L09-06.
+- **Maps to:**
+  - New question Q-motion-11 (proposed, zoom 2, first among the stage's zoom-2 questions; below zoom 2 the gate applies silently with the default tiers, since Q-motion-01 is asked at zoom 1): "Which things will people use all day? Those will not move." Show the inventory pre-sorted into the four tiers so the person only corrects which component sits in which tier; default: the tiers above. The answer can move a component between tiers but cannot give motion to a 100+/day or keyboard-initiated action, which the locked standards forbid (STD-when-to-animate-05, STD-when-to-animate-06) [inferred].
+  - Q-motion-01 use/avoid: replace "use expressive motion for page transitions, the primary action and alerts" with "no motion on things used all day or started from the keyboard; expressive motion only at rare moments (DC-L19-83)".
+  - Visual sample: a command menu opened with and without animation, and arrow-key navigation with and without an animated highlight [S-L19-012].
+- **Impact now / as it grows:**
+  - Gate by frequency: now, fewer animations to build and review, and the app feels fast. As it grows, each new component gets its tier at birth, so motion does not creep onto high-frequency surfaces and review can flag it [inferred].
+  - Purpose-only: now, fine for marketing pages. As it grows, frequent surfaces pile up motion that people meet hundreds of times a day, and the fix later is deletion [inferred].
+  - Animate everywhere: now, a lively demo. As it grows, a slower-feeling product and a larger reduced-motion surface to maintain [inferred].
+- **Standards:** STD-when-to-animate-01, STD-when-to-animate-03, STD-when-to-animate-04, STD-when-to-animate-05, STD-when-to-animate-06, STD-when-to-animate-07, STD-when-to-animate-08, STD-when-to-animate-13, STD-when-to-animate-14, STD-when-to-animate-15, STD-when-to-animate-16, STD-when-to-animate-17, STD-when-to-animate-20.
+
+### DC-L19-82: Motion personality (amount and character)
+- **Block path:** Foundations > Motion > Personality
+- **Questions the designer answers:** Should motion feel crisp and quick, calm and elegant, or playful and bouncy? How much should move overall? May one component be livelier than the rest?
+- **Options:**
+  - **Crisp and fast.** Fewer, subtler, fast animations; the house example is a professional dashboard [S-L19-023] [S-L19-024]. Kole: dashboard motion is "pretty tame and user focused" and people want a snappy, fast dashboard [S-L19-047]; his "snappy and performant" tone [S-L19-035].
+  - **Elegant.** Slightly slower than typical UI and using `ease` rather than ease-out, as Sonner's toast does (400ms ease) [S-L19-023] [S-L19-033] [S-L19-017]; Kole's "slow and smooth" tone [S-L19-035]. The house names elegance for one component, the toast, not for a whole product, so as a product personality it is [inferred]: only components whose own personality calls for it enter on `ease`, and every other entrance stays on ease-out (STD-easing-duration-01).
+  - **Playful.** More motion and bouncier springs for a playful consumer app [S-L19-023] [S-L19-024]; Kole's "fun and springy" tone [S-L19-035]. Bounce still comes only after a gesture that carried momentum or at a deliberately playful, rare moment, within 0.1-0.3 (DC-L19-88).
+  - **Minimal.** Only feedback and state changes move: press scale and short opacity fades. It replaces today's `none` option, GOV.UK's no-motion posture (DC-L09-06); under the house standards "minimal" cannot mean zero, because press feedback (STD-mobile-touch-05, a must) and state-explaining fades stay [inferred from STD-mobile-touch-05 and STD-accessibility-motion-02].
+  - **Two-mode (current default).** Plain for most actions, bold for 1-3 key moments per flow (Carbon, Material) [DC-L04-19]. Differs from the house rule: bold moments belong to rare or first-time moments, not to every flow, page transitions or the primary action (STD-when-to-animate-09).
+  - **Springs throughout (current option).** Differs from STD-springs-gestures-01: motion that no finger drives runs on a timing curve. Its useful part (springs for touch) moves to DC-L19-87.
+- **Visual effect:** Crisp reads competent, fast and quiet. Elegant reads calm and refined. Playful reads alive and physical. Minimal reads still but responsive. The curve itself sets the tone [S-L19-035]. One bouncy component in a crisp app reads as a defect and is a review finding [S-L19-025] [S-L19-032].
+- **Depends on (upstream):** Q-brand-01 sliders, Q-brand-04 (liveliness), Q-aud-02 (high-trust caps it), Q-scope-06, DC-L19-81.
+- **Affects (downstream):** which component recipes differ from the plain set (the toast's ease, DC-L19-99), how many delight moments exist (DC-L19-83), bounce on momentum settles (DC-L19-88), the show-if of Q-motion-04 and Q-motion-06, and the levers `energy` dial.
+- **Token encoding:** a string token `motion.personality` = `crisp | elegant | playful | minimal` that selects component recipes within the locked budgets [inferred]. Durations stay `$type: duration` and curves `$type: cubicBezier`; there is no DTCG type for personality.
+- **Platform notes:** Native screen transitions keep the platform default whatever the personality [S-L19-016].
+- **Accessibility constraints:** Personality never overrides reduced motion (DC-L19-92), the 300ms UI budget or the 1s ceiling; bounce disappears under reduced motion.
+- **Default + heuristic:** Default by audience: `playful` when Q-aud-02 is `play`; `crisp` in every other case, including Q-scope-06 `operate` and Q-aud-02 `work` (today's defaults) and `consumer`; Q-aud-02 `high-trust` always caps at `crisp`, as today's cap does at `productive`; `elegant` is offered to anyone but never chosen by default [inferred]. Rule of thumb: personality changes how many things move and a component's curve within the job rules, never the budgets. Differs from DC-L04-19 and DC-L09-06, whose defaults use "ease-in exit" and "springs only for spatial moves in the expressive mode": exits use ease-out (DC-L19-85) and springs follow the finger in every mode (DC-L19-87). The levers `energy` dial should stop swapping curve families and stretching durations past the budgets (conflicts recorded under STD-easing-duration-02 and STD-easing-duration-07) [inferred].
+- **Evidence:** [S-L19-017] [S-L19-023] [S-L19-024] [S-L19-025] [S-L19-032] [S-L19-033] [S-L19-035] [S-L19-047]; compared with DC-L04-19, DC-L06-10, DC-L09-06.
+- **Maps to:**
+  - Q-motion-01: new option `crisp` replacing `productive` (drop the Carbon curve `cubic-bezier(0.2, 0, 0.38, 0.9)`, which is not a house curve); new option `elegant`; `springs` renamed `playful` with bounce only after momentum; `none` renamed `minimal` (press feedback and fades stay); `two-mode` retired, its "few big moments" moving to DC-L19-83.
+  - Q-motion-01: new default `crisp` (`playful` only for Q-aud-02 `play`, as above) because daily use argues for less motion [S-L19-024]; default text changes from "ease-in to exit" to "ease-out to enter and exit".
+  - Visual sample: one dropdown and one toast played in each personality: crisp (dropdown 200ms ease-out), elegant (toast 400ms ease), playful (a flicked card settling with bounce 0.2).
+- **Impact now / as it grows:**
+  - Crisp: now, fast and cheap to build. As it grows, stays consistent as components are added; the risk is a flat feel, answered by a few rare delight moments.
+  - Elegant: now, a calm, premium feel. As it grows, every new component needs the slower `ease` recipe checked against the 300ms rule and a stated reason.
+  - Playful: now, a lively brand. As it grows, more motion to review and more reduced-motion variants; bounce must stay tied to gestures or it spreads to everyday controls.
+  - Minimal: now, almost nothing to maintain. As it grows, feedback gaps appear unless press and state changes are kept.
+- **Standards:** STD-easing-duration-13, STD-when-to-animate-09, STD-springs-gestures-01, STD-springs-gestures-05, STD-springs-gestures-07, STD-easing-duration-01, STD-easing-duration-03, STD-easing-duration-06, STD-mobile-touch-05, STD-accessibility-motion-02.
+
+### DC-L19-83: Where the delight budget goes (rare moments)
+- **Block path:** Foundations > Motion > Delight moments
+- **Questions the designer answers:** Which rare moments may show off a little? Is there a first run, a success or an empty screen worth celebrating?
+- **Options:**
+  - **No delight moments.** Everything uses standard motion.
+  - **Onboarding and first run.** Kole calls onboarding the best time for mobile users to be captivated (Craft: a clean screen, a swipe, then tools sliding up from the bottom) [S-L19-084]; an onboarding step that wraps into the next slide in the swipe's direction [S-L19-035]. House: explanation motion is allowed only on marketing and onboarding surfaces.
+  - **Success and completion.** A check mark that slides in through a mask instead of fading [S-L19-059]; toasts with celebratory success messages and particles [S-L19-079].
+  - **Empty states and error pages.** Kole: a 404 page is the ultimate time to be quirky [S-L19-063]; empty states are in the house rare tier [S-L19-024].
+  - **Rarely used components.** A morphing feedback button is delightful only because people use it rarely [S-L19-012].
+  - **Current: 1-3 key moments per flow, including opening a page or the primary action** (DC-L04-19, DC-L06-03 via Q-brand-04 `hero-moments`). Differs: page opens and primary actions recur far more often than the rare tier allows (conflict recorded under STD-when-to-animate-09).
+- **Visual effect:** Kept rare, delight lands as a pleasant surprise; used daily it fades and slows people down [S-L19-012].
+- **Depends on (upstream):** DC-L19-81, DC-L19-82, Q-pattern-04 (onboarding style), Q-brand-04.
+- **Affects (downstream):** onboarding screens, empty states, success states, success toasts, the 404 page; Lottie is used only for illustration and celebration, never UI state [S-L19-016].
+- **Token encoding:** none (process decision). The chosen moments can be recorded as a string list in `$extensions` (`opendesigner.motion.delightMoments`) [inferred].
+- **Platform notes:** React Native uses Lottie or Skia for illustration and celebration [S-L19-016].
+- **Accessibility constraints:** Each delight animation ships with its reduced-motion version. The house bans slow loops near 0.2 Hz. Kole adds a pause and play button to a shimmer [S-L19-079] (single video), but his reason is that its uneven speed may bother some people, not accessibility; a stop control for looping decoration is only [inferred] from it. No haptic on an entrance the user did not cause.
+- **Default + heuristic:** Pick a few named rare moments (1-3 [inferred]; no source gives a count) from first run, success and empty state; never a component people use daily. Rule of thumb: if a person meets it more than occasionally, it is not a delight moment.
+- **Evidence:** [S-L19-012] [S-L19-016] [S-L19-024] [S-L19-035] [S-L19-059] [S-L19-063] [S-L19-079] [S-L19-084]; compared with DC-L04-19, DC-L06-10.
+- **Maps to:**
+  - New question Q-motion-12 (proposed, zoom 2, show if Q-brand-04 is `hero-moments` or `expressive`, so it does not re-ask what Q-brand-04 decided): "Which rare moments should get a little celebration: first run, finishing a task, empty screens, error pages?" Multi-select; default: first run and success [inferred].
+  - Q-brand-04 option `hero-moments`: reword "expressive motion and type only at significant moments such as opening a page or the primary action" to "at rare moments such as first run, success and empty states".
+  - Visual sample: a success check sliding in through a mask after a spinner [S-L19-059], and onboarding tools sliding up from the bottom [S-L19-084].
+- **Impact now / as it grows:**
+  - None: now, nothing extra to build. As it grows, the product can feel generic; adding moments later is easy because they are isolated.
+  - Onboarding and first run: now, a strong first impression. As it grows, onboarding changes with features, so the motion must be cheap to rebuild.
+  - Success, empty states and 404: now, small, contained work. As it grows, each new flow asks for its own success moment; keep a shared recipe so they stay consistent [inferred].
+- **Standards:** STD-when-to-animate-08, STD-when-to-animate-09, STD-when-to-animate-10, STD-accessibility-motion-01, STD-accessibility-motion-08, STD-springs-gestures-61, STD-performance-properties-13.
+
+### DC-L19-84: How lively the marketing pages may be
+- **Block path:** Patterns > Marketing surfaces > Motion level
+- **Questions the designer answers:** Does the marketing site get more motion than the app? How much: none, a few moving parts, polished details, or scroll storytelling?
+- **Options:**
+  - **No effects.** Calm and fast; the conversion-focused sites Kole shows, such as linear.app with dark mode and some glass but no heavy animation [S-L19-040].
+  - **A few moving parts.** huddle.works's minimal motion [S-L19-040]; simple, tasteful hover effects (Welcome, Pipe, Klaviyo) instead of heavy graphics [S-L19-066]; photos slightly zooming in or out and staggered slide-ups [S-L19-085]; one well-built hover animation that demonstrates the product (Intercom) [S-L19-084].
+  - **Polished details.** Kole's "level four": a blur on the multi-select, a mega menu that stays open and slides its content instead of closing and reopening, a call to action that appears on hover only when needed [S-L19-072]; an explanatory animation in the first viewport (Linear's Product Intelligence) [S-L19-012].
+  - **Scroll storytelling and 3D.** Prometheus Fuels-style scrollytelling for awareness sites: memorable but heavy [S-L19-040]; scroll-driven process diagrams [S-L19-050]; parallax on elements in spacious margins [S-L19-063].
+  - **Load sequences (values from single videos).** A loading screen held 1,000ms then slid away over 800ms on a custom exponential curve [S-L19-081]; GSAP `expo.inOut` over 1.3s with a 0.2s stagger [S-L19-071]. These are marketing motion; the house allows longer, illustrative motion there. Two limits still apply: the same GSAP video grows its navbar from scale 0, which STD-enter-exit-origin-01 forbids on every surface, and Kole himself says to keep preloaders short because people are impatient [S-L19-069].
+- **Visual effect:** From calm and fast to memorable but heavy. Kole's warnings: effects that slow loading or make navigating harder are probably not worth it [S-L19-040]; big or flashy animation overwhelms people [S-L19-069]; an imported scroll effect that renders blurry looks cheap (Coda) [S-L19-066].
+- **Depends on (upstream):** Q-scope-01 includes `marketing`; Q-brand-05 (how marketing relates to the product); Q-scope-06 (`persuade` or `experience`); DC-L19-82.
+- **Affects (downstream):** heroes, scroll reveals, logo marquees, navigation and mega menus, feature sections, 404; the performance budget (DC-L19-96).
+- **Token encoding:** a separate marketing motion set beside the product set, for example `motion.marketing.reveal` = `$type: transition` {600ms, 0ms, [0.77, 0, 0.175, 1]} and `motion.marketing.image-reveal` {1000ms, same curve}, the house scroll and image reveal recipes [S-L19-017] [S-L19-010]; the product set is unchanged [inferred structure].
+- **Platform notes:** Web only in these sources. Mouse-following effects need a backup on tablets and phones [S-L19-069]; hover effects sit behind the fine-pointer gate.
+- **Accessibility constraints:** Reduced motion removes parallax and scroll-driven movement. Marquee text reduces usability [S-L19-085] and loops should be slow enough to read [S-L19-069]. Scrolljacking "very sparingly, if ever" [S-L19-054] (single video, opinion). No full-viewport moving backgrounds and no slow 0.2 Hz loops (house). The two loop rules pull in opposite directions (slow enough to read, but not near one cycle per 5 seconds); the house rule wins [inferred].
+- **Default + heuristic:** Default `few-moving-parts` for conversion sites (Q-scope-06 `persuade`); `scroll-story` only for awareness or experience sites. Rules of thumb: the layout should look good before any animation is added [S-L19-082]; motion should point at the product [S-L19-084]; repeat one or two motion themes rather than one-off effects [S-L19-062] (Kole's view across videos, practitioner opinion). Scroll reveals fire once, 100px into view.
+- **Evidence:** [S-L19-010] [S-L19-012] [S-L19-017] [S-L19-040] [S-L19-050] [S-L19-054] [S-L19-062] [S-L19-063] [S-L19-066] [S-L19-069] [S-L19-071] [S-L19-072] [S-L19-081] [S-L19-082] [S-L19-084] [S-L19-085]; compared with DC-L06-01 (via Q-brand-05).
+- **Maps to:**
+  - New question Q-motion-13 (proposed, zoom 2, show if Q-scope-01 includes `marketing`): "How lively should the marketing site be: still, a few moving parts, polished details, or scroll storytelling?" Default `few-moving-parts`.
+  - Q-scope-01 option `marketing`: add that this is where longer, explanatory and scroll-triggered motion is allowed and where product-UI budgets relax.
+  - Visual sample: a mega menu closing and reopening versus staying open and sliding its content [S-L19-072]; the four levels as four hero strips.
+- **Impact now / as it grows:**
+  - None: now, fastest to ship. As it grows, the site may feel flat against competitors; motion can be added section by section later.
+  - Few moving parts: now, modest build effort. As it grows, easy to keep consistent if the moving parts are shared recipes.
+  - Polished details: now, noticeably more build and QA time. As it grows, each new section must meet the same bar or the site looks uneven [inferred].
+  - Scroll storytelling: now, a memorable but heavy page. As it grows, costly to change copy or structure, and performance and reduced-motion work grows with every section [inferred].
+- **Standards:** STD-when-to-animate-10, STD-when-to-animate-11, STD-enter-exit-origin-01, STD-enter-exit-origin-26, STD-enter-exit-origin-27, STD-enter-exit-origin-28, STD-enter-exit-origin-43, STD-easing-duration-06, STD-easing-duration-09, STD-accessibility-motion-02, STD-accessibility-motion-07, STD-accessibility-motion-08, STD-accessibility-motion-15, STD-performance-properties-14.
+
+### DC-L19-85: Easing curves grouped by job
+- **Block path:** Foundations > Motion > Easing curves
+- **Questions the designer answers:** Which curve does each kind of movement use? Are curves grouped by job, by strength or by mood? Is ease-in ever allowed?
+- **Options:**
+  - **By job, with strong custom curves (house).** [S-L19-018] [S-L19-025] [S-L19-033]
+    - entering or leaving: ease-out `cubic-bezier(0.23, 1, 0.32, 1)`;
+    - moving or morphing on screen: ease-in-out `cubic-bezier(0.77, 0, 0.175, 1)`;
+    - hover and color: CSS `ease`;
+    - constant motion (spinner, marquee, progress): `linear`;
+    - drawers and sheets on a timing curve: `cubic-bezier(0.32, 0.72, 0, 1)`, the iOS-like curve from Ionic [S-L19-005];
+    - never ease-in on UI [S-L19-003] [S-L19-014]; other curves come from easing.dev or easings.co. animations.dev keeps its named curves as `--ease-*` variables (6 of 18 shown) [S-L19-007]; all six shown start slowly (both control points sit below the diagonal, the ease-in shape), so they are not UI curves under STD-easing-duration-03 [inferred from the control points].
+  - **Role-based standard, enter, exit (current Q-motion-03 default, DC-L04-21).** Standard (0.2, 0, 0, 1), enter (0, 0, 0, 1) or (0.05, 0.7, 0.1, 1), exit (0.3, 0, 1, 1). Differs: the exit curve accelerates, which is ease-in shaped (STD-easing-duration-03), and none of these is the house curve.
+  - **By strength or by mood** (Fluent min/mid/max; Carbon productive and expressive) [DC-L04-21]. Differs: the house fixes one curve per job instead of swapping curves by mood or by the `energy` dial.
+  - **Practitioner views.** "Almost never" a linear ease on swipes and UI [S-L19-035], which agrees with the house (linear only for constant motion). The GSAP load sequence uses `expo.inOut` to slide a full-screen loader off the screen and the header text into place [S-L19-071]; by the house flowchart those are an exit and an entrance (ease-out), not on-screen moves [inferred]. Kole's ease-in-out on the Figma nav fade-in [S-L19-081] likewise differs from the house ease-out for entering elements [inferred].
+- **Visual effect:** Ease-out starts fast, so the interface feels responsive; two 300ms dropdowns side by side show ease-in feeling slower [S-L19-003]. Custom curves feel more energetic than CSS's built-in keywords [S-L19-003]. The drawer curve feels like an iOS sheet [S-L19-005].
+- **Depends on (upstream):** DC-L19-82 (only a component with an elegant personality, such as the toast, enters on `ease`); DC-L19-87.
+- **Affects (downstream):** every transition token; `motion.easing.exit` is removed; the engine's `motion.transition.enter`, `.exit`, `.move` and `.feedback` pick curves by job; the `motion.html` presets.
+- **Token encoding:** `$type: cubicBezier`: `motion.easing.out` = [0.23, 1, 0.32, 1], `motion.easing.in-out` = [0.77, 0, 0.175, 1], `motion.easing.drawer` = [0.32, 0.72, 0, 1], `motion.easing.hover` = [0.25, 0.1, 0.25, 1] (CSS `ease`) [inferred equivalence], `motion.easing.linear` = [0, 0, 1, 1].
+- **Platform notes:** React Native uses the same beziers (`EASE_OUT`, `EASE_IN_OUT`, `EASE_SHEET`) and never Reanimated's built-in curves [S-L19-016]. Native screen transitions keep the platform's own curve.
+- **Accessibility constraints:** none directly; the reduced-motion cross-fade uses 200ms `ease` (DC-L19-92).
+- **Default + heuristic:** The job-based set above. Ask: is it entering or leaving, moving on screen, a hover or color change, or constant? If none fits, use ease-out. Differs from DC-L04-21 and DC-L04-24, which give exits an accelerate curve.
+- **Evidence:** [S-L19-003] [S-L19-005] [S-L19-007] [S-L19-014] [S-L19-016] [S-L19-018] [S-L19-025] [S-L19-033] [S-L19-035] [S-L19-071] [S-L19-081]; compared with DC-L04-21, DC-L04-24, DC-L06-10.
+- **Maps to:**
+  - Q-motion-03: new default "by job: ease-out (0.23, 1, 0.32, 1) to enter and leave, ease-in-out (0.77, 0, 0.175, 1) to move, `ease` for hover and color, linear for constant motion, drawer (0.32, 0.72, 0, 1) for sheets; no ease-in", because the house bans ease-in on UI and fixes one curve per job. Option `role-based` reworded to these four jobs; `intensity-based` and `personality-based` kept only as labels for comparison.
+  - Q-motion-01 default text: "ease-in to exit" becomes "ease-out to enter and exit".
+  - Visual sample: two 300ms "Options" dropdowns, ease-in against ease-out, with the curve graph; built-in against custom ease-in-out [S-L19-003].
+- **Impact now / as it grows:**
+  - By job: now, five named curves and one question per animation. As it grows, new components pick a curve without debate, and review can check the job automatically [inferred].
+  - Role-based with an accelerate exit: now, familiar from Material and Carbon. As it grows, every exit feels sluggish and each becomes a review finding.
+  - By mood: now, expressive range. As it grows, curves drift between components and teams.
+- **Standards:** STD-easing-duration-01, STD-easing-duration-02, STD-easing-duration-03, STD-easing-duration-13, STD-easing-duration-17, STD-components-toasts-drawers-40, STD-enter-exit-origin-39.
+
+### DC-L19-86: Duration budget per element
+- **Block path:** Foundations > Motion > Durations
+- **Questions the designer answers:** How long does each kind of element take to appear? Do things leave faster than they arrive? What may take longer than 300ms?
+- **Options:**
+  - **A budget per element (house).** [S-L19-018] [S-L19-017] [S-L19-016] [S-L19-015]
+    - web: button press 100-160ms (recipe 160ms); tooltips and small popovers 125-200ms (recipe 125ms); dropdowns and selects 150-250ms (recipe 200ms); modals 200-500ms (recipe 250ms); drawers 500ms on the drawer curve; toasts 400ms `ease` (Sonner's personality);
+    - iOS and Android: press 100-150ms (recipe 120ms); toggles, chips and small state changes 150-200ms; sheets, modals and drawers a spring of about 300ms perceived; screen transitions at the platform default (iOS push 350ms);
+    - UI stays under 300ms unless a reason is stated; nothing runs over 1s unless it is illustrative [S-L19-001]; a 180ms select or dropdown feels more responsive than a 400ms one [S-L19-003] [S-L19-012]; exits about 20% faster (the React Native toast: 300ms in, 250ms out) [S-L19-015] [S-L19-004], although the web recipes run dropdowns, tooltips and modals at the same duration both ways [S-L19-017]; larger elements and longer travel get longer [S-L19-004].
+  - **Six-step ladder (current Q-motion-02 default, DC-L04-20).** Instant 0, micro 100, short 150-200, medium 250-300, long 400-500, extra 700. Differs: `long` and `extra` pass the UI budget with no named reason, and there is no 125ms tooltip step.
+  - **Four semantic steps (Primer) or 16 steps (Material 3)** [DC-L04-20].
+  - **Energy-scaled ladder (levers `motion.durationMultiplier` 0.8-1.2).** Differs: it stretches menus and modals past their budgets.
+  - **Marketing lengths (single videos).** 800ms slides after a 1,000ms hold [S-L19-081]; 1.3s moves [S-L19-071]. Allowed only as illustrative marketing motion (DC-L19-84).
+- **Visual effect:** Short durations feel connected to the click; long ones feel sluggish. Faster exits get out of the way and respect people's time.
+- **Depends on (upstream):** DC-L19-81, DC-L19-82, DC-L19-85; the component inventory; platform (Q-plat-01).
+- **Affects (downstream):** every duration token and component recipe; engine `validate` thresholds (an advisory above 300ms, not above 400ms and 500ms); `motion.duration.long` and `extra` for UI.
+- **Token encoding:** `$type: duration`: `motion.duration.press` 160ms, `motion.duration.tooltip` 125ms, `motion.duration.dropdown` 200ms, `motion.duration.modal` 250ms, `motion.duration.drawer` 500ms, `motion.duration.toast` 400ms; exit tokens derived at 0.8 of the stored entrance value so they follow a locked value, applied where a recipe has a separate exit (the web popover, tooltip and modal recipes share one duration for both directions, so they keep it) [inferred]; the 300ms budget stored as a validation rule in `$extensions` [inferred].
+- **Platform notes:** React Native keeps tens-per-day motion under 150ms and press feedback at 120ms at most [S-L19-016]; native screen transitions are never overridden.
+- **Accessibility constraints:** Motion that runs by itself for more than 5 seconds needs pause, stop or hide (WCAG 2.2.2, cited in DC-L04-20) [inferred]; the 1s ceiling holds.
+- **Default + heuristic:** The per-element budget. Rule of thumb: if it is UI and over 300ms, name the reason (a drawer, a toast's personality) or cut it to 150-250ms. Differs from DC-L04-20 (steps up to 700ms, exits 20-35% shorter).
+- **Evidence:** [S-L19-001] [S-L19-003] [S-L19-004] [S-L19-012] [S-L19-015] [S-L19-016] [S-L19-017] [S-L19-018] [S-L19-071] [S-L19-081]; compared with DC-L04-20, DC-L04-24.
+- **Maps to:**
+  - Q-motion-02: new option `per-element` (the table above) as the new default, because the house times each element within its own budget; `6-steps` loses `extra 700` and keeps `long` for drawers only; `asymmetric` becomes part of the default at about 20% (not 20-35%).
+  - Visual sample: the 180ms and 400ms selects opened one after the other [S-L19-003]; a timeline showing each element's band.
+- **Impact now / as it grows:**
+  - Per element: now, more named tokens (about six). As it grows, each new component inherits a band and stays fast; the budget doubles as a review check [inferred].
+  - Six-step ladder: now, fewer tokens. As it grows, components reach for `long` and `extra`, and the product slows down.
+  - Energy-scaled: now, one dial feels powerful. As it grows, a small dial change silently moves every duration past its budget.
+- **Standards:** STD-easing-duration-06, STD-easing-duration-07, STD-easing-duration-09, STD-easing-duration-10, STD-easing-duration-11, STD-easing-duration-12, STD-easing-duration-13, STD-enter-exit-origin-08, STD-enter-exit-origin-09, STD-enter-exit-origin-11, STD-enter-exit-origin-41, STD-components-toasts-drawers-07, STD-components-toasts-drawers-08, STD-mobile-touch-05, STD-mobile-touch-42.
+
+### DC-L19-87: What drives each motion: timing curve, spring or keyframes
+- **Block path:** Foundations > Motion > Motion driver and interruptibility
+- **Questions the designer answers:** Which motion follows a finger and needs springs? Can people grab or reverse something while it moves? Can they keep working while things animate?
+- **Options:**
+  - **Springs for anything a finger drives, timing for everything else (house).** Drags, flicks, swipes and anything a finger can interrupt settle on a spring with the release velocity; motion no finger started runs on a curve and a duration [S-L19-016] [S-L19-018] [S-L19-020]. Springs carry their velocity through an interruption [S-L19-019].
+  - **CSS transitions for things triggered rapidly.** Stacking toasts, toggles, expand and collapse retarget from where they are; keyframes restart and jump (Sonner's keyframes-versus-transitions demo) [S-L19-006] [S-L19-018].
+  - **Keyframes or CSS animations for predetermined motion** that nobody interrupts; they run off the main thread and stay smooth while the page is busy [S-L19-023] [S-L19-033].
+  - **Springs throughout** (current Q-motion-01 `springs`; Apple and M3 Expressive in DC-L04-19 and DC-L04-22). Differs: the house keeps plain on-screen moves on ease-in-out timing.
+  - **Duration and easing only** (Carbon, Fluent, Polaris, Primer in DC-L04-22). Differs: it cannot serve drag-driven UI.
+  - **Blocking input briefly.** DC-L04-24 allows input to be blocked for up to about 100ms [inferred in that card]. Differs: the house never locks input, not even during a stagger.
+- **Visual effect:** Springs feel continuous and grab-able; timing feels predictable; keyframes on rapid UI make elements jump; blocked input feels broken.
+- **Depends on (upstream):** Q-plat-03 (touch), Q-plat-08 (stack), DC-L19-82.
+- **Affects (downstream):** sheets, drawers, carousels, toasts, toggles, accordions, card stacks; the engine's `motion.transition.move`, which today points plain on-screen moves at a spatial spring (conflict under STD-springs-gestures-01).
+- **Token encoding:** timing motion as `$type: transition` {duration, delay, timingFunction}; springs as a number group in `$extensions` (DC-L19-88); each motion token states which driver it uses [inferred].
+- **Platform notes:**
+  - Web: walk down CSS transition, `@starting-style`, CSS animation, WAAPI, then Motion (springs, layout, exit and gesture values) and stop at the first that fits [S-L19-018]. A spring pre-sampled into CSS `linear()` is a fixed-duration curve and cannot take a release velocity (conflict recorded under STD-springs-gestures-16) [inferred].
+  - React Native: Reanimated CSS transitions for state changes; a shared value with `Gesture.Pan()` for anything a finger touches [S-L19-016].
+  - SwiftUI: start the animation in the synchronous callback, on the event's frame [S-L19-034].
+- **Accessibility constraints:** Never block input during a transition. Under reduced motion, springs become cross-fades (DC-L19-92).
+- **Default + heuristic:** Use a spring if a finger was involved and timing for everything else [S-L19-016]. The web house sources add two more spring cases: decorative mouse-tracking values go through a spring (`useSpring`, STD-springs-gestures-45), and so may an element meant to feel alive, such as a Dynamic Island-style morph [S-L19-018] [S-L19-023]. Anything that can fire twice in a second uses transitions, not keyframes. Nothing locks input.
+- **Evidence:** [S-L19-006] [S-L19-016] [S-L19-018] [S-L19-019] [S-L19-020] [S-L19-023] [S-L19-033] [S-L19-034]; compared with DC-L04-19, DC-L04-22, DC-L04-24.
+- **Maps to:**
+  - Q-motion-04 show-if: from "Q-motion-01 is two-mode or springs" to "Q-plat-03 includes `touch`, or the product has any drag or swipe (DC-L19-97)", because springs follow the finger, not the personality.
+  - Q-motion-02 default text: "never blocks input longer than about 100ms" becomes "never blocks input".
+  - Q-motion-01: option `springs` reworded as described in DC-L19-82.
+  - Visual sample: toasts added quickly with keyframes against transitions [S-L19-006]; a sheet grabbed while it closes and following the finger.
+- **Impact now / as it grows:**
+  - Springs for touch, timing elsewhere: now, a JS spring library only where gestures exist. As it grows, new gesture components reuse the same spring presets and stay interruptible.
+  - Springs throughout: now, one model. As it grows, a JS dependency on every surface and plain moves that overshoot.
+  - Timing only: now, cheapest. As it grows, adding a draggable sheet later means introducing springs anyway.
+- **Standards:** STD-springs-gestures-01, STD-springs-gestures-12, STD-springs-gestures-13, STD-springs-gestures-14, STD-springs-gestures-15, STD-springs-gestures-16, STD-springs-gestures-45, STD-performance-properties-13, STD-performance-properties-15, STD-swift-45.
+
+### DC-L19-88: Spring parameters and presets
+- **Block path:** Foundations > Motion > Springs
+- **Questions the designer answers:** How should springs be described: bounce and duration, damping and response, or physics numbers? How much bounce is allowed, and when? Which presets exist?
+- **Options:**
+  - **Damping ratio and response (Apple's designer parameters; house).** Default settle 1.0 with a response of 0.3-0.4s (move or reposition 1.0 / 0.4); about 0.8 only after a flick; sheet or drawer 0.8 / 0.3; rotation 0.8 / 0.4; a dismissal that must stop at a hard edge stays at 1.0 with overshoot clamping [S-L19-020] [S-L19-015] [S-L19-016]. Motion mapping: `{ type: 'spring', bounce: 0, duration: 0.4 }`, and bounce 0.2 after a flick [S-L19-020]; the web drag settle recipe is `{ duration: 0.5, bounce: 0.2 }` [S-L19-017]. Reanimated: `{ duration: 400, dampingRatio: 1 }` and so on [S-L19-016].
+  - **Duration and bounce (current Q-motion-04 `apple-bounce`: 0, 0.15, 0.3).** Close; differs in that the house recommends 0.2 and allows 0.1-0.3, and only after momentum or at playful moments [S-L19-033].
+  - **Mass, stiffness and damping.** `{ mass: 1, stiffness: 100, damping: 10 }` when more control is needed [S-L19-018] [S-L19-033]. Kole's Figma springs are in this form: a hover name tag at 500ms, stiffness 636, damping 24 [S-L19-079] and a spinner at stiffness 550, damping 40 [S-L19-059] (single-video values). With mass 1 the name tag works out to a damping ratio of about 0.48 [inferred], a visible bounce on a pop-up with no gesture behind it. The house's own physics example (mass 1, stiffness 100, damping 10) works out the same way to 0.5 [inferred], and the same stiffness and damping drive its decorative mouse-tracking example [S-L19-023], so STD-springs-gestures-05 permits this much bounce only as a deliberately playful or decorative moment, never on an everyday pop-up [inferred].
+  - **Material spatial and effects springs with energy-driven damping (current DC-L04-22 default and levers).** Stores damping ratio and stiffness; lets spatial hero motion overshoot, and the `energy` dial under-damps every spatial spring above 33. Differs: overshoot only after momentum.
+- **Visual effect:** Damping 1.0 settles smoothly with no overshoot; 0.8 overshoots slightly, like a thrown object; about 0.5 bounces visibly and reads as gimmicky on everyday UI [inferred].
+- **Depends on (upstream):** DC-L19-87; DC-L19-82 (playful may use the top of 0.1-0.3).
+- **Affects (downstream):** `motion.spring.*` tokens; sheets, drawers, carousels, picture-in-picture style moves, rotating elements.
+- **Token encoding:** DTCG has no spring type (DC-L04-22). Store the designer parameters as a number group in `$extensions`: `motion.spring.settle` {dampingRatio 1.0, response 0.4}, `motion.spring.momentum` {0.8, 0.4}, `motion.spring.sheet` {0.8, 0.3}, `motion.spring.rotate` {0.8, 0.4}, `motion.spring.dismiss` {1.0, 0.3, clamp true}; derive stiffness for Compose and bounce for SwiftUI and Motion at export [inferred].
+- **Platform notes:** Reanimated takes `duration` and `dampingRatio`, never mass, stiffness and damping [S-L19-016]; Motion takes bounce and duration [S-L19-020]; Compose needs stiffness, derived at export [inferred].
+- **Accessibility constraints:** Reduced motion drops springs and overshoot in favour of a cross-fade.
+- **Default + heuristic:** Four presets plus a clamped dismiss, as above. Rule of thumb: bounce only when a finger threw it; nothing that appears on its own overshoots. Differs from DC-L04-22 (stiffness stored, energy-driven damping, under-damped hero moves) and from Q-motion-04's 0.15 step.
+- **Evidence:** [S-L19-015] [S-L19-016] [S-L19-017] [S-L19-018] [S-L19-020] [S-L19-023] [S-L19-033] [S-L19-059] [S-L19-079]; compared with DC-L04-22, DC-L07-14, DC-L09-06.
+- **Maps to:**
+  - Q-motion-04: new default "damping ratio and response, four presets (settle 1.0/0.4, momentum 0.8/0.4, sheet 0.8/0.3, rotate 0.8/0.4) plus a clamped dismiss", because these are the values Apple ships and the house locks.
+  - Q-motion-04 option `apple-bounce`: values become 0 and 0.2 (range 0.1-0.3). Option `spatial-effects`: add "moves never overshoot unless a gesture carried momentum".
+  - Visual sample: one drag released three ways, 1.0, 0.8 and about 0.5, with the release velocity carried in [S-L19-020]; a sheet dismissed with a clamped spring beside one snapping back.
+- **Impact now / as it grows:**
+  - Damping and response presets: now, five named springs. As it grows, every new gesture reuses a preset and exports cleanly to each platform.
+  - Duration and bounce: now, easy to read. As it grows, fine if the bounce range stays 0.1-0.3.
+  - Physics numbers: now, maximum control. As it grows, hard to review; teams drift into bouncy values [inferred].
+  - Energy-driven damping: now, one dial. As it grows, raising energy makes every plain move bounce.
+- **Standards:** STD-springs-gestures-02, STD-springs-gestures-04, STD-springs-gestures-05, STD-springs-gestures-06, STD-springs-gestures-07, STD-springs-gestures-08, STD-springs-gestures-09, STD-springs-gestures-10, STD-springs-gestures-45, STD-mobile-touch-51, STD-accessibility-motion-02.
+
+### DC-L19-89: How things appear and leave
+- **Block path:** Foundations > Motion > Enter and exit
+- **Questions the designer answers:** Do menus and popups grow out of the button that opened them? Do things only fade, or also scale or slide a little? Do they leave the way they came?
+- **Options:**
+  - **Scale and fade from the trigger (house recipes).** Dropdowns, popovers, menus and selects: opacity 0 plus scale(0.95) from the trigger's transform origin, 200ms ease-out; tooltips scale(0.97), 125ms; modals centered, scale(0.96), 250ms, with the backdrop fading on the same timing [S-L19-017]. Never from scale(0), which looks like it comes out of nowhere; start at 0.9 or more, like a deflated balloon that still has a shape [S-L19-003] [S-L19-004]. Leave along the same path: a toast that enters from the bottom leaves through the bottom [S-L19-012].
+  - **A small slide plus fade (practitioner, Figma prototypes and a marketing page).** A hidden menu placed a couple of pixels lower so it slides up as it fades in [S-L19-059]; a hover name tag rising from slightly lower at opacity 0 [S-L19-079]; decorative marketing elements entering in a way that suits them (a star that rotates and pops, a balloon that flies in) [S-L19-063]. This agrees with the house rule that entrances carry a small transform [inferred].
+  - **Plain fade (current Q-motion-06 option `fade`: "Fade for in-screen enter and exit").** Differs: the house forbids opacity-only entrances except a modal's backdrop and the reduced-motion variant, and DC-L04-23 itself records Material's pattern as fade plus scale. Kole calls a plain fade-in "robotic" for decorative elements on a landing page [S-L19-063].
+  - **Slide by the element's own size** for toasts, drawers and sheets, written as a percentage such as translateY(100%) [S-L19-023] [S-L19-033].
+  - **Clip-path reveal** for images and reveals: inset(0 0 100% 0) to inset(0 0 0 0) on the ease-in-out curve, with no layout shift [S-L19-010].
+- **Visual effect:** Scaling from the trigger makes the panel look like it came out of what was clicked; center-origin popovers look wrong, most of all at the top right [S-L19-003]. scale(0) pops from nothing; a plain fade looks flat.
+- **Depends on (upstream):** DC-L19-85, DC-L19-86; the component primitives (Base UI and Radix expose the trigger origin as a CSS variable).
+- **Affects (downstream):** popover, dropdown, menu, select, tooltip, modal and backdrop, toast, drawer, accordion (height and opacity 200ms), image reveals.
+- **Token encoding:** component recipe tokens, for example `popover.motion.enter` = `$type: transition` {200ms, 0ms, [0.23, 1, 0.32, 1]} with `popover.motion.from-scale` = `$type: number` 0.95; `tooltip.motion.from-scale` 0.97; `modal.motion.from-scale` 0.96 [values from S-L19-017; names inferred]. Transform origin is a CSS convention, not a token.
+- **Platform notes:** React Native uses Reanimated layout animations (`entering`, `exiting`) and percentage translates for sheets [S-L19-016]; the web uses `@starting-style` with a mounted-flag fallback [S-L19-023].
+- **Accessibility constraints:** Reduced motion keeps the opacity and drops the scale and slide (DC-L19-92).
+- **Default + heuristic:** The house recipe set. Rule of thumb: everything that enters gets opacity 0 plus a small transform; anything anchored to a trigger grows from it; modals grow from the center; everything leaves the way it came.
+- **Evidence:** [S-L19-003] [S-L19-004] [S-L19-010] [S-L19-012] [S-L19-016] [S-L19-017] [S-L19-023] [S-L19-033] [S-L19-059] [S-L19-063] [S-L19-079]; compared with DC-L04-23.
+- **Maps to:**
+  - Q-motion-06 option `fade`: reword to "fade plus scale from the trigger for menus and popovers (0.95, 200ms), tooltips (0.97, 125ms), centered dialogs (0.96, 250ms)".
+  - Visual sample: the "Options" element entering from scale(0) and from 0.93 [S-L19-003]; the feedback popover toggled between center and trigger origin [S-L19-003]; a menu sliding up a couple of pixels as it fades in [S-L19-059].
+- **Impact now / as it grows:**
+  - Scale from the trigger: now, needs primitives that expose the origin. As it grows, every new anchored overlay looks connected to its trigger for free.
+  - Small slide plus fade: now, simple in Figma prototypes. As it grows, fine if the distance stays small and the path is the exit path.
+  - Plain fade: now, cheapest. As it grows, every overlay reads flat and each becomes a review finding.
+- **Standards:** STD-enter-exit-origin-01, STD-enter-exit-origin-02, STD-enter-exit-origin-03, STD-enter-exit-origin-04, STD-enter-exit-origin-06, STD-enter-exit-origin-08, STD-enter-exit-origin-09, STD-enter-exit-origin-11, STD-enter-exit-origin-12, STD-enter-exit-origin-16, STD-enter-exit-origin-17, STD-enter-exit-origin-21, STD-enter-exit-origin-23, STD-enter-exit-origin-26, STD-enter-exit-origin-38.
+
+### DC-L19-90: Screen and page transitions
+- **Block path:** Patterns > Navigation > Screen transitions
+- **Questions the designer answers:** When people move between screens or tabs, does anything move? Who owns it on iOS and Android? Should an item grow into its own detail page?
+- **Options:**
+  - **Platform-owned.** The native stack at the platform default (iOS push 350ms); a modal for a self-contained task people can abandon; a form sheet with detents for a short interruption; the back swipe mirrors any custom animation [S-L19-016] [S-L19-015]. Agrees with DC-L10-14 on screens; DC-L10-14's "shared brand motion for in-content micro-interactions (as springs)" differs, because springs are only for motion a finger drives (STD-springs-gestures-01).
+  - **No animation for tabs and core navigation.** Tab switches never slide or fade (Expo `animation: 'none'`) [S-L19-016]; core navigation is in the 100+ a day tier [S-L19-024].
+  - **Continuity (shared element, container transform).** A card that expands into a page, an image that zooms into the next page's hero, transitions that follow the swipe's direction [S-L19-035] (Kole calls the plain slide "lame": opinion); the vocabulary names shared-element, continuity and direction-aware transitions [S-L19-019]; a mega menu that stays open and slides its content [S-L19-072].
+  - **Direction carries meaning.** Sliding up from the bottom means temporary; a screen sliding in from the left shows progress, as in onboarding [S-L19-084] (single video; consistent with the shared-axis pattern in DC-L04-23 [inferred]).
+  - **Material's four patterns including fade-through for tabs (current Q-motion-06 default "all four plus stagger", DC-L04-23).** Differs: fade-through between tabs breaks STD-when-to-animate-14.
+  - **Custom swipe back with the background moving in from about 35%** [S-L19-053] (single-video number); relevant only to custom or web builds, since native back stays with the OS [inferred].
+- **Visual effect:** Native transitions feel at home and keep the back gesture. Continuity keeps people oriented. Animated tabs feel slow when used all day.
+- **Depends on (upstream):** DC-L19-81, Q-plat-01, Q-plat-08, Q-motion-09.
+- **Affects (downstream):** router configuration, the tab bar, detail pages, onboarding flows, web view transitions.
+- **Token encoding:** none for native screens (delegated to the OS). Web: one `motion.transition.navigate` transition for occasional drill-ins only [inferred]; tabs have none.
+- **Platform notes:** Android predictive back and iOS swipe-back stay native (DC-L10-14). On the web, a view transition morphs between states and connects shared elements [S-L19-019].
+- **Accessibility constraints:** Under reduced motion, native stacks switch to `animation: 'fade'` [S-L19-015] and spatial transitions become fades.
+- **Default + heuristic:** Platform default on native, configured through native stack options and never rebuilt in JavaScript; no animation on tab switches and core navigation; on the web, a continuity transition only for occasional drill-ins (card to detail) and onboarding, while on native the same idea stays inside one screen (a card expanding in place) [inferred]; forward moves sideways, temporary things come from the bottom [inferred from S-L19-084 and DC-L04-23].
+- **Evidence:** [S-L19-015] [S-L19-016] [S-L19-019] [S-L19-024] [S-L19-035] [S-L19-053] [S-L19-072] [S-L19-084]; compared with DC-L04-23, DC-L10-14.
+- **Maps to:**
+  - Q-motion-06: new default "platform transitions for screens (native stack on iOS and Android), none for tabs and core navigation, container transform for occasional drill-ins on the web, shared axis x for onboarding; no fade-through between tabs", because tab switches are an all-day action and native screen transitions stay with the platform.
+  - Q-motion-09: keeps default `os-nav-brand-micro`, with its label "small brand springs inside content" reworded to "small brand micro-motion inside content, on springs only where a finger drives it" (STD-springs-gestures-01); DC-L19-98 adds the haptic map to the same default.
+  - Visual sample: an image zooming into the next page's hero against a plain page slide [S-L19-035]; a mega menu closing and reopening against sliding [S-L19-072]; a tab switch that is instant.
+- **Impact now / as it grows:**
+  - Platform-owned: now, nothing to build. As it grows, new OS behaviour (such as predictive back) arrives for free.
+  - None for tabs: now, instant. As it grows, stays fast as tabs are added.
+  - Continuity: now, extra build per drill-in. As it grows, each new detail page needs a matching shared element, so keep it to a few patterns [inferred].
+  - Fade-through for tabs: now, looks polished in a demo. As it grows, slows the most-used navigation.
+- **Standards:** STD-when-to-animate-05, STD-when-to-animate-14, STD-mobile-touch-42, STD-mobile-touch-44, STD-accessibility-motion-04, STD-easing-duration-06, STD-springs-gestures-01.
+
+### DC-L19-91: Stagger for groups of items
+- **Block path:** Foundations > Motion > Stagger
+- **Questions the designer answers:** When a group of items appears, do they come in one after another? How far apart? Which lists skip it?
+- **Options:**
+  - **30-80ms per item, only for groups seen occasionally (house).** Web recipe: each item from opacity 0 and translateY(8px) over 300ms ease-out, delays 0, 50, 100 and 150ms [S-L19-017] [S-L19-033]; React Native: `FadeInDown.duration(250).delay(index * 40)` [S-L19-015]. Never blocks interaction; no entrance on lists people scroll past all day; never on rows of a virtualized list.
+  - **20-50ms per item, total at most 500ms (current Q-motion-06 option, DC-L04-23; Carbon 20ms).** Differs: 20-29ms is below the house floor and there is no condition on how often the list is seen.
+  - **Longer marketing staggers (single videos).** Navbar items 0.2s apart, 0.6s each [S-L19-071]; phone screens sliding up one after another on load [S-L19-085]; scroll-highlighted lines filling one after another [S-L19-069]. Marketing or illustrative motion, outside the UI range.
+  - **Steps revealed as work progresses (practitioner, product UI).** An AI research trail whose three steps fade in one by one [S-L19-055] (no timing given). Each step shows real progress, so it is state indication paced by the work rather than a decorative stagger [inferred].
+  - **No stagger.** The group appears together.
+- **Visual effect:** A short stagger reads as a natural cascade; a long one feels slow; an entrance on an all-day list gets in the way.
+- **Depends on (upstream):** DC-L19-81, DC-L19-86.
+- **Affects (downstream):** lists, grids, search results, a dashboard's first load, onboarding.
+- **Token encoding:** `motion.stagger.step` = `$type: duration` 50ms (40ms in React Native); `motion.stagger.item` = `$type: transition` {300ms, 0ms, [0.23, 1, 0.32, 1]} [values from S-L19-017 and S-L19-015; names inferred].
+- **Platform notes:** React Native defines layout-animation builders at module scope or in `useMemo` [S-L19-016].
+- **Accessibility constraints:** Under reduced motion the translate goes and the opacity stays, or the items appear together [inferred from STD-accessibility-motion-02]; input is never blocked.
+- **Default + heuristic:** 50ms on the web and 40ms in React Native, only for occasionally seen groups and for results the person asked for and is waiting on. Rule of thumb: if they scroll past it all day, it should already be there.
+- **Evidence:** [S-L19-015] [S-L19-016] [S-L19-017] [S-L19-033] [S-L19-055] [S-L19-069] [S-L19-071] [S-L19-085]; compared with DC-L04-23.
+- **Maps to:**
+  - Q-motion-06 option `stagger`: "30-80ms per item (50 web, 40 React Native), only on occasionally seen lists and awaited results, never on all-day or virtualized lists" replaces "20-50ms, total at most 500ms".
+  - Visual sample: the same search results entering all at once, at 50ms and at 150ms steps [inferred].
+- **Impact now / as it grows:**
+  - 30-80ms, occasional only: now, one token. As it grows, lists that become all-day surfaces must lose their stagger, so tier lists in the inventory (DC-L19-81).
+  - 20-50ms, total 500ms: now, similar feel. As it grows, all-day lists keep entrances and long lists hit the total cap unevenly [inferred].
+  - Marketing staggers: now, dramatic load. As it grows, long sequences delay content on every visit.
+  - None: now, simplest. As it grows, awaited content can pop in abruptly.
+- **Standards:** STD-when-to-animate-13, STD-enter-exit-origin-13, STD-enter-exit-origin-33, STD-enter-exit-origin-35, STD-springs-gestures-13, STD-performance-properties-20.
+
+### DC-L19-92: What reduced motion does
+- **Block path:** Foundations > Motion > Reduced motion
+- **Questions the designer answers:** When someone turns on reduced motion, what replaces movement? Does anything still animate? Is it built with each animation or added later?
+- **Options:**
+  - **Replace, gentler not zero (house).** Drop translation, scale, slides, springs, parallax and overshoot; keep the opacity and color changes that explain a state change; use a 200ms `ease` cross-fade (sheet: opacity 200ms ease, transform none) [S-L19-020] [S-L19-018] [S-L19-016]; native stacks fade [S-L19-015]; in JS, branch the values (`closedX = reduce ? 0 : '-100%'`) [S-L19-033]; ship it in the same change as the animation and check it by toggling the setting in DevTools [S-L19-026].
+  - **Remove all non-essential motion (current `remove`, WCAG 2.3.3 AAA).** The engine maps it to 0ms feedback, enter, exit and expand transitions. Differs: the house rejects zero motion.
+  - **A static jump for small elements.** The prototype picker's highlight simply has no transition under reduced motion [S-L19-030], which the house wording allows as "a static transition" [inferred].
+  - **Per-device budgets (DC-L14-08) and an in-app switch (Fluent in DC-L04-25; Q-aud-04).** Not covered by the L19 sources.
+  - **Looping decoration with a pause control.** A shimmer with a pause and play button [S-L19-079] (single video; added because its uneven speed may bother some people, not framed as a reduced-motion measure).
+- **Visual effect:** Replacing keeps the product polished (cross-fades) instead of broken (jumps); zero motion loses the fades that explain what changed.
+- **Depends on (upstream):** every other motion decision.
+- **Affects (downstream):** every animated component, screen transitions, springs, stagger, parallax, loaders and shimmer, marketing scroll effects.
+- **Token encoding:** a `reduced` mode of the motion collection in which transitions alias `motion.transition.crossfade` = `$type: transition` {200ms, 0ms, [0.25, 0.1, 0.25, 1]} and spatial values resolve to no movement [inferred mode structure; values from S-L19-020]. Differs from today's engine, which emits 100ms on the standard curve (conflict under STD-accessibility-motion-02).
+- **Platform notes:** Web `@media (prefers-reduced-motion: reduce)`; React `useReducedMotion()`; Reanimated `ReduceMotion.System`; native stack `animation: 'fade'` [S-L19-016] [S-L19-015].
+- **Accessibility constraints:** DC-L04-25 treats WCAG 2.3.3 as a requirement; keeping fades is compatible, because WCAG's definition of motion animation leaves out opacity and color (as DC-L04-25 records) [inferred link]. No full-viewport moving backgrounds; no slow loops near 0.2 Hz.
+- **Default + heuristic:** `replace`, with a 200ms `ease` cross-fade, shipped with each animation. Rule of thumb: remove travel, keep meaning.
+- **Evidence:** [S-L19-015] [S-L19-016] [S-L19-018] [S-L19-020] [S-L19-026] [S-L19-030] [S-L19-033] [S-L19-079]; compared with DC-L04-25, DC-L10-16, DC-L14-08.
+- **Maps to:**
+  - Q-motion-07: confirms default `replace`, adding "cross-fade 200ms `ease`, shipped with every animation".
+  - Q-motion-07 option `remove`: reword to "remove every movement, keep fades and color feedback", or retire it, because zero motion is rejected.
+  - Q-motion-10: confirms default (all device settings; reduced transparency and increased contrast handled as separate signals).
+  - Visual sample: a sheet sliding up, then fading in over 200ms with no movement under reduced motion [S-L19-020]; a native push next to its fade [S-L19-015].
+- **Impact now / as it grows:**
+  - Replace: now, a second variant per animation. As it grows, the variant ships with each new animation, so there is no backlog.
+  - Remove to zero: now, the least work. As it grows, people with the setting on lose state feedback everywhere and each surface becomes a review finding.
+  - Static jump: now, fine for small highlights. As it grows, large elements that jump feel broken [inferred].
+- **Standards:** STD-accessibility-motion-01, STD-accessibility-motion-02, STD-accessibility-motion-03, STD-accessibility-motion-04, STD-accessibility-motion-05, STD-accessibility-motion-06, STD-accessibility-motion-07, STD-accessibility-motion-08.
+
+### DC-L19-93: Press feedback
+- **Block path:** Components > States > Press feedback
+- **Questions the designer answers:** Should buttons and other tappable things shrink a little when pressed? How fast? A tint, a scale, or both?
+- **Options:**
+  - **Scale to 0.97 while pressed (house).** The whole element, label and icons included; 100-160ms ease-out on the web (recipe 160ms; the mobile-web sample uses 100ms with a background change); 120ms `cubic-bezier(0.23, 1, 0.32, 1)` in React Native with hitSlop 12; subtle range 0.95-0.98 [S-L19-003] [S-L19-017] [S-L19-028] [S-L19-015] [S-L19-020]. It fires on press-down (`:active` or `pointerdown`), never only on click [S-L19-028].
+  - **Practitioner versions.** A button that gets smaller when clicked, with its label sliding up in a mask on hover [S-L19-079]; buttons should almost always get a small animation [S-L19-054] (agrees for press); gray the button out on press when the next screen takes a moment, and add a spinner for long waits [S-L19-045].
+  - **Tint overlay only (current Q-state-04 default, Material state layers, DC-L08-09).** Not a conflict on its own, but nothing generated scales a pressed control (recorded under STD-mobile-touch-05); tint and scale can coexist [inferred].
+  - **Android ripple.** Only in a Material-styled app; otherwise the same scale on both platforms is more coherent [S-L19-016].
+- **Visual effect:** The press scale makes the interface feel as if it is listening [S-L19-003]; with no press effect the interface feels less responsive.
+- **Depends on (upstream):** Q-state-04, DC-L19-85, Q-plat-01.
+- **Affects (downstream):** Button, IconButton, chips, list rows, link cards, tabs.
+- **Token encoding:** `motion.press.scale` = `$type: number` 0.97; `motion.transition.press` = `$type: transition` {160ms, 0ms, [0.23, 1, 0.32, 1]} (120ms on native) [values from sources; names inferred].
+- **Platform notes:** `:active` works for every input type on the web; React Native uses Pressable with a Reanimated CSS transition; Android ripple only for Material apps [S-L19-016].
+- **Accessibility constraints:** Press feedback is not hover, so it is never gated behind the fine-pointer query. Under reduced motion, STD-accessibility-motion-02 lists scale among the movements to remove, so the reduced variant keeps the tint and drops the scale [inferred reading].
+- **Default + heuristic:** Tint plus a 0.97 scale on every pressable. Rule of thumb: respond the instant the finger lands, within 160ms.
+- **Evidence:** [S-L19-003] [S-L19-015] [S-L19-016] [S-L19-017] [S-L19-020] [S-L19-028] [S-L19-045] [S-L19-054] [S-L19-079]; compared with DC-L08-09, DC-L13-01.
+- **Maps to:**
+  - Q-state-04: new default adds "plus a press scale of 0.97 over 100-160ms ease-out on every pressable, alongside the tint".
+  - Q-state-02: new heuristic "press feedback on press-down at every level".
+  - Visual sample: the two "Paste" buttons, with and without the press scale [S-L19-003].
+- **Impact now / as it grows:**
+  - Scale plus tint: now, one token and one CSS rule per pressable base. As it grows, every new component inherits it through the shared base [inferred].
+  - Tint only: now, what Material ships. As it grows, controls feel flat next to native apps, and adding scale later touches every component.
+  - Ripple: now, native on Android. As it grows, two feedback styles to maintain across platforms.
+- **Standards:** STD-mobile-touch-05, STD-components-toasts-drawers-72, STD-when-to-animate-07, STD-accessibility-motion-15, STD-easing-duration-07.
+
+### DC-L19-94: Hover motion
+- **Block path:** Components > States > Hover motion
+- **Questions the designer answers:** Should things move when the pointer rests on them, or only change color? Everywhere, or only on the marketing site? What happens on touch screens?
+- **Options:**
+  - **Color only, or nothing, in product UI.** Things hovered tens of times a day lose the animation or the hover itself [S-L19-003] [S-L19-012]; a text and background color change reads as cool but professional (quitenice.com) [S-L19-069]. Color changes run on `ease` (DC-L19-85).
+  - **Subtle reveals.** An arrow that fades in to show a whole card is a link [S-L19-075]; secondary actions revealed on hover with a tooltip [S-L19-056]; an icon label sliding in slightly [S-L19-059]; on dashboards, chart hover that shows the value in a bubble or dims the other bars [S-L19-047]. Kole calls chart hover the place a dashboard can "get a little more creative" [S-L19-047]; the house keeps decorative motion off functional charts (STD-when-to-animate-11), so only hover states that help people read the data belong there [inferred].
+  - **Rich hover (marketing).** A masked label slide with a morphing circle [S-L19-069]; an image zooming out while the call to action pops up and the accent color appears only on hover [S-L19-065]; blur, enlarge and reveal text on image cards (Accenture-style) [S-L19-082]; small hover interactions on almost everything [S-L19-063]. Kole's own limit: keep them simple and well built, "don't go overboard" [S-L19-066].
+- **Visual effect:** Color only feels calm and professional; subtle reveals make secondary actions findable without clutter; rich hovers feel premium on a page visited once and distracting on a screen used daily.
+- **Depends on (upstream):** DC-L19-81, DC-L19-84, Q-plat-03 (pointer or touch), Q-state-04.
+- **Affects (downstream):** buttons, cards, list rows, sidebar links, charts, marketing cards.
+- **Token encoding:** `motion.transition.hover` = `$type: transition` {150ms, 0ms, `ease`} [the 150ms is inferred from the tens-per-day tier and the picker's 150ms color change in S-L19-030; that change runs on ease-out, and the picker calls its own styling harness chrome rather than a design decision, so it is a weak anchor].
+- **Platform notes:** Every `:hover` rule sits inside `@media (hover: hover) and (pointer: fine)`; touch gets `:active` instead, otherwise a tapped element stays in its hover state [S-L19-028]. Mouse-following effects need a phone and tablet fallback [S-L19-069].
+- **Accessibility constraints:** Hover content must be dismissible and persistent (WCAG 1.4.13, already in Q-state-04's use/avoid); anything revealed on hover also needs keyboard and touch access [inferred]. Hover never carries the only signal.
+- **Default + heuristic:** Product UI: color on `ease`, and subtle reveals only for secondary actions; rich hovers only on marketing surfaces. Rule of thumb: the more often it is hovered, the less it moves; if a hover flickers, animate a child instead of the hovered parent.
+- **Evidence:** [S-L19-003] [S-L19-011] [S-L19-012] [S-L19-028] [S-L19-030] [S-L19-047] [S-L19-056] [S-L19-059] [S-L19-063] [S-L19-065] [S-L19-066] [S-L19-069] [S-L19-075] [S-L19-082]; compared with DC-L08-09, DC-L14-06.
+- **Maps to:**
+  - Q-state-04 use/avoid: new heuristic "hover motion only on fine pointers; product UI uses color change or a subtle reveal; moving hovers only on marketing pages".
+  - Visual sample: the same card with a color-only hover, an arrow fade-in [S-L19-075] and an image-zoom hover [S-L19-065], with a label saying where each belongs; and the "Train Your Judgement" exercise on Emil Kowalski's site that compares two hover treatments on an options list meant for frequent use [S-L19-011].
+- **Impact now / as it grows:**
+  - Color only: now, cheapest and calm. As it grows, stays fast on every new list and table.
+  - Subtle reveals: now, cleaner layouts. As it grows, hidden actions need touch and keyboard paths for each new component.
+  - Rich hover: now, a premium marketing page. As it grows, it spreads into product UI unless the surface rule is written down.
+- **Standards:** STD-when-to-animate-07, STD-when-to-animate-11, STD-accessibility-motion-15, STD-easing-duration-01, STD-performance-properties-24.
+
+### DC-L19-95: Confirmation and loading motion
+- **Block path:** Patterns > Feedback > Action confirmation and loading motion
+- **Questions the designer answers:** How does the product show that an action worked? What moves while people wait? How fast do loaders move?
+- **Options:**
+  - **An immediate state change.** A filled save icon and a red dot on the tab where the item went [S-L19-045]; for keyboard shortcuts, an instant state change with no animation (house), which the macOS video accepts as the minimum [S-L19-067].
+  - **A small confirming motion where the result is not visible.** A chip sliding up after the copy button [S-L19-052]; a check mark sliding in through a mask after the spinner [S-L19-059]; a quick-save window that collapses into a toast and slides away while the save continues in the background [S-L19-067], although in that video the collapse is triggered by the Enter key, and keyboard-initiated actions never animate under STD-when-to-animate-06, so only its background save (optimistic UI) carries over. Every interaction gets a response [S-L19-052], which Emil also asks for [S-L19-003].
+  - **Loaders.** Spinners spin fast, because a faster spinner makes loading seem quicker [S-L19-003]; constant motion is linear; AI loaders are short, looping and fluid (Notion AI's dots, Claude's star) [S-L19-055]; skeletons shimmer and the content slots exactly into place [S-L19-055]; a pressed button grays out and shows a spinner for long waits [S-L19-045]; a loading toast turns into success or error in place [S-L19-022].
+  - **Optimistic UI.** A deleted email disappears before the server confirms (Gmail, Apple Mail) [S-L19-047] [S-L19-067].
+  - **Celebration.** Particles on a success toast [S-L19-079]; only at rare moments (DC-L19-83).
+- **Visual effect:** People see that something happened; a fast spinner feels like faster work; a shimmer makes the layout feel alive.
+- **Depends on (upstream):** DC-L13-01 (the loading thresholds), DC-L19-81, DC-L19-83, Q-form-04.
+- **Affects (downstream):** the button's loading state, Spinner, Skeleton, Toast (promise), copy buttons, save actions, streamed AI output.
+- **Token encoding:** spinners and progress use `motion.easing.linear`; the sources give no spin period, only "fast" [gap]; the confirming motion reuses the enter recipe (DC-L19-89) [inferred].
+- **Platform notes:** On phones, success and error pair with a notification haptic (DC-L19-98).
+- **Accessibility constraints:** Shimmer and looping loaders honor reduced motion; announce busy and done states to screen readers (DC-L13-01) [inferred]; no slow 0.2 Hz loops.
+- **Default + heuristic:** Respond within 50ms (DC-L13-01) with a state change first; add a small confirming motion only where the result is off-screen or invisible (copy, save elsewhere); a fast, linear spinner in the pressed button for waits; a skeleton shimmer for region loads; celebration only for rare successes.
+- **Evidence:** [S-L19-003] [S-L19-022] [S-L19-045] [S-L19-047] [S-L19-052] [S-L19-055] [S-L19-059] [S-L19-067] [S-L19-079]; compared with DC-L13-01, DC-L08-12.
+- **Maps to:**
+  - Q-state-08: new heuristic "spinners spin fast and linear; shimmer honors reduced motion; AI loaders are short and looping".
+  - Q-form-04: new option note "in-place confirmation motion (a chip sliding up) when the result is not visible".
+  - Visual sample: two spinners at different speeds loading the same data [S-L19-003]; the copy chip [S-L19-052]; the check mark sliding in [S-L19-059].
+- **Impact now / as it grows:**
+  - State change only: now, cheapest. As it grows, invisible results (copy, background save) leave people unsure.
+  - Confirming motion: now, a handful of small recipes. As it grows, reuse one recipe so confirmations look the same everywhere [inferred].
+  - Fast loaders and skeletons: now, feel faster at no load-time cost. As it grows, skeletons must track layout changes.
+  - Optimistic UI: now, feels instant. As it grows, needs a visible rollback for failures (DC-L13-01).
+- **Standards:** STD-easing-duration-01, STD-easing-duration-15, STD-when-to-animate-03, STD-when-to-animate-06, STD-when-to-animate-09, STD-components-toasts-drawers-72, STD-accessibility-motion-01, STD-accessibility-motion-08, STD-springs-gestures-59.
+
+### DC-L19-96: Performance budget and the device that proves it
+- **Block path:** Foundations > Motion > Performance budget
+- **Questions the designer answers:** What is the slowest phone and computer this must feel smooth on? Which effects are too heavy (big blur, 3D, video)? What frame rate counts as smooth?
+- **Options:**
+  - **A frame budget.** 60fps is the baseline and 120fps where the display supports it [S-L19-019]; dropped frames fail review; Expo lifts the 60fps cap on ProMotion iPhones with `CADisableMinimumFrameDurationOnPhone` [S-L19-016].
+  - **Proof on real hardware.** A phone a few years old, with the keyboard open and once in landscape; Chrome emulation is not proof [S-L19-028]; a physical phone with Safari devtools for drawers [S-L19-005]; a release build on the slowest device [S-L19-016]. The drawer article also accepts the Xcode Simulator [S-L19-005], but the later skills say real hardware is better [S-L19-023] [S-L19-028] and the house standard never counts a simulator as verified (STD-process-review-taste-33).
+  - **Cheap properties only.** Transform and opacity, plus clip-path; animated blur under 20px; in React Native never animate elevation or BlurView intensity [S-L19-013] [S-L19-016].
+  - **A budget for heavy effects (practitioner).** Drop 3D and heavy animation when it slows loading or navigation [S-L19-040]; big or flashy animation slows the site [S-L19-069]; keep morphing-image changes small or the animation stutters [S-L19-050]; a preloader can buy heavy media time to load (one creator's guess about another site) [S-L19-069].
+- **Visual effect:** Smooth motion versus visible jank; heavy blur and 3D look premium on a fast laptop and stutter on a mid-range phone.
+- **Depends on (upstream):** Q-plat-02 (devices), Q-plat-08 (stack), Q-dir-01 (glass and blur), DC-L19-84.
+- **Affects (downstream):** glass materials (animated blur stays under 20px; the engine's 24px glass blur cannot be animated at full value), marketing 3D and video, drag implementations, long lists (virtualize 1,000+ rows), tool choice.
+- **Token encoding:** none (process decision). The device and frame rate can be recorded as strings in `$extensions` for review [inferred].
+- **Platform notes:** Web: per-frame values go to `ref.current.style` or motion values, never React state; drag transforms are set on the moving element, not through a parent CSS variable (lag appeared at about 20 list items) [S-L19-005] [S-L19-013]. React Native: Reanimated worklets on the UI thread, never core Animated. SwiftUI: start on the event's frame [S-L19-034].
+- **Accessibility constraints:** Reduced transparency drops blur altogether; smoothness on low-end devices is part of access [inferred].
+- **Default + heuristic:** 60fps on the slowest device named in the proposed Q-plat-15 (Q-plat-02 names only device classes), 120fps where supported, checked on a release build before motion counts as done. Rule of thumb: if an effect needs a preloader to hide its weight, question the effect [inferred from S-L19-040 and S-L19-069].
+- **Evidence:** [S-L19-005] [S-L19-013] [S-L19-016] [S-L19-019] [S-L19-023] [S-L19-028] [S-L19-034] [S-L19-040] [S-L19-050] [S-L19-069]; compared with DC-L13-01 (INP and RAIL budgets), DC-L14-08.
+- **Maps to:**
+  - Q-plat-02: new follow-up question (proposed Q-plat-15, zoom 2; Q-plat-11 to Q-plat-14 are already proposed in the platforms cards): "Which is the slowest phone and computer this must feel smooth on?" Default: a phone about three years old and a mid-range laptop [inferred default].
+  - Visual sample: the drawer with 20+ items dragged through a parent CSS variable (laggy) and with a direct transform (smooth) [S-L19-005]; a frame-budget graphic, 16ms at 60fps and 8ms at 120fps.
+- **Impact now / as it grows:**
+  - Frame budget plus a named device: now, one test device and a check. As it grows, every new effect is tested against the same device, so the product does not slowly get heavier.
+  - No named device: now, nothing to set up. As it grows, effects that look fine on the designer's laptop ship janky to most users [inferred].
+- **Standards:** STD-performance-properties-01, STD-performance-properties-02, STD-performance-properties-06, STD-performance-properties-10, STD-performance-properties-11, STD-performance-properties-13, STD-performance-properties-16, STD-performance-properties-17, STD-performance-properties-18, STD-performance-properties-19, STD-enter-exit-origin-30, STD-mobile-touch-35, STD-mobile-touch-39, STD-process-review-taste-33.
+
+### DC-L19-97: Gestures: which ones, how they commit, and their visible alternative
+- **Block path:** Patterns > Gestures > Drag, swipe and release
+- **Questions the designer answers:** Which things can be swiped or dragged (sheets, toasts, rows, cards)? Does a quick flick count? Does every gesture also have a button?
+- **Options:**
+  - **Momentum release (house).** Dismiss when the distance passes the threshold or the velocity passes about 0.11 (distance over milliseconds) [S-L19-006] [S-L19-017]; project where a flick would stop (deceleration rate 0.998, or 0.99 for snappier) and snap to the point nearest the projection [S-L19-020]; a sheet dismisses when the projection passes 40% of its height [S-L19-015]; past an edge the element follows with rising resistance (constant 0.55) instead of hitting a wall [S-L19-020] [S-L19-006]; tracking stays 1:1 at the grab offset, with pointer capture and about 10px of movement before the axis locks [S-L19-020] [S-L19-016]; the settle is a spring handed the release velocity (DC-L19-87, DC-L19-88).
+  - **Distance only.** Heavy: a quick short flick does not dismiss [S-L19-006] [S-L19-015].
+  - **Snap points.** Velocity-based by default, so a fast flick can skip a point; sequential (Vaul `snapToSequentialPoint`) when every point matters equally [S-L19-098]; fixed pixels when an input must peek out evenly on every device [S-L19-005]. Vaul is good-to-have and unmaintained: use it as a craft reference.
+  - **A gesture plus a visible alternative (practitioner).** Swipe plus a button or long-press menu, as Gmail offers delete by swipe or by tap [S-L19-035]; teach swipes before relying on them [S-L19-053]; a swipe-to-confirm slider for high-impact or irreversible actions, such as sending an email or buying crypto [S-L19-035] (single video; the house equivalent is hold-to-confirm, 2s linear press and 200ms ease-out release).
+  - **Swipe only.** TikTok's swipe up as the single core action [S-L19-077]; the swipe video keeps a fallback instead [S-L19-035].
+- **Visual effect:** Momentum makes a flick feel like a throw; distance-only feels heavy; hard stops feel like walls; rubber-banding feels physical.
+- **Depends on (upstream):** Q-plat-03 (touch), Q-pattern-01 (sheets), DC-L19-87, DC-L19-88.
+- **Affects (downstream):** sheets and drawers; toasts (the swipe direction follows the toaster's position [S-L19-088]); swipe rows (a built-in swipeable for revealing actions, a custom gesture only for swipe-to-commit [S-L19-015]); carousels (native scroll-snap beats a hand-rolled spring [S-L19-028]); card stacks.
+- **Token encoding:** a gesture group of `$type: number` tokens: `gesture.dismiss.velocity` 0.11, `gesture.dismiss.projection` 0.4 (share of the sheet's height), `gesture.projection.deceleration` 0.998, `gesture.rubberband.constant` 0.55, and `gesture.axis-lock` = `$type: dimension` 10px [values from sources; grouping and names inferred]. DTCG has no gesture type.
+- **Platform notes:** Web: `touch-action` names what the browser keeps (`pan-y` on horizontal carousels, `none` only for gestures that own every axis) [S-L19-028]. React Native: `Gesture.Pan()` with `activeOffsetY([-10, 10])` [S-L19-016]; a native form sheet when the sheet is its own destination [S-L19-015].
+- **Accessibility constraints:** Every drag has a non-drag alternative (WCAG 2.5.7, in DC-L10-15); drawers stay dismissible by outside click and Escape; toasts can show a close button (`closeButton`) [S-L19-092].
+- **Default + heuristic:** The momentum model is locked; every gesture has a visible button or menu that does the same job; sequential snap points only when every point matters. Rule of thumb: a flick should be enough, and a person who never swipes should still get everything done.
+- **Evidence:** [S-L19-005] [S-L19-006] [S-L19-015] [S-L19-016] [S-L19-017] [S-L19-020] [S-L19-021] [S-L19-028] [S-L19-035] [S-L19-053] [S-L19-077] [S-L19-088] [S-L19-092] [S-L19-098]; compared with DC-L10-15, DC-L04-24.
+- **Maps to:**
+  - New question Q-motion-14 (proposed, zoom 3, show if Q-plat-03 includes `touch`): "Which things should people be able to swipe or drag, and which button does the same job?" Default: sheets and toasts swipe to dismiss; sheets also close by a visible control, outside click and Escape; toasts keep Sonner's defaults (dismissible, the Alt+T hotkey that focuses them, auto-close after 4000ms) [S-L19-021] [S-L19-092], with a close button as an option.
+  - Visual sample: Sonner's toast flicked away and dragged the wrong way to feel the friction [S-L19-006]; a drawer where a slow drag returns and a flick closes [S-L19-005]; the projection diagram [S-L19-020]; Vaul sequential snapping [S-L19-098]; a swipe-to-confirm slider next to a button [S-L19-035].
+- **Impact now / as it grows:**
+  - Momentum release: now, a small set of shared gesture numbers. As it grows, every new draggable feels the same and passes review.
+  - Distance only: now, simpler code. As it grows, every sheet feels heavy and gets reworked.
+  - Gesture plus alternative: now, one extra control per gesture. As it grows, new users and assistive technology users are never stuck.
+  - Swipe only: now, the cleanest screen. As it grows, hidden actions are undiscoverable for new users.
+- **Standards:** STD-springs-gestures-17, STD-springs-gestures-18, STD-springs-gestures-19, STD-springs-gestures-20, STD-springs-gestures-21, STD-springs-gestures-22, STD-springs-gestures-23, STD-springs-gestures-24, STD-springs-gestures-25, STD-springs-gestures-26, STD-springs-gestures-28, STD-springs-gestures-30, STD-springs-gestures-34, STD-springs-gestures-39, STD-accessibility-motion-23, STD-accessibility-motion-24, STD-components-toasts-drawers-77, STD-mobile-touch-18, STD-mobile-touch-19.
+
+### DC-L19-98: Haptics for each moment
+- **Block path:** Foundations > Haptics > Moment map
+- **Questions the designer answers:** On phones, which moments vibrate? How many vibrations per action? Can a vibration ever be the only feedback?
+- **Options:**
+  - **A haptic per moment (house).** A selection tick when a value steps (picker, slider detent, segmented control, tab press); a light impact when something snaps home, a sheet detent catches, a drag commits or a pull crosses its refresh threshold; a medium impact for a heavy landing or a destructive action; a success or error notification for outcomes [S-L19-016] [S-L19-015]. Fire on the causal event, in the same frame as the visual, at most once per action, never on scroll, per frame or on an entrance the user did not cause [S-L19-020] [S-L19-016].
+  - **System haptics only (current Q-motion-09 default `haptics-system`, with a semantic map only for products with frequent confirmations).** Standard controls already play theirs (DC-L04-26). Differs: custom interactions (sheets, swipe rows, pull to refresh) then have none.
+  - **About six semantic events (DC-L04-26, `haptics-semantic`).** Close to the house map; confirms "less is more".
+  - **One app-wide intensity from the `energy` dial (levers).** Differs: the source chooses the call by moment, not by a global intensity.
+- **Visual effect:** Felt, not seen: well-placed ticks make detents and commits feel physical; too many train people to ignore them.
+- **Depends on (upstream):** Q-plat-01 (phones), DC-L19-97.
+- **Affects (downstream):** sheets, pull to refresh, pickers, custom tabs, swipe to delete, form outcomes.
+- **Token encoding:** string tokens with platform mapping in `$extensions` (the DC-L04-26 approach): `haptic.step` = "selection", `haptic.snap` = "impact-light", `haptic.heavy` = "impact-medium", `haptic.success` = "notification-success", `haptic.error` = "notification-error" [names inferred].
+- **Platform notes:** The sources use Expo's calls (`selectionAsync`, `impactAsync(Light | Medium)`, `notificationAsync`); iOS and Android system controls already give haptics; on the web the sources only name the Vibration API in passing, as something a CSS transition must not lag [S-L19-020], and map no moments to it.
+- **Accessibility constraints:** A haptic is never the only feedback; pair it with a visual change that works alone.
+- **Default + heuristic:** The per-moment map for custom interactions and system haptics for standard controls; one haptic per action. Rule of thumb: vibrate on the moment something catches or completes, never while it moves.
+- **Evidence:** [S-L19-015] [S-L19-016] [S-L19-020]; compared with DC-L04-26, DC-L10-14.
+- **Maps to:**
+  - Q-motion-09: new default "OS navigation plus brand micro-motion, and a haptic per moment (selection, light impact, medium impact, success or error), once per action", because custom gestures need their own haptics.
+  - Q-motion-09 option `haptics-semantic`: replaced by the four-moment map.
+  - Q-motion-08: confirms default `silent`; option `rare-events` matches the house rule that sound fires only for success, error, commit and snap, in the same frame as the visual [S-L19-020].
+  - Visual sample: the event list with each moment's call: tab press to selection, sheet detent to light impact, delete to medium impact, save to success.
+- **Impact now / as it grows:**
+  - Per moment: now, five named calls. As it grows, new gestures pick from the same five and stay consistent.
+  - System only: now, nothing to build. As it grows, custom gestures feel dead next to system controls.
+  - Global intensity: now, one setting. As it grows, every haptic is equally strong, so none carries meaning.
+- **Standards:** STD-mobile-touch-62, STD-springs-gestures-59, STD-springs-gestures-60, STD-springs-gestures-61, STD-accessibility-motion-20.
+
+### DC-L19-99: Motion token structure: shared transitions or component recipes
+- **Block path:** Tokens > Motion > Tiers and recipes
+- **Questions the designer answers:** Do all popups share one "enter" transition, or does each component carry its own recipe? Where do springs and gesture numbers live? What does the `energy` dial change?
+- **Options:**
+  - **Shared semantic transitions only (today's engine: `motion.transition.enter`, `.exit`, `.expand`, `.move`, `.feedback`).** Simple, but tooltips, dropdowns and toasts get one duration although their budgets differ (125-200ms, 150-250ms, 400ms `ease`), and sheets share the dialog token instead of 500ms on the drawer curve (conflicts under STD-easing-duration-07 and STD-easing-duration-13).
+  - **Primitive curves plus component recipes (house).** Three named curves as tokens (`--ease-out`, `--ease-in-out`, `--ease-drawer`) [S-L19-025] [S-L19-033] plus a recipe per component: press 160ms at 0.97, tooltip 125ms at 0.97, dropdown 200ms at 0.95, modal 250ms at 0.96, drawer 500ms on the drawer curve, toast 400ms `ease` [S-L19-017]; "start from the recipe, then adapt" [S-L19-017]. animations.dev keeps its named curves as `--ease-*` variables [S-L19-007].
+  - **Dial-driven values (levers `energy`).** One dial swaps curves and scales durations 0.8-1.2. Differs: recipes are fixed and the budgets are locked.
+  - **3-5 durations and 3-4 curves, springs in `$extensions`, a reduced-motion mode (DC-L07-14).** Confirms springs in `$extensions` and a reduced mode; differs by adding a component recipe tier.
+- **Visual effect:** Recipes keep each component in its own budget and personality; a shared token makes a toast feel like a menu and a sheet like a dialog.
+- **Depends on (upstream):** DC-L19-85, DC-L19-86, DC-L19-88, DC-L19-89; Q-token-03 (which values get tokens), Q-tool-01.
+- **Affects (downstream):** every export (CSS, Tailwind, Swift, Compose, Figma), the DESIGN.md Motion section, engine `validate` and `review`, `motion.html` presets.
+- **Token encoding:** primitives `motion.easing.out` (`$type: cubicBezier`) and `motion.duration.*` (`$type: duration`); component recipes such as `tooltip.motion.enter` = `$type: transition` {duration: "{motion.duration.tooltip}", delay: 0ms, timingFunction: "{motion.easing.out}"} and `tooltip.motion.from-scale` = `$type: number` 0.97; springs as `$extensions: {"opendesigner.spring": {"dampingRatio": 0.8, "response": 0.3}}`; a `reduced` mode on the same collection [structure inferred; values from S-L19-017 and S-L19-020].
+- **Platform notes:** React Native exports the same curves as `EASE_OUT`, `EASE_IN_OUT`, `EASE_SHEET` constants [S-L19-016]; Figma gets timing and easing variables (DC-L07-14).
+- **Accessibility constraints:** The reduced mode lives on the same collection, so every recipe has its reduced twin.
+- **Default + heuristic:** Primitives (three curves plus `ease` and `linear`) and component recipes for press, tooltip, dropdown or popover, modal with backdrop, drawer or sheet, toast, accordion and stagger; springs and gesture numbers in `$extensions`; the `energy` dial changes personality and scope (DC-L19-82), never recipe values. Rule of thumb: if two components have different budgets, they need different recipes.
+- **Evidence:** [S-L19-007] [S-L19-016] [S-L19-017] [S-L19-020] [S-L19-025] [S-L19-033]; compared with DC-L07-14, DC-L04-28, DC-L04-23.
+- **Maps to:**
+  - Q-motion-02 and Q-motion-03: new default text "tokens are three curves plus per-component recipes, not one shared enter transition".
+  - Q-token-03: new heuristic "whenever motion gets tokens (`standard` and `extended`), it gets component recipe tokens, not only shared transitions, because budgets differ per component" [inferred]. The `minimal` option (color, type, space) gives motion no tokens at all, and this card does not override that choice.
+  - Visual sample: the component sheet with each recipe replayable next to its token.
+- **Impact now / as it grows:**
+  - Shared transitions: now, five tokens. As it grows, every new component inherits the wrong budget and teams fork local values.
+  - Recipes: now, about eight recipe groups. As it grows, new components start from the nearest recipe and stay in budget.
+  - Dial-driven: now, one control. As it grows, changing the dial silently changes every recipe.
+- **Standards:** STD-easing-duration-02, STD-easing-duration-07, STD-easing-duration-13, STD-easing-duration-17, STD-enter-exit-origin-08, STD-enter-exit-origin-09, STD-enter-exit-origin-11, STD-enter-exit-origin-41, STD-components-toasts-drawers-07, STD-components-toasts-drawers-40, STD-mobile-touch-05.
+
+### Area: Components (DC-L19-101 to DC-L19-119)
+
+Area `components`: stages 20, 21 and 22, plus Q-pattern-01 and Q-pattern-03, which `pacing.json` files under the same area. Topics: toasts and notifications, drawers and sheets, buttons and actions, forms and inputs, navigation and sidebars, modals and popovers, UI libraries. Motion values (durations, curves, springs) are already locked by the standards; these cards cite them only where a component decision depends on them.
+
+### DC-L19-101: Which library supplies each standard part
+- **Block path:** Components > Implementation > Base library (one library per job)
+- **Questions the designer answers:** Once the starting approach is picked (Q-comp-01), which library supplies dialogs, menus, toasts, command menus and code inputs? Is something already installed that should stay? Should any standard part be built by hand?
+- **Options:**
+  - `curated-per-job`: one library per job from Emil Kowalski's curated list. That means base-ui for unstyled, accessible dialogs, popovers, menus and selects; cmdk for ⌘K command menus; Sonner for toasts; input-otp for one-time codes; motion only for springs, layout, exit or gesture-driven animation; and plain CSS for a simple hover or fade [S-L19-029]. The list is taste-driven and gives no bundle-size or performance comparison [S-L19-029]; its cues (package.json, className, Tailwind) make it web- and React-centric [inferred].
+  - `keep-installed`: read package.json first and use a listed library that is already installed. If a competitor is installed (the list's example is react-window instead of Virtuoso), flag the curated pick but do not swap it unless asked [S-L19-029].
+  - `radix-primitives`: Radix. Emil Kowalski built Vaul on Radix Dialog [S-L19-005] and says he would reach for Radix Tabs to make his clip-path tabs accessible [S-L19-010]. STD-accessibility-motion-16 accepts base-ui or Radix.
+  - `react-aria`: React Aria is one of DC-L08-03's headless options and half of Q-comp-01's current React default. It is not on the curated list, so under STD-visual-details-55 it is offered only when the person asks for it or already has it installed. **Differs from DC-L08-03 and Q-comp-01's default** ("shadcn on Base UI or React Aria"). The conflict is recorded in standards.json under STD-visual-details-55.
+  - `hand-rolled`: build the part yourself. The list names hand-built toasts and `<div>` dropdowns or dialogs with manual focus handling as mismatches to catch [S-L19-029] [S-L19-018]. Ruled out by STD-visual-details-57 and STD-accessibility-motion-16.
+  - Drawers are a gap. The curated list has no drawer entry [S-L19-029]. Vaul (Radix Dialog underneath; parts Root, Trigger, Portal, Overlay, Content, Handle, Title, Description, Close [S-L19-093]) is unmaintained, so treat it as the behaviour spec rather than a dependency [inferred]. That squares two standards: STD-visual-details-57 names drawers among the parts not to hand-roll, and STD-visual-details-55 forbids installing an abandoned package, so the drawer is built on the chosen dialog primitive (STD-components-toasts-drawers-38) rather than from bare `<div>`s [inferred].
+- **Visual effect:** `curated-per-job` and `radix-primitives` have no look of their own; the parts take it from your tokens. Sonner ships its own look until you style it headless (light theme, gray typed toasts) [S-L19-090] [S-L19-092] [S-L19-022]. `hand-rolled` parts can look identical at rest but behave worse with the keyboard, focus and dismissal [inferred from S-L19-029's reason].
+- **Depends on (upstream):** Q-plat-01 (React web or native), Q-comp-01 (approach), what package.json already lists.
+- **Affects (downstream):** Q-comp-02 (the `toast`, `command-palette`, `drawer` and `sheet` entries in the engine's extended list each get a named library), DC-L08-04 (compound parts), focus and dismissal in every overlay, Q-form-04 (toasts), the libraries line in DESIGN.md and the AGENTS.md snippet [inferred].
+- **Token encoding:** none (process decision). Record it in state.json as a map, for example `components.libraries = {primitives: "base-ui", toast: "sonner", command: "cmdk", otp: "input-otp"}` [inferred].
+- **Platform notes:** web and React only [inferred from S-L19-029's package.json, className and Tailwind cues]. React Native uses its own list: Reanimated with worklets, Gesture Handler, Expo Router (sheets, native tabs, menus), expo-haptics and keyboard-controller [S-L19-016]. It also uses platform pieces instead of JavaScript rebuilds: `formSheet`, NativeTabs, Link.Menu (STD-mobile-touch-41). For SwiftUI, Compose and Vue the list names nothing. Say that plainly, then recommend from general knowledge, which is the skill's own rule [S-L19-029].
+- **Accessibility constraints:** overlays must trap focus, return it and close on Escape (DC-L08-20). A primitive does this for you; a hand-rolled `<div>` does not (STD-accessibility-motion-16). Re-theming a primitive does not carry its contrast over (DC-L11-01).
+- **Default + heuristic:** for React web, `curated-per-job` on top of `keep-installed`. Heuristic: Q-comp-01 picks the approach (headless, copy-in, native, adopt), then the curated list names one library per job in one sentence, never a menu [inferred combination of Q-comp-01 and S-L19-029]. Drawers are built on the chosen dialog primitive with Vaul's behaviours (DC-L19-115).
+- **Evidence:** [S-L19-029] ([[sources/eks-skills-pick-ui-library-skill-emilkowalski-skills-skills-pick-ui-library-skill-md|emilkowalski/skills: skills/pick-ui-library/SKILL.md]]); [S-L19-018] ([[sources/eks-skills-animate-skill-emilkowalski-skills-skills-animate-skill-md|emilkowalski/skills: skills/animate/SKILL.md]]); [S-L19-005] ([[sources/ek-building-a-drawer-component-building-a-drawer-component|Building a drawer component]]); [S-L19-010] ([[sources/ek-the-magic-of-clip-path-the-magic-of-clip-path|The Magic of Clip Path]]); [S-L19-093] ([[sources/vaul-api-api-reference-vaul|API Reference – Vaul]]); [S-L19-090] ([[sources/sonner-styling-styling-sonner|Styling – Sonner]]); [S-L19-092] ([[sources/sonner-toaster-toaster-sonner|Toaster – Sonner]]); [S-L19-016] ([[sources/eks-skills-animate-expo-skill-emilkowalski-skills-skills-animate-expo-skill-md|emilkowalski/skills: skills/animate-expo/SKILL.md]]); [S-L19-022] ([[sources/eks-skills-ask-sonner-skill-emilkowalski-skills-skills-ask-sonner-skill-md|emilkowalski/skills: skills/ask-sonner/SKILL.md]]); compared DC-L08-03, DC-L11-01, DC-L08-01, DC-L08-04.
+- **Maps to:** Q-comp-01: **new default** "React web: headless base-ui, or shadcn on Base UI; keep Radix or React Aria only when already installed or asked for", because STD-visual-details-55 keeps picks inside the curated list. shadcn is not on that list either: it is a copy-in styled layer over base-ui, so when the `copy-in-styled` approach is picked the agent says it is leaving the list, as the skill requires [inferred from S-L19-029]. **New heuristic:** "read package.json first; name one library per job". Q-comp-02: keeps the `core-25` default; when `extended` is picked, records the library for each extended part (toast = Sonner, command-palette = cmdk, drawer/sheet = dialog primitive plus Vaul's behaviours) and adds an OTP field (input-otp), which the engine's extended list does not have yet.
+- **Impact now / as it grows:**
+  - `curated-per-job`: now, working focus and dismissal from day one with fewer choices. As it grows, every teammate and AI agent reaches for the same part. The list is pinned to one commit of the skills repo, so it needs re-checking [inferred].
+  - `keep-installed`: now, no dependency churn. As it grows, a competitor can stay, leaving two ways to do one job until someone decides to migrate.
+  - `radix-primitives`: now, the same accessibility. As it grows, mixing Radix and base-ui means two primitive sets to theme [inferred].
+  - `react-aria`: now, fine if already installed. As it grows, agents that follow the house skills will keep flagging it [inferred].
+  - `hand-rolled`: now, it looks finished. As it grows, every overlay carries its own focus and dismissal bugs.
+- **Standards:** STD-visual-details-55, STD-visual-details-56, STD-visual-details-57, STD-accessibility-motion-16, STD-components-toasts-drawers-38, STD-mobile-touch-41.
+
+### DC-L19-102: What a control does the moment it is pressed
+- **Block path:** Components > States > Pressed
+- **Questions the designer answers:** When a finger or mouse goes down on a button, does it only change color, or does it also give a little? Does the action fire on press or on release? Do iOS and Android behave the same?
+- **Options:**
+  - `tint-only`: a color change only. This is Q-state-04's current `overlays` default (Material press layer 10%, DC-L01-17 and DC-L08-09). Kole Jain makes the pressed state a slightly darker version of the base color and, on phones, a slightly darker gray, which he says feels like pressing into something [S-L19-051].
+  - `scale-and-tint`: shrink the whole element to 0.97 on `:active` and shift the background. The sample is `transform: scale(0.97)`, `background: var(--gray-4)`, `transition: transform 100ms ease-out, background 100ms` [S-L19-028] [S-L19-020]. The recipe uses 160ms ease-out [S-L19-017] [S-L19-023]. The audits allow a scale of 0.95-0.98 over 100-160ms [S-L19-025] [S-L19-033]. Kole Jain also shrinks buttons while pressed [S-L19-079].
+  - `ripple`: the Android ripple, only in a Material-styled app. A custom-designed app gives both platforms the same press scale (STD-mobile-touch-67) [S-L19-016].
+  - `none`: no press state. Rejected: feedback that only arrives on click reads as lag (STD-components-toasts-drawers-72) [S-L19-028].
+- **Visual effect:** `tint-only`: flat; the button changes color but does not move. `scale-and-tint`: the button gives slightly under the finger, and its label and icons scale with it, which reads as a physical press [S-L19-017]. `ripple`: unmistakably Material. `none`: taps look missed.
+- **Depends on (upstream):** Q-state-04 (state method), Q-motion-01 (motion personality), Q-plat-01.
+- **Affects (downstream):** every pressable (buttons, icon buttons, chips, tabs, list rows, cards used as links), the preview's `.ds-btn:active` rule and the React Native Pressable wrapper.
+- **Token encoding:** `motion.press.scale` (`$type: number`, 0.97). `motion.duration.press` (`$type: duration`: 160ms in the web recipe; 120ms is the React Native ceiling). The press curve aliases the existing ease-out token, `cubic-bezier(0.23, 1, 0.32, 1)` in the standards, and must not fork a new curve (STD-mobile-touch-05). The pressed color keeps the existing `solid-pressed` or overlay roles.
+- **Platform notes:** web: `:active` stays ungated, and only hover is gated [S-L19-017]. Every tappable gets `touch-action: manipulation` (STD-mobile-touch-06). React Native: show feedback on `onPressIn` and commit on `onPressOut`, over 100-150ms with 120ms and a 3% scale as the ceiling, and use `pressRetentionOffset` so a drifting finger keeps its press [S-L19-016] [S-L19-015].
+- **Accessibility constraints:** the hit area stays at least 44pt on iOS, 48dp on Android and 44px for touch on the web. Grow it with hitSlop or a pseudo-element, never by enlarging the visual (STD-mobile-touch-09) [S-L19-004]. Ship a reduced-motion variant with the change (STD-accessibility-motion-01); keeping the color shift and dropping the scale is one way [inferred].
+- **Default + heuristic:** `scale-and-tint`: 0.97 plus a darker tint, 160ms ease-out on the web. The pressed look appears on pointer-down and the action commits on release. Heuristic: the more often a control is pressed, the subtler its feedback (STD-when-to-animate-07).
+- **Evidence:** [S-L19-051] ([[sources/EOcY3hPMQkk-the-7-color-mistakes-that-ruin-your-ui-designs|The 7 Color Mistakes that RUIN your UI Designs]]); [S-L19-028] ([[sources/eks-skills-mobile-native-skill-emilkowalski-skills-skills-mobile-native-skill-md|emilkowalski/skills: skills/mobile-native/SKILL.md]]); [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]); [S-L19-017] ([[sources/eks-skills-animate-recipes-emilkowalski-skills-skills-animate-recipes-md|emilkowalski/skills: skills/animate/RECIPES.md]]); [S-L19-023] ([[sources/eks-skills-emil-design-eng-skill-emilkowalski-skills-skills-emil-design-eng-skill-md|emilkowalski/skills: skills/emil-design-eng/SKILL.md]]); [S-L19-025] ([[sources/eks-skills-improve-animations-audit-emilkowalski-skills-skills-improve-animations-audit-md|emilkowalski/skills: skills/improve-animations/AUDIT.md]]); [S-L19-033] ([[sources/eks-skills-review-animations-standards-emilkowalski-skills-skills-review-animations-standards-md|emilkowalski/skills: skills/review-animations/STANDARDS.md]]); [S-L19-079] ([[sources/ld1zhQMXxXU-11-micro-animations-that-will-instantly-level-up-your-ui-free-figma-file|11 Micro Animations That Will Instantly Level Up Your UI (free figma file)]]); [S-L19-016] ([[sources/eks-skills-animate-expo-skill-emilkowalski-skills-skills-animate-expo-skill-md|emilkowalski/skills: skills/animate-expo/SKILL.md]]); [S-L19-015] ([[sources/eks-skills-animate-expo-recipes-emilkowalski-skills-skills-animate-expo-recipes-md|emilkowalski/skills: skills/animate-expo/RECIPES.md]]); [S-L19-004] ([[sources/ek-agents-with-taste-agents-with-taste|Agents with Taste]]); [S-L19-003] ([[sources/ek-7-practical-animation-tips-7-practical-animation-tips|7 Practical Animation Tips]]); compared DC-L08-09, DC-L01-17, DC-L03-12.
+- **Maps to:** Q-state-04: **new option** `press-scale` ("Shrink to 97% while pressed, plus a darker tint"), and **new default** for the pressed state; overlays stay for hover. **Differs from DC-L08-09's default** (overlays for hover and press). This fixes the conflict recorded under STD-mobile-touch-05 (a tint only, and no press-scale token in the engine). **Visual sample:** two "Paste" buttons, one scaling to 0.97 on press and one not [S-L19-003].
+- **Impact now / as it grows:**
+  - `tint-only`: now, the simplest to build. As it grows, touch users on every new component get feedback that feels dead.
+  - `scale-and-tint`: now, one token and one rule. As it grows, every new pressable inherits it for free, provided the rule sits in the base button and not in each component [inferred].
+  - `ripple`: now, native feel on Android. As it grows, it splits the look by platform and ties the brand to Material.
+  - `none`: now, nothing to build. As it grows, "the app feels laggy" reports keep coming.
+- **Standards:** STD-mobile-touch-05, STD-components-toasts-drawers-72, STD-mobile-touch-67, STD-mobile-touch-06, STD-mobile-touch-09, STD-when-to-animate-07, STD-accessibility-motion-01, STD-easing-duration-07.
+
+### DC-L19-103: Hover on controls, product screens versus marketing pages
+- **Block path:** Components > States > Hover
+- **Questions the designer answers:** When the pointer rests on a button or list item, does it change color, move, or do nothing? Do marketing pages get richer hovers than the product? What replaces hover on touch screens?
+- **Options:**
+  - `color-shift`: a slightly lighter or brighter version of the base color [S-L19-051]. List and sidebar items show a highlight rectangle that is invisible until hovered [S-L19-059]. Ghost buttons have no background until hovered [S-L19-052]. The easing for hover and color changes is `ease` [S-L19-023].
+  - `near-none`: for things hovered tens of times a day (list rows, sidebar items), remove the hover animation or make it near-imperceptible (STD-when-to-animate-07) [S-L19-023]. Judge a list hover by running the pointer through the whole list [S-L19-011].
+  - `rich-motion`: motion hovers. Examples: the label slides up inside a mask while a copy slides in [S-L19-079]; the label slides while a circle morphs into a rectangle, or the text and background swap [S-L19-069]; a call to action moves to the cursor, used sparingly and with a tablet and phone fallback [S-L19-069]. Kole Jain says buttons should almost always have a small animation [S-L19-054]. That is one creator's opinion, and his rich examples are all marketing sites.
+  - `arrow-reveal`: when a whole card is the link, an arrow fades in on hover to show it can be clicked [S-L19-075].
+- **Visual effect:** `color-shift`: calm and clear. `near-none`: the fastest-feeling option, and quiet. `rich-motion`: playful and premium on a landing page, but tiring when repeated in a work tool [inferred]. `arrow-reveal`: shows a link without adding a button.
+- **Depends on (upstream):** Q-state-04, Q-motion-01, Q-plat-01 and Q-plat-02 (touch or pointer), and whether the surface is a marketing page or the product.
+- **Affects (downstream):** every hoverable, the hover color roles, the CSS export's media-query gate, and the preview's hover rules.
+- **Token encoding:** hover color comes from the existing state method (a `solid-hover` step or the overlay opacity), and the change runs on `motion.transition.feedback`. Rich hovers are component-level and get no token [inferred].
+- **Platform notes:** web: every `:hover` style goes inside `@media (hover: hover) and (pointer: fine)` (STD-accessibility-motion-15). Tailwind v4's `hover:` variant already compiles to `(hover: hover)` [S-L19-028]. iOS and Android apps have no hover, so move each affordance into press, position or nothing (STD-mobile-touch-30) [S-L19-051]. Tablet pointer hover: see DC-L14-06.
+- **Accessibility constraints:** content that appears on hover must be dismissible, hoverable and persistent (WCAG 1.4.13, Q-state-04). A state that carries meaning needs 3:1 (DC-L08-09). Rich hovers need a reduced-motion variant (STD-accessibility-motion-01).
+- **Default + heuristic:** product UI uses `color-shift`, instant or near-imperceptible, and gated to fine pointers. `rich-motion` is for marketing calls to action only, with one kind per page [inferred]. Heuristic: the more often something is hovered, the less it moves.
+- **Evidence:** [S-L19-051] ([[sources/EOcY3hPMQkk-the-7-color-mistakes-that-ruin-your-ui-designs|The 7 Color Mistakes that RUIN your UI Designs]]); [S-L19-059] ([[sources/NtZeYmTMuo4-animated-dashboard-sidebar-tutorial-in-figma-free-design-files|Animated Dashboard Sidebar Tutorial in Figma (+ free design files)]]); [S-L19-052] ([[sources/EcbgbKtOELY-every-ui-ux-concept-explained-in-under-10-minutes|Every UI/UX Concept Explained in Under 10 Minutes]]); [S-L19-023] ([[sources/eks-skills-emil-design-eng-skill-emilkowalski-skills-skills-emil-design-eng-skill-md|emilkowalski/skills: skills/emil-design-eng/SKILL.md]]); [S-L19-011] ([[sources/ek-train-your-judgement-train-your-judgement|Train Your Judgement]]); [S-L19-079] ([[sources/ld1zhQMXxXU-11-micro-animations-that-will-instantly-level-up-your-ui-free-figma-file|11 Micro Animations That Will Instantly Level Up Your UI (free figma file)]]); [S-L19-069] ([[sources/ZsP20PN14O0-5-trendy-animations-to-steal-for-your-next-web-design|5 Trendy Animations to Steal for Your Next Web Design]]); [S-L19-054] ([[sources/HE4rLEQpiXY-how-to-think-like-a-genius-ui-ux-designer|How to think like a GENIUS UI/UX designer]]); [S-L19-075] ([[sources/gKM6b2EnW1k-upgrading-9-crucial-ui-elements-free-figma-file-included|Upgrading 9 CRUCIAL UI Elements (free figma file included)]]); [S-L19-028] ([[sources/eks-skills-mobile-native-skill-emilkowalski-skills-skills-mobile-native-skill-md|emilkowalski/skills: skills/mobile-native/SKILL.md]]); compared DC-L08-09, DC-L14-06, DC-L15-09.
+- **Maps to:** Q-state-04: **new heuristic** "hover is a color shift in the product and motion only on marketing pages; every hover sits behind (hover: hover) and (pointer: fine)". Engine: gate the preview's hover rules (the conflict recorded under STD-accessibility-motion-15). **Visual sample:** a list hovered top to bottom with and without an animated highlight [S-L19-011], and the masked label slide [S-L19-079].
+- **Impact now / as it grows:**
+  - `color-shift`: now, one state color per variant. As it grows, it scales to hundreds of rows without anyone noticing it.
+  - `near-none`: now, less to build. As it grows, dense screens stay fast to scan.
+  - `rich-motion`: now, a memorable landing page. As it grows, each new marketing page needs the same polish, or the hovers start to look inconsistent.
+  - `arrow-reveal`: now, cleaner cards. As it grows, touch users need another cue, such as the card's shape or a chevron [inferred].
+- **Standards:** STD-accessibility-motion-15, STD-when-to-animate-07, STD-mobile-touch-30, STD-accessibility-motion-01.
+
+### DC-L19-104: Emphasis inside a group of buttons
+- **Block path:** Components > Button > Variants; Patterns > Actions > Emphasis
+- **Questions the designer answers:** When two or more buttons sit together, which one gets the fill? What happens to a second call to action? Should the navigation button be as strong as the hero button?
+- **Options:**
+  - `fill-one-ghost-rest`: one filled primary. Nearby buttons lose their background (ghost) or are dropped; a header only ever has one primary call to action [S-L19-057]. A ghost button looks like a sidebar link, with no background until hover [S-L19-052]. Confirms DC-L13-18 and DC-L08-05 (one primary per region).
+  - `outline-secondary`: a stroke-only secondary. A pricing card's button that moves higher up the card becomes an outline button, so the hierarchy holds [S-L19-075]. In a nav bar, outline the most important link or the sign-up action [S-L19-072].
+  - `darkness-ladder`: importance equals darkness, from ghost up to a black button with white text, with most multi-purpose buttons around 90-95% white [S-L19-039]. This comes from one video, so treat it as opinion. The same video opens with Vercel's near-monochrome palette [S-L19-039], and the ladder seems best suited to such brands [inferred].
+  - `size-step`: the nav call to action is one size down. Steve Schoger's hero buttons use 14px text and a 38px height reached through padding; his nav button is 28px (24px felt too small), so it does not compete [S-L19-103]. This is one designer's preference, and smaller than Q-space-04's default of 32/40/48.
+  - Supporting rules: buttons that do the same job match in size, radius and style [S-L19-045] [S-L19-044]. Buttons side by side are the same height, so a ring must not add 2px [S-L19-103]. A hero button and a nav button that go to the same place share one label [S-L19-072]. A repeating card can itself be the link and drop its button, unless the action is specific, such as "Try it out" [S-L19-075]. Chips are not buttons: they are always thinner and almost never use the primary color [S-L19-075]. The ring, shared-label, card-link and chip rules each come from a single video, so they are practitioner opinion; the matching-buttons rule has two videos behind it.
+- **Visual effect:** `fill-one-ghost-rest`: one obvious next step, and quiet around it. `outline-secondary`: a visible but lighter second choice. `darkness-ladder`: a monochrome look where weight comes from value, not hue. `size-step`: a nav that stays out of the hero's way.
+- **Depends on (upstream):** Q-state-01 (number of styles), Q-color-02 (accent or neutral), Q-space-04 (heights), Q-shape-01.
+- **Affects (downstream):** primary, secondary and ghost button variants, the nav bar, the hero, cards, pricing cards and the chip component.
+- **Token encoding:** button variant tokens in the optional component tier (Q-token-01), for example `button.ghost.bg` = transparent, and `size.control.sm` versus `size.control.md` for the nav and hero buttons [inferred naming].
+- **Platform notes:** on iOS, style rather than size marks the preferred choice (DC-L08-05). The sources give no other platform differences.
+- **Accessibility constraints:** emphasis must not rely on color alone (DC-L13-18). Ghost button text still needs 4.5:1. A 28px visual button keeps a 44px hit area on touch (STD-mobile-touch-09) [S-L19-004].
+- **Default + heuristic:** confirms `four-danger` with one filled button per area. Heuristic: when two actions compete, remove the lesser one's fill (ghost) before adding another style, and make the nav call to action one control size smaller than the hero's [inferred from S-L19-057 and S-L19-103].
+- **Evidence:** [S-L19-057] ([[sources/Lp6ey4AyDzA-8-web-design-hacks-to-actually-make-your-designs-better|8 Web Design Hacks To ACTUALLY Make Your Designs Better]]); [S-L19-052] ([[sources/EcbgbKtOELY-every-ui-ux-concept-explained-in-under-10-minutes|Every UI/UX Concept Explained in Under 10 Minutes]]); [S-L19-075] ([[sources/gKM6b2EnW1k-upgrading-9-crucial-ui-elements-free-figma-file-included|Upgrading 9 CRUCIAL UI Elements (free figma file included)]]); [S-L19-072] ([[sources/eMMiLeo_UGI-the-4-levels-of-landing-page-ui-ux-design|The 4 Levels of Landing Page UI/UX Design]]); [S-L19-039] ([[sources/66oOi9OLMCw-why-the-60-30-10-rule-is-ruining-your-ui-designs|Why the 60-30-10 Rule is RUINING Your UI Designs]]); [S-L19-103] ([[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]); [S-L19-045] ([[sources/AH_ugxmLeUM-7-ui-ux-mistakes-that-scream-youre-a-beginner|7 UI/UX mistakes that SCREAM you’re a beginner]]); [S-L19-044] ([[sources/ADaQuZS04Rc-stop-making-pretty-uis-think-like-a-product-designer|Stop Making Pretty UIs. Think Like a Product Designer]]); [S-L19-004] ([[sources/ek-agents-with-taste-agents-with-taste|Agents with Taste]]); compared DC-L08-05, DC-L13-18, DC-L08-07, DC-L03-12.
+- **Maps to:** Q-state-01: **confirms the current default** and adds a **new heuristic** (strip the fill before adding a style; one size step between nav and hero). **Visual samples:** a header with two filled buttons, then the second one ghosted [S-L19-057]; the ghost-to-black ladder for neutral brands [S-L19-039]. Q-space-04: no change, since Schoger's 28/38px sizes are one designer's preference.
+- **Impact now / as it grows:**
+  - `fill-one-ghost-rest`: now, clear screens. As it grows, new features cannot grab attention by adding another filled button, which keeps the hierarchy honest.
+  - `outline-secondary`: now, a middle level of emphasis. As it grows, it is easy to overuse, and many outlines look like a form [inferred].
+  - `darkness-ladder`: now, it works without a brand hue. As it grows, every new button needs a place on the ladder, which calls for a documented scale [inferred].
+  - `size-step`: now, a tidy nav. As it grows, a small nav button still has to meet touch targets on phones.
+- **Standards:** STD-visual-details-36, STD-mobile-touch-09.
+
+### DC-L19-105: How visible secondary actions are
+- **Block path:** Patterns > Actions > Disclosure; Components > Icon button, Tooltip, Menu
+- **Questions the designer answers:** Which actions stay visible with a label, which become icons, which appear on hover, and which go into a "⋯" menu? How do touch and keyboard users reach an action that appears on hover? Do icon-only buttons get tooltips, and how fast do they appear?
+- **Options:**
+  - `labelled`: always visible with a text label. Use it for the action the product's success depends on; Spotify Wrapped's share button is the example [S-L19-076]. On Kole Jain's "spectrum of explicitness", a global, always-visible share button sits high [S-L19-056].
+  - `icon-plus-tooltip`: the icon is always visible and has a tooltip. Tooltips on icons and on ambiguous labels are missing from almost every beginner dashboard [S-L19-056]. Well-known icons (house, bookmark, user) need no label, and less familiar icon-only buttons get a tooltip [S-L19-045]. Counterpoint: do not rely on icons whose meaning only appears once the tooltip does; use visuals people recognise, or placement [S-L19-080].
+  - `hover-reveal`: the icon appears on hover, with a tooltip, when space is tight and the action is minor, such as removing a person from a share list or copying a table cell [S-L19-056].
+  - `overflow-menu`: collapse busy card buttons into a triple-dot menu [S-L19-061]. Another Kole Jain video says the opposite: do not fix a crowded card by hiding actions in a corner menu, but line the buttons up on a new edge [S-L19-080]. **The two videos disagree.**
+  - `contextual`: actions appear with the task. A note editor swaps the nav bar for formatting and sharing, and a long press blurs the screen and lists the item's actions [S-L19-053]. Swipe actions keep a visible button or long-press menu for people who do not know the gesture [S-L19-035]. Buttons show the keyboard shortcuts they trigger [S-L19-067].
+  - Tooltip timing is locked. The first tooltip waits; the ones next to it then open instantly with no animation (STD-enter-exit-origin-10) [S-L19-003]. The motion is scale 0.97 over 125ms (STD-enter-exit-origin-09). Kole Jain waits a full second, as Obsidian does [S-L19-079]. That value comes from one video; no Emil Kowalski source gives the delay.
+- **Visual effect:** `labelled`: explicit but wordy. `icon-plus-tooltip`: compact, but it relies on familiar icons. `hover-reveal`: the cleanest resting state, with actions that appear only when someone looks for them [S-L19-056]. `overflow-menu`: calm cards, with actions one click deeper. `contextual`: focused screens where the tools change with the task.
+- **Depends on (upstream):** Q-pattern-03 (progressive disclosure), Q-state-02 (signifier strength), Q-icon-05 (labels), Q-plat-01 and Q-plat-02.
+- **Affects (downstream):** icon buttons, tooltips, menus, table rows, cards and list items, plus a DESIGN.md rule for where new actions go.
+- **Token encoding:** none (pattern and content decision). Tooltip motion uses the existing motion tokens.
+- **Platform notes:** phones and tablets have no hover, so a hover-revealed action becomes a press, a position or nothing (STD-mobile-touch-30). That means a long-press menu or an always-visible icon [S-L19-053]. React Native uses Link.Menu for context menus (STD-mobile-touch-41).
+- **Accessibility constraints:** an action revealed on hover must also appear on keyboard focus, for example with `:focus-within` [inferred]. Icon-only buttons need an accessible name (DC-L08-08, DC-L05-07). Tooltips follow WCAG 1.4.13, and labels are never hover-only (DC-L05-07). Targets stay at least 24px, and 44pt/48dp on touch.
+- **Default + heuristic:** place each action by how important and how frequent it is (the spectrum) [S-L19-056]. The product's key action gets a label; secondary actions get icons with tooltips. Use `hover-reveal` only for minor, repeated actions, and only when the same action also shows on focus and has a visible touch fallback [inferred]. Try re-aligning a crowded card before reaching for an overflow menu [S-L19-080].
+- **Evidence:** [S-L19-076] ([[sources/goWOAFqJHpA-i-redesigned-spotify-wrapped-entirely-from-scratch|I Redesigned Spotify Wrapped Entirely From SCRATCH]]); [S-L19-056] ([[sources/Ksx9C2-3yMo-the-3-dashboard-ui-flaws-that-give-away-you-ve-never-built-one|The 3 dashboard UI flaws that give away you've NEVER built one]]); [S-L19-045] ([[sources/AH_ugxmLeUM-7-ui-ux-mistakes-that-scream-youre-a-beginner|7 UI/UX mistakes that SCREAM you’re a beginner]]); [S-L19-080] ([[sources/neE6wOuBIP8-the-secret-behind-weirdly-perfect-ui-designs|The secret behind weirdly perfect UI designs]]); [S-L19-061] ([[sources/PDcQJOPby1k-5-saas-ui-ux-mistakes-that-scream-you-vibe-code|5 SaaS UI/UX mistakes that SCREAM you Vibe Code]]); [S-L19-053] ([[sources/Gfsd8NNuD9g-everything-you-need-to-know-about-mobile-app-uis-in-8-minutes-beginner-friendly|Everything you need to know about Mobile App UI’s in 8 minutes (beginner friendly)]]); [S-L19-035] ([[sources/14h1VnkQvIc-master-the-3-types-of-crazy-mobile-ui-swipe-interactions|Master the 3 Types of CRAZY Mobile UI Swipe Interactions]]); [S-L19-067] ([[sources/Vy0KKvZJRH8-everything-you-need-to-design-macos-apps-exactly-like-apple-beginner-friendly|Everything you need to Design macOS Apps EXACTLY like Apple (beginner friendly)]]); [S-L19-003] ([[sources/ek-7-practical-animation-tips-7-practical-animation-tips|7 Practical Animation Tips]]); [S-L19-079] ([[sources/ld1zhQMXxXU-11-micro-animations-that-will-instantly-level-up-your-ui-free-figma-file|11 Micro Animations That Will Instantly Level Up Your UI (free figma file)]]); compared DC-L13-03, DC-L05-07, DC-L08-08, DC-L15-09.
+- **Maps to:** Q-pattern-03: **new heuristic** for the `contextual` option: "reveal on hover only for minor actions, and always give a focus path and a touch path". **Visual sample:** the share popover with the search box on top and remove buttons revealed on hover [S-L19-056]. Q-icon-05: confirms `labels-default`, with tooltips on unfamiliar icon-only controls.
+- **Impact now / as it grows:**
+  - `labelled`: now, nothing to learn. As it grows, toolbars run out of room.
+  - `icon-plus-tooltip`: now, compact. As it grows, each new icon has to be recognisable, and the icon set becomes a real dependency.
+  - `hover-reveal`: now, clean screens. As it grows, every revealed action needs its focus and touch twin, or it fails on phones.
+  - `overflow-menu`: now, calm cards. As it grows, menus become a dumping ground where features go unseen [inferred].
+  - `contextual`: now, focused views. As it grows, each new task needs its own action set designed.
+- **Standards:** STD-mobile-touch-30, STD-enter-exit-origin-09, STD-enter-exit-origin-10, STD-visual-details-31, STD-visual-details-32, STD-mobile-touch-41.
+
+### DC-L19-106: What "on", selected and active look like
+- **Block path:** Components > States > Selected and active
+- **Questions the designer answers:** How does the current sidebar item or tab show that it is picked? Does the picked state use the brand color? What does a checkbox, switch or chip look like when it is off?
+- **Options:**
+  - `indicator-shape`: a rectangle indicator on the active sidebar link [S-L19-047], or a container around the selected item with inactive items grayed out [S-L19-052]. M3's pill indicator is in DC-L08-14.
+  - `brand-on-active`: active states are where a nav bar can take a pop of brand color [S-L19-075]. Keep icons uncolored and save icon color for status, such as the active tab [S-L19-051]. **Differs from DC-L08-14,** which offers a neutral selected state and keeps the brand color for actions in action-dense products (that card marks this [inferred]).
+  - `neutral-active`: a neutral selected look (Atlassian, per DC-L08-14).
+  - `off-is-plain`: the off state stays plain, with a thin border and no color or icon; fill, color and a checkmark belong to the on state only [S-L19-080]. Values left at their default show in gray, so changed values catch the eye [S-L19-080]. Chips almost never take the primary call-to-action color [S-L19-075] (one video's rule).
+  - Indicator motion. On the web, tabs whose active background or text color changes use a duplicate tab list clipped to the active tab, with the clip animated over 250ms ease-in-out (STD-enter-exit-origin-42) [S-L19-010] [S-L19-017]. In React Native, measure the tabs once and slide the pill over 250ms ease-in-out, with the haptic on press [S-L19-015]. The tab content switches with no animation (STD-when-to-animate-14).
+  - Tab bars: every tab gets an active state (a profile picture works for the profile tab), and inactive icons stay clearly visible [S-L19-075].
+- **Visual effect:** `indicator-shape`: you can tell where you are even in grayscale. `brand-on-active`: a lively nav that ties the brand to "you are here". `neutral-active`: calm, and color keeps meaning "act". `off-is-plain`: settings screens where the eye jumps straight to what is on.
+- **Depends on (upstream):** Q-color-02 (accent), Q-state-01 (the primary style must not look like a selected item), Q-layout-04 (navigation model), Q-icon-05.
+- **Affects (downstream):** tabs, sidebar items, tab bars, segmented controls, checkboxes, radios, switches, chips and filters.
+- **Token encoding:** a selected role pair, for example `color.bg.selected` and `color.text.selected` (`$type: color`), and an indicator color. The web indicator runs 250ms ease-in-out through the existing duration and easing tokens [inferred naming].
+- **Platform notes:** on iOS and Android, NativeTabs keep the platform's own selected behaviour (STD-mobile-touch-41). HIG tab bars tint the selected item with the accent, which DC-L08-14 marks [inferred].
+- **Accessibility constraints:** never color alone; always an indicator as well (DC-L08-14). A boundary that carries state needs 3:1. Expose `aria-selected` or `aria-current`. The clip-path duplicate is `aria-hidden` and its buttons get `tabIndex={-1}` (STD-accessibility-motion-17). Tab labels must be dark enough to read [S-L19-075].
+- **Default + heuristic:** an indicator plus color, with color only on the on or selected state and neutral off states. Brand color on selected items is fine in navigation-light products such as a tab bar. In action-dense products, keep DC-L08-14's neutral selection so the brand color keeps meaning "act" [inferred reconciliation of S-L19-075 and DC-L08-14].
+- **Evidence:** [S-L19-047] ([[sources/B7k5rOgmOGY-everything-you-need-to-know-to-build-a-dashboard-ui-in-8-minutes-beginner-friendly|EVERYTHING you need to know to build a Dashboard UI in 8 minutes (beginner friendly)]]); [S-L19-052] ([[sources/EcbgbKtOELY-every-ui-ux-concept-explained-in-under-10-minutes|Every UI/UX Concept Explained in Under 10 Minutes]]); [S-L19-075] ([[sources/gKM6b2EnW1k-upgrading-9-crucial-ui-elements-free-figma-file-included|Upgrading 9 CRUCIAL UI Elements (free figma file included)]]); [S-L19-051] ([[sources/EOcY3hPMQkk-the-7-color-mistakes-that-ruin-your-ui-designs|The 7 Color Mistakes that RUIN your UI Designs]]); [S-L19-080] ([[sources/neE6wOuBIP8-the-secret-behind-weirdly-perfect-ui-designs|The secret behind weirdly perfect UI designs]]); [S-L19-010] ([[sources/ek-the-magic-of-clip-path-the-magic-of-clip-path|The Magic of Clip Path]]); [S-L19-017] ([[sources/eks-skills-animate-recipes-emilkowalski-skills-skills-animate-recipes-md|emilkowalski/skills: skills/animate/RECIPES.md]]); [S-L19-015] ([[sources/eks-skills-animate-expo-recipes-emilkowalski-skills-skills-animate-expo-recipes-md|emilkowalski/skills: skills/animate-expo/RECIPES.md]]); compared DC-L08-14, DC-L01-17, DC-L06-04.
+- **Maps to:** Q-state-05: **new option** `off-plain` (a rule for every toggle: "color belongs to the on state") and a **new heuristic** for when brand color may mark selection. **Visual samples:** a checkbox off and on next to six chips all colored at rest [S-L19-080]; clip-path tabs with the clip turned off to show the duplicate [S-L19-010]; a Dribbble tab-bar shot before and after [S-L19-075].
+- **Impact now / as it grows:**
+  - `indicator-shape`: now, readable in any theme. As it grows, it holds up for color-blind users and in high-contrast modes.
+  - `brand-on-active`: now, a branded nav. As it grows, the brand color serves two jobs, and primary buttons and selected items can start to look alike.
+  - `neutral-active`: now, less pop. As it grows, color stays a reliable signal for actions.
+  - `off-is-plain`: now, calmer settings. As it grows, long settings pages stay scannable.
+- **Standards:** STD-enter-exit-origin-42, STD-accessibility-motion-17, STD-when-to-animate-14, STD-accessibility-motion-16, STD-mobile-touch-41, STD-visual-details-36.
+
+### DC-L19-107: Which button carries the fill in a delete confirmation
+- **Block path:** Patterns > Destructive confirmation; Components > Button > Danger
+- **Questions the designer answers:** In "Delete this project?", is Delete the filled button, or is Cancel? Which button does Enter press? Is Delete red even when the brand color is not?
+- **Options:**
+  - `destructive-fill`: Delete gets the primary fill, preferably red, and Cancel is demoted to no background, a border only, or reduced opacity [S-L19-057].
+  - `safe-fill`: the primary color always marks the non-destructive action, as in macOS pop-ups, so people learn to trust it [S-L19-044]. This matches DC-L13-18 and DC-L08-06, which cite Apple's rule that a destructive button never takes the primary role.
+  - `red-not-brand`: destructive actions are red whatever the brand color, because a brand-colored delete hides its danger [S-L19-051] [S-L19-039]. Confirms DC-L08-06.
+  - **Kole Jain's two videos disagree** on the first two options [S-L19-057] [S-L19-044].
+- **Visual effect:** `destructive-fill`: the dialog points at Delete, which is fast for deliberate deletes and risky for habitual clicks [inferred]. `safe-fill`: the loud button is the safe one, and Delete is visible but quieter. `red-not-brand`: danger reads the same on every screen.
+- **Depends on (upstream):** Q-form-05 (undo or confirm), Q-state-06, Q-state-01, Q-color-15.
+- **Affects (downstream):** the confirmation dialog pattern, the danger button variant, initial focus and the Enter key.
+- **Token encoding:** existing danger status roles; nothing new.
+- **Platform notes:** on macOS and iOS the destructive role renders red and never primary (DC-L08-06, DC-L13-18). In React Native, a destructive action firing gets a medium haptic (STD-mobile-touch-62) [S-L19-016]. Button order differs by OS (DC-L13-18 [inferred]).
+- **Accessibility constraints:** the label names the action, such as "Delete file" (DC-L08-06). Focus returns to the control that opened the dialog (DC-L13-08). Color is never the only signal, and danger text meets 4.5:1.
+- **Default + heuristic:** confirms Q-state-06's default: subtle danger in context, and solid red only in the final confirmation step (DC-L08-06). New: initial focus and Enter go to Cancel [inferred; reconciles S-L19-057 and S-L19-044]. Heuristic: the filled color means the same thing in every dialog (STD-visual-details-36) [S-L19-044].
+- **Evidence:** [S-L19-057] ([[sources/Lp6ey4AyDzA-8-web-design-hacks-to-actually-make-your-designs-better|8 Web Design Hacks To ACTUALLY Make Your Designs Better]]); [S-L19-044] ([[sources/ADaQuZS04Rc-stop-making-pretty-uis-think-like-a-product-designer|Stop Making Pretty UIs. Think Like a Product Designer]]); [S-L19-051] ([[sources/EOcY3hPMQkk-the-7-color-mistakes-that-ruin-your-ui-designs|The 7 Color Mistakes that RUIN your UI Designs]]); [S-L19-039] ([[sources/66oOi9OLMCw-why-the-60-30-10-rule-is-ruining-your-ui-designs|Why the 60-30-10 Rule is RUINING Your UI Designs]]); [S-L19-016] ([[sources/eks-skills-animate-expo-skill-emilkowalski-skills-skills-animate-expo-skill-md|emilkowalski/skills: skills/animate-expo/SKILL.md]]); compared DC-L08-06, DC-L13-18, DC-L13-08.
+- **Maps to:** Q-state-06: **confirms the default**, adds a **new option** `safe-fill` ("The primary color only ever marks the safe choice, as in macOS"), and adds a **new heuristic** (focus and Enter on Cancel). **Visual sample:** the two delete dialogs side by side [S-L19-057] [S-L19-044].
+- **Impact now / as it grows:**
+  - `destructive-fill`: now, the fastest delete. As it grows, what the filled button means changes from dialog to dialog, and people stop trusting it [inferred from S-L19-044].
+  - `safe-fill`: now, one extra look at the dialog before deleting. As it grows, one rule covers every new dialog.
+  - `red-not-brand`: now, red joins the palette. As it grows, danger stays recognisable through any rebrand.
+- **Standards:** STD-visual-details-40, STD-visual-details-36, STD-mobile-touch-62.
+
+### DC-L19-108: How irreversible actions are guarded
+- **Block path:** Patterns > Error prevention > Destructive actions
+- **Questions the designer answers:** For an action that cannot be undone, is the guard a dialog, or a deliberate gesture such as hold-to-delete or slide-to-send? What protects reversible actions?
+- **Options:**
+  - `undo`: easy undo for slips (STD-visual-details-40) [S-L19-020]. The Undo lives in a toast action (DC-L19-112) [inferred].
+  - `confirm-dialog`: only for genuinely destructive, irreversible actions, and sparingly, because overuse trains people to click through [S-L19-020]. Use verb labels (DC-L13-08).
+  - `hold-to-confirm`: an overlay clipped to `inset(0 100% 0 0)` fills to `inset(0 0 0 0)` over 2s linear while held, snaps back over 200ms ease-out on release, and the button scales to 0.97 [S-L19-017] [S-L19-023]. animations.dev teaches it as a "Hold to Delete" exercise [S-L19-001]. Symmetric press and release timing is flagged as a finding [S-L19-025].
+  - `slide-to-confirm`: a slider dragged all the way across, for high-impact or irreversible actions such as sending an email in Resend or buying crypto. It is much harder to trigger by accident than a button [S-L19-035].
+  - `type-to-confirm`: from DC-L13-08, which marks it [inferred]; no L19 source covers it.
+- **Visual effect:** `undo`: fast and calm, and the action happens at once. `confirm-dialog`: a full stop. `hold-to-confirm`: a fill sweeps across the button, and the risk is felt in the hand. `slide-to-confirm`: a physical, deliberate commitment on touch screens. `type-to-confirm`: heavy, and meant for catastrophic actions.
+- **Depends on (upstream):** Q-form-05, Q-state-06, Q-plat-01 (touch or pointer), Q-form-04 (the undo channel).
+- **Affects (downstream):** delete flows, danger buttons, toast actions and haptics.
+- **Token encoding:** hold-to-confirm: `motion.duration.hold` (`$type: duration`, 2000ms) with a linear curve for the deliberate phase, and a 200ms release on the ease-out token (STD-easing-duration-12) [inferred naming].
+- **Platform notes:** in React Native, a medium haptic fires when the destructive action commits (STD-mobile-touch-62). Slide-to-confirm is a touch pattern. Holding with a pointer works on desktop but needs a keyboard path [inferred].
+- **Accessibility constraints:** hold and slide need a keyboard route and a single-pointer, untimed alternative (WCAG 2.5.1 and 2.5.7) [inferred; the sources do not cover it]. Kole Jain keeps buttons for people who do not know a gesture [S-L19-035]. WCAG 3.3.4 applies to legal, financial and data actions (DC-L13-08).
+- **Default + heuristic:** confirms `both`: undo for reversible actions, confirmation for irreversible ones. New: `hold-to-confirm` as the in-place guard when an irreversible action should not open a dialog (for example from a list row) [inferred]; `slide-to-confirm` only for high-impact actions on touch, with a button fallback.
+- **Evidence:** [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]); [S-L19-017] ([[sources/eks-skills-animate-recipes-emilkowalski-skills-skills-animate-recipes-md|emilkowalski/skills: skills/animate/RECIPES.md]]); [S-L19-023] ([[sources/eks-skills-emil-design-eng-skill-emilkowalski-skills-skills-emil-design-eng-skill-md|emilkowalski/skills: skills/emil-design-eng/SKILL.md]]); [S-L19-001] ([[sources/adev-changelog-animations-dev|animations.dev]]); [S-L19-025] ([[sources/eks-skills-improve-animations-audit-emilkowalski-skills-skills-improve-animations-audit-md|emilkowalski/skills: skills/improve-animations/AUDIT.md]]); [S-L19-035] ([[sources/14h1VnkQvIc-master-the-3-types-of-crazy-mobile-ui-swipe-interactions|Master the 3 Types of CRAZY Mobile UI Swipe Interactions]]); compared DC-L13-08, DC-L08-06.
+- **Maps to:** Q-form-05: **confirms the default** `both` and adds **new options** `hold-to-confirm` ("Hold the button for 2 seconds to delete") and `slide-to-confirm` ("Slide all the way across to send or buy"). **Visual samples:** a hold-to-delete button whose fill sweeps over 2s and snaps back in 200ms [S-L19-017]; a Resend-style slider [S-L19-035].
+- **Impact now / as it grows:**
+  - `undo`: now, needs soft delete in the backend. As it grows, it is the cheapest safety net at scale.
+  - `confirm-dialog`: now, simple. As it grows, every extra dialog trains more click-through.
+  - `hold-to-confirm`: now, one component. As it grows, it becomes a recognisable house pattern for danger.
+  - `slide-to-confirm`: now, a touch-only control. As it grows, desktop needs its own route.
+  - `type-to-confirm`: now, slow. As it grows, keep it to a handful of catastrophic actions.
+- **Standards:** STD-visual-details-40, STD-components-toasts-drawers-77, STD-easing-duration-12, STD-mobile-touch-62, STD-mobile-touch-05.
+
+### DC-L19-109: What a pressed control shows while it works and when it is done
+- **Block path:** Components > States > Pending and success; Patterns > Feedback
+- **Questions the designer answers:** After a tap, what shows while the app works? How does someone know a silent action, such as copy or save, worked? What happens when the work finishes after they have moved on?
+- **Options:**
+  - `pending-in-button`: a submitted form shows a loading state [S-L19-003]. When the next screen may take a moment, gray the button out as soon as it is tapped, and add a spinner for long waits [S-L19-045]. Confirms the in-button pending of DC-L08-12 and DC-L13-01.
+  - `success-in-place`: copying to the clipboard shows a success state [S-L19-003]. A small chip slides up after copying, because hover and click states alone do not confirm anything [S-L19-052]. Saving fills the save icon and adds a red dot to the save tab [S-L19-045]. When a state swap still reads as two objects, blur it by 2px and fade it to 0.7 over 200ms [S-L19-003] [S-L19-023].
+  - `background-toast`: work that finishes later uses `toast.loading` and then an update by id, or `toast.promise` with loading, success and error [S-L19-091] [S-L19-022]. A deploy reports its status right away, as Vercel does [S-L19-044].
+  - `optimistic`: show the result at once while the work continues. Kole Jain's quick-save window collapses into a toast, as Apple Mail does when moving mail to the trash [S-L19-067]. This is the optimistic option in DC-L13-01.
+  - A faster-spinning spinner makes loading feel quicker with the same load time [S-L19-003].
+- **Visual effect:** `pending-in-button`: the tap clearly registered, and the button holds its place. `success-in-place`: a small, satisfying close to the action. `background-toast`: people keep working and hear back at the edge of the screen. `optimistic`: the product feels instant.
+- **Depends on (upstream):** Q-state-08, Q-form-04, Q-state-04 (how disabled looks), Q-form-02 (whether submit can be disabled).
+- **Affects (downstream):** button pending and success states, icon swaps, toasts and form submission.
+- **Token encoding:** nothing new. Reuse `motion.transition.feedback` and the status colors; spinners are linear.
+- **Platform notes:** iOS puts the activity indicator inside the button (DC-L13-01). React Native fires a success or error notification haptic when an operation ends (STD-mobile-touch-62).
+- **Accessibility constraints:** "gray out" must not become a `disabled` attribute that drops focus. Keep the control focusable with `aria-disabled` or `aria-busy` (DC-L08-10, DC-L08-12). **This differs from Kole Jain's gray-out,** which reads as disabled [S-L19-045]. Announce success and failure through a live region (DC-L13-01, DC-L13-09 [inferred]). Block repeat submissions while pending (DC-L13-01).
+- **Default + heuristic:** press feedback at once (DC-L19-102); a pending state in the button for waits (Q-state-08's timing ladder); `success-in-place` for actions with no visible result; `toast.promise` for work that finishes after the person has moved on; `optimistic` only when failure is rare and reversible (Q-state-08). Heuristic: every action ends in one of three things: pending, success in place, or a toast [inferred from STD-visual-details-49].
+- **Evidence:** [S-L19-003] ([[sources/ek-7-practical-animation-tips-7-practical-animation-tips|7 Practical Animation Tips]]); [S-L19-045] ([[sources/AH_ugxmLeUM-7-ui-ux-mistakes-that-scream-youre-a-beginner|7 UI/UX mistakes that SCREAM you’re a beginner]]); [S-L19-052] ([[sources/EcbgbKtOELY-every-ui-ux-concept-explained-in-under-10-minutes|Every UI/UX Concept Explained in Under 10 Minutes]]); [S-L19-023] ([[sources/eks-skills-emil-design-eng-skill-emilkowalski-skills-skills-emil-design-eng-skill-md|emilkowalski/skills: skills/emil-design-eng/SKILL.md]]); [S-L19-091] ([[sources/sonner-toast-toast-sonner|Toast – Sonner]]); [S-L19-022] ([[sources/eks-skills-ask-sonner-skill-emilkowalski-skills-skills-ask-sonner-skill-md|emilkowalski/skills: skills/ask-sonner/SKILL.md]]); [S-L19-044] ([[sources/ADaQuZS04Rc-stop-making-pretty-uis-think-like-a-product-designer|Stop Making Pretty UIs. Think Like a Product Designer]]); [S-L19-067] ([[sources/Vy0KKvZJRH8-everything-you-need-to-design-macos-apps-exactly-like-apple-beginner-friendly|Everything you need to Design macOS Apps EXACTLY like Apple (beginner friendly)]]); compared DC-L13-01, DC-L08-12, DC-L08-10, DC-L13-09.
+- **Maps to:** Q-state-08: **new option** `success-in-place` ("The button or icon itself confirms: Copied, a check, a filled icon") and a **new heuristic** (every action gets pending, success in place, or a toast). **Visual sample:** a copy button whose label swaps to a check, with and without the 2px blur [S-L19-003].
+- **Impact now / as it grows:**
+  - `pending-in-button`: now, no double submits. As it grows, every async action inherits the same state.
+  - `success-in-place`: now, a small detail per action. As it grows, a shared "done" state keeps quick actions consistent.
+  - `background-toast`: now, it needs Sonner. As it grows, it scales to long jobs (deploys, imports).
+  - `optimistic`: now, the snappiest feel. As it grows, every optimistic action needs a rollback path and an error message.
+- **Standards:** STD-visual-details-49, STD-enter-exit-origin-29, STD-components-toasts-drawers-19, STD-components-toasts-drawers-20, STD-components-toasts-drawers-21, STD-mobile-touch-62.
+
+### DC-L19-110: Text field anatomy and phone input rules
+- **Block path:** Components > Text field; Patterns > Forms > Field anatomy
+- **Questions the designer answers:** Where does the label go, and what goes in the placeholder? How big is the text inside inputs on phones? Which keyboard opens for each field?
+- **Options:**
+  - `label-above-example`: labels sit above the inputs, always visible, and the placeholder shows a realistic example of the expected entry [S-L19-075]. Confirms DC-L13-05 and DC-L08-16 (placeholder-as-label rejected).
+  - `soft-filled`: an off-white fill with the stroke at 40% opacity [S-L19-075]. This is one video's styling, sitting between Q-form-01's `outlined` and `filled`. A 40% stroke may miss the 3:1 that DC-L08-16 asks for when the border is the field's only boundary [inferred].
+  - Field states: focus when someone clicks in, error as a red border plus a message, and warning for optional issues [S-L19-052].
+  - `input-16`: input, textarea and select text at 16px or more. If desktop wants smaller text, apply the 16px only under `(pointer: coarse)` [S-L19-028] (STD-mobile-touch-11). Never switch off pinch zoom to hide the problem (STD-accessibility-motion-27).
+  - `keyboard-hints`: `inputmode="numeric"` for codes, `inputmode="decimal"` for amounts, `type="email"` and `type="tel"`, `autocapitalize="none"` and `autocorrect="off"` on usernames and codes, and `enterkeyhint` of send, search or done [S-L19-028] (STD-mobile-touch-13).
+  - One-time codes use input-otp [S-L19-029].
+  - Sign-up modals: a "Create account" subheading and a small log-in link, laid out on a 4px grid [S-L19-075]. The 4px grid is Kole Jain's personal rule; it agrees with the 4-based options in Q-space-01.
+  - Inside drawers, inputs stay above the on-screen keyboard (Vaul's `repositionInputs`, on by default) [S-L19-005] [S-L19-096] [S-L19-093].
+- **Visual effect:** `label-above-example`: forms that are longer but never ambiguous halfway through. `soft-filled`: soft and app-like, and it can fade on light backgrounds. `input-16`: slightly larger text on phones and no zoom jump on focus. `keyboard-hints`: the right keyboard appears, and the return key says what it does.
+- **Depends on (upstream):** Q-form-01, Q-type-08 (body size), Q-space-04 (heights), Q-plat-01.
+- **Affects (downstream):** text fields, textareas, selects, search fields, OTP fields, sign-up and log-in modals, and the input text style.
+- **Token encoding:** a separate input text style, for example `text.input.md` (`$type: typography`) at 16px on coarse pointers, so a 14px body choice cannot make iOS zoom. Also `color.border.input` checked at 3:1, and `color.bg.input` for filled or soft styles [inferred naming].
+- **Platform notes:** the sources' input rules are for the web. Native iOS and Android fields are not covered (DC-L08-16 notes iOS grouped lists).
+- **Accessibility constraints:** every field has a programmatic label. Errors are never color-only; use a message and an icon. The input border meets 3:1 when it is the only boundary (DC-L08-16). Pinch zoom stays on.
+- **Default + heuristic:** confirms `outlined` with top labels. New: the placeholder holds a realistic example, input text is 16px on coarse pointers even when Q-type-08 picks a 14px body, and each field type sets its keyboard attributes.
+- **Evidence:** [S-L19-075] ([[sources/gKM6b2EnW1k-upgrading-9-crucial-ui-elements-free-figma-file-included|Upgrading 9 CRUCIAL UI Elements (free figma file included)]]); [S-L19-052] ([[sources/EcbgbKtOELY-every-ui-ux-concept-explained-in-under-10-minutes|Every UI/UX Concept Explained in Under 10 Minutes]]); [S-L19-028] ([[sources/eks-skills-mobile-native-skill-emilkowalski-skills-skills-mobile-native-skill-md|emilkowalski/skills: skills/mobile-native/SKILL.md]]); [S-L19-029] ([[sources/eks-skills-pick-ui-library-skill-emilkowalski-skills-skills-pick-ui-library-skill-md|emilkowalski/skills: skills/pick-ui-library/SKILL.md]]); [S-L19-005] ([[sources/ek-building-a-drawer-component-building-a-drawer-component|Building a drawer component]]); [S-L19-096] ([[sources/vaul-inputs-inputs-vaul|Inputs – Vaul]]); [S-L19-093] ([[sources/vaul-api-api-reference-vaul|API Reference – Vaul]]); compared DC-L08-16, DC-L13-05, DC-L13-07.
+- **Maps to:** Q-form-01: **new default additions** ("placeholder shows a realistic example; input text 16px on touch"), plus a **new option** `soft-filled` with a 3:1 check. Engine: give inputs their own text style instead of `text.body.md`, fixing the conflict recorded under STD-mobile-touch-11. **Visual samples:** the sign-up modal before and after [S-L19-075]; an input under 16px that zooms the page on focus next to a 16px one that does not [S-L19-028]; a row of phone keyboards [S-L19-028].
+- **Impact now / as it grows:**
+  - `label-above-example`: now, slightly taller forms. As it grows, long forms stay usable, and translations do not lose their labels.
+  - `soft-filled`: now, a softer look. As it grows, it must pass contrast in every theme you add.
+  - `input-16`: now, one extra text style. As it grows, no page of the product zooms on focus.
+  - `keyboard-hints`: now, a few attributes per field. As it grows, a field-type table keeps new forms right by default [inferred].
+- **Standards:** STD-mobile-touch-11, STD-accessibility-motion-27, STD-mobile-touch-13, STD-visual-details-55, STD-components-toasts-drawers-45, STD-components-toasts-drawers-48, STD-visual-details-41.
+
+### DC-L19-111: When forms check answers
+- **Block path:** Patterns > Forms > Validation timing
+- **Questions the designer answers:** Does a field say "invalid" while someone types, when they leave it, or only when they press submit? What does submit still check?
+- **Options:**
+  - `inline`: validate form input inline, not on submit (STD-visual-details-49) [S-L19-020]. Errors show as a red border plus a message next to the field [S-L19-052].
+  - `on-blur-everything`: check each field when the person leaves it, and clear the error on the keystroke that fixes it ("reward early, punish late", DC-L13-06). Q-form-02's current `on-blur` option does this for format checks only.
+  - `on-submit-summary`: check on submit, with an error summary that takes focus (GOV.UK, DC-L08-17). As the only timing, this conflicts with STD-visual-details-49.
+  - `live-keystroke`: only for things like password-strength meters (DC-L13-06).
+- **Visual effect:** `inline` and `on-blur-everything`: calm while typing, with problems shown right where they are as soon as a field is done. `on-submit-summary`: clean until the end, then a list of fixes. `live-keystroke`: constant feedback, which is hostile outside of meters.
+- **Depends on (upstream):** Q-form-01 (field anatomy), Q-form-03 (error messages), and Q-form-02's disabled-submit choice.
+- **Affects (downstream):** every field, the error summary, the submit button and error messages.
+- **Token encoding:** none (behaviour). Uses the danger status roles.
+- **Platform notes:** the same on every platform. Phone keyboards make premature errors more costly (DC-L13-06 [inferred]).
+- **Accessibility constraints:** errors are identified in text and announced (WCAG 3.3.1). Focus is not moved while someone types (DC-L13-06). An error summary shown on submit takes focus (DC-L08-17).
+- **Default + heuristic:** inline on blur for every rule the browser can check, not only formats, with errors cleared on the fixing keystroke. Submit-time checks are a backstop only, for server-side errors and untouched required fields, with a summary on forms of more than about 5 fields. **Differs from DC-L08-17's on-submit default;** the house standard decides it.
+- **Evidence:** [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]); [S-L19-052] ([[sources/EcbgbKtOELY-every-ui-ux-concept-explained-in-under-10-minutes|Every UI/UX Concept Explained in Under 10 Minutes]]); compared DC-L13-06, DC-L08-17, DC-L13-07.
+- **Maps to:** Q-form-02: **new default wording** ("on blur for every field the client can check; on submit only for what cannot be checked earlier, with a summary on long forms"), because STD-visual-details-49 (a must) requires inline validation. This resolves the conflict recorded for Q-form-02 in standards.json. Relabel `on-submit-summary` as "summary as a backstop".
+- **Impact now / as it grows:**
+  - `inline`: now, client-side rules per field. As it grows, shared validators keep every new form consistent [inferred].
+  - `on-blur-everything`: now, the same work as inline. As it grows, it scales to long forms without surprises at the end.
+  - `on-submit-summary`: now, the least work. As it grows, long forms fail late and frustrate people.
+  - `live-keystroke`: now, fine for meters. As it grows, keep it confined to them.
+- **Standards:** STD-visual-details-49.
+
+### DC-L19-112: When a toast is the right channel
+- **Block path:** Patterns > Feedback > Messaging; Components > Toast
+- **Questions the designer answers:** Which messages go in a toast, and which stay on the page? Can an error be only a toast? Does a toast with an Undo button disappear on a timer?
+- **Options:**
+  - `confirm-after-overlay`: a toast confirms changes made inside a modal, because the page was hidden while they worked [S-L19-047].
+  - `status-of-slow-work`: status right after a slow action (Vercel's build status) [S-L19-044], with `toast.promise` or `toast.loading` [S-L19-091].
+  - `undo-carrier`: the Undo from DC-L13-08 sits in the toast's `action`, a primary button that closes the toast unless the handler calls `event.preventDefault()` [S-L19-091] [inferred pairing].
+  - `warnings-and-errors`: toasts for warnings and errors, which often get missed elsewhere [S-L19-047]. **Differs from DC-L13-09,** which says a toast is never the only channel for an error that blocks progress (that card marks this [inferred]).
+  - `no-toasts`: Primer's choice (DC-L13-09); still valid.
+  - Never use a message to shame people about their usage when its only exits are an upsell or more of the same notifications [S-L19-048]. The video's examples are pop-up messages; applying the rule to toasts is [inferred].
+  - Timers: Sonner closes every toast after 4000ms unless `duration` changes, and clicking action or cancel closes it [S-L19-091]. The timer pauses on hover and while the tab is hidden [S-L19-006]. DC-L08-18 and Q-form-04's option text say never to auto-dismiss a toast that contains an action (WCAG 2.2.1). This conflict is recorded under STD-components-toasts-drawers-15.
+- **Visual effect:** toasts keep the layout still and report at the edge of the screen; banners and inline messages stay put and are easy to find again. `warnings-and-errors` in toasts are easy to miss once they fade [inferred].
+- **Depends on (upstream):** Q-form-04, Q-form-05, Q-state-08, DC-L19-101 (Sonner).
+- **Affects (downstream):** the toast component, banners, inline messages, the undo flow and live-region announcements.
+- **Token encoding:** none (channel decision). The per-toast `duration` override is set in code.
+- **Platform notes:** web and React use Sonner, the curated pick [S-L19-029]. iOS uses system notifications and in-place status (DC-L08-18). React Native has a toast recipe [S-L19-015]. The sources give no SwiftUI or Compose guidance.
+- **Accessibility constraints:** WCAG 2.2.1 for timed toasts that carry actions (DC-L08-18). Keyboard users reach the toaster with Alt+T, and the container is labelled (STD-accessibility-motion-23). None of the sources says whether Sonner announces new toasts through a live region; check it in code or with a screen reader. Toasts need a reduced-motion variant (STD-accessibility-motion-01), and no toast source gives one.
+- **Default + heuristic:** keep `inline-banner` as the default channel. Use toasts (Sonner) for three jobs: confirming a change made in an overlay, reporting work that finishes later, and carrying Undo. A toast with an action gets `duration: Infinity` per call (Sonner's way to persist a toast [S-L19-089]) and stays dismissible, which satisfies DC-L08-18 while plain toasts keep the 4s default [inferred; STD-components-toasts-drawers-15 and STD-components-toasts-drawers-26 allow per-call overrides]. An error that blocks progress also appears in place (DC-L13-09).
+- **Evidence:** [S-L19-047] ([[sources/B7k5rOgmOGY-everything-you-need-to-know-to-build-a-dashboard-ui-in-8-minutes-beginner-friendly|EVERYTHING you need to know to build a Dashboard UI in 8 minutes (beginner friendly)]]); [S-L19-044] ([[sources/ADaQuZS04Rc-stop-making-pretty-uis-think-like-a-product-designer|Stop Making Pretty UIs. Think Like a Product Designer]]); [S-L19-091] ([[sources/sonner-toast-toast-sonner|Toast – Sonner]]); [S-L19-006] ([[sources/ek-building-a-toast-component-building-a-toast-component|Building a toast component]]); [S-L19-048] ([[sources/BUDipdbKK7Y-i-made-the-most-unhinged-ui-upgrades-downgrades|I Made The Most UNHINGED UI Upgrades (downgrades?)]]); [S-L19-029] ([[sources/eks-skills-pick-ui-library-skill-emilkowalski-skills-skills-pick-ui-library-skill-md|emilkowalski/skills: skills/pick-ui-library/SKILL.md]]); [S-L19-015] ([[sources/eks-skills-animate-expo-recipes-emilkowalski-skills-skills-animate-expo-recipes-md|emilkowalski/skills: skills/animate-expo/RECIPES.md]]); [S-L19-022] ([[sources/eks-skills-ask-sonner-skill-emilkowalski-skills-skills-ask-sonner-skill-md|emilkowalski/skills: skills/ask-sonner/SKILL.md]]); [S-L19-089] ([[sources/sonner-other-other-sonner|Other – Sonner]]); compared DC-L13-09, DC-L08-18, DC-L13-08, DC-L13-07.
+- **Maps to:** Q-form-04: **reword** the `inline-banner` option to "inline or banner by default; toasts for overlay confirmations, background status and Undo; toasts with an action stay until dismissed, plain toasts close after 4 seconds". This resolves the recorded conflict. **New heuristic:** "an error toast only echoes an error shown in place". **Visual samples:** a create-link modal that closes into a confirming toast [S-L19-047]; a loading toast that turns into a success toast in place [S-L19-022].
+- **Impact now / as it grows:**
+  - `confirm-after-overlay`: now, one call after close. As it grows, every modal ends the same way.
+  - `status-of-slow-work`: now, needs promise wiring. As it grows, it covers long jobs and integrations.
+  - `undo-carrier`: now, needs soft delete. As it grows, it removes most confirmation dialogs.
+  - `warnings-and-errors`: now, quick to add. As it grows, missed errors become support tickets unless they also appear in place [inferred].
+  - `no-toasts`: now, fewer components. As it grows, background work has nowhere to report.
+- **Standards:** STD-visual-details-57, STD-components-toasts-drawers-15, STD-components-toasts-drawers-16, STD-components-toasts-drawers-17, STD-components-toasts-drawers-19, STD-components-toasts-drawers-26, STD-components-toasts-drawers-28, STD-accessibility-motion-23, STD-accessibility-motion-01.
+
+### DC-L19-113: Where toasts sit and how they look
+- **Block path:** Components > Toast > Placement, stack and style
+- **Questions the designer answers:** Which corner or edge do toasts come from? Are success and error toasts colored, or neutral? Do toasts follow the theme or invert it? How many show at once?
+- **Options:**
+  - Position: one of six (top or bottom, each left, center or right). `bottom-right` is the default (STD-components-toasts-drawers-29) [S-L19-092], and the docs' example uses `top-center` [S-L19-092]. Swipe direction follows the position [S-L19-088] [S-L19-092]. Use several toasters only for a clear separation, such as a global one top right and a canvas one bottom left [S-L19-092].
+  - Color: `neutral`, the default, where typed toasts stay gray until `richColors` is on; `rich-colors`, green and red; and `invert`, which flips toasts against the theme [S-L19-021] [S-L19-092] [S-L19-022].
+  - Theme: toasts follow the app theme, which is a must; otherwise they default to light [S-L19-092] [S-L19-022].
+  - Stack: collapsed, drawn as `Y(0) scale(1)`, `Y(-14px) scale(0.95)`, `Y(-28px) scale(0.9)`, with every toast at the front toast's height. Hover expands the stack (`expand` is false by default), with a gap of 14 and 3 toasts visible [S-L19-006] [S-L19-092].
+  - Offsets: 32px from the edges on desktop and 16px below 600px wide [S-L19-092]. In React Native, `bottom: insets.bottom + 16` [S-L19-015].
+  - Close button: off by default (`closeButton: false`) [S-L19-091] [S-L19-092].
+  - Build: for a design system, a headless `toast.custom()` wrapped in your own `toast()`, skipping the halfway rungs (`unstyled`, stacks of `!important` classes) [S-L19-090] [S-L19-022].
+  - Delight: Kole Jain's loading-to-celebration toast with particles [S-L19-079] is opinion. Toasts are occasional UI, so they get standard motion (STD-when-to-animate-08); keep celebration for a rare first success [inferred].
+- **Visual effect:** `bottom-right`: out of the way on desktop and near where the eye ends. `top-center`: noticed more, and it covers headers. `neutral`: quiet and on brand. `rich-colors`: status readable at a glance. `invert`: high-contrast chips that stand off the page.
+- **Depends on (upstream):** DC-L19-112 (toasts used at all), Q-theme-01, Q-color-15 (status colors), Q-layout-04 (a bottom tab bar must not sit under bottom toasts [inferred]).
+- **Affects (downstream):** the Toaster configuration, toast component tokens, status colors and safe-area padding.
+- **Token encoding:** optional component tier (Q-token-01): `toast.offset.desktop` (`dimension`, 32px), `toast.offset.mobile` (`dimension`, 16px), `toast.gap` (`dimension`, 14px; Sonner lists 14 with no unit, so px is [inferred]), `toast.duration` (`duration`, 4000ms) and `toast.visible` (`number`, 3). The toast surface aliases a theme-following surface such as `color.surface.overlay`, not `color.bg.inverse` unless `invert` is picked. The engine currently describes `color.bg.inverse` as "the inverted surface" for tooltips and toasts, which conflicts with Sonner's `invert: false` default (STD-components-toasts-drawers-23). Toast motion gets its own transition, 400ms `ease` from `translateY(100%)` on the web and 300ms in / 250ms out in React Native, instead of the shared `motion.transition.enter` (STD-components-toasts-drawers-07 records that conflict; -08 holds the React Native values).
+- **Platform notes:** on the mobile web, pad toasts with `env(safe-area-inset-*)` (STD-mobile-touch-16). React Native offsets them by the safe-area insets. No source gives a mobile position, so whether bottom-right should become bottom-center on phones is open.
+- **Accessibility constraints:** status colors meet contrast, and each type keeps its icon so color is not the only signal [inferred]. Sonner lets icons be swapped per type or removed with `null` [S-L19-090], so the design system must not remove them. Keep Alt+T and the labelled container (STD-accessibility-motion-23). Keep swipe-to-dismiss and `dismissible: true`.
+- **Default + heuristic:** bottom-right; neutral colors unless Q-color-15 asks for colored status toasts; theme-following; a collapsed stack of 3 that expands on hover; 32/16px offsets; a headless custom toast for the design system.
+- **Evidence:** [S-L19-092] ([[sources/sonner-toaster-toaster-sonner|Toaster – Sonner]]); [S-L19-088] ([[sources/sonner-home-sonner|Sonner]]); [S-L19-021] ([[sources/eks-skills-ask-sonner-api-emilkowalski-skills-skills-ask-sonner-api-md|emilkowalski/skills: skills/ask-sonner/API.md]]); [S-L19-022] ([[sources/eks-skills-ask-sonner-skill-emilkowalski-skills-skills-ask-sonner-skill-md|emilkowalski/skills: skills/ask-sonner/SKILL.md]]); [S-L19-006] ([[sources/ek-building-a-toast-component-building-a-toast-component|Building a toast component]]); [S-L19-015] ([[sources/eks-skills-animate-expo-recipes-emilkowalski-skills-skills-animate-expo-recipes-md|emilkowalski/skills: skills/animate-expo/RECIPES.md]]); [S-L19-091] ([[sources/sonner-toast-toast-sonner|Toast – Sonner]]); [S-L19-090] ([[sources/sonner-styling-styling-sonner|Styling – Sonner]]); [S-L19-079] ([[sources/ld1zhQMXxXU-11-micro-animations-that-will-instantly-level-up-your-ui-free-figma-file|11 Micro Animations That Will Instantly Level Up Your UI (free figma file)]]); compared DC-L08-18, DC-L13-09.
+- **Maps to:** **new question** (stage 22 detailed, show if Q-form-04 is not `no-toasts`): "Where should toasts appear, and should success and error toasts be colored?" Options: `bottom-right` (default), `top-center`, `bottom-center`; `neutral` (default), `rich-colors`, `invert`. Engine: default the toast surface to the theme surface, not the inverse. **Visual samples:** the three-toast stack with its Y and scale labels [S-L19-006]; the six-position grid showing each swipe direction [S-L19-088].
+- **Impact now / as it grows:**
+  - `bottom-right`: now, Sonner's default with no config. As it grows, it can clash with chat widgets or bottom bars placed later [inferred].
+  - `top-center`: now, more visible. As it grows, it competes with headers and banners.
+  - `neutral`: now, calm. As it grows, errors lean on their icon and wording.
+  - `rich-colors`: now, instant status. As it grows, each theme needs tuned status pairs.
+  - `invert`: now, strong contrast. As it grows, it needs an inverse surface in every theme.
+- **Standards:** STD-components-toasts-drawers-02, STD-components-toasts-drawers-03, STD-components-toasts-drawers-10, STD-components-toasts-drawers-11, STD-components-toasts-drawers-12, STD-components-toasts-drawers-13, STD-components-toasts-drawers-14, STD-components-toasts-drawers-18, STD-components-toasts-drawers-22, STD-components-toasts-drawers-23, STD-components-toasts-drawers-24, STD-components-toasts-drawers-25, STD-components-toasts-drawers-29, STD-components-toasts-drawers-30, STD-components-toasts-drawers-35, STD-components-toasts-drawers-07, STD-components-toasts-drawers-08, STD-mobile-touch-16, STD-accessibility-motion-23, STD-when-to-animate-08.
+
+### DC-L19-114: Popover, modal, sheet or new page
+- **Block path:** Patterns > Modality; Components > Popover, Dialog, Sheet
+- **Questions the designer answers:** When an action needs more room, does it open a small popover, a centered modal, a sliding sheet or a new page? What changes on phones? When is a blocking layer not allowed?
+- **Options:**
+  - `popover`: for simple, non-blocking context such as display settings; people can click away without consequences [S-L19-047]. It also suits rarely used features such as sharing, with the popover's main action (a search box) at the top [S-L19-056], and account links opened from an account card [S-L19-061].
+  - `modal`: for more complex context tied to the current page, such as creating a link. It blocks until the person creates or cancels, and a toast confirms afterwards [S-L19-047]. A short create form that leaves a side flyout mostly empty fits better in a modal [S-L19-061]. Build new modals from the system's existing parts [S-L19-044].
+  - `sheet`: on phones, a drawer (bottom sheet) instead of a modal for a more native feel (STD-components-toasts-drawers-37) [S-L19-005]. Use it for a side task that should not pull people away; the template picker has a title, a search bar, a check and an X [S-L19-053]. React Native uses `formSheet` for short interruptions and `modal` for a self-contained task people can abandon (STD-mobile-touch-42, STD-components-toasts-drawers-59).
+  - `side-flyout`: DC-L08-20's side sheet for editing with context. Kole Jain moved a sparse flyout into a modal [S-L19-061]. **Differs from DC-L08-20's default.**
+  - `new-page`: for large or permanent context, such as opening an existing item, with a back button or breadcrumb [S-L19-047]. First check whether the feature fits the hidden states of an existing drawer or modal [S-L19-056]. On phones, a new page is the default for something new that does not depend on the current screen [S-L19-053].
+  - Avoid: a modal that blocks everything until a chore is done (Figma's forced layer naming) [S-L19-048], and a welcome modal of six bullet points [S-L19-056]. Each comes from one video; the chore modal also breaks STD-visual-details-33 (never trap the user). If a feature must block, the modal says how to turn it off [S-L19-048].
+- **Visual effect:** `popover`: light and anchored to its button. `modal`: a full stop in the middle of the screen. `sheet`: the page stays in view behind a panel that can be flicked away. `side-flyout`: the page stays visible beside the task. `new-page`: a full context switch.
+- **Depends on (upstream):** Q-plat-01 and Q-plat-02, Q-layout-04, Q-pattern-03, Q-depth-06.
+- **Affects (downstream):** dialog, popover, sheet and drawer components; `radius.overlay`, `elevation.overlay` and `color.overlay.scrim`; the locked motion recipes (popover 0.95 over 200ms from its trigger, modal 0.96 over 250ms from the center, drawer 500ms on the drawer curve).
+- **Token encoding:** none (pattern decision). It uses the existing overlay tokens plus a drawer curve token, `motion.easing.drawer` = `cubic-bezier(0.32, 0.72, 0, 1)` (`$type: cubicBezier`, STD-components-toasts-drawers-40).
+- **Platform notes:** phones use sheets; desktop uses popovers and modals. macOS apps also live outside their window, in popovers, extra windows and notifications [S-L19-067].
+- **Accessibility constraints:** build on primitives (STD-accessibility-motion-16). Trap focus, return it, and close on Escape (DC-L08-20). Never trap the user (STD-accessibility-motion-24, STD-visual-details-33). Pop-ups that can be swiped away keep a close button [S-L19-035].
+- **Default + heuristic:** the ladder. A popover for simple, non-blocking settings and rarely used features; a modal for short tasks tied to the page; a sheet on phones for anything that would be a modal on desktop; a side sheet only when the task needs the page in view and has enough content to fill the panel [inferred from S-L19-061]; a new page for large or lasting context, once existing overlays have been ruled out.
+- **Evidence:** [S-L19-047] ([[sources/B7k5rOgmOGY-everything-you-need-to-know-to-build-a-dashboard-ui-in-8-minutes-beginner-friendly|EVERYTHING you need to know to build a Dashboard UI in 8 minutes (beginner friendly)]]); [S-L19-056] ([[sources/Ksx9C2-3yMo-the-3-dashboard-ui-flaws-that-give-away-you-ve-never-built-one|The 3 dashboard UI flaws that give away you've NEVER built one]]); [S-L19-061] ([[sources/PDcQJOPby1k-5-saas-ui-ux-mistakes-that-scream-you-vibe-code|5 SaaS UI/UX mistakes that SCREAM you Vibe Code]]); [S-L19-044] ([[sources/ADaQuZS04Rc-stop-making-pretty-uis-think-like-a-product-designer|Stop Making Pretty UIs. Think Like a Product Designer]]); [S-L19-005] ([[sources/ek-building-a-drawer-component-building-a-drawer-component|Building a drawer component]]); [S-L19-053] ([[sources/Gfsd8NNuD9g-everything-you-need-to-know-about-mobile-app-uis-in-8-minutes-beginner-friendly|Everything you need to know about Mobile App UI’s in 8 minutes (beginner friendly)]]); [S-L19-048] ([[sources/BUDipdbKK7Y-i-made-the-most-unhinged-ui-upgrades-downgrades|I Made The Most UNHINGED UI Upgrades (downgrades?)]]); [S-L19-067] ([[sources/Vy0KKvZJRH8-everything-you-need-to-design-macos-apps-exactly-like-apple-beginner-friendly|Everything you need to Design macOS Apps EXACTLY like Apple (beginner friendly)]]); [S-L19-035] ([[sources/14h1VnkQvIc-master-the-3-types-of-crazy-mobile-ui-swipe-interactions|Master the 3 Types of CRAZY Mobile UI Swipe Interactions]]); compared DC-L08-20, DC-L04-18, DC-L13-03.
+- **Maps to:** Q-pattern-01: **new option and default** `ladder` ("Popover for small choices, modal for short page tasks, sheet on phones, new page for big or lasting things"), based on [S-L19-047], [S-L19-005] and STD-components-toasts-drawers-37. It narrows DC-L08-20's "side sheet for editing" to forms long enough to fill it [inferred from S-L19-061]. **New use/avoid line:** no chore modals and no bullet-point welcome modals [S-L19-048] [S-L19-056]. **Visual sample:** the popover, modal and new-page ladder on one dashboard [S-L19-047].
+- **Impact now / as it grows:**
+  - `popover`: now, light. As it grows, features pile into popovers that deserve a page.
+  - `modal`: now, focused. As it grows, stacked or chained modals appear unless the ladder is enforced.
+  - `sheet`: now, native on phones. As it grows, it needs sheet behaviours (DC-L19-115).
+  - `side-flyout`: now, keeps context. As it grows, sparse panels look empty and unfinished.
+  - `new-page`: now, room for everything. As it grows, navigation depth and back paths multiply.
+- **Standards:** STD-components-toasts-drawers-37, STD-accessibility-motion-16, STD-accessibility-motion-24, STD-visual-details-33, STD-visual-details-20, STD-mobile-touch-42, STD-components-toasts-drawers-59, STD-components-toasts-drawers-40, STD-enter-exit-origin-08, STD-enter-exit-origin-11.
+
+### DC-L19-115: How a phone sheet rests and leaves
+- **Block path:** Components > Sheet and drawer > Heights and dismissal
+- **Questions the designer answers:** Does the sheet open to one height or rest at several? Can a quick flick close it, and is there also a close button? Can people use the page behind it?
+- **Options:**
+  - `one-height`: Vaul's defaults: modal, from the bottom, dismissible by an outside click, Escape or a drag down, and draggable from anywhere (`handleOnly: false`) [S-L19-093] [S-L19-097] (STD-components-toasts-drawers-39, good-to-have).
+  - `snap-points`: the sheet can rest part-open, like Apple Maps. On release it snaps to the closest point, and a hard flick can skip points or close it [S-L19-005]. Points are a fraction of the viewport or fixed pixels; use pixels when an input must peek out by the same amount on every device [S-L19-005] (STD-components-toasts-drawers-48). `snapToSequentialPoint` stops a fast drag skipping points when every point matters equally [S-L19-098] (STD-springs-gestures-24), and `fadeFromIndex` sets where the fade starts [S-L19-098].
+  - `non-modal`: `modal={false}`, usually with snap points, keeps the page behind usable [S-L19-097] [S-L19-098].
+  - `non-dismissible`: `dismissible={false}` blocks outside clicks, Escape and dragging. It then needs an explicit close; the docs' demo can only be closed by refreshing [S-L19-097] (STD-accessibility-motion-24).
+  - `native-detents`: a React Native `formSheet` with at most three detents. The grabber is iOS-only, the content is a single screen, and `fitToContents` needs explicitly sized content (STD-components-toasts-drawers-60) [S-L19-015].
+  - Dismissing: a flick is enough, by distance or by velocity above about 0.11 (STD-springs-gestures-21) [S-L19-005] [S-L19-023]. The React Native recipe dismisses when the projected position passes 40% of the sheet's height [S-L19-015].
+  - Keep a visible close button for people who do not know the gesture [S-L19-035]; the template sheet has a check and an X [S-L19-053].
+- **Visual effect:** `one-height`: a simple panel that comes and goes. `snap-points`: a layered, map-like feel where content peeks. `non-modal`: the sheet works alongside the page. `non-dismissible`: a hard stop. `native-detents`: exactly the platform's sheet.
+- **Depends on (upstream):** DC-L19-114 (a sheet was chosen), Q-plat-01 and Q-plat-02, Q-motion-01.
+- **Affects (downstream):** the sheet or drawer component; scrolling inside sheets (drag only from the scroll top, blocked for 100ms after reaching it; STD-components-toasts-drawers-44); inputs inside sheets (STD-components-toasts-drawers-45); haptics on detents (STD-mobile-touch-62); overscroll containment.
+- **Token encoding:** snap heights as `size.sheet.peek` and similar (`$type: dimension`, px) [inferred naming]; `motion.easing.drawer` (`cubicBezier`, [0.32, 0.72, 0, 1]); `motion.duration.drawer` (`duration`, 500ms for timed open and close); and a spring for drags (damping 0.8, response 0.3) (STD-springs-gestures-08).
+- **Platform notes:** web sheets use `100dvh`, contained overscroll, and bottom padding of `calc(1rem + env(safe-area-inset-bottom))` [S-L19-028]. The drag surface uses `touch-action: none` and the handle `pan-x` (STD-mobile-touch-18). React Native uses `formSheet`, where Android caps detents at three. iOS system sheets use detents and a grabber (DC-L08-20).
+- **Accessibility constraints:** never trap anyone: dismissible by default, plus a close control (STD-accessibility-motion-24). Title and Description are announced when the drawer opens [S-L19-093]. A controlled drawer passes `onOpenChange` (STD-accessibility-motion-25). The overlay covers the inert page (STD-accessibility-motion-26). Under reduced motion, Apple's sample turns the sheet into a 200ms opacity fade [S-L19-020].
+- **Default + heuristic:** one height fitted to the content; modal; dismissible by drag, flick, outside click and Escape; plus a visible close or confirm control. Use snap points only for content people browse while keeping context (maps, lists over content), sequential when each point matters equally, and at most three detents on native.
+- **Evidence:** [S-L19-093] ([[sources/vaul-api-api-reference-vaul|API Reference – Vaul]]); [S-L19-005] ([[sources/ek-building-a-drawer-component-building-a-drawer-component|Building a drawer component]]); [S-L19-098] ([[sources/vaul-snap-points-snap-points-vaul|Snap Points – Vaul]]); [S-L19-097] ([[sources/vaul-other-other-vaul|Other – Vaul]]); [S-L19-015] ([[sources/eks-skills-animate-expo-recipes-emilkowalski-skills-skills-animate-expo-recipes-md|emilkowalski/skills: skills/animate-expo/RECIPES.md]]); [S-L19-023] ([[sources/eks-skills-emil-design-eng-skill-emilkowalski-skills-skills-emil-design-eng-skill-md|emilkowalski/skills: skills/emil-design-eng/SKILL.md]]); [S-L19-035] ([[sources/14h1VnkQvIc-master-the-3-types-of-crazy-mobile-ui-swipe-interactions|Master the 3 Types of CRAZY Mobile UI Swipe Interactions]]); [S-L19-053] ([[sources/Gfsd8NNuD9g-everything-you-need-to-know-about-mobile-app-uis-in-8-minutes-beginner-friendly|Everything you need to know about Mobile App UI’s in 8 minutes (beginner friendly)]]); [S-L19-028] ([[sources/eks-skills-mobile-native-skill-emilkowalski-skills-skills-mobile-native-skill-md|emilkowalski/skills: skills/mobile-native/SKILL.md]]); [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]); compared DC-L08-20, DC-L04-18.
+- **Maps to:** **new question** (stage 20 detailed, show if Q-plat-02 includes phone and Q-pattern-01 uses sheets): "Should sheets on phones open to one height, or rest at a few heights like Apple Maps?" Options: `one-height` (default), `snap-points`, `snap-sequential`, `non-modal-snap`. **Visual samples:** snap points with a fixed-pixel input peeking out [S-L19-005]; drag-to-dismiss with a light haptic on snap-back [S-L19-015].
+- **Impact now / as it grows:**
+  - `one-height`: now, the least behaviour to test. As it grows, it covers most pickers, filters and forms.
+  - `snap-points`: now, more gesture work and real-device testing. As it grows, it suits map- or list-driven products that browse while keeping context.
+  - `non-modal`: now, flexible. As it grows, focus management gets harder with two live surfaces [inferred].
+  - `non-dismissible`: now, forces completion. As it grows, each one needs a close path, or it traps people.
+  - `native-detents`: now, free native behaviour. As it grows, the three-detent cap and Android differences limit custom layouts.
+- **Standards:** STD-components-toasts-drawers-39, STD-components-toasts-drawers-44, STD-components-toasts-drawers-45, STD-components-toasts-drawers-48, STD-components-toasts-drawers-60, STD-components-toasts-drawers-40, STD-springs-gestures-21, STD-springs-gestures-22, STD-springs-gestures-24, STD-springs-gestures-08, STD-accessibility-motion-24, STD-accessibility-motion-25, STD-accessibility-motion-26, STD-mobile-touch-10, STD-mobile-touch-14, STD-mobile-touch-16, STD-mobile-touch-18, STD-enter-exit-origin-41.
+
+### DC-L19-116: What happens to the page behind an overlay
+- **Block path:** Foundations > Depth > Scrim; Components > Sheet and dialog > Backdrop
+- **Questions the designer answers:** When a sheet or dialog opens, does the page just dim, or does it also shrink back like a stack of cards? Do non-blocking panels dim anything?
+- **Options:**
+  - `dim`: a scrim only. Vaul's starter overlay is black at 40% (`bg-black/40`) [S-L19-095], inside DC-L04-18's 40-50% light-mode range [inferred match]. The backdrop fades with the modal, on the same timing (STD-enter-exit-origin-12).
+  - `dim-and-push-back`: the page scales down and rounds its corners so it looks like another sheet (Vaul's opt-in `scaleBackground`). While dragging, the values follow progress: dragging down 40% sets the radius to 60% of its maximum [S-L19-005]. Apple-style guidance gives a modal task a scrim and pushes the background back or down, and stacked sheets progressively dim and push back each parent [S-L19-020]. Kole Jain zooms the background out as a sheet rises [S-L19-053] and also moves it down [S-L19-035].
+  - `no-scrim`: a parallel, non-blocking panel uses translucency and offset without a scrim [S-L19-020] (STD-visual-details-20), like Vaul's `modal={false}` [S-L19-097].
+  - `theme-color-sync`: matching Safari's theme bar to the overlay. Emil Kowalski has not shipped it, because the color falls out of step when frames drop [S-L19-005] (STD-components-toasts-drawers-65).
+- **Visual effect:** `dim`: familiar and calm. `dim-and-push-back`: iOS-like depth, where the page clearly sits behind [S-L19-005]. `no-scrim`: work continues beside the panel.
+- **Depends on (upstream):** DC-L19-114, DC-L19-115, Q-depth-06 (scrim darkness), Q-motion-01, Q-depth-04 (glass).
+- **Affects (downstream):** `color.overlay.scrim`, sheet and dialog enter and exit, an app-root wrapper element (Vaul uses `[vaul-drawer-wrapper]`), and `radius.overlay`.
+- **Token encoding:** `color.overlay.scrim` (existing). The push-back scale is not given in the sources; pick it by eye and record it as `motion.backdrop.scale` (`$type: number`) [inferred].
+- **Platform notes:** iOS system sheets manage their own dimming (DC-L04-18 [inferred there]). React Native derives the backdrop's opacity from the sheet's own position [S-L19-015]. The web needs a wrapper element around the app.
+- **Accessibility constraints:** under reduced motion, drop the scale and keep the dim as an opacity change [inferred from S-L19-020's reduced-motion guidance]. The overlay covers the inert page (STD-accessibility-motion-26). Ship the reduced-motion variant with the change (STD-accessibility-motion-01).
+- **Default + heuristic:** `dim` for modal dialogs and sheets; `dim-and-push-back` as an opt-in for phone sheets in expressive products [inferred]; `no-scrim` for non-blocking panels.
+- **Evidence:** [S-L19-095] ([[sources/vaul-getting-started-getting-started-vaul|Getting Started – Vaul]]); [S-L19-005] ([[sources/ek-building-a-drawer-component-building-a-drawer-component|Building a drawer component]]); [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]); [S-L19-053] ([[sources/Gfsd8NNuD9g-everything-you-need-to-know-about-mobile-app-uis-in-8-minutes-beginner-friendly|Everything you need to know about Mobile App UI’s in 8 minutes (beginner friendly)]]); [S-L19-035] ([[sources/14h1VnkQvIc-master-the-3-types-of-crazy-mobile-ui-swipe-interactions|Master the 3 Types of CRAZY Mobile UI Swipe Interactions]]); [S-L19-097] ([[sources/vaul-other-other-vaul|Other – Vaul]]); [S-L19-015] ([[sources/eks-skills-animate-expo-recipes-emilkowalski-skills-skills-animate-expo-recipes-md|emilkowalski/skills: skills/animate-expo/RECIPES.md]]); compared DC-L04-18, DC-L08-20.
+- **Maps to:** Q-depth-06: **new option** `push-back` ("Dim and shrink the page behind a phone sheet"), and a **reworded use line**: the current "use lighter scrims for non-blocking sheets" becomes "no scrim for non-blocking panels". **Differs from DC-L04-18,** whose lighter-scrim line is [inferred]; the conflict is recorded under STD-visual-details-20. Q-pattern-01: a use line that non-blocking panels get no scrim. **Visual samples:** a drawer with `scaleBackground` rounding the page behind it [S-L19-005]; stacked sheets, each parent dimmer [S-L19-020].
+- **Impact now / as it grows:**
+  - `dim`: now, one token. As it grows, it works for every overlay.
+  - `dim-and-push-back`: now, a wrapper and transform wiring. As it grows, nested sheets need consistent depth steps.
+  - `no-scrim`: now, parallel work. As it grows, panels need clear edges (translucency or borders) to stay distinct.
+  - `theme-color-sync`: now, polish. As it grows, it is fragile, so leave it out unless it stays in step.
+- **Standards:** STD-visual-details-20, STD-enter-exit-origin-12, STD-accessibility-motion-26, STD-components-toasts-drawers-65, STD-accessibility-motion-01.
+
+### DC-L19-117: A command menu, and how it opens
+- **Block path:** Components > Command palette; Patterns > Search
+- **Questions the designer answers:** Does the product get a ⌘K command menu, a floating search bar, or neither? How does it open, and how are keyboard shortcuts taught?
+- **Options:**
+  - `command-menu`: a universal command palette, as in Notion, Obsidian and Attio. It is sleek and intuitive, but most items take you to a new screen [S-L19-067]. Build it on cmdk [S-L19-029].
+  - `floating-search`: a floating search bar with a slide-out preview keeps a one-screen app on one screen. It stays collapsed until clicked or opened by its shortcut [S-L19-067]. Search is prominent and always reachable in native Mac apps, and results show a count and a clear X [S-L19-067].
+  - `none`: rely on visible navigation and search.
+  - Opening: instantly, with no animation, and the arrow-key highlight moves instantly too (Raycast) [S-L19-012] (STD-when-to-animate-05, STD-when-to-animate-06).
+  - Shortcuts: show reminders on the buttons they trigger, teach them in onboarding, keep a cheat sheet in a settings popover, and give every shortcut visible feedback [S-L19-067].
+- **Visual effect:** `command-menu`: a power-user feel, with everything one keystroke away. `floating-search`: search in place, and the app stays on one screen. `none`: simpler, with nothing hidden behind keys.
+- **Depends on (upstream):** Q-plat-01 (a desktop or web app), Q-comp-02 (extended inventory), DC-L19-101.
+- **Affects (downstream):** the `command-palette` entry in the engine's extended list, shortcut hints (kbd) in buttons and menus, the search field, and onboarding.
+- **Token encoding:** none. Motion is explicitly none.
+- **Platform notes:** desktop and web apps. macOS utilities appear where they are needed, like Spotlight and Raycast [S-L19-067]. Rare on phones [inferred].
+- **Accessibility constraints:** cmdk is expected to handle focus, as STD-accessibility-motion-16 assumes; the sources do not describe its behaviour [inferred]. Results should be announced [inferred]. Shortcut hints need text alternatives.
+- **Default + heuristic:** `none` for simple sites and phone-first apps; `command-menu` (cmdk) for desktop or web tools used daily with more destinations or actions than the sidebar shows [inferred]; `floating-search` for one-screen utilities. It always opens with no animation.
+- **Evidence:** [S-L19-067] ([[sources/Vy0KKvZJRH8-everything-you-need-to-design-macos-apps-exactly-like-apple-beginner-friendly|Everything you need to Design macOS Apps EXACTLY like Apple (beginner friendly)]]); [S-L19-029] ([[sources/eks-skills-pick-ui-library-skill-emilkowalski-skills-skills-pick-ui-library-skill-md|emilkowalski/skills: skills/pick-ui-library/SKILL.md]]); [S-L19-012] ([[sources/ek-you-dont-need-animations-you-don-t-need-animations|You Don't Need Animations]]); compared DC-L16-10, DC-L08-01.
+- **Maps to:** Q-comp-02: **confirms** `command-palette` in the extended list and adds a **new heuristic** (add it to version 1 for daily-use desktop or web tools; build on cmdk; it opens instantly). **Visual sample:** a command menu toggled with and without animation [S-L19-012].
+- **Impact now / as it grows:**
+  - `command-menu`: now, one library and an index of actions. As it grows, every new feature registers a command, and discoverability scales.
+  - `floating-search`: now, a focused utility. As it grows, it may need to become a full palette.
+  - `none`: now, nothing to build. As it grows, power users ask for shortcuts.
+- **Standards:** STD-when-to-animate-05, STD-when-to-animate-06, STD-accessibility-motion-16, STD-visual-details-55.
+
+### DC-L19-118: What goes in the sidebar, and in what order
+- **Block path:** Components > Side navigation; Patterns > App shell
+- **Questions the designer answers:** What sits at the top of the sidebar, the account or the logo? How are links grouped, and what goes to the bottom? Does it collapse to icons? Do items show counts?
+- **Options:**
+  - `account-top`: profile management at the top, with a picture and arrows that show it opens [S-L19-047]; the user's name and icon with an arrow to switch accounts [S-L19-086]; an account card whose links open in a popover, instead of a gradient letter avatar [S-L19-061]. Profile and search may live in the top bar instead [S-L19-047].
+  - `logo-top`: the logo at the very top, then the menu, the team with a manage button, and settings at the bottom, plus an add-widget button and a collapsed state [S-L19-068].
+  - `no-sidebar`: when navigation is only browsing and search, skip the sidebar and give the space to content [S-L19-067].
+  - Item rules: a recognizable icon and a short title on every link, which also makes a collapsed sidebar and badges work [S-L19-047]. Group links by relevance; settings and help go to the bottom [S-L19-047] [S-L19-086]. Nest links into dropdowns as they grow, and use tabs for closely related views instead of more items [S-L19-047]. No stats such as click counts [S-L19-061]. Drop section labels like "Menu" [S-L19-086]. Left-align and tighten the spacing [S-L19-061]. Name items for what they hold, not "Home" (STD-visual-details-34) [S-L19-020]. Links are ghost buttons [S-L19-052] with a hover rectangle [S-L19-059]. Heavier materials mark the sidebar region (STD-visual-details-17) [S-L19-020]. Its empty space can hold notifications, as Dub and Linear do [S-L19-047].
+  - Collapsed width: no source gives a value.
+  - The item rules above come from Kole Jain videos, most from one video each, so they are practitioner opinion except where a standard id backs them.
+- **Visual effect:** `account-top`: team and account switching feel central, as in many SaaS tools. `logo-top`: brand-led, and suits single-account products [inferred]. `no-sidebar`: more room for the user's content.
+- **Depends on (upstream):** Q-layout-04 (a sidebar was chosen), Q-state-05 (active item), Q-icon-05, Q-depth-04.
+- **Affects (downstream):** the side navigation component, the app shell, the account menu popover, badges, and how many icons the icon set must cover.
+- **Token encoding:** sidebar widths (expanded and collapsed) as `dimension` tokens, with values not given by the sources; a heavier surface role for the sidebar region; `size.icon.*`.
+- **Platform notes:** in macOS utility apps, global actions go in the top bar, navigation in the sidebar and content in the middle; the traffic lights are integrated, and the top ~50px stays free for dragging [S-L19-067]. On phones the sidebar becomes a bottom bar or a home page (DC-L19-119).
+- **Accessibility constraints:** a nav landmark and `aria-current` (DC-L08-19). The active state is never color-only. Items meet the target size. Collapsed icon-only items need accessible names and tooltips. Core navigation does not animate (STD-when-to-animate-05), and hover stays near-imperceptible (STD-when-to-animate-07).
+- **Default + heuristic:** `account-top` for multi-account or team products; `logo-top` for single-account products [inferred]. Always: an icon plus a short label, grouped by relevance, settings and help at the bottom, one clear active indicator, collapsible to icons, and counts only when they call for action [inferred reconciliation of S-L19-047 and S-L19-061].
+- **Evidence:** [S-L19-047] ([[sources/B7k5rOgmOGY-everything-you-need-to-know-to-build-a-dashboard-ui-in-8-minutes-beginner-friendly|EVERYTHING you need to know to build a Dashboard UI in 8 minutes (beginner friendly)]]); [S-L19-086] ([[sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai|Vibe Coding a Pro UI in SECONDS With AI]]); [S-L19-061] ([[sources/PDcQJOPby1k-5-saas-ui-ux-mistakes-that-scream-you-vibe-code|5 SaaS UI/UX mistakes that SCREAM you Vibe Code]]); [S-L19-068] ([[sources/Yr2uIcFZDDQ-redesigning-a-finance-dashboard-ui-from-scratch-ft-dribbble|Redesigning a Finance Dashboard UI from SCRATCH (ft. Dribbble)]]); [S-L19-067] ([[sources/Vy0KKvZJRH8-everything-you-need-to-design-macos-apps-exactly-like-apple-beginner-friendly|Everything you need to Design macOS Apps EXACTLY like Apple (beginner friendly)]]); [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]); [S-L19-052] ([[sources/EcbgbKtOELY-every-ui-ux-concept-explained-in-under-10-minutes|Every UI/UX Concept Explained in Under 10 Minutes]]); [S-L19-059] ([[sources/NtZeYmTMuo4-animated-dashboard-sidebar-tutorial-in-figma-free-design-files|Animated Dashboard Sidebar Tutorial in Figma (+ free design files)]]); compared DC-L08-19, DC-L03-19, DC-L13-02, DC-L10-09.
+- **Maps to:** **new question** (stage 20 detailed, show if Q-layout-04 is `sidebar` or `adaptive-bar-rail-sidebar`): "What sits at the top of the sidebar, and what goes to the bottom?" Options: `account-top`, `logo-top`, `no-sidebar`. **Visual samples:** Kole Jain's dashboard sidebar with its collapsed version [S-L19-047]; the collapsible finance-dashboard sidebar [S-L19-068].
+- **Impact now / as it grows:**
+  - `account-top`: now, account switching is one click away. As it grows, teams and workspaces fit without redesign.
+  - `logo-top`: now, a stronger brand moment. As it grows, account switching needs a new home once teams arrive [inferred].
+  - `no-sidebar`: now, more content space. As it grows, new sections need somewhere to go, and a sidebar may have to return.
+- **Standards:** STD-visual-details-33, STD-visual-details-34, STD-visual-details-36, STD-visual-details-17, STD-when-to-animate-05, STD-when-to-animate-07, STD-mobile-touch-09.
+
+### DC-L19-119: The phone tab bar and where the main action goes
+- **Block path:** Components > Tab bar (bottom navigation); Patterns > Navigation > Mobile
+- **Questions the designer answers:** How many tabs? Icons only, or with labels? Is the "create" action a raised button in the bar, a separate floating button, or just another tab?
+- **Options:**
+  - Count: three or four is ideal and five is the limit, which keeps every target over 44px [S-L19-053]. Confirms DC-L08-19 and DC-L13-02 (3-5).
+  - `floating-broken-out`: a floating bar with the most important action set apart [S-L19-053]. This fits iOS 26's floating tab bar (DC-L10-09) [inferred link].
+  - `inline-create`: do not raise the create button above the bar in a circle, because people use every other tab more; drop it into line with the others [S-L19-075]. The bar redesigned is a Dribbble tab-bar shot that the video compares with Instagram.
+  - `sidebar-as-home`: when there are too many important sections, the sidebar becomes the home page, as in Notion, and the bottom holds a big search bar or action button [S-L19-053].
+  - Labels: icons alone for familiar icons (Instagram), labels when icons are obscure (Apple Music). Labels must be dark enough to read [S-L19-075].
+  - Every tab has an active state (a profile picture works), inactive icons stay clearly visible, and icons spread apart for larger tap areas [S-L19-075].
+  - Thumb reach: TikTok keeps the bottom bar and a right-hand column of actions within reach of a right thumb, citing 70-80% of people as right-handed [S-L19-077]. That figure comes from one video.
+  - Switching tabs: no animation (STD-when-to-animate-14); NativeTabs (STD-mobile-touch-41); a selection haptic on tab press (STD-mobile-touch-62) [S-L19-015].
+- **Visual effect:** `floating-broken-out`: modern and focused on one main job. `inline-create`: calm and even, where no tab shouts. `sidebar-as-home`: a hub-and-spoke app with a big home screen.
+- **Depends on (upstream):** Q-layout-04, Q-plat-01 and Q-plat-02, Q-icon-05, DC-L19-106 (active states).
+- **Affects (downstream):** the tab bar component, floating action buttons, safe areas, and toast position (bottom toasts must clear the bar [inferred]).
+- **Token encoding:** `size.target.min` (44pt on iOS, 48dp on Android); the tab bar height is not given by the sources; safe-area padding.
+- **Platform notes:** React Native uses NativeTabs, with the platform's own behaviour. iOS has a floating bar, and Android a navigation bar (DC-L10-09). The mobile web pads the bar with `env(safe-area-inset-bottom)` (STD-mobile-touch-16), and the browser's own bar can get in the way at the bottom [S-L19-076].
+- **Accessibility constraints:** 44pt/48dp targets, labels at 4.5:1, active states not color-only, and `aria-current` or `aria-selected`.
+- **Default + heuristic:** three or four tabs; labels unless every icon is universal; an active state on every tab; the main action inline, unless it is the product's most-used job, in which case break it out [inferred reconciliation of S-L19-053 and S-L19-075]; no animation when switching tabs.
+- **Evidence:** [S-L19-053] ([[sources/Gfsd8NNuD9g-everything-you-need-to-know-about-mobile-app-uis-in-8-minutes-beginner-friendly|Everything you need to know about Mobile App UI’s in 8 minutes (beginner friendly)]]); [S-L19-075] ([[sources/gKM6b2EnW1k-upgrading-9-crucial-ui-elements-free-figma-file-included|Upgrading 9 CRUCIAL UI Elements (free figma file included)]]); [S-L19-077] ([[sources/ixUq4HM4FNg-tiktoks-ux-is-so-good-it-should-be-illegal-seriously|TikTok’s UX is so GOOD it should be ILLEGAL (seriously)]]); [S-L19-015] ([[sources/eks-skills-animate-expo-recipes-emilkowalski-skills-skills-animate-expo-recipes-md|emilkowalski/skills: skills/animate-expo/RECIPES.md]]); [S-L19-076] ([[sources/goWOAFqJHpA-i-redesigned-spotify-wrapped-entirely-from-scratch|I Redesigned Spotify Wrapped Entirely From SCRATCH]]); compared DC-L08-19, DC-L13-02, DC-L10-09, DC-L14-05, DC-L05-07.
+- **Maps to:** Q-layout-04: **confirms** 3-5 and adds a **new heuristic** (raise the main action only when it is the most-used job). Q-icon-05: **confirms** `labels-default` for tab bars with obscure icons. **Visual samples:** the Dribbble tab-bar shot before and after [S-L19-075]; a floating bar with the main action set apart [S-L19-053]; TikTok's thumb zone [S-L19-077].
+- **Impact now / as it grows:**
+  - `floating-broken-out`: now, a clear main job. As it grows, a second "main" action has nowhere to go.
+  - `inline-create`: now, even and calm. As it grows, adding a fifth tab hits the limit quickly.
+  - `sidebar-as-home`: now, room for many sections. As it grows, the home screen needs curation (recents, counts).
+- **Standards:** STD-when-to-animate-14, STD-mobile-touch-41, STD-mobile-touch-62, STD-mobile-touch-09, STD-mobile-touch-16, STD-visual-details-34.
+
+### Area: Patterns (DC-L19-121 to DC-L19-138)
+
+Area `patterns`: stage 23 (patterns and AI surfaces), plus the neighbouring questions that decide feedback, loading and marketing pages (Q-state-08, Q-form-04, Q-viz-01, Q-brand-04). Almost every practitioner source here is one creator (Kole Jain); one is Steve Schoger. When several of these videos agree, that is still one practitioner repeating a view. Sibling L19 cards already cover the hero axis (DC-L19-45), dashboard module priority (DC-L19-48), phone adaptation (DC-L19-49), marketing sections (DC-L19-50, DC-L19-51, DC-L19-53), key numbers (DC-L19-33), marketing copy (DC-L19-36), tone (DC-L19-37), chart colors (DC-L19-10) and what carries color (DC-L19-01), so these cards point to them. Where a card here touches a question that a sibling card in another area also changes, its "Maps to" names the sibling and uses the sibling's option id, so the two propose one change. Proposed ids Q-pattern-07, Q-pattern-08 and Q-pattern-10 to Q-pattern-13 are placeholders; Q-pattern-09 is not used, because the marketing motion question is DC-L19-84's proposed Q-motion-13.
+
+### DC-L19-121: Tables and lists: the data picks the display form
+- **Block path:** Patterns > Data display > Tables, lists and activity logs
+- **Questions the designer answers:** For each column, which form shows it best: plain text, a chip, a right-aligned number, an avatar, a timeline? What must a table offer beyond rows (search, filter, sort, bulk actions)? How do inactive or finished items look? When does a long list need virtualization?
+- **Options:**
+  - **Plain text columns:** every field shown as plain text, so nothing about the data shapes the table. The source uses this as the "before" that gives away someone who has never built a dashboard [S-L19-056].
+  - **Data-driven forms:** fixed-value columns (department, employment status) become chips; numbers are right-aligned so digits line up by place value; long text is truncated; inactive or deactivated rows are shaded out; time-delineated records become a timeline (in a sidebar pop-out or a wider second column) instead of a time-sorted table; activity logs put an avatar beside the actor; data with a time dimension gets a summary chart [S-L19-056]. Color comes from the data, such as a red icon in a chip for an urgent action [S-L19-056].
+  - **Table capabilities:** a good list comes down to separation (space, lines or color) and a good table to search, filter and sort; selecting several items reveals a contextual bulk-actions button; home-page rows show only a few essential fields [S-L19-047]. An analytics toggle that splits a total into its items so they can be compared [S-L19-061].
+  - **Progress in rows:** show an actual percentage instead of an "in progress" label, and keep the "completed" color for completed work only [S-L19-086]. DC-L19-33 already carries the percentage rule for numbers; this applies it to rows and Gantt bars.
+  - **Rendering long collections:** virtualize any list or table of 1,000+ rows with Virtuoso instead of rendering it directly or reaching for pagination hacks [S-L19-029]. This is a house standard (STD-performance-properties-17).
+- **Visual effect:** Right-aligned numbers line their digits up by place value, an avatar lets the eye link an action to a person faster than reading a name, and a timeline is easier to follow than a time-sorted table [S-L19-056]. The data-driven table is the more appealing of the before and after [S-L19-056]. Chips let the eye scan categories without reading, and shaded inactive rows push attention to live items [inferred]. A bulk-action button that appears only on selection keeps the toolbar calm until it is needed [S-L19-047] [inferred for "calm"].
+- **Depends on (upstream):** page type (Q-layout-03 `data`), key-number styling (Q-type-06, DC-L19-33, DC-L02-26), status colors (Q-color-15, DC-L01-15), density (Q-dir-02, DC-L03-10), how people move through long lists (Q-pattern-02, DC-L08-21).
+- **Affects (downstream):** Table, List row, Chip or Badge, Avatar, Timeline, Activity log, Bulk-action bar, Tooltip, table empty states (DC-L13-10, DC-L19-126), the summary chart (DC-L19-122).
+- **Token encoding:** no new token types. Chips use the existing `color.status.*` roles (`color`). Tabular digits have no DTCG field, so they sit in `$extensions` on the numeric text style [inferred]. `table.row.inactive.opacity` (`number`) [inferred name]. Right alignment of numeric cells is a component rule, not a token.
+- **Platform notes:** Hover-revealed row actions have no hover on touch [inferred]; Apple Reminders reveals secondary actions on swipe [S-L19-056], which can serve as the touch version [inferred] (see DC-L19-123). On phones each section extends in one direction only [S-L19-053], so wide tables become lists or one-direction scrollers (DC-L19-49) [inferred for tables].
+- **Accessibility constraints:** A chip's meaning needs text (and optionally an icon), never color alone (WCAG 1.4.1) [inferred, consistent with DC-L05-25]. Shaded inactive rows still need readable text (4.5:1) or their status stated in words [inferred]. Truncated text needs a keyboard-reachable way to read the full value [inferred]. Row checkboxes meet the 24 px target floor.
+- **Default + heuristic:** Default for a `data` product: numbers right-aligned with tabular digits, fixed-value fields as labelled chips, truncation with the full value on hover and focus, shaded inactive rows, bulk actions on multi-select, and search, filter and sort on any table longer than one screen [inferred threshold]. Heuristic, "let the data drive the form": a fixed set of values becomes a chip, a number is right-aligned, records ordered by time are tried as a timeline, a list that can pass 1,000 rows is virtualized. The form rules come from Kole Jain videos only. Virtualization is a house standard (STD-performance-properties-17). Tabular digits are a house standard for price columns and numbers that change in place (STD-visual-details-02) and the research default for every table (DC-L02-26). No existing research card sets the other table display rules.
+- **Evidence:** [S-L19-056] [S-L19-047] [S-L19-061] [S-L19-086] [S-L19-029] [S-L19-053]. Compared against DC-L08-21, DC-L02-26, DC-L13-10, DC-L19-33 and DC-L19-49.
+- **Maps to:**
+  - Q-layout-03 `data`: new heuristic. The component sheet for a data product scaffolds a table with labelled chips, right-aligned tabular numbers, truncation, shaded inactive rows and a bulk-action bar.
+  - Q-pattern-02: new heuristic, "how people move through a list (pages, Load more) and how it renders (virtualized from 1,000 rows) are separate choices; virtualization is required by STD-performance-properties-17 whatever the answer". Confirms the default `pagination`. [S-L19-054] prefers Load more to infinite scroll because the footer stays reachable, which matches DC-L08-21's Load more for result lists.
+  - Q-comp-02: when Q-layout-03 is `data`, add Timeline and Activity log to the first-version inventory [inferred].
+  - Visual sample: the before-and-after table, plain text columns against chips, right-aligned numbers, truncation and shaded inactive rows [S-L19-056].
+- **Impact now / as it grows:**
+  - *Plain text:* now the fastest to build. As columns and rows are added, every column costs more reading time.
+  - *Data-driven forms:* now each column type needs a rule. As data grows, new columns inherit a form from their type (a fixed set becomes a chip, a number is right-aligned) [inferred].
+  - *Table capabilities:* now more to build. Search, filter, sort and bulk actions are what keep a table usable past a few dozen rows [inferred].
+  - *Progress as a percentage:* now needs a real value from the data. It stays meaningful as tasks multiply, where "in progress" tells nothing [S-L19-086].
+  - *Virtualization:* now one more dependency. It keeps scrolling smooth as rows pass 1,000.
+- **Standards:** STD-visual-details-02, STD-performance-properties-17, STD-visual-details-55, STD-visual-details-56, STD-when-to-animate-07, STD-when-to-animate-13
+
+### DC-L19-122: How charts are drawn on product dashboards
+- **Block path:** Foundations > Data visualization > Chart presentation (product dashboards)
+- **Questions the designer answers:** Which chart shapes does the dashboard use? What must every chart show (axis, grid lines, numbers, legend, a time-range switch)? Are lines smoothed? Do charts animate? Which library draws them?
+- **Options:**
+  - **Decorative charts:** no vertical axis, rounded bar tops that hide where a bar ends, 16 bars for 7 days of data [S-L19-045]; smoothed lines and a faded most-recent segment [S-L19-075]; a chart shown next to growth percentages for the same data [S-L19-068]. All rejected by the sources.
+  - **Plain, familiar and labelled:** basic line and bar charts with grid lines, numbers, a quick summary and a date-range selector; no unusual chart shapes that people cannot read [S-L19-047]. Horizontal and vertical grid lines, markers, straight segments instead of curves, a time-frame switcher (a dropdown when space is short), a gray previous-period line for business metrics, and a legend [S-L19-075]. In case studies: a title, axis titles and a legend, with the part that matters circled or annotated [S-L19-083].
+  - **One representation chosen per dataset:** a two-sided bar chart for money in and out, a pie chart for a line of credit, and never a chart plus growth percentages for the same numbers [S-L19-068]. Location as a shaded map with the numbers listed beside it, usage as a few small donut charts, and KPI tiles with micro charts that carry the screen's color [S-L19-061].
+  - **Hover detail:** hovering shows the value with a percent bubble, or dims the other bars [S-L19-047]. This is close to DC-L05-24's rule that hovering a legend dims the other series to 30%; the source dims on hovering the chart itself.
+  - **Animated charts:** line-drawing entrances, spring-driven graphs, mouse-tracking. Rejected on functional data: [S-L19-024] lists an animated line drawing on an analytics chart as a rejected suggestion, and STD-when-to-animate-11 forbids moving data people are reading.
+  - **Library:** recharts for static or interactive dashboards, Liveline only for live data that scrolls with time [S-L19-029]. This is the curated list locked by STD-visual-details-55.
+- **Visual effect:** The plain chart is less pretty but carries far more useful information [S-L19-045]. Smoothed lines make it hard to see where the tip is, and a faded recent segment reads as if you don't want to know what happened [S-L19-075]. A gray previous-period line gives instant context [S-L19-075]. Micro charts on KPI tiles add color that means something [S-L19-061].
+- **Depends on (upstream):** chart palette (Q-color-19, DC-L19-10, DC-L05-23), chart anatomy tokens (DC-L05-24), chart scope (DC-L05-22), text sizes on dense screens (DC-L19-25), motion personality (Q-motion-01, STD-easing-duration-13).
+- **Affects (downstream):** chart components, KPI tile, legend, tooltip, the time-range control (segmented control or select), dashboard templates, chart empty and loading states (DC-L19-126, DC-L19-127).
+- **Token encoding:** reuse DC-L05-24's aliases (`chart.gridline.color = {color.border}`, `chart.series.dimmed.opacity = 0.3` as `number`) and DC-L19-61's `chart.bar.radius = {radius.0}` at the value end (`dimension`). Add a comparison-series alias `chart.comparison.color = {color.chart.neutral}` (`color`) [inferred name]. Curve type has no DTCG type, so `$extensions.chart.curve = "linear"` [inferred]. No motion tokens for data marks.
+- **Platform notes:** the curated list targets web front ends (package.json checks) [inferred from S-L19-029]; native apps theme the platform chart framework with the same tokens (DC-L05-22). STD-visual-details-56: if the project already uses another chart library, flag rather than replace it.
+- **Accessibility constraints:** marks at 3:1 against the surface, never color alone, and a text alternative or data table (DC-L05-23, DC-L05-25). Tick labels and legends are text and need 4.5:1 (DC-L05-24). Values shown only on hover need a keyboard and touch path, such as focusable points or the table [inferred].
+- **Default + heuristic:** Default: the current `core-6` plus a KPI big number (confirms DC-L05-22 and Q-viz-01), drawn with recharts on the web, with an axis, grid lines, labelled numbers, a legend when there is more than one series, a time-range switch when the data is over time, and no entrance animation on data. Heuristic: one representation per dataset, and "if the chart needs its caption to be read, fix the chart" [inferred]. Straight segments and square bar tops are defaults a brand may change, not lint errors: "no smoothing" comes from two videos by one creator (the finance redesign points back to the other [S-L19-068]), "no rounded tops" from a third [S-L19-045], and the research does not rule on smoothing (DC-L05-22 only forbids interpolating across gaps). Chart colors are DC-L19-10's decision, including its gray previous-period line.
+- **Evidence:** [S-L19-045] [S-L19-047] [S-L19-061] [S-L19-068] [S-L19-075] [S-L19-083] [S-L19-024] [S-L19-029]. Compared against DC-L05-22, DC-L05-23, DC-L05-24, DC-L05-25, DC-L19-10 and DC-L19-61 (which already proposes the Q-viz-01 heuristic "no rounded bar tops").
+- **Maps to:**
+  - Q-viz-01: option `theme-library` names the curated pick, "recharts, with Liveline for live streaming data", because STD-visual-details-55 locks the list; new default wording "`core-6`, drawn with recharts on the web".
+  - Q-viz-01: new heuristic, "one representation per dataset; every chart has an axis, labelled numbers, a legend when there are two or more series, a time-range switch when data is over time; no decorative motion on data".
+  - Q-viz-01 visual samples: the Dribbble bar chart (no axis, rounded tops, 16 bars for 7 days) beside the plain one [S-L19-045]; the line chart before and after (grid lines, markers, straight segments, time-frame switcher, gray last-period line, legend) [S-L19-075]; KPI tiles with micro charts [S-L19-061].
+- **Impact now / as it grows:**
+  - *Decorative:* now looks polished in a screenshot. As data and series grow it becomes unreadable and can mislead.
+  - *Plain and labelled:* now less pretty [S-L19-045]. It scales to more series and periods because the chrome is already there.
+  - *One representation per dataset:* now a decision per module. As modules multiply, a chart-by-purpose guide (DC-L05-22 `by-purpose`) keeps the choices consistent [inferred].
+  - *Animated:* now eye-catching. It slows every repeat visit, and STD-when-to-animate-11 forbids it.
+  - *recharts plus Liveline:* now one library to learn. When live data arrives, add Liveline rather than bending recharts [inferred].
+- **Standards:** STD-when-to-animate-11, STD-easing-duration-13, STD-visual-details-55, STD-visual-details-56, STD-visual-details-59, STD-visual-details-02
+
+### DC-L19-123: How visible each action is (the spectrum of explicitness)
+- **Block path:** Patterns > Information density > Action visibility
+- **Questions the designer answers:** Which actions are always on screen with a label, which are icons, which appear only on hover, selection or swipe, and which live in a popover or menu? Does every icon get a tooltip? What stays hidden until there is content?
+- **Options:** (from most to least explicit)
+  - **Global and always visible:** a share button that is always on screen sits high on the spectrum [S-L19-056].
+  - **Always visible, with a full label or as an icon:** more explicit than a hover reveal; a full label is the most explicit form of a row action [S-L19-056].
+  - **Revealed when people look for it:** an icon that appears on hover with a tooltip, for secondary actions in tight space (remove a user from sharing, copy a cell) [S-L19-056]; on swipe left and right (Apple Reminders) [S-L19-056]; on selection (a bulk-actions button when several items are selected) [S-L19-047].
+  - **One step away:** infrequent features in a popover with its primary action at the top (sharing settings) [S-L19-056]; a secondary detail cut from a card, behind a kebab menu [S-L19-068]; advanced options collapsed by default in a create form [S-L19-061]; long important text behind a "see more" button [S-L19-065]. DC-L19-105 records a disagreement between Kole Jain videos on menus: one collapses busy card buttons into a triple-dot menu [S-L19-061], another says to realign them first.
+  - **Hidden until useful:** filters and other tools stay hidden until the user has content [S-L19-067]; on mobile, actions come and go with the task (the note editor swaps the nav bar for formatting and sharing tools) [S-L19-053].
+- **Visual effect:** High explicitness is obvious but crowded; low explicitness is calm and dense but risks people never finding the action (DC-L13-03: what people cannot find, they cannot use). A hover reveal appears as soon as people start looking for the action [S-L19-056]. Tooltips on icons are what nearly every beginner dashboard lacks [S-L19-056].
+- **Depends on (upstream):** how often and how important each action is; audience expertise (DC-L13-03); input methods (Q-plat-03); density (Q-dir-02).
+- **Affects (downstream):** table rows, list items, cards, toolbars, Tooltip, Popover, Menu, swipe actions, the bulk-action bar, create forms, empty states.
+- **Token encoding:** none (a pattern rule). A component prop such as `reveal: always | hover | select | swipe | menu` [inferred].
+- **Platform notes:** Touch screens have no hover: iOS uses swipe actions and long-press menus [S-L19-056] [S-L19-053], and a swipe needs a visible button for people who don't know the gesture [S-L19-035]. On the web, hover styles sit inside `(hover: hover) and (pointer: fine)` (STD-accessibility-motion-15), so a hover-revealed action must appear some other way on touch [inferred].
+- **Accessibility constraints:** Never hover-only for anything essential (DC-L13-03). A hover-revealed action also appears on keyboard focus (for example with `:focus-within` on the row) and on coarse pointers stays visible or moves into a menu [inferred]. Every icon-only control has a tooltip [S-L19-056], an accessible name, and a tooltip that keyboard users can reach [inferred for the name and keyboard]. Icon buttons meet the 24 px target floor.
+- **Default + heuristic:** Rank each action by how often it is used and how much it matters, then place it: main and frequent actions labelled and always visible; secondary actions in tight space as icons revealed on hover and focus, with a touch fallback; infrequent features in a popover or menu; advanced options collapsed; tools that need content hidden until content exists. Every icon-only control gets a tooltip. This extends DC-L13-03 (which covers how options are disclosed) to where each action lives, and agrees with its "never hover-only for essentials". The source never covers touch or keyboard for hover reveals, so the fallback rule is [inferred] from DC-L13-03 and STD-accessibility-motion-15.
+- **Evidence:** [S-L19-056] [S-L19-047] [S-L19-061] [S-L19-065] [S-L19-067] [S-L19-068] [S-L19-053] [S-L19-035] [S-L19-054] (progressive disclosure through menus and search that open on demand). Compared against DC-L13-03 and DC-L19-105, which covers the same spectrum from the component side.
+- **Maps to:**
+  - Q-pattern-03: confirms the default `progressive`. New heuristic for every option, "place each action by how often and how much it matters: labelled, icon, on hover and focus, in a popover" [S-L19-056]. It sits beside DC-L19-105's heuristic for the `contextual` option (reveal on hover only for minor actions, always with a focus path and a touch path). No new option, so the two cards make one change.
+  - Q-pattern-03 visual sample: a sharing table with the remove icon on hover plus a tooltip, share settings in a popover, and a global share button that is always visible [S-L19-056].
+  - Q-dist-03 `lint-rules`: new warnings, "icon-only control with no accessible name or tooltip" and "action revealed only on hover with no focus or touch path" [inferred from S-L19-056 and DC-L13-03].
+- **Impact now / as it grows:**
+  - *Always visible:* now obvious. As features grow, the screen crowds and every new button competes.
+  - *Revealed on hover, swipe or selection:* now a calm screen. Each new reveal needs a touch and keyboard twin, which grows the testing surface.
+  - *One step away:* now tidy. As features pile into menus, discoverability drops, so menus need search or grouping [inferred].
+  - *Hidden until useful:* now a simple first screen. It scales well, because tools appear as the user's content grows [S-L19-067].
+- **Standards:** STD-visual-details-31, STD-visual-details-30, STD-visual-details-36, STD-accessibility-motion-15, STD-accessibility-motion-16
+
+### DC-L19-124: Which surface a task opens in: popover, modal, sheet or new page
+- **Block path:** Patterns > Modality > Surface by task size and permanence
+- **Questions the designer answers:** For each task, does it open in a popover, a modal, a side panel, a bottom sheet or its own page? What confirms a change made inside a blocking modal? When must a new page have a way back?
+- **Options:**
+  - **Popover:** simple context that doesn't block, so people can click away without consequences (display settings) [S-L19-047]; infrequent features such as sharing, so the user isn't "ripped" to another page [S-L19-056]; account links opened from an account card [S-L19-061].
+  - **Modal:** more complex context that is still tied to the page (creating a link next to the list of links), blocking until create or cancel; because the page is hidden while the change is made, a toast confirms it afterwards [S-L19-047]. A modal also fits a create form with few fields better than a sparse side flyout [S-L19-061].
+  - **Side panel or flyout:** rejected for a few-field form that left lots of empty space [S-L19-061]; used for a timeline shown beside a table [S-L19-056]. DC-L08-20 keeps side sheets for editing with context.
+  - **Bottom sheet (phones):** a side task that must not pull the user away from what they are doing (picking a template while editing a note), any height, closed with a gesture [S-L19-053]; swipe down to dismiss, and still a close button [S-L19-035].
+  - **New page:** permanent or very large context, such as opening an existing item, always with a back button or breadcrumb, which the source treats as close to mandatory [S-L19-047]. On phones, prefer a new page over a new layout when the task doesn't depend on the current screen [S-L19-053].
+- **Visual effect:** A popover feels light and reversible; a modal stops the page and focuses one task; a bottom sheet keeps context and reads as temporary [S-L19-084]; a new page signals a change of place [inferred]. A sparse flyout looks empty [S-L19-061].
+- **Depends on (upstream):** DC-L08-20 (overlay model), navigation model (Q-layout-04), breakpoints (Q-layout-01), elevation and scrim (Q-depth-06).
+- **Affects (downstream):** Popover, Dialog, Sheet or Drawer, page templates, breadcrumbs, the confirming toast after a modal (DC-L19-128).
+- **Token encoding:** existing overlay tokens from DC-L08-20 (`scrim.color`, `dialog.radius`, `sheet.radius.top`); nothing new.
+- **Platform notes:** Phones use bottom sheets where desktop uses popovers or modals [S-L19-053]. iOS sheets use detents and a grabber (DC-L08-20). Web drawers follow the Vaul-based drawer standards (for example STD-accessibility-motion-24, STD-accessibility-motion-26).
+- **Accessibility constraints:** Dialogs, drawers and popovers are built on an accessible primitive that manages focus, trapping and dismissal (STD-accessibility-motion-16). Every overlay has a way out by Escape, outside click or a close control (STD-accessibility-motion-24, STD-visual-details-33). Modal surfaces get a dimming scrim (STD-visual-details-20). The back button or breadcrumb on a new page is the "how do I get out" answer.
+- **Default + heuristic:** A size-and-permanence ladder: popover for simple, non-blocking settings; modal for a short task tied to the page, confirmed by a toast after it closes; side sheet when people must see the page while they edit (DC-L08-20); new page, with a back button or breadcrumb, for permanent or large context; bottom sheet on phones for in-context side tasks. This confirms DC-L08-20 (dialog for short decisions, side sheet for editing with context, bottom sheet on phones) and adds the popover and new-page rungs and the permanence test. It differs slightly from DC-L08-20 on one case: [S-L19-047] puts link creation in a modal because it relates to the list on the page, a task DC-L08-20's "side sheet for editing with context" could also claim; they reconcile as "modal when the form is short and the page isn't needed while typing, side sheet when it is" [inferred], which matches DC-L19-114's "side sheet only when the task needs the page in view and has enough content to fill the panel".
+- **Evidence:** [S-L19-047] [S-L19-056] [S-L19-061] [S-L19-053] [S-L19-035] [S-L19-084]. Compared against DC-L08-20 and DC-L19-114, which proposes the same ladder from the component side.
+- **Maps to:**
+  - Q-pattern-01: supports DC-L19-114's new option and default `ladder` (today `default_value` is null). This card adds two parts to its label: the permanence test (lasting or large context gets a new page) and a back button or breadcrumb on every new page. The ladder refines the existing `hig` option ("panels and pop-ups for small tasks; full screen for big flows") rather than contradicting it.
+  - Q-pattern-01 visual sample: the same "create link" task as a popover, a modal, a sparse side flyout and a page [S-L19-047] [S-L19-061]; the bottom-sheet template picker over a note [S-L19-053].
+  - Q-dist-03 `lint-rules`: new warning, "a page reached from a dashboard with no back button or breadcrumb" [inferred from S-L19-047].
+- **Impact now / as it grows:**
+  - *Popover:* now the lightest option. Popovers that grow into forms should move up the ladder [inferred].
+  - *Modal:* now focused. Stacked or nested modals appear as flows grow; the Q-pattern-01 guidance already says to avoid stacking them.
+  - *Side panel:* now keeps context. It looks empty for small forms [S-L19-061] and fits growing edit forms better.
+  - *Bottom sheet:* now the native phone pattern. Several detents and nested sheets add gesture rules to test.
+  - *New page:* now a clear change of place. It scales to any size of task, at the cost of navigation to keep consistent.
+- **Standards:** STD-accessibility-motion-16, STD-accessibility-motion-24, STD-accessibility-motion-26, STD-visual-details-20, STD-visual-details-33, STD-when-to-animate-08
+
+### DC-L19-125: Which states every screen and flow ships with
+- **Block path:** Patterns > States > State coverage
+- **Questions the designer answers:** Beyond the full, ideal screen, which states must each feature have: empty, loading, success, error? Does the builder create them automatically and warn when one is missing? What happens right after a create step?
+- **Options:**
+  - **Ideal state only:** the full screen and nothing else, the "happy path" most designers stop at [S-L19-044]. The ideal, full mock is not what people see when they first log in [S-L19-053].
+  - **Ideal plus empty:** the current research rule for collections, with a warning when a collection has no empty variant (DC-L13-10).
+  - **The full set:** empty, loading, success and error for every screen and feature, because real apps must handle every state people actually meet [S-L19-044]. Every interaction needs a response, such as spinners while data loads and success messages when an action completes [S-L19-052]. Lists need an empty state [S-L19-047]. Feedback comes in four kinds: status, completion, warning and error [S-L19-020].
+  - **The full set plus "hidden UI":** new-feature announcements, onboarding pop-ups and tooltips, the hidden UI a finished product needs [S-L19-056]; and the next step after a create, with a way to skip (Notion prompts for members after a new team space) [S-L19-044].
+- **Visual effect:** With every state designed, the product feels finished and in control; missing states look broken, like a blank screen or an action that seems to do nothing [S-L19-044] [S-L19-045].
+- **Depends on (upstream):** DC-L13-10 (empty), DC-L13-01 (loading), DC-L13-09 (message channel), DC-L13-08 (undo or confirm).
+- **Affects (downstream):** every collection and every async component, page templates, the stage 23 preview, builder lint.
+- **Token encoding:** none; a builder rule, for example `$extensions.builder.requiredStates = ["empty", "loading", "success", "error"]` [inferred].
+- **Platform notes:** The same on every platform; the sources show it on web dashboards, mobile apps and macOS apps [S-L19-044] [S-L19-053] [S-L19-067].
+- **Accessibility constraints:** state changes are announced to screen readers (a polite live region, WCAG 4.1.3; DC-L13-01) [inferred]; errors are stated in text, not by color alone; an error state always offers a way forward or out (STD-visual-details-33).
+- **Default + heuristic:** Scaffold all four states for every collection and every async action, and warn when a flow ships without its success, error and empty variants. That warning is the L13 research's Peak-End lint, which was marked [inferred] there and now has direct source support [S-L19-044] and a house standard behind it (STD-visual-details-49). Heuristic: for each screen, ask "what does it look like with nothing in it, while it waits, when it worked, and when it failed?"
+- **Evidence:** [S-L19-044] [S-L19-052] [S-L19-047] [S-L19-020] [S-L19-056] [S-L19-053] [S-L19-045] [S-L19-067]. Compared against DC-L13-10, DC-L13-01 and the L13 Part E defaults (scaffolded empty, error and success variants).
+- **Maps to:**
+  - Q-dist-03 `lint-rules`: new warning, "a collection or async action with no loading, success or error variant" (extends the existing empty-state warning).
+  - Stage 23 "Show": add a state switcher (ideal, empty, loading, success, error) to the component sheet, so each pattern is previewed in every state [inferred].
+  - Q-pattern-04: supports making `empty-kinds` the default (see DC-L19-126).
+- **Impact now / as it grows:**
+  - *Ideal only:* now the fastest. Every new feature adds screens that break in real use.
+  - *Ideal plus empty:* now covers first use. Silent failures and waits stay undesigned as async features grow.
+  - *Full set:* now four variants per feature. The scaffold makes each new feature arrive complete, and reviews check against one list [inferred].
+  - *Full set plus hidden UI:* now the most design work. It is what makes a growing product feel finished [S-L19-056].
+- **Standards:** STD-visual-details-49, STD-visual-details-33, STD-visual-details-40, STD-process-review-taste-40
+
+### DC-L19-126: Empty states: first use against no results
+- **Block path:** Patterns > States > Empty
+- **Questions the designer answers:** What does a new user see before any content exists? What does a search or filter with no matches show? Should filters and tools appear before there is content? May an empty state animate?
+- **Options:**
+  - **Blank area:** leaves people facing a blank screen [S-L19-044]. Rejected.
+  - **First use, a grid of invitations:** several cards inviting the user to add events, tasks and notes. Considered and passed over by the source [S-L19-053].
+  - **First use, one focused action:** a full-screen empty state that draws attention to the main action (the plus button), with a simple popover explaining how things work [S-L19-053]; an animation, a message and a clear next step (Dub's dashboard) [S-L19-044]; a simple state inviting the first action, with filters and other tools hidden until there is content [S-L19-067].
+  - **No results:** imagery, an acknowledgement that nothing matches the keywords, suggestions in case of a typo, and an action to leave the empty state [S-L19-053]; the result count and a clear (X) button in the search bar, with the query and a back arrow at the top [S-L19-067].
+  - The research's kinds stay the frame: first use, user-cleared, no results, no permission or error; loading is not empty (DC-L13-10).
+- **Visual effect:** A single focused action makes the next step obvious; a grid of invitations competes with itself [S-L19-053] [inferred for "competes"]. A no-results state with suggestions feels helpful instead of a dead end [inferred]. Hiding tools that need content keeps the first screen quiet [S-L19-067].
+- **Depends on (upstream):** DC-L13-10, illustration tier (DC-L05-20, Q-img-04), tone for first use and errors (Q-voice-02, DC-L19-37), onboarding (DC-L19-129), state coverage (DC-L19-125).
+- **Affects (downstream):** the EmptyState component and its variants, search, filter bars, tables, dashboards, chart placeholders.
+- **Token encoding:** the existing spot-illustration size from DC-L05-20 (`illustration.size.spot`, `dimension`); nothing new.
+- **Platform notes:** On phones the first-use state is full screen [S-L19-053]. In macOS apps the empty state sits in the content area and filters stay hidden until there is content [S-L19-067].
+- **Accessibility constraints:** the message is real text, not only an image (DC-L13-10); the action meets the 24 px target floor; any animation has a reduced-motion version that keeps a short fade (STD-accessibility-motion-02); after clearing a filter, focus lands somewhere sensible, such as the results heading [inferred].
+- **Default + heuristic:** Confirms DC-L13-10's kinds and its three jobs (say what is going on, help people learn, give one direct action). Adds: first use shows one focused action with one short explanation, not a grid of invitations; tools that need content (filters, sort, bulk actions) stay hidden until content exists; no results means acknowledge, suggest (a typo fix, clear filters) and offer a way out. Motion: a first-use empty state is rare enough for delight (STD-when-to-animate-09), but an empty state people hit every day, such as inbox zero or a filter with no matches, stays subtle (STD-when-to-animate-04) [inferred split]. Illustration: a colorful spot for first run, a neutral one for routine states (DC-L05-20).
+- **Evidence:** [S-L19-044] [S-L19-053] [S-L19-067] [S-L19-047] [S-L19-024]. Compared against DC-L13-10, DC-L13-11 and DC-L05-20.
+- **Maps to:**
+  - Q-pattern-04: new default `empty-kinds` (today `default_value` is null), with the first-use and no-results anatomy above; the onboarding options move to a new question (DC-L19-129).
+  - Q-pattern-04 visual sample: a first-use full-screen state with a popover on the plus button beside a no-results state with typo suggestions [S-L19-053]; Dub's empty dashboard with an animation, message and next step [S-L19-044].
+  - Q-img-04: new heuristic, "colorful spot or mascot only on first-use empty states; neutral on routine ones" (confirms DC-L05-20).
+- **Impact now / as it grows:**
+  - *Blank:* now no work. Every new collection looks broken on day one.
+  - *Grid of invitations:* now shows everything the product can do. As features grow, the grid grows and the first step blurs.
+  - *One focused action:* now a single clear start. As features grow, the rest is taught in sequence (DC-L19-129).
+  - *No-results anatomy:* now suggestions to write. As content grows, no-results becomes the most common empty state, so the investment pays back [inferred].
+- **Standards:** STD-when-to-animate-09, STD-when-to-animate-04, STD-accessibility-motion-02, STD-visual-details-31, STD-visual-details-49
+
+### DC-L19-127: What people see while they wait, and when to show the result before the server answers
+- **Block path:** Patterns > Feedback > Loading and latency
+- **Questions the designer answers:** What changes the instant someone presses? When does a spinner or skeleton appear? When may the screen show the result before the server confirms it? What fills a long AI generation?
+- **Options:**
+  - **Instant press response:** highlight a control on pointer-down, not on release [S-L19-020]; gray the pressed button so a split-second screen load doesn't look like a missed tap, and add a loading wheel if it really takes long [S-L19-045]; answer every action as soon as possible [S-L19-003] [S-L19-052].
+  - **Threshold ladder:** no indicator under about 1 s, a looping indicator for 2-10 s, percent-done over 10 s (DC-L13-01, the current `nng-ladder` option).
+  - **Skeleton with shimmer:** placeholders where the content will land, then the content slots exactly into place [S-L19-055]; the named pattern for loading content [S-L19-019].
+  - **Status in the trigger or in one toast:** a spinner inside the pressed button (DC-L08-12); a single promise toast that moves from loading to success or error [S-L19-006] [S-L19-091]; a build status right after a deploy (Vercel), and an informative loading state then success or error when connecting an integration [S-L19-044]. A Figma recipe moves an integration tile from focus to spinning to a success check that slides in through a mask [S-L19-059].
+  - **Optimistic update:** show the result at once on the assumption the request will succeed: Gmail removes a deleted email instantly [S-L19-047]; Apple Mail moves mail to trash before the server deletes it, and a quick-save window collapses into a toast while saving continues in the background [S-L19-067]. The research adds a visible rollback when it fails (DC-L13-01).
+  - **AI generation:** stream text word by word, keep loaders short, looping and fluid, and show the steps taken [S-L19-055] (see DC-L19-138).
+- **Visual effect:** A faster-spinning spinner makes loading feel faster at the same load time [S-L19-012]. Optimistic updates feel instant, without a pause before the item disappears [S-L19-047]. Skeletons make the layout feel alive [S-L19-055]. Streaming turns delay into anticipation [S-L19-055].
+- **Depends on (upstream):** DC-L13-01, DC-L08-12, motion personality (Q-motion-01), how reliable the API is, the undo policy (Q-form-05, DC-L13-08).
+- **Affects (downstream):** Button loading state, Spinner, Skeleton, Progress bar, Toast (promise and loading calls), list removal, the AI response container.
+- **Token encoding:** keep DC-L13-01's `duration` tokens (`feedback.acknowledge.max = 50ms`, `feedback.indicator.delay = 1000ms`, `feedback.determinate.threshold = 10000ms`). Spinner rotation eases linearly: `motion.easing.linear = [0, 0, 1, 1]` (`cubicBezier`), per STD-easing-duration-01. No source gives a spinner duration; STD-easing-duration-15 only says "fast". Skeleton colors as `color.skeleton.base` and `color.skeleton.highlight` (`color`) [inferred names].
+- **Platform notes:** On the web, async toasts use Sonner's `toast.promise`, or `toast.loading` plus an update by id when the code manages the states (STD-components-toasts-drawers-19, STD-components-toasts-drawers-21). iOS puts the activity indicator inside the button, and Android uses the M3 loading indicator (DC-L13-01).
+- **Accessibility constraints:** mark busy regions (`aria-busy`) and announce completion politely (DC-L13-01). Under reduced motion, shimmer and spinners lose their movement but keep an opacity change (STD-accessibility-motion-02). A pending button keeps its label readable and stays focusable, unlike a disabled one (DC-L08-12) [inferred for the contrast point]. Don't loop a slow oscillation near 0.2 Hz (STD-accessibility-motion-08).
+- **Default + heuristic:** Proposed default for Q-state-08 (today null): answer on pointer-down; no indicator under about 1 s; a skeleton for page or region loads; a spinner inside the trigger for actions; determinate progress with cancel past 10 s (DC-L13-01); and optimistic updates for likely, reversible actions (delete, move, save), with undo or a rollback message if the request fails. Never optimistic for payments or anything irreversible [inferred from STD-visual-details-40 and DC-L13-01]. Spinners spin fast and linear (STD-easing-duration-15, STD-easing-duration-01). Two small conflicts: [S-L19-045] grays out the pressed button, while DC-L08-12 keeps loading buttons focusable, so gray the look but keep focus and label [inferred]; and the Figma spinner uses a spring (stiffness 550, damping 40) [S-L19-059], which code replaces with the linear standard.
+- **Evidence:** [S-L19-020] [S-L19-045] [S-L19-003] [S-L19-052] [S-L19-012] [S-L19-019] [S-L19-055] [S-L19-006] [S-L19-091] [S-L19-044] [S-L19-059] [S-L19-047] [S-L19-067]. Compared against DC-L13-01, DC-L08-12, DC-L19-109 (pending, success-in-place and toast endings for a pressed control) and DC-L19-95 (confirmation and loading motion).
+- **Maps to:**
+  - Q-state-08: new default combining `nng-ladder` and `inline-button` (the question has no default today). It works alongside DC-L19-109's new option `success-in-place` and DC-L19-95's heuristic "spinners spin fast and linear; shimmer honors reduced motion; AI loaders are short and looping"; none of the three changes conflicts.
+  - Q-state-08: new option `optimistic`, "show the result at once for likely, reversible actions; roll back with a message if it fails" [S-L19-047] [S-L19-067]. DC-L19-109 lists the same option with the same condition (failure rare and reversible).
+  - Q-state-08 visual samples: a Gmail-style delete that vanishes instantly beside one that waits on a spinner [S-L19-047]; two spinners at different speeds [S-L19-012]; a promise toast moving from loading to success in place [S-L19-006].
+- **Impact now / as it grows:**
+  - *Press response:* now nearly free. It keeps every action feeling alive however slow the back end gets.
+  - *Threshold ladder:* now needs timing logic. It keeps short waits quiet as features multiply.
+  - *Skeleton:* now one placeholder per layout. Skeletons drift when layouts change and need upkeep [inferred].
+  - *Status in trigger or toast:* now local and precise. As async work grows, one promise toast per action avoids a pile of toasts.
+  - *Optimistic:* now instant. As more actions become optimistic, every one needs a tested rollback path [inferred].
+- **Standards:** STD-visual-details-49, STD-easing-duration-15, STD-easing-duration-01, STD-accessibility-motion-02, STD-accessibility-motion-08, STD-visual-details-40, STD-components-toasts-drawers-19, STD-components-toasts-drawers-20, STD-components-toasts-drawers-21
+
+### DC-L19-128: Where confirmations, warnings and errors appear: inline, banner or toast
+- **Block path:** Patterns > Feedback > Message channel
+- **Questions the designer answers:** Which messages go in a toast and which stay in place or in a banner? May a toast carry an error? How long does a toast stay, and what about toasts with buttons? How does async work report back?
+- **Options:**
+  - **Inline or banner first:** toasts only for low-stakes confirmations with undo, and never the only channel for an error that blocks progress (DC-L13-09, DC-L08-18). This is Q-form-04's current default, `inline-banner`.
+  - **Toasts as the product's notification layer:** confirm a change made in a modal (the page was hidden while it happened), and tell people about something or prompt them to act without taking over the screen, including warnings and errors, which are often missed [S-L19-047].
+  - **One promise toast per async action:** pass a promise and a message for each of its three states, and one toast moves from loading to success or error [S-L19-006] [S-L19-091]; `toast.loading` plus an update by id when the code manages the states itself [S-L19-022].
+  - **Toast after a background save:** a quick-save window collapses into a toast while the save finishes [S-L19-067].
+  - **Richer toasts:** loading animations and celebratory success messages with particles [S-L19-079]; only rare successes qualify for that (DC-L19-130).
+- **Visual effect:** Inline feedback is quiet and precise; banners are loud and persistent; toasts are ambient and easy to miss (DC-L13-09). One toast that changes in place feels calmer than a stack of separate loading and success toasts [inferred].
+- **Depends on (upstream):** DC-L13-09, DC-L08-18, the overlay chosen for the task (DC-L19-124), undo or confirm (Q-form-05), status colors (Q-color-15).
+- **Affects (downstream):** the Toaster (Sonner, mounted once), Banner, inline alert, field errors, async buttons.
+- **Token encoding:** `duration.toast.default = 4000ms` (`duration`, STD-components-toasts-drawers-15); `toast.visible.max = 3` (`number`, STD-components-toasts-drawers-14); `toast.offset = 32px`, and `16px` below 600 px wide (`dimension`, STD-components-toasts-drawers-30). Position has no DTCG type: `$extensions.toast.position = "bottom-right"` (STD-components-toasts-drawers-29).
+- **Platform notes:** On the web every toast is Sonner, never hand-built (STD-visual-details-57). iOS uses in-place status and system notifications rather than toasts (DC-L08-18). React Native toasts follow STD-components-toasts-drawers-08, and all toasts are padded for safe areas (STD-mobile-touch-16).
+- **Accessibility constraints:** the auto-dismiss timer pauses on hover and while the page is hidden (STD-components-toasts-drawers-16, STD-components-toasts-drawers-17). A toast with an action stays until acted on or dismissed, which answers WCAG 2.2.1 for timed messages; the rule is DC-L08-18's, and Sonner supports it per toast with `duration: Infinity` [S-L19-021] [inferred pairing]. Keep Sonner's container label, Alt+T hotkey and dismissible toasts (STD-accessibility-motion-23). A blocking error is shown at its cause, never only in a toast (DC-L13-09).
+- **Default + heuristic:** Keep `inline-banner` as the default. Routing rule that settles the disagreement between [S-L19-047] and DC-L13-09: an error that blocks progress appears inline at its cause; a warning or error from background work (a failed sync, a failed save after an optimistic update) may use `toast.error`, which answers the concern that such messages get missed [inferred], and the item it concerns also shows its failed state in place wherever it is on screen (DC-L19-112: an error toast only echoes an error shown in place); a change confirmed after a modal closes gets a toast; async actions get one promise toast, never a new toast per state. Plain toasts auto-close after 4000 ms; toasts with an action persist. That reconciles DC-L08-18's "never auto-dismiss toasts that contain actions" with the 4000 ms house default [inferred; also noted in the feedback wiki page].
+- **Evidence:** [S-L19-047] [S-L19-006] [S-L19-091] [S-L19-021] [S-L19-022] [S-L19-067] [S-L19-079]. Compared against DC-L13-09, DC-L08-18 and DC-L19-112 (when a toast is the right channel).
+- **Maps to:**
+  - Q-form-04: confirms the default `inline-banner`, with the option text as DC-L19-112 rewords it ("toasts with an action stay until dismissed, plain toasts close after 4 seconds"); new heuristic, the routing rule above, which includes DC-L19-112's "an error toast only echoes an error shown in place".
+  - Q-form-04 option `toasts-widely`: add the house build note "one Sonner Toaster; promise toasts for async work; action toasts persist".
+  - Q-form-04 visual sample: a promise toast moving from loading to success in place, next to a collapsed toast stack [S-L19-006] [S-L19-091].
+- **Impact now / as it grows:**
+  - *Inline or banner first:* now precise. As background work grows, some failures happen away from any field and need another channel.
+  - *Toasts widely:* now one simple channel. As messages multiply, important errors vanish after four seconds.
+  - *Promise toast:* now one call per async action. It keeps the toast count down as async features grow.
+  - *Richer toasts:* now memorable. On frequent actions they turn into noise (STD-when-to-animate-07).
+- **Standards:** STD-visual-details-57, STD-components-toasts-drawers-14, STD-components-toasts-drawers-15, STD-components-toasts-drawers-16, STD-components-toasts-drawers-17, STD-components-toasts-drawers-19, STD-components-toasts-drawers-20, STD-components-toasts-drawers-29, STD-components-toasts-drawers-30, STD-accessibility-motion-23
+
+### DC-L19-129: Onboarding: how new users learn the product and get set up
+- **Block path:** Patterns > Guidance > Onboarding and first run
+- **Questions the designer answers:** Does the product explain itself, or does it need guidance? If guidance, in what form: tips in sequence, a checklist, a modal that closes when you do the thing, a tour? What does sign-up ask, in what order, and what can be skipped? What does the first screen after sign-up look like?
+- **Options:**
+  - **None:** a self-evident UI, NN/g's first recommendation (DC-L13-11). Apple's own desktop apps skip onboarding, and [S-L19-067] says a shortcut-driven desktop app should not copy that.
+  - **Tips in sequence:** one tooltip on the most important action; once it is done, a second tooltip or a simple checklist in the corner. The point is to sequence features, not to hide them [S-L19-056].
+  - **Learn by doing:** a simple modal that teaches a keyboard shortcut and closes when the user performs it, backed by a shortcut cheat sheet [S-L19-067].
+  - **The first-use empty state as onboarding:** a focused empty state with a popover on the main action [S-L19-053] (DC-L19-126).
+  - **Rejected:** a modal explaining the whole product in six bullet points at first login, forgotten the moment it closes, and a fully loaded dashboard with no guidance [S-L19-056]. The research also advises against deck-of-cards tutorials (DC-L13-11).
+  - **Swipeable step screens (phones):** a next control that works by tap or swipe, with motion that follows the swipe [S-L19-035]; clean UI first, then motion, then a small surprise (Craft) [S-L19-084]. These are praised for how they feel, not for what people learn, and look like the deck-of-cards tutorials DC-L13-11 does not recommend [inferred mapping].
+  - **Setup steps:** an escape link to log in on the sign-up screen [S-L19-043] and in sign-up modals [S-L19-075]; email verification that either blocks or gently reminds, where the source says neither choice is wrong [S-L19-043]; a team-size question that sends teams to an invite step and lets individuals skip it [S-L19-043]; reassure people before asking for data (a message before connecting a bank), and show the product's value before asking for effort (insights into past spending before a savings goal) [S-L19-078]; a quick interest pick and the shortest tutorial, then learn from behaviour [S-L19-077]; after a create step, prompt the natural next step with a skip [S-L19-044].
+  - **The welcome page:** the first screen after sign-up sets the tone and shows the care to expect (the course's customisable "Motion Passport") [S-L19-007], which is STD-process-review-taste-67.
+- **Visual effect:** Tips in sequence keep people from being overwhelmed [S-L19-056]; a bullet-point welcome modal is forgotten the moment it closes [S-L19-056]; a tour feels heavy up front (DC-L13-11). Reassurance before a data request and value before an effort request build trust [S-L19-078] [inferred for "trust"].
+- **Depends on (upstream):** DC-L13-11, how new the interaction model is, what data the product needs (privacy), input methods (Q-plat-03; keyboard shortcuts to teach), empty states (DC-L19-126).
+- **Affects (downstream):** Tooltip or Coachmark, Checklist, Dialog, empty states, sign-up and verification screens, Stepper (position and total), permission prompts, the welcome screen.
+- **Token encoding:** none (a process and content decision).
+- **Platform notes:** On phones, onboarding is the best moment to win people over [S-L19-084]; step screens sliding in from the side show progress and panels sliding up read as temporary [S-L19-084]; every swipe needs a visible button [S-L19-035]. On desktop, teach shortcuts [S-L19-067]; the shortcut's own feedback is an instant state change, because keyboard-started actions never animate (STD-when-to-animate-06) [inferred application].
+- **Accessibility constraints:** coachmarks are reachable by keyboard, dismissible, and manage focus like dialogs (DC-L13-11); every step can be skipped; a "do it to close" modal also closes with Escape or a close control (STD-accessibility-motion-24) [inferred]; step transitions become cross-fades under reduced motion (STD-accessibility-motion-02).
+- **Default + heuristic:** Default `sequenced-tips`: one tip on the main action, then a small checklist, together with first-use empty states. Setup asks only for what changes the next steps (team size) or what the product needs right now, shows value before asking, always offers a way to log in instead and a skip, and asks for private data at the moment it is needed with the reason (STD-visual-details-41). No bullet-point welcome modal; a tour only for genuinely new, complex screens (DC-L13-11). The welcome screen is designed, not left to chance (STD-process-review-taste-67). This confirms DC-L13-11 and turns its "contextual help" into a sequence. Motion: onboarding steps get standard motion (STD-when-to-animate-08); first-run delight is spent once, on the welcome or the first success (DC-L19-130) [inferred split].
+- **Evidence:** [S-L19-056] [S-L19-067] [S-L19-053] [S-L19-035] [S-L19-084] [S-L19-043] [S-L19-075] [S-L19-078] [S-L19-077] [S-L19-044] [S-L19-007]. Compared against DC-L13-11, DC-L13-03 and DC-L19-151 (keyboard shortcuts and how people learn them).
+- **Maps to:**
+  - Q-pattern-04: split into two questions. Q-pattern-04 keeps "What should an empty screen show?" (DC-L19-126); a new question (proposed Q-pattern-07, zoom 2, stage 23) asks "How should first-time users learn the product?" with options `none` (today's `onboarding-none`), `sequenced-tips` (default; a sharper version of today's `onboarding-contextual`), `learn-by-doing` (new, for shortcut-heavy desktop apps; the onboarding side of DC-L19-151's `teach-in-onboarding` option for proposed Q-plat-14) and `walkthrough` (only for genuinely new, complex screens).
+  - Q-pattern-07 follow-up (zoom 3): "What does sign-up ask before the product is useful?" with a checklist: escape to log in, verification (`block` or `remind`), a branching question, value before data.
+  - Visual samples: a tooltip on the main action followed by a corner checklist, beside the rejected six-bullet modal [S-L19-056]; the branching five-screen sign-up where individuals skip the invite step [S-L19-043]; the shortcut modal that closes when the user performs it [S-L19-067].
+- **Impact now / as it grows:**
+  - *None:* now no work. As features grow, more of them go undiscovered.
+  - *Tips in sequence:* now a small sequence to design. New features slot in as new tips or checklist items [inferred].
+  - *Learn by doing:* now teaches the one thing that matters. Each new shortcut needs a way to be learned, such as the cheat sheet [S-L19-067].
+  - *Walkthrough:* now thorough. Every UI change can break the tour.
+  - *Setup steps:* now each question adds friction. Asking only what changes the next step keeps sign-up short as the product grows [inferred].
+- **Standards:** STD-process-review-taste-67, STD-visual-details-41, STD-visual-details-39, STD-visual-details-33, STD-when-to-animate-06, STD-when-to-animate-08, STD-when-to-animate-10, STD-accessibility-motion-02, STD-accessibility-motion-24
+
+### DC-L19-130: Where the delight budget is spent
+- **Block path:** Foundations > Brand > Expression > Hero moments (by pattern)
+- **Questions the designer answers:** Which moments get celebratory or playful treatment: the first run, first-use empty states, success after a real milestone, the 404 page? Which never do? How rich may a success message be?
+- **Options:**
+  - **None:** calm everywhere. For tools people open with a clear goal, the house standard is to remove friction instead of adding delight (STD-when-to-animate-20).
+  - **Rare moments only:** first run, empty states, success or completion, and celebration are the only places where bounce, a generous stagger or a longer beat belong [S-L19-024]; this is STD-when-to-animate-09.
+  - **Candidate moments named by the sources:** a welcome page that sets the tone (the Motion Passport) [S-L19-007]; an onboarding surprise after a clean start (Craft) [S-L19-084]; an empty dashboard with an animation (Dub) [S-L19-044]; celebratory success toasts with particles [S-L19-079]; a success check that slides in through a mask instead of fading [S-L19-059]; milestone badges, such as saving 30 days in a row [S-L19-078]; a quirky 404 page with a quiz, a movie character or a mini game, the best place to be playful because the user doesn't belong there [S-L19-063].
+  - **Everywhere:** delight on frequent actions. Ruled out: STD-when-to-animate-09 bans it on components people use many times a day, and STD-when-to-animate-05 bans any motion at 100+ uses a day.
+- **Visual effect:** Delight kept for rare peaks makes them memorable, which matches the peak-end rule in the L13 research (design the ends, celebrate sparingly at real peaks), and keeps daily use fast [inferred link]. Delight on frequent actions feels slow and gimmicky (DC-L04-19).
+- **Depends on (upstream):** how lively the brand is (Q-brand-04, DC-L06-03), motion style (Q-motion-01, DC-L04-19), the product's personality (STD-easing-duration-13), tone for success and errors (Q-voice-02, DC-L19-37).
+- **Affects (downstream):** success states, toast variants, EmptyState, the 404 template, the welcome screen, milestone and badge components, sound and haptics (Q-motion-08, Q-motion-09).
+- **Token encoding:** the expressive motion set already planned as a mode (DC-L04-19 `motion-scheme: expressive`); nothing new. The chosen moments can be recorded as builder metadata, `$extensions.builder.delightMoments = ["first-run", "empty.first-use", "milestone", "not-found"]` [inferred].
+- **Platform notes:** haptics and sound only for meaningful moments such as success, at most one haptic per action (STD-springs-gestures-61), and never as the only feedback (STD-accessibility-motion-20).
+- **Accessibility constraints:** under reduced motion, celebrations keep a short cross-fade instead of movement (STD-accessibility-motion-02); particle bursts must not flash more than three times a second (WCAG 2.3.1) [inferred]; a playful 404 still says where you are and gives a way back (STD-visual-details-33, DC-L19-37).
+- **Default + heuristic:** Keep Q-brand-04's default `hero-moments` and name the moments: the welcome screen after sign-up, the first-use empty state, the completion of a rare and meaningful task (a first project published, a milestone), and the 404 page. Heuristic: ask how often this person will see it (STD-when-to-animate-04). Tens of times a day means no delight (a "copied" confirmation stays subtle, STD-when-to-animate-07); once, or at a milestone, means it is eligible. DC-L06-03 sets "one or two hero moments" and DC-L04-19 "1-3 hero moments per flow", but their examples (opening a page, the primary action) recur far more often than STD-when-to-animate-09 allows; DC-L19-83 records that conflict and rewords `hero-moments` to "rare moments such as first run, success and empty states". This card follows DC-L19-83 and gives the interview a concrete list to offer. It differs from [S-L19-079], which suggests celebratory success toasts in general: under STD-when-to-animate-09 only rare successes qualify.
+- **Evidence:** [S-L19-024] [S-L19-007] [S-L19-084] [S-L19-044] [S-L19-079] [S-L19-059] [S-L19-078] [S-L19-063]. Compared against DC-L06-03, DC-L04-19, DC-L05-20, DC-L19-83 and the L13 peak-end row.
+- **Maps to:**
+  - Q-brand-04: keeps the default `hero-moments` with DC-L19-83's rewording. New follow-up (proposed Q-pattern-10, zoom 3, show if Q-brand-04 is `hero-moments` or `expressive`): "Which moments get the lively treatment?" Multi-select `first-run`, `first-empty`, `milestone`, `not-found`, `none`; default `first-run` and `milestone` [inferred].
+  - Q-brand-04 visual samples: a plain success toast next to a celebratory one with particles [S-L19-079]; the 404 quiz and mini-game examples [S-L19-063].
+- **Impact now / as it grows:**
+  - *None:* now the fastest product. First runs and milestones pass without a moment people remember.
+  - *Rare moments only:* now a few crafted pieces. As features grow, the list stays short because frequency, not feature count, decides [inferred].
+  - *Everywhere:* now lively. Every frequent action pays the cost on every use, and it breaks the house standards.
+- **Standards:** STD-when-to-animate-03, STD-when-to-animate-04, STD-when-to-animate-05, STD-when-to-animate-07, STD-when-to-animate-09, STD-when-to-animate-20, STD-easing-duration-13, STD-springs-gestures-61, STD-accessibility-motion-02, STD-accessibility-motion-20, STD-visual-details-47, STD-process-review-taste-67
+
+### DC-L19-131: Marketing visuals: show the real product
+- **Block path:** Patterns > Marketing page > Product imagery
+- **Questions the designer answers:** What fills the hero and the feature sections: stock photos, generic icons, a generated mock interface, a full screenshot, cropped views, or visuals made from the product for the page? How are screenshots captured and framed?
+- **Options:** (the "levels" of [S-L19-072], with the other sources placed on them)
+  - **Level one, unrelated imagery:** stock images that have little to do with the product undermine the whole page [S-L19-072]; generic feature icons read as vibe-coded [S-L19-061]; a fake interface an AI tool guessed from the app's description [S-L19-103].
+  - **Level two, the full product screenshot:** a big improvement and a source of color, but not framed, so it draws attention to nothing in particular [S-L19-072]. A real screenshot is a simple way to add a graphic when there are no other graphics; capture it at 3x, and match the site's grays and corner radius to the screenshot's [S-L19-103].
+  - **Level three, zoomed crops:** zoom in on the important parts to curate exactly what the viewer sees [S-L19-072]; in feature cards, crop the full screenshot to the feature being described, with the relevant state showing, such as a chart tooltip [S-L19-103].
+  - **Level four, visuals crafted for the page:** show exactly what the product does and let its color thread through the page [S-L19-072]; skewed link cards and lightly edited images of the product's own screens [S-L19-061].
+  - **Product-led motion:** the hero image slides and fades into the product view as the page scrolls, so the first thing motion shows is the product [S-L19-084]; the product's own "thinking" loader as a hero accent [S-L19-082]. (How much motion: DC-L19-133.)
+  - **Audience imagery:** images of the people and settings the product serves. A restaurant-software site with no images at all feels robotic, so its redesign uses moody restaurant photos to relate to its users [S-L19-062]. For a physical product such as a skincare brand, product photos on bright white with lots of space [S-L19-049].
+- **Visual effect:** Product imagery makes the page read as a software company at first glance [S-L19-084] and meets the quality bar that builds trust [S-L19-061]. Stock images and generic icons make the page look like a template [S-L19-072] [S-L19-061]. Crops focus attention; crafted visuals feel made for the page [S-L19-072].
+- **Depends on (upstream):** what the screens are for (Q-scope-06 `persuade`), whether marketing is in scope (Q-scope-01), photography (Q-img-01), whether a product UI exists to capture, where color comes from (DC-L19-01 `imagery-led`).
+- **Affects (downstream):** hero, feature sections, bento tiles, social-proof sections, the screenshot capture step in the builder, open-graph images [inferred].
+- **Token encoding:** no new tokens; the screenshot frame reuses radius and border roles (the see-through ring is DC-L19-09's decision). Capture scale as builder metadata, `$extensions.builder.screenshot.scale = 3` [inferred].
+- **Platform notes:** web marketing pages. Capturing at 3x keeps screenshots sharp on high-density screens [S-L19-103] [inferred reason beyond "high resolution"].
+- **Accessibility constraints:** each product image has alt text that says what it shows [inferred]; text that matters is real text on the page, not only pixels inside a screenshot (WCAG 1.4.5) [inferred]; text laid over imagery still meets 4.5:1.
+- **Default + heuristic:** For a software product with a marketing page: use the real product. A cropped or crafted product view in the hero, a cropped screenshot per feature, site grays matched to the product. Audience imagery may sit beside the product views where the page says who it is for [S-L19-062]; images unrelated to the product or its users never [S-L19-072]. Four videos agree on showing the product (three by Kole Jain [S-L19-061] [S-L19-072] [S-L19-084], one by Steve Schoger [S-L19-103]); no research card covers product imagery [checked L05 cards DC-L05-14 to DC-L05-21]. DC-L19-72 reaches the same default from the imagery side. OpenDesigner guardrail: the imagery is the person's own product; a reference site's screenshots are never reused (AGENTS.md "references give structure, never identity").
+- **Evidence:** [S-L19-072] [S-L19-061] [S-L19-103] [S-L19-084] [S-L19-082] [S-L19-062] [S-L19-049]. Compared against DC-L05-14, DC-L05-20, DC-L19-01 and DC-L19-72.
+- **Maps to:**
+  - Q-img-01: supports DC-L19-72's new option `product-ui` ("real screenshots of your product, captured at 3x and cropped to each feature") and its default `product-ui` when Q-scope-01 includes marketing (today the default is `none`). This card adds one trigger: Q-scope-06 `persuade` with a product UI to capture. It is distinct from the existing `still-life` option, which covers photos of physical products.
+  - Q-img-01 visual sample: the four levels of one SaaS landing page side by side, from stock photo to crafted product visual [S-L19-072].
+- **Impact now / as it grows:**
+  - *Stock or icons:* now quick. It never shows what the product does, and it ages with the stock library.
+  - *Full screenshot:* now honest and colorful. Every UI change makes the page out of date [inferred].
+  - *Crops:* now focused. Crops of small areas survive more UI changes than full screenshots [inferred].
+  - *Crafted visuals:* now the most work. Each new feature needs its own visual, but the page stays coherent [inferred].
+- **Standards:** STD-when-to-animate-10, STD-process-review-taste-40, STD-visual-details-30
+
+### DC-L19-132: Calls to action on marketing pages
+- **Block path:** Patterns > Marketing page > Call to action
+- **Questions the designer answers:** How many main actions does the hero have? Is the first action a button, or a field people type into? Do the nav button and the hero button share a label? Where does the page ask again?
+- **Options:**
+  - **One primary action:** one call to action and one main focus in the header, as Google and Apple do, because people are easily distracted; the same video allows "one or maybe two" things to look at and click [S-L19-040]; header sections get only one primary call to action, and if a second must stay, remove its fill [S-L19-057].
+  - **A primary and an unfilled secondary:** heading, subtext and a primary and secondary call to action [S-L19-049]; a hero with "Get started" and "Explore" used as a stagger exercise [S-L19-011]. These reconcile with the line above as one filled button plus one unfilled [inferred], which is DC-L13-18's rule.
+  - **Matching labels:** when the nav button and the hero button go to the same place, give them the same label, so people build the right mental model [S-L19-072].
+  - **A field as the call to action:** a search or prompt bar visitors can type into, which then sends them to log in; because they have already started acting, they are more likely to finish [S-L19-082]. Prompt products can drop the landing page and open on a large prompt box above the fold (ChatGPT, Gemini) [S-L19-055]. A "find a dealer" search bar instead of a button [S-L19-065].
+  - **Asking again:** a call-to-action section is important when the header has none [S-L19-065]; the hero's typeable bar reused as the final call to action [S-L19-082].
+  - **Call to action on hover:** a level-four detail where a button appears on hover over the logo section, only when needed [S-L19-072]. Hover does not exist on touch.
+- **Visual effect:** One filled button gives an obvious next step; two filled buttons draw equal attention and compete [S-L19-057]. A typeable field turns the hero into the product's first use [S-L19-082] [inferred for "first use"]. Matching labels read as one path [S-L19-072].
+- **Depends on (upstream):** DC-L13-18 (one high-emphasis action per region), button styles (Q-state-01), hero axis (DC-L19-45), marketing copy (DC-L19-36), product type (a prompt or search product).
+- **Affects (downstream):** the hero template, navigation, the final call-to-action section, button variants, an input-as-CTA component.
+- **Token encoding:** none new; button emphasis tokens from DC-L13-18 (`button.primary.*`, `button.secondary.*`).
+- **Platform notes:** web marketing. Hover reveals sit behind fine-pointer media queries (STD-accessibility-motion-15), so a hover-only call to action is missing on phones [inferred application].
+- **Accessibility constraints:** a prompt or search field has a visible label or an accessible name, not a placeholder alone (the L13 placeholder-only warning); what the visitor typed survives the redirect to log in [inferred]; emphasis is carried by fill and shape, not color alone (DC-L13-18); targets meet 24 px.
+- **Default + heuristic:** One filled primary action per hero; any second action unfilled; the nav and hero buttons share a label when they share a destination; every long page ends with a call-to-action section, which is required when the hero has none. For prompt or search products, the input is the call to action. Never make a hover-revealed call to action the only way forward. This confirms DC-L13-18; "one primary" appears in two Kole Jain videos and in DC-L13-18, so it is treated as a rule rather than one creator's opinion.
+- **Evidence:** [S-L19-040] [S-L19-057] [S-L19-049] [S-L19-011] [S-L19-072] [S-L19-082] [S-L19-055] [S-L19-065]. Compared against DC-L13-18, DC-L19-45 and DC-L19-104 (which adds, for Q-state-01, "strip the fill before adding a style" and a nav button one size smaller).
+- **Maps to:**
+  - New question (proposed Q-pattern-08, zoom 2, stage 23, show if Q-scope-01 includes `marketing` or Q-scope-06 is `persuade`): "What should visitors do first: press a button, or start typing?" Options `button` (default), `prompt-field` (the visitor types a prompt or query) [S-L19-082] [S-L19-055], `search-field` (find a location or item) [S-L19-065].
+  - Q-state-01: confirms "one main button per area" for marketing heroes; new heuristic, "nav and hero buttons share a label when they share a destination" [S-L19-072].
+  - Visual samples: level one's mismatched nav and hero labels against level two's matching ones [S-L19-072]; a Gemini-style hero whose call to action is a typeable bar [S-L19-082].
+- **Impact now / as it grows:**
+  - *One primary:* now a clear path. New campaigns compete for that one slot, which forces a choice [inferred].
+  - *Primary and unfilled secondary:* now covers two audiences. More secondary links creep in over time and need the same discipline.
+  - *Field as the call to action:* now engaging. It ties the landing page to the product's input and has to change when the product's input changes [inferred].
+  - *Final section:* now a second chance. It scales to long pages because each section can lead into it [inferred].
+- **Standards:** STD-accessibility-motion-15, STD-visual-details-29, STD-visual-details-36, STD-mobile-touch-10
+
+### DC-L19-133: How much motion marketing pages get
+- **Block path:** Foundations > Motion > Marketing surface budget
+- **Questions the designer answers:** Is the page built to convert or to be remembered? Does the marketing site get more motion than the product, and what is each effect for? Which effects are in: scroll reveals, preloaders, marquees, 3D, scrolljacking?
+- **Options:**
+  - **Conversion first, few effects:** sites built to get people to buy or try (an invoicing site whose name the captions garble, Linear, Huddle) work without heavy effects; usability is at the heart of everything, and effects that slow loading or navigation are not worth it [S-L19-040].
+  - **Built to be remembered:** heavy scrollytelling (Prometheus Fuels) serves awareness, not purchase [S-L19-040]; a spinning 3D logo as the hero so the rest of the page needs little design [S-L19-046].
+  - **The maturity ladder:** no motion; simple load animations, which can feel cheap; smooth hover effects and fluid slider transitions; small high-quality details such as a blur transition or a mega menu that pushes content aside [S-L19-072]. Software sites are moving to simple, tasteful animation, and an imported scroll effect that renders blurry gives itself away [S-L19-066].
+  - **Motion with a job:** motion that draws attention to the product, such as a hero image sliding into the product view, or a single well-built hover animation that demonstrates the product; complex animation for its own sake makes navigation harder [S-L19-084]. An animation can replace a static asset when it explains a feature in the first viewport (Linear's Product Intelligence) [S-L19-012].
+  - **Specific effects:** preloaders add a premium feel and cover heavy media but must stay short [S-L19-069]; two build recipes hold the loader for 1,000 ms then slide it away over 800 ms [S-L19-081], or slide it over 1.3 s with `expo.inOut` [S-L19-071]; marquee text costs usability [S-L19-085]; scrolljacking rarely, if at all [S-L19-054]; scroll-revealed process diagrams and morphing media, keeping the changes small [S-L19-050].
+- **Visual effect:** Pages with few effects can still be aesthetic, persuasive and usable; heavy effects are memorable but can load slower and make navigating harder [S-L19-040]. Level-four details signal quality [S-L19-072]. Motion that points at the product gives people an early first look at it [S-L19-084].
+- **Depends on (upstream):** what the screens are for (Q-scope-06), how the marketing site relates to the product (Q-brand-05, DC-L06-01), how lively the brand is (Q-brand-04), motion style (Q-motion-01, DC-L04-19).
+- **Affects (downstream):** hero entrance, section reveals, logo strip, preloader, product demo animations, mega menu, the marketing motion set.
+- **Token encoding:** a marketing (expressive) motion set as a mode rather than duplicate tokens (DC-L04-19, DC-L06-01). Values from the standards: scroll reveal `clip-path` over `600ms` on the ease-in-out curve and image reveal `1s` `cubic-bezier(0.77, 0, 0.175, 1)` (STD-easing-duration-09 values), as `duration` and `cubicBezier` tokens such as `motion.marketing.reveal.duration = 600ms` [inferred names]; group entrances stagger 30-80 ms per item (STD-enter-exit-origin-13).
+- **Platform notes:** web marketing. Heroes use `min-height: 100svh` (STD-mobile-touch-10). Decorative mouse-tracking is allowed on marketing pages (STD-when-to-animate-11), but hover effects sit behind fine-pointer media queries (STD-accessibility-motion-15).
+- **Accessibility constraints:** every effect ships with its reduced-motion version in the same change (STD-accessibility-motion-01, STD-accessibility-motion-02); no moving background behind the full viewport (STD-accessibility-motion-07); no slow loops near 0.2 Hz (STD-accessibility-motion-08); marquees and other auto-moving content over 5 s need a pause control (WCAG 2.2.2) [inferred]; a stagger never blocks input (STD-springs-gestures-13).
+- **Default + heuristic:** Default "convert" (DC-L19-84's `few-moving-parts`): motion that points at the product, scroll reveals that fire once on entry (STD-enter-exit-origin-27, STD-enter-exit-origin-28), one well-built signature interaction, no scrolljacking, and a preloader only when heavy media must load, kept short. Choose "remember" (`scroll-story`) only when the page's goal is awareness or Q-scope-06 is `experience`. Heuristic: first "is this page built to convert or to be remembered?" [S-L19-040], then "what does this effect point at?" (STD-when-to-animate-03). Marketing motion is exempt from the 300 ms and 1 s caps (STD-easing-duration-06, STD-easing-duration-09), which covers the recipes' long preloaders, but entrances still ease out (STD-easing-duration-01), so the ease-in-out nav fade in [S-L19-081] follows the standard instead. The stagger follows STD-enter-exit-origin-13 (30-80 ms), which differs from DC-L04-23's 20-50 ms; the standard wins.
+- **Evidence:** [S-L19-040] [S-L19-046] [S-L19-072] [S-L19-066] [S-L19-084] [S-L19-012] [S-L19-069] [S-L19-081] [S-L19-071] [S-L19-085] [S-L19-054] [S-L19-050]. Compared against DC-L04-19, DC-L04-23, DC-L06-01, DC-L06-03 and DC-L19-84 (how lively the marketing pages may be).
+- **Maps to:**
+  - Proposed Q-motion-13 (DC-L19-84, zoom 2, show if Q-scope-01 includes `marketing`): supports its default `few-moving-parts` for pages built to convert and `scroll-story` only for awareness or experience sites. This card's "convert or remember?" [S-L19-040] becomes that question's heuristic rather than a separate question, so the marketing motion budget is asked once.
+  - Q-brand-05: confirms `one-system-two-sets`; the lively set is where marketing motion lives.
+  - Q-motion-01 visual sample: the same landing page at motion levels two, three and four [S-L19-072]; the hero image sliding into the product view [S-L19-084].
+- **Impact now / as it grows:**
+  - *Convert:* now fast pages and less to build. As campaigns come and go, the few effects are easy to keep consistent [inferred].
+  - *Remember:* now memorable. Heavy effects take long to build and render and can slow loading [S-L19-040]; they are also costly to change and hard to keep accessible [inferred].
+  - *Motion with a job:* now each effect needs a reason. As features launch, the reason ("show the product") gives each new effect its brief [inferred].
+- **Standards:** STD-when-to-animate-03, STD-when-to-animate-10, STD-when-to-animate-11, STD-enter-exit-origin-13, STD-enter-exit-origin-26, STD-enter-exit-origin-27, STD-enter-exit-origin-28, STD-easing-duration-01, STD-easing-duration-06, STD-easing-duration-09, STD-springs-gestures-13, STD-accessibility-motion-01, STD-accessibility-motion-02, STD-accessibility-motion-07, STD-accessibility-motion-08, STD-mobile-touch-10
+
+### DC-L19-134: Pricing pages and plan pickers
+- **Block path:** Patterns > Commerce > Pricing and plans
+- **Questions the designer answers:** How many plans? What is biggest on a plan card, the name or the price? How are discounts, billing terms and plan differences shown? Where does Enterprise go? How is the suggested plan marked?
+- **Options:**
+  - **Fewer plans:** five plans (in an in-product billing tab) is not ideal; drop at least one, and rename a very high-volume plan to Enterprise because those customers probably need more than a fixed plan [S-L19-061]. Merge pages that sell the same thing into one plans section built on the few points that matter (for an AI product: cost, a better model, document uploads) [S-L19-082].
+  - **Enterprise as a small link:** a tiny Enterprise button on every plan instead of its own section; the creator estimates it is irrelevant to about 98% of visitors [S-L19-082].
+  - **Card hierarchy:** plan name smaller and monthly price larger, because the price is what people care about [S-L19-061]. Give each plan a name and a short description, use check marks instead of bullets, list a feature the plan doesn't include, turn the button into an outline if it moves up the card, separate price and features with a light tint of the primary color instead of a divider, and write an actionable button label [S-L19-075].
+  - **Honest numbers:** show the actual discount, or discounted plans look cheaper than lower tiers and the order stops making sense; show what the next plan adds that the current one lacks (Resend, Supabase) [S-L19-061]; a note under the price with the real billing terms, so people don't feel misled when they learn what they will pay [S-L19-075].
+  - **One highlighted purchase:** the purchase call to action as one of the cards, marked with a gradient stroke [S-L19-082] (gradients are DC-L19-12's decision).
+  - **Billing inside the product:** tabs for billing and usage, usage as a few small donut charts, the billing email and payment method [S-L19-061].
+- **Visual effect:** A larger price and a smaller name put the eye on what people decide by [S-L19-061]; check marks and a listed missing feature make plans easy to compare [S-L19-075] [inferred for "easy to compare"]; a clear discount keeps the order readable [S-L19-061]. The five-plan picker, with discounts that were not shown, looks like a mess [S-L19-061].
+- **Depends on (upstream):** the deceptive-pattern policy (DC-L13-15: hidden costs, comparison prevention), one high-emphasis action per region (DC-L13-18), number styling (Q-type-06, DC-L19-33), gradients (Q-color-25, DC-L19-12).
+- **Affects (downstream):** PricingCard, a plan comparison table, the billing settings page, upgrade prompts (DC-L19-135), a monthly or yearly switch.
+- **Token encoding:** none new. Prices use tabular digits (STD-visual-details-02); a price that animates on a monthly or yearly switch uses NumberFlow (STD-visual-details-59) [inferred application]. The price-area tint is a `color` alias of the primary at reduced opacity, such as `color.pricing.price-area` [inferred name].
+- **Platform notes:** web pricing pages and in-product billing tabs only. No source covers mobile app paywalls, free trials, app-store purchase rules, taxes or currencies.
+- **Accessibility constraints:** price and billing terms are real text at 4.5:1; a crossed-out old price also says it in words ("was $X"), because strikethrough is not announced reliably [inferred]; check marks and "not included" marks have text or accessible names, never an icon or color alone (WCAG 1.1.1, 1.4.1) [inferred]; the suggested plan is marked by more than color.
+- **Default + heuristic:** Three or four plans, one of them suggested; the price larger than the name; the real discount and the billing terms under the price; what the next plan adds; Enterprise as a small link on each plan (still visible, so not hidden in the deceptive-pattern sense [inferred]). The plan count and the 98% figure are one creator's opinion; the three-to-four ceiling matches the L13 research's suggested info lint (a plan picker with more than 3-4 tiers and no suggested marker or comparison) [inferred there too]. The honesty rules line up with DC-L13-15's hidden costs and comparison prevention [inferred mapping].
+- **Evidence:** [S-L19-061] [S-L19-075] [S-L19-082]. Compared against DC-L13-15, DC-L13-18, the L13 choice-overload row, and DC-L19-12.
+- **Maps to:**
+  - New question (proposed Q-pattern-11, zoom 3, stage 23, show if the product sells plans or Q-scope-06 is `persuade`): "How should your plans be shown?" Options `plan-cards` (3-4 cards, one suggested; default), `comparison-table` (a feature grid when plans differ on many features) [inferred option], `single-plan` (one price plus an Enterprise link) [inferred option].
+  - Q-pattern-05: new detectable check for pricing, "a discounted price shown without the real discount or the billing term" [inferred from S-L19-061 and S-L19-075].
+  - Visual samples: a pricing card before and after (check marks, a listed missing feature, a billing note, a tinted price area, an outline button) [S-L19-075]; a vibe-coded plan picker fixed (fewer plans, smaller names, bigger prices, the real discount, the next plan's extras) [S-L19-061].
+- **Impact now / as it grows:**
+  - *Plan cards:* now easy to compare. As plans or features grow, cards overflow and a comparison table takes over [inferred].
+  - *Comparison table:* now thorough. It suits growing feature lists but reads as dense on phones [inferred].
+  - *Single plan:* now the simplest choice. As customer types diverge, it forces an early split into tiers [inferred].
+  - *Honest numbers:* now a few more lines of text. They prevent support load and distrust as prices and discounts change [S-L19-075] [inferred for support load].
+- **Standards:** STD-visual-details-02, STD-visual-details-59, STD-visual-details-29, STD-visual-details-35, STD-visual-details-44
+
+### DC-L19-135: Paywalls, upsells and re-engagement prompts
+- **Block path:** Principles > Ethics > Monetization and engagement prompts
+- **Questions the designer answers:** What may sit behind a paywall or an account wall? Where may upgrade prompts appear, and what may they say? May the product comment on how much someone uses it, keep reminding them, or punish a lapse? Can people turn intrusive features off?
+- **Options:**
+  - **Upgrade prompt at the limit:** show what the higher plan unlocks where the limit applies [inferred placement]; the source's hover version (after Dub) reveals the Pro limits by sliding the new limit in and the old number out, instead of crossed-out text [S-L19-079]; show what the next plan includes [S-L19-061].
+  - **A wall in front of simple content:** a recipe behind a paywall or an account requirement, presented as infuriating [S-L19-048].
+  - **Pressure tactics:** a usage-shaming message whose only choices are upgrading or more of the same notifications; a progress warning with a button nudging the user to lower their goal; a streak punishment that makes a reader guess where they were; endless pop-ups and premium tiers that add nothing [S-L19-048]. The video is satire: each is presented as what makes products maddening.
+  - **An off switch:** three of the deliberately annoying features in that video (the forced layer-naming modal, the streak punishment and neighbour control of smart-home devices) come with a way to turn them off: a notice, a button beside them or a setting [S-L19-048]. The usage-shaming message does not; its only choices are upgrading or more notifications.
+  - **The research policy:** DC-L13-15's enforced lint (pre-checked opt-ins, unequal accept and decline, re-prompting after a dismissal, fake countdowns, confirmshaming copy, cancelling harder than signing up).
+- **Visual effect:** A prompt at the limit reads as help; a shaming or guilt prompt reads as hostile [S-L19-048]; a wall in front of simple content reads as a trap [S-L19-048] [inferred for "trap"].
+- **Depends on (upstream):** DC-L13-15 and Q-pattern-05 (still Planned), tone (DC-L19-37: never shame the user), pricing (DC-L19-134).
+- **Affects (downstream):** upgrade banners and limit states, paywall screens, notification and reminder prompts, streak and progress UI, feature toggles in settings.
+- **Token encoding:** none; lint rules in `$extensions` or config (DC-L13-15).
+- **Platform notes:** no source covers app-store paywall rules or notification permission prompts; DC-L13-15 lists notification prompts among the affected surfaces.
+- **Accessibility constraints:** an upgrade detail shown on hover also needs a non-hover path (STD-accessibility-motion-15) [inferred]; paywalls and prompts always have a way out (STD-accessibility-motion-24, STD-visual-details-33); a decline option is never low-contrast (DC-L13-15 notes visual interference overlaps with contrast failures).
+- **Default + heuristic:** Confirms Q-pattern-05's default `enforced`. Upgrade prompts appear at the limit, say what the next plan adds, and accept one dismissal that sticks (no re-prompting, the DSA example in DC-L13-15). Candidate checks from these sources: (1) an engagement feature (reminder, usage nudge, streak prompt) with no off switch: warning [inferred]; (2) an upsell attached to a usage or guilt message: flagged for human review as confirmshaming [inferred mapping]; (3) a paywall or account wall in front of content promoted as free: human review; (4) a lapse that removes progress or blocks content: human review. These rest on one satire video; DC-L13-15 supplies the policy and legal anchors.
+- **Evidence:** [S-L19-048] [S-L19-079] [S-L19-061]. Compared against DC-L13-15 and DC-L19-37.
+- **Maps to:**
+  - Q-pattern-05: confirms `enforced`; the off-switch check is the simplest first lint to build while the question is Planned [inferred]; add the other three as human-review items.
+  - Q-pattern-05 visual sample: the anti-pattern gallery (the 342-videos message with an upsell, the step-goal pop-up with a button suggesting a lower goal, the streak punishment) [S-L19-048] beside an upgrade prompt that slides the higher limit in [S-L19-079].
+- **Impact now / as it grows:**
+  - *Prompt at the limit:* now slightly less conversion pressure. It keeps trust as the user base grows [inferred].
+  - *Walls and pressure tactics:* now more upgrades, perhaps. They breed resentment, and the research notes laws moving against them (DC-L13-15).
+  - *Off switch:* now one setting per feature. As engagement features multiply, a settings page of switches keeps people in control (STD-visual-details-39).
+- **Standards:** STD-visual-details-39, STD-visual-details-44, STD-visual-details-45, STD-visual-details-33, STD-accessibility-motion-15, STD-accessibility-motion-24
+
+### DC-L19-136: Progress, streaks and rewards
+- **Block path:** Patterns > Engagement > Progress and gamification
+- **Questions the designer answers:** Does the product show progress toward the person's own goals? Does it add streaks, a currency, badges or leaderboards? What happens when someone misses a day? What does the product prove before it asks for effort?
+- **Options:**
+  - **None:** the product's value is the reason to return. For everyday work tools the house standard is to remove friction rather than add delight (STD-when-to-animate-20).
+  - **Progress only:** show what has been done and what is left, as Exercism shows the share of a language completed [S-L19-078]; a percentage, not "in progress" [S-L19-086]; multi-step flows show position and total (the L13 goal-gradient default).
+  - **A game layer:** one central currency earned by the core actions (Duolingo XP, Todoist Karma) that shows progress; a streak kept alive by the core action; rewards scaled to the size of the goal; badges for milestones such as 30 days in a row; short quizzes that pay the currency. Rewards must tie to real goals, because meaningless rewards motivate no one [S-L19-078].
+  - **A social layer:** leaderboards and public badges; a league with promotion, neutral and demotion zones (Duolingo); a local leaderboard when the ranking involves money, to account for income and currency differences [S-L19-078].
+  - **Sharing as a reason to come back** [inferred framing]: in a yearly recap, the share button is always visible because sharing is why the recap succeeds; one share button with scopes (slide, chapter, whole recap); the owner's name on shared content; a short comparison with last year [S-L19-076].
+  - **Rejected:** punishing a broken streak [S-L19-048]; meaningless rewards [S-L19-078]. Removing choices so the core action needs no decision works for TikTok because its algorithm learns what people want [S-L19-077]; the research warns that choice overload averages near zero and does not justify deleting options (L13 choice-overload row), and lists addictive design among the patterns to watch (DC-L13-15).
+- **Visual effect:** Visible progress and a single currency give a sense of momentum [S-L19-078]; leaderboards add comparison and pressure [S-L19-078] [inferred for "pressure"]; punishments make the product feel hostile [S-L19-048].
+- **Depends on (upstream):** audience and use (Q-aud-01, Q-scope-06), how lively the brand is (Q-brand-04), the deceptive-pattern policy (DC-L13-15), tone (DC-L19-37), onboarding order (DC-L19-129: value before the game).
+- **Affects (downstream):** progress bar or ring, streak counter, badge, leaderboard, currency counter, milestone celebrations (DC-L19-130), reminder settings, glance views (Q-pattern-06) [inferred].
+- **Token encoding:** none new. Counters use tabular digits (STD-visual-details-02) and animate with NumberFlow (STD-visual-details-59); celebrations use the expressive motion set (DC-L04-19).
+- **Platform notes:** a milestone may get one success haptic, never one per frame or on scroll (STD-springs-gestures-61). A streak or goal is a candidate for a widget or complication (Q-pattern-06) [inferred].
+- **Accessibility constraints:** progress rings and bars show the value in text; league zones are not marked by color alone; celebrations respect reduced motion (STD-accessibility-motion-02); nothing is lost to a time limit the person cannot extend (WCAG 2.2.1) [inferred].
+- **Default + heuristic:** `none` for work tools; `progress` for products built around the person's own goals; a game or social layer only with an explicit goal, and then with these conditions: rewards tie to real goals [S-L19-078], value is shown before any game [S-L19-078], a missed day is never punished [S-L19-048] [inferred rule from the satire], reminders and other engagement features have an off switch [inferred, generalising the three off switches in S-L19-048], and progress is honest, with no artificial head start (the L13 goal-gradient ethics note). Every mechanic here comes from single Kole Jain videos; none reports retention data.
+- **Evidence:** [S-L19-078] [S-L19-086] [S-L19-076] [S-L19-048] [S-L19-077]. Compared against DC-L13-15 and the L13 goal-gradient, peak-end and choice-overload rows.
+- **Maps to:**
+  - New question (proposed Q-pattern-12, zoom 3, stage 23, show if Q-aud-01 is `regular` or `large`): "Should the product use progress, streaks or rewards to bring people back?" Options `none` (default when Q-scope-06 is `operate`), `progress` (default otherwise), `game-layer`, `social` [inferred defaults].
+  - Visual samples: the savings app's goal home, league leaderboard with promotion and demotion zones, and analytics with overspending marked [S-L19-078]; the recap with one share button and three scopes [S-L19-076].
+- **Impact now / as it grows:**
+  - *None:* now nothing to maintain. Return visits depend entirely on the product's value.
+  - *Progress:* now one bar per goal. It stays honest and cheap as goals multiply [inferred].
+  - *Game layer:* now motivating. Every new feature must be priced in the currency, and the economy needs balancing as it grows [inferred].
+  - *Social layer:* now adds comparison. As users grow, fairness (local boards, leagues) and moderation become work [S-L19-078] [inferred for moderation].
+  - *Sharing:* now one share control. Each shared item carries the brand to new people [S-L19-076] [inferred].
+- **Standards:** STD-when-to-animate-09, STD-when-to-animate-20, STD-springs-gestures-61, STD-visual-details-02, STD-visual-details-59, STD-visual-details-39, STD-visual-details-44, STD-visual-details-45, STD-visual-details-47
+
+### DC-L19-137: Measuring whether a design change worked
+- **Block path:** Process > Measurement > Product outcomes
+- **Questions the designer answers:** What is this page or flow for: sales, sign-ups, enquiries? Which number should the change move? How will we check it: analytics before and after, an A/B test, or a usability test? Who can see the analytics?
+- **Options:**
+  - **Not measured:** the page is judged on looks. The source says clients mostly judge looks while users care whether it works, and a site that looks good but serves no purpose still won't sell [S-L19-038].
+  - **Before and after:** compare the site's analytics before and after the new design ships; build the site yourself or keep view-only access so you can [S-L19-038]. Weaker than a controlled test, because other things change over time [inferred].
+  - **Controlled A/B test:** when you build option A and option B, validate them and ship the winner, not both (STD-when-to-animate-22); break a familiar pattern only with proof, and test rather than assume (STD-visual-details-37). A/B tests and analytics need large traffic (L13 methods table).
+  - **Usability testing only:** about five people per round finds most problems (L13 methods table), but the samples of small pre-launch tests are too small to prove impact [S-L19-038].
+  - **Where to spend effort:** for a site with heavy traffic, conversion rate optimisation beats more SEO, because a small gain at that scale is worth a lot [S-L19-038].
+  - **Reporting:** short case studies with the services, the problem, and the solution with numbers [S-L19-038].
+- **Visual effect:** none on screen (a process decision). Recorded metrics sit next to the decisions they belong to, so later sessions know what each change was for [inferred].
+- **Depends on (upstream):** what the screens are for (Q-scope-06), the system-level success measures (Q-gov-05, DC-L11-20), which measure adoption of the design system rather than product outcomes, and DC-L19-166, which proposes product results before and after as one way to judge the whole system.
+- **Affects (downstream):** `opendesigner/decisions.md` entries, DESIGN.md, the deceptive-pattern policy (conversion pressure is where DC-L13-15 gets tested), A/B variant prototypes.
+- **Token encoding:** none (process). A decision can carry `expected_effect { metric, baseline, check: "before-after" | "ab-test" | "usability" }`, mirroring DC-L11-20's `metrics[]` shape [inferred].
+- **Platform notes:** most website builders include basic analytics [S-L19-038]; app-store and in-app analytics are not covered by any source.
+- **Accessibility constraints:** no variant may drop below the floors to win a test: both A and B pass WCAG 2.2 AA contrast, 24 px targets, visible focus and reduced motion [inferred]; a trick that raises conversion is still a deceptive pattern (DC-L13-15).
+- **Default + heuristic:** For `persuade` screens, record the one number each major change is meant to move and check it before and after at minimum; run a controlled A/B test only with enough traffic; never claim impact from a five-person test. This rests on one freelancer's video [S-L19-038], backed by two house standards and the L13 methods table; no research card covers product experiments (DC-L11-20 measures the system). DC-L19-166 uses the same video for a system-level check; this card works per change.
+- **Evidence:** [S-L19-038]. Compared against DC-L11-20, DC-L13-15, DC-L19-166 and the L13 Part D methods table.
+- **Maps to:**
+  - New question (proposed Q-pattern-13, zoom 3, show if Q-scope-06 is `persuade`): "Which number should this page move, and how will you check it?" Options `not-measured`, `before-after` (default), `ab-test`, `usability-only`. The answer is saved with the decision.
+  - Q-gov-05: new note, "DC-L19-166's `outcomes` option judges the system by product results before and after; the per-change numbers recorded by Q-pattern-13 feed it".
+  - Visual sample: a short case-study card with services, problem, and solution with numbers [S-L19-038].
+- **Impact now / as it grows:**
+  - *Not measured:* now no setup. Design arguments stay matters of taste as the team grows [inferred].
+  - *Before and after:* now needs analytics access. It gives a rough signal that gets noisier as more changes ship at once [inferred].
+  - *A/B test:* now needs traffic and tooling. It scales best, because each change is judged on its own (STD-when-to-animate-22).
+  - *Usability only:* now cheap and fast for finding problems. It never proves impact, however many rounds are run [S-L19-038].
+- **Standards:** STD-when-to-animate-22, STD-visual-details-37, STD-visual-details-44
+
+### DC-L19-138: AI workspace components beyond labels
+- **Block path:** Patterns > AI > Workspace components
+- **Questions the designer answers:** If the product generates content, does it keep a searchable history? If the AI remembers things, can people see and edit that memory? Can people edit part of a response in place? What shows while the AI works? Are confidence levels shown?
+- **Options:** (all from one Kole Jain video [S-L19-055] unless noted)
+  - **A prompt box as the front door:** a large prompt box above the fold gets people trying the tool at once; ChatGPT and Gemini dropped their landing pages. A useful box previews attached PDFs and images, compresses long pasted code into a block, offers context chips that change the mode, integration buttons, and progressive disclosure such as an advanced toggle or a cost estimate above the input.
+  - **Generation history:** called essential when the product outputs text, code or images; organised by session or tied to the source block, with a first-line preview, deletion, and search, which turns history into a workspace.
+  - **Memory panel:** if the AI has persistent memory, it must be visible and under the user's control: see storage, bulk delete, add facts. The source criticises tools that hide it in settings.
+  - **Inline editing:** highlight any part of a response and type the change (Claude, Lex, Notion AI).
+  - **While it works:** short, looping, fluid loaders; streamed output; skeletons with shimmer; a trail of steps (documents retrieved, sources cited) fading in one by one (see DC-L19-127).
+  - **Confidence indicator:** a pill under each response ("high confidence", "unverified"), clickable for the number.
+  - **A dark "soft glass" look:** a style trend, not a pattern; it falls under the house rules for translucency.
+- **Visual effect:** History and memory make the tool feel like a workspace; inline edits feel like revising, not regenerating; a step trail makes the AI feel like a collaborator rather than a black box; streaming turns delay into anticipation [S-L19-055].
+- **Depends on (upstream):** Q-ai-01 (whether and how AI appears), DC-L13-16 (AI interface patterns), DC-L08-22 (AI module), wait feedback (DC-L19-127).
+- **Affects (downstream):** prompt input, attachment chip, context chips, history list with search, memory panel, inline-edit popover, streaming text container, skeleton, step trail, confidence badge.
+- **Token encoding:** existing AI roles (`color.ai.*`, `icon.ai`) and thinking-indicator motion from DC-L13-16; nothing new [inferred].
+- **Platform notes:** the examples are web and desktop AI tools; no source covers native mobile AI patterns.
+- **Accessibility constraints:** streamed text must not flood screen readers, and the view must not autoscroll to the end (DC-L13-16); the step trail and confidence level are text, not color alone; glass surfaces become frostier or solid under reduced transparency (STD-accessibility-motion-11), and text on them gets higher contrast (STD-visual-details-13); memory and history deletion are undoable or confirmed, as with any destructive action (STD-visual-details-40).
+- **Default + heuristic:** For products whose Q-ai-01 answer is `chat` or `presence-mode`: a prompt box with attachment previews, searchable history, streamed output, and the stop, regenerate, edit and copy controls DC-L13-16 already asks for. A memory panel is required whenever the AI keeps memory [S-L19-055]; this fits the house rule to add previews, confirmations and disclaimers to AI features (STD-visual-details-45) [inferred link]. Two points differ from the source and follow DC-L13-16: a step trail may show retrieval steps and citations, but not narrated reasoning presented as an explanation; and confidence labels belong in high-stakes contexts, not under every response. Everything here is one creator's survey of current tools.
+- **Evidence:** [S-L19-055]. Compared against DC-L13-16, DC-L08-22 and DC-L19-127.
+- **Maps to:**
+  - Q-ai-01: new follow-up (zoom 3, show if Q-ai-01 is not `none`), multi-select "Which AI workspace parts does the product need?": `history`, `memory-panel`, `inline-edit`, `step-trail`, `confidence`; default `history` for `chat` [inferred].
+  - Q-ai-01: new heuristic, "memory that exists is shown and editable".
+  - Visual samples: a prompt box with attachment previews and context chips; a research trail fading in step by step; a confidence pill under an answer [S-L19-055].
+- **Impact now / as it grows:**
+  - *Prompt box and history:* now the core of the product. Search keeps history useful as generations pile up [S-L19-055].
+  - *Memory panel:* now one more screen. As memory grows, people need bulk delete and storage limits to stay in control [S-L19-055].
+  - *Inline edit:* now faster fixes. Each new output type (code, images) needs its own way to select a part [inferred].
+  - *Step trail and confidence:* now more trust. They have to stay honest as models change, or they mislead (DC-L13-16).
+- **Standards:** STD-visual-details-45, STD-visual-details-40, STD-accessibility-motion-11, STD-visual-details-13, STD-accessibility-motion-02
+
+### Area: Platforms (DC-L19-141 to DC-L19-153)
+
+Area `platforms`: the topics Mobile app patterns, Desktop and macOS apps and Accessibility (stages 02 audience and commitments, 04 platforms and devices). Written 2026-09-24. Built from the 34 verified analyses tagged with these topics, checked against the raw text where a card relies on a detail (the mobile, macOS, Spotify Wrapped and TikTok transcripts, the mobile-native, animate-expo and apple-design skills, and the Raycast passage of "You Don't Need Animations"), and compared with DC-L10-01 to DC-L10-25, DC-L14-01 to DC-L14-14, DC-L03-12, DC-L03-19, DC-L06-14, DC-L08-19, DC-L08-20, DC-L11-19, DC-L13-01, DC-L13-03, DC-L13-11, DC-L13-14, DC-L13-17 and DC-L16-10. Where another L19 card owns a decision (DC-L19-14, DC-L19-15, DC-L19-17, DC-L19-32, DC-L19-49, DC-L19-55, DC-L19-90, DC-L19-93, DC-L19-96, DC-L19-97, DC-L19-101, DC-L19-103, DC-L19-117, DC-L19-119, DC-L19-129), these cards point to it. Synthesis pages: [[synthesis/mobile-app-patterns|Mobile app patterns synthesis]], [[synthesis/desktop-and-macos-apps|Desktop and macOS apps synthesis]], [[synthesis/accessibility|Accessibility synthesis]].
+
+### DC-L19-141: Accessibility floor: WCAG 2.2 AA plus the locked house rules
+- **Block path:** Foundations > Accessibility > Conformance target
+- **Questions the designer answers:** Which WCAG level do we commit to? Which rules above AA are already locked, whatever we pick? What would "stricter" still add?
+- **Options:**
+  - **WCAG 2.2 AA plus the house locks** (the current default `wcag22-aa`, reworded): AA contrast and the 24px web target floor (guardrails), plus rules the house standards make "must" at every level. Touch targets are 44x44pt on iOS, 48dp on Android, and small web controls get a 44px hit area for touch [S-L19-016] [S-L19-004]. Pinch zoom is never disabled; inputs stay at 16px or more instead [S-L19-028]. Every animation ships its reduced-motion version, gentler rather than zero [S-L19-016] [S-L19-020]. Reduced transparency and increased contrast are handled as separate signals [S-L19-020]. Layout scales with the user's text size [S-L19-020] [S-L19-016]. Hover styles are gated to fine pointers and touch gets its own press state [S-L19-028], and a haptic is never the only feedback [S-L19-016]. Overlays sit on accessible primitives [S-L19-029] [S-L19-005] and can always be dismissed (STD-accessibility-motion-24; Vaul's non-dismissible drawer shows the failure [S-L19-097]). Visible focus is already a locked guardrail (a 2px ring at a 2px offset, `guardrails.md`); the sources add that focus states should be clearly distinct [S-L19-001] and use the same 2px outline at a 2px offset [S-L19-030].
+  - **AA plus stricter rules** (`wcag22-aa-plus`, reworded): what is left once touch targets are locked: 7:1 body text and fewer mid-tone text colors (DC-L01-22), and 44px targets for mouse as well as touch (WCAG 2.5.5, AAA) [inferred]. The 44px touch target in the default is already the AAA size for touch [inferred]. Kole Jain's contrast work (checking colored cards and chips, darkening a brand color that fails with white text) [S-L19-051] [S-L19-086] checks against WCAG without naming a level; it fits AA and adds nothing AAA-specific [inferred].
+  - **Level A only** (`wcag22-a`): offered today, but it contradicts the locked floor in AGENTS.md and `guardrails.md`, and `engine.py` already maps it to AA ("AA stays the floor"). The option promises something the system will not do.
+- **Visual effect:** AA plus locks: roomy hit areas on touch, a visible focus ring, motion that fades instead of sliding for people who ask, glass that turns solid when transparency is reduced. AA plus stricter: darker secondary text, fewer light grays, a flatter and plainer look [inferred]. Level A: nothing different from AA, because the engine ignores it.
+- **Depends on (upstream):** Q-aud-01 (who uses it), Q-aud-02 (what is at stake), Q-plat-01 and Q-plat-02 (which platform rules apply).
+- **Affects (downstream):** `size.target.*`, the contrast validator target (`raw.contrastTarget`), focus ring tokens, the reduced-motion and reduced-transparency modes, input text size, `guardrails.md` and DESIGN.md's accessibility section.
+- **Token encoding:** existing `size.target.pointer` and `size.target.touch` ($type dimension). The level itself is a validator setting (`raw.contrastTarget` AA or AAA), not a token.
+- **Platform notes:** web: 24px pointer targets and 44px touch hit areas built with a pseudo-element [S-L19-004]; iOS 44pt with `hitSlop` when the visual is smaller [S-L19-016]; Android 48dp. Zoom and the 16px input rule are web-only (iOS Safari zooms smaller inputs) [S-L19-028]. In React Native, `allowFontScaling` is on by default, so no height may be hardcoded [S-L19-016].
+- **Accessibility constraints:** WCAG 2.2 AA is the locked floor; 2.5.8 (24px), 2.5.5 (44px, AAA), 1.4.4 (resize text).
+- **Default + heuristic:** Default `wcag22-aa`, presented as "AA plus the house locks". Offer `wcag22-aa-plus` for money, health and government products [inferred]. Nothing below AA. Rule of thumb: the level question only decides how strict contrast and mouse targets are; touch targets, zoom, motion, transparency, contrast signals and text scaling are not up for choice.
+- **Evidence:** [S-L19-001] [S-L19-004] [S-L19-005] [S-L19-016] [S-L19-020] [S-L19-028] [S-L19-029] [S-L19-030] [S-L19-051] [S-L19-086] [S-L19-097]; compared with DC-L11-19, DC-L01-22, DC-L03-12, DC-L10-15.
+- **Maps to:**
+  - Q-aud-03: remove option `wcag22-a`, or show it as unavailable with the reason "AA is the locked floor", because `engine.py` maps it to AA and AGENTS.md locks AA.
+  - Q-aud-03: `wcag22-aa` label becomes "WCAG 2.2 AA, with locked rules for touch targets, zoom, motion and text size" (confirms current default); `wcag22-aa-plus` label becomes "AA plus 7:1 body text and 44px targets for the mouse too" (the "bigger targets" wording is already true for touch).
+  - Q-aud-03 new heuristic [inferred]: when Q-aud-02 is `high-trust`, pre-select `wcag22-aa-plus` as the recommendation.
+  - Visual sample: the Show strip lists each locked rule with its standard id, for example "Touch targets 44pt / 48dp (STD-mobile-touch-09)".
+- **Impact now / as it grows:**
+  - *AA plus locks:* now, a little extra layout room for hit areas and one extra CSS block per animation. As it grows, components carry the locks, so new screens inherit them; the risk is a hand-rolled component that skips them, which review catches.
+  - *AA plus stricter:* now, a narrower, darker palette. As it grows, every new text color, theme and brand color must pass 7:1, which gets harder with each addition.
+  - *Level A:* now, no effect (mapped to AA). As it grows, it only misleads the person who picked it.
+- **Standards:** STD-mobile-touch-09, STD-mobile-touch-11, STD-accessibility-motion-01, STD-accessibility-motion-02, STD-accessibility-motion-11, STD-accessibility-motion-12, STD-accessibility-motion-13, STD-accessibility-motion-15, STD-accessibility-motion-16, STD-accessibility-motion-20, STD-accessibility-motion-24, STD-accessibility-motion-27
+
+### DC-L19-142: Device settings the product always follows, and controls inside the app
+- **Block path:** Foundations > Accessibility > User settings > Device signals and in-app controls
+- **Questions the designer answers:** Which device settings does the product obey without being asked? Which extra controls, if any, live inside the app? Can people rearrange or hide parts of the interface?
+- **Options:**
+  - **Follow every device signal (always on, not a choice):** reduced motion, reduced transparency and increased contrast as three separate signals, and the user's text size, all built into components [S-L19-020]; in React Native, `useReducedMotion()` or `reduceMotion: ReduceMotion.System`, and layouts measured rather than fixed because text can reach 200% [S-L19-016]; pinch zoom stays available [S-L19-028]; light and dark follow the system "as much as possible" [S-L19-067].
+  - **Plus an appearance switch in the app:** Kole Jain's Mac app keeps light and dark settings in a settings popover [S-L19-067]. This differs from DC-L10-17 (Apple: no app-only appearance setting). DC-L19-14 already owns this choice for Q-theme-01.
+  - **Plus personalization:** when no single layout fits everyone, let people rearrange controls and hide what they don't use [S-L19-020]; the same Mac app lets people choose which side the quick-save panel opens from [S-L19-067].
+  - **Plus a full high-contrast theme** (7:1): an optional extra mode (DC-L19-17, DC-L01-20).
+  - **Plus text-size or density controls in the app** (today's `text-size` and `density` options): no source in this area asks for them. An in-app text-size control repeats the device's own text-size setting on native platforms [inferred]; a compact/roomy switch has no device equivalent, so it stays a genuine in-app option (DC-L03-11) [inferred].
+- **Visual effect:** Following the signals: people who turn them on get a solid, bordered, non-moving, larger-text version of the same screen, and nobody else sees a change. In-app controls: a settings popover or panel; more choice for people, more combinations to test.
+- **Depends on (upstream):** DC-L19-141 (the floor), Q-plat-01 (macOS has no Dynamic Type, DC-L10-07), Q-theme-01.
+- **Affects (downstream):** the motion, transparency and contrast token modes, rem-based spacing, a settings screen or popover, the test matrix (Q-gov-07).
+- **Token encoding:** semantic-tier modes `motion: full | reduced`, `transparency: full | reduced`, `contrast: standard | more` (DC-L10-16), written on the web as `prefers-reduced-motion`, `prefers-reduced-transparency: reduce` and `prefers-contrast: more` [S-L19-020]. In-app switches reuse the engine's existing `[data-theme]` and `[data-density]` overrides; nothing new.
+- **Platform notes:** web reads the three media queries [S-L19-020]; React Native reads the system setting per animation [S-L19-016]; macOS follows the system appearance [S-L19-067].
+- **Accessibility constraints:** reduced motion keeps opacity and color changes and drops movement; it is never zero. Text scales to 200%; zoom is never disabled.
+- **Default + heuristic:** Default: every device signal followed automatically and never asked about; no extra in-app controls unless Q-theme-01 chose a switch or the product serves groups whose needs clash (then personalization). Rule of thumb: if the device already has a switch for it, the product obeys that switch; an in-app control is only for what the device can't express.
+- **Evidence:** [S-L19-016] [S-L19-020] [S-L19-028] [S-L19-067]; compared with DC-L10-16, DC-L10-17, DC-L13-14, DC-L19-14, DC-L19-17.
+- **Maps to:**
+  - Q-aud-04: new ask "Beyond the device's own settings, which controls should people get inside the app?"; `reduced-motion`, and the device parts of `contrast` and `text-size`, become always-on notes instead of options, because the house standards make them musts.
+  - Q-aud-04: new option `personalize` (rearrange or hide controls) [S-L19-020]; new default "none beyond the device settings", replacing "text-size + reduced-motion", which are now automatic.
+  - Q-aud-04 visual sample: the preview's mode switcher keeps one toggle per device signal, labeled "always followed", so people can see what each one does.
+  - Q-motion-10: confirms "all of them" (the list becomes information, not a choice).
+- **Impact now / as it grows:**
+  - *Device signals:* now, three CSS blocks (or three runtime checks) and rem spacing. As it grows, every new translucent, moving or fixed-height component must honor them, which review can check.
+  - *Appearance switch:* now, a stored preference and a control. As it grows, extra themes join the same switch (DC-L19-14).
+  - *Personalization:* now, a settings model and saved layouts. As it grows, every new control needs a place in the customizable set, and support has more layouts to reason about [inferred].
+  - *High-contrast theme:* now, one extra mode. As it grows, every new color needs its 7:1 value.
+  - *In-app text size:* now, a duplicate control. As it grows, two text-size settings can fight each other [inferred].
+  - *In-app density switch:* now, a compact/comfortable token mode. As it grows, every component needs both densities, with hit areas that never shrink (DC-L03-12).
+- **Standards:** STD-accessibility-motion-01, STD-accessibility-motion-02, STD-accessibility-motion-11, STD-accessibility-motion-12, STD-accessibility-motion-13, STD-accessibility-motion-27, STD-visual-details-43, STD-visual-details-64
+
+### DC-L19-143: Mixed input: hover is an extra, press feedback is for everyone
+- **Block path:** Foundations > Interaction > Input capability > Hover and press
+- **Questions the designer answers:** Will the same screen be used with a finger and a mouse, sometimes on the same device? What happens to anything that only shows on hover? When does a tap show that it landed?
+- **Options:**
+  - **Mixed input, gated by capability (the house rule for the web):** iPads with trackpads, laptops with touchscreens and phones with a mouse mean touch and mouse are not exclusive. Hover styles live only inside `@media (hover: hover) and (pointer: fine)`, never behind a user-agent, screen-width or JavaScript touch check [S-L19-028]. Press feedback fires when the finger lands (`:active`, or `pointerdown` in JavaScript, never `click`): scale 0.97 over 100-160ms with ease-out [S-L19-028]. Highlight on touch-down, commit on touch-up, and about 10px of hit padding so a drifting finger keeps its press [S-L19-020].
+  - **Touch only (native phone app):** there is no hover, so every hover affordance moves to press, position or nothing, redesigned rather than ported [S-L19-016]. Pressables scale to 0.97 in 100-150ms (the recipe uses 120ms), with `hitSlop` to reach 44pt and `pressRetentionOffset` for drift [S-L19-016] [S-L19-015]. On mobile, a slightly darker gray on press makes it "feel like you're actually pressing into something" [S-L19-051].
+  - **Pointer first (desktop):** hover may add hints, such as an arrow fading in on a card that is a link [S-L19-075] or a tooltip on an unclear icon [S-L19-045], but only as an extra with a visible or keyboard path too (DC-L13-03: never hover-only for anything essential; DC-L19-55 for card links).
+  - **Device sniffing:** ruled out [S-L19-028].
+- **Visual effect:** Gated hover: desktops keep hover lifts and tints; phones never show a button stuck in its hover state after a tap [S-L19-028]. Press scale: the whole button, label and icon included, gives under the finger, which reads as physical [S-L19-016]. Touch-only redesign: actions that hid behind hover become visible icons or rows [inferred], or a long-press menu, the mobile equivalent of the right click [S-L19-053].
+- **Depends on (upstream):** Q-plat-01, Q-plat-02 (devices), DC-L19-141.
+- **Affects (downstream):** every interactive component's state rules, tooltips (need a non-hover trigger), whole-card links, `size.target.*`, Q-state-04.
+- **Token encoding:** existing `size.target.pointer` (24) and `size.target.touch` (44 or 48), $type dimension. Press feedback as motion tokens, for example `motion.press.scale` ($type number, 0.97) and `motion.press.duration` ($type duration, 100ms) [inferred names]. Hover gating is an output rule of the CSS export, not a token.
+- **Platform notes:** web: remove the tap highlight globally only together with an `:active` state on every tappable, and put `touch-action: manipulation` on tappables to remove the tap delay [S-L19-028]. React Native: Pressable with a CSS transition [S-L19-016]. Android ripple only in a Material-styled app (DC-L19-147).
+- **Accessibility constraints:** WCAG 1.4.13 for content shown on hover; 2.5.8 targets; whatever hover reveals must also be reachable by keyboard focus [inferred].
+- **Default + heuristic:** Default for Q-plat-03: touch + pointer + keyboard, treated as possibly on the same device, on every web surface; native phone apps are touch plus the operating system's keyboard and switch access [inferred]. Rule of thumb: design the touch version first; hover can only add, never hold something people need.
+- **Evidence:** [S-L19-015] [S-L19-016] [S-L19-020] [S-L19-028] [S-L19-045] [S-L19-051] [S-L19-053] [S-L19-075]; compared with DC-L10-15, DC-L14-06, DC-L03-12, DC-L13-03, DC-L19-93, DC-L19-103.
+- **Maps to:**
+  - Q-plat-03: new heuristic and Use/avoid line "hover never carries anything essential; gate it by capability, never by device" [S-L19-028]; the default text becomes "touch + pointer + keyboard, possibly on the same device" (confirms the current default set).
+  - Q-plat-03 visual sample: a phone screen where a tapped button stays in its hover state, beside the gated version, and a button scaling to 0.97 as the finger lands [S-L19-028].
+  - Q-state-04: no separate change here. Its current default (all eight states, overlays for hover and press) gains the press scale from DC-L19-93 and the gated hover from DC-L19-103; this card only adds that the same device may be used by finger and mouse, which is what the `per-input` option describes.
+  - Engine: the preview's ungated `:hover` rules are already recorded as a conflict under STD-accessibility-motion-15; no new note.
+- **Impact now / as it grows:**
+  - *Mixed input:* now, one media query around every hover rule and an `:active` rule per control. As it grows, new devices (touch laptops, tablets with keyboards) just work, because nothing depends on the device name.
+  - *Touch only:* now, hover ideas must be redesigned, not copied. As it grows, a later web or desktop version adds hover as an extra without changing the base.
+  - *Pointer first:* now, richer hover hints. As it grows, every hover hint needs a touch and keyboard twin, or it becomes a trap when touch use grows.
+  - *Device sniffing:* now, it seems to work on the designer's devices. As it grows, it breaks on each new mixed-input device.
+- **Standards:** STD-mobile-touch-02, STD-mobile-touch-03, STD-mobile-touch-05, STD-mobile-touch-06, STD-mobile-touch-08, STD-mobile-touch-09, STD-mobile-touch-30, STD-accessibility-motion-15, STD-components-toasts-drawers-72
+
+### DC-L19-144: Web product on phones: installed-app feel or scrolling document
+- **Block path:** Platforms > Web > Mobile web posture
+- **Questions the designer answers:** When people open the web product on a phone, should it feel like an installed app or like a page? Will people add it to their home screen? Does a marketing site sit next to the app?
+- **Options:**
+  - **App shell (feels installed):** `overscroll-behavior: none` on the root, so the page no longer rubber-bands or pull-to-refreshes, with `contain` on every inner scroller; a `100dvh` shell that tracks the visible area; control text unselectable; bottom-pinned UI padded with `env(safe-area-inset-bottom)`; `interactive-widget=resizes-content` so the Android keyboard shrinks the layout as on iOS [S-L19-028]. A drawer people drag down needs the same shell (`100dvh`, no page overscroll) [S-L19-028], and keeps its inputs above the keyboard (Visual Viewport API, or Vaul's `repositionInputs`) [S-L19-005] [S-L19-096].
+  - **Scrolling document (marketing, docs, content):** keep the page's own overscroll and pull-to-refresh, which is "fine on a document"; heroes use `min-height: 100svh`, because `dvh` shifts layout mid-scroll [S-L19-028].
+  - **Installed PWA:** the app shell plus `apple-mobile-web-app-status-bar-style` and the manifest's `theme_color` and `background_color`, set as one decision with `theme-color`; tested in standalone mode, which changes the viewport, safe areas and status bar [S-L19-028].
+  - **Per surface:** app routes get the shell, marketing routes stay documents [inferred from the split in S-L19-028].
+  - **In every option:** the mobile baseline ships before the first component: `viewport-fit=cover` and `interactive-widget=resizes-content` in the viewport meta, one `theme-color` per scheme (DC-L19-15), no tap highlight, `-webkit-text-size-adjust: 100%`, 16px inputs, `touch-action: manipulation`, gated hover [S-L19-028]. The skills README lists these as the fixes a web app needs once it runs on a phone [S-L19-014].
+- **Visual effect:** App shell: the page stops bouncing as a whole, bottom bars sit above the URL bar and home indicator, and the status bar matches the header; it feels installed rather than "a website in a browser" [S-L19-028]. Document: scrolls and refreshes like the web. On the mobile web, bottom navigation must also clear the browser bar, which an app-only product never has to think about [S-L19-076].
+- **Depends on (upstream):** Q-scope-01 (product app, marketing, docs), Q-plat-01 (`web`), Q-plat-02 (phone in scope), Q-theme-01.
+- **Affects (downstream):** the CSS export's root rules and viewport meta, the app-shell template, drawers and sheets, bottom navigation, full-height heroes, the PWA manifest.
+- **Token encoding:** none (platform-layer output of the web export). The `theme-color` values come from the header surface token (DC-L19-15). An export setting such as `mobileWeb: app-shell | document | pwa | per-surface` could live under `$extensions` [inferred].
+- **Platform notes:** web only; native apps get these behaviors from the OS. iOS Safari zooms into inputs under 16px and does not zoom back out; Chrome device emulation reproduces none of these bugs [S-L19-028].
+- **Accessibility constraints:** never `user-scalable=no` or `maximum-scale=1`; text that is content stays selectable; safe-area padding keeps controls out of the notch and home-indicator zones [S-L19-028].
+- **Default + heuristic:** Default: derived from Q-scope-01 and shown as a confirm chip: `product-app` gives an app shell, `marketing` or `docs-content` gives a document, both give per surface; PWA only when the person says people will install it. The baseline always ships when phones are in scope. Rule of thumb from the source: own scroll areas, a drawer people drag down, or a canvas means app shell; reading top to bottom means document [S-L19-028].
+- **Evidence:** [S-L19-005] [S-L19-014] [S-L19-028] [S-L19-076] [S-L19-096]; compared with DC-L10-01, DC-L10-11, DC-L10-18, DC-L19-15.
+- **Maps to:**
+  - New question (proposed Q-plat-12, zoom 2, show if Q-plat-01 includes `web` and Q-plat-02 includes `phone`; Q-plat-11 is already proposed by DC-L19-96): "On phones, should your web product feel like an installed app or like a page people scroll?" with options `app-shell`, `document`, `pwa`, `per-surface`; default derived from Q-scope-01.
+  - Q-plat-01 `web` option text gains "on phones it ships the mobile baseline first" (STD-mobile-touch-21).
+  - Engine: the CSS export and `preview.html` should write the baseline; the preview's viewport meta is already recorded as a conflict under STD-mobile-touch-21.
+  - Visual sample: a bottom button hidden under the URL bar at `100vh` beside the `100dvh` version, and a header padded under the notch [S-L19-028].
+- **Impact now / as it grows:**
+  - *App shell:* now, a handful of root rules and one layout height. As it grows, every new scroller, sheet and bottom bar must follow them (contain, dvh, safe-area padding), and each is a one-line check.
+  - *Document:* now, almost nothing beyond the baseline. As it grows, if app-like features appear (drag-down drawers, canvases), the page starts fighting pull-to-refresh and must move to per surface.
+  - *PWA:* now, manifest and status-bar decisions plus standalone testing. As it grows, installed users expect offline behavior and app-like navigation [inferred].
+  - *Per surface:* now, two sets of root rules. As it grows, each new route must be tagged app or document, or it inherits the wrong one.
+- **Standards:** STD-mobile-touch-10, STD-mobile-touch-14, STD-mobile-touch-15, STD-mobile-touch-16, STD-mobile-touch-17, STD-mobile-touch-20, STD-mobile-touch-21, STD-accessibility-motion-27, STD-components-toasts-drawers-45
+
+### DC-L19-145: Thumb reach: where frequent actions sit on a phone
+- **Block path:** Foundations > Layout > Reach zones (phone)
+- **Questions the designer answers:** On a phone, which actions sit at the bottom within easy thumb reach, and which may stay at the top? Does the main action get its own spot? Do we plan for right- or left-handed use?
+- **Options:**
+  - **Bottom-weighted (reach first):** the important controls go at the bottom, where they are easier to reach, even though pushing everything to the top looks good; the close X can stay at the top [S-L19-076]. TikTok's bottom navigation follows the same idea as its swipe: a large target with almost no thumb travel [S-L19-077]. A floating bottom bar of three or four links, five at most, keeps every target over 44 [S-L19-053]. This matches DC-L10-09 (controls in the middle and bottom are easier to reach).
+  - **Top for rare and contextual actions:** a bell and a more menu at the top, changing with the page; while a note is being edited, the nav bar hides and formatting and sharing take the top [S-L19-053].
+  - **Main action broken out of the bar:** a floating bar with "the important action broken out" is described as today's typical bottom bar [S-L19-053]. Differs from [S-L19-075]: a raised, circled add button draws attention to the tab people use least, so drop it into line with the others. The two agree when the broken-out action is the most used one, such as search or quick capture, and disagree when it is a rarely used "add" [inferred]. DC-L19-119 (the phone tab bar) already owns this choice and reaches the same reconciliation; this card only adds the reach reasoning.
+  - **Side-edge action column:** TikTok lines up its action icons on the right for "the 70 to 80%" of people who are right-handed [S-L19-077]. One video's figure with no second source; the L13 law table's Fitts's law row warns that screen-edge targets help mouse users but hurt touch users (research/L13-ux-laws-heuristics.md).
+  - **One huge target for the dominant action:** TikTok's swipe target is almost the whole screen [S-L19-077]. The video names Hick's law, but its argument (target size and distance) is Fitts's law, as its analysis notes.
+- **Visual effect:** Bottom-weighted: a quiet top (title, close, status) and a busy bottom; one-handed use feels effortless. Top-heavy: clean in a screenshot, but every action is a stretch [S-L19-076]. An edge column: content fills the screen and controls hug one side, like a video feed [S-L19-077].
+- **Depends on (upstream):** Q-plat-02 (phone first-class), Q-layout-04 (navigation container), Q-aud-04 `situational` (one hand busy), DC-L19-144 (the mobile web browser bar).
+- **Affects (downstream):** bottom bar, floating action button, sheet action rows, toolbars, the phone app-shell template, safe-area padding.
+- **Token encoding:** none new; the bar uses the existing `size.target.touch` and safe-area padding. A builder lint rule "frequent actions in the lower part of compact screens" is a proposal [inferred].
+- **Platform notes:** mobile web: the browser bar can cover bottom navigation [S-L19-076]; use a `100dvh` shell and safe-area padding (STD-mobile-touch-10, STD-mobile-touch-16). The iOS tab bar floats and can minimize on scroll (DC-L10-09).
+- **Accessibility constraints:** 44pt / 48dp targets; spreading tab icons a little widens each click area, and tab labels, when used, must be dark enough to read [S-L19-075].
+- **Default + heuristic:** Default on phones: bottom-weighted, with navigation and the one or two most frequent actions at the bottom and rare or global actions (settings, notifications, close) at the top; break the main action out of the bar only when it is also the most used; no handedness-specific layout. Rule of thumb: rank actions by how often they are used; the more often, the lower (and, for the one dominant action, the bigger [inferred from S-L19-077]).
+- **Evidence:** [S-L19-053] [S-L19-075] [S-L19-076] [S-L19-077]; compared with DC-L10-09, DC-L14-05, DC-L03-19, DC-L08-19, DC-L19-49, DC-L19-119.
+- **Maps to:**
+  - Q-layout-04: new heuristic for phones: how often an action is used decides how low it sits [S-L19-076] [S-L19-077]. The companion rule "the main action leaves the bar only if it is the most used" is DC-L19-119's heuristic for the same question; apply it once.
+  - Q-aud-04 `situational` ("one hand busy"): new heuristic [inferred]: when picked, the builder applies the bottom-weighted rule and flags primary actions anchored at the top.
+  - Q-plat-02 visual sample: a thumb-reach overlay on the draft phone screen, next to the Spotify Wrapped redesign with share and volume moved to the bottom [S-L19-076] and TikTok's bottom bar and right-edge column [S-L19-077].
+- **Impact now / as it grows:**
+  - *Bottom-weighted:* now, the bottom of the screen needs careful spacing and safe-area padding. As it grows, the bottom fills up; new actions compete for the few low slots, which forces a ranking.
+  - *Top for rare actions:* now, a calm top bar. As it grows, the top becomes the place for everything that doesn't fit below, so it needs a "more" menu.
+  - *Main action broken out:* now, a strong signal for one action. As it grows, it is hard to take back if the most used action changes.
+  - *Side-edge column:* now, maximum content area. As it grows, left-handed and accessibility users may ask for a mirrored layout [inferred].
+  - *One huge target:* now, the simplest possible screen. As it grows, it only works while the product keeps choosing well for people (see DC-L19-146).
+- **Standards:** STD-mobile-touch-09, STD-mobile-touch-10, STD-mobile-touch-16, STD-visual-details-42
+
+### DC-L19-146: New interactions: where they may appear and what backs them up
+- **Block path:** Patterns > Interaction > Convention vs novelty > Gestures and signature moments
+- **Questions the designer answers:** Which interactions may be new or gesture-driven, and which must work the way people already know? If an action is a swipe, what does someone do who doesn't know the swipe? Where does the product's one "surprise" go?
+- **Options:**
+  - **Usual behavior, your own look** (`custom-skin`, the current default): familiar controls and platform navigation, with the brand in the visuals. Break a familiar pattern only when you can prove the new one is better, then test it [S-L19-020]. Don't replace a layout people have used for years; evolve it, as with Spotify Wrapped's eight-year-old format [S-L19-076]. Lean on gestures the audience already knows, such as tap to pause for a Gen Z audience [S-L19-076].
+  - **Gesture shortcuts on top of visible controls:** a swipe that replaces a button (swipe to add a friend) or reveals more, with buttons "for the uninitiated", as Gmail offers delete by swipe or by button [S-L19-035]; the video hedges the long-press fallback as "probably" good UX, so "every gesture has a visible twin" is the house reading (WCAG 2.5.7 in DC-L10-15, and DC-L19-97), not the video's rule. Teach a swipe before relying on it (swipe back, swipe up to search as in Slack, long press as the mobile right click) [S-L19-053]. Gesture mechanics (momentum, thresholds, rubber-banding) belong to DC-L19-97.
+  - **One dominant gesture, other options removed:** TikTok's swipe up with auto-snap and autoplay, after an onboarding that only asks for interests and gives a very short tutorial [S-L19-077]. It only works when the product learns what people want; the L13 law table warns that Hick's law is not a reason to delete navigation (research/L13-ux-laws-heuristics.md).
+  - **Signature transitions:** a card that expands into a page with an elastic snap, an image that zooms into the next page's hero, a circle wrap between onboarding slides [S-L19-035]; direction that carries meaning, with tools sliding up from the bottom as temporary and onboarding screens sliding in from the left as progress [S-L19-084]. Differs from the house standards for native apps: screen changes stay on the native stack at the platform's duration, tabs never slide, and a custom stack animation must set `animationMatchesGesture`. Delight motion belongs to rare moments such as onboarding, which is also where Kole Jain puts the captivating moment on mobile [S-L19-084].
+  - **Drag-only confirmation:** a swipe-to-confirm slider for sending an email (Resend) or buying crypto, because a slider is harder to trigger by accident than a button [S-L19-035]. It is drag-only, so WCAG 2.5.7 still needs another way [inferred]. House alternatives: hold-to-confirm (a 2s linear fill while pressed, a 200ms release) for destructive actions a plain click fires too easily, or undo for slips and a confirmation only for truly destructive, irreversible actions.
+- **Visual effect:** Custom skin: instantly familiar, with the brand in the look. Gesture shortcuts: faster for regulars, invisible to newcomers unless taught. One dominant gesture: almost no chrome, content fills the screen [S-L19-077]. Signature transitions: memorable continuity between screens [S-L19-035]. Swipe or hold to confirm: a deliberate, heavier action.
+- **Depends on (upstream):** Q-plat-05 (posture), Q-brand-04 (how expressive), Q-aud-02 (what is at stake), Q-plat-03 (inputs).
+- **Affects (downstream):** swipe rows, sheets, onboarding, confirmation patterns, motion for rare moments, the accessible alternatives for every gesture.
+- **Token encoding:** none (behavior rules). Signature motion uses the existing motion tokens. A builder lint rule "every gesture-driven action names its non-gesture twin" is a proposal [inferred].
+- **Platform notes:** React Native: rows that reveal actions use `ReanimatedSwipeable`; a pan inside a scroll view declares its axis (for example `activeOffsetX([-10, 10])`) [S-L19-015]. Web: `touch-action` set per gesture surface (STD-mobile-touch-18).
+- **Accessibility constraints:** WCAG 2.5.7 (dragging movements) and 2.5.1 (pointer gestures) need a single-pointer alternative, such as a tap or click [inferred mapping]; Kole Jain's swipe video does not discuss assistive technology or reduced motion (its analysis says so); every signature transition ships its reduced-motion version.
+- **Default + heuristic:** Default `custom-skin`: gestures only as shortcuts with a visible twin; one signature moment, in onboarding or a rare success state, never in everyday navigation. On native apps that moment lives inside one screen or uses the native stack's own options with `animationMatchesGesture`, never a JavaScript-rebuilt screen transition (STD-mobile-touch-42, STD-mobile-touch-44; DC-L19-90). Rule of thumb: if a newcomer can't find the action without being told, it needs a visible control; if people see the motion 100 or more times a day, it belongs to the platform.
+- **Evidence:** [S-L19-015] [S-L19-020] [S-L19-035] [S-L19-053] [S-L19-076] [S-L19-077] [S-L19-084]; compared with DC-L13-17, DC-L10-14, DC-L10-15, DC-L19-90, DC-L19-97 and the L13 law table.
+- **Maps to:**
+  - Q-plat-10: new heuristic "every gesture has a visible twin; evolve familiar formats instead of replacing them" [S-L19-035] [S-L19-076]; `novel-core` text gains "backed by a visible control, proven better and tested" [S-L19-020] (confirms current default `custom-skin`).
+  - Q-plat-10 visual sample: Gmail's delete by swipe and by button; Resend's swipe to send beside a hold-to-confirm button [S-L19-035].
+  - Q-plat-03: confirms the WCAG 2.5.7 Use/avoid line and extends it to swipe-to-confirm.
+  - Q-motion-06 (motion area): follows DC-L19-90's proposed default: `container-transform` only for occasional drill-ins on the web, and on native kept inside one screen; no separate change from this card.
+- **Impact now / as it grows:**
+  - *Custom skin:* now, less novelty to design and test. As it grows, the product stays learnable as features pile up.
+  - *Gesture shortcuts:* now, each gesture needs its twin and a way to teach it. As it grows, regulars get faster while newcomers are never locked out.
+  - *One dominant gesture:* now, a very simple main screen. As it grows, every new feature fights for a place the design has removed, and the product depends on its recommendations staying good.
+  - *Signature transitions:* now, custom motion work on the native stack. As it grows, each one adds reduced-motion and back-gesture cases to maintain; keeping them in rare moments caps the cost.
+  - *Drag-only confirmation:* now, safe against accidental taps. As it grows, it fails keyboard, switch and voice users unless the alternative exists.
+- **Standards:** STD-visual-details-36, STD-visual-details-37, STD-visual-details-40, STD-mobile-touch-18, STD-mobile-touch-41, STD-mobile-touch-42, STD-mobile-touch-44, STD-when-to-animate-05, STD-when-to-animate-09, STD-when-to-animate-14, STD-components-toasts-drawers-77, STD-easing-duration-12, STD-accessibility-motion-01
+
+### DC-L19-147: What stays native, whatever the look
+- **Block path:** Platforms > Strategy > Platform-owned pieces
+- **Questions the designer answers:** Which parts of a native app are always the platform's own, whatever our brand look? Does press feedback follow Android's ripple or our own? When the web offers the same pieces, how native must they behave?
+- **Options:**
+  - **The platform owns navigation and system surfaces (house rule for React Native and Expo):** native stack screen changes at the platform's duration (iOS push is 350ms), `formSheet` for a sheet that is its own screen, NativeTabs for the tab bar, `Link.Menu` and `Link.Preview` for context menus and press-and-hold previews (iOS), `headerLargeTitleEnabled` for large-title headers (iOS), RefreshControl for pull to refresh, hand-rolled only when it is a signature interaction [S-L19-016]. Form sheets differ by platform: Android caps detents at three and shows no grabber, so a sheet keeps single-screen content and a drag cue of its own [S-L19-015].
+  - **The brand owns what happens inside a screen** (DC-L10-14's split, which the source's rules fit [inferred]): press feel, in-content springs and haptics mapped to moments; in a custom-designed app, iOS and Android get the same 0.97 press scale [S-L19-016].
+  - **Material idiom on Android:** the ripple, only in a Material-styled app [S-L19-016].
+  - **Web versions of native pieces:** they match the behavior people expect from the OS, "invisible" details included; Vaul models the iOS sheet and is built on Radix Dialog [S-L19-005]. On macOS, the system share button appears in almost every app and the window buttons sit in the app's own bar [S-L19-067]; close is always top-left [S-L19-020].
+  - **JavaScript rebuilds of screen transitions, tab bars or sheets:** ruled out in React Native by the house standards, including under `brand-first`. Kole Jain's custom page transitions [S-L19-035] have to stay inside one screen or use the native stack's own options (DC-L19-146, DC-L19-90).
+- **Visual effect:** Platform-owned pieces look and move like every other app on the phone and pick up OS redesigns such as Liquid Glass by rebuilding (DC-L10-02, DC-L10-13). The brand still shows in color, type, press feel and in-screen motion. The same press scale on both platforms gives one consistent feel; the ripple reads as Material.
+- **Depends on (upstream):** Q-plat-05 (posture), Q-plat-08 (stack), Q-plat-06 (controls).
+- **Affects (downstream):** navigation, sheets, tab bar, menus, pull to refresh, swipe rows, press feedback, haptics (Q-motion-09).
+- **Token encoding:** none for platform-owned pieces (delegated to the OS, as DC-L10-14 says). Brand micro-motion as tokens: press scale ($type number) and duration ($type duration, 100-150ms), springs stored as duration and damping ratio [S-L19-016].
+- **Platform notes:** `Link.Menu`, `Link.Preview` and `headerLargeTitleEnabled` are iOS-only; NativeTabs lives under `expo-router/unstable-native-tabs` and may change [S-L19-016]. The sources say nothing about Flutter, which draws its own widgets (DC-L10-21).
+- **Accessibility constraints:** native pieces carry screen-reader semantics (DC-L10-13); under reduced motion, native stack changes become a fade; a haptic is never the only feedback [S-L19-016].
+- **Default + heuristic:** Default for every posture in React Native: the platform owns navigation, sheets, tabs, menus and pull to refresh; the brand owns the look and the motion inside screens; one press scale on both platforms unless the app is Material-styled. This confirms DC-L10-02's hybrid rule and DC-L06-14's 80/20; in React Native it narrows `brand-first` to "brand look on native behavior" [inferred], while other stacks keep DC-L10-02's options. Rule of thumb: if people's thumbs already know it from every other app, don't rebuild it.
+- **Evidence:** [S-L19-005] [S-L19-015] [S-L19-016] [S-L19-020] [S-L19-035] [S-L19-067]; compared with DC-L10-02, DC-L10-13, DC-L10-14, DC-L10-21, DC-L06-14, DC-L19-101.
+- **Maps to:**
+  - Q-plat-05: confirms current default `hybrid`. The `brand-first` label stays (it also serves Flutter and other stacks the house standards don't cover, DC-L10-21); when Q-plat-08 is `react-native`, it shows a note: "In React Native your look runs on the platform's own navigation, sheets and tabs; the house standards don't rebuild those (STD-mobile-touch-41, STD-mobile-touch-42)."
+  - Q-plat-06: confirms current default `system`; new note under `restyled` and `custom`: "press feedback: the same scale on iOS and Android; ripple only in a Material-styled app" [S-L19-016].
+  - Q-motion-09: confirms `os-nav-brand-micro`.
+  - Visual sample: one screen on iOS and Android with native sheet and tab bar, both pressing to 0.97.
+- **Impact now / as it grows:**
+  - *Platform-owned pieces:* now, less custom code and fewer look choices in chrome. As it grows, each OS redesign arrives by rebuilding, not redesigning.
+  - *Brand inside screens:* now, a small set of motion tokens. As it grows, those tokens are the brand's feel on every new screen and platform.
+  - *Material idiom:* now, a native Android feel. As it grows, iOS and Android press feel drift apart.
+  - *Web versions:* now, a primitive (base-ui) plus Vaul's drawer behaviours instead of custom work. As it grows, base-ui updates arrive by upgrading, but Vaul is unmaintained (its README), so the drawer behaviours become the team's own code to keep (DC-L19-101).
+  - *JS rebuilds:* ruled out; they would stutter and drift from each OS update.
+- **Standards:** STD-mobile-touch-41, STD-mobile-touch-42, STD-mobile-touch-44, STD-mobile-touch-51, STD-mobile-touch-67, STD-components-toasts-drawers-59, STD-components-toasts-drawers-60, STD-accessibility-motion-04, STD-accessibility-motion-20, STD-visual-details-36, STD-visual-details-50
+
+### DC-L19-148: Build stack and the house toolkit that comes with it
+- **Block path:** Platforms > Implementation > Build stack and toolkit
+- **Questions the designer answers:** What will you build the UI with, and which libraries, settings and code standards come with that choice? What happens when the stack is outside what the house sources cover?
+- **Options:**
+  - **React on the web:** one library per job from the curated list: base-ui for dialogs, popovers, menus and selects (never a `div`-based dialog), cmdk for ⌘K menus, Sonner for toasts, motion only for springs, layout and exit animations (plain CSS for a simple hover or fade), dnd kit, Virtuoso for 1,000+ rows, zustand, clsx or cva, next-themes [S-L19-029]. Drawers are not on the curated list: build them on the dialog primitive with Vaul's behaviours as the spec [S-L19-005] [S-L19-093]; Vaul itself is unmaintained (its README), so flag that before adding it as a dependency (DC-L19-101; STD-visual-details-55 never installs an abandoned package). The mobile baseline when phones are in scope (DC-L19-144).
+  - **React Native with Expo:** Reanimated 4 with react-native-worklets (New Architecture), Gesture Handler (never PanResponder), expo-router for the native stack, sheets, tabs and menus, expo-haptics, react-native-keyboard-controller with KeyboardProvider at the root, Lottie only for illustration, Skia for very large scenes; install with `npx expo install`; set `CADisableMinimumFrameDurationOnPhone` so ProMotion iPhones run at 120fps [S-L19-016] [S-L19-015].
+  - **SwiftUI and Swift:** the write-swift skill sets the code standard (Swift 6.3 baseline, main actor by default for app modules, value types first, gesture animations started on the event's frame) [S-L19-034] [S-L19-014]. The design sources give nothing SwiftUI-specific for components.
+  - **Vue, Angular, Svelte, web components, Flutter, Compose, .NET MAUI:** no source in this area; the curated list is React-centric and the Expo stack is React Native-only. The builder falls back to DC-L10-19, DC-L10-20 and DC-L10-21 and says it has left the curated list [S-L19-029].
+- **Visual effect:** none directly. The toolkit decides how sheets, toasts and menus feel (Sonner's stacked toasts, a native `formSheet`) and whether motion runs at 120fps or drops frames on an older Android [S-L19-016].
+- **Depends on (upstream):** Q-plat-01, Q-plat-05, Q-comp-01, the team's existing code (`package.json`).
+- **Affects (downstream):** generated component code, Q-comp-01's base, motion implementation, which skills the AGENTS snippet points to, DESIGN.md's "built with" section, export targets (DC-L10-22).
+- **Token encoding:** none (implementation). Tokens reach each stack through DC-L10-22's outputs; React Native springs are stored as duration and damping ratio [S-L19-016].
+- **Platform notes:** `Link.Menu` and `Link.Preview` are iOS-only; Reanimated 4 needs the New Architecture; the library picks are pinned to one commit of the skills repository and may change (analysis caveats).
+- **Accessibility constraints:** base-ui and Radix handle focus management, trapping and dismissal [S-L19-029] [S-L19-005]; Sonner keeps its "Notifications" label and the Alt+T hotkey [S-L19-021]; React Native reads reduced motion per animation [S-L19-016].
+- **Default + heuristic:** Default: React gives the curated list; React Native gives the Expo stack; SwiftUI gives the write-swift standard; any other stack is recorded with a plain note that the house toolkit doesn't cover it. Rule of thumb: read `package.json` first and keep a library the project already has; name one library per job, never a menu.
+- **Evidence:** [S-L19-005] [S-L19-014] [S-L19-015] [S-L19-016] [S-L19-021] [S-L19-029] [S-L19-034] [S-L19-093]; compared with DC-L10-19, DC-L10-20, DC-L10-21, DC-L10-22, DC-L19-101 (which owns the per-part library picks for React web).
+- **Maps to:**
+  - Q-plat-08: each option gains a one-line "comes with" note as listed above (new option text); confirms current default `react` for the web.
+  - Q-comp-01: cross-reference: its React default names React Aria, which is outside the curated list (conflict already recorded under STD-visual-details-55).
+  - AGENTS snippet and DESIGN.md (proposed): name the toolkit for the chosen stack so later sessions don't pick competitors [inferred].
+- **Impact now / as it grows:**
+  - *React:* now, fewer build-vs-buy debates. As it grows, one list keeps many contributors on the same libraries; a library's change of direction affects everything at once.
+  - *React Native:* now, a fixed setup cost (root providers, New Architecture, the 120fps flag). As it grows, motion stays on the UI thread as screens multiply.
+  - *SwiftUI:* now, a code standard without component guidance. As it grows, component decisions come from DC-L10-20 and the design cards, not from the toolkit.
+  - *Other stacks:* now, no house toolkit. As it grows, the team maintains its own list and should record it as an owner input [inferred].
+- **Standards:** STD-visual-details-55, STD-visual-details-56, STD-visual-details-57, STD-accessibility-motion-16, STD-accessibility-motion-23, STD-mobile-touch-33, STD-mobile-touch-38, STD-mobile-touch-39, STD-mobile-touch-51, STD-swift-02, STD-swift-17
+
+### DC-L19-149: Desktop app: a window people visit, or a presence where they work
+- **Block path:** Platforms > Desktop > App presence
+- **Questions the designer answers:** Do people come to the desktop app's window to work, or should it also appear where they already are? What is the one thing they need while they are in another app?
+- **Options:**
+  - **Destination window only:** the main window holds everything and people switch to it to act [inferred effect; the source argues against this for utility apps].
+  - **Main window plus a shortcut panel:** a global shortcut (Command Shift S in the example) opens a minimal panel over whatever app is in front: no window buttons, a drop area, an input, buttons with shortcut hints and a native blur; Enter turns it into a toast that leaves the screen while the save finishes in the background [S-L19-067]. Modeled on Spotlight (Command Space) and Raycast [S-L19-067].
+  - **Ambient presence:** pop-ups triggered by context (Notion's meeting pop-up), a strip along a screen edge (Paste), popovers and notifications [S-L19-067].
+  - **How the panel appears:** the video's panel slides in and out [S-L19-067]. Differs from the house standards: something opened hundreds of times a day, like Raycast, has no open animation at all, which Emil calls the optimal experience [S-L19-012]; keyboard-started actions change instantly. The panel appears instantly and the feedback is the state change itself; Escape closes it instantly too. On Enter the panel likewise closes at once, and the toast that confirms the save is a separate notification that may enter as toasts do [inferred reading of STD-when-to-animate-06].
+- **Visual effect:** Window only: a classic app, fine for deep work. Shortcut panel: the app feels part of the Mac, "a system exactly where you need it" [S-L19-067], with a tiny glass footprint. Ambient: the most native feel, but interruptive if overused [inferred].
+- **Depends on (upstream):** Q-plat-01 `desktop`, the desktop shell (DC-L10-24; the example app was built from web front-end code turned into a native Mac app [S-L19-067]), Q-scope-01.
+- **Affects (downstream):** a quick-panel component, a toast that doubles as completion feedback, the keyboard layer (DC-L19-151), the blur and its solid fallback, onboarding that teaches the shortcut, optimistic saves with a failure path (DC-L13-01).
+- **Token encoding:** none new; the panel uses existing surface and material tokens, and its blur needs its solid twin (`color.surface.glass-fallback`, DC-L19-17).
+- **Platform notes:** macOS models: Spotlight, Raycast, Paste [S-L19-067]. Electron exposes vibrancy and hidden title bars (DC-L10-24). Windows has no source in this wiki.
+- **Accessibility constraints:** the global shortcut must not override standard OS shortcuts (DC-L13-17); reduced transparency turns the blur solid; the panel also needs a non-keyboard way in, such as a menu bar or dock item [inferred].
+- **Default + heuristic:** Default: a destination window [inferred; the video argues that a native-feeling utility should not be a destination, but most desktop apps are not capture utilities]; add one shortcut panel when the core task happens while people are in other apps, as with capturing inspiration mid-work [S-L19-067] (search and clipboard, after Spotlight and Paste, are [inferred] extensions); ambient pop-ups only for time-bound events such as Notion's meeting pop-up [S-L19-067] [inferred scope]. Rule of thumb: if the task starts in another app, the product should come to that app.
+- **Evidence:** [S-L19-012] [S-L19-067]; compared with DC-L10-24, DC-L13-17, DC-L13-01.
+- **Maps to:**
+  - New question (proposed Q-plat-13, zoom 2, show if Q-plat-01 includes `desktop`): "Is your desktop app a window people go to, or should it also appear where they already work?" with options `window-only`, `shortcut-panel`, `ambient`; default `window-only` [inferred default].
+  - Visual sample: a Spotlight-style quick panel over another app, turning into a toast on Enter [S-L19-067].
+- **Impact now / as it grows:**
+  - *Window only:* now, one surface to design. As it grows, every capture or lookup still needs a trip to the app.
+  - *Shortcut panel:* now, a global shortcut, a small panel and a background save with a failure state. As it grows, the panel becomes the most-used surface, so it must stay instant and tiny while features push to join it.
+  - *Ambient:* now, permission prompts and trigger rules. As it grows, each new trigger risks interrupting people; they need a way to turn them off [inferred].
+- **Standards:** STD-when-to-animate-05, STD-when-to-animate-06, STD-when-to-animate-20, STD-accessibility-motion-11, STD-visual-details-16, STD-visual-details-42
+
+### DC-L19-150: Desktop main window: title bar and layout
+- **Block path:** Platforms > Desktop > Window chrome and main-window layout
+- **Questions the designer answers:** Does the app keep the system title bar, or fold the window buttons into its own top bar or sidebar? How much of the top edge stays free for dragging? Does the main window need a sidebar?
+- **Options:**
+  - **System title bar above the app:** standard chrome, the least work; DC-L10-24 notes that a web-tech app that ignores native chrome reads as "a website in a window".
+  - **Integrated title bar:** the window buttons live in the top bar or sidebar and are treated like any other element, as in Finder, Notes, Reminders, Calendar and Settings [S-L19-067]; Electron's hidden or inset title bar and Window Controls Overlay allow it (DC-L10-24). Keep roughly the top 50 pixels free of actions, because that strip drags the window [S-L19-067] (one video's estimate; no platform source in this wiki confirms it).
+  - **Frameless utility window:** no window buttons at all, only for small summoned panels (DC-L19-149) [S-L19-067].
+  - **Layout inside the window:** global actions in the top bar, navigation in a sidebar, content in the center (Apple's utility apps) [S-L19-067]; skip the sidebar when navigation is only browsing and searching, which frees room for content [S-L19-067]. Native macOS also expects a full menu bar with every command (DC-L10-24); the video doesn't mention it.
+- **Visual effect:** Integrated: one continuous surface up to the window's top edge, with the sidebar running to the top, which reads as Apple-made. System bar: a separate stripe above the app. Frameless: a floating widget. No sidebar: the window becomes a container for the person's content [S-L19-067].
+- **Depends on (upstream):** Q-plat-01 `desktop`, the desktop shell (DC-L10-24), Q-layout-04, DC-L19-149.
+- **Affects (downstream):** the desktop app-shell template, top bar height and padding, sidebar, menu bar, the draggable region.
+- **Token encoding:** a draggable-strip height as a layout dimension, for example `layout.window.drag-region` ($type dimension, 50px as a starting value marked "one video's estimate") [inferred name]; otherwise none.
+- **Platform notes:** macOS: the window buttons stay top-left, since close is always top-left [S-L19-020]. Windows: no source in this wiki (DC-L10-24 covers Mica and 4/8px radii).
+- **Accessibility constraints:** macOS pointer targets are 28pt by default and 20pt at minimum (DC-L10-15); controls placed near the drag strip keep their full hit area [inferred]; the menu bar gives keyboard access to every command (DC-L10-24).
+- **Default + heuristic:** Default for macOS apps: an integrated title bar with top bar, sidebar and content, and a calm top strip; drop the sidebar when navigation is only browsing and searching [S-L19-067], which sits below DC-L08-19's range of three to five sidebar destinations [inferred]. Rule of thumb: the window's top edge belongs to the window, not to actions.
+- **Evidence:** [S-L19-020] [S-L19-067]; compared with DC-L10-24, DC-L10-09, DC-L14-05, DC-L08-19, DC-L03-19.
+- **Maps to:**
+  - New question (proposed Q-plat-14, zoom 3, show if Q-plat-01 includes `desktop`): "Keep the system title bar, or build the window buttons into your own bar?" with options `system-titlebar`, `integrated`, `frameless-panels`; default `integrated` on macOS.
+  - Q-layout-04 desktop visual sample: a Finder- or Notes-style window with the window buttons in the bar and the drag strip highlighted, shown with and without a sidebar [S-L19-067].
+- **Impact now / as it grows:**
+  - *System title bar:* now, no chrome work. As it grows, the app keeps looking like a web page in a frame next to native apps.
+  - *Integrated:* now, drag regions and button placement to get right. As it grows, new toolbar actions compete with the drag strip and must go into the sidebar, menus or the menu bar.
+  - *Frameless panels:* now, a minimal utility look. As it grows, each panel needs its own way to close and move [inferred].
+  - *No sidebar:* now, maximum room for content. As it grows, a second real destination forces the sidebar back in.
+- **Standards:** STD-visual-details-36, STD-visual-details-42
+
+### DC-L19-151: Keyboard shortcuts: which actions get them, how people learn them, what they see
+- **Block path:** Foundations > Interaction > Keyboard shortcuts
+- **Questions the designer answers:** Which actions get keyboard shortcuts? How do people discover them? What do they see when a shortcut fires?
+- **Options:**
+  - **Operating-system standards only:** the video's examples of standard macOS shortcuts are Command Space (Spotlight), Command Tab (switch apps) and Command W (close) [S-L19-067]; never override standard shortcuts (DC-L13-17; the L13 heuristic table asks for a shortcut registry that refuses to override OS or browser standards).
+  - **App shortcuts shown where the action lives:** shortcut hints on the buttons they trigger [S-L19-067]; in menus, alignment and type separate clickable items, non-clickable items and shortcuts, as in Linear [S-L19-084]; Sonner's Alt+T moves focus to the toasts [S-L19-021] [S-L19-092].
+  - **Plus a cheat sheet:** opened by its own shortcut (Google) or kept in a settings popover [S-L19-067].
+  - **Plus onboarding that teaches the main shortcut:** a modal that closes when the person performs the shortcut [S-L19-067]. Differs from DC-L13-11 (no forced tour); fits only as a short, skippable step when the shortcut is the product's core [inferred]. DC-L19-129 already owns this as `learn-by-doing` in its proposed onboarding question, so this card does not ask it again.
+  - **Feedback when a shortcut fires:** "If you don't see a change, you assume that something went wrong", so the video asks for micro-animations or at least a state change [S-L19-067]. The house standards never animate keyboard-started actions or command-palette toggles [S-L19-025] [S-L19-023], and review blocks such animation [S-L19-032]. So the feedback is an instant, visible state change (the panel is there, the item is selected), the half of the video's rule that both sides accept.
+- **Visual effect:** Hints make buttons and menus a little denser and more "pro"; a cheat sheet keeps the interface clean; instant feedback feels exact and fast, like Raycast [S-L19-012].
+- **Depends on (upstream):** Q-plat-03 `keyboard`, Q-plat-01 (`desktop` or `web`), DC-L19-149.
+- **Affects (downstream):** a shortcut slot in buttons and menu rows, a keyboard-key component, tooltips, onboarding, settings, the command menu (DC-L19-152).
+- **Token encoding:** a text style for shortcut hints (a `type` role, $type typography) in the secondary text color [inferred]; no motion tokens, because the change is instant.
+- **Platform notes:** Command on macOS and Ctrl elsewhere (DC-L16-10); on phones, shortcuts only matter with a hardware keyboard [inferred].
+- **Accessibility constraints:** visible focus on everything the keyboard reaches (DC-L08-11); a shortcut is never the only way to an action [inferred]; toasts stay reachable by hotkey.
+- **Default + heuristic:** Default for desktop and web apps: OS standards untouched; shortcuts for the most frequent actions, shown on their buttons and menu rows; a cheat sheet in settings; feedback as an instant state change, never an animation. Rule of thumb: every shortcut needs a visible result in the frame it fires and a visible place to learn it.
+- **Evidence:** [S-L19-012] [S-L19-021] [S-L19-023] [S-L19-025] [S-L19-032] [S-L19-067] [S-L19-084] [S-L19-092]; compared with DC-L13-17, DC-L13-11, DC-L16-10, DC-L08-11, DC-L19-81, DC-L19-129.
+- **Maps to:**
+  - Q-plat-03 `keyboard`: option text becomes "Keyboard: visible focus everywhere, shortcuts shown on buttons and menus, instant feedback with no animation".
+  - New question (proposed Q-plat-15, zoom 3, show if Q-plat-03 includes `keyboard` or Q-plat-01 includes `desktop`): "Which actions get keyboard shortcuts, and how do people learn them?" with options `os-only`, `shown-hints`, `hints-and-cheat-sheet`; default `hints-and-cheat-sheet` on desktop, `os-only` for phone-first products [inferred defaults]. Teaching a shortcut during onboarding stays with DC-L19-129 (`learn-by-doing`).
+  - Visual sample: Linear's menu with its shortcut column [S-L19-084] and the quick-save window with shortcut hints on its buttons [S-L19-067].
+  - Engine: the motion feedback token's description ("Hover, press, color changes") without a keyboard exception is already recorded under STD-when-to-animate-06.
+- **Impact now / as it grows:**
+  - *OS standards only:* now, nothing to design. As it grows, power users of a work tool ask for shortcuts.
+  - *Shown hints:* now, one extra slot in buttons and menus. As it grows, the registry must prevent collisions as features add shortcuts.
+  - *Cheat sheet:* now, one settings view. As it grows, it becomes the single list to keep in sync with the registry.
+  - *Onboarding step:* now, one short modal. As it grows, it teaches only the core shortcut; others stay in hints and the cheat sheet.
+  - *Instant feedback:* now, no motion work. As it grows, the product stays fast however often shortcuts are used.
+- **Standards:** STD-when-to-animate-05, STD-when-to-animate-06, STD-when-to-animate-17, STD-accessibility-motion-23, STD-visual-details-49
+
+### DC-L19-152: Search on desktop: a command palette, or search in place
+- **Block path:** Patterns > Search > Desktop search surface
+- **Questions the designer answers:** Is search a command palette that jumps anywhere, or a search bar that filters what is on screen? Where does it live, and how does it open?
+- **Options:**
+  - **Command palette (⌘K):** universal search and commands, as in Notion, Obsidian and Attio; sleek, but most items take you to an entirely new screen [S-L19-067]. Built on cmdk [S-L19-029] and opened instantly, since command-palette toggles never animate [S-L19-025].
+  - **Floating search bar with a slide-out preview:** search filters in place and the app stays on one screen; a collapsed bar at the bottom expands on click or shortcut; the bar shows the result count and a clear X, and the query and a back arrow sit top left, because results look like the browse view [S-L19-067].
+  - **Prominent toolbar search:** every native Mac app (Music, Shortcuts, Weather) keeps search prominent and accessible [S-L19-067]; placing it in the toolbar is [inferred], since the video names no location.
+  - **Both:** a palette for commands and destinations, in-place search for content [inferred].
+- **Visual effect:** Palette: a centered overlay with grouped results and shortcut hints (the L08 catalog's C51 anatomy), invisible until summoned. Floating bar: search is part of the canvas and content stays visible. Toolbar search: always in view, obvious to newcomers.
+- **Depends on (upstream):** DC-L19-149 (one-screen utility or many sections), Q-layout-04, DC-L19-151.
+- **Affects (downstream):** the command palette component (C51), the search field, the no-results state (imagery, suggestions for typos and a way out [S-L19-053]), the keyboard layer.
+- **Token encoding:** none new (dialog and menu tokens, per C51).
+- **Platform notes:** desktop and web. On phones, search tends to move to the bottom or open with a swipe up, as in Slack [S-L19-053].
+- **Accessibility constraints:** a palette is a combobox and listbox inside a dialog (C51) on a primitive that manages focus; the video's bar "beautifully expands" on its shortcut [S-L19-067], but under the house standards it appears instantly.
+- **Default + heuristic:** Default: prominent in-place search for one-screen and content apps; add a ⌘K palette when the product has many sections or commands that lead elsewhere. Rule of thumb: if most results are destinations, use a palette; if they are items on this screen, filter in place [S-L19-067].
+- **Evidence:** [S-L19-025] [S-L19-029] [S-L19-053] [S-L19-067]; compared with DC-L16-10, DC-L19-117, the L08 catalog entry C51 and the L13 heuristic table (flexibility and efficiency of use).
+- **Maps to:**
+  - No new question: DC-L19-117 already maps this choice to Q-comp-02 (`none` for simple sites and phone-first apps, a cmdk menu for daily-use tools with many destinations, a floating search for one-screen utilities, always opening instantly). This card adds two things to that heuristic: the rule of thumb "destinations mean a palette, items on this screen mean filtering in place" [S-L19-067], and prominent always-visible search as an option for content apps [S-L19-067]. The "about five top-level sections" threshold is [inferred].
+  - Visual sample: the collapsed floating search bar, then expanded with result count, clear X and back arrow [S-L19-067], beside a ⌘K palette.
+- **Impact now / as it grows:**
+  - *Palette:* now, one overlay and a command registry. As it grows, it scales to hundreds of commands and becomes the expert's main entry point.
+  - *In-place search:* now, simple and visible. As it grows, it can't reach commands or other sections, so a palette joins it.
+  - *Toolbar search:* now, the most discoverable. As it grows, it takes permanent toolbar space.
+  - *Both:* now, two surfaces to design. As it grows, the split between "find a thing" and "do a thing" stays clear [inferred].
+- **Standards:** STD-accessibility-motion-16, STD-when-to-animate-05, STD-when-to-animate-06, STD-when-to-animate-20
+
+### DC-L19-153: Real-device check: which device counts as proof
+- **Block path:** Governance > Testing > Device check floor
+- **Questions the designer answers:** On which physical devices is feel and layout judged before something is called done? Does an emulator, a simulator or a dev build count? Which phone is the "slow one"?
+- **Options:**
+  - **Real hardware for the web:** a phone connected by cable, the dev server opened by IP, Safari's Web Inspector or `chrome://inspect`; a phone a few years old, the keyboard open, landscape at least once, and standalone mode when a PWA is a target. Chrome device emulation reproduces none of the mobile bugs [S-L19-028]; a shrunken desktop window doesn't count either [S-L19-005].
+  - **Release build on the slowest supported device, for native apps:** never Expo Go, a dev build or a simulator, because a dev build's slow JavaScript thread hides the problems; wrong-thread animation drops to about 20fps on a three-year-old Android (an illustrative figure) [S-L19-016].
+  - **Simulator as proof:** the drawer article accepts the Xcode Simulator as an alternative test device [S-L19-005]; the mobile-native skill calls it a step up from emulation that still misses touch feel [S-L19-028]; the house standard settles it: it never counts as verified.
+  - **Honest reporting without a device:** say which fixes were verified from code and which need a phone; never claim a device-only fix is fixed [S-L19-028].
+  - **Real people in real contexts** [S-L19-020] (STD-process-review-taste-34).
+- **Visual effect:** none directly; the choice decides which bugs ship: sticky hover, buttons under the URL bar, input zoom, jank on older phones [S-L19-028] [S-L19-016].
+- **Depends on (upstream):** Q-plat-02 (devices), Q-plat-09 (OS floor), Q-plat-08 (stack), Q-gov-07 (test matrix).
+- **Affects (downstream):** the definition of done, component acceptance, QA checklists, the wording of the builder's reports.
+- **Token encoding:** none (process decision).
+- **Platform notes:** iOS through Safari's Develop menu, Android through `chrome://inspect` [S-L19-028]; native feel on release builds [S-L19-016]; touch interactions such as drawers and swipes on physical devices [S-L19-023].
+- **Accessibility constraints:** the check includes toggling reduced motion (STD-accessibility-motion-05), plus the largest text size and one screen reader per device class (DC-L14-14).
+- **Default + heuristic:** Default when phones are in scope: at least one physical iPhone and one older Android [inferred pairing; the sources say "a phone that's a few years old" and "slowest supported device"], release builds for native apps, standalone mode for PWAs; emulators only for layout sketches. Rule of thumb: if it hasn't run on a phone, say which parts are unverified instead of calling it done.
+- **Evidence:** [S-L19-005] [S-L19-016] [S-L19-020] [S-L19-023] [S-L19-028]; compared with DC-L14-14, DC-L10-23, DC-L19-96.
+- **Maps to:**
+  - No second device question: DC-L19-96 already proposes Q-plat-11 (a Q-plat-02 follow-up, "Which is the slowest phone and computer this must feel smooth on?"). This card asks that the answer name real hardware the team will check on, including a phone a few years old, and that it is recorded in PRODUCT.md as an owner input [inferred].
+  - Q-gov-07: new option `real-device-floor`, on by default when Q-plat-02 includes `phone`.
+  - Engine (proposed): `engine.py review` lists "needs a real device" items when phones are in scope, instead of reporting them as passed [inferred].
+- **Impact now / as it grows:**
+  - *Real hardware (web):* now, a cable, a second phone and a few minutes per change. As it grows, the device shelf follows the audience's devices, and bugs are caught before users report them.
+  - *Release build on the slowest device:* now, slower check cycles. As it grows, performance stays good as screens and animations multiply.
+  - *Simulator as proof:* now, fast. As it grows, touch-feel bugs ship unnoticed.
+  - *Honest reporting:* now, a short "unverified" list. As it grows, the list shows where the team needs devices or testers.
+  - *Real people:* now, recruiting effort. As it grows, it catches the context problems no device test finds.
+- **Standards:** STD-process-review-taste-29, STD-process-review-taste-33, STD-process-review-taste-34, STD-accessibility-motion-05, STD-mobile-touch-24, STD-mobile-touch-39
+
+### Area: Process (DC-L19-161 to DC-L19-177)
+
+Area `process`: stages 00 (reference intake), 03 (brand personality and principles), 25 (team, governance and change), 26 (output, documentation and AI channels) and 27 (builder preferences). Written 2026-09-24. Built from the 74 verified analyses tagged with these topics, checked against the raw text where a card relies on a detail, and compared with `questions.json`, the stage files, `synthesis/standards.json` and the existing cards each card cites. Several target questions are planned (Q-dist-01, Q-dist-02, Q-dist-03, Q-pref-01, Q-pref-02): the interview skips them today, so the changes apply when they are built. What the process sources hold that is not carried into cards is listed under "Open questions / gaps".
+
+### DC-L19-161: Which references to learn from, and what to take from each
+- **Block path:** Builder > Input > Reference intake (Stage 00; also Stage 03 product likes)
+- **Questions the designer answers:** Which examples should the builder learn from: products you use, showcase shots, or competitors? What exactly do you like about each one? Should we borrow one whole page, or one section from each of several sites?
+- **Options:**
+  - **Screenshots of shipped products:** a screenshot of a real product such as Linear, or a realistic site from SiteInspire, gave an AI the look the author was after, while a busy Dribbble dashboard used with the same prompt lost its small details [S-L19-086]. Studying the apps you use, and asking why an interaction feels good, is how taste is trained [S-L19-008]. One review of 50 software landing pages counted what recurs (41 of 50 showed customer logos) before borrowing [S-L19-066].
+  - **Showcase shots (Dribbble-style concepts):** they look great, but busy shots lose their small details when an AI reads them [S-L19-086]. They often favour looks over usability [S-L19-049] [S-L19-075], fall apart once each element is checked for meaning [S-L19-068], and their busy layouts distract people on a real site [S-L19-040].
+  - **A curated list of tastemakers:** find people respected in the field, then the people they admire, and study their designs, apps and books [S-L19-008].
+  - **An annotated swipe file:** collect about 20 hero and feature sections and annotate a couple for spacing, hierarchy and grouping; take a page apart into zones (text block, navbar, stats, image) before designing [S-L19-043]. One designer builds a mood board before opening Figma so he starts with a full idea, not a sliver of one [S-L19-040].
+  - **One section from each site ("Frankensteining"):** choose a reference for each section to work out the message and page flow, keep only the wireframe, and discard the references' visuals [S-L19-062]. Two redesigns borrow and adapt layouts from competitors and sibling products the same way [S-L19-082] [S-L19-065].
+  - **Competitors, flagged only:** today's Q-brand-02 option `competitors` and DC-L17-03's flag-only path.
+- **Visual effect:** Shipped-product references give screens that look buildable and complete. Showcase references give dramatic screens that turn out thin or illogical once real content and states arrive, with small details dropped [S-L19-086] [S-L19-068]. Section-by-section references give a page flow fitted to the message, wearing the person's own identity [S-L19-062].
+- **Depends on (upstream):** the entry path (Q-scope-05), the identity firewall (DC-L17-03).
+- **Affects (downstream):** values pre-filled by `engine.py intake`, section and layout options (DC-L19-50, DC-L19-51), direction (Q-dir-01), the decision log's `reference` provenance.
+- **Token encoding:** none (process decision). Pre-filled values keep DC-L17-03's provenance (`$extensions.opendesigner.source = {reference, method, confidence}`), plus a `why` string holding what the person said they like about the reference [inferred].
+- **Platform notes:** web references expose computed values; app references arrive as screenshots, so their values are estimates (DC-L17-03). The sources name Mobbin as a place to collect real app and site screens, but always inside a sponsor segment [S-L19-043] [S-L19-054].
+- **Accessibility constraints:** every value taken from a reference is re-checked in its new context (DC-L17-03). In one video, a Dribbble tab bar had inactive icons too faint to see and two background colors nobody could tell apart [S-L19-075], so showcase colors are never copied unchecked.
+- **Default + heuristic:** Default: ask for products the person uses first. Accept a showcase shot, but say it is read for mood only, not for layout or values [S-L19-086] [S-L19-068]. Heuristic: for every reference, ask one follow-up, "What do you like about it?", and record the answer as its reason, because taste means naming why something feels right [S-L19-008] [S-L19-011]. Take structure section by section, never identity (confirms DC-L17-03 and Q-ref-01's use/avoid line). Confirms DC-L18-09 (1-3 references liked and one disliked). The claim that an AI cannot see a busy shot's details rests on one side-by-side test in one model [S-L19-086]; three other videos agree that showcase shots trade usability for looks [S-L19-049] [S-L19-068] [S-L19-075], so the warning holds even if the mechanism is one person's observation.
+- **Evidence:** [S-L19-008] [S-L19-011] [S-L19-040] [S-L19-043] [S-L19-049] [S-L19-054] [S-L19-062] [S-L19-065] [S-L19-066] [S-L19-068] [S-L19-075] [S-L19-082] [S-L19-086]. Compared against DC-L17-03, DC-L18-09 and DC-L06-02.
+- **Maps to:**
+  - Q-ref-01: new option `product-screens` "Screenshots of products you use", split from `screenshot`, with the note that showcase shots are read for mood only [S-L19-086]. New option `per-section` "A different site for each section (flow only)" [S-L19-062]. New heuristic: one follow-up per reference, "What do you like about it?", saved as the reason [S-L19-008].
+  - Q-brand-02: new heuristic: after the person names products, ask why for each, and offer the answers as tie-breaker candidates for Q-brand-07 [inferred].
+  - Visual sample: the same prompt built from a busy showcase shot and from a shipped-product screenshot [S-L19-086].
+- **Impact now / as it grows:**
+  - *Shipped products:* now, realistic starting values and fewer invented details. As it grows, the product follows conventions people already know, which are easier to extend [S-L19-054].
+  - *Showcase shots:* now, a striking mood. As it grows, screens break as real content, states and edge cases arrive [S-L19-068].
+  - *Tastemaker list:* now, a slower start. As it grows, the team shares a quality bar it can point to.
+  - *Swipe file:* now, about 20 sections of homework. As it grows, a ready library for every new page.
+  - *One section from each site:* now, a page flow fitted to the message. As it grows, pages only feel like one product if identity is defined separately from layout (DC-L19-162) [S-L19-062].
+- **Standards:** STD-process-review-taste-51, STD-process-review-taste-52
+
+### DC-L19-162: Naming the feeling: one target emotion, shown as one layout in different flavors
+- **Block path:** Foundations > Brand > Personality > Target emotion (Stage 03, with the zoom 0 "how should it feel?" question)
+- **Questions the designer answers:** Which single feeling should people come away with: calm, confident, excited, or something else? Looking at the same screen in two or three styles, which one is yours?
+- **Options:**
+  - **One named emotion that every decision reinforces:** decide the emotion people should feel (calm, confident or excited) and reinforce it in every decision, instead of adding delight on top [S-L19-020].
+  - **Flavors of one layout:** the same layout restyled warm and friendly (warm background, colorful visuals, rounded corners, large bubbly buttons) or modern and premium (much less rounded corners, less colorful and more premium imagery, maybe noise in the background); the product and layout stay the same and only the feel changes [S-L19-043].
+  - **Identities swapped into one wireframe:** when layout and visual identity are defined separately and carefully, different identities can be dropped into the same layout for very different feelings [S-L19-062].
+  - **Feeling first, not a formula:** choose each part of the identity for the feeling it gives and whether it makes sense for the brand, not from a formula; the redesign starts from one moody image [S-L19-062]. The mood image as a color input is already in DC-L19-11.
+  - **Sliders only:** today's Q-brand-01 (seven sliders, filled from 2-3 feel words at zoom 0). On its own this falls short of STD-visual-details-47, a locked house standard that asks for the emotion to be decided; it is listed as today's behavior, not as an allowed end state.
+- **Visual effect:** A named emotion makes choices consistent: a calm product gets fewer and softer moves, an excited one more color and motion [inferred from STD-easing-duration-13, which ties motion to personality]. Friendly versus premium flavors look as described above [S-L19-043]. A site built by formula can be clean and well animated and still feel soulless [S-L19-062].
+- **Depends on (upstream):** what the screens are for (Q-scope-06), who uses them (Q-aud-01), the product goal (DC-L19-177).
+- **Affects (downstream):** the lever matrix (DC-L06-02) and through it roundness (DC-L19-63), colorfulness, imagery style (DC-L19-75), motion personality (DC-L19-82) and voice; the "one thing to remember" line in RATIONALE.md.
+- **Token encoding:** none directly. Record `profile.emotion` (for example `"calm"`) beside the slider values; tokens change through the sliders it pre-positions [inferred].
+- **Platform notes:** the sources give none.
+- **Accessibility constraints:** no flavor may drop below the contrast and target floors. Low-color "premium" imagery and background noise still need readable text (the redesign adds noise partly because it helps text contrast [S-L19-062]). An "excited" product still ships reduced motion with every animation.
+- **Default + heuristic:** Default: at zoom 0, pick one lead emotion from the person's feel words and say it back in one line ("I read that as calm"), then record it. At zoom 2, show the person's own sample screen in two or three flavors of the same layout, one at a time and full size (as DC-L19-34 and DC-L19-56 already require for type and layout). Heuristic: when two sliders pull a value in opposite directions, the lead emotion breaks the tie [inferred]. Treat the slider-to-token matrix as a starting point and judge the result for feeling, because a formula alone can produce a soulless result [S-L19-062]. This extends DC-L19-63, which uses the same friendly-versus-premium example for corners only. "A site with no images feels robotic" is one video's opinion [S-L19-062].
+- **Evidence:** [S-L19-020] [S-L19-043] [S-L19-062] [S-L19-063] (the imagery vibe scale, owned by DC-L19-75). Compared against DC-L06-02, DC-L19-63, DC-L19-75 and DC-L19-82.
+- **Maps to:**
+  - Q-brand-01: new heuristic: one lead emotion, named back to the person and recorded. Visual sample: one layout in a friendly and a premium flavor [S-L19-043]. New "Show" wording: the 2-3 style tiles use the same layout, so only the style differs [inferred].
+  - Q-brand-07: new heuristic: the lead emotion becomes the goal of the first principle [inferred].
+- **Impact now / as it grows:**
+  - *Named emotion:* now, one word steers every default. As it grows, each new component and page gets a clear test: does this feel calm?
+  - *Flavors of one layout:* now, people see that style, not layout, changes the feel. As it grows, a second brand or theme becomes a flavor swap, not a redesign.
+  - *Identity swapped into one wireframe:* now, it needs layout and identity kept apart. As it grows, rebrands and sub-brands reuse the same wireframes [S-L19-062].
+  - *Sliders only:* now, fast. As it grows, conflicting settings get averaged unless something breaks the tie.
+- **Standards:** STD-visual-details-47, STD-easing-duration-13, STD-accessibility-motion-01
+
+### DC-L19-163: How design principles are worded and used
+- **Block path:** Foundations > Brand > Principles (Stage 03)
+- **Questions the designer answers:** Which principles break ties, and which one wins? Should the builder also reason with a shared named set, such as Apple's eight? Does every set carry a rule about familiar patterns and about what not to build?
+- **Options:**
+  - **Apple's eight principles as a shared vocabulary:** purpose, agency, responsibility, familiarity, flexibility, simplicity, craft and delight, named when making and defending decisions; delight comes from getting the other seven right [S-L19-020]. This is already a locked house standard (STD-visual-details-48), so the builder always does it; it is not something the person opts into.
+  - **Product-specific principles:** today's `generate`, IBM checklists, Fluent pairs, GOV.UK imperatives and Carbon value words.
+  - **A familiarity rule in every set:** break a familiar pattern only when you can prove the new one is better, and test it [S-L19-020]. People expect conventional layouts after decades of websites; conventional layouts are easier to extend and make responsive, and uniqueness comes from micro-interactions and features [S-L19-054].
+  - **A purpose rule in every set:** decide what not to build, because every feature spends the user's time, attention and trust [S-L19-020]; decide whether an idea deserves building even when AI makes building cheap [S-L19-009].
+  - **"A few decisions we stick to":** a design system is decisions you can stick to, not hundreds of components [S-L19-044]; it is a shared language, not a way to make everything look the same [S-L19-054].
+- **Visual effect:** none directly; principles decide how conflicts resolve. A familiarity rule keeps layouts conventional and moves distinctiveness into details [S-L19-054]. A purpose rule keeps screens short.
+- **Depends on (upstream):** the sliders (Q-brand-01), the lead emotion (DC-L19-162), the product goal (DC-L19-177).
+- **Affects (downstream):** tie-breaking in the lever matrix (DC-L06-15), coach messages that name a principle (Q-pref-01, DC-L15-11), DESIGN.md's principles section, RATIONALE.md.
+- **Token encoding:** none (content decision). State holds `principles: [{text, outranks, serves}]`, where `serves` names one of the eight [inferred].
+- **Platform notes:** familiarity differs by platform, because native conventions differ (DC-L06-14) [inferred].
+- **Accessibility constraints:** one principle keeps accessibility non-negotiable (today's default, DC-L06-15). Apple's "responsibility" adds anticipating misuse and harm, especially in AI features (STD-visual-details-45).
+- **Default + heuristic:** Keep `generate` as the default (3-5 principles, each naming what it outranks, one making accessibility non-negotiable). Add two standing lines to every generated set: a familiarity rule and a purpose rule. Use Apple's eight as the vocabulary the builder reasons with when it explains a recommendation, not as the product's own principles. This differs from DC-L11-05 in kind, not in substance: DC-L11-05 warns against generic words every product could claim ("simple", "beautiful") as the product's principles; the eight are a shared reasoning vocabulary, so they sit beside the product's specific set rather than replacing it [inferred].
+- **Evidence:** [S-L19-009] [S-L19-020] [S-L19-044] [S-L19-054]. Compared against DC-L06-15 and DC-L11-05.
+- **Maps to:**
+  - Q-brand-07: no new option for Apple's eight, because STD-visual-details-48 already makes them the builder's reasoning vocabulary in every project (an opt-in option would suggest they can be switched off). New heuristic: every generated set includes a familiarity rule (STD-visual-details-37) and a purpose rule (STD-when-to-animate-22) [S-L19-020]. New "Show" detail: each principle's do/don't pair names which of the eight it serves [inferred].
+- **Impact now / as it grows:**
+  - *Apple's eight as vocabulary:* now, recommendations are explained in the same words every time. As it grows, new teammates learn one vocabulary for design reviews.
+  - *Product-specific only (without the eight, which STD-visual-details-48 rules out):* now, a sharper identity. As it grows, without shared words, reviews drift into taste arguments.
+  - *Familiarity rule:* now, conventional layouts. As it grows, the product stays easy to extend and make responsive [S-L19-054].
+  - *Purpose rule:* now, fewer features and sections. As it grows, the system stays small enough to hold.
+- **Standards:** STD-visual-details-48, STD-visual-details-37, STD-visual-details-45, STD-when-to-animate-22
+
+### DC-L19-164: How much system this team needs
+- **Block path:** Delivery > Governance > System size (Stage 25, and the "stop here or zoom in" offer)
+- **Questions the designer answers:** Should the system be light and easy to change or scrap, or deep and fully defined? At which zoom level should we stop?
+- **Options:**
+  - **Light and easy to scrap:** a lean startup might need something lightweight and flexible, quick to update and easy to scrap [S-L19-054].
+  - **A few decisions held everywhere:** it is not about having hundreds of components; keep button spacing, type scale and color scheme the same so new screens, such as a new modal, feel familiar and are quick to build [S-L19-044].
+  - **Strict core, loose edges:** today's default (DC-L11-03).
+  - **Deep and fully defined:** Material Design is massive and deeply defined because its use cases span dozens of products and billions of users [S-L19-054].
+- **Visual effect:** A light system has few tokens and components and changes fast; screens stay consistent as long as the few decisions are held [S-L19-044]. A deep system defines every edge case and is slower to change [inferred].
+- **Depends on (upstream):** team model (DC-L11-09), how many products and surfaces (Q-scope-01), platforms (Q-plat-01).
+- **Affects (downstream):** which zoom level the builder recommends stopping at, the size of the component inventory (stage 20), whether stage 25's detailed questions are asked, how deep the docs go.
+- **Token encoding:** none (process decision). State holds `profile.systemSize = "light" | "core" | "deep"` [inferred].
+- **Platform notes:** more platforms push toward deeper definition; breadth is the reason the source gives for Material's size [S-L19-054].
+- **Accessibility constraints:** the floors (WCAG 2.2 AA contrast, 24 px targets, visible focus, reduced motion) apply at every size.
+- **Default + heuristic:** Default: for one person or a small team building one product, recommend stopping at zoom 1 plus the areas they care about, and skip stage 25's zoom 3 questions [inferred: the sources say to size the system to the team, not which zoom level to stop at]. Say why in plain words: a system is a few decisions held everywhere, not a component count [S-L19-044] [S-L19-054]. Recommend deep definition only when several products or teams share the system [inferred from S-L19-054's Material example]. This confirms DC-L11-03's strict core for teams and adds size as its own dial, separate from strictness [inferred]. Invest in excellent defaults before adding options (STD-visual-details-51); that this is what lets a light system look finished is [inferred].
+- **Evidence:** [S-L19-044] [S-L19-054] [S-L19-023] (good defaults matter more than options; most users never customize). Compared against DC-L11-03 and DC-L11-21.
+- **Maps to:**
+  - Q-gov-01: no new option. A `lightweight` option would overlap the existing `loose` ("a framework with room to experiment") and would mix size into a strictness question, which this card treats as a separate dial. Instead, the `loose` option's wording gains the lean-startup case: "light and easy to change or scrap" [S-L19-054]. Confirms the current default for teams (`strict`: strict core, loose edges).
+  - Zoom offer (`zoom.md`, "stop here, or zoom into X"): new heuristic: recommend a stopping level by team size and number of products [inferred from S-L19-054, which sizes the system to the team].
+- **Impact now / as it grows:**
+  - *Light:* now, few files and fast answers. As it grows, a second product or team forces a move to a strict core.
+  - *A few decisions held:* now, consistency with little work. As it grows, new screens stay familiar and quick to assemble [S-L19-044].
+  - *Strict core:* now, more setup. As it grows, it holds across teams (DC-L11-03).
+  - *Deep:* now, slow to set up and change. As it grows, it fits dozens of products [S-L19-054].
+- **Standards:** STD-visual-details-51
+
+### DC-L19-165: Breaking a rule on purpose: how exceptions are recorded and reviewed
+- **Block path:** Delivery > Governance > Exceptions (Stage 25; `engine.py review`)
+- **Questions the designer answers:** When a screen needs to break a system rule, where is that written down and why? Should the review keep flagging a deliberate exception? When does a repeated exception become a change to the system?
+- **Options:**
+  - **Silent exception:** today an `od-ignore` comment on a line keeps a raw value, with no reason recorded.
+  - **Exception with a reason:** break a system rule only on purpose, never by accident [S-L19-054]. In motion audits, a tradeoff that a design doc or code comment documents as deliberate is noted, not reported again [S-L19-027] (STD-process-review-taste-22); extending that from motion to every system rule is [inferred].
+  - **Exception with proof:** a familiar pattern is broken only with proof that the new one is better, and a test [S-L19-020].
+  - **Snowflake path:** one-off needs go to the product backlog and system additions to the system backlog (Brad Frost's flow in DC-L11-12).
+  - **House standards:** changed only by the owner, through `engine.py standard override <id> --why` (exists today).
+- **Visual effect:** none directly. With reasons, deviations stay rare and explainable; silent ignores pile up as drift nobody can explain [inferred].
+- **Depends on (upstream):** strictness (Q-gov-01), the contribution model (Q-gov-03).
+- **Affects (downstream):** `engine.py review` output, `decisions.md`, an exceptions list in DESIGN.md, lint waivers (DC-L17-07's `waived_by` and `reason`).
+- **Token encoding:** none. A code comment `od-ignore: <reason>` and a decisions.md entry `{scope, rule, reason, owner}` [inferred].
+- **Platform notes:** the sources give none.
+- **Accessibility constraints:** the floors cannot be excepted: an ignore comment on a contrast or target failure must still be reported, as DC-L17-07 already says accessibility rules are never waivable. Today `engine.py review` skips every line that carries `od-ignore`, so this needs an engine change [inferred].
+- **Default + heuristic:** Default: every exception carries a one-line reason. The review lists reasoned exceptions under "kept on purpose" and does not count them as findings; an ignore with no reason is itself a finding. Heuristic: when the same exception appears three times, it is a missing token or a rule to change, not an exception [inferred]. Confirms DC-L11-12 (snowflake path and decision records) and DC-L17-07 (waivers need reasons).
+- **Evidence:** [S-L19-020] [S-L19-027] [S-L19-054]. Compared against DC-L11-12 and DC-L17-07.
+- **Maps to:**
+  - Q-gov-03: new heuristic: an exception needs a reason, and the review notes a reasoned exception instead of flagging it again [S-L19-027] [S-L19-054].
+  - `engine.py review` (no Q-id): `od-ignore` takes an optional reason; reasoned exceptions print in their own short list; bare ignores count as findings [inferred].
+- **Impact now / as it grows:**
+  - *Silent:* now, the fastest. As it grows, drift that nobody can explain.
+  - *With a reason:* now, one line per exception. As it grows, repeated reasons show where the system needs a new token or rule.
+  - *With proof:* now, a test for each broken convention. As it grows, fewer confusing one-offs [S-L19-020].
+  - *Snowflake path:* now, it needs a backlog. As it grows, it scales to many teams (DC-L11-12).
+- **Standards:** STD-process-review-taste-22, STD-visual-details-37
+
+### DC-L19-166: How you will know the system helped
+- **Block path:** Delivery > Governance > Success measures (Stage 25)
+- **Questions the designer answers:** Which result should get better: sign-ups, sales, how fast people find things, or how consistently the team builds? How will you compare before and after? Are small tests proof?
+- **Options:**
+  - **Product results before and after:** compare the site's analytics before and after the new design ships, keeping admin or view-only access to do so [S-L19-038].
+  - **Small tests with people:** have a couple of people go through lo-fi wireframes, watch whether things are intuitive, tweak and test again [S-L19-083]; test with real people in the real context of use [S-L19-020]. But pre-launch tests often have too few people to prove impact [S-L19-038].
+  - **Findability:** judge a screen by how fast someone who arrives with one question can find the answer [S-L19-080]; for a page, ask whether someone scrolling for 5 seconds would understand the idea [S-L19-084].
+  - **Adoption and satisfaction:** today's default (DC-L11-20): design adoption, code adoption and a quarterly survey.
+  - **Build speed through consistency:** new screens quick to assemble and familiar to use [S-L19-044] (as a measure, [inferred]).
+- **Visual effect:** none (process decision).
+- **Depends on (upstream):** the product goal (DC-L19-177), what the screens are for (Q-scope-06).
+- **Affects (downstream):** the metrics mock in Q-gov-05's "Show", RATIONALE.md's opening, later extend sessions.
+- **Token encoding:** none (process decision).
+- **Platform notes:** the sources give none.
+- **Accessibility constraints:** include people who use assistive technology in any test (DC-L14-14) [inferred].
+- **Default + heuristic:** Default for one person or a small team: one product result they already track (sign-ups, sales or a key task), compared before and after, plus a findability check on the main screen. Add adoption measures (DC-L11-20) once more than one team uses the system. Heuristic: a small pre-launch test finds problems; it does not prove impact [S-L19-038]. The before-and-after advice comes from one freelancer's video [S-L19-038]; it agrees with DC-L11-20 that success needs measuring, but it targets product outcomes rather than system adoption.
+- **Evidence:** [S-L19-020] [S-L19-038] [S-L19-044] [S-L19-080] [S-L19-083] [S-L19-084]. Compared against DC-L11-20 and DC-L14-14.
+- **Maps to:**
+  - Q-gov-05: new option `outcomes` "Product results before and after: sign-ups, sales, or time to find one thing" [S-L19-038] [S-L19-080]. New heuristic: treat small tests as problem finders, not proof [S-L19-038].
+- **Impact now / as it grows:**
+  - *Before and after results:* now, needs access to analytics. As it grows, the system's value shows in numbers leadership already reads.
+  - *Small tests:* now, cheap and fast. As it grows, they keep finding problems but never settle arguments [S-L19-038].
+  - *Findability:* now, one check per key screen. As it grows, it catches screens that get denser without getting clearer.
+  - *Adoption:* now, needs scanners and analytics. As it grows, the right measure once many teams share the system (DC-L11-20).
+- **Standards:** STD-process-review-taste-34
+
+### DC-L19-167: What the builder's checks cannot judge
+- **Block path:** Delivery > Quality > Checks by hand (Stage 25; the end of `engine.py review`)
+- **Questions the designer answers:** Which checks must a person do by hand? On which devices? When: right away, or the next day?
+- **Options:**
+  - **Code checks only:** `engine.py validate` and `review` catch raw values, broken standards and contrast. For motion and gestures this falls short of the locked standards STD-process-review-taste-29 to -33; it is listed as today's behavior.
+  - **Say what code cannot settle:** a crossfade or a spring's bounce [S-L19-018], gestures and haptic timing [S-L19-016] depend on feel; say so and name the check instead of guessing [S-L19-024], and never call a device-only fix verified [S-L19-016].
+  - **Slow motion and frame by frame:** play motion at 2-5 times its duration or slow it in the DevTools animation inspector [S-L19-023]; record it and play it back frame by frame [S-L19-001].
+  - **A fresh look the next day:** review again the next day [S-L19-023]; one designer did, and then made bigger changes, switching the app to dark mode [S-L19-078].
+  - **Use it the way people will:** open and close menus rapidly [S-L19-011], spam toggles [S-L19-026], flick gestures and interrupt them mid-flight [S-L19-016].
+  - **Real hardware:** a physical phone on the local dev server, never a shrunken desktop window [S-L19-005] [S-L19-023].
+  - **The target screen:** view the design on the screen it is meant for; designing zoomed out in Figma led one designer to oversized type and spacing [S-L19-057] [S-L19-042]. DC-L19-56 already sets the real frame for layout choices.
+  - **Real people in real context** [S-L19-020].
+- **Visual effect:** none directly. These checks catch sluggish or off-feeling motion, gestures that fight the finger, and type that is too big on the real screen, all of which pass code checks [inferred].
+- **Depends on (upstream):** platforms (Q-plat-01), motion personality (DC-L19-82).
+- **Affects (downstream):** the Q-gov-07 test matrix, a closing section in review output, a "how to check" note in DESIGN.md.
+- **Token encoding:** none (process decision).
+- **Platform notes:** for web, a physical phone with Safari Web Inspector or Chrome remote debugging; for React Native, a release build on the slowest supported device. Emulation, dev builds, Expo Go and simulators never count as verified (STD-process-review-taste-33).
+- **Accessibility constraints:** the feel check includes toggling reduced motion (STD-process-review-taste-19), alongside Q-gov-07's screen reader and largest-text checks.
+- **Default + heuristic:** Default: every `engine.py review` ends with a short "check by hand" list drawn from what changed: motion gets slow motion and a reduced-motion toggle, gestures get a physical phone, type gets a look on the target screen. Nothing that depends on feel is reported as verified. Heuristic: if it moves or answers a touch, it needs a hand check [inferred].
+- **Evidence:** [S-L19-001] [S-L19-005] [S-L19-011] [S-L19-016] [S-L19-018] [S-L19-020] [S-L19-023] [S-L19-024] [S-L19-026] [S-L19-042] [S-L19-057] [S-L19-078]. Compared against DC-L14-14 and DC-L19-56.
+- **Maps to:**
+  - Q-gov-07: new option `feel-checks` "Feel checks: a physical phone for gestures, slow motion for animation, a second look the next day" [S-L19-023]. New default: one feel row per shipped device class, next to the assistive-technology rows.
+  - `engine.py review` (no Q-id): new closing list of hand checks [inferred].
+- **Impact now / as it grows:**
+  - *Code checks only:* now, fast and automatic. As it grows, motion and gestures drift without anyone noticing.
+  - *Named hand checks:* now, a few minutes per change. As it grows, the product keeps its feel as more people touch it.
+  - *Next-day look:* now, a day's delay. As it grows, fewer reworks after launch [S-L19-078].
+  - *Real hardware:* now, needs a phone on the desk. As it grows, the only way gesture-heavy screens stay right [S-L19-005].
+- **Standards:** STD-process-review-taste-29, STD-process-review-taste-30, STD-process-review-taste-31, STD-process-review-taste-32, STD-process-review-taste-33, STD-process-review-taste-34, STD-process-review-taste-19
+
+### DC-L19-168: How the decisions are written up for other people
+- **Block path:** Delivery > Records > Rationale write-up (Stage 26; `RATIONALE.md`)
+- **Questions the designer answers:** Who will read the reasons: teammates, a manager, a client, a future hire? What should they see first? Do we say what is unfinished?
+- **Options:**
+  - **The log only:** `decisions.md`.
+  - **A one-page summary:** today's RATIONALE.md (what we built, the five choices with their alternatives, what the rules guarantee, what is still open).
+  - **Case-study shape:** a clear problem statement first, with a brief summary of the solution at the top so readers don't scroll to the end to find it; final designs shown large with the reasoning beside each; a short reflection on what could be better and what was left out; chapter-like titles so it can be skimmed; readable in one sitting, about 10-15 minutes [S-L19-083]. A case study should be followable from its images alone, with a visual every couple of paragraphs, and end with what was learned [S-L19-064].
+  - **Results-led:** list what was done, the problem, then the solution with numbers where possible [S-L19-038].
+  - **Reasons-led:** which easing and duration you chose, and why, is often more important than the code [S-L19-002]; explain why something feels right instead of calling it good or bad [S-L19-008].
+- **Visual effect:** none in the product. Readers can skim, see the result next to its reason, and trust what is and isn't finished [inferred].
+- **Depends on (upstream):** the decision log (DC-L17-10), approval gates (DC-L17-12).
+- **Affects (downstream):** RATIONALE.md, the introductions in DESIGN.md, team summaries, later extend sessions.
+- **Token encoding:** none (content decision).
+- **Platform notes:** the sources give none.
+- **Accessibility constraints:** images in the write-up need text alternatives [inferred]; the "what the rules guarantee" section stays.
+- **Default + heuristic:** Keep RATIONALE.md to one page, in the case-study shape: open with the problem and a one-line answer; place a small rendered sample (the chosen option beside its main alternative) next to each of the five choices; close with "What we'd do next", covering open items and what was left out. Heuristic: if a reason can't be written in one sentence, the decision isn't settled yet [inferred]. Confirms DC-L17-10 and DC-L11-12. The case-study advice comes from portfolio videos for job seekers [S-L19-083] [S-L19-064]; using it for a design system's rationale is [inferred].
+- **Evidence:** [S-L19-002] [S-L19-008] [S-L19-038] [S-L19-064] [S-L19-083]. Compared against DC-L17-10 and DC-L11-12.
+- **Maps to:**
+  - `RATIONALE.md` template (stage 26 output, no Q-id): new opening "The problem, and our answer in one line"; a visual slot beside each of the five choices; the closing "What is still open" becomes "What we'd do next", adding what was left out [S-L19-083].
+  - Q-gov-03 `adrs`: new heuristic: each decision record keeps a one-sentence reason and the alternative it beat (confirms today's "record why an option was chosen and what it beat").
+- **Impact now / as it grows:**
+  - *Log only:* now, no extra writing. As it grows, only people who read JSON and logs understand the system.
+  - *One-page summary:* now, a quick read. As it grows, it lacks the visuals that make reasons stick.
+  - *Case-study shape:* now, a little more work at the end of the interview. As it grows, new teammates and stakeholders understand the system in one sitting [S-L19-083].
+  - *Results-led:* now, needs numbers. As it grows, the most persuasive record for leadership or clients [S-L19-038].
+- **Standards:** STD-process-review-taste-52
+
+### DC-L19-169: Docs people can touch: demos, good-and-bad pairs, snippets and a changelog
+- **Block path:** Delivery > Documentation > Page content (Stage 26; also the Stage 25 change-communication question)
+- **Questions the designer answers:** Can people try each component and foundation on its page? Does the page show a wrong version next to the right one? Can people copy the code, or copy the page for an AI? Where is every change listed?
+- **Options:**
+  - **Static pages with a props table:** what Storybook autodocs gives (DC-L17-13). On its own this falls short of STD-process-review-taste-60, which asks for interactive examples and ready-to-use snippets; it is listed as the baseline.
+  - **Interactive demos:** people only understand motion by feeling the difference themselves, so explain it with demos, not text [S-L19-007] [S-L19-002]; ship live examples with ready-to-use code snippets [S-L19-006].
+  - **Bad-versus-good pairs:** show the wrong and the right version side by side [S-L19-001]; comparing two versions and writing down why trains judgement [S-L19-011].
+  - **Step-through demos** for ideas built up in steps, with Previous and Next [S-L19-007].
+  - **Copy as markdown:** a button on every page so its content can be given to an AI [S-L19-001].
+  - **A changelog page** that records every update, as the product keeps changing [S-L19-007] [S-L19-001].
+- **Visual effect:** docs that behave like the product; pairs make the reason for each rule visible at a glance [inferred].
+- **Depends on (upstream):** where docs live (Q-dist-04), AI channels (Q-dist-02).
+- **Affects (downstream):** generated docs pages, `preview.html`, markdown twins for AI tools, release notes.
+- **Token encoding:** none. Each page lists the tokens its demo uses [inferred].
+- **Platform notes:** web pages can run demos live; native components are shown as recordings or linked builds [inferred].
+- **Accessibility constraints:** demos respect reduced motion; the "bad" example is labelled in words, not only by color [inferred].
+- **Default + heuristic:** Default: every generated page gets one live demo, one good-and-bad pair wherever the system has a rule, a copy button for code and another for markdown, and the docs site gets a changelog page. Confirms DC-L11-18's page template and Q-dist-04's default; adds the pair and the copy-as-markdown button.
+- **Evidence:** [S-L19-001] [S-L19-002] [S-L19-006] [S-L19-007] [S-L19-011]. Compared against DC-L11-17, DC-L11-18, DC-L11-22 and DC-L17-13.
+- **Maps to:**
+  - Q-dist-04: new heuristic: one live demo, one good-and-bad pair and copy buttons (code and markdown) per page [S-L19-001] [S-L19-006]. Visual sample: a component page with its pair.
+  - Q-gov-06: confirms `release-notes`; new default wording: publish them as a changelog page on the docs site [S-L19-007].
+- **Impact now / as it grows:**
+  - *Static pages:* now, the cheapest. As it grows, people guess how things should feel and drift.
+  - *Interactive demos:* now, more to build. As it grows, the fastest way for new people and AI tools to learn the system [S-L19-006].
+  - *Good-and-bad pairs:* now, one extra render per rule. As it grows, reviews point to the pair instead of re-arguing.
+  - *Copy as markdown:* now, one button. As it grows, every AI tool the team adopts can read the docs.
+  - *Changelog page:* now, one line per release. As it grows, teams see what changed without asking.
+- **Standards:** STD-process-review-taste-59, STD-process-review-taste-60, STD-process-review-taste-63, STD-process-review-taste-54
+
+### DC-L19-170: Who sees the result, and how it is framed
+- **Block path:** Delivery > Presentation > Preview framing (Stage 26; `engine.py preview`)
+- **Questions the designer answers:** Is this preview for you to decide, for your team to build from, for a client, or for a portfolio or launch post? Should screens sit in device frames? Should key interactions be clickable?
+- **Options:**
+  - **Deciding:** true size, one option at a time, in realistic context (DC-L19-34, DC-L19-56).
+  - **Team handoff:** final screens shown large with the reasoning beside each [S-L19-083]; every tab of a tabbed section designed before handoff, or the developer receives half the site [S-L19-066]; every state a user can meet designed, not only the happy path [S-L19-044].
+  - **Client:** the goal changes from impressing to building confidence, so show device mockups of where the product will be used (even a plain computer frame helps; a lifestyle mockup, such as the UI on an iPad or Apple Watch, goes further) and a working prototype that reveals hidden interactions such as swipe actions or a modal animating in [S-L19-041].
+  - **Showcase (portfolio, social or launch post):** a plain background made by darkening and desaturating the accent, with a faint shadow; in dark mode, large blurred circles of the accent behind the UI; optionally a small skew (2° vertical and -14° horizontal in one example), one element popped out, an ungridded collage for landing pages, or one zoomed-in, lightly animated section for dashboards [S-L19-041]. Visitors see before they read, so large imagery leads [S-L19-064]; launch material can be built around the signature motion, as Sonner's was [S-L19-006].
+- **Visual effect:** Deciding looks plain and exact. Handoff reads like a spec with reasons. Client framing looks real and finished [S-L19-041]. Showcase framing looks dramatic and flattering [S-L19-041]; that its skew, glow and tinted backgrounds change apparent size and color is [inferred].
+- **Depends on (upstream):** surfaces (Q-scope-01), platforms (Q-plat-01), motion.
+- **Affects (downstream):** the layout of `preview.html`, exported screenshots, the docs site, the images in RATIONALE.md (DC-L19-168).
+- **Token encoding:** none. A showcase background is derived from the brand color at export time and is not a product token [inferred].
+- **Platform notes:** device frames differ per platform. "The latest Apple product is the gold standard" for mockups is one creator's opinion [S-L19-041].
+- **Accessibility constraints:** showcase effects (skew, glow, collage) never appear in the deciding view, because they change apparent size and contrast [inferred from STD-process-review-taste-43's reason]. Clickable prototypes keep reduced-motion handling.
+- **Default + heuristic:** Default: the preview opens in the deciding view; the client and showcase framings are extra exports [inferred]. Heuristic: match the frame to the audience, and keep showcase tricks out of client meetings, where they work less well [S-L19-041]. Differs from DC-L16-06 (a split view with a component matrix and 2-4 sample screens, every mode at once) only when options are being compared: the chosen system can still be shown that way, but competing options are shown one at a time, full size (STD-process-review-taste-43) [inferred]. The skew values and the AI mockup workflow (a 30-word prompt, a green screen on the device) are one video's examples and date quickly [S-L19-041].
+- **Evidence:** [S-L19-006] [S-L19-041] [S-L19-044] [S-L19-064] [S-L19-066] [S-L19-083]. Compared against DC-L16-06, DC-L17-11, DC-L19-34 and DC-L19-56.
+- **Maps to:**
+  - New question Q-dist-05 (stage 26, zoom 2): "Who will see the result first: you, your team, a client, or people online?" Options `deciding`, `team`, `client`, `showcase`; default `deciding`. It changes only how `preview.html` and exported images are framed.
+  - Visual sample: the same dashboard framed three ways (plain true size, laptop mockup, muted showcase background) [S-L19-041].
+- **Impact now / as it grows:**
+  - *Deciding:* now, honest judgements. As it grows, the only view decisions should be made in.
+  - *Team handoff:* now, every tab and state must exist. As it grows, fewer "what goes here?" questions from developers [inferred from S-L19-066].
+  - *Client:* now, a device frame and a few clickable flows. As it grows, clients sign off on how it works, not just how it looks [S-L19-041].
+  - *Showcase:* now, attractive posts. As it grows, useful for hiring and launches, never for decisions.
+- **Standards:** STD-process-review-taste-43, STD-process-review-taste-35, STD-process-review-taste-40
+
+### DC-L19-171: Rule files for AI agents: one per aspect, strict, each with its reason
+- **Block path:** Delivery > AI channels > Agent rule files (Stage 26)
+- **Questions the designer answers:** How does the system's taste reach coding agents: one DESIGN.md, or a rule file for each aspect of the interface? Does each rule say why? Is there a ready brief for asking an AI to design a screen?
+- **Options:**
+  - **DESIGN.md plus DTCG files:** what every system ships today.
+  - **One rule file per aspect:** write a skill file for each aspect of the interface (animation, layout, icons, color, typography), make each rule strict and say why it has to be that way, then give the files to your agents [S-L19-004]. Motion knowledge packaged as a SKILL.md lets agents build animations with you or for you [S-L19-007], and review them and suggest improvements [S-L19-001].
+  - **Named effects:** ask for a motion effect by its exact term, such as Stagger or Pop in, not a vague description [S-L19-014] [S-L19-019].
+  - **A brief for designing with AI:** say you want a design (in HTML and CSS if it will go into Figma), state the screen's purpose and use, name the elements you want, and require an icon library, or the AI fills the UI with emoji [S-L19-086]. Give short, specific instructions with a starting value [S-L19-103]; tell the AI exactly which logic and features you need [S-L19-061].
+  - **Live channels:** MCP server, registry, llms.txt (today's options, DC-L11-23).
+- **Visual effect:** agents stop guessing and produce the house look; a prompt without an icon-library line comes back full of emoji [S-L19-086].
+- **Depends on (upstream):** DESIGN.md, the house standards, the chosen AI channels.
+- **Affects (downstream):** the AGENTS.md snippet, generated rule files, what `engine.py review` checks.
+- **Token encoding:** none. Files such as `opendesigner/rules/<aspect>.md`, each rule as `{rule, why, values, standard}` [inferred]; the engine's standards already carry a rule and a why.
+- **Platform notes:** the source repository keeps separate skills for mobile web and for Swift [S-L19-014], so rule files split by platform where rules differ.
+- **Accessibility constraints:** the accessibility floors appear in every aspect file [inferred].
+- **Default + heuristic:** Default: keep DESIGN.md and DTCG files, and add one short rule file per aspect, generated from the person's decisions and the house standards, each rule strict and with its reason. Add a copyable "brief for an AI" block to DESIGN.md with the four parts above. Heuristic: a rule without a reason gets re-argued, by people and by agents [inferred from S-L19-004]. Confirms DC-L11-23 ("many short, structured files") and DC-L17-13 (agent-oriented guideline files).
+- **Evidence:** [S-L19-001] [S-L19-004] [S-L19-007] [S-L19-014] [S-L19-019] [S-L19-061] [S-L19-086] [S-L19-103]. Compared against DC-L11-23 and DC-L17-13.
+- **Maps to:**
+  - Q-dist-02 (planned): no new option; the existing `rules` option ("Rules files for AI agents") gains the shape: one rule file per part of the interface, each rule strict and with its reason [S-L19-004] (STD-process-review-taste-55). New default when built: DESIGN.md and DTCG plus `rules` in that shape, beside today's "at least one live channel" (DC-L11-23).
+  - AGENTS.md snippet (no Q-id): new line: load the rule file for the aspect you are changing before UI work [inferred].
+- **Impact now / as it grows:**
+  - *DESIGN.md only:* now, one file to maintain. As it grows, one long file that agents skim and partly ignore.
+  - *Aspect files:* now, several short files to generate. As it grows, each agent loads only what it needs, and rules stay followed [S-L19-004].
+  - *Named effects:* now, a small glossary. As it grows, prompts and reviews share exact words.
+  - *AI brief:* now, one block in DESIGN.md. As it grows, anyone on the team gets on-system screens from an AI.
+- **Standards:** STD-process-review-taste-55, STD-process-review-taste-56, STD-process-review-taste-57
+
+### DC-L19-172: Which AI tells the review catches
+- **Block path:** Guardrails > Checks > Generic AI output (Stage 26; `engine.py review`)
+- **Questions the designer answers:** Which common AI-made looks should the review flag? Which may you keep on purpose?
+- **Options (each tell with the card that owns its fix):**
+  - Emoji as interface icons [S-L19-061] [S-L19-086] (DC-L19-68).
+  - An indigo accent that, in one designer's experience, AI defaults to every time [S-L19-103], and bright colors that don't work together [S-L19-061] (DC-L19-11).
+  - Everything centered by default [S-L19-103] (DC-L19-45).
+  - The basic default Inter instead of the variable file with its display cut [S-L19-103] (DC-L19-28).
+  - Generated fake UI instead of a real product screenshot, and generic feature icons instead of graphics made from the product [S-L19-103] [S-L19-061] (DC-L19-72, DC-L19-73).
+  - No images at all on a page for a named audience, which one video calls a telltale sign of vibe coding [S-L19-062] (DC-L19-72).
+  - Gradient profile circles with a letter [S-L19-061] (DC-L19-76).
+  - The same KPIs repeated several times, and cards that do nothing [S-L19-061] (DC-L19-42).
+  - Missing hidden states, hovers and tooltips: one video says AI has a hard time with the parts of a UI you can't immediately see (the presenter's opinion) [S-L19-056], and another lists them among the elements beginners most often miss [S-L19-045] (DC-L19-125).
+  - Ease-in on entering elements, and a solid border where a semi-transparent shadow fits [S-L19-014] (DC-L19-85, DC-L19-09).
+  - Placeholder copy and dead buttons (STD-process-review-taste-40) [S-L19-037].
+  - Motion that runs but feels mediocre [S-L19-011].
+- **Visual effect:** removing these makes a product feel designed rather than generated; output with no thought behind it feels empty [S-L19-009].
+- **Depends on (upstream):** the chosen direction and values: a tell is only a finding if the person did not choose it.
+- **Affects (downstream):** review output, exported lint rules, an "avoid" list in DESIGN.md.
+- **Token encoding:** a rule catalog `{id, severity, why, owner_card, waived_by, reason}` in DC-L17-07's format.
+- **Platform notes:** most tells come from web and marketing pages; native apps need a smaller set (DC-L17-07).
+- **Accessibility constraints:** accessibility rules are never waivable; taste tells are (DC-L17-07).
+- **Default + heuristic:** Default: taste tells warn and can be kept on purpose with a reason (DC-L19-165); a look the person chose, such as a centered hero for a single statement, is not flagged. Heuristic: after generating a screen with AI, the biggest fixes are fonts, alignment and color [S-L19-086]. "Never let an AI choose your colors or your layout" is one video's always/never claim [S-L19-061], but three videos agree AI picks need a person's judgement [S-L19-061] [S-L19-086] [S-L19-103] and Emil Kowalski's README says agents lack taste [S-L19-014]. Confirms DC-L17-07. Also confirms today's untouched defaults: the device's own font (Q-type-01 `system`) and a restrained starting look (neutral grays, one accent), which the house standards require when there is no project to draw from. The L17 tell catalog (research/L17, part of DC-L17-07's evidence) also lists "system-ui as the primary face"; that tell conflicts with STD-visual-details-11 (default to the system font), so the standard wins and the review does not flag it.
+- **Evidence:** [S-L19-009] [S-L19-011] [S-L19-014] [S-L19-037] [S-L19-045] [S-L19-056] [S-L19-061] [S-L19-062] [S-L19-086] [S-L19-103]. Compared against DC-L17-07, DC-L11-24 and the sibling cards named above.
+- **Maps to:**
+  - Q-dist-03 (planned): new option `ai-tells` "Flag common AI-made looks (emoji icons, the default indigo, everything centered, dead cards)" [S-L19-061] [S-L19-103].
+  - `engine.py review` (no Q-id): add two cheap text checks, emoji in icon positions and lorem ipsum [inferred].
+- **Impact now / as it grows:**
+  - *No tell checks:* now, nothing to configure. As it grows, AI-built screens slowly pull the product toward the generic look.
+  - *Tell checks with waivers:* now, a few warnings to answer. As it grows, the product keeps its own look as more of it is generated.
+- **Standards:** STD-process-review-taste-01, STD-process-review-taste-40, STD-visual-details-25, STD-visual-details-11
+
+### DC-L19-173: What the Figma copy contains so designers can keep working in it
+- **Block path:** Delivery > Output > Figma library (Stage 26, the push to Figma)
+- **Questions the designer answers:** When the system is written to Figma, what becomes a variable, a style or a component? Are components built so designers can edit many at once and prototype them without renaming layers?
+- **Options:**
+  - **Styles for colors, variables for measurements, components for elements:** one video's recipe for consistency [S-L19-045]. This differs from DC-L07-21 ("variables for values, styles for bundles"), which requires colors that change by mode to be variables.
+  - **Components on auto layout:** always build chips with auto layout [S-L19-075]; build cards and chips with auto layout and vertical trim off [S-L19-045]; auto layout can be added across frames at once [S-L19-074].
+  - **Stable layer names:** Figma's multi-edit finds matching layers by name and grouping position [S-L19-074]; Smart Animate animates layers that share a name and crossfades the rest [S-L19-059]; prototypes toggle layer opacity, not fill opacity [S-L19-059].
+  - **A states frame per interactive component** (hover, pressed, loading, success), ready for prototyping [S-L19-059] [S-L19-079].
+  - **AI-made screens brought into Figma for small fixes:** ask the AI for HTML and CSS, import it with the HTML to design plugin, then fix small things by hand [S-L19-086]. Vector work such as logos still happens in Figma [S-L19-103].
+  - **Nudge amount matched to the grid:** change Figma's nudge from 10 to 8 on an 8 px grid [S-L19-070]; a per-user preference, so it can only be a handoff tip.
+- **Visual effect:** none in the product. Designers edit many frames at once and prototype without renaming layers [inferred].
+- **Depends on (upstream):** where the master copy lives (Q-tool-01), Figma collection structure (DC-L07-18), styles versus variables (DC-L07-21), component API (DC-L07-22), the base unit.
+- **Affects (downstream):** the Figma push through MCP, prototypes, design handoff.
+- **Token encoding:** variables per collection (DC-L07-18). Layer names follow component part names, for example `Button/Label` and `Button/Icon`, the same in every variant and state [inferred].
+- **Platform notes:** the sources give none.
+- **Accessibility constraints:** the states frame includes the focus state, since visible focus is a locked floor [inferred].
+- **Default + heuristic:** Default: follow DC-L07-21 (variables for values, including colors by mode; styles for bundles). Build every generated component on auto layout, keep part names identical across variants and states so multi-edit and Smart Animate work, and add a states frame per interactive component. "Styles for colors" comes from one June 2025 video of beginner mistakes [S-L19-045], which gives no reason for it; DC-L07-21 holds because colors change between light and dark.
+- **Evidence:** [S-L19-045] [S-L19-059] [S-L19-070] [S-L19-074] [S-L19-075] [S-L19-079] [S-L19-086] [S-L19-103]. Compared against DC-L07-18, DC-L07-21, DC-L07-22 and DC-L16-13.
+- **Maps to:**
+  - Q-dist-01 (planned), option `design-push`: new heuristic: auto layout on every component, stable part names across variants and states, and a states frame per interactive component [S-L19-059] [S-L19-074]. Handoff note: set Figma's nudge amount to the base unit [S-L19-070].
+- **Impact now / as it grows:**
+  - *Styles for colors:* now, familiar to beginners. As it grows, light and dark need duplicate styles and drift apart (why DC-L07-21 differs).
+  - *Auto layout everywhere:* now, a little more generation work. As it grows, components resize cleanly as content changes.
+  - *Stable part names:* now, a naming rule. As it grows, bulk edits and prototypes work across the whole library [S-L19-074].
+  - *States frames:* now, more frames. As it grows, prototypes and handoff need no extra drawing.
+- **Standards:** STD-process-review-taste-35
+
+### DC-L19-174: How variations are generated and compared
+- **Block path:** Builder > Exploration > Variants (Stage 27)
+- **Questions the designer answers:** How many different directions do you want to see? What does each one explore? How do you flip between them? What happens to the ones you don't pick?
+- **Options:**
+  - **A "show 6" grid of versions:** today's Q-pref-02 option and DC-L16-05's default. It conflicts with two house standards: never more than 5 variants, and variants shown one at a time, full size, never as side-by-side thumbnails.
+  - **Named directions behind a picker:** 3 variants by default, up to 5 only when asked or when the space is wide; each named for its direction (Quiet, Editorial, Playful, Dense) and exploring a stated axis (layout, density, personality, motion or interaction model); two that differ only in accent color or copy count as one [S-L19-031]. Every variant fully works with realistic content; one is shown at a time, full size, in realistic context; switching is instant with number keys and arrows, R replays, and the choice is kept in the URL [S-L19-031] [S-L19-030]. The hand-off is a table of when each variant is right and what it costs, with no favorite pre-picked [S-L19-031].
+  - **Lock and shuffle:** today's option (DC-L16-05, DC-L17-05) for fine exploration.
+  - **Up to 8 concepts (gstack):** in DC-L17-05's option list; differs from the cap of 5.
+  - **Build A and B, validate, ship the winner:** prototyping options is thinking, but only if the idea is then validated; cheap building is no reason to ship both [S-L19-009].
+- **Visual effect:** thumbnails distort spacing and scale; tints of one idea teach nothing when you flip between them [S-L19-031]. Named directions feel like real alternatives, each one defensible [S-L19-031].
+- **Depends on (upstream):** locks (`engine.py lock`), the lead emotion (DC-L19-162), the product's personality, which bounds how bold the boldest variant may be [S-L19-031].
+- **Affects (downstream):** the preview, the decision log (rejected variants are kept, as DC-L17-05 says), the templates' "Copy my choice" flow.
+- **Token encoding:** each variant is a set of parameter values plus a seed (DC-L16-05), with a `name` and an `axis` [inferred].
+- **Platform notes:** variants live in an isolated route (`/prototypes/<slug>`) or, with no project, in one self-contained HTML file [S-L19-031]; the source does not cover native apps.
+- **Accessibility constraints:** every variant meets the floors and ships reduced motion; the picker uses its fixed accessible markup (STD-accessibility-motion-18).
+- **Default + heuristic:** Default: replace `show-6` with a picker of 3 named directions on different axes, one at a time and full size in the real preview, with a table of when each is right and its cost; the person picks. If asked which the builder would pick, it answers from the product's personality and how often the thing is used, not from looks alone [S-L19-031]. Lock and shuffle stays for tuning inside the chosen direction, showing one result at a time [inferred]. Differs from DC-L16-05 (the "show 6" grid) and from DC-L17-05's upper option of 8 (gstack); the standards cap variants at 5. DC-L17-05's light and dark side by side compares one variant in two modes, not variants, so it can stay if each is full size [inferred]. Whole-screen style tiles in the interview (Q-brand-01's "Show") follow the same rule: one at a time, full size [inferred from STD-process-review-taste-43].
+- **Evidence:** [S-L19-009] [S-L19-014] [S-L19-030] [S-L19-031]. Compared against DC-L16-05, DC-L17-05, DC-L19-34 and DC-L19-56.
+- **Maps to:**
+  - Q-pref-02 (planned): remove option `show-6`; new option `picker-3` "Three named directions, one at a time at full size; flip with number keys" [S-L19-031]. New default when built: `patches`, `picker-3` and `lock-shuffle`.
+  - Q-pref-02: split into two questions, because it asks two decisions at once (how AI edits are reviewed, DC-L16-04 and DC-L19-175; how variations are shown, DC-L16-05 and this card) [inferred].
+- **Impact now / as it grows:**
+  - *"Show 6" grid:* now, many options at a glance. As it grows, choices are made at the wrong size, and near-duplicates waste the comparison.
+  - *Named directions behind a picker:* now, fewer but truly different options. As it grows, every exploration leaves a named record of what was tried and why it lost.
+  - *Lock and shuffle:* now, playful fine-tuning. As it grows, fine inside a direction, weak for choosing one.
+  - *Build A and B, then validate:* now, twice the building. As it grows, only validated ideas ship [S-L19-009].
+- **Standards:** STD-process-review-taste-37, STD-process-review-taste-38, STD-process-review-taste-39, STD-process-review-taste-40, STD-process-review-taste-41, STD-process-review-taste-43, STD-process-review-taste-44, STD-process-review-taste-46, STD-process-review-taste-48, STD-when-to-animate-22, STD-accessibility-motion-18
+
+### DC-L19-175: How AI edits and fine-tuning happen
+- **Block path:** Builder > AI > Edit model (Stage 27)
+- **Questions the designer answers:** When you refine something, do you regenerate it, describe the change, drag a temporary control, or fix it by hand? How do you check the change was better?
+- **Options:**
+  - **Regenerate the whole thing:** the alternative these sources work against. One video fixes a design one mistake at a time instead of starting from scratch [S-L19-045] (said of improving a design by hand; applying it to AI edits is [inferred]), and the live Claude Code session refines the page section by section with short instructions rather than re-prompting it whole [S-L19-103].
+  - **Short, specific instructions:** name the exact change and a starting value; work top to bottom, one section at a time; check how an element is built before giving the fix [S-L19-103].
+  - **A temporary tool on the page:** for fiddly positions, have the AI build a temporary control inline on the page you are working on, set the values by hand, bake them into the code and remove the tool [S-L19-103]. This confirms DC-L16-05's "generated controls" option with a working practitioner example.
+  - **Try, look, adjust ("Goldilocks"):** for example a heading width tried at 45ch, then 40, then 35, and back to 40 [S-L19-103].
+  - **Small tweaks by hand:** a sticky sidebar or exact left alignment is quicker fixed in Figma than re-prompted [S-L19-086].
+  - **Spread a finished treatment:** once a treatment works in one section, apply it to all sections in one instruction [S-L19-103].
+  - **Compare before and after:** today's default, patches with before and after views (DC-L16-04); rebuild the original on a separate page to compare [S-L19-103]; put the original next to the redesign [S-L19-065].
+  - **Talk it through first:** think and talk through what the change should do before writing code [S-L19-002].
+- **Visual effect:** tuned values land where the eye says, not where a guess says [inferred]; one-at-a-time fixes keep what already works [inferred from S-L19-045].
+- **Depends on (upstream):** patch review (DC-L16-04), locks.
+- **Affects (downstream):** the decision log (every baked value recorded as the person's choice), tokens, review.
+- **Token encoding:** a tuned value is saved as a decision, not left inline: `engine.py set <path> <value> --why "..."` (the existing rule in the AGENTS snippet).
+- **Platform notes:** inline tools suit web previews; native values are tuned in the preview and saved the same way [inferred].
+- **Accessibility constraints:** tuned values pass the same contrast and target checks before they are saved (DC-L16-04's gate) [inferred].
+- **Default + heuristic:** Default: patches with before and after (confirms DC-L16-04), plus a temporary on-page control for values that need the eye (positions, as in the source [S-L19-103]; widths in characters and opacity, which the source tuned by trying values in prompts, are [inferred] candidates), with every tuned value saved as a decision with the person's reason. Heuristic: fix one named issue at a time, in place; regenerate only when the direction itself is wrong [S-L19-045] [inferred]. The workflow is one designer's live session [S-L19-103], a practice rather than a tested method.
+- **Evidence:** [S-L19-002] [S-L19-045] [S-L19-065] [S-L19-086] [S-L19-103]. Compared against DC-L16-04, DC-L16-05 and DC-L16-14.
+- **Maps to:**
+  - Q-pref-02 (planned): new option `tune-inline` "Drag a temporary control on the real page, then save the value" [S-L19-103]. New heuristic: fix one issue at a time instead of regenerating [S-L19-045] [S-L19-103] [inferred for AI edits]. Confirms `patches`.
+- **Impact now / as it grows:**
+  - *Regenerate:* now, quick to ask. As it grows, each regeneration loses fixes already made.
+  - *Specific instructions:* now, needs the right words and a starting value. As it grows, the instructions double as a record of what changed.
+  - *Temporary tool:* now, one extra step. As it grows, fiddly values stop being guessed.
+  - *By hand in Figma:* now, fastest for tiny tweaks. As it grows, hand edits must flow back into the tokens or they drift.
+  - *Before and after:* now, a second view. As it grows, every change can be judged and explained.
+- **Standards:** STD-process-review-taste-64, STD-process-review-taste-26, STD-process-review-taste-29
+
+### DC-L19-176: How a critique or review is reported
+- **Block path:** Builder > Guidance > Review report (Stage 27; `engine.py review`)
+- **Questions the designer answers:** Should problems arrive as a list, or as one table of before, after and why? In what order? Does the review end with a clear verdict?
+- **Options:**
+  - **A list of `file:line value -> fix`:** today's `engine.py review` output. It falls short of the locked standard STD-process-review-taste-04 (one Before/After/Why table), so it is listed as today's behavior, not an allowed end state.
+  - **One table with Before, After and Why columns,** one row per issue, never separate "Before:" and "After:" lines [S-L19-032] [S-L19-023]; the agent in Emil Kowalski's example returns a list of issues and a before-and-after table [S-L19-004].
+  - **Ranked by leverage:** impact divided by effort; a short list of high-confidence items beats a long padded one; say plainly when things are already right [S-L19-027] [S-L19-024].
+  - **Exact values:** the exact curve, duration or value, never a vague target such as "use a nicer easing" [S-L19-032].
+  - **One severity per finding:** HIGH, MEDIUM or LOW [S-L19-027].
+  - **A closing verdict:** Block or Approve under stated criteria, for motion reviews [S-L19-032].
+  - **Spot, name, fix:** each finding names the problem in words [S-L19-011].
+- **Visual effect:** none (process decision). Readers see what to change and why in one scan [inferred].
+- **Depends on (upstream):** the critique mode (Q-pref-01), the house standards and project decisions that give each Why.
+- **Affects (downstream):** `engine.py review` output, coach messages in chat, the lint report in Q-dist-03's "Show".
+- **Token encoding:** none (process decision).
+- **Platform notes:** the sources give none.
+- **Accessibility constraints:** accessibility findings always appear in every mode (DC-L15-11); motion without reduced-motion handling is at least MEDIUM (STD-accessibility-motion-06).
+- **Default + heuristic:** Default: `engine.py review` prints one table (Where, Before, After, Why), where Why names the standard or decision and its reason, sorted by severity and then leverage, followed by a one-line verdict ("ready" or "fix N before shipping"); strict mode turns that verdict into Block or Approve. Coach mode uses the same row format in chat. Confirms DC-L15-11's rule that every message names the principle.
+- **Evidence:** [S-L19-004] [S-L19-011] [S-L19-023] [S-L19-024] [S-L19-027] [S-L19-032]. Compared against DC-L15-11 and DC-L11-24.
+- **Maps to:**
+  - Q-pref-01 (planned): new heuristic for every mode: the report is one Before/After/Why table ranked by severity and leverage, with a verdict line; `strict` maps to Block or Approve [S-L19-032].
+  - `engine.py review` (no Q-id): switch the finding list to that table and add the verdict line [inferred].
+- **Impact now / as it grows:**
+  - *Plain list:* now, compact. As it grows, long lists with no reasons get skimmed and ignored.
+  - *Before/After/Why table:* now, a wider report. As it grows, each row teaches the rule behind it, so the same finding appears less often.
+  - *Ranked by leverage:* now, the top rows are the ones worth doing. As it grows, big reports stay usable.
+  - *Verdict line:* now, one line. As it grows, a clear gate for shipping.
+- **Standards:** STD-process-review-taste-04, STD-process-review-taste-05, STD-process-review-taste-07, STD-process-review-taste-08, STD-process-review-taste-09, STD-process-review-taste-10, STD-process-review-taste-52, STD-accessibility-motion-06
+
+### DC-L19-177: The goal behind the brief, before any visuals
+- **Block path:** Foundations > Product > Goal and user intent (Stage 03, beside the principles; `PRODUCT.md`)
+- **Questions the designer answers:** What must these screens achieve: more sign-ups, sales, a faster task? Why do people arrive, and what do they need first? What should the product leave out?
+- **Options:**
+  - **Start from the look:** the habit the sources warn against: starting with icons or card layouts loses sight of why you are designing [S-L19-054].
+  - **Start from the user's intent:** build the element that serves it first (the search bar, for people who come to search), and add function only as new intents appear (listings and filters for people who come to browse) [S-L19-054].
+  - **Start from the need behind the request:** "I need a website" usually means more customers, sales or sign-ups; design for the site's users, not for the client's taste [S-L19-038].
+  - **Start from a written brief and a problem statement:** expand the prompt into a full brief and keep it in mind throughout [S-L19-037]; get the problem statement right first, because solving the wrong problem makes the solution not matter [S-L19-083].
+  - **Start from where and how it is used:** for a Mac utility, while people work in other apps [S-L19-067]; think in screens and sequences, asking how the user got here and what they need next [S-L19-044].
+  - **Decide what not to build:** judge whether an idea deserves building [S-L19-009]; every feature spends the user's time, attention and trust [S-L19-020].
+- **Visual effect:** pages lead with what people came for, with fewer decorative sections [inferred]; a hero built around an action (a search bar) rather than a slogan [S-L19-054] [S-L19-082].
+- **Depends on (upstream):** what they are making (zoom 0 question 1), surfaces (Q-scope-06), audience (Q-aud-01).
+- **Affects (downstream):** PRODUCT.md, the principles (DC-L19-163), success measures (DC-L19-166), the sample screen used in every preview (DC-L19-35), which components come first.
+- **Token encoding:** none. State holds `context.goal` and `context.intents[]`, written to PRODUCT.md [inferred].
+- **Platform notes:** usage context matters most on desktop utilities, where the app should appear where the person already works [S-L19-067].
+- **Accessibility constraints:** none beyond the floors.
+- **Default + heuristic:** Default: at zoom 0, take the goal from the person's first answer when it is there; otherwise ask one short follow-up: "What should people get done first when they arrive?" Record it; previews use it to pick the sample screen. Heuristic: a section, component or principle that serves neither the goal nor an intent is a candidate to cut [S-L19-020] [S-L19-054]. Six sources agree on intent or problem first [S-L19-037] [S-L19-038] [S-L19-044] [S-L19-054] [S-L19-067] [S-L19-083]; half are career, portfolio and freelance videos [S-L19-037] [S-L19-038] [S-L19-083], and none is about interviewing someone to set up a system, so applying them to a design-system interview is [inferred].
+- **Evidence:** [S-L19-009] [S-L19-020] [S-L19-037] [S-L19-038] [S-L19-044] [S-L19-054] [S-L19-067] [S-L19-082] [S-L19-083]. Compared against DC-L06-15, DC-L11-05 and DC-L19-35.
+- **Maps to:**
+  - Q-brand-07: new option `from-goal` "Start from what people come to do; the first principle protects it" [S-L19-054].
+  - Zoom 0, question 1 ("What are you making?", recorded as `context.product`): new follow-up for the goal when their words don't give one [inferred]. This touches stage 01 as well as stage 03.
+- **Impact now / as it grows:**
+  - *Look first:* now, quick visuals. As it grows, features pile up without a reason to be there.
+  - *Intent first:* now, one more question. As it grows, new features are added only when a new intent appears [S-L19-054].
+  - *Need behind the request:* now, a business question. As it grows, the system can be judged by results (DC-L19-166) [S-L19-038].
+  - *Written brief:* now, a paragraph of writing. As it grows, every later session can check work against it.
+- **Standards:** STD-when-to-animate-22, STD-visual-details-31
+
+### Area: Tokens (DC-L19-181 to DC-L19-190)
+
+Area `tokens`: the topics Design systems and tokens, and Web implementation (CSS and React) (stages 05 where the system lives, and 24 tokens and encoding). Written 2026-09-24. Built from the 42 verified analyses tagged with these topics, checked against the raw text where a card relies on a detail, and compared with DC-L07-01 to DC-L07-28, DC-L03-26, DC-L04-21, DC-L04-22, DC-L04-28, DC-L08-03, DC-L09-08, DC-L10-08, DC-L10-18, DC-L10-22, DC-L11-01, DC-L11-16, DC-L11-23 and DC-L16-02, `questions.json`, the stage 05 and 24 files, `pacing.json`, `synthesis/standards.json`, and `engine.py` where a card says what the engine does today (facts marked "checked" were read on 2026-09-24). Read but not cited: S-L19-042, S-L19-002, S-L19-010, S-L19-019, S-L19-069, S-L19-071, S-L19-030, S-L19-087, S-L19-088 and S-L19-093 (their decisions belong to the typography, motion, component and process cards). No new interview question is proposed here: the delivery area already has 18 zoom-3 questions (`pacing.json`). Synthesis pages: [[synthesis/design-systems-and-tokens|Design systems and tokens synthesis]], [[synthesis/web-implementation-css-and-react|Web implementation (CSS and React) synthesis]].
+
+### DC-L19-181: How much system to define first, and what counts as progress
+- **Block path:** Tokens > Architecture > System size and first commitments
+- **Questions the designer answers:** Should this system be light and easy to throw away, or deeply defined for many products? Which few decisions must hold on every screen from day one? Do we measure progress by how many components exist, or by how many decisions hold everywhere?
+- **Options:**
+  - **Lean core: a few decisions you stick to.** In Linear, buttons, spacing and text styles are exactly the same in a settings panel and when creating a view; in Kole's own example, holding button spacing, the type scale and the color scheme constant makes a new modal quick to build and familiar [S-L19-044]. A lean startup needs something light, flexible, quick to update and easy to scrap [S-L19-054]. The house motion vocabulary is this size: three named curves and a duration table [S-L19-018]. One video adds one shared corner radius for all small components (10px in its example) [S-L19-045]; the 10px is opinion from one video, the "one radius for the small parts" lesson is the point.
+  - **Deeply defined.** Material Design is massive and deeply defined because it serves dozens of products and billions of users [S-L19-054]. In token terms this is a component tier for every part (DC-L07-02, option 2) [inferred].
+  - **Count of components as the goal.** Rejected: a system is not about having hundreds of components [S-L19-044].
+  - **How the core is held in the design file.** Kole: styles for colors, variables for measurements, components for UI elements [S-L19-045] (one video, June 2025). This differs from DC-L07-21, which makes every single value that changes by mode, colors included, a variable so light and dark can switch; styles stay for bundles such as text styles and shadows.
+- **Visual effect:** Lean core: every new screen looks like it belongs, with few distinct paddings, radii and type sizes on show [S-L19-044]. Deeply defined: the same consistency across many products, but a change takes longer to reach the screen [inferred]. Component count as the goal: many parts that each look slightly different, which Kole calls amateur when duplicates differ [S-L19-045].
+- **Depends on (upstream):** Q-scope-04 (team size and model), Q-scope-01 (which surfaces), Q-scope-02 (existing screens), DC-L11-01 (adopt, adapt or create).
+- **Affects (downstream):** Q-token-01 (tier depth, whether component tokens exist at launch), Q-token-03 (coverage), which tokens are locked (`engine.py set --lock`), Q-gov-01 (how strict), what DESIGN.md reports as done.
+- **Token encoding:** none new (process decision). The core commitments are ordinary semantic tokens that carry the engine's lock, for example the control padding, the `text.*` scale, the small-component radius and the surface and action colors [inferred].
+- **Platform notes:** The sources give none.
+- **Accessibility constraints:** However lean, the locked floors are part of the core from day one: WCAG 2.2 AA contrast, 24px minimum targets, visible focus and reduced motion (OpenDesigner guardrails).
+- **Default + heuristic:** Default: a lean core. Confirms Q-token-01 `two-plus` (DC-L07-01) with component tokens added only when a brand must restyle one component or 3 or more components share a value (DC-L07-02). Confirms Q-token-03 `extended`: "lean" means few hand-made decisions, not few token categories, because the engine generates the extra categories from the same few inputs and they stay quick to update [inferred]. One exception, owned by the motion cards: motion gets per-component recipe tokens from the start, because each component has its own duration budget (DC-L19-99). Heuristic: let Q-scope-04 set the depth. `size-1-2`, `size-3-5` or `model-solitary` gets the lean core; `size-10plus`, `model-federated`, or several products sharing the system gets component tokens for the parts brands restyle [inferred from S-L19-054 and DC-L11-01]. No question asks how many products share the system; Q-scope-01 counts surfaces (app, marketing site, docs), which is only a stand-in [inferred]. Count progress in decisions held, not components built [S-L19-044], and break a rule only on purpose, never by accident [S-L19-054]. For the Figma split, keep DC-L07-21: a color that changes between light and dark must be a variable; Kole's "styles for colors" is a one-video opinion (DC-L19-173 says the same). This card is the token-depth side of DC-L19-164 (how much system the team needs, and where to stop zooming); the two agree.
+- **Evidence:** [S-L19-018] [S-L19-044] [S-L19-045] [S-L19-054]; compared with DC-L07-01, DC-L07-02, DC-L07-07, DC-L07-21, DC-L11-01, DC-L11-09, DC-L19-99, DC-L19-164, DC-L19-173.
+- **Maps to:**
+  - Q-scope-04: new effect. Today it decides DC-L11-09 and DC-L11-10 and changes DC-L11-01, DC-L11-11 and DC-L11-12, all process and governance cards; add that it sets how deep Q-token-01 goes (lean core or component tier).
+  - Q-token-01: confirms default `two-plus`; new heuristic "depth follows team size and number of products".
+  - Q-token-03: confirms default `extended`; new Use/avoid line "lean means few hand-made decisions, not fewer token kinds".
+  - Q-token-07 `vars-styles`: flag, no change: Kole's styles-for-colors [S-L19-045] differs from DC-L07-21; keep variables for any value that changes by mode.
+  - Visual sample: Linear's settings panel beside its view-creation screen with identical buttons, spacing and text styles [S-L19-044]; a new modal assembled only from existing parts [S-L19-044].
+- **Impact now / as it grows:**
+  - Lean core: now, a handful of decisions and a fast first build. As it grows, local values need a promotion path to shared tokens once 3 or more components use them (DC-L07-02), and on-purpose exceptions need a written reason.
+  - Deeply defined: now, slower to set up and more to review. As it grows, it pays back across many products, but it is no longer easy to scrap [S-L19-054].
+  - Component count as the goal: now, it looks productive. As it grows, parts drift apart because no shared decisions hold them together [S-L19-044] [inferred].
+- **Standards:** STD-visual-details-27 (every value a deliberate choice), STD-visual-details-36 (same look, same behaviour), STD-visual-details-51 (excellent defaults before options).
+
+### DC-L19-182: Spacing on the web grows with the reader's text size (rem, not px)
+- **Block path:** Tokens > Types > Dimension > Web output unit for spacing and sizes
+- **Questions the designer answers:** When someone sets a larger default text size in their browser, should padding, gaps and control heights grow with the text or stay fixed? Which values should stay in pixels? Does anything change for people who never touch that setting?
+- **Options:**
+  - **rem (or em) for spacing on the web.** The house rule: respect the user's text-size setting and scale layout with the text, writing spacing in rem or em, not fixed px, so a larger font does not break the layout [S-L19-020] (STD-accessibility-motion-13, must). Carbon, Atlassian and Primer publish rem next to px, and Tailwind's spacing base is 0.25rem (DC-L03-26).
+  - **px spacing, rem type only.** What the engine exports today: in the CSS export only `font.size.*` becomes rem, while `space.*`, control heights and target sizes stay px (checked; the conflict is recorded on STD-accessibility-motion-13). The Tailwind export goes one step further: it sets Tailwind's spacing multiplier to `--spacing: 4px` (the base unit in px, checked), replacing Tailwind's own rem-based 0.25rem (DC-L03-26), so every `p-*` and `gap-*` class becomes fixed; this part is not recorded in `standards.json`. DC-L03-26 cites a practitioner view that padding should stay px because growing spacing squeezes content, and Q-token-04 keeps "spacing scales with text size" as a toggle that is off by default. Both differ from the house standard.
+  - **em inside a component.** Spacing tied to the component's own font size, which the standard also allows [S-L19-020]; for example the gap between a button's icon and label follows the label [inferred].
+  - **What stays px.** The standard's review check matches only margin, padding and gap (its `review.pattern` in `standards.json`), so borders, focus rings, shadow offsets and radii can stay px, and 1px hairlines stay crisp [inferred from the review pattern].
+- **Visual effect:** At the default text size nothing changes: 1rem is 16px. With a larger default text size, rem spacing keeps the proportions, so cards and buttons get roomier along with their text. With px spacing, bigger text is squeezed inside the same padding and fixed-height controls can clip their labels [inferred]. Browser zoom scales px and rem alike; only the text-size setting shows the difference [inferred].
+- **Depends on (upstream):** Q-plat-01 (web is shipped), Q-space-01 (base unit), Q-token-04 (source units).
+- **Affects (downstream):** every `space.*`, `size.control.*` and `size.target.*` token in the CSS export and in Tailwind's `--spacing-*` (which point at the CSS variables), container padding, the review lint's spacing message. Breakpoints are already rem in the Tailwind export, but the CSS export's `size.breakpoint.*` variables are px (checked).
+- **Token encoding:** The source stays px, `{"$type": "dimension", "$value": {"value": 16, "unit": "px"}}`, so Figma import stays lossless (DC-L07-11). Only the web transform changes: `--ds-space-400: 1rem` instead of `16px`, dividing by 16 as the platform pipelines assume (DC-L10-22).
+- **Platform notes:** Web only for the unit. The same standard asks native apps to respect Dynamic Type by scaling layout with text [S-L19-020] but names no mechanism for native spacing [inferred: on iOS this would be a scaled metric]. DC-L10-08's Android rule (spacing in dp, only text in sp) is not contradicted by these sources. Figma keeps px.
+- **Accessibility constraints:** WCAG 1.4.4 Resize Text (200%) and 1.4.10 Reflow at 320 CSS px (DC-L03-26). A 24px minimum target written as plain 1.5rem would fall below 24 CSS px for someone who sets a default text size smaller than 16px, so write the floor as `max(24px, 1.5rem)`: it grows with larger text and never drops under the locked 24px floor [inferred].
+- **Default + heuristic:** Default on the web: spacing and control heights in rem (px divided by 16); target-size floors as `max(<px>, <rem>)`; borders, rings, shadow offsets and radii in px; source values stay px. The standard names spacing only; extending it to control heights and target sizes is [inferred] from its "scale layout with the text". Differs from DC-L03-26 and the current Q-token-04 default: the toggle "spacing scales with text size, off by default" goes away on the web, because the house standard is must-level. The layout cards already write spacing in rem on the web (DC-L19-41, DC-L19-43, DC-L19-47), so this card agrees with them. Heuristic [inferred]: if the value makes room for text (padding, gap, control height), it is rem; if it draws a line, it is px; if it is a locked minimum, it is `max()` of both.
+- **Evidence:** [S-L19-020]; compared with DC-L03-26, DC-L07-11, DC-L10-08, DC-L10-22.
+- **Maps to:**
+  - Q-token-04: new default "px in the source; rem on the web for type, spacing, control heights and breakpoints; `max(px, rem)` for target-size floors; px for borders, rings, shadows and radii". Remove "spacing scales with text size is an explicit toggle, off by default" for web output. New Use/avoid line: "avoid px margin, padding and gap on the web (STD-accessibility-motion-13)".
+  - Engine (proposed): the CSS export's `css_dim` rem conversion should cover `space.*` and `size.control.*`, not only `font.size.*`, and write `size.target.*` as `max(24px, 1.5rem)` and so on; the Tailwind export should write `--spacing` as the base unit divided by 16 in rem (0.25rem for a 4px unit) instead of px.
+  - Visual sample: the same card at the default text size and at a 200% default text size, once with px padding and once with rem padding.
+- **Impact now / as it grows:**
+  - rem: now, one transform change and no visible difference at the default size. As it grows, every new component inherits text scaling, and testing at 200% text finds fewer broken layouts.
+  - px: now, nothing to change. As it grows, each component needs its own fix when text-size bugs are reported, and the review check flags every px padding.
+- **Standards:** STD-accessibility-motion-13, STD-visual-details-27.
+
+### DC-L19-183: Names for motion tokens that code, agents and the house skills share
+- **Block path:** Tokens > Naming > Motion token names
+- **Questions the designer answers:** Should a curve's name say its job (for things entering or leaving, for things moving on screen, for drawers) or its character (silk, breeze)? What names should the CSS export write, so a coding agent that looks for `--ease-*` finds them? Does the web need the same names as the other platforms?
+- **Options:**
+  - **Job names from the house vocabulary.** `--ease-out` (entering and exiting), `--ease-in-out` (moving or morphing on screen) and `--ease-drawer` (drawers and sheets) [S-L19-018] [S-L19-023] [S-L19-025] [S-L19-033]; suggestions must use this shared vocabulary [S-L19-024]; recipes consume `var(--ease-out)` [S-L19-017]; press feedback reuses the same token rather than forking a curve [S-L19-028]. Before any motion work, recon looks for `--ease-*` and `--duration-*` [S-L19-027].
+  - **Role names (the engine and DC-L04-21).** DTCG `motion.easing.standard`, `enter`, `exit` and `linear`, exported as `--ds-motion-easing-enter` in CSS and `--ease-standard`, `--ease-enter`, `--ease-exit`, `--ease-linear` in the Tailwind `@theme` (checked). Carbon, Primer and Windows group curves this way (DC-L04-21).
+  - **Character names.** The animations.dev library keeps 18 custom curves on `:root` with names such as `--ease-breeze` and `--ease-silk` [S-L19-007]. The six it shows all start slowly by their control points [inferred], which the names do not reveal, and the source says nothing about where each is used.
+  - **Intensity names.** Fluent's min, mid and max (DC-L04-21).
+- **Visual effect:** None on screen by itself. Job names make a wrong curve visible in code review: an entrance written with an exit-only or ease-in curve reads as wrong from its name [inferred].
+- **Depends on (upstream):** Q-motion-03 (how curves are grouped), Q-token-02 (grammar and prefix), DC-L19-189 (existing tokens in the repo).
+- **Affects (downstream):** the CSS and Tailwind exports, the DESIGN.md motion section, component recipes, the review lint (STD-visual-details-26 flags a hand-typed `cubic-bezier(` in a transition), and whether agents extend the system or add a parallel set.
+- **Token encoding:** DTCG paths named by job, `$type: cubicBezier`: `motion.easing.out` = [0.23, 1, 0.32, 1], `motion.easing.in-out` = [0.77, 0, 0.175, 1], `motion.easing.drawer` = [0.32, 0.72, 0, 1] (values from STD-easing-duration-02 and STD-components-toasts-drawers-40) [inferred path names]. The CSS export writes unprefixed aliases next to the prefixed tokens, for example `--ease-out: var(--ds-motion-easing-out)`, plus `--duration-*` aliases for the duration steps [inferred].
+- **Platform notes:** React Native uses constants with the same jobs: `EASE_OUT`, `EASE_IN_OUT` and `EASE_SHEET` for the drawer curve (values in STD-easing-duration-02 and STD-components-toasts-drawers-40). The sources give no Swift or Compose names.
+- **Accessibility constraints:** None directly. The reduced-motion mode must still switch the aliased values (the engine switches motion by `[data-motion]` and `prefers-reduced-motion`, checked).
+- **Default + heuristic:** Default: name curves by job and export the house names `--ease-out`, `--ease-in-out` and `--ease-drawer` (and `--duration-*`) as unprefixed aliases, so an agent following the house skills finds and extends them instead of adding its own [S-L19-018] [S-L19-027]. Differs from DC-L04-21 and the Q-motion-03 option `role-based` (standard, enter, exit): the house vocabulary has no separate exit curve, because exits use ease-out too (STD-easing-duration-01, STD-easing-duration-03); the value conflicts are already recorded on STD-easing-duration-02, the naming conflict is not. Differs from DC-L07-05 (prefix only in platform output) for these aliases only. Character-named curves stay out of the UI token set [inferred]. Heuristic: if a person or agent cannot tell from a curve's name whether it is for entering, moving or a drawer, rename it.
+- **Evidence:** [S-L19-007] [S-L19-017] [S-L19-018] [S-L19-023] [S-L19-024] [S-L19-025] [S-L19-027] [S-L19-028] [S-L19-033]; compared with DC-L04-21, DC-L07-04, DC-L07-05, DC-L07-14, DC-L19-85.
+- **Maps to:**
+  - Q-token-02: new option `motion-names`: "motion tokens use the house names (`--ease-out`, `--ease-in-out`, `--ease-drawer`, `--duration-*`) as unprefixed CSS aliases"; new default for motion tokens.
+  - Q-motion-03: owned by DC-L19-85 (new default "by job", `role-based` reworded to the jobs), which uses the same token paths as this card; no separate option is proposed here.
+  - Engine (proposed): add the aliases to the CSS export and rename the Tailwind `--ease-enter`/`--ease-exit` pair.
+  - Visual sample: the `:root` block with the three curves, each plotted [S-L19-025].
+- **Impact now / as it grows:**
+  - Job names: now, agents and people pick the right curve by name. As it grows, new curves slot in by job, and one edit changes every use.
+  - Role names: now, fine inside OpenDesigner. As it grows, each agent session that looks for `--ease-out` and does not find it risks adding a parallel set [inferred].
+  - Character names: now, expressive. As it grows, nobody knows which curve to use, and near-duplicates pile up as consolidation findings [S-L19-025].
+- **Standards:** STD-visual-details-26, STD-easing-duration-01, STD-easing-duration-02, STD-easing-duration-03, STD-components-toasts-drawers-40, STD-process-review-taste-11.
+
+### DC-L19-184: Which framework defaults stay switched on next to the system (Tailwind theme)
+- **Block path:** Tokens > Delivery > Web > Framework default theme
+- **Questions the designer answers:** When the system ships as Tailwind utilities, which of Tailwind's own built-in values should still exist? Should anyone still be able to type `ease-in`? Should `hover:` mean "only on a device with a mouse"?
+- **Options:**
+  - **Reset colors, text sizes, radii, shadows and breakpoints only (the engine today).** `exports.tailwindReset` switches those namespaces off, breakpoints only when the system defines them (checked). Tailwind's easing defaults stay: `ease-in` is cubic-bezier(0.4, 0, 1, 1), `ease-out` is (0, 0, 0.2, 1) and `ease-in-out` is (0.4, 0, 0.2, 1) [inferred; checked against Tailwind's transition-timing-function docs on 2026-09-24]. That `ease-in-out` is the exact curve the house names as one never to hand-type or approximate [S-L19-018], built-in curves are too weak [S-L19-018], and ease-in is never allowed on UI (STD-easing-duration-03).
+  - **Reset easing too, and point Tailwind's names at the system.** `--ease-*: initial`, then `--ease-out`, `--ease-in-out` and `--ease-drawer` defined from the system tokens, so Tailwind's own `ease-out` and `ease-in-out` classes give the strong curves and `ease-in` no longer exists [inferred]. The bare `transition` class does not read `--ease-*`: it uses `--default-transition-timing-function`, which is cubic-bezier(0.4, 0, 0.2, 1) with a 150ms `--default-transition-duration` [inferred; checked against Tailwind's transition-property docs on 2026-09-27]. The reset leaves it alone, so it must be set to the house ease-out as well.
+  - **No reset.** Tailwind's palette, radii and curves sit beside the system's: a parallel set (STD-visual-details-26).
+  - **Hover gating.** Tailwind v4's `hover:` already compiles to `@media (hover: hover)`; v3 needs `future.hoverOnlyWhenSupported` [S-L19-028]. The standard asks for both `(hover: hover)` and `(pointer: fine)` (STD-accessibility-motion-15), so a custom `hover` variant that adds `(pointer: fine)` closes the gap [inferred].
+  - **Prompting in Tailwind's names.** Schoger instructs Claude Code in Tailwind's default vocabulary (gray 950 at 10%, text-sm, 5XL) [S-L19-103]. After a reset those names are gone, so prompts must use the system's names [inferred].
+- **Visual effect:** With the easing reset and the default timing function set, every `transition` and `ease-*` class an engineer or agent types moves on the strong house curves, so menus and popovers feel snappy instead of generic [S-L19-018]. Without them, some components glide on Tailwind's softer defaults and a few start slowly with `ease-in` [inferred].
+- **Depends on (upstream):** Q-tool-02 (`utilities`), Q-token-08 (`web-delivery`), Q-plat-08 (framework), DC-L19-183 (motion names).
+- **Affects (downstream):** the Tailwind `@theme` export, which utility classes exist, editor autocomplete, the DESIGN.md list of classes, the review lint, the hover rules in the preview.
+- **Token encoding:** no new tokens; export lines such as `@theme { --ease-*: initial; --ease-out: var(--ds-motion-easing-out); --ease-in-out: var(--ds-motion-easing-in-out); --ease-drawer: var(--ds-motion-easing-drawer); --default-transition-timing-function: var(--ds-motion-easing-out); }` [inferred].
+- **Platform notes:** Web with Tailwind only. v3 and v4 differ for hover [S-L19-028]; the `@theme` reset syntax is v4.
+- **Accessibility constraints:** Hover styles gated on both media features, with `:active` press feedback left ungated (STD-accessibility-motion-15). Reduced motion keeps working because the aliases point at the moded CSS variables (checked: durations follow the reduced-motion mode).
+- **Default + heuristic:** Default when Q-tool-02 includes `utilities`: reset every Tailwind namespace the system defines, easing included, redefine `--ease-out`, `--ease-in-out` and `--ease-drawer` from the system tokens, point `--default-transition-timing-function` at the house ease-out, add a hover variant gated on `(hover: hover) and (pointer: fine)`, and list the system's class names in DESIGN.md so prompts use them. Heuristic: any built-in utility value the system does not own is a parallel token; switch it off or point it at a system token.
+- **Evidence:** [S-L19-018] [S-L19-028] [S-L19-103]; compared with DC-L09-08, DC-L10-18, and the Q-tool-02 default. `standards.json` records no conflict for the easing reset yet.
+- **Maps to:**
+  - Q-tool-02, option `utilities`: new default note "Tailwind's own easing, color, type, radius and shadow values are switched off; `ease-out` and `ease-in-out` point at the house curves, and so does the bare `transition` class; `hover:` is gated on a fine pointer".
+  - Q-token-08, option `web-delivery`: new Use/avoid line "avoid leaving framework defaults that duplicate system tokens".
+  - Engine (proposed): add `--ease-*: initial` and `--default-transition-timing-function` to the `tailwindReset` block, and a gated hover variant; add a conflict note to STD-easing-duration-02 or STD-visual-details-26.
+  - Visual sample: the same dropdown on Tailwind's default `ease-in-out` and on the house `--ease-out`, side by side at 10% speed.
+- **Impact now / as it grows:**
+  - Full reset: now, a few extra lines and one class (`ease-in`) that disappears. As it grows, every engineer and agent gets the house curves by default, with nothing to catch in review.
+  - Partial reset (today): now, nothing changes. As it grows, weak and ease-in curves keep appearing through ordinary class names and must be caught one by one [inferred].
+- **Standards:** STD-visual-details-26, STD-easing-duration-02, STD-easing-duration-03, STD-accessibility-motion-15.
+
+### DC-L19-185: How the system's look reaches library components (the styling ladder)
+- **Block path:** Components > Implementation > Styling third-party components
+- **Questions the designer answers:** When a component comes from a library (a toast, a drawer, a menu), does it keep the library's look or take ours? If ours, do we override its styles or render our own markup on top of its behaviour? Do product teams call the library directly, or our wrapper?
+- **Options:** Sonner's ladder, from least to most control [S-L19-022] [S-L19-090]:
+  - **Library defaults**, tuned with its own switches (`richColors` for green and red status, `invert`) [S-L19-022].
+  - **Global style options**: `toastOptions.style` for every toast, `style` for one; options on a single call win over global ones [S-L19-090] [S-L19-021].
+  - **Classes on parts**, each needing `!important` (Tailwind's `!` prefix) because the library's injected styles win the cascade; fine for a few changes [S-L19-090] [S-L19-022].
+  - **`unstyled: true`**: a halfway house that gets messy quickly [S-L19-022] [S-L19-090].
+  - **Headless, wrapped**: your own JSX on the library's behaviour (`toast.custom()` keeps positioning, stacking and swipe), wrapped in your own `toast()` whose props fit the codebase. The docs recommend it because people usually either keep the defaults or go fully custom [S-L19-090] [S-L19-091], and the house skill calls it the design-system toast [S-L19-022].
+  - **Unstyled primitives by design**: base-ui for dialogs, popovers, menus and selects [S-L19-029]; Vaul's parts are styled by the app, for example an overlay of `fixed inset-0 bg-black/40` [S-L19-095]. The system supplies all the styling.
+- **Visual effect:** Defaults show the library's own look (Sonner's toasts are light unless told the theme [S-L19-092]). The middle rungs are a fair compromise for a few changes but get messy quickly [S-L19-090]; as overrides pile up they tend to break in small ways [inferred]. Headless and unstyled primitives look exactly like the rest of the system because they use its tokens [inferred].
+- **Depends on (upstream):** Q-comp-01 (component base), Q-tool-02 (how engineers use the system), Q-plat-08 (React), Q-form-04 (whether toasts are used).
+- **Affects (downstream):** toast, drawer, menu and dialog components; their component tokens; the wrapper API; library upgrades; DESIGN.md usage notes.
+- **Token encoding:** no new semantic tokens; the wrapper reads the system's surface, text, radius and elevation tokens. Library settings that are values can become component tokens, for example `toast.offset.desktop` = 32px, `toast.offset.mobile` = 16px and `toast.gap` = 14 (Sonner's defaults) [S-L19-021] [S-L19-092]; the names are [inferred] and match DC-L19-113.
+- **Platform notes:** Web and React. When Sonner's injected stylesheet is lost (Astro, view transitions) import `sonner/dist/styles.css`; inside Shadow DOM, copy the `[data-sonner-toaster]` style tag into the shadow root [S-L19-022] [S-L19-089].
+- **Accessibility constraints:** Headless keeps the library's behaviour, so keep Sonner's container label, Alt+T hotkey and dismissible default (STD-accessibility-motion-23); your own JSX must still meet contrast and visible focus. Dialogs, popovers and menus stay on an accessible primitive that handles focus trapping and dismissal (STD-accessibility-motion-16).
+- **Default + heuristic:** Default: every design-system component that wraps a behaviour library is headless (or built on an unstyled primitive) and exposed through the system's own function or component, so product code never imports the library directly [inferred from S-L19-090's wrapper advice]. Keep library defaults only where the look already fits, for example an internal tool. Heuristic: once more than a few classes need `!important`, go headless [S-L19-022]; never settle on the middle rungs.
+- **Evidence:** [S-L19-021] [S-L19-022] [S-L19-029] [S-L19-089] [S-L19-090] [S-L19-091] [S-L19-092] [S-L19-095]; compared with DC-L08-03, DC-L09-08, DC-L19-101 (which library supplies each part) and DC-L19-113 (toast placement and tokens).
+- **Maps to:**
+  - Q-comp-01, option `headless`: confirms, and adds "behaviour libraries such as Sonner are used headless and wrapped in the system's own function".
+  - Q-tool-02: new heuristic "product teams import the system's wrappers, never the library directly" for `npm` and `copy-in`.
+  - No new question: this is an automatic default when Q-comp-01 is `headless` or `copy-in-styled`.
+  - Visual sample: one toast at four rungs (defaults, inline style, classes with `!important`, headless) [S-L19-022].
+- **Impact now / as it grows:**
+  - Headless and wrapped: now, more JSX to write once. As it grows, library upgrades do not change the look, and the library can be swapped behind the wrapper [inferred].
+  - Defaults: now, no work. As it grows, the library's look drifts from the brand and overrides pile up.
+  - Middle rungs: now, quick fixes. As it grows, `!important` classes multiply until someone rewrites them headless anyway [inferred from S-L19-090, which calls this route messy beyond a few changes].
+- **Standards:** STD-components-toasts-drawers-24, STD-components-toasts-drawers-25, STD-components-toasts-drawers-34, STD-visual-details-55, STD-visual-details-57, STD-accessibility-motion-16, STD-accessibility-motion-23.
+
+### DC-L19-186: Which values are CSS variables, and at what scope
+- **Block path:** Tokens > Delivery > Web > Variable scope and state hooks
+- **Questions the designer answers:** Which values live as CSS variables on the page root, which are set per component by the component library, and which must never be CSS variables at all? How does the CSS know a component's state (opening, closing, open instantly)?
+- **Options:**
+  - **Theme tokens on `:root`.** Named custom properties on `:root`, as in Emil's easing library [S-L19-007]; components use them through `var(--ease-out)` [S-L19-017]. Modes switch with an attribute on the root (the engine uses `[data-theme]`, `[data-density]` and `[data-motion]`, checked).
+  - **Variables the component library sets, used as given.** Base UI's `--transform-origin` and Radix's `--radix-dropdown-menu-content-transform-origin` make popovers grow from their trigger [S-L19-003] [S-L19-017] [S-L19-032]; Vaul's `--initial-transform` adjusts a side drawer that does not touch the screen edge [S-L19-094]. The names differ per library [S-L19-003] (the audit writes the Base UI one [S-L19-025]), so they belong to the chosen base [inferred].
+  - **Component-internal computed variables.** Sonner builds its stack transform in CSS from `--toasts-before`, `--lift-amount` and `--offset` [S-L19-006]. They change when the stack changes, not every frame [inferred].
+  - **Per-frame values: never an inherited variable on a parent.** Variables are inherited, so changing one restyles every child; a drawer's drag lagged past about 20 list items until the transform was set on the element itself [S-L19-005]; in React, write per-frame values to `ref.current.style` [S-L19-013].
+  - **State as data attributes.** Sonner styles state through `data-mounted`, `data-expanded` and `data-front` [S-L19-006]; the recipes use `[data-starting-style]`, `[data-ending-style]`, `[data-instant]`, `[data-closed]` and `[data-visible]`, with `@starting-style` first and a `data-mounted` flag as fallback [S-L19-017] [S-L19-003].
+- **Visual effect:** None when right. When wrong: dropped frames while dragging a long drawer [S-L19-005], and popovers that grow from their own center instead of the button that opened them [S-L19-003].
+- **Depends on (upstream):** Q-token-08 (`web-delivery`), Q-comp-01 (the base library decides the variable and attribute names), DC-L10-18.
+- **Affects (downstream):** the CSS export, component recipes, DESIGN.md usage notes, the review lint (STD-performance-properties-11 already flags drag offsets written to `--swipe` or `--drag` variables).
+- **Token encoding:** Only theme-level values are DTCG tokens (emitted on `:root`). Library variables and state attributes are not tokens; they are documented in each component's notes [inferred]. Example: `.popover { transform-origin: var(--transform-origin); transition: transform 200ms var(--ease-out), opacity 200ms var(--ease-out); }` [S-L19-017].
+- **Platform notes:** Web only. The attribute names assume a library that sets them (Base UI is named only for `--transform-origin`) [S-L19-017].
+- **Accessibility constraints:** `[data-instant]` removes the animation only for neighbouring tooltips; the first still waits (STD-enter-exit-origin-10). Reduced-motion blocks apply to state transitions too (STD-accessibility-motion-01).
+- **Default + heuristic:** Default: tokens and modes as `:root` custom properties (confirms DC-L10-18); components consume the base library's variables and data attributes instead of computing origin or state themselves; values that change every frame are written inline on the moving element. Heuristic: if it changes every frame, it is not a variable; if it changes per theme, it is a `:root` token; if the library measures it, use the library's variable.
+- **Evidence:** [S-L19-003] [S-L19-005] [S-L19-006] [S-L19-007] [S-L19-013] [S-L19-017] [S-L19-025] [S-L19-032] [S-L19-094]; compared with DC-L10-18.
+- **Maps to:**
+  - Q-token-08, option `web-delivery`: keep the current text (custom properties for semantics, media queries for preferences, container queries for components) and add "custom properties sit on `:root` for tokens and modes; component state uses the base library's variables and data attributes; per-frame values are inline transforms"; new Use/avoid line "avoid CSS variables for values that change every frame (STD-performance-properties-11)".
+  - Q-comp-01: new note "the chosen base decides the transform-origin variable and state attribute names; keep them inside the wrapper" [inferred].
+  - Visual samples: a drawer with 20+ items dragged with a variable and with an inline transform [S-L19-005]; a popover growing from its center and from its trigger [S-L19-003].
+- **Impact now / as it grows:**
+  - Scoped as above: now, the recipes are correct from the start. As it grows, switching base library (Radix to Base UI) changes only the names inside the wrappers [inferred].
+  - Everything as variables: now, it feels tidy. As it grows, drag performance falls as lists grow [S-L19-005].
+- **Standards:** STD-performance-properties-11, STD-enter-exit-origin-03, STD-enter-exit-origin-06, STD-enter-exit-origin-10, STD-enter-exit-origin-40, STD-visual-details-26.
+
+### DC-L19-187: Component variant axes named once for Figma, tokens and code
+- **Block path:** Components > API > Variant axes and their code encoding
+- **Questions the designer answers:** What are each component's variant axes (size, intent, state)? Are they spelled the same in Figma, in token names and in code props? How does a chosen variant become classes in code?
+- **Options:**
+  - **A typed variant API (cva)** for components with real variants, named in the source as size, intent and state [S-L19-029]; must-level when a component has variants (STD-visual-details-62).
+  - **Ad hoc conditional classes (clsx)** for one-off conditions; the two compose [S-L19-029]. Template-literal ternaries three conditions deep are banned (STD-visual-details-62).
+  - **Figma variants for state, size and type** (DC-L07-22); the third item of that list is "type" where the code source says "intent".
+  - **Token modifiers**: variant (primary, secondary, success, error), state (hover, press, focus, disabled) and scale (DC-L07-04, EightShapes).
+  - **State from the library as data attributes** instead of a state prop, where the base library sets them [S-L19-006] [S-L19-017].
+- **Visual effect:** Indirect: the same size or intent looks and behaves the same in every component (STD-visual-details-36); mismatched axes show up as a "medium" button next to a "medium" input of a different height [inferred].
+- **Depends on (upstream):** Q-token-02 (grammar), Q-comp-01 (base), Q-token-01 (whether component tokens exist), Q-tool-04 (Code Connect property maps).
+- **Affects (downstream):** component token paths, Figma variant properties, code props, cva configurations, Code Connect mappings, DESIGN.md component tables.
+- **Token encoding:** component tokens keyed by the same axis values, for example `button.height.sm|md|lg` and `button.bg.{intent}.{state}`, and a cva config with `variants: { size, intent }` whose keys match [inferred names].
+- **Platform notes:** the curated list names cva for variant-driven Tailwind styling, in a React-centric list [S-L19-029]; the sources give nothing for SwiftUI or Compose.
+- **Accessibility constraints:** the state axis always includes focus-visible and disabled (visible focus is a locked floor); the smallest size still meets the 24px target floor.
+- **Default + heuristic:** Default: three axes spelled `size`, `intent` and `state` in Figma variant properties, component token paths and code props; states the base library sets stay data attributes. Differs from DC-L07-22 in one word: "intent" instead of "type", following the code source [S-L19-029] and avoiding a clash with the HTML `type` attribute on buttons [inferred]; DC-L07-04 already warns against `type` as a name part because it is a homonym. Heuristic: a condition that appears in more than one component, or needs a Figma variant, is an axis; anything else is clsx.
+- **Evidence:** [S-L19-006] [S-L19-017] [S-L19-029]; compared with DC-L07-04, DC-L07-22, DC-L07-24, DC-L08-04.
+- **Maps to:**
+  - Q-token-02: new option `variant-axes`: "component variants use `size`, `intent` and `state`, spelled the same in Figma, tokens and code".
+  - Q-tool-04: Code Connect prop maps become one-to-one when the axes match [inferred].
+  - Q-comp-01 (with Tailwind): code encoding default "cva for variant-shaped components, clsx for ad hoc classes" (STD-visual-details-62).
+- **Impact now / as it grows:**
+  - Shared axes: now, one naming decision. As it grows, new components, Code Connect maps and agent-written code line up without translation tables [inferred].
+  - Separate names per tool: now, no work. As it grows, every handoff needs a mapping, and mismatched sizes creep in.
+- **Standards:** STD-visual-details-62, STD-visual-details-36.
+
+### DC-L19-188: What each token and rule tells an agent: the use, the exact value and the reason
+- **Block path:** Tokens > Governance > Descriptions and agent rules
+- **Questions the designer answers:** Does each token say only what it is, or also when to use it, when not to, and why? Do the rules we hand to AI coding tools carry their reasons? Are values given exactly, or "about right"?
+- **Options:**
+  - **Describe what it is.** The engine's motion descriptions today are one-liners such as "Entering: decelerate." (checked).
+  - **Describe use and reason, strictly.** Emil packages taste as one strict rule file per aspect of the interface, each rule stating why it has to be done that way, so the agent does not guess or invent its own rules [S-L19-004]; his course ships its principles as a rules file and a SKILL.md for coding agents [S-L19-001] [S-L19-007]. The audit gives reasons in plain words, for example ease-in delays the exact moment the user is watching [S-L19-025].
+  - **Exact values only.** Take curves, durations and springs from the tables and never approximate [S-L19-018]; copy values exactly [S-L19-025]; plans cite exact values, file and line, and one exemplar to imitate [S-L19-026].
+  - **Docs that machines can read.** A "copy as markdown" button so content can be fed to LLMs [S-L19-001]; interactive examples with ready-to-use code [S-L19-006].
+- **Visual effect:** None on screen. Agents given the rules with reasons produce clearly better results [S-L19-004], which shows as fewer invented values and fewer parallel tokens [inferred].
+- **Depends on (upstream):** Q-scope-03 (`ai-agents`), Q-token-09 (descriptions), Q-dist-02 (how agents read the system).
+- **Affects (downstream):** `$description` on every semantic token, DESIGN.md, the AGENTS.md snippet, rules files, review messages.
+- **Token encoding:** `$description` in one or two plain sentences with use, avoid and reason, for example on `motion.easing.out`: "Anything entering or leaving the screen. Never use ease-in on UI: it starts slowly and delays the moment the user is watching." (reason from [S-L19-025]) [inferred wording].
+- **Platform notes:** none.
+- **Accessibility constraints:** floor rules carry their reason too, for example 16px inputs so iOS does not zoom the page (STD-accessibility-motion-27).
+- **Default + heuristic:** Default: every semantic token and every house rule written into DESIGN.md carries its use and its reason, with exact values. Extends DC-L07-23 (a description of intended use) with the reason. The engine gap is already recorded: DESIGN.md writes each standard's rule and values but leaves out its "why" (conflict note on STD-process-review-taste-55). Heuristic: a rule without a reason gets reinvented; a description an agent can act on says when to use it, when not to, and why.
+- **Evidence:** [S-L19-001] [S-L19-004] [S-L19-006] [S-L19-007] [S-L19-018] [S-L19-025] [S-L19-026]; compared with DC-L07-23, DC-L07-24, DC-L11-23, DC-L19-171.
+- **Maps to:**
+  - Q-token-09, option `descriptions`: new wording "a short note on each semantic token with its use, what to avoid, and why"; new Use/avoid line "avoid descriptions that only restate the name".
+  - Q-dist-02 (planned; the interview skips it until built), option `rules`: rules are strict and each states its reason (STD-process-review-taste-55). This agrees with DC-L19-171, which adds the option `aspect-files` (one rule file per aspect, each rule with its reason); no second change is proposed here.
+  - Engine: write the standards' "why" into DESIGN.md (the recorded conflict).
+  - Visual sample: a token detail card showing the same curve with a bare description and with use plus reason.
+- **Impact now / as it grows:**
+  - Use plus reason: now, longer descriptions to write once (the engine can generate most). As it grows, each new agent session starts with the same rules and reasons, so fewer tokens are forked or misused [inferred].
+  - What-it-is only: now, compact. As it grows, agents and new teammates re-derive rules and invent near-duplicates [S-L19-025].
+- **Standards:** STD-process-review-taste-55, STD-visual-details-26, STD-easing-duration-17.
+
+### DC-L19-189: When the codebase already has tokens: map onto them, extend, never fork
+- **Block path:** Tokens > Architecture > Source of truth > Existing tokens in the repo
+- **Questions the designer answers:** Does the project already have tokens or CSS variables (colors, radii, spacing, fonts, easing, durations)? Should OpenDesigner's output adopt those names, replace them, or sit beside them? What happens to near-duplicates it finds?
+- **Options:**
+  - **Map and extend (the house rule).** Recon first: where tokens live (global CSS with `--ease-*` and `--duration-*`, the Tailwind config, keyframes) and the existing duration scales and spring configs [S-L19-027] [S-L19-024] [S-L19-031]. Build from them and extend what is missing; a parallel system is a defect [S-L19-018]; new curves go into the repo's existing token file [S-L19-026]; do not fork a new curve for press feedback [S-L19-028]. The same applies to libraries: read `package.json`, use what is installed, and do not replace a competitor unless asked [S-L19-029]. Schoger did the design-side version, switching the page's grays from slate to neutral to match the grays in the product screenshot on the page [S-L19-103].
+  - **Replace through a migration.** The builder's model becomes the master (the Q-tool-01 default, DC-L16-02) and old tokens are deprecated for one release before removal (DC-L07-23). Only when the person asks for it [inferred from STD-visual-details-56's "unless asked"].
+  - **Side by side.** The builder emits its own `--ds-*` set next to the existing one: the parallel set the standard forbids (STD-visual-details-26).
+  - **Consolidate what is there.** Several near-identical hand-typed curves are a consolidation finding [S-L19-025], rated LOW (polish) [S-L19-027]; one plan per finding, merged only when the files and the fix are the same, such as one easing-token swap across components [S-L19-026].
+  - **No project at all.** When prototyping with nothing to draw tokens from: neutral grays, one accent and the system font stack [S-L19-031] (STD-visual-details-25, a prototyping rule).
+- **Visual effect:** Map and extend: new screens look like the product people already use; prototype variants look as if they could ship in the product tomorrow [S-L19-031]. Side by side: two almost-equal grays or curves, which shows as small, hard-to-name inconsistencies [inferred].
+- **Depends on (upstream):** Q-scope-02 (existing screens), Q-scope-05 (start from an existing product; adopt, adapt or create), Q-ref-01 `code`, Q-tool-01.
+- **Affects (downstream):** the Q-tool-01 default, export names (prefix and aliases), the token file location, the Tailwind config, review findings, the opendesigner-extract skill.
+- **Token encoding:** existing names are kept as each matching token's code name, so the export writes the project's own variables (for example the DTCG token `motion.easing.out` exported as the project's existing `--ease-out`) [inferred; DC-L16-02 already gives every token a code syntax].
+- **Platform notes:** Mostly web in these sources. In Figma, existing variables play the same role (DC-L07-08).
+- **Accessibility constraints:** An existing token that fails a locked floor (for example text below AA contrast) is not adopted as is; the floor wins and the change is reported [inferred from the guardrails].
+- **Default + heuristic:** Default: when Q-scope-02 is not `greenfield`, or recon finds tokens, OpenDesigner reads the existing tokens as its starting values, keeps their names as code names, and only extends. Differs from DC-L16-02 and the Q-tool-01 default `builder` in one respect: the builder's model can stay the master, but its export must write the project's existing names instead of a second prefixed set. Heuristic: before adding any token, search for one that already does the job; three near-matches means one token.
+- **Evidence:** [S-L19-018] [S-L19-024] [S-L19-025] [S-L19-026] [S-L19-027] [S-L19-028] [S-L19-029] [S-L19-031] [S-L19-103]; compared with DC-L07-08, DC-L07-23, DC-L11-01, DC-L11-16, DC-L16-02.
+- **Maps to:**
+  - Q-tool-01: new heuristic "if the repo already has tokens, the export keeps their names and extends them; replacing them is an explicit migration".
+  - Q-scope-02 and Q-scope-05 (`existing-product`, `adapt`): recon runs first, and the found tokens pre-fill the answers.
+  - Q-token-02, option `prefix`: "never rename a project's existing tokens to add a prefix".
+  - Q-dist-03 (planned): near-duplicate curves and durations reported as LOW consolidation findings [S-L19-027].
+  - Visual sample: five near-matching hand-typed curves becoming one `var(--ease-out)` [S-L19-025].
+- **Impact now / as it grows:**
+  - Map and extend: now, a slower first run because recon comes first. As it grows, one set of tokens to maintain, and every agent finds and reuses it.
+  - Replace: now, clean names. As it grows, a migration with a deprecation window and codemods.
+  - Side by side: now, the fastest start. As it grows, two systems drift apart and every review has to pick one.
+- **Standards:** STD-visual-details-26, STD-visual-details-56, STD-visual-details-25, STD-process-review-taste-11, STD-process-review-taste-10, STD-process-review-taste-49.
+
+### DC-L19-190: How spring tokens are stored
+- **Block path:** Tokens > Types > Motion > Spring encoding
+- **Questions the designer answers:** Are springs stored as the two numbers designers reason with (how much it overshoots, and how quickly it arrives) or as physics numbers (stiffness, mass)? What does each platform receive? What does the web get when it cannot run a spring?
+- **Options:**
+  - **Damping ratio and response (the house standard).** Apple replaced mass, stiffness and damping with these two designer-friendly numbers; 1.0 means no bounce, lower is bouncier; response is how quickly the value reaches the target, in seconds, and is not a duration [S-L19-020]. Apple's values: move or reposition 1.0 and 0.4, rotation 0.8 and 0.4, drawer or sheet 0.8 and 0.3 [S-L19-020]. On the web, Motion's `bounce` and `duration` map closely to damping and response [S-L19-020]; the house skills write it as `{ type: "spring", duration: 0.5, bounce: 0.2 }` [S-L19-018] [S-L19-023] [S-L19-025] [S-L19-033], with bounce kept to 0.1-0.3 [S-L19-018].
+  - **Damping ratio and stiffness (the engine and Q-token-05 today).** The engine stores `dampingRatio`, `stiffness` and `mass` and derives Apple's duration and bounce (checked); Q-token-05's option text stores `{dampingRatio, stiffness}`; the M3 export does the same (DC-L04-22).
+  - **Mass, stiffness and damping.** Only when more control is needed [S-L19-018] [S-L19-023].
+  - **Web fallback.** A CSS `linear()` sample of the spring (Atlassian; the engine writes one), or a cubic-bezier (DC-L04-22).
+- **Visual effect:** The same motion when converted correctly. What changes is what a designer can tune by eye: bounce 0.2 reads as a slight overshoot, response 0.3 as snappy; stiffness 700 means nothing until it is plotted [inferred].
+- **Depends on (upstream):** Q-motion-01 (personality), Q-motion-04 (springs or not), Q-token-05, Q-token-08 (pipeline outputs).
+- **Affects (downstream):** `motion.spring.*` tokens, Figma's spring bounce field (DC-L07-14), SwiftUI, Compose and Motion code, the CSS fallback.
+- **Token encoding:** a `transition` token with its fallback curve, and the spring in `$extensions`: `{"spring": {"dampingRatio": 0.8, "response": 0.3}}` for a sheet [S-L19-020]. Stiffness is derived for platforms that need it: stiffness = (2π / response)² with mass 1 [inferred; the engine already uses the inverse, response = 2π / √stiffness]. Bounce = 1 − dampingRatio for ratios up to 1 [inferred; the engine uses the same mapping].
+- **Platform notes:** SwiftUI takes duration and bounce, Compose takes dampingRatio and stiffness (DC-L04-22), Motion takes bounce and duration [S-L19-020], and a React Native sheet uses `{ duration: 300, dampingRatio: 0.8 }` (STD-components-toasts-drawers-40). So the stored pair converts to every target, with Compose needing the derived stiffness.
+- **Accessibility constraints:** Reduced motion removes springs and overshoot and keeps a short fade (STD-accessibility-motion-02).
+- **Default + heuristic:** Default: store `dampingRatio` and `response` (in seconds) as the source values; derive stiffness for Compose and a `linear()` sample for CSS. Most UI starts at damping 1.0; bounce only when the gesture carried momentum [S-L19-020]. Differs from the Q-token-05 option text and the Q-motion-04 default, which store stiffness (the Q-motion-04 conflict is recorded on STD-springs-gestures-02; Q-token-05's is not). Heuristic: if a designer cannot predict the feel from the two stored numbers, store different numbers.
+- **Evidence:** [S-L19-018] [S-L19-020] [S-L19-023] [S-L19-025] [S-L19-033]; compared with DC-L04-22, DC-L04-28, DC-L07-14, DC-L09-06, DC-L19-88, DC-L19-99.
+- **Maps to:**
+  - Q-token-05, option `motion`: change "springs as `{dampingRatio, stiffness}` in `$extensions`" to "springs as `{dampingRatio, response}` in `$extensions`, stiffness derived per platform, with a `linear()` or bezier fallback". This is the storage side of DC-L19-88 (the presets) and DC-L19-99 (the `$extensions` shape), which store the same pair.
+  - Q-motion-04: owned by DC-L19-88 (new default: damping ratio and response with four presets); this card agrees and proposes nothing further there.
+  - Engine (proposed): make `dampingRatio` and `response` the stored spring fields and derive `stiffness`.
+  - Visual sample: Apple's sheet spring (0.8, 0.3) next to its move spring (1.0, 0.4), plotted over time.
+- **Impact now / as it grows:**
+  - Damping and response: now, one conversion function. As it grows, designers tune springs on every platform with the same two numbers.
+  - Damping and stiffness: now, matches Compose and M3 directly. As it grows, every design review needs a plot to know what a stiffness value feels like [inferred].
+- **Standards:** STD-springs-gestures-02, STD-components-toasts-drawers-40, STD-accessibility-motion-02.
+
+## Part B: Proposed questionnaire changes
+
+Collected from every card's "Maps to". A row is one change to one question (or one part of the interview); where several cards propose parts of the same change, the card column lists all of them. Entries that only confirm a current option or default are left out; added visual samples are included, because they change what the question shows. "Kept" inside a change means the card confirms that part. Evidence lists the sources and standards the card cites for that change; the card's own Evidence line has the full list. Rows are in `questions.json` order, with proposed questions after their family.
+
+Notes for maintainers, found while assembling (details under "Open questions / gaps"):
+- **Q-plat id clash.** DC-L19-96 was renumbered to Q-plat-15 during the motion check, but DC-L19-151 also proposes Q-plat-15 (keyboard shortcuts), and DC-L19-144 and DC-L19-153 still call DC-L19-96's question Q-plat-11. This table lists the slowest-device question as Q-plat-11, which is free, and keeps Q-plat-15 for shortcuts.
+- **Two versions of one question.** Q-motion-12 (DC-L19-83, zoom 2) and Q-pattern-10 (DC-L19-130, zoom 3) both ask which rare moments get celebration, with different option lists and defaults. They should become one question.
+- **Two floors for one option.** DC-L19-08 proposes 55% (light) and 50% (dark) for body text under Q-color-22 `opacity-levels`; DC-L19-23 proposes 60% and 50% for secondary text.
+- **Planned questions.** Changes to Q-pattern-05, Q-dist-01, Q-dist-02, Q-dist-03, Q-pref-01 and Q-pref-02 take effect only when those questions are built; the new lint rules all land on planned Q-dist-03.
+- **Unnumbered new questions.** Five new questions have no id yet (DC-L19-16, DC-L19-28, DC-L19-113, DC-L19-115, DC-L19-118).
+
+### B1. Questions
+
+| Q-id | Change | Evidence | Card |
+|---|---|---|---|
+| Q-ref-01 | New option `product-screens` (screenshots of products you use, split from `screenshot`; showcase shots are read for mood only) and new option `per-section` (a different site for each section, flow only); new heuristic: one follow-up per reference, "What do you like about it?", saved as the reason; visual sample: one prompt built from a showcase shot and from a shipped-product screenshot | [S-L19-086] [S-L19-062] [S-L19-008] | DC-L19-161 |
+| Q-scope-01 | `marketing` option note: this is where longer, explanatory and scroll-triggered motion is allowed and where product-UI budgets relax | [S-L19-012] [S-L19-017] | DC-L19-84 |
+| Zoom 0, question 1 (`context.product`) | New follow-up for the goal when the person's words do not give one [inferred]; touches stage 01 as well as stage 03 | [inferred] | DC-L19-177 |
+| Q-scope-04 | New effect: it also sets how deep Q-token-01 goes (lean core or component tier) | [S-L19-054] | DC-L19-181 |
+| Q-scope-02, Q-scope-05 | For `existing-product` and `adapt`: recon runs first, and the tokens it finds pre-fill the answers | [S-L19-027] | DC-L19-189 |
+| Q-aud-03 | Remove `wcag22-a`, or show it as unavailable ("AA is the locked floor"); relabel `wcag22-aa` "WCAG 2.2 AA, with locked rules for touch targets, zoom, motion and text size" (default kept) and `wcag22-aa-plus` "AA plus 7:1 body text and 44px targets for the mouse too"; heuristic [inferred]: recommend `wcag22-aa-plus` when Q-aud-02 is `high-trust`; the Show strip lists each locked rule with its standard id | STD-mobile-touch-09; [S-L19-028] [S-L19-020] | DC-L19-141 |
+| Q-aud-04 | New ask "Beyond the device's own settings, which controls should people get inside the app?"; `reduced-motion` and the device parts of `contrast` and `text-size` become always-on notes, not options; new option `personalize` (rearrange or hide controls); new default "none beyond the device settings"; visual sample: the preview's mode switcher with one toggle per device signal, labelled "always followed" | [S-L19-020] [S-L19-016] [S-L19-028] | DC-L19-142 |
+| Q-aud-04 | `situational` ("one hand busy"): heuristic [inferred]: when picked, the builder applies the bottom-weighted reach rule and flags primary actions anchored at the top | [S-L19-076] [S-L19-077] | DC-L19-145 |
+| Q-brand-01 | New heuristic: one lead emotion, named back to the person and recorded; visual sample: one layout in a friendly and a premium flavor; Show: the 2-3 style tiles use the same layout, so only the style differs [inferred] | [S-L19-043] [S-L19-062] | DC-L19-162 |
+| Q-brand-02 | New heuristic [inferred]: after the person names products, ask why for each and offer the answers as tie-breaker candidates for Q-brand-07 | [inferred] | DC-L19-161 |
+| Q-brand-08 | New tick box "Product screenshots" | [S-L19-072] [S-L19-103] | DC-L19-72 |
+| Q-brand-04 | `hero-moments` reworded from "opening a page or the primary action" to "rare moments such as first run, success and empty states" (default kept); visual samples: a plain success toast next to a celebratory one, and the 404 quiz and mini-game examples | [S-L19-012] [S-L19-024] [S-L19-079] [S-L19-063]; STD-when-to-animate-09 | DC-L19-83, DC-L19-130 |
+| Q-brand-06 | New heuristic: at most two giant-text moments per marketing page; visual sample: a giant-text hero (a 290px display headline with small navigation beneath) | [S-L19-057] [S-L19-065] [S-L19-060] | DC-L19-26 |
+| Q-brand-07 | New heuristic [inferred]: the lead emotion becomes the goal of the first principle | [inferred] | DC-L19-162 |
+| Q-brand-07 | No option for Apple's eight principles (STD-visual-details-48 already makes them the builder's reasoning vocabulary); every generated set includes a familiarity rule and a purpose rule; Show [inferred]: each principle's do/don't pair names which of the eight it serves | [S-L19-020]; STD-visual-details-37, STD-when-to-animate-22 | DC-L19-163 |
+| Q-brand-07 | New option `from-goal`: start from what people come to do; the first principle protects it | [S-L19-054] | DC-L19-177 |
+| Q-plat-01 | `web` option text gains "on phones it ships the mobile baseline first" | STD-mobile-touch-21; [S-L19-028] | DC-L19-144 |
+| Q-plat-05 | Default `hybrid` kept; when Q-plat-08 is `react-native`, `brand-first` shows a note that the look runs on the platform's own navigation, sheets and tabs; visual sample: one screen on iOS and Android with the native sheet and tab bar, both pressing to 0.97 | STD-mobile-touch-41, STD-mobile-touch-42; [S-L19-016] | DC-L19-147 |
+| Q-plat-10 | New heuristic: every gesture has a visible twin; evolve familiar formats instead of replacing them; `novel-core` text gains "backed by a visible control, proven better and tested" (default `custom-skin` kept); visual samples: Gmail's delete by swipe and by button, Resend's swipe to send beside a hold-to-confirm button | [S-L19-035] [S-L19-076] [S-L19-020] | DC-L19-146 |
+| Q-plat-06 | Default `system` kept; note under `restyled` and `custom`: the same press scale on iOS and Android, ripple only in a Material-styled app | [S-L19-016] | DC-L19-147 |
+| Q-plat-08 | Each option gains a one-line "comes with" note naming the house toolkit for that stack; default `react` for the web kept | [S-L19-029] [S-L19-016] [S-L19-015] [S-L19-034] | DC-L19-148 |
+| Q-plat-02 | Visual sample: a thumb-reach overlay on the draft phone screen, next to the Spotify Wrapped redesign with share and volume moved to the bottom and TikTok's bottom bar and right-edge column | [S-L19-076] [S-L19-077] | DC-L19-145 |
+| Q-plat-03 | New heuristic and use/avoid line: hover never carries anything essential; gate it by capability, never by device; default text becomes "touch + pointer + keyboard, possibly on the same device" (default set kept); visual sample: a tapped button stuck in its hover state next to the gated version, and a button scaling to 0.97 as the finger lands | [S-L19-028] | DC-L19-143 |
+| Q-plat-03 | The WCAG 2.5.7 use/avoid line is kept and extended to swipe-to-confirm | [S-L19-035] | DC-L19-146 |
+| Q-plat-03 | `keyboard` option text: "Keyboard: visible focus everywhere, shortcuts shown on buttons and menus, instant feedback with no animation" | [S-L19-067] [S-L19-084]; STD-when-to-animate-06 | DC-L19-151 |
+| Q-plat-11 (new; DC-L19-96 now calls it Q-plat-15, see the note above) | Follow-up to Q-plat-02 (zoom 2): "Which is the slowest phone and computer this must feel smooth on?" Default: a phone about three years old and a mid-range laptop [inferred]; the answer names real hardware the team will check on and is recorded in PRODUCT.md as an owner input [inferred]; visual sample: a 20-item drawer dragged through a parent CSS variable and with a direct transform, and a frame-budget graphic | [S-L19-005] [S-L19-016] [S-L19-028] | DC-L19-96, DC-L19-153 |
+| Q-plat-12 (new) | New question (zoom 2; show if Q-plat-01 includes `web` and Q-plat-02 includes `phone`): "On phones, should your web product feel like an installed app or like a page people scroll?" Options `app-shell`, `document`, `pwa`, `per-surface`; default derived from Q-scope-01; visual sample: a bottom button hidden under the URL bar at `100vh` next to `100dvh`, and a header padded under the notch | [S-L19-028] | DC-L19-144 |
+| Q-plat-13 (new) | New question (zoom 2; show if Q-plat-01 includes `desktop`): "Is your desktop app a window people go to, or should it also appear where they already work?" Options `window-only` (default [inferred]), `shortcut-panel`, `ambient`; visual sample: a Spotlight-style quick panel over another app | [S-L19-067] [S-L19-012] | DC-L19-149 |
+| Q-plat-14 (new) | New question (zoom 3; show if Q-plat-01 includes `desktop`): "Keep the system title bar, or build the window buttons into your own bar?" Options `system-titlebar`, `integrated` (default on macOS), `frameless-panels` | [S-L19-067] | DC-L19-150 |
+| Q-plat-15 (new) | New question (zoom 3; show if Q-plat-03 includes `keyboard` or Q-plat-01 includes `desktop`): "Which actions get keyboard shortcuts, and how do people learn them?" Options `os-only`, `shown-hints`, `hints-and-cheat-sheet`; defaults [inferred]: `hints-and-cheat-sheet` on desktop, `os-only` for phone-first products; visual samples: Linear's menu with its shortcut column and a quick-save window with shortcut hints | [S-L19-067] [S-L19-084] [S-L19-021] [S-L19-092] | DC-L19-151 |
+| Q-tool-01 | New heuristic: if the repo already has tokens, the export keeps their names and extends them; replacing them is an explicit migration | [S-L19-018] [S-L19-027] [S-L19-029] | DC-L19-189 |
+| Q-tool-02 | `utilities`: Tailwind's own easing, color, type, radius and shadow values are switched off; `ease-out`, `ease-in-out` and the bare `transition` class point at the house curves; `hover:` is gated on a fine pointer | [S-L19-018] [S-L19-028] [S-L19-103] | DC-L19-184 |
+| Q-tool-02 | New heuristic for `npm` and `copy-in`: product teams import the system's wrappers, never the library directly | [S-L19-090] [S-L19-022] | DC-L19-185 |
+| Q-tool-04 | Code Connect prop maps become one-to-one when the variant axes match [inferred] | [inferred] | DC-L19-187 |
+| Q-dir-01 | Visual samples for `neo-brutalist` (a sticker with a hard offset shadow) and `soft` (a clay rectangle and a tactile button) | [S-L19-075] [S-L19-058] [S-L19-052] | DC-L19-67 |
+| Q-dir-02 | New heuristic: `compact` caps product text at 24px [inferred: the source's cap is for dashboards, not for a density setting] | [S-L19-052] | DC-L19-25 |
+| Q-dir-03 | New heuristic: rank first, then one lever per level, and the smallest text is never the faintest; visual samples: Kole Jain's two treatments of one heading, subheading and paragraph set, a text block with size only against size plus two weights and two colors, and real cards before and after (the trip card, the rental listing card) instead of only a heading ladder | [S-L19-042] [S-L19-057] [S-L19-052] [S-L19-070] | DC-L19-23, DC-L19-46, DC-L19-54 |
+| Q-dir-04 | New heuristic: one card level, with the inside of a card grouped by space; default nuance: space on wide layouts, cards allowed as the main unit on compact widths; visual samples: a card nested in a card next to the same content grouped by space, and a wide canvas of stacked containers dissolved into one line and a column edge | [S-L19-053] [S-L19-057] [S-L19-061] [S-L19-068] [S-L19-080] | DC-L19-42 |
+| Q-dir-04 | Default wording "lines for long lists" becomes "space for lists; alternating tint when rows must sit tight; lines when the style is line-based" (differs from DC-L15-05; flag for the owner) | [S-L19-070] [S-L19-047] | DC-L19-43 |
+| Q-dir-04 | New heuristic for page sections: space first, bands for rhythm, a frame only as a deliberate style; `lines` visual sample for marketing pages: a page framed by vertical lines and a canvas grid | [S-L19-085] [S-L19-103] [S-L19-050] [S-L19-072] | DC-L19-53 |
+| Q-dir-05 | New heuristic for component internals: labels to the start, values to the end, every element on at least two edges; visual samples: a receipt (text hard left, prices hard right, no dividers) and a profile card before and after an edge is manufactured | [S-L19-080] | DC-L19-44 |
+| Q-dir-05 | New option `split` (headline on the start side at about 3/5, supporting text and actions at about 2/5, tops aligned); visual sample: one hero centered, start-aligned and split (the Show gains a hero [inferred]) | [S-L19-103] | DC-L19-45 |
+| Q-dir-02, Q-space-09 | New heuristic: a compact width is not a compact density [inferred from S-L19-053] | [S-L19-053] | DC-L19-49 |
+| Q-dir-04, Q-layout-05 | Show variants one at a time, full size, next to sibling content, not as a grid of thumbnails | STD-process-review-taste-43 | DC-L19-56 |
+| Q-theme-01 | `light-only` and `dark-only` become `light-first` and `dark-first`: both modes are always generated and the unshipped one is marked as not shipped; the default's "dark-only on watch" becomes "dark-first on watch" | STD-visual-details-24; [S-L19-067] | DC-L19-14 |
+| Q-theme-01 | No new question; a new automatic output when Q-plat-01 includes web: per-scheme `theme-color` tags (the engine writes `color-scheme` but no `theme-color`) | [S-L19-028] | DC-L19-15 |
+| New question (stage 07, zoom 3; no id yet) | Show only if Q-theme-01 is `light-dark-toggle`: "When someone flips the theme in the app, should it fade or sweep across?" Options `cross-fade` (default) and `reveal`; otherwise the cross-fade applies automatically with no question | [S-L19-020] [S-L19-010]; STD-accessibility-motion-09, STD-when-to-animate-06 | DC-L19-16 |
+| Q-theme-02 | New option `tint` (hue-tinted versions of the whole interface), showing the palette count (two modes times the number of tints); visual sample: one design themed red, green and blue in light and dark | [S-L19-039] | DC-L19-13 |
+| Q-theme-03 | `generator-ready` gains the gray-shift recipe as its tinting method | [S-L19-039] | DC-L19-13 |
+| Q-color-01 | New hook input "a mood image" (extract base tones and one or two accents); new heuristic for the no-brand path (three seeds, one muted, one recommended, no silent indigo, the person picks); new named fallback for a failing brand color (a complementary action color); visual samples: a screen with an unchosen saturated indigo against a muted seed, and the orange-fails, darker-orange-passes, complementary-blue-passes strip | [S-L19-051] [S-L19-061] [S-L19-062] [S-L19-086] [S-L19-103] | DC-L19-11 |
+| Q-color-02 | Default `accent` kept; visual sample: Vercel's near-monochrome console with colored build statuses, and a menu whose only blue item is the resubscribe prompt | [S-L19-039] [S-L19-080] | DC-L19-01 |
+| Q-color-03 | Visual sample for `monochrome` (Vercel; Schoger's gray 950 page); new use/avoid line "monochrome never removes status colors" | [S-L19-039] [S-L19-103] | DC-L19-01 |
+| Q-color-05 | Options and default kept; `data-led` added as a named variant of `strict` for dashboard views and `imagery-led` as a variant of `moderate` for marketing pages with product visuals; new heuristic "defaults gray, color marks change, action or data" | [S-L19-039] [S-L19-056] [S-L19-061] [S-L19-072] [S-L19-080] | DC-L19-01 |
+| Q-color-08 | Visual sample: the ramp strip labelled with each job in both numberings (1 to 12 and 50 to 950), in light and dark | [S-L19-039] [S-L19-070] | DC-L19-06 |
+| Q-color-09 | New option `accent-wash` (the background is a very light or very dark version of the accent); new heuristic "match the gray family the product already uses", pre-filled from Q-ref-01 or an extraction; visual sample: pure black against a GitHub-style blue-black, orange-tinted cards, and a Tailwind 50/500 pair | [S-L19-070] [S-L19-103] [S-L19-051]; STD-visual-details-26 | DC-L19-03 |
+| Q-color-10 | Default kept; new heuristic: a marketing-only system uses only three to five of its neutrals | [S-L19-039] | DC-L19-02 |
+| Q-color-13 | New heuristic for dark subtle levels: a dim fill with a bright same-hue label | [S-L19-052] [S-L19-051] | DC-L19-06 |
+| Q-color-14 | Under the kept default `role-tiers`, a light-mode sub-choice: `cards-lighter` (default; the engine's current output) or `cards-darker`; visual sample: one dashboard Vercel-style, Notion-style and Supabase-style, with the dark column lighter-when-higher | [S-L19-039] [S-L19-051] | DC-L19-02 |
+| Q-color-14 | Dark default kept; visual sample in the dark column: a card raised by fill, a search bar raised by border only, and a card with both | [S-L19-039] [S-L19-051] [S-L19-052] | DC-L19-05 |
+| Q-color-16 | New heuristic "double the distance for dark backgrounds"; visual sample: one dark dashboard with reflected light steps (the cards vanish) and with doubled steps | [S-L19-039] [S-L19-070] | DC-L19-04 |
+| Q-color-19 | New option `equal-lightness` (a generation method for the categorical set); new heuristic "pick by series count"; default refined to brand-gray for single-series charts and categorical for multi-series; visual samples: a fixed-lightness OKLCH bar chart beside a naive HSL spectrum, and a line chart with a gray previous-period line and a legend | [S-L19-039] [S-L19-075] | DC-L19-10 |
+| Q-color-20 | New zoom-3 sub-choice "direction": `toward-contrast` (default), `always-darker`, `lighter-hover`; visual sample: one button in light and dark with each direction, hover and press side by side | [S-L19-039] [S-L19-051] | DC-L19-07 |
+| Q-color-21 | New option `tinted-deep` (the dark base takes a deep brand or chosen hue) with an automatic status-color check; default `near-black` kept | [S-L19-052] [S-L19-082] | DC-L19-03 |
+| Q-color-22 | New option `brand-ink`; new floor on `opacity-levels` (55% in light, 50% in dark for body text); visual sample: the text ladder at 11%, 20% and 40% on white and on a 96% page, and the dark version with white only on the logo and one key number | [S-L19-039] [S-L19-051] [S-L19-057] | DC-L19-08 |
+| Q-color-22 | New heuristic for `opacity-levels`: a floor of 60% (light) and 50% (dark) for secondary text, or a per-surface contrast check; disabled text stays exempt (DC-L01-14). See the note on the two floors above | [S-L19-057] | DC-L19-23 |
+| Q-color-23 | New heuristic for dark borders: brighter than an inverted palette gives, never so bright that the card gets too much contrast; visual sample: a dark card whose too-bright border is lowered and whose chip is dimmed | [S-L19-052] | DC-L19-05 |
+| Q-color-23 | New default wording "decorative edges use a see-through ring; interactive boundaries use the 3:1 border"; visual sample: card edges four ways (none, subtle shadow, 85% border, 10% ring) | [S-L19-039] [S-L19-103]; STD-visual-details-14 | DC-L19-09 |
+| Q-color-24 | New default: forced colors, increased contrast and reduced transparency, always on the web; the `increased` option becomes always on rather than a choice | [S-L19-020] | DC-L19-17 |
+| Q-color-25 | New option `single-hue`; new heuristic "one hue per gradient, noise sparingly"; visual samples: a blue-to-green gradient replaced by a flat fill, and a Gemini-style hero with a mesh gradient, light noise and a gradient-stroke plan card | [S-L19-045] [S-L19-082] | DC-L19-12 |
+| Q-color-26 | `alpha-neutrals` kept; the ring (10%) and the well (5%) become named uses | [S-L19-103] | DC-L19-09 |
+| Q-type-02 | Also show it for `open-neutral` and `open-custom` when the face is loaded from files, so loading and the metric-matched fallback get decided | STD-visual-details-10 | DC-L19-28 |
+| Q-type-04 | Show line: add a long-label row to the button row | [S-L19-054] | DC-L19-35 |
+| Q-type-05 | `display-face` gains "for giant text only; check the licence" | [S-L19-057] [S-L19-065] [S-L19-050] | DC-L19-26 |
+| Q-type-05 | New option `accent-serif` (sans everywhere, plus a serif for a few emphasized words or lines in headlines; a narrower use of `sans-serif`); new heuristic: a second face must have a named job, and display and handwritten faces never go below heading sizes; visual sample: a hero with lines split between serif and sans; default otherwise kept | [S-L19-001] [S-L19-042] [S-L19-062] [S-L19-049] | DC-L19-27 |
+| Q-type-06 | New default: tabular numeric styles whatever the option (`numeric-face` then only adds a large metric style); visual samples: Schoger's stats row, a ticking counter with proportional against tabular digits, and a monospace uppercase eyebrow | [S-L19-103]; STD-visual-details-02 | DC-L19-27, DC-L19-33 |
+| Q-type-07 | Default `variable-opsz` kept; visual samples: Inter's text cut and display cut on the same 48px heading, and one headline at 500, 550 and 600 | [S-L19-103] | DC-L19-24, DC-L19-28 |
+| New question (stage 10, zoom 3; no id yet) | "Should any alternate letter shapes be on or off (single-storey a, tailed l)?", previewed with a confusable-pairs specimen | [S-L19-103] | DC-L19-28 |
+| Q-type-08 | New default: 14px UI body on desktop; 16px input text (on coarse pointers at minimum); body of at least 16px on mobile web; 17pt on iOS; visual sample (here or under Q-type-16): a squished mobile screen next to real app sizes | [S-L19-028] [S-L19-053]; STD-mobile-touch-11 | DC-L19-32 |
+| Q-type-15 | Default `fixed` kept; `fluid` gains "display and headline only, interpolated between the layout's narrowest and widest container, with a rem term in the middle value"; visual sample: the font-size-against-width graph with its min and max caps | [S-L19-042] [S-L19-020] | DC-L19-31 |
+| Q-type-09 | Ratio bands kept; visual sample (here or under Q-dir-02): landing-page and dashboard text styles side by side | [S-L19-047] [S-L19-052] | DC-L19-25 |
+| Q-type-10 | New heuristic: a size budget per surface, plus a review check | [S-L19-052] [S-L19-047] [S-L19-042] | DC-L19-25 |
+| Q-type-11 | New heuristic: the no-inversion check after snapping, falling back to 2px; new default for display roles 1.05-1.1; visual samples: a 64px+ heading on auto next to 110%, and a paragraph at 150% under a heading at 110-130% | [S-L19-020] [S-L19-042]; STD-visual-details-06 | DC-L19-22 |
+| Q-type-12 | New heuristic: body copy never takes the secondary text color | [S-L19-042] | DC-L19-23 |
+| Q-type-12 | New default "3 weights in the system, at most 2 in any one view, with at least one named weight between them"; new use/avoid line: underline only links | [S-L19-057] [S-L19-103] [S-L19-080]; STD-visual-details-09 | DC-L19-24 |
+| Q-type-13 | Remove `zero`, or reword it "the font's spacing for body text, with headings still tightened and capitals still loosened"; new default: the card's role-and-size table; visual samples: one large heading at 0 and at -2%, a hero heading at -2% to -3% with 110-120% line height, and a monospace uppercase eyebrow with wide tracking | [S-L19-070] [S-L19-052] [S-L19-103] [S-L19-020]; STD-visual-details-04, STD-visual-details-05 | DC-L19-21 |
+| Q-type-14 | `measure-45-75` becomes `measure-65` ("45-65 characters, capped at about 65ch"); new option `heading-40ch`; new default: body 65ch and headings 40ch; visual sample: one heading at 35, 40 and 45ch | [S-L19-004] [S-L19-103]; STD-visual-details-01 | DC-L19-29 |
+| Q-type-14 | New option `wrap-balance-pretty`, on by default for the web export; visual samples: a stats heading with an orphan word next to the `pretty` fix, and a call-to-action heading with `pretty` against `balance` | [S-L19-103] | DC-L19-30 |
+| Q-type-08, Q-type-09, Q-type-10 | Visual sample change: render each option at 100% in a phone-width and a desktop-width frame, one at a time | [S-L19-031] [S-L19-042] [S-L19-057] | DC-L19-34 |
+| Q-space-02 | Default `hybrid` kept; use/avoid adds: do not round large values to 5 or 10 off the scale | [S-L19-103]; STD-visual-details-26 | DC-L19-47 |
+| Q-space-05 | Default `1:2` kept; new heuristic: the action gap is at least twice the pair gap; visual sample: the annotated hero (eyebrow 12, heading, subtext 8, buttons 32) with every gap labelled | [S-L19-062] [S-L19-043] | DC-L19-41 |
+| Q-space-06 | New heuristic: padding grows with the container, and a snug card group uses a gap equal to the inset (the `insets` squish option is kept); visual sample: a feature card with an 8px inset next to a hero screenshot well with 64px of padding | [S-L19-103] [S-L19-060] [S-L19-075] | DC-L19-47 |
+| Q-space-08 | New heuristic: hero and section-header gaps are measured from the text box, because large headings carry extra space below the baseline | [S-L19-062] [inferred link] | DC-L19-41 |
+| Q-layout-01 | Visual sample: the resizable frame gets a fold line at about 1,000px on the 1920px desktop, and a phone frame with browser chrome | [S-L19-049] [S-L19-057] | DC-L19-56 |
+| Q-layout-02 | New heuristic: one direction per section and one panel per screen on compact widths; visual sample: in the resizable frame, a desktop dashboard becomes one panel per phone screen | [S-L19-053] [S-L19-045] | DC-L19-49 |
+| Q-layout-04 | New option `hub-home`: on phones the sidebar becomes the home page when too many sections matter for a bottom bar | [S-L19-053] | DC-L19-49 |
+| Q-layout-04 | The 3-5 tab range is kept; new heuristics: raise the main action only when it is the most-used job, and on phones how often an action is used decides how low it sits; visual samples: a tab-bar shot before and after, a floating bar with the main action set apart, TikTok's thumb zone | [S-L19-053] [S-L19-075] [S-L19-076] [S-L19-077] | DC-L19-119, DC-L19-145 |
+| Q-layout-04 | Desktop visual sample: a Finder- or Notes-style window with the window buttons in the bar and the drag strip highlighted, with and without a sidebar | [S-L19-067] | DC-L19-150 |
+| Q-layout-03 | `reading` caps at 65 characters | STD-visual-details-01 | DC-L19-29 |
+| Q-layout-03 | `data`: the component sheet for a data product scaffolds a table with labelled chips, right-aligned tabular numbers, truncation, shaded inactive rows and a bulk-action bar; visual sample: the table before and after | [S-L19-056]; STD-visual-details-02 | DC-L19-121 |
+| Q-layout-05 | New heuristic: `bento` becomes one entry in the section library (Q-layout-09) instead of the only named section option; `bento` itself gains: simple whole-column spans, only with enough content, sizes set after the content plan, tiles holding real product UI; visual samples: a row of four cards turned into a bento, a simple bento with one tilted card | [S-L19-060] [S-L19-066] [S-L19-072] | DC-L19-51, DC-L19-52 |
+| Q-layout-07 (new) | New question (zoom 3, stage 13; show if Q-layout-03 is `data` or `working`, or Q-aud-01 is `dense`): "What must people see first on the main screen, and what can wait?" Options `priority-grid` (default), `single-focus`, `user-arranged`; visual sample: a finance dashboard cut from 12 cards to a few tiered modules | [S-L19-068] [S-L19-047] [S-L19-053] [S-L19-061]; STD-visual-details-64 | DC-L19-48 |
+| Q-layout-08 (new) | New question (zoom 3, stage 13; show if Q-scope-01 includes `marketing` or Q-scope-06 is `persuade`): "Should each marketing section get its own layout, and how far may sections break the grid?" Options `repeat`, `vary` (default), `vary-break-box`; visual sample: repeated text-and-image rows next to a varied page | [S-L19-085] [S-L19-072] [S-L19-082] [S-L19-065] | DC-L19-50 |
+| Q-layout-09 (new) | New multi-select question (zoom 3, stage 13; same show-if as Q-layout-08): which section patterns the marketing kit includes (`logo-strip`, `big-hero`, `tabbed`, `scroll-stack`, `carousel`, `bento`, `line-grid`, `text-interlude`, `one-column-features`); the builder proposes a set from the content inventory [inferred]; visual sample: the section catalogue | [S-L19-060] [S-L19-066] [S-L19-043] | DC-L19-51 |
+| Stage 14 auto-applied rule (DC-L04-05) | Two new exceptions: pills skip the rule, and edges flush with the container get 0; stage visual sample: equal radii, concentric radii, a pill in a pill, and a hero screenshot cropped flush at the bottom | [S-L19-070] [S-L19-103] | DC-L19-62 |
+| Q-pref-03 | `auto-known` kept; both new cases join the list of known cases | [S-L19-070] [S-L19-103] | DC-L19-62 |
+| Q-shape-01 | Visual sample "one layout in two flavors" (friendly against professional); note on `pill`: buttons side by side keep one height; default kept | [S-L19-043] [S-L19-103] | DC-L19-63 |
+| Q-shape-03 | New role rows: media (standalone images and screenshots use the container radius; images inset in a card use the concentric inner radius) and data marks (square value ends); visual sample: a landing page with square images beside rounded buttons, then with matched corners | [S-L19-072] [S-L19-103] [S-L19-045] | DC-L19-61 |
+| Q-depth-01 | Answers DC-L08-15's open question ("Is the whole card clickable?") with DC-L19-55's rule: whole-card link for repeated cards, an explicit button for a specific action | [S-L19-075] | DC-L19-55 |
+| Q-depth-01 | The default's "border" should read "see-through ring", as DC-L19-09 proposes for Q-color-23, so the stage-15 text follows STD-visual-details-14 | [S-L19-052]; STD-visual-details-14 | DC-L19-64 |
+| Q-depth-03 | New option `soft-single` (one soft shadow: x at or below y, blur 1.3-2 times y, 15-20% opacity); new heuristic (the four review checks); visual sample: Figma's default shadow, a softened shadow and no shadow on the same card; default kept | [S-L19-045] [S-L19-057] [S-L19-052] | DC-L19-64 |
+| Q-depth-04 | New web default: see-through bars, toolbars and sheets, with solid and high-contrast versions; `none` reworded "Opaque surfaces (also the reduced-transparency version)"; visual sample: the toolbar over busy content beside its solid twin | [S-L19-020]; STD-visual-details-16 | DC-L19-65 |
+| Q-depth-05 | New option `zebra-when-tight`; default becomes "space first; alternating tint or lines in dense tables"; visual samples: one list with lines, with space, and tight with alternating rows; a dense checklist before and after grouping by due date with avatars | [S-L19-070] [S-L19-080] | DC-L19-43 |
+| Q-depth-05 | No option change; a caution for rings: an outer 1px ring made a button read about 2px taller than the unringed one beside it, so side-by-side buttons are wrapped in a 1px-padded span (one video) | [S-L19-103] | DC-L19-64 |
+| Q-depth-06 | New default: 40% near-black, tinted toward the neutral hue, in light mode, for modal tasks only (narrowing today's 40-50% to Vaul's value); use/avoid becomes "no scrim for non-blocking panels; stacked sheets dim step by step" | [S-L19-095] [S-L19-020]; STD-visual-details-20 | DC-L19-66, DC-L19-116 |
+| Q-depth-06 | New option `push-back` (dim and shrink the page behind a phone sheet); visual samples: a drawer with `scaleBackground` rounding the page behind it, and stacked sheets, each parent dimmer | [S-L19-005] [S-L19-020] | DC-L19-116 |
+| Stage 15 auto-applied rules | Two new rows: a scroll edge, not a divider, under sticky headers and toolbars (STD-visual-details-15); a scrim by task type (STD-visual-details-20) | STD-visual-details-15, STD-visual-details-20 | DC-L19-65, DC-L19-66 |
+| Q-depth-07 (new) | New question (stage 15, zoom 3; show if Q-dir-01 is not `flat2` or `tonal`, or Q-scope-01 includes marketing): which special surface effects, and where; options `none` (default for product screens), `tactile`, `hard-offset`, `offset-layer`, `clay`, `metal`, `glass-card`, all except `tactile` marketing-only | [S-L19-052] [S-L19-058] [S-L19-075] [S-L19-085] | DC-L19-67 |
+| Q-motion-01 | Options become `crisp` (replaces `productive`, dropping the Carbon curve), `elegant` (new), `playful` (renamed from `springs`, bounce only after momentum) and `minimal` (renamed from `none`; press feedback and fades stay); `two-mode` retired; new default `crisp` (`playful` only for Q-aud-02 `play`; `high-trust` never above `crisp`); default text "ease-out to enter and exit"; use/avoid "no motion on things used all day or started from the keyboard; expressive motion only at rare moments"; visual sample: one dropdown and one toast in each personality | [S-L19-023] [S-L19-024] [S-L19-035] [S-L19-047]; STD-when-to-animate-09, STD-springs-gestures-01 | DC-L19-81, DC-L19-82, DC-L19-85, DC-L19-87 |
+| Q-motion-01 | Visual sample: the same landing page at motion levels two, three and four, and a hero image sliding into the product view | [S-L19-072] [S-L19-084] | DC-L19-133 |
+| Q-motion-04 | Show-if becomes "Q-plat-03 includes `touch`, or the product has any drag or swipe"; new default: damping ratio and response with four presets (settle 1.0/0.4, momentum 0.8/0.4, sheet 0.8/0.3, rotate 0.8/0.4) plus a clamped dismiss; `apple-bounce` values become 0 and 0.2 (range 0.1-0.3); `spatial-effects` adds "moves never overshoot unless a gesture carried momentum" | [S-L19-016] [S-L19-020] [S-L19-033] | DC-L19-87, DC-L19-88, DC-L19-190 |
+| Q-motion-02 | New default option `per-element` duration budget; `6-steps` loses `extra 700` and keeps `long` for drawers only; `asymmetric` becomes part of the default at about 20% (not 20-35%); default text "never blocks input"; tokens are three curves plus per-component recipes; visual sample: the 180ms and 400ms selects opened one after the other | [S-L19-003] [S-L19-015] [S-L19-017] [S-L19-018] | DC-L19-86, DC-L19-87, DC-L19-99 |
+| Q-motion-03 | New default "by job": ease-out (0.23, 1, 0.32, 1) to enter and leave, ease-in-out (0.77, 0, 0.175, 1) to move, `ease` for hover and color, linear for constant motion, drawer (0.32, 0.72, 0, 1) for sheets; no ease-in; `role-based` reworded to these jobs; `intensity-based` and `personality-based` kept only as comparison labels; visual sample: two 300ms dropdowns, ease-in against ease-out | [S-L19-003] [S-L19-005] [S-L19-018] [S-L19-033] | DC-L19-85, DC-L19-99, DC-L19-183 |
+| Q-motion-06 | `fade` becomes fade plus scale from the trigger (menus and popovers 0.95 and 200ms, tooltips 0.97 and 125ms, centered dialogs 0.96 and 250ms); new default: platform transitions for screens, none for tabs and core navigation, container transform for occasional drill-ins on the web, shared axis x for onboarding, no fade-through for tabs; `stagger` becomes 30-80ms per item (50 web, 40 React Native), only on occasionally seen lists and awaited results | [S-L19-003] [S-L19-015] [S-L19-016] [S-L19-017] [S-L19-035]; STD-enter-exit-origin-13 | DC-L19-89, DC-L19-90, DC-L19-91 |
+| Q-motion-07 | Default `replace` kept and gains "cross-fade 200ms `ease`, shipped with every animation"; `remove` reworded "remove every movement, keep fades and color feedback", or retired | [S-L19-016] [S-L19-018] [S-L19-020] | DC-L19-92 |
+| Q-motion-09 | New default: OS navigation plus brand micro-motion, and a haptic per moment (selection, light impact, medium impact, success or error), once per action; `haptics-semantic` replaced by the four-moment map; `os-nav-brand-micro` label reworded "small brand micro-motion inside content, on springs only where a finger drives it" | [S-L19-015] [S-L19-016] [S-L19-020]; STD-springs-gestures-01 | DC-L19-90, DC-L19-98 |
+| Q-motion-10 | The list of device settings becomes information, not a choice: transparency and contrast are always applied wherever glass exists (house musts) | [S-L19-020] | DC-L19-65, DC-L19-142 |
+| Q-motion-11 (new) | New question, zoom 2, first of the stage's zoom-2 set (below zoom 2 the gate applies silently): "Which things will people use all day? Those will not move." The inventory is pre-sorted into four frequency tiers; answers move components between tiers but cannot give motion to a 100+/day or keyboard-started action; visual sample: a command menu opened with and without animation | [S-L19-012] [S-L19-016] [S-L19-018] [S-L19-024]; STD-when-to-animate-05, STD-when-to-animate-06 | DC-L19-81 |
+| Q-motion-12 (new) | New question, zoom 2 (show if Q-brand-04 is `hero-moments` or `expressive`): "Which rare moments should get a little celebration: first run, finishing a task, empty screens, error pages?" Multi-select, default first run and success [inferred]. Overlaps Q-pattern-10, see the note above | [S-L19-012] [S-L19-059] [S-L19-063] [S-L19-084] | DC-L19-83 |
+| Q-motion-13 (new) | New question, zoom 2 (show if Q-scope-01 includes `marketing`): "How lively should the marketing site be: still, a few moving parts, polished details, or scroll storytelling?" Default `few-moving-parts` for pages built to convert, `scroll-story` only for awareness or experience sites; heuristic "is this page built to convert or to be remembered?" | [S-L19-040] [S-L19-066] [S-L19-072] [S-L19-084] | DC-L19-84, DC-L19-133 |
+| Q-motion-14 (new) | New question, zoom 3 (show if Q-plat-03 includes `touch`): "Which things should people be able to swipe or drag, and which button does the same job?" Default: sheets and toasts swipe to dismiss; sheets also close by a visible control, outside click and Escape; toasts keep Sonner's defaults (dismissible, Alt+T, auto-close after 4000ms), with a close button as an option | [S-L19-006] [S-L19-020] [S-L19-021] [S-L19-035] [S-L19-092] | DC-L19-97 |
+| Q-icon-01 | New heuristic and use/avoid: never emoji as interface icons, and name the library for AI tools; the hook's "If no" path adds "tell the AI which library"; visual sample: a card with emoji beside the same card with Phosphor icons; default kept | [S-L19-061] [S-L19-086] | DC-L19-68 |
+| Q-icon-02 | "Filled when selected" kept; new check: every tab and nav icon has an active version, and inactive icons stay at 3:1 | [S-L19-075] | DC-L19-71 |
+| Q-icon-04 | New heuristic: an icon is never taller than the paired line height, and the builder picks the icon size from the text style; visual sample: icons at the 24px line height beside oversized icons; default sizes kept | [S-L19-052] [S-L19-057] | DC-L19-69 |
+| Q-icon-05 | Note the familiar-icons exception for tab bars (icon-only is accepted for an Instagram-style bar) | [S-L19-075] | DC-L19-38 |
+| Q-icon-05 | New heuristic (order of fixes: a better icon, a label, then a tooltip); use/avoid "a tooltip never replaces a label on touch screens"; visual samples: an action bar where only one icon is explained by its position, and Instagram's unlabelled tab bar beside Apple Music's labelled one; default kept; the first-tooltip delay stays an open value | [S-L19-045] [S-L19-080] [S-L19-075] [S-L19-079] | DC-L19-70 |
+| Q-icon-05 | New option `accent-marketing` (feature icons in accent colors, marketing pages only); visual sample: a file-storage app's colored tab icons redone uncolored, with color only on the active tab; product default kept | [S-L19-051] [S-L19-062] [S-L19-082] | DC-L19-71 |
+| Q-img-01 | New option `product-ui` (real screenshots of the product, captured at 3x and cropped to each feature); new default `product-ui` when Q-scope-01 includes marketing, or when Q-scope-06 is `persuade` with a product UI to capture; the hook asks for screenshots or a running build; visual samples: a stock-image page beside a page with the product dashboard in the hero, and the four levels of one SaaS landing page | [S-L19-072] [S-L19-061] [S-L19-062] [S-L19-103] | DC-L19-72, DC-L19-131 |
+| Q-img-01 | The photo brief adds "a clear focal point, a calm area where text will sit, zoomed out for full-screen heroes" | [S-L19-043] [S-L19-065] | DC-L19-74 |
+| Q-img-02 | New option `masked-shapes` (images cut into shapes that match the brand, on marketing pages only) | [S-L19-085] [S-L19-010] | DC-L19-61 |
+| Q-img-02 | `scrim` split into `gradient-scrim` (whenever text must sit on an image, heroes first; image cards keep text beside the image) and `overlay` (a flat, subtle veil, only after choosing a better photo); new option `progressive-blur`; heuristic "never over the focal point"; visual sample: one image with a full overlay, a gradient, and a gradient plus progressive blur; `text-beside` kept as the default elsewhere | [S-L19-052] [S-L19-075] [S-L19-043] [S-L19-065] | DC-L19-74 |
+| Q-img-03 | New heuristic: avatars beside every person referenced in lists and logs, and the uploaded photo replaces the generic profile icon; visual sample: an activity log with avatars and a red icon in a chip for an urgent action; `circle-square` kept | [S-L19-056] [S-L19-080] [S-L19-075] | DC-L19-76 |
+| Q-img-04 | New options `blobs` (the most playful) and `realistic` (professional; uses photos); `hand-drawn` gains "marks over bold text: circles, underlines, arrows"; default preselected from Q-brand-01; heuristic: stop before clutter, large below, small on top, a safe margin; visual sample: three heroes with blobs, doodles and realistic imagery | [S-L19-063] [S-L19-050] | DC-L19-75 |
+| Q-img-04 | New heuristic: a colorful spot or mascot only on first-use empty states, neutral on routine ones (confirms DC-L05-20) | DC-L05-20 (existing card) | DC-L19-126 |
+| Q-img-06 | `3d` gains "check the lighting while it rotates" | [S-L19-046] | DC-L19-75 |
+| Q-img-08 (new) | New question (stage 18, zoom 3; show if Q-img-01 includes `product-ui`): "How should product screenshots sit on your pages?" Options `well` (default), `plain-card`, `full-bleed`, `skewed-cards`; visual sample: one feature card as a plain bordered card and as a tinted well with an inset screenshot | [S-L19-103] [S-L19-061] | DC-L19-73 |
+| Q-viz-01 | New heuristic: no rounded bar tops; the value end stays square | [S-L19-045] | DC-L19-61 |
+| Q-viz-01 | `theme-library` names the curated pick (recharts, with Liveline for live streaming data); default wording "`core-6`, drawn with recharts on the web"; heuristic: one representation per dataset, an axis, labelled numbers, a legend from two series, a time-range switch for data over time, no decorative motion on data; visual samples: a Dribbble bar chart beside the plain one, a line chart before and after, KPI tiles with micro charts | [S-L19-029] [S-L19-045] [S-L19-075] [S-L19-061] [S-L19-068]; STD-visual-details-55, STD-when-to-animate-11 | DC-L19-122 |
+| Q-voice-01 | Visual samples: a corporate line against a friendly one, and one feature written as "what it does" and as "how it helps" | [S-L19-063] [S-L19-072] | DC-L19-36 |
+| Q-voice-02 | New tone rows: "not found (404): may be playful, with a way back" and "usage and progress nudges: neutral, with a real choice"; new heuristic: never shame or guilt the user; visual samples: two guilt messages as "don't", a playful 404 with a clear way back as "do" | [S-L19-063] [S-L19-048] | DC-L19-37 |
+| Q-voice-04 | New option `hero-short`: one short idea per headline, one or two sentences of subtext, benefit first | [S-L19-072] [S-L19-043] | DC-L19-36 |
+| Q-voice-05 | Option `numbers` extended: every number has a label; progress as a percentage, not "in progress"; headline stats carry a comparison | [S-L19-068] [S-L19-076] [S-L19-103] | DC-L19-33 |
+| Q-voice-05 | New option `typographic-punctuation`, on by default, with the ellipsis locked; Show line: "..." against "…", and straight against curly quotes | [S-L19-004] [S-L19-001]; STD-visual-details-03 | DC-L19-39 |
+| Q-voice-06 | New heuristic: component examples come with a long-string case and an empty case; visual sample: a listing card with a very long destination name, overflowing and then truncated | [S-L19-054] | DC-L19-35 |
+| Q-voice-06 | New options `specific-nav` (name navigation for its contents) and `one-label-per-destination`; visual samples: navigation reading "Progress, Library" against "Home", and a nav button and a hero button with matching labels | [S-L19-072] [S-L19-075]; STD-visual-details-34 | DC-L19-38 |
+| Q-comp-01 | New React-web default: headless base-ui, or shadcn on Base UI; Radix or React Aria only when already installed or asked for; with `copy-in-styled` the agent says it is leaving the curated list [inferred]; new heuristic "read package.json first; name one library per job" | [S-L19-029]; STD-visual-details-55 | DC-L19-101 |
+| Q-comp-01 | `headless`: behaviour libraries such as Sonner are used headless and wrapped in the system's own function; the chosen base decides the transform-origin variable and state attribute names, kept inside the wrapper [inferred]; with Tailwind, cva for variant-shaped components and clsx for ad hoc classes | [S-L19-022] [S-L19-090] [S-L19-029]; STD-visual-details-62 | DC-L19-185, DC-L19-186, DC-L19-187 |
+| Q-comp-02 | `core-25` default kept; when `extended` is picked, record the library for each extended part (toast = Sonner, command-palette = cmdk, drawer and sheet = the dialog primitive plus Vaul's behaviours) and add an OTP field (input-otp), which the engine's extended list does not have yet | [S-L19-029] [S-L19-093] | DC-L19-101 |
+| Q-comp-02 | `command-palette` kept in the extended list; heuristic: add it to version 1 for daily-use desktop or web tools, build it on cmdk, open it instantly; "destinations mean a palette, items on this screen mean filtering in place"; prominent always-visible search as an option for content apps (the "about five sections" threshold is [inferred]); visual samples: a command menu with and without animation, a collapsed and expanded floating search bar beside a ⌘K palette | [S-L19-012] [S-L19-029] [S-L19-067] | DC-L19-117, DC-L19-152 |
+| Q-comp-02 | When Q-layout-03 is `data`, add Timeline and Activity log to the first-version inventory [inferred] | [inferred] | DC-L19-121 |
+| New question (stage 20 detailed; no id yet) | Show if Q-plat-02 includes phone and Q-pattern-01 uses sheets: "Should sheets on phones open to one height, or rest at a few heights like Apple Maps?" Options `one-height` (default), `snap-points`, `snap-sequential`, `non-modal-snap`; visual samples: snap points with a fixed-pixel input peeking out, drag-to-dismiss with a light haptic on snap-back | [S-L19-005] [S-L19-015] [S-L19-093] [S-L19-098] | DC-L19-115 |
+| New question (stage 20 detailed; no id yet) | Show if Q-layout-04 is `sidebar` or `adaptive-bar-rail-sidebar`: "What sits at the top of the sidebar, and what goes to the bottom?" Options `account-top`, `logo-top`, `no-sidebar`; visual samples: a dashboard sidebar with its collapsed version, a collapsible finance-dashboard sidebar | [S-L19-047] [S-L19-061] [S-L19-068] | DC-L19-118 |
+| Q-state-01 | Default kept; new heuristic: strip the fill before adding a style, and one size step between nav and hero buttons; visual samples: a header with two filled buttons then the second ghosted, and the ghost-to-black ladder for neutral brands | [S-L19-057] [S-L19-039] [S-L19-103] | DC-L19-104 |
+| Q-state-01 | "One main button per area" kept for marketing heroes; new heuristic: nav and hero buttons share a label when they share a destination | [S-L19-072] | DC-L19-132 |
+| Q-state-02 | New heuristic for cards: a whole-card link for repeated cards and an explicit button for a specific action; visual sample: a whole-card link with a hover arrow next to a card with an explicit button, on a touch frame and a pointer frame | [S-L19-075] [S-L19-056] [S-L19-072] | DC-L19-55 |
+| Q-state-02 | New heuristic: press feedback on press-down at every level | [S-L19-028] | DC-L19-93 |
+| Q-state-04 | Visual sample for disabled: a light gray fill with a white label in both modes | [S-L19-051] | DC-L19-07 |
+| Q-state-04 | New option `press-scale` (shrink to 97% while pressed, over 100-160ms ease-out, plus a darker tint) and new default for the pressed state; overlays stay for hover; visual sample: two "Paste" buttons with and without the press scale | [S-L19-003] [S-L19-017] [S-L19-028]; STD-mobile-touch-05 | DC-L19-93, DC-L19-102 |
+| Q-state-04 | Hover: a color shift in the product and motion only on marketing pages (color change or a subtle reveal in product UI); every hover sits behind `(hover: hover)` and `(pointer: fine)`; visual samples: a list hovered with and without an animated highlight, the masked label slide, and one card with a color-only hover, an arrow fade-in and an image zoom, each labelled with where it belongs | [S-L19-011] [S-L19-028] [S-L19-069] [S-L19-075] [S-L19-079]; STD-accessibility-motion-15 | DC-L19-94, DC-L19-103 |
+| Q-state-05 | New option `off-plain` ("color belongs to the on state", for every toggle) and a heuristic for when brand color may mark selection; visual samples: a checkbox off and on next to six chips colored at rest, clip-path tabs with the clip turned off, a tab-bar shot before and after | [S-L19-080] [S-L19-075] [S-L19-010] | DC-L19-106 |
+| Q-state-06 | Default kept; new option `safe-fill` (the primary color only ever marks the safe choice, as in macOS); new heuristic: focus and Enter on Cancel; visual sample: the two delete dialogs side by side | [S-L19-057] [S-L19-044]; STD-visual-details-36 | DC-L19-107 |
+| Q-state-08 | New heuristic: spinners spin fast and linear; shimmer honors reduced motion; AI loaders are short and looping; visual samples: two spinners at different speeds, the copy chip, a check mark sliding in | [S-L19-003] [S-L19-055] [S-L19-052] [S-L19-059] | DC-L19-95 |
+| Q-state-08 | New option `success-in-place` (the button or icon itself confirms: Copied, a check, a filled icon); new heuristic: every action gets pending, success in place, or a toast; visual sample: a copy button whose label swaps to a check, with and without the 2px blur | [S-L19-003] [S-L19-052] [S-L19-067] | DC-L19-109 |
+| Q-state-08 | New default (none today) combining `nng-ladder` and `inline-button`: answer on pointer-down, no indicator under about 1s, a skeleton for page or region loads, a spinner inside the trigger, determinate progress with cancel past 10s; new option `optimistic` for likely, reversible actions, with a rollback message on failure; visual samples: a delete that vanishes at once beside one that waits on a spinner, and a promise toast moving from loading to success | [S-L19-045] [S-L19-047] [S-L19-059] [S-L19-067] [S-L19-006]; STD-visual-details-40 | DC-L19-109, DC-L19-127 |
+| Q-form-01 | New default additions: the placeholder shows a realistic example; input text is 16px on touch; new option `soft-filled` with a 3:1 check; visual samples: a sign-up modal before and after, an input under 16px that zooms the page on focus next to a 16px one, a row of phone keyboards | [S-L19-075] [S-L19-028]; STD-mobile-touch-11 | DC-L19-110 |
+| Q-form-02 | New default wording: on blur for every field the client can check; on submit only for what cannot be checked earlier, with a summary on long forms; `on-submit-summary` relabelled "summary as a backstop" | STD-visual-details-49; [S-L19-020] [S-L19-052] | DC-L19-111 |
+| Q-form-04 | Wiring note when toasts are used: the Toaster follows the resolved theme | [S-L19-022] [S-L19-092] | DC-L19-15 |
+| Q-form-04 | Option note: in-place confirmation motion (a chip sliding up) when the result is not visible | [S-L19-052] | DC-L19-95 |
+| Q-form-04 | `inline-banner` reworded: "inline or banner by default; toasts for overlay confirmations, background status and Undo; toasts with an action stay until dismissed, plain toasts close after 4 seconds"; new heuristic: an error toast only echoes an error shown in place; the routing rule: blocking errors inline at their cause, background failures may toast, a change confirmed after a modal closes gets a toast, async work gets one promise toast; visual samples: a create-link modal closing into a confirming toast, a loading toast turning into success in place, a collapsed toast stack | [S-L19-047] [S-L19-022] [S-L19-091] [S-L19-006]; STD-components-toasts-drawers-15 | DC-L19-112, DC-L19-128 |
+| Q-form-04 | `toasts-widely` gains the house build note: one Sonner Toaster; promise toasts for async work; action toasts persist | [S-L19-006] [S-L19-091] | DC-L19-128 |
+| Q-form-05 | Default `both` kept; new options `hold-to-confirm` (hold the button for 2 seconds to delete) and `slide-to-confirm` (slide all the way across to send or buy); visual samples: a hold-to-delete button whose fill sweeps over 2s and snaps back in 200ms, a Resend-style slider | [S-L19-017] [S-L19-035] [S-L19-020] | DC-L19-108 |
+| New question (stage 22 detailed; no id yet) | Show if Q-form-04 is not `no-toasts`: "Where should toasts appear, and should success and error toasts be colored?" Position `bottom-right` (default), `top-center`, `bottom-center`; style `neutral` (default), `rich-colors`, `invert`; visual samples: the three-toast stack with its Y and scale labels, the six-position grid with each swipe direction | [S-L19-006] [S-L19-088] [S-L19-092] [S-L19-021] | DC-L19-113 |
+| Q-pattern-01 | New option and default `ladder` (none today): popover for small choices, modal for short page tasks, sheet on phones, new page for big or lasting things (the permanence test), with a back button or breadcrumb on every new page; it refines `hig`; the side sheet narrows to forms long enough to fill it [inferred]; use/avoid: no chore modals, no bullet-point welcome modals, no scrim for non-blocking panels; visual samples: the ladder on one dashboard, one "create link" task four ways, a bottom-sheet template picker | [S-L19-047] [S-L19-005] [S-L19-061] [S-L19-048] [S-L19-056] [S-L19-053]; STD-components-toasts-drawers-37 | DC-L19-114, DC-L19-116, DC-L19-124 |
+| Q-pattern-02 | Heuristic: how people move through a list (pages, Load more) and how it renders (virtualized from 1,000 rows) are separate choices; virtualization is required whatever the answer; default `pagination` kept | [S-L19-054]; STD-performance-properties-17 | DC-L19-121 |
+| Q-pattern-03 | New heuristic: hiding actions in a menu comes after edges have been tried, not before | [S-L19-080] | DC-L19-44 |
+| Q-pattern-03 | Heuristic for `contextual`: reveal on hover only for minor actions, always with a focus path and a touch path; visual sample: the share popover with the search box on top and remove buttons revealed on hover | [S-L19-056] [S-L19-080] | DC-L19-105 |
+| Q-pattern-03 | Default `progressive` kept; heuristic for every option: place each action by how often and how much it matters (labelled, icon, on hover and focus, in a popover); visual sample: a sharing table with the remove icon on hover plus a tooltip, settings in a popover, and an always-visible share button | [S-L19-056] | DC-L19-123 |
+| Q-pattern-04 | New default `empty-kinds` (none today), with first-use (one focused action and one short explanation; tools that need content stay hidden) and no-results (acknowledge, suggest, a way out) anatomy; the onboarding options move to Q-pattern-07; visual samples: a first-use state with a popover on the plus button beside a no-results state with typo suggestions, and Dub's empty dashboard | [S-L19-053] [S-L19-044] [S-L19-067] | DC-L19-125, DC-L19-126, DC-L19-129 |
+| Q-pattern-05 (planned) | `enforced` kept; the off-switch check is the first lint to build while the question is planned [inferred]; the other three become human-review items; new detectable check: a discounted price shown without the real discount or the billing term [inferred]; visual sample: the anti-pattern gallery beside an upgrade prompt that slides the higher limit in | [S-L19-048] [S-L19-079] [S-L19-061] [S-L19-075] | DC-L19-134, DC-L19-135 |
+| Q-pattern-07 (new) | Split out of Q-pattern-04 (zoom 2, stage 23): "How should first-time users learn the product?" Options `none`, `sequenced-tips` (default), `learn-by-doing` (shortcut-heavy desktop apps; also DC-L19-151's onboarding step), `walkthrough` (only for genuinely new, complex screens); zoom-3 follow-up: what sign-up asks before the product is useful (escape to log in, verification `block` or `remind`, a branching question, value before data); visual samples: a tooltip on the main action then a corner checklist, the branching five-screen sign-up, the shortcut modal that closes when the user performs it | [S-L19-056] [S-L19-043] [S-L19-067]; STD-visual-details-41 | DC-L19-129, DC-L19-151 |
+| Q-pattern-08 (new) | New question (zoom 2, stage 23; show if Q-scope-01 includes `marketing` or Q-scope-06 is `persuade`): "What should visitors do first: press a button, or start typing?" Options `button` (default), `prompt-field`, `search-field`; visual samples: mismatched against matching nav and hero labels, a hero whose call to action is a typeable bar | [S-L19-082] [S-L19-055] [S-L19-065] [S-L19-072] | DC-L19-132 |
+| Q-pattern-10 (new) | Follow-up (zoom 3; show if Q-brand-04 is `hero-moments` or `expressive`): "Which moments get the lively treatment?" Multi-select `first-run`, `first-empty`, `milestone`, `not-found`, `none`; default `first-run` and `milestone` [inferred]. Overlaps Q-motion-12, see the note above | [S-L19-079] [S-L19-063]; STD-when-to-animate-04, STD-when-to-animate-09 | DC-L19-130 |
+| Q-pattern-11 (new) | New question (zoom 3, stage 23; show if the product sells plans or Q-scope-06 is `persuade`): "How should your plans be shown?" Options `plan-cards` (3-4 cards, one suggested; default), `comparison-table` [inferred option], `single-plan` [inferred option]; visual samples: a pricing card before and after, a plan picker fixed | [S-L19-061] [S-L19-075] | DC-L19-134 |
+| Q-pattern-12 (new) | New question (zoom 3, stage 23; show if Q-aud-01 is `regular` or `large`): "Should the product use progress, streaks or rewards to bring people back?" Options `none` (default when Q-scope-06 is `operate`), `progress` (default otherwise), `game-layer`, `social` [inferred defaults]; visual samples: a savings app's goal home, league leaderboard and analytics, and a recap with one share button | [S-L19-078] [S-L19-076] [S-L19-048] | DC-L19-136 |
+| Q-pattern-13 (new) | New question (zoom 3; show if Q-scope-06 is `persuade`): "Which number should this page move, and how will you check it?" Options `not-measured`, `before-after` (default), `ab-test`, `usability-only`; the answer is saved with the decision; visual sample: a short case-study card with the problem and the solution with numbers | [S-L19-038] | DC-L19-137 |
+| Q-ai-01 | New zoom-3 follow-up (show if not `none`), multi-select "Which AI workspace parts does the product need?": `history`, `memory-panel`, `inline-edit`, `step-trail`, `confidence`; default `history` for `chat` [inferred]; heuristic "memory that exists is shown and editable"; visual samples: a prompt box with attachment previews and context chips, a research trail, a confidence pill | [S-L19-055]; STD-visual-details-45 | DC-L19-138 |
+| Q-token-01 | `two-plus` kept; new heuristic: depth follows team size and number of products (from Q-scope-04); visual samples: Linear's settings panel beside its view-creation screen with identical parts, and a new modal assembled only from existing parts | [S-L19-044] [S-L19-054] | DC-L19-181 |
+| Q-token-04 | New default: px in the source; rem on the web for type, spacing, control heights and breakpoints; `max(px, rem)` for target-size floors; px for borders, rings, shadows and radii; the "spacing scales with text size, off by default" toggle is removed for web output; use/avoid "avoid px margin, padding and gap on the web"; visual sample: one card at the default and at a 200% text size, with px and with rem padding | [S-L19-020]; STD-accessibility-motion-13 | DC-L19-182 |
+| Q-token-08 | `web-delivery` keeps its text and adds: custom properties on `:root` for tokens and modes, the base library's variables and data attributes for component state, inline transforms for per-frame values; use/avoid lines "avoid framework defaults that duplicate system tokens" and "avoid CSS variables for values that change every frame" | [S-L19-003] [S-L19-005] [S-L19-006] [S-L19-017]; STD-performance-properties-11 | DC-L19-184, DC-L19-186 |
+| Q-token-02 | New option `motion-names` (unprefixed `--ease-out`, `--ease-in-out`, `--ease-drawer` and `--duration-*` aliases) as the default for motion tokens; visual sample: the `:root` block with the three curves, each plotted | [S-L19-018] [S-L19-027] [S-L19-025] | DC-L19-183 |
+| Q-token-02 | New option `variant-axes`: component variants use `size`, `intent` and `state`, spelled the same in Figma, tokens and code | [S-L19-029] | DC-L19-187 |
+| Q-token-02 | `prefix`: never rename a project's existing tokens to add a prefix | [S-L19-027] [S-L19-029] | DC-L19-189 |
+| Q-token-03 | Heuristic: whenever motion gets tokens (`standard`, `extended`), it gets component recipe tokens, not only shared transitions [inferred]; `minimal` still gives motion no tokens | [S-L19-017] [inferred] | DC-L19-99 |
+| Q-token-03 | `extended` kept; new use/avoid line: "lean" means few hand-made decisions, not fewer token kinds | [S-L19-054] | DC-L19-181 |
+| Q-token-05 | `motion`: springs stored as `{dampingRatio, response}` in `$extensions`, stiffness derived per platform, with a `linear()` or bezier fallback; visual sample: Apple's sheet spring (0.8, 0.3) next to its move spring (1.0, 0.4) | [S-L19-020]; STD-springs-gestures-02 | DC-L19-190 |
+| Q-token-09 | `descriptions`: a short note on each semantic token with its use, what to avoid, and why; use/avoid "avoid descriptions that only restate the name"; visual sample: a token card with a bare description against one with use and reason | [S-L19-004] [S-L19-025] | DC-L19-188 |
+| Q-gov-01 | No new option; the `loose` wording gains the lean-startup case "light and easy to change or scrap"; default `strict` kept | [S-L19-054] | DC-L19-164 |
+| Zoom offer (`zoom.md`) | New heuristic: recommend a stopping level by team size and number of products [inferred from S-L19-054] | [S-L19-054] | DC-L19-164 |
+| Q-gov-03 | New heuristic: an exception needs a reason, and the review notes a reasoned exception instead of flagging it again | [S-L19-027] [S-L19-054] | DC-L19-165 |
+| Q-gov-03 | `adrs`: each decision record keeps a one-sentence reason and the alternative it beat (matches today's wording) | [S-L19-083] | DC-L19-168 |
+| Q-gov-05 | New option `outcomes` (product results before and after: sign-ups, sales, or time to find one thing); heuristic: small tests find problems, they are not proof; the per-change numbers recorded by Q-pattern-13 feed it | [S-L19-038] [S-L19-080] | DC-L19-137, DC-L19-166 |
+| Q-gov-06 | `release-notes` kept; new default wording: publish them as a changelog page on the docs site | [S-L19-007] | DC-L19-169 |
+| Q-gov-07 | New option `real-device-floor`, on by default when Q-plat-02 includes `phone` | [S-L19-028] [S-L19-005] [S-L19-016] | DC-L19-153 |
+| Q-gov-07 | New option `feel-checks` (a physical phone for gestures, slow motion for animation, a second look the next day); new default: one feel row per shipped device class, next to the assistive-technology rows | [S-L19-023] | DC-L19-167 |
+| Q-dist-01 (planned) | `design-push` heuristic: auto layout on every component, stable part names across variants and states, a states frame per interactive component; handoff note: set Figma's nudge amount to the base unit | [S-L19-059] [S-L19-074] [S-L19-070] | DC-L19-173 |
+| Q-dist-04 | New heuristic: one live demo, one good-and-bad pair and copy buttons (code and markdown) per docs page; visual sample: a component page with its pair | [S-L19-001] [S-L19-006] | DC-L19-169 |
+| Q-dist-02 (planned) | No new option; `rules` gains its shape: one rule file per part of the interface, each rule strict and with its reason; new default when built: DESIGN.md and DTCG plus `rules` in that shape, beside "at least one live channel" (DC-L11-23) | [S-L19-004]; STD-process-review-taste-55 | DC-L19-171, DC-L19-188 |
+| Q-dist-03 (planned) | New lint rules: warn on a card inside a card (`maxCardDepth: 1`, a warning, not a block) | [S-L19-053] [S-L19-061] [S-L19-068] | DC-L19-42 |
+| Q-dist-03 (planned) | New lint rule: numeric table columns aligned to the end | [S-L19-056] | DC-L19-44 |
+| Q-dist-03 (planned) | `lint-rules` warnings: an icon-only control with no accessible name or tooltip; an action revealed only on hover with no focus or touch path [inferred from S-L19-056 and DC-L13-03]; a page reached from a dashboard with no back button or breadcrumb [inferred from S-L19-047]; a collection or async action with no loading, success or error variant (extends the empty-state warning) | [S-L19-056] [S-L19-047] [S-L19-044]; STD-visual-details-49 | DC-L19-123, DC-L19-124, DC-L19-125 |
+| Q-dist-03 (planned) | New option `ai-tells`: flag common AI-made looks (emoji icons, the default indigo, everything centered, dead cards) | [S-L19-061] [S-L19-103] | DC-L19-172 |
+| Q-dist-03 (planned) | Near-duplicate curves and durations reported as LOW consolidation findings; visual sample: five near-matching hand-typed curves becoming one `var(--ease-out)` | [S-L19-027] [S-L19-025] | DC-L19-189 |
+| Q-dist-05 (new) | New question (stage 26, zoom 2): "Who will see the result first: you, your team, a client, or people online?" Options `deciding` (default), `team`, `client`, `showcase`; it changes only how `preview.html` and exported images are framed; visual sample: one dashboard framed three ways | [S-L19-041] | DC-L19-170 |
+| Q-pref-01 (planned) | Heuristic for every mode: the report is one Before/After/Why table ranked by severity and leverage, with a verdict line; `strict` maps to Block or Approve | [S-L19-032] | DC-L19-176 |
+| Q-pref-02 (planned) | Remove `show-6`; new option `picker-3` (three named directions, one at a time at full size, flipped with number keys); new default when built: `patches`, `picker-3` and `lock-shuffle`; split into two questions (how AI edits are reviewed; how variations are shown) [inferred] | [S-L19-031]; STD-process-review-taste-43 | DC-L19-174 |
+| Q-pref-02 (planned) | New option `tune-inline` (drag a temporary control on the real page, then save the value); heuristic: fix one issue at a time instead of regenerating; `patches` kept | [S-L19-103] [S-L19-045] | DC-L19-175 |
+
+### B2. Engine, templates and outputs (no Q-id)
+
+Changes named in "Maps to" that land in `engine.py`, a template or a generated file rather than in a question.
+
+| Q-id | Change | Evidence | Card |
+|---|---|---|---|
+| none: `engine.py validate` | An advisory when adjacent dark surface tiers are less than about 4% brightness apart, or closer than the light tiers [inferred] | [S-L19-039] [S-L19-070] | DC-L19-04 |
+| none: Logo asset hook | Ask for a dark-mode logo variant, or desaturate the logo slightly [inferred] | [S-L19-051] | DC-L19-06 |
+| none: Engine tokens: `color.bg.inverse`, toast surface | Describe `color.bg.inverse` for tooltips only [inferred]; the toast surface defaults to a theme-following surface, not the inverse, unless `invert` is picked | STD-components-toasts-drawers-23; [S-L19-092] | DC-L19-15, DC-L19-113 |
+| none: `engine.py validate` or `review` | Flag a CSS export with no `prefers-contrast: more` or `prefers-reduced-transparency: reduce` block | [S-L19-020] | DC-L19-17 |
+| none: Engine `tracking()` | Key tightening on heading roles from about 20px, and never return 0 for capitals | STD-visual-details-04, STD-visual-details-05 | DC-L19-21 |
+| none: `engine.py review` | Count distinct weights per preview screen [inferred] | [S-L19-057] | DC-L19-24 |
+| none: Engine CSS export: fonts | Write `@font-face` and a metric-matched fallback | STD-visual-details-10 | DC-L19-28 |
+| none: Engine tokens: `text.input` | Give inputs their own text style instead of `text.body.md` | STD-mobile-touch-11; [S-L19-028] | DC-L19-32, DC-L19-110 |
+| none: Template `type-scale.html` | Keep the 1:1 rendering, add phone-width and desktop-width frames, and show a "scaled" badge whenever the host displays the page at other than 1:1 [inferred] | [S-L19-057] [S-L19-042] | DC-L19-34 |
+| none: Template `component-sheet.html` | Card templates: one lead fact, grouped facts, and labels only where values could be confused | [S-L19-052] [S-L19-070] | DC-L19-54 |
+| none: Stage 23 Show, `component-sheet.html` | A state switcher (ideal, empty, loading, success, error), so each pattern is previewed in every state [inferred] | STD-visual-details-49 | DC-L19-125 |
+| none: Engine tokens: scrim | A stack step beside the single `color.overlay.scrim` | STD-visual-details-20 | DC-L19-66 |
+| none: `engine.py review`, Sonner wiring | Warn on emoji used as an icon, emoji in icon positions and lorem ipsum [inferred]; generate the Sonner `icons` map from `icon.library` | [S-L19-061] [S-L19-086] [S-L19-090] | DC-L19-68, DC-L19-172 |
+| none: AGENTS snippet and DESIGN.md | Name the icon library and forbid emoji as interface icons | [S-L19-086] [S-L19-061] | DC-L19-68 |
+| none: AGENTS snippet and DESIGN.md | Name the toolkit for the chosen stack so later sessions do not pick competitors [inferred] | [S-L19-029] | DC-L19-148 |
+| none: AGENTS.md snippet | Load the rule file for the aspect you are changing before UI work [inferred] | [S-L19-004] | DC-L19-171 |
+| none: Engine preview: hover | Gate the preview's hover rules behind `(hover: hover)` and `(pointer: fine)` (the conflict recorded under STD-accessibility-motion-15) | STD-accessibility-motion-15; [S-L19-028] | DC-L19-103, DC-L19-143 |
+| none: Engine CSS export and `preview.html` | Write the mobile baseline (the preview's viewport meta is the recorded conflict) | STD-mobile-touch-21; [S-L19-028] | DC-L19-144 |
+| none: `engine.py review` | List "needs a real device" items when phones are in scope, instead of reporting them as passed [inferred] | [S-L19-028] | DC-L19-153 |
+| none: `engine.py review` | `od-ignore` takes an optional reason; reasoned exceptions print in their own short list; bare ignores count as findings [inferred] | [S-L19-027] | DC-L19-165 |
+| none: `engine.py review` | A closing list of hand checks the builder cannot judge [inferred] | [S-L19-023] | DC-L19-167 |
+| none: `engine.py review` | Findings as one Before/After/Why table with a verdict line [inferred] | [S-L19-032] | DC-L19-176 |
+| none: `RATIONALE.md` template (stage 26) | New opening "The problem, and our answer in one line"; a visual slot beside each of the five choices; the closing "What is still open" becomes "What we'd do next", adding what was left out | [S-L19-083] | DC-L19-168 |
+| none: Engine CSS and Tailwind export: units | The rem conversion covers `space.*` and `size.control.*`, not only `font.size.*`; `size.target.*` is written as `max(24px, 1.5rem)` and so on; Tailwind's `--spacing` is the base unit divided by 16 in rem | [S-L19-020]; STD-accessibility-motion-13 | DC-L19-182 |
+| none: Engine CSS and Tailwind export: motion names | Add the unprefixed motion aliases to the CSS export and rename the Tailwind `--ease-enter`/`--ease-exit` pair | [S-L19-018] [S-L19-027] | DC-L19-183 |
+| none: Engine Tailwind export: `tailwindReset` | Add `--ease-*: initial` and `--default-transition-timing-function`, and a gated hover variant; add a conflict note to STD-easing-duration-02 or STD-visual-details-26 | [S-L19-018] [S-L19-028] | DC-L19-184 |
+| none: Engine DESIGN.md | Write each standard's "why" into DESIGN.md (the recorded conflict on STD-process-review-taste-55) | [S-L19-004]; STD-process-review-taste-55 | DC-L19-188 |
+| none: Engine tokens: springs | Make `dampingRatio` and `response` the stored spring fields and derive `stiffness` | [S-L19-020]; STD-springs-gestures-02 | DC-L19-190 |
+
+---
+
+## Part C: Conflicts with existing research
+
+Every place a card records that the trusted sources differ from an existing Decision Card (DC-L01 to DC-L18, L09 benchmarks), a current question default or option, or what the engine does today. The resolution is the card's proposal; the card id is at the end of each resolution. Where a house standard decides, it is named, and it wins. The shape and depth rows come from that area's own conflicts table. Disagreements between two sources, with no existing card involved, are listed under "Open questions / gaps".
+
+| Existing card or default | What the sources say | Resolution proposed |
+|---|---|---|
+| DC-L01-17 (hover one step, press two steps toward more contrast) | One video steps darker on hover in both modes, which in dark mode moves toward less contrast [S-L19-039]; another lightens on hover [S-L19-051] | Keep toward-more-contrast as the default; record both videos as disagreements, not overrides; the direction becomes a zoom-3 sub-choice of Q-color-20 (DC-L19-07) |
+| DC-L10-17 (no app-only appearance setting on Apple platforms) | A macOS example app keeps light and dark in its settings popover [S-L19-067] | Keep following the system; DC-L10-17 stays the rule on Apple platforms; the in-app switch is recorded, not adopted (DC-L19-14, DC-L19-142) |
+| Q-theme-01 `light-only` (engine sets `darkMode: False`) | STD-visual-details-24 wants both modes generated | `light-first` and `dark-first` still generate both modes; for `dark-only` it is a rename (DC-L19-14) |
+| Engine's opaque `color.border.*` for decorative edges (conflict note on STD-visual-details-14) | A 10% see-through ring [S-L19-103]; one video also uses an opaque 85% border [S-L19-039] | See-through ring for decorative edges, the 3:1 border for interactive boundaries; the opaque border stays an option but the standard wins (DC-L19-09) |
+| Q-color-19 default (brand-gray by default, categorical-6-8 for dashboards) and DC-L01-24 | An equal-lightness OKLCH spectrum so no hue looks neon [S-L19-039] (one video) | Choose by series count; equal chroma and a narrow lightness band, ordered so neighbours still differ in lightness, which keeps DC-L01-24's neighbour contrast [inferred] (DC-L19-10) |
+| Q-color-25 default ("never on interactive components") | A gradient stroke on the one call-to-action card and on hover in an AI product [S-L19-082] | Keep the default; the gradient stroke stays an explicit choice under the `components` option (DC-L19-12) |
+| Engine `color.bg.inverse` described for tooltips and toasts (conflict note on STD-components-toasts-drawers-23) | Sonner's toasts do not invert by default [S-L19-021] [S-L19-022] [S-L19-092] | Inverse for tooltips only; toasts follow the theme unless `invert` is picked (DC-L19-15, DC-L19-113) |
+| Q-color-24 `increased` offered as a choice; no contrast or transparency blocks in the CSS export | Increase Contrast and Reduce Transparency are house musts [S-L19-020] | Always on for the web; validate or review flags the missing blocks (DC-L19-17) |
+| DC-L02-14 (tighten letter spacing from about 32px); engine leaves title.lg (22px) and headline.sm (27px) untouched | Tighten headings whatever their size (STD-visual-details-05); Schoger tightens at 24-30px [S-L19-103] | Start tightening at about 20px (the threshold is [inferred]); remove or reword Q-type-13 `zero` (DC-L19-21) |
+| DC-L02-13 display band (1.1-1.15) and the engine's 4px-snapped line heights, which invert (title.lg 1.4545 above body.lg 1.3333) | Ratio falls as size rises, about 1.05 for display [S-L19-020]; 110-130% for headings [S-L19-042] (STD-visual-details-06) | Display 1.05-1.1 and a no-inversion check after snapping, falling back to 2px (DC-L19-22) |
+| DC-L02-17 (65-70ch), Q-type-14 `measure-45-75`, Q-layout-03 `reading` (40-80 characters) | Body capped at about 65ch (STD-visual-details-01); section headings at 40ch [S-L19-103] (one video) | Body 65ch, headings 40ch; `measure-65` replaces `measure-45-75`; `reading` capped at 65 (DC-L19-29) |
+| DC-L02-20 (16px mobile web text marked unverified); the preview's inputs are 14px | 16px input text is a house standard [S-L19-028]; 16px mobile body [S-L19-053] | New Q-type-08 default and a `text.input` style (DC-L19-32, DC-L19-110) |
+| Engine creates tabular numerals only for `numeric-face` or `data` (conflict note on STD-visual-details-02) | Tabular digits for numbers that change or line up (STD-visual-details-02) | Always generate `text.numeric.*` with tabular digits (DC-L19-33) |
+| Engine writes no `@font-face` or metric overrides (conflict note on STD-visual-details-10) | A metric-matched fallback (STD-visual-details-10) | The engine writes both (DC-L19-28) |
+| Q-type-15 default `fixed` | Every text size fluid [S-L19-042] | Keep `fixed`; `fluid` covers display and headline only (DC-L19-31) |
+| DC-L06-19 ("errors serious") | A 404 page may be playful [S-L19-063] | Exception for 404 pages only, always with a way back (DC-L19-37) |
+| DC-L05-07 ("label everything in navigation") | Icon-only is accepted for an Instagram-style tab bar with familiar icons [S-L19-075] | Keep DC-L05-07 as the default; icon-only is an option for consumer apps with familiar icons [inferred] (DC-L19-38) |
+| DC-L15-05 (lint allows two container levels) | One card level; nesting is sometimes unavoidable [S-L19-053] [S-L19-061] [S-L19-068] | `maxCardDepth: 1` as a warning, not a block (DC-L19-42) |
+| DC-L04-08 and DC-L15-05 (lines for dense or long lists) | Space, or alternating tint when rows sit tight [S-L19-070] (one video); another video offers all three without choosing [S-L19-047] | Change only the default wording for lists; lines stay an equal option for data tables; flag for the owner (DC-L19-43) |
+| DC-L03-24 (Material allows more generous spacing on desktop) | Keep type and spacing, or go a little larger, on phones [S-L19-053] [S-L19-045] | A compact width is not a compact density (DC-L19-49) |
+| `option-gallery.html` shows options as a grid | Variants are shown one at a time, full size (STD-process-review-taste-43) | Show layout variants one at a time next to sibling content; the conflict is already recorded in the standards (DC-L19-56) |
+| DC-L04-03 and the engine's `radius.detail` and `radius.control-sm` | One video uses one radius for every small component [S-L19-045]; the builder creates up to three by rule | Keep the steps (Tier A evidence); allow different radii only by role; review flags same-job components that differ (DC-L19-61) |
+| DC-L04-05 (floor on the inner radius) | Past the formula's limit (30px in the example), the video judges by eye [S-L19-070] | Keep the floor in the builder; the eye only for hand-made assets (DC-L19-62) |
+| DC-L04-04 (the 60% iOS smoothing preset) | Maximum corner smoothing [S-L19-070] (one presenter's taste) | Keep the default; record "maximum" as taste (DC-L19-63) |
+| DC-L04-12 (near-black shadow at low alpha) | Light-gray shadow color [S-L19-045] [S-L19-059] (two videos, one presenter) | Keep near-black at low alpha (STD-visual-details-14 asks for a semi-transparent shadow) (DC-L19-64) |
+| The house picker's 3x blur ratio and the engine's two-layer 2.7-3x | A blur ratio of 1.3-2 times y [S-L19-057] (one video) | Adopt only the 1.3x floor, as a review warning (DC-L19-64) |
+| DC-L04-15, DC-L10-12 and the Q-depth-04 default (opaque bars on the web) | See-through bars with solid and high-contrast versions (STD-visual-details-16) [S-L19-020] | The house standard wins: see-through chrome with both fallbacks (DC-L19-65) |
+| Engine `material.glass.blur` 24px | Animated blur stays under 20px (STD-enter-exit-origin-30); blur by size (STD-visual-details-19) | Blur tokens by size; any surface whose blur animates stays under 20px [inferred] (DC-L19-65) |
+| DC-L04-15 tint of about 70% or more [inferred there] | The house toolbar sample uses 0.6 alpha [S-L19-020] | 0.6 is an example; the contrast check over busy content sets the final alpha (DC-L19-65) |
+| Q-depth-06 use/avoid and DC-L04-18 ("lighter scrims for non-blocking sheets", marked [inferred] there) | No scrim for non-blocking panels (STD-visual-details-20) | No scrim for non-blocking panels (DC-L19-66, DC-L19-116) |
+| DC-L04-18 (40-50% near-black, tinted toward the neutral hue) | Vaul's example is plain black at 40% [S-L19-095] | Take Vaul's 40%, keep DC-L04-18's neutral tint (DC-L19-66) |
+| A bouncy tooltip with a 1s delay [S-L19-079] | No bounce on tooltips (STD-springs-gestures-05, STD-enter-exit-origin-09) | House tooltip motion; the 1s delay stays an open value (DC-L19-70) |
+| DC-L05-07 and Q-icon-05 `universal-only` (icon-only with a tooltip) | A universally known icon needs nothing else [S-L19-045] | Keep the accessible name and the pointer tooltip on universal icons (DC-L19-70) |
+| DC-L05-08 | Helpful icons in dense info rows add information and a splash of color [S-L19-061] | Keep neutral icons in the product; accent icons only on marketing (DC-L19-71) |
+| DC-L05-16 and Q-img-02 (scrim only for heroes) | A gradient scrim for text on images [S-L19-052]; text overlaid on a card works only with some images [S-L19-075] | Image cards keep text beside the image; the scrim is for text that must sit on an image (DC-L19-74) |
+| DC-L06-10 and the Q-motion-01 use/avoid line (expressive motion for page transitions and the primary action) | Things used all day or started from the keyboard do not move [S-L19-012] [S-L19-024] (STD-when-to-animate-01, -05, -06) | A frequency gate (proposed Q-motion-11) and a reworded use/avoid line (DC-L19-81) |
+| DC-L04-19, DC-L06-03, the Q-motion-01 default `two-mode` and Q-brand-04 `hero-moments` (1-3 key moments per flow, including opening a page or the primary action) | Bold motion only at rare or first-time moments (STD-when-to-animate-09) [S-L19-024] | Retire `two-mode`, default `crisp`, reword `hero-moments` to rare moments (DC-L19-82, DC-L19-83, DC-L19-130) |
+| DC-L09-06 and Q-motion-01 `springs` (springs throughout, or only for spatial moves in the expressive mode) | Motion that no finger drives runs on a timing curve (STD-springs-gestures-01) [S-L19-016] [S-L19-018] | `playful` with bounce only after momentum; Q-motion-04 shown whenever there is touch or drag (DC-L19-82, DC-L19-87) |
+| DC-L04-21, DC-L04-24, the Q-motion-01 default text "ease-in to exit" and Q-motion-03 `role-based` (standard, enter, exit) | Ease-out to enter and exit, no ease-in on UI (STD-easing-duration-01, -03) [S-L19-003] [S-L19-018] | Curves by job and house names with no separate exit curve (DC-L19-85, DC-L19-183) |
+| DC-L04-20 (duration steps up to 700ms, exits 20-35% shorter) | Per-element budgets, UI under 300ms, exits about 20% faster [S-L19-003] [S-L19-018] | `per-element` default; drop `extra 700` (DC-L19-86) |
+| DC-L04-22 (stiffness stored, energy-driven damping, under-damped hero moves), Q-motion-04's 0.15 step and the Q-token-05 option text | Damping ratio and response, the values Apple ships (STD-springs-gestures-02) [S-L19-020] | Four presets plus a clamped dismiss; store `{dampingRatio, response}` (DC-L19-88, DC-L19-190) |
+| DC-L04-23 and Q-motion-06 `stagger` (20-50ms, total at most 500ms) | 30-80ms per item (STD-enter-exit-origin-13): 50ms on the web, 40ms in React Native [S-L19-017] [S-L19-015] | The standard wins (DC-L19-91, DC-L19-133) |
+| Engine reduced motion (100ms on the standard curve; conflict under STD-accessibility-motion-02) | A 200ms `ease` cross-fade with no movement [S-L19-020] | A reduced mode that aliases a cross-fade transition (DC-L19-92) |
+| Engine `motion.transition.move` points plain moves at a spatial spring (conflict under STD-springs-gestures-01) | Springs only where a finger drives the motion [S-L19-016] [S-L19-018] | Plain on-screen moves stay on ease-in-out timing; springs follow the finger (DC-L19-85, DC-L19-87) |
+| Engine shared transitions only (`motion.transition.enter`, `.exit` and so on) | Each component has its own budget (STD-easing-duration-07, -13) [S-L19-017] [S-L19-025] | Three curves plus per-component recipes (DC-L19-99) |
+| Q-motion-06 option `fade` ("Fade for in-screen enter and exit") | The house forbids opacity-only entrances except a modal's backdrop and the reduced-motion variant; a plain fade-in reads as robotic [S-L19-063] | `fade` becomes fade plus scale from the trigger (DC-L19-89) |
+| Q-motion-06 stage default ("all four plus stagger", DC-L04-23), which includes fade-through between tabs | Tab switches do not animate (STD-when-to-animate-14) | Platform transitions for screens, none for tabs, container transform only for occasional drill-ins (DC-L19-90) |
+| Q-motion-07 `remove` (the engine maps it to 0ms transitions) | The house rejects zero motion; reduced motion keeps a cross-fade [S-L19-020] | Reword to keep fades and color feedback, or retire it (DC-L19-92) |
+| Q-motion-09 stage default (system haptics, with a semantic map only for products with frequent confirmations; DC-L04-26) | Custom interactions need their own haptics, one per moment [S-L19-015] [S-L19-016] | The four-moment haptic map joins the default (DC-L19-98) |
+| DC-L04-24 and the Q-motion-02 default text (input may be blocked for up to about 100ms) | The house never locks input, not even during a stagger | Default text becomes "never blocks input" (DC-L19-87) |
+| The levers `energy` dial swaps curve families and stretches durations | Budgets and curves are fixed by job (conflicts under STD-easing-duration-02 and -07) | Personality changes how many things move, never the budgets [inferred] (DC-L19-82) |
+| DC-L08-03 and the Q-comp-01 React default ("shadcn on Base UI or React Aria") | One library per job from the curated list: base-ui, cmdk, Sonner, input-otp, motion [S-L19-029] (STD-visual-details-55) | Base-ui by default; Radix or React Aria only when installed or asked for (DC-L19-101, DC-L19-148) |
+| DC-L08-09 default (overlays for hover and press) and the tint-only pressed state | Scale to 0.97 while pressed [S-L19-003] [S-L19-028] (conflict under STD-mobile-touch-05) | `press-scale` as the pressed default beside the tint; overlays stay for hover (DC-L19-93, DC-L19-102) |
+| DC-L08-14 (neutral selected state; brand color kept for actions in action-dense products) | Active states are where a nav bar can take a pop of brand color [S-L19-075] | Brand color on selection in navigation-light products such as a tab bar; neutral selection in action-dense products [inferred] (DC-L19-106) |
+| DC-L08-17 (on-submit default) | Inline validation is a must (STD-visual-details-49) | On blur by default; the submit summary is a backstop (DC-L19-111) |
+| DC-L13-09 (a toast is never the only channel for an error that blocks progress) | Toasts for warnings and errors, which often get missed elsewhere [S-L19-047] | Blocking errors inline at their cause; background failures may toast and also show in place (DC-L19-112, DC-L19-128) |
+| DC-L08-18 and the Q-form-04 option text (never auto-dismiss a toast with an action) | Sonner closes every toast after 4000ms by default [S-L19-091] | Plain toasts close after 4000ms; toasts with an action persist through the per-call duration (STD-components-toasts-drawers-15, -26) (DC-L19-112, DC-L19-128) |
+| Engine toast motion on the shared `motion.transition.enter` (conflict under STD-components-toasts-drawers-07) | Toasts have their own motion: 400ms `ease` from `translateY(100%)` on the web, 300ms in and 250ms out in React Native (STD-components-toasts-drawers-07, -08) | Toasts get their own transition and tokens (DC-L19-113) |
+| DC-L08-20 default (side sheet for editing with context) | A sparse flyout was moved into a modal [S-L19-061] | The ladder; a side sheet only for forms long enough to fill it [inferred] (DC-L19-114, DC-L19-124) |
+| DC-L08-12 (loading buttons stay focusable) | The pressed button grays out while it works [S-L19-045] | Gray the look but keep focus and label [inferred] (DC-L19-109, DC-L19-127) |
+| DC-L13-16 (no narrated reasoning presented as an explanation) | A step trail of the AI's research and a confidence pill under each response [S-L19-055] | Follow DC-L13-16: a step trail may show retrieval steps and citations; confidence labels only in high-stakes contexts (DC-L19-138) |
+| Q-aud-03 `wcag22-a` | AA is the locked floor (AGENTS.md, `guardrails.md`; the engine already maps `wcag22-a` to AA) | Remove the option or show it as unavailable (DC-L19-141) |
+| Q-aud-04 default (text size and reduced motion as choices) | Following the device settings is a house must [S-L19-020] [S-L19-016] [S-L19-028] | Device settings always on; the question asks only about in-app controls (DC-L19-142) |
+| DC-L13-11 (no forced tour) | An onboarding modal that closes when the person performs the main shortcut [S-L19-067] | Only as a short, skippable step when the shortcut is the product's core [inferred]; owned by Q-pattern-07 `learn-by-doing` (DC-L19-129, DC-L19-151) |
+| DC-L16-05 and Q-pref-02 `show-6`; DC-L17-05's up to 8 concepts | Never more than 5 variants, one at a time, full size (STD-process-review-taste-43) [S-L19-031] | `picker-3` replaces `show-6` (DC-L19-174) |
+| DC-L16-06 (a split view with every mode at once) | Competing options are shown one at a time, full size (STD-process-review-taste-43) | Only when options are being compared; the chosen system can still be shown the DC-L16-06 way [inferred] (DC-L19-170) |
+| DC-L11-05 (no generic principle words) | Apple's eight principles as a shared vocabulary [S-L19-020] (STD-visual-details-48) | They differ in kind, not substance: the eight sit beside the product's own principles as the builder's reasoning vocabulary [inferred] (DC-L19-163) |
+| DC-L17-07's AI-tell catalog ("system-ui as the primary face") | Default to the system font (STD-visual-details-11) | The standard wins; the review does not flag the system font (DC-L19-172) |
+| DC-L07-21 (variables for every value that changes by mode, colors included) | Styles for colors, variables for measurements [S-L19-045] (one video, no reason given) | Keep DC-L07-21; Q-token-07 unchanged; the video is recorded as opinion (DC-L19-173, DC-L19-181) |
+| DC-L03-26 and the Q-token-04 default (px spacing; "spacing scales with text size" off); engine exports px spacing and Tailwind `--spacing: 4px` | Spacing scales with the reader's text size (STD-accessibility-motion-13) [S-L19-020] | rem on the web for spacing and control heights; the toggle goes away for web output (DC-L19-182) |
+| DC-L07-05 (prefix only in platform output) | The house skills look for `--ease-out`, `--ease-in-out`, `--ease-drawer` [S-L19-018] [S-L19-027] | Unprefixed aliases for motion only (DC-L19-183) |
+| The Q-tool-02 default and the engine's `tailwindReset` (Tailwind easing left on) | House curves only (STD-easing-duration-02, STD-visual-details-26) [S-L19-018] | Reset Tailwind's easing and the bare `transition` timing function (DC-L19-184) |
+| DC-L07-22 (variant axis named `type`) | `intent` in the code source [S-L19-029] | `intent`, which also avoids the HTML `type` attribute [inferred] (DC-L19-187) |
+| DC-L16-02 and the Q-tool-01 default `builder` | Existing tokens are kept and extended [S-L19-027] [S-L19-029] | The builder may stay the master, but its export writes the project's existing names (DC-L19-189) |
+| Engine DESIGN.md leaves out each standard's "why" (conflict on STD-process-review-taste-55) | Every rule states its reason [S-L19-004] | Write the why (DC-L19-188) |
+
+---
+
+## Open questions / gaps
+
+### Found while assembling this file
+
+- **Q-plat id clash.** DC-L19-96 proposes "Q-plat-15" for the slowest-device question (its motion check moved it off Q-plat-11), while DC-L19-151 proposes Q-plat-15 for keyboard shortcuts. DC-L19-144 and DC-L19-153 still name DC-L19-96's question Q-plat-11, and the platforms confidence notes say "Q-plat-11 is DC-L19-96's". Q-plat-11 is free in `questions.json`, so DC-L19-96 should go back to Q-plat-11 in `_cards/motion.md` (Part B already lists it that way).
+- **DC-L19-129 points to a stale id and option.** It calls DC-L19-151's question "proposed Q-plat-14" and names a `teach-in-onboarding` option. DC-L19-151 proposes Q-plat-15 (Q-plat-14 is DC-L19-150's title-bar question), its options are `os-only`, `shown-hints` and `hints-and-cheat-sheet`, and it leaves the onboarding step to DC-L19-129's `learn-by-doing`.
+- **Duplicate question.** Q-motion-12 (DC-L19-83: first run and success by default, zoom 2) and Q-pattern-10 (DC-L19-130: `first-run` and `milestone` by default, zoom 3) ask the same thing under the same show-if. DC-L19-130 says it follows DC-L19-83, but still proposes its own id.
+- **Two opacity floors.** Q-color-22 `opacity-levels` gets 55%/50% for body text from DC-L19-08 and 60%/50% for secondary text from DC-L19-23; DC-L19-46 says DC-L19-08 proposes "the floor". Both are [inferred] from contrast arithmetic; one rule should be chosen.
+- **Option name mismatch.** DC-L19-188 (and the tokens area's change table) say DC-L19-171 adds an option `aspect-files` to Q-dist-02; DC-L19-171 adds no option and gives the existing `rules` option its shape.
+- **Unnumbered new questions** need ids: the theme-switch question (DC-L19-16), letter alternates (DC-L19-28), toast position and color (DC-L19-113), phone sheet heights (DC-L19-115) and sidebar order (DC-L19-118).
+- **Planned targets.** Many proposals land on questions the interview skips today (Q-pattern-05, Q-dist-01 to Q-dist-03, Q-pref-01, Q-pref-02); in particular every new lint rule from the layout and patterns cards waits for Q-dist-03.
+
+### Color (from the area file)
+
+- Hover direction in dark mode is disputed: [S-L19-039] steps darker, [S-L19-051] lighter on hover, DC-L01-17 toward more contrast. No source tested it with users.
+- The engine's dark surface steps (about 3.1% brightness apart for a pure gray) are narrower than the videos' 4 to 6%. This was worked out from engine constants, not from a generated palette; a generated build should confirm it before the check is added.
+- "Gray 950" in [S-L19-103] may be Tailwind's gray or neutral 950 (the page had just been switched to neutral grays), so the ring's exact contrast is approximate.
+- The Tailwind 50/500 and 950/300 pairs in [S-L19-070] were not contrast-checked by the source or here.
+- How far the equal-lightness chart palette can stretch before series become hard to tell apart for color-blind people is untested.
+
+### Shape and depth (from the area file)
+
+- The first-tooltip delay has no value from a house source; the only number is one video's 1s [S-L19-079].
+- The gradient scrim's stops and opacities are not given by any source; they need measuring from the shared Figma files or setting by contrast tests.
+- The Figma values for clay, metal, glass cards and the light-gray shadows are shown on screen only; they should be measured before any becomes a preset.
+- Should a sheet that materializes with blur be allowed the 20px of the static toolbar sample? STD-enter-exit-origin-30 says no for animated blur; the standards owner should confirm the split between static and animated blur.
+- Feather Icons is recommended twice but is not in DC-L05-01's list; its license and upkeep need checking before it is offered.
+- The screenshot-frame values (5% well, 10% ring, 8px inset, 64px hero padding) come from one video in Tailwind's scale; they should be confirmed on a second product before becoming defaults beyond `well`.
+
+### Motion (from the area file)
+
+- The first tooltip's delay has only one number in the sources (1s, a single video [S-L19-079]); the house fixes only that neighbouring tooltips open instantly.
+- No source gives a spinner's rotation period; "fast" is the only guidance [S-L19-003].
+- In-app reduced-motion switches (Q-aud-04) and per-device motion budgets (DC-L14-08, TV, watch, car, headset) are not covered by any L19 source.
+- Swipe-to-confirm for irreversible actions rests on one video [S-L19-035]; it may deserve a place beside hold-to-confirm, but only after another source agrees.
+- Whether a sampled CSS `linear()` spring is ever good enough on the web is open: it is cheaper than a JS library but cannot take a release velocity [inferred].
+- STD-enter-exit-origin-39 records a tension between mirrored easing on reversible transitions and the ban on ease-in; these cards follow the ease-out rule.
+- Whether the 3% press scale should be dropped under reduced motion is my reading of STD-accessibility-motion-02, not something a source says about press feedback directly.
+- Two practitioner videos animate keyboard-initiated actions (the macOS quick-save panel [S-L19-067], the shortcut hint animation [S-L19-079]); the house forbids it (STD-when-to-animate-06), and only their state-change feedback is used here.
+
+### Platforms (from the area file)
+
+- The 50-pixel drag strip (DC-L19-150) and the 70-80% right-handed figure (DC-L19-145) come from one video each; no platform source in this wiki confirms either.
+- Windows desktop apps have no practitioner or house source in this wiki; DC-L19-149 and DC-L19-150 lean on macOS only.
+- Swipe-to-confirm (DC-L19-146): the sources give no tap alternative; hold-to-confirm is the house pattern, but no source compares the two for high-impact, non-destructive actions such as sending.
+- Whether `brand-first` (Q-plat-05) should stay as an option for Flutter, where the React Native standards do not apply, is open; the sources are silent on Flutter.
+- The proposed thresholds (a ⌘K palette above about five sections in DC-L19-152) are inferred, not sourced.
+- None of the sources cover screen-reader testing, forced colors, text direction or video captions beyond one changelog line [S-L19-001]; DC-L10-16 and Q-gov-07 remain the reference.
+
+### Tokens (from the area file)
+
+- The Tailwind easing values and the bare `transition` class's default timing function in DC-L19-184 come from Tailwind's own documentation, not from an L19 source; they were checked on 2026-09-24 and 2026-09-27 and can change with a Tailwind release.
+- No source says how native apps should scale spacing with Dynamic Type; DC-L19-182 only settles the web.
+- Whether radii should follow rem is untested; DC-L19-182 keeps them px because the standard's check covers only margin, padding and gap.
+- Should the engine's reduced-motion and theme attributes (`[data-motion]`, `[data-theme]`) also be documented as the "state attributes" of the page, next to the component ones? Not covered by the sources.
+- How `engine.py review` should rate a hand-typed curve (must-level break of STD-visual-details-26, or LOW polish per [S-L19-027]) is still open, as the tokens synthesis notes.
+- Vaul is recorded as unmaintained (`learn/sources.json`), so DC-L19-185 and DC-L19-186 use it as a craft reference for `--initial-transform` and unstyled parts, not as a recommended dependency.
+
+### Typography, layout, components and patterns (gaps stated inside the cards)
+
+- The 16px mobile-web body size still rests on DC-L02-20 and one video; only the 16px input size is a house standard (DC-L19-32).
+- The sources give no native equivalent for balanced and pretty line wrapping (DC-L19-30).
+- Dashboard module priority was an open question on both wiki topic pages; DC-L19-48 proposes Q-layout-07 for it.
+- No source says whether Sonner announces new toasts through a live region (check in code or with a screen reader), and no toast source gives a reduced-motion variant (DC-L19-112).
+- No source gives a mobile toast position, so whether bottom-right should become bottom-center on phones is open (DC-L19-113).
+- No source gives a collapsed sidebar width (DC-L19-118) or a tab bar height (DC-L19-119).
+- No source gives a spinner duration beyond "fast" (DC-L19-127, STD-easing-duration-15).
+- No source covers mobile app paywalls, free trials, app-store purchase rules, taxes or currencies (DC-L19-134), notification permission prompts (DC-L19-135) or native mobile AI patterns (DC-L19-138).
+
+### Process sources not carried into cards (from the area file)
+
+- **Pricing and client work** ([S-L19-036], most of [S-L19-038], the prices in [S-L19-072]): hourly, project and value-based pricing, niches and add-on services are about the designer's business, not the system, so they change no question. The transferable ideas (the need behind the request, before-and-after results) are in DC-L19-166 and DC-L19-177. Two sources note that work takes longer than planned ([S-L19-036]; four screens took three days instead of four to six hours in [S-L19-078]); `pacing.json` already labels its minutes as rough estimates.
+- **Where to host a portfolio and how many projects to show** ([S-L19-037], [S-L19-064]): career advice with no interview change.
+- **Resource lists** ([S-L19-073], [S-L19-049], [S-L19-082]): named sites for placeholder logos, stock photos, mockups and icons could feed DC-L17-04's fallback order, but their licences were not checked here and one presenter jokes about taking logos, so none is proposed as a default.
+- **Figma effect recipes and animated prototypes** ([S-L19-058], [S-L19-071], [S-L19-081]) belong to the surface-effects and motion cards (DC-L19-67, DC-L19-85 to DC-L19-99).
+
+### Disagreements between sources
+
+These involve no existing card; each card records how it settles them.
+- Hover direction: one video steps darker on hover, another lightens (DC-L19-07).
+- Dark card borders: "brighten" advice against a light border lowered because it had too much contrast (DC-L19-05).
+- Text color: two videos use near-black text and, in dark mode, light gray with white reserved; one uses plain black or white; one flips dark-mode text to white (DC-L19-08).
+- Hiding actions: one Kole Jain video collapses busy card buttons into a menu, another says to line them up on a new edge first; settled by how often the action is used [inferred] (DC-L19-44, DC-L19-105, DC-L19-123).
+- Delete confirmations: two Kole Jain videos disagree on which button carries the fill (DC-L19-107).
+- The phone tab bar's main action: broken out of the bar in one video, dropped into line in another; they agree when the action is the most used one [inferred] (DC-L19-119, DC-L19-145).
+- Practitioner motion the house standards override: animated keyboard-started actions and shortcut hints (DC-L19-151, STD-when-to-animate-06), a quick panel that slides in (DC-L19-149), a spring-driven Figma spinner (DC-L19-127), an ease-in-out fade-in (DC-L19-85, DC-L19-133), a bouncy tooltip (DC-L19-70), and signature screen transitions on native (DC-L19-146).
+
+---
+
+## Confidence
+
+### Overall
+
+- The cards draw on the 99 analyses in `learn/analysis/`, each of which went through the verify step (a fresh agent tried to refute every rule, value and quote against the source). Five area files (color, shape and depth, platforms, process, tokens) also state that their cards were checked against the raw text wherever a card relies on a detail; the motion file records a raw-text re-read of every cited source; the typography, layout, components and patterns files do not describe their checking method.
+- Four area files record a dated second pass on 2026-09-27 that re-read every cited source and resolved every S-id, STD id, DC id and Q-id: motion, shape and depth, platforms and tokens. The color, typography, layout, components, patterns and process files record no dated second pass.
+- No card was withdrawn in any area. The motion, shape and depth, and tokens files say so explicitly; no other file marks a card withdrawn.
+- Checked while assembling: every one of the 290 distinct STD ids the cards cite exists in `synthesis/standards.json`; every existing Q-id they cite exists in `questions.json`, and the 21 that do not are proposals (Q-depth-07, Q-dist-05, Q-img-08, Q-layout-07 to Q-layout-09, Q-motion-11 to Q-motion-14, Q-pattern-07, Q-pattern-08, Q-pattern-10 to Q-pattern-13, Q-plat-11 to Q-plat-15); S-ids and DC ids pass `tools/jev_nav.py check`.
+- Parts B and C and the notes in "Found while assembling" were compiled from the cards' own text; they restate the cards and add no new claims about the sources.
+- Mobbin contributed nothing: its 4 logged videos had no captions.
+- Reference evidence is concentrated. 52 of the 53 analysed reference sources are Kole Jain videos and the other is one Steve Schoger session, so "two videos agree" often means one presenter twice; the cards say "one presenter, two videos" where that applies.
+- Some facts come from outside the L19 sources and can drift: the Tailwind easing values in DC-L19-184 (Tailwind's documentation, checked 2026-09-24 and 2026-09-27) and every "the engine does X today" statement (read in `engine.py` on 2026-09-24).
+- The cards mark their own connections [inferred]: color 101 times, typography 88, layout 96, shape and depth 122, motion 73, components 80, patterns 130, platforms 55, process 72, tokens 57 (counted in the area files).
+
+### Color (from the area file)
+
+- Confirmed against source text: the four-layer model, the lightness targets, "double the distance", the dark accent steps, the chart and theming recipes [S-L19-039]; the dark-mode, hover, press and disabled advice [S-L19-051]; the dark card fix [S-L19-052]; the Tailwind pairs and dark layer steps [S-L19-070]; the text-opacity range [S-L19-057]; the house-standard sources through `synthesis/standards.json`.
+- Inferred and marked: contrast ratios computed from the sources' percentages, the engine's current dark step spacing, the brightness gaps of Atlassian, Fluent and Carbon worked out from hex values in existing cards, and the reconciliations flagged in each Default.
+
+### Shape and depth (from the area file)
+
+- Confirmed against the raw text: every number used (the 10px shared radius, the 30/10/20 nested example and its 30px limit, the pill exception, Figma's 25% preset and the x, blur and 15-20% shadow recipe, gray 950 at 10% and 5%, the 8px inset, the 64px hero padding and 10px crop, the 25% zoom, the 3x capture, the 38px and 28px pill buttons, the 2px-taller ringed button, the 24px icon line height, the one-second tooltip delay, the 3/4 image card, the 12-point sticker, the 20% metal tint, the toolbar and picker values, `bg-black/40`) and every paraphrased claim a card relies on.
+- Marked [inferred]: the reconciliations (steps by role, eye versus floor, the icon-size ceiling, the blur split between static and animated surfaces), the token names, the shadow-ratio arithmetic, and most "as it grows" lines.
+- Single-video values are labelled as such in each card; none is proposed as a locked rule.
+
+Verification (2026-09-27), from the same file:
+
+An adversarial pass re-read every cited source (analysis and raw text), `questions.json`, the stage files, `synthesis/standards.json`, `engine.py`, `levers.json` and the compared DC-L04, DC-L05, DC-L06, DC-L09, DC-L10 and DC-L15 cards. Every S-id, DC id, STD id and wiki link resolves. No card was withdrawn. Fixes made:
+
+- DC-L19-64: the Q-depth-05 note had the video backwards. It was the outer ring, not a border, that made one button read 2px taller. The engine's blur ratios are now stated per model (ladder 2x, two-layer shadows about 2.7-3x), the 1.3x floor is a warning, and the "light gray" is no longer assumed to be opaque.
+- DC-L19-63: "preselect Q-shape-01 from Q-brand-01" was presented as new; the Q-brand-01 macros already push the roundness dial. "Every button becomes a pill" is now marked [inferred].
+- DC-L19-69: DC-L05-05 already pairs icons to the line height, so the video agrees with it rather than competing; the 16px detail limit is marked [inferred].
+- DC-L19-70 and DC-L19-74: two silent overrides of existing cards (the `universal-only` tooltip, and DC-L05-16's heroes-only scrim) are now reconciled and listed in the conflicts table.
+- DC-L19-66: keeps DC-L04-18's neutral tint and cites the house drawer standards (drawers are modal by default).
+- DC-L19-61, -62, -65, -67, -68, -71, -72, -73: wording brought back to what the sources say ("most obvious sign", "never ship", "five colored icons", a carousel "pill"), single-presenter rules labelled, and choices no source makes (the media radius step, the `soft` preset for tactile buttons, filled icon versions) marked [inferred].
+
+### Motion (from the area file)
+
+- Confirmed against source text: Kole Jain's statements used here (almost never a linear ease and the three tones; swipe-to-confirm for high-impact actions and the button fallback; subtle and classy; dashboards tame and snappy; buttons almost always get a small animation and scrolljacking sparingly; bottom means temporary and left means progress; the 500ms, 636 and 24 name-tag spring, the one-second tooltip delay and the shimmer pause button; the 550 and 40 spinner spring and the menu a couple of pixels lower; the 35% swipe-back offset; short, looping AI loaders; the state-change minimum for shortcuts; the copy chip; the robotic fade and the 404 advice; the mega menu; conversion versus awareness sites; repeated motion themes; the 1,000ms and 800ms load timings; the 1.3s GSAP move and 0.2 stagger; marquee usability; simple, tasteful hovers; the grayed-out pressed button; the hover arrow). Emil Kowalski's Raycast example, the Linear Product Intelligence animation, the crisp-dashboard and elegant-Sonner personality lines, the frequency table, the fast spinner and the 180ms against 400ms select were checked in the raw text; all other house values come from `synthesis/standards.json`, which cites its sources.
+- Inferred and marked: damping ratios computed from Kole's Figma spring numbers, token names and groupings, the proposed question ids, the hover duration of 150ms, the default slowest device, and the reconciliations flagged in each Default.
+- Adversarial check, 2026-09-27: every cited S-L19 source was re-read in its raw text, and every STD, DC and Q id was checked against `synthesis/standards.json`, `research/`, `benchmarks/` and `questions.json`. No card was withdrawn. Corrections: a proposed-id clash (Q-plat-11, now Q-plat-15); keyboard-triggered motion in two videos flagged against STD-when-to-animate-06; a bounce claim about the name-tag spring aligned with STD-springs-gestures-05; the Xcode Simulator no longer counted as proof (STD-process-review-taste-33); `expo.inOut` reclassified as exit and entrance easing; the AI research trail moved out of marketing staggers; the Q-token-03 and Q-motion-09 proposals narrowed so they do not override an owner's choice or a standard; and several attributions tightened (GOV.UK, the Train Your Judgement exercise, the shimmer's pause button, "slightly" zooming photos, "from the left").
+
+### Platforms (from the area file)
+
+- Confirmed against the raw text: the mobile sizes, bottom-bar limits and the rule that one screen does one thing [S-L19-053]; the macOS layout, drag strip, shortcut feedback, Raycast and Spotlight models and the web-tech build [S-L19-067]; reach at the bottom and the browser bar [S-L19-076]; the right-handed figure and the Fitts/Hick mix-up [S-L19-077]; the mobile-native symptom list, app-versus-document split and emulation rule [S-L19-028]; the Expo no-hover fact, native pieces table, ripple rule and 350ms push [S-L19-016]; the familiarity principle and "close is always top-left" [S-L19-020]; Raycast with no open animation [S-L19-012].
+- Taken first from the verified analyses, then re-read in the raw text during the 2026-09-27 check: the Vaul, Sonner, pick-ui-library, write-swift, drawer, Expo recipes, apple-design, audit and review-animations details. That check fixed: Vaul listed as a house toolkit pick (it is unmaintained and not on the curated list), the review "block" rule cited to the wrong skill, the swipe fallback stated more firmly than the video, a hover claim attributed to the mobile video, proposed question ids that collided with DC-L19-96, and new questions that duplicated DC-L19-117, DC-L19-129 and DC-L19-96.
+- Inferred and marked: the proposed question ids (Q-plat-12 to Q-plat-15; Q-plat-11 is DC-L19-96's), token names, the thresholds, the handedness and interruption effects, and each reconciliation flagged in a Default.
+
+### Tokens (from the area file)
+
+- Confirmed against source text: the easing library on `:root` [S-L19-007]; "styles for colors, variables for measurements" [S-L19-045]; lean versus massive systems [S-L19-054] and "decisions you can stick to" [S-L19-044]; rem or em spacing [S-L19-020]; the recon targets `--ease-*` and `--duration-*` and LOW severity for consolidation [S-L19-027]; consolidation of near-identical curves [S-L19-025]; the headless recommendation and the wrapper advice [S-L19-090]; the transform-origin variables [S-L19-003]; `--initial-transform` [S-L19-094]; data attributes and stack variables [S-L19-006]; the inherited-variable drag lag [S-L19-005]; cva and clsx for size, intent and state, and the `package.json` check [S-L19-029]; Apple's spring table [S-L19-020]; rule files with reasons [S-L19-004]; the "copy as markdown" button and rules file [S-L19-001].
+- Checked in `engine.py`: rem only for `font.size.*` in the CSS export; Tailwind's `--spacing` written in px; `--ds-` prefixed CSS names; the Tailwind `--ease-standard/enter/exit/linear` aliases; `tailwindReset` covering colors, text, radii, shadows and breakpoints only; springs stored with stiffness and derived Apple values; mode switching by `[data-theme]`, `[data-density]` and `[data-motion]`.
+- Inferred and marked: the depth-by-team-size mapping, the "what stays px" split, the alias names, the "intent" over "type" reason, the wrapper-for-every-behaviour-library default, the stiffness and bounce conversions, and the reconciliations flagged in each Default.
+- Adversarial check, 2026-09-27 (every cited source reopened in `learn/analysis/` and `learn/raw/`, every Q-id, DC id and STD id resolved). Corrected: DC-L19-182's claim that a 1.5rem target never drops below 24px (false when someone sets a smaller default text size; now `max(24px, 1.5rem)`), and its control-height and target extension is now marked inferred; DC-L19-184 missed that Tailwind's bare `transition` class uses `--default-transition-timing-function`, which the `--ease-*` reset does not touch; DC-L19-181's Linear wording (the source says "creating a view", not a dialog), its account of what Q-scope-04 changes, and its use of Q-scope-01 surfaces as a product count; DC-L19-185's middle-rung effects, which go beyond the Sonner page and are now inferred; DC-L19-186's citation for per-library variable names; DC-L19-187's "fourth" item (it is the third) and cva's scope; DC-L19-189's misquote of the prototype skill and the prototyping scope of STD-visual-details-25; DC-L19-190's attribution of the Motion-to-Apple mapping (it is [S-L19-020]). Cross-links added where these cards overlap newer cards: DC-L19-85 and DC-L19-88 own Q-motion-03 and Q-motion-04, DC-L19-99 gives motion a component tier from the start, DC-L19-164 is the process side of DC-L19-181, DC-L19-171 shares Q-dist-02 (planned) with DC-L19-188, and DC-L19-113 names the toast tokens. No card contradicts a house standard, and none was withdrawn.
+
+### Claims that rest on a single video
+
+Each is labelled in its card. None is proposed as a locked rule; where one feeds a proposed default in Part B, the maintainers should look for a second source first.
+
+| Claim | Source | Card | How the card uses it |
+|---|---|---|---|
+| If cards are pure white, the page should not be | [S-L19-039] | DC-L19-02 | Heuristic under the `cards-lighter` default |
+| Accent-colored backgrounds from Tailwind 50/500 and 950/300 pairs, with no contrast check | [S-L19-070] | DC-L19-03 | Expressive option `accent-wash`, with a status-color check |
+| Equal-lightness OKLCH chart spectrum, hue stepped by 25-30 | [S-L19-039] | DC-L19-10 | New generation option, reconciled with DC-L01-24's neighbour contrast |
+| Gray-shift recipe for tinted themes | [S-L19-039] | DC-L19-13 | Tinting method for `generator-ready` |
+| Text opacity range 45-70%, two colors the maximum | [S-L19-057] | DC-L19-08 | Describes the existing `opacity-levels` option; the floors are [inferred] |
+| Up to -4% tracking for text over 70-80px | [S-L19-070] | DC-L19-21 | Upper bound only |
+| Up to six text sizes on marketing pages, nothing above 24px on dashboards | [S-L19-052] | DC-L19-25, DC-L19-46 | Size budget heuristic; the 24px `compact` cap is marked [inferred] for density |
+| One, maybe two giant-text moments per page | [S-L19-057] | DC-L19-26 | Proposed Q-brand-06 heuristic (at most two) |
+| Section headings at 40ch, chosen by eye | [S-L19-103] | DC-L19-29 | Proposed `heading-40ch` default |
+| Hero buttons at least twice as far below the subtext as the subtext sits below the heading | [S-L19-062] | DC-L19-41 | Q-space-05 heuristic |
+| Space or alternating tint for list rows instead of lines | [S-L19-070] | DC-L19-43 | Default wording for lists; lines stay equal for tables |
+| Split hero at about 3/5 and 2/5 | [S-L19-103] | DC-L19-45 | New option `split` |
+| Padding grows with the container; gap equal to inset (8px inset, 64px well) | [S-L19-103] | DC-L19-47 | Recommended heuristic, not a lock |
+| Section patterns chosen by item count | [S-L19-060] | DC-L19-51 | Builder heuristic for proposed Q-layout-09 |
+| One shared radius for small components (10px) | [S-L19-045] | DC-L19-61, DC-L19-181 | Not adopted: the builder keeps radius steps by role |
+| Soft shadow recipe: blur at least 1.3 times y, 15-20% opacity | [S-L19-057] | DC-L19-64 | Option `soft-single`; only the 1.3x floor becomes a review warning |
+| A 1px outer ring makes a button read about 2px taller | [S-L19-103] | DC-L19-64 | Caution note, no option change |
+| First tooltip after a one-second rest | [S-L19-079] | DC-L19-70 | Left as an open value |
+| Screenshot well values (5% well, 10% ring, 8px inset, 64px hero padding) | [S-L19-103] | DC-L19-73 | Recommended starting frame `well` |
+| Load-sequence timings (1,000ms hold, 800ms slide; 1.3s move, 0.2s stagger) | [S-L19-081] [S-L19-071] | DC-L19-84, DC-L19-86, DC-L19-91 | Marketing examples only |
+| Swipe-to-confirm for high-impact actions | [S-L19-035] | DC-L19-97, DC-L19-108, DC-L19-146 | Option `slide-to-confirm`; every gesture keeps a visible twin |
+| Nav 28px and hero 38px pill buttons | [S-L19-103] | DC-L19-63, DC-L19-104 | No change to Q-space-04 |
+| 70-80% of people are right-handed | [S-L19-077] | DC-L19-119, DC-L19-145 | Reach reasoning only |
+| Three or four plans, and a section estimated irrelevant to about 98% of visitors | [S-L19-061] [S-L19-082] | DC-L19-134 | Default `plan-cards` for proposed Q-pattern-11 |
+| AI workspace parts (memory panel, step trail, confidence pill) | [S-L19-055] | DC-L19-138 | One creator's survey; two points follow DC-L13-16 instead |
+| Top 50px of a desktop window kept free for dragging | [S-L19-067] | DC-L19-150 | Starting value marked "one video's estimate" |
+| Before-and-after numbers to show a design worked | [S-L19-038] | DC-L19-137, DC-L19-166 | Default `before-after`; option `outcomes` |
+| Styles for colors, variables for measurements | [S-L19-045] | DC-L19-173, DC-L19-181 | Not adopted: DC-L07-21 stays |
+| Never let an AI choose your colors or layout | [S-L19-061] | DC-L19-11, DC-L19-172 | Kept only as the milder point three videos share: AI picks need a person's judgement |
+
+---
+
+## Source key
+
+Every L19 source id, with its wiki page, publisher and authority. URLs, dates and what was taken from each are in `traces/L19-trace.md`.
+
+- [S-L19-001] [[sources/adev-changelog-animations-dev|animations.dev]] (animations.dev (web); non-negotiable)
+- [S-L19-002] [[sources/adev-home-animations-dev|animations.dev]] (animations.dev (web); non-negotiable)
+- [S-L19-003] [[sources/ek-7-practical-animation-tips-7-practical-animation-tips|7 Practical Animation Tips]] (Emil Kowalski (web); non-negotiable)
+- [S-L19-004] [[sources/ek-agents-with-taste-agents-with-taste|Agents with Taste]] (Emil Kowalski (web); non-negotiable)
+- [S-L19-005] [[sources/ek-building-a-drawer-component-building-a-drawer-component|Building a drawer component]] (Emil Kowalski (web); non-negotiable)
+- [S-L19-006] [[sources/ek-building-a-toast-component-building-a-toast-component|Building a toast component]] (Emil Kowalski (web); non-negotiable)
+- [S-L19-007] [[sources/ek-building-an-animation-course-building-an-animation-course|Building an animation course]] (Emil Kowalski (web); non-negotiable)
+- [S-L19-008] [[sources/ek-developing-taste-developing-taste|Developing Taste]] (Emil Kowalski (web); non-negotiable)
+- [S-L19-009] [[sources/ek-friction-as-a-feature-friction-as-a-feature|Friction as a Feature]] (Emil Kowalski (web); non-negotiable)
+- [S-L19-010] [[sources/ek-the-magic-of-clip-path-the-magic-of-clip-path|The Magic of Clip Path]] (Emil Kowalski (web); non-negotiable)
+- [S-L19-011] [[sources/ek-train-your-judgement-train-your-judgement|Train Your Judgement]] (Emil Kowalski (web); non-negotiable)
+- [S-L19-012] [[sources/ek-you-dont-need-animations-you-don-t-need-animations|You Don't Need Animations]] (Emil Kowalski (web); non-negotiable)
+- [S-L19-013] [[sources/eks-performance-cheatsheet-emilkowalski-skills-performance-cheatsheet-md|emilkowalski/skills: performance-cheatsheet.md]] (emilkowalski/skills (GitHub, MIT); non-negotiable)
+- [S-L19-014] [[sources/eks-readme-emilkowalski-skills-readme-md|emilkowalski/skills: README.md]] (emilkowalski/skills (GitHub, MIT); non-negotiable)
+- [S-L19-015] [[sources/eks-skills-animate-expo-recipes-emilkowalski-skills-skills-animate-expo-recipes-md|emilkowalski/skills: skills/animate-expo/RECIPES.md]] (emilkowalski/skills (GitHub, MIT); non-negotiable)
+- [S-L19-016] [[sources/eks-skills-animate-expo-skill-emilkowalski-skills-skills-animate-expo-skill-md|emilkowalski/skills: skills/animate-expo/SKILL.md]] (emilkowalski/skills (GitHub, MIT); non-negotiable)
+- [S-L19-017] [[sources/eks-skills-animate-recipes-emilkowalski-skills-skills-animate-recipes-md|emilkowalski/skills: skills/animate/RECIPES.md]] (emilkowalski/skills (GitHub, MIT); non-negotiable)
+- [S-L19-018] [[sources/eks-skills-animate-skill-emilkowalski-skills-skills-animate-skill-md|emilkowalski/skills: skills/animate/SKILL.md]] (emilkowalski/skills (GitHub, MIT); non-negotiable)
+- [S-L19-019] [[sources/eks-skills-animation-vocabulary-skill-emilkowalski-skills-skills-animation-vocabulary-skill-md|emilkowalski/skills: skills/animation-vocabulary/SKILL.md]] (emilkowalski/skills (GitHub, MIT); non-negotiable)
+- [S-L19-020] [[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]] (emilkowalski/skills (GitHub, MIT); non-negotiable)
+- [S-L19-021] [[sources/eks-skills-ask-sonner-api-emilkowalski-skills-skills-ask-sonner-api-md|emilkowalski/skills: skills/ask-sonner/API.md]] (emilkowalski/skills (GitHub, MIT); non-negotiable)
+- [S-L19-022] [[sources/eks-skills-ask-sonner-skill-emilkowalski-skills-skills-ask-sonner-skill-md|emilkowalski/skills: skills/ask-sonner/SKILL.md]] (emilkowalski/skills (GitHub, MIT); non-negotiable)
+- [S-L19-023] [[sources/eks-skills-emil-design-eng-skill-emilkowalski-skills-skills-emil-design-eng-skill-md|emilkowalski/skills: skills/emil-design-eng/SKILL.md]] (emilkowalski/skills (GitHub, MIT); non-negotiable)
+- [S-L19-024] [[sources/eks-skills-find-animation-opportunities-skill-emilkowalski-skills-skills-find-animation-opportunities-skill-md|emilkowalski/skills: skills/find-animation-opportunities/SKILL.md]] (emilkowalski/skills (GitHub, MIT); non-negotiable)
+- [S-L19-025] [[sources/eks-skills-improve-animations-audit-emilkowalski-skills-skills-improve-animations-audit-md|emilkowalski/skills: skills/improve-animations/AUDIT.md]] (emilkowalski/skills (GitHub, MIT); non-negotiable)
+- [S-L19-026] [[sources/eks-skills-improve-animations-plan-template-emilkowalski-skills-skills-improve-animations-plan-template-md|emilkowalski/skills: skills/improve-animations/PLAN-TEMPLATE.md]] (emilkowalski/skills (GitHub, MIT); non-negotiable)
+- [S-L19-027] [[sources/eks-skills-improve-animations-skill-emilkowalski-skills-skills-improve-animations-skill-md|emilkowalski/skills: skills/improve-animations/SKILL.md]] (emilkowalski/skills (GitHub, MIT); non-negotiable)
+- [S-L19-028] [[sources/eks-skills-mobile-native-skill-emilkowalski-skills-skills-mobile-native-skill-md|emilkowalski/skills: skills/mobile-native/SKILL.md]] (emilkowalski/skills (GitHub, MIT); non-negotiable)
+- [S-L19-029] [[sources/eks-skills-pick-ui-library-skill-emilkowalski-skills-skills-pick-ui-library-skill-md|emilkowalski/skills: skills/pick-ui-library/SKILL.md]] (emilkowalski/skills (GitHub, MIT); non-negotiable)
+- [S-L19-030] [[sources/eks-skills-prototype-picker-emilkowalski-skills-skills-prototype-picker-md|emilkowalski/skills: skills/prototype/PICKER.md]] (emilkowalski/skills (GitHub, MIT); non-negotiable)
+- [S-L19-031] [[sources/eks-skills-prototype-skill-emilkowalski-skills-skills-prototype-skill-md|emilkowalski/skills: skills/prototype/SKILL.md]] (emilkowalski/skills (GitHub, MIT); non-negotiable)
+- [S-L19-032] [[sources/eks-skills-review-animations-skill-emilkowalski-skills-skills-review-animations-skill-md|emilkowalski/skills: skills/review-animations/SKILL.md]] (emilkowalski/skills (GitHub, MIT); non-negotiable)
+- [S-L19-033] [[sources/eks-skills-review-animations-standards-emilkowalski-skills-skills-review-animations-standards-md|emilkowalski/skills: skills/review-animations/STANDARDS.md]] (emilkowalski/skills (GitHub, MIT); non-negotiable)
+- [S-L19-034] [[sources/eks-skills-write-swift-skill-emilkowalski-skills-skills-write-swift-skill-md|emilkowalski/skills: skills/write-swift/SKILL.md]] (emilkowalski/skills (GitHub, MIT); non-negotiable)
+- [S-L19-035] [[sources/14h1VnkQvIc-master-the-3-types-of-crazy-mobile-ui-swipe-interactions|Master the 3 Types of CRAZY Mobile UI Swipe Interactions]] (Kole Jain; reference)
+- [S-L19-036] [[sources/2rtsoM2Dqrs-how-to-price-website-designs-with-specific-numbers|How To Price Website Designs (With Specific Numbers)]] (Kole Jain; reference)
+- [S-L19-037] [[sources/59XWYgN00nQ-create-a-portfolio-with-no-experience-or-clients-needed|Create A Portfolio With No Experience (or clients) Needed]] (Kole Jain; reference)
+- [S-L19-038] [[sources/5JxUJ1fuyO8-make-one-design-change-to-actually-land-clients-stop-struggling|Make ONE Design Change to Actually Land Clients (Stop Struggling)]] (Kole Jain; reference)
+- [S-L19-039] [[sources/66oOi9OLMCw-why-the-60-30-10-rule-is-ruining-your-ui-designs|Why the 60-30-10 Rule is RUINING Your UI Designs]] (Kole Jain; reference)
+- [S-L19-040] [[sources/6CC8lLnqa28-6-things-you-probably-need-to-hear-as-a-web-designer|6 Things You Probably Need to Hear (as a web designer)]] (Kole Jain; reference)
+- [S-L19-041] [[sources/7cTdCu8HMgM-the-definitive-process-to-present-uis-like-a-pro|The DEFINITIVE process to present UIs like a pro]] (Kole Jain; reference)
+- [S-L19-042] [[sources/7sUUzOCv47U-mathematically-perfect-typography-for-web-design|Mathematically Perfect Typography for Web Design]] (Kole Jain; reference)
+- [S-L19-043] [[sources/9WVt1CelBfg-the-stupid-simple-way-to-learn-ui-ux-design-in-exactly-10-minutes|The stupid simple way to learn UI/UX design in exactly 10 minutes]] (Kole Jain; reference)
+- [S-L19-044] [[sources/ADaQuZS04Rc-stop-making-pretty-uis-think-like-a-product-designer|Stop Making Pretty UIs. Think Like a Product Designer]] (Kole Jain; reference)
+- [S-L19-045] [[sources/AH_ugxmLeUM-7-ui-ux-mistakes-that-scream-youre-a-beginner|7 UI/UX mistakes that SCREAM you’re a beginner]] (Kole Jain; reference)
+- [S-L19-046] [[sources/A_Ozpb0XDuw-how-hard-is-it-to-really-make-a-no-code-3d-animated-website|How hard is it to REALLY make a no-code 3D animated website?]] (Kole Jain; reference)
+- [S-L19-047] [[sources/B7k5rOgmOGY-everything-you-need-to-know-to-build-a-dashboard-ui-in-8-minutes-beginner-friendly|EVERYTHING you need to know to build a Dashboard UI in 8 minutes (beginner friendly)]] (Kole Jain; reference)
+- [S-L19-048] [[sources/BUDipdbKK7Y-i-made-the-most-unhinged-ui-upgrades-downgrades|I Made The Most UNHINGED UI Upgrades (downgrades?)]] (Kole Jain; reference)
+- [S-L19-049] [[sources/BvbFPzLjWcU-redesigning-a-modern-skincare-ui-from-scratch-free-design-files|Redesigning A Modern Skincare UI from SCRATCH (+ free design files)]] (Kole Jain; reference)
+- [S-L19-050] [[sources/EHwZzWd-OnQ-7-ui-design-trends-that-are-criminally-slept-on-dont-miss-these|7 ui design trends that are CRIMINALLY slept on (don’t miss these)]] (Kole Jain; reference)
+- [S-L19-051] [[sources/EOcY3hPMQkk-the-7-color-mistakes-that-ruin-your-ui-designs|The 7 Color Mistakes that RUIN your UI Designs]] (Kole Jain; reference)
+- [S-L19-052] [[sources/EcbgbKtOELY-every-ui-ux-concept-explained-in-under-10-minutes|Every UI/UX Concept Explained in Under 10 Minutes]] (Kole Jain; reference)
+- [S-L19-053] [[sources/Gfsd8NNuD9g-everything-you-need-to-know-about-mobile-app-uis-in-8-minutes-beginner-friendly|Everything you need to know about Mobile App UI’s in 8 minutes (beginner friendly)]] (Kole Jain; reference)
+- [S-L19-054] [[sources/HE4rLEQpiXY-how-to-think-like-a-genius-ui-ux-designer|How to think like a GENIUS UI/UX designer]] (Kole Jain; reference)
+- [S-L19-055] [[sources/If7iCPDy2vk-the-7-ui-components-to-design-like-unicorn-ai-startups|The 7 UI Components to Design Like Unicorn AI Startups]] (Kole Jain; reference)
+- [S-L19-056] [[sources/Ksx9C2-3yMo-the-3-dashboard-ui-flaws-that-give-away-you-ve-never-built-one|The 3 dashboard UI flaws that give away you've NEVER built one]] (Kole Jain; reference)
+- [S-L19-057] [[sources/Lp6ey4AyDzA-8-web-design-hacks-to-actually-make-your-designs-better|8 Web Design Hacks To ACTUALLY Make Your Designs Better]] (Kole Jain; reference)
+- [S-L19-058] [[sources/MZSm6MA8bww-advanced-figma-web-design-effects|Advanced FIGMA Web Design Effects]] (Kole Jain; reference)
+- [S-L19-059] [[sources/NtZeYmTMuo4-animated-dashboard-sidebar-tutorial-in-figma-free-design-files|Animated Dashboard Sidebar Tutorial in Figma (+ free design files)]] (Kole Jain; reference)
+- [S-L19-060] [[sources/P2ksReDwWkE-website-layouts-to-make-a-professional-website-design-in-2024|Website Layouts To Make A Professional Website Design in 2024]] (Kole Jain; reference)
+- [S-L19-061] [[sources/PDcQJOPby1k-5-saas-ui-ux-mistakes-that-scream-you-vibe-code|5 SaaS UI/UX mistakes that SCREAM you Vibe Code]] (Kole Jain; reference)
+- [S-L19-062] [[sources/RCneB_MQ7qs-the-one-thing-vibe-coding-cant-fix-about-your-website|The one thing vibe coding CAN’T fix about your website]] (Kole Jain; reference)
+- [S-L19-063] [[sources/SfX43uIubj4-4-ui-design-hacks-to-kill-boring-designs|4 UI Design Hacks to KILL boring designs]] (Kole Jain; reference)
+- [S-L19-064] [[sources/ToJiXPTNnLY-professional-portfolio-breakdown-why-is-theirs-so-much-better|Professional Portfolio Breakdown — Why Is Theirs So Much Better?]] (Kole Jain; reference)
+- [S-L19-065] [[sources/V3Omp1hm0Sg-i-redesigned-a-failing-tesla-wannabe-full-website-to-save-it|I Redesigned a Failing Tesla WANNABE Full Website To SAVE It]] (Kole Jain; reference)
+- [S-L19-066] [[sources/VPeTgU7la34-7-modern-ui-layouts-from-50-top-software-companies-free-figma-file|7 Modern UI Layouts from 50 Top Software Companies (+ Free Figma File)]] (Kole Jain; reference)
+- [S-L19-067] [[sources/Vy0KKvZJRH8-everything-you-need-to-design-macos-apps-exactly-like-apple-beginner-friendly|Everything you need to Design macOS Apps EXACTLY like Apple (beginner friendly)]] (Kole Jain; reference)
+- [S-L19-068] [[sources/Yr2uIcFZDDQ-redesigning-a-finance-dashboard-ui-from-scratch-ft-dribbble|Redesigning a Finance Dashboard UI from SCRATCH (ft. Dribbble)]] (Kole Jain; reference)
+- [S-L19-069] [[sources/ZsP20PN14O0-5-trendy-animations-to-steal-for-your-next-web-design|5 Trendy Animations to Steal for Your Next Web Design]] (Kole Jain; reference)
+- [S-L19-070] [[sources/c1TvOcKdBVE-the-8-ui-ux-cheat-codes-for-instantly-better-designs|The 8 UI/UX Cheat Codes for INSTANTLY Better Designs]] (Kole Jain; reference)
+- [S-L19-071] [[sources/d4MF6pdAZNw-developing-premium-load-animations-html-css-js-part-2|Developing Premium Load animations (HTML, CSS & JS): Part 2]] (Kole Jain; reference)
+- [S-L19-072] [[sources/eMMiLeo_UGI-the-4-levels-of-landing-page-ui-ux-design|The 4 Levels of Landing Page UI/UX Design]] (Kole Jain; reference)
+- [S-L19-073] [[sources/eeN7yUcIWbw-20-top-underrated-web-design-resources-for-2025|20 Top Underrated Web Design Resources for 2025]] (Kole Jain; reference)
+- [S-L19-074] [[sources/fL1X2Mw6s3w-figma-update-everything-in-under-2-minutes|Figma Update: Everything In Under 2 Minutes]] (Kole Jain; reference)
+- [S-L19-075] [[sources/gKM6b2EnW1k-upgrading-9-crucial-ui-elements-free-figma-file-included|Upgrading 9 CRUCIAL UI Elements (free figma file included)]] (Kole Jain; reference)
+- [S-L19-076] [[sources/goWOAFqJHpA-i-redesigned-spotify-wrapped-entirely-from-scratch|I Redesigned Spotify Wrapped Entirely From SCRATCH]] (Kole Jain; reference)
+- [S-L19-077] [[sources/ixUq4HM4FNg-tiktoks-ux-is-so-good-it-should-be-illegal-seriously|TikTok’s UX is so GOOD it should be ILLEGAL (seriously)]] (Kole Jain; reference)
+- [S-L19-078] [[sources/jSxxAFxjxbU-i-spent-a-week-gamifying-apps-this-is-what-i-built|I spent a week gamifying apps. This is what I built]] (Kole Jain; reference)
+- [S-L19-079] [[sources/ld1zhQMXxXU-11-micro-animations-that-will-instantly-level-up-your-ui-free-figma-file|11 Micro Animations That Will Instantly Level Up Your UI (free figma file)]] (Kole Jain; reference)
+- [S-L19-080] [[sources/neE6wOuBIP8-the-secret-behind-weirdly-perfect-ui-designs|The secret behind weirdly perfect UI designs]] (Kole Jain; reference)
+- [S-L19-081] [[sources/nl8OFGdx75w-prototyping-professional-load-animations-in-figma-part-1|Prototyping Professional Load Animations in Figma: Part 1]] (Kole Jain; reference)
+- [S-L19-082] [[sources/pGYLZyBE32o-i-redesigned-google-s-ai-website-from-scratch-complete-transformation|I Redesigned Google's AI Website from SCRATCH (complete transformation)]] (Kole Jain; reference)
+- [S-L19-083] [[sources/t7mpEDXzjCg-make-a-perfect-ux-case-study-in-8-steps|Make A Perfect UX Case Study In 8 Steps]] (Kole Jain; reference)
+- [S-L19-084] [[sources/tNMAFjzapOk-the-formula-behind-truly-captivating-ui-sections|The Formula Behind Truly Captivating UI Sections]] (Kole Jain; reference)
+- [S-L19-085] [[sources/ulSOdTgoGeY-awful-to-amazing-web-designs-easily|Awful To AMAZING Web Designs Easily]] (Kole Jain; reference)
+- [S-L19-086] [[sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai|Vibe Coding a Pro UI in SECONDS With AI]] (Kole Jain; reference)
+- [S-L19-087] [[sources/sonner-getting-started-getting-started-sonner|Getting Started – Sonner]] (Sonner docs (web); non-negotiable)
+- [S-L19-088] [[sources/sonner-home-sonner|Sonner]] (Sonner docs (web); non-negotiable)
+- [S-L19-089] [[sources/sonner-other-other-sonner|Other – Sonner]] (Sonner docs (web); non-negotiable)
+- [S-L19-090] [[sources/sonner-styling-styling-sonner|Styling – Sonner]] (Sonner docs (web); non-negotiable)
+- [S-L19-091] [[sources/sonner-toast-toast-sonner|Toast – Sonner]] (Sonner docs (web); non-negotiable)
+- [S-L19-092] [[sources/sonner-toaster-toaster-sonner|Toaster – Sonner]] (Sonner docs (web); non-negotiable)
+- [S-L19-093] [[sources/vaul-api-api-reference-vaul|API Reference – Vaul]] (Vaul docs (web); good-to-have)
+- [S-L19-094] [[sources/vaul-default-default-vaul|Default – Vaul]] (Vaul docs (web); good-to-have)
+- [S-L19-095] [[sources/vaul-getting-started-getting-started-vaul|Getting Started – Vaul]] (Vaul docs (web); good-to-have)
+- [S-L19-096] [[sources/vaul-inputs-inputs-vaul|Inputs – Vaul]] (Vaul docs (web); good-to-have)
+- [S-L19-097] [[sources/vaul-other-other-vaul|Other – Vaul]] (Vaul docs (web); good-to-have)
+- [S-L19-098] [[sources/vaul-snap-points-snap-points-vaul|Snap Points – Vaul]] (Vaul docs (web); good-to-have)
+- [S-L19-099] rejected: no captions available (Mobbin)
+- [S-L19-100] rejected: no captions available (Mobbin)
+- [S-L19-101] rejected: no captions available (Mobbin)
+- [S-L19-102] rejected: no captions available (Mobbin)
+- [S-L19-103] [[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]] (Steve Schoger; reference)

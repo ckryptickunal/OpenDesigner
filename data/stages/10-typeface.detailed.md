@@ -41,8 +41,11 @@ Zoom 3 detailed · weight high · changes 5 decisions · class G · cards DC-L02
 - **Why:** Optical sizing makes small text sturdier and large text sleeker. Without it, big headings set in the body version of a font look clunky [DC-L02-04].
 - **Options:**
   - `variable-opsz` Variable weight plus optical size tied to font size (SF Pro, Segoe UI Variable 8-36pt, Inter opsz 14-32; Material sets opsz = font size).
+    - Now: Weights plus letter shapes that adjust to size: sturdier small text and sleeker headings. As it grows: Every new size looks right on its own where the font supports it; otherwise heading spacing is set by hand.
   - `static` Static fonts, set weights only (Roboto as applied by M3 components).
+    - Now: Fixed weights only, such as regular and bold: simplest, and works with any font. As it grows: Big headings need tighter letter spacing and line heights set by hand, since letters don't reshape by size.
   - `variable-wght` Variable weight, with in-between weights (Polaris 450/550/650).
+    - Now: In-between weights, like Polaris's 450 and 550, for finer steps of emphasis. As it grows: New text styles can use finer emphasis steps without adding font files. [inferred]
 - **Default:** `variable-opsz`: variable-opsz when the face has it; otherwise separate display tracking and line-height values above about 24px *Source:* card heuristic [DC-L02-04].
 - **Show:** a size ramp from 11px to 64px with opsz on and off.
 - **Use / avoid:** use opsz tied to size; avoid setting display sizes in a text cut without tracking adjustments [DC-L02-04, DC-L02-14].

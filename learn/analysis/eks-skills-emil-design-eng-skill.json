@@ -1,0 +1,1963 @@
+{
+ "summary": "This is Emil Kowalski's design-engineering agent skill: a compact rulebook for UI polish, animation decisions and component details. It gives a four-step framework for any animation (should it animate, why, which easing, how fast) with a frequency table, an easing decision tree, three custom cubic-bezier curves and a duration table capped at 300ms for UI. It adds concrete component rules (press scale 0.97, never scale(0), origin-aware popovers, instant subsequent tooltips), spring, gesture and performance rules, reduced-motion and touch-hover handling, the principles behind Sonner, stagger and debugging practice, and a review checklist. For a design system these become motion tokens, component behaviour defaults and a locked review checklist.",
+ "key_ideas": [
+  "Taste is trained by studying and reverse engineering great interfaces.",
+  "Invisible details compound; people love interfaces without knowing why.",
+  "Decide whether to animate by how often people see the element; frequent or keyboard actions get no animation.",
+  "Every animation needs a purpose: spatial consistency, state, explanation, feedback or avoiding jarring change.",
+  "Easing follows the job: ease-out to enter or exit, ease-in-out to move, ease for hover, linear for constant motion, never ease-in.",
+  "Built-in CSS easings are too weak; use strong custom curves.",
+  "UI animation stays under 300ms, and speed shapes perceived performance.",
+  "Springs suit gestures and interruptible motion because they keep velocity; keep bounce subtle.",
+  "Pressable things scale to about 0.97; nothing enters from scale(0); popovers grow from their trigger, modals from center.",
+  "Transitions beat keyframes for rapidly triggered UI because they retarget instead of restarting.",
+  "Animate only transform and opacity; prefer CSS or WAAPI when the main thread is busy.",
+  "Reduced motion means fewer and gentler animations, not zero.",
+  "Loved components come from low-friction setup, excellent defaults, invisible edge-case handling and cohesive motion.",
+  "Be slow where the user decides and fast where the system responds.",
+  "Debug motion in slow motion, frame by frame, on real devices and the next day."
+ ],
+ "entities": [
+  {
+   "name": "Emil Kowalski",
+   "type": "person",
+   "description": "Design engineer whose philosophy the skill encodes; the component principles come from building Sonner, presumably his library [inferred]."
+  },
+  {
+   "name": "Paul Graham",
+   "type": "person",
+   "description": "Quoted on unseen details combining into something stunning."
+  },
+  {
+   "name": "Raycast",
+   "type": "product",
+   "description": "Example of a frequently used tool with no open/close animation."
+  },
+  {
+   "name": "Dynamic Island",
+   "type": "product",
+   "description": "Apple feature cited as an element that should feel alive, suited to springs."
+  },
+  {
+   "name": "Motion (formerly Framer Motion)",
+   "type": "library",
+   "description": "React animation library; useSpring for springs, with a caveat that x/y/scale shorthands are not hardware-accelerated."
+  },
+  {
+   "name": "Base UI",
+   "type": "library",
+   "description": "Component library whose var(--transform-origin) makes popovers origin-aware."
+  },
+  {
+   "name": "Ionic Framework",
+   "type": "library",
+   "description": "Source of the iOS-like drawer easing curve."
+  },
+  {
+   "name": "Sonner",
+   "type": "library",
+   "description": "Toast library (13M+ weekly npm downloads per the source) whose building produced the component principles."
+  },
+  {
+   "name": "Vaul",
+   "type": "library",
+   "description": "Drawer library cited for hiding the drawer with translateY(100%) before animating in."
+  },
+  {
+   "name": "Vercel",
+   "type": "company",
+   "description": "Where a dashboard tab animation dropped frames until moved to CSS animations."
+  },
+  {
+   "name": "Family",
+   "type": "product",
+   "description": "App whose drawer list shows the opacity + height combination."
+  },
+  {
+   "name": "easing.dev",
+   "type": "tool",
+   "description": "Resource for stronger custom easing curves."
+  },
+  {
+   "name": "easings.co",
+   "type": "tool",
+   "description": "Resource for stronger custom easing curves."
+  },
+  {
+   "name": "Web Animations API (WAAPI)",
+   "type": "tool",
+   "description": "Browser API for programmatic, hardware-accelerated CSS-performance animations."
+  },
+  {
+   "name": "@starting-style",
+   "type": "concept",
+   "description": "CSS at-rule for animating an element's entry without JavaScript."
+  },
+  {
+   "name": "clip-path inset()",
+   "type": "concept",
+   "description": "CSS clipping used for reveals, tabs, hold-to-delete and comparison sliders."
+  },
+  {
+   "name": "prefers-reduced-motion",
+   "type": "concept",
+   "description": "Media query for users who want fewer and gentler animations."
+  },
+  {
+   "name": "Chrome DevTools Animations panel",
+   "type": "tool",
+   "description": "Used for slow-motion and frame-by-frame animation inspection."
+  },
+  {
+   "name": "Safari remote devtools",
+   "type": "tool",
+   "description": "Used to debug gestures on a physical phone; Xcode Simulator is the weaker alternative."
+  },
+  {
+   "name": "IntersectionObserver",
+   "type": "tool",
+   "description": "Browser API for triggering image reveals when an element enters the viewport."
+  }
+ ],
+ "topics": [
+  {
+   "name": "Motion principles",
+   "summary": "A four-step decision framework (should it animate, purpose, easing, speed), frequency-based rules, valid purposes, no scale(0), cohesion with component personality, and asymmetric timing."
+  },
+  {
+   "name": "Easing and timing",
+   "summary": "Easing decision tree by job, three custom cubic-bezier tokens, never ease-in, a duration table per element type, a 300ms cap for UI, exits faster than entrances, and 30-80ms stagger."
+  },
+  {
+   "name": "Spring animation",
+   "summary": "When to use springs, useSpring for decorative mouse tracking, Apple duration+bounce config recommended over mass/stiffness/damping, subtle bounce 0.1-0.3, and velocity-preserving interruption."
+  },
+  {
+   "name": "Animation performance",
+   "summary": "Animate only transform and opacity, avoid inherited CSS variable updates during drag, Framer Motion shorthands are main-thread, CSS animations beat JS under load, and WAAPI for programmatic control; blur under 20px."
+  },
+  {
+   "name": "Gestures and drag",
+   "summary": "Velocity-based dismissal above ~0.11, damping and friction at boundaries, pointer capture, multi-touch protection, and testing gestures on real devices."
+  },
+  {
+   "name": "Micro-interactions",
+   "summary": "Press scale 0.97 on :active, blur to mask crossfades, hold-to-delete with clip-path, clipped tab color transitions and comparison sliders."
+  },
+  {
+   "name": "Reduced motion",
+   "summary": "Reduced motion means fewer and gentler animations, keeping opacity and color while removing movement; useReducedMotion in React."
+  },
+  {
+   "name": "Accessibility",
+   "summary": "Motion sickness risk and reduced motion, plus gating hover animations behind (hover: hover) and (pointer: fine) for touch devices."
+  },
+  {
+   "name": "Toasts and notifications",
+   "summary": "Toasts enter and exit from the same direction, use transitions rather than keyframes, pause timers when the tab is hidden, fill stack gaps to keep hover, and Sonner's slower ease-based motion."
+  },
+  {
+   "name": "Drawers and sheets",
+   "summary": "iOS-like drawer curve, translateY(100%) hiding, 200-500ms duration, damping and friction when dragging past the top, and avoiding inherited CSS variables during swipe."
+  },
+  {
+   "name": "Modals and popovers",
+   "summary": "Popovers and tooltips scale from their trigger via var(--transform-origin); modals stay centered; tooltip delay then instant subsequent tooltips."
+  },
+  {
+   "name": "Buttons and actions",
+   "summary": "Buttons scale to 0.97 on press with a 160ms ease-out transform, and hold-to-delete uses a slow press and snappy release."
+  },
+  {
+   "name": "Feedback, empty and loading states",
+   "summary": "Faster-spinning spinners make loading feel faster; transitions prevent jarring appear/disappear changes."
+  },
+  {
+   "name": "Design taste and judgement",
+   "summary": "Taste is trained, unseen details compound, and beauty is leverage in software."
+  },
+  {
+   "name": "Design process",
+   "summary": "Answer the framework before coding, review the next day, slow motion and frame-by-frame inspection, real-device testing, and Before/After/Why review tables."
+  },
+  {
+   "name": "UI libraries",
+   "summary": "Sonner principles for building loved components: minimal setup, great defaults over options, memorable naming, invisible edge cases, transitions for dynamic UI, and interactive docs."
+  },
+  {
+   "name": "Design systems and tokens",
+   "summary": "Named easing tokens (--ease-out, --ease-in-out, --ease-drawer) and per-element duration ranges suitable as motion tokens."
+  },
+  {
+   "name": "Web implementation (CSS and React)",
+   "summary": "@starting-style with a data-mounted fallback, percentage translates, 3D transforms, clip-path inset techniques, WAAPI, useInView and IntersectionObserver."
+  }
+ ],
+ "claims": [
+  {
+   "claim": "In a world where everyone's software is good enough, taste is the differentiator.",
+   "evidence": "You are a design engineer with the craft sensibility."
+  },
+  {
+   "claim": "Good taste is a trained instinct, not personal preference or something innate.",
+   "evidence": "Taste is trained, not innate"
+  },
+  {
+   "claim": "People select tools based on the overall experience, not just functionality.",
+   "evidence": "Beauty is leverage"
+  },
+  {
+   "claim": "Animation on actions repeated hundreds of times a day makes them feel slow, delayed and disconnected.",
+   "evidence": "Never animate keyboard-initiated actions."
+  },
+  {
+   "claim": "Built-in CSS easings are too weak to make animations feel intentional.",
+   "evidence": "Critical: use custom easing curves."
+  },
+  {
+   "claim": "A dropdown with ease-in at 300ms feels slower than one with ease-out at 300ms, because ease-in delays the initial movement.",
+   "evidence": "Never use ease-in for UI animations."
+  },
+  {
+   "claim": "A faster-spinning spinner makes loading feel faster even when load time is identical.",
+   "evidence": "Perceived performance"
+  },
+  {
+   "claim": "ease-out at 200ms feels faster than ease-in at 200ms because the user sees immediate movement.",
+   "evidence": "Perceived performance"
+  },
+  {
+   "claim": "Springs feel more natural than duration-based animations because they simulate real physics and have no fixed duration.",
+   "evidence": "Spring Animations"
+  },
+  {
+   "claim": "Springs maintain velocity when interrupted, while CSS animations and keyframes restart from zero.",
+   "evidence": "Interruptibility advantage"
+  },
+  {
+   "claim": "The default transform-origin: center is wrong for almost every popover.",
+   "evidence": "Make popovers origin-aware"
+  },
+  {
+   "claim": "CSS transitions can be interrupted and retargeted mid-animation; keyframes restart from zero.",
+   "evidence": "Use CSS transitions over keyframes for interruptible UI"
+  },
+  {
+   "claim": "Blur during a crossfade blends old and new states so the eye perceives one smooth transformation instead of two objects swapping.",
+   "evidence": "Why blur works"
+  },
+  {
+   "claim": "Heavy blur is expensive, especially in Safari.",
+   "evidence": "Keep blur under 20px."
+  },
+  {
+   "claim": "@starting-style replaces the React pattern of setting mounted: true in useEffect after the first render.",
+   "evidence": "Animate enter states with @starting-style"
+  },
+  {
+   "claim": "Percentage values in translate() are relative to the element's own size.",
+   "evidence": "translateY with percentages"
+  },
+  {
+   "claim": "scale() scales an element's children too, unlike width/height, so text and icons scale with a pressed button.",
+   "evidence": "scale() scales children too"
+  },
+  {
+   "claim": "Clipping a duplicated, active-styled tab list creates a color transition that timing individual color transitions can never achieve.",
+   "evidence": "Tabs with perfect color transitions"
+  },
+  {
+   "claim": "A clip-path comparison slider needs no extra DOM elements and is fully hardware-accelerated.",
+   "evidence": "Comparison sliders"
+  },
+  {
+   "claim": "Without multi-touch protection, switching fingers mid-drag makes the element jump to the new position.",
+   "evidence": "Multi-touch protection"
+  },
+  {
+   "claim": "Transform and opacity skip layout and paint and run on the GPU; animating padding, margin, height or width triggers all three rendering steps.",
+   "evidence": "Only animate transform and opacity"
+  },
+  {
+   "claim": "Changing a CSS variable on a parent recalculates styles for all its children.",
+   "evidence": "CSS variables are inheritable"
+  },
+  {
+   "claim": "Framer Motion's x, y and scale shorthands are not hardware-accelerated; they use requestAnimationFrame on the main thread.",
+   "evidence": "Framer Motion hardware acceleration caveat"
+  },
+  {
+   "claim": "At Vercel, a dashboard tab animation using Shared Layout Animations dropped frames during page loads, and switching to CSS animations fixed it.",
+   "evidence": "Framer Motion hardware acceleration caveat"
+  },
+  {
+   "claim": "CSS animations run off the main thread and stay smooth when the browser is busy loading a page.",
+   "evidence": "CSS animations beat JS under load"
+  },
+  {
+   "claim": "The Web Animations API is hardware-accelerated, interruptible and needs no library.",
+   "evidence": "Use WAAPI for programmatic CSS animations"
+  },
+  {
+   "claim": "Animations can cause motion sickness.",
+   "evidence": "prefers-reduced-motion"
+  },
+  {
+   "claim": "Touch devices trigger hover on tap, causing false positives.",
+   "evidence": "Touch device hover states"
+  },
+  {
+   "claim": "Most users never customize a component's defaults.",
+   "evidence": "Good defaults matter more than options."
+  },
+  {
+   "claim": "Sonner's animation is slightly slower than typical UI animation and uses ease rather than ease-out to feel more elegant.",
+   "evidence": "Cohesion matters"
+  },
+  {
+   "claim": "There is no formula for combining opacity and height animations on list items; it takes trial and error.",
+   "evidence": "The opacity + height combination"
+  },
+  {
+   "claim": "Imperfections missed during development are noticed when reviewing the next day.",
+   "evidence": "Review your work the next day"
+  }
+ ],
+ "quotes": [
+  "Never animate keyboard-initiated actions.",
+  "Reduced motion means fewer and gentler animations, not zero.",
+  "Good defaults matter more than options."
+ ],
+ "tags": [
+  "animation",
+  "motion",
+  "easing",
+  "duration",
+  "springs",
+  "gestures",
+  "performance",
+  "reduced-motion",
+  "css",
+  "react",
+  "sonner",
+  "design-engineering",
+  "review-checklist",
+  "agent-skill"
+ ],
+ "authority": "non-negotiable",
+ "rules": [
+  {
+   "rule": "Study why the best interfaces feel the way they do: reverse engineer their animations and inspect their interactions instead of stopping once the UI works.",
+   "why": "Taste is a trained instinct, built by surrounding yourself with great work, thinking about why it feels good and practising.",
+   "kind": "do",
+   "strength": "should",
+   "area": "process",
+   "applies_to": "all",
+   "values": [],
+   "evidence": "Taste is trained, not innate"
+  },
+  {
+   "rule": "Make every feature behave exactly as people assume it will, so they carry on without giving it a second thought.",
+   "why": "Most details are never consciously noticed; the aggregate of invisible correctness is what makes people love an interface.",
+   "kind": "do",
+   "strength": "should",
+   "area": "patterns",
+   "applies_to": "all",
+   "values": [],
+   "evidence": "Unseen details compound"
+  },
+  {
+   "rule": "Treat good defaults and good animations as a product differentiator, not an afterthought.",
+   "why": "People choose tools on the overall experience, and beauty is underused in software, so it is leverage to stand out.",
+   "kind": "do",
+   "strength": "should",
+   "area": "process",
+   "applies_to": "all",
+   "values": [],
+   "evidence": "Beauty is leverage"
+  },
+  {
+   "rule": "When reviewing UI code, report findings as one markdown table with Before | After | Why columns, one row per issue; never as separate 'Before:' and 'After:' lines.",
+   "why": "The skill marks this format as required and shows the line-by-line format as wrong.",
+   "kind": "do",
+   "strength": "must",
+   "area": "process",
+   "applies_to": "all",
+   "values": [
+    "| Before | After | Why |"
+   ],
+   "evidence": "Review Format (Required)"
+  },
+  {
+   "rule": "Before writing any animation code, answer in order: should it animate at all, what is its purpose, which easing, and how fast.",
+   "why": "The Animation Decision Framework says to answer these questions in order before writing any animation code.",
+   "kind": "do",
+   "strength": "should",
+   "area": "motion",
+   "applies_to": "all",
+   "values": [],
+   "evidence": "The Animation Decision Framework"
+  },
+  {
+   "rule": "Do not animate anything people trigger 100+ times a day, such as keyboard shortcuts or a command palette toggle.",
+   "why": "The frequency table says 'No animation. Ever.' for this band; animation makes very frequent actions feel slow.",
+   "kind": "dont",
+   "strength": "must",
+   "area": "motion",
+   "applies_to": "all",
+   "values": [
+    "100+ times/day"
+   ],
+   "evidence": "1. Should this animate at all?"
+  },
+  {
+   "rule": "Remove or drastically reduce animation on things people see tens of times a day, such as hover effects and list navigation.",
+   "why": "Frequency table: tens of times/day means remove or drastically reduce.",
+   "kind": "dont",
+   "strength": "should",
+   "area": "motion",
+   "applies_to": "all",
+   "values": [
+    "Tens of times/day"
+   ],
+   "evidence": "1. Should this animate at all?"
+  },
+  {
+   "rule": "Give occasional elements (modals, drawers, toasts) a standard animation, and keep delight for rare or first-time moments (onboarding, feedback forms, celebrations).",
+   "why": "Frequency table: occasional gets standard animation; rare/first-time can add delight.",
+   "kind": "do",
+   "strength": "should",
+   "area": "motion",
+   "applies_to": "all",
+   "values": [],
+   "evidence": "1. Should this animate at all?"
+  },
+  {
+   "rule": "Never animate keyboard-initiated actions.",
+   "why": "They are repeated hundreds of times daily, and animation makes them feel slow, delayed and disconnected from the user's actions.",
+   "kind": "dont",
+   "strength": "must",
+   "area": "motion",
+   "applies_to": "all",
+   "values": [],
+   "evidence": "Never animate keyboard-initiated actions."
+  },
+  {
+   "rule": "Give every animation a clear answer to 'why does this animate?': spatial consistency, state indication, explanation, feedback, or preventing a jarring change.",
+   "why": "Every animation must have a clear purpose; these are the valid ones the source lists.",
+   "kind": "do",
+   "strength": "must",
+   "area": "motion",
+   "applies_to": "all",
+   "values": [],
+   "evidence": "2. What is the purpose?"
+  },
+  {
+   "rule": "Do not animate something people see often when the only reason is that it looks cool.",
+   "why": "If the purpose is just 'it looks cool' and the user will see it often, don't animate.",
+   "kind": "dont",
+   "strength": "must",
+   "area": "motion",
+   "applies_to": "all",
+   "values": [],
+   "evidence": "2. What is the purpose?"
+  },
+  {
+   "rule": "Make toasts enter and exit from the same direction.",
+   "why": "Spatial consistency makes swipe-to-dismiss feel intuitive.",
+   "kind": "do",
+   "strength": "should",
+   "area": "components",
+   "applies_to": "all",
+   "values": [],
+   "evidence": "Spatial consistency"
+  },
+  {
+   "rule": "Give elements a transition when they appear or disappear rather than letting them pop in or out.",
+   "why": "Elements appearing or disappearing without transition feel broken.",
+   "kind": "do",
+   "strength": "should",
+   "area": "motion",
+   "applies_to": "all",
+   "values": [],
+   "evidence": "Preventing jarring changes"
+  },
+  {
+   "rule": "Use ease-out for elements entering or exiting the screen.",
+   "why": "It starts fast and feels responsive.",
+   "kind": "do",
+   "strength": "must",
+   "area": "motion",
+   "applies_to": "all",
+   "values": [
+    "ease-out"
+   ],
+   "evidence": "3. What easing should it use?"
+  },
+  {
+   "rule": "Use ease-in-out for elements that move or morph while staying on screen.",
+   "why": "It gives natural acceleration and deceleration.",
+   "kind": "do",
+   "strength": "should",
+   "area": "motion",
+   "applies_to": "all",
+   "values": [
+    "ease-in-out"
+   ],
+   "evidence": "Is it moving/morphing on screen?"
+  },
+  {
+   "rule": "Use ease for hover and color changes.",
+   "why": "The easing decision tree assigns ease to hover/color changes.",
+   "kind": "do",
+   "strength": "should",
+   "area": "motion",
+   "applies_to": "all",
+   "values": [
+    "ease"
+   ],
+   "evidence": "Is it a hover/color change?"
+  },
+  {
+   "rule": "Use linear only for constant motion such as a marquee or progress bar.",
+   "why": "The easing decision tree assigns linear to constant motion.",
+   "kind": "do",
+   "strength": "should",
+   "area": "motion",
+   "applies_to": "all",
+   "values": [
+    "linear"
+   ],
+   "evidence": "Is it constant motion (marquee, progress bar)?"
+  },
+  {
+   "rule": "When no other easing case applies, default to ease-out.",
+   "why": "The decision tree's default branch is ease-out.",
+   "kind": "do",
+   "strength": "should",
+   "area": "motion",
+   "applies_to": "all",
+   "values": [
+    "ease-out"
+   ],
+   "evidence": "Default → ease-out"
+  },
+  {
+   "rule": "Use custom easing curves instead of the built-in CSS keywords.",
+   "why": "The built-in CSS easings are too weak and lack the punch that makes animations feel intentional.",
+   "kind": "do",
+   "strength": "must",
+   "area": "motion",
+   "applies_to": "css",
+   "values": [],
+   "evidence": "Critical: use custom easing curves."
+  },
+  {
+   "rule": "Define a strong ease-out token for UI interactions.",
+   "why": "Given as the strong ease-out for UI interactions.",
+   "kind": "do",
+   "strength": "should",
+   "area": "tokens",
+   "applies_to": "css",
+   "values": [
+    "--ease-out: cubic-bezier(0.23, 1, 0.32, 1)"
+   ],
+   "evidence": "Strong ease-out for UI interactions"
+  },
+  {
+   "rule": "Define a strong ease-in-out token for on-screen movement.",
+   "why": "Given as the strong ease-in-out for on-screen movement.",
+   "kind": "do",
+   "strength": "should",
+   "area": "tokens",
+   "applies_to": "css",
+   "values": [
+    "--ease-in-out: cubic-bezier(0.77, 0, 0.175, 1)"
+   ],
+   "evidence": "Strong ease-in-out for on-screen movement"
+  },
+  {
+   "rule": "Define an iOS-like drawer easing token for drawers.",
+   "why": "Given as the iOS-like drawer curve, taken from Ionic Framework.",
+   "kind": "do",
+   "strength": "should",
+   "area": "tokens",
+   "applies_to": "css",
+   "values": [
+    "--ease-drawer: cubic-bezier(0.32, 0.72, 0, 1)"
+   ],
+   "evidence": "iOS-like drawer curve (from Ionic Framework)"
+  },
+  {
+   "rule": "Never use ease-in for UI animations.",
+   "why": "It starts slow, delaying movement at the moment the user watches most closely; a dropdown with ease-in at 300ms feels slower than ease-out at the same 300ms.",
+   "kind": "dont",
+   "strength": "must",
+   "area": "motion",
+   "applies_to": "all",
+   "values": [
+    "ease-in",
+    "300ms"
+   ],
+   "evidence": "Never use ease-in for UI animations."
+  },
+  {
+   "rule": "Do not invent easing curves from scratch; pick stronger variants of standard easings from easing.dev or easings.co.",
+   "why": "The source points to these as easing curve resources.",
+   "kind": "dont",
+   "strength": "should",
+   "area": "tooling",
+   "applies_to": "all",
+   "values": [
+    "https://easing.dev/",
+    "https://easings.co/"
+   ],
+   "evidence": "Easing curve resources"
+  },
+  {
+   "rule": "Make button press feedback last 100-160ms.",
+   "why": "Duration table for button press feedback.",
+   "kind": "do",
+   "strength": "should",
+   "area": "motion",
+   "applies_to": "all",
+   "values": [
+    "100-160ms"
+   ],
+   "evidence": "4. How fast should it be?"
+  },
+  {
+   "rule": "Make tooltips and small popovers animate in 125-200ms.",
+   "why": "Duration table for tooltips and small popovers.",
+   "kind": "do",
+   "strength": "should",
+   "area": "motion",
+   "applies_to": "all",
+   "values": [
+    "125-200ms"
+   ],
+   "evidence": "4. How fast should it be?"
+  },
+  {
+   "rule": "Make dropdowns and selects animate in 150-250ms.",
+   "why": "Duration table for dropdowns and selects.",
+   "kind": "do",
+   "strength": "should",
+   "area": "motion",
+   "applies_to": "all",
+   "values": [
+    "150-250ms"
+   ],
+   "evidence": "4. How fast should it be?"
+  },
+  {
+   "rule": "Make modals and drawers animate in 200-500ms.",
+   "why": "Duration table for modals and drawers.",
+   "kind": "do",
+   "strength": "should",
+   "area": "motion",
+   "applies_to": "all",
+   "values": [
+    "200-500ms"
+   ],
+   "evidence": "4. How fast should it be?"
+  },
+  {
+   "rule": "Allow marketing and explanatory animations to run longer than UI animations.",
+   "why": "Duration table: marketing/explanatory can be longer.",
+   "kind": "do",
+   "strength": "consider",
+   "area": "motion",
+   "applies_to": "all",
+   "values": [],
+   "evidence": "Marketing/explanatory"
+  },
+  {
+   "rule": "Keep UI animations under 300ms; if a UI element's animation is longer, reduce it to 150-250ms.",
+   "why": "A 180ms dropdown feels more responsive than a 400ms one; the review checklist flags durations over 300ms.",
+   "kind": "do",
+   "strength": "must",
+   "area": "motion",
+   "applies_to": "all",
+   "values": [
+    "300ms",
+    "150-250ms",
+    "180ms",
+    "400ms"
+   ],
+   "evidence": "Rule: UI animations should stay under 300ms."
+  },
+  {
+   "rule": "Make loading spinners spin fast.",
+   "why": "A faster-spinning spinner makes the app feel like it loads faster even when load time is identical.",
+   "kind": "do",
+   "strength": "consider",
+   "area": "components",
+   "applies_to": "all",
+   "values": [],
+   "evidence": "Perceived performance"
+  },
+  {
+   "rule": "Use springs for drag interactions with momentum, elements that should feel alive, gestures that can be interrupted mid-animation, and decorative mouse-tracking.",
+   "why": "Springs simulate real physics, settle from physical parameters rather than a fixed duration, and feel more natural.",
+   "kind": "do",
+   "strength": "should",
+   "area": "motion",
+   "applies_to": "all",
+   "values": [],
+   "evidence": "When to use springs"
+  },
+  {
+   "rule": "For decorative mouse-tracking effects, interpolate the value with a spring (Motion's useSpring) instead of tying the visual directly to mouse position.",
+   "why": "Tying visuals directly to mouse position feels artificial and instant; a spring adds momentum.",
+   "kind": "do",
+   "strength": "should",
+   "area": "motion",
+   "applies_to": "react",
+   "values": [
+    "useSpring",
+    "mouseX * 0.1",
+    "stiffness: 100",
+    "damping: 10"
+   ],
+   "evidence": "Spring-based mouse interactions"
+  },
+  {
+   "rule": "Do not add decorative motion to functional displays, such as a functional graph in a banking app.",
+   "why": "The spring mouse effect works only because it is decorative; for a functional graph no animation would be better.",
+   "kind": "dont",
+   "strength": "should",
+   "area": "motion",
+   "applies_to": "all",
+   "values": [],
+   "evidence": "If this were a functional graph in a banking app"
+  },
+  {
+   "rule": "Configure springs with Apple's duration-and-bounce approach by default.",
+   "why": "The source recommends it as easier to reason about.",
+   "kind": "do",
+   "strength": "should",
+   "area": "motion",
+   "applies_to": "all",
+   "values": [
+    "{ type: \"spring\", duration: 0.5, bounce: 0.2 }"
+   ],
+   "evidence": "Apple's approach (recommended — easier to reason about)"
+  },
+  {
+   "rule": "Use traditional mass, stiffness and damping spring parameters only when you need more control.",
+   "why": "The source presents traditional physics as the option with more control.",
+   "kind": "do",
+   "strength": "consider",
+   "area": "motion",
+   "applies_to": "all",
+   "values": [
+    "{ type: \"spring\", mass: 1, stiffness: 100, damping: 10 }"
+   ],
+   "evidence": "Traditional physics (more control)"
+  },
+  {
+   "rule": "Avoid bounce in most UI; when you use it, keep it subtle (0.1-0.3) and reserve it for drag-to-dismiss and playful interactions.",
+   "why": "The source says to keep bounce subtle and avoid it in most UI contexts.",
+   "kind": "dont",
+   "strength": "should",
+   "area": "motion",
+   "applies_to": "all",
+   "values": [
+    "0.1-0.3"
+   ],
+   "evidence": "Keep bounce subtle (0.1-0.3) when used."
+  },
+  {
+   "rule": "Use springs for interactions people may reverse mid-motion, such as clicking an item open and quickly pressing Escape.",
+   "why": "Springs keep their velocity when interrupted and reverse smoothly from the current position, while CSS animations and keyframes restart from zero.",
+   "kind": "do",
+   "strength": "should",
+   "area": "motion",
+   "applies_to": "all",
+   "values": [],
+   "evidence": "Interruptibility advantage"
+  },
+  {
+   "rule": "Give every pressable element a subtle scale-down on :active, with a transform transition.",
+   "why": "Instant press feedback makes the UI feel like it is truly listening to the user.",
+   "kind": "do",
+   "strength": "must",
+   "area": "components",
+   "applies_to": "css",
+   "values": [
+    "transform: scale(0.97)",
+    "transition: transform 160ms ease-out",
+    "0.95-0.98"
+   ],
+   "evidence": "Buttons must feel responsive"
+  },
+  {
+   "rule": "Never animate an element in from scale(0); start from scale(0.9) or higher combined with opacity.",
+   "why": "Nothing in the real world appears from nothing; scale(0) entrances look like they come out of nowhere.",
+   "kind": "dont",
+   "strength": "must",
+   "area": "motion",
+   "applies_to": "css",
+   "values": [
+    "scale(0)",
+    "scale(0.9)",
+    "transform: scale(0.95)",
+    "opacity: 0"
+   ],
+   "evidence": "Never animate from scale(0)"
+  },
+  {
+   "rule": "Make popovers scale in from their trigger by setting transform-origin to the trigger position (for example Base UI's CSS variable).",
+   "why": "The default transform-origin: center is wrong for almost every popover; unseen details compound.",
+   "kind": "do",
+   "strength": "must",
+   "area": "components",
+   "applies_to": "css",
+   "values": [
+    "transform-origin: var(--transform-origin)"
+   ],
+   "evidence": "Make popovers origin-aware"
+  },
+  {
+   "rule": "Keep modals at transform-origin: center.",
+   "why": "Modals are not anchored to a trigger; they appear centered in the viewport.",
+   "kind": "do",
+   "strength": "should",
+   "area": "components",
+   "applies_to": "css",
+   "values": [
+    "transform-origin: center"
+   ],
+   "evidence": "Exception: modals."
+  },
+  {
+   "rule": "Add a delay before the first tooltip appears.",
+   "why": "It prevents accidental activation.",
+   "kind": "do",
+   "strength": "should",
+   "area": "components",
+   "applies_to": "all",
+   "values": [],
+   "evidence": "Tooltips: skip delay on subsequent hovers"
+  },
+  {
+   "rule": "Once one tooltip is open, open adjacent tooltips instantly with no delay and no animation.",
+   "why": "It feels faster without defeating the purpose of the initial delay, and makes the whole toolbar feel faster.",
+   "kind": "do",
+   "strength": "should",
+   "area": "components",
+   "applies_to": "css",
+   "values": [
+    ".tooltip[data-instant]",
+    "transition-duration: 0ms"
+   ],
+   "evidence": "Skip animation on subsequent tooltips"
+  },
+  {
+   "rule": "Animate tooltips from their trigger with a short transform and opacity transition, starting and ending at a slightly reduced scale.",
+   "why": "The source's tooltip CSS pattern.",
+   "kind": "do",
+   "strength": "should",
+   "area": "components",
+   "applies_to": "css",
+   "values": [
+    "transition: transform 125ms ease-out, opacity 125ms ease-out",
+    "opacity: 0",
+    "transform: scale(0.97)",
+    "transform-origin: var(--transform-origin)"
+   ],
+   "evidence": "Tooltips: skip delay on subsequent hovers"
+  },
+  {
+   "rule": "Use CSS transitions, not keyframes, for any UI that can be triggered rapidly (adding toasts, toggling states).",
+   "why": "Transitions can be interrupted and retargeted mid-animation; keyframes restart from zero.",
+   "kind": "do",
+   "strength": "must",
+   "area": "motion",
+   "applies_to": "css",
+   "values": [
+    "transition: transform 400ms ease"
+   ],
+   "evidence": "Use CSS transitions over keyframes for interruptible UI"
+  },
+  {
+   "rule": "If a crossfade still looks wrong after trying other easings and durations, add a subtle blur during the transition.",
+   "why": "Blur blends the old and new states so the eye sees one smooth transformation instead of two overlapping objects.",
+   "kind": "do",
+   "strength": "consider",
+   "area": "motion",
+   "applies_to": "css",
+   "values": [
+    "filter: blur(2px)"
+   ],
+   "evidence": "Use blur to mask imperfect transitions"
+  },
+  {
+   "rule": "For a polished button state change, combine scale-on-press with a blurred, slightly faded content transition.",
+   "why": "The source's example of blur plus press feedback.",
+   "kind": "do",
+   "strength": "consider",
+   "area": "components",
+   "applies_to": "css",
+   "values": [
+    "transform: scale(0.97)",
+    "transition: filter 200ms ease, opacity 200ms ease",
+    "filter: blur(2px)",
+    "opacity: 0.7"
+   ],
+   "evidence": "Combine blur with scale-on-press"
+  },
+  {
+   "rule": "Keep blur under 20px.",
+   "why": "Heavy blur is expensive, especially in Safari.",
+   "kind": "dont",
+   "strength": "should",
+   "area": "motion",
+   "applies_to": "web",
+   "values": [
+    "20px"
+   ],
+   "evidence": "Keep blur under 20px."
+  },
+  {
+   "rule": "Animate enter states with CSS @starting-style where browser support allows; otherwise fall back to a data-mounted attribute set after first render.",
+   "why": "@starting-style animates entry without JavaScript and replaces the useEffect mounted pattern.",
+   "kind": "do",
+   "strength": "should",
+   "area": "motion",
+   "applies_to": "css",
+   "values": [
+    "@starting-style",
+    "opacity 400ms ease",
+    "transform 400ms ease",
+    "translateY(100%)",
+    "data-mounted"
+   ],
+   "evidence": "Animate enter states with @starting-style"
+  },
+  {
+   "rule": "Use percentage translate values (such as translateY(100%)) to move an element by its own size instead of hardcoded pixel values.",
+   "why": "Percentages are relative to the element's own size, less error-prone and adapt to content; Sonner and Vaul use this.",
+   "kind": "do",
+   "strength": "should",
+   "area": "motion",
+   "applies_to": "css",
+   "values": [
+    "translateY(100%)",
+    "translateY(-100%)"
+   ],
+   "evidence": "translateY with percentages"
+  },
+  {
+   "rule": "Use rotateX()/rotateY() with transform-style: preserve-3d for depth effects such as orbits and coin flips, without JavaScript.",
+   "why": "These create real 3D effects in CSS.",
+   "kind": "do",
+   "strength": "consider",
+   "area": "motion",
+   "applies_to": "css",
+   "values": [
+    "transform-style: preserve-3d",
+    "translateZ(72px)"
+   ],
+   "evidence": "3D transforms for depth"
+  },
+  {
+   "rule": "Set transform-origin to where the trigger lives for origin-aware interactions.",
+   "why": "Every element transforms from an anchor point that defaults to center.",
+   "kind": "do",
+   "strength": "should",
+   "area": "motion",
+   "applies_to": "css",
+   "values": [],
+   "evidence": "transform-origin"
+  },
+  {
+   "rule": "Use clip-path: inset() to animate reveals; each value eats into the element from that side.",
+   "why": "clip-path is one of the most powerful animation tools in CSS, not just for shapes.",
+   "kind": "do",
+   "strength": "consider",
+   "area": "motion",
+   "applies_to": "css",
+   "values": [
+    "clip-path: inset(0 100% 0 0)",
+    "clip-path: inset(0 0 0 0)"
+   ],
+   "evidence": "The inset shape"
+  },
+  {
+   "rule": "For tab color transitions, duplicate the tab list, style the copy as active, clip the copy so only the active tab shows, and animate the clip on tab change.",
+   "why": "It creates a seamless color transition that timing individual color transitions can never achieve.",
+   "kind": "do",
+   "strength": "should",
+   "area": "components",
+   "applies_to": "css",
+   "values": [],
+   "evidence": "Tabs with perfect color transitions"
+  },
+  {
+   "rule": "Build hold-to-delete with a colored overlay clipped to inset(0 100% 0 0) that transitions to inset(0 0 0 0) over 2s linear on :active, snaps back in 200ms ease-out on release, and scales the button to 0.97 on press.",
+   "why": "Slow where the user is deciding, fast where the system responds, with press feedback.",
+   "kind": "do",
+   "strength": "should",
+   "area": "components",
+   "applies_to": "css",
+   "values": [
+    "clip-path: inset(0 100% 0 0)",
+    "inset(0 0 0 0)",
+    "2s linear",
+    "200ms ease-out",
+    "scale(0.97)"
+   ],
+   "evidence": "Hold-to-delete pattern"
+  },
+  {
+   "rule": "Reveal images on scroll by animating clip-path from inset(0 0 100% 0) to inset(0 0 0 0) when they enter the viewport, triggering once.",
+   "why": "The source's image reveal pattern using IntersectionObserver or useInView.",
+   "kind": "do",
+   "strength": "consider",
+   "area": "motion",
+   "applies_to": "web",
+   "values": [
+    "clip-path: inset(0 0 100% 0)",
+    "inset(0 0 0 0)",
+    "{ once: true, margin: \"-100px\" }"
+   ],
+   "evidence": "Image reveals on scroll"
+  },
+  {
+   "rule": "Build before/after comparison sliders by overlaying two images and changing the right inset of the top image's clip-path with the drag position.",
+   "why": "No extra DOM elements are needed and it is fully hardware-accelerated.",
+   "kind": "do",
+   "strength": "consider",
+   "area": "components",
+   "applies_to": "css",
+   "values": [
+    "clip-path: inset(0 50% 0 0)"
+   ],
+   "evidence": "Comparison sliders"
+  },
+  {
+   "rule": "Dismiss on a quick flick: compute velocity as distance divided by elapsed time and dismiss when it exceeds about 0.11, regardless of distance; do not require dragging past a threshold.",
+   "why": "A quick flick should be enough.",
+   "kind": "do",
+   "strength": "should",
+   "area": "patterns",
+   "applies_to": "all",
+   "values": [
+    "velocity > 0.11",
+    "Math.abs(dragDistance) / elapsedTime"
+   ],
+   "evidence": "Momentum-based dismissal"
+  },
+  {
+   "rule": "Apply damping when someone drags past a natural boundary, so the further they drag the less the element moves.",
+   "why": "Things in real life don't suddenly stop; they slow down first.",
+   "kind": "do",
+   "strength": "should",
+   "area": "patterns",
+   "applies_to": "all",
+   "values": [],
+   "evidence": "Damping at boundaries"
+  },
+  {
+   "rule": "Once dragging starts, capture all pointer events on the dragged element.",
+   "why": "Dragging continues even if the pointer leaves the element bounds.",
+   "kind": "do",
+   "strength": "should",
+   "area": "patterns",
+   "applies_to": "web",
+   "values": [],
+   "evidence": "Pointer capture for drag"
+  },
+  {
+   "rule": "Ignore additional touch points after the first drag begins.",
+   "why": "Otherwise switching fingers mid-drag makes the element jump to the new position.",
+   "kind": "dont",
+   "strength": "should",
+   "area": "patterns",
+   "applies_to": "all",
+   "values": [],
+   "evidence": "Multi-touch protection"
+  },
+  {
+   "rule": "Allow drags beyond the limit with increasing friction instead of blocking them with a hard stop.",
+   "why": "It feels more natural than hitting an invisible wall.",
+   "kind": "do",
+   "strength": "should",
+   "area": "patterns",
+   "applies_to": "all",
+   "values": [],
+   "evidence": "Friction instead of hard stops"
+  },
+  {
+   "rule": "Animate only transform and opacity; do not animate padding, margin, height or width.",
+   "why": "Transform and opacity skip layout and paint and run on the GPU; the others trigger all three rendering steps.",
+   "kind": "do",
+   "strength": "must",
+   "area": "motion",
+   "applies_to": "web",
+   "values": [
+    "transform",
+    "opacity"
+   ],
+   "evidence": "Only animate transform and opacity"
+  },
+  {
+   "rule": "Never use transition: all; name the exact properties being transitioned.",
+   "why": "The review table says to specify exact properties and avoid `all`; the review checklist flags `transition: all` as an issue.",
+   "kind": "dont",
+   "strength": "must",
+   "area": "motion",
+   "applies_to": "css",
+   "values": [
+    "transition: transform 200ms ease-out"
+   ],
+   "evidence": "Review Checklist"
+  },
+  {
+   "rule": "During drags or frequent updates, set transform directly on the moving element instead of updating a CSS variable on its container.",
+   "why": "CSS variables are inherited, so changing one on a parent recalculates styles for all children.",
+   "kind": "dont",
+   "strength": "must",
+   "area": "motion",
+   "applies_to": "web",
+   "values": [
+    "--swipe-amount",
+    "element.style.transform = `translateY(${distance}px)`"
+   ],
+   "evidence": "CSS variables are inheritable"
+  },
+  {
+   "rule": "In Framer Motion, animate the full transform string instead of the x, y or scale shorthands when the animation must stay smooth under load.",
+   "why": "The shorthands use requestAnimationFrame on the main thread and are not hardware-accelerated, so they drop frames under load; the review checklist flags Framer Motion x/y props under load.",
+   "kind": "do",
+   "strength": "must",
+   "area": "motion",
+   "applies_to": "react",
+   "values": [
+    "animate={{ transform: \"translateX(100px)\" }}",
+    "transform: \"translateX()\""
+   ],
+   "evidence": "Framer Motion hardware acceleration caveat"
+  },
+  {
+   "rule": "Use CSS animations for predetermined animations and JavaScript for dynamic, interruptible ones.",
+   "why": "CSS animations run off the main thread and stay smooth while the browser is busy; requestAnimationFrame animations drop frames.",
+   "kind": "do",
+   "strength": "should",
+   "area": "motion",
+   "applies_to": "web",
+   "values": [],
+   "evidence": "CSS animations beat JS under load"
+  },
+  {
+   "rule": "Use the Web Animations API when you need programmatic control of CSS-performance animations.",
+   "why": "It is hardware-accelerated, interruptible and needs no library.",
+   "kind": "do",
+   "strength": "should",
+   "area": "motion",
+   "applies_to": "web",
+   "values": [
+    "duration: 1000",
+    "fill: 'forwards'",
+    "easing: 'cubic-bezier(0.77, 0, 0.175, 1)'"
+   ],
+   "evidence": "Use WAAPI for programmatic CSS animations"
+  },
+  {
+   "rule": "Under prefers-reduced-motion, keep fewer and gentler animations rather than none: keep opacity and color transitions that aid comprehension and remove movement and position animations.",
+   "why": "Animations can cause motion sickness, but reduced motion does not mean zero motion.",
+   "kind": "do",
+   "strength": "should",
+   "area": "accessibility",
+   "applies_to": "all",
+   "values": [
+    "@media (prefers-reduced-motion: reduce)",
+    "animation: fade 0.2s ease"
+   ],
+   "evidence": "prefers-reduced-motion"
+  },
+  {
+   "rule": "In React, read useReducedMotion and swap position-based values for static ones when it is on.",
+   "why": "The source's React pattern for reduced motion.",
+   "kind": "do",
+   "strength": "should",
+   "area": "accessibility",
+   "applies_to": "react",
+   "values": [
+    "closedX = shouldReduceMotion ? 0 : '-100%'"
+   ],
+   "evidence": "prefers-reduced-motion"
+  },
+  {
+   "rule": "Gate hover animations behind a hover-capable, fine-pointer media query.",
+   "why": "Touch devices trigger hover on tap, causing false positives.",
+   "kind": "do",
+   "strength": "must",
+   "area": "accessibility",
+   "applies_to": "css",
+   "values": [
+    "@media (hover: hover) and (pointer: fine)",
+    "transform: scale(1.05)"
+   ],
+   "evidence": "Touch device hover states"
+  },
+  {
+   "rule": "Make components adoptable with minimal setup: no hooks, no context, one component mounted once and a function callable from anywhere.",
+   "why": "The less friction to adopt, the more people will use it.",
+   "kind": "do",
+   "strength": "should",
+   "area": "components",
+   "applies_to": "react",
+   "values": [
+    "<Toaster />",
+    "toast()"
+   ],
+   "evidence": "Developer experience is key."
+  },
+  {
+   "rule": "Invest in excellent defaults (easing, timing, visual design) before adding options; ship beautiful out of the box.",
+   "why": "Most users never customize.",
+   "kind": "do",
+   "strength": "should",
+   "area": "process",
+   "applies_to": "all",
+   "values": [],
+   "evidence": "Good defaults matter more than options."
+  },
+  {
+   "rule": "Give components a memorable name, trading some discoverability for memorability when appropriate.",
+   "why": "Naming creates identity; 'Sonner' feels more elegant than 'react-toast'.",
+   "kind": "do",
+   "strength": "consider",
+   "area": "content",
+   "applies_to": "all",
+   "values": [],
+   "evidence": "Naming creates identity."
+  },
+  {
+   "rule": "Pause toast timers while the tab is hidden.",
+   "why": "Handling edge cases invisibly is part of what makes a component loved.",
+   "kind": "do",
+   "strength": "should",
+   "area": "components",
+   "applies_to": "web",
+   "values": [],
+   "evidence": "Handle edge cases invisibly."
+  },
+  {
+   "rule": "Fill the gaps between stacked toasts with pseudo-elements so hover state is kept while moving between them.",
+   "why": "Handle edge cases invisibly; users never notice, and that is right.",
+   "kind": "do",
+   "strength": "should",
+   "area": "components",
+   "applies_to": "css",
+   "values": [],
+   "evidence": "Handle edge cases invisibly."
+  },
+  {
+   "rule": "Build an interactive documentation site where people can touch and play with the component, with ready-to-use code snippets.",
+   "why": "Interactive examples lower the barrier to adoption.",
+   "kind": "do",
+   "strength": "should",
+   "area": "process",
+   "applies_to": "all",
+   "values": [],
+   "evidence": "Build a great documentation site."
+  },
+  {
+   "rule": "Match animation easing and duration to the component's personality and the surrounding design: bouncier for playful components, crisp and fast for a professional dashboard.",
+   "why": "Cohesion makes animation satisfying; Sonner's motion, design, page and name are in harmony.",
+   "kind": "do",
+   "strength": "should",
+   "area": "motion",
+   "applies_to": "all",
+   "values": [],
+   "evidence": "Cohesion matters"
+  },
+  {
+   "rule": "When items enter and exit a list, tune the opacity change against the height animation by trial and error until it feels right.",
+   "why": "There is no formula for the opacity + height combination.",
+   "kind": "do",
+   "strength": "should",
+   "area": "motion",
+   "applies_to": "all",
+   "values": [],
+   "evidence": "The opacity + height combination"
+  },
+  {
+   "rule": "Review animations again the next day with fresh eyes.",
+   "why": "You notice imperfections the next day that you missed during development.",
+   "kind": "do",
+   "strength": "should",
+   "area": "process",
+   "applies_to": "all",
+   "values": [],
+   "evidence": "Review your work the next day"
+  },
+  {
+   "rule": "Make deliberate actions slow and responses fast: slow where the user is deciding (hold-to-delete 2s linear), snappy where the system responds (release 200ms ease-out).",
+   "why": "Pressing should be deliberate but release should always be snappy.",
+   "kind": "do",
+   "strength": "must",
+   "area": "motion",
+   "applies_to": "all",
+   "values": [
+    "2s linear",
+    "200ms ease-out"
+   ],
+   "evidence": "Asymmetric enter/exit timing"
+  },
+  {
+   "rule": "Make exits faster than entrances instead of using the same speed for both.",
+   "why": "The review checklist flags the same enter/exit transition speed as an issue; the source's reason is to be slow where the user is deciding and fast where the system is responding.",
+   "kind": "do",
+   "strength": "must",
+   "area": "motion",
+   "applies_to": "all",
+   "values": [
+    "enter 2s, exit 200ms"
+   ],
+   "evidence": "Same enter/exit transition speed"
+  },
+  {
+   "rule": "Stagger elements that enter together, with 30-80ms between items.",
+   "why": "A cascade feels more natural than everything appearing at once, and the review checklist flags elements all appearing at once; long delays make the interface feel slow.",
+   "kind": "do",
+   "strength": "must",
+   "area": "motion",
+   "applies_to": "all",
+   "values": [
+    "30-80ms",
+    "0ms",
+    "50ms",
+    "100ms",
+    "150ms",
+    "translateY(8px)",
+    "300ms ease-out"
+   ],
+   "evidence": "Stagger Animations"
+  },
+  {
+   "rule": "Never block interaction while a stagger animation is playing.",
+   "why": "Stagger is decorative.",
+   "kind": "dont",
+   "strength": "must",
+   "area": "motion",
+   "applies_to": "all",
+   "values": [],
+   "evidence": "Stagger is decorative"
+  },
+  {
+   "rule": "Test animations in slow motion (2-5x the normal duration, or the DevTools animation inspector) and check color overlap, easing, transform-origin and whether properties stay in sync.",
+   "why": "Slow motion reveals issues invisible at full speed.",
+   "kind": "do",
+   "strength": "should",
+   "area": "process",
+   "applies_to": "web",
+   "values": [
+    "2-5x"
+   ],
+   "evidence": "Slow motion testing"
+  },
+  {
+   "rule": "Step through animations frame by frame in the Chrome DevTools Animations panel.",
+   "why": "It reveals timing issues between coordinated properties that you cannot see at full speed.",
+   "kind": "do",
+   "strength": "should",
+   "area": "process",
+   "applies_to": "web",
+   "values": [],
+   "evidence": "Frame-by-frame inspection"
+  },
+  {
+   "rule": "Test touch interactions such as drawers and swipe gestures on physical devices (USB, local dev server by IP, Safari remote devtools) rather than only the Xcode Simulator.",
+   "why": "Real hardware is better for gesture testing.",
+   "kind": "do",
+   "strength": "should",
+   "area": "process",
+   "applies_to": "all",
+   "values": [],
+   "evidence": "Test on real devices"
+  },
+  {
+   "rule": "When reviewing UI code, check for every Review Checklist issue: transition: all, scale(0) entries, ease-in on UI elements, transform-origin: center on popovers (modals exempt), animation on keyboard actions, UI durations over 300ms, hover animation without the hover/pointer media query, keyframes on rapidly triggered elements, Framer Motion x/y props under load, the same enter/exit speed, and elements all appearing at once.",
+   "why": "The source lists these as the issues to check for when reviewing UI code, each with its fix.",
+   "kind": "do",
+   "strength": "should",
+   "area": "process",
+   "applies_to": "all",
+   "values": [
+    "transition: all",
+    "scale(0)",
+    "Duration > 300ms",
+    "Reduce to 150-250ms",
+    "@media (hover: hover) and (pointer: fine)",
+    "30-80ms"
+   ],
+   "evidence": "Review Checklist"
+  }
+ ],
+ "decisions": [
+  {
+   "question": "Should this element animate at all?",
+   "options": [
+    {
+     "name": "No animation",
+     "effect": "Instant response; nothing slows the action down.",
+     "when": "Seen 100+ times a day, such as keyboard shortcuts or a command palette toggle; any keyboard-initiated action."
+    },
+    {
+     "name": "Remove or drastically reduce",
+     "effect": "Motion removed or drastically reduced.",
+     "when": "Seen tens of times a day, such as hover effects and list navigation."
+    },
+    {
+     "name": "Standard animation",
+     "effect": "Normal enter and exit motion.",
+     "when": "Occasional elements such as modals, drawers and toasts."
+    },
+    {
+     "name": "Add delight",
+     "effect": "Room to add delight.",
+     "when": "Rare or first-time moments such as onboarding, feedback forms and celebrations."
+    }
+   ],
+   "recommendation": "Decide by how often people will see it; never animate keyboard-initiated actions (Raycast has no open/close animation).",
+   "maps_to": null,
+   "evidence": "1. Should this animate at all?"
+  },
+  {
+   "question": "How should easing be chosen for each animation?",
+   "options": [
+    {
+     "name": "ease-out (custom, e.g. cubic-bezier(0.23, 1, 0.32, 1))",
+     "effect": "Starts fast and feels responsive.",
+     "when": "Elements entering or exiting; also the default."
+    },
+    {
+     "name": "ease-in-out (custom, e.g. cubic-bezier(0.77, 0, 0.175, 1))",
+     "effect": "Natural acceleration and deceleration.",
+     "when": "Elements moving or morphing on screen."
+    },
+    {
+     "name": "ease",
+     "effect": "Gentle, even change. [inferred]",
+     "when": "Hover and color changes."
+    },
+    {
+     "name": "linear",
+     "effect": "Constant speed.",
+     "when": "Constant motion such as a marquee or progress bar."
+    },
+    {
+     "name": "ease-in",
+     "effect": "Starts slow, so the UI feels sluggish.",
+     "when": "Never for UI animations."
+    }
+   ],
+   "recommendation": "Choose by the job the motion does, using strong custom curves rather than the built-in keywords; never ease-in.",
+   "maps_to": "Q-motion-03",
+   "evidence": "3. What easing should it use?"
+  },
+  {
+   "question": "How long should UI animations be, and should exits match entrances?",
+   "options": [
+    {
+     "name": "Per-element durations under 300ms",
+     "effect": "Button press 100-160ms, tooltips 125-200ms, dropdowns 150-250ms; UI feels responsive.",
+     "when": "All product UI."
+    },
+    {
+     "name": "Longer durations",
+     "effect": "Modals and drawers 200-500ms; marketing can be longer.",
+     "when": "Modals, drawers, marketing or explanatory animation."
+    },
+    {
+     "name": "Asymmetric timing",
+     "effect": "Slow where the user decides, fast where the system responds; exits faster than entrances.",
+     "when": "Deliberate actions like hold-to-delete (2s linear press, 200ms ease-out release)."
+    }
+   ],
+   "recommendation": "Keep UI animations under 300ms and make exits faster than entrances.",
+   "maps_to": "Q-motion-02",
+   "evidence": "4. How fast should it be?"
+  },
+  {
+   "question": "How should springs be configured?",
+   "options": [
+    {
+     "name": "Apple's duration + bounce",
+     "effect": "Easier to reason about, e.g. { type: \"spring\", duration: 0.5, bounce: 0.2 }.",
+     "when": "Default."
+    },
+    {
+     "name": "Mass, stiffness, damping",
+     "effect": "More control, e.g. { type: \"spring\", mass: 1, stiffness: 100, damping: 10 }.",
+     "when": "When you need finer control."
+    }
+   ],
+   "recommendation": "Apple's approach; keep bounce subtle (0.1-0.3) and avoid it in most UI.",
+   "maps_to": "Q-motion-04",
+   "evidence": "Spring configuration"
+  },
+  {
+   "question": "What motion personality should a component have?",
+   "options": [
+    {
+     "name": "Playful",
+     "effect": "Bouncier motion.",
+     "when": "Playful components; drag-to-dismiss and playful interactions."
+    },
+    {
+     "name": "Crisp and fast",
+     "effect": "Crisp and fast motion.",
+     "when": "A professional dashboard."
+    },
+    {
+     "name": "Elegant",
+     "effect": "Slightly slower than typical UI, using ease rather than ease-out (Sonner).",
+     "when": "When the whole product's vibe calls for it and it stays cohesive."
+    }
+   ],
+   "recommendation": "Match the motion to the mood so easing, timing, design and name are in harmony.",
+   "maps_to": "Q-motion-01",
+   "evidence": "Cohesion matters"
+  },
+  {
+   "question": "What should happen when someone turns on reduced motion?",
+   "options": [
+    {
+     "name": "Fewer and gentler animations",
+     "effect": "Keeps opacity and color transitions that aid comprehension, removes movement and position animation.",
+     "when": "Default."
+    },
+    {
+     "name": "Zero animation",
+     "effect": "Removes all motion, including helpful fades.",
+     "when": "The source says reduced motion does not mean zero."
+    }
+   ],
+   "recommendation": "Fewer and gentler, not zero.",
+   "maps_to": "Q-motion-07",
+   "evidence": "prefers-reduced-motion"
+  },
+  {
+   "question": "Should elements that enter together appear one by one?",
+   "options": [
+    {
+     "name": "All at once",
+     "effect": "Everything appears together, which feels less natural.",
+     "when": "Flagged as an issue in the review checklist."
+    },
+    {
+     "name": "Short stagger (30-80ms)",
+     "effect": "A cascade that feels natural without slowing the UI.",
+     "when": "Multiple elements entering together."
+    }
+   ],
+   "recommendation": "Stagger by 30-80ms and never block interaction while it plays.",
+   "maps_to": "Q-motion-06",
+   "evidence": "Stagger Animations"
+  },
+  {
+   "question": "Which animation technique should drive a UI animation?",
+   "options": [
+    {
+     "name": "CSS transitions",
+     "effect": "Interruptible and retargetable mid-animation.",
+     "when": "Anything triggered rapidly, like adding toasts or toggling states."
+    },
+    {
+     "name": "CSS keyframes",
+     "effect": "Restart from zero when interrupted; run off the main thread.",
+     "when": "Predetermined animations that will not be interrupted."
+    },
+    {
+     "name": "Springs (JS)",
+     "effect": "Keep velocity when interrupted.",
+     "when": "Gestures, drag with momentum, reversible interactions."
+    },
+    {
+     "name": "Web Animations API",
+     "effect": "JS control with CSS performance, hardware-accelerated and interruptible.",
+     "when": "Programmatic animations without a library."
+    }
+   ],
+   "recommendation": "Transitions for dynamic UI, CSS for predetermined animation, JS for dynamic interruptible motion, WAAPI for programmatic control.",
+   "maps_to": null,
+   "evidence": "Use CSS transitions over keyframes for interruptible UI"
+  },
+  {
+   "question": "Where should a popup scale from?",
+   "options": [
+    {
+     "name": "Its trigger (var(--transform-origin))",
+     "effect": "Grows out of the button that opened it.",
+     "when": "Popovers and tooltips."
+    },
+    {
+     "name": "Center",
+     "effect": "Grows from the middle of the viewport.",
+     "when": "Modals only, since they are not anchored to a trigger."
+    }
+   ],
+   "recommendation": "Trigger for popovers, center for modals.",
+   "maps_to": null,
+   "evidence": "Make popovers origin-aware"
+  },
+  {
+   "question": "When should a swipe dismiss something?",
+   "options": [
+    {
+     "name": "Distance threshold only",
+     "effect": "People must drag far enough before release dismisses.",
+     "when": "Not recommended on its own."
+    },
+    {
+     "name": "Distance or velocity",
+     "effect": "A quick flick (velocity > 0.11) dismisses regardless of distance.",
+     "when": "Default for swipe-to-dismiss."
+    }
+   ],
+   "recommendation": "Dismiss when distance passes the threshold or velocity exceeds about 0.11.",
+   "maps_to": null,
+   "evidence": "Momentum-based dismissal"
+  },
+  {
+   "question": "How should an element's enter state be animated in CSS?",
+   "options": [
+    {
+     "name": "@starting-style",
+     "effect": "Animates entry without JavaScript.",
+     "when": "When browser support allows."
+    },
+    {
+     "name": "data-mounted attribute set in useEffect",
+     "effect": "Legacy pattern that works everywhere.",
+     "when": "Fallback when @starting-style is not supported."
+    }
+   ],
+   "recommendation": "@starting-style, with the data-mounted fallback.",
+   "maps_to": null,
+   "evidence": "Animate enter states with @starting-style"
+  }
+ ],
+ "process": [
+  {
+   "step": "Decide whether to animate",
+   "detail": "Ask how often people will see it: 100+ times a day or keyboard-initiated means no animation; tens of times a day means remove or drastically reduce; occasional gets standard motion; rare can add delight."
+  },
+  {
+   "step": "Name the purpose",
+   "detail": "Write down why it animates: spatial consistency, state indication, explanation, feedback or preventing a jarring change. If it is only 'looks cool' and seen often, drop it."
+  },
+  {
+   "step": "Pick the easing",
+   "detail": "Entering or exiting: ease-out; moving on screen: ease-in-out; hover or color: ease; constant motion: linear; otherwise ease-out. Use strong custom curves, never ease-in."
+  },
+  {
+   "step": "Set the duration",
+   "detail": "Use the duration table (press 100-160ms, tooltips 125-200ms, dropdowns 150-250ms, modals and drawers 200-500ms) and keep UI animation under 300ms; make exits faster than entrances."
+  },
+  {
+   "step": "Choose the technique",
+   "detail": "Transitions for rapidly triggered UI, springs for gestures and interruptible motion, CSS for predetermined animation, WAAPI for programmatic control; animate only transform and opacity."
+  },
+  {
+   "step": "Test in slow motion",
+   "detail": "Raise durations 2-5x or use the DevTools animation inspector; check color overlap, easing, transform-origin and property sync."
+  },
+  {
+   "step": "Step frame by frame",
+   "detail": "Use the Chrome DevTools Animations panel to catch timing issues between coordinated properties."
+  },
+  {
+   "step": "Test gestures on real devices",
+   "detail": "Connect a phone over USB, open the local dev server by IP and use Safari remote devtools; the Xcode Simulator is a weaker alternative."
+  },
+  {
+   "step": "Review the next day",
+   "detail": "Look at the animation again with fresh eyes to spot imperfections missed during development."
+  },
+  {
+   "step": "Report review findings as a table",
+   "detail": "Run the review checklist and output one markdown table with Before | After | Why columns, one row per issue."
+  }
+ ],
+ "examples": [
+  {
+   "what": "Launcher with no open/close animation",
+   "where": "Raycast",
+   "visual_note": "Opens and closes instantly; the source calls this optimal for something used hundreds of times a day."
+  },
+  {
+   "what": "An element that feels alive",
+   "where": "Apple Dynamic Island",
+   "visual_note": "Cited as the kind of element that suits spring animation."
+  },
+  {
+   "what": "Toast positioning with percentage translates such as translateY(-100%)",
+   "where": "Sonner",
+   "visual_note": "Toasts move by their own height; the animation is slightly slower than typical UI and uses ease for an elegant, cohesive feel."
+  },
+  {
+   "what": "Drawer hidden with translateY(100%) before animating in",
+   "where": "Vaul",
+   "visual_note": "Works regardless of drawer height."
+  },
+  {
+   "what": "Dashboard tab animation that dropped frames",
+   "where": "Vercel",
+   "visual_note": "Shared Layout Animations dropped frames during page loads; switching to CSS animations (off main thread) fixed it."
+  },
+  {
+   "what": "List items entering and exiting a drawer",
+   "where": "Family",
+   "visual_note": "Opacity and height animations had to be tuned together by trial and error."
+  },
+  {
+   "what": "Hold-to-delete button",
+   "where": null,
+   "visual_note": "A colored overlay fills left to right via clip-path over 2s linear while held, snaps back in 200ms ease-out on release; the button scales to 0.97."
+  },
+  {
+   "what": "Tabs with a clipped duplicate layer",
+   "where": null,
+   "visual_note": "An 'active' copy of the tab list is clipped so only the active tab shows; animating the clip on tab change gives a seamless color transition."
+  },
+  {
+   "what": "Before/after comparison slider",
+   "where": null,
+   "visual_note": "Two stacked images; the top one is clipped with inset(0 50% 0 0) and the inset follows the drag."
+  },
+  {
+   "what": "Spring-smoothed mouse-tracking rotation",
+   "where": null,
+   "visual_note": "Rotation follows mouseX * 0.1 through useSpring (stiffness 100, damping 10), giving momentum instead of an instant, artificial response."
+  },
+  {
+   "what": "CSS 3D orbit",
+   "where": null,
+   "visual_note": "An element orbits using rotateY and translateZ(72px) inside a preserve-3d wrapper, with no JavaScript."
+  },
+  {
+   "what": "Balloon analogy for entry scale",
+   "where": null,
+   "visual_note": "Starting from scale(0.9)+ is like a deflated balloon that still has a visible shape, rather than appearing from nothing."
+  }
+ ],
+ "numbers": [
+  {
+   "value": "100+ times/day",
+   "context": "Frequency at which an element should never animate (keyboard shortcuts, command palette toggle)",
+   "evidence": "1. Should this animate at all?"
+  },
+  {
+   "value": "100-160ms",
+   "context": "Button press feedback duration",
+   "evidence": "4. How fast should it be?"
+  },
+  {
+   "value": "125-200ms",
+   "context": "Tooltips and small popovers duration",
+   "evidence": "4. How fast should it be?"
+  },
+  {
+   "value": "150-250ms",
+   "context": "Dropdowns and selects duration; also the fix for UI durations over 300ms",
+   "evidence": "4. How fast should it be?"
+  },
+  {
+   "value": "200-500ms",
+   "context": "Modals and drawers duration",
+   "evidence": "4. How fast should it be?"
+  },
+  {
+   "value": "300ms",
+   "context": "Upper limit for UI animations; also the ease-in vs ease-out dropdown comparison and the stagger fade-in duration",
+   "evidence": "Rule: UI animations should stay under 300ms."
+  },
+  {
+   "value": "180ms",
+   "context": "A 180ms dropdown/select feels more responsive than a 400ms one",
+   "evidence": "Perceived performance"
+  },
+  {
+   "value": "cubic-bezier(0.23, 1, 0.32, 1)",
+   "context": "Strong ease-out for UI interactions",
+   "evidence": "Critical: use custom easing curves."
+  },
+  {
+   "value": "cubic-bezier(0.77, 0, 0.175, 1)",
+   "context": "Strong ease-in-out for on-screen movement; also used in the WAAPI example",
+   "evidence": "Critical: use custom easing curves."
+  },
+  {
+   "value": "cubic-bezier(0.32, 0.72, 0, 1)",
+   "context": "iOS-like drawer curve from Ionic Framework",
+   "evidence": "Critical: use custom easing curves."
+  },
+  {
+   "value": "scale(0.97)",
+   "context": "Button :active press scale; also tooltip start/end scale",
+   "evidence": "Buttons must feel responsive"
+  },
+  {
+   "value": "0.95-0.98",
+   "context": "Range for press scale on pressable elements",
+   "evidence": "The scale should be subtle (0.95-0.98)."
+  },
+  {
+   "value": "160ms",
+   "context": "Button transform transition for press feedback",
+   "evidence": "transition: transform 160ms ease-out"
+  },
+  {
+   "value": "scale(0.9)",
+   "context": "Minimum starting scale for entrances (with opacity)",
+   "evidence": "Never animate from scale(0)"
+  },
+  {
+   "value": "125ms",
+   "context": "Tooltip transform and opacity transition",
+   "evidence": "Tooltips: skip delay on subsequent hovers"
+  },
+  {
+   "value": "0ms",
+   "context": "Transition duration for subsequent (instant) tooltips",
+   "evidence": ".tooltip[data-instant]"
+  },
+  {
+   "value": "400ms",
+   "context": "Toast transition in the transitions-vs-keyframes and @starting-style examples; also the slower dropdown compared with 180ms",
+   "evidence": "transition: transform 400ms ease"
+  },
+  {
+   "value": "blur(2px)",
+   "context": "Blur added during crossfades to mask imperfect transitions",
+   "evidence": "Use blur to mask imperfect transitions"
+  },
+  {
+   "value": "20px",
+   "context": "Maximum blur, because heavy blur is expensive especially in Safari",
+   "evidence": "Keep blur under 20px."
+  },
+  {
+   "value": "0.1-0.3",
+   "context": "Subtle spring bounce range",
+   "evidence": "Spring configuration"
+  },
+  {
+   "value": "duration: 0.5, bounce: 0.2",
+   "context": "Apple-style spring configuration example",
+   "evidence": "Apple's approach"
+  },
+  {
+   "value": "mass: 1, stiffness: 100, damping: 10",
+   "context": "Traditional physics spring configuration example",
+   "evidence": "Traditional physics (more control)"
+  },
+  {
+   "value": "0.11",
+   "context": "Swipe velocity above which a toast/drawer dismisses regardless of distance",
+   "evidence": "Momentum-based dismissal"
+  },
+  {
+   "value": "2s",
+   "context": "Linear hold duration for hold-to-delete press",
+   "evidence": "Hold-to-delete pattern"
+  },
+  {
+   "value": "200ms",
+   "context": "ease-out release/snap-back for hold-to-delete; also the exact-property transition example and the blurred button-content filter/opacity transition",
+   "evidence": "Asymmetric enter/exit timing"
+  },
+  {
+   "value": "30-80ms",
+   "context": "Delay between staggered items",
+   "evidence": "Stagger Animations"
+  },
+  {
+   "value": "translateY(8px)",
+   "context": "Starting offset for staggered items fading in over 300ms ease-out",
+   "evidence": "Stagger Animations"
+  },
+  {
+   "value": "2-5x",
+   "context": "How much to lengthen durations for slow-motion testing",
+   "evidence": "Slow motion testing"
+  },
+  {
+   "value": "0.2s",
+   "context": "Fade animation duration in the reduced-motion example",
+   "evidence": "prefers-reduced-motion"
+  },
+  {
+   "value": "-100px",
+   "context": "useInView margin for triggering image reveals on scroll",
+   "evidence": "Image reveals on scroll"
+  },
+  {
+   "value": "13M+",
+   "context": "Sonner weekly npm downloads, as stated by the source",
+   "evidence": "The Sonner Principles"
+  },
+  {
+   "value": "scale(0.95)",
+   "context": "Entry start scale, combined with opacity: 0, instead of scale(0) (review table and checklist fix)",
+   "evidence": "Never animate from scale(0)"
+  },
+  {
+   "value": "opacity: 0.7",
+   "context": "Button content opacity while blurred during a state transition",
+   "evidence": "Use blur to mask imperfect transitions"
+  },
+  {
+   "value": "transform: scale(1.05)",
+   "context": "Example hover scale gated behind @media (hover: hover) and (pointer: fine)",
+   "evidence": "Touch device hover states"
+  },
+  {
+   "value": "50ms",
+   "context": "Step between nth-child animation delays in the stagger example (0ms, 50ms, 100ms, 150ms)",
+   "evidence": "Stagger Animations"
+  },
+  {
+   "value": "translateY(100%)",
+   "context": "Hides a drawer (Vaul) or starts a toast's @starting-style entry by its own height",
+   "evidence": "translateY with percentages"
+  },
+  {
+   "value": "translateZ(72px)",
+   "context": "Orbit radius in the CSS 3D orbit keyframes",
+   "evidence": "3D transforms for depth"
+  },
+  {
+   "value": "duration: 1000",
+   "context": "WAAPI clip-path reveal example duration",
+   "evidence": "Use WAAPI for programmatic CSS animations"
+  },
+  {
+   "value": "inset(0 50% 0 0)",
+   "context": "Starting clip on the top image of a comparison slider",
+   "evidence": "Comparison sliders"
+  },
+  {
+   "value": "mouseX * 0.1",
+   "context": "Rotation factor in the spring mouse-tracking example",
+   "evidence": "Spring-based mouse interactions"
+  }
+ ],
+ "caveats": [
+  "This is an AI agent skill (SKILL.md), so parts of it are agent behaviour rather than design guidance: a scripted first reply and a required review output format.",
+  "Snapshot of commit 85e8e23; library-specific advice (Framer Motion shorthands not being hardware-accelerated, @starting-style browser support) may change with later versions [inferred].",
+  "Internal tension: 'UI animations should stay under 300ms' and the checklist fix of 150-250ms sit beside a 200-500ms range for modals and drawers and 400ms toast examples; Sonner is deliberately slower than typical UI.",
+  "The checklist example 'enter 2s, exit 200ms' comes from the hold-to-delete press/release pattern, not from ordinary entrance animations. [inferred]",
+  "The 0.11 velocity threshold is computed as swipe distance divided by milliseconds in the code sample; units are not stated [inferred].",
+  "Sonner's '13M+ weekly npm downloads' is a figure the source states about the library it draws its principles from, likely the author's own (self-promotion) [inferred]; not independently checked here.",
+  "The spring mouse-tracking pattern is explicitly decorative; the source says functional displays (a banking graph) are better without animation.",
+  "The 'Initial Response' section (a scripted first reply, then nothing until the user asks a question) is persona behaviour for this agent skill and is deliberately not recorded as a design rule."
+ ]
+}

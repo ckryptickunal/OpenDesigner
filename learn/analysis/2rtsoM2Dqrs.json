@@ -1,0 +1,389 @@
+{
+  "summary": "Kole Jain walks through three ways to price website design work: hourly, flat project pricing, and value-based pricing, which he calls the holy grail. He gives rough hourly rates by experience level (and notes they depend heavily on location), then shows how to build a project price from a break-even cost (estimated hours times hourly rate) marked up by a factor between 1 and 2 depending on how interesting and valuable the client is. Value-based pricing takes a share (5 to 10%) of the extra revenue a redesign produces, so prices scale with client size rather than time spent, but it only works when the result can be tied to a measurable revenue increase. This is freelance business advice rather than design guidance; for someone building a design system it matters mainly as a way to scope and price the work itself [inferred].",
+  "key_ideas": [
+    "There are three pricing models for design work: hourly, project (flat rate) and value-based.",
+    "Hourly rates are very location specific; the video contrasts about $50 an hour in the US with about 12 in India.",
+    "Hourly billing sets designer and client against each other: one wants more hours billed, the other fewer.",
+    "Hourly pricing is useful only while you cannot yet price a project accurately.",
+    "Clients prefer a hard number up front, which project pricing gives them.",
+    "Project price starts from a break-even cost: estimated hours multiplied by your hourly rate.",
+    "Time estimates should also account for meetings and revisions.",
+    "Mark up the break-even by a factor between 1 and 2: close to 1 for a high-profile client who brings future work, higher for a dull client.",
+    "Value-based pricing takes a cut of the extra revenue your redesign creates, generally 5 to 10%.",
+    "Value-based pricing lets your price scale with client size regardless of hours spent, but requires estimating revenue gain and agreeing an ROI with the client.",
+    "Value-based pricing does not fit clients with no revenue or non-profits; fall back to project pricing.",
+    "Work usually takes longer than you expect, and your skills are worth more than you think."
+  ],
+  "entities": [
+    {
+      "name": "Kole Jain",
+      "type": "person",
+      "description": "Channel host presenting the three pricing methods."
+    },
+    {
+      "name": "Hourly pricing",
+      "type": "concept",
+      "description": "Billing per hour worked; the first and most common method in the video."
+    },
+    {
+      "name": "Project pricing",
+      "type": "concept",
+      "description": "A flat rate per project built from break-even cost and a markup factor."
+    },
+    {
+      "name": "Value-based pricing",
+      "type": "concept",
+      "description": "Charging a share of the additional revenue the design work produces."
+    },
+    {
+      "name": "Break-even cost",
+      "type": "concept",
+      "description": "Estimated project hours multiplied by the hourly rate; the floor for a project price."
+    },
+    {
+      "name": "ROI",
+      "type": "concept",
+      "description": "The return the client must accept as reasonable when agreeing a value-based fee."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Freelancing and pricing work",
+      "summary": "Compares hourly, project and value-based pricing for web design, with sample hourly rates by experience, a break-even-plus-markup formula for project pricing, and a 5 to 10% revenue share for value-based pricing."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "The average designer in the US is paid about $50 an hour, while the average designer in India is paid about 12.",
+      "evidence": "average salary of a designer in the US gets paid about $50 an hour"
+    },
+    {
+      "claim": "Charging hourly motivates the designer to maximise billed hours while the client wants as few as possible, creating opposing views.",
+      "evidence": "if you're charging hourly You're motivated to maximize the amount of hours you Bill"
+    },
+    {
+      "claim": "Hourly pricing lacks a concrete number, which helps when you cannot accurately price a project but becomes counterproductive after that.",
+      "evidence": "lacks a concrete number which is good if you can't accurately price out a project"
+    },
+    {
+      "claim": "Clients like to have a hard number when they enter a project, and project pricing provides it.",
+      "evidence": "clients like to have a hard number whenever they enter into a project"
+    },
+    {
+      "claim": "Project pricing is easier for the client but adds complexity for the designer.",
+      "evidence": "this makes things much easier for the client but does introduce a bit of complexity for us"
+    },
+    {
+      "claim": "With value-based pricing, prices can scale with larger clients irrespective of time spent.",
+      "evidence": "as you work with larger clients your prices can scale too irrespective of how much time you spend"
+    },
+    {
+      "claim": "Value-based pricing requires estimating the revenue gain and working with the client to agree an acceptable ROI.",
+      "evidence": "now you need to estimate the gain in revenue and work with your client to figure out an acceptable Roi"
+    },
+    {
+      "claim": "Value-based pricing only makes sense when the project relates to a quantifiable increase in revenue; not for companies with no revenue or non-profits.",
+      "evidence": "your project needs to relate to an increase in Revenue in a quantifiable way"
+    }
+  ],
+  "quotes": [
+    "things generally take longer than you think they will",
+    "your skills are more valuable than you think they are",
+    "value based pricing reckons that you should get a piece of this additional profit"
+  ],
+  "tags": [
+    "pricing",
+    "freelancing",
+    "hourly-rate",
+    "project-pricing",
+    "value-based-pricing",
+    "clients",
+    "web-design"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "Move from hourly to flat project pricing once you can estimate a project's scope.",
+      "why": "Hourly billing gives designer and client opposing incentives, and clients want a hard number up front; hourly is only useful while you cannot accurately price a project.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "quickly becomes counterproductive after that ... project pricing fixes all of that"
+    },
+    {
+      "rule": "Calculate a project's break-even cost by multiplying the estimated hours by your hourly rate.",
+      "why": "It is the base from which the flat project price is built.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "we calculate our break even cost by figuring out how long it's going to take and multiplying that by our hourly rate"
+    },
+    {
+      "rule": "Include time for meetings and revisions in every project time estimate.",
+      "why": "The time benchmarks are only guidelines, and things generally take longer than you think they will.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "don't forget to account for meetings and revisions as well"
+    },
+    {
+      "rule": "Multiply the break-even cost by a factor between 1 and 2 based on how interesting the project is and how much future value the client brings.",
+      "why": "A big-name client who will bring more clients is worth doing near break-even; a boring client should cost more for the same work.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "process",
+      "applies_to": "all",
+      "values": [
+        "1 and two",
+        "1.5"
+      ],
+      "evidence": "gross up our break even point ... by a factor of anywhere between 1 and two"
+    },
+    {
+      "rule": "For value-based pricing, charge a share of the additional revenue the redesign produces, generally 5 to 10%.",
+      "why": "The designer should get a piece of the extra profit the work creates, and this lets prices scale with larger clients regardless of time spent.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "process",
+      "applies_to": "all",
+      "values": [
+        "5 to 10%"
+      ],
+      "evidence": "value based pricing reckons that you should get a piece of this additional profit generally it's 5 to 10%"
+    },
+    {
+      "rule": "Do not use value-based pricing when the work cannot be tied to a quantifiable revenue increase, such as a client with no revenue or a non-profit; use project pricing instead.",
+      "why": "Value-based pricing depends on measuring the revenue gain.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "if for example the company isn't generating any revenue or maybe they're a non-for-profit this doesn't make much sense"
+    },
+    {
+      "rule": "Treat hourly-rate guidelines as location specific and adjust them to where you work.",
+      "why": "Designer pay is very location specific: about $50 an hour on average in the US versus about 12 in India.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [
+        "$50 an hour",
+        "about 12"
+      ],
+      "evidence": "please note this is very location specific"
+    },
+    {
+      "rule": "If you do not know what to charge, use experience-based hourly guidelines (US and similar countries): 20 to $30 an hour after 1 to two years of designing, $35 to $50 after working with a few clients successfully, then 60 up to $100 after a year or so of that.",
+      "why": "The presenter offers these as guidelines for designers who don't know what to charge, with rates rising as experience and successful client work grow.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "process",
+      "applies_to": "all",
+      "values": [
+        "20 to $30 an hour",
+        "$35 to $50 an hour",
+        "60 all the way up to $100"
+      ],
+      "evidence": "after working with a few clients successfully you could bump that up to $35 to $50 an hour"
+    },
+    {
+      "rule": "For value-based pricing, estimate the client's revenue gain and agree an acceptable ROI with them before setting the fee.",
+      "why": "The fee is a share of that gain, so it has to be estimated; the presenter says there is no easy way around this extra complexity.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "now you need to estimate the gain in revenue and work with your client to figure out an acceptable Roi for them"
+    },
+    {
+      "rule": "When pricing, assume the work will take longer than you think and that your skills are worth more than you think.",
+      "why": "The presenter gives these as the two things to remember to price projects successfully and accurately.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "just remember these two things things generally take longer than you think they will"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "How should a design project be priced?",
+      "options": [
+        {
+          "name": "Hourly",
+          "effect": "Bill for each hour worked; no concrete total, and designer and client pull in opposite directions on hours.",
+          "when": "When you cannot yet accurately price out a project, typically early in your career."
+        },
+        {
+          "name": "Project (flat rate)",
+          "effect": "One fixed price the client knows up front; easier for the client, more estimating work for the designer.",
+          "when": "When you can estimate the hours, or as the fallback when value-based pricing does not apply."
+        },
+        {
+          "name": "Value-based",
+          "effect": "Price is a share of the extra revenue the work generates, so fees scale with client size regardless of hours.",
+          "when": "When the redesign can be tied to a quantifiable revenue increase and you can agree an acceptable ROI with the client."
+        }
+      ],
+      "recommendation": "Value-based pricing is presented as the holy grail because prices scale with larger clients irrespective of time spent; project pricing is the fallback when revenue gain cannot be measured; hourly is only useful until you can price projects accurately.",
+      "maps_to": null,
+      "evidence": "the three types of pricing with the last one being the Holy Grail of pricing strategies"
+    },
+    {
+      "question": "How much should the break-even cost be marked up for a given client?",
+      "options": [
+        {
+          "name": "About 1x (break-even)",
+          "effect": "Charge roughly your cost and not much more.",
+          "when": "A fantastic, big-name client who will likely bring you more clients."
+        },
+        {
+          "name": "1.5x",
+          "effect": "A moderate markup, e.g. $4,000 becomes $6,000.",
+          "when": "A middle-of-the-road client who brings some value."
+        },
+        {
+          "name": "Up to 2x",
+          "effect": "The highest markup for the same amount of work.",
+          "when": "A really boring client; 2 is the top of the stated range."
+        }
+      ],
+      "recommendation": "Scale the factor between 1 and 2 by how interesting the project is and how much future value the client brings.",
+      "maps_to": null,
+      "evidence": "consider how interesting this project is to us and how much value it's going to bring us in the future"
+    }
+  ],
+  "process": [
+    {
+      "step": "Pick an hourly rate",
+      "detail": "Base it on location and experience, e.g. $20 to $30 an hour for 1 to two years of designing in the US and similar countries, $35 to $50 after working with a few clients successfully, then 60 up to $100 after a year or so of that."
+    },
+    {
+      "step": "Estimate the time",
+      "detail": "Estimate how long the project will take using benchmarks as guidelines, and add time for meetings and revisions."
+    },
+    {
+      "step": "Compute break-even",
+      "detail": "Multiply the estimated hours by your hourly rate."
+    },
+    {
+      "step": "Weigh the client",
+      "detail": "Judge how interesting the project is and how much future value (reputation, referrals) the client brings."
+    },
+    {
+      "step": "Apply the markup",
+      "detail": "Multiply break-even by a factor between 1 and 2 to get the flat project price."
+    },
+    {
+      "step": "Check for value-based fit",
+      "detail": "If the work ties to a quantifiable revenue increase, estimate the revenue gain, agree an acceptable ROI with the client, and charge a share of the gain (generally 5 to 10%); otherwise keep the project price."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Project pricing markup worked example",
+      "where": null,
+      "visual_note": "A $4,000 break-even multiplied by 1.5 for a middle-of-the-road client gives a $6,000 project price."
+    },
+    {
+      "what": "Value-based pricing worked example",
+      "where": null,
+      "visual_note": "A client making $2 million in revenue per year gains an additional 10% after a redesign; 5 to 10% of that gain equates to 10 to $20,000."
+    },
+    {
+      "what": "Opening comparison of websites of different worth",
+      "where": null,
+      "visual_note": "The intro asks why one website is worth more than another; the sites are presumably shown on screen [inferred] and are not named in the transcript."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "$50 an hour",
+      "context": "Average pay of a designer in the US",
+      "evidence": "average salary of a designer in the US gets paid about $50 an hour"
+    },
+    {
+      "value": "about 12",
+      "context": "Average hourly pay of a designer in India (currency presumably dollars [inferred])",
+      "evidence": "the average designer in India gets paid about 12"
+    },
+    {
+      "value": "1 to two years",
+      "context": "Design experience at which the $ 20 to $30 an hour guideline applies",
+      "evidence": "if you've been designing for 1 to two years"
+    },
+    {
+      "value": "20 to $30 an hour",
+      "context": "Suggested hourly rate in the US and similar countries after 1 to two years of designing",
+      "evidence": "you could charge $ 20 to $30 an hour if you've been designing for 1 to two years"
+    },
+    {
+      "value": "$35 to $50 an hour",
+      "context": "Suggested hourly rate after working with a few clients successfully",
+      "evidence": "you could bump that up to $35 to $50 an hour"
+    },
+    {
+      "value": "60 all the way up to $100",
+      "context": "Suggested hourly rate after a year or so at the previous level",
+      "evidence": "you could charge anywhere from 60 all the way up to $100"
+    },
+    {
+      "value": "$4,000",
+      "context": "Example break-even cost for a project",
+      "evidence": "let's assume that you have a break even of $4,000"
+    },
+    {
+      "value": "1 and two",
+      "context": "Range of the markup factor applied to break-even",
+      "evidence": "by a factor of anywhere between 1 and two"
+    },
+    {
+      "value": "1.5",
+      "context": "Markup factor for a middle-of-the-road client, turning $4,000 into $6,000",
+      "evidence": "multiply it by 1.5 to give you a $6,000 total"
+    },
+    {
+      "value": "$6,000",
+      "context": "Project price after applying the 1.5 markup to the $4,000 break-even",
+      "evidence": "multiply it by 1.5 to give you a $6,000 total"
+    },
+    {
+      "value": "$2 million",
+      "context": "Example client's annual revenue for value-based pricing",
+      "evidence": "they're making $2 million in Revenue per year"
+    },
+    {
+      "value": "10%",
+      "context": "Example additional annual revenue after the redesign",
+      "evidence": "now they're making an additional 10% of Revenue per year"
+    },
+    {
+      "value": "5 to 10%",
+      "context": "Typical designer share of the additional revenue in value-based pricing",
+      "evidence": "generally it's 5 to 10%"
+    },
+    {
+      "value": "10 to $20,000",
+      "context": "Resulting value-based fee in the example",
+      "evidence": "which equates to 10 to $20,000"
+    }
+  ],
+  "caveats": [
+    "This is freelance business advice, not design guidance; it does not inform tokens, components or visual decisions [inferred].",
+    "Rates are rules of thumb from April 2024, given as location-specific guidelines for people who don't know what to charge; they are the presenter's opinion, not sourced data.",
+    "The video introduces 'common benchmarks for times' but they are not spoken in the transcript (presumably shown on screen [inferred]), so they are not captured here.",
+    "Auto-caption error: the transcript says 'break even point of $44,000', which almost certainly mis-hears the $4,000 break-even stated just before; the number is left out of the numbers list.",
+    "Short comedic interjections from an imagined client voice ('I'm getting it', 'passive income') are skits, not advice.",
+    "The presenter hopes you would no longer be charging hourly by the time you reach 60 to $100 an hour, implying hourly is a stage to move past."
+  ]
+}

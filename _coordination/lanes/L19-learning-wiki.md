@@ -7,6 +7,7 @@ You maintain OpenDesigner's learning wiki: knowledge from sources the owner trus
 - `python3 tools/wiki.py status` shows sources fetched but not analysed or ingested.
 
 ## Steps
+0. `python3 tools/wiki.py next` tells you which of the steps below are out of date. Run it first and last.
 1. `export OD_SESSION="<name>"`, `python3 tools/od.py claim L19` (or ask the holder), and read your inbox.
 2. Add each link: `python3 tools/wiki.py add <url> --authority non-negotiable|good-to-have|reference [--name "..."]`. A channel means every video on it; a video means that video only. Ask the owner when the authority is unclear. Never guess it.
 3. Fetch: `.venv-wiki/bin/python tools/wiki.py fetch --only "<name>"` (set-up is in `learn/README.md`). Paid, logged-in or paywalled content is out of scope: use only public pages.

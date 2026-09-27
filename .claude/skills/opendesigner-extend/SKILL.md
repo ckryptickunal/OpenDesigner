@@ -23,6 +23,7 @@ The engine is `scripts/engine.py` in this skill when it was installed from a rel
    - `git log --oneline -15 -- opendesigner/ DESIGN.md`, if the project uses git.
 2. If `DESIGN.md.hand-edited` exists, someone edited the generated file by hand. Offer to turn each edit into a decision.
 3. Run `engine.py review`. If it reports errors or drift, say so first. Fixing them may be the real task.
+   If `engine.py validate` says OpenDesigner's house standards are newer than this system's, say so in one line, run `engine.py standards --update`, and show what changed by area. Their overrides and project standards stay as they are.
 4. Tell the person in three lines or fewer: the direction, the zoom level of the area they care about, and anything locked or open.
 5. Ask only about what is new. Never re-run the whole interview.
 
@@ -36,13 +37,19 @@ In a chat-only host, ask the person to upload `state.json`, `decisions.md` and D
 | "Let's define colors properly", "more detail on type" | Zoom in | Run the next zoom level for that area (`<opendesigner>/references/zoom.md`), then record it, for example `set zoom.color '"defined"'` |
 | "New brand color", "dark mode", "add Android" | An area reopened | Ask that area's questions at its current zoom level |
 | "Make it feel more playful", a new direction | A challenge | It touches most decisions. Say what would move (`graph.json`), offer safe choices and risks, and change nothing without a clear yes |
-| "Why is X like this?" | A question | Answer from `decisions.md` and the cards. Change nothing |
+| "Why is X like this?" | A question | Answer from `decisions.md`, the standards (`engine.py standards`) and the cards. Change nothing |
+| "Follow this guide", "use this article as a rule", a link to learn from | A new source | `<opendesigner>/references/rules.md` section 12: agree its weight, read it with consent, keep the rules they pick |
 | A value that doesn't exist yet | A token addition | Add it through the engine with a reason (section 4, "Add a token"). Never hard-code it |
 
 ## 3. Locks and conflicts
 - Anything in `state.json` → `locks` (brand colors, contrast target, reduced motion, anything the owner locked) changes only with explicit consent. Name the lock and ask.
 - A conflict with an earlier decision: show both and let the person choose. The new decision supersedes the old one. Nothing is edited or deleted.
 - "You decide" is recorded with `--set-by delegated`.
+
+### Standards
+- A value locked by a standard (house `STD-...` or project `PRJ-...`) changes only when the person explicitly asks to improve, remove or change that standard. Restate the rule and its reason once. Then run `engine.py standard override <id> --why "<their words>" [--value <json>]`. `engine.py standard restore <id>` undoes it.
+- "Follow this guide" or "this is non-negotiable for us": add it as a project standard (`<opendesigner>/references/rules.md` section 12).
+- `engine.py standards` lists what applies, what was overridden and why, and any pending house updates.
 
 ## 4. Make the change
 1. Show it first: the current value, the new value, and what else moves (`graph.json`). Use a template from `<opendesigner>/assets/templates/` when the host can show one.

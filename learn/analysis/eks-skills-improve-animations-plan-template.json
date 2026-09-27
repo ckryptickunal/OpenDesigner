@@ -1,0 +1,106 @@
+{
+  "summary": "The plan template that Emil Kowalski's improve-animations skill uses for every animation fix it hands off. Each plan is written for an executor that may be a less capable model with no context and no taste, so it must spell out the problem with file:line citations and verbatim current code, the exact target values, the repo's own conventions with an exemplar, one concrete edit per step, hard scope boundaries, and a verification section that includes a slow-motion feel check. For a design system team it is a ready format for turning motion findings into safe, reviewable work that cheaper agents or junior contributors can carry out without guessing.",
+  "key_ideas": [
+    "Write plans for the weakest executor: zero context, zero taste.",
+    "Never point back to earlier discussion; inline every value, path and code excerpt.",
+    "Stamp each plan with the commit it was written against so drift can be detected.",
+    "Problem sections cite file:line and quote the current code verbatim.",
+    "Target sections spell out every curve, duration, spring config and media query.",
+    "Plans extend the repo's existing tokens and patterns, shown through one exemplar.",
+    "Boundaries limit edits to motion properties, forbid new dependencies, and require stopping on drift.",
+    "Verification pairs mechanical checks with a feel check in slow motion and under reduced motion.",
+    "One plan per finding, merged only when files and fix pattern are identical.",
+    "A plans/README.md index tracks order, dependencies and status."
+  ],
+  "entities": [
+    {"name": "improve-animations", "type": "tool", "description": "Emil Kowalski's agent skill that writes every plan in this format."},
+    {"name": "AUDIT.md", "type": "concept", "description": "The audit playbook every target value in a plan must be pulled from."},
+    {"name": "DevTools Animations panel", "type": "tool", "description": "Used to slow animation playback to 10% for the feel check."},
+    {"name": "DevTools Rendering panel", "type": "tool", "description": "Used to toggle prefers-reduced-motion during verification."},
+    {"name": "git rev-parse --short HEAD", "type": "tool", "description": "Command whose output stamps each plan with the commit it was written against."},
+    {"name": "Feel check", "type": "concept", "description": "Mandatory manual check that motion looks right, not just that it compiles."}
+  ],
+  "topics": [
+    {"name": "Design process", "summary": "A fixed plan structure (status, commit, severity, category, scope, problem, target, conventions, steps, boundaries, verification) and an index README for turning motion findings into executable work."},
+    {"name": "AI-assisted design", "summary": "Plans are written so a less capable model with zero context and zero taste can execute them without improvising."},
+    {"name": "Motion principles", "summary": "Motion can be mechanically correct and still feel wrong, so a feel check in slow motion is required."},
+    {"name": "Easing and timing", "summary": "The example target replaces transition: all 400ms ease-in with separate transform and opacity transitions at 200ms using var(--ease-out)."},
+    {"name": "Reduced motion", "summary": "Verification toggles prefers-reduced-motion and confirms movement is dropped while opacity feedback remains."},
+    {"name": "Design systems and tokens", "summary": "New curves go into the repo's existing token file, e.g. --ease-out: cubic-bezier(0.23, 1, 0.32, 1) in src/styles/tokens.css."}
+  ],
+  "claims": [
+    {"claim": "The executor of a plan may be a less capable model with zero context and zero taste.", "evidence": "# Plan Template"},
+    {"claim": "Motion can be mechanically correct and still feel wrong.", "evidence": "Notes for the plan author: The feel check is not optional"},
+    {"claim": "Code may drift after the commit a plan was stamped with, so steps may stop matching the code.", "evidence": "Boundaries: drift since the commit stamp"}
+  ],
+  "quotes": [
+    "The executor may be a less capable model with zero context and zero taste",
+    "The feel check is not optional.",
+    "Motion can be mechanically correct and still feel wrong"
+  ],
+  "tags": ["motion", "implementation-plan", "handoff", "template", "verification", "feel-check", "agents", "process"],
+  "authority": "non-negotiable",
+  "rules": [
+    {"rule": "Write every animation-fix plan in the fixed structure: a title line '# NNN — <Short imperative title>' followed by Status, Commit, Severity, Category and Estimated scope, then Problem, Target, Repo conventions to follow, Steps, Boundaries and Verification sections.", "why": "Every plan written by improve-animations follows this structure.", "kind": "do", "strength": "must", "area": "process", "applies_to": "all", "values": ["NNN", "Status", "Commit", "Severity", "Category", "Estimated scope"], "evidence": "Every plan written by improve-animations follows this structure"},
+    {"rule": "Write the plan so an executor with zero context and zero taste can complete it; the plan must contain everything, exactly.", "why": "The executor may be a less capable model.", "kind": "do", "strength": "must", "area": "process", "applies_to": "all", "values": [], "evidence": "the plan must contain everything, exactly"},
+    {"rule": "Never refer back to earlier discussion such as 'the audit above' or 'the easing we discussed'.", "why": "The executor has no context from that discussion.", "kind": "dont", "strength": "must", "area": "process", "applies_to": "all", "values": [], "evidence": "No references to \"the audit above\" or \"the easing we discussed.\""},
+    {"rule": "Set a new plan's Status to TODO.", "why": "Template header field.", "kind": "do", "strength": "must", "area": "process", "applies_to": "all", "values": ["TODO"], "evidence": "**Status**: TODO"},
+    {"rule": "Stamp the Commit field with the output of git rev-parse --short HEAD at the time the plan is written.", "why": "Lets the executor detect drift since the commit stamp.", "kind": "do", "strength": "must", "area": "process", "applies_to": "all", "values": ["git rev-parse --short HEAD"], "evidence": "**Commit**"},
+    {"rule": "Mark Severity as exactly one of HIGH, MEDIUM or LOW, and name the audit category.", "why": "Template header fields.", "kind": "do", "strength": "must", "area": "process", "applies_to": "all", "values": ["HIGH", "MEDIUM", "LOW"], "evidence": "**Severity**: HIGH | MEDIUM | LOW"},
+    {"rule": "State the estimated scope as the number of files and a rough size.", "why": "Template header field.", "kind": "do", "strength": "must", "area": "process", "applies_to": "all", "values": ["<n files, rough size>"], "evidence": "**Estimated scope**"},
+    {"rule": "In Problem, say what is wrong, where, and why it matters to how the product feels.", "why": "Template Problem section.", "kind": "do", "strength": "must", "area": "process", "applies_to": "all", "values": [], "evidence": "## Problem"},
+    {"rule": "Cite every problem location as path/to/file.tsx:123 and include the current code verbatim.", "why": "Template Problem section.", "kind": "do", "strength": "must", "area": "process", "applies_to": "all", "values": ["path/to/file.tsx:123"], "evidence": "Cite every location as path/to/file.tsx:123"},
+    {"rule": "Label each code excerpt with a comment giving its location and whether it is the current or the target code, e.g. /* src/components/dropdown.css:14 — current */ and /* target */.", "why": "The template's Problem and Target excerpts are labelled this way.", "kind": "do", "strength": "should", "area": "process", "applies_to": "all", "values": ["/* target */"], "evidence": "/* src/components/dropdown.css:14 — current */"},
+    {"rule": "In Target, spell out the exact end state with every value: curves, durations, spring configs and media queries.", "why": "The executor has zero context and zero taste, so the plan must contain everything, exactly.", "kind": "do", "strength": "must", "area": "process", "applies_to": "all", "values": [], "evidence": "## Target: Every value spelled out"},
+    {"rule": "Never write a vague target such as 'use a nicer easing'.", "why": "Every value must be spelled out.", "kind": "dont", "strength": "must", "area": "process", "applies_to": "all", "values": [], "evidence": "Never \"use a nicer easing\""},
+    {"rule": "Document how the codebase already handles the pattern (token names, file placement, prop patterns) and give one exemplar file:line for the executor to imitate.", "why": "The executor should follow repo conventions.", "kind": "do", "strength": "must", "area": "process", "applies_to": "all", "values": ["<exemplar file:line that already does this correctly>"], "evidence": "## Repo conventions to follow"},
+    {"rule": "Add new easing curves to the repo's existing token file rather than inline, e.g. --ease-out: cubic-bezier(0.23, 1, 0.32, 1) in src/styles/tokens.css.", "why": "Template example of following repo conventions.", "kind": "do", "strength": "should", "area": "tokens", "applies_to": "css", "values": ["src/styles/tokens.css", "--ease-out: cubic-bezier(0.23, 1, 0.32, 1)"], "evidence": "Easing tokens live in src/styles/tokens.css"},
+    {"rule": "Write Steps as one concrete edit per step: the file, what changes, and the resulting code.", "why": "Template Steps section.", "kind": "do", "strength": "must", "area": "process", "applies_to": "all", "values": [], "evidence": "## Steps"},
+    {"rule": "List the files and components the executor must not touch.", "why": "Template Boundaries section.", "kind": "do", "strength": "must", "area": "process", "applies_to": "all", "values": [], "evidence": "Do NOT touch <files/components out of scope>"},
+    {"rule": "Restrict the executor to motion properties; do not change markup or structure unless a step says so.", "why": "Template Boundaries section.", "kind": "dont", "strength": "must", "area": "process", "applies_to": "all", "values": [], "evidence": "Do NOT change markup/structure — motion properties only"},
+    {"rule": "Do not add new dependencies in an animation-fix plan.", "why": "Template Boundaries section.", "kind": "dont", "strength": "must", "area": "process", "applies_to": "all", "values": [], "evidence": "Do NOT add new dependencies."},
+    {"rule": "If a step does not match the code found (drift since the commit stamp), stop and report instead of improvising.", "why": "Template Boundaries section.", "kind": "do", "strength": "must", "area": "process", "applies_to": "all", "values": [], "evidence": "STOP and report instead of improvising"},
+    {"rule": "In Verification, give the exact mechanical commands (typecheck, lint, build) with their expected outcome.", "why": "Template Verification section.", "kind": "do", "strength": "must", "area": "process", "applies_to": "all", "values": ["typecheck", "lint", "build"], "evidence": "**Mechanical**"},
+    {"rule": "Include a feel check: run the UI, trigger the interaction, and list observable checks such as 'the dropdown scales from its trigger, not from center' and 'spamming the toggle never restarts the animation from zero'.", "why": "Motion can be mechanically correct and still feel wrong.", "kind": "do", "strength": "must", "area": "motion", "applies_to": "all", "values": [], "evidence": "**Feel check**"},
+    {"rule": "In the feel check, set DevTools animation playback to 10% (Animations panel) and confirm the specific detail.", "why": "Motion can be mechanically correct and still feel wrong; the executor needs concrete things to watch for in slow motion.", "kind": "do", "strength": "must", "area": "tooling", "applies_to": "web", "values": ["10%"], "evidence": "In DevTools, set playback to 10% (Animations panel)"},
+    {"rule": "In the feel check, toggle prefers-reduced-motion (Rendering panel) and confirm movement is dropped but opacity feedback remains.", "why": "Template verification step for reduced motion.", "kind": "do", "strength": "must", "area": "accessibility", "applies_to": "web", "values": ["prefers-reduced-motion"], "evidence": "Toggle prefers-reduced-motion (Rendering panel)"},
+    {"rule": "End Verification with 'Done when' criteria that a machine or an eye can check.", "why": "Template Verification section.", "kind": "do", "strength": "must", "area": "process", "applies_to": "all", "values": [], "evidence": "**Done when**"},
+    {"rule": "Write one plan per finding; merge two findings into one plan only when they share every file and the same fix pattern.", "why": "Notes for the plan author, e.g. the same easing token swap across components.", "kind": "do", "strength": "must", "area": "process", "applies_to": "all", "values": [], "evidence": "One plan per finding"},
+    {"rule": "Pull every value from AUDIT.md; never approximate from memory.", "why": "Notes for the plan author.", "kind": "do", "strength": "must", "area": "process", "applies_to": "all", "values": [], "evidence": "Pull every value from AUDIT.md"},
+    {"rule": "Never skip the feel check; give the executor or reviewer concrete things to watch in slow motion.", "why": "Motion can be mechanically correct and still feel wrong.", "kind": "dont", "strength": "must", "area": "process", "applies_to": "all", "values": [], "evidence": "The feel check is not optional."},
+    {"rule": "After writing plans, create or update plans/README.md with a table of plans (number, title, severity, status), the recommended execution order and dependencies between plans.", "why": "Notes for the plan author.", "kind": "do", "strength": "must", "area": "process", "applies_to": "all", "values": ["plans/README.md"], "evidence": "create or update plans/README.md"}
+  ],
+  "decisions": [
+    {"question": "Should related animation findings be fixed in one plan or several?", "options": [
+      {"name": "One plan per finding", "effect": "Each fix is small, reviewable and independently executable.", "when": "The default."},
+      {"name": "Merged plan", "effect": "One plan covers several findings with the same edit.", "when": "Only when the findings share every file and the same fix pattern, such as the same easing token swap across components."}
+    ], "recommendation": "One plan per finding; merge only when files and fix pattern are identical.", "maps_to": null, "evidence": "Notes for the plan author"}
+  ],
+  "process": [
+    {"step": "Header", "detail": "Title '# NNN — <Short imperative title>', then Status TODO, Commit from git rev-parse --short HEAD, Severity HIGH/MEDIUM/LOW, audit Category, and Estimated scope (files, rough size)."},
+    {"step": "Problem", "detail": "What is wrong, where, and why it matters to how the product feels; cite every location as file:line and quote current code verbatim."},
+    {"step": "Target", "detail": "The exact end state with every curve, duration, spring config and media query spelled out, pulled from AUDIT.md."},
+    {"step": "Repo conventions", "detail": "Where tokens live, naming, file placement and prop patterns, plus one exemplar file:line to imitate."},
+    {"step": "Steps", "detail": "Numbered steps, each one concrete edit with the file, the change and the resulting code."},
+    {"step": "Boundaries", "detail": "Out-of-scope files, motion properties only, no new dependencies, stop and report on drift."},
+    {"step": "Verification", "detail": "Mechanical commands with expected outcome; a feel check with observable checks, 10% playback in DevTools and a reduced-motion toggle; Done-when criteria."},
+    {"step": "Index", "detail": "Create or update plans/README.md with the plan table (number, title, severity, status), execution order and dependencies."}
+  ],
+  "examples": [
+    {"what": "Dropdown with a sluggish all-property transition", "where": null, "visual_note": "Current code .dropdown { transition: all 400ms ease-in; } at src/components/dropdown.css:14, shown as the kind of verbatim excerpt a Problem section cites."},
+    {"what": "Dropdown target state", "where": null, "visual_note": "transition: transform 200ms var(--ease-out), opacity 200ms var(--ease-out); plus transform-origin: var(--transform-origin): only transform and opacity animate, with the strong ease-out token, scaling from the trigger."},
+    {"what": "Feel-check observations", "where": null, "visual_note": "Example checks: the dropdown scales from its trigger, not from center; spamming the toggle never restarts the animation from zero."}
+  ],
+  "numbers": [
+    {"value": "10%", "context": "DevTools animation playback speed for the feel check.", "evidence": "In DevTools, set playback to 10% (Animations panel)"},
+    {"value": "400ms", "context": "Duration in the example's current (wrong) dropdown transition, with ease-in and transition: all.", "evidence": "src/components/dropdown.css:14 — current"},
+    {"value": "200ms", "context": "Duration in the example's target dropdown transition for transform and opacity.", "evidence": "/* target */"},
+    {"value": "cubic-bezier(0.23, 1, 0.32, 1)", "context": "Example --ease-out token added to the repo's token file.", "evidence": "Repo conventions to follow"}
+  ],
+  "caveats": [
+    "This is an AI-agent skill file pinned to commit 85e8e23 of emilkowalski/skills.",
+    "The file paths (src/styles/tokens.css, src/components/dropdown.css:14) are placeholders in a template, not real files.",
+    "The DevTools panel names (Animations, Rendering) are written without naming a browser.",
+    "The template governs plan documents for code changes; its only motion values are in the example (the --ease-out curve and a 200ms dropdown transition), which agree with AUDIT.md's --ease-out token and 150–250ms dropdown band [inferred]."
+  ]
+}

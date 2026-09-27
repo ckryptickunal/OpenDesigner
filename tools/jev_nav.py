@@ -90,6 +90,18 @@ def jev(state, questions):
         return json.load(r)["answers"]
 
 
+def standards_as_cards():
+    """House standards (synthesis/standards.json, lane L19) join the pool, so `find` answers "what is the rule for X?" too."""
+    p = ROOT / "synthesis/standards.json"
+    if not p.exists():
+        return []
+    doc = json.loads(p.read_text())
+    return [dict(id=s["id"], title=s["title"], file="synthesis/standards.json", line=0,
+                 text=f"House standard ({s['strength']}): {s['rule']} Why: {s['why']} Values: "
+                      + "; ".join(f"{k}: {v}" for k, v in (s.get("values") or {}).items()))
+            for s in doc.get("standards", [])]
+
+
 def keyword_rank(query, pool):
     terms = set(re.findall(r"\w{3,}", query.lower()))
     return sorted(pool, key=lambda c: -sum((c["title"] + " " + c["text"]).lower().count(t) for t in terms))
@@ -97,7 +109,8 @@ def keyword_rank(query, pool):
 
 def find(args):
     query, research = args.query, [l for l in lanes() if l["id"].startswith("L")]
-    everything = [c for l in research for f in lane_files(l["id"]) for c in cards(f)]
+    std = standards_as_cards()
+    everything = [c for l in research for f in lane_files(l["id"]) for c in cards(f)] + std
     if not api_key():
         print("No JEV_API_KEY or TYPESAFE_API_KEY found: using keyword ranking instead of Jev.\n", file=sys.stderr)
         return show(keyword_rank(query, everything)[: args.top], None)
@@ -107,9 +120,10 @@ def find(args):
     lane = jev({"question": query}, {"lane": {
         "type": "choice",
         "instructions": "Which research lane of a design-system research project is most likely to answer `question`?",
-        "criteria": {l["id"]: l["scope"] for l in research}}})["lane"]["choice"]
-    pool = {(c["file"], c["line"]): c for c in keyword_rank(query, everything)[:KEYWORD_CANDIDATES]}
-    pool |= {(c["file"], c["line"]): c for f in lane_files(lane) for c in cards(f)}
+        "criteria": {l["id"]: l["scope"] for l in research}
+                    | ({"STD": "House standards: non-negotiable rules for motion, easing, animation, toasts, drawers and UI polish"} if std else {})}})["lane"]["choice"]
+    pool = {(c["file"], c["line"], c["id"]): c for c in keyword_rank(query, everything)[:KEYWORD_CANDIDATES]}
+    pool |= {(c["file"], c["line"], c["id"]): c for c in (std if lane == "STD" else [c for f in lane_files(lane) for c in cards(f)])}
     pool = list(pool.values())
 
     # 2. Judge: one Noul per card over shared state; batches run in parallel.

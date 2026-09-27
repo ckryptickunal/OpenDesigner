@@ -1,0 +1,155 @@
+{
+  "summary": "Kole Jain argues that strong UI/UX designers focus on making things work for the user rather than on making them look good, and treat web design as a story that guides someone to an action. Using an Airbnb-like vacation rental flow, he shows how to start from user intent (a search bar first, then listings and filters for people who want to browse) and to expand functionality only as intent expands. He recommends following the layouts users already expect, choosing and structuring content for how people scan it and for imperfect real content, and using animation only when it adds clarity or function, with progressive disclosure and a Load more button over infinite scroll as examples. He closes by saying a design system should reflect the team's values and size, that developing it (rules, spacing, type scales, interaction patterns) is often more critical than the design itself, that it is a shared language rather than a way to make everything look the same, and that its rules should be broken only on purpose. For someone building a design system, this gives a user-intent-first process, content stress tests, a functional-motion stance and a way to size the system to the team.",
+  "key_ideas": [
+    "Good design focuses on making things work brilliantly for the user, not only on making them look good.",
+    "Think of web design as a story that guides someone to an action; extra flare like 3D graphics or smooth scrolling can get in the way.",
+    "Start from user intent: if people come to search, the search bar is the natural starting point, augmented with useful inputs.",
+    "A site can serve more than one intent, such as searching and browsing, and each intent adds its own functionality.",
+    "Fonts, colors and icons change the aesthetics but do very little to change functionality.",
+    "Users expect certain layouts after decades of websites: top-to-bottom, left-to-right flow, navigation at the top, easy-to-find calls to action.",
+    "Conventional layouts are easier to extend with new sections and to make responsive; uniqueness comes from micro interactions and features.",
+    "Designing around content has two steps: decide what content to show, then structure it so imperfect content still works.",
+    "Animations should add clarity or functionality; his old portfolio, whose animations didn't do anything, is his example of what not to do.",
+    "Progressive disclosure shows what the user needs and reveals more as it is required.",
+    "A Load more button is preferable to infinite scroll because it gives control and lets users reach the footer.",
+    "Buttons should almost always have a small animation, while scrolljacking should be used very sparingly, if ever.",
+    "A design system should match the team: lightweight and easy to scrap for a lean startup, massive and deeply defined for many products.",
+    "Building the system (rules, spacing, typography scales, interaction patterns) is often more critical than the design itself.",
+    "A design system is a shared language, not a way to make everything look the same; break its rules with intention."
+  ],
+  "entities": [
+    {"name": "Kole Jain", "type": "person", "description": "Presenter of the video and owner of the channel; shows his own old portfolio website as a cautionary example."},
+    {"name": "Mobbin", "type": "product", "description": "The video's paid sponsor (auto-captioned as 'Mobin'); see caveats."},
+    {"name": "Airbnb", "type": "company", "description": "Reference for the vacation-rental user flow used as the running example."},
+    {"name": "Material Design", "type": "product", "description": "Google's design system, cited as massive and deeply defined because it spans dozens of products and billions of users."},
+    {"name": "Google", "type": "company", "description": "Owner of Material Design, used to contrast a large system with a lean startup's system."},
+    {"name": "User intent", "type": "concept", "description": "Why the user is on the page (search or browse); the starting point for the design."},
+    {"name": "Progressive disclosure", "type": "concept", "description": "Showing users what they need and revealing more as it is required, e.g. a menu or search bar that animates in."},
+    {"name": "Scrolljacking", "type": "concept", "description": "Scroll effects that take over normal scrolling [inferred]; the video says to use them very sparingly, if ever."},
+    {"name": "Infinite scroll", "type": "concept", "description": "Loading content continuously as the user scrolls [inferred]; the video says it often makes the footer impossible to reach and prefers a Load more button."}
+  ],
+  "topics": [
+    {"name": "Design process", "summary": "Start with user intent, build what serves it, expand functionality only as intent expands, then decide and structure content before adding motion."},
+    {"name": "Design taste and judgement", "summary": "Separates good from genius designers by focus on function over looks, respecting conventions while adding something unique, and breaking rules only with intention."},
+    {"name": "Spacing and layout", "summary": "Users expect information to flow top to bottom and left to right with navigation at the top; conventional layouts make new sections and responsive design easier."},
+    {"name": "Visual hierarchy", "summary": "Calls to action should be eye-catching and easy to find; listing cards should lead with scan-critical details like location, rating and price."},
+    {"name": "Cards and sections", "summary": "Listing cards should show scannable specifics rather than descriptions, truncate long names and put a circle behind icons on bright images."},
+    {"name": "Content and microcopy", "summary": "Design around content in two steps: choose what to show from how users interact, then structure it for imperfect content such as very long names."},
+    {"name": "Motion principles", "summary": "Animations should add clarity or functionality; the presenter's old portfolio is shown as an example of animations that did nothing."},
+    {"name": "Micro-interactions", "summary": "A cool micro interaction is one way to make a conventional layout uniquely yours; buttons should almost always have a small animation."},
+    {"name": "Navigation and sidebars", "summary": "When links run out of room, consolidate them into a menu that animates in; navigation belongs at the top of the page."},
+    {"name": "Buttons and actions", "summary": "Calls to action should be eye-catching and easy to find, and buttons should almost always have a small animation."},
+    {"name": "Forms and inputs", "summary": "For a rental search, the search bar is the starting point, augmented with destination, number of travelers and dates, plus filtering UI for browsers."},
+    {"name": "Landing pages", "summary": "A header and background image over the search bar adds nothing functional; flare like 3D graphics and smooth scrolling can get in the way of guiding to an action."},
+    {"name": "Accessibility", "summary": "Add a circle behind a save icon placed on bright listing images to guarantee contrast."},
+    {"name": "Design systems and tokens", "summary": "A system has to reflect the values of the team; defining rules, spacing, type scales and interaction patterns gives an architecture for expansion, and the system is a shared language rather than a way to make everything look the same."}
+  ],
+  "claims": [
+    {"claim": "Most designers focus on making things look good, while genius designers focus on making things work brilliantly for the user.", "evidence": "They focus on making things work brilliantly for the user"},
+    {"claim": "If the goal is to guide someone to an action, flare such as 3D graphics or buttery smooth scrolling might just be in the way.", "evidence": "all that flare might just be in the way"},
+    {"claim": "Adding a header and background image above the search bar does nothing extra for the user.", "evidence": "Does this design do anything extra that this design didn't? Not at all."},
+    {"claim": "Fonts, colors and icons affect the aesthetics but do very little to change functionality.", "evidence": "Notice how the fonts, colors, and icons affect the aesthetics"},
+    {"claim": "After 30 plus years of websites, users have come to expect certain layouts.", "evidence": "after 30 plus years of websites, users have come to expect certain layouts"},
+    {"claim": "Designs that follow common layout expectations are generally much easier to extend with new sections and to make responsive.", "evidence": "much easier to integrate new sections seamlessly and make responsive"},
+    {"claim": "Without a content structure, design has very little value.", "evidence": "without a content structure, design has very little value"},
+    {"claim": "How the user will interact with the design determines what type of information is presented.", "evidence": "Understanding how the user will interact with the design will determine what type of information is presented"},
+    {"claim": "Designing only for perfect content leads to unintended consequences, such as long names or icons losing contrast on bright images.", "evidence": "Otherwise, you end up with unintended consequences"},
+    {"claim": "A Load more button gives the user more control than infinite scroll and lets them reach the footer, which infinite scroll often makes impossible.", "evidence": "a load more button is preferable over infinite scroll"},
+    {"claim": "A lean startup may need a lightweight, flexible system, while Material Design is massive because its use cases span dozens of products and billions of users.", "evidence": "A lean startup might need something lightweight and flexible"},
+    {"claim": "The development of a design system is often more critical than the design itself, because it gives an architecture for expansion.", "evidence": "the development of a design system is often more critical than the design itself"},
+    {"claim": "A design system's purpose is to give the team a shared language, not to make everything look the same.", "evidence": "It's about giving your team a shared language"},
+    {"claim": "Design systems add a layer of replicability and speed that is tough to match.", "evidence": "design systems add a layer of replicability and speed that's tough to match"},
+    {"claim": "Respecting users' layout expectations while making the design uniquely yours, such as with a micro interaction or unique features, separates the good from the genius.", "evidence": "is what separates the good from the genius"}
+  ],
+  "quotes": [
+    "Think of web design not as art, but as a story",
+    "Animations should add clarity or functionality to a design.",
+    "You don't break the system by accident. You break it with intention."
+  ],
+  "tags": ["user-intent", "ux-process", "layout-conventions", "content-structure", "progressive-disclosure", "load-more", "infinite-scroll", "scrolljacking", "functional-animation", "design-system-scale", "truncation", "kole-jain"],
+  "authority": "reference",
+  "rules": [
+    {"rule": "Start a flow from the user's intent and build the element that serves it first (for a rental search, the search bar with destination, number of travelers and dates) before working on icons or card layouts.", "why": "Starting with icons or card layouts loses the plot of why you are designing; the intent to search makes the search bar the natural starting point.", "kind": "do", "strength": "should", "area": "process", "applies_to": "all", "values": [], "evidence": "Start with user intent"},
+    {"rule": "Do not add a header and background image (or similar decoration) around a core element unless it does something for the user.", "why": "The decorated version does nothing extra that the plain version didn't.", "kind": "dont", "strength": "consider", "area": "layout", "applies_to": "all", "values": [], "evidence": "put a header above this and slap an image on the background"},
+    {"rule": "Skip flare such as 3D graphics or buttery smooth scrolling when the page's goal is to guide someone to an action.", "why": "Not every story needs it, and all that flare might just be in the way of the action.", "kind": "dont", "strength": "consider", "area": "motion", "applies_to": "web", "values": [], "evidence": "not every story needs 3D graphics or buttery smooth scrolling"},
+    {"rule": "Add functionality only when a new user intent calls for it, for example listings plus filtering UI for people who come to browse rather than search.", "why": "Only as the user intent expands should the functionality of the design expand; styling alone changes little about function.", "kind": "do", "strength": "should", "area": "process", "applies_to": "all", "values": [], "evidence": "Only as the user intent expands do we expand the functionality of our designs"},
+    {"rule": "Follow expected layout conventions: let information flow top to bottom and left to right, put navigation at the top of the page, and make calls to action eye-catching and easy to find.", "why": "Users have come to expect these layouts, and designs that follow them are much easier to extend with new sections and make responsive.", "kind": "do", "strength": "should", "area": "layout", "applies_to": "web", "values": [], "evidence": "typically information should flow top to bottom and left to right"},
+    {"rule": "Make a conventional layout your own through a micro interaction or a set of unique features rather than by abandoning expected layouts.", "why": "Respecting expectations while adding something unique is what separates the good from the genius.", "kind": "do", "strength": "consider", "area": "patterns", "applies_to": "all", "values": [], "evidence": "Respecting these expectations, but making the design uniquely yours"},
+    {"rule": "Choose what a card shows from how users will interact with it: put the specifics people scan by (location, rating, price) on listing cards and leave detailed descriptions for the page they open on click.", "why": "Users who want a detailed look will click the listing; they need the scannable specifics before anything else.", "kind": "do", "strength": "should", "area": "content", "applies_to": "all", "values": [], "evidence": "They need the specifics to scan like the location, rating, and price before anything else"},
+    {"rule": "Test layouts with imperfect content and truncate long names such as a destination with a really long title.", "why": "Designs built on perfect, short content end up with unintended consequences when real content arrives.", "kind": "do", "strength": "should", "area": "content", "applies_to": "all", "values": [], "evidence": "We'd probably want to truncate long names"},
+    {"rule": "Put a circle behind icons that sit on photos (such as a save icon on bright listing images).", "why": "The circle guarantees contrast whatever the image behind it.", "kind": "do", "strength": "should", "area": "accessibility", "applies_to": "all", "values": [], "evidence": "add a circle to the icon to guarantee contrast"},
+    {"rule": "Only add an animation when it adds clarity or functionality; remove animations that don't do anything.", "why": "He shows his old portfolio website, calls it awful, and says none of its animations did anything.", "kind": "do", "strength": "should", "area": "motion", "applies_to": "all", "values": [], "evidence": "Animations should add clarity or functionality to a design"},
+    {"rule": "When navigation links run out of room, consolidate them into a menu that animates in.", "why": "The menu's animation then serves a purpose instead of being decoration.", "kind": "do", "strength": "consider", "area": "components", "applies_to": "all", "values": [], "evidence": "we consolidate them into a menu that can animate in serving a purpose"},
+    {"rule": "When a web app takes on a browsing priority, shrink the search bar instead of sticking the whole search block to the top, and animate it open when clicked.", "why": "The source gives it as an example of progressive disclosure: showing the user what they need to see and revealing more as it's required.", "kind": "do", "strength": "consider", "area": "patterns", "applies_to": "web", "values": [], "evidence": "reduce the size of the search bar and have it animate in when clicked"},
+    {"rule": "Use progressive disclosure: show the user what they need to see and reveal more as it is required.", "why": "Menus and search bars that animate in on demand are given as great examples of this.", "kind": "do", "strength": "should", "area": "patterns", "applies_to": "all", "values": [], "evidence": "showing the user what they need to see and revealing more as it's required"},
+    {"rule": "Prefer a Load more button over infinite scroll for long lists.", "why": "It gives the user more control and lets them actually reach the footer, which infinite scroll often makes impossible.", "kind": "do", "strength": "should", "area": "patterns", "applies_to": "web", "values": [], "evidence": "a load more button is preferable over infinite scroll"},
+    {"rule": "Give buttons a small animation.", "why": "Given as a general rule under the principle that animation should add clarity or functionality; the source adds that context matters.", "kind": "do", "strength": "should", "area": "motion", "applies_to": "all", "values": [], "evidence": "buttons should almost always have a small animation"},
+    {"rule": "Avoid scrolljacking effects; use them very sparingly, if ever.", "why": "Stated as a general rule alongside the principle that animation must add clarity or function.", "kind": "dont", "strength": "should", "area": "motion", "applies_to": "web", "values": [], "evidence": "scrolljacking effects should be used very sparingly, if ever"},
+    {"rule": "Make the design system reflect the values of the team and size it to match: a lean startup might need one that is lightweight, flexible, quick to update and easy to scrap; a system whose use cases span dozens of products and billions of users, like Material Design, is massive and deeply defined.", "why": "The source states the system has to reflect the values of the team, and explains Material Design's size by the number of products and users it serves.", "kind": "do", "strength": "must", "area": "process", "applies_to": "all", "values": [], "evidence": "But the system has to reflect the values of the team"},
+    {"rule": "Put real effort into defining the system's rules, spacing, typography scales and interaction patterns, not only into how it looks.", "why": "The process of defining them gives you an architecture for expansion, and the development of a design system is often more critical than the design itself.", "kind": "do", "strength": "should", "area": "tokens", "applies_to": "all", "values": [], "evidence": "The process of defining rules, spacing, typography scales, interaction patterns gives you an architecture for expansion"},
+    {"rule": "Treat the design system as the team's shared language, not as a way to make everything look the same.", "why": "The source says that is what a design system is about, and that mastering the language includes knowing when to bend its rules.", "kind": "do", "strength": "should", "area": "process", "applies_to": "all", "values": [], "evidence": "a design system isn't about making everything look the same"},
+    {"rule": "Break a design system rule only on purpose, never by accident.", "why": "The system is a shared language, and mastery means knowing when to bend the rules with intention.", "kind": "do", "strength": "should", "area": "process", "applies_to": "all", "values": [], "evidence": "You don't break the system by accident. You break it with intention."}
+  ],
+  "decisions": [
+    {"question": "How should long lists of results load?", "options": [
+      {"name": "Load more button", "effect": "The user decides when to see more and can reach the footer.", "when": "The source's general preference for lists such as listings."},
+      {"name": "Infinite scroll", "effect": "Content keeps loading as the user scrolls, which often makes the footer impossible to reach and gives the user less control.", "when": "Not recommended by the source."}
+    ], "recommendation": "Load more, because it gives the user more control and lets them reach the footer.", "maps_to": "Q-pattern-02", "evidence": "a load more button is preferable over infinite scroll"},
+    {"question": "Should every option and element be visible at once, or revealed as needed?", "options": [
+      {"name": "Show everything", "effect": "All navigation links and the full search block stay on screen; with many links you run out of room.", "when": "When there is room and nothing competes with the main intent [inferred]."},
+      {"name": "Progressive disclosure", "effect": "Links fold into a menu that animates in, or the search bar shrinks and animates open when clicked; users see what they need and more appears on demand.", "when": "When links run out of room, or when browsing becomes the priority over search."}
+    ], "recommendation": "Progressive disclosure: show what the user needs and reveal more as it is required.", "maps_to": "Q-pattern-03", "evidence": "These are all great examples of progressive disclosure"},
+    {"question": "Should the page follow familiar layout conventions or try a new arrangement?", "options": [
+      {"name": "Familiar layout", "effect": "Information flows top to bottom and left to right, navigation sits at the top and calls to action are easy to find; new sections and responsive versions are easier to add.", "when": "Typically, since users have come to expect these layouts."},
+      {"name": "New layout (e.g. search bar placed lower, cards arranged differently)", "effect": "Can be done if it serves the user better, but breaks what users expect.", "when": "Only if it serves the user better."}
+    ], "recommendation": "Respect the expected layout and make it uniquely yours with a micro interaction or unique features.", "maps_to": null, "evidence": "users have come to expect certain layouts"},
+    {"question": "What should a listing card show?", "options": [
+      {"name": "Short description on every listing", "effect": "More text on each card that users who want detail would get by clicking anyway.", "when": "Not preferred by the source for a browse page."},
+      {"name": "Scannable specifics (location, rating, price)", "effect": "Users can compare listings at a glance and click for the detailed look.", "when": "When users scan a list and open items for detail."}
+    ], "recommendation": "Show the scannable specifics first; the detail lives on the listing page.", "maps_to": null, "evidence": "They need the specifics to scan like the location, rating, and price"},
+    {"question": "How large and defined should the design system be?", "options": [
+      {"name": "Lightweight and flexible", "effect": "Quick to update and easy to scrap.", "when": "A lean startup."},
+      {"name": "Massive and deeply defined", "effect": "Covers many use cases in depth, like Google's Material Design.", "when": "When use cases span dozens of products and billions of users."}
+    ], "recommendation": "Whichever reflects the values of the team; the source does not pick one for everyone.", "maps_to": null, "evidence": "Google's material design is massive and deeply defined"},
+    {"question": "Where should animation be used?", "options": [
+      {"name": "Functional animation", "effect": "A menu or search bar animates in when needed, and buttons get a small animation; motion adds clarity or function.", "when": "Buttons almost always; menus and disclosure patterns when they serve a purpose."},
+      {"name": "Decorative or scroll-taking animation", "effect": "Animations that don't do anything (like the presenter's old portfolio) or scrolljacking effects.", "when": "Scrolljacking very sparingly, if ever."}
+    ], "recommendation": "Animate only when it adds clarity or functionality.", "maps_to": null, "evidence": "All of these animations didn't do anything"},
+    {"question": "Where should website navigation sit, and what happens when the links run out of room?", "options": [
+      {"name": "Top navigation", "effect": "Links sit at the top of the page, where users have come to expect navigation.", "when": "The default layout convention for websites."},
+      {"name": "Menu that animates in", "effect": "Links are consolidated into a menu that animates in, so the motion serves a purpose.", "when": "As more links are added and you run out of room."}
+    ], "recommendation": "Keep navigation at the top of the page, and consolidate links into a menu that animates in once they run out of room.", "maps_to": "Q-layout-04", "evidence": "Navigation is at the top of the page"}
+  ],
+  "process": [
+    {"step": "Find the user intent", "detail": "Ask why the user is there (e.g. to search for accommodation) before thinking about icons or card layouts."},
+    {"step": "Build the element that serves it", "detail": "Start with the natural element for that intent, such as a search bar, then augment it with useful inputs like destination, number of travelers and dates."},
+    {"step": "Serve additional intents", "detail": "For users who want to browse, display listings and add filtering UI; expand functionality only as intent expands."},
+    {"step": "Leverage existing layouts", "detail": "Let information flow top to bottom and left to right, keep navigation at the top and make calls to action easy to find; add uniqueness through micro interactions or features."},
+    {"step": "Decide which content to display", "detail": "Use how the user will interact to pick the information shown, e.g. location, rating and price on cards, details on click."},
+    {"step": "Structure the content for imperfect cases", "detail": "Test with long names and bright images; truncate long names and add a circle behind icons to guarantee contrast."},
+    {"step": "Add functional animation", "detail": "Animate only what adds clarity or function: menus and search bars that reveal on demand (progressive disclosure), small button animations; avoid scrolljacking."},
+    {"step": "Build a design system that fits the team", "detail": "Define rules, spacing, typography scales and interaction patterns at a size that matches the team, and break the rules only with intention."}
+  ],
+  "examples": [
+    {"what": "Vacation rental search starting from a search bar", "where": "An Airbnb-like flow", "visual_note": "A search bar augmented with destination, number of travelers and dates; adding a header and background image above it is shown to add nothing functional."},
+    {"what": "Browse view with listings and filters", "where": "The same rental flow", "visual_note": "Listing cards plus filtering UI serve users who want a vacation but don't know where; restyling fonts, colors and icons changes the look but does very little to change the function."},
+    {"what": "Alternative layouts versus the conventional one", "where": "The same rental flow", "visual_note": "The search bar moved lower and cards rearranged, contrasted with a conventional top-to-bottom layout that is easier to extend and make responsive."},
+    {"what": "Card stress test with imperfect content", "where": "The travel listing cards", "visual_note": "A destination with a very long name is truncated, and a save icon on a bright listing image gets a circle behind it to keep contrast."},
+    {"what": "An old portfolio website full of animations", "where": "Kole Jain's old portfolio", "visual_note": "Shown as awful because none of its animations did anything."},
+    {"what": "Navigation consolidated into an animated menu", "where": "Generic website navigation", "visual_note": "As links are added and room runs out, they collapse into a menu that animates in, so the motion serves a purpose."},
+    {"what": "Search bar that shrinks and expands on click", "where": "The rental web app", "visual_note": "Instead of a search block stuck to the top, a smaller search bar animates open when clicked once browsing becomes the priority."},
+    {"what": "Large versus lean design systems", "where": "Google's Material Design versus a lean startup", "visual_note": "Material Design is massive and deeply defined for dozens of products and billions of users; a startup system is lightweight and easy to scrap."}
+  ],
+  "numbers": [
+    {"value": "30 plus years", "context": "How long websites have existed, the reason users expect certain layouts.", "evidence": "after 30 plus years of websites"},
+    {"value": "two steps", "context": "Designing around content: decide which content to display, then structure it.", "evidence": "There are two steps to designing around content"},
+    {"value": "dozens of products and billions of users", "context": "The scale Material Design spans, which is why it is massive and deeply defined.", "evidence": "the use cases span dozens of products and billions of users"}
+  ],
+  "caveats": [
+    "Sponsor segment for Mobbin (auto-captioned 'Mobin') in the middle of the video, labelled 'Use the right tools' in the timestamps, plus a 20% discount link in the description; the resource recommendation there is a paid plug.",
+    "Short opinion piece (about 5.5 minutes); rules like 'load more over infinite scroll' and 'scrolljacking very sparingly, if ever' are the presenter's general guidance, and he notes context matters.",
+    "The visuals (rental flow, cards, portfolio, menu) are described only through narration in the transcript; exact layouts, colors and animation values are not stated.",
+    "No motion values (durations, easing) are given for the recommended button, menu or search-bar animations.",
+    "The transcript is auto-generated (for example 'Mobin' for Mobbin), so wording may differ slightly from what is spoken."
+  ]
+}

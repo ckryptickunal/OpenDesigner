@@ -14,9 +14,13 @@ Zoom 3 detailed · weight high · changes 5 decisions · class G · cards DC-L02
 - **Why:** One product type scale keeps apps calm. A second, expressive set gives article pages big size jumps. Those "would be distracting if used in product" [DC-L02-11].
 - **Options:**
   - `two-sets` Two sets: productive base 14px with fixed headings, expressive base 16px with fluid headings (Carbon display from 42px to 156px across breakpoints).
+    - Now: A calm product text scale plus a separate, dramatic set with huge headings for marketing and articles. As it grows: Pays off once over a third of pages are marketing or editorial; two sets to keep in step across screen sizes.
   - `emphasized` One scale plus heavier styles: 15 baseline + 15 heavier styles for actions and headlines (M3 Expressive).
+    - Now: One scale, plus heavier versions of styles for actions and headlines, like Material 3 Expressive. As it grows: One scale to maintain; emphasis grows by weight rather than new sizes, so pages stay consistent. [inferred]
   - `brand-face` One scale plus a brand font for brand moments (Atlassian Charlie Sans).
+    - Now: One scale, with your brand font kept for special brand moments, like Atlassian's Charlie Sans. As it grows: Brand moments stay recognizable as you grow, but the extra font must be licensed and loaded everywhere. [inferred]
   - `productive-only` One product scale only (Polaris, Primer) [DC-L02-11].
+    - Now: One product scale only, like Polaris and Primer: calm, with small jumps between sizes. As it grows: Simplest to keep; if a marketing site arrives, it will likely need 3-4 bigger display styles added.
 - **Default:** one productive scale plus 3-4 expressive display styles; a full second set if more than a third of pages are marketing or editorial *Source:* card heuristic [DC-L02-11].
 - **Show:** a heading ladder at productive and expressive settings, across three breakpoints.
 - **Use / avoid:** use fluid, expressive display styles on marketing and editorial pages; avoid them inside product containers (Carbon: "Do not use these styles inside a container").

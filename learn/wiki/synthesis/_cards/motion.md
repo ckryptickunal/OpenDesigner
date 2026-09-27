@@ -1,0 +1,643 @@
+# Motion: Decision Cards (lane L19)
+
+Area `motion` (OpenDesigner stage 16; wiki topics Motion principles, Easing and timing, Spring animation, Animation performance, Gestures and drag, Micro-interactions and Reduced motion). Cards DC-L19-81 to DC-L19-99, written 2026-09-24. Each card adds something the existing L04, L06, L07, L09, L10, L13 and L14 cards do not have, or flags where the trusted sources disagree with them.
+
+How to read the evidence: Emil Kowalski's sources (his site, animations.dev, the emilkowalski/skills repo, the Sonner docs) are house standards, cited as STD ids and locked. Vaul is good-to-have (a recommended default; the library is unmaintained, so it is a craft reference, not a dependency to suggest). Kole Jain's videos are trusted practitioner opinion; a number or an "always/never" from a single video is labelled as opinion unless another source or existing research agrees. My own connections are marked [inferred]. The wiki synthesis pages for the seven topics (`learn/wiki/synthesis/motion-principles.md` and siblings) hold the longer discussion.
+
+## Sources used
+
+| S-id | Wiki page |
+|---|---|
+| S-L19-001 | [[sources/adev-changelog-animations-dev]] (changelog) |
+| S-L19-003 | [[sources/ek-7-practical-animation-tips-7-practical-animation-tips]] |
+| S-L19-004 | [[sources/ek-agents-with-taste-agents-with-taste]] |
+| S-L19-005 | [[sources/ek-building-a-drawer-component-building-a-drawer-component]] |
+| S-L19-006 | [[sources/ek-building-a-toast-component-building-a-toast-component]] |
+| S-L19-007 | [[sources/ek-building-an-animation-course-building-an-animation-course]] |
+| S-L19-010 | [[sources/ek-the-magic-of-clip-path-the-magic-of-clip-path]] |
+| S-L19-011 | [[sources/ek-train-your-judgement-train-your-judgement]] |
+| S-L19-012 | [[sources/ek-you-dont-need-animations-you-don-t-need-animations]] |
+| S-L19-013 | [[sources/eks-performance-cheatsheet-emilkowalski-skills-performance-cheatsheet-md]] |
+| S-L19-014 | [[sources/eks-readme-emilkowalski-skills-readme-md]] |
+| S-L19-015 | [[sources/eks-skills-animate-expo-recipes-emilkowalski-skills-skills-animate-expo-recipes-md]] |
+| S-L19-016 | [[sources/eks-skills-animate-expo-skill-emilkowalski-skills-skills-animate-expo-skill-md]] |
+| S-L19-017 | [[sources/eks-skills-animate-recipes-emilkowalski-skills-skills-animate-recipes-md]] |
+| S-L19-018 | [[sources/eks-skills-animate-skill-emilkowalski-skills-skills-animate-skill-md]] |
+| S-L19-019 | [[sources/eks-skills-animation-vocabulary-skill-emilkowalski-skills-skills-animation-vocabulary-skill-md]] |
+| S-L19-020 | [[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md]] |
+| S-L19-021 | [[sources/eks-skills-ask-sonner-api-emilkowalski-skills-skills-ask-sonner-api-md]] |
+| S-L19-022 | [[sources/eks-skills-ask-sonner-skill-emilkowalski-skills-skills-ask-sonner-skill-md]] |
+| S-L19-023 | [[sources/eks-skills-emil-design-eng-skill-emilkowalski-skills-skills-emil-design-eng-skill-md]] |
+| S-L19-024 | [[sources/eks-skills-find-animation-opportunities-skill-emilkowalski-skills-skills-find-animation-opportunities-skill-md]] |
+| S-L19-025 | [[sources/eks-skills-improve-animations-audit-emilkowalski-skills-skills-improve-animations-audit-md]] |
+| S-L19-026 | [[sources/eks-skills-improve-animations-plan-template-emilkowalski-skills-skills-improve-animations-plan-template-md]] |
+| S-L19-027 | [[sources/eks-skills-improve-animations-skill-emilkowalski-skills-skills-improve-animations-skill-md]] |
+| S-L19-028 | [[sources/eks-skills-mobile-native-skill-emilkowalski-skills-skills-mobile-native-skill-md]] |
+| S-L19-030 | [[sources/eks-skills-prototype-picker-emilkowalski-skills-skills-prototype-picker-md]] |
+| S-L19-032 | [[sources/eks-skills-review-animations-skill-emilkowalski-skills-skills-review-animations-skill-md]] |
+| S-L19-033 | [[sources/eks-skills-review-animations-standards-emilkowalski-skills-skills-review-animations-standards-md]] |
+| S-L19-034 | [[sources/eks-skills-write-swift-skill-emilkowalski-skills-skills-write-swift-skill-md]] |
+| S-L19-035 | [[sources/14h1VnkQvIc-master-the-3-types-of-crazy-mobile-ui-swipe-interactions]] |
+| S-L19-040 | [[sources/6CC8lLnqa28-6-things-you-probably-need-to-hear-as-a-web-designer]] |
+| S-L19-045 | [[sources/AH_ugxmLeUM-7-ui-ux-mistakes-that-scream-youre-a-beginner]] |
+| S-L19-047 | [[sources/B7k5rOgmOGY-everything-you-need-to-know-to-build-a-dashboard-ui-in-8-minutes-beginner-friendly]] |
+| S-L19-050 | [[sources/EHwZzWd-OnQ-7-ui-design-trends-that-are-criminally-slept-on-dont-miss-these]] |
+| S-L19-052 | [[sources/EcbgbKtOELY-every-ui-ux-concept-explained-in-under-10-minutes]] |
+| S-L19-053 | [[sources/Gfsd8NNuD9g-everything-you-need-to-know-about-mobile-app-uis-in-8-minutes-beginner-friendly]] |
+| S-L19-054 | [[sources/HE4rLEQpiXY-how-to-think-like-a-genius-ui-ux-designer]] |
+| S-L19-055 | [[sources/If7iCPDy2vk-the-7-ui-components-to-design-like-unicorn-ai-startups]] |
+| S-L19-056 | [[sources/Ksx9C2-3yMo-the-3-dashboard-ui-flaws-that-give-away-you-ve-never-built-one]] |
+| S-L19-059 | [[sources/NtZeYmTMuo4-animated-dashboard-sidebar-tutorial-in-figma-free-design-files]] |
+| S-L19-062 | [[sources/RCneB_MQ7qs-the-one-thing-vibe-coding-cant-fix-about-your-website]] |
+| S-L19-063 | [[sources/SfX43uIubj4-4-ui-design-hacks-to-kill-boring-designs]] |
+| S-L19-065 | [[sources/V3Omp1hm0Sg-i-redesigned-a-failing-tesla-wannabe-full-website-to-save-it]] |
+| S-L19-066 | [[sources/VPeTgU7la34-7-modern-ui-layouts-from-50-top-software-companies-free-figma-file]] |
+| S-L19-067 | [[sources/Vy0KKvZJRH8-everything-you-need-to-design-macos-apps-exactly-like-apple-beginner-friendly]] |
+| S-L19-069 | [[sources/ZsP20PN14O0-5-trendy-animations-to-steal-for-your-next-web-design]] |
+| S-L19-071 | [[sources/d4MF6pdAZNw-developing-premium-load-animations-html-css-js-part-2]] |
+| S-L19-072 | [[sources/eMMiLeo_UGI-the-4-levels-of-landing-page-ui-ux-design]] |
+| S-L19-075 | [[sources/gKM6b2EnW1k-upgrading-9-crucial-ui-elements-free-figma-file-included]] |
+| S-L19-077 | [[sources/ixUq4HM4FNg-tiktoks-ux-is-so-good-it-should-be-illegal-seriously]] |
+| S-L19-079 | [[sources/ld1zhQMXxXU-11-micro-animations-that-will-instantly-level-up-your-ui-free-figma-file]] |
+| S-L19-081 | [[sources/nl8OFGdx75w-prototyping-professional-load-animations-in-figma-part-1]] |
+| S-L19-082 | [[sources/pGYLZyBE32o-i-redesigned-google-s-ai-website-from-scratch-complete-transformation]] |
+| S-L19-084 | [[sources/tNMAFjzapOk-the-formula-behind-truly-captivating-ui-sections]] |
+| S-L19-085 | [[sources/ulSOdTgoGeY-awful-to-amazing-web-designs-easily]] |
+| S-L19-088 | [[sources/sonner-home-sonner]] |
+| S-L19-092 | [[sources/sonner-toaster-toaster-sonner]] |
+| S-L19-098 | [[sources/vaul-snap-points-snap-points-vaul]] |
+
+Also read for this area and not cited in a card because they added nothing beyond the cited sources: S-L19-002, S-L19-029, S-L19-031, S-L19-060, S-L19-073, S-L19-076, S-L19-089, S-L19-093, S-L19-094.
+
+## Decision Cards
+
+### DC-L19-81: Which interactions get no motion (the frequency gate)
+- **Block path:** Foundations > Motion > When to animate
+- **Questions the designer answers:** Which things will people use all day, and should those move at all? Which actions start from the keyboard? Where is motion allowed to take its time?
+- **Options:**
+  - **Gate by how often it is seen (house standard).** Four tiers decide before any curve is picked [S-L19-018] [S-L19-023] [S-L19-024] [S-L19-033]:
+    - 100+ times a day (keyboard shortcuts, command palette toggle, core navigation; on iOS and Android also tab switches, keyboard open and close, scrolling and settings toggles): no animation; on native, the platform default or nothing [S-L19-016].
+    - Tens of times a day (hover effects, list navigation, frequent toggles, press feedback, row selection): near-imperceptible or none; in React Native under 150ms [S-L19-016].
+    - Occasional (modals, drawers, sheets, toasts, settings, onboarding steps): standard motion.
+    - Rare or first-time (onboarding, first run, empty states, success, celebration): the delight budget (DC-L19-83).
+    - Real example: Raycast opens with no animation at all, which the author calls the optimal experience for something opened hundreds of times a day [S-L19-012].
+  - **Purpose-only test (practitioner videos).** Animate only when motion adds clarity or functionality and remove animation that does nothing [S-L19-054]; motion should support clarity, not distract [S-L19-084]. No video uses frequency as a test [inferred], so on its own this lets frequent surfaces keep motion.
+  - **Animate a little everywhere.** Small hover interactions on almost everything keep a simple site from feeling bland [S-L19-063], and buttons should almost always get a small animation [S-L19-054]. The hover tip comes from a portfolio and marketing-site context [S-L19-063]; the button tip is stated as a general rule that "context matters" qualifies [S-L19-054]. Inside product UI both break STD-when-to-animate-07, except for press feedback, which both sides endorse (DC-L19-93) [inferred].
+  - **OpenDesigner today.** No question or default says what stays still (recorded as a conflict under STD-when-to-animate-01). Differs from DC-L06-10 and the Q-motion-01 use/avoid line, which give expressive motion to page transitions and the primary action, both high-frequency surfaces [inferred].
+- **Visual effect:** Gated: tools people use all day feel instant and wired to their hands, and the few things that do move stand out. Ungated: motion delights at first, then becomes annoying and makes the interface feel slower [S-L19-012] [S-L19-003]. An arrow-key list highlight that animates visibly lags behind the key presses [S-L19-012].
+- **Depends on (upstream):** Q-scope-06 (operate or persuade), Q-plat-03 (keyboard input), Q-aud-02 (stakes), the component inventory (Q-comp-01 and stage 20).
+- **Affects (downstream):** every component's motion spec; command palette, menus, tabs, list rows and hover states; the DESIGN.md Motion section, which should say what never moves; review severity (animation on a keyboard or high-frequency action is a HIGH finding [S-L19-027]).
+- **Token encoding:** none (process decision). Record the tier per component in the component spec, for example `$extensions: {"opendesigner.motion": {"frequency": "100+/day", "animate": false}}` [inferred].
+- **Platform notes:** iOS and Android keep tab switches, keyboard open and close, scrolling and settings toggles at the platform default or instant; Expo Router tabs use `animation: 'none'` [S-L19-016]. On the web, keyboard-initiated actions (shortcuts, focus jumps, arrow-key list highlight) never animate [S-L19-018] [S-L19-023] [S-L19-024] [S-L19-012].
+- **Accessibility constraints:** Removing motion never removes feedback: a keyboard action still shows an immediate state change. The macOS video accepts a state change as the minimum ("micro animations, or at least a state change") [S-L19-067], but its own shortcut-opened quick-save panel slides in, slides away and collapses into a toast, which STD-when-to-animate-06 does not allow; only its state-change minimum carries over. Visible focus stays. Reduced motion is a separate layer (DC-L19-92).
+- **Default + heuristic:** Gate on. Tier every component in the inventory; ship no animation on 100+/day and keyboard-initiated actions; expect to reject most motion ideas (at most 5-7 suggestions for a whole app [S-L19-024]). Rule of thumb: the more often it is seen, the less it moves; when unsure, delete the animation [S-L19-032].
+- **Evidence:** [S-L19-003] [S-L19-012] [S-L19-016] [S-L19-018] [S-L19-023] [S-L19-024] [S-L19-027] [S-L19-032] [S-L19-033] [S-L19-054] [S-L19-063] [S-L19-067] [S-L19-084]; compared with DC-L04-19, DC-L06-10, DC-L09-06.
+- **Maps to:**
+  - New question Q-motion-11 (proposed, zoom 2, first among the stage's zoom-2 questions; below zoom 2 the gate applies silently with the default tiers, since Q-motion-01 is asked at zoom 1): "Which things will people use all day? Those will not move." Show the inventory pre-sorted into the four tiers so the person only corrects which component sits in which tier; default: the tiers above. The answer can move a component between tiers but cannot give motion to a 100+/day or keyboard-initiated action, which the locked standards forbid (STD-when-to-animate-05, STD-when-to-animate-06) [inferred].
+  - Q-motion-01 use/avoid: replace "use expressive motion for page transitions, the primary action and alerts" with "no motion on things used all day or started from the keyboard; expressive motion only at rare moments (DC-L19-83)".
+  - Visual sample: a command menu opened with and without animation, and arrow-key navigation with and without an animated highlight [S-L19-012].
+- **Impact now / as it grows:**
+  - Gate by frequency: now, fewer animations to build and review, and the app feels fast. As it grows, each new component gets its tier at birth, so motion does not creep onto high-frequency surfaces and review can flag it [inferred].
+  - Purpose-only: now, fine for marketing pages. As it grows, frequent surfaces pile up motion that people meet hundreds of times a day, and the fix later is deletion [inferred].
+  - Animate everywhere: now, a lively demo. As it grows, a slower-feeling product and a larger reduced-motion surface to maintain [inferred].
+- **Standards:** STD-when-to-animate-01, STD-when-to-animate-03, STD-when-to-animate-04, STD-when-to-animate-05, STD-when-to-animate-06, STD-when-to-animate-07, STD-when-to-animate-08, STD-when-to-animate-13, STD-when-to-animate-14, STD-when-to-animate-15, STD-when-to-animate-16, STD-when-to-animate-17, STD-when-to-animate-20.
+
+### DC-L19-82: Motion personality (amount and character)
+- **Block path:** Foundations > Motion > Personality
+- **Questions the designer answers:** Should motion feel crisp and quick, calm and elegant, or playful and bouncy? How much should move overall? May one component be livelier than the rest?
+- **Options:**
+  - **Crisp and fast.** Fewer, subtler, fast animations; the house example is a professional dashboard [S-L19-023] [S-L19-024]. Kole: dashboard motion is "pretty tame and user focused" and people want a snappy, fast dashboard [S-L19-047]; his "snappy and performant" tone [S-L19-035].
+  - **Elegant.** Slightly slower than typical UI and using `ease` rather than ease-out, as Sonner's toast does (400ms ease) [S-L19-023] [S-L19-033] [S-L19-017]; Kole's "slow and smooth" tone [S-L19-035]. The house names elegance for one component, the toast, not for a whole product, so as a product personality it is [inferred]: only components whose own personality calls for it enter on `ease`, and every other entrance stays on ease-out (STD-easing-duration-01).
+  - **Playful.** More motion and bouncier springs for a playful consumer app [S-L19-023] [S-L19-024]; Kole's "fun and springy" tone [S-L19-035]. Bounce still comes only after a gesture that carried momentum or at a deliberately playful, rare moment, within 0.1-0.3 (DC-L19-88).
+  - **Minimal.** Only feedback and state changes move: press scale and short opacity fades. It replaces today's `none` option, GOV.UK's no-motion posture (DC-L09-06); under the house standards "minimal" cannot mean zero, because press feedback (STD-mobile-touch-05, a must) and state-explaining fades stay [inferred from STD-mobile-touch-05 and STD-accessibility-motion-02].
+  - **Two-mode (current default).** Plain for most actions, bold for 1-3 key moments per flow (Carbon, Material) [DC-L04-19]. Differs from the house rule: bold moments belong to rare or first-time moments, not to every flow, page transitions or the primary action (STD-when-to-animate-09).
+  - **Springs throughout (current option).** Differs from STD-springs-gestures-01: motion that no finger drives runs on a timing curve. Its useful part (springs for touch) moves to DC-L19-87.
+- **Visual effect:** Crisp reads competent, fast and quiet. Elegant reads calm and refined. Playful reads alive and physical. Minimal reads still but responsive. The curve itself sets the tone [S-L19-035]. One bouncy component in a crisp app reads as a defect and is a review finding [S-L19-025] [S-L19-032].
+- **Depends on (upstream):** Q-brand-01 sliders, Q-brand-04 (liveliness), Q-aud-02 (high-trust caps it), Q-scope-06, DC-L19-81.
+- **Affects (downstream):** which component recipes differ from the plain set (the toast's ease, DC-L19-99), how many delight moments exist (DC-L19-83), bounce on momentum settles (DC-L19-88), the show-if of Q-motion-04 and Q-motion-06, and the levers `energy` dial.
+- **Token encoding:** a string token `motion.personality` = `crisp | elegant | playful | minimal` that selects component recipes within the locked budgets [inferred]. Durations stay `$type: duration` and curves `$type: cubicBezier`; there is no DTCG type for personality.
+- **Platform notes:** Native screen transitions keep the platform default whatever the personality [S-L19-016].
+- **Accessibility constraints:** Personality never overrides reduced motion (DC-L19-92), the 300ms UI budget or the 1s ceiling; bounce disappears under reduced motion.
+- **Default + heuristic:** Default by audience: `playful` when Q-aud-02 is `play`; `crisp` in every other case, including Q-scope-06 `operate` and Q-aud-02 `work` (today's defaults) and `consumer`; Q-aud-02 `high-trust` always caps at `crisp`, as today's cap does at `productive`; `elegant` is offered to anyone but never chosen by default [inferred]. Rule of thumb: personality changes how many things move and a component's curve within the job rules, never the budgets. Differs from DC-L04-19 and DC-L09-06, whose defaults use "ease-in exit" and "springs only for spatial moves in the expressive mode": exits use ease-out (DC-L19-85) and springs follow the finger in every mode (DC-L19-87). The levers `energy` dial should stop swapping curve families and stretching durations past the budgets (conflicts recorded under STD-easing-duration-02 and STD-easing-duration-07) [inferred].
+- **Evidence:** [S-L19-017] [S-L19-023] [S-L19-024] [S-L19-025] [S-L19-032] [S-L19-033] [S-L19-035] [S-L19-047]; compared with DC-L04-19, DC-L06-10, DC-L09-06.
+- **Maps to:**
+  - Q-motion-01: new option `crisp` replacing `productive` (drop the Carbon curve `cubic-bezier(0.2, 0, 0.38, 0.9)`, which is not a house curve); new option `elegant`; `springs` renamed `playful` with bounce only after momentum; `none` renamed `minimal` (press feedback and fades stay); `two-mode` retired, its "few big moments" moving to DC-L19-83.
+  - Q-motion-01: new default `crisp` (`playful` only for Q-aud-02 `play`, as above) because daily use argues for less motion [S-L19-024]; default text changes from "ease-in to exit" to "ease-out to enter and exit".
+  - Visual sample: one dropdown and one toast played in each personality: crisp (dropdown 200ms ease-out), elegant (toast 400ms ease), playful (a flicked card settling with bounce 0.2).
+- **Impact now / as it grows:**
+  - Crisp: now, fast and cheap to build. As it grows, stays consistent as components are added; the risk is a flat feel, answered by a few rare delight moments.
+  - Elegant: now, a calm, premium feel. As it grows, every new component needs the slower `ease` recipe checked against the 300ms rule and a stated reason.
+  - Playful: now, a lively brand. As it grows, more motion to review and more reduced-motion variants; bounce must stay tied to gestures or it spreads to everyday controls.
+  - Minimal: now, almost nothing to maintain. As it grows, feedback gaps appear unless press and state changes are kept.
+- **Standards:** STD-easing-duration-13, STD-when-to-animate-09, STD-springs-gestures-01, STD-springs-gestures-05, STD-springs-gestures-07, STD-easing-duration-01, STD-easing-duration-03, STD-easing-duration-06, STD-mobile-touch-05, STD-accessibility-motion-02.
+
+### DC-L19-83: Where the delight budget goes (rare moments)
+- **Block path:** Foundations > Motion > Delight moments
+- **Questions the designer answers:** Which rare moments may show off a little? Is there a first run, a success or an empty screen worth celebrating?
+- **Options:**
+  - **No delight moments.** Everything uses standard motion.
+  - **Onboarding and first run.** Kole calls onboarding the best time for mobile users to be captivated (Craft: a clean screen, a swipe, then tools sliding up from the bottom) [S-L19-084]; an onboarding step that wraps into the next slide in the swipe's direction [S-L19-035]. House: explanation motion is allowed only on marketing and onboarding surfaces.
+  - **Success and completion.** A check mark that slides in through a mask instead of fading [S-L19-059]; toasts with celebratory success messages and particles [S-L19-079].
+  - **Empty states and error pages.** Kole: a 404 page is the ultimate time to be quirky [S-L19-063]; empty states are in the house rare tier [S-L19-024].
+  - **Rarely used components.** A morphing feedback button is delightful only because people use it rarely [S-L19-012].
+  - **Current: 1-3 key moments per flow, including opening a page or the primary action** (DC-L04-19, DC-L06-03 via Q-brand-04 `hero-moments`). Differs: page opens and primary actions recur far more often than the rare tier allows (conflict recorded under STD-when-to-animate-09).
+- **Visual effect:** Kept rare, delight lands as a pleasant surprise; used daily it fades and slows people down [S-L19-012].
+- **Depends on (upstream):** DC-L19-81, DC-L19-82, Q-pattern-04 (onboarding style), Q-brand-04.
+- **Affects (downstream):** onboarding screens, empty states, success states, success toasts, the 404 page; Lottie is used only for illustration and celebration, never UI state [S-L19-016].
+- **Token encoding:** none (process decision). The chosen moments can be recorded as a string list in `$extensions` (`opendesigner.motion.delightMoments`) [inferred].
+- **Platform notes:** React Native uses Lottie or Skia for illustration and celebration [S-L19-016].
+- **Accessibility constraints:** Each delight animation ships with its reduced-motion version. The house bans slow loops near 0.2 Hz. Kole adds a pause and play button to a shimmer [S-L19-079] (single video), but his reason is that its uneven speed may bother some people, not accessibility; a stop control for looping decoration is only [inferred] from it. No haptic on an entrance the user did not cause.
+- **Default + heuristic:** Pick a few named rare moments (1-3 [inferred]; no source gives a count) from first run, success and empty state; never a component people use daily. Rule of thumb: if a person meets it more than occasionally, it is not a delight moment.
+- **Evidence:** [S-L19-012] [S-L19-016] [S-L19-024] [S-L19-035] [S-L19-059] [S-L19-063] [S-L19-079] [S-L19-084]; compared with DC-L04-19, DC-L06-10.
+- **Maps to:**
+  - New question Q-motion-12 (proposed, zoom 2, show if Q-brand-04 is `hero-moments` or `expressive`, so it does not re-ask what Q-brand-04 decided): "Which rare moments should get a little celebration: first run, finishing a task, empty screens, error pages?" Multi-select; default: first run and success [inferred].
+  - Q-brand-04 option `hero-moments`: reword "expressive motion and type only at significant moments such as opening a page or the primary action" to "at rare moments such as first run, success and empty states".
+  - Visual sample: a success check sliding in through a mask after a spinner [S-L19-059], and onboarding tools sliding up from the bottom [S-L19-084].
+- **Impact now / as it grows:**
+  - None: now, nothing extra to build. As it grows, the product can feel generic; adding moments later is easy because they are isolated.
+  - Onboarding and first run: now, a strong first impression. As it grows, onboarding changes with features, so the motion must be cheap to rebuild.
+  - Success, empty states and 404: now, small, contained work. As it grows, each new flow asks for its own success moment; keep a shared recipe so they stay consistent [inferred].
+- **Standards:** STD-when-to-animate-08, STD-when-to-animate-09, STD-when-to-animate-10, STD-accessibility-motion-01, STD-accessibility-motion-08, STD-springs-gestures-61, STD-performance-properties-13.
+
+### DC-L19-84: How lively the marketing pages may be
+- **Block path:** Patterns > Marketing surfaces > Motion level
+- **Questions the designer answers:** Does the marketing site get more motion than the app? How much: none, a few moving parts, polished details, or scroll storytelling?
+- **Options:**
+  - **No effects.** Calm and fast; the conversion-focused sites Kole shows, such as linear.app with dark mode and some glass but no heavy animation [S-L19-040].
+  - **A few moving parts.** huddle.works's minimal motion [S-L19-040]; simple, tasteful hover effects (Welcome, Pipe, Klaviyo) instead of heavy graphics [S-L19-066]; photos slightly zooming in or out and staggered slide-ups [S-L19-085]; one well-built hover animation that demonstrates the product (Intercom) [S-L19-084].
+  - **Polished details.** Kole's "level four": a blur on the multi-select, a mega menu that stays open and slides its content instead of closing and reopening, a call to action that appears on hover only when needed [S-L19-072]; an explanatory animation in the first viewport (Linear's Product Intelligence) [S-L19-012].
+  - **Scroll storytelling and 3D.** Prometheus Fuels-style scrollytelling for awareness sites: memorable but heavy [S-L19-040]; scroll-driven process diagrams [S-L19-050]; parallax on elements in spacious margins [S-L19-063].
+  - **Load sequences (values from single videos).** A loading screen held 1,000ms then slid away over 800ms on a custom exponential curve [S-L19-081]; GSAP `expo.inOut` over 1.3s with a 0.2s stagger [S-L19-071]. These are marketing motion; the house allows longer, illustrative motion there. Two limits still apply: the same GSAP video grows its navbar from scale 0, which STD-enter-exit-origin-01 forbids on every surface, and Kole himself says to keep preloaders short because people are impatient [S-L19-069].
+- **Visual effect:** From calm and fast to memorable but heavy. Kole's warnings: effects that slow loading or make navigating harder are probably not worth it [S-L19-040]; big or flashy animation overwhelms people [S-L19-069]; an imported scroll effect that renders blurry looks cheap (Coda) [S-L19-066].
+- **Depends on (upstream):** Q-scope-01 includes `marketing`; Q-brand-05 (how marketing relates to the product); Q-scope-06 (`persuade` or `experience`); DC-L19-82.
+- **Affects (downstream):** heroes, scroll reveals, logo marquees, navigation and mega menus, feature sections, 404; the performance budget (DC-L19-96).
+- **Token encoding:** a separate marketing motion set beside the product set, for example `motion.marketing.reveal` = `$type: transition` {600ms, 0ms, [0.77, 0, 0.175, 1]} and `motion.marketing.image-reveal` {1000ms, same curve}, the house scroll and image reveal recipes [S-L19-017] [S-L19-010]; the product set is unchanged [inferred structure].
+- **Platform notes:** Web only in these sources. Mouse-following effects need a backup on tablets and phones [S-L19-069]; hover effects sit behind the fine-pointer gate.
+- **Accessibility constraints:** Reduced motion removes parallax and scroll-driven movement. Marquee text reduces usability [S-L19-085] and loops should be slow enough to read [S-L19-069]. Scrolljacking "very sparingly, if ever" [S-L19-054] (single video, opinion). No full-viewport moving backgrounds and no slow 0.2 Hz loops (house). The two loop rules pull in opposite directions (slow enough to read, but not near one cycle per 5 seconds); the house rule wins [inferred].
+- **Default + heuristic:** Default `few-moving-parts` for conversion sites (Q-scope-06 `persuade`); `scroll-story` only for awareness or experience sites. Rules of thumb: the layout should look good before any animation is added [S-L19-082]; motion should point at the product [S-L19-084]; repeat one or two motion themes rather than one-off effects [S-L19-062] (Kole's view across videos, practitioner opinion). Scroll reveals fire once, 100px into view.
+- **Evidence:** [S-L19-010] [S-L19-012] [S-L19-017] [S-L19-040] [S-L19-050] [S-L19-054] [S-L19-062] [S-L19-063] [S-L19-066] [S-L19-069] [S-L19-071] [S-L19-072] [S-L19-081] [S-L19-082] [S-L19-084] [S-L19-085]; compared with DC-L06-01 (via Q-brand-05).
+- **Maps to:**
+  - New question Q-motion-13 (proposed, zoom 2, show if Q-scope-01 includes `marketing`): "How lively should the marketing site be: still, a few moving parts, polished details, or scroll storytelling?" Default `few-moving-parts`.
+  - Q-scope-01 option `marketing`: add that this is where longer, explanatory and scroll-triggered motion is allowed and where product-UI budgets relax.
+  - Visual sample: a mega menu closing and reopening versus staying open and sliding its content [S-L19-072]; the four levels as four hero strips.
+- **Impact now / as it grows:**
+  - None: now, fastest to ship. As it grows, the site may feel flat against competitors; motion can be added section by section later.
+  - Few moving parts: now, modest build effort. As it grows, easy to keep consistent if the moving parts are shared recipes.
+  - Polished details: now, noticeably more build and QA time. As it grows, each new section must meet the same bar or the site looks uneven [inferred].
+  - Scroll storytelling: now, a memorable but heavy page. As it grows, costly to change copy or structure, and performance and reduced-motion work grows with every section [inferred].
+- **Standards:** STD-when-to-animate-10, STD-when-to-animate-11, STD-enter-exit-origin-01, STD-enter-exit-origin-26, STD-enter-exit-origin-27, STD-enter-exit-origin-28, STD-enter-exit-origin-43, STD-easing-duration-06, STD-easing-duration-09, STD-accessibility-motion-02, STD-accessibility-motion-07, STD-accessibility-motion-08, STD-accessibility-motion-15, STD-performance-properties-14.
+
+### DC-L19-85: Easing curves grouped by job
+- **Block path:** Foundations > Motion > Easing curves
+- **Questions the designer answers:** Which curve does each kind of movement use? Are curves grouped by job, by strength or by mood? Is ease-in ever allowed?
+- **Options:**
+  - **By job, with strong custom curves (house).** [S-L19-018] [S-L19-025] [S-L19-033]
+    - entering or leaving: ease-out `cubic-bezier(0.23, 1, 0.32, 1)`;
+    - moving or morphing on screen: ease-in-out `cubic-bezier(0.77, 0, 0.175, 1)`;
+    - hover and color: CSS `ease`;
+    - constant motion (spinner, marquee, progress): `linear`;
+    - drawers and sheets on a timing curve: `cubic-bezier(0.32, 0.72, 0, 1)`, the iOS-like curve from Ionic [S-L19-005];
+    - never ease-in on UI [S-L19-003] [S-L19-014]; other curves come from easing.dev or easings.co. animations.dev keeps its named curves as `--ease-*` variables (6 of 18 shown) [S-L19-007]; all six shown start slowly (both control points sit below the diagonal, the ease-in shape), so they are not UI curves under STD-easing-duration-03 [inferred from the control points].
+  - **Role-based standard, enter, exit (current Q-motion-03 default, DC-L04-21).** Standard (0.2, 0, 0, 1), enter (0, 0, 0, 1) or (0.05, 0.7, 0.1, 1), exit (0.3, 0, 1, 1). Differs: the exit curve accelerates, which is ease-in shaped (STD-easing-duration-03), and none of these is the house curve.
+  - **By strength or by mood** (Fluent min/mid/max; Carbon productive and expressive) [DC-L04-21]. Differs: the house fixes one curve per job instead of swapping curves by mood or by the `energy` dial.
+  - **Practitioner views.** "Almost never" a linear ease on swipes and UI [S-L19-035], which agrees with the house (linear only for constant motion). The GSAP load sequence uses `expo.inOut` to slide a full-screen loader off the screen and the header text into place [S-L19-071]; by the house flowchart those are an exit and an entrance (ease-out), not on-screen moves [inferred]. Kole's ease-in-out on the Figma nav fade-in [S-L19-081] likewise differs from the house ease-out for entering elements [inferred].
+- **Visual effect:** Ease-out starts fast, so the interface feels responsive; two 300ms dropdowns side by side show ease-in feeling slower [S-L19-003]. Custom curves feel more energetic than CSS's built-in keywords [S-L19-003]. The drawer curve feels like an iOS sheet [S-L19-005].
+- **Depends on (upstream):** DC-L19-82 (only a component with an elegant personality, such as the toast, enters on `ease`); DC-L19-87.
+- **Affects (downstream):** every transition token; `motion.easing.exit` is removed; the engine's `motion.transition.enter`, `.exit`, `.move` and `.feedback` pick curves by job; the `motion.html` presets.
+- **Token encoding:** `$type: cubicBezier`: `motion.easing.out` = [0.23, 1, 0.32, 1], `motion.easing.in-out` = [0.77, 0, 0.175, 1], `motion.easing.drawer` = [0.32, 0.72, 0, 1], `motion.easing.hover` = [0.25, 0.1, 0.25, 1] (CSS `ease`) [inferred equivalence], `motion.easing.linear` = [0, 0, 1, 1].
+- **Platform notes:** React Native uses the same beziers (`EASE_OUT`, `EASE_IN_OUT`, `EASE_SHEET`) and never Reanimated's built-in curves [S-L19-016]. Native screen transitions keep the platform's own curve.
+- **Accessibility constraints:** none directly; the reduced-motion cross-fade uses 200ms `ease` (DC-L19-92).
+- **Default + heuristic:** The job-based set above. Ask: is it entering or leaving, moving on screen, a hover or color change, or constant? If none fits, use ease-out. Differs from DC-L04-21 and DC-L04-24, which give exits an accelerate curve.
+- **Evidence:** [S-L19-003] [S-L19-005] [S-L19-007] [S-L19-014] [S-L19-016] [S-L19-018] [S-L19-025] [S-L19-033] [S-L19-035] [S-L19-071] [S-L19-081]; compared with DC-L04-21, DC-L04-24, DC-L06-10.
+- **Maps to:**
+  - Q-motion-03: new default "by job: ease-out (0.23, 1, 0.32, 1) to enter and leave, ease-in-out (0.77, 0, 0.175, 1) to move, `ease` for hover and color, linear for constant motion, drawer (0.32, 0.72, 0, 1) for sheets; no ease-in", because the house bans ease-in on UI and fixes one curve per job. Option `role-based` reworded to these four jobs; `intensity-based` and `personality-based` kept only as labels for comparison.
+  - Q-motion-01 default text: "ease-in to exit" becomes "ease-out to enter and exit".
+  - Visual sample: two 300ms "Options" dropdowns, ease-in against ease-out, with the curve graph; built-in against custom ease-in-out [S-L19-003].
+- **Impact now / as it grows:**
+  - By job: now, five named curves and one question per animation. As it grows, new components pick a curve without debate, and review can check the job automatically [inferred].
+  - Role-based with an accelerate exit: now, familiar from Material and Carbon. As it grows, every exit feels sluggish and each becomes a review finding.
+  - By mood: now, expressive range. As it grows, curves drift between components and teams.
+- **Standards:** STD-easing-duration-01, STD-easing-duration-02, STD-easing-duration-03, STD-easing-duration-13, STD-easing-duration-17, STD-components-toasts-drawers-40, STD-enter-exit-origin-39.
+
+### DC-L19-86: Duration budget per element
+- **Block path:** Foundations > Motion > Durations
+- **Questions the designer answers:** How long does each kind of element take to appear? Do things leave faster than they arrive? What may take longer than 300ms?
+- **Options:**
+  - **A budget per element (house).** [S-L19-018] [S-L19-017] [S-L19-016] [S-L19-015]
+    - web: button press 100-160ms (recipe 160ms); tooltips and small popovers 125-200ms (recipe 125ms); dropdowns and selects 150-250ms (recipe 200ms); modals 200-500ms (recipe 250ms); drawers 500ms on the drawer curve; toasts 400ms `ease` (Sonner's personality);
+    - iOS and Android: press 100-150ms (recipe 120ms); toggles, chips and small state changes 150-200ms; sheets, modals and drawers a spring of about 300ms perceived; screen transitions at the platform default (iOS push 350ms);
+    - UI stays under 300ms unless a reason is stated; nothing runs over 1s unless it is illustrative [S-L19-001]; a 180ms select or dropdown feels more responsive than a 400ms one [S-L19-003] [S-L19-012]; exits about 20% faster (the React Native toast: 300ms in, 250ms out) [S-L19-015] [S-L19-004], although the web recipes run dropdowns, tooltips and modals at the same duration both ways [S-L19-017]; larger elements and longer travel get longer [S-L19-004].
+  - **Six-step ladder (current Q-motion-02 default, DC-L04-20).** Instant 0, micro 100, short 150-200, medium 250-300, long 400-500, extra 700. Differs: `long` and `extra` pass the UI budget with no named reason, and there is no 125ms tooltip step.
+  - **Four semantic steps (Primer) or 16 steps (Material 3)** [DC-L04-20].
+  - **Energy-scaled ladder (levers `motion.durationMultiplier` 0.8-1.2).** Differs: it stretches menus and modals past their budgets.
+  - **Marketing lengths (single videos).** 800ms slides after a 1,000ms hold [S-L19-081]; 1.3s moves [S-L19-071]. Allowed only as illustrative marketing motion (DC-L19-84).
+- **Visual effect:** Short durations feel connected to the click; long ones feel sluggish. Faster exits get out of the way and respect people's time.
+- **Depends on (upstream):** DC-L19-81, DC-L19-82, DC-L19-85; the component inventory; platform (Q-plat-01).
+- **Affects (downstream):** every duration token and component recipe; engine `validate` thresholds (an advisory above 300ms, not above 400ms and 500ms); `motion.duration.long` and `extra` for UI.
+- **Token encoding:** `$type: duration`: `motion.duration.press` 160ms, `motion.duration.tooltip` 125ms, `motion.duration.dropdown` 200ms, `motion.duration.modal` 250ms, `motion.duration.drawer` 500ms, `motion.duration.toast` 400ms; exit tokens derived at 0.8 of the stored entrance value so they follow a locked value, applied where a recipe has a separate exit (the web popover, tooltip and modal recipes share one duration for both directions, so they keep it) [inferred]; the 300ms budget stored as a validation rule in `$extensions` [inferred].
+- **Platform notes:** React Native keeps tens-per-day motion under 150ms and press feedback at 120ms at most [S-L19-016]; native screen transitions are never overridden.
+- **Accessibility constraints:** Motion that runs by itself for more than 5 seconds needs pause, stop or hide (WCAG 2.2.2, cited in DC-L04-20) [inferred]; the 1s ceiling holds.
+- **Default + heuristic:** The per-element budget. Rule of thumb: if it is UI and over 300ms, name the reason (a drawer, a toast's personality) or cut it to 150-250ms. Differs from DC-L04-20 (steps up to 700ms, exits 20-35% shorter).
+- **Evidence:** [S-L19-001] [S-L19-003] [S-L19-004] [S-L19-012] [S-L19-015] [S-L19-016] [S-L19-017] [S-L19-018] [S-L19-071] [S-L19-081]; compared with DC-L04-20, DC-L04-24.
+- **Maps to:**
+  - Q-motion-02: new option `per-element` (the table above) as the new default, because the house times each element within its own budget; `6-steps` loses `extra 700` and keeps `long` for drawers only; `asymmetric` becomes part of the default at about 20% (not 20-35%).
+  - Visual sample: the 180ms and 400ms selects opened one after the other [S-L19-003]; a timeline showing each element's band.
+- **Impact now / as it grows:**
+  - Per element: now, more named tokens (about six). As it grows, each new component inherits a band and stays fast; the budget doubles as a review check [inferred].
+  - Six-step ladder: now, fewer tokens. As it grows, components reach for `long` and `extra`, and the product slows down.
+  - Energy-scaled: now, one dial feels powerful. As it grows, a small dial change silently moves every duration past its budget.
+- **Standards:** STD-easing-duration-06, STD-easing-duration-07, STD-easing-duration-09, STD-easing-duration-10, STD-easing-duration-11, STD-easing-duration-12, STD-easing-duration-13, STD-enter-exit-origin-08, STD-enter-exit-origin-09, STD-enter-exit-origin-11, STD-enter-exit-origin-41, STD-components-toasts-drawers-07, STD-components-toasts-drawers-08, STD-mobile-touch-05, STD-mobile-touch-42.
+
+### DC-L19-87: What drives each motion: timing curve, spring or keyframes
+- **Block path:** Foundations > Motion > Motion driver and interruptibility
+- **Questions the designer answers:** Which motion follows a finger and needs springs? Can people grab or reverse something while it moves? Can they keep working while things animate?
+- **Options:**
+  - **Springs for anything a finger drives, timing for everything else (house).** Drags, flicks, swipes and anything a finger can interrupt settle on a spring with the release velocity; motion no finger started runs on a curve and a duration [S-L19-016] [S-L19-018] [S-L19-020]. Springs carry their velocity through an interruption [S-L19-019].
+  - **CSS transitions for things triggered rapidly.** Stacking toasts, toggles, expand and collapse retarget from where they are; keyframes restart and jump (Sonner's keyframes-versus-transitions demo) [S-L19-006] [S-L19-018].
+  - **Keyframes or CSS animations for predetermined motion** that nobody interrupts; they run off the main thread and stay smooth while the page is busy [S-L19-023] [S-L19-033].
+  - **Springs throughout** (current Q-motion-01 `springs`; Apple and M3 Expressive in DC-L04-19 and DC-L04-22). Differs: the house keeps plain on-screen moves on ease-in-out timing.
+  - **Duration and easing only** (Carbon, Fluent, Polaris, Primer in DC-L04-22). Differs: it cannot serve drag-driven UI.
+  - **Blocking input briefly.** DC-L04-24 allows input to be blocked for up to about 100ms [inferred in that card]. Differs: the house never locks input, not even during a stagger.
+- **Visual effect:** Springs feel continuous and grab-able; timing feels predictable; keyframes on rapid UI make elements jump; blocked input feels broken.
+- **Depends on (upstream):** Q-plat-03 (touch), Q-plat-08 (stack), DC-L19-82.
+- **Affects (downstream):** sheets, drawers, carousels, toasts, toggles, accordions, card stacks; the engine's `motion.transition.move`, which today points plain on-screen moves at a spatial spring (conflict under STD-springs-gestures-01).
+- **Token encoding:** timing motion as `$type: transition` {duration, delay, timingFunction}; springs as a number group in `$extensions` (DC-L19-88); each motion token states which driver it uses [inferred].
+- **Platform notes:**
+  - Web: walk down CSS transition, `@starting-style`, CSS animation, WAAPI, then Motion (springs, layout, exit and gesture values) and stop at the first that fits [S-L19-018]. A spring pre-sampled into CSS `linear()` is a fixed-duration curve and cannot take a release velocity (conflict recorded under STD-springs-gestures-16) [inferred].
+  - React Native: Reanimated CSS transitions for state changes; a shared value with `Gesture.Pan()` for anything a finger touches [S-L19-016].
+  - SwiftUI: start the animation in the synchronous callback, on the event's frame [S-L19-034].
+- **Accessibility constraints:** Never block input during a transition. Under reduced motion, springs become cross-fades (DC-L19-92).
+- **Default + heuristic:** Use a spring if a finger was involved and timing for everything else [S-L19-016]. The web house sources add two more spring cases: decorative mouse-tracking values go through a spring (`useSpring`, STD-springs-gestures-45), and so may an element meant to feel alive, such as a Dynamic Island-style morph [S-L19-018] [S-L19-023]. Anything that can fire twice in a second uses transitions, not keyframes. Nothing locks input.
+- **Evidence:** [S-L19-006] [S-L19-016] [S-L19-018] [S-L19-019] [S-L19-020] [S-L19-023] [S-L19-033] [S-L19-034]; compared with DC-L04-19, DC-L04-22, DC-L04-24.
+- **Maps to:**
+  - Q-motion-04 show-if: from "Q-motion-01 is two-mode or springs" to "Q-plat-03 includes `touch`, or the product has any drag or swipe (DC-L19-97)", because springs follow the finger, not the personality.
+  - Q-motion-02 default text: "never blocks input longer than about 100ms" becomes "never blocks input".
+  - Q-motion-01: option `springs` reworded as described in DC-L19-82.
+  - Visual sample: toasts added quickly with keyframes against transitions [S-L19-006]; a sheet grabbed while it closes and following the finger.
+- **Impact now / as it grows:**
+  - Springs for touch, timing elsewhere: now, a JS spring library only where gestures exist. As it grows, new gesture components reuse the same spring presets and stay interruptible.
+  - Springs throughout: now, one model. As it grows, a JS dependency on every surface and plain moves that overshoot.
+  - Timing only: now, cheapest. As it grows, adding a draggable sheet later means introducing springs anyway.
+- **Standards:** STD-springs-gestures-01, STD-springs-gestures-12, STD-springs-gestures-13, STD-springs-gestures-14, STD-springs-gestures-15, STD-springs-gestures-16, STD-springs-gestures-45, STD-performance-properties-13, STD-performance-properties-15, STD-swift-45.
+
+### DC-L19-88: Spring parameters and presets
+- **Block path:** Foundations > Motion > Springs
+- **Questions the designer answers:** How should springs be described: bounce and duration, damping and response, or physics numbers? How much bounce is allowed, and when? Which presets exist?
+- **Options:**
+  - **Damping ratio and response (Apple's designer parameters; house).** Default settle 1.0 with a response of 0.3-0.4s (move or reposition 1.0 / 0.4); about 0.8 only after a flick; sheet or drawer 0.8 / 0.3; rotation 0.8 / 0.4; a dismissal that must stop at a hard edge stays at 1.0 with overshoot clamping [S-L19-020] [S-L19-015] [S-L19-016]. Motion mapping: `{ type: 'spring', bounce: 0, duration: 0.4 }`, and bounce 0.2 after a flick [S-L19-020]; the web drag settle recipe is `{ duration: 0.5, bounce: 0.2 }` [S-L19-017]. Reanimated: `{ duration: 400, dampingRatio: 1 }` and so on [S-L19-016].
+  - **Duration and bounce (current Q-motion-04 `apple-bounce`: 0, 0.15, 0.3).** Close; differs in that the house recommends 0.2 and allows 0.1-0.3, and only after momentum or at playful moments [S-L19-033].
+  - **Mass, stiffness and damping.** `{ mass: 1, stiffness: 100, damping: 10 }` when more control is needed [S-L19-018] [S-L19-033]. Kole's Figma springs are in this form: a hover name tag at 500ms, stiffness 636, damping 24 [S-L19-079] and a spinner at stiffness 550, damping 40 [S-L19-059] (single-video values). With mass 1 the name tag works out to a damping ratio of about 0.48 [inferred], a visible bounce on a pop-up with no gesture behind it. The house's own physics example (mass 1, stiffness 100, damping 10) works out the same way to 0.5 [inferred], and the same stiffness and damping drive its decorative mouse-tracking example [S-L19-023], so STD-springs-gestures-05 permits this much bounce only as a deliberately playful or decorative moment, never on an everyday pop-up [inferred].
+  - **Material spatial and effects springs with energy-driven damping (current DC-L04-22 default and levers).** Stores damping ratio and stiffness; lets spatial hero motion overshoot, and the `energy` dial under-damps every spatial spring above 33. Differs: overshoot only after momentum.
+- **Visual effect:** Damping 1.0 settles smoothly with no overshoot; 0.8 overshoots slightly, like a thrown object; about 0.5 bounces visibly and reads as gimmicky on everyday UI [inferred].
+- **Depends on (upstream):** DC-L19-87; DC-L19-82 (playful may use the top of 0.1-0.3).
+- **Affects (downstream):** `motion.spring.*` tokens; sheets, drawers, carousels, picture-in-picture style moves, rotating elements.
+- **Token encoding:** DTCG has no spring type (DC-L04-22). Store the designer parameters as a number group in `$extensions`: `motion.spring.settle` {dampingRatio 1.0, response 0.4}, `motion.spring.momentum` {0.8, 0.4}, `motion.spring.sheet` {0.8, 0.3}, `motion.spring.rotate` {0.8, 0.4}, `motion.spring.dismiss` {1.0, 0.3, clamp true}; derive stiffness for Compose and bounce for SwiftUI and Motion at export [inferred].
+- **Platform notes:** Reanimated takes `duration` and `dampingRatio`, never mass, stiffness and damping [S-L19-016]; Motion takes bounce and duration [S-L19-020]; Compose needs stiffness, derived at export [inferred].
+- **Accessibility constraints:** Reduced motion drops springs and overshoot in favour of a cross-fade.
+- **Default + heuristic:** Four presets plus a clamped dismiss, as above. Rule of thumb: bounce only when a finger threw it; nothing that appears on its own overshoots. Differs from DC-L04-22 (stiffness stored, energy-driven damping, under-damped hero moves) and from Q-motion-04's 0.15 step.
+- **Evidence:** [S-L19-015] [S-L19-016] [S-L19-017] [S-L19-018] [S-L19-020] [S-L19-023] [S-L19-033] [S-L19-059] [S-L19-079]; compared with DC-L04-22, DC-L07-14, DC-L09-06.
+- **Maps to:**
+  - Q-motion-04: new default "damping ratio and response, four presets (settle 1.0/0.4, momentum 0.8/0.4, sheet 0.8/0.3, rotate 0.8/0.4) plus a clamped dismiss", because these are the values Apple ships and the house locks.
+  - Q-motion-04 option `apple-bounce`: values become 0 and 0.2 (range 0.1-0.3). Option `spatial-effects`: add "moves never overshoot unless a gesture carried momentum".
+  - Visual sample: one drag released three ways, 1.0, 0.8 and about 0.5, with the release velocity carried in [S-L19-020]; a sheet dismissed with a clamped spring beside one snapping back.
+- **Impact now / as it grows:**
+  - Damping and response presets: now, five named springs. As it grows, every new gesture reuses a preset and exports cleanly to each platform.
+  - Duration and bounce: now, easy to read. As it grows, fine if the bounce range stays 0.1-0.3.
+  - Physics numbers: now, maximum control. As it grows, hard to review; teams drift into bouncy values [inferred].
+  - Energy-driven damping: now, one dial. As it grows, raising energy makes every plain move bounce.
+- **Standards:** STD-springs-gestures-02, STD-springs-gestures-04, STD-springs-gestures-05, STD-springs-gestures-06, STD-springs-gestures-07, STD-springs-gestures-08, STD-springs-gestures-09, STD-springs-gestures-10, STD-springs-gestures-45, STD-mobile-touch-51, STD-accessibility-motion-02.
+
+### DC-L19-89: How things appear and leave
+- **Block path:** Foundations > Motion > Enter and exit
+- **Questions the designer answers:** Do menus and popups grow out of the button that opened them? Do things only fade, or also scale or slide a little? Do they leave the way they came?
+- **Options:**
+  - **Scale and fade from the trigger (house recipes).** Dropdowns, popovers, menus and selects: opacity 0 plus scale(0.95) from the trigger's transform origin, 200ms ease-out; tooltips scale(0.97), 125ms; modals centered, scale(0.96), 250ms, with the backdrop fading on the same timing [S-L19-017]. Never from scale(0), which looks like it comes out of nowhere; start at 0.9 or more, like a deflated balloon that still has a shape [S-L19-003] [S-L19-004]. Leave along the same path: a toast that enters from the bottom leaves through the bottom [S-L19-012].
+  - **A small slide plus fade (practitioner, Figma prototypes and a marketing page).** A hidden menu placed a couple of pixels lower so it slides up as it fades in [S-L19-059]; a hover name tag rising from slightly lower at opacity 0 [S-L19-079]; decorative marketing elements entering in a way that suits them (a star that rotates and pops, a balloon that flies in) [S-L19-063]. This agrees with the house rule that entrances carry a small transform [inferred].
+  - **Plain fade (current Q-motion-06 option `fade`: "Fade for in-screen enter and exit").** Differs: the house forbids opacity-only entrances except a modal's backdrop and the reduced-motion variant, and DC-L04-23 itself records Material's pattern as fade plus scale. Kole calls a plain fade-in "robotic" for decorative elements on a landing page [S-L19-063].
+  - **Slide by the element's own size** for toasts, drawers and sheets, written as a percentage such as translateY(100%) [S-L19-023] [S-L19-033].
+  - **Clip-path reveal** for images and reveals: inset(0 0 100% 0) to inset(0 0 0 0) on the ease-in-out curve, with no layout shift [S-L19-010].
+- **Visual effect:** Scaling from the trigger makes the panel look like it came out of what was clicked; center-origin popovers look wrong, most of all at the top right [S-L19-003]. scale(0) pops from nothing; a plain fade looks flat.
+- **Depends on (upstream):** DC-L19-85, DC-L19-86; the component primitives (Base UI and Radix expose the trigger origin as a CSS variable).
+- **Affects (downstream):** popover, dropdown, menu, select, tooltip, modal and backdrop, toast, drawer, accordion (height and opacity 200ms), image reveals.
+- **Token encoding:** component recipe tokens, for example `popover.motion.enter` = `$type: transition` {200ms, 0ms, [0.23, 1, 0.32, 1]} with `popover.motion.from-scale` = `$type: number` 0.95; `tooltip.motion.from-scale` 0.97; `modal.motion.from-scale` 0.96 [values from S-L19-017; names inferred]. Transform origin is a CSS convention, not a token.
+- **Platform notes:** React Native uses Reanimated layout animations (`entering`, `exiting`) and percentage translates for sheets [S-L19-016]; the web uses `@starting-style` with a mounted-flag fallback [S-L19-023].
+- **Accessibility constraints:** Reduced motion keeps the opacity and drops the scale and slide (DC-L19-92).
+- **Default + heuristic:** The house recipe set. Rule of thumb: everything that enters gets opacity 0 plus a small transform; anything anchored to a trigger grows from it; modals grow from the center; everything leaves the way it came.
+- **Evidence:** [S-L19-003] [S-L19-004] [S-L19-010] [S-L19-012] [S-L19-016] [S-L19-017] [S-L19-023] [S-L19-033] [S-L19-059] [S-L19-063] [S-L19-079]; compared with DC-L04-23.
+- **Maps to:**
+  - Q-motion-06 option `fade`: reword to "fade plus scale from the trigger for menus and popovers (0.95, 200ms), tooltips (0.97, 125ms), centered dialogs (0.96, 250ms)".
+  - Visual sample: the "Options" element entering from scale(0) and from 0.93 [S-L19-003]; the feedback popover toggled between center and trigger origin [S-L19-003]; a menu sliding up a couple of pixels as it fades in [S-L19-059].
+- **Impact now / as it grows:**
+  - Scale from the trigger: now, needs primitives that expose the origin. As it grows, every new anchored overlay looks connected to its trigger for free.
+  - Small slide plus fade: now, simple in Figma prototypes. As it grows, fine if the distance stays small and the path is the exit path.
+  - Plain fade: now, cheapest. As it grows, every overlay reads flat and each becomes a review finding.
+- **Standards:** STD-enter-exit-origin-01, STD-enter-exit-origin-02, STD-enter-exit-origin-03, STD-enter-exit-origin-04, STD-enter-exit-origin-06, STD-enter-exit-origin-08, STD-enter-exit-origin-09, STD-enter-exit-origin-11, STD-enter-exit-origin-12, STD-enter-exit-origin-16, STD-enter-exit-origin-17, STD-enter-exit-origin-21, STD-enter-exit-origin-23, STD-enter-exit-origin-26, STD-enter-exit-origin-38.
+
+### DC-L19-90: Screen and page transitions
+- **Block path:** Patterns > Navigation > Screen transitions
+- **Questions the designer answers:** When people move between screens or tabs, does anything move? Who owns it on iOS and Android? Should an item grow into its own detail page?
+- **Options:**
+  - **Platform-owned.** The native stack at the platform default (iOS push 350ms); a modal for a self-contained task people can abandon; a form sheet with detents for a short interruption; the back swipe mirrors any custom animation [S-L19-016] [S-L19-015]. Agrees with DC-L10-14 on screens; DC-L10-14's "shared brand motion for in-content micro-interactions (as springs)" differs, because springs are only for motion a finger drives (STD-springs-gestures-01).
+  - **No animation for tabs and core navigation.** Tab switches never slide or fade (Expo `animation: 'none'`) [S-L19-016]; core navigation is in the 100+ a day tier [S-L19-024].
+  - **Continuity (shared element, container transform).** A card that expands into a page, an image that zooms into the next page's hero, transitions that follow the swipe's direction [S-L19-035] (Kole calls the plain slide "lame": opinion); the vocabulary names shared-element, continuity and direction-aware transitions [S-L19-019]; a mega menu that stays open and slides its content [S-L19-072].
+  - **Direction carries meaning.** Sliding up from the bottom means temporary; a screen sliding in from the left shows progress, as in onboarding [S-L19-084] (single video; consistent with the shared-axis pattern in DC-L04-23 [inferred]).
+  - **Material's four patterns including fade-through for tabs (current Q-motion-06 default "all four plus stagger", DC-L04-23).** Differs: fade-through between tabs breaks STD-when-to-animate-14.
+  - **Custom swipe back with the background moving in from about 35%** [S-L19-053] (single-video number); relevant only to custom or web builds, since native back stays with the OS [inferred].
+- **Visual effect:** Native transitions feel at home and keep the back gesture. Continuity keeps people oriented. Animated tabs feel slow when used all day.
+- **Depends on (upstream):** DC-L19-81, Q-plat-01, Q-plat-08, Q-motion-09.
+- **Affects (downstream):** router configuration, the tab bar, detail pages, onboarding flows, web view transitions.
+- **Token encoding:** none for native screens (delegated to the OS). Web: one `motion.transition.navigate` transition for occasional drill-ins only [inferred]; tabs have none.
+- **Platform notes:** Android predictive back and iOS swipe-back stay native (DC-L10-14). On the web, a view transition morphs between states and connects shared elements [S-L19-019].
+- **Accessibility constraints:** Under reduced motion, native stacks switch to `animation: 'fade'` [S-L19-015] and spatial transitions become fades.
+- **Default + heuristic:** Platform default on native, configured through native stack options and never rebuilt in JavaScript; no animation on tab switches and core navigation; on the web, a continuity transition only for occasional drill-ins (card to detail) and onboarding, while on native the same idea stays inside one screen (a card expanding in place) [inferred]; forward moves sideways, temporary things come from the bottom [inferred from S-L19-084 and DC-L04-23].
+- **Evidence:** [S-L19-015] [S-L19-016] [S-L19-019] [S-L19-024] [S-L19-035] [S-L19-053] [S-L19-072] [S-L19-084]; compared with DC-L04-23, DC-L10-14.
+- **Maps to:**
+  - Q-motion-06: new default "platform transitions for screens (native stack on iOS and Android), none for tabs and core navigation, container transform for occasional drill-ins on the web, shared axis x for onboarding; no fade-through between tabs", because tab switches are an all-day action and native screen transitions stay with the platform.
+  - Q-motion-09: keeps default `os-nav-brand-micro`, with its label "small brand springs inside content" reworded to "small brand micro-motion inside content, on springs only where a finger drives it" (STD-springs-gestures-01); DC-L19-98 adds the haptic map to the same default.
+  - Visual sample: an image zooming into the next page's hero against a plain page slide [S-L19-035]; a mega menu closing and reopening against sliding [S-L19-072]; a tab switch that is instant.
+- **Impact now / as it grows:**
+  - Platform-owned: now, nothing to build. As it grows, new OS behaviour (such as predictive back) arrives for free.
+  - None for tabs: now, instant. As it grows, stays fast as tabs are added.
+  - Continuity: now, extra build per drill-in. As it grows, each new detail page needs a matching shared element, so keep it to a few patterns [inferred].
+  - Fade-through for tabs: now, looks polished in a demo. As it grows, slows the most-used navigation.
+- **Standards:** STD-when-to-animate-05, STD-when-to-animate-14, STD-mobile-touch-42, STD-mobile-touch-44, STD-accessibility-motion-04, STD-easing-duration-06, STD-springs-gestures-01.
+
+### DC-L19-91: Stagger for groups of items
+- **Block path:** Foundations > Motion > Stagger
+- **Questions the designer answers:** When a group of items appears, do they come in one after another? How far apart? Which lists skip it?
+- **Options:**
+  - **30-80ms per item, only for groups seen occasionally (house).** Web recipe: each item from opacity 0 and translateY(8px) over 300ms ease-out, delays 0, 50, 100 and 150ms [S-L19-017] [S-L19-033]; React Native: `FadeInDown.duration(250).delay(index * 40)` [S-L19-015]. Never blocks interaction; no entrance on lists people scroll past all day; never on rows of a virtualized list.
+  - **20-50ms per item, total at most 500ms (current Q-motion-06 option, DC-L04-23; Carbon 20ms).** Differs: 20-29ms is below the house floor and there is no condition on how often the list is seen.
+  - **Longer marketing staggers (single videos).** Navbar items 0.2s apart, 0.6s each [S-L19-071]; phone screens sliding up one after another on load [S-L19-085]; scroll-highlighted lines filling one after another [S-L19-069]. Marketing or illustrative motion, outside the UI range.
+  - **Steps revealed as work progresses (practitioner, product UI).** An AI research trail whose three steps fade in one by one [S-L19-055] (no timing given). Each step shows real progress, so it is state indication paced by the work rather than a decorative stagger [inferred].
+  - **No stagger.** The group appears together.
+- **Visual effect:** A short stagger reads as a natural cascade; a long one feels slow; an entrance on an all-day list gets in the way.
+- **Depends on (upstream):** DC-L19-81, DC-L19-86.
+- **Affects (downstream):** lists, grids, search results, a dashboard's first load, onboarding.
+- **Token encoding:** `motion.stagger.step` = `$type: duration` 50ms (40ms in React Native); `motion.stagger.item` = `$type: transition` {300ms, 0ms, [0.23, 1, 0.32, 1]} [values from S-L19-017 and S-L19-015; names inferred].
+- **Platform notes:** React Native defines layout-animation builders at module scope or in `useMemo` [S-L19-016].
+- **Accessibility constraints:** Under reduced motion the translate goes and the opacity stays, or the items appear together [inferred from STD-accessibility-motion-02]; input is never blocked.
+- **Default + heuristic:** 50ms on the web and 40ms in React Native, only for occasionally seen groups and for results the person asked for and is waiting on. Rule of thumb: if they scroll past it all day, it should already be there.
+- **Evidence:** [S-L19-015] [S-L19-016] [S-L19-017] [S-L19-033] [S-L19-055] [S-L19-069] [S-L19-071] [S-L19-085]; compared with DC-L04-23.
+- **Maps to:**
+  - Q-motion-06 option `stagger`: "30-80ms per item (50 web, 40 React Native), only on occasionally seen lists and awaited results, never on all-day or virtualized lists" replaces "20-50ms, total at most 500ms".
+  - Visual sample: the same search results entering all at once, at 50ms and at 150ms steps [inferred].
+- **Impact now / as it grows:**
+  - 30-80ms, occasional only: now, one token. As it grows, lists that become all-day surfaces must lose their stagger, so tier lists in the inventory (DC-L19-81).
+  - 20-50ms, total 500ms: now, similar feel. As it grows, all-day lists keep entrances and long lists hit the total cap unevenly [inferred].
+  - Marketing staggers: now, dramatic load. As it grows, long sequences delay content on every visit.
+  - None: now, simplest. As it grows, awaited content can pop in abruptly.
+- **Standards:** STD-when-to-animate-13, STD-enter-exit-origin-13, STD-enter-exit-origin-33, STD-enter-exit-origin-35, STD-springs-gestures-13, STD-performance-properties-20.
+
+### DC-L19-92: What reduced motion does
+- **Block path:** Foundations > Motion > Reduced motion
+- **Questions the designer answers:** When someone turns on reduced motion, what replaces movement? Does anything still animate? Is it built with each animation or added later?
+- **Options:**
+  - **Replace, gentler not zero (house).** Drop translation, scale, slides, springs, parallax and overshoot; keep the opacity and color changes that explain a state change; use a 200ms `ease` cross-fade (sheet: opacity 200ms ease, transform none) [S-L19-020] [S-L19-018] [S-L19-016]; native stacks fade [S-L19-015]; in JS, branch the values (`closedX = reduce ? 0 : '-100%'`) [S-L19-033]; ship it in the same change as the animation and check it by toggling the setting in DevTools [S-L19-026].
+  - **Remove all non-essential motion (current `remove`, WCAG 2.3.3 AAA).** The engine maps it to 0ms feedback, enter, exit and expand transitions. Differs: the house rejects zero motion.
+  - **A static jump for small elements.** The prototype picker's highlight simply has no transition under reduced motion [S-L19-030], which the house wording allows as "a static transition" [inferred].
+  - **Per-device budgets (DC-L14-08) and an in-app switch (Fluent in DC-L04-25; Q-aud-04).** Not covered by the L19 sources.
+  - **Looping decoration with a pause control.** A shimmer with a pause and play button [S-L19-079] (single video; added because its uneven speed may bother some people, not framed as a reduced-motion measure).
+- **Visual effect:** Replacing keeps the product polished (cross-fades) instead of broken (jumps); zero motion loses the fades that explain what changed.
+- **Depends on (upstream):** every other motion decision.
+- **Affects (downstream):** every animated component, screen transitions, springs, stagger, parallax, loaders and shimmer, marketing scroll effects.
+- **Token encoding:** a `reduced` mode of the motion collection in which transitions alias `motion.transition.crossfade` = `$type: transition` {200ms, 0ms, [0.25, 0.1, 0.25, 1]} and spatial values resolve to no movement [inferred mode structure; values from S-L19-020]. Differs from today's engine, which emits 100ms on the standard curve (conflict under STD-accessibility-motion-02).
+- **Platform notes:** Web `@media (prefers-reduced-motion: reduce)`; React `useReducedMotion()`; Reanimated `ReduceMotion.System`; native stack `animation: 'fade'` [S-L19-016] [S-L19-015].
+- **Accessibility constraints:** DC-L04-25 treats WCAG 2.3.3 as a requirement; keeping fades is compatible, because WCAG's definition of motion animation leaves out opacity and color (as DC-L04-25 records) [inferred link]. No full-viewport moving backgrounds; no slow loops near 0.2 Hz.
+- **Default + heuristic:** `replace`, with a 200ms `ease` cross-fade, shipped with each animation. Rule of thumb: remove travel, keep meaning.
+- **Evidence:** [S-L19-015] [S-L19-016] [S-L19-018] [S-L19-020] [S-L19-026] [S-L19-030] [S-L19-033] [S-L19-079]; compared with DC-L04-25, DC-L10-16, DC-L14-08.
+- **Maps to:**
+  - Q-motion-07: confirms default `replace`, adding "cross-fade 200ms `ease`, shipped with every animation".
+  - Q-motion-07 option `remove`: reword to "remove every movement, keep fades and color feedback", or retire it, because zero motion is rejected.
+  - Q-motion-10: confirms default (all device settings; reduced transparency and increased contrast handled as separate signals).
+  - Visual sample: a sheet sliding up, then fading in over 200ms with no movement under reduced motion [S-L19-020]; a native push next to its fade [S-L19-015].
+- **Impact now / as it grows:**
+  - Replace: now, a second variant per animation. As it grows, the variant ships with each new animation, so there is no backlog.
+  - Remove to zero: now, the least work. As it grows, people with the setting on lose state feedback everywhere and each surface becomes a review finding.
+  - Static jump: now, fine for small highlights. As it grows, large elements that jump feel broken [inferred].
+- **Standards:** STD-accessibility-motion-01, STD-accessibility-motion-02, STD-accessibility-motion-03, STD-accessibility-motion-04, STD-accessibility-motion-05, STD-accessibility-motion-06, STD-accessibility-motion-07, STD-accessibility-motion-08.
+
+### DC-L19-93: Press feedback
+- **Block path:** Components > States > Press feedback
+- **Questions the designer answers:** Should buttons and other tappable things shrink a little when pressed? How fast? A tint, a scale, or both?
+- **Options:**
+  - **Scale to 0.97 while pressed (house).** The whole element, label and icons included; 100-160ms ease-out on the web (recipe 160ms; the mobile-web sample uses 100ms with a background change); 120ms `cubic-bezier(0.23, 1, 0.32, 1)` in React Native with hitSlop 12; subtle range 0.95-0.98 [S-L19-003] [S-L19-017] [S-L19-028] [S-L19-015] [S-L19-020]. It fires on press-down (`:active` or `pointerdown`), never only on click [S-L19-028].
+  - **Practitioner versions.** A button that gets smaller when clicked, with its label sliding up in a mask on hover [S-L19-079]; buttons should almost always get a small animation [S-L19-054] (agrees for press); gray the button out on press when the next screen takes a moment, and add a spinner for long waits [S-L19-045].
+  - **Tint overlay only (current Q-state-04 default, Material state layers, DC-L08-09).** Not a conflict on its own, but nothing generated scales a pressed control (recorded under STD-mobile-touch-05); tint and scale can coexist [inferred].
+  - **Android ripple.** Only in a Material-styled app; otherwise the same scale on both platforms is more coherent [S-L19-016].
+- **Visual effect:** The press scale makes the interface feel as if it is listening [S-L19-003]; with no press effect the interface feels less responsive.
+- **Depends on (upstream):** Q-state-04, DC-L19-85, Q-plat-01.
+- **Affects (downstream):** Button, IconButton, chips, list rows, link cards, tabs.
+- **Token encoding:** `motion.press.scale` = `$type: number` 0.97; `motion.transition.press` = `$type: transition` {160ms, 0ms, [0.23, 1, 0.32, 1]} (120ms on native) [values from sources; names inferred].
+- **Platform notes:** `:active` works for every input type on the web; React Native uses Pressable with a Reanimated CSS transition; Android ripple only for Material apps [S-L19-016].
+- **Accessibility constraints:** Press feedback is not hover, so it is never gated behind the fine-pointer query. Under reduced motion, STD-accessibility-motion-02 lists scale among the movements to remove, so the reduced variant keeps the tint and drops the scale [inferred reading].
+- **Default + heuristic:** Tint plus a 0.97 scale on every pressable. Rule of thumb: respond the instant the finger lands, within 160ms.
+- **Evidence:** [S-L19-003] [S-L19-015] [S-L19-016] [S-L19-017] [S-L19-020] [S-L19-028] [S-L19-045] [S-L19-054] [S-L19-079]; compared with DC-L08-09, DC-L13-01.
+- **Maps to:**
+  - Q-state-04: new default adds "plus a press scale of 0.97 over 100-160ms ease-out on every pressable, alongside the tint".
+  - Q-state-02: new heuristic "press feedback on press-down at every level".
+  - Visual sample: the two "Paste" buttons, with and without the press scale [S-L19-003].
+- **Impact now / as it grows:**
+  - Scale plus tint: now, one token and one CSS rule per pressable base. As it grows, every new component inherits it through the shared base [inferred].
+  - Tint only: now, what Material ships. As it grows, controls feel flat next to native apps, and adding scale later touches every component.
+  - Ripple: now, native on Android. As it grows, two feedback styles to maintain across platforms.
+- **Standards:** STD-mobile-touch-05, STD-components-toasts-drawers-72, STD-when-to-animate-07, STD-accessibility-motion-15, STD-easing-duration-07.
+
+### DC-L19-94: Hover motion
+- **Block path:** Components > States > Hover motion
+- **Questions the designer answers:** Should things move when the pointer rests on them, or only change color? Everywhere, or only on the marketing site? What happens on touch screens?
+- **Options:**
+  - **Color only, or nothing, in product UI.** Things hovered tens of times a day lose the animation or the hover itself [S-L19-003] [S-L19-012]; a text and background color change reads as cool but professional (quitenice.com) [S-L19-069]. Color changes run on `ease` (DC-L19-85).
+  - **Subtle reveals.** An arrow that fades in to show a whole card is a link [S-L19-075]; secondary actions revealed on hover with a tooltip [S-L19-056]; an icon label sliding in slightly [S-L19-059]; on dashboards, chart hover that shows the value in a bubble or dims the other bars [S-L19-047]. Kole calls chart hover the place a dashboard can "get a little more creative" [S-L19-047]; the house keeps decorative motion off functional charts (STD-when-to-animate-11), so only hover states that help people read the data belong there [inferred].
+  - **Rich hover (marketing).** A masked label slide with a morphing circle [S-L19-069]; an image zooming out while the call to action pops up and the accent color appears only on hover [S-L19-065]; blur, enlarge and reveal text on image cards (Accenture-style) [S-L19-082]; small hover interactions on almost everything [S-L19-063]. Kole's own limit: keep them simple and well built, "don't go overboard" [S-L19-066].
+- **Visual effect:** Color only feels calm and professional; subtle reveals make secondary actions findable without clutter; rich hovers feel premium on a page visited once and distracting on a screen used daily.
+- **Depends on (upstream):** DC-L19-81, DC-L19-84, Q-plat-03 (pointer or touch), Q-state-04.
+- **Affects (downstream):** buttons, cards, list rows, sidebar links, charts, marketing cards.
+- **Token encoding:** `motion.transition.hover` = `$type: transition` {150ms, 0ms, `ease`} [the 150ms is inferred from the tens-per-day tier and the picker's 150ms color change in S-L19-030; that change runs on ease-out, and the picker calls its own styling harness chrome rather than a design decision, so it is a weak anchor].
+- **Platform notes:** Every `:hover` rule sits inside `@media (hover: hover) and (pointer: fine)`; touch gets `:active` instead, otherwise a tapped element stays in its hover state [S-L19-028]. Mouse-following effects need a phone and tablet fallback [S-L19-069].
+- **Accessibility constraints:** Hover content must be dismissible and persistent (WCAG 1.4.13, already in Q-state-04's use/avoid); anything revealed on hover also needs keyboard and touch access [inferred]. Hover never carries the only signal.
+- **Default + heuristic:** Product UI: color on `ease`, and subtle reveals only for secondary actions; rich hovers only on marketing surfaces. Rule of thumb: the more often it is hovered, the less it moves; if a hover flickers, animate a child instead of the hovered parent.
+- **Evidence:** [S-L19-003] [S-L19-011] [S-L19-012] [S-L19-028] [S-L19-030] [S-L19-047] [S-L19-056] [S-L19-059] [S-L19-063] [S-L19-065] [S-L19-066] [S-L19-069] [S-L19-075] [S-L19-082]; compared with DC-L08-09, DC-L14-06.
+- **Maps to:**
+  - Q-state-04 use/avoid: new heuristic "hover motion only on fine pointers; product UI uses color change or a subtle reveal; moving hovers only on marketing pages".
+  - Visual sample: the same card with a color-only hover, an arrow fade-in [S-L19-075] and an image-zoom hover [S-L19-065], with a label saying where each belongs; and the "Train Your Judgement" exercise on Emil Kowalski's site that compares two hover treatments on an options list meant for frequent use [S-L19-011].
+- **Impact now / as it grows:**
+  - Color only: now, cheapest and calm. As it grows, stays fast on every new list and table.
+  - Subtle reveals: now, cleaner layouts. As it grows, hidden actions need touch and keyboard paths for each new component.
+  - Rich hover: now, a premium marketing page. As it grows, it spreads into product UI unless the surface rule is written down.
+- **Standards:** STD-when-to-animate-07, STD-when-to-animate-11, STD-accessibility-motion-15, STD-easing-duration-01, STD-performance-properties-24.
+
+### DC-L19-95: Confirmation and loading motion
+- **Block path:** Patterns > Feedback > Action confirmation and loading motion
+- **Questions the designer answers:** How does the product show that an action worked? What moves while people wait? How fast do loaders move?
+- **Options:**
+  - **An immediate state change.** A filled save icon and a red dot on the tab where the item went [S-L19-045]; for keyboard shortcuts, an instant state change with no animation (house), which the macOS video accepts as the minimum [S-L19-067].
+  - **A small confirming motion where the result is not visible.** A chip sliding up after the copy button [S-L19-052]; a check mark sliding in through a mask after the spinner [S-L19-059]; a quick-save window that collapses into a toast and slides away while the save continues in the background [S-L19-067], although in that video the collapse is triggered by the Enter key, and keyboard-initiated actions never animate under STD-when-to-animate-06, so only its background save (optimistic UI) carries over. Every interaction gets a response [S-L19-052], which Emil also asks for [S-L19-003].
+  - **Loaders.** Spinners spin fast, because a faster spinner makes loading seem quicker [S-L19-003]; constant motion is linear; AI loaders are short, looping and fluid (Notion AI's dots, Claude's star) [S-L19-055]; skeletons shimmer and the content slots exactly into place [S-L19-055]; a pressed button grays out and shows a spinner for long waits [S-L19-045]; a loading toast turns into success or error in place [S-L19-022].
+  - **Optimistic UI.** A deleted email disappears before the server confirms (Gmail, Apple Mail) [S-L19-047] [S-L19-067].
+  - **Celebration.** Particles on a success toast [S-L19-079]; only at rare moments (DC-L19-83).
+- **Visual effect:** People see that something happened; a fast spinner feels like faster work; a shimmer makes the layout feel alive.
+- **Depends on (upstream):** DC-L13-01 (the loading thresholds), DC-L19-81, DC-L19-83, Q-form-04.
+- **Affects (downstream):** the button's loading state, Spinner, Skeleton, Toast (promise), copy buttons, save actions, streamed AI output.
+- **Token encoding:** spinners and progress use `motion.easing.linear`; the sources give no spin period, only "fast" [gap]; the confirming motion reuses the enter recipe (DC-L19-89) [inferred].
+- **Platform notes:** On phones, success and error pair with a notification haptic (DC-L19-98).
+- **Accessibility constraints:** Shimmer and looping loaders honor reduced motion; announce busy and done states to screen readers (DC-L13-01) [inferred]; no slow 0.2 Hz loops.
+- **Default + heuristic:** Respond within 50ms (DC-L13-01) with a state change first; add a small confirming motion only where the result is off-screen or invisible (copy, save elsewhere); a fast, linear spinner in the pressed button for waits; a skeleton shimmer for region loads; celebration only for rare successes.
+- **Evidence:** [S-L19-003] [S-L19-022] [S-L19-045] [S-L19-047] [S-L19-052] [S-L19-055] [S-L19-059] [S-L19-067] [S-L19-079]; compared with DC-L13-01, DC-L08-12.
+- **Maps to:**
+  - Q-state-08: new heuristic "spinners spin fast and linear; shimmer honors reduced motion; AI loaders are short and looping".
+  - Q-form-04: new option note "in-place confirmation motion (a chip sliding up) when the result is not visible".
+  - Visual sample: two spinners at different speeds loading the same data [S-L19-003]; the copy chip [S-L19-052]; the check mark sliding in [S-L19-059].
+- **Impact now / as it grows:**
+  - State change only: now, cheapest. As it grows, invisible results (copy, background save) leave people unsure.
+  - Confirming motion: now, a handful of small recipes. As it grows, reuse one recipe so confirmations look the same everywhere [inferred].
+  - Fast loaders and skeletons: now, feel faster at no load-time cost. As it grows, skeletons must track layout changes.
+  - Optimistic UI: now, feels instant. As it grows, needs a visible rollback for failures (DC-L13-01).
+- **Standards:** STD-easing-duration-01, STD-easing-duration-15, STD-when-to-animate-03, STD-when-to-animate-06, STD-when-to-animate-09, STD-components-toasts-drawers-72, STD-accessibility-motion-01, STD-accessibility-motion-08, STD-springs-gestures-59.
+
+### DC-L19-96: Performance budget and the device that proves it
+- **Block path:** Foundations > Motion > Performance budget
+- **Questions the designer answers:** What is the slowest phone and computer this must feel smooth on? Which effects are too heavy (big blur, 3D, video)? What frame rate counts as smooth?
+- **Options:**
+  - **A frame budget.** 60fps is the baseline and 120fps where the display supports it [S-L19-019]; dropped frames fail review; Expo lifts the 60fps cap on ProMotion iPhones with `CADisableMinimumFrameDurationOnPhone` [S-L19-016].
+  - **Proof on real hardware.** A phone a few years old, with the keyboard open and once in landscape; Chrome emulation is not proof [S-L19-028]; a physical phone with Safari devtools for drawers [S-L19-005]; a release build on the slowest device [S-L19-016]. The drawer article also accepts the Xcode Simulator [S-L19-005], but the later skills say real hardware is better [S-L19-023] [S-L19-028] and the house standard never counts a simulator as verified (STD-process-review-taste-33).
+  - **Cheap properties only.** Transform and opacity, plus clip-path; animated blur under 20px; in React Native never animate elevation or BlurView intensity [S-L19-013] [S-L19-016].
+  - **A budget for heavy effects (practitioner).** Drop 3D and heavy animation when it slows loading or navigation [S-L19-040]; big or flashy animation slows the site [S-L19-069]; keep morphing-image changes small or the animation stutters [S-L19-050]; a preloader can buy heavy media time to load (one creator's guess about another site) [S-L19-069].
+- **Visual effect:** Smooth motion versus visible jank; heavy blur and 3D look premium on a fast laptop and stutter on a mid-range phone.
+- **Depends on (upstream):** Q-plat-02 (devices), Q-plat-08 (stack), Q-dir-01 (glass and blur), DC-L19-84.
+- **Affects (downstream):** glass materials (animated blur stays under 20px; the engine's 24px glass blur cannot be animated at full value), marketing 3D and video, drag implementations, long lists (virtualize 1,000+ rows), tool choice.
+- **Token encoding:** none (process decision). The device and frame rate can be recorded as strings in `$extensions` for review [inferred].
+- **Platform notes:** Web: per-frame values go to `ref.current.style` or motion values, never React state; drag transforms are set on the moving element, not through a parent CSS variable (lag appeared at about 20 list items) [S-L19-005] [S-L19-013]. React Native: Reanimated worklets on the UI thread, never core Animated. SwiftUI: start on the event's frame [S-L19-034].
+- **Accessibility constraints:** Reduced transparency drops blur altogether; smoothness on low-end devices is part of access [inferred].
+- **Default + heuristic:** 60fps on the slowest device named in the proposed Q-plat-15 (Q-plat-02 names only device classes), 120fps where supported, checked on a release build before motion counts as done. Rule of thumb: if an effect needs a preloader to hide its weight, question the effect [inferred from S-L19-040 and S-L19-069].
+- **Evidence:** [S-L19-005] [S-L19-013] [S-L19-016] [S-L19-019] [S-L19-023] [S-L19-028] [S-L19-034] [S-L19-040] [S-L19-050] [S-L19-069]; compared with DC-L13-01 (INP and RAIL budgets), DC-L14-08.
+- **Maps to:**
+  - Q-plat-02: new follow-up question (proposed Q-plat-15, zoom 2; Q-plat-11 to Q-plat-14 are already proposed in the platforms cards): "Which is the slowest phone and computer this must feel smooth on?" Default: a phone about three years old and a mid-range laptop [inferred default].
+  - Visual sample: the drawer with 20+ items dragged through a parent CSS variable (laggy) and with a direct transform (smooth) [S-L19-005]; a frame-budget graphic, 16ms at 60fps and 8ms at 120fps.
+- **Impact now / as it grows:**
+  - Frame budget plus a named device: now, one test device and a check. As it grows, every new effect is tested against the same device, so the product does not slowly get heavier.
+  - No named device: now, nothing to set up. As it grows, effects that look fine on the designer's laptop ship janky to most users [inferred].
+- **Standards:** STD-performance-properties-01, STD-performance-properties-02, STD-performance-properties-06, STD-performance-properties-10, STD-performance-properties-11, STD-performance-properties-13, STD-performance-properties-16, STD-performance-properties-17, STD-performance-properties-18, STD-performance-properties-19, STD-enter-exit-origin-30, STD-mobile-touch-35, STD-mobile-touch-39, STD-process-review-taste-33.
+
+### DC-L19-97: Gestures: which ones, how they commit, and their visible alternative
+- **Block path:** Patterns > Gestures > Drag, swipe and release
+- **Questions the designer answers:** Which things can be swiped or dragged (sheets, toasts, rows, cards)? Does a quick flick count? Does every gesture also have a button?
+- **Options:**
+  - **Momentum release (house).** Dismiss when the distance passes the threshold or the velocity passes about 0.11 (distance over milliseconds) [S-L19-006] [S-L19-017]; project where a flick would stop (deceleration rate 0.998, or 0.99 for snappier) and snap to the point nearest the projection [S-L19-020]; a sheet dismisses when the projection passes 40% of its height [S-L19-015]; past an edge the element follows with rising resistance (constant 0.55) instead of hitting a wall [S-L19-020] [S-L19-006]; tracking stays 1:1 at the grab offset, with pointer capture and about 10px of movement before the axis locks [S-L19-020] [S-L19-016]; the settle is a spring handed the release velocity (DC-L19-87, DC-L19-88).
+  - **Distance only.** Heavy: a quick short flick does not dismiss [S-L19-006] [S-L19-015].
+  - **Snap points.** Velocity-based by default, so a fast flick can skip a point; sequential (Vaul `snapToSequentialPoint`) when every point matters equally [S-L19-098]; fixed pixels when an input must peek out evenly on every device [S-L19-005]. Vaul is good-to-have and unmaintained: use it as a craft reference.
+  - **A gesture plus a visible alternative (practitioner).** Swipe plus a button or long-press menu, as Gmail offers delete by swipe or by tap [S-L19-035]; teach swipes before relying on them [S-L19-053]; a swipe-to-confirm slider for high-impact or irreversible actions, such as sending an email or buying crypto [S-L19-035] (single video; the house equivalent is hold-to-confirm, 2s linear press and 200ms ease-out release).
+  - **Swipe only.** TikTok's swipe up as the single core action [S-L19-077]; the swipe video keeps a fallback instead [S-L19-035].
+- **Visual effect:** Momentum makes a flick feel like a throw; distance-only feels heavy; hard stops feel like walls; rubber-banding feels physical.
+- **Depends on (upstream):** Q-plat-03 (touch), Q-pattern-01 (sheets), DC-L19-87, DC-L19-88.
+- **Affects (downstream):** sheets and drawers; toasts (the swipe direction follows the toaster's position [S-L19-088]); swipe rows (a built-in swipeable for revealing actions, a custom gesture only for swipe-to-commit [S-L19-015]); carousels (native scroll-snap beats a hand-rolled spring [S-L19-028]); card stacks.
+- **Token encoding:** a gesture group of `$type: number` tokens: `gesture.dismiss.velocity` 0.11, `gesture.dismiss.projection` 0.4 (share of the sheet's height), `gesture.projection.deceleration` 0.998, `gesture.rubberband.constant` 0.55, and `gesture.axis-lock` = `$type: dimension` 10px [values from sources; grouping and names inferred]. DTCG has no gesture type.
+- **Platform notes:** Web: `touch-action` names what the browser keeps (`pan-y` on horizontal carousels, `none` only for gestures that own every axis) [S-L19-028]. React Native: `Gesture.Pan()` with `activeOffsetY([-10, 10])` [S-L19-016]; a native form sheet when the sheet is its own destination [S-L19-015].
+- **Accessibility constraints:** Every drag has a non-drag alternative (WCAG 2.5.7, in DC-L10-15); drawers stay dismissible by outside click and Escape; toasts can show a close button (`closeButton`) [S-L19-092].
+- **Default + heuristic:** The momentum model is locked; every gesture has a visible button or menu that does the same job; sequential snap points only when every point matters. Rule of thumb: a flick should be enough, and a person who never swipes should still get everything done.
+- **Evidence:** [S-L19-005] [S-L19-006] [S-L19-015] [S-L19-016] [S-L19-017] [S-L19-020] [S-L19-021] [S-L19-028] [S-L19-035] [S-L19-053] [S-L19-077] [S-L19-088] [S-L19-092] [S-L19-098]; compared with DC-L10-15, DC-L04-24.
+- **Maps to:**
+  - New question Q-motion-14 (proposed, zoom 3, show if Q-plat-03 includes `touch`): "Which things should people be able to swipe or drag, and which button does the same job?" Default: sheets and toasts swipe to dismiss; sheets also close by a visible control, outside click and Escape; toasts keep Sonner's defaults (dismissible, the Alt+T hotkey that focuses them, auto-close after 4000ms) [S-L19-021] [S-L19-092], with a close button as an option.
+  - Visual sample: Sonner's toast flicked away and dragged the wrong way to feel the friction [S-L19-006]; a drawer where a slow drag returns and a flick closes [S-L19-005]; the projection diagram [S-L19-020]; Vaul sequential snapping [S-L19-098]; a swipe-to-confirm slider next to a button [S-L19-035].
+- **Impact now / as it grows:**
+  - Momentum release: now, a small set of shared gesture numbers. As it grows, every new draggable feels the same and passes review.
+  - Distance only: now, simpler code. As it grows, every sheet feels heavy and gets reworked.
+  - Gesture plus alternative: now, one extra control per gesture. As it grows, new users and assistive technology users are never stuck.
+  - Swipe only: now, the cleanest screen. As it grows, hidden actions are undiscoverable for new users.
+- **Standards:** STD-springs-gestures-17, STD-springs-gestures-18, STD-springs-gestures-19, STD-springs-gestures-20, STD-springs-gestures-21, STD-springs-gestures-22, STD-springs-gestures-23, STD-springs-gestures-24, STD-springs-gestures-25, STD-springs-gestures-26, STD-springs-gestures-28, STD-springs-gestures-30, STD-springs-gestures-34, STD-springs-gestures-39, STD-accessibility-motion-23, STD-accessibility-motion-24, STD-components-toasts-drawers-77, STD-mobile-touch-18, STD-mobile-touch-19.
+
+### DC-L19-98: Haptics for each moment
+- **Block path:** Foundations > Haptics > Moment map
+- **Questions the designer answers:** On phones, which moments vibrate? How many vibrations per action? Can a vibration ever be the only feedback?
+- **Options:**
+  - **A haptic per moment (house).** A selection tick when a value steps (picker, slider detent, segmented control, tab press); a light impact when something snaps home, a sheet detent catches, a drag commits or a pull crosses its refresh threshold; a medium impact for a heavy landing or a destructive action; a success or error notification for outcomes [S-L19-016] [S-L19-015]. Fire on the causal event, in the same frame as the visual, at most once per action, never on scroll, per frame or on an entrance the user did not cause [S-L19-020] [S-L19-016].
+  - **System haptics only (current Q-motion-09 default `haptics-system`, with a semantic map only for products with frequent confirmations).** Standard controls already play theirs (DC-L04-26). Differs: custom interactions (sheets, swipe rows, pull to refresh) then have none.
+  - **About six semantic events (DC-L04-26, `haptics-semantic`).** Close to the house map; confirms "less is more".
+  - **One app-wide intensity from the `energy` dial (levers).** Differs: the source chooses the call by moment, not by a global intensity.
+- **Visual effect:** Felt, not seen: well-placed ticks make detents and commits feel physical; too many train people to ignore them.
+- **Depends on (upstream):** Q-plat-01 (phones), DC-L19-97.
+- **Affects (downstream):** sheets, pull to refresh, pickers, custom tabs, swipe to delete, form outcomes.
+- **Token encoding:** string tokens with platform mapping in `$extensions` (the DC-L04-26 approach): `haptic.step` = "selection", `haptic.snap` = "impact-light", `haptic.heavy` = "impact-medium", `haptic.success` = "notification-success", `haptic.error` = "notification-error" [names inferred].
+- **Platform notes:** The sources use Expo's calls (`selectionAsync`, `impactAsync(Light | Medium)`, `notificationAsync`); iOS and Android system controls already give haptics; on the web the sources only name the Vibration API in passing, as something a CSS transition must not lag [S-L19-020], and map no moments to it.
+- **Accessibility constraints:** A haptic is never the only feedback; pair it with a visual change that works alone.
+- **Default + heuristic:** The per-moment map for custom interactions and system haptics for standard controls; one haptic per action. Rule of thumb: vibrate on the moment something catches or completes, never while it moves.
+- **Evidence:** [S-L19-015] [S-L19-016] [S-L19-020]; compared with DC-L04-26, DC-L10-14.
+- **Maps to:**
+  - Q-motion-09: new default "OS navigation plus brand micro-motion, and a haptic per moment (selection, light impact, medium impact, success or error), once per action", because custom gestures need their own haptics.
+  - Q-motion-09 option `haptics-semantic`: replaced by the four-moment map.
+  - Q-motion-08: confirms default `silent`; option `rare-events` matches the house rule that sound fires only for success, error, commit and snap, in the same frame as the visual [S-L19-020].
+  - Visual sample: the event list with each moment's call: tab press to selection, sheet detent to light impact, delete to medium impact, save to success.
+- **Impact now / as it grows:**
+  - Per moment: now, five named calls. As it grows, new gestures pick from the same five and stay consistent.
+  - System only: now, nothing to build. As it grows, custom gestures feel dead next to system controls.
+  - Global intensity: now, one setting. As it grows, every haptic is equally strong, so none carries meaning.
+- **Standards:** STD-mobile-touch-62, STD-springs-gestures-59, STD-springs-gestures-60, STD-springs-gestures-61, STD-accessibility-motion-20.
+
+### DC-L19-99: Motion token structure: shared transitions or component recipes
+- **Block path:** Tokens > Motion > Tiers and recipes
+- **Questions the designer answers:** Do all popups share one "enter" transition, or does each component carry its own recipe? Where do springs and gesture numbers live? What does the `energy` dial change?
+- **Options:**
+  - **Shared semantic transitions only (today's engine: `motion.transition.enter`, `.exit`, `.expand`, `.move`, `.feedback`).** Simple, but tooltips, dropdowns and toasts get one duration although their budgets differ (125-200ms, 150-250ms, 400ms `ease`), and sheets share the dialog token instead of 500ms on the drawer curve (conflicts under STD-easing-duration-07 and STD-easing-duration-13).
+  - **Primitive curves plus component recipes (house).** Three named curves as tokens (`--ease-out`, `--ease-in-out`, `--ease-drawer`) [S-L19-025] [S-L19-033] plus a recipe per component: press 160ms at 0.97, tooltip 125ms at 0.97, dropdown 200ms at 0.95, modal 250ms at 0.96, drawer 500ms on the drawer curve, toast 400ms `ease` [S-L19-017]; "start from the recipe, then adapt" [S-L19-017]. animations.dev keeps its named curves as `--ease-*` variables [S-L19-007].
+  - **Dial-driven values (levers `energy`).** One dial swaps curves and scales durations 0.8-1.2. Differs: recipes are fixed and the budgets are locked.
+  - **3-5 durations and 3-4 curves, springs in `$extensions`, a reduced-motion mode (DC-L07-14).** Confirms springs in `$extensions` and a reduced mode; differs by adding a component recipe tier.
+- **Visual effect:** Recipes keep each component in its own budget and personality; a shared token makes a toast feel like a menu and a sheet like a dialog.
+- **Depends on (upstream):** DC-L19-85, DC-L19-86, DC-L19-88, DC-L19-89; Q-token-03 (which values get tokens), Q-tool-01.
+- **Affects (downstream):** every export (CSS, Tailwind, Swift, Compose, Figma), the DESIGN.md Motion section, engine `validate` and `review`, `motion.html` presets.
+- **Token encoding:** primitives `motion.easing.out` (`$type: cubicBezier`) and `motion.duration.*` (`$type: duration`); component recipes such as `tooltip.motion.enter` = `$type: transition` {duration: "{motion.duration.tooltip}", delay: 0ms, timingFunction: "{motion.easing.out}"} and `tooltip.motion.from-scale` = `$type: number` 0.97; springs as `$extensions: {"opendesigner.spring": {"dampingRatio": 0.8, "response": 0.3}}`; a `reduced` mode on the same collection [structure inferred; values from S-L19-017 and S-L19-020].
+- **Platform notes:** React Native exports the same curves as `EASE_OUT`, `EASE_IN_OUT`, `EASE_SHEET` constants [S-L19-016]; Figma gets timing and easing variables (DC-L07-14).
+- **Accessibility constraints:** The reduced mode lives on the same collection, so every recipe has its reduced twin.
+- **Default + heuristic:** Primitives (three curves plus `ease` and `linear`) and component recipes for press, tooltip, dropdown or popover, modal with backdrop, drawer or sheet, toast, accordion and stagger; springs and gesture numbers in `$extensions`; the `energy` dial changes personality and scope (DC-L19-82), never recipe values. Rule of thumb: if two components have different budgets, they need different recipes.
+- **Evidence:** [S-L19-007] [S-L19-016] [S-L19-017] [S-L19-020] [S-L19-025] [S-L19-033]; compared with DC-L07-14, DC-L04-28, DC-L04-23.
+- **Maps to:**
+  - Q-motion-02 and Q-motion-03: new default text "tokens are three curves plus per-component recipes, not one shared enter transition".
+  - Q-token-03: new heuristic "whenever motion gets tokens (`standard` and `extended`), it gets component recipe tokens, not only shared transitions, because budgets differ per component" [inferred]. The `minimal` option (color, type, space) gives motion no tokens at all, and this card does not override that choice.
+  - Visual sample: the component sheet with each recipe replayable next to its token.
+- **Impact now / as it grows:**
+  - Shared transitions: now, five tokens. As it grows, every new component inherits the wrong budget and teams fork local values.
+  - Recipes: now, about eight recipe groups. As it grows, new components start from the nearest recipe and stay in budget.
+  - Dial-driven: now, one control. As it grows, changing the dial silently changes every recipe.
+- **Standards:** STD-easing-duration-02, STD-easing-duration-07, STD-easing-duration-13, STD-easing-duration-17, STD-enter-exit-origin-08, STD-enter-exit-origin-09, STD-enter-exit-origin-11, STD-enter-exit-origin-41, STD-components-toasts-drawers-07, STD-components-toasts-drawers-40, STD-mobile-touch-05.
+
+## Proposed questionnaire changes
+
+| Q-id | Change | Evidence |
+|---|---|---|
+| Q-motion-11 (new) | New question, zoom 2 (first in the stage's zoom-2 set): which things are used all day (they do not move); inventory pre-sorted into four frequency tiers; answers move components between tiers but cannot unlock motion the standards forbid | DC-L19-81; S-L19-012, S-L19-016, S-L19-018, S-L19-024 |
+| Q-motion-01 | Options become `crisp`, `elegant`, `playful`, `minimal`; `two-mode` retired; default `crisp` (`playful` only for Q-aud-02 `play`, never above `crisp` for `high-trust`); default text "ease-out to enter and exit"; use/avoid "no motion on all-day or keyboard actions, expressive only at rare moments" | DC-L19-81, DC-L19-82, DC-L19-85; S-L19-023, S-L19-024, S-L19-035, S-L19-047 |
+| Q-motion-12 (new) | New question, zoom 2, show if Q-brand-04 is `hero-moments` or `expressive`: which rare moments get celebration (first run, success, empty screens, 404) | DC-L19-83; S-L19-012, S-L19-059, S-L19-063, S-L19-084 |
+| Q-brand-04 | `hero-moments` reworded from "opening a page or the primary action" to "rare moments: first run, success, empty states" | DC-L19-83; S-L19-012, S-L19-024 |
+| Q-motion-13 (new) | New question, zoom 2, show if Q-scope-01 includes `marketing`: how lively the marketing site is; default `few-moving-parts` | DC-L19-84; S-L19-040, S-L19-066, S-L19-072, S-L19-084 |
+| Q-scope-01 | `marketing` option note: longer, explanatory and scroll-triggered motion lives here | DC-L19-84; S-L19-012, S-L19-017 |
+| Q-motion-03 | New default: curves by job (0.23, 1, 0.32, 1 / 0.77, 0, 0.175, 1 / ease / linear / drawer 0.32, 0.72, 0, 1); no ease-in exit | DC-L19-85; S-L19-003, S-L19-005, S-L19-018, S-L19-033 |
+| Q-motion-02 | New default option `per-element` duration budget; `extra 700` removed; exits about 20% faster; "never blocks input"; tokens as component recipes | DC-L19-86, DC-L19-87, DC-L19-99; S-L19-003, S-L19-015, S-L19-017, S-L19-018 |
+| Q-motion-04 | Show-if becomes touch or any drag; new default damping ratio and response with four presets plus clamped dismiss; `apple-bounce` values 0 and 0.2 (range 0.1-0.3) | DC-L19-87, DC-L19-88; S-L19-016, S-L19-020, S-L19-033 |
+| Q-motion-06 | `fade` becomes fade plus scale from the trigger; new default: platform screens, no tab animation, container transform for occasional drill-ins, shared axis x for onboarding, no fade-through for tabs; `stagger` becomes 30-80ms on occasional lists only | DC-L19-89, DC-L19-90, DC-L19-91; S-L19-003, S-L19-015, S-L19-016, S-L19-017, S-L19-035 |
+| Q-motion-07 | Confirms `replace`, adds 200ms `ease` cross-fade shipped with every animation; `remove` reworded to keep fades or retired | DC-L19-92; S-L19-016, S-L19-018, S-L19-020 |
+| Q-motion-10 | Confirms default | DC-L19-92; S-L19-020 |
+| Q-state-04 | Default adds a 0.97 press scale over 100-160ms ease-out beside the tint; use/avoid adds hover motion only on fine pointers, color or subtle reveal in product UI | DC-L19-93, DC-L19-94; S-L19-003, S-L19-017, S-L19-028, S-L19-069 |
+| Q-state-02 | Heuristic: press feedback on press-down at every level | DC-L19-93; S-L19-028 |
+| Q-state-08 | Heuristic: fast linear spinners, shimmer with reduced motion, short looping AI loaders | DC-L19-95; S-L19-003, S-L19-055 |
+| Q-form-04 | Option note: in-place confirmation motion when the result is not visible | DC-L19-95; S-L19-052 |
+| Q-plat-15 (new) | Follow-up to Q-plat-02: the slowest phone and computer that must feel smooth (numbered after the platforms cards' proposed Q-plat-11 to Q-plat-14) | DC-L19-96; S-L19-016, S-L19-028 |
+| Q-motion-14 (new) | New question, zoom 3, show if touch: which things swipe or drag and which button does the same job | DC-L19-97; S-L19-006, S-L19-020, S-L19-035 |
+| Q-motion-09 | New default: a haptic per moment, once per action; `haptics-semantic` replaced by the four-moment map; keeps `os-nav-brand-micro`, reworded so springs apply only where a finger drives the motion | DC-L19-90, DC-L19-98; S-L19-015, S-L19-016 |
+| Q-motion-08 | Confirms default `silent`; `rare-events` matches the house sound rule | DC-L19-98; S-L19-020 |
+| Q-token-03 | Heuristic: whenever motion gets tokens (`standard`, `extended`), it gets component recipe tokens, not only shared transitions | DC-L19-99; S-L19-017 [inferred] |
+
+## Open questions / gaps
+
+- The first tooltip's delay has only one number in the sources (1s, a single video [S-L19-079]); the house fixes only that neighbouring tooltips open instantly.
+- No source gives a spinner's rotation period; "fast" is the only guidance [S-L19-003].
+- In-app reduced-motion switches (Q-aud-04) and per-device motion budgets (DC-L14-08, TV, watch, car, headset) are not covered by any L19 source.
+- Swipe-to-confirm for irreversible actions rests on one video [S-L19-035]; it may deserve a place beside hold-to-confirm, but only after another source agrees.
+- Whether a sampled CSS `linear()` spring is ever good enough on the web is open: it is cheaper than a JS library but cannot take a release velocity [inferred].
+- STD-enter-exit-origin-39 records a tension between mirrored easing on reversible transitions and the ban on ease-in; these cards follow the ease-out rule.
+- Whether the 3% press scale should be dropped under reduced motion is my reading of STD-accessibility-motion-02, not something a source says about press feedback directly.
+- Two practitioner videos animate keyboard-initiated actions (the macOS quick-save panel [S-L19-067], the shortcut hint animation [S-L19-079]); the house forbids it (STD-when-to-animate-06), and only their state-change feedback is used here.
+
+## Confidence
+
+- Confirmed against source text: Kole Jain's statements used here (almost never a linear ease and the three tones; swipe-to-confirm for high-impact actions and the button fallback; subtle and classy; dashboards tame and snappy; buttons almost always get a small animation and scrolljacking sparingly; bottom means temporary and left means progress; the 500ms, 636 and 24 name-tag spring, the one-second tooltip delay and the shimmer pause button; the 550 and 40 spinner spring and the menu a couple of pixels lower; the 35% swipe-back offset; short, looping AI loaders; the state-change minimum for shortcuts; the copy chip; the robotic fade and the 404 advice; the mega menu; conversion versus awareness sites; repeated motion themes; the 1,000ms and 800ms load timings; the 1.3s GSAP move and 0.2 stagger; marquee usability; simple, tasteful hovers; the grayed-out pressed button; the hover arrow). Emil Kowalski's Raycast example, the Linear Product Intelligence animation, the crisp-dashboard and elegant-Sonner personality lines, the frequency table, the fast spinner and the 180ms against 400ms select were checked in the raw text; all other house values come from `synthesis/standards.json`, which cites its sources.
+- Inferred and marked: damping ratios computed from Kole's Figma spring numbers, token names and groupings, the proposed question ids, the hover duration of 150ms, the default slowest device, and the reconciliations flagged in each Default.
+- Adversarial check, 2026-09-27: every cited S-L19 source was re-read in its raw text, and every STD, DC and Q id was checked against `synthesis/standards.json`, `research/`, `benchmarks/` and `questions.json`. No card was withdrawn. Corrections: a proposed-id clash (Q-plat-11, now Q-plat-15); keyboard-triggered motion in two videos flagged against STD-when-to-animate-06; a bounce claim about the name-tag spring aligned with STD-springs-gestures-05; the Xcode Simulator no longer counted as proof (STD-process-review-taste-33); `expo.inOut` reclassified as exit and entrance easing; the AI research trail moved out of marketing staggers; the Q-token-03 and Q-motion-09 proposals narrowed so they do not override an owner's choice or a standard; and several attributions tightened (GOV.UK, the Train Your Judgement exercise, the shimmer's pause button, "slightly" zooming photos, "from the left").

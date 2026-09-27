@@ -1,0 +1,560 @@
+# Decision Cards: process (lane L19)
+
+Area `process`: OpenDesigner stages 00 (reference intake), 03 (brand personality and principles), 25 (team, governance and change), 26 (output, documentation and AI channels) and 27 (builder preferences). Topics: Design taste and judgement, Design process, Presenting designs, Portfolio and case studies, AI-assisted design, Figma and design tools, Prototyping, Freelancing and pricing work, Design resources. Cards DC-L19-161 to DC-L19-177. Written 2026-09-24.
+
+Built from every verified analysis tagged with these topics in `learn/analysis/` (74 sources), checked against the raw text where a card relies on a detail, and compared with `questions.json`, the stage files, `synthesis/standards.json` and the existing cards they cite (DC-L06-02, DC-L06-15, DC-L07-21, DC-L11-03, DC-L11-05, DC-L11-12, DC-L11-17, DC-L11-18, DC-L11-20, DC-L11-22, DC-L11-23, DC-L11-24, DC-L14-14, DC-L15-11, DC-L16-04, DC-L16-05, DC-L16-12, DC-L17-03 to DC-L17-13, DC-L18-09) and the sibling L19 cards in this folder.
+
+How to read these cards:
+- Emil Kowalski's articles and skills are non-negotiable sources; their rules are already house standards (STD-...), which are locked. Where an existing card or question disagrees with a standard, the card says so and the standard wins.
+- The videos (Kole Jain, Steve Schoger) are reference sources: trusted practitioner opinion. A number or an "always/never" from one video is marked as one video's view unless another source or existing research agrees.
+- `[inferred]` marks a connection made while writing the card, not something a source says. In "Impact now / as it grows", the growth lines are `[inferred]` unless a source is cited.
+- Where a card differs from an existing card, it says so ("differs from DC-..."). It does not quietly override it.
+- Several target questions are marked **Planned** in the stage files (Q-dist-01, Q-dist-02, Q-dist-03, Q-pref-01, Q-pref-02): the interview skips them today. The changes below apply when they are built.
+- The source key at the end links each S-id to its wiki page.
+
+---
+
+### DC-L19-161: Which references to learn from, and what to take from each
+- **Block path:** Builder > Input > Reference intake (Stage 00; also Stage 03 product likes)
+- **Questions the designer answers:** Which examples should the builder learn from: products you use, showcase shots, or competitors? What exactly do you like about each one? Should we borrow one whole page, or one section from each of several sites?
+- **Options:**
+  - **Screenshots of shipped products:** a screenshot of a real product such as Linear, or a realistic site from SiteInspire, gave an AI the look the author was after, while a busy Dribbble dashboard used with the same prompt lost its small details [S-L19-086]. Studying the apps you use, and asking why an interaction feels good, is how taste is trained [S-L19-008]. One review of 50 software landing pages counted what recurs (41 of 50 showed customer logos) before borrowing [S-L19-066].
+  - **Showcase shots (Dribbble-style concepts):** they look great, but busy shots lose their small details when an AI reads them [S-L19-086]. They often favour looks over usability [S-L19-049] [S-L19-075], fall apart once each element is checked for meaning [S-L19-068], and their busy layouts distract people on a real site [S-L19-040].
+  - **A curated list of tastemakers:** find people respected in the field, then the people they admire, and study their designs, apps and books [S-L19-008].
+  - **An annotated swipe file:** collect about 20 hero and feature sections and annotate a couple for spacing, hierarchy and grouping; take a page apart into zones (text block, navbar, stats, image) before designing [S-L19-043]. One designer builds a mood board before opening Figma so he starts with a full idea, not a sliver of one [S-L19-040].
+  - **One section from each site ("Frankensteining"):** choose a reference for each section to work out the message and page flow, keep only the wireframe, and discard the references' visuals [S-L19-062]. Two redesigns borrow and adapt layouts from competitors and sibling products the same way [S-L19-082] [S-L19-065].
+  - **Competitors, flagged only:** today's Q-brand-02 option `competitors` and DC-L17-03's flag-only path.
+- **Visual effect:** Shipped-product references give screens that look buildable and complete. Showcase references give dramatic screens that turn out thin or illogical once real content and states arrive, with small details dropped [S-L19-086] [S-L19-068]. Section-by-section references give a page flow fitted to the message, wearing the person's own identity [S-L19-062].
+- **Depends on (upstream):** the entry path (Q-scope-05), the identity firewall (DC-L17-03).
+- **Affects (downstream):** values pre-filled by `engine.py intake`, section and layout options (DC-L19-50, DC-L19-51), direction (Q-dir-01), the decision log's `reference` provenance.
+- **Token encoding:** none (process decision). Pre-filled values keep DC-L17-03's provenance (`$extensions.opendesigner.source = {reference, method, confidence}`), plus a `why` string holding what the person said they like about the reference [inferred].
+- **Platform notes:** web references expose computed values; app references arrive as screenshots, so their values are estimates (DC-L17-03). The sources name Mobbin as a place to collect real app and site screens, but always inside a sponsor segment [S-L19-043] [S-L19-054].
+- **Accessibility constraints:** every value taken from a reference is re-checked in its new context (DC-L17-03). In one video, a Dribbble tab bar had inactive icons too faint to see and two background colors nobody could tell apart [S-L19-075], so showcase colors are never copied unchecked.
+- **Default + heuristic:** Default: ask for products the person uses first. Accept a showcase shot, but say it is read for mood only, not for layout or values [S-L19-086] [S-L19-068]. Heuristic: for every reference, ask one follow-up, "What do you like about it?", and record the answer as its reason, because taste means naming why something feels right [S-L19-008] [S-L19-011]. Take structure section by section, never identity (confirms DC-L17-03 and Q-ref-01's use/avoid line). Confirms DC-L18-09 (1-3 references liked and one disliked). The claim that an AI cannot see a busy shot's details rests on one side-by-side test in one model [S-L19-086]; three other videos agree that showcase shots trade usability for looks [S-L19-049] [S-L19-068] [S-L19-075], so the warning holds even if the mechanism is one person's observation.
+- **Evidence:** [S-L19-008] [S-L19-011] [S-L19-040] [S-L19-043] [S-L19-049] [S-L19-054] [S-L19-062] [S-L19-065] [S-L19-066] [S-L19-068] [S-L19-075] [S-L19-082] [S-L19-086]. Compared against DC-L17-03, DC-L18-09 and DC-L06-02.
+- **Maps to:**
+  - Q-ref-01: new option `product-screens` "Screenshots of products you use", split from `screenshot`, with the note that showcase shots are read for mood only [S-L19-086]. New option `per-section` "A different site for each section (flow only)" [S-L19-062]. New heuristic: one follow-up per reference, "What do you like about it?", saved as the reason [S-L19-008].
+  - Q-brand-02: new heuristic: after the person names products, ask why for each, and offer the answers as tie-breaker candidates for Q-brand-07 [inferred].
+  - Visual sample: the same prompt built from a busy showcase shot and from a shipped-product screenshot [S-L19-086].
+- **Impact now / as it grows:**
+  - *Shipped products:* now, realistic starting values and fewer invented details. As it grows, the product follows conventions people already know, which are easier to extend [S-L19-054].
+  - *Showcase shots:* now, a striking mood. As it grows, screens break as real content, states and edge cases arrive [S-L19-068].
+  - *Tastemaker list:* now, a slower start. As it grows, the team shares a quality bar it can point to.
+  - *Swipe file:* now, about 20 sections of homework. As it grows, a ready library for every new page.
+  - *One section from each site:* now, a page flow fitted to the message. As it grows, pages only feel like one product if identity is defined separately from layout (DC-L19-162) [S-L19-062].
+- **Standards:** STD-process-review-taste-51, STD-process-review-taste-52
+
+### DC-L19-162: Naming the feeling: one target emotion, shown as one layout in different flavors
+- **Block path:** Foundations > Brand > Personality > Target emotion (Stage 03, with the zoom 0 "how should it feel?" question)
+- **Questions the designer answers:** Which single feeling should people come away with: calm, confident, excited, or something else? Looking at the same screen in two or three styles, which one is yours?
+- **Options:**
+  - **One named emotion that every decision reinforces:** decide the emotion people should feel (calm, confident or excited) and reinforce it in every decision, instead of adding delight on top [S-L19-020].
+  - **Flavors of one layout:** the same layout restyled warm and friendly (warm background, colorful visuals, rounded corners, large bubbly buttons) or modern and premium (much less rounded corners, less colorful and more premium imagery, maybe noise in the background); the product and layout stay the same and only the feel changes [S-L19-043].
+  - **Identities swapped into one wireframe:** when layout and visual identity are defined separately and carefully, different identities can be dropped into the same layout for very different feelings [S-L19-062].
+  - **Feeling first, not a formula:** choose each part of the identity for the feeling it gives and whether it makes sense for the brand, not from a formula; the redesign starts from one moody image [S-L19-062]. The mood image as a color input is already in DC-L19-11.
+  - **Sliders only:** today's Q-brand-01 (seven sliders, filled from 2-3 feel words at zoom 0). On its own this falls short of STD-visual-details-47, a locked house standard that asks for the emotion to be decided; it is listed as today's behavior, not as an allowed end state.
+- **Visual effect:** A named emotion makes choices consistent: a calm product gets fewer and softer moves, an excited one more color and motion [inferred from STD-easing-duration-13, which ties motion to personality]. Friendly versus premium flavors look as described above [S-L19-043]. A site built by formula can be clean and well animated and still feel soulless [S-L19-062].
+- **Depends on (upstream):** what the screens are for (Q-scope-06), who uses them (Q-aud-01), the product goal (DC-L19-177).
+- **Affects (downstream):** the lever matrix (DC-L06-02) and through it roundness (DC-L19-63), colorfulness, imagery style (DC-L19-75), motion personality (DC-L19-82) and voice; the "one thing to remember" line in RATIONALE.md.
+- **Token encoding:** none directly. Record `profile.emotion` (for example `"calm"`) beside the slider values; tokens change through the sliders it pre-positions [inferred].
+- **Platform notes:** the sources give none.
+- **Accessibility constraints:** no flavor may drop below the contrast and target floors. Low-color "premium" imagery and background noise still need readable text (the redesign adds noise partly because it helps text contrast [S-L19-062]). An "excited" product still ships reduced motion with every animation.
+- **Default + heuristic:** Default: at zoom 0, pick one lead emotion from the person's feel words and say it back in one line ("I read that as calm"), then record it. At zoom 2, show the person's own sample screen in two or three flavors of the same layout, one at a time and full size (as DC-L19-34 and DC-L19-56 already require for type and layout). Heuristic: when two sliders pull a value in opposite directions, the lead emotion breaks the tie [inferred]. Treat the slider-to-token matrix as a starting point and judge the result for feeling, because a formula alone can produce a soulless result [S-L19-062]. This extends DC-L19-63, which uses the same friendly-versus-premium example for corners only. "A site with no images feels robotic" is one video's opinion [S-L19-062].
+- **Evidence:** [S-L19-020] [S-L19-043] [S-L19-062] [S-L19-063] (the imagery vibe scale, owned by DC-L19-75). Compared against DC-L06-02, DC-L19-63, DC-L19-75 and DC-L19-82.
+- **Maps to:**
+  - Q-brand-01: new heuristic: one lead emotion, named back to the person and recorded. Visual sample: one layout in a friendly and a premium flavor [S-L19-043]. New "Show" wording: the 2-3 style tiles use the same layout, so only the style differs [inferred].
+  - Q-brand-07: new heuristic: the lead emotion becomes the goal of the first principle [inferred].
+- **Impact now / as it grows:**
+  - *Named emotion:* now, one word steers every default. As it grows, each new component and page gets a clear test: does this feel calm?
+  - *Flavors of one layout:* now, people see that style, not layout, changes the feel. As it grows, a second brand or theme becomes a flavor swap, not a redesign.
+  - *Identity swapped into one wireframe:* now, it needs layout and identity kept apart. As it grows, rebrands and sub-brands reuse the same wireframes [S-L19-062].
+  - *Sliders only:* now, fast. As it grows, conflicting settings get averaged unless something breaks the tie.
+- **Standards:** STD-visual-details-47, STD-easing-duration-13, STD-accessibility-motion-01
+
+### DC-L19-163: How design principles are worded and used
+- **Block path:** Foundations > Brand > Principles (Stage 03)
+- **Questions the designer answers:** Which principles break ties, and which one wins? Should the builder also reason with a shared named set, such as Apple's eight? Does every set carry a rule about familiar patterns and about what not to build?
+- **Options:**
+  - **Apple's eight principles as a shared vocabulary:** purpose, agency, responsibility, familiarity, flexibility, simplicity, craft and delight, named when making and defending decisions; delight comes from getting the other seven right [S-L19-020]. This is already a locked house standard (STD-visual-details-48), so the builder always does it; it is not something the person opts into.
+  - **Product-specific principles:** today's `generate`, IBM checklists, Fluent pairs, GOV.UK imperatives and Carbon value words.
+  - **A familiarity rule in every set:** break a familiar pattern only when you can prove the new one is better, and test it [S-L19-020]. People expect conventional layouts after decades of websites; conventional layouts are easier to extend and make responsive, and uniqueness comes from micro-interactions and features [S-L19-054].
+  - **A purpose rule in every set:** decide what not to build, because every feature spends the user's time, attention and trust [S-L19-020]; decide whether an idea deserves building even when AI makes building cheap [S-L19-009].
+  - **"A few decisions we stick to":** a design system is decisions you can stick to, not hundreds of components [S-L19-044]; it is a shared language, not a way to make everything look the same [S-L19-054].
+- **Visual effect:** none directly; principles decide how conflicts resolve. A familiarity rule keeps layouts conventional and moves distinctiveness into details [S-L19-054]. A purpose rule keeps screens short.
+- **Depends on (upstream):** the sliders (Q-brand-01), the lead emotion (DC-L19-162), the product goal (DC-L19-177).
+- **Affects (downstream):** tie-breaking in the lever matrix (DC-L06-15), coach messages that name a principle (Q-pref-01, DC-L15-11), DESIGN.md's principles section, RATIONALE.md.
+- **Token encoding:** none (content decision). State holds `principles: [{text, outranks, serves}]`, where `serves` names one of the eight [inferred].
+- **Platform notes:** familiarity differs by platform, because native conventions differ (DC-L06-14) [inferred].
+- **Accessibility constraints:** one principle keeps accessibility non-negotiable (today's default, DC-L06-15). Apple's "responsibility" adds anticipating misuse and harm, especially in AI features (STD-visual-details-45).
+- **Default + heuristic:** Keep `generate` as the default (3-5 principles, each naming what it outranks, one making accessibility non-negotiable). Add two standing lines to every generated set: a familiarity rule and a purpose rule. Use Apple's eight as the vocabulary the builder reasons with when it explains a recommendation, not as the product's own principles. This differs from DC-L11-05 in kind, not in substance: DC-L11-05 warns against generic words every product could claim ("simple", "beautiful") as the product's principles; the eight are a shared reasoning vocabulary, so they sit beside the product's specific set rather than replacing it [inferred].
+- **Evidence:** [S-L19-009] [S-L19-020] [S-L19-044] [S-L19-054]. Compared against DC-L06-15 and DC-L11-05.
+- **Maps to:**
+  - Q-brand-07: no new option for Apple's eight, because STD-visual-details-48 already makes them the builder's reasoning vocabulary in every project (an opt-in option would suggest they can be switched off). New heuristic: every generated set includes a familiarity rule (STD-visual-details-37) and a purpose rule (STD-when-to-animate-22) [S-L19-020]. New "Show" detail: each principle's do/don't pair names which of the eight it serves [inferred].
+- **Impact now / as it grows:**
+  - *Apple's eight as vocabulary:* now, recommendations are explained in the same words every time. As it grows, new teammates learn one vocabulary for design reviews.
+  - *Product-specific only (without the eight, which STD-visual-details-48 rules out):* now, a sharper identity. As it grows, without shared words, reviews drift into taste arguments.
+  - *Familiarity rule:* now, conventional layouts. As it grows, the product stays easy to extend and make responsive [S-L19-054].
+  - *Purpose rule:* now, fewer features and sections. As it grows, the system stays small enough to hold.
+- **Standards:** STD-visual-details-48, STD-visual-details-37, STD-visual-details-45, STD-when-to-animate-22
+
+### DC-L19-164: How much system this team needs
+- **Block path:** Delivery > Governance > System size (Stage 25, and the "stop here or zoom in" offer)
+- **Questions the designer answers:** Should the system be light and easy to change or scrap, or deep and fully defined? At which zoom level should we stop?
+- **Options:**
+  - **Light and easy to scrap:** a lean startup might need something lightweight and flexible, quick to update and easy to scrap [S-L19-054].
+  - **A few decisions held everywhere:** it is not about having hundreds of components; keep button spacing, type scale and color scheme the same so new screens, such as a new modal, feel familiar and are quick to build [S-L19-044].
+  - **Strict core, loose edges:** today's default (DC-L11-03).
+  - **Deep and fully defined:** Material Design is massive and deeply defined because its use cases span dozens of products and billions of users [S-L19-054].
+- **Visual effect:** A light system has few tokens and components and changes fast; screens stay consistent as long as the few decisions are held [S-L19-044]. A deep system defines every edge case and is slower to change [inferred].
+- **Depends on (upstream):** team model (DC-L11-09), how many products and surfaces (Q-scope-01), platforms (Q-plat-01).
+- **Affects (downstream):** which zoom level the builder recommends stopping at, the size of the component inventory (stage 20), whether stage 25's detailed questions are asked, how deep the docs go.
+- **Token encoding:** none (process decision). State holds `profile.systemSize = "light" | "core" | "deep"` [inferred].
+- **Platform notes:** more platforms push toward deeper definition; breadth is the reason the source gives for Material's size [S-L19-054].
+- **Accessibility constraints:** the floors (WCAG 2.2 AA contrast, 24 px targets, visible focus, reduced motion) apply at every size.
+- **Default + heuristic:** Default: for one person or a small team building one product, recommend stopping at zoom 1 plus the areas they care about, and skip stage 25's zoom 3 questions [inferred: the sources say to size the system to the team, not which zoom level to stop at]. Say why in plain words: a system is a few decisions held everywhere, not a component count [S-L19-044] [S-L19-054]. Recommend deep definition only when several products or teams share the system [inferred from S-L19-054's Material example]. This confirms DC-L11-03's strict core for teams and adds size as its own dial, separate from strictness [inferred]. Invest in excellent defaults before adding options (STD-visual-details-51); that this is what lets a light system look finished is [inferred].
+- **Evidence:** [S-L19-044] [S-L19-054] [S-L19-023] (good defaults matter more than options; most users never customize). Compared against DC-L11-03 and DC-L11-21.
+- **Maps to:**
+  - Q-gov-01: no new option. A `lightweight` option would overlap the existing `loose` ("a framework with room to experiment") and would mix size into a strictness question, which this card treats as a separate dial. Instead, the `loose` option's wording gains the lean-startup case: "light and easy to change or scrap" [S-L19-054]. Confirms the current default for teams (`strict`: strict core, loose edges).
+  - Zoom offer (`zoom.md`, "stop here, or zoom into X"): new heuristic: recommend a stopping level by team size and number of products [inferred from S-L19-054, which sizes the system to the team].
+- **Impact now / as it grows:**
+  - *Light:* now, few files and fast answers. As it grows, a second product or team forces a move to a strict core.
+  - *A few decisions held:* now, consistency with little work. As it grows, new screens stay familiar and quick to assemble [S-L19-044].
+  - *Strict core:* now, more setup. As it grows, it holds across teams (DC-L11-03).
+  - *Deep:* now, slow to set up and change. As it grows, it fits dozens of products [S-L19-054].
+- **Standards:** STD-visual-details-51
+
+### DC-L19-165: Breaking a rule on purpose: how exceptions are recorded and reviewed
+- **Block path:** Delivery > Governance > Exceptions (Stage 25; `engine.py review`)
+- **Questions the designer answers:** When a screen needs to break a system rule, where is that written down and why? Should the review keep flagging a deliberate exception? When does a repeated exception become a change to the system?
+- **Options:**
+  - **Silent exception:** today an `od-ignore` comment on a line keeps a raw value, with no reason recorded.
+  - **Exception with a reason:** break a system rule only on purpose, never by accident [S-L19-054]. In motion audits, a tradeoff that a design doc or code comment documents as deliberate is noted, not reported again [S-L19-027] (STD-process-review-taste-22); extending that from motion to every system rule is [inferred].
+  - **Exception with proof:** a familiar pattern is broken only with proof that the new one is better, and a test [S-L19-020].
+  - **Snowflake path:** one-off needs go to the product backlog and system additions to the system backlog (Brad Frost's flow in DC-L11-12).
+  - **House standards:** changed only by the owner, through `engine.py standard override <id> --why` (exists today).
+- **Visual effect:** none directly. With reasons, deviations stay rare and explainable; silent ignores pile up as drift nobody can explain [inferred].
+- **Depends on (upstream):** strictness (Q-gov-01), the contribution model (Q-gov-03).
+- **Affects (downstream):** `engine.py review` output, `decisions.md`, an exceptions list in DESIGN.md, lint waivers (DC-L17-07's `waived_by` and `reason`).
+- **Token encoding:** none. A code comment `od-ignore: <reason>` and a decisions.md entry `{scope, rule, reason, owner}` [inferred].
+- **Platform notes:** the sources give none.
+- **Accessibility constraints:** the floors cannot be excepted: an ignore comment on a contrast or target failure must still be reported, as DC-L17-07 already says accessibility rules are never waivable. Today `engine.py review` skips every line that carries `od-ignore`, so this needs an engine change [inferred].
+- **Default + heuristic:** Default: every exception carries a one-line reason. The review lists reasoned exceptions under "kept on purpose" and does not count them as findings; an ignore with no reason is itself a finding. Heuristic: when the same exception appears three times, it is a missing token or a rule to change, not an exception [inferred]. Confirms DC-L11-12 (snowflake path and decision records) and DC-L17-07 (waivers need reasons).
+- **Evidence:** [S-L19-020] [S-L19-027] [S-L19-054]. Compared against DC-L11-12 and DC-L17-07.
+- **Maps to:**
+  - Q-gov-03: new heuristic: an exception needs a reason, and the review notes a reasoned exception instead of flagging it again [S-L19-027] [S-L19-054].
+  - `engine.py review` (no Q-id): `od-ignore` takes an optional reason; reasoned exceptions print in their own short list; bare ignores count as findings [inferred].
+- **Impact now / as it grows:**
+  - *Silent:* now, the fastest. As it grows, drift that nobody can explain.
+  - *With a reason:* now, one line per exception. As it grows, repeated reasons show where the system needs a new token or rule.
+  - *With proof:* now, a test for each broken convention. As it grows, fewer confusing one-offs [S-L19-020].
+  - *Snowflake path:* now, it needs a backlog. As it grows, it scales to many teams (DC-L11-12).
+- **Standards:** STD-process-review-taste-22, STD-visual-details-37
+
+### DC-L19-166: How you will know the system helped
+- **Block path:** Delivery > Governance > Success measures (Stage 25)
+- **Questions the designer answers:** Which result should get better: sign-ups, sales, how fast people find things, or how consistently the team builds? How will you compare before and after? Are small tests proof?
+- **Options:**
+  - **Product results before and after:** compare the site's analytics before and after the new design ships, keeping admin or view-only access to do so [S-L19-038].
+  - **Small tests with people:** have a couple of people go through lo-fi wireframes, watch whether things are intuitive, tweak and test again [S-L19-083]; test with real people in the real context of use [S-L19-020]. But pre-launch tests often have too few people to prove impact [S-L19-038].
+  - **Findability:** judge a screen by how fast someone who arrives with one question can find the answer [S-L19-080]; for a page, ask whether someone scrolling for 5 seconds would understand the idea [S-L19-084].
+  - **Adoption and satisfaction:** today's default (DC-L11-20): design adoption, code adoption and a quarterly survey.
+  - **Build speed through consistency:** new screens quick to assemble and familiar to use [S-L19-044] (as a measure, [inferred]).
+- **Visual effect:** none (process decision).
+- **Depends on (upstream):** the product goal (DC-L19-177), what the screens are for (Q-scope-06).
+- **Affects (downstream):** the metrics mock in Q-gov-05's "Show", RATIONALE.md's opening, later extend sessions.
+- **Token encoding:** none (process decision).
+- **Platform notes:** the sources give none.
+- **Accessibility constraints:** include people who use assistive technology in any test (DC-L14-14) [inferred].
+- **Default + heuristic:** Default for one person or a small team: one product result they already track (sign-ups, sales or a key task), compared before and after, plus a findability check on the main screen. Add adoption measures (DC-L11-20) once more than one team uses the system. Heuristic: a small pre-launch test finds problems; it does not prove impact [S-L19-038]. The before-and-after advice comes from one freelancer's video [S-L19-038]; it agrees with DC-L11-20 that success needs measuring, but it targets product outcomes rather than system adoption.
+- **Evidence:** [S-L19-020] [S-L19-038] [S-L19-044] [S-L19-080] [S-L19-083] [S-L19-084]. Compared against DC-L11-20 and DC-L14-14.
+- **Maps to:**
+  - Q-gov-05: new option `outcomes` "Product results before and after: sign-ups, sales, or time to find one thing" [S-L19-038] [S-L19-080]. New heuristic: treat small tests as problem finders, not proof [S-L19-038].
+- **Impact now / as it grows:**
+  - *Before and after results:* now, needs access to analytics. As it grows, the system's value shows in numbers leadership already reads.
+  - *Small tests:* now, cheap and fast. As it grows, they keep finding problems but never settle arguments [S-L19-038].
+  - *Findability:* now, one check per key screen. As it grows, it catches screens that get denser without getting clearer.
+  - *Adoption:* now, needs scanners and analytics. As it grows, the right measure once many teams share the system (DC-L11-20).
+- **Standards:** STD-process-review-taste-34
+
+### DC-L19-167: What the builder's checks cannot judge
+- **Block path:** Delivery > Quality > Checks by hand (Stage 25; the end of `engine.py review`)
+- **Questions the designer answers:** Which checks must a person do by hand? On which devices? When: right away, or the next day?
+- **Options:**
+  - **Code checks only:** `engine.py validate` and `review` catch raw values, broken standards and contrast. For motion and gestures this falls short of the locked standards STD-process-review-taste-29 to -33; it is listed as today's behavior.
+  - **Say what code cannot settle:** a crossfade or a spring's bounce [S-L19-018], gestures and haptic timing [S-L19-016] depend on feel; say so and name the check instead of guessing [S-L19-024], and never call a device-only fix verified [S-L19-016].
+  - **Slow motion and frame by frame:** play motion at 2-5 times its duration or slow it in the DevTools animation inspector [S-L19-023]; record it and play it back frame by frame [S-L19-001].
+  - **A fresh look the next day:** review again the next day [S-L19-023]; one designer did, and then made bigger changes, switching the app to dark mode [S-L19-078].
+  - **Use it the way people will:** open and close menus rapidly [S-L19-011], spam toggles [S-L19-026], flick gestures and interrupt them mid-flight [S-L19-016].
+  - **Real hardware:** a physical phone on the local dev server, never a shrunken desktop window [S-L19-005] [S-L19-023].
+  - **The target screen:** view the design on the screen it is meant for; designing zoomed out in Figma led one designer to oversized type and spacing [S-L19-057] [S-L19-042]. DC-L19-56 already sets the real frame for layout choices.
+  - **Real people in real context** [S-L19-020].
+- **Visual effect:** none directly. These checks catch sluggish or off-feeling motion, gestures that fight the finger, and type that is too big on the real screen, all of which pass code checks [inferred].
+- **Depends on (upstream):** platforms (Q-plat-01), motion personality (DC-L19-82).
+- **Affects (downstream):** the Q-gov-07 test matrix, a closing section in review output, a "how to check" note in DESIGN.md.
+- **Token encoding:** none (process decision).
+- **Platform notes:** for web, a physical phone with Safari Web Inspector or Chrome remote debugging; for React Native, a release build on the slowest supported device. Emulation, dev builds, Expo Go and simulators never count as verified (STD-process-review-taste-33).
+- **Accessibility constraints:** the feel check includes toggling reduced motion (STD-process-review-taste-19), alongside Q-gov-07's screen reader and largest-text checks.
+- **Default + heuristic:** Default: every `engine.py review` ends with a short "check by hand" list drawn from what changed: motion gets slow motion and a reduced-motion toggle, gestures get a physical phone, type gets a look on the target screen. Nothing that depends on feel is reported as verified. Heuristic: if it moves or answers a touch, it needs a hand check [inferred].
+- **Evidence:** [S-L19-001] [S-L19-005] [S-L19-011] [S-L19-016] [S-L19-018] [S-L19-020] [S-L19-023] [S-L19-024] [S-L19-026] [S-L19-042] [S-L19-057] [S-L19-078]. Compared against DC-L14-14 and DC-L19-56.
+- **Maps to:**
+  - Q-gov-07: new option `feel-checks` "Feel checks: a physical phone for gestures, slow motion for animation, a second look the next day" [S-L19-023]. New default: one feel row per shipped device class, next to the assistive-technology rows.
+  - `engine.py review` (no Q-id): new closing list of hand checks [inferred].
+- **Impact now / as it grows:**
+  - *Code checks only:* now, fast and automatic. As it grows, motion and gestures drift without anyone noticing.
+  - *Named hand checks:* now, a few minutes per change. As it grows, the product keeps its feel as more people touch it.
+  - *Next-day look:* now, a day's delay. As it grows, fewer reworks after launch [S-L19-078].
+  - *Real hardware:* now, needs a phone on the desk. As it grows, the only way gesture-heavy screens stay right [S-L19-005].
+- **Standards:** STD-process-review-taste-29, STD-process-review-taste-30, STD-process-review-taste-31, STD-process-review-taste-32, STD-process-review-taste-33, STD-process-review-taste-34, STD-process-review-taste-19
+
+### DC-L19-168: How the decisions are written up for other people
+- **Block path:** Delivery > Records > Rationale write-up (Stage 26; `RATIONALE.md`)
+- **Questions the designer answers:** Who will read the reasons: teammates, a manager, a client, a future hire? What should they see first? Do we say what is unfinished?
+- **Options:**
+  - **The log only:** `decisions.md`.
+  - **A one-page summary:** today's RATIONALE.md (what we built, the five choices with their alternatives, what the rules guarantee, what is still open).
+  - **Case-study shape:** a clear problem statement first, with a brief summary of the solution at the top so readers don't scroll to the end to find it; final designs shown large with the reasoning beside each; a short reflection on what could be better and what was left out; chapter-like titles so it can be skimmed; readable in one sitting, about 10-15 minutes [S-L19-083]. A case study should be followable from its images alone, with a visual every couple of paragraphs, and end with what was learned [S-L19-064].
+  - **Results-led:** list what was done, the problem, then the solution with numbers where possible [S-L19-038].
+  - **Reasons-led:** which easing and duration you chose, and why, is often more important than the code [S-L19-002]; explain why something feels right instead of calling it good or bad [S-L19-008].
+- **Visual effect:** none in the product. Readers can skim, see the result next to its reason, and trust what is and isn't finished [inferred].
+- **Depends on (upstream):** the decision log (DC-L17-10), approval gates (DC-L17-12).
+- **Affects (downstream):** RATIONALE.md, the introductions in DESIGN.md, team summaries, later extend sessions.
+- **Token encoding:** none (content decision).
+- **Platform notes:** the sources give none.
+- **Accessibility constraints:** images in the write-up need text alternatives [inferred]; the "what the rules guarantee" section stays.
+- **Default + heuristic:** Keep RATIONALE.md to one page, in the case-study shape: open with the problem and a one-line answer; place a small rendered sample (the chosen option beside its main alternative) next to each of the five choices; close with "What we'd do next", covering open items and what was left out. Heuristic: if a reason can't be written in one sentence, the decision isn't settled yet [inferred]. Confirms DC-L17-10 and DC-L11-12. The case-study advice comes from portfolio videos for job seekers [S-L19-083] [S-L19-064]; using it for a design system's rationale is [inferred].
+- **Evidence:** [S-L19-002] [S-L19-008] [S-L19-038] [S-L19-064] [S-L19-083]. Compared against DC-L17-10 and DC-L11-12.
+- **Maps to:**
+  - `RATIONALE.md` template (stage 26 output, no Q-id): new opening "The problem, and our answer in one line"; a visual slot beside each of the five choices; the closing "What is still open" becomes "What we'd do next", adding what was left out [S-L19-083].
+  - Q-gov-03 `adrs`: new heuristic: each decision record keeps a one-sentence reason and the alternative it beat (confirms today's "record why an option was chosen and what it beat").
+- **Impact now / as it grows:**
+  - *Log only:* now, no extra writing. As it grows, only people who read JSON and logs understand the system.
+  - *One-page summary:* now, a quick read. As it grows, it lacks the visuals that make reasons stick.
+  - *Case-study shape:* now, a little more work at the end of the interview. As it grows, new teammates and stakeholders understand the system in one sitting [S-L19-083].
+  - *Results-led:* now, needs numbers. As it grows, the most persuasive record for leadership or clients [S-L19-038].
+- **Standards:** STD-process-review-taste-52
+
+### DC-L19-169: Docs people can touch: demos, good-and-bad pairs, snippets and a changelog
+- **Block path:** Delivery > Documentation > Page content (Stage 26; also the Stage 25 change-communication question)
+- **Questions the designer answers:** Can people try each component and foundation on its page? Does the page show a wrong version next to the right one? Can people copy the code, or copy the page for an AI? Where is every change listed?
+- **Options:**
+  - **Static pages with a props table:** what Storybook autodocs gives (DC-L17-13). On its own this falls short of STD-process-review-taste-60, which asks for interactive examples and ready-to-use snippets; it is listed as the baseline.
+  - **Interactive demos:** people only understand motion by feeling the difference themselves, so explain it with demos, not text [S-L19-007] [S-L19-002]; ship live examples with ready-to-use code snippets [S-L19-006].
+  - **Bad-versus-good pairs:** show the wrong and the right version side by side [S-L19-001]; comparing two versions and writing down why trains judgement [S-L19-011].
+  - **Step-through demos** for ideas built up in steps, with Previous and Next [S-L19-007].
+  - **Copy as markdown:** a button on every page so its content can be given to an AI [S-L19-001].
+  - **A changelog page** that records every update, as the product keeps changing [S-L19-007] [S-L19-001].
+- **Visual effect:** docs that behave like the product; pairs make the reason for each rule visible at a glance [inferred].
+- **Depends on (upstream):** where docs live (Q-dist-04), AI channels (Q-dist-02).
+- **Affects (downstream):** generated docs pages, `preview.html`, markdown twins for AI tools, release notes.
+- **Token encoding:** none. Each page lists the tokens its demo uses [inferred].
+- **Platform notes:** web pages can run demos live; native components are shown as recordings or linked builds [inferred].
+- **Accessibility constraints:** demos respect reduced motion; the "bad" example is labelled in words, not only by color [inferred].
+- **Default + heuristic:** Default: every generated page gets one live demo, one good-and-bad pair wherever the system has a rule, a copy button for code and another for markdown, and the docs site gets a changelog page. Confirms DC-L11-18's page template and Q-dist-04's default; adds the pair and the copy-as-markdown button.
+- **Evidence:** [S-L19-001] [S-L19-002] [S-L19-006] [S-L19-007] [S-L19-011]. Compared against DC-L11-17, DC-L11-18, DC-L11-22 and DC-L17-13.
+- **Maps to:**
+  - Q-dist-04: new heuristic: one live demo, one good-and-bad pair and copy buttons (code and markdown) per page [S-L19-001] [S-L19-006]. Visual sample: a component page with its pair.
+  - Q-gov-06: confirms `release-notes`; new default wording: publish them as a changelog page on the docs site [S-L19-007].
+- **Impact now / as it grows:**
+  - *Static pages:* now, the cheapest. As it grows, people guess how things should feel and drift.
+  - *Interactive demos:* now, more to build. As it grows, the fastest way for new people and AI tools to learn the system [S-L19-006].
+  - *Good-and-bad pairs:* now, one extra render per rule. As it grows, reviews point to the pair instead of re-arguing.
+  - *Copy as markdown:* now, one button. As it grows, every AI tool the team adopts can read the docs.
+  - *Changelog page:* now, one line per release. As it grows, teams see what changed without asking.
+- **Standards:** STD-process-review-taste-59, STD-process-review-taste-60, STD-process-review-taste-63, STD-process-review-taste-54
+
+### DC-L19-170: Who sees the result, and how it is framed
+- **Block path:** Delivery > Presentation > Preview framing (Stage 26; `engine.py preview`)
+- **Questions the designer answers:** Is this preview for you to decide, for your team to build from, for a client, or for a portfolio or launch post? Should screens sit in device frames? Should key interactions be clickable?
+- **Options:**
+  - **Deciding:** true size, one option at a time, in realistic context (DC-L19-34, DC-L19-56).
+  - **Team handoff:** final screens shown large with the reasoning beside each [S-L19-083]; every tab of a tabbed section designed before handoff, or the developer receives half the site [S-L19-066]; every state a user can meet designed, not only the happy path [S-L19-044].
+  - **Client:** the goal changes from impressing to building confidence, so show device mockups of where the product will be used (even a plain computer frame helps; a lifestyle mockup, such as the UI on an iPad or Apple Watch, goes further) and a working prototype that reveals hidden interactions such as swipe actions or a modal animating in [S-L19-041].
+  - **Showcase (portfolio, social or launch post):** a plain background made by darkening and desaturating the accent, with a faint shadow; in dark mode, large blurred circles of the accent behind the UI; optionally a small skew (2° vertical and -14° horizontal in one example), one element popped out, an ungridded collage for landing pages, or one zoomed-in, lightly animated section for dashboards [S-L19-041]. Visitors see before they read, so large imagery leads [S-L19-064]; launch material can be built around the signature motion, as Sonner's was [S-L19-006].
+- **Visual effect:** Deciding looks plain and exact. Handoff reads like a spec with reasons. Client framing looks real and finished [S-L19-041]. Showcase framing looks dramatic and flattering [S-L19-041]; that its skew, glow and tinted backgrounds change apparent size and color is [inferred].
+- **Depends on (upstream):** surfaces (Q-scope-01), platforms (Q-plat-01), motion.
+- **Affects (downstream):** the layout of `preview.html`, exported screenshots, the docs site, the images in RATIONALE.md (DC-L19-168).
+- **Token encoding:** none. A showcase background is derived from the brand color at export time and is not a product token [inferred].
+- **Platform notes:** device frames differ per platform. "The latest Apple product is the gold standard" for mockups is one creator's opinion [S-L19-041].
+- **Accessibility constraints:** showcase effects (skew, glow, collage) never appear in the deciding view, because they change apparent size and contrast [inferred from STD-process-review-taste-43's reason]. Clickable prototypes keep reduced-motion handling.
+- **Default + heuristic:** Default: the preview opens in the deciding view; the client and showcase framings are extra exports [inferred]. Heuristic: match the frame to the audience, and keep showcase tricks out of client meetings, where they work less well [S-L19-041]. Differs from DC-L16-06 (a split view with a component matrix and 2-4 sample screens, every mode at once) only when options are being compared: the chosen system can still be shown that way, but competing options are shown one at a time, full size (STD-process-review-taste-43) [inferred]. The skew values and the AI mockup workflow (a 30-word prompt, a green screen on the device) are one video's examples and date quickly [S-L19-041].
+- **Evidence:** [S-L19-006] [S-L19-041] [S-L19-044] [S-L19-064] [S-L19-066] [S-L19-083]. Compared against DC-L16-06, DC-L17-11, DC-L19-34 and DC-L19-56.
+- **Maps to:**
+  - New question Q-dist-05 (stage 26, zoom 2): "Who will see the result first: you, your team, a client, or people online?" Options `deciding`, `team`, `client`, `showcase`; default `deciding`. It changes only how `preview.html` and exported images are framed.
+  - Visual sample: the same dashboard framed three ways (plain true size, laptop mockup, muted showcase background) [S-L19-041].
+- **Impact now / as it grows:**
+  - *Deciding:* now, honest judgements. As it grows, the only view decisions should be made in.
+  - *Team handoff:* now, every tab and state must exist. As it grows, fewer "what goes here?" questions from developers [inferred from S-L19-066].
+  - *Client:* now, a device frame and a few clickable flows. As it grows, clients sign off on how it works, not just how it looks [S-L19-041].
+  - *Showcase:* now, attractive posts. As it grows, useful for hiring and launches, never for decisions.
+- **Standards:** STD-process-review-taste-43, STD-process-review-taste-35, STD-process-review-taste-40
+
+### DC-L19-171: Rule files for AI agents: one per aspect, strict, each with its reason
+- **Block path:** Delivery > AI channels > Agent rule files (Stage 26)
+- **Questions the designer answers:** How does the system's taste reach coding agents: one DESIGN.md, or a rule file for each aspect of the interface? Does each rule say why? Is there a ready brief for asking an AI to design a screen?
+- **Options:**
+  - **DESIGN.md plus DTCG files:** what every system ships today.
+  - **One rule file per aspect:** write a skill file for each aspect of the interface (animation, layout, icons, color, typography), make each rule strict and say why it has to be that way, then give the files to your agents [S-L19-004]. Motion knowledge packaged as a SKILL.md lets agents build animations with you or for you [S-L19-007], and review them and suggest improvements [S-L19-001].
+  - **Named effects:** ask for a motion effect by its exact term, such as Stagger or Pop in, not a vague description [S-L19-014] [S-L19-019].
+  - **A brief for designing with AI:** say you want a design (in HTML and CSS if it will go into Figma), state the screen's purpose and use, name the elements you want, and require an icon library, or the AI fills the UI with emoji [S-L19-086]. Give short, specific instructions with a starting value [S-L19-103]; tell the AI exactly which logic and features you need [S-L19-061].
+  - **Live channels:** MCP server, registry, llms.txt (today's options, DC-L11-23).
+- **Visual effect:** agents stop guessing and produce the house look; a prompt without an icon-library line comes back full of emoji [S-L19-086].
+- **Depends on (upstream):** DESIGN.md, the house standards, the chosen AI channels.
+- **Affects (downstream):** the AGENTS.md snippet, generated rule files, what `engine.py review` checks.
+- **Token encoding:** none. Files such as `opendesigner/rules/<aspect>.md`, each rule as `{rule, why, values, standard}` [inferred]; the engine's standards already carry a rule and a why.
+- **Platform notes:** the source repository keeps separate skills for mobile web and for Swift [S-L19-014], so rule files split by platform where rules differ.
+- **Accessibility constraints:** the accessibility floors appear in every aspect file [inferred].
+- **Default + heuristic:** Default: keep DESIGN.md and DTCG files, and add one short rule file per aspect, generated from the person's decisions and the house standards, each rule strict and with its reason. Add a copyable "brief for an AI" block to DESIGN.md with the four parts above. Heuristic: a rule without a reason gets re-argued, by people and by agents [inferred from S-L19-004]. Confirms DC-L11-23 ("many short, structured files") and DC-L17-13 (agent-oriented guideline files).
+- **Evidence:** [S-L19-001] [S-L19-004] [S-L19-007] [S-L19-014] [S-L19-019] [S-L19-061] [S-L19-086] [S-L19-103]. Compared against DC-L11-23 and DC-L17-13.
+- **Maps to:**
+  - Q-dist-02 (planned): no new option; the existing `rules` option ("Rules files for AI agents") gains the shape: one rule file per part of the interface, each rule strict and with its reason [S-L19-004] (STD-process-review-taste-55). New default when built: DESIGN.md and DTCG plus `rules` in that shape, beside today's "at least one live channel" (DC-L11-23).
+  - AGENTS.md snippet (no Q-id): new line: load the rule file for the aspect you are changing before UI work [inferred].
+- **Impact now / as it grows:**
+  - *DESIGN.md only:* now, one file to maintain. As it grows, one long file that agents skim and partly ignore.
+  - *Aspect files:* now, several short files to generate. As it grows, each agent loads only what it needs, and rules stay followed [S-L19-004].
+  - *Named effects:* now, a small glossary. As it grows, prompts and reviews share exact words.
+  - *AI brief:* now, one block in DESIGN.md. As it grows, anyone on the team gets on-system screens from an AI.
+- **Standards:** STD-process-review-taste-55, STD-process-review-taste-56, STD-process-review-taste-57
+
+### DC-L19-172: Which AI tells the review catches
+- **Block path:** Guardrails > Checks > Generic AI output (Stage 26; `engine.py review`)
+- **Questions the designer answers:** Which common AI-made looks should the review flag? Which may you keep on purpose?
+- **Options (each tell with the card that owns its fix):**
+  - Emoji as interface icons [S-L19-061] [S-L19-086] (DC-L19-68).
+  - An indigo accent that, in one designer's experience, AI defaults to every time [S-L19-103], and bright colors that don't work together [S-L19-061] (DC-L19-11).
+  - Everything centered by default [S-L19-103] (DC-L19-45).
+  - The basic default Inter instead of the variable file with its display cut [S-L19-103] (DC-L19-28).
+  - Generated fake UI instead of a real product screenshot, and generic feature icons instead of graphics made from the product [S-L19-103] [S-L19-061] (DC-L19-72, DC-L19-73).
+  - No images at all on a page for a named audience, which one video calls a telltale sign of vibe coding [S-L19-062] (DC-L19-72).
+  - Gradient profile circles with a letter [S-L19-061] (DC-L19-76).
+  - The same KPIs repeated several times, and cards that do nothing [S-L19-061] (DC-L19-42).
+  - Missing hidden states, hovers and tooltips: one video says AI has a hard time with the parts of a UI you can't immediately see (the presenter's opinion) [S-L19-056], and another lists them among the elements beginners most often miss [S-L19-045] (DC-L19-125).
+  - Ease-in on entering elements, and a solid border where a semi-transparent shadow fits [S-L19-014] (DC-L19-85, DC-L19-09).
+  - Placeholder copy and dead buttons (STD-process-review-taste-40) [S-L19-037].
+  - Motion that runs but feels mediocre [S-L19-011].
+- **Visual effect:** removing these makes a product feel designed rather than generated; output with no thought behind it feels empty [S-L19-009].
+- **Depends on (upstream):** the chosen direction and values: a tell is only a finding if the person did not choose it.
+- **Affects (downstream):** review output, exported lint rules, an "avoid" list in DESIGN.md.
+- **Token encoding:** a rule catalog `{id, severity, why, owner_card, waived_by, reason}` in DC-L17-07's format.
+- **Platform notes:** most tells come from web and marketing pages; native apps need a smaller set (DC-L17-07).
+- **Accessibility constraints:** accessibility rules are never waivable; taste tells are (DC-L17-07).
+- **Default + heuristic:** Default: taste tells warn and can be kept on purpose with a reason (DC-L19-165); a look the person chose, such as a centered hero for a single statement, is not flagged. Heuristic: after generating a screen with AI, the biggest fixes are fonts, alignment and color [S-L19-086]. "Never let an AI choose your colors or your layout" is one video's always/never claim [S-L19-061], but three videos agree AI picks need a person's judgement [S-L19-061] [S-L19-086] [S-L19-103] and Emil Kowalski's README says agents lack taste [S-L19-014]. Confirms DC-L17-07. Also confirms today's untouched defaults: the device's own font (Q-type-01 `system`) and a restrained starting look (neutral grays, one accent), which the house standards require when there is no project to draw from. The L17 tell catalog (research/L17, part of DC-L17-07's evidence) also lists "system-ui as the primary face"; that tell conflicts with STD-visual-details-11 (default to the system font), so the standard wins and the review does not flag it.
+- **Evidence:** [S-L19-009] [S-L19-011] [S-L19-014] [S-L19-037] [S-L19-045] [S-L19-056] [S-L19-061] [S-L19-062] [S-L19-086] [S-L19-103]. Compared against DC-L17-07, DC-L11-24 and the sibling cards named above.
+- **Maps to:**
+  - Q-dist-03 (planned): new option `ai-tells` "Flag common AI-made looks (emoji icons, the default indigo, everything centered, dead cards)" [S-L19-061] [S-L19-103].
+  - `engine.py review` (no Q-id): add two cheap text checks, emoji in icon positions and lorem ipsum [inferred].
+- **Impact now / as it grows:**
+  - *No tell checks:* now, nothing to configure. As it grows, AI-built screens slowly pull the product toward the generic look.
+  - *Tell checks with waivers:* now, a few warnings to answer. As it grows, the product keeps its own look as more of it is generated.
+- **Standards:** STD-process-review-taste-01, STD-process-review-taste-40, STD-visual-details-25, STD-visual-details-11
+
+### DC-L19-173: What the Figma copy contains so designers can keep working in it
+- **Block path:** Delivery > Output > Figma library (Stage 26, the push to Figma)
+- **Questions the designer answers:** When the system is written to Figma, what becomes a variable, a style or a component? Are components built so designers can edit many at once and prototype them without renaming layers?
+- **Options:**
+  - **Styles for colors, variables for measurements, components for elements:** one video's recipe for consistency [S-L19-045]. This differs from DC-L07-21 ("variables for values, styles for bundles"), which requires colors that change by mode to be variables.
+  - **Components on auto layout:** always build chips with auto layout [S-L19-075]; build cards and chips with auto layout and vertical trim off [S-L19-045]; auto layout can be added across frames at once [S-L19-074].
+  - **Stable layer names:** Figma's multi-edit finds matching layers by name and grouping position [S-L19-074]; Smart Animate animates layers that share a name and crossfades the rest [S-L19-059]; prototypes toggle layer opacity, not fill opacity [S-L19-059].
+  - **A states frame per interactive component** (hover, pressed, loading, success), ready for prototyping [S-L19-059] [S-L19-079].
+  - **AI-made screens brought into Figma for small fixes:** ask the AI for HTML and CSS, import it with the HTML to design plugin, then fix small things by hand [S-L19-086]. Vector work such as logos still happens in Figma [S-L19-103].
+  - **Nudge amount matched to the grid:** change Figma's nudge from 10 to 8 on an 8 px grid [S-L19-070]; a per-user preference, so it can only be a handoff tip.
+- **Visual effect:** none in the product. Designers edit many frames at once and prototype without renaming layers [inferred].
+- **Depends on (upstream):** where the master copy lives (Q-tool-01), Figma collection structure (DC-L07-18), styles versus variables (DC-L07-21), component API (DC-L07-22), the base unit.
+- **Affects (downstream):** the Figma push through MCP, prototypes, design handoff.
+- **Token encoding:** variables per collection (DC-L07-18). Layer names follow component part names, for example `Button/Label` and `Button/Icon`, the same in every variant and state [inferred].
+- **Platform notes:** the sources give none.
+- **Accessibility constraints:** the states frame includes the focus state, since visible focus is a locked floor [inferred].
+- **Default + heuristic:** Default: follow DC-L07-21 (variables for values, including colors by mode; styles for bundles). Build every generated component on auto layout, keep part names identical across variants and states so multi-edit and Smart Animate work, and add a states frame per interactive component. "Styles for colors" comes from one June 2025 video of beginner mistakes [S-L19-045], which gives no reason for it; DC-L07-21 holds because colors change between light and dark.
+- **Evidence:** [S-L19-045] [S-L19-059] [S-L19-070] [S-L19-074] [S-L19-075] [S-L19-079] [S-L19-086] [S-L19-103]. Compared against DC-L07-18, DC-L07-21, DC-L07-22 and DC-L16-13.
+- **Maps to:**
+  - Q-dist-01 (planned), option `design-push`: new heuristic: auto layout on every component, stable part names across variants and states, and a states frame per interactive component [S-L19-059] [S-L19-074]. Handoff note: set Figma's nudge amount to the base unit [S-L19-070].
+- **Impact now / as it grows:**
+  - *Styles for colors:* now, familiar to beginners. As it grows, light and dark need duplicate styles and drift apart (why DC-L07-21 differs).
+  - *Auto layout everywhere:* now, a little more generation work. As it grows, components resize cleanly as content changes.
+  - *Stable part names:* now, a naming rule. As it grows, bulk edits and prototypes work across the whole library [S-L19-074].
+  - *States frames:* now, more frames. As it grows, prototypes and handoff need no extra drawing.
+- **Standards:** STD-process-review-taste-35
+
+### DC-L19-174: How variations are generated and compared
+- **Block path:** Builder > Exploration > Variants (Stage 27)
+- **Questions the designer answers:** How many different directions do you want to see? What does each one explore? How do you flip between them? What happens to the ones you don't pick?
+- **Options:**
+  - **A "show 6" grid of versions:** today's Q-pref-02 option and DC-L16-05's default. It conflicts with two house standards: never more than 5 variants, and variants shown one at a time, full size, never as side-by-side thumbnails.
+  - **Named directions behind a picker:** 3 variants by default, up to 5 only when asked or when the space is wide; each named for its direction (Quiet, Editorial, Playful, Dense) and exploring a stated axis (layout, density, personality, motion or interaction model); two that differ only in accent color or copy count as one [S-L19-031]. Every variant fully works with realistic content; one is shown at a time, full size, in realistic context; switching is instant with number keys and arrows, R replays, and the choice is kept in the URL [S-L19-031] [S-L19-030]. The hand-off is a table of when each variant is right and what it costs, with no favorite pre-picked [S-L19-031].
+  - **Lock and shuffle:** today's option (DC-L16-05, DC-L17-05) for fine exploration.
+  - **Up to 8 concepts (gstack):** in DC-L17-05's option list; differs from the cap of 5.
+  - **Build A and B, validate, ship the winner:** prototyping options is thinking, but only if the idea is then validated; cheap building is no reason to ship both [S-L19-009].
+- **Visual effect:** thumbnails distort spacing and scale; tints of one idea teach nothing when you flip between them [S-L19-031]. Named directions feel like real alternatives, each one defensible [S-L19-031].
+- **Depends on (upstream):** locks (`engine.py lock`), the lead emotion (DC-L19-162), the product's personality, which bounds how bold the boldest variant may be [S-L19-031].
+- **Affects (downstream):** the preview, the decision log (rejected variants are kept, as DC-L17-05 says), the templates' "Copy my choice" flow.
+- **Token encoding:** each variant is a set of parameter values plus a seed (DC-L16-05), with a `name` and an `axis` [inferred].
+- **Platform notes:** variants live in an isolated route (`/prototypes/<slug>`) or, with no project, in one self-contained HTML file [S-L19-031]; the source does not cover native apps.
+- **Accessibility constraints:** every variant meets the floors and ships reduced motion; the picker uses its fixed accessible markup (STD-accessibility-motion-18).
+- **Default + heuristic:** Default: replace `show-6` with a picker of 3 named directions on different axes, one at a time and full size in the real preview, with a table of when each is right and its cost; the person picks. If asked which the builder would pick, it answers from the product's personality and how often the thing is used, not from looks alone [S-L19-031]. Lock and shuffle stays for tuning inside the chosen direction, showing one result at a time [inferred]. Differs from DC-L16-05 (the "show 6" grid) and from DC-L17-05's upper option of 8 (gstack); the standards cap variants at 5. DC-L17-05's light and dark side by side compares one variant in two modes, not variants, so it can stay if each is full size [inferred]. Whole-screen style tiles in the interview (Q-brand-01's "Show") follow the same rule: one at a time, full size [inferred from STD-process-review-taste-43].
+- **Evidence:** [S-L19-009] [S-L19-014] [S-L19-030] [S-L19-031]. Compared against DC-L16-05, DC-L17-05, DC-L19-34 and DC-L19-56.
+- **Maps to:**
+  - Q-pref-02 (planned): remove option `show-6`; new option `picker-3` "Three named directions, one at a time at full size; flip with number keys" [S-L19-031]. New default when built: `patches`, `picker-3` and `lock-shuffle`.
+  - Q-pref-02: split into two questions, because it asks two decisions at once (how AI edits are reviewed, DC-L16-04 and DC-L19-175; how variations are shown, DC-L16-05 and this card) [inferred].
+- **Impact now / as it grows:**
+  - *"Show 6" grid:* now, many options at a glance. As it grows, choices are made at the wrong size, and near-duplicates waste the comparison.
+  - *Named directions behind a picker:* now, fewer but truly different options. As it grows, every exploration leaves a named record of what was tried and why it lost.
+  - *Lock and shuffle:* now, playful fine-tuning. As it grows, fine inside a direction, weak for choosing one.
+  - *Build A and B, then validate:* now, twice the building. As it grows, only validated ideas ship [S-L19-009].
+- **Standards:** STD-process-review-taste-37, STD-process-review-taste-38, STD-process-review-taste-39, STD-process-review-taste-40, STD-process-review-taste-41, STD-process-review-taste-43, STD-process-review-taste-44, STD-process-review-taste-46, STD-process-review-taste-48, STD-when-to-animate-22, STD-accessibility-motion-18
+
+### DC-L19-175: How AI edits and fine-tuning happen
+- **Block path:** Builder > AI > Edit model (Stage 27)
+- **Questions the designer answers:** When you refine something, do you regenerate it, describe the change, drag a temporary control, or fix it by hand? How do you check the change was better?
+- **Options:**
+  - **Regenerate the whole thing:** the alternative these sources work against. One video fixes a design one mistake at a time instead of starting from scratch [S-L19-045] (said of improving a design by hand; applying it to AI edits is [inferred]), and the live Claude Code session refines the page section by section with short instructions rather than re-prompting it whole [S-L19-103].
+  - **Short, specific instructions:** name the exact change and a starting value; work top to bottom, one section at a time; check how an element is built before giving the fix [S-L19-103].
+  - **A temporary tool on the page:** for fiddly positions, have the AI build a temporary control inline on the page you are working on, set the values by hand, bake them into the code and remove the tool [S-L19-103]. This confirms DC-L16-05's "generated controls" option with a working practitioner example.
+  - **Try, look, adjust ("Goldilocks"):** for example a heading width tried at 45ch, then 40, then 35, and back to 40 [S-L19-103].
+  - **Small tweaks by hand:** a sticky sidebar or exact left alignment is quicker fixed in Figma than re-prompted [S-L19-086].
+  - **Spread a finished treatment:** once a treatment works in one section, apply it to all sections in one instruction [S-L19-103].
+  - **Compare before and after:** today's default, patches with before and after views (DC-L16-04); rebuild the original on a separate page to compare [S-L19-103]; put the original next to the redesign [S-L19-065].
+  - **Talk it through first:** think and talk through what the change should do before writing code [S-L19-002].
+- **Visual effect:** tuned values land where the eye says, not where a guess says [inferred]; one-at-a-time fixes keep what already works [inferred from S-L19-045].
+- **Depends on (upstream):** patch review (DC-L16-04), locks.
+- **Affects (downstream):** the decision log (every baked value recorded as the person's choice), tokens, review.
+- **Token encoding:** a tuned value is saved as a decision, not left inline: `engine.py set <path> <value> --why "..."` (the existing rule in the AGENTS snippet).
+- **Platform notes:** inline tools suit web previews; native values are tuned in the preview and saved the same way [inferred].
+- **Accessibility constraints:** tuned values pass the same contrast and target checks before they are saved (DC-L16-04's gate) [inferred].
+- **Default + heuristic:** Default: patches with before and after (confirms DC-L16-04), plus a temporary on-page control for values that need the eye (positions, as in the source [S-L19-103]; widths in characters and opacity, which the source tuned by trying values in prompts, are [inferred] candidates), with every tuned value saved as a decision with the person's reason. Heuristic: fix one named issue at a time, in place; regenerate only when the direction itself is wrong [S-L19-045] [inferred]. The workflow is one designer's live session [S-L19-103], a practice rather than a tested method.
+- **Evidence:** [S-L19-002] [S-L19-045] [S-L19-065] [S-L19-086] [S-L19-103]. Compared against DC-L16-04, DC-L16-05 and DC-L16-14.
+- **Maps to:**
+  - Q-pref-02 (planned): new option `tune-inline` "Drag a temporary control on the real page, then save the value" [S-L19-103]. New heuristic: fix one issue at a time instead of regenerating [S-L19-045] [S-L19-103] [inferred for AI edits]. Confirms `patches`.
+- **Impact now / as it grows:**
+  - *Regenerate:* now, quick to ask. As it grows, each regeneration loses fixes already made.
+  - *Specific instructions:* now, needs the right words and a starting value. As it grows, the instructions double as a record of what changed.
+  - *Temporary tool:* now, one extra step. As it grows, fiddly values stop being guessed.
+  - *By hand in Figma:* now, fastest for tiny tweaks. As it grows, hand edits must flow back into the tokens or they drift.
+  - *Before and after:* now, a second view. As it grows, every change can be judged and explained.
+- **Standards:** STD-process-review-taste-64, STD-process-review-taste-26, STD-process-review-taste-29
+
+### DC-L19-176: How a critique or review is reported
+- **Block path:** Builder > Guidance > Review report (Stage 27; `engine.py review`)
+- **Questions the designer answers:** Should problems arrive as a list, or as one table of before, after and why? In what order? Does the review end with a clear verdict?
+- **Options:**
+  - **A list of `file:line value -> fix`:** today's `engine.py review` output. It falls short of the locked standard STD-process-review-taste-04 (one Before/After/Why table), so it is listed as today's behavior, not an allowed end state.
+  - **One table with Before, After and Why columns,** one row per issue, never separate "Before:" and "After:" lines [S-L19-032] [S-L19-023]; the agent in Emil Kowalski's example returns a list of issues and a before-and-after table [S-L19-004].
+  - **Ranked by leverage:** impact divided by effort; a short list of high-confidence items beats a long padded one; say plainly when things are already right [S-L19-027] [S-L19-024].
+  - **Exact values:** the exact curve, duration or value, never a vague target such as "use a nicer easing" [S-L19-032].
+  - **One severity per finding:** HIGH, MEDIUM or LOW [S-L19-027].
+  - **A closing verdict:** Block or Approve under stated criteria, for motion reviews [S-L19-032].
+  - **Spot, name, fix:** each finding names the problem in words [S-L19-011].
+- **Visual effect:** none (process decision). Readers see what to change and why in one scan [inferred].
+- **Depends on (upstream):** the critique mode (Q-pref-01), the house standards and project decisions that give each Why.
+- **Affects (downstream):** `engine.py review` output, coach messages in chat, the lint report in Q-dist-03's "Show".
+- **Token encoding:** none (process decision).
+- **Platform notes:** the sources give none.
+- **Accessibility constraints:** accessibility findings always appear in every mode (DC-L15-11); motion without reduced-motion handling is at least MEDIUM (STD-accessibility-motion-06).
+- **Default + heuristic:** Default: `engine.py review` prints one table (Where, Before, After, Why), where Why names the standard or decision and its reason, sorted by severity and then leverage, followed by a one-line verdict ("ready" or "fix N before shipping"); strict mode turns that verdict into Block or Approve. Coach mode uses the same row format in chat. Confirms DC-L15-11's rule that every message names the principle.
+- **Evidence:** [S-L19-004] [S-L19-011] [S-L19-023] [S-L19-024] [S-L19-027] [S-L19-032]. Compared against DC-L15-11 and DC-L11-24.
+- **Maps to:**
+  - Q-pref-01 (planned): new heuristic for every mode: the report is one Before/After/Why table ranked by severity and leverage, with a verdict line; `strict` maps to Block or Approve [S-L19-032].
+  - `engine.py review` (no Q-id): switch the finding list to that table and add the verdict line [inferred].
+- **Impact now / as it grows:**
+  - *Plain list:* now, compact. As it grows, long lists with no reasons get skimmed and ignored.
+  - *Before/After/Why table:* now, a wider report. As it grows, each row teaches the rule behind it, so the same finding appears less often.
+  - *Ranked by leverage:* now, the top rows are the ones worth doing. As it grows, big reports stay usable.
+  - *Verdict line:* now, one line. As it grows, a clear gate for shipping.
+- **Standards:** STD-process-review-taste-04, STD-process-review-taste-05, STD-process-review-taste-07, STD-process-review-taste-08, STD-process-review-taste-09, STD-process-review-taste-10, STD-process-review-taste-52, STD-accessibility-motion-06
+
+### DC-L19-177: The goal behind the brief, before any visuals
+- **Block path:** Foundations > Product > Goal and user intent (Stage 03, beside the principles; `PRODUCT.md`)
+- **Questions the designer answers:** What must these screens achieve: more sign-ups, sales, a faster task? Why do people arrive, and what do they need first? What should the product leave out?
+- **Options:**
+  - **Start from the look:** the habit the sources warn against: starting with icons or card layouts loses sight of why you are designing [S-L19-054].
+  - **Start from the user's intent:** build the element that serves it first (the search bar, for people who come to search), and add function only as new intents appear (listings and filters for people who come to browse) [S-L19-054].
+  - **Start from the need behind the request:** "I need a website" usually means more customers, sales or sign-ups; design for the site's users, not for the client's taste [S-L19-038].
+  - **Start from a written brief and a problem statement:** expand the prompt into a full brief and keep it in mind throughout [S-L19-037]; get the problem statement right first, because solving the wrong problem makes the solution not matter [S-L19-083].
+  - **Start from where and how it is used:** for a Mac utility, while people work in other apps [S-L19-067]; think in screens and sequences, asking how the user got here and what they need next [S-L19-044].
+  - **Decide what not to build:** judge whether an idea deserves building [S-L19-009]; every feature spends the user's time, attention and trust [S-L19-020].
+- **Visual effect:** pages lead with what people came for, with fewer decorative sections [inferred]; a hero built around an action (a search bar) rather than a slogan [S-L19-054] [S-L19-082].
+- **Depends on (upstream):** what they are making (zoom 0 question 1), surfaces (Q-scope-06), audience (Q-aud-01).
+- **Affects (downstream):** PRODUCT.md, the principles (DC-L19-163), success measures (DC-L19-166), the sample screen used in every preview (DC-L19-35), which components come first.
+- **Token encoding:** none. State holds `context.goal` and `context.intents[]`, written to PRODUCT.md [inferred].
+- **Platform notes:** usage context matters most on desktop utilities, where the app should appear where the person already works [S-L19-067].
+- **Accessibility constraints:** none beyond the floors.
+- **Default + heuristic:** Default: at zoom 0, take the goal from the person's first answer when it is there; otherwise ask one short follow-up: "What should people get done first when they arrive?" Record it; previews use it to pick the sample screen. Heuristic: a section, component or principle that serves neither the goal nor an intent is a candidate to cut [S-L19-020] [S-L19-054]. Six sources agree on intent or problem first [S-L19-037] [S-L19-038] [S-L19-044] [S-L19-054] [S-L19-067] [S-L19-083]; half are career, portfolio and freelance videos [S-L19-037] [S-L19-038] [S-L19-083], and none is about interviewing someone to set up a system, so applying them to a design-system interview is [inferred].
+- **Evidence:** [S-L19-009] [S-L19-020] [S-L19-037] [S-L19-038] [S-L19-044] [S-L19-054] [S-L19-067] [S-L19-082] [S-L19-083]. Compared against DC-L06-15, DC-L11-05 and DC-L19-35.
+- **Maps to:**
+  - Q-brand-07: new option `from-goal` "Start from what people come to do; the first principle protects it" [S-L19-054].
+  - Zoom 0, question 1 ("What are you making?", recorded as `context.product`): new follow-up for the goal when their words don't give one [inferred]. This touches stage 01 as well as stage 03.
+- **Impact now / as it grows:**
+  - *Look first:* now, quick visuals. As it grows, features pile up without a reason to be there.
+  - *Intent first:* now, one more question. As it grows, new features are added only when a new intent appears [S-L19-054].
+  - *Need behind the request:* now, a business question. As it grows, the system can be judged by results (DC-L19-166) [S-L19-038].
+  - *Written brief:* now, a paragraph of writing. As it grows, every later session can check work against it.
+- **Standards:** STD-when-to-animate-22, STD-visual-details-31
+
+---
+
+## Not carried into cards
+
+- **Pricing and client work** ([S-L19-036], most of [S-L19-038], the prices in [S-L19-072]): hourly, project and value-based pricing, niches and add-on services are about the designer's business, not the system, so they change no question. The transferable ideas (the need behind the request, before-and-after results) are in DC-L19-166 and DC-L19-177. Two sources note that work takes longer than planned ([S-L19-036]; four screens took three days instead of four to six hours in [S-L19-078]); `pacing.json` already labels its minutes as rough estimates.
+- **Where to host a portfolio and how many projects to show** ([S-L19-037], [S-L19-064]): career advice with no interview change.
+- **Resource lists** ([S-L19-073], [S-L19-049], [S-L19-082]): named sites for placeholder logos, stock photos, mockups and icons could feed DC-L17-04's fallback order, but their licences were not checked here and one presenter jokes about taking logos, so none is proposed as a default.
+- **Figma effect recipes and animated prototypes** ([S-L19-058], [S-L19-071], [S-L19-081]) belong to the surface-effects and motion cards (DC-L19-67, DC-L19-85 to DC-L19-99).
+
+## Source key
+
+- [S-L19-001] [[sources/adev-changelog-animations-dev|animations.dev]] (non-negotiable)
+- [S-L19-002] [[sources/adev-home-animations-dev|animations.dev]] (non-negotiable)
+- [S-L19-004] [[sources/ek-agents-with-taste-agents-with-taste|Agents with Taste]] (non-negotiable)
+- [S-L19-005] [[sources/ek-building-a-drawer-component-building-a-drawer-component|Building a drawer component]] (non-negotiable)
+- [S-L19-006] [[sources/ek-building-a-toast-component-building-a-toast-component|Building a toast component]] (non-negotiable)
+- [S-L19-007] [[sources/ek-building-an-animation-course-building-an-animation-course|Building an animation course]] (non-negotiable)
+- [S-L19-008] [[sources/ek-developing-taste-developing-taste|Developing Taste]] (non-negotiable)
+- [S-L19-009] [[sources/ek-friction-as-a-feature-friction-as-a-feature|Friction as a Feature]] (non-negotiable)
+- [S-L19-011] [[sources/ek-train-your-judgement-train-your-judgement|Train Your Judgement]] (non-negotiable)
+- [S-L19-014] [[sources/eks-readme-emilkowalski-skills-readme-md|emilkowalski/skills: README.md]] (non-negotiable)
+- [S-L19-016] [[sources/eks-skills-animate-expo-skill-emilkowalski-skills-skills-animate-expo-skill-md|emilkowalski/skills: skills/animate-expo/SKILL.md]] (non-negotiable)
+- [S-L19-018] [[sources/eks-skills-animate-skill-emilkowalski-skills-skills-animate-skill-md|emilkowalski/skills: skills/animate/SKILL.md]] (non-negotiable)
+- [S-L19-019] [[sources/eks-skills-animation-vocabulary-skill-emilkowalski-skills-skills-animation-vocabulary-skill-md|emilkowalski/skills: skills/animation-vocabulary/SKILL.md]] (non-negotiable)
+- [S-L19-020] [[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]] (non-negotiable)
+- [S-L19-023] [[sources/eks-skills-emil-design-eng-skill-emilkowalski-skills-skills-emil-design-eng-skill-md|emilkowalski/skills: skills/emil-design-eng/SKILL.md]] (non-negotiable)
+- [S-L19-024] [[sources/eks-skills-find-animation-opportunities-skill-emilkowalski-skills-skills-find-animation-opportunities-skill-md|emilkowalski/skills: skills/find-animation-opportunities/SKILL.md]] (non-negotiable)
+- [S-L19-026] [[sources/eks-skills-improve-animations-plan-template-emilkowalski-skills-skills-improve-animations-plan-template-md|emilkowalski/skills: skills/improve-animations/PLAN-TEMPLATE.md]] (non-negotiable)
+- [S-L19-027] [[sources/eks-skills-improve-animations-skill-emilkowalski-skills-skills-improve-animations-skill-md|emilkowalski/skills: skills/improve-animations/SKILL.md]] (non-negotiable)
+- [S-L19-030] [[sources/eks-skills-prototype-picker-emilkowalski-skills-skills-prototype-picker-md|emilkowalski/skills: skills/prototype/PICKER.md]] (non-negotiable)
+- [S-L19-031] [[sources/eks-skills-prototype-skill-emilkowalski-skills-skills-prototype-skill-md|emilkowalski/skills: skills/prototype/SKILL.md]] (non-negotiable)
+- [S-L19-032] [[sources/eks-skills-review-animations-skill-emilkowalski-skills-skills-review-animations-skill-md|emilkowalski/skills: skills/review-animations/SKILL.md]] (non-negotiable)
+- [S-L19-036] [[sources/2rtsoM2Dqrs-how-to-price-website-designs-with-specific-numbers|How To Price Website Designs (With Specific Numbers)]] (reference)
+- [S-L19-037] [[sources/59XWYgN00nQ-create-a-portfolio-with-no-experience-or-clients-needed|Create A Portfolio With No Experience (or clients) Needed]] (reference)
+- [S-L19-038] [[sources/5JxUJ1fuyO8-make-one-design-change-to-actually-land-clients-stop-struggling|Make ONE Design Change to Actually Land Clients (Stop Struggling)]] (reference)
+- [S-L19-040] [[sources/6CC8lLnqa28-6-things-you-probably-need-to-hear-as-a-web-designer|6 Things You Probably Need to Hear (as a web designer)]] (reference)
+- [S-L19-041] [[sources/7cTdCu8HMgM-the-definitive-process-to-present-uis-like-a-pro|The DEFINITIVE process to present UIs like a pro]] (reference)
+- [S-L19-042] [[sources/7sUUzOCv47U-mathematically-perfect-typography-for-web-design|Mathematically Perfect Typography for Web Design]] (reference)
+- [S-L19-043] [[sources/9WVt1CelBfg-the-stupid-simple-way-to-learn-ui-ux-design-in-exactly-10-minutes|The stupid simple way to learn UI/UX design in exactly 10 minutes]] (reference)
+- [S-L19-044] [[sources/ADaQuZS04Rc-stop-making-pretty-uis-think-like-a-product-designer|Stop Making Pretty UIs. Think Like a Product Designer]] (reference)
+- [S-L19-045] [[sources/AH_ugxmLeUM-7-ui-ux-mistakes-that-scream-youre-a-beginner|7 UI/UX mistakes that SCREAM you're a beginner]] (reference)
+- [S-L19-049] [[sources/BvbFPzLjWcU-redesigning-a-modern-skincare-ui-from-scratch-free-design-files|Redesigning A Modern Skincare UI from SCRATCH (+ free design files)]] (reference)
+- [S-L19-054] [[sources/HE4rLEQpiXY-how-to-think-like-a-genius-ui-ux-designer|How to think like a GENIUS UI/UX designer]] (reference)
+- [S-L19-056] [[sources/Ksx9C2-3yMo-the-3-dashboard-ui-flaws-that-give-away-you-ve-never-built-one|The 3 dashboard UI flaws that give away you've NEVER built one]] (reference)
+- [S-L19-057] [[sources/Lp6ey4AyDzA-8-web-design-hacks-to-actually-make-your-designs-better|8 Web Design Hacks To ACTUALLY Make Your Designs Better]] (reference)
+- [S-L19-058] [[sources/MZSm6MA8bww-advanced-figma-web-design-effects|Advanced FIGMA Web Design Effects]] (reference)
+- [S-L19-059] [[sources/NtZeYmTMuo4-animated-dashboard-sidebar-tutorial-in-figma-free-design-files|Animated Dashboard Sidebar Tutorial in Figma (+ free design files)]] (reference)
+- [S-L19-061] [[sources/PDcQJOPby1k-5-saas-ui-ux-mistakes-that-scream-you-vibe-code|5 SaaS UI/UX mistakes that SCREAM you Vibe Code]] (reference)
+- [S-L19-062] [[sources/RCneB_MQ7qs-the-one-thing-vibe-coding-cant-fix-about-your-website|The one thing vibe coding CAN'T fix about your website]] (reference)
+- [S-L19-063] [[sources/SfX43uIubj4-4-ui-design-hacks-to-kill-boring-designs|4 UI Design Hacks to KILL boring designs]] (reference)
+- [S-L19-064] [[sources/ToJiXPTNnLY-professional-portfolio-breakdown-why-is-theirs-so-much-better|Professional Portfolio Breakdown — Why Is Theirs So Much Better?]] (reference)
+- [S-L19-065] [[sources/V3Omp1hm0Sg-i-redesigned-a-failing-tesla-wannabe-full-website-to-save-it|I Redesigned a Failing Tesla WANNABE Full Website To SAVE It]] (reference)
+- [S-L19-066] [[sources/VPeTgU7la34-7-modern-ui-layouts-from-50-top-software-companies-free-figma-file|7 Modern UI Layouts from 50 Top Software Companies (+ Free Figma File)]] (reference)
+- [S-L19-067] [[sources/Vy0KKvZJRH8-everything-you-need-to-design-macos-apps-exactly-like-apple-beginner-friendly|Everything you need to Design macOS Apps EXACTLY like Apple (beginner friendly)]] (reference)
+- [S-L19-068] [[sources/Yr2uIcFZDDQ-redesigning-a-finance-dashboard-ui-from-scratch-ft-dribbble|Redesigning a Finance Dashboard UI from SCRATCH (ft. Dribbble)]] (reference)
+- [S-L19-070] [[sources/c1TvOcKdBVE-the-8-ui-ux-cheat-codes-for-instantly-better-designs|The 8 UI/UX Cheat Codes for INSTANTLY Better Designs]] (reference)
+- [S-L19-071] [[sources/d4MF6pdAZNw-developing-premium-load-animations-html-css-js-part-2|Developing Premium Load animations (HTML, CSS & JS): Part 2]] (reference)
+- [S-L19-072] [[sources/eMMiLeo_UGI-the-4-levels-of-landing-page-ui-ux-design|The 4 Levels of Landing Page UI/UX Design]] (reference)
+- [S-L19-073] [[sources/eeN7yUcIWbw-20-top-underrated-web-design-resources-for-2025|20 Top Underrated Web Design Resources for 2025]] (reference)
+- [S-L19-074] [[sources/fL1X2Mw6s3w-figma-update-everything-in-under-2-minutes|Figma Update: Everything In Under 2 Minutes]] (reference)
+- [S-L19-075] [[sources/gKM6b2EnW1k-upgrading-9-crucial-ui-elements-free-figma-file-included|Upgrading 9 CRUCIAL UI Elements (free figma file included)]] (reference)
+- [S-L19-078] [[sources/jSxxAFxjxbU-i-spent-a-week-gamifying-apps-this-is-what-i-built|I spent a week gamifying apps. This is what I built]] (reference)
+- [S-L19-079] [[sources/ld1zhQMXxXU-11-micro-animations-that-will-instantly-level-up-your-ui-free-figma-file|11 Micro Animations That Will Instantly Level Up Your UI (free figma file)]] (reference)
+- [S-L19-080] [[sources/neE6wOuBIP8-the-secret-behind-weirdly-perfect-ui-designs|The secret behind weirdly perfect UI designs]] (reference)
+- [S-L19-081] [[sources/nl8OFGdx75w-prototyping-professional-load-animations-in-figma-part-1|Prototyping Professional Load Animations in Figma: Part 1]] (reference)
+- [S-L19-082] [[sources/pGYLZyBE32o-i-redesigned-google-s-ai-website-from-scratch-complete-transformation|I Redesigned Google's AI Website from SCRATCH (complete transformation)]] (reference)
+- [S-L19-083] [[sources/t7mpEDXzjCg-make-a-perfect-ux-case-study-in-8-steps|Make A Perfect UX Case Study In 8 Steps]] (reference)
+- [S-L19-084] [[sources/tNMAFjzapOk-the-formula-behind-truly-captivating-ui-sections|The Formula Behind Truly Captivating UI Sections]] (reference)
+- [S-L19-086] [[sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai|Vibe Coding a Pro UI in SECONDS With AI]] (reference)
+- [S-L19-103] [[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]] (reference)

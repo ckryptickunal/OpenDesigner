@@ -16,12 +16,19 @@ Zoom 0 sketch · weight high · changes 15 decisions · class I · cards DC-L06-
 - **Why:** The sliders set starting values for color strength, corner radius and type. They also set font weight, motion, illustration and voice, through the L06 lever matrix [DC-L06-02].
 - **Options:**
   - `A playful-serious` Playful: saturated brand color on chrome, large radii and pills, springs with overshoot, characters. Serious: neutral or monochrome scheme, small radii, ease-out without bounce, pictograms (M3 Expressive vs Carbon).
+    - Now: Toward playful: strong color, big round corners, springier motion. Toward serious: neutral colors, small corners, calm motion. As it grows: Every new screen inherits this mood; Google's research warns that expressive styles may not suit banking.
   - `B friendly-authoritative` Friendly: warm neutrals, softer borders, rounded corners, sentence case, contractions. Authoritative: cool greys and deep blues or black, tighter radii, strong rules (Linear 2026 warm gray, Airbnb 2025 curves vs Uber black, IBM grid).
+    - Now: Toward friendly: warm grays, rounded corners, casual wording. Toward authoritative: cool grays or black, tighter corners, strong lines. As it grows: It also sets how the words sound, so new copy, errors and help text follow the same tone.
   - `C minimal-rich` Minimal: near-monochrome with one accent, whitespace instead of containers, fewer outlined icons, no hero moments (Notion, Linear). Rich: primary/secondary/tertiary mixing, visible containers, filled or colored icons, 1-2 hero moments (M3 Expressive).
+    - Now: Toward minimal: near gray, one accent, lots of space. Toward rich: several colors, visible boxes, filled icons, big moments. As it grows: Minimal stays calm as screens multiply; rich needs rules for where extra color goes, or screens get busy. [inferred]
   - `D calm-energetic` Calm: shorter, subtle motion (Carbon standard curve), lighter weights, low saturation. Energetic: Carbon expressive curve or springs, heavy weights, high saturation.
+    - Now: Toward calm: short, subtle motion, lighter weights, soft colors. Toward energetic: livelier motion, heavier weights, stronger colors. As it grows: Even when energetic, lively motion stays on rare moments; things people do many times a day stay quiet.
   - `E premium-everyday` Premium: taller, more elegant type, restrained palette, subtle materials. Everyday: sturdy type with tall x-height, bright primaries, flat fills (Google Sans Flex study; Airbnb Cereal).
+    - Now: Toward premium: taller, elegant type, restrained colors, subtle materials. Toward everyday: sturdy type, bright colors, flat fills. As it grows: Premium depends on restraint, so each new feature must resist adding color; everyday tolerates more variety. [inferred]
   - `F modern-heritage` Modern: geometric or grotesque sans, variable fonts, perceptual generated ramps, a mono companion. Heritage: serif or slab, fixed hand-picked palette (Cooper for Mailchimp).
+    - Now: Toward modern: geometric fonts, generated color shades, a code font. Toward heritage: serif fonts, hand-picked fixed colors. As it grows: Generated shades extend to new colors on their own; a hand-picked palette needs a person for every new shade. [inferred]
   - `G bold-deferential` Bold: brand color on large surfaces, custom components and typeface everywhere. Deferential: accent only on primary actions and status, native type and components (Apple HIG; Fluent reuses native patterns 80% of the time).
+    - Now: Toward bold: brand color on big areas, custom parts everywhere. Toward deferential: accent on key actions only, native fonts and controls. As it grows: Bold means rebuilding custom parts for every platform and OS update; deferential gets platform updates for free.
 - **Default:** 50 on every slider *Source:* L06 lever matrix convention (50 = system default) [DC-L06-02]. Q-aud-02 pre-positions A, B and D.
 - **Show:** 2-3 generated style tiles (type, color, radius, a button, a card) that update as sliders move; slider conflicts (for example "playful" wants large radii, "authoritative" wants small) are shown, not silently averaged [S-L06-078; L06 section 4.2].
 - **Skip:** yes; all sliders at 50 give the neutral-toolkit look that L09 warns every generated app starts from [L09 A3].
@@ -83,8 +90,11 @@ Zoom 2 defined · weight high · changes 5 decisions · class G · cards DC-L06-
 - **Why:** In Google's tests, expressive design made products seem 34% more modern and key parts up to 4x faster to spot. Too much of it hurts ease of use, and a strong minority prefers calm [DC-L06-03].
 - **Options:**
   - `hero-moments` Calm, plus 1-2 big moments: expressive motion and type only at significant moments such as opening a page or the primary action (Carbon expressive motion; Material's own budget).
+    - Now: Calm everywhere, plus one or two big moments, such as a first success, with bolder type and motion. As it grows: Big moments stay rare, like first run or finishing a task; everyday actions stay quiet, per house standards.
   - `productive` Calm and steady only: calm, dense, efficient (Carbon product UI, Linear 2026 "calmer interface").
+    - Now: Calm and efficient everywhere, with no big animated moments, like Carbon's product screens. As it grows: Stays comfortable for daily use as features pile up; a strong minority prefers calm, though it can seem less modern.
   - `expressive` Lively throughout: varied shapes, rich color, emphasized type, fluid motion (M3 Expressive's seven tactics).
+    - Now: Lively throughout: varied shapes, rich color, bigger type and fluid motion; Google's tests found it feels more modern. As it grows: Overdone, it hurts ease of use; house standards still keep motion off things people do many times a day.
 - **Default:** `hero-moments`: hero-moments *Source:* card heuristic, Material's "one or two hero moments" rule [DC-L06-03]. Capped at productive when Q-aud-02 = high-trust.
 - **Show:** one screen shown in all three settings, with the hero moment (for example a success state) animated.
 - **Skip:** yes.

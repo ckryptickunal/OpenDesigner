@@ -1,0 +1,847 @@
+{
+ "$comment": "Lane L19. What each option of OpenDesigner's high-impact questions changes. Covers every question with weight high (pacing.json time_weight_rule: a decided card with fan-out 5+ or a Quick question): 30 questions, which include every question named in pacing.json top_decisions and Q-motion-01. Per option: 'now' = what changes today on the person's screen; 'as_it_grows' = what it means with more screens, people, platforms or content. One plain sentence each, 25 words at most. Lines restate the question's own option text, its Decision Cards (research/L*.md, benchmarks/L09) and the house standards; a line that is OpenDesigner's own reasoning ends with ' [inferred]'. evidence: Decision Card ids (DC-...) and learning-wiki source ids (S-L19-..., learn/sids.json) the lines rest on; standards: house standards (synthesis/standards.json) a line must respect or cites, so no line contradicts them. Keys match questionnaire.json option values. tools/build_data.py copies the lines into questions.json (now, grows) and the stage files ('Now: ... As it grows: ...'). The policy that uses them: learn/wiki/synthesis/decide-or-ask.md.",
+ "version": 1,
+ "updated": "2026-09-24",
+ "questions": {
+  "Q-scope-01": {
+   "options": {
+    "product-app": {
+     "now": "Parts are built for your app alone, so the look can stay tight and specific. [inferred]",
+     "as_it_grows": "Adding a marketing site or emails later means making parts more general and adding token layers."
+    },
+    "marketing": {
+     "now": "Adds a louder, expressive layer for the marketing site next to the calm app layer, as Carbon does.",
+     "as_it_grows": "Marketing and app styles tend to drift apart, so someone must keep the shared colors and type in step."
+    },
+    "internal-tools": {
+     "now": "In-house tools are usually dense: smaller text and tighter rows so more fits on screen. [inferred]",
+     "as_it_grows": "Each new tool reuses the same parts; dense screens get a compact mode instead of a second system."
+    },
+    "docs-content": {
+     "now": "Long reading pages add rules for comfortable line length and paragraph spacing. [inferred]",
+     "as_it_grows": "If articles pass about a third of your pages, a second, bigger set of heading styles pays off."
+    },
+    "email": {
+     "now": "Email can show only simple styling, so the system must also write its colors and text out for email.",
+     "as_it_grows": "Every new email template reuses those outputs; anything email cannot show needs a plain fallback. [inferred]"
+    },
+    "partner-embed": {
+     "now": "Parts must work inside other people's sites, so they get general names like 'card', not 'product card'.",
+     "as_it_grows": "Partners build on your parts, so changes need public docs and stricter version numbers."
+    }
+   },
+   "evidence": [
+    "DC-L11-02",
+    "DC-L06-01",
+    "DC-L09-04",
+    "DC-L02-11",
+    "DC-L11-14"
+   ]
+  },
+  "Q-scope-03": {
+   "options": {
+    "engineers": {
+     "now": "Adds component docs and code packages that engineers can install.",
+     "as_it_grows": "More engineers and projects mean more packages to version and keep in step. [inferred]"
+    },
+    "designers": {
+     "now": "Adds a design-tool library, such as Figma, that mirrors the tokens.",
+     "as_it_grows": "Without automatic sync, the design library and the code drift apart, a common team complaint."
+    },
+    "content-pm": {
+     "now": "Adds usage and voice guidance, so writers know how the product talks.",
+     "as_it_grows": "As more people write copy, the shared voice traits settle arguments and keep screens sounding alike."
+    },
+    "partners": {
+     "now": "Adds public docs and stricter version numbers, because outside teams build on the system.",
+     "as_it_grows": "Every breaking change then affects people outside your team, so changes slow down and need notice. [inferred]"
+    },
+    "ai-agents": {
+     "now": "Adds files AI coding tools can read, such as DESIGN.md, so they follow the system.",
+     "as_it_grows": "Every screen an AI writes later reads the same written rules, so it needs less re-explaining. [inferred]"
+    }
+   },
+   "evidence": [
+    "DC-L11-02",
+    "DC-L11-18",
+    "DC-L16-13",
+    "DC-L11-16",
+    "DC-L06-18",
+    "DC-L11-14",
+    "DC-L11-23",
+    "S-L19-004"
+   ]
+  },
+  "Q-aud-01": {
+   "options": {
+    "dense": {
+     "now": "Body text 13-14 px and controls 28-32 px, so more rows fit; it looks professional and packed.",
+     "as_it_grows": "Fits data tools as they grow, but touch and occasional use need a roomier mode; tap targets never shrink."
+    },
+    "regular": {
+     "now": "Body text 16 px and controls 36-40 px: balanced for an everyday app.",
+     "as_it_grows": "The safe middle: data-heavy pages can add a compact mode later instead of a second system."
+    },
+    "large": {
+     "now": "Body text 17 px or more and 44-48 px targets: calm and easy to read and tap on phones.",
+     "as_it_grows": "Suits public and phone use; dense admin screens added later would need a compact mode. [inferred]"
+    }
+   },
+   "evidence": [
+    "DC-L09-04",
+    "DC-L15-04"
+   ],
+   "standards": [
+    "STD-mobile-touch-09"
+   ]
+  },
+  "Q-brand-01": {
+   "options": {
+    "A playful-serious": {
+     "now": "Toward playful: strong color, big round corners, springier motion. Toward serious: neutral colors, small corners, calm motion.",
+     "as_it_grows": "Every new screen inherits this mood; Google's research warns that expressive styles may not suit banking."
+    },
+    "B friendly-authoritative": {
+     "now": "Toward friendly: warm grays, rounded corners, casual wording. Toward authoritative: cool grays or black, tighter corners, strong lines.",
+     "as_it_grows": "It also sets how the words sound, so new copy, errors and help text follow the same tone."
+    },
+    "C minimal-rich": {
+     "now": "Toward minimal: near gray, one accent, lots of space. Toward rich: several colors, visible boxes, filled icons, big moments.",
+     "as_it_grows": "Minimal stays calm as screens multiply; rich needs rules for where extra color goes, or screens get busy. [inferred]"
+    },
+    "D calm-energetic": {
+     "now": "Toward calm: short, subtle motion, lighter weights, soft colors. Toward energetic: livelier motion, heavier weights, stronger colors.",
+     "as_it_grows": "Even when energetic, lively motion stays on rare moments; things people do many times a day stay quiet."
+    },
+    "E premium-everyday": {
+     "now": "Toward premium: taller, elegant type, restrained colors, subtle materials. Toward everyday: sturdy type, bright colors, flat fills.",
+     "as_it_grows": "Premium depends on restraint, so each new feature must resist adding color; everyday tolerates more variety. [inferred]"
+    },
+    "F modern-heritage": {
+     "now": "Toward modern: geometric fonts, generated color shades, a code font. Toward heritage: serif fonts, hand-picked fixed colors.",
+     "as_it_grows": "Generated shades extend to new colors on their own; a hand-picked palette needs a person for every new shade. [inferred]"
+    },
+    "G bold-deferential": {
+     "now": "Toward bold: brand color on big areas, custom parts everywhere. Toward deferential: accent on key actions only, native fonts and controls.",
+     "as_it_grows": "Bold means rebuilding custom parts for every platform and OS update; deferential gets platform updates for free."
+    }
+   },
+   "evidence": [
+    "DC-L06-02",
+    "DC-L06-03",
+    "DC-L04-02",
+    "DC-L10-02",
+    "DC-L01-03",
+    "S-L19-012"
+   ],
+   "standards": [
+    "STD-when-to-animate-05",
+    "STD-when-to-animate-09",
+    "STD-springs-gestures-07"
+   ]
+  },
+  "Q-brand-04": {
+   "options": {
+    "productive": {
+     "now": "Calm and efficient everywhere, with no big animated moments, like Carbon's product screens.",
+     "as_it_grows": "Stays comfortable for daily use as features pile up; a strong minority prefers calm, though it can seem less modern."
+    },
+    "hero-moments": {
+     "now": "Calm everywhere, plus one or two big moments, such as a first success, with bolder type and motion.",
+     "as_it_grows": "Big moments stay rare, like first run or finishing a task; everyday actions stay quiet, per house standards."
+    },
+    "expressive": {
+     "now": "Lively throughout: varied shapes, rich color, bigger type and fluid motion; Google's tests found it feels more modern.",
+     "as_it_grows": "Overdone, it hurts ease of use; house standards still keep motion off things people do many times a day."
+    }
+   },
+   "evidence": [
+    "DC-L06-03",
+    "DC-L04-19",
+    "S-L19-012"
+   ],
+   "standards": [
+    "STD-when-to-animate-05",
+    "STD-when-to-animate-09"
+   ]
+  },
+  "Q-brand-06": {
+   "options": {
+    "two-sets": {
+     "now": "A calm product text scale plus a separate, dramatic set with huge headings for marketing and articles.",
+     "as_it_grows": "Pays off once over a third of pages are marketing or editorial; two sets to keep in step across screen sizes."
+    },
+    "emphasized": {
+     "now": "One scale, plus heavier versions of styles for actions and headlines, like Material 3 Expressive.",
+     "as_it_grows": "One scale to maintain; emphasis grows by weight rather than new sizes, so pages stay consistent. [inferred]"
+    },
+    "brand-face": {
+     "now": "One scale, with your brand font kept for special brand moments, like Atlassian's Charlie Sans.",
+     "as_it_grows": "Brand moments stay recognizable as you grow, but the extra font must be licensed and loaded everywhere. [inferred]"
+    },
+    "productive-only": {
+     "now": "One product scale only, like Polaris and Primer: calm, with small jumps between sizes.",
+     "as_it_grows": "Simplest to keep; if a marketing site arrives, it will likely need 3-4 bigger display styles added."
+    }
+   },
+   "evidence": [
+    "DC-L02-11",
+    "DC-L02-01"
+   ]
+  },
+  "Q-plat-01": {
+   "options": {
+    "web": {
+     "now": "One set of CSS files, and your brand can show in every pixel.",
+     "as_it_grows": "Adding apps later brings each platform's own habits, units and screen readers to design and test for."
+    },
+    "ios": {
+     "now": "Apple styles the bars, controls and sheets (Liquid Glass); sizes are in points, and text follows Dynamic Type.",
+     "as_it_grows": "Apple's redesigns reach standard parts for free; parts you custom-build must be updated by hand."
+    },
+    "android": {
+     "now": "Material 3 habits and dp units; layouts for large screens (600 dp and up) are required.",
+     "as_it_grows": "Tablets and foldables come with it, so wider layouts with panes are needed from day one."
+    },
+    "desktop": {
+     "now": "A desktop app; built with web tech, it must respect the native window frame or it feels like a website. [inferred]",
+     "as_it_grows": "Windows resize freely, so layouts must change by window size, never by device type."
+    },
+    "secondary": {
+     "now": "Watch, TV, car or headset: only colors, text roles and icons carry over, inside platform templates.",
+     "as_it_grows": "Each device adds its own text sizes and focus styles; the smaller or farther the screen, the less custom UI survives. [inferred]"
+    }
+   },
+   "evidence": [
+    "DC-L10-01",
+    "DC-L10-02",
+    "DC-L10-10",
+    "DC-L10-24",
+    "DC-L14-01"
+   ]
+  },
+  "Q-plat-05": {
+   "options": {
+    "native-first": {
+     "now": "Uses the platform's own controls almost everywhere; your brand shows in content, accents, images and words.",
+     "as_it_grows": "OS updates and accessibility come built in, but the app looks more like other apps on the device."
+    },
+    "hybrid": {
+     "now": "Brand colors, type and signature moments, with native navigation, back gestures, sheets and pickers.",
+     "as_it_grows": "Share what people see as the brand, keep how the phone works native: about 80% native, 20% signature."
+    },
+    "brand-first": {
+     "now": "The same custom look on every platform; it can feel foreign, with the wrong back gestures or sheets.",
+     "as_it_grows": "Every OS change must be rebuilt by hand, and screen reader and text-size support must be rebuilt too."
+    }
+   },
+   "evidence": [
+    "DC-L10-02",
+    "DC-L06-14"
+   ]
+  },
+  "Q-plat-07": {
+   "options": {
+    "principles": {
+     "now": "Platforms share only ideas, so each app can look quite different.",
+     "as_it_grows": "Easiest to start, but the apps drift apart as teams grow, because nothing concrete is shared. [inferred]"
+    },
+    "tokens": {
+     "now": "Same colors, type personality and spacing everywhere, with components built to fit each platform.",
+     "as_it_grows": "Share the what (names and decisions) everywhere and let each platform's code do the how, so it still feels native. [inferred]"
+    },
+    "specs": {
+     "now": "One plan per component (parts, states, screen reader notes), coded separately per platform, like Uber Base.",
+     "as_it_grows": "One plan can serve many code stacks, but every plan change must then be built once per platform. [inferred]"
+    },
+    "code": {
+     "now": "Identical component code on every platform, so everything looks the same.",
+     "as_it_grows": "Features ship everywhere at once, but the app feels least native, and one bug reaches every platform. [inferred]"
+    }
+   },
+   "evidence": [
+    "DC-L10-03"
+   ]
+  },
+  "Q-plat-02": {
+   "options": {
+    "phone": {
+     "now": "Phones get layouts designed for them, because core tasks happen there.",
+     "as_it_grows": "Devices that only adapt the phone layout look stretched, which Google now penalizes on large screens."
+    },
+    "tablet-foldable": {
+     "now": "Adds rails, sidebars and two or three panes; Android ignores orientation locks at 600 dp and up.",
+     "as_it_grows": "Android forces this size on apps anyway, so skipping it means a stretched phone layout there."
+    },
+    "desktop-web": {
+     "now": "Wide layouts for desktop and web are designed properly, not stretched from the phone.",
+     "as_it_grows": "Big screens add panes and sidebars that change the product's shape; iPad windows make any size normal."
+    },
+    "watch": {
+     "now": "A dark, glanceable version with scrolling lists; only colors, type and icons travel.",
+     "as_it_grows": "Adds its own watch text sizes and motion values to maintain alongside the main system."
+    },
+    "tv": {
+     "now": "Big type, focus rows you move through with a remote, 66 pt targets and a safe border.",
+     "as_it_grows": "Adds a TV text scale and focus styles to every component that appears there."
+    },
+    "car": {
+     "now": "Uses the car system's templates: large, sparse, high-contrast screens with little room for your brand.",
+     "as_it_grows": "Templates limit custom UI, so only colors, type and icons carry over from the main system."
+    },
+    "spatial": {
+     "now": "Glass windows floating at a distance, with 60 pt targets.",
+     "as_it_grows": "Adds comfort rules, such as no motion at the edge of vision, to every animated part."
+    }
+   },
+   "evidence": [
+    "DC-L14-01",
+    "DC-L10-01",
+    "DC-L10-24"
+   ]
+  },
+  "Q-tool-01": {
+   "options": {
+    "builder": {
+     "now": "OpenDesigner's files are the master copy; one step writes tokens, CSS, native code and design-tool files.",
+     "as_it_grows": "Design tools stay mirrors refreshed from one master; 60% of teams have no such token automation."
+    },
+    "token-file": {
+     "now": "A token file in git is the master; code and Figma are fed from it.",
+     "as_it_grows": "Best once two or more code platforms exist, and it keeps colors Figma cannot hold, like OKLCH. [inferred]"
+    },
+    "code": {
+     "now": "Tokens and components live in code, and design tools copy from it, as most practitioners now work.",
+     "as_it_grows": "Real components can be tested automatically, but visual exploration becomes a second-class copy."
+    },
+    "design-file": {
+     "now": "Figma variables are the master, and designers own the tokens.",
+     "as_it_grows": "Fits one web platform; Figma drops some color formats, so with more platforms the master should move to files. [inferred]"
+    }
+   },
+   "evidence": [
+    "DC-L16-02",
+    "DC-L07-08",
+    "DC-L11-16",
+    "DC-L16-13"
+   ]
+  },
+  "Q-dir-01": {
+   "options": {
+    "flat2": {
+     "now": "Mostly flat surfaces, subtle shadows or tone steps, and clear signs of what to click: neutral and efficient.",
+     "as_it_grows": "A durable base that ages well as screens pile up; keep neo-brutalist and maximal styles for marketing pages."
+    },
+    "tonal": {
+     "now": "Surfaces separate by soft color steps: friendly and systematic, like Material 3.",
+     "as_it_grows": "Needs 4-5 close gray steps and matches Android's own look as you add platforms. [inferred]"
+    },
+    "glass": {
+     "now": "See-through bars and controls over the content: premium and native on Apple, but it can hide content.",
+     "as_it_grows": "Every glass surface needs a solid version for people who reduce transparency or raise contrast; large blurs may also slow drawing. [inferred]"
+    },
+    "neo-brutalist": {
+     "now": "Thick borders, hard offset shadows and 2-3 bold colors: loud, indie and memorable.",
+     "as_it_grows": "Its solid borders go against a house standard, and research keeps it to marketing or indie products."
+    },
+    "soft": {
+     "now": "Raised same-color surfaces with soft paired shadows: tactile but vague, and edges often fail contrast.",
+     "as_it_grows": "Every clickable part needs added borders to reach 3:1 contrast, which undoes much of the look. [inferred]"
+    },
+    "maximal": {
+     "now": "Vibrant colors, overlapping visuals and bold type: energetic but busy.",
+     "as_it_grows": "Meant for marketing only; inside the app, the busyness grows with every screen. [inferred]"
+    }
+   },
+   "evidence": [
+    "DC-L15-01",
+    "DC-L09-02"
+   ],
+   "standards": [
+    "STD-accessibility-motion-11",
+    "STD-accessibility-motion-12",
+    "STD-visual-details-14"
+   ]
+  },
+  "Q-dir-02": {
+   "options": {
+    "compact": {
+     "now": "More data per screen with tighter rows: looks efficient and expert.",
+     "as_it_grows": "Needs strong grouping and clear signs of what to click as screens fill; tap targets keep their minimum size."
+    },
+    "comfortable": {
+     "now": "Calmer and touch-friendly, with room around each item.",
+     "as_it_grows": "A good base for app screens; data-heavy tables and lists can add a compact mode later."
+    },
+    "spacious": {
+     "now": "Lots of space: calm, premium and focused on one message.",
+     "as_it_grows": "Great for marketing and focused tasks, but it slows down people who come back often."
+    },
+    "user-selectable": {
+     "now": "A default density plus a compact mode people can switch on, like Atlassian and Salesforce.",
+     "as_it_grows": "Only data-heavy parts (tables, lists, menus, trees) need both sizes; targets never shrink in either mode."
+    }
+   },
+   "evidence": [
+    "DC-L15-04",
+    "DC-L08-13",
+    "DC-L03-10"
+   ],
+   "standards": [
+    "STD-mobile-touch-09"
+   ]
+  },
+  "Q-color-01": {
+   "options": {
+    "keep-hex": {
+     "now": "Your exact brand colors stay, and a person tunes each shade by hand.",
+     "as_it_grows": "Keeps the brand's nuance, but every new color, mode or theme needs hand-tuning again. [inferred]"
+    },
+    "seed": {
+     "now": "One color generates even, matching shades for everything, like Material and Ant.",
+     "as_it_grows": "New colors and dark mode come out consistent; still check contrast, since Ant's own default blue fails with white text."
+    },
+    "seed-3": {
+     "now": "Three inputs (brand color, gray base and contrast) generate the whole palette.",
+     "as_it_grows": "Easy to retheme later: Linear replaced 98 per-theme variables with these three."
+    },
+    "contrast-targets": {
+     "now": "Each shade is set by a contrast goal, so text on every color stays readable.",
+     "as_it_grows": "Readability stays predictable across every new color and theme you add."
+    }
+   },
+   "evidence": [
+    "DC-L09-03",
+    "DC-L01-09",
+    "DC-L06-06"
+   ]
+  },
+  "Q-color-02": {
+   "options": {
+    "accent": {
+     "now": "Brand color only on main buttons, links, status and the selected tab: calm and content-first.",
+     "as_it_grows": "Stays calm as screens multiply and suits Apple's glass look; each view gives the color to one key element."
+    },
+    "signature-surface": {
+     "now": "One standout area, like Slack's purple sidebar, carries the brand: instantly recognizable.",
+     "as_it_grows": "Every new layout must keep room for that area, or the recognition fades. [inferred]"
+    },
+    "flooded-chrome": {
+     "now": "Brand color on the app bars and floating buttons: louder and more playful.",
+     "as_it_grows": "Normal on Android, but on iOS 26 a tinted bar reads as dated and 'fighting the glass'. [inferred]"
+    },
+    "content-layer": {
+     "now": "Brand color lives in the content, which scrolls under clear glass controls: modern, Apple 2026 style.",
+     "as_it_grows": "Each new screen needs colorful content to show the brand, and glass over bright content needs dimming for contrast. [inferred]"
+    },
+    "neutral-first": {
+     "now": "Mostly gray, with a faint brand tint on bars and menus, as Linear did with its blue.",
+     "as_it_grows": "Very calm at any size; the brand then relies on logo, type and words more than color. [inferred]"
+    }
+   },
+   "evidence": [
+    "DC-L06-04",
+    "DC-L10-04"
+   ]
+  },
+  "Q-color-03": {
+   "options": {
+    "monochrome": {
+     "now": "All gray or nearly gray: calm, premium and technical, like Polaris's black brand.",
+     "as_it_grows": "Status colors stand out clearly because little else is colorful; charts still need their own colors. [inferred]"
+    },
+    "tonal": {
+     "now": "Low to medium color: friendly and balanced, Material's default.",
+     "as_it_grows": "The safe default for work products: keep big surfaces soft and spend strong color on small, meaningful parts."
+    },
+    "vivid": {
+     "now": "Strong, saturated colors: energetic and consumer-grade.",
+     "as_it_grows": "As screens fill, everything shouts and status colors lose punch, so status also needs icons or words. [inferred]"
+    },
+    "expressive": {
+     "now": "Colors turned away from your brand hue: surprising and playful, like Material Expressive.",
+     "as_it_grows": "Your exact brand hue may barely appear, so recognition must come from other parts. [inferred]"
+    },
+    "fidelity": {
+     "now": "Your brand hue stays exact in containers and fills.",
+     "as_it_grows": "Best when the hue is a legal or recognition asset; light brand colors will need dark text on buttons."
+    }
+   },
+   "evidence": [
+    "DC-L01-10",
+    "DC-L06-05",
+    "DC-L01-09",
+    "DC-L01-21"
+   ]
+  },
+  "Q-color-06": {
+   "options": {
+    "static": {
+     "now": "Your brand colors stay fixed on every device; best for work apps and iOS.",
+     "as_it_grows": "Screenshots and brand recall stay the same for everyone as the product spreads. [inferred]"
+    },
+    "dynamic-optional": {
+     "now": "Fixed brand colors by default; Android users can switch on colors from their wallpaper.",
+     "as_it_grows": "Brand and error colors stay fixed, but testing grows: each wallpaper and mode can change the colors."
+    },
+    "follow-os": {
+     "now": "Colors follow the wallpaper or device accent: personal and native.",
+     "as_it_grows": "Every user's screenshots differ and brand recall weakens; keep brand-critical and status colors fixed. [inferred]"
+    }
+   },
+   "evidence": [
+    "DC-L10-05",
+    "DC-L01-21"
+   ]
+  },
+  "Q-color-07": {
+   "options": {
+    "oklch": {
+     "now": "Shades built so each step looks equally heavy in every color: the modern web method.",
+     "as_it_grows": "New colors slot in without shifting what looks important; contrast still gets checked after generation. [inferred]"
+    },
+    "hct": {
+     "now": "Material's method, numbered by tone, so the same tone gives the same brightness in every hue.",
+     "as_it_grows": "Needed if the system feeds Android dynamic color, and Material's tools read it on every platform."
+    },
+    "contrast-indexed": {
+     "now": "Every step has the same contrast in every color, like Spectrum's 700 steps.",
+     "as_it_grows": "Best if people can recolor the accent: every new accent passes the same text pairings."
+    },
+    "hand-tuned": {
+     "now": "Each color is tuned by hand: more character, less predictable.",
+     "as_it_grows": "Swapping or adding a hue can make buttons suddenly lighter or darker, so each one needs checking. [inferred]"
+    },
+    "preset": {
+     "now": "A ready-made palette like Tailwind's or Radix's: fast, with a recognizable stock look.",
+     "as_it_grows": "Quick to extend, but your product shares its colors with many others. [inferred]"
+    },
+    "lab-hsl": {
+     "now": "Older methods: Lab was Stripe's 2019 fix, and HSL washes out yellows and muddies blues.",
+     "as_it_grows": "HSL shades stay uneven with every color you add, so it is best avoided."
+    }
+   },
+   "evidence": [
+    "DC-L01-01",
+    "DC-L01-03",
+    "DC-L01-04"
+   ]
+  },
+  "Q-color-14": {
+   "options": {
+    "container-tiers": {
+     "now": "Named layers from lowest to highest, not tied to shadows: flat, calm and modern, like Material 3.",
+     "as_it_grows": "Works without shadows in both modes; clickable layers still need visible edges. [inferred]"
+    },
+    "alternating": {
+     "now": "Layers alternate shades in light mode and step lighter in dark: crisp and grid-like, like Carbon.",
+     "as_it_grows": "Clear on dense enterprise screens; deep nesting needs care so layers don't blur together. [inferred]"
+    },
+    "elevation-named": {
+     "now": "Layers named by height, like Atlassian's raised and overlay levels.",
+     "as_it_grows": "Names tie color to shadow height, so changing the depth style later touches both. [inferred]"
+    },
+    "role-tiers": {
+     "now": "4-5 layers named by job (base, raised, overlay, sunken), each with its own light and dark color.",
+     "as_it_grows": "New parts pick a layer by its job, and dark mode shows depth with lighter surfaces, not glowing shadows."
+    }
+   },
+   "evidence": [
+    "DC-L01-13",
+    "DC-L09-02"
+   ]
+  },
+  "Q-color-16": {
+   "options": {
+    "tone-reassign": {
+     "now": "Same color families, with each job moved to a new shade in dark mode, like Material.",
+     "as_it_grows": "What looks most important stays the same in both modes as screens are added."
+    },
+    "mirrored": {
+     "now": "A mirrored ramp (700 in light is 400 in dark) with separate dark grays, like Atlassian.",
+     "as_it_grows": "Each new color gets its dark version by role, and every pair is re-checked for contrast."
+    },
+    "separate": {
+     "now": "Separate hand-tuned dark scales, like Radix and Primer: richer darks.",
+     "as_it_grows": "Looks richer but drifts over time: every new color needs its own dark scale tuned. [inferred]"
+    }
+   },
+   "evidence": [
+    "DC-L01-18"
+   ],
+   "standards": [
+    "STD-visual-details-24"
+   ]
+  },
+  "Q-color-17": {
+   "options": {
+    "aa": {
+     "now": "Text needs 4.5:1 contrast, large text and parts 3:1, which allows softer gray text and lighter tints.",
+     "as_it_grows": "Every new color pair is tested against it in every mode, at every build."
+    },
+    "aaa": {
+     "now": "Text needs 7:1 contrast: darker gray text and deeper accents, which feels heavier and starker. [inferred]",
+     "as_it_grows": "Primer and Material keep it for high-contrast modes; applied everywhere, it limits every new color choice. [inferred]"
+    },
+    "aa-apca": {
+     "now": "AA must pass, plus APCA advice on body text, as Radix and Geist do.",
+     "as_it_grows": "Keeps you at AA today and closer to WCAG 3, which is still a draft. [inferred]"
+    }
+   },
+   "evidence": [
+    "DC-L01-22"
+   ]
+  },
+  "Q-type-01": {
+   "options": {
+    "system": {
+     "now": "Each device's own font, such as SF Pro or Roboto: native and invisible, so content leads.",
+     "as_it_grows": "Nothing to load or license, and native text-size settings work for free; the brand must show elsewhere."
+    },
+    "open-neutral": {
+     "now": "A free, plain font like Inter: the neutral SaaS look.",
+     "as_it_grows": "Looks the same on every platform with no license cost, but many products share it. [inferred]"
+    },
+    "open-custom": {
+     "now": "A free font with character, like IBM Plex or Geist: recognizable without license fees.",
+     "as_it_grows": "Consistent across platforms; native apps must bundle it and support text-size settings themselves. [inferred]"
+    },
+    "brand-display": {
+     "now": "Your brand font for headlines and the system font for body text, as Apple advises.",
+     "as_it_grows": "Headlines stay recognizable while small text stays legible on every new platform."
+    },
+    "brand-everywhere": {
+     "now": "Your own font everywhere, like Uber Move or Airbnb Cereal: the strongest identity.",
+     "as_it_grows": "Every platform must bundle it and rebuild text scaling; keep it out of body text if it looks weak at 13 pt."
+    }
+   },
+   "evidence": [
+    "DC-L09-05",
+    "DC-L02-01",
+    "DC-L06-07",
+    "DC-L10-06"
+   ],
+   "standards": [
+    "STD-visual-details-10",
+    "STD-visual-details-11"
+   ]
+  },
+  "Q-type-07": {
+   "options": {
+    "static": {
+     "now": "Fixed weights only, such as regular and bold: simplest, and works with any font.",
+     "as_it_grows": "Big headings need tighter letter spacing and line heights set by hand, since letters don't reshape by size."
+    },
+    "variable-wght": {
+     "now": "In-between weights, like Polaris's 450 and 550, for finer steps of emphasis.",
+     "as_it_grows": "New text styles can use finer emphasis steps without adding font files. [inferred]"
+    },
+    "variable-opsz": {
+     "now": "Weights plus letter shapes that adjust to size: sturdier small text and sleeker headings.",
+     "as_it_grows": "Every new size looks right on its own where the font supports it; otherwise heading spacing is set by hand."
+    }
+   },
+   "evidence": [
+    "DC-L02-04",
+    "DC-L02-14"
+   ],
+   "standards": [
+    "STD-visual-details-05"
+   ]
+  },
+  "Q-space-01": {
+   "options": {
+    "4-grid-8-rhythm": {
+     "now": "Spacing named in steps of 8, with 2, 4 and 6 kept for small gaps inside components.",
+     "as_it_grows": "What Material 3, Atlassian and Spectrum ship; 24, 44 and 48 px targets build from whole steps."
+    },
+    "4": {
+     "now": "Steps of 4 everywhere: finer control and a more compact, tool-like feel.",
+     "as_it_grows": "Suits dense, data-heavy tools; with many close steps, people may pick gaps that look almost the same. [inferred]"
+    },
+    "8": {
+     "now": "Steps of 8 with few in-between: chunky, calm and clearly different gaps.",
+     "as_it_grows": "Rhythm stays obvious on marketing and content pages; tight spots like icon labels may need exceptions. [inferred]"
+    },
+    "rem-16": {
+     "now": "Spacing in rem units based on 16 px, like Bootstrap, so it follows the person's text-size setting on the web.",
+     "as_it_grows": "Spacing grows when people enlarge text; native apps convert it to their own point and dp units. [inferred]"
+    }
+   },
+   "evidence": [
+    "DC-L03-01",
+    "DC-L03-02"
+   ]
+  },
+  "Q-space-02": {
+   "options": {
+    "hybrid": {
+     "now": "Small steps at the bottom and bigger jumps at the top: tight inside groups, loose between them.",
+     "as_it_grows": "About 12-15 steps cover app and marketing pages, with the big top steps kept for page sections."
+    },
+    "linear": {
+     "now": "Even 4 px steps: many choices close together.",
+     "as_it_grows": "Near-identical gaps like 20, 24 and 28 creep in and read as inconsistency."
+    },
+    "geometric": {
+     "now": "Each step doubles (2, 4, 8, 16, 32, 64): very clear levels.",
+     "as_it_grows": "Grouping reads instantly, but big jumps may leave no good size for some layouts. [inferred]"
+    }
+   },
+   "evidence": [
+    "DC-L03-02"
+   ]
+  },
+  "Q-layout-01": {
+   "options": {
+    "material": {
+     "now": "Layouts change at 600, 840, 1200 and 1600: works for Android and the web.",
+     "as_it_grows": "One set shared across platforms; Material notes some products never need the largest sizes."
+    },
+    "tailwind": {
+     "now": "Layouts change at 640, 768, 1024, 1280 and 1536: the common web-only set.",
+     "as_it_grows": "Fine while you stay on the web; adding native apps later means mapping to their own size classes. [inferred]"
+    },
+    "bootstrap": {
+     "now": "Layouts change at 576, 768, 992, 1200 and 1400: Bootstrap's set.",
+     "as_it_grows": "Familiar to Bootstrap teams; more breakpoints mean smoother changes but more design and testing. [inferred]"
+    },
+    "apple-size-classes": {
+     "now": "The system reports compact or regular width and height, and the layout follows that.",
+     "as_it_grows": "Handles any iPad window size, because layout follows window size, never device type."
+    }
+   },
+   "evidence": [
+    "DC-L03-14",
+    "DC-L10-10"
+   ]
+  },
+  "Q-shape-01": {
+   "options": {
+    "square": {
+     "now": "Corners of 0-2 px: official and engineered, like GOV.UK and Carbon.",
+     "as_it_grows": "Sharp corners become a deliberate brand choice, since even Carbon is adding roundness; iOS rounds its own controls anyway. [inferred]"
+    },
+    "subtle": {
+     "now": "Corners of 4-6 px: businesslike, like Primer and Atlassian.",
+     "as_it_grows": "The safest default across audiences; containers get 8-12 px, and focus rings follow the corners."
+    },
+    "soft": {
+     "now": "Corners of 8-12 px: friendly and modern, like Polaris and Airbnb.",
+     "as_it_grows": "Nested cards need matching inner corners, which iOS expects and the web must work out itself. [inferred]"
+    },
+    "pill": {
+     "now": "Fully round ends: consumer, playful and touch-first, like Material 3 and iOS 26.",
+     "as_it_grows": "Needs taller controls, so it fits poorly on dense, short controls in data tools."
+    },
+    "rule-based": {
+     "now": "Corners set by size, like Spectrum's 6-10 px, or matched to the container, as Apple does.",
+     "as_it_grows": "New parts get the right corner from their size or container, without a new decision. [inferred]"
+    }
+   },
+   "evidence": [
+    "DC-L09-01",
+    "DC-L04-02"
+   ]
+  },
+  "Q-depth-01": {
+   "options": {
+    "shadow": {
+     "now": "A ladder of shadows: tactile and clearly layered, like Fluent and Polaris.",
+     "as_it_grows": "Best kept for things that float, like menus and dialogs; static cards can use color steps instead."
+    },
+    "tonal": {
+     "now": "Layers separate by color steps: flat, calm and color-forward, like Carbon and Linear.",
+     "as_it_grows": "Suits data-dense tools; needs 4-5 close gray steps, and clickable card edges need 3:1 contrast."
+    },
+    "borders": {
+     "now": "Thin lines only: dense and technical, like GOV.UK and Primer.",
+     "as_it_grows": "A house standard prefers see-through shadows to solid borders, and clickable card edges need 3:1 contrast."
+    },
+    "ring-shadow": {
+     "now": "A faint 1 px ring plus a soft shadow: crisp edges, like Radix, Geist and Airbnb.",
+     "as_it_grows": "Matches the house standard's see-through edges; in dark mode, lighter surfaces replace shadows."
+    },
+    "glass": {
+     "now": "Frosted, see-through materials: premium and content-first, like Apple's Liquid Glass.",
+     "as_it_grows": "Every glass surface needs a solid version for people who reduce transparency or raise contrast; large blurs may also slow drawing. [inferred]"
+    }
+   },
+   "evidence": [
+    "DC-L09-02",
+    "DC-L04-10",
+    "DC-L08-15"
+   ],
+   "standards": [
+    "STD-visual-details-14",
+    "STD-accessibility-motion-11",
+    "STD-accessibility-motion-12"
+   ]
+  },
+  "Q-motion-01": {
+   "options": {
+    "none": {
+     "now": "Almost nothing moves; press feedback and quick fades that explain a change stay. Still and calm, like GOV.UK.",
+     "as_it_grows": "Stays consistent as screens grow, but rare moments like a first success get no extra life. [inferred]"
+    },
+    "productive": {
+     "now": "Quick, plain movements with no bounce: fast and competent.",
+     "as_it_grows": "Fits frequent actions as features grow; things done 100+ times a day still get no animation at all."
+    },
+    "two-mode": {
+     "now": "Quick, plain motion for most actions, with bolder motion kept for a few key moments.",
+     "as_it_grows": "Bold moments stay rare, like onboarding or a first success; daily actions stay quick and quiet, and core navigation doesn't animate."
+    },
+    "springs": {
+     "now": "Movement feels physical and can be caught mid-way; bounce stays for flicks, drags and rare playful moments, per house standards.",
+     "as_it_grows": "Springs drive whatever a finger moves; motion nobody touched keeps plain timing curves, and the web needs a JavaScript spring library."
+    }
+   },
+   "evidence": [
+    "DC-L09-06",
+    "DC-L04-19",
+    "DC-L06-10",
+    "S-L19-012",
+    "S-L19-018",
+    "S-L19-023"
+   ],
+   "standards": [
+    "STD-when-to-animate-05",
+    "STD-when-to-animate-09",
+    "STD-easing-duration-13",
+    "STD-springs-gestures-01",
+    "STD-springs-gestures-05",
+    "STD-springs-gestures-16",
+    "STD-accessibility-motion-02",
+    "STD-mobile-touch-05"
+   ]
+  },
+  "Q-voice-01": {
+   "options": {
+    "upload": {
+     "now": "Your existing guide becomes the rules for all product words.",
+     "as_it_grows": "Every new screen, error and empty state follows it, and copy arguments settle by pointing to it."
+    },
+    "plainspoken": {
+     "now": "Plainspoken and genuine, with dry humor, like Mailchimp.",
+     "as_it_grows": "Voice stays the same everywhere while tone softens for errors and serious moments, so humor gets rationed. [inferred]"
+    },
+    "warm-crisp": {
+     "now": "Warm and relaxed, crisp and clear, ready to help, like Microsoft.",
+     "as_it_grows": "Holds up as more writers join, as long as each trait has a 'but not' so it isn't vague. [inferred]"
+    },
+    "bold-optimistic": {
+     "now": "Bold, optimistic and practical with a wink, like Atlassian.",
+     "as_it_grows": "Optimism must not hide bad news, so error and billing messages need a plainer tone. [inferred]"
+    },
+    "custom": {
+     "now": "Your own 3-4 traits in 'X, but not Y' form, with words to avoid.",
+     "as_it_grows": "Example lines per trait let new writers and AI tools match it; a content designer should review it. [inferred]"
+    }
+   },
+   "evidence": [
+    "DC-L06-18"
+   ]
+  }
+ }
+}

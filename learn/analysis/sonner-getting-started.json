@@ -1,0 +1,189 @@
+{
+  "summary": "The Getting Started page of the Sonner docs shows the three steps to put toasts into a React app. You install the sonner package, add the Toaster component once to your app, and call the toast() function from any event handler to show a toast. The page stresses that Toaster can be placed anywhere, even in a server component such as the root layout.tsx. For a design system this fixes the setup pattern for toasts: a Toaster mounted in the root layout and a single function call for every message. [inferred]",
+  "key_ideas": [
+    "Sonner is a toast component for React.",
+    "Install it from the command line as the sonner package.",
+    "Toasts need a Toaster component rendered in the app.",
+    "Toaster can live anywhere, including a server component such as layout.tsx.",
+    "The example mounts Toaster inside body, after the page children, in the root layout.",
+    "A toast is shown by calling toast() with a string, for example from a button's onClick.",
+    "Toaster and toast are named imports from 'sonner'.",
+    "Every toast option is documented on the separate toast() page."
+  ],
+  "entities": [
+    {
+      "name": "Sonner",
+      "type": "library",
+      "description": "The toast component for React that this page sets up."
+    },
+    {
+      "name": "Toaster",
+      "type": "concept",
+      "description": "Sonner's component that must be added to the app so toasts can render."
+    },
+    {
+      "name": "toast()",
+      "type": "concept",
+      "description": "Sonner's function that renders a toast when called."
+    },
+    {
+      "name": "React",
+      "type": "library",
+      "description": "The UI framework Sonner is built for."
+    },
+    {
+      "name": "pnpm",
+      "type": "tool",
+      "description": "The package manager used in the install command."
+    },
+    {
+      "name": "aiforui.dev",
+      "type": "product",
+      "description": "A course promoted in the site-wide banner at the top of the page."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Toasts and notifications",
+      "summary": "How to install Sonner, mount the Toaster and render a first toast."
+    },
+    {
+      "name": "UI libraries",
+      "summary": "Sonner is presented as a ready-made toast component for React, installed as a package."
+    },
+    {
+      "name": "Web implementation (CSS and React)",
+      "summary": "Shows the React code: Toaster in the root layout.tsx and toast('Toast') in a button onClick."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Sonner is a toast component for React.",
+      "evidence": "Sonner is a toast component for React."
+    },
+    {
+      "claim": "The Toaster component can be placed anywhere in the app, even in server components such as layout.tsx.",
+      "evidence": "It can be placed anywhere, even in server components such as layout.tsx"
+    },
+    {
+      "claim": "Calling toast() with a string renders a toast.",
+      "evidence": "Render a toast"
+    },
+    {
+      "claim": "All toast options are documented on the toast page.",
+      "evidence": "For all options, view the toast page"
+    }
+  ],
+  "quotes": [
+    "Sonner is a toast component for React.",
+    "It can be placed anywhere, even in server components such as layout.tsx"
+  ],
+  "tags": [
+    "sonner",
+    "toast",
+    "react",
+    "setup",
+    "installation",
+    "nextjs-layout"
+  ],
+  "authority": "non-negotiable",
+  "rules": [
+    {
+      "rule": "Install the sonner package from the command line; this page's command is pnpm i sonner.",
+      "why": "Installation is the first documented step: install the component from your command line.",
+      "kind": "do",
+      "strength": "should",
+      "area": "tooling",
+      "applies_to": "react",
+      "values": [
+        "pnpm i sonner"
+      ],
+      "evidence": "Install the component from your command line."
+    },
+    {
+      "rule": "Add the <Toaster /> component to the app before calling toast(); the example mounts it inside <body>, after {children}, in the root layout.tsx.",
+      "why": "Getting Started lists adding Toaster to your app as a setup step, before rendering a toast.",
+      "kind": "do",
+      "strength": "must",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "<Toaster />",
+        "layout.tsx"
+      ],
+      "evidence": "Add Toaster to your app"
+    },
+    {
+      "rule": "It is fine to render <Toaster /> inside a server component such as layout.tsx; it does not have to sit in a particular place.",
+      "why": "The docs say it can be placed anywhere, even in server components.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "layout.tsx"
+      ],
+      "evidence": "It can be placed anywhere, even in server components such as layout.tsx"
+    },
+    {
+      "rule": "Import Toaster and toast as named imports from the 'sonner' package.",
+      "why": "This is how the page's code examples import the component and the function.",
+      "kind": "do",
+      "strength": "should",
+      "area": "tooling",
+      "applies_to": "react",
+      "values": [
+        "import { Toaster } from 'sonner'",
+        "import { toast } from 'sonner'"
+      ],
+      "evidence": "import { Toaster } from 'sonner'"
+    },
+    {
+      "rule": "Show a toast by calling toast() with the message string from an event handler, for example a button's onClick.",
+      "why": "This is the documented way to render a toast.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "toast('Toast')",
+        "onClick={() => toast('Toast')}"
+      ],
+      "evidence": "Render a toast"
+    }
+  ],
+  "decisions": [],
+  "process": [
+    {
+      "step": "Install",
+      "detail": "Run pnpm i sonner from the command line."
+    },
+    {
+      "step": "Add Toaster to your app",
+      "detail": "Import { Toaster } from 'sonner' and render <Toaster /> in the app, for example inside <body> after {children} in the root layout.tsx. A server component is fine."
+    },
+    {
+      "step": "Render a toast",
+      "detail": "Import { toast } from 'sonner' and call toast('...') from an event handler such as a button's onClick. See the toast page for all options."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Root layout with Toaster",
+      "where": "layout.tsx (RootLayout)",
+      "visual_note": "Code only: <html lang=\"en\"><body>{children}<Toaster /></body></html>, showing Toaster mounted once at the root, after the page content."
+    },
+    {
+      "what": "Button that renders a toast",
+      "where": "MyToast component",
+      "visual_note": "Code only: a button labelled 'Render Toast' whose onClick calls toast('Toast')."
+    }
+  ],
+  "numbers": [],
+  "caveats": [
+    "A site-wide banner promotes the author's aiforui.dev course with a countdown ('31 minutes left to join'). This is self-promotion and time-sensitive, not documentation.",
+    "The page's publish date is unknown, so the API it shows may have changed since it was fetched.",
+    "This page installs with pnpm i sonner, while the Sonner homepage uses npm install sonner.",
+    "The page links to a write-up on how Sonner was built, but that write-up is not part of this text."
+  ]
+}

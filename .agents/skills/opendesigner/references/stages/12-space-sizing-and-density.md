@@ -16,9 +16,13 @@ Zoom 2 defined · weight high · changes 5 decisions · class G · cards DC-L03-
 - **Why:** The base unit sets the smallest step you can see between two spacings. 8 gives chunky, calm steps; 4 gives finer control [DC-L03-01].
 - **Options:**
   - `4-grid-8-rhythm` 4 as the grid, 8 as the rhythm: named on an 8 base with 2, 4, 6, 12 kept for internals (Material 3, Atlassian, Spectrum).
+    - Now: Spacing named in steps of 8, with 2, 4 and 6 kept for small gaps inside components. As it grows: What Material 3, Atlassian and Spectrum ship; 24, 44 and 48 px targets build from whole steps.
   - `4` 4 throughout (Fluent 2, Polaris, Primer, Tailwind `--spacing: 0.25rem`).
+    - Now: Steps of 4 everywhere: finer control and a more compact, tool-like feel. As it grows: Suits dense, data-heavy tools; with many close steps, people may pick gaps that look almost the same. [inferred]
   - `8` 8 with few sub-steps (Carbon's 8px mini unit).
+    - Now: Steps of 8 with few in-between: chunky, calm and clearly different gaps. As it grows: Rhythm stays obvious on marketing and content pages; tight spots like icon labels may need exceptions. [inferred]
   - `rem-16` 16px rem-based (Bootstrap `$spacer: 1rem`) [DC-L03-01].
+    - Now: Spacing in rem units based on 16 px, like Bootstrap, so it follows the person's text-size setting on the web. As it grows: Spacing grows when people enlarge text; native apps convert it to their own point and dp units. [inferred]
 - **Default:** 4-grid-8-rhythm *Source:* L09 shared default row 2 (4px base, 17 of 22 systems contain the 4-64 ladder) and card heuristic [L09 A1; DC-L03-01].
 - **Show:** a card, form and toolbar with spacing overlays; hovering any gap shows its token and value.
 - **Use / avoid:** use the 2/4/6 sub-steps inside components (icon-to-label, chip padding); avoid them between layout sections [DC-L03-01, DC-L03-04].
@@ -30,8 +34,11 @@ Zoom 2 defined · weight high · changes 5 decisions · class G · cards DC-L03-
 - **Why:** Steps that grow in bigger jumps (hybrid or doubling) make levels of spacing easy to see at a glance. Even steps that sit close together get used in mixed-up ways [DC-L03-02].
 - **Options:**
   - `hybrid` Fine at the bottom, coarse at the top: 0, 2, 4, 6, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80 (Atlassian's exact set; Carbon similar to 160).
+    - Now: Small steps at the bottom and bigger jumps at the top: tight inside groups, loose between them. As it grows: About 12-15 steps cover app and marketing pages, with the big top steps kept for page sections.
   - `linear` Even 4px steps (Tailwind open-ended, Fluent to 56, Primer to 48).
+    - Now: Even 4 px steps: many choices close together. As it grows: Near-identical gaps like 20, 24 and 28 creep in and read as inconsistency.
   - `geometric` Doubling: 2, 4, 8, 16, 32, 64 (Curtis: linear offers "too many choices too close together").
+    - Now: Each step doubles (2, 4, 8, 16, 32, 64): very clear levels. As it grows: Grouping reads instantly, but big jumps may leave no good size for some layouts. [inferred]
 - **Default:** `hybrid`: hybrid, 12-15 steps *Source:* card heuristic [DC-L03-02]; L09 shared default row 2 (0, 2, 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96).
 - **Show:** the scale as bars; dragging a step shows where it is used on the component sheet.
 - **Use / avoid:** keep adjacent steps at least about 25% apart above 8px so the difference is visible; avoid adding steps nobody can tell apart [DC-L03-02].

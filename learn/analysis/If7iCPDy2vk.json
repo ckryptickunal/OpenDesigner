@@ -1,0 +1,717 @@
+{
+  "summary": "Kole Jain walks through the UI patterns that 'unicorn' (billion dollar) AI startups share: a large prompt box, generation history and memory, inline AI editing, showing the AI's work, streamed and skeleton loading, confidence indicators, and a dark soft glass look. For most of them he names real products that do it well (Claude, Replit, Cursor, Notion AI, Lex.page, Perplexity, Relume, Amazon Comprehend, ChatGPT), and for several he describes his own free Figma component (memory panel, inline edit selectors, research trail, skeleton shimmer, confidence pill, glass surface). The common thread is that an AI product should give feedback at every step: previews in the input, retrievable history, visible and controllable memory, fast inline revision, a visible research trail, output that streams in, and an honest signal of how sure the model is [inferred]. For someone building a design system for an AI product, it gives a checklist of components (prompt input, history list, memory panel, inline edit bar, step trail, skeleton with shimmer, confidence pill) plus a recipe for the glass surface.",
+  "key_ideas": [
+    "Prompt-based tools tend to open with a giant prompt box, which gets people trying the tool immediately and keeps the area above the fold clean.",
+    "ChatGPT and Gemini dropped their landing pages entirely, so visitors land straight in the interface.",
+    "A good prompt box previews attachments such as PDFs and images, and compresses large pastes such as code into a compact block.",
+    "Mode chips, adding context such as code, integration buttons (Google Drive, GitHub, Figma, internal tools), an advanced-mode toggle and a token cost estimate turn the input into a control panel.",
+    "Loading indicators in AI tools should be short, looping and fluid.",
+    "Generation history is essential for products that output text, code or images, and its core principle is retrievability: snippets, deletion and search.",
+    "History records what happened; memory records what matters, so persistent memory should be visible and user-controlled, not hidden in settings.",
+    "Inline AI editing (highlight, then say what to change) feels like real-time revision rather than regeneration; keep its controls short and compact.",
+    "Showing the steps the AI took (documents retrieved, sources cited) makes the product feel intelligent and like a collaborator, not a black box.",
+    "Waiting is tolerable when there is feedback: streaming output word by word and skeletons with shimmer make delays part of the experience.",
+    "Confidence indicators tell people when an AI answer may be wrong: a label such as 'high confidence' or 'unverified', with the numeric score one click away.",
+    "The dark soft glass look (dark background, blur, striking gradients, subtle animation) is common among AI startups and simple to build in Figma."
+  ],
+  "entities": [
+    {
+      "name": "Kole Jain",
+      "type": "person",
+      "description": "Creator of the video; presents the AI UI patterns and gives away Figma components he built for them."
+    },
+    {
+      "name": "ChatGPT",
+      "type": "product",
+      "description": "Cited for dropping its landing page, organising history by session, exposing memory, and streaming responses."
+    },
+    {
+      "name": "Gemini",
+      "type": "product",
+      "description": "Cited alongside ChatGPT for dropping its landing page so visitors land in the interface."
+    },
+    {
+      "name": "Claude",
+      "type": "product",
+      "description": "Cited for previewing attached PDFs and images as blocks, its rotating star loading animation, and inline AI editing."
+    },
+    {
+      "name": "Replit",
+      "type": "product",
+      "description": "Cited for compressing pasted code into a clean viewable block in the prompt box."
+    },
+    {
+      "name": "Cursor",
+      "type": "product",
+      "description": "Cited for letting people add code context to the chat."
+    },
+    {
+      "name": "Notion AI",
+      "type": "product",
+      "description": "Cited for its three bouncing dots loader, generations tied to the original block, contextual edit buttons and streamed output."
+    },
+    {
+      "name": "Lex.page",
+      "type": "product",
+      "description": "Writing tool cited for rephrasing a sentence inline with keyboard shortcuts."
+    },
+    {
+      "name": "Perplexity",
+      "type": "product",
+      "description": "Cited for showing its research steps: documents retrieved, sources cited and the flow of logic."
+    },
+    {
+      "name": "Relume",
+      "type": "product",
+      "description": "Cited for skeleton loading with shimmer placeholders while generating a wireframe (captions say 'Reloom')."
+    },
+    {
+      "name": "Amazon Comprehend",
+      "type": "product",
+      "description": "Cited for showing a confidence score with an answer (97% in the source's example, 61% or an 'uncertain' flag when unsure)."
+    },
+    {
+      "name": "GitHub",
+      "type": "company",
+      "description": "Cited as a page using the dark soft glass look."
+    },
+    {
+      "name": "Figma",
+      "type": "tool",
+      "description": "Tool used to build the glass effect and the free component files."
+    },
+    {
+      "name": "Final Round AI",
+      "type": "company",
+      "description": "Sponsor of the video; its cover letter generator is plugged mid-video (captions say 'final rounds')."
+    },
+    {
+      "name": "Progressive disclosure",
+      "type": "concept",
+      "description": "Built right into the prompt input, for example a button that toggles advanced mode or a token cost estimate above the input."
+    },
+    {
+      "name": "Retrievability",
+      "type": "concept",
+      "description": "The core design principle for generation history: people must be able to find past outputs again."
+    },
+    {
+      "name": "Confidence indicator",
+      "type": "concept",
+      "description": "A label or score showing how sure the AI is about an answer."
+    },
+    {
+      "name": "Dark soft glass effect",
+      "type": "concept",
+      "description": "Translucent dark surfaces with blur, gradients, a one pixel border and soft inner shadow."
+    }
+  ],
+  "topics": [
+    {
+      "name": "SaaS product UI",
+      "summary": "Seven recurring component patterns in AI products: prompt box, history and memory, inline editing, visible reasoning steps, loading, confidence indicators and glass styling."
+    },
+    {
+      "name": "Forms and inputs",
+      "summary": "The prompt box as the main input: attachment previews, collapsing large pastes, mode chips, context and integration buttons, an advanced toggle and a token cost estimate."
+    },
+    {
+      "name": "Feedback, empty and loading states",
+      "summary": "Short looping loaders, streaming output word by word, skeleton placeholders with shimmer, step-by-step research trails and confidence labels all give feedback during waits."
+    },
+    {
+      "name": "Micro-interactions",
+      "summary": "Examples of small motion: Notion AI's three bouncing dots, Claude's rotating star, research steps fading in one by one, and a shimmer running across a glass border."
+    },
+    {
+      "name": "Depth, shadows and borders",
+      "summary": "The dark soft glass recipe: a semi-transparent rectangle, subtle gradient, background blur, a one pixel border and a soft inner shadow."
+    },
+    {
+      "name": "Landing pages",
+      "summary": "ChatGPT and Gemini dropped their landing pages so visitors land in the product; a giant prompt box above the fold gets people trying the tool immediately, kind of like Google."
+    },
+    {
+      "name": "Figma and design tools",
+      "summary": "The glass effect is described as easy to build in Figma, and the components are shared as Figma files."
+    },
+    {
+      "name": "Design resources",
+      "summary": "The creator gives away Figma files of the components he built for each pattern."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Starting with a giant prompt box gets the user trying out the tool immediately and gives a cleaner aesthetic above the fold.",
+      "evidence": "It gets the user trying out the tool immediately"
+    },
+    {
+      "claim": "ChatGPT and Gemini have both ditched their landing pages entirely, so the moment you land you are in the interface.",
+      "evidence": "both ditched their landing pages entirely"
+    },
+    {
+      "claim": "Replit compresses pasted code instantly into a clean viewable block.",
+      "evidence": "Pasting code instantly compresses into a clean viewable block"
+    },
+    {
+      "claim": "Letting people add code context to the chat gives them confidence that the AI knows what they want before they say it.",
+      "evidence": "gives you the confidence that the AI knows what you want"
+    },
+    {
+      "claim": "Most AI tools still hide memory in settings or do not expose it at all.",
+      "evidence": "most tools still hide memory in settings"
+    },
+    {
+      "claim": "Inline AI editing is fast, contextual and removes friction.",
+      "evidence": "It's fast, contextual, and removes friction"
+    },
+    {
+      "claim": "Showing research steps makes the product feel intelligent because it shows the AI is referencing material rather than pulling answers from the void.",
+      "evidence": "pulling answers from the void"
+    },
+    {
+      "claim": "Streaming responses word by word turns delay into anticipation.",
+      "evidence": "That trickle of output turns delay into anticipation"
+    },
+    {
+      "claim": "Amazon Comprehend returns a confidence score with an answer, for example 97% for a confident answer, and may show 61% or flag the result as uncertain when unsure.",
+      "evidence": "Amazon comprehend does this well"
+    },
+    {
+      "claim": "Startups use the dark soft glass effect to exude technological supremacy.",
+      "evidence": "trying to exude technological supremacy"
+    },
+    {
+      "claim": "Showing the AI thinking makes even delays part of the experience; what users hate is waiting without feedback.",
+      "evidence": "even delays become part of the experience"
+    },
+    {
+      "claim": "ChatGPT has implemented user-visible memory control, but most tools still hide memory in settings or do not expose it.",
+      "evidence": "Chat GBT has implemented this"
+    }
+  ],
+  "quotes": [
+    "Actually, users hate waiting without feedback.",
+    "memory is a record of what matters.",
+    "turns your history into a workspace, not a waste basket."
+  ],
+  "tags": [
+    "ai-products",
+    "prompt-box",
+    "generation-history",
+    "ai-memory",
+    "inline-editing",
+    "streaming",
+    "skeleton-loading",
+    "shimmer",
+    "confidence-indicator",
+    "glassmorphism",
+    "progressive-disclosure",
+    "loading-states",
+    "kole-jain"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "In prompt-based tools, open with a large prompt box above the fold so people can try the tool straight away.",
+      "why": "It gets the user trying out the tool immediately and gives a much cleaner aesthetic above the fold.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "if you're not starting with a giant prompt box"
+    },
+    {
+      "rule": "Preview attached PDFs and images as blocks inside the prompt box.",
+      "why": "A great prompt box has to feel useful, not just be an input field.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "previewing PDFs or images like these blocks"
+    },
+    {
+      "rule": "Collapse large pasted inputs such as code into a compact, viewable block instead of showing them in full in the chat.",
+      "why": "So they don't take over the chat.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "grouping large inputs like code blocks"
+    },
+    {
+      "rule": "When the AI has broad use cases, let people give it context in the prompt box: chips that switch the mode (for example brainstorm, data, email) or a way to add context such as code.",
+      "why": "It gets better answers, and adding context (as Cursor does with code) gives people confidence the AI knows what they want before they say it.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [
+        "brainstorm",
+        "data",
+        "email"
+      ],
+      "evidence": "Think chips that change the mode"
+    },
+    {
+      "rule": "Consider integration buttons in the prompt box that connect to other tools such as Google Drive, GitHub, Figma or internal tools.",
+      "why": "As AI gets more capable, deep integrations are starting to appear in prompt boxes.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [
+        "Google Drive",
+        "GitHub",
+        "Figma"
+      ],
+      "evidence": "Think buttons that connect to Google Drive, GitHub, Figma"
+    },
+    {
+      "rule": "Build progressive disclosure into the prompt input, such as a button that toggles advanced mode or a token cost estimate shown right above the input.",
+      "why": "It turns the prompt box from just an input into the control panel for the product.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "build progressive disclosure right into the input"
+    },
+    {
+      "rule": "Keep AI loading indicators short, looping and fluid.",
+      "why": "The prompt experience should all feel fast.",
+      "kind": "do",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "three bouncing dots",
+        "rotating star"
+      ],
+      "evidence": "Any loading indicators need to be short, looping, and fluid"
+    },
+    {
+      "rule": "If the product outputs text, code or images, provide a generation history.",
+      "why": "The source calls generation history essential for such products.",
+      "kind": "do",
+      "strength": "must",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "generation history is essential"
+    },
+    {
+      "rule": "In generation history, preview the first line or a short snippet of each generation, allow deleting chats, and allow search.",
+      "why": "The core design principle is retrievability; search turns history into a workspace, not a waste basket.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "The core design principle is retrievability"
+    },
+    {
+      "rule": "If the AI has persistent memory, show it to people and let them control it.",
+      "why": "History is a record of what happened, but memory is a record of what matters; the source calls it a huge opportunity.",
+      "kind": "do",
+      "strength": "must",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "you absolutely need to show it and let users control it"
+    },
+    {
+      "rule": "Give persistent memory a dedicated panel where people can see the storage space used, bulk delete irrelevant content and add key facts.",
+      "why": "It is how the source's own component lets users see and control memory.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "we're giving users a dedicated memory panel"
+    },
+    {
+      "rule": "Do not hide AI memory in settings or leave it unexposed.",
+      "why": "The source calls hiding memory, as most tools do, 'wild'.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "most tools still hide memory in settings"
+    },
+    {
+      "rule": "Let people highlight any part of an AI response and type what they want changed.",
+      "why": "It is fast, contextual and removes friction, and feels like real-time revision, not regeneration.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "inline AI editing"
+    },
+    {
+      "rule": "Keep the inline edit control short and compact: a few quick selectors plus keyboard shortcuts.",
+      "why": "For the user it then feels like real-time revision, not regeneration.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "The idea is to keep this short and compact"
+    },
+    {
+      "rule": "Show the steps the AI took, such as documents retrieved and sources cited, fading each step in one by one.",
+      "why": "It makes the product feel intelligent and the AI feel like a collaborator, not a black box.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [
+        "searching docs",
+        "extracting quotes",
+        "drafting answer"
+      ],
+      "evidence": "These fade in one by one"
+    },
+    {
+      "rule": "Don't make people wait without feedback; show the AI thinking while it works.",
+      "why": "Users hate waiting without feedback, but when the AI is shown thinking, even delays become part of the experience.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "users hate waiting without feedback"
+    },
+    {
+      "rule": "Stream AI responses word by word rather than showing them only when complete.",
+      "why": "Users hate waiting without feedback; the trickle of output turns delay into anticipation.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "stream their responses word by word"
+    },
+    {
+      "rule": "While content generates, show skeleton placeholders with a shimmer effect where the content will appear, then slot the content exactly into place.",
+      "why": "The layout feels alive and the product feels like it is working alongside the user.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Skeleton loading, like in Reloom"
+    },
+    {
+      "rule": "Show a confidence indicator with AI answers: a label or score that flags when the result is uncertain.",
+      "why": "A lot of AI outputs feel confident but aren't; the source calls confidence indicators the solution.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "the solution? Confidence indicators"
+    },
+    {
+      "rule": "Build the confidence indicator as a pill-shaped bar below each AI response with a label such as 'high confidence' or 'unverified', clickable to reveal the numeric confidence value.",
+      "why": "It is the source's own component for flagging uncertain answers.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [
+        "high confidence",
+        "unverified"
+      ],
+      "evidence": "pill-shaped bar below each AI response"
+    },
+    {
+      "rule": "To build a dark soft glass surface, use a rectangle with some transparency, a subtle gradient, background blur, a one pixel border and a soft inner shadow.",
+      "why": "It is the look AI startups use to exude technological supremacy, and it is easy to build in Figma.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "elevation",
+      "applies_to": "all",
+      "values": [
+        "one pixel border"
+      ],
+      "evidence": "a one pixel border and soft inner shadow"
+    },
+    {
+      "rule": "Optionally run a gentle shimmer across the border of a glass surface for a subtle animation.",
+      "why": "The source adds it to its glass component for a subtle, luxury glass feel.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "a gentle shimmer that runs across the border"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "What should a first-time visitor to an AI product land on?",
+      "options": [
+        {
+          "name": "A separate landing page",
+          "effect": "Visitors read marketing before they touch the tool [inferred].",
+          "when": "Not recommended by the source for prompt-based tools [inferred]."
+        },
+        {
+          "name": "The interface itself, led by a giant prompt box",
+          "effect": "Visitors start trying the tool immediately, with a clean, Google-like area above the fold.",
+          "when": "Prompt-based tools; ChatGPT and Gemini work this way."
+        }
+      ],
+      "recommendation": "Start with a giant prompt box; it gets people using the tool immediately and looks cleaner above the fold.",
+      "maps_to": null,
+      "evidence": "both ditched their landing pages entirely"
+    },
+    {
+      "question": "How should the product organise past generations?",
+      "options": [
+        {
+          "name": "By session in a vertical list",
+          "effect": "A list of previous runs, one entry per session.",
+          "when": "As ChatGPT does."
+        },
+        {
+          "name": "Tied to the original document block",
+          "effect": "Each generation stays attached to the place it was made.",
+          "when": "As Notion AI does."
+        }
+      ],
+      "recommendation": "Either way, design for retrievability: a snippet preview per item, deletion and search.",
+      "maps_to": null,
+      "evidence": "Tools like ChachiBT organized by session"
+    },
+    {
+      "question": "How do people revise part of an AI response?",
+      "options": [
+        {
+          "name": "Regenerate the whole response",
+          "effect": "The full answer is replaced [inferred].",
+          "when": "The source contrasts this with inline editing, which feels like revision instead [inferred]."
+        },
+        {
+          "name": "Highlight and type the change",
+          "effect": "Fast, contextual editing of just the selected part.",
+          "when": "As Claude does with its responses."
+        },
+        {
+          "name": "Keyboard shortcuts for inline rephrasing",
+          "effect": "Rephrase a sentence in place with a few keys.",
+          "when": "As the writing tool Lex.page does."
+        },
+        {
+          "name": "Contextual buttons under each paragraph",
+          "effect": "One-click actions such as 'improve writing' or 'fix spelling'.",
+          "when": "As Notion AI does."
+        }
+      ],
+      "recommendation": "Offer inline editing and keep it short and compact: a few quick selectors and keyboard shortcuts, so it feels like real-time revision, not regeneration.",
+      "maps_to": null,
+      "evidence": "real-time revision, not regeneration"
+    },
+    {
+      "question": "What should people see while the AI is generating?",
+      "options": [
+        {
+          "name": "A short looping indicator",
+          "effect": "A small fluid loop such as three bouncing dots or a rotating star.",
+          "when": "Loading indicators in the prompt experience (Notion AI, Claude)."
+        },
+        {
+          "name": "Streamed output word by word",
+          "effect": "A trickle of output that turns delay into anticipation.",
+          "when": "Text responses (Notion AI, ChatGPT and everyone else)."
+        },
+        {
+          "name": "Skeleton placeholders with shimmer",
+          "effect": "Placeholder images and text boxes shimmer, then the content slots exactly into place.",
+          "when": "Generated layouts, as in Relume's wireframe canvas."
+        },
+        {
+          "name": "A step-by-step research trail",
+          "effect": "Steps like searching docs, extracting quotes and drafting answer fade in one by one.",
+          "when": "Research and retrieval, as Perplexity does."
+        }
+      ],
+      "recommendation": "Don't make people wait without feedback; show the AI thinking through streaming, skeletons with shimmer, or visible steps, and keep any loader short, looping and fluid.",
+      "maps_to": "Q-state-08",
+      "evidence": "users hate waiting without feedback"
+    },
+    {
+      "question": "How should the product show how sure the AI is?",
+      "options": [
+        {
+          "name": "A numeric confidence score",
+          "effect": "A percentage such as 97% for a confident answer or 61% when unsure.",
+          "when": "As Amazon Comprehend does."
+        },
+        {
+          "name": "A labelled pill below each response",
+          "effect": "A pill-shaped bar reading 'high confidence' or 'unverified', clickable for the numeric value.",
+          "when": "The source's own component."
+        },
+        {
+          "name": "No indicator",
+          "effect": "Every output looks equally confident, though many aren't [inferred].",
+          "when": "The source argues this is the problem to solve [inferred]."
+        }
+      ],
+      "recommendation": "Use a labelled pill below each response and let people click for the numeric value.",
+      "maps_to": null,
+      "evidence": "Confidence indicators"
+    }
+  ],
+  "process": [
+    {
+      "step": "Build the prompt box as a control panel",
+      "detail": "Start from a large input, then add attachment previews, collapsed blocks for large pastes, mode chips, context and integration buttons (Google Drive, GitHub, Figma), an advanced-mode toggle and a token cost estimate above the input."
+    },
+    {
+      "step": "Design the history list for retrieval",
+      "detail": "Show the first line or a short snippet of each generation, allow deleting chats, and add search."
+    },
+    {
+      "step": "Add a memory panel",
+      "detail": "Show the storage space used, allow bulk deleting irrelevant content, and let people add key facts to persistent memory."
+    },
+    {
+      "step": "Build the inline edit control",
+      "detail": "Let people highlight part of a response and type the change; keep the control short and compact with a few quick selectors and keyboard shortcuts."
+    },
+    {
+      "step": "Build the research trail",
+      "detail": "Simulate a mini research trail of three animated steps (searching docs, extracting quotes, drafting answer) that fade in one by one."
+    },
+    {
+      "step": "Build the skeleton loader",
+      "detail": "Place a simple loading animation and shimmer where the text will eventually appear; when the content is ready it slots into place (as Relume does)."
+    },
+    {
+      "step": "Build the confidence pill",
+      "detail": "Put a pill-shaped bar below each AI response with a label such as 'high confidence' or 'unverified', and let people click it for the numeric confidence value."
+    },
+    {
+      "step": "Build the dark soft glass surface in Figma",
+      "detail": "Draw a rectangle with some transparency, add a subtle gradient, blur the background, add a one pixel border and a soft inner shadow; optionally run a gentle shimmer across the border."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Landing straight in the interface",
+      "where": "ChatGPT and Gemini",
+      "visual_note": "No landing page: a giant prompt box above the fold, kind of like Google."
+    },
+    {
+      "what": "Attachment previews in the prompt box",
+      "where": "Claude",
+      "visual_note": "Attached PDFs and images show as preview blocks inside the input."
+    },
+    {
+      "what": "Pasted code collapses into a block",
+      "where": "Replit",
+      "visual_note": "Pasting code instantly compresses into a clean viewable block so it doesn't take over the chat."
+    },
+    {
+      "what": "Adding code context to the chat",
+      "where": "Cursor",
+      "visual_note": "People attach code context to a message, signalling the AI knows what they mean."
+    },
+    {
+      "what": "Short looping loaders",
+      "where": "Notion AI and Claude",
+      "visual_note": "Notion AI's three bouncing dots and Claude's rotating star animation."
+    },
+    {
+      "what": "Generation history styles",
+      "where": "ChatGPT and Notion AI",
+      "visual_note": "ChatGPT lists previous runs by session vertically; Notion AI ties generations to the original document block."
+    },
+    {
+      "what": "Memory panel component",
+      "where": "Kole Jain's free component (ChatGPT has a similar feature)",
+      "visual_note": "A dedicated panel showing storage space, bulk delete and adding key facts."
+    },
+    {
+      "what": "Inline AI editing",
+      "where": "Claude, Lex.page, Notion AI",
+      "visual_note": "Highlight a response and type the change (Claude); rephrase with keyboard shortcuts (Lex.page); buttons like 'improve writing' or 'fix spelling' under each paragraph (Notion AI)."
+    },
+    {
+      "what": "Research trail",
+      "where": "Perplexity; Kole Jain's component",
+      "visual_note": "Perplexity shows documents retrieved, sources cited and a logic flow across hops; the component shows three animated steps fading in one by one."
+    },
+    {
+      "what": "Skeleton loading with shimmer",
+      "where": "Relume",
+      "visual_note": "While generating a wireframe, the canvas shows placeholder images and text boxes with shimmer, then content slots into place."
+    },
+    {
+      "what": "Confidence score",
+      "where": "Amazon Comprehend",
+      "visual_note": "Asked who was president in 2009, it returns Barack Obama with a score such as 97%; uncertain answers might show 61% or an uncertain flag."
+    },
+    {
+      "what": "Confidence pill component",
+      "where": "Kole Jain's free component",
+      "visual_note": "A pill-shaped bar below each AI response labelled 'high confidence' or 'unverified'; clicking it shows the numeric value."
+    },
+    {
+      "what": "Dark soft glass look",
+      "where": "GitHub",
+      "visual_note": "Dark backgrounds, blur, striking gradients and subtle animations; the component adds a shimmer running across the border."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "97%",
+      "context": "Example confidence score Amazon Comprehend might show for a confident answer",
+      "evidence": "maybe 97%"
+    },
+    {
+      "value": "61%",
+      "context": "Example confidence score when the model is not sure",
+      "evidence": "it might show 61%"
+    },
+    {
+      "value": "one pixel",
+      "context": "Border width on the dark soft glass surface",
+      "evidence": "a one pixel border and soft inner shadow"
+    },
+    {
+      "value": "three",
+      "context": "Animated steps in the research trail component (searching docs, extracting quotes, drafting answer)",
+      "evidence": "three animated steps"
+    },
+    {
+      "value": "7",
+      "context": "Number of AI startup UI components covered in the video",
+      "evidence": "The 7 UI Components to Design Like Unicorn AI Startups"
+    },
+    {
+      "value": "three",
+      "context": "Notion AI's loader is three bouncing dots",
+      "evidence": "Notion AI's three bouncing dots"
+    }
+  ],
+  "caveats": [
+    "Sponsor segment for Final Round AI's cover letter generator (a claimed 30 minutes by hand versus about one with the tool); excluded from rules.",
+    "The video shows components on screen but states almost no exact values: no durations, blur amounts, opacities, gradient colours or shadow settings for the glass effect beyond the one pixel border.",
+    "The source counts '7 UI components' in the title, but the transcript does not number them; how the patterns group into seven is the analyst's reading [inferred].",
+    "The patterns describe what AI startups do in 2025 (published 2025-08-13), not tested results; phrases like 'you're doing it wrong' and 'Twitter would really benefit' are opinion.",
+    "The confidence scores (97%, 61%) are illustrative examples, not measured values.",
+    "Amazon Comprehend is a text analysis service, not a question-answering tool, so the 'president in 2009' confidence example may be illustrative rather than a real Comprehend feature [inferred].",
+    "Auto-caption fixes: 'ChachiBT', 'CHBT' and 'Chat GBT' read as ChatGPT, 'Replet' as Replit, 'Reloom' as Relume, 'final rounds' as Final Round AI. 'context taking' is left as captioned; it may mean context tagging. [inferred]",
+    "The video does not discuss accessibility of shimmer or streaming (for example reduced motion or screen reader announcements) or contrast on translucent glass surfaces.",
+    "The timestamps in the description are cut off after 'Inlin'."
+  ]
+}

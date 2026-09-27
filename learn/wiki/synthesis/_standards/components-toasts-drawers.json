@@ -1,0 +1,3230 @@
+{
+  "theme": "components-toasts-drawers",
+  "standards": [
+    {
+      "id": "STD-components-toasts-drawers-01",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Use Sonner for toasts",
+      "rule": "Build toasts with Sonner; do not hand-roll a toast component or build toasts with a modal library. If the project already uses another toast library, flag the recommendation instead of replacing the dependency unasked.",
+      "why": "Sonner is the curated pick for toasts and exists for exactly this; the animate skill sends any task that needs a component such as a toast to the library pick, because hand-rolling those is how you end up with no focus management.",
+      "strength": "must",
+      "values": {
+        "library": "sonner",
+        "install": "npm install sonner"
+      },
+      "applies_to": [
+        "web",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-pick-ui-library-skill",
+          "evidence": "Toasts built by hand or with a modal library"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "Hand-rolling those is how you end up"
+        },
+        {
+          "id": "eks-readme",
+          "evidence": "instead of letting AI hand-roll a toast component"
+        },
+        {
+          "id": "sonner-home",
+          "evidence": "An opinionated toast component for React"
+        },
+        {
+          "id": "eks-skills-pick-ui-library-skill",
+          "evidence": "flag the recommendation but don't churn the dependency without being asked"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-02",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Mount one Toaster at the root",
+      "rule": "Mount exactly one <Toaster /> once, as close to the app root as possible (in Next.js, layout.tsx), and never render it per page, conditionally, or in both a layout and a page.",
+      "why": "A second mounted Toaster duplicates every toast, and an unmounted one means toasts never appear.",
+      "strength": "must",
+      "values": {
+        "mount": "<Toaster />",
+        "next.js": "layout.tsx"
+      },
+      "applies_to": [
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-ask-sonner-skill",
+          "evidence": "Never render it per-page or conditionally"
+        },
+        {
+          "id": "eks-skills-ask-sonner-skill",
+          "evidence": "Two Toasters mounted"
+        },
+        {
+          "id": "sonner-getting-started",
+          "evidence": "Add Toaster to your app"
+        },
+        {
+          "id": "sonner-home",
+          "evidence": "Render the toaster in the root of your app"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-03",
+      "theme": "components-toasts-drawers",
+      "area": "elevation",
+      "title": "Keep the Toaster outside stacking contexts",
+      "rule": "Mount the Toaster at the document root, outside any dialog or portal container and outside any ancestor with transform, filter or overflow.",
+      "why": "Such an ancestor creates a stacking context, or the overlay out-z-indexes the toaster, so toasts sit behind a modal or get clipped.",
+      "strength": "should",
+      "values": {
+        "avoid-ancestors": "transform, filter, overflow"
+      },
+      "applies_to": [
+        "web",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-ask-sonner-skill",
+          "evidence": "Move `<Toaster />` to the document root, outside any dialog/portal container"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-04",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Call toast() only from client code",
+      "rule": "Call toast() only from client code (event handlers, effects, callbacks); in a server action, return the result and call toast() in the client code that receives it.",
+      "why": "toast() is a plain function that does nothing on the server.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-ask-sonner-skill",
+          "evidence": "it does nothing on the server"
+        },
+        {
+          "id": "sonner-getting-started",
+          "evidence": "Render a toast"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-05",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Fire toasts from handlers or stable ids",
+      "rule": "Fire toasts from event handlers; when a toast must fire from an effect, pass a stable id so a repeated call updates the toast instead of duplicating it.",
+      "why": "React StrictMode's dev double-invoke runs effects twice; a stable id makes the second call update rather than duplicate.",
+      "strength": "should",
+      "values": {
+        "effect-fix": "stable id"
+      },
+      "applies_to": [
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-ask-sonner-skill",
+          "evidence": "React StrictMode's dev double-invoke"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-06",
+      "theme": "components-toasts-drawers",
+      "area": "motion",
+      "title": "Toasts use transitions, never keyframes",
+      "rule": "Animate toast entry and stack movement with CSS transitions (or springs), never @keyframes, and treat anything a user can trigger twice in a second the same way.",
+      "why": "Keyframes cannot change their end position while running and restart from zero, so older toasts jump into place when toasts arrive quickly; transitions can be interrupted and retargeted mid-flight.",
+      "strength": "must",
+      "values": {
+        "transition": "transition: transform 400ms ease"
+      },
+      "applies_to": [
+        "css",
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-toast-component",
+          "evidence": "CSS transitions, on the other hand, can be interrupted and retargeted"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "Transitions, not keyframes, for anything triggered rapidly"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Use transitions, not keyframes, for dynamic UI"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "on toasts/toggles/rapidly-triggered UI"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "Keyframes on toasts, toggles, or anything added/triggered rapidly"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Interruptibility"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "(?i)@keyframes\\s+[\\w-]*toast[\\w-]*|\\.(?=[\\w-]*toast)(?![\\w-]*(?:spin|load|icon))[\\w-]+(?![\\w-])[^{}]*\\{[^}]*\\banimation(?:-name)?\\s*:(?!\\s*none\\b)",
+        "message": "Toasts must animate with CSS transitions (e.g. transition: transform 400ms ease), not keyframes, so they can be retargeted."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-07",
+      "theme": "components-toasts-drawers",
+      "area": "motion",
+      "title": "Web toast enter: 400ms ease from below",
+      "rule": "On the web, enter a toast from opacity: 0 and transform: translateY(100%) to its settled position with transition: opacity 400ms ease, transform 400ms ease, using @starting-style (or a mounted flag set in useEffect where @starting-style is unavailable).",
+      "why": "A toast that suddenly appears feels off; Sonner uses ease rather than ease-out and runs slightly slower than typical UI because its motion is tuned to the component's personality.",
+      "strength": "should",
+      "values": {
+        "from": "opacity: 0; transform: translateY(100%)",
+        "transition": "opacity 400ms ease, transform 400ms ease",
+        "entry": "@starting-style",
+        "fallback": "useEffect(() => { setMounted(true); }, []); <div data-mounted={mounted}>"
+      },
+      "applies_to": [
+        "web",
+        "css",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-toast-component",
+          "evidence": "start at translateY(100%) and transition to translateY(0)"
+        },
+        {
+          "id": "ek-you-dont-need-animations",
+          "evidence": "Having a toast suddenly appear would feel off"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "slightly slower than typical UI"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "slightly slower than typical UI animations"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "New toasts appear instantly"
+        }
+      ],
+      "engine": [
+        {
+          "path": "motion.duration.toast",
+          "value": "400ms",
+          "type": "duration",
+          "note": "new token for the toast enter/exit transition"
+        },
+        {
+          "path": "motion.easing.toast",
+          "value": [
+            0.25,
+            0.1,
+            0.25,
+            1
+          ],
+          "type": "cubicBezier",
+          "note": "new token for CSS `ease`; the cubic-bezier(0.25, 0.1, 0.25, 1) equivalence comes from the CSS spec, not the source [inferred]"
+        }
+      ],
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py build_motion_context: motion.transition.enter ('Menus, popovers, toasts entering') uses motion.duration.medium (240ms at default dials) with motion.easing.enter [0, 0, 0, 1]; Sonner's web toast enters over 400ms with ease."
+      ]
+    },
+    {
+      "id": "STD-components-toasts-drawers-08",
+      "theme": "components-toasts-drawers",
+      "area": "motion",
+      "title": "React Native toasts: 300ms in, 250ms out",
+      "rule": "In React Native, enter toasts with FadeInDown.duration(300).easing(EASE_OUT), exit with FadeOutDown.duration(250).easing(EASE_OUT), keep them within the 300ms cap, and define both builders at module scope.",
+      "why": "A toast is uninvited, so it should be quicker and quieter than motion the user asked for; the user has finished reading, so the exit runs about 20% faster than the entry.",
+      "strength": "must",
+      "values": {
+        "enter": "FadeInDown.duration(300).easing(EASE_OUT)",
+        "exit": "FadeOutDown.duration(250).easing(EASE_OUT)",
+        "cap": "300ms",
+        "exit-vs-enter": "~20% faster",
+        "EASE_OUT": "Easing.bezier(0.23, 1, 0.32, 1)"
+      },
+      "applies_to": [
+        "react-native"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "The 300ms cap holds here too"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Exit ~20% faster than entry"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-09",
+      "theme": "components-toasts-drawers",
+      "area": "motion",
+      "title": "Exit the way it entered",
+      "rule": "Make toasts, sheets and other dismissable surfaces leave by the same edge and path they entered from, matching the swipe-to-dismiss direction.",
+      "why": "Symmetric paths create spatial consistency, which makes swipe-to-dismiss feel obvious; entering from the bottom and leaving to the side reads as two unrelated elements.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-you-dont-need-animations",
+          "evidence": "it comes from and leaves in the same direction"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "It exits the way it entered"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "Exit the way it entered"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "toast enters and exits from the same direction"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "toast enters and exits the same edge"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "Enter and exit along the same path"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-10",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Stack toasts with lift and depth",
+      "rule": "In the collapsed stack, position toasts absolutely, lift each toast behind the front one by the gap times its index, and scale it down by 0.05 per index; apply this only to non-front toasts while the stack is collapsed.",
+      "why": "Absolute positioning simplifies the stacking, and scaling the toasts behind down creates a sense of depth.",
+      "strength": "should",
+      "values": {
+        "scale": "scale(calc((-1 * var(--toasts-before) * 0.05) + 1))",
+        "lift": "translateY(calc(var(--lift-amount) * var(--toasts-before)))",
+        "examples": "Y(0) scale(1); Y(-14px) scale(0.95); Y(-28px) scale(0.9)",
+        "selector": "[data-sonner-toast][data-expanded=\"false\"][data-front=\"false\"]"
+      },
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-toast-component",
+          "evidence": "scale them down by 0.05 * index to create a sense of depth"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-11",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Stacked toasts share the front height",
+      "rule": "While toasts are stacked, give every toast the height of the toast in front.",
+      "why": "Toasts with different heights otherwise do not stick out evenly behind the front toast.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-toast-component",
+          "evidence": "make all the toasts the height of the toast in front when in stacked mode"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-12",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Expand the toast stack on hover",
+      "rule": "Keep the toast stack collapsed and expand it while the pointer hovers the toast area (expand: false by default); when expanded, offset each toast by its index times the gap plus the heights of the toasts before it, with a gap of 14.",
+      "why": "Stacked mode hides older toasts and hovering reveals them; toasts can differ in height, so each expanded offset adds the real heights above it.",
+      "strength": "should",
+      "values": {
+        "expand": "false (default)",
+        "offset": "heightIndex * GAP + toastsHeightBefore",
+        "gap": "14"
+      },
+      "applies_to": [
+        "web",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-toast-component",
+          "evidence": "hover over the toast area to expand and see all the toasts"
+        },
+        {
+          "id": "eks-skills-ask-sonner-api",
+          "evidence": "Toasts expanded by default (otherwise they expand on hover)"
+        },
+        {
+          "id": "eks-skills-ask-sonner-api",
+          "evidence": "Gap between toasts when expanded"
+        },
+        {
+          "id": "sonner-toaster",
+          "evidence": "When you hover on one of the toasts, they will expand"
+        }
+      ],
+      "engine": {
+        "path": "component.toast.gap",
+        "value": "14px",
+        "type": "dimension",
+        "note": "new token; Sonner documents gap as the number 14 without a unit, so px is [inferred]"
+      },
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-13",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Fill gaps between toasts for hover",
+      "rule": "Fill the gaps between expanded toasts with an :after pseudo-element so the hover state holds while the pointer crosses a gap.",
+      "why": "The gaps belong to no toast, so hovering them would make the toasts lose their hover state (and collapse).",
+      "strength": "must",
+      "values": {
+        "css": ":after"
+      },
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-toast-component",
+          "evidence": "add an :after pseudo-element to fill these gaps"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Fill gaps between stacked toasts with pseudo-elements"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-14",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Show at most three toasts",
+      "rule": "Show at most 3 toasts at once by default (visibleToasts: 3).",
+      "why": "3 is Sonner's documented default number of visible toasts.",
+      "strength": "should",
+      "values": {
+        "visibleToasts": "3"
+      },
+      "applies_to": [
+        "web",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-ask-sonner-api",
+          "evidence": "Amount of visible toasts"
+        },
+        {
+          "id": "sonner-toaster",
+          "evidence": "9 toasts will be visible instead of the default, which is 3"
+        }
+      ],
+      "engine": {
+        "path": "component.toast.visible",
+        "value": 3,
+        "type": "number",
+        "note": "new token; `engine.py set` cannot create a number token on this path yet (it asks for a type), so the engine needs a number rule for it"
+      },
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-15",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Auto-dismiss toasts after 4 seconds",
+      "rule": "Auto-close toasts after 4000ms by default.",
+      "why": "4000ms is Sonner's default duration: by default the toast disappears after 4 seconds unless you hover over it.",
+      "strength": "should",
+      "values": {
+        "duration": "4000ms"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-toast-component",
+          "evidence": "By default the toast disappears after 4 seconds"
+        },
+        {
+          "id": "eks-skills-ask-sonner-api",
+          "evidence": "Milliseconds before auto-close"
+        },
+        {
+          "id": "sonner-toast",
+          "evidence": "API Reference"
+        }
+      ],
+      "engine": {
+        "path": "component.toast.duration",
+        "value": "4000ms",
+        "type": "duration",
+        "note": "new token for the toast auto-dismiss time"
+      },
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "synthesis/cards.json DC-L08-18 default and skills/opendesigner/references/stages/22-forms-validation-and-feedback.md Q-form-04 option inline-banner say to 'never auto-dismiss toasts that contain actions', while Sonner closes action toasts after the same 4000ms unless duration is changed [inferred]"
+      ]
+    },
+    {
+      "id": "STD-components-toasts-drawers-16",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Pause the toast timer on hover",
+      "rule": "Pause the auto-dismiss timer while the pointer hovers the toasts.",
+      "why": "The toast disappears after 4 seconds unless you hover over it, so a person reading it keeps it.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-toast-component",
+          "evidence": "unless you hover over it"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-17",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Pause toast timers in a hidden tab",
+      "rule": "Pause the auto-dismiss timer while the document is hidden (document.hidden and the visibilitychange event).",
+      "why": "A toast fired while the person is on another tab would otherwise time out unseen; an inactive tab should freeze its toasts.",
+      "strength": "must",
+      "values": {
+        "api": "document.hidden + visibilitychange",
+        "hook": "useIsDocumentHidden"
+      },
+      "applies_to": [
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-toast-component",
+          "evidence": "useIsDocumentHidden hook that checks if the document (tab) is hidden"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Pause toast timers when the tab is hidden"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-18",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Swipe toasts away along their position",
+      "rule": "Let people swipe toasts away on touch and on desktop, with the allowed swipe directions following the toaster position; override swipeDirections only when they must differ.",
+      "why": "People are used to swiping notifications away on their devices, and Sonner derives the swipe directions from the position.",
+      "strength": "should",
+      "values": {
+        "swipeDirections": "based on position (default)"
+      },
+      "applies_to": [
+        "web",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-toast-component",
+          "evidence": "You can also swipe on desktop"
+        },
+        {
+          "id": "eks-skills-ask-sonner-api",
+          "evidence": "Allowed swipe-to-dismiss directions"
+        },
+        {
+          "id": "eks-skills-ask-sonner-skill",
+          "evidence": "Swipe-to-dismiss goes the wrong way"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-19",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Pick the toast call by need",
+      "rule": "Pick the toast() call by what the message needs: toast('Title') with { description } for plain messages, toast.success/error/info/warning for status, toast.promise for work tied to one promise, toast.loading plus an update by id when you manage the states yourself, { action } / { cancel } for buttons, and toast.custom for headless JSX.",
+      "why": "Typed calls carry the matching icon, the promise toast starts loading and switches to success or error on its own, and the action button closes the toast unless onClick calls event.preventDefault().",
+      "strength": "should",
+      "values": {
+        "plain": "toast('Title', { description })",
+        "status": "toast.success / toast.error / toast.info / toast.warning",
+        "promise": "toast.promise(promise, { loading, success, error })",
+        "manual-async": "toast.loading('…') then toast.success('…', { id })",
+        "action": "{ action: { label, onClick } }; event.preventDefault() keeps it open; cancel is the secondary button",
+        "custom-shell": "toast(<jsx />)",
+        "headless": "toast.custom((t) => <jsx />)"
+      },
+      "applies_to": [
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-ask-sonner-skill",
+          "evidence": "Picking the right call"
+        },
+        {
+          "id": "eks-skills-ask-sonner-api",
+          "evidence": "Typed toast with matching icon"
+        },
+        {
+          "id": "sonner-toast",
+          "evidence": "Starts in a loading state and will update automatically"
+        },
+        {
+          "id": "sonner-toast",
+          "evidence": "Renders a primary button, clicking it will close the toast"
+        },
+        {
+          "id": "ek-building-a-toast-component",
+          "evidence": "People often praise Sonner"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-20",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Promise toasts need a settling promise",
+      "rule": "Pass toast.promise a promise, or a function returning one, that actually resolves or rejects.",
+      "why": "Otherwise the loading toast waits forever and never closes.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-ask-sonner-skill",
+          "evidence": "the promise must actually resolve/reject"
+        },
+        {
+          "id": "eks-skills-ask-sonner-skill",
+          "evidence": "a `toast.promise` whose promise never settles"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-21",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Update a toast by its id",
+      "rule": "To change a toast already on screen, keep the id toast() returns and call toast() (or a typed call such as toast.success) again with that id, passing only the props that change, instead of adding a new toast.",
+      "why": "Calling toast() with the same id updates the existing toast, only the props you pass change, and a typed call switches its type.",
+      "strength": "should",
+      "values": {
+        "example": "const id = toast.loading('Uploading…'); toast.success('Uploaded', { id });"
+      },
+      "applies_to": [
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-ask-sonner-skill",
+          "evidence": "only the props you pass change"
+        },
+        {
+          "id": "sonner-other",
+          "evidence": "The toast() function returns the id of the toast"
+        },
+        {
+          "id": "eks-skills-ask-sonner-api",
+          "evidence": "calling `toast()` again with the same id updates the existing toast"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-22",
+      "theme": "components-toasts-drawers",
+      "area": "color",
+      "title": "Toasts follow the app theme",
+      "rule": "In an app with a dark theme, set the Toaster theme to 'system' or pass the theme provider's resolved theme (for example <Toaster theme={resolvedTheme} /> from next-themes).",
+      "why": "theme defaults to 'light' and does not track the OS, so dark mode is otherwise ignored.",
+      "strength": "must",
+      "values": {
+        "theme": "theme=\"system\" or theme={resolvedTheme}",
+        "default": "'light'"
+      },
+      "applies_to": [
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-ask-sonner-skill",
+          "evidence": "does not track the OS"
+        },
+        {
+          "id": "eks-skills-ask-sonner-api",
+          "evidence": "`'light'`, `'dark'`, or `'system'`"
+        },
+        {
+          "id": "sonner-toaster",
+          "evidence": "Dynamic theme"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-23",
+      "theme": "components-toasts-drawers",
+      "area": "color",
+      "title": "Rich colors and invert from defaults",
+      "rule": "Start toast styling from Sonner's defaults: add richColors on the Toaster when success and error must read green and red, and use invert only to flip toasts against the theme.",
+      "why": "Success and error toasts are gray by default; richColors and invert are the first rung of the styling ladder.",
+      "strength": "should",
+      "values": {
+        "richColors": "false (default)",
+        "invert": "false (default)"
+      },
+      "applies_to": [
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-ask-sonner-skill",
+          "evidence": "Success/error look gray, not green/red"
+        },
+        {
+          "id": "eks-skills-ask-sonner-skill",
+          "evidence": "plus `richColors` on the Toaster for colorful success/error"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py semantic colors: color.bg.inverse is described as 'Tooltips and toasts: the inverted surface' (and color.text.inverse as text on it for tooltips and toasts), while Sonner's default is invert: false, so toasts follow the theme instead of inverting [inferred]"
+      ]
+    },
+    {
+      "id": "STD-components-toasts-drawers-24",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Headless toast for the design system",
+      "rule": "Build the design system's toast headless with toast.custom() and your own JSX, wrapped in your own toast() function. Climb the styling ladder (defaults, inline style, classNames, headless) only as far as a change needs: the middle rungs suit a few small changes, and a design-system toast should not linger there.",
+      "why": "Headless keeps Sonner's positioning, stacking and swipe while giving full control, and it is the recommended approach because people usually either use the defaults or go fully custom; styling parts with classes gets messy quickly and is a good compromise only for a few changes.",
+      "strength": "should",
+      "values": {
+        "headless": "toast.custom((t) => <jsx />)",
+        "small-change": "toastOptions={{ style: { … } }}",
+        "avoid": "unstyled: true (a halfway house; headless gives more control for the same effort)"
+      },
+      "applies_to": [
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-ask-sonner-skill",
+          "evidence": "The recommended approach for a design-system toast"
+        },
+        {
+          "id": "eks-skills-ask-sonner-skill",
+          "evidence": "lingering in the middle is not"
+        },
+        {
+          "id": "sonner-styling",
+          "evidence": "people usually either use the defaults or go fully custom"
+        },
+        {
+          "id": "sonner-styling",
+          "evidence": "This can get quite messy quickly"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-25",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Toast classNames need !important",
+      "rule": "When styling toast parts through toastOptions.classNames (toast, title, description, actionButton, cancelButton, closeButton), mark every class !important (Tailwind: the ! prefix) unless the toast is unstyled, and go headless once more than a few classes need it.",
+      "why": "Sonner's injected styles win the cascade, so classes without !important have no effect.",
+      "strength": "must",
+      "values": {
+        "parts": "toast, title, description, actionButton, cancelButton, closeButton",
+        "tailwind": "!text-red-900"
+      },
+      "applies_to": [
+        "css",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-ask-sonner-skill",
+          "evidence": "Sonner's injected styles win the cascade"
+        },
+        {
+          "id": "eks-skills-ask-sonner-api",
+          "evidence": "Needs `!important` unless `unstyled`"
+        },
+        {
+          "id": "sonner-styling",
+          "evidence": "You will need to use !important in order to override the default styles"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-26",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Set toast defaults on the Toaster",
+      "rule": "Put app-wide toast options in the Toaster's toastOptions and override them per toast() call only where needed.",
+      "why": "Options passed to toast() override the same options set on the Toaster.",
+      "strength": "should",
+      "values": {
+        "prop": "toastOptions"
+      },
+      "applies_to": [
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-ask-sonner-api",
+          "evidence": "Options passed to `toast()` override the same options"
+        },
+        {
+          "id": "sonner-toast",
+          "evidence": "These will override the options passed to <Toaster />"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-27",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Target toasts when several toasters exist",
+      "rule": "When more than one Toaster exists, give each an id and pass toasterId in every toast() call.",
+      "why": "Without toasterId, every toaster renders the toast.",
+      "strength": "must",
+      "values": {
+        "example": "<Toaster id=\"canvas\" />; toast('…', { toasterId: 'canvas' })"
+      },
+      "applies_to": [
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-ask-sonner-skill",
+          "evidence": "Without `toasterId`, every toaster renders the toast"
+        },
+        {
+          "id": "eks-skills-ask-sonner-api",
+          "evidence": "targeted by `toast()`'s `toasterId` option"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-28",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Handle dismiss and auto-close separately",
+      "rule": "Handle user dismissal in onDismiss and timeouts in onAutoClose, and wire both when code must react to every way a toast closes.",
+      "why": "onDismiss fires on the close button or a swipe and onAutoClose fires when the toast closes after its duration; there is no single closed callback.",
+      "strength": "should",
+      "values": {
+        "callbacks": "onDismiss, onAutoClose"
+      },
+      "applies_to": [
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-ask-sonner-skill",
+          "evidence": "there is no single \"closed\" callback"
+        },
+        {
+          "id": "sonner-other",
+          "evidence": "On Close Callback"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-29",
+      "theme": "components-toasts-drawers",
+      "area": "layout",
+      "title": "Toasts default to bottom-right",
+      "rule": "Place toasts bottom-right by default, choosing only from top-left, top-center, top-right, bottom-left, bottom-center and bottom-right.",
+      "why": "bottom-right is Sonner's documented default and these are its six positions; swipe directions follow the position.",
+      "strength": "should",
+      "values": {
+        "default": "bottom-right",
+        "positions": "top-left, top-center, top-right, bottom-left, bottom-center, bottom-right"
+      },
+      "applies_to": [
+        "web",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-ask-sonner-api",
+          "evidence": "`'bottom-right'`"
+        },
+        {
+          "id": "sonner-toaster",
+          "evidence": "Available positions"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-30",
+      "theme": "components-toasts-drawers",
+      "area": "layout",
+      "title": "Toaster edge offsets: 32px and 16px",
+      "rule": "Offset the toaster 32px from the screen edges on desktop and 16px when the screen is narrower than 600px (offset and mobileOffset).",
+      "why": "These are Sonner's documented default offsets, and mobileOffset applies below a 600px screen width.",
+      "strength": "should",
+      "values": {
+        "offset": "32px",
+        "mobileOffset": "16px",
+        "mobile-below": "600px"
+      },
+      "applies_to": [
+        "web",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "sonner-toaster",
+          "evidence": "Default desktop offset is 32px and default mobile offset is 16px"
+        },
+        {
+          "id": "eks-skills-ask-sonner-skill",
+          "evidence": "Toasts too close to the screen edge on mobile"
+        }
+      ],
+      "engine": [
+        {
+          "path": "component.toast.offset.desktop",
+          "value": "32px",
+          "type": "dimension",
+          "note": "new token"
+        },
+        {
+          "path": "component.toast.offset.mobile",
+          "value": "16px",
+          "type": "dimension",
+          "note": "new token; applies below a 600px screen width"
+        }
+      ],
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-33",
+      "theme": "components-toasts-drawers",
+      "area": "platforms",
+      "title": "Copy Sonner styles into shadow DOM",
+      "rule": "When rendering Sonner inside shadow DOM, copy the <style> elements in document.head whose text includes [data-sonner-toaster] into the shadow root.",
+      "why": "Sonner inserts its styles into the document head when the bundle loads, so they are not available inside shadow DOM.",
+      "strength": "must",
+      "values": {
+        "selector": "[data-sonner-toaster]"
+      },
+      "applies_to": [
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "sonner-other",
+          "evidence": "you need to add the styles to the shadow DOM manually"
+        },
+        {
+          "id": "eks-skills-ask-sonner-skill",
+          "evidence": "Unstyled inside Shadow DOM"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-34",
+      "theme": "components-toasts-drawers",
+      "area": "platforms",
+      "title": "Import Sonner styles when they are lost",
+      "rule": "When toasts render unstyled (Astro, view transitions), import Sonner's stylesheet explicitly in a layout: import 'sonner/dist/styles.css'.",
+      "why": "Sonner's injected stylesheet was lost.",
+      "strength": "should",
+      "values": {
+        "import": "import 'sonner/dist/styles.css'"
+      },
+      "applies_to": [
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "sonner-other",
+          "evidence": "please import Sonner's styles into a layout file"
+        },
+        {
+          "id": "eks-skills-ask-sonner-skill",
+          "evidence": "Toasts render completely unstyled"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-35",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Toast API is a plain function",
+      "rule": "Expose the design-system toast as a plain toast() function callable from anywhere, with one <Toaster /> mounted once: no hooks and no React context.",
+      "why": "No hooks, no context, one insert and a function call is one of the two reasons Sonner succeeded; the less friction to adopt, the more people use it (Sonner avoids context with an observer pattern).",
+      "strength": "should",
+      "values": {
+        "api": "toast('My toast')",
+        "state": "observer pattern: <Toaster /> subscribes, toast() notifies"
+      },
+      "applies_to": [
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-toast-component",
+          "evidence": "No hooks, no context, you insert <Toaster /> once"
+        },
+        {
+          "id": "ek-building-a-toast-component",
+          "evidence": "manage the state via the Observer Pattern"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Developer experience is key"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-36",
+      "theme": "components-toasts-drawers",
+      "area": "process",
+      "title": "Tune toast reflow by eye",
+      "rule": "When stacked toasts reflow, adjust the opacity change against the height change by feel and look at it again the next day.",
+      "why": "There is no formula for that pair.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "There's no formula for that pair"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Look at it again the next day"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": false,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-37",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Prefer drawers over modals on mobile",
+      "rule": "On mobile, present secondary content in a drawer (bottom sheet) rather than a modal.",
+      "why": "A drawer gives a more native feel on mobile.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "web",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "I prefer using a drawer instead of a modal on mobile for a more native feel"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-38",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Build drawers on an accessible dialog",
+      "rule": "Build drawers on an accessible dialog primitive (Vaul builds on Radix Dialog) with composable, styleable parts: Root, Trigger, Portal, Overlay, Content, Handle, Title, Description and Close.",
+      "why": "The dialog primitive makes the drawer accessible and handles focus management, a Radix-like API feels familiar, and not every drawer has to look the same. Vaul itself is unmaintained per its GitHub README (learn/sources.json, checked 2026-09-24); flag that before adding it as a dependency.",
+      "strength": "should",
+      "values": {
+        "parts": "Drawer.Root, Drawer.Trigger, Drawer.Portal, Drawer.Overlay, Drawer.Content, Drawer.Handle, Drawer.Title, Drawer.Description, Drawer.Close"
+      },
+      "applies_to": [
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "Radix ensures the component is accessible, handles focus management"
+        },
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "Not every drawer has to look the same"
+        },
+        {
+          "id": "vaul-api",
+          "evidence": "Import all parts and piece them together"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-39",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Drawer defaults: modal, bottom, dismissible",
+      "rule": "Default drawers to modal, opening from the bottom edge, dismissible (outside click, Escape and drag down), draggable from anywhere rather than only the handle, and portalled with an overlay over the inert rest of the view.",
+      "why": "These are Vaul's Root defaults; dismissible: false blocks all three ways of closing, and the Overlay covers the inert portion of the view. Vaul itself is unmaintained per its GitHub README (learn/sources.json, checked 2026-09-24); flag that before adding it as a dependency.",
+      "strength": "should",
+      "values": {
+        "modal": "true",
+        "direction": "bottom",
+        "dismissible": "true",
+        "handleOnly": "false",
+        "container": "document.body"
+      },
+      "applies_to": [
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "vaul-api",
+          "evidence": "Components API"
+        },
+        {
+          "id": "vaul-api",
+          "evidence": "A layer that covers the inert portion of the view when the drawer is open"
+        },
+        {
+          "id": "vaul-other",
+          "evidence": "Non-dismissible"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-40",
+      "theme": "components-toasts-drawers",
+      "area": "motion",
+      "title": "Drawer curve: cubic-bezier(0.32, 0.72, 0, 1)",
+      "rule": "Animate drawers and sheets with the iOS-like drawer curve, defined once as a token: --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1) (React Native: Easing.bezier(0.32, 0.72, 0, 1)).",
+      "why": "The curve, from the Ionic Framework, closely matches iOS's sheet; the right easing and duration make a big difference to how the component feels, and built-in CSS easings are too weak.",
+      "strength": "must",
+      "values": {
+        "--ease-drawer": "cubic-bezier(0.32, 0.72, 0, 1)",
+        "react-native": "EASE_SHEET = Easing.bezier(0.32, 0.72, 0, 1)"
+      },
+      "applies_to": [
+        "css",
+        "web",
+        "react-native"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "The curve used in Vaul closely matches the one used in iOS"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "iOS-like drawer curve (Ionic)"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "iOS-like drawer curve (from Ionic Framework)"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "iOS-like drawer curve"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "--ease-drawer"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "--ease-drawer"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "EASE_SHEET"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "EASE_SHEET"
+        }
+      ],
+      "engine": {
+        "path": "motion.easing.drawer",
+        "value": [
+          0.32,
+          0.72,
+          0,
+          1
+        ],
+        "type": "cubicBezier",
+        "note": "new token (tested: engine.py set creates it in primitives.tokens.json)"
+      },
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py build_motion_context: motion.transition.expand ('Dialogs, sheets, side panels entering') uses motion.easing.enter [0, 0, 0, 1], not the drawer curve",
+        "skills/opendesigner/references/stages/16-motion-haptics-and-sound.detailed.md Q-motion-03 default names standard (0.2, 0, 0, 1), enter (0, 0, 0, 1) or (0.05, 0.7, 0.1, 1), exit (0.3, 0, 1, 1) and linear for spinners and progress; it has no drawer curve"
+      ]
+    },
+    {
+      "id": "STD-components-toasts-drawers-41",
+      "theme": "components-toasts-drawers",
+      "area": "motion",
+      "title": "Drawers open and close in 500ms",
+      "rule": "Hide a drawer at transform: translateY(100%) and open it to translateY(0) with transition: transform 500ms var(--ease-drawer).",
+      "why": "500ms is meant to mimic iOS's Sheet, and this is how Vaul hides a drawer before animating it in; the skills' duration table allows 200–500ms for modals and drawers (the ek-agents-with-taste example table says 200–300ms).",
+      "strength": "should",
+      "values": {
+        "closed": "[data-closed] { transform: translateY(100%) }",
+        "open": "transform: translateY(0)",
+        "transition": "transform 500ms var(--ease-drawer)",
+        "band": "200–500ms"
+      },
+      "applies_to": [
+        "css",
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "Duration of 500ms is also supposed to mimic"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "This is how Vaul hides a drawer before animating it in"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "Modals, drawers | 200–500ms"
+        }
+      ],
+      "engine": {
+        "path": "motion.duration.drawer",
+        "value": "500ms",
+        "type": "duration",
+        "note": "new token (tested: engine.py set creates it in primitives.tokens.json)"
+      },
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py build_motion_context: motion.transition.expand ('Dialogs, sheets, side panels entering') uses motion.duration.long, 380ms at default dials (400ms times the Energy multiplier)",
+        "synthesis/levers.json formulas.motion.standardMax is 400, below the 500ms drawer transition [inferred]"
+      ]
+    },
+    {
+      "id": "STD-components-toasts-drawers-42",
+      "theme": "components-toasts-drawers",
+      "area": "motion",
+      "title": "Move toasts and drawers by their own size",
+      "rule": "Hide and reveal toasts and drawers with percentage translates such as translateY(100%), which move the element by its own size, not with hard-coded pixel offsets.",
+      "why": "Percentages are relative to the element's own size, so they work whatever the toast's or drawer's height; Sonner and Vaul position toasts and drawers this way.",
+      "strength": "should",
+      "values": {
+        "example": "translateY(100%)"
+      },
+      "applies_to": [
+        "css",
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "percentages, not hardcoded pixels"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "This is how Sonner positions toasts and how Vaul hides the drawer"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "translateY(100%)"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "\\.(?=[\\w-]*(?:toast|drawer|sheet))[\\w-]+(?![\\w-])[^{}]*\\{[^}]*translateY\\(\\s*-?\\d{3,}px\\s*\\)",
+        "message": "Hide toasts and drawers with translateY(100%), which follows the element's own size, not a fixed pixel offset."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-43",
+      "theme": "components-toasts-drawers",
+      "area": "motion",
+      "title": "Write drag offsets straight to the element",
+      "rule": "While dragging a drawer or sheet, write the offset directly to the moving element (element.style.transform = `translateY(${distance}px)`) without re-rendering, never through an inherited CSS variable on the drawer or a parent.",
+      "why": "CSS variables are inheritable, so each change recalculates styles for every child; the author's drawer dropped frames once it held about 20 list items, until the transform was set on the element directly.",
+      "strength": "must",
+      "values": {
+        "do": "transform: `translateY(${draggedDistance}px)`",
+        "dont": "--swipe-amount on the drawer",
+        "react": "ref.current.style"
+      },
+      "applies_to": [
+        "web",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "Updating the style directly on the element fixed the issue"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Driving it through a CSS variable on the parent recalcs styles for every child"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Update `transform` directly on the element instead"
+        },
+        {
+          "id": "eks-performance-cheatsheet",
+          "evidence": "ref.current.style"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-44",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Drag a drawer only from its scroll top",
+      "rule": "Let a scrollable drawer be dragged only when its content is scrolled to the top, and block dragging for 100ms after scrolling reaches the top.",
+      "why": "Being scrollable and draggable at once is tricky; this mirrors native iOS drawers, and fast scrolling can overshoot the top into a drag with enough velocity to close the drawer by accident.",
+      "strength": "should",
+      "values": {
+        "check": "shouldDrag",
+        "drag-lock-after-scroll": "100ms"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "doesn’t allow you to drag unless you are scrolled to the top of the drawer"
+        },
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "I added a timeout of 100ms"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-45",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Keep drawer inputs above the keyboard",
+      "rule": "When an input inside a drawer opens the on-screen keyboard, stop the browser's scroll-into-view and use the Visual Viewport API to size the drawer to the visual viewport and sit it directly above the keyboard (Vaul: repositionInputs, on by default).",
+      "why": "Otherwise the browser scrolls up and pushes the drawer, potentially hiding important content; sitting above the keyboard keeps the drawer fully scrollable, and the author found this works best despite a slight delay. Vaul itself is unmaintained per its GitHub README (learn/sources.json, checked 2026-09-24); flag that before adding it as a dependency.",
+      "strength": "should",
+      "values": {
+        "listener": "window.visualViewport resize",
+        "height": "`${visualViewportHeight - OFFSET}px`",
+        "bottom": "`${Math.max(diffFromInitial, 0)}px`, where diffFromInitial = window.innerHeight - visualViewportHeight",
+        "vaul": "repositionInputs: true (default)"
+      },
+      "applies_to": [
+        "web",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "handle it using Visual Viewport"
+        },
+        {
+          "id": "vaul-inputs",
+          "evidence": "Vaul fixes this by correcting the position of the drawer when the keyboard is opened"
+        },
+        {
+          "id": "vaul-api",
+          "evidence": "repositionInputs"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-46",
+      "theme": "components-toasts-drawers",
+      "area": "motion",
+      "title": "Snap to the momentum-projected point",
+      "rule": "On release, snap a drawer to the snap point nearest the momentum-projected resting position, not the one nearest the release point, so a hard flick skips points or closes the drawer (upward too).",
+      "why": "Projecting from release velocity is what makes a flick feel like a throw; Vaul's snap points are momentum based too.",
+      "strength": "must",
+      "values": {
+        "projection": "((velocity / 1000) * decelerationRate) / (1 - decelerationRate)",
+        "decelerationRate": "0.998 (0.99 snappier)"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "If you flick hard enough, the drawer will skip some points or even close completely"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "Momentum projection"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "decelerationRate"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-47",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Sequential snap points when all matter",
+      "rule": "Turn on snapToSequentialPoint when every snap point in a drawer is equally important.",
+      "why": "It disables velocity-based snapping, so a fast drag cannot skip a point. Vaul itself is unmaintained per its GitHub README (learn/sources.json, checked 2026-09-24); flag that before adding it as a dependency.",
+      "strength": "should",
+      "values": {
+        "prop": "snapToSequentialPoint"
+      },
+      "applies_to": [
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "vaul-snap-points",
+          "evidence": "Useful if each snap point in a drawer is equally important"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-48",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Fixed-pixel snap points for inputs",
+      "rule": "Use a fixed-pixel snap point (rather than a fraction of the viewport) when something such as an input must stick out by the same amount on every device.",
+      "why": "Fixed values make the content stick out evenly on all devices.",
+      "strength": "should",
+      "values": {
+        "forms": "fraction of the viewport or fixed px"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "Fixed values are particularly useful when you want to ensure that an input evenly sticks out on all devices"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-49",
+      "theme": "components-toasts-drawers",
+      "area": "elevation",
+      "title": "Dim and push back behind modal sheets",
+      "rule": "Pair a modal sheet or task with a dimming scrim and push the background back; for stacked sheets, progressively dim and push back each parent layer.",
+      "why": "Dim to focus: the scrim and push-back separate a modal task from the flow behind it.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "For stacked sheets, progressively dim and push back each parent layer"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-50",
+      "theme": "components-toasts-drawers",
+      "area": "motion",
+      "title": "Drive the backdrop from drag progress",
+      "rule": "While a drawer is dragged, derive the backdrop opacity and any background scale and radius from the drawer's own drag progress rather than fixed values.",
+      "why": "The background follows the same logic during drag with values based on progress (dragging down 40% sets the radius to 60% of its max), and a backdrop derived from the sheet's own value is always in sync.",
+      "strength": "should",
+      "values": {
+        "example": "drag 40% down: border radius at 60% of max",
+        "react-native": "interpolate(translateY.get(), [0, HEIGHT], [1, 0], Extrapolation.CLAMP)"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "all the values are based on the drag progress"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "The backdrop derives from the same value"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-51",
+      "theme": "components-toasts-drawers",
+      "area": "motion",
+      "title": "Grabbing a closing sheet follows the finger",
+      "rule": "When someone grabs a sheet or modal that is still animating, continue from its current on-screen position and follow the finger at once instead of finishing the animation first (React Native: capture translateY in onStart).",
+      "why": "Every animation must be interruptible; without capturing the current value, grabbing a sheet mid-animation teleports it.",
+      "strength": "must",
+      "values": {
+        "react-native": "onStart: context.set(translateY.get())"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "A closing modal the user grabs again should follow the finger"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "start from the current on-screen value, not from 0"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-52",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Controlled drawers handle onOpenChange",
+      "rule": "When the drawer's open state is controlled, also pass onOpenChange so Escape and outside clicks update it.",
+      "why": "onOpenChange is called when the open state changes, which is how a controlled drawer reacts to Escape and outside clicks. Vaul itself is unmaintained per its GitHub README (learn/sources.json, checked 2026-09-24); flag that before adding it as a dependency.",
+      "strength": "should",
+      "values": {
+        "props": "open + onOpenChange"
+      },
+      "applies_to": [
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "vaul-default",
+          "evidence": "Controlled"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-53",
+      "theme": "components-toasts-drawers",
+      "area": "motion",
+      "title": "Offset drawers that float off the edge",
+      "rule": "When a drawer does not touch the edge of the screen, adjust its animation with the --initial-transform CSS variable.",
+      "why": "The variable adjusts the animation for drawers that do not touch the screen edge. Vaul itself is unmaintained per its GitHub README (learn/sources.json, checked 2026-09-24); flag that before adding it as a dependency.",
+      "strength": "should",
+      "values": {
+        "variable": "--initial-transform"
+      },
+      "applies_to": [
+        "css",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "vaul-default",
+          "evidence": "--initial-transform"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-54",
+      "theme": "components-toasts-drawers",
+      "area": "platforms",
+      "title": "Contain scroll inside sheets",
+      "rule": "In apps with drag-down drawers or their own scroll containers, set overscroll-behavior: none on html and body, and give every inner scrollable such as sheet content overflow-y: auto with overscroll-behavior: contain.",
+      "why": "Scrolling past the top otherwise triggers pull-to-refresh on Android Chrome or the whole-page rubber band on iOS; contain keeps the sheet's own bounce but stops scroll chaining to the page.",
+      "strength": "must",
+      "values": {
+        "root": "html, body { overscroll-behavior: none; }",
+        "sheet-content": "overflow-y: auto; overscroll-behavior: contain;"
+      },
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "Pull-to-refresh hijacks scroll"
+        },
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": ".sheet-content"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-55",
+      "theme": "components-toasts-drawers",
+      "area": "platforms",
+      "title": "Name what the browser keeps on sheets",
+      "rule": "Give a drag-to-dismiss sheet surface that owns every axis touch-action: none, and a vertical sheet handle touch-action: pan-x.",
+      "why": "touch-action values name what the browser may still do: none means the element handles everything, and pan-x leaves horizontal panning to the browser while the sheet handles vertical drags.",
+      "strength": "must",
+      "values": {
+        "drag-surface": "touch-action: none",
+        "vertical-sheet-handle": "touch-action: pan-x"
+      },
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "a custom gesture (a drag-to-dismiss sheet, a slider) owns every axis"
+        },
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "the sheet handles vertical drags; horizontal stays with the browser"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-56",
+      "theme": "components-toasts-drawers",
+      "area": "layout",
+      "title": "Drawers use 100dvh, not 100vh",
+      "rule": "Size app shells, drawers and anything bottom-pinned with height: 100dvh, never 100vh.",
+      "why": "100vh is the largest viewport, so on load it overflows by the URL bar's height and bottom-pinned UI sits under the bar.",
+      "strength": "must",
+      "values": {
+        "do": "height: 100dvh",
+        "dont": "100vh"
+      },
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "App shell, drawers, anything that should track the visible area"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "\\.(?=[\\w-]*(?:drawer|sheet))[\\w-]+(?![\\w-])[^{}]*\\{(?![^}]*\\b100dvh\\b)[^}]*(?<![\\w-])(?:(?:min|max)-)?height\\s*:\\s*100vh\\b",
+        "message": "Use height: 100dvh on drawers and sheets so they track the visible area as browser chrome shows and hides."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-57",
+      "theme": "components-toasts-drawers",
+      "area": "layout",
+      "title": "Keep toasts and sheets off the notch",
+      "rule": "Offset toasts and sheets by the safe-area insets: on the web set viewport-fit=cover and pad sheets with calc(1rem + env(safe-area-inset-bottom)), giving env() a 0px fallback inside calc; in React Native place toasts at bottom: insets.bottom + 16.",
+      "why": "A toast at bottom: 16 sits under the home indicator on every modern iPhone; fixed headers, bottom bars, toasts and sheets are the elements that need the insets.",
+      "strength": "must",
+      "values": {
+        "web-sheet": "padding-bottom: calc(1rem + env(safe-area-inset-bottom))",
+        "web-fallback": "env(safe-area-inset-bottom, 0px) when used in a calc",
+        "meta": "viewport-fit=cover",
+        "react-native-toast": "bottom: insets.bottom + 16, left: 16, right: 16"
+      },
+      "applies_to": [
+        "web",
+        "css",
+        "react-native"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Safe area insets, always"
+        },
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "Fixed headers, bottom tab bars, toasts, and sheets are the elements that need this"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-58",
+      "theme": "components-toasts-drawers",
+      "area": "process",
+      "title": "Test drawers and swipes on a real phone",
+      "rule": "Test drawers and swipe gestures on a physical phone before calling them done (phone connected to the computer, dev server opened by the computer's IP, Safari Web Inspector or Chrome remote debugging), not by shrinking a desktop window or in device emulation; the Xcode Simulator is only a fallback.",
+      "why": "A component like this needs the same environment as an actual mobile device: emulation cannot reproduce sticky hover, tap delay, rubber-banding, safe areas or the keyboard, and the Xcode Simulator still misses touch feel.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "you can’t just simply open the dev tools and make the window smaller"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "real hardware is better for gesture testing"
+        },
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "Test on hardware before calling it done"
+        },
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "The Xcode Simulator is a step up from emulation but still misses touch feel"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": false,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-59",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "React Native: native sheet presentations",
+      "rule": "In React Native (Expo Router), present a bottom sheet that is its own screen with presentation: 'formSheet' (with detents for a short interruption such as a picker, filter or share), use presentation: 'modal' for a self-contained task the user can abandon, and build a custom drag-to-dismiss sheet only when it must live inside an existing screen.",
+      "why": "formSheet is a real UISheetPresentationController, free and correct; the navigation table maps each overlay kind to a presentation.",
+      "strength": "must",
+      "values": {
+        "sheet-screen": "presentation: 'formSheet'",
+        "short-interruption": "presentation: 'formSheet' with sheetAllowedDetents",
+        "abandonable-task": "presentation: 'modal'"
+      },
+      "applies_to": [
+        "react-native"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "A bottom sheet that is its own screen"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "A short interruption: picker, filter, share"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "A self-contained task the user can abandon"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-60",
+      "theme": "components-toasts-drawers",
+      "area": "platforms",
+      "title": "React Native: form sheets on both platforms",
+      "rule": "Design React Native form sheets for both platforms: at most three detents, content that is a single screen (use presentation: 'modal' if it needs its own navigation), a drag affordance beyond sheetGrabberVisible, and explicitly sized content for sheetAllowedDetents: 'fitToContents'.",
+      "why": "Android caps detents at three and silently truncates longer lists, cannot host native headers or nested stacks in a form sheet, and shows no grabber; a flex: 1 root has no intrinsic height to fit.",
+      "strength": "must",
+      "values": {
+        "max-detents": "3",
+        "grabber": "sheetGrabberVisible is iOS-only",
+        "fit": "sheetAllowedDetents: 'fitToContents' needs explicit size, not flex: 1"
+      },
+      "applies_to": [
+        "react-native",
+        "android",
+        "ios"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Android caps detents at three"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "is iOS-only"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Android form sheets can't host native headers or nested stacks"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "needs explicitly sized content"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-61",
+      "theme": "components-toasts-drawers",
+      "area": "motion",
+      "title": "Sheet springs take the release velocity",
+      "rule": "Settle a released sheet or drawer with a spring that receives the release velocity. React Native: withSpring with { duration: 300, dampingRatio: 0.8, velocity } to snap back, and dampingRatio 1 with overshootClamping: true to dismiss. Web: the drag-to-dismiss recipe settles with { type: \"spring\", duration: 0.5, bounce: 0.2 }.",
+      "why": "Handing velocity to the spring removes the seam between the finger releasing and the animation continuing, and a spring keeps the velocity when the drag is interrupted; overshootClamping stops a dismissed sheet springing past the bottom and flashing a gap. Apple ships damping 0.8 and response 0.3 for drawers and sheets.",
+      "strength": "must",
+      "values": {
+        "table": "{ duration: 300, dampingRatio: 0.8, velocity }",
+        "snap-back": "withSpring(0, { duration: 300, dampingRatio: 0.8, velocity: e.velocityY })",
+        "dismiss": "withSpring(HEIGHT, { duration: 300, dampingRatio: 1, velocity: e.velocityY, overshootClamping: true })",
+        "apple": "damping 0.8, response 0.3",
+        "web": "{ type: \"spring\", duration: 0.5, bounce: 0.2 }"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Sheet, drawer"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Velocity is handed to the spring"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "on dismissal"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "Drawer / sheet"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Settle with a spring so an interrupted drag keeps its velocity"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py build_motion: motion.spring.spatial.default, labelled 'partial-screen (sheets, drawers)', has dampingRatio 0.988 and stiffness 700 at default dials (Apple bounce 0.012, css durationMs 260), not damping 0.8 with a 0.3 response"
+      ]
+    },
+    {
+      "id": "STD-components-toasts-drawers-62",
+      "theme": "components-toasts-drawers",
+      "area": "motion",
+      "title": "Sheet drags need about 10px of intent",
+      "rule": "Require about 10px of movement before a sheet or drawer drag commits to its axis, so a horizontal swipe can still win (React Native: Gesture.Pan().activeOffsetY([-10, 10])).",
+      "why": "A small movement threshold (hysteresis) requires intent before committing to a direction; in React Native it lets a horizontal swipe win.",
+      "strength": "should",
+      "values": {
+        "threshold": "~10px",
+        "gesture": "Gesture.Pan().activeOffsetY([-10, 10])"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "let a horizontal swipe win; require intent before committing"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "require a small movement threshold (hysteresis, ~10px) before committing to a direction"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-63",
+      "theme": "components-toasts-drawers",
+      "area": "motion",
+      "title": "React Native: detect detent crossings on UI thread",
+      "rule": "To fire something once when a detent, snap or threshold is crossed, compare on the UI thread with useAnimatedReaction and call JS only when the state flips; never poll from JS or scheduleOnRN every frame.",
+      "why": "The comparison runs on the UI thread every frame while the JS call happens only when the state changes.",
+      "strength": "must",
+      "values": {
+        "api": "useAnimatedReaction"
+      },
+      "applies_to": [
+        "react-native"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Firing something once at a threshold"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-64",
+      "theme": "components-toasts-drawers",
+      "area": "platforms",
+      "title": "Light haptic when a sheet settles",
+      "rule": "When a sheet snaps home, a detent catches or a drag commits, fire Haptics.impactAsync(ImpactFeedbackStyle.Light) in the same frame as the visual, once per action and never as the only feedback.",
+      "why": "The haptic map ties a Light impact to these moments. The skill's absolute haptic rules: same frame as the visual (a haptic that lags its animation reads as a glitch), one per user action, and never the only feedback, because haptics are off or silent for many users.",
+      "strength": "should",
+      "values": {
+        "haptic": "Haptics.impactAsync(ImpactFeedbackStyle.Light)"
+      },
+      "applies_to": [
+        "react-native",
+        "ios",
+        "android"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Something snaps home, a sheet detent catches, a drag commits"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "it snapped home"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Three rules, and they're absolute"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/references/stages/16-motion-haptics-and-sound.detailed.md Q-motion-09 default is haptics-system (system haptics only; a semantic map only for products with frequent confirmations) [inferred]"
+      ]
+    },
+    {
+      "id": "STD-components-toasts-drawers-65",
+      "theme": "components-toasts-drawers",
+      "area": "motion",
+      "title": "Safari theme bar must match the overlay",
+      "rule": "Sync Safari's theme-color with a drawer overlay only if it stays in step with the overlay: precompute the opaque color the overlay makes over the background, interpolate along the drawer's own curve for the open and close transition (by drag progress while dragging), and leave the sync out if it falls out of step.",
+      "why": "Linear interpolation will not match a drawer on a custom bezier curve, and the author has not shipped the theme-bar sync in Vaul because it does not match the overlay transition when frames drop.",
+      "strength": "should",
+      "values": {
+        "meta": "meta[name=\"theme-color\"]",
+        "curve": "bezier-easing with the drawer curve"
+      },
+      "applies_to": [
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "the interpolation is done using the same curve as the drawer"
+        },
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "as it doesn’t match the overlay transition when some frames are dropped"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": false,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-66",
+      "theme": "components-toasts-drawers",
+      "area": "motion",
+      "title": "Dismiss on a flick, not just distance",
+      "rule": "Dismiss swiped toasts and dragged drawers when the drag passes the distance threshold OR its velocity is high enough (web: Math.abs(swipeAmount) / timeTaken > 0.11; React Native: current position plus projected velocity beyond 40% of the sheet height); never use a distance-only threshold.",
+      "why": "A quick, short flick should be enough; requiring a fixed travel makes the element feel heavy.",
+      "strength": "must",
+      "values": {
+        "web": "Math.abs(swipeAmount) >= SWIPE_THRESHOLD || velocity > 0.11",
+        "velocity": "Math.abs(swipeAmount) / timeTaken",
+        "react-native": "translateY.get() + project(e.velocityY) > HEIGHT * 0.4"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-toast-component",
+          "evidence": "The swipe is momentum-based"
+        },
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "you can just flick it"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Dismiss on a flick, not just on distance"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "drags without velocity-based dismissal"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Momentum dismissal"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Distance-only dismiss"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "Velocity decides, not distance"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-67",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Capture the pointer while dragging",
+      "rule": "Once a toast or drawer drag starts, capture all later pointer events on the dragged element.",
+      "why": "Otherwise the drag stops as soon as the pointer or thumb leaves the element.",
+      "strength": "must",
+      "values": {
+        "api": "setPointerCapture"
+      },
+      "applies_to": [
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-toast-component",
+          "evidence": "set the toast to capture all future pointer events"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Pointer capture"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Pointer capture"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "Use Pointer Events with `setPointerCapture`"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-68",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Ignore extra touches during a drag",
+      "rule": "Ignore every touch after the first until the person releases (if (isDragging) return).",
+      "why": "Adding a second finger would otherwise make the drawer jump to the new position; native drawers set this expectation and the drawer would feel off without it.",
+      "strength": "must",
+      "values": {
+        "guard": "if (isDragging) return"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "We simply ignore all touches after the initial one until the user releases"
+        },
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "People use drawers on native OSes frequently, which creates certain expectations"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Multi-touch protection"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Multi-touch protection"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-69",
+      "theme": "components-toasts-drawers",
+      "area": "motion",
+      "title": "Resist over-drag instead of stopping",
+      "rule": "When a toast or drawer is dragged in a direction it cannot go (a toast upward, a drawer above its top), let it move with rising resistance instead of a hard stop.",
+      "why": "Things in real life slow down before they stop; a hard stop reads as frozen and friction feels nicer than blocking the drag.",
+      "strength": "must",
+      "values": {
+        "rubberband": "(overshoot * dimension * constant) / (dimension + constant * Math.abs(overshoot))",
+        "constant": "0.55"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-toast-component",
+          "evidence": "it will slow down and eventually stop"
+        },
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "the drawer will damp the drag"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Friction, not a wall"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "Rubber-band, don't hard-stop"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "upward past the top resists"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-70",
+      "theme": "components-toasts-drawers",
+      "area": "motion",
+      "title": "Track the finger 1:1 from the grab point",
+      "rule": "Move a dragged drawer or sheet 1:1 with the pointer the whole way through, keeping the offset from where it was grabbed, instead of animating only when the gesture ends.",
+      "why": "Feedback must be continuous during the interaction; snapping the element's center to the pointer breaks the illusion.",
+      "strength": "must",
+      "values": {
+        "grab-offset": "grabOffset = e.clientY - el.getBoundingClientRect().top"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "For a drag, slider, or drawer, update the UI 1:1 with the pointer"
+        },
+        {
+          "id": "ek-building-a-drawer-component",
+          "evidence": "Not losing frames while dragging is a good start"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-71",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Press scale 0.97 on :active",
+      "rule": "Give every pressable element press feedback: transform: scale(0.97) on :active (keep it within 0.95–0.98) with a 100–160ms ease-out transform transition (recipe: transition: transform 160ms var(--ease-out)), scaling the whole button so the label and icons come along.",
+      "why": "It makes the interface feel instantly more responsive, as if it is listening; scale() scales the children too, which is what reads as a physical press.",
+      "strength": "must",
+      "values": {
+        "css": ".button:active { transform: scale(0.97); }",
+        "transition": "transition: transform 160ms var(--ease-out)",
+        "scale-range": "0.95–0.98",
+        "duration-range": "100–160ms",
+        "easing": "ease-out"
+      },
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "ek-7-practical-animation-tips",
+          "evidence": "A scale of 0.97 on the :active pseudo-class should do the job"
+        },
+        {
+          "id": "ek-agents-with-taste",
+          "evidence": "Make buttons feel responsive"
+        },
+        {
+          "id": "ek-you-dont-need-animations",
+          "evidence": "subtle scale down effect when pressing a button"
+        },
+        {
+          "id": "ek-building-an-animation-course",
+          "evidence": "A subtle scale down on press makes the interface feel more responsive"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Button press"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "The scale should be subtle (0.95-0.98)"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "Button press feedback | 100–160ms"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "Keep it subtle (0.95–0.98)"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Button press feedback"
+        },
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "Keep press feedback at 100–160ms"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "Feedback lives on the press, and it's instant"
+        }
+      ],
+      "engine": [
+        {
+          "path": "motion.scale.press",
+          "value": 0.97,
+          "type": "number",
+          "note": "new token; `engine.py set` cannot create a number token on this path yet (it asks for a type), so the engine needs a number rule for it"
+        },
+        {
+          "path": "motion.duration.micro",
+          "value": "100ms",
+          "type": "duration",
+          "note": "unchanged: motion.transition.feedback already uses micro (100ms), inside the 100–160ms band"
+        }
+      ],
+      "review": {
+        "pattern": ":active[^{}]*\\{[^}]*scale\\(\\s*0?\\.(?:[0-8]\\d*|9(?:[0-4]\\d*)?|99\\d*)\\s*\\)|\\bactive:scale-(?:[0-8]\\d|9[0-4])\\b|\\bactive:scale-\\[0?\\.(?:[0-8]\\d*|9(?:[0-4]\\d*)?|99\\d*)\\]|\\bwhileTap=\\{\\{[^}]*\\bscale\\s*:\\s*0?\\.(?:[0-8]\\d*|9(?:[0-4]\\d*)?|99\\d*)(?!\\d)",
+        "message": "Keep press feedback subtle: scale(0.97) on :active, within 0.95–0.98."
+      },
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py build_motion_context: motion.transition.feedback ('Hover, press, color changes') uses motion.easing.standard [0.2, 0, 0, 1] rather than an ease-out curve [inferred]",
+        "skills/opendesigner/references/stages/21-actions-states-and-focus.detailed.md Q-state-04 default shows pressed with a see-through overlay (opacity.state.pressed 0.10) and the engine emits no press-scale token [inferred]"
+      ]
+    },
+    {
+      "id": "STD-components-toasts-drawers-72",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Feedback on press, commit on release",
+      "rule": "Show press feedback the instant the pointer or finger goes down (:active, or pointerdown / onPressIn when JavaScript is needed) and commit the action on release; never show feedback only on click.",
+      "why": "Waiting for click or touch-up to show anything feels dead and reads as lag even at 0ms, because the finger has already left.",
+      "strength": "must",
+      "values": {
+        "css": ":active",
+        "js": "pointerdown",
+        "react-native": "onPressIn (feedback), onPressOut (commit)"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "Respond on pointer-down, not on release"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Feedback on press-in, commit on press-out"
+        },
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "Feedback on release instead of press"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-73",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "React Native press: 0.97 in 120ms",
+      "rule": "In React Native, give every pressable a press scale of 0.97 through Pressable onPressIn/onPressOut and a CSS transition on transform (120ms, cubic-bezier(0.23, 1, 0.32, 1)), treating 120ms and a 3% scale as the ceiling; no gesture and no shared value.",
+      "why": "It passes the frequency gate only because it is near-imperceptible, and a CSS transition is the whole implementation; anything longer or larger belongs to rarer moments.",
+      "strength": "must",
+      "values": {
+        "scale": "0.97",
+        "duration": "120ms",
+        "ceiling": "120ms and a 3% scale",
+        "curve": "cubic-bezier(0.23, 1, 0.32, 1)",
+        "skill-band": "100–150ms"
+      },
+      "applies_to": [
+        "react-native"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "120ms and a 3% scale is the ceiling"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "scale: 0.97"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-74",
+      "theme": "components-toasts-drawers",
+      "area": "accessibility",
+      "title": "Small targets get a 44px hit area",
+      "rule": "Bring small buttons and icons up to a 44px (44pt; 48dp on Android) hit area without growing the visual: a pseudo-element on the web, hitSlop={12} with pressRetentionOffset={16} in React Native.",
+      "why": "Small buttons are hard to tap; hitSlop reaches the 44pt target without growing the icon and pressRetentionOffset stops slight finger drift from cancelling the press.",
+      "strength": "must",
+      "values": {
+        "web": "44px minimum hit area via a pseudo-element",
+        "react-native": "hitSlop={12} pressRetentionOffset={16}",
+        "target": "44pt",
+        "android": "48dp"
+      },
+      "applies_to": [
+        "web",
+        "react-native"
+      ],
+      "sources": [
+        {
+          "id": "ek-agents-with-taste",
+          "evidence": "Use 44px minimum hit area (pseudo-element)"
+        },
+        {
+          "id": "eks-skills-animate-expo-recipes",
+          "evidence": "brings a small icon up to the 44pt target without growing it"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "44×44pt minimum touch target"
+        }
+      ],
+      "engine": {
+        "path": "size.target.touch",
+        "value": "44px",
+        "type": "dimension",
+        "note": "unchanged: OpenDesigner already sets size.target.touch (and size.target.min) to 44px at default settings"
+      },
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "OpenDesigner's generated size.target.pointer is 24px for fine pointers (the locked WCAG floor), below the 44px hit area the source gives for small buttons [inferred]"
+      ]
+    },
+    {
+      "id": "STD-components-toasts-drawers-75",
+      "theme": "components-toasts-drawers",
+      "area": "platforms",
+      "title": "Same press scale on Android",
+      "rule": "Use the Android ripple only in a Material-styled app; in a custom-designed app use the same press scale on both platforms.",
+      "why": "The same scale on both platforms is more coherent than a ripple on one.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "android",
+        "react-native"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Android ripple only in a Material-styled app"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-76",
+      "theme": "components-toasts-drawers",
+      "area": "accessibility",
+      "title": "Ungated press, gated hover",
+      "rule": "Leave the :active press state ungated and put every :hover style inside @media (hover: hover) and (pointer: fine).",
+      "why": ":active is a real press on touch, while touch browsers fake a hover on tap and leave it applied.",
+      "strength": "must",
+      "values": {
+        "hover-gate": "@media (hover: hover) and (pointer: fine)"
+      },
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "No hover gating needed here"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "Ungated `:hover` motion"
+        },
+        {
+          "id": "eks-skills-mobile-native-skill",
+          "evidence": "Hover state stuck after tap"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-77",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Hold to confirm: slow press, fast release",
+      "rule": "When a destructive action that a plain click fires too easily uses hold-to-confirm, make the press slow and the release fast: an overlay clipped to inset(0 100% 0 0) fills to inset(0 0 0 0) over 2s linear while pressed and snaps back over 200ms ease-out on release, with scale(0.97) on the button.",
+      "why": "Be slow where the person is deciding and snappy where the system responds (symmetric timing on a hold is a review finding); linear is right because the fill is a progress indicator.",
+      "strength": "must",
+      "values": {
+        "rest": "clip-path: inset(0 100% 0 0)",
+        "pressed": "clip-path: inset(0 0 0 0); transition: clip-path 2s linear",
+        "release": "transition: clip-path 200ms var(--ease-out)",
+        "button": "transform: scale(0.97)"
+      },
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Hold to confirm"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Hold-to-delete"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "Asymmetric timing where the user is deciding"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "Asymmetric enter/exit"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-78",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Delay the first tooltip",
+      "rule": "Give tooltips a delay before the first one appears.",
+      "why": "The delay prevents accidental activation.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "web"
+      ],
+      "sources": [
+        {
+          "id": "ek-7-practical-animation-tips",
+          "evidence": "Tooltips should have a delay before appearing to prevent accidental activation"
+        },
+        {
+          "id": "ek-you-dont-need-animations",
+          "evidence": "tooltips should have a slight delay before appearing"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "The initial delay prevents accidental activation"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-79",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Later tooltips open instantly",
+      "rule": "Once one tooltip is open, open the other tooltips in the group with no delay and no animation (Base UI: .tooltip[data-instant] { transition-duration: 0ms; }).",
+      "why": "It feels faster without defeating the purpose of the initial delay, and makes the whole toolbar feel faster.",
+      "strength": "must",
+      "values": {
+        "css": ".tooltip[data-instant] { transition-duration: 0ms; }"
+      },
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "ek-7-practical-animation-tips",
+          "evidence": "hovering over other tooltips should open them with no delay and no animation"
+        },
+        {
+          "id": "ek-agents-with-taste",
+          "evidence": "Skip delay/animation after first tooltip"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Once one tooltip is open, neighbours open instantly"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Tooltips: skip delay on subsequent hovers"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "after the first, they should be instant"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-80",
+      "theme": "components-toasts-drawers",
+      "area": "motion",
+      "title": "Tooltip motion: 125ms from scale 0.97",
+      "rule": "Animate tooltips within 125–200ms: transition transform and opacity over 125ms var(--ease-out) from and to opacity: 0 and transform: scale(0.97), with transform-origin: var(--transform-origin).",
+      "why": "A tooltip is the same shape as a popover, only faster. The built-in CSS easings are too weak, so the recipe uses the strong --ease-out curve (the 7 tips essay shows the same 0.125s with the built-in ease-out).",
+      "strength": "must",
+      "values": {
+        "transition": "transform 125ms var(--ease-out), opacity 125ms var(--ease-out)",
+        "from-and-to": "opacity: 0; transform: scale(0.97)",
+        "origin": "transform-origin: var(--transform-origin)",
+        "band": "125–200ms",
+        "--ease-out": "cubic-bezier(0.23, 1, 0.32, 1)"
+      },
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "ek-7-practical-animation-tips",
+          "evidence": "transform 0.125 s ease-out"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Same shape as a popover, faster"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "Tooltips, small popovers | 125–200ms"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Tooltips, small popovers | 125-200ms"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "The built-in CSS easings are too weak"
+        }
+      ],
+      "engine": [
+        {
+          "path": "motion.duration.tooltip",
+          "value": "125ms",
+          "type": "duration",
+          "note": "new token"
+        },
+        {
+          "path": "motion.scale.tooltip",
+          "value": 0.97,
+          "type": "number",
+          "note": "new token; `engine.py set` cannot create a number token on this path yet (it asks for a type), so the engine needs a number rule for it"
+        }
+      ],
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py build_motion_context has no tooltip transition; the nearest, motion.transition.enter, runs motion.duration.medium (240ms at default dials), above the 125–200ms tooltip band [inferred]"
+      ]
+    },
+    {
+      "id": "STD-components-toasts-drawers-81",
+      "theme": "components-toasts-drawers",
+      "area": "motion",
+      "title": "Popovers scale from their trigger",
+      "rule": "Scale dropdowns, popovers, menus, selects and tooltips out of their trigger with transform-origin: var(--transform-origin) (Base UI) or var(--radix-dropdown-menu-content-transform-origin) (Radix), never from the default center.",
+      "why": "The panel should look like it came out of the thing you clicked; center is wrong in most cases, and the difference compounds even when nobody notices it.",
+      "strength": "must",
+      "values": {
+        "base-ui": "transform-origin: var(--transform-origin)",
+        "radix": "transform-origin: var(--radix-dropdown-menu-content-transform-origin)"
+      },
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "ek-7-practical-animation-tips",
+          "evidence": "its default value is center , which is wrong in most cases"
+        },
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "The `transform-origin` is the whole point"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "at the trigger"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Make popovers origin-aware"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Origin-aware popovers"
+        },
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "Anchor interactions to their source"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "\\.(?=[\\w-]*(?:popover|dropdown|menu|tooltip|select(?!ed|ion)))(?![\\w-]*(?:trigger|button|btn|item|icon|arrow))[\\w-]+(?![\\w-])[^{}]*\\{[^}]*transform-origin\\s*:\\s*center(?:\\s+center)?\\s*(?:!important\\s*)?(?:[;}]|$)",
+        "message": "Popovers, menus, dropdowns and tooltips scale from their trigger: transform-origin: var(--transform-origin)."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-82",
+      "theme": "components-toasts-drawers",
+      "area": "motion",
+      "title": "Menus: 200ms ease-out from scale 0.95",
+      "rule": "Animate dropdowns, popovers, menus and selects within 150–250ms: transition opacity and transform over 200ms ease-out, entering from and exiting to opacity: 0 and transform: scale(0.95).",
+      "why": "The panel scales out of its trigger, not out of thin air, and a 180ms dropdown feels more responsive than a 400ms one.",
+      "strength": "must",
+      "values": {
+        "transition": "opacity 200ms var(--ease-out), transform 200ms var(--ease-out)",
+        "from-and-to": "opacity: 0; transform: scale(0.95) on [data-starting-style] and [data-ending-style]",
+        "band": "150–250ms"
+      },
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Dropdown, popover, menu, select"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "Dropdowns, selects | 150–250ms"
+        },
+        {
+          "id": "ek-you-dont-need-animations",
+          "evidence": "A 180ms dropdown animation feels more responsive than a 400ms one"
+        },
+        {
+          "id": "ek-7-practical-animation-tips",
+          "evidence": "A 180ms select animation feels more responsive"
+        }
+      ],
+      "engine": [
+        {
+          "path": "motion.duration.popover",
+          "value": "200ms",
+          "type": "duration",
+          "note": "new token"
+        },
+        {
+          "path": "motion.scale.popover",
+          "value": 0.95,
+          "type": "number",
+          "note": "new token; `engine.py set` cannot create a number token on this path yet (it asks for a type), so the engine needs a number rule for it"
+        }
+      ],
+      "review": {
+        "pattern": "\\.(?=[\\w-]*(?:dropdown|popover|menu|select(?!ed|ion)))(?![\\w-]*(?:trigger|button|btn|item|icon|arrow))[\\w-]+(?![\\w-])[^{}]*\\{[^}]*\\btransition(?:-duration)?\\s*:[^;{}]*?(?:\\b(?:[3-9]\\d{2}|\\d{4,})ms\\b|(?<![\\d.])(?:0?\\.[3-9]\\d*|[1-9](?:\\.\\d+)?)s\\b)",
+        "message": "Keep dropdowns, popovers, menus and selects at 150–250ms (house value 200ms)."
+      },
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py build_motion_context: motion.transition.exit leaves on motion.easing.exit [0.3, 0, 1, 1], an accelerating curve, while the recipe exits popovers on the same 200ms ease-out [inferred]",
+        "skills/opendesigner/references/stages/16-motion-haptics-and-sound.md Q-motion-01 default says 'ease-in to exit' [inferred]",
+        "skills/opendesigner/references/stages/16-motion-haptics-and-sound.detailed.md Q-motion-06 option fade (a default) is a plain fade for dialogs and menus; the recipe adds scale(0.95) from the trigger [inferred]"
+      ]
+    },
+    {
+      "id": "STD-components-toasts-drawers-83",
+      "theme": "components-toasts-drawers",
+      "area": "motion",
+      "title": "No overshoot on menus",
+      "rule": "Do not overshoot or bounce menus and other surfaces that appear without a gesture; allow bounce only when the gesture carried momentum.",
+      "why": "Overshoot on a menu that just faded in feels wrong; overshoot on a card you flicked feels right.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "Overshoot on a menu that just faded in feels wrong"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Bounce only when the gesture carried momentum"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-84",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Keyboard list highlight moves instantly",
+      "rule": "Move the highlight in a command menu or list navigated with arrow keys instantly, with no animation.",
+      "why": "Keyboard-initiated actions repeat hundreds of times a day, and an animated highlight feels delayed compared to the keys you press.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-you-dont-need-animations",
+          "evidence": "Notice how the highlight feels delayed compared to the keys you press"
+        },
+        {
+          "id": "ek-you-dont-need-animations",
+          "evidence": "You should never animate them"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-85",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Command menus open instantly",
+      "rule": "Show a command menu, and any other UI opened hundreds of times a day, instantly with no open or close animation.",
+      "why": "The frequency gate says no animation, ever, for a command palette toggle; animating something opened hundreds of times a day would be very annoying, and Raycast having no animation at all is the optimal experience.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-you-dont-need-animations",
+          "evidence": "I use Raycast hundreds of times a day"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "command palette toggle"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Raycast has no open/close animation"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "Reject. No animation. Ever."
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "No animation. Ever."
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-86",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "base-ui for dialogs and menus",
+      "rule": "Build dialogs, popovers, menus and selects on base-ui and command menus on cmdk; never ship a <div>-based dropdown or dialog with manual focus handling. If the project already uses a different primitive library, flag the recommendation instead of replacing the dependency unasked.",
+      "why": "base-ui handles accessibility, focus trapping and dismissal; cmdk is the curated pick for ⌘K palettes.",
+      "strength": "must",
+      "values": {
+        "primitives": "base-ui",
+        "command-menu": "cmdk"
+      },
+      "applies_to": [
+        "web",
+        "react"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-pick-ui-library-skill",
+          "evidence": "Unstyled, accessible UI components (dialogs, popovers, menus, selects…)"
+        },
+        {
+          "id": "eks-skills-pick-ui-library-skill",
+          "evidence": "A `<div>`-based dropdown/dialog with manual focus handling"
+        },
+        {
+          "id": "eks-skills-pick-ui-library-skill",
+          "evidence": "Command menus (⌘K palettes)"
+        },
+        {
+          "id": "eks-skills-pick-ui-library-skill",
+          "evidence": "flag the recommendation but don't churn the dependency without being asked"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-87",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Expo: native context menus",
+      "rule": "In Expo Router apps on iOS, use Link.Menu and Link.Preview for context menus and press-and-hold previews; never rebuild them in JavaScript.",
+      "why": "They are the native menus and peek (iOS-only).",
+      "strength": "must",
+      "values": {
+        "api": "Link.Menu / Link.Preview"
+      },
+      "applies_to": [
+        "react-native",
+        "ios"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Context menu, press-and-hold preview"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-88",
+      "theme": "components-toasts-drawers",
+      "area": "motion",
+      "title": "Modals stay centered on screen",
+      "rule": "Keep modals at transform-origin: center; they are exempt from the trigger-origin rule.",
+      "why": "A modal is not anchored to a trigger; it appears centered in the viewport.",
+      "strength": "must",
+      "values": {
+        "css": "transform-origin: center"
+      },
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "The one popover that stays centered"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Exception: modals"
+        },
+        {
+          "id": "eks-skills-review-animations-skill",
+          "evidence": "Origin & physical correctness"
+        },
+        {
+          "id": "eks-skills-improve-animations-audit",
+          "evidence": "Modals are exempt"
+        }
+      ],
+      "engine": null,
+      "review": {
+        "pattern": "\\.(?=[\\w-]*(?:modal|dialog))[\\w-]+(?![\\w-])[^{}]*\\{[^}]*transform-origin\\s*:\\s*var\\(--(?:radix-[\\w-]+-)?transform-origin\\)",
+        "message": "Modals are not anchored to a trigger: keep transform-origin: center."
+      },
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-89",
+      "theme": "components-toasts-drawers",
+      "area": "motion",
+      "title": "Modal motion: 250ms from scale 0.96",
+      "rule": "Animate modals within 200–500ms: transition opacity and transform over 250ms ease-out, entering from and exiting to opacity: 0 and transform: scale(0.96), and fade the backdrop's opacity with the same timing.",
+      "why": "These are the source's modal recipe values; animating the backdrop alongside makes the modal and backdrop read as one surface.",
+      "strength": "must",
+      "values": {
+        "transition": "opacity 250ms var(--ease-out), transform 250ms var(--ease-out)",
+        "from-and-to": "opacity: 0; transform: scale(0.96)",
+        "backdrop": "transition: opacity 250ms var(--ease-out)",
+        "band": "200–500ms"
+      },
+      "applies_to": [
+        "web",
+        "css"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-recipes",
+          "evidence": "Animate the backdrop's opacity alongside it so they read as one surface"
+        },
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "Modals, drawers | 200–500ms"
+        },
+        {
+          "id": "eks-skills-review-animations-standards",
+          "evidence": "Modals, drawers | 200–500ms"
+        }
+      ],
+      "engine": [
+        {
+          "path": "motion.duration.modal",
+          "value": "250ms",
+          "type": "duration",
+          "note": "new token"
+        },
+        {
+          "path": "motion.scale.modal",
+          "value": 0.96,
+          "type": "number",
+          "note": "new token; `engine.py set` cannot create a number token on this path yet (it asks for a type), so the engine needs a number rule for it"
+        }
+      ],
+      "review": null,
+      "design_md": true,
+      "conflicts": [
+        "skills/opendesigner/scripts/engine.py build_motion_context: motion.transition.expand ('Dialogs, sheets, side panels entering') uses motion.duration.long (380ms at default dials) with motion.easing.enter [0, 0, 0, 1]; the modal recipe is 250ms ease-out",
+        "skills/opendesigner/scripts/engine.py build_motion_context: motion.transition.exit uses motion.easing.exit [0.3, 0, 1, 1] while the modal recipe exits on the same ease-out [inferred]"
+      ]
+    },
+    {
+      "id": "STD-components-toasts-drawers-90",
+      "theme": "components-toasts-drawers",
+      "area": "components",
+      "title": "Confirm only irreversible destructive actions",
+      "rule": "Offer easy undo for slips, and use a confirmation dialog only for genuinely destructive, irreversible actions, sparingly.",
+      "why": "Forgiveness backs agency, and overusing confirmations trains people to click through them.",
+      "strength": "must",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-apple-design-skill",
+          "evidence": "a confirmation dialog only for genuinely destructive, irreversible actions"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-91",
+      "theme": "components-toasts-drawers",
+      "area": "motion",
+      "title": "Occasional surfaces get standard motion",
+      "rule": "Give occasional surfaces such as modals, drawers and toasts a standard animation, and keep delight for rare or first-time moments.",
+      "why": "The frequency table marks occasional surfaces as eligible for standard animation; delight belongs to the rare tier.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "eks-skills-animate-skill",
+          "evidence": "Occasional (modals, drawers, toasts)"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Occasional (modals, drawers, toasts)"
+        },
+        {
+          "id": "eks-skills-find-animation-opportunities-skill",
+          "evidence": "Occasional (modals, drawers, toasts, settings)"
+        },
+        {
+          "id": "eks-skills-animate-expo-skill",
+          "evidence": "Should this animate at all"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": []
+    },
+    {
+      "id": "STD-components-toasts-drawers-92",
+      "theme": "components-toasts-drawers",
+      "area": "process",
+      "title": "Document components with live examples",
+      "rule": "Give the system's components documentation with interactive examples and ready-to-use code snippets, written as part of the work rather than as an afterthought.",
+      "why": "If a component is not easy to use, people give up before they even try it; letting people touch and play with it before they use it lowers the barrier to adoption, and documentation is often overlooked and done as an afterthought when it should not be.",
+      "strength": "should",
+      "values": {},
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "ek-building-a-toast-component",
+          "evidence": "Good documentation and clear instructions can drastically lower the barrier to use any product"
+        },
+        {
+          "id": "ek-building-a-toast-component",
+          "evidence": "If the component is not easy to use, people will give up before they even try it"
+        },
+        {
+          "id": "eks-skills-emil-design-eng-skill",
+          "evidence": "Build a great documentation site"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": false,
+      "conflicts": []
+    }
+  ]
+}

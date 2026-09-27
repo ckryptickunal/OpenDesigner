@@ -1,0 +1,486 @@
+{
+  "summary": "Kole Jain walks through four decorative Figma effects built from gradients, blend modes, inner shadows and blurs: a kaleidoscope effect, a clay effect, a metallic effect and plugin-free mesh gradients. For each he names where it fits: kaleidoscope for credit cards, stickers and buttons; clay for isometrics and illustrations that need depth; metallic for credit cards and metal mockups; mesh gradients for websites, posters and slideshows. The recipes hinge on a few load-bearing details, such as keeping the Screen layer on top in the kaleidoscope, avoiding saturated colors for clay, and needing a noticeable color change in the middle of the metallic gradient. For a design system, the video is a recipe book for decorative surfaces and brand illustration rather than for core UI, and he openly says the kaleidoscope's usability is poor even though it looks good.",
+  "key_ideas": [
+    "Decorative effects in Figma can be built from layered gradients, blend modes (Difference, Screen, Overlay), inner shadows and blurs; only the kaleidoscope's optional noise step uses a plugin.",
+    "Each effect has named best uses: kaleidoscope for credit cards, stickers and buttons; clay for isometrics and illustrations; metallic for credit cards and metal mockups and 'not a whole lot else'; mesh gradients on websites, posters, slideshows and 'just about everything else'.",
+    "In the kaleidoscope, layer order is load-bearing: the Screen layer must sit on top of everything else or the effect breaks.",
+    "The kaleidoscope's angular gradient should alternate black and white an even number of times.",
+    "An effect can look good while being poor for usability; the kaleidoscope with overlay text is his own example.",
+    "The clay effect comes from two inner shadows, one covering the top and right edges and one the bottom and left, and it works poorly with saturated colors.",
+    "A metallic look needs a noticeable color change in the middle of the gradient; the edge colors matter less.",
+    "A white radial gradient on Overlay adds depth and thickness to a metallic surface.",
+    "A layer with a fill of 20% in a red, orange or blue turns plain metal into rose gold, gold, bronze or titanium.",
+    "Mesh gradients come from stacked, blurred, semi-transparent circles on Overlay; the more overlapping layers, the brighter and more vibrant the result.",
+    "Mesh gradients are more art than science: iterate on colors, blurs and transparencies until it looks right."
+  ],
+  "entities": [
+    {
+      "name": "Kole Jain",
+      "type": "person",
+      "description": "Owner of the channel and presenter of the tutorial."
+    },
+    {
+      "name": "Figma",
+      "type": "tool",
+      "description": "The design tool every effect in the video is built in."
+    },
+    {
+      "name": "Noise & Texture plugin",
+      "type": "tool",
+      "description": "Figma plugin he uses to add noise to the kaleidoscope effect."
+    },
+    {
+      "name": "Dribbble",
+      "type": "product",
+      "description": "Named in the video description: the effects can help make 'one of those insane fintech Dribbble designs'."
+    },
+    {
+      "name": "Kaleidoscope effect",
+      "type": "concept",
+      "description": "Radial gradient plus alternating black and white angular gradient layers on Difference and Screen, for cards, stickers and buttons."
+    },
+    {
+      "name": "Clay effect",
+      "type": "concept",
+      "description": "A muted-color shape with two opposing inner shadows, for isometrics and illustrations that need depth."
+    },
+    {
+      "name": "Metallic effect",
+      "type": "concept",
+      "description": "Gray and dark blue linear gradient with an Overlay radial highlight and inner shadows, for credit cards and metal mockups."
+    },
+    {
+      "name": "Mesh gradient",
+      "type": "concept",
+      "description": "Blurred, semi-transparent circles stacked on Overlay to form a soft multi-color gradient without plugins."
+    },
+    {
+      "name": "Blend modes",
+      "type": "concept",
+      "description": "Difference, Screen and Overlay are the blend modes the recipes rely on."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Figma and design tools",
+      "summary": "Four step-by-step Figma recipes (kaleidoscope, clay, metallic, mesh gradient) using layer order, blend modes, inner shadows, blurs and one noise plugin."
+    },
+    {
+      "name": "Color",
+      "summary": "Gradient choices drive each effect: radial gradients in any colors, black and white angular stripes, grays and dark blues for metal, a 20% tint for gold, bronze or titanium, and muted rather than saturated colors for clay."
+    },
+    {
+      "name": "Depth, shadows and borders",
+      "summary": "Paired inner shadows on opposite edges create the clay look, inner shadows plus an Overlay highlight give metal depth and thickness, and an optional drop shadow gives the clay 'a better effect'."
+    },
+    {
+      "name": "Icons and imagery",
+      "summary": "Clay suits isometrics and illustrations that need depth; kaleidoscope suits stickers; mesh gradients suit posters and slideshows."
+    },
+    {
+      "name": "Gradients, blend modes and texture effects",
+      "summary": "Decorative surface effects built from layered gradients, blend modes, noise and blur, with a named best use for each."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "The kaleidoscope effect only works if the duplicated Screen layer sits on top of everything else.",
+      "evidence": "make sure this layer is on top of everything else otherwise the effect won't work"
+    },
+    {
+      "claim": "The angular gradient can alternate black and white eight times; 10 and six also work well.",
+      "evidence": "we're doing eight here but 10 and six would also work well"
+    },
+    {
+      "claim": "The kaleidoscope with overlay text has poor usability even though it looks good.",
+      "evidence": "the usability is pretty bad but it looks good nonetheless"
+    },
+    {
+      "claim": "Saturated colors don't work well for the clay effect.",
+      "evidence": "saturated colors don't work too well for this effect"
+    },
+    {
+      "claim": "Two inner shadows, one covering the top and right edges and one the bottom and left, produce the clay effect.",
+      "evidence": "another inner Shadow with these settings which will cover the bottom and left edges"
+    },
+    {
+      "claim": "Adding a drop shadow makes the clay effect better.",
+      "evidence": "we can add a drop shadow to this for a better effect"
+    },
+    {
+      "claim": "The metallic effect needs a noticeable change in color in the middle of the gradient; edge colors matter less.",
+      "evidence": "for this effect to work we need to have a noticeable change in color in the middle"
+    },
+    {
+      "claim": "A white radial gradient layer on Overlay gives a metallic card depth and thickness.",
+      "evidence": "set the blend mode to Overlay to give it some depth and thickness"
+    },
+    {
+      "claim": "A layer with a 20% fill in reds, oranges or blues can give metal a gold, bronze or titanium feel.",
+      "evidence": "just add another layer with a fill of 20%"
+    },
+    {
+      "claim": "Mesh gradients can be made in Figma with no plugins.",
+      "evidence": "creating mesh gradients in figma with absolutely no plugins"
+    },
+    {
+      "claim": "The more overlapping layers a mesh gradient has, the brighter and more vibrant it becomes.",
+      "evidence": "the more layers you use that overlap the brighter and more vibrant"
+    },
+    {
+      "claim": "The kaleidoscope's best use cases are credit cards, stickers and buttons.",
+      "evidence": "the best use cases I can think of are credit cards stickers and buttons"
+    },
+    {
+      "claim": "The clay effect is good for isometrics or illustrations that need some depth.",
+      "evidence": "these are really good for isometrics or illustrations that need some depth"
+    },
+    {
+      "claim": "The metallic effect is great for credit cards and metal mockups and not a whole lot else.",
+      "evidence": "great for credit cards metal mockups and not a whole lot else"
+    },
+    {
+      "claim": "The mesh gradient is probably the most useful of the four effects; he uses it on websites, posters, slideshows and just about everything else.",
+      "evidence": "I use these on websites posters slideshows and just about everything else"
+    }
+  ],
+  "quotes": [
+    "the usability is pretty bad but it looks good nonetheless",
+    "saturated colors don't work too well for this effect",
+    "this is more of an art than a science"
+  ],
+  "tags": [
+    "figma",
+    "blend-modes",
+    "gradients",
+    "mesh-gradient",
+    "inner-shadow",
+    "noise-texture",
+    "metallic",
+    "clay",
+    "decorative-effects",
+    "credit-card"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "Use the kaleidoscope effect on credit cards, stickers and buttons, the best use cases he names.",
+      "why": "They are the best use cases he can think of; he also admits the finished effect's usability is pretty bad even though it looks good.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "the best use cases I can think of are credit cards stickers and buttons"
+    },
+    {
+      "rule": "In the kaleidoscope's angular gradient layer, alternate black and white an even number of times.",
+      "why": "No reason is given beyond the recipe; he uses eight and says 10 and six would also work well.",
+      "kind": "do",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [
+        "eight",
+        "10 and six"
+      ],
+      "evidence": "alternate black and white an even amount of times"
+    },
+    {
+      "rule": "Set the angular gradient layer to the Difference blend mode (auto-caption: 'differ'), duplicate it, set the duplicate to Screen, and keep the Screen layer on top of every other layer.",
+      "why": "If the Screen layer is not on top, the effect won't work.",
+      "kind": "do",
+      "strength": "must",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [
+        "Screen"
+      ],
+      "evidence": "make sure this layer is on top of everything else otherwise the effect won't work"
+    },
+    {
+      "rule": "On a kaleidoscope surface, add text made thicker and set to the Overlay blend mode, accepting that its usability is pretty bad.",
+      "why": "He presents it as the step that makes the effect look good, while admitting the usability is pretty bad.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [
+        "Overlay"
+      ],
+      "evidence": "add some text make it thicker and set the blend mode to Overlay"
+    },
+    {
+      "rule": "Don't use saturated colors for the clay effect; pick a less saturated one.",
+      "why": "Saturated colors don't work too well for this effect.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "saturated colors don't work too well for this effect"
+    },
+    {
+      "rule": "Build the clay effect from two inner shadows: one covering the top and right edges and one covering the bottom and left edges; optionally add a drop shadow.",
+      "why": "That is his whole recipe for the clay effect, which suits illustrations that need some depth; a drop shadow gives 'a better effect'.",
+      "kind": "do",
+      "strength": "should",
+      "area": "elevation",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "which will cover the top and right edges of our rectangle"
+    },
+    {
+      "rule": "For a metallic surface, the linear gradient (he uses mostly grays and dark blues) must have a noticeable change in color in the middle.",
+      "why": "For this effect to work the middle needs a noticeable change in color; the colors on the edge matter less.",
+      "kind": "do",
+      "strength": "must",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "for this effect to work we need to have a noticeable change in color in the middle"
+    },
+    {
+      "rule": "Add a white radial gradient layer set to Overlay, then two inner shadows, on top of the metallic gradient.",
+      "why": "The Overlay highlight gives the metal depth and thickness.",
+      "kind": "do",
+      "strength": "should",
+      "area": "elevation",
+      "applies_to": "all",
+      "values": [
+        "Overlay"
+      ],
+      "evidence": "white radial gradient to it and set the blend mode to Overlay"
+    },
+    {
+      "rule": "To tint metal (rose gold, gold, bronze, titanium), add a layer with a 20% fill in a red, orange or blue.",
+      "why": "Reds, oranges and blues can give a gold, bronze or even titanium feel.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "color",
+      "applies_to": "all",
+      "values": [
+        "20%"
+      ],
+      "evidence": "add another layer with a fill of 20%"
+    },
+    {
+      "rule": "Build mesh gradients from blurred, semi-transparent circles: one as the background, then more circles on top set to Overlay.",
+      "why": "It is his recipe for a mesh gradient in Figma with absolutely no plugins; repeating the Overlay circles a couple of times makes the mesh come together.",
+      "kind": "do",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [
+        "Overlay"
+      ],
+      "evidence": "a circle with some transparency and a blur this will be our background"
+    },
+    {
+      "rule": "For a brighter, more vibrant mesh gradient, stack more overlapping layers, 8 to 10 or more.",
+      "why": "The more overlapping layers, the brighter and more vibrant the gradient becomes.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "color",
+      "applies_to": "all",
+      "values": [
+        "8 to 10 layers"
+      ],
+      "evidence": "don't be afraid to use 8 to 10 layers or even more"
+    },
+    {
+      "rule": "Keep the metallic effect to credit cards and metal mockups.",
+      "why": "He calls it great for credit cards and metal mockups and 'not a whole lot else'.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "great for credit cards metal mockups and not a whole lot else"
+    },
+    {
+      "rule": "Use the clay effect for isometrics or illustrations that need some depth.",
+      "why": "He names those as what the clay effect is really good for.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "these are really good for isometrics or illustrations that need some depth"
+    },
+    {
+      "rule": "Add noise to the kaleidoscope with the Noise & Texture plugin to improve it.",
+      "why": "After the base effect works he says 'we can make it better' and adds noise first.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "let's add some noise with the noise and texture plugin"
+    },
+    {
+      "rule": "Treat mesh gradients as iterative: play with the colors, blurs and transparencies until you're happy rather than following fixed values.",
+      "why": "He says making them is more of an art than a science.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "play around with the colors blurs and transparencies until you're happy"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "Which decorative effect fits this surface?",
+      "options": [
+        {
+          "name": "Kaleidoscope",
+          "effect": "Striped radial pattern from the angular gradient, with noise and overlay text; looks good, but its usability is poor.",
+          "when": "Credit cards, stickers and buttons."
+        },
+        {
+          "name": "Clay",
+          "effect": "Muted-color shape with inner shadows on opposite edges that gives it depth.",
+          "when": "Isometrics or illustrations that need some depth."
+        },
+        {
+          "name": "Metallic",
+          "effect": "Gray and dark blue sheen with a highlight and inner shadows that reads as a metal plate; can be tinted to rose gold, gold, bronze or titanium.",
+          "when": "Credit cards and metal mockups, and not much else."
+        },
+        {
+          "name": "Mesh gradient",
+          "effect": "Soft, blurred multi-color background that grows brighter and more vibrant with more layers.",
+          "when": "Websites, posters, slideshows and most other surfaces."
+        }
+      ],
+      "recommendation": "He calls the mesh gradient probably the most useful of the four and uses it on just about everything he can; the others have narrower use cases.",
+      "maps_to": null,
+      "evidence": "our last and probably most useful effect is creating mesh gradients"
+    },
+    {
+      "question": "Should a metallic surface stay plain metal or be tinted?",
+      "options": [
+        {
+          "name": "Plain metal",
+          "effect": "Grays and dark blues with an Overlay highlight and inner shadows.",
+          "when": "The default metallic credit card or mockup."
+        },
+        {
+          "name": "Tinted metal",
+          "effect": "An extra layer with a 20% fill in red, orange or blue gives a rose gold, gold, bronze or titanium feel.",
+          "when": "When you want a specific finish such as rose gold."
+        }
+      ],
+      "recommendation": null,
+      "maps_to": null,
+      "evidence": "now let's say we want our credit card to be rose gold"
+    },
+    {
+      "question": "How vibrant should a mesh gradient be?",
+      "options": [
+        {
+          "name": "Few overlapping layers",
+          "effect": "Softer and less bright. [inferred]",
+          "when": "A calmer background. [inferred]"
+        },
+        {
+          "name": "8 to 10 or more overlapping layers",
+          "effect": "Brighter and more vibrant.",
+          "when": "When you want a brighter, more vibrant gradient."
+        }
+      ],
+      "recommendation": "Don't be afraid to use 8 to 10 layers or more, then tune colors, blurs and transparencies until you're happy.",
+      "maps_to": null,
+      "evidence": "the more layers you use that overlap the brighter and more vibrant your gradient will become"
+    }
+  ],
+  "process": [
+    {
+      "step": "Kaleidoscope: base",
+      "detail": "Draw a circle with a radial gradient in any colors."
+    },
+    {
+      "step": "Kaleidoscope: stripes",
+      "detail": "Add a layer with an angular gradient alternating black and white an even number of times (eight; 10 or six also work) and set it to Difference."
+    },
+    {
+      "step": "Kaleidoscope: screen layer",
+      "detail": "Duplicate the stripe layer, set the copy to Screen and keep it on top of everything else."
+    },
+    {
+      "step": "Kaleidoscope: finish",
+      "detail": "Add noise with the Noise & Texture plugin, then add thicker text set to Overlay."
+    },
+    {
+      "step": "Clay",
+      "detail": "Draw a rectangle in a non-saturated color, add one inner shadow covering the top and right edges and another covering the bottom and left edges, and optionally a drop shadow."
+    },
+    {
+      "step": "Metallic",
+      "detail": "Draw a rounded rectangle with a linear gradient of mostly grays and dark blues with a noticeable change in the middle, add a white radial gradient layer on Overlay, then two inner shadows."
+    },
+    {
+      "step": "Metallic: tint",
+      "detail": "For rose gold, gold, bronze or titanium, add another layer with a 20% fill in a red, orange or blue."
+    },
+    {
+      "step": "Mesh gradient",
+      "detail": "Place a semi-transparent, blurred circle as the background, add more semi-transparent, blurred circles set to Overlay, repeat (8 to 10 layers or more), and tune colors, blurs and transparencies."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Kaleidoscope circle",
+      "where": "Figma tutorial",
+      "visual_note": "A radial-gradient circle overlaid with black and white angular stripes on Difference and Screen, plus noise and Overlay text; shows how layer order and blend modes create a radiating pattern for cards, stickers or buttons."
+    },
+    {
+      "what": "Clay rectangle",
+      "where": "Figma tutorial",
+      "visual_note": "A muted-color rectangle with inner shadows on the top and right and on the bottom and left edges; shows how opposing inner shadows add depth for isometrics and illustrations."
+    },
+    {
+      "what": "Metallic credit card, plus a rose gold variant",
+      "where": "Figma tutorial",
+      "visual_note": "A rounded card with a gray and dark blue gradient, an Overlay white highlight and inner shadows, then a 20% colored fill layer to make it rose gold; shows how a mid-gradient color change and a tint layer read as metal."
+    },
+    {
+      "what": "Plugin-free mesh gradient",
+      "where": "Figma tutorial",
+      "visual_note": "Stacked blurred, semi-transparent circles on Overlay forming a soft multi-color gradient; shows that more overlapping layers make it brighter and more vibrant."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "eight",
+      "context": "Number of black and white alternations used in the kaleidoscope's angular gradient.",
+      "evidence": "we're doing eight here"
+    },
+    {
+      "value": "10 and six",
+      "context": "Other alternation counts that also work well for the angular gradient.",
+      "evidence": "but 10 and six would also work well"
+    },
+    {
+      "value": "20%",
+      "context": "Fill of the extra colored layer that tints metal to rose gold, gold, bronze or titanium.",
+      "evidence": "add another layer with a fill of 20%"
+    },
+    {
+      "value": "8 to 10 layers",
+      "context": "Number of overlapping circles (or more) to make a mesh gradient bright and vibrant.",
+      "evidence": "don't be afraid to use 8 to 10 layers or even more"
+    }
+  ],
+  "caveats": [
+    "The inner-shadow, blur and transparency values are only shown on screen ('with these settings'); the transcript has no numbers for them, so the recipes can't be fully reproduced from text.",
+    "The kaleidoscope recap is shown on screen for viewers to screenshot and is not in the transcript.",
+    "Auto-caption says the blend mode is 'differ'; this is Figma's Difference blend mode. 'the colors of the rain' is probably 'the rainbow', but that is not certain.",
+    "These are decorative, Dribbble-style effects, not core UI guidance; he admits the kaleidoscope's usability is pretty bad.",
+    "The use cases for each effect are his opinion, not tested guidance.",
+    "Self-promotion: the Figma file is offered through a link in the pinned comment, and he asks for a thumbs up for a part two.",
+    "Published 2024-04-13; Figma's interface and the Noise & Texture plugin may have changed since.",
+    "Figma only: no CSS or code equivalents are covered."
+  ]
+}
