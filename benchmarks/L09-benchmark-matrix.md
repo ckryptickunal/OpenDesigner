@@ -52,6 +52,22 @@ _Lane L09. Checked against live sources on 2026-09-23. 25 systems. Every value i
 
 **How to read the tables.** Rows follow the numbering above. "n/p" means not public. Values are as of 2026-09-23. For systems with two themes, the newer theme is listed first (SLDS: Cosmos, then Lightning Blue; Gestalt: classic default, with the visual refresh "VR" noted).
 
+### Extended systems (token-level, added 2026-09-27)
+
+Seven more teardowns came from outside contributors (issue #15). They are token-level: each covers 13 to 17 of the 21 Snapshot fields. They are **not** included in the 25-system matrix or its counts below. Their licences decide how the builder may use them. "Evidence only" means values may be cited and compared, never turned into a preset or copied into a user's system.
+
+| System | Owner | Snapshot | Licence | Builder may use it as | Teardown |
+|---|---|---|---|---|---|
+| Workday Canvas | Workday | `@workday/canvas-tokens-web` 4.5.0 | CC BY-ND 4.0 (no derivatives) [S-L09-767, 768] | Evidence only | `systems/workday-canvas.md` |
+| Elastic EUI (Borealis) | Elastic | `@elastic/eui-theme-borealis` 8.1.0 | Elastic License 2.0 or SSPL v1 [S-L09-780, 781] | Evidence only | `systems/elastic-eui.md` |
+| NYPL Reservoir | New York Public Library | `@nypl/design-system-react-components` 4.5.1 | Apache-2.0 [S-L09-788] | Evidence; structure may inform a preset | `systems/nypl-reservoir.md` |
+| AWS Cloudscape | Amazon Web Services | `@cloudscape-design/design-tokens` 3.0.113 | Apache-2.0 [S-L09-797, 798] | Evidence; structure may inform a preset | `systems/cloudscape.md` |
+| GC Design System | Canadian Digital Service | `@gcds-core/tokens` 1.6.0 | MIT [S-L09-839] | Evidence; structure may inform a preset | `systems/gc-design-system.md` |
+| Duet | LocalTapiola | `@duetds/tokens` 5.1.5 | Restricted to work for LocalTapiola [S-L09-809] | Evidence only | `systems/duet.md` |
+| Porsche Design System | Porsche AG | `@porsche-design-system/components-js` 4.7.0 | Code Apache-2.0; fonts, icons and marque restricted [S-L09-818] | Evidence; never its assets | `systems/porsche.md` |
+
+Brand identity stays out in every case (AGENTS.md rules). None of these is cited by a `synthesis/` card yet, so none changes a default or question today.
+
 ## Matrix
 
 ### M1. Identity and distribution
