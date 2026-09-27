@@ -1458,6 +1458,90 @@ class Standards(unittest.TestCase):
             quiet(e.cmd_init, d, name="House")
             self.assertEqual(quiet(e.cmd_build, d), 0)
 
+    def test_shipped_house_file_maps_every_value_on_a_fresh_sketch(self):
+        """Every engine value of the shipped house file reaches the tokens, including the new number and spring tokens whose
+        type only the mapping gives (motion.scale.press 0.97 from STD-mobile-touch-05, motion.spring.sheet from
+        STD-springs-gestures-08), and they flow into the exports like other tokens of their type."""
+        path = os.path.join(e.REFERENCES, "standards.json")
+        if not os.path.exists(path):
+            self.skipTest("references/standards.json is not built yet")
+        with tempfile.TemporaryDirectory() as t, house_standards(path):
+            d = os.path.join(t, "opendesigner")
+            self.assertEqual(quiet(e.cmd_sketch, d, "House", None, "regular", "web", "friendly,minimal"), 0)
+            code, out = run_cli("standards", "--json", "--dir", d)
+            self.assertEqual(json.loads(out)["unmapped"], [])
+            self.assertEqual({sid: r["unmapped"] for sid, r in std_read(d)["standards"]["records"].items() if r.get("unmapped")}, {})
+            meta = e.read_json(os.path.join(d, "tokens", "opendesigner.meta.json"))
+            self.assertEqual([n for n in meta["notes"] if "skipped" in n], [])
+            self.assertEqual(e.validate_dir(d).count("error"), 0)
+            sem = e.read_json(os.path.join(d, "tokens", "semantic.tokens.json"))
+            press = sem["motion"]["scale"]["press"]
+            self.assertEqual((press["$type"], press["$value"]), ("number", 0.97))
+            self.assertEqual(press["$extensions"]["opendesigner"], {"source": "standard", "standard": "STD-mobile-touch-05"})
+            self.assertEqual((sem["motion"]["gesture"]["rubberband-constant"]["$value"], sem["component"]["toast"]["visible"]["$value"]), (0.55, 3))
+            sheet = e.read_json(os.path.join(d, "tokens", "primitives.tokens.json"))["motion"]["spring"]["sheet"]
+            self.assertEqual(sheet["$type"], "transition")
+            self.assertEqual(set(sheet["$value"]), {"duration", "delay", "timingFunction"})
+            ext = sheet["$extensions"]["opendesigner"]
+            self.assertEqual((ext["spring"], ext["apple"]), ({"dampingRatio": 0.8, "stiffness": 438.6, "mass": 1}, {"duration": 0.3, "bounce": 0.2}))
+            b = os.path.join(d, "build")
+            with open(os.path.join(b, "css", "tokens.css"), encoding="utf-8") as f:
+                css = f.read()
+            for needle in ("--ds-motion-scale-press: 0.97;", "--ds-motion-gesture-deceleration-rate: 0.998;", "--ds-component-toast-visible: 3;",
+                           "--ds-motion-spring-sheet-duration: 410ms;", "--ds-motion-spring-sheet-easing: linear("):
+                self.assertIn(needle, css)
+            with open(os.path.join(b, "tailwind", "theme.css"), encoding="utf-8") as f:
+                self.assertIn('@import "../css/tokens.css";', f.read())      # numbers and springs reach Tailwind through tokens.css
+            with open(os.path.join(b, "swift", "DesignTokens.swift"), encoding="utf-8") as f:
+                swift = f.read()
+            self.assertIn("public static let scalePress: Double = 0.97", swift)
+            self.assertIn("public static let springSheet = Animation.spring(duration: 0.3, bounce: 0.2)", swift)
+            with open(os.path.join(b, "compose", "DesignTokens.kt"), encoding="utf-8") as f:
+                kt = f.read()
+            self.assertIn("const val scalePress = 0.97f", kt)
+            self.assertIn("fun <T> springSheet() = spring<T>(dampingRatio = 0.8f, stiffness = 438.6f)", kt)
+
+    def test_new_tokens_take_the_type_their_mapping_gives(self):
+        spring = {"dampingRatio": 0.8, "stiffness": 438.6, "mass": 1}
+        data = {"version": 1, "themes": [], "standards": [
+            {"id": "STD-t-01", "theme": "t", "title": "Press", "rule": "Pressables scale to 0.97.", "strength": "must",
+             "engine": {"path": "motion.scale.press", "value": 0.97, "type": "number"}, "since": 1, "changed": 1},
+            {"id": "STD-t-02", "theme": "t", "title": "Sheet", "rule": "Sheets settle on a spring.", "strength": "must",
+             "engine": {"path": "motion.spring.sheet", "value": spring, "type": "transition"}, "since": 1, "changed": 1},
+            {"id": "STD-t-03", "theme": "t", "title": "Bad spring", "rule": "A spring with no damping.", "strength": "should",
+             "engine": {"path": "motion.spring.bad", "value": {"dampingRatio": 0, "stiffness": 100}, "type": "transition"},
+             "since": 1, "changed": 1},
+            {"id": "STD-t-04", "theme": "t", "title": "Bad type", "rule": "A type DTCG does not have.", "strength": "should",
+             "engine": {"path": "motion.scale.hover", "value": 1.02, "type": "numbr"}, "since": 1, "changed": 1}]}
+        with tempfile.TemporaryDirectory() as t, house_standards(write_std(t, "std.json", data)):
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="Typed")
+            state = std_read(d)
+            self.assertEqual(state["overrides"], {"motion.scale.press": 0.97, "motion.spring.sheet": spring})
+            un = {u["id"]: u["reason"] for u in e.std_unmapped(e.merge_defaults(state), e.load_standards())}
+            self.assertEqual(sorted(un), ["STD-t-03", "STD-t-04"])
+            self.assertIn("is not a valid transition value", un["STD-t-03"])
+            self.assertIn("'numbr' is not a DTCG token type", un["STD-t-04"])
+            code, out = run_cli("standards", "--dir", d)
+            self.assertIn("Not mapped (the engine could not put these values in the tokens; each line says why.", out)
+            self.assertNotIn("maintainers", out)
+            files, _m, _c = quiet(e.cmd_generate, d)
+            self.assertEqual(files["semantic.tokens.json"]["motion"]["scale"]["press"]["$type"], "number")
+            self.assertEqual(files["primitives.tokens.json"]["motion"]["spring"]["sheet"]["$extensions"]["opendesigner"]["spring"], spring)
+            # a person's new unitless number still needs a type; a standard's mapping gives one
+            dd = files["opendesigner.meta.json"]["params"]["space.densityMode"]["value"]
+            self.assertIn("is unclear", e.override_plan(files, "motion.scale.hover", 1.02, dd)["error"])
+            plan = e.override_plan(files, "motion.scale.hover", 1.02, dd, "number")
+            self.assertEqual((plan["files"], plan["type"], plan["new"]), (["semantic.tokens.json"], "number", True))
+            self.assertEqual(e.override_plan(files, "motion.easing.exit", [0.23, 1, 0.32, 1], dd, "duration")["type"], "cubicBezier")
+            # overridden, the value is the person's and keeps its type from the standard's record
+            quiet(e.cmd_standard, d, "override", sid="STD-t-01", why="our brand presses deeper", value=0.95)
+            files, _m, _c = quiet(e.cmd_generate, d)
+            press = files["semantic.tokens.json"]["motion"]["scale"]["press"]
+            self.assertEqual((press["$type"], press["$value"], press["$extensions"]["opendesigner"]["source"]), ("number", 0.95, "person"))
+            quiet(e.cmd_set, d, "motion.scale.press", 0.96, "their tweak")
+            self.assertEqual(quiet(e.cmd_generate, d)[0]["semantic.tokens.json"]["motion"]["scale"]["press"]["$value"], 0.96)
+
 
 
 def std_run(fn, *a, **k):

@@ -2,16 +2,17 @@
 """Navigate the design-system research with Jev (TypeSafe's System One model).
 
   python3 tools/jev_nav.py status            lane progress, Decision Cards, sources
-  python3 tools/jev_nav.py find "question"   gathers candidate cards, then Jev ranks them for the question
+  python3 tools/jev_nav.py find "question"   gathers candidate cards and house standards, then Jev ranks them for the question
   python3 tools/jev_nav.py html              writes navigator.html, a visual map of the research
   python3 tools/jev_nav.py export            writes synthesis/cards.json, every Decision Card split into its fields
   python3 tools/jev_nav.py graph             writes synthesis/decision-graph.json from the cards' depends/affects links
-  python3 tools/jev_nav.py check             flags cited source ids missing from traces and unknown card ids
+  python3 tools/jev_nav.py check             flags cited source ids missing from traces, unknown card ids and unknown standard ids
 
 `find` needs JEV_API_KEY (or TYPESAFE_API_KEY) in the environment or in the project's .env;
-without it, it falls back to keyword ranking.
+without it, it falls back to keyword (BM25) ranking.
 """
-import argparse, html, json, os, re, sys, urllib.error, urllib.request
+import argparse, html, json, math, os, re, sys, urllib.error, urllib.request
+from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -19,6 +20,9 @@ ROOT = Path(__file__).resolve().parent.parent
 API = "https://api.typesafe.ai/v1/systemone"
 CARDS_PER_REQUEST = 20
 KEYWORD_CANDIDATES = 40
+STANDARD_CANDIDATES = 18  # keyword-top house standards always judged, whatever lane Jev picks (doubled for the STD lane)
+DCID = re.compile(r"DC-L\d+-\d+")
+STDID = re.compile(r"STD-[a-z]+(?:-[a-z]+)*-\d+")
 
 
 def lanes():
@@ -90,48 +94,152 @@ def jev(state, questions):
         return json.load(r)["answers"]
 
 
-def standards_as_cards():
-    """House standards (synthesis/standards.json, lane L19) join the pool, so `find` answers "what is the rule for X?" too."""
+def standards_doc():
     p = ROOT / "synthesis/standards.json"
-    if not p.exists():
-        return []
-    doc = json.loads(p.read_text())
-    return [dict(id=s["id"], title=s["title"], file="synthesis/standards.json", line=0,
+    return json.loads(p.read_text()) if p.exists() else {}
+
+
+def standards_as_cards(doc):
+    """House standards (synthesis/standards.json, lane L19) join the pool, so `find` answers "what is the rule for X?" too."""
+    return [dict(id=s["id"], title=s["title"], file="synthesis/standards.json", line=0, theme=s.get("theme", ""), std=s,
                  text=f"House standard ({s['strength']}): {s['rule']} Why: {s['why']} Values: "
                       + "; ".join(f"{k}: {v}" for k, v in (s.get("values") or {}).items()))
             for s in doc.get("standards", [])]
 
 
-def keyword_rank(query, pool):
-    terms = set(re.findall(r"\w{3,}", query.lower()))
-    return sorted(pool, key=lambda c: -sum((c["title"] + " " + c["text"]).lower().count(t) for t in terms))
+STOPWORDS = set("""a about all an and any are as at be been but by can could did do does for from get had has have
+how i if in into is it its just me more most my need no not of on or our should so some than that the their them
+then there these they this those to up use using was we were what when where which who why will with would you your""".split())
+
+
+def stem(word):
+    """Crude suffix stripping, so "closes", "closing" and "close" meet, as do "dragged" and "drag"."""
+    if word.endswith("ies") and len(word) > 4:
+        word = word[:-3] + "y"
+    elif word.endswith("sses"):
+        word = word[:-2]
+    elif word.endswith("es") and len(word) > 4 and not word.endswith(("ses", "ues")):
+        word = word[:-2]
+    elif word.endswith("s") and len(word) > 3 and not word.endswith(("ss", "us", "is")):
+        word = word[:-1]
+    for suffix, repl in (("ation", "at"), ("ing", ""), ("ed", ""), ("ly", "")):
+        if word.endswith(suffix) and len(word) - len(suffix) >= 3:
+            word = word[: -len(suffix)] + repl
+            if suffix in ("ing", "ed") and word[-1] == word[-2] and word[-1] not in "lsz":
+                word = word[:-1]  # dragg -> drag, sett -> set
+            break
+    return word[:-1] if word.endswith("e") and len(word) > 3 else word
+
+
+def terms(text):
+    return [stem(w) for w in re.findall(r"[a-z0-9]+", text.lower()) if len(w) > 1 and w not in STOPWORDS]
+
+
+def keyword_rank(query, pool, k1=1.2, b=0.75, title_weight=3):
+    """BM25 (the BM25F form: title and text are length-normalised separately, and a title match counts
+    `title_weight` times). Rare words count more, and a match in a long card counts less than the same match
+    in a short one. Returns only the cards that match at least one term, best first."""
+    docs = [(Counter(terms(c["title"])), Counter(terms(c["text"]))) for c in pool]
+    lengths = [(sum(t.values()), sum(x.values())) for t, x in docs]
+    avg_title = sum(l[0] for l in lengths) / max(len(docs), 1) or 1
+    avg_text = sum(l[1] for l in lengths) / max(len(docs), 1) or 1
+    q = set(terms(query))
+    idf = {}
+    for t in q:
+        n = sum(1 for title, text in docs if t in title or t in text)
+        idf[t] = math.log(1 + (len(docs) - n + 0.5) / (n + 0.5))
+    def score(i):
+        (title, text), (lt, lx) = docs[i], lengths[i]
+        s = 0.0
+        for t in q:
+            tf = title_weight * title[t] / (1 - b + b * lt / avg_title) + text[t] / (1 - b + b * lx / avg_text)
+            s += idf[t] * tf * (k1 + 1) / (tf + k1) if tf else 0
+        return s
+    scored = sorted(((score(i), i) for i in range(len(pool))), key=lambda t: -t[0])
+    return [pool[i] for s, i in scored if s > 0]
+
+
+def named_standards(card):
+    """Standard ids on an L19 card's `Standards:` line."""
+    return STDID.findall(fields(card).get("standards", ""))
+
+
+def house_overrides(all_cards, doc):
+    """Older card id -> ids of the L19 cards ("differs from DC-...") and standards ("conflicts") that the house prefers."""
+    out = {}
+    for c in all_cards:
+        if not c["id"].startswith("DC-L19-"):
+            continue
+        # Only the card's recommended default overrides an older card; a "differs" note on an option the house did not
+        # adopt does not. Both wordings occur: "differs from DC-..." and "Differs: DC-...".
+        default = fields(c).get("default") or ""
+        for m in re.finditer(r"differs(?:\s+from)?\s*:?", default, re.I):
+            clause = re.split(r"[.;]\**(?=\s|$)", default[m.end():], maxsplit=1)[0]
+            for old in DCID.findall(clause):
+                if not old.startswith("DC-L19-"):
+                    out.setdefault(old, set()).add(c["id"])
+    for s in doc.get("standards", []):
+        for old in DCID.findall(" ".join(s.get("conflicts") or [])):
+            out.setdefault(old, set()).add(s["id"])
+    return out
+
+
+def judge_text(c):
+    """What the judge reads: a standard's rule and values; a card's Questions, Default and Standards lines."""
+    if "std" in c:
+        s = c["std"]
+        return (f"House standard ({s['strength']}): {s['rule']} Values: "
+                + "; ".join(f"{k}: {v}" for k, v in (s.get("values") or {}).items()))
+    f = fields(c)
+    parts = [f"{label}: {re.sub(r'^[(][^)]*[)] ', '', f[key])}" for key, label in (("questions", "Questions"), ("default", "Default"), ("standards", "Standards")) if f.get(key)]
+    return "\n".join(parts) if parts else c["text"][:900]
 
 
 def find(args):
     query, research = args.query, [l for l in lanes() if l["id"].startswith("L")]
-    std = standards_as_cards()
+    doc = standards_doc()
+    std = standards_as_cards(doc)
     everything = [c for l in research for f in lane_files(l["id"]) for c in cards(f)] + std
+    overrides = house_overrides(everything, doc)
+    ranked = keyword_rank(query, everything)
     if not api_key():
         print("No JEV_API_KEY or TYPESAFE_API_KEY found: using keyword ranking instead of Jev.\n", file=sys.stderr)
-        return show(keyword_rank(query, everything)[: args.top], None)
+        return show(ranked[: args.top], None, overrides)
 
-    # 1. Candidates: code retrieves, Jev judges. Keyword matches across all lanes, plus every card
-    #    in the lane Jev picks (catches questions that share no words with the right card).
+    # 1. Candidates: code retrieves, Jev judges. The keyword-top (BM25) cards across all lanes, the keyword-top
+    #    house standards, every card in the research lane Jev picks (catches questions that share no words
+    #    with the right card), and the standards named on the pooled L19 cards' `Standards:` lines.
+    themes = "; ".join(f"{t['title']} ({t['summary']})" for t in doc.get("themes", []))
     lane = jev({"question": query}, {"lane": {
         "type": "choice",
         "instructions": "Which research lane of a design-system research project is most likely to answer `question`?",
         "criteria": {l["id"]: l["scope"] for l in research}
-                    | ({"STD": "House standards: non-negotiable rules for motion, easing, animation, toasts, drawers and UI polish"} if std else {})}})["lane"]["choice"]
-    pool = {(c["file"], c["line"], c["id"]): c for c in keyword_rank(query, everything)[:KEYWORD_CANDIDATES]}
-    pool |= {(c["file"], c["line"], c["id"]): c for c in (std if lane == "STD" else [c for f in lane_files(lane) for c in cards(f)])}
+                    | ({"STD": f"House standards, the non-negotiable rules. Themes: {themes}"} if std else {})}})["lane"]["choice"]
+    key = lambda c: (c["file"], c["line"], c["id"])
+    pool = {}
+    def add(cs):
+        for c in cs:
+            pool.setdefault(key(c), c)
+    add([c for c in ranked if "std" not in c][:KEYWORD_CANDIDATES])
+    add([c for c in ranked if "std" in c][: STANDARD_CANDIDATES * (2 if lane == "STD" else 1)])
+    if lane != "STD":
+        add(c for f in lane_files(lane) for c in cards(f))
+    # Standards named on pooled L19 cards, in keyword order; capped so that picking the L19 lane (164 cards)
+    # does not pull in nearly every standard.
+    std_by_id = {c["id"]: c for c in std}
+    l19 = [c for c in ranked if c["id"].startswith("DC-L19-") and key(c) in pool][:KEYWORD_CANDIDATES]
+    add(std_by_id[s] for c in l19 for s in named_standards(c) if s in std_by_id)
     pool = list(pool.values())
 
     # 2. Judge: one Noul per card over shared state; batches run in parallel.
     def judge(batch):
-        state = {"question": query, "cards": [{"title": c["title"], "text": c["text"][:900]} for c in batch]}
-        qs = {f"c{j}": {"type": "noul", "instructions": f"Does the Decision Card `cards[{j}]` directly help answer `question`?",
-                        "criteria": {"true": "The card addresses the question's subject and gives usable guidance",
-                                     "false": "The card is about something else or only mentions it in passing"}}
+        state = {"question": query, "cards": [{"title": c["title"], "text": judge_text(c)} for c in batch]}
+        qs = {f"c{j}": {"type": "noul", "instructions": f"Does the Decision Card or house standard `cards[{j}]` directly help answer `question`?",
+                        "criteria": {"true": "It gives usable guidance specific to the question's component, property or situation "
+                                             "(it names it, or a category that plainly includes it)",
+                                     "false": "It is about something else or only mentions the subject in passing; or it is a general "
+                                              "process, workflow or review rule (how to build, check or review work) that does not name "
+                                              "the question's component or property"}}
               for j in range(len(batch))}
         answers = jev(state, qs)
         return [(answers[f"c{j}"]["noul"], c) for j, c in enumerate(batch)]
@@ -140,15 +248,36 @@ def find(args):
     with ThreadPoolExecutor(max_workers=4) as ex:
         scored = sorted((s for b in ex.map(judge, batches) for s in b), key=lambda t: -t[0])
     top = scored[: args.top]
-    print(f"Judged {len(pool)} candidate cards (Jev's lane pick: {lane}); answers from " +
-          ", ".join(sorted({c['id'].split('-')[1] for s, c in top if s >= 0.5})) + "\n")
-    show([c for _, c in top], [s for s, _ in top])
+    good = [c for s, c in top if s >= 0.5]
+    lanes_hit = sorted({c["id"].split("-")[1] for c in good if c["id"].startswith("DC-")})
+    themes_hit = sorted({c.get("theme") or c["id"].split("-")[1] for c in good if not c["id"].startswith("DC-")})
+    n_std = sum(1 for c in pool if "std" in c)
+    print(f"Judged {len(pool) - n_std} cards and {n_std} house standards (Jev's lane pick: {lane}); answers from "
+          + (", ".join(lanes_hit + ([f"STD ({', '.join(themes_hit)})"] if themes_hit else [])) or "nothing above 0.5") + "\n")
+    show([c for _, c in top], [s for s, _ in top], overrides)
 
 
-def show(ranked, scores):
-    for i, c in enumerate(ranked):
-        tag = f"{scores[i]:.2f}  " if scores else ""
-        print(f"{tag}{c['id']}: {c['title']}\n      {c['file']}:{c['line']}")
+def show(ranked, scores, overrides=None):
+    """Print the results. A card the house differs from is marked, and moved just below the card or standard
+    that supersedes it when both are in the list."""
+    overrides = overrides or {}
+    rows = list(zip(scores or [None] * len(ranked), ranked))
+    for _ in range(len(rows)):
+        moved = False
+        for i, (_, c) in enumerate(rows):
+            later = [j for j in range(i + 1, len(rows)) if rows[j][1]["id"] in overrides.get(c["id"], ())]
+            if later:
+                rows.insert(later[-1], rows.pop(i))
+                moved = True
+                break
+        if not moved:
+            break
+    for s, c in rows:
+        tag = f"{s:.2f}  " if s is not None else ""
+        by = sorted(overrides.get(c["id"], ()))
+        note = f"  (house differs: {', '.join(by[:3])}{f' +{len(by) - 3}' if len(by) > 3 else ''})" if by else ""
+        where = f"{c['file']}:{c['line']}" if c["line"] else f"{c['file']} ({c['id']}; readable in skills/opendesigner/references/standards/)"
+        print(f"{tag}{c['id']}: {c['title']}{note}\n      {where}")
 
 
 FIELD = re.compile(r"^- \*\*(.+?):\*\*\s*(.*)$")
@@ -264,21 +393,30 @@ def graph(_):
 
 
 def check(_):
-    """Citation integrity: every S-id cited must be logged in a trace; every DC id referenced must exist."""
-    sid, dcid = re.compile(r"S-[A-Z]+\d*[a-z]?-\d+"), re.compile(r"DC-L\d+-\d+")
+    """Citation integrity: every S-id cited must be logged in a trace; every DC id referenced must exist;
+    every STD id cited must be a standard (active or retired) in synthesis/standards.json."""
+    sid = re.compile(r"S-[A-Z]+\d*[a-z]?-\d+")
     defined = {s for p in (ROOT / "traces").glob("*-trace.md") for s in sid.findall(p.read_text(errors="replace"))}
     cards_known = {c["id"] for l in lanes() for f in lane_files(l["id"]) for c in cards(f)}
+    doc = standards_doc()
+    std_known = {s["id"] for s in doc.get("standards", [])} | {r["id"] for r in doc.get("retired", [])}
     docs = [p for d in ("research", "benchmarks", "benchmarks/systems", "synthesis", "sources") for p in sorted((ROOT / d).glob("*.md"))]
+    std_docs = (sorted((ROOT / "research").glob("*.md")) + sorted((ROOT / "synthesis").glob("*.md"))
+                + [p for p in sorted((ROOT / "synthesis").glob("*.json")) if p.name != "standards.json"]
+                + sorted((ROOT / "learn/wiki/synthesis").glob("*.md")))
     bad = 0
-    for p in docs:
+    for p in sorted(set(docs) | set(std_docs)):
         text = p.read_text(errors="replace")
-        missing_s = sorted(set(sid.findall(text)) - defined)
-        missing_dc = sorted(set(dcid.findall(text)) - cards_known)
-        if missing_s or missing_dc:
+        missing_s = sorted(set(sid.findall(text)) - defined) if p in docs else []
+        missing_dc = sorted(set(DCID.findall(text)) - cards_known) if p in docs else []
+        missing_std = sorted(set(STDID.findall(text)) - std_known) if p in std_docs else []
+        if missing_s or missing_dc or missing_std:
             bad += 1
-            print(f"{p.relative_to(ROOT)}: {len(missing_s)} source ids not in any trace {missing_s[:6]}"
-                  f"{'; ' + str(len(missing_dc)) + ' unknown card ids ' + str(missing_dc[:6]) if missing_dc else ''}")
-    print(f"\n{len(docs)} files checked, {len(defined)} source ids logged, {len(cards_known)} cards; {bad} files with dangling references")
+            problems = [f"{len(ids)} {what} {ids[:6]}" for ids, what in ((missing_s, "source ids not in any trace"),
+                        (missing_dc, "unknown card ids"), (missing_std, "unknown standard ids")) if ids]
+            print(f"{p.relative_to(ROOT)}: " + "; ".join(problems))
+    print(f"\n{len(set(docs) | set(std_docs))} files checked, {len(defined)} source ids logged, {len(cards_known)} cards, "
+          f"{len(std_known)} standards; {bad} files with dangling references")
 
 
 def build_html(_):

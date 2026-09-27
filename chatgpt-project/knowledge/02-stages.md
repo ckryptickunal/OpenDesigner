@@ -2158,16 +2158,16 @@ Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L04-
 - **Skip:** yes.
 
 ## Q-motion-03 · Which easing curves?
-Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L04-21
+Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L04-21, DC-L19-85
 - **Ask:** "How should speed-up and slow-down curves be grouped: by job, strength or mood?"
 - **Why:** Easing curves that slow down hard make things feel fast as they arrive. Curves named by job are the easiest to use the same way everywhere [DC-L04-21].
 - **Options:**
-  - `role-based` Standard / enter / exit (Carbon, Primer, Windows).
+  - `role-based` By job: entering or leaving, moving on screen, hover and color, constant motion; one curve each, the house set. Carbon, Primer and Windows also name curves by role (standard / enter / exit).
   - `intensity-based` Min / mid / max intensity (Fluent).
   - `personality-based` Practical vs bold (Atlassian); productive vs expressive (Carbon).
-- **Default:** standard (0.2, 0, 0, 1), enter (0, 0, 0, 1) or (0.05, 0.7, 0.1, 1), exit (0.3, 0, 1, 1), linear only for spinners and progress *Source:* card heuristic [DC-L04-21]; L09 shared default row 5.
+- **Default:** `role-based`: by job, one curve each: ease-out cubic-bezier(0.23, 1, 0.32, 1) for entering and leaving, cubic-bezier(0.77, 0, 0.175, 1) for moves on screen, CSS `ease` for hover and color changes, the drawer curve cubic-bezier(0.32, 0.72, 0, 1) for drawers and sheets, linear only for spinners and progress; no ease-in anywhere *Source:* house standards STD-easing-duration-01, STD-easing-duration-02, STD-easing-duration-03 and STD-components-toasts-drawers-40 [DC-L19-85]; replaces the accelerate exit (0.3, 0, 1, 1) of DC-L04-21.
 - **Show:** the curve editor with a live card.
-- **Use / avoid:** use linear only for continuous indicators; avoid ease-in for entrances [DC-L04-21].
+- **Use / avoid:** use linear only for spinners, progress and other constant motion; never ease-in on UI (STD-easing-duration-03) [DC-L19-85].
 - **Skip:** yes.
 
 ## Q-motion-05 · Should shapes morph or use an expressive shape library?
@@ -2789,14 +2789,15 @@ Read the main stage file first; these questions refine it.
 Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-state-04 · Which states get their own styling, per input type?
-Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L08-09, DC-L14-06
+Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L08-09, DC-L14-06, DC-L19-102, DC-L19-93
 - **Ask:** "How should states like hover, pressed and disabled get their look, and does it change by device?"
 - **Why:** A see-through tint gives any color its states for free; a token for each state lets you tune them to the brand. On TV, focus is large and moving; on desktop, the ring is thin and still [DC-L08-09, DC-L14-06].
 - **Options:**
   - `overlays` A see-through tint on hover and press (Material state layers).
   - `explicit` Its own token for each state and variant (Carbon).
   - `per-input` By how people use each device: desktop rest/hover/focus-visible/pressed/selected/disabled; TV focused with scale and elevation; tablet pointer lift.
-- **Default:** style all eight states; overlays for hover and press, explicit tokens for selected and error; define states once, render the subset each context can trigger *Source:* card heuristics [DC-L08-09, DC-L14-06].
+  - `press-scale` Shrink to 97% while pressed, plus a darker tint: the whole element, label and icons included, scales to 0.97 (`motion.scale.press`) on press-down over 100-160ms ease-out; overlays stay for hover.
+- **Default:** style all eight states; overlays for hover; on press, scale to 0.97 (from `motion.scale.press`) with a darker tint, 100-160ms ease-out, shown on press-down (`press-scale`); explicit tokens for selected and error; define states once, render the subset each context can trigger *Source:* house standard STD-mobile-touch-05 and card heuristics [DC-L19-102, DC-L19-93, DC-L08-09, DC-L14-06].
 - **Show:** the state matrix for every component.
 - **Use / avoid:** make hover content dismissible and persistent (WCAG 1.4.13); avoid hover-only affordances on touch [DC-L14-06].
 - **Skip:** yes.

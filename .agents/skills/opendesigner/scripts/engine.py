@@ -1978,22 +1978,45 @@ def spring_curve(damping, stiffness, samples=24):
     return "linear(" + ", ".join(f"{v:g}" for v in pts) + ")", int(round(t_end * 1000 / 10) * 10)
 
 
+def spring_params(value):
+    """(dampingRatio, stiffness at mass 1) of a spring written as {dampingRatio, stiffness, mass?}, else None."""
+    if not (isinstance(value, dict) and {"dampingRatio", "stiffness"} <= set(value) <= {"dampingRatio", "stiffness", "mass"}):
+        return None
+    z, k, m = value["dampingRatio"], value["stiffness"], value.get("mass", 1)
+    if not all(isinstance(x, (int, float)) and not isinstance(x, bool) and math.isfinite(x) and x > 0 for x in (z, k, m)):
+        return None
+    return rnd(z, 3), rnd(k / m, 1)  # the damping ratio already includes the mass; the curve needs stiffness per unit mass
+
+
+def spring_token(z, stiff, standard):
+    """A spring as DTCG 2025.10 stores it (no spring type, S-L07-002 issue #429): a transition $value with a cubic-bezier
+    fallback, and $extensions holding dampingRatio and stiffness, Apple duration and bounce, and a CSS linear() sample
+    (DC-L04-22). Returns ($value, extensions)."""
+    lin, dur = spring_curve(z, stiff)
+    ext = {"spring": {"dampingRatio": z, "stiffness": stiff, "mass": 1},
+           "apple": {"duration": rnd(2 * math.pi / math.sqrt(stiff), 3), "bounce": rnd(max(0.0, 1 - z), 3)},
+           "css": {"easing": lin if z < 1 else "cubic-bezier(" + ", ".join(f"{v:g}" for v in standard) + ")", "durationMs": dur}}
+    return {"duration": ms(dur), "delay": ms(0), "timingFunction": A("motion.easing.standard")}, ext
+
+
 def build_motion(ctx):
     p = ctx.params
     energy = ctx.dials["energy"]
     mult = float(ctx.P("motion.durationMultiplier", p["motion.durationMultiplier"]))
     r10 = lambda v: int(round(v / 10) * 10)
     d = {"instant": 0, "micro": 100, "short": 150, "medium": r10(250 * mult), "long": r10(400 * mult), "extra": r10(700 * mult)}
-    exit_k = 0.75  # exits 20-35% shorter than entrances (Atlassian 250/200, Primer 300/200) [inferred midpoint]
+    exit_k = 0.8  # exits about 20% shorter than entrances: house standard STD-easing-duration-11 (Atlassian 250/200, Primer 300/200)
     d["medium-exit"] = r10(d["medium"] * exit_k)
     d["long-exit"] = r10(d["long"] * exit_k)
     std = p["motion.easing.standard"]
     if energy <= 33:
-        enter, exit_ = [0, 0, 0.38, 0.9], [0.2, 0, 1, 0.9]      # Carbon productive (S-L06-002)
+        enter, exit_ = [0, 0, 0.38, 0.9], [0, 0, 0.38, 0.9]     # Carbon productive enter curve (S-L06-002); exits too (below)
     elif energy <= 66:
-        enter, exit_ = [0, 0, 0, 1], [0.3, 0, 1, 1]            # Material decelerate / accelerate
+        enter, exit_ = [0, 0, 0, 1], [0, 0, 0, 1]              # Material decelerate, for exits too (below)
     else:
-        enter, exit_ = [0, 0, 0.3, 1], [0.4, 0.14, 1, 1]       # Carbon expressive (S-L06-002)
+        enter, exit_ = [0, 0, 0.3, 1], [0, 0, 0.3, 1]          # Carbon expressive enter curve (S-L06-002)
+    # Exits decelerate like entrances: house standard STD-easing-duration-03 bans ease-in on UI, so even when a person
+    # overrides the stronger house curves (STD-easing-duration-02), exits never fall back to an accelerating curve.
     zeta = float(ctx.P("motion.spring.spatial.dampingRatio", p["motion.spring.spatial.dampingRatio"]))
     k = float(ctx.P("motion.spring.spatial.stiffness", p["motion.spring.spatial.stiffness"]))
     zeta, k = rnd(zeta, 3), rnd(k, 1)
@@ -2002,24 +2025,18 @@ def build_motion(ctx):
                            "effects": (1.0, {"fast": 3800, "default": 1600, "slow": 800})}.items():
         g = {}
         for speed, stiff in ks.items():
-            stiff = rnd(stiff, 1)
-            lin, dur = spring_curve(z, stiff)
-            apple_d = rnd(2 * math.pi / math.sqrt(stiff), 3)
-            ext = {"spring": {"dampingRatio": z, "stiffness": stiff, "mass": 1},
-                   "apple": {"duration": apple_d, "bounce": rnd(max(0.0, 1 - z), 3)},
-                   "css": {"easing": lin if z < 1 else "cubic-bezier(" + ", ".join(f"{v:g}" for v in std) + ")", "durationMs": dur},
-                   "use": {"fast": "small components (switches, buttons)", "default": "partial-screen (sheets, drawers)",
-                           "slow": "full-screen"}[speed]}
-            g[speed] = tok({"duration": ms(dur), "delay": ms(0), "timingFunction": A("motion.easing.standard")},
-                           None, ext)
+            val, ext = spring_token(z, rnd(stiff, 1), std)
+            ext["use"] = {"fast": "small components (switches, buttons)", "default": "partial-screen (sheets, drawers)",
+                          "slow": "full-screen"}[speed]
+            g[speed] = tok(val, None, ext)
         springs[group] = g
     motion = {
         "duration": {"$type": "duration",
-                     "$description": f"Duration ladder (DC-L04-20); Energy multiplies medium and longer by {mult:.2f} (0.8-1.2, A4). Exits 25% shorter.",
+                     "$description": f"Duration ladder (DC-L04-20); Energy multiplies medium and longer by {mult:.2f} (0.8-1.2, A4). Exits about 20% shorter (STD-easing-duration-11).",
                      **{kk: tok(ms(v)) for kk, v in d.items()}},
-        "easing": {"$type": "cubicBezier", "$description": "Standard, enter (decelerate), exit (accelerate); linear only for spinners and progress (DC-L04-21).",
+        "easing": {"$type": "cubicBezier", "$description": "Standard, enter (decelerate) and exit curves; linear only for spinners and progress (DC-L04-21).",
                    "standard": tok(std, "Moving and morphing on screen."), "enter": tok(enter, "Entering: decelerate."),
-                   "exit": tok(exit_, "Leaving: accelerate out of the way."), "linear": tok([0, 0, 1, 1], "Spinners and progress only.")},
+                   "exit": tok(exit_, "Leaving the screen."), "linear": tok([0, 0, 1, 1], "Spinners and progress only.")},
         "spring": {"$type": "transition",
                    "$description": "Springs. DTCG 2025.10 has no spring type (S-L07-002, issue #429): each is a transition with a cubic-bezier "
                                    "fallback; dampingRatio and stiffness live in $extensions with Apple duration/bounce and a CSS linear() "
@@ -2048,7 +2065,7 @@ def build_motion_context(ctx, context):
     else:
         body = {"feedback": t("micro", "standard", "Hover, press, color changes."),
                 "enter": t("medium", "enter", "Menus, popovers, toasts entering."),
-                "exit": t("medium-exit", "exit", "Leaving: shorter than enter (DC-L04-24)."),
+                "exit": t("medium-exit", "exit", "Leaving the screen, shorter than entering (exit durations: STD-easing-duration-11)."),
                 "move": tok(A("motion.spring.spatial.default"), "On-screen movement: spatial spring (web: linear() sample)."),
                 "expand": t("long", "enter", "Dialogs, sheets, side panels entering.")}
     desc = f"Semantic transitions, {context} motion. Reduced motion is a token mode: travel becomes opacity, feedback stays (DC-L04-25)."
@@ -2262,14 +2279,20 @@ def coerce_token_value(value, typ):
         return value if isinstance(value, (str, list)) else None
     if typ == "cubicBezier":
         return value if isinstance(value, list) and len(value) == 4 else None
+    if typ == "transition" and isinstance(value, dict) and ({"dampingRatio", "stiffness"} & set(value)):
+        return value if spring_params(value) else None  # a spring: apply_token_overrides writes it as a transition
     return value  # composite types (shadow, typography, transition) are passed through as given
 
 
-def override_plan(files, key, value, default_density):
+def override_plan(files, key, value, default_density, typ=None):
     """Where a token override lands and in what form: {files: [..], values: {file: value}, type, new, note} or {error}.
     Existing tokens keep their type; a density token without a mode prefix changes the default density only, so the
     other densities keep their own values. New tokens go to the files of their group, in every context of a modifier,
-    so names stay the same across modes (DTCG resolver rule)."""
+    so names stay the same across modes (DTCG resolver rule). typ: the $type the caller already knows (a standard's
+    mapping gives one); a new token takes it, else the type is inferred from the value and path. A standard's number
+    and spring tokens (motion.scale.press 0.97, STD-mobile-touch-05) cannot be inferred, so they need it."""
+    if typ is not None and typ not in DTCG_TYPES:
+        return {"error": f"{typ!r} is not a DTCG token type; use one of {', '.join(sorted(DTCG_TYPES))}"}
     mode, path = split_mode_key(key)
     if mode and mode not in MODE_WORDS:
         return {"error": f"unknown mode {mode!r}; use one of {', '.join(MODE_WORDS)}"}
@@ -2297,7 +2320,7 @@ def override_plan(files, key, value, default_density):
         if v is None:
             return {"error": f"{path} is a {typ} token; {json.dumps(value)} is not a {typ} value"}
         return {"files": targets, "values": {fn: v for fn in targets}, "type": typ, "new": False, "note": note, "path": path}
-    typ = infer_token_type(value, path)
+    typ = typ or infer_token_type(value, path)
     if isinstance(value, str) and value.startswith("{") and value.endswith("}"):
         tgt = value[1:-1]
         for fn in tokfiles:
@@ -2338,16 +2361,41 @@ def override_plan(files, key, value, default_density):
             "path": path}
 
 
-def apply_token_overrides(ctx, files):
+def std_token_types(state):
+    """{override key: DTCG $type} from the engine mappings of the standards this system keeps records for (a house
+    standard by the copy kept with its record, a project one by its own entry). A new token a standard adds keeps its
+    type on every build, also after the person overrode the standard; a higher-ranked standard's type wins."""
+    st = state.get("standards")
+    if not std_has_records(state):
+        return {}
+    proj = st.get("project")
+    project = {s.get("id"): s for s in proj if isinstance(s, dict)} if isinstance(proj, list) else {}
+    out = {}
+    for sid, rec in sorted(st["records"].items(), key=lambda kv: _std_rank(kv[0])):
+        s = project.get(sid) or (rec.get("std") if isinstance(rec, dict) and isinstance(rec.get("std"), dict) else None)
+        for eng in std_engine(s or {}):
+            path, typ = eng.get("path"), eng.get("type")
+            if isinstance(path, str) and path.strip() and isinstance(typ, str):
+                sp = normalize_path(path.strip())
+                if sp.startswith("overrides.") and not is_param_override(sp.split(".", 1)[1]):
+                    out.setdefault(sp.split(".", 1)[1], typ)
+    return out
+
+
+def apply_token_overrides(ctx, files, token_types=None):
     """Overrides whose key is not a lever parameter patch or add a token: 'path' or '<mode>:path' (light, dark, spacious,
-    comfortable, compact, standard, reduced). Values are DTCG; new tokens carry source: person."""
+    comfortable, compact, standard, reduced). Values are DTCG; new tokens carry source: person, or the standard that
+    holds them. token_types: {key: $type} for values no standard record names yet (a standard's trial build); the
+    standards' own mappings give the rest. A spring ({dampingRatio, stiffness}) is written the way build_motion writes
+    motion.spring.spatial.*: a transition with the spring in $extensions."""
     applied = []
     ov = ctx.state.get("overrides") or {}
     default_density = ctx.params["space.densityMode"]
     held = std_held(ctx.state) if std_has_records(ctx.state) else {}
+    types = dict(std_token_types(ctx.state), **(token_types or {}))
     # unprefixed keys first, so a mode-prefixed value for the same token wins in its mode
     for key in sorted((k for k in ov if not is_param_override(k)), key=lambda k: (":" in k, k)):
-        plan = override_plan(files, key, ov[key], default_density)
+        plan = override_plan(files, key, ov[key], default_density, types.get(key))
         if "error" in plan:
             ctx.notes.append(f"override {key} skipped: {plan['error']}")
             continue
@@ -2359,13 +2407,17 @@ def apply_token_overrides(ctx, files):
             leaf = node.get(parts[-1])
             sid = held.get("overrides." + key)
             src = {"source": "standard", "standard": sid} if sid else {"source": "person"}
+            val, ext = copy.deepcopy(plan["values"][fn]), {}
+            spring = spring_params(val) if plan["type"] == "transition" else None
+            if spring:
+                val, ext = spring_token(*spring, ctx.params["motion.easing.standard"])
             if isinstance(leaf, dict) and "$value" in leaf:
-                leaf["$value"] = copy.deepcopy(plan["values"][fn])
-                leaf.setdefault("$extensions", {}).setdefault(NS, {}).update(src)
+                leaf["$value"] = val
+                leaf.setdefault("$extensions", {}).setdefault(NS, {}).update(ext, **src)
             else:
-                node[parts[-1]] = {"$value": copy.deepcopy(plan["values"][fn]), "$type": plan["type"],
+                node[parts[-1]] = {"$value": val, "$type": plan["type"],
                                    "$description": f"Added by standard {sid}." if sid else "Added by a person (engine.py set).",
-                                   "$extensions": {NS: src}}
+                                   "$extensions": {NS: dict(ext, **src)}}
             applied.append(f"{fn}:{plan['path']}")
     return applied
 
@@ -2407,9 +2459,9 @@ def split_tree(tree, pred, prefix=""):
     return yes, no
 
 
-def generate_system(state):
+def generate_system(state, token_types=None):
     """Files follow the spec's tiering (7.4): primitives, semantic, semantic.color.<theme>, semantic.density.<mode>,
-    motion.<standard|reduced>, plus the resolver and a meta file."""
+    motion.<standard|reduced>, plus the resolver and a meta file. token_types: see apply_token_overrides."""
     ctx = Ctx(state)
     files = {}
     prim, opacity = build_color_primitives(ctx)
@@ -2431,7 +2483,7 @@ def generate_system(state):
         files[f"semantic.density.{dname}.tokens.json"] = dens[dname]
     for c in ("standard", "reduced"):
         files[f"motion.{c}.tokens.json"] = build_motion_context(ctx, c)
-    applied = apply_token_overrides(ctx, files)
+    applied = apply_token_overrides(ctx, files, token_types)
     files["opendesigner.resolver.json"] = build_resolver(ctx, list(files))
     ramps = {}
     for (name, mode), r in sorted(ctx.ramps.items()):
@@ -2904,6 +2956,8 @@ def validate_files(files, state, rep):
     for k, v in std.items():
         if k.startswith("motion.transition."):
             dms = v["resolved"]["duration"]["value"] * (1000 if v["resolved"]["duration"]["unit"] == "s" else 1)
+            if isinstance(v.get("$value"), str) and v["$value"].startswith("{motion.spring."):
+                continue  # a spring is judged by its response, not by the settle time of its linear() sample (STD-springs-gestures)
             if dms > 500:
                 rep.add("warning", "lint", f"{k} takes {dms}ms. Over 500ms feels slow", "transition-over 500ms", "L13-E1 [inferred link]")
             elif dms > 400:
@@ -3367,7 +3421,8 @@ ANSWER_TABLE = {
                    "minimal": {"overrides.signifier.minStrength": "minimal-allowed"}},
     "Q-state-03": {"outer-2-2": {"raw.focusWidth": 2, "raw.focusOffset": 2}, "material-3": {"raw.focusWidth": 3, "raw.focusOffset": 2},
                    "inset": {"raw.focusWidth": 2, "raw.focusOffset": -2}, "two-tone": {"raw.focusStyle": "two-tone"}},
-    "Q-state-04": {"overlays": {"raw.stateMethod": "overlay"}, "explicit": {"raw.stateMethod": "step"}},
+    "Q-state-04": {"overlays": {"raw.stateMethod": "overlay"}, "explicit": {"raw.stateMethod": "step"},
+                   "press-scale": {"raw.stateMethod": "overlay"}},  # overlays for hover; the 0.97 press scale is motion.scale.press
     "Q-form-01": {"outlined": {"raw.fieldStyle": "outlined"}, "filled": {"raw.fieldStyle": "filled"}},
     "Q-ai-01": {"none": {}, "label-button": {"components.inventory+": ["ai-label", "ai-button"]},
                 "presence-mode": {"components.inventory+": ["ai-label"]}, "chat": {"components.inventory+": ["chat-message", "prompt-input"]},
@@ -4227,14 +4282,20 @@ def _std_base(state, cache):
     return cache["files"]
 
 
-def _std_trial(state, sp, value, cache):
+def _trial_types(items):
+    """{override key: $type} for the (state path, type) pairs of values tried before any standard record names them."""
+    return {sp.split(".", 1)[1]: typ for sp, typ in items if typ and sp.startswith("overrides.")}
+
+
+def _std_trial(state, sp, value, cache, types=None):
     """Build the system with the value in place: a value the generator cannot use, or one that breaks a check the engine
-    enforces (accessibility floors outrank every standard, KNOWLEDGE.md 2), is refused."""
+    enforces (accessibility floors outrank every standard, KNOWLEDGE.md 2), is refused. types: {override key: $type}
+    of the values tried (see _trial_types)."""
     _std_base(state, cache)
     trial = copy.deepcopy(state)
     try:
         _store(trial, sp, value, "standard", "D-0000", False)
-        files = generate_system(trial)[0]
+        files = generate_system(trial, types)[0]
         rep = Report()
         validate_files(files, trial, rep)
     except Exception as ex:  # a bad value is reported as not mapped, never a crash
@@ -4264,7 +4325,7 @@ def std_target(state, path, value, typ=None, cache=None, trial=True):
         key = sp.split(".", 1)[1]
         files = _std_base(state, cache)
         try:
-            plan = override_plan(files, key, value, files["opendesigner.meta.json"]["params"]["space.densityMode"]["value"])
+            plan = override_plan(files, key, value, files["opendesigner.meta.json"]["params"]["space.densityMode"]["value"], typ)
         except Exception as ex:
             raise ValueError(f"the engine cannot read {json.dumps(value, ensure_ascii=False)} for {key} ({ex})")
         if "error" in plan:
@@ -4273,7 +4334,7 @@ def std_target(state, path, value, typ=None, cache=None, trial=True):
             raise ValueError(f"{plan['path']} is a {plan['type']} token, but the standard gives a {typ}")
         value = next(iter(plan["values"].values()))
         if trial:
-            _std_trial(state, sp, value, cache)
+            _std_trial(state, sp, value, cache, _trial_types([(sp, typ)]))
         return sp, value
     if parts[0] == "overrides":
         pass  # a lever parameter: the trial build below checks the value
@@ -4299,29 +4360,31 @@ def std_target(state, path, value, typ=None, cache=None, trial=True):
 
 
 def _std_batch_check(state, items, cache):
-    """items [(key, state path, value)] -> {key: reason} for the values a trial build refuses. One build when they all
-    pass; otherwise each is tried on top of the ones accepted before it, so a bad pair is caught too."""
+    """items [(key, state path, value, $type or None)] -> {key: reason} for the values a trial build refuses. One build
+    when they all pass; otherwise each is tried on top of the ones accepted before it, so a bad pair is caught too."""
     if not items:
         return {}
     try:
         _std_base(state, cache)
     except ValueError as ex:
-        return {k: str(ex) for k, _sp, _v in items}
+        return {k: str(ex) for k, _sp, _v, _t in items}
+    types = _trial_types([(sp, t) for _k, sp, _v, t in items])
     try:
         trial = copy.deepcopy(state)
-        for _k, sp, v in items:
+        for _k, sp, v, _t in items:
             _store(trial, sp, v, "standard", "D-0000", False)
         rep = Report()
-        validate_files(generate_system(trial)[0], trial, rep)
+        validate_files(generate_system(trial, types)[0], trial, rep)
         if not [i for i in rep.items if i["severity"] == "error" and i["message"] not in cache["errors"]]:
             return {}
     except Exception:  # found one by one below
         pass
-    bad, acc = {}, copy.deepcopy(state)
-    for k, sp, v in items:
+    bad, acc, seen = {}, copy.deepcopy(state), []
+    for k, sp, v, t in items:
         try:
-            _std_trial(acc, sp, v, cache)
+            _std_trial(acc, sp, v, cache, _trial_types(seen + [(sp, t)]))
             _store(acc, sp, v, "standard", "D-0000", False)
+            seen.append((sp, t))
         except Exception as ex:
             bad[k] = str(ex)
     return bad
@@ -4509,7 +4572,8 @@ def std_apply(d, state, stds, did, force=False, locked=True, set_by="standard", 
                 plan[(si, ei)] = ("kept", sp, v, mine["id"] if mine else "locked")
             else:
                 plan[(si, ei)] = ("ok", sp, v)
-    for k, reason in _std_batch_check(state, [(k, x[1], x[2]) for k, x in plan.items() if x[0] == "ok"], cache).items():
+    ok = [(k, x[1], x[2], std_engine(stds[k[0]])[k[1]].get("type")) for k, x in plan.items() if x[0] == "ok"]
+    for k, reason in _std_batch_check(state, ok, cache).items():
         plan[k] = ("bad", reason)
     for si, s in enumerate(stds):
         sid = s["id"]
@@ -4760,7 +4824,7 @@ def std_unmapped(state, house):
                 continue
             done = sp in (rec.get("paths") or {}) or sp in (rec.get("kept") or {})
             if not (done and _int_or(s.get("changed"), 0) <= (st["house_version"] or 0)):
-                items.append(((s["id"], eng.get("path")), sp, v))
+                items.append(((s["id"], eng.get("path")), sp, v, eng.get("type")))
     for (sid, path), reason in _std_batch_check(state, items, cache).items():
         out.append({"id": sid, "path": path, "reason": reason})
     return out
@@ -4870,8 +4934,8 @@ def cmd_standards(d, as_json=False, update=False):
         print(f"The house standards file is missing here ({standards_file()}), so these cannot be checked against it: "
               f"{', '.join(gone)}. They stay as recorded; to change one: engine.py standard override <id> --why \"<their words>\".")
     if unmapped:
-        print("Not mapped (the engine could not apply these values; for a house standard, maintainers fix its engine mapping in "
-              "synthesis/standards.json):")
+        print("Not mapped (the engine could not put these values in the tokens; each line says why. Accessibility floors outrank "
+              "every standard, so a value that would break one stays out on purpose):")
         for u in unmapped:
             print(f"  {u['id']}  {u['path']}: {u['reason']}")
     n, c, r = len(pending["new"]), len(pending["changed"]), len(pending["retired"])
@@ -6018,6 +6082,8 @@ def export_swift(files, meta, prefix):
         t = base[p]
         if t["type"] == "duration":
             L.append(f"        public static let {camel(p.split('.')[1:])}: Double = {fmt_num(rnd(t['resolved']['value'] / 1000, 3))}")
+        if t["type"] == "number" and p.startswith("motion."):  # scales and gesture constants (motion.scale.press, STD-mobile-touch-05)
+            L.append(f"        public static let {camel(p.split('.')[1:])}: Double = {fmt_num(t['resolved'])}")
         sp = (t.get("$extensions") or {}).get(NS, {}).get("apple") if t["type"] == "transition" and p.startswith("motion.spring.") else None
         if sp:
             L.append(f"        public static let {camel(p.split('.')[1:])} = Animation.spring(duration: {fmt_num(sp['duration'])}, bounce: {fmt_num(sp['bounce'])})")
@@ -6084,6 +6150,8 @@ def export_compose(files, meta, prefix):
         t = base[p]
         if t["type"] == "duration":
             K.append(f"    const val {camel(p.split('.')[1:])}Ms = {int(t['resolved']['value'])}")
+        if t["type"] == "number" and p.startswith("motion."):  # scales and gesture constants (motion.scale.press, STD-mobile-touch-05)
+            K.append(f"    const val {camel(p.split('.')[1:])} = {fmt_num(t['resolved'])}f")
         sp = (t.get("$extensions") or {}).get(NS, {}).get("spring") if t["type"] == "transition" and p.startswith("motion.spring.") else None
         if sp:
             K.append(f"    fun <T> {camel(p.split('.')[1:])}() = spring<T>(dampingRatio = {fmt_num(sp['dampingRatio'])}f, stiffness = {fmt_num(sp['stiffness'])}f)")
@@ -6836,7 +6904,7 @@ def render_design_md(d, files, meta, state, existing=""):
             f"(Apple duration {spx.get('apple', {}).get('duration')}s, bounce {spx.get('apple', {}).get('bounce')}; web `linear()` sample over "
             f"{spx.get('css', {}).get('durationMs')}ms)." + (" Motion is off (flags.motionOff): standard equals reduced." if mot.get("motionOff") else ""),
             "", _md_table(["Token", "Value"], rows),
-            "", "- Exits are about 25% shorter than entrances; linear easing only for spinners and progress.",
+            "", "- Exits are about 20% shorter than entrances; linear easing only for spinners and progress.",
             "- Reduced motion (`prefers-reduced-motion` or `data-motion=\"reduced\"`): travel becomes opacity, feedback stays, `motion.transition.move` is 0ms.",
             "- Springs are stored as damping and stiffness in `$extensions.opendesigner.spring` because DTCG 2025.10 has no spring type.",
             f"- Haptics: {params['haptics.intensity']} intensity where the platform has them; sound: hook H-sound is "

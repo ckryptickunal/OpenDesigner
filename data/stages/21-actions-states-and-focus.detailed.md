@@ -9,14 +9,15 @@ Read the main stage file first; these questions refine it.
 Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-state-04 · Which states get their own styling, per input type?
-Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L08-09, DC-L14-06
+Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L08-09, DC-L14-06, DC-L19-102, DC-L19-93
 - **Ask:** "How should states like hover, pressed and disabled get their look, and does it change by device?"
 - **Why:** A see-through tint gives any color its states for free; a token for each state lets you tune them to the brand. On TV, focus is large and moving; on desktop, the ring is thin and still [DC-L08-09, DC-L14-06].
 - **Options:**
   - `overlays` A see-through tint on hover and press (Material state layers).
   - `explicit` Its own token for each state and variant (Carbon).
   - `per-input` By how people use each device: desktop rest/hover/focus-visible/pressed/selected/disabled; TV focused with scale and elevation; tablet pointer lift.
-- **Default:** style all eight states; overlays for hover and press, explicit tokens for selected and error; define states once, render the subset each context can trigger *Source:* card heuristics [DC-L08-09, DC-L14-06].
+  - `press-scale` Shrink to 97% while pressed, plus a darker tint: the whole element, label and icons included, scales to 0.97 (`motion.scale.press`) on press-down over 100-160ms ease-out; overlays stay for hover.
+- **Default:** style all eight states; overlays for hover; on press, scale to 0.97 (from `motion.scale.press`) with a darker tint, 100-160ms ease-out, shown on press-down (`press-scale`); explicit tokens for selected and error; define states once, render the subset each context can trigger *Source:* house standard STD-mobile-touch-05 and card heuristics [DC-L19-102, DC-L19-93, DC-L08-09, DC-L14-06].
 - **Show:** the state matrix for every component.
 - **Use / avoid:** make hover content dismissible and persistent (WCAG 1.4.13); avoid hover-only affordances on touch [DC-L14-06].
 - **Skip:** yes.

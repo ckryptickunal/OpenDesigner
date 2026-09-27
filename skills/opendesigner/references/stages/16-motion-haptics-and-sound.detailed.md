@@ -37,16 +37,16 @@ Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L04-
 - **Skip:** yes.
 
 ## Q-motion-03 · Which easing curves?
-Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L04-21
+Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L04-21, DC-L19-85
 - **Ask:** "How should speed-up and slow-down curves be grouped: by job, strength or mood?"
 - **Why:** Easing curves that slow down hard make things feel fast as they arrive. Curves named by job are the easiest to use the same way everywhere [DC-L04-21].
 - **Options:**
-  - `role-based` Standard / enter / exit (Carbon, Primer, Windows).
+  - `role-based` By job: entering or leaving, moving on screen, hover and color, constant motion; one curve each, the house set. Carbon, Primer and Windows also name curves by role (standard / enter / exit).
   - `intensity-based` Min / mid / max intensity (Fluent).
   - `personality-based` Practical vs bold (Atlassian); productive vs expressive (Carbon).
-- **Default:** standard (0.2, 0, 0, 1), enter (0, 0, 0, 1) or (0.05, 0.7, 0.1, 1), exit (0.3, 0, 1, 1), linear only for spinners and progress *Source:* card heuristic [DC-L04-21]; L09 shared default row 5.
+- **Default:** `role-based`: by job, one curve each: ease-out cubic-bezier(0.23, 1, 0.32, 1) for entering and leaving, cubic-bezier(0.77, 0, 0.175, 1) for moves on screen, CSS `ease` for hover and color changes, the drawer curve cubic-bezier(0.32, 0.72, 0, 1) for drawers and sheets, linear only for spinners and progress; no ease-in anywhere *Source:* house standards STD-easing-duration-01, STD-easing-duration-02, STD-easing-duration-03 and STD-components-toasts-drawers-40 [DC-L19-85]; replaces the accelerate exit (0.3, 0, 1, 1) of DC-L04-21.
 - **Show:** the curve editor with a live card.
-- **Use / avoid:** use linear only for continuous indicators; avoid ease-in for entrances [DC-L04-21].
+- **Use / avoid:** use linear only for spinners, progress and other constant motion; never ease-in on UI (STD-easing-duration-03) [DC-L19-85].
 - **Skip:** yes.
 
 ## Q-motion-05 · Should shapes morph or use an expressive shape library?

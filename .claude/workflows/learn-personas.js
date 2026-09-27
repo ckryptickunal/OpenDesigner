@@ -15,7 +15,7 @@ const ROOT = A.root || '/Users/Kunal/Desktop/Design-System'
 const SKILL = `${ROOT}/skills/opendesigner`
 
 const COMMON = `Scratch work: put any helper script or temp file in a directory of your own (mktemp -d), and never run a script you did not write in this task (other agents share the scratch space).
-You are testing OpenDesigner (repo ${ROOT}) as a real user would meet it. Read ${SKILL}/SKILL.md, ${SKILL}/references/rules.md (sections 5, 6 "Decide or ask", 12), ${SKILL}/references/guardrails.md (4b), ${SKILL}/references/standards.md, ${ROOT}/skills/opendesigner-extend/SKILL.md and ${ROOT}/docs/KNOWLEDGE.md. Play the AGENT that follows those instructions, and imagine the person's replies as described. Run every engine command for real: python3 ${SKILL}/scripts/engine.py ... from inside your own project folder (make it with mktemp -d; never write inside the repo). Do NOT edit any repo file. Before you start, run df -h "$TMPDIR": if less than 500 MB is free, stop and report that instead of testing. Delete your temp folder when you finish.
+You are testing OpenDesigner (repo ${ROOT}) as a real user would meet it. Read ${SKILL}/SKILL.md, ${SKILL}/references/rules.md (sections 5, 6 "Decide or ask", 12), ${SKILL}/references/guardrails.md (4b), ${SKILL}/references/standards.md, ${ROOT}/skills/opendesigner-extend/SKILL.md and ${ROOT}/docs/KNOWLEDGE.md. Play the AGENT that follows those instructions, and imagine the person's replies as described. Run every engine command for real: python3 ${SKILL}/scripts/engine.py ... from inside your own project folder (make it with mktemp -d; never write inside the repo). Do NOT edit any repo file. Delete your temp folder when you finish.
 Record, as you go, every friction point: an instruction that is missing, wrong, ambiguous or contradicts another; an engine command that fails, prints a traceback, or prints something a person would not understand; a standard that makes a bad result; anything the docs promise that does not happen.
 Return a numbered findings list. Each: severity (high = wrong result or broken promise; medium = confusing or slow; low = polish), where (file:line or command), what happened (paste the exact command and the relevant output), and the fix you suggest. Then one line: what worked well.`
 
@@ -27,7 +27,8 @@ const PERSONAS = [
   { key: 'returning', prompt: `Persona: a team that made their system with an OLDER house standards version and comes back months later. Build a fixture in your temp dir: copy ${SKILL}/references/standards.json to std-old.json and edit it into an older version: version one lower, remove two standards, change one standard's locked value. Run the project with OD_STANDARDS_FILE=<that file>: init, sketch, override one standard with a reason. Then point OD_STANDARDS_FILE at the real ${SKILL}/references/standards.json (newer) and follow the extend skill start-up routine: validate should tell them; standards --update should apply new and changed ones and keep the override. Check decisions.md, DESIGN.md, opendesigner/standards.md and tokens after. Also check that a project whose state.json has no "standards" key (delete it) still works with every command.` },
 ]
 
-const RETRIEVAL = `From ${ROOT}, run python3 tools/jev_nav.py find "<question>" --top 8 for each question below (JEV_API_KEY is in .env; the tool reads it). For each, record whether a relevant house standard (STD-...) or L19 Decision Card (DC-L19-...) appears in the top 8, and whether an older card now contradicts it. Questions:
+const RETRIEVAL = `Scratch work: put any temp file in a directory of your own (mktemp -d) and delete it when you finish.
+From ${ROOT}, run python3 tools/jev_nav.py find "<question>" --top 8 for each question below (JEV_API_KEY is in .env; the tool reads it). For each, record whether a relevant house standard (STD-...) or L19 Decision Card (DC-L19-...) appears in the top 8, and whether an older card now contradicts it. Questions:
 1. which easing should a modal use when it closes
 2. how long should a dropdown animation take
 3. should a toast pause when I hover it
@@ -43,6 +44,12 @@ const RETRIEVAL = `From ${ROOT}, run python3 tools/jev_nav.py find "<question>" 
 Also run python3 tools/jev_nav.py check and report dangling references. Return a table (question, best STD/DC-L19 hit and rank or "none", any contradiction) and suggestions to improve retrieval. Do not edit files.`
 
 const people = A.only ? PERSONAS.filter(p => A.only.includes(p.key)) : PERSONAS
+// One disk check for the whole run: five personas plus retrieval need about 1 GB of scratch and transcript space.
+const disk = await agent(`Run: df -m "$TMPDIR" | tail -1 | awk '{print $4}' and return the number of free megabytes. Do nothing else.`,
+  { label: 'disk', phase: 'Personas', effort: 'low', schema: { type: 'object', properties: { free_mb: { type: 'integer' } }, required: ['free_mb'] } })
+if (!disk || disk.free_mb < 1000) {
+  return { stopped: `Only ${disk ? disk.free_mb : '?'} MB free on the temp volume; the persona tests need about 1 GB. Free space and run again (args {"only": [...]} runs fewer personas).` }
+}
 phase('Personas')
 const personas = await parallel(people.map(p => () => agent(`${COMMON}\n\n${p.prompt}`, { label: `persona:${p.key}`, phase: 'Personas' })
   .then(r => ({ key: p.key, findings: r }))))

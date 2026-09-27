@@ -2559,18 +2559,18 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Example:** Plot the four curves and animate a card with each.
 - **Control:** single choice (structure) + curve editor
 - **Options:**
-  - `role-based` Standard / enter / exit (Carbon, Primer, Windows) [S-L04-014, S-L04-024, S-L04-013].
+  - `role-based` By job: entering or leaving, moving on screen, hover and color, constant motion; one curve each, the house set [S-L19-018, S-L19-025, S-L19-033]. Carbon, Primer and Windows also name curves by role (standard / enter / exit) [S-L04-014, S-L04-024, S-L04-013].
   - `intensity-based` Min / mid / max intensity (Fluent) [S-L04-006].
   - `personality-based` Practical vs bold (Atlassian); productive vs expressive (Carbon) [S-L04-018, S-L04-014].
-- **Default:** standard (0.2, 0, 0, 1), enter (0, 0, 0, 1) or (0.05, 0.7, 0.1, 1), exit (0.3, 0, 1, 1), linear only for spinners and progress. *Source:* card heuristic [DC-L04-21]; L09 shared default row 5.
-- **Decides:** DC-L04-21
+- **Default:** by job, one curve each: ease-out cubic-bezier(0.23, 1, 0.32, 1) for entering and leaving, cubic-bezier(0.77, 0, 0.175, 1) for moves on screen, CSS `ease` for hover and color changes, the drawer curve cubic-bezier(0.32, 0.72, 0, 1) for drawers and sheets, linear only for spinners and progress; no ease-in anywhere. *Source:* house standards STD-easing-duration-01, STD-easing-duration-02, STD-easing-duration-03 and STD-components-toasts-drawers-40 [DC-L19-85]; replaces the accelerate exit (0.3, 0, 1, 1) of DC-L04-21.
+- **Decides:** DC-L04-21, DC-L19-85
 - **Changes:** DC-L07-14 · blocks: Foundations > Motion > Easing curves
 - **Preview:** the curve editor with a live card.
-- **Use / avoid:** use linear only for continuous indicators; avoid ease-in for entrances [DC-L04-21].
+- **Use / avoid:** use linear only for spinners, progress and other constant motion; never ease-in on UI (STD-easing-duration-03) [DC-L19-85].
 - **Skip:** yes.
 - **Block class:** G (generatable)
 - **Time weight:** low (fan-out 1)
-- **Evidence:** DC-L04-21; S-L04-003, S-L04-006, S-L04-013, S-L04-014, S-L04-018
+- **Evidence:** DC-L04-21, DC-L19-85; S-L04-003, S-L04-006, S-L04-013, S-L04-014, S-L04-018, S-L19-003, S-L19-005, S-L19-014, S-L19-018, S-L19-025, S-L19-033
 
 ### Q-motion-05 · Should shapes morph or use an expressive shape library? · Expert
 - **Show if:** Q-shape-01 is pill or Q-motion-01 is springs
@@ -3342,15 +3342,16 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
   - `overlays` A see-through tint on hover and press (Material state layers) [S-L01-005, S-L08-095].
   - `explicit` Its own token for each state and variant (Carbon) [S-L08-062].
   - `per-input` By how people use each device: desktop rest/hover/focus-visible/pressed/selected/disabled; TV focused with scale and elevation; tablet pointer lift [S-L14-013, S-L14-071].
-- **Default:** style all eight states; overlays for hover and press, explicit tokens for selected and error; define states once, render the subset each context can trigger. *Source:* card heuristics [DC-L08-09, DC-L14-06].
-- **Decides:** DC-L08-09, DC-L14-06
+  - `press-scale` Shrink to 97% while pressed, plus a darker tint: the whole element, label and icons included, scales to 0.97 (`motion.scale.press`) on press-down over 100-160ms ease-out; overlays stay for hover [S-L19-017, S-L19-020, S-L19-028].
+- **Default:** style all eight states; overlays for hover; on press, scale to 0.97 (from `motion.scale.press`) with a darker tint, 100-160ms ease-out, shown on press-down (`press-scale`); explicit tokens for selected and error; define states once, render the subset each context can trigger. *Source:* house standard STD-mobile-touch-05 and card heuristics [DC-L19-102, DC-L19-93, DC-L08-09, DC-L14-06].
+- **Decides:** DC-L08-09, DC-L14-06, DC-L19-102, DC-L19-93
 - **Changes:** DC-L07-02 · blocks: Components > States; Foundations > Interaction > States
 - **Preview:** the state matrix for every component.
 - **Use / avoid:** make hover content dismissible and persistent (WCAG 1.4.13); avoid hover-only affordances on touch [DC-L14-06].
 - **Skip:** yes.
 - **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
-- **Evidence:** DC-L08-09, DC-L14-06; S-L01-005, S-L08-062, S-L14-013, S-L14-070, S-L14-071
+- **Evidence:** DC-L08-09, DC-L14-06, DC-L19-93, DC-L19-102; S-L01-005, S-L08-062, S-L14-013, S-L14-070, S-L14-071, S-L19-017, S-L19-020, S-L19-028
 
 ### Q-state-05 · How should selected and active items look? · Expert
 - **Why:** Showing picked items in brand color feels lively. A neutral look keeps brand color meaning "action" and nothing else [DC-L08-14].
@@ -4387,7 +4388,6 @@ Decision Cards from the learning wiki (`research/L19-learning-wiki.md`) that no 
 | DC-L19-82 | Motion personality (amount and character) | new question |
 | DC-L19-83 | Where the delight budget goes (rare moments) | new question |
 | DC-L19-84 | How lively the marketing pages may be | new question |
-| DC-L19-85 | Easing curves grouped by job | new question |
 | DC-L19-86 | Duration budget per element | new question |
 | DC-L19-87 | What drives each motion: timing curve, spring or keyframes | new question |
 | DC-L19-88 | Spring parameters and presets | new question |
@@ -4395,7 +4395,6 @@ Decision Cards from the learning wiki (`research/L19-learning-wiki.md`) that no 
 | DC-L19-90 | Screen and page transitions | new question |
 | DC-L19-91 | Stagger for groups of items | new question |
 | DC-L19-92 | What reduced motion does | new question |
-| DC-L19-93 | Press feedback | new question |
 | DC-L19-94 | Hover motion | new question |
 | DC-L19-95 | Confirmation and loading motion | new question |
 | DC-L19-96 | Performance budget and the device that proves it | new question |
@@ -4403,7 +4402,6 @@ Decision Cards from the learning wiki (`research/L19-learning-wiki.md`) that no 
 | DC-L19-98 | Haptics for each moment | new question |
 | DC-L19-99 | Motion token structure: shared transitions or component recipes | new question |
 | DC-L19-101 | Which library supplies each standard part | Q-comp-01, Q-comp-02 |
-| DC-L19-102 | What a control does the moment it is pressed | Q-state-04 |
 | DC-L19-103 | Hover on controls, product screens versus marketing pages | Q-state-04 |
 | DC-L19-104 | Emphasis inside a group of buttons | Q-space-04, Q-state-01 |
 | DC-L19-105 | How visible secondary actions are | Q-icon-05, Q-pattern-03 |
