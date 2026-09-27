@@ -23085,6 +23085,639 @@
    "how": "keyword window",
    "verdict": "supports",
    "confidence": 1.0
+  },
+  {
+   "source": "9ypqs_2fAl8",
+   "n": 0,
+   "rule": "Sell the outcome before the paywall (for example, how much time or life the user gets back), so the paywall reads as the natural next step of the flow rather than an interruption.",
+   "values": [
+    "7%",
+    "17%"
+   ],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 1.0
+  },
+  {
+   "source": "9ypqs_2fAl8",
+   "n": 1,
+   "rule": "Prefer a multi-page paywall that unfolds information gradually over a single-page paywall that shows everything at once.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 1.0
+  },
+  {
+   "source": "9ypqs_2fAl8",
+   "n": 2,
+   "rule": "At the end of onboarding, make the paywall a natural segue that finishes onboarding: tell the user their plan is ready and speak to their ideal outcome in emotional terms (for example, feeling like themselves in 4 weeks).",
+   "values": [
+    "4 weeks"
+   ],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 1.0
+  },
+  {
+   "source": "9ypqs_2fAl8",
+   "n": 3,
+   "rule": "Show a step-by-step timeline of the free trial on the paywall screen.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 0.97
+  },
+  {
+   "source": "9ypqs_2fAl8",
+   "n": 4,
+   "rule": "Add a 'no commitment, cancel anytime' subtitle to the paywall's call to action.",
+   "values": [
+    "no commitment cancel anytime"
+   ],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 1.0
+  },
+  {
+   "source": "9ypqs_2fAl8",
+   "n": 8,
+   "rule": "Don't use aggressive last-minute discounts (except perhaps for Cyber Monday or Black Friday); offer a longer free trial instead.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 0.99
+  },
+  {
+   "source": "9ypqs_2fAl8",
+   "n": 9,
+   "rule": "Default the paywall to the yearly plan unless a yearly product doesn't suit your business.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 0.84
+  },
+  {
+   "source": "9ypqs_2fAl8",
+   "n": 10,
+   "rule": "Show only two plans on the base paywall (the yearly plan plus a weekly or monthly one) and put any other plans behind a 'view all plans' button that opens a sheet.",
+   "values": [
+    "two",
+    "view all plans"
+   ],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 1.0
+  },
+  {
+   "source": "9ypqs_2fAl8",
+   "n": 11,
+   "rule": "Launch a simple base paywall and measure its base stats before optimising different placements.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 0.99
+  },
+  {
+   "source": "9ypqs_2fAl8",
+   "n": 18,
+   "rule": "If you're building for the long term, avoid spin-the-wheel paywalls and fake urgency.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 0.98
+  },
+  {
+   "source": "9ypqs_2fAl8",
+   "n": 19,
+   "rule": "Don't build paywalls around free-trial toggles.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 0.99
+  },
+  {
+   "source": "9ypqs_2fAl8",
+   "n": 20,
+   "rule": "Test radically different paywall designs (video, bullet list, trial timeline, long-form) against each other, then test copy, pricing and flow until one clearly wins.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 0.98
+  },
+  {
+   "source": "9ypqs_2fAl8",
+   "n": 21,
+   "rule": "Plan paywalls across the whole customer lifecycle (after onboarding, when a premium feature is unlocked, inside settings, and as a win-back offer before the user leaves), and show each one at the right moment.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 0.96
+  },
+  {
+   "source": "9ypqs_2fAl8",
+   "n": 27,
+   "rule": "Judge subscription work by retention and LTV, not only by how many people subscribe.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 0.93
+  },
+  {
+   "source": "ARq1bx3Sfg8",
+   "n": 0,
+   "rule": "Let people miss a day without losing their streak, for example with a streak freeze they can equip (Duolingo allows up to two at a time).",
+   "values": [
+    "up to two streak freezes at a time",
+    "0.38%",
+    "over 200,000"
+   ],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 1.0
+  },
+  {
+   "source": "ARq1bx3Sfg8",
+   "n": 1,
+   "rule": "Keep the bar to preserve a streak low: completing one unit of the core action (one lesson) should keep it alive, instead of requiring the full daily goal.",
+   "values": [
+    "one lesson",
+    "over 40%",
+    "7-day streak"
+   ],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 1.0
+  },
+  {
+   "source": "ARq1bx3Sfg8",
+   "n": 2,
+   "rule": "Don't answer broken streaks by making the streak stricter or adding more pressure and accountability.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 0.96
+  },
+  {
+   "source": "ARq1bx3Sfg8",
+   "n": 3,
+   "rule": "Design streaks around recovery rather than perfection: offer repairs, freezes, pauses or grace days.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 1.0
+  },
+  {
+   "source": "ARq1bx3Sfg8",
+   "n": 12,
+   "rule": "Don't judge a streak feature only by engagement and retention numbers when the product's goal is a lasting habit.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 1.0
+  },
+  {
+   "source": "E7RzEZ8GlHE",
+   "n": 0,
+   "rule": "Ship a first paywall with just a headline describing the product, a couple of bullet points on what it does, and a continue button; do not start with heavy optimization.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 1.0
+  },
+  {
+   "source": "E7RzEZ8GlHE",
+   "n": 1,
+   "rule": "Test radically different paywall designs (for example a video paywall, a bullet list paywall, a trial timeline paywall and a long-form paywall) before testing smaller details.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 0.98
+  },
+  {
+   "source": "E7RzEZ8GlHE",
+   "n": 2,
+   "rule": "After the design is settled, personalize the paywall: call out the user's name, highlight their goals and show imagery that represents their identity.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 0.97
+  },
+  {
+   "source": "E7RzEZ8GlHE",
+   "n": 3,
+   "rule": "Preselect the yearly product in the paywall footer by default, after checking that a yearly plan suits your business.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 0.98
+  },
+  {
+   "source": "E7RzEZ8GlHE",
+   "n": 4,
+   "rule": "Show only two products on the paywall, for example a yearly and a weekly plan.",
+   "values": [
+    "two"
+   ],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 1.0
+  },
+  {
+   "source": "E7RzEZ8GlHE",
+   "n": 6,
+   "rule": "Do not judge a paywall experiment by ARPU alone; also check paywall percentage, trial to paid conversion rate, LTV, D1, D7, D30 and churn.",
+   "values": [
+    "90 to 95%",
+    "D1",
+    "D7",
+    "D30"
+   ],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 1.0
+  },
+  {
+   "source": "E7RzEZ8GlHE",
+   "n": 7,
+   "rule": "Track the share of installs that actually see the paywall and aim for above 80%.",
+   "values": [
+    "80%",
+    "90%"
+   ],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 1.0
+  },
+  {
+   "source": "E7RzEZ8GlHE",
+   "n": 8,
+   "rule": "Pick the key paywall metric by business type: ARPU for an app built to launch and gain as many users as possible, LTV and retention for a long-term business.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 0.98
+  },
+  {
+   "source": "E7RzEZ8GlHE",
+   "n": 10,
+   "rule": "Design and test paywalls for every touch point: after onboarding, gated features, the settings page, account cancellation and before the user deletes the app.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 0.99
+  },
+  {
+   "source": "E7RzEZ8GlHE",
+   "n": 13,
+   "rule": "Do not show a steep discount such as 80% off immediately after onboarding.",
+   "values": [
+    "80%"
+   ],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 1.0
+  },
+  {
+   "source": "E7RzEZ8GlHE",
+   "n": 15,
+   "rule": "Avoid predetermined spin-the-wheel discount paywalls when building a long-term business.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 0.99
+  },
+  {
+   "source": "Qsq-Sj_rojU",
+   "n": 0,
+   "rule": "Make welcome screens show the product in action and the outcome it delivers instead of a list of features.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 0.98
+  },
+  {
+   "source": "Qsq-Sj_rojU",
+   "n": 2,
+   "rule": "Let users pick more than one goal in onboarding goal questions instead of forcing a single choice.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 0.96
+  },
+  {
+   "source": "Qsq-Sj_rojU",
+   "n": 4,
+   "rule": "After a personalization quiz, show what the answers unlocked: a personal plan, the date the goal will be reached, or a home page already filled with matching content.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 0.99
+  },
+  {
+   "source": "Qsq-Sj_rojU",
+   "n": 8,
+   "rule": "Don't front-load all education at the start of onboarding; explain dry concepts step by step with reassuring copy and tooltips that state the impact of each step.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 0.99
+  },
+  {
+   "source": "Qsq-Sj_rojU",
+   "n": 9,
+   "rule": "Make password fields check off each requirement in real time as the user types.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 0.99
+  },
+  {
+   "source": "Qsq-Sj_rojU",
+   "n": 10,
+   "rule": "Replace a blank first-use empty state with a small nudge in the right place, instead of guided tours or pop-ups.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 0.99
+  },
+  {
+   "source": "Qsq-Sj_rojU",
+   "n": 11,
+   "rule": "Use a clear, persistent onboarding checklist instead of pop-ups and banners to guide new users through setup.",
+   "values": [
+    "six-step"
+   ],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 1.0
+  },
+  {
+   "source": "Qsq-Sj_rojU",
+   "n": 12,
+   "rule": "Show a custom screen explaining the benefit before triggering the system notification permission prompt, optionally previewing the notification the user would receive.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 0.99
+  },
+  {
+   "source": "Qsq-Sj_rojU",
+   "n": 14,
+   "rule": "Don't copy another product's onboarding without checking it fits your audience's culture and density expectations.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 0.99
+  },
+  {
+   "source": "Qsq-Sj_rojU",
+   "n": 16,
+   "rule": "Design onboarding to bring users to value (the aha moment) quickly, and judge a flow by that rather than by its screen count.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 1.0
+  },
+  {
+   "source": "YbLF42BaoZs",
+   "n": 0,
+   "rule": "Before asking an AI to design a flow, have it research how shipped apps solve that same flow; do not one-shot the design from a prompt alone.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 1.0
+  },
+  {
+   "source": "YbLF42BaoZs",
+   "n": 1,
+   "rule": "Scope the research to the product's own industry and flow, for example onboarding and account opening flows across fintech or banking apps.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 1.0
+  },
+  {
+   "source": "YbLF42BaoZs",
+   "n": 7,
+   "rule": "Keep the decisions about what to prioritize, what to keep and what to cut with the designer rather than the AI or its reference tool.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 1.0
+  },
+  {
+   "source": "kdRkuqu8apE",
+   "n": 0,
+   "rule": "Place key insights next to a chart instead of showing the chart alone.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 1.0
+  },
+  {
+   "source": "kdRkuqu8apE",
+   "n": 1,
+   "rule": "Make the dashboard show what the product does, how the user is doing and what to do next, not only report numbers.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 1.0
+  },
+  {
+   "source": "kdRkuqu8apE",
+   "n": 2,
+   "rule": "Choose each visualization by asking how to make this data make sense to your users instantly, rather than dropping in a template chart.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 1.0
+  },
+  {
+   "source": "kdRkuqu8apE",
+   "n": 3,
+   "rule": "Decide what to leave out of a dashboard; prefer a clean layout over a busy one.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 0.99
+  },
+  {
+   "source": "qK7WYCMvjUw",
+   "n": 0,
+   "rule": "Build onboarding screens around the user's job or pain rather than the product's features: give a small bite-sized insight, then introduce the feature by showing how it solves that specific problem.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 1.0
+  },
+  {
+   "source": "qK7WYCMvjUw",
+   "n": 2,
+   "rule": "Use the answers collected during onboarding to personalize the first session, including the quick access buttons on the home screen.",
+   "values": [
+    "41%",
+    "37%"
+   ],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 1.0
+  },
+  {
+   "source": "qK7WYCMvjUw",
+   "n": 3,
+   "rule": "Before adding an element seen in other apps, such as a login or sign-up step, ask why the product needs it; Moonly removed login because data was already kept in the Apple keychain and email collection was not paying off.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 0.96
+  },
+  {
+   "source": "qK7WYCMvjUw",
+   "n": 4,
+   "rule": "Do not show a different contextual paywall for each feature; show one consistent paywall that makes clear that paying unlocks all features.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 0.97
+  },
+  {
+   "source": "qK7WYCMvjUw",
+   "n": 5,
+   "rule": "Default to a soft paywall the user can close and keep using the app (Moonly shows its close button after 5 seconds), rather than a hard paywall.",
+   "values": [
+    "5 seconds"
+   ],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 1.0
+  },
+  {
+   "source": "qK7WYCMvjUw",
+   "n": 7,
+   "rule": "Choose paywall imagery the paying audience can recognize themselves in, and test it; for a paying audience over 35, use a realistic style instead of cartoonish 3D characters.",
+   "values": [
+    "over 35",
+    "2x"
+   ],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 0.99
+  },
+  {
+   "source": "qK7WYCMvjUw",
+   "n": 8,
+   "rule": "Do not personalize product images with the user's own face.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 0.96
+  },
+  {
+   "source": "qK7WYCMvjUw",
+   "n": 9,
+   "rule": "A/B test several variants of the paywall title and subtitle (Moonly tested eight).",
+   "values": [
+    "eight variants",
+    "12%"
+   ],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 1.0
+  },
+  {
+   "source": "qK7WYCMvjUw",
+   "n": 10,
+   "rule": "Add social proof, such as number of downloads and reviews, to the paywall.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 0.96
+  },
+  {
+   "source": "qK7WYCMvjUw",
+   "n": 19,
+   "rule": "Do not offer alternative billing on Android through Google's native SDK.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 0.98
+  },
+  {
+   "source": "qK7WYCMvjUw",
+   "n": 21,
+   "rule": "Validate the market with a lean web funnel before building the full app.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 0.99
+  },
+  {
+   "source": "qK7WYCMvjUw",
+   "n": 24,
+   "rule": "Run pricing tests as a priority, testing both the price and the perceived value.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 0.99
   }
  ],
  "standards": [

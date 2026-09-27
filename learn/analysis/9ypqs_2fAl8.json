@@ -1,0 +1,991 @@
+{
+  "summary": "Mobbin studied nearly 3,000 paywalls and hundreds of subscription flows, and interviewed Jonathan Parra, who has designed over 4,700 paywalls, to find what separates high-performing paywalls from average ones. The main lessons are that a paywall is a flow, not a single screen: it should sell the outcome first, appear at the right moment in the customer lifecycle, and reduce the fear of being charged with trial timelines, reassuring subtitles and longer trials. Some findings run against intuition: added friction such as requiring a credit card can raise paid conversion, and an ugly, text-heavy paywall sometimes beats a beautiful one, so there is no universal best paywall, only better experiments. It also covers pricing and packaging (default to yearly, show only two plans), framing techniques (social proof, value framing, price anchoring), formats (multi-page, table, video) and the tactics to be wary of, such as spin-the-wheel offers, fake urgency and free-trial toggles that Apple began rejecting. For a design system this gives concrete patterns, copy and component choices for subscription screens, plus a warning that conversion patterns must be tested and weighed against long-term trust, retention and LTV.",
+  "key_ideas": [
+    "A paywall is a flow, not a screen: the product should sell the outcome before it asks for money, so the paywall feels like the natural next step.",
+    "Users sometimes decide to pay before they even see the paywall, so every touchpoint in the lifecycle matters.",
+    "Paywalls can appear after onboarding, when unlocking a premium feature, inside settings, or as a win-back offer before the user leaves.",
+    "A well-designed paywall shown at the wrong moment is still a bad paywall.",
+    "Multi-page paywalls, where information unfolds gradually, almost always beat single-page paywalls in Jonathan's experience.",
+    "Some of the best-performing paywalls reduce perceived risk: a step-by-step trial timeline, a 'no commitment, cancel anytime' subtitle, or a longer trial.",
+    "Presentation can change results even when the offer does not change.",
+    "More friction can raise paid conversion: requiring a credit card for a trial filtered out people who were never serious.",
+    "Common framing techniques are social proof, value framing matched to what users care about, and price anchoring.",
+    "Default to a yearly plan for the highest LTV, show only two plans, and hide any others behind a 'view all plans' sheet.",
+    "Tables show what users miss if they don't subscribe; video can communicate value faster than screenshots or bullet points.",
+    "Polish (animation, custom characters, world building) is becoming a differentiator now that anyone can ship an app.",
+    "Spin-the-wheel paywalls and fake urgency can maximise short-term revenue but wear down trust; users learn to close paywalls to get an offer.",
+    "There is no universal best paywall; radically different design tests move the needle most.",
+    "Retention and LTV matter more than getting the first payment."
+  ],
+  "entities": [
+    {
+      "name": "Mobbin",
+      "type": "company",
+      "description": "Maker of the video; studied the paywalls and subscription flows in its library."
+    },
+    {
+      "name": "Jonathan Parra",
+      "type": "person",
+      "description": "Guest known as 'The Paywall Guy', who has designed over 4,700 paywalls for consumer apps."
+    },
+    {
+      "name": "Superwall",
+      "type": "tool",
+      "description": "Paywall tool; Jonathan learned from Jake and Nick there that design tests move the needle most, and says tables are hard to build in it."
+    },
+    {
+      "name": "RevenueCat",
+      "type": "tool",
+      "description": "Named alongside Superwall as a place where Jonathan is not seeing many table paywalls."
+    },
+    {
+      "name": "Opal",
+      "type": "product",
+      "description": "Sells the outcome (getting 8 years of your life back) before its paywall; trial sign-ups rose from 7% to 17%."
+    },
+    {
+      "name": "Ahead",
+      "type": "product",
+      "description": "Unfolds paywall information gradually and compares its price to coffee or therapy."
+    },
+    {
+      "name": "Blinkist",
+      "type": "product",
+      "description": "Added a step-by-step trial timeline after users felt tricked into being charged."
+    },
+    {
+      "name": "Tipstop",
+      "type": "product",
+      "description": "Emphasised the free trial and added a discount badge; direct conversions almost tripled (name as heard in the captions)."
+    },
+    {
+      "name": "Slopes",
+      "type": "product",
+      "description": "Replaced the paywall with a 'pay ramp' single action, raising trial starts by 25%."
+    },
+    {
+      "name": "Apple",
+      "type": "company",
+      "description": "Its redeem-free-trial approach inspired Slopes; in early 2026 it began rejecting paywalls that relied on free-trial toggles."
+    },
+    {
+      "name": "Outsider",
+      "type": "product",
+      "description": "Required credit card details to start a trial: fewer sign-ups, far higher conversion."
+    },
+    {
+      "name": "Moonly",
+      "type": "product",
+      "description": "Offered a free trial only on the annual plan."
+    },
+    {
+      "name": "Tide",
+      "type": "product",
+      "description": "Anchors price by breaking it into smaller weekly amounts."
+    },
+    {
+      "name": "Headspace",
+      "type": "product",
+      "description": "Tested 7-, 14- and 30-day trials; a 14-day trial on the annual plan won."
+    },
+    {
+      "name": "Focus Town",
+      "type": "product",
+      "description": "App Jonathan cites for polish: branding and an Animal Crossing-esque experience."
+    },
+    {
+      "name": "ClassPass",
+      "type": "product",
+      "description": "Takes fewer than five screens to subscribe but 17 to cancel."
+    },
+    {
+      "name": "Lottie",
+      "type": "library",
+      "description": "Animation file format used for the predetermined spin-the-wheel paywall."
+    },
+    {
+      "name": "Pay ramp",
+      "type": "concept",
+      "description": "Slopes' replacement for a paywall: one action, 'redeem your free week'."
+    },
+    {
+      "name": "Exit intent sheet",
+      "type": "concept",
+      "description": "A sheet shown when the user tries to cancel, offering a smaller commitment such as the monthly plan."
+    },
+    {
+      "name": "Price anchoring",
+      "type": "concept",
+      "description": "Framing price as small weekly amounts or against familiar spending."
+    },
+    {
+      "name": "LTV",
+      "type": "concept",
+      "description": "Lifetime value [inferred: the source never expands the acronym]; with retention, the metric Jonathan wishes founders cared about most."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Paywalls and pricing pages",
+      "summary": "The whole source: paywall placement, multi-page flows, risk reduction, pricing and packaging, formats (table, video, pay ramp) and tactics to avoid."
+    },
+    {
+      "name": "A/B testing and conversion",
+      "summary": "Case results (Opal 7% to 17%, Slopes +25%, Outsider five times conversion, Headspace 14-day winner) and the conclusion that radically different design tests move the needle most; there is no universal best paywall."
+    },
+    {
+      "name": "Onboarding",
+      "summary": "The paywall at the end of onboarding should feel like a natural segue: 'your plan is ready', framed around the user's ideal outcome."
+    },
+    {
+      "name": "Dark patterns and user-hostile design",
+      "summary": "Spin-the-wheel offers, fake urgency and aggressive last-minute discounts can work short term but erode trust; Apple began rejecting confusing free-trial toggles."
+    },
+    {
+      "name": "Content and microcopy",
+      "summary": "A 'no commitment, cancel anytime' subtitle helps; a CTA naming what the user is doing instead of 'Continue' is hit or miss; value framing and price anchoring are copy choices."
+    },
+    {
+      "name": "Drawers and sheets",
+      "summary": "Extra pricing plans go behind a 'view all plans' button that opens a sheet; an exit intent sheet offers the monthly plan when the user tries to cancel."
+    },
+    {
+      "name": "Retention and gamification",
+      "summary": "Retention and LTV are the metrics that matter most; the goal is building something worth paying for, not only getting the first payment."
+    },
+    {
+      "name": "Mobile app patterns",
+      "summary": "Consumer-app subscription patterns: trial timelines, one-time offers with animation and haptic feedback, video paywalls and Apple's review stance on trial toggles."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Users sometimes decide to pay before they even see the paywall.",
+      "evidence": "[0:41] users sometimes decide to pay before they even see the paywall"
+    },
+    {
+      "claim": "Lifecycle monetization and the paywalls are the only part of the app that makes money.",
+      "evidence": "[1:16] monetization and the paywalls, that's the only part of the app that makes money"
+    },
+    {
+      "claim": "Opal's trial sign-ups went up from 7% to 17% by showing users how many years of their life they could save.",
+      "evidence": "[1:37] trial sign-ups went up from 7% to 17%"
+    },
+    {
+      "claim": "Multi-page paywalls almost always do better than single-page paywalls.",
+      "evidence": "[1:46] Multi-page paywalls almost always do better than single-page paywalls"
+    },
+    {
+      "claim": "Blinkist's step-by-step trial timeline led to more trial sign-ups, fewer complaints and more push notification opt-ins.",
+      "evidence": "[3:20] The result was more trial sign-ups, fewer complaints. Push notification opt-ins also went up"
+    },
+    {
+      "claim": "Tipstop's direct conversions almost tripled after it emphasised the free trial, added a discount badge and made the offer easier to understand, without changing the offer.",
+      "evidence": "[3:41] Direct conversions almost tripled"
+    },
+    {
+      "claim": "Slopes' pay ramp (a single 'redeem your free week' action) increased trial starts by 25%.",
+      "evidence": "[4:02] This alone increased trial starts by 25%"
+    },
+    {
+      "claim": "A 'no commitment, cancel anytime' subtitle always seems to do well and bumps conversion incrementally.",
+      "evidence": "[4:12] This no commitment cancel anytime subtitle always seems to do well"
+    },
+    {
+      "claim": "Most winning paywalls in Jonathan's experience have a right chevron on the button, though he has not tested it in isolation.",
+      "evidence": "[4:45] in most of the paywalls that end up winning, they have this right chevron"
+    },
+    {
+      "claim": "Requiring credit card details for Outsider's free trial cut sign-ups by more than half but raised conversion rates five times, more than doubling paying customers.",
+      "evidence": "[5:47] Sign-ups dropped by more than half, but the conversion rates increased by five times"
+    },
+    {
+      "claim": "Headspace's winning trial variant was a 14-day trial for the annual plan, beating 7-day and 30-day trials.",
+      "evidence": "[6:56] tested 7-day, 14-day, and 30-day free trials"
+    },
+    {
+      "claim": "A yearly product has the highest LTV.",
+      "evidence": "[7:17] default to a yearly product because we see that that has the highest LTV"
+    },
+    {
+      "claim": "Video can communicate value faster than static screenshots or bullet points.",
+      "evidence": "[8:20] Video could communicate value faster than static screenshots"
+    },
+    {
+      "claim": "The spin-the-wheel paywall works for maximising revenue at a weekly price point.",
+      "evidence": "[10:13] if you're optimizing for a weekly price and you want to maximize revenue, unfortunately, it works"
+    },
+    {
+      "claim": "More users are getting comfortable closing paywalls because they expect an offer afterwards.",
+      "evidence": "[10:30] more and more users are getting comfortable closing paywalls"
+    },
+    {
+      "claim": "In early 2026 Apple started rejecting paywall patterns that relied on free-trial toggles, some of which were considered confusing or misleading.",
+      "evidence": "[10:37] Apple also started rejecting paywall patterns that relied on free trial toggles"
+    },
+    {
+      "claim": "A very ugly, compact, aggressive squeeze-page paywall for an AI girlfriend app outperformed almost every paywall Jonathan designed for it.",
+      "evidence": "[10:54] probably the ugliest paywall I've ever seen"
+    },
+    {
+      "claim": "Design tests move the needle the most.",
+      "evidence": "[11:16] design tests move the needle the most"
+    },
+    {
+      "claim": "Subscribing to ClassPass takes fewer than five screens, while cancelling takes 17.",
+      "evidence": "[12:07] it takes less than five screens to subscribe to ClassPass, but 17 screens to cancel"
+    },
+    {
+      "claim": "Every paywall today kind of looks the same.",
+      "evidence": "[0:30] Every paywall today kind of looks the same."
+    },
+    {
+      "claim": "Tables are a little hard to build in Superwall, which Jonathan thinks may be why few table paywalls appear in RevenueCat and Superwall.",
+      "evidence": "[7:58] They're a little hard to build in Superwall"
+    },
+    {
+      "claim": "When two products compete for the same user, polish could be why someone chooses one over the others.",
+      "evidence": "[9:00] polish could be the reason why someone chooses your product over the others"
+    },
+    {
+      "claim": "If retention and LTV are good, you are building a good product.",
+      "evidence": "[11:49] if retention and LTV are good, you're building a good product"
+    }
+  ],
+  "quotes": [
+    "A paywall isn't just a screen. It's a flow.",
+    "there is literally no universal best paywall, only better experiments.",
+    "When every app uses fake urgency tactics, users eventually stop believing it."
+  ],
+  "tags": [
+    "paywall",
+    "pricing",
+    "subscription",
+    "free-trial",
+    "conversion",
+    "onboarding",
+    "a-b-testing",
+    "social-proof",
+    "price-anchoring",
+    "exit-intent",
+    "dark-patterns",
+    "retention",
+    "ltv",
+    "consumer-apps",
+    "app-review"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "Sell the outcome before the paywall (for example, how much time or life the user gets back), so the paywall reads as the natural next step of the flow rather than an interruption.",
+      "why": "Opal's trial sign-ups rose from 7% to 17% after showing users how many years of their life they could save; a working paywall feels like the product asking for the next step.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [
+        "7%",
+        "17%"
+      ],
+      "evidence": "[1:25] Before asking for money, Opal spends time selling the outcome"
+    },
+    {
+      "rule": "Prefer a multi-page paywall that unfolds information gradually over a single-page paywall that shows everything at once.",
+      "why": "Multi-page paywalls almost always do better in Jonathan's experience, and gradual information gives users time to process the decision.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[1:46] Multi-page paywalls almost always do better than single-page paywalls"
+    },
+    {
+      "rule": "At the end of onboarding, make the paywall a natural segue that finishes onboarding: tell the user their plan is ready and speak to their ideal outcome in emotional terms (for example, feeling like themselves in 4 weeks).",
+      "why": "The paywall should already feel part of the experience.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "all",
+      "values": [
+        "4 weeks"
+      ],
+      "evidence": "[2:10] Does the paywall already feel part of the experience?"
+    },
+    {
+      "rule": "Show a step-by-step timeline of the free trial on the paywall screen.",
+      "why": "Blinkist users felt tricked into being charged; the timeline brought more trial sign-ups, fewer complaints, and more push notification opt-ins.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[3:14] redesigned the paywall screen to show a step-by-step timeline"
+    },
+    {
+      "rule": "Add a 'no commitment, cancel anytime' subtitle to the paywall's call to action.",
+      "why": "It always seems to do well and bumps conversion up incrementally.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "all",
+      "values": [
+        "no commitment cancel anytime"
+      ],
+      "evidence": "[4:12] This no commitment cancel anytime subtitle always seems to do well"
+    },
+    {
+      "rule": "Experiment with a call-to-action label that names what the user is doing instead of a plain 'Continue'.",
+      "why": "Jonathan finds it hit or miss, so he tests it.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "content",
+      "applies_to": "all",
+      "values": [
+        "continue"
+      ],
+      "evidence": "[4:22] kind of call to action for what the user is doing instead of just continue"
+    },
+    {
+      "rule": "Consider putting a right chevron on the paywall's main button.",
+      "why": "Most winning paywalls in Jonathan's experience have one, though he has not tested it in isolation.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[4:33] having this right chevron here on the button"
+    },
+    {
+      "rule": "When a user tries to cancel or close a yearly offer, show an exit intent sheet that offers the monthly plan instead.",
+      "why": "Users not ready to commit for a year can still subscribe monthly.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[5:01] I like to show the users an exit intent sheet"
+    },
+    {
+      "rule": "Don't use aggressive last-minute discounts (except perhaps for Cyber Monday or Black Friday); offer a longer free trial instead.",
+      "why": "A larger trial keeps you compliant and safe and can achieve the same goal while preserving trust.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[5:13] I wouldn't really do this unless it's maybe Cyber Monday Black Friday"
+    },
+    {
+      "rule": "Default the paywall to the yearly plan unless a yearly product doesn't suit your business.",
+      "why": "Yearly products have the highest LTV.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[7:17] you want to default to a yearly product"
+    },
+    {
+      "rule": "Show only two plans on the base paywall (the yearly plan plus a weekly or monthly one) and put any other plans behind a 'view all plans' button that opens a sheet.",
+      "why": "Showing two decreases cognitive load on the user.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [
+        "two",
+        "view all plans"
+      ],
+      "evidence": "[7:30] You only want to show two to decrease cognitive load"
+    },
+    {
+      "rule": "Launch a simple base paywall and measure its base stats before optimising different placements.",
+      "why": "You need baseline performance before going further with optimisation.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[7:42] You want to keep the base paywall simple"
+    },
+    {
+      "rule": "Consider a table-based paywall that shows users what they miss out on if they don't subscribe.",
+      "why": "Tables do a good job of showcasing what you miss by not subscribing; Jonathan is a huge fan of them.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[7:58] I am a huge fan of tables"
+    },
+    {
+      "rule": "Consider a video paywall that shows the app in action, with a simple bullet list and simple social proof.",
+      "why": "Video can communicate value faster than static screenshots or bullet points.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[8:10] A video paywall showing you the app in action"
+    },
+    {
+      "rule": "Make the free trial prominent, add a discount badge, and make the offer easier to understand.",
+      "why": "Tipstop's direct conversions almost tripled with the same offer presented this way.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[3:32] emphasized the free trial, added a discount badge"
+    },
+    {
+      "rule": "Use price anchoring: break the price into smaller weekly amounts or compare it with things people already spend money on, such as coffee or therapy.",
+      "why": "It is one of the framing techniques the studied paywalls use (Tide, Ahead).",
+      "kind": "do",
+      "strength": "consider",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[6:40] And then there's price anchoring"
+    },
+    {
+      "rule": "Show social proof on the paywall with real user reviews and a five-star rating.",
+      "why": "Social accolades show credibility and authority.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [
+        "five-star"
+      ],
+      "evidence": "[6:14] most common techniques is social proof"
+    },
+    {
+      "rule": "Time a one-time offer (gone once closed) to the moment the user is considering an upgrade, and pair it with animation and haptic feedback.",
+      "why": "A well-designed paywall at the wrong moment is still a bad paywall; animation and haptics help pull the user's attention at the moment they are considering an upgrade.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[2:45] One example is the one-time offer"
+    },
+    {
+      "rule": "If you're building for the long term, avoid spin-the-wheel paywalls and fake urgency.",
+      "why": "They can maximise weekly-price revenue, but when every app uses fake urgency users stop believing it, and users learn to close paywalls expecting an offer.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[10:06] If you're optimizing for a longer-term business, that may not be a good paywall for you"
+    },
+    {
+      "rule": "Don't build paywalls around free-trial toggles.",
+      "why": "In early 2026 Apple started rejecting paywall patterns that relied on them because some were considered confusing or misleading.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "platforms",
+      "applies_to": "ios",
+      "values": [],
+      "evidence": "[10:37] Apple also started rejecting paywall patterns that relied on free trial toggles"
+    },
+    {
+      "rule": "Test radically different paywall designs (video, bullet list, trial timeline, long-form) against each other, then test copy, pricing and flow until one clearly wins.",
+      "why": "Design tests move the needle the most, and an ugly paywall can beat a beautiful one; there is no universal best paywall.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[11:16] design tests move the needle the most"
+    },
+    {
+      "rule": "Plan paywalls across the whole customer lifecycle (after onboarding, when a premium feature is unlocked, inside settings, and as a win-back offer before the user leaves), and show each one at the right moment.",
+      "why": "All the touchpoints are extremely important, contextual paywalls speak more to the user because they're more personalized, and a well-designed paywall at the wrong moment is still a bad paywall.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[0:59] Those paywalls speak more to the user because they're more personalized."
+    },
+    {
+      "rule": "Consider offering a longer free trial on the annual plan; Headspace's 14-day trial for the annual plan beat 7-day and 30-day trials.",
+      "why": "Even though the annual plan costs more, the longer trial made the whole decision feel less risky.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [
+        "14-day"
+      ],
+      "evidence": "[7:00] The winning variant was this, 14-day trial for the annual plan"
+    },
+    {
+      "rule": "Don't assume removing friction raises paid conversion: consider requiring payment details to start a free trial, to filter out people who are not serious.",
+      "why": "When Outsider required credit card details, sign-ups dropped by more than half but conversion rates rose five times and paying customers more than doubled; the extra friction filtered out people who were never serious.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[5:56] The extra friction filtered out people who were never serious"
+    },
+    {
+      "rule": "Frame the paywall's value around what the user cares about, so it sells the future that user wants.",
+      "why": "Value framing is one of the common framing techniques; the studied screens are all selling different futures.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[6:31] You're framing the value in such a way that it matches what the users care about"
+    },
+    {
+      "rule": "Consider replacing the traditional paywall with a pay ramp: one action, such as 'redeem your free week'.",
+      "why": "Slopes built this, inspired by Apple's redeem-free-trial approach, and it alone increased trial starts by 25%.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [
+        "redeem your free week"
+      ],
+      "evidence": "[3:57] a pay ramp. Users see a single action, redeem your free week."
+    },
+    {
+      "rule": "Put time into polish: animations, custom character designs and world building.",
+      "why": "Now that anyone can ship an app the bar has been raised; Jonathan expects the most polished apps to be the most successful, and polish could be why someone chooses your product over others.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[8:50] put in the time to polish it with animations, with custom character designs"
+    },
+    {
+      "rule": "Judge subscription work by retention and LTV, not only by how many people subscribe.",
+      "why": "Jonathan wishes founders cared most about retention and LTV: if they are good you are building a good product, and building something people keep paying for is much harder than getting them to subscribe.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[11:45] The metrics that I wish more founders really care the most about is retention and LTV"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "Where in the product should the paywall appear?",
+      "options": [
+        {
+          "name": "After onboarding",
+          "effect": "Ends onboarding as a natural segue once the product has sold the outcome.",
+          "when": "The main placement discussed; when onboarding builds up the user's ideal outcome."
+        },
+        {
+          "name": "When unlocking a premium feature",
+          "effect": "The paywall appears at the moment of wanting a paid feature.",
+          "when": "Not specified beyond being one of the placements."
+        },
+        {
+          "name": "Inside settings",
+          "effect": "A paywall the user reaches from settings.",
+          "when": "Not specified beyond being one of the placements."
+        },
+        {
+          "name": "Win-back offer before leaving",
+          "effect": "An offer shown before the user leaves.",
+          "when": "Not specified beyond being one of the placements."
+        }
+      ],
+      "recommendation": "Think about the entire customer lifecycle; all touchpoints are important, and a well-designed paywall at the wrong moment is still a bad paywall.",
+      "maps_to": null,
+      "evidence": "[0:49] The paywall can appear after onboarding, when you unlock a premium feature"
+    },
+    {
+      "question": "Should the paywall be one page or several?",
+      "options": [
+        {
+          "name": "Single-page paywall",
+          "effect": "Everything shown at once; the user must absorb it all together.",
+          "when": "Not recommended by the source."
+        },
+        {
+          "name": "Multi-page paywall",
+          "effect": "Information unfolds gradually, giving time to process the decision.",
+          "when": "Generally; Jonathan says it almost always does better."
+        }
+      ],
+      "recommendation": "Multi-page: Jonathan says multi-page paywalls almost always do better than single-page ones.",
+      "maps_to": null,
+      "evidence": "[1:46] Multi-page paywalls almost always do better than single-page paywalls"
+    },
+    {
+      "question": "How many plans should the paywall show, and which one is the default?",
+      "options": [
+        {
+          "name": "Yearly by default plus weekly or monthly (two plans)",
+          "effect": "Lower cognitive load; the default is the highest-LTV plan.",
+          "when": "The recommended base paywall."
+        },
+        {
+          "name": "Extra plans behind 'view all plans'",
+          "effect": "A button opens a sheet with all the pricing options while the base paywall stays simple.",
+          "when": "When you need to support more pricing options."
+        }
+      ],
+      "recommendation": "Default to yearly for the highest LTV, show only two plans to reduce cognitive load, and hide the rest behind a 'view all plans' sheet.",
+      "maps_to": "Q-pattern-03",
+      "evidence": "[7:30] You only want to show two to decrease cognitive load"
+    },
+    {
+      "question": "How long should the free trial be, and on which plan?",
+      "options": [
+        {
+          "name": "7-day trial",
+          "effect": "Shorter risk-free period.",
+          "when": "Tested by Headspace; not the winner."
+        },
+        {
+          "name": "14-day trial on the annual plan",
+          "effect": "Makes the whole decision feel less risky even though the annual plan costs more.",
+          "when": "Headspace's winning variant."
+        },
+        {
+          "name": "30-day trial",
+          "effect": "Longest risk-free period.",
+          "when": "Tested by Headspace; not the winner."
+        },
+        {
+          "name": "Trial only on the annual plan",
+          "effect": "Adds friction by limiting the trial to one plan.",
+          "when": "Moonly's approach; the source does not state its result."
+        }
+      ],
+      "recommendation": "Headspace's winner was a 14-day trial for the annual plan; a longer trial is also recommended instead of aggressive last-minute discounts.",
+      "maps_to": null,
+      "evidence": "[6:56] tested 7-day, 14-day, and 30-day free trials"
+    },
+    {
+      "question": "Should starting a free trial require payment details?",
+      "options": [
+        {
+          "name": "No card required",
+          "effect": "More sign-ups, including people who were never serious.",
+          "when": "Not specified."
+        },
+        {
+          "name": "Credit card required",
+          "effect": "Outsider: sign-ups dropped by more than half, but conversion rates increased five times and paying customers more than doubled.",
+          "when": "When you want to filter out people who are not serious."
+        }
+      ],
+      "recommendation": null,
+      "maps_to": null,
+      "evidence": "[5:56] The extra friction filtered out people who were never serious"
+    },
+    {
+      "question": "What should happen when a user tries to leave the paywall without subscribing?",
+      "options": [
+        {
+          "name": "Exit intent sheet with the monthly plan",
+          "effect": "Users not ready to commit for a year can still subscribe monthly.",
+          "when": "Jonathan's preferred approach."
+        },
+        {
+          "name": "Aggressive last-minute discount",
+          "effect": "Pressure at the last moment; users learn to close paywalls to get an offer.",
+          "when": "Only perhaps for Cyber Monday or Black Friday."
+        },
+        {
+          "name": "Offer with a larger trial",
+          "effect": "Achieves the same goal while preserving trust.",
+          "when": "Recommended instead of a discount, to stay compliant and safe."
+        }
+      ],
+      "recommendation": "Use an exit intent sheet or a longer-trial offer rather than aggressive discounts.",
+      "maps_to": null,
+      "evidence": "[5:23] I'd recommend instead to have an offer with a larger trial"
+    },
+    {
+      "question": "Which paywall format should you try?",
+      "options": [
+        {
+          "name": "Table-based paywall",
+          "effect": "Shows what the user misses out on without subscribing.",
+          "when": "Jonathan is a huge fan; harder to build in Superwall."
+        },
+        {
+          "name": "Video paywall",
+          "effect": "Shows the app in action with a simple bullet list and social proof; communicates value faster than screenshots.",
+          "when": "Works pretty well per Jonathan."
+        },
+        {
+          "name": "Trial timeline paywall",
+          "effect": "A step-by-step timeline reduces fear of being charged.",
+          "when": "When users worry about forgetting to cancel (Blinkist)."
+        },
+        {
+          "name": "Pay ramp (no traditional paywall)",
+          "effect": "One action, 'redeem your free week'.",
+          "when": "Slopes' approach inspired by Apple; +25% trial starts."
+        },
+        {
+          "name": "Bullet list or long-form paywall",
+          "effect": "Text-led formats.",
+          "when": "Listed as radically different designs worth testing."
+        },
+        {
+          "name": "Spin-the-wheel paywall",
+          "effect": "A predetermined Lottie wheel lands on a discount the user claims.",
+          "when": "Works for maximising weekly-price revenue; not for a longer-term business."
+        }
+      ],
+      "recommendation": "No universal best; run radically different designs against each other until one clearly wins.",
+      "maps_to": null,
+      "evidence": "[11:25] You could have a video paywall, you could have bullet list paywall"
+    },
+    {
+      "question": "Should the paywall use pressure tactics such as spin-the-wheel offers and fake urgency?",
+      "options": [
+        {
+          "name": "Use them",
+          "effect": "Can maximise short-term weekly revenue, but users stop believing fake urgency and learn to close paywalls for an offer.",
+          "when": "Only when optimising purely for weekly-price revenue."
+        },
+        {
+          "name": "Avoid them",
+          "effect": "Preserves trust for a long-term business.",
+          "when": "When optimising for a longer-term business."
+        }
+      ],
+      "recommendation": "Avoid them for a long-term business; this is a long-term game.",
+      "maps_to": "Q-pattern-05",
+      "evidence": "[10:24] When every app uses fake urgency tactics"
+    },
+    {
+      "question": "How polished should the paywall look?",
+      "options": [
+        {
+          "name": "Highly polished, branded",
+          "effect": "Animations, custom character designs and world building (like Focus Town) can be why users choose you.",
+          "when": "When competing for the same user as other apps."
+        },
+        {
+          "name": "Plain, compact squeeze page",
+          "effect": "Ugly and text-heavy, yet it overperformed Jonathan's designs for one app.",
+          "when": "Only if testing shows it wins."
+        }
+      ],
+      "recommendation": "No fixed answer: polish is becoming a differentiator, but an ugly paywall can win, so test.",
+      "maps_to": null,
+      "evidence": "[8:28] I think animations work really well"
+    }
+  ],
+  "process": [
+    {
+      "step": "Map the touchpoints",
+      "detail": "Consider the whole customer lifecycle: after onboarding, premium-feature unlocks, settings and win-back offers before leaving."
+    },
+    {
+      "step": "Sell the outcome first",
+      "detail": "Before the paywall, show the user their plan and the ideal outcome they will get, so the paywall feels like the natural next step."
+    },
+    {
+      "step": "Reduce risk",
+      "detail": "Add a trial timeline, a 'no commitment, cancel anytime' subtitle, or a longer trial instead of a discount."
+    },
+    {
+      "step": "Set pricing and packaging",
+      "detail": "Default to yearly, show two plans, and put others behind a 'view all plans' sheet."
+    },
+    {
+      "step": "Ship a simple base paywall",
+      "detail": "Get users onto it and measure base stats before optimising different placements."
+    },
+    {
+      "step": "Test radically different designs",
+      "detail": "Pit video, bullet list, trial timeline and long-form paywalls against each other until one blows everything out of the water."
+    },
+    {
+      "step": "Refine copy, pricing and flow",
+      "detail": "Keep testing copy, pricing and flow until something clearly wins."
+    },
+    {
+      "step": "Watch retention and LTV",
+      "detail": "Judge the result by retention and LTV, not only by how many people subscribe."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Outcome-first onboarding before the paywall",
+      "where": "Opal",
+      "visual_note": "Screens sell 'getting 8 years of your life back' before asking for money; trial sign-ups went from 7% to 17%."
+    },
+    {
+      "what": "Gradually unfolding paywall and price comparison",
+      "where": "Ahead",
+      "visual_note": "Information unfolds step by step, and the subscription is compared to coffee or therapy."
+    },
+    {
+      "what": "One-time offer with animation and haptics",
+      "where": null,
+      "visual_note": "An offer that disappears if closed, using animation and haptic feedback to pull attention at the moment of upgrading."
+    },
+    {
+      "what": "Step-by-step trial timeline paywall",
+      "where": "Blinkist",
+      "visual_note": "A timeline of the free trial reassures users who felt tricked; it also raised push notification opt-ins since reminders come before the trial ends."
+    },
+    {
+      "what": "Free trial emphasis with a discount badge",
+      "where": "Tipstop",
+      "visual_note": "Same offer presented more clearly with a discount badge; direct conversions almost tripled."
+    },
+    {
+      "what": "Pay ramp instead of a paywall",
+      "where": "Slopes",
+      "visual_note": "A single 'redeem your free week' action with no traditional paywall, inspired by Apple's redeem-free-trial approach."
+    },
+    {
+      "what": "Paywall button with subtitle and right chevron",
+      "where": null,
+      "visual_note": "Jonathan's paywall with a 'no commitment, cancel anytime' subtitle and a right chevron on the main button."
+    },
+    {
+      "what": "Exit intent sheet",
+      "where": null,
+      "visual_note": "Tapping cancel opens a sheet offering the monthly plan to users not ready for a year."
+    },
+    {
+      "what": "Credit card required to start a trial",
+      "where": "Outsider",
+      "visual_note": "Sign-ups dropped by more than half but conversion rates rose five times."
+    },
+    {
+      "what": "Weekly price breakdown",
+      "where": "Tide",
+      "visual_note": "Price broken into smaller weekly amounts (price anchoring)."
+    },
+    {
+      "what": "14-day trial on the annual plan",
+      "where": "Headspace",
+      "visual_note": "Winning variant among 7-, 14- and 30-day trials."
+    },
+    {
+      "what": "Table-based and video paywalls",
+      "where": null,
+      "visual_note": "A table showing what you miss without subscribing; a video of the app in action with a bullet list and simple social proof."
+    },
+    {
+      "what": "Polished, branded experience",
+      "where": "Focus Town",
+      "visual_note": "Animal Crossing-esque branding and world building cited as the coming level of polish."
+    },
+    {
+      "what": "Spin-the-wheel paywall",
+      "where": null,
+      "visual_note": "A predetermined Lottie wheel lands on a discount the user claims; works for weekly revenue but Jonathan is skeptical of it."
+    },
+    {
+      "what": "Ugly squeeze-page paywall",
+      "where": "An AI girlfriend app (unnamed)",
+      "visual_note": "Compact elements, lots of text, aggressive squeeze page; it outperformed Jonathan's designs."
+    },
+    {
+      "what": "Asymmetric subscribe and cancel flows",
+      "where": "ClassPass",
+      "visual_note": "Fewer than five screens to subscribe, 17 screens to cancel."
+    },
+    {
+      "what": "Free trial only on the annual plan",
+      "where": "Moonly",
+      "visual_note": "Moonly introduced a free trial, but only on the annual plan; the video does not state the result."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "2,995",
+      "context": "Paywalls Mobbin studied (the transcript says 'nearly 3,000')",
+      "evidence": "Title: We Studied 2,995 Paywalls"
+    },
+    {
+      "value": "4,700",
+      "context": "Paywalls Jonathan Parra has designed",
+      "evidence": "[0:07] over 4,700 paywalls"
+    },
+    {
+      "value": "7% to 17%",
+      "context": "Opal's trial sign-up rate before and after showing years of life saved",
+      "evidence": "[1:40] went up from 7% to 17%"
+    },
+    {
+      "value": "8 years",
+      "context": "The outcome Opal sells before its paywall",
+      "evidence": "[1:27] getting 8 years of your life back"
+    },
+    {
+      "value": "almost tripled",
+      "context": "Tipstop's direct conversions after re-presenting the same offer",
+      "evidence": "[3:41] Direct conversions almost tripled"
+    },
+    {
+      "value": "25%",
+      "context": "Increase in Slopes' trial starts from the pay ramp",
+      "evidence": "[4:05] increased trial starts by 25%"
+    },
+    {
+      "value": "five times",
+      "context": "Increase in Outsider's conversion rate after requiring a credit card; sign-ups dropped by more than half",
+      "evidence": "[5:50] the conversion rates increased by five times"
+    },
+    {
+      "value": "7-day, 14-day, and 30-day",
+      "context": "Free trial lengths Headspace tested; the 14-day trial for the annual plan won",
+      "evidence": "[6:56] tested 7-day, 14-day, and 30-day free trials"
+    },
+    {
+      "value": "two",
+      "context": "Number of plans to show on the base paywall",
+      "evidence": "[7:30] You only want to show two"
+    },
+    {
+      "value": "early 2026",
+      "context": "When Apple started rejecting paywalls relying on free-trial toggles",
+      "evidence": "[10:37] in early 2026, Apple also started rejecting"
+    },
+    {
+      "value": "17",
+      "context": "Screens needed to cancel ClassPass, versus fewer than five to subscribe",
+      "evidence": "[12:07] less than five screens to subscribe to ClassPass, but 17 screens to cancel"
+    },
+    {
+      "value": "more than half",
+      "context": "Drop in Outsider's sign-ups after requiring a credit card for the trial",
+      "evidence": "[5:47] Sign-ups dropped by more than half"
+    },
+    {
+      "value": "more than double",
+      "context": "Outsider's paying customers after requiring a credit card",
+      "evidence": "[5:53] more than double the paying customers"
+    },
+    {
+      "value": "4 weeks",
+      "context": "Example emotional outcome on an end-of-onboarding paywall: feeling like themselves in 4 weeks",
+      "evidence": "[2:05] feeling like themselves in 4 weeks"
+    }
+  ],
+  "caveats": [
+    "Self-promotion: Mobbin plugs its own Mobbin MCP at [9:05], and the description links to the guest's X account and tapasgrowth.com.",
+    "Case results (Opal, Blinkist, Tipstop, Slopes, Outsider, Headspace) are single-company outcomes quoted without test details, sample sizes or dates; they are not general benchmarks.",
+    "Many recommendations are one practitioner's experience ('I like to', 'almost always'); the right chevron is explicitly untested in isolation, and the CTA wording is 'hit or miss'.",
+    "Dated information: published 2026-07-09; Apple's early-2026 rejection of free-trial toggles and its handling of Black Friday sales may change.",
+    "Auto-caption spellings: 'Moby' at [0:03] is Mobbin and 'A Head' at [2:19] is Ahead (spelled 'Ahead' at [6:45]); the names Tipstop, Moonly, Tide and Outsider are as heard and not verified.",
+    "The description is cut off ('Previously, he worked at Superwa'); the transcript only confirms he learned from Jake and Nick at Superwall.",
+    "Moonly's result is not stated; the video only says it 'discovered something similar'.",
+    "The video is highly visual; the on-screen paywall examples are only partly described in the transcript and no media list was available.",
+    "Spin-the-wheel, fake urgency and aggressive discounts are described as working short term; the source presents them as patterns not worth copying, not as recommendations."
+  ]
+}

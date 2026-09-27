@@ -798,3 +798,36 @@
 ## [2026-09-27] ingest | emilkowalski/skills: skills/prototype/SKILL.md
 - Source: `raw/emil-skills/eks-skills-prototype-skill.txt`
 - Wiki page: `wiki/sources/eks-skills-prototype-skill-emilkowalski-skills-skills-prototype-skill-md.md`
+
+## [2026-09-28] ingest | We Studied 2,995 Paywalls. Here’s What Actually Converts.
+- Source: `raw/mobbin/9ypqs_2fAl8.txt`
+- Wiki page: `wiki/sources/9ypqs_2fAl8-we-studied-2-995-paywalls-heres-what-actually-converts.md`
+
+## [2026-09-28] ingest | The Psychology Behind Streaks
+- Source: `raw/mobbin/ARq1bx3Sfg8.txt`
+- Wiki page: `wiki/sources/ARq1bx3Sfg8-the-psychology-behind-streaks.md`
+
+## [2026-09-28] ingest | He Tested 4,700 Paywalls. These Won.
+- Source: `raw/mobbin/E7RzEZ8GlHE.txt`
+- Wiki page: `wiki/sources/E7RzEZ8GlHE-he-tested-4-700-paywalls-these-won.md`
+
+## [2026-09-28] ingest | I Studied 1,460 Onboarding Flows. Here's What I Found.
+- Source: `raw/mobbin/Qsq-Sj_rojU.txt`
+- Wiki page: `wiki/sources/Qsq-Sj_rojU-i-studied-1-460-onboarding-flows-here-s-what-i-found.md`
+
+## [2026-09-28] ingest | I Gave Claude 600,000 UI Screens… Then This Happened
+- Source: `raw/mobbin/YbLF42BaoZs.txt`
+- Wiki page: `wiki/sources/YbLF42BaoZs-i-gave-claude-600-000-ui-screens-then-this-happened.md`
+
+## [2026-09-28] ingest | Mobbin
+- Source: `raw/mobbin/a1DBwxKuioA.txt`
+- Wiki page: `wiki/sources/a1DBwxKuioA-mobbin.md`
+- Dropped 1 quote(s) that were not in the transcript.
+
+## [2026-09-28] ingest | I Studied 2,108 Dashboards To See What Sticks
+- Source: `raw/mobbin/kdRkuqu8apE.txt`
+- Wiki page: `wiki/sources/kdRkuqu8apE-i-studied-2-108-dashboards-to-see-what-sticks.md`
+
+## [2026-09-28] ingest | He Spent $1M on A/B Tests. Here's What Won.
+- Source: `raw/mobbin/qK7WYCMvjUw.txt`
+- Wiki page: `wiki/sources/qK7WYCMvjUw-he-spent-1m-on-a-b-tests-here-s-what-won.md`

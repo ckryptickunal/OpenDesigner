@@ -9,8 +9,8 @@ tags:
 
 Every must/should rule in `learn/analysis/` was checked against the source passage its evidence points to. Code finds the passage; TypeSafe's Jev judges whether it supports the rule. Verdicts below 0.8 confidence, and every verdict other than *supports*, go to review. Run: `python3 tools/wiki.py cite-check`.
 
-- Rules checked: 2025
-- supports: 2024
+- Rules checked: 2084
+- supports: 2083
 - contradicts: 1
 - unsupported: 0
 - Flagged for review: 26

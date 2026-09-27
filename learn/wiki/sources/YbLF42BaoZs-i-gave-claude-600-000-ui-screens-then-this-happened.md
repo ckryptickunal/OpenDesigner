@@ -1,0 +1,148 @@
+---
+type: source
+title: "I Gave Claude 600,000 UI Screens… Then This Happened"
+created: 2026-09-28
+updated: 2026-09-28
+video_id: YbLF42BaoZs
+url: https://www.youtube.com/watch?v=YbLF42BaoZs
+channel: Mobbin
+published: 2026-07-27T13:43:02Z
+authority: reference
+tags:
+  - ai-assisted-design
+  - mcp
+  - design-research
+  - reference-library
+  - onboarding
+  - fintech
+  - competitor-analysis
+  - mobbin
+  - paper
+---
+
+# I Gave Claude 600,000 UI Screens… Then This Happened
+
+## Metadata
+
+- Video ID: `YbLF42BaoZs`
+- Channel: Mobbin
+- Published: 2026-07-27T13:43:02Z
+- URL: https://www.youtube.com/watch?v=YbLF42BaoZs
+
+## Summary
+
+Mobbin demonstrates connecting Claude to Mobbin MCP, a library of over 600,000 screens, flows and animations from shipped apps and websites, so the AI researches real products before it designs. Asked for a fintech onboarding flow, the unresearched draft looks fine but is generic, while the researched one accounts for identity checks and compliance requirements because it studied account opening flows in finance apps. The workflow is two steps: first a research prompt that returns a visual report of top examples, common patterns, trade-offs and best practices; then a fresh build session in a design tool (Paper MCP, with a made-up design system) that gets the report plus a short brief and is asked to flag where it deviates from the patterns it found. The video also shows narrower uses (head-to-head competitor comparisons, quick lookups such as 10 empty states, copy with cited sources, edge cases) and ends by saying the tool cannot decide what to prioritize, keep or cut. For someone building a design system, it shows how to make AI-generated screens grounded in the product's industry rather than generic.
+
+## Key Ideas
+
+- In the demo, the AI's flow drafted without references looked fine but was generic.
+- Grounding the AI in real, shipped products in the same industry makes it cover domain needs, such as identity checks and compliance in fintech onboarding.
+- Industry context matters: a banking onboarding flow is not the same as a generic onboarding flow.
+- Research first, then design; the source advises against one-shotting a design.
+- A good research prompt asks for relevant screens and flows, a comparison of patterns across products, what the best apps do differently, and a visual report of top examples, common patterns and best practices.
+- The research report surfaces common patterns, trade-offs and blind spots, and distills how the best apps differ in copy and in user flow.
+- Build in a fresh session, giving the agent the research report and a short document describing what to build.
+- The build prompt asks the agent to flag where it intentionally deviates from researched patterns; in the demo it pushed back on the brief and explained why.
+- After the broad research, use the reference library for specific problems: competitor comparisons, quick lookups, copy ideas with cited sources, cross-industry remixes and edge cases.
+- Deciding what to prioritize, keep and cut stays with the designer, not the tool.
+
+## Entities
+
+- [[entities/mobbin|Mobbin]] (company): Publisher of the video and of the screen library the demo relies on.
+- [[entities/mobbin-mcp|Mobbin MCP]] (tool): Connects an AI tool to Mobbin's library of shipped app and website screens, flows and animations.
+- [[entities/claude|Claude]] (product): The AI used for the research report and the build, in a browser and in the Claude desktop app.
+- [[entities/paper|Paper]] (tool): Design tool whose MCP lets Claude build the onboarding flow in a file with a made-up design system.
+- [[entities/figma|Figma]] (tool): An agent inside Figma is shown producing some broken UI in iOS map and filter views before research, and a cited result after Mobbin MCP research.
+- [[entities/curve|Curve]] (product): Name of the fintech app whose onboarding flow is proposed and built in the demo.
+- [[entities/one|One]] (product): App the agent cited for putting its setup bonus on the homepage (a finance app [inferred]).
+- [[entities/doordash|DoorDash]] (product): Compared head to head with Uber Eats on checkout, tipping and order summary.
+- [[entities/uber-eats|Uber Eats]] (product): Compared head to head with DoorDash on checkout, tipping and order summary.
+
+## Topics
+
+- [[topics/ai-assisted-design|AI-assisted design]]: Shows a research-then-build workflow with Claude and MCP servers: unresearched AI output is generic or broken, researched output is grounded in shipped products and cites its sources.
+- [[topics/onboarding|Onboarding]]: The worked example is a fintech onboarding and account opening flow; the grounded version accounts for identity checks and compliance requirements, and an offers nudge is placed on the homepage right after onboarding.
+- [[topics/design-process|Design process]]: Research how top apps in the category solve the flow, compare patterns, get a report, then build with a brief and flag deliberate deviations; prioritizing, keeping and cutting stay with the designer.
+- [[topics/design-resources|Design resources]]: A library of over 600,000 real app and website screens, flows and animations, reachable from AI tools, used for research, quick lookups and competitor comparisons.
+- [[topics/figma-and-design-tools|Figma and design tools]]: Paper MCP is used to build the flow inside a design file; an agent inside Figma produced some broken UI in iOS map and filter views until it researched references first.
+- [[topics/content-and-microcopy|Content and microcopy]]: The research distills how the best apps differ in copy, and the AI can suggest copy tailored to users while citing where the inspiration came from.
+- [[topics/dark-patterns-and-user-hostile-design|Dark patterns and user-hostile design]]: The brief asked where an offers nudge belongs without feeling manipulative; the agent put it on the homepage right after onboarding, citing an app that does the same.
+
+## Notable Claims
+
+- Mobbin MCP gives an AI tool access to over 600,000 real app and website screens, flows and animations from shipped products. Evidence: [0:27] a library card to over 600,000 real app
+- The unresearched fintech onboarding draft looked fine but was generic, while the researched draft accounted for identity checks and compliance requirements. Evidence: [0:04] This one, it looks fine, but it's generic
+- The AI fetched account opening flows in the finance category and studied welcome screens from fintech apps, so it knew a banking onboarding flow differs from a generic one. Evidence: [1:12] It's actually fetching account opening flows in the finance category
+- The research report pulls out common patterns, trade-offs and blind spots, and distills what the best apps do differently in copy and user flow. Evidence: [1:30] It pulls out all the common patterns, trade-offs, blind spots
+- While building, the agent pushed back on the brief and explained why; for the brief's question of where the offers nudge belongs without feeling manipulative, it placed it on the homepage right after onboarding, citing One, whose setup bonus is on its homepage. Evidence: [2:25] it's actually pushing back on the brief
+- An agent inside Figma, asked for iOS map and filter views, produced some broken UI; when connected to Mobbin MCP to research first, it studied references and cited the source. Evidence: [3:06] some of the UI are broken
+- Mobbin MCP cannot decide what to prioritize, what to keep and what to cut. Evidence: [4:13] what Mobbin MCP can't do is help us decide what to prioritize
+
+## Quotes
+
+> a banking onboarding flow is not the same as a generic one
+> — [1:21](https://www.youtube.com/watch?v=YbLF42BaoZs&t=81s)
+
+> We don't recommend one-shotting a design right away.
+> — [2:49](https://www.youtube.com/watch?v=YbLF42BaoZs&t=169s)
+
+> Flag anywhere that you're intentionally deviating from a pattern you found.
+> — [2:20](https://www.youtube.com/watch?v=YbLF42BaoZs&t=140s)
+
+<!-- od:learn -->
+
+## For OpenDesigner
+
+- Authority: **reference**
+- Caveat: The whole video is Mobbin promoting its own paid product: Mobbin MCP is included with any paid Mobbin plan, setup is at mobbin.com/mcp, and it is said to work with Claude, Antigravity, Codex, Cursor and more. The with-and-without comparisons are vendor demos, not independent tests.
+- Caveat: It ends with plugs for other Mobbin videos: 3,000 paywalls studied for what converts, and over 1,000 onboarding flows.
+- Caveat: The over 600,000 figure and the list of compatible tools are as of July 2026 (published 2026-07-27).
+- Caveat: Auto-captions spell Mobbin as 'Mavin' (corrected here). The 'safe offers nudge' caption may be a mishearing (perhaps 'sign-up offers' [inferred]); it is left as an offers nudge because the exact word is uncertain. The captions do not say whether the pushback on the brief was the nudge placement itself or something else.
+- Caveat: The generated flows, report and Figma screens are only shown on screen; the transcript gives no visual details or values (no spacing, colors, type or timings), and no media list was available.
+- Caveat: The design system in the Paper demo is made up for the video.
+
+### Rules and practices
+
+- **should** (process, all): Before asking an AI to design a flow, have it research how shipped apps solve that same flow; do not one-shot the design from a prompt alone. Why: Without research the fintech onboarding was generic and Figma's iOS map and filter views had broken UI; with research the flow covered identity checks and compliance and cited its references. [[2:49] We don't recommend one-shotting a design right away]
+- **should** (process, all): Scope the research to the product's own industry and flow, for example onboarding and account opening flows across fintech or banking apps. Why: A banking onboarding flow is not the same as a generic one; industry-specific references bring in needs such as identity checks and compliance requirements. [[1:21] so it knows a banking onboarding flow is not the same as a generic one]
+- **consider** (patterns, all): In a fintech or banking onboarding and account opening flow, account for identity checks and compliance requirements. Why: The source's grounded flow, based on real finance apps, covers these and feels much more considered than the generic one. [[0:11] accounts for things like identity checks, compliance requirements]
+- **consider** (process, all): In the research prompt, ask for the most relevant screens and user flows, a comparison of patterns across products, what the best apps do differently, and a visual report of top examples, common patterns and best practices. Why: The resulting report surfaces common patterns, trade-offs and blind spots that designers tend to miss, and distills differences in copy and user flow. [[0:53] Find the most relevant screens and user flows]
+- **consider** (process, all): Start the build in a fresh AI session and attach the research report plus a short document describing what you want to build. Why: The source says this is optional but helps the agent understand the full context. [[2:03] Attach two things, the research report]
+- **consider** (process, all): When asking the agent to build from research, tell it to flag anywhere it intentionally deviates from a pattern it found. Why: The source's build prompt includes this; in the demo the agent pushed back on the brief and explained its reasons, citing a referenced app [inferred link between the instruction and the pushback]. [[2:20] Flag anywhere that you're intentionally deviating]
+- **consider** (process, all): After the broad research, use the reference library for specific design problems: head-to-head competitor comparisons (such as checkout, tipping and order summary), quick lookups (such as 10 empty states from productivity apps), copy suggestions tailored to your users that cite their sources, remixing ideas across industries, and edge cases. Why: The source recommends researching first and then using the library to solve specific design problems. [[3:20] Compare competitors head-to-head like how DoorDash and Uber Eats can do checkout]
+- **should** (process, all): Keep the decisions about what to prioritize, what to keep and what to cut with the designer rather than the AI or its reference tool. Why: The reference tool cannot make those calls; that part is still the designer's call. [[4:16] help us decide what to prioritize, what to keep, and what to cut]
+
+### Decisions it informs
+
+- Should the AI design a flow straight from the prompt, or research real shipped products first?
+  - One-shot from the prompt: The fintech onboarding looked fine but generic; the Figma agent's iOS map and filter views came out with some broken UI. When: The source does not recommend it for designing a flow.
+  - Research shipped products first, then build: The flow was grounded in real finance apps, covering identity checks and compliance requirements, and the output cited its references. When: Before designing a flow, and then again to solve specific design problems.
+  - Recommendation: Research first with a library of shipped screens, then build; the source says it does not recommend one-shotting a design right away.
+
+### Process
+
+1. Connect the AI to a reference library: Connect the AI tool (Claude in the browser in the demo) to Mobbin MCP so it can pull real screens, flows and animations from shipped products.
+2. Research the flow in its industry: Ask it to research how top apps design the flow (onboarding and account opening across fintech or banking apps), find the most relevant screens and flows, compare patterns across products, and identify what the best apps do differently.
+3. Get a visual report: Ask for a visual report of the top examples, common patterns and best practices the top companies converge on; it also lists trade-offs, blind spots, and copy and flow differences.
+4. Dig into references: Click a reference in the report to open it in Mobbin, then look for similar screens or study the end-to-end user flow.
+5. Build in a fresh session: Open a new session in a design tool connected by MCP (Paper, with a design system in the file), attach the research report and a short document describing what to build, and ask it to propose and build the flow, flagging intentional deviations from found patterns.
+6. Review the agent's pushback: Read where the agent pushes back on the brief and why; in the demo, for the brief's question of where the offers nudge belongs without feeling manipulative, it placed it on the homepage right after onboarding because a referenced app, One, does the same.
+7. Use the library for specific problems: Compare competitors head to head (DoorDash and Uber Eats on checkout, tipping and order summary), look things up fast (10 empty states from productivity apps), get copy suggestions with cited sources, remix ideas across industries, and cover edge cases.
+8. Decide priorities yourself: Decide what to prioritize, keep and cut; the tool cannot make that call.
+
+### Examples and visual references
+
+- Two AI-drafted fintech onboarding flows side by side (Claude): One looks fine but generic; the other is grounded in real finance apps and accounts for identity checks and compliance requirements.
+- Research report on fintech onboarding and account opening (Claude with Mobbin MCP): A visual report built from account opening flows and welcome screens in the finance category, listing top examples, common patterns, trade-offs, blind spots and best practices, each reference linking back to Mobbin.
+- Onboarding flow for Curve built in a design file (Paper, via Paper MCP in the Claude desktop app): Built on a made-up design system in the file from the research report and a brief; the agent flags deviations and explains its choices.
+- Placement of an offers nudge (Curve demo, citing the app One): The agent put the offer on the homepage right after onboarding, citing One's setup bonus on its homepage, in answer to the brief's question of where it belongs without feeling manipulative.
+- iOS map and filter views generated with and without research (Figma agent): Without research some of the UI is broken; with Mobbin MCP research the result cites its source references.
+- Head-to-head checkout comparison (DoorDash and Uber Eats): Compares checkout, tipping and order summary screens between the two competitors.
+- Quick lookup of empty states (Productivity apps): Shows 10 empty states from productivity apps at once.
+
+### Numbers
+
+- 600,000: Real app and website screens, flows and animations reachable through Mobbin MCP (stated as 'over 600,000'). [[0:27] a library card to over 600,000 real app]
+- 10: Empty states from productivity apps shown in a quick lookup. [[3:32] showing you 10 empty states]
+
+<!-- /od:learn -->

@@ -2,7 +2,7 @@
 type: entity
 title: Apple
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources: []
 tags: []
 ---
@@ -28,3 +28,5 @@ Named as using swipe gestures, especially swipe-to-dismiss, throughout its apps.
 - [[sources/pGYLZyBE32o-i-redesigned-google-s-ai-website-from-scratch-complete-transformation|I Redesigned Google's AI Website from SCRATCH (complete transformation)]]: Cited for having an entire page devoted to privacy and for generally using a lock icon.
 - [[sources/ulSOdTgoGeY-awful-to-amazing-web-designs-easily|Awful To AMAZING Web Designs Easily]]: Cited for cropping and zooming into product images and for stacking two-column layouts into one column.
 - [[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]: Where the author first saw the inline section-heading treatment.
+- [[sources/9ypqs_2fAl8-we-studied-2-995-paywalls-heres-what-actually-converts|We Studied 2,995 Paywalls. Here’s What Actually Converts.]] [5:17](https://www.youtube.com/watch?v=9ypqs_2fAl8&t=317s): Its redeem-free-trial approach inspired Slopes; in early 2026 it began rejecting paywalls that relied on free-trial toggles.
+- [[sources/kdRkuqu8apE-i-studied-2-108-dashboards-to-see-what-sticks|I Studied 2,108 Dashboards To See What Sticks]] [3:34](https://www.youtube.com/watch?v=kdRkuqu8apE&t=214s): Example of a coined metric: closing your rings.

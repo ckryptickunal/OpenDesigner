@@ -1,0 +1,167 @@
+{
+  "summary": "A Mobbin video that looks at 859 streak designs and explains the psychology that makes people come back each day. It sorts streak designs by the lever they pull: fear of loss (urgent copy, countdowns, a guilt-inducing mascot), optimism (encouraging copy, commitment-style calls to action, collectible milestones), attachment to a mascot (anthropomorphism and the Tamagotchi effect), and visual attention (a visible chain where a gap stands out, the Zeigarnik effect). It then explains that dopamine responds to the prediction of a reward and walks through the four-stage habit loop of cue, craving, response and reward. Duolingo's experiments show that flexibility beat pressure: streak freezes and a one-lesson minimum kept more people going. The video ends by warning that most evidence on streaks covers engagement and retention, not necessarily lasting habits, and that a study found missing a day had almost no effect on whether a habit forms. For a design system, it is a guide to the copy, mascot, visual-chain and celebration choices inside a streak pattern and the emotions each one creates.",
+  "key_ideas": [
+    "Every streak design answers one question: what makes the person come back tomorrow.",
+    "Fear-based streaks rely on loss aversion: losing something stings more than gaining the same thing feels good, so the design shows what you could lose.",
+    "Fear-based streak screens use more urgent copy, a countdown clock and a mascot that makes you feel guilty.",
+    "Optimism-based streaks use positive, encouraging copy and make you feel you are building a better version of yourself.",
+    "Reframing a call to action as a promise to yourself, such as 'commit to my goal' instead of 'continue', was a big win in Duolingo's tests.",
+    "Streaks can become collectibles: badges and milestones act as tangible proof of progress.",
+    "Mascots use anthropomorphism and the Tamagotchi effect: when a digital thing seems to need you, you get attached, and leaving feels harder.",
+    "Showing consistency as a visible pattern makes any gap stand out at once (the Zeigarnik effect), so filling a missing block feels satisfying and breaking the chain feels bad.",
+    "Dopamine responds to the prediction of a reward, so a streak only has to make the brain feel something satisfying is about to happen.",
+    "The habit loop has four stages (cue, craving, response, reward), and each can be designed: a reminder, a jingle, an easy next step, a satisfying finish.",
+    "Simply seeing the streak number makes people more likely to keep going, even before they open the app.",
+    "The longer a streak, the more it becomes part of a person's identity, which is why some give up entirely after breaking one.",
+    "Flexibility beat strictness at Duolingo: streak freezes raised daily active learners, and a lower bar to keep the streak alive meant more people kept a 7-day streak.",
+    "Once a streak becomes routine, the dopamine signal weakens, so apps add surprises such as animations, milestone celebrations and bonus XP.",
+    "Optimizing for engagement is not the same as building a lasting habit; what may matter most is whether people return after breaking a streak."
+  ],
+  "entities": [
+    {"name": "Mobbin", "type": "company", "description": "The channel that made the video; the presenter looked at 859 streak designs on Mobbin."},
+    {"name": "Duolingo", "type": "product", "description": "Learning app (lessons, daily goals) used as the main case study: commitment copy, the Duo mascot, the lesson jingle, streak freezes and streak experiments."},
+    {"name": "Duo", "type": "product", "description": "Duolingo's cartoon owl mascot; the presenter opened the app to avoid disappointing it. The angry owl in the fear section is presumably Duo [inferred]."},
+    {"name": "Opal", "type": "product", "description": "App where the streak earns milestones that users collect over time."},
+    {"name": "Tamagotchi", "type": "product", "description": "1990s virtual pet by Bandai that died if ignored; origin of the Tamagotchi effect."},
+    {"name": "Bandai", "type": "company", "description": "Maker of the Tamagotchi."},
+    {"name": "Wolfram Schultz", "type": "person", "description": "Professor whose research found dopamine responds to the prediction of rewards."},
+    {"name": "Loss aversion", "type": "concept", "description": "Losses feel worse than equal gains feel good; the basis of fear-based streaks."},
+    {"name": "Anthropomorphism", "type": "concept", "description": "Giving human emotions to non-human things, which mascots rely on."},
+    {"name": "Tamagotchi effect", "type": "concept", "description": "Attachment that forms when a digital thing appears to need you back."},
+    {"name": "Zeigarnik effect", "type": "concept", "description": "Unfinished things stay active in the mind longer, so gaps in a visible streak pattern stand out."},
+    {"name": "Habit loop", "type": "concept", "description": "Four stages of a habit: cue, craving, response and reward."},
+    {"name": "Streak freeze", "type": "concept", "description": "Duolingo feature that lets a user miss a day without losing the streak."}
+  ],
+  "topics": [
+    {"name": "Retention and gamification", "summary": "Explains four psychological levers behind streaks (loss aversion, optimism, mascot attachment, visible chains), the habit loop, and Duolingo data showing streak freezes and a one-lesson minimum improve retention; warns that streaks prove engagement, not lasting habits."},
+    {"name": "Content and microcopy", "summary": "Fear-based streaks use urgent copy while optimism-based ones use encouraging copy; Duolingo's switch from 'continue' to 'commit to my goal' was a massive win, and more apps now reframe calls to action as promises to yourself."},
+    {"name": "A/B testing and conversion", "summary": "Reports Duolingo tests: up to two equipped streak freezes raised daily active learners by 0.38%, and a one-lesson rule beat the full-daily-goal rule with over 40% more people keeping a 7-day streak."},
+    {"name": "Icons and imagery", "summary": "Mascots such as Duolingo's owl or a little bird that grows alongside you are designed to create attachment through anthropomorphism, not only to make apps feel cute."},
+    {"name": "Micro-interactions", "summary": "Once streaks become predictable, apps layer in surprises such as animations, milestone celebrations and bonus XP; a jingle after each lesson builds craving for the next one."},
+    {"name": "Dark patterns and user-hostile design", "summary": "Asks whether streaks build habits or just make people afraid to stop, describes guilt and urgency tactics, and says optimizing for engagement differs from building lasting habits. [inferred] link to this topic; the source does not use the term dark pattern."}
+  ],
+  "claims": [
+    {"claim": "The presenter looked at 859 streak designs on Mobbin.", "evidence": "[0:18] after looking at 859 streak designs on Mobbin"},
+    {"claim": "Losing $10 stings more than winning $10 feels good; this is loss aversion, and streak mechanics bet on it.", "evidence": "[0:31] Let's say you won $10 today"},
+    {"claim": "Fear-based streak designs make copy more urgent, start a countdown clock and use an angry owl to create guilt.", "evidence": "[0:45] The copy becomes more urgent"},
+    {"claim": "Duolingo's product team changed a call to action from 'continue' to 'commit to my goal' and it was a massive win.", "evidence": "[1:12] Duolingo's product team tested these copy changes"},
+    {"claim": "In Opal, the streak earns milestones that users can collect over time.", "evidence": "[1:38] In Opal, your streak earns you literal milestones"},
+    {"claim": "People grieved when their ignored Tamagotchi died; this attachment is called the Tamagotchi effect.", "evidence": "[2:36] People carried them everywhere, even grieved"},
+    {"claim": "Once you feel something for a product, the barrier to leaving feels higher.", "evidence": "[3:06] The moment you feel something for a product"},
+    {"claim": "Unfinished things stay active in the mind longer than completed ones (the Zeigarnik effect), so a gap in a visible streak is noticed immediately.", "evidence": "[3:33] Part of this relates to the Zeigarnik effect"},
+    {"claim": "Professor Schultz found dopamine responds to the prediction of rewards, not only to rewards.", "evidence": "[4:14] Professor Schultz found that dopamine doesn't just respond to rewards"},
+    {"claim": "Studies found that people reminded of their streak, just by seeing the number, are more likely to keep going.", "evidence": "[5:14] Studies found that when people are reminded of their streak"},
+    {"claim": "The longer the streak, the more a person's identity gets wrapped up in it.", "evidence": "[5:41] longer the streak, the more our identity"},
+    {"claim": "When Duolingo let users equip up to two streak freezes at a time, daily active learners increased by 0.38%, over 200,000 more people every day.", "evidence": "[6:02] when Duolingo allowed users to equip up to two streak freezes"},
+    {"claim": "A variant where one lesson kept the streak alive beat requiring the full daily goal, with over 40% more people maintaining their 7-day streak.", "evidence": "[6:20] Duolingo tested two variants"},
+    {"claim": "Most evidence around streaks focuses on engagement and retention, not necessarily lasting behavioral change.", "evidence": "[7:10] most evidence around streaks focuses on engagement and retention"},
+    {"claim": "When a streak becomes routine and predictable, the dopamine signal weakens.", "evidence": "[7:26] when things become predictable, that dopamine signal actually weakens"},
+    {"claim": "A study of people building real habits over months found missing a day had almost no effect on whether the behavior became automatic.", "evidence": "[8:07] A study tracked people building real habits over months"}
+  ],
+  "quotes": [
+    "At some point, keeping my streak alive mattered more than actually learning.",
+    "mascots aren't just there to make apps feel cute. They're designed to create attachment.",
+    "optimizing for engagement and optimizing for long-term habit formation is not the same thing."
+  ],
+  "tags": ["streaks", "gamification", "retention", "habit-loop", "loss-aversion", "mascots", "microcopy", "behavioral-psychology", "duolingo", "mobbin"],
+  "authority": "reference",
+  "rules": [
+    {"rule": "Let people miss a day without losing their streak, for example with a streak freeze they can equip (Duolingo allows up to two at a time).", "why": "Duolingo found flexibility worked better than extra pressure: allowing up to two equipped freezes raised daily active learners by 0.38%, over 200,000 more people a day.", "kind": "do", "strength": "should", "area": "patterns", "applies_to": "all", "values": ["up to two streak freezes at a time", "0.38%", "over 200,000"], "evidence": "[5:55] a feature called streak freeze that lets you miss a day without losing everything"},
+    {"rule": "Keep the bar to preserve a streak low: completing one unit of the core action (one lesson) should keep it alive, instead of requiring the full daily goal.", "why": "In Duolingo's test the one-lesson variant won, with over 40% more people maintaining their 7-day streak.", "kind": "do", "strength": "should", "area": "patterns", "applies_to": "all", "values": ["one lesson", "over 40%", "7-day streak"], "evidence": "[6:20] Duolingo tested two variants"},
+    {"rule": "Don't answer broken streaks by making the streak stricter or adding more pressure and accountability.", "why": "It is the obvious fix, but Duolingo found the opposite worked better; people keep going after failure when goals include some built-in flexibility.", "kind": "dont", "strength": "should", "area": "patterns", "applies_to": "all", "values": [], "evidence": "[5:46] The obvious solution to this would be making your streaks stricter"},
+    {"rule": "Design streaks around recovery rather than perfection: offer repairs, freezes, pauses or grace days.", "why": "Missing a day had almost no effect on whether a habit became automatic, and what may matter most is whether people come back after breaking a streak.", "kind": "do", "strength": "should", "area": "patterns", "applies_to": "all", "values": [], "evidence": "[6:41] designing streaks around recovery instead of perfection"},
+    {"rule": "Word the streak's main call to action as a commitment the person makes to themselves (e.g. 'commit to my goal') rather than a neutral 'continue'.", "why": "Duolingo's product team tested this copy change and called it a massive win; more apps now reframe calls to action as a promise to yourself.", "kind": "do", "strength": "consider", "area": "content", "applies_to": "all", "values": ["continue", "commit to my goal"], "evidence": "[1:15] We used to say continue and we changed that to commit to my goal"},
+    {"rule": "Remind people of their current streak number, so it acts as the cue before they open the app.", "why": "Studies found that just seeing the streak number makes people more likely to keep going; the cue starts the habit loop before the app is opened.", "kind": "do", "strength": "consider", "area": "patterns", "applies_to": "all", "values": [], "evidence": "[5:14] Studies found that when people are reminded of their streak, just seeing the number, they're more likely to keep going"},
+    {"rule": "Make the daily action easy to do, for example by auto-progressing to the next step.", "why": "The response stage of the habit loop depends on the action being easy.", "kind": "do", "strength": "consider", "area": "patterns", "applies_to": "all", "values": [], "evidence": "[5:02] Next, response. Make it easy so we'll do it"},
+    {"rule": "Show consistency as a visible pattern of filled days so that a missing day stands out as a gap.", "why": "Unfinished things stay active in the mind (Zeigarnik effect), so the gap is noticed immediately and filling it feels satisfying.", "kind": "do", "strength": "consider", "area": "patterns", "applies_to": "all", "values": [], "evidence": "[3:26] They all turn consistency into a visible pattern"},
+    {"rule": "Turn streak progress into collectibles such as badges and milestones that act as tangible proof of progress.", "why": "Optimism-based streaks make people feel they are building towards a better version of themselves; Opal lets users collect milestones earned by the streak.", "kind": "do", "strength": "consider", "area": "patterns", "applies_to": "all", "values": [], "evidence": "[1:29] Some apps even turn streaks into collectibles"},
+    {"rule": "Once a streak has become routine, add unpredictable moments such as animations, milestone celebrations or bonus XP.", "why": "When the streak becomes predictable the dopamine signal weakens; the source notes this keeps engagement alive but is not the same as building a lasting habit.", "kind": "do", "strength": "consider", "area": "patterns", "applies_to": "all", "values": [], "evidence": "[7:31] So, apps keep layering in new surprises"},
+    {"rule": "End each completed session with a short, recognisable sound, like Duolingo's jingle after each lesson, to build wanting for the next one.", "why": "Craving is the second stage of the habit loop; the source says the Duolingo jingle after each lesson makes people want the next one.", "kind": "do", "strength": "consider", "area": "patterns", "applies_to": "all", "values": [], "evidence": "[4:59] The Duolingo jingle after each lesson makes us want the next one"},
+    {"rule": "If the product has a mascot, give it a personality that responds to the person (cheering them on, growing alongside them) instead of using it only as decoration.", "why": "The source says mascots are designed to create attachment, not just to look cute, and once people feel something for a product the barrier to leaving feels higher; it presents this as a retention tactic and questions whether streaks just make people afraid to stop.", "kind": "do", "strength": "consider", "area": "iconography", "applies_to": "all", "values": [], "evidence": "[3:00] mascots aren't just there to make apps feel cute. They're designed to create attachment"},
+    {"rule": "Don't judge a streak feature only by engagement and retention numbers when the product's goal is a lasting habit.", "why": "Most evidence on streaks covers engagement and retention, not lasting behavioral change, and optimizing for engagement is not the same as optimizing for habit formation.", "kind": "dont", "strength": "should", "area": "process", "applies_to": "all", "values": [], "evidence": "[7:48] optimizing for engagement and optimizing for long-term habit formation"}
+  ],
+  "decisions": [
+    {
+      "question": "Which emotion should the streak lean on to bring people back?",
+      "options": [
+        {"name": "Fear of loss", "effect": "Urgent copy, a countdown clock and a mascot that makes you feel guilty; people act to protect what they could lose.", "when": "The source gives no case for choosing it; it asks whether streaks build habits or just make people afraid to stop."},
+        {"name": "Optimism", "effect": "Positive, encouraging copy, calls to action reframed as a promise to yourself, and collectible badges and milestones; people feel they are building a better self.", "when": "When the streak should feel like progress towards a goal [inferred]."},
+        {"name": "Attachment to a mascot", "effect": "A character that cheers you on or grows alongside you; people feel it needs them, which raises the barrier to leaving.", "when": "When the product has or wants a mascot with a personality, like Duolingo's owl [inferred]."},
+        {"name": "Visual attention", "effect": "Consistency shown as a visible pattern; a gap is noticed immediately and filling it feels satisfying.", "when": "When the design should work without fear, hope or attachment, including products unrelated to self-improvement."}
+      ],
+      "recommendation": "The source does not pick one lever. It concludes that what may matter most is whether people come back after breaking a streak, and that flexibility beat pressure at Duolingo.",
+      "maps_to": null,
+      "evidence": "[0:29] start with the most obvious pattern, fear; [0:58] Now, some streak systems lean on optimism; [3:00] mascots aren't just there to make apps feel cute; [3:18] Some streak systems don't rely on fear, hope, or attachment. They work through visual attention"
+    },
+    {
+      "question": "What should a person have to do each day to keep the streak alive?",
+      "options": [
+        {"name": "Hit the full daily goal", "effect": "Stricter; fewer people keep their streak.", "when": "Not recommended by the test result."},
+        {"name": "Complete one lesson (one unit of the core action)", "effect": "Over 40% more people maintained their 7-day streak in Duolingo's test.", "when": "When the aim is to keep people coming back."}
+      ],
+      "recommendation": "One lesson: this variant won Duolingo's test, with over 40% more people keeping a 7-day streak.",
+      "maps_to": null,
+      "evidence": "[6:20] Duolingo tested two variants"
+    },
+    {
+      "question": "What happens when someone misses a day?",
+      "options": [
+        {"name": "The streak resets", "effect": "Strict; the longer the streak, the more identity is lost, and some people give up entirely.", "when": "The source describes this as the common design but argues against it."},
+        {"name": "Streak freeze", "effect": "The person can miss a day without losing everything; at Duolingo, equipping up to two at a time raised daily active learners by 0.38%.", "when": "When retention after a missed day matters."},
+        {"name": "Repairs, pauses or grace days", "effect": "The streak is designed around recovery instead of perfection.", "when": "When the goal is for people to come back after a break."}
+      ],
+      "recommendation": "Build in flexibility (freezes, repairs, pauses, grace days); Duolingo found this worked better than stricter rules, and missing a day barely affects habit formation.",
+      "maps_to": null,
+      "evidence": "[5:55] a feature called streak freeze; [6:41] designing streaks around recovery instead of perfection. Repairs, freezing your streaks, pauses"
+    },
+    {
+      "question": "How should the streak's main button be worded?",
+      "options": [
+        {"name": "Neutral ('continue')", "effect": "A plain next step.", "when": "The baseline Duolingo moved away from."},
+        {"name": "Commitment ('commit to my goal')", "effect": "Turns the tap into a promise the person makes to themselves.", "when": "When the streak uses optimism framing."}
+      ],
+      "recommendation": "Commitment framing: Duolingo's team called the change from 'continue' to 'commit to my goal' a massive win.",
+      "maps_to": null,
+      "evidence": "[1:12] Duolingo's product team tested these copy changes"
+    }
+  ],
+  "process": [
+    {"step": "Cue", "detail": "Give something that triggers anticipation before the app is opened, such as a reminder that shows the streak number."},
+    {"step": "Craving", "detail": "Build wanting for the next session, as Duolingo's jingle after each lesson makes people want the next one."},
+    {"step": "Response", "detail": "Make the action easy, for example by auto-progressing to the next step."},
+    {"step": "Reward", "detail": "Deliver the satisfying feeling the brain has been anticipating; once it becomes predictable, add surprises such as animations, milestone celebrations or bonus XP."}
+  ],
+  "examples": [
+    {"what": "Fear-based streak screen", "where": "Duolingo (the angry owl; not named in the transcript) [inferred]", "visual_note": "Copy grows more urgent, a clock counts down, and an angry owl creates guilt; shows loss aversion in action."},
+    {"what": "Call to action reworded from 'continue' to 'commit to my goal'", "where": "Duolingo", "visual_note": "Same button, reframed as a promise to yourself; reported as a massive win."},
+    {"what": "Streak milestones as collectibles", "where": "Opal", "visual_note": "The streak earns milestones collected over time, giving tangible proof of progress."},
+    {"what": "Mascot as a personality", "where": "Duolingo (Duo the owl)", "visual_note": "A cartoon owl that became a personality; the presenter opened the app to avoid disappointing Duo rather than for the streak number, showing attachment beyond the streak."},
+    {"what": "A little bird growing alongside you", "where": null, "visual_note": "A mascot that grows as the user keeps going, applying the Tamagotchi effect."},
+    {"what": "Tamagotchi virtual pet", "where": "Bandai, 1990s", "visual_note": "A tiny pet you had to feed and care for, which died if ignored; people grieved, the origin of the Tamagotchi effect."},
+    {"what": "Consistency shown as a visible pattern with gaps", "where": null, "visual_note": "Different interfaces, including ones unrelated to self-improvement, show days as blocks; a missing block stands out and filling it feels satisfying."},
+    {"what": "Jingle after each lesson", "where": "Duolingo", "visual_note": "A sound at the end of a lesson that builds craving for the next one."},
+    {"what": "Streak freeze", "where": "Duolingo", "visual_note": "Lets users miss a day without losing everything; up to two can be equipped at a time."},
+    {"what": "Surprise layers on a routine streak", "where": null, "visual_note": "Animations, milestone celebrations and bonus XP added to keep the loop unpredictable."}
+  ],
+  "numbers": [
+    {"value": "859", "context": "Streak designs on Mobbin looked at for the video.", "evidence": "[0:18] after looking at 859 streak designs on Mobbin"},
+    {"value": "$10", "context": "Winning versus losing $10 used to illustrate loss aversion.", "evidence": "[0:31] Let's say you won $10 today"},
+    {"value": "four", "context": "Stages of the habit loop: cue, craving, response, reward.", "evidence": "[4:48] every habit follows the same four stages"},
+    {"value": "up to two", "context": "Streak freezes a Duolingo user can equip at a time.", "evidence": "[6:02] equip up to two streak freezes at a time"},
+    {"value": "0.38%", "context": "Increase in Duolingo daily active learners after allowing up to two equipped streak freezes.", "evidence": "[6:07] active learners increased by 0.38%"},
+    {"value": "over 200,000", "context": "More people coming back to Duolingo every day from that change.", "evidence": "[6:10] That's over 200,000 more people coming back every day"},
+    {"value": "one lesson", "context": "What a user had to complete each day to keep the streak alive in the winning Duolingo variant (versus the full daily goal).", "evidence": "[6:29] keep their streak alive by just completing one lesson on Duolingo"},
+    {"value": "over 40%", "context": "More people maintained their 7-day streak when one lesson kept the streak alive.", "evidence": "[6:35] Over 40% more people maintained their 7-day streak"},
+    {"value": "7-day", "context": "Streak length measured in the one-lesson versus full-daily-goal test.", "evidence": "[6:35] maintained their 7-day streak"}
+  ],
+  "caveats": [
+    "Made by Mobbin's channel; the 859 designs come from its own library, and the end promotes other Mobbin episodes (1,000 onboarding flows, 2,000 dashboard designs, an upcoming paywalls episode).",
+    "Duolingo figures (0.38%, over 200,000, over 40%) are reported by the video without a linked study; the only named source is Professor Wolfram Schultz's dopamine research.",
+    "The 'studies found' about seeing the streak number and the study of habits over months are not named in the transcript.",
+    "The 'continue' to 'commit to my goal' line appears to be a clip of a Duolingo product team member who is not named in the transcript [inferred].",
+    "The fear, guilt and attachment tactics are described, not endorsed; the video questions whether streaks build habits or just make people afraid to stop.",
+    "Parts are the presenter's personal experience with Duolingo (opening the app to avoid disappointing Duo), which is opinion, not data.",
+    "Auto-generated captions with [music] markers; the line 'the original virtual reality pet' and 'Your care determines the pets you get from Bandai' sound like a quoted vintage clip [inferred].",
+    "Published 2026-05-26; Duolingo's features and results may change."
+  ]
+}

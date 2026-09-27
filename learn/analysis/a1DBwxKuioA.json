@@ -1,0 +1,70 @@
+{
+  "summary": "A 51-second promotional video from Mobbin's own channel with no spoken content: the auto-generated transcript contains only [Music] and [Applause] cues and two stray 'n' captions. Everything the source says is in its description, which presents Mobbin as a searchable library of real-world mobile and web app screenshots for design inspiration, with counts of screens, flows and apps. It teaches no design rules, decisions or process. For someone building a design system, its only use is as a pointer to a reference library of real app screens that can be browsed for patterns [inferred].",
+  "key_ideas": [
+    "The video has no narration; the transcript holds only [Music] and [Applause] cues and two stray 'n' captions.",
+    "Mobbin describes itself as a UI and UX reference library of fully searchable mobile and web screenshots.",
+    "The description counts the library's contents as screens, flows and apps.",
+    "Its stated purpose is real-world design inspiration."
+  ],
+  "entities": [
+    {
+      "name": "Mobbin",
+      "type": "product",
+      "description": "The UI and UX reference library the video promotes; it publishes this video on its own channel."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Design resources",
+      "summary": "Promotes Mobbin as a searchable library of real mobile and web app screenshots, flows and apps for design inspiration; the counts come from the description, not the video."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Mobbin's own description says the library features over 600,000 screens, 322,000 flows and 1,000 apps (self-reported).",
+      "evidence": "Description: Featuring over 600,000 screens, 322,000 flows, and 1,000 apps"
+    },
+    {
+      "claim": "Mobbin's own description calls it the world's largest UI and UX reference library of fully searchable mobile and web screenshots (a self-promotional claim, not independently supported).",
+      "evidence": "Description: the world's largest UI & UX reference library of fully searchable mobile & web screenshots"
+    }
+  ],
+  "quotes": [
+    "Discover real-world design inspiration."
+  ],
+  "tags": [
+    "mobbin",
+    "design-inspiration",
+    "ui-reference-library",
+    "screenshots",
+    "promo"
+  ],
+  "authority": "reference",
+  "rules": [],
+  "decisions": [],
+  "process": [],
+  "examples": [],
+  "numbers": [
+    {
+      "value": "600,000",
+      "context": "Screens in the Mobbin library, as claimed in the description ('over 600,000 screens').",
+      "evidence": "Description: Featuring over 600,000 screens"
+    },
+    {
+      "value": "322,000",
+      "context": "Flows in the Mobbin library, as claimed in the description.",
+      "evidence": "Description: 322,000 flows"
+    },
+    {
+      "value": "1,000",
+      "context": "Apps in the Mobbin library, as claimed in the description.",
+      "evidence": "Description: and 1,000 apps"
+    }
+  ],
+  "caveats": [
+    "The whole source is a product promotion published by Mobbin itself; nothing in it is independent evidence.",
+    "There is no spoken content: the transcript is only [Music], [Applause] and two stray 'n' captions, so whatever the video shows on screen could not be analysed from the text.",
+    "The library counts and the 'world's largest' claim are self-reported marketing figures from the description; the video was published on 2024-07-17 and the figures may have changed since [inferred].",
+    "No media list exists for this source, so no visuals were reviewed."
+  ]
+}

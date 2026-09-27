@@ -2,7 +2,7 @@
 type: entity
 title: Figma
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources: []
 tags: []
 ---
@@ -53,3 +53,4 @@ The creator offers a Figma file with the colors and variables from the video
 - [[sources/t7mpEDXzjCg-make-a-perfect-ux-case-study-in-8-steps|Make A Perfect UX Case Study In 8 Steps]]: Named as an alternative to hand drawing for low-fidelity wireframes.
 - [[sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai|Vibe Coding a Pro UI in SECONDS With AI]]: Where the generated HTML is imported and the small fixes are made.
 - [[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]: Still used by the author to make vector graphics such as the fake logos, exported as SVG.
+- [[sources/YbLF42BaoZs-i-gave-claude-600-000-ui-screens-then-this-happened|I Gave Claude 600,000 UI Screens… Then This Happened]] [2:58](https://www.youtube.com/watch?v=YbLF42BaoZs&t=178s): An agent inside Figma is shown producing some broken UI in iOS map and filter views before research, and a cited result after Mobbin MCP research.

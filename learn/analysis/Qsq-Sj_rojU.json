@@ -1,0 +1,1009 @@
+{
+  "summary": "A Mobbin video that reviews 1,460 onboarding flows across 986 apps and websites to ask what makes onboarding good and whether a product needs one at all. It finds that the average app has 25 onboarding screens and that some of the longest flows belong to some of the most successful apps, so it suggests shortness may never have been the point; getting people to the moment they feel the product's value (the aha moment) is. The strongest flows sell the outcome instead of listing features, ask a few personalization questions and then show what the answers unlocked, add delight to long flows, and teach in context with checklists, tooltips and empty-state nudges instead of pop-ups. It also covers paywalls inside onboarding, custom screens before the notification permission prompt, and splitting a sign-up form across screens, citing A/B results for several of these. For a design system this gives concrete onboarding patterns, empty-state and permission-primer components, and a reminder that some products (inspiration libraries, AI chat) may be best with little or no onboarding.",
+  "key_ideas": [
+    "Short onboarding is not the point; the average app in the sample has 25 onboarding screens and some of the longest flows belong to successful apps.",
+    "Good onboarding follows sign up, set up, then the aha moment where the user feels the product's value.",
+    "Welcome screens work best when they sell the outcome by showing the product in action, not by listing features.",
+    "Letting people try the core experience before signing up goes a step further in selling the outcome, and the video rarely sees it in apps with AI features.",
+    "A human touch, such as a founder's note or a CEO video at the aha moment, makes the product feel made with intention.",
+    "The best flows add personalization and make it worth the user's time; only 7% of AI apps personalize during onboarding, and AI tools seem to let the product learn from use instead.",
+    "Allowing more than one answer to a goal question (multi-intent) and a conversational quiz tone both raised conversion in cited tests.",
+    "After a quiz, show what the answers unlocked: a personal plan, a date the goal will be reached, or a home page filled with relevant content.",
+    "22% of the sample shows a paywall during onboarding; some apps pair it with personalization, a one-time offer, a page of social proof, tailored plans or a playful design.",
+    "Long flows can feel short when there is always something going on, such as animations on loading and verification steps.",
+    "Teach in context instead of front-loading education: reassuring copy, tooltips, live password requirement checks and empty-state nudges.",
+    "A persistent onboarding checklist outperformed pop-ups and banners and stays available after the user dismisses the flow.",
+    "A custom screen before the system notification prompt, optionally previewing the notification, is common and said to raise accept rates.",
+    "Splitting a sign-up form across several screens raised conversions in one case, so added friction in one place can remove it elsewhere.",
+    "Culture matters: audiences differ in how much information density feels efficient, so successful flows cannot simply be copied.",
+    "The flows that stuck brought users to value quickly: sometimes by adding delight to a long flow, sometimes by letting users personalize, sometimes by getting out of the way.",
+    "Some products may not need onboarding at all: when the product speaks for itself (an inspiration library, an AI chat whose first prompt is the value), letting users in fast may be best."
+  ],
+  "entities": [
+    {
+      "name": "Mobbin",
+      "type": "product",
+      "description": "Library of app and website screens; the channel, the data source for the 1,460 flows, and an example of a product that may not need onboarding."
+    },
+    {
+      "name": "Airbnb",
+      "type": "company",
+      "description": "Aha moment is the first booking; shows a CEO video after you list your first space."
+    },
+    {
+      "name": "Netflix",
+      "type": "company",
+      "description": "Aha moment is finding and watching a show."
+    },
+    {
+      "name": "Timehop",
+      "type": "product",
+      "description": "Welcome screen simply shows the product in action on mobile and desktop."
+    },
+    {
+      "name": "Runkeeper",
+      "type": "product",
+      "description": "Uses animation on open so you understand the app without reading."
+    },
+    {
+      "name": "Elma",
+      "type": "product",
+      "description": "App with AI features (name as auto-captioned) that lets you try the core experience before signing up."
+    },
+    {
+      "name": "Superhuman",
+      "type": "product",
+      "description": "Turns its sign-up screen into a pitch with logos on the side as social proof."
+    },
+    {
+      "name": "One Year",
+      "type": "product",
+      "description": "Includes a founder's note with a handwritten signature and a hand-drawn flower in onboarding."
+    },
+    {
+      "name": "Tinder",
+      "type": "product",
+      "description": "Acknowledges when your birthday is near."
+    },
+    {
+      "name": "Basecamp",
+      "type": "product",
+      "description": "Shows a personal note from the CEO after account creation."
+    },
+    {
+      "name": "Tide",
+      "type": "product",
+      "description": "Short onboarding: two questions, customized recommendations, then a sign-up prompt."
+    },
+    {
+      "name": "Headspace",
+      "type": "product",
+      "description": "Let users pick more than one goal, which the video says raised free trial conversion 10%."
+    },
+    {
+      "name": "Focus Flight",
+      "type": "product",
+      "description": "Lets you choose a map style during onboarding and presents its one-time offer as a flight ticket that prints with vibration."
+    },
+    {
+      "name": "Dollar Shave Club",
+      "type": "company",
+      "description": "Made its quiz copy more conversational, which the video says raised subscriptions 5%."
+    },
+    {
+      "name": "Endless",
+      "type": "product",
+      "description": "After six questions, shows what your answers unlocked."
+    },
+    {
+      "name": "Byte Pal / Bipul",
+      "type": "product",
+      "description": "Auto-captioned names for a flow with a raccoon virtual pet, 61 screens, a personal plan with a goal date, then a paywall; possibly one app [inferred]."
+    },
+    {
+      "name": "Brilliant",
+      "type": "product",
+      "description": "Shows courses personalized to your answers and a custom screen before the notification prompt."
+    },
+    {
+      "name": "Speak",
+      "type": "product",
+      "description": "Language app that states what you will achieve in 2 months and has you speaking during onboarding."
+    },
+    {
+      "name": "Timely",
+      "type": "product",
+      "description": "Shows a full page of social proof before its paywall (name as auto-captioned)."
+    },
+    {
+      "name": "Grammarly",
+      "type": "product",
+      "description": "Recommends pricing plans tailored to quiz answers; almost 20% more plan upgrades per the video."
+    },
+    {
+      "name": "Duolingo",
+      "type": "product",
+      "description": "One of the longest flows: 60 screens, including a first lesson, before account creation."
+    },
+    {
+      "name": "Bump",
+      "type": "product",
+      "description": "Creative onboarding with animated loading and verification states."
+    },
+    {
+      "name": "Cake Equity",
+      "type": "product",
+      "description": "Explains equity and vesting with reassuring copy and tooltips instead of front-loaded education."
+    },
+    {
+      "name": "Mural",
+      "type": "product",
+      "description": "Replaced pop-ups and banners with a six-step checklist, raising one-week retention 10% relative."
+    },
+    {
+      "name": "Center",
+      "type": "product",
+      "description": "Pre-permission screen that also previews the notification you would receive (name as auto-captioned)."
+    },
+    {
+      "name": "House",
+      "type": "product",
+      "description": "Split its sign-up form across multiple screens and saw 15% more conversions (name as auto-captioned)."
+    },
+    {
+      "name": "Aha moment",
+      "type": "concept",
+      "description": "The point where a user actually feels the product's value; the target of onboarding."
+    },
+    {
+      "name": "Multi-intent query",
+      "type": "concept",
+      "description": "An onboarding question that lets users pick more than one goal."
+    },
+    {
+      "name": "Onboarding checklist",
+      "type": "concept",
+      "description": "A persistent list of setup steps used instead of pop-ups and banners."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Onboarding",
+      "summary": "The core subject: onboarding length, the path to the aha moment, selling outcomes, personalization, delight in long flows, contextual teaching and whether onboarding is needed at all."
+    },
+    {
+      "name": "Paywalls and pricing pages",
+      "summary": "22% of the sample shows a paywall during onboarding; examples pair it with quizzes, one-time offers, social proof, tailored plans and a playful ticket design."
+    },
+    {
+      "name": "A/B testing and conversion",
+      "summary": "Cites results: multi-goal selection +10% trial conversion, conversational quiz copy +5% subscriptions, tailored plans almost +20% upgrades, a checklist +10% relative retention, a split sign-up form +15% conversions."
+    },
+    {
+      "name": "Feedback, empty and loading states",
+      "summary": "Replace blank empty states with a small nudge, and give loading and verification states smooth animation so long flows stay engaging."
+    },
+    {
+      "name": "Content and microcopy",
+      "summary": "Copy tweaks matter: sell the outcome, conversational quiz wording, reassuring copy with tooltips, and a sign-up screen rewritten as a pitch."
+    },
+    {
+      "name": "Forms and inputs",
+      "summary": "A password field that checks requirements live removes a reason to get stuck; splitting sign-up across screens raised conversions in one case."
+    },
+    {
+      "name": "Mobile app patterns",
+      "summary": "Web onboarding is 21% shorter than iOS, which the video says might be because mobile has more permission and paywall screens baked in; many apps prime the notification prompt with a custom screen."
+    },
+    {
+      "name": "Micro-interactions",
+      "summary": "Small moments like a vibration as a ticket-shaped offer prints, or animated verification, add delight to onboarding."
+    },
+    {
+      "name": "Retention and gamification",
+      "summary": "A persistent checklist lifted one-week retention; a nameable virtual pet raccoon made a 61-screen flow fun."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "The average app studied has 25 onboarding screens.",
+      "evidence": "[0:10] the average app has 25 onboarding screens"
+    },
+    {
+      "claim": "The categories with the longest onboarding are finance, health and fitness, and education; seven of the 10 longest are finance apps.",
+      "evidence": "[0:16] The longest categories are finance"
+    },
+    {
+      "claim": "Some apps with the longest onboarding flows are among the most successful, while three of the shortest flows belong to AI products.",
+      "evidence": "[0:27] longest onboarding flows are also one of the most successful ones"
+    },
+    {
+      "claim": "The best onboarding screens share one trait: they sell the outcome rather than list features.",
+      "evidence": "[1:10] They're not listing features, they're selling the outcome"
+    },
+    {
+      "claim": "Apps with AI features rarely let people try them before signing up.",
+      "evidence": "[1:35] I rarely see apps with AI features who lets you try it out"
+    },
+    {
+      "claim": "23% of apps personalize during onboarding, but only 7% of AI apps do; it seems AI tools let the product learn from users instead.",
+      "evidence": "[2:37] 23% of apps personalize during onboarding, with AI apps at only 7%"
+    },
+    {
+      "claim": "Letting Headspace users pick more than one goal led to a 10% increase in free trial conversion.",
+      "evidence": "[3:17] it led to 10% increase in free trial conversion"
+    },
+    {
+      "claim": "Making Dollar Shave Club's quiz copy more conversational led to a 5% increase in subscriptions.",
+      "evidence": "[3:40] This alone led to 5% increase in subscriptions"
+    },
+    {
+      "claim": "22% of the 900-plus apps and websites show a paywall during onboarding.",
+      "evidence": "[4:49] 22% [music] of them throws a paywall during onboarding"
+    },
+    {
+      "claim": "Grammarly's pricing plans tailored to quiz answers led to almost a 20% increase in plan upgrades.",
+      "evidence": "[5:27] almost a 20% increase in plan upgrades"
+    },
+    {
+      "claim": "Duolingo takes users through 60 screens before sign-up, yet it does not feel long.",
+      "evidence": "[6:00] you've already gone through 60 screens"
+    },
+    {
+      "claim": "Replacing pop-ups and banners with a six-step checklist drove a 10% relative increase in Mural's one-week retention.",
+      "evidence": "[7:35] Mural replaced pop-ups and banners with a clear six-step checklist"
+    },
+    {
+      "claim": "A custom screen before the notification pop-up reportedly improves accept rates significantly.",
+      "evidence": "[7:57] custom screen before the notification pop-up"
+    },
+    {
+      "claim": "Web onboarding is 21% shorter than iOS, possibly because mobile has more permission and paywall screens.",
+      "evidence": "[8:16] web onboarding is 21% shorter than iOS"
+    },
+    {
+      "claim": "Splitting a sign-up form into multiple screens gave House a 15% increase in conversions.",
+      "evidence": "[8:25] House split their sign-up form into multiple screens"
+    },
+    {
+      "claim": "Users in Eastern markets tend to be more comfortable with information-heavy interfaces.",
+      "evidence": "[8:41] Users in Eastern markets tend to be more comfortable"
+    },
+    {
+      "claim": "The flows the author remembered brought users to value quickly.",
+      "evidence": "[9:02] they brought users to value quickly"
+    }
+  ],
+  "quotes": [
+    "They're not listing features, they're selling the outcome.",
+    "Maybe the friction we add in one place removes friction in another.",
+    "The ones that stuck with me didn't feel like onboarding."
+  ],
+  "tags": [
+    "onboarding",
+    "aha-moment",
+    "personalization",
+    "paywall",
+    "conversion",
+    "ab-testing",
+    "empty-states",
+    "checklist",
+    "permission-prompt",
+    "sign-up",
+    "microcopy",
+    "delight",
+    "mobile"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "Make welcome screens show the product in action and the outcome it delivers instead of a list of features.",
+      "why": "The best onboarding screens studied had this in common; Timehop's welcome screen shows the product in action, and Runkeeper's animation conveys what the app does without reading a word.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[1:10] They're not listing features, they're selling the outcome"
+    },
+    {
+      "rule": "Consider letting people try the core experience before asking them to create an account.",
+      "why": "It goes a step further in selling the outcome; Elma lets you try the core experience before sign-up, which the video rarely sees in apps with AI features, and Duolingo has users complete a first lesson before creating an account.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[1:32] It lets you try the core experience before you sign up"
+    },
+    {
+      "rule": "Let users pick more than one goal in onboarding goal questions instead of forcing a single choice.",
+      "why": "Headspace found users arrive with more than one pain point; allowing several goals led to a 10% increase in free trial conversion.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[3:04] Headspace found out that their users come to their app with more than one pain point"
+    },
+    {
+      "rule": "Write onboarding quiz questions in a conversational tone.",
+      "why": "Dollar Shave Club's conversational quiz copy alone led to a 5% increase in subscriptions.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[3:37] Dollar Shave Club tweaked the quiz copy to be more conversational"
+    },
+    {
+      "rule": "After a personalization quiz, show what the answers unlocked: a personal plan, the date the goal will be reached, or a home page already filled with matching content.",
+      "why": "Before the product is used it already feels like it will work (Endless, Byte Pal, Brilliant, Speak).",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[3:48] They actually show you what those answers unlocked"
+    },
+    {
+      "rule": "When onboarding asks personalization questions, make them worth the user's time by visibly using the answers, for example customizing recommendations right away.",
+      "why": "The best flows add personalization and make it worth your time; Tide asks two questions, customizes recommendations as you watch, then prompts sign-up.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[2:33] add personalization into the flow, and they make it worth your time"
+    },
+    {
+      "rule": "When onboarding includes a paywall, consider recommending pricing plans tailored to the user's quiz answers.",
+      "why": "Grammarly's tailored plan recommendations led to almost a 20% increase in plan upgrades.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[5:19] As for Grammarly, based on your quiz answers, they recommend tailored pricing plans"
+    },
+    {
+      "rule": "In a long onboarding flow, give often-overlooked steps such as loading and verification states smooth animation so something is always happening.",
+      "why": "Bump and Bipul keep long flows fun so they do not feel like a boring onboarding; the loved flows make long onboarding feel short.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[6:14] Smooth animations on things like verification that rarely get special treatment"
+    },
+    {
+      "rule": "Don't front-load all education at the start of onboarding; explain dry concepts step by step with reassuring copy and tooltips that state the impact of each step.",
+      "why": "Cake Equity makes equity and vesting approachable so users feel someone is guiding them along the way.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[6:46] some apps don't front-load all the education to you"
+    },
+    {
+      "rule": "Make password fields check off each requirement in real time as the user types.",
+      "why": "It removes a reason to get stuck and makes the experience feel effortless.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[7:08] a password field that checks off requirements in real time as you type"
+    },
+    {
+      "rule": "Replace a blank first-use empty state with a small nudge in the right place, instead of guided tours or pop-ups.",
+      "why": "To-do apps do this well: no guided tours, no pop-ups, just a nudge in the right place.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[7:22] Instead of giving users a blank empty state"
+    },
+    {
+      "rule": "Use a clear, persistent onboarding checklist instead of pop-ups and banners to guide new users through setup.",
+      "why": "Mural's switch to a six-step checklist drove a 10% relative increase in one-week retention, and checklists stay around after the user dismisses the initial flow.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [
+        "six-step"
+      ],
+      "evidence": "[7:35] Mural replaced pop-ups and banners with a clear six-step checklist"
+    },
+    {
+      "rule": "Show a custom screen explaining the benefit before triggering the system notification permission prompt, optionally previewing the notification the user would receive.",
+      "why": "Many apps do this and it reportedly improves accept rates significantly (Brilliant, Center).",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[7:55] a lot of apps show a custom screen before the notification pop-up"
+    },
+    {
+      "rule": "Consider splitting a sign-up form into multiple screens.",
+      "why": "House saw a 15% increase in conversions after doing so; added friction in one place can remove friction in another.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[8:25] House split their sign-up form into multiple screens"
+    },
+    {
+      "rule": "Don't copy another product's onboarding without checking it fits your audience's culture and density expectations.",
+      "why": "Users in Eastern markets tend to be more comfortable with information-heavy interfaces, so what feels like clutter to one audience feels efficient to another.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[8:49] which is partly why we can't just copy what worked"
+    },
+    {
+      "rule": "If the product delivers value on first use (an inspiration library, an AI chat's first prompt), let users in fast with little or no onboarding.",
+      "why": "Mobbin and AI chat apps speak for themselves (the first prompt is where users find value), so the video suggests the best experience may be to let users in fast without an onboarding that gets in their way.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[9:32] maybe the best experience is just to let users get in fast"
+    },
+    {
+      "rule": "Design onboarding to bring users to value (the aha moment) quickly, and judge a flow by that rather than by its screen count.",
+      "why": "The average app has 25 onboarding screens and some of the longest flows belong to successful apps; what the flows that stuck had in common was bringing users to value quickly.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[9:02] they brought users to value quickly"
+    },
+    {
+      "rule": "Consider a human touch in onboarding, such as a founder's note, a personal CEO message, or a message at the aha moment.",
+      "why": "Some apps skip the pitch and just feel human (One Year's handwritten founder note, Tinder's birthday acknowledgement, Airbnb's CEO video after a first listing); Basecamp's CEO note makes the product feel made with intention.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[1:49] Some apps skip the pitch entirely and just feel human"
+    },
+    {
+      "rule": "Consider rewriting the sign-up screen as a pitch, with social proof such as logos beside the form.",
+      "why": "Sometimes selling the outcome is just a copy tweak: Superhuman turns a boring sign-up screen into a pitch with logos on the side.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[1:43] sometimes it could just be a copy tweak like Superhuman"
+    },
+    {
+      "rule": "Consider letting users customize a visible part of the app during onboarding, such as a map style.",
+      "why": "Focus Flight's map style choice makes the app feel like yours before you start using it.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[3:26] Focus Flight lets you choose your map style during onboarding"
+    },
+    {
+      "rule": "Add small, unflashy guidance through onboarding steps, such as a progress indicator or helpful microcopy.",
+      "why": "None of this is flashy, but it removes reasons to get stuck and makes the experience feel effortless.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[7:13] Maybe it's a progress indicator, maybe it's microcopy"
+    },
+    {
+      "rule": "When onboarding ends in a paywall, consider showing value or social proof first, such as a ready personal plan with a goal date or a page of social proof.",
+      "why": "Timely shows a full page of social proof before its paywall, and the raccoon app emphasizes the value (your plan is ready, you will reach your goal by a date) before its paywall.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[5:04] Timely does the same with a full page of social proof before showing the paywall"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "How should the first onboarding screens sell the product?",
+      "options": [
+        {
+          "name": "Product in action",
+          "effect": "The welcome screen shows the product working instead of a feature list.",
+          "when": "As in Timehop, on both mobile and desktop."
+        },
+        {
+          "name": "Animation on open",
+          "effect": "People get a feel for what the app does without reading a word.",
+          "when": "As in Runkeeper."
+        },
+        {
+          "name": "Try the core experience first",
+          "effect": "People use the core experience before signing up.",
+          "when": "As in Elma; rare for apps with AI features."
+        },
+        {
+          "name": "Sign-up screen as a pitch",
+          "effect": "A copy tweak turns sign-up into a pitch, with logos as social proof.",
+          "when": "As in Superhuman."
+        },
+        {
+          "name": "A human touch",
+          "effect": "Skip the pitch and feel human, for example a founder's note with a handwritten signature.",
+          "when": "As in One Year and Basecamp."
+        }
+      ],
+      "recommendation": "Sell the outcome, not a list of features: the best onboarding screens studied had that in common.",
+      "maps_to": null,
+      "evidence": "[1:10] They're not listing features, they're selling the outcome"
+    },
+    {
+      "question": "Does this product need an onboarding flow, and how long should it be?",
+      "options": [
+        {
+          "name": "No onboarding, get in fast",
+          "effect": "Users land straight in the product and find value on first use.",
+          "when": "The product speaks for itself, like Mobbin or AI chat apps where the first prompt is the value."
+        },
+        {
+          "name": "Short and sweet",
+          "effect": "A couple of questions, visible customization, then a sign-up prompt.",
+          "when": "As in Tide: two questions, recommendations customize, then a sign-up prompt."
+        },
+        {
+          "name": "Long but delightful",
+          "effect": "Dozens of screens with animation, personalization and a first win that do not feel long.",
+          "when": "As in Duolingo (60 screens before sign-up, including a first lesson) or Bipul (61 screens with animation and a personal plan), which do not feel long."
+        }
+      ],
+      "recommendation": "There is no single right length; the flows that stuck brought users to value quickly, whether by adding delight to a long flow, letting users personalize, or getting out of the way. Maybe it all boils down to the product.",
+      "maps_to": null,
+      "evidence": "[8:53] I don't think there's one right or wrong way to design an onboarding flow"
+    },
+    {
+      "question": "When should people be asked to create an account?",
+      "options": [
+        {
+          "name": "First, before anything else",
+          "effect": "Sign up, set up the account, then reach the aha moment.",
+          "when": "The pattern the video says the best onboarding seems to follow."
+        },
+        {
+          "name": "After trying the core experience",
+          "effect": "Users feel the value (a first lesson, an AI result) before committing.",
+          "when": "The core experience can run without an account, as in Elma and Duolingo."
+        },
+        {
+          "name": "After personalization",
+          "effect": "Users answer questions, watch recommendations adapt, then get prompted to sign up.",
+          "when": "As in Tide: two questions, recommendations customize, then a sign-up prompt."
+        }
+      ],
+      "recommendation": null,
+      "maps_to": null,
+      "evidence": "[0:46] You sign up, set up your account, you hit the aha moment"
+    },
+    {
+      "question": "How should first-time users learn the product?",
+      "options": [
+        {
+          "name": "Pop-ups, banners and guided tours",
+          "effect": "Interruptive overlays that disappear once dismissed.",
+          "when": "The approach Mural replaced; the source does not recommend it."
+        },
+        {
+          "name": "Persistent checklist",
+          "effect": "A clear list of setup steps that stays around after the initial flow is dismissed.",
+          "when": "Setup has several steps; Mural's six-step checklist raised one-week retention 10% relative."
+        },
+        {
+          "name": "Nudges in the empty state",
+          "effect": "A blank screen instead shows a small hint in the right place.",
+          "when": "First-use screens with nothing in them yet, as in to-do apps."
+        },
+        {
+          "name": "Reassuring copy and tooltips per step",
+          "effect": "Dry concepts are explained where they come up, so users feel guided.",
+          "when": "The domain is complex or unfamiliar, as in Cake Equity's equity and vesting."
+        }
+      ],
+      "recommendation": "Prefer checklists and contextual nudges over pop-ups and tours: the source cites a retention lift for a checklist and says such small aids make the experience feel effortless.",
+      "maps_to": "Q-pattern-04",
+      "evidence": "[7:35] Mural replaced pop-ups and banners with a clear six-step checklist"
+    },
+    {
+      "question": "Should onboarding ask personalization questions, and what should it do with the answers?",
+      "options": [
+        {
+          "name": "Ask nothing, let the product learn",
+          "effect": "No up-front questions; the product adapts from use.",
+          "when": "Typical of AI tools (only 7% of AI apps personalize during onboarding)."
+        },
+        {
+          "name": "Quiz, then show what it unlocked",
+          "effect": "A personal plan, a goal date or a pre-filled home page makes the product feel like it will work before use.",
+          "when": "Answers change what the user sees, as in Endless, Byte Pal, Brilliant and Speak."
+        },
+        {
+          "name": "Let users customize the look",
+          "effect": "The app feels like theirs before they start, such as picking a map style.",
+          "when": "As in Focus Flight's map style picker."
+        }
+      ],
+      "recommendation": "Make personalization worth the user's time, and show what the answers unlocked rather than just collecting them.",
+      "maps_to": null,
+      "evidence": "[3:48] They actually show you what those answers unlocked"
+    },
+    {
+      "question": "Should onboarding include a paywall, and how should it be presented?",
+      "options": [
+        {
+          "name": "No paywall in onboarding",
+          "effect": "Users reach the product without a purchase step.",
+          "when": "22% of the sample shows a paywall during onboarding, so this is the more common choice [inferred]."
+        },
+        {
+          "name": "Paywall after a quiz with a one-time offer",
+          "effect": "The offer is meant to drive urgency right after personalization.",
+          "when": "Used by an app auto-captioned as 'The site'."
+        },
+        {
+          "name": "Social proof page before the paywall",
+          "effect": "A full page of social proof comes before the paywall.",
+          "when": "Used by Timely."
+        },
+        {
+          "name": "Tailored plan recommendation",
+          "effect": "Plans are recommended from quiz answers.",
+          "when": "Grammarly; almost a 20% increase in plan upgrades."
+        },
+        {
+          "name": "Playful paywall",
+          "effect": "The offer is shaped like a flight ticket and the phone vibrates as it prints, so the paywall feels delightful.",
+          "when": "Focus Flight."
+        }
+      ],
+      "recommendation": null,
+      "maps_to": null,
+      "evidence": "[4:51] Some apps also pair personalization with a paywall"
+    },
+    {
+      "question": "How should the app ask for notification permission?",
+      "options": [
+        {
+          "name": "System prompt directly",
+          "effect": "The operating system pop-up appears with no context.",
+          "when": "Not discussed as a recommended choice."
+        },
+        {
+          "name": "Custom screen first",
+          "effect": "A screen explains the benefit (for example, reminders to build a habit) before the system prompt.",
+          "when": "Brilliant does this; said to improve accept rates significantly."
+        },
+        {
+          "name": "Custom screen with a notification preview",
+          "effect": "The primer also teases the notification the user will receive.",
+          "when": "Center goes one step further this way."
+        }
+      ],
+      "recommendation": "Show a custom screen before the notification pop-up, because it reportedly improves accept rates significantly.",
+      "maps_to": null,
+      "evidence": "[7:55] a lot of apps show a custom screen before the notification pop-up"
+    },
+    {
+      "question": "Should the sign-up form be one screen or split across several?",
+      "options": [
+        {
+          "name": "Single screen",
+          "effect": "All fields at once.",
+          "when": "Not discussed as a recommended choice."
+        },
+        {
+          "name": "Multiple screens",
+          "effect": "Fewer fields per step; more steps overall.",
+          "when": "House did this and saw a 15% increase in conversions."
+        }
+      ],
+      "recommendation": "The source was surprised that splitting helped and suggests added friction in one place can remove friction in another; it does not generalize further.",
+      "maps_to": null,
+      "evidence": "[8:25] House split their sign-up form into multiple screens"
+    }
+  ],
+  "process": [
+    {
+      "step": "Name the aha moment",
+      "detail": "Identify where users actually feel the product's value (Airbnb: first booking; Netflix: watching a show; Mobbin: saving a screen to a collection) and design onboarding to get there."
+    },
+    {
+      "step": "Decide whether onboarding is needed",
+      "detail": "If the product delivers value immediately, like an inspiration library or an AI chat's first prompt, let users in fast; otherwise choose how long the flow must be."
+    },
+    {
+      "step": "Sell the outcome up front",
+      "detail": "Open with the product in action, animation, a try-before-sign-up, or a sign-up screen rewritten as a pitch with social proof."
+    },
+    {
+      "step": "Personalize and show the result",
+      "detail": "Make questions worth the user's time, allow more than one goal, write them conversationally, then show what the answers unlocked."
+    },
+    {
+      "step": "Keep long flows engaging",
+      "detail": "Add animation and delight to steps like loading and verification so a long flow does not feel long."
+    },
+    {
+      "step": "Teach in context",
+      "detail": "Use reassuring copy, tooltips, live form validation, empty-state nudges and a persistent checklist instead of front-loaded education or pop-ups."
+    },
+    {
+      "step": "Prime permissions",
+      "detail": "Show a custom screen that explains, and optionally previews, notifications before the system prompt."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Welcome screen showing the product in action on mobile and desktop",
+      "where": "Timehop",
+      "visual_note": "No feature list; the product itself fills the welcome screen, selling the outcome."
+    },
+    {
+      "what": "Animated opening that explains the app without text",
+      "where": "Runkeeper",
+      "visual_note": "Animation plays the moment the app opens so the purpose is clear without reading a word."
+    },
+    {
+      "what": "Sign-up screen turned into a pitch",
+      "where": "Superhuman",
+      "visual_note": "The sign-up form sits beside customer logos used as social proof."
+    },
+    {
+      "what": "Founder's note inside onboarding",
+      "where": "One Year",
+      "visual_note": "A note with a handwritten signature and a hand-drawn flower adds a human touch."
+    },
+    {
+      "what": "CEO video at the aha moment",
+      "where": "Airbnb",
+      "visual_note": "After listing a first space, the host sees a video from the CEO; a founder's touch outside the onboarding flow."
+    },
+    {
+      "what": "Personal CEO note after account creation",
+      "where": "Basecamp",
+      "visual_note": "Makes the product feel made with intention."
+    },
+    {
+      "what": "Two-question onboarding with live customization",
+      "where": "Tide",
+      "visual_note": "Answer two questions, watch recommendations customize, then get prompted to sign up."
+    },
+    {
+      "what": "Multi-select goal question",
+      "where": "Headspace",
+      "visual_note": "Users can choose more than one goal instead of a single one."
+    },
+    {
+      "what": "Map style picker during onboarding",
+      "where": "Focus Flight",
+      "visual_note": "Choosing a map style makes the app feel like yours before first use."
+    },
+    {
+      "what": "Results screen after a six-question quiz",
+      "where": "Endless",
+      "visual_note": "Shows what the answers unlocked before the product is used."
+    },
+    {
+      "what": "Outcome promise with a simple graph",
+      "where": "Speak",
+      "visual_note": "One screen says you will communicate while traveling in France in 2 months, with a graph showing speaking beats reading; earlier steps had the user speaking."
+    },
+    {
+      "what": "Personalized home page right after onboarding",
+      "where": "Brilliant",
+      "visual_note": "Home is already populated with courses matching the user's responses."
+    },
+    {
+      "what": "Ticket-shaped one-time offer",
+      "where": "Focus Flight",
+      "visual_note": "The paywall offer looks like a flight ticket and the phone vibrates as it prints, making the paywall feel delightful."
+    },
+    {
+      "what": "60 screens before sign-up",
+      "where": "Duolingo",
+      "visual_note": "Get started, choose a language, answer questions about yourself, complete a first lesson, then create an account; it does not feel long."
+    },
+    {
+      "what": "Animated loading and verification states",
+      "where": "Bump",
+      "visual_note": "Something is always going on; even verification gets smooth animation."
+    },
+    {
+      "what": "Virtual pet raccoon onboarding",
+      "where": "Bipul (auto-captioned)",
+      "visual_note": "61 screens with lovable raccoon animations, naming your pet, a personal plan with a weight-loss date, then a paywall."
+    },
+    {
+      "what": "Tooltips and reassuring copy for dry concepts",
+      "where": "Cake Equity",
+      "visual_note": "Equity and vesting steps each explain their impact so users feel guided."
+    },
+    {
+      "what": "Password field with live requirement checks",
+      "where": null,
+      "visual_note": "Requirements tick off as the user types, removing a reason to get stuck."
+    },
+    {
+      "what": "Empty state with a nudge instead of a tour",
+      "where": "To-do apps",
+      "visual_note": "No guided tours or pop-ups; a small hint sits in the right place on the empty screen."
+    },
+    {
+      "what": "Six-step onboarding checklist",
+      "where": "Mural",
+      "visual_note": "Replaced pop-ups and banners; stays available after the initial flow is dismissed."
+    },
+    {
+      "what": "Notification pre-permission screens",
+      "where": "Brilliant, Center",
+      "visual_note": "Brilliant explains it will remind you to learn so it becomes a habit; Center also previews the notification you would receive."
+    },
+    {
+      "what": "Try the core experience before sign-up",
+      "where": "Elma (auto-captioned)",
+      "visual_note": "The core experience can be tried before creating an account, which the video rarely sees in apps with AI features."
+    },
+    {
+      "what": "Birthday acknowledgement",
+      "where": "Tinder",
+      "visual_note": "The app acknowledges when your birthday is around the corner, a human touch."
+    },
+    {
+      "what": "Full page of social proof before the paywall",
+      "where": "Timely (auto-captioned)",
+      "visual_note": "A whole screen of social proof comes right before the paywall."
+    },
+    {
+      "what": "Pricing plans tailored to quiz answers",
+      "where": "Grammarly",
+      "visual_note": "Plans are recommended from the quiz answers; almost a 20% increase in plan upgrades per the video."
+    },
+    {
+      "what": "Sign-up form split across several screens",
+      "where": "House (auto-captioned)",
+      "visual_note": "Fewer fields per screen; a 15% increase in conversions per the video."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "1,460",
+      "context": "Onboarding flows studied",
+      "evidence": "Title: I Studied 1,460 Onboarding Flows"
+    },
+    {
+      "value": "986",
+      "context": "Apps and websites the flows came from",
+      "evidence": "[5:41] Out of 986 apps"
+    },
+    {
+      "value": "25",
+      "context": "Average number of onboarding screens per app",
+      "evidence": "[0:10] the average app has 25 onboarding screens"
+    },
+    {
+      "value": "Seven out of 10",
+      "context": "Share of the longest-onboarding apps that are finance apps",
+      "evidence": "[0:20] Seven out of 10 of these longest apps are actually finance apps"
+    },
+    {
+      "value": "23%",
+      "context": "Apps that personalize during onboarding",
+      "evidence": "[2:37] 23% of apps personalize during onboarding"
+    },
+    {
+      "value": "7%",
+      "context": "AI apps that personalize during onboarding",
+      "evidence": "[2:40] with AI apps at only 7%"
+    },
+    {
+      "value": "10%",
+      "context": "Increase in Headspace free trial conversion from allowing more than one goal",
+      "evidence": "[3:17] 10% increase in free trial conversion"
+    },
+    {
+      "value": "5%",
+      "context": "Increase in Dollar Shave Club subscriptions from conversational quiz copy",
+      "evidence": "[3:43] 5% increase in subscriptions"
+    },
+    {
+      "value": "22%",
+      "context": "Share of the 900-plus apps and websites that show a paywall during onboarding",
+      "evidence": "[4:49] 22% [music] of them throws a paywall during onboarding"
+    },
+    {
+      "value": "almost a 20%",
+      "context": "Increase in Grammarly plan upgrades from tailored pricing plans",
+      "evidence": "[5:27] almost a 20% increase in plan upgrades"
+    },
+    {
+      "value": "60",
+      "context": "Screens a Duolingo user goes through before signing up",
+      "evidence": "[6:00] you've already gone through 60 screens"
+    },
+    {
+      "value": "61",
+      "context": "Screens in Bipul's onboarding",
+      "evidence": "[6:26] Bipul has 61 screens"
+    },
+    {
+      "value": "10% relative",
+      "context": "Increase in Mural one-week retention after replacing pop-ups and banners with a six-step checklist",
+      "evidence": "[7:39] a 10% relative increase in one-week retention"
+    },
+    {
+      "value": "21%",
+      "context": "How much shorter web onboarding is than iOS",
+      "evidence": "[8:16] web onboarding is 21% shorter than iOS"
+    },
+    {
+      "value": "15%",
+      "context": "Increase in House conversions after splitting sign-up into multiple screens",
+      "evidence": "[8:30] they see a 15% increase in conversions"
+    },
+    {
+      "value": "900-plus",
+      "context": "Apps and websites the paywall share (22%) was measured over",
+      "evidence": "[4:47] out of 900-plus apps and websites"
+    },
+    {
+      "value": "three",
+      "context": "Apps among those with the shortest onboarding flows that are AI products",
+      "evidence": "[0:34] three of them are AI products"
+    },
+    {
+      "value": "two",
+      "context": "Questions in Tide's onboarding before it customizes recommendations",
+      "evidence": "[2:56] answer two questions"
+    },
+    {
+      "value": "six",
+      "context": "Questions in Endless's quiz before it shows what the answers unlocked",
+      "evidence": "[3:52] you answer six questions"
+    },
+    {
+      "value": "six-step",
+      "context": "Size of the checklist Mural used in place of pop-ups and banners",
+      "evidence": "[7:37] a clear six-step checklist"
+    },
+    {
+      "value": "2 months",
+      "context": "Time frame on Speak's outcome screen for communicating while traveling in France",
+      "evidence": "[4:32] In 2 months, you'll be able to communicate"
+    }
+  ],
+  "caveats": [
+    "The video is by Mobbin and draws all flows from Mobbin's library; it promotes Mobbin's AI search for onboarding checklists, says onboarding flows are the second most searched on Mobbin, and uses Mobbin as an example of a product that needs no onboarding.",
+    "The description links case studies for Headspace, multi-intent queries, conversational tone and Dollar Shave Club (the link list is cut off); the transcript gives no sample sizes, durations or test conditions for any cited result (Headspace, Dollar Shave Club, Grammarly, Mural, House).",
+    "The link between long onboarding and success is observational: some of the longest flows belong to successful apps, which does not show that length causes success.",
+    "Several claims are hedged in the source: pre-permission screens 'apparently' improve accept rates with no figure, and mobile's extra permission and paywall screens only 'might explain' why web onboarding is 21% shorter.",
+    "The Eastern-markets density claim is stated without a source.",
+    "App names come from auto-captions and some are uncertain: 'Elma', 'Byte Pal' and 'Bipul' (the raccoon app, possibly the same product), 'The site' (an unnamed app pairing a quiz with a one-time offer), 'Timely', 'Center' and 'House'.",
+    "Published 2026-04-16; percentages describe the sample at that time.",
+    "One-time offers 'to drive urgency' are reported neutrally; the source does not discuss whether such tactics pressure users [inferred].",
+    "Sample figures differ: 1,460 flows across 986 apps and websites (title, description), 'over a thousand' flows (intro), and 900-plus apps and websites for the 22% paywall figure; the video does not say how they relate.",
+    "The video says the best onboarding follows sign up, set up, then the aha moment, yet several flows it praises (Duolingo, Tide, Elma) put the value before sign-up; it does not reconcile the two."
+  ]
+}
