@@ -60,7 +60,7 @@ python3 <skill>/scripts/engine.py preview [--open]                              
 `FUNDING.yml` is owned by R4 (not R1).
 
 ## Shared conventions
-- Python 3.10+, standard library only, no network in anything that ships inside `skills/`.
+- Python 3.10+, standard library only, no network in anything that ships inside `skills/`. One exception (owner decision, 2026-09-28): `skills/opendesigner-illustrate/scripts/illustrate.py` `search` and `fetch` may call the illustration sources that allow automation, over HTTPS only.
 - Every value the engine produces traces to `synthesis/levers.json` or a Decision Card; keep `[inferred]` honesty in docs.
 - DTCG 2025.10 is the canonical token format; DESIGN.md is the readable view.
 - Reference intake copies structure and quality, never another brand's identity (hard rule).

@@ -4,9 +4,9 @@ tokens, make variants, and write them into the app with a licence ledger.
 
     python3 illustrate.py sources [--kind 3d] [--no-credit] [--q "empty inbox"] [-v]   sources, filtered, with search links
     python3 illustrate.py directory [--open | --md PATH]      a browsable page (or Markdown) of every source
-    python3 illustrate.py search "empty inbox" --slot empty-state [--source openverse,iconify,commons]   run twice: see below
+    python3 illustrate.py search "empty inbox" --slot empty-state [--source openverse,iconify,commons] [--offline]
     python3 illustrate.py rank --purpose "empty inbox" --slot empty-state [--style flat|line|any]
-    python3 illustrate.py fetch <candidate-id> [...]           run twice: prints the download, then sanitizes and logs it
+    python3 illustrate.py fetch <candidate-id> [...] [--offline]  download, sanitize and log it in the ledger
     python3 illustrate.py add FILE --source undraw --url URL [--title T] [--author A]   a file the person downloaded
     python3 illustrate.py palette [--tokens PATH | --accent HEX]  the palette recoloring will use
     python3 illustrate.py recolor NAME [--variants light,dark,tint,mono,swap,themed] [--map "#6c63ff=accent2"] [--recolor-skin]
@@ -27,11 +27,12 @@ lightness. The dark variant uses the same step in the dark ramp, which holds the
 Skin tones are kept unless --recolor-skin. Every SVG passes an allow-list sanitizer (no scripts, animation,
 foreign content or remote loads, CSS included) before anything else reads it. Standard library only.
 
-No network: scripts that ship inside skills stay offline (SPEC principle 9). `search` and `fetch` run in two steps.
-The first run prints the exact HTTPS requests (as curl lines); the agent fetches them with its own tools into
-opendesigner/illustrations/responses/ or downloads/, and the second run reads the saved files.
+Network: `search` and `fetch` call the sources that allow automation, over HTTPS only, capped at 3 MB a file (owner
+decision 2026-09-28; the one exception to "skills stay offline"). Responses are saved under
+opendesigner/illustrations/responses/ and downloads/ first, then parsed. With --offline, or when the network fails,
+they print the requests as curl lines; the agent fetches them with its own tools and runs the same command again.
 """
-import argparse, datetime, html, json, math, re, sys, urllib.parse
+import argparse, datetime, html, json, math, re, sys, urllib.error, urllib.parse, urllib.request
 import xml.etree.ElementTree as ET
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -631,9 +632,10 @@ def expand_query(purpose, slot, purposes):
     extra = purposes.get("slots", {}).get(slot, {}).get("keywords", []) if slot else []
     return words, extra
 
-# Connectors never touch the network. Scripts that ship inside skills stay offline (SPEC principle 9, REPO-PLAN,
-# SECURITY.md), as in opendesigner-extract: each connector lists the HTTPS requests to make, the agent fetches them
-# with its own tools (curl, WebFetch, a browser) into responses/, and the parser reads the saved files.
+# Each connector lists the HTTPS requests to make and parses the saved responses. `search` and `fetch` make the
+# requests themselves (owner decision 2026-09-28: this skill may use the network, the one exception to SPEC
+# principle 9), saving each response under responses/ or downloads/ first. With --offline, or when the network
+# fails, they print the same requests as curl lines for the agent to fetch with its own tools.
 
 
 def _url(endpoint, params):
@@ -761,6 +763,34 @@ def fetch_line(url, dest):
     if not url.lower().startswith("https://"):
         raise ValueError(f"only https:// URLs are fetched, not {url[:40]!r}")
     return f'curl -sL --max-filesize {MAX_BYTES} -A "{UA}" "{url}" -o "{dest}"'
+
+
+def http_get(url, dest, timeout=30):
+    """Download one HTTPS URL to dest, at most MAX_BYTES. The only place this skill touches the network."""
+    fetch_line(url, dest)  # refuses anything but https://
+    req = urllib.request.Request(url, headers={"User-Agent": UA})
+    with urllib.request.urlopen(req, timeout=timeout) as r:
+        if not r.geturl().lower().startswith("https://"):
+            raise ValueError("redirected away from HTTPS")
+        body = r.read(MAX_BYTES + 1)
+    if len(body) > MAX_BYTES:
+        raise ValueError(f"over {MAX_BYTES // 1_000_000} MB")
+    Path(dest).parent.mkdir(parents=True, exist_ok=True)
+    Path(dest).write_bytes(body)
+
+
+def fetch_all(pairs, offline):
+    """Fetch (url, dest) pairs directly; return the curl lines for the ones left to the agent."""
+    left = []
+    for url, dest in pairs:
+        if not offline:
+            try:
+                http_get(url, dest)
+                continue
+            except (urllib.error.URLError, OSError, ValueError, TimeoutError) as e:
+                print(f"  network: {url[:70]} failed ({e.__class__.__name__}); fetch it yourself")
+        left.append(fetch_line(url, dest))
+    return left
 
 
 def read_saved(path):
@@ -950,8 +980,8 @@ def directory_markdown(data):
     rows = source_rows(data)
     out = ["# Illustration directory", "",
            f"Generated by `tools/build_data.py` from `synthesis/illustration-sources.json` (licences read on {data.get('verified')}). "
-           "Licences change: open the licence link before you ship. **Agent fetches** means `illustrate.py search` prints the "
-           "HTTPS requests, the agent fetches them with its own tools, and the script parses them (it never uses the network); **you download** means the site forbids automation, so the person picks and "
+           "Licences change: open the licence link before you ship. **Agent fetches** means `illustrate.py search` "
+           "queries and downloads it over HTTPS; **you download** means the site forbids automation, so the person picks and "
            "downloads and `illustrate.py add` brings the file in; **agent may browse** means bots are allowed but illustrate.py has no "
            "connector, so the agent browses or calls the site's API with its own tools. For the browsable page with filters and one search box "
            "for every site, run `python3 scripts/illustrate.py directory --open`. How to search well: `searching.md`.", ""]
@@ -1015,7 +1045,7 @@ h2{font-size:17px;margin:0}.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{back
 details{font-size:14px}summary{cursor:pointer;color:var(--muted)}ol,ul{margin:6px 0;padding-left:20px}
 </style>
 <header><h1>Illustration directory</h1><p>Free and open illustration sources, with their licences as read on <span id="v"></span>. Type what you need once; every card's button searches that site for it.</p>
-<p><b>Agent fetches</b>: the AI fetches the requests illustrate.py prints (the script itself never uses the network). <b>Agent may browse</b>: bots are allowed, so the AI may browse it with its own tools. <b>You download</b>: the site forbids bots, so you pick and download, then the AI recolors it.</p></header>
+<p><b>Agent fetches</b>: illustrate.py searches and downloads it over HTTPS. <b>Agent may browse</b>: bots are allowed, so the AI may browse it with its own tools. <b>You download</b>: the site forbids bots, so you pick and download, then the AI recolors it.</p></header>
 <div class="bar"><div><input id="q" placeholder="What should the picture show? e.g. empty inbox, rocket launch, team" aria-label="Search words">
 <span id="filters"></span></div></div>
 <main id="list"></main>
@@ -1065,8 +1095,8 @@ def cmd_directory(a):
 
 
 def cmd_search(a):
-    """Two steps, no network here: the first run writes requests.json and prints what to fetch; after the agent
-    saves each response to its `save_as` path, the second run parses them into candidates.json."""
+    """Write requests.json, fetch each response to its `save_as` path, then parse them into candidates.json.
+    With --offline (or when the network fails) it prints the requests and parses on the next run."""
     data, purposes = load_json(SOURCES), load_json(PURPOSES)
     sources = {s["id"]: s for s in data["sources"]}
     words, extra = expand_query(a.purpose, a.slot, purposes)
@@ -1100,9 +1130,12 @@ def cmd_search(a):
         for f in resp.iterdir():
             f.unlink()  # answers to an older search must not be read as answers to this one
         proj.save(proj.dir / "requests.json", {"purpose": a.purpose, "slot": a.slot, "query": query, "requests": plan})
-        print(f"Fetch these {len(plan)} HTTPS responses with your own tools (this script never uses the network), then run the same search again:")
-        for r in plan:
-            print("  " + fetch_line(r["url"], r["save_as"]))
+        left = fetch_all([(r["url"], r["save_as"]) for r in plan], a.offline)
+        saved = [r for r in plan if Path(r["save_as"]).exists()]
+    if not saved:
+        print(f"Fetch these {len(left)} HTTPS responses with your own tools, then run the same search again:")
+        for line in left:
+            print("  " + line)
         for e in errors:
             print(f"  error {e}")
         for m in manual:
@@ -1189,10 +1222,12 @@ def cmd_fetch(a):
         if not dl.exists():
             dl.parent.mkdir(parents=True, exist_ok=True)
             try:
-                waiting.append(fetch_line(c["download"], dl))
+                waiting += fetch_all([(c["download"], dl)], a.offline)
             except ValueError as e:
                 print(f"skip {cid}: {e}")
-            continue
+                continue
+            if not dl.exists():
+                continue
         text = read_saved(dl)
         try:
             root, notes = sanitize(text)
@@ -1214,7 +1249,7 @@ def cmd_fetch(a):
         print(f"fetched {name} <- {cid} ({verdict}; {len(notes)} sanitize notes)")
     proj.save(proj.cand, {**proj.load(proj.cand, {}), "items": list(cand.values())})
     if waiting:
-        print("Download these with your own tools (this script never uses the network), then run the same fetch again:")
+        print("Download these with your own tools, then run the same fetch again:")
         for line in waiting:
             print("  " + line)
 
@@ -1563,6 +1598,7 @@ def main(argv=None):
 
     p = sub.add_parser("search"); p.add_argument("purpose"); p.add_argument("--slot"); p.add_argument("--query")
     p.add_argument("--source"); p.add_argument("--limit", type=int, default=20); p.add_argument("--keep", action="store_true")
+    p.add_argument("--offline", action="store_true", help="print the requests as curl lines instead of fetching them")
     p.set_defaults(fn=cmd_search)
     p = sub.add_parser("rank"); p.add_argument("--purpose"); p.add_argument("--slot"); p.add_argument("--style", default="any", choices=["any", "flat", "line"])
     p.add_argument("--top", type=int, default=12); p.add_argument("--all", action="store_true")
@@ -1570,6 +1606,7 @@ def main(argv=None):
     p = sub.add_parser("style"); p.add_argument("--lock", metavar="NAME"); p.add_argument("--unlock", action="store_true")
     p.set_defaults(fn=cmd_style)
     p = sub.add_parser("fetch"); p.add_argument("ids", nargs="+"); p.add_argument("--name"); p.add_argument("--force", action="store_true")
+    p.add_argument("--offline", action="store_true", help="print the download as a curl line instead of fetching it")
     p.set_defaults(fn=cmd_fetch)
     p = sub.add_parser("add"); p.add_argument("file"); p.add_argument("--source", required=True); p.add_argument("--url")
     p.add_argument("--title"); p.add_argument("--author"); p.add_argument("--licence"); p.add_argument("--name"); p.set_defaults(fn=cmd_add)

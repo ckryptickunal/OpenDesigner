@@ -6,6 +6,7 @@ APIs returned on 2026-09-28, and every SVG is a small fixture written here (no t
 """
 import contextlib, io, json, os, sys, tempfile, unittest
 from pathlib import Path
+from unittest import mock
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
@@ -131,11 +132,37 @@ class Hostile(unittest.TestCase):
             il.fetch_line("file:///etc/passwd", "x.svg")
         self.assertIn('"https://a.example/x.svg"', il.fetch_line("https://a.example/x.svg", "x.svg"))
 
-    def test_script_has_no_network_code(self):
-        # skills stay offline (SPEC principle 9, REPO-PLAN, SECURITY.md): the agent fetches with its own tools
+    def test_network_stays_in_one_https_function(self):
+        # the owner allowed this skill the network (2026-09-28), confined to http_get: HTTPS only, 3 MB cap
         src = (HERE / "illustrate.py").read_text()
-        for bad in ("urllib.request", "urlopen", "import socket", "http.client", "import requests", "import httpx"):
+        self.assertEqual(src.count("urlopen("), 1)
+        self.assertIn("def http_get(", src.split("urlopen(")[0].rsplit("\ndef ", 1)[-1].join(["\ndef ", ""]))
+        for bad in ("import socket", "http.client", "import requests", "import httpx", "subprocess", "os.system"):
             self.assertNotIn(bad, src)
+        with tempfile.TemporaryDirectory() as tmp:
+            for url in ("http://a.example/x.svg", "file:///etc/passwd", "ftp://a.example/x"):
+                with self.assertRaises(ValueError):
+                    il.http_get(url, Path(tmp) / "x")
+
+    def test_http_get_refuses_downgrade_and_oversize(self):
+        class Resp:
+            def __init__(self, url, body): self.url, self.body = url, body
+            def geturl(self): return self.url
+            def read(self, n): return self.body[:n]
+            def __enter__(self): return self
+            def __exit__(self, *a): return False
+        with tempfile.TemporaryDirectory() as tmp:
+            dest = Path(tmp) / "x.svg"
+            with mock.patch.object(il.urllib.request, "urlopen", return_value=Resp("http://a.example/x.svg", b"<svg/>")):
+                with self.assertRaises(ValueError):
+                    il.http_get("https://a.example/x.svg", dest)
+            with mock.patch.object(il.urllib.request, "urlopen", return_value=Resp("https://a.example/x.svg", b"x" * (il.MAX_BYTES + 5))):
+                with self.assertRaises(ValueError):
+                    il.http_get("https://a.example/x.svg", dest)
+            self.assertFalse(dest.exists())
+            with mock.patch.object(il.urllib.request, "urlopen", return_value=Resp("https://a.example/x.svg", b"<svg/>")):
+                il.http_get("https://a.example/x.svg", dest)
+            self.assertEqual(dest.read_bytes(), b"<svg/>")
 
 
 class Recolor(unittest.TestCase):
@@ -392,14 +419,14 @@ def ov(i, title, lic):
 
 
 class Workflow(unittest.TestCase):
-    """search -> rank -> fetch -> recolor -> apply -> ledger in a temporary project. The test stands in for the agent,
-    saving the responses the two-step search and fetch ask for; nothing touches the network."""
+    """search -> rank -> fetch -> recolor -> apply -> ledger in a temporary project, in --offline mode: the test stands
+    in for the agent, saving the responses search and fetch ask for, so nothing touches the network."""
 
     def test_end_to_end(self):
         with tempfile.TemporaryDirectory() as tmp:
             d = str(Path(tmp) / "opendesigner" / "illustrations")
-            out = run(["--dir", d, "search", "rocket launch", "--slot", "onboarding"])
-            self.assertIn("never uses the network", out)          # step one only prints what to fetch
+            out = run(["--dir", d, "search", "rocket launch", "--slot", "onboarding", "--offline"])
+            self.assertIn("with your own tools", out)             # --offline only prints what to fetch
             self.assertIn('curl -sL', out)
             self.assertIn("undraw.co/search/rocket", out)        # the manual source is offered, not fetched
             self.assertFalse(Path(d, "candidates.json").exists())
@@ -416,16 +443,16 @@ class Workflow(unittest.TestCase):
             ranked = [l.split()[2] for l in out.splitlines() if l[:1].strip() or l.startswith(" ")][:3]
             self.assertEqual(ranked[0], "openverse:1")
             self.assertNotIn("openverse:3", out)                # non-commercial is hidden
-            out = run(["--dir", d, "fetch", "openverse:1", "openverse:3", "--name", "launch"])
+            out = run(["--dir", d, "fetch", "openverse:1", "openverse:3", "--name", "launch", "--offline"])
             self.assertIn("skip openverse:3: non-commercial", out)
             self.assertIn('"https://x/1.svg"', out)              # step one: the download to make
             Path(d, "downloads", "openverse-1.svg").write_text(SCENE)
             out = run(["--dir", d, "fetch", "openverse:1", "--name", "launch"])
             self.assertIn("fetched launch", out)
-            run(["--dir", d, "fetch", "commons:4"])
+            run(["--dir", d, "fetch", "commons:4", "--offline"])
             Path(d, "downloads", "commons-4.svg").write_text("<svg xmlns='http://www.w3.org/2000/svg'>&nbsp;</svg>")
             self.assertIn("not a usable SVG", run(["--dir", d, "fetch", "commons:4"]))
-            out = run(["--dir", d, "search", "coffee"])           # a new search starts over: old responses are cleared
+            out = run(["--dir", d, "search", "coffee", "--offline"])  # a new search starts over: old responses are cleared
             self.assertFalse(any(Path(d, "responses").iterdir()))
             out = run(["--dir", d, "recolor", "launch", "--tokens", str(EXAMPLE_CSS)])
             self.assertIn("6 variants", out)

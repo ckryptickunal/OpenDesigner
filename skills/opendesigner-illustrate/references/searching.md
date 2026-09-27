@@ -61,13 +61,12 @@ Sources marked **you download** forbid bots (`sources.json` says why). The agent
 
 ## 5. How the agent moves through each kind of source
 - **Agent fetches** (`access: api`: Openverse, Commons, Open Doodles, Lukasz Adam, CocoMaterial, Iconify):
-  1. Run `illustrate.py search`. It prints one `curl` line per HTTPS request.
-  2. Fetch each with your shell, web-fetch tool or browser, saving it to the path shown.
-  3. Run the same `search` again, then `rank` and `sheet --candidates`.
-  4. Look at the sheet in a browser tool or as images.
-  5. `fetch` only the finalists, the same two-step way.
+  1. Run `illustrate.py search`. It calls each source over HTTPS.
+  2. Run `rank`, then `sheet --candidates`.
+  3. Look at the sheet in a browser tool or as images.
+  4. `fetch` only the finalists.
 
-  The script never uses the network; skills stay offline (SPEC principle 9).
+  In a sandbox without internet, add `--offline`: it prints the requests as `curl` lines. Fetch them with your own tools and run the same command again.
 - **Agent may browse** (`access: open`: illlustrations, Openclipart, the emoji sets on GitHub, NASA, The Met, Smithsonian, Doodle Ipsum, Kenney): bots are allowed, but there is no connector. Follow the source's `navigate` steps in `directory.md` with the browser tool or the site's API. Read the licence on the item page. Download over HTTPS, then `illustrate.py add FILE --source <id> --url <item page>`.
 - **You download** (`access: manual`: unDraw, Storyset, Blush, ManyPixels and the rest): give the person the search link from `illustrate.py sources --q "<words>"`, the site's tips, and the colour to set. Don't open, search or click these sites for them. When they send files back, run `illustrate.py add FILE --source <id> --url <item page>`.
 - **Whatever the source:**
