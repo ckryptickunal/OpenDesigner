@@ -28,7 +28,7 @@ _Lane L09 teardown. Checked on 2026-09-25. Numeric theme snapshot: published `@e
 
 ## Version notes and disagreements
 
-The live border documentation displays `#E3E8F2` for its border sample. Borealis 8.1.0's published light JSON has `euiColorLightShade = #CAD3E2`, while the pinned TypeScript border uses `colors.borderBaseSubdued`. These are different named surfaces and potentially different documentation/theme contexts: this entry does not force them into one supposedly universal border color. Its radius row uses the published theme and source, including control/panel/frame roles absent from the docs' short small/medium table. [S-L09-779] [S-L09-781] [S-L09-837]
+The border docs sample `#E3E8F2` matches Borealis 8.1.0's published light `euiBorderColor` (`#E3E8F2`); it is not the same token as `euiColorLightShade` (`#CAD3E2`). The one real mismatch is in prose: the docs say the default border uses `colors.lightShade`, while the pinned TypeScript source uses `colors.borderBaseSubdued`. Record token names with values rather than matching by color. Its radius row uses the published theme and source, including control/panel/frame roles absent from the docs' short small/medium table. [S-L09-779] [S-L09-781] [S-L09-837]
 
 ## Builder takeaways
 

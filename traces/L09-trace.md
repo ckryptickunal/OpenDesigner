@@ -583,5 +583,5 @@ Append-only. One row per source opened, including rejected ones. Id ranges: S-L0
 | 2026-09-25 | S-L09-784 | https://github.com/elastic/eui/blob/57dd70bc43f1f8b03a192b76f45570efd502f140/packages/eui-theme-borealis/src/variables/_animation.ts | Elastic | 57dd70bc43f1 | A | used | Timing and curves |
 | 2026-09-25 | S-L09-785 | https://eui.elastic.co/docs/getting-started/theming/tokens/sizing/ | Elastic | live | A | used | Resolved spacing values |
 | 2026-09-25 | S-L09-786 | https://eui.elastic.co/docs/getting-started/theming/high-contrast-mode/ | Elastic | live | A | used | Independent contrast preference |
-| 2026-09-25 | S-L09-837 | https://eui.elastic.co/docs/getting-started/theming/tokens/borders/ | Elastic | live | A | used | Border example differs from Borealis release context |
+| 2026-09-25 | S-L09-837 | https://eui.elastic.co/docs/getting-started/theming/tokens/borders/ | Elastic | live | A | used | Border sample `#E3E8F2` (matches 8.1.0 `euiBorderColor`); prose names `colors.lightShade`, source uses `borderBaseSubdued` |
 | 2026-09-25 | S-L09-838 | https://eui.elastic.co/docs/getting-started/accessibility/ | Elastic | live | A | used | Accessibility target and integration responsibilities |
