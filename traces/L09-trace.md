@@ -582,3 +582,43 @@ Append-only. One row per source opened, including rejected ones. Id ranges: S-L0
 | 2026-09-25 | S-L09-803 | https://cloudscape.design/foundation/core-principles/accessibility/ | AWS Cloudscape | live | A | used | Consumer accessibility responsibilities |
 | 2026-09-25 | S-L09-804 | https://cloudscape.design/foundation/visual-foundation/design-tokens/ | AWS Cloudscape | live | A | used | Token consumption guidance |
 | 2026-09-25 | S-L09-805 | https://github.com/cloudscape-design/components | AWS Cloudscape | live | A | used | React implementation |
+## NYPL Reservoir follow-up, 2026-09-25
+
+| Time | ID | URL | Publisher | Date / version | Tier | Status | Used for |
+|---|---|---|---|---|---|---|---|
+| 2026-09-25 | S-L09-787 | https://github.com/NYPL/nypl-design-system/blob/3a425277959ca46eabecdfe3f5e6cecd73a160ab/README.md | NYPL | 3a425277959c | A | used | Identity, setup, documentation and accessibility process |
+| 2026-09-25 | S-L09-788 | https://github.com/NYPL/nypl-design-system/blob/3a425277959ca46eabecdfe3f5e6cecd73a160ab/package.json | NYPL | 3a425277959c | A | used | Version, license, dependencies and peer range |
+| 2026-09-25 | S-L09-789 | https://github.com/NYPL/nypl-design-system/blob/3a425277959ca46eabecdfe3f5e6cecd73a160ab/src/theme/foundations/colors.ts | NYPL | 3a425277959c | A | used | Primitives, UI modes and Figma references |
+| 2026-09-25 | S-L09-790 | https://github.com/NYPL/nypl-design-system/blob/3a425277959ca46eabecdfe3f5e6cecd73a160ab/src/theme/foundations/typography.ts | NYPL | 3a425277959c | A | used | Responsive type, weights and mismatched comment |
+| 2026-09-25 | S-L09-791 | https://github.com/NYPL/nypl-design-system/blob/3a425277959ca46eabecdfe3f5e6cecd73a160ab/src/theme/foundations/spacing.ts | NYPL | 3a425277959c | A | used | Preferred subset and component spacing |
+| 2026-09-25 | S-L09-792 | https://github.com/NYPL/nypl-design-system/blob/3a425277959ca46eabecdfe3f5e6cecd73a160ab/src/theme/foundations/radii.ts | NYPL | 3a425277959c | A | used | Component and shape radii |
+| 2026-09-25 | S-L09-793 | https://github.com/NYPL/nypl-design-system/blob/3a425277959ca46eabecdfe3f5e6cecd73a160ab/src/theme/foundations/shadows.ts | NYPL | 3a425277959c | A | used | Local shadow override |
+| 2026-09-25 | S-L09-794 | https://github.com/NYPL/nypl-design-system/blob/3a425277959ca46eabecdfe3f5e6cecd73a160ab/src/theme/foundations/breakpoints.ts | NYPL | 3a425277959c | A | used | Responsive breakpoint values |
+| 2026-09-25 | S-L09-795 | https://registry.npmjs.org/@nypl/design-system-react-components/4.5.1 | NYPL | 4.5.1 | A | used | Published release metadata |
+## Elastic EUI follow-up, 2026-09-25
+
+| Time | ID | URL | Publisher | Date / version | Tier | Status | Used for |
+|---|---|---|---|---|---|---|---|
+| 2026-09-25 | S-L09-777 | https://registry.npmjs.org/@elastic/eui-theme-borealis/8.1.0 | Elastic | 8.1.0 | A | used | Release metadata |
+| 2026-09-25 | S-L09-778 | https://github.com/elastic/eui/blob/57dd70bc43f1f8b03a192b76f45570efd502f140/packages/eui-theme-borealis/README.md | Elastic | 57dd70bc43f1 | A | used | Theme export identity |
+| 2026-09-25 | S-L09-779 | https://cdn.jsdelivr.net/npm/@elastic/eui-theme-borealis@8.1.0/lib/eui_theme_borealis_light.json | Elastic | 8.1.0 | A | used | Published light colors, typography and role radii |
+| 2026-09-25 | S-L09-780 | https://github.com/elastic/eui/blob/57dd70bc43f1f8b03a192b76f45570efd502f140/packages/eui-theme-borealis/src/variables/_typography.ts | Elastic | 57dd70bc43f1 | A | used | Type scale and weights |
+| 2026-09-25 | S-L09-781 | https://github.com/elastic/eui/blob/57dd70bc43f1f8b03a192b76f45570efd502f140/packages/eui-theme-borealis/src/variables/_borders.ts | Elastic | 57dd70bc43f1 | A | used | Computed border and radius roles; license header |
+| 2026-09-25 | S-L09-782 | https://github.com/elastic/eui/blob/57dd70bc43f1f8b03a192b76f45570efd502f140/packages/eui-theme-borealis/src/variables/_size.ts | Elastic | 57dd70bc43f1 | A | used | Base and sizing factors |
+| 2026-09-25 | S-L09-783 | https://cdn.jsdelivr.net/npm/@elastic/eui-theme-borealis@8.1.0/lib/eui_theme_borealis_dark.json | Elastic | 8.1.0 | A | used | Published dark colors |
+| 2026-09-25 | S-L09-784 | https://github.com/elastic/eui/blob/57dd70bc43f1f8b03a192b76f45570efd502f140/packages/eui-theme-borealis/src/variables/_animation.ts | Elastic | 57dd70bc43f1 | A | used | Timing and curves |
+| 2026-09-25 | S-L09-785 | https://eui.elastic.co/docs/getting-started/theming/tokens/sizing/ | Elastic | live | A | used | Resolved spacing values |
+| 2026-09-25 | S-L09-786 | https://eui.elastic.co/docs/getting-started/theming/high-contrast-mode/ | Elastic | live | A | used | Independent contrast preference |
+| 2026-09-25 | S-L09-837 | https://eui.elastic.co/docs/getting-started/theming/tokens/borders/ | Elastic | live | A | used | Border sample `#E3E8F2` (matches 8.1.0 `euiBorderColor`); prose names `colors.lightShade`, source uses `borderBaseSubdued` |
+| 2026-09-25 | S-L09-838 | https://eui.elastic.co/docs/getting-started/accessibility/ | Elastic | live | A | used | Accessibility target and integration responsibilities |
+## Workday Canvas follow-up, 2026-09-25
+
+| Time | ID | URL | Publisher | Date / version | Tier | Status | Used for |
+|---|---|---|---|---|---|---|---|
+| 2026-09-25 | S-L09-767 | https://registry.npmjs.org/@workday/canvas-tokens-web/4.5.0 | Workday | 4.5.0 | A | used | Package version, license and exports |
+| 2026-09-25 | S-L09-768 | https://github.com/Workday/canvas-tokens/blob/e62a99610bbc0cc59f146781bcca6825cfb1028f/README.md | Workday | e62a99610bbc | A | used | Support policy and token license |
+| 2026-09-25 | S-L09-769 | https://github.com/Workday/canvas-tokens/blob/e62a99610bbc0cc59f146781bcca6825cfb1028f/packages/canvas-tokens/tokens/base.json | Workday | e62a99610bbc | A | used | Base palette, sizes and font families |
+| 2026-09-25 | S-L09-770 | https://github.com/Workday/canvas-tokens/blob/e62a99610bbc0cc59f146781bcca6825cfb1028f/packages/canvas-tokens/tokens/web/sys.json | Workday | e62a99610bbc | A | used | System aliases, gaps, shape, type and migration names |
+| 2026-09-25 | S-L09-771 | https://github.com/Workday/canvas-tokens/blob/e62a99610bbc0cc59f146781bcca6825cfb1028f/packages/canvas-tokens/tokens/web/brand.json | Workday | e62a99610bbc | A | used | Brand primary aliases |
+| 2026-09-25 | S-L09-772 | https://unpkg.com/@workday/canvas-tokens-web@4.5.0/css/base/_variables.css | Workday | 4.5.0 | A | used | Published base CSS; inspected in npm archive |
+| 2026-09-25 | S-L09-773 | https://unpkg.com/@workday/canvas-tokens-web@4.5.0/css/system/_variables.css | Workday | 4.5.0 | A | used | Published system CSS; inspected in npm archive |

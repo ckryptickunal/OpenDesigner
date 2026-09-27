@@ -35,6 +35,48 @@ def state_with(**raw):
     return s
 
 
+class IllustrationFallbackOrder(unittest.TestCase):
+    """Order is commission, then open sets, then AI tools, then no illustration.
+
+    `\\bai\\b` is the wrong check: the open-sets clause says "bans AI training" before the AI step.
+    """
+
+    ORDER = (
+        r"\bcommission\b",
+        r"\bopen sets\b",
+        r"ai vector tools|ai: recraft|\(3\) ai tools",
+        r"no illustration",
+    )
+
+    def positions(self, text):
+        lowered = text.lower()
+        found = [re.search(pattern, lowered) for pattern in self.ORDER]
+        self.assertTrue(all(found), text)
+        return [match.start() for match in found]
+
+    def test_hook_and_questionnaire_share_the_documented_order(self):
+        references = os.path.join(os.path.dirname(__file__), "..", "references")
+        with open(os.path.join(references, "hooks.json"), encoding="utf-8") as f:
+            hook = next(h for h in json.load(f)["hooks"] if h["id"] == "H-illus")
+        with open(os.path.join(references, "hooks.md"), encoding="utf-8") as f:
+            row = next(line for line in f if line.startswith("| `H-illus`"))
+        q_if_no = hook["questionnaire"]["Q-img-04"]["if_no"]
+        for text in (row, hook["if_no"], q_if_no):
+            with self.subTest(text=text):
+                positions = self.positions(text)
+                self.assertEqual(positions, sorted(positions))
+        self.assertRegex(
+            q_if_no,
+            r"^\(1\) commission[\s\S]+\(2\) open sets[\s\S]+\(3\) AI tools[\s\S]+\(4\) ship no illustration",
+        )
+
+    def test_open_sets_clause_does_not_count_as_the_ai_step(self):
+        banned_first = "commission, then open sets (bans AI training), then AI: Recraft, then no illustration"
+        swapped = "commission, then AI: Recraft, then open sets, then no illustration"
+        self.assertEqual(self.positions(banned_first), sorted(self.positions(banned_first)))
+        self.assertNotEqual(self.positions(swapped), sorted(self.positions(swapped)))
+
+
 class ColorMath(unittest.TestCase):
     def test_wcag_contrast_known_values(self):
         self.assertAlmostEqual(e.contrast("#000000", "#ffffff"), 21.0, places=6)
