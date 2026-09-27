@@ -53,8 +53,8 @@ _Lane L09 teardown. Verified against live sources on 2026-09-23. Every value car
 - Offer a headless tier so teams can keep behaviour and accessibility while replacing visuals, as Fluent now does [S-L09-199].
 
 ## Gaps / unverified
-- Conflict: the Fluent 2 shapes page lists Large 8px and X-Large 12px, but code tokens are Large 6px, XLarge 8px, 2XLarge 12px [S-L09-191] [S-L09-171].
-- Conflict: the typography page shows Subtitle 1 at 20/26, but tokens give 20/28 (lineHeightBase500) [S-L09-185] [S-L09-173].
+- Conflict: the Fluent 2 shapes page lists Large 8px and X-Large 12px, but code tokens are Large 6px, XLarge 8px, 2XLarge 12px [S-L09-191] [S-L09-171]. Resolved for React v9 web output on 2026-09-25: use the published token values (research/L04 open question 3) [S-L04-078].
+- Conflict: the typography page shows Subtitle 1 at 20/26, but tokens give 20/28 (lineHeightBase500) [S-L09-185] [S-L09-173]. Resolved for React v9 web output on 2026-09-25: use 20/28 from the published packages (research/L02 open questions) [S-L02-065].
 - Stale comments in lightColor.ts say brand[80] is #0078d4; the actual brandWeb[80] value is #0f6cbd [S-L09-187] [S-L09-178].
 - "CAP DR" is not defined in the public PR; the source repo (fluentui-design-tokens) is private [S-L09-180] [S-L09-182].
 - Fluent 2 site launch date is inferred from the first web-archive capture (2023-05-23), not an announcement [S-L09-166].
