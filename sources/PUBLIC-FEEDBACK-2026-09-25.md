@@ -4,15 +4,15 @@
 
 ## Quick read
 
-- **Generic defaults are the loudest complaint.** Builders identify repeated rounded cards, gradients, stock fonts, Tailwind/shadcn defaults and interchangeable landing-page sections. This supports showing alternatives and recording the human's visual choices, rather than assuming one house style.
+- **Generic defaults are the most frequent complaint in this hand-picked sample.** Builders identify repeated rounded cards, gradients, stock fonts, Tailwind/shadcn defaults and interchangeable landing-page sections. This supports showing alternatives and recording the human's visual choices, rather than assuming one house style.
 - **A screenshot or adjective is not enough.** Several builders say the tools lose layout, copy, colours or the subtler character of a reference. Preserve reference-to-decision links and have the user review interpretations before generating assets.
-- **Consistency fails across pages and iterations.** Button typography, spacing and colour drift; a local change can propagate unexpectedly. Separate approved project rules from exploratory variants, and make changes auditable.
+- **Consistency fails across pages and iterations.** One firsthand report (OD-16) and one question post (OD-18) describe button typography, spacing and colour drifting; a local change can propagate unexpectedly. Separate approved project rules from exploratory variants, and make changes auditable.
 - **The gap is not just first-pass aesthetics.** Navigation, breakpoints, loading states and accessibility require testing and human review. A status board should show what has actually been checked, not mark generated UI as finished.
-- **There is a counterpoint.** Some people regard a generic component language as useful for speed; distinctiveness should be a user choice, not imposed. See OD-03.
+- **There is a counterpoint.** One commenter regards a generic component language as useful for speed; distinctiveness should be a user choice, not imposed. See OD-03.
 
 ## Source records
 
-Schema for agents: each `OD-NN` block has `theme`, `date`, `audience`, `type`, `evidence`, `source`, and `OpenDesigner relevance`. A post can appear in only one block even if it informs multiple themes. `type` is `firsthand`, `discussion`, or `feature-request`. Relevance is a design hypothesis, not a claim that OpenDesigner already solves it.
+Schema for agents: each `OD-NN` block has `theme`, `date`, `audience`, `type`, `evidence`, `source`, and `OpenDesigner relevance`. Each comment appears in only one block, even if it informs several themes; two threads supply two records each (OD-11 and OD-13; OD-03 and OD-23). `type` is `firsthand`, `discussion`, or `feature-request`. Relevance is a design hypothesis, not a claim that OpenDesigner already solves it.
 
 ### Generic visual defaults and distinctiveness
 
@@ -21,7 +21,7 @@ Schema for agents: each `OD-NN` block has `theme`, `date`, `audience`, `type`, `
 - date: 2025-08-26
 - audience: Indie builders using Bolt / vibe coding
 - type: firsthand
-- evidence: "One thing I find really frustrating about AI app builders like Bolt is how generic their UIs tend to look ... you can spot an AI-generated landing page or UI from a mile away."
+- evidence: "One thing I find really frustrating about AI app builders like Bolt is how generic their UIs tend to look ... you can spot an AI-generated landing page or UI from a mile away most of the time."
 - source: [r/vibecoding, "UI made by vibecoding is so generic"](https://www.reddit.com/r/vibecoding/comments/1n0fh3n/ui_made_by_vibecoding_is_so_generic/)
 - OpenDesigner relevance: Ask for examples and preferred distinctions before defaulting to a standard landing-page arrangement.
 
@@ -48,7 +48,7 @@ Schema for agents: each `OD-NN` block has `theme`, `date`, `audience`, `type`, `
 - date: 2025-08-31
 - audience: Lovable user
 - type: firsthand
-- evidence: "Every time I build something in lovable the site has exactly the same design ... now all vibe coded apps look the same." The author also worries that changing it may disrupt the project.
+- evidence: "Every time I build something in lovable the site has exactly the same design, which is fine, but now all vibe coded apps look the same." The author also worries that changing it may disrupt the project.
 - source: [r/lovable, "Generic AI Slop design"](https://www.reddit.com/r/lovable/comments/1n4olsd/generic_ai_slop_design/)
 - OpenDesigner relevance: Differentiate a visual-direction decision from a risky codebase rewrite; show a preview and scope of changes.
 
@@ -66,7 +66,7 @@ Schema for agents: each `OD-NN` block has `theme`, `date`, `audience`, `type`, `
 - date: 2025-11-29
 - audience: Claude Code frontend users
 - type: discussion
-- evidence: A user experimenting with Claude skills reports "when you ask claude to generate UI, it defaults to the same patterns every time." The post suggests a skill-based fix and is partly solution advocacy.
+- evidence: A user experimenting with Claude skills reports "when you ask claude to generate UI, it defaults to the same patterns every time." The post promotes the author's own frontend-design-pro plugin (flair: Built with Claude), so treat it as interested testimony.
 - source: [r/ClaudeAI, generic UI patterns](https://www.reddit.com/r/ClaudeAI/comments/1p9srou/finally_figured_out_why_claudes_ui_generations/)
 - OpenDesigner relevance: Compare human-selected patterns against the model's default patterns; do not treat the author's proposed fix as independently validated.
 
@@ -93,16 +93,16 @@ Schema for agents: each `OD-NN` block has `theme`, `date`, `audience`, `type`, `
 - date: 2025-11-24
 - audience: Indie SaaS builders
 - type: discussion
-- evidence: Poster describes the recurring "rounded buttons, same spacing, same shadows, same purple/blue vibe." This is an open-ended discussion prompt, not a controlled study.
+- evidence: Poster describes the recurring "rounded buttons, same spacing, same shadows, same purple/blue vibe." This is an open-ended discussion prompt, not a controlled study. The post advertises the poster's product, vibefyre.com (flair: Showcase).
 - source: [r/lovable, same-template SaaS UI](https://www.reddit.com/r/lovable/comments/1p5fz8d/why_does_every_ai_saas_ui_look_like_the_same/)
 - OpenDesigner relevance: Record the choices behind a spacing, colour, and component system so they do not collapse into defaults.
 
 #### OD-10
 - theme: Generic defaults / visual hierarchy
-- date: Date not independently verified; HN page displayed "6 months ago" at retrieval
+- date: 2026-02-10
 - audience: Founder using Cursor, Claude, Figma
 - type: discussion
-- evidence: The commenter complains that gradients, rounded cards, shadows, and presets compete, with "No taste. No hierarchy." The same commenter promotes a tool they built, so treat as interested testimony.
+- evidence: The submitter, in a first comment on their own link post for automotion.dev, complains that gradients, rounded cards, shadows, and presets compete: "There's no taste. No hierarchy." They promote a tool they built, so treat this as interested testimony.
 - source: [Hacker News, AI beige slop discussion](https://news.ycombinator.com/item?id=46956964)
 - OpenDesigner relevance: Critique hierarchy with the user and identify the one primary purpose of each screen before generating it.
 
@@ -130,7 +130,7 @@ Schema for agents: each `OD-NN` block has `theme`, `date`, `audience`, `type`, `
 - theme: Reference fidelity / visual hierarchy
 - date: 2025-04-25
 - audience: Frontend developer in the OD-11 discussion
-- type: firsthand comment
+- type: firsthand
 - evidence: Asked for Swiss style with specified elements; the commenter says tools returned wrong elements and "terrible UX and hierarchy," like generic WordPress templates.
 - source: [r/Frontend, image-to-UI intent and comments](https://www.reddit.com/r/Frontend/comments/1k7mh0z/anyone_else_feel_like_aiassisted_ui_tools_still/)
 - OpenDesigner relevance: Test whether stated visual language and hierarchy actually survive generation, rather than checking only build success.
@@ -141,7 +141,7 @@ Schema for agents: each `OD-NN` block has `theme`, `date`, `audience`, `type`, `
 - audience: Designer requesting Bolt feature
 - type: feature-request
 - evidence: "Bolt currently relies on existing design libraries or makes its own design choices"; uploaded reference images can be misread, and manually adjusting generated design is time-consuming. The request asks to integrate a custom guide covering type, colours, buttons and layout.
-- source: [stackblitz/bolt.new issue #494, Custom Style Guide Integration](https://github.com/stackblitz/bolt.new/issues/494)
+- source: [stackblitz/bolt.new issue #494, Custom Style Guide Integration](https://web.archive.org/web/20241107144430/https://github.com/stackblitz/bolt.new/issues/494) (archived copy; issues are now turned off on that repo)
 - OpenDesigner relevance: A persistent, human-approved style guide and trace from reference to rule are a directly articulated need; this is a request, not proof of Bolt's current behavior.
 
 #### OD-15
@@ -169,7 +169,7 @@ Schema for agents: each `OD-NN` block has `theme`, `date`, `audience`, `type`, `
 - date: 2025-03-31
 - audience: Lovable user
 - type: firsthand
-- evidence: A navigation styling update caused unintended changes elsewhere; the author describes "a lot of circular prompting" and asks for a whole-UI review.
+- evidence: A navigation styling update caused unintended changes elsewhere; the author describes "a lot of circular prompting" and shares a prompt (flair: Tutorial) asking Lovable for a whole-UI review.
 - source: [r/lovable, UI inconsistencies after adjustment](https://www.reddit.com/r/lovable/comments/1jo2gx7/prompt_to_fix_ui_inconsistencies_on_lovable/)
 - OpenDesigner relevance: Show what changed and which project rules/assets each change affects; support scoped review before propagating.
 
@@ -186,18 +186,18 @@ Schema for agents: each `OD-NN` block has `theme`, `date`, `audience`, `type`, `
 - theme: Agent-readable design rules
 - date: 2026-04-15
 - audience: React/Tailwind/shadcn developer with an existing custom system
-- type: firsthand need
+- type: firsthand
 - evidence: The user wants an agent-readable `design-system.md` and text wireframes so an agent can implement their existing components and layouts without Figma files.
 - source: [r/Frontend, structuring design-system.md](https://www.reddit.com/r/Frontend/comments/1slxwjt/need_advice_how_to_structure_a_designsystemmd/)
 - OpenDesigner relevance: Human-readable and machine-readable system outputs are complementary, but must distinguish existing rules from suggestions.
 
 #### OD-20
 - theme: Structural design rules
-- date: Date not independently verified; HN page displayed "7 months ago" at retrieval
-- audience: Frontend engineer discussing v0
+- date: 2026-01-10
+- audience: HN commenter in a discussion of v0
 - type: discussion
 - evidence: A commenter argues UI should use component hierarchies with pre-defined design guidelines, with colours, margins and radii defined outside raw model-generated code.
-- source: [Hacker News, discussion of v0 as a coding agent](https://news.ycombinator.com/item?id=46535691)
+- source: [Hacker News, discussion of v0 as a coding agent](https://news.ycombinator.com/item?id=46570978)
 - OpenDesigner relevance: Separate chosen design tokens/components from generated layout and implementation. This is a proposed architecture, not firsthand failure evidence.
 
 ### Evaluation beyond looks
@@ -240,4 +240,4 @@ Schema for agents: each `OD-NN` block has `theme`, `date`, `audience`, `type`, `
 
 ## Method and limits
 
-Searched public web indexes for Reddit discussions in r/Frontend, r/lovable, r/vibecoding and r/ClaudeAI, HN discussions, GitHub issues of Bolt, and the OpenDesigner repo; opened each included source page. The linked [last30days-skill](https://github.com/mvanhorn/last30days-skill) was considered as a search lead, but this corpus uses directly checked public pages rather than claiming results from a tool not run. Searches of X and v0/Lovable GitHub issues did not produce sufficiently verifiable and relevant direct reports for inclusion; no claim of exhaustive coverage. Reddit posters are anonymous and some advice/complaint threads may include self-promotion. HN relative dates were left unconverted rather than guessing exact dates. Do not quote the synthesis as if it were OpenDesigner customer feedback. This is a snapshot, not a continuously refreshed feed.
+Searched public web indexes for Reddit discussions in r/Frontend, r/lovable, r/vibecoding and r/ClaudeAI, HN discussions, GitHub issues of Bolt, and the OpenDesigner repo; opened each included source page, or its archived copy where the original is gone (OD-14). Reddit threads were re-checked on 2026-09-27 through the Arctic Shift archive and HN through its API. The linked [last30days-skill](https://github.com/mvanhorn/last30days-skill) was considered as a search lead, but this corpus uses directly checked public pages rather than claiming results from a tool not run. Searches of X and v0/Lovable GitHub issues did not produce sufficiently verifiable and relevant direct reports for inclusion; no claim of exhaustive coverage. Reddit posters are anonymous and some advice/complaint threads may include self-promotion. Do not quote the synthesis as if it were OpenDesigner customer feedback. This is a snapshot, not a continuously refreshed feed.

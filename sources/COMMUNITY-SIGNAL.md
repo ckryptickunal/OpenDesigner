@@ -1,7 +1,7 @@
 # Community signal (lane L00, source validation)
 
 Written 2026-09-23 by L00. Window: 2026-08-24 to 2026-09-23 for the last30days runs, plus web checks of the sources people cite.
-Raw engine output lives in `sources/last30days-raw/` (`<slug>.md` is the full saved raw file, `<slug>.compact.md` is the engine's compact report). Every source opened is logged in `traces/L00-trace.md`.
+A separate hand-picked corpus of public complaints about AI-generated UI (2024-2026, 23 records, Tier C) is in [PUBLIC-FEEDBACK-2026-09-25.md](PUBLIC-FEEDBACK-2026-09-25.md). Raw engine output lives in `sources/last30days-raw/` (`<slug>.md` is the full saved raw file, `<slug>.compact.md` is the engine's compact report). Every source opened is logged in `traces/L00-trace.md`.
 
 **How to read this file.** "Community" evidence is Tier C by definition (Reddit, HN, YouTube). I use it to spot what practitioners argue about, which sources they cite, and what changed recently. A claim becomes "confirmed" here only when a Tier A or B source (checked live today) backs it.
 
