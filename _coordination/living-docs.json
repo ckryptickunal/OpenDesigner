@@ -1,0 +1,40 @@
+{
+  "anthropics/claude-code#60327": "closed",
+  "anthropics/claude-code#71523": "closed",
+  "npm:@cloudscape-design/design-tokens": {
+    "deprecated": false,
+    "latest": "3.0.113"
+  },
+  "npm:@duetds/tokens": {
+    "deprecated": false,
+    "latest": "5.1.5"
+  },
+  "npm:@elastic/eui-theme-borealis": {
+    "deprecated": false,
+    "latest": "8.1.0"
+  },
+  "npm:@gcds-core/tokens": {
+    "deprecated": false,
+    "latest": "1.6.0"
+  },
+  "npm:@nypl/design-system-react-components": {
+    "deprecated": false,
+    "latest": "4.5.1"
+  },
+  "npm:@porsche-design-system/components-js": {
+    "deprecated": false,
+    "latest": "4.7.0"
+  },
+  "npm:@workday/canvas-tokens-web": {
+    "deprecated": false,
+    "latest": "4.5.0"
+  },
+  "penpot/penpot#9305": "open",
+  "penpot/penpot#9307": "open",
+  "repo.ci_has_runs": false,
+  "repo.open_prs": [],
+  "repo.stars": 0,
+  "tailwindlabs/tailwindcss#19570": "open",
+  "tokens-studio/figma-plugin#3775": "open",
+  "tokens-studio/figma-plugin#3778": "open"
+}

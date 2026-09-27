@@ -111,6 +111,22 @@ python3 tools/build_dist.py --check      skill frontmatter is portable
 python3 tools/jev_nav.py check           no dangling citations
 ```
 
+### Reviewing and merging pull requests
+Follow `.claude/skills/od-pr-review/SKILL.md` (any agent can read it; Claude Code loads it as a skill). It covers the static security scan (`scripts/scan_pr.py`, which never runs PR code), relevance to the goal, the project rules, fact-checking, testing the merged result, and merging only after the maintainer says yes. Results go in `_coordination/PR-RESOLUTION-LOG.md`.
+
+### Living documents
+These documents describe things that keep changing. Update them in the same change as the thing they describe, and never let them claim something the repo or the world no longer shows:
+
+| Document | Update it when |
+|---|---|
+| `docs/FIELD-PLAN.md` | A user trial or host test has a result, an owner decision is made, or a status fact changes |
+| `.claude/skills/od-pr-review/SKILL.md` and `scripts/scan_pr.py` | The repo gains a new place where code runs or agents read instructions, a new rule, or working CI |
+| `_coordination/PR-RESOLUTION-LOG.md` | After every PR review or merge (append; never rewrite past entries) |
+| `benchmarks/L09-benchmark-matrix.md` "Extended systems" | A teardown is added, or a benchmarked package changes version, licence or deprecation status |
+| `docs/PRODUCT-VISION.md` | Only when Kunal restates the vision; `tools/test_product_vision.py` guards its repo facts |
+
+`python3 tools/living_docs.py` compares the facts these documents rely on (stars, CI runs, open PRs, cited issues, npm versions) with `_coordination/living-docs.json` and names the documents to revisit. Update those documents, then run it with `--accept`.
+
 ### Useful commands
 ```
 python3 tools/od.py status
