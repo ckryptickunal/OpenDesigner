@@ -46,7 +46,7 @@ LINE_RULES = [  # (severity, label, regex, file regex it applies to or None for 
      r"|(disable|skip|bypass) (the )?(safety|guardrail|check|consent|review)|auto-?merge|without asking|system prompt", r"\.(md|json|txt|html?|ya?ml)$"),
     ("REVIEW", "long encoded-looking string", r"[A-Za-z0-9+/=]{200,}|(\\x[0-9a-fA-F]{2}){20,}", None),
 ]
-INVISIBLE = re.compile("[​-‏‪-‮⁦-⁩﻿]")
+INVISIBLE = re.compile("[\u200b-\u200f\u202a-\u202e\u2066-\u2069\ufeff]")
 IST = re.compile(r"^\+- \d{4}-\d{2}-\d{2} \d{2}:\d{2} IST ")
 
 
