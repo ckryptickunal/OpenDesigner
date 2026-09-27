@@ -582,3 +582,16 @@ Append-only. One row per source opened, including rejected ones. Id ranges: S-L0
 | 2026-09-25 | S-L09-833 | https://cdn.jsdelivr.net/npm/@cdssnc/gcds-tokens@2.14.0/build/web/css/global/typography/lineHeights.css | Canadian Digital Service | 2.14.0 | A | used | Desktop and mobile line-height ratios |
 | 2026-09-25 | S-L09-834 | https://cdn.jsdelivr.net/npm/@cdssnc/gcds-tokens@2.14.0/build/web/css/global/spacing.css | Canadian Digital Service | 2.14.0 | A | used | Spacing scale |
 | 2026-09-25 | S-L09-835 | https://cdn.jsdelivr.net/npm/@cdssnc/gcds-tokens@2.14.0/build/web/css/global/border.css | Canadian Digital Service | 2.14.0 | A | used | Radius and width values |
+
+## GC Design System update to @gcds-core/tokens, 2026-09-27
+
+| Time | ID | URL | Publisher | Date / version | Tier | Status | Used for |
+|---|---|---|---|---|---|---|---|
+| 2026-09-27 | S-L09-839 | https://registry.npmjs.org/@gcds-core/tokens/1.6.0 ; https://registry.npmjs.org/@cdssnc/gcds-tokens | Canadian Digital Service | 1.6.0 | A | used | Package version, date, MIT license; deprecation notice on the old package |
+| 2026-09-27 | S-L09-840 | https://cdn.jsdelivr.net/npm/@gcds-core/tokens@1.6.0/README.md | Canadian Digital Service | 1.6.0 | A | used | Identity, distribution, bilingual README and contribution section |
+| 2026-09-27 | S-L09-841 | https://cdn.jsdelivr.net/npm/@gcds-core/tokens@1.6.0/build/web/css/global/color.css | Canadian Digital Service | 1.6.0 | A | used | Semantic colors and focus roles (five changed since 2.14.0) |
+| 2026-09-27 | S-L09-842 | https://cdn.jsdelivr.net/npm/@gcds-core/tokens@1.6.0/build/web/css/global/typography/fontFamilies.css | Canadian Digital Service | 1.6.0 | A | used | Typeface stacks |
+| 2026-09-27 | S-L09-843 | https://cdn.jsdelivr.net/npm/@gcds-core/tokens@1.6.0/build/web/css/global/typography/fontSizes.css | Canadian Digital Service | 1.6.0 | A | used | Desktop and mobile type scales (unchanged) |
+| 2026-09-27 | S-L09-844 | https://cdn.jsdelivr.net/npm/@gcds-core/tokens@1.6.0/build/web/css/global/typography/lineHeights.css | Canadian Digital Service | 1.6.0 | A | used | Line heights (unchanged) |
+| 2026-09-27 | S-L09-845 | https://cdn.jsdelivr.net/npm/@gcds-core/tokens@1.6.0/build/web/css/global/spacing.css | Canadian Digital Service | 1.6.0 | A | used | Spacing scale (unchanged) |
+| 2026-09-27 | S-L09-846 | https://cdn.jsdelivr.net/npm/@gcds-core/tokens@1.6.0/build/web/css/global/border.css | Canadian Digital Service | 1.6.0 | A | used | Radius and width (unchanged) |
