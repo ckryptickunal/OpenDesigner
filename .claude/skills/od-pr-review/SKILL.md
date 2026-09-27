@@ -94,6 +94,7 @@ cd .worktrees/merge-check && git merge --no-edit refs/od-review/pr-<N> [more PRs
 
 Then run, in that worktree:
 - every command in the "Before you commit" block of `AGENTS.md`, which is the single list of repo checks (do not keep a copy here);
+- every `run:` step in `.github/workflows/ci.yml`, because CI may add checks that are not in that block, and Actions is off, so nothing else runs them;
 - `python3 tools/check_links.py`;
 - every test file: `skills/*/scripts/test_*.py` and `tools/test_*.py` (`test_journey` runs as `python3 -m unittest test_journey` from its folder);
 - a JSON parse of every `*.json`, and a UTF-8 decode of every `*.md`.
