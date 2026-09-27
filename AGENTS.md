@@ -17,6 +17,7 @@ Load the **`opendesigner`** skill and follow it: `skills/opendesigner/SKILL.md`.
 | Learn from a website, screenshot, Figma file, repo or brand book | `opendesigner-extract` |
 | Change or extend a system that already has an `opendesigner/` folder | `opendesigner-extend` |
 | Get the system into CSS, Tailwind, Swift, Compose, Figma or Paper | `opendesigner-export` |
+| Add illustrations or "make it more visual": find open-licence SVGs, rank them, recolor them to the tokens, apply them | `opendesigner-illustrate` |
 
 ### Where the knowledge is
 | Path | What it holds |
@@ -28,6 +29,7 @@ Load the **`opendesigner`** skill and follow it: `skills/opendesigner/SKILL.md`.
 | `skills/opendesigner/references/standards.md`, `standards/<theme>.md` | House standards: rules from sources the owner marked non-negotiable, applied and locked in every project, changed only when the person explicitly asks ([docs/KNOWLEDGE.md](docs/KNOWLEDGE.md)) |
 | `skills/opendesigner/assets/templates/` | 8 visual templates (palette, type scale, spacing ruler, radius, elevation, motion, component sheet, option gallery). Each is JSON-fed, and its "Copy my choice" button produces `OD:` lines |
 | `skills/opendesigner/scripts/engine.py` | State, ramps, scales, contrast, validation and exports. Python 3.10+, standard library, no network |
+| `skills/opendesigner-illustrate/` | `scripts/illustrate.py` (search, rank, fetch, recolor to tokens, variants, apply, licence ledger) `references/sources.json` (generated from `synthesis/illustration-sources.json`: 44 illustration sources with verified licences and three access levels: agent fetches, agent may browse, you download), `references/directory.md` (the same list to browse, generated) and `references/searching.md` (where to look, how to word a search, file formats, how to move through each source) |
 | `skills/opendesigner/scripts/journey.py` | The private journey log (asked first), its report, and opt-in anonymous sharing ([docs/PRIVACY.md](docs/PRIVACY.md)) |
 | `data/` | The same JSON and stage files, for tools that are not skills |
 | `synthesis/`, `research/` | The full sources, if a reference file is not enough |
@@ -85,7 +87,7 @@ Use the skill's own folder path when it is installed elsewhere (for example a pl
 | `traces/` | Append-only log of every source each lane opened |
 | `synthesis/` | Combined outputs: ontology, questionnaire, levers (dials and formulas), decision graph, cards, builder spec, house standards (`standards.json`) and impact notes (`impact.json`) |
 | `learn/` | **The learning wiki** (lane L19), kept on its own: trusted sources and their authority, one analysis per source, an OpenWiki Markdown wiki with cross-source topic pages and Decision Cards. Start at `learn/MAP.md`; to change the app from it, `learn/IMPROVING.md`; the rules, `docs/KNOWLEDGE.md`. Third-party text (`learn/raw/`) is never committed |
-| `skills/` | **Source of truth** for the four skills (Agent Skills format, portable frontmatter only) |
+| `skills/` | **Source of truth** for the five skills (Agent Skills format, portable frontmatter only) |
 | `.agents/skills/`, `.claude/skills/` | Generated copies of `skills/`. Never edit them. Run `python3 tools/sync_skills.py` |
 | `data/`, `skills/*/references/*.json`, `references/stages/`, `references/cards/`, `chatgpt-project/knowledge/` | Generated from `synthesis/` (including `glossary.json`) by `python3 tools/build_data.py`. Edit the source instead |
 | `.claude-plugin/`, `plugin.json` | Claude plugin and marketplace manifests, and the Agent Plugins 1.0 manifest. Keep `version` in step |

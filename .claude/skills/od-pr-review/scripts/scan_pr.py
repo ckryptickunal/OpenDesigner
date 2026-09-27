@@ -18,6 +18,8 @@ HIGH_RISK = [  # (path regex, why a human must read every changed line)
     (r"^\.claude-plugin/|^plugin\.json$", "plugin manifest: what every user installs"),
     (r"(^|/)(AGENTS|CLAUDE|GEMINI)\.md$|^llms\.txt$|SKILL\.md$|^chatgpt-project/instructions\.md$"
      r"|references/(rules|guardrails|hooks|improve)\.md$", "instructions that other people's AI models follow"),
+    (r"illustration-sources\.json$|opendesigner-illustrate/references/(sources\.json|searching\.md)$",
+     "URLs, licences and access levels that agents follow: re-check changed sources against their live licence page and robots.txt"),
     (r"journey\.py$|^server/|^docs/PRIVACY\.md$", "telemetry and consent: what may leave a user's machine"),
     (r"^(LICENSE|LICENSE-CONTENT|CITATION\.cff|GOVERNANCE\.md|SECURITY\.md)$", "licence, governance or security policy"),
     (r"^\.gitignore$", "ignore rules: removing a line can expose secrets"),

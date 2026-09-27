@@ -6,7 +6,7 @@
     {
       "name": "opendesigner",
       "source": "./",
-      "description": "Four skills: opendesigner (the interview), opendesigner-extract (learn from a reference without copying identity), opendesigner-extend (change a system safely), opendesigner-export (code, Figma, Paper).",
+      "description": "Five skills: opendesigner (the interview), opendesigner-extract (learn from a reference without copying identity), opendesigner-extend (change a system safely), opendesigner-export (code, Figma, Paper), opendesigner-illustrate (open-licence illustrations recolored to your tokens).",
       "category": "design",
       "tags": ["design-system", "design-tokens", "theme", "figma"]
     }

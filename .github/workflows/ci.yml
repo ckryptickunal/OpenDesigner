@@ -69,6 +69,9 @@ jobs:
       - name: Reference extraction tests (css_scan.py, read_page.js with the runner's Node)
         run: python3 skills/opendesigner-extract/scripts/test_extract.py
 
+      - name: Illustration skill tests (illustrate.py, offline)
+        run: python3 skills/opendesigner-illustrate/scripts/test_illustrate.py
+
       - name: Learning wiki (tools/wiki.py check, standards, tests without OpenWiki)
         run: |
           python3 tools/wiki.py check

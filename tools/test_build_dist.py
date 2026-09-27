@@ -22,7 +22,7 @@ class StandaloneSkills(unittest.TestCase):
                 with self.assertRaises(SystemExit) as exit_status:
                     build_dist.main()
                 self.assertEqual(exit_status.exception.code, 0)
-            for name in ("opendesigner-extract", "opendesigner-extend", "opendesigner-export"):
+            for name in ("opendesigner-extract", "opendesigner-extend", "opendesigner-export", "opendesigner-illustrate"):
                 with self.subTest(skill=name), zipfile.ZipFile(Path(tmp) / f"{name}.zip") as z:
                     root = f"{name}/"
                     names = z.namelist()

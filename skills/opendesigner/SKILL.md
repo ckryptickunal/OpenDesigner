@@ -21,6 +21,7 @@ Take facts from `references/`, not from memory. Use `scripts/engine.py` for all 
 | The repo already has `opendesigner/state.json` or an OpenDesigner DESIGN.md | **opendesigner-extend** |
 | They share a website, screenshot, Figma file, repo CSS or brand book to learn from | **opendesigner-extract**, then come back |
 | They want it in Figma, Paper, Tailwind, iOS or Android | **opendesigner-export** |
+| They want illustrations, or the app "more visual" (empty states, onboarding, errors, hero) | **opendesigner-illustrate** |
 | A one-off UI task in a project that already has a system | Follow its DESIGN.md. Don't interview |
 
 ## Files in this skill
@@ -131,7 +132,7 @@ Once the system exists, people ask for pages, and then for changes to them. Foll
 - **At the end of any implementation** (a page, a component, a refactor), run `engine.py review`. Then re-read DESIGN.md. Record any new value the work needed as a decision, not as a hard-coded value. `assets/output/AGENTS-snippet.md` tells every later agent to do the same.
 
 ## Designer hooks
-Some assets need a person to make them, such as a logo, app icon, illustration, photos, a brand typeface or exact brand colors. `references/hooks.md` lists all 14. It says when to ask, which formats to accept, what to offer when they don't have one, and how to record the answer.
+Some assets need a person to make them, such as a logo, app icon, illustration, photos, a brand typeface or exact brand colors. `references/hooks.md` lists all 14. It says when to ask, which formats to accept, what to offer when they don't have one, and how to record the answer. When they have no illustrations and want open-library art, hand off to **opendesigner-illustrate**: it finds, ranks, recolors and applies art with a licence ledger.
 
 When they name a brand font, ask where its licence lets them use it: websites, apps, and hosting the files themselves. Then say in one line what that means for each platform they build for. For example: "Your licence covers websites only, so the iPhone app will use the system font." Record it with `engine.py pick Q-type-02 web-only` (or `yes`, `app-only`), as `hooks.md` (H-type) says. Never guess a licence.
 
