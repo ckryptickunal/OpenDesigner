@@ -757,6 +757,62 @@ def pct(a, b):
     return f"{round(100 * a / b)}%" if b else "n/a"
 
 
+def _requests(explicit):
+    if explicit is None:
+        return set()
+    if isinstance(explicit, str):
+        return {explicit}
+    return {item for item in explicit if item}
+
+
+def suggest_flow(question_id, *, owner=False, locked=False, answered=False, high_impact=False,
+                 explicit=None, help_count=0, consented_friction=False):
+    """Suggest how to ask one question. Never writes, skips, or changes an answer.
+
+    explicit is an in-session request, or several: "faster", "show an example", "explain more".
+    Friction counts are used only when consented_friction is true. Owner and high-impact
+    questions stay on screen; a speed request does not remove them.
+    """
+    asked = _requests(explicit)
+    suggestion = "keep"
+    reason = "No signal says this question should change."
+    if locked or answered:
+        reason = "This question is already settled in the project, so the suggestion is to leave it."
+    elif "faster" in asked and "explain more" in asked:
+        reason = "The signals disagree, so leave the question as it is."
+    elif owner or high_impact:
+        if "explain more" in asked or (consented_friction and help_count >= 2):
+            suggestion = "explain-more"
+            reason = "They asked for more explanation. The question still has to be asked."
+        elif "show an example" in asked:
+            suggestion = "show-example"
+            reason = "They asked to see an example. The question still has to be asked."
+        elif "faster" in asked:
+            reason = "A request to go faster does not skip an owner or high-impact question."
+        else:
+            reason = "Owner and high-impact questions stay visible."
+    elif "faster" in asked and help_count >= 2:
+        reason = "A speed request and repeated help disagree, so leave the question as it is."
+    elif "faster" in asked:
+        suggestion = "shorten"
+        reason = "They asked to go faster in this session. This does not change the shared interview."
+    elif "show an example" in asked:
+        suggestion = "show-example"
+        reason = "They asked to see one example before answering."
+    elif "explain more" in asked or (consented_friction and help_count >= 2):
+        suggestion = "explain-more"
+        reason = "They need the explanation. Friction counts are included only because logging was allowed."
+    elif help_count >= 2:
+        reason = "Help requests are ignored until logging is allowed. The question stays as written."
+    return {
+        "question": question_id,
+        "suggestion": suggestion,
+        "reason": reason,
+        "writes": False,
+        "skips": False,
+    }
+
+
 def analyze(sm, min_n=1):
     steps = sm["steps"]
     qsteps = {k: s for k, s in steps.items() if s["level"] in LEVELS}
@@ -806,7 +862,7 @@ def analyze(sm, min_n=1):
     speedups += [f"{k}: stopped here {steps[k]['dropped']} times: make it skippable, or ask it later."
                  for k in dropped if steps[k]["dropped"] >= max(min_n, 2)]
     auto = [r for r in defaults if auto_apply(r, min_n)]
-    speedups += [f"{r['step']}: {kept_words(r)} and {r['weight'] or 'unknown'} impact: auto-apply it and mention it in one line."
+    speedups += [f"{r['step']}: {kept_words(r)} and {r['weight'] or 'unknown'} impact: hypothesis, not applied: mention it in one line after testing."
                  for r in auto]
 
     def names(rows):

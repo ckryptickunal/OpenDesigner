@@ -585,3 +585,14 @@ Append-only. One row per source opened, including rejected ones. Id ranges: S-L0
 | 2026-09-25 | S-L09-786 | https://eui.elastic.co/docs/getting-started/theming/high-contrast-mode/ | Elastic | live | A | used | Independent contrast preference |
 | 2026-09-25 | S-L09-837 | https://eui.elastic.co/docs/getting-started/theming/tokens/borders/ | Elastic | live | A | used | Border sample `#E3E8F2` (matches 8.1.0 `euiBorderColor`); prose names `colors.lightShade`, source uses `borderBaseSubdued` |
 | 2026-09-25 | S-L09-838 | https://eui.elastic.co/docs/getting-started/accessibility/ | Elastic | live | A | used | Accessibility target and integration responsibilities |
+## Workday Canvas follow-up, 2026-09-25
+
+| Time | ID | URL | Publisher | Date / version | Tier | Status | Used for |
+|---|---|---|---|---|---|---|---|
+| 2026-09-25 | S-L09-767 | https://registry.npmjs.org/@workday/canvas-tokens-web/4.5.0 | Workday | 4.5.0 | A | used | Package version, license and exports |
+| 2026-09-25 | S-L09-768 | https://github.com/Workday/canvas-tokens/blob/e62a99610bbc0cc59f146781bcca6825cfb1028f/README.md | Workday | e62a99610bbc | A | used | Support policy and token license |
+| 2026-09-25 | S-L09-769 | https://github.com/Workday/canvas-tokens/blob/e62a99610bbc0cc59f146781bcca6825cfb1028f/packages/canvas-tokens/tokens/base.json | Workday | e62a99610bbc | A | used | Base palette, sizes and font families |
+| 2026-09-25 | S-L09-770 | https://github.com/Workday/canvas-tokens/blob/e62a99610bbc0cc59f146781bcca6825cfb1028f/packages/canvas-tokens/tokens/web/sys.json | Workday | e62a99610bbc | A | used | System aliases, gaps, shape, type and migration names |
+| 2026-09-25 | S-L09-771 | https://github.com/Workday/canvas-tokens/blob/e62a99610bbc0cc59f146781bcca6825cfb1028f/packages/canvas-tokens/tokens/web/brand.json | Workday | e62a99610bbc | A | used | Brand primary aliases |
+| 2026-09-25 | S-L09-772 | https://unpkg.com/@workday/canvas-tokens-web@4.5.0/css/base/_variables.css | Workday | 4.5.0 | A | used | Published base CSS; inspected in npm archive |
+| 2026-09-25 | S-L09-773 | https://unpkg.com/@workday/canvas-tokens-web@4.5.0/css/system/_variables.css | Workday | 4.5.0 | A | used | Published system CSS; inspected in npm archive |
