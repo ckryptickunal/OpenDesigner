@@ -2,7 +2,7 @@
 type: topic
 title: Design taste and judgement
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources: []
 tags: []
 ---
@@ -54,3 +54,4 @@ Eye-catching Dribbble-style variety differs from usable design; usability is at 
 - [[sources/tNMAFjzapOk-the-formula-behind-truly-captivating-ui-sections|The Formula Behind Truly Captivating UI Sections]]: Frames good UI as structure, rhythm and just the right surprise, and warns against motion and ornament for their own sake.
 - [[sources/ulSOdTgoGeY-awful-to-amazing-web-designs-easily|Awful To AMAZING Web Designs Easily]]: Distinguishes a good design from an interesting one and argues interesting sites have more variety in layouts, colors and sizes, and more originality.
 - See also: [[synthesis/design-taste-and-judgement|Design taste and judgement synthesis]]
+- [[sources/kdRkuqu8apE-i-studied-2-108-dashboards-to-see-what-sticks|I Studied 2,108 Dashboards To See What Sticks]]: Use the gut check 'Would I screenshot this, and why?'; the best dashboards knew what to leave out rather than being the prettiest.

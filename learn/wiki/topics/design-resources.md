@@ -2,7 +2,7 @@
 type: topic
 title: Design resources
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources: []
 tags: []
 ---
@@ -30,3 +30,5 @@ Names prompt sites (Good Brief, Sharpen Design) and inspiration sites (Dribbble,
 - [[sources/pGYLZyBE32o-i-redesigned-google-s-ai-website-from-scratch-complete-transformation|I Redesigned Google's AI Website from SCRATCH (complete transformation)]]: Flaticon, filtered to interface icons, as a source of clean simple icons.
 - [[sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai|Vibe Coding a Pro UI in SECONDS With AI]]: Compares reference sources: busy Dribbble dashboards confuse the AI, SiteInspire and real products like Linear work better; 21st.dev supplies AI-ready components.
 - See also: [[synthesis/design-resources|Design resources synthesis]]
+- [[sources/YbLF42BaoZs-i-gave-claude-600-000-ui-screens-then-this-happened|I Gave Claude 600,000 UI Screens… Then This Happened]]: A library of over 600,000 real app and website screens, flows and animations, reachable from AI tools, used for research, quick lookups and competitor comparisons.
+- [[sources/a1DBwxKuioA-mobbin|Mobbin]]: Promotes Mobbin as a searchable library of real mobile and web app screenshots, flows and apps for design inspiration; the counts come from the description, not the video.

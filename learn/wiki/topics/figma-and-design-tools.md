@@ -2,7 +2,7 @@
 type: topic
 title: Figma and design tools
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources: []
 tags: []
 ---
@@ -35,3 +35,4 @@ Uses Figma layout grids, auto layout with vertical trim off, styles, variables a
 - [[sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai|Vibe Coding a Pro UI in SECONDS With AI]]: Download the AI result as HTML, import it with the HTML to design plugin (File tab, components on for hover effects), then do small fixes in Figma.
 - [[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]: Figma remains the author's tool for vector graphics such as logos, exported as SVG into the project.
 - See also: [[synthesis/figma-and-design-tools|Figma and design tools synthesis]]
+- [[sources/YbLF42BaoZs-i-gave-claude-600-000-ui-screens-then-this-happened|I Gave Claude 600,000 UI Screens… Then This Happened]]: Paper MCP is used to build the flow inside a design file; an agent inside Figma produced some broken UI in iOS map and filter views until it researched references first.

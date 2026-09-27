@@ -2,7 +2,7 @@
 type: synthesis
 title: Design resources
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources:
   - 59XWYgN00nQ
   - 66oOi9OLMCw
@@ -16,6 +16,8 @@ sources:
   - PDcQJOPby1k
   - RCneB_MQ7qs
   - V3Omp1hm0Sg
+  - YbLF42BaoZs
+  - a1DBwxKuioA
   - adev-changelog
   - c1TvOcKdBVE
   - eeN7yUcIWbw
@@ -33,7 +35,7 @@ tags:
 
 ## In short
 
-Designers lean on outside resources for four things: inspiration, ready-made assets (icons, photos, mockups, fonts, 3D), tools that do one job better than Figma, and learning material. The sources name dozens of sites; what matters more is how to use them. Take one consistent icon set rather than hunting icon by icon, pick references from real products rather than showy gallery shots, and borrow structure, never identity or unlicensed assets. Emil Kowalski's sources add that easing curves and UI libraries should come from a short trusted list, which OpenDesigner locks as house standards. Most picks here are one creator's opinions with dates attached, and several videos are sponsored, so check that a site still exists, what it costs and what its licence allows before relying on it.
+Designers lean on outside resources for four things: inspiration and reference libraries (now including libraries of shipped app screens that an AI can search), ready-made assets (icons, photos, mockups, fonts, 3D), tools that do one job better than Figma, and learning material. The sources name dozens of sites; what matters more is how to use them. Take one consistent icon set rather than hunting icon by icon, pick references from real products rather than showy gallery shots, and borrow structure, never identity or unlicensed assets. Emil Kowalski's sources add that easing curves and UI libraries should come from a short trusted list, which OpenDesigner locks as house standards. Most picks here are one creator's opinions with dates attached, and several videos are sponsored or made by the tool's own company, so check that a site still exists, what it costs and what its licence allows before relying on it.
 
 ## House standards
 
@@ -54,9 +56,14 @@ Also locked, in `skills/opendesigner/references/guardrails.md`: the identity fir
 - Common inspiration sources are Dribbble, Pinterest, Instagram and Behance [S-L19-037] ([[sources/59XWYgN00nQ-create-a-portfolio-with-no-experience-or-clients-needed|Create A Portfolio With No Experience (or clients) Needed]]); Dribbble and Behance again for a mood board before opening Figma [S-L19-040] ([[sources/6CC8lLnqa28-6-things-you-probably-need-to-hear-as-a-web-designer|6 Things You Probably Need to Hear (as a web designer)]]); and Mobbin, Dribbble and Pinterest for a swipe file of about 20 hero and feature sections [S-L19-043] ([[sources/9WVt1CelBfg-the-stupid-simple-way-to-learn-ui-ux-design-in-exactly-10-minutes|The stupid simple way to learn UI/UX design in exactly 10 minutes]]). Mobbin sponsors that last video.
 - Unsectioned splits real websites into searchable sections for layout ideas; Design Spells collects micro-interactions from large brands; trending.design gathers trending work from Twitter [S-L19-073] ([[sources/eeN7yUcIWbw-20-top-underrated-web-design-resources-for-2025|20 Top Underrated Web Design Resources for 2025]]).
 - Real competitors and sibling products are references too: EV sites before a car-brand redesign [S-L19-065] ([[sources/V3Omp1hm0Sg-i-redesigned-a-failing-tesla-wannabe-full-website-to-save-it|I Redesigned a Failing Tesla WANNABE Full Website To SAVE It]]), and OpenAI, Microsoft and Google pages before an AI-product redesign [S-L19-082] ([[sources/pGYLZyBE32o-i-redesigned-google-s-ai-website-from-scratch-complete-transformation|I Redesigned Google's AI Website from SCRATCH (complete transformation)]]).
-- For an AI tool, a screenshot of a real product such as Linear or a realistic site from SiteInspire works better than a busy Dribbble dashboard, whose small details the AI cannot see [S-L19-086] ([[sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai|Vibe Coding a Pro UI in SECONDS With AI]]).
+- For an AI tool, a screenshot of a real product such as Linear worked better than a busy Dribbble dashboard, whose small details the AI could not see; the presenter also suggests realistic sites from SiteInspire but did not test one [S-L19-086] ([[sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai|Vibe Coding a Pro UI in SECONDS With AI]]).
 - Emil Kowalski's method is to build a curated list of respected tastemakers, then the people they admire, and study their work; Brian Lovin's App Dissection is his example of studying apps rather than just using them [S-L19-008] ([[sources/ek-developing-taste-developing-taste|Developing Taste]]).
 - Practice prompts for self-initiated projects come from Good Brief or Sharpen Design [S-L19-037] ([[sources/59XWYgN00nQ-create-a-portfolio-with-no-experience-or-clients-needed|Create A Portfolio With No Experience (or clients) Needed]]).
+
+### Libraries of shipped screens
+
+- Mobbin describes itself as a fully searchable reference library of real mobile and web app screenshots; the description of its promo video counts over 600,000 screens, 322,000 flows and 1,000 apps and calls it the world's largest. These are the company's own marketing figures, and the 51-second promo has no narration [S-L19-109] ([[sources/a1DBwxKuioA-mobbin|Mobbin]]).
+- Its MCP connection, included with paid plans, lets AI tools such as Claude, Codex and Cursor search the library. Mobbin's demo uses it for a research report before designing a flow, then for narrow lookups: a head-to-head comparison of DoorDash and Uber Eats checkout, tipping and order summary, 10 empty states from productivity apps at once, copy ideas that cite their sources, ideas remixed across industries, and edge cases. The library cannot decide what to prioritize, keep or cut [S-L19-108] ([[sources/YbLF42BaoZs-i-gave-claude-600-000-ui-screens-then-this-happened|I Gave Claude 600,000 UI Screens… Then This Happened]]).
 
 ### Color tools
 
@@ -92,7 +99,9 @@ Between the sources:
 - **Icon sources disagree:** one video rules out searching Flaticon icon by icon [S-L19-057]; another recommends Flaticon filtered to interface icons [S-L19-082]; a third uses Flaticon alongside plugin sets [S-L19-045]. All three want a consistent, simple set; the filter in [S-L19-082] is one way to get there [inferred].
 - **Dribbble as inspiration, with limits:** it is a default inspiration source in [S-L19-037] [S-L19-040] [S-L19-043] [S-L19-065], but other videos warn that Dribbble shots favor looks over usability [S-L19-040] and make poor references for AI [S-L19-086]. Real products and real sites are the safer reference [S-L19-086] [S-L19-082] [inferred].
 - **Curated lists over big menus:** Emil's sources narrow choices to trusted lists: libraries the author trusts [S-L19-014], a curated list of tastemakers [S-L19-008], and curves only from easing.dev or easings.co (`STD-easing-duration-02`). [S-L19-073] instead offers 20 tools to try. One is about what to ship, the other about what to explore [inferred].
-- **Sponsorship:** Mobbin sponsors [S-L19-043] and Relume sponsors [S-L19-062], while [S-L19-073] recommends the Relume kit without a sponsor read. Treat any sponsored pick as a plug.
+- **Sponsorship:** Mobbin sponsors [S-L19-043] and Relume sponsors [S-L19-062], while [S-L19-073] recommends the Relume kit without a sponsor read. Mobbin's own videos [S-L19-108] [S-L19-109] are promotion too. Treat any sponsored or vendor pick as a plug.
+- **The size claim:** "over 600,000" appears both in the description of a 2024 promo [S-L19-109] and in a 2026 demo [S-L19-108]. A description can be edited after publishing, so neither figure can be dated or checked from these sources [inferred].
+- **Big library or short list:** Emil's sources narrow choices to short trusted lists, and a 600,000-screen library is the opposite. The Mobbin demo narrows it by asking for one industry and one flow, and leaves the final choice to the designer [S-L19-108]; both treat the person's judgement as the filter [inferred].
 
 Against OpenDesigner's existing research and rules:
 
@@ -100,11 +109,13 @@ Against OpenDesigner's existing research and rules:
 - **Color ramps:** DC-L01-01 builds ramps in OKLCH and notes that Tailwind v4 moved its palette to OKLCH. The Tailwind pairs [S-L19-070] come from that palette, but the video mentions no contrast check, so each pair still needs one [inferred]. Coolors [S-L19-040] [S-L19-070] gives a base color, not a ramp.
 - **Font pairing:** DC-L02-03 says a pairing needs both distinction and harmony and that too-similar faces read as a mistake. A one-click generator such as Fontjoy [S-L19-073] can suggest pairs, but the pair still needs a stated reason (`STD-visual-details-11` starts from the system font) [inferred].
 - **Identity and licences:** borrowing a logo from Logoipsum, which the presenter jokes about stealing [S-L19-073], runs into the identity firewall and licence rules if it ships. Logo libraries fit as clearly marked placeholders only; the guardrails say a generated placeholder is never shown as a finished asset [inferred].
+- **Shipped screens as references (agree):** DC-L19-161 asks first for screenshots of products the person uses and notes that the Kole Jain videos naming Mobbin are ones Mobbin sponsors. A library of shipped screens is that kind of reference at scale [S-L19-108] [S-L19-109]; the screens show other companies' products, so the identity firewall and licence rules apply to anything taken from them, and no source here covers the library's licence terms [inferred].
 - **3D and animated assets:** DC-L05-21 notes that 3D and animated assets make a product feel alive but are heavy and can distract. Endless Tools [S-L19-073] fits Q-img-06's `3d` option with that caution [inferred].
 
 ## Decisions this informs
 
-- **Q-ref-01** (a site, screenshot or Figma file you like): prefer real products and realistic sites over busy gallery shots [S-L19-086]; references give structure and quality, never identity (`guardrails.md` section 1).
+- **Q-ref-01** (a site, screenshot or Figma file you like): prefer real products and realistic sites over busy gallery shots [S-L19-086]; a library of shipped screens can supply them flow by flow [S-L19-108]; references give structure and quality, never identity (`guardrails.md` section 1).
+- **Q-brand-02** (which products it should feel like, including `competitors`): a head-to-head lookup of two competitors' flows [S-L19-108] is one way to fill it [inferred].
 - **Q-icon-01** (your own icons or a ready-made set): one consistent set [S-L19-057], such as Phosphor or Lucide [S-L19-061], backs `open-source` for web products.
 - **Q-color-01** (fixed brand colors, or a palette built from one color) and **Q-color-07** (how each ramp is built, default `oklch`): Coolors can supply the one starting color for `seed` [S-L19-070] [S-L19-040]; OpenDesigner still builds the ramp itself [inferred].
 - **Q-type-05** (one family or a pair): a pairing tool [S-L19-073] can suggest options for the `sans-serif` or `display-face` answers.
@@ -116,6 +127,7 @@ Against OpenDesigner's existing research and rules:
 - Searching Flaticon unfiltered (many clashing styles) beside one consistent icon pack [S-L19-057] ([[sources/Lp6ey4AyDzA-8-web-design-hacks-to-actually-make-your-designs-better|8 Web Design Hacks To ACTUALLY Make Your Designs Better]]).
 - A busy Dribbble dashboard as an AI reference beside a Linear screenshot, and the two results [S-L19-086] ([[sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai|Vibe Coding a Pro UI in SECONDS With AI]]).
 - Tailwind 50 with 500 and 950 with 300 as ready-made background and accent pairs [S-L19-070] ([[sources/c1TvOcKdBVE-the-8-ui-ux-cheat-codes-for-instantly-better-designs|The 8 UI/UX Cheat Codes for INSTANTLY Better Designs]]).
+- A single lookup returning 10 empty states from productivity apps, and a side-by-side of two delivery apps' checkout, tipping and order summary [S-L19-108] ([[sources/YbLF42BaoZs-i-gave-claude-600-000-ui-screens-then-this-happened|I Gave Claude 600,000 UI Screens… Then This Happened]]).
 - Isocons' rounded and sharp isometric icons at two stroke weights [S-L19-073] ([[sources/eeN7yUcIWbw-20-top-underrated-web-design-resources-for-2025|20 Top Underrated Web Design Resources for 2025]]).
 - A mesh gradient from a dedicated generator such as Photo Gradient [S-L19-073] ([[sources/eeN7yUcIWbw-20-top-underrated-web-design-resources-for-2025|20 Top Underrated Web Design Resources for 2025]]), beside the plugin-free Figma recipe of stacked, blurred circles on Overlay [S-L19-058] ([[sources/MZSm6MA8bww-advanced-figma-web-design-effects|Advanced FIGMA Web Design Effects]]).
 
@@ -124,3 +136,4 @@ Against OpenDesigner's existing research and rules:
 - Which of the named sites are still live, free and licensed for commercial use? The list in [S-L19-073] dates from January 2025, and no source checks licences.
 - Should OpenDesigner keep its own vetted resource list per asset slot (icons, photos, mockups, fonts, 3D), with licence notes, the way `STD-visual-details-55` does for code libraries?
 - Is Flaticon's "interface icons" filter consistent enough to count as one set, or does it mix icon families?
+- Mobbin's library and MCP are paid [S-L19-108]. Should OpenDesigner's reference step suggest a shipped-screen library at all, and if so, how does it say that screens from other companies are for structure only?

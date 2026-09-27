@@ -2,7 +2,7 @@
 type: synthesis
 title: Figma and design tools
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources:
   - AH_ugxmLeUM
   - A_Ozpb0XDuw
@@ -12,6 +12,7 @@ sources:
   - NtZeYmTMuo4
   - P2ksReDwWkE
   - VPeTgU7la34
+  - YbLF42BaoZs
   - c1TvOcKdBVE
   - eeN7yUcIWbw
   - ek-the-magic-of-clip-path
@@ -31,7 +32,7 @@ tags:
 
 ## In short
 
-Figma is the everyday tool in most of these sources, and the videos share many small habits that make it faster and tidier: auto layout for anything with padding, one set of styles, variables and components, a nudge amount that matches your spacing grid, layer names that let Smart Animate and multi-edit find the right layers, and prototypes checked on the real screen size. The sources also show Figma's limits, where a dedicated tool does better (mesh gradients, arrows, 3D, animation), and a newer workflow where the design is written in code by an AI and Figma is used only for polish or for vector graphics such as logos. Figma's own defaults are not always good: its preset shadow is called too harsh, and designing zoomed out made one presenter's type and spacing far too large. Everything here is practitioner opinion tied to the Figma of its date (2024 to 2026), and none of it overrides OpenDesigner's own token file, which Figma only mirrors.
+Figma is the everyday tool in most of these sources, and the videos share many small habits that make it faster and tidier: auto layout for anything with padding, one set of styles, variables and components, a nudge amount that matches your spacing grid, layer names that let Smart Animate and multi-edit find the right layers, and prototypes checked on the real screen size. The sources also show Figma's limits, where a dedicated tool does better (mesh gradients, arrows, 3D, animation), and newer workflows where an AI writes the design in code and Figma is used only for polish or for vector graphics such as logos, or where an agent builds straight into a design file through an MCP connection (Paper in one Mobbin demo). Figma's own defaults are not always good: its preset shadow is called too harsh, and designing zoomed out made one presenter's type and spacing far too large. Everything here is practitioner opinion tied to the Figma of its date (2024 to 2026), and none of it overrides OpenDesigner's own token file, which Figma only mirrors.
 
 ## House standards
 
@@ -86,13 +87,18 @@ Also from `skills/opendesigner/references/guardrails.md`, section 6: before writ
 - Ask the AI for HTML and CSS, download it, and import it with the HTML to design plugin (File tab, components setting on so hover effects come across). Because it is HTML and not an image, every element stays editable. Small fixes such as a sticky sidebar or exact alignment are faster in Figma than by re-prompting [S-L19-086] ([[sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai|Vibe Coding a Pro UI in SECONDS With AI]]).
 - Steve Schoger designs a whole marketing page in Claude Code and opens Figma mainly for vector graphics such as logos, exported as SVG into the project [S-L19-103] ([[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]).
 
+### Agents working inside the design tool
+
+- In Mobbin's demo, a fresh Claude desktop session connected to Paper through its MCP builds an onboarding flow inside a Paper file that already holds a (made-up) design system, working from an attached research report and a short brief [S-L19-108] ([[sources/YbLF42BaoZs-i-gave-claude-600-000-ui-screens-then-this-happened|I Gave Claude 600,000 UI Screens… Then This Happened]]).
+- An agent inside Figma, asked for iOS map and filter views, produced some broken UI; connected to Mobbin's MCP to research references first, it studied them and cited its sources [S-L19-108] ([[sources/YbLF42BaoZs-i-gave-claude-600-000-ui-screens-then-this-happened|I Gave Claude 600,000 UI Screens… Then This Happened]]). The screens are only shown on video, and the comparison is the vendor's own demo.
+
 ## Where they agree and disagree
 
 Between the sources:
 
 - **Auto layout everywhere:** agreed across [S-L19-045] [S-L19-075] [S-L19-074] [S-L19-079].
 - **Figma's defaults need adjusting:** the preset shadow is too strong [S-L19-057] [S-L19-045], and zooming out misleads you on size [S-L19-057].
-- **Where the design lives:** most videos design in Figma and hand off; [S-L19-086] generates in code and polishes in Figma; [S-L19-103] designs in code and keeps Figma for vectors. The direction is moving toward code, with Figma as one tool among several [inferred].
+- **Where the design lives:** most videos design in Figma and hand off; [S-L19-086] generates in code and polishes in Figma; [S-L19-103] designs in code and keeps Figma for vectors; [S-L19-108] has an agent build inside a design file through MCP. The work is moving toward code and agents, with Figma as one tool among several [inferred].
 - **Figma versus dedicated tools:** Figma can make a mesh gradient with stacked blurred layers [S-L19-058], but [S-L19-073] says a dedicated generator does more. Both hold: the recipe is enough for a soft gradient, the generator for richer ones [inferred].
 
 Against OpenDesigner's existing research:
@@ -100,7 +106,7 @@ Against OpenDesigner's existing research:
 - **Colors as styles conflicts with the default:** [S-L19-045] puts colors in styles and measurements in variables. DC-L07-21 defaults to "variables for values, styles for bundles": every single color, spacing, radius and opacity value is a variable, and only composites (text styles, shadows, gradients, grids) are styles, because a value that changes by mode must be a variable. Follow DC-L07-21; the video's split would break dark mode [inferred].
 - **Corner smoothing:** [S-L19-070] turns iOS corner smoothing to the maximum on every shape. DC-L04-04 says Figma's iOS preset is 60% and recommends it only for iOS-targeted components, with circular arcs on the web; Q-shape-04 defaults to `circular` [inferred].
 - **Figma mirrors the source of truth:** DC-L07-08 defaults to DTCG files in git with Figma as a synced, published view, and DC-L16-02 makes the builder's own model canonical with design tools as push targets. The code-first workflows of [S-L19-086] and [S-L19-103] fit that direction; the Figma-first habits in most videos fit teams where designers own the tokens [inferred]. DC-L11-16 reports that 60% of teams have no design-to-code automation at all.
-- **Writing into Figma:** DC-L16-13 and DC-L18-13 write to Figma through the remote MCP when a Full seat is present, otherwise emit DTCG files Figma imports, and confirm before writing to a real file. The HTML to design plugin [S-L19-086] is another import path, for screens rather than tokens [inferred].
+- **Writing into Figma:** DC-L16-13 and DC-L18-13 write to Figma through the remote MCP when a Full seat is present, otherwise emit DTCG files Figma imports, and confirm before writing to a real file. The HTML to design plugin [S-L19-086] is another import path, for screens rather than tokens [inferred]. Mobbin's Paper demo is the same MCP route used to build screens rather than tokens, on a file set up for the purpose [S-L19-108]; `guardrails.md` section 6 still applies (confirm the target file before writing) [inferred].
 - **Plan limits:** DC-L07-27 says the Figma plan decides what is possible (Starter cannot publish libraries; Code Connect, branching and analytics need Organization). None of the videos mention plan limits.
 - **Shadows:** a softer, lower-opacity shadow [S-L19-057] [S-L19-045] moves toward `STD-visual-details-14`'s semi-transparent shadow.
 
@@ -114,6 +120,7 @@ Against OpenDesigner's existing research:
 - **Q-shape-04** (circular or squircle corners): [S-L19-070] favors maximum smoothing; the default stays `circular` for the web.
 - **Q-depth-03** (what shadows look like): start below Figma's 25% preset, at 15 to 20% [S-L19-057].
 - **Q-dist-01** (planned: how the system leaves the builder, including `design-push` to Figma or Paper): the round trip in [S-L19-086] shows the reverse direction, code into Figma.
+- **Q-tool-03** (which design tool): the `paper` answer (MCP read and write) is the one Mobbin's agent builds in [S-L19-108]; an agent in a design file needs the system's tokens in that file to build on, as the demo's file had [inferred].
 
 ## Visual examples worth showing
 
@@ -123,9 +130,11 @@ Against OpenDesigner's existing research:
 - A kaleidoscope, a clay rectangle, a metallic card with its rose-gold variant and a plugin-free mesh gradient, each with its layer stack visible [S-L19-058] ([[sources/MZSm6MA8bww-advanced-figma-web-design-effects|Advanced FIGMA Web Design Effects]]).
 - An AI-generated dashboard before and after a few minutes of fixes in Figma (fonts, alignment, color) [S-L19-086] ([[sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai|Vibe Coding a Pro UI in SECONDS With AI]]).
 - The same 3D logo made in Spline and in Blender [S-L19-046] ([[sources/A_Ozpb0XDuw-how-hard-is-it-to-really-make-a-no-code-3d-animated-website|How hard is it to REALLY make a no-code 3D animated website?]]).
+- iOS map and filter views from an agent inside Figma, before research (some broken UI) and after (citing its references) [S-L19-108] ([[sources/YbLF42BaoZs-i-gave-claude-600-000-ui-screens-then-this-happened|I Gave Claude 600,000 UI Screens… Then This Happened]]).
 
 ## Open questions
 
 - Several details (the 25% shadow preset, the nudge default of 10, vertical trim, the lack of modifier keys in prototypes) describe Figma between 2024 and 2025. Which still hold?
 - Should OpenDesigner's Figma export set iOS corner smoothing at all, given DC-L04-04's 60% iOS-only advice and the "maximum" habit of [S-L19-070]?
 - How should a Figma spring (stiffness and damping) or a hand-dragged curve be converted into tokens that meet `STD-easing-duration-02`?
+- When an agent builds screens straight into Figma or Paper [S-L19-108], how does OpenDesigner check that it used the system's variables and components rather than hand-typed values (`STD-visual-details-26`)? The source gives no values from the demo file.

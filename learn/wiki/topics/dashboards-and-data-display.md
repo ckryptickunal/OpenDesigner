@@ -2,7 +2,7 @@
 type: topic
 title: Dashboards and data display
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources: []
 tags: []
 ---
@@ -32,4 +32,5 @@ Charts need a full-spectrum palette at equal perceived brightness, made in OKLCH
 - [[sources/jSxxAFxjxbU-i-spent-a-week-gamifying-apps-this-is-what-i-built|I spent a week gamifying apps. This is what I built]]: Analytics about spending and savings are called critical. The analytics tab toggles saving or spending and daily, weekly or monthly views, shows a spending target with overspending marked in purple, recent transactions, and insights on upcoming bill payments so users can prepare.
 - [[sources/t7mpEDXzjCg-make-a-perfect-ux-case-study-in-8-steps|Make A Perfect UX Case Study In 8 Steps]]: Only in passing: data in a case study should use clear graphs with a title, axis titles and a legend, plus circling and annotations to guide understanding.
 - [[sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai|Vibe Coding a Pro UI in SECONDS With AI]]: Builds a project management dashboard with a Gantt chart; fixes progress bars that used the completed color for unfinished work and replaces 'in progress' with a percent.
+- [[sources/kdRkuqu8apE-i-studied-2-108-dashboards-to-see-what-sticks|I Studied 2,108 Dashboards To See What Sticks]]: The whole video: beyond hierarchy, spacing and charts, memorable dashboards add insights and next steps, choose visuals that make data instantly clear, stay clean, and increasingly add AI to explain changes.
 - See also: [[synthesis/dashboards-and-data-display|Dashboards and data display synthesis]]

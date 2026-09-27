@@ -2,7 +2,7 @@
 type: topic
 title: Drawers and sheets
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources: []
 tags: []
 ---
@@ -35,3 +35,4 @@ A popup from the bottom is dismissed by swiping down, with buttons included, whi
 - [[sources/vaul-other-other-vaul|Other – Vaul]]: Non-modal and non-dismissible drawers, plus a recreation of the Family drawer.
 - [[sources/vaul-snap-points-snap-points-vaul|Snap Points – Vaul]]: Snap points let a drawer rest partially open; options for background interaction, sequential snapping and where fading starts.
 - See also: [[synthesis/drawers-and-sheets|Drawers and sheets synthesis]]
+- [[sources/9ypqs_2fAl8-we-studied-2-995-paywalls-heres-what-actually-converts|We Studied 2,995 Paywalls. Here’s What Actually Converts.]]: Extra pricing plans go behind a 'view all plans' button that opens a sheet; an exit intent sheet offers the monthly plan when the user tries to cancel.

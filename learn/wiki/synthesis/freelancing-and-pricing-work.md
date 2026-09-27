@@ -2,7 +2,7 @@
 type: synthesis
 title: Freelancing and pricing work
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources:
   - 2rtsoM2Dqrs
   - 5JxUJ1fuyO8
@@ -94,4 +94,4 @@ No OpenDesigner question asks about pricing, and none should: it is not a design
 - The hourly rates date from April 2024 and are US-centric. Do they still hold, and what do they look like elsewhere? No source checks them against market data.
 - How do you estimate the revenue gain before the work is done, for value-based pricing? The source says there is no easy way around it.
 - The time benchmarks for estimating a project were shown on screen in [S-L19-036] but are not in the transcript, so they are missing here.
-- Should OpenDesigner's measurement question (Q-gov-05) offer a business-outcome option, such as conversion before and after, for marketing surfaces? Today its options cover pain, adoption, satisfaction and maturity [inferred].
+- Should OpenDesigner's measurement question (Q-gov-05) offer a business-outcome option, such as conversion before and after, for marketing surfaces? Today its options cover pain, adoption, satisfaction and maturity [inferred]. DC-L19-166 proposes an `outcomes` option (product results before and after) built on [S-L19-038].

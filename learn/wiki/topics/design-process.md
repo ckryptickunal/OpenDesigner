@@ -2,7 +2,7 @@
 type: topic
 title: Design process
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources: []
 tags: []
 ---
@@ -55,3 +55,5 @@ A short project workflow: unique prompt, niche fit, full brief, inspiration gath
 - [[sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai|Vibe Coding a Pro UI in SECONDS With AI]]: Reference, prompt, generate, check responsiveness, import to Figma, polish fonts, alignment and color, then reuse the screen to generate more screens or a landing page.
 - [[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]: Work top to bottom one section at a time, try values and 'Goldilocks' them, apply a finished treatment to all sections, and compare the before and after versions.
 - See also: [[synthesis/design-process|Design process synthesis]]
+- [[sources/YbLF42BaoZs-i-gave-claude-600-000-ui-screens-then-this-happened|I Gave Claude 600,000 UI Screens… Then This Happened]]: Research how top apps in the category solve the flow, compare patterns, get a report, then build with a brief and flag deliberate deviations; prioritizing, keeping and cutting stay with the designer.
+- [[sources/qK7WYCMvjUw-he-spent-1m-on-a-b-tests-here-s-what-won|He Spent $1M on A/B Tests. Here's What Won.]]: Start by asking why an element is needed instead of copying other apps, and test the market cheaply with a web funnel before building the full product.

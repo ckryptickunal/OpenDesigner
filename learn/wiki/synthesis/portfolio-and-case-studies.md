@@ -2,7 +2,7 @@
 type: synthesis
 title: Portfolio and case studies
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources:
   - 59XWYgN00nQ
   - 5JxUJ1fuyO8

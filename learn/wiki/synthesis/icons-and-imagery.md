@@ -2,10 +2,11 @@
 type: synthesis
 title: Icons and imagery
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources:
   - 9WVt1CelBfg
   - AH_ugxmLeUM
+  - ARq1bx3Sfg8
   - A_Ozpb0XDuw
   - BvbFPzLjWcU
   - EHwZzWd-OnQ
@@ -29,6 +30,7 @@ sources:
   - ld1zhQMXxXU
   - neE6wOuBIP8
   - pGYLZyBE32o
+  - qK7WYCMvjUw
   - sonner-styling
   - ulSOdTgoGeY
   - xHD01_Onac0
@@ -40,7 +42,7 @@ tags:
 
 ## In short
 
-Icons are small symbols that help people scan a screen and act. Imagery is the photos, product screenshots, illustrations and 3D art that show what a product is and who it is for. The sources say to take every icon from one library so they match, keep icons simple and about as tall as the text line, and leave them uncolored unless the color shows a status. Don't use emojis as interface icons. Give unfamiliar icons a tooltip, or better, choose icons people recognize at a glance. For images, quality and relevance matter most: real product or audience images beat unrelated stock, the image's focal point should stay clear, and text on a photo needs a gradient behind it.
+Icons are small symbols that help people scan a screen and act, and imagery is the photos, product screenshots, illustrations, mascots and 3D art that show what a product is and who it is for. The sources say to take every icon from one library so they match, keep icons simple and about as tall as the text line, leave them uncolored unless the color shows a status, and avoid emojis as interface icons. Give unfamiliar icons a tooltip, or better, choose icons people recognize at a glance. For images, quality and relevance matter most: show the real product and people your audience can see themselves in, keep the focal point clear, and put a gradient behind text on a photo. A mascot is there to make people attached to the product, not only to look cute, and one app found its older paying customers preferred realistic images to cartoon 3D characters.
 
 ## House standards
 
@@ -48,11 +50,12 @@ Icons are small symbols that help people scan a screen and act. Imagery is the p
 - **STD-visual-details-38** (should): use metaphors that are neither too literal nor too abstract (a trash can means delete) and honor their physics.
 - **STD-mobile-touch-09** (must): touch targets of at least 44×44pt (iOS), 48dp (Android) or a 44px hit area (web). When an icon is smaller, grow the hit area, never the icon.
 - **STD-mobile-touch-05** (must): pressed elements scale to 0.97 as a whole, so their label and icons come along.
-- **STD-enter-exit-origin-09** (must): a tooltip enters and exits between `opacity: 0` with `scale(0.97)` and its resting state, from its trigger, in 125ms on the ease-out curve.
+- **STD-enter-exit-origin-09** (must): a tooltip enters and exits between `opacity: 0` with `scale(0.97)` and its resting state, from its trigger, in 125ms on the ease-out curve; tooltips and small popovers stay within 125-200ms.
 - **STD-enter-exit-origin-10** (must): delay only the first tooltip in a group, then open neighbouring tooltips instantly with no animation.
-- **STD-springs-gestures-05** (must): a spring never overshoots on UI that appears without a gesture behind it, such as a popover or tooltip.
+- **STD-springs-gestures-05** (must): a spring never overshoots on UI that appears without a gesture behind it, such as a popover or tooltip. Bounce is kept for motion after a gesture with momentum and, beyond that, for deliberately playful interactions and rare delight moments.
+- **STD-when-to-animate-03** (must): name each animation's purpose; delight counts only at the rare or first-time tier. This bounds the surprise animations and milestone celebrations that streak apps add around badges and mascots [S-L19-105] [inferred].
 - **STD-accessibility-motion-18** (must): the picker's icon-only replay button carries `aria-label="Replay animation (R)"`. This is the only standard that names an icon-only button's label, and it is specific to the picker.
-- **STD-enter-exit-origin-26** (should): reveal images with `clip-path: inset()`, from `inset(0 0 100% 0)` to `inset(0 0 0 0)` on the ease-in-out curve, not by animating width, height or an overflow wrapper. **STD-easing-duration-09** (must): nothing runs over 1s unless it is illustrative, and the 1s image reveal is that exception.
+- **STD-enter-exit-origin-26** (should): reveal images with `clip-path: inset()`, from `inset(0 0 100% 0)` to `inset(0 0 0 0)` on the ease-in-out curve, not by animating width, height or an overflow wrapper. **STD-easing-duration-09** (must): nothing runs over 1s unless it is illustrative; the 1s image reveal sits exactly at that cap, and the standard records it as a marketing value.
 - **STD-when-to-animate-11** (must): decorative motion such as animated line drawing belongs on marketing pages and illustrations, never on functional charts.
 - **STD-enter-exit-origin-38** (should): set the transform-origin of every scaled or rotated element on purpose, SVG elements included.
 - **STD-process-review-taste-55** (should): give coding agents written rule files per aspect of the interface, icons among them, each rule with its reason.
@@ -86,7 +89,7 @@ Icons are small symbols that help people scan a screen and act. Imagery is the p
 
 ### Where icons earn their place
 - Cards with no icons force people to read more; add icons and replace short text actions such as "save" [S-L19-045].
-- Icons are called the secret to a great sidebar, and they get small hover labels and state changes [S-L19-059] ([[sources/NtZeYmTMuo4-animated-dashboard-sidebar-tutorial-in-figma-free-design-files|Animated Dashboard Sidebar Tutorial in Figma (+ free design files)]]).
+- Icons are called the secret to a great sidebar. Later in the same prototype, integration icons that have no labels get a short description on hover [S-L19-059] ([[sources/NtZeYmTMuo4-animated-dashboard-sidebar-tutorial-in-figma-free-design-files|Animated Dashboard Sidebar Tutorial in Figma (+ free design files)]]).
 - Show a relationship such as a route with icons and alignment instead of "from" and "to" labels [S-L19-052]. Put an avatar beside each actor in an activity log, because the eye finds people faster than names [S-L19-056] [S-L19-080].
 - In Sonner toasts, the default success, info, warning, error and loading icons can be replaced for the whole app (`icons` prop), set on one toast (`icon`), or removed with `null` [S-L19-090] ([[sources/sonner-styling-styling-sonner|Styling – Sonner]]).
 
@@ -101,6 +104,12 @@ Icons are small symbols that help people scan a screen and act. Imagery is the p
 - A skincare site should lead with great product photos on a bright white background, using ready-made product mockups rather than renders built from scratch [S-L19-049] ([[sources/BvbFPzLjWcU-redesigning-a-modern-skincare-ui-from-scratch-free-design-files|Redesigning A Modern Skincare UI from SCRATCH (+ free design files)]]).
 - In a portfolio, large, bright imagery should grab attention before any text. A case study needs a visual or GIF every couple of paragraphs, so the process can be understood from the images alone [S-L19-064] ([[sources/ToJiXPTNnLY-professional-portfolio-breakdown-why-is-theirs-so-much-better|Professional Portfolio Breakdown — Why Is Theirs So Much Better?]]).
 - Images help people recognize things. Photos in a navigation menu show which product is which (Rivian's truck and SUV) [S-L19-050] ([[sources/EHwZzWd-OnQ-7-ui-design-trends-that-are-criminally-slept-on-dont-miss-these|7 ui design trends that are CRIMINALLY slept on (don’t miss these)]]), and an image in a card adds color and makes scanning easy [S-L19-052].
+
+### Realistic or cartoon: match the people who pay
+- Moonly's founder calls images the biggest lever on the paywall. Within a few days a single winning image delivered a 2x uplift, and it was not the one the team bet on: the first realistic image (a woman at sunset) beat the Disney-style 3D characters the team loved. The audience most willing to pay is over 35 and could not recognize themselves in cartoonish 3D characters [S-L19-111] ([[sources/qK7WYCMvjUw-he-spent-1m-on-a-b-tests-here-s-what-won|He Spent $1M on A/B Tests. Here's What Won.]]).
+- For the app's AI astrologer, the team tested cartoon graphics, a Disney-like style and a faceless approach, and none appealed to users. People receiving meaningful personal guidance need the entity to feel trustworthy, so realism worked better [S-L19-111].
+- Personalizing the user's avatar by their zodiac sign made the product feel more personal. Putting the user's own face into about 50 product images went too far: results were inconsistent and some were cringe, thousands of users avoided opening the app, and the feature was removed. People are sensitive to anything involving their own face [S-L19-111].
+- Every element, icon and piece of text on the paywall earned its place by winning a test, and near-daily small changes took conversion on paid traffic from 10% in 2020 to 40% [S-L19-111]. These are the founder's own figures from one astrology app, not a published study.
 
 ### Composition: focal point, crop and consistency
 - Keep the hero image's focal point clear by placing text and stats around it, and pick an image whose background is calm next to the text [S-L19-043].
@@ -124,6 +133,11 @@ Icons are small symbols that help people scan a screen and act. Imagery is the p
 - A 3D logo can start from the logo's Figma SVG, extruded and lit in Spline or Blender. Check a rotating asset for dark spots and fix the lighting [S-L19-046] ([[sources/A_Ozpb0XDuw-how-hard-is-it-to-really-make-a-no-code-3d-animated-website|How hard is it to REALLY make a no-code 3D animated website?]]). Resource picks include Burst (stock photos), Endless Tools (3D) and Handy Arrows [S-L19-073].
 - animations.dev teaches its hero illustration animations from SVG basics: the coordinate system and `viewBox`, path syntax, stroke properties for path drawing, and correct transform origins [S-L19-001] ([[sources/adev-changelog-animations-dev|animations.dev]]).
 
+### Mascots and characters
+- Mascots are not only there to make apps feel cute; they are designed to create attachment. Giving human emotions to non-human things is anthropomorphism, and the Tamagotchi effect is the attachment that forms when a digital thing seems to need you back. Examples: a mascot cheering you on, a little bird that grows alongside you, and Duolingo's owl, which became a personality. The presenter kept opening the app so as not to disappoint Duo, not for the streak number [S-L19-105] ([[sources/ARq1bx3Sfg8-the-psychology-behind-streaks|The Psychology Behind Streaks]]).
+- The same kind of character can carry pressure: fear-based streak screens pair more urgent copy and a countdown with an angry owl that makes you feel guilty. The video describes these tactics rather than endorsing them, and asks whether streaks build habits or just make people afraid to stop [S-L19-105].
+- Badges and milestones can turn progress into collectibles (Opal's streak earns milestones you collect). Once a streak becomes routine, apps add surprise animations, milestone celebrations and bonus XP [S-L19-105].
+
 ### Motion on images
 - Reveal an image by animating `clip-path` from `inset(0 0 100% 0)` to `inset(0 0 0 0)` over 1s with `cubic-bezier(0.77, 0, 0.175, 1)`. Trigger it once, when at least 100px is in view. Build before/after sliders by clipping the top image with `inset(0 50% 0 0)` from the drag position [S-L19-010] ([[sources/ek-the-magic-of-clip-path-the-magic-of-clip-path|The Magic of Clip Path]]).
 - Hover effects from the practitioners, none with timings:
@@ -142,8 +156,12 @@ Icons are small symbols that help people scan a screen and act. Imagery is the p
 - **Tooltip motion (conflict with house standards).** The 1-second delay [S-L19-079] fits STD-enter-exit-origin-10 (delay the first tooltip). The standard sets no delay value, so 1s is a single-video number. The demo's bouncy easing conflicts with STD-springs-gestures-05 and STD-enter-exit-origin-09 (125ms ease-out, no overshoot), and the standards win.
 - **Text on images (agree, and fills a gap).** Gradient scrims [S-L19-052] [S-L19-060] [S-L19-065] are the "gradient scrim" option of DC-L05-16, which the research had marked [inferred] with no official source. Q-img-02 defaults to text beside images with a scrim only on heroes. "Move titles off the image when unsure" [S-L19-065] agrees with that default.
 - **Stock versus real (agree, one tension).** Product and audience images over unrelated stock [S-L19-072] [S-L19-061] [S-L19-062] match DC-L05-14, which says to use real product and people photos where trust matters and to reject any image another company could have made. But other videos recommend more stock sites [S-L19-073] and AI images "where they fit" [S-L19-085], while the Q-img-01 hook warns that AI images show artifacts and stereotypes.
-- **Illustration (agree).** Imagery style setting the vibe [S-L19-063] matches DC-L05-19 (style follows personality). "Stop before clutter" [S-L19-063] matches DC-L05-20, where overusing illustration raises cognitive load, which the research marked [inferred]. 3D as a hero or marketing centerpiece [S-L19-046] fits DC-L05-21, which keeps 3D and Lottie for onboarding, celebration and marketing.
-- **Image motion (house rule applies).** The 1s clip-path reveal [S-L19-010] is allowed only because it is illustrative (STD-easing-duration-09). The practitioners' hover zooms and image morphs have no timings, so they should be checked against the house duration and frequency rules before becoming defaults [inferred].
+- **Illustration (agree).** Imagery style setting the vibe [S-L19-063] matches DC-L05-19 (style follows personality). "Stop before clutter" [S-L19-063] matches DC-L05-20, where overusing illustration increases cognitive load (Atlassian); only that card's "makes a tool feel childish" is marked [inferred]. 3D as a hero or marketing centerpiece [S-L19-046] fits DC-L05-21, which keeps 3D and Lottie for onboarding, celebration and marketing.
+- **Realistic versus cartoon (new evidence, one app).** Moonly's result [S-L19-111] agrees in direction with the vibe scale, where realistic imagery reads professional [S-L19-063], and with DC-L05-14, where natural, ungraded photos read factual and trustworthy. It tempers DC-L05-19 and DC-L06-12, which offer rounded characters and dimensional 3D as warm, playful styles: the team's favourite 3D style lost because the people paying could not see themselves in it. It is one astrology app with a paying audience over 35 and self-reported figures, so it is a reason to ask who pays and to test the image, not a rule against illustration.
+- **A realistic AI helper (conflicts with the research).** A realistic look made Moonly's AI astrologer feel trustworthy [S-L19-111]. DC-L13-16 recommends a neutral, non-anthropomorphic voice, because human-sounding explanations lead people to overestimate what the AI can do, and Q-img-03 offers a distinct avatar shape so AI agents are easy to tell apart. A realistic human face on an AI works against both [inferred]. With one source on the other side, the research's caution should hold.
+- **Mascots (agree on the option, add a purpose and a caution).** Q-img-04's `mascot` option and DC-L06-12 treat a mascot as a brand asset for loading, error and empty states (Mailchimp's Freddie, Duolingo's Duo). The streaks video adds why it works, attachment, and shows the same character used to create guilt [S-L19-105]. Guilt as a nudge sits close to the confirmshaming and nagging that DC-L13-15's deceptive-pattern policy lists [inferred]; no research card from L01-L18 sets a limit on mascots used for retention pressure, and the learning-wiki card DC-L19-77 now proposes one (cheer, never guilt).
+- **Celebrations (house rule applies).** Surprise animations and milestone celebrations [S-L19-105] are delight, which STD-when-to-animate-03 allows only at the rare or first-time tier; any bounce in them falls under STD-springs-gestures-05's exception for rare delight moments [inferred].
+- **Image motion (house rule applies).** The 1s clip-path reveal [S-L19-010] sits exactly at the 1s cap, and STD-easing-duration-09 records it as a marketing value; anything longer would have to be illustrative. The practitioners' hover zooms and image morphs have no timings, so they should be checked against the house duration and frequency rules before becoming defaults [inferred].
 
 ## Decisions this informs
 
@@ -153,12 +171,12 @@ Icons are small symbols that help people scan a screen and act. Imagery is the p
 - **Q-icon-04** (sizes): tie the icon size token to the adjacent line height [S-L19-052].
 - **Q-icon-05** (labels and color): several analyses map here [S-L19-045] [S-L19-051] [S-L19-079]. Keep `labels-default` plus universal icons only. Tooltips are an addition, not a replacement for labels [S-L19-080]. Keep icons mono, with status colors only.
 - **Q-icon-07** (SVG or font): download SVG [S-L19-045], in line with DC-L05-10's SVG source of truth.
-- **Q-img-01** (photography): real product and audience images, a clear focal point and high resolution [S-L19-062] [S-L19-072] [S-L19-043] [S-L19-065].
+- **Q-img-01** (photography): real product and audience images, a clear focal point and high resolution [S-L19-062] [S-L19-072] [S-L19-043] [S-L19-065]. Realistic people the paying audience can recognize themselves in, with the image tested rather than chosen by the team's taste [S-L19-111].
 - **Q-img-02** (image shapes, text on images): gradient scrim, a better photo before an overlay, titles off the image when unsure, and one consistent treatment per image set [S-L19-052] [S-L19-049] [S-L19-065] [S-L19-085].
-- **Q-img-03** (avatars): show avatars wherever people are referenced [S-L19-056] [S-L19-080]. The sources say nothing about avatar shape.
-- **Q-img-04** (illustration): vibe scale (blobs, doodles, realistic), hand-drawn accents, clay for isometric art, and a clutter limit [S-L19-063] [S-L19-050] [S-L19-058].
+- **Q-img-03** (avatars): show avatars wherever people are referenced [S-L19-056] [S-L19-080]. Personalize an avatar with something the user gave, such as a zodiac sign, but not with their own face [S-L19-111]. Keep `agent-shape` for AI helpers; Moonly's realistic AI guide [S-L19-111] is weighed against DC-L13-16 above. The sources say nothing about avatar shape.
+- **Q-img-04** (illustration or mascot): vibe scale (blobs, doodles, realistic), hand-drawn accents, clay for isometric art, and a clutter limit [S-L19-063] [S-L19-050] [S-L19-058]. The `mascot` option gains its purpose (attachment) and a caution against guilt [S-L19-105]; cartoon characters can miss an older paying audience [S-L19-111].
 - **Q-img-05** (pictograms): accent-colored feature icons and product graphics on marketing pages [S-L19-062] [S-L19-061].
-- **Q-img-06** (3D, Lottie, emoji): 3D logo workflow [S-L19-046], 3D resources [S-L19-073], and no emojis as UI icons [S-L19-061] [S-L19-086].
+- **Q-img-06** (3D, Lottie, emoji): 3D logo workflow [S-L19-046], 3D resources [S-L19-073], and no emojis as UI icons [S-L19-061] [S-L19-086]. Disney-style 3D characters lost to a realistic image on one paywall [S-L19-111]; celebrations stay within STD-when-to-animate-03 [S-L19-105].
 - **Q-brand-01 / Q-brand-08**: the imagery vibe follows the personality sliders [S-L19-063], and the asset inventory should ask for product screenshots and audience photos [S-L19-062] [S-L19-072] [inferred].
 
 ## Visual examples worth showing
@@ -175,6 +193,8 @@ Icons are small symbols that help people scan a screen and act. Imagery is the p
 - A clip-path image reveal and a before/after comparison slider [S-L19-010].
 - Rivian's navigation with product photos [S-L19-050]. A delayed icon tooltip and a magnifying glass expanding into a search bar [S-L19-079].
 - A Sonner toast with swapped and removed icons [S-L19-090]. A clay isometric illustration [S-L19-058]. A spinning 3D logo [S-L19-046].
+- Moonly's paywall with Disney-style 3D characters beside the winning realistic image of a woman at sunset, and its AI astrologer, Luna, in the realistic style that beat the cartoon, Disney-like and faceless ones the team tested [S-L19-111].
+- Streak screens side by side: an angry owl with urgent copy and a countdown (fear), a cheering mascot and a little bird that grows with you (attachment), Opal's collectible milestones, and a chain of day blocks where one gap stands out [S-L19-105].
 
 ## Open questions
 
@@ -184,3 +204,6 @@ Icons are small symbols that help people scan a screen and act. Imagery is the p
 - How should OpenDesigner treat AI-generated images, which one source allows "where they fit" [S-L19-085] and the Q-img-01 hook flags?
 - Should icon color rules differ by surface: mono in the product, accent colors allowed on marketing pages [S-L19-051] [S-L19-062]?
 - Should the builder derive the icon size token from the body line height automatically, as the "line height" rule suggests [S-L19-052]?
+- Should Q-img-04's `mascot` option warn against guilt-based use such as the angry owl, and where does attachment end and pressure begin [S-L19-105]? DC-L19-77 proposes an answer (a mascot may cheer, never guilt).
+- Does realistic-over-cartoon hold beyond one app whose paying audience is over 35 [S-L19-111]? Should OpenDesigner ask who pays before recommending an illustration or 3D style?
+- Should Q-img-03 grow to cover avatar personalization and how an AI helper looks (realistic, cartoon, faceless or a distinct agent shape), given Moonly's result and DC-L13-16's caution? DC-L19-78 and DC-L19-79 propose answers.

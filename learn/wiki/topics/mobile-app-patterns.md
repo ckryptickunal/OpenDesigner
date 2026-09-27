@@ -2,7 +2,7 @@
 type: topic
 title: Mobile app patterns
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources: []
 tags: []
 ---
@@ -29,4 +29,9 @@ Uses the phone's screen edges for effects (3D card ring, a horizon that shrinks 
 - [[sources/jSxxAFxjxbU-i-spent-a-week-gamifying-apps-this-is-what-i-built|I spent a week gamifying apps. This is what I built]]: The example mobile app uses four tabs: goal overview, leaderboard, spending and saving analytics, and education.
 - [[sources/tNMAFjzapOk-the-formula-behind-truly-captivating-ui-sections|The Formula Behind Truly Captivating UI Sections]]: The formula applies to mobile apps; sliding up from the bottom signifies a temporary action and a screen sliding from the left shows progress in the onboarding flow.
 - [[sources/vaul-inputs-inputs-vaul|Inputs – Vaul]]: Keyboard handling for drawers that contain inputs; the page does not name mobile, but a keyboard that pushes content up points to on-screen keyboards [inferred].
+- [[sources/9ypqs_2fAl8-we-studied-2-995-paywalls-heres-what-actually-converts|We Studied 2,995 Paywalls. Here’s What Actually Converts.]]: Consumer-app subscription patterns: trial timelines, one-time offers with animation and haptic feedback, video paywalls and Apple's review stance on trial toggles.
+- [[sources/E7RzEZ8GlHE-he-tested-4-700-paywalls-these-won|He Tested 4,700 Paywalls. These Won.]]: Paywall touch points in consumer mobile apps: onboarding, feature gates, the settings page, account cancellation and a last-chance paywall before the user deletes the app.
+- [[sources/Qsq-Sj_rojU-i-studied-1-460-onboarding-flows-here-s-what-i-found|I Studied 1,460 Onboarding Flows. Here's What I Found.]]: Web onboarding is 21% shorter than iOS, which the video says might be because mobile has more permission and paywall screens baked in; many apps prime the notification prompt with a custom screen.
+- [[sources/kdRkuqu8apE-i-studied-2-108-dashboards-to-see-what-sticks|I Studied 2,108 Dashboards To See What Sticks]]: Many standout dashboards were on mobile, such as Opal's story-style swipeable screen time insights and Orbit's enjoyable subscription tracking.
+- [[sources/qK7WYCMvjUw-he-spent-1m-on-a-b-tests-here-s-what-won|He Spent $1M on A/B Tests. Here's What Won.]]: The app has no login screen, keeps data in the Apple keychain, customizes home quick access buttons from onboarding answers, and offers a one-tap share flow when a user takes a screenshot.
 - See also: [[synthesis/mobile-app-patterns|Mobile app patterns synthesis]]

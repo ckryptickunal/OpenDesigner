@@ -2,7 +2,7 @@
 type: topic
 title: Onboarding
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources: []
 tags: []
 ---
@@ -25,4 +25,9 @@ An onboarding flow uses a button that can be tapped or swiped, with a circle tha
 - [[sources/ixUq4HM4FNg-tiktoks-ux-is-so-good-it-should-be-illegal-seriously|TikTok’s UX is so GOOD it should be ILLEGAL (seriously)]]: Onboarding is limited to choosing interests and the shortest tutorial; only 30 to 50% of the first thousand videos rely on those inputs, the rest is learned.
 - [[sources/jSxxAFxjxbU-i-spent-a-week-gamifying-apps-this-is-what-i-built|I spent a week gamifying apps. This is what I built]]: Onboarding welcomes the user, asks them to connect a bank account with reassurance, shows swipeable insights into past spending to prove value before gamifying, then asks for a savings goal with a slider for the time period.
 - [[sources/tNMAFjzapOk-the-formula-behind-truly-captivating-ui-sections|The Formula Behind Truly Captivating UI Sections]]: On mobile, onboarding is the best time to captivate: Craft uses a clean focused UI, a swipe animation, and editing tools that slide up from the bottom.
+- [[sources/9ypqs_2fAl8-we-studied-2-995-paywalls-heres-what-actually-converts|We Studied 2,995 Paywalls. Here’s What Actually Converts.]] [0:49](https://www.youtube.com/watch?v=9ypqs_2fAl8&t=49s): The paywall at the end of onboarding should feel like a natural segue: 'your plan is ready', framed around the user's ideal outcome.
+- [[sources/E7RzEZ8GlHE-he-tested-4-700-paywalls-these-won|He Tested 4,700 Paywalls. These Won.]] [4:09](https://www.youtube.com/watch?v=E7RzEZ8GlHE&t=249s): The after-onboarding paywall is the most used touch point (78% of iOS apps on Mobbin); whether to create an account before or after it is inconclusive in the guest's tests, though he prefers account first to tie a user ID to the subscriber.
+- [[sources/Qsq-Sj_rojU-i-studied-1-460-onboarding-flows-here-s-what-i-found|I Studied 1,460 Onboarding Flows. Here's What I Found.]] [0:00](https://www.youtube.com/watch?v=Qsq-Sj_rojU&t=0s): The core subject: onboarding length, the path to the aha moment, selling outcomes, personalization, delight in long flows, contextual teaching and whether onboarding is needed at all.
+- [[sources/YbLF42BaoZs-i-gave-claude-600-000-ui-screens-then-this-happened|I Gave Claude 600,000 UI Screens… Then This Happened]] [0:00](https://www.youtube.com/watch?v=YbLF42BaoZs&t=0s): The worked example is a fintech onboarding and account opening flow; the grounded version accounts for identity checks and compliance requirements, and an offers nudge is placed on the homepage right after onboarding.
+- [[sources/qK7WYCMvjUw-he-spent-1m-on-a-b-tests-here-s-what-won|He Spent $1M on A/B Tests. Here's What Won.]] [0:14](https://www.youtube.com/watch?v=qK7WYCMvjUw&t=14s): Moonly's onboarding is 30 screens, built around the user's job or pain, gives a bite-sized insight before introducing a feature, and comes in about 10 variants tailored to the ad and App Store page the user came from; this doubled lifetime value.
 - See also: [[synthesis/onboarding|Onboarding synthesis]]

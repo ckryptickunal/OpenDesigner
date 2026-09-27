@@ -2,7 +2,7 @@
 type: synthesis
 title: Animation performance
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources:
   - adev-home
   - ek-7-practical-animation-tips
@@ -102,10 +102,11 @@ Smooth motion depends on what you animate. Moving and fading things with transfo
 
 - **Heavy effects cost speed.** The videos' warnings [S-L19-069] [[sources/ZsP20PN14O0-5-trendy-animations-to-steal-for-your-next-web-design|5 Trendy Animations to Steal for Your Next Web Design]] [S-L19-050] [[sources/EHwZzWd-OnQ-7-ui-design-trends-that-are-criminally-slept-on-dont-miss-these|7 ui design trends that are CRIMINALLY slept on (don’t miss these)]] agree with the house performance standards; neither video gives a property-level rule, and the house fills that in (`STD-performance-properties-01`) [inferred].
 - **Preloaders.** A preloader [S-L19-069] [[sources/ZsP20PN14O0-5-trendy-animations-to-steal-for-your-next-web-design|5 Trendy Animations to Steal for Your Next Web Design]] is one creator's guess about why a site uses one. The house has no preloader rule, and a preloader is a wait people sit through, which the speed rules (`STD-easing-duration-06`, `STD-easing-duration-09`) and the purpose gate would question outside marketing pages [inferred].
-- **Web springs.** DC-L04-22 notes that the web needs a JavaScript spring library or a sampled CSS `linear()` curve; this matches `STD-performance-properties-15`: JavaScript for dynamic, interruptible motion, CSS for predetermined motion [inferred].
+- **Web springs.** DC-L04-22 notes that the web needs a JavaScript spring library or a sampled CSS `linear()` curve; this matches `STD-performance-properties-15`: JavaScript for dynamic, interruptible motion, CSS for predetermined motion [inferred]. standards.json records the remaining gap under that standard: the engine ships the web's on-screen movement spring as a fixed CSS transition, which cannot be grabbed and reversed mid-flight.
 - **Input latency.** DC-L13-01 cites INP of 200ms or less and RAIL's 100ms response and 50ms input handling; this sits alongside `STD-springs-gestures-41` (remove latency from the input path) [inferred].
 - **Devices.** DC-L14-08 adds device classes (TV, watch, car, e-ink) where motion should shrink or stop; the L19 sources cover phones, desktops and ProMotion displays only.
-- **Gap in OpenDesigner.** None of OpenDesigner's questions or Decision Cards covers animation performance directly; it arrives through the build stack (Q-plat-08) and the house standards.
+- **Gap in OpenDesigner.** OpenDesigner's older questions and Decision Cards do not cover animation performance directly; it arrives through the build stack (Q-plat-08) and the house standards. DC-L19-96 proposes a 60fps budget (120fps where supported) on the slowest named device, checked on a release build, through a new device question (proposed Q-plat-11, a follow-up to Q-plat-02) that is not built yet.
+- **Review coverage.** `engine.py review` flags layout-property transitions and `transition: all` through `STD-performance-properties-01` and `STD-performance-properties-06`. standards.json records that its general duration fix still points `transition: width 200ms ease-out` to a motion token whatever property it animates, and that with no house standards loaded nothing flags the property.
 
 ## Decisions this informs
 
@@ -113,7 +114,7 @@ Smooth motion depends on what you animate. Moving and fading things with transfo
 - **Q-plat-02** (which devices matter): the slowest supported device is the one that verifies feel; ProMotion iPhones need 120fps unlocked.
 - **Q-depth-04** and **Q-dir-01** (glass and translucent surfaces): blur is expensive, so animated blur stays under 20px and React Native never animates BlurView intensity.
 - **Q-pattern-02** (how long lists load): long lists are virtualized whatever the loading pattern.
-- **Q-motion-04** (how springs are set up): springs on the web add a JavaScript library or a sampled curve.
+- **Q-motion-04** (how springs are set up): settled by `STD-springs-gestures-02` and `STD-springs-gestures-04`; springs on the web still add a JavaScript library or a sampled curve.
 - **Q-state-08** (what people see while waiting): a fast spinner improves perceived performance.
 
 ## Visual examples worth showing
@@ -127,7 +128,7 @@ Smooth motion depends on what you animate. Moving and fading things with transfo
 
 ## Open questions
 
-- Should `engine.py review` flag layout-property animation and `transition: all` in the person's code, as the standards require?
+- `engine.py review` flags layout-property animation and `transition: all` only through the house standards. Should its general duration fix also flag the property, instead of pointing a layout-property transition to a motion token?
 - Should OpenDesigner's generated preview and exports be checked against the frame budget, and on which devices?
 - When is a sampled CSS `linear()` spring an acceptable, cheaper stand-in for a JavaScript spring?
 - Should marketing pages get a preloader rule, given that only one video discusses preloaders?

@@ -2,7 +2,7 @@
 type: synthesis
 title: Modals and popovers
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources:
   - 14h1VnkQvIc
   - ADaQuZS04Rc
@@ -32,6 +32,7 @@ sources:
   - eks-skills-review-animations-skill
   - eks-skills-review-animations-standards
   - ld1zhQMXxXU
+  - qK7WYCMvjUw
   - vaul-getting-started
   - vaul-other
   - vaul-snap-points
@@ -95,6 +96,7 @@ Modals, popovers, dropdown menus and tooltips are layers that float above the pa
 - Do not block every other action until a chore is done; Figma's forced layer-naming modal is the infuriating example, and even an annoying feature needs a notice explaining how to turn it off. Endless pop-ups and guilt pop-ups are the same problem [S-L19-048] ([[sources/BUDipdbKK7Y-i-made-the-most-unhinged-ui-upgrades-downgrades|I Made The Most UNHINGED UI Upgrades (downgrades?)]]).
 - Do not greet a new user with a modal of six bullet points explaining the whole product; they forget it the moment they close it. Start with one tooltip on the most important action, then a second tooltip or a small checklist [S-L19-056] ([[sources/Ksx9C2-3yMo-the-3-dashboard-ui-flaws-that-give-away-you-ve-never-built-one|The 3 dashboard UI flaws that give away you've NEVER built one]]).
 - A modal task gets a dimming scrim and pushes the page back; a parallel, non-blocking panel uses translucency without a scrim. Confirmation dialogs are only for truly destructive, irreversible actions, because too many train people to click through [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]).
+- A paywall people can close is called a soft paywall even when its close button only appears after 5 seconds, as in the astrology app Moonly. Its founder says the soft paywall won across all his tests, while the host says hard paywalls won in the US; the figures are self-reported by one app [S-L19-111] ([[sources/qK7WYCMvjUw-he-spent-1m-on-a-b-tests-here-s-what-won|He Spent $1M on A/B Tests. Here's What Won.]]).
 - Pop-ups and bottom pop-ups can be dismissed by swiping, but keep a close button for people who do not know the gesture [S-L19-035] ([[sources/14h1VnkQvIc-master-the-3-types-of-crazy-mobile-ui-swipe-interactions|Master the 3 Types of CRAZY Mobile UI Swipe Interactions]]).
 
 ### Motion: origin, scale and speed
@@ -134,6 +136,7 @@ Modals, popovers, dropdown menus and tooltips are layers that float above the pa
 - **Scrim.** Apple-style guidance dims only for modal tasks [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]). DC-L04-18 gives 40-50% near-black in light mode and 50-60% in dark mode, which fits Vaul's 40% starter overlay [S-L19-095] ([[sources/vaul-getting-started-getting-started-vaul|Getting Started – Vaul]]) [inferred].
 - **Primary role in a destructive dialog.** The two Kole Jain videos disagree [S-L19-057] ([[sources/Lp6ey4AyDzA-8-web-design-hacks-to-actually-make-your-designs-better|8 Web Design Hacks To ACTUALLY Make Your Designs Better]]) [S-L19-044] ([[sources/ADaQuZS04Rc-stop-making-pretty-uis-think-like-a-product-designer|Stop Making Pretty UIs. Think Like a Product Designer]]). DC-L13-18 and DC-L08-06 cite Apple's rule that a destructive button never takes the primary role, and DC-L08-06 allows solid red only in the final confirmation step.
 - **Confirming at all.** `STD-visual-details-40` and DC-L13-08 agree: undo for reversible actions, confirmation only for costly, irreversible ones.
+- **A delayed way out.** Moonly's close button that waits 5 seconds [S-L19-111] ([[sources/qK7WYCMvjUw-he-spent-1m-on-a-b-tests-here-s-what-won|He Spent $1M on A/B Tests. Here's What Won.]]) still gives a way out eventually, but it delays the exit that `STD-accessibility-motion-24` asks every screen and overlay to have. DC-L13-15 lists obstruction among the 16 deceptive patterns and leaves those a tool cannot detect to human review; whether a timed close counts is not settled by any source [inferred].
 - **Hover-only actions.** Kole Jain reveals secondary actions on hover [S-L19-056] ([[sources/Ksx9C2-3yMo-the-3-dashboard-ui-flaws-that-give-away-you-ve-never-built-one|The 3 dashboard UI flaws that give away you've NEVER built one]]), and the video does not say how touch or keyboard users reach those actions [inferred]; `STD-mobile-touch-30` requires hover affordances to be redesigned for touch.
 - **Onboarding modals.** Kole Jain warns against a bullet-point modal at login [S-L19-056] ([[sources/Ksx9C2-3yMo-the-3-dashboard-ui-flaws-that-give-away-you-ve-never-built-one|The 3 dashboard UI flaws that give away you've NEVER built one]]) but uses a small onboarding modal that teaches a shortcut by having people do it [S-L19-067] ([[sources/Vy0KKvZJRH8-everything-you-need-to-design-macos-apps-exactly-like-apple-beginner-friendly|Everything you need to Design macOS Apps EXACTLY like Apple (beginner friendly)]]). The difference is teaching by doing rather than by reading [inferred].
 - **Accessibility.** DC-L08-20 requires focus to be trapped and returned, Escape to close and `aria-modal`; building on base-ui or Radix (`STD-accessibility-motion-16`) is how the house standards get that.
@@ -143,14 +146,14 @@ Modals, popovers, dropdown menus and tooltips are layers that float above the pa
 - **Q-pattern-01** (centered box, sliding panel or small pop-up): the popover, modal and page ladder, and drawers on phones.
 - **Q-depth-06** (shade behind dialogs): dim only for modal tasks, 40-50% in light mode.
 - **Q-depth-04** (glass or solid menus and pop-ups): non-blocking panels use translucency without a scrim.
-- **Q-motion-02** (durations): tooltip, dropdown and modal bands.
+- **Q-motion-02** (durations): tooltip, dropdown and modal bands; the house standards settle this question (`STD-easing-duration-07`).
 - **Q-motion-03** (how curves are grouped): ease-out for entrances and exits, never ease-in.
-- **Q-motion-04** (springs and bounce): no overshoot on menus, popovers and dialogs.
-- **Q-form-05** (undo or confirm): confirmation dialogs only for destructive, irreversible actions.
+- **Q-motion-04** (springs and bounce): no overshoot on menus, popovers and dialogs; `STD-springs-gestures-05` rules out the `spatial-effects` option.
+- **Q-form-05** (undo or confirm): confirmation dialogs only for destructive, irreversible actions. `STD-visual-details-40` settles this question and rules out the `confirm` option (an "Are you sure?" box instead of undo).
 - **Q-state-06** (how risky actions look): who gets the primary color in a delete dialog.
 - **Q-pattern-03** (show everything or tuck extras away): popovers for rarely used features, hover-revealed secondary actions.
 - **Q-pattern-04** (first-time users): tooltips and a checklist instead of a bullet-point modal.
-- **Q-pattern-05** (stopping design tricks): no blocking chore modals or guilt pop-ups.
+- **Q-pattern-05** (stopping design tricks): no blocking chore modals or guilt pop-ups, and a decision on close buttons that appear late [S-L19-111] ([[sources/qK7WYCMvjUw-he-spent-1m-on-a-b-tests-here-s-what-won|He Spent $1M on A/B Tests. Here's What Won.]]).
 - **Q-icon-05** (when icons get words): tooltips on icon-only controls.
 - **Q-comp-01** (bare parts or a full kit): accessible headless primitives for every overlay.
 
@@ -175,3 +178,4 @@ Modals, popovers, dropdown menus and tooltips are layers that float above the pa
 - In a destructive confirmation, which button gets the primary role and the default focus?
 - How should hover-revealed actions work for touch and keyboard users?
 - What do modals and popovers do under reduced motion? These sources do not say.
+- May a close control appear after a delay, as on Moonly's paywall, or must the way out be there from the start?

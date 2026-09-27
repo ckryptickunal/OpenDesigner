@@ -2,9 +2,12 @@
 type: synthesis
 title: Gradients, blend modes and texture effects
 created: 2026-09-27
-updated: 2026-09-27
+updated: 2026-09-28
 sources:
   - MZSm6MA8bww
+  - gKM6b2EnW1k
+  - AH_ugxmLeUM
+  - pGYLZyBE32o
 tags:
   - od-area-shape-depth
 ---
@@ -13,7 +16,7 @@ tags:
 
 ## In short
 
-These are decorative surface effects: smooth blends between colors (gradients), layers that mix their colors with the layers underneath (blend modes such as Screen or Overlay), and blur or grain that give a surface texture. The only source on this topic is a short Figma tutorial that builds four effects from those pieces (a kaleidoscope, clay, metal and a mesh gradient) and names where each one fits: mostly cards, stickers, illustrations, mockups and backgrounds, with buttons the only everyday control on the list. Its presenter admits that one of them looks good but is poor for usability, and says mesh gradients are more art than science. This page rests on that single reference video, so its recipes and use cases are opinion until another source agrees. OpenDesigner's research keeps gradients to brand and marketing surfaces by default, and any text placed on these surfaces still has to pass the locked contrast floor.
+These are decorative surface effects: smooth blends between colors (gradients), layers that mix their colors with the layers underneath (blend modes such as Screen or Overlay), and blur or grain that give a surface texture. The only source tagged with this topic is a short Figma tutorial that builds four effects from those pieces (a kaleidoscope, clay, metal and a mesh gradient) and names where each one fits: mostly cards, stickers, illustrations, mockups and backgrounds, with buttons the only everyday control on the list. Its presenter admits that one of them looks good but is poor for usability, and says mesh gradients are more art than science. This page rests on that single reference video (one other video by the same presenter mentions the kaleidoscope in passing), so its recipes and use cases are opinion until another source agrees. OpenDesigner's research keeps gradients to brand and marketing surfaces by default, and any text placed on these surfaces still has to pass the locked contrast floor.
 
 ## House standards
 
@@ -34,7 +37,7 @@ Also locked, as an OpenDesigner accessibility floor rather than an STD: text 4.5
 
 ### Four effects, each with a named place
 
-- **Kaleidoscope:** best for credit cards, stickers and buttons. The presenter admits that the finished effect, with text laid over it, is poor for usability even though it looks good [S-L19-058] ([[sources/MZSm6MA8bww-advanced-figma-web-design-effects|Advanced FIGMA Web Design Effects]]).
+- **Kaleidoscope:** best for credit cards, stickers and buttons. The presenter admits that the finished effect, with text laid over it, is poor for usability even though it looks good [S-L19-058] ([[sources/MZSm6MA8bww-advanced-figma-web-design-effects|Advanced FIGMA Web Design Effects]]). In a later video he suggests giving a button the kaleidoscope, saying it works very well on dark UI themes [S-L19-075] ([[sources/gKM6b2EnW1k-upgrading-9-crucial-ui-elements-free-figma-file-included|Upgrading 9 CRUCIAL UI Elements (free figma file included)]]); being the same presenter, this is not independent support.
 - **Clay:** for isometric drawings and illustrations that need some depth [S-L19-058] ([[sources/MZSm6MA8bww-advanced-figma-web-design-effects|Advanced FIGMA Web Design Effects]]).
 - **Metallic:** for credit cards and metal mockups and, in his words, not much else [S-L19-058] ([[sources/MZSm6MA8bww-advanced-figma-web-design-effects|Advanced FIGMA Web Design Effects]]).
 - **Mesh gradient:** he calls it probably the most useful of the four and uses it on websites, posters, slideshows and almost everything else he can [S-L19-058] ([[sources/MZSm6MA8bww-advanced-figma-web-design-effects|Advanced FIGMA Web Design Effects]]).

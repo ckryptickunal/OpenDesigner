@@ -2,7 +2,7 @@
 type: synthesis
 title: Navigation and sidebars
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources:
   - 14h1VnkQvIc
   - 5JxUJ1fuyO8
@@ -141,10 +141,10 @@ Navigation tells people where they are, where they can go and how to get back. O
 - **Q-layout-04** (how many sections, and where the menu sits): a sidebar on desktop, a bottom bar of three to five on phones, and the question of hiding links on websites.
 - **Q-state-05** (how the picked tab or item shows): a rectangle or pill indicator, a clip-path tab, and whether brand color is used.
 - **Q-icon-05** (when icons get words): label obscure tab icons, and make labels dark enough.
-- **Q-motion-06** (screen changes): native stack transitions on mobile; shared-element moments are practitioner opinion.
-- **Q-motion-09** (system or brand motion): navigation follows the platform.
+- **Q-motion-06** (screen changes): native stack transitions on mobile; shared-element moments are practitioner opinion. The house standards rule out the `fade` option (`STD-enter-exit-origin-02`) and the `fade-through` option (`STD-when-to-animate-05`, `STD-when-to-animate-14`).
+- **Q-motion-09** (system or brand motion): navigation follows the platform; `STD-mobile-touch-42` rules out the `one-language` option.
 - **Q-motion-07** (reduced motion): stack transitions switch to a fade.
-- **Q-depth-04** (glass or solid bars): translucent bars with scroll-edge effects.
+- **Q-depth-04** (glass or solid bars): translucent bars with scroll-edge effects; `STD-visual-details-16` rules out the `none` and `transient` options on the web.
 - **Q-pattern-03** (show everything or tuck extras away): menus that open on demand when links run out of room.
 - **Q-space-03** (tap target size): bottom-bar items over 44px.
 

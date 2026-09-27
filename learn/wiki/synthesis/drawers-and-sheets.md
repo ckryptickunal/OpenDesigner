@@ -2,9 +2,10 @@
 type: synthesis
 title: Drawers and sheets
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources:
   - 14h1VnkQvIc
+  - 9ypqs_2fAl8
   - Gfsd8NNuD9g
   - PDcQJOPby1k
   - adev-home
@@ -48,6 +49,7 @@ Most of these are locked. Four come only from the Vaul docs, a good-to-have sour
 - `STD-accessibility-motion-25` (should): Controlled drawers still react to Escape.
 - `STD-accessibility-motion-26` (should): Cover the inert page behind a drawer.
 - `STD-visual-details-20` (should): Scrim for modal tasks only.
+- `STD-visual-details-16` (should): Translucent bars and sheets. (web; it rules out Q-depth-04's `none` and `transient` options)
 - `STD-components-toasts-drawers-59` (must): React Native: native sheet presentations.
 - `STD-components-toasts-drawers-60` (must): React Native: form sheets on both platforms.
 - `STD-mobile-touch-41` (must): Use native pieces instead of JS rebuilds.
@@ -94,6 +96,7 @@ Most of these are locked. Four come only from the Vaul docs, a good-to-have sour
 - On mobile, Emil Kowalski presents content in a drawer rather than a modal because it feels more native. He frames this as his preference, and the article offers no measurement [S-L19-005] ([[sources/ek-building-a-drawer-component-building-a-drawer-component|Building a drawer component]]).
 - In React Native, a sheet that is its own destination uses `presentation: 'formSheet'` (a short interruption such as a picker, filter or share); a custom drag-to-dismiss sheet is only for a sheet that must live inside an existing screen; a self-contained task with its own navigation uses `presentation: 'modal'` [S-L19-015] ([[sources/eks-skills-animate-expo-recipes-emilkowalski-skills-skills-animate-expo-recipes-md|emilkowalski/skills: skills/animate-expo/RECIPES.md]]) [S-L19-016] ([[sources/eks-skills-animate-expo-skill-emilkowalski-skills-skills-animate-expo-skill-md|emilkowalski/skills: skills/animate-expo/SKILL.md]]).
 - Vaul's variants cover a bottom drawer (the default), side drawers (`direction` right or left), nested drawers, a scrollable drawer that behaves like Apple's Sheet, and a drawer opened from code [S-L19-094] ([[sources/vaul-default-default-vaul|Default – Vaul]]). `modal={false}` keeps the page behind usable; `dismissible={false}` blocks outside click, Escape and drag [S-L19-097] ([[sources/vaul-other-other-vaul|Other – Vaul]]).
+- Sheets also carry secondary choices in a paywall. Jonathan Parra, interviewed in Mobbin's paywall study, shows only two plans on the base paywall to lower cognitive load and puts any other plans behind a "view all plans" button that opens a sheet. When someone tries to leave a yearly offer, he shows an exit intent sheet offering the monthly plan instead. Both are his practice as a paywall designer; the video gives no test result for either [S-L19-104] ([[sources/9ypqs_2fAl8-we-studied-2-995-paywalls-heres-what-actually-converts|We Studied 2,995 Paywalls. Here’s What Actually Converts.]]).
 - Drawers are occasional UI, so they get standard animation, not delight [S-L19-023] ([[sources/eks-skills-emil-design-eng-skill-emilkowalski-skills-skills-emil-design-eng-skill-md|emilkowalski/skills: skills/emil-design-eng/SKILL.md]]) [S-L19-024] ([[sources/eks-skills-find-animation-opportunities-skill-emilkowalski-skills-skills-find-animation-opportunities-skill-md|emilkowalski/skills: skills/find-animation-opportunities/SKILL.md]]) [S-L19-025] ([[sources/eks-skills-improve-animations-audit-emilkowalski-skills-skills-improve-animations-audit-md|emilkowalski/skills: skills/improve-animations/AUDIT.md]]) [S-L19-033] ([[sources/eks-skills-review-animations-standards-emilkowalski-skills-skills-review-animations-standards-md|emilkowalski/skills: skills/review-animations/STANDARDS.md]]).
 
 ### Anatomy and defaults
@@ -148,6 +151,8 @@ Most of these are locked. Four come only from the Vaul docs, a good-to-have sour
 - **The background.** Kole Jain's zoom-out [S-L19-053] ([[sources/Gfsd8NNuD9g-everything-you-need-to-know-about-mobile-app-uis-in-8-minutes-beginner-friendly|Everything you need to know about Mobile App UI’s in 8 minutes (beginner friendly)]]), Vaul's `scaleBackground` [S-L19-005] ([[sources/ek-building-a-drawer-component-building-a-drawer-component|Building a drawer component]]) and Apple's push-back of parent sheets [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]) are the same idea at different strengths [inferred].
 - **Scrim darkness.** Vaul's 40% black starter [S-L19-095] ([[sources/vaul-getting-started-getting-started-vaul|Getting Started – Vaul]]) sits inside DC-L04-18's default of 40-50% near-black in light mode, and matches Q-depth-06's Fluent option [inferred].
 - **Where the drawer comes from.** Vaul is built on Radix Dialog [S-L19-005] ([[sources/ek-building-a-drawer-component-building-a-drawer-component|Building a drawer component]]), while Emil Kowalski's curated list names base-ui for dialogs and has no drawer entry at all [S-L19-029] ([[sources/eks-skills-pick-ui-library-skill-emilkowalski-skills-skills-pick-ui-library-skill-md|emilkowalski/skills: skills/pick-ui-library/SKILL.md]]). Vaul itself is unmaintained, per the note in `learn/sources.json`. DC-L08-03's default for React web is shadcn on Base UI or React Aria.
+- **Sheets for extra choices.** Parra's "view all plans" sheet [S-L19-104] ([[sources/9ypqs_2fAl8-we-studied-2-995-paywalls-heres-what-actually-converts|We Studied 2,995 Paywalls. Here’s What Actually Converts.]]) is progressive disclosure: the main options first and the rest behind a clearly named trigger, which is DC-L13-03's default and Q-pattern-03's `progressive` option [inferred].
+- **Exit intent sheets.** The same video recommends an exit intent sheet when someone tries to leave the paywall, while warning against aggressive last-minute discounts and fake urgency [S-L19-104] ([[sources/9ypqs_2fAl8-we-studied-2-995-paywalls-heres-what-actually-converts|We Studied 2,995 Paywalls. Here’s What Actually Converts.]]). DC-L13-15's enforced policy flags re-prompting after a dismissal (nagging, and the EU DSA's repeated-requests example). A sheet that answers "no" with a second offer may fall under that rule, so it needs a human ethics review rather than a default [inferred].
 - **Desktop side panels.** DC-L08-20 suggests a side sheet for editing with context, but Kole Jain replaced a sparse side flyout with a modal because it had few fields and a lot of empty space [S-L19-061] ([[sources/PDcQJOPby1k-5-saas-ui-ux-mistakes-that-scream-you-vibe-code|5 SaaS UI/UX mistakes that SCREAM you Vibe Code]]). The number of fields seems to decide it [inferred].
 - **Button order.** DC-L08-20 records iOS sheets putting Cancel on the leading edge and Done on the trailing edge. Kole Jain's template sheet has a check and an X, but the video does not say where each sits [S-L19-053] ([[sources/Gfsd8NNuD9g-everything-you-need-to-know-about-mobile-app-uis-in-8-minutes-beginner-friendly|Everything you need to know about Mobile App UI’s in 8 minutes (beginner friendly)]]).
 
@@ -157,11 +162,13 @@ Most of these are locked. Four come only from the Vaul docs, a good-to-have sour
 - **Q-depth-06** (how dark the shade behind dialogs is): the 40% starter scrim, and dimming only for modal tasks.
 - **Q-motion-01** (quick, calm or bouncy): the drawer curve and sheet spring are locked, so sheets keep them whatever personality is picked [inferred].
 - **Q-motion-03** (how curves are grouped): the drawer curve is its own token next to ease-out and ease-in-out.
-- **Q-motion-04** (how springs are set up): springs are written as damping and response (0.8 and 0.3s for sheets).
+- **Q-motion-04** (how springs are set up): springs are written as damping and response (0.8 and 0.3s for sheets); `STD-springs-gestures-01` rules out the `durations-only` option.
 - **Q-motion-02** (how many durations): 500ms for web drawers is a named exception.
 - **Q-motion-07** (reduced motion): Apple's sample turns the sheet into a 200ms opacity fade with no transform [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]).
 - **Q-motion-09** (system or brand motion and haptics): a light haptic when the sheet snaps home.
-- **Q-depth-04** (glass or solid): sheets are translucent layers under the Apple guidance [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]).
+- **Q-depth-04** (glass or solid): sheets are translucent layers under the Apple guidance, and `STD-visual-details-16` rules out the `none` and `transient` options on the web [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]).
+- **Q-pattern-03** (show everything or tuck extras away): extra choices, such as further pricing plans, behind a named button that opens a sheet [S-L19-104] ([[sources/9ypqs_2fAl8-we-studied-2-995-paywalls-heres-what-actually-converts|We Studied 2,995 Paywalls. Here’s What Actually Converts.]]).
+- **Q-pattern-05** (stopping design tricks): whether an exit intent sheet counts as re-prompting after a dismissal [inferred].
 - **Q-comp-03** (settings or smaller parts): drawers are built from compound parts.
 - **Q-plat-06** (built-in or restyled controls): in React Native the native form sheet comes first [inferred].
 
@@ -174,6 +181,7 @@ Most of these are locked. Four come only from the Vaul docs, a good-to-have sour
 - A bottom pop-up with swipe down plus buttons, the background moving back and down [S-L19-035] ([[sources/14h1VnkQvIc-master-the-3-types-of-crazy-mobile-ui-swipe-interactions|Master the 3 Types of CRAZY Mobile UI Swipe Interactions]]).
 - A drawer with an input, repositioned above the keyboard versus pushed up by the browser [S-L19-096] ([[sources/vaul-inputs-inputs-vaul|Inputs – Vaul]]).
 - Stacked sheets, each parent dimmer and pushed further back [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]).
+- A paywall with two plans and a "view all plans" button that opens a sheet listing the rest, and the exit intent sheet offering the monthly plan [S-L19-104] ([[sources/9ypqs_2fAl8-we-studied-2-995-paywalls-heres-what-actually-converts|We Studied 2,995 Paywalls. Here’s What Actually Converts.]]).
 - Vaul's side drawer that does not touch the screen edge, adjusted with `--initial-transform` [S-L19-094] ([[sources/vaul-default-default-vaul|Default – Vaul]]).
 
 ## Open questions
@@ -182,4 +190,5 @@ Most of these are locked. Four come only from the Vaul docs, a good-to-have sour
 - Should strong flicks skip snap points by default, or should drawers default to sequential snapping?
 - When does a desktop create or edit form belong in a side sheet rather than a modal?
 - Should the Safari theme-color sync ever ship, given it cannot stay in step when frames drop?
+- Is an exit intent sheet on a paywall allowed under Q-pattern-05's `enforced` default, or is it the kind of repeated request DC-L13-15 blocks?
 - Which duration should OpenDesigner export as the drawer default for timed motion: 500ms, or something inside the 200-300ms modal and drawer tier given in "Agents with Taste" [S-L19-004] ([[sources/ek-agents-with-taste-agents-with-taste|Agents with Taste]])?

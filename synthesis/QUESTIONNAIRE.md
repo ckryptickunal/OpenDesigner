@@ -4348,7 +4348,7 @@ Decision Cards from the learning wiki (`research/L19-learning-wiki.md`) that no 
 | DC-L19-33 | Key numbers: style, alignment, label and context | new question |
 | DC-L19-34 | How type choices are previewed: true size, in context | new question |
 | DC-L19-35 | Sample content in previews: realistic, with stress cases | new question |
-| DC-L19-36 | Marketing copy: length and focus | new question |
+| DC-L19-36 | Marketing and conversion copy: length and focus | new question |
 | DC-L19-37 | Where playfulness belongs, and never at the user | new question |
 | DC-L19-38 | Naming navigation, actions and screens | new question |
 | DC-L19-39 | Typographic punctuation in interface text | new question |
@@ -4384,6 +4384,9 @@ Decision Cards from the learning wiki (`research/L19-learning-wiki.md`) that no 
 | DC-L19-74 | Text and controls over images | new question |
 | DC-L19-75 | How playful the imagery is | new question |
 | DC-L19-76 | Where avatars appear | new question |
+| DC-L19-77 | What a mascot does: brand moments, a companion, or pressure | new question |
+| DC-L19-78 | How an AI helper is pictured | new question |
+| DC-L19-79 | Whether images change for each person | new question |
 | DC-L19-81 | Which interactions get no motion (the frequency gate) | new question |
 | DC-L19-82 | Motion personality (amount and character) | new question |
 | DC-L19-83 | Where the delight budget goes (rare moments) | new question |
@@ -4403,14 +4406,14 @@ Decision Cards from the learning wiki (`research/L19-learning-wiki.md`) that no 
 | DC-L19-99 | Motion token structure: shared transitions or component recipes | new question |
 | DC-L19-101 | Which library supplies each standard part | Q-comp-01, Q-comp-02 |
 | DC-L19-103 | Hover on controls, product screens versus marketing pages | Q-state-04 |
-| DC-L19-104 | Emphasis inside a group of buttons | Q-space-04, Q-state-01 |
+| DC-L19-104 | Emphasis inside a group of buttons | Q-space-04, Q-state-01, Q-state-07, Q-voice-06 |
 | DC-L19-105 | How visible secondary actions are | Q-icon-05, Q-pattern-03 |
 | DC-L19-106 | What "on", selected and active look like | Q-state-05 |
 | DC-L19-107 | Which button carries the fill in a delete confirmation | Q-state-06 |
 | DC-L19-108 | How irreversible actions are guarded | Q-form-05 |
 | DC-L19-109 | What a pressed control shows while it works and when it is done | Q-state-08 |
 | DC-L19-110 | Text field anatomy and phone input rules | Q-form-01 |
-| DC-L19-111 | When forms check answers | Q-form-02 |
+| DC-L19-111 | When forms check answers | Q-form-02, Q-pattern-03 |
 | DC-L19-112 | When a toast is the right channel | Q-form-04 |
 | DC-L19-113 | Where toasts sit and how they look | Q-form-04 |
 | DC-L19-114 | Popover, modal, sheet or new page | Q-pattern-01 |
@@ -4437,6 +4440,7 @@ Decision Cards from the learning wiki (`research/L19-learning-wiki.md`) that no 
 | DC-L19-136 | Progress, streaks and rewards | new question |
 | DC-L19-137 | Measuring whether a design change worked | new question |
 | DC-L19-138 | AI workspace components beyond labels | new question |
+| DC-L19-139 | The subscription paywall screen: format, trial and reassurance | new question |
 | DC-L19-141 | Accessibility floor: WCAG 2.2 AA plus the locked house rules | new question |
 | DC-L19-142 | Device settings the product always follows, and controls inside the app | new question |
 | DC-L19-143 | Mixed input: hover is an extra, press feedback is for everyone | new question |
@@ -4450,6 +4454,11 @@ Decision Cards from the learning wiki (`research/L19-learning-wiki.md`) that no 
 | DC-L19-151 | Keyboard shortcuts: which actions get them, how people learn them, what they see | new question |
 | DC-L19-152 | Search on desktop: a command palette, or search in place | new question |
 | DC-L19-153 | Real-device check: which device counts as proof | new question |
+| DC-L19-154 | Asking for system permissions, notifications first | new question |
+| DC-L19-155 | Store rules and where people pay | new question |
+| DC-L19-156 | Accounts on phones: none, the platform's sign-in, or an email account | new question |
+| DC-L19-157 | The Swift token file: where it lives and how it is isolated | new question |
+| DC-L19-158 | Sharing out of the app: the system share, share cards and the screenshot moment | new question |
 | DC-L19-161 | Which references to learn from, and what to take from each | new question |
 | DC-L19-162 | Naming the feeling: one target emotion, shown as one layout in different flavors | new question |
 | DC-L19-163 | How design principles are worded and used | new question |
@@ -4467,6 +4476,8 @@ Decision Cards from the learning wiki (`research/L19-learning-wiki.md`) that no 
 | DC-L19-175 | How AI edits and fine-tuning happen | new question |
 | DC-L19-176 | How a critique or review is reported | new question |
 | DC-L19-177 | The goal behind the brief, before any visuals | new question |
+| DC-L19-178 | Research shipped products before the builder drafts a flow | new question |
+| DC-L19-179 | Launch and share surfaces: what the system covers outside the product | new question |
 | DC-L19-181 | How much system to define first, and what counts as progress | new question |
 | DC-L19-182 | Spacing on the web grows with the reader's text size (rem, not px) | new question |
 | DC-L19-183 | Names for motion tokens that code, agents and the house skills share | new question |

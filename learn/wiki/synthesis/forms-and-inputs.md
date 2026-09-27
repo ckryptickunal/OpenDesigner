@@ -2,7 +2,7 @@
 type: synthesis
 title: Forms and inputs
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources:
   - AH_ugxmLeUM
   - B7k5rOgmOGY
@@ -10,6 +10,7 @@ sources:
   - HE4rLEQpiXY
   - If7iCPDy2vk
   - PDcQJOPby1k
+  - Qsq-Sj_rojU
   - ek-building-a-drawer-component
   - eks-skills-apple-design-skill
   - eks-skills-mobile-native-skill
@@ -26,14 +27,14 @@ tags:
 
 ## In short
 
-Forms are where people type and choose, so the labels must stay visible and the page must not jump or zoom while they work. Put each label above its field and use the placeholder for a realistic example, never as the label. On phones, input text is at least 16px so iOS does not zoom in, and each field asks for the right keyboard, such as numbers for a code. Check answers as people go rather than only when they press submit, and show a problem next to its field with a red border and a message. Show the common fields first and tuck advanced options away.
+Forms are where people type and choose, so the labels must stay visible and the page must not jump or zoom while they work. Put each label above its field and use the placeholder for a realistic example, never as the label. On phones, input text is at least 16px so iOS does not zoom in, and each field asks for the right keyboard, such as numbers for a code. Check answers as people go rather than only when they press submit, and show a problem next to its field with a red border and a message. Show the common fields first, tuck advanced options away, and add small help where people get stuck, such as a password field that ticks off its rules as they type.
 
 ## House standards
 
 - `STD-mobile-touch-11` (must): Form inputs at 16px or larger.
 - `STD-accessibility-motion-27` (must): Never disable pinch zoom.
 - `STD-mobile-touch-13` (should): Open the right software keyboard per field.
-- `STD-visual-details-49` (must): Feedback on every action. (this includes validating form input inline rather than on submit)
+- `STD-visual-details-49` (must): Feedback on every action. (this includes validating form input inline rather than on submit; the standard rules out Q-form-02's `on-submit-summary` option and supersedes DC-L08-17)
 - `STD-visual-details-31` (should): Show the common path first.
 - `STD-visual-details-32` (should): Controls sit near what they change.
 - `STD-visual-details-35` (should): Keep interface copy plain and concise.
@@ -61,6 +62,7 @@ Forms are where people type and choose, so the labels must stay visible and the 
 ### When to check answers
 
 - Validate form input inline, not on submit [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]).
+- A password field that checks off each requirement in real time as people type removes a reason to get stuck. Mobbin's onboarding study puts it beside a progress indicator and helpful microcopy as small, unflashy guidance that makes a flow feel effortless [S-L19-107] ([[sources/Qsq-Sj_rojU-i-studied-1-460-onboarding-flows-here-s-what-i-found|I Studied 1,460 Onboarding Flows. Here's What I Found.]]).
 
 ### Phones: zoom, keyboards and the viewport
 
@@ -74,6 +76,13 @@ Forms are where people type and choose, so the labels must stay visible and the 
 - Start from what the person intends. For a rental search, build the search bar first (destination, travelers, dates) before any cards or icons, and reveal more only as it is needed; once browsing becomes the priority, shrink the search bar and let it animate open on click [S-L19-054] ([[sources/HE4rLEQpiXY-how-to-think-like-a-genius-ui-ux-designer|How to think like a GENIUS UI/UX designer]]).
 - A search bar can collapse into its magnifying-glass icon and expand on click, as Apple does [S-L19-079] ([[sources/ld1zhQMXxXU-11-micro-animations-that-will-instantly-level-up-your-ui-free-figma-file|11 Micro Animations That Will Instantly Level Up Your UI (free figma file)]]).
 - A screen of preset choices needs a search field for choices that are not listed and a skip button for people to whom none apply [S-L19-045] ([[sources/AH_ugxmLeUM-7-ui-ux-mistakes-that-scream-youre-a-beginner|7 UI/UX mistakes that SCREAM you’re a beginner]]).
+
+### Sign-up forms and onboarding questions
+
+- Splitting a sign-up form across several screens can help: House (the name comes from auto-captions) did it and saw a 15% rise in conversions. The video calls the result surprising, suggests friction added in one place can remove friction in another, and does not generalize further; it gives no sample size or test conditions [S-L19-107] ([[sources/Qsq-Sj_rojU-i-studied-1-460-onboarding-flows-here-s-what-i-found|I Studied 1,460 Onboarding Flows. Here's What I Found.]]).
+- A sign-up screen can be rewritten as a pitch, as Superhuman does with customer logos beside the form [S-L19-107] ([[sources/Qsq-Sj_rojU-i-studied-1-460-onboarding-flows-here-s-what-i-found|I Studied 1,460 Onboarding Flows. Here's What I Found.]]).
+- Let people pick more than one answer in a goal question: Headspace found people arrive with more than one pain point, and allowing several goals raised free-trial conversion by 10%. Dollar Shave Club's more conversational quiz wording alone raised subscriptions by 5%. Both figures are as reported in the video, with no test details [S-L19-107] ([[sources/Qsq-Sj_rojU-i-studied-1-460-onboarding-flows-here-s-what-i-found|I Studied 1,460 Onboarding Flows. Here's What I Found.]]).
+- Explain dry, unfamiliar fields step by step with reassuring copy and tooltips that state what each step changes, instead of front-loading all the education; Cake Equity does this for equity and vesting [S-L19-107] ([[sources/Qsq-Sj_rojU-i-studied-1-460-onboarding-flows-here-s-what-i-found|I Studied 1,460 Onboarding Flows. Here's What I Found.]]).
 
 ### Forms inside products
 
@@ -91,7 +100,9 @@ Forms are where people type and choose, so the labels must stay visible and the 
 ## Where they agree and disagree
 
 - **Labels.** Kole Jain's labels-above rule [S-L19-075] ([[sources/gKM6b2EnW1k-upgrading-9-crucial-ui-elements-free-figma-file-included|Upgrading 9 CRUCIAL UI Elements (free figma file included)]]) matches OpenDesigner's research exactly: DC-L13-05 rejects placeholder-as-label, and DC-L08-16 defaults to top labels.
-- **When to validate.** The house standard, from the Apple-design skill [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]), says validate inline rather than on submit (`STD-visual-details-49`). OpenDesigner's research does not agree with itself: DC-L13-06 recommends validating when the person leaves a field ("reward early, punish late"), which is Q-form-02's default, while DC-L08-17 defaults to validating on submit, with blur checks only for formats. Validation on blur is inline, so DC-L13-06 fits the standard; a submit-only form would not [inferred].
+- **When to validate.** The house standard, from the Apple-design skill [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]), says validate inline rather than on submit (`STD-visual-details-49`). OpenDesigner's research did not agree with itself: DC-L13-06 recommends validating when the person leaves a field ("reward early, punish late"), which is Q-form-02's default, while DC-L08-17 defaults to validating on submit, with blur checks only for formats. The house standards now settle it: `STD-visual-details-49` records that it supersedes DC-L08-17 and rules out Q-form-02's `on-submit-summary` option. Validation on blur is inline, so DC-L13-06 fits the standard [inferred].
+- **Live checks while typing.** The password field that ticks off its rules as people type [S-L19-107] ([[sources/Qsq-Sj_rojU-i-studied-1-460-onboarding-flows-here-s-what-i-found|I Studied 1,460 Onboarding Flows. Here's What I Found.]]) is the one case where DC-L13-06 accepts keystroke validation ("only for things like password-strength meters"), so the sources agree. For other fields DC-L13-06 still prefers checking on blur.
+- **One screen or several.** The split sign-up [S-L19-107] ([[sources/Qsq-Sj_rojU-i-studied-1-460-onboarding-flows-here-s-what-i-found|I Studied 1,460 Onboarding Flows. Here's What I Found.]]) matches DC-L13-06's heuristic of one thing per page for long forms and DC-L13-03's staged disclosure, which that card limits to steps that stand alone. It rests on one reported case. Kole Jain's fixed sign-up keeps every field in one modal [S-L19-075] ([[sources/gKM6b2EnW1k-upgrading-9-crucial-ui-elements-free-figma-file-included|Upgrading 9 CRUCIAL UI Elements (free figma file included)]]); a short sign-up modal and a longer onboarding flow may simply call for different answers [inferred].
 - **Error messages.** The red border plus a message [S-L19-052] ([[sources/EcbgbKtOELY-every-ui-ux-concept-explained-in-under-10-minutes|Every UI/UX Concept Explained in Under 10 Minutes]]) fits DC-L13-07's inline pattern. DC-L13-07 also asks for an icon or text so the error does not rely on color alone; the message covers that.
 - **Field style.** An off-white fill with a 40%-opacity stroke [S-L19-075] ([[sources/gKM6b2EnW1k-upgrading-9-crucial-ui-elements-free-figma-file-included|Upgrading 9 CRUCIAL UI Elements (free figma file included)]]) sits between Q-form-01's outlined default and its filled option. DC-L08-16 notes borders need 3:1 contrast, and a 40%-opacity stroke may not reach it [inferred].
 - **Spacing.** Kole Jain's 4px grid [S-L19-075] ([[sources/gKM6b2EnW1k-upgrading-9-crucial-ui-elements-free-figma-file-included|Upgrading 9 CRUCIAL UI Elements (free figma file included)]]) matches the 4-based options in Q-space-01.
@@ -100,9 +111,9 @@ Forms are where people type and choose, so the labels must stay visible and the 
 ## Decisions this informs
 
 - **Q-form-01** (border or fill, label placement): labels on top, realistic placeholders.
-- **Q-form-02** (when to check answers): inline, which rules out checking only on submit [inferred].
+- **Q-form-02** (when to check answers): inline; `STD-visual-details-49` rules out the `on-submit-summary` option. Live checks suit password rules [S-L19-107] ([[sources/Qsq-Sj_rojU-i-studied-1-460-onboarding-flows-here-s-what-i-found|I Studied 1,460 Onboarding Flows. Here's What I Found.]]).
 - **Q-form-03** (where errors show up): inline, next to the field, with a red border and a message.
-- **Q-pattern-03** (show everything or tuck extras away): collapse advanced options.
+- **Q-pattern-03** (show everything or tuck extras away): collapse advanced options; the `staged` option (one step at a time) gets a reported example in the split sign-up [S-L19-107] ([[sources/Qsq-Sj_rojU-i-studied-1-460-onboarding-flows-here-s-what-i-found|I Studied 1,460 Onboarding Flows. Here's What I Found.]]).
 - **Q-pattern-01** (modal, panel or pop-up): a modal for a short create form.
 - **Q-type-08** (body text size): inputs need 16px on touch even if body text is smaller [inferred].
 - **Q-space-01** (base spacing unit): a 4px grid for forms.
@@ -119,6 +130,9 @@ Forms are where people type and choose, so the labels must stay visible and the 
 - A checkbox off and on, next to six chips that are all colored in their default state [S-L19-080] ([[sources/neE6wOuBIP8-the-secret-behind-weirdly-perfect-ui-designs|The secret behind weirdly perfect UI designs]]).
 - A create-link modal with advanced options collapsed [S-L19-061] ([[sources/PDcQJOPby1k-5-saas-ui-ux-mistakes-that-scream-you-vibe-code|5 SaaS UI/UX mistakes that SCREAM you Vibe Code]]).
 - An AI prompt box with attachment previews and mode chips [S-L19-055] ([[sources/If7iCPDy2vk-the-7-ui-components-to-design-like-unicorn-ai-startups|The 7 UI Components to Design Like Unicorn AI Startups]]).
+- A password field whose rule list ticks off as each rule is met, next to one that only complains on submit [S-L19-107] ([[sources/Qsq-Sj_rojU-i-studied-1-460-onboarding-flows-here-s-what-i-found|I Studied 1,460 Onboarding Flows. Here's What I Found.]]).
+- One sign-up screen with every field against the same sign-up split across several screens, and a Superhuman-style sign-up with customer logos beside the form [S-L19-107] ([[sources/Qsq-Sj_rojU-i-studied-1-460-onboarding-flows-here-s-what-i-found|I Studied 1,460 Onboarding Flows. Here's What I Found.]]).
+- A goal question that allows several answers, as Headspace's does [S-L19-107] ([[sources/Qsq-Sj_rojU-i-studied-1-460-onboarding-flows-here-s-what-i-found|I Studied 1,460 Onboarding Flows. Here's What I Found.]]).
 - A Linear-style form progress bar drawing itself in [S-L19-079] ([[sources/ld1zhQMXxXU-11-micro-animations-that-will-instantly-level-up-your-ui-free-figma-file|11 Micro Animations That Will Instantly Level Up Your UI (free figma file)]]).
 
 ## Open questions
@@ -128,3 +142,4 @@ Forms are where people type and choose, so the labels must stay visible and the 
 - How should required and optional fields be marked? None of these sources covers it.
 - Are floating labels acceptable? None of these sources evaluates them.
 - What should native iOS and Android forms follow, since the input rules here are web-only?
+- When does splitting a form across screens help, and when does it only add steps? The one reported case comes with no platform, sample size or test details.

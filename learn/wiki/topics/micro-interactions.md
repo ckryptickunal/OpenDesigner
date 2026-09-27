@@ -2,7 +2,7 @@
 type: topic
 title: Micro-interactions
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources: []
 tags: []
 ---
@@ -58,3 +58,5 @@ Carousel page indicators can go from a plain highlight to a fluid, magnetic effe
 - [[sources/tNMAFjzapOk-the-formula-behind-truly-captivating-ui-sections|The Formula Behind Truly Captivating UI Sections]]: A single well-built hover animation (Intercom), a mouse effect with a screen-like background, and Linear's expanding modal show small interactions that engage and reward users.
 - [[sources/ulSOdTgoGeY-awful-to-amazing-web-designs-easily|Awful To AMAZING Web Designs Easily]]: Offset buttons on backgrounds or images can be animated easily with a hover effect.
 - See also: [[synthesis/micro-interactions|Micro-interactions synthesis]]
+- [[sources/ARq1bx3Sfg8-the-psychology-behind-streaks|The Psychology Behind Streaks]]: Once streaks become predictable, apps layer in surprises such as animations, milestone celebrations and bonus XP; a jingle after each lesson builds craving for the next one.
+- [[sources/Qsq-Sj_rojU-i-studied-1-460-onboarding-flows-here-s-what-i-found|I Studied 1,460 Onboarding Flows. Here's What I Found.]]: Small moments like a vibration as a ticket-shaped offer prints, or animated verification, add delight to onboarding.

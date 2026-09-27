@@ -2,7 +2,7 @@
 type: topic
 title: Content and microcopy
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources: []
 tags: []
 ---
@@ -30,3 +30,8 @@ Use realistic content in designs; absolutely no lorem ipsum.
 - [[sources/goWOAFqJHpA-i-redesigned-spotify-wrapped-entirely-from-scratch|I Redesigned Spotify Wrapped Entirely From SCRATCH]]: Add comparison text such as a percentage increase over last year, or 'you two just met' for a new artist; prefer a few familiar categories over odd AI-generated genre names.
 - [[sources/pGYLZyBE32o-i-redesigned-google-s-ai-website-from-scratch-complete-transformation|I Redesigned Google's AI Website from SCRATCH (complete transformation)]]: Writes a punchy headline in the style of the Chrome site and plays on 'unparalleled privacy' with two non-parallel lines.
 - See also: [[synthesis/content-and-microcopy|Content and microcopy synthesis]]
+- [[sources/9ypqs_2fAl8-we-studied-2-995-paywalls-heres-what-actually-converts|We Studied 2,995 Paywalls. Here’s What Actually Converts.]]: A 'no commitment, cancel anytime' subtitle helps; a CTA naming what the user is doing instead of 'Continue' is hit or miss; value framing and price anchoring are copy choices.
+- [[sources/ARq1bx3Sfg8-the-psychology-behind-streaks|The Psychology Behind Streaks]]: Fear-based streaks use urgent copy while optimism-based ones use encouraging copy; Duolingo's switch from 'continue' to 'commit to my goal' was a massive win, and more apps now reframe calls to action as promises to yourself.
+- [[sources/Qsq-Sj_rojU-i-studied-1-460-onboarding-flows-here-s-what-i-found|I Studied 1,460 Onboarding Flows. Here's What I Found.]]: Copy tweaks matter: sell the outcome, conversational quiz wording, reassuring copy with tooltips, and a sign-up screen rewritten as a pitch.
+- [[sources/YbLF42BaoZs-i-gave-claude-600-000-ui-screens-then-this-happened|I Gave Claude 600,000 UI Screens… Then This Happened]]: The research distills how the best apps differ in copy, and the AI can suggest copy tailored to users while citing where the inspiration came from.
+- [[sources/qK7WYCMvjUw-he-spent-1m-on-a-b-tests-here-s-what-won|He Spent $1M on A/B Tests. Here's What Won.]]: Changing only paywall titles and subtitles raised conversion by 12%; social proof and a 'no commitment, cancel anytime' subtitle help.

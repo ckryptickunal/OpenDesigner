@@ -2,7 +2,7 @@
 type: synthesis
 title: Landing pages
 created: 2026-09-24
-updated: 2026-09-27
+updated: 2026-09-28
 sources:
   - 5JxUJ1fuyO8
   - 6CC8lLnqa28
@@ -48,7 +48,7 @@ A landing page is a short story that leads a visitor to one action, such as sign
 - `STD-when-to-animate-10` (must): explanation motion (showing how a feature works) only on marketing and onboarding surfaces.
 - `STD-when-to-animate-11` (must): decorative motion such as mouse-tracking belongs on marketing pages and illustrations, never on functional data.
 - `STD-enter-exit-origin-27` (must): scroll-triggered reveals only on marketing surfaces; `STD-enter-exit-origin-26` (should): reveal with `clip-path: inset()` rather than animating width or height.
-- `STD-easing-duration-06` (must) and `STD-easing-duration-09` (must): UI motion stays under 300 ms and nothing runs over 1 s, but marketing and explanatory motion is exempt from both limits.
+- `STD-easing-duration-06` (must) and `STD-easing-duration-09` (must): UI motion stays under 300 ms and nothing runs over 1 s, but marketing and explanatory motion may run longer; `STD-easing-duration-06` still asks whether a slow moment needs to be slow.
 - `STD-easing-duration-01` (must): pick easing by job: entrances ease-out, on-screen moves ease-in-out, constant motion such as a marquee linear.
 - `STD-enter-exit-origin-13` (must): stagger group entrances by 30-80 ms; `STD-springs-gestures-13` (must): never block input while a stagger or transition plays.
 - `STD-accessibility-motion-02` (must): under reduced motion, replace movement with a short opacity cross-fade instead of removing all feedback; this applies to marketing effects too [inferred].
@@ -118,7 +118,7 @@ A landing page is a short story that leads a visitor to one action, such as sign
 - **One main action.** [S-L19-040] and [S-L19-057] say one primary call to action per header, while [S-L19-049] and the hero in [S-L19-011] show a primary and a secondary button. They reconcile as one filled primary plus an unfilled secondary [inferred], which matches the research rule of at most one high-emphasis action per region (DC-L13-18).
 - **Hero layout has no winner.** Stacked [S-L19-072], split [S-L19-103] [S-L19-049] and centered (the most common, per [S-L19-043]) are all recommended; [S-L19-043] says to pick by what the content is trying to do.
 - **Effects.** [S-L19-046] argues 3D carries a page; [S-L19-040], [S-L19-054] and [S-L19-066] warn that heavy graphics slow pages or get in the way. The house purpose rule (`STD-when-to-animate-03`) sides with motion that has a job.
-- **Preloaders.** The two recipes [S-L19-071] [S-L19-081] hold content back for over a second, and [S-L19-069] warns they must stay short. The house limit exempts marketing motion (`STD-easing-duration-09`), so the length is a judgement call [inferred]. One recipe fades the navigation in with ease-in-out [S-L19-081]; the house rule gives entrances ease-out (`STD-easing-duration-01`), so follow the standard.
+- **Preloaders.** The two recipes [S-L19-071] [S-L19-081] hold content back for over a second, and [S-L19-069] warns they must stay short. The house limits let marketing motion run longer (`STD-easing-duration-06`, `STD-easing-duration-09`), so the length is a judgement call [inferred]. One recipe fades the navigation in with ease-in-out [S-L19-081], and the other slides the loading screen off the page with `expo.inOut` [S-L19-071]; the house rule gives entrances and exits ease-out (`STD-easing-duration-01`), so both follow the standard instead (DC-L19-133) [inferred application].
 - **Stagger timing.** The house standard is 30-80 ms per item (`STD-enter-exit-origin-13`); the research proposes 20-50 ms with a 500 ms total (DC-L04-23, the Q-motion-06 "stagger" option). The standard is locked, so the research value should follow it.
 - **Marketing and product in one system.** The research defaults to one system with a calm set and a lively set (DC-L06-01), productive type plus 3-4 expressive display styles (DC-L02-11), and one or two hero moments (DC-L06-03), or one to three per flow (DC-L04-19). The sources' bigger type range [S-L19-052] and richer motion fit that "second mood" [inferred].
 - **Long pages.** [S-L19-054] prefers a Load more button to infinite scroll so the footer stays reachable, which the research also says (DC-L08-21).

@@ -2,7 +2,7 @@
 type: synthesis
 title: Desktop and macOS apps
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources:
   - Vy0KKvZJRH8
 tags:
@@ -60,7 +60,7 @@ A Mac app feels native when it shows up where people are already working, for ex
 
 With a single source, the comparisons are with OpenDesigner's research and house standards.
 
-- **Window layout (agree, with one gap).** Top bar, sidebar and content [S-L19-067] match DC-L10-09 and DC-L14-05 (desktop: menu bar, toolbar, sidebar), DC-L03-19 (a full sidebar reads as a desktop productivity tool) and the desktop end of Q-layout-04's default. The video never mentions the menu bar, which DC-L10-24 and the L10 platform table say native macOS expects to hold every command, together with standard shortcuts.
+- **Window layout (agree, with one gap).** Top bar, sidebar and content [S-L19-067] match DC-L10-09 and DC-L14-05 (desktop: menu bar, toolbar, sidebar), DC-L03-19 (a full sidebar reads as a desktop productivity tool) and the desktop end of Q-layout-04's default. The video never mentions the menu bar, which native macOS expects together with keyboard shortcuts (DC-L10-24, the L10 platform table) and which holds "all the commands" (DC-L10-09).
 - **Skipping the sidebar (no conflict).** DC-L08-19 defaults desktops to a sidebar for 3-5 destinations; the example app has only browse and search, so it falls below that range [inferred]. Q-layout-04 has no "no navigation container" option besides `hidden`.
 - **Window chrome (partly covered).** Integrated traffic lights and a clear drag strip [S-L19-067] fit DC-L10-24's note that Electron shells expose `titleBarStyle` (hidden, hiddenInset) and Window Controls Overlay, and that an app ignoring native chrome reads as "a website in a window". No card gives a drag-strip height, so the 50-pixel figure stays the video's opinion.
 - **Dark mode is not an inversion (agree).** [S-L19-067] matches DC-L10-17 (Apple: the dark palette isn't an inversion) and DC-L01-18 (no major system ships a pure inversion), plus STD-visual-details-24. DC-L01-18 also notes that Spectrum's dark themes target higher contrast ratios, which is close to the video's "more different colors in dark mode" [inferred].
@@ -84,7 +84,7 @@ With a single source, the comparisons are with OpenDesigner's research and house
 - **Q-pattern-03** (show everything or disclose progressively): `progressive`, with filters hidden until content exists [S-L19-067].
 - **Q-pattern-04** (empty screens and first use): `empty-kinds` for the first-use state, and a short shortcut-teaching modal as the video's choice [S-L19-067].
 - **Q-state-08** (what people see while they wait): optimistic UI for background saves, with a failure path still to be designed [S-L19-067].
-- **Q-depth-04** (glass or solid): native blur on floating utility windows, with a solid fallback [S-L19-067].
+- **Q-depth-04** (glass or solid): native blur on floating utility windows, with a solid fallback [S-L19-067]. `standards.json` now refuses the question's `none` (opaque) and `transient` options under STD-visual-details-16, so translucent bars are the house direction and the solid surface stays as the reduced-transparency fallback (STD-accessibility-motion-11).
 
 ## Visual examples worth showing
 
@@ -99,8 +99,8 @@ With a single source, the comparisons are with OpenDesigner's research and house
 
 ## Open questions
 
-- No OpenDesigner question covers the desktop app shell yet: window chrome and the drag region, the menu bar, a shortcut list, drag and drop, or floating utility windows. The platform cards propose three (Q-plat-13 app presence, Q-plat-14 title bar, Q-plat-15 shortcuts; DC-L19-149 to DC-L19-151); the menu bar and drag and drop still have none. Should Q-plat-01 `desktop` unlock them, in stage 04 or stage 13?
-- How should a shortcut-opened panel appear under STD-when-to-animate-06: instantly, with only an instant state change as feedback? Does the rule also cover the quick-save panel's slide-away on Escape and its collapse into a toast?
+- No OpenDesigner question covers the desktop app shell yet: window chrome and the drag region, the menu bar, a shortcut list, drag and drop, or floating utility windows. The platform cards propose three (Q-plat-13 app presence, Q-plat-14 title bar, Q-plat-15 shortcuts; DC-L19-149 to DC-L19-151); the menu bar and drag and drop still have none (DC-L19-158 offers drag-out as a sharing option only). The earlier id clash is settled in the cards: DC-L19-96's slowest-device question is back at Q-plat-11 (`_cards/motion.md`), and Q-plat-15 stays with shortcuts. Should Q-plat-01 `desktop` unlock them, in stage 04 or stage 13?
+- DC-L19-149 proposes that a shortcut-opened panel appears and closes instantly, with the state change as the feedback, and reads the confirming toast as a separate notification that may enter as toasts do [inferred]. Does the owner accept that reading of STD-when-to-animate-06 for the toast?
 - Should macOS apps offer an in-app light/dark setting (the video) or only follow the system (DC-L10-17)?
 - The 50-pixel drag strip is one video's estimate. Is there a platform source to confirm it before it becomes a layout token?
 - Which pointer target should desktop apps use as the floor: macOS 28pt (20pt minimum) or the web's 24px?

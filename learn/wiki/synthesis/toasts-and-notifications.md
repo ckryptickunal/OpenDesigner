@@ -2,11 +2,13 @@
 type: synthesis
 title: Toasts and notifications
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources:
+  - 9ypqs_2fAl8
   - ADaQuZS04Rc
   - B7k5rOgmOGY
   - BUDipdbKK7Y
+  - Qsq-Sj_rojU
   - Vy0KKvZJRH8
   - adev-changelog
   - adev-home
@@ -38,7 +40,7 @@ tags:
 
 ## In short
 
-A toast is a small message that slides in near the edge of the screen, says what just happened, and then goes away by itself. The house rule is to build toasts with Sonner rather than by hand, mount one Toaster near the root of the app, and call a plain `toast()` function wherever something happens. A toast rises from below, leaves the way it came, closes after 4 seconds, and pauses that timer while the pointer rests on it or the browser tab is hidden. Practitioner videos use toasts to confirm changes made in a modal and to report slow jobs such as a deploy. OpenDesigner's own research is more careful: it keeps toasts for low-stakes news and puts blocking errors somewhere that stays on screen.
+A toast is a small message that slides in near the edge of the screen, says what just happened, and then goes away by itself. The house rule is to build toasts with Sonner rather than by hand, mount one Toaster near the root of the app, and call a plain `toast()` function wherever something happens. A toast rises from below, leaves the way it came and closes after 4 seconds, pausing while the pointer rests on it or the browser tab is hidden; a toast with a button such as Undo stays until the person acts or dismisses it. Practitioner videos use toasts to confirm changes made in a modal and to report slow jobs such as a deploy. OpenDesigner's own research is more careful: it keeps toasts for low-stakes news and puts blocking errors somewhere that stays on screen.
 
 ## House standards
 
@@ -79,7 +81,7 @@ These are locked. Standards backed by the Sonner docs and Emil Kowalski's writin
 - `STD-components-toasts-drawers-12` (should): Expand the toast stack on hover.
 - `STD-components-toasts-drawers-13` (must): Fill gaps between toasts for hover.
 - `STD-components-toasts-drawers-14` (should): Show at most three toasts.
-- `STD-components-toasts-drawers-15` (should): Auto-dismiss toasts after 4 seconds.
+- `STD-components-toasts-drawers-15` (should): Auto-dismiss toasts after 4 seconds, except action toasts. (a toast with an Undo or Retry button gets `duration: Infinity` and stays until the person acts or dismisses it; changed in standards version 2)
 - `STD-components-toasts-drawers-16` (should): Pause the toast timer on hover.
 - `STD-components-toasts-drawers-17` (must): Pause toast timers in a hidden tab.
 - `STD-components-toasts-drawers-18` (should): Swipe toasts away along their position.
@@ -104,7 +106,7 @@ These are locked. Standards backed by the Sonner docs and Emil Kowalski's writin
 - A dashboard's toasts are its notification system. They confirm the changes someone made inside a modal (the page was hidden while they worked), make people aware of something without taking over the screen, prompt an action, and carry warning and error states, which often get missed [S-L19-047] ([[sources/B7k5rOgmOGY-everything-you-need-to-know-to-build-a-dashboard-ui-in-8-minutes-beginner-friendly|EVERYTHING you need to know to build a Dashboard UI in 8 minutes (beginner friendly)]]).
 - When an action takes time, such as a deploy, report its status right away so nobody has to guess whether it worked; Vercel's build-status notification is the example [S-L19-044] ([[sources/ADaQuZS04Rc-stop-making-pretty-uis-think-like-a-product-designer|Stop Making Pretty UIs. Think Like a Product Designer]]).
 - A toast can close out an optimistic action: in Kole Jain's macOS quick-save window, pressing Enter collapses the window into a toast that slides off while the save finishes in the background [S-L19-067] ([[sources/Vy0KKvZJRH8-everything-you-need-to-design-macos-apps-exactly-like-apple-beginner-friendly|Everything you need to Design macOS Apps EXACTLY like Apple (beginner friendly)]]).
-- Notifications must not shame people. A recurring YouTube watch-time message whose only exits are "subscribe to Premium" or "keep getting this" is shown as an infuriating example [S-L19-048] ([[sources/BUDipdbKK7Y-i-made-the-most-unhinged-ui-upgrades-downgrades|I Made The Most UNHINGED UI Upgrades (downgrades?)]]).
+- Notifications must not shame people. A recurring YouTube watch-time message whose only exits are "subscribe to Premium" or "keep getting this" is shown as an infuriating example [S-L19-048] ([[sources/BUDipdbKK7Y-i-made-the-most-unhinged-ui-upgrades-downgrades|I Made The Most UNHINGED UI Upgrades (downgrades?)]]). That is one satirical video; the rule gains support from DC-L13-15, whose deceptive-pattern policy lists nagging and confirmshaming [inferred link].
 - Toasts should animate in, because a toast that suddenly appears feels off [S-L19-012] ([[sources/ek-you-dont-need-animations-you-don-t-need-animations|You Don't Need Animations]]). Emil Kowalski's frequency table puts toasts with modals and drawers as occasional UI: they get standard animation, and delight is saved for rare moments [S-L19-023] ([[sources/eks-skills-emil-design-eng-skill-emilkowalski-skills-skills-emil-design-eng-skill-md|emilkowalski/skills: skills/emil-design-eng/SKILL.md]]) [S-L19-024] ([[sources/eks-skills-find-animation-opportunities-skill-emilkowalski-skills-skills-find-animation-opportunities-skill-md|emilkowalski/skills: skills/find-animation-opportunities/SKILL.md]]) [S-L19-025] ([[sources/eks-skills-improve-animations-audit-emilkowalski-skills-skills-improve-animations-audit-md|emilkowalski/skills: skills/improve-animations/AUDIT.md]]) [S-L19-033] ([[sources/eks-skills-review-animations-standards-emilkowalski-skills-skills-review-animations-standards-md|emilkowalski/skills: skills/review-animations/STANDARDS.md]]).
 
 ### Use Sonner, and set it up once
@@ -157,6 +159,11 @@ These are locked. Standards backed by the Sonner docs and Emil Kowalski's writin
 
 - The toast container carries an ARIA label ("Notifications" by default, changed with `containerAriaLabel`), `Alt+T` moves focus to the toaster, and toasts are dismissible unless told otherwise [S-L19-091] ([[sources/sonner-toast-toast-sonner|Toast – Sonner]]) [S-L19-092] ([[sources/sonner-toaster-toaster-sonner|Toaster – Sonner]]) [S-L19-021] ([[sources/eks-skills-ask-sonner-api-emilkowalski-skills-skills-ask-sonner-api-md|emilkowalski/skills: skills/ask-sonner/API.md]]).
 
+### Asking to send push notifications
+
+- Many apps show their own screen before the system's notification permission prompt, explaining the benefit; Brilliant says it will remind you to learn so it becomes a habit, and Center also previews the notification you would get. The video says this "apparently" improves accept rates a lot, with no figure [S-L19-107] ([[sources/Qsq-Sj_rojU-i-studied-1-460-onboarding-flows-here-s-what-i-found|I Studied 1,460 Onboarding Flows. Here's What I Found.]]).
+- A trial timeline lifted opt-ins too: after Blinkist added a step-by-step trial timeline to its paywall, push notification opt-ins went up along with trial sign-ups, which the video puts down to people being reminded before the trial ends [S-L19-104] ([[sources/9ypqs_2fAl8-we-studied-2-995-paywalls-heres-what-actually-converts|We Studied 2,995 Paywalls. Here’s What Actually Converts.]]).
+
 ### Beyond the slide-up (practitioner opinion)
 
 - Kole Jain wants toasts to do more than the obvious slide-up and suggests toasts that show a small loading animation and then a celebratory success message, sometimes with particles. He likes Linear's toasts more than Vercel's, and he places a swipeable card stack in the bottom right as a notification center, noting that dub.co keeps one in its sidebar [S-L19-079] ([[sources/ld1zhQMXxXU-11-micro-animations-that-will-instantly-level-up-your-ui-free-figma-file|11 Micro Animations That Will Instantly Level Up Your UI (free figma file)]]). He also points to Dub and Linear using the sidebar's empty space for notifications [S-L19-047] ([[sources/B7k5rOgmOGY-everything-you-need-to-know-to-build-a-dashboard-ui-in-8-minutes-beginner-friendly|EVERYTHING you need to know to build a Dashboard UI in 8 minutes (beginner friendly)]]). These are one creator's preferences, not tested findings.
@@ -170,7 +177,7 @@ These are locked. Standards backed by the Sonner docs and Emil Kowalski's writin
 - **Timing.** Emil Kowalski's sources hold a tension: UI should stay under 300ms, yet the web toast runs 400ms and the React Native toast is capped at 300ms [S-L19-023] ([[sources/eks-skills-emil-design-eng-skill-emilkowalski-skills-skills-emil-design-eng-skill-md|emilkowalski/skills: skills/emil-design-eng/SKILL.md]]) [S-L19-015] ([[sources/eks-skills-animate-expo-recipes-emilkowalski-skills-skills-animate-expo-recipes-md|emilkowalski/skills: skills/animate-expo/RECIPES.md]]). The house standards settle it: 400ms on the web is a named exception for personality (`STD-easing-duration-06`, `STD-easing-duration-13`), and React Native keeps 300ms in and 250ms out (`STD-components-toasts-drawers-08`).
 - **Delight in toasts.** Kole Jain's celebratory, particle-filled toasts [S-L19-079] ([[sources/ld1zhQMXxXU-11-micro-animations-that-will-instantly-level-up-your-ui-free-figma-file|11 Micro Animations That Will Instantly Level Up Your UI (free figma file)]]) pull against the frequency rule that toasts are occasional UI and get standard motion, not delight (`STD-when-to-animate-08`). A reasonable split is a plain toast for routine confirmations and a celebratory one only for a rare first success [inferred].
 - **Errors in toasts.** Kole Jain uses toasts for warnings and errors precisely because they are easy to miss elsewhere [S-L19-047] ([[sources/B7k5rOgmOGY-everything-you-need-to-know-to-build-a-dashboard-ui-in-8-minutes-beginner-friendly|EVERYTHING you need to know to build a Dashboard UI in 8 minutes (beginner friendly)]]). OpenDesigner's research says the opposite about blocking errors: DC-L13-09 keeps toasts for low-stakes confirmations and says a toast should never be the only channel for an error that stops progress, and DC-L13-07 lists toasts as unsuited to form errors. Both of those are marked [inferred] in the research itself, so neither side has hard evidence here.
-- **Actions and auto-dismiss.** DC-L08-18 says never auto-dismiss a toast that contains an action, citing WCAG 2.2.1 and 2.2.3 on timing. Sonner closes every toast after 4000ms unless `duration: Infinity` is set, and clicking an action closes it [S-L19-091] ([[sources/sonner-toast-toast-sonner|Toast – Sonner]]) [S-L19-021] ([[sources/eks-skills-ask-sonner-api-emilkowalski-skills-skills-ask-sonner-api-md|emilkowalski/skills: skills/ask-sonner/API.md]]). Sonner's pause on hover and on hidden tabs covers part of the "pausable" requirement, but not keyboard or screen-reader users who never hover [inferred]. Giving action toasts `duration: Infinity` would satisfy both [inferred].
+- **Actions and auto-dismiss.** DC-L08-18 says never auto-dismiss a toast that contains an action, citing WCAG 2.2.1 and 2.2.3 on timing, and Q-form-04's `inline-banner` option says the same. Sonner closes every toast after 4000ms unless `duration: Infinity` is set, and clicking an action closes it [S-L19-091] ([[sources/sonner-toast-toast-sonner|Toast – Sonner]]) [S-L19-021] ([[sources/eks-skills-ask-sonner-api-emilkowalski-skills-skills-ask-sonner-api-md|emilkowalski/skills: skills/ask-sonner/API.md]]). Sonner's pause on hover and on hidden tabs covers part of the "pausable" requirement, but not keyboard or screen-reader users who never hover [inferred]. DC-L19-112 proposed giving action toasts `duration: Infinity`, and version 2 of the house standards now does the same: `STD-components-toasts-drawers-15` now keeps a toast with an action button until the person acts or dismisses it. The standard marks this exception as its own reasoning from the accessibility floor, not something the Sonner sources state.
 - **Whether to use toasts at all.** DC-L13-09 notes that Primer deliberately ships no toast, and Q-form-04 defaults to inline messages and banners. The house standards do not decide that question; they only lock how a toast is built once a product uses one.
 - **Undo.** DC-L13-08 recommends a toast with Undo for reversible actions. Sonner's `action` button is the natural place for that Undo [inferred].
 - **Loading.** DC-L13-01 lists optimistic UI as an option, which matches Kole Jain's save-then-toast pattern [S-L19-067] ([[sources/Vy0KKvZJRH8-everything-you-need-to-design-macos-apps-exactly-like-apple-beginner-friendly|Everything you need to Design macOS Apps EXACTLY like Apple (beginner friendly)]]) and Sonner's `toast.loading` and `toast.promise` [S-L19-091] ([[sources/sonner-toast-toast-sonner|Toast – Sonner]]).
@@ -178,11 +185,11 @@ These are locked. Standards backed by the Sonner docs and Emil Kowalski's writin
 
 ## Decisions this informs
 
-- **Q-form-04** (where "Saved" messages appear): the sources favour toasts for confirmations in dashboards, while the default is `inline-banner`. Whichever is chosen, the house standards fix how toasts behave.
+- **Q-form-04** (where "Saved" messages appear): the sources favour toasts for confirmations in dashboards, while the default is `inline-banner`. Whichever is chosen, the house standards fix how toasts behave, and the option's rule that action toasts never auto-dismiss now matches `STD-components-toasts-drawers-15`.
 - **Q-form-05** (undo or confirm on delete): a toast with an Undo action is the undo channel [inferred].
 - **Q-state-08** (what people see while they wait): `toast.loading` and `toast.promise` cover background work that finishes after the person has moved on.
 - **Q-motion-01** (motion personality): Sonner is the worked example of motion tuned to a component's personality.
-- **Q-motion-02** (durations, faster exits): toasts show the 20%-faster exit (300ms in, 250ms out on React Native).
+- **Q-motion-02** (durations, faster exits): toasts show the 20%-faster exit (300ms in, 250ms out on React Native). The house standards settle this question (`STD-easing-duration-07`, `STD-easing-duration-11`).
 - **Q-theme-01** (light and dark): toasts must follow the app theme, never the light default.
 - **Q-color-15** (status colors): typed toasts need success, error, info and warning colors and icons; `richColors` is off by default.
 - **Q-comp-01** (bare parts or a full kit): the headless `toast.custom()` route matches the headless option [inferred].
@@ -199,13 +206,14 @@ These are locked. Standards backed by the Sonner docs and Emil Kowalski's writin
 - A "create link" modal that closes and is followed by a confirming toast [S-L19-047] ([[sources/B7k5rOgmOGY-everything-you-need-to-know-to-build-a-dashboard-ui-in-8-minutes-beginner-friendly|EVERYTHING you need to know to build a Dashboard UI in 8 minutes (beginner friendly)]]).
 - The macOS quick-save window collapsing into a toast [S-L19-067] ([[sources/Vy0KKvZJRH8-everything-you-need-to-design-macos-apps-exactly-like-apple-beginner-friendly|Everything you need to Design macOS Apps EXACTLY like Apple (beginner friendly)]]).
 - A React Native toast sitting 16 points above the home indicator [S-L19-015] ([[sources/eks-skills-animate-expo-recipes-emilkowalski-skills-skills-animate-expo-recipes-md|emilkowalski/skills: skills/animate-expo/RECIPES.md]]).
+- A permission primer screen before the system notification prompt, with a preview of the notification, as Center does [S-L19-107] ([[sources/Qsq-Sj_rojU-i-studied-1-460-onboarding-flows-here-s-what-i-found|I Studied 1,460 Onboarding Flows. Here's What I Found.]]).
 - Kole Jain's loading-to-celebration toast, labeled as practitioner opinion [S-L19-079] ([[sources/ld1zhQMXxXU-11-micro-animations-that-will-instantly-level-up-your-ui-free-figma-file|11 Micro Animations That Will Instantly Level Up Your UI (free figma file)]]).
 
 ## Open questions
 
-- Should toasts that carry an action (such as Undo) persist until dismissed, as DC-L08-18 asks, or keep the 4-second default with hover and hidden-tab pausing? The standards and the research need one answer.
 - May a toast carry an error that blocks progress, as Kole Jain does, or must that error also appear in place?
 - Does Sonner announce new toasts to screen readers through a live region? None of these sources says; it needs a check against Sonner's code or a screen-reader test.
 - What does a toast do under reduced motion? None of the toast sources gives a reduced-motion variant, and `STD-accessibility-motion-01` requires one.
 - On narrow screens, should the default stay bottom-right or move to bottom-center? The sources give a 16px mobile offset but no mobile position.
 - What should OpenDesigner recommend for SwiftUI and Compose, where Sonner does not exist?
+- Where should the push-permission primer live in the interview? No question covers it; DC-L13-15 lists notification prompts among the surfaces its deceptive-pattern policy affects.

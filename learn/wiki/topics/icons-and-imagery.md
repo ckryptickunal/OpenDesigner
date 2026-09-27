@@ -2,7 +2,7 @@
 type: topic
 title: Icons and imagery
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources: []
 tags: []
 ---
@@ -45,3 +45,5 @@ A high-quality asset makes or breaks a landing page; the image's focal point mus
 - [[sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai|Vibe Coding a Pro UI in SECONDS With AI]]: Without an icon library in the prompt the AI uses emojis; ask for an icon library and add icons during the Figma pass.
 
 - See also: [[synthesis/icons-and-imagery|Icons and imagery synthesis]]
+- [[sources/ARq1bx3Sfg8-the-psychology-behind-streaks|The Psychology Behind Streaks]]: Mascots such as Duolingo's owl or a little bird that grows alongside you are designed to create attachment through anthropomorphism, not only to make apps feel cute.
+- [[sources/qK7WYCMvjUw-he-spent-1m-on-a-b-tests-here-s-what-won|He Spent $1M on A/B Tests. Here's What Won.]]: Realistic images beat Disney-style 3D characters because the paying audience is over 35; personalizing images with the user's face failed; a realistic look suited the AI astrologer.

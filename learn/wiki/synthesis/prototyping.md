@@ -2,7 +2,7 @@
 type: synthesis
 title: Prototyping
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources:
   - 7cTdCu8HMgM
   - Lp6ey4AyDzA
@@ -66,14 +66,14 @@ A prototype is a working version you can click, hover and feel, and every source
 
 - Smart Animate treats layers with exactly the same name in two frames as one element and animates between them; differently named layers crossfade. Toggle visibility with the layer's opacity, not the fill's. Use "while hovering" for hover effects and "on click" for menus [S-L19-059] ([[sources/NtZeYmTMuo4-animated-dashboard-sidebar-tutorial-in-figma-free-design-files|Animated Dashboard Sidebar Tutorial in Figma (+ free design files)]]).
 - A menu slides up because its hidden state sits a few pixels lower; a rectangle morphs into a search bar because both layers share a name; a check mark slides in through a mask. The sidebar's spinner steps through rotated frames on a 300 millisecond delay with a custom spring (stiffness 550, damping 40) [S-L19-059] ([[sources/NtZeYmTMuo4-animated-dashboard-sidebar-tutorial-in-figma-free-design-files|Animated Dashboard Sidebar Tutorial in Figma (+ free design files)]]).
-- Page-load sequences are chains of duplicated frames, each holding one state, linked by after-delay triggers; a 1 millisecond delay starts each step right after the last. It helps to build the frames backwards from the finished screen. The example waits 1,000 milliseconds, slides the loading screen away over 800 milliseconds with a custom curve dragged by eye, expands a dot into the navbar over 400 milliseconds and sweeps a text wipe over 700 milliseconds [S-L19-081] ([[sources/nl8OFGdx75w-prototyping-professional-load-animations-in-figma-part-1|Prototyping Professional Load Animations in Figma: Part 1]]). These are one demo's values.
+- Page-load sequences are chains of duplicated frames, each holding one state, linked by after-delay triggers; a 1 millisecond delay starts each step right after the last. It helps to build the frames backwards from the finished screen. The example waits 1,000 milliseconds, slides the loading screen away over 800 milliseconds with a custom curve dragged by eye, grows a dot into a circle over 300 milliseconds and the circle into the navbar over 400, and sweeps each pass of a text wipe over 700 milliseconds [S-L19-081] ([[sources/nl8OFGdx75w-prototyping-professional-load-animations-in-figma-part-1|Prototyping Professional Load Animations in Figma: Part 1]]). These are one demo's values.
 - Eleven micro-interactions are built the same way (masks, subtract shapes, mouse enter and leave, while pressing, delays). The only timings spoken are a name tag's spring (500 milliseconds, stiffness 636, damping 24) and a one-second hover delay on tooltips. Figma prototypes cannot bind the Command or Shift keys, so X and A stood in for a shortcut demo [S-L19-079] ([[sources/ld1zhQMXxXU-11-micro-animations-that-will-instantly-level-up-your-ui-free-figma-file|11 Micro Animations That Will Instantly Level Up Your UI (free figma file)]]).
 - An offset-button hover is two frames (the second with the background moved) joined by a hover interaction [S-L19-085] ([[sources/ulSOdTgoGeY-awful-to-amazing-web-designs-easily|Awful To AMAZING Web Designs Easily]]).
 - The Figma mobile app can mirror a prototype so you can try it on the real screen size [S-L19-057] ([[sources/Lp6ey4AyDzA-8-web-design-hacks-to-actually-make-your-designs-better|8 Web Design Hacks To ACTUALLY Make Your Designs Better]]).
 
 ### From prototype to code
 
-- The same load animations were rebuilt with GSAP, using the `expo.inOut` ease to match the Figma curves and paused timelines of chained steps (for example a 0.2 second stagger on navbar items). The presenter says the timings may need adjusting in code [S-L19-071] ([[sources/d4MF6pdAZNw-developing-premium-load-animations-html-css-js-part-2|Developing Premium Load animations (HTML, CSS & JS): Part 2]]).
+- The same load animations were rebuilt with GSAP, using the `expo.inOut` ease to match the Figma curves and paused timelines of chained steps (for example a 0.2 second stagger on navbar items). The code durations are longer than the Figma ones: 1.3 seconds for the loading-screen slide, the hero text and the navbar widening, 0.8 seconds for the navbar growing from scale 0, and 1 second for each half of the text wipe. The presenter says the timings may need adjusting in code [S-L19-071] ([[sources/d4MF6pdAZNw-developing-premium-load-animations-html-css-js-part-2|Developing Premium Load animations (HTML, CSS & JS): Part 2]]).
 
 ## Where they agree and disagree
 
@@ -87,6 +87,7 @@ Against the house motion standards:
 
 - **Long load sequences:** the 800 and 700 millisecond steps [S-L19-081] are over the 300ms UI cap in `STD-easing-duration-06`. As marketing page-load motion they fall under that standard's "can be longer" clause and each step stays under the 1s limit of `STD-easing-duration-09`, but the standard also says a rarely seen animation must still pass a speed check, and the whole sequence holds the content back for almost two seconds [inferred].
 - **Curves set by eye:** hand-dragged bezier handles and Figma's ease in and out preset [S-L19-081] differ from `STD-easing-duration-02`, which asks for the named strong curves or a curve from easing.dev or easings.co. In code, `expo.inOut` [S-L19-071] suits movement on screen under `STD-easing-duration-01`, but a loading screen sliding away is an exit, where the flowchart picks ease-out [inferred].
+- **The coded version goes further:** its 1.3 second slides [S-L19-071] pass the 1s limit of `STD-easing-duration-09`, which allows longer only for illustrative (marketing or explanatory) motion, so they hold only if a page-load sequence counts as marketing motion [inferred]. Its navbar animates in from scale 0 [S-L19-071], which `STD-enter-exit-origin-01` forbids (start from 0.9 to 0.97 with opacity 0).
 - **A spring-stepped spinner:** the Figma spinner steps through frames with a spring [S-L19-059]; `STD-easing-duration-01` gives constant motion such as a spinner linear easing, and `STD-easing-duration-15` says spinners spin fast [inferred].
 
 Against OpenDesigner's existing research:
@@ -97,7 +98,7 @@ Against OpenDesigner's existing research:
 
 ## Decisions this informs
 
-- **Q-pref-02** (planned, not asked yet: how to review AI changes and try other versions): the house standards point to a picker showing three to five named variants one at a time; `show-6` conflicts with them, and `lock-shuffle` fits fine-tuning after a direction is chosen [inferred].
+- **Q-pref-02** (planned, not asked yet: how to review AI changes and try other versions): the house standards point to a picker showing three to five named variants one at a time; `show-6` conflicts with them, and `lock-shuffle` fits fine-tuning after a direction is chosen [inferred]. DC-L19-174 proposes replacing `show-6` with `picker-3`.
 - **Q-motion-01** (how motion should feel): each prototype variant must meet the craft bar whatever the answer, and the product's personality bounds the boldest variant [S-L19-031].
 - **Q-motion-04** (how springy motion is set up): Figma's stiffness-and-damping springs [S-L19-059] [S-L19-079] are spring physics; `durations-only` has no place for them [inferred].
 - **Q-tool-03** (which design tool): the Figma prototype workflow of [S-L19-059] [S-L19-081] [S-L19-079] applies when the answer is a Figma plan; without a design tool, the code prototype of [S-L19-031] still works.

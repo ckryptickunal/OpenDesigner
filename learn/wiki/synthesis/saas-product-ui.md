@@ -2,13 +2,14 @@
 type: synthesis
 title: SaaS product UI
 created: 2026-09-24
-updated: 2026-09-27
+updated: 2026-09-28
 sources:
   - 66oOi9OLMCw
   - ADaQuZS04Rc
   - B7k5rOgmOGY
   - If7iCPDy2vk
   - PDcQJOPby1k
+  - kdRkuqu8apE
   - tNMAFjzapOk
 tags:
   - od-area-patterns
@@ -17,7 +18,7 @@ tags:
 
 ## In short
 
-A SaaS product is a tool people work in every day, not a brochure. The sources say to design it as screens and sequences, to design every state people meet (empty, loading, success and error), and to hold a small set of decisions consistently so each new screen feels familiar. The sidebar is the product's spine, the main area shows what matters most, and overlays are picked by how big and how lasting the task is. Product UIs are mostly neutral, with several background layers and color kept for meaning. Small tells, such as emojis used as icons or the same KPI cards on every page, make a product look careless.
+A SaaS product is a tool people work in every day, not a brochure. The sources say to design it as screens and sequences, to design every state people meet (empty, loading, success and error), and to hold a small set of decisions consistently so each new screen feels familiar. The sidebar is the product's spine, the main area shows what matters most, and overlays are picked by how big and how lasting the task is; the UI stays mostly neutral, with several background layers and color kept for meaning. Small tells, such as emojis used as icons or the same KPI cards on every page, make a product look careless. The home dashboard also sells the product: when rivals do roughly the same thing, one screen that shows what the product does, how you are doing and what to do next does much of the convincing.
 
 ## House standards
 
@@ -47,6 +48,11 @@ A SaaS product is a tool people work in every day, not a brochure. The sources s
 - Keep sidebar items to navigation, with no stats; replace a gradient initial-letter avatar with an account card whose links open in a popover; put billing, usage and future sections in tabs; collapse advanced form options by default [S-L19-061] ([[sources/PDcQJOPby1k-5-saas-ui-ux-mistakes-that-scream-you-vibe-code|5 SaaS UI/UX mistakes that SCREAM you Vibe Code]]).
 - Choose the surface by the size and permanence of the task: a popover for simple non-blocking settings, a modal for complex work on the same page, a new page for permanent or large context, with a back button or breadcrumb [S-L19-047] ([[sources/B7k5rOgmOGY-everything-you-need-to-know-to-build-a-dashboard-ui-in-8-minutes-beginner-friendly|EVERYTHING you need to know to build a Dashboard UI in 8 minutes (beginner friendly)]]).
 
+### The home dashboard sells the product
+
+- Nearly one in five products on Mobbin use the dashboard as the home screen. When people choose between platforms that do roughly the same thing, the dashboard does a lot of the convincing: one screenshot should tell what the product does, how you are doing and what to do next [S-L19-110] ([[sources/kdRkuqu8apE-i-studied-2-108-dashboards-to-see-what-sticks|I Studied 2,108 Dashboards To See What Sticks]]).
+- The memorable ones go one step past the data (insights beside a chart, recaps, highlights), fit the visual to the data, and leave things out; AI is starting to answer "why did this change?" beside the data [S-L19-110] ([[sources/kdRkuqu8apE-i-studied-2-108-dashboards-to-see-what-sticks|I Studied 2,108 Dashboards To See What Sticks]]). The detail is in the [[synthesis/dashboards-and-data-display|Dashboards and data display synthesis]].
+
 ### Mostly neutral, color for meaning
 
 - The 60-30-10 rule does not fit product UI. Plan color in four layers: a neutral foundation, a functional accent, semantic colors and theming. A product needs about four background layers, one or two strokes and about three text colors before hover states. Semantic colors for success, failure and in-progress are always needed, even in a black-and-white brand like Vercel's [S-L19-039] ([[sources/66oOi9OLMCw-why-the-60-30-10-rule-is-ruining-your-ui-designs|Why the 60-30-10 Rule is RUINING Your UI Designs]]).
@@ -71,6 +77,7 @@ A SaaS product is a tool people work in every day, not a brochure. The sources s
 - **Showing the AI's steps.** [S-L19-055] shows retrieved documents and cited sources step by step to make the AI feel like a collaborator. The research agrees about sources (place them next to the claim, show them in drill-down form) but advises against step-by-step reasoning shown as an explanation, because it is often unfaithful to what the model did (DC-L13-16). Retrieval steps and citations are fine; narrated reasoning is not [inferred].
 - **Confidence labels.** [S-L19-055] and the research both suggest confidence ratings, which the research limits to high-stakes contexts (DC-L13-16).
 - **Neutral budgets.** The counts of background layers, strokes and text colors come from one video [S-L19-039]; the research's status default of four statuses with icons (DC-L01-15) agrees on the semantic layer.
+- **What to do next.** [S-L19-110]'s "what to do next" on the home dashboard echoes [S-L19-044]'s question for every screen, what the user needs next, and [S-L19-047]'s main area showing what matters most [inferred link]. The Mobbin figures (one in five home screens) are platform data that cannot be checked from the video.
 - **Motion.** [S-L19-044] praises Linear's subtle but meaningful status animations and [S-L19-047] calls dashboard motion tame and user focused, both matching `STD-easing-duration-13`.
 
 ## Decisions this informs
@@ -85,7 +92,7 @@ A SaaS product is a tool people work in every day, not a brochure. The sources s
 - **Q-state-06** (how risky actions look): the primary color stays on the safe action.
 - **Q-form-04** (where "Saved" messages appear) and **Q-form-05** (undo or confirm).
 - **Q-icon-01** (icon source): an interface icon set, not emojis.
-- **Q-ai-01** (how AI work is labelled and corrected).
+- **Q-ai-01** (how AI work is labelled and corrected): an AI prompt under a chart, or an AI layer beside the data, to explain changes [S-L19-110].
 - **Q-motion-01** (motion style): productive.
 
 ## Visual examples worth showing
@@ -97,6 +104,7 @@ A SaaS product is a tool people work in every day, not a brochure. The sources s
 - Vercel's near-monochrome palette that still shows build status in color, and Mercury's tinted sidebar [S-L19-039].
 - A prompt box with attachment previews, a memory panel with storage, bulk delete and added facts, a research trail fading in step by step, and a confidence pill under each answer [S-L19-055].
 - Linear's menu, where alignment and type separate clickable items from shortcuts [S-L19-084].
+- A home dashboard that passes the one-screenshot test (what the product does, how you are doing, what to do next) [S-L19-110]; Shopify's Live View, which the video praises for fitting its visual to the data, is one candidate [inferred pairing].
 
 ## Open questions
 

@@ -2,7 +2,7 @@
 type: synthesis
 title: Design taste and judgement
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources:
   - 6CC8lLnqa28
   - 9WVt1CelBfg
@@ -38,6 +38,7 @@ sources:
   - eks-skills-prototype-skill
   - eks-skills-review-animations-skill
   - eks-skills-review-animations-standards
+  - kdRkuqu8apE
   - neE6wOuBIP8
   - pGYLZyBE32o
   - tNMAFjzapOk
@@ -50,7 +51,7 @@ tags:
 
 ## In short
 
-Taste is not personal preference: it is a trained ability to see what makes a design better, and with practice you can say why. Emil Kowalski's sources, which are locked house standards here, teach it by looking at great work, comparing two versions side by side and writing down why one feels better, and they say that small details nobody consciously notices add up to software that feels right. Kole Jain's videos agree that function comes before looks and that restraint usually wins, but they also warn that a design can follow every rule and still feel boring or soulless, so one well-chosen distinctive touch matters. Galleries such as Dribbble are useful for ideas but often reward looks over sense. Judgement matters more now that AI can build anything quickly, because someone still has to decide what is good enough to ship.
+Taste is not personal preference: it is a trained ability to see what makes a design better, and with practice you can say why. Emil Kowalski's sources, which are locked house standards here, teach it by looking at great work, comparing two versions side by side and writing down why one feels better, and they say that small details nobody consciously notices add up to software that feels right. Kole Jain's videos agree that function comes before looks and that restraint usually wins, but they also warn that a design can follow every rule and still feel boring or soulless, so one well-chosen distinctive touch matters. Galleries such as Dribbble are useful for ideas but often reward looks over sense, and a Mobbin review of 2,108 dashboards found that the memorable ones were not the prettiest but the ones that knew what to leave out. Judgement matters more now that AI can build anything quickly, because someone still has to decide what is good enough to ship.
 
 ## House standards
 
@@ -63,7 +64,8 @@ Taste is not personal preference: it is a trained ability to see what makes a de
 - `STD-visual-details-50` (should): polish the small details users will not consciously notice, such as native-feeling behavior.
 - `STD-visual-details-51` (should): make the default design and motion of a component excellent before adding options.
 - `STD-visual-details-27` (should): make every spacing, timing and alignment value a deliberate choice you can defend.
-- `STD-visual-details-29` and `STD-visual-details-30` (should): make the most important thing the most obvious, and aim for simplicity, not minimalism.
+- `STD-visual-details-29` and `STD-visual-details-30` (should): make the most important thing the most obvious, and aim for simplicity, not minimalism: strip what is unnecessary and make every element earn its place.
+- `STD-visual-details-44` (should): decide what not to build, and spend the user's time, attention and trust only on what pays off.
 - `STD-visual-details-37` (should): break a familiar pattern only when you can prove the new one is better.
 - `STD-visual-details-47` (should): decide the emotion people should feel and reinforce it in every decision.
 - `STD-when-to-animate-03` and `STD-when-to-animate-16` (must): every animation needs a named purpose ("it looks cool" is not one), and expect to reject most candidates when looking for places to add motion.
@@ -97,6 +99,13 @@ Taste is not personal preference: it is a trained ability to see what makes a de
 - Interfaces that feel "weirdly perfect" are built to be scanned, not read: they line content up on shared edges, tell items apart with avatars, chips and icons, and keep defaults gray so only what matters gets color. The polish comes from scannability, not prettiness [S-L19-080] ([[sources/neE6wOuBIP8-the-secret-behind-weirdly-perfect-ui-designs|The secret behind weirdly perfect UI designs]]).
 - Beginner mistakes include skipping flow planning, overusing shadows, glows and gradients, cramped or uneven spacing, inconsistent components, poor icons, redundant elements, missing feedback and over-designed charts [S-L19-045] ([[sources/AH_ugxmLeUM-7-ui-ux-mistakes-that-scream-youre-a-beginner|7 UI/UX mistakes that SCREAM you’re a beginner]]).
 
+### Knowing what to leave out
+
+- After going through 2,108 dashboards, Mobbin's presenter found that clear hierarchy, good spacing and useful charts make a dashboard fine but not memorable. The ones worth a screenshot "weren't the prettiest ones": they knew what to leave out. His gut check is to ask "Would I screenshot this, and why?" [S-L19-110] ([[sources/kdRkuqu8apE-i-studied-2-108-dashboards-to-see-what-sticks|I Studied 2,108 Dashboards To See What Sticks]]).
+- The standouts "weren't templates": someone asked how to make the data make sense to users instantly. Examples include key insights placed beside a line chart, a heat map where darker squares mean busier hours, and an analytics dashboard that stands out simply by being clean when most look busy [S-L19-110] ([[sources/kdRkuqu8apE-i-studied-2-108-dashboards-to-see-what-sticks|I Studied 2,108 Dashboards To See What Sticks]]).
+- Small, specific touches also show that someone made decisions: a birthday cake inside Cake's ownership donut chart, and a game in Mercury where an empty table would sit once all bills are paid [S-L19-110] ([[sources/kdRkuqu8apE-i-studied-2-108-dashboards-to-see-what-sticks|I Studied 2,108 Dashboards To See What Sticks]]).
+- These patterns are the presenter's opinion from browsing screenshots. The video's one usage figure, that AI dashboards get about twice the saves and exports on Mobbin, shows what designers collect, not what users prefer [S-L19-110].
+
 ### Restraint
 
 - Restraint is the defining trait of good motion work: reject most candidates, never animate because it looks cool, and treat finding nothing to add as a good result [S-L19-024] ([[sources/eks-skills-find-animation-opportunities-skill-emilkowalski-skills-skills-find-animation-opportunities-skill-md|emilkowalski/skills: skills/find-animation-opportunities/SKILL.md]]). Deciding when not to animate is part of the craft; think about what the user is trying to do and how often they will see it [S-L19-012] ([[sources/ek-you-dont-need-animations-you-don-t-need-animations|You Don't Need Animations]]).
@@ -128,6 +137,10 @@ Between the sources:
 - **Explain it, or eyeball it:** Emil holds that almost every taste decision has a nameable reason [S-L19-004] and that every value should be defensible [S-L19-020]. Kole admits much is eyeballed [S-L19-063] and that hierarchy is not exact [S-L19-052], and one of Emil's own sources says one motion balance has no formula [S-L19-033]. Both can hold: the reason can be named even when the exact value is found by trying [inferred].
 - **Restraint versus interest:** restraint runs through [S-L19-024] [S-L19-012] [S-L19-069] [S-L19-057] [S-L19-084], while [S-L19-085] [S-L19-062] [S-L19-050] push for variety and originality. They meet in "one distinctive touch" [S-L19-066] and "just the right surprise" [S-L19-084].
 - **Dribbble:** used for inspiration in several videos, but warned against as a guide to usability [S-L19-040] [S-L19-049] [S-L19-068].
+- **Pretty is not the point:** Mobbin's dashboards worth a screenshot were not the prettiest but knew what to leave out [S-L19-110]; Kole's "weirdly perfect" interfaces owe their polish to scannability, not prettiness [S-L19-080]; and a Dribbble dashboard falls apart once each element is checked for meaning [S-L19-068].
+- **Templates show:** "you can tell these weren't templates" [S-L19-110] matches the landing-page video's point that a page looks like a template when nobody made any design decisions [S-L19-072], and the advice to add one distinctive touch to common layouts [S-L19-066].
+- **A gut check that asks why:** the screenshot test is a gut check, but it ends in "and why?" [S-L19-110], so it still asks for a reason, as `STD-process-review-taste-52` does [inferred].
+- **Delight in a data screen:** the cake in a donut chart and the game after all bills are paid [S-L19-110] are delight inside data screens; the video does not say how either moves. Wherever they animate, `STD-when-to-animate-09` would limit them to rare or first-time moments such as success states, and `STD-when-to-animate-11` keeps decorative motion off charts people are reading [inferred].
 - **Hover and button motion:** Kole wants small hover interactions on almost everything on a simple site [S-L19-063], sees tasteful hovers as premium [S-L19-065] and says buttons should almost always have a small animation [S-L19-054]. `STD-when-to-animate-07` says anything seen tens of times a day, including hover and press feedback, should be removed or reduced to near-imperceptible motion. A marketing site visited occasionally is a different frequency tier from an app used daily, so the two can coexist, but in product UI the standard wins [inferred].
 
 Against OpenDesigner's existing research:
@@ -137,6 +150,8 @@ Against OpenDesigner's existing research:
 - **Taste rules warn, accessibility rules fail:** DC-L17-07 lints for generic looks with waivers; taste rules only warn, while accessibility rules block. That fits the practitioner opinions here, which are advice rather than hard rules [inferred].
 - **Looks are not usability:** OpenDesigner's guardrails (section 7) forbid automating "treating attractiveness as usability", which agrees with [S-L19-080]'s point that polish comes from scannability, not prettiness [inferred].
 - **Principles as words:** DC-L11-05 warns against principles built on words any product could claim ("simple", "beautiful"), in line with Emil's point that taste should be explained, not labelled [inferred].
+- **Leaving things out on dashboards:** DC-L19-48 ranks every module before placing it, and the finance redesign cuts what adds no value [S-L19-068]. Mobbin's "knew what to leave out" [S-L19-110] reaches the same place from a different direction: from what people remember rather than from a priority audit [inferred].
+- **Charts chosen for the data:** DC-L19-122 keeps a fixed chart set by default, with the heuristic "if the chart needs its caption to be read, fix the chart". Mobbin's standouts go further, picking a visual that fits the data, such as a live map with one dot per visitor or an hours heat map [S-L19-110]. The two fit together: the fixed set covers most cases, and a fitted visual is an exception worth recording with its reason (DC-L19-165) [inferred].
 
 ## Decisions this informs
 
@@ -145,7 +160,10 @@ Against OpenDesigner's existing research:
 - **Q-plat-10** (usual behavior, own look, or something new): conventions plus one distinctive touch [S-L19-054] [S-L19-066] back `custom-skin`.
 - **Q-brand-04** (how lively) and **Q-motion-01** (how motion feels): the restraint sources favor `hero-moments` or `productive` over `expressive` for Q-brand-04, and `productive` or `two-mode` over `springs` for Q-motion-01; delight is kept for rare moments (`STD-when-to-animate-09`) [inferred].
 - **Q-dir-01** (overall look): "simple and well put together beats flashy" [S-L19-066]; a `maximal` look needs a reason tied to the brand's feeling [S-L19-062] [inferred].
-- **Q-ref-01** (a reference you like): point to work by respected tastemakers and say why it feels great [S-L19-008]; prefer references that make sense over gallery shots that only look good [S-L19-068].
+- **Q-ref-01** (a reference you like): point to work by respected tastemakers and say why it feels great [S-L19-008]; prefer references that make sense over gallery shots that only look good [S-L19-068] [S-L19-110].
+- **Q-viz-01** (which charts): the default `core-6` covers most needs; a chart built for how users will read that data instantly [S-L19-110] is an exception to record with its reason [inferred].
+- **Q-pattern-04** (what an empty screen shows): the source contrasts Mercury's game with an empty table once everything is done [S-L19-110], a "user-cleared" case of `empty-kinds`.
+- **Q-pref-01** (planned: how strict the critique is): "Would I screenshot this, and why?" [S-L19-110] could be one of the `coach` prompts at the end of a screen review [inferred].
 
 ## Visual examples worth showing
 
@@ -158,6 +176,8 @@ Against OpenDesigner's existing research:
 - A restaurant-software site with no images beside its redesign built from one moody image [S-L19-062] ([[sources/RCneB_MQ7qs-the-one-thing-vibe-coding-cant-fix-about-your-website|The one thing vibe coding CAN’T fix about your website]]).
 - A Dribbble-style finance dashboard beside a version where every card has a purpose and a priority [S-L19-068] ([[sources/Yr2uIcFZDDQ-redesigning-a-finance-dashboard-ui-from-scratch-ft-dribbble|Redesigning a Finance Dashboard UI from SCRATCH (ft. Dribbble)]]).
 - The presenter's old, everything-moving portfolio beside his current one [S-L19-043] ([[sources/9WVt1CelBfg-the-stupid-simple-way-to-learn-ui-ux-design-in-exactly-10-minutes|The stupid simple way to learn UI/UX design in exactly 10 minutes]]).
+- A plain line chart beside the same chart with key insights next to it, and a busy analytics dashboard beside a very clean one [S-L19-110] ([[sources/kdRkuqu8apE-i-studied-2-108-dashboards-to-see-what-sticks|I Studied 2,108 Dashboards To See What Sticks]]).
+- An ownership donut chart with a birthday cake inside it, and a paid-up bills screen showing a game instead of an empty table [S-L19-110] ([[sources/kdRkuqu8apE-i-studied-2-108-dashboards-to-see-what-sticks|I Studied 2,108 Dashboards To See What Sticks]]).
 
 ## Open questions
 
@@ -165,3 +185,4 @@ Against OpenDesigner's existing research:
 - How should OpenDesigner help a person build their own list of tastemakers (`STD-process-review-taste-51`) during a short interview?
 - Where exactly is the line between a marketing site's occasional hovers and product UI's frequent ones, for `STD-when-to-animate-07`?
 - Can "interesting" be measured at all, for example as layout variety across sections, or does it stay a human judgement?
+- The screenshot gut check [S-L19-110] comes from one person browsing a reference library. Would the answer to "and why?" match what users of the product remember, and how could OpenDesigner find out?

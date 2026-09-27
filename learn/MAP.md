@@ -6,11 +6,11 @@ Everything OpenDesigner has learned from the sources its owner trusts, and where
 
 ## At a glance
 
-- **Sources:** 99 analysed (6 good-to-have, 40 non-negotiable, 53 reference), listed in [sources.json](sources.json); citations in [../traces/L19-trace.md](../traces/L19-trace.md).
-- **Extracted:** 2768 rules, 601 decisions, 686 process steps, 802 examples ([analysis/](analysis/), one file per source).
-- **Wiki:** 99 source pages, 50 topics, 53 synthesis pages ([wiki/index.md](wiki/index.md)).
+- **Sources:** 107 analysed (6 good-to-have, 40 non-negotiable, 61 reference), listed in [sources.json](sources.json); citations in [../traces/L19-trace.md](../traces/L19-trace.md).
+- **Extracted:** 2895 rules, 646 decisions, 734 process steps, 889 examples ([analysis/](analysis/), one file per source).
+- **Wiki:** 107 source pages, 50 topics, 53 synthesis pages ([wiki/index.md](wiki/index.md)).
 - **House standards:** 455 rules in 11 themes, version 2 ([../synthesis/standards.json](../synthesis/standards.json)).
-- **Decision Cards:** 164 in [wiki/synthesis/_cards/](wiki/synthesis/_cards/) (assembled into [../research/L19-learning-wiki.md](../research/L19-learning-wiki.md)).
+- **Decision Cards:** 175 in [wiki/synthesis/_cards/](wiki/synthesis/_cards/) (assembled into [../research/L19-learning-wiki.md](../research/L19-learning-wiki.md)).
 - **Impact notes:** "Now / As it grows" for 30 high-impact questions ([../synthesis/impact.json](../synthesis/impact.json)).
 - **Process:** [Decide or ask](wiki/synthesis/decide-or-ask.md) · [Citation check](wiki/synthesis/citation-check.md) · [House standards](wiki/synthesis/house-standards.md)
 
@@ -25,14 +25,14 @@ Each topic page brings every source on that topic together: what they teach, whe
 - **Corners:** [Shape and corner radius](wiki/synthesis/shape-and-corner-radius.md) (8)
 - **Depth, shadows and effects:** [Depth, shadows and borders](wiki/synthesis/depth-shadows-and-borders.md) (19) · [Gradients, blend modes and texture effects](wiki/synthesis/gradients-blend-modes-and-texture-effects.md) (1). Standards: [components-toasts-drawers](../skills/opendesigner/references/standards/components-toasts-drawers.md), [visual-details](../skills/opendesigner/references/standards/visual-details.md)
 - **Light, dark and themes:** [Dark mode and themes](wiki/synthesis/dark-mode-and-themes.md) (18)
-- **Icons and imagery:** [Icons and imagery](wiki/synthesis/icons-and-imagery.md) (28)
+- **Icons and imagery:** [Icons and imagery](wiki/synthesis/icons-and-imagery.md) (30)
 - **Accessibility:** [Accessibility](wiki/synthesis/accessibility.md) (22). Standards: [accessibility-motion](../skills/opendesigner/references/standards/accessibility-motion.md), [mobile-touch](../skills/opendesigner/references/standards/mobile-touch.md), [visual-details](../skills/opendesigner/references/standards/visual-details.md)
-- **Motion:** [Motion principles](wiki/synthesis/motion-principles.md) (35) · [Easing and timing](wiki/synthesis/easing-and-timing.md) (34) · [Spring animation](wiki/synthesis/spring-animation.md) (16) · [Animation performance](wiki/synthesis/animation-performance.md) (22) · [Gestures and drag](wiki/synthesis/gestures-and-drag.md) (31) · [Micro-interactions](wiki/synthesis/micro-interactions.md) (42) · [Reduced motion](wiki/synthesis/reduced-motion.md) (14). Standards: [components-toasts-drawers](../skills/opendesigner/references/standards/components-toasts-drawers.md), [easing-duration](../skills/opendesigner/references/standards/easing-duration.md), [enter-exit-origin](../skills/opendesigner/references/standards/enter-exit-origin.md), [mobile-touch](../skills/opendesigner/references/standards/mobile-touch.md), [performance-properties](../skills/opendesigner/references/standards/performance-properties.md), [process-review-taste](../skills/opendesigner/references/standards/process-review-taste.md), [springs-gestures](../skills/opendesigner/references/standards/springs-gestures.md), [swift](../skills/opendesigner/references/standards/swift.md), [when-to-animate](../skills/opendesigner/references/standards/when-to-animate.md)
-- **Components:** [Toasts and notifications](wiki/synthesis/toasts-and-notifications.md) (27) · [Drawers and sheets](wiki/synthesis/drawers-and-sheets.md) (19) · [Buttons and actions](wiki/synthesis/buttons-and-actions.md) (34) · [Forms and inputs](wiki/synthesis/forms-and-inputs.md) (13) · [Navigation and sidebars](wiki/synthesis/navigation-and-sidebars.md) (32) · [Modals and popovers](wiki/synthesis/modals-and-popovers.md) (30) · [Cards and sections](wiki/synthesis/cards-and-sections.md) (22) · [UI libraries](wiki/synthesis/ui-libraries.md) (17). Standards: [accessibility-motion](../skills/opendesigner/references/standards/accessibility-motion.md), [components-toasts-drawers](../skills/opendesigner/references/standards/components-toasts-drawers.md), [enter-exit-origin](../skills/opendesigner/references/standards/enter-exit-origin.md), [mobile-touch](../skills/opendesigner/references/standards/mobile-touch.md), [performance-properties](../skills/opendesigner/references/standards/performance-properties.md), [process-review-taste](../skills/opendesigner/references/standards/process-review-taste.md), [springs-gestures](../skills/opendesigner/references/standards/springs-gestures.md), [visual-details](../skills/opendesigner/references/standards/visual-details.md)
-- **Patterns and flows:** [Dashboards and data display](wiki/synthesis/dashboards-and-data-display.md) (17) · [Landing pages](wiki/synthesis/landing-pages.md) (29) · [Onboarding](wiki/synthesis/onboarding.md) (10) · [Paywalls and pricing pages](wiki/synthesis/paywalls-and-pricing-pages.md) (5) · [Retention and gamification](wiki/synthesis/retention-and-gamification.md) (4) · [SaaS product UI](wiki/synthesis/saas-product-ui.md) (6) · [Feedback, empty and loading states](wiki/synthesis/feedback-empty-and-loading-states.md) (24) · [A/B testing and conversion](wiki/synthesis/a-b-testing-and-conversion.md) (1) · [Dark patterns and user-hostile design](wiki/synthesis/dark-patterns-and-user-hostile-design.md) (1)
-- **Platforms and devices:** [Mobile app patterns](wiki/synthesis/mobile-app-patterns.md) (14) · [Desktop and macOS apps](wiki/synthesis/desktop-and-macos-apps.md) (1) · [Native implementation (Swift and SwiftUI)](wiki/synthesis/native-implementation-swift-and-swiftui.md) (1). Standards: [components-toasts-drawers](../skills/opendesigner/references/standards/components-toasts-drawers.md), [mobile-touch](../skills/opendesigner/references/standards/mobile-touch.md), [process-review-taste](../skills/opendesigner/references/standards/process-review-taste.md), [swift](../skills/opendesigner/references/standards/swift.md), [visual-details](../skills/opendesigner/references/standards/visual-details.md)
-- **Words:** [Content and microcopy](wiki/synthesis/content-and-microcopy.md) (14)
-- **Process, taste and tools:** [Design taste and judgement](wiki/synthesis/design-taste-and-judgement.md) (38) · [Design process](wiki/synthesis/design-process.md) (39) · [Presenting designs](wiki/synthesis/presenting-designs.md) (5) · [Portfolio and case studies](wiki/synthesis/portfolio-and-case-studies.md) (11) · [AI-assisted design](wiki/synthesis/ai-assisted-design.md) (26) · [Figma and design tools](wiki/synthesis/figma-and-design-tools.md) (19) · [Prototyping](wiki/synthesis/prototyping.md) (12) · [Freelancing and pricing work](wiki/synthesis/freelancing-and-pricing-work.md) (4) · [Design resources](wiki/synthesis/design-resources.md) (14) · [Launch and marketing](wiki/synthesis/launch-and-marketing.md) (1). Standards: [accessibility-motion](../skills/opendesigner/references/standards/accessibility-motion.md), [easing-duration](../skills/opendesigner/references/standards/easing-duration.md), [mobile-touch](../skills/opendesigner/references/standards/mobile-touch.md), [process-review-taste](../skills/opendesigner/references/standards/process-review-taste.md), [springs-gestures](../skills/opendesigner/references/standards/springs-gestures.md), [swift](../skills/opendesigner/references/standards/swift.md), [visual-details](../skills/opendesigner/references/standards/visual-details.md), [when-to-animate](../skills/opendesigner/references/standards/when-to-animate.md)
+- **Motion:** [Motion principles](wiki/synthesis/motion-principles.md) (35) · [Easing and timing](wiki/synthesis/easing-and-timing.md) (34) · [Spring animation](wiki/synthesis/spring-animation.md) (16) · [Animation performance](wiki/synthesis/animation-performance.md) (22) · [Gestures and drag](wiki/synthesis/gestures-and-drag.md) (31) · [Micro-interactions](wiki/synthesis/micro-interactions.md) (44) · [Reduced motion](wiki/synthesis/reduced-motion.md) (14). Standards: [components-toasts-drawers](../skills/opendesigner/references/standards/components-toasts-drawers.md), [easing-duration](../skills/opendesigner/references/standards/easing-duration.md), [enter-exit-origin](../skills/opendesigner/references/standards/enter-exit-origin.md), [mobile-touch](../skills/opendesigner/references/standards/mobile-touch.md), [performance-properties](../skills/opendesigner/references/standards/performance-properties.md), [process-review-taste](../skills/opendesigner/references/standards/process-review-taste.md), [springs-gestures](../skills/opendesigner/references/standards/springs-gestures.md), [swift](../skills/opendesigner/references/standards/swift.md), [when-to-animate](../skills/opendesigner/references/standards/when-to-animate.md)
+- **Components:** [Toasts and notifications](wiki/synthesis/toasts-and-notifications.md) (27) · [Drawers and sheets](wiki/synthesis/drawers-and-sheets.md) (20) · [Buttons and actions](wiki/synthesis/buttons-and-actions.md) (34) · [Forms and inputs](wiki/synthesis/forms-and-inputs.md) (14) · [Navigation and sidebars](wiki/synthesis/navigation-and-sidebars.md) (32) · [Modals and popovers](wiki/synthesis/modals-and-popovers.md) (30) · [Cards and sections](wiki/synthesis/cards-and-sections.md) (22) · [UI libraries](wiki/synthesis/ui-libraries.md) (17). Standards: [accessibility-motion](../skills/opendesigner/references/standards/accessibility-motion.md), [components-toasts-drawers](../skills/opendesigner/references/standards/components-toasts-drawers.md), [enter-exit-origin](../skills/opendesigner/references/standards/enter-exit-origin.md), [mobile-touch](../skills/opendesigner/references/standards/mobile-touch.md), [performance-properties](../skills/opendesigner/references/standards/performance-properties.md), [process-review-taste](../skills/opendesigner/references/standards/process-review-taste.md), [springs-gestures](../skills/opendesigner/references/standards/springs-gestures.md), [visual-details](../skills/opendesigner/references/standards/visual-details.md)
+- **Patterns and flows:** [Dashboards and data display](wiki/synthesis/dashboards-and-data-display.md) (18) · [Landing pages](wiki/synthesis/landing-pages.md) (29) · [Onboarding](wiki/synthesis/onboarding.md) (15) · [Paywalls and pricing pages](wiki/synthesis/paywalls-and-pricing-pages.md) (9) · [Retention and gamification](wiki/synthesis/retention-and-gamification.md) (10) · [SaaS product UI](wiki/synthesis/saas-product-ui.md) (7) · [Feedback, empty and loading states](wiki/synthesis/feedback-empty-and-loading-states.md) (26) · [A/B testing and conversion](wiki/synthesis/a-b-testing-and-conversion.md) (6) · [Dark patterns and user-hostile design](wiki/synthesis/dark-patterns-and-user-hostile-design.md) (6)
+- **Platforms and devices:** [Mobile app patterns](wiki/synthesis/mobile-app-patterns.md) (19) · [Desktop and macOS apps](wiki/synthesis/desktop-and-macos-apps.md) (1) · [Native implementation (Swift and SwiftUI)](wiki/synthesis/native-implementation-swift-and-swiftui.md) (1). Standards: [components-toasts-drawers](../skills/opendesigner/references/standards/components-toasts-drawers.md), [mobile-touch](../skills/opendesigner/references/standards/mobile-touch.md), [process-review-taste](../skills/opendesigner/references/standards/process-review-taste.md), [swift](../skills/opendesigner/references/standards/swift.md), [visual-details](../skills/opendesigner/references/standards/visual-details.md)
+- **Words:** [Content and microcopy](wiki/synthesis/content-and-microcopy.md) (19)
+- **Process, taste and tools:** [Design taste and judgement](wiki/synthesis/design-taste-and-judgement.md) (39) · [Design process](wiki/synthesis/design-process.md) (41) · [Presenting designs](wiki/synthesis/presenting-designs.md) (5) · [Portfolio and case studies](wiki/synthesis/portfolio-and-case-studies.md) (11) · [AI-assisted design](wiki/synthesis/ai-assisted-design.md) (28) · [Figma and design tools](wiki/synthesis/figma-and-design-tools.md) (20) · [Prototyping](wiki/synthesis/prototyping.md) (12) · [Freelancing and pricing work](wiki/synthesis/freelancing-and-pricing-work.md) (4) · [Design resources](wiki/synthesis/design-resources.md) (16) · [Launch and marketing](wiki/synthesis/launch-and-marketing.md) (2). Standards: [accessibility-motion](../skills/opendesigner/references/standards/accessibility-motion.md), [easing-duration](../skills/opendesigner/references/standards/easing-duration.md), [mobile-touch](../skills/opendesigner/references/standards/mobile-touch.md), [process-review-taste](../skills/opendesigner/references/standards/process-review-taste.md), [springs-gestures](../skills/opendesigner/references/standards/springs-gestures.md), [swift](../skills/opendesigner/references/standards/swift.md), [visual-details](../skills/opendesigner/references/standards/visual-details.md), [when-to-animate](../skills/opendesigner/references/standards/when-to-animate.md)
 - **Tokens and code:** [Design systems and tokens](wiki/synthesis/design-systems-and-tokens.md) (16) · [Web implementation (CSS and React)](wiki/synthesis/web-implementation-css-and-react.md) (38). Standards: [springs-gestures](../skills/opendesigner/references/standards/springs-gestures.md), [visual-details](../skills/opendesigner/references/standards/visual-details.md)
 
 ## House standards
@@ -94,7 +94,7 @@ Reference sources turned into decisions the interview can ask better. Each card 
 - DC-L19-33: Key numbers: style, alignment, label and context
 - DC-L19-34: How type choices are previewed: true size, in context
 - DC-L19-35: Sample content in previews: realistic, with stress cases
-- DC-L19-36: Marketing copy: length and focus
+- DC-L19-36: Marketing and conversion copy: length and focus
 - DC-L19-37: Where playfulness belongs, and never at the user
 - DC-L19-38: Naming navigation, actions and screens
 - DC-L19-39: Typographic punctuation in interface text
@@ -136,6 +136,9 @@ Reference sources turned into decisions the interview can ask better. Each card 
 - DC-L19-74: Text and controls over images
 - DC-L19-75: How playful the imagery is
 - DC-L19-76: Where avatars appear
+- DC-L19-77: What a mascot does: brand moments, a companion, or pressure
+- DC-L19-78: How an AI helper is pictured
+- DC-L19-79: Whether images change for each person
 
 ### motion ([_cards/motion.md](wiki/synthesis/_cards/motion.md))
 
@@ -164,14 +167,14 @@ Reference sources turned into decisions the interview can ask better. Each card 
 - DC-L19-101: Which library supplies each standard part → Q-comp-01, Q-comp-02
 - DC-L19-102: What a control does the moment it is pressed → Q-state-04
 - DC-L19-103: Hover on controls, product screens versus marketing pages → Q-state-04
-- DC-L19-104: Emphasis inside a group of buttons → Q-space-04, Q-state-01
+- DC-L19-104: Emphasis inside a group of buttons → Q-space-04, Q-state-01, Q-state-07, Q-voice-06
 - DC-L19-105: How visible secondary actions are → Q-icon-05, Q-pattern-03
 - DC-L19-106: What "on", selected and active look like → Q-state-05
 - DC-L19-107: Which button carries the fill in a delete confirmation → Q-state-06
 - DC-L19-108: How irreversible actions are guarded → Q-form-05
 - DC-L19-109: What a pressed control shows while it works and when it is done → Q-state-08
 - DC-L19-110: Text field anatomy and phone input rules → Q-form-01
-- DC-L19-111: When forms check answers → Q-form-02
+- DC-L19-111: When forms check answers → Q-form-02, Q-pattern-03
 - DC-L19-112: When a toast is the right channel → Q-form-04
 - DC-L19-113: Where toasts sit and how they look → Q-form-04
 - DC-L19-114: Popover, modal, sheet or new page → Q-pattern-01
@@ -201,6 +204,7 @@ Reference sources turned into decisions the interview can ask better. Each card 
 - DC-L19-136: Progress, streaks and rewards
 - DC-L19-137: Measuring whether a design change worked
 - DC-L19-138: AI workspace components beyond labels
+- DC-L19-139: The subscription paywall screen: format, trial and reassurance
 
 ### platforms ([_cards/platforms.md](wiki/synthesis/_cards/platforms.md))
 
@@ -217,6 +221,11 @@ Reference sources turned into decisions the interview can ask better. Each card 
 - DC-L19-151: Keyboard shortcuts: which actions get them, how people learn them, what they see
 - DC-L19-152: Search on desktop: a command palette, or search in place
 - DC-L19-153: Real-device check: which device counts as proof
+- DC-L19-154: Asking for system permissions, notifications first
+- DC-L19-155: Store rules and where people pay
+- DC-L19-156: Accounts on phones: none, the platform's sign-in, or an email account
+- DC-L19-157: The Swift token file: where it lives and how it is isolated
+- DC-L19-158: Sharing out of the app: the system share, share cards and the screenshot moment
 
 ### process ([_cards/process.md](wiki/synthesis/_cards/process.md))
 
@@ -237,6 +246,8 @@ Reference sources turned into decisions the interview can ask better. Each card 
 - DC-L19-175: How AI edits and fine-tuning happen
 - DC-L19-176: How a critique or review is reported
 - DC-L19-177: The goal behind the brief, before any visuals
+- DC-L19-178: Research shipped products before the builder drafts a flow
+- DC-L19-179: Launch and share surfaces: what the system covers outside the product
 
 ### tokens ([_cards/tokens.md](wiki/synthesis/_cards/tokens.md))
 
@@ -284,7 +295,7 @@ Before you change a question in `synthesis/QUESTIONNAIRE.md`, read the cards lis
 | Q-layout-04 | DC-L19-118, DC-L19-119 | - |
 | Q-motion-01 | - | yes |
 | Q-pattern-01 | DC-L19-114, DC-L19-115, DC-L19-116 | - |
-| Q-pattern-03 | DC-L19-105 | - |
+| Q-pattern-03 | DC-L19-105, DC-L19-111 | - |
 | Q-plat-01 | - | yes |
 | Q-plat-02 | DC-L19-115 | yes |
 | Q-plat-05 | - | yes |
@@ -299,6 +310,7 @@ Before you change a question in `synthesis/QUESTIONNAIRE.md`, read the cards lis
 | Q-state-04 | DC-L19-102, DC-L19-103 | - |
 | Q-state-05 | DC-L19-106 | - |
 | Q-state-06 | DC-L19-107 | - |
+| Q-state-07 | DC-L19-104 | - |
 | Q-state-08 | DC-L19-109 | - |
 | Q-tool-01 | - | yes |
 | Q-type-01 | - | yes |
@@ -306,6 +318,7 @@ Before you change a question in `synthesis/QUESTIONNAIRE.md`, read the cards lis
 | Q-type-11 | DC-L19-22 | - |
 | Q-type-13 | DC-L19-21 | - |
 | Q-voice-01 | - | yes |
+| Q-voice-06 | DC-L19-104 | - |
 
 ## Where each part lands in the app
 

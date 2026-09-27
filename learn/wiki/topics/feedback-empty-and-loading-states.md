@@ -2,7 +2,7 @@
 type: topic
 title: Feedback, empty and loading states
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources: []
 tags: []
 ---
@@ -39,4 +39,6 @@ Real apps need empty, loading, success and error states; examples from Dub (empt
 - [[sources/ixUq4HM4FNg-tiktoks-ux-is-so-good-it-should-be-illegal-seriously|TikTok’s UX is so GOOD it should be ILLEGAL (seriously)]]: Defines user feedback as an immediate response to any action, and extends it to social feedback (likes, comments, shares) for creators.
 - [[sources/nl8OFGdx75w-prototyping-professional-load-animations-in-figma-part-1|Prototyping Professional Load Animations in Figma: Part 1]]: A loading screen with a centred logo slides up to reveal the page, with the content underneath rising with it and the nav fading in afterwards.
 - [[sources/sonner-toast-toast-sonner|Toast – Sonner]]: Promise toasts show loading and then success or error automatically; loading toasts show a spinner when you manage the states yourself.
+- [[sources/Qsq-Sj_rojU-i-studied-1-460-onboarding-flows-here-s-what-i-found|I Studied 1,460 Onboarding Flows. Here's What I Found.]]: Replace blank empty states with a small nudge, and give loading and verification states smooth animation so long flows stay engaging.
+- [[sources/kdRkuqu8apE-i-studied-2-108-dashboards-to-see-what-sticks|I Studied 2,108 Dashboards To See What Sticks]]: Mercury shows a game instead of an empty table after all bills are paid, as an example of a non-template empty state.
 - See also: [[synthesis/feedback-empty-and-loading-states|Feedback, empty and loading states synthesis]]

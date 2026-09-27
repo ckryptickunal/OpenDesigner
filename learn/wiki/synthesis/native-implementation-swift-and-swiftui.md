@@ -2,7 +2,7 @@
 type: synthesis
 title: Native implementation (Swift and SwiftUI)
 created: 2026-09-27
-updated: 2026-09-27
+updated: 2026-09-28
 sources:
   - eks-skills-write-swift-skill
 tags:
@@ -13,7 +13,7 @@ tags:
 
 ## In short
 
-This page is about the Swift code behind an iPhone, iPad or Mac design system: how its data models, background work, SwiftUI views, tests and logs are written. The one source is Emil Kowalski's write-swift skill, whose through-line is to start with the simplest, most static, single-threaded code that works and to add concurrency, shared references or unsafe code only for a reason you can state. For SwiftUI that means views stay on the main thread, an animation that answers a gesture starts on the same frame as the gesture, and code SwiftUI runs off the main thread copies the one value it needs instead of capturing the whole view. The owner marked this source non-negotiable, so its rules are already the 113 locked `STD-swift` house standards; still, the page rests on a single source, and the parts the author states as preference stay opinion until another source agrees. It is a coding standard, not visual guidance, and it is dated: Swift 6.3 is the baseline, and Swift 6.4 features must not be written yet.
+This page is about the Swift code behind an iPhone, iPad or Mac design system: how its data models, background work, SwiftUI views, tests and logs are written. The one source is Emil Kowalski's write-swift skill, whose through-line is to start with the simplest, most static, single-threaded code that works and to add concurrency, shared references or unsafe code only for a reason you can state. For SwiftUI that means views stay on the main thread, an animation that answers a gesture starts on the same frame as the gesture, and code SwiftUI runs off the main thread copies the one value it needs instead of capturing the whole view. The owner marked this source non-negotiable, so its rules are already the 113 locked `STD-swift` house standards, including the parts the author states as preference, which are locked as `should` rather than `must` (for example `STD-swift-27`); the page still rests on a single source, so no other source has been compared with it. It is a coding standard, not visual guidance, and it is dated: Swift 6.3 is the baseline, and Swift 6.4 features must not be written yet.
 
 ## House standards
 
@@ -101,7 +101,7 @@ Standards from other themes that reach native Apple UI code (written for every p
 
 ### What the source is not
 
-- It is a general Swift coding skill with no guidance on color, type, spacing or component anatomy. Its opening block tells an agent how to greet the user when the skill loads, which is not a coding rule, and a few items are the author's stated preferences, such as keeping most model classes non-`Sendable` and listing performance levers roughly by payoff [S-L19-034] ([[sources/eks-skills-write-swift-skill-emilkowalski-skills-skills-write-swift-skill-md|emilkowalski/skills: skills/write-swift/SKILL.md]]).
+- It is a general Swift coding skill with no guidance on color, type, spacing or component anatomy. Its opening block tells an agent how to greet the user when the skill loads, which is not a coding rule, and a few items are the author's stated preferences, such as keeping most model classes non-`Sendable` and listing performance levers roughly by payoff; the house standards keep these as `should` rules (`STD-swift-27`, `STD-swift-62`) [S-L19-034] ([[sources/eks-skills-write-swift-skill-emilkowalski-skills-skills-write-swift-skill-md|emilkowalski/skills: skills/write-swift/SKILL.md]]).
 
 ## Where they agree and disagree
 

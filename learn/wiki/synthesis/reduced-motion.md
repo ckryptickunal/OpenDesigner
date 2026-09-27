@@ -2,7 +2,7 @@
 type: synthesis
 title: Reduced motion
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources:
   - eks-skills-animate-expo-recipes
   - eks-skills-animate-expo-skill
@@ -74,19 +74,19 @@ Some people feel dizzy, sick or distracted when things move on screen, so they a
 - **The sources agree.** Every source that covers reduced motion is an Emil Kowalski skill file, and all of them say gentler, not zero. The only looser wording is the vocabulary skill's "toning down or removing" [S-L19-019] [[sources/eks-skills-animation-vocabulary-skill-emilkowalski-skills-skills-animation-vocabulary-skill-md|emilkowalski/skills: skills/animation-vocabulary/SKILL.md]]; `STD-accessibility-motion-02` settles it: never remove all feedback.
 - **Instant versus fade.** The picker drops its transition entirely [S-L19-030] [[sources/eks-skills-prototype-picker-emilkowalski-skills-skills-prototype-picker-md|emilkowalski/skills: skills/prototype/PICKER.md]], so the highlight jumps into place instead of fading. `STD-accessibility-motion-02` allows "a static transition", so this is within the rule [inferred].
 - **OpenDesigner's research agrees on the core.** DC-L04-25's default ("keep feedback (color, opacity) and remove travel (translate, scale, parallax)") matches `STD-accessibility-motion-02`, and its note that shared-axis transitions should swap to a fade matches the native crossfade in `STD-accessibility-motion-04`.
-- **The "remove" option.** Q-motion-07 offers `remove` (all non-essential motion, WCAG 2.3.3). standards.json records this as a conflict with `STD-accessibility-motion-02`, because the engine then sets the reduced feedback, enter, exit and expand transitions to 0ms, leaving no motion at all. The same entry records that the engine's reduced cross-fade is 100ms on the standard curve, while the sources use 200ms ease.
-- **Separate settings.** DC-L10-16 and Q-motion-10 treat reduced motion, reduced transparency and increased contrast as separate modes, in line with `STD-accessibility-motion-11` and `STD-accessibility-motion-12`.
+- **The "remove" option.** Q-motion-07 is now settled by `STD-accessibility-motion-02`, so the interview skips it, and its `remove` option (all non-essential motion, WCAG 2.3.3) is marked as breaking the standard, because the engine would then set the reduced feedback, enter, exit and expand transitions to 0ms. The standard locks `raw.reducedMotion` to `replace` and swaps the engine's reduced enter, exit and expand transitions (100ms on the standard curve) for a 200ms `ease` cross-fade on a new `motion.duration.reduced-fade` token; the engine's own values return only if the person overrides the standard. DC-L19-92 records the same default.
+- **Separate settings.** DC-L10-16 and Q-motion-10 treat reduced motion, reduced transparency and increased contrast as separate modes, in line with `STD-accessibility-motion-11` and `STD-accessibility-motion-12`; Q-motion-10 is now settled by `STD-accessibility-motion-01`, `STD-accessibility-motion-11`, `STD-accessibility-motion-12` and `STD-accessibility-motion-13`.
 - **Oscillation and devices.** DC-L14-08 and DC-L04-25 cite Apple's visionOS warning about oscillation near 0.2 Hz; `STD-accessibility-motion-08` makes it a rule for every platform. The per-device motion budgets in DC-L14-08 are not covered by these sources.
 - **Loading shimmer.** DC-L13-01 notes that animated skeletons raise accessibility concerns and should honour reduced motion, which `STD-accessibility-motion-01` covers.
 - **In-app setting.** DC-L04-25 mentions an in-app "no motion" setting (Fluent) and Q-aud-04 asks whether people can switch motion off inside the product; these sources only discuss the operating-system setting.
 
 ## Decisions this informs
 
-- **Q-motion-07** (fade gently or stop moving): `replace` is the house answer; `remove` needs rewording so it never removes feedback, and the reduced cross-fade should be 200ms ease.
-- **Q-motion-10** (which device settings the design follows): reduced motion is always followed, and reduced transparency and increased contrast get their own handling.
+- **Q-motion-07** (fade gently or stop moving): settled by `STD-accessibility-motion-02`: `replace`, with a 200ms `ease` cross-fade; `remove` is marked as breaking the standard.
+- **Q-motion-10** (which device settings the design follows): settled by `STD-accessibility-motion-01`, `STD-accessibility-motion-11`, `STD-accessibility-motion-12` and `STD-accessibility-motion-13`: reduced motion is always followed, and reduced transparency and increased contrast get their own handling.
 - **Q-aud-04** (which settings people can change): whether to add an in-app reduced-motion switch on top of the OS setting.
 - **Q-motion-06** (screen transitions): under reduced motion, spatial transitions become fades.
-- **Q-motion-04** (how springs are set up): springs and bounce are removed under reduced motion.
+- **Q-motion-04** (how springs are set up, settled by `STD-springs-gestures-02` and `STD-springs-gestures-04`): springs and bounce are removed under reduced motion.
 - **Q-plat-08** (what the UI is built with): decides the mechanism: the CSS media query, `useReducedMotion()`, or Reanimated's `ReduceMotion.System`.
 
 ## Visual examples worth showing
@@ -100,6 +100,6 @@ Some people feel dizzy, sick or distracted when things move on screen, so they a
 ## Open questions
 
 - Should OpenDesigner offer an in-app reduced-motion switch (Q-aud-04), or rely on the OS setting alone as these sources do?
-- Should reduced motion be exported as a token mode (DC-L04-25) or written per component? The sources show per-component code only.
+- The standard now writes reduced-mode tokens (`reduced:motion.transition.enter`, `.exit` and `.expand`), as DC-L04-25 suggested, while the sources show per-component code. Does the token mode cover component cases such as the picker highlight, or does each component still need its own branch?
 - Is a jump (no transition) acceptable for every moving element under reduced motion, or only for small ones such as the picker highlight [S-L19-030] [[sources/eks-skills-prototype-picker-emilkowalski-skills-skills-prototype-picker-md|emilkowalski/skills: skills/prototype/PICKER.md]]?
 - Haptics and sound as alternatives when motion is reduced (DC-L04-25, from Apple) are not discussed in these sources.

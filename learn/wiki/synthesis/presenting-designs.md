@@ -2,7 +2,7 @@
 type: synthesis
 title: Presenting designs
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources:
   - 7cTdCu8HMgM
   - ek-building-a-toast-component
@@ -88,7 +88,8 @@ Against OpenDesigner's existing research and files:
 
 ## Decisions this informs
 
-- **Q-pref-02** (planned, not asked yet: how to review AI changes and try other versions): the house standards favor one variant at a time behind a picker, which none of its options (`patches`, `staged`, `lock-shuffle`, `show-6`) names; `show-6` conflicts with `STD-process-review-taste-43` [inferred].
+- **Q-pref-02** (planned, not asked yet: how to review AI changes and try other versions): the house standards favor one variant at a time behind a picker, which none of its options (`patches`, `staged`, `lock-shuffle`, `show-6`) names; `show-6` conflicts with `STD-process-review-taste-43` [inferred]. DC-L19-174 proposes removing `show-6` and adding `picker-3` (three named directions, one at a time, full size) [S-L19-031].
+- **Proposed Q-dist-05** (who sees the result first): DC-L19-170 proposes framing the preview by audience (`deciding`, `team`, `client`, `showcase`), with the deciding view as the default and the showcase and client techniques of [S-L19-041] as extra exports.
 - **Q-dist-04** (where the docs live and what each component page shows): Sonner's custom docs site with live examples and copyable code [S-L19-006] backs `custom-site` or a template that includes a live demo.
 - **Q-scope-06** (what the screens are for): a portfolio or showcase site is `experience`, which is where the showcase techniques of [S-L19-041] belong [inferred].
 
@@ -105,5 +106,5 @@ Against OpenDesigner's existing research and files:
 ## Open questions
 
 - Does the one-at-a-time rule (`STD-process-review-taste-43`) cover OpenDesigner's gallery of whole design-system directions, or only variants of one UI piece? The standard's own conflict note leaves this open.
-- Should Q-pref-02 gain a "picker, one at a time" option, and should `show-6` be removed or limited to a quick first look?
+- Should Q-pref-02 gain a "picker, one at a time" option, and should `show-6` be removed or limited to a quick first look? DC-L19-174 proposes `picker-3` and removing `show-6`; the question itself is still planned.
 - The showcase techniques were only described for web and dashboard designs. How should native mobile apps be shown to clients, beyond device and lifestyle mockups?

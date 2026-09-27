@@ -2,7 +2,7 @@
 type: topic
 title: AI-assisted design
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources: []
 tags: []
 ---
@@ -42,3 +42,5 @@ ChatGPT is used to write a full project brief from a short prompt.
 - [[sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai|Vibe Coding a Pro UI in SECONDS With AI]]: A four-part prompt (design in HTML and CSS, purpose and use, specific elements, icon library) plus one well-chosen reference image produces a usable dashboard from Claude.
 - [[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]: Uses Claude Code as the main design tool: a plain first prompt, then many short, specific refinement prompts, inspecting how elements are built and asking for temporary tools; notes AI defaults (indigo, centering, basic Inter).
 - See also: [[synthesis/ai-assisted-design|AI-assisted design synthesis]]
+- [[sources/YbLF42BaoZs-i-gave-claude-600-000-ui-screens-then-this-happened|I Gave Claude 600,000 UI Screens… Then This Happened]]: Shows a research-then-build workflow with Claude and MCP servers: unresearched AI output is generic or broken, researched output is grounded in shipped products and cites its sources.
+- [[sources/qK7WYCMvjUw-he-spent-1m-on-a-b-tests-here-s-what-won|He Spent $1M on A/B Tests. Here's What Won.]]: Moonly uses Cursor and Codex to design experiments around inefficiencies and to reconcile analytics numbers into ship, don't ship or collect-more-data recommendations.

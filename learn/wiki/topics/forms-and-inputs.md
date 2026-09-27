@@ -2,7 +2,7 @@
 type: topic
 title: Forms and inputs
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources: []
 tags: []
 ---
@@ -29,3 +29,4 @@ User input is one of the four core dashboard components, found in modals such as
 - [[sources/neE6wOuBIP8-the-secret-behind-weirdly-perfect-ui-designs|The secret behind weirdly perfect UI designs]]: A checkbox is a thin border when off and earns fill and a checkmark when on; making it blue when off would destroy the signal.
 - [[sources/vaul-inputs-inputs-vaul|Inputs – Vaul]]: Inputs inside drawers are tricky because the keyboard pushes content up; Vaul repositions the drawer.
 - See also: [[synthesis/forms-and-inputs|Forms and inputs synthesis]]
+- [[sources/Qsq-Sj_rojU-i-studied-1-460-onboarding-flows-here-s-what-i-found|I Studied 1,460 Onboarding Flows. Here's What I Found.]]: A password field that checks requirements live removes a reason to get stuck; splitting sign-up across screens raised conversions in one case.

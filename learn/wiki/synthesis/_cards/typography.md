@@ -10,7 +10,29 @@ tags:
 
 Area `typography` (OpenDesigner stages 10, 11 and 19; wiki topics Typography, and Content and microcopy). Cards DC-L19-21 to DC-L19-39. Each card adds something the existing L02, L06, L13 and L15 cards do not have, or flags where the trusted sources disagree with them.
 
-How to read the evidence: Emil Kowalski's sources are house standards (STD ids, locked). Kole Jain and Steve Schoger videos are trusted practitioner opinion; a number or an "always/never" from a single video is labelled as opinion unless another source or existing research agrees. My own connections are marked [inferred].
+How to read the evidence: Emil Kowalski's sources are house standards (STD ids, locked). Kole Jain, Mobbin and Steve Schoger videos are trusted practitioner opinion; a number or an "always/never" from a single video is labelled as opinion unless another source or existing research agrees. The Mobbin interviews report A/B results from single apps, self-reported by the guest with no test details, so each counts as one source, not as data. Jonathan Parra speaks in [S-L19-104] and [S-L19-106], and a clip of him reappears in [S-L19-111], so his claims count as one voice however many videos repeat them. My own connections are marked [inferred].
+
+Updated 2026-09-28 with the Mobbin videos ([S-L19-104], [S-L19-105], [S-L19-106], [S-L19-107], [S-L19-108], [S-L19-110], [S-L19-111]) and the prototype picker spec ([S-L19-030]), each checked against its raw transcript or file. What changed:
+- DC-L19-33 gains insight lines beside charts and the way prices are written in smaller units.
+- DC-L19-34 gains the neutral-chrome rule for type previews.
+- DC-L19-35 gains sample copy researched from the product's own category.
+- DC-L19-36 now covers onboarding and paywall copy as well as marketing pages. "Sell the outcome" is now backed by four sources, and two sources show that short copy does not always win on conversion screens.
+- DC-L19-37 gains the streak review's fear and optimism levers and the "human touch".
+- DC-L19-38 gains commitment wording on buttons and product-coined metric names.
+
+Adversarial check, 2026-09-28: every cited source was re-read in its raw transcript or file. Nothing failed badly enough to withdraw; ten cards were corrected:
+- DC-L19-21: the `zero` option is now marked as breaking and refused by the engine; the -0.03em display value is labelled as one creator's.
+- DC-L19-22: the 64px sample size is marked [inferred].
+- DC-L19-25: the golden-ratio method is described as Kole's personal method, no longer quoted as his own words.
+- DC-L19-27: Courier Prime is identified as monospace only by inference.
+- DC-L19-29: `measure-45-75` is now marked as breaking.
+- DC-L19-33: only one dashboard in [S-L19-110] puts insights beside a chart.
+- DC-L19-35: the lorem ipsum search was re-run.
+- DC-L19-36: `outcome-first` moves from Q-voice-04 (reading grade) to Q-voice-06, and tested long copy stays inside STD-visual-details-35.
+- DC-L19-37: the fake-urgency line is the video's, not Parra's, and one copy test did exist.
+- DC-L19-38: first-person button labels are named as an exception to DC-L06-21.
+
+No card was withdrawn. The block (DC-L19-21 to DC-L19-39) was already full, so the new material went into the cards it belongs to rather than into new cards. The paywall, streak and onboarding patterns themselves belong to the patterns area (DC-L19-129, DC-L19-135, DC-L19-136). The cards here cover only their words and their type.
 
 ### DC-L19-21: Letter spacing by role, size and case
 - **Block path:** Foundations > Typography > Metrics > Letter spacing
@@ -20,7 +42,7 @@ How to read the evidence: Emil Kowalski's sources are house standards (STD ids, 
   - **Practitioner thresholds and amounts.** Schoger tightens headlines once they pass about 24-30px [S-L19-103]. Kole tightens "large header text" by about -2% to -3% [S-L19-052], and in another video by -2% to -4% on text over about 70-80px, where zero spacing looks disjointed [S-L19-070]. A Figma percentage is a share of the font size, so -2% equals -0.02em [inferred].
   - **Uppercase eyebrows with wide tracking.** Schoger widens tracking whenever text is all capitals, as on a monospace, extra-small, gray eyebrow [S-L19-103].
   - **Existing research and engine.** DC-L02-14 defaults to -0.01 to -0.02em from about 32px. `engine.py` `tracking()` gives +0.05em to capitals, +0.02em at 12px and below, 0 from 13px to 31px, -0.01em from 32px and -0.02em from 48px.
-  - **`zero` (the font's own spacing everywhere).** Today's Q-type-13 option. With it the engine returns 0 for every style, including capitals.
+  - **`zero` (the font's own spacing everywhere).** Still listed under Q-type-13, but `questions.json` now marks it as breaking STD-visual-details-04 and STD-visual-details-05, and `engine.py` refuses to record it (checked 2026-09-28). If it were set, `tracking()` would return 0 for every style, including capitals.
 - **Visual effect:** Tightened large headings look denser and more confident (DC-L02-14); Kole says it makes large text look professional at once [S-L19-052], and Schoger says it gives headlines more impact [S-L19-103]. Side by side the change is subtle, but untightened large text looks disjointed [S-L19-070] or too loose [S-L19-052]. Capitals with too little spacing look cramped [S-L19-004]. `zero` leaves headings loose and capital labels cramped.
 - **Depends on (upstream):** Q-type-01 (the system font already ships tracking tables [S-L19-020]); Q-type-07 (fonts that change shape by size do part of the tightening, DC-L02-14); the size scale (Q-type-08, Q-type-09); scripts (no tracking on non-Latin scripts, DC-L02-25).
 - **Affects (downstream):** `letterSpacing` in every `text.*` style; the capitals label style (`text.label.sm`); eyebrows and overlines; capitalized buttons and tabs; DC-L19-26 display moments.
@@ -33,12 +55,12 @@ How to read the evidence: Emil Kowalski's sources are house standards (STD ids, 
   - body and label roles from 13px to 18px: 0;
   - title and headline roles from about 20px to 31px: -0.01em;
   - 32px to 69px: -0.02em (Emil's example value);
-  - display text from 70px: -0.03em (inside Kole's -2% to -4%).
+  - display text from 70px: -0.03em (inside Kole's -2% to -3% [S-L19-052] and -2% to -4% [S-L19-070]; a practitioner value from one creator, not research).
   - Rule of thumb: every heading role gets zero or negative tracking, the bigger it is the tighter, and body text never moves. With an optical-size font, check the table by eye, because the font already tightens some sizes.
   - Differs from DC-L02-14, which starts at about 32px. The earlier start follows the house standard, which says to tighten headings whatever their size (STD-visual-details-05), and sits just below Schoger's 24-30px [S-L19-103]; the 20px threshold itself is [inferred]. It fixes the recorded conflict in which the default title.lg (22px) and headline.sm (27px) get no tightening, against STD-visual-details-05.
 - **Evidence:** [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]), [S-L19-004] ([[sources/ek-agents-with-taste-agents-with-taste|Agents with Taste]]), [S-L19-052] ([[sources/EcbgbKtOELY-every-ui-ux-concept-explained-in-under-10-minutes|Every UI/UX Concept Explained in Under 10 Minutes]]), [S-L19-070] ([[sources/c1TvOcKdBVE-the-8-ui-ux-cheat-codes-for-instantly-better-designs|The 8 UI/UX Cheat Codes for INSTANTLY Better Designs]]), [S-L19-103] ([[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]). Compared: DC-L02-14, DC-L02-25, DC-L02-04.
 - **Maps to:** Q-type-13:
-  - Remove option `zero`, or reword it as "the font's spacing for body text, with headings still tightened and capitals still loosened", because as written it breaks STD-visual-details-05 and STD-visual-details-04.
+  - Remove option `zero`, or reword it as "the font's spacing for body text, with headings still tightened and capitals still loosened", because as written it breaks STD-visual-details-05 and STD-visual-details-04. The option is already marked as breaking both and refused by the engine, so this only removes a choice nobody can make.
   - New default: the role-and-size table above.
   - Visual sample: the same large heading at 0 and at -2% [S-L19-070]; a hero heading at -2% to -3% with 110-120% line height [S-L19-052]; a monospace uppercase eyebrow with wide tracking [S-L19-103].
   - Engine note: `tracking()` should key on heading roles from about 20px and never return 0 for capitals.
@@ -71,7 +93,7 @@ How to read the evidence: Emil Kowalski's sources are house standards (STD ids, 
 - **Maps to:** Q-type-11:
   - New heuristic: the no-inversion check after snapping, falling back to 2px.
   - New default for display roles: 1.05-1.1, because the house skill's display sample uses 1.05.
-  - Visual sample: a 64px+ heading on auto next to 110% [S-L19-042]; a paragraph at 150% under a heading at 110-130%.
+  - Visual sample: a very large heading (for example 64px [inferred]; the source says only "extremely large text") on auto next to 110% [S-L19-042]; a paragraph at 150% under a heading at 110-130%.
 - **Impact now / as it grows:**
   - *Falling ratio with the no-inversion check:* now, it fixes the inverted pairs in the default scale; as it grows, new sizes slot in without anyone re-checking leading by hand.
   - *4px snapping only:* now, text lines up with a 4px grid; as it grows, every change of base size or ratio can create a new inversion.
@@ -153,7 +175,7 @@ How to read the evidence: Emil Kowalski's sources are house standards (STD ids, 
   - **Dashboards: nothing above 24px.** The range shrinks because more information must fit [S-L19-052]; dashboards use many small sizes with small steps between them [S-L19-047].
   - **A productive scale runs to about 32px** (DC-L02-11: productive sizes 12-32), above Kole's 24px.
   - **About three sizes per view** (the BOARD L15 note in Q-type-10's Use/avoid).
-  - **Ratio chosen by surface.** Golden ratio (1.62) only when there is just a heading and body, its square root (1.27) for a full style guide, and its cube root for dashboards and mobile [S-L19-042]; the cube root is about 1.17 [inferred]. Kole calls this his own method, and L15 rates golden-ratio scales as weak evidence.
+  - **Ratio chosen by surface.** Golden ratio (1.62) only when there is just a heading and body, its square root (1.27) for a full style guide, and its cube root for dashboards and mobile [S-L19-042]; the cube root is about 1.17 [inferred]. This is Kole's personal method, not a standard (the analysis of his video says so), and L15 rates golden-ratio scales as weak evidence.
   - **Avoid mixing extremes on one page.** Giant headline sections next to small spec-text sections split a site into two styles [S-L19-065]; tiny text in a blog list is a flaw [S-L19-082]; the product's name in a 12px corner hides what it is [S-L19-084].
 - **Visual effect:** A small dashboard range looks dense and calm and fits more rows; a wide landing-page range looks dramatic and editorial (DC-L02-11's productive and expressive scales). A page mixing giant and tiny text feels like two different sites [S-L19-065].
 - **Depends on (upstream):** Q-dir-02 (density), Q-dir-03 (hierarchy strength), Q-brand-06 (marketing set), Q-type-09 (ratio).
@@ -218,7 +240,7 @@ How to read the evidence: Emil Kowalski's sources are house standards (STD ids, 
   - **Sans plus serif for personality.** Like a printed menu for a restaurant brand, with hero lines split between serif and sans [S-L19-062].
   - **Serif accent for important words.** The animations.dev site added a serif to emphasise important words; this is a changelog entry, not stated guidance [S-L19-001].
   - **Handwritten face in the display role** [S-L19-042]; quirky display fonts on stickers [S-L19-075].
-  - **Monospace for details.** Schoger's monospace uppercase eyebrows [S-L19-103]; Kole's portfolio uses a third, monospace font for captions, which he calls an edge case [S-L19-042]; Kole removed a monospace that did not fit a restaurant brand [S-L19-062].
+  - **Monospace for details.** Schoger's monospace uppercase eyebrows [S-L19-103]; Kole's portfolio uses a third font, Courier Prime (a monospace [inferred]), for small details and captions, which he calls an edge case [S-L19-042]; Kole removed a monospace that did not fit a restaurant brand [S-L19-062].
   - **Pairing help.** A pairing tool such as Fontjoy for beginners, who tend to pair badly [S-L19-073].
 - **Visual effect:** One sans looks clean and consistent. A mixed-in serif adds personality, like a printed menu [S-L19-062]. Monospace eyebrows look more designed and more interesting [S-L19-103]. A display face gives poster-like brand moments [inferred].
 - **Depends on (upstream):** Q-type-01, Q-type-03, Q-brand-01 (personality), Q-type-02 (licence), Q-type-04 (script coverage of each face).
@@ -280,7 +302,7 @@ How to read the evidence: Emil Kowalski's sources are house standards (STD ids, 
 - **Questions the designer answers:** How wide can a paragraph get? How wide can a heading get? In what unit do we set those widths?
 - **Options:**
   - **Body capped at about 65ch (house must)** [S-L19-004].
-  - **Wider ranges in today's questions.** Q-type-14 `measure-45-75` and Q-layout-03 `reading` (40-80 characters) allow lines above 65ch, the recorded conflict with STD-visual-details-01.
+  - **Wider ranges in today's questions.** Q-type-14 `measure-45-75` and Q-layout-03 `reading` (40-80 characters) allow lines above 65ch, the recorded conflict with STD-visual-details-01. `measure-45-75` is now marked as breaking that standard, so the engine refuses it; `reading` is not marked (checked 2026-09-28).
   - **Headings set in ch.** Schoger tried 45ch and 35ch and chose 40ch for section headings, replacing a fixed max width [S-L19-103].
   - **Fixed max width** (a rem or px container such as max-w-3xl), which Schoger replaced [S-L19-103].
   - **The ch width goes on the element that sets the font size.** When it sat on another element, the text came out too narrow [S-L19-103].
@@ -393,7 +415,7 @@ How to read the evidence: Emil Kowalski's sources are house standards (STD ids, 
 
 ### DC-L19-33: Key numbers: style, alignment, label and context
 - **Block path:** Foundations > Typography > Details > Numbers (stats, prices, metrics)
-- **Questions the designer answers:** How do headline stats and prices look? Do numbers that change keep their width? What words go with a number?
+- **Questions the designer answers:** How do headline stats and prices look? Do numbers that change keep their width? What words go with a number or a chart? If a price is shown in a smaller unit than it is billed, what else must appear?
 - **Options:**
   - **Tabular digits on price columns and on numbers that change in place (house must)** [S-L19-004] [S-L19-019].
   - **Large value in regular weight.** Schoger found the generated stat numbers clunky and reset them large (5XL) in regular weight, with labels in gray 600, left-aligned, with a divider between stats [S-L19-103].
@@ -402,26 +424,34 @@ How to read the evidence: Emil Kowalski's sources are house standards (STD ids, 
   - **Text hard left, values hard right** in lists and line items [S-L19-080].
   - **A dedicated metric style** (Atlassian `font.metric.large` 28/32, DC-L02-05).
   - **Words around numbers.** Label every chart and number [S-L19-068]; show an actual percentage instead of "in progress" [S-L19-086]; add context to a headline stat, such as a 120% increase on last year or "you two just met" for something new [S-L19-076]; show the figure that matters for the real object, such as a minimum payment and due date [S-L19-068].
-- **Visual effect:** Large regular-weight stats replaced numbers Schoger called clunky [S-L19-103]; that they read calmer is [inferred]. Tabular digits stop numbers jumping as they change [S-L19-019]. Unlabeled numbers mean nothing [S-L19-068].
-- **Depends on (upstream):** Q-type-06, Q-voice-05 (numbers mechanics), product type (a data-heavy tool).
-- **Affects (downstream):** `text.numeric.*` styles; stat tiles, tables, pricing cards, chart axis labels, counters and timers.
+  - **An insight line beside the chart (new in the update).** In Mobbin's review of 2,108 dashboards, the ones the host kept coming back to were "one step ahead": one app puts key insights next to its line chart, so it shows what to do about the data and not only what happened, and others package stats into a weekly recap, a daily brief or post-run highlights [S-L19-110].
+  - **Prices written in a smaller unit (new in the update).** As price anchoring, one app breaks its price into smaller weekly amounts, and another compares its subscription with coffee or therapy [S-L19-104]. A two-plan footer can show both plans as a weekly price with a subtitle giving the actual price; Parra raises this as a layout to test, not as a recommendation [S-L19-106].
+- **Visual effect:** Large regular-weight stats replaced numbers Schoger called clunky [S-L19-103]; that they read calmer is [inferred]. Tabular digits stop numbers jumping as they change [S-L19-019]. Unlabeled numbers mean nothing [S-L19-068]. An insight beside a chart turns it into guidance on what to do next [S-L19-110]. A weekly figure makes a yearly price look smaller [inferred]; that is the point of anchoring [S-L19-104].
+- **Depends on (upstream):** Q-type-06, Q-voice-05 (numbers mechanics), product type (a data-heavy tool), pricing and plans (DC-L19-134).
+- **Affects (downstream):** `text.numeric.*` styles; stat tiles, tables, pricing cards, paywall price footers, chart axis labels, chart insight lines, counters and timers.
 - **Token encoding:** `text.numeric.md` and `text.numeric.lg` with `$extensions.fontVariantNumeric` = `tabular-nums`. The engine already writes this, but only when `numericStyles` is set.
 - **Platform notes:** `font-variant-numeric` on the web (STD-visual-details-02); native monospaced digits are not verified (DC-L02-26).
-- **Accessibility constraints:** Labels give meaning to both sighted and screen-reader users [inferred]; label contrast follows DC-L19-23.
+- **Accessibility constraints:** Labels give meaning to both sighted and screen-reader users [inferred]; label contrast follows DC-L19-23. The billed amount under a per-week price is real information, so it needs body-text contrast (4.5:1), not the faint fine-print treatment [inferred].
 - **Default + heuristic:**
   - Always generate `text.numeric.*` with tabular digits. This fixes the recorded STD-visual-details-02 conflict, where the engine creates them only for Q-type-06 `numeric-face` or Q-layout-03 `data`.
   - Stat values are regular weight at a large size, with a short label in the secondary color. This is Schoger's treatment [S-L19-103], one practitioner's taste.
-  - Every number gets a label [S-L19-068]. Headline stats get one comparison line; this comes from one Kole redesign [S-L19-076] and is opinion.
+  - Every number gets a label [S-L19-068]. Key charts and headline stats get one line saying what the number means or what to do next.
+    - Two independent sources now agree that numbers need words around them: Kole's redesigns [S-L19-068] [S-L19-076] and Mobbin's dashboard review [S-L19-110]. It is no longer one video's opinion.
+    - The specific form, a comparison with an earlier period, is still Kole's alone [S-L19-076].
+  - A price shown in a smaller unit than it is billed (per week for a yearly plan) always shows the billed amount and period directly beneath it. The one source that describes this layout includes that subtitle [S-L19-106]; making it required is [inferred]. A weekly figure on its own would fall under the hidden-costs and trick-wording patterns in DC-L13-15 [inferred].
   - Rule of thumb: if a number can change while someone watches it, or sits in a column, it is tabular (DC-L02-26).
-- **Evidence:** [S-L19-004] ([[sources/ek-agents-with-taste-agents-with-taste|Agents with Taste]]), [S-L19-019] ([[sources/eks-skills-animation-vocabulary-skill-emilkowalski-skills-skills-animation-vocabulary-skill-md|emilkowalski/skills: skills/animation-vocabulary/SKILL.md]]), [S-L19-103] ([[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]), [S-L19-043] ([[sources/9WVt1CelBfg-the-stupid-simple-way-to-learn-ui-ux-design-in-exactly-10-minutes|The stupid simple way to learn UI/UX design in exactly 10 minutes]]), [S-L19-061] ([[sources/PDcQJOPby1k-5-saas-ui-ux-mistakes-that-scream-you-vibe-code|5 SaaS UI/UX mistakes that SCREAM you Vibe Code]]), [S-L19-080] ([[sources/neE6wOuBIP8-the-secret-behind-weirdly-perfect-ui-designs|The secret behind weirdly perfect UI designs]]), [S-L19-068] ([[sources/Yr2uIcFZDDQ-redesigning-a-finance-dashboard-ui-from-scratch-ft-dribbble|Redesigning a Finance Dashboard UI from SCRATCH (ft. Dribbble)]]), [S-L19-086] ([[sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai|Vibe Coding a Pro UI in SECONDS With AI]]), [S-L19-076] ([[sources/goWOAFqJHpA-i-redesigned-spotify-wrapped-entirely-from-scratch|I Redesigned Spotify Wrapped Entirely From SCRATCH]]). Compared: DC-L02-05, DC-L02-26, DC-L06-21.
+- **Evidence:** [S-L19-004] ([[sources/ek-agents-with-taste-agents-with-taste|Agents with Taste]]), [S-L19-019] ([[sources/eks-skills-animation-vocabulary-skill-emilkowalski-skills-skills-animation-vocabulary-skill-md|emilkowalski/skills: skills/animation-vocabulary/SKILL.md]]), [S-L19-103] ([[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]), [S-L19-043] ([[sources/9WVt1CelBfg-the-stupid-simple-way-to-learn-ui-ux-design-in-exactly-10-minutes|The stupid simple way to learn UI/UX design in exactly 10 minutes]]), [S-L19-061] ([[sources/PDcQJOPby1k-5-saas-ui-ux-mistakes-that-scream-you-vibe-code|5 SaaS UI/UX mistakes that SCREAM you Vibe Code]]), [S-L19-080] ([[sources/neE6wOuBIP8-the-secret-behind-weirdly-perfect-ui-designs|The secret behind weirdly perfect UI designs]]), [S-L19-068] ([[sources/Yr2uIcFZDDQ-redesigning-a-finance-dashboard-ui-from-scratch-ft-dribbble|Redesigning a Finance Dashboard UI from SCRATCH (ft. Dribbble)]]), [S-L19-086] ([[sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai|Vibe Coding a Pro UI in SECONDS With AI]]), [S-L19-076] ([[sources/goWOAFqJHpA-i-redesigned-spotify-wrapped-entirely-from-scratch|I Redesigned Spotify Wrapped Entirely From SCRATCH]]), [S-L19-110] ([[sources/kdRkuqu8apE-i-studied-2-108-dashboards-to-see-what-sticks|I Studied 2,108 Dashboards To See What Sticks]]), [S-L19-104] ([[sources/9ypqs_2fAl8-we-studied-2-995-paywalls-heres-what-actually-converts|We Studied 2,995 Paywalls. Here’s What Actually Converts.]]), [S-L19-106] ([[sources/E7RzEZ8GlHE-he-tested-4-700-paywalls-these-won|He Tested 4,700 Paywalls. These Won.]]). Compared: DC-L02-05, DC-L02-26, DC-L06-21, DC-L13-15, and the L19 pricing and chart cards DC-L19-134 and DC-L19-122.
 - **Maps to:**
   - Q-type-06, new default: tabular numeric styles whatever the option; `numeric-face` then only adds a large metric style.
   - Q-type-06, visual sample: Schoger's stats row, and a ticking counter with proportional against tabular digits.
-  - Q-voice-05, extend option `numbers`: "every number has a label; progress as a percentage, not 'in progress'; headline stats carry a comparison".
+  - Q-voice-05, extend option `numbers`: "every number has a label; progress as a percentage, not 'in progress'; headline stats and key charts carry one line of meaning or next step; a price shown per smaller unit also shows the billed amount and period".
+  - Visual samples: a line chart alone next to the same chart with an insight line beside it [S-L19-110]; a two-plan price footer with a weekly price over the billed-amount subtitle [S-L19-106].
 - **Impact now / as it grows:**
   - *Tabular numbers always:* now, columns line up; as it grows, every new table, counter and timer is right by default.
   - *Tabular only when chosen:* now, fewer styles; as it grows, data screens added later jitter.
   - *Labels and comparison lines:* now, clearer numbers; as it grows, the product needs a shared rule for comparison periods (week, month, year) [inferred].
+  - *Insight lines beside charts:* now, each chart says what to do [S-L19-110]; as it grows, someone has to write or generate an insight for every new chart, and a stale or wrong insight does more harm than none [inferred].
+  - *Prices in a smaller unit with the billed amount:* now, a smaller-looking price that stays honest; as it grows, every currency and billing period needs both lines translated and checked, which suits a copy lint [inferred].
 - **Standards:** STD-visual-details-02; STD-visual-details-59 (a counter, price or stat that animates uses NumberFlow) applies to the same numbers [inferred link].
 
 ### DC-L19-34: How type choices are previewed: true size, in context
@@ -432,22 +462,28 @@ How to read the evidence: Emil Kowalski's sources are house standards (STD ids, 
   - **True size on the intended screen.** Always view designs on the screens they are meant for [S-L19-042]; check on a desktop, or mirror a prototype to a phone [S-L19-057].
   - **One option at a time, full size, in realistic context** (a toast needs a page behind it) [S-L19-031].
   - **A zoomed-out comparison with real apps**, to catch a squished mobile design [S-L19-053].
-- **Visual effect:** True-size previews lead to sensibly sized type. Scaled previews make text look small, so people oversize it [S-L19-057].
+  - **The preview's own controls in a fixed, neutral face (new in the update).** The house prototype picker sets its text in the system stack at 13px and is never restyled with the project's fonts or tokens. It stays identical across projects, so it always reads as harness chrome and never as part of the design being judged [S-L19-030] (STD-process-review-taste-45).
+  - **Controls in the candidate font.** The template's labels and buttons change with each option, so the person judges the chrome as well as the type [inferred].
+- **Visual effect:** True-size previews lead to sensibly sized type. Scaled previews make text look small, so people oversize it [S-L19-057]. Neutral chrome keeps attention on the only thing that changes, the option [inferred from S-L19-030].
 - **Depends on (upstream):** Q-plat-01 (platforms).
 - **Affects (downstream):** `assets/templates/type-scale.html`, the option gallery, the engine preview, `show.py`.
 - **Token encoding:** none (process decision).
 - **Platform notes:** Show a phone-width frame for mobile and a desktop-width frame for web [inferred].
 - **Accessibility constraints:** Previews should also show the 200% text-size state, which Q-type-17's Show line already asks for.
-- **Default + heuristic:** The type-scale template keeps rendering at 1:1 CSS pixels with no scale-to-fit (true of `type-scale.html` when checked on 2026-09-24). It shows one option at a time, full size, on a real screen, and labels any view that a host has scaled [inferred from S-L19-031, S-L19-042 and S-L19-057].
-  - Rule of thumb: never ask someone to choose a type size from a shrunken thumbnail.
-- **Evidence:** [S-L19-057] ([[sources/Lp6ey4AyDzA-8-web-design-hacks-to-actually-make-your-designs-better|8 Web Design Hacks To ACTUALLY Make Your Designs Better]]), [S-L19-042] ([[sources/7sUUzOCv47U-mathematically-perfect-typography-for-web-design|Mathematically Perfect Typography for Web Design]]), [S-L19-031] ([[sources/eks-skills-prototype-skill-emilkowalski-skills-skills-prototype-skill-md|emilkowalski/skills: skills/prototype/SKILL.md]]), [S-L19-053] ([[sources/Gfsd8NNuD9g-everything-you-need-to-know-about-mobile-app-uis-in-8-minutes-beginner-friendly|Everything you need to know about Mobile App UI’s in 8 minutes (beginner friendly)]]). Compared: DC-L02-08 and Q-type-08's Show line.
+- **Default + heuristic:** The type-scale template keeps rendering at 1:1 CSS pixels with no scale-to-fit (true of `type-scale.html` when checked on 2026-09-24 and again on 2026-09-28). It shows one option at a time, full size, on a real screen, and labels any view that a host has scaled [inferred from S-L19-031, S-L19-042 and S-L19-057].
+  - The candidate face and sizes apply only to the sample text. The template's own headings, buttons and value readouts stay in one fixed system stack in every project, as the picker spec does for its chrome [S-L19-030]. This confirms the current template: on 2026-09-28 `type-scale.html` set its controls in a fixed `system-ui` stack and applied the candidate family only to the sample ladder.
+  - Rule of thumb: never ask someone to choose a type size from a shrunken thumbnail, or a typeface from a page where everything changes at once.
+- **Evidence:** [S-L19-057] ([[sources/Lp6ey4AyDzA-8-web-design-hacks-to-actually-make-your-designs-better|8 Web Design Hacks To ACTUALLY Make Your Designs Better]]), [S-L19-042] ([[sources/7sUUzOCv47U-mathematically-perfect-typography-for-web-design|Mathematically Perfect Typography for Web Design]]), [S-L19-031] ([[sources/eks-skills-prototype-skill-emilkowalski-skills-skills-prototype-skill-md|emilkowalski/skills: skills/prototype/SKILL.md]]), [S-L19-053] ([[sources/Gfsd8NNuD9g-everything-you-need-to-know-about-mobile-app-uis-in-8-minutes-beginner-friendly|Everything you need to know about Mobile App UI’s in 8 minutes (beginner friendly)]]), [S-L19-030] ([[sources/eks-skills-prototype-picker-emilkowalski-skills-skills-prototype-picker-md|emilkowalski/skills: skills/prototype/PICKER.md]]). Compared: DC-L02-08 and Q-type-08's Show line.
 - **Maps to:**
   - Q-type-08, Q-type-09 and Q-type-10, visual sample change: render each option at 100% in a phone-width and a desktop-width frame, one at a time.
   - Template change to `type-scale.html`: keep the current 1:1 rendering, add phone-width and desktop-width frames, and show a "scaled" badge whenever the host displays the page at other than 1:1 [inferred].
+  - Template contract (confirms current state): in `type-scale.html` and `option-gallery.html`, only the sample takes the candidate font, and the controls stay in the fixed system stack [S-L19-030]. Both templates did this when checked on 2026-09-28; the change is to write it down as a rule so later template edits keep it.
 - **Impact now / as it grows:**
   - *True size, one at a time:* now, choices match what ships; as it grows, fewer "why does this look huge on my phone" fixes after launch [inferred].
   - *Thumbnails side by side:* now, fast comparison; as it grows, sizes chosen at the wrong scale spread into every screen.
-- **Standards:** STD-process-review-taste-43 (applied here by analogy [inferred]), STD-process-review-taste-40.
+  - *Neutral chrome:* now, people judge only the option; as it grows, every template looks the same around the sample, so previews stay comparable across projects and sessions [inferred from S-L19-030].
+  - *Chrome in the candidate font:* now, a fuller impression; as it grows, a template restyled per project mixes the tool's look into each decision [inferred].
+- **Standards:** STD-process-review-taste-43 (applied here by analogy [inferred]), STD-process-review-taste-40, STD-process-review-taste-45 (applied to type previews by analogy [inferred]).
 
 ### DC-L19-35: Sample content in previews: realistic, with stress cases
 - **Block path:** Process > Previews > Sample content
@@ -457,85 +493,118 @@ How to read the evidence: Emil Kowalski's sources are house standards (STD ids, 
   - **Realistic, product-shaped copy** with plausible names and numbers [S-L19-031], starting from a written brief [S-L19-037].
   - **Realistic plus imperfect content.** A destination with a very long name gets truncated, and a save icon on a bright photo gets a circle behind it; Kole warns that designs built only on perfect, short content have unintended consequences [S-L19-054].
   - **Plus translated lengths.** Labels under 10 characters budgeted at 2-3 times their English length (DC-L06-24) [inferred link].
-- **Visual effect:** Realistic copy shows true line lengths and wraps. Stress cases show truncation and overflow before launch [S-L19-054].
-- **Depends on (upstream):** the product description from the scope questions, Q-voice-01 (voice), Q-type-04 (languages).
+  - **Researched from the product's own category (new in the update).** In Mobbin's demo, a fintech onboarding drafted by AI without references looked fine but generic. The version grounded in real finance apps covered identity checks and compliance requirements. A reference library can also suggest copy tailored to the users and cite where each idea came from, and can surface edge cases [S-L19-108]. The source is a vendor demo of Mobbin's own paid tool, not an independent test.
+- **Visual effect:** Realistic copy shows true line lengths and wraps. Stress cases show truncation and overflow before launch [S-L19-054]. Category-grounded copy brings in the domain's real steps and words, which change what a screen must fit (a fintech form carries identity and compliance text) [S-L19-108] [inferred for the fit].
+- **Depends on (upstream):** the product description from the scope questions, the product's category or industry, Q-voice-01 (voice), Q-type-04 (languages).
 - **Affects (downstream):** engine previews; the sample strings in each template's `od-data`; the component sheet; examples in DESIGN.md.
 - **Token encoding:** none (content decision).
 - **Platform notes:** None from these sources.
 - **Accessibility constraints:** Stress long strings together with 200% text size (Q-type-17) [inferred]. Truncated text needs a way to reach the full content (DC-L02-18).
 - **Default + heuristic:** Previews use copy built from the person's own product description (their nouns, verbs, names and numbers). Each component sheet includes one long-string case and one empty case [inferred from S-L19-054].
+  - When the person has no copy yet, sample copy is drafted for the product's category (a banking sign-up includes an identity-check step, for example), and the preview says it is drafted [inferred from S-L19-108]. Researched copy takes the pattern, never the wording: a reference shows what a screen needs to say, and the text is written fresh. That follows OpenDesigner's rule that references give structure and quality, never identity or copy.
   - Rule of thumb: if a preview only looks right with short words, it is not finished [inferred from S-L19-054].
-  - This confirms the current state: a text search on 2026-09-24, recorded in the content synthesis, found no lorem ipsum in the engine or templates.
-- **Evidence:** [S-L19-037] ([[sources/59XWYgN00nQ-create-a-portfolio-with-no-experience-or-clients-needed|Create A Portfolio With No Experience (or clients) Needed]]), [S-L19-031] ([[sources/eks-skills-prototype-skill-emilkowalski-skills-skills-prototype-skill-md|emilkowalski/skills: skills/prototype/SKILL.md]]), [S-L19-054] ([[sources/HE4rLEQpiXY-how-to-think-like-a-genius-ui-ux-designer|How to think like a GENIUS UI/UX designer]]). Compared: DC-L06-24, DC-L02-18.
+  - This confirms the current state: a text search of `skills/opendesigner/scripts/` and `skills/opendesigner/assets/templates/`, first run on 2026-09-24 and re-run on 2026-09-28, found no lorem ipsum.
+- **Evidence:** [S-L19-037] ([[sources/59XWYgN00nQ-create-a-portfolio-with-no-experience-or-clients-needed|Create A Portfolio With No Experience (or clients) Needed]]), [S-L19-031] ([[sources/eks-skills-prototype-skill-emilkowalski-skills-skills-prototype-skill-md|emilkowalski/skills: skills/prototype/SKILL.md]]), [S-L19-054] ([[sources/HE4rLEQpiXY-how-to-think-like-a-genius-ui-ux-designer|How to think like a GENIUS UI/UX designer]]), [S-L19-108] ([[sources/YbLF42BaoZs-i-gave-claude-600-000-ui-screens-then-this-happened|I Gave Claude 600,000 UI Screens… Then This Happened]]). Compared: DC-L06-24, DC-L02-18.
 - **Maps to:**
   - Q-voice-06, new heuristic: component examples come with a long-string case and an empty case.
+  - Q-voice-06, new heuristic: with no copy from the person, sample strings are drafted for the product's category and labelled as drafts [S-L19-108] [inferred].
   - Q-type-04, Show line: add a long-label row to the button row.
   - Visual sample: a listing card with a very long destination name, first overflowing, then truncated [S-L19-054].
 - **Impact now / as it grows:**
   - *Realistic content with stress cases:* now, previews show real problems early; as it grows, new components ship with their overflow behavior already decided.
   - *Realistic content only:* now, believable; as it grows, long names, translations and user content still break layouts after launch.
+  - *Category-researched drafts:* now, previews carry the domain's real steps rather than generic ones [S-L19-108]; as it grows, the drafts must be replaced by the team's own copy, or the product keeps wording nobody owns [inferred].
 - **Standards:** STD-process-review-taste-40, STD-visual-details-03.
 
-### DC-L19-36: Marketing copy: length and focus
-- **Block path:** Content > Voice > Marketing copy
-- **Questions the designer answers:** How long should hero headlines and subtext be? Should the copy say what the product does, or how it helps? How much text should a section carry?
+### DC-L19-36: Marketing and conversion copy: length and focus
+- **Block path:** Content > Voice > Marketing and conversion copy (landing pages, welcome and onboarding screens, paywalls)
+- **Questions the designer answers:** How long should hero headlines and subtext be? Should the copy say what the product does, or what the person gets out of it? How much text should a section carry? On a screen that asks for a commitment (sign-up, trial, subscription), what reassures the person?
 - **Options:**
   - **Long, vague blocks.** Nobody stops to read them [S-L19-072].
-  - **Short, punchy headline with a related subtext** [S-L19-072]. One example page uses a seven-word heading and a 14-word subtext [S-L19-043]; another redesign borrows the Chrome site's punchy headline style [S-L19-082].
-  - **What it does against how it helps.** Kole's step from level three to level four rewrites copy about collecting and analysing data quickly into a promise to turn that data into decisions [S-L19-072].
-  - **Friendly and natural, not corporate.** "We sweat the details" beats a formal line about attention to detail; Basecamp's site is written in plain, natural language [S-L19-063].
+  - **Short, punchy headline with a related subtext** [S-L19-072]. One example page uses a seven-word heading and a 14-word subtext [S-L19-043]; another redesign borrows the Chrome site's punchy headline style [S-L19-082]. A first paywall needs only a headline describing the product, a couple of bullet points on what it does and a button to continue [S-L19-106].
+  - **What it does against what the person gets (sell the outcome).** Kole's step from level three to level four rewrites copy about collecting and analysing data quickly into a promise to turn that data into decisions [S-L19-072]. Updated with the Mobbin videos:
+    - the best onboarding screens in a review of 1,460 flows do not list features; they sell the outcome, sometimes with just a copy tweak such as a sign-up screen rewritten as a pitch [S-L19-107];
+    - Opal sells the years of life people get back before it shows its paywall, and a paywall at the end of onboarding tells people their plan is ready and speaks to their ideal outcome [S-L19-104];
+    - value framing matches the offer to what users care about, so each paywall sells a different future [S-L19-104];
+    - Moonly's onboarding moved from features to the user's job or pain: a bite-sized insight first, then the feature shown solving that problem [S-L19-111].
+  - **Friendly and natural, not corporate.** "We sweat the details" beats a formal line about attention to detail; Basecamp's site is written in plain, natural language [S-L19-063]. Dollar Shave Club's quiz copy, rewritten to be more conversational, raised subscriptions by 5% [S-L19-107].
+  - **Personalized copy (new in the update).** On a paywall, call out the person's name and highlight their goals [S-L19-106]; after a quiz, show what the answers unlocked, such as a personal plan or the date a goal will be reached [S-L19-107].
+  - **A reassurance line under the commitment button (new in the update).** Parra says a "no commitment, cancel anytime" subtitle always seems to do well and adds conversion incrementally [S-L19-104]. The Moonly video plays a clip of an earlier guest making the same point [S-L19-111]; the wording matches Parra's, so it is not a second voice [inferred]. Another app showed a step-by-step timeline of its free trial after users felt tricked into being charged [S-L19-104].
   - **One actionable heading** that promises exactly what the software does [S-L19-062].
   - **Cut repetition.** Remove text that repeats an image or stats shown above, and do not repeat the company name when it is already on screen [S-L19-065] [S-L19-072]. Put long but important text behind "see more", or paraphrase it and link to full specs [S-L19-065]. Break a wall of text into bullets or a table [S-L19-080].
-- **Visual effect:** Short copy leaves room for visuals and larger type; long blocks push type smaller and sections denser [inferred]. Friendly copy makes a page feel human [S-L19-063].
-- **Depends on (upstream):** Q-voice-01 (voice traits), the product and audience from the scope questions, Q-brand-06 (display moments, DC-L19-26).
-- **Affects (downstream):** copy slots in hero and section components; the voice section of DESIGN.md; heading measure (DC-L19-29).
-- **Token encoding:** None. It is a content rule, with an optional lint setting such as `content.hero.headline.maxWords` [inferred].
-- **Platform notes:** None from these sources.
-- **Accessibility constraints:** Plain language with no jargon (STD-visual-details-35); reading level targets (DC-L13-13).
-- **Default + heuristic:** A headline carries one idea and fits in two or three lines at the heading measure; the subtext is one or two sentences; the benefit comes first; nothing repeats the brand name or what an image already shows [inferred from S-L19-072 and S-L19-043, sized to DC-L19-29].
-  - The 7-word and 14-word counts come from one example page and are opinion, not a rule.
-  - Adds a marketing-copy rule next to DC-L13-13, whose limits cover only buttons and reading grade.
-- **Evidence:** [S-L19-072] ([[sources/eMMiLeo_UGI-the-4-levels-of-landing-page-ui-ux-design|The 4 Levels of Landing Page UI/UX Design]]), [S-L19-043] ([[sources/9WVt1CelBfg-the-stupid-simple-way-to-learn-ui-ux-design-in-exactly-10-minutes|The stupid simple way to learn UI/UX design in exactly 10 minutes]]), [S-L19-082] ([[sources/pGYLZyBE32o-i-redesigned-google-s-ai-website-from-scratch-complete-transformation|I Redesigned Google's AI Website from SCRATCH (complete transformation)]]), [S-L19-063] ([[sources/SfX43uIubj4-4-ui-design-hacks-to-kill-boring-designs|4 UI Design Hacks to KILL boring designs]]), [S-L19-062] ([[sources/RCneB_MQ7qs-the-one-thing-vibe-coding-cant-fix-about-your-website|The one thing vibe coding CAN’T fix about your website]]), [S-L19-065] ([[sources/V3Omp1hm0Sg-i-redesigned-a-failing-tesla-wannabe-full-website-to-save-it|I Redesigned a Failing Tesla WANNABE Full Website To SAVE It]]), [S-L19-080] ([[sources/neE6wOuBIP8-the-secret-behind-weirdly-perfect-ui-designs|The secret behind weirdly perfect UI designs]]), [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]). Compared: DC-L06-18, DC-L13-13.
+  - **Text-heavy, when it tests better (counter-evidence).** An ugly, text-heavy paywall beat everything Parra designed for one app [S-L19-104]. Mobbin says audiences in Eastern markets find information-heavy interfaces efficient where others see clutter, without citing a study [S-L19-107].
+- **Visual effect:** Short copy leaves room for visuals and larger type; long blocks push type smaller and sections denser [inferred]. Friendly copy makes a page feel human [S-L19-063]. When the outcome is sold first, the paywall does not feel like an interruption [S-L19-104]. A reassurance line adds a small second line of text under the main button [inferred].
+- **Depends on (upstream):** Q-voice-01 (voice traits), the product and audience from the scope questions, Q-brand-06 (display moments, DC-L19-26); where onboarding and paywalls appear is the patterns area's decision (DC-L19-129, DC-L19-135).
+- **Affects (downstream):** copy slots in hero and section components; welcome, quiz-result and paywall screens; a subtitle slot under primary buttons on commitment steps; the voice section of DESIGN.md; heading measure (DC-L19-29).
+- **Token encoding:** None. It is a content rule, with an optional lint setting such as `content.hero.headline.maxWords` [inferred], and a component slot such as `button.subtitle` for the reassurance line [inferred name].
+- **Platform notes:** The paywall and onboarding examples come from consumer mobile apps [S-L19-104] [S-L19-107]; the landing-page examples are websites. The sources give no copy difference between platforms.
+- **Accessibility constraints:** Plain language with no jargon (STD-visual-details-35); reading level targets (DC-L13-13). A reassurance line or trial terms under a button are part of the offer, so they meet body-text contrast and size, not a faint fine-print style [inferred]. The ethics limits of DC-L13-15 apply: no fake urgency, no hidden costs, no trick wording.
+- **Default + heuristic:**
+  - Lead with what the person gets, then how the product delivers it. This now rests on four sources that agree (Kole [S-L19-072] and three Mobbin videos [S-L19-104] [S-L19-107] [S-L19-111]), so it is a recommended default rather than one creator's opinion.
+  - On marketing pages: a headline carries one idea and fits in two or three lines at the heading measure; the subtext is one or two sentences; nothing repeats the brand name or what an image already shows [inferred from S-L19-072 and S-L19-043, sized to DC-L19-29]. The 7-word and 14-word counts come from one example page and are opinion, not a rule.
+  - On onboarding and paywall screens, length is something to test, not a fixed rule. The sources show both a minimal paywall [S-L19-106] and a text-heavy one that won [S-L19-104]. At Moonly, changing only the titles and subtitles (eight variants) raised conversion by 12% [S-L19-111]. Start short and outcome-first, and treat the words as the first thing to test [inferred from S-L19-106 and S-L19-111]. A longer variant may carry more information, but its wording stays plain, jargon-free and concise, because STD-visual-details-35 still applies [inferred].
+  - On a step that starts a trial or subscription, put one plain reassurance line under the main button saying what happens next and how to cancel. The support is one practitioner's experience [S-L19-104], repeated as a clip in [S-L19-111]. The line must be true: a promise of "cancel anytime" commits the product to an easy cancel flow (the hard-to-cancel pattern in DC-L13-15) [inferred].
+  - The 12% and 5% figures are single-company results, self-reported, with no test details [S-L19-111] [S-L19-107].
+  - Adds a conversion-copy rule next to DC-L13-13, whose limits cover only buttons and reading grade.
+- **Evidence:** [S-L19-072] ([[sources/eMMiLeo_UGI-the-4-levels-of-landing-page-ui-ux-design|The 4 Levels of Landing Page UI/UX Design]]), [S-L19-043] ([[sources/9WVt1CelBfg-the-stupid-simple-way-to-learn-ui-ux-design-in-exactly-10-minutes|The stupid simple way to learn UI/UX design in exactly 10 minutes]]), [S-L19-082] ([[sources/pGYLZyBE32o-i-redesigned-google-s-ai-website-from-scratch-complete-transformation|I Redesigned Google's AI Website from SCRATCH (complete transformation)]]), [S-L19-063] ([[sources/SfX43uIubj4-4-ui-design-hacks-to-kill-boring-designs|4 UI Design Hacks to KILL boring designs]]), [S-L19-062] ([[sources/RCneB_MQ7qs-the-one-thing-vibe-coding-cant-fix-about-your-website|The one thing vibe coding CAN’T fix about your website]]), [S-L19-065] ([[sources/V3Omp1hm0Sg-i-redesigned-a-failing-tesla-wannabe-full-website-to-save-it|I Redesigned a Failing Tesla WANNABE Full Website To SAVE It]]), [S-L19-080] ([[sources/neE6wOuBIP8-the-secret-behind-weirdly-perfect-ui-designs|The secret behind weirdly perfect UI designs]]), [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]), [S-L19-104] ([[sources/9ypqs_2fAl8-we-studied-2-995-paywalls-heres-what-actually-converts|We Studied 2,995 Paywalls. Here’s What Actually Converts.]]), [S-L19-106] ([[sources/E7RzEZ8GlHE-he-tested-4-700-paywalls-these-won|He Tested 4,700 Paywalls. These Won.]]), [S-L19-107] ([[sources/Qsq-Sj_rojU-i-studied-1-460-onboarding-flows-here-s-what-i-found|I Studied 1,460 Onboarding Flows. Here's What I Found.]]), [S-L19-111] ([[sources/qK7WYCMvjUw-he-spent-1m-on-a-b-tests-here-s-what-won|He Spent $1M on A/B Tests. Here's What Won.]]). Compared: DC-L06-18, DC-L13-13, DC-L13-15, and the L19 pattern cards DC-L19-129 (onboarding) and DC-L19-135 (paywalls).
 - **Maps to:**
-  - Q-voice-04, new option `hero-short`: "one short idea per headline, one or two sentences of subtext, benefit first".
-  - Q-voice-01, visual samples: a corporate line against a friendly one [S-L19-063]; the same feature written as "what it does" and as "how it helps" [S-L19-072].
+  - Q-voice-06, new option `outcome-first` (replacing the earlier proposal `hero-short` on Q-voice-04, which asks about reading grade and so is the wrong home for a headline rule [inferred]): "Headlines say what the person gets; one short idea per headline, one or two sentences of subtext". Recommended default for the headline slots of hero, welcome and paywall components, because four sources agree on outcome-first.
+  - Q-voice-06, new option `commitment-reassurance`: "Buttons that start a trial or subscription carry one plain line on what happens next and how to cancel", with the heuristic that the line must be true.
+  - Q-voice-06, new heuristic: on onboarding and paywall screens, the words are the first thing to test; length has no fixed rule there, but the wording stays plain and concise (STD-visual-details-35).
+  - Q-voice-01, visual samples: a corporate line against a friendly one [S-L19-063]; the same feature written as "what it does" and as "what you get" [S-L19-072]; a welcome screen that lists features next to one that shows the product delivering its outcome [S-L19-107]; a paywall button with and without the reassurance line [S-L19-104].
 - **Impact now / as it grows:**
-  - *Short and benefit-first:* now, scannable pages with room for larger type; as it grows, every new page follows the same pattern, which needs someone who owns the copy.
+  - *Outcome first, short:* now, scannable pages with room for larger type; as it grows, every new page and flow follows the same pattern, which needs someone who owns the copy.
   - *Long and descriptive:* now, complete; as it grows, pages get longer and denser, and type shrinks to fit.
-- **Standards:** STD-visual-details-35.
+  - *Personalized copy:* now, screens that speak to the person's own goal; as it grows, every personalized string needs a fallback for missing answers and a check in each language [inferred].
+  - *Reassurance line:* now, a small lift in confidence on commitment steps [S-L19-104]; as it grows, it becomes a promise that billing, support and the cancel flow must keep in every market [inferred].
+  - *Text-heavy when it tests better:* now, possibly more conversions on that one screen [S-L19-104]; as it grows, it splits the product's voice between conversion screens and the rest, so it needs an owner and a documented exception [inferred].
+- **Standards:** STD-visual-details-35; STD-visual-details-30 (every element earns its place) bounds how much copy a screen carries [inferred link].
 
 ### DC-L19-37: Where playfulness belongs, and never at the user
 - **Block path:** Content > Tone > Where personality appears
-- **Questions the designer answers:** Where may the product joke or show personality? May copy ever comment on how much someone uses the product? How should a "page not found" screen sound?
+- **Questions the designer answers:** Where may the product joke or show personality? May copy ever comment on how much someone uses the product? Do streak, reminder and progress messages push with fear, or encourage? How should a "page not found" screen sound?
 - **Options:**
   - **Serious everywhere.**
   - **Playful in low-stakes moments.** A 404 page is the best place to be quirky because the visitor does not belong there (Mobbin's interface quiz, Pixar's character) [S-L19-063]. A line of personality on a portfolio [S-L19-064]. A warm context line for good news [S-L19-076].
   - **Sass or guilt aimed at the user's own behavior.** Kole's deliberately infuriating examples: a message about 342 watched videos that offers only an upsell or more notifications, and a step-goal message saying you would need to run a marathon today. He held back from adding more because it would turn from passive-aggressive to plainly aggressive [S-L19-048].
+  - **Fear of loss in streak and reminder copy (new in the update).** Mobbin's review of 859 streak designs describes the lever: the copy grows more urgent, a clock counts down, and a mascot makes you feel guilty, so people act to protect what they could lose. The video describes this without endorsing it, and opens by asking whether streaks build habits or just make people afraid to stop [S-L19-105]. On paywalls, the paywall video says fake urgency stops working once every app uses it, and Parra sees users learning to close paywalls and wait for an offer [S-L19-104] [S-L19-106].
+  - **Encouraging copy (new in the update).** Optimism-based streaks use positive, encouraging copy that makes people feel they are building a better version of themselves; some reframe the button as a promise to yourself (DC-L19-38) [S-L19-105].
+  - **A human touch (new in the update).** A founder's note with a handwritten signature inside onboarding, an app acknowledging that your birthday is near, a CEO's video when a host lists a first space, a personal note from the CEO after sign-up. The review says such touches make the product feel made with intention [S-L19-107].
   - **DC-L06-19's matrix.** Errors are serious and humor must never hide the meaning.
-- **Visual effect:** A playful 404 or success moment feels human [S-L19-063]; shaming copy makes people angry [S-L19-048].
-- **Depends on (upstream):** Q-voice-01, Q-voice-02, Q-brand-01 (how playful the brand is).
-- **Affects (downstream):** 404 and not-found pages; empty states; success toasts; usage, streak and limit nudges; upsell dialogs; notification copy.
-- **Token encoding:** None. Add rows to DC-L06-19's tone matrix for "not found" and "usage or progress nudge".
+- **Visual effect:** A playful 404 or success moment feels human [S-L19-063]; shaming copy makes people angry [S-L19-048]. Fear-based streak copy creates urgency and guilt; encouraging copy makes progress feel like building a better self [S-L19-105]. A founder's note makes the product feel made with intention [S-L19-107].
+- **Depends on (upstream):** Q-voice-01, Q-voice-02, Q-brand-01 (how playful the brand is); whether the product has streaks or reminders at all (DC-L19-136).
+- **Affects (downstream):** 404 and not-found pages; empty states; success toasts; usage, streak and limit nudges; reminder notifications; upsell dialogs; the welcome screen and first success; notification copy.
+- **Token encoding:** None. Add rows to DC-L06-19's tone matrix for "not found", "usage, streak or progress nudge" and "first run and first success".
 - **Platform notes:** None from these sources.
 - **Accessibility constraints:** A playful 404 still needs a plain way back (search or a home link), because a screen must never trap the user (STD-visual-details-33) and errors must say how to fix (DC-L06-19). A 404 game that redirects on its own may take control away from the visitor [inferred]; the source does not discuss it [S-L19-063].
 - **Default + heuristic:** Aim humor at the situation, never at the person [inferred from S-L19-063 against S-L19-048].
   - A 404 is a low-stakes navigation miss, so it may use the brand's playful tone, with a way back. Errors that cost people work stay serious.
   - Usage and progress nudges state facts neutrally and offer a real choice, not just an upsell [inferred from S-L19-048, which shows the opposite as a joke].
+  - Streak, reminder and progress messages encourage. They never threaten a loss, count down to a deadline that is not real, or make the person feel guilty.
+    - This rule now has two sources behind it. Kole's satire shows guilt copy as infuriating [S-L19-048], and Mobbin's streak review describes fear and guilt as tactics and questions them [S-L19-105]. The paywall video adds that fake urgency wears down trust [S-L19-104].
+    - None of them compared fear-based with encouraging reminder copy. The one reported copy test, Duolingo's "commit to my goal" button [S-L19-105], changed a button label (DC-L19-38), not reminder tone. The other Duolingo results concern streak rules (streak freezes, a one-lesson minimum), where flexibility beat pressure; reading them as support for encouraging copy is [inferred]. The streak mechanics themselves are DC-L19-136's decision.
+  - A personal note from the team belongs at first run or the first success, where people first feel the product's value [S-L19-107]. That matches STD-process-review-taste-67, which treats the first screen after sign-up as packaging [inferred link]. Showing it once, not on every visit, is [inferred].
   - Differs from DC-L06-19 for 404 pages only: its "errors serious" default would make them serious too.
-- **Evidence:** [S-L19-063] ([[sources/SfX43uIubj4-4-ui-design-hacks-to-kill-boring-designs|4 UI Design Hacks to KILL boring designs]]), [S-L19-048] ([[sources/BUDipdbKK7Y-i-made-the-most-unhinged-ui-upgrades-downgrades|I Made The Most UNHINGED UI Upgrades (downgrades?)]]), [S-L19-064] ([[sources/ToJiXPTNnLY-professional-portfolio-breakdown-why-is-theirs-so-much-better|Professional Portfolio Breakdown — Why Is Theirs So Much Better?]]), [S-L19-076] ([[sources/goWOAFqJHpA-i-redesigned-spotify-wrapped-entirely-from-scratch|I Redesigned Spotify Wrapped Entirely From SCRATCH]]). Compared: DC-L06-19, DC-L13-07.
+- **Evidence:** [S-L19-063] ([[sources/SfX43uIubj4-4-ui-design-hacks-to-kill-boring-designs|4 UI Design Hacks to KILL boring designs]]), [S-L19-048] ([[sources/BUDipdbKK7Y-i-made-the-most-unhinged-ui-upgrades-downgrades|I Made The Most UNHINGED UI Upgrades (downgrades?)]]), [S-L19-064] ([[sources/ToJiXPTNnLY-professional-portfolio-breakdown-why-is-theirs-so-much-better|Professional Portfolio Breakdown — Why Is Theirs So Much Better?]]), [S-L19-076] ([[sources/goWOAFqJHpA-i-redesigned-spotify-wrapped-entirely-from-scratch|I Redesigned Spotify Wrapped Entirely From SCRATCH]]), [S-L19-105] ([[sources/ARq1bx3Sfg8-the-psychology-behind-streaks|The Psychology Behind Streaks]]), [S-L19-104] ([[sources/9ypqs_2fAl8-we-studied-2-995-paywalls-heres-what-actually-converts|We Studied 2,995 Paywalls. Here’s What Actually Converts.]]), [S-L19-106] ([[sources/E7RzEZ8GlHE-he-tested-4-700-paywalls-these-won|He Tested 4,700 Paywalls. These Won.]]), [S-L19-107] ([[sources/Qsq-Sj_rojU-i-studied-1-460-onboarding-flows-here-s-what-i-found|I Studied 1,460 Onboarding Flows. Here's What I Found.]]). Compared: DC-L06-19, DC-L13-07, DC-L13-15 (fake urgency, confirmshaming), and the L19 pattern cards DC-L19-136 (streaks) and DC-L19-129 (onboarding).
 - **Maps to:**
-  - Q-voice-02, new tone rows: "not found (404): may be playful, with a way back" and "usage and progress nudges: neutral, with a real choice".
-  - Q-voice-02, new heuristic: never shame or guilt the user.
-  - Q-voice-02, visual samples: the 342-videos and marathon messages as "don't" examples; a playful 404 with a clear way back as the "do".
+  - Q-voice-02, new tone rows:
+    - "not found (404): may be playful, with a way back";
+    - "usage, streak and progress nudges: neutral or encouraging, with a real choice; never loss threats, false countdowns or guilt";
+    - "first run and first success: may carry one personal note from the team".
+  - Q-voice-02, new heuristic: never shame or guilt the user, and never use urgency that is not real.
+  - Q-voice-02, visual samples: the 342-videos and marathon messages as "don't" examples; a playful 404 with a clear way back as the "do"; the same streak reminder written with a countdown and guilt, then encouragingly [S-L19-105]; a founder's note on a welcome screen [S-L19-107].
 - **Impact now / as it grows:**
   - *Humor aimed at the situation:* now, warmth in rare moments; as it grows, the rule keeps many writers consistent.
   - *Serious everywhere:* now, safe; as it grows, the brand can feel generic.
   - *Sass aimed at the user:* now, "edgy"; as it grows, it wears away trust, worst in paywall and usage flows.
-- **Standards:** STD-visual-details-35, STD-visual-details-33; STD-when-to-animate-09 is the motion counterpart, keeping delight for rare moments [inferred link].
+  - *Fear and urgency in streak copy:* now, people may come back to protect what they could lose [S-L19-105]; as it grows, people stop believing the urgency [S-L19-104], and every new reminder adds to the pressure [inferred].
+  - *Encouraging copy:* now, progress feels like self-improvement [S-L19-105]; as it grows, it stays usable in more places, including after a missed day [inferred].
+  - *A human touch:* now, the product feels made with intention [S-L19-107]; as it grows, the note must stay true and be updated when the team or founder changes [inferred].
+- **Standards:** STD-visual-details-35, STD-visual-details-33, STD-process-review-taste-67; STD-when-to-animate-09 is the motion counterpart, keeping delight for rare moments [inferred link].
 
 ### DC-L19-38: Naming navigation, actions and screens
 - **Block path:** Content > Microcopy > Labels and names
-- **Questions the designer answers:** What do we call navigation items? Do two buttons that lead to the same place share a label? When does an icon need a word? Should a screen announce what it is?
+- **Questions the designer answers:** What do we call navigation items? Do two buttons that lead to the same place share a label? When does an icon need a word? Should a screen announce what it is? On a step where the person commits to something, does the button say "Continue" or name the commitment? Does the product coin a name for its own key metric?
 - **Options:**
   - **Name items for their contents** ("Progress", "Library"), not with vague umbrellas like "Home" (house standard). If a control needs a label to explain it, its placement is weak [S-L19-020].
   - **Same destination, same label.** A navigation button and a hero button that go to the same place share a label [S-L19-072].
@@ -544,9 +613,12 @@ How to read the evidence: Emil Kowalski's sources are house standards (STD ids, 
   - **Do not title a screen with what it obviously is** ("financial dashboard") [S-L19-068]; drop section labels such as "Menu" [S-L19-086].
   - **Drop labels the layout already makes clear**, but keep them where values could be confused, such as check-in and check-out [S-L19-070].
   - **A few familiar category names** rather than invented, hyper-specific ones [S-L19-076].
-- **Visual effect:** Specific labels make the product predictable [S-L19-020]. Matching labels build the right mental model [S-L19-072]. Fewer redundant labels reduce clutter [inferred from S-L19-068 and S-L19-070].
-- **Depends on (upstream):** Q-voice-01, the word list (DC-L06-23), Q-icon-05.
-- **Affects (downstream):** navigation items, calls to action, tab bars, section headers, card titles, the word list.
+  - **"Continue" on every step.** DC-L06-22's consistent flow vocabulary (Get Started, Continue or Next, Done); a first paywall needs only a button to continue [S-L19-106].
+  - **Name the commitment on the button (new in the update).** Duolingo's product team changed "continue" to "commit to my goal" and called it a massive win; the streak review says more apps now reframe a call to action as a promise you make to yourself [S-L19-105]. Parra finds a label naming what the user is doing, instead of just "continue", hit or miss, and keeps testing it [S-L19-104].
+  - **A coined name for the product's own metric (new in the update).** Duolingo made streaks a thing, Oura gives a readiness score, and Apple users say they closed their rings. Mobbin's dashboard review says that once people talk this way they are very unlikely to switch, an assertion it gives no data for [S-L19-110].
+- **Visual effect:** Specific labels make the product predictable [S-L19-020]. Matching labels build the right mental model [S-L19-072]. Fewer redundant labels reduce clutter [inferred from S-L19-068 and S-L19-070]. Commitment wording turns the tap into a promise the person makes to themselves [S-L19-105]. A coined metric becomes part of how users describe what they did [S-L19-110].
+- **Depends on (upstream):** Q-voice-01, the word list (DC-L06-23), Q-icon-05, the flow vocabulary (DC-L06-22).
+- **Affects (downstream):** navigation items, calls to action, tab bars, section headers, card titles, primary buttons on goal, plan and trial steps, metric labels on dashboards, the word list.
 - **Token encoding:** None. Default strings as i18n keys plus the word list (DC-L06-22, DC-L06-23).
 - **Platform notes:** None from these sources.
 - **Accessibility constraints:** Icon-only controls need an accessible name (DC-L05-07); tab labels need enough contrast to read [S-L19-075].
@@ -555,14 +627,25 @@ How to read the evidence: Emil Kowalski's sources are house standards (STD ids, 
   - One label per destination across the product; review warns when the same link target has different labels [inferred].
   - Actions are verb-first (DC-L06-22). No screen title that just names the screen's type.
   - Icon-only navigation only for familiar icons. Kole accepts it for an Instagram-style tab bar [S-L19-075], which differs from DC-L05-07's "label everything in navigation". Keep DC-L05-07 as the default and offer icon-only as an option for consumer apps with familiar icons [inferred].
-- **Evidence:** [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]), [S-L19-072] ([[sources/eMMiLeo_UGI-the-4-levels-of-landing-page-ui-ux-design|The 4 Levels of Landing Page UI/UX Design]]), [S-L19-075] ([[sources/gKM6b2EnW1k-upgrading-9-crucial-ui-elements-free-figma-file-included|Upgrading 9 CRUCIAL UI Elements (free figma file included)]]), [S-L19-068] ([[sources/Yr2uIcFZDDQ-redesigning-a-finance-dashboard-ui-from-scratch-ft-dribbble|Redesigning a Finance Dashboard UI from SCRATCH (ft. Dribbble)]]), [S-L19-086] ([[sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai|Vibe Coding a Pro UI in SECONDS With AI]]), [S-L19-070] ([[sources/c1TvOcKdBVE-the-8-ui-ux-cheat-codes-for-instantly-better-designs|The 8 UI/UX Cheat Codes for INSTANTLY Better Designs]]), [S-L19-076] ([[sources/goWOAFqJHpA-i-redesigned-spotify-wrapped-entirely-from-scratch|I Redesigned Spotify Wrapped Entirely From SCRATCH]]). Compared: DC-L06-22, DC-L06-23, DC-L05-07.
+  - On a step where the person commits to something (a goal, a plan, a trial), the button names what they commit to instead of "Continue".
+    - The two sources disagree on how much this helps: a massive win at Duolingo [S-L19-105], hit or miss for Parra [S-L19-104]. So it is a default worth testing, not a rule.
+    - First-person wording ("my goal") is allowed on these buttons only, as an exception to DC-L06-21's "you" for the user [inferred]. The label fits Q-voice-04's `labels-2-4` (verb first, 2-4 words, names the result).
+    - The way out stays neutral: a commitment label never comes with a shaming decline link, which DC-L13-15's confirmshaming lint already catches [inferred link].
+    - This differs from DC-L06-22's single flow vocabulary on commitment steps only. Ordinary step-to-step navigation keeps "Continue".
+  - At most one coined metric name, and only for the product's signature measure. It goes in the word list with a plain definition, and every other category keeps a familiar name [inferred reconciliation of S-L19-110 with S-L19-076].
+- **Evidence:** [S-L19-020] ([[sources/eks-skills-apple-design-skill-emilkowalski-skills-skills-apple-design-skill-md|emilkowalski/skills: skills/apple-design/SKILL.md]]), [S-L19-072] ([[sources/eMMiLeo_UGI-the-4-levels-of-landing-page-ui-ux-design|The 4 Levels of Landing Page UI/UX Design]]), [S-L19-075] ([[sources/gKM6b2EnW1k-upgrading-9-crucial-ui-elements-free-figma-file-included|Upgrading 9 CRUCIAL UI Elements (free figma file included)]]), [S-L19-068] ([[sources/Yr2uIcFZDDQ-redesigning-a-finance-dashboard-ui-from-scratch-ft-dribbble|Redesigning a Finance Dashboard UI from SCRATCH (ft. Dribbble)]]), [S-L19-086] ([[sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai|Vibe Coding a Pro UI in SECONDS With AI]]), [S-L19-070] ([[sources/c1TvOcKdBVE-the-8-ui-ux-cheat-codes-for-instantly-better-designs|The 8 UI/UX Cheat Codes for INSTANTLY Better Designs]]), [S-L19-076] ([[sources/goWOAFqJHpA-i-redesigned-spotify-wrapped-entirely-from-scratch|I Redesigned Spotify Wrapped Entirely From SCRATCH]]), [S-L19-105] ([[sources/ARq1bx3Sfg8-the-psychology-behind-streaks|The Psychology Behind Streaks]]), [S-L19-104] ([[sources/9ypqs_2fAl8-we-studied-2-995-paywalls-heres-what-actually-converts|We Studied 2,995 Paywalls. Here’s What Actually Converts.]]), [S-L19-106] ([[sources/E7RzEZ8GlHE-he-tested-4-700-paywalls-these-won|He Tested 4,700 Paywalls. These Won.]]), [S-L19-110] ([[sources/kdRkuqu8apE-i-studied-2-108-dashboards-to-see-what-sticks|I Studied 2,108 Dashboards To See What Sticks]]). Compared: DC-L06-22, DC-L06-23, DC-L05-07, DC-L13-13, DC-L13-15.
 - **Maps to:**
   - Q-voice-06, new options `specific-nav` ("name navigation for its contents", STD-visual-details-34) and `one-label-per-destination`.
   - Q-icon-05: note Kole's familiar-icons exception for tab bars.
-  - Visual samples: navigation reading "Progress, Library" against "Home"; a navigation button and a hero button with matching labels [S-L19-072].
+  - Q-voice-06 `flow-vocab`: add the exception "steps where the person commits to a goal, plan or trial name what they commit to; ordinary steps keep Continue" [S-L19-105] [S-L19-104].
+  - Q-voice-06 `word-list`: add a row for the product's signature metric name, if it coins one, with its plain definition [S-L19-110] [inferred].
+  - Visual samples: navigation reading "Progress, Library" against "Home"; a navigation button and a hero button with matching labels [S-L19-072]; the same goal screen with "Continue" and with a commitment label [S-L19-105].
 - **Impact now / as it grows:**
   - *Specific, consistent labels:* now, clear; as it grows, the word list keeps new features' names consistent.
   - *Generic umbrellas:* now, easy; as it grows, "Home" and "Dashboard" turn into junk drawers [inferred].
+  - *Commitment labels:* now, the button restates the promise [S-L19-105]; as it grows, each commitment step needs its own label and translation, and the flow vocabulary needs a written exception [inferred].
+  - *"Continue" everywhere:* now, one predictable word (DC-L06-22); as it grows, still consistent, but the moments that matter look like every other step [inferred].
+  - *A coined metric name:* now, a memorable measure [S-L19-110]; as it grows, every new user must learn it, so it must be defined wherever it appears [inferred].
 - **Standards:** STD-visual-details-34, STD-visual-details-35; STD-visual-details-36 (things that look the same behave the same) is the matching consistency rule [inferred link].
 
 ### DC-L19-39: Typographic punctuation in interface text

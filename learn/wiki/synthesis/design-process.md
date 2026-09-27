@@ -2,7 +2,7 @@
 type: synthesis
 title: Design process
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources:
   - 2rtsoM2Dqrs
   - 59XWYgN00nQ
@@ -20,6 +20,7 @@ sources:
   - V3Omp1hm0Sg
   - VPeTgU7la34
   - Vy0KKvZJRH8
+  - YbLF42BaoZs
   - Yr2uIcFZDDQ
   - ek-agents-with-taste
   - ek-building-a-drawer-component
@@ -41,6 +42,7 @@ sources:
   - jSxxAFxjxbU
   - lkKGQVHrXzE
   - pGYLZyBE32o
+  - qK7WYCMvjUw
   - t7mpEDXzjCg
   - ulSOdTgoGeY
   - xHD01_Onac0
@@ -52,13 +54,14 @@ tags:
 
 ## In short
 
-Good design work follows a rough order: understand the problem and the person first, gather references, plan the structure (flows, wireframes, content) before any styling, then build section by section, and only add motion once the layout already works. Along the way you try several options, look again with fresh eyes the next day, and check the result on the real screen or device, not a zoomed-out canvas. Emil Kowalski's sources add a strict review habit for motion (slow motion, frame by frame, real hardware, a clear approve or block) and a disciplined way to audit a codebase and hand fixes to other agents; those are locked house standards. Kole Jain's redesign videos and Steve Schoger's Claude Code session show the same order in practice and are practitioner opinion. Two of Kole Jain's videos say work takes longer than expected [S-L19-036] [S-L19-078], and Emil Kowalski's sources say "it works" is not the end (`STD-process-review-taste-50`).
+Good design work follows a rough order: understand the problem and the person first, gather references, plan the structure (flows, wireframes, content) before any styling, then build section by section, and only add motion once the layout already works. Along the way you try several options, look again with fresh eyes the next day, and check the result on the real screen or device, not a zoomed-out canvas. Emil Kowalski's sources add a strict review habit for motion (slow motion, frame by frame, real hardware, a clear approve or block) and a disciplined way to audit a codebase and hand fixes to other agents; those are locked house standards. Kole Jain's redesign videos, Steve Schoger's Claude Code session and two Mobbin videos show the same order in practice and are practitioner opinion; Mobbin adds researching how shipped products in the same industry solve a flow before designing it, and asking why an element is needed before copying it from other apps. Two of Kole Jain's videos say work takes longer than expected [S-L19-036] [S-L19-078], and Emil Kowalski's sources say "it works" is not the end (`STD-process-review-taste-50`).
 
 ## House standards
 
 - `STD-when-to-animate-01` (must): decide whether something should animate at all (how often it is seen, what its purpose is) before choosing any tool, easing or duration.
 - `STD-when-to-animate-22` (should): judge whether an idea deserves to be built before building it; build A and B to compare, ship only the winner.
 - `STD-visual-details-44` (should): decide what not to build.
+- `STD-visual-details-30` (should): strip what is unnecessary and make every element earn its place.
 - `STD-visual-details-47` and `STD-visual-details-48` (should): decide the emotion people should feel and reinforce it in every decision, and reason with Apple's eight principles (purpose, agency, responsibility, familiarity, flexibility, simplicity, craft, delight).
 - `STD-visual-details-37` (should): break a familiar pattern only when you can prove the new one is better, and test it.
 - `STD-process-review-taste-11` (must): before judging or designing motion, map the stack, existing conventions, the product's personality and how often each surface is seen.
@@ -84,6 +87,8 @@ Good design work follows a rough order: understand the problem and the person fi
 - A UX case study shows the whole research loop: collect data, group it in an affinity map into a problem statement, build a persona, map the flow, sketch lo-fi wireframes, test them with a couple of people, tweak and retest, then design and reflect [S-L19-083] ([[sources/t7mpEDXzjCg-make-a-perfect-ux-case-study-in-8-steps|Make A Perfect UX Case Study In 8 Steps]]).
 - Before animating, name the purpose, weigh how often people will see it and what they are trying to do, and only then check the speed [S-L19-012] ([[sources/ek-you-dont-need-animations-you-don-t-need-animations|You Don't Need Animations]]).
 - Keep a judgement step that decides what is worth building at all, since AI no longer makes building expensive enough to force that choice [S-L19-009] ([[sources/ek-friction-as-a-feature-friction-as-a-feature|Friction as a Feature]]).
+- Before adding an element because dozens of other apps have it, ask why the product needs it. Moonly's founder asked what its login screen was for: data already lived in the Apple keychain, a real email adds friction, and years of email marketing had not paid off, so the login went [S-L19-111] ([[sources/qK7WYCMvjUw-he-spent-1m-on-a-b-tests-here-s-what-won|He Spent $1M on A/B Tests. Here's What Won.]]).
+- Before building an expensive app, check that the market exists with a lean web funnel, built alone with AI agents or with one front-end developer; the mistake he names is spending millions before learning the market was not there [S-L19-111] ([[sources/qK7WYCMvjUw-he-spent-1m-on-a-b-tests-here-s-what-won|He Spent $1M on A/B Tests. Here's What Won.]]).
 
 ### Gather references, then plan structure before pixels
 
@@ -97,6 +102,7 @@ Good design work follows a rough order: understand the problem and the person fi
 - A dashboard redesign starts with the hierarchy: check what falls below the fold, cut what adds no value, audit and merge cards, rank each module high, mid or low priority, then assemble the grid [S-L19-068] ([[sources/Yr2uIcFZDDQ-redesigning-a-finance-dashboard-ui-from-scratch-ft-dribbble|Redesigning a Finance Dashboard UI from SCRATCH (ft. Dribbble)]]).
 - For a product people have used for years, critique what was lost, and evolve the layout rather than replacing it [S-L19-076] ([[sources/goWOAFqJHpA-i-redesigned-spotify-wrapped-entirely-from-scratch|I Redesigned Spotify Wrapped Entirely From SCRATCH]]).
 - Study many real sites to see which sections recur and why, make your own interpretation, and design every tab of a tabbed section before handing off [S-L19-066] ([[sources/VPeTgU7la34-7-modern-ui-layouts-from-50-top-software-companies-free-figma-file|7 Modern UI Layouts from 50 Top Software Companies (+ Free Figma File)]]).
+- Research how shipped products in the same industry solve the flow before designing it, rather than one-shotting a design. Mobbin's demo asks an AI to compare onboarding and account-opening flows across fintech apps and return a visual report of top examples, common patterns, trade-offs and blind spots; a banking onboarding is not a generic one, and the researched draft covered identity checks and compliance where the unresearched one was generic. The build then starts from that report plus a short brief, with a request to flag every deliberate deviation from the patterns found. Deciding what to prioritize, keep and cut stays with the designer [S-L19-108] ([[sources/YbLF42BaoZs-i-gave-claude-600-000-ui-screens-then-this-happened|I Gave Claude 600,000 UI Screens… Then This Happened]]). The video is Mobbin promoting its own paid tool, and its before-and-after drafts are demos, not tests.
 - Replace "eyeball one page, then build a style guide" with a systematic type scale, rank every text element by importance before styling, and review designs on the screens they are meant for [S-L19-042] ([[sources/7sUUzOCv47U-mathematically-perfect-typography-for-web-design|Mathematically Perfect Typography for Web Design]]).
 
 ### Build and iterate
@@ -117,6 +123,7 @@ Good design work follows a rough order: understand the problem and the person fi
 - For mobile web fixes: match the symptom, apply the fix only where its reason applies, ship the baseline first, test on an older real phone with the keyboard open and in landscape, and report what still needs a device [S-L19-028] ([[sources/eks-skills-mobile-native-skill-emilkowalski-skills-skills-mobile-native-skill-md|emilkowalski/skills: skills/mobile-native/SKILL.md]]).
 - Train judgement with a loop: compare two variants, use them, pick one, write down why, then compare with an expert breakdown [S-L19-011] ([[sources/ek-train-your-judgement-train-your-judgement|Train Your Judgement]]). Surround yourself with great work, work out why you like it, practise and ask the right person for critique [S-L19-008] ([[sources/ek-developing-taste-developing-taste|Developing Taste]]).
 - To turn judgement into rules: step back, ask why you made each decision, say it, make it a strict rule, then give the packaged rules to agents [S-L19-004] ([[sources/ek-agents-with-taste-agents-with-taste|Agents with Taste]]).
+- Where there is enough traffic, test even the elements nobody would question and keep each one only after it wins. Moonly says every element, icon and piece of text earned its place by winning a test; conversion on paid traffic went from 10% in 2020 to 40% through small improvements made almost every day, and the founder calls pricing tests the most important experiment. Running hundreds of tests a month, the team uses AI tools to match numbers across analytics sources and recommend ship, don't ship or collect more data [S-L19-111] ([[sources/qK7WYCMvjUw-he-spent-1m-on-a-b-tests-here-s-what-won|He Spent $1M on A/B Tests. Here's What Won.]]). The figures are self-reported by one astrology app, whose most willing payers are over 35.
 
 ### Audit a codebase and hand the fixes off
 
@@ -138,7 +145,11 @@ Between the sources:
 - **Simulators:** the drawer essay offers Xcode Simulator as a close replica [S-L19-005], but `STD-process-review-taste-33`, built from that essay and newer skills, says a simulator never counts as verified for feel. The standard wins.
 - **Copying references:** copy a design exactly to learn [S-L19-043]; keep only a reference's wireframe and bring your own identity [S-L19-062]. The first is practice; for real work OpenDesigner's identity firewall applies [inferred].
 - **Evolve or rebuild:** fix one mistake at a time [S-L19-045] and evolve a familiar layout [S-L19-076], while several redesigns rebuild a site section by section [S-L19-065] [S-L19-082]. The choice seems to follow how familiar users are with the current design [inferred].
-- **Small tests:** testing wireframes with a couple of people [S-L19-083] spots confusion, but tests that small cannot prove a business result [S-L19-038] [inferred].
+- **Small tests:** testing wireframes with a couple of people [S-L19-083] spots confusion, but tests that small cannot prove a business result [S-L19-038] [inferred]. At the other end, Moonly settles almost every element with an A/B test on paid traffic [S-L19-111], which needs a volume few products have [inferred].
+- **Research before the first draft:** mood boards before Figma [S-L19-040], a research loop in case studies [S-L19-083] and competitor sites before redesigns [S-L19-065] [S-L19-082] all come before drawing; Mobbin's demo applies the same idea to an AI, which drafted a generic flow until it studied shipped apps in its industry [S-L19-108].
+- **Follow conventions, or question them:** Kole says respect the conventions users already expect [S-L19-054], while Moonly's founder says not to copy an element on autopilot and removed the login screen that most apps have (only 12% of apps on Mobbin have no sign-up or login step anywhere) [S-L19-111]. `STD-visual-details-37` joins them: break a familiar pattern only when you can prove the new one is better, and test it. Moonly reasoned through what the login was for before removing it; the video does not say that removal was A/B tested, although it says many other elements were [S-L19-111] [inferred]. Mobbin's build prompt, "flag anywhere that you're intentionally deviating from a pattern you found", is the same discipline written into a brief [S-L19-108] [inferred].
+- **Who decides:** Mobbin leaves what to prioritize, keep and cut to the designer [S-L19-108]; Moonly lets a winning test decide what stays [S-L19-111]. Both can hold: judgement proposes, and a test settles it where there is traffic to test with [inferred].
+- **Check before you build:** a lean web funnel before the full app [S-L19-111] and Emil's advice to judge whether an idea deserves building (`STD-when-to-animate-22`) come from different places, market risk and taste, but both put a check before the expensive part [inferred].
 - **Time:** work takes far longer than estimated: four screens took three days instead of four to six hours [S-L19-078], and the pricing video says things generally take longer than you think [S-L19-036]. Both are one creator's experience, not measured data.
 
 Against OpenDesigner's existing research:
@@ -150,6 +161,9 @@ Against OpenDesigner's existing research:
 - **Gates:** DC-L17-12 sets approval gates at structure, direction and assets; [S-L19-062] settles the visual identity before any section is designed, and the prototype skill stops for the person's choice [S-L19-031] [inferred].
 - **Convention first:** DC-L13-17 defaults to conventional behavior with a custom look and novelty only where it sets the product apart, which [S-L19-054] [S-L19-076] and `STD-visual-details-37` all support.
 - **Principles as tie-breakers:** DC-L11-05 wants three to five testable principles; [S-L19-054] says the system should reflect the team's values, and `STD-visual-details-48` names Apple's eight [inferred].
+- **Asking why an element is there:** DC-L19-177's heuristic, that a section, component or principle serving neither the goal nor an intent is a candidate to cut, is the same question Moonly asked of its login screen [S-L19-111] [inferred]. DC-L13-17 keeps conventional behavior by default and allows novelty only where it is tested; removing an element most apps have is a novelty in that sense; Moonly justified it by asking what the login was for, and the video does not say whether the removal itself was tested [S-L19-111] [inferred].
+- **Which references:** DC-L19-161 defaults to screenshots of shipped products over showcase shots; Mobbin's research step uses exactly that kind of reference, narrowed to the product's own industry and flow [S-L19-108]. DC-L19-161 also notes that the Kole Jain videos naming Mobbin are ones Mobbin sponsors; this one is Mobbin's own promotion.
+- **Testing needs traffic:** DC-L19-137 runs a controlled A/B test only with enough traffic and never claims impact from a five-person test. Moonly's test-everything habit [S-L19-111] sits at the high-traffic end of that card, and says nothing about products without paid acquisition [inferred].
 
 ## Decisions this informs
 
@@ -161,6 +175,9 @@ Against OpenDesigner's existing research:
 - **Q-plat-10** (usual behavior, own look, or something new): evolve familiar layouts [S-L19-076] and follow conventions [S-L19-054], which backs the default `custom-skin`.
 - **Q-gov-05** (what hurts, and how to measure): find the real problem first and measure before and after [S-L19-038].
 - **Q-pref-02** (planned: reviewing AI changes): Before, After and Why tables [S-L19-023] back `patches`.
+- **Q-ref-01** (a reference you like): shipped products in the person's own industry, studied flow by flow [S-L19-108], are the kind of reference DC-L19-161 asks for first.
+- **Q-brand-02** (which products it should feel like, including `competitors`): a head-to-head comparison of competitors' flows, such as two delivery apps' checkout, tipping and order summary, is one way to answer it [S-L19-108] [inferred].
+- **Q-gov-05** (how to measure whether it helped): record the number each change should move; an A/B test for every element [S-L19-111] is only for products with the traffic to run one (DC-L19-137).
 
 ## Visual examples worth showing
 
@@ -172,6 +189,8 @@ Against OpenDesigner's existing research:
 - A gamified app's first-day light screens beside the next-day dark redesign [S-L19-078] ([[sources/jSxxAFxjxbU-i-spent-a-week-gamifying-apps-this-is-what-i-built|I spent a week gamifying apps. This is what I built]]).
 - The case-study research loop from Google Form to affinity map, persona, flow, lo-fi sketches and the tested final design [S-L19-083] ([[sources/t7mpEDXzjCg-make-a-perfect-ux-case-study-in-8-steps|Make A Perfect UX Case Study In 8 Steps]]).
 - A Mac quick-capture window that appears from a shortcut, collapses into a toast on Enter and slides away [S-L19-067] ([[sources/Vy0KKvZJRH8-everything-you-need-to-design-macos-apps-exactly-like-apple-beginner-friendly|Everything you need to Design macOS Apps EXACTLY like Apple (beginner friendly)]]).
+- Two AI-drafted fintech onboarding flows side by side, one generic and one grounded in researched finance apps with identity checks and compliance steps, plus the research report between them [S-L19-108] ([[sources/YbLF42BaoZs-i-gave-claude-600-000-ui-screens-then-this-happened|I Gave Claude 600,000 UI Screens… Then This Happened]]). The transcript describes the drafts but gives no values, so a sample would be a reconstruction.
+- The "ask why" chain for a login screen: keep data (already in the keychain), collect emails (friction), email marketing (not paying off), so remove it [S-L19-111] ([[sources/qK7WYCMvjUw-he-spent-1m-on-a-b-tests-here-s-what-won|He Spent $1M on A/B Tests. Here's What Won.]]).
 
 ## Open questions
 
@@ -179,3 +198,5 @@ Against OpenDesigner's existing research:
 - `STD-process-review-taste-34` asks for testing with real people in context, which the builder cannot do itself. Should the handoff include a short test plan?
 - Q-gov-02 has no single default option in `questions.json`; its stage file gives DC-L11-06's mixed default (minimal foundations first, then pilot-driven components, incremental rollout). Should scale-first or flows-first be the recommendation for a new product?
 - How should estimates be set when both the creator's own project [S-L19-078] and his pricing advice [S-L19-036] say work runs long?
+- Should OpenDesigner's interview include a research step before direction, such as asking for two or three shipped products in the person's own industry and what each does well? Mobbin's version depends on its paid library [S-L19-108]; the question is whether the step works without it. DC-L19-178 proposes Q-pref-04, which starts from the person's named references and uses a connected library only if they already have one.
+- Moonly's results [S-L19-111] come from one app that acquires users through ads. What should a small team with no traffic use in place of "every element earns its place by winning a test"?

@@ -2,7 +2,7 @@
 type: synthesis
 title: Shape and corner radius
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-28
 sources:
   - 9WVt1CelBfg
   - AH_ugxmLeUM
@@ -36,7 +36,7 @@ Corner radius is how round the corners of buttons, cards, inputs and images are.
 ### Roundness sets the mood
 - The same layout feels friendly and welcoming with round corners and large, bubbly buttons (plus a warm background and colorful visuals). With much less rounded corners, calmer premium imagery and optional background noise, it feels modern and professional [S-L19-043] ([[sources/9WVt1CelBfg-the-stupid-simple-way-to-learn-ui-ux-design-in-exactly-10-minutes|The stupid simple way to learn UI/UX design in exactly 10 minutes]]).
 - For an AI product's look, one redesign pairs mesh gradients and a healthy dose of noise with fully rounded corners [S-L19-082] ([[sources/pGYLZyBE32o-i-redesigned-google-s-ai-website-from-scratch-complete-transformation|I Redesigned Google's AI Website from SCRATCH (complete transformation)]]).
-- Steve Schoger switched a generated site to pill buttons on every button because the horizontal padding felt too much, and liked the result. He presents this as his own taste, not as a rule [S-L19-103] ([[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]).
+- Steve Schoger switched a generated site to pill buttons on every button because the horizontal padding felt a bit much. He tried it to see what would happen and liked the result; it is his taste in one video, not a tested rule [S-L19-103] ([[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]).
 
 ### One radius family, used everywhere
 - Mixed corner radii make a design feel amateur. Give all smaller components one shared radius (10 pixels in the recipe app), and make components that do the same job match in size, radius and style, such as the back and skip buttons [S-L19-045] ([[sources/AH_ugxmLeUM-7-ui-ux-mistakes-that-scream-youre-a-beginner|7 UI/UX mistakes that SCREAM you’re a beginner]]). The 10 pixels is that app's value; the lasting lesson is one shared radius.
@@ -73,7 +73,7 @@ Corner radius is how round the corners of buttons, cards, inputs and images are.
 - **Q-shape-03** (which components get which radius): images and screenshots belong in the radius roles too [S-L19-072] [S-L19-103], not just controls and containers.
 - **Q-shape-04** (circular or smoothed corners): the analysis maps [S-L19-070] here. It is evidence for offering `continuous`, but "maximum smoothing" is opinion, not a default.
 - **Concentric rule (applied automatically in stage 14 through DC-L04-05):** the sources back it [S-L19-070] [S-L19-103] and add the pill exception, so the builder should skip the warning for pills [inferred].
-- **Q-img-02** (image shapes): image corners should come from the same radius family as the buttons beside them [S-L19-072].
+- **Q-img-02** (image shapes): it covers aspect ratios and text on images, not corners, so the rule that image corners come from the same radius family as the buttons beside them [S-L19-072] belongs in Q-shape-03's roles, as DC-L19-61 proposes.
 
 ## Visual examples worth showing
 
