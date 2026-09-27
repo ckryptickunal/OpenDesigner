@@ -646,6 +646,14 @@ class FindPassage(unittest.TestCase):
         self.assertEqual(how, "evidence found")
         self.assertIn("most important part", passage)
 
+    def test_timed_transcript_from_openwiki_03(self):
+        # OpenWiki 0.3+ writes one "[m:ss] text" line per caption cue; evidence may carry the cue's timestamp.
+        timed = "[0:00] After studying nearly 3,000 paywalls,\n[0:03] hundreds of subscription flows on Mobbin,\n[0:07] the best ones show the price early"
+        body = wiki.CUE.sub("", timed)
+        passage, how = wiki.find_passage(body, "Show the price early", "[0:03] subscription flows on Mobbin, the best ones show")
+        self.assertEqual(how, "evidence found")
+        self.assertIn("show the price early", passage)
+
     def test_keyword_fallback(self):
         passage, how = wiki.find_passage(self.body, "Press scale 0.97 on buttons", "section 1")
         self.assertEqual(how, "keyword window")

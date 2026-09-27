@@ -874,16 +874,20 @@ def jev(state, questions):
         return json.load(r)["answers"]
 
 
+CUE = re.compile(r"\[\d+:\d{2}(?::\d{2})?\]\s*")  # OpenWiki 0.3+ writes "[m:ss] text" per caption cue
+
+
 def body_of(path):
+    """The transcript or page text, with OpenWiki's per-cue timestamps removed so phrases that span cues still match."""
     text = path.read_text(encoding="utf-8", errors="replace")
-    return text.split("TRANSCRIPT", 1)[-1]
+    return CUE.sub("", text.split("TRANSCRIPT", 1)[-1])
 
 
 def find_passage(body, rule, evidence, width=700):
     """Code finds the evidence; Jev only judges it. Try the evidence phrase, then the best keyword window."""
     flat = re.sub(r"\s+", " ", body)
     low = flat.lower()
-    ev = re.sub(r"\s+", " ", (evidence or "")).strip().strip(".").lower()
+    ev = re.sub(r"\s+", " ", CUE.sub("", evidence or "")).strip().strip(".").lower()
     parts = [p.strip(" .\"'") for p in re.split(r"\.\.\.|…|;|\s-\s", ev)]  # "A ... B" quotes two fragments
     for probe in [ev, ev[:60], ev[:30]] + sorted(parts, key=len, reverse=True):
         if len(probe) >= 12 and probe in low:

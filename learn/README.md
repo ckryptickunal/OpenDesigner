@@ -135,7 +135,8 @@ python3 -m venv .venv-wiki
 .venv-wiki/bin/pip install "git+https://github.com/ckryptickunal/OpenWiki.git@$(python3 -c "import json;print(json.load(open('learn/openwiki.lock.json'))['commit'])")" pysocks pytest
 ```
 
-- `YOUTUBE_API_KEY` in the environment lists channel videos. A single video works without it.
+- `YOUTUBE_API_KEY` in the environment lists channel videos. Since OpenWiki 0.3, `yt-dlp` (on the PATH or installed in the venv) lists channels without a key, and a single video never needs one.
+- Since OpenWiki 0.3, transcripts are timed: each caption line starts with `[m:ss]`. Analyses cite evidence with the cue's timestamp, and `wiki.py cite-check` ignores the markers when it looks for a phrase.
 - YouTube blocks an IP after many caption requests. Wait an hour, or run `tor` and set `YOUTUBE_PROXY=socks5://127.0.0.1:9050`.
 - No Gemini key is needed: the analysis is done by agents and passed to OpenWiki with `--analysis-file`. OpenWiki's own Gemini ingest still works if you prefer it, but its output lacks the rules, decisions and authority fields.
 - `JEV_API_KEY` (TypeSafe) in the environment or `.env` enables `cite-check` and Jev ranking in `tools/jev_nav.py find`.

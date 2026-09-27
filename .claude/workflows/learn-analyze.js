@@ -21,7 +21,7 @@ Write ONE JSON file per raw source at ${ROOT}/learn/analysis/<source id>.json (t
   "key_ideas": ["5-15 short ideas, in your own words"],
   "entities": [{"name": "Sonner", "type": "person|company|product|library|tool|concept", "description": "one line on its role here"}],
   "topics": [{"name": "<copy EXACTLY from learn/taxonomy.json topics[].name>", "summary": "what this source says about the topic"}],
-  "claims": [{"claim": "a factual or causal claim the source makes", "evidence": "where: section heading or a short phrase that appears near it in the raw text"}],
+  "claims": [{"claim": "a factual or causal claim the source makes", "evidence": "where: section heading or a short phrase that appears near it in the raw text; in a timed transcript (lines start with [m:ss]), start with the cue's timestamp, e.g. \"[3:15] the best ones show the price\""}],
   "quotes": ["at most 3 verbatim quotes, each 15 words or fewer"],
   "tags": ["short-lowercase-tags"],
   "authority": "<the authority given to you>",

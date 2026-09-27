@@ -1,8 +1,30 @@
 {
   "repo": "https://github.com/ckryptickunal/OpenWiki",
-  "commit": "f730cdb88d67f490990fef15ea070ffaa97ad583",
-  "version": "0.2.0",
-  "tested": "2026-09-24",
-  "tests": {"openwiki": "62 passed, 2 deselected (live smoke tests)", "opendesigner": "pending: tools/test_wiki.py"},
-  "commits_adopted": ["c903164 Rename to OpenWiki, fix extraction bugs, add providers and open-source setup (#1)", "f730cdb Add a script to publish the website while Actions is unavailable"]
+  "commit": "f3c72422b6d7d549ec6be6beb205bcdda8e70f80",
+  "version": "0.3.1",
+  "tested": "2026-09-27",
+  "tests": {
+    "openwiki": "87 passed, 2 deselected in 0.20s",
+    "opendesigner": "OK"
+  },
+  "commits_adopted": [
+    "3e44abd Redesign the website and deploy it on Vercel",
+    "250fbca Skip Vercel builds for the gh-pages mirror branch",
+    "fd34ba8 Make the row hover blur very subtle",
+    "eb2eeb2 Serve the site with absolute /openwiki/ links so trailing slashes don't matter",
+    "9b6e193 Add a GitHub call to action beside the wordmark; soften hover blur to 10%",
+    "14a31fd Link the Karpathy LLM Wiki pattern in the README (#2)",
+    "9cbecdb Remove CI status badge (Actions not scheduling on this account) (#3)",
+    "c5a1fd9 Add sourced public feedback corpus for OpenWiki (#4)",
+    "35765bb Ground wiki pages in the transcript: timestamps, verified quotes, honest failures",
+    "8b39bd2 OpenWiki 0.3.0: keyless channels, search, cited ask, full-length ingest",
+    "86d5bd3 Silence yt-dlp's own notices during keyless listing",
+    "3ab1eb4 Add the 44-second launch film to the README and website",
+    "5ca7210 Launch film v2: Revolut-style visual system, calmer motion, launch kit",
+    "241365c Launch film v3: real photos, real output, every claim sourced",
+    "b455e64 Use an animated GIF of the launch film as the link preview",
+    "e1353f0 Route the preview image by crawler so WhatsApp gets the small still",
+    "e2576cb Launch film v4: 26-second kinetic-type cut",
+    "f3c7242 Release 0.3.1: quiet keyless channel listing; PyPI publish workflow"
+  ]
 }
