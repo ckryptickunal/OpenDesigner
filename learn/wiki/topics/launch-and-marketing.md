@@ -16,3 +16,4 @@ Organic word of mouth is the best marketing: make something great, make sure a f
 ## Source Mentions
 
 - [[sources/ek-building-an-animation-course-building-an-animation-course|Building an animation course]]: Organic word of mouth is the best marketing: make something great, make sure a few people see it, and people will share it and answer others' questions about it.
+- See also: [[synthesis/launch-and-marketing|Launch and marketing synthesis]]

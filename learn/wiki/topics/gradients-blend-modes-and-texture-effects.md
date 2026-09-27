@@ -16,3 +16,4 @@ Decorative surface effects built from layered gradients, blend modes, noise and 
 ## Source Mentions
 
 - [[sources/MZSm6MA8bww-advanced-figma-web-design-effects|Advanced FIGMA Web Design Effects]]: Decorative surface effects built from layered gradients, blend modes, noise and blur, with a named best use for each.
+- See also: [[synthesis/gradients-blend-modes-and-texture-effects|Gradients, blend modes and texture effects synthesis]]
