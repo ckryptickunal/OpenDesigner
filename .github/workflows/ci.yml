@@ -57,6 +57,15 @@ jobs:
       - name: Journey tracker tests (local log, anonymous report, consent texts)
         run: python3 skills/opendesigner/scripts/test_journey.py
 
+      - name: User-workflow preference resolver
+        run: python3 skills/opendesigner/scripts/test_preferences.py
+
+      - name: Product vision stays grounded in the repo
+        run: python3 tools/test_product_vision.py
+
+      - name: Project status board exporter
+        run: python3 tools/test_project_board.py
+
       - name: Reference extraction tests (css_scan.py, read_page.js with the runner's Node)
         run: python3 skills/opendesigner-extract/scripts/test_extract.py
 
@@ -75,6 +84,9 @@ jobs:
           else
             echo "tools/build_dist.py not present yet; skipping"
           fi
+
+      - name: Standalone skill zips include visual templates
+        run: python3 tools/test_build_dist.py
 
       - name: Relative Markdown links resolve (offline)
         run: python3 tools/check_links.py
