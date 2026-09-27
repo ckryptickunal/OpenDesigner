@@ -58,9 +58,22 @@ class Project(unittest.TestCase):
 class Consent(Project):
     def test_nothing_is_logged_until_they_say_yes(self):
         self.assertIsNone(self.log("step_shown", step="Q-aud-01"))
-        code, out = run(["--dir", self.d, "log", "step_shown", "--step", "Q-aud-01"])
+        with mock.patch.dict(os.environ, {"CLAUDECODE": "", "CLAUDE_CODE_REMOTE": ""}):
+            code, out = run(["--dir", self.d, "log", "step_shown", "--step", "Q-aud-01"])
         self.assertEqual(code, 0)
-        self.assertIn(j.CONSENT_QUESTION, out)
+        self.assertIn(j.CONSENT_QUESTIONS["web"], out)
+        self.assertFalse(os.path.exists(j.jpath(self.d, "events.jsonl")))
+        with mock.patch.dict(os.environ, {"CLAUDECODE": "1", "CLAUDE_CODE_REMOTE": ""}):
+            code, out = run(["--dir", self.d, "log", "step_shown", "--step", "Q-aud-01"])
+        self.assertEqual(code, 0)
+        self.assertIn(j.CONSENT_QUESTIONS["local"], out)
+        self.assertFalse(os.path.exists(j.jpath(self.d, "events.jsonl")))
+        # A remote Claude Code session is not the person's own computer, so the web wording stays.
+        with mock.patch.dict(os.environ, {"CLAUDECODE": "1", "CLAUDE_CODE_REMOTE": "1"}):
+            code, out = run(["--dir", self.d, "log", "step_shown", "--step", "Q-aud-01"])
+        self.assertEqual(code, 0)
+        self.assertIn(j.CONSENT_QUESTIONS["web"], out)
+        self.assertNotIn(j.CONSENT_QUESTIONS["local"], out)
         self.assertFalse(os.path.exists(j.jpath(self.d, "events.jsonl")))
 
     def test_off_logs_nothing_and_says_nothing(self):
@@ -256,7 +269,7 @@ class Report(Project):
         text = " ".join(an["speedups"])
         self.assertNotIn("keep asking", text)
         self.assertIn("Q-brand-01, Q-color-01: handed over", text)
-        self.assertIn("Q-color-20: handed over ('you choose') 1 of 1 times and low impact: auto-apply it", text)
+        self.assertIn("Q-color-20: handed over ('you choose') 1 of 1 times and low impact: hypothesis, not applied:", text)
 
     def test_housekeeping_after_the_end_stays_in_that_session(self):
         """U5 designer F31: a review right after session_end opened a phantom second session."""
@@ -480,7 +493,7 @@ class Aggregate(Project):
         with open(out) as f:
             md = f.read()
         self.assertIn("OpenDesigner journeys: 4 reports", md)
-        self.assertIn("Q-color-20: default kept 4 of 4 times and low impact: auto-apply it", md)
+        self.assertIn("Q-color-20: default kept 4 of 4 times and low impact: hypothesis, not applied:", md)
         self.assertIn("Q-aud-01: stopped here 3 times", md)
         self.assertIn("skipped 1", printed)
 
@@ -513,6 +526,44 @@ class ConsentTexts(unittest.TestCase):
             for name, block in (("sharing question", j.SHARE_CONSENT), ("details", j.SHARE_DETAILS)):
                 self.assertTrue(self.quoted_block(text, block.splitlines()), f"{rel}: the {name} drifted from journey.py")
             self.assertIn(j.SHARE_ASK, text, rel)
+
+
+class FlowSuggestions(unittest.TestCase):
+    def test_suggestions_never_write_or_skip(self):
+        cases = [
+            dict(explicit="faster"),
+            dict(owner=True, explicit="faster"),
+            dict(high_impact=True, explicit="faster"),
+            dict(locked=True, explicit="faster"),
+            dict(answered=True, explicit="explain more"),
+            dict(explicit="show an example"),
+            dict(explicit="explain more"),
+            dict(help_count=3, consented_friction=True),
+            dict(help_count=3, consented_friction=False),
+            dict(explicit=["faster", "explain more"]),
+        ]
+        for kwargs in cases:
+            with self.subTest(kwargs):
+                result = j.suggest_flow("Q-scope-01", **kwargs)
+                self.assertFalse(result["writes"])
+                self.assertFalse(result["skips"])
+                self.assertIn(result["suggestion"], {"keep", "shorten", "show-example", "explain-more"})
+
+    def test_owner_question_stays_when_they_want_to_go_faster(self):
+        result = j.suggest_flow("Q-scope-01", owner=True, explicit="faster")
+        self.assertEqual(result["suggestion"], "keep")
+
+    def test_one_speed_request_only_shortens_a_ordinary_question(self):
+        result = j.suggest_flow("Q-shape-02", explicit="faster")
+        self.assertEqual(result["suggestion"], "shorten")
+
+    def test_help_without_consent_does_not_change_the_question(self):
+        result = j.suggest_flow("Q-shape-02", help_count=4, consented_friction=False)
+        self.assertEqual(result["suggestion"], "keep")
+
+    def test_conflicting_requests_leave_the_question_alone(self):
+        result = j.suggest_flow("Q-shape-02", explicit=["faster", "explain more"])
+        self.assertEqual(result["suggestion"], "keep")
 
 
 if __name__ == "__main__":
