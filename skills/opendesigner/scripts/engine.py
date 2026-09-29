@@ -8244,7 +8244,7 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
             f"(Warmth {dials['warmth']}). Voice guide hook H-voice: {vstat}.",
             "", "- Buttons say what they do in two to four words; errors say what happened and how to fix it.",
             "- Reading level: plain language; avoid jargon in UI copy.",
-            "- Word list: not recorded yet (Q-voice-03)."]
+            "- Word list: not recorded yet (Q-voice-06)."]
     out.append(section("Content and Voice", "\n".join(body), lead="**Words stay plain and short, and every button says what it does.**", term_key="Content and voice"))
 
     # 13 Accessibility
