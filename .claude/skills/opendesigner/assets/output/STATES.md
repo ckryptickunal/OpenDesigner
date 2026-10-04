@@ -1,15 +1,14 @@
 # {{name}}: states
 
-<!-- OpenDesigner output template: the state catalogue, kept at opendesigner/STATES.md. Copy it when the product has a screen
-that shows data: a list, a total, a count, a status, progress against a limit, or the result of an action. Fill the rows before
-you design or change that screen. It comes from one project's lessons (research/L21-design-playbook.md, DC-L19-125): treat its
-lists as a starting point to test, not a rule. Placeholders look like {{this}}. -->
+<!-- OpenDesigner output template: the state catalogue, kept at opendesigner/STATES.md. Offered when someone builds a new screen
+that shows data: a list, a total, a count, a status, progress against a limit, or the result of an action. Its lists are a starting
+point to adapt, not a rule. Placeholders look like {{this}}. -->
 
 Agreed with {{the owner}} on {{YYYY-MM-DD}}. Read this before you change any screen that shows a state. Screens take their words from here; they never invent a state of their own.
 
 ## Rules
 
-1. **List the states first.** No screen that shows data is designed or changed until each of its states is a row in section 2. If a state you need is missing, add the row, get it agreed, then build.
+1. **List the states first.** Before you build a new screen that shows data, write each of its states as a row in section 2. When a screen needs a state that has no row, add the row first.
 2. **Words carry the state.** Every state is said in words. Color agrees with the words and never speaks alone, so the screen reads the same in grayscale and to a screen reader (an accessibility floor).
 3. **One job per tone.** Use the system's status roles: `danger` only for something that failed, is invalid or is already over; `warning` for something that needs attention; `info` for what is not a problem; `success` for something that went well (a completed action, a real improvement), never for "no change"; no tone for ordinary states. In a family of states, only the worst one gets `danger`. The brand accent is never a state color.
 4. **Say it once per screen.** One place on each screen states the state. Nothing nearby repeats it or says the opposite.
@@ -80,7 +79,7 @@ Classes to sweep. A class the product truly does not have gets one row with Stat
 
 ## Building from it
 
-- One function per screen picks the state and returns everything the screen says for it: the label, the figure, the caption and the tone. The screen draws that result and holds no state logic or state text of its own.
+- An option for engineers: one function per screen picks the state and returns everything the screen says for it (the label, the figure, the caption and the tone), so two screens cannot word one state differently.
 - Write one test per row, named with its id. Add one test that loops over every state and fails when a state lacks its words, its tone or its screen-reader text. For each threshold, test just below, exactly at and just above it.
 - Keep one hidden page or story that draws each component in every state side by side, through the same code and tokens as the real screen, in light and dark.
 - When someone flags one wrong state, list every state of that feature here before you fix the one they named.

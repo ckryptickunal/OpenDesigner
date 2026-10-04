@@ -49,7 +49,7 @@ Hard rules for every OpenDesigner skill. Sources: `_coordination/BRIEF.md` requi
 - Don't claim you checked something you did not run.
 - **Written, built and verified are three different claims** (`research/L21-design-playbook.md`, DC-L21-02). Written: the file changed. Built: it compiled, or `engine.py build` ran. Verified: a check ran and passed, or someone looked at the result on the screen or device it is for. Never write "works", "done", "passes" or "fixed" for something that did not run. Write "written, not run" or "not verified", and say what would verify it.
 - A sweep of code you could not run is a list of guesses. Fix only what is certain, and name the rest as not verified.
-- **Report in a fixed order** at the end of any work in the person's project:
+- **After code work, in the engineer voice, report in a fixed order.** In the plain voice, keep the short summary (SKILL.md, Finish step 3, and `rules.md` section 8) and say in one line what nobody could check. The fixed order:
   1. The result, in one line.
   2. What was checked and how: each command and its result (for example `engine.py review --strict` and its last line, or their tests), and what was only read.
   3. What is not verified, riskiest first.
