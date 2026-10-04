@@ -41,6 +41,33 @@
   - *Removed registry:* now, one command per removal. As it grows, the record of what was taken out and why, which code alone never keeps.
   - *Guard checks in review:* now, a few more lines of output. As it grows, a stale branch or an older-side merge shows up before it ships.
 
+### DC-L21-02: What the builder may call checked: written, built, verified
+- **Block path:** Builder > Guidance > Reporting what was checked (every skill's closing report; `guardrails.md` section 5; the extend skill's change note)
+- **Questions the designer answers:** When the AI says a change is done, what has actually run? What should a report say first? What is left for a person to check by hand, and on what?
+- **Options:**
+  - **"Done":** a bare status word. In the source project "done" hid that nothing had run; many commits landed before any compiler saw them [S-L21-01: 13.2, CORE-PRINCIPLES mistake 6]. The count is one project's.
+  - **Three separate states:** written (the file changed), built (it compiled or ran), verified (a build, a test run, a screenshot pass or a device check). Never write "builds", "works", "tests pass" or "done" for what did not run; write "not verified" [S-L21-01: 13.2, 13.4].
+  - **What was checked, first:** open every report with what was and was not verified, piece by piece, and close with the riskiest unverified items and the command that checks each [S-L21-01: 13.3, 15.7].
+  - **A fixed report order:** result and checks; what changed for the person; what is not verified; decisions for the owner; numbered checks on a real device; commands; skipped items with reasons [S-L21-01: 15.10]. A Deviation line whenever the work departs from a brief or a design document [S-L21-01: 15.17]; every skip with its reason [S-L21-01: 15.18].
+  - **A check-by-hand list, ordered by risk:** each step names the screen, one action, the expected result and what must not happen; anything nobody has seen running is marked "not seen yet" [S-L21-01: 13.15; template 13 rules R3, R4, R9, R14].
+  - **Unrun sweeps are guesses:** a bug sweep that could not run is a set of hypotheses; fix only what is certain [S-L21-01: 13.20; case study 16].
+- **Visual effect:** none directly. People trust a report that says what it did not check, and the first real run becomes a short list instead of a surprise [S-L21-01: case study 16] [inferred for "trust"].
+- **Depends on (upstream):** which checks exist (`engine.py validate`, `review`), the hand checks DC-L19-167 names, the review report format (DC-L19-176).
+- **Affects (downstream):** the closing summary in every skill, the extend skill's change note, the AGENTS note ("report written, built and verified separately").
+- **Token encoding:** none (process decision).
+- **Platform notes:** the playbook's toolchain advice (parse checks, fetching a compiler into scratch space) is left out: OpenDesigner's own checks run on standard-library Python everywhere. What carries over is the wording rule and the order.
+- **Accessibility constraints:** the check-by-hand list includes the reduced-motion toggle, the largest text size and a screen reader whenever the change touches them (Q-gov-07, STD-process-review-taste-19).
+- **Default + heuristic:** Default, applied in this lane: written, built and verified are reported separately; a report follows the fixed order in `guardrails.md` section 5; work that moves, answers a touch or can only be judged on a real screen ends with a numbered check-by-hand list, riskiest first. Heuristic: if a claim cannot point to something that ran in this session, it says "not verified" [S-L21-01: 13.2] [inferred wording].
+- **Evidence:** [S-L21-01: 13.2, 13.3, 13.4, 13.15, 13.20, 15.7, 15.10, 15.17, 15.18; template 13; case study 16; CORE-PRINCIPLES mistake 6]. Compared against DC-L19-167 and DC-L19-176.
+- **Maps to:**
+  - `guardrails.md` section 5, the main skill's Finish step 3, the extend skill's change note (section 6). Applied.
+  - `engine.py review` (no Q-id): its closing line gives reports one exact line to quote. Applied (DC-L21-01).
+  - Q-gov-07: supports DC-L19-167's proposed `feel-checks` option; adds "ordered by risk, with what must not happen" as its heuristic, for L20 [S-L21-01: 13.15].
+- **Impact now / as it grows:**
+  - *"Done":* now, the shortest report. As it grows, unrun work piles up unseen.
+  - *Three states and a fixed order:* now, a few more lines per report. As it grows, every report reads the same way, so gaps stand out.
+  - *Check-by-hand list:* now, a few minutes of a person's time. As it grows, the only route for motion, gestures and real screens.
+
 ## Part B: Evidence on existing cards
 
 | Card | What the playbook adds | Status after this lane |
@@ -49,6 +76,7 @@
 | DC-L11-24 (AI guardrails) | Evidence that enforcement has to run where the agents work: a text-only check that needs no compiler, run before every install and pull request, with the exact success line quoted in reports [S-L21-01: 02.14, tooling-01, tooling-03]. | Applied inside `engine.py review` (guard checks and the closing line) rather than as a separate script, so OpenDesigner keeps one command. |
 | DC-L11-15 (deprecation) | The design-side twin of token deprecation: a removed control, label or treatment needs a record with its replacement and reason, because nothing in code marks its absence [S-L21-01: 02.4, gov-06]. | Applied as the removed registry. Token deprecation itself is unchanged. |
 | DC-L19-125 (which states every screen ships with) | A second source, and a wider state set for screens that show data. See "Extending DC-L19-125" below. | The state catalogue template is applied (`assets/output/STATES.md`, kept in a project as `opendesigner/STATES.md`), with skill wording in the main and extend skills. The card's lint warning and its component-sheet state switcher stay pending for L20; the extension below widens what the switcher should show. |
+| DC-L19-167 (what the builder's checks cannot judge) | A second source for "never call a device-only result verified" and for a closing list of hand checks: numbered, ordered by risk, each with the expected result and what must not happen, "not seen yet" on anything nobody watched run [S-L21-01: 13.15; template 13 rules R3, R4, R9, R14]. A sweep you could not run is a set of guesses [S-L21-01: 13.20; case study 16]. | Applied as agent wording (`guardrails.md` section 5, the extend change note). The card's engine part, a closing "check by hand" list printed by `engine.py review` from what changed, stays pending for L20. |
 | DC-L19-176 (how a review is reported) | One fixed success line, every problem listed in one run, and a failure message that names the fix [S-L21-01: 02.14, tooling-03]. | The closing verdict line is applied (`Review: ok` / `Review: N to fix`). The Before/After/Why table the card proposes is not done; it stays pending for L20. |
 
 ### Extending DC-L19-125: states beyond empty, loading, success and error
@@ -74,3 +102,4 @@ Proposed for L20, extending the card's "Maps to" (not applied here):
 | Agent note: routing table, source order, never-list, merge rule, review before a pull request, stop and ask | `skills/opendesigner/assets/output/AGENTS-snippet.md` | DC-L21-01 |
 | Skill wording: record removals, keep the note on the branch new work starts from, offer review in CI after a yes; extend start-up reads guard lines, removal row, merge rule, reasoned exceptions, review before a pull request | `skills/opendesigner/SKILL.md`, `skills/opendesigner-extend/SKILL.md` | DC-L21-01, DC-L19-165 |
 | The state catalogue: a template with ten rules, a thresholds table, the state matrix with eight classes, boundary rows, modes, settled contradictions, open questions and how to build and test from it; skill wording to write states before building a screen that shows data | `skills/opendesigner/assets/output/STATES.md`, `skills/opendesigner/SKILL.md` ("DESIGN.md stays alive"), `skills/opendesigner-extend/SKILL.md` section 2 | DC-L19-125 (extended) |
+| Honest reports: written, built and verified kept apart; a fixed report order; a check-by-hand list ordered by risk; unrun sweeps named as guesses | `skills/opendesigner/references/guardrails.md` section 5, `skills/opendesigner/SKILL.md` (Finish step 3), `skills/opendesigner-extend/SKILL.md` section 6 | DC-L21-02, DC-L19-167 |

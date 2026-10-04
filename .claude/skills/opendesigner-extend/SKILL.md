@@ -95,8 +95,13 @@ What changed: <decision, old -> new>
 Why: <reason in the owner's words>
 Affects: <tokens and components>
 Validation: pass | <warnings with reasons>
+Checked: <each command that ran and its result, for example "engine.py review --strict: Review: ok">
+Not verified: <what nobody ran or looked at, riskiest first> | none
+Check by hand: <numbered, riskiest first: where, one action, what should happen, what must not> | none
+Skipped: <what, and why> | none
 Decision log: opendesigner/decisions.md, D-<nnnn>
 ```
+Keep "written", "built" and "verified" apart (`<opendesigner>/references/guardrails.md` section 5). A check by hand is needed whenever the change moves, answers a touch, or can only be judged on the screen or device it is for; mark a step "not seen yet" when nobody has watched it run.
 
 ## 7. Improve OpenDesigner
 If a question, option or building block was missing, or a step confused the person, follow `<opendesigner>/references/improve.md` (`engine.py feedback ... --kind gap|bug|confusing|idea`). Nothing is posted without their OK.

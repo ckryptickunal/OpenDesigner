@@ -127,7 +127,7 @@ If they share a source to **follow** or **learn from** (a style guide, an articl
 One question per message here, as everywhere.
 1. `engine.py build`. Validation passes, or each warning has a written reason. For a warning the defaults raise, write the reason yourself; don't ask the person about it.
 2. Check the outputs: `opendesigner/tokens/` (canonical), `opendesigner/build/` (exports), `DESIGN.md` and `PRODUCT.md` at the root, `opendesigner/decisions.md` and `state.json`. Write `opendesigner/RATIONALE.md` for the team from `assets/output/RATIONALE.md`.
-3. Send a short summary in three parts: what we chose and why, what is still open, and how to change it later ("use opendesigner-extend"). Add coverage in one line (decided, defaulted, not applicable, pending). For the plain voice, point to the preview and the short summary at the top of DESIGN.md, not the rest of the file. For the engineer voice, name the export files they will import.
+3. Send a short summary in three parts: what we chose and why, what is still open, and how to change it later ("use opendesigner-extend"). Say what you checked and what you did not: name each command you ran and its result, and never call something verified that did not run (`guardrails.md` section 5). Add coverage in one line (decided, defaulted, not applicable, pending). For the plain voice, point to the preview and the short summary at the top of DESIGN.md, not the rest of the file. For the engineer voice, name the export files they will import.
 4. If the project has code or agent files (AGENTS.md, CLAUDE.md, `.cursor/`), ask in its own message: "Want me to add a short note to your AGENTS.md, so other AI helpers follow these choices?" After a yes, append `assets/output/AGENTS-snippet.md`. Skip this step when there is no code yet. If they use git, say in one line that the note, DESIGN.md and `opendesigner/` belong on the branch new work starts from: a branch without them builds the old look. Offer once, in its own message, to run `engine.py review --strict` before each push or in their CI; it changes their setup, so add it only after a yes.
 5. If you recorded feedback, mention it and offer the issue link (`references/improve.md`).
 6. If the log is on: `journey.py log session_end`, then `journey.py report`. Mention one line of it only if it shows something useful. In the first session, the last message is the sharing question. In later sessions, send or ask about the report. Both are in `rules.md` section 11.
@@ -511,7 +511,7 @@ You are in the repo when `_coordination/PROTOCOL.md` and `tools/od.py` exist. Th
 
 # Guardrails
 
-Hard rules for every OpenDesigner skill. Sources: `_coordination/BRIEF.md` requirement 4, `research/L17` Parts F3 and H, `research/L18` DC-L18-10 to 14, and `synthesis/levers.json` → `guardrails`.
+Hard rules for every OpenDesigner skill. Sources: `_coordination/BRIEF.md` requirement 4, `research/L17` Parts F3 and H, `research/L18` DC-L18-10 to 14, `research/L21` (honest reports and canvas writes), and `synthesis/levers.json` → `guardrails`.
 
 ## 1. Identity firewall (references)
 - Copy **structure and quality**: layout rhythm, scales and ratios, density, depth model, motion character, component anatomy and the quality bar.
@@ -558,6 +558,15 @@ Hard rules for every OpenDesigner skill. Sources: `_coordination/BRIEF.md` requi
 - A generated placeholder is never shown as a finished asset.
 - Every value traces to `levers.json`, a Decision Card, the person, or a reference. If you infer, say so.
 - Don't claim you checked something you did not run.
+- **Written, built and verified are three different claims** (`research/L21-design-playbook.md`, DC-L21-02). Written: the file changed. Built: it compiled, or `engine.py build` ran. Verified: a check ran and passed, or someone looked at the result on the screen or device it is for. Never write "works", "done", "passes" or "fixed" for something that did not run. Write "written, not run" or "not verified", and say what would verify it.
+- A sweep of code you could not run is a list of guesses. Fix only what is certain, and name the rest as not verified.
+- **Report in a fixed order** at the end of any work in the person's project:
+  1. The result, in one line.
+  2. What was checked and how: each command and its result (for example `engine.py review --strict` and its last line, or their tests), and what was only read.
+  3. What is not verified, riskiest first.
+  4. Decisions for the person: short numbered questions, your recommendation first, and the default that holds until they answer.
+  5. Anything skipped or done differently from the plan, each with its reason.
+  6. A check-by-hand list when the work moves, answers a touch, or can only be judged on a real screen: numbered, riskiest first, one action per step with what should happen and what must not, and "not seen yet" on anything nobody has watched run.
 
 ## 6. Files and tools
 - Write inside `opendesigner/` freely. Ask before editing anything else in the person's repo (AGENTS.md, CLAUDE.md, CSS, Tailwind config).
