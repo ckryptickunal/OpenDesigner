@@ -605,6 +605,12 @@ class KeepDecidedSystem(unittest.TestCase):
             self.assertEqual([(f_["kind"], f_["standard"]) for f_ in res["findings"]], [("standard", "STD-easing-duration-02")])
             self.assertEqual(len(res["keptOnPurpose"]), 1)              # the raw 1s stays out; the standard is still reported
             self.assertEqual(quiet(e.cmd_review, d, strict=True), 1)
+            self.write(t, ".c { transition: all 1s; } /* od-ignore */\n")   # a bare ignore, as older projects were told to write
+            res = review_json(d)
+            self.assertEqual(res["findings"], [])
+            self.assertEqual([n["standard"] for n in res["standardNotes"]], ["STD-easing-duration-02"])
+            self.assertEqual(quiet(e.cmd_review, d, strict=True), 0)    # a note during the transition, not a failure
+            self.assertIn("a reason on the line will not waive it", std_run(e.cmd_review, d)[1])
 
     def test_removed_registry_flags_a_return_and_reaches_design_md(self):
         with tempfile.TemporaryDirectory() as t:
@@ -656,6 +662,13 @@ class KeepDecidedSystem(unittest.TestCase):
             self.assertIn("Warning", text)
             got = std_run(e.cmd_removed, d, "add", what="uppercase section labels", why="calmer", pattern=r"text-transform:\s*uppercase")[0]
             self.assertNotEqual(got[0], "EXIT")                         # "labels" alone is not a floor
+            for what, pat in (("the Focus mode toggle", None), ("low-contrast helper captions", None), ("thick borders", r"2px solid"),
+                              ("the splash animation", r"animation"), ("the second button in cards", r"button"),
+                              ("the Close link in banners", r">Close<")):
+                got = std_run(e.cmd_removed, d, "add", what=what, why="owner removed it", pattern=pat)[0]
+                self.assertNotEqual(got[0], "EXIT", what)                # ordinary removals pass without --force
+            for what in ("the contrast check on cards", "visible labels on fields", "focus-visible styles"):
+                self.assertEqual(std_run(e.cmd_removed, d, "add", what=what, why="w")[0][0], "EXIT", what)
 
     def test_a_broken_registry_entry_is_skipped_not_fatal(self):
         with tempfile.TemporaryDirectory() as t:
@@ -712,8 +725,10 @@ class KeepDecidedSystem(unittest.TestCase):
             st["dials"]["roundness"]["value"] = 30
             st["removed"] = []
             e.dump_json(sp, st)
-            checks = review_json(d)["guard"]
-            self.assertEqual(sorted(g["check"] for g in checks), ["locked-decision", "locked-decision", "tokens-in-step"])
+            res = review_json(d)
+            checks = res["guard"]
+            self.assertEqual(sorted(g["check"] for g in checks), ["locked-decision", "locked-decision"])
+            self.assertIn("state.json changed since the last build", res["notes"][0]["message"])   # a note, not a failure
             msgs = " ".join(g["message"] for g in checks)
             self.assertIn("locked dials.roundness at 60, but state.json now has 30", msgs)
             self.assertIn("R-01 (the floating help button) as removed on purpose", msgs)
@@ -768,25 +783,39 @@ class KeepDecidedSystem(unittest.TestCase):
             e.dump_json(os.path.join(d, "state.json"), st)
             self.assertIn("locked-decision", [g["check"] for g in review_json(d)["guard"]])
 
-    def test_another_engine_version_is_a_note(self):
+    def test_token_files_hand_edit_versus_engine_change(self):
         with tempfile.TemporaryDirectory() as t:
             d = self.project(t)
-            mp = os.path.join(d, "tokens", "opendesigner.meta.json")
+            tokdir = os.path.join(d, "tokens")
+            mp = os.path.join(tokdir, "opendesigner.meta.json")
+            tok = os.path.join(tokdir, "semantic.tokens.json")
             meta = e.read_json(mp)
+            self.assertIn("semantic.tokens.json", meta["fileHashes"])
             meta["notes"] = ["a teammate's engine wrote another note"]  # the meta file alone never counts
             e.dump_json(mp, meta)
             self.assertEqual((review_json(d)["guard"], review_json(d)["notes"]), ([], []))
+            data = e.read_json(tok)                                     # 1. a hand edit: counts toward --strict
+            data["$extensions"] = {"edited": "by hand"}
+            e.dump_json(tok, data)
+            self.assertEqual([g["check"] for g in review_json(d)["guard"]], ["tokens-in-step"])
+            self.assertEqual(quiet(e.cmd_review, d, strict=True), 1)
+            meta["fileHashes"]["semantic.tokens.json"] = e.content_hash(data)   # 2. what an older engine built: a note
             meta["engine"] = "0.9.0"
             e.dump_json(mp, meta)
-            tok = os.path.join(d, "tokens", "semantic.tokens.json")
-            data = e.read_json(tok)
-            data["$extensions"] = {"older": "engine"}
-            e.dump_json(tok, data)
             res = review_json(d)
             self.assertEqual(res["guard"], [])
-            self.assertEqual([n["check"] for n in res["notes"]], ["engine-version"])
-            self.assertIn(f"built by engine 0.9.0; this is engine {e.ENGINE_VERSION}", res["notes"][0]["message"])
+            self.assertIn("the engine is newer than the one that built them (built by engine 0.9.0", res["notes"][0]["message"])
+            self.assertEqual(res["notes"][0]["fix"], "run engine.py build and look at the diff")
             self.assertEqual(quiet(e.cmd_review, d, strict=True), 0)
+            del meta["fileHashes"]                                      # 3. an older project with no recorded hashes: a note
+            meta["engine"] = e.ENGINE_VERSION
+            e.dump_json(mp, meta)
+            res = review_json(d)
+            self.assertEqual(res["guard"], [])
+            self.assertIn("recorded no file hashes", res["notes"][0]["message"])
+            self.assertEqual(quiet(e.cmd_review, d, strict=True), 0)
+            quiet(e.cmd_build, d)
+            self.assertEqual((review_json(d)["guard"], review_json(d)["notes"]), ([], []))
 
     def test_recorded_changes_to_a_locked_value_are_not_drift(self):
         with tempfile.TemporaryDirectory() as t:
@@ -1559,9 +1588,12 @@ class Standards(unittest.TestCase):
                     e.cmd_review(d, as_json=True)
                 return [f_ for f_ in json.loads(out.getvalue())["findings"] if f_["kind"] == "standard"]
             got = review()
-            # an od-ignore comment keeps raw values, never a standard (DC-L19-165, lane L21), so line 3 is reported too
-            self.assertEqual(sorted((f_["standard"], f_["line"]) for f_ in got),
-                             [("PRJ-01", 4), ("STD-easing-duration-02", 1), ("STD-easing-duration-02", 3)])
+            self.assertEqual(sorted((f_["standard"], f_["line"]) for f_ in got), [("PRJ-01", 4), ("STD-easing-duration-02", 1)])
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_review(d, as_json=True)
+            notes = json.loads(out.getvalue())["standardNotes"]    # lane L21: a bare od-ignore that breaks a standard is a note for now
+            self.assertEqual([(n["standard"], n["line"]) for n in notes], [("STD-easing-duration-02", 3)])
             f1 = next(f_ for f_ in got if f_["standard"] == "STD-easing-duration-02")
             self.assertEqual((f1["file"], f1["fix"], f1["strength"], f1["severity"]),
                              (os.path.join("src", "a.css"), "name the properties you animate", "must", "warning"))

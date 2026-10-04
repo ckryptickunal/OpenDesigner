@@ -2591,6 +2591,16 @@ def split_tree(tree, pred, prefix=""):
     return yes, no
 
 
+def is_token_file(fn):
+    return fn.endswith(".tokens.json") or fn == "opendesigner.resolver.json"
+
+
+def content_hash(data):
+    """A short hash of JSON content that ignores key order and formatting."""
+    import hashlib
+    return hashlib.sha256(json.dumps(data, sort_keys=True, ensure_ascii=False, separators=(",", ":")).encode("utf-8")).hexdigest()[:16]
+
+
 def generate_system(state, token_types=None):
     """Files follow the spec's tiering (7.4): primitives, semantic, semantic.color.<theme>, semantic.density.<mode>,
     motion.<standard|reduced>, plus the resolver and a meta file. token_types: see apply_token_overrides."""
@@ -2634,6 +2644,8 @@ def generate_system(state, token_types=None):
         "textScaling": ctx.raw.get("textScaling") or "full", "notes": ctx.notes,
     }
     meta["stateHash"] = state_hash(state)
+    # content hash of each token file and the resolver, so review can tell a hand edit from an engine or state change (L21)
+    meta["fileHashes"] = {fn: content_hash(files[fn]) for fn in sorted(files) if is_token_file(fn)}
     files["opendesigner.meta.json"] = meta
     return files, meta, ctx
 
@@ -9705,25 +9717,21 @@ def removed_entries(state, active_only=True):
     return [r for r in out if r.get("status", "removed") == "removed"] if active_only else out
 
 
-# Code an accessibility floor depends on (guardrails.md section 4). A removal pattern that matches any of these would make
-# review ask people to delete a focus ring, a label, alt text or a reduced-motion path, so `removed add` refuses it.
-FLOOR_SAMPLES = (":focus-visible { outline: 2px solid var(--ds-color-focus); outline-offset: 2px; }",
-                 "button:focus { outline: 2px solid #1a73e8; }", '<button aria-label="Close">', '<label for="email">Email</label>',
-                 '<img src="team.png" alt="The team at work">', "@media (prefers-reduced-motion: reduce) { * { animation: none; } }",
-                 '.accessibilityLabel("Close")', 'contentDescription = "Close"', '<span class="sr-only">Close</span>')
-RX_FLOOR_WORDS = re.compile(r"focus|\baria\b|alt text|screen ?reader|reduced[ -]motion|contrast|accessib|(tap|touch|click) targets?|hit areas?|"
-                            r"(form|field) labels?", re.I)
+# What an accessibility floor depends on (guardrails.md section 4): focus rings and outlines, accessible names and visible labels,
+# alt text, the reduced-motion path, and contrast floors. Only these specific targets count, so "the Focus mode toggle", "low-contrast
+# helper captions" or a pattern such as `button` or `2px solid` is not mistaken for a floor.
+RX_FLOOR_TARGET = re.compile(r"focus[ -]?(?:rings?|outlines?|visible|indicators?|states?)\b|:focus|\boutline\b|aria-label|"
+                             r"accessib(?:le|ility) ?(?:names?|labels?)|accessibilityLabel|contentDescription|visible labels?|\balt=|alt text|"
+                             r"prefers-reduced-motion|reduced[ -]motion|contrast (?:checks?|floors?|minimums?|ratios?|requirements?|targets?)", re.I)
 
 
 def removal_hits_floor(what, pattern):
-    """Why a removal would take away an accessibility floor, or None."""
-    if pattern and not regex_problem(pattern):
-        rx = re.compile(pattern)
-        hit = next((s for s in FLOOR_SAMPLES if rx.search(s)), None)
-        if hit:
-            return f"its --pattern matches code an accessibility floor needs ({hit})"
-    m = RX_FLOOR_WORDS.search(what or "")
-    return f"it names an accessibility floor (\"{m.group(0)}\")" if m else None
+    """Why a removal would take away an accessibility floor, or None: its name or its pattern names a floor target."""
+    for label, text in (("its name", what or ""), ("its --pattern", pattern or "")):
+        m = RX_FLOOR_TARGET.search(text)
+        if m:
+            return f"{label} names an accessibility floor (\"{m.group(0)}\")"
+    return None
 
 
 def removed_review_rules(state):
@@ -9907,21 +9915,22 @@ def review_guard(d, state, files):
                     disk[fn] = None
         fresh = json.loads(json.dumps(files, ensure_ascii=False))
         meta_disk = disk.get("opendesigner.meta.json") if isinstance(disk.get("opendesigner.meta.json"), dict) else {}
-        built_by = meta_disk.get("engine")
-        if meta_disk.get("stateHash") != state_hash(load_state(d)):
-            out.append({"check": "tokens-in-step", "message": "the tokens are older than state.json: a decision was recorded without a "
-                        "build, or a merge brought in another state.json", "fix": "run engine.py build, then review again"})
-        else:  # the token files and the resolver only: the meta file carries the engine version and notes
-            tok = lambda fn: fn.endswith(".tokens.json") or fn == "opendesigner.resolver.json"
-            differ = sorted(fn for fn in set(disk) | set(fresh) if tok(fn) and disk.get(fn) != fresh.get(fn))
-            if built_by and built_by != ENGINE_VERSION:
-                notes.append({"check": "engine-version", "message": f"the tokens were built by engine {built_by}; this is engine {ENGINE_VERSION}"
-                              + (f", which writes {len(differ)} token file{'s' if len(differ) != 1 else ''} differently" if differ else ""),
-                              "fix": "run engine.py build when the team agrees on one OpenDesigner version"})
-            elif differ:
-                out.append({"check": "tokens-in-step", "message": f"{', '.join(differ[:4])}{' and more' if len(differ) > 4 else ''} in "
-                            f"{rel('tokens/')} no longer match what state.json generates: a generated file was edited by hand, or a merge mixed "
-                            "two versions", "fix": "run engine.py build (record a decision instead of editing tokens)"})
+        recorded = meta_disk.get("fileHashes") if isinstance(meta_disk.get("fileHashes"), dict) else {}
+        edited = sorted(fn for fn in recorded if is_token_file(fn) and (fn not in disk or content_hash(disk[fn]) != recorded[fn]))
+        if edited:  # the file no longer matches what the last build wrote: a hand edit or a half-merged file
+            out.append({"check": "tokens-in-step", "message": f"{', '.join(edited[:4])}{' and more' if len(edited) > 4 else ''} in "
+                        f"{rel('tokens/')} changed after the last build: a generated file was edited by hand, or a merge mixed two versions",
+                        "fix": "run engine.py build (record a decision instead of editing tokens)"})
+        differ = sorted(fn for fn in set(disk) | set(fresh) if is_token_file(fn) and fn not in edited and disk.get(fn) != fresh.get(fn))
+        if differ:  # what the last build wrote, but not what this engine and state.json give now
+            why = ("state.json changed since the last build" if meta_disk.get("stateHash") != state_hash(load_state(d))
+                   else "the engine is newer than the one that built them")
+            built = meta_disk.get("engine")
+            notes.append({"check": "tokens-in-step", "message": f"{len(differ)} token file{'s' if len(differ) != 1 else ''} in {rel('tokens/')} "
+                          f"differ from what this engine and state.json generate now ({', '.join(differ[:3])}{' and more' if len(differ) > 3 else ''}): "
+                          + why + (f" (built by engine {built}; this is {ENGINE_VERSION})" if built and built != ENGINE_VERSION else "")
+                          + ("" if recorded else "; this build recorded no file hashes, so a hand edit cannot be told apart"),
+                          "fix": "run engine.py build and look at the diff"})
     for path, (did, val, locked) in sorted(_decision_values(d).items(), key=lambda kv: _dnum(kv[1][0])):
         if not locked or path in ("init", "zoom.all") or path.endswith("+"):
             continue
@@ -10081,7 +10090,7 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
         return (f"use var({css_var(prefix, 'motion.transition.' + role)}-duration) and its -easing "
                 f"(the {role} transition: {TR_WORDS[role]}; {why})")
     findings, scanned = [], 0
-    kept, bare = [], []  # od-ignore lines with a reason (kept on purpose) and without one (a finding of their own, DC-L19-165)
+    kept, bare, std_notes = [], [], []  # od-ignore lines with and without a reason; standards broken on bare-ignore lines (notes)
     std_rules = std_review_rules(state)  # house standards followed and project standards that carry a review pattern
     removed_rules = removed_review_rules(state)  # things removed on purpose that carry a review pattern (DC-L21-01)
     locked_literals = std_locked_literals(state)
@@ -10109,8 +10118,8 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
                 if re.search(r"^\s*(//|/\*|\*|<!--)", line):
                     continue
                 ignored = "od-ignore" in line  # an exception on purpose: listed with its reason, or noted when it has none
+                why_ = ignore_reason(line) if ignored else ""
                 if ignored:
-                    why_ = ignore_reason(line)
                     (kept if why_ else bare).append({"file": rel, "line": i, "reason": why_})
                 for rx, r in ([] if ignored else removed_rules):  # something the owner removed on purpose is back
                     m_ = next((m_ for m_ in rx.finditer(line[:REVIEW_LINE_CAP]) if m_.end() > m_.start()), None)
@@ -10131,7 +10140,9 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
                                 break
                 if hits:
                     ids = list(dict.fromkeys(h[2]["id"] for h in hits))
-                    findings.append({"kind": "standard", "file": rel, "line": i, "value": hits[0][0],
+                    # a bare od-ignore that breaks a standard is a note for now (older projects were told to write it); with a
+                    # reason it is a finding, because a comment never waives a standard (DC-L19-165)
+                    (std_notes if ignored and not why_ else findings).append({"kind": "standard", "file": rel, "line": i, "value": hits[0][0],
                                      "fix": "; ".join(dict.fromkeys(h[1].rstrip(" .") if len(hits) > 1 else h[1] for h in hits if h[1])),
                                      "standard": ids[0], "standards": ids,
                                      "strength": "must" if any(h[2].get("strength") == "must" for h in hits) else "should",
@@ -10284,7 +10295,7 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
     to_fix = len(findings) + len(guard) + len(set(untrue)) + (1 if (stale or missing) else 0)  # a bare od-ignore is a note (DC-L19-165)
     result = {"project": project, "filesScanned": scanned, "counts": by, "findings": findings[:500], "staleSections": stale,
               "missing": missing, "untrue": sorted(set(untrue)), "keptOnPurpose": kept[:500], "ignoredWithoutReason": bare[:500],
-              "guard": guard, "notes": guard_notes, "toFix": to_fix, "ok": to_fix == 0}
+              "guard": guard, "notes": guard_notes, "standardNotes": std_notes[:500], "toFix": to_fix, "ok": to_fix == 0}
     if as_json:
         print(json.dumps(result, indent=2))
     else:
@@ -10317,6 +10328,11 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
                   "Not counted as a finding:")
             for b_ in bare[:limit]:
                 print(f"  {b_['file']}:{b_['line']}")
+        if std_notes:
+            print(f"Note: {len(std_notes)} line{'s' if len(std_notes) != 1 else ''} with a bare od-ignore break{'s' if len(std_notes) == 1 else ''} "
+                  "a standard. Not counted yet; a reason on the line will not waive it, so fix the line:")
+            for f_ in std_notes[:limit]:
+                print(f"  {f_['file']}:{f_['line']}  {f_['value']}  ->  {f_['fix']} ({', '.join(f_['standards'])}, {f_['strength']})")
         if kept:
             print(f"{len(kept)} line{'s' if len(kept) != 1 else ''} kept on purpose (od-ignore with a reason; not counted as findings):")
             for k_ in kept[:limit]:
