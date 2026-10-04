@@ -892,6 +892,41 @@ class PersonalOutputs(unittest.TestCase):
             self.assertEqual(e.zoom_levels(d, st)["color"]["level"], "broad")
 
 
+class PreviewFloors(unittest.TestCase):
+    """The preview page itself keeps the floors it checks in the person's system: 4.5:1 text and no sideways scroll at
+    320 CSS px (WCAG 1.4.3, 1.4.10). Static checks only (a real browser is not a dependency of the skills): they pin the
+    colors and the layout mechanisms that were measured in Chrome to fix the overflow."""
+
+    SURFACES = (("app:operate", "Internal admin for users and jobs"), ("app:operate", "Personal finance: budgets and bills"),
+                ("docs:read", "Developer guides"), ("website:persuade", "A website for our school robotics club"))
+
+    def previews(self, name="Pilot"):
+        """(directory, preview.html text) for each sample-screen kind. The caller's temp dir outlives the loop."""
+        with tempfile.TemporaryDirectory() as t:
+            for i, (surf, product) in enumerate(self.SURFACES):
+                d = os.path.join(t, f"p{i}", "opendesigner")
+                quiet(e.cmd_init, d, name=name)
+                quiet(e.cmd_set, d, "context.product", product, "x")
+                quiet(e.cmd_sketch, d, name, None, "regular", "web", surfaces=surf)
+                with open(os.path.join(d, "preview.html"), encoding="utf-8") as f:
+                    yield d, f.read()
+
+    def test_page_greys_reach_text_contrast(self):
+        for _, html in self.previews():
+            page = re.search(r"body\{margin:0;background:(#[0-9a-f]{6})", html).group(1)
+            for sel, bgs in ((r"\.pv-note", (page, "#ffffff")), (r"\.pv-sub", (page,)), (r"\.pv-details summary", (page,)),
+                             (r"\.pv-chip", ("#ffffff",))):
+                fg = re.search(sel + r"\{[^}]*?(?<![-\w])color:(#[0-9a-f]{6})", html).group(1)
+                for bg in bgs:
+                    self.assertGreaterEqual(e.contrast(fg, bg), 4.5, f"{sel} {fg} on {bg}")
+
+    def test_wide_content_scrolls_or_wraps_instead_of_widening_the_page(self):
+        for _, html in self.previews():
+            self.assertIn("minmax(min(360px,100%),1fr)", html)              # a grid track may shrink below 360px
+            self.assertNotIn("minmax(360px", html)
+            self.assertEqual(html.count("<table"), html.count('<div class="pv-scroll"><table'))   # each table scrolls on its own
+
+
 class PlatformsAndLicences(unittest.TestCase):
     """U5 fix 6: font licence scope per platform; iOS Dynamic Type."""
 

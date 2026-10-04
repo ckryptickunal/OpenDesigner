@@ -8464,15 +8464,16 @@ def render_preview(files, meta, state, preview_dir="."):
     label = "text.label.lg" if "text.label.lg" in base else "text.body.md"
     ui_css = f"""
 *,*::before,*::after{{box-sizing:border-box}}
-body{{margin:0;background:#f4f4f5;color:#18181b;font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}}
+body{{margin:0;background:#f4f4f5;color:#18181b;font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-wrap:break-word}}
 .pv-wrap{{max-width:1240px;margin:0 auto;padding:24px 20px 64px}}
 .pv-h1{{font-size:22px;font-weight:650;margin:0 0 4px}} .pv-sub{{color:#52525b;margin:0 0 14px}}
 .pv-chips{{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 18px}}
 .pv-chip{{background:#fff;border:1px solid #e4e4e7;border-radius:999px;padding:3px 10px;font-size:12px;color:#3f3f46}}
 .pv-chip b{{font-weight:600;color:#18181b}}
 .pv-h2{{font-size:15px;font-weight:650;margin:34px 0 10px;padding-top:14px;border-top:1px solid #e4e4e7}}
-.pv-note{{color:#71717a;font-size:12px;margin:0 0 10px}}
-.pv-grid2{{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:16px}}
+.pv-note{{color:#63636c;font-size:12px;margin:0 0 10px}}
+.pv-grid2{{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(360px,100%),1fr));gap:16px}} .pv-grid2>*{{min-width:0}}
+.pv-scroll{{max-width:100%;overflow-x:auto}} .pv-theme pre{{max-width:100%;overflow-x:auto}} .pv-theme img{{max-width:100%;object-fit:contain}} .pv-card svg{{max-width:100%;height:auto}}
 .pv-mono{{font:11px/1.3 ui-monospace,SFMono-Regular,Menlo,monospace}}
 .pv-theme{{background:{V('color.surface.base')};color:{V('color.text.primary')};border-radius:14px;padding:18px;border:1px solid {V('color.border.subtle')}}}
 .pv-theme-label{{{t('text.label.sm') if 'text.label.sm' in base else ''}color:{V('color.text.secondary')};margin:0 0 12px}}
@@ -8508,20 +8509,24 @@ body{{margin:0;background:#f4f4f5;color:#18181b;font:14px/1.45 system-ui,-apple-
 .ds-table th{{text-align:left;{t('text.label.md') if 'text.label.md' in base else ''}color:{V('color.text.secondary')};padding:{V('space.inset.sm')} {V('space.inset.md')};border-bottom:1px solid {V('color.border.default')}}}
 .ds-table td{{padding:{V('space.inset.sm')} {V('space.inset.md')};border-bottom:1px solid {V('color.border.subtle')};height:{V('size.control.md')}}}
 .pv-details{{margin:0 0 18px}} .pv-details summary{{cursor:pointer;color:#52525b;font-size:12px;margin:0 0 8px}}
-.sw-ramp{{display:grid;grid-template-columns:90px repeat(12,1fr);gap:3px;margin:0 0 3px;align-items:stretch}}
-.sw{{height:38px;border-radius:4px;display:flex;align-items:flex-end;padding:2px 3px;font:9px/1 ui-monospace,Menlo,monospace}}
+.sw-ramp{{display:grid;grid-template-columns:90px repeat(12,minmax(0,1fr));gap:3px;margin:0 0 3px;align-items:stretch}}
+.sw{{height:38px;min-width:0;overflow:hidden;border-radius:4px;display:flex;align-items:flex-end;padding:2px 3px;font:9px/1 ui-monospace,Menlo,monospace}}
+@media (max-width:600px){{.sw-ramp{{grid-template-columns:repeat(12,minmax(0,1fr))}} .sw-name{{grid-column:1/-1;margin-top:6px}}}}
 .sw-name{{font-size:12px;color:#3f3f46;align-self:center}}
 .role-grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:6px}}
 .role{{display:flex;gap:8px;align-items:center;font:11px/1.25 ui-monospace,Menlo,monospace;color:{V('color.text.secondary')}}}
+.role{{min-width:0}} .role span{{min-width:0;overflow-wrap:anywhere}}
 .role i{{width:28px;height:28px;border-radius:6px;flex:none;border:1px solid {V('color.border.subtle')}}}
+.pv-spec{{display:flex;flex-wrap:wrap;gap:2px 16px;align-items:baseline;margin:0 0 8px}}
+.pv-spec .pv-mono{{width:170px;flex:none}} .pv-spec>span:last-child{{flex:1 1 220px;min-width:0;overflow-wrap:anywhere}}
 .ruler{{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap}}
 .ruler div{{background:#6366f1;opacity:.85;border-radius:2px}}
 .pv-card{{background:#fff;border:1px solid #e4e4e7;border-radius:12px;padding:16px}}
 .motion-box{{width:36px;height:36px;border-radius:8px;background:{V('color.bg.action.primary')}}}
-.motion-lane{{position:relative;height:44px;background:#f4f4f5;border-radius:8px;margin:0 0 8px}}
+.motion-lane{{position:relative;height:44px;background:#f4f4f5;border-radius:8px;margin:0 0 8px;container-type:inline-size}}
 .motion-lane .motion-box{{position:absolute;left:4px;top:4px}}
-.pv-card:hover .motion-box.m-std{{transform:translateX(420px);transition:transform {V('motion.duration.medium')} {V('motion.easing.standard')}}}
-.pv-card:hover .motion-box.m-spring{{transform:translateX(420px);transition:transform {VV('motion.transition.move', 'duration')} {VV('motion.transition.move', 'easing')}}}
+.pv-card:hover .motion-box.m-std{{transform:translateX(min(420px,calc(100cqw - 44px)));transition:transform {V('motion.duration.medium')} {V('motion.easing.standard')}}}
+.pv-card:hover .motion-box.m-spring{{transform:translateX(min(420px,calc(100cqw - 44px)));transition:transform {VV('motion.transition.move', 'duration')} {VV('motion.transition.move', 'easing')}}}
 .motion-box{{transition:transform {V('motion.duration.medium-exit')} {V('motion.easing.exit')}}}
 @media (prefers-reduced-motion: reduce){{.pv-card:hover .motion-box{{transform:none}}}}
 """
@@ -8549,7 +8554,7 @@ body{{margin:0;background:#f4f4f5;color:#18181b;font:14px/1.45 system-ui,-apple-
     def components(theme):
         brandbar = (f'<img src="{_esc(logo)}" alt="{name} logo" style="height:32px;width:auto">' if logo else
                     f'<span style="{t("text.label.lg") if "text.label.lg" in base else ""}color:{V("color.text.primary")}">{name}</span>')
-        nav = (f'<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 20px;padding:0 0 12px;'
+        nav = (f'<div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;margin:0 0 20px;padding:0 0 12px;'
                f'border-bottom:1px solid {V("color.border.subtle")}">{brandbar}<a class="ds-link" href="#">'
                f'{"Settings" if kind in ("operate", "finance") else "Contact"}</a></div>')
         if kind == "persuade":
@@ -8580,7 +8585,7 @@ body{{margin:0;background:#f4f4f5;color:#18181b;font:14px/1.45 system-ui,-apple-
                     + "</div>"
                     f'<div class="pv-row" style="justify-content:space-between"><span style="{t("text.title.md") if "text.title.md" in base else ""}">Transactions</span>'
                     '<button class="ds-btn primary">Add transaction</button></div>'
-                    f'<table class="ds-table"><thead><tr><th>Date</th><th>Payee</th><th>Category</th><th style="text-align:right">Amount</th></tr></thead><tbody>{trs}</tbody></table>')
+                    f'<div class="pv-scroll"><table class="ds-table"><thead><tr><th>Date</th><th>Payee</th><th>Category</th><th style="text-align:right">Amount</th></tr></thead><tbody>{trs}</tbody></table></div>')
         elif kind == "read":
             body = (f'<div style="{t("text." + big)}margin:0 0 8px">Getting started with {name}</div>'
                     f'<p style="{lead_style}color:{V("color.text.primary")};max-width:60ch">'
@@ -8595,9 +8600,9 @@ body{{margin:0;background:#f4f4f5;color:#18181b;font:14px/1.45 system-ui,-apple-
             trs = "".join(f'<tr><td>{a}</td><td>{b_}</td><td>{badge(k_, c_)}</td><td style="text-align:right"><a class="ds-link" href="#">Edit</a></td></tr>'
                           for a, b_, c_, k_ in people)
             body = (f'<div class="pv-row" style="justify-content:space-between"><span style="{t("text." + head)}">Users</span>'
-                    '<span style="display:flex;gap:8px"><input class="ds-input" placeholder="Search users" style="max-width:200px">'
+                    '<span style="display:flex;flex-wrap:wrap;gap:8px"><input class="ds-input" placeholder="Search users" style="max-width:200px">'
                     '<button class="ds-btn primary">Add user</button></span></div>'
-                    f'<table class="ds-table"><thead><tr><th>Name</th><th>Role</th><th>Status</th><th></th></tr></thead><tbody>{trs}</tbody></table>'
+                    f'<div class="pv-scroll"><table class="ds-table"><thead><tr><th>Name</th><th>Role</th><th>Status</th><th></th></tr></thead><tbody>{trs}</tbody></table></div>'
                     '<div class="pv-row" style="align-items:flex-start;margin-top:16px">'
                     '<label class="ds-field"><span class="ds-label">Email</span><input class="ds-input" placeholder="name@example.com"><span class="ds-help">Used to sign in.</span></label>'
                     '<label class="ds-field"><span class="ds-label">Team</span><input class="ds-input is-error" value="Ops Team!"><span class="ds-help err">Use letters, numbers and dashes.</span></label>'
@@ -8643,7 +8648,7 @@ body{{margin:0;background:#f4f4f5;color:#18181b;font:14px/1.45 system-ui,-apple-
         ext = (base[p].get("$extensions") or {}).get(NS, {})
         v = base[p]["resolved"]
         caps = "text-transform:uppercase;" if ext.get("textTransform") else ""
-        html.append(f'<div style="display:flex;gap:16px;align-items:baseline;margin:0 0 8px"><span class="pv-mono" style="width:170px;flex:none;color:{V("color.text.tertiary")}">'
+        html.append(f'<div class="pv-spec"><span class="pv-mono" style="color:{V("color.text.tertiary")}">'
                     f'{p[5:]} {fmt_num(_px(v["fontSize"]))}/{ext.get("lineHeightPx")} {int(v["fontWeight"])}</span>'
                     f'<span style="{t(p)}{caps}">{_esc(ext.get("use", "The quick brown fox"))}</span></div>')
     html.append("</div>")
@@ -8655,12 +8660,12 @@ body{{margin:0;background:#f4f4f5;color:#18181b;font:14px/1.45 system-ui,-apple-
             html.append(f'<div style="width:{v}px;height:{v}px" title="space.{v}"></div>')
     html.append("</div><p class=\"pv-mono\" style=\"margin:8px 0 0\">" + " ".join(str(v) for v in ladder) + "</p></div><div class=\"pv-card\"><p class=\"pv-note\">Density modes (same component)</p>")
     for dn in DENSITIES:
-        html.append(f'<div data-density="{dn}" data-theme="light" style="display:flex;gap:10px;align-items:center;margin:0 0 8px"><span class="pv-mono" style="width:90px">{dn}</span>'
+        html.append(f'<div data-density="{dn}" data-theme="light" style="display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;margin:0 0 8px"><span class="pv-mono" style="width:90px">{dn}</span>'
                     f'<button class="ds-btn primary">Save</button><input class="ds-input" style="max-width:160px" placeholder="Search"></div>')
     html.append("</div><div class=\"pv-card\"><p class=\"pv-note\">Radius roles</p><div style=\"display:flex;gap:12px;flex-wrap:wrap\">")
     for r in ("detail", "control-sm", "control", "container", "overlay", "full"):
         html.append(f'<div style="text-align:center"><div style="width:64px;height:48px;background:#e0e7ff;border:1.5px solid #6366f1;border-radius:{V("radius." + r)}"></div><span class="pv-mono">{r}</span></div>')
-    html.append("</div></div><div class=\"pv-card\"><p class=\"pv-note\">Hit-area floors (L14 I-1)</p><div style=\"display:flex;gap:14px;align-items:flex-end\">")
+    html.append("</div></div><div class=\"pv-card\"><p class=\"pv-note\">Hit-area floors (L14 I-1)</p><div style=\"display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end\">")
     for k, v in sinfo["targets"].items():
         html.append(f'<div style="text-align:center"><div style="width:{v}px;height:{v}px;border:1.5px dashed #6366f1;border-radius:6px"></div><span class="pv-mono">{k} {v}</span></div>')
     html.append("</div></div></div>")

@@ -238,29 +238,29 @@
   --ds-motion-duration-medium: 200ms;
   --ds-motion-duration-long: 320ms;
   --ds-motion-duration-extra: 560ms;
-  --ds-motion-duration-medium-exit: 150ms;
-  --ds-motion-duration-long-exit: 240ms;
+  --ds-motion-duration-medium-exit: 160ms;
+  --ds-motion-duration-long-exit: 260ms;
   --ds-motion-easing-standard: cubic-bezier(0.2, 0, 0.38, 0.9);
   --ds-motion-easing-enter: cubic-bezier(0, 0, 0.38, 0.9);
-  --ds-motion-easing-exit: cubic-bezier(0.2, 0, 1, 0.9);
+  --ds-motion-easing-exit: cubic-bezier(0, 0, 0.38, 0.9);
   --ds-motion-easing-linear: cubic-bezier(0, 0, 1, 1);
   --ds-motion-spring-spatial-fast-duration: 250ms;
-  --ds-motion-spring-spatial-fast-easing: cubic-bezier(0.2, 0, 0.38, 0.9);
+  --ds-motion-spring-spatial-fast-easing: linear(0, 0.057, 0.179, 0.319, 0.453, 0.571, 0.669, 0.748, 0.811, 0.859, 0.895, 0.923, 0.944, 0.959, 0.97, 0.979, 0.985, 0.989, 0.992, 0.994, 0.996, 0.997, 0.998, 0.999, 1);
   --ds-motion-spring-spatial-fast-delay: 0ms;
   --ds-motion-spring-spatial-default-duration: 350ms;
-  --ds-motion-spring-spatial-default-easing: cubic-bezier(0.2, 0, 0.38, 0.9);
+  --ds-motion-spring-spatial-default-easing: linear(0, 0.057, 0.179, 0.319, 0.453, 0.571, 0.669, 0.748, 0.811, 0.859, 0.895, 0.923, 0.944, 0.959, 0.97, 0.979, 0.985, 0.989, 0.992, 0.994, 0.996, 0.997, 0.998, 0.999, 1);
   --ds-motion-spring-spatial-default-delay: 0ms;
   --ds-motion-spring-spatial-slow-duration: 520ms;
-  --ds-motion-spring-spatial-slow-easing: cubic-bezier(0.2, 0, 0.38, 0.9);
+  --ds-motion-spring-spatial-slow-easing: linear(0, 0.057, 0.179, 0.319, 0.453, 0.571, 0.669, 0.748, 0.811, 0.859, 0.895, 0.923, 0.944, 0.959, 0.97, 0.979, 0.985, 0.989, 0.992, 0.994, 0.996, 0.997, 0.998, 0.999, 1);
   --ds-motion-spring-spatial-slow-delay: 0ms;
   --ds-motion-spring-effects-fast-duration: 150ms;
-  --ds-motion-spring-effects-fast-easing: cubic-bezier(0.2, 0, 0.38, 0.9);
+  --ds-motion-spring-effects-fast-easing: linear(0, 0.057, 0.179, 0.319, 0.453, 0.571, 0.669, 0.748, 0.811, 0.859, 0.895, 0.923, 0.944, 0.959, 0.97, 0.979, 0.985, 0.989, 0.992, 0.994, 0.996, 0.997, 0.998, 0.999, 1);
   --ds-motion-spring-effects-fast-delay: 0ms;
   --ds-motion-spring-effects-default-duration: 230ms;
-  --ds-motion-spring-effects-default-easing: cubic-bezier(0.2, 0, 0.38, 0.9);
+  --ds-motion-spring-effects-default-easing: linear(0, 0.057, 0.179, 0.319, 0.453, 0.571, 0.669, 0.748, 0.811, 0.859, 0.895, 0.923, 0.944, 0.959, 0.97, 0.979, 0.985, 0.989, 0.992, 0.994, 0.996, 0.997, 0.998, 0.999, 1);
   --ds-motion-spring-effects-default-delay: 0ms;
   --ds-motion-spring-effects-slow-duration: 330ms;
-  --ds-motion-spring-effects-slow-easing: cubic-bezier(0.2, 0, 0.38, 0.9);
+  --ds-motion-spring-effects-slow-easing: linear(0, 0.057, 0.179, 0.319, 0.453, 0.571, 0.669, 0.748, 0.811, 0.859, 0.895, 0.923, 0.944, 0.959, 0.97, 0.979, 0.985, 0.989, 0.992, 0.994, 0.996, 0.997, 0.998, 0.999, 1);
   --ds-motion-spring-effects-slow-delay: 0ms;
   --ds-font-family-text: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --ds-font-family-display: var(--ds-font-family-text);
@@ -606,15 +606,16 @@
 
 
 *,*::before,*::after{box-sizing:border-box}
-body{margin:0;background:#f4f4f5;color:#18181b;font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{margin:0;background:#f4f4f5;color:#18181b;font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-wrap:break-word}
 .pv-wrap{max-width:1240px;margin:0 auto;padding:24px 20px 64px}
 .pv-h1{font-size:22px;font-weight:650;margin:0 0 4px} .pv-sub{color:#52525b;margin:0 0 14px}
 .pv-chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 18px}
 .pv-chip{background:#fff;border:1px solid #e4e4e7;border-radius:999px;padding:3px 10px;font-size:12px;color:#3f3f46}
 .pv-chip b{font-weight:600;color:#18181b}
 .pv-h2{font-size:15px;font-weight:650;margin:34px 0 10px;padding-top:14px;border-top:1px solid #e4e4e7}
-.pv-note{color:#71717a;font-size:12px;margin:0 0 10px}
-.pv-grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:16px}
+.pv-note{color:#63636c;font-size:12px;margin:0 0 10px}
+.pv-grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(360px,100%),1fr));gap:16px} .pv-grid2>*{min-width:0}
+.pv-scroll{max-width:100%;overflow-x:auto} .pv-theme pre{max-width:100%;overflow-x:auto} .pv-theme img{max-width:100%;object-fit:contain} .pv-card svg{max-width:100%;height:auto}
 .pv-mono{font:11px/1.3 ui-monospace,SFMono-Regular,Menlo,monospace}
 .pv-theme{background:var(--ds-color-surface-base);color:var(--ds-color-text-primary);border-radius:14px;padding:18px;border:1px solid var(--ds-color-border-subtle)}
 .pv-theme-label{font: var(--ds-text-label-sm); letter-spacing: var(--ds-text-label-sm-tracking);color:var(--ds-color-text-secondary);margin:0 0 12px}
@@ -650,26 +651,30 @@ body{margin:0;background:#f4f4f5;color:#18181b;font:14px/1.45 system-ui,-apple-s
 .ds-table th{text-align:left;font: var(--ds-text-label-md); letter-spacing: var(--ds-text-label-md-tracking);color:var(--ds-color-text-secondary);padding:var(--ds-space-inset-sm) var(--ds-space-inset-md);border-bottom:1px solid var(--ds-color-border-default)}
 .ds-table td{padding:var(--ds-space-inset-sm) var(--ds-space-inset-md);border-bottom:1px solid var(--ds-color-border-subtle);height:var(--ds-size-control-md)}
 .pv-details{margin:0 0 18px} .pv-details summary{cursor:pointer;color:#52525b;font-size:12px;margin:0 0 8px}
-.sw-ramp{display:grid;grid-template-columns:90px repeat(12,1fr);gap:3px;margin:0 0 3px;align-items:stretch}
-.sw{height:38px;border-radius:4px;display:flex;align-items:flex-end;padding:2px 3px;font:9px/1 ui-monospace,Menlo,monospace}
+.sw-ramp{display:grid;grid-template-columns:90px repeat(12,minmax(0,1fr));gap:3px;margin:0 0 3px;align-items:stretch}
+.sw{height:38px;min-width:0;overflow:hidden;border-radius:4px;display:flex;align-items:flex-end;padding:2px 3px;font:9px/1 ui-monospace,Menlo,monospace}
+@media (max-width:600px){.sw-ramp{grid-template-columns:repeat(12,minmax(0,1fr))} .sw-name{grid-column:1/-1;margin-top:6px}}
 .sw-name{font-size:12px;color:#3f3f46;align-self:center}
 .role-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:6px}
 .role{display:flex;gap:8px;align-items:center;font:11px/1.25 ui-monospace,Menlo,monospace;color:var(--ds-color-text-secondary)}
+.role{min-width:0} .role span{min-width:0;overflow-wrap:anywhere}
 .role i{width:28px;height:28px;border-radius:6px;flex:none;border:1px solid var(--ds-color-border-subtle)}
+.pv-spec{display:flex;flex-wrap:wrap;gap:2px 16px;align-items:baseline;margin:0 0 8px}
+.pv-spec .pv-mono{width:170px;flex:none} .pv-spec>span:last-child{flex:1 1 220px;min-width:0;overflow-wrap:anywhere}
 .ruler{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap}
 .ruler div{background:#6366f1;opacity:.85;border-radius:2px}
 .pv-card{background:#fff;border:1px solid #e4e4e7;border-radius:12px;padding:16px}
 .motion-box{width:36px;height:36px;border-radius:8px;background:var(--ds-color-bg-action-primary)}
-.motion-lane{position:relative;height:44px;background:#f4f4f5;border-radius:8px;margin:0 0 8px}
+.motion-lane{position:relative;height:44px;background:#f4f4f5;border-radius:8px;margin:0 0 8px;container-type:inline-size}
 .motion-lane .motion-box{position:absolute;left:4px;top:4px}
-.pv-card:hover .motion-box.m-std{transform:translateX(420px);transition:transform var(--ds-motion-duration-medium) var(--ds-motion-easing-standard)}
-.pv-card:hover .motion-box.m-spring{transform:translateX(420px);transition:transform var(--ds-motion-transition-move-duration) var(--ds-motion-transition-move-easing)}
+.pv-card:hover .motion-box.m-std{transform:translateX(min(420px,calc(100cqw - 44px)));transition:transform var(--ds-motion-duration-medium) var(--ds-motion-easing-standard)}
+.pv-card:hover .motion-box.m-spring{transform:translateX(min(420px,calc(100cqw - 44px)));transition:transform var(--ds-motion-transition-move-duration) var(--ds-motion-transition-move-easing)}
 .motion-box{transition:transform var(--ds-motion-duration-medium-exit) var(--ds-motion-easing-exit)}
 @media (prefers-reduced-motion: reduce){.pv-card:hover .motion-box{transform:none}}
 </style></head><body><div class="pv-wrap">
 <h1 class="pv-h1">Public Service Accessible</h1><p class="pv-sub">Apply for and track council benefits online. Sample screens use only your tokens; the words are examples.</p>
 <details class="pv-details"><summary>Details: the settings behind this</summary><div class="pv-chips"><span class="pv-chip">expression <b>10</b></span><span class="pv-chip">brandPresence <b>85</b></span><span class="pv-chip">density <b>8</b></span><span class="pv-chip">energy <b>0</b></span><span class="pv-chip">roundness <b>0</b></span><span class="pv-chip">colorfulness <b>35</b></span><span class="pv-chip">depth <b>5</b></span><span class="pv-chip">warmth <b>45</b></span><span class="pv-chip">body <b>19px x 1.2</b></span><span class="pv-chip">unit <b>5px</b></span><span class="pv-chip">radius <b>0</b></span><span class="pv-chip">depth <b>borders</b></span><span class="pv-chip">brand <b>#075c63</b></span></div></details>
-<div class="pv-grid2"><div class="pv-theme" data-theme="light"><p class="pv-theme-label">light theme</p><div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 20px;padding:0 0 12px;border-bottom:1px solid var(--ds-color-border-subtle)"><span style="font: var(--ds-text-label-lg); letter-spacing: var(--ds-text-label-lg-tracking);color:var(--ds-color-text-primary)">Public Service Accessible</span><a class="ds-link" href="#">Settings</a></div><div class="pv-row" style="justify-content:space-between"><span style="font: var(--ds-text-headline-sm); letter-spacing: var(--ds-text-headline-sm-tracking);">Users</span><span style="display:flex;gap:8px"><input class="ds-input" placeholder="Search users" style="max-width:200px"><button class="ds-btn primary">Add user</button></span></div><table class="ds-table"><thead><tr><th>Name</th><th>Role</th><th>Status</th><th></th></tr></thead><tbody><tr><td>Asha Rao</td><td>Admin</td><td><span class="ds-badge" style="background:var(--ds-color-bg-success-subtle);color:var(--ds-color-text-success)">Active</span></td><td style="text-align:right"><a class="ds-link" href="#">Edit</a></td></tr><tr><td>Ben Ortiz</td><td>Editor</td><td><span class="ds-badge" style="background:var(--ds-color-bg-info-subtle);color:var(--ds-color-text-info)">Invited</span></td><td style="text-align:right"><a class="ds-link" href="#">Edit</a></td></tr><tr><td>Chen Wei</td><td>Viewer</td><td><span class="ds-badge" style="background:var(--ds-color-bg-danger-subtle);color:var(--ds-color-text-danger)">Suspended</span></td><td style="text-align:right"><a class="ds-link" href="#">Edit</a></td></tr><tr><td>Dana Kim</td><td>Editor</td><td><span class="ds-badge" style="background:var(--ds-color-bg-success-subtle);color:var(--ds-color-text-success)">Active</span></td><td style="text-align:right"><a class="ds-link" href="#">Edit</a></td></tr></tbody></table><div class="pv-row" style="align-items:flex-start;margin-top:16px"><label class="ds-field"><span class="ds-label">Email</span><input class="ds-input" placeholder="name@example.com"><span class="ds-help">Used to sign in.</span></label><label class="ds-field"><span class="ds-label">Team</span><input class="ds-input is-error" value="Ops Team!"><span class="ds-help err">Use letters, numbers and dashes.</span></label><label class="ds-field"><span class="ds-label">Plan</span><input class="ds-input" value="Team" disabled><span class="ds-help">Set by your admin.</span></label></div><p class="pv-theme-label" style="margin-top:20px">Button states</p><div class="pv-row"><button class="ds-btn primary">Default</button><button class="ds-btn primary is-hover">Hover</button><button class="ds-btn primary is-pressed">Pressed</button><button class="ds-btn primary is-focus">Focus</button><button class="ds-btn primary" disabled>Disabled</button><button class="ds-btn secondary">Secondary</button><button class="ds-btn danger">Delete</button></div></div></div>
+<div class="pv-grid2"><div class="pv-theme" data-theme="light"><p class="pv-theme-label">light theme</p><div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;margin:0 0 20px;padding:0 0 12px;border-bottom:1px solid var(--ds-color-border-subtle)"><span style="font: var(--ds-text-label-lg); letter-spacing: var(--ds-text-label-lg-tracking);color:var(--ds-color-text-primary)">Public Service Accessible</span><a class="ds-link" href="#">Settings</a></div><div class="pv-row" style="justify-content:space-between"><span style="font: var(--ds-text-headline-sm); letter-spacing: var(--ds-text-headline-sm-tracking);">Users</span><span style="display:flex;flex-wrap:wrap;gap:8px"><input class="ds-input" placeholder="Search users" style="max-width:200px"><button class="ds-btn primary">Add user</button></span></div><div class="pv-scroll"><table class="ds-table"><thead><tr><th>Name</th><th>Role</th><th>Status</th><th></th></tr></thead><tbody><tr><td>Asha Rao</td><td>Admin</td><td><span class="ds-badge" style="background:var(--ds-color-bg-success-subtle);color:var(--ds-color-text-success)">Active</span></td><td style="text-align:right"><a class="ds-link" href="#">Edit</a></td></tr><tr><td>Ben Ortiz</td><td>Editor</td><td><span class="ds-badge" style="background:var(--ds-color-bg-info-subtle);color:var(--ds-color-text-info)">Invited</span></td><td style="text-align:right"><a class="ds-link" href="#">Edit</a></td></tr><tr><td>Chen Wei</td><td>Viewer</td><td><span class="ds-badge" style="background:var(--ds-color-bg-danger-subtle);color:var(--ds-color-text-danger)">Suspended</span></td><td style="text-align:right"><a class="ds-link" href="#">Edit</a></td></tr><tr><td>Dana Kim</td><td>Editor</td><td><span class="ds-badge" style="background:var(--ds-color-bg-success-subtle);color:var(--ds-color-text-success)">Active</span></td><td style="text-align:right"><a class="ds-link" href="#">Edit</a></td></tr></tbody></table></div><div class="pv-row" style="align-items:flex-start;margin-top:16px"><label class="ds-field"><span class="ds-label">Email</span><input class="ds-input" placeholder="name@example.com"><span class="ds-help">Used to sign in.</span></label><label class="ds-field"><span class="ds-label">Team</span><input class="ds-input is-error" value="Ops Team!"><span class="ds-help err">Use letters, numbers and dashes.</span></label><label class="ds-field"><span class="ds-label">Plan</span><input class="ds-input" value="Team" disabled><span class="ds-help">Set by your admin.</span></label></div><p class="pv-theme-label" style="margin-top:20px">Button states</p><div class="pv-row"><button class="ds-btn primary">Default</button><button class="ds-btn primary is-hover">Hover</button><button class="ds-btn primary is-pressed">Pressed</button><button class="ds-btn primary is-focus">Focus</button><button class="ds-btn primary" disabled>Disabled</button><button class="ds-btn secondary">Secondary</button><button class="ds-btn danger">Delete</button></div></div></div>
 <h2 class="pv-h2">Color ramps</h2><p class="pv-note">Primitives, 12 contrast-indexed OKLCH steps per hue; light and dark are separate ramps.</p>
 <div class="pv-card" style="margin:0 0 10px;">
 <div class="sw-ramp"><span class="sw-name" style="color:#3f3f46">accent light</span><div class="sw" style="background:#fbfdfd;color:#000" title="accent light 1 #fbfdfd">1</div><div class="sw" style="background:#f0f5f5;color:#000" title="accent light 2 #f0f5f5">2</div><div class="sw" style="background:#e2edef;color:#000" title="accent light 3 #e2edef">3</div><div class="sw" style="background:#d4e6e8;color:#000" title="accent light 4 #d4e6e8">4</div><div class="sw" style="background:#c7dfe1;color:#000" title="accent light 5 #c7dfe1">5</div><div class="sw" style="background:#b9d8db;color:#000" title="accent light 6 #b9d8db">6</div><div class="sw" style="background:#abd0d4;color:#000" title="accent light 7 #abd0d4">7</div><div class="sw" style="background:#5d8e93;color:#000" title="accent light 8 #5d8e93">8</div><div class="sw" style="background:#075c63;color:#fff" title="accent light 9 #075c63">9</div><div class="sw" style="background:#025057;color:#fff" title="accent light 10 #025057">10</div><div class="sw" style="background:#004247;color:#fff" title="accent light 11 #004247">11</div><div class="sw" style="background:#163032;color:#fff" title="accent light 12 #163032">12</div></div>
@@ -692,20 +697,20 @@ body{margin:0;background:#f4f4f5;color:#18181b;font:14px/1.45 system-ui,-apple-s
 </div>
 <h2 class="pv-h2">Typography</h2>
 <p class="pv-note">round(19 x 1.2^n): 16, 19, 23, 27, 33, 39, 47px. Weights body 400, label 400, heading 600.</p><div class="pv-theme" data-theme="light">
-<div style="display:flex;gap:16px;align-items:baseline;margin:0 0 8px"><span class="pv-mono" style="width:170px;flex:none;color:var(--ds-color-text-tertiary)">headline.lg 47/52 600</span><span style="font: var(--ds-text-headline-lg); letter-spacing: var(--ds-text-headline-lg-tracking);">Page and section titles.</span></div>
-<div style="display:flex;gap:16px;align-items:baseline;margin:0 0 8px"><span class="pv-mono" style="width:170px;flex:none;color:var(--ds-color-text-tertiary)">headline.md 39/48 600</span><span style="font: var(--ds-text-headline-md); letter-spacing: var(--ds-text-headline-md-tracking);">Page and section titles.</span></div>
-<div style="display:flex;gap:16px;align-items:baseline;margin:0 0 8px"><span class="pv-mono" style="width:170px;flex:none;color:var(--ds-color-text-tertiary)">headline.sm 33/40 600</span><span style="font: var(--ds-text-headline-sm); letter-spacing: var(--ds-text-headline-sm-tracking);">Page and section titles.</span></div>
-<div style="display:flex;gap:16px;align-items:baseline;margin:0 0 8px"><span class="pv-mono" style="width:170px;flex:none;color:var(--ds-color-text-tertiary)">title.lg 27/32 600</span><span style="font: var(--ds-text-title-lg); letter-spacing: var(--ds-text-title-lg-tracking);">Card, panel and group titles.</span></div>
-<div style="display:flex;gap:16px;align-items:baseline;margin:0 0 8px"><span class="pv-mono" style="width:170px;flex:none;color:var(--ds-color-text-tertiary)">body.lg 23/32 400</span><span style="font: var(--ds-text-body-lg); letter-spacing: var(--ds-text-body-lg-tracking);">Long-form reading, onboarding copy.</span></div>
-<div style="display:flex;gap:16px;align-items:baseline;margin:0 0 8px"><span class="pv-mono" style="width:170px;flex:none;color:var(--ds-color-text-tertiary)">title.md 23/32 600</span><span style="font: var(--ds-text-title-md); letter-spacing: var(--ds-text-title-md-tracking);">Card, panel and group titles.</span></div>
-<div style="display:flex;gap:16px;align-items:baseline;margin:0 0 8px"><span class="pv-mono" style="width:170px;flex:none;color:var(--ds-color-text-tertiary)">body.md 19/28 400</span><span style="font: var(--ds-text-body-md); letter-spacing: var(--ds-text-body-md-tracking);">Default UI text: forms, tables, descriptions.</span></div>
-<div style="display:flex;gap:16px;align-items:baseline;margin:0 0 8px"><span class="pv-mono" style="width:170px;flex:none;color:var(--ds-color-text-tertiary)">label.lg 19/28 400</span><span style="font: var(--ds-text-label-lg); letter-spacing: var(--ds-text-label-lg-tracking);">Button and control labels.</span></div>
-<div style="display:flex;gap:16px;align-items:baseline;margin:0 0 8px"><span class="pv-mono" style="width:170px;flex:none;color:var(--ds-color-text-tertiary)">code.md 19/28 400</span><span style="font: var(--ds-text-code-md); letter-spacing: var(--ds-text-code-md-tracking);">Code blocks, token names.</span></div>
-<div style="display:flex;gap:16px;align-items:baseline;margin:0 0 8px"><span class="pv-mono" style="width:170px;flex:none;color:var(--ds-color-text-tertiary)">title.sm 19/28 600</span><span style="font: var(--ds-text-title-sm); letter-spacing: var(--ds-text-title-sm-tracking);">Table headers, field-group titles.</span></div>
-<div style="display:flex;gap:16px;align-items:baseline;margin:0 0 8px"><span class="pv-mono" style="width:170px;flex:none;color:var(--ds-color-text-tertiary)">body.sm 16/24 400</span><span style="font: var(--ds-text-body-sm); letter-spacing: var(--ds-text-body-sm-tracking);">Helper text, timestamps, captions.</span></div>
-<div style="display:flex;gap:16px;align-items:baseline;margin:0 0 8px"><span class="pv-mono" style="width:170px;flex:none;color:var(--ds-color-text-tertiary)">label.sm 16/24 400</span><span style="font: var(--ds-text-label-sm); letter-spacing: var(--ds-text-label-sm-tracking);text-transform:uppercase;">Overlines in capitals with wide tracking (DC-L02-18).</span></div>
-<div style="display:flex;gap:16px;align-items:baseline;margin:0 0 8px"><span class="pv-mono" style="width:170px;flex:none;color:var(--ds-color-text-tertiary)">label.md 16/24 400</span><span style="font: var(--ds-text-label-md); letter-spacing: var(--ds-text-label-md-tracking);">Small control labels, badges, dense tabs.</span></div>
-<div style="display:flex;gap:16px;align-items:baseline;margin:0 0 8px"><span class="pv-mono" style="width:170px;flex:none;color:var(--ds-color-text-tertiary)">code.sm 16/24 400</span><span style="font: var(--ds-text-code-sm); letter-spacing: var(--ds-text-code-sm-tracking);">Inline values, dense code rows.</span></div>
+<div class="pv-spec"><span class="pv-mono" style="color:var(--ds-color-text-tertiary)">headline.lg 47/52 600</span><span style="font: var(--ds-text-headline-lg); letter-spacing: var(--ds-text-headline-lg-tracking);">Page and section titles.</span></div>
+<div class="pv-spec"><span class="pv-mono" style="color:var(--ds-color-text-tertiary)">headline.md 39/48 600</span><span style="font: var(--ds-text-headline-md); letter-spacing: var(--ds-text-headline-md-tracking);">Page and section titles.</span></div>
+<div class="pv-spec"><span class="pv-mono" style="color:var(--ds-color-text-tertiary)">headline.sm 33/40 600</span><span style="font: var(--ds-text-headline-sm); letter-spacing: var(--ds-text-headline-sm-tracking);">Page and section titles.</span></div>
+<div class="pv-spec"><span class="pv-mono" style="color:var(--ds-color-text-tertiary)">title.lg 27/32 600</span><span style="font: var(--ds-text-title-lg); letter-spacing: var(--ds-text-title-lg-tracking);">Card, panel and group titles.</span></div>
+<div class="pv-spec"><span class="pv-mono" style="color:var(--ds-color-text-tertiary)">body.lg 23/32 400</span><span style="font: var(--ds-text-body-lg); letter-spacing: var(--ds-text-body-lg-tracking);">Long-form reading, onboarding copy.</span></div>
+<div class="pv-spec"><span class="pv-mono" style="color:var(--ds-color-text-tertiary)">title.md 23/32 600</span><span style="font: var(--ds-text-title-md); letter-spacing: var(--ds-text-title-md-tracking);">Card, panel and group titles.</span></div>
+<div class="pv-spec"><span class="pv-mono" style="color:var(--ds-color-text-tertiary)">body.md 19/28 400</span><span style="font: var(--ds-text-body-md); letter-spacing: var(--ds-text-body-md-tracking);">Default UI text: forms, tables, descriptions.</span></div>
+<div class="pv-spec"><span class="pv-mono" style="color:var(--ds-color-text-tertiary)">label.lg 19/28 400</span><span style="font: var(--ds-text-label-lg); letter-spacing: var(--ds-text-label-lg-tracking);">Button and control labels.</span></div>
+<div class="pv-spec"><span class="pv-mono" style="color:var(--ds-color-text-tertiary)">code.md 19/28 400</span><span style="font: var(--ds-text-code-md); letter-spacing: var(--ds-text-code-md-tracking);">Code blocks, token names.</span></div>
+<div class="pv-spec"><span class="pv-mono" style="color:var(--ds-color-text-tertiary)">title.sm 19/28 600</span><span style="font: var(--ds-text-title-sm); letter-spacing: var(--ds-text-title-sm-tracking);">Table headers, field-group titles.</span></div>
+<div class="pv-spec"><span class="pv-mono" style="color:var(--ds-color-text-tertiary)">body.sm 16/24 400</span><span style="font: var(--ds-text-body-sm); letter-spacing: var(--ds-text-body-sm-tracking);">Helper text, timestamps, captions.</span></div>
+<div class="pv-spec"><span class="pv-mono" style="color:var(--ds-color-text-tertiary)">label.sm 16/24 400</span><span style="font: var(--ds-text-label-sm); letter-spacing: var(--ds-text-label-sm-tracking);text-transform:uppercase;">Overlines in capitals with wide tracking (DC-L02-18).</span></div>
+<div class="pv-spec"><span class="pv-mono" style="color:var(--ds-color-text-tertiary)">label.md 16/24 400</span><span style="font: var(--ds-text-label-md); letter-spacing: var(--ds-text-label-md-tracking);">Small control labels, badges, dense tabs.</span></div>
+<div class="pv-spec"><span class="pv-mono" style="color:var(--ds-color-text-tertiary)">code.sm 16/24 400</span><span style="font: var(--ds-text-code-sm); letter-spacing: var(--ds-text-code-sm-tracking);">Inline values, dense code rows.</span></div>
 </div>
 <h2 class="pv-h2">Space, density, radius and targets</h2><div class="pv-grid2"><div class="pv-card"><p class="pv-note">Spacing ladder</p><div class="ruler">
 <div style="width:5px;height:5px" title="space.5"></div>
@@ -721,9 +726,9 @@ body{margin:0;background:#f4f4f5;color:#18181b;font:14px/1.45 system-ui,-apple-s
 <div style="width:100px;height:100px" title="space.100"></div>
 <div style="width:120px;height:120px" title="space.120"></div>
 </div><p class="pv-mono" style="margin:8px 0 0">0 5 10 15 20 25 30 40 50 60 80 100 120</p></div><div class="pv-card"><p class="pv-note">Density modes (same component)</p>
-<div data-density="spacious" data-theme="light" style="display:flex;gap:10px;align-items:center;margin:0 0 8px"><span class="pv-mono" style="width:90px">spacious</span><button class="ds-btn primary">Save</button><input class="ds-input" style="max-width:160px" placeholder="Search"></div>
-<div data-density="comfortable" data-theme="light" style="display:flex;gap:10px;align-items:center;margin:0 0 8px"><span class="pv-mono" style="width:90px">comfortable</span><button class="ds-btn primary">Save</button><input class="ds-input" style="max-width:160px" placeholder="Search"></div>
-<div data-density="compact" data-theme="light" style="display:flex;gap:10px;align-items:center;margin:0 0 8px"><span class="pv-mono" style="width:90px">compact</span><button class="ds-btn primary">Save</button><input class="ds-input" style="max-width:160px" placeholder="Search"></div>
+<div data-density="spacious" data-theme="light" style="display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;margin:0 0 8px"><span class="pv-mono" style="width:90px">spacious</span><button class="ds-btn primary">Save</button><input class="ds-input" style="max-width:160px" placeholder="Search"></div>
+<div data-density="comfortable" data-theme="light" style="display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;margin:0 0 8px"><span class="pv-mono" style="width:90px">comfortable</span><button class="ds-btn primary">Save</button><input class="ds-input" style="max-width:160px" placeholder="Search"></div>
+<div data-density="compact" data-theme="light" style="display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;margin:0 0 8px"><span class="pv-mono" style="width:90px">compact</span><button class="ds-btn primary">Save</button><input class="ds-input" style="max-width:160px" placeholder="Search"></div>
 </div><div class="pv-card"><p class="pv-note">Radius roles</p><div style="display:flex;gap:12px;flex-wrap:wrap">
 <div style="text-align:center"><div style="width:64px;height:48px;background:#e0e7ff;border:1.5px solid #6366f1;border-radius:var(--ds-radius-detail)"></div><span class="pv-mono">detail</span></div>
 <div style="text-align:center"><div style="width:64px;height:48px;background:#e0e7ff;border:1.5px solid #6366f1;border-radius:var(--ds-radius-control-sm)"></div><span class="pv-mono">control-sm</span></div>
@@ -731,7 +736,7 @@ body{margin:0;background:#f4f4f5;color:#18181b;font:14px/1.45 system-ui,-apple-s
 <div style="text-align:center"><div style="width:64px;height:48px;background:#e0e7ff;border:1.5px solid #6366f1;border-radius:var(--ds-radius-container)"></div><span class="pv-mono">container</span></div>
 <div style="text-align:center"><div style="width:64px;height:48px;background:#e0e7ff;border:1.5px solid #6366f1;border-radius:var(--ds-radius-overlay)"></div><span class="pv-mono">overlay</span></div>
 <div style="text-align:center"><div style="width:64px;height:48px;background:#e0e7ff;border:1.5px solid #6366f1;border-radius:var(--ds-radius-full)"></div><span class="pv-mono">full</span></div>
-</div></div><div class="pv-card"><p class="pv-note">Hit-area floors (L14 I-1)</p><div style="display:flex;gap:14px;align-items:flex-end">
+</div></div><div class="pv-card"><p class="pv-note">Hit-area floors (L14 I-1)</p><div style="display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end">
 <div style="text-align:center"><div style="width:48px;height:48px;border:1.5px dashed #6366f1;border-radius:6px"></div><span class="pv-mono">pointer 48</span></div>
 <div style="text-align:center"><div style="width:48px;height:48px;border:1.5px dashed #6366f1;border-radius:6px"></div><span class="pv-mono">touch 48</span></div>
 </div></div></div>
@@ -740,5 +745,5 @@ body{margin:0;background:#f4f4f5;color:#18181b;font:14px/1.45 system-ui,-apple-s
 </div>
 <h2 class="pv-h2">Motion</h2><div class="pv-card"><p class="pv-note">Hover this card: the top box uses motion.duration.medium with the standard easing, the bottom one the spatial spring (CSS linear() sample). Reduced motion removes travel.</p>
 <div class="motion-lane"><div class="motion-box m-std"></div></div><div class="motion-lane"><div class="motion-box m-spring"></div></div>
-<p class="pv-mono">instant 0ms &middot; micro 100ms &middot; short 150ms &middot; medium 200ms &middot; long 320ms &middot; extra 560ms &middot; medium-exit 150ms &middot; long-exit 240ms</p>
+<p class="pv-mono">instant 0ms &middot; micro 100ms &middot; short 150ms &middot; medium 200ms &middot; long 320ms &middot; extra 560ms &middot; medium-exit 160ms &middot; long-exit 260ms</p>
 </div></div></body></html>
