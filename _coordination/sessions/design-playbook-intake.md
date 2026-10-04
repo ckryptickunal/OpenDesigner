@@ -8,3 +8,4 @@ Append-only heartbeat. Newest last.
 - 2026-10-04 22:38 IST: L21 group 1 done (review guard, removed registry, agent note); starting group 2 (states)
 - 2026-10-04 22:40 IST: L21 group 2 done (state catalogue); starting group 3 (honest checks)
 - 2026-10-04 22:41 IST: L21 group 3 done (honest reports); starting group 4 (feedback and canvas round trips)
+- 2026-10-04 22:42 IST: L21 group 4 done (feedback, open questions, canvas round trips); writing the owner-decision section and running the checks

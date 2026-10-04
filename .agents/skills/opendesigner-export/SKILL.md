@@ -45,6 +45,16 @@ python3 <engine> export --format tailwind   one format only: css tailwind dtcg f
 
 Ask before wiring an export into the person's code, such as their main CSS file, Tailwind config or build. For an engineer, name the exact files and lines, as above. Offer to append `<opendesigner>/assets/output/AGENTS-snippet.md` to their AGENTS.md, so later agents use the tokens.
 
+## Before every write to Figma or Paper
+A design file is shared. Someone may have changed it since your last write, or be editing it right now. These steps keep their work safe (`research/L21-design-playbook.md`, DC-L21-04):
+1. **Read the live file just before you write.** Figma: `get_metadata` and `get_screenshot` for the frames you will touch, `get_variable_defs` for the variables. Paper: `get_basic_info`, `get_selection` and `list_comment_threads`. Never write from a copy you read earlier in the session.
+2. **Turn edits and comments into decisions first.** Compare what you read with your last write. Each hand edit and each comment is a request: apply it through the engine (`engine.py set ... --why "changed in Figma by <name>"`) or ask about it before you write anything.
+3. **Write only what changed.** Update the frames, artboards and variables your change touches, in place, in the same file. Never regenerate the whole file.
+4. **Never overwrite a frame someone is editing,** or one edited by hand since your last write. Put your version beside it, named "<frame> (OpenDesigner proposal)", tell the person, and leave theirs alone. Replace theirs only when they say so.
+5. **Show that untouched frames did not change.** Before you write, take screenshots of every frame that uses what you change and of a few you will not touch. After you write, take them again and compare. Report "N frames compared, M changed as expected, 0 unexpected", and undo anything unexpected. If you could only compare by eye, say so.
+6. **Answer each comment in its own thread** when the tool can reply there: what changed and where. Otherwise answer in chat and name each thread. Leave a thread open when the answer is unclear.
+7. **Record the write:** the file, the date, the frames and variables that changed, and the file's version name if it has one (Figma version history). It goes in the export summary (section 4).
+
 ## 2. Figma
 Detect what is connected before promising anything:
 - **Remote Figma MCP with `use_figma`** (signed in, Full seat; canvas writes are in beta): it can create variables, styles and frames. If Figma's official skills are installed (`figma-use`, `figma-generate-library`), load them and follow their rules. They know the current API.

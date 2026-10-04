@@ -349,6 +349,19 @@ A value outside the listed options is recorded as given, with the person's reaso
 - **In a hurry** ("just pick", "just do it", "skip the rest"): stop asking optional questions. Pick what fits their words and files, record it as `delegated`, and list it in one line (`zoom.md`, "People in a hurry").
 - **Conflicting answers** inside one cycle: show both answers and the conflict. Settle it with their ranked principles (Q-brand-07). Never quietly split the difference.
 - **Changing an earlier decision:** re-run `generate` and name the downstream decisions that moved (`graph.json` → edges).
+- **When you decide for the person** (`delegated` or `assumed`), write in `--why` what you chose over what, and how to undo it: `--why "delegated: 8px grid over 4px for the dense tables; to undo, set raw.spaceUnit 4"`. List these calls at the next gate. A flagged guess is fine; a buried one is not.
+- **Open questions last across sessions.** Keep one numbered list (Q1, Q2 and on) in the newest `## Open items` entry of `opendesigner/decisions.md`: each question with your recommendation, the default that holds until the person answers, and whether it blocks work. A new session copies every unanswered question into its own Open items entry and marks an answered one with its decision id ("answered: D-0042"). Never drop a question without an answer. Close one that a recorded decision already answers.
+
+### Feedback on what was built
+When the person reacts to built screens ("it looks dull", a marked screenshot, "this is wrong"), their words usually name a symptom or one example, not the fix (`research/L21-design-playbook.md`, DC-L21-03):
+1. **Answer every part.** Split the message into numbered parts and answer each by its number. If a word looks misheard or unclear, say how you read it in your first sentence.
+2. **Read for the intent.** What are they reacting to, and what do they like that this lacks? Open the screen, the build and any reference they name.
+3. **Check the decisions first:** `decisions.md`, the standards and "Removed on Purpose" in DESIGN.md. If the request clashes with one, name it and ask; the decision holds until they answer.
+4. **One example is a class.** Find every place with the same pattern, fix it once where it is shared (a token, a component), and report how many places changed and which you left alone, with the reason.
+5. **Say the plan in one line before you change anything:** the smallest change that meets the intent, what will not change, and how you will check it.
+6. **Words that set limits.** "At most" and "no more than" set a ceiling, not a target. A word about the whole product ("calmer", "easier to read") becomes a written rule you can check before you touch any screen.
+7. **After two rejected tries at the same intent, stop inventing.** Undo what your tries added that the reference does not have, then follow the reference's approach with the person's own tokens.
+8. **Still open:** a reply that mixes a yes with a condition, or a question they passed over. Ask again, once, with the options side by side.
 
 ## 8. Summaries and the offer after each level
 After each level or area, write 2 to 4 plain sentences a teammate could read. For example: "We chose slightly rounded 6 px corners, because the app is a busy work tool. Cards use 8 px." Name the defaults you filled in, in one line. Never dump settings: no dial numbers, token lists or hex codes unless they ask. The engine logs each `set` with its `--why` in `opendesigner/decisions.md`. Then make the offer (`zoom.md`): stop here, or zoom into at most 3 named areas. After the sketch, the first result has its own shape (`zoom.md`, "The first result").
@@ -573,6 +586,7 @@ Hard rules for every OpenDesigner skill. Sources: `_coordination/BRIEF.md` requi
 - Decisions are appended, never deleted: a change supersedes the old record.
 - Scripts are standard-library Python with no network access. Never add a dependency to the person's project without asking.
 - Before writing to Figma or Paper, confirm the target file. For Figma, suggest a duplicate first.
+- Read a design file just before each write, write only what changed, and never overwrite a frame someone else is editing or edited by hand: put yours beside it (opendesigner-export, "Before every write to Figma or Paper").
 - Never commit secrets or read `.env` files.
 
 ## 7. Never automate these (they need a human)
@@ -843,6 +857,9 @@ One entry per decision, newest last. Superseded decisions stay; a later entry re
 - Assumed answers to confirm: {{question ids}}
 - Pending assets and their briefs: {{hook ids and owners}}
 - Warnings waived, with reasons: {{rule ids}}
+- Open questions (copied forward by every session until answered; never dropped without an answer):
+  - Q1 · {{question}} · recommend: {{option}} · default until answered: {{value}} · blocks: {{yes | no}}
+  - Q2 · {{question}} · answered: {{D-nnnn}}
 ```
 
 ## Output template: RATIONALE.md

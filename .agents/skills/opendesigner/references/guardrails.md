@@ -62,6 +62,7 @@ Hard rules for every OpenDesigner skill. Sources: `_coordination/BRIEF.md` requi
 - Decisions are appended, never deleted: a change supersedes the old record.
 - Scripts are standard-library Python with no network access. Never add a dependency to the person's project without asking.
 - Before writing to Figma or Paper, confirm the target file. For Figma, suggest a duplicate first.
+- Read a design file just before each write, write only what changed, and never overwrite a frame someone else is editing or edited by hand: put yours beside it (opendesigner-export, "Before every write to Figma or Paper").
 - Never commit secrets or read `.env` files.
 
 ## 7. Never automate these (they need a human)

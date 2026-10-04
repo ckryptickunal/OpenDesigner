@@ -68,6 +68,60 @@
   - *Three states and a fixed order:* now, a few more lines per report. As it grows, every report reads the same way, so gaps stand out.
   - *Check-by-hand list:* now, a few minutes of a person's time. As it grows, the only route for motion, gestures and real screens.
 
+### DC-L21-03: Reading the owner's feedback on built screens, and keeping open questions alive
+- **Block path:** Builder > Guidance > Feedback on what was built (`rules.md` section 7; the extend skill's request table; decisions.md "Open items")
+- **Questions the designer answers:** When the person says a built screen "looks dull" or marks a screenshot, how does the AI turn that into a scoped change? How does it avoid fixing only the one screen they named? Where do unanswered questions live between sessions? How are the AI's own judgment calls recorded?
+- **Options:**
+  - **Literal reading:** change exactly the words of the comment on the screen named. In the source project, comments named a symptom or one example, not the fix; literal fixes were sent back [S-L21-01: 01.8, seed-03; case study 10].
+  - **Split, read for intent, answer every part:** split each message into decision, reason, bug and numbered asks, and answer by number; state your reading of an odd term first [S-L21-01: 01.6, summaries-2-03, summaries-2-01].
+  - **One example is a class:** fix it, build one shared mechanism, sweep the product with a look-for list and a leave-alone list [S-L21-01: 01.23, motion-pers-31].
+  - **A worksheet per message:** the quote, the literal ask, the intent, what is already decided, the smallest change, what not to change, how to verify, what to ask, the outcome [S-L21-01: template 16 section 1]. Reading patterns: an adjective about the look usually points at a gap next to something the owner likes; "at most" is a ceiling, not a target; a whole-product taste word needs a written test before any change [S-L21-01: template 16 section 2].
+  - **Stop rule:** after two rejected attempts on one intent, add no new device; undo what the attempts added that the reference lacks, then copy the reference's mechanism [S-L21-01: template 16 section 3; case study 10].
+  - **Still open:** a reply that mixes approval with a condition, or a question that was brushed aside, stays open [S-L21-01: 01.7, seed-10].
+  - **One numbered list of open questions that survives sessions,** each with a default and whether it blocks, repeated until answered and never deleted without an answer [S-L21-01: 01.16, assistant-2-06, gov-76].
+  - **A judgment ledger:** when the owner delegates, record each call, its alternative and how to undo it [S-L21-01: 01.13, 01.17, owner-messages-04, ux-adoption-86].
+- **Visual effect:** none directly. Fewer reworks: the change matches what the person meant, and the same complaint does not return on the next screen [inferred].
+- **Depends on (upstream):** the decide-or-ask rules (`rules.md` section 6), the decision log, "Removed on Purpose" (DC-L21-01).
+- **Affects (downstream):** `rules.md` section 7, the extend skill's request table and start-up, the decisions.md "Open items" template, the extend change note.
+- **Token encoding:** none (process decision). The open-questions list lives in decisions.md "Open items" entries as `Q<n> · question · recommend · default · blocks` [inferred format].
+- **Platform notes:** the same everywhere.
+- **Accessibility constraints:** a vague request never lowers a floor; "make it lighter" that would break contrast is answered with the nearest option that passes [inferred].
+- **Default + heuristic:** Default, applied in this lane: `rules.md` section 7 gives the eight-step method for feedback on built screens, the open-questions list in decisions.md, and `--why` text that says what was chosen over what and how to undo it. Heuristic: if the comment names one screen, ask where else the same pattern lives before you fix it [S-L21-01: 01.23].
+- **Evidence:** [S-L21-01: 01.6, 01.7, 01.8, 01.13, 01.16, 01.17, 01.23, seed-03, seed-10, summaries-2-01, summaries-2-03, motion-pers-31, assistant-2-06, gov-76, owner-messages-04, ux-adoption-86; template 16; case study 10]. Compared against `rules.md` section 7 as it stood (vague taste words become 3 to 5 visual keywords) and `learn/wiki/synthesis/decide-or-ask.md`.
+- **Maps to:**
+  - `rules.md` section 7 ("When you decide for the person", "Open questions last across sessions", "Feedback on what was built"). Applied.
+  - The extend skill (a feedback row in section 2, open questions at start-up, an "Open questions" line in the change note) and `assets/output/decisions.md`. Applied.
+  - Q-pref-01 (planned): the `coach` mode could use the same split-and-answer format [inferred]; for L20.
+- **Impact now / as it grows:**
+  - *Literal:* now, quick. As it grows, the same complaint comes back screen by screen.
+  - *Intent and class:* now, a short plan before each change. As it grows, one fix covers every screen with the pattern.
+  - *Open-questions list:* now, a few lines per session. As it grows, nothing the person was asked is lost between sessions.
+
+### DC-L21-04: Writing to a design canvas without losing anyone's work
+- **Block path:** Delivery > Output > Round trips to Figma and Paper (Stage 26; `opendesigner-export`)
+- **Questions the designer answers:** When the AI writes to a shared design file, what stops it from overwriting a designer's edits? How do we know a change to one shared piece did not alter other frames? How are comments answered?
+- **Options:**
+  - **Write from memory:** regenerate the file from the AI's last copy. The playbook's publish protocol exists because the live canvas changes faster than any copy [S-L21-01: 14.1, gov-44; case study 06].
+  - **Read just before every write, merge into what you read, publish only the changed boards, to the same place** [S-L21-01: 14.2, summaries-2-78, gov-45]. In the source project the host refused a publish until the session had read the latest version [S-L21-01: template 15 part 6].
+  - **Never overwrite a board someone is editing:** publish yours beside it, tell them, redraw after they save [S-L21-01: 14.4, assistant-1-76, seed-105].
+  - **Prove untouched boards unchanged:** render before and after, write the list of boards expected to change first, and report how many changed as expected and how many did not [S-L21-01: 14.3; template 15 part 7].
+  - **Close each comment in its own thread:** change, reply in the thread, resolve after the change is pushed, one line in chat [S-L21-01: 14.7, summaries-2-79].
+  - **Tie each copy to a named version** of the board, with the export date [S-L21-01: case study 06; 14.25].
+- **Visual effect:** none in the product. Designers keep their edits, and every frame that changed was meant to [inferred].
+- **Depends on (upstream):** where the master copy lives (Q-tool-01), what the Figma copy contains (DC-L19-173), the identity firewall for references (DC-L17-03).
+- **Affects (downstream):** the export skill's Figma and Paper flows, the export summary, `guardrails.md` section 6.
+- **Token encoding:** none (process decision).
+- **Platform notes:** Figma's desktop MCP reads only; writes go through the remote MCP's `use_figma`. Paper's MCP runs inside Paper Desktop. A byte-for-byte image comparison needs saved screenshots; when only a visual comparison is possible, the report says so [inferred].
+- **Accessibility constraints:** a proposal frame placed beside the designer's keeps the system's contrast and focus floors [inferred].
+- **Default + heuristic:** Default, applied in this lane: the export skill's "Before every write" steps: read just before writing, turn edits and comments into decisions first, write only what changed, never overwrite a frame being edited (put a proposal beside it), compare untouched frames before and after, answer each comment in its thread, record the write with the file's version. Heuristic: if you did not read a frame in this session, you may not write to it [S-L21-01: 14.2].
+- **Evidence:** [S-L21-01: 14.1, 14.2, 14.3, 14.4, 14.7, 14.25, gov-44, gov-45, summaries-2-78, summaries-2-79, assistant-1-76, seed-105; template 15 parts 6 and 7; case study 06]. Compared against DC-L19-173 and the export skill's existing round-trip steps.
+- **Maps to:**
+  - `opendesigner-export/SKILL.md`, "Before every write to Figma or Paper", and `guardrails.md` section 6. Applied.
+  - Q-dist-01 (planned) `design-push`: add "read before every write; proposals beside edited frames" as its heuristic, for L20 [inferred].
+- **Impact now / as it grows:**
+  - *Write from memory:* now, fastest. As it grows, a designer's edits vanish and trust in the file goes with them.
+  - *Read, write only what changed, compare:* now, a few extra reads and screenshots per write. As it grows, the file can be shared by people and agents at once.
+
 ## Part B: Evidence on existing cards
 
 | Card | What the playbook adds | Status after this lane |
@@ -77,6 +131,7 @@
 | DC-L11-15 (deprecation) | The design-side twin of token deprecation: a removed control, label or treatment needs a record with its replacement and reason, because nothing in code marks its absence [S-L21-01: 02.4, gov-06]. | Applied as the removed registry. Token deprecation itself is unchanged. |
 | DC-L19-125 (which states every screen ships with) | A second source, and a wider state set for screens that show data. See "Extending DC-L19-125" below. | The state catalogue template is applied (`assets/output/STATES.md`, kept in a project as `opendesigner/STATES.md`), with skill wording in the main and extend skills. The card's lint warning and its component-sheet state switcher stay pending for L20; the extension below widens what the switcher should show. |
 | DC-L19-167 (what the builder's checks cannot judge) | A second source for "never call a device-only result verified" and for a closing list of hand checks: numbered, ordered by risk, each with the expected result and what must not happen, "not seen yet" on anything nobody watched run [S-L21-01: 13.15; template 13 rules R3, R4, R9, R14]. A sweep you could not run is a set of guesses [S-L21-01: 13.20; case study 16]. | Applied as agent wording (`guardrails.md` section 5, the extend change note). The card's engine part, a closing "check by hand" list printed by `engine.py review` from what changed, stays pending for L20. |
+| DC-L19-173 (what the Figma copy contains) | Adjacent, not the same question: DC-L19-173 is about what the copy holds, the playbook about writing to it safely. The write-safety lessons became DC-L21-04 [S-L21-01: 14.2, 14.3, 14.4]. One overlap: build boards from one shared mock-up whose new inputs default to the old look, so a change to a shared piece cannot silently alter other boards [S-L21-01: 14.12, canvas-04]. | Unchanged; L20 may cite DC-L21-04 when it adopts the card's `design-push` heuristic. |
 | DC-L19-176 (how a review is reported) | One fixed success line, every problem listed in one run, and a failure message that names the fix [S-L21-01: 02.14, tooling-03]. | The closing verdict line is applied (`Review: ok` / `Review: N to fix`). The Before/After/Why table the card proposes is not done; it stays pending for L20. |
 
 ### Extending DC-L19-125: states beyond empty, loading, success and error
@@ -103,3 +158,5 @@ Proposed for L20, extending the card's "Maps to" (not applied here):
 | Skill wording: record removals, keep the note on the branch new work starts from, offer review in CI after a yes; extend start-up reads guard lines, removal row, merge rule, reasoned exceptions, review before a pull request | `skills/opendesigner/SKILL.md`, `skills/opendesigner-extend/SKILL.md` | DC-L21-01, DC-L19-165 |
 | The state catalogue: a template with ten rules, a thresholds table, the state matrix with eight classes, boundary rows, modes, settled contradictions, open questions and how to build and test from it; skill wording to write states before building a screen that shows data | `skills/opendesigner/assets/output/STATES.md`, `skills/opendesigner/SKILL.md` ("DESIGN.md stays alive"), `skills/opendesigner-extend/SKILL.md` section 2 | DC-L19-125 (extended) |
 | Honest reports: written, built and verified kept apart; a fixed report order; a check-by-hand list ordered by risk; unrun sweeps named as guesses | `skills/opendesigner/references/guardrails.md` section 5, `skills/opendesigner/SKILL.md` (Finish step 3), `skills/opendesigner-extend/SKILL.md` section 6 | DC-L21-02, DC-L19-167 |
+| Feedback on built screens: an eight-step method, judgment calls written with how to undo them, one numbered open-questions list that every session carries forward | `skills/opendesigner/references/rules.md` section 7, `skills/opendesigner/assets/output/decisions.md`, `skills/opendesigner-extend/SKILL.md` sections 1, 2 and 6 | DC-L21-03 |
+| Safe canvas round trips: read just before every write, edits and comments first, write only what changed, proposals beside frames being edited, compare untouched frames, answer each comment in its thread, record the version | `skills/opendesigner-export/SKILL.md` ("Before every write to Figma or Paper"), `skills/opendesigner/references/guardrails.md` section 6 | DC-L21-04 |

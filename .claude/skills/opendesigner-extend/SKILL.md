@@ -18,7 +18,7 @@ The engine is `scripts/engine.py` in this skill when it was installed from a rel
 1. Read, in order:
    - `DESIGN.md` and `PRODUCT.md` (project root). Note each section's zoom line.
    - `opendesigner/state.json` (`profile.voice`, `zoom`, answers, `locks`, hooks).
-   - `opendesigner/decisions.md` (newest entries last).
+   - `opendesigner/decisions.md` (newest entries last), including the open questions in its newest `## Open items` entry. Ask the ones that block what the person wants now; carry the rest forward (`<opendesigner>/references/rules.md` section 7).
    - `opendesigner/tokens/`.
    - `git log --oneline -15 -- opendesigner/ DESIGN.md`, if the project uses git.
 2. If `DESIGN.md.hand-edited` exists, someone edited the generated file by hand. Offer to turn each edit into a decision.
@@ -39,6 +39,7 @@ In a chat-only host, ask the person to upload `state.json`, `decisions.md` and D
 | "Let's define colors properly", "more detail on type" | Zoom in | Run the next zoom level for that area (`<opendesigner>/references/zoom.md`), then record it, for example `set zoom.color '"defined"'` |
 | "New brand color", "dark mode", "add Android" | An area reopened | Ask that area's questions at its current zoom level |
 | "Make it feel more playful", a new direction | A challenge | It touches most decisions. Say what would move (`graph.json`), offer safe choices and risks, and change nothing without a clear yes |
+| "It looks dull", "this screen is wrong", a marked screenshot, a comment on a built screen | Feedback on what was built | Follow `<opendesigner>/references/rules.md` section 7, "Feedback on what was built": answer every numbered part, read for the intent, check the decisions first, treat one example as a class, and say the smallest change and what stays before you touch anything. After two rejected tries, follow the reference instead of inventing |
 | "Why is X like this?" | A question | Answer from `decisions.md`, the standards (`engine.py standards`) and the cards. Change nothing |
 | "Follow this guide", "use this article as a rule", a link to learn from | A new source | `<opendesigner>/references/rules.md` section 12: agree its weight, read it with consent, keep the rules they pick |
 | A value that doesn't exist yet | A token addition | Add it through the engine with a reason (section 4, "Add a token"). Never hard-code it |
@@ -100,6 +101,7 @@ Not verified: <what nobody ran or looked at, riskiest first> | none
 Check by hand: <numbered, riskiest first: where, one action, what should happen, what must not> | none
 Skipped: <what, and why> | none
 Decision log: opendesigner/decisions.md, D-<nnnn>
+Open questions: <numbered, each with the default that holds until answered> | none
 ```
 Keep "written", "built" and "verified" apart (`<opendesigner>/references/guardrails.md` section 5). A check by hand is needed whenever the change moves, answers a touch, or can only be judged on the screen or device it is for; mark a step "not seen yet" when nobody has watched it run.
 
