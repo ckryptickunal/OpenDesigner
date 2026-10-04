@@ -110,6 +110,7 @@ python3 <skill>/scripts/journey.py share [--dry-run] [--yes]           send the 
 - DESIGN.md is the person's living spec. Once it exists, every `set` and `lock` refreshes it and PRODUCT.md by itself. Run `engine.py design-md` to create it, or after a `--no-doc` change.
 - Each section shows its zoom level (sketch, broad, defined, detailed). Each decision opens with one plain sentence. Text inside `<!-- od:keep -->` blocks survives each refresh.
 - **At the end of any implementation** (a page, a component, a refactor), run `engine.py review`. Then re-read DESIGN.md. Record any new value the work needed as a decision, not as a hard-coded value. `assets/output/AGENTS-snippet.md` tells every later agent to do the same.
+- **Screens that show data** (a list, a total, a status, progress) fail in the states nobody drew. Before building one, write its states in `opendesigner/STATES.md` from `assets/output/STATES.md`: every state's words, tone and next step, and the rows below, at and above each threshold (opendesigner-extend, section 2).
 - **When the person removes something** (a control, a label, divider lines, a flow), record it the same day: `engine.py removed add "<what>" --why "<their words>" --instead "<what replaces it>"`. Add `--pattern` when code that brings it back can be found line by line. DESIGN.md then lists it under "Removed on Purpose", and `review` flags its return. Removals leave no trace in code, so without the record a later session adds them back first.
 
 ## Designer hooks

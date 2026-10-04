@@ -34,6 +34,7 @@ In a chat-only host, ask the person to upload `state.json`, `decisions.md` and D
 | Request | Treat it as | Do |
 |---|---|---|
 | "Add a date picker / pricing table / settings page" | New component or pattern | Build it from existing tokens only. List the tokens it uses. Add states and keyboard behavior |
+| A screen that shows data: a list, a total, a count, a status, progress against a limit, the result of an action | States first | Before you design or change it, write its states in `opendesigner/STATES.md` (copy `<opendesigner>/assets/output/STATES.md` the first time): one row per state with its words, tone and next step, and the boundary rows. Show the person the rows, then build. One function per screen picks the state and returns its words; the screen holds no state text of its own. When someone flags one wrong state, list every state of that feature before fixing the one named |
 | "Make buttons a bit rounder", "denser tables" | One decision | Find the question in the stage file. Show the current value and the options, then `set` it |
 | "Let's define colors properly", "more detail on type" | Zoom in | Run the next zoom level for that area (`<opendesigner>/references/zoom.md`), then record it, for example `set zoom.color '"defined"'` |
 | "New brand color", "dark mode", "add Android" | An area reopened | Ask that area's questions at its current zoom level |
