@@ -9722,6 +9722,8 @@ def removed_entries(state, active_only=True):
 # helper captions" or a pattern such as `button` or `2px solid` is not mistaken for a floor.
 RX_FLOOR_TARGET = re.compile(r"focus[ -]?(?:rings?|outlines?|visible|indicators?|states?)\b|:focus|\boutline\b|aria-label|"
                              r"accessib(?:le|ility) ?(?:names?|labels?)|accessibilityLabel|contentDescription|visible labels?|\balt=|alt text|"
+                             r"(?:form|field|input) labels?|<label\b|sr-only|visually-hidden|screen[ -]?reader (?:text|hints?|labels?|only)|"
+                             r"(?:tap|touch|click|hit) (?:targets?|areas?|sizes?)|target sizes?|min-(?:height|width)[^0-9\n]{0,8}(?:24|44|48)(?:px|pt|dp)?\b|"
                              r"prefers-reduced-motion|reduced[ -]motion|contrast (?:checks?|floors?|minimums?|ratios?|requirements?|targets?)", re.I)
 
 
@@ -9923,14 +9925,22 @@ def review_guard(d, state, files):
                         "fix": "run engine.py build (record a decision instead of editing tokens)"})
         differ = sorted(fn for fn in set(disk) | set(fresh) if is_token_file(fn) and fn not in edited and disk.get(fn) != fresh.get(fn))
         if differ:  # what the last build wrote, but not what this engine and state.json give now
-            why = ("state.json changed since the last build" if meta_disk.get("stateHash") != state_hash(load_state(d))
-                   else "the engine is newer than the one that built them")
+            n_ = len(differ)
+            files_ = f"{n_} token file{'s' if n_ != 1 else ''} in {rel('tokens/')} ({', '.join(differ[:3])}{' and more' if n_ > 3 else ''}) "
+            files_ += f"{'differ' if n_ != 1 else 'differs'} from what this engine and state.json generate now"
             built = meta_disk.get("engine")
-            notes.append({"check": "tokens-in-step", "message": f"{len(differ)} token file{'s' if len(differ) != 1 else ''} in {rel('tokens/')} "
-                          f"differ from what this engine and state.json generate now ({', '.join(differ[:3])}{' and more' if len(differ) > 3 else ''}): "
-                          + why + (f" (built by engine {built}; this is {ENGINE_VERSION})" if built and built != ENGINE_VERSION else "")
-                          + ("" if recorded else "; this build recorded no file hashes, so a hand edit cannot be told apart"),
-                          "fix": "run engine.py build and look at the diff"})
+            ver = f" (built by engine {built}; this is {ENGINE_VERSION})" if built and built != ENGINE_VERSION else ""
+            state_moved = meta_disk.get("stateHash") != state_hash(load_state(d))  # build records the hash of the inputs it reads
+            if not recorded:  # built before file hashes were recorded: a hand edit, a stale build and a newer engine look alike
+                notes.append({"check": "tokens-in-step", "message": files_ + ": this build recorded no file hashes, so a hand edit cannot be told "
+                              "apart from " + ("a change to state.json since the last build" if state_moved else "a newer engine") + ver,
+                              "fix": "run engine.py build and look at the diff"})
+            elif state_moved:  # a decision recorded without a build, or a merge that brought in another state.json: exports are stale
+                out.append({"check": "tokens-in-step", "message": files_ + ": state.json changed since the last build",
+                            "fix": "run engine.py build, then review again"})
+            else:
+                notes.append({"check": "tokens-in-step", "message": files_ + ": the engine is newer than the one that built them" + ver,
+                              "fix": "run engine.py build and look at the diff"})
     for path, (did, val, locked) in sorted(_decision_values(d).items(), key=lambda kv: _dnum(kv[1][0])):
         if not locked or path in ("init", "zoom.all") or path.endswith("+"):
             continue

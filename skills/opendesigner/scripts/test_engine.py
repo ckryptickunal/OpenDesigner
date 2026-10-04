@@ -669,6 +669,9 @@ class KeepDecidedSystem(unittest.TestCase):
                 self.assertNotEqual(got[0], "EXIT", what)                # ordinary removals pass without --force
             for what in ("the contrast check on cards", "visible labels on fields", "focus-visible styles"):
                 self.assertEqual(std_run(e.cmd_removed, d, "add", what=what, why="w")[0][0], "EXIT", what)
+            for what, pat in (("field labels", r"<label"), ("the sr-only skip text", r"sr-only"), ("screen reader hints", None),
+                              ("tap targets padding", r"min-height:\s*44px")):
+                self.assertEqual(std_run(e.cmd_removed, d, "add", what=what, why="w", pattern=pat)[0][0], "EXIT", what)
 
     def test_a_broken_registry_entry_is_skipped_not_fatal(self):
         with tempfile.TemporaryDirectory() as t:
@@ -725,13 +728,12 @@ class KeepDecidedSystem(unittest.TestCase):
             st["dials"]["roundness"]["value"] = 30
             st["removed"] = []
             e.dump_json(sp, st)
-            res = review_json(d)
-            checks = res["guard"]
-            self.assertEqual(sorted(g["check"] for g in checks), ["locked-decision", "locked-decision"])
-            self.assertIn("state.json changed since the last build", res["notes"][0]["message"])   # a note, not a failure
+            checks = review_json(d)["guard"]
+            self.assertEqual(sorted(g["check"] for g in checks), ["locked-decision", "locked-decision", "tokens-in-step"])
             msgs = " ".join(g["message"] for g in checks)
             self.assertIn("locked dials.roundness at 60, but state.json now has 30", msgs)
             self.assertIn("R-01 (the floating help button) as removed on purpose", msgs)
+            self.assertIn("state.json changed since the last build", msgs)
             self.assertEqual(quiet(e.cmd_review, d, strict=True), 1)
             os.remove(os.path.join(d, "decisions.md"))                    # a branch that lacks the system's files
             self.assertIn("required-file", [g["check"] for g in review_json(d)["guard"]])
@@ -783,6 +785,35 @@ class KeepDecidedSystem(unittest.TestCase):
             e.dump_json(os.path.join(d, "state.json"), st)
             self.assertIn("locked-decision", [g["check"] for g in review_json(d)["guard"]])
 
+    def test_a_decision_without_a_build_fails_strict(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.project(t)
+            quiet(e.cmd_set, d, "dials.roundness", 70, "rounder")         # recorded, but nobody ran build
+            res = review_json(d)
+            self.assertEqual([g["check"] for g in res["guard"]], ["tokens-in-step"])
+            self.assertIn("state.json changed since the last build", res["guard"][0]["message"])
+            self.assertEqual(quiet(e.cmd_review, d, strict=True), 1)
+            quiet(e.cmd_build, d)
+            self.assertEqual(quiet(e.cmd_review, d, strict=True), 0)
+
+    def test_an_engine_only_change_is_a_note(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.project(t)
+            mp = os.path.join(d, "tokens", "opendesigner.meta.json")
+            tok = os.path.join(d, "tokens", "semantic.tokens.json")
+            data = e.read_json(tok)                                      # what another engine wrote for the same state.json
+            data["$extensions"] = {"older": "engine"}
+            e.dump_json(tok, data)
+            meta = e.read_json(mp)
+            meta["fileHashes"]["semantic.tokens.json"] = e.content_hash(data)
+            e.dump_json(mp, meta)
+            res = review_json(d)
+            self.assertEqual(res["guard"], [])
+            self.assertIn("1 token file in", res["notes"][0]["message"])
+            self.assertIn("differs from what this engine", res["notes"][0]["message"])
+            self.assertIn("the engine is newer than the one that built them", res["notes"][0]["message"])
+            self.assertEqual(quiet(e.cmd_review, d, strict=True), 0)
+
     def test_token_files_hand_edit_versus_engine_change(self):
         with tempfile.TemporaryDirectory() as t:
             d = self.project(t)
@@ -812,7 +843,7 @@ class KeepDecidedSystem(unittest.TestCase):
             e.dump_json(mp, meta)
             res = review_json(d)
             self.assertEqual(res["guard"], [])
-            self.assertIn("recorded no file hashes", res["notes"][0]["message"])
+            self.assertIn("recorded no file hashes, so a hand edit cannot be told apart from a newer engine", res["notes"][0]["message"])
             self.assertEqual(quiet(e.cmd_review, d, strict=True), 0)
             quiet(e.cmd_build, d)
             self.assertEqual((review_json(d)["guard"], review_json(d)["notes"]), ([], []))
