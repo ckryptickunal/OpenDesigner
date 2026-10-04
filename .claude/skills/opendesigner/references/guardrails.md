@@ -53,7 +53,7 @@ Hard rules for every OpenDesigner skill. Sources: `_coordination/BRIEF.md` requi
   1. The result, in one line.
   2. What was checked and how: each command and its result (for example `engine.py review --strict` and its last line, or their tests), and what was only read.
   3. What is not verified, riskiest first.
-  4. Decisions for the person: short numbered questions, your recommendation first, and the default that holds until they answer.
+  4. Decisions for the person: record every open question in the open-questions list of `opendesigner/decisions.md` (`rules.md` section 7), with your recommendation and the default that holds until they answer. Ask at most one in the message, the one that blocks the most.
   5. Anything skipped or done differently from the plan, each with its reason.
   6. A check-by-hand list when the work moves, answers a touch, or can only be judged on a real screen: numbered, riskiest first, one action per step with what should happen and what must not, and "not seen yet" on anything nobody has watched run.
 

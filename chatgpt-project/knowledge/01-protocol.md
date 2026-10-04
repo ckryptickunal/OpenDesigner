@@ -577,7 +577,7 @@ Hard rules for every OpenDesigner skill. Sources: `_coordination/BRIEF.md` requi
   1. The result, in one line.
   2. What was checked and how: each command and its result (for example `engine.py review --strict` and its last line, or their tests), and what was only read.
   3. What is not verified, riskiest first.
-  4. Decisions for the person: short numbered questions, your recommendation first, and the default that holds until they answer.
+  4. Decisions for the person: record every open question in the open-questions list of `opendesigner/decisions.md` (`rules.md` section 7), with your recommendation and the default that holds until they answer. Ask at most one in the message, the one that blocks the most.
   5. Anything skipped or done differently from the plan, each with its reason.
   6. A check-by-hand list when the work moves, answers a touch, or can only be judged on a real screen: numbered, riskiest first, one action per step with what should happen and what must not, and "not seen yet" on anything nobody has watched run.
 
@@ -936,7 +936,7 @@ This project's design is decided. The system lives in `opendesigner/`, and `DESI
 **In a merge conflict** in `opendesigner/` or `DESIGN.md`, keep every entry from both sides of `decisions.md`. For `state.json`, keep the side with the newer decisions, then record the other side's decisions again with `engine.py set` and its removals with `engine.py removed add`. Never hand-merge tokens or exports: run `engine.py build`. In a UI file, keep the design side and re-apply your logic change on top.
 
 **At the end of every implementation** (a page, a component, a refactor)
-1. Run `python3 <opendesigner skill>/scripts/engine.py review`. It lists hard-coded values that skip the tokens, code that breaks a standard or brings back something removed, `od-ignore` comments without a reason, missing system files, tokens out of step with `state.json`, a locked decision that changed, and `DESIGN.md` sections that are out of date. Its last line is `Review: ok` when nothing is left.
+1. Run `python3 <opendesigner skill>/scripts/engine.py review`. It lists hard-coded values that skip the tokens, code that breaks a standard or brings back something removed, `od-ignore` comments without a reason, missing system files, a token file edited after the last build, a locked decision that changed, and `DESIGN.md` sections that are out of date. Its last line is `Review: ok` when nothing is left.
 2. Re-read the `DESIGN.md` sections you touched.
 3. If the work needed a value the system lacks, add it as a decision: `engine.py set <path> <value> --why "..."`, then `engine.py design-md`. Don't inline it.
 4. Fix any drift `review` reports.

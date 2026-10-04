@@ -12,3 +12,4 @@ Append-only heartbeat. Newest last.
 - 2026-10-04 22:51 IST: finished L21: 4 cards (DC-L21-01..04), evidence on DC-L19-125/-165/-167/-173/-176 and DC-L11-15/-24, review guard checks + removed registry + 6 tests, STATES.md template, honest-report and feedback wording, canvas write steps; 5 owner decisions proposed, none applied; branch docs/design-playbook-lessons for a PR (no sync)
 - 2026-10-04 22:51 IST: L21 done: 4 groups committed on docs/design-playbook-lessons for the owner's PR; no push, no sync
 - 2026-10-04 23:28 IST: L21: fixing the fresh-context review findings (engine, skills, lane file); new commits only
+- 2026-10-04 23:46 IST: L21: second review findings A-D fixed; running checks
