@@ -81,7 +81,8 @@ python3 <skill>/scripts/engine.py export --format css|tailwind|figma|paper|swift
 python3 <skill>/scripts/engine.py preview [--open]           opendesigner/preview.html
 python3 <skill>/scripts/engine.py show <template> [--open]   one visual template filled with real values (opendesigner/preview/)
 python3 <skill>/scripts/engine.py build [--force]            generate and validate; exports, DESIGN.md and preview only if there are no errors
-python3 <skill>/scripts/engine.py review [--project src/]    end-of-implementation check: hard-coded colors, sizes, radii, shadows, durations; stale DESIGN.md sections
+python3 <skill>/scripts/engine.py review [--project src/] [--strict]   end-of-implementation check: hard-coded values, broken standards, removed things that came back, od-ignore without a reason, guard problems, stale DESIGN.md; last line "Review: ok"
+python3 <skill>/scripts/engine.py removed add "<what>" --why "<their words>" [--instead "..."] [--pattern RE]   something the owner removed on purpose; list | restore <R-id> --why "..."
 python3 <skill>/scripts/engine.py feedback "..." --kind gap|bug|confusing|idea [--from-journey]
 python3 <skill>/scripts/engine.py standards [--update]       house and project standards; --update applies newer house standards (overrides stay)
 python3 <skill>/scripts/engine.py standard override <id> --why "<their words>" [--path P [--value <json>]]...   only when the person explicitly asks; --path releases only that value, without it every value the standard sets
@@ -109,6 +110,7 @@ python3 <skill>/scripts/journey.py share [--dry-run] [--yes]           send the 
 - DESIGN.md is the person's living spec. Once it exists, every `set` and `lock` refreshes it and PRODUCT.md by itself. Run `engine.py design-md` to create it, or after a `--no-doc` change.
 - Each section shows its zoom level (sketch, broad, defined, detailed). Each decision opens with one plain sentence. Text inside `<!-- od:keep -->` blocks survives each refresh.
 - **At the end of any implementation** (a page, a component, a refactor), run `engine.py review`. Then re-read DESIGN.md. Record any new value the work needed as a decision, not as a hard-coded value. `assets/output/AGENTS-snippet.md` tells every later agent to do the same.
+- **When the person removes something** (a control, a label, divider lines, a flow), record it the same day: `engine.py removed add "<what>" --why "<their words>" --instead "<what replaces it>"`. Add `--pattern` when code that brings it back can be found line by line. DESIGN.md then lists it under "Removed on Purpose", and `review` flags its return. Removals leave no trace in code, so without the record a later session adds them back first.
 
 ## Designer hooks
 Some assets need a person to make them, such as a logo, app icon, illustration, photos, a brand typeface or exact brand colors. `references/hooks.md` lists all 14. It says when to ask, which formats to accept, what to offer when they don't have one, and how to record the answer.
@@ -125,7 +127,7 @@ One question per message here, as everywhere.
 1. `engine.py build`. Validation passes, or each warning has a written reason. For a warning the defaults raise, write the reason yourself; don't ask the person about it.
 2. Check the outputs: `opendesigner/tokens/` (canonical), `opendesigner/build/` (exports), `DESIGN.md` and `PRODUCT.md` at the root, `opendesigner/decisions.md` and `state.json`. Write `opendesigner/RATIONALE.md` for the team from `assets/output/RATIONALE.md`.
 3. Send a short summary in three parts: what we chose and why, what is still open, and how to change it later ("use opendesigner-extend"). Add coverage in one line (decided, defaulted, not applicable, pending). For the plain voice, point to the preview and the short summary at the top of DESIGN.md, not the rest of the file. For the engineer voice, name the export files they will import.
-4. If the project has code or agent files (AGENTS.md, CLAUDE.md, `.cursor/`), ask in its own message: "Want me to add a short note to your AGENTS.md, so other AI helpers follow these choices?" After a yes, append `assets/output/AGENTS-snippet.md`. Skip this step when there is no code yet.
+4. If the project has code or agent files (AGENTS.md, CLAUDE.md, `.cursor/`), ask in its own message: "Want me to add a short note to your AGENTS.md, so other AI helpers follow these choices?" After a yes, append `assets/output/AGENTS-snippet.md`. Skip this step when there is no code yet. If they use git, say in one line that the note, DESIGN.md and `opendesigner/` belong on the branch new work starts from: a branch without them builds the old look. Offer once, in its own message, to run `engine.py review --strict` before each push or in their CI; it changes their setup, so add it only after a yes.
 5. If you recorded feedback, mention it and offer the issue link (`references/improve.md`).
 6. If the log is on: `journey.py log session_end`, then `journey.py report`. Mention one line of it only if it shows something useful. In the first session, the last message is the sharing question. In later sessions, send or ask about the report. Both are in `rules.md` section 11.
 
@@ -786,6 +788,17 @@ Designers: accent used sparingly · Code: `color.bg.action.primary`
 ## Motion
 ## Components
 ## Do's and Don'ts
+## Standards
+<!-- Only when standards apply. -->
+
+## Removed on Purpose
+<!-- Only when the owner has removed something (engine.py removed add). Later sessions check this table before adding anything back. -->
+**{{n}} things were removed on purpose. Don't bring them back.**
+
+| Id | Removed | Instead | Why | Since | Checked by |
+|---|---|---|---|---|---|
+| R-01 | {{what was removed, and where}} | {{what people see now, or "nothing"}} | {{the owner's words, or "not recorded"}} | {{YYYY-MM-DD}} | {{`engine.py review` when it has a pattern, else "by hand, on each screen"}} |
+
 <!-- The engine fills the remaining sections in the same pattern: zoom line, marker, plain decisions, collapsed detail. -->
 
 ## Open Items
@@ -866,22 +879,42 @@ Footnotes: {{Q-ids and D-numbers for each choice above}}
 
 ```
 ## Design system (OpenDesigner)
-This project's design system lives in `opendesigner/`, and `DESIGN.md` is its living spec.
+This project's design is decided. The system lives in `opendesigner/`, and `DESIGN.md` is its living spec. This note keeps later AI sessions from undoing it by accident. Keep this note, `DESIGN.md` and `opendesigner/` on the branch new work starts from: a branch without them builds the old look.
 
-**Before any UI, styling or visual work**
-1. Read `DESIGN.md` and `PRODUCT.md` at the project root.
-2. Use the tokens in `opendesigner/tokens/` (DTCG, canonical) or their exports in `opendesigner/build/` (for example `build/css/tokens.css` or `build/tailwind/theme.css`).
-3. Never hard-code colors, font sizes, spacing, radii, shadows or durations.
-4. Check `opendesigner/decisions.md` for why a value is what it is. Locked decisions (`locks` in `opendesigner/state.json`) change only with the owner's consent.
-5. Follow the standards listed in DESIGN.md (for example: which easing, which properties to animate, which library for toasts). They are rules, not suggestions. Only the owner can change one, and only when they ask: `engine.py standard override <id> --why "<their words>"` for one value, or `engine.py standard add ... --beats <id>` when their own rule always wins. `engine.py set --force` never changes a standard's value.
+**Which file decides what.** Before you change something, read the row that covers it.
+
+| Area | Where | Read it before you change |
+|---|---|---|
+| Colors, type, spacing, radii, shadows, motion | `opendesigner/tokens/` (canonical) and its exports in `opendesigner/build/` (for example `build/css/tokens.css` or `build/tailwind/theme.css`) | any styling |
+| What each value is for, and the rules | `DESIGN.md` and `PRODUCT.md` at the project root, including the Standards section | any screen or component |
+| Why a value is what it is, and who decided | `opendesigner/decisions.md` (newest last) | a value you want to change |
+| Things removed on purpose | "Removed on Purpose" in `DESIGN.md`, when it has one | adding a control, label, line, color treatment or flow |
+| The states of screens that show data | `opendesigner/STATES.md`, when it exists | a list, total, status or progress display |
+
+**When files disagree,** the owner's newest decision wins, then `decisions.md` and `DESIGN.md`, then the tokens, then older plans, audits and research, then the existing code. Code that differs from a decision is the bug. List every conflict you settled in your report.
+
+**Never, as part of other work**
+- Hard-code colors, font sizes, spacing, radii, shadows or durations. Use the tokens, or add a decision (below).
+- Edit generated files by hand: `opendesigner/tokens/`, `opendesigner/build/`, or `DESIGN.md` outside `<!-- od:keep -->` blocks. Change the decision and run `engine.py build`.
+- Change a locked decision (`locks` in `opendesigner/state.json`) or a standard without the owner's explicit yes. Standards are rules, not suggestions: `engine.py standard override <id> --why "<their words>"` changes one value, `engine.py standard add ... --beats <id>` records the owner's own rule, and `engine.py set --force` never changes a standard's value.
+- Bring back anything listed under "Removed on Purpose".
+- Restyle or reword a screen or component to suit another task. If the task seems to need a different look, word or interaction, ask.
+- Weaken a check to make it pass. A real exception gets its reason on the same line: `od-ignore: <why>`.
+- Rewrite or delete entries in `opendesigner/decisions.md`. It is append-only.
+
+**In a merge conflict** in `opendesigner/` or `DESIGN.md`, keep every entry from both sides of `decisions.md`. For `state.json`, keep the side with the newer decisions, then record the other side's decisions again with `engine.py set`. Never hand-merge tokens or exports: run `engine.py build`. In a UI file, keep the design side and re-apply your logic change on top.
 
 **At the end of every implementation** (a page, a component, a refactor)
-1. Run `python3 <opendesigner skill>/scripts/engine.py review`. It lists hard-coded values that skip the tokens, code that breaks a standard, and DESIGN.md sections that are out of date.
-2. Re-read the DESIGN.md sections you touched.
+1. Run `python3 <opendesigner skill>/scripts/engine.py review`. It lists hard-coded values that skip the tokens, code that breaks a standard or brings back something removed, `od-ignore` comments without a reason, missing system files, tokens out of step with `state.json`, a locked decision that changed, and `DESIGN.md` sections that are out of date. Its last line is `Review: ok` when nothing is left.
+2. Re-read the `DESIGN.md` sections you touched.
 3. If the work needed a value the system lacks, add it as a decision: `engine.py set <path> <value> --why "..."`, then `engine.py design-md`. Don't inline it.
 4. Fix any drift `review` reports.
 
-**To change or extend the system,** use the `opendesigner-extend` skill. The accessibility floors are part of the system, not options: WCAG 2.2 AA contrast, 24 px minimum targets, visible focus and reduced motion.
+**Before you open a pull request or merge,** run `engine.py review --strict` and paste its last line in your report. Report "written", "built" and "verified" separately, and never call something verified that did not run.
+
+**Stop and ask the owner** when a task needs a different look, word or interaction than `DESIGN.md` gives, when a change would reverse a decision or bring back a removed thing, or when an audit or reference conflicts with a decision. Keep today's design until they answer.
+
+**To change or extend the system,** use the `opendesigner-extend` skill. When the owner removes something, record it the same day: `engine.py removed add "<what>" --why "<their words>" --instead "<what replaces it>"`. The accessibility floors are part of the system, not options: WCAG 2.2 AA contrast, 24 px minimum targets, visible focus and reduced motion.
 
 **`opendesigner/journey/` is a private log of the owner's steps.** It stays out of git. Never commit it, share it or read it into other work.
 
@@ -1120,6 +1153,7 @@ This project's design system lives in `opendesigner/`, and `DESIGN.md` is its li
  "locks": [
   "raw.brandColor"
  ],
+ "removed": [],
  "profile": {
   "voice": "plain"
  },

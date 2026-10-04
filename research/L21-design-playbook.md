@@ -1,0 +1,60 @@
+# L21: Design playbook lessons (private, first-party project evidence)
+
+## Lane overview
+
+- **What this lane does.** It brings four groups of lessons from a private design playbook into OpenDesigner. The owner approved the groups from a gap report: keeping a decided design from being undone, states beyond the happy path, honest checks, and reading the owner's feedback together with safe round trips to a design canvas.
+- **The source.** S-L21-01, "Design playbook: lessons from one mobile app built by many AI sessions under design rules (private, first-party project evidence, 2026)". It is not public and has no licence, so it cannot enter `learn/sources.json` (`learn/IMPROVING.md` section 4 asks for public pages only). It enters as this research lane instead. Every file opened is in `traces/L21-trace.md`.
+- **How it is cited.** By chapter rule number (02.14 means chapter 02, rule 14 of its "rules in one screen"), template or case-study number, and the item ids the playbook attaches to each principle (for example gov-18). The playbook's own caveats apply: no person read its chapters line by line, and numbers inside its reasons were not re-derived from the original records [S-L21-01: README].
+- **Authority.** Reference material, treated like Tier C (`_coordination/SCHEMA.md`). It shapes options, evidence and agent behaviour. It never sets a default value by itself (`docs/KNOWLEDGE.md` sections 1 and 2). Every number below is one project's evidence: a starting point to test, not a rule.
+- **What changed in OpenDesigner.** Agent instructions, output templates and `engine.py review` checks (Part C). No house standard, no `synthesis/standards.json` entry and no default token value changed. Where the playbook disagrees with OpenDesigner, Part D sets out both positions for the owner to decide; none of them is applied.
+- **New cards versus evidence.** Where a pending card already covers a lesson (DC-L19-125, -165, -167, -176), the playbook is added as evidence there (Part B), so lane L20 sees a second source. Four lessons had no card, so they get one each (Part A).
+
+## Part A: Decision Cards
+
+### DC-L21-01: Keeping a decided design system from being undone
+- **Block path:** Governance > AI guardrails > Protecting decided design across sessions (Stage 25; `engine.py review`, `assets/output/AGENTS-snippet.md`, DESIGN.md "Removed on Purpose")
+- **Questions the designer answers:** When several AI sessions or people change the product, what stops one of them from undoing a decision by accident? Where is something removed on purpose remembered? What has to pass before a merge or pull request?
+- **Options:**
+  - **Prose only:** decisions written in DESIGN.md and decisions.md, plus a short agent note. In the source project, rules that lived only in documents were broken again by the next session that had not read them, and a removed control survived for hours after its removal [S-L21-01: 02.15, assistant-2-07, summaries-2-11].
+  - **One instruction file that every session reads first,** with a table that routes each area to the document that decides it, a never-list, the merge rules and the command to run before a pull request. Each never-list entry names a verb and a concrete object and says "as part of other work", so a change the owner asks for is not blocked [S-L21-01: 02.2, 02.4, gov-01, gov-03, gov-05]. The source file was about 60 lines in six sections; that length is one project's observation, not a tested rule [S-L21-01: gov-01].
+  - **A registry of removed things:** what was removed, what replaced it, why (the owner's words or "not recorded"), when, and how a return is noticed. A row is added the same day, because removals leave no trace in code and a well-meaning session re-adds them first [S-L21-01: 02.4, gov-06, seed-15; template 18 section 5].
+  - **A guard that runs anywhere:** one fast check per way the design was or could be undone: the files that carry the system exist, decision documents keep their rules, decided values hold, removed or banned patterns stay absent. It prints one fixed success line, lists every problem in one run and names the likely fix. An exception is allowed only on its own line, with a marker and a reason [S-L21-01: 02.14, 02.16, 02.18, tooling-01, tooling-03, gov-11, gov-18; template 02].
+  - **Plan for the three accidental reverts:** a stale branch merged over the design, a merge conflict resolved toward the older side, and a well-meant tidy-up. A check for one does not cover the others [S-L21-01: 02.3, gov-09]. For conflicts: keep the design side and re-apply the other change on top [S-L21-01: 02.20, gov-23].
+  - **Reach every branch:** the lock protects only the branches that hold it. In the source project, a build from a branch without the design work showed none of it [S-L21-01: case study 02].
+  - **Code-owner review** of design files on the repository host [S-L21-01: seed-13]. That is a host setting outside OpenDesigner; it is mentioned, not built.
+- **Visual effect:** none directly. Decided screens keep their look as more sessions and people work on them [inferred].
+- **Depends on (upstream):** strictness (Q-gov-01), contribution model (Q-gov-03), how exceptions are recorded (DC-L19-165), decision records (DC-L11-12).
+- **Affects (downstream):** the agent note (`AGENTS-snippet.md`), DESIGN.md ("Removed on Purpose", "For Agents"), `engine.py review` (guard checks and a closing line), the new `engine.py removed` command and the `removed` list in state.json, and the extend skill's start-up, removal and merge rules.
+- **Token encoding:** none. State: `removed[] {id, what, instead, why, date, pattern, status, decision}`. Each removal is also an append-only decisions.md entry `removed.R-nn = "<what>"`, recorded as locked [inferred design for OpenDesigner].
+- **Platform notes:** the checks are text searches, so they run where no compiler does [S-L21-01: tooling-01]. OpenDesigner's review already reads CSS, JSX, Tailwind, Swift and Compose, so a removal pattern can target any of them.
+- **Accessibility constraints:** the accessibility floors stay locked whatever the registry says. A removal never takes away a focus ring, a label or a reduced-motion path [inferred].
+- **Default + heuristic:** Default, applied in this lane with the owner's approval: the agent note routes each area to its file, states the order in which sources win, holds a never-list and the merge rule, and asks for `engine.py review --strict` before a pull request. DESIGN.md lists what was removed. Review checks that the system's files exist, that the tokens on disk are what state.json generates, that every locked decision in state.json still matches the append-only decisions.md (which survives a merge that took the older side of state.json), that removed patterns stay absent, and that every `od-ignore` carries a reason; it ends with one fixed line, `Review: ok` or `Review: N to fix`. Heuristic: turn every regression the owner catches into a check the same day [S-L21-01: 02.15]. What a text search cannot see becomes a check by hand on each screen [S-L21-01: template 18 section 5.2].
+- **Evidence:** [S-L21-01: 02.2, 02.3, 02.4, 02.14, 02.15, 02.16, 02.18, 02.20, gov-01, gov-03, gov-05, gov-06, gov-09, gov-11, gov-18, gov-23, seed-13, seed-15, tooling-01, tooling-03, assistant-2-07, summaries-2-11; templates 01, 02, 18; case study 02]. Compared against DC-L11-12, DC-L11-15, DC-L11-24 and DC-L19-165.
+- **Maps to:**
+  - `engine.py review` (no Q-id): guard checks (required files, tokens in step, locked decisions, removed patterns), reasoned and bare `od-ignore`, one closing line. Applied in this lane.
+  - `engine.py removed add|list|restore` (no Q-id) and DESIGN.md "Removed on Purpose". Applied.
+  - `assets/output/AGENTS-snippet.md` and the extend skill sections 1, 2, 3 and 5. Applied.
+  - Q-gov-01 and Q-gov-03: a heuristic for lane L20 to consider: "a removal is recorded the day it happens, with what replaced it", and "a strict project runs `engine.py review --strict` before every merge" [inferred].
+- **Impact now / as it grows:**
+  - *Prose only:* now, nothing to set up. As it grows, every new session is a new chance to undo a decision.
+  - *Agent note with routing and a never-list:* now, one longer note. As it grows, a fresh session knows where each answer lives before it edits.
+  - *Removed registry:* now, one command per removal. As it grows, the record of what was taken out and why, which code alone never keeps.
+  - *Guard checks in review:* now, a few more lines of output. As it grows, a stale branch or an older-side merge shows up before it ships.
+
+## Part B: Evidence on existing cards
+
+| Card | What the playbook adds | Status after this lane |
+|---|---|---|
+| DC-L19-165 (exceptions need a reason) | A second source. An exception lives only on its own line, as one fixed marker plus a reason; a marker without a reason fails the check; the markers are counted, and a growing count means the rule needs a conversation with the owner [S-L21-01: 02.16, gov-18, tooling-06; template 02 section 4.4]. | The engine part is applied: `od-ignore: <why>` lines are listed as kept on purpose, a bare `od-ignore` counts as a finding (it fails `--strict`), and a reason that repeats three times prompts a question to the owner. Not applied: the card's line that "a reason never waives a house standard". Review still skips an `od-ignore` line for standards too, as before, but now lists it with its reason (STD-process-review-taste-22 asks that a documented tradeoff be noted, not re-reported). See open question 2. The Q-gov-03 heuristic stays pending for L20. |
+| DC-L11-24 (AI guardrails) | Evidence that enforcement has to run where the agents work: a text-only check that needs no compiler, run before every install and pull request, with the exact success line quoted in reports [S-L21-01: 02.14, tooling-01, tooling-03]. | Applied inside `engine.py review` (guard checks and the closing line) rather than as a separate script, so OpenDesigner keeps one command. |
+| DC-L11-15 (deprecation) | The design-side twin of token deprecation: a removed control, label or treatment needs a record with its replacement and reason, because nothing in code marks its absence [S-L21-01: 02.4, gov-06]. | Applied as the removed registry. Token deprecation itself is unchanged. |
+| DC-L19-176 (how a review is reported) | One fixed success line, every problem listed in one run, and a failure message that names the fix [S-L21-01: 02.14, tooling-03]. | The closing verdict line is applied (`Review: ok` / `Review: N to fix`). The Before/After/Why table the card proposes is not done; it stays pending for L20. |
+
+## Part C: What changed in OpenDesigner
+
+| Change | Files | Backed by |
+|---|---|---|
+| Review guard checks: required files, tokens in step with state.json, locked decisions against decisions.md, removed patterns, reasoned and bare `od-ignore`, one closing line | `skills/opendesigner/scripts/engine.py` (`review_guard`, `ignore_reason`, `cmd_review`), tests in `test_engine.py` (`KeepDecidedSystem`) | DC-L21-01, DC-L19-165, DC-L19-176 |
+| The removed-on-purpose registry: `engine.py removed add|list|restore`, a "Removed on Purpose" section in DESIGN.md and a line in "For Agents" | `engine.py` (`cmd_removed`, `render_design_md`), `assets/output/DESIGN.md`, `assets/output/state.json` | DC-L21-01 |
+| Agent note: routing table, source order, never-list, merge rule, review before a pull request, stop and ask | `skills/opendesigner/assets/output/AGENTS-snippet.md` | DC-L21-01 |
+| Skill wording: record removals, keep the note on the branch new work starts from, offer review in CI after a yes; extend start-up reads guard lines, removal row, merge rule, reasoned exceptions, review before a pull request | `skills/opendesigner/SKILL.md`, `skills/opendesigner-extend/SKILL.md` | DC-L21-01, DC-L19-165 |

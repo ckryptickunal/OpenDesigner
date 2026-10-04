@@ -91,7 +91,8 @@ python3 <skill>/scripts/engine.py export --format css|tailwind|figma|paper|swift
 python3 <skill>/scripts/engine.py preview [--open]           opendesigner/preview.html
 python3 <skill>/scripts/engine.py show <template> [--open]   one visual template filled with real values (opendesigner/preview/)
 python3 <skill>/scripts/engine.py build [--force]            generate and validate; exports, DESIGN.md and preview only if there are no errors
-python3 <skill>/scripts/engine.py review [--project src/]    end-of-implementation check: hard-coded colors, sizes, radii, shadows, durations; stale DESIGN.md sections
+python3 <skill>/scripts/engine.py review [--project src/] [--strict]   end-of-implementation check: hard-coded values, broken standards, removed things that came back, od-ignore without a reason, guard problems, stale DESIGN.md; last line "Review: ok"
+python3 <skill>/scripts/engine.py removed add "<what>" --why "<their words>" [--instead "..."] [--pattern RE]   something the owner removed on purpose; list | restore <R-id> --why "..."
 python3 <skill>/scripts/engine.py feedback "..." --kind gap|bug|confusing|idea [--from-journey]
 python3 <skill>/scripts/engine.py standards [--update]       house and project standards; --update applies newer house standards (overrides stay)
 python3 <skill>/scripts/engine.py standard override <id> --why "<their words>" [--path P [--value <json>]]...   only when the person explicitly asks; --path releases only that value, without it every value the standard sets
@@ -119,6 +120,7 @@ python3 <skill>/scripts/journey.py share [--dry-run] [--yes]           send the 
 - DESIGN.md is the person's living spec. Once it exists, every `set` and `lock` refreshes it and PRODUCT.md by itself. Run `engine.py design-md` to create it, or after a `--no-doc` change.
 - Each section shows its zoom level (sketch, broad, defined, detailed). Each decision opens with one plain sentence. Text inside `<!-- od:keep -->` blocks survives each refresh.
 - **At the end of any implementation** (a page, a component, a refactor), run `engine.py review`. Then re-read DESIGN.md. Record any new value the work needed as a decision, not as a hard-coded value. `assets/output/AGENTS-snippet.md` tells every later agent to do the same.
+- **When the person removes something** (a control, a label, divider lines, a flow), record it the same day: `engine.py removed add "<what>" --why "<their words>" --instead "<what replaces it>"`. Add `--pattern` when code that brings it back can be found line by line. DESIGN.md then lists it under "Removed on Purpose", and `review` flags its return. Removals leave no trace in code, so without the record a later session adds them back first.
 
 ## Designer hooks
 Some assets need a person to make them, such as a logo, app icon, illustration, photos, a brand typeface or exact brand colors. `references/hooks.md` lists all 14. It says when to ask, which formats to accept, what to offer when they don't have one, and how to record the answer.
@@ -135,7 +137,7 @@ One question per message here, as everywhere.
 1. `engine.py build`. Validation passes, or each warning has a written reason. For a warning the defaults raise, write the reason yourself; don't ask the person about it.
 2. Check the outputs: `opendesigner/tokens/` (canonical), `opendesigner/build/` (exports), `DESIGN.md` and `PRODUCT.md` at the root, `opendesigner/decisions.md` and `state.json`. Write `opendesigner/RATIONALE.md` for the team from `assets/output/RATIONALE.md`.
 3. Send a short summary in three parts: what we chose and why, what is still open, and how to change it later ("use opendesigner-extend"). Add coverage in one line (decided, defaulted, not applicable, pending). For the plain voice, point to the preview and the short summary at the top of DESIGN.md, not the rest of the file. For the engineer voice, name the export files they will import.
-4. If the project has code or agent files (AGENTS.md, CLAUDE.md, `.cursor/`), ask in its own message: "Want me to add a short note to your AGENTS.md, so other AI helpers follow these choices?" After a yes, append `assets/output/AGENTS-snippet.md`. Skip this step when there is no code yet.
+4. If the project has code or agent files (AGENTS.md, CLAUDE.md, `.cursor/`), ask in its own message: "Want me to add a short note to your AGENTS.md, so other AI helpers follow these choices?" After a yes, append `assets/output/AGENTS-snippet.md`. Skip this step when there is no code yet. If they use git, say in one line that the note, DESIGN.md and `opendesigner/` belong on the branch new work starts from: a branch without them builds the old look. Offer once, in its own message, to run `engine.py review --strict` before each push or in their CI; it changes their setup, so add it only after a yes.
 5. If you recorded feedback, mention it and offer the issue link (`references/improve.md`).
 6. If the log is on: `journey.py log session_end`, then `journey.py report`. Mention one line of it only if it shows something useful. In the first session, the last message is the sharing question. In later sessions, send or ask about the report. Both are in `rules.md` section 11.
 

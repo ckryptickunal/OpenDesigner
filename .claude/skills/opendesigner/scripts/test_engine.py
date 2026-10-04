@@ -555,6 +555,137 @@ class ReviewAndFeedback(unittest.TestCase):
                 e.cmd_feedback(t, "x", "rant")
 
 
+class KeepDecidedSystem(unittest.TestCase):
+    """Lane L21 (research/L21-design-playbook.md, DC-L21-01, DC-L19-165): review guards a decided system against the three
+    accidental reverts (a stale branch, a merge that took the older side, a tidy-up that brings back what was removed on
+    purpose), an exception needs a reason, and the run ends with one fixed line."""
+
+    def project(self, t, name="Keep"):
+        d = os.path.join(t, "opendesigner")
+        quiet(e.cmd_init, d, name=name)
+        quiet(e.cmd_build, d)
+        os.makedirs(os.path.join(t, "src"), exist_ok=True)
+        return d
+
+    def write(self, t, text, name="a.css"):
+        with open(os.path.join(t, "src", name), "w", encoding="utf-8") as f:
+            f.write(text)
+
+    def test_reason_is_read_from_every_comment_style(self):
+        self.assertEqual(e.ignore_reason(".a { color: #f60; } /* od-ignore: matches the printed logo */"), "matches the printed logo")
+        self.assertEqual(e.ignore_reason("<b style={{ color: '#f60' }} /> {/* od-ignore: brand gradient stop */}"), "brand gradient stop")
+        self.assertEqual(e.ignore_reason('<hr class="x"> <!-- od-ignore - email template needs it -->'), "email template needs it")
+        self.assertEqual(e.ignore_reason("let c = Color(red: 1, green: 0, blue: 0) // od-ignore (system share sheet)"), "system share sheet")
+        for bare in (".y { color: #0f0; } /* od-ignore */", "x // od-ignore: ok", "x // od-ignore:", "x /* od-ignore -- */"):
+            self.assertEqual(e.ignore_reason(bare), "", bare)
+
+    def test_ignore_without_a_reason_is_a_finding_and_with_one_is_listed(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.project(t)
+            self.write(t, ".logo { color: #ff6600; } /* od-ignore: matches the printed logo */\n.ok { gap: var(--ds-space-8); }\n")
+            res = review_json(d)
+            self.assertEqual((res["findings"], res["ignoredWithoutReason"], res["guard"], res["ok"]), ([], [], [], True))
+            self.assertEqual(res["keptOnPurpose"], [{"file": os.path.join("src", "a.css"), "line": 1, "reason": "matches the printed logo"}])
+            self.assertEqual(quiet(e.cmd_review, d, strict=True), 0)
+            self.write(t, ".x { color: #00ff00; } /* od-ignore */\n")
+            res = review_json(d)
+            self.assertEqual(res["findings"], [])                      # the raw value stays out of the findings, as before
+            self.assertEqual(res["ignoredWithoutReason"], [{"file": os.path.join("src", "a.css"), "line": 1, "reason": ""}])
+            self.assertEqual((res["toFix"], res["ok"]), (1, False))
+            self.assertEqual(quiet(e.cmd_review, d, strict=True), 1)    # a bare ignore fails a strict run
+
+    def test_removed_registry_flags_a_return_and_reaches_design_md(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.project(t)
+            got = std_run(e.cmd_removed, d, "add", what="divider lines between list rows", why=None)[0]
+            self.assertEqual(got[0], "EXIT")                           # a reason is never guessed
+            got = std_run(e.cmd_removed, d, "add", what="dividers", why="w", pattern="(a+)+")[0]
+            self.assertEqual(got[0], "EXIT")                           # an unsafe pattern is refused
+            quiet(e.cmd_removed, d, "add", what="divider lines between list rows", why="rows read better grouped by space",
+                  instead="space between grouped rows", pattern=r"border-bottom:\s*1px")
+            quiet(e.cmd_removed, d, "add", what="the floating help button", why="not recorded")
+            quiet(e.cmd_design_md, d)
+            self.write(t, ".row { border-bottom: 1px solid var(--ds-color-border-default); }\n"
+                          ".menu-sep { border-bottom: 1px solid var(--ds-color-border-default); } /* od-ignore: menu separators stay */\n")
+            res = review_json(d)
+            gone = [f_ for f_ in res["findings"] if f_["kind"] == "removed"]
+            self.assertEqual([(f_["line"], f_["removed"]) for f_ in gone], [(1, "R-01")])
+            self.assertIn("space between grouped rows", gone[0]["fix"])
+            self.assertEqual(res["counts"], {"removed": 1})
+            sec = design_section(t, "Removed on Purpose")
+            self.assertIn("| R-01 | divider lines between list rows | space between grouped rows | rows read better grouped by space |", sec)
+            self.assertIn("| R-02 | the floating help button | nothing | not recorded |", sec)
+            self.assertIn("by hand, on each screen", sec)
+            self.assertIn("Never bring back anything in Removed on Purpose", design_section(t, "For Agents"))
+            self.assertEqual(review_json(d)["staleSections"], [])
+            quiet(e.cmd_removed, d, "restore", rid="R-01", why="the owner wants the lines back in dense tables")
+            res = review_json(d)
+            self.assertEqual([f_ for f_ in res["findings"] if f_["kind"] == "removed"], [])
+            reg = e.read_json(os.path.join(d, "state.json"))["removed"]
+            self.assertEqual([(r["id"], r["status"]) for r in reg], [("R-01", "restored"), ("R-02", "removed")])  # history stays
+            quiet(e.cmd_removed, d, "add", what="uppercase section labels", why="calmer headings")
+            self.assertEqual(e.read_json(os.path.join(d, "state.json"))["removed"][-1]["id"], "R-03")              # ids never reused
+            with open(os.path.join(d, "decisions.md"), encoding="utf-8") as f:
+                log = f.read()
+            self.assertIn('removed.R-01 = "divider lines between list rows"', log)
+            self.assertIn("removed.R-01 = null", log)
+            self.assertEqual(std_run(e.cmd_removed, d, "restore", rid="R-01", why="again")[0][0], "EXIT")
+
+    def test_guard_catches_hand_edited_tokens_an_older_side_merge_and_missing_files(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="Guard")
+            quiet(e.cmd_set, d, "dials.roundness", 60, "owner wants softer corners", lock=True)
+            quiet(e.cmd_removed, d, "add", what="the floating help button", why="not recorded")
+            quiet(e.cmd_build, d)
+            self.assertEqual(review_json(d)["guard"], [])
+            tok = os.path.join(d, "tokens", "semantic.tokens.json")      # a hand edit of a generated file
+            data = e.read_json(tok)
+            data["$extensions"] = {"edited": "by hand"}
+            e.dump_json(tok, data)
+            self.assertEqual([g["check"] for g in review_json(d)["guard"]], ["tokens-in-step"])
+            self.assertIn("semantic.tokens.json", review_json(d)["guard"][0]["message"])
+            quiet(e.cmd_build, d)
+            sp = os.path.join(d, "state.json")                            # a merge that took the older side of state.json
+            st = e.read_json(sp)
+            st["dials"]["roundness"]["value"] = 30
+            st["removed"] = []
+            e.dump_json(sp, st)
+            checks = review_json(d)["guard"]
+            self.assertEqual(sorted(g["check"] for g in checks), ["locked-decision", "locked-decision", "tokens-in-step"])
+            msgs = " ".join(g["message"] for g in checks)
+            self.assertIn("locked dials.roundness at 60, but state.json now has 30", msgs)
+            self.assertIn("R-01 (the floating help button) as removed on purpose", msgs)
+            self.assertEqual(quiet(e.cmd_review, d, strict=True), 1)
+            os.remove(os.path.join(d, "decisions.md"))                    # a branch that lacks the system's files
+            self.assertIn("required-file", [g["check"] for g in review_json(d)["guard"]])
+
+    def test_recorded_changes_to_a_locked_value_are_not_drift(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="No drift")
+            quiet(e.cmd_set, d, "dials.roundness", 60, "softer", lock=True)
+            quiet(e.cmd_lock, d, "dials.roundness", False)                # unlocked, then changed with a new entry
+            quiet(e.cmd_set, d, "dials.roundness", 20, "sharper after all")
+            quiet(e.cmd_set, d, "raw.spaceUnit", 8, "an 8px grid", lock=True)
+            quiet(e.cmd_build, d)
+            self.assertEqual(review_json(d)["guard"], [])
+            quiet(e.cmd_set, d, "dials.roundness", 60, "softer again", lock=True)
+            quiet(e.cmd_set, d, "answers.Q-shape-01", "square", "square after all", force=True)   # moves the lock through 'also set'
+            quiet(e.cmd_build, d)
+            self.assertEqual(e.dial_value(e.read_json(os.path.join(d, "state.json"))["dials"]["roundness"]), 5)
+            self.assertEqual(review_json(d)["guard"], [])
+
+    def test_review_ends_with_one_fixed_line(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.project(t)
+            text = std_run(e.cmd_review, d)[1].strip().splitlines()
+            self.assertEqual(text[-1], "Review: ok")
+            self.write(t, ".x { color: #ff0000; }\n")
+            self.assertEqual(std_run(e.cmd_review, d)[1].strip().splitlines()[-1], "Review: 1 to fix (run with --strict to make this fail)")
+            self.assertEqual(std_run(e.cmd_review, d, strict=True)[1].strip().splitlines()[-1], "Review: 1 to fix")
+
+
 class JourneyTracking(unittest.TestCase):
     """The engine logs its own steps to the private journey log, and only after the person's yes (journey.py)."""
 

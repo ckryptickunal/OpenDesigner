@@ -23,7 +23,8 @@ The engine is `scripts/engine.py` in this skill when it was installed from a rel
    - `git log --oneline -15 -- opendesigner/ DESIGN.md`, if the project uses git.
 2. If `DESIGN.md.hand-edited` exists, someone edited the generated file by hand. Offer to turn each edit into a decision.
 3. Run `engine.py validate`. It checks the system and reports the house standards version. If it says OpenDesigner's house standards are newer than this system's, say so in one line, run `engine.py standards --update`, then `engine.py build`, and show what changed by area. Their overrides and project standards stay as they are.
-4. Run `engine.py review`. If it reports errors or drift, say so first. Fixing them may be the real task.
+4. Run `engine.py review`. If it reports errors or drift, say so first. Fixing them may be the real task. Its guard lines catch the accidental reverts: a missing system file (a branch that lacks the design work), tokens out of step with `state.json`, and a locked decision whose value changed (often a merge that took the older side of `state.json`). Never "fix" a guard line by picking a value yourself: show both values and ask which is right.
+   - If the project has an agent file (AGENTS.md, CLAUDE.md) and it no longer holds the "Design system (OpenDesigner)" note, say so in one line and offer to add it back.
 5. Tell the person in three lines or fewer: the direction, the zoom level of the area they care about, and anything locked or open.
 6. Ask only about what is new. Never re-run the whole interview.
 
@@ -40,11 +41,14 @@ In a chat-only host, ask the person to upload `state.json`, `decisions.md` and D
 | "Why is X like this?" | A question | Answer from `decisions.md`, the standards (`engine.py standards`) and the cards. Change nothing |
 | "Follow this guide", "use this article as a rule", a link to learn from | A new source | `<opendesigner>/references/rules.md` section 12: agree its weight, read it with consent, keep the rules they pick |
 | A value that doesn't exist yet | A token addition | Add it through the engine with a reason (section 4, "Add a token"). Never hard-code it |
+| "Remove the divider lines", "never show that banner again" | A removal | Remove it everywhere it appears, then record it the same day: `engine.py removed add "<what, and where>" --why "<their words>" --instead "<what replaces it>"`. Add `--pattern <regex>` when code that brings it back can be found line by line; first search the code, and make sure nothing matches except survivors marked `od-ignore: <why>`. Without a pattern, it becomes a check by hand on each screen |
 
 ## 3. Locks and conflicts
 - Anything in `state.json` → `locks` (brand colors, contrast target, reduced motion, anything the owner locked) changes only with explicit consent. Name the lock and ask.
 - A conflict with an earlier decision: show both and let the person choose. The new decision supersedes the old one. Nothing is edited or deleted.
 - "You decide" is recorded with `--set-by delegated`.
+- Something listed under "Removed on Purpose" in DESIGN.md comes back only when the person asks for it: `engine.py removed restore <R-id> --why "<their words>"`. An audit, a research note or a reference product that shows a removed thing does not count as asking.
+- **Merge conflicts in the system's files.** Keep every entry from both sides of `opendesigner/decisions.md` (it is append-only). For `state.json`, keep the side with the newer decisions, then record the other side's decisions again with `engine.py set`. Never hand-merge tokens or exports: run `engine.py build`, then `engine.py review --strict`. In a UI file, keep the design side and re-apply the logic change on top.
 
 ### Standards
 - A value locked by a standard (house `STD-...` or project `PRJ-...`) changes only when the person explicitly asks to improve, remove or change that standard. Restate the rule and its reason once. Then their words pick the route:
@@ -79,6 +83,8 @@ After building anything with the system (a page, a component, a refactor):
 2. Re-read the DESIGN.md sections you touched.
 3. For every new value the work needed, add a decision. Never inline it.
 4. Fix any drift that review lists (raw colors, sizes, radii, shadows or durations in code that aren't tokens). Replace each with the token for that role: a background gets a `bg` token, text gets a `text` token, a border gets a `border` token, a hover transition gets the feedback transition. The nearest value alone can pick the wrong role. Add a token if the value is genuinely new. Apply only what the person approves.
+5. A raw value kept on purpose carries its reason on the same line: `od-ignore: <why>`. Review lists those lines as kept on purpose and counts a bare `od-ignore` as a finding. When the same reason shows up three times, it is probably a missing token or a rule to change: ask the person.
+6. Before a pull request or a merge, run `engine.py review --strict`. Its last line is `Review: ok` when nothing is left; quote that line in the change note.
 
 ## 6. Tell the team
 End with a change note that can be read in 20 seconds:
