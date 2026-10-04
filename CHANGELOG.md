@@ -25,6 +25,11 @@ The first public version: the research base, the synthesis that turns it into an
   - Three cards are adopted so far; the rest are listed as pending in `synthesis/QUESTIONNAIRE.md` for lane L20.
   - "Now / As it grows" notes for 30 high-impact questions appear under each option.
 - **Research search:** `tools/jev_nav.py find` also searches the house standards and ranks with BM25. It judges each card by its recommended default and marks older cards the house supersedes.
+- **Keeping a decided system from being undone** (lane L21, `research/L21-design-playbook.md`):
+  - `engine.py review` adds guard checks (the system's files exist, the tokens match `state.json`, every locked decision still matches the append-only `decisions.md`), flags code that brings back something removed on purpose, lists `od-ignore: <why>` lines as kept on purpose, counts a bare `od-ignore` as a finding, and ends with one line: `Review: ok` or `Review: N to fix`.
+  - `engine.py removed add|list|restore` keeps a registry of things removed on purpose; DESIGN.md lists them under "Removed on Purpose".
+  - The AGENTS.md note routes each area to the file that decides it, with a never-list, the merge rule and `review --strict` before a pull request.
+  - A state catalogue template (`assets/output/STATES.md`) for screens that show data; honest reports that keep written, built and verified apart; a method for reading feedback on built screens with one open-questions list across sessions; and safe writes to Figma and Paper.
 
 - **Research base:** 18 finished research lanes (L00 to L18, with L12 still open) written as 352 Decision Cards, with 2,740 sources logged in `traces/`, including rejected ones.
 - **Benchmark:** 25 public design systems compared with real values in `benchmarks/`.
