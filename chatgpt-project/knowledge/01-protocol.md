@@ -936,7 +936,7 @@ This project's design is decided. The system lives in `opendesigner/`, and `DESI
 **In a merge conflict** in `opendesigner/` or `DESIGN.md`, keep every entry from both sides of `decisions.md`. For `state.json`, keep the side with the newer decisions, then record the other side's decisions again with `engine.py set` and its removals with `engine.py removed add`. Never hand-merge tokens or exports: run `engine.py build`. In a UI file, keep the design side and re-apply your logic change on top.
 
 **At the end of every implementation** (a page, a component, a refactor)
-1. Run `python3 <opendesigner skill>/scripts/engine.py review`. It lists hard-coded values that skip the tokens, code that breaks a standard or brings back something removed, `od-ignore` comments without a reason, missing system files, a token file edited after the last build, a locked decision that changed, and `DESIGN.md` sections that are out of date. Its last line is `Review: ok` when nothing is left.
+1. Run `python3 <opendesigner skill>/scripts/engine.py review`. It lists hard-coded values that skip the tokens, code that breaks a standard or brings back something removed, `od-ignore` comments without a reason, missing system files, a token file edited after the last build, tokens older than `state.json`, a locked decision that changed, and `DESIGN.md` sections that are out of date. Its last line is `Review: ok` when nothing is left.
 2. Re-read the `DESIGN.md` sections you touched.
 3. If the work needed a value the system lacks, add it as a decision: `engine.py set <path> <value> --why "..."`, then `engine.py design-md`. Don't inline it.
 4. Fix any drift `review` reports.

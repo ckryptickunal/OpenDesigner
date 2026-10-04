@@ -13,3 +13,4 @@ Append-only heartbeat. Newest last.
 - 2026-10-04 22:51 IST: L21 done: 4 groups committed on docs/design-playbook-lessons for the owner's PR; no push, no sync
 - 2026-10-04 23:28 IST: L21: fixing the fresh-context review findings (engine, skills, lane file); new commits only
 - 2026-10-04 23:46 IST: L21: second review findings A-D fixed; running checks
+- 2026-10-04 23:52 IST: L21: final review fixes committed; checks re-run
