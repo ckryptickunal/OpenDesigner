@@ -26,8 +26,10 @@ The first public version: the research base, the synthesis that turns it into an
   - "Now / As it grows" notes for 30 high-impact questions appear under each option.
 - **Research search:** `tools/jev_nav.py find` also searches the house standards and ranks with BM25. It judges each card by its recommended default and marks older cards the house supersedes.
 - **Keeping a decided system from being undone** (lane L21, `research/L21-design-playbook.md`):
-  - `engine.py review` adds guard checks (the system's files exist, the tokens match `state.json`, every locked decision still matches the append-only `decisions.md`), flags code that brings back something removed on purpose, lists `od-ignore: <why>` lines as kept on purpose, counts a bare `od-ignore` as a finding, and ends with one line: `Review: ok` or `Review: N to fix`.
-  - `engine.py removed add|list|restore` keeps a registry of things removed on purpose; DESIGN.md lists them under "Removed on Purpose".
+  - `engine.py review` adds guard checks (the system's files exist, the token files match `state.json`, every locked decision, including `engine.py lock`, still matches the append-only `decisions.md`, and every recorded removal is still in the registry), flags code that brings back something removed on purpose, and ends with one line: `Review: ok` or `Review: N to fix`.
+  - Changed behaviour of `od-ignore`: a line with `od-ignore: <why, at least two words>` is listed as kept on purpose; a bare `od-ignore` is still skipped for raw values but now shows as a note (it does not fail `--strict`); and an `od-ignore` line is now checked against the standards, because a comment never waives a standard.
+  - Tokens built by another engine version show as a note naming both versions, not as a failure.
+  - `engine.py removed add|list|restore` keeps a registry of things removed on purpose; DESIGN.md lists them under "Removed on Purpose". It refuses a removal that would take away an accessibility floor unless `--force` says it is a false alarm.
   - The AGENTS.md note routes each area to the file that decides it, with a never-list, the merge rule and `review --strict` before a pull request.
   - A state catalogue template (`assets/output/STATES.md`) for screens that show data; honest reports that keep written, built and verified apart; a method for reading feedback on built screens with one open-questions list across sessions; and safe writes to Figma and Paper.
 

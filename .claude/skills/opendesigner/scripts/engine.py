@@ -4255,7 +4255,8 @@ def cmd_lock(d, path, on=True):
     for q in parts:
         cur = cur.get(q) if isinstance(cur, dict) else None
     log_decision(d, path, answer_value(cur), "locked: change only with the owner's consent" if on else "unlocked for change",
-                 "chosen", on, title=f"{'lock' if on else 'unlock'} {path}")
+                 "chosen", on, title=f"{'lock' if on else 'unlock'} {path}",
+                 extra=[f"value: {json.dumps(_state_value(state, path), ensure_ascii=False)}"] if on else None)
     print(f"{'locked' if on else 'unlocked'} {path}")
 
 
@@ -9147,11 +9148,13 @@ def main(argv=None):
     q.add_argument("--why", required=True, help="the owner's words, or \"not recorded\"")
     q.add_argument("--instead", default=None, help="what people see now, or where the job moved")
     q.add_argument("--pattern", default=None, help="a regular expression that finds it in code, so review notices a return")
+    q.add_argument("--force", action="store_true", help="record it although it looks like an accessibility floor (a false alarm)")
     q = rsub.add_parser("list", parents=[common])
     q.add_argument("--json", action="store_true")
     q = rsub.add_parser("restore", parents=[common], help="the owner brings a removed thing back")
     q.add_argument("id")
     q.add_argument("--why", required=True, help="the owner's words")
+    q.add_argument("--what", default=None, help="which removal, when two branches gave two removals the same id")
     for q in rsub.choices.values():
         q.add_argument("--no-doc", dest="no_doc", action="store_true")
     a = ap.parse_args(argv)
@@ -9219,7 +9222,8 @@ def main(argv=None):
             refresh_docs(d)
     elif a.cmd == "removed":
         cmd_removed(d, a.action, what=getattr(a, "what", None), why=getattr(a, "why", None), instead=getattr(a, "instead", None),
-                    pattern=getattr(a, "pattern", None), rid=getattr(a, "id", None), as_json=getattr(a, "json", False))
+                    pattern=getattr(a, "pattern", None), rid=getattr(a, "id", None), as_json=getattr(a, "json", False),
+                    force=getattr(a, "force", False))
         if a.action != "list" and not a.no_doc:
             refresh_docs(d)
     elif a.cmd == "feedback":
@@ -9693,9 +9697,33 @@ def ignore_reason(line):
 
 
 def removed_entries(state, active_only=True):
-    """Entries of the removed-on-purpose registry (state.json `removed`); restored ones only when active_only is False."""
-    out = [r for r in (state.get("removed") or []) if isinstance(r, dict) and r.get("id")]
+    """Entries of the removed-on-purpose registry (state.json `removed`); restored ones only when active_only is False.
+    An entry without a text id and a text `what` (a hand edit, a bad merge) is left out, never a crash."""
+    reg = state.get("removed")
+    out = [r for r in (reg if isinstance(reg, list) else []) if isinstance(r, dict) and isinstance(r.get("id"), str) and r["id"].strip()
+           and isinstance(r.get("what"), str) and r["what"].strip()]
     return [r for r in out if r.get("status", "removed") == "removed"] if active_only else out
+
+
+# Code an accessibility floor depends on (guardrails.md section 4). A removal pattern that matches any of these would make
+# review ask people to delete a focus ring, a label, alt text or a reduced-motion path, so `removed add` refuses it.
+FLOOR_SAMPLES = (":focus-visible { outline: 2px solid var(--ds-color-focus); outline-offset: 2px; }",
+                 "button:focus { outline: 2px solid #1a73e8; }", '<button aria-label="Close">', '<label for="email">Email</label>',
+                 '<img src="team.png" alt="The team at work">', "@media (prefers-reduced-motion: reduce) { * { animation: none; } }",
+                 '.accessibilityLabel("Close")', 'contentDescription = "Close"', '<span class="sr-only">Close</span>')
+RX_FLOOR_WORDS = re.compile(r"focus|\baria\b|alt text|screen ?reader|reduced[ -]motion|contrast|accessib|(tap|touch|click) targets?|hit areas?|"
+                            r"(form|field) labels?", re.I)
+
+
+def removal_hits_floor(what, pattern):
+    """Why a removal would take away an accessibility floor, or None."""
+    if pattern and not regex_problem(pattern):
+        rx = re.compile(pattern)
+        hit = next((s for s in FLOOR_SAMPLES if rx.search(s)), None)
+        if hit:
+            return f"its --pattern matches code an accessibility floor needs ({hit})"
+    m = RX_FLOOR_WORDS.search(what or "")
+    return f"it names an accessibility floor (\"{m.group(0)}\")" if m else None
 
 
 def removed_review_rules(state):
@@ -9709,7 +9737,7 @@ def removed_fix(r):
             f"{instead} Only the owner brings it back (engine.py removed restore {r['id']} --why \"<their words>\").")
 
 
-def cmd_removed(d, action, what=None, why=None, instead=None, pattern=None, rid=None, as_json=False):
+def cmd_removed(d, action, what=None, why=None, instead=None, pattern=None, rid=None, as_json=False, force=False):
     """The registry of things removed on purpose: what, what replaced it, why, when, and an optional review pattern that
     notices a return. Removals leave no trace in code, so later sessions re-add them first (S-L21-01: 02.4, gov-06).
     Entries are never deleted: a restore marks the entry and logs the owner's words."""
@@ -9718,13 +9746,15 @@ def cmd_removed(d, action, what=None, why=None, instead=None, pattern=None, rid=
         raise SystemExit(f"no state at {sp}; run `engine.py init --dir {d}` first")
     state = merge_defaults(read_json(sp))
     reg = state.setdefault("removed", [])
+    if not isinstance(reg, list):
+        raise SystemExit("state.json has a `removed` value that is not a list, so the registry cannot be read. Restore it from git.")
     if action == "list":
         if as_json:
             print(json.dumps(reg, indent=2, ensure_ascii=False))
         elif not reg:
             print("Nothing is recorded as removed on purpose.")
         else:
-            for r in reg:
+            for r in removed_entries(state, active_only=False):
                 state_words = "removed" if r.get("status", "removed") == "removed" else f"brought back {(r.get('restored') or {}).get('date', '')}".strip()
                 print(f"{r['id']}  {r['what']}  ({state_words}; instead: {r.get('instead') or 'nothing'}; "
                       f"{'review checks it' if r.get('pattern') else 'check by hand'})")
@@ -9741,7 +9771,12 @@ def cmd_removed(d, action, what=None, why=None, instead=None, pattern=None, rid=
             problem = regex_problem(pattern)
             if problem:
                 raise SystemExit(f"Nothing was recorded: the --pattern cannot be used because {problem}.")
-        rid = f"R-{len(reg) + 1:02d}"  # ids are never reused, restored entries keep theirs
+        floor = removal_hits_floor(what, pattern)
+        if floor and not force:  # a removal never takes away an accessibility floor (guardrails.md section 4)
+            raise SystemExit(f"Nothing was recorded: {floor}. A removal never takes away an accessibility floor (focus rings, labels, alt text, "
+                             "reduced motion, contrast, target sizes). Narrow the pattern; if this is a false alarm, run it again with --force.")
+        nums = [int(m_.group(1)) for r in reg if isinstance(r, dict) for m_ in [re.match(r"R-(\d+)$", str(r.get("id") or ""))] if m_]
+        rid = f"R-{max(nums, default=0) + 1:02d}"  # ids are never reused, restored entries keep theirs
         reg.append({"id": rid, "what": what, "instead": (instead or "").strip() or None, "why": why.strip(), "date": today,
                     "pattern": pattern or None, "status": "removed", "decision": did})
         dump_json(sp, state)
@@ -9751,11 +9786,19 @@ def cmd_removed(d, action, what=None, why=None, instead=None, pattern=None, rid=
         print(f"{did} removed on purpose: {rid} {what}" + (f" (instead: {instead.strip()})" if (instead or "").strip() else ""))
         print("  engine.py review now flags code that brings it back." if pattern else
               "  No --pattern, so review cannot see it: list it as a check by hand on each screen.")
+        if floor:
+            print(f"  Warning: {floor}. Recorded because of --force; make sure no focus ring, label, alt text, reduced-motion path or "
+                  "contrast is removed with it.")
         return reg
     if action == "restore":
-        ent = next((r for r in reg if r.get("id") == rid), None)
+        cands = [r for r in removed_entries(state, active_only=False) if r["id"] == rid and (not what or r["what"] == what.strip())]
+        if len(cands) > 1:  # two branches each added the same id before a merge
+            raise SystemExit(f"{rid} names {len(cands)} removals (two branches added one each): "
+                             + "; ".join(f'"{r["what"]}"' for r in cands) + f". Ask the owner which comes back, then: engine.py removed restore {rid} "
+                             "--what \"<that text>\" --why \"...\"")
+        ent = cands[0] if cands else None
         if not ent:
-            raise SystemExit(f"There is no {rid} in the registry. engine.py removed list shows the ids.")
+            raise SystemExit(f"There is no {rid} in the registry" + (f" with that text" if what else "") + ". engine.py removed list shows the ids.")
         if ent.get("status", "removed") != "removed":
             raise SystemExit(f"{rid} was already brought back.")
         if not (why or "").strip():
@@ -9769,29 +9812,64 @@ def cmd_removed(d, action, what=None, why=None, instead=None, pattern=None, rid=
     raise SystemExit("removed takes add, list or restore")
 
 
+def _decisions_text(d):
+    fp = os.path.join(d, "decisions.md")
+    if not os.path.exists(fp):
+        return ""
+    with open(fp, encoding="utf-8") as f:
+        return f.read().replace("\r\n", "\n")  # a checkout on Windows may turn the log's line ends into CRLF
+
+
 def _decision_values(d):
     """The latest value per path from decisions.md, with whether the person locked it: {path: (id, value text, locked)}.
-    A later entry's 'also set' line moves the value but keeps the lock. Standards' entries are left out (std_validate
-    checks those)."""
-    fp = os.path.join(d, "decisions.md")
+    A later entry's 'also set' line moves the value but keeps the lock. `engine.py lock <path>` entries (title "lock <path>")
+    lock the path at the value they record, or at the latest value logged before; "unlock <path>" opens it. Standards'
+    entries are left out (std_validate checks those), and so are removals (_decision_removals)."""
     latest = {}
-    if not os.path.exists(fp):
-        return latest
-    with open(fp, encoding="utf-8") as f:
-        text = f.read()
-    for block in re.split(r"^(?=## D-\d+ · )", text, flags=re.M):
+    for block in re.split(r"^(?=## D-\d+ · )", _decisions_text(d), flags=re.M):
         m = re.match(r"## (D-\d+) · (.*?)\n- set_by: (\S+) · locked: (\S+)", block)
         if not m:
             continue
         did, head, set_by, locked = m.groups()
+        if set_by not in PERSON_SET_BY:
+            continue
+        lk = re.match(r"^(lock|unlock) (\S+)$", head.strip())
+        if lk:
+            path = normalize_path(lk.group(2))
+            mv = re.search(r"^- value: (.*)$", block, flags=re.M)
+            val = mv.group(1).strip() if mv and mv.group(1).strip() != "null" else (latest.get(path) or (None, None))[1]
+            if val is not None:
+                latest[path] = (did, val, lk.group(1) == "lock")
+            continue
         path, _, val = head.partition(" = ")
-        if val and set_by in PERSON_SET_BY:
+        if val and not path.startswith("removed."):
             latest[path.strip()] = (did, val.strip(), locked == "yes")
         for am in re.finditer(r"^- also set: (\S+) = (.*) \(from Q-[\w-]+\)$", block, flags=re.M):
             if am.group(1) in latest:
                 old = latest[am.group(1)]
                 latest[am.group(1)] = (did, am.group(2).strip(), old[2] and am.group(2).strip() != "back to the default")
     return latest
+
+
+def _decision_removals(d):
+    """Removals decisions.md still holds in force, as {what: (decision id, R-id)}. Matched by what was removed, not by id: two
+    branches can each add the same R-id before a merge. A restore ("brought back: <what>") takes its removal out."""
+    out = {}
+    for block in re.split(r"^(?=## D-\d+ · )", _decisions_text(d), flags=re.M):
+        m = re.match(r"## (D-\d+) · removed\.(R-\d+) = (.*?)\n", block)
+        if not m:
+            continue
+        try:
+            what = json.loads(m.group(3))
+        except ValueError:
+            continue
+        if isinstance(what, str) and what.strip():
+            out[what.strip()] = (m.group(1), m.group(2))
+        else:
+            back = re.search(r"^- brought back: (.*)$", block, flags=re.M)
+            if back:
+                out.pop(back.group(1).strip(), None)
+    return out
 
 
 def _state_value(state, path):
@@ -9806,11 +9884,12 @@ def _state_value(state, path):
 
 
 def review_guard(d, state, files):
-    """Guard checks for review (S-L21-01: 02.3, 02.14, 02.18; template 02): the files that carry the system exist, the tokens
-    on disk are what state.json generates, and every decision the person locked still holds in state.json. decisions.md is
-    append-only, so it survives a merge that took the older side of state.json; comparing the two shows that merge.
-    Returns [{check, message, fix}]."""
-    out = []
+    """Guard checks for review (DC-L19-165, DC-L21-01; S-L21-01: 02.3, 02.14, 02.18): the files that carry the system exist,
+    the token files on disk are what state.json generates, every decision the person locked still holds in state.json, and
+    every removal decisions.md records is still in the registry. decisions.md is append-only, so it survives a merge that
+    took the older side of state.json; comparing the two shows that merge. Returns (problems, notes): problems count toward
+    --strict, notes do not. Each item is {check, message, fix}."""
+    out, notes = [], []
     rel = lambda p: os.path.join(os.path.basename(os.path.abspath(d)), p)
     if not os.path.exists(os.path.join(d, "decisions.md")):
         out.append({"check": "required-file", "message": f"{rel('decisions.md')} is missing, so nobody can see why a value is what it is",
@@ -9827,28 +9906,30 @@ def review_guard(d, state, files):
                 except (OSError, ValueError):
                     disk[fn] = None
         fresh = json.loads(json.dumps(files, ensure_ascii=False))
-        if (disk.get("opendesigner.meta.json") or {}).get("stateHash") != state_hash(load_state(d)):
+        meta_disk = disk.get("opendesigner.meta.json") if isinstance(disk.get("opendesigner.meta.json"), dict) else {}
+        built_by = meta_disk.get("engine")
+        if meta_disk.get("stateHash") != state_hash(load_state(d)):
             out.append({"check": "tokens-in-step", "message": "the tokens are older than state.json: a decision was recorded without a "
                         "build, or a merge brought in another state.json", "fix": "run engine.py build, then review again"})
-        else:
-            differ = sorted(fn for fn in set(disk) | set(fresh) if disk.get(fn) != fresh.get(fn))
-            if differ:
+        else:  # the token files and the resolver only: the meta file carries the engine version and notes
+            tok = lambda fn: fn.endswith(".tokens.json") or fn == "opendesigner.resolver.json"
+            differ = sorted(fn for fn in set(disk) | set(fresh) if tok(fn) and disk.get(fn) != fresh.get(fn))
+            if built_by and built_by != ENGINE_VERSION:
+                notes.append({"check": "engine-version", "message": f"the tokens were built by engine {built_by}; this is engine {ENGINE_VERSION}"
+                              + (f", which writes {len(differ)} token file{'s' if len(differ) != 1 else ''} differently" if differ else ""),
+                              "fix": "run engine.py build when the team agrees on one OpenDesigner version"})
+            elif differ:
                 out.append({"check": "tokens-in-step", "message": f"{', '.join(differ[:4])}{' and more' if len(differ) > 4 else ''} in "
-                            f"{rel('tokens/')} no longer match what state.json generates: a generated file was edited by hand, a merge mixed "
-                            "two versions, or the engine is newer", "fix": "run engine.py build (record a decision instead of editing tokens)"})
+                            f"{rel('tokens/')} no longer match what state.json generates: a generated file was edited by hand, or a merge mixed "
+                            "two versions", "fix": "run engine.py build (record a decision instead of editing tokens)"})
     for path, (did, val, locked) in sorted(_decision_values(d).items(), key=lambda kv: _dnum(kv[1][0])):
         if not locked or path in ("init", "zoom.all") or path.endswith("+"):
             continue
+        if std_holders(state, path) or _dnum(did) <= _dnum(std_path_decision(state, path)):
+            continue  # a standard took the value over after the person's lock (standard add, restore): it holds the path now
         try:
             want = json.loads(val)
         except ValueError:
-            continue
-        if path.startswith("removed."):
-            rid = path.split(".", 1)[1]
-            if want is not None and not any(r["id"] == rid for r in removed_entries(state)):
-                out.append({"check": "locked-decision", "message": f"{did} recorded {rid} ({want}) as removed on purpose, but the registry in "
-                            "state.json no longer lists it: a merge may have taken the older side of state.json",
-                            "fix": f"ask the owner; to record it again: engine.py removed add \"{want}\" --why \"...\""})
             continue
         if want == UNSET:
             continue
@@ -9857,7 +9938,13 @@ def review_guard(d, state, files):
             out.append({"check": "locked-decision", "message": f"{did} locked {shown_path(path)} at {val}, but state.json now has "
                         f"{json.dumps(cur, ensure_ascii=False)}: a merge may have taken the older side of state.json, or it was edited by hand",
                         "fix": f"ask the owner which value is right, then record it: engine.py set {path} <value> --force --why \"...\""})
-    return out
+    active = {r["what"].strip() for r in removed_entries(state)}
+    for what, (did, rid) in sorted(_decision_removals(d).items(), key=lambda kv: _dnum(kv[1][0])):
+        if what not in active:
+            out.append({"check": "locked-decision", "message": f"{did} recorded {rid} ({what}) as removed on purpose, but the registry in "
+                        "state.json no longer lists it: a merge may have taken the older side of state.json, or two branches used the same id",
+                        "fix": f"ask the owner; to record it again: engine.py removed add \"{what}\" --why \"...\""})
+    return out, notes
 
 
 def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
@@ -10021,11 +10108,11 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
             for i, line in enumerate(lines, 1):
                 if re.search(r"^\s*(//|/\*|\*|<!--)", line):
                     continue
-                if "od-ignore" in line:  # an exception on purpose: listed with its reason, or flagged when it has none
+                ignored = "od-ignore" in line  # an exception on purpose: listed with its reason, or noted when it has none
+                if ignored:
                     why_ = ignore_reason(line)
                     (kept if why_ else bare).append({"file": rel, "line": i, "reason": why_})
-                    continue
-                for rx, r in removed_rules:  # something the owner removed on purpose is back
+                for rx, r in ([] if ignored else removed_rules):  # something the owner removed on purpose is back
                     m_ = next((m_ for m_ in rx.finditer(line[:REVIEW_LINE_CAP]) if m_.end() > m_.start()), None)
                     if m_:
                         findings.append({"kind": "removed", "file": rel, "line": i, "value": m_.group(0).strip()[:80],
@@ -10049,6 +10136,8 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
                                      "standard": ids[0], "standards": ids,
                                      "strength": "must" if any(h[2].get("strength") == "must" for h in hits) else "should",
                                      "severity": "warning"})
+                if ignored:  # a comment keeps a raw value or a removed thing; it never waives a standard (DC-L19-165)
+                    continue
                 line = mask_vars(line)  # every literal is read, even next to a var(); a var() and its fallback are tokens at work (R18)
                 ctx = (css_selector_context(lines, i) if ext in (".css", ".scss", ".sass", ".less") else
                        (lines[i - 2] if i > 1 else "")) + " " + line  # the selector or the line above names the element's role
@@ -10188,14 +10277,14 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
                             untrue.append(f"{fname} says {q} is not recorded, but it was answered")
     else:
         missing = ["DESIGN.md"]
-    guard = review_guard(d, state, files)
+    guard, guard_notes = review_guard(d, state, files)
     by = {}
     for f_ in findings:
         by[f_["kind"]] = by.get(f_["kind"], 0) + 1
-    to_fix = len(findings) + len(bare) + len(guard) + len(set(untrue)) + (1 if (stale or missing) else 0)
+    to_fix = len(findings) + len(guard) + len(set(untrue)) + (1 if (stale or missing) else 0)  # a bare od-ignore is a note (DC-L19-165)
     result = {"project": project, "filesScanned": scanned, "counts": by, "findings": findings[:500], "staleSections": stale,
               "missing": missing, "untrue": sorted(set(untrue)), "keptOnPurpose": kept[:500], "ignoredWithoutReason": bare[:500],
-              "guard": guard, "toFix": to_fix, "ok": to_fix == 0}
+              "guard": guard, "notes": guard_notes, "toFix": to_fix, "ok": to_fix == 0}
     if as_json:
         print(json.dumps(result, indent=2))
     else:
@@ -10213,7 +10302,7 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
                 print(f"  {f_['file']}:{f_['line']}  {f_['value']}  ->  {f_['fix']}")
             if total > limit:
                 print(f"  ... and {total - limit} more (use --json for all).")
-            print("  To keep a raw value on purpose, add a comment with the reason on that line: od-ignore: <why>.")
+            print("  To keep a raw value on purpose, add a comment with the reason on that line: od-ignore: <why, at least two words>.")
         else:
             print("No hard-coded colors, sizes, radii, shadows or durations found: the code uses the tokens.")
         if gonef:
@@ -10223,8 +10312,9 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
             if len(gonef) > limit:
                 print(f"  ... and {len(gonef) - limit} more (use --json for all).")
         if bare:
-            print(f"{len(bare)} od-ignore comment{'s' if len(bare) != 1 else ''} give{'s' if len(bare) == 1 else ''} no reason. "
-                  "Write why on the same line (od-ignore: <why>), or remove the comment and fix the line:")
+            print(f"Note: {len(bare)} od-ignore comment{'s' if len(bare) != 1 else ''} give{'s' if len(bare) == 1 else ''} no reason. "
+                  "Write why on the same line (od-ignore: <why, at least two words>), or remove the comment and fix the line. "
+                  "Not counted as a finding:")
             for b_ in bare[:limit]:
                 print(f"  {b_['file']}:{b_['line']}")
         if kept:
@@ -10261,10 +10351,12 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
             print("DESIGN.md matches state.json.")
         for g_ in guard:
             print(f"Guard ({g_['check']}): {g_['message']}. Fix: {g_['fix']}.")
+        for n_ in guard_notes:
+            print(f"Note ({n_['check']}): {n_['message']}. {n_['fix'][0].upper() + n_['fix'][1:]}. Not counted as a finding.")
         # one fixed closing line, so a report can quote it (S-L21-01 02.14; DC-L19-176's verdict line)
         print("Review: ok" if not to_fix else f"Review: {to_fix} to fix" + ("" if strict else " (run with --strict to make this fail)"))
     track(d, "review")
-    return 1 if strict and (findings or stale or missing or untrue or bare or guard) else 0
+    return 1 if strict and (findings or stale or missing or untrue or guard) else 0
 
 
 # =============================================================================================
