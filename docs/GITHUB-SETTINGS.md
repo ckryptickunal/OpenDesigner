@@ -6,6 +6,7 @@ Everything here is for the maintainer to apply. GitHub's search reads the reposi
 - The repository is public, with 0 stars [S-V1b-001].
 - Applied on 2026-09-23: the About description, the 20 topics, Discussions on, wiki and projects off, the 22 labels, and the 21 seed issues.
 - Still to do: private vulnerability reporting, secret scanning, push protection and Dependabot alerts (all off). The merge settings and the `main` ruleset are not applied yet either.
+- Update on 2026-10-13 (checked with the GitHub API): the ruleset "Protect main" is applied, so `main` cannot be deleted or force-pushed (see [Protect main](#protect-main)). Private vulnerability reporting is on. Secret scanning, push protection and Dependabot alerts are still off, the merge settings are still not applied, and CI has still never run (0 workflow runs).
 - GitHub Actions is disabled at the account level, so CI has never run. Kunal has to turn it back on in his GitHub account settings, or ask GitHub Support.
 
 All commands use the [GitHub CLI](https://cli.github.com/) and assume:
@@ -113,11 +114,23 @@ GitHub's default labels (`documentation`, `duplicate`, `invalid`, `wontfix`) can
 
 ## Protect main
 
-After the first green CI run, require it on `main`. CI can't run until GitHub Actions is turned back on (see the status above).
+**Applied on 2026-10-13:** the ruleset "Protect main" stops anyone from deleting `main` or force-pushing to it. Ordinary pushes and pull request merges still work, so `tools/od.py sync` is not affected. It was created with:
 
 ```bash
 gh api -X POST "repos/$REPO/rulesets" --input - <<'JSON'
-{"name": "main", "target": "branch", "enforcement": "active",
+{"name": "Protect main", "target": "branch", "enforcement": "active",
+ "conditions": {"ref_name": {"include": ["~DEFAULT_BRANCH"], "exclude": []}},
+ "rules": [{"type": "deletion"}, {"type": "non_fast_forward"}]}
+JSON
+```
+
+To see it, open **Settings > Rules > Rulesets** on GitHub, or run `gh api "repos/$REPO/rulesets"`. To rewrite history on purpose (for example to purge a secret), set the ruleset to Disabled there, do the work, and set it back to Active.
+
+**Still to do, after the first green CI run:** require the CI check on `main`. CI can't run until GitHub Actions is turned back on (see the status above). Take the ruleset's id from `gh api "repos/$REPO/rulesets"`, then:
+
+```bash
+gh api -X PUT "repos/$REPO/rulesets/<id>" --input - <<'JSON'
+{"name": "Protect main", "target": "branch", "enforcement": "active",
  "conditions": {"ref_name": {"include": ["~DEFAULT_BRANCH"], "exclude": []}},
  "rules": [{"type": "deletion"}, {"type": "non_fast_forward"},
            {"type": "required_status_checks",
@@ -126,7 +139,7 @@ gh api -X POST "repos/$REPO/rulesets" --input - <<'JSON'
 JSON
 ```
 
-The coordination tool (`tools/od.py sync`) pushes straight to `main` from maintainer sessions. To keep that working, add a bypass for the maintainer role in the ruleset. Or have sessions open pull requests instead.
+The coordination tool (`tools/od.py sync`) pushes straight to `main` from maintainer sessions. To keep that working once the check is required, add a bypass for the maintainer role in the ruleset. Or have sessions open pull requests instead.
 
 ## Seed issues
 
