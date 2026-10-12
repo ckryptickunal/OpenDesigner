@@ -35,6 +35,7 @@ Take facts from `references/`, not from memory. Use `scripts/engine.py` for all 
 | `references/guardrails.md` | Before writing files, before reading a reference, and whenever you are unsure |
 | `references/standards.md` | At the start (short). House standards: rules OpenDesigner applies and locks in every project, the values they lock, and how the person can change one |
 | `references/standards/<theme>.md` | Before you offer options in that area, and before you implement anything it covers (motion, toasts, drawers, touch, Swift and more) |
+| `references/making.md` | Before you build a page, a screen or a section with the system, and each time the person gives feedback on what you built. The round, showing options, keeping a page one page, checking it as rendered, and the mistakes builders make |
 | `references/improve.md` | When something is missing, wrong or confusing |
 | `scripts/journey.py`, `references/report.schema.json` | The private journey log and the optional anonymous report (`rules.md` section 11) |
 | `references/questions.json`, `graph.json`, `cards/Lxx.json`, `levers.json`, `ontology-slim.json` | Machine index; what a choice changes; "why?" sources; dials and formulas; the full block map |
@@ -114,6 +115,15 @@ python3 <skill>/scripts/journey.py share [--dry-run] [--yes]           send the 
 - Never mention the log in normal messages. Never log before a clear yes.
 - Help and frustration belong to the step that caused them: pass `--step` when it is not the question on screen (`rules.md` section 11).
 - Sharing an anonymous report with the OpenDesigner team is a separate yes. Ask it once, in the last message of the first session, after the outputs are written. Never ask it in the first message, and never again. Only a clear choice counts: "whatever" or no answer is a no (`rules.md` section 11).
+
+## Building pages with the system
+Once the system exists, people ask for pages, and then for changes to them. Follow `references/making.md`:
+- Have tokens before the first draft, and take every value from them.
+- A note applies to every instance of the same kind, and to nothing else.
+- Show options one at a time, full size, on a review copy of the page (never the live one), with the current version kept as an option.
+- Check the rendered page, in the person's own window, before you show it.
+- When a page stops looking like one page, run the cohesion audit (`assets/output/COHESION-AUDIT.md`) before restyling anything.
+- When the person repeats a note, stop patching: work out what you misread, and record the rule. "More like this one" usually asks for new ideas, not variations: say in one line how you read it (`making.md` section 10).
 
 ## DESIGN.md stays alive
 - DESIGN.md is the person's living spec. Once it exists, every `set` and `lock` refreshes it and PRODUCT.md by itself. Run `engine.py design-md` to create it, or after a `--no-doc` change.

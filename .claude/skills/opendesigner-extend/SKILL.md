@@ -35,6 +35,8 @@ In a chat-only host, ask the person to upload `state.json`, `decisions.md` and D
 | "Add a date picker / pricing table / settings page" | New component or pattern | Build it from existing tokens only. List the tokens it uses. Add states and keyboard behavior |
 | "Make buttons a bit rounder", "denser tables" | One decision | Find the question in the stage file. Show the current value and the options, then `set` it |
 | "Let's define colors properly", "more detail on type" | Zoom in | Run the next zoom level for that area (`<opendesigner>/references/zoom.md`), then record it, for example `set zoom.color '"defined"'` |
+| "Build the landing page", "redo this section", "show me some options" | A page built with the system | Follow `<opendesigner>/references/making.md`: one round at a time, options on a review copy of the page with the current version kept, every value from the tokens, and a check of the rendered page before you show it |
+| "These sections don't match", "it doesn't feel like one page" | A page that does not hang together | Change nothing yet. Run the cohesion audit (`<opendesigner>/references/making.md` section 4, with `<opendesigner>/assets/output/COHESION-AUDIT.md`), then build the directions they choose as options |
 | "New brand color", "dark mode", "add Android" | An area reopened | Ask that area's questions at its current zoom level |
 | "Make it feel more playful", a new direction | A challenge | It touches most decisions. Say what would move (`graph.json`), offer safe choices and risks, and change nothing without a clear yes |
 | "Why is X like this?" | A question | Answer from `decisions.md`, the standards (`engine.py standards`) and the cards. Change nothing |
@@ -74,7 +76,7 @@ engine.py set compact:space.inset.md 10 --why "tighter cards in compact mode"
 - Tell the person the token's name and where to use it, in one line. Then use the token in the code, never the raw value.
 
 ## 5. End of every implementation: review
-After building anything with the system (a page, a component, a refactor):
+After building anything with the system (a page, a component, a refactor). Review reads code and cannot see the page, so also check the page as rendered (`<opendesigner>/references/making.md` section 5):
 1. Run `engine.py review` (add `--project <folder>` to scan a specific folder; `--strict` makes findings fail the run).
 2. Re-read the DESIGN.md sections you touched.
 3. For every new value the work needed, add a decision. Never inline it.
