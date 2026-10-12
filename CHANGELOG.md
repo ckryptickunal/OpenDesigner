@@ -9,7 +9,7 @@ The first public version: the research base, the synthesis that turns it into an
 ### Added
 
 - **Making and reviewing pages** (lane L22, `research/L22-making-and-review.md`): what to do after the system exists.
-  - A guide for agents, `skills/opendesigner/references/making.md`: the first draft built on the tokens, one round of feedback at a time, options on the real page with the current version kept, what stays the same between sections, checking the rendered page in the person's own window, finished interface shown inside a page, sections that hold the page, and figures drawn as graphics. It ends with the mistakes an AI builder made in that project, and what to do when the person has to repeat a note.
+  - A guide for agents, `skills/opendesigner/references/making.md`: the first draft built on the tokens, one round of feedback at a time, options on a review copy of the page with the current version kept, what stays the same between sections, checking the rendered page in the person's own window, finished interface shown inside a page, sections that hold the page, and figures drawn as graphics. It ends with the mistakes an AI builder made in that project, and what to do when the person has to repeat a note.
   - A cohesion audit template, `assets/output/COHESION-AUDIT.md`, for a page that stopped looking like one page.
   - Nine Decision Cards (DC-L22-01 to -09) from the decision trail of one marketing-site build, with 22 rows of evidence on existing cards, standards and rules, and six items for the maintainer to decide. No standard, question, default or engine code changed.
   - The main and extend skills point to the guide, and `docs/HOW-IT-WORKS.md` section 9 describes it.

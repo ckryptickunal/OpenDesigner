@@ -197,7 +197,7 @@ A design system is finished when pages are built with it, and most of the work h
 
 - **Tokens come before the first draft.** You can ask for a draft before the deeper questions. The model still runs the 5-question sketch first, so every value on the page has a token.
 - **One round at a time.** The model says your note back in one line, finds every place of the same kind, changes only that, and shows the result next to what was there before.
-- **Options sit on the real page.** You flip between them with a switch, one at a time and full size, and the current version stays as one of the options. When you decide, the switch goes away.
+- **Options sit on a review copy of the real page.** You flip between them with a switch, one at a time and full size, and the current version stays as one of the options. When you decide, the switch goes away.
 - **The page is checked as you will see it:** in your browser, at your window size, between the usual sizes, and with no hover.
 - **A repeated note is a signal.** If you have to say something twice, the model stops patching. It works out what it misread, says your rule back in one line, applies it everywhere, and records it so later pages keep it.
 - **When a page stops looking like one page,** the model measures it before changing anything. It asks the same eight questions of every section, matches each of your complaints to a cause, and offers a few directions.

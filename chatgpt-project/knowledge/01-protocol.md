@@ -110,10 +110,10 @@ python3 <skill>/scripts/journey.py share [--dry-run] [--yes]           send the 
 Once the system exists, people ask for pages, and then for changes to them. Follow `references/making.md`:
 - Have tokens before the first draft, and take every value from them.
 - A note applies to every instance of the same kind, and to nothing else.
-- Show options one at a time on the real page, with the current version kept as an option.
+- Show options one at a time, full size, on a review copy of the page (never the live one), with the current version kept as an option.
 - Check the rendered page, in the person's own window, before you show it.
 - When a page stops looking like one page, run the cohesion audit (`assets/output/COHESION-AUDIT.md`) before restyling anything.
-- When the person repeats a note, stop patching: work out what you misread, and record the rule. "More like this one" asks for new ideas, not variations (`making.md` section 10).
+- When the person repeats a note, stop patching: work out what you misread, and record the rule. "More like this one" usually asks for new ideas, not variations: say in one line how you read it (`making.md` section 10).
 
 ## DESIGN.md stays alive
 - DESIGN.md is the person's living spec. Once it exists, every `set` and `lock` refreshes it and PRODUCT.md by itself. Run `engine.py design-md` to create it, or after a `--no-doc` change.
@@ -663,7 +663,7 @@ Sources: `research/L22-making-and-review.md` (one marketing-site build; referenc
 - **Know the job.** Write one line: who the page is for, and what they should do or believe when they reach the end. Judge every option against that line, not against looks alone.
 - **Lock what exists.** Copy the person's existing words exactly, with where each came from and the date. Mark new text as new. Never mix invented text into a record of what exists (`guardrails.md` section 5).
 - **Use their real assets,** or ask for them (`hooks.md`). A stand-in is never shown as finished.
-- **Look at shipped work before you invent.** For each part of the page, find how shipped products solve it, starting from the person's own references (DC-L19-178). Take structure and quality, never identity (`guardrails.md` section 1). In the source project, whole rounds of the builder's own options were removed, and the pages the owner kept working on were built on rebuilds of shipped sections (DC-L22-01).
+- **Look at shipped work before you invent.** For each part of the page, find how shipped products solve it, starting from the person's own references. List the pages you want to open and get a yes first (`guardrails.md` section 2). DC-L19-178 asks for this before a flow with domain rules; for a page section it is a habit that paid off in the source project. Take structure and quality, never identity (`guardrails.md` section 1). In the source project, whole rounds of the builder's own options were removed, and the pages the owner kept working on were built on rebuilds of shipped sections (DC-L22-01).
 - **Agree the pace, once.** Some people approve a plan step by step. Others decide by looking at a built draft. Ask which they want. A draft first is fine. Sections 2 to 10 are what keep a draft honest (DC-L22-01).
 - **Build the first draft on the tokens.** A draft may come before the deeper questions, never before the token build. Run the sketch (`zoom.md`, level 0), or read their existing product with opendesigner-extract. Then make the draft read its values from that build's export, and never give it a style file of its own. In the source project a sketch build existed from the first day and the draft was never bound to it. Values lived in three separate style kits, and one page ended with seven type families.
 - **Fix the page's materials before the second section is built** (section 4).
@@ -678,7 +678,7 @@ Follow this order every time the person asks for something on a built page.
 6. **Show it next to what was there before** (section 3).
 7. **Record the decision in their words.** Then remove the options it settled.
 
-**Ask, or act?** Act on what follows from the request, and report it. Ask only at a real fork, with your pick and a visible alternative. Keep waiting decisions in one numbered list the person can answer in one message: a question that is only logged never closes.
+**Ask, or act?** Act on what follows from the request, and report it. Ask only at a real fork, with your pick and a visible alternative. Keep waiting decisions in one numbered list under Open items in `opendesigner/decisions.md`, and ask one per message, the one that blocks the most (`rules.md` section 1): a question that is only logged never closes.
 
 **What they say, and what they pick.** A stated preference is something to test. Build the smallest real version, keep the version before one switch away, and record the choice only after they have seen it on the page (DC-L22-01).
 
@@ -687,14 +687,14 @@ The house standards already say how options are built and compared: STD-process-
 - Name each option by what it explores (-37). Build three by default and five at most (-38).
 - Every option fully works, with realistic, product-shaped content (-40).
 - Options live on a review route or page of their own, never in the live product (-41).
-- Show one at a time, full size, inside the real page (-43). A small map or a thumbnail is not enough to decide from.
+- Show one at a time, full size, with the rest of the page around it (-43). A small map or a thumbnail is not enough to decide from.
 - Flip through every option yourself first (-47). Say when each is the right choice and what it costs, and don't pick for them (-48).
 - When they pick, build only that one into the product (-49).
 
 What one project adds (DC-L22-02):
 - **Keep the current version as an option,** with a plain name such as "Today". People judge each new option against it. You test against it too (section 5).
-- **One question at a time is still the rule (-42).** When the person asks to judge several things together, such as type, corners and one section's layout, give each question its own switch with a plain name. Each switch remembers its state and has an address in the URL, so a combination can be shared and tested. Keep the count low: every switch multiplies the combinations you must check.
-- **The controls never cover the page.** Keep the picker's own look as its spec gives it (-45). If the person says the controls are in the way, let them fold the controls away. The spec has no such control yet (lane L22, Part D3).
+- **One piece at a time is still the rule (-42).** When the person asks to judge several things together, such as type, corners and one section's layout, that is a request to step outside a house standard: say so once and record it first (`guardrails.md` section 4b). Then give each question its own switch with a plain name. Each switch remembers its state and has an address in the URL, so a combination can be shared and tested. Keep the count low: every switch multiplies the combinations you must check.
+- **The controls never cover the page.** Keep the picker exactly as its spec gives it (-45). The spec has no way to fold the controls away yet (lane L22, Part D3). If the person asks for one, that is also a request to change a standard: record it first (`guardrails.md` section 4b).
 - **Boil down after every decision.** Remove the switch, keep the choice, record it. Ask once, early, whether earlier options should stay reachable; some people want to go back to them.
 - **Never remove an option the person has not ruled out.**
 - **A section made for a light background is not a dark section with the colors swapped.** Design the dark one as its own option, or keep the section light.
@@ -710,7 +710,7 @@ Sections may differ in layout (DC-L19-50). They may not differ in materials. Dec
 - how photographs are treated;
 - how a section that steps is controlled.
 
-When a reference inspires a section, you may first rebuild its structure closely, with the person's own words and assets, on a review page that never ships, to judge the idea. Take nothing of the reference's identity (`guardrails.md` section 1). Once the person picks it, rebuild it in these materials before anything else is built onto it. In the source project, several rounds each built one section to a strong reference and kept much of that reference's look: its small type, its corners or its boxes. After a few rounds one page held four design languages and seven type families.
+When a reference inspires a section, take its lessons by default. Only when the person asks for their own version of it (opendesigner-extract calls this "our version of this") may you first rebuild its structure closely, with the person's own words and assets, on a review page that never ships, to judge the idea. Take nothing of the reference's identity (`guardrails.md` section 1). Once the person picks it, rebuild it in these materials before anything else is built onto it. In the source project, several rounds each built one section to a strong reference and kept much of that reference's look: its small type, its corners or its boxes. After a few rounds one page held four design languages and seven type families.
 
 **When the person says the page does not hang together,** or calls a section "bland" or "different", don't restyle by eye. Run the cohesion audit first. Copy `assets/output/COHESION-AUDIT.md` to `opendesigner/COHESION-AUDIT.md` and fill it in:
 1. Number the sections, and read the numbering back with the person's own words beside each.
@@ -724,13 +724,13 @@ When a reference inspires a section, you may first rebuild its structure closely
 ## 5. Check it as rendered
 `engine.py review` reads values in code. It cannot see the page (DC-L22-05, DC-L19-167). Before you show anything:
 - **Look at it.** Take a screenshot of every section you changed and read it, at each size you support. Fix what is broken before the person sees it.
-- **Use the person's own window.** Ask once what they review in: which browser, how wide the window is, any zoom. Test there as well as at the usual sizes (DC-L19-56).
+- **Match the person's own window.** Ask once what they review in: which browser, how wide the window is, any zoom. Test at that size in your own test window, as well as at the usual sizes (DC-L19-56).
 - **Test between the breakpoints.** A rule written for tablets can squeeze a layout at a width nobody opened.
 - **Test without hover.** Anything that changes on hover must also change another way: by itself on a timer, or on a tap (DC-L19-143). Hover styles themselves sit behind a fine-pointer query (STD-accessibility-motion-15).
 - **Measure text as rendered** wherever something is scaled down. A screen shown at reduced scale can pass every type check while its text renders at 8 to 10 px.
 - **Compare with the version before** for everything you did not mean to change. Compare computed styles or screenshots, section by section.
 - **Emulation is not a device** (STD-process-review-taste-33). When the person reports a fault you cannot reproduce, say so, say what you tried, remove every difference your change introduced, and ask them to look again. Never report it as fixed.
-- **When you record the screen to check motion, record only your test window.** A recording of a screen region can catch the person's other windows.
+- **Ask before you record the screen to check motion, and record only your test window.** A recording of a screen region can catch the person's other windows.
 
 Then tell the person what you checked and what you could not (`guardrails.md` section 5).
 
@@ -738,7 +738,7 @@ Then tell the person what you checked and what you could not (`guardrails.md` se
 A product screen on a marketing page, or a live demo in documentation, is a finished design inside another one (DC-L22-04).
 - **Keep the two style worlds apart.** A page rule aimed at a bare element or attribute, such as every `svg` or every `[stroke]`, reaches into the embedded interface. Scope page rules so they stop at its edge.
 - **Give every class inside the embed its own prefix,** state classes included. A short name such as `on` or `live` will match a page rule with the same name, and nothing reports it.
-- **Write the embed's resets so each weighs one element.** Wrap only the scoping part of the selector in `:where(...)`. The reset then beats the page's element rules and still loses to the embed's own classes.
+- **Write the embed's resets so each weighs one element.** Wrap only the scoping part of the selector in `:where(...)`. The reset then weighs the same as a page rule on a bare element, so it wins only when the embed's styles load after the page's. It still loses to the embed's own classes, and to a page rule aimed at an attribute or a class, which is why those are scoped (first point).
 - **After any page-wide restyle, compare the embed with the version before.** Count something cheap, such as icon colors per screen or the computed typefaces.
 - **Design it at real size and show it scaled, like a screenshot.** Decide which parts must stay readable (the title, the key figures, the main action) and measure them as rendered.
 - **On a small screen, show part of it at a readable size and move the view.** Don't shrink the whole screen.
@@ -766,7 +766,7 @@ A drawing beside a number is a claim (DC-L22-07).
 ## 9. Debt, and when it is done
 - **Keep a debt list as you go:** every value that did not come from the system, every option still switched on, every check you could not run.
 - **A page is done when the list is empty or the person has accepted what is left.** Run `engine.py review`, then ask the eight cohesion questions (section 4) one more time.
-- **Send what any product would need back to OpenDesigner** (`improve.md`). Write it about the method, never about the person's product.
+- **Record what any product would need for OpenDesigner** with `engine.py feedback` (`improve.md`). Write it about the method, never about the person's product. Nothing is posted without the person's OK.
 
 ## 10. Mistakes builders make, and what a repeated note means
 These are mistakes an AI builder made in the source project (DC-L22-09). Most drew a correction from the owner, and several came back more than once. Check your own work against this list before you show anything.
@@ -778,7 +778,7 @@ These are mistakes an AI builder made in the source project (DC-L22-09). Most dr
 | Fixing only where they pointed | The same note comes back for the next card, page or screen | Every instance of the same kind, counted (section 2) |
 | Fixing everything that looks alike | A note about one kind of thing changes other kinds | The thing named and its true siblings, and nothing else |
 | Taking a word to its extreme | "Lighter" becomes all white. "Sharp" becomes square. "Faster" becomes rushed. "Obvious" becomes a banner | A preference is a direction, not an absolute. Move one step that way and show it |
-| Inventing first, or following a reference loosely | You design options from your own idea of the problem, or draw something loosely "after" a reference, even after being told to study shipped work | Study shipped examples first, and rebuild their structure closely (section 1). A method the person names holds for the next section too |
+| Inventing first, or following a reference loosely | You design options from your own idea of the problem, or draw something loosely "after" a reference, even after being told to study shipped work | Study shipped examples first (section 1). When the person asked for their own version of a reference, rebuild its structure closely (section 4). A method the person names holds for the next section too |
 | Forgetting what was already said | A rule from an early round is broken on a page built later | Keep standing rules in one list, as decisions or project standards, and read it before each new piece |
 | Adding what nobody asked for | A new button, a label, a disclaimer, a tint | Add nothing as a side effect. Offer it in one line instead |
 | Changing what was approved or protected | A page-wide pass restyles something they were happy with | Approved work is frozen. Compare it with the version before (section 5) |
@@ -786,7 +786,7 @@ These are mistakes an AI builder made in the source project (DC-L22-09). Most dr
 | A timid fix | The change is so small that the note comes back | Make the change clearly visible, on every instance |
 | Asking what follows | You ask whether a rule applies to the next page | Act and report. Ask only at a real fork |
 | Showing unseen work | You show something you never looked at as rendered | Section 5 |
-| Arguing from analysis | You defend a choice with a measurement while the person is judging by eye | Measure faults and whether rules were kept. For taste, show two versions. An accessibility floor is not taste: show both and say which one meets it (`guardrails.md` section 4) |
+| Arguing from analysis | You defend a choice with a measurement while the person is judging by eye | Measure faults and whether rules were kept. For taste, show two versions. An accessibility floor is not taste: keep the version that meets it, say so in one line, and offer the nearest version that passes (`guardrails.md` section 4) |
 | Fixing a different fault | You fix something real that is not what they meant, and call it done | Say back what you think they saw, and where. If you cannot see it, say so |
 | Bringing a reference's style in with its structure | A rebuilt section arrives with the reference's type and corners | Rebuild it in the page's materials (section 4) |
 | Stating what you did not check | You say two things match, or that something does not move, without looking | `guardrails.md` section 5. When you find out you were wrong, say so in the open |
@@ -797,7 +797,7 @@ These are mistakes an AI builder made in the source project (DC-L22-09). Most dr
 3. Write the rule behind the note in one line, and say it back.
 4. Apply it to every instance, counted (section 2).
 5. Record it as a decision or a project standard, so work built later keeps it.
-6. On a third time, write a small check that finds every case, and run it before every showing.
+6. On a third time, write a small check that finds every case (inside `opendesigner/`, with no new dependency), and run it before every showing.
 
 **Read each reply for what it says about your reading, not only for the fix.** "I only wanted that one changed" means your changes reach too far. The same fix asked for on five cards means they reach too little. "You just did more of the same" means "more" was a request for new ideas. Change how you read the next note, and say what you changed.
 

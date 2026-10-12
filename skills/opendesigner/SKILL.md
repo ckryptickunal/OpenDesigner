@@ -120,10 +120,10 @@ python3 <skill>/scripts/journey.py share [--dry-run] [--yes]           send the 
 Once the system exists, people ask for pages, and then for changes to them. Follow `references/making.md`:
 - Have tokens before the first draft, and take every value from them.
 - A note applies to every instance of the same kind, and to nothing else.
-- Show options one at a time on the real page, with the current version kept as an option.
+- Show options one at a time, full size, on a review copy of the page (never the live one), with the current version kept as an option.
 - Check the rendered page, in the person's own window, before you show it.
 - When a page stops looking like one page, run the cohesion audit (`assets/output/COHESION-AUDIT.md`) before restyling anything.
-- When the person repeats a note, stop patching: work out what you misread, and record the rule. "More like this one" asks for new ideas, not variations (`making.md` section 10).
+- When the person repeats a note, stop patching: work out what you misread, and record the rule. "More like this one" usually asks for new ideas, not variations: say in one line how you read it (`making.md` section 10).
 
 ## DESIGN.md stays alive
 - DESIGN.md is the person's living spec. Once it exists, every `set` and `lock` refreshes it and PRODUCT.md by itself. Run `engine.py design-md` to create it, or after a `--no-doc` change.
