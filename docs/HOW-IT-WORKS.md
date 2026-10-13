@@ -191,6 +191,19 @@ You may come back later to change something, maybe in a different AI tool. The e
 
 The engine gives the same result every time: the same `state.json` makes the same tokens on any machine. That is what lets different models extend the same system without drift. Details: [SPEC.md section 9](SPEC.md#9-harmony-and-extension-across-sessions-and-models).
 
+### Making and reviewing pages
+
+A design system is finished when pages are built with it, and most of the work happens there: you look at a page, say what is wrong, and the model changes it. The skills follow one guide for this, [`making.md`](../skills/opendesigner/references/making.md). In short:
+
+- **Tokens come before the first draft.** You can ask for a draft before the deeper questions. The model still runs the 5-question sketch first, so every value on the page has a token.
+- **One round at a time.** The model says your note back in one line, finds every place of the same kind, changes only that, and shows the result next to what was there before.
+- **Options sit on a review copy of the real page.** You flip between them with a switch, one at a time and full size, and the current version stays as one of the options. When you decide, the switch goes away.
+- **The page is checked as you will see it:** in your browser, at your window size, between the usual sizes, and with no hover.
+- **A repeated note is a signal.** If you have to say something twice, the model stops patching. It works out what it misread, says your rule back in one line, applies it everywhere, and records it so later pages keep it.
+- **When a page stops looking like one page,** the model measures it before changing anything. It asks the same eight questions of every section, matches each of your complaints to a cause, and offers a few directions.
+
+The evidence is one real project, written up in [`research/L22-making-and-review.md`](../research/L22-making-and-review.md). It is reference material: it shapes what the model does and never sets a value.
+
 ## 10. When something is missing
 
 The model may find a gap, a bug or a confusing step while it works in your project. If so, it writes it down with `engine.py feedback`. That saves the note in `opendesigner/feedback.md` and prepares a ready-to-file issue link for this repository. Nothing is posted unless you submit it.
