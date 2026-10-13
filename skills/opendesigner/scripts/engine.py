@@ -8174,6 +8174,7 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
         body = [_md_table(["Id", "Removed", "Instead", "Why", "Since", "Checked by"], rows) if rows else "Nothing is removed right now.",
                 "", "- Before you add a control, label, line, color treatment, flow or component, compare it with this table. A match means stop and ask the owner.",
                 "- An audit, research note or reference product that shows a removed thing is out of date on that point: keep what replaced it.",
+                "- No row takes away an accessibility floor, whatever it is called: focus rings, labels, alt text, reduced motion, contrast and target sizes stay.",
                 "- Record a new removal the day it happens: `engine.py removed add \"<what>\" --why \"<their words>\" --instead \"...\" --pattern \"<regex>\"`."]
         if back:
             body += ["", "Brought back on purpose: " + "; ".join(f"{r['id']} {r['what']} ({(r.get('restored') or {}).get('date', '')})" for r in back) + "."]
@@ -9717,22 +9718,125 @@ def removed_entries(state, active_only=True):
     return [r for r in out if r.get("status", "removed") == "removed"] if active_only else out
 
 
-# What an accessibility floor depends on (guardrails.md section 4): focus rings and outlines, accessible names and visible labels,
-# alt text, the reduced-motion path, and contrast floors. Only these specific targets count, so "the Focus mode toggle", "low-contrast
-# helper captions" or a pattern such as `button` or `2px solid` is not mistaken for a floor.
-RX_FLOOR_TARGET = re.compile(r"focus[ -]?(?:rings?|outlines?|visible|indicators?|states?)\b|:focus|\boutline\b|aria-label|"
-                             r"accessib(?:le|ility) ?(?:names?|labels?)|accessibilityLabel|contentDescription|visible labels?|\balt=|alt text|"
-                             r"(?:form|field|input) labels?|<label\b|sr-only|visually-hidden|screen[ -]?reader (?:text|hints?|labels?|only)|"
-                             r"(?:tap|touch|click|hit) (?:targets?|areas?|sizes?)|target sizes?|min-(?:height|width)[^0-9\n]{0,8}(?:24|44|48)(?:px|pt|dp)?\b|"
-                             r"prefers-reduced-motion|reduced[ -]motion|contrast (?:checks?|floors?|minimums?|ratios?|requirements?|targets?)", re.I)
+# The accessibility floors (guardrails.md section 4) as they appear in code: the part of a line that carries one. A removal never
+# takes these away, so review never reports them as "removed on purpose" (floor_at), and a --pattern that would is refused
+# (removal_hits_floor). The lists are a net, not a proof: add the construct when a floor is written another way.
+FLOOR_CODE = (
+    ("visible_focus", r":focus(?:-visible|-within)?\b|(?<![\w-])focus(?:-visible|-within)?:(?!outline-none)[\w\[\]/.-]+|"
+                      r"(?<![\w-])outline(?:-offset|-color|-style|-width)?\s*:(?!\s*(?:none|0)\b)[^;}\n]*|\.focus(?:ed|able)\(|"
+                      r"[fF]ocusRequester|tab[iI]ndex\s*="),
+    ("names_and_labels", r"(?<![\w-])(?:aria-[a-z]+|role)(?:\s*=\s*(?:\"[^\"]*\"|'[^']*'|\{[^}]*\}))?|<label\b[^>]*>|htmlFor\s*=|<legend\b|"
+                         r"\.accessibility(?:Label|Hint|Value)\(|contentDescription\s*=|(?<![\w-])sr-only\b|visually-hidden|VisuallyHidden"),
+    ("alt_text", r"(?<![\w-])alt\s*=\s*(?:\"[^\"]*\"|'[^']*'|\{[^}]*\})?"),
+    ("reduced_motion", r"prefers-reduced-motion|(?<![\w-])motion-(?:reduce|safe):[\w\[\]/.-]+|[uU]seReducedMotion|[rR]educed?Motion\b|"
+                       r"isReduceMotionEnabled|ANIMATOR_DURATION_SCALE"),
+    ("target_size", r"min-(?:height|width|block-size|inline-size)\s*:\s*(?:2[4-9]|3\d|4[0-8])px|"
+                    r"(?<![\w-])min-[hw]-(?:\[(?:2[4-9]|3\d|4[0-8])px\]|(?:[6-9]|1[0-2])\b)|"
+                    r"min(?:Width|Height)\s*[:=]\s*(?:2[4-9]|3\d|4[0-8])\b|minimumInteractiveComponentSize"),
+    ("contrast", r"prefers-contrast|forced-colors"),
+    ("keyboard_and_media_access", r"skip-(?:link|nav|to-content)|[Ss]kip to (?:main )?content|<track\b[^>]*>"),
+)
+RX_FLOOR_CODE = re.compile("|".join(f"(?P<{name}>{rx})" for name, rx in FLOOR_CODE))
+# A rule, media query or branch that carries a floor for everything inside it
+RX_FLOOR_BLOCK = re.compile(r"(?P<visible_focus>:focus(?:-visible|-within)?\b)|(?P<reduced_motion>prefers-reduced-motion|[rR]educed?Motion\b)|"
+                            r"(?P<contrast>prefers-contrast|forced-colors)")
+# Lines that carry a floor, as people write them in CSS, HTML, JSX, Tailwind, SwiftUI and Compose. A --pattern is run against
+# these, so its wording does not matter: `prefers-reduced`, `alt\s*=` and `aria-` hit the same lines as the full names do.
+FLOOR_SAMPLES = (
+    "button:focus-visible { outline: 2px solid var(--ds-color-border-focus); outline-offset: 2px; }",
+    ".field:focus { box-shadow: 0 0 0 2px var(--ds-color-border-focus); }",
+    ".menu:focus-within { outline: 3px solid Highlight; }",
+    '<button className="rounded-control focus-visible:ring-2 focus-visible:ring-offset-2">Save</button>',
+    '<div tabIndex={0} role="button" aria-pressed={on}>',
+    'TextField("Email", text: $email).focused($emailFocused)',
+    "Modifier.focusRequester(first).focusable()",
+    '<label for="email">Email address</label>',
+    '<label htmlFor="email" className="field-label">Email</label>',
+    '<button aria-label="Close dialog" class="icon-button">',
+    '<input id="q" aria-labelledby="q-label" aria-describedby="q-hint">',
+    '<span class="sr-only">Close</span>',
+    '<span class="visually-hidden">Loading</span>',
+    'Image(systemName: "xmark").accessibilityLabel("Close")',
+    'Icon(Icons.Default.Close, contentDescription = "Close")',
+    '<img src="team.jpg" alt="The team at the 2024 offsite">',
+    "<Image src={cover} alt={title} width={640} height={360} />",
+    "@media (prefers-reduced-motion: reduce) { .card { transition: none; } }",
+    'const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;',
+    "const shouldReduceMotion = useReducedMotion();",
+    '<div className="motion-safe:animate-fade-in motion-reduce:transition-none">',
+    "@Environment(\\.accessibilityReduceMotion) var reduceMotion",
+    ".icon-button { min-width: 44px; min-height: 44px; }",
+    ".chip { min-height: 24px; }",
+    '<button className="min-h-11 min-w-11">',
+    'Button(action: save) { Image(systemName: "plus") }.frame(minWidth: 44, minHeight: 44)',
+    "IconButton(onClick = onClose, modifier = Modifier.sizeIn(minWidth = 48.dp, minHeight = 48.dp))",
+    "@media (prefers-contrast: more) { .hint { color: var(--ds-color-text-primary); } }",
+    "@media (forced-colors: active) { .button { border: 1px solid ButtonText; } }",
+    '<a class="skip-link" href="#main">Skip to content</a>',
+    '<track kind="captions" src="talk.en.vtt" srclang="en" label="English">',
+)
+# A removal's name, for the plain cases only ("focus rings", "alt text"). Words can always be put another way ("the calm mode"),
+# so nothing depends on this list: the --pattern is tested on FLOOR_SAMPLES, and review checks the line itself (floor_at).
+RX_FLOOR_NAME = re.compile(r"focus[ -]?(?:rings?|outlines?|visible|indicators?|states?|styles?)\b|:focus|\boutline\b|\baria\b|"
+                           r"keyboard (?:highlights?|focus|outlines?|rings?|indicators?|access|navigation)|tab(?: ?index| order)\b|"
+                           r"skip[ -]?(?:links?|nav(?:igation)?|to[ -](?:main[ -])?content)|"
+                           r"accessib(?:le|ility) ?(?:names?|labels?|hints?)|accessibilityLabel|contentDescription|visible labels?|\balt=|"
+                           r"alt(?:ernative)?[ -]?(?:text|attributes?|tags?)|(?:form|field|input) labels?|<label\b|sr-only|visually-hidden|"
+                           r"screen[ -]?reader (?:text|hints?|labels?|only)|(?:tap|touch|click|hit) (?:targets?|areas?|sizes?)|target sizes?|"
+                           r"min-(?:height|width)[^0-9\n]{0,8}(?:24|44|48)(?:px|pt|dp)?\b|prefers-reduced-motion|reduced?[ -]?motion|"
+                           r"(?:video|audio|closed|media|player) captions?|captions? (?:on|for|in) (?:the )?(?:videos?|audio|media|clips?|player)|"
+                           r"subtitles?|contrast (?:checks?|floors?|minimums?|ratios?|requirements?|targets?)|high[ -]contrast (?:mode|theme)", re.I)
+
+
+def floor_spans(text):
+    """[(start, end, floor)] for every part of a code line that carries an accessibility floor."""
+    return [(m.start(), m.end(), m.lastgroup.replace("_", " ")) for m in RX_FLOOR_CODE.finditer(text)]
+
+
+def block_context(lines, i, cap=200):
+    """The openers of every block still open around line i (1-based): selectors, at-rules, `if (...)`. Reads up to cap lines up."""
+    out, depth = [], 0
+    for j in range(i - 2, max(-1, i - 2 - cap), -1):
+        row = lines[j][:REVIEW_LINE_CAP]
+        depth += row.count("}") - row.count("{")
+        if depth < 0:
+            out.append(row.rsplit("{", 1)[0].strip())
+            depth = 0
+    return " ".join(out)
+
+
+def floor_at(lines, i, span):
+    """The accessibility floor a match at span on line i (1-based) belongs to, or None: the match overlaps a part of the line
+    that carries one (a focus outline, a label, alt text, a target size), or it sits inside a rule, media query or branch
+    that does (:focus-visible, prefers-reduced-motion, forced-colors)."""
+    line = lines[i - 1][:REVIEW_LINE_CAP]
+    hit = next((f for a, b, f in floor_spans(line) if span[0] < b and span[1] > a), None)
+    if hit:
+        return hit
+    before, prev = line[:span[0]], None
+    while prev != before:  # rules already closed on this line do not hold the match
+        prev, before = before, re.sub(r"[^{}]*\{[^{}]*\}", "", before)
+    opener = re.match(r"[^{};]*(?=\{)", line[span[1]:])  # the match is part of a selector or at-rule: the rest of it counts too
+    m = RX_FLOOR_BLOCK.search(block_context(lines, i) + " " + before + line[span[0]:span[1]] + (opener.group(0) if opener else ""))
+    return m.lastgroup.replace("_", " ") if m else None
 
 
 def removal_hits_floor(what, pattern):
-    """Why a removal would take away an accessibility floor, or None: its name or its pattern names a floor target."""
-    for label, text in (("its name", what or ""), ("its --pattern", pattern or "")):
-        m = RX_FLOOR_TARGET.search(text)
-        if m:
-            return f"{label} names an accessibility floor (\"{m.group(0)}\")"
+    """Why a removal would take away an accessibility floor, or None. The --pattern is run against FLOOR_SAMPLES: when it
+    matches the part of a line that carries a floor, review would report that floor as removed on purpose. Text beside the
+    floor on the same line (`button`, `>Close<`) is not a hit. The name is read only for the plain cases."""
+    if pattern:
+        rx = re.compile(pattern)
+        for sample in FLOOR_SAMPLES:
+            # an attribute's value is content, not the floor: `Close` may match inside aria-label="Close", `aria-` may not
+            spans = [(a, a + sample[a:b].index("=") + 1 if "=" in sample[a:b] else b, f) for a, b, f in floor_spans(sample)]
+            for m in rx.finditer(sample):
+                hit = next((f for a, b, f in spans if m.start() < b and m.end() > a), None) if m.end() > m.start() else None
+                if hit:
+                    return f"its --pattern matches {hit} in a line such as `{sample}`"
+    m = RX_FLOOR_NAME.search(what or "")
+    if m:
+        return f"its name names an accessibility floor (\"{m.group(0)}\")"
     return None
 
 
@@ -9767,7 +9871,7 @@ def cmd_removed(d, action, what=None, why=None, instead=None, pattern=None, rid=
             for r in removed_entries(state, active_only=False):
                 state_words = "removed" if r.get("status", "removed") == "removed" else f"brought back {(r.get('restored') or {}).get('date', '')}".strip()
                 print(f"{r['id']}  {r['what']}  ({state_words}; instead: {r.get('instead') or 'nothing'}; "
-                      f"{'review checks it' if r.get('pattern') else 'check by hand'})")
+                      f"{'review checks it' if r.get('pattern') else 'check by hand'}{'; recorded with --force' if r.get('forced') else ''})")
         return reg
     did = f"D-{len(_decision_entries(d)) + 1:04d}"
     today = _dt.date.today().isoformat()
@@ -9784,21 +9888,23 @@ def cmd_removed(d, action, what=None, why=None, instead=None, pattern=None, rid=
         floor = removal_hits_floor(what, pattern)
         if floor and not force:  # a removal never takes away an accessibility floor (guardrails.md section 4)
             raise SystemExit(f"Nothing was recorded: {floor}. A removal never takes away an accessibility floor (focus rings, labels, alt text, "
-                             "reduced motion, contrast, target sizes). Narrow the pattern; if this is a false alarm, run it again with --force.")
+                             "reduced motion, contrast, target sizes). Narrow the pattern to the thing that was removed (its class, "
+                             "property or component name); if this is a false alarm, run it again with --force.")
         nums = [int(m_.group(1)) for r in reg if isinstance(r, dict) for m_ in [re.match(r"R-(\d+)$", str(r.get("id") or ""))] if m_]
         rid = f"R-{max(nums, default=0) + 1:02d}"  # ids are never reused, restored entries keep theirs
         reg.append({"id": rid, "what": what, "instead": (instead or "").strip() or None, "why": why.strip(), "date": today,
-                    "pattern": pattern or None, "status": "removed", "decision": did})
+                    "pattern": pattern or None, "status": "removed", "decision": did, **({"forced": floor} if floor else {})})
         dump_json(sp, state)
         log_decision(d, f"removed.{rid}", what, why.strip(), "chosen", True,
                      extra=[f"instead: {(instead or '').strip() or 'nothing'}",
-                            f"review pattern: {pattern}" if pattern else "review cannot see it: check each screen by hand"])
+                            f"review pattern: {pattern}" if pattern else "review cannot see it: check each screen by hand"]
+                     + ([f"forced: recorded with --force although {floor}. No accessibility floor is removed with it"] if floor else []))
         print(f"{did} removed on purpose: {rid} {what}" + (f" (instead: {instead.strip()})" if (instead or "").strip() else ""))
         print("  engine.py review now flags code that brings it back." if pattern else
               "  No --pattern, so review cannot see it: list it as a check by hand on each screen.")
         if floor:
-            print(f"  Warning: {floor}. Recorded because of --force; make sure no focus ring, label, alt text, reduced-motion path or "
-                  "contrast is removed with it.")
+            print(f"  Warning: {floor}. Recorded because of --force, and marked as forced in decisions.md. No focus ring, label, alt "
+                  "text, reduced-motion path, contrast or target size is removed with it; review leaves those lines alone.")
         return reg
     if action == "restore":
         cands = [r for r in removed_entries(state, active_only=False) if r["id"] == rid and (not what or r["what"] == what.strip())]
@@ -9826,21 +9932,53 @@ def _decisions_text(d):
     fp = os.path.join(d, "decisions.md")
     if not os.path.exists(fp):
         return ""
-    with open(fp, encoding="utf-8") as f:
-        return f.read().replace("\r\n", "\n")  # a checkout on Windows may turn the log's line ends into CRLF
+    with open(fp, encoding="utf-8") as f:  # text mode, so a checkout on Windows that wrote CRLF line ends reads the same
+        return f.read()
 
 
 def _decision_values(d):
-    """The latest value per path from decisions.md, with whether the person locked it: {path: (id, value text, locked)}.
-    A later entry's 'also set' line moves the value but keeps the lock. `engine.py lock <path>` entries (title "lock <path>")
-    lock the path at the value they record, or at the latest value logged before; "unlock <path>" opens it. Standards'
-    entries are left out (std_validate checks those), and so are removals (_decision_removals)."""
+    """What decisions.md says each path the person set holds now: {path: (id, value text or None, locked)}. It follows the
+    log the way state.json follows the commands, so a flow that was recorded correctly never reads as drift:
+    - a lock stays through a later entry for the same path (`set --force`) until an "unlock <path>" entry opens it;
+    - `engine.py lock <path>` entries (title "lock <path>") lock the path at the value they record, or the latest one logged;
+    - an entry for a value inside a locked group (context.product under context), for the group a locked value sits in, or
+      for a list item (path+) moves the recorded value with it;
+    - 'also set' lines move a value and keep its lock.
+    The value is None when the log cannot say what it is: a standard's entry names the path (standard add, remove, override,
+    restore and updates set values without a "path = value" title), or the value went back to its default. Removals are
+    read by _decision_removals."""
     latest = {}
+
+    def put(path, did, val, lock=None):
+        """Record val at path; a locked value above or below it follows."""
+        old = latest.get(path)
+        latest[path] = (did, val, (old[2] if old else False) if lock is None else lock)
+        for other, (odid, oval, olocked) in list(latest.items()):
+            if other == path or not olocked or oval is None:
+                continue
+            try:
+                if path.startswith(other + ".") and other in ("dials", "answers", "overrides"):
+                    latest[other] = (did, None, True)  # these keep records or flat keys, not plain nested values
+                elif path.startswith(other + "."):  # a value inside a locked group
+                    obj = json.loads(oval)
+                    set_path(obj, path[len(other) + 1:], json.loads(val))
+                    latest[other] = (did, json.dumps(obj, ensure_ascii=False), True)
+                elif other.startswith(path + "."):  # the group a locked value sits in
+                    latest[other] = (did, json.dumps(get_path(json.loads(val), other[len(path) + 1:]), ensure_ascii=False), True)
+            except (ValueError, TypeError, AttributeError):
+                latest[other] = (did, None, True)
+
     for block in re.split(r"^(?=## D-\d+ · )", _decisions_text(d), flags=re.M):
         m = re.match(r"## (D-\d+) · (.*?)\n- set_by: (\S+) · locked: (\S+)", block)
         if not m:
             continue
         did, head, set_by, locked = m.groups()
+        if set_by == "standard" or re.match(r"(?:remove|override|restore) (?:PRJ|STD)-|project standard PRJ-", head):
+            body = block.split("\n", 3)[-1]  # after the title, the set_by line and the reason
+            for path, (odid, oval, olocked) in list(latest.items()):
+                if re.search(r"(?<![\w.+-])" + re.escape(shown_path(path)) + r"(?![\w+-]|\.\w)", body):
+                    latest[path] = (did, None, olocked)  # a standard holds or released it: the person's value no longer shows here
+            continue
         if set_by not in PERSON_SET_BY:
             continue
         lk = re.match(r"^(lock|unlock) (\S+)$", head.strip())
@@ -9848,16 +9986,25 @@ def _decision_values(d):
             path = normalize_path(lk.group(2))
             mv = re.search(r"^- value: (.*)$", block, flags=re.M)
             val = mv.group(1).strip() if mv and mv.group(1).strip() != "null" else (latest.get(path) or (None, None))[1]
-            if val is not None:
-                latest[path] = (did, val, lk.group(1) == "lock")
+            latest[path] = (did, val, lk.group(1) == "lock")
             continue
         path, _, val = head.partition(" = ")
+        path, val = path.strip(), val.strip()
         if val and not path.startswith("removed."):
-            latest[path.strip()] = (did, val.strip(), locked == "yes")
+            if path.endswith("+"):  # an item added to a list: the list's recorded value grows with it
+                path = path[:-1]
+                try:
+                    lst, items = json.loads((latest.get(path) or (None, "[]"))[1] or "null"), json.loads(val)
+                    val = json.dumps(lst + [x for x in (items if isinstance(items, list) else [items]) if x not in lst], ensure_ascii=False)
+                except (ValueError, TypeError):
+                    val = None
+            if path == "zoom.all":  # raises every area's level at once
+                for other in [o for o in latest if o.startswith("zoom.")]:
+                    latest[other] = (did, None, latest[other][2])
+            put(path, did, val, True if locked == "yes" else None)
         for am in re.finditer(r"^- also set: (\S+) = (.*) \(from Q-[\w-]+\)$", block, flags=re.M):
             if am.group(1) in latest:
-                old = latest[am.group(1)]
-                latest[am.group(1)] = (did, am.group(2).strip(), old[2] and am.group(2).strip() != "back to the default")
+                put(am.group(1), did, None if am.group(2).strip() == "back to the default" else am.group(2).strip())
     return latest
 
 
@@ -9880,6 +10027,14 @@ def _decision_removals(d):
             if back:
                 out.pop(back.group(1).strip(), None)
     return out
+
+
+def _holds(cur, want):
+    """True when state.json still holds a recorded value. A group (context, taste) holds it when every recorded key does:
+    a key a newer engine adds to the group is not drift."""
+    if isinstance(cur, dict) and isinstance(want, dict):
+        return all(k in cur and _holds(cur[k], v) for k, v in want.items())
+    return _same(cur, want)
 
 
 def _state_value(state, path):
@@ -9916,7 +10071,8 @@ def review_guard(d, state, files):
                 except (OSError, ValueError):
                     disk[fn] = None
         fresh = json.loads(json.dumps(files, ensure_ascii=False))
-        meta_disk = disk.get("opendesigner.meta.json") if isinstance(disk.get("opendesigner.meta.json"), dict) else {}
+        meta_ok = isinstance(disk.get("opendesigner.meta.json"), dict)  # every build writes it, with the hash of each token file
+        meta_disk = disk["opendesigner.meta.json"] if meta_ok else {}
         recorded = meta_disk.get("fileHashes") if isinstance(meta_disk.get("fileHashes"), dict) else {}
         edited = sorted(fn for fn in recorded if is_token_file(fn) and (fn not in disk or content_hash(disk[fn]) != recorded[fn]))
         if edited:  # the file no longer matches what the last build wrote: a hand edit or a half-merged file
@@ -9931,7 +10087,9 @@ def review_guard(d, state, files):
             built = meta_disk.get("engine")
             ver = f" (built by engine {built}; this is {ENGINE_VERSION})" if built and built != ENGINE_VERSION else ""
             state_moved = meta_disk.get("stateHash") != state_hash(load_state(d))  # build records the hash of the inputs it reads
-            if not recorded:  # built before file hashes were recorded: a hand edit, a stale build and a newer engine look alike
+            if not meta_ok:  # reported below: without the build's record nothing rules out a hand edit
+                pass
+            elif not recorded:  # built before file hashes were recorded: a hand edit, a stale build and a newer engine look alike
                 notes.append({"check": "tokens-in-step", "message": files_ + ": this build recorded no file hashes, so a hand edit cannot be told "
                               "apart from " + ("a change to state.json since the last build" if state_moved else "a newer engine") + ver,
                               "fix": "run engine.py build and look at the diff"})
@@ -9941,8 +10099,14 @@ def review_guard(d, state, files):
             else:
                 notes.append({"check": "tokens-in-step", "message": files_ + ": the engine is newer than the one that built them" + ver,
                               "fix": "run engine.py build and look at the diff"})
+        if not meta_ok:
+            n_ = len(differ)
+            out.append({"check": "required-file", "message": f"{rel('tokens/opendesigner.meta.json')} is missing or cannot be read, so nothing "
+                        "shows whether a token file was edited by hand" + (f" ({n_} token file{'s' if n_ != 1 else ''} "
+                        f"{'differ' if n_ != 1 else 'differs'} from what state.json generates now: {', '.join(differ[:3])})" if differ else ""),
+                        "fix": "run engine.py build and look at the diff"})
     for path, (did, val, locked) in sorted(_decision_values(d).items(), key=lambda kv: _dnum(kv[1][0])):
-        if not locked or path in ("init", "zoom.all") or path.endswith("+"):
+        if not locked or val is None or path in ("init", "zoom.all"):
             continue
         if std_holders(state, path) or _dnum(did) <= _dnum(std_path_decision(state, path)):
             continue  # a standard took the value over after the person's lock (standard add, restore): it holds the path now
@@ -9953,7 +10117,7 @@ def review_guard(d, state, files):
         if want == UNSET:
             continue
         cur = _state_value(state, path)
-        if not _same(cur, want):
+        if not _holds(cur, want):
             out.append({"check": "locked-decision", "message": f"{did} locked {shown_path(path)} at {val}, but state.json now has "
                         f"{json.dumps(cur, ensure_ascii=False)}: a merge may have taken the older side of state.json, or it was edited by hand",
                         "fix": f"ask the owner which value is right, then record it: engine.py set {path} <value> --force --why \"...\""})
@@ -9970,7 +10134,8 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
     """End-of-implementation check: hard-coded colors, sizes, radii, shadows and durations that bypass tokens (CSS, JSX style
     objects, Tailwind arbitrary values and default scales, SwiftUI, Compose), role-appropriate token suggestions, code that
     breaks a standard or brings back something removed on purpose, od-ignore exceptions with and without a reason, guard
-    checks (DC-L21-01), stale or untrue DESIGN.md sections, and one closing verdict line."""
+    checks (DC-L21-01), the errors `validate` finds in the tokens, stale or untrue DESIGN.md sections, and one closing
+    verdict line. --strict exits 1 exactly when that line is not "Review: ok"."""
     state = merge_defaults(load_state(d))
     files, meta, _ = generate_system(load_state(d))
     prefix = slug(meta.get("prefix") or "ds").replace("-", "")
@@ -10100,7 +10265,8 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
         return (f"use var({css_var(prefix, 'motion.transition.' + role)}-duration) and its -easing "
                 f"(the {role} transition: {TR_WORDS[role]}; {why})")
     findings, scanned = [], 0
-    kept, bare, std_notes = [], [], []  # od-ignore lines with and without a reason; standards broken on bare-ignore lines (notes)
+    kept, bare, std_notes = [], [], []  # od-ignore lines with and without a reason; standards broken on od-ignore lines (notes)
+    floor_kept = []  # lines a removed pattern matches that carry an accessibility floor: never reported as removed
     std_rules = std_review_rules(state)  # house standards followed and project standards that carry a review pattern
     removed_rules = removed_review_rules(state)  # things removed on purpose that carry a review pattern (DC-L21-01)
     locked_literals = std_locked_literals(state)
@@ -10131,11 +10297,15 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
                 why_ = ignore_reason(line) if ignored else ""
                 if ignored:
                     (kept if why_ else bare).append({"file": rel, "line": i, "reason": why_})
-                for rx, r in ([] if ignored else removed_rules):  # something the owner removed on purpose is back
+                for rx, r in ([] if why_ else removed_rules):  # something the owner removed on purpose is back; only a reason keeps it
                     m_ = next((m_ for m_ in rx.finditer(line[:REVIEW_LINE_CAP]) if m_.end() > m_.start()), None)
-                    if m_:
+                    floor = floor_at(lines, i, m_.span()) if m_ else None
+                    if floor:  # a removal never takes away an accessibility floor (guardrails.md section 4): the line stays
+                        floor_kept.append({"file": rel, "line": i, "value": m_.group(0).strip()[:80], "removed": r["id"], "floor": floor})
+                    elif m_:
                         findings.append({"kind": "removed", "file": rel, "line": i, "value": m_.group(0).strip()[:80],
-                                         "fix": removed_fix(r), "removed": r["id"], "severity": "warning"})
+                                         "fix": removed_fix(r) + (" The od-ignore on this line gives no reason, so it does not keep it."
+                                                                  if ignored else ""), "removed": r["id"], "severity": "warning"})
                 hits = []  # every standard this line breaks, merged into one finding (R28)
                 for rx, std in std_rules:  # the first match that is not empty, in the first REVIEW_LINE_CAP characters
                     ms_ = next((m_ for m_ in rx.finditer(line[:REVIEW_LINE_CAP]) if m_.end() > m_.start()), None)
@@ -10150,14 +10320,21 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
                                 break
                 if hits:
                     ids = list(dict.fromkeys(h[2]["id"] for h in hits))
-                    # a bare od-ignore that breaks a standard is a note for now (older projects were told to write it); with a
-                    # reason it is a finding, because a comment never waives a standard (DC-L19-165)
-                    (std_notes if ignored and not why_ else findings).append({"kind": "standard", "file": rel, "line": i, "value": hits[0][0],
-                                     "fix": "; ".join(dict.fromkeys(h[1].rstrip(" .") if len(hits) > 1 else h[1] for h in hits if h[1])),
-                                     "standard": ids[0], "standards": ids,
-                                     "strength": "must" if any(h[2].get("strength") == "must" for h in hits) else "should",
-                                     "severity": "warning"})
-                if ignored:  # a comment keeps a raw value or a removed thing; it never waives a standard (DC-L19-165)
+                    # A standard broken on an od-ignore line, with or without a reason, is shown as a note and not counted. Until
+                    # this change such a line was skipped whole, and STD-process-review-taste-40 tells people to write od-ignore in
+                    # a test or story, while DC-L19-165 says a comment never waives a standard. Which one holds is the
+                    # OpenDesigner owner's decision (research/L21-design-playbook.md, open questions); projects keep passing meanwhile.
+                    item = {"kind": "standard", "file": rel, "line": i, "value": hits[0][0],
+                            "fix": "; ".join(dict.fromkeys(h[1].rstrip(" .") if len(hits) > 1 else h[1] for h in hits if h[1])),
+                            "standard": ids[0], "standards": ids,
+                            "strength": "must" if any(h[2].get("strength") == "must" for h in hits) else "should", "severity": "warning"}
+                    if ignored:
+                        std_notes.append(dict(item, reason=why_))
+                        if why_:
+                            kept.pop()  # shown once, in the note with its reason
+                    else:
+                        findings.append(item)
+                if ignored:  # the comment keeps the raw values on the line (and, with a reason, a removed thing)
                     continue
                 line = mask_vars(line)  # every literal is read, even next to a var(); a var() and its fallback are tokens at work (R18)
                 ctx = (css_selector_context(lines, i) if ext in (".css", ".scss", ".sass", ".less") else
@@ -10299,13 +10476,21 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
     else:
         missing = ["DESIGN.md"]
     guard, guard_notes = review_guard(d, state, files)
+    # what `engine.py validate` says about the tokens state.json gives now: "Review: ok" is the line people quote before a
+    # merge, so it never prints over a failed contrast, target-size or standards check
+    rep = Report()
+    validate_files(files, state, rep)
+    std_validate(state, rep, files)
+    invalid = [i_ for i_ in rep.items if i_["severity"] == "error"]
     by = {}
     for f_ in findings:
         by[f_["kind"]] = by.get(f_["kind"], 0) + 1
-    to_fix = len(findings) + len(guard) + len(set(untrue)) + (1 if (stale or missing) else 0)  # a bare od-ignore is a note (DC-L19-165)
+    to_fix = len(findings) + len(guard) + len(invalid) + len(set(untrue)) + (1 if (stale or missing) else 0)  # notes are not counted
     result = {"project": project, "filesScanned": scanned, "counts": by, "findings": findings[:500], "staleSections": stale,
               "missing": missing, "untrue": sorted(set(untrue)), "keptOnPurpose": kept[:500], "ignoredWithoutReason": bare[:500],
-              "guard": guard, "notes": guard_notes, "standardNotes": std_notes[:500], "toFix": to_fix, "ok": to_fix == 0}
+              "guard": guard, "notes": guard_notes, "standardNotes": std_notes[:500], "floorKept": floor_kept[:500],
+              "validateErrors": [{"category": i_["category"], "message": i_["message"], "where": i_["where"]} for i_ in invalid[:500]],
+              "toFix": to_fix, "ok": to_fix == 0}
     if as_json:
         print(json.dumps(result, indent=2))
     else:
@@ -10338,11 +10523,21 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
                   "Not counted as a finding:")
             for b_ in bare[:limit]:
                 print(f"  {b_['file']}:{b_['line']}")
+        if floor_kept:
+            n_ = len(floor_kept)
+            print(f"Note: {n_} line{'s' if n_ != 1 else ''} match{'es' if n_ == 1 else ''} the pattern of something removed on purpose but "
+                  f"carr{'ies' if n_ == 1 else 'y'} an accessibility floor. {'It stays' if n_ == 1 else 'They stay'}: a removal never takes "
+                  "away a floor. Not counted as a finding:")
+            for k_ in floor_kept[:limit]:
+                print(f"  {k_['file']}:{k_['line']}  {k_['value']}  ({k_['floor']}; pattern of {k_['removed']})")
         if std_notes:
-            print(f"Note: {len(std_notes)} line{'s' if len(std_notes) != 1 else ''} with a bare od-ignore break{'s' if len(std_notes) == 1 else ''} "
-                  "a standard. Not counted yet; a reason on the line will not waive it, so fix the line:")
+            n_ = len(std_notes)
+            print(f"Note: {n_} line{'s' if n_ != 1 else ''} with an od-ignore comment break{'s' if n_ == 1 else ''} a standard. Not counted "
+                  "for now: OpenDesigner has not yet settled whether a reason on the line can excuse a standard in a test or story. "
+                  "Fix the line where you can:")
             for f_ in std_notes[:limit]:
-                print(f"  {f_['file']}:{f_['line']}  {f_['value']}  ->  {f_['fix']} ({', '.join(f_['standards'])}, {f_['strength']})")
+                print(f"  {f_['file']}:{f_['line']}  {f_['value']}  ->  {f_['fix']} ({', '.join(f_['standards'])}, {f_['strength']}; "
+                      + (f"reason given: {f_['reason'][:80]})" if f_["reason"] else "no reason given)"))
         if kept:
             print(f"{len(kept)} line{'s' if len(kept) != 1 else ''} kept on purpose (od-ignore with a reason; not counted as findings):")
             for k_ in kept[:limit]:
@@ -10379,10 +10574,14 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
             print(f"Guard ({g_['check']}): {g_['message']}. Fix: {g_['fix']}.")
         for n_ in guard_notes:
             print(f"Note ({n_['check']}): {n_['message']}. {n_['fix'][0].upper() + n_['fix'][1:]}. Not counted as a finding.")
+        if invalid:
+            n_ = len(invalid)
+            print(f"Validate: {n_} error{'s' if n_ != 1 else ''} in the tokens, for example: {invalid[0]['message'].rstrip('.')}. "
+                  "Fix: run `engine.py validate` for the full list and each fix.")
         # one fixed closing line, so a report can quote it (S-L21-01 02.14; DC-L19-176's verdict line)
         print("Review: ok" if not to_fix else f"Review: {to_fix} to fix" + ("" if strict else " (run with --strict to make this fail)"))
     track(d, "review")
-    return 1 if strict and (findings or stale or missing or untrue or guard) else 0
+    return 1 if strict and to_fix else 0
 
 
 # =============================================================================================
