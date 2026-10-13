@@ -1,6 +1,6 @@
 # Guardrails
 
-Hard rules for every OpenDesigner skill. Sources: `_coordination/BRIEF.md` requirement 4, `research/L17` Parts F3 and H, `research/L18` DC-L18-10 to 14, and `synthesis/levers.json` → `guardrails`.
+Hard rules for every OpenDesigner skill. Sources: `_coordination/BRIEF.md` requirement 4, `research/L17` Parts F3 and H, `research/L18` DC-L18-10 to 14, `research/L21` (honest reports and canvas writes), and `synthesis/levers.json` → `guardrails`.
 
 ## 1. Identity firewall (references)
 - Copy **structure and quality**: layout rhythm, scales and ratios, density, depth model, motion character, component anatomy and the quality bar.
@@ -47,12 +47,22 @@ Hard rules for every OpenDesigner skill. Sources: `_coordination/BRIEF.md` requi
 - A generated placeholder is never shown as a finished asset.
 - Every value traces to `levers.json`, a Decision Card, the person, or a reference. If you infer, say so.
 - Don't claim you checked something you did not run.
+- **Written, built and verified are three different claims** (`research/L21-design-playbook.md`, DC-L21-02). Written: the file changed. Built: it compiled, or `engine.py build` ran. Verified: a check ran and passed, or someone looked at the result on the screen or device it is for. Never write "works", "done", "passes" or "fixed" for something that did not run. Write "written, not run" or "not verified", and say what would verify it.
+- A sweep of code you could not run is a list of guesses. Fix only what is certain, and name the rest as not verified.
+- **After code work, in the engineer voice, report in a fixed order.** In the plain voice, keep the short summary (SKILL.md, Finish step 3, and `rules.md` section 8) and say in one line what nobody could check. The fixed order:
+  1. The result, in one line.
+  2. What was checked and how: each command and its result (for example `engine.py review --strict` and its last line, or their tests), and what was only read.
+  3. What is not verified, riskiest first.
+  4. Decisions for the person: record every open question in the open-questions list of `opendesigner/decisions.md` (`rules.md` section 7), with your recommendation and the default that holds until they answer. Ask at most one in the message, the one that blocks the most.
+  5. Anything skipped or done differently from the plan, each with its reason.
+  6. A check-by-hand list when the work moves, answers a touch, or can only be judged on a real screen: numbered, riskiest first, one action per step with what should happen and what must not, and "not seen yet" on anything nobody has watched run.
 
 ## 6. Files and tools
 - Write inside `opendesigner/` freely. Ask before editing anything else in the person's repo (AGENTS.md, CLAUDE.md, CSS, Tailwind config).
 - Decisions are appended, never deleted: a change supersedes the old record.
 - Scripts are standard-library Python with no network access. Never add a dependency to the person's project without asking.
 - Before writing to Figma or Paper, confirm the target file. For Figma, suggest a duplicate first.
+- Read a design file just before each write, write only what changed, and never overwrite a frame someone else is editing or edited by hand: put yours beside it (opendesigner-export, "Before every write to Figma or Paper").
 - Never commit secrets or read `.env` files.
 
 ## 7. Never automate these (they need a human)

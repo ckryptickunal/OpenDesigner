@@ -52,6 +52,19 @@ Designers: accent used sparingly · Code: `color.bg.action.primary`
 ## Motion
 ## Components
 ## Do's and Don'ts
+## Standards
+<!-- Only when standards apply. -->
+
+## Removed on Purpose
+<!-- Only when the owner has removed something (engine.py removed add). Later sessions check this table before adding anything back. -->
+**{{n}} things were removed on purpose. Don't bring them back.**
+
+| Id | Removed | Instead | Why | Since | Checked by |
+|---|---|---|---|---|---|
+| R-01 | {{what was removed, and where}} | {{what people see now, or "nothing"}} | {{the owner's words, or "not recorded"}} | {{YYYY-MM-DD}} | {{`engine.py review` when it has a pattern, else "by hand, on each screen"}} |
+
+- No row takes away an accessibility floor, whatever it is called: focus rings, labels, alt text, reduced motion, contrast and target sizes stay.
+
 <!-- The engine fills the remaining sections in the same pattern: zoom line, marker, plain decisions, collapsed detail. -->
 
 ## Open Items

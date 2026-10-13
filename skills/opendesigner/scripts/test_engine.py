@@ -555,6 +555,529 @@ class ReviewAndFeedback(unittest.TestCase):
                 e.cmd_feedback(t, "x", "rant")
 
 
+class KeepDecidedSystem(unittest.TestCase):
+    """Lane L21 (research/L21-design-playbook.md, DC-L21-01, DC-L19-165): review guards a decided system against the three
+    accidental reverts (a stale branch, a merge that took the older side, a tidy-up that brings back what was removed on
+    purpose), an exception needs a reason, and the run ends with one fixed line."""
+
+    def project(self, t, name="Keep"):
+        d = os.path.join(t, "opendesigner")
+        quiet(e.cmd_init, d, name=name)
+        quiet(e.cmd_build, d)
+        os.makedirs(os.path.join(t, "src"), exist_ok=True)
+        return d
+
+    def write(self, t, text, name="a.css"):
+        with open(os.path.join(t, "src", name), "w", encoding="utf-8") as f:
+            f.write(text)
+
+    def test_reason_is_read_from_every_comment_style(self):
+        self.assertEqual(e.ignore_reason(".a { color: #f60; } /* od-ignore: matches the printed logo */"), "matches the printed logo")
+        self.assertEqual(e.ignore_reason("<b style={{ color: '#f60' }} /> {/* od-ignore: brand gradient stop */}"), "brand gradient stop")
+        self.assertEqual(e.ignore_reason('<hr class="x"> <!-- od-ignore - email template needs it -->'), "email template needs it")
+        self.assertEqual(e.ignore_reason("let c = Color(red: 1, green: 0, blue: 0) // od-ignore (system share sheet)"), "system share sheet")
+        for bare in (".y { color: #0f0; } /* od-ignore */", "x // od-ignore: ok", "x // od-ignore:", "x /* od-ignore -- */"):
+            self.assertEqual(e.ignore_reason(bare), "", bare)
+
+    def test_ignore_without_a_reason_is_a_note_and_with_one_is_listed(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.project(t)
+            self.write(t, ".logo { color: #ff6600; } /* od-ignore: matches the printed logo */\n.ok { gap: var(--ds-space-8); }\n")
+            res = review_json(d)
+            self.assertEqual((res["findings"], res["ignoredWithoutReason"], res["guard"], res["ok"]), ([], [], [], True))
+            self.assertEqual(res["keptOnPurpose"], [{"file": os.path.join("src", "a.css"), "line": 1, "reason": "matches the printed logo"}])
+            self.assertEqual(quiet(e.cmd_review, d, strict=True), 0)
+            self.write(t, ".x { color: #00ff00; } /* od-ignore */\n")
+            res = review_json(d)
+            self.assertEqual(res["findings"], [])                      # the raw value stays out of the findings, as before
+            self.assertEqual(res["ignoredWithoutReason"], [{"file": os.path.join("src", "a.css"), "line": 1, "reason": ""}])
+            self.assertEqual((res["toFix"], res["ok"]), (0, True))      # a note: older projects were told to write a bare od-ignore
+            self.assertEqual(quiet(e.cmd_review, d, strict=True), 0)
+            text = std_run(e.cmd_review, d)[1]
+            self.assertIn("od-ignore: <why, at least two words>", text)
+            self.assertIn("Not counted as a finding", text)
+
+    def test_a_standard_broken_on_an_ignored_line_is_a_note_for_now(self):
+        """Whether a reason can excuse a standard in a test or story is the OpenDesigner owner's decision (DC-L19-165 against
+        STD-process-review-taste-40's message). Until it is made, such a line is shown and not counted: before this lane the
+        line was skipped whole, so a project that passed keeps passing."""
+        with tempfile.TemporaryDirectory() as t, house_standards(write_std(t, "std.json", STD_V1)):
+            d = self.project(t)
+            for line, reason in ((".c { transition: all 1s; } /* od-ignore: story fixture only */\n", "story fixture only"),
+                                 (".c { transition: all 1s; } /* od-ignore */\n", "")):
+                self.write(t, line)
+                res = review_json(d)
+                self.assertEqual(res["findings"], [], line)
+                self.assertEqual([(n["standard"], n["reason"]) for n in res["standardNotes"]], [("STD-easing-duration-02", reason)])
+                self.assertEqual(res["keptOnPurpose"], [])               # shown once, in the note: never also as "kept on purpose"
+                self.assertEqual((res["toFix"], res["ok"]), (0, True))
+                self.assertEqual(quiet(e.cmd_review, d, strict=True), 0)
+                text = std_run(e.cmd_review, d)[1]
+                self.assertEqual(text.count("a.css:1"), 1 if reason else 2, text)   # a bare one is also in the no-reason note
+                self.assertIn("Not counted for now", text)
+                self.assertIn("reason given: story fixture only" if reason else "no reason given", text)
+                self.assertNotIn("kept on purpose", text)
+                self.assertNotIn("a standard:", text)                     # never under "N lines break a standard:" as well
+                self.assertEqual(text.strip().splitlines()[-1], "Review: ok")
+            self.write(t, ".c { transition: all 1s; }\n")                 # without the comment it is a finding, as always
+            self.assertIn(("standard", "STD-easing-duration-02"), [(f_["kind"], f_.get("standard")) for f_ in review_json(d)["findings"]])
+            self.assertEqual(quiet(e.cmd_review, d, strict=True), 1)
+
+    def test_a_bare_ignore_does_not_hide_a_removed_thing(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.project(t)
+            quiet(e.cmd_removed, d, "add", what="divider lines between list rows", why="grouped by space", pattern=r"border-bottom:\s*1px")
+            quiet(e.cmd_design_md, d)
+            self.write(t, ".row { border-bottom: 1px solid var(--ds-color-border-default); } /* od-ignore */\n")
+            res = review_json(d)
+            self.assertEqual([(f_["kind"], f_["removed"]) for f_ in res["findings"]], [("removed", "R-01")])
+            self.assertIn("gives no reason, so it does not keep it", res["findings"][0]["fix"])
+            self.assertEqual(len(res["ignoredWithoutReason"]), 1)
+            self.assertEqual(std_run(e.cmd_review, d)[1].strip().splitlines()[-1], "Review: 1 to fix (run with --strict to make this fail)")
+            self.assertEqual(quiet(e.cmd_review, d, strict=True), 1)
+            self.write(t, ".row { border-bottom: 1px solid var(--ds-color-border-default); } /* od-ignore: menu separators stay */\n")
+            res = review_json(d)                                        # a reason keeps it, and the line is listed
+            self.assertEqual((res["findings"], [k["reason"] for k in res["keptOnPurpose"]], res["ok"]), ([], ["menu separators stay"], True))
+
+    def test_removed_registry_flags_a_return_and_reaches_design_md(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.project(t)
+            got = std_run(e.cmd_removed, d, "add", what="divider lines between list rows", why=None)[0]
+            self.assertEqual(got[0], "EXIT")                           # a reason is never guessed
+            got = std_run(e.cmd_removed, d, "add", what="dividers", why="w", pattern="(a+)+")[0]
+            self.assertEqual(got[0], "EXIT")                           # an unsafe pattern is refused
+            quiet(e.cmd_removed, d, "add", what="divider lines between list rows", why="rows read better grouped by space",
+                  instead="space between grouped rows", pattern=r"border-bottom:\s*1px")
+            quiet(e.cmd_removed, d, "add", what="the floating help button", why="not recorded")
+            quiet(e.cmd_design_md, d)
+            self.write(t, ".row { border-bottom: 1px solid var(--ds-color-border-default); }\n"
+                          ".menu-sep { border-bottom: 1px solid var(--ds-color-border-default); } /* od-ignore: menu separators stay */\n")
+            res = review_json(d)
+            gone = [f_ for f_ in res["findings"] if f_["kind"] == "removed"]
+            self.assertEqual([(f_["line"], f_["removed"]) for f_ in gone], [(1, "R-01")])
+            self.assertIn("space between grouped rows", gone[0]["fix"])
+            self.assertEqual(res["counts"], {"removed": 1})
+            sec = design_section(t, "Removed on Purpose")
+            self.assertIn("| R-01 | divider lines between list rows | space between grouped rows | rows read better grouped by space |", sec)
+            self.assertIn("| R-02 | the floating help button | nothing | not recorded |", sec)
+            self.assertIn("by hand, on each screen", sec)
+            self.assertIn("Never bring back anything in Removed on Purpose", design_section(t, "For Agents"))
+            self.assertEqual(review_json(d)["staleSections"], [])
+            quiet(e.cmd_removed, d, "restore", rid="R-01", why="the owner wants the lines back in dense tables")
+            res = review_json(d)
+            self.assertEqual([f_ for f_ in res["findings"] if f_["kind"] == "removed"], [])
+            reg = e.read_json(os.path.join(d, "state.json"))["removed"]
+            self.assertEqual([(r["id"], r["status"]) for r in reg], [("R-01", "restored"), ("R-02", "removed")])  # history stays
+            quiet(e.cmd_removed, d, "add", what="uppercase section labels", why="calmer headings")
+            self.assertEqual(e.read_json(os.path.join(d, "state.json"))["removed"][-1]["id"], "R-03")              # ids never reused
+            with open(os.path.join(d, "decisions.md"), encoding="utf-8") as f:
+                log = f.read()
+            self.assertIn('removed.R-01 = "divider lines between list rows"', log)
+            self.assertIn("removed.R-01 = null", log)
+            self.assertEqual(std_run(e.cmd_removed, d, "restore", rid="R-01", why="again")[0][0], "EXIT")
+
+    def test_a_removal_never_takes_away_an_accessibility_floor(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.project(t)
+            sp = os.path.join(d, "state.json")
+            # the pattern is run against lines that carry a floor, so the name and the wording of the pattern do not matter
+            for what, pat in (("outlines on buttons", r"outline:\s*2px"), ("the old attributes", r"aria-label"),
+                              ("motion fallbacks", r"prefers-reduced-motion"), ("the calm mode", r"prefers-reduced"),
+                              ("decorative text", r"alt\s*="), ("extra attributes", r"aria-"), ("the helper markup", r"<label"),
+                              ("the hidden text", r"sr-only"), ("padding on chips", r"min-height:\s*44px"), ("the jump link", r"skip-link"),
+                              ("the text track", r"kind=\"captions\""), ("thick borders", r"2px solid"), ("the glow", r"focus-visible:ring"),
+                              ("the system colors tweak", r"forced-colors"), ("the native hints", r"accessibilityLabel"),
+                              ("the extra tab stops", r"tab[iI]ndex")):
+                got = std_run(e.cmd_removed, d, "add", what=what, why="cleaner", pattern=pat)[0]
+                self.assertEqual(got[0], "EXIT", what)
+                self.assertIn("its --pattern matches", got[1], what)
+                self.assertIn("A removal never takes away an accessibility floor", got[1])
+            # the name is read for the plain cases
+            for what in ("focus rings", "the contrast check on cards", "visible labels on fields", "focus-visible styles",
+                         "screen reader hints", "the keyboard highlight", "the skip link", "video captions", "alt text on photos"):
+                got = std_run(e.cmd_removed, d, "add", what=what, why="w")[0]
+                self.assertEqual(got[0], "EXIT", what)
+                self.assertIn("its name names an accessibility floor", got[1])
+            self.assertEqual(e.read_json(sp).get("removed") or [], [])    # nothing was recorded
+            # ordinary removals pass without --force: text beside a floor on the same line is not the floor
+            for what, pat in (("the Focus mode toggle", None), ("low-contrast helper captions", None), ("thick borders", r"border:\s*2px solid"),
+                              ("the splash animation", r"animation"), ("the second button in cards", r"button"),
+                              ("the Close link in banners", r">Close<"), ("the word Close", r"Close"),
+                              ("uppercase section labels", r"text-transform:\s*uppercase"), ("outlined buttons", r"btn-outline"),
+                              ("the old reset rule", r"outline:\s*none"), ("hero photos", r"<img[^>]*hero"), ("drop shadows on cards", r"box-shadow")):
+                got = std_run(e.cmd_removed, d, "add", what=what, why="owner removed it", pattern=pat)[0]
+                self.assertNotEqual(got[0], "EXIT", what)
+                self.assertNotIn("forced", e.read_json(sp)["removed"][-1])
+            # --force records a false alarm, and the entry is marked in state.json, decisions.md and the list
+            got, text = std_run(e.cmd_removed, d, "add", what="the calm mode", why="false alarm checked", pattern=r"prefers-reduced", force=True)
+            self.assertNotEqual(got[0], "EXIT")
+            self.assertIn("Warning", text)
+            self.assertIn("its --pattern matches reduced motion", e.read_json(sp)["removed"][-1]["forced"])
+            with open(os.path.join(d, "decisions.md"), encoding="utf-8") as f:
+                log = f.read()
+            self.assertEqual(log.count("- forced: recorded with --force although its --pattern matches reduced motion"), 1)
+            listed = std_run(e.cmd_removed, d, "list")[1].splitlines()
+            self.assertEqual([("recorded with --force" in ln) for ln in listed][-2:], [False, True])
+
+    def test_every_floor_has_a_sample_and_every_sample_reads_as_a_floor(self):
+        for sample in e.FLOOR_SAMPLES:
+            self.assertTrue(e.floor_spans(sample), sample)
+        self.assertEqual({f for s_ in e.FLOOR_SAMPLES for _a, _b, f in e.floor_spans(s_)}, {n.replace("_", " ") for n, _rx in e.FLOOR_CODE})
+        for line in ("button { outline: none; }", '<a class="btn-outline">', ".card { min-height: 320px; }", '<p class="focus-mode">',
+                     '<button className="focus:outline-none">', ".x { border-bottom: 1px solid red; }"):
+            self.assertEqual(e.floor_spans(line), [], line)
+
+    def test_review_never_reports_a_floor_as_removed(self):
+        """Also when the entry was forced, or its pattern is one the sample lines do not catch."""
+        with tempfile.TemporaryDirectory() as t:
+            d = self.project(t)
+            quiet(e.cmd_removed, d, "add", what="the calm mode", why="owner removed it", pattern=r"prefers-reduced", force=True)
+            quiet(e.cmd_removed, d, "add", what="the splash animation", why="owner removed it", pattern=r"animation:")
+            quiet(e.cmd_removed, d, "add", what="drop shadows", why="depth by borders", pattern=r"box-shadow")
+            quiet(e.cmd_removed, d, "add", what="hero photos", why="owner removed them", pattern=r"<img[^>]*hero")
+            quiet(e.cmd_removed, d, "add", what="the wide layout", why="one column everywhere", pattern=r"@media")
+            quiet(e.cmd_removed, d, "add", what="the old attributes", why="owner removed them", pattern=r"aria-label", force=True)
+            quiet(e.cmd_design_md, d)
+            self.assertIn("No row takes away an accessibility floor", design_section(t, "Removed on Purpose"))
+            self.write(t, "@media (prefers-reduced-motion: reduce) {\n"                # 1 the forced pattern: the query itself
+                          "  .card { animation: none; }\n"                              # 2 inside the query: the reduced-motion path
+                          "}\n"
+                          ".card { animation: var(--ds-splash); }\n"                    # 4 the removed thing is back
+                          ".field:focus-visible {\n"
+                          "  box-shadow: 0 0 0 2px var(--ds-color-border-focus);\n"     # 6 a focus ring drawn as a shadow
+                          "}\n"
+                          ".card { box-shadow: var(--ds-elevation-raised); }\n"         # 8 the removed thing is back
+                          "a:focus { outline: 1px dotted; } .hero { animation: var(--ds-spin); }\n"    # 9 a closed focus rule covers nothing after it
+                          "@media (min-width: 900px) { .wide { display: grid; } }\n")                  # 10 the removed thing is back
+            self.write(t, '<img class="hero" src="a.jpg" alt="The team">\n'      # 1 the image is back; its alt goes with it
+                          '<button aria-label="Close">x</button>\n', name="page.html")   # 2 a forced pattern: the label itself
+            res = review_json(d)
+            gone = sorted((os.path.basename(f_["file"]), f_["line"], f_["removed"]) for f_ in res["findings"] if f_["kind"] == "removed")
+            self.assertEqual(gone, [("a.css", 4, "R-02"), ("a.css", 8, "R-03"), ("a.css", 9, "R-02"), ("a.css", 10, "R-05"),
+                                    ("page.html", 1, "R-04")])
+            self.assertEqual(sorted((k["line"], k["removed"], k["floor"]) for k in res["floorKept"]),
+                             [(1, "R-01", "reduced motion"), (1, "R-05", "reduced motion"),   # R-05 matches "@media", before the query
+                              (2, "R-02", "reduced motion"), (2, "R-06", "names and labels"), (6, "R-03", "visible focus")])
+            text = std_run(e.cmd_review, d)[1]
+            self.assertIn("a removal never takes away a floor", text)
+            self.assertNotIn("a.css:2  animation:  ->", text)             # never "removed on purpose ... Leave it out" for a floor line
+
+    def test_a_broken_registry_entry_is_skipped_not_fatal(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.project(t)
+            sp = os.path.join(d, "state.json")
+            for junk in ([{"id": "R-01"}, {"what": "no id"}, "text", {"id": "R-02", "what": "the help button", "why": "w"}], 5):
+                st = e.read_json(sp)
+                st["removed"] = junk
+                e.dump_json(sp, st)
+                quiet(e.cmd_design_md, d)
+                review_json(d)
+                quiet(e.cmd_set, d, "dials.roundness", 40, "rounder")
+            st["removed"] = [{"id": "R-01"}, {"id": "R-02", "what": "the help button", "why": "w"}]
+            e.dump_json(sp, st)
+            quiet(e.cmd_design_md, d)
+            self.assertIn("| R-02 | the help button |", design_section(t, "Removed on Purpose"))
+            self.assertEqual(quiet(e.cmd_removed, d, "add", what="the banner", why="w")[-1]["id"], "R-03")
+
+    def test_two_branches_with_the_same_removal_id(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.project(t)
+            quiet(e.cmd_removed, d, "add", what="the floating help button", why="not recorded")
+            sp = os.path.join(d, "state.json")
+            st = e.read_json(sp)                                       # the merge kept the other branch's R-01
+            st["removed"][0]["what"] = "the promo banner"
+            e.dump_json(sp, st)
+            msgs = [g["message"] for g in review_json(d)["guard"]]
+            self.assertTrue(any("R-01 (the floating help button)" in m_ for m_ in msgs), msgs)
+            st["removed"] = [dict(st["removed"][0]), dict(st["removed"][0], what="the floating help button")]
+            e.dump_json(sp, st)
+            self.assertEqual(review_json(d)["guard"], [])
+            self.assertEqual(std_run(e.cmd_removed, d, "restore", rid="R-01", why="back")[0][0], "EXIT")   # ambiguous
+            quiet(e.cmd_removed, d, "restore", rid="R-01", why="back", what="the promo banner")
+            self.assertEqual([r["status"] for r in e.read_json(sp)["removed"]], ["restored", "removed"])
+            self.assertEqual(review_json(d)["guard"], [])
+
+    def test_guard_catches_hand_edited_tokens_an_older_side_merge_and_missing_files(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="Guard")
+            quiet(e.cmd_set, d, "dials.roundness", 60, "owner wants softer corners", lock=True)
+            quiet(e.cmd_removed, d, "add", what="the floating help button", why="not recorded")
+            quiet(e.cmd_build, d)
+            self.assertEqual(review_json(d)["guard"], [])
+            tok = os.path.join(d, "tokens", "semantic.tokens.json")      # a hand edit of a generated file
+            data = e.read_json(tok)
+            data["$extensions"] = {"edited": "by hand"}
+            e.dump_json(tok, data)
+            self.assertEqual([g["check"] for g in review_json(d)["guard"]], ["tokens-in-step"])
+            self.assertIn("semantic.tokens.json", review_json(d)["guard"][0]["message"])
+            quiet(e.cmd_build, d)
+            sp = os.path.join(d, "state.json")                            # a merge that took the older side of state.json
+            st = e.read_json(sp)
+            st["dials"]["roundness"]["value"] = 30
+            st["removed"] = []
+            e.dump_json(sp, st)
+            checks = review_json(d)["guard"]
+            self.assertEqual(sorted(g["check"] for g in checks), ["locked-decision", "locked-decision", "tokens-in-step"])
+            msgs = " ".join(g["message"] for g in checks)
+            self.assertIn("locked dials.roundness at 60, but state.json now has 30", msgs)
+            self.assertIn("R-01 (the floating help button) as removed on purpose", msgs)
+            self.assertIn("state.json changed since the last build", msgs)
+            self.assertEqual(quiet(e.cmd_review, d, strict=True), 1)
+            os.remove(os.path.join(d, "decisions.md"))                    # a branch that lacks the system's files
+            self.assertIn("required-file", [g["check"] for g in review_json(d)["guard"]])
+
+    def test_a_standard_taking_over_a_locked_value_is_not_drift(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="Taken over")
+            quiet(e.cmd_set, d, "size.row.md", 36, "rows in the jobs list", lock=True)
+            quiet(e.cmd_standard, d, "add", rule="Rows are 40px.", why="brand book", source="brand.pdf", pairs=[["size.row.md", 40]])
+            quiet(e.cmd_build, d)
+            self.assertEqual(review_json(d)["guard"], [])
+
+    def test_locks_made_with_the_lock_command_are_checked(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="Lock command")
+            quiet(e.cmd_set, d, "dials.roundness", 60, "softer")       # not locked here
+            quiet(e.cmd_lock, d, "dials.roundness")                    # the route OD: lock lines use
+            quiet(e.cmd_lock, d, "raw.spaceUnit")                      # a default value, locked without a set
+            quiet(e.cmd_build, d)
+            self.assertEqual(review_json(d)["guard"], [])
+            sp = os.path.join(d, "state.json")
+            st = e.read_json(sp)
+            st["dials"]["roundness"]["value"] = 30
+            st["raw"]["spaceUnit"] = 8 if st["raw"].get("spaceUnit") != 8 else 4
+            e.dump_json(sp, st)
+            msgs = " ".join(g["message"] for g in review_json(d)["guard"] if g["check"] == "locked-decision")
+            self.assertIn("locked dials.roundness at 60", msgs)
+            self.assertIn("locked raw.spaceUnit", msgs)
+            quiet(e.cmd_lock, d, "dials.roundness", False)             # unlocked: a later change is the owner's to make
+            self.assertNotIn("dials.roundness", " ".join(g["message"] for g in review_json(d)["guard"]))
+
+    def test_windows_line_ends_in_the_log(self):
+        """A checkout on Windows can turn the log's line ends into CRLF. The log is read in text mode, which reads them as
+        plain line ends; read any other way, the 'also set' line below is lost and the moved lock reads as drift."""
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="CRLF")
+            quiet(e.cmd_set, d, "dials.roundness", 60, "softer", lock=True)
+            quiet(e.cmd_set, d, "answers.Q-shape-01", "square", "square after all", force=True)   # moves the dial: "also set"
+            quiet(e.cmd_removed, d, "add", what="the floating help button", why="not recorded")
+            quiet(e.cmd_build, d)
+            fp = os.path.join(d, "decisions.md")
+            with open(fp, "rb") as f:
+                raw = f.read()
+            self.assertNotIn(b"\r", raw)
+            with open(fp, "wb") as f:
+                f.write(raw.replace(b"\n", b"\r\n"))
+            self.assertIn(b"\r\n- also set: dials.roundness = 5 (from Q-shape-01)\r\n", raw.replace(b"\n", b"\r\n"))
+            self.assertEqual(e._decision_values(d)["dials.roundness"][1:], ("5", True))
+            self.assertEqual(review_json(d)["guard"], [])
+            st = e.read_json(os.path.join(d, "state.json"))
+            st["dials"]["roundness"]["value"] = 30
+            st["removed"] = []
+            e.dump_json(os.path.join(d, "state.json"), st)
+            msgs = " ".join(g["message"] for g in review_json(d)["guard"] if g["check"] == "locked-decision")
+            self.assertIn("locked dials.roundness at 5", msgs)
+            self.assertIn("R-01 (the floating help button)", msgs)
+
+    def test_a_decision_without_a_build_fails_strict(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.project(t)
+            quiet(e.cmd_set, d, "dials.roundness", 70, "rounder")         # recorded, but nobody ran build
+            res = review_json(d)
+            self.assertEqual([g["check"] for g in res["guard"]], ["tokens-in-step"])
+            self.assertIn("state.json changed since the last build", res["guard"][0]["message"])
+            self.assertEqual(quiet(e.cmd_review, d, strict=True), 1)
+            quiet(e.cmd_build, d)
+            self.assertEqual(quiet(e.cmd_review, d, strict=True), 0)
+
+    def test_an_engine_only_change_is_a_note(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.project(t)
+            mp = os.path.join(d, "tokens", "opendesigner.meta.json")
+            tok = os.path.join(d, "tokens", "semantic.tokens.json")
+            data = e.read_json(tok)                                      # what another engine wrote for the same state.json
+            data["$extensions"] = {"older": "engine"}
+            e.dump_json(tok, data)
+            meta = e.read_json(mp)
+            meta["fileHashes"]["semantic.tokens.json"] = e.content_hash(data)
+            e.dump_json(mp, meta)
+            res = review_json(d)
+            self.assertEqual(res["guard"], [])
+            self.assertIn("1 token file in", res["notes"][0]["message"])
+            self.assertIn("differs from what this engine", res["notes"][0]["message"])
+            self.assertIn("the engine is newer than the one that built them", res["notes"][0]["message"])
+            self.assertEqual(quiet(e.cmd_review, d, strict=True), 0)
+
+    def test_token_files_hand_edit_versus_engine_change(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.project(t)
+            tokdir = os.path.join(d, "tokens")
+            mp = os.path.join(tokdir, "opendesigner.meta.json")
+            tok = os.path.join(tokdir, "semantic.tokens.json")
+            meta = e.read_json(mp)
+            self.assertIn("semantic.tokens.json", meta["fileHashes"])
+            meta["notes"] = ["a teammate's engine wrote another note"]  # the meta file alone never counts
+            e.dump_json(mp, meta)
+            self.assertEqual((review_json(d)["guard"], review_json(d)["notes"]), ([], []))
+            data = e.read_json(tok)                                     # 1. a hand edit: counts toward --strict
+            data["$extensions"] = {"edited": "by hand"}
+            e.dump_json(tok, data)
+            self.assertEqual([g["check"] for g in review_json(d)["guard"]], ["tokens-in-step"])
+            self.assertEqual(quiet(e.cmd_review, d, strict=True), 1)
+            meta["fileHashes"]["semantic.tokens.json"] = e.content_hash(data)   # 2. what an older engine built: a note
+            meta["engine"] = "0.9.0"
+            e.dump_json(mp, meta)
+            res = review_json(d)
+            self.assertEqual(res["guard"], [])
+            self.assertIn("the engine is newer than the one that built them (built by engine 0.9.0", res["notes"][0]["message"])
+            self.assertEqual(res["notes"][0]["fix"], "run engine.py build and look at the diff")
+            self.assertEqual(quiet(e.cmd_review, d, strict=True), 0)
+            del meta["fileHashes"]                                      # 3. an older project with no recorded hashes: a note
+            meta["engine"] = e.ENGINE_VERSION
+            e.dump_json(mp, meta)
+            res = review_json(d)
+            self.assertEqual(res["guard"], [])
+            self.assertIn("recorded no file hashes, so a hand edit cannot be told apart from a newer engine", res["notes"][0]["message"])
+            self.assertEqual(quiet(e.cmd_review, d, strict=True), 0)
+            quiet(e.cmd_build, d)
+            self.assertEqual((review_json(d)["guard"], review_json(d)["notes"]), ([], []))
+
+    def test_recorded_changes_to_a_locked_value_are_not_drift(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="No drift")
+            quiet(e.cmd_set, d, "dials.roundness", 60, "softer", lock=True)
+            quiet(e.cmd_lock, d, "dials.roundness", False)                # unlocked, then changed with a new entry
+            quiet(e.cmd_set, d, "dials.roundness", 20, "sharper after all")
+            quiet(e.cmd_set, d, "raw.spaceUnit", 8, "an 8px grid", lock=True)
+            quiet(e.cmd_build, d)
+            self.assertEqual(review_json(d)["guard"], [])
+            quiet(e.cmd_set, d, "dials.roundness", 60, "softer again", lock=True)
+            quiet(e.cmd_set, d, "answers.Q-shape-01", "square", "square after all", force=True)   # moves the lock through 'also set'
+            quiet(e.cmd_build, d)
+            self.assertEqual(e.dial_value(e.read_json(os.path.join(d, "state.json"))["dials"]["roundness"]), 5)
+            self.assertEqual(review_json(d)["guard"], [])
+
+    def test_flows_that_were_recorded_never_read_as_drift(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            sp = os.path.join(d, "state.json")
+            quiet(e.cmd_init, d, name="Recorded")
+            # a project standard takes a locked value over and is removed again: its value stays, still locked by the person
+            quiet(e.cmd_set, d, "size.row.md", 36, "rows in the jobs list", lock=True)
+            quiet(e.cmd_standard, d, "add", rule="Rows are 40px.", why="brand book", source="brand.pdf", pairs=[["size.row.md", 40]])
+            quiet(e.cmd_standard, d, "remove", sid="PRJ-01", why="the owner dropped the rule")
+            self.assertEqual(e.read_json(sp)["overrides"]["size.row.md"]["value"], 40)
+            # a locked group, then one value inside it changed with --force
+            quiet(e.cmd_lock, d, "context")
+            quiet(e.cmd_set, d, "context.product", "a jobs board", "the owner renamed it", force=True)
+            # a locked list, then one item added to it
+            quiet(e.cmd_set, d, "taste.feelWords", ["calm"], "their words", lock=True)
+            quiet(e.cmd_set, d, "taste.feelWords+", "quiet", "one more word", force=True)
+            # a value locked on its own, then the group it sits in replaced with --force
+            quiet(e.cmd_set, d, "profile.voice", "designer", "they asked for it", lock=True)
+            quiet(e.cmd_set, d, "profile", {"voice": "engineer"}, "the whole profile again", force=True)
+            # every dial locked at once, then one changed with --force: the dials keep records, so the log cannot patch the group
+            quiet(e.cmd_lock, d, "dials")
+            quiet(e.cmd_set, d, "dials.roundness", 40, "a little rounder", force=True)
+            quiet(e.cmd_build, d)
+            self.assertEqual(review_json(d)["guard"], [])
+            self.assertEqual(quiet(e.cmd_review, d, strict=True), 0)
+            vals = e._decision_values(d)
+            self.assertEqual(vals["overrides.size.row.md"][1:], (None, True))   # the log cannot say what a standard left there
+            self.assertEqual(json.loads(vals["taste.feelWords"][1]), ["calm", "quiet"])
+            # ...and a merge that took the older side of state.json still shows for each value the log knows
+            st = e.read_json(sp)
+            st["context"]["product"] = "the older name"
+            st["taste"]["feelWords"] = ["calm"]
+            st["profile"]["voice"] = "designer"
+            e.dump_json(sp, st)
+            msgs = " ".join(g["message"] for g in review_json(d)["guard"] if g["check"] == "locked-decision")
+            for want in ("locked context at", "locked taste.feelWords at [\"calm\", \"quiet\"]", "locked profile.voice at \"engineer\""):
+                self.assertIn(want, msgs)
+            st["context"]["product"] = "a jobs board"
+            st["context"]["addedByANewerEngine"] = True                  # a key the recorded group never had is not drift
+            st["taste"]["feelWords"] = ["calm", "quiet"]
+            st["profile"]["voice"] = "engineer"
+            e.dump_json(sp, st)
+            self.assertEqual([g for g in review_json(d)["guard"] if g["check"] == "locked-decision"], [])
+
+    def test_a_lock_is_still_watched_after_a_forced_change(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="Forced")
+            quiet(e.cmd_set, d, "dials.roundness", 60, "softer", lock=True)
+            quiet(e.cmd_set, d, "dials.roundness", 40, "a little less", force=True)   # no --lock: state.json keeps the lock
+            quiet(e.cmd_build, d)
+            sp = os.path.join(d, "state.json")
+            self.assertTrue(e.is_locked(e.read_json(sp), "dials.roundness"))
+            self.assertEqual(review_json(d)["guard"], [])
+            st = e.read_json(sp)
+            st["dials"]["roundness"]["value"] = 60                       # a merge took the older side
+            e.dump_json(sp, st)
+            msgs = [g["message"] for g in review_json(d)["guard"] if g["check"] == "locked-decision"]
+            self.assertEqual(len(msgs), 1)
+            self.assertIn("locked dials.roundness at 40, but state.json now has 60", msgs[0])
+            quiet(e.cmd_lock, d, "dials.roundness", False)
+            self.assertEqual([g for g in review_json(d)["guard"] if g["check"] == "locked-decision"], [])
+
+    def test_a_hand_edit_with_the_build_record_deleted_is_caught(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.project(t)
+            tok = os.path.join(d, "tokens", "semantic.tokens.json")
+            mp = os.path.join(d, "tokens", "opendesigner.meta.json")
+            data = e.read_json(tok)
+            data["$extensions"] = {"edited": "by hand"}
+            e.dump_json(tok, data)
+            os.remove(mp)                                                # the file that holds the hashes goes too
+            res = review_json(d)
+            self.assertEqual([g["check"] for g in res["guard"]], ["required-file"])
+            self.assertIn("opendesigner.meta.json is missing or cannot be read", res["guard"][0]["message"])
+            self.assertIn("1 token file differs from what state.json generates now: semantic.tokens.json", res["guard"][0]["message"])
+            self.assertEqual(res["notes"], [])
+            self.assertEqual(quiet(e.cmd_review, d, strict=True), 1)
+            with open(mp, "w", encoding="utf-8") as f:                   # a half-merged record reads the same as none
+                f.write("<<<<<<< ours")
+            self.assertEqual([g["check"] for g in review_json(d)["guard"]], ["required-file"])
+            quiet(e.cmd_build, d)
+            self.assertEqual((review_json(d)["guard"], quiet(e.cmd_review, d, strict=True)), ([], 0))
+            os.remove(mp)                                                # missing on its own: the build is incomplete
+            self.assertEqual([g["check"] for g in review_json(d)["guard"]], ["required-file"])
+
+    def test_review_is_not_ok_while_validate_reports_an_error(self):
+        """"Review: ok" is the line quoted before a merge, so it covers what `engine.py validate` checks too."""
+        with tempfile.TemporaryDirectory() as t:
+            d = self.project(t)
+            quiet(e.cmd_set, d, "size.target.pointer", {"value": 20, "unit": "px"}, "too small on purpose")
+            self.assertEqual(quiet(e.cmd_build, d, force=True), 1)
+            self.assertGreaterEqual(e.validate_dir(d).count("error"), 1)
+            res = review_json(d)
+            self.assertEqual((res["findings"], res["guard"], res["staleSections"]), ([], [], []))   # nothing else is wrong
+            self.assertEqual(len(res["validateErrors"]), e.validate_dir(d).count("error"))
+            self.assertEqual((res["toFix"], res["ok"]), (len(res["validateErrors"]), False))
+            lines = std_run(e.cmd_review, d)[1].strip().splitlines()
+            self.assertEqual(lines[-1], f"Review: {res['toFix']} to fix (run with --strict to make this fail)")
+            self.assertTrue(lines[-2].startswith("Validate: "), lines[-2])
+            self.assertEqual(quiet(e.cmd_review, d, strict=True), 1)
+            quiet(e.cmd_set, d, "size.target.pointer", {"value": 24, "unit": "px"}, "back to the floor")
+            self.assertEqual(quiet(e.cmd_build, d), 0)
+            self.assertEqual(std_run(e.cmd_review, d, strict=True)[1].strip().splitlines()[-1], "Review: ok")
+            self.assertEqual(quiet(e.cmd_review, d, strict=True), 0)
+
+    def test_review_ends_with_one_fixed_line(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.project(t)
+            text = std_run(e.cmd_review, d)[1].strip().splitlines()
+            self.assertEqual(text[-1], "Review: ok")
+            self.write(t, ".x { color: #ff0000; }\n")
+            self.assertEqual(std_run(e.cmd_review, d)[1].strip().splitlines()[-1], "Review: 1 to fix (run with --strict to make this fail)")
+            self.assertEqual(std_run(e.cmd_review, d, strict=True)[1].strip().splitlines()[-1], "Review: 1 to fix")
+
+
 class JourneyTracking(unittest.TestCase):
     """The engine logs its own steps to the private journey log, and only after the person's yes (journey.py)."""
 
@@ -1301,6 +1824,11 @@ class Standards(unittest.TestCase):
                 return [f_ for f_ in json.loads(out.getvalue())["findings"] if f_["kind"] == "standard"]
             got = review()
             self.assertEqual(sorted((f_["standard"], f_["line"]) for f_ in got), [("PRJ-01", 4), ("STD-easing-duration-02", 1)])
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_review(d, as_json=True)
+            notes = json.loads(out.getvalue())["standardNotes"]    # lane L21: a bare od-ignore that breaks a standard is a note for now
+            self.assertEqual([(n["standard"], n["line"]) for n in notes], [("STD-easing-duration-02", 3)])
             f1 = next(f_ for f_ in got if f_["standard"] == "STD-easing-duration-02")
             self.assertEqual((f1["file"], f1["fix"], f1["strength"], f1["severity"]),
                              (os.path.join("src", "a.css"), "name the properties you animate", "must", "warning"))
