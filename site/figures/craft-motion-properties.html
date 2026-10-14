@@ -1,0 +1,29 @@
+<figure class="fig cr">
+<div class="fig-panel">
+<div class="cr-steps">
+<div>
+<div class="cr-steps-h"><span class="chip bad">Don’t animate</span><span class="mono">width · height · margin · padding · top · left</span></div>
+<div class="flow">
+<div class="flow-box"><span class="kicker">Step 1</span><strong>Layout</strong><span>Work out where every box sits</span></div>
+<svg class="flow-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h13M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<div class="flow-box"><span class="kicker">Step 2</span><strong>Paint</strong><span>Fill in the pixels</span></div>
+<svg class="flow-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h13M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<div class="flow-box"><span class="kicker">Step 3</span><strong>Composite</strong><span>Stack the layers on screen</span></div>
+</div>
+<div class="cr-steps-note">All three steps run again on every frame, so the motion stutters when the page is busy.</div>
+</div>
+<div>
+<div class="cr-steps-h"><span class="chip ok">Animate</span><span class="mono">transform · opacity</span></div>
+<div class="flow">
+<div class="flow-box is-skipped"><span class="kicker">Skipped</span><strong>Layout</strong><span>Nothing moves in the layout</span></div>
+<svg class="flow-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h13M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<div class="flow-box is-skipped"><span class="kicker">Skipped</span><strong>Paint</strong><span>The pixels are reused</span></div>
+<svg class="flow-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h13M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<div class="flow-box accent"><span class="kicker" style="color:var(--accent-text)">Every frame</span><strong>Composite</strong><span>Runs on the graphics chip (GPU)</span></div>
+</div>
+<div class="cr-steps-note">Exceptions the standards allow: clip-path for reveals, height for accordions, and width on an absolutely positioned element with no children.</div>
+</div>
+</div>
+</div>
+<figcaption>Why only transform and opacity: changing width, height, margin, padding, top or left makes the browser redo layout, paint and compositing on every frame. Transform and opacity skip the first two steps and run on the GPU.</figcaption>
+</figure>

@@ -84,8 +84,11 @@
 .opt-art { width: 56px; height: 36px; background: var(--accent); display: block; }
 .opt-l { font-weight: 500; } .opt-s { font-size: 12px; color: var(--ink-muted); }
 .rec { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: start; margin-top: 14px; font-size: 14px; line-height: 20px; }
-@media (max-width: 900px) { .hero-fig .fig-scene { padding: 24px 16px; } .hero-comp { flex-direction: column; align-items: stretch; } .hero-comp > .fig-card { width: 100%; min-width: 0; margin-inline: auto; } .hero-side { width: 100%; max-width: 540px; margin-top: 0; grid-template-columns: 1fr 1fr; } }
-@media (max-width: 560px) { .hero-side { grid-template-columns: 1fr; } .shape-opts { grid-template-columns: repeat(2, 1fr); } }
+/* Narrow: one column, every card on the same centre line and the same width as the question card (owner caught an off-axis pair, 2026-10-15). */
+.hero-fig .fig-scene { container-type: inline-size; }
+@media (max-width: 900px) { .hero-fig .fig-scene { padding: 24px 16px; } }
+@container (max-width: 880px) { .hero-comp { flex-direction: column; align-items: center; } .hero-comp > .fig-card, .hero-side .fig-card { width: 100%; min-width: 0; max-width: 540px !important; } .hero-side { width: 100%; max-width: 540px; margin: 0; grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 560px) { .shape-opts { grid-template-columns: repeat(2, 1fr); } }
 
 /* small pieces of real UI used inside figures */
 .ui-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 36px; padding: 0 14px; border-radius: var(--radius-detail); font-size: 14px; font-weight: 500; background: var(--accent); color: var(--on-accent); }
@@ -105,6 +108,8 @@
 .fig table.mini th, .fig table.mini td { text-align: left; padding: 8px 10px; border-top: 1px solid var(--line); }
 .fig table.mini thead th { border-top: 0; font-weight: 600; color: var(--ink-muted); }
 .code-lines { margin: 0; padding: 12px 14px; font-size: 12.5px; line-height: 20px; background: var(--surface-sunken); border: 1px solid var(--line); border-radius: var(--radius-detail); overflow-x: auto; white-space: pre; }
+/* Code inside a figure wraps instead of scrolling: a figure never shows its own scrollbar. */
+.fig .code-lines { white-space: pre-wrap; overflow-wrap: anywhere; overflow-x: visible; }
 .code-lines .c { color: var(--ink-muted); } .code-lines .k { color: var(--accent-text); } .code-lines .bad { color: var(--bad); } .code-lines .ok { color: var(--ok); }
 
 /* inside a docs page: the prose styles stop at the figure's edge */
@@ -141,3 +146,16 @@
 .do .dd-h::before { background-repeat: no-repeat; background-position: 8px 50%; background-size: 11px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%231a2200' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 8.5l3 3 7-7'/%3E%3C/svg%3E"); transform: rotate(-3deg); }
 .dont .dd-h::before { background-repeat: no-repeat; background-position: 8px 50%; background-size: 11px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%234d0d2f' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4l8 8M12 4l-8 8'/%3E%3C/svg%3E"); transform: rotate(2.5deg); }
 .dd-h { gap: 0; }
+
+/* Layout checker findings, 2026-10-15: long paths and file names wrap inside small boxes and chips instead of spilling or being cut;
+   a grid of 8 cards splits evenly (4 + 4, or 2 per row) instead of leaving a partial last row. */
+.fig .mono, .fig code, .flow-box, .dd-art span { overflow-wrap: anywhere; }
+.fig .chip { max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
+.fig-panel { container-type: inline-size; }
+.grid-even { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@container (min-width: 760px) { .grid-even { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@container (max-width: 360px) { .grid-even { grid-template-columns: minmax(0, 1fr); } }
+
+/* Do and Don't panels: the drawing fills the panel, so both grey boxes end on one line (alignment audit, 2026-10-15). */
+.dodont > div { display: flex; flex-direction: column; }
+.dodont .dd-art { flex: 1; }

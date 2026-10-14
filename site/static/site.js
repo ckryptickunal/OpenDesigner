@@ -23,6 +23,58 @@
       .catch(function () {});
   }
 
+  // tabs (home: examples and install). Without this script every panel shows, one after another.
+  document.querySelectorAll("[data-tabs]").forEach(function (box) {
+    var tabs = Array.prototype.slice.call(box.querySelectorAll('[role="tab"]'));
+    var pick = function (t, focus, animate) {
+      tabs.forEach(function (x) {
+        var on = x === t;
+        x.setAttribute("aria-selected", on ? "true" : "false");
+        x.tabIndex = on ? 0 : -1;
+        var panel = document.getElementById(x.getAttribute("aria-controls"));
+        if (!panel) return;
+        var was = panel.hidden;
+        panel.hidden = !on;
+        panel.classList.remove("is-entering");
+        if (on && was && animate) { void panel.offsetWidth; panel.classList.add("is-entering"); }
+      });
+      if (focus) t.focus();
+    };
+    tabs.forEach(function (t, i) {
+      t.addEventListener("click", function (e) { pick(t, false, e.detail > 0); });  // e.detail is 0 for Enter or Space: keyboard stays instant
+      t.addEventListener("keydown", function (e) {
+        var j = e.key === "ArrowRight" ? i + 1 : e.key === "ArrowLeft" ? i - 1 : e.key === "Home" ? 0 : e.key === "End" ? tabs.length - 1 : null;
+        if (j === null) return;
+        e.preventDefault();
+        pick(tabs[(j + tabs.length) % tabs.length], true);
+      });
+    });
+    pick(tabs.filter(function (t) { return t.getAttribute("aria-selected") === "true"; })[0] || tabs[0], false, false);
+  });
+
+  // reveal on scroll: content below the fold fades and rises once as it comes into view. Content already on screen is left alone,
+  // and with reduced motion nothing is hidden at all. Printing shows everything.
+  window.addEventListener("beforeprint", function () { document.querySelectorAll(".reveal-wait").forEach(function (el) { el.classList.remove("reveal-wait"); }); });
+  if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    var groups = ".h-head, .h-steps > li, .who > a, .bento > article, .craft > a, .ex-grid > a, .demo, .tabs:not(.demo), .h-split > *, .faq, .h-zoom, .h-end-card, .home .fig:not(.home-hero)";
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        var el = en.target;
+        el.classList.remove("reveal-wait");
+        io.unobserve(el);
+        setTimeout(function () { el.classList.remove("reveal"); el.style.removeProperty("--i"); }, 900);  // hand back to hover transitions
+      });
+    }, { rootMargin: "0px 0px -8% 0px" });
+    document.querySelectorAll(".home " + groups.split(", ").join(", .home ")).forEach(function (el) {
+      if (el.getBoundingClientRect().top < window.innerHeight) return;
+      var sibs = el.parentElement ? Array.prototype.indexOf.call(el.parentElement.children, el) : 0;
+      el.style.setProperty("--i", String(Math.min(sibs, 5)));
+      el.classList.add("reveal", "reveal-wait");
+      io.observe(el);
+    });
+  }
+
   // showcase: tag filters
   var filters = document.querySelector(".filters");
   if (filters) {

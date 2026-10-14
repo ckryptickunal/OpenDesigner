@@ -1,0 +1,377 @@
+/* The craft guide (Craft section of the docs): live motion, UX and UI examples. Figures in site/figures/craft-*.html.
+   Every demo is CSS only. Its motion values are the house standards' (skills/opendesigner/references/standards/), named next to it.
+   Loops animate transform and opacity only, pause while their figure is hovered or focused, and rest on their end state when the
+   reader asks for reduced motion: the base styles are the end states, and the keyframes start from the hidden state.
+   Small drawn interfaces use shadow rings instead of solid borders (STD-visual-details-14); windows clip with contain: paint. */
+
+.cr {
+  --cr-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --cr-inout: cubic-bezier(0.77, 0, 0.175, 1);
+  --cr-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --cr-ring: color-mix(in srgb, var(--ink) 13%, transparent);
+  --cr-lift: 0 0 0 1px var(--cr-ring), 0 1px 2px color-mix(in srgb, var(--ink) 8%, transparent), 0 10px 24px -12px color-mix(in srgb, var(--ink) 34%, transparent);
+}
+.cr .dd-art { overflow: visible; }
+
+/* labels, the pause hint and the reduced-motion note */
+.cr-meta { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 2px 12px; font: 400 12px/16px "Source Code Pro", ui-monospace, Menlo, monospace; letter-spacing: 0; color: var(--ink-muted); }
+.cr-meta > * { min-width: 0; overflow-wrap: anywhere; }
+.cr-meta b { font-weight: 500; color: var(--ink); }
+.cr-meta.stack { flex-direction: column; align-items: flex-start; }
+.cr-stage { position: relative; display: grid; gap: 12px; min-width: 0; border-radius: var(--r-control); }
+.cr-stage:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 4px; }
+.cr-foot { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-top: 10px; font-size: 13px; line-height: 20px; color: var(--ink-muted); }
+.cr-hint { display: inline-flex; align-items: center; gap: 8px; }
+.cr-hint::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--ok); flex: none; }
+.cr-hint-paused, .cr-rm { display: none; }
+.cr:is(:hover, :focus-within) .cr-loop { animation-play-state: paused; }
+.cr:is(:hover, :focus-within) .cr-hint::before { background: var(--warn); }
+.cr:is(:hover, :focus-within) .cr-hint-play { display: none; }
+.cr:is(:hover, :focus-within) .cr-hint-paused { display: inline; }
+@media (prefers-reduced-motion: reduce) {
+  .cr .cr-loop { animation: none !important; }
+  .cr .cr-hint { display: none; }
+  .cr .cr-rm { display: inline; }
+}
+
+/* small pieces of drawn interface */
+.cr-ui { font-size: 14px; line-height: 20px; color: var(--ink); }
+.cr-pill { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 32px; padding: 0 14px; border-radius: var(--r-pill); background: var(--surface-raised); box-shadow: 0 0 0 1px var(--cr-ring); font-weight: 600; font-size: 13px; line-height: 18px; color: var(--ink); white-space: nowrap; }
+.cr-pill.solid { background: var(--accent); color: var(--on-accent); box-shadow: none; }
+.cr-pill.danger { background: var(--bad); color: var(--on-accent); box-shadow: none; }
+.cr-pop { background: var(--surface-raised); border-radius: var(--r-control); box-shadow: var(--cr-lift); }
+.cr-win { position: relative; border-radius: var(--r-control); background: var(--surface-raised); box-shadow: 0 0 0 1px var(--cr-ring); contain: paint; }
+.cr-skel { display: grid; gap: 8px; padding: 14px; }
+.cr-skel i { display: block; height: 8px; border-radius: 4px; background: var(--surface-sunken); }
+.cr-skel i:nth-child(1) { width: 46%; height: 10px; background: color-mix(in srgb, var(--ink) 14%, var(--surface-sunken)); }
+.cr-skel i:nth-child(2) { width: 88%; } .cr-skel i:nth-child(3) { width: 72%; } .cr-skel i:nth-child(4) { width: 80%; } .cr-skel i:nth-child(5) { width: 56%; }
+.cr-center { display: grid; justify-items: center; }
+
+/* 1. the easing race: three dots cross one track in the same time */
+.cr-lane { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 14px; align-items: center; padding: 14px 0; border-top: 1px solid var(--line); }
+.cr-lane:first-child { border-top: 0; padding-top: 0; }
+.cr-lane:last-child { padding-bottom: 0; }
+.cr-lane-b { display: grid; gap: 10px; min-width: 0; }
+.cr-curve { width: 44px; height: 44px; display: block; }
+.cr-curve .ax { fill: none; stroke: var(--line); stroke-width: 1.5; }
+.cr-curve .ln { fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; }
+.cr-track { position: relative; height: 16px; container-type: inline-size; }
+.cr-track::before { content: ""; position: absolute; left: 0; right: 0; top: 7px; height: 2px; border-radius: 1px; background: var(--line); }
+.cr-track::after { content: ""; position: absolute; right: 0; top: 0; width: 2px; height: 16px; border-radius: 1px; background: var(--line-strong); }
+.cr-dot { position: absolute; left: 0; top: 1px; width: 14px; height: 14px; border-radius: 50%; background: currentColor; transform: translateX(calc(100cqw - 14px)); }
+.cr-dot.cr-loop { animation: cr-race 2.4s var(--cr-ease) infinite; }
+@keyframes cr-race {
+  0% { transform: translateX(0); opacity: 1; }
+  41.67%, 80% { transform: translateX(calc(100cqw - 14px)); opacity: 1; }
+  88% { transform: translateX(calc(100cqw - 14px)); opacity: 0; }
+  89% { transform: translateX(0); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+/* 2-4. a trigger and the menu it opens: duration, scale(0) and origin */
+.cr-scene { position: relative; height: 158px; }
+.cr-trigger { width: 64px; }
+.cr-menu { position: absolute; top: 40px; left: 0; width: 164px; padding: 4px; display: grid; gap: 2px; transform-origin: 32px -6px; }
+.cr-menu > span { padding: 6px 10px; border-radius: var(--r-detail); font-size: 14px; line-height: 20px; white-space: nowrap; }
+.cr-menu > .on { background: var(--accent-soft); color: var(--accent-text); font-weight: 500; }
+.cr-menu.o-center { transform-origin: center; }
+.cr-origin { position: absolute; z-index: 2; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; box-shadow: 0 0 0 2px var(--accent), inset 0 0 0 1px var(--surface-raised); pointer-events: none; }
+.cr-origin::after { content: ""; position: absolute; left: 5px; top: 5px; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
+.cr-d180 { animation: cr-d180 2.4s var(--cr-out) infinite; }
+.cr-d400 { animation: cr-d400 2.4s var(--cr-out) infinite; }
+@keyframes cr-d180 { 0% { opacity: 0; transform: scale(0.95); } 7.5%, 70% { opacity: 1; transform: none; } 77.5%, 100% { opacity: 0; transform: scale(0.95); } }
+@keyframes cr-d400 { 0% { opacity: 0; transform: scale(0.95); } 16.67%, 70% { opacity: 1; transform: none; } 86.67%, 100% { opacity: 0; transform: scale(0.95); } }
+.cr-zero { animation: cr-zero 2.4s var(--cr-out) infinite; }
+.cr-soft { animation: cr-soft 2.4s var(--cr-out) infinite; }
+@keyframes cr-zero { 0% { transform: scale(0); } 8.33%, 70% { transform: none; } 78.33%, 100% { transform: scale(0); } }
+@keyframes cr-soft { 0% { opacity: 0; transform: scale(0.95); } 8.33%, 70% { opacity: 1; transform: none; } 78.33%, 100% { opacity: 0; transform: scale(0.95); } }
+.cr-grow { animation: cr-grow 3s var(--cr-out) infinite; }
+@keyframes cr-grow { 0% { opacity: 0; transform: scale(0.9); } 20%, 65% { opacity: 1; transform: none; } 85%, 100% { opacity: 0; transform: scale(0.9); } }
+
+/* 5. press feedback and hold to confirm (real buttons) */
+.cr-press-art { display: grid; justify-items: center; gap: 14px; padding: 22px 14px 16px; }
+.cr-btn { appearance: none; border: 0; margin: 0; min-height: 44px; padding: 0 22px; border-radius: var(--r-pill); background: var(--accent); color: var(--on-accent);
+  font: 600 15px/20px "Hanken Grotesk", system-ui, sans-serif; letter-spacing: -0.016em; cursor: pointer;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+.cr-btn:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+.cr-btn.pressable { transition: transform 160ms var(--cr-out); }
+.cr-btn.pressable:active { transform: scale(0.97); }
+@media (prefers-reduced-motion: reduce) { .cr-btn.pressable:active { transform: none; background: var(--accent-text); } }
+.cr-hold { position: relative; background: var(--bad-soft); color: var(--bad); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--bad) 35%, transparent); }
+.cr-hold-fill { position: absolute; inset: 0; display: grid; place-items: center; border-radius: inherit; background: var(--bad); color: var(--on-accent); clip-path: inset(0 100% 0 0); pointer-events: none; }
+.cr-hold.snappy { transition: transform 160ms var(--cr-out); }
+.cr-hold.snappy .cr-hold-fill { transition: clip-path 200ms var(--cr-out); }
+.cr-hold.snappy:active .cr-hold-fill { transition: clip-path 2s linear; clip-path: inset(0 0 0 0); }
+.cr-hold.even .cr-hold-fill { transition: clip-path 2s linear; }
+.cr-hold.even:active .cr-hold-fill { clip-path: inset(0 0 0 0); }
+.cr-hold:active { transform: scale(0.97); }
+@media (prefers-reduced-motion: reduce) {
+  /* the fill is a progress bar the person holds, not movement: it keeps its timing; the press scale gives way to color */
+  .cr .cr-hold.snappy .cr-hold-fill { transition: clip-path 200ms var(--cr-out) !important; }
+  .cr .cr-hold.snappy:active .cr-hold-fill, .cr .cr-hold.even .cr-hold-fill { transition: clip-path 2s linear !important; }
+  .cr-hold:active { transform: none; }
+}
+
+/* 6. toasts: in and out along one edge */
+.cr-toastwin { height: 136px; }
+.cr-toast { position: absolute; right: 12px; bottom: 12px; display: flex; align-items: center; gap: 8px; max-width: calc(100% - 24px); padding: 10px 14px; border-radius: var(--r-control); background: var(--surface-raised); box-shadow: var(--cr-lift); font-size: 14px; line-height: 20px; white-space: nowrap; }
+.cr-toast::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--ok); flex: none; }
+.cr-t-same { animation: cr-t-same 3s var(--cr-out) infinite; }
+.cr-t-away { animation: cr-t-away 3s var(--cr-out) infinite; }
+@keyframes cr-t-same { 0% { opacity: 0; transform: translateY(calc(100% + 12px)); } 10%, 70% { opacity: 1; transform: none; } 78.33%, 100% { opacity: 0; transform: translateY(calc(100% + 12px)); } }
+@keyframes cr-t-away { 0% { opacity: 0; transform: translateY(calc(100% + 12px)); } 10%, 70% { opacity: 1; transform: none; } 80%, 100% { opacity: 0; transform: translateY(-150%); } }
+
+/* 7. stagger */
+.cr-list { display: grid; gap: 6px; }
+.cr-row { display: flex; align-items: center; gap: 10px; min-width: 0; padding: 8px 10px; border-radius: var(--r-control); background: var(--surface-raised); box-shadow: 0 0 0 1px var(--cr-ring); font-size: 14px; line-height: 20px; }
+.cr-row > i { width: 22px; height: 22px; border-radius: 50%; background: var(--accent-soft); flex: none; }
+.cr-row > span { flex: 1; min-width: 0; }
+.cr-row > small { font: 400 12px/16px "Source Code Pro", ui-monospace, monospace; color: var(--ink-muted); }
+.cr-rise { animation: cr-rise 2.4s var(--cr-out) calc(var(--i, 0) * 50ms) infinite both; }
+.cr-rise-all { animation: cr-rise 2.4s var(--cr-out) infinite both; }
+@keyframes cr-rise { 0% { opacity: 0; transform: translateY(8px); } 12.5%, 75% { opacity: 1; transform: none; } 85%, 100% { opacity: 0; transform: translateY(8px); } }
+
+/* 8. interruptible: a switch on a transition, a switch on keyframes */
+.cr-switches { display: grid; justify-items: center; gap: 10px; padding: 12px 0 4px; }
+.cr-switch { position: relative; display: inline-flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 4px; font-size: 15px; line-height: 20px; cursor: pointer; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; }
+.cr-switch input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.cr-sw { position: relative; width: 52px; height: 32px; border-radius: var(--r-pill); background: var(--line-strong); flex: none; }
+.cr-sw::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--accent); opacity: 0; }
+.cr-knob { position: absolute; top: 3px; left: 3px; width: 26px; height: 26px; border-radius: 50%; background: var(--surface-raised); box-shadow: 0 1px 3px color-mix(in srgb, var(--ink) 30%, transparent); }
+.cr-switch input:focus-visible + .cr-sw { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+.cr-switch input:checked + .cr-sw::before { opacity: 1; }
+.cr-switch input:checked + .cr-sw .cr-knob { transform: translateX(20px); }
+.cr-sw-t .cr-knob { transition: transform 400ms ease; }
+.cr-sw-t .cr-sw::before { transition: opacity 400ms ease; }
+.cr-sw-k .cr-knob { animation: cr-knob-off 400ms ease both; }
+.cr-sw-k .cr-sw::before { animation: cr-fill-off 400ms ease both; }
+.cr-sw-k input:checked + .cr-sw .cr-knob { animation: cr-knob-on 400ms ease both; }
+.cr-sw-k input:checked + .cr-sw::before { animation: cr-fill-on 400ms ease both; }
+@keyframes cr-knob-on { from { transform: none; } to { transform: translateX(20px); } }
+@keyframes cr-knob-off { from { transform: translateX(20px); } to { transform: none; } }
+@keyframes cr-fill-on { from { opacity: 0; } to { opacity: 1; } }
+@keyframes cr-fill-off { from { opacity: 1; } to { opacity: 0; } }
+
+/* 9. reduced motion: cut versus fade */
+.cr-sheetwin { height: 132px; }
+.cr-sheet { position: absolute; left: 12px; right: 12px; bottom: 12px; padding: 12px 14px; display: grid; gap: 4px; }
+.cr-sheet b { font-weight: 600; }
+.cr-sheet span { color: var(--ink-muted); font-size: 13px; line-height: 18px; }
+.cr-cut { animation: cr-cut 2.4s linear infinite; }
+.cr-fade { animation: cr-fade 2.4s ease infinite; }
+@keyframes cr-cut { 0%, 9.99% { opacity: 0; } 10%, 69.99% { opacity: 1; } 70%, 100% { opacity: 0; } }
+@keyframes cr-fade { 0% { opacity: 0; } 8.33%, 70% { opacity: 1; } 78.33%, 100% { opacity: 0; } }
+
+/* frequency ladder and the rendering steps (static) */
+.cr-freq { display: grid; }
+.cr-freq-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 220px); gap: 8px 24px; align-items: center; padding: 14px 0; border-top: 1px solid var(--line); }
+.cr-freq-row:first-child { border-top: 0; padding-top: 0; }
+.cr-freq-row:last-child { padding-bottom: 0; }
+.cr-freq-k { display: grid; gap: 2px; min-width: 0; }
+.cr-freq-k strong { font-weight: 600; font-size: 15px; line-height: 22px; }
+.cr-freq-k span:not(.kicker) { font-size: 14px; line-height: 20px; color: var(--ink-muted); }
+.cr-freq-v { display: grid; gap: 8px; justify-items: start; min-width: 0; }
+.cr-freq-v .fig-bar { width: 100%; }
+@media (max-width: 560px) { .cr-freq-row { grid-template-columns: minmax(0, 1fr); } }
+.cr-steps { display: grid; gap: 20px; }
+.cr-steps-h { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-bottom: 10px; font-size: 14px; line-height: 20px; }
+.cr-steps .flow-box { font-size: 14px; line-height: 20px; }
+.cr-steps .flow-box span:not(.kicker) { font-size: 13px; line-height: 18px; color: var(--ink-muted); }
+.cr-steps .flow-box.is-skipped { background: var(--surface-sunken); border-style: dashed; color: var(--ink-muted); }
+.cr-steps-note { margin-top: 8px; font-size: 13px; line-height: 18px; color: var(--ink-muted); }
+
+/* UX: the keyboard list */
+.cr-cmd { padding: 6px; }
+.cr-cmd-in { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 8px 10px; margin-bottom: 6px; border-bottom: 1px solid var(--line); color: var(--ink-muted); font-size: 14px; line-height: 20px; }
+.cr-cmd-list { position: relative; display: grid; }
+.cr-cmd-list > span { position: relative; z-index: 1; height: 32px; display: flex; align-items: center; padding: 0 10px; font-size: 14px; line-height: 20px; white-space: nowrap; }
+.cr-hl { position: absolute; left: 0; right: 0; top: 0; height: 32px; border-radius: var(--r-detail); background: var(--accent-soft); box-shadow: inset 2px 0 0 var(--accent); transform: translateY(128px); }
+.cr-key { position: relative; display: inline-grid; place-items: center; min-width: 26px; height: 26px; padding: 0 6px; border-radius: var(--r-detail); background: var(--surface-raised); box-shadow: 0 0 0 1px var(--cr-ring), 0 1px 0 1px var(--cr-ring); font: 500 13px/1 "Source Code Pro", ui-monospace, monospace; color: var(--ink); }
+.cr-key::after { content: ""; position: absolute; inset: -3px; border-radius: 8px; box-shadow: 0 0 0 2px var(--accent); opacity: 0; }
+.cr-key.cr-loop::after { animation: cr-keyflash 2.4s linear infinite; }
+.cr:is(:hover, :focus-within) .cr-key.cr-loop::after { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .cr .cr-key.cr-loop::after { animation: none !important; } }
+.cr-hl-jump { animation: cr-hl-jump 2.4s step-end infinite; }
+.cr-hl-ease { animation: cr-hl-ease 2.4s var(--cr-out) infinite; }
+@keyframes cr-hl-jump { 0% { transform: translateY(0); } 25% { transform: translateY(32px); } 37.5% { transform: translateY(64px); } 50% { transform: translateY(96px); } 62.5%, 100% { transform: translateY(128px); } }
+@keyframes cr-hl-ease {
+  0%, 25% { transform: translateY(0); } 33.33%, 37.5% { transform: translateY(32px); } 45.83%, 50% { transform: translateY(64px); }
+  58.33%, 62.5% { transform: translateY(96px); } 70.83%, 99.9% { transform: translateY(128px); } 100% { transform: translateY(0); }
+}
+@keyframes cr-keyflash { 0%, 24.9% { opacity: 0; } 25%, 29% { opacity: 1; } 29.1%, 37.4% { opacity: 0; } 37.5%, 41.5% { opacity: 1; } 41.6%, 49.9% { opacity: 0; } 50%, 54% { opacity: 1; } 54.1%, 62.4% { opacity: 0; } 62.5%, 66.5% { opacity: 1; } 66.6%, 100% { opacity: 0; } }
+
+/* UX: tooltips. The first one waits; once the toolbar is warm, neighbours open with no delay and no animation (STD-enter-exit-origin-10).
+   --cr-warm turns to 1 after the pointer or focus has rested in the toolbar for the first tooltip's delay plus its 125 ms entrance. */
+@property --cr-warm { syntax: "<number>"; inherits: true; initial-value: 0; }
+.cr-toolsart { display: grid; justify-items: center; gap: 12px; padding: 44px 14px 16px; }
+.cr-tools { --cr-warm: 0; position: relative; display: inline-flex; gap: 4px; padding: 4px; border-radius: var(--r-control); background: var(--surface-raised); box-shadow: var(--cr-lift); transition: --cr-warm 0s; }
+.cr-tool { position: relative; display: grid; place-items: center; width: 36px; height: 36px; padding: 0; border: 0; border-radius: var(--r-detail); background: none; color: var(--ink); cursor: default; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.cr-tool svg { width: 18px; height: 18px; display: block; }
+.cr-tool:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+.cr-tip { position: absolute; bottom: calc(100% + 10px); left: 50%; translate: -50% 0; padding: 4px 8px; border-radius: var(--r-detail); background: var(--ink); color: var(--surface-raised); font: 600 12px/16px "Hanken Grotesk", system-ui, sans-serif; letter-spacing: 0; white-space: nowrap; pointer-events: none; opacity: 0; transform-origin: 50% 100%; }
+@keyframes cr-tip-in { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: none; } }
+@keyframes cr-tip-fade { from { opacity: 0; } to { opacity: 1; } }
+@media (hover: hover) and (pointer: fine) {
+  .cr-tools.slow .cr-tool:hover .cr-tip { animation: cr-tip-in 125ms var(--cr-out) 500ms both; }
+  .cr-tools.warm:hover { --cr-warm: 1; transition: --cr-warm 0s 625ms; }
+  .cr-tools.warm .cr-tool:hover .cr-tip { animation: cr-tip-in calc((1 - var(--cr-warm)) * 125ms) var(--cr-out) calc((1 - var(--cr-warm)) * 500ms) both; }
+}
+.cr-tools.slow .cr-tool:focus-visible .cr-tip { animation: cr-tip-in 125ms var(--cr-out) 500ms both; }
+.cr-tools.warm:focus-within { --cr-warm: 1; transition: --cr-warm 0s 625ms; }
+.cr-tools.warm .cr-tool:focus-visible .cr-tip { animation: cr-tip-in calc((1 - var(--cr-warm)) * 125ms) var(--cr-out) calc((1 - var(--cr-warm)) * 500ms) both; }
+@media (prefers-reduced-motion: reduce) {
+  /* gentler, not none: the tooltips keep their timing and fade without scaling. site.css stops every transition under reduced
+     motion, so the warm-up timer is switched back on here: it is a delay, not movement. */
+  .cr .cr-tools { transition: --cr-warm 0s !important; }
+  .cr .cr-tools.warm:focus-within { transition: --cr-warm 0s 625ms !important; }
+  .cr .cr-tools .cr-tool:focus-visible .cr-tip { animation-name: cr-tip-fade !important; animation-duration: 125ms !important; animation-delay: 500ms !important; animation-fill-mode: both !important; }
+  .cr .cr-tools.warm .cr-tool:focus-visible .cr-tip { animation-duration: calc((1 - var(--cr-warm)) * 125ms) !important; animation-delay: calc((1 - var(--cr-warm)) * 500ms) !important; }
+}
+@media (prefers-reduced-motion: reduce) and (hover: hover) and (pointer: fine) {
+  .cr .cr-tools.warm:hover { transition: --cr-warm 0s 625ms !important; }
+  .cr .cr-tools .cr-tool:hover .cr-tip { animation-name: cr-tip-fade !important; animation-duration: 125ms !important; animation-delay: 500ms !important; animation-fill-mode: both !important; }
+  .cr .cr-tools.warm .cr-tool:hover .cr-tip { animation-duration: calc((1 - var(--cr-warm)) * 125ms) !important; animation-delay: calc((1 - var(--cr-warm)) * 500ms) !important; }
+}
+.cr-touch-note { display: none; font-size: 13px; line-height: 18px; color: var(--ink-muted); text-align: center; }
+@media (hover: none) { .cr-touch-note { display: block; } }
+
+/* UX: a toast stack that expands while hovered or focused (STD-components-toasts-drawers-10, -11, -12) */
+.cr-stackwin { height: 264px; }
+.cr-stack { position: absolute; right: 16px; bottom: 16px; width: 228px; max-width: calc(100% - 32px); height: 48px; }
+.cr-stack > div { position: absolute; left: 0; right: 0; bottom: 0; height: 48px; display: flex; align-items: center; gap: 8px; padding: 0 8px 0 14px; border-radius: var(--r-control); background: var(--surface-raised); box-shadow: var(--cr-lift); font-size: 14px; line-height: 20px; white-space: nowrap; transform-origin: 50% 0; transition: transform 400ms ease; }
+.cr-stack > div > span { flex: 1; min-width: 0; }
+.cr-stack > .t0 { z-index: 3; }
+.cr-stack > .t1 { z-index: 2; transform: translateY(-14px) scale(0.95); }
+.cr-stack > .t2 { z-index: 1; transform: translateY(-28px) scale(0.9); }
+.cr-stack:focus-within > .t1 { transform: translateY(-62px); }
+.cr-stack:focus-within > .t2 { transform: translateY(-124px); }
+@media (hover: hover) and (pointer: fine) {
+  .cr-stack::after { content: ""; position: absolute; left: 0; right: 0; bottom: 100%; height: 0; }
+  .cr-stack:hover::after { height: 124px; }
+  .cr-stack:hover > .t1 { transform: translateY(-62px); }
+  .cr-stack:hover > .t2 { transform: translateY(-124px); }
+}
+.cr-undo { appearance: none; border: 0; margin: 0; min-height: 32px; padding: 0 12px; border-radius: var(--r-pill); background: var(--ink); color: var(--surface-raised); font: 600 13px/18px "Hanken Grotesk", system-ui, sans-serif; cursor: pointer; touch-action: manipulation; flex: none; }
+.cr-undo:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+.cr-pile { position: absolute; left: 12px; right: 12px; top: 12px; display: grid; gap: 6px; }
+.cr-pile > div { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; min-width: 0; padding: 7px 8px 7px 12px; border-radius: var(--r-control); background: var(--surface-raised); box-shadow: var(--cr-lift); font-size: 13px; line-height: 18px; }
+.cr-pile > div > span:first-child { flex: 1 1 112px; min-width: 0; }
+.cr-pile .chip { flex: none; }
+
+/* UX: a phone with a drawer that opens on the drawer curve, and one with a centred dialog */
+.cr-phones { display: grid; justify-items: center; }
+.cr-phone { position: relative; width: 168px; height: 300px; border-radius: 30px; background: var(--surface-raised); box-shadow: 0 0 0 6px var(--ink), 0 0 0 7px var(--cr-ring); contain: paint; }
+.cr-phone .cr-skel { padding: 28px 16px 16px; }
+.cr-scrim { position: absolute; inset: 0; background: color-mix(in srgb, var(--ink) 40%, transparent); }
+.cr-drawer { position: absolute; left: 0; right: 0; bottom: 0; height: 58%; padding: 10px 16px 16px; display: grid; align-content: start; gap: 8px; border-radius: 22px 22px 0 0; background: var(--surface-raised); font-size: 13px; line-height: 18px; }
+.cr-drawer::before { content: ""; justify-self: center; width: 36px; height: 5px; border-radius: 3px; background: var(--line-strong); }
+.cr-drawer b { font-weight: 600; font-size: 15px; line-height: 20px; }
+.cr-drawer .cr-pill { justify-self: stretch; margin-top: 6px; }
+.cr-dialog { position: absolute; left: 14px; right: 14px; top: 50%; translate: 0 -50%; padding: 14px; display: grid; gap: 6px; border-radius: 18px; background: var(--surface-raised); font-size: 13px; line-height: 18px; }
+.cr-dialog b { font-weight: 600; font-size: 15px; line-height: 20px; }
+.cr-dialog .cr-pill { min-height: 28px; font-size: 12px; }
+.cr-dialog .cr-pill.ghost { box-shadow: none; background: var(--surface-sunken); }
+.cr-dialog-row { display: flex; justify-content: flex-end; gap: 6px; margin-top: 4px; }
+.cr-sheet-up { animation: cr-sheet-up 3s var(--cr-drawer) infinite; }
+.cr-scrim-in { animation: cr-scrim-in 3s var(--cr-drawer) infinite; }
+@keyframes cr-sheet-up { 0% { transform: translateY(100%); } 16.67%, 66.67% { transform: none; } 83.33%, 100% { transform: translateY(100%); } }
+@keyframes cr-scrim-in { 0% { opacity: 0; } 16.67%, 66.67% { opacity: 1; } 83.33%, 100% { opacity: 0; } }
+
+/* UX: forms, dialogs and the hover note */
+.cr-form { display: grid; gap: 6px; padding: 14px; }
+.cr-form label, .cr-form .lab { font-size: 13px; line-height: 18px; font-weight: 600; }
+.cr-field { display: flex; align-items: center; min-height: 40px; padding: 0 12px; border-radius: var(--r-control); background: var(--surface-raised); box-shadow: 0 0 0 1px var(--line-strong); font-size: 16px; line-height: 22px; color: var(--ink); min-width: 0; overflow-wrap: anywhere; }
+.cr-field.bad { box-shadow: 0 0 0 2px var(--bad); }
+.cr-err { display: flex; gap: 6px; align-items: flex-start; font-size: 13px; line-height: 18px; color: var(--bad); }
+.cr-err svg { width: 16px; height: 16px; flex: none; margin-top: 1px; }
+.cr-form .cr-pill { justify-self: start; margin-top: 8px; }
+.cr-modalwin { min-height: 236px; }
+.cr-modalwin .cr-scrim { z-index: 1; }
+.cr-alert { position: absolute; z-index: 2; left: 50%; top: 50%; translate: -50% -50%; width: min(220px, calc(100% - 24px)); padding: 14px; display: grid; gap: 6px; border-radius: var(--r-control); background: var(--surface-raised); box-shadow: var(--cr-lift); font-size: 13px; line-height: 18px; }
+.cr-alert b { font-size: 15px; line-height: 20px; font-weight: 600; }
+.cr-alert .cr-pill { justify-self: end; min-height: 28px; font-size: 12px; }
+.cr-alert .cr-dialog-row .cr-pill { justify-self: auto; }
+.cr-alert .cr-pill.ghost { box-shadow: none; background: var(--surface-sunken); }
+.cr-inbox { display: grid; gap: 0; padding: 6px 12px 12px; }
+.cr-inbox > div { display: flex; align-items: center; gap: 10px; min-width: 0; padding: 9px 2px; border-top: 1px solid var(--line); font-size: 13px; line-height: 18px; }
+.cr-inbox > div:first-child { border-top: 0; }
+.cr-inbox > div > i { width: 20px; height: 20px; border-radius: 50%; background: var(--accent-soft); flex: none; }
+.cr-inbox > div > span { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.cr-inbox > div.gone { opacity: .45; text-decoration: line-through; text-decoration-color: var(--ink-muted); }
+.cr-toast.still { position: absolute; right: 12px; bottom: 12px; left: 12px; justify-content: space-between; white-space: normal; padding: 6px 6px 6px 14px; }
+.cr-toast.still > span:first-child { flex: 1; min-width: 0; }
+.cr-toast.still > .cr-pill { flex: none; }
+.cr-toast.still .cr-undo { min-height: 30px; }
+
+/* UX: swipe to dismiss */
+.cr-swipe { display: grid; gap: 10px; }
+.cr-lanebox { position: relative; height: 72px; border-radius: var(--r-control); background: var(--surface-raised); box-shadow: 0 0 0 1px var(--cr-ring); contain: paint; }
+.cr-lanebox .cr-toast { left: 12px; right: auto; bottom: 10px; z-index: 1; }
+.cr-lanebox .cr-ghost { opacity: .35; }
+.cr-mark { position: absolute; top: 6px; bottom: 6px; width: 0; border-left: 2px dashed var(--line-strong); }
+.cr-mark span { position: absolute; top: -2px; right: 6px; font: 500 11px/14px "Source Code Pro", ui-monospace, monospace; color: var(--ink-muted); white-space: nowrap; }
+.cr-flick { position: absolute; height: 2px; background: var(--accent); top: 50%; }
+.cr-flick::after { content: ""; position: absolute; right: -2px; top: -4px; border: 5px solid transparent; border-left: 7px solid var(--accent); border-right: 0; }
+.cr-swipe .cr-meta { justify-content: flex-start; }
+
+/* UI details: annotated drawings at actual size */
+.cr-ann { position: relative; }
+.cr-ann .ann-dot.abs { transform: translate(-50%, -50%); }
+.cr-spec { display: grid; gap: 18px; padding: 8px 0; }
+.cr-spec-display { font-size: 34px; line-height: 1.05; font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+.cr .cr-spec .cr-spec-display { letter-spacing: -0.02em; }
+.cr-spec-label { font-size: 11px; line-height: 16px; font-weight: 600; text-transform: uppercase; }
+.cr .cr-spec .cr-spec-label { letter-spacing: 0.07em; }
+.cr-spec-body { font-size: 16px; line-height: 1.5; max-width: 65ch; margin: 0; }
+.cr .cr-spec .cr-spec-body { letter-spacing: 0; }
+.cr-ann-wrap { position: relative; padding-left: 30px; }
+.cr-ann-wrap > .ann-dot { position: absolute; left: 0; top: 2px; }
+.cr-amounts { display: grid; gap: 0; font-size: 16px; line-height: 24px; }
+.cr-amounts > div { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-top: 1px solid var(--line); }
+.cr-amounts > div:first-child { border-top: 0; }
+.cr-amounts .v { text-align: right; white-space: nowrap; }
+.cr-amounts .tab { font-variant-numeric: tabular-nums; }
+.cr-amounts .pn1 { margin-inline: -0.11em; }
+.cr .cr-amounts { letter-spacing: 0; }
+.cr-guide { position: relative; }
+.cr-guide::after { content: ""; position: absolute; top: 0; bottom: 0; right: 2ch; border-right: 1px dashed var(--accent); opacity: .7; }
+.cr-card-demo { padding: 16px; border-radius: var(--r-control); background: var(--surface-raised); display: grid; gap: 4px; font-size: 14px; line-height: 20px; }
+.cr-card-demo b { font-weight: 600; font-size: 15px; }
+.cr-card-demo span { color: var(--ink-muted); }
+.cr-card-demo.hard { box-shadow: none; border: 1px solid var(--line-strong); }
+.cr-card-demo.soft { box-shadow: var(--cr-lift); }
+.cr-cards { display: grid; gap: 14px; padding: 6px; }
+.cr-settings { display: grid; gap: 0; padding: 4px 14px; }
+.cr-settings > div { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; padding: 10px 0; border-top: 1px solid var(--line); font-size: 14px; line-height: 20px; }
+.cr-settings > div:first-child { border-top: 0; }
+.cr-settings em { font-style: italic; }
+.cr-settings u { text-decoration: underline; text-underline-offset: 3px; }
+.cr-settings a { color: var(--accent-text); }
+.cr-settings .muted { color: var(--ink-muted); }
+.cr-edgewin { height: 196px; }
+.cr-bar { position: absolute; left: 0; right: 0; top: 0; z-index: 2; height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 14px; font-weight: 600; font-size: 14px; background: color-mix(in srgb, var(--surface-raised) 86%, transparent); }
+.cr-bar.line { box-shadow: 0 1px 0 var(--line-strong); }
+.cr-bar.fadeedge::after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 18px; background: linear-gradient(var(--surface-raised), color-mix(in srgb, var(--surface-raised) 0%, transparent)); pointer-events: none; }
+.cr-feed { position: absolute; left: 0; right: 0; top: 34px; display: grid; gap: 8px; padding: 0 14px; }
+.cr-feed > div { display: flex; gap: 10px; align-items: center; padding: 8px 10px; border-radius: var(--r-control); background: var(--surface-sunken); font-size: 13px; line-height: 18px; }
+.cr-feed > div > i { width: 22px; height: 22px; border-radius: 50%; background: var(--accent-soft); flex: none; }
+.cr-measure { position: relative; display: grid; place-items: center; min-height: 168px; }
+.cr-hit { position: relative; width: 44px; height: 44px; display: grid; place-items: center; border-radius: var(--r-detail); outline: 1.5px dashed var(--accent); outline-offset: -1px; background: var(--accent-soft); }
+.cr-hit-floor { position: absolute; left: 10px; top: 10px; width: 24px; height: 24px; outline: 1.5px solid var(--ok); outline-offset: -1px; border-radius: 4px; }
+.cr-hit-icon { position: relative; width: 20px; height: 20px; display: grid; place-items: center; border-radius: 4px; background: var(--surface-raised); color: var(--ink); box-shadow: 0 0 0 1px var(--cr-ring); }
+.cr-hit-icon svg { width: 14px; height: 14px; }
+.cr-focus-demo { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; padding: 0 18px; border-radius: var(--r-pill); background: var(--accent); color: var(--on-accent); font-weight: 600; font-size: 14px; outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+.cr-dim { font: 500 12px/16px "Source Code Pro", ui-monospace, monospace; color: var(--ink-muted); white-space: nowrap; }
+.cr-fills { display: grid; gap: 14px; }
+.cr-fill { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.cr-fill > .s { flex: none; display: inline-flex; align-items: center; justify-content: center; min-width: 104px; min-height: 36px; padding: 0 14px; border-radius: var(--r-pill); font-weight: 600; font-size: 14px; line-height: 18px; }
+.cr-fill > .m { flex: 1; min-width: 0; font-size: 13px; line-height: 18px; overflow-wrap: anywhere; }
+.cr-fill > .m .mono { font-size: 12px; color: var(--ink-muted); }
+.cr-fill > .chip { flex: none; }
+.cr-fills { container-type: inline-size; }
+@container (max-width: 360px) { .cr-fill { flex-wrap: wrap; row-gap: 6px; } .cr-fill > .m { flex-basis: 100%; order: 3; } }
+.cr-src { display: grid; gap: 10px; }
+.cr-phones .cr-stage { justify-items: center; }
+.cr-measures { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-end; gap: 24px 32px; padding: 8px 0; }
+.cr-mitem { display: grid; justify-items: center; gap: 10px; }
+.cr-mitem > .cr-field { justify-content: flex-start; }

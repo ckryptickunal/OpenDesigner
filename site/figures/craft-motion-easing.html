@@ -1,0 +1,23 @@
+<figure class="fig cr">
+<div class="fig-panel">
+<div class="cr-stage" tabindex="0" role="group" aria-label="Easing race. Three dots cross the same distance in the same time: ease-in, the built-in ease-out and the house ease-out curve. Hover or focus to pause.">
+<div class="cr-lane" style="color:var(--bad)">
+<svg class="cr-curve" viewBox="0 0 44 44" aria-hidden="true"><path class="ax" d="M2 2V42H42"/><path class="ln" d="M2 42C18.8 42 42 2 42 2"/></svg>
+<div class="cr-lane-b"><div class="cr-meta"><span><b>ease-in</b> <span class="chip bad">never on UI</span></span><span>cubic-bezier(0.42, 0, 1, 1)</span></div>
+<div class="cr-track"><span class="cr-dot cr-loop" style="--cr-ease:cubic-bezier(0.42, 0, 1, 1)"></span></div></div>
+</div>
+<div class="cr-lane" style="color:var(--ink-muted)">
+<svg class="cr-curve" viewBox="0 0 44 44" aria-hidden="true"><path class="ax" d="M2 2V42H42"/><path class="ln" d="M2 42C2 42 25.2 2 42 2"/></svg>
+<div class="cr-lane-b"><div class="cr-meta"><span><b>ease-out</b>, built in <span class="chip warn">too weak</span></span><span>cubic-bezier(0, 0, 0.58, 1)</span></div>
+<div class="cr-track"><span class="cr-dot cr-loop" style="--cr-ease:cubic-bezier(0, 0, 0.58, 1)"></span></div></div>
+</div>
+<div class="cr-lane" style="color:var(--accent)">
+<svg class="cr-curve" viewBox="0 0 44 44" aria-hidden="true"><path class="ax" d="M2 2V42H42"/><path class="ln" d="M2 42C11.2 2 14.8 2 42 2"/></svg>
+<div class="cr-lane-b"><div class="cr-meta"><span><b>ease-out</b>, the house curve <span class="chip ok">use this</span></span><span>cubic-bezier(0.23, 1, 0.32, 1)</span></div>
+<div class="cr-track"><span class="cr-dot cr-loop" style="--cr-ease:cubic-bezier(0.23, 1, 0.32, 1)"></span></div></div>
+</div>
+</div>
+<div class="cr-foot"><span>Each dot takes <span class="num">1&nbsp;s</span> here, slowed down so you can see the curve. In an interface, keep it under <span class="num">300&nbsp;ms</span>.</span><span class="cr-hint" aria-hidden="true"><span class="cr-hint-play">Hover or focus to pause.</span><span class="cr-hint-paused">Paused.</span></span><span class="cr-rm">Reduced motion is on, so the dots rest at the finish.</span></div>
+</div>
+<figcaption>Three dots cross the same track in the same time. The ease-in dot starts slowly, so nothing seems to happen at the moment you look. The house ease-out curve moves at once and then settles, which is why it feels faster.</figcaption>
+</figure>

@@ -39,7 +39,7 @@ This refreshes the tokens, `DESIGN.md`, `opendesigner/overview.html`, the filled
 
 ## Rules
 
-- Never put another company's name or logo in any image.
+- Never put another company's name or logo in any image, with one exception (owner, 2026-10-15): when a page names a well-known tool, app or business that OpenDesigner works with, show its own mark (from Simple Icons, CC0), monochrome, next to its name, as a plain statement of where it runs. Never as an endorsement, never inside invented showcase brands.
 - Use at most two fonts in any one thing.
 - Keep tonal contrast clear: dark text on light grounds and light text on dark grounds.
 - Show the system in the artifact before rendering any exports.

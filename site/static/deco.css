@@ -1,0 +1,77 @@
+/* Decoration, direction A "Press proof" (owner's choice, 2026-10-15, from three previews): the marks a print designer leaves on
+   a proof sheet. Flat cobalt and ink, 1-1.5 px rules, monospace labels, crop marks, a rubber stamp, numbered section tabs,
+   line pictograms and spec callouts that show real values. Every mark explains the product; nothing floats for its own sake.
+   Two faces only (Hanken Grotesk, Source Code Pro). Decorative SVGs are aria-hidden; rotation stops under reduced motion. */
+.rot { transform: rotate(var(--r, 0deg)); }
+@media (prefers-reduced-motion: reduce) { .rot { transform: none; } }
+
+/* crop marks and a registration target around the hero picture, and nowhere else */
+.a-plate { position: relative; }
+.a-crop { position: absolute; overflow: visible; fill: none; stroke: var(--ink); stroke-width: 1; z-index: 3; }
+.a-crop.tl { left: 0; top: 0; } .a-crop.tr { right: 0; top: 0; transform: scaleX(-1); }
+.a-crop.bl { left: 0; bottom: 0; transform: scaleY(-1); } .a-crop.br { right: 0; bottom: 0; transform: scale(-1); }
+.a-reg { position: absolute; left: 50%; top: -34px; width: 22px; height: 22px; margin-left: -11px; fill: none; stroke: var(--ink); stroke-width: 1; }
+.a-reg-q { fill: var(--ink); stroke: none; }
+@media (max-width: 640px) { .a-crop, .a-reg { display: none; } }
+
+/* the rubber stamp on the rules card (the card lets it hang over its corner) */
+.hh-file { overflow: visible; position: relative; }
+.hh-file > .fig-card-h { border-radius: var(--r-card) var(--r-card) 0 0; }
+.hh-file > .fig-card-f { border-radius: 0 0 var(--r-card) var(--r-card); }
+.a-stamp { --r: -5deg; position: absolute; z-index: 3; right: -20px; bottom: -30px; width: 84px; height: 84px; }
+@media (max-width: 1100px) { .a-stamp { display: none; } }
+
+/* numbered section tabs */
+.a-idx { display: flex; align-items: center; gap: 10px; color: var(--ink); }
+.a-idx-n { display: inline-grid; place-items: center; min-width: 28px; height: 20px; padding: 0 6px; border-radius: 6px; background: var(--accent); color: var(--on-accent); letter-spacing: .04em; }
+.a-idx::after { content: ""; width: 80px; height: 13px; flex: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='13'%3E%3Cg fill='none' stroke='%23222428'%3E%3Cpath d='M0 6.5H66M73.5 0V13M67 6.5H80'/%3E%3Ccircle cx='73.5' cy='6.5' r='3.5'/%3E%3C/g%3E%3C/svg%3E") no-repeat; }
+
+/* line pictograms on the step cards */
+.h-step { position: relative; }
+.a-pict { position: absolute; top: 20px; right: 20px; width: 48px; height: 32px; fill: none; stroke: var(--ink); stroke-width: 1.25; stroke-linejoin: round; }
+.a-pict .a-pf { stroke: var(--line-strong); stroke-width: 1; }
+
+/* spec callouts on each example card, with the example's own token values */
+.x-card { position: relative; }
+.a-call { position: absolute; z-index: 2; display: flex; align-items: center; gap: 6px; white-space: nowrap; padding: 2px 7px; border-radius: 6px; background: #fff;
+  font: 500 11px/16px "Source Code Pro", ui-monospace, monospace; letter-spacing: .02em; color: var(--accent-text); box-shadow: 0 1px 2px rgb(10 14 40 / .18); }
+.a-call b { font-weight: 500; color: var(--ink); }
+.a-call::before { content: ""; position: absolute; width: 1px; background: #fff; }
+.a-call::after { content: ""; position: absolute; width: 5px; height: 5px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 1px var(--accent-text); }
+.a-call-top { left: -2px; bottom: calc(100% + 12px); }
+.a-call-top::before { left: 9px; top: 100%; height: 12px; } .a-call-top::after { left: 7px; top: calc(100% + 10px); }
+.a-call-bot { right: 18px; top: calc(100% + 14px); }
+.a-call-bot::before { right: 30px; bottom: 100%; height: 28px; } .a-call-bot::after { right: 28px; bottom: calc(100% + 26px); }
+.a-dim { position: absolute; z-index: 2; right: -18px; bottom: calc(var(--x-inset) * 2); height: var(--x-h); width: 7px; border: 1px solid #fff; border-left: 0; }
+.a-dim span { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); padding: 0 4px; border-radius: 4px; background: #fff; font: 500 11px/16px "Source Code Pro", ui-monospace, monospace; color: var(--accent-text); }
+.demo-stage { padding-block: 64px; }
+@media (max-width: 640px) { .a-call, .a-dim { display: none; } .demo-stage { padding-block: 24px; } }
+
+/* showcase: status is a rectangular rubber stamp; tags are a punched audience tag, a ruled style label and a dashed industry label */
+.a-rstamp { --r: 3deg; display: inline-block; padding: 2px 7px; background: #fff; color: var(--accent); border: 1.5px solid var(--accent); border-radius: 4px;
+  outline: 1px solid var(--accent); outline-offset: 2px; font: 500 11px/16px "Source Code Pro", ui-monospace, monospace; letter-spacing: .07em; text-transform: uppercase; filter: url(#a-ink); }
+.piece-stuck .a-rstamp + .a-rstamp { --r: -2deg; margin-right: 10px; }
+.a-tags { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 6px; }
+.a-tag { display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 6px; white-space: nowrap; font: 600 12px/16px "Hanken Grotesk", system-ui, sans-serif; letter-spacing: 0; }
+.a-aud { position: relative; padding-left: 18px; background: var(--accent); color: var(--on-accent); border-radius: 6px 11px 11px 6px; }
+.a-aud::before { content: ""; position: absolute; left: 7px; top: 8px; width: 6px; height: 6px; border-radius: 50%; background: var(--surface-raised); }
+.a-sty { border: 1.25px solid var(--ink); color: var(--ink); font: 500 11px/16px "Source Code Pro", ui-monospace, monospace; letter-spacing: .06em; text-transform: uppercase; }
+.a-ind { border: 1.25px dashed var(--ink); color: var(--ink); background: #fff; }
+.legend .a-tag, .legend .a-rstamp { flex: none; }
+
+/* docs: a catalogue-card tab with the page's place in its group */
+.a-card { --r: 3deg; display: inline-flex; align-items: stretch; border: 1.5px solid var(--ink); border-radius: 6px; background: #fff; overflow: hidden; }
+.a-card-k { display: grid; place-items: center; padding: 6px 10px; font: 500 11px/16px "Source Code Pro", ui-monospace, monospace; letter-spacing: .07em; text-transform: uppercase; color: var(--ink); }
+.a-card-n { display: flex; align-items: center; white-space: nowrap; padding: 0 9px; background: var(--accent); color: var(--on-accent); font: 500 14px/20px "Source Code Pro", ui-monospace, monospace; letter-spacing: 0; }
+.a-card-n small { font-size: 11px; }
+.doc-stickers .a-card { transform: rotate(3deg); }
+@media (max-width: 640px) { .doc-stickers .a-card { transform: rotate(-2deg); } }
+@media (prefers-reduced-motion: reduce) { .doc-stickers .a-card { transform: none; } }
+
+/* the remaining labels (style names, do and don't) as flat printed labels instead of thick die-cut stickers */
+.sticker { border: 1.25px solid var(--ink); box-shadow: none; background-image: none; border-radius: 6px; padding: 2px 8px; }
+.sticker.paper { box-shadow: none; }
+.dd-h::before { border: 1.5px solid currentColor !important; box-shadow: none !important; border-radius: 4px !important; padding: 1px 7px !important; background: #fff !important;
+  font: 500 11px/16px "Source Code Pro", ui-monospace, monospace !important; letter-spacing: .07em; text-transform: uppercase; outline: 1px solid currentColor; outline-offset: 2px; }
+.do .dd-h::before { color: var(--ok) !important; } .dont .dd-h::before { color: var(--bad) !important; }

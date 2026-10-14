@@ -1,0 +1,28 @@
+<figure class="fig cr">
+<div class="dodont">
+<div class="dont"><p class="dd-h">Hover styles for every device</p><p class="dd-why">Phones have no hover, so the browser fakes one: the first tap applies the hover style and leaves it there until you tap somewhere else.</p>
+<div class="dd-art cr-phones"><div class="cr-phone cr-ui" style="height:212px" aria-hidden="true">
+<div class="cr-feed" style="top:24px">
+<div><i></i><span>Design review</span></div>
+<div style="background:var(--accent-soft);box-shadow:0 0 0 2px var(--accent)"><i style="background:var(--accent)"></i><span>Roadmap sync</span></div>
+<div><i></i><span>Hiring panel</span></div>
+<div><i></i><span>Release notes</span></div>
+</div></div>
+<div class="cr-meta" style="margin-top:10px;justify-content:center"><span>tapped once: the row stays lit</span></div>
+<pre class="code-lines" style="margin-top:14px;justify-self:stretch">.row:hover {
+  background: var(--accent-soft);
+}</pre></div></div>
+<div class="do"><p class="dd-h">Hover only where there is a fine pointer</p><p class="dd-why">The hover style applies only when the main input can hover and point precisely. The press style is a real press on touch, so it stays ungated.</p>
+<div class="dd-art"><pre class="code-lines">@media (hover: hover)
+   and (pointer: fine) {
+  .row:hover {
+    background: var(--accent-soft);
+  }
+}
+
+.row:active {
+  transform: scale(0.97);
+}</pre></div></div>
+</div>
+<figcaption>A hover style on a phone sticks after the first tap, because touch screens fake a hover. Gating every hover rule behind hover: hover and pointer: fine keeps it for mice and trackpads, while the :active press style stays for everyone.</figcaption>
+</figure>

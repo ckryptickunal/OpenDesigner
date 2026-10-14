@@ -1,0 +1,23 @@
+<figure class="fig cr">
+<div class="dodont">
+<div class="dont"><p class="dd-h">Every tooltip waits</p><p class="dd-why">Point at one button, wait, then slide along the row. Each tooltip makes you wait again, so reading the toolbar is slow.</p>
+<div class="dd-art cr-toolsart"><div class="cr-tools slow" role="toolbar" aria-label="Formatting, every tooltip waits">
+<button type="button" class="cr-tool" aria-label="Bold"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M5 3.5h4.6a2.9 2.9 0 0 1 0 5.8H5zM5 9.3h5.3a3 3 0 0 1 0 6H5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span class="cr-tip" aria-hidden="true">Bold</span></button>
+<button type="button" class="cr-tool" aria-label="Italic"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M8 3.5h6M4 14.5h6M11 3.5l-4 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span class="cr-tip" aria-hidden="true">Italic</span></button>
+<button type="button" class="cr-tool" aria-label="Link"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M7.5 10.5l3-3M6.2 8.3 4.6 9.9a2.6 2.6 0 0 0 3.7 3.7l1.6-1.6M11.8 9.7l1.6-1.6a2.6 2.6 0 0 0-3.7-3.7L8.1 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span class="cr-tip" aria-hidden="true">Link</span></button>
+<button type="button" class="cr-tool" aria-label="Comment"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M3.5 4.5h11v7h-6l-3 2.5v-2.5h-2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span class="cr-tip" aria-hidden="true">Comment</span></button>
+</div>
+<div class="cr-meta"><span>each: waits, then 125&nbsp;ms in</span></div>
+<p class="cr-touch-note">Try it with a mouse, or with the Tab key.</p></div></div>
+<div class="do"><p class="dd-h">Only the first one waits</p><p class="dd-why">Point at one button, wait, then slide along the row. Once one tooltip is open, the next opens with no delay and no animation.</p>
+<div class="dd-art cr-toolsart"><div class="cr-tools warm" role="toolbar" aria-label="Formatting, only the first tooltip waits">
+<button type="button" class="cr-tool" aria-label="Bold"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M5 3.5h4.6a2.9 2.9 0 0 1 0 5.8H5zM5 9.3h5.3a3 3 0 0 1 0 6H5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span class="cr-tip" aria-hidden="true">Bold</span></button>
+<button type="button" class="cr-tool" aria-label="Italic"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M8 3.5h6M4 14.5h6M11 3.5l-4 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span class="cr-tip" aria-hidden="true">Italic</span></button>
+<button type="button" class="cr-tool" aria-label="Link"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M7.5 10.5l3-3M6.2 8.3 4.6 9.9a2.6 2.6 0 0 0 3.7 3.7l1.6-1.6M11.8 9.7l1.6-1.6a2.6 2.6 0 0 0-3.7-3.7L8.1 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span class="cr-tip" aria-hidden="true">Link</span></button>
+<button type="button" class="cr-tool" aria-label="Comment"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M3.5 4.5h11v7h-6l-3 2.5v-2.5h-2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span class="cr-tip" aria-hidden="true">Comment</span></button>
+</div>
+<div class="cr-meta"><span>first: waits, then 125&nbsp;ms in · next: 0&nbsp;ms</span></div>
+<p class="cr-touch-note">Try it with a mouse, or with the Tab key.</p></div></div>
+</div>
+<figcaption>Two real toolbars. In the first, every tooltip waits before it appears. In the second, only the first one waits, to avoid opening by accident; after that, neighboring tooltips open with no delay and no animation, so the whole toolbar feels faster.</figcaption>
+</figure>

@@ -13,7 +13,7 @@ These are short answers to the questions people ask most about OpenDesigner. The
 
 OpenDesigner is a free, open-source add-on for AI tools like Claude, ChatGPT, Codex and Cursor. It helps you make a design system: the rules for how your app looks, like colors, text sizes, spacing, corners and buttons. It reads your project, asks a few plain questions, suggests an answer for each with a reason, checks the result, and saves the rules as files in your project.
 
-The code, skills and data are under the MIT licence. The written research and docs are under CC BY 4.0. You need your own AI tool, which may cost money. See the [introduction](/docs/).
+The code, skills and data are under the MIT licence. The written research and docs are under CC BY 4.0. You need your own AI tool, which may cost money. See the [introduction](/docs/introduction/).
 
 ### Isn't this just a prompt?
 

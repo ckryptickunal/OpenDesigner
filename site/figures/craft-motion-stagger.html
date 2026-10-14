@@ -1,0 +1,26 @@
+<figure class="fig cr">
+<div class="dodont">
+<div class="dont"><p class="dd-h">Everything at once</p><p class="dd-why">Four rows land in the same frame. A short cascade would feel more natural.</p>
+<div class="dd-art"><div class="cr-stage" tabindex="0" role="group" aria-label="Four list rows that appear at the same time. Hover or focus to pause.">
+<div class="cr-meta"><span><b>delay 0&nbsp;ms</b> for every row</span><span>300&nbsp;ms · house ease-out</span></div>
+<div class="cr-list cr-ui">
+<div class="cr-row cr-loop cr-rise-all"><i></i><span>Design review</span><small>10:00</small></div>
+<div class="cr-row cr-loop cr-rise-all"><i></i><span>Roadmap sync</span><small>11:30</small></div>
+<div class="cr-row cr-loop cr-rise-all"><i></i><span>Hiring panel</span><small>14:00</small></div>
+<div class="cr-row cr-loop cr-rise-all"><i></i><span>Release notes</span><small>16:15</small></div>
+</div>
+</div></div></div>
+<div class="do"><p class="dd-h">50&nbsp;ms apart</p><p class="dd-why">Each row starts 50&nbsp;ms after the one above, so the list cascades in reading order. It is still usable at once.</p>
+<div class="dd-art"><div class="cr-stage" tabindex="0" role="group" aria-label="Four list rows that appear 50 milliseconds apart. Hover or focus to pause.">
+<div class="cr-meta"><span><b>delay 0, 50, 100, 150&nbsp;ms</b></span><span>300&nbsp;ms · house ease-out</span></div>
+<div class="cr-list cr-ui">
+<div class="cr-row cr-loop cr-rise" style="--i:0"><i></i><span>Design review</span><small>10:00</small></div>
+<div class="cr-row cr-loop cr-rise" style="--i:1"><i></i><span>Roadmap sync</span><small>11:30</small></div>
+<div class="cr-row cr-loop cr-rise" style="--i:2"><i></i><span>Hiring panel</span><small>14:00</small></div>
+<div class="cr-row cr-loop cr-rise" style="--i:3"><i></i><span>Release notes</span><small>16:15</small></div>
+</div>
+</div></div></div>
+</div>
+<div class="cr-foot"><span>Each row rises <span class="num">8&nbsp;px</span> as it fades in.</span><span class="cr-hint" aria-hidden="true"><span class="cr-hint-play">Hover or focus to pause.</span><span class="cr-hint-paused">Paused.</span></span><span class="cr-rm">Reduced motion is on, so the rows stay in place.</span></div>
+<figcaption>The same four rows entering together. Without a stagger they land in one frame; with 50 ms between rows they cascade in reading order. Keep the step between 30 and 80 ms, and never make people wait for it to finish.</figcaption>
+</figure>

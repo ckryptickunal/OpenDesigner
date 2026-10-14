@@ -4,7 +4,7 @@ seo_title: How OpenDesigner works, step by step, from install to review
 description: Every step OpenDesigner takes, in order: reading your project, the sketch, a first build, zooming in, the checks, the files it writes, and later changes.
 section: Reference
 order: 1
-updated: 2026-10-14
+updated: 2026-10-15
 ---
 
 OpenDesigner works inside the AI tool you already use: it reads your project, asks up to five questions, and builds a complete first version with a Python engine. You then zoom in only where you care. It checks the result with fixed rules, writes every decision down, and keeps later changes consistent.
@@ -39,6 +39,16 @@ A Python engine does the math. It works out color ramps, type and spacing scales
 Your answers move [eight dials](/docs/dials/), such as Density, Roundness and Energy. Each dial runs from 0 to 100, and each position maps to concrete values: a type ratio, a corner radius, a motion duration. Feel words like "playful" or "calm" move several dials at once.
 
 Every answer is recorded with how it was set, such as chosen, assumed or delegated. A suggestion you did not answer is never recorded as your decision. See [Decisions, DESIGN.md and the overview page](/docs/decisions/).
+
+### Your taste
+
+Your taste can move the dials too, but only as a suggestion you confirm.
+
+- **The taste poll** is optional and takes about 5 minutes. You rate 20 to 30 real screens from shipped products, never AI-made ones. The screen images stay on your computer.
+- **The taste index** combines every taste signal in your project: the poll, your own decisions, your inspirations, a style you picked and your feel words. It gives each dial a value and a confidence, plus red lines. When it is sure about a dial, it asks "confirm this?". It never offers an option past a red line, and `engine.py review` tells you when the system drifts from your taste.
+- **The taste card** sits at the top of `DESIGN.md` and on the overview page. It has five lines: your own picture of the look, color, shape, motion, and what it should never look like. Each line says where it comes from. The picture and the Never list only ever come from you.
+
+Taste never moves an accessibility floor or a house standard, and it stays in your project.
 
 ## Showing choices
 
