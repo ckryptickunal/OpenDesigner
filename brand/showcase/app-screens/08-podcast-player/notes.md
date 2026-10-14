@@ -70,3 +70,20 @@ The page is navy near-black (`accent2-dark-2` `#1c2029`, because the neutral dar
 - **Gap:** dark neutrals ignore most of `neutralBase`: a navy base still gives near-grey `#131519`, so the navy page uses an accent step.
 - **Gap:** there is no input for a light display weight; heading weight comes only from Energy.
 - **Gap:** `OPEN_FONTS` did not know Instrument Serif or Newsreader. (feedback recorded)
+
+## Round 3 (owner review, 2026-10-14)
+**What he said:** "can be a little better." The audit before it named the generated contour-map art with a glowing moon and a coordinate label (a motif repeated across the showcase), and reused invented data.
+
+**What changed:**
+- **The cover is a real photograph, made into a cover.** Dave Hoefler's "River between grass" (free Unsplash licence, checked on its photo page; `images.unsplash.com/photo-1567475360083-31f83e5e9b0e`, cropped with `rect=` so the top-right corner is plain grass), set as a duotone from navy to ice in a 132 pt square with "Night Cartography" in Newsreader on it. The river bend is the episode's subject ("The river that changed its mind"). The canvas, moon, glow, route and coordinate label are gone, and so is the full-bleed texture behind the header: the page is flat navy.
+- **Accent with one job.** Ice blue marks "now" only: all played time in one fill, the phrase being spoken, and the current chapter's number and time. Play is ice white with a navy glyph.
+- **Labels.** No letterspaced capitals: "Episode 41 · 52 min · 12 Oct", "Transcript · Yusra Quennell", "Chapter 3 of 6 · The river that changed its mind" on one line, "Full transcript" in sentence case.
+- **Platform.** `--ds-size-target-min` is 44 in the piece (the token resolves to 24 under `pointer: fine`, which the renderer reports); the transport is a five-column grid with play centred on the screen; the nav glyphs, "1.2×" and the sleep moon sit on the 20 and 370 margins.
+- **Chapters** are a table of contents under a sticky header, scrolled one row so 02 (played, dimmed), 03 (now) and 04 show; rows share a baseline and the leaders end on one line; times are m:ss to match the scrubber.
+- **Data.** The fill inside chapter 3 was 54% for 18:42 (it should have been 59%); elapsed is now 17:05, remaining −34:55 (52:00 in all), fill 43% = 4:23 of 10:12. Chapter starts 0:00, 4:06, 12:42, 22:54, 32:18, 44:24; segment widths 4.1, 8.6, 10.2, 9.4, 12.1, 7.6 minutes. "Ines Valcourt" (Ines is also in `app-screens/02`) is now Yusra Quennell; "18:42" is gone.
+- Type roles: Display 54 (Newsreader 300) · Title 2 22 · Body 17 · Subheadline 15 · Footnote 13, plus the cover's own 20 pt type. `overrides.font.size.15` and `.22` added through the engine.
+- References this round: Neuecast https://mobbin.com/screens/c1987944-c25e-4f79-ad38-2a2d44bdd7f9 (a type-led player), Brink https://mobbin.com/screens/cf024e3b-bc8b-4981-b433-0cfbe5ae11bd (cover, chapters, 15/30 skips and sleep in one row), Spotify https://mobbin.com/screens/646eefc4-43bd-4950-8b14-11a1431f9bfd (speed, skips and timer under the scrubber; a white play button).
+
+**Fresh-eyes audit** (fresh-context agent, against the B2B product screens and the three references): **3/5** (24 pt targets from the token, play off centre, the cover still texture, crushed bottom, two accent jobs), **3/5** after the first rework (current chapter under the fade, rows off their baselines, a pasted-on cover band), then **4/5**, with four polish items (sticky-header hairline, header spacing, leader ends, cover type contrast), all applied after it.
+
+**Checks:** `engine.py build` passes (2 light-mode warnings, not used here). `preflight.py html`: the Google Fonts `<link>` false positive only. `check_dates.py --year 2026`: passes.

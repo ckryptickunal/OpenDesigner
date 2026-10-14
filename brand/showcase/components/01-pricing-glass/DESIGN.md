@@ -64,7 +64,7 @@ No principles recorded yet (Q-brand-07). Until they are, the dials act as the ti
 - **Density 35/100** (spacious to compact: leaning spacious): body 16px on the web, default control 40px, density mode comfortable, icons 20px; hit areas never shrink.
 - **Energy 55/100** (calm to energetic: balanced): standard easing [0.77, 0, 0.175, 1], duration multiplier 1.02, spring damping 1.0, heading weight 650, navigation: neutral.
 - **Roundness 62/100** (sharp to soft: leaning soft): control radius 12, icon corners rounded, caps round.
-- **Depth 90/100** (flat to deep: deep): depth model: materials.
+- **Depth 35/100** (flat to deep: leaning flat): depth model: ring+faint-shadow.
 - **Colorfulness 82/100** (monochrome to vivid: vivid): scheme expressive, accent chroma 68.2 (HCT), 3 accent(s), surfaces: brand-or-dynamic-surfaces.
 - **Warmth 62/100** (cool/formal to warm/friendly: leaning warm/friendly): neutral tint chroma 0.006 at hue 58, borders: default, sentence-case, contractions allowed.
 
@@ -143,12 +143,12 @@ Designers: primary or brand accent · Code: `color.bg.accent`
 
 | Token | Light | Dark | Use |
 |---|---|---|---|
-| `color.bg.accent.bold` | `#f2a93b` | `#e8ad5e` | Solid accent fill. |
-| `color.bg.accent.bold-hover` | `#df9b35` | `#f8bd6e` | Hover: one step, at least 1.15:1 from the solid (DC-L01-17). |
-| `color.bg.accent.bold-pressed` | `#d49127` | `#ffcb88` | Pressed: at least 1.3:1 from the solid. |
-| `color.bg.accent.subtle` | `#f6eada` | `#302619` | Selected rows, accent badges. |
-| `color.bg.accent.subtle-hover` | `#f4e0c7` | `#3c2d19` | Hover on accent subtle fills. |
-| `color.bg.accent.subtle-pressed` | `#f1d6b5` | `#483418` | Pressed accent subtle fills. |
+| `color.bg.accent.bold` | `#f2a93b` | `#f2a93b` | Solid accent fill. |
+| `color.bg.accent.bold-hover` | `#df9b35` | `#ffba5a` | Hover: one step, at least 1.15:1 from the solid (DC-L01-17). |
+| `color.bg.accent.bold-pressed` | `#d49127` | `#ffca86` | Pressed: at least 1.3:1 from the solid. |
+| `color.bg.accent.subtle` | `#f6eada` | `#322515` | Selected rows, accent badges. |
+| `color.bg.accent.subtle-hover` | `#f4e0c7` | `#3e2c12` | Hover on accent subtle fills. |
+| `color.bg.accent.subtle-pressed` | `#f1d6b5` | `#4b320d` | Pressed accent subtle fills. |
 | `color.bg.accent2.bold` | `#578134` | `#6b8e51` | accent2 solid fill. |
 | `color.bg.accent2.bold-hover` | `#4d752d` | `#789b5e` | Hover: one step, at least 1.15:1 from the solid (DC-L01-17). |
 | `color.bg.accent2.bold-pressed` | `#456c24` | `#81a568` | Pressed: at least 1.3:1 from the solid. |
@@ -157,10 +157,10 @@ Designers: primary or brand accent · Code: `color.bg.accent`
 | `color.bg.accent3.bold-hover` | `#a54f5b` | `#c97c84` | Hover: one step, at least 1.15:1 from the solid (DC-L01-17). |
 | `color.bg.accent3.bold-pressed` | `#9b4753` | `#d4868e` | Pressed: at least 1.3:1 from the solid. |
 | `color.bg.accent3.subtle` | `#fae7e9` | `#322425` | accent3 subtle fill. |
-| `color.bg.action.primary` | `#f2a93b` | `#e8ad5e` | Primary action. One per view (DC-L15-03, L15 P08). |
-| `color.bg.action.primary-hover` | `#df9b35` | `#f8bd6e` | Hover: one step, at least 1.15:1 from the solid (DC-L01-17). |
-| `color.bg.action.primary-pressed` | `#d49127` | `#ffcb88` | Pressed: at least 1.3:1 from the solid. |
-| `color.bg.brand` | `#f2a93b` | `#e8ad5e` | Brand fill for signature surfaces; carries text.on-brand (brandAnchor rule, DC-L01-09). |
+| `color.bg.action.primary` | `#f2a93b` | `#f2a93b` | Primary action. One per view (DC-L15-03, L15 P08). |
+| `color.bg.action.primary-hover` | `#df9b35` | `#ffba5a` | Hover: one step, at least 1.15:1 from the solid (DC-L01-17). |
+| `color.bg.action.primary-pressed` | `#d49127` | `#ffca86` | Pressed: at least 1.3:1 from the solid. |
+| `color.bg.brand` | `#f2a93b` | `#f2a93b` | Brand fill for signature surfaces; carries text.on-brand (brandAnchor rule, DC-L01-09). |
 | `color.bg.danger.bold` | `#d93834` | `#da5b51` | Danger solid fill. |
 | `color.bg.danger.bold-hover` | `#c72f2c` | `#e9695e` | Hover: one step, at least 1.15:1 from the solid (DC-L01-17). |
 | `color.bg.danger.bold-pressed` | `#bc2323` | `#f47367` | Pressed: at least 1.3:1 from the solid. |
@@ -183,38 +183,36 @@ Designers: primary or brand accent · Code: `color.bg.accent`
 | `color.bg.warning.bold-hover` | `#dda331` | `#f7c56e` | Hover: one step, at least 1.15:1 from the solid (DC-L01-17). |
 | `color.bg.warning.bold-pressed` | `#d29921` | `#ffd388` | Pressed: at least 1.3:1 from the solid. |
 | `color.bg.warning.subtle` | `#f5ead9` | `#2f2618` | Warning banner and badge background. |
-| `color.border.accent` | `#af7c33` | `#a87935` | Selected card or accent outline. |
+| `color.border.accent` | `#af7c33` | `#b0750c` | Selected card or accent outline. |
 | `color.border.danger` | `#d76258` | `#cd6057` | Danger boundary, for example an invalid field (3:1). |
 | `color.border.default` | `#c5cad0` | `#45484d` | Outline buttons and table grids (decorative; the label carries meaning). |
-| `color.border.focus` | `#8b5a00` | `#ffc77f` | Focus ring (3:1 against every surface, DC-L04-09). |
+| `color.border.focus` | `#8b5a00` | `#ffc67c` | Focus ring (3:1 against every surface, DC-L04-09). |
 | `color.border.info` | `#008ed1` | `#0089c9` | Info boundary, for example an invalid field (3:1). |
 | `color.border.input` | `#82878d` | `#7c8086` | Text field and select borders (3:1, DC-L01-16). |
+| `color.border.separator` | `#e0e3e7` | `#34363a` | Hairlines between table rows and list items, lighter than border.subtle; decorative, so never the only cue (DC-L23-05). |
 | `color.border.strong` | `#82878d` | `#7c8086` | Boundaries that are the only cue: inputs, checkboxes, switches (3:1, WCAG 1.4.11). |
 | `color.border.subtle` | `#ced2d7` | `#3c3f43` | Dividers and card edges (decorative). |
 | `color.border.success` | `#089a47` | `#199547` | Success boundary, for example an invalid field (3:1). |
 | `color.border.warning` | `#aa7f2c` | `#a47b2f` | Warning boundary, for example an invalid field (3:1). |
-| `color.icon.accent` | `#8b5a00` | `#ffc77f` | Selected and interactive icons. |
+| `color.icon.accent` | `#8b5a00` | `#ffc67c` | Selected and interactive icons. |
 | `color.icon.default` | `#54585e` | `#a6abb2` | Icons beside text; same color as secondary text (DC-L05-08). |
 | `color.icon.on-accent` | `#222428` | `#141516` | Icons on solid accent fills. |
 | `color.icon.subtle` | `#60656b` | `#91969d` | Decorative icons. |
 | `color.overlay.scrim` | `#222428 @0.45` | `#000000` | Modal backdrop (DC-L04-18; Q-depth-06). |
 | `color.surface.base` | `#fcfdfe` | `#1c1d1f` | The page background. |
-| `color.surface.glass` | `#ffffff @0.72` | `#232527` | Glass for controls and navigation only, never content (DC-L04-15). |
-| `color.surface.glass-dimming` | `#000000 @0.35` | `#000000` | 35% dimming under clear glass over bright content (S-L15-073). |
-| `color.surface.glass-fallback` | `#ffffff` | `#2b2e30` | Solid twin under Reduce Transparency and Increase Contrast (DC-L04-16). |
 | `color.surface.nav` | `#fcfdfe` | `#1c1d1f` | Navigation on the page background. |
 | `color.surface.overlay` | `#ffffff` | `#2b2e30` | Menus, popovers, dialogs; always with elevation.floating or elevation.overlay. |
 | `color.surface.raised` | `#ffffff` | `#232527` | Cards and panels on the page. |
 | `color.surface.sunken` | `#f2f4f6` | `#141516` | Wells, code blocks, page gutters. |
-| `color.surface.tinted` | `#f6eada` | `#302619` | Tinted container (Colorfulness 50+, L09 X rubric; Q-color-05). |
-| `color.text.accent` | `#8b5a00` | `#ffc77f` | Accent text and selected labels. |
+| `color.surface.tinted` | `#f6eada` | `#322515` | Tinted container (Colorfulness 50+, L09 X rubric; Q-color-05). |
+| `color.text.accent` | `#8b5a00` | `#ffc67c` | Accent text and selected labels. |
 | `color.text.accent2` | `#3f6122` | `#94b67c` | accent2 text. |
 | `color.text.accent3` | `#8a404a` | `#e2989f` | accent3 text. |
 | `color.text.danger` | `#a82321` | `#ff8c80` | Danger text and icons; pair with an icon or label (DC-L01-15). |
 | `color.text.disabled` | `#82878d` | `#7c8086` | Disabled labels; exempt from contrast minimums (WCAG 1.4.3 exception). |
 | `color.text.info` | `#005c8a` | `#39b5ff` | Info text and icons; pair with an icon or label (DC-L01-15). |
 | `color.text.inverse` | `#ffffff` | `#141516` | Text on color.bg.inverse (tooltips, toasts). |
-| `color.text.link` | `#8b5a00` | `#ffc77f` | Links. Underline them in running text so color is not the only cue. |
+| `color.text.link` | `#8b5a00` | `#ffc67c` | Links. Underline them in running text so color is not the only cue. |
 | `color.text.on-accent` | `#222428` | `#141516` | Text and icons on color.bg.accent.bold* (auto-picked light or dark, S-L06-094). |
 | `color.text.on-accent2` | `#ffffff` | `#141516` | Text on accent2 solid. |
 | `color.text.on-accent3` | `#ffffff` | `#141516` | Text on accent3 solid. |
@@ -304,11 +302,11 @@ Designers: spacing scale, 0 to 96 · Code: `space.0 to space.96`
 
 **Intent.** Everything sits on a 4px unit: ladder 0, 2, 4, 6, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96. Density is a mode on the semantic layer (default **comfortable**). Primitives and minimum tap areas never change.
 
-| Density | inset xs/sm/md/lg/xl | section sm/md/lg | control sm/md/lg | outer:inner |
-|---|---|---|---|---|
-| spacious | 6 / 12 / 16 / 20 / 32 | 64 / 80 / 96 | 40 / 48 / 56 | 3.5 |
-| comfortable (default) | 4 / 8 / 12 / 16 / 24 | 32 / 40 / 64 | 32 / 40 / 48 | 2.5 |
-| compact | 2 / 6 / 8 / 12 / 20 | 16 / 24 / 40 | 24 / 32 / 40 | 2.0 |
+| Density | inset xs/sm/md/lg/xl | section sm/md/lg | control sm/md/lg | row sm/md/lg/two-line | outer:inner |
+|---|---|---|---|---|---|
+| spacious | 6 / 12 / 16 / 20 / 32 | 64 / 80 / 96 | 40 / 48 / 56 | 52 / 56 / 64 / 80 | 3.5 |
+| comfortable (default) | 4 / 8 / 12 / 16 / 24 | 32 / 40 / 64 | 32 / 40 / 48 | 44 / 48 / 56 / 72 | 2.5 |
+| compact | 2 / 6 / 8 / 12 / 20 | 16 / 24 / 40 | 24 / 32 / 40 | 36 / 40 / 48 / 64 | 2.0 |
 
 - Target sizes: pointer 24px, touch 44px; `size.target.min` is the floor for the primary input, and `space.target.gap` separates adjacent targets.
 - Inner gaps stay below outer gaps (at least half), so grouping reads without borders (L15 P16).
@@ -327,7 +325,7 @@ Decisions: D-0018 (dials.density).
 > Zoom: broad (1 of 3), 2 decisions in this area. To zoom in, answer Q-depth-04.
 <!-- od:zoom area=elevation level=1 -->
 
-**Controls and bars can be see-through glass, with solid fallbacks.**
+**Cards get a faint outline and a very soft shadow.**
 Designers: flat, shadowed, tonal or glass · Code: `$extensions.opendesigner.model`
 
 <details><summary>More</summary>
@@ -335,19 +333,19 @@ Designers: flat, shadowed, tonal or glass · Code: `$extensions.opendesigner.mod
 **Your answers here** (each one either sets tokens or is a rule for this section):
 - How should cards and panels stand out from the page: shadows, color steps, lines, or glass? **Materials and glass** (delegated; tokens; Q-depth-01)
 
-**Intent.** Depth 90/100 selects the **materials** model. Shadow alpha in light mode is 0.221; dark mode doubles it and lifts surfaces by lightness instead (sunken, base, raised, overlay).
+**Intent.** Depth 35/100 selects the **ring+faint-shadow** model. Shadow alpha in light mode is 0.116; dark mode doubles it and lifts surfaces by lightness instead (sunken, base, raised, overlay).
 
 | Token | Layers (x y blur spread) | Use |
 |---|---|---|
-| `elevation.raised` | 0 0 2 0, 0 1 2 0 | Cards that lift on hover, sticky headers, dragged rows. |
-| `elevation.floating` | 0 0 2 0, 0 4 8 0 | Menus, popovers, dropdowns. |
-| `elevation.overlay` | 0 0 2 0, 0 14 28 0 | Dialogs and sheets (with color.overlay.scrim). |
+| `elevation.raised` | 0 0 0 1, 0 1 2 0 | Cards that lift on hover, sticky headers, dragged rows. |
+| `elevation.floating` | 0 0 0 1, 0 1 2 0, 0 4 12 0 | Menus, popovers, dropdowns. |
+| `elevation.overlay` | 0 0 0 1, 0 1 2 0, 0 12 32 0 | Dialogs and sheets (with color.overlay.scrim). |
 
 - Borders: 1px default, 2px selected and focus, 4px emphasis; width changes use an inset shadow so layout does not jump.
 - Stacking: page < raised < floating (menus) < overlay (dialogs with `color.overlay.scrim`).
-- Glass is for controls and navigation only, with `color.surface.glass-fallback` under Reduce Transparency.
+- No materials or glass in this system.
 
-Decisions: D-0016 (dials.depth), D-0027 (answers.Q-depth-01).
+Decisions: D-0027 (answers.Q-depth-01), D-0031 (dials.depth).
 
 </details>
 
@@ -448,7 +446,7 @@ Designers: guardrails and design linting · Code: `engine.py validate, engine.py
 - Don't use motion as the only signal, or flash more than three times a second.
 - Don't copy another brand's identity from a reference (colors, typeface, logo, imagery, copy).
 
-**Current validation findings:** warn: light: color.bg.action.primary (#f2a93b) on color.surface.base (#fcfdfe) is 1.96:1, needs 3.0:1, warn: light: color.bg.action.primary (#f2a93b) on color.surface.raised (#ffffff) is 2.00:1, needs 3.0:1, warn: the feel words premium, rich pull colorfulness in opposite directions. Pick which one wins
+**Current validation findings:** warn: light: color.bg.action.primary (#f2a93b) on color.surface.base (#fcfdfe) is 1.96:1, needs 3.0:1, warn: light: color.bg.action.primary (#f2a93b) on color.surface.raised (#ffffff) is 2.00:1, needs 3.0:1
 
 **Waivers:** none.
 
@@ -666,7 +664,7 @@ Decisions: D-0009 (answers.Q-plat-01).
 
 ## Decisions
 
-**30 decisions so far.** Each one says who set it and why.
+**31 decisions so far.** Each one says who set it and why.
 Designers: decision history with reasons · Code: `opendesigner/decisions.md`
 
 <details><summary>More</summary>
@@ -684,7 +682,6 @@ Your own decisions first (the newest value per path), then your changes to stand
 | D-0012 | `answers.Q-theme-01` | "dark-only" | delegated | sketch: picked for them |
 | D-0013 | `answers.Q-scope-06` | ["pricing page:persuade"] | delegated | sketch: picked for them |
 | D-0015 | `dials.colorfulness` | 82 | delegated | Glowing amber highlight plan and film-grade light need a vivid accent, not a muted one |
-| D-0016 | `dials.depth` | 85 | delegated | Frosted glass cards layered over light: a deep, material style |
 | D-0017 | `dials.expression` | 85 | delegated | A persuasive pricing page for a creative AI video studio: expressive display type and one hero moment |
 | D-0018 | `dials.density` | 35 | delegated | Persuade surface: spacious cards, few features per plan |
 | D-0019 | `dials.roundness` | 62 | delegated | Soft glass panes with generous corners, pill toggle |
@@ -699,6 +696,7 @@ Your own decisions first (the newest value per path), then your changes to stand
 | D-0028 | `answers.Q-color-21` | "near-black" | delegated | Cinema-dark canvas |
 | D-0029 | `raw.brandColor` | "#F2A93B" | chosen | The brief's amber, exact; sketch had swapped it for a darker brown so white text would pass, but this amber carries dark text |
 | D-0030 | `answers.Q-color-10` | "alpha" | delegated | Hairlines and glass highlights need see-through whites that work over the lit backdrop |
+| D-0031 | `dials.depth` | 35 | delegated | round 3: the owner found the glass page weak; flat dark columns and one lit plan, no glass over art |
 | D-0003 | standards | override STD-visual-details-24 (house standard) | chosen, overrides STD-visual-details-24 | Brief asks for a dark pricing table for an AI video studio: a dark-only marketing surface |
 | D-0002 | standards | House standards v2: 455 applied | standard (locked) | OpenDesigner's house standards (sources marked non-negotiable) are applied without asking and locked. Change one only when the person asks: engine.py... |
 | D-0014 | standards | House standards v2 for css, web: 0 now apply, 166 no longer apply | standard (locked) | The platforms or the stack changed, so the house standards were re-scoped: the ones that now apply are applied and locked; the ones that no longer apply are... |
@@ -714,14 +712,14 @@ Your own decisions first (the newest value per path), then your changes to stand
 - Answers taken on assumption or delegated: name (delegated), answers.Q-aud-01 (delegated), context.audience (delegated), answers.Q-plat-01 (delegated), macros (delegated), taste.feelWords (delegated), answers.Q-theme-01 (delegated), answers.Q-scope-06 (delegated), dials.colorfulness (delegated), dials.depth (delegated), dials.expression (delegated), dials.density (delegated), dials.roundness (delegated), dials.warmth (delegated), dials.energy (delegated), raw.textFace (delegated), raw.displayFace (delegated), raw.monoFace (delegated), answers.Q-color-01 (delegated), answers.Q-color-09 (delegated), answers.Q-depth-01 (delegated), answers.Q-color-21 (delegated), answers.Q-color-10 (delegated)
 - Waivers: none.
 - Licence risks: Instrument Serif: confirm the web licence (record it with engine.py set raw.fontLicence).
-- Validation: 0 errors, 3 warnings.
+- Validation: 0 errors, 2 warnings.
 
 ## For Agents
 
 **AI agents: read this file and the tokens before you change any screen.**
 
 1. Before any visual work, read this file, PRODUCT.md and `opendesigner/tokens/` (start at `opendesigner/tokens/opendesigner.resolver.json`).
-2. Use tokens, never raw values: CSS `var(--ds-...)`, Tailwind classes from `opendesigner/build/tailwind/theme.css`, `DS.*` in Swift, `DsTheme` in Compose.
+2. Use tokens, never raw values: CSS `var(--ds-...)`, Tailwind classes from `opendesigner/build/tailwind/theme.css`, `DS.*` in Swift. In Compose: colors from `LocalDsColors.current` (provide `DsLightColors` or `DsDarkColors`), then `DsSpace`, `DsType` and `DsMotion`.
 3. Do not change a locked decision without asking the owner.
 4. To change the system: `engine.py set <path> <value> --why "..."`, then `engine.py generate`, `engine.py validate`, `engine.py design-md`.
 5. To extend: add a decision (never hand-edit tokens or this file). Keep semantic names the same across modes. Deprecate instead of deleting.

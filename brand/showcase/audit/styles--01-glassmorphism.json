@@ -1,0 +1,101 @@
+{
+ "piece": "styles/01-glassmorphism",
+ "title": "01 · Glassmorphism · Corvale revenue overview",
+ "pattern": "dashboard",
+ "platform": "web",
+ "industry": "subscription billing / fintech (B2B SaaS)",
+ "style": [
+  "glassmorphism",
+  "frosted glass",
+  "photographic backdrop",
+  "dark"
+ ],
+ "tags": [
+  "style study",
+  "glassmorphism",
+  "billing",
+  "MRR",
+  "churn",
+  "invoices",
+  "dashboard",
+  "backdrop-filter",
+  "unsplash photo",
+  "B2B"
+ ],
+ "score": 3,
+ "self_score": 4,
+ "verdict": "polish",
+ "strengths": [
+  "The glass has a real job: the summit of a real photograph stands in the open band and its ridge runs on behind three panes, so the blur shows a shape continuing into the glass instead of painted blobs",
+  "Believable billing data that adds up: MRR $1,279,480 (+4.0%, +$48,910), a bridge of New +$38,420, Expansion +$32,180, Reactivated +$2,940, Contraction −$9,860, Churn −$14,770; revenue churn 1.20% against a 1.50% target; 68.6% of $31,280 failed payments recovered; past-due invoices with retry steps and days late",
+  "Contrast measured at the worst pixel behind each text run (0 of 119 below 4.5:1 after 13 round-1 failures), a 35% dimming layer, a reduced-transparency fallback, and one mint with one job (money going up)"
+ ],
+ "slop_signals": [
+  "The mountain photograph is decoration standing in for content: a billing dashboard has no reason to sit on 'Workspace backdrop: photograph from Unsplash', and the 'Change backdrop' link exists only to excuse it",
+  "Glass is used on every reading surface (all five widgets), which styles.md says never to do; over the dark foreground the panes read as plain dark cards, so the style mostly disappears",
+  "Conventional three-column widget dashboard (big light-weight '$1,279,480', mint pill 'New invoice', segmented Month/Quarter/12 months) that Deel or Stripe already ship flat",
+  "Name collisions: 'Corvale' is one letter from product/03 'Corvane', and 'Halyard' (Halyard Analytics) also appears there as 'Halyard Systems'"
+ ],
+ "fixes": [
+  "Keep the reading surfaces solid and put glass only on the floating layer (top bar, tooltip, filter bar) over the chart and table, so the blur shows real data scrolling behind it",
+  "Or move the study to a product whose backdrop is the content (maps, photos, media) instead of a photo behind finance data",
+  "Label the churn tile 'Month to date' (1.20% is Oct 1-14 churn over Sep close) and show the Ferro Labs row in USD or mark the past-due total as converted",
+  "Rename Corvale and Halyard Analytics to names no other showcase piece uses"
+ ],
+ "references": [
+  {
+   "site": "Deel",
+   "url": "https://mobbin.com/screens/dc3a9a21-9748-44b2-bfed-34ea627c3b77",
+   "mobbin_url": "https://mobbin.com/screens/dc3a9a21-9748-44b2-bfed-34ea627c3b77",
+   "what": "Dark finance home with payments due and overdue invoices on flat solid cards; the same content without glass"
+  },
+  {
+   "site": "Telegram",
+   "url": "https://mobbin.com/screens/f8b76f0f-419d-4265-8cee-f6e1f42b1c55",
+   "mobbin_url": "https://mobbin.com/screens/f8b76f0f-419d-4265-8cee-f6e1f42b1c55",
+   "what": "A user-chosen photo wallpaper behind the UI, where reading surfaces stay solid white"
+  },
+  {
+   "site": "Tana",
+   "url": "https://mobbin.com/screens/7830189f-0b30-4d2c-b3cf-4a23f42b5425",
+   "mobbin_url": "https://mobbin.com/screens/7830189f-0b30-4d2c-b3cf-4a23f42b5425",
+   "what": "Translucent tinted panels used lightly in a shipped work tool"
+  }
+ ],
+ "audited": "2026-10-14",
+ "audited_by": "independent",
+ "facts": [],
+ "polish": {
+  "score": 4,
+  "audited": "2026-10-14",
+  "audited_by": "fresh-context agents, two rounds (4, then 4)",
+  "title": "01 · Glassmorphism · Kadrel asset review",
+  "changed": [
+   "Rebuilt as Kadrel, a brand-asset review tool whose content is the photograph: a real Unsplash photo (Peter Schulz, near Mora, Sweden) shown whole at Fit, 17%",
+   "One idea only this product has: placement crops. The selected Web hero 21:9 crop is drawn on the photo with its headline zone and the focal point; four crops in true ratios sit below with a status each",
+   "Glass on one layer only: top bar, tool palette, two crop labels and zoom float over the photo; the placements strip and the inspector are solid",
+   "Tint uses the engine's 35% dimming token; rendered contrast 73 runs, 0 below the floor, lowest 5.05:1",
+   "The USD/euro mix and the churn period are gone with the billing screen; the rights panel states licence, place, people and releases; capture date and size come from the image metadata",
+   "Names: Corvale, Halyard Analytics, Okapi Robotics and the other billing customers removed; Darkslide tried and dropped (a real studio for brands); now Kadrel, Siljevik Cabins, Signe Aldén, Rhys Marsh",
+   "After the fresh audits: footer acts on the selected crop, the comment thread no longer contradicts itself, pin 2 moved off the lifebuoy, the pink warning text set in white"
+  ],
+  "references": [
+   {
+    "site": "Air",
+    "mobbin_url": "https://mobbin.com/screens/98217c4d-ba19-4ef8-af76-7a4834172567",
+    "what": "Dark asset viewer with floating tools and a solid Info/Comments panel"
+   },
+   {
+    "site": "Shopify",
+    "mobbin_url": "https://mobbin.com/screens/06a322b7-84c5-4994-b3af-98443b6c3a76",
+    "what": "Focal point on an image with an info card"
+   },
+   {
+    "site": "Frame.io",
+    "mobbin_url": "https://mobbin.com/screens/79b23a07-f804-4e09-b554-f05ea13d814f",
+    "what": "Media review with breadcrumb, comments panel and status"
+   }
+  ],
+  "facts_checked": "Weekdays (Fri 9 Oct 2026, Mon 26 Oct 2026), crop sizes against 6240 x 4160 and their ratios, zoom 1060/6240, approval and comment counts, photo metadata (Canon EOS 6D Mark II, DateTimeOriginal 2025-07-08)"
+ }
+}

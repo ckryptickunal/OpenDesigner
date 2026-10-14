@@ -1,0 +1,18 @@
+<figure class="fig">
+<div class="dodont">
+<div class="dont"><p class="dd-h">Focus shown by color alone</p><p class="dd-why">The outline is removed and a slightly darker fill is the only sign. Keyboard users can't tell where they are, and meaning shown by color alone is an error.</p>
+<div class="dd-art" style="display:grid;gap:12px">
+<div class="ui-row" style="gap:16px"><span style="display:grid;gap:6px;justify-items:center"><span class="ui-btn">Button</span><span class="kicker">idle</span></span><span style="display:grid;gap:6px;justify-items:center"><span class="ui-btn" style="background:#1e2fe6">Button</span><span class="kicker" style="color:var(--bad)">focused</span></span></div>
+<pre class="code-lines" style="white-space:pre-wrap">:focus {
+  outline: <span class="bad">none</span>;
+  background: <span class="bad">#1e2fe6</span>;
+}</pre>
+</div></div>
+<div class="do"><p class="dd-h">A visible ring with a gap</p><p class="dd-why">A <span class="num">2</span> px ring with a <span class="num">2</span> px gap around the element, in a color that keeps <span class="num">3:1</span> against every surface.</p>
+<div class="dd-art" style="display:grid;gap:12px">
+<div class="ui-row" style="gap:16px;padding:4px"><span style="display:grid;gap:6px;justify-items:center"><span class="ui-btn">Button</span><span class="kicker">idle</span></span><span style="display:grid;gap:6px;justify-items:center"><span class="ui-btn ui-focus">Button</span><span class="kicker" style="color:var(--ok)">focused</span></span></div>
+<dl class="kv" style="font-size:13px;line-height:18px;margin:0"><dt>ring</dt><dd><span class="mono">--ds-focus-ring-width</span> <span class="num">2px</span></dd><dt>gap</dt><dd><span class="mono">--ds-focus-ring-offset</span> <span class="num">2px</span></dd><dt>color</dt><dd><span class="mono">--ds-color-border-focus</span></dd></dl>
+</div></div>
+</div>
+<figcaption>The focus ring every system gets: a 2 px ring with a 2 px gap in the focus color, which stays at 3:1 against every surface. A darker fill with the outline removed relies on color alone, which the checks report as an error.</figcaption>
+</figure>

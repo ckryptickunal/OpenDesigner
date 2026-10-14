@@ -421,3 +421,38 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 - set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
 - reason: owner rule: two fonts only (Unbounded + DM Sans); time codes use DM Sans tabular figures
 - also set: raw.monoFace = "ui-monospace" (from Q-type-06)
+
+## D-0025 · raw.brandColor = "#FF3D81"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0005 · source_ref: none
+- reason: round 3: the brand stays as typed (it had been stored as #e2136a); the pink is now a riso ink for the sleeve and the played waveform, never text on white
+- previous value: "#e2136a"
+
+## D-0026 · dials.roundness = 52
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0016 · source_ref: none
+- reason: round 3: 24/32 px pillows read as a toy; 8-16 px
+- previous value: 82
+
+## D-0027 · dials.depth = 30
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0017 · source_ref: none
+- reason: round 3: no page glow; flat card
+- previous value: 70
+
+## D-0028 · dials.colorfulness = 62
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0018 · source_ref: none
+- reason: round 3: one vivid object (the sleeve), quiet chrome
+- previous value: 92
+
+## D-0029 · dials.warmth = 30
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0019 · source_ref: none
+- reason: round 3: cooler neutrals on a paper-white release page
+- previous value: 62
+
+## D-0030 · dials.expression = 68
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0012 · source_ref: none
+- reason: round 3: the title no longer needs 90 px at 850
+- previous value: 90
+
+## D-0031 · name = "Calamondin Tapes"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: round 3: renamed; the first name sat close to a real record label
+- previous value: (the first name, listed in NAMES.md)

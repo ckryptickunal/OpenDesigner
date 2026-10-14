@@ -459,3 +459,141 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 - set_by: asset · locked: no · date: 2026-10-14 · supersedes: D-0030 · source_ref: none
 - reason: logo files, paths relative to the project root
 - previous value: ["../design-system/project/assets/Logos/lockup-light.svg", "../design-system/project/assets/Logos/mark-light.svg"]
+
+## D-0033 · dials.roundness = 15
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: D-0016 · source_ref: none
+- reason: owner 2026-10-14: the site read as retro; wants it modern like supermemory.ai: square corners, flat surfaces, hairlines
+- previous value: 40
+
+## D-0034 · dials.depth = 15
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: D-0017 · source_ref: none
+- reason: owner 2026-10-14: no drop shadows, hairline borders instead
+- previous value: 30
+
+## D-0035 · answers.Q-aud-01 = "regular"
+- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: D-0002 · source_ref: none
+- reason: judgment 2026-10-14 after Kunal: top customers are B2B and enterprise; readers are design-system teams, designers and engineers who read the docs at work, mostly on a desktop
+- previous value: "large"
+- also set: dials.density = 50 (from Q-aud-01)
+
+## D-0036 · context.audience = "design-system teams, product designers and engineers, mostly at work on a desktop, including enterprise and B2B teams"
+- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: D-0003 · source_ref: none
+- reason: judgment 2026-10-14 after Kunal: top customers are B2B and enterprise
+- previous value: "people who use it now and then, often on a phone"
+
+## D-0037 · answers.Q-scope-01 = ["marketing", "docs-content"]
+- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+- reason: judgment 2026-10-14 after Kunal: top customers are B2B and enterprise; the system styles opendesigner.vercel.app (landing and docs), social cards and the README, not an app
+- also set: context.scope.in = ["Marketing site", "Docs or content site"] (from Q-scope-01)
+- also set: raw.marketingSurfaces = true (from Q-scope-01)
+
+## D-0038 · answers.Q-scope-06 = ["landing page:persuade", "documentation:read", "social cards:persuade", "readme:read"]
+- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: D-0010 · source_ref: none
+- reason: judgment 2026-10-14 after Kunal: top customers are B2B and enterprise; the docs site is now the main surface
+- previous value: ["social cards:persuade", "readme:read"]
+- also set: context.surfaces = [{"name": "landing page", "mode": "Persuade"}, {"name": "documentation", "mode": "Read"}, {"name": "social cards", "mode": "Persuade"}, {"name": "readme", "mode": "Read"}] (from Q-scope-06)
+- also set: raw.productType = "marketing" (from Q-scope-06)
+- also set: raw.marketingSurfaces = true (from Q-scope-06)
+
+## D-0039 · raw.brandColor = "#2338FF"
+- set_by: chosen · locked: yes · date: 2026-10-14 · supersedes: D-0025 · source_ref: none
+- reason: Kunal chose cobalt over the AI's red; locked so later sessions cannot drift it
+- previous value: "#2338FF"
+
+## D-0040 · hooks.H-appicon.status = "not-needed"
+- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+- reason: judgment 2026-10-14 after Kunal: top customers are B2B and enterprise; there is no app, only a site, docs and social cards
+- previous value: "pending"
+
+## D-0041 · hooks.H-sound.status = "not-needed"
+- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+- reason: no app and no sound on the site
+- previous value: "pending"
+
+## D-0042 · hooks.H-haptic.status = "not-needed"
+- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+- reason: no app
+- previous value: "pending"
+
+## D-0043 · hooks.H-favicon.status = "have"
+- set_by: asset · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+- reason: the favicon set is made from the mark (site/build.py images())
+- previous value: "pending"
+
+## D-0044 · hooks.H-photo.status = "open-library"
+- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+- reason: judgment 2026-10-14 after Kunal: top customers are B2B and enterprise; free Unsplash photos (abstract blurs, workspaces) in a cobalt duotone or as a grainy backdrop behind real UI, photographer credited; never posed people or stock smiles
+- previous value: "pending"
+
+## D-0045 · hooks.H-illus.status = "not-needed"
+- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+- reason: judgment 2026-10-14 after Kunal: top customers are B2B and enterprise; enterprise buyers need to see the product, so figures are drawn from real UI and data (site/figures), never mascots or spot illustration
+- previous value: "pending"
+
+## D-0046 · hooks.H-icons.status = "open-library"
+- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+- reason: a few line arrows and the GitHub mark only; if more are needed, one open library at one stroke weight
+- previous value: "pending"
+
+## D-0047 · override STD-visual-details-24 (house standard)
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: D-0011 · source_ref: none
+- reason: Kunal 2026-10-14: keep the website only in light mode, do not keep it in dark mode
+- house standard STD-visual-details-24: Make interface colors adapt to light and dark mode: give each color role a light value and a dark value.
+- why the house follows it: The source lists colors that adapt to light and dark as part of the craft that builds trust.
+- unlocked: nothing (it sets no values)
+
+## D-0048 · answers.Q-theme-01 = "light-only"
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: D-0009 · source_ref: none
+- reason: Kunal 2026-10-14: keep the website only in light mode, no dark mode
+- previous value: "light-dark-toggle"
+- also set: raw.flags.darkMode = false (from Q-theme-01)
+- also set: raw.defaultTheme = "system" (from Q-theme-01)
+
+## D-0049 · taste.feelWords = ["technical", "premium", "calm", "precise", "friendly"]
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: D-0008 · source_ref: none
+- reason: Kunal 2026-10-14 for B2B and enterprise buyers: technical, premium, calm, precise, friendly
+- previous value: ["bold", "premium", "warm"]
+
+## D-0050 · macros = ["modern", "serious", "premium", "minimal", "friendly"]
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: D-0007 · source_ref: none
+- reason: Kunal 2026-10-14 for B2B and enterprise buyers: technical, premium, calm, precise, friendly (engine reading: technical = modern + serious, calm = minimal, precise = serious)
+- previous value: ["bold", "premium", "friendly"]
+
+## D-0051 · dials.expression = 40
+- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: D-0012 · source_ref: none
+- reason: Kunal 2026-10-14 for B2B and enterprise buyers: technical, premium, calm, precise, friendly: calm and precise means modest type contrast; real UI and numbers persuade, not display size
+- previous value: 68
+
+## D-0052 · dials.brandPresence = 55
+- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: D-0021 · source_ref: none
+- reason: Kunal 2026-10-14 for B2B and enterprise buyers: technical, premium, calm, precise, friendly: cobalt marks actions and one highlight per view, the rest stays neutral
+- previous value: 80
+
+## D-0053 · dials.density = 45
+- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: D-0014 · source_ref: none
+- reason: Kunal 2026-10-14 for B2B and enterprise buyers: technical, premium, calm, precise, friendly: technical readers at a desk; tighter than a marketing page, roomier than a data tool
+- previous value: 50
+
+## D-0054 · dials.energy = 30
+- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: D-0027 · source_ref: none
+- reason: Kunal 2026-10-14 for B2B and enterprise buyers: technical, premium, calm, precise, friendly: calm; short, quiet motion
+- previous value: 40
+
+## D-0055 · dials.colorfulness = 35
+- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: D-0020 · source_ref: none
+- reason: Kunal 2026-10-14 for B2B and enterprise buyers: technical, premium, calm, precise, friendly: one accent plus status colors, as premium B2B tools do
+- previous value: 62
+
+## D-0056 · dials.roundness = 75
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: D-0033 · source_ref: none
+- reason: Kunal 2026-10-14: use iOS style rounded edges with iOS kerning everywhere instead of sharp corners
+- previous value: 15
+
+## D-0057 · answers.Q-shape-04 = "continuous"
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+- reason: Kunal 2026-10-14: use iOS style rounded edges with iOS kerning everywhere instead of sharp corners (Apple-style continuous corners)
+
+## D-0058 · answers.Q-type-13 = "size-table"
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+- reason: Kunal 2026-10-14: use iOS style rounded edges with iOS kerning everywhere instead of sharp corners (Apple's SF Pro tracking table by size, HIG Typography, iOS tracking values)
+- also set: raw.tracking = "size-table" (from Q-type-13)

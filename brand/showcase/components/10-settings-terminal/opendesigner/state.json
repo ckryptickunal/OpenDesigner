@@ -51,10 +51,10 @@
       "decision": "D-0016"
     },
     "depth": {
-      "value": 10,
+      "value": 4,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0017"
+      "decision": "D-0029"
     },
     "colorfulness": {
       "value": 85,
@@ -141,7 +141,7 @@
     "iconStroke": null,
     "devices": [],
     "situations": [],
-    "domain": null,
+    "domain": "ML infrastructure: GPU servers in a colocation cage",
     "minTarget": null,
     "focusWidth": 2,
     "secondaryColors": [],
@@ -149,7 +149,10 @@
     "scripts": [
       "Latn"
     ],
-    "defaultTheme": "system"
+    "defaultTheme": "system",
+    "borderDefault": null,
+    "texture": null,
+    "gradients": null
   },
   "overrides": {
     "motion.duration.instant": {
@@ -531,7 +534,7 @@
     ]
   },
   "hashes": {
-    "DESIGN.md": "a9f5ff9294a16be3",
+    "DESIGN.md": "aa0a92888e4062c6",
     "PRODUCT.md": "82514f16674d0052"
   },
   "exports": {
@@ -2633,5 +2636,7 @@
       "font.size.input": "dimension"
     },
     "snapshots": "standards-state.json"
-  }
+  },
+  "style": null,
+  "customStyles": {}
 }

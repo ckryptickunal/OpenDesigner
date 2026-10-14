@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Security · Larchfield Mutual · Ferrule</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Text:wght@400;500;600&family=Red+Hat+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+:root {
+  --ink: var(--ds-color-text-primary);
+  --muted: var(--ds-color-text-secondary);
+  --faint: var(--ds-color-text-tertiary);
+  --sep: var(--ds-color-neutral-light-4);   /* hairlines: no separator role yet */
+  --edge: var(--ds-color-neutral-light-5);  /* panel and control edges */
+  --page: var(--ds-color-surface-raised);
+  --wash: var(--ds-color-surface-nav);
+  --plum: var(--ds-color-bg-accent-bold);   /* toggles and focus only */
+  --primary: var(--ds-color-bg-inverse);    /* near-black primary: no engine role (process finding) */
+  --on-primary: var(--ds-color-text-inverse);
+  --mono: var(--ds-font-family-mono);
+}
+* { box-sizing: border-box; margin: 0; }
+html, body { background: var(--page); }
+body { font: var(--ds-text-body-md); color: var(--ink); -webkit-font-smoothing: antialiased; min-width: 1280px; }
+button, input, select { font: inherit; color: inherit; }
+button { background: none; border: 0; cursor: pointer; }
+a { color: inherit; }
+:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); border-radius: var(--ds-radius-control-sm); }
+.mono { font-family: var(--mono); font-size: var(--ds-font-size-12); }
+.num { font-variant-numeric: tabular-nums; }
+svg.i { width: var(--ds-size-icon-sm); height: var(--ds-size-icon-sm); flex: none; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+.app { display: grid; grid-template-columns: 248px 1fr; min-height: 100vh; }
+body[data-frame="security"] .f-audit, body[data-frame="audit"] .f-security { display: none; }
+
+/* Settings nav */
+aside { position: sticky; top: 0; height: 100vh; background: var(--wash); border-right: 1px solid var(--edge); padding: var(--ds-space-12); display: flex; flex-direction: column; }
+.back { display: inline-flex; align-items: center; gap: var(--ds-space-6); height: 28px; padding: 0 var(--ds-space-8); color: var(--muted); text-decoration: none; border-radius: var(--ds-radius-control); }
+.ws { display: flex; align-items: center; gap: var(--ds-space-8); padding: var(--ds-space-12) var(--ds-space-8) var(--ds-space-4); }
+.ws .tile { width: 24px; height: 24px; border-radius: var(--ds-radius-control); background: var(--ds-color-neutral-light-12); color: #fff; display: grid; place-items: center; font: var(--ds-text-label-sm); }
+.ws div { line-height: 1.25; font: var(--ds-text-label-lg); }
+.ws small { display: block; font: var(--ds-text-body-sm); color: var(--faint); }
+.grp { font: var(--ds-text-label-sm); color: var(--faint); padding: var(--ds-space-16) var(--ds-space-8) var(--ds-space-4); }
+.nav a { display: flex; align-items: center; height: 28px; padding: 0 var(--ds-space-8); border-radius: var(--ds-radius-control); color: var(--muted); text-decoration: none; }
+.nav a[aria-current] { background: var(--ds-color-bg-neutral-subtle-hover); color: var(--ink); font-weight: 500; }
+.nav a .n { margin-left: auto; font: var(--ds-text-body-sm); color: var(--faint); font-variant-numeric: tabular-nums; }
+
+main { min-width: 0; }
+
+/* Security frame */
+.sec { display: grid; grid-template-columns: 736px 200px; gap: var(--ds-space-64); padding: var(--ds-space-24) var(--ds-space-48) var(--ds-space-64) var(--ds-space-64); }
+.crumbs { font: var(--ds-text-body-sm); color: var(--faint); }
+h1 { font: var(--ds-text-title-lg); letter-spacing: -0.01em; margin-top: var(--ds-space-4); }
+.lede { color: var(--muted); margin-top: var(--ds-space-4); max-width: 640px; }
+.section { margin-top: var(--ds-space-24); }
+.section > header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: var(--ds-space-8); }
+h2 { font: var(--ds-text-label-lg); font-weight: 600; }
+.section > header p { color: var(--muted); font: var(--ds-text-body-sm); margin-top: var(--ds-space-2); }
+.link { color: var(--muted); font: var(--ds-text-body-sm); display: inline-flex; align-items: center; gap: var(--ds-space-4); text-decoration: underline; text-decoration-color: var(--ds-color-neutral-light-7); text-underline-offset: 3px; }
+.panel { border: 1px solid var(--edge); border-radius: var(--ds-radius-container); background: var(--page); }
+.row { display: flex; align-items: center; gap: var(--ds-space-24); padding: var(--ds-space-12) var(--ds-space-16); min-height: 60px; }
+.row + .row { border-top: 1px solid var(--sep); }
+.row .txt { flex: 1; min-width: 0; }
+.row .t { font: var(--ds-text-label-lg); display: flex; align-items: center; gap: var(--ds-space-8); }
+.row .d { font: var(--ds-text-body-sm); color: var(--muted); margin-top: var(--ds-space-2); max-width: 600px; }
+.row .d a { white-space: nowrap; color: var(--ink); text-underline-offset: 2px; text-decoration-color: var(--ds-color-neutral-light-7); }
+.row.off .t, .row.off .d { color: var(--faint); }
+.gate { font: var(--ds-text-label-sm); color: var(--muted); border: 1px solid var(--edge); border-radius: var(--ds-radius-control-sm); padding: 0 var(--ds-space-6); line-height: 18px; font-weight: 500; }
+
+/* Switch */
+.sw { position: relative; flex: none; width: 32px; height: 18px; border-radius: 9px; background: var(--ds-color-neutral-light-8); /* off track 3.6:1, WCAG 1.4.11 */ padding: 0; margin: 3px 0; }
+.sw::after { content: ""; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgb(0 0 0 / 0.2); transition: transform var(--ds-motion-duration-short, 150ms); }
+.sw[aria-checked="true"] { background: var(--plum); }
+.sw[aria-checked="true"]::after { transform: translateX(14px); }
+.sw:disabled { background: var(--ds-color-neutral-light-4); cursor: not-allowed; }
+.sw:disabled::after { box-shadow: none; }
+
+/* Notice and fields */
+.notice { display: flex; gap: var(--ds-space-12); padding: var(--ds-space-12) var(--ds-space-16); background: var(--ds-color-surface-base); border-bottom: 1px solid var(--sep); border-radius: var(--ds-radius-container) var(--ds-radius-container) 0 0; }
+.notice svg { margin-top: var(--ds-space-2); color: var(--ink); }
+.notice .t { font: var(--ds-text-label-lg); }
+.notice .d { font: var(--ds-text-body-sm); color: var(--muted); margin-top: var(--ds-space-2); }
+.notice .acts { margin-left: auto; display: flex; gap: var(--ds-space-8); align-items: center; flex: none; }
+.field { display: grid; grid-template-columns: 200px 1fr; align-items: center; gap: var(--ds-space-16); padding: var(--ds-space-8) var(--ds-space-16); }
+.notice + .field { padding-top: var(--ds-space-16); }
+.field label { font: var(--ds-text-label-md); color: var(--muted); }
+.field label small { display: block; font: var(--ds-text-body-sm); color: var(--faint); }
+.ro { display: flex; align-items: center; height: var(--ds-size-control-md); border: 1px solid var(--edge); border-radius: var(--ds-radius-control); background: var(--ds-color-surface-base); padding-left: var(--ds-space-12); overflow: hidden; }
+.ro span { flex: 1; font-family: var(--mono); font-size: var(--ds-font-size-12); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ro button { height: 100%; padding: 0 var(--ds-space-12); border-left: 1px solid var(--edge); display: inline-flex; align-items: center; gap: var(--ds-space-6); color: var(--muted); font: var(--ds-text-label-md); background: var(--page); }
+.input { display: flex; align-items: center; height: var(--ds-size-control-md); border: 1px solid var(--ds-color-border-input); border-radius: var(--ds-radius-control); padding: 0 var(--ds-space-12); color: var(--faint); background: var(--ds-color-bg-field); }
+.pair { display: flex; gap: var(--ds-space-8); }
+.pair .input { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hint { grid-column: 2; font: var(--ds-text-body-sm); color: var(--muted); margin-top: -4px; }
+.subhead { padding: var(--ds-space-16) var(--ds-space-16) 0; font: var(--ds-text-label-md); color: var(--muted); }
+.panel .foot { display: flex; align-items: center; justify-content: space-between; padding: var(--ds-space-12) var(--ds-space-16); border-top: 1px solid var(--sep); }
+.btn { height: var(--ds-size-control-md); padding: 0 var(--ds-space-12); display: inline-flex; align-items: center; gap: var(--ds-space-6); border-radius: var(--ds-radius-control); font: var(--ds-text-label-lg); border: 1px solid var(--edge); background: var(--page); white-space: nowrap; }
+.btn.sm { height: var(--ds-size-control-sm); padding: 0 var(--ds-space-8); font: var(--ds-text-label-md); }
+.btn.primary { background: var(--primary); color: var(--on-primary); border-color: transparent; }
+.btn.danger { color: var(--ds-color-text-danger); background: var(--ds-color-bg-danger-subtle); border-color: transparent; }
+.sel { display: inline-flex; align-items: center; gap: var(--ds-space-8); height: var(--ds-size-control-md); padding: 0 var(--ds-space-8) 0 var(--ds-space-12); border: 1px solid var(--ds-color-border-input); border-radius: var(--ds-radius-control); background: var(--ds-color-bg-field); white-space: nowrap; }
+.sel svg { color: var(--faint); width: 14px; height: 14px; }
+
+/* On this page */
+.toc { position: sticky; top: 32px; align-self: start; padding-top: var(--ds-space-4); }
+.toc h3 { font: var(--ds-text-label-sm); color: var(--faint); margin-bottom: var(--ds-space-8); }
+.toc a { display: block; padding: var(--ds-space-4) 0 var(--ds-space-4) var(--ds-space-12); border-left: 1px solid var(--edge); color: var(--muted); text-decoration: none; font: var(--ds-text-body-sm); }
+.toc a[aria-current] { color: var(--ink); border-left: 2px solid var(--ink); padding-left: 11px; font-weight: 500; }
+.toc .last { margin-top: var(--ds-space-24); font: var(--ds-text-body-sm); color: var(--muted); }
+.toc .last a { display: inline; padding: 0; border: 0; color: var(--ink); text-decoration: underline; text-decoration-color: var(--ds-color-neutral-light-7); text-underline-offset: 2px; }
+
+/* Audit frame */
+.aud { padding: var(--ds-space-32) var(--ds-space-40) 0; }
+.aud .top { display: flex; align-items: flex-end; justify-content: space-between; }
+.filters { display: flex; align-items: center; gap: var(--ds-space-8); margin-top: var(--ds-space-20); }
+.filters .sel b { font-weight: 500; }
+.filters .sel .k { color: var(--muted); }
+.filters .input { width: 264px; gap: var(--ds-space-8); }
+.seg { display: inline-flex; height: var(--ds-size-control-md); padding: var(--ds-space-2); border: 1px solid var(--edge); border-radius: var(--ds-radius-control); background: var(--wash); }
+.seg button { padding: 0 var(--ds-space-8); border-radius: var(--ds-radius-control-sm); color: var(--muted); font: var(--ds-text-label-md); font-weight: 400; }
+.seg button[aria-pressed="true"] { background: var(--page); color: var(--ink); font-weight: 500; box-shadow: 0 0 0 1px var(--edge); }
+.spacer { flex: 1; }
+.meta { display: flex; justify-content: space-between; align-items: center; margin-top: var(--ds-space-16); font: var(--ds-text-body-sm); color: var(--muted); }
+table.log { width: 100%; border-collapse: collapse; margin-top: var(--ds-space-8); }
+.log th { font: var(--ds-text-label-md); color: var(--muted); text-align: left; height: 32px; padding: 0 var(--ds-space-12); border-top: 1px solid var(--sep); border-bottom: 1px solid var(--sep); white-space: nowrap; }
+.log td { padding: 0 var(--ds-space-12); height: 56px; border-bottom: 1px solid var(--sep); vertical-align: middle; }
+.log td .l2 { display: block; font: var(--ds-text-body-sm); color: var(--muted); margin-top: var(--ds-space-2); }
+.log td.time { white-space: nowrap; font-variant-numeric: tabular-nums; width: 168px; }
+.log td.time .l2 { color: var(--faint); }
+.who { display: flex; align-items: center; gap: var(--ds-space-8); white-space: nowrap; }
+.who .av { width: 26px; height: 26px; flex: none; border-radius: 50%; background: var(--ds-color-neutral-light-4); color: var(--muted); display: grid; place-items: center; font: var(--ds-text-label-sm); }
+.who .av.sq { border-radius: var(--ds-radius-control-sm); background: var(--wash); border: 1px solid var(--edge); }
+.who .av.sq { border-radius: var(--ds-radius-control); }
+.who .av.sq svg { width: 14px; height: 14px; }
+.who .nm { line-height: 1.3; }
+.log td.act .code { font-family: var(--mono); font-size: var(--ds-font-size-12); color: var(--muted); }
+.log td.act b { font-weight: 500; }
+.log td.ip { white-space: nowrap; }
+.log td.ip .addr { font-family: var(--mono); font-size: var(--ds-font-size-12); }
+.log td.chev { width: 40px; color: var(--faint); }
+.log tr.open td { background: var(--ds-color-surface-base); border-bottom: 0; }
+.log tr.detail td { background: var(--ds-color-surface-base); height: auto; padding: 0 var(--ds-space-12) var(--ds-space-16); }
+.fail { display: inline-flex; align-items: center; gap: var(--ds-space-4); font: var(--ds-text-label-sm); color: var(--ds-color-text-danger); margin-left: var(--ds-space-6); }
+.entry { display: grid; grid-template-columns: 160px 1fr 160px 1fr; gap: var(--ds-space-6) var(--ds-space-16); padding: var(--ds-space-12) var(--ds-space-16); border: 1px solid var(--edge); border-radius: var(--ds-radius-container); background: var(--page); margin-left: 180px; font: var(--ds-text-body-sm); }
+.entry dt { color: var(--muted); }
+.entry dd { margin: 0; color: var(--ink); }
+.entry dd .mono { font-size: var(--ds-font-size-12); }
+.entry .diff { grid-column: 2 / -1; }
+.diff div { display: flex; gap: var(--ds-space-8); align-items: baseline; }
+.diff s { color: var(--faint); text-decoration-color: var(--ds-color-neutral-light-8); }
+.copy { display: inline-grid; place-items: center; width: 20px; height: 20px; vertical-align: -5px; color: var(--faint); border-radius: 4px; margin-left: var(--ds-space-2); }
+.copy svg { width: 13px; height: 13px; }
+</style>
+</head>
+<body data-frame="security">
+<div class="app">
+  <aside aria-label="Settings">
+    <a class="back" href="#"><svg class="i" viewBox="0 0 16 16"><path d="M9.5 4 5.5 8l4 4"/></svg>Back to Ferrule</a>
+    <div class="ws"><span class="tile">L</span><div>Larchfield Mutual<small>Business plan · 214 members</small></div></div>
+    <div class="grp">Account</div>
+    <nav class="nav"><a href="#">Profile</a><a href="#">Notifications</a><a href="#">Personal tokens</a></nav>
+    <div class="grp">Workspace</div>
+    <nav class="nav"><a href="#">General</a><a href="#">Members<span class="n">214</span></a><a href="#">Groups<span class="n">12</span></a><a href="#">Warehouses<span class="n">4</span></a><a href="#">Integrations</a></nav>
+    <div class="grp">Security and access</div>
+    <nav class="nav">
+      <a href="?frame=security" class="f-nav-sec">Security</a>
+      <a href="?frame=audit" class="f-nav-aud">Audit log</a>
+      <a href="#">Data retention</a>
+      <a href="#">Network policies</a>
+    </nav>
+    <div class="grp">Billing</div>
+    <nav class="nav"><a href="#">Plan and usage</a><a href="#">Invoices</a></nav>
+  </aside>
+
+  <main>
+    <!-- Frame 1: Security -->
+    <div class="sec f-security">
+      <div>
+        <h1>Security</h1>
+        <p class="lede">How the 214 members of Larchfield Mutual sign in, and how long they stay signed in.</p>
+
+        <section class="section" id="auth" aria-labelledby="h-auth">
+          <header><div><h2 id="h-auth">Authentication</h2></div></header>
+          <div class="panel">
+            <div class="row">
+              <div class="txt"><div class="t">Email and password</div><div class="d">Members sign in with a password of at least 12 characters. All 214 members use it now; it is the only method on.</div></div>
+              <button class="sw" role="switch" aria-checked="true" aria-label="Email and password"></button>
+            </div>
+            <div class="row">
+              <div class="txt"><div class="t">Email sign-in link</div><div class="d">A one-time link that works for 10 minutes. Turned off Oct 9; 6 members used it in the 30 days before.</div></div>
+              <button class="sw" role="switch" aria-checked="false" aria-label="Email sign-in link"></button>
+            </div>
+            <div class="row">
+              <div class="txt"><div class="t">Require two-factor authentication</div><div class="d">Members without it set it up at their next sign-in and can't run queries until then. SAML sign-ins are exempt. <a href="#">12 members</a> haven't set it up.</div></div>
+              <button class="sw" role="switch" aria-checked="true" aria-label="Require two-factor authentication"></button>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="sso" aria-labelledby="h-sso">
+          <header><div><h2 id="h-sso">Single sign-on (SAML 2.0)</h2></div><a class="link" href="#">Setup guide<svg class="i" viewBox="0 0 16 16" style="width:12px;height:12px"><path d="M6 4h6v6M12 4l-7 7"/></svg></a></header>
+          <div class="panel">
+            <div class="notice" role="status">
+              <svg class="i" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6"/><path d="M8 7.5v3.5M8 5.2v.1"/></svg>
+              <div><div class="t">Verify a domain first</div><div class="d">SAML can be turned on once larchfieldmutual.com is verified. We look for its TXT record every 10 minutes; the 13:52 UTC check didn't find it yet.</div></div>
+              <div class="acts"><button class="btn sm">Check now</button></div>
+            </div>
+            <div class="field"><label>ACS URL<small>Reply URL in some providers</small></label><div class="ro"><span>https://id.ferrule.cloud/saml/larchfield-mutual/acs</span><button aria-label="Copy ACS URL"><svg class="i" viewBox="0 0 16 16" style="width:14px;height:14px"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 5.5v-2a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2"/></svg>Copy</button></div></div>
+            <div class="field"><label>Entity ID<small>Also called audience URI</small></label><div class="ro"><span>urn:ferrule:sp:ws_8Kq2Nf7Tc4</span><button aria-label="Copy entity ID"><svg class="i" viewBox="0 0 16 16" style="width:14px;height:14px"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 5.5v-2a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2"/></svg>Copy</button></div></div>
+            <div class="field" style="padding-bottom:var(--ds-space-16)"><label for="md">IdP metadata URL<small>From your identity provider</small></label><div class="pair"><div class="input" id="md">e.g. https://idp.example.com/saml/metadata</div><button class="btn">Upload XML</button><button class="btn primary">Save</button></div></div>
+            <div class="row off" style="border-top:1px solid var(--sep)">
+              <div class="txt"><div class="t">Turn on SAML sign-in</div><div class="d">Members with a larchfieldmutual.com email can sign in through your identity provider.</div></div>
+              <button class="sw" role="switch" aria-checked="false" disabled aria-label="Turn on SAML sign-in, needs a verified domain"></button>
+            </div>
+            <div class="row off">
+              <div class="txt"><div class="t">Require SAML for everyone</div><div class="d">Password sign-in stops for larchfieldmutual.com members; owners keep a recovery password.</div></div>
+              <button class="sw" role="switch" aria-checked="false" disabled aria-label="Require SAML, needs a verified domain"></button>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="scim" aria-labelledby="h-scim">
+          <header><div><h2 id="h-scim">User provisioning</h2></div></header>
+          <div class="panel">
+            <div class="row off">
+              <div class="txt"><div class="t">SCIM 2.0 provisioning <span class="gate">Available on Enterprise</span></div><div class="d">Create, update and deactivate members from your identity provider; access ends within 60 seconds.</div></div>
+              <button class="sw" role="switch" aria-checked="false" disabled aria-label="SCIM provisioning, available on Enterprise"></button>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="sessions" aria-labelledby="h-ses">
+          <header><div><h2 id="h-ses">Sessions</h2></div></header>
+          <div class="panel">
+            <div class="row"><div class="txt"><div class="t">Session length</div><div class="d">Members sign in again after this long, even if they're active.</div></div><span class="sel">12 hours<svg class="i" viewBox="0 0 16 16"><path d="M5 6.5 8 9.5l3-3"/></svg></span></div>
+            <div class="row"><div class="txt"><div class="t">Idle timeout</div><div class="d">Sign members out after this long without activity in any tab.</div></div><span class="sel">30 minutes<svg class="i" viewBox="0 0 16 16"><path d="M5 6.5 8 9.5l3-3"/></svg></span></div>
+          </div>
+        </section>
+
+        <section class="section" id="danger" aria-labelledby="h-dz">
+          <header><div><h2 id="h-dz">Danger zone</h2></div></header>
+          <div class="panel">
+            <div class="row"><div class="txt"><div class="t">Sign out all members</div><div class="d">Ends 187 active sessions, including yours. Members sign in again with their usual method.</div></div><button class="btn danger">Sign out all members</button></div>
+            <div class="row"><div class="txt"><div class="t">Workspace ID</div><div class="d">Support asks for this. It never changes.</div></div><span class="ro" style="width:220px"><span>ws_8Kq2Nf7Tc4</span><button aria-label="Copy workspace ID">Copy</button></span></div>
+          </div>
+        </section>
+      </div>
+
+      <nav class="toc" aria-label="On this page">
+        <h3>On this page</h3>
+        <a href="#auth" aria-current="true">Authentication</a>
+        <a href="#sso">Single sign-on</a>
+        <a href="#scim">User provisioning</a>
+        <a href="#sessions">Sessions</a>
+        <a href="#danger">Danger zone</a>
+        <p class="last">Last changed by Amara Sjöberg at 13:58 UTC. <a href="?frame=audit">View in audit log</a></p>
+      </nav>
+    </div>
+
+    <!-- Frame 2: Audit log -->
+    <div class="aud f-audit">
+      <div class="crumbs">Settings / Security and access</div>
+      <div class="top">
+        <div>
+          <h1>Audit log</h1>
+          <p class="lede" style="max-width:none">Every change to settings, members, data access and API keys. Kept for 90 days on the Business plan; Enterprise keeps 400 days.</p>
+        </div>
+        <button class="btn"><svg class="i" viewBox="0 0 16 16"><path d="M8 2.5v8M4.5 7 8 10.5 11.5 7M3 13.5h10"/></svg>Export CSV</button>
+      </div>
+      <div class="filters">
+        <span class="sel"><svg class="i" viewBox="0 0 16 16" style="width:16px;height:16px"><rect x="2.5" y="3.5" width="11" height="10" rx="1.5"/><path d="M2.5 6.5h11M5.5 2v3M10.5 2v3"/></svg><b>Oct 7 – Oct 14, 2026</b><svg class="i" viewBox="0 0 16 16"><path d="M5 6.5 8 9.5l3-3"/></svg></span>
+        <span class="sel"><span class="k">Actor</span><b>Anyone</b><svg class="i" viewBox="0 0 16 16"><path d="M5 6.5 8 9.5l3-3"/></svg></span>
+        <span class="sel"><span class="k">Event</span><b>All events</b><svg class="i" viewBox="0 0 16 16"><path d="M5 6.5 8 9.5l3-3"/></svg></span>
+        <span class="input"><svg class="i" viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 3 3"/></svg>IP or range, e.g. 203.0.113.0/24</span>
+        <span class="spacer"></span>
+        <span style="color:var(--muted);font:var(--ds-text-body-sm)">Times in</span>
+        <div class="seg" role="group" aria-label="Time zone"><button aria-pressed="true">UTC</button><button aria-pressed="false">Local (CEST)</button></div>
+      </div>
+      <div class="meta"><span><b style="color:var(--ink);font-weight:500" class="num">1,146</b> events in this range · newest first</span><span>Updated 14:02 UTC</span></div>
+      <table class="log">
+        <thead><tr><th>Time (UTC)</th><th>Actor</th><th>Action</th><th>IP address</th><th></th></tr></thead>
+        <tbody id="log"></tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<script>
+(() => {
+const frame = new URLSearchParams(location.search).get("frame") === "audit" ? "audit" : "security";
+document.body.dataset.frame = frame;
+document.querySelector(frame === "audit" ? ".f-nav-aud" : ".f-nav-sec").setAttribute("aria-current", "page");
+if (frame === "audit") document.title = "Audit log · Larchfield Mutual · Ferrule";
+
+// switches toggle for real (disabled ones stay put)
+document.querySelectorAll(".sw").forEach(b => b.addEventListener("click", () => b.setAttribute("aria-checked", b.getAttribute("aria-checked") !== "true")));
+
+// Invented audit events for a fictional workspace. IPs come from the documentation ranges (RFC 5737).
+const ICON = {
+  bot: '<svg class="i" viewBox="0 0 16 16"><rect x="3" y="5" width="10" height="8" rx="2"/><path d="M8 5V2.5M6 9h.01M10 9h.01"/></svg>',
+  key: '<svg class="i" viewBox="0 0 16 16"><circle cx="5.5" cy="10.5" r="2.5"/><path d="m7.5 8.5 5-5M11 5l1.5 1.5"/></svg>',
+  support: '<svg class="i" viewBox="0 0 16 16"><path d="M8 2.5 13 4.5v3.7c0 2.8-2.1 4.6-5 5.3-2.9-.7-5-2.5-5-5.3V4.5Z"/></svg>',
+};
+const E = [
+  ["2026-10-14 13:58:07", ["AS", "Amara Sjöberg", "Owner"], "Changed session length from <b>24 hours</b> to <b>12 hours</b>", "security.session_policy.updated", "198.51.100.24", "Stockholm, Sweden", "open"],
+  ["2026-10-14 13:41:52", ["bot", "hr-sync", "Service account"], "Deactivated <b>jakob.hensel@larchfieldmutual.com</b>", "member.deactivated", "203.0.113.18", "Frankfurt, Germany"],
+  ["2026-10-14 13:22:10", ["key", "claims-archive", "API key ••••3f9a"], "Exported <b>claims.payments_2026</b>, 1,204,881 rows, to stage ext_archive", "data.export.completed", "192.0.2.140", "Dublin, Ireland"],
+  ["2026-10-14 12:47:33", ["AS", "Amara Sjöberg", "Owner"], "Added domain <b>larchfieldmutual.com</b> and started verification", "domain.verification.started", "198.51.100.24", "Stockholm, Sweden"],
+  ["2026-10-14 11:05:19", ["support", "Ferrule Support", "Access grant SA-2291"], "Viewed warehouse settings for <b>ANALYTICS_M</b>", "support.access.used", "192.0.2.77", "Toronto, Canada"],
+  ["2026-10-14 10:31:46", ["DV", "Dmitri Volkov", "Member"], "Sign-in with a wrong password, third attempt in 5 minutes", "auth.login.failed", "203.0.113.209", "Rotterdam, Netherlands", "fail"],
+  ["2026-10-14 09:58:02", ["RO", "Rafael Ortiz", "Admin"], "Invited <b>3 people</b> to the Underwriting group", "member.invited", "198.51.100.61", "Madrid, Spain"],
+  ["2026-10-14 09:12:40", ["bot", "warehouse-scheduler", "System"], "Resumed warehouse <b>ANALYTICS_M</b> after 6 h 02 min idle", "warehouse.resumed", "—", "Internal"],
+  ["2026-10-14 08:44:15", ["RO", "Rafael Ortiz", "Admin"], "Created API key <b>bi-dashboards</b> with read access to 4 schemas", "api_key.created", "198.51.100.61", "Madrid, Spain"],
+  ["2026-10-13 22:17:03", ["AS", "Amara Sjöberg", "Owner"], "Turned on <b>Require two-factor authentication</b>", "security.mfa_policy.updated", "198.51.100.24", "Stockholm, Sweden"],
+];
+const tb = document.getElementById("log");
+E.forEach(([t, who, action, code, ip, place, flag]) => {
+  const [d, hms] = t.split(" ");
+  const av = ICON[who[0]] ? `<span class="av sq">${ICON[who[0]]}</span>` : `<span class="av">${who[0]}</span>`;
+  const tr = document.createElement("tr");
+  if (flag === "open") tr.className = "open";
+  tr.innerHTML = `<td class="time">${hms}<span class="l2">${d}</span></td>
+    <td><div class="who">${av}<div class="nm">${who[1]}<span class="l2">${who[2]}</span></div></div></td>
+    <td class="act">${action}${flag === "fail" ? '<span class="fail"><svg class="i" viewBox="0 0 16 16" style="width:12px;height:12px"><path d="m4.5 4.5 7 7M11.5 4.5l-7 7"/></svg>Failed</span>' : ""}<span class="l2 code">${code}</span></td>
+    <td class="ip"><span class="addr">${ip}</span><span class="l2">${place}</span></td>
+    <td class="chev"><svg class="i" viewBox="0 0 16 16">${flag === "open" ? '<path d="M4.5 6.5 8 10l3.5-3.5"/>' : '<path d="m6.5 4.5 3.5 3.5-3.5 3.5"/>'}</svg></td>`;
+  tb.appendChild(tr);
+  if (flag === "open") {
+    const dt = document.createElement("tr");
+    dt.className = "detail";
+    dt.innerHTML = `<td colspan="5"><dl class="entry">
+      <dt>Event ID</dt><dd><span class="mono">evt_01JA7X3M9QH2K8VZ4T6N</span><button class="copy" aria-label="Copy event ID"><svg class="i" viewBox="0 0 16 16"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 5.5v-2a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2"/></svg></button></dd>
+      <dt>Actor</dt><dd>amara.sjoberg@larchfieldmutual.com · <span class="mono">usr_4Tz81wQ</span></dd>
+      <dt>Changes</dt><dd class="diff">
+        <div><span class="mono">session.max_length</span><s>24h</s><span>→</span><span class="mono">12h</span></div>
+        <div><span class="mono">session.idle_timeout</span><s>60m</s><span>→</span><span class="mono">30m</span></div>
+      </dd>
+      <dt>Applies to</dt><dd>214 members, at their next sign-in</dd>
+      <dt>Signed in with</dt><dd>Password and authenticator app</dd>
+      <dt>Request ID</dt><dd><span class="mono">req_9f3c2a71e0</span></dd>
+      <dt>Local time</dt><dd class="num">15:58:07 CEST, Oct 14</dd>
+    </dl></td>`;
+    tb.appendChild(dt);
+  }
+});
+})();
+</script>
+</body>
+</html>

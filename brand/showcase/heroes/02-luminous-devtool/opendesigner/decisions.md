@@ -440,3 +440,8 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 ## D-0028 · raw.accentCount = 3
 - set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
 - reason: aqua, violet and indigo for the light field and code syntax
+
+## D-0029 · name = "Nearmost"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: Round 3: the old name belongs to a real open-source tool in the same field; 'nearmost' means nearest
+- previous value: "Orrery"

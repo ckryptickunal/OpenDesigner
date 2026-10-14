@@ -1,0 +1,67 @@
+{
+ "piece": "heroes/09-japanese-ceramics",
+ "title": "09 Kumo Kōbō: Japanese ceramics workshop hero",
+ "pattern": "brand hero",
+ "platform": "web",
+ "industry": "ceramics",
+ "style": [
+  "minimal",
+  "editorial",
+  "organic"
+ ],
+ "tags": [
+  "brand hero",
+  "ceramics",
+  "craft",
+  "washi",
+  "serif",
+  "vertical type",
+  "seal",
+  "quiet"
+ ],
+ "score": 4,
+ "verdict": "keep",
+ "strengths": [
+  "One object, drawn well: the tea bowl's iron glaze with ash runs, a thin foot, a soft ground shadow; the caption 'No. 214, tea bowl · Iron glaze, ash run · 11.5 × 8 cm' is how a workshop labels work",
+  "Shippori Mincho for English and Japanese with Zen Kaku Gothic for small text; the vertical phrase and the vermilion seal are quiet and placed, not sprinkled",
+  "Corner data (Autumn opening · 2 November, 01 — 06 pagination, 'Wood-fired stoneware · since 1998') and copy with facts (two potters, one kiln, three-day firings, twice a year)"
+ ],
+ "slop_signals": [
+  "A large soft brown blurred disc behind the bowl: a gradient blob standing in for a moon or kiln glow",
+  "Two underlined CTAs stacked ('See the autumn kiln opening ->', 'Visit the workshop') where one would do",
+  "Vertical calligraphy + red seal + washi texture is the expected 'Japanese minimal' kit; well handled, but recognisable"
+ ],
+ "fixes": [
+  "Remove the blurred disc, or replace it with a hard-edged ink circle (an enso) or nothing; the bowl's shadow already grounds it",
+  "One link; fold 'Visit the workshop' into the nav",
+  "Photograph or paint a second bowl state (a detail of the glaze) for the 01-06 pager so the pagination means something"
+ ],
+ "references": [
+  {
+   "site": "Palmer Dinnerware",
+   "url": "https://mobbin.com/sites/sections/dfb1f238-01a9-4866-afae-db35c7863ae8",
+   "what": "Ceramic pieces photographed top-down are the whole art direction, headline small and centred, no blob behind them"
+  },
+  {
+   "site": "In Common With",
+   "url": "https://mobbin.com/sites/sections/a87f2a50-8a78-4193-b491-5589059041fa",
+   "what": "Warm photograph, type that whispers in the corner; the same quiet register with a real image"
+  },
+  {
+   "site": "Kalstore",
+   "url": "https://mobbin.com/sites/sections/ebd881f0-19d0-4472-902b-368227ecfb81",
+   "what": "One sentence, one underline, nothing else; shows that a single CTA is enough"
+  },
+  {
+   "site": "Studio Freight",
+   "url": "https://mobbin.com/sites/sections/37214c10-d891-48bc-a46e-6050033671b4",
+   "what": "Corner-pinned micro type (date, counter, caption) around an asymmetric headline; our corner labels follow this"
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "remove",
+  "said": "very ugly",
+  "date": "2026-10-14"
+ }
+}

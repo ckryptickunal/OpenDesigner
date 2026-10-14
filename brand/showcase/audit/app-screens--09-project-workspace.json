@@ -1,0 +1,62 @@
+{
+ "piece": "app-screens/09-project-workspace",
+ "title": "09 · Quarry: project workspace (desktop, 1440×900 @2x)",
+ "pattern": "project board",
+ "platform": "web",
+ "industry": "software",
+ "style": [
+  "enterprise",
+  "minimal",
+  "swiss"
+ ],
+ "tags": [
+  "project board",
+  "software",
+  "kanban",
+  "issues",
+  "desktop",
+  "light",
+  "dense",
+  "web"
+ ],
+ "score": 4,
+ "verdict": "keep",
+ "strengths": [
+  "Card density, label chips, initials avatars and the sidebar sections match Linear and Height at a real 14/12 px scale; one vermilion for today, urgent, due dates and the primary action.",
+  "Believable work: FLD-231 'Bulk reassign jobs from the dispatcher map', 'Retry queue for failed photo uploads', a 'Release 4.2' milestone on Fri 17, 'Synced 2 s ago', a named engineering lead.",
+  "Own details inside the convention: diamond status glyphs, keyboard numbers on the view tabs, a 3/5 subtask bar on the focused card."
+ ],
+ "slop_signals": [
+  "A two-week timeline and a five-column board stacked on one screen: Linear and Jira show one or the other, so the composite reads as a showcase, not a view someone works in.",
+  "A permanent keyboard-shortcut footer across the bottom; real tools keep this behind '?'.",
+  "Every label chip repeats the same diamond glyph before its text."
+ ],
+ "fixes": [
+  "Show either the board or the timeline; if both, collapse the timeline to a one-row cycle-progress strip.",
+  "Remove the shortcut footer, or reduce it to 'Synced 2 s ago' and a '?'.",
+  "Drop the glyph from label chips, or give each label its own colour dot as Linear does."
+ ],
+ "references": [
+  {
+   "site": "Linear",
+   "url": "https://mobbin.com/screens/410846e7-09d4-4ed8-baf2-ec94d96c29f4",
+   "what": "Board with id, title, label dots and avatar per card, sidebar in sections: the anatomy this piece reproduces, with no timeline above it."
+  },
+  {
+   "site": "Linear",
+   "url": "https://mobbin.com/screens/a6f3c2e2-cbe0-4559-bda7-54ee9d405692",
+   "what": "Milestone progress lives in a side panel, not in a strip over the board."
+  },
+  {
+   "site": "Linear",
+   "url": "https://mobbin.com/screens/720724d3-f686-457f-8c00-fa7efa409b12",
+   "what": "Dark board, same card anatomy; no shortcut footer."
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "keep",
+  "said": "okay",
+  "date": "2026-10-14"
+ }
+}

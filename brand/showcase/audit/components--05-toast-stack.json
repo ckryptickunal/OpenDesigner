@@ -1,0 +1,90 @@
+{
+ "piece": "components/05-toast-stack",
+ "title": "05 · Toast stack (Kinroom)",
+ "pattern": "toast stack",
+ "platform": "web",
+ "industry": "team chat",
+ "style": [
+  "minimal",
+  "playful",
+  "organic"
+ ],
+ "tags": [
+  "toast stack",
+  "team chat",
+  "notifications",
+  "undo",
+  "lilac",
+  "stacked",
+  "soft"
+ ],
+ "score": 3,
+ "verdict": "polish",
+ "strengths": [
+  "The behaviour is right and specific: newest in front, 14 px lift and 5% scale per layer, a timer bar only on auto-dismiss toasts, Undo that stays, Retry on the failed upload, Reply on a mention",
+  "Copy reads like a product: 'Huddle notes saved · Pinned to #launch-week', 'roadmap-q3.pdf didn't upload · The connection dropped at 62%'",
+  "One face (Figtree), one accent, the display line highlighted by weight only"
+ ],
+ "slop_signals": [
+  "Two blurred fog blobs (lilac top-right, mint bottom-left) behind the whole sheet: gradient blobs for no reason",
+  "Every toast opens with a tinted icon disc (mint check, lilac undo arrow, rose '!', a pink-to-lilac gradient 'T' avatar); real toasts carry meaning with a 16 px icon or a 3 px bar, not a 40 px pastel circle",
+  "Toasts are 356 px wide with 24 px corners, pill buttons and a 3-line stack: three white pillows the size of cards, while Asana, Skiff and Notion Mail ship 180 to 280 px, one-line toasts",
+  "The chat behind uses pastel-circle initials ('AI', 'MK', 'A', 'T', 'M') and the left column is a marketing page ('Small news, softly stacked.') explaining the component, so the toast never appears at product scale"
+ ],
+ "fixes": [
+  "Flatten the background to one lilac-grey; delete both blobs",
+  "Replace the icon discs with a plain 16 px icon in the status colour (or a 3 px left bar), and the gradient avatar with a neutral monogram",
+  "Shrink toasts to about 320 px, 12 to 16 px radius, 12 px padding, title 14 px and body 13 px; make Undo and Mark read text buttons, keep one filled button (Reply)",
+  "Render the hero as the chat app at real scale with the stack in its corner; move the explainer copy to the notes"
+ ],
+ "references": [
+  {
+   "site": "Asana",
+   "url": "https://mobbin.com/screens/36cb9092-004d-4cfa-abc7-930e4a7ff931",
+   "what": "A small bottom-left toast with a green time bar and a plain 'Undo' button; no icon disc, no shadow stack"
+  },
+  {
+   "site": "Skiff",
+   "url": "https://mobbin.com/screens/bf104b69-c42d-4fb9-a746-d51ca884f4a6",
+   "what": "A dark 180 px toast: 'Message sent', one line, 'Undo'; shows how small a real toast is"
+  },
+  {
+   "site": "Notion Mail",
+   "url": "https://mobbin.com/screens/5ba89c38-f816-455e-bfa0-ad98517c7d0d",
+   "what": "'Thread archived · Undo' as a single dark pill, bottom left, in the page's own corner"
+  },
+  {
+   "site": "GitBook",
+   "url": "https://mobbin.com/screens/9e06cd74-e5a9-4913-b907-5fc7476065be",
+   "what": "White toast with a small check icon, title and one-line body at bottom right; the closest in size to ours and still quieter"
+  },
+  {
+   "site": "Modal",
+   "url": "https://mobbin.com/screens/87b2d397-bbe1-4398-ad00-f8143c60f24f",
+   "what": "Success toast with a 16 px icon and a close, on the app's own surface"
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "improve",
+  "said": "okay, but still needs work",
+  "date": "2026-10-14"
+ },
+ "round3": {
+  "score": 4,
+  "changed": [
+   "Rebuilt as the Kinroom app at real size: a publisher's room with Kinroom's own labels and a room brief panel (print run, reading seats, advance copies, pinned call notes, a checklist with owners and dates)",
+   "Fog blobs, pastel icon discs, pillow toasts and the marketing column removed; ink one-line toasts, 288 px, in the window corner over the brief, stepped tones behind",
+   "Toast behaviour kept from the house standards; the timer stays on the plain toast because action toasts persist (STD-15, WCAG 2.2.1)",
+   "Story and data made consistent; people renamed to avoid 'AI' and 'DM' initials and a fictional detective; Thimbleweed Press became Pellwick Press",
+   "Engine: roundness 78 to 55, depth 72 to 45",
+   "States: expanded, mention, error (failure kept on the composer chip); the redundant uploading frame removed",
+   "Fresh-eyes audit 3/5, then 4/5; remaining notes fixed",
+   "Renamed Chorus to Kinroom (coordinator, 2026-10-15): the old name belongs to real products in the same field; web search found no Kinroom"
+  ]
+ },
+ "facts": [
+  "mockups/05-components-board embeds this shot.png; its caption may still describe the lilac pillow toasts; re-check and re-render",
+  "mockups/05-components-board (and 08 where it uses this piece) crop this shot.png with fixed background-position offsets set for the old layout; the crops now land on different content and need new offsets"
+ ]
+}

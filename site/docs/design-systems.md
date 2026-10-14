@@ -9,11 +9,17 @@ updated: 2026-10-14
 
 A design system is the set of rules for how a product looks and behaves. It covers colors, text sizes, spacing, corners, depth, motion and the parts people use, like buttons and form fields. Writing the rules down keeps every screen consistent, even when different people, or different AI chats, build them.
 
+{{figure:design-systems-parts}}
+
 ## Why teams write the rules down
 
 Without written rules, each new screen makes its own small choices. One button gets 8 px corners and the next gets 6 px. A gray is typed in by hand and is a little off from the others. Over time the app looks slightly wrong, and nobody can say why.
 
+{{figure:design-systems-hardcoded}}
+
 A design system fixes this with a short list of agreed values and the reason for each one. Designers use the same values in their design tool. Engineers use them in code. AI coding tools read them before they change a screen.
+
+{{figure:design-systems-one-source}}
 
 ## What goes into a design system
 

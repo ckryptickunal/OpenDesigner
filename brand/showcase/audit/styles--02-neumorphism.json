@@ -1,0 +1,98 @@
+{
+ "piece": "styles/02-neumorphism",
+ "title": "02 · Neumorphism · Ouvra building controls",
+ "pattern": "control panel",
+ "platform": "web",
+ "industry": "building management / facilities (B2B)",
+ "style": [
+  "neumorphism",
+  "soft UI",
+  "monochrome",
+  "light"
+ ],
+ "tags": [
+  "style study",
+  "neumorphism",
+  "building management",
+  "HVAC",
+  "thermostat dial",
+  "occupancy",
+  "schedule",
+  "accessibility",
+  "B2B"
+ ],
+ "score": 3,
+ "self_score": 4,
+ "verdict": "polish",
+ "strengths": [
+  "The style's known failure is solved and stated: ink text at 13.1:1, state never by shadow alone (pressed in plus cobalt), a 3.05:1 rim only on controls whose shape is their only cue, one rule for the whole panel (pressed in means on)",
+  "A crafted zone dial (16 to 28 °C, 0.5 °C ticks, set-point handle on the tick band, the cobalt arc showing the gap being closed) with the set point stepper beneath it",
+  "Real BMS detail: AHU-2 and VAV-6.01 to 6.04, 345 L/s, 2.1 kW fan power, CO₂ 640 ppm with a 900 ppm boost rule, a meeting-room zone 1.6° over because VAV-6.03 is stuck open, set-back hours and the next holiday exception"
+ ],
+ "slop_signals": [
+  "The same soft extrusion on every panel, key, row and chart bar: 'one bubbly radius on every element', so nothing reads as the thing to press",
+  "The occupancy caption 'Raised: today to 10:00 · pressed in: yesterday' has to explain an encoding that cannot be seen; at 100% the raised and pressed bars look the same",
+  "Generic icon rail (grid, thermometer, bolt, calendar, bell) and an 'IV' avatar disc that add nothing",
+  "A 2020 Dribbble smart-home layout: a big dial card plus four equal widget cards"
+ ],
+ "fixes": [
+  "Make one object soft, the zone dial, the way Airbnb's month dial is the only soft object on its screen; draw the panels flat with hairlines",
+  "Show today against yesterday with a real second signal (outline against fill, or a cobalt line for yesterday) instead of raised against pressed",
+  "Fix the weekday and the VAV conflict below, and rename Tessaly House"
+ ],
+ "references": [
+  {
+   "site": "Airbnb",
+   "url": "https://mobbin.com/screens/5c40f106-f3d9-442a-b651-a885faa0ec83",
+   "mobbin_url": "https://mobbin.com/screens/5c40f106-f3d9-442a-b651-a885faa0ec83",
+   "what": "A shipped soft-UI dial (extruded ring, inset centre) used for one control while the rest of the screen stays flat"
+  },
+  {
+   "site": "Starlink",
+   "url": "https://mobbin.com/screens/bc087b84-b872-4048-acfb-f9c8bfa44a18",
+   "mobbin_url": "https://mobbin.com/screens/bc087b84-b872-4048-acfb-f9c8bfa44a18",
+   "what": "A ticked schedule dial with handles on the ring, flat and high-contrast"
+  },
+  {
+   "site": "Calm Sleep",
+   "url": "https://mobbin.com/screens/b0676303-922e-42ed-bb43-696146bd765a",
+   "mobbin_url": "https://mobbin.com/screens/b0676303-922e-42ed-bb43-696146bd765a",
+   "what": "A range dial with labelled hours and one accent for the selected arc"
+  }
+ ],
+ "audited": "2026-10-14",
+ "audited_by": "independent",
+ "facts": [],
+ "polish": {
+  "score": 4,
+  "audited": "2026-10-14",
+  "audited_by": "fresh-context agents, two rounds (4, then 4)",
+  "title": "02 · Neumorphism · Ostwell floor plan and zone dial",
+  "changed": [
+   "Rebuilt around the Level 6 floor plan: zone temperatures against set points, live desk sensors (38 of 64 east, 27 of 48 west), VAV boxes in their zones, one fault said once next to its box",
+   "Soft on one control only: the zone dial, built from the engine's extruded and pressed elevation tokens; the handle is a slider (keys, drag, 0.5 °C steps) with − and + on the dial; everything else flat with hairlines",
+   "Today against yesterday as bars against a dashed line; icon rail and avatar removed",
+   "Facts: Wed 14 Oct; each VAV box serves one zone; the stuck damper is at 10%, so its rooms run warm; outside-air cooling with the chiller locked out below 12 °C explains the 0.9° gap; dampers 86% and 2,580 of 3,000 L/s agree",
+   "Names: Ouvra (a real French plumbing and heating software) and then Kelvane (a live HVAC contractor template) dropped; now Ostwell; Tessaly House is now Fenwold House",
+   "After the fresh audits: one fault signal, V- prefixes on VAV labels, lighter outer wall and in-use desks, chart titles name the zone, set-back gives both limits"
+  ],
+  "references": [
+   {
+    "site": "Airbnb",
+    "mobbin_url": "https://mobbin.com/screens/5c40f106-f3d9-442a-b651-a885faa0ec83",
+    "what": "One soft dial on a flat screen; the knob is the control"
+   },
+   {
+    "site": "Rivian",
+    "mobbin_url": "https://mobbin.com/screens/d217e8a1-3cf7-44b4-be12-5937efd5ee13",
+    "what": "Set temperature against actual with flat steppers"
+   },
+   {
+    "site": "Zillow",
+    "mobbin_url": "https://mobbin.com/screens/887b121b-4662-4fcb-9599-d6fef699b07d",
+    "what": "A floor plan in one line weight with markers and a floor picker"
+   }
+  ],
+  "facts_checked": "Weekday, desk counts per zone and total (65 of 112), plate area 64 x 34 = 2,176 m², VAV assignments, fault direction, economiser and chiller lockout, airflow against damper position, set point against reading on the dial and the chart"
+ }
+}

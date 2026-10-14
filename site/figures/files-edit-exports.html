@@ -1,0 +1,39 @@
+<figure class="fig">
+<div class="dodont">
+  <div class="do">
+    <p class="dd-h">Change the decision</p>
+    <p class="dd-why">Record it with <span class="mono">set</span>, then <span class="mono">build</span>. Every export changes together, and the log says why.</p>
+    <div class="dd-art" style="display:grid;gap:10px">
+      <pre class="code-lines" style="background:var(--surface-raised);white-space:pre-wrap;overflow-wrap:anywhere"><span class="c">$</span> engine.py set dials.roundness 60 --why "softer corners for a friendlier feel"
+<span class="c">$</span> engine.py build</pre>
+      <span class="kicker">Rewritten together</span>
+      <pre class="code-lines" style="background:var(--surface-raised);white-space:pre-wrap;overflow-wrap:anywhere"><span class="c">css/tokens.css</span>
+  <span class="ok">--ds-radius-control: var(--ds-radius-8);</span>
+<span class="c">swift/DesignTokens.swift</span>
+  <span class="ok">public static let radiusControl: CGFloat = 8</span>
+<span class="c">compose/DesignTokens.kt</span>
+  <span class="ok">val radiusControl = 8.dp</span>
+<span class="c">decisions.md</span>
+  <span class="ok">## D-0009 · dials.roundness = 60</span></pre>
+    </div>
+  </div>
+  <div class="dont">
+    <p class="dd-h">Edit an export by hand</p>
+    <p class="dd-why">The next build rewrites it from the tokens. Swift, Compose and Tailwind never changed, and the log knows nothing.</p>
+    <div class="dd-art" style="display:grid;gap:10px">
+      <pre class="code-lines" style="background:var(--surface-raised);white-space:pre-wrap;overflow-wrap:anywhere"><span class="c">opendesigner/build/css/tokens.css</span>
+<span class="c">-</span> --ds-radius-control: var(--ds-radius-6);
+<span class="bad">+ --ds-radius-control: 8px;</span>   <span class="c">typed in by hand</span></pre>
+      <span class="kicker">After the next build</span>
+      <pre class="code-lines" style="background:var(--surface-raised);white-space:pre-wrap;overflow-wrap:anywhere"><span class="c">$</span> engine.py build
+<span class="c">css/tokens.css</span>
+  <span class="bad">--ds-radius-control: var(--ds-radius-6);</span>   <span class="c">back to the tokens</span>
+<span class="c">swift/DesignTokens.swift</span>
+  radiusControl: CGFloat = 6   <span class="c">never changed</span>
+<span class="c">decisions.md</span>
+  <span class="c">(no entry)</span></pre>
+    </div>
+  </div>
+</div>
+<figcaption>Everything in opendesigner/build/ is made from the tokens and rewritten by every build. Record the decision instead, and CSS, Swift and Compose move together with a reason in the log.</figcaption>
+</figure>

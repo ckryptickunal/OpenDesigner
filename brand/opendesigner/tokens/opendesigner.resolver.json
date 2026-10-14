@@ -1,7 +1,7 @@
 {
   "name": "OpenDesigner brand",
   "version": "2025.10",
-  "description": "DTCG Resolver Module 2025.10. Orthogonal modifiers (no two set the same token): theme x density x motion (S-L07-004, DC-L07-15, DC-L07-17).",
+  "description": "DTCG Resolver Module 2025.10. Orthogonal modifiers (no two set the same token): density x motion (S-L07-004, DC-L07-15, DC-L07-17).",
   "sets": {
     "foundation": {
       "description": "Primitives and mode-independent tokens.",
@@ -13,25 +13,17 @@
           "$ref": "semantic.tokens.json"
         }
       ]
+    },
+    "theme": {
+      "description": "Single color scheme (light).",
+      "sources": [
+        {
+          "$ref": "semantic.color.light.tokens.json"
+        }
+      ]
     }
   },
   "modifiers": {
-    "theme": {
-      "description": "Color scheme; dark is a separate mapping, not an inversion (DC-L01-18).",
-      "contexts": {
-        "light": [
-          {
-            "$ref": "semantic.color.light.tokens.json"
-          }
-        ],
-        "dark": [
-          {
-            "$ref": "semantic.color.dark.tokens.json"
-          }
-        ]
-      },
-      "default": "light"
-    },
     "density": {
       "description": "Semantic spacing density; primitives and target minimums never change (DC-L03-11).",
       "contexts": {
@@ -51,7 +43,7 @@
           }
         ]
       },
-      "default": "spacious"
+      "default": "comfortable"
     },
     "motion": {
       "description": "Reduced motion as a token mode (DC-L04-25; WCAG 2.3.3 treated as required).",
@@ -75,7 +67,7 @@
       "$ref": "#/sets/foundation"
     },
     {
-      "$ref": "#/modifiers/theme"
+      "$ref": "#/sets/theme"
     },
     {
       "$ref": "#/modifiers/density"

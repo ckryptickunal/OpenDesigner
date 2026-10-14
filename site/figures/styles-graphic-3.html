@@ -1,0 +1,49 @@
+<figure class="fig">
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,200px),1fr));gap:12px">
+<div id="risograph" style="border:1px solid var(--line);min-width:0">
+<div aria-hidden="true" style="aspect-ratio:7/5;width:100%;max-height:180px;overflow:hidden;background:#f4efe6">
+<svg viewBox="0 0 210 150" width="100%" height="100%" preserveAspectRatio="xMidYMid slice"><defs><filter id="riso-n" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" seed="4"/><feColorMatrix values="0 0 0 0 .96 0 0 0 0 .94 0 0 0 0 .9 0 0 0 -3.2 1.38"/></filter></defs>
+<rect width="210" height="150" fill="#f4efe6"/>
+<g style="mix-blend-mode:multiply"><circle cx="132" cy="56" r="28" fill="#ff48b0"/></g>
+<g style="mix-blend-mode:multiply"><path d="M14 128l50-72 30 40 24-28 52 60z" fill="#ff48b0"/></g>
+<g style="mix-blend-mode:multiply"><path d="M17 126l50-72 30 40 24-28 52 60z" fill="#0078bf"/><path d="M128 112h70M134 118h64M140 124h58M146 130h52" stroke="#0078bf" stroke-width="3"/></g>
+<rect width="210" height="150" filter="url(#riso-n)" opacity=".5"/>
+</svg></div>
+<div style="padding:0 14px 14px"><span class="sticker ink" style="display:flex;width:fit-content;position:relative;margin-top:-13px">Risograph</span>
+<p style="margin:10px 0">A cheap, colorful print look: two or three bright inks that overlap a little off, with grain.</p>
+<dl class="kv" style="grid-template-columns:1fr;gap:2px">
+<dt><b>People say</b></dt><dd>zine, printed, ink, screen print, indie</dd>
+<dt><b>In code</b></dt><dd>one layer per ink with <code>mix-blend-mode: multiply</code>, nudged 1 to 3 px</dd>
+<dt><b>Fits</b></dt><dd>indie publishing, cultural events, cafes, music; marketing only</dd>
+<dt><b>Goes wrong when</b></dt><dd>interface text is shifted out of line, or pink and yellow carry text</dd>
+</dl></div></div>
+<div id="duotone" style="border:1px solid var(--line);min-width:0">
+<div aria-hidden="true" style="aspect-ratio:7/5;width:100%;max-height:180px;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:10px 10px 22px;background:#fff;font-size:12px;line-height:16px;font-weight:600;color:#222428">
+<div style="position:relative;overflow:hidden"><svg viewBox="0 0 100 120" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" style="display:block"><defs><linearGradient id="duo-sky" x2="0" y2="1"><stop offset="0" stop-color="#3b7dd8"/><stop offset="1" stop-color="#f6c28b"/></linearGradient><filter id="duo-f" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncR type="table" tableValues=".09 1"/><feFuncG type="table" tableValues=".1 .58"/><feFuncB type="table" tableValues=".36 .68"/></feComponentTransfer></filter></defs><g id="duo-s"><rect width="100" height="120" fill="url(#duo-sky)"/><circle cx="64" cy="42" r="13" fill="#fff4bf"/><path d="M0 86l26-30 18 18 22-26 34 38v34H0z" fill="#4f7d45"/><path d="M0 98l30-18 30 14 40-12v38H0z" fill="#22402a"/><path d="M0 104h100v16H0z" fill="#2c6394"/><path d="M14 110h22M50 114h30" stroke="#9cc3e6" stroke-width="2"/></g></svg><span style="position:absolute;left:4px;top:4px;padding:0 6px;background:#fff">Color</span></div>
+<div style="position:relative;overflow:hidden"><svg viewBox="0 0 100 120" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" style="display:block"><use href="#duo-s" filter="url(#duo-f)"/></svg><span style="position:absolute;left:4px;top:4px;padding:0 6px;background:#fff">Duotone</span></div>
+</div>
+<div style="padding:0 14px 14px"><span class="sticker ink" style="display:flex;width:fit-content;position:relative;margin-top:-13px">Duotone</span>
+<p style="margin:10px 0">Pictures recolored in just two colors: one for the dark parts, one for the light parts.</p>
+<dl class="kv" style="grid-template-columns:1fr;gap:2px">
+<dt><b>People say</b></dt><dd>two-color photos, tinted photos, “like a poster”</dd>
+<dt><b>In code</b></dt><dd>an SVG filter: <code>feColorMatrix</code> to gray, then <code>feComponentTransfer</code></dd>
+<dt><b>Fits</b></dt><dd>editorial and event imagery, team pages that need mixed photos to match</dd>
+<dt><b>Goes wrong when</b></dt><dd>it hides product screenshots, or faces turn unflattering colors</dd>
+</dl></div></div>
+<div id="grain-and-noise" style="border:1px solid var(--line);min-width:0">
+<div aria-hidden="true" style="aspect-ratio:7/5;width:100%;max-height:180px;overflow:hidden;position:relative;background:linear-gradient(150deg in oklab,#f7b267,#e0605a 45%,#1f4e5f);font-size:12px;line-height:16px;font-weight:600;color:#222428">
+<svg style="position:absolute;top:0;left:50%;width:50%;height:100%;mix-blend-mode:overlay;opacity:.75"><filter id="gn-f"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#gn-f)"/></svg>
+<span style="position:absolute;top:0;bottom:0;left:50%;border-left:1px dashed rgb(255 255 255/.8)"></span>
+<span style="position:absolute;left:10px;top:10px;padding:0 6px;background:#fff">Smooth</span><span style="position:absolute;left:calc(50% + 10px);top:10px;padding:0 6px;background:#fff">Grain</span>
+</div>
+<div style="padding:0 14px 14px"><span class="sticker ink" style="display:flex;width:fit-content;position:relative;margin-top:-13px">Grain and noise</span>
+<p style="margin:10px 0">A fine speckle over colors and gradients, like film or printed paper.</p>
+<dl class="kv" style="grid-template-columns:1fr;gap:2px">
+<dt><b>People say</b></dt><dd>grainy, film, analog, textured, “less digital”</dd>
+<dt><b>In code</b></dt><dd>an SVG <code>feTurbulence</code> layer at about 6% with <code>mix-blend-mode: overlay</code></dd>
+<dt><b>Fits</b></dt><dd>brand and marketing surfaces, music, wellness, food</dd>
+<dt><b>Goes wrong when</b></dt><dd>grain sits over body text, stands in for a real picture, or covers the whole app</dd>
+</dl></div></div>
+</div>
+<figcaption>Print and texture styles. Risograph: a pink sun and mountains printed in two inks that mix where they overlap and sit a little out of line, with grain. Duotone: the same drawn landscape in full color and mapped to two inks, navy and pink. Grain and noise: one gradient, smooth on the left and grainy on the right (the grain is made stronger than usual here so it shows).</figcaption>
+</figure>

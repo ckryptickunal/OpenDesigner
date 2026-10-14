@@ -1,0 +1,65 @@
+{
+ "piece": "watch/01-ridgeline-trail",
+ "title": "01 Ridgeline: notes",
+ "pattern": "activity",
+ "platform": "watchos",
+ "industry": "fitness",
+ "style": [
+  "industrial",
+  "dark",
+  "neon"
+ ],
+ "tags": [
+  "activity",
+  "fitness",
+  "trail running",
+  "pace",
+  "watch",
+  "dark",
+  "lime",
+  "watchos"
+ ],
+ "score": 4,
+ "verdict": "keep",
+ "strengths": [
+  "One number mid-stride: a 68 px italic pace with the delta to plan, then one picture: an elevation profile with the climb hatched, the summit flagged and the runner marked.",
+  "Watch conventions held: time top right, corner insets respected, pure black for OLED, four sizes in one family.",
+  "Specific data: KM 14.2, −0:08 to plan, +312 m, 2.1 km to the summit."
+ ],
+ "slop_signals": [
+  "Seven data points plus a chart on a 205 × 251 display (km tag, clock, pace, delta, label, climb, distance, profile): at the edge of what one glance can take.",
+  "Hatched fill plus contour echoes behind the profile: two textures where one fill would do; the Oura and Strava live widgets use none."
+ ],
+ "fixes": [
+  "Drop either the 'TO SUMMIT' label row or the km tag; let the profile carry the summit distance.",
+  "Keep the hatching, remove the contour echoes."
+ ],
+ "references": [
+  {
+   "site": "Apple Fitness",
+   "url": "https://mobbin.com/screens/98936404-4997-4707-b71a-1d5e186e976a",
+   "what": "One yellow timer, grey labels, flat black: the workout metric hierarchy Apple uses on the watch too."
+  },
+  {
+   "site": "Strava",
+   "url": "https://mobbin.com/screens/349d3d1e-9f6e-436c-bf73-6b38e8aea1d3",
+   "what": "Live Activity: time, split pace, distance with labels under values and nothing drawn behind them."
+  },
+  {
+   "site": "Oura",
+   "url": "https://mobbin.com/screens/0fedbd2c-bfc1-442a-b554-1c768e9dfa55",
+   "what": "Three metrics with small-caps labels under the values: the label-under-value rhythm at glance size."
+  },
+  {
+   "site": "Nike Run Club",
+   "url": "https://mobbin.com/screens/889a013f-9b8a-4950-961e-d5bb0796f7da",
+   "what": "Slanted metrics in one family, flat, no texture."
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "keep",
+  "said": "most of the watch screens are okay",
+  "date": "2026-10-14"
+ }
+}

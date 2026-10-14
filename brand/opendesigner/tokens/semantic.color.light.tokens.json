@@ -34,12 +34,8 @@
         "$description": "Menus, popovers, dialogs; always with elevation.floating or elevation.overlay."
       },
       "nav": {
-        "$value": "{color.neutral.light.1}",
-        "$description": "Navigation on the page background."
-      },
-      "tinted": {
-        "$value": "{color.accent.light.2}",
-        "$description": "Tinted container (Colorfulness 50+, L09 X rubric; Q-color-05)."
+        "$value": "{color.neutral.light.2}",
+        "$description": "Recessive navigation, dimmer than content (Linear 2026, S-L06-067)."
       }
     },
     "text": {
@@ -82,22 +78,6 @@
       "on-brand": {
         "$value": "{color.white}",
         "$description": "Text on color.bg.brand."
-      },
-      "accent2": {
-        "$value": "{color.accent2.light.11}",
-        "$description": "accent2 text."
-      },
-      "on-accent2": {
-        "$value": "{color.white}",
-        "$description": "Text on accent2 solid."
-      },
-      "accent3": {
-        "$value": "{color.accent3.light.11}",
-        "$description": "accent3 text."
-      },
-      "on-accent3": {
-        "$value": "{color.white}",
-        "$description": "Text on accent3 solid."
       },
       "success": {
         "$value": "{color.success.light.11}",
@@ -203,42 +183,6 @@
         "$value": "{color.accent.light.9}",
         "$description": "Brand fill for signature surfaces; carries text.on-brand (brandAnchor rule, DC-L01-09)."
       },
-      "accent2": {
-        "subtle": {
-          "$value": "{color.accent2.light.3}",
-          "$description": "accent2 subtle fill."
-        },
-        "bold": {
-          "$value": "{color.accent2.light.9}",
-          "$description": "accent2 solid fill."
-        },
-        "bold-hover": {
-          "$value": "{color.accent2.light.10}",
-          "$description": "Hover: one step, at least 1.15:1 from the solid (DC-L01-17)."
-        },
-        "bold-pressed": {
-          "$value": "{color.accent2.light.solid-pressed}",
-          "$description": "Pressed: at least 1.3:1 from the solid."
-        }
-      },
-      "accent3": {
-        "subtle": {
-          "$value": "{color.accent3.light.3}",
-          "$description": "accent3 subtle fill."
-        },
-        "bold": {
-          "$value": "{color.accent3.light.9}",
-          "$description": "accent3 solid fill."
-        },
-        "bold-hover": {
-          "$value": "{color.accent3.light.10}",
-          "$description": "Hover: one step, at least 1.15:1 from the solid (DC-L01-17)."
-        },
-        "bold-pressed": {
-          "$value": "{color.accent3.light.solid-pressed}",
-          "$description": "Pressed: at least 1.3:1 from the solid."
-        }
-      },
       "success": {
         "subtle": {
           "$value": "{color.success.light.3}",
@@ -337,6 +281,10 @@
         "$value": "{color.accent.light.8}",
         "$description": "Selected card or accent outline."
       },
+      "separator": {
+        "$value": "{color.neutral.light.5}",
+        "$description": "Hairlines between table rows and list items, lighter than border.subtle; decorative, so never the only cue (DC-L23-05)."
+      },
       "success": {
         "$value": "{color.success.light.8}",
         "$description": "Success boundary, for example an invalid field (3:1)."
@@ -397,7 +345,7 @@
             0.1569
           ],
           "hex": "#222428",
-          "alpha": 0.107
+          "alpha": 0.0
         },
         "$description": "Key shadow color; alpha doubles in dark (DC-L04-12)."
       },
@@ -410,7 +358,7 @@
             0.1569
           ],
           "hex": "#222428",
-          "alpha": 0.091
+          "alpha": 0.0
         },
         "$description": "Ambient shadow color."
       },

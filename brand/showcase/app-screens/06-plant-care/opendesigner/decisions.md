@@ -461,3 +461,72 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 - set_by: chosen · locked: no · date: 2026-10-14 · supersedes: D-0010 · source_ref: none
 - reason: piece 03 already uses Fraunces; Alegreya is a calligraphic book serif with 400-900 weights, so a phrase can be set in bold
 - previous value: "Fraunces"
+
+## D-0025 · raw.accentCount = 1
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: D-0020 · source_ref: none
+- reason: Round 3: one accent with one job. Moss marks today and the actions; the terracotta second accent is gone (audit: cream + orange-brown is the forbidden combination)
+- previous value: 2
+
+## D-0026 · raw.secondaryColors = []
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: D-0021 · source_ref: none
+- reason: Round 3: terracotta removed
+- previous value: ["#C0603A"]
+
+## D-0027 · raw.neutralBase = "#8E928C"
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: D-0023 · source_ref: none
+- reason: Round 3: a cool grey-green base gives a clean white page and near-black ink instead of cream paper and brown-grey text
+- previous value: "#E6E0D2"
+
+## D-0028 · dials.roundness = 60
+- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: D-0015 · source_ref: none
+- reason: Round 3: friendly but not blobby; photos and cards at 16, controls full
+- previous value: 82
+
+## D-0029 · overrides.font.size.11 = {"value": 11, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+- reason: Round 3: iOS Dynamic Type step
+- new dimension token in primitives.tokens.json
+
+## D-0030 · overrides.font.size.12 = {"value": 12, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+- reason: Round 3: iOS Dynamic Type step
+- new dimension token in primitives.tokens.json
+
+## D-0031 · overrides.font.size.13 = {"value": 13, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+- reason: Round 3: iOS Dynamic Type step
+- new dimension token in primitives.tokens.json
+
+## D-0032 · overrides.font.size.15 = {"value": 15, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+- reason: Round 3: iOS Dynamic Type step
+- new dimension token in primitives.tokens.json
+
+## D-0033 · overrides.font.size.17 = {"value": 17, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+- reason: Round 3: iOS Dynamic Type step
+
+## D-0034 · overrides.font.size.20 = {"value": 20, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+- reason: Round 3: iOS Dynamic Type step
+- new dimension token in primitives.tokens.json
+
+## D-0035 · overrides.font.size.22 = {"value": 22, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+- reason: Round 3: iOS Dynamic Type step
+- new dimension token in primitives.tokens.json
+
+## D-0036 · overrides.font.size.28 = {"value": 28, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+- reason: Round 3: iOS Dynamic Type step
+- new dimension token in primitives.tokens.json
+
+## D-0037 · overrides.font.size.34 = {"value": 34, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+- reason: Round 3: iOS Dynamic Type step
+- new dimension token in primitives.tokens.json
+
+## D-0038 · overrides.font.size.48 = {"value": 48, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+- reason: Round 3: the soil reading, a custom display role above Large Title 34
+- new dimension token in primitives.tokens.json

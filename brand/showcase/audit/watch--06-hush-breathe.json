@@ -1,0 +1,70 @@
+{
+ "piece": "watch/06-hush-breathe",
+ "title": "06 Hush: notes",
+ "pattern": "breathe",
+ "platform": "watchos",
+ "industry": "wellness",
+ "style": [
+  "organic",
+  "dark",
+  "minimal"
+ ],
+ "tags": [
+  "breathe",
+  "wellness",
+  "mindfulness",
+  "orb",
+  "watch",
+  "dark",
+  "lavender",
+  "watchos"
+ ],
+ "score": 2,
+ "verdict": "remake",
+ "strengths": [
+  "Nothing to tap and one instruction: the right scope for a one-minute break; 'Breathe in' in Fraunces 300 and '4 of 7' are the right two lines."
+ ],
+ "slop_signals": [
+  "A blurry lavender glow orb with film grain as the whole interface: the AI 'calm orb'. Apple's Breathe is a crisp flower, Calm a crisp ring, Finch and Breathwrk flat concentric discs with edges.",
+  "Two hairline rings around the orb carry no data; the progress arc with its dot then says '4 of 7' a second time.",
+  "'Hush' in bold lavender top-left reads as a logo on a screen that should hold only the breath."
+ ],
+ "fixes": [
+  "Draw the breath as a crisp shape with an edge (a disc that scales, or petals) and let its size be the phase; no blur, no grain.",
+  "Remove the rings; keep either the arc or the '4 of 7' line.",
+  "Drop the wordmark; the time is enough."
+ ],
+ "references": [
+  {
+   "site": "Breathwrk",
+   "url": "https://mobbin.com/screens/a7726922-7009-4136-ad66-f22affa3077e",
+   "what": "Flat concentric discs with hard edges and the word inside: the shape does the breathing."
+  },
+  {
+   "site": "Finch",
+   "url": "https://mobbin.com/screens/170f6c9c-3e74-4f2f-b29c-58290c4002d7",
+   "what": "Flat rings with 'Inhale' inside on a single colour."
+  },
+  {
+   "site": "How We Feel",
+   "url": "https://mobbin.com/screens/a9c8abcf-2dfe-49e1-a5da-0cc11d636ab5",
+   "what": "A field of dots that expands, a serif cue below, black: a breath without a glow."
+  },
+  {
+   "site": "WHOOP",
+   "url": "https://mobbin.com/screens/1e199875-3bd6-4cb5-83f6-255a3d78b263",
+   "what": "One hairline ring with the instruction below it."
+  },
+  {
+   "site": "Calm Sleep",
+   "url": "https://mobbin.com/screens/54e3f825-c301-4fc9-a3d1-3b72bc658591",
+   "what": "A ring with nodes over a blurred image: the closest shipped look to this piece, and still an edge, not a blob."
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "keep",
+  "said": "most of the watch screens are okay",
+  "date": "2026-10-14"
+ }
+}

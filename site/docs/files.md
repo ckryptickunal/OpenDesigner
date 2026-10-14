@@ -9,6 +9,8 @@ updated: 2026-10-14
 
 OpenDesigner writes `DESIGN.md` and `PRODUCT.md` at the root of your project, and everything else into an `opendesigner/` folder. The token files in `opendesigner/tokens/` are the source of truth, and every other file is made from them. In a test run, one sketch and build wrote 50 files with no errors.
 
+{{figure:files-tree}}
+
 ## At the root of your project
 
 - **`DESIGN.md`:** your design rules in plain words, for people and AI tools. It refreshes after every decision, and each section shows its zoom level.
@@ -31,6 +33,8 @@ See [Design tokens and DTCG](/docs/design-tokens/).
 ## The exports
 
 All of these are in `opendesigner/build/`. Every build rewrites them, so don't edit them by hand.
+
+{{figure:files-edit-exports}}
 
 - **`css/tokens.css`:** CSS variables you can use in any web project.
 - **`tailwind/theme.css`:** a Tailwind CSS v4 theme, so utility classes use your colors, spacing, radii and type.

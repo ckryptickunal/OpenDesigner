@@ -63,3 +63,7 @@ Result used from tokens.css: every colour role (surfaces, text, border, accent, 
 - **Weight on purpose:** the table title is 500, the sheet number is light 300; bold is kept for selected tab and the selected-count only.
 - **Color:** light slate surface, near-black text, one orange for selection, primary action and sort state. No change needed.
 - Knock-on fixes from the bigger body: widened the weight column (figures were truncating), shortened the Status filter value to "In transit, Delayed +1", search placeholder to "Search ID or lane", density specimens to ID and time.
+
+## Round 3 (owner review)
+- The owner's verdict was "okay", so the piece is kept as it is.
+- 2026-10-15: the carrier "Halden Freight" is renamed "Ostrel Freight" (OF), because Halden Private (`app-screens/01`) is a product in the showcase and each name belongs to one product. Re-rendered at 1440 × 900 @2.

@@ -417,3 +417,23 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 ## D-0024 · overrides.type.headingWeight = 400
 - set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
 - reason: a soft serif reads hushed at regular weight, not bold
+
+## D-0025 · raw.brandColor = "#3D5A47"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0004 · source_ref: none
+- reason: Round 3: the owner bans brown with orange and cream; one deep sage green carries the brand
+- previous value: "#b8643f"
+
+## D-0026 · raw.neutralBase = "#E8ECE4"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0023 · source_ref: none
+- reason: Round 3: cool green-grey paper instead of cream
+- previous value: "#EADBC4"
+
+## D-0027 · raw.secondaryColors = ["#E2B23A"]
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0013 · source_ref: none
+- reason: Round 3: chamomile yellow, for the flower hearts only
+- previous value: ["#7E9475"]
+
+## D-0028 · dials.warmth = 30
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0016 · source_ref: none
+- reason: Round 3: 85 made the neutrals brown
+- previous value: 85

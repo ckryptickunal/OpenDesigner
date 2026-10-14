@@ -1,0 +1,80 @@
+{
+ "piece": "components/10-settings-terminal",
+ "title": "10 · Settings panel · rackhound",
+ "pattern": "settings panel",
+ "platform": "web",
+ "industry": "devtools",
+ "style": [
+  "terminal",
+  "retro",
+  "dark"
+ ],
+ "tags": [
+  "settings panel",
+  "devtools",
+  "terminal",
+  "amber",
+  "mono",
+  "self-hosted",
+  "switches"
+ ],
+ "score": 4,
+ "verdict": "keep",
+ "strengths": [
+  "A costume worn consistently: box-drawing frames, block-character switches and sliders, tmux status lines, a pixel face for titles only; underneath it is the Linear / Dash settings anatomy (label left, one-line description, control right)",
+  "Details only this product would have: 'up 41d 03:12 · load 0.42 0.38 0.31', 'fans 1820 rpm', the fan-curve preview with 'now 58' and 'target 62', an apply log that reads 'set fan.target=62°C ........ ok' and a 'retry' line",
+  "Every control has its states (switch off/on/hover/focus/applying/locked; segmented, slider, input in hover/focus/disabled/dragging/over limit/error/read-only), and the hierarchy works by brightness alone"
+ ],
+ "slop_signals": [
+  "Phosphor glow and scanlines on every line of text: the dark + neon family, and the dim amber hint text sits close to the 4.5:1 floor",
+  "The 56 px pixel 'settings' title with a block cursor and the '#10' numeral are the theme talking louder than the panel"
+ ],
+ "fixes": [
+  "Halve the glow radius on body text and keep the full glow for the bright readouts ('62°C', '85W') only",
+  "Set the page title at the panel-title size (the same as 'power & fans') and drop the cursor block"
+ ],
+ "references": [
+  {
+   "site": "Linear",
+   "url": "https://mobbin.com/screens/c968b3b2-82a5-4044-8e4a-0bec5683dec5",
+   "what": "Label-left, one-line description, control-right rows grouped under headings; our rows follow this exactly"
+  },
+  {
+   "site": "Dropbox Dash",
+   "url": "https://mobbin.com/screens/f2c6abf3-905c-444a-af3d-33088030cb89",
+   "what": "Dark settings with radio groups and switches labelled 'On'; a theme group with System / Light / Dark"
+  },
+  {
+   "site": "Modal",
+   "url": "https://mobbin.com/screens/87b2d397-bbe1-4398-ad00-f8143c60f24f",
+   "what": "Developer settings in dark where the only colour is the switch and a 'Save changes' button"
+  },
+  {
+   "site": "Savee",
+   "url": "https://mobbin.com/screens/e8ebebb8-9565-481e-952b-4c0d8fa1b56b",
+   "what": "Black settings with sections on the left and rows of switches on the right; shows how little a dark settings page needs"
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "improve",
+  "said": "okay, but I don't know who will use it",
+  "date": "2026-10-14"
+ },
+ "round3": {
+  "score": 4,
+  "changed": [
+   "Gave it an audience and a job: the web console an ML infrastructure team uses for GPU servers in a colocation cage; this page sets one pool's power and thermal policy to stay under the 12.5 kW the rack is contracted for",
+   "Kept the label-left rows with consequences, block sliders and switches, the fan-curve preview, the change log and the amber brand",
+   "Costume quietened: no scanlines, glow, cursor or mode line; grey text and frames; amber only for live, changed or chosen values; red only for over-contract or failed; VT323 only on the title and readouts",
+   "Real, re-added data: node draws 11.40 kW; full load 8 x (4 x W + base, fans included); 310 W is the most that fits; one alert rule above 12.0 kW; single-feed cap against a 10.5 kW feed; three racks, 31 kW",
+   "States: drag over the contract (apply disabled), applying 5 of 8, partial failure with gpu-07 at 330 W (12.03 kW, alert logged, retry and undo all)",
+   "Engine: raw.domain set to the ML-infra job, depth 10 to 4, rebuilt; brand #ffb000 checked",
+   "Fresh-eyes audit 3/5, then 4/5; the remaining notes fixed"
+  ]
+ },
+ "facts": [
+  "Body copy is 14 px mono, below the brief's 15-17 px web body; legible at 13:1 and recorded as the console's exception",
+  "The 56 px VT323 budget readout is off the token scale on purpose (preflight warns)"
+ ]
+}

@@ -8,8 +8,16 @@
   "summary": "",
   "context": {
     "product": "",
-    "audience": "people who use it now and then, often on a phone",
+    "audience": "design-system teams, product designers and engineers, mostly at work on a desktop, including enterprise and B2B teams",
     "surfaces": [
+      {
+        "name": "landing page",
+        "mode": "Persuade"
+      },
+      {
+        "name": "documentation",
+        "mode": "Read"
+      },
       {
         "name": "social cards",
         "mode": "Persuade"
@@ -22,7 +30,10 @@
     "entryPath": "",
     "memorable": "",
     "scope": {
-      "in": [],
+      "in": [
+        "Marketing site",
+        "Docs or content site"
+      ],
       "out": []
     },
     "constraints": [],
@@ -30,46 +41,46 @@
   },
   "dials": {
     "expression": {
-      "value": 68,
+      "value": 40,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0012"
+      "decision": "D-0051"
     },
     "brandPresence": {
-      "value": 80,
+      "value": 55,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0021"
+      "decision": "D-0052"
     },
     "density": {
-      "value": 30,
+      "value": 45,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0014"
+      "decision": "D-0053"
     },
     "energy": {
-      "value": 40,
-      "set_by": "delegated",
-      "detached": true,
-      "decision": "D-0027"
-    },
-    "roundness": {
-      "value": 40,
-      "set_by": "delegated",
-      "detached": true,
-      "decision": "D-0016"
-    },
-    "depth": {
       "value": 30,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0017"
+      "decision": "D-0054"
+    },
+    "roundness": {
+      "value": 75,
+      "set_by": "chosen",
+      "detached": true,
+      "decision": "D-0056"
+    },
+    "depth": {
+      "value": 15,
+      "set_by": "chosen",
+      "detached": true,
+      "decision": "D-0034"
     },
     "colorfulness": {
-      "value": 62,
+      "value": 35,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0020"
+      "decision": "D-0055"
     },
     "warmth": {
       "value": 30,
@@ -80,8 +91,10 @@
   },
   "preset": null,
   "macros": [
-    "bold",
+    "modern",
+    "serious",
     "premium",
+    "minimal",
     "friendly"
   ],
   "raw": {
@@ -108,7 +121,7 @@
       "brandExact": true,
       "tintTowardBrand": false,
       "motionOff": false,
-      "darkMode": true,
+      "darkMode": false,
       "p3": true
     },
     "overrides": {},
@@ -158,7 +171,10 @@
     "scripts": [
       "Latn"
     ],
-    "defaultTheme": "system"
+    "defaultTheme": "system",
+    "borderDefault": null,
+    "texture": null,
+    "gradients": null
   },
   "overrides": {
     "motion.duration.instant": {
@@ -359,10 +375,9 @@
   },
   "answers": {
     "Q-aud-01": {
-      "value": "large",
+      "value": "regular",
       "set_by": "delegated",
-      "decision": "D-0002",
-      "via": "sketch",
+      "decision": "D-0035",
       "locked": false
     },
     "Q-plat-01": {
@@ -376,26 +391,47 @@
       "locked": false
     },
     "Q-theme-01": {
-      "value": "light-dark-toggle",
-      "set_by": "delegated",
-      "decision": "D-0009",
-      "via": "sketch",
+      "value": "light-only",
+      "set_by": "chosen",
+      "decision": "D-0048",
       "locked": false
     },
     "Q-scope-06": {
       "value": [
+        "landing page:persuade",
+        "documentation:read",
         "social cards:persuade",
         "readme:read"
       ],
       "set_by": "delegated",
-      "decision": "D-0010",
-      "via": "sketch",
+      "decision": "D-0038",
       "locked": false
     },
     "Q-type-01": {
       "value": "open-custom",
       "set_by": "chosen",
       "decision": "D-0023",
+      "locked": false
+    },
+    "Q-scope-01": {
+      "value": [
+        "marketing",
+        "docs-content"
+      ],
+      "set_by": "delegated",
+      "decision": "D-0037",
+      "locked": false
+    },
+    "Q-shape-04": {
+      "value": "continuous",
+      "set_by": "chosen",
+      "decision": "D-0057",
+      "locked": false
+    },
+    "Q-type-13": {
+      "value": "size-table",
+      "set_by": "chosen",
+      "decision": "D-0058",
       "locked": false
     }
   },
@@ -443,35 +479,35 @@
       "note": ""
     },
     "H-appicon": {
-      "status": "pending",
+      "status": "not-needed",
       "name": "App icon",
       "question": "Q-icon-06",
       "files": [],
       "note": ""
     },
     "H-favicon": {
-      "status": "pending",
+      "status": "have",
       "name": "Favicon set",
       "question": "Q-brand-03",
       "files": [],
       "note": ""
     },
     "H-icons": {
-      "status": "pending",
+      "status": "open-library",
       "name": "Custom icons, pictograms, spot icons",
       "question": "Q-icon-01",
       "files": [],
       "note": ""
     },
     "H-illus": {
-      "status": "pending",
+      "status": "not-needed",
       "name": "Illustration, characters, empty-state art",
       "question": "Q-img-04",
       "files": [],
       "note": ""
     },
     "H-photo": {
-      "status": "pending",
+      "status": "open-library",
       "name": "Photography and art direction",
       "question": "Q-img-01",
       "files": [],
@@ -506,14 +542,14 @@
       "note": ""
     },
     "H-sound": {
-      "status": "pending",
+      "status": "not-needed",
       "name": "UI sounds and sonic logo",
       "question": "Q-motion-08",
       "files": [],
       "note": ""
     },
     "H-haptic": {
-      "status": "pending",
+      "status": "not-needed",
       "name": "Custom haptic patterns",
       "question": "Q-motion-09",
       "files": [],
@@ -542,14 +578,16 @@
   "references": {},
   "taste": {
     "feelWords": [
-      "bold",
+      "technical",
       "premium",
-      "warm"
+      "calm",
+      "precise",
+      "friendly"
     ]
   },
   "hashes": {
-    "DESIGN.md": "bf1e79ba61bab90a",
-    "PRODUCT.md": "2c07a657287ab48d"
+    "DESIGN.md": "cd416d111d56e655",
+    "PRODUCT.md": "f9af39d028276c5e"
   },
   "exports": {
     "prefix": "ds",
@@ -602,10 +640,11 @@
     "overrides.motion.scale.press",
     "overrides.size.target.touch",
     "overrides.size.target.min",
-    "overrides.font.size.input"
+    "overrides.font.size.input",
+    "raw.brandColor"
   ],
   "standards": {
-    "house_version": 2,
+    "house_version": 3,
     "applied": [
       "STD-when-to-animate-01",
       "STD-when-to-animate-03",
@@ -897,7 +936,13 @@
       "STD-process-review-taste-66",
       "STD-process-review-taste-67"
     ],
-    "overridden": {},
+    "overridden": {
+      "STD-visual-details-24": {
+        "why": "Kunal 2026-10-14: keep the website only in light mode, do not keep it in dark mode",
+        "decision": "D-0047",
+        "date": "2026-10-14"
+      }
+    },
     "project": [],
     "retired_seen": [],
     "records": {
@@ -2650,5 +2695,7 @@
       "font.size.input": "dimension"
     },
     "snapshots": "standards-state.json"
-  }
+  },
+  "style": null,
+  "customStyles": {}
 }

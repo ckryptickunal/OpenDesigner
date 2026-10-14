@@ -1,0 +1,79 @@
+{
+ "piece": "watch/09-oncall-incident",
+ "title": "09 Pagewright: on-call page",
+ "pattern": "incident page",
+ "platform": "watchos",
+ "industry": "incident management / on-call (B2B devtools)",
+ "style": [
+  "dark",
+  "minimal",
+  "technical"
+ ],
+ "tags": [
+  "on-call",
+  "incident",
+  "severity",
+  "acknowledge",
+  "escalate",
+  "watch",
+  "watchos",
+  "B2B",
+  "dark"
+ ],
+ "score": 4,
+ "verdict": "keep",
+ "strengths": [
+  "Reads in one glance, in the right order: the 'SEV 1' tag, 'card-auth', 'Declines 31%, usually 4%', 'Open 14 min · INC-2291', then who is on it. Every mark is a fact or an action",
+  "One red used once, on the severity tag, with black text; no glow, rings, wordmark or gradient. It is the opposite of the old Hush orb",
+  "watchOS layout holds at 100%: the clock top right, one 18 px left edge, two full-width capsule buttons; the bottom capsule clears the 48 px display corner by about 2 px"
+ ],
+ "slop_signals": [
+  "Step order: 'Noor, Bastian on it' for 'Open 14 min' means someone already acknowledged the page, yet the primary button is 'Acknowledge'. An SRE buyer will notice: a page for an incident others are working is a responder request ('Join' or 'Accept'), not an acknowledgement",
+  "Conventional rather than ownable: a clean long-look notification that any on-call tool could ship; nothing in it is Pagewright's own",
+  "The two stacked buttons fill about 40% of the display, and the bottom capsule sits about 2 px from the display's corner curve, which looks cramped at full size",
+  "The initials discs 'NA' and 'BL' add a second way of saying who is on it, beside 'Noor, Bastian on it'"
+ ],
+ "fixes": [
+  "Fix the logic in one of two ways: make the primary 'Join incident' (secondary 'Escalate to tier 2'), or make it a fresh page nobody has taken ('Noor paged 3 min ago, no ack') and keep 'Acknowledge'",
+  "Drop the initials discs and keep the line 'Noor, Bastian on it'; use the freed row for one piece of data only this product has, such as a small 30-minute decline-rate trace that shows the step at 02:58",
+  "Inset the action stack 4 px more from the bottom so the lower capsule does not touch the corner curve"
+ ],
+ "references": [
+  {
+   "site": "Rivian",
+   "url": "https://mobbin.com/screens/c25ddb40-e4a0-4f77-a9a6-9996a8afa4ed",
+   "mobbin_url": "https://mobbin.com/screens/c25ddb40-e4a0-4f77-a9a6-9996a8afa4ed",
+   "what": "Alarm triggered: one statement, then two stacked full-width actions. The piece matches this structure and its quality"
+  },
+  {
+   "site": "Starlink",
+   "url": "https://mobbin.com/screens/80b46a69-ecc7-4754-ba88-72c0ea76ab69",
+   "mobbin_url": "https://mobbin.com/screens/80b46a69-ecc7-4754-ba88-72c0ea76ab69",
+   "what": "Outages: black, technical, times and durations in a column, red used only on the events. The same sober register, with data as the picture"
+  },
+  {
+   "site": "Linear Mobile",
+   "url": "https://mobbin.com/screens/a625482c-b708-4b6b-a9b2-1f4a4feb26f6",
+   "mobbin_url": "https://mobbin.com/screens/a625482c-b708-4b6b-a9b2-1f4a4feb26f6",
+   "what": "An issue ID and status as plain metadata above the title; the piece's 'INC-2291' line does the same"
+  },
+  {
+   "site": "Oura",
+   "url": "https://mobbin.com/screens/4e3a4957-3dbd-4cba-ba15-41bac9594a9f",
+   "mobbin_url": "https://mobbin.com/screens/4e3a4957-3dbd-4cba-ba15-41bac9594a9f",
+   "what": "A dark alert with one plain headline and one action, the numbers under it carrying the urgency"
+  }
+ ],
+ "audited": "2026-10-14",
+ "self_score": 4,
+ "facts": [],
+ "audited_by": "independent",
+ "fixed": [
+  "Main button now reads 'Join incident': two responders already acknowledged the page (orchestrator, 2026-10-14)"
+ ],
+ "owner": {
+  "verdict": "keep",
+  "said": "most of the watch screens are okay",
+  "date": "2026-10-14"
+ }
+}

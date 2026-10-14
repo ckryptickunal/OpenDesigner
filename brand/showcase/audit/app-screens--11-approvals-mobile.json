@@ -1,0 +1,83 @@
+{
+ "piece": "app-screens/11-approvals-mobile",
+ "title": "11 · Quillon: purchase request approval",
+ "pattern": "approval detail",
+ "platform": "ios",
+ "industry": "B2B procurement",
+ "style": [
+  "native",
+  "minimal",
+  "light"
+ ],
+ "tags": [
+  "approval detail",
+  "b2b",
+  "procurement",
+  "purchase request",
+  "approval chain",
+  "budget",
+  "ios",
+  "inset grouped",
+  "tab bar"
+ ],
+ "score": 4,
+ "verdict": "keep",
+ "strengths": [
+  "The consequence comes before the decision: 'If you approve' shows the Q4 Facilities budget bar (60% spent, +15% this request in ink, $23,340 left of $96,000, arithmetic exact) and the next step: 'Rhea Kapoor (CFO) approves next. Then PO-10482 goes to Ashbury, paid on Net 30.'",
+  "The policy line and the approval chain are plain and complete: 'Policy FIN-04: over $10,000 also needs the CFO', then four steps by shape and word (two filled checks, 'You' as a ring 'waiting since 09:40', the CFO hollow 'next')",
+  "Native iOS chrome rebuilt from shipped apps: status bar, '‹ Approvals' with a '1 of 4' title and previous and next arrows, inset-grouped cards, a decision bar with 'Decline' and 'Approve $14,860' at 50 pt, a labelled tab bar with a badge, Dynamic Type sizes 34/22/17/15/13/11"
+ ],
+ "slop_signals": [
+  "Uppercase grey section headers ('IF YOU APPROVE', 'APPROVALS · 2 OF 4 STEPS DONE') look older than current iOS work apps",
+  "Large grey 'Decline' pill beside an equally large green primary; the tab badge is a red '4' on a green filled icon, two status colors in the tab bar"
+ ],
+ "fixes": [
+  "Rename the app 'Quillon' (Fennick lists a vendor 'Quillon Software') and 'Owen Castillo' (heroes/10 has R. Castillo)",
+  "Use sentence-case section headers and a quieter Decline (text or outline) so the one decision reads first"
+ ],
+ "references": [
+  {
+   "site": "Brex",
+   "url": "https://mobbin.com/screens/ecf850cc-08cc-46ef-b321-8248107afc9e",
+   "what": "Approval status as a vertical timeline with pending reviewers; ours adds roles, times and why the CFO is next"
+  },
+  {
+   "site": "Remote Global HR",
+   "url": "https://mobbin.com/screens/0cbdcc18-5e9d-4678-8d0f-b8c2af3c49ab",
+   "what": "Decline and Approve pinned at the bottom with balance impact; ours shows the budget impact as a bar"
+  },
+  {
+   "site": "Instacart",
+   "url": "https://mobbin.com/screens/d4e4f075-e8d2-4292-be15-b0bf2031b0db",
+   "what": "Approval card stating the consequence and deadline; ours is more exact about money"
+  }
+ ],
+ "audited": "2026-10-14",
+ "self_score": 4,
+ "audited_by": "independent",
+ "facts": [
+  "mockups/10-multi-device (not edited): desktop.html links this piece's tokens.css, so it turns cobalt on its next render; ten copy and colour changes for it are listed in app-screens/11-approvals-mobile/notes.md under Round 3, and desktop.png and the mockup's shot.png need a re-render"
+ ],
+ "fixed": [
+  "Budget period 'Q4' (60% spent two weeks into the quarter) is now 'Jul–Dec' (3.5 of 6 months gone, 60% spent); amounts unchanged",
+  "Owen Castillo → Owen Marchetti; the app keeps the name Quillon and Fennick's vendor was renamed instead",
+  "Re-rendered shot.png at 390 × 844 pt, 3×"
+ ],
+ "owner": {
+  "verdict": "improve",
+  "said": "needs better spacing",
+  "date": "2026-10-14"
+ },
+ "round3": {
+  "score": 4,
+  "changed": [
+   "Tab bar hidden on this pushed screen; the decision bar is the only bottom bar (12 pt above 50 pt buttons, 34 pt home area), translucent, with a Details card scrolling under it",
+   "8 pt rhythm: 24 between sections, 8 header to card, 16 inside cards, 58 pt sign-off rows; all four steps above the bar",
+   "Type at iOS roles: names, labels and vendor at 17, details at 15, sentence-case headers at 13 regular",
+   "Own identity next to Fennick: cobalt accent through the engine, request ID 'PR-2207' as the title, whole dollars, its own section labels",
+   "Sign-off counted right (1 of 3 approved; the requester is an arrow), times in their own column, plain phrases, policy on the CFO's row",
+   "Budget legend no longer adds to 99%; graphic contrast raised (ring #868686, track #d2d2d2, spent #757575); Decline outlined, regular weight",
+   "Fresh-eyes audit: 3/5 then 4/5; its last four items applied"
+  ]
+ }
+}

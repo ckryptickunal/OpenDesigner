@@ -596,3 +596,38 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 - set_by: delegated · locked: no · date: 2026-10-14 · supersedes: D-0051 · source_ref: none
 - reason: owner rule: grey-ink secondary text, faint cream paper
 - previous value: "#A08F74"
+
+## D-0054 · raw.displayFace = "Newsreader"
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: D-0023 · source_ref: none
+- reason: Round 3: owner asked for better fonts. Fraunces with its SOFT and WONK axes read quirky; Newsreader (Production Type, OFL) is a calm text-and-display serif with an optical-size axis, made for reading
+- previous value: "Fraunces"
+
+## D-0055 · raw.textFace = "Schibsted Grotesk"
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: D-0024 · source_ref: none
+- reason: Round 3: owner asked for better fonts. A newspaper grotesk (OFL) with sturdier small sizes and clearer figures than Libre Franklin
+- previous value: "Libre Franklin"
+
+## D-0056 · raw.accentCount = 1
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+- reason: Round 3: one accent with one job. Tomato red marks the kicker and the running timer; checks are ink
+- previous value: 3
+
+## D-0057 · raw.secondaryColors = []
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: D-0020 · source_ref: none
+- reason: Round 3: the olive check and mustard are gone (one accent)
+- previous value: ["#5F6B2E", "#E2B44C"]
+
+## D-0058 · raw.neutralBase = "#8C8984"
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: D-0053 · source_ref: none
+- reason: Round 3: a near-neutral base so the page is clean off-white with near-black ink, not cream with brown ink next to an orange-red (house colour rule)
+- previous value: "#958A78"
+
+## D-0059 · dials.roundness = 45
+- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: D-0014 · source_ref: none
+- reason: Round 3: round photo buttons, a 16 pt timer card and pill stepper, as current iOS recipe apps draw them
+- previous value: 20
+
+## D-0060 · raw.displayFace = "Literata"
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: D-0054 · source_ref: none
+- reason: Round 3: Newsreader is already the serif of app-screens/08 (Undertow); Literata (OFL, optical sizes 7-72) is a reading serif with a warmer, bookish display cut that suits a cooking quarterly
+- previous value: "Newsreader"

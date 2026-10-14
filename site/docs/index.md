@@ -9,6 +9,8 @@ updated: 2026-10-14
 
 OpenDesigner is a free, open-source (MIT) add-on that helps you make a design system with the AI tool you already use, such as Claude, ChatGPT, Codex or Cursor. A design system is the set of rules for how your app looks: colors, text sizes, spacing, corners, depth, motion and parts like buttons. OpenDesigner asks a few plain questions, suggests an answer for each with a reason, checks the result, and saves the rules as files in your project.
 
+{{figure:index-how-it-works}}
+
 ## What it does
 
 - **It reads your project first.** It looks at your CSS, Tailwind config, `package.json`, token files, logo and font files. It doesn't ask what a file already answers.
@@ -24,6 +26,8 @@ OpenDesigner is a free, open-source (MIT) add-on that helps you make a design sy
 ### Students and beginners
 
 You don't need to know design words. It asks one question at a time, suggests an answer, and explains each new term in one line.
+
+{{figure:index-question-card}}
 
 ### Product designers
 
@@ -53,7 +57,7 @@ It reads what exists, fills the gaps, and leaves a system that later changes can
 - Your own AI tool and plan. OpenDesigner is free, but the AI is not part of it. Your chat goes to your AI provider, as with any prompt.
 - Python 3.10 or newer for the engine. In the Claude app, code execution must be on.
 
-## The five skills
+## The eight skills
 
 A skill is a set of instructions your AI tool loads when a task needs it.
 
@@ -62,6 +66,9 @@ A skill is a set of instructions your AI tool loads when a task needs it.
 - **opendesigner-extend** changes or extends a system you already made.
 - **opendesigner-export** gets the system into code, Figma or Paper.
 - **opendesigner-illustrate** finds open-licence illustrations, ranks them and recolors them to your tokens.
+- **opendesigner-review** checks a built interface like a careful user would: every screen size and theme, scrolling, hover, keyboard and motion, with measured spacing, type, fonts and contrast, and evidence for each finding.
+- **opendesigner-paint** makes original art painted in code in your palette: hero films, loops and still paintings in styles such as watercolour, sketch or woodcut.
+- **opendesigner-preflight** checks anything visual before you export or share it (a page, a deck, a video, a card) for the small mistakes that make it look cheap or wrong.
 
 ## How early it is
 

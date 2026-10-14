@@ -13,11 +13,12 @@
    OFF-TOKEN notes are inline where a value steps outside the system on purpose. */
 :root {
   --ink: var(--ds-color-text-primary);
-  --paper: var(--ds-color-surface-sunken);
+  --paper: var(--ds-color-neutral-light-2);   /* round 3: paper white, not parchment (the engine's sunken step is a shade too grey for a whole page) */
   --rule: var(--ds-color-border-subtle);
   --fb: var(--ds-motion-transition-feedback-duration) var(--ds-motion-transition-feedback-easing);
   --serif: var(--ds-font-family-display);
 }
+[data-theme="dark"] { --ds-color-border-focus: var(--ds-color-neutral-dark-12); }   /* raw.focusColor is one value for both themes; dark needs the light ink */
 * { box-sizing: border-box; }
 html, body { margin: 0; }
 body {
@@ -27,9 +28,7 @@ body {
   font: var(--ds-text-body-md);
   -webkit-font-smoothing: antialiased;
 }
-/* paper grain: decorative noise, 5% */
-body::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .05; mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3 0 0 0 0 .25 0 0 0 0 .2 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E"); }
+/* round 3: the paper grain is gone with the parchment */
 button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
 :focus-visible, .is-focus { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
 svg.i { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; flex: none; }
@@ -51,13 +50,13 @@ svg.i { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-widt
 .col-l { display: flex; flex-direction: column; }
 .col-r { display: flex; flex-direction: column; gap: var(--ds-space-12); padding-top: 4px; }
 .lab { display: flex; align-items: baseline; gap: var(--ds-space-8); margin-bottom: var(--ds-space-8); }
-.lab .sc b { color: var(--ds-color-text-accent); font-weight: 600; }
+.lab .sc b { color: var(--ink); font-weight: 600; }
 .lab .note { font: italic 400 var(--ds-font-size-13)/1.3 var(--serif); color: var(--ds-color-text-secondary); margin-left: auto; }
 
 /* answer excerpt */
 .answer { position: relative; padding: 0 40px 0 0; }
 .answer .who { display: flex; align-items: center; gap: var(--ds-space-8); margin-bottom: var(--ds-space-8); }
-.answer .who .dot { width: 6px; height: 6px; border-radius: var(--ds-radius-full); background: var(--ds-color-bg-accent-bold); }
+.answer .who .dot { width: 6px; height: 6px; border-radius: var(--ds-radius-full); background: var(--ink); }
 .answer p { margin: 0; font: 400 var(--ds-font-size-20)/1.5 var(--serif); font-variation-settings: "opsz" 20; color: var(--ink); text-wrap: pretty; }
 .answer em { font-style: italic; }
 .cite { display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 5px; margin: 0 0 0 2px; vertical-align: 3px; border-radius: var(--ds-radius-detail); background: var(--ds-color-bg-accent-subtle); color: var(--ds-color-text-accent); font: 600 var(--ds-font-size-13)/1 var(--ds-font-family-text); transition: background-color var(--fb); }
@@ -67,16 +66,15 @@ svg.i { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-widt
 .srcs i { font-family: var(--serif); }
 
 /* composer (hero) */
-.composer { position: relative; margin-top: 28px; background: var(--ds-color-surface-base); border: 1px solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-overlay); box-shadow: var(--ds-elevation-floating); transition: border-color var(--fb), box-shadow var(--fb); }
-.composer:focus-within, .composer.is-focus-within { border-color: var(--ds-color-border-accent); box-shadow: var(--ds-elevation-floating), 0 0 0 3px var(--ds-color-bg-accent-subtle); }
-.composer.drag { border-style: dashed; border-color: var(--ds-color-border-accent); background: var(--ds-color-accent-light-2); }
+.composer { position: relative; margin-top: 28px; background: var(--ds-color-white); border: 1px solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-overlay); box-shadow: var(--ds-elevation-floating); transition: border-color var(--fb), box-shadow var(--fb); }
+.composer:focus-within, .composer.is-focus-within { border-color: var(--ink); }
+.composer.drag { border-style: dashed; border-color: var(--ds-color-accent-light-9); background: var(--ds-color-white); }
 .atts { display: flex; gap: var(--ds-space-8); padding: var(--ds-space-16) var(--ds-space-16) 0; }
 .att { position: relative; display: flex; align-items: center; gap: var(--ds-space-12); height: 60px; padding: 0 var(--ds-space-12) 0 var(--ds-space-8); min-width: 0; flex: 0 1 236px; border: 1px solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-control); background: var(--ds-color-surface-raised); transition: border-color var(--fb); }
 .att:hover, .att.is-hover { border-color: var(--ds-color-border-default); }
 .att .doc { position: relative; width: 36px; height: 44px; flex: none; border-radius: 4px 12px 4px 4px; display: grid; place-items: center; font: italic 500 var(--ds-font-size-20)/1 var(--serif); }
-.att .doc.pdf { background: var(--ds-color-bg-accent-subtle); color: var(--ds-color-text-accent); }
-.att .doc.web { background: var(--ds-color-bg-info-subtle); color: var(--ds-color-text-info); }
-.att .doc.csv { background: var(--ds-color-bg-success-subtle); color: var(--ds-color-text-success); }
+/* round 3: one neutral tile for every source type; the glyph says the type, so blue stays for actions */
+.att .doc.pdf, .att .doc.web, .att .doc.csv { background: var(--ds-color-bg-neutral-subtle); color: var(--ink); }
 .att .t { min-width: 0; }
 .att .n { display: block; font: var(--ds-text-label-sm); color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .att .m { display: block; font: var(--ds-text-body-sm); color: var(--ds-color-text-tertiary); white-space: nowrap; }
@@ -85,13 +83,13 @@ svg.i { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-widt
 .att .x svg { width: 12px; height: 12px; stroke-width: 2; }
 .ring { width: 36px; height: 36px; flex: none; }
 .ring circle { fill: none; stroke-width: 3; }
-.att.err { border-color: var(--ds-color-border-danger); background: var(--ds-color-bg-danger-subtle); }
+.att.err { border-color: var(--ds-color-border-subtle); background: var(--ds-color-surface-raised); }
 .att.err .m { color: var(--ds-color-text-danger); }
 
-.input { min-height: 84px; padding: var(--ds-space-16) var(--ds-space-20) var(--ds-space-8); font: 400 var(--ds-font-size-20)/1.5 var(--ds-font-family-text); color: var(--ink); outline: none; caret-color: var(--ds-color-bg-accent-bold); }
+.input { min-height: 84px; padding: var(--ds-space-16) var(--ds-space-20) var(--ds-space-8); font: 400 var(--ds-font-size-20)/1.5 var(--ds-font-family-text); color: var(--ink); outline: none; caret-color: var(--ink); }
 .input:empty::before { content: attr(data-ph); color: var(--ds-color-text-tertiary); }
 .mention { display: inline-flex; align-items: center; gap: 4px; padding: 0 6px; border-radius: var(--ds-radius-detail); background: var(--ds-color-bg-accent-subtle); color: var(--ds-color-text-accent); font: 500 1em/1.25 var(--ds-font-family-text); }
-.caret { display: inline-block; width: 2px; height: 1.1em; vertical-align: -3px; background: var(--ds-color-bg-accent-bold); animation: blink 1.1s steps(1) infinite; margin-left: 1px; }
+.caret { display: inline-block; width: 2px; height: 1.1em; vertical-align: -3px; background: var(--ink); animation: blink 1.1s steps(1) infinite; margin-left: 1px; }
 @keyframes blink { 50% { opacity: 0; } }
 
 .bar { display: flex; align-items: center; gap: var(--ds-space-8); padding: var(--ds-space-8) var(--ds-space-12) var(--ds-space-12); }
@@ -108,10 +106,10 @@ svg.i { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-widt
 .pill .chev { width: 14px; height: 14px; color: var(--ds-color-icon-subtle); }
 .hint { margin-left: auto; font: var(--ds-text-body-sm); color: var(--ds-color-text-tertiary); display: flex; gap: var(--ds-space-12); }
 .hint kbd { font: 500 var(--ds-font-size-13)/1 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
-.send { width: 44px; height: 44px; border-radius: var(--ds-radius-full); display: grid; place-items: center; background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); transition: background-color var(--fb), transform var(--fb); }
+.send { width: 44px; height: 44px; border-radius: var(--ds-radius-full); display: grid; place-items: center; background: var(--ink); color: var(--ds-color-white); transition: background-color var(--fb), transform var(--fb); }
 .send svg { width: 20px; height: 20px; stroke-width: 2; }
-.send:hover, .send.is-hover { background: var(--ds-color-bg-action-primary-hover); }
-.send:active, .send.is-active { background: var(--ds-color-bg-action-primary-pressed); transform: scale(var(--ds-motion-scale-press)); }
+.send:hover, .send.is-hover { background: color-mix(in srgb, var(--ink) 84%, white); }
+.send:active, .send.is-active { background: var(--ds-color-black, #000); transform: scale(var(--ds-motion-scale-press)); }
 .send:disabled, .send.is-disabled { background: var(--ds-color-bg-disabled); color: var(--ds-color-text-disabled); cursor: not-allowed; }
 .send.stop { background: var(--ds-color-bg-inverse); color: var(--ds-color-text-inverse); }
 .send.stop .sq { width: 12px; height: 12px; border-radius: 3px; background: currentColor; }
@@ -132,27 +130,27 @@ svg.i { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-widt
 .opt .on { font: var(--ds-text-label-md); color: var(--ink); display: flex; gap: 8px; align-items: baseline; }
 .opt .on em { font: 400 var(--ds-font-size-13)/1 var(--ds-font-family-text); font-style: normal; color: var(--ds-color-text-secondary); }
 .opt .od { display: block; font: var(--ds-text-body-sm); color: var(--ds-color-text-secondary); }
-.opt .ck { color: var(--ds-color-text-accent); opacity: 0; margin-top: 4px; }
+.opt .ck { color: var(--ink); opacity: 0; margin-top: 4px; }
 .opt[aria-checked="true"] .ck { opacity: 1; }
 .menu .mf { display: flex; align-items: center; gap: 6px; margin-top: var(--ds-space-4); padding: var(--ds-space-8); border-top: 1px solid var(--rule); font: var(--ds-text-body-sm); color: var(--ds-color-text-tertiary); }
 .menu .mf svg { width: 14px; height: 14px; }
-.slow { font: 500 var(--ds-font-size-13)/1 var(--ds-font-family-text); color: var(--ds-color-text-warning); background: var(--ds-color-bg-warning-subtle); padding: 2px 6px; border-radius: var(--ds-radius-detail); }
+.slow { font: 500 var(--ds-font-size-13)/1 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
 
 /* minis */
 .minis { display: grid; grid-template-columns: 1fr 1fr; gap: var(--ds-space-20); margin-top: 28px; }
-.mini { background: var(--ds-color-surface-base); border: 1px solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); padding: var(--ds-space-12); }
+.mini { background: var(--ds-color-white); border: 1px solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); padding: var(--ds-space-12); }
 .mini .input { min-height: 0; padding: var(--ds-space-4) var(--ds-space-8) var(--ds-space-12); font-size: var(--ds-font-size-16); }
 .mini .bar { padding: 0; }
 .mini .send { width: 36px; height: 36px; }
 .mini .send svg { width: 16px; height: 16px; }
 .sugs { display: flex; flex-wrap: wrap; gap: var(--ds-space-6); margin: var(--ds-space-12) 0 0; }
 .sug { height: 32px; padding: 0 var(--ds-space-12); border-radius: var(--ds-radius-full); border: 1px solid var(--ds-color-border-subtle); font: italic 400 var(--ds-font-size-16)/1 var(--serif); color: var(--ds-color-text-secondary); transition: border-color var(--fb), color var(--fb), background-color var(--fb); }
-.sug:hover { border-color: var(--ds-color-border-accent); color: var(--ds-color-text-accent); background: var(--ds-color-accent-light-2); }
+.sug:hover { border-color: var(--ds-color-border-strong); color: var(--ink); background: var(--ds-color-white); }
 .status { display: flex; align-items: center; gap: var(--ds-space-8); padding: var(--ds-space-4) var(--ds-space-8) var(--ds-space-12); font: italic 400 var(--ds-font-size-16)/1.4 var(--serif); color: var(--ds-color-text-secondary); }
-.status .pulse { width: 8px; height: 8px; border-radius: var(--ds-radius-full); background: var(--ds-color-bg-accent-bold); animation: pulse 1.4s var(--ds-motion-easing-standard) infinite; flex: none; }
+.status .pulse { width: 8px; height: 8px; border-radius: var(--ds-radius-full); background: var(--ink); animation: pulse 1.4s var(--ds-motion-easing-standard) infinite; flex: none; }
 @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .35; transform: scale(.7); } }
 .read { flex: 1; height: 3px; border-radius: var(--ds-radius-full); background: var(--ds-color-bg-neutral-subtle); overflow: hidden; }
-.read span { display: block; height: 100%; width: 38%; background: var(--ds-color-bg-accent-bold); border-radius: inherit; }
+.read span { display: block; height: 100%; width: 38%; background: var(--ink); border-radius: inherit; }
 
 /* right column specs */
 .spec { background: transparent; }
@@ -164,15 +162,15 @@ svg.i { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-widt
 .attcol .att { flex: none; width: 100%; height: 52px; }
 .attcol .att .doc { width: 30px; height: 36px; font-size: var(--ds-font-size-16); }
 .attrow { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--ds-space-8); }
-.errbox { display: flex; gap: var(--ds-space-12); align-items: center; padding: var(--ds-space-12) var(--ds-space-16); border-radius: var(--ds-radius-container); background: var(--ds-color-bg-danger-subtle); border: 1px solid var(--ds-color-border-danger); }
+.errbox { display: flex; gap: var(--ds-space-12); align-items: center; padding: var(--ds-space-12) var(--ds-space-16); border-radius: var(--ds-radius-container); background: var(--ds-color-white); border: 1px solid var(--ds-color-border-subtle); }
 .errbox .t { flex: 1; }
 .errbox b { display: block; font: var(--ds-text-label-md); color: var(--ds-color-text-danger); }
 .errbox span { font: var(--ds-text-body-sm); color: var(--ink); }
-.btn-s { height: 32px; padding: 0 var(--ds-space-12); border-radius: var(--ds-radius-full); font: var(--ds-text-label-md); border: 1px solid var(--ds-color-border-danger); color: var(--ds-color-text-danger); background: var(--ds-color-surface-raised); display: inline-flex; align-items: center; gap: 6px; transition: background-color var(--fb); }
-.btn-s:hover { background: var(--ds-color-danger-light-2); }
+.btn-s { height: 32px; padding: 0 var(--ds-space-12); border-radius: var(--ds-radius-full); font: var(--ds-text-label-md); border: 1px solid var(--ds-color-border-default); color: var(--ink); background: var(--ds-color-white); display: inline-flex; align-items: center; gap: 6px; transition: background-color var(--fb); }
+.btn-s:hover { background: var(--ds-color-neutral-light-2); }
 .btn-s svg { width: 14px; height: 14px; }
 
-.drop { display: flex; align-items: center; gap: var(--ds-space-16); padding: var(--ds-space-12) var(--ds-space-20); border: 1.5px dashed var(--ds-color-border-accent); border-radius: var(--ds-radius-container); background: var(--ds-color-accent-light-2); }
+.drop { display: flex; align-items: center; gap: var(--ds-space-16); padding: var(--ds-space-12) var(--ds-space-20); border: 1.5px dashed var(--ds-color-accent-light-9); border-radius: var(--ds-radius-container); background: var(--ds-color-white); }
 .drop b { display: block; font: italic 500 var(--ds-font-size-20)/1.2 var(--serif); color: var(--ds-color-text-accent); }
 .drop span { font: var(--ds-text-body-sm); color: var(--ds-color-text-secondary); }
 @media (prefers-reduced-motion: reduce) {
@@ -202,12 +200,12 @@ svg.i { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-widt
       <div class="srcs"><span id="s1"><b>1</b><i>Keller, Tidal Commons</i>, 1987, p. 14</span><span id="s2"><b>2</b><i>Saltings field interviews</i>, 2019, #0412</span></div>
     </article>
 
-    <div class="lab" style="margin-top:28px;margin-bottom:-16px"><span class="sc"><b>Hero</b> · typing, three sources attached, one uploading</span><span class="note">focus ring is the soft terracotta halo</span></div>
+    <div class="lab" style="margin-top:28px;margin-bottom:-16px"><span class="sc"><b>Hero</b> · typing, three sources attached, one uploading</span><span class="note">focus is a 1 px ink border</span></div>
     <section class="composer is-focus-within" id="composer" aria-label="Ask Oriel">
       <div class="atts" id="atts">
         <div class="att"><span class="doc pdf" aria-hidden="true">¶</span><span class="t"><span class="n">Keller – Tidal Commons.pdf</span><span class="m">PDF · 42 pages</span></span><button class="x" aria-label="Remove Keller – Tidal Commons.pdf"><svg class="i" viewBox="0 0 12 12"><path d="m3 3 6 6M9 3 3 9"/></svg></button></div>
         <div class="att"><span class="doc csv" aria-hidden="true">#</span><span class="t"><span class="n">saltings-interviews.csv</span><span class="m">Table · 1,204 rows</span></span><button class="x" aria-label="Remove saltings-interviews.csv"><svg class="i" viewBox="0 0 12 12"><path d="m3 3 6 6M9 3 3 9"/></svg></button></div>
-        <div class="att"><svg class="ring" viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="14" stroke="var(--ds-color-bg-neutral-subtle)"/><circle cx="18" cy="18" r="14" stroke="var(--ds-color-bg-accent-bold)" stroke-dasharray="54.6 88" stroke-linecap="round" transform="rotate(-90 18 18)"/></svg><span class="t"><span class="n">Harbour board minutes 1931–38</span><span class="m" role="status">Uploading · 62%</span></span><button class="x" aria-label="Cancel upload"><svg class="i" viewBox="0 0 12 12"><path d="m3 3 6 6M9 3 3 9"/></svg></button></div>
+        <div class="att"><svg class="ring" viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="14" stroke="var(--ds-color-bg-neutral-subtle)"/><circle cx="18" cy="18" r="14" stroke="var(--ink)" stroke-dasharray="54.6 88" stroke-linecap="round" transform="rotate(-90 18 18)"/></svg><span class="t"><span class="n">Harbour board minutes 1931–38</span><span class="m" role="status">Uploading · 62%</span></span><button class="x" aria-label="Cancel upload"><svg class="i" viewBox="0 0 12 12"><path d="m3 3 6 6M9 3 3 9"/></svg></button></div>
       </div>
       <div class="input" id="input" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Message" data-ph="Ask about your sources…">Now set that against the <span class="mention" contenteditable="false">@Harbour minutes</span>. Where do they contradict Keller on who may dredge the flats?<span class="caret" aria-hidden="true"></span></div>
       <div class="bar">
@@ -291,7 +289,7 @@ svg.i { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-widt
     <div class="spec">
       <div class="lab"><span class="sc"><b>Drop</b> · dragging files in</span><span class="note">the whole composer is the target</span></div>
       <div class="drop" aria-hidden="true">
-        <svg viewBox="0 0 40 40" width="36" height="36"><path d="M11 6h13l7 7v21H11z" fill="var(--ds-color-surface-raised)" stroke="var(--ds-color-border-accent)" stroke-width="1.5"/><path d="M24 6v7h7" fill="none" stroke="var(--ds-color-border-accent)" stroke-width="1.5"/><path d="M21 28v-9M17 22.5l4-4 4 4" fill="none" stroke="var(--ds-color-bg-accent-bold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg viewBox="0 0 40 40" width="36" height="36"><path d="M11 6h13l7 7v21H11z" fill="var(--ds-color-surface-raised)" stroke="var(--ds-color-accent-light-9)" stroke-width="1.5"/><path d="M24 6v7h7" fill="none" stroke="var(--ds-color-accent-light-9)" stroke-width="1.5"/><path d="M21 28v-9M17 22.5l4-4 4 4" fill="none" stroke="var(--ds-color-bg-accent-bold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <div><b>Drop to add as a source</b><span>PDF, EPUB, CSV, notes or a link · up to 50 MB each</span></div>
       </div>
     </div>

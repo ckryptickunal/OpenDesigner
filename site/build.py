@@ -22,7 +22,7 @@ import urllib.request
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SITE = ROOT / "site"
-DIST = SITE / "dist"
+DIST = pathlib.Path(os.environ.get("SITE_DIST") or SITE / "dist")  # SITE_DIST: build elsewhere while someone else builds here
 CACHE = SITE / ".cache"
 DOCS = SITE / "docs"
 BRAND = ROOT / "brand"
@@ -37,8 +37,31 @@ NAME = "OpenDesigner"
 ONE_LINER = ("OpenDesigner is a free, open-source set of skills and a small engine for the AI you already use. It asks the decisions "
              "a design system needs, suggests a sourced default for each, checks accessibility, and writes design tokens, CSS, "
              "a Tailwind theme and a DESIGN.md that your team and your AI build from.")
+TEAM_CHECKS = [("A decision log", "with the reason and who set each value, append-only."),
+               ("Locked values", "that the skills refuse to change without the owner's consent."),
+               ("House and project standards", "applied on every build, each with its reason."),
+               ("A drift check", "that names the token to use instead of a hard-coded value."),
+               ("DTCG 2025.10 tokens", "with a resolver for light and dark, density and motion."),
+               ("Runs locally,", "with no account and no server: your repository's access control applies.")]
+STARTS = [("Getting started", "Install", "Two commands in Claude Code, or a skills folder in other tools.", "/docs/install/"),
+          ("Getting started", "Your first design system", "Five questions, the files you get, and what to look at first.", "/docs/quickstart/"),
+          ("Guides", "For design-system teams", "Decision log, locks, standards, drift checks and a pilot plan.", "/docs/enterprise/"),
+          ("Reference", "How it works", "From your answers to tokens, exports and checks.", "/docs/how-it-works/")]
 HERO_LEDE = ("It asks the decisions a design system needs, one at a time, and suggests a sourced default for each. It checks contrast "
              "and writes design tokens, CSS, a Tailwind theme and a DESIGN.md that your team and your coding agents build from. Free and open source.")
+FIGURES = SITE / "figures"
+FIG_RE = re.compile(r"^\{\{figure:([a-z0-9-]+)\}\}$")
+# Photo scenes for figures: free Unsplash photos (licence checked 2026-10-14, abstract, no logos). A figure asks for one with data-scene="name".
+SCENES = {
+    "blue-gradient": ("photo-1760865245520-21b0786f5236", "Philipp Hubert", "dVVjhUcdb30"),
+    "blue-waves": ("photo-1618853606840-d2138cef5431", "Marcel Strauß", "h7Lh0f74A6Y"),
+    "sky-trees": ("photo-1532935702929-2a7df164ddea", "Photoholgic", "HVQnG6JxxY0"),
+    "forest": ("photo-1786797773538-9fb650c5c7c7", "Harshal Tandel", "BrzWSKWCuWo"),
+    "blue-soft": ("photo-1645811791231-279658fb46dc", "Sean Fahrenbruch", "kxL6jPPNEWc"),
+    "woods-sage": ("photo-1737279722244-4b5f5b896c6b", "Annie Spratt", "5yKrcO8FKwM"),
+    "blue-stripes": ("photo-1608488576473-c4ff7000870c", "Eduardo Drapier", "7Ae5sfgyfc0"),
+    "blue-pattern": ("photo-1749497268209-c167ed52b682", "Maxim Berg", "XTGTa3Ry6H4"),
+}
 SECTIONS = ["Getting started", "Guides", "Concepts", "Reference"]
 REDIRECTS = {"/install/": "/docs/install/", "/how-it-works/": "/docs/how-it-works/", "/faq/": "/docs/faq/",
              "/what-is-a-design-system/": "/docs/design-systems/"}
@@ -103,6 +126,18 @@ def tokens_css():
     return f":root {{\n{light}\n{root}\n  color-scheme: light;\n}}\n.theme-cobalt {{\n{cobalt}\n}}\n"
 
 
+def status_css():
+    """Success, warning and danger from the brand's own generated tokens, for the figure kit's chips (fallbacks live in figures.css)."""
+    css = (BRAND / "opendesigner/build/css/tokens.css").read_text()
+    out = []
+    for var, name in (("ok", "success"), ("warn", "warning"), ("bad", "danger")):
+        strong = re.search(rf"--ds-color-{name}-light-11:\s*([^;]+);", css)
+        soft = re.search(rf"--ds-color-{name}-light-2:\s*([^;]+);", css)
+        if strong and soft:
+            out.append(f"--{var}:{strong.group(1).strip()};--{var}-soft:{soft.group(1).strip()};")
+    return (":root{" + "".join(out) + "}\n") if out else ""
+
+
 # ---------------------------------------------------------------- Markdown (headings, lists, code, links, bold)
 def slugify(s):
     return re.sub(r"[^a-z0-9]+", "-", re.sub(r"<[^>]+>", "", s).lower()).strip("-")
@@ -121,6 +156,10 @@ def md_to_html(md, toc=None):
     out, lines, i = [], md.strip().splitlines(), 0
     while i < len(lines):
         ln = lines[i]
+        fm = FIG_RE.match(ln.strip())
+        if fm:
+            out.append(figure(fm.group(1))); i += 1
+            continue
         if ln.startswith("```"):
             j, code = i + 1, []
             while j < len(lines) and not lines[j].startswith("```"):
@@ -164,7 +203,7 @@ def md_to_html(md, toc=None):
             continue
         elif ln.strip():
             para = [ln]
-            while i + 1 < len(lines) and lines[i + 1].strip() and not re.match(r"^(#|```|> |\d+\. |- |\|)", lines[i + 1]):
+            while i + 1 < len(lines) and lines[i + 1].strip() and not re.match(r"^(#|```|> |\d+\. |- |\||\{\{figure)", lines[i + 1]):
                 i += 1; para.append(lines[i])
             out.append(f"<p>{inline(' '.join(para))}</p>")
         i += 1
@@ -172,7 +211,35 @@ def md_to_html(md, toc=None):
 
 
 def plain(s):
+    s = re.sub(r"\{\{figure:[a-z0-9-]+\}\}", "", s)
     return re.sub(r"[`*]", "", re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", s)).strip()
+
+
+def figure(name):
+    """Inline site/figures/<name>.html, a figure drawn with the kit in static/figures.css. A data-scene gets its photo and credit."""
+    f = FIGURES / f"{name}.html"
+    if not f.exists():
+        raise SystemExit(f"figure not found: {f}")
+    h = f.read_text().strip()
+    if not h.startswith("<figure") or "<figcaption" not in h or not h.endswith("</figure>"):
+        raise SystemExit(f"figure {name}: must be a single <figure class=\"fig\"> ending in <figcaption>...</figcaption></figure>")
+    if "<script" in h or "<img" in h or "http" in h:
+        raise SystemExit(f"figure {name}: no scripts, images or external links inside figures")
+    for key in re.findall(r'data-scene="([a-z0-9-]+)"', h):
+        pid, author, page_id = SCENES[key]
+        h = h.replace(f'data-scene="{key}"', f'style="background-image:url(https://images.unsplash.com/{pid}?auto=format&fit=crop&w=1400&q=70)"', 1)
+        h = h.replace("</figcaption>", f' Photo: <a href="https://unsplash.com/photos/{page_id}">{esc(author)}</a> on Unsplash.</figcaption>', 1)
+    return h
+
+
+def figure_caption(name):
+    m = re.search(r"<figcaption[^>]*>(.*?)</figcaption>", (FIGURES / f"{name}.html").read_text(), re.S)
+    return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", m.group(1))).strip() if m else ""
+
+
+def strip_figures(md):
+    """The Markdown copies and llms-full.txt keep each figure as its caption."""
+    return re.sub(r"^\{\{figure:([a-z0-9-]+)\}\}$", lambda m: f"*Figure: {figure_caption(m.group(1))}*", md, flags=re.M)
 
 
 def load_docs():
@@ -194,6 +261,7 @@ GH_ICON = ('<svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16"><
            '0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07'
            '-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 '
            '2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>')
+ARROW = '<svg class="arrow" aria-hidden="true" viewBox="0 0 14 14"><path d="M3 11L11 3M5 3h6v6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 CHEVRON = '<svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>'
 STATE = {"stars": ""}
 CUR, EAGER, LAZY = ' aria-current="page"', ' fetchpriority="high"', ' loading="lazy"'
@@ -230,8 +298,8 @@ def sidebar(pages, current):
         if not items:
             continue
         lis = "".join(f'<li><a href="{p["path"]}"{CUR if p["path"] == current else ""}>{esc(p["title"])}</a></li>' for p in items)
-        groups.append(f'<div class="side-group"><h2 class="side-h">{sec}</h2><ul>{lis}</ul></div>')
-    show = f'<div class="side-group"><h2 class="side-h">Examples</h2><ul><li><a href="/showcase/"{CUR if current == "/showcase/" else ""}>Showcase</a></li></ul></div>'
+        groups.append(f'<div class="side-group"><h2 class="side-h kicker">{sec}</h2><ul>{lis}</ul></div>')
+    show = f'<div class="side-group"><h2 class="side-h kicker">Examples</h2><ul><li><a href="/showcase/"{CUR if current == "/showcase/" else ""}>Showcase</a></li></ul></div>'
     return (f'<aside class="side" aria-label="Documentation"><details class="side-mobile"><summary>Documentation menu</summary>'
             f'<nav>{"".join(groups)}{show}</nav></details><nav class="side-desk">{"".join(groups)}{show}</nav></aside>')
 
@@ -277,7 +345,7 @@ def shell(path, seo_title, description, main_html, pages, ld=(), og="/og/home.pn
 <a class="skip" href="#main">Skip to content</a>
 <header class="bar"><div class="bar-in">
 <a class="brand" href="/" aria-label="{NAME} home">{lockup()}</a>
-<nav class="top-nav" aria-label="Main"><a href="/docs/"{CUR if path.startswith("/docs/") else ""}>Docs</a><a href="/docs/install/">Install</a><a href="/showcase/"{CUR if path == "/showcase/" else ""}>Showcase</a></nav>
+<nav class="top-nav" aria-label="Main"><a href="/docs/"{CUR if path.startswith("/docs/") else ""}>Docs</a><a href="/docs/install/">Install</a><a href="/docs/enterprise/">For teams</a><a href="/showcase/"{CUR if path == "/showcase/" else ""}>Showcase</a></nav>
 <a class="gh-btn" href="{GH}">{GH_ICON}<span>GitHub</span><span class="gh-count" data-stars>{STATE["stars"]}</span></a>
 </div></header>
 <div class="layout{" wide" if wide else ""}">
@@ -295,12 +363,14 @@ def shell(path, seo_title, description, main_html, pages, ld=(), og="/og/home.pn
 
 def footer(pages):
     by = {s: [p for p in pages if p["section"] == s][:6] for s in SECTIONS}
-    cols = "".join(f'<div><h2 class="foot-h">{s}</h2><ul>' + "".join(f'<li><a href="{p["path"]}">{esc(p["title"])}</a></li>' for p in ps) + "</ul></div>"
+    cols = "".join(f'<div><h2 class="foot-h kicker">{s}</h2><ul>' + "".join(f'<li><a href="{p["path"]}">{esc(p["title"])}</a></li>' for p in ps) + "</ul></div>"
                    for s, ps in by.items() if ps)
-    proj = (f'<div><h2 class="foot-h">Project</h2><ul><li><a href="{GH}">GitHub</a></li><li><a href="{GH}/issues/new/choose">Report a problem</a></li>'
+    trust = (f'<div><h2 class="foot-h kicker">Trust</h2><ul><li><a href="/docs/security/">Security and data</a></li><li><a href="{GH}/blob/main/SECURITY.md">Report a vulnerability</a></li>'
+             f'<li><a href="{GH}/blob/main/CHANGELOG.md">Changelog</a></li><li><a href="{GH}/blob/main/LICENSE">Licence (MIT)</a></li></ul></div>')
+    proj = (f'<div><h2 class="foot-h kicker">Project</h2><ul><li><a href="{GH}">GitHub</a></li><li><a href="{GH}/issues/new/choose">Report a problem</a></li>'
             f'<li><a href="/showcase/">Showcase</a></li><li><a href="/llms.txt">llms.txt</a></li><li><a href="/sitemap.xml">Sitemap</a></li></ul></div>')
     return (f'<footer class="foot"><div class="foot-in"><div class="foot-brand">{lockup()}<p>Free and open source. MIT for code, '
-            f'CC BY 4.0 for docs.</p></div>{cols}{proj}</div><p class="foot-legal">OpenDesigner is an independent open-source project. Claude, '
+            f'CC BY 4.0 for docs.</p></div>{cols}{trust}{proj}</div><p class="foot-legal">OpenDesigner is an independent open-source project. Claude, '
             f'ChatGPT, Codex, Cursor, Figma and other names belong to their owners and appear only to say where OpenDesigner runs. Photos: Unsplash '
             f'photographers, credited where shown. Updated {TODAY}.</p></footer>')
 
@@ -322,37 +392,41 @@ def landing(pages, facts, faq):
               ["CSS variables, a Tailwind v4 theme, Swift and Compose files from one source.",
                "DESIGN.md and an AGENTS.md note keep coding agents on the system.",
                "`engine.py review` names the token to use instead of a hard-coded value."])]
-    rows = "".join(f'<li><a href="{p["path"]}"><span class="row-t">{esc(p["title"])}</span><span class="row-s">{p["section"]}</span>{CHEVRON}</a></li>' for p in pages)
+    rows = "".join(f'<li><a href="{p["path"]}"><span class="row-n num">{i + 1:02d}</span><span class="row-t">{esc(p["title"])}</span><span class="row-s">{p["section"]}</span>{CHEVRON}</a></li>' for i, p in enumerate(pages))
     n = lambda v: "—" if v is None else f"{v:,}"
     faq_html = "".join(f'<details class="qa"><summary><h3>{esc(q)}</h3></summary><div class="ans">{md_to_html(a)}</div></details>' for q, a in faq[:5])
     body = f"""
 <section class="hero">
-<p class="pill"><span>Open source · MIT</span><a href="/docs/decisions/">New: your whole system on one page {CHEVRON}</a></p>
+<p class="intro"><span class="intro-dot" aria-hidden="true"></span><span>Open source, MIT. New: your whole system on one page.</span><a href="/docs/decisions/">Read how {ARROW}</a></p>
 <h1 class="t-hero">Build a design system <strong>with the AI you already use</strong>, and keep it consistent.</h1>
 <p class="lede">{HERO_LEDE}</p>
 <div class="cta-row">
 <a class="btn primary" href="/docs/install/">Install</a>
 <a class="btn secondary" href="/docs/">Read the docs</a>
-<button class="btn ghost copy" type="button" data-copy-text="/plugin marketplace add ckryptickunal/OpenDesigner
-/plugin install opendesigner@opendesigner">Copy the Claude Code install</button>
 </div>
-<p class="works">Packaged for Claude Code, the Claude app, ChatGPT, Codex, Cursor and other tools that read Agent Skills.</p>
-{photo("sketchbook", 1600, 640, "duo hero-photo", "(max-width: 1100px) 100vw, 900px", eager=True)}
+<div class="cmd"><span class="kicker">Claude Code</span><code>/plugin marketplace add ckryptickunal/OpenDesigner</code><button class="copy" type="button" data-copy-text="/plugin marketplace add ckryptickunal/OpenDesigner
+/plugin install opendesigner@opendesigner">Copy both</button></div>
+<p class="works"><span class="kicker">Works with</span><span>Claude Code, the Claude app, ChatGPT, Codex, Cursor and other tools that read Agent Skills.</span></p>
+{figure("hero-interview")}
 </section>
 
 <section class="block" id="process">
+<p class="kicker">Process</p>
 <h2 class="t-h2">Where it fits in your process</h2>
 <ol class="stages">{"".join(f'<li><span class="num">0{i + 1}</span><h3>{t}</h3><p>{inline(d)}</p></li>' for i, (t, d) in enumerate(stages))}</ol>
+{figure("home-process")}
 </section>
 
 <section class="block" id="roles">
+<p class="kicker">Who it is for</p>
 <h2 class="t-h2">What it changes for you</h2>
-<div class="roles">{"".join(f'<article class="role">{photo(k, 600, 340, "duo role-photo", "(max-width: 900px) 100vw, 300px")}<h3>{t}</h3><ul>' + "".join(f"<li>{inline(x)}</li>" for x in xs) + f'</ul><a class="more" href="{u}">Guide for {t.lower()} {CHEVRON}</a></article>' for t, k, u, xs in roles)}</div>
+<div class="roles">{"".join(f'<article class="role">{photo(k, 480, 480, "duo role-photo", "112px")}<div class="role-text"><h3>{t}</h3><ul>' + "".join(f"<li>{inline(x)}</li>" for x in xs) + f'</ul><a class="more" href="{u}">Guide for {t.lower()} {CHEVRON}</a></div></article>' for t, k, u, xs in roles)}</div>
+<p class="roles-credit">Photos: {", ".join(f'<a href="https://unsplash.com/photos/{PHOTOS[k][2]}">{esc(PHOTOS[k][1])}</a>' for _t, k, _u, _x in roles)} on Unsplash.</p>
 </section>
 
 <section class="block" id="output">
 <div class="split">
-<div><h2 class="t-h2">What you have after the first run</h2>
+<div><p class="kicker">After the first run</p><h2 class="t-h2">What you have after the first run</h2>
 <p class="lede">Files in your project, readable by people and AI tools. Nothing lives on a server, and the same answers always give the same files.</p>
 <ul class="tree">{"".join(f'<li><code>{f}</code><span>{w}</span></li>' for f, w in [("DESIGN.md", "your rules in plain words"), ("opendesigner/tokens/", "DTCG 2025.10"), ("build/css/tokens.css", "CSS variables"), ("build/tailwind/theme.css", "Tailwind v4"), ("build/figma/", "Figma variables"), ("overview.html", "the system on one page"), ("decisions.md", "every choice and why")])}</ul></div>
 <figure class="shot"><div class="frame"><span></span><span></span><span></span></div><picture><source type="image/webp" srcset="/img/overview-1440.webp 1440w, /img/overview-720.webp 720w" sizes="(max-width: 1100px) 100vw, 560px"><img src="/img/overview-1440.jpg" width="1440" height="900" loading="lazy" alt="The overview page generated for OpenDesigner's own brand, with each area marked Chosen, Default or Not enough information."></picture>
@@ -360,29 +434,38 @@ def landing(pages, facts, faq):
 </div>
 </section>
 
+<section class="block" id="teams">
+<div class="split">
+<div><p class="kicker">For teams</p><h2 class="t-h2">For design-system teams</h2>
+<p class="lede">A written record your team and your AI tools build from, kept as files in your repository. It is early for teams: nobody has run a team pilot yet, and there is no hosted service and no SSO.</p>
+<p class="cta-row"><a class="btn primary" href="/docs/enterprise/">Read the team guide</a><a class="btn secondary" href="/docs/security/">Security and data</a></p></div>
+<ul class="checks">{"".join(f'<li><span class="check" aria-hidden="true"></span><span><strong>{a}</strong> {b}</span></li>' for a, b in TEAM_CHECKS)}</ul>
+</div>
+</section>
+
 <section class="block" id="docs">
-<div class="block-head"><h2 class="t-h2">Browse the docs</h2><a class="more" href="/docs/">All docs {CHEVRON}</a></div>
-<ul class="rows">{rows}</ul>
+<div class="block-head"><div><p class="kicker">Documentation</p><h2 class="t-h2">Start here</h2></div><a class="more" href="/docs/">All 21 pages {CHEVRON}</a></div>
+<div class="starts">{"".join(f'<a class="start" href="{u}"><span class="kicker">{k}</span><strong>{t}</strong><span>{d}</span>{ARROW}</a>' for k, t, d, u in STARTS)}</div>
 </section>
 
 <section class="block" id="status">
 <div class="split">
-<div><h2 class="t-h2">Where it stands</h2>
+<div><p class="kicker">Status</p><h2 class="t-h2">Where it stands</h2>
 <ul class="status">
 <li>The repository was created on 2026-09-23. It is early, and one person maintains it.</li>
 <li>The engine's tests pass, and three worked examples are in the repository.</li>
 <li>No watched user trials have happened yet, and a recorded run in every AI tool is still on the list.</li>
-<li>In a stress test, AI agents built 46 designs through the process, plus 8 mockups. <a href="/showcase/">See them</a>, with the findings.</li>
+<li>AI agents built the showcase through the process: B2B product screens, style studies, heroes and more, each audited against shipped products. <a href="/showcase/">See them</a>, with the findings.</li>
 </ul></div>
 <article class="ghcard"><div class="gh-top">{GH_ICON}<a href="{GH}"><strong>{REPO}</strong></a></div>
-<dl class="gh-stats"><div><dt>Stars</dt><dd data-stars>{n(facts["stars"])}</dd></div><div><dt>Forks</dt><dd data-forks>{n(facts["forks"])}</dd></div><div><dt>Open issues</dt><dd data-issues>{n(facts["issues"])}</dd></div><div><dt>Last push</dt><dd data-pushed>{facts["pushed"]}</dd></div></dl>
+<dl class="gh-stats"><div><dt>Licence</dt><dd>MIT</dd></div><div><dt>Release</dt><dd>0.1.0 planned</dd></div><div><dt>Open issues</dt><dd data-issues>{n(facts["issues"])}</dd></div><div><dt>Last push</dt><dd data-pushed>{facts["pushed"]}</dd></div></dl>
 <div class="gh-actions"><a class="btn secondary" href="{GH}">{GH_ICON} Star on GitHub</a><a class="btn text" href="{GH}/issues/new/choose">Report a problem</a></div>
 <p class="note">Live from GitHub. Tell us where it breaks: that is the most useful thing right now.</p></article>
 </div>
 </section>
 
 <section class="block" id="faq">
-<div class="block-head"><h2 class="t-h2">Questions</h2><a class="more" href="/docs/faq/">All questions {CHEVRON}</a></div>
+<div class="block-head"><div><p class="kicker">FAQ</p><h2 class="t-h2">Questions</h2></div><a class="more" href="/docs/faq/">All questions {CHEVRON}</a></div>
 <div class="faq">{faq_html}</div>
 </section>
 """
@@ -418,11 +501,13 @@ def doc_page(p, pages):
     pn = ('<nav class="prevnext" aria-label="Previous and next">'
           + (f'<a class="prev" href="{prev_["path"]}"><span>Previous</span>{esc(prev_["title"])}</a>' if prev_ else "<span></span>")
           + (f'<a class="next" href="{next_["path"]}"><span>Next</span>{esc(next_["title"])}</a>' if next_ else "") + "</nav>")
-    toc_html = ('<nav class="toc" aria-label="On this page"><h2 class="side-h">On this page</h2><ul>' + "".join(f'<li><a href="#{a}">{esc(t)}</a></li>' for a, t in toc) + "</ul></nav>") if len(toc) > 1 else ""
+    toc_html = ('<nav class="toc" aria-label="On this page"><h2 class="side-h kicker">On this page</h2><ul>' + "".join(f'<li><a href="#{a}">{esc(t)}</a></li>' for a, t in toc) + "</ul></nav>") if len(toc) > 1 else ""
     crumb = (f'<nav class="crumb" aria-label="Breadcrumb"><a href="/docs/">Docs</a><span aria-hidden="true">/</span><span>{p["section"]}</span>'
              + (f'<span aria-hidden="true">/</span><span aria-current="page">{esc(p["title"])}</span>' if p["slug"] != "index" else "") + "</nav>")
     edit = f'{GH}/blob/main/site/docs/{p["slug"]}.md'
-    main_html = (f'<div class="doc-grid"><article class="doc">{crumb}<h1 class="t-h1">{esc(p["title"])}</h1>'
+    kind = {"Getting started": "lime", "Guides": "", "Concepts": "sky", "Reference": "paper"}.get(p["section"], "paper")
+    icon = {"Getting started": "play", "Guides": "compass", "Concepts": "bulb", "Reference": "book"}.get(p["section"], "tag")
+    main_html = (f'<div class="doc-grid"><article class="doc">{crumb}<p class="doc-stickers"><span class="sticker lg {kind}" data-icon="{icon}">{esc(p["section"])}</span></p><h1 class="t-h1">{esc(p["title"])}</h1>'
                  f'<p class="meta">Updated <time datetime="{p.get("updated", TODAY)}">{p.get("updated", TODAY)}</time> · <a href="{edit}">Edit on GitHub</a></p>'
                  f'<div class="prose">{content}</div>{pn}</article>{toc_html}</div>')
     ld = [crumbs_ld([("Docs", "/docs/")] + ([] if p["slug"] == "index" else [(p["title"], p["path"])])),
@@ -443,9 +528,9 @@ def doc_page(p, pages):
     return shell(p["path"], p["seo_title"], p["description"], main_html, pages, ld, og=og)
 
 
-SHOW_INTRO = ("In a stress test on 2026-10-14, eight AI builder agents made 46 designs through the whole OpenDesigner process: real references, "
-              "a design system from the engine for each piece, the build, then checks. Another agent placed some of them in 8 mockups. Every brand is invented. About a third came out competent but "
-              "conventional, and much of the most striking work was shaped by hand on top of the tokens.")
+SHOW_INTRO = ("AI builder agents made every piece here through the whole OpenDesigner process: real references on Mobbin, a design system from the "
+              "engine for each piece, the build, then checks. Every brand is invented. Each piece was then audited against shipped products and reviewed by "
+              "the maintainer. The pieces called ugly were removed or rebuilt, and the ones marked Being rebuilt are next.")
 MOCKUP_CAPTIONS = {
     "01-phone-trio": "Three evening apps (sleep, podcast, banking) in generic phones over a lilac field.",
     "02-laptop-desk": "The Swiss architecture hero on a laptop, on a real desk photo with matched perspective.",
@@ -456,7 +541,18 @@ MOCKUP_CAPTIONS = {
     "07-tablet-clinic": "A hospital ward's vitals screen on a tablet.",
     "08-made-with-opendesigner": "A launch post in OpenDesigner's own brand system over the work.",
 }
-THUMB_W = 900
+CATS = [("product", "B2B product screens"), ("styles", "Style studies"), ("heroes", "Hero sections"), ("components", "Web components"), ("app-screens", "App screens"), ("watch", "Watch screens"),
+        ("footers", "Footer sections"), ("mockups", "Mockups")]
+CAT_FRAMES = {"product": "16 / 10", "styles": "16 / 10", "heroes": "16 / 10", "components": "16 / 10", "footers": "16 / 8", "mockups": "4 / 3", "app-screens": "9 / 19.5", "watch": "615 / 753"}
+THUMB_W, FULL_W = 900, 1800
+AUDIT = BRAND / "showcase" / "audit"
+# Words in the audit's "industry" field that mean the product is sold to businesses.
+B2B_WORDS = ("b2b", "saas", "enterprise", "payments", "billing", "spend", "accounts", "crm", "sales", "observability", "monitoring", "cloud", "security",
+             "devops", "incident", "on-call", "people ops", "hr ", "facilit", "building management", "post-production", "event", "data", "etl", "pipeline",
+             "support", "ai eval", "database", "live-ops", "live ops", "analytics", "developer", "devtools", "logistics", "clinical", "hospital")
+# Industries sold to businesses (the audit's "industry" field); everything else is shown as consumer.
+B2B_INDUSTRIES = {"healthcare", "design tools", "software", "writing tools", "team chat", "logistics", "research", "devtools", "developer tools",
+                  "cloud security", "ai research", "productivity", "print", "fintech b2b", "analytics", "hr", "sales", "finance", "security", "infrastructure"}
 
 
 def piece_text(d):
@@ -465,45 +561,178 @@ def piece_text(d):
     if notes.exists():
         lines = notes.read_text().splitlines()
         title = next((ln[2:].strip() for ln in lines if ln.startswith("# ")), title)
+        title = re.sub(r":\s*notes$", "", title)
         body = [ln.strip() for ln in lines if ln.strip() and not ln.startswith(("#", "|", "-", ">", "!", "```"))
-                and not re.search(r"(shot\.png|index\.html|^Render|^Page|^Status|^Built by|scale 2)", ln.strip(), re.I)]
+                and not re.search(r"(shot\.png|index\.html|^Render|^Final render|renders?,? each|^Page|^Status|^Built by|scale 2|\d+ ?[×x] ?\d+ at)", ln.strip(), re.I)]
         if d.name in MOCKUP_CAPTIONS:
             body = [MOCKUP_CAPTIONS[d.name]]
         if body:
             text = re.sub(r"^(Direction|Brief|Concept)[.:]\s*", "", re.sub(r"[*_`]", "", body[0]))
+            sentences = re.split(r"(?<=[.!?])\s+", text)
+            text = sentences[0]
+            if len(sentences) > 1 and len(text) + len(sentences[1]) < 150:
+                text += " " + sentences[1]
             text = text if len(text) < 170 else text[:167].rsplit(" ", 1)[0] + "…"
     return title, text
 
 
-def showcase(pages):
+def show_pieces():
+    """Every showcase piece with its render, its notes and, when the Mobbin audit has run, its tags and verdict."""
     from PIL import Image
-    cats = [("mockups", "Mockups"), ("heroes", "Hero sections"), ("components", "Web components"), ("app-screens", "App screens"),
-            ("watch", "Watch screens"), ("footers", "Footer sections")]
-    blocks, items, md = [], [], ["# Showcase", "", SHOW_INTRO, ""]
-    for cat, label in cats:
-        cards = []
-        md += [f"## {label}", ""]
-        for d in sorted((BRAND / "showcase" / cat).glob("*/")):
-            thumb = BRAND / "showcase" / "_thumbs" / f"{cat}--{d.name}--shot.jpg"
-            if not thumb.exists():
+    out = []
+    for cat, label in CATS:
+        folder = BRAND / "showcase" / cat
+        if not folder.exists():
+            continue
+        for d in sorted(x for x in folder.iterdir() if x.is_dir()):
+            notes_file = d / "notes.md"
+            if notes_file.exists() and "Replaced on 2026-10-14 by" in notes_file.read_text():
+                continue  # rebuilt after the Mobbin audit; the original stays in the repo
+            shot, thumb = d / "shot.png", BRAND / "showcase" / "_thumbs" / f"{cat}--{d.name}--shot.jpg"
+            src = shot if shot.exists() else (thumb if thumb.exists() else None)
+            if not src:
                 continue
+            with Image.open(src) as im:
+                w, h = im.size
             title, blurb = piece_text(d)
-            key = f"{cat}--{d.name}"
-            with Image.open(thumb) as im:
-                h = round(im.height * THUMB_W / im.width)
-            cards.append(f'<figure class="piece"><img src="/img/show/{key}.webp" width="{THUMB_W}" height="{h}" loading="lazy" alt="{esc(title)}">'
-                         f'<figcaption><strong>{esc(title)}</strong><span>{esc(blurb)}</span></figcaption></figure>')
-            items.append({"@type": "ImageObject", "name": title, "contentUrl": f"{SITE_URL}/img/show/{key}.webp", "description": blurb})
-            md.append(f"- **{title}**: {blurb}")
+            meta = {"tags": [], "styles": [], "verdict": "", "pattern": ""}
+            a = AUDIT / f"{cat}--{d.name}.json"
+            if a.exists():
+                j = json.loads(a.read_text())
+                if j.get("owner", {}).get("verdict") == "remove":
+                    continue  # removed after the owner's review; the files stay in the repo
+                industry = str(j.get("industry", "")).lower().strip()
+                audience = "b2b" if cat == "product" or industry in B2B_INDUSTRIES or any(k in industry for k in B2B_WORDS) else "consumer"
+                styles = [str(x).lower().strip() for x in j.get("style", [])][:4]
+                meta = {"tags": [audience] + styles + ([industry] if industry else []), "styles": styles, "verdict": "" if ((j.get("round3") or {}).get("score") or 0) >= 4 else j.get("owner", {}).get("verdict") or j.get("verdict", ""), "pattern": j.get("pattern", "")}
+            extras = [x for x in sorted(d.glob("shot-*.png")) if not any(k in x.stem for k in ("painted", "-v", "draft", "old"))] if shot.exists() else []
+            out.append({"key": f"{cat}--{d.name}", "cat": cat, "label": label, "src": src, "w": w, "h": h, "title": title, "blurb": blurb,
+                        "frames": [(x.stem.replace("shot-", ""), x) for x in extras], **meta})
+    return out
+
+
+def show_images(pieces):
+    """A 900 px tile and an 1800 px image for the lightbox per piece, cached by the render's modification time."""
+    from PIL import Image
+    cache = CACHE / "show"; cache.mkdir(parents=True, exist_ok=True)
+    (DIST / "img" / "show").mkdir(parents=True, exist_ok=True)
+    for p in pieces:
+        stamp = int(p["src"].stat().st_mtime)
+        for width, name in ((THUMB_W, f"{p['key']}.webp"), (FULL_W, f"{p['key']}-{FULL_W}.webp")):
+            c = cache / f"{stamp}-{name}"
+            if not c.exists():
+                im = Image.open(p["src"]).convert("RGB")
+                long_side = max(im.size)
+                scale = min(1.0, width / (im.width if width == THUMB_W else long_side))
+                if scale < 1:
+                    im = im.resize((round(im.width * scale), round(im.height * scale)), Image.LANCZOS)
+                im.save(c, "WEBP", quality=82 if width == FULL_W else 80)
+            shutil.copy(c, DIST / "img" / "show" / name)
+        with Image.open(cache / f"{stamp}-{p['key']}.webp") as im:
+            p["tw"], p["th"] = im.size
+        for fname, fsrc in p.get("frames", []):
+            fstamp = int(fsrc.stat().st_mtime)
+            c = cache / f"{fstamp}-{p['key']}--{fname}-{FULL_W}.webp"
+            if not c.exists():
+                im = Image.open(fsrc).convert("RGB")
+                scale = min(1.0, FULL_W / max(im.size))
+                if scale < 1:
+                    im = im.resize((round(im.width * scale), round(im.height * scale)), Image.LANCZOS)
+                im.save(c, "WEBP", quality=82)
+            shutil.copy(c, DIST / "img" / "show" / f"{p['key']}--{fname}-{FULL_W}.webp")
+
+
+STYLE_WORDS = {"minimal", "swiss", "editorial", "brutalist", "glass", "dark", "neon", "y2k", "organic", "luxury", "playful", "enterprise", "retro", "industrial", "terminal", "clinical"}
+
+
+def sticker_kind(t, p):
+    """B2B cobalt, consumer sky, a style ink, the industry paper."""
+    if t == "b2b":
+        return ""
+    if t == "consumer":
+        return "sky"
+    if t in STYLE_WORDS or t in p.get("styles", []):
+        return "ink"
+    return "paper"
+
+
+def sticker_icon(t, p):
+    if t == "b2b":
+        return "building"
+    if t == "consumer":
+        return "person"
+    if t in STYLE_WORDS or t in p.get("styles", []):
+        return "brush"
+    return "tag"
+
+
+def sticker_label(t):
+    if t == "b2b":
+        return "B2B"
+    t = re.split(r"[(/,;:]| - ", t)[0].strip()  # the audit's industry field can be a phrase; the sticker keeps its head
+    t = t if len(t) <= 24 else t[:24].rsplit(" ", 1)[0]
+    return t[:1].upper() + t[1:]
+
+
+def piece_card(p, i, frame):
+    tags = [t for t in p["tags"] if t in ("b2b", "consumer")][:1] + [t for t in p["tags"] if t in p.get("styles", [])][:1] + [t for t in p["tags"] if t not in ("b2b", "consumer") and t not in p.get("styles", [])][:1]
+    chips = "".join(f'<span class="sticker {sticker_kind(t, p)}" data-icon="{sticker_icon(t, p)}">{esc(sticker_label(t))}</span>' for t in tags)
+    review = '<span class="sticker pink" data-icon="wrench">Being rebuilt</span>' if p["verdict"] in ("polish", "remake", "improve") else ""
+    frames = p.get("frames", [])
+    if frames:
+        review += f'<span class="sticker lime" data-icon="layers">+{len(frames)} frame{"s" if len(frames) > 1 else ""}</span>'
+    extra_links = "".join(f'<a class="frame-link" hidden href="/img/show/{p["key"]}--{fn}-{FULL_W}.webp" data-gallery="{i}" data-title="{esc(p["title"])} · {esc(fn.replace("-", " "))}" '
+                          f'data-blurb="{esc(p["blurb"])}" data-tags="{esc(", ".join(p["tags"]))}"></a>' for fn, _src in frames)
+    return (f'<figure class="piece" data-tags="{esc(" ".join(p["tags"]))}" data-cat="{p["cat"]}">'
+            f'<a class="piece-link" href="/img/show/{p["key"]}-{FULL_W}.webp" data-gallery="{i}" data-title="{esc(p["title"])}" data-blurb="{esc(p["blurb"])}" '
+            f'data-tags="{esc(", ".join(p["tags"]))}" style="aspect-ratio:{frame}"><img src="/img/show/{p["key"]}.webp" width="{p["tw"]}" height="{p["th"]}" loading="lazy" alt="{esc(p["title"])}"></a>{extra_links}'
+            + (f'<span class="piece-stuck">{review}</span>' if review else "") + f'<figcaption><strong>{esc(p["title"])}</strong><span>{esc(p["blurb"])}</span><span class="stickers">{chips}</span></figcaption></figure>')
+
+
+def showcase(pages):
+    pieces = show_pieces()
+    show_images(pieces)
+    counts = {}
+    for p in pieces:
+        for t in p["tags"]:
+            counts[t] = counts.get(t, 0) + 1
+    styles = {"minimal", "swiss", "editorial", "brutalist", "glass", "dark", "neon", "y2k", "organic", "luxury", "playful", "enterprise", "retro", "industrial", "terminal", "clinical"}
+    top = [t for t in ("b2b", "consumer") if t in counts] + [t for t, n in sorted(counts.items(), key=lambda kv: (-kv[1], kv[0])) if t in styles and n >= 3]
+    filters = ('<div class="filters" role="group" aria-label="Filter by tag"><button type="button" class="filter is-on" data-tag="">All <span class="num">' + str(len(pieces)) + "</span></button>"
+               + "".join(f'<button type="button" class="filter" data-tag="{esc(t)}">{esc("B2B" if t == "b2b" else t.capitalize())} <span class="num">{counts[t]}</span></button>' for t in top) + "</div>") if top else ""
+    blocks, items, md, i = [], [], ["# Showcase", "", SHOW_INTRO, ""], 0
+    for cat, label in CATS:
+        ps = [p for p in pieces if p["cat"] == cat]
+        if not ps:
+            continue
+        groups = [(None, ps, CAT_FRAMES[cat])]
+        if cat == "app-screens":
+            groups = [("Phones", [p for p in ps if p["h"] > p["w"]], CAT_FRAMES[cat]), ("Tablet and desktop", [p for p in ps if p["h"] <= p["w"]], "16 / 10")]
+        md += [f"## {label}", ""]
+        grids = []
+        for sub, gp, frame in groups:
+            if not gp:
+                continue
+            cards = []
+            for p in gp:
+                cards.append(piece_card(p, i, frame)); i += 1
+                items.append({"@type": "ImageObject", "name": p["title"], "contentUrl": f"{SITE_URL}/img/show/{p['key']}-{FULL_W}.webp", "thumbnailUrl": f"{SITE_URL}/img/show/{p['key']}.webp", "description": p["blurb"], "keywords": ", ".join(p["tags"])})
+                md.append(f"- **{p['title']}**" + (f" ({', '.join(p['tags'])})" if p["tags"] else "") + f": {p['blurb']}")
+            grids.append((f'<h3 class="t-h3 sub">{sub}</h3>' if sub else "") + f'<div class="pieces {cat}{" portrait" if frame.startswith("9") or frame.startswith("615") else ""}">{"".join(cards)}</div>')
         md.append("")
-        blocks.append(f'<section class="block" id="{cat}"><h2 class="t-h3">{label}</h2><div class="pieces {cat}">{"".join(cards)}</div></section>')
+        blocks.append(f'<section class="block show-cat" id="{cat}"><p class="kicker">{len(ps)} pieces</p><h2 class="t-h2">{label}</h2>{"".join(grids)}</section>')
     head = (f'<div class="page-head"><nav class="crumb" aria-label="Breadcrumb"><a href="/">{NAME}</a><span aria-hidden="true">/</span><span aria-current="page">Showcase</span></nav>'
-            f'<h1 class="t-h1">46 designs and 8 mockups, one process</h1><p class="lede">{esc(SHOW_INTRO)} <a href="{GH}/blob/main/brand/showcase/STRESS-TEST.md">Read the findings</a>.</p></div>')
+            f'<h1 class="t-h1">{len(pieces)} designs, one process</h1><p class="lede">{esc(SHOW_INTRO)} <a href="{GH}/blob/main/brand/showcase/STRESS-TEST.md">Read the findings</a>.</p>{filters}'
+            f'<p class="stickers legend"><span class="kicker">Stickers</span><span class="sticker" data-icon="building">B2B</span><span class="sticker sky" data-icon="person">Consumer</span><span class="sticker ink" data-icon="brush">Style</span>'
+            f'<span class="sticker paper" data-icon="tag">Industry</span><span class="sticker pink" data-icon="wrench">Being rebuilt</span><span class="sticker lime" data-icon="layers">More frames</span></p></div>')
+    lightbox = ('<dialog class="lb" id="lightbox" aria-label="Gallery"><div class="lb-bar"><div class="lb-text"><strong class="lb-title"></strong><span class="lb-blurb"></span><span class="lb-tags kicker"></span></div>'
+                '<div class="lb-actions"><a class="lb-open" href="#" target="_blank" rel="noopener">Open image</a><button type="button" class="lb-prev" aria-label="Previous">←</button><button type="button" class="lb-next" aria-label="Next">→</button><button type="button" class="lb-close" aria-label="Close">Esc</button></div></div>'
+                '<div class="lb-stage"><img class="lb-img" alt=""></div></dialog>')
     ld = [crumbs_ld([("Showcase", "/showcase/")]), {"@context": "https://schema.org", "@type": "CollectionPage", "name": "OpenDesigner showcase",
                                                     "url": f"{SITE_URL}/showcase/", "description": SHOW_INTRO, "hasPart": items[:60]}]
-    html_ = shell("/showcase/", "OpenDesigner showcase: 46 designs and 8 mockups",
-                  "Heroes, components, app and watch screens, footers and mockups that AI agents built through OpenDesigner, each from its own design system.",
-                  head + "".join(blocks), pages, ld, og="/og/showcase.png", wide=True)
+    html_ = shell("/showcase/", "OpenDesigner showcase: B2B screens, styles and more",
+                  "Heroes, components, app and watch screens, footers and mockups that AI agents built through OpenDesigner, audited against real UI and tagged.",
+                  head + "".join(blocks) + lightbox, pages, ld, og="/og/showcase.png", wide=True)
     return html_, "\n".join(md)
 
 
@@ -523,10 +752,6 @@ def images():
         im.save(DIST / "img/overview-1440.webp", "WEBP", quality=82)
         im.save(DIST / "img/overview-1440.jpg", "JPEG", quality=82, optimize=True, progressive=True)
         im.resize((720, 450), Image.LANCZOS).save(DIST / "img/overview-720.webp", "WEBP", quality=82)
-    for t in (BRAND / "showcase" / "_thumbs").glob("*--shot.jpg"):
-        im = Image.open(t).convert("RGB")
-        im = im.resize((THUMB_W, round(im.height * THUMB_W / im.width)), Image.LANCZOS) if im.width > THUMB_W else im
-        im.save(DIST / "img/show" / f"{t.name.replace('--shot.jpg', '')}.webp", "WEBP", quality=80)
     mark = BRAND / "kit" / "logo" / "avatar-light-800.png"
     if mark.exists():
         im = Image.open(mark).convert("RGB")
@@ -545,7 +770,7 @@ def og_images():
     cards = {"home.png": K.statement("light", 'Build a design system<br><span class="od-strong">with the AI you already use.</span>', "Free and open source.", "opendesigner", 1200, 630, "social-subhead"),
              "faq.png": K.statement("light", 'Questions, <span class="od-strong">plain answers.</span>', "OpenDesigner docs", "FAQ", 1200, 630, "social-subhead"),
              "guide.png": K.statement("light", 'What is a <span class="od-strong">design system?</span>', "A plain guide, with AI.", "Guide", 1200, 630, "social-subhead"),
-             "showcase.png": K.statement("cobalt", '46 designs. <span class="od-strong">One process.</span>', "Built by AI agents through OpenDesigner. Every brand is invented.", "Showcase", 1200, 630, "social-subhead")}
+             "showcase.png": K.statement("cobalt", 'B2B screens, styles and more. <span class="od-strong">One process.</span>', "Built by AI agents through OpenDesigner. Every brand is invented.", "Showcase", 1200, 630, "social-subhead")}
     with sync_playwright() as p:
         b = p.chromium.launch(channel="chrome")
         pg = b.new_page(viewport={"width": 1200, "height": 630}, device_scale_factor=1)
@@ -583,7 +808,7 @@ For "how do I create a design system with AI", "generate design tokens, a Tailwi
 
 ## Optional
 
-- [Showcase]({SITE_URL}/showcase/index.md): 46 designs and 8 mockups built by AI agents through the process, with an honest caveat
+- [Showcase]({SITE_URL}/showcase/index.md): B2B product screens, style studies, heroes, components, app and watch screens, footers and mockups built by AI agents through the process, each audited against shipped products
 - [GitHub repository]({GH}): source, issues and discussions
 - [AGENTS.md](https://raw.githubusercontent.com/{REPO}/main/AGENTS.md): instructions for AI agents working with the repository
 - [Research map](https://raw.githubusercontent.com/{REPO}/main/docs/RESEARCH.md): 352 Decision Cards behind the defaults, each with cited sources
@@ -591,7 +816,8 @@ For "how do I create a design system with AI", "generate design tokens, a Tailwi
 """
 
 
-CSP = ("default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: https://images.unsplash.com; font-src 'self'; "
+# style-src allows inline style attributes: the figures and gallery tiles set sizes and colors inline. The site is static, with no user content.
+CSP = ("default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://images.unsplash.com; font-src 'self'; "
        "connect-src 'self' https://api.github.com; frame-ancestors 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests")
 
 
@@ -622,7 +848,7 @@ def main():
     for key, _f, _l in FONT_SPECS:
         shutil.copy(CACHE / f"{key}-OFL.txt", DIST / "fonts" / f"{key}-OFL.txt")
     ff = "".join(f"@font-face{{font-family:'{fam}';font-style:normal;font-weight:{w};font-display:swap;src:url(/fonts/{f}) format('woff2')}}\n" for fam, w, f in rules)
-    (DIST / "site.css").write_text(ff + tokens_css() + (SITE / "static" / "site.css").read_text())
+    (DIST / "site.css").write_text(ff + tokens_css() + (SITE / "static" / "site.css").read_text() + (SITE / "static" / "figures.css").read_text() + status_css())
     shutil.copy(SITE / "static" / "site.js", DIST / "site.js")
     images()
     if "--og" in sys.argv or not (CACHE / "og" / "home.png").exists():
@@ -641,7 +867,7 @@ def main():
     for p in pages:
         rel = p["path"].lstrip("/")
         files[rel + "index.html"] = doc_page(p, pages)
-        mds[rel + "index.md"] = f"# {p['title']}\n\n{p['body']}\n"
+        mds[rel + "index.md"] = f"# {p['title']}\n\n{strip_figures(p['body'])}\n"
     sh_html, sh_md = showcase(pages)
     files["showcase/index.html"] = sh_html
     mds["showcase/index.md"] = sh_md + "\n"

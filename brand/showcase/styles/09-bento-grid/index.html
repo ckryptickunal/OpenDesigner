@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Holdfast · Bento features</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* Holdfast: one grotesk (Schibsted Grotesk), ink, cool greys and one sun yellow. */
+  :root {
+    --ink: var(--ds-color-neutral-light-12);
+    --ink-2: var(--ds-color-text-secondary);
+    --ink-3: var(--ds-color-text-tertiary);
+    --line: var(--ds-color-neutral-light-5);
+    --line-soft: var(--ds-color-neutral-light-3);
+    --sun: var(--ds-color-brand-seed);
+    --gap: var(--ds-space-16);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--ds-color-neutral-light-3); }
+  body {
+    font-family: var(--ds-font-family-text);
+    color: var(--ink);
+    font-size: var(--ds-font-size-16);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* tabular figures only where numbers line up: in this face tnum also widens . , : */
+  .due, .tabs em { font-variant-numeric: tabular-nums; }
+  .wrap { width: 1312px; margin: 0 auto; padding: var(--ds-space-48) 0 var(--ds-space-40); }
+
+  /* section head */
+  .head { display: grid; grid-template-columns: 7fr 5fr; gap: var(--ds-space-48); align-items: end; margin-bottom: var(--ds-space-32); }
+  .head h2 { font-size: var(--ds-font-size-49); line-height: 1.08; font-weight: 400; letter-spacing: -0.025em; max-width: 22ch; }
+  .head h2 b { font-weight: 600; }
+  .head p { font-size: var(--ds-font-size-16); color: var(--ink-2); max-width: 44ch; }
+  .head a { display: inline-flex; align-items: center; gap: var(--ds-space-6); margin-top: var(--ds-space-12); color: var(--ink); font-weight: 600; text-decoration: none; border-bottom: 2px solid var(--sun); padding-bottom: 1px; min-height: 24px; }
+  .head a:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ink); outline-offset: 3px; border-radius: 4px; }
+
+  /* the bento */
+  .bento { display: grid; grid-template-columns: repeat(12, 1fr); grid-template-rows: 322px 322px; gap: var(--gap); }
+  .tile { background: var(--ds-color-white); border-radius: var(--ds-radius-24); padding: var(--ds-space-24); position: relative; overflow: hidden; display: flex; flex-direction: column; }
+  .cap { font-size: var(--ds-font-size-16); line-height: 1.4; color: var(--ink-2); max-width: 34ch; }
+  .cap b { color: var(--ink); font-weight: 600; }
+  .t-inbox { grid-column: 1 / 6; grid-row: 1 / 3; padding: 0; }
+  .t-sla   { grid-column: 6 / 9; grid-row: 1; background: var(--sun); }
+  .t-macro { grid-column: 9 / 13; grid-row: 1; }
+  .t-csat  { grid-column: 6 / 10; grid-row: 2; }
+  .t-keys  { grid-column: 10 / 13; grid-row: 2; background: var(--ink); color: var(--ds-color-white); }
+  .t-keys .cap { color: var(--ds-color-neutral-dark-11); }
+  .t-keys .cap b { color: var(--ds-color-white); }
+  .t-sla .cap, .t-sla .cap b { color: var(--ink); }
+
+  .small { font-size: var(--ds-font-size-13); line-height: 1.45; }
+  .muted { color: var(--ink-3); }
+
+  /* ---------- inbox ---------- */
+  .ib-cap { padding: var(--ds-space-24) var(--ds-space-24) var(--ds-space-20); }
+  .ib { margin: 0 var(--ds-space-12) var(--ds-space-12); border: 1px solid var(--line); border-radius: var(--ds-radius-12); flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+  .ib-top { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+  .ib-title { font-size: var(--ds-font-size-13); font-weight: 600; display: flex; align-items: center; gap: var(--ds-space-8); }
+  .ib-title .team { color: var(--ink-3); font-weight: 400; }
+  .tabs { display: flex; gap: var(--ds-space-2); font-size: var(--ds-font-size-13); }
+  .tabs span { padding: 3px 9px; border-radius: var(--ds-radius-8); color: var(--ink-2); }
+  .tabs span.on { background: var(--line-soft); color: var(--ink); font-weight: 600; }
+  .tabs em { font-style: normal; color: var(--ink-3); margin-left: var(--ds-space-4); font-weight: 400; }
+  .row { display: grid; grid-template-columns: 16px 1fr auto 26px; align-items: center; gap: var(--ds-space-12); padding: 11px 14px; border-bottom: 1px solid var(--line-soft); font-size: var(--ds-font-size-13); line-height: 1.35; }
+  .row.sel { background: var(--ds-color-neutral-light-2); box-shadow: inset 3px 0 0 var(--ink); }
+  .row .who { font-weight: 600; display: flex; gap: var(--ds-space-6); align-items: baseline; }
+  .row .who .id { font-weight: 400; color: var(--ink-3); }
+  .row .subj { color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 330px; }
+  .ch { width: 16px; height: 16px; color: var(--ink-3); }
+  .due { font-size: var(--ds-font-size-13); font-weight: 500; padding: var(--ds-space-2) var(--ds-space-8); border-radius: var(--ds-radius-6); white-space: nowrap; color: var(--ink-2); background: var(--line-soft); }
+  .due.soon { background: var(--sun); color: var(--ink); font-weight: 600; }
+  .due.late { background: transparent; color: var(--ds-color-text-danger); font-weight: 600; padding-left: 0; padding-right: 0; }
+  .av { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: var(--ds-font-size-13); font-weight: 600; background: var(--line-soft); color: var(--ink-2); }
+  .av.me { background: var(--ink); color: var(--ds-color-white); }
+  .ib-foot { margin-top: auto; display: flex; justify-content: space-between; padding: 10px 14px; font-size: var(--ds-font-size-13); color: var(--ink-3); border-top: 1px solid var(--line); background: var(--ds-color-neutral-light-1); }
+  .kbd { display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 5px; border: 1px solid var(--line); border-bottom-width: 2px; font-size: var(--ds-font-size-13); font-weight: 600; color: var(--ink-2); background: var(--ds-color-white); }
+
+  /* ---------- SLA ---------- */
+  .sla { margin-top: auto; }
+  .sla .lbl { font-size: var(--ds-font-size-13); font-weight: 600; }
+  .clock { font-size: var(--ds-font-size-76); line-height: 0.95; font-weight: 500; letter-spacing: -0.03em; margin: var(--ds-space-6) 0 14px; }
+  .clock span { font-weight: 400; }
+  .track { height: 8px; border-radius: 99px; background: rgb(0 0 0 / 0.12); position: relative; overflow: hidden; }
+  .track i { position: absolute; inset: 0 auto 0 0; width: 76%; background: var(--ink); border-radius: 99px; }
+  .sla-meta { display: flex; justify-content: space-between; margin-top: var(--ds-space-8); font-size: var(--ds-font-size-13); }
+
+  /* ---------- macro ---------- */
+  .mc { margin: auto calc(-1 * var(--ds-space-24)) calc(-1 * var(--ds-space-24)) var(--ds-space-24); border: 1px solid var(--line); border-right: 0; border-bottom: 0; border-radius: var(--ds-radius-12) 0 0 0; overflow: hidden; background: var(--ds-color-neutral-light-1); }
+  .mc-body, .acts, .mc-head { padding-right: var(--ds-space-24) !important; }
+  .mc-head { display: flex; justify-content: space-between; align-items: center; padding: 9px var(--ds-space-12); border-bottom: 1px solid var(--line-soft); font-size: var(--ds-font-size-13); }
+  .mc-head b { font-weight: 600; }
+  .mc-body { padding: 10px var(--ds-space-12); font-size: var(--ds-font-size-13); line-height: 1.6; color: var(--ink); }
+  .var { display: inline-block; padding: 0 var(--ds-space-6); border-radius: 5px; background: var(--ds-color-neutral-light-3); color: var(--ink); font-weight: 600; line-height: 1.5; }
+  .acts { border-top: 1px solid var(--line-soft); padding: var(--ds-space-8) var(--ds-space-12); display: grid; gap: var(--ds-space-4); font-size: var(--ds-font-size-13); }
+  .act { display: grid; grid-template-columns: 92px 1fr; color: var(--ink-3); }
+  .act b { color: var(--ink); font-weight: 500; }
+
+  /* ---------- CSAT ---------- */
+  .cs { margin-top: auto; display: grid; grid-template-columns: auto 1fr; gap: var(--ds-space-24); align-items: end; }
+  .score { font-size: var(--ds-font-size-39); line-height: 1; font-weight: 500; letter-spacing: -0.03em; }
+  .score small { font-size: var(--ds-font-size-20); font-weight: 400; color: var(--ink-3); letter-spacing: 0; }
+  .delta { font-size: var(--ds-font-size-13); color: var(--ds-color-text-success); font-weight: 600; margin-top: var(--ds-space-6); }
+  .delta span { color: var(--ink-3); font-weight: 400; }
+  .bars { display: grid; grid-template-columns: repeat(12, 1fr); gap: 5px; height: 168px; align-items: end; position: relative; }
+  .bars i { display: block; background: var(--ds-color-neutral-light-4); border-radius: 4px 4px 2px 2px; }
+  .bars i.now { background: var(--ink); }
+  .bars .goal { position: absolute; left: 0; right: 0; border-top: 1px dashed var(--ds-color-neutral-light-8); }
+  .legend { display: flex; align-items: center; gap: var(--ds-space-6); font-size: var(--ds-font-size-13); color: var(--ink-3); margin-top: var(--ds-space-16); }
+  .legend i { width: 18px; border-top: 1px dashed var(--ds-color-neutral-light-8); }
+  .axis { display: flex; justify-content: space-between; font-size: var(--ds-font-size-13); color: var(--ink-3); margin-top: var(--ds-space-6); grid-column: 2; }
+
+  /* ---------- keys ---------- */
+  .cmd { margin-top: auto; background: var(--ds-color-neutral-dark-3); border-radius: var(--ds-radius-12); border: 1px solid var(--ds-color-neutral-dark-6); overflow: hidden; font-size: var(--ds-font-size-13); }
+  .cmd-in { padding: 9px var(--ds-space-12); border-bottom: 1px solid var(--ds-color-neutral-dark-6); color: var(--ds-color-white); display: flex; justify-content: space-between; }
+  .cmd-in span { color: var(--ds-color-neutral-dark-11); }
+  .opt { display: flex; justify-content: space-between; align-items: center; padding: 7px var(--ds-space-12); color: var(--ds-color-neutral-dark-12); }
+  .opt.on { background: var(--sun); color: var(--ink); font-weight: 600; }
+  .opt .k { display: inline-grid; place-items: center; min-width: 20px; height: 20px; border-radius: 5px; border: 1px solid var(--ds-color-neutral-dark-7); color: var(--ds-color-neutral-dark-11); font-size: var(--ds-font-size-13); font-weight: 600; }
+  .opt.on .k { border-color: rgb(0 0 0 / 0.3); color: var(--ink); }
+  .opt .when { color: var(--ds-color-neutral-dark-11); font-weight: 400; margin-left: var(--ds-space-6); }
+  .opt.on .when { color: var(--ink); opacity: 0.7; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .clock .s { transition: opacity var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+  }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="head">
+    <h2>Built around the promises you make customers.</h2>
+    <div>
+      <p>Holdfast is a help desk for B2B teams with contracts to keep. Every ticket carries its SLA, so the queue is always in the order that matters.</p>
+      <a href="#tour">Take the product tour <span aria-hidden="true">→</span></a>
+    </div>
+  </header>
+
+  <section class="bento" aria-label="Holdfast features">
+
+    <!-- 1. Inbox -->
+    <article class="tile t-inbox">
+      <p class="cap ib-cap" style="max-width:44ch"><b>Inbox.</b> Email, chat and shared channels in one queue, sorted by the next promise about to break.</p>
+      <div class="ib" role="img" aria-label="Inbox for the Billing team: nine open tickets sorted by SLA, one breached">
+        <div class="ib-top">
+          <div class="ib-title">Billing <span class="team">· tier 1</span></div>
+          <div class="tabs"><span class="on">Open<em>38</em></span><span>Due soon<em>6</em></span><span>Snoozed<em>12</em></span></div>
+        </div>
+        <div class="row">
+          <svg class="ch" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1.5" y="3" width="13" height="10" rx="2"/><path d="M2 4l6 5 6-5"/></svg>
+          <div><div class="who">Arden Telecom <span class="id">#48213</span></div><div class="subj">Invoice INV-20931 was charged twice on the 1st</div></div>
+          <span class="due late">Late 4m</span><span class="av">MO</span>
+        </div>
+        <div class="row sel">
+          <svg class="ch" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2.5 3.5h11v7h-6l-3 2.5v-2.5h-2z" stroke-linejoin="round"/></svg>
+          <div><div class="who">Pellucid Health <span class="id">#48207</span></div><div class="subj">SSO login loops back to the sign-in page for 3 admins</div></div>
+          <span class="due soon">14m</span><span class="av me">KT</span>
+        </div>
+        <div class="row">
+          <svg class="ch" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 2.5l-1.5 11M11.5 2.5l-1.5 11M2.5 6h11.5M2 10.5h11.5"/></svg>
+          <div><div class="who">Norrland Freight <span class="id">#48199</span></div><div class="subj">Need 40 more seats provisioned before Friday's rollout</div></div>
+          <span class="due soon">22m</span><span class="av">JS</span>
+        </div>
+        <div class="row">
+          <svg class="ch" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1.5" y="3" width="13" height="10" rx="2"/><path d="M2 4l6 5 6-5"/></svg>
+          <div><div class="who">Quarry &amp; Vale <span class="id">#48190</span></div><div class="subj">CSV export drops the Notes column since Tuesday</div></div>
+          <span class="due">1h 05m</span><span class="av">MO</span>
+        </div>
+        <div class="row">
+          <svg class="ch" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2.5 3.5h11v7h-6l-3 2.5v-2.5h-2z" stroke-linejoin="round"/></svg>
+          <div><div class="who">Bitwise Kitchens <span class="id">#48186</span></div><div class="subj">Can we move our renewal date to January 31?</div></div>
+          <span class="due">2h 40m</span><span class="av">AL</span>
+        </div>
+        <div class="row">
+          <svg class="ch" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 2.5l-1.5 11M11.5 2.5l-1.5 11M2.5 6h11.5M2 10.5h11.5"/></svg>
+          <div><div class="who">Saltworks Studio <span class="id">#48181</span></div><div class="subj">Webhook retries stopped at 03:12 UTC, 214 events queued</div></div>
+          <span class="due">3h 15m</span><span class="av">JS</span>
+        </div>
+        <div class="row">
+          <svg class="ch" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1.5" y="3" width="13" height="10" rx="2"/><path d="M2 4l6 5 6-5"/></svg>
+          <div><div class="who">Kettle Robotics <span class="id">#48174</span></div><div class="subj">Remove a former admin who still receives invoices</div></div>
+          <span class="due">5h 50m</span><span class="av">AL</span>
+        </div>
+        <div class="row">
+          <svg class="ch" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1.5" y="3" width="13" height="10" rx="2"/><path d="M2 4l6 5 6-5"/></svg>
+          <div><div class="who">Oakmere Schools <span class="id">#48166</span></div><div class="subj">Purchase order needs our VAT number on page 2</div></div>
+          <span class="due">Tomorrow</span><span class="av">KT</span>
+        </div>
+        <div class="ib-foot"><span>8 of 38 · sorted by SLA</span><span><span class="kbd">J</span> <span class="kbd">K</span> move &nbsp; <span class="kbd">R</span> reply</span></div>
+      </div>
+    </article>
+
+    <!-- 2. SLA clock -->
+    <article class="tile t-sla">
+      <p class="cap"><b>SLA clocks.</b> Each ticket shows what you promised and how long is left.</p>
+      <div class="sla" role="img" aria-label="First reply due in 14 minutes 32 seconds; 76 percent of the 1 hour target used">
+        <div class="lbl">First reply due in</div>
+        <div class="clock">14:<span class="s">32</span></div>
+        <div class="track"><i></i></div>
+        <div class="sla-meta"><span>Enterprise · 1 h first reply</span><span>#48207</span></div>
+      </div>
+    </article>
+
+    <!-- 3. Macros -->
+    <article class="tile t-macro">
+      <p class="cap"><b>Macros.</b> Answers your team writes once, filled in with each customer's details.</p>
+      <div class="mc" role="img" aria-label="Macro: Refund a duplicate charge, with variables and three actions">
+        <div class="mc-head"><b>Refund a duplicate charge</b><span class="muted">used 312 times</span></div>
+        <div class="mc-body">Hi <span class="var">first_name</span>, you're right: <span class="var">invoice.id</span> was charged twice. The refund of <span class="var">invoice.amount</span> is on its way and lands in 3 to 5 working days.</div>
+        <div class="acts">
+          <div class="act">Set status<b>Pending customer</b></div>
+          <div class="act">Add tag<b>billing · refund</b></div>
+          <div class="act">Assign to<b>Finance, tier 2</b></div>
+        </div>
+      </div>
+    </article>
+
+    <!-- 4. CSAT -->
+    <article class="tile t-csat">
+      <p class="cap"><b>Satisfaction.</b> Every rating arrives attached to the conversation that earned it.</p>
+      <div class="cs">
+        <div>
+          <div class="score">94.2<small>%</small></div>
+          <div class="delta">+1.8 pts <span>vs September</span></div>
+          <div class="small muted" style="margin-top:2px">1,284 ratings this month</div>
+          <div class="legend"><i></i>Goal 92%</div>
+        </div>
+        <div>
+          <div class="bars" role="img" aria-label="Weekly CSAT for 12 weeks, from 89 to 96 percent; goal 92 percent">
+            <div class="goal" style="bottom:58%"></div>
+            <i style="height:40%"></i><i style="height:48%"></i><i style="height:36%"></i><i style="height:52%"></i>
+            <i style="height:56%"></i><i style="height:50%"></i><i style="height:62%"></i><i style="height:60%"></i>
+            <i style="height:68%"></i><i style="height:64%"></i><i style="height:74%"></i><i class="now" style="height:80%"></i>
+          </div>
+          <div class="axis"><span>Jul 21</span><span>Aug 18</span><span>Sep 15</span><span>Oct 13</span></div>
+        </div>
+      </div>
+    </article>
+
+    <!-- 5. Keyboard -->
+    <article class="tile t-keys">
+      <p class="cap"><b>Keyboard first.</b> Reply, assign and snooze from the keys.</p>
+      <div class="cmd" role="img" aria-label="Snooze menu: until the customer replies, in 2 hours, tomorrow at 9:00, Monday at 9:00">
+        <div class="cmd-in">Snooze #48207 until… <span class="kbd" style="background:transparent;border-color:var(--ds-color-neutral-dark-7);color:var(--ds-color-neutral-dark-11)">S</span></div>
+        <div class="opt on"><span>Customer replies</span><span class="k">1</span></div>
+        <div class="opt"><span>In 2 hours<span class="when">16:50</span></span><span class="k">2</span></div>
+        <div class="opt"><span>Tomorrow<span class="when">09:00</span></span><span class="k">3</span></div>
+        <div class="opt"><span>Monday<span class="when">09:00</span></span><span class="k">4</span></div>
+      </div>
+    </article>
+  </section>
+</main>
+</body>
+</html>

@@ -43,6 +43,8 @@ The semantic token points to it:
 
 In the CSS export, that becomes `--ds-color-text-primary`. Components use the semantic roles. They don't use the primitives directly. That way a dark-mode mapping can point the same role at a different shade.
 
+{{figure:design-tokens-tiers}}
+
 ## The DTCG format
 
 DTCG is short for the Design Tokens Community Group, a W3C Community Group. Its specification stores tokens as JSON. Each token has a `$value`, and can have a `$type` and a `$description`. Version 2025.10, its first stable version, was published on 28 October 2025.
@@ -62,6 +64,8 @@ A mode is a version of the same tokens for a different setting, such as dark mod
 - **motion:** standard or reduced.
 
 No two switches set the same token, so any combination works. In a test run, the engine checked 164 color pairs in every mode and 12 mode combinations.
+
+{{figure:design-tokens-resolver}}
 
 ## Where OpenDesigner keeps its tokens
 

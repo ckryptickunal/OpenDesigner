@@ -45,10 +45,10 @@
       "decision": "D-0014"
     },
     "roundness": {
-      "value": 82,
+      "value": 60,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0015"
+      "decision": "D-0028"
     },
     "depth": {
       "value": 25,
@@ -78,7 +78,7 @@
     "brandColor": "#4e6e48",
     "primaryActionColor": null,
     "focusColor": null,
-    "neutralBase": "#E6E0D2",
+    "neutralBase": "#8E928C",
     "contrastTarget": "AA",
     "textFace": "Figtree",
     "displayFace": "Alegreya",
@@ -108,7 +108,7 @@
       "selfHost": true
     },
     "fontClass": null,
-    "accentCount": 2,
+    "accentCount": 1,
     "accentHarmony": "triadic",
     "neutralTint": null,
     "chartPalette": null,
@@ -142,14 +142,15 @@
     "domain": null,
     "minTarget": null,
     "focusWidth": 2,
-    "secondaryColors": [
-      "#C0603A"
-    ],
+    "secondaryColors": [],
     "monoFace": "ui-monospace",
     "scripts": [
       "Latn"
     ],
-    "defaultTheme": "system"
+    "defaultTheme": "system",
+    "borderDefault": null,
+    "texture": null,
+    "gradients": null
   },
   "overrides": {
     "motion.duration.instant": {
@@ -295,6 +296,46 @@
     },
     "size.target.min": {
       "value": 44,
+      "unit": "px"
+    },
+    "font.size.11": {
+      "value": 11,
+      "unit": "px"
+    },
+    "font.size.12": {
+      "value": 12,
+      "unit": "px"
+    },
+    "font.size.13": {
+      "value": 13,
+      "unit": "px"
+    },
+    "font.size.15": {
+      "value": 15,
+      "unit": "px"
+    },
+    "font.size.17": {
+      "value": 17,
+      "unit": "px"
+    },
+    "font.size.20": {
+      "value": 20,
+      "unit": "px"
+    },
+    "font.size.22": {
+      "value": 22,
+      "unit": "px"
+    },
+    "font.size.28": {
+      "value": 28,
+      "unit": "px"
+    },
+    "font.size.34": {
+      "value": 34,
+      "unit": "px"
+    },
+    "font.size.48": {
+      "value": 48,
       "unit": "px"
     }
   },
@@ -461,7 +502,7 @@
     ]
   },
   "hashes": {
-    "DESIGN.md": "b1038cf95a342883",
+    "DESIGN.md": "8441ca0b44b82323",
     "PRODUCT.md": "146e39be1a029538"
   },
   "exports": {
@@ -2751,5 +2792,7 @@
       "size.target.min": "dimension"
     },
     "snapshots": "standards-state.json"
-  }
+  },
+  "style": null,
+  "customStyles": {}
 }

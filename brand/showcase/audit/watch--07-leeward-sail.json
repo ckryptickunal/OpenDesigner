@@ -1,0 +1,59 @@
+{
+ "piece": "watch/07-leeward-sail",
+ "title": "07 Leeward: notes",
+ "pattern": "sailing instrument",
+ "platform": "watchos",
+ "industry": "marine",
+ "style": [
+  "industrial",
+  "retro",
+  "dark"
+ ],
+ "tags": [
+  "sailing instrument",
+  "marine",
+  "compass",
+  "heading",
+  "watch",
+  "dark",
+  "mono",
+  "watchos"
+ ],
+ "score": 4,
+ "verdict": "keep",
+ "strengths": [
+  "An instrument, not a poster: a compass card larger than the display, bone hairlines and ticks, port red and starboard green as the only colour, one mono family in four sizes.",
+  "Real readings: 247° magnetic, AWS 14.2 kn, SOG 6.8 kn, starboard tack at 38°; the apparent-wind arrow sits where a helm would look for it."
+ ],
+ "slop_signals": [
+  "The time sits top centre; watchOS puts it top right.",
+  "The 'W' cardinal letter is rotated with the card and '210' is cut by the display edge, so the top of the card is crowded with two coloured arcs, ticks and labels."
+ ],
+ "fixes": [
+  "Move the clock to the top-right corner inset.",
+  "Keep the cardinal letters upright and stop the outer labels at the inset rather than the edge."
+ ],
+ "references": [
+  {
+   "site": "Tide Guide",
+   "url": "https://mobbin.com/screens/a1406be1-da27-493e-8fea-275326ad965d",
+   "what": "Direction dial with cardinal letters and an 'NE 45°' readout under it: degree plus cardinal, read once."
+  },
+  {
+   "site": "Starlink",
+   "url": "https://mobbin.com/screens/efacde8d-8eed-4b1c-a6ee-2a2f18a17f19",
+   "what": "A tick ring with large upright cardinal letters on black."
+  },
+  {
+   "site": "Polestar",
+   "url": "https://mobbin.com/screens/13a0c3e2-30bf-4154-9a65-558909d65173",
+   "what": "A ring dial with small labels and one colour arc on black."
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "keep",
+  "said": "most of the watch screens are okay",
+  "date": "2026-10-14"
+ }
+}

@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prill · Evals before release</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300;400;500&family=Funnel+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* Prill. The mesh gradient is the run itself: every case of run #2,481 placed by its answer-correctness
+     score under v13 (across) and v14 (up), smoothed into density and blended in OKLab.
+     Graphite for the cases that held or improved; one warm signal, molten orange, for the 117 that now break the refund policy. */
+  :root {
+    --ink: var(--ds-color-neutral-light-12);
+    --ink-2: var(--ds-color-text-secondary);
+    --ink-3: var(--ds-color-text-tertiary);
+    --line: var(--ds-color-neutral-light-5);
+    --line-soft: var(--ds-color-neutral-light-3);
+    --hot: var(--ds-color-brand-seed);          /* molten orange: the field's signal only */
+    --hot-text: var(--ds-color-accent-light-10); /* the same signal as readable text, 5.5:1 on white */
+    --core: var(--ds-color-accent3-light-9);     /* amber, the hottest part of the cloud */
+    --plate: var(--ds-color-neutral-light-2);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--ds-color-white); }
+  body { font-family: var(--ds-font-family-text); color: var(--ink); font-size: var(--ds-font-size-16); line-height: 1.5; -webkit-font-smoothing: antialiased; overflow: hidden; }
+  a { color: inherit; text-decoration: none; }
+  a:focus-visible, button:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); border-radius: var(--ds-radius-control); }
+  .num { font-variant-numeric: tabular-nums; }
+
+  .page { position: relative; width: 1440px; height: 900px; padding: 0 var(--ds-space-64); }
+  nav { height: 80px; display: flex; align-items: center; gap: var(--ds-space-48); }
+  .brand { display: flex; align-items: center; gap: 10px; font-family: var(--ds-font-family-display); font-size: var(--ds-font-size-21); font-weight: 500; letter-spacing: -0.01em; }
+  /* the mark is a prill, the bead an assay leaves: one flat orange disc with one amber highlight */
+  .mark { position: relative; width: 20px; height: 20px; border-radius: 50%; background: var(--ds-color-brand-seed); }
+  .mark::after { content: ""; position: absolute; left: 5px; top: 4px; width: 6px; height: 6px; border-radius: 50%; background: var(--ds-color-accent3-light-9); }
+  .links { display: flex; gap: var(--ds-space-32); color: var(--ink-2); }
+  .signin { margin-left: auto; font-weight: 500; }
+
+  .hero { display: grid; grid-template-columns: 760px 1fr; gap: var(--ds-space-48); align-items: end; padding-top: 36px; }
+  h1 { font-family: var(--ds-font-family-display); font-size: var(--ds-font-size-67); line-height: 1.02; font-weight: 300; letter-spacing: -0.03em; }
+  .side { padding-bottom: 6px; }
+  .lede { font-size: var(--ds-font-size-21); line-height: 1.4; color: var(--ink-2); max-width: 26em; }
+  .cta { margin-top: var(--ds-space-24); display: inline-flex; align-items: center; gap: 10px; height: 48px; padding: 0 22px; border-radius: var(--ds-radius-control); background: var(--ink); color: var(--ds-color-white); border: 0; font: inherit; font-weight: 500; cursor: pointer; }
+
+  /* the product, flat and whole in the page grid */
+  .run { margin-top: 36px; border: 1px solid var(--line); border-radius: var(--ds-radius-overlay); overflow: hidden; display: grid; grid-template-columns: 520px 1fr; grid-template-rows: 40px 1fr; height: 548px; }
+  .bar { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; padding: 0 var(--ds-space-20); border-bottom: 1px solid var(--line-soft); font-size: var(--ds-font-size-12); color: var(--ink-3); }
+  .bar b { color: var(--ink); font-weight: 500; }
+
+  .fig { border-right: 1px solid var(--line-soft); padding: var(--ds-space-16) var(--ds-space-20) 0; position: relative; }
+  .fig h2 { font-size: var(--ds-font-size-16); font-weight: 500; }
+  .fig .sub { font-size: var(--ds-font-size-12); color: var(--ink-2); margin-top: 2px; }
+  .plotwrap { position: absolute; left: 20px; top: 72px; width: 479px; height: 420px; }
+  .plot { position: absolute; inset: 0; border-radius: var(--ds-radius-4); overflow: hidden; background: var(--plate); }
+  .plot canvas, .plot svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .tick { position: absolute; font-size: var(--ds-font-size-12); color: var(--ink-2); }
+  .axis { position: absolute; font-size: var(--ds-font-size-12); color: var(--ink); font-weight: 500; white-space: nowrap; }
+  .tag { position: absolute; font-size: var(--ds-font-size-12); line-height: 1.35; color: var(--ink); background: var(--ds-color-white); padding: 3px 7px; border-radius: var(--ds-radius-4); white-space: nowrap; }
+  .tag.hot { color: var(--hot-text); font-weight: 600; box-shadow: inset 0 0 0 1px var(--hot); }
+  .quiet { position: absolute; font-size: var(--ds-font-size-12); color: var(--ink-2); }
+
+  .res { display: flex; flex-direction: column; min-width: 0; }
+  .title { display: flex; justify-content: space-between; align-items: flex-start; padding: var(--ds-space-16) var(--ds-space-20) 14px; }
+  .title h2 { font-size: var(--ds-font-size-21); font-weight: 500; letter-spacing: -0.01em; line-height: 1.2; }
+  .models { margin-top: var(--ds-space-4); font-size: var(--ds-font-size-12); color: var(--ink-2); }
+  .gate { text-align: right; }
+  .gate .state { font-size: var(--ds-font-size-16); font-weight: 600; color: var(--hot-text); }
+  .gate .why { font-size: var(--ds-font-size-12); color: var(--ink-3); }
+  table { width: 100%; border-collapse: collapse; }
+  th { font-size: var(--ds-font-size-12); font-weight: 500; color: var(--ink-3); text-align: right; padding: var(--ds-space-8) var(--ds-space-20) var(--ds-space-8) 0; border-top: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft); background: var(--ds-color-neutral-light-1); }
+  th:first-child, td:first-child { text-align: left; padding-left: var(--ds-space-20); }
+  td { text-align: right; padding: 11px var(--ds-space-20) 11px 0; border-bottom: 1px solid var(--line-soft); white-space: nowrap; }
+  td .kind { font-size: var(--ds-font-size-12); color: var(--ink-3); margin-left: var(--ds-space-8); }
+  td.thr, td.base { color: var(--ink-2); }
+  tr.fail td.cand, tr.fail td.chg { color: var(--hot-text); font-weight: 600; }
+  .reg { margin-top: auto; display: flex; justify-content: space-between; align-items: center; gap: var(--ds-space-24); padding: 14px var(--ds-space-20); background: var(--ds-color-neutral-light-1); }
+  .reg p { font-size: var(--ds-font-size-12); color: var(--ink-2); line-height: 1.45; }
+  .reg p b { color: var(--ink); font-weight: 600; }
+  .ghost { flex: none; height: 36px; padding: 0 14px; border-radius: var(--ds-radius-control); border: 1px solid var(--line); background: var(--ds-color-white); font: inherit; font-size: var(--ds-font-size-16); font-weight: 500; color: var(--ink); cursor: pointer; }
+</style>
+</head>
+<body>
+<div class="page">
+  <nav aria-label="Main">
+    <a class="brand" href="#"><span class="mark" aria-hidden="true"></span>prill</a>
+    <div class="links"><a href="#">Product</a><a href="#">Evaluators</a><a href="#">Docs</a><a href="#">Pricing</a><a href="#">Changelog</a></div>
+    <a class="signin" href="#">Sign in</a>
+  </nav>
+
+  <section class="hero">
+    <h1>Know what got worse before your users do.</h1>
+    <div class="side">
+      <p class="lede">Prill runs every prompt, model and retrieval change against your real cases, and shows you case by case what broke.</p>
+      <button class="cta">Start a free eval run <span aria-hidden="true">→</span></button>
+    </div>
+  </section>
+
+  <article class="run" aria-label="Eval run 2,481: v14 against v13">
+    <div class="bar"><span>support-agent / Runs / <b>#2,481</b></span><span class="num">4,012 cases · Oct 14, 14:37 · 6 min 12 s</span></div>
+
+    <figure class="fig">
+      <h2>Answer correctness, case by case</h2>
+      <p class="sub">Each case by its v13 score (across) and v14 score (up). Darker grey: more cases.</p>
+      <div class="plotwrap" id="wrap">
+        <div class="plot" role="img" aria-label="Density of all 4,012 cases by v13 and v14 answer-correctness score. Most cases sit in the top right, just above the line where the two scores are equal, so v14 scores a little higher. A separate orange cloud of 117 cases sits below the line on the right: they scored about 0.9 under v13 and about 0.4 under v14, and they now break the refund policy.">
+          <canvas id="field"></canvas>
+          <svg id="over" viewBox="0 0 479 420" aria-hidden="true"></svg>
+        </div>
+        <span class="tick" style="left:8px;top:6px">1.0</span><span class="axis" style="left:40px;top:6px">v14 ↑</span>
+        <span class="tick" style="left:8px;top:50%;transform:translateY(-50%)">0.6</span>
+        <span class="tick" style="left:8px;bottom:6px">0.2</span>
+        <span class="tick" style="left:50%;bottom:6px;transform:translateX(-50%)">0.6</span>
+        <span class="axis" style="left:calc(50% + 26px);bottom:6px">v13 →</span><span class="tick" style="right:8px;bottom:6px">1.0</span>
+        <span class="quiet" style="left:22%;top:24%">better in v14</span>
+        <span class="quiet" style="left:40%;bottom:9%">worse in v14</span>
+        <span class="tag hot" id="hotTag">117 now break the refund policy</span>
+      </div>
+    </figure>
+
+    <section class="res" aria-label="Results by evaluator">
+      <div class="title">
+        <div>
+          <h2>v14 against v13</h2>
+          <div class="models">v14 · candidate · new refund prompt, smaller model &nbsp;·&nbsp; v13 · in production</div>
+        </div>
+        <div class="gate"><div class="state">Release blocked</div><div class="why">1 of 6 checks below threshold</div></div>
+      </div>
+      <table class="num">
+        <thead><tr><th>Evaluator</th><th>Threshold</th><th>v13</th><th>v14</th><th>Change</th></tr></thead>
+        <tbody>
+          <tr><td>Answer correctness<span class="kind">judge</span></td><td class="thr">≥ 0.85</td><td class="base">0.861</td><td class="cand">0.893</td><td class="chg">+0.032</td></tr>
+          <tr><td>Cites a source<span class="kind">rule</span></td><td class="thr">≥ 0.90</td><td class="base">0.912</td><td class="cand">0.934</td><td class="chg">+0.022</td></tr>
+          <tr class="fail"><td>Follows refund policy<span class="kind">rule</span></td><td class="thr">≥ 0.97</td><td class="base">0.978</td><td class="cand">0.951</td><td class="chg">−0.027</td></tr>
+          <tr><td>Escalates when unsure<span class="kind">judge</span></td><td class="thr">≥ 0.86</td><td class="base">0.884</td><td class="cand">0.871</td><td class="chg">−0.013</td></tr>
+          <tr><td>Tone, 1 to 5<span class="kind">rubric</span></td><td class="thr">≥ 4.0</td><td class="base">4.31</td><td class="cand">4.42</td><td class="chg">+0.11</td></tr>
+          <tr><td>Latency p95<span class="kind">metric</span></td><td class="thr">≤ 2.5 s</td><td class="base">2.41 s</td><td class="cand">1.86 s</td><td class="chg">−0.55 s</td></tr>
+          <tr><td>Cost per 1,000 cases<span class="kind">metric</span></td><td class="thr">not gated</td><td class="base">$3.92</td><td class="cand">$2.71</td><td class="chg">−$1.21</td></tr>
+        </tbody>
+      </table>
+      <div class="reg">
+        <p><b>117 cases pass the refund policy in v13 and fail it in v14;</b> 8 go the other way, so 3,924 passes become 3,815. Case 1187, “Refund after 45 days?”: v13 declined, v14 offered one.</p>
+        <button class="ghost">Review 117 cases</button>
+      </div>
+    </section>
+  </article>
+</div>
+
+<script>
+/* The field. Deterministic: a seeded generator stands in for the run's 4,012 cases.
+   3,895 cases that held or improved; 117 that now break the refund policy. */
+(function () {
+  const wrap = document.getElementById('wrap'), cv = document.getElementById('field');
+  const W = 479, H = 420, dpr = Math.min(window.devicePixelRatio || 1, 2);
+  cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+  const ctx = cv.getContext('2d');
+  const tok = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const hex = h => { h = h.replace('#', ''); return [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16) / 255); };
+
+  // OKLab, so the blends stay clean instead of turning muddy
+  const lin = c => c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+  const gam = c => c <= 0.0031308 ? 12.92 * c : 1.055 * Math.pow(c, 1 / 2.4) - 0.055;
+  function toLab([r, g, b]) {
+    r = lin(r); g = lin(g); b = lin(b);
+    const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b), m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b), s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
+    return [0.2104542553 * l + 0.7936177850 * m - 0.0040720468 * s, 1.9779984951 * l - 2.4285922050 * m + 0.4505937099 * s, 0.0259040371 * l + 0.7827717662 * m - 0.8086757660 * s];
+  }
+  function toRgb([L, A, B]) {
+    const l = (L + 0.3963377774 * A + 0.2158037573 * B) ** 3, m = (L - 0.1055613458 * A - 0.0638541728 * B) ** 3, s = (L - 0.0894841775 * A - 1.2914855480 * B) ** 3;
+    return [4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s, -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s, -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s].map(c => Math.max(0, Math.min(1, gam(c))) * 255);
+  }
+  const mix = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t);
+  const C = {
+    ground: toLab(hex(tok('--ds-color-neutral-light-2'))),
+    lo: toLab(hex(tok('--ds-color-neutral-light-6'))),
+    mid: toLab(hex(tok('--ds-color-neutral-light-9'))),
+    hi: toLab(hex(tok('--ds-color-neutral-light-12'))),
+    hot: toLab(hex(tok('--ds-color-brand-seed'))),
+    core: toLab(hex(tok('--ds-color-accent3-light-9')))
+  };
+
+  let s = 2481;
+  const rnd = () => { s |= 0; s = s + 0x6D2B79F5 | 0; let t = Math.imul(s ^ s >>> 15, 1 | s); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  const gauss = (m, sd) => { let u = 0, v = 0; while (!u) u = rnd(); while (!v) v = rnd(); return m + sd * Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); };
+  const cl = x => Math.max(0, Math.min(1, x));
+
+  const G = 196, GH = Math.round(G * H / W), held = new Float32Array(G * GH), hot = new Float32Array(G * GH);
+  const ax = v => (v - 0.2) / 0.8;   // the axes run from 0.2 to 1.0: almost no case scores lower
+  function splat(g, x, y, sig) {
+    x = ax(x); y = ax(y);
+    const cx = x * (G - 1), cy = (1 - y) * (GH - 1), R = Math.ceil(sig * 3);
+    for (let dy = -R; dy <= R; dy++) for (let dx = -R; dx <= R; dx++) {
+      const X = Math.round(cx) + dx, Y = Math.round(cy) + dy; if (X < 0 || Y < 0 || X >= G || Y >= GH) continue;
+      g[Y * G + X] += Math.exp(-(dx * dx + dy * dy) / (2 * sig * sig));
+    }
+  }
+  const hotPts = [];
+  // the 117: passed the refund policy in v13, fail it in v14
+  for (let i = 0; i < 117; i++) hotPts.push([Math.min(0.97, cl(gauss(0.88, 0.045))), cl(gauss(0.40, 0.07))]);
+  // the other 3,895, on a logit scale, with the centre and the shift solved so that all 4,012 cases
+  // average the table's answer-correctness scores: v13 0.861, v14 0.893
+  const n1 = [], n2 = []; for (let i = 0; i < 3895; i++) { n1.push(gauss(0, 1)); n2.push(gauss(0, 1)); }
+  const sig = z => 1 / (1 + Math.exp(-z));
+  const hot13 = hotPts.reduce((t, p) => t + p[0], 0), hot14 = hotPts.reduce((t, p) => t + p[1], 0);
+  const mean = f => { let t = 0; for (let i = 0; i < 3895; i++) t += f(i); return t; };
+  const solve = (g, target) => { let lo = -4, hi = 8; for (let k = 0; k < 60; k++) { const mid = (lo + hi) / 2; (g(mid) < target ? lo = mid : hi = mid); } return (lo + hi) / 2; };
+  const m = solve(m => (mean(i => sig(m + 1.25 * n1[i])) + hot13) / 4012, 0.861);
+  const shift = solve(t => (mean(i => sig(m + 1.25 * n1[i] + t + 0.45 * n2[i])) + hot14) / 4012, 0.893);
+  for (let i = 0; i < 3895; i++) splat(held, sig(m + 1.25 * n1[i]), sig(m + 1.25 * n1[i] + shift + 0.45 * n2[i]), 7);
+  hotPts.forEach(([a, b]) => splat(hot, a, b, 5.5));
+  document.getElementById('wrap').dataset.means = [(mean(i => sig(m + 1.25 * n1[i])) + hot13) / 4012, (mean(i => sig(m + 1.25 * n1[i] + shift + 0.45 * n2[i])) + hot14) / 4012].map(v => v.toFixed(4)).join(' ');
+
+  let mh = 0, mo = 0; for (let i = 0; i < held.length; i++) { mh = Math.max(mh, held[i]); mo = Math.max(mo, hot[i]); }
+  const off = document.createElement('canvas'); off.width = G; off.height = GH;
+  const oc = off.getContext('2d'), img = oc.createImageData(G, GH);
+  for (let i = 0; i < held.length; i++) {
+    const a = Math.pow(held[i] / mh, 0.34), b = Math.pow(hot[i] / mo, 0.55);
+    let c = mix(C.ground, C.lo, Math.min(1, a * 1.6));
+    c = mix(c, C.mid, Math.max(0, Math.min(1, (a - 0.35) * 1.6)));
+    c = mix(c, C.hi, Math.max(0, (a - 0.75) * 3.2));
+    c = mix(c, C.hot, Math.min(1, b * 1.25));
+    c = mix(c, C.core, Math.pow(b, 3) * 0.9);
+    const [r, g, bb] = toRgb(c); img.data.set([r, g, bb, 255], i * 4);
+  }
+  oc.putImageData(img, 0, 0);
+  ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
+  ctx.filter = `blur(${6 * dpr}px)`;
+  ctx.drawImage(off, -10 * dpr, -10 * dpr, cv.width + 20 * dpr, cv.height + 20 * dpr);
+  ctx.filter = 'none';
+  // fine grain, so it reads as printed rather than lit
+  const px = ctx.getImageData(0, 0, cv.width, cv.height), d = px.data;
+  for (let i = 0; i < d.length; i += 4) { const n = (rnd() - 0.5) * 9; d[i] += n; d[i + 1] += n; d[i + 2] += n; }
+  ctx.putImageData(px, 0, 0);
+
+  // the line of equal scores and the label of the orange cloud, placed where the cloud really is
+  const over = document.getElementById('over');
+  const ang = -Math.atan2(H, W) * 180 / Math.PI;
+  over.innerHTML = `<line x1="${W * 0.1}" y1="${H * 0.9}" x2="${W}" y2="0" stroke="var(--ink)" stroke-width="1" stroke-dasharray="3 4" opacity=".55"/>` +
+    `<text x="0" y="0" transform="translate(${W * 0.34 - 5} ${H * 0.66 - 6}) rotate(${ang})" text-anchor="middle" font-size="12" fill="var(--ink-2)" font-family="var(--ds-font-family-text)">same score in both</text>`;
+  // the 117 are the only cases drawn one by one
+  over.insertAdjacentHTML('beforeend', hotPts.map(([a, b]) => `<circle cx="${(ax(a) * W).toFixed(1)}" cy="${((1 - ax(b)) * H).toFixed(1)}" r="1.6" fill="var(--ink)" opacity=".75"/>`).join(''));
+  const cx = ax(hotPts.reduce((a, p) => a + p[0], 0) / hotPts.length), cy = ax(hotPts.reduce((a, p) => a + p[1], 0) / hotPts.length);
+  const tag = document.getElementById('hotTag');
+  tag.style.right = '12px'; tag.style.top = ((1 - cy) * H - 92) + 'px';
+  over.insertAdjacentHTML('beforeend', `<path d="M${cx * W} ${(1 - cy) * H - 68} V${(1 - cy) * H - 44}" stroke="var(--hot)" stroke-width="1.5"/>`);
+})();
+</script>
+</body>
+</html>

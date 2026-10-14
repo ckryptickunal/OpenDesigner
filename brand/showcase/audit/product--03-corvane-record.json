@@ -1,0 +1,73 @@
+{
+ "piece": "product/03-corvane-record",
+ "title": "03 · Company record · Corvane",
+ "pattern": "record detail with activity timeline",
+ "platform": "web",
+ "industry": "sales software (CRM)",
+ "style": [
+  "enterprise",
+  "minimal",
+  "dense"
+ ],
+ "tags": [
+  "crm",
+  "record page",
+  "activity timeline",
+  "attribute diffs",
+  "details panel",
+  "inline edit",
+  "command palette",
+  "b2b"
+ ],
+ "score": 4,
+ "verdict": "keep",
+ "strengths": [
+  "The timeline records changes, not just events: 'changed Deal value and 3 other attributes' expands into old → new rows with deltas ('$48,000.00 → $62,500.00 +$14,500.00', 'Nov 14, 2026 → Dec 5, 2026 +21 days', 'Evaluation → Proposal')",
+  "Record navigation and counts everywhere: '12 of 214 in Enterprise pipeline' with arrows, tabs with counts (Emails 148, Calls 12, People 17), groups with event counts, 'Show all 24'",
+  "The details panel invites input: 'Set parent company…', 'Set renewal date…', one field mid-edit with a cobalt focus ring; the cobalt appears only on links and focus",
+  "One typeface (Hanken Grotesk) at three sizes and three weights carries the whole screen; the ⌘K frame is scoped to the record with verb-led actions, grey selection and keycaps"
+ ],
+ "slop_signals": [
+  "Staged states: an expanded diff, a focused input with a caret ('Tier-2 maker of wing ribs|') and a hovered 'Parent company' row in one frame",
+  "Three grey-filled meta chips under the title read heavier than Attio's plain meta row",
+  "Very close to Attio's layout and copy patterns ('Set parent company…', 'Show all 24', '12 of 214 in Enterprise pipeline'); structure borrowed, which is allowed, but nothing on the screen is Corvane's own"
+ ],
+ "fixes": [
+  "Fix the list-membership label: 'Enterprise pipeline since today' contradicts the timeline 'moved this company to Enterprise pipeline' on Oct 6; say 'since Oct 6' or label the stage date",
+  "Keep only one live edit state (the focused input) and drop the hover row",
+  "Rename Halyard Systems (styles/01 Halyard Analytics), Tessaly (styles/02 Tessaly House), Joanne Okafor and Tomás Herrera (both names reused in other pieces)"
+ ],
+ "references": [
+  {
+   "site": "Attio",
+   "url": "https://mobbin.com/screens/3f58982f-fb3f-46de-a123-70350ebfa604",
+   "what": "Same record layout: tabs with counts, timeline of attribute changes, right details panel with 'Set …' placeholders; ours is denser and has the diff open"
+  },
+  {
+   "site": "Twenty",
+   "url": "https://mobbin.com/screens/4b51a4dc-265c-44bb-9c58-7e85e3731258",
+   "what": "Grouped field diff in the timeline ('You updated 7 fields'); ours adds deltas (+$14,500.00, +21 days)"
+  },
+  {
+   "site": "Pipedrive",
+   "url": "https://mobbin.com/screens/d7c51694-e293-445d-9829-557a50744b38",
+   "what": "Average tier: colored overdue pill, yellow note card, green Deal button; ours is clearly above it"
+  }
+ ],
+ "audited": "2026-10-14",
+ "self_score": 5,
+ "audited_by": "independent",
+ "facts": [],
+ "fixed": [
+  "Lists panel: 'Enterprise pipeline · since Oct 6', matching the timeline",
+  "One temporary state per frame: main frame keeps the expanded change diff; the hovered Parent company row is gone; the field mid-edit is shot-edit.png (?state=edit); the ⌘K frame stays shot-palette.png",
+  "Names: Halyard Systems → Aldermoor Systems, Tessaly Aerostructures → Lathom Aerostructures (lathom-aero.com), Tomás Herrera → Gareth Penhale, Joanne Okafor → Joanne Achterberg, Eitan Varga → Eitan Mizrahi",
+  "Deal 'Fleet expansion' (a wing-rib maker has no fleet) is now 'Lathom · 3-site rollout', matching the SCIM-for-3-sites note",
+  "Re-rendered shot.png, shot-edit.png and shot-palette.png at 1440 × 900, 2×"
+ ],
+ "owner": {
+  "verdict": "keep",
+  "said": "I love the B2B product screens; they look absolutely crazy",
+  "date": "2026-10-14"
+ }
+}

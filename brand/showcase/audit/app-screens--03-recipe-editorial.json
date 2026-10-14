@@ -1,0 +1,77 @@
+{
+ "piece": "app-screens/03-recipe-editorial",
+ "title": "03 · Larder: recipe detail",
+ "pattern": "recipe detail",
+ "platform": "ios",
+ "industry": "food",
+ "style": [
+  "editorial",
+  "minimal"
+ ],
+ "tags": [
+  "recipe detail",
+  "food",
+  "cooking",
+  "editorial",
+  "serif",
+  "photo",
+  "checklist",
+  "ios"
+ ],
+ "score": 5,
+ "verdict": "keep",
+ "strengths": [
+  "A real idea carried into product terms: magazine furniture (masthead 'Larder No. 14', the 'AUTUMN SUPPERS' rule, a 'Fig. 1' caption, a kicker) around a working recipe screen with a servings stepper, a checklist and a pinned step timer.",
+  "A real, credited photograph instead of generated art, and the data agrees with it: 600 g cherry tomatoes on the vine, 2 jars butter beans 'keep the liquor', step 3 of 6 'Simmer, lid off', 12:40.",
+  "Type discipline: two faces, five sizes, the title split by weight (bold phrase, light rest) rather than italics or colour; one red for masthead, kicker and timer only."
+ ],
+ "slop_signals": [
+  "Checked ingredients strike through both quantity and name in a heavy grey line; Kitchen Stories and Julienne mark done with the check alone.",
+  "'ONE POT · P. 32' is a page reference in an app: a conceit rather than a product detail."
+ ],
+ "fixes": [
+  "Drop the strikethrough and let the check plus a lighter colour mark done rows.",
+  "Replace 'P. 32' with something the app knows (the section only, or prep time)."
+ ],
+ "references": [
+  {
+   "site": "Julienne",
+   "url": "https://mobbin.com/screens/ad8755f7-d3fe-42c4-a57c-dd23175e6635",
+   "what": "Serif title, a four-fact row (skill, time, ingredients, calories), ingredient checks and a cook action: the same order, plainer."
+  },
+  {
+   "site": "Kitchen Stories",
+   "url": "https://mobbin.com/screens/6a2dec2a-8492-4e64-bcda-12ac62d57c30",
+   "what": "Quantity-first rows on hairlines with the servings stepper on the header line; done rows are not struck through."
+  },
+  {
+   "site": "Instacart",
+   "url": "https://mobbin.com/screens/0532323f-1c75-4311-be94-ef6890f7686f",
+   "what": "Photo, title, a credit line for the source, large checks on ingredients."
+  },
+  {
+   "site": "Recime",
+   "url": "https://mobbin.com/screens/23767ade-328f-4232-b804-6f6903272987",
+   "what": "Servings stepper with quantities in bold and names regular, the same row grammar."
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "improve",
+  "said": "better fonts, better spacing",
+  "date": "2026-10-14"
+ },
+ "round3": {
+  "score": 4,
+  "changed": [
+   "Fonts: Fraunces + Libre Franklin replaced by Literata (display) + Schibsted Grotesk (text) through the engine; iOS roles 34/22/17/15/13, weights 400-500",
+   "Spacing: everything on the 20/370 margins, 24 pt between groups, 52 pt rows; folio rules, 'Fig. 1' caption and 'p. 32' removed",
+   "Photo edge to edge under the status bar with a scrim (status clock 5.3:1, icons 3.3:1 at the brightest pixels); knife logos cropped out",
+   "One accent: tomato red only on 'Start cooking'; olive and mustard removed; neutral off-white page instead of cream with brown ink",
+   "The running step timer (contradicted the unticked list) replaced by a 6-step method bar sized by minutes: 15 hands-on + 40 waiting = 55",
+   "Done rows: quiet grey-filled check, tertiary text, no strikethrough",
+   "Fresh-eyes audit: 3/5, 3/5, then 4/5; its polish items fixed"
+  ]
+ },
+ "facts": []
+}

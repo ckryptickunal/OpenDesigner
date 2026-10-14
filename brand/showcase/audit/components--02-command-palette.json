@@ -1,0 +1,64 @@
+{
+ "piece": "components/02-command-palette",
+ "title": "02 · Command palette (Margin)",
+ "pattern": "command palette",
+ "platform": "web",
+ "industry": "writing tools",
+ "style": [
+  "minimal",
+  "editorial",
+  "swiss"
+ ],
+ "tags": [
+  "command palette",
+  "writing tools",
+  "monochrome",
+  "keyboard",
+  "fuzzy search",
+  "manuscript",
+  "keycaps"
+ ],
+ "score": 4,
+ "verdict": "keep",
+ "strengths": [
+  "Sits in a real page: the palette floats over a manuscript with chapter title, word count and 'Saved', so it reads as a tool and not a floating card",
+  "Restraint: paper, ink, 1 px rules, two faces (IBM Plex Sans, Newsreader), no hue; matches are weight 600 plus a hairline underline, exactly the house rule",
+  "Believable content: 'in The Salt Road ×' scope chip, group counts, 'Salt Road / Ch. 3' paths, an empty state that offers '⌘N starts a draft named \"qzxv\"', and keycaps for every key the footer names"
+ ],
+ "slop_signals": [
+  "Row metadata abbreviations 'edited 2 d' and '2,140 w' are truncated in a way no shipped product uses (real rows say '2d ago' or '2,140 words')",
+  "The scattered fuzzy-match underlines in 'Sh ore leave: rev erse outline' make four rows look noisy at once; real palettes bold the run and skip the underline"
+ ],
+ "fixes": [
+  "Write metadata as '2 days ago' and '2,140 words' (or '2d' / '2.1k words'), right-aligned in the quiet grey",
+  "Keep the weight highlight and drop the hairline underline under matched letters; or underline only when the match is a single run"
+ ],
+ "references": [
+  {
+   "site": "Gumloop",
+   "url": "https://mobbin.com/screens/97f3400e-39b6-469b-b208-addb2d51e850",
+   "what": "Grouped results with breadcrumb paths ('Personal > Feedback Categorizer') and an 'Open ↵' hint on the selected row; the same anatomy, same quietness"
+  },
+  {
+   "site": "Mintlify",
+   "url": "https://mobbin.com/screens/7c7ad31f-9dfe-4be7-83d7-6002fe31d4d0",
+   "what": "Group labels, a description line under each row, ESC in the input and 'Select / Open' keycaps in the footer"
+  },
+  {
+   "site": "Ferndesk",
+   "url": "https://mobbin.com/screens/59f05a71-36d4-4f70-b956-cd5bc8d0f98d",
+   "what": "Long result list with one-line previews and footer key hints; the hover state is barely a tint"
+  },
+  {
+   "site": "Customer.io",
+   "url": "https://mobbin.com/screens/d6ebb7ec-1bb2-4406-8f94-3684981e13d0",
+   "what": "A category filter inside the search field like our scope chip, plus a preview pane for the selected result"
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "keep",
+  "said": "the one web component that is not ugly",
+  "date": "2026-10-14"
+ }
+}

@@ -9,6 +9,24 @@ updated: 2026-10-14
 
 OpenDesigner gives a design-system team a written record and a set of checks: a decision log with reasons, locks, house and project standards, a check for hard-coded values in code, and DTCG 2025.10 tokens. Everything lives as files in your repository. It is early for teams: nobody has run a team pilot yet, and there is no hosted service and no SSO.
 
+## At a glance
+
+| What a team needs | Status |
+|---|---|
+| Decision log, append-only, with reasons | Works |
+| Locked values | Works |
+| House standards (455 rules, version 3) and project standards | Works |
+| Drift check for hard-coded values in code | Works locally; not tested in CI yet |
+| DTCG 2025.10 tokens with a resolver for modes | Works |
+| Figma variables, one import file per mode | Works |
+| Light and dark, three densities, reduced motion | Works |
+| Style Dictionary, Terrazzo, Tokens Studio, Penpot | Named in the export skill; not tested |
+| Several brands from one system | Not yet |
+| React Native and Flutter exports | Not yet |
+| Hosted service, SSO and roles | Not offered; your repository host's access control applies |
+
+What runs where, and what can leave your computer: [Security and data](/docs/security/).
+
 ## The decision log
 
 `opendesigner/decisions.md` records every decision, newest last. Each entry has the value, the reason, the date, whether it is locked, and what it replaces. It also says how the value was set: chosen, confirmed default, auto default, assumed, delegated, or taken from a reference, an asset or a standard. [Decisions, DESIGN.md and the overview page](/docs/decisions/) explains each one.
@@ -21,6 +39,8 @@ A suggestion nobody answered is never recorded as a decision. The log is append-
 - reason: sketch: Level 0 answer
 ```
 
+{{figure:enterprise-log-entry}}
+
 ## Locked decisions
 
 Lock any value that must not drift, such as an exact brand color:
@@ -31,9 +51,11 @@ engine.py set raw.brandColor '"#2563eb"' --why "brand team" --lock
 
 After that, the engine refuses to change it and says to ask the owner first. The accessibility floors are locked too, unless you raise them. The optional `AGENTS.md` note tells coding agents the same.
 
+{{figure:enterprise-lock}}
+
 ## House standards and project standards
 
-**House standards** are 455 rules (version 2, updated 2026-09-27) from sources the project owner marked non-negotiable. They cover areas such as motion, touch and components. The engine applies the ones that fit your platforms and locks them. In a test run, a web-only project got 289 of them. They are listed with their sources in `opendesigner/standards.md`.
+**House standards** are 455 rules (version 3, updated 2026-10-14) from sources the project owner marked non-negotiable. They cover areas such as motion, touch and components. The engine applies the ones that fit your platforms and locks them. In a test run, a web-only project got 289 of them. They are listed with their sources in `opendesigner/standards.md`.
 
 A house standard changes only when someone explicitly asks. `engine.py standard override` changes one value or the whole standard, and records the reason. `engine.py standard restore` undoes it. `engine.py standards --update` applies newer house standards and keeps your overrides.
 
@@ -76,6 +98,20 @@ Each system has light and dark colors, three densities and a reduced-motion mode
 ## Governance questions
 
 At deeper zoom levels, the interview asks questions only your team can answer. Examples: how strict the system is, who can add to it, how components get a status and a version, and how you announce changes. It records your answers in `PRODUCT.md` and never invents one.
+
+## Pilot it with one team
+
+Nobody has piloted OpenDesigner with a team yet. If you try it, this order keeps the pilot small and reversible:
+
+1. Start with one product, not the whole portfolio.
+2. Run the sketch, then commit `DESIGN.md`, `opendesigner/tokens/` and the exports.
+3. Accept the `AGENTS.md` note, so coding agents read the system before they touch the interface.
+4. Lock the values that must not drift: `engine.py set raw.brandColor '"#2338FF"' --lock --why "..."`.
+5. Add your team's own rules as project standards, each with a reason (`--why`).
+6. Read the decision log together in your design review.
+7. Have each person run `engine.py review` at the end of their work. `--strict` exits with an error on drift, but it has not been tested in a pipeline yet.
+
+Questions, gaps and results from a pilot are the most useful thing you can send back: open an issue with the [issue forms](https://github.com/ckryptickunal/OpenDesigner/issues/new/choose). There is one maintainer and no support agreement.
 
 ## Where it does not fit yet
 

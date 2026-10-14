@@ -1,0 +1,15 @@
+<figure class="fig">
+<div class="dodont">
+<div class="dont"><p class="dd-h">A gray that looks close enough</p><p class="dd-why">On a good screen both read fine. Measured, the first is <span class="num">4.49:1</span>. The engine never rounds up, so body text in it fails and the build stops.</p>
+<div class="dd-art" style="display:grid;gap:10px">
+<div style="display:flex;align-items:center;gap:12px"><span style="width:56px;height:48px;display:grid;place-items:center;border:1px solid var(--line);border-radius:var(--radius-control);background:#fcfdff;color:#6f7683;font-size:26px;font-weight:500;flex:none">Aa</span><span style="flex:1;min-width:0;font-size:13px;line-height:18px"><span class="mono" style="overflow-wrap:anywhere">color.neutral.light.9</span><br><span class="num" style="color:var(--ink-muted)">#6f7683 on #fcfdff</span></span><span class="chip bad num">4.49:1</span></div>
+<div style="display:flex;align-items:center;gap:12px"><span style="width:56px;height:48px;display:grid;place-items:center;border:1px solid var(--line);border-radius:var(--radius-control);background:#fcfdff;color:#808793;font-size:26px;font-weight:500;flex:none">Aa</span><span style="flex:1;min-width:0;font-size:13px;line-height:18px"><span class="mono" style="overflow-wrap:anywhere">color.text.disabled</span> as body text<br><span class="num" style="color:var(--ink-muted)">#808793 on #fcfdff</span></span><span class="chip bad num">3.55:1</span></div>
+</div></div>
+<div class="do"><p class="dd-h">Text roles built to pass</p><p class="dd-why">The floor for body text is <span class="num">4.5:1</span>, checked with the WCAG 2 formula in every mode. The text roles clear it with room to spare.</p>
+<div class="dd-art" style="display:grid;gap:10px">
+<div style="display:flex;align-items:center;gap:12px"><span style="width:56px;height:48px;display:grid;place-items:center;border:1px solid var(--line);border-radius:var(--radius-control);background:#fcfdff;color:#222428;font-size:26px;font-weight:500;flex:none">Aa</span><span style="flex:1;min-width:0;font-size:13px;line-height:18px"><span class="mono" style="overflow-wrap:anywhere">color.text.primary</span><br><span class="num" style="color:var(--ink-muted)">#222428 on #fcfdff</span></span><span class="chip ok num">15.27:1</span></div>
+<div style="display:flex;align-items:center;gap:12px"><span style="width:56px;height:48px;display:grid;place-items:center;border:1px solid var(--line);border-radius:var(--radius-control);background:#fcfdff;color:#515762;font-size:26px;font-weight:500;flex:none">Aa</span><span style="flex:1;min-width:0;font-size:13px;line-height:18px"><span class="mono" style="overflow-wrap:anywhere">color.text.secondary</span><br><span class="num" style="color:var(--ink-muted)">#515762 on #fcfdff</span></span><span class="chip ok num">7.14:1</span></div>
+</div></div>
+</div>
+<figcaption>Contrast is measured, not eyeballed. In OpenDesigner's own palette the neutral step 9 reads fine but measures 4.49:1 and fails the 4.5:1 floor for body text, while the text roles pass with room to spare.</figcaption>
+</figure>

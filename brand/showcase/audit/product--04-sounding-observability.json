@@ -1,0 +1,74 @@
+{
+ "piece": "product/04-sounding-observability",
+ "title": "04 · Service overview · Sounding",
+ "pattern": "observability dashboard",
+ "platform": "web",
+ "industry": "developer tools",
+ "style": [
+  "enterprise",
+  "minimal",
+  "technical"
+ ],
+ "tags": [
+  "dashboard",
+  "observability",
+  "charts",
+  "kpi row",
+  "sparklines",
+  "data table",
+  "dense",
+  "b2b"
+ ],
+ "score": 4,
+ "verdict": "keep",
+ "strengths": [
+  "Reads as a real on-call screen: the alert statement ('p95 latency above its 450 ms objective since 13:21 UTC · View alert') sits beside the service title, and the deploy that caused it (v2.41.0 at 13:12) is marked on every chart and named in the meta line",
+  "Quiet chart grammar from the study: 1.5 px ink lines, previous day dashed, last hour dotted, hatched no-trace-data band, end-only axis labels, 'Updated 14:02 UTC', a sampling footnote and one honest empty card ('No upstream timeouts in this range')",
+  "Numbers agree: 11 endpoint rows add up to 18,375,270 requests (18.38M, 213 req/s) and 41,604 errors (0.23%); the request and error series are scaled to those totals and the trace gap shows in latency, errors and every sparkline but not in load-balancer requests",
+  "One amber only for the alerting series and the words that point to it; near-black primary; 400/500/600; 36 px rows; mono only on routes, versions and latencies"
+ ],
+ "slop_signals": [
+  "Every chart feature at once: pinned tooltip, objective line, hatched no-data band, deploy diamonds, dotted partial hour and an 'Alerting' badge; it reads as a feature tour more than a page in use",
+  "The latency chart's lower grey line (p50) is not in the legend",
+  "Four bordered chart cards; Vercel and Stripe keep widget chrome lighter"
+ ],
+ "fixes": [
+  "Unpin the tooltip in the main frame or show it in a second state",
+  "Label the p50 line in the latency card or drop it",
+  "Rename the workspace 'Wrenfield Pay' (Fennick has Wrenfield Water Co.) and the signed-in user 'Mara Okafor' (same full name in styles/01 and app-screens/09)"
+ ],
+ "references": [
+  {
+   "site": "Vercel",
+   "url": "https://mobbin.com/screens/38a44719-a4b0-482b-bb40-283eec56ebd4",
+   "what": "Environment select, time range, chart cards with chevron titles, empty card 'No invocations in this time range', table below; ours follows it with richer data"
+  },
+  {
+   "site": "Grok",
+   "url": "https://mobbin.com/screens/661ddba6-bb26-4b5c-b1c6-9f3e9f2f743f",
+   "what": "p90/p50 in mono per card and honest 'Not enough data to display a trend'"
+  },
+  {
+   "site": "Railway",
+   "url": "https://mobbin.com/screens/fe76e123-f3c7-426b-a58e-b8b3188063d9",
+   "what": "Average tier: bar colors per status class, crowded axes; ours is quieter"
+  }
+ ],
+ "audited": "2026-10-14",
+ "self_score": 4,
+ "audited_by": "independent",
+ "facts": [],
+ "fixed": [
+  "One temporary state per frame: the pinned tooltip and crosshair moved to shot-tooltip.png (?state=tooltip)",
+  "Tooltip change is computed from the figures shown: 228/s vs 214/s reads +6.5%",
+  "The p50 line is labelled in the legend ('Latency p50')",
+  "'Go 1.23' (out of support by Oct 2026) is now 'Go 1.26'",
+  "Names: Wrenfield Pay (W) → Fulmar Pay (F); Mara Okafor (MO) → Yusuf Hartmann (YH)",
+  "Re-rendered shot.png and shot-tooltip.png at 1440 × 900, 2×"
+ ],
+ "owner": {
+  "verdict": "keep",
+  "said": "I love the B2B product screens; they look absolutely crazy",
+  "date": "2026-10-14"
+ }
+}

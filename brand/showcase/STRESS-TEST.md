@@ -6,6 +6,8 @@ How it was checked: every bug was checked against the code (function and line gi
 
 Line numbers in `engine.py` are from the committed version (HEAD `78dc59f`, last changed 2026-10-04), which is the code the builders ran. While this review was running, another session added an uncommitted overview page and an `artifact` export to `engine.py` (about 400 lines). That change touches none of the findings, but it shifts line numbers: +1 after line 22, and about +395 after line 8712. Search by function name if a line looks off. The one traceback below was printed by the working-tree file, so its line numbers are shifted.
 
+> **Update, later on 2026-10-14: the audit against shipped work.** Kunal judged most pieces as AI slop, so all 54 (the 46 plus 8 mockups) were audited against three to five shipped products each on Mobbin (`audit/`, one JSON per piece: score, verdict, tags, the visible tells, fixes and the references by URL). Result: 28 keep, 20 polish, 6 remake; average 3.5 of 5. The judgement in section 1 below was too kind. The tells, counted, and what the pieces that passed share are now rules for every builder: `skills/opendesigner/references/making.md` section 11. The six remakes and the polish list are being rebuilt with B2B subjects first (Kunal: the highest-paying customers are B2B and enterprise).
+
 ---
 
 ## 1. The headline result
@@ -113,6 +115,8 @@ Builder claims I rejected or softened:
 - **Already open:** no (not in OWNER-FEEDBACK).
 
 ### 2. Preflight can't read a token-built page (bug)
+
+> **Fixed on 2026-10-14** in `skills/opendesigner-preflight` (checked before its first push): Google Fonts faces now count as loaded; font sizes are read from token-built pages (rem, pt, clamp(), var() fallbacks, the font shorthand, inline styles); `--medium app` (11 pt) and `--medium watch` (12 pt) exist; the web floor fails under 11 px and warns at 11 px. Seven tests cover it. Open: the engine still gives web systems an 11 px small body style.
 
 - **Hit:** 8 of 8 builders. The false M9 error appeared on at least 33 of 46 pieces:
   - footers: 7 of 8

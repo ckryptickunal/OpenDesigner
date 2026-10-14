@@ -32,6 +32,8 @@ The skills are written instructions your AI follows. The questions follow a deci
 
 A Python engine does the math. It works out color ramps, type and spacing scales, contrast checks and every export. It uses only Python's standard library and makes no network calls. The same answers give the same files. You can run the engine with no AI at all. See [Engine commands](/docs/engine/).
 
+{{figure:how-it-works-pipeline}}
+
 ## How your answers become a system
 
 Your answers move [eight dials](/docs/dials/), such as Density, Roundness and Energy. Each dial runs from 0 to 100, and each position maps to concrete values: a type ratio, a corner radius, a motion duration. Feel words like "playful" or "calm" move several dials at once.
@@ -53,6 +55,8 @@ For a logo, custom icons, illustration, photos, a brand typeface or a voice guid
 Rule-based checks run first and give the same result every time. Breaking an accessibility rule is an error. Breaking a taste rule is a warning. Only after the system passes does the AI critique it. See [Accessibility floors](/docs/accessibility/).
 
 House standards also apply. These are 455 rules from sources the project owner marked non-negotiable. The engine applies the ones that fit your platforms and locks them.
+
+{{figure:how-it-works-checks}}
 
 ## Files, later changes and privacy
 

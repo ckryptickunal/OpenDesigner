@@ -1,0 +1,54 @@
+<figure class="fig">
+<div class="fig-panel">
+  <div class="ann-grid">
+    <div style="min-width:0;padding:14px 16px;border:1px solid var(--line);border-radius:var(--radius-container);background:var(--surface-raised);font-size:13px;line-height:20px;overflow-wrap:anywhere">
+      <div class="mono" style="font-weight:500">your-project/</div>
+      <div style="margin-left:4px;padding-left:12px;border-left:1px solid var(--line)">
+        <div><span class="ann-dot" style="width:18px;height:18px;font-size:11px;box-shadow:none;vertical-align:-4px;margin-right:6px">1</span><span class="mono">DESIGN.md</span> <span style="color:var(--ink-muted)">your rules in plain words</span></div>
+        <div><span class="ann-dot" style="width:18px;height:18px;font-size:11px;box-shadow:none;vertical-align:-4px;margin-right:6px">1</span><span class="mono">PRODUCT.md</span> <span style="color:var(--ink-muted)">what it is, who it is for, where it runs</span></div>
+        <div><span class="mono" style="font-weight:500">opendesigner/</span></div>
+        <div style="margin-left:4px;padding-left:12px;border-left:1px solid var(--line)">
+          <div><span class="ann-dot" style="width:18px;height:18px;font-size:11px;box-shadow:none;vertical-align:-4px;margin-right:6px">2</span><span class="mono" style="font-weight:500">tokens/</span> <span style="color:var(--ink-muted)">11 DTCG files, the source of truth</span></div>
+          <div class="mono" style="margin-left:4px;padding-left:12px;border-left:1px solid var(--line);font-size:12.5px;display:grid">
+            <span>primitives.tokens.json</span>
+            <span>semantic.tokens.json</span>
+            <span>semantic.color.light.<wbr>tokens.json</span>
+            <span>semantic.color.dark.<wbr>tokens.json</span>
+            <span>semantic.density.spacious.<wbr>tokens.json</span>
+            <span>semantic.density.comfortable.<wbr>tokens.json</span>
+            <span>semantic.density.compact.<wbr>tokens.json</span>
+            <span>motion.standard.tokens.json</span>
+            <span>motion.reduced.tokens.json</span>
+            <span>opendesigner.resolver.json</span>
+            <span>opendesigner.meta.json</span>
+          </div>
+          <div><span class="ann-dot" style="width:18px;height:18px;font-size:11px;box-shadow:none;vertical-align:-4px;margin-right:6px">3</span><span class="mono" style="font-weight:500">build/</span> <span style="color:var(--ink-muted)">the exports, rewritten by every build</span></div>
+          <div class="mono" style="margin-left:4px;padding-left:12px;border-left:1px solid var(--line);font-size:12.5px;display:grid">
+            <span>css/tokens.css</span>
+            <span>tailwind/theme.css</span>
+            <span>figma/variables.json · figma/import/</span>
+            <span>paper/tokens.json · tokens.light.css · tokens.dark.css</span>
+            <span>swift/DesignTokens.swift</span>
+            <span>compose/DesignTokens.kt</span>
+            <span>dtcg/</span>
+            <span>artifact/project/</span>
+          </div>
+          <div><span class="ann-dot" style="width:18px;height:18px;font-size:11px;box-shadow:none;vertical-align:-4px;margin-right:6px">3</span><span class="mono">overview.html</span> <span style="color:var(--ink-muted)">the whole system on one page</span></div>
+          <div><span class="ann-dot" style="width:18px;height:18px;font-size:11px;box-shadow:none;vertical-align:-4px;margin-right:6px">3</span><span class="mono">preview.html · preview/</span> <span style="color:var(--ink-muted)">every token; seven filled templates</span></div>
+          <div><span class="ann-dot" style="width:18px;height:18px;font-size:11px;box-shadow:none;vertical-align:-4px;margin-right:6px">4</span><span class="mono">decisions.md</span> <span style="color:var(--ink-muted)">every decision, how it was set and why</span></div>
+          <div><span class="ann-dot" style="width:18px;height:18px;font-size:11px;box-shadow:none;vertical-align:-4px;margin-right:6px">4</span><span class="mono">standards.md · standards-state.json</span></div>
+          <div><span class="ann-dot" style="width:18px;height:18px;font-size:11px;box-shadow:none;vertical-align:-4px;margin-right:6px">4</span><span class="mono">state.json</span> <span style="color:var(--ink-muted)">where you left off</span></div>
+        </div>
+      </div>
+    </div>
+    <ul class="ann-legend">
+      <li><span class="ann-dot" style="color:var(--on-accent)">1</span><div><strong>At the root.</strong> <span>For people and AI tools. Commit both.</span></div></li>
+      <li><span class="ann-dot" style="color:var(--on-accent)">2</span><div><strong>The source of truth.</strong> <span>DTCG 2025.10 tokens. Every other file is made from these.</span></div></li>
+      <li><span class="ann-dot" style="color:var(--on-accent)">3</span><div><strong>Made from the tokens.</strong> <span>Exports and pages. Every build rewrites them, so don't edit them by hand.</span></div></li>
+      <li><span class="ann-dot" style="color:var(--on-accent)">4</span><div><strong>The record.</strong> <span>Append-only decisions, the locked standards, and the state a later session continues from.</span></div></li>
+      <li><span class="ann-dot" style="background:var(--surface-raised);color:var(--ink-muted);border:1px dashed var(--line-strong)">+</span><div><strong>Only when you ask.</strong> <span><span class="mono">RATIONALE.md</span>, <span class="mono">feedback.md</span>, <span class="mono">references/</span> and the private <span class="mono">journey/</span> log, which stays out of git.</span></div></li>
+    </ul>
+  </div>
+</div>
+<figcaption>Everything OpenDesigner writes, as one sketch and build leaves it: two files at the root, the tokens as the source of truth, the exports and pages made from them, and the record of how each value was set.</figcaption>
+</figure>

@@ -9,6 +9,8 @@ updated: 2026-10-14
 
 If you already have an app, a brand book or a site you like, OpenDesigner can learn from it with the opendesigner-extract skill. It measures values such as text sizes, spacing, corners, shadows and colors, shows you where each one came from, and offers them as suggested answers. Nothing is decided until you accept it, and it never copies another brand's identity.
 
+{{figure:existing-product-extract-flow}}
+
 ## What it can read
 
 - **Your repo:** CSS, a Tailwind config, or `*.tokens.json` files.
@@ -77,6 +79,8 @@ A reference can shape the structure and quality of your system. It doesn't carry
 - photos, illustration, custom icons, signature shapes or copy.
 
 For the accent color, it keeps the role and how strong the color is, then asks for your own brand color. For a proprietary font, it suggests an open font of the same kind and says why. This rule wins over any request to make your app look exactly like another brand.
+
+{{figure:existing-product-structure-not-identity}}
 
 ## Your own app
 

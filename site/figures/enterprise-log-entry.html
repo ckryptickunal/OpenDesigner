@@ -1,0 +1,26 @@
+<figure class="fig">
+<div class="fig-panel">
+<div style="border:1px solid var(--line);border-radius:var(--radius-container);background:var(--surface-raised);padding:14px 16px;min-width:0">
+<div class="kicker" style="font-size:12px;margin-bottom:10px">opendesigner/decisions.md</div>
+<div style="display:flex;gap:8px;align-items:flex-start"><span class="ann-dot" style="flex:none">1</span><span class="mono" style="font-size:12.5px;line-height:22px;font-weight:600;overflow-wrap:anywhere">## D-0004 · raw.brandColor = "#2563eb"</span></div>
+<div class="mono" style="font-size:12.5px;line-height:22px;display:flex;flex-wrap:wrap;gap:6px 14px;margin:8px 0 8px 30px">
+<span style="display:inline-flex;gap:6px;align-items:center"><span class="ann-dot">2</span>set_by: chosen</span>
+<span style="display:inline-flex;gap:6px;align-items:center"><span class="ann-dot">3</span>locked: no</span>
+<span style="display:inline-flex;gap:6px;align-items:center"><span class="ann-dot">4</span><span class="num">date: 2026-10-14</span></span>
+<span style="display:inline-flex;gap:6px;align-items:center"><span class="ann-dot">5</span>supersedes: none</span>
+<span style="display:inline-flex;gap:6px;align-items:center"><span class="ann-dot">6</span>source_ref: none</span>
+</div>
+<div style="display:flex;gap:8px;align-items:flex-start;margin-left:30px"><span class="ann-dot" style="flex:none">7</span><span class="mono" style="font-size:12.5px;line-height:22px">reason: sketch: Level 0 answer</span></div>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:12px 20px;margin-top:18px;font-size:14px;line-height:20px">
+<div style="flex:1 1 200px;display:grid;grid-template-columns:22px 1fr;gap:10px"><span class="ann-dot">1</span><span><strong style="font-weight:600">The id, the path, the value.</strong> <span style="color:var(--ink-muted)">Ids count up; the path is the place in state.json.</span></span></div>
+<div style="flex:1 1 200px;display:grid;grid-template-columns:22px 1fr;gap:10px"><span class="ann-dot">2</span><span><strong style="font-weight:600">How it was set.</strong> <span style="color:var(--ink-muted)">chosen, confirmed default, auto default, assumed, delegated, reference, asset or standard.</span></span></div>
+<div style="flex:1 1 200px;display:grid;grid-template-columns:22px 1fr;gap:10px"><span class="ann-dot">3</span><span><strong style="font-weight:600">Locked or not.</strong> <span style="color:var(--ink-muted)">A locked value changes only with the owner's OK.</span></span></div>
+<div style="flex:1 1 200px;display:grid;grid-template-columns:22px 1fr;gap:10px"><span class="ann-dot">4</span><span><strong style="font-weight:600">The date.</strong></span></div>
+<div style="flex:1 1 200px;display:grid;grid-template-columns:22px 1fr;gap:10px"><span class="ann-dot">5</span><span><strong style="font-weight:600">What it replaces.</strong> <span style="color:var(--ink-muted)">A later entry supersedes an earlier one; nothing is deleted.</span></span></div>
+<div style="flex:1 1 200px;display:grid;grid-template-columns:22px 1fr;gap:10px"><span class="ann-dot">6</span><span><strong style="font-weight:600">Where it came from.</strong> <span style="color:var(--ink-muted)">A reference, an asset or a standard, when there is one.</span></span></div>
+<div style="flex:1 1 200px;display:grid;grid-template-columns:22px 1fr;gap:10px"><span class="ann-dot">7</span><span><strong style="font-weight:600">The reason,</strong> <span style="color:var(--ink-muted)">in the person's words or the step that produced it.</span></span></div>
+</div>
+</div>
+<figcaption>One entry from the decision log, from a test run. Every entry has the same seven parts, so a reviewer, an auditor or a coding agent can read how any value came to be.</figcaption>
+</figure>

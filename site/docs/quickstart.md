@@ -22,6 +22,8 @@ To make your first design system, say "Create a design system for this project" 
 
 The example is a made-up study planner called Studyhall. Each question comes with a suggested answer and its reason. You can answer in your own words, or say "just pick". Then it picks for you and records those answers as handed over to it.
 
+{{figure:quickstart-five-questions}}
+
 ### 1. What are you making?
 
 Example answer: "A study planner for university students, called Studyhall."
@@ -81,6 +83,8 @@ The full list is on [The files it writes](/docs/files/).
 Open `opendesigner/overview.html` in your browser. It shows your whole system on one page: colors with their contrast ratios, headings h1 to h6, every text style, spacing, corners, depth, motion and core components. It works offline.
 
 Each area is marked **Chosen**, **Picked for you** or **Default**. Anything only you can give, such as a logo or a voice guide, shows as **Not enough information**, next to the question that fills it.
+
+{{figure:quickstart-overview-status}}
 
 Check three things:
 - Is your brand color on the main buttons?

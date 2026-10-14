@@ -1,0 +1,73 @@
+{
+ "piece": "app-screens/04-fitness-neon",
+ "title": "04 · Voltfield: live workout",
+ "pattern": "live workout",
+ "platform": "ios",
+ "industry": "fitness",
+ "style": [
+  "neon",
+  "dark",
+  "industrial"
+ ],
+ "tags": [
+  "live workout",
+  "fitness",
+  "running",
+  "heart rate",
+  "dark",
+  "neon",
+  "condensed",
+  "ios"
+ ],
+ "score": 3,
+ "verdict": "polish",
+ "strengths": [
+  "The hierarchy is right for a glance mid-stride: one 169 px heart rate, its zone, the target range, then the trace and the strip, with Lap small and Pause wide (the Apple Fitness weighting).",
+  "Specific data: Tempo 6 × 800, rep 4/6, 496 / 800 m, zone times that add up, a coach cue with a pace window and a comparison to rep 3, 'Hold Pause to end the run'."
+ ],
+ "slop_signals": [
+  "Glow on everything lime: a text-shadow bloom on '172', bloom on the trace line and its pink peaks, bloom on the Z4 segment and the active rep segment.",
+  "A faint 39 px grid drawn over the whole black background: texture with no meaning.",
+  "Chamfered corners on the lock, Lap and Pause, a skewed 'Z4 · THRESHOLD' chip and a skewed rep bar: three 'techy' shape tricks on one screen.",
+  "A red heart glyph beside 'BPM' as decoration; the zone bar already says what the colour means."
+ ],
+ "fixes": [
+  "Remove every glow (text-shadow and zero-offset box-shadow); lime on black is 18:1 and needs no help.",
+  "Remove the background grid.",
+  "Pick one shape rule: chamfers on the two buttons or the skew on the chip, not both; set the rep bar straight.",
+  "Drop the heart glyph; 'BPM' as a unit is enough."
+ ],
+ "references": [
+  {
+   "site": "WHOOP",
+   "url": "https://mobbin.com/screens/eb5e7fd4-5d77-427f-9b49-99fa1b30b96c",
+   "what": "Big heart rate over a live trace and a three-stat strip, all flat: the same stack with no glow or grid."
+  },
+  {
+   "site": "Apple Fitness",
+   "url": "https://mobbin.com/screens/98936404-4997-4707-b71a-1d5e186e976a",
+   "what": "One yellow timer and a wide pause in a bottom tray; everything else is grey and small."
+  },
+  {
+   "site": "Oura",
+   "url": "https://mobbin.com/screens/1881d8d9-7b6a-4b94-ace8-53ed3549453c",
+   "what": "Zone arc, zone label and a big number on a flat dark gradient."
+  },
+  {
+   "site": "Nike Run Club",
+   "url": "https://mobbin.com/screens/6b506d61-b2e1-4690-9cf8-23aa94a80a7e",
+   "what": "One giant slanted number on flat orange: loud without a single effect."
+  },
+  {
+   "site": "Ultrahuman",
+   "url": "https://mobbin.com/screens/5fad3d2c-5723-4f47-98e1-b72abc2fdf20",
+   "what": "Zone ring with the active segment raised and labelled in plain words."
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "keep",
+  "said": "great",
+  "date": "2026-10-14"
+ }
+}

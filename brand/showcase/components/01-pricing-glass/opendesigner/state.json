@@ -51,10 +51,10 @@
       "decision": "D-0019"
     },
     "depth": {
-      "value": 90,
+      "value": 35,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0027"
+      "decision": "D-0031"
     },
     "colorfulness": {
       "value": 82,
@@ -149,7 +149,10 @@
     "scripts": [
       "Latn"
     ],
-    "defaultTheme": "dark"
+    "defaultTheme": "dark",
+    "borderDefault": null,
+    "texture": null,
+    "gradients": null
   },
   "overrides": {
     "motion.duration.instant": {
@@ -557,7 +560,7 @@
     ]
   },
   "hashes": {
-    "DESIGN.md": "9194a6f68e128c52",
+    "DESIGN.md": "15c818c733d01ed9",
     "PRODUCT.md": "a7b413bd7bd8da82"
   },
   "exports": {
@@ -2666,5 +2669,7 @@
       "font.size.input": "dimension"
     },
     "snapshots": "standards-state.json"
-  }
+  },
+  "style": null,
+  "customStyles": {}
 }

@@ -1,0 +1,60 @@
+{
+ "piece": "watch/04-headway-transit",
+ "title": "04 Headway: notes",
+ "pattern": "transit",
+ "platform": "watchos",
+ "industry": "transit",
+ "style": [
+  "industrial",
+  "brutalist",
+  "dark"
+ ],
+ "tags": [
+  "transit",
+  "departures",
+  "countdown",
+  "signage",
+  "watch",
+  "dark",
+  "yellow",
+  "watchos"
+ ],
+ "score": 4,
+ "verdict": "keep",
+ "strengths": [
+  "A real idea carried to the end: station signage, yellow on black, square line badges, hard rules, one condensed family at five sizes.",
+  "The giant '2' answers the only question; the stop line with a you-are-here marker explains distance without words.",
+  "Believable rows: 7 Northgate 9 MIN, 12 Harbour 14 MIN."
+ ],
+ "slop_signals": [
+  "The rotated vertical 'MIN' is a signage gimmick that sits against the countdown's left edge.",
+  "Three ideas on one small display (countdown, stop diagram, departure list), and the list rows are 42 px, under the 44 pt target, so they cannot be tapped."
+ ],
+ "fixes": [
+  "Set 'MIN' horizontally under the '2' at 14 px.",
+  "Make the rows 44 px and drop the stop diagram, or keep the diagram and move the list to a second page."
+ ],
+ "references": [
+  {
+   "site": "Transit",
+   "url": "https://mobbin.com/screens/bfc8b4f1-09b1-410b-86f0-173422392314",
+   "what": "Line badge, destination and times with live arcs, the line colour as the page: the same signage logic."
+  },
+  {
+   "site": "Transit",
+   "url": "https://mobbin.com/screens/ce89dd67-b358-4669-bfa3-fc490d71dbfa",
+   "what": "Square line badges before each time in a list of tappable rows."
+  },
+  {
+   "site": "Flighty",
+   "url": "https://mobbin.com/screens/81ec2024-c231-4e53-8f23-60d3197b488c",
+   "what": "Live Activity: a countdown line under two codes; one idea per surface."
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "keep",
+  "said": "most of the watch screens are okay",
+  "date": "2026-10-14"
+ }
+}

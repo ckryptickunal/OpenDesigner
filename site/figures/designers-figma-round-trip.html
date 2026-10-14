@@ -1,0 +1,18 @@
+<figure class="fig">
+<div class="fig-panel">
+<div class="flow">
+<div class="flow-box"><span class="kicker" style="font-size:12px">1 · Build</span><strong style="font-weight:600">engine.py build</strong><span style="color:var(--ink-muted);font-size:13px;line-height:18px">Writes <span class="mono" style="font-size:12px">build/figma/import/</span>, one file per collection and mode</span></div>
+<svg class="flow-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<div class="flow-box"><span class="kicker" style="font-size:12px">2 · Figma</span><strong style="font-weight:600">Variables import</strong><span style="color:var(--ink-muted);font-size:13px;line-height:18px">Primitives · Color (Light, Dark) · Density (Spacious, Comfortable, Compact) · Motion (Standard, Reduced) · Tokens</span></div>
+<svg class="flow-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<div class="flow-box"><span class="kicker" style="font-size:12px">3 · Edit</span><strong style="font-weight:600">You change a variable</strong><span style="color:var(--ink-muted);font-size:13px;line-height:18px">In your design file, as part of normal canvas work</span></div>
+<svg class="flow-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<div class="flow-box accent"><span class="kicker" style="font-size:12px">4 · Record</span><strong style="font-weight:600">A new decision</strong><span style="color:var(--ink-muted);font-size:13px;line-height:18px">The export skill reads the change back and logs it with <span class="mono" style="font-size:12px">engine.py set</span>. It never edits the token files.</span></div>
+</div>
+<div style="display:flex;gap:8px;align-items:center;margin-top:16px;font-size:13px;line-height:18px;color:var(--ink-muted)">
+<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" style="flex:none;color:var(--line-strong)"><path d="M15 4v6H5m3-3-3 3 3 3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<span>Then step 1 again: the next build carries the change into CSS, Tailwind, Swift, Compose and the Figma files together.</span>
+</div>
+</div>
+<figcaption>The Figma round trip. The build writes one import file per collection and mode; an edit in Figma comes back as a decision in the log, and the next build spreads it to every export. The token files are never edited by hand.</figcaption>
+</figure>

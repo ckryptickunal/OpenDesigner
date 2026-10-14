@@ -4,7 +4,7 @@
   "engine_version": "1.0.0",
   "levers_version": "levers/1.0 2026-09-23",
   "mode": "standard",
-  "name": "Orrery",
+  "name": "Nearmost",
   "summary": "",
   "context": {
     "product": "",
@@ -145,7 +145,10 @@
     "scripts": [
       "Latn"
     ],
-    "defaultTheme": "dark"
+    "defaultTheme": "dark",
+    "borderDefault": null,
+    "texture": null,
+    "gradients": null
   },
   "overrides": {
     "motion.duration.instant": {
@@ -520,8 +523,8 @@
     ]
   },
   "hashes": {
-    "DESIGN.md": "fe43008334aea3d7",
-    "PRODUCT.md": "dedd81ed113e2728"
+    "DESIGN.md": "7f306a28f593b2df",
+    "PRODUCT.md": "3d8b506b39bdb051"
   },
   "exports": {
     "prefix": "ds",
@@ -2628,5 +2631,7 @@
       "font.size.input": "dimension"
     },
     "snapshots": "standards-state.json"
-  }
+  },
+  "style": null,
+  "customStyles": {}
 }

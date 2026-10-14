@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>payments-api · Overview · Sounding</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+/* Local aliases. Everything resolves to engine tokens; the two hairline roles are ramp steps because the
+   engine has no separator role lighter than border.subtle (process finding). */
+:root {
+  --ink: var(--ds-color-text-primary);
+  --muted: var(--ds-color-text-secondary);
+  --faint: var(--ds-color-text-tertiary);
+  --sep: var(--ds-color-neutral-light-4);      /* row and grid hairlines */
+  --edge: var(--ds-color-neutral-light-5);     /* card and control edges */
+  --page: var(--ds-color-surface-raised);
+  --wash: var(--ds-color-neutral-light-2);
+  --alert: var(--ds-color-chart-categorical-1); /* the one alerting series */
+  --alert-text: var(--ds-color-text-accent);
+  --series: var(--ds-color-neutral-light-12);
+  --compare: var(--ds-color-neutral-light-7);
+  --row: 36px;                                  /* no row-height token yet (P2) */
+  --mono: var(--ds-font-family-mono);
+  /* near-black primary: the engine has no way to make one next to a chromatic accent (process finding) */
+  --primary: var(--ds-color-bg-inverse);
+  --on-primary: var(--ds-color-text-inverse);
+}
+* { box-sizing: border-box; margin: 0; }
+html, body { background: var(--page); }
+body {
+  font: var(--ds-text-body-md);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  min-width: 1280px;
+}
+button, input { font: inherit; color: inherit; }
+button { background: none; border: 0; cursor: pointer; }
+:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); border-radius: var(--ds-radius-control-sm); }
+.num { font-variant-numeric: tabular-nums; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+svg.i { width: var(--ds-size-icon-sm); height: var(--ds-size-icon-sm); flex: none; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Top bar */
+.top { height: 48px; display: flex; align-items: center; gap: var(--ds-space-12); padding: 0 var(--ds-space-32); }
+.mark { width: 20px; height: 20px; border-radius: var(--ds-radius-control-sm); background: var(--primary); display: grid; place-items: center; }
+.crumb { display: flex; align-items: center; gap: var(--ds-space-8); font: var(--ds-text-label-lg); }
+.crumb .slash { color: var(--ds-color-neutral-light-6); font-weight: 400; }
+.crumb .org { display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: var(--ds-radius-control-sm); background: var(--wash); border: 1px solid var(--edge); font: var(--ds-text-label-sm); color: var(--muted); }
+.crumb button { display: inline-flex; align-items: center; gap: var(--ds-space-6); padding: var(--ds-space-4) var(--ds-space-6); margin: 0 -6px; border-radius: var(--ds-radius-control); }
+.crumb button svg { color: var(--faint); width: 14px; height: 14px; }
+.pill { font: var(--ds-text-label-sm); color: var(--muted); border: 1px solid var(--edge); border-radius: var(--ds-radius-full); padding: 1px var(--ds-space-8); }
+.spacer { flex: 1; }
+.search { display: flex; align-items: center; gap: var(--ds-space-8); width: 248px; height: var(--ds-size-control-md); padding: 0 var(--ds-space-8) 0 var(--ds-space-12); border: 1px solid var(--edge); border-radius: var(--ds-radius-control); color: var(--faint); }
+.search span { flex: 1; white-space: nowrap; }
+kbd { font: var(--ds-text-label-sm); font-family: var(--ds-font-family-text); color: var(--faint); border: 1px solid var(--edge); border-radius: var(--ds-radius-control-sm); padding: 0 5px; line-height: 18px; }
+.tbtn { text-decoration: none; height: var(--ds-size-control-md); padding: 0 var(--ds-space-8); display: inline-flex; align-items: center; gap: var(--ds-space-6); color: var(--muted); border-radius: var(--ds-radius-control); font: var(--ds-text-label-lg); font-weight: 400; }
+.avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--ds-color-neutral-light-3); color: var(--muted); display: grid; place-items: center; font: var(--ds-text-label-sm); }
+
+/* Tabs */
+.tabs { display: flex; gap: var(--ds-space-4); padding: 0 var(--ds-space-24); border-bottom: 1px solid var(--edge); }
+.tabs a { position: relative; display: inline-flex; align-items: center; gap: var(--ds-space-6); height: 40px; padding: 0 var(--ds-space-8); color: var(--muted); text-decoration: none; }
+.tabs a[aria-current] { color: var(--ink); font-weight: 500; }
+.tabs a[aria-current]::after { content: ""; position: absolute; left: 8px; right: 8px; bottom: -1px; height: 2px; background: var(--ink); border-radius: 1px; }
+.count { font: var(--ds-text-label-sm); font-weight: 400; color: var(--muted); background: var(--ds-color-bg-neutral-subtle); border-radius: var(--ds-radius-full); padding: 0 var(--ds-space-6); line-height: 18px; }
+
+main { padding: 0 var(--ds-space-32); }
+
+/* Page header */
+.head { display: flex; align-items: center; justify-content: space-between; padding: var(--ds-space-24) 0 var(--ds-space-16); }
+h1 { font: var(--ds-text-title-lg); letter-spacing: -0.01em; }
+.meta { margin-top: var(--ds-space-2); display: flex; align-items: center; gap: var(--ds-space-8); color: var(--muted); }
+.meta .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--ds-color-neutral-light-7); }
+.titlerow { display: flex; align-items: center; gap: var(--ds-space-16); }
+.firing { display: inline-flex; align-items: center; gap: var(--ds-space-8); color: var(--ink); font: var(--ds-text-body-md); padding-left: var(--ds-space-16); border-left: 1px solid var(--edge); }
+.firing a { margin-left: var(--ds-space-4); }
+.firing i { width: 8px; height: 8px; border-radius: 50%; background: var(--alert); box-shadow: 0 0 0 3px var(--ds-color-accent-light-3); }
+.firing a { color: var(--ink); text-underline-offset: 3px; text-decoration-color: var(--ds-color-neutral-light-7); }
+.actions { display: flex; gap: var(--ds-space-8); }
+.btn { height: var(--ds-size-control-md); padding: 0 var(--ds-space-12); display: inline-flex; align-items: center; gap: var(--ds-space-6); border-radius: var(--ds-radius-control); font: var(--ds-text-label-lg); border: 1px solid var(--edge); background: var(--page); }
+.btn.primary { background: var(--primary); color: var(--on-primary); border-color: transparent; }
+
+/* Controls */
+.controls { display: flex; align-items: center; gap: var(--ds-space-8); padding-bottom: var(--ds-space-20); }
+.sel { height: var(--ds-size-control-md); display: inline-flex; align-items: center; gap: var(--ds-space-8); padding: 0 var(--ds-space-8) 0 var(--ds-space-12); border: 1px solid var(--edge); border-radius: var(--ds-radius-control); background: var(--page); }
+.sel svg.chev { color: var(--faint); width: 14px; height: 14px; }
+.sel .env { width: 8px; height: 8px; border-radius: 50%; background: var(--ds-color-success-light-9); }
+.sel b { font-weight: 500; }
+.joiner { color: var(--muted); padding: 0 var(--ds-space-2); }
+.seg { display: inline-flex; height: var(--ds-size-control-md); padding: var(--ds-space-2); border: 1px solid var(--edge); border-radius: var(--ds-radius-control); background: var(--wash); }
+.seg button { padding: 0 var(--ds-space-8); border-radius: var(--ds-radius-control-sm); color: var(--muted); font: var(--ds-text-label-md); font-weight: 400; min-width: 24px; }
+.seg button[aria-pressed="true"] { background: var(--page); color: var(--ink); font-weight: 500; box-shadow: 0 0 0 1px var(--edge); }
+.fresh { color: var(--muted); display: inline-flex; align-items: center; gap: var(--ds-space-8); }
+.icon-btn { width: var(--ds-size-control-md); height: var(--ds-size-control-md); display: grid; place-items: center; border: 1px solid var(--edge); border-radius: var(--ds-radius-control); color: var(--muted); }
+
+/* KPI text row */
+.kpis { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--sep); padding: var(--ds-space-16) 0 var(--ds-space-24); }
+.kpi { padding-right: var(--ds-space-24); }
+.kpi + .kpi { padding-left: var(--ds-space-24); border-left: 1px solid var(--sep); }
+.kpi .label { font: var(--ds-text-label-md); color: var(--muted); display: flex; align-items: center; gap: var(--ds-space-6); }
+.kpi .value { font: var(--ds-text-headline-sm); font-weight: 500; letter-spacing: -0.015em; margin-top: var(--ds-space-4); font-variant-numeric: tabular-nums; }
+.kpi .value.mono { font-family: var(--mono); letter-spacing: -0.03em; }
+.kpi .value small { font-size: var(--ds-font-size-14); font-weight: 400; color: var(--muted); letter-spacing: 0; margin-left: var(--ds-space-2); font-family: var(--ds-font-family-text); }
+.kpi .delta { margin-top: var(--ds-space-2); font: var(--ds-text-body-sm); color: var(--muted); font-variant-numeric: tabular-nums; }
+.kpi .delta b { font-weight: 500; color: var(--ink); }
+.kpi .delta b.up-bad { color: var(--alert-text); }
+.tag-alert { font: var(--ds-text-label-sm); color: var(--alert-text); display: inline-flex; align-items: center; gap: var(--ds-space-4); }
+.tag-alert i { width: 6px; height: 6px; border-radius: 50%; background: var(--alert); }
+
+/* Chart cards */
+.charts { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--ds-space-16); }
+.card { border: 1px solid var(--edge); border-radius: var(--ds-radius-container); background: var(--page); }
+.chart { padding: var(--ds-space-12) var(--ds-space-16) var(--ds-space-8); position: relative; }
+.chart header { display: flex; align-items: baseline; justify-content: space-between; height: 24px; }
+.chart h2 { font: var(--ds-text-label-lg); display: inline-flex; align-items: center; gap: var(--ds-space-2); }
+.chart h2 svg { width: 14px; height: 14px; color: var(--faint); }
+.chart .sum { font: var(--ds-text-body-sm); color: var(--muted); font-variant-numeric: tabular-nums; }
+.chart .sum b { color: var(--ink); font-weight: 500; }
+.chart .sum b.al { color: var(--alert-text); }
+.plot { position: relative; height: 132px; margin-top: var(--ds-space-8); }
+.plot svg { position: absolute; inset: 0; overflow: visible; }
+.axis { display: flex; justify-content: space-between; font: var(--ds-text-body-sm); color: var(--faint); margin-top: var(--ds-space-6); font-variant-numeric: tabular-nums; }
+.empty-note { position: absolute; left: 0; right: 0; top: 34px; text-align: center; }
+.empty-note strong { display: block; font: var(--ds-text-label-lg); }
+.empty-note span { display: block; margin: var(--ds-space-2) auto 0; font: var(--ds-text-body-sm); color: var(--muted); max-width: 236px; }
+.tip { position: absolute; z-index: 2; min-width: 168px; background: var(--ds-color-surface-overlay); border: 1px solid var(--edge); border-radius: var(--ds-radius-container); box-shadow: 0 4px 12px -2px rgb(17 18 22 / 0.10), 0 1px 3px rgb(17 18 22 / 0.06); padding: var(--ds-space-6) var(--ds-space-8) var(--ds-space-4); font: var(--ds-text-body-sm); }
+.tip .when { display: flex; justify-content: space-between; gap: var(--ds-space-12); color: var(--muted); padding-bottom: var(--ds-space-4); margin-bottom: var(--ds-space-2); border-bottom: 1px solid var(--sep); }
+.tip table { width: 100%; border-collapse: collapse; }
+.tip td { padding: 1px 0; }
+.tip td:last-child { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.sw { display: inline-block; width: 12px; height: 0; border-top: 2px solid; vertical-align: middle; margin-right: var(--ds-space-6); }
+.sw.dash { border-top-style: dashed; border-top-width: 1.5px; }
+.legend { display: flex; align-items: center; gap: var(--ds-space-20); padding: var(--ds-space-12) 0 var(--ds-space-24); font: var(--ds-text-body-sm); color: var(--muted); }
+.legend .lk { white-space: nowrap; display: inline-flex; align-items: center; gap: var(--ds-space-6); }
+.legend .note { margin-left: auto; white-space: nowrap; }
+.hatch { display: inline-block; width: 12px; height: 12px; border-radius: 2px; border: 1px solid var(--edge); background: repeating-linear-gradient(135deg, var(--ds-color-neutral-light-6) 0 1px, transparent 1px 4px); }
+.dep { display: inline-block; width: 7px; height: 7px; background: var(--ink); transform: rotate(45deg); border-radius: 1px; margin: 0 var(--ds-space-2); }
+
+/* Endpoints table */
+.tablecard header { display: flex; align-items: center; gap: var(--ds-space-8); padding: var(--ds-space-12) var(--ds-space-16); }
+.tablecard h2 { font: var(--ds-text-label-lg); font-weight: 600; }
+.filter { display: flex; align-items: center; gap: var(--ds-space-8); width: 220px; height: var(--ds-size-control-md); padding: 0 var(--ds-space-12); border: 1px solid var(--ds-color-border-input); border-radius: var(--ds-radius-control); color: var(--faint); margin-left: auto; }
+table.ep { width: 100%; border-collapse: collapse; }
+.ep th { font: var(--ds-text-label-md); color: var(--muted); text-align: left; height: 32px; padding: 0 var(--ds-space-16); border-top: 1px solid var(--sep); border-bottom: 1px solid var(--sep); background: var(--ds-color-surface-base); white-space: nowrap; }
+.ep th.r, .ep td.r { text-align: right; }
+.ep th .sort { color: var(--ink); display: inline-flex; align-items: center; gap: var(--ds-space-4); }
+.ep td { height: var(--row); padding: 0 var(--ds-space-16); border-bottom: 1px solid var(--sep); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.ep td.route { vertical-align: middle; font-family: var(--mono); font-size: var(--ds-font-size-14); letter-spacing: -0.01em; }
+.ep td.route .m { display: inline-block; width: 60px; color: var(--muted); font-size: var(--ds-font-size-12); }
+.ep td.lat { font-family: var(--mono); font-size: var(--ds-font-size-14); }
+.ep td.lat small { font-family: var(--ds-font-family-text); color: var(--faint); font-size: var(--ds-font-size-12); margin-left: var(--ds-space-2); }
+.ep tr.al td.p95 { font-weight: 500; }
+.ep td.spark svg { display: block; }
+.ep td.muted { color: var(--muted); }
+.ep .al-flag { vertical-align: 1px; display: inline-flex; align-items: center; gap: var(--ds-space-6); margin-left: var(--ds-space-12); font-family: var(--ds-font-family-text); font-size: var(--ds-font-size-12); color: var(--alert-text); letter-spacing: 0; }
+.ep .al-flag i { width: 6px; height: 6px; border-radius: 50%; background: var(--alert); }
+.ep tbody tr:hover td { background: var(--ds-color-surface-base); }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <pattern id="hatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="5" height="5" fill="var(--ds-color-neutral-light-2)"/>
+      <line x1="0" y1="0" x2="0" y2="5" stroke="var(--ds-color-neutral-light-6)" stroke-width="1.2"/>
+    </pattern>
+  </defs>
+</svg>
+
+<header class="top" role="banner">
+  <a class="mark" href="#" aria-label="Sounding home">
+    <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1v6.2" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/><circle cx="6" cy="9.2" r="1.9" fill="#fff"/></svg>
+  </a>
+  <nav class="crumb" aria-label="Breadcrumb">
+    <button><span class="org">F</span>Fulmar Pay<svg class="i" viewBox="0 0 16 16"><path d="M5 6.5 8 9.5l3-3"/></svg></button>
+    <span class="slash">/</span>
+    <button>payments-api<svg class="i" viewBox="0 0 16 16"><path d="M5 6.5 8 9.5l3-3"/></svg></button>
+    <span class="pill">Service</span>
+  </nav>
+  <div class="spacer"></div>
+  <div class="search" role="button" tabindex="0" aria-label="Search or run a command"><svg class="i" viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 3 3"/></svg><span>Search services, traces…</span><kbd>⌘K</kbd></div>
+  <a class="tbtn" href="#">Docs</a>
+  <button class="tbtn" aria-label="Notifications, 1 unread"><svg class="i" viewBox="0 0 16 16"><path d="M4 11V7a4 4 0 0 1 8 0v4l1 1.5H3L4 11Z"/><path d="M6.5 14h3"/></svg></button>
+  <div class="avatar" aria-label="Yusuf Hartmann">YH</div>
+</header>
+
+<nav class="tabs" aria-label="Service">
+  <a href="#" aria-current="page">Overview</a>
+  <a href="#">Traces</a>
+  <a href="#">Logs</a>
+  <a href="#">Endpoints <span class="count">11</span></a>
+  <a href="#">Deploys</a>
+  <a href="#">Alerts <span class="count">1</span></a>
+  <a href="#">Settings</a>
+</nav>
+
+<main>
+  <div class="head">
+    <div>
+      <div class="titlerow"><h1>payments-api</h1><span class="firing"><i aria-hidden="true"></i>p95 latency above its 450 ms objective since 13:21 UTC<a href="#">View alert</a></span></div>
+      <div class="meta">
+        <span>Go 1.26</span><span class="dot"></span>
+        <span class="num">14 instances in us-east-1 and eu-west-1</span><span class="dot"></span>
+        <span><span class="mono">v2.41.0</span> deployed 13:12 UTC by ci-release</span>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn"><svg class="i" viewBox="0 0 16 16"><path d="M6.5 9.5 9.5 6.5"/><path d="M7.5 4.5 9 3a2.5 2.5 0 0 1 3.5 3.5L11 8M8.5 11.5 7 13a2.5 2.5 0 0 1-3.5-3.5L5 8"/></svg>Copy link</button>
+      <button class="btn primary"><svg class="i" viewBox="0 0 16 16"><path d="M8 3.5v9M3.5 8h9"/></svg>New alert</button>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="sel"><span class="env" aria-hidden="true"></span><b>Production</b><svg class="i chev" viewBox="0 0 16 16"><path d="M5 6.5 8 9.5l3-3"/></svg></button>
+    <button class="sel"><svg class="i" viewBox="0 0 16 16" style="color:var(--faint)"><rect x="2.5" y="3.5" width="11" height="10" rx="1.5"/><path d="M2.5 6.5h11M5.5 2v3M10.5 2v3"/></svg><b>Last 24 hours</b><svg class="i chev" viewBox="0 0 16 16"><path d="M5 6.5 8 9.5l3-3"/></svg></button>
+    <span class="joiner">compared to</span>
+    <button class="sel"><b>Previous day</b><svg class="i chev" viewBox="0 0 16 16"><path d="M5 6.5 8 9.5l3-3"/></svg></button>
+    <div class="seg" role="group" aria-label="Bucket size" style="margin-left:var(--ds-space-8)">
+      <button aria-pressed="false">1m</button><button aria-pressed="true">5m</button><button aria-pressed="false">1h</button>
+    </div>
+    <div class="spacer"></div>
+    <span class="fresh">Updated 14:02 UTC</span>
+    <button class="icon-btn" aria-label="Refresh"><svg class="i" viewBox="0 0 16 16"><path d="M13 8a5 5 0 1 1-1.5-3.6"/><path d="M13 2.5v3h-3"/></svg></button>
+  </div>
+
+  <section class="kpis" aria-label="Summary for the last 24 hours">
+    <div class="kpi">
+      <div class="label">Requests</div>
+      <div class="value" id="k-req">18.38M</div>
+      <div class="delta"><b>▲ 6.1%</b> vs 17.32M previous day · <span id="k-rps">213</span> req/s avg</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Latency p50</div>
+      <div class="value mono">84<small>ms</small></div>
+      <div class="delta"><b>▼ 3 ms</b> vs 87 ms previous day</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Latency p95</div>
+      <div class="value mono">386<small>ms</small></div>
+      <div class="delta"><b>▲ 92 ms</b> vs 294 ms previous day</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Error rate (5xx)</div>
+      <div class="value" id="k-err">0.23%</div>
+      <div class="delta"><b>▲ 0.09 pt</b> vs 0.14% previous day · <span id="k-errn">41,604</span> errors</div>
+    </div>
+  </section>
+
+  <section class="charts" aria-label="Charts">
+    <article class="card chart" id="c-req">
+      <header><h2>Requests<svg class="i" viewBox="0 0 16 16"><path d="m6.5 4.5 3.5 3.5-3.5 3.5"/></svg></h2><span class="sum">peak <b class="num" id="s-req">331</b> req/s</span></header>
+      <div class="plot"></div>
+      <div class="axis"><span>Oct 13, 14:00</span><span>Now</span></div>
+          <div class="tip" id="tip" role="tooltip" hidden>
+        <div class="when"><span>Oct 13, <span class="num" id="tip-t">21:55</span> UTC</span><span class="num" id="tip-c">—</span></div>
+        <table>
+          <tr><td><span class="sw" style="border-color:var(--series);border-top-width:1.5px"></span>Requests</td><td id="tip-a">—</td></tr>
+          <tr><td><span class="sw dash" style="border-color:var(--ds-color-neutral-light-8)"></span>Previous day</td><td id="tip-b">—</td></tr>
+        </table>
+      </div>
+    </article>
+    <article class="card chart" id="c-lat">
+      <header><h2>Latency p95<svg class="i" viewBox="0 0 16 16"><path d="m6.5 4.5 3.5 3.5-3.5 3.5"/></svg></h2><span class="sum">now <b class="al mono" id="s-lat">541 ms</b></span></header>
+      <div class="plot"></div>
+      <div class="axis"><span>Oct 13, 14:00</span><span>Now</span></div>
+    </article>
+    <article class="card chart" id="c-err">
+      <header><h2>Error rate<svg class="i" viewBox="0 0 16 16"><path d="m6.5 4.5 3.5 3.5-3.5 3.5"/></svg></h2><span class="sum">now <b class="num" id="s-err">0.41%</b></span></header>
+      <div class="plot"></div>
+      <div class="axis"><span>Oct 13, 14:00</span><span>Now</span></div>
+    </article>
+    <article class="card chart" id="c-to">
+      <header><h2>Upstream timeouts<svg class="i" viewBox="0 0 16 16"><path d="m6.5 4.5 3.5 3.5-3.5 3.5"/></svg></h2><span class="sum"><b class="num">0</b> in range</span></header>
+      <div class="plot">
+        <div class="empty-note"><strong>No upstream timeouts in this range</strong><span>Calls to ledger-svc and fx-rates that take longer than 2 s are counted here.</span></div>
+      </div>
+      <div class="axis"><span>Oct 13, 14:00</span><span>Now</span></div>
+    </article>
+  </section>
+
+  <div class="legend">
+    <span class="lk"><span class="sw" style="border-color:var(--series);border-top-width:1.5px"></span>Today</span>
+    <span class="lk"><span class="sw dash" style="border-color:var(--ds-color-neutral-light-8)"></span>Previous day</span>
+    <span class="lk"><span class="sw" style="border-color:var(--ds-color-neutral-light-8);border-top-width:1px"></span>Latency p50</span>
+    <span class="lk"><svg width="14" height="4" aria-hidden="true"><path d="M1 2h12" stroke="var(--series)" stroke-width="1.5" stroke-dasharray="0 3" stroke-linecap="round"/></svg>Last hour, partial</span>
+    <span class="lk"><span class="dep" aria-hidden="true"></span>Deploy</span>
+    <span class="lk"><span class="hatch" aria-hidden="true"></span>No trace data (collector upgrade)</span>
+    <span class="note">Latency and errors: 1-in-10 sampled traces, 1.84M spans. Requests: load balancer counts.</span>
+  </div>
+
+  <section class="card tablecard" aria-label="Endpoints">
+    <header>
+      <h2>Endpoints</h2><span class="count">11</span>
+      <div class="filter"><svg class="i" viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 3 3"/></svg><span>Filter by route</span></div>
+      <button class="btn" style="height:var(--ds-size-control-md)"><svg class="i" viewBox="0 0 16 16"><path d="M3 4.5h10M5 8h6M7 11.5h2"/></svg>Columns</button>
+    </header>
+    <table class="ep">
+      <thead><tr>
+        <th style="width:30%">Route</th>
+        <th class="r">Requests</th>
+        <th>p95, last 24 h</th>
+        <th class="r">p50</th>
+        <th class="r"><span class="sort">p95<svg class="i" viewBox="0 0 16 16" style="width:12px;height:12px"><path d="M8 3v10M4.5 9.5 8 13l3.5-3.5"/></svg></span></th>
+        <th class="r">Error rate</th>
+        <th class="r">Errors</th>
+        <th class="r">Share of traffic</th>
+      </tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </section>
+</main>
+
+<script>
+/* Invented data for a fictional service. Totals are computed from the endpoint rows, so the KPI row,
+   the charts and the table agree. 288 buckets of 5 minutes: Oct 13 14:05 to Oct 14 14:00 UTC. */
+const EP = [
+  ["POST","/v1/payouts",1284310,142,1240,0.91,true],
+  ["POST","/v1/charges",3406771,118,402,0.44],
+  ["POST","/v1/refunds",418902,131,388,0.61],
+  ["POST","/v1/customers",211438,96,288,0.18],
+  ["GET","/v1/fx/quote",806214,64,210,1.12],
+  ["DELETE","/v1/cards/:id",48102,54,160,0.00],
+  ["GET","/v1/disputes",92867,47,133,0.01],
+  ["GET","/v1/balances",5912004,38,96,0.02],
+  ["GET","/v1/payouts/:id",1102483,29,84,0.03],
+  ["GET","/v1/charges/:id",2877519,22,71,0.05],
+  ["POST","/v1/webhooks/ack",2214660,11,34,0.00],
+];
+const N = 288, START_H = 14 + 5/60;          // first bucket ends 14:05 on Oct 13
+const hourOf = i => (START_H + i * 5 / 60) % 24;
+const GAP = i => { const d = START_H + i * 5 / 60; return d >= 26 && d < 27 + 50 / 60; }; // no trace data 02:00-03:50 on Oct 14
+const DEPLOYS = [{h: 18.5, day: 0, v: "v2.40.3"}, {h: 7.3, day: 1, v: "v2.40.4"}, {h: 13.2, day: 1, v: "v2.41.0"}];
+const idxOf = (day, h) => Math.round(((day * 24 + h) - START_H) * 12);
+const DEPLOY_IDX = DEPLOYS.map(d => idxOf(d.day, d.h));
+const REGRESS = DEPLOY_IDX[2];
+let seed = 7;
+const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+const noise = (a) => (rnd() - 0.5) * 2 * a;
+const smooth = (arr, k = 2) => arr.map((_, i) => { let s = 0, n = 0; for (let j = -k; j <= k; j++) { const v = arr[i + j]; if (v != null) { s += v; n++; } } return s / n; });
+
+const TOTAL = EP.reduce((s, r) => s + r[2], 0);
+const ERRORS = EP.reduce((s, r) => s + Math.round(r[2] * r[5] / 100), 0);
+
+// requests per second, diurnal, scaled so 288 x 300 s adds up to TOTAL
+function diurnal(i, amp) { const h = hourOf(i); return 1 + amp * Math.cos(2 * Math.PI * (h - 16) / 24); }
+let req = smooth(Array.from({length: N}, (_, i) => diurnal(i, 0.52) + noise(0.04)), 2);
+const reqScale = TOTAL / (req.reduce((a, b) => a + b, 0) * 300);
+req = req.map(v => v * reqScale);
+let prevReq = smooth(Array.from({length: N}, (_, i) => diurnal(i, 0.5) + noise(0.05)));
+const prevScale = 17318822 / (prevReq.reduce((a, b) => a + b, 0) * 300);
+prevReq = prevReq.map(v => v * prevScale);
+
+// latency p95 and p50 (ms)
+let p95 = smooth(Array.from({length: N}, (_, i) => 300 + 60 * (diurnal(i, 0.52) - 1) + noise(18) + (i >= REGRESS ? 215 + noise(14) : 0)), 2);
+p95 = p95.map((v, i) => i >= REGRESS && i < REGRESS + 3 ? 300 + 60 * (diurnal(i, 0.52) - 1) + (i - REGRESS + 1) * 62 : v);
+let prev95 = smooth(Array.from({length: N}, (_, i) => 290 + 58 * (diurnal(i, 0.5) - 1) + noise(16)), 2);
+let p50 = smooth(Array.from({length: N}, (_, i) => 82 + 9 * (diurnal(i, 0.52) - 1) + noise(4) + (i >= REGRESS ? 9 : 0)), 1);
+// error rate (%), scaled so the request-weighted mean equals ERRORS / TOTAL
+let err = smooth(Array.from({length: N}, (_, i) => 0.17 + 0.05 * (diurnal(i, 0.52) - 1) + noise(0.035) + (i >= REGRESS ? 0.24 + noise(0.03) : 0)), 2);
+let prevErr = smooth(Array.from({length: N}, (_, i) => 0.14 + 0.04 * (diurnal(i, 0.5) - 1) + noise(0.03)), 2);
+for (const a of [p95, p50, err]) for (let i = 0; i < N; i++) if (GAP(i)) a[i] = null;
+{ let num = 0, den = 0; err.forEach((v, i) => { if (v != null) { num += v * req[i]; den += req[i]; } });
+  const k = (ERRORS / TOTAL * 100) / (num / den); err = err.map(v => v == null ? null : v * k); }
+
+// summaries shown in the page come from the same arrays
+const fmtInt = n => n.toLocaleString("en-US");
+document.getElementById("k-req").textContent = (TOTAL / 1e6).toFixed(2) + "M";
+document.getElementById("k-rps").textContent = Math.round(TOTAL / 86400);
+document.getElementById("k-err").textContent = (ERRORS / TOTAL * 100).toFixed(2) + "%";
+document.getElementById("k-errn").textContent = fmtInt(ERRORS);
+document.getElementById("s-req").textContent = Math.round(Math.max(...req));
+const lastVal = a => { for (let i = a.length - 1; i >= 0; i--) if (a[i] != null) return a[i]; };
+document.getElementById("s-lat").textContent = Math.round(lastVal(p95)) + " ms";
+document.getElementById("s-err").textContent = lastVal(err).toFixed(2) + "%";
+
+const NS = "http://www.w3.org/2000/svg";
+function el(tag, attrs, parent) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent && parent.appendChild(e); return e; }
+function pathFor(a, x, y, from = 0, to = a.length - 1) {
+  let d = "", pen = false;
+  for (let i = from; i <= to; i++) { const v = a[i]; if (v == null) { pen = false; continue; } d += (pen ? "L" : "M") + x(i).toFixed(1) + " " + y(v).toFixed(1); pen = true; }
+  return d;
+}
+const PARTIAL = N - 12; // the last hour is still arriving
+
+function chart(id, series, opts) {
+  const host = document.querySelector("#" + id + " .plot");
+  const W = host.clientWidth, H = host.clientHeight;
+  const svg = el("svg", {width: W, height: H, viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": opts.label}, host);
+  const top = 14, bottom = H - 1;
+  const max = opts.max;
+  const x = i => (i / (N - 1)) * W;
+  const y = v => bottom - (v / max) * (bottom - top);
+  // horizontal hairlines: max, middle, zero
+  (opts.empty ? [0] : [max, max / 2, 0]).forEach((v) => el("line", {x1: 0, x2: W, y1: Math.round(y(v)) + 0.5, y2: Math.round(y(v)) + 0.5, stroke: v === 0 ? "var(--ds-color-neutral-light-6)" : "var(--sep)", "stroke-width": 1}, svg));
+  if (!opts.empty) el("text", {x: 0, y: Math.round(y(max)) - 4, fill: "var(--ds-color-text-tertiary)", "font-size": 12, "font-family": "Inter"}, svg).textContent = opts.maxLabel;
+  if (opts.gap) { // hatched band where trace data is missing
+    let s = -1, e = -1; for (let i = 0; i < N; i++) if (GAP(i)) { if (s < 0) s = i; e = i; }
+    el("rect", {x: x(s - 0.5), y: top, width: x(e + 0.5) - x(s - 0.5), height: bottom - top, fill: "url(#hatch)"}, svg);
+  }
+  if (opts.threshold) {
+    const ty = Math.round(y(opts.threshold.v)) + 0.5;
+    el("line", {x1: 0, x2: W, y1: ty, y2: ty, stroke: "var(--ds-color-accent-light-7)", "stroke-width": 1}, svg);
+    const t = el("text", {x: 0, y: ty - 5, fill: "var(--alert-text)", "font-size": 12, "font-family": "Inter"}, svg); t.textContent = opts.threshold.label;
+  }
+  // deploy markers
+  if (!opts.noDeploys) DEPLOY_IDX.forEach((di, k) => {
+    const dx = Math.round(x(di)) + 0.5;
+    el("line", {x1: dx, x2: dx, y1: top - 2, y2: bottom, stroke: "var(--ds-color-neutral-light-7)", "stroke-width": 1, "stroke-dasharray": "2 3"}, svg);
+    el("rect", {x: dx - 3, y: top - 6, width: 6, height: 6, transform: `rotate(45 ${dx} ${top - 3})`, fill: "var(--series)", rx: 1}, svg);
+    if (opts.deployLabel && k === 2) { const t = el("text", {x: dx - 7, y: top - 1, "text-anchor": "end", fill: "var(--ds-color-text-secondary)", "font-size": 12, "font-family": "JetBrains Mono"}, svg); t.textContent = DEPLOYS[k].v; }
+  });
+  series.forEach(s => {
+    const common = {fill: "none", stroke: s.color, "stroke-width": s.w || 1.5, "stroke-linejoin": "round", "stroke-linecap": "round"};
+    if (s.dash) { el("path", {...common, d: pathFor(s.data, x, y), "stroke-dasharray": s.dash}, svg); return; }
+    el("path", {...common, d: pathFor(s.data, x, y, 0, PARTIAL)}, svg);
+    el("path", {...common, d: pathFor(s.data, x, y, PARTIAL, N - 1), "stroke-dasharray": "0 3.2"}, svg);
+  });
+  return {svg, x, y, W, H};
+}
+
+const reqc = chart("c-req", [
+  {data: prevReq, color: "var(--ds-color-neutral-light-8)", dash: "3 3", w: 1.25},
+  {data: req, color: "var(--series)"},
+], {max: 400, maxLabel: "400/s", label: "Requests per second, last 24 hours"});
+
+const lat = chart("c-lat", [
+  {data: prev95, color: "var(--ds-color-neutral-light-8)", dash: "3 3", w: 1.25},
+  {data: p50, color: "var(--ds-color-neutral-light-8)", w: 1},
+  {data: p95, color: "var(--alert)"},
+], {max: 600, maxLabel: "600 ms", gap: true, threshold: {v: 450, label: "Objective 450 ms"}, deployLabel: true, label: "Latency p95 and p50, last 24 hours, alerting"});
+
+chart("c-err", [
+  {data: prevErr, color: "var(--ds-color-neutral-light-8)", dash: "3 3", w: 1.25},
+  {data: err, color: "var(--series)"},
+], {max: 0.8, maxLabel: "0.8%", gap: true, label: "5xx error rate, last 24 hours"});
+
+chart("c-to", [], {max: 10, empty: true, noDeploys: true, label: "Upstream timeouts, none in range"});
+
+// pinned hover on the requests chart: crosshair plus a mini-table tooltip.
+// One temporary state per frame: it shows only in the second frame (?state=tooltip).
+if (new URLSearchParams(location.search).get("state") === "tooltip") (function () {
+  const i = idxOf(0, 21.5) - 1; // 21:25 on Oct 13
+  const cx = Math.round(reqc.x(i)) + 0.5;
+  el("line", {x1: cx, x2: cx, y1: 10, y2: reqc.H, stroke: "var(--ds-color-neutral-light-9)", "stroke-width": 1}, reqc.svg);
+  el("circle", {cx, cy: reqc.y(req[i]), r: 3.5, fill: "var(--page)", stroke: "var(--series)", "stroke-width": 1.5}, reqc.svg);
+  el("circle", {cx, cy: reqc.y(prevReq[i]), r: 2.5, fill: "var(--page)", stroke: "var(--ds-color-neutral-light-8)", "stroke-width": 1.25}, reqc.svg);
+  const hh = Math.floor(hourOf(i)), mm = Math.round((hourOf(i) - hh) * 60);
+  document.getElementById("tip-t").textContent = String(hh).padStart(2, "0") + ":" + String(mm).padStart(2, "0");
+  const a = Math.round(req[i]), b = Math.round(prevReq[i]); // the change is computed from the figures shown
+  document.getElementById("tip-a").textContent = a + "/s";
+  document.getElementById("tip-b").textContent = b + "/s";
+  const ch = (a / b - 1) * 100;
+  document.getElementById("tip-c").textContent = (ch >= 0 ? "+" : "−") + Math.abs(ch).toFixed(1) + "%";
+  const tip = document.getElementById("tip");
+  tip.hidden = false;
+  const plot = document.querySelector("#c-req .plot");
+  tip.style.left = (plot.offsetLeft + cx + 10) + "px";
+  tip.style.top = (plot.offsetTop + 2) + "px";
+})();
+
+// endpoint rows with p95 sparklines; the gap and the regression come from the same timeline
+const rows = document.getElementById("rows");
+EP.forEach((r, k) => {
+  const [m, route, n, q50, q95, er, alerting] = r;
+  const tr = document.createElement("tr");
+  if (alerting) tr.className = "al";
+  const errs = Math.round(n * er / 100);
+  tr.innerHTML = `<td class="route"><span class="m">${m}</span>${route}${alerting ? '<span class="al-flag"><i></i>Alerting</span>' : ""}</td>
+    <td class="r">${fmtInt(n)}</td>
+    <td class="spark"></td>
+    <td class="r lat">${q50}<small>ms</small></td>
+    <td class="r lat p95">${fmtInt(q95)}<small>ms</small></td>
+    <td class="r">${er.toFixed(2)}%</td>
+    <td class="r muted">${errs ? fmtInt(errs) : "0"}</td>
+    <td class="r muted">${(n / TOTAL * 100).toFixed(1)}%</td>`;
+  rows.appendChild(tr);
+  const W = 120, H = 22, M = 48, s = [];
+  seed = 31 + k * 13;
+  for (let j = 0; j < M; j++) {
+    const i = j * 6;
+    s.push(GAP(i) ? null : (1 + 0.18 * (diurnal(i, 0.5) - 1) + noise(0.06) + (alerting && i >= REGRESS ? 1.3 : 0) + (k === 4 && j > 30 && j < 34 ? 0.35 : 0)));
+  }
+  const mx = Math.max(...s.filter(v => v != null)) * 1.05, mn = Math.min(...s.filter(v => v != null)) * 0.9;
+  const svg = el("svg", {width: W, height: H, viewBox: `0 0 ${W} ${H}`, "aria-hidden": "true"}, tr.querySelector(".spark"));
+  el("path", {d: pathFor(s, j => j / (M - 1) * W, v => H - 2 - (v - mn) / (mx - mn) * (H - 4)), fill: "none", stroke: alerting ? "var(--alert)" : "var(--ds-color-neutral-light-9)", "stroke-width": 1.25, "stroke-linejoin": "round"}, svg);
+});
+</script>
+</body>
+</html>

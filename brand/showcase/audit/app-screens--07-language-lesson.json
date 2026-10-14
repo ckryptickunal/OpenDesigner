@@ -1,0 +1,68 @@
+{
+ "piece": "app-screens/07-language-lesson",
+ "title": "07 · Parlo: Italian lesson (phone, 390×844 @3x)",
+ "pattern": "lesson screen",
+ "platform": "ios",
+ "industry": "education",
+ "style": [
+  "playful",
+  "brutalist"
+ ],
+ "tags": [
+  "lesson screen",
+  "education",
+  "language",
+  "exercise",
+  "mascot",
+  "light",
+  "ios"
+ ],
+ "score": 3,
+ "verdict": "polish",
+ "strengths": [
+  "The exercise order is faithful to the shipped pattern: progress bar, prompt, character and bubble, answer line, word bank with empty slots, result sheet with Continue.",
+  "An own identity on top of the structure: an enamel moka-pot mascot, cobalt ink outlines, and a sunflower fill box marking the new word 'cornetto' in both the sentence and the answer tile.",
+  "Real lesson content: 'Vorrei un caffè e un cornetto', the gender hint '(m.)', an explanation on the result sheet."
+ ],
+ "slop_signals": [
+  "Every word on screen is bold (Nunito 600-900, Fredoka 600-700): the prompt, the tiles, the sheet copy, the chips. Duolingo sets tiles and body at regular weight.",
+  "Confetti dots scattered on the result sheet and a dot grid on the page background: decoration twice.",
+  "The 'croissant (m.)' tooltip overlaps the top edge of the speech bubble instead of sitting clear of it.",
+  "A 2 px outline plus a hard bottom shadow on every tile, bubble, chip and button: the neo-brutalist tile look applied to all twenty-odd elements.",
+  "The mascot's blush cheeks and big round eyes are the generic 'cute app mascot' drawing."
+ ],
+ "fixes": [
+  "Set tiles, sheet copy and the sentence at regular or medium weight; keep bold for the prompt and 'Perfetto!'.",
+  "Remove the confetti and the page dot grid.",
+  "Move the tooltip above the bubble with clear air, or inline the gender into the hint.",
+  "Give the hard shadow only to tappable tiles and the Continue button; set the bubble and chips flat."
+ ],
+ "references": [
+  {
+   "site": "Duolingo",
+   "url": "https://mobbin.com/screens/999d36c0-e831-4345-94e1-896367f1d7fe",
+   "what": "Translate exercise with regular-weight tiles and a result sheet: the structure this piece follows."
+  },
+  {
+   "site": "Duolingo",
+   "url": "https://mobbin.com/screens/c1d0e1c6-2633-4424-ab10-d5b18f197cc5",
+   "what": "Used tiles leave empty slots in the bank, so it never reflows."
+  },
+  {
+   "site": "Duolingo",
+   "url": "https://mobbin.com/screens/23036166-7afc-4d7c-bdc6-e951cc870703",
+   "what": "'New word' chip and a dotted underline on the new word: one highlight device, not fill box plus chip plus bold."
+  },
+  {
+   "site": "Duolingo",
+   "url": "https://mobbin.com/screens/3e3414a9-6363-4ffa-a994-64747c616c8b",
+   "what": "Correct sheet with a meaning line and Continue; no confetti."
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "keep",
+  "said": "good to go",
+  "date": "2026-10-14"
+ }
+}

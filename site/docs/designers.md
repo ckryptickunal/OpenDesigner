@@ -31,11 +31,15 @@ You can also say "talk like a designer". It then leads with design terms, and pl
 
 Reviews go faster when everyone can see why a value is what it is.
 
+{{figure:designers-reason-vs-value}}
+
 - **`opendesigner/decisions.md`** lists every decision with its reason, its date and how it was set: chosen by you, a default you confirmed, assumed from your words, handed over ("you decide"), or taken from a reference. A later decision replaces an earlier one, but nothing is deleted. Anyone can see the history.
 - **`DESIGN.md`** shows how far each area was zoomed. A reviewer can tell what was decided and what is still a default.
 - **`opendesigner/overview.html`** puts the whole system on one page. Each area is marked Chosen, Picked for you or Default. It is a good page to share on screen in a review.
 - **`opendesigner/RATIONALE.md`** is one page for the team: what was chosen, why, and what is still open. The skill writes it at the end of a session.
 - **"Why is this blue?"** Ask your AI. The extend skill answers from the decision log and changes nothing.
+
+{{figure:designers-review-why-blue}}
 
 The defaults rest on 352 Decision Cards. Each card covers one design decision, with its options, a default and its sources. See [Decisions, DESIGN.md and the overview page](/docs/decisions/).
 
@@ -51,6 +55,8 @@ Figma imports this token format only in part: one mode per file, sRGB colors, px
 ### Writing straight into a Figma file
 
 With Figma's remote MCP server and a Full seat, the export skill can create the variables, text styles, effect styles and specimen frames in your file. It suggests working on a duplicate first, and it checks the result by reading the variables back. When you change something in Figma, it records the change as a new decision instead of editing token files.
+
+{{figure:designers-figma-round-trip}}
 
 Hands-on Figma research is still an open task ([issue #10](https://github.com/ckryptickunal/OpenDesigner/issues/10)). The Figma steps so far come from Figma's own docs. Paper is also supported while Paper Desktop is running. See [Export](/docs/export/).
 

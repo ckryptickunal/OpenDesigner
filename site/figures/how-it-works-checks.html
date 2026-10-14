@@ -1,0 +1,17 @@
+<figure class="fig">
+<div class="fig-panel">
+  <div class="kicker" style="margin-bottom:12px">Rules first, opinion last</div>
+  <div class="flow">
+    <div class="flow-box"><span class="kicker">1 · Fixed rules</span><strong>Same result every time</strong><span style="font-size:13px;line-height:18px;color:var(--ink-muted)">Contrast, target sizes, focus rings, reduced motion. House standards that fit your platforms are applied and locked.</span></div>
+    <svg class="flow-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h13M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div class="flow-box"><span class="kicker">2 · The gate</span><strong>What the result means</strong><div style="display:flex;gap:8px;align-items:flex-start;margin-top:2px"><span class="chip bad dot">Error</span><span style="font-size:13px;line-height:22px;color:var(--ink-muted)">an accessibility rule is broken; the build stops</span></div><div style="display:flex;gap:8px;align-items:flex-start"><span class="chip warn dot">Warning</span><span style="font-size:13px;line-height:22px;color:var(--ink-muted)">a taste rule is broken; the build goes on</span></div></div>
+    <svg class="flow-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h13M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div class="flow-box accent"><span class="kicker" style="color:var(--accent-text)">3 · Only then</span><strong>The AI critiques it</strong><span style="font-size:13px;line-height:18px;color:var(--ink-muted)">The AI gives an opinion only after the system passes the rules.</span></div>
+  </div>
+  <div style="margin-top:14px"><span class="kicker">A real report from <span style="text-transform:none">engine.py validate</span></span></div>
+  <pre class="code-lines" style="margin-top:6px;white-space:pre-wrap;overflow-wrap:anywhere"><span class="ok">Passes: no errors.</span> 1 warning, 5 notes.  (opendesigner)
+<span style="color:var(--warn)">WARN</span>  No brand color yet, so the accent uses a stand-in blue  [Brand color is a raw input; DC-L06-06]
+Checked 164 color pairs in every mode, 12 mode combinations and 419 tokens.</pre>
+</div>
+<figcaption>Rule-based checks run first and decide alone: an accessibility error blocks the build, a taste warning does not. The AI's critique comes only after a pass.</figcaption>
+</figure>

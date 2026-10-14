@@ -1,0 +1,83 @@
+{
+ "piece": "app-screens/01-private-banking",
+ "title": "01 · Halden Private: private banking home",
+ "pattern": "account overview",
+ "platform": "ios",
+ "industry": "banking",
+ "style": [
+  "luxury",
+  "dark",
+  "editorial"
+ ],
+ "tags": [
+  "account overview",
+  "banking",
+  "wealth",
+  "dark",
+  "luxury",
+  "serif",
+  "card",
+  "ios"
+ ],
+ "score": 4,
+ "verdict": "keep",
+ "strengths": [
+  "One hero figure (£4,862,310.54 in Bodoni with smaller pence) above an axis-free chart, then holdings rows with tabular figures and a second line for the change: the rhythm Revolut and Wealthsimple use, rebuilt in its own materials.",
+  "Believable data: a balanced-mandate portfolio, a sterling current account ending 0921, £12,480 of £60,000 spent this month, a 1M range picker.",
+  "Platform chrome is right: 9:41 status bar, a four-item labelled tab bar, 44 pt targets, gold held to one job (delta, chart, active tab)."
+ ],
+ "slop_signals": [
+  "The card stacks brushed-metal gradient, contour-line guilloche, noise and engraved text shadows: the 'luxury fintech card' cliché. Revolut and Monzo show premium cards as flat colour with a logo.",
+  "The brand is said four times on one screen: the 'HALDEN PRIVATE' wordmark, 'HALDEN RESERVE' on the card, the 'H' monogram, 'Holdings' in the same Bodoni.",
+  "Letterspaced capitals carry 'premium' on the wordmark, the card name, 'ELEANOR VOSS' and '4417': tracking used as decoration.",
+  "The next card peeks in as a plain gold rectangle with no detail, so it reads as a cut-off block rather than a second card."
+ ],
+ "fixes": [
+  "Flatten the card: one green, the chip, the wordmark and the number; drop the contour pattern and the specular sheen.",
+  "Say the brand once: keep the wordmark, drop the monogram, set 'Holdings' without letterspacing.",
+  "Give the peeking card a visible detail (its own name or last digits) or remove the carousel."
+ ],
+ "references": [
+  {
+   "site": "Revolut",
+   "url": "https://mobbin.com/screens/a2d088dd-3c73-4d57-a905-420857a2aa7a",
+   "what": "Cards shown as small flat thumbnails above 'Total wealth'; the balance leads, not the card."
+  },
+  {
+   "site": "Monzo",
+   "url": "https://mobbin.com/screens/6c2bac17-2f8f-468d-bc8f-c77b4cf7ea5b",
+   "what": "The card is one flat colour with the balance on it, and the feed below uses plain rows with amounts right-aligned."
+  },
+  {
+   "site": "Wealthsimple",
+   "url": "https://mobbin.com/screens/3451c08b-cf3c-4a71-8064-14580f02ab59",
+   "what": "Dark home with a big balance over an axis-free area chart and range pills: the same hero rhythm, with no texture anywhere."
+  },
+  {
+   "site": "Stake",
+   "url": "https://mobbin.com/screens/fbb07838-058f-4d8f-b410-37a936028e3e",
+   "what": "Dark invest home: 'Holdings' as a plain section head and a tab bar with five labelled items."
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "improve",
+  "said": "needs work on font; text is not visible",
+  "date": "2026-10-14"
+ },
+ "round3": {
+  "score": 4,
+  "changed": [
+   "Type: Bodoni Moda only for the wealth figure (48, opsz 14 so hairlines are 2-3 device px) and the wordmark (22); everything read or tapped is Inter at iOS roles 20/17/15/12; no letterspaced capitals",
+   "Contrast: neutral base #0E2A1F to #1C2B24 through the engine; secondary text #9fb0a7 (about 8:1); every text 6.1:1 or more measured from the pixels",
+   "Metal card, guilloche, grain, foil, monogram and the blank peeking card removed; replaced by a private-bank task: approve £150,000.00 to Cardew Aske LLP by Fri 16 Oct, from the current account",
+   "Gold limited to the Review action and the active tab; change line in primary text with +/−; chart in ivory, no fill, flat weekends, end labels; full-width segmented range control",
+   "Numbers un-rounded and re-added: holdings sum to £4,862,310.54, changes to £38,214.08 (one negative), deposit interest = 1,240,000 × 4.85% × 29/365",
+   "Fresh-eyes audit: 3/5 then 4/5; every defect from both passes fixed"
+  ]
+ },
+ "facts": [
+  "Name collision still open: 'Halden' is also Halden Freight in components/06-data-table (a customer row); rename the freight company, since the bank is this piece's product and appears in mockups/01",
+  "mockups/01-phone-trio shows this shot.png; its alt text still describes 'a metal card ... on deep green' and it needs a re-render"
+ ]
+}

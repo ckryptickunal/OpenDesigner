@@ -1,0 +1,84 @@
+{
+ "piece": "app-screens/10-clinical-vitals",
+ "title": "10 · Vigil: ward vitals (tablet, 1180×820 @2x)",
+ "pattern": "vitals dashboard",
+ "platform": "ipados",
+ "industry": "healthcare",
+ "style": [
+  "clinical",
+  "enterprise",
+  "minimal"
+ ],
+ "tags": [
+  "vitals dashboard",
+  "healthcare",
+  "clinical",
+  "tablet",
+  "light",
+  "status",
+  "charts",
+  "ipados"
+ ],
+ "score": 3,
+ "verdict": "polish",
+ "strengths": [
+  "Status never relies on colour alone: a shape (circle, triangle, octagon), a word and a number for every state, and the NEWS2 octagon reads from across the station.",
+  "Plausible clinical structure: patients sorted by NEWS2, 'Obs due now', 'Overdue 15 min', an escalation banner with a response countdown, a 12-hour NEWS2 strip.",
+  "Atkinson Hyperlegible for values where 1/l and 0/O matter; the iPad status bar and the 1180 × 820 layout are right."
+ ],
+ "slop_signals": [
+  "Each vital tile says its status four ways: a coloured border, a badge, a coloured end dot and the delta colour, so every tile carries a border and a badge and a chart frame.",
+  "Two colour systems fight: traces take categorical hues (green, blue, brown, red, purple) while borders and badges take status hues, so one 'Watch' tile has a brown trace and the next a red one.",
+  "Almost every text is bold: patient names, values, badges, tab labels, buttons; little is left to be quiet.",
+  "Thirteen patients, six tiles, a banner, a strip and a header in one view: the density of a demo, not a night shift."
+ ],
+ "fixes": [
+  "Draw all traces in one ink (or in the tile's status colour) and remove the coloured tile border; let the badge carry status.",
+  "Set names and sublines at regular weight; keep bold for the big values and the NEWS2 score.",
+  "Show only patients needing action in the left list by default, the rest behind the 'All 13' tab."
+ ],
+ "references": [
+  {
+   "site": "Supabase",
+   "url": "https://mobbin.com/screens/704ea722-33ea-44f5-ba70-03005b33a9f9",
+   "what": "Status tiles above service-health charts in one green; status is a word and a small badge, never a border."
+  },
+  {
+   "site": "Vanta",
+   "url": "https://mobbin.com/screens/6e3596e8-0f6a-4a38-ad5b-bbc17fae0fe1",
+   "what": "A list with status dots and a summary card at regular weights; bold is kept for counts."
+  },
+  {
+   "site": "LangChain",
+   "url": "https://mobbin.com/screens/1477a00a-3813-4a3e-9d4c-115d70e7d4b5",
+   "what": "List on the left, one chart panel on the right, one accent colour for the line."
+  },
+  {
+   "site": "Neon",
+   "url": "https://mobbin.com/screens/57e883a3-2c9f-42aa-b776-c873201a6cdc",
+   "what": "Metric row and a monitoring chart in grey chrome with a single series colour."
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "improve",
+  "said": "needs a lot of work",
+  "date": "2026-10-14"
+ },
+ "round3": {
+  "score": 4,
+  "changed": [
+   "Renamed Vigil (a real nurse-call company) to Wardlight; colliding surnames replaced",
+   "Rebuilt as an iPad split view: ward sidebar sorted by NEWS2, patient header, escalation card, and an RCP-style observation chart with each cell shaded by its parameter score and a trend per row",
+   "NEWS2 maths fixed (the old tiles added to 11 but showed 7); totals 2, 4, 5, 6, 7, 8 re-scored twice against RCP 2017",
+   "Scene made consistent: 02:16 Wed 14 Oct, emergency call 02:04, registrar and outreach pages each with status and elapsed time, obs every 15 min, sepsis screen and a non-penicillin antibiotic in the timeline",
+   "Status said once; one three-step score ramp; red only for 7+ totals and score-3 cells; teal for selection and the one filled action",
+   "One app face at regular weight (Atkinson Hyperlegible Next), values at 17 pt, system face in the status bar",
+   "Fresh-eyes audit: 3/5 then 4/5; its last five items applied"
+  ]
+ },
+ "facts": [
+  "mockups/07-tablet-clinic still says 'Vigil' (title, comment, alt text, caption) and shows this shot.png: rename and re-render",
+  "'Ward 4B' is also used in heroes/10"
+ ]
+}

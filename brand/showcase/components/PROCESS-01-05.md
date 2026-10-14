@@ -10,7 +10,7 @@ Five working, interactive web components, each a 1440 × 900 component sheet ren
 | 02 | `02-command-palette/shot.png` | Margin, writing tool. A palette floating over a manuscript, annotated with margin notes; real fuzzy matching | paper and ink only, 1 px rules | IBM Plex Sans + Newsreader (manuscript, wordmark) | 1440×900 @2x |
 | 03 | `03-date-range-picker/shot.png` | Wayfern, cabin stays. Two months, a price in every night, heat from cream to coral, fern marks best prices | cream, tan, coral, terracotta band, ink | Fraunces (soft, wonky) + Nunito | 1440×900 @2x |
 | 04 | `04-upload-brutal/shot.png` | Halftone Yard, print shop. Neo-brutalist dropzone and job-ticket rows, drag, reject, progress, error with replace | newsprint, ink, process cyan / magenta / yellow | Archivo (normal and expanded) + Space Mono (data only) | 1440×900 @2x |
-| 05 | `05-toast-stack/shot.png` | Chorus, team chat. A layered toast stack in context, fanned out on hover, with undo, retry and reply | lilac fog, white, ink, iris, mint | Figtree only | 1440×900 @2x |
+| 05 | `05-toast-stack/shot.png` | Kinroom, team chat. A layered toast stack in context, fanned out on hover, with undo, retry and reply | lilac fog, white, ink, iris, mint | Figtree only | 1440×900 @2x |
 
 Every piece has `index.html` (works live: hover, focus-visible, keyboard, reduced motion), `notes.md` (direction, Mobbin references by link, dials, fonts, type scale, what is outside the tokens and why, checks, findings), `opendesigner/` (state, tokens, build, `feedback.md`) and the generated `DESIGN.md` and `PRODUCT.md`. 04 and 05 read `?still` to freeze their timers for the render.
 

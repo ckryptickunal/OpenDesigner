@@ -4,7 +4,7 @@
   "engine_version": "1.0.0",
   "levers_version": "levers/1.0 2026-09-23",
   "mode": "standard",
-  "name": "Pomelo Tapes",
+  "name": "Calamondin Tapes",
   "summary": "",
   "context": {
     "product": "",
@@ -21,10 +21,10 @@
   },
   "dials": {
     "expression": {
-      "value": 90,
+      "value": 68,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0012"
+      "decision": "D-0030"
     },
     "brandPresence": {
       "value": 85,
@@ -45,28 +45,28 @@
       "decision": "D-0015"
     },
     "roundness": {
-      "value": 82,
+      "value": 52,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0016"
+      "decision": "D-0026"
     },
     "depth": {
-      "value": 70,
+      "value": 30,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0017"
+      "decision": "D-0027"
     },
     "colorfulness": {
-      "value": 92,
-      "set_by": "delegated",
-      "detached": true,
-      "decision": "D-0018"
-    },
-    "warmth": {
       "value": 62,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0019"
+      "decision": "D-0028"
+    },
+    "warmth": {
+      "value": 30,
+      "set_by": "delegated",
+      "detached": true,
+      "decision": "D-0029"
     }
   },
   "preset": null,
@@ -75,7 +75,7 @@
     "bold"
   ],
   "raw": {
-    "brandColor": "#e2136a",
+    "brandColor": "#FF3D81",
     "primaryActionColor": null,
     "focusColor": null,
     "neutralBase": null,
@@ -147,7 +147,10 @@
     "scripts": [
       "Latn"
     ],
-    "defaultTheme": "system"
+    "defaultTheme": "system",
+    "borderDefault": null,
+    "texture": null,
+    "gradients": null
   },
   "overrides": {
     "motion.duration.instant": {
@@ -528,8 +531,8 @@
     ]
   },
   "hashes": {
-    "DESIGN.md": "dd51b85b80f148b8",
-    "PRODUCT.md": "0d9a3b860c25f7a9"
+    "DESIGN.md": "db4dc4e6a02d2891",
+    "PRODUCT.md": "917c39ea9ff70f8f"
   },
   "exports": {
     "prefix": "ds",
@@ -2630,5 +2633,7 @@
       "font.size.input": "dimension"
     },
     "snapshots": "standards-state.json"
-  }
+  },
+  "style": null,
+  "customStyles": {}
 }

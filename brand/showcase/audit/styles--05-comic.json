@@ -1,0 +1,76 @@
+{
+ "piece": "styles/05-comic",
+ "title": "05 Nightjar: an incident postmortem told as a comic",
+ "pattern": "blog post",
+ "platform": "web",
+ "industry": "incident management / on-call (B2B devtools)",
+ "style": [
+  "comic",
+  "noir",
+  "halftone",
+  "two-ink"
+ ],
+ "tags": [
+  "style study",
+  "comic",
+  "postmortem",
+  "engineering blog",
+  "speech balloons",
+  "halftone",
+  "svg illustration",
+  "two inks",
+  "B2B"
+ ],
+ "score": 4,
+ "self_score": 4,
+ "verdict": "keep",
+ "strengths": [
+  "A believable incident told end to end in seven panels: the page at 02:14, the deploy suspect, a rollback that fixes nothing, the renamed config key and 3 s default, retries fanning 1 call into 16, the breaker, resolved at 02:47",
+  "Two inks with a rule: red appears only where something is broken, so the closing panel has none; tone is halftone dots, never gradients",
+  "Real postmortem content around the strip: window, impact (4,180 of 33,712 checkouts, 12.4%), cause, and three shipped actions with owners and dates; every panel has a text version"
+ ],
+ "slop_signals": [
+  "The figure drawings are crude primitives: a mitten-shaped hand on the breaker lever, a box mug in the last panel, a head drawn as a black circle with headphones; next to FREITAG's or Discord's illustration they read as clip art",
+  "The breaker panel says 'RETRY WORKER CLOSED' at the top and 'OPEN' at the lever, so the state is said two contradictory ways"
+ ],
+ "fixes": [
+  "Redraw the three figurative panels with an illustrator's line (weight variation, hands and objects drawn from reference), or turn them into diagram panels like the strong 02:31 one",
+  "Fix the drain arithmetic and the 'haven't moved' line (below)",
+  "Label the breaker once: 'Retry worker breaker: OPEN'"
+ ],
+ "references": [
+  {
+   "site": "FREITAG",
+   "url": "https://mobbin.com/sites/sections/3ccd68f1-5142-422c-b972-8009dc78c366",
+   "mobbin_url": "https://mobbin.com/sites/sections/3ccd68f1-5142-422c-b972-8009dc78c366",
+   "what": "A numbered process drawn in one ink line with real figures: the bar for drawing craft"
+  },
+  {
+   "site": "Discord",
+   "url": "https://mobbin.com/sites/sections/7ca0d602-03f2-4566-8a5d-6912658e4c4a",
+   "mobbin_url": "https://mobbin.com/sites/sections/7ca0d602-03f2-4566-8a5d-6912658e4c4a",
+   "what": "A company story told in chapters with professional character illustration"
+  },
+  {
+   "site": "Fibery",
+   "url": "https://mobbin.com/sites/sections/6b6f5398-f384-422a-ad92-a11c8fd00943",
+   "mobbin_url": "https://mobbin.com/sites/sections/6b6f5398-f384-422a-ad92-a11c8fd00943",
+   "what": "Speech balloons carrying real dialogue on a product page"
+  }
+ ],
+ "audited": "2026-10-14",
+ "audited_by": "independent",
+ "facts": [],
+ "polish": {
+  "score": 4,
+  "changed": [
+   "Retry queue drains at 4,000 calls a second: about 2.0 M at 02:36, empty at 02:44, before 02:47 resolved",
+   "Panels 1, 2 and 4 agree minute by minute (38% at 02:13); the rollback marker sits at 02:24; errors fall only to 29% and Kwame says so",
+   "02:00 settlement batch marked in panel 2 and named in the Cause row; panel 4 caption blames the queued retries; queue labelled for all ledger callers",
+   "Reused data replaced: 02:14 to 02:13, 31% to 29%",
+   "Breaker panel redrawn as an object with no hand, labelled once, with the queue drawn draining; KA-CHUNK and OPEN no longer red",
+   "Head, headphones, mug, key legends and app arrows redrawn; text versions match the drawings; curly quotes; calmer body lettering",
+   "Reflow for 721 to 1,375 px and phones; engine pick Q-dir-01 comic"
+  ]
+ }
+}

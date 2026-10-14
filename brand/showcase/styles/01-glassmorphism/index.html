@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kadrel: Lakeside shed, Mora</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* Glass lives on one layer only: the controls that float over the photograph (top bar, tool palette,
+     crop labels, zoom). The photo is the content. The strip and the inspector are reading surfaces, so they are solid. */
+  :root {
+    --glass-blur: var(--ds-material-glass-blur);
+    --glass-fill-top: rgb(255 255 255 / 0.12);
+    --glass-fill-bottom: rgb(255 255 255 / 0.04);
+    --glass-tint: var(--ds-color-surface-glass-dimming);
+    --glass-rim: rgb(255 255 255 / 0.50);
+    --glass-rim-faint: rgb(255 255 255 / 0.10);
+    --on-glass: #ffffff;
+    --on-glass-2: rgb(255 255 255 / 0.84);
+    --hair: rgb(255 255 255 / 0.10);
+    --ink: var(--ds-color-text-primary);
+    --ink-2: var(--ds-color-text-secondary);
+    --ok: var(--ds-color-accent-dark-11);
+    --stop: var(--ds-color-danger-dark-11);
+    --mint: var(--ds-color-brand-seed);
+    --photo: url("https://images.unsplash.com/photo-1754293193520-2f450176724e?w=2400&q=80&fm=jpg");
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: var(--ds-font-family-text);
+    font-size: var(--ds-font-size-14);
+    line-height: var(--ds-font-line-height-20);
+    color: var(--ink);
+    background: var(--ds-color-neutral-dark-1);
+    font-feature-settings: "tnum" 1;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  button { font: inherit; color: inherit; }
+  :focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-accent-dark-11); outline-offset: var(--ds-focus-ring-offset); }
+
+  .app { display: grid; grid-template-columns: minmax(0, 1fr) 380px; height: 100vh; height: 100dvh; }
+
+  /* ---- the canvas: photo at Fit (the whole 3:2 frame), then the placements strip */
+  .canvas { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: 707px 1fr; min-width: 0; background: var(--ds-color-neutral-dark-1); }
+  .stage { position: relative; overflow: hidden; }
+  .stage > img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+  /* crop overlay: everything outside the selected crop is dimmed, the crop keeps a hairline and corner ticks */
+  .overlay { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+  .glass {
+    position: absolute;
+    background: linear-gradient(180deg, var(--glass-fill-top), var(--glass-fill-bottom)), var(--glass-tint);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+    backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+    box-shadow: 0 12px 32px -12px rgb(0 0 0 / 0.55);
+    color: var(--on-glass);
+    isolation: isolate;
+  }
+  /* the rim: light on the top-left edge, fading round the bottom */
+  .glass::before { content: ""; position: absolute; inset: 0; border-radius: inherit; padding: var(--ds-border-width-1); pointer-events: none;
+    background: linear-gradient(160deg, var(--glass-rim) 0%, var(--glass-rim-faint) 38%, var(--glass-rim-faint) 70%, rgb(255 255 255 / 0.22) 100%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
+  @media (prefers-reduced-transparency: reduce) {
+    .glass { background: var(--ds-color-surface-glass-fallback); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  }
+
+  /* top bar */
+  .bar { left: var(--ds-space-16); right: var(--ds-space-16); top: var(--ds-space-16); height: 48px; border-radius: var(--ds-radius-full);
+    display: flex; align-items: center; gap: var(--ds-space-12); padding: 0 var(--ds-space-6) 0 var(--ds-space-16); }
+  .mark { display: flex; align-items: center; gap: var(--ds-space-8); font-weight: 700; letter-spacing: -0.01em; }
+  .crumbs { display: flex; align-items: center; gap: var(--ds-space-8); padding-left: var(--ds-space-12); border-left: 1px solid rgb(255 255 255 / 0.22); color: var(--on-glass-2); white-space: nowrap; font-weight: 500; }
+  .crumbs b { color: var(--on-glass); font-weight: 600; }
+  .crumbs i { font-style: normal; opacity: .7; }
+  .spacer { flex: 1; }
+  .seg { display: flex; gap: var(--ds-space-2); padding: var(--ds-space-2); border-radius: var(--ds-radius-full); background: rgb(0 0 0 / 0.22); }
+  .seg button { all: unset; cursor: pointer; height: 32px; padding: 0 var(--ds-space-12); border-radius: var(--ds-radius-full); display: inline-flex; align-items: center; color: var(--on-glass-2); font-weight: 500; }
+  .seg button[aria-pressed="true"] { background: rgb(255 255 255 / 0.92); color: var(--ds-color-neutral-dark-1); font-weight: 600; }
+  .gbtn { all: unset; cursor: pointer; height: 36px; padding: 0 var(--ds-space-16); border-radius: var(--ds-radius-full); display: inline-flex; align-items: center; gap: var(--ds-space-6); font-weight: 600; box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.30); }
+
+  /* tool palette */
+  .tools { left: var(--ds-space-16); top: 300px; width: 48px; padding: var(--ds-space-6); border-radius: var(--ds-radius-24); display: grid; gap: var(--ds-space-4); }
+  .tools button { all: unset; cursor: pointer; width: 36px; height: 36px; border-radius: var(--ds-radius-full); display: grid; place-items: center; color: var(--on-glass); }
+  .tools button[aria-pressed="true"] { background: rgb(255 255 255 / 0.92); color: var(--ds-color-neutral-dark-1); }
+  .tools hr { border: 0; height: 1px; background: rgb(255 255 255 / 0.22); margin: var(--ds-space-2) var(--ds-space-6); }
+
+  /* labels on the crop */
+  .chip { border-radius: var(--ds-radius-full); height: 28px; padding: 0 var(--ds-space-12); display: inline-flex; align-items: center; gap: var(--ds-space-8); white-space: nowrap; font-size: var(--ds-font-size-11); line-height: var(--ds-font-line-height-16); font-weight: 600; }
+  .chip span { color: var(--on-glass-2); font-weight: 500; }
+  .chip.crop { left: 12px; top: 111px; }
+  .chip.zone { left: 80px; top: 566px; }
+  .chip.zone { color: var(--on-glass-2); font-weight: 500; }
+  .chip.zone em { font-style: normal; color: var(--on-glass); font-weight: 700; }
+  .zoom { right: var(--ds-space-16); bottom: var(--ds-space-16); height: 36px; border-radius: var(--ds-radius-full); display: flex; align-items: center; padding: 0 var(--ds-space-4); gap: var(--ds-space-2); font-weight: 600; }
+  .zoom button { all: unset; cursor: pointer; width: 28px; height: 28px; border-radius: var(--ds-radius-full); display: grid; place-items: center; }
+  .zoom span { padding: 0 var(--ds-space-6); min-width: 64px; text-align: center; }
+
+  /* comment pins sit on the photo: solid, numbered, one per open comment */
+  .pin { position: absolute; width: 28px; height: 28px; border-radius: 50% 50% 50% 4px; background: var(--ds-color-neutral-dark-12); color: var(--ds-color-neutral-dark-1);
+    display: grid; place-items: center; font-weight: 700; font-size: var(--ds-font-size-11); box-shadow: 0 0 0 2px rgb(0 0 0 / 0.35), 0 6px 14px -4px rgb(0 0 0 / .6); }
+
+  /* ---- placements strip (solid) */
+  .strip { padding: var(--ds-space-12) var(--ds-space-24) var(--ds-space-8); border-top: 1px solid var(--hair); display: grid; grid-template-rows: auto 1fr; gap: var(--ds-space-8); }
+  .strip header { display: flex; align-items: baseline; gap: var(--ds-space-12); }
+  .strip h2 { font-size: var(--ds-font-size-14); line-height: var(--ds-font-line-height-20); font-weight: 600; }
+  .meta { color: var(--ink-2); font-size: var(--ds-font-size-11); line-height: var(--ds-font-line-height-16); }
+  .strip header .meta:last-child { margin-left: auto; }
+  .crops { display: flex; gap: var(--ds-space-24); align-items: flex-start; }
+  .crops figure { display: grid; gap: var(--ds-space-8); align-items: start; }
+  .thumb { height: 96px; border-radius: var(--ds-radius-6); background-image: var(--photo); background-repeat: no-repeat; box-shadow: inset 0 0 0 1px rgb(255 255 255 / .08); }
+  .crops figure[aria-current] .thumb { box-shadow: 0 0 0 2px var(--ds-color-neutral-dark-1), 0 0 0 4px var(--ds-color-neutral-dark-12); }
+  .crops figcaption { display: grid; white-space: nowrap; }
+  .crops figcaption b { font-weight: 600; }
+  .crops figcaption b span { font-weight: 400; color: var(--ink-2); font-size: var(--ds-font-size-11); margin-left: var(--ds-space-6); }
+  .st { font-size: var(--ds-font-size-11); line-height: var(--ds-font-line-height-16); font-weight: 600; }
+  .st.ok { color: var(--ok); }
+  .golive { margin-left: auto; display: grid; justify-items: end; align-content: start; gap: var(--ds-space-2); text-align: right; padding-top: var(--ds-space-2); }
+  .golive b { font-weight: 600; }
+  .btn.sm { flex: none; height: 36px; padding: 0 var(--ds-space-16); margin-top: var(--ds-space-12); }
+  .st.stop { color: var(--stop); }
+
+  /* ---- inspector (solid) */
+  .inspector { background: var(--ds-color-surface-base); border-left: 1px solid var(--hair); display: grid; grid-template-rows: auto auto 1fr auto; min-height: 0; }
+  .ins-head { padding: var(--ds-space-24) var(--ds-space-24) var(--ds-space-16); }
+  .ins-head h1 { font-size: var(--ds-font-size-18); line-height: var(--ds-font-line-height-24); font-weight: 600; letter-spacing: -0.01em; }
+  .ins-head p { margin-top: var(--ds-space-4); }
+  section.rights { padding: var(--ds-space-16) var(--ds-space-24) var(--ds-space-20); border-top: 1px solid var(--hair); }
+  h3 { font-size: var(--ds-font-size-11); line-height: var(--ds-font-line-height-16); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-2); margin-bottom: var(--ds-space-8); }
+  dl.kv { display: grid; grid-template-columns: 76px 1fr; gap: var(--ds-space-6) var(--ds-space-12); }
+  dl.kv dt { color: var(--ink-2); }
+  dl.kv dd b { font-weight: 600; }
+  dl.kv a { color: var(--ink); text-decoration: underline; text-decoration-color: rgb(255 255 255 / .35); text-underline-offset: 3px; }
+  section.thread { padding: var(--ds-space-16) var(--ds-space-24); border-top: 1px solid var(--hair); overflow: hidden; display: flex; flex-direction: column; gap: var(--ds-space-16); }
+  .c { display: grid; grid-template-columns: 20px 1fr; gap: var(--ds-space-2) var(--ds-space-12); }
+  .c .n { grid-row: span 2; width: 20px; height: 20px; border-radius: 50% 50% 50% 3px; background: var(--ds-color-neutral-dark-12); color: var(--ds-color-neutral-dark-1); display: grid; place-items: center; font-size: var(--ds-font-size-11); font-weight: 700; margin-top: var(--ds-space-2); }
+  .c .reply-line { grid-row: span 2; width: 1px; justify-self: center; background: rgb(255 255 255 / .16); }
+  .c .who { display: flex; gap: var(--ds-space-6); align-items: baseline; }
+  .c .who b { font-weight: 600; }
+  .c p { color: var(--ink); }
+  .hist { padding-top: var(--ds-space-12); border-top: 1px solid var(--hair); }
+  .hist h3 { margin-bottom: var(--ds-space-6); }
+  .hist ol { list-style: none; padding: 0; display: grid; gap: var(--ds-space-6); }
+  .hist ol { gap: var(--ds-space-4); }
+  .hist li { display: grid; grid-template-columns: 76px 1fr; gap: var(--ds-space-8); }
+  .hist li span { color: var(--ink); }
+  .composer { margin-top: auto; height: 40px; border-radius: var(--ds-radius-12); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .16); display: flex; align-items: center; padding: 0 var(--ds-space-12); color: var(--ink-2); }
+  .ins-foot { padding: var(--ds-space-16) var(--ds-space-24) var(--ds-space-24); border-top: 1px solid var(--hair); display: grid; gap: var(--ds-space-12); }
+  .ins-foot .row { display: flex; gap: var(--ds-space-8); }
+  .ins-foot .sel { color: var(--ink); font-weight: 600; }
+  .btn { all: unset; cursor: pointer; flex: 1; height: var(--ds-size-control-md); border-radius: var(--ds-radius-12); display: inline-flex; align-items: center; justify-content: center; font-weight: 600; white-space: nowrap; }
+  .btn.ghost { box-shadow: inset 0 0 0 1px rgb(255 255 255 / .28); }
+  .btn.primary { background: var(--mint); color: var(--ds-color-text-on-accent); }
+  @media (pointer: fine) {
+    .seg button:hover, .tools button:hover, .zoom button:hover { background: rgb(255 255 255 / 0.14); }
+    .btn.primary:hover { filter: brightness(1.06); }
+    .btn.ghost:hover { background: rgb(255 255 255 / .06); }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <main class="canvas">
+    <div class="stage" aria-label="Photo, fitted to the window, with the Web hero crop selected">
+      <img src="https://images.unsplash.com/photo-1754293193520-2f450176724e?w=2400&q=80&fm=jpg"
+           alt="A red wooden shed with a corrugated roof beside a lake at golden hour, tall pines behind it, picnic tables in front and a jetty running out to the right">
+
+      <!-- Web hero 21:9 crop: full width, rows 20.9% to 85.2% of the frame, centred on the focal point. Headline zone = left 40% of the crop. -->
+      <svg class="overlay" viewBox="0 0 1060 707" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <rect width="8" height="8" fill="rgb(247 144 133 / .12)"/><line x1="0" y1="0" x2="0" y2="8" stroke="rgb(255 215 209 / .38)" stroke-width="1.2"/>
+          </pattern>
+        </defs>
+        <rect x="0" y="0" width="1060" height="147" fill="rgb(6 8 12 / .58)"/>
+        <rect x="0" y="602" width="1060" height="105" fill="rgb(6 8 12 / .58)"/>
+        <rect x="0" y="147" width="424" height="455" fill="url(#hatch)"/>
+        <line x1="424" y1="147" x2="424" y2="602" stroke="rgb(255 215 209 / .9)" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <rect x="0.75" y="147" width="1058.5" height="455" fill="none" stroke="#fff" stroke-width="1.5"/>
+        <g stroke="#fff" stroke-width="4" fill="none" stroke-linecap="square">
+          <path d="M2 167V149h18M1040 149h18v18M1058 582v18h-18M20 600H2v-18"/>
+        </g>
+        <!-- focal point: the shed door, 38% across and 53% down -->
+        <g transform="translate(403 375)">
+          <circle r="15" fill="none" stroke="#fff" stroke-width="2"/>
+          <circle r="3" fill="#fff"/>
+          <path d="M-22 0h-6M22 0h6M0 -22v-6M0 22v6" stroke="#fff" stroke-width="2"/>
+        </g>
+      </svg>
+
+      <header class="bar glass">
+        <div class="mark">
+          <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><path d="M6 1.5v14.5h14.5M1.5 6h14.5v14.5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><rect x="6" y="6" width="10" height="10" fill="var(--mint)"/></svg>
+          Kadrel
+        </div>
+        <nav class="crumbs" aria-label="Location">Siljevik Cabins <i>/</i> Summer 2027 early booking <i>/</i> <b>Lakeside shed, Mora</b></nav>
+        <div class="spacer"></div>
+        <div class="seg" role="group" aria-label="View">
+          <button aria-pressed="true">Crops</button>
+          <button aria-pressed="false">Original</button>
+          <button aria-pressed="false">Compare</button>
+        </div>
+        <button class="gbtn">
+          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 10V2M5 5l3-3 3 3M3 9v4h10V9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Share
+        </button>
+      </header>
+
+      <div class="tools glass" role="toolbar" aria-label="Tools" aria-orientation="vertical">
+        <button aria-label="Select" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M4 2.5l10 6-4.4 1.2L7.4 14z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
+        <button aria-label="Crop" aria-pressed="true"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M5 1.5V13h11.5M1.5 5H13v11.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></button>
+        <button aria-label="Focal point" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="5" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="9" cy="9" r="1.5" fill="currentColor"/><path d="M9 1v2.5M9 14.5V17M1 9h2.5M14.5 9H17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+        <button aria-label="Comment" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M3 3.5h12v8.5H8l-4 3v-3H3z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
+        <hr>
+        <button aria-label="Colour sample" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M11.5 2.5l4 4-1.5 1.5-4-4zM10.5 5.5L4 12v2h2l6.5-6.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
+      </div>
+
+      <div class="chip crop glass">Web hero 21:9 <span>2520 × 1080</span></div>
+      <div class="chip zone glass">Headline zone <em>covers the shed</em></div>
+
+      <span class="pin" style="left: 300px; top: 300px;" aria-label="Comment 1">1</span>
+      <span class="pin" style="left: 990px; top: 346px;" aria-label="Comment 2">2</span>
+
+      <div class="zoom glass" role="group" aria-label="Zoom">
+        <button aria-label="Zoom out"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+        <span>Fit · 17%</span>
+        <button aria-label="Zoom in"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7h8M7 3v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+      </div>
+    </div>
+
+    <section class="strip" aria-label="Placements">
+      <header>
+        <h2>Placements</h2>
+        <span class="meta">4 crops from one photo, each as close to the focal point (38%, 53%) as its frame allows</span>
+      </header>
+      <div class="crops">
+        <figure aria-current="true" data-crop="0,0.2085,1,0.643">
+          <div class="thumb" role="img" aria-label="Web hero crop"></div>
+          <figcaption><b>Web hero<span>21:9 · 2520 × 1080</span></b><span class="st stop">Changes requested</span></figcaption>
+        </figure>
+        <figure data-crop="0,0.28,1,0.5">
+          <div class="thumb" role="img" aria-label="Billboard crop"></div>
+          <figcaption><b>Billboard<span>3:1 · 4800 × 1600</span></b><span class="st ok">Approved</span></figcaption>
+        </figure>
+        <figure data-crop="0.1133,0,0.5333,1">
+          <div class="thumb" role="img" aria-label="Feed crop"></div>
+          <figcaption><b>Feed<span>4:5 · 1080 × 1350</span></b><span class="st ok">Approved</span></figcaption>
+        </figure>
+        <figure data-crop="0.1925,0,0.375,1">
+          <div class="thumb" role="img" aria-label="Story crop"></div>
+          <figcaption><b>Story<span>9:16 · 1080 × 1920</span></b><span class="st">Waiting for review</span></figcaption>
+        </figure>
+        <div class="golive">
+          <span class="meta">Goes live</span>
+          <b>Mon 26 Oct 2026</b>
+          <span class="meta">in 12 days</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <aside class="inspector" aria-label="Asset details">
+    <div class="ins-head">
+      <h1>Lakeside shed, Mora</h1>
+      <p class="meta">JPG · 6240 × 4160 · shot 8 Jul 2025 on a Canon EOS 6D Mark II</p>
+      <p class="meta">Added Fri 9 Oct 2026 by Signe Aldén</p>
+    </div>
+
+    <section class="rights">
+      <h3>Rights</h3>
+      <dl class="kv">
+        <dt>Source</dt><dd>Unsplash, photo by <a href="https://unsplash.com/photos/red-shack-on-a-lake-with-a-pier-0kdx9yqALL4">Peter Schulz</a></dd>
+        <dt>Licence</dt><dd><b>Unsplash Licence.</b> Commercial use, no fee, no expiry</dd>
+        <dt>Place</dt><dd>Near Mora, Sweden</dd>
+        <dt>People</dt><dd>None identifiable</dd>
+        <dt>Releases</dt><dd>None on file (a building is visible)</dd>
+      </dl>
+    </section>
+
+
+    <section class="thread" aria-label="Comments">
+      <h3>Comments · 3</h3>
+      <div class="c">
+        <span class="n">1</span>
+        <div class="who"><b>Signe Aldén</b><span class="meta">Art director · 09:12</span></div>
+        <p>Web hero: the headline zone sits on the shed. Can we try another template for this one?</p>
+      </div>
+      <div class="c">
+        <span class="reply-line"></span>
+        <div class="who"><b>Rhys Marsh</b><span class="meta">Designer · 09:40</span></div>
+        <p>A bottom-band headline over the grass clears the shed and the lifebuoy. Layout up by 14:00.</p>
+      </div>
+      <div class="c">
+        <span class="n">2</span>
+        <div class="who"><b>Signe Aldén</b><span class="meta">10:05</span></div>
+        <p>Keep the lifebuoy in the two wide crops. It leads the eye down the jetty.</p>
+      </div>
+      <div class="composer">Reply to Rhys</div>
+      <div class="hist">
+        <h3>History</h3>
+        <ol class="meta">
+          <li><span>Today 09:12</span>Changes requested on Web hero</li>
+          <li><span>Tue 13 Oct</span>Billboard and Feed approved by Signe</li>
+        </ol>
+      </div>
+    </section>
+
+    <div class="ins-foot">
+      <p class="meta">Selected: <b class="sel">Web hero</b>, changes requested. 2 of 4 crops approved.</p>
+      <div class="row">
+        <button class="btn ghost">Request changes</button>
+        <button class="btn primary">Approve web hero</button>
+      </div>
+    </div>
+  </aside>
+</div>
+<script>
+  // Each placement thumbnail is the same photo, cropped by the rectangle in data-crop (x, y, width, height as fractions of the frame).
+  const A = 6240 / 4160;
+  document.querySelectorAll('.crops figure').forEach(f => {
+    const [x, y, w, h] = f.dataset.crop.split(',').map(Number);
+    const t = f.querySelector('.thumb'), th = 96, tw = th * (w * A) / h;
+    const bw = tw / w, bh = bw / A;
+    Object.assign(t.style, { width: tw.toFixed(1) + 'px', backgroundSize: `${bw.toFixed(1)}px ${bh.toFixed(1)}px`, backgroundPosition: `${(-x * bw).toFixed(1)}px ${(-y * bh).toFixed(1)}px` });
+  });
+</script>
+</body>
+</html>

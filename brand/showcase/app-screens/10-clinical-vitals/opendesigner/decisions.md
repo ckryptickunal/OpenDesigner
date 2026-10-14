@@ -446,3 +446,41 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 ## D-0021 · raw.chartPalette = "categorical-8"
 - set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
 - reason: one distinct color per vital sign
+
+## D-0022 · name = "Wardlight"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: Round 3: 'Vigil' is a real company in this field (Vigil Health Solutions, nurse call and resident monitoring); renamed
+- previous value: "Vigil"
+
+## D-0023 · overrides.font.size.13 = {"value": 13, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: Round 3: iPadOS Dynamic Type step
+- new dimension token in primitives.tokens.json
+
+## D-0024 · overrides.font.size.15 = {"value": 15, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: Round 3: iPadOS Dynamic Type step
+- new dimension token in primitives.tokens.json
+
+## D-0025 · overrides.font.size.17 = {"value": 17, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: Round 3: iPadOS Dynamic Type step
+
+## D-0026 · overrides.font.size.20 = {"value": 20, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: Round 3: iPadOS Dynamic Type step
+
+## D-0027 · overrides.font.size.28 = {"value": 28, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: Round 3: iPadOS Dynamic Type step
+- new dimension token in primitives.tokens.json
+
+## D-0028 · overrides.font.size.34 = {"value": 34, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: Round 3: iPadOS Dynamic Type step
+- new dimension token in primitives.tokens.json
+
+## D-0029 · dials.density = 60
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0011 · source_ref: none
+- reason: Round 3: an observation chart is dense by nature; the chrome around it is calm
+- previous value: 66

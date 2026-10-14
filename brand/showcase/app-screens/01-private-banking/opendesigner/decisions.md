@@ -585,3 +585,48 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 ## D-0051 · overrides.text.headline.md = {"fontFamily": "{font.family.display}", "fontSize": "{font.size.34}", "fontWeight": "{font.weight.heading}", "letterSpacing": {"value": 0.0, "unit": "em"}, "lineHeight": 1.2059}
 - set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
 - reason: HIG Large Title (34/41)
+
+## D-0052 · raw.neutralBase = "#1A2420"
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: D-0029 · source_ref: none
+- reason: Round 3: owner said the text is not visible; a less saturated green-black lets text and secondary text read as bright neutral instead of green mid-tones
+- previous value: "#0E2A1F"
+
+## D-0053 · dials.depth = 30
+- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: D-0019 · source_ref: none
+- reason: Round 3: the card is flat now (audit: brushed metal was the luxury-card cliché)
+- previous value: 65
+
+## D-0054 · raw.neutralBase = "#173226"
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: D-0052 · source_ref: none
+- reason: Round 3: owner said the text is not visible. A green-black that keeps the bottle-green surfaces but gives brighter, less green secondary text than #0E2A1F did
+- previous value: "#1A2420"
+
+## D-0055 · raw.neutralBase = "#1C2B24"
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: D-0054 · source_ref: none
+- reason: trial
+- previous value: "#173226"
+
+## D-0056 · raw.neutralBase = "#1A2C23"
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: D-0055 · source_ref: none
+- reason: trial
+- previous value: "#1C2B24"
+
+## D-0057 · raw.neutralBase = "#16271F"
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: D-0056 · source_ref: none
+- reason: trial
+- previous value: "#1A2C23"
+
+## D-0058 · raw.neutralBase = "#1C2B24"
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: D-0057 · source_ref: none
+- reason: Round 3: owner said the text is not visible. A greyer green-black: surfaces keep a trace of bottle green, secondary text moves from #96b1a4 to a brighter, more neutral #9fb0a7, and the bottle green moves onto the card
+- previous value: "#16271F"
+
+## D-0059 · overrides.font.size.12 = {"value": 12, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+- reason: Round 3: HIG Caption 1 for tab labels and the avatar initials; 11 read too small to the owner
+- new dimension token in primitives.tokens.json
+
+## D-0060 · overrides.font.size.48 = {"value": 48, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+- reason: Round 3: the wealth figure, a custom display role above Large Title 34
+- new dimension token in primitives.tokens.json

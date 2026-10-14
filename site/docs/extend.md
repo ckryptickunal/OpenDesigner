@@ -9,6 +9,8 @@ updated: 2026-10-14
 
 To change a design system you made with OpenDesigner, ask your AI for the change. The opendesigner-extend skill takes over when your project already has an `opendesigner/` folder. It reads your past decisions and locks first, asks only about what is new, records the change with its reason, and rebuilds every file.
 
+{{figure:extend-flow}}
+
 ## When it runs
 
 It runs when `opendesigner/state.json` exists, or when the root `DESIGN.md` was made by OpenDesigner. Common requests:
@@ -95,6 +97,8 @@ Decision log: opendesigner/decisions.md, D-0012
 ```
 
 The values above are an example.
+
+{{figure:extend-change-note}}
 
 ## Using a different AI tool later
 

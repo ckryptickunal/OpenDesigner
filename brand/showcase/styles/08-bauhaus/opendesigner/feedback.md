@@ -1,0 +1,18 @@
+# Feedback
+
+Gaps, bugs, confusing steps and ideas found while using OpenDesigner. Each entry has a ready-to-file issue link. Nothing is posted unless you open the link and submit it yourself.
+
+## F-001 · 2026-10-14 · bug
+raw.secondaryColors are not pinned like the brand: Bauhaus ultramarine #1E4AA8 came out as #256aff at accent2 step 9 and the exact hex is in no step; cadmium yellow #F2C200 became #edc343. A style built on exact primaries has to bypass the tokens (two hand-set CSS variables).
+
+[File this as an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new?title=%5Bbug%5D%20raw.secondaryColors%20are%20not%20pinned%20like%20the%20brand%3A%20Bauhaus%20ultramarine...&body=%2A%2AKind%3A%2A%2A%20bug%0A%0A%2A%2AWhat%20happened%20or%20what%20is%20missing%3A%2A%2A%0Araw.secondaryColors%20are%20not%20pinned%20like%20the%20brand%3A%20Bauhaus%20ultramarine%20%231E4AA8%20came%20out%20as%20%23256aff%20at%20accent2%20step%209%20and%20the%20exact%20hex%20is%20in%20no%20step%3B%20cadmium%20yellow%20%23F2C200%20became%20%23edc343.%20A%20style%20built%20on%20exact%20primaries%20has%20to%20bypass%20the%20tokens%20%28two%20hand-set%20CSS%20variables%29.%0A%0A%2A%2AEngine%3A%2A%2A%201.0.0%20%28Python%203.10%29%0A%0A_Filed%20from%20%60engine.py%20feedback%60.%20Please%20remove%20anything%20private%20before%20submitting._&labels=bug%2Cfrom-engine)
+
+## F-002 · 2026-10-14 · gap
+No layout-grid tokens: a 'strict grid' style (Bauhaus, Swiss) has no columns, gutter or margin tokens to build on; I computed a 12-column grid (84.67 px columns, 24 px gutters, 80 px margins) by hand and placed the diagram on it in comments.
+
+[File this as an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new?title=%5Bgap%5D%20No%20layout-grid%20tokens%3A%20a%20%27strict%20grid%27%20style%20%28Bauhaus%2C%20Swiss%29%20has%20no%20c...&body=%2A%2AKind%3A%2A%2A%20gap%0A%0A%2A%2AWhat%20happened%20or%20what%20is%20missing%3A%2A%2A%0ANo%20layout-grid%20tokens%3A%20a%20%27strict%20grid%27%20style%20%28Bauhaus%2C%20Swiss%29%20has%20no%20columns%2C%20gutter%20or%20margin%20tokens%20to%20build%20on%3B%20I%20computed%20a%2012-column%20grid%20%2884.67%20px%20columns%2C%2024%20px%20gutters%2C%2080%20px%20margins%29%20by%20hand%20and%20placed%20the%20diagram%20on%20it%20in%20comments.%0A%0A%2A%2AEngine%3A%2A%2A%201.0.0%20%28Python%203.10%29%0A%0A_Filed%20from%20%60engine.py%20feedback%60.%20Please%20remove%20anything%20private%20before%20submitting._&labels=gap%2Cfrom-engine)
+
+## F-003 · 2026-10-14 · idea
+Style knowledge idea: a short catalogue of named styles (comic, Memphis, risograph, Bauhaus, Swiss, brutalist, Y2K...) with checkable traits, the dial settings that express them, what the dials cannot hold, and how each goes wrong. Builders wrote this by hand in every notes.md.
+
+[File this as an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new?title=%5Bidea%5D%20Style%20knowledge%20idea%3A%20a%20short%20catalogue%20of%20named%20styles%20%28comic%2C%20Memphi...&body=%2A%2AKind%3A%2A%2A%20idea%0A%0A%2A%2AWhat%20happened%20or%20what%20is%20missing%3A%2A%2A%0AStyle%20knowledge%20idea%3A%20a%20short%20catalogue%20of%20named%20styles%20%28comic%2C%20Memphis%2C%20risograph%2C%20Bauhaus%2C%20Swiss%2C%20brutalist%2C%20Y2K...%29%20with%20checkable%20traits%2C%20the%20dial%20settings%20that%20express%20them%2C%20what%20the%20dials%20cannot%20hold%2C%20and%20how%20each%20goes%20wrong.%20Builders%20wrote%20this%20by%20hand%20in%20every%20notes.md.%0A%0A%2A%2AEngine%3A%2A%2A%201.0.0%20%28Python%203.10%29%0A%0A_Filed%20from%20%60engine.py%20feedback%60.%20Please%20remove%20anything%20private%20before%20submitting._&labels=enhancement%2Cfrom-engine)

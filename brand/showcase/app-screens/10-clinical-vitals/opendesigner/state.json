@@ -4,7 +4,7 @@
   "engine_version": "1.0.0",
   "levers_version": "levers/1.0 2026-09-23",
   "mode": "standard",
-  "name": "Vigil",
+  "name": "Wardlight",
   "summary": "",
   "context": {
     "product": "",
@@ -33,10 +33,10 @@
       "decision": "D-0010"
     },
     "density": {
-      "value": 66,
+      "value": 60,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0011"
+      "decision": "D-0029"
     },
     "energy": {
       "value": 28,
@@ -149,7 +149,10 @@
     "scripts": [
       "Latn"
     ],
-    "defaultTheme": "system"
+    "defaultTheme": "system",
+    "borderDefault": null,
+    "texture": null,
+    "gradients": null
   },
   "overrides": {
     "motion.duration.instant": {
@@ -295,6 +298,30 @@
     },
     "size.target.min": {
       "value": 44,
+      "unit": "px"
+    },
+    "font.size.13": {
+      "value": 13,
+      "unit": "px"
+    },
+    "font.size.15": {
+      "value": 15,
+      "unit": "px"
+    },
+    "font.size.17": {
+      "value": 17,
+      "unit": "px"
+    },
+    "font.size.20": {
+      "value": 20,
+      "unit": "px"
+    },
+    "font.size.28": {
+      "value": 28,
+      "unit": "px"
+    },
+    "font.size.34": {
+      "value": 34,
       "unit": "px"
     }
   },
@@ -462,8 +489,8 @@
     ]
   },
   "hashes": {
-    "DESIGN.md": "62e982069a2ac02e",
-    "PRODUCT.md": "ad80b6292f6e7918"
+    "DESIGN.md": "5dc5937696e79ed2",
+    "PRODUCT.md": "697b4eed06c838d7"
   },
   "exports": {
     "prefix": "ds",
@@ -2752,5 +2779,7 @@
       "size.target.min": "dimension"
     },
     "snapshots": "standards-state.json"
-  }
+  },
+  "style": null,
+  "customStyles": {}
 }

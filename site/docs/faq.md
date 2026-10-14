@@ -49,7 +49,7 @@ No. It does the repetitive system work: scales, tokens, states and contrast. It 
 
 That's a fair worry. OpenDesigner asks what people should remember about your product, sets eight dials from your answers, and asks for your own logo, fonts and art instead of faking them. It won't copy someone else's brand from a reference site.
 
-To be honest about the limits: in our stress test, AI agents made 46 pieces by following the process. About a third came out competent but conventional, and most of the striking work was made outside the tokens. The tokens give you consistency and readable contrast. A distinctive look still needs your input.
+To be honest about the limits: in our stress test, AI agents made 46 pieces by following the process, plus 8 mockups. An audit against shipped products on Mobbin then passed 28 of the 54, sent 20 back for polish and rebuilt 6; much of the striking work was made outside the tokens. The audit's lessons are now rules every builder checks against. The tokens give you consistency and readable contrast. A distinctive look still needs your input.
 
 ### Does it make my app meet WCAG?
 

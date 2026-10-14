@@ -3,13 +3,13 @@
   "name": "OpenDesigner brand",
   "prefix": "ds",
   "dials": {
-    "expression": 68,
-    "brandPresence": 80,
-    "density": 30,
-    "energy": 40,
-    "roundness": 40,
-    "colorfulness": 62,
-    "depth": 30,
+    "expression": 40,
+    "brandPresence": 55,
+    "density": 45,
+    "energy": 30,
+    "roundness": 75,
+    "colorfulness": 35,
+    "depth": 15,
     "warmth": 30
   },
   "dialSources": {
@@ -26,10 +26,16 @@
   "preset": "flat2",
   "presetIsDefault": true,
   "macros": [
-    "bold",
+    "modern",
+    "serious",
     "premium",
+    "minimal",
     "friendly"
   ],
+  "style": null,
+  "look": {
+    "gradient": null
+  },
   "params": {
     "behavior.navigationNative": {
       "value": true,
@@ -49,7 +55,7 @@
       "inferred": true
     },
     "chrome.navTreatment": {
-      "value": "neutral",
+      "value": "recessive",
       "dial": "energy",
       "evidence": [
         "S-L06-067",
@@ -58,7 +64,7 @@
       "inferred": false
     },
     "color.accentChroma.hct": {
-      "value": 40.72,
+      "value": 22.0,
       "dial": "colorfulness",
       "evidence": [
         "S-L01-010"
@@ -66,7 +72,7 @@
       "inferred": false
     },
     "color.accentCount": {
-      "value": 3,
+      "value": 1,
       "dial": "colorfulness",
       "evidence": [
         "DC-L01-08",
@@ -75,7 +81,7 @@
       "inferred": true
     },
     "color.brandPlacement": {
-      "value": "large-surfaces+custom-components",
+      "value": "accent+signature-surface",
       "dial": "brandPresence",
       "evidence": [
         "S-L06-008",
@@ -84,7 +90,7 @@
       "inferred": false
     },
     "color.brandRole": {
-      "value": "brand-chrome-allowed",
+      "value": "accent+signature-surface",
       "dial": "expression",
       "evidence": [
         "DC-L06-04"
@@ -104,7 +110,7 @@
       "inferred": false
     },
     "color.schemeVariant": {
-      "value": "tonalSpot",
+      "value": "neutral",
       "dial": "colorfulness",
       "evidence": [
         "S-L06-083",
@@ -113,7 +119,7 @@
       "inferred": false
     },
     "color.surfaces": {
-      "value": "tinted-containers",
+      "value": "neutral+one-accent",
       "dial": "colorfulness",
       "evidence": [
         "L09-A3-X-rubric"
@@ -121,7 +127,7 @@
       "inferred": true
     },
     "color.textMayUseAccent": {
-      "value": "allowed",
+      "value": "links-and-selection-only",
       "dial": "colorfulness",
       "evidence": [
         "S-L01-053"
@@ -129,7 +135,7 @@
       "inferred": true
     },
     "colorfulness.couplingOffset": {
-      "value": -3.0,
+      "value": -6.0,
       "dial": "energy",
       "evidence": [
         "S-L06-083",
@@ -170,7 +176,7 @@
       "override": true
     },
     "components.nativeShare": {
-      "value": 0.32000000000000006,
+      "value": 0.72,
       "dial": "brandPresence",
       "evidence": [
         "DC-L06-14",
@@ -197,7 +203,7 @@
       "inferred": false
     },
     "content.voiceGuidance": {
-      "value": "full",
+      "value": "short",
       "dial": "brandPresence",
       "evidence": [
         "L09-A3-Y-rubric"
@@ -205,7 +211,7 @@
       "inferred": true
     },
     "control.height.md": {
-      "value": 48,
+      "value": 40,
       "dial": "density",
       "evidence": [
         "DC-L03-07",
@@ -222,7 +228,7 @@
       "inferred": false
     },
     "elevation.model": {
-      "value": "ring+faint-shadow",
+      "value": "borders",
       "dial": "depth",
       "evidence": [
         "DC-L04-10",
@@ -232,7 +238,7 @@
       "inferred": false
     },
     "elevation.shadowAlpha.light": {
-      "value": 0.10666666666666666,
+      "value": 0.08,
       "dial": "depth",
       "evidence": [
         "DC-L04-12"
@@ -240,7 +246,7 @@
       "inferred": true
     },
     "emphasis.heroMoments": {
-      "value": "1-2-per-product",
+      "value": "significant-moments",
       "dial": "expression",
       "evidence": [
         "DC-L06-03",
@@ -266,7 +272,7 @@
       "override": true
     },
     "haptics.intensity": {
-      "value": "medium",
+      "value": "light",
       "dial": "energy",
       "evidence": [
         "DC-L04-26",
@@ -275,7 +281,7 @@
       "inferred": true
     },
     "icon.caps": {
-      "value": "square",
+      "value": "round",
       "dial": "roundness",
       "evidence": [
         "DC-L05-03"
@@ -283,7 +289,7 @@
       "inferred": true
     },
     "icon.cornerStyle": {
-      "value": "default",
+      "value": "rounded",
       "dial": "roundness",
       "evidence": [
         "DC-L05-02",
@@ -292,7 +298,7 @@
       "inferred": false
     },
     "icon.defaultSize": {
-      "value": 24,
+      "value": 20,
       "dial": "density",
       "evidence": [
         "DC-L05-05",
@@ -311,7 +317,7 @@
       "inferred": true
     },
     "layout.containment": {
-      "value": "visible-containers",
+      "value": "mixed",
       "dial": "expression",
       "evidence": [
         "S-L06-080",
@@ -411,7 +417,7 @@
       "override": true
     },
     "motion.durationMultiplier": {
-      "value": 0.96,
+      "value": 0.92,
       "dial": "energy",
       "evidence": [
         "S-L09-656",
@@ -490,7 +496,7 @@
       "override": true
     },
     "motion.expressiveScope": {
-      "value": "throughout",
+      "value": "significant-moments",
       "dial": "expression",
       "evidence": [
         "DC-L04-19",
@@ -611,7 +617,7 @@
       "inferred": true
     },
     "radius.control": {
-      "value": 6,
+      "value": 12,
       "dial": "roundness",
       "evidence": [
         "DC-L04-02",
@@ -678,7 +684,7 @@
       "inferred": true
     },
     "signifier.minStrength": {
-      "value": "minimal-allowed",
+      "value": "balanced",
       "dial": "density",
       "evidence": [
         "DC-L15-04",
@@ -702,7 +708,7 @@
       "override": true
     },
     "space.densityMode": {
-      "value": "spacious",
+      "value": "comfortable",
       "dial": "density",
       "evidence": [
         "DC-L03-10",
@@ -712,7 +718,7 @@
       "inferred": false
     },
     "space.innerOuterRatio": {
-      "value": 3.5,
+      "value": 2.5,
       "dial": "density",
       "evidence": [
         "DC-L03-24"
@@ -747,7 +753,7 @@
       "inferred": false
     },
     "type.emphasizedVariants": {
-      "value": true,
+      "value": false,
       "dial": "expression",
       "evidence": [
         "DC-L02-11",
@@ -756,7 +762,7 @@
       "inferred": false
     },
     "type.faceSuggestion": {
-      "value": "proprietary-brand-face",
+      "value": "open-custom-face",
       "dial": "brandPresence",
       "evidence": [
         "L09-A3-Y-rubric",
@@ -793,7 +799,7 @@
       "override": true
     },
     "type.ratio": {
-      "value": 1.333,
+      "value": 1.25,
       "dial": "expression",
       "evidence": [
         "DC-L15-02",
@@ -810,7 +816,7 @@
       "inferred": false
     },
     "type.weightCount": {
-      "value": 4,
+      "value": 3,
       "dial": "expression",
       "evidence": [
         "DC-L02-15"
@@ -819,7 +825,7 @@
     }
   },
   "color": {
-    "scheme": "tonalSpot",
+    "scheme": "neutral",
     "peakHct": 83.23,
     "brandHct": 83.23,
     "placeholderBrand": false,
@@ -838,33 +844,36 @@
     "brandPinFailed": false,
     "brandAdjustedTo": null,
     "brandContrastWhite": 6.82,
+    "brandContrastDark": 2.27,
+    "brandPinnedDark": false,
+    "brandContrastDarkMode": 2.68,
+    "brandDark": "#527cff",
+    "secondary": [],
     "statusPeakHct": 84.0,
     "textMin": 4.5,
     "ramps": [
       "accent",
-      "accent2",
-      "accent3",
       "success",
       "warning",
       "danger",
       "info"
     ],
-    "accentCount": 3,
+    "accentCount": 1,
     "chart": {}
   },
   "ramps": {
     "accent": {
       "dark": {
         "hex": [
-          "#141821",
-          "#1a202d",
-          "#1c2742",
-          "#1f2e56",
-          "#22356b",
-          "#253b80",
-          "#26419b",
-          "#507af9",
-          "#517cff",
+          "#141823",
+          "#192030",
+          "#1a2648",
+          "#1c2d5f",
+          "#1e3377",
+          "#20388f",
+          "#203bae",
+          "#4e79ff",
+          "#527cff",
           "#638cff",
           "#89aaff",
           "#c4d6ff"
@@ -873,47 +882,47 @@
         "oklch": [
           [
             0.21,
-            0.018
+            0.022
           ],
           [
-            0.243,
-            0.027
+            0.244,
+            0.033
           ],
           [
-            0.277,
-            0.052
+            0.278,
+            0.064
           ],
           [
-            0.31,
-            0.074
+            0.313,
+            0.091
           ],
           [
-            0.344,
-            0.097
-          ],
-          [
-            0.377,
+            0.347,
             0.119
           ],
           [
-            0.411,
-            0.151
+            0.381,
+            0.147
           ],
           [
-            0.617,
-            0.196
+            0.415,
+            0.186
+          ],
+          [
+            0.618,
+            0.205
           ],
           [
             0.626,
             0.2
           ],
           [
-            0.666,
+            0.667,
             0.176
           ],
           [
-            0.748,
-            0.129
+            0.749,
+            0.128
           ],
           [
             0.875,
@@ -985,278 +994,6 @@
           [
             0.331,
             0.125
-          ]
-        ]
-      }
-    },
-    "accent2": {
-      "dark": {
-        "hex": [
-          "#1b171b",
-          "#241e24",
-          "#302330",
-          "#3c293b",
-          "#482f48",
-          "#543554",
-          "#623a62",
-          "#a86ea7",
-          "#b06db0",
-          "#be7abe",
-          "#d796d7",
-          "#e6cee5"
-        ],
-        "textOnSolid": "light",
-        "oklch": [
-          [
-            0.211,
-            0.01
-          ],
-          [
-            0.244,
-            0.015
-          ],
-          [
-            0.278,
-            0.028
-          ],
-          [
-            0.311,
-            0.041
-          ],
-          [
-            0.345,
-            0.053
-          ],
-          [
-            0.378,
-            0.065
-          ],
-          [
-            0.412,
-            0.083
-          ],
-          [
-            0.618,
-            0.107
-          ],
-          [
-            0.629,
-            0.123
-          ],
-          [
-            0.673,
-            0.123
-          ],
-          [
-            0.758,
-            0.115
-          ],
-          [
-            0.879,
-            0.041
-          ]
-        ]
-      },
-      "light": {
-        "hex": [
-          "#fffcff",
-          "#faf2f9",
-          "#f7e7f6",
-          "#f4dcf3",
-          "#f2d0f1",
-          "#efc5ee",
-          "#ecb9eb",
-          "#af71ae",
-          "#a856a9",
-          "#994c9a",
-          "#803d81",
-          "#482848"
-        ],
-        "textOnSolid": "light",
-        "oklch": [
-          [
-            0.994,
-            0.005
-          ],
-          [
-            0.969,
-            0.012
-          ],
-          [
-            0.945,
-            0.026
-          ],
-          [
-            0.92,
-            0.041
-          ],
-          [
-            0.896,
-            0.056
-          ],
-          [
-            0.872,
-            0.071
-          ],
-          [
-            0.847,
-            0.087
-          ],
-          [
-            0.635,
-            0.114
-          ],
-          [
-            0.582,
-            0.152
-          ],
-          [
-            0.541,
-            0.144
-          ],
-          [
-            0.473,
-            0.129
-          ],
-          [
-            0.332,
-            0.068
-          ]
-        ]
-      }
-    },
-    "accent3": {
-      "dark": {
-        "hex": [
-          "#13191a",
-          "#172123",
-          "#152b2e",
-          "#113439",
-          "#083e44",
-          "#00474f",
-          "#005059",
-          "#00909e",
-          "#0093a1",
-          "#00a1b1",
-          "#31bccd",
-          "#b6dce2"
-        ],
-        "textOnSolid": "light",
-        "oklch": [
-          [
-            0.208,
-            0.01
-          ],
-          [
-            0.24,
-            0.015
-          ],
-          [
-            0.271,
-            0.028
-          ],
-          [
-            0.302,
-            0.041
-          ],
-          [
-            0.333,
-            0.053
-          ],
-          [
-            0.364,
-            0.062
-          ],
-          [
-            0.395,
-            0.068
-          ],
-          [
-            0.596,
-            0.102
-          ],
-          [
-            0.605,
-            0.104
-          ],
-          [
-            0.648,
-            0.111
-          ],
-          [
-            0.732,
-            0.115
-          ],
-          [
-            0.87,
-            0.041
-          ]
-        ]
-      },
-      "light": {
-        "hex": [
-          "#f8feff",
-          "#ebf6f8",
-          "#d7f0f3",
-          "#c3eaef",
-          "#ade4eb",
-          "#97dde7",
-          "#7ed7e3",
-          "#0094a3",
-          "#00828f",
-          "#007581",
-          "#00616b",
-          "#003a40"
-        ],
-        "textOnSolid": "light",
-        "oklch": [
-          [
-            0.992,
-            0.006
-          ],
-          [
-            0.965,
-            0.012
-          ],
-          [
-            0.938,
-            0.026
-          ],
-          [
-            0.91,
-            0.041
-          ],
-          [
-            0.883,
-            0.056
-          ],
-          [
-            0.855,
-            0.072
-          ],
-          [
-            0.828,
-            0.087
-          ],
-          [
-            0.609,
-            0.104
-          ],
-          [
-            0.554,
-            0.095
-          ],
-          [
-            0.515,
-            0.088
-          ],
-          [
-            0.45,
-            0.077
-          ],
-          [
-            0.318,
-            0.055
           ]
         ]
       }
@@ -1943,52 +1680,54 @@
     }
   },
   "modes": [
-    "light",
-    "dark"
+    "light"
   ],
   "type": {
     "base": 16,
-    "ratio": 1.333,
+    "ratio": 1.25,
     "reach": 5.5,
-    "nTop": 6,
+    "nTop": 8,
     "raw": [
-      9,
-      12,
+      10,
+      13,
       16,
-      21,
-      28,
-      38,
-      51,
-      67,
-      90
+      20,
+      25,
+      31,
+      39,
+      49,
+      61,
+      76,
+      95
     ],
     "sizes": [
-      12,
+      13,
       16,
-      21,
-      28,
-      38,
-      51,
-      67,
-      90
+      20,
+      25,
+      39,
+      49,
+      76,
+      95
     ],
     "merged": [],
-    "minSize": 11,
+    "minSize": 12,
     "scaleSizes": [
-      12,
+      13,
       16,
-      21,
-      28,
-      38,
-      51,
-      67,
-      90
+      20,
+      25,
+      31,
+      39,
+      49,
+      61,
+      76,
+      95
     ],
     "weights": {
       "body": 400,
       "label": 500,
-      "heading": 400,
-      "display": 500
+      "heading": 400
     },
     "styles": [
       "body.sm",
@@ -2003,30 +1742,20 @@
       "title.md",
       "title.lg",
       "headline.sm",
-      "headline.md",
       "headline.lg",
-      "display.sm"
+      "display.md",
+      "display.lg"
     ],
-    "emphasized": [
-      "emphasized.body.sm",
-      "emphasized.body.md",
-      "emphasized.body.lg",
-      "emphasized.title.sm",
-      "emphasized.title.md",
-      "emphasized.title.lg",
-      "emphasized.headline.sm",
-      "emphasized.headline.md",
-      "emphasized.headline.lg"
-    ],
+    "emphasized": [],
     "lineHeights": [
-      16,
+      20,
       24,
       28,
       36,
       48,
       56,
-      76,
-      100
+      84,
+      108
     ],
     "scripts": {},
     "faces": {
@@ -2069,7 +1798,7 @@
       "pointer": 24,
       "touch": 44
     },
-    "iconDefault": 24,
+    "iconDefault": 20,
     "iconStroke": {
       "16": 1.5,
       "20": 2.0,
@@ -2108,6 +1837,12 @@
         "md": 48,
         "lg": 56
       },
+      "row": {
+        "sm": 52,
+        "md": 56,
+        "lg": 64,
+        "two-line": 80
+      },
       "ratio": 3.5
     },
     "comfortable": {
@@ -2139,6 +1874,12 @@
         "sm": 32,
         "md": 40,
         "lg": 48
+      },
+      "row": {
+        "sm": 44,
+        "md": 48,
+        "lg": 56,
+        "two-line": 72
       },
       "ratio": 2.5
     },
@@ -2172,37 +1913,44 @@
         "md": 32,
         "lg": 40
       },
+      "row": {
+        "sm": 36,
+        "md": 40,
+        "lg": 48,
+        "two-line": 64
+      },
       "ratio": 2.0
     }
   },
   "shape": {
-    "control": 6,
-    "control-sm": 4,
-    "detail": 2,
-    "container": 8,
-    "overlay": 12,
+    "control": 12,
+    "control-sm": 8,
+    "detail": 6,
+    "container": 16,
+    "overlay": 24,
     "nested": 2,
     "focusWidth": 2,
-    "focusRadius": 8,
-    "iconCorners": "default",
-    "iconCaps": "square"
+    "focusRadius": 14,
+    "iconCorners": "rounded",
+    "iconCaps": "round",
+    "borderDefault": 1
   },
   "elevation": {
-    "model": "ring+faint-shadow",
-    "alpha": 0.107
+    "model": "borders",
+    "alpha": 0.0
   },
   "motion": {
     "durations": {
       "instant": 0,
       "micro": 100,
       "short": 150,
-      "medium": 240,
-      "long": 380,
-      "extra": 670,
+      "medium": 230,
+      "long": 370,
+      "extra": 640,
       "medium-exit": 160,
       "long-exit": 200
     },
-    "multiplier": 0.96,
+    "multiplier": 0.92,
     "standard": [
       0.77,
       0,
@@ -2212,14 +1960,14 @@
     "enter": [
       0,
       0,
-      0,
-      1
+      0.38,
+      0.9
     ],
     "exit": [
       0,
       0,
-      0,
-      1
+      0.38,
+      0.9
     ],
     "spatial": {
       "dampingRatio": 1.0,
@@ -2735,114 +2483,6 @@
     },
     {
       "mode": "light",
-      "fg": "color.text.accent2",
-      "bg": "color.surface.base",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "light",
-      "fg": "color.text.accent2",
-      "bg": "color.surface.raised",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "light",
-      "fg": "color.text.accent2",
-      "bg": "color.bg.accent2.subtle",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "light",
-      "fg": "color.text.on-accent2",
-      "bg": "color.bg.accent2.bold",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "light",
-      "fg": "color.text.on-accent2",
-      "bg": "color.bg.accent2.bold-hover",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "light",
-      "fg": "color.text.on-accent2",
-      "bg": "color.bg.accent2.bold-pressed",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "light",
-      "fg": "color.text.accent3",
-      "bg": "color.surface.base",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "light",
-      "fg": "color.text.accent3",
-      "bg": "color.surface.raised",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "light",
-      "fg": "color.text.accent3",
-      "bg": "color.bg.accent3.subtle",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "light",
-      "fg": "color.text.on-accent3",
-      "bg": "color.bg.accent3.bold",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "light",
-      "fg": "color.text.on-accent3",
-      "bg": "color.bg.accent3.bold-hover",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "light",
-      "fg": "color.text.on-accent3",
-      "bg": "color.bg.accent3.bold-pressed",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "light",
       "fg": "color.border.strong",
       "bg": "color.surface.base",
       "min": 3.0,
@@ -3068,852 +2708,6 @@
     },
     {
       "mode": "light",
-      "fg": "color.bg.action.primary",
-      "bg": "color.surface.raised",
-      "min": 3.0,
-      "kind": "fill-boundary",
-      "rule": "WCAG 2.2 SC 1.4.11 (advisory: a text-labelled button needs no boundary contrast)",
-      "level": "warning"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.primary",
-      "bg": "color.surface.base",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.primary",
-      "bg": "color.surface.raised",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.primary",
-      "bg": "color.surface.sunken",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.primary",
-      "bg": "color.surface.overlay",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.primary",
-      "bg": "color.bg.neutral.subtle",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.primary",
-      "bg": "color.bg.neutral.subtle-hover",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.primary",
-      "bg": "color.bg.neutral.subtle-pressed",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.primary",
-      "bg": "color.bg.accent.subtle",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.primary",
-      "bg": "color.bg.field",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.secondary",
-      "bg": "color.surface.base",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.secondary",
-      "bg": "color.surface.raised",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.secondary",
-      "bg": "color.surface.sunken",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.secondary",
-      "bg": "color.surface.overlay",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.secondary",
-      "bg": "color.bg.neutral.subtle",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.secondary",
-      "bg": "color.bg.neutral.subtle-hover",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.tertiary",
-      "bg": "color.surface.base",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.tertiary",
-      "bg": "color.surface.raised",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.tertiary",
-      "bg": "color.surface.sunken",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.tertiary",
-      "bg": "color.surface.overlay",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.link",
-      "bg": "color.surface.base",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.link",
-      "bg": "color.surface.raised",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.link",
-      "bg": "color.surface.sunken",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.link",
-      "bg": "color.surface.overlay",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.link",
-      "bg": "color.bg.accent.subtle",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.on-accent",
-      "bg": "color.bg.accent.bold",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.on-accent",
-      "bg": "color.bg.accent.bold-hover",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.on-accent",
-      "bg": "color.bg.accent.bold-pressed",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.on-action",
-      "bg": "color.bg.action.primary",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.on-action",
-      "bg": "color.bg.action.primary-hover",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.on-action",
-      "bg": "color.bg.action.primary-pressed",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.on-brand",
-      "bg": "color.bg.brand",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.inverse",
-      "bg": "color.bg.inverse",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.success",
-      "bg": "color.surface.base",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.success",
-      "bg": "color.surface.raised",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.success",
-      "bg": "color.bg.success.subtle",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.on-success",
-      "bg": "color.bg.success.bold",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.on-success",
-      "bg": "color.bg.success.bold-hover",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.on-success",
-      "bg": "color.bg.success.bold-pressed",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.warning",
-      "bg": "color.surface.base",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.warning",
-      "bg": "color.surface.raised",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.warning",
-      "bg": "color.bg.warning.subtle",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.on-warning",
-      "bg": "color.bg.warning.bold",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.on-warning",
-      "bg": "color.bg.warning.bold-hover",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.on-warning",
-      "bg": "color.bg.warning.bold-pressed",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.danger",
-      "bg": "color.surface.base",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.danger",
-      "bg": "color.surface.raised",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.danger",
-      "bg": "color.bg.danger.subtle",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.on-danger",
-      "bg": "color.bg.danger.bold",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.on-danger",
-      "bg": "color.bg.danger.bold-hover",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.on-danger",
-      "bg": "color.bg.danger.bold-pressed",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.info",
-      "bg": "color.surface.base",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.info",
-      "bg": "color.surface.raised",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.info",
-      "bg": "color.bg.info.subtle",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.on-info",
-      "bg": "color.bg.info.bold",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.on-info",
-      "bg": "color.bg.info.bold-hover",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.on-info",
-      "bg": "color.bg.info.bold-pressed",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.accent2",
-      "bg": "color.surface.base",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.accent2",
-      "bg": "color.surface.raised",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.accent2",
-      "bg": "color.bg.accent2.subtle",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.on-accent2",
-      "bg": "color.bg.accent2.bold",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.on-accent2",
-      "bg": "color.bg.accent2.bold-hover",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.on-accent2",
-      "bg": "color.bg.accent2.bold-pressed",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.accent3",
-      "bg": "color.surface.base",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.accent3",
-      "bg": "color.surface.raised",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.accent3",
-      "bg": "color.bg.accent3.subtle",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.on-accent3",
-      "bg": "color.bg.accent3.bold",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.on-accent3",
-      "bg": "color.bg.accent3.bold-hover",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.text.on-accent3",
-      "bg": "color.bg.accent3.bold-pressed",
-      "min": 4.5,
-      "kind": "text",
-      "rule": "WCAG 2.2 SC 1.4.3",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.border.strong",
-      "bg": "color.surface.base",
-      "min": 3.0,
-      "kind": "non-text",
-      "rule": "WCAG 2.2 SC 1.4.11",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.border.strong",
-      "bg": "color.surface.raised",
-      "min": 3.0,
-      "kind": "non-text",
-      "rule": "WCAG 2.2 SC 1.4.11",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.border.strong",
-      "bg": "color.surface.sunken",
-      "min": 3.0,
-      "kind": "non-text",
-      "rule": "WCAG 2.2 SC 1.4.11",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.border.strong",
-      "bg": "color.surface.overlay",
-      "min": 3.0,
-      "kind": "non-text",
-      "rule": "WCAG 2.2 SC 1.4.11",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.border.input",
-      "bg": "color.surface.base",
-      "min": 3.0,
-      "kind": "non-text",
-      "rule": "WCAG 2.2 SC 1.4.11",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.border.input",
-      "bg": "color.surface.raised",
-      "min": 3.0,
-      "kind": "non-text",
-      "rule": "WCAG 2.2 SC 1.4.11",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.border.input",
-      "bg": "color.surface.sunken",
-      "min": 3.0,
-      "kind": "non-text",
-      "rule": "WCAG 2.2 SC 1.4.11",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.border.input",
-      "bg": "color.surface.overlay",
-      "min": 3.0,
-      "kind": "non-text",
-      "rule": "WCAG 2.2 SC 1.4.11",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.border.input",
-      "bg": "color.bg.neutral.subtle",
-      "min": 3.0,
-      "kind": "non-text",
-      "rule": "WCAG 2.2 SC 1.4.11",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.border.input",
-      "bg": "color.bg.field",
-      "min": 3.0,
-      "kind": "non-text",
-      "rule": "WCAG 2.2 SC 1.4.11",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.icon.default",
-      "bg": "color.surface.base",
-      "min": 3.0,
-      "kind": "non-text",
-      "rule": "WCAG 2.2 SC 1.4.11",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.icon.default",
-      "bg": "color.surface.raised",
-      "min": 3.0,
-      "kind": "non-text",
-      "rule": "WCAG 2.2 SC 1.4.11",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.icon.default",
-      "bg": "color.surface.sunken",
-      "min": 3.0,
-      "kind": "non-text",
-      "rule": "WCAG 2.2 SC 1.4.11",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.icon.default",
-      "bg": "color.surface.overlay",
-      "min": 3.0,
-      "kind": "non-text",
-      "rule": "WCAG 2.2 SC 1.4.11",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.icon.default",
-      "bg": "color.bg.neutral.subtle",
-      "min": 3.0,
-      "kind": "non-text",
-      "rule": "WCAG 2.2 SC 1.4.11",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.border.danger",
-      "bg": "color.surface.base",
-      "min": 3.0,
-      "kind": "non-text",
-      "rule": "WCAG 2.2 SC 1.4.11",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.border.danger",
-      "bg": "color.surface.raised",
-      "min": 3.0,
-      "kind": "non-text",
-      "rule": "WCAG 2.2 SC 1.4.11",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.border.danger",
-      "bg": "color.surface.sunken",
-      "min": 3.0,
-      "kind": "non-text",
-      "rule": "WCAG 2.2 SC 1.4.11",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.border.danger",
-      "bg": "color.surface.overlay",
-      "min": 3.0,
-      "kind": "non-text",
-      "rule": "WCAG 2.2 SC 1.4.11",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.border.focus",
-      "bg": "color.surface.base",
-      "min": 3.0,
-      "kind": "focus",
-      "rule": "WCAG 2.2 SC 1.4.11, 2.4.13",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.border.focus",
-      "bg": "color.surface.raised",
-      "min": 3.0,
-      "kind": "focus",
-      "rule": "WCAG 2.2 SC 1.4.11, 2.4.13",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.border.focus",
-      "bg": "color.surface.sunken",
-      "min": 3.0,
-      "kind": "focus",
-      "rule": "WCAG 2.2 SC 1.4.11, 2.4.13",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.border.focus",
-      "bg": "color.surface.overlay",
-      "min": 3.0,
-      "kind": "focus",
-      "rule": "WCAG 2.2 SC 1.4.11, 2.4.13",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.border.focus",
-      "bg": "color.bg.neutral.subtle",
-      "min": 3.0,
-      "kind": "focus",
-      "rule": "WCAG 2.2 SC 1.4.11, 2.4.13",
-      "level": "error"
-    },
-    {
-      "mode": "dark",
-      "fg": "color.bg.action.primary",
-      "bg": "color.surface.base",
-      "min": 3.0,
-      "kind": "fill-boundary",
-      "rule": "WCAG 2.2 SC 1.4.11 (advisory: a text-labelled button needs no boundary contrast)",
-      "level": "warning"
-    },
-    {
-      "mode": "dark",
       "fg": "color.bg.action.primary",
       "bg": "color.surface.raised",
       "min": 3.0,
@@ -3976,5 +2770,6 @@
   ],
   "textScaling": "full",
   "notes": [],
-  "stateHash": "711c9a4b4ba8ea76"
+  "stateHash": "fe8061757630a55c",
+  "profile": null
 }

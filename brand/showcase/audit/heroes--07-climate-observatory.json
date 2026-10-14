@@ -1,0 +1,80 @@
+{
+ "piece": "heroes/07-climate-observatory",
+ "title": "07 Isobath Ocean Observatory: climate data hero",
+ "pattern": "brand hero",
+ "platform": "web",
+ "industry": "climate science",
+ "style": [
+  "dark",
+  "swiss",
+  "minimal"
+ ],
+ "tags": [
+  "brand hero",
+  "climate science",
+  "data",
+  "dark",
+  "contour map",
+  "mono",
+  "readouts",
+  "institute"
+ ],
+ "score": 4,
+ "verdict": "keep",
+ "strengths": [
+  "The picture is the institute's own data: bathymetric contours, a float marker with depth, a marine-heatwave label, latitude ticks on the frame edge; nothing decorative",
+  "IBM Plex Sans light for the headline and Plex Mono for every number is a disciplined two-face system; one teal, one coral, used only for live state",
+  "Readouts carry units and baselines (+1.38 °C vs 1991-2020 mean, 168 µmol/kg, -0.017 per decade) and the status bar says 'DATA CC BY 4.0 · UPDATED 14:06:22 UTC': the page reads as published science"
+ ],
+ "slop_signals": [
+  "Headline left, four stacked readout cards right, two buttons (filled teal 'Explore live data', underlined 'Read the 2026 Ocean Heat Report'): the SaaS skeleton under the science",
+  "Four readout cards of identical height with a sparkline each is close to the 'feature cards with icons' rhythm",
+  "'The ocean keeps the record.' is a slogan; the institute's own voice is in the sub-line"
+ ],
+ "fixes": [
+  "Dock the readouts into the map (labels on the contours) or reduce to two, so the map is the one subject",
+  "One button; the report link belongs in the nav or the status bar",
+  "Consider the sub-line as the headline: the hourly readings and 6,000 metres are the claim"
+ ],
+ "references": [
+  {
+   "site": "MOUTHWASH Studio",
+   "url": "https://mobbin.com/sites/sections/38d3c862-d84c-4840-9fd0-94002eaf5571",
+   "what": "One line drawing on dark with a single mono caption; the same restraint our map has, with even less around it"
+  },
+  {
+   "site": "Dub",
+   "url": "https://mobbin.com/sites/sections/c9831c1e-e14f-4ba8-9f87-c9bafeaddf2b",
+   "what": "A data-driven globe is the hero and one card is docked on it; live data as the picture"
+  },
+  {
+   "site": "Dovetail",
+   "url": "https://mobbin.com/sites/sections/57c3f21b-b420-47cc-be74-8b45ab45aea5",
+   "what": "Dark hero with a hairline grid and the product panel bleeding off the edge; small plain buttons"
+  },
+  {
+   "site": "Unseen Studio",
+   "url": "https://mobbin.com/sites/sections/64611226-7921-4e34-9001-83c7e91bd803",
+   "what": "A wireframe sphere on dark with one word; shows the register our contour drawing sits in"
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "improve",
+  "said": "okay",
+  "date": "2026-10-14"
+ },
+ "round3": {
+  "score": 4,
+  "changed": [
+   "The four-card readout rail is gone; one float's profile panel is docked to the float on the map by a short leader (temperature to 2,000 m against the 1991-2020 October mean, the warm 38 m mixed layer in coral, +1.38 C), with three readings shown nowhere else",
+   "The map is a real chart: contours every 100 m with exact index labels every 500 m, one positive depth convention, a true graticule with every line labelled, a 50 km scale bar; the radial glow and the crosshair reticle are gone",
+   "The warm-water anomaly is its own irregular dashed outline with a plain label, not colour painted onto the sea-floor contours",
+   "Headline states the reach ('The North Atlantic, from the surface to 6,000 metres.'), one button, sentence case; data corrected (612 instruments, O2 246 umol/kg, a deep profile that differs from the mean)",
+   "Panel aligned to the 64 px margin, the eyebrow's top and the button's bottom; nav underline on the nav rule"
+  ]
+ },
+ "facts": [
+  "The seamount is generated in code, not drawn from real bathymetry (the auditor's reason it stays below 5)"
+ ]
+}

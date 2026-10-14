@@ -5,10 +5,15 @@ The public site for OpenDesigner: a documentation directory with a landing page,
 ```
 python3 site/build.py          # writes site/dist/ (static HTML, Markdown copies, robots.txt, llms.txt, llms-full.txt, sitemap.xml)
 python3 site/build.py --og     # also re-renders the Open Graph images (Playwright + Chrome)
+python3 site/check.py          # checks the build: h1, canonical, title and description lengths, structured data, links, anchors, assets
 python3 site/deploy.py         # builds and publishes to Vercel (--preview for a preview URL)
 ```
 
+Before every deploy, open the build locally in the browser pane (`preview_start` with the `opendesigner-site` config in `.claude/launch.json`) and look at it.
+
 - **Hosting:** Vercel, project `opendesigner`, at https://opendesigner.vercel.app (the address is in `site-url.txt`). Deploying needs the Vercel CLI, signed in. Each production deploy also pings IndexNow.
+- **Figures** live in `figures/*.html` and are placed in a docs page with `{{figure:name}}` on its own line (contract: `figures/README.md`).
+- **Showcase** tiles, tags and the lightbox come from `brand/showcase/` and its Mobbin audit files in `brand/showcase/audit/`.
 - **Edit the docs** in `docs/*.md`. Front matter: `title`, `seo_title` (50 to 60 characters), `description` (140 to 160), `section` (Getting started, Guides, Concepts or Reference), `order` and `updated`. Links are root-absolute (`/docs/install/`). Every claim must match the product facts; when in doubt, leave it out.
 - **The landing page** is in `build.py` (`landing()`). Its photos are free Unsplash photos, hotlinked from images.unsplash.com as Unsplash asks, shown in a cobalt duotone, with the photographer credited under each.
 - **One source:** the HTML pages, their Markdown copies, `llms.txt`, `llms-full.txt`, the sitemap and the structured data all come from the same docs.

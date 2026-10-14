@@ -1,0 +1,82 @@
+{
+ "piece": "heroes/01-swiss-architecture",
+ "title": "01 Halde Architekten: Swiss architecture hero",
+ "pattern": "brand hero",
+ "platform": "web",
+ "industry": "architecture",
+ "style": [
+  "swiss",
+  "minimal",
+  "editorial"
+ ],
+ "tags": [
+  "brand hero",
+  "architecture",
+  "swiss",
+  "grid",
+  "index",
+  "technical drawing",
+  "poster type",
+  "light"
+ ],
+ "score": 4,
+ "verdict": "keep",
+ "strengths": [
+  "A drawing only this studio would have: a building section with the 21 Dec and 21 Jun sun lines, altitude labels and level marks, drawn in the page's own red and ink",
+  "One typeface (Inter Tight) carries nav, index, body and the display line; weight and size do all the hierarchy",
+  "Small true-to-world data in the corners (47.37 N 8.54 E, Sunrise 07:38, an index of eight named projects with places and years) reads like a real office, not a template"
+ ],
+ "slop_signals": [
+  "Three competing centres on one screen: the index, the section drawing and the giant 'Houses that follow the sun.' line all ask to be read first",
+  "'Start a project ->' filled button next to an underlined 'Read the method' is the stock pair",
+  "The red slab fills on the drawing's floors and the diagonal hatching read slightly diagrammatic next to the precision of the rest"
+ ],
+ "fixes": [
+  "Let the headline own the first screen and push the index below it, or shrink the headline to a two-column width so the drawing stays the subject",
+  "Drop the second CTA or make 'Read the method' a plain text link in the index column",
+  "Give the section drawing one more level of care: wall thickness, a ground line, a figure for scale, as Heron AI's elevation does"
+ ],
+ "references": [
+  {
+   "site": "Heron AI",
+   "url": "https://mobbin.com/sites/sections/76dab96c-c33d-4d52-944b-7d32dc2274fa",
+   "what": "An architectural elevation drawing is the whole hero, with frame ticks and coordinates in the corners and the headline at the bottom; its drawing carries more rendering (trees, concrete) than ours"
+  },
+  {
+   "site": "Studio Freight",
+   "url": "https://mobbin.com/sites/sections/37214c10-d891-48bc-a46e-6050033671b4",
+   "what": "Huge type is the layout, tiny mono labels pinned to the corners; same move as our bottom headline, with less competing around it"
+  },
+  {
+   "site": "MOUTHWASH Studio",
+   "url": "https://mobbin.com/sites/sections/38d3c862-d84c-4840-9fd0-94002eaf5571",
+   "what": "One line drawing, one mono caption, nothing else; shows how much quieter the first screen could be"
+  },
+  {
+   "site": "Studio Freight",
+   "url": "https://mobbin.com/sites/sections/c88d7a4b-61f2-4217-8818-80213f9cd809",
+   "what": "Labels pinned to the four edges of an otherwise empty page; our corner data follows this"
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "improve",
+  "said": "okay",
+  "date": "2026-10-14"
+ },
+ "round3": {
+  "score": 4,
+  "changed": [
+   "The building section is now the one object: about 680 px tall at 1 m = 32 px across all twelve columns; the project index and the column guides are gone (the index survives as 'Work 24' and '01 of 24')",
+   "Drawn as an architect would: poché slabs, retaining walls, 1.40 m overhangs, balustrades, level marks, a 0.8 m hatched cut-earth band, dimension chains with extension lines (8.00 / 8.00 / 12.40, 1.40, 7.24), a title block with scale bar, outline figures and a 1:200 winter tree",
+   "Sun geometry computed for Flims (46.83 N): 19.7 deg on 21 Dec reaches 7.24 m in; 66.6 deg on 21 Jun stops 0.06 m short of the glass; light shown once outside (ray) and once inside (wedge); red never sets text",
+   "Headline cut to one line at 88 px, weight 500, in a band ruled off from the drawing; the red full stop stays as the sun",
+   "One action: an underlined 'Start a project' link replaces the filled button plus link",
+   "Fixes from fresh eyes: 'looking west' (was east), Zurich sunrise 07:41 (was 07:38), key at 16 px on the paper, no repeated numbers or place names"
+  ]
+ },
+ "facts": [
+  "Halde is one letter from Halden Private (app-screens/01) and Halden Freight (components/06); still unresolved in NAMES.md, and renaming would also change mockups/02 and mockups/08",
+  "mockups/02-laptop-desk alt text still describes the removed numbered project index"
+ ]
+}

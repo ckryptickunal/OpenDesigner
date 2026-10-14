@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fenmoor STEM-8 Post Console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* Materials. The engine has no skeuomorphic option, so metal, anodizing, knurling, LEDs and glass are
+     drawn here; every flat colour still comes from the neutral, accent and status ramps (notes.md).
+     One light: a soft key from the top left of the room. */
+  :root {
+    --anod: var(--ds-color-neutral-dark-2);
+    --anod-hi: var(--ds-color-neutral-dark-4);
+    --anod-lo: var(--ds-color-neutral-dark-1);
+    --alu-1: var(--ds-color-neutral-dark-12);
+    --alu-2: var(--ds-color-neutral-dark-11);
+    --alu-3: var(--ds-color-neutral-dark-9);
+    --engrave: var(--ds-color-neutral-dark-1);
+    --legend: var(--ds-color-neutral-dark-11);
+    --legend-2: var(--ds-color-neutral-dark-10);
+    --lcd: var(--ds-color-accent-dark-11);
+    --lcd-dim: var(--ds-color-accent-dark-10);
+    --led-g: var(--ds-color-success-dark-11);
+    --led-y: var(--ds-color-warning-dark-11);
+    --led-r: var(--ds-color-danger-dark-11);
+    --brushed: repeating-linear-gradient(90deg, rgb(255 255 255 / .035) 0 1px, transparent 1px 3px, rgb(0 0 0 / .05) 3px 4px);
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { height: 100%; }
+  body { background: var(--anod-lo); color: var(--ds-color-text-primary); font-family: var(--ds-font-family-text); font-size: var(--ds-font-size-14); line-height: var(--ds-font-line-height-20); font-feature-settings: "tnum" 1; -webkit-font-smoothing: antialiased; overflow: hidden; }
+  button { font: inherit; color: inherit; }
+  :focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+  .leg { font-family: var(--ds-font-family-display); font-size: var(--ds-font-size-12); line-height: var(--ds-font-line-height-16); font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--legend); }
+
+  /* chassis */
+  .chassis { position: relative; height: 100vh; height: 100dvh; padding: var(--ds-space-16); display: grid; grid-template-rows: 80px 1fr; gap: var(--ds-space-12);
+    background: var(--brushed), linear-gradient(180deg, var(--anod-hi), var(--anod) 30%, var(--anod-lo)); }
+  .screw { position: absolute; width: 12px; height: 12px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, var(--alu-1), var(--alu-3) 70%); box-shadow: 0 1px 1px rgb(0 0 0 / .7), inset 0 -1px 1px rgb(0 0 0 / .4); }
+  .screw::after { content: ""; position: absolute; left: 2px; right: 2px; top: 5px; height: 2px; background: var(--anod-lo); border-radius: 1px; transform: rotate(var(--r, 30deg)); }
+
+  /* faceplate: light brushed aluminium, engraved legends */
+  .face { position: relative; border-radius: var(--ds-radius-6); display: flex; align-items: center; gap: var(--ds-space-24); padding: 0 var(--ds-space-24) 0 var(--ds-space-32);
+    background: repeating-linear-gradient(90deg, rgb(255 255 255 / .12) 0 1px, transparent 1px 2px, rgb(0 0 0 / .05) 2px 3px), linear-gradient(180deg, var(--alu-1), var(--alu-2) 55%, var(--alu-3));
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / .8), inset 0 -2px 0 rgb(0 0 0 / .25), 0 2px 0 var(--anod-lo), 0 6px 14px rgb(0 0 0 / .5); }
+  .face .eng { color: var(--engrave); text-shadow: 0 1px 0 rgb(255 255 255 / .55); }
+  .wordmark { font-family: var(--ds-font-family-display); font-weight: 600; font-size: var(--ds-font-size-24); letter-spacing: .32em; line-height: 1; }
+  .model { display: grid; gap: var(--ds-space-2); }
+  .model .leg { color: var(--engrave); }
+  .model span:last-child { font-size: var(--ds-font-size-12); line-height: var(--ds-font-line-height-16); color: var(--ds-color-neutral-dark-3); }
+  .face .sp { flex: 1; }
+  .lcdwin { height: 52px; padding: 0 var(--ds-space-16); border-radius: var(--ds-radius-4); display: flex; flex-direction: column; justify-content: center; gap: var(--ds-space-2); min-width: 150px;
+    background: linear-gradient(180deg, rgb(255 255 255 / .05), transparent 40%), var(--anod-lo); box-shadow: inset 0 2px 6px rgb(0 0 0 / .9), 0 1px 0 rgb(255 255 255 / .7), 0 -1px 0 rgb(0 0 0 / .35); }
+  .lcdwin .leg { color: var(--lcd-dim); font-size: var(--ds-font-size-12); }
+  .lcdwin b { color: var(--lcd); font-weight: 500; font-size: var(--ds-font-size-17); line-height: 20px; letter-spacing: .02em; }
+  .key { height: 36px; min-width: 44px; padding: 0 var(--ds-space-12); border: 0; border-radius: var(--ds-radius-4); cursor: pointer; font-family: var(--ds-font-family-display); font-weight: 600; letter-spacing: .1em; font-size: var(--ds-font-size-12); text-transform: uppercase; color: var(--engrave);
+    background: linear-gradient(180deg, var(--alu-1), var(--alu-2)); box-shadow: inset 0 1px 0 rgb(255 255 255 / .9), 0 2px 0 var(--alu-3), 0 3px 5px rgb(0 0 0 / .45); }
+  .key[aria-pressed="true"] { box-shadow: inset 0 2px 4px rgb(0 0 0 / .35), 0 1px 0 rgb(255 255 255 / .6); background: linear-gradient(180deg, var(--alu-2), var(--alu-1)); transform: translateY(1px); }
+
+  /* channel bay */
+  .bay { display: grid; grid-template-columns: repeat(8, 1fr) 448px; gap: 0; min-height: 0; border-radius: var(--ds-radius-6); background: var(--anod-lo); box-shadow: inset 0 2px 8px rgb(0 0 0 / .8), 0 1px 0 rgb(255 255 255 / .06); padding: var(--ds-space-4); }
+  .strip { position: relative; display: grid; grid-template-rows: 48px auto auto 1fr 36px; gap: var(--ds-space-12); padding: var(--ds-space-12) var(--ds-space-8) var(--ds-space-8);
+    background: var(--brushed), linear-gradient(180deg, var(--anod-hi), var(--anod) 40%, var(--anod)); box-shadow: inset 1px 0 0 rgb(255 255 255 / .07), inset -1px 0 0 rgb(0 0 0 / .6); }
+  .strip.sel { background: var(--brushed), linear-gradient(180deg, var(--ds-color-neutral-dark-5), var(--ds-color-neutral-dark-3) 40%, var(--ds-color-neutral-dark-3)); }
+  .scrib { border-radius: var(--ds-radius-4); padding: var(--ds-space-4) var(--ds-space-8); display: grid; align-content: center;
+    background: linear-gradient(180deg, rgb(255 255 255 / .05), transparent 45%), var(--anod-lo); box-shadow: inset 0 2px 5px rgb(0 0 0 / .9), 0 1px 0 rgb(255 255 255 / .08); }
+  .scrib b { font-family: var(--ds-font-family-display); font-size: var(--ds-font-size-17); line-height: 20px; font-weight: 600; letter-spacing: .06em; color: var(--lcd); }
+  .scrib span { font-size: var(--ds-font-size-12); line-height: var(--ds-font-line-height-16); color: var(--lcd); opacity: .85; }
+  .sel .scrib { box-shadow: inset 0 2px 5px rgb(0 0 0 / .9), 0 0 0 1px var(--lcd-dim), 0 1px 0 rgb(255 255 255 / .08); }
+  .knobs { display: grid; grid-template-columns: 1fr 1fr; gap: var(--ds-space-8) var(--ds-space-4); justify-items: center; }
+  .kc { display: grid; justify-items: center; gap: var(--ds-space-2); }
+  .kc .val { font-size: var(--ds-font-size-12); line-height: var(--ds-font-line-height-16); color: var(--ds-color-text-primary); }
+  .knob { position: relative; width: 48px; height: 48px; }
+  .knob svg { position: absolute; inset: 0; }
+  .cap { position: absolute; inset: 9px; border-radius: 50%;
+    background: repeating-conic-gradient(from 0deg, var(--alu-3) 0deg 4deg, var(--alu-1) 4deg 8deg);
+    box-shadow: 0 3px 4px rgb(0 0 0 / .75), 0 0 0 1px var(--anod-lo); }
+  .cap::before { content: ""; position: absolute; inset: 4px; border-radius: 50%; background: radial-gradient(circle at 36% 30%, var(--ds-color-white), var(--alu-2) 45%, var(--alu-3) 100%); box-shadow: inset 0 -1px 2px rgb(0 0 0 / .35); }
+  .cap::after { content: ""; position: absolute; left: calc(50% - 1px); top: 5px; width: 2px; height: 9px; border-radius: 1px; background: var(--anod-lo); transform-origin: 50% 10px; transform: rotate(var(--a, 0deg)); }
+  .btns { display: grid; grid-template-columns: 1fr 1fr; gap: var(--ds-space-6); }
+  .btn { position: relative; height: 30px; border: 0; border-radius: var(--ds-radius-4); cursor: pointer; font-family: var(--ds-font-family-display); font-weight: 600; letter-spacing: .08em; font-size: var(--ds-font-size-12); text-transform: uppercase; color: var(--legend);
+    background: linear-gradient(180deg, var(--ds-color-neutral-dark-6), var(--ds-color-neutral-dark-4)); box-shadow: inset 0 1px 0 rgb(255 255 255 / .12), 0 2px 0 var(--anod-lo), 0 3px 4px rgb(0 0 0 / .5); }
+  .btn[aria-pressed="true"] { transform: translateY(1px); box-shadow: inset 0 1px 0 rgb(255 255 255 / .2), 0 1px 0 var(--anod-lo); }
+  .btn.mute[aria-pressed="true"] { background: linear-gradient(180deg, var(--ds-color-danger-dark-10), var(--ds-color-danger-dark-9)); color: var(--ds-color-text-on-danger); }
+  .btn.solo[aria-pressed="true"] { background: linear-gradient(180deg, var(--ds-color-warning-dark-10), var(--ds-color-warning-dark-9)); color: var(--ds-color-text-on-warning); }
+
+  .fz { position: relative; display: grid; grid-template-columns: 24px 26px 12px 1fr; gap: var(--ds-space-4); min-height: 0; padding: var(--ds-space-8) 0; }
+  .scale { position: relative; }
+  .scale span { position: absolute; right: 0; transform: translateY(-50%); font-size: var(--ds-font-size-12); line-height: 1; color: var(--legend-2); }
+  .slot { position: relative; justify-self: center; width: 8px; border-radius: 4px; background: var(--anod-lo); box-shadow: inset 0 2px 3px rgb(0 0 0 / .95), 0 1px 0 rgb(255 255 255 / .08); }
+  .fcap { position: absolute; left: 50%; width: 30px; height: 46px; margin-left: -15px; transform: translateY(-50%); border-radius: 3px;
+    background: repeating-linear-gradient(180deg, rgb(0 0 0 / .18) 0 1px, transparent 1px 4px), linear-gradient(90deg, var(--alu-3), var(--alu-1) 35%, var(--alu-2) 70%, var(--alu-3));
+    box-shadow: 0 6px 8px rgb(0 0 0 / .6), 0 2px 2px rgb(0 0 0 / .5), inset 0 1px 0 rgb(255 255 255 / .8); }
+  .fcap::after { content: ""; position: absolute; left: 2px; right: 2px; top: calc(50% - 1px); height: 2px; background: var(--anod-lo); }
+  .meter { justify-self: start; width: 12px; display: flex; flex-direction: column-reverse; gap: var(--ds-space-2); padding: 3px; border-radius: 3px; background: var(--anod-lo); box-shadow: inset 0 1px 3px rgb(0 0 0 / .9); }
+  .meter i { flex: 1; border-radius: 1px; background: color-mix(in srgb, var(--c) 14%, var(--anod-lo)); }
+  .meter i.on { background: var(--c); box-shadow: 0 0 4px color-mix(in srgb, var(--c) 60%, transparent); }
+  .ticks { position: absolute; left: 24px; width: 26px; top: var(--ds-space-8); bottom: var(--ds-space-8); }
+  .ticks i { position: absolute; left: 3px; right: 3px; height: 1px; background: var(--legend-2); opacity: .55; }
+  .plate { display: flex; align-items: center; justify-content: space-between; padding: 0 var(--ds-space-8); border-radius: var(--ds-radius-4);
+    background: linear-gradient(180deg, var(--alu-1), var(--alu-3)); box-shadow: inset 0 1px 0 rgb(255 255 255 / .8), 0 2px 3px rgb(0 0 0 / .5); }
+  .plate b { font-family: var(--ds-font-family-display); font-weight: 600; font-size: var(--ds-font-size-17); color: var(--engrave); text-shadow: 0 1px 0 rgb(255 255 255 / .5); }
+  .plate span { font-size: var(--ds-font-size-12); color: var(--ds-color-neutral-dark-3); font-weight: 600; }
+
+  /* master */
+  .master { display: grid; grid-template-rows: auto 1fr; gap: var(--ds-space-12); padding: var(--ds-space-12); margin-left: var(--ds-space-4);
+    background: var(--brushed), linear-gradient(180deg, var(--anod-hi), var(--anod) 40%); box-shadow: inset 1px 0 0 rgb(255 255 255 / .08); border-radius: 0 var(--ds-radius-4) var(--ds-radius-4) 0; }
+  .loud { border-radius: var(--ds-radius-6); padding: var(--ds-space-16); background: linear-gradient(180deg, rgb(255 255 255 / .04), transparent 30%), var(--anod-lo); box-shadow: inset 0 3px 10px rgb(0 0 0 / .95), 0 1px 0 rgb(255 255 255 / .08); }
+  .loud .row { display: flex; justify-content: space-between; align-items: baseline; }
+  .loud .leg { color: var(--lcd-dim); }
+  .intg { display: flex; align-items: baseline; gap: var(--ds-space-8); margin-top: var(--ds-space-8); }
+  .intg b { font-size: var(--ds-font-size-35); line-height: 40px; font-weight: 500; color: var(--lcd); letter-spacing: -0.01em; }
+  .intg span { color: var(--lcd); font-size: var(--ds-font-size-14); }
+  .spec { display: inline-flex; align-items: center; gap: var(--ds-space-6); margin-left: auto; font-family: var(--ds-font-family-display); font-weight: 600; letter-spacing: .1em; font-size: var(--ds-font-size-12); color: var(--led-g); }
+  .spec i, .led { width: 8px; height: 8px; border-radius: 50%; background: var(--led-g); box-shadow: 0 0 6px var(--led-g); display: inline-block; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--ds-space-8) var(--ds-space-12); margin-top: var(--ds-space-12); }
+  .stats div { display: grid; }
+  .stats b { color: var(--lcd); font-weight: 500; font-size: var(--ds-font-size-17); line-height: 22px; }
+  .stats b small { font-size: var(--ds-font-size-12); opacity: .85; margin-left: var(--ds-space-2); }
+  .hist { margin-top: var(--ds-space-12); position: relative; }
+  .hist svg { height: 104px; }
+  .hist svg { width: 100%; height: 100%; display: block; }
+  .bus { display: grid; grid-template-columns: 1fr 120px; gap: var(--ds-space-12); min-height: 0; }
+  .busm { border-radius: var(--ds-radius-6); padding: var(--ds-space-12) var(--ds-space-12) var(--ds-space-8); background: var(--anod-lo); box-shadow: inset 0 3px 8px rgb(0 0 0 / .9), 0 1px 0 rgb(255 255 255 / .08); display: grid; grid-template-rows: auto 1fr auto; gap: var(--ds-space-8); }
+  .busm .cols { display: grid; grid-template-columns: 22px repeat(6, 1fr); gap: var(--ds-space-8); min-height: 0; }
+  .busm .meter { width: 100%; justify-self: stretch; }
+  .busm .lbls { display: grid; grid-template-columns: 22px repeat(6, 1fr); gap: var(--ds-space-8); text-align: center; }
+  .dbs { position: relative; }
+  .dbs.ms span { left: 0; right: auto; }
+  .dbs span { position: absolute; right: 0; transform: translateY(-50%); font-size: var(--ds-font-size-12); color: var(--legend-2); line-height: 1; }
+  .mfz { display: grid; grid-template-rows: auto 1fr auto auto; gap: var(--ds-space-8); }
+  .mfz .fz { grid-template-columns: 30px 1fr; }
+  .mon { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--ds-space-6); }
+  .mon .btn { height: 28px; }
+  .mon .btn[aria-pressed="true"] { background: linear-gradient(180deg, var(--ds-color-accent-dark-10), var(--ds-color-accent-dark-9)); color: var(--ds-color-text-on-accent); }
+</style>
+</head>
+<body>
+<div class="chassis">
+  <span class="screw" style="left:4px;top:4px;--r:20deg"></span><span class="screw" style="right:4px;top:4px;--r:-40deg"></span>
+  <span class="screw" style="left:4px;bottom:4px;--r:70deg"></span><span class="screw" style="right:4px;bottom:4px;--r:5deg"></span>
+
+  <header class="face">
+    <div class="wordmark eng">FENMOOR</div>
+    <div class="model"><span class="leg eng">Stem-8 post console</span><span>Serial 0412 · 48 kHz · 24-bit</span></div>
+    <div class="sp"></div>
+    <div class="lcdwin" style="min-width:230px"><span class="leg">Session</span><b>Ep 104 · Reel 3 · temp mix v6</b></div>
+    <div class="lcdwin"><span class="leg">Timecode · play</span><b>01:12:46:08</b></div>
+    <div class="lcdwin"><span class="leg">Delivery spec</span><b>−24 LKFS ±2</b></div>
+    <button class="key" aria-pressed="true">A</button><button class="key" aria-pressed="false">B</button>
+  </header>
+
+  <main class="bay" id="bay" aria-label="Mixer"></main>
+</div>
+
+<script>
+  // Fader scale: console-style, non-linear (position from top, 0..1).
+  const FS = [[10, 0], [5, .08], [0, .18], [-5, .29], [-10, .40], [-20, .57], [-30, .70], [-40, .80], [-60, .92], [-Infinity, 1]];
+  const fpos = db => { if (db === -Infinity) return 1; for (let i = 0; i < FS.length - 1; i++) { const [a, pa] = FS[i], [b, pb] = FS[i + 1]; if (db <= a && db >= b) return pa + (a - db) / (a - (b === -Infinity ? -80 : b)) * (pb - pa); } return 1; };
+  // LED meter: 0 dBFS at top to -60 at bottom, 2 dB a segment.
+  const SEG = 30, ledColor = d => d > -6 ? "var(--led-r)" : d > -18 ? "var(--led-y)" : "var(--led-g)";
+  const meter = (peak, n = SEG) => { let h = ""; for (let i = 0; i < n; i++) { const d = -60 + (i + 1) * (60 / n); h += `<i class="${d <= peak ? "on" : ""}" style="--c:${ledColor(d)}"></i>`; } return h; };
+  // knob with a 270° scale of 11 ticks
+  const knob = (frac, label, val) => {
+    let t = ""; for (let i = 0; i <= 10; i++) { const a = (135 + i * 27) * Math.PI / 180, r1 = 21, r2 = i % 5 === 0 ? 24 : 23; t += `<line x1="${24 + r1 * Math.cos(a)}" y1="${24 + r1 * Math.sin(a)}" x2="${24 + r2 * Math.cos(a)}" y2="${24 + r2 * Math.sin(a)}" stroke="var(--legend-2)" stroke-width="${i % 5 === 0 ? 1.6 : 1}"/>`; }
+    return `<div class="kc"><span class="leg">${label}</span><div class="knob" role="slider" aria-label="${label}" aria-valuetext="${val}" tabindex="0"><svg viewBox="0 0 48 48" aria-hidden="true">${t}</svg><span class="cap" style="--a:${-135 + frac * 270}deg"></span></div><span class="val">${val}</span></div>`;
+  };
+  const ch = [
+    // name, sub, trim(frac,val), hpf, presence, pan, fader dB, peak dBFS, mute, solo, selected
+    ["DX 1", "Boom", [.62, "+3.0"], [.38, "80 Hz"], [.58, "+1.5"], [.5, "C"], -2.5, -12, 0, 0, 1],
+    ["DX 2", "Lav", [.55, "+1.0"], [.42, "100 Hz"], [.5, "0.0"], [.5, "C"], -6.0, -60, 1, 0, 0],
+    ["ADR", "Booth", [.5, "0.0"], [.45, "120 Hz"], [.62, "+2.0"], [.5, "C"], -4.0, -16, 0, 0, 0],
+    ["FOLEY", "Steps", [.45, "−2.0"], [.3, "60 Hz"], [.5, "0.0"], [.38, "L 24"], -9.5, -24, 0, 0, 0],
+    ["FX", "Hard", [.5, "0.0"], [.2, "30 Hz"], [.46, "−0.5"], [.5, "C"], -7.0, -19, 0, 0, 0],
+    ["BG", "Dock", [.5, "0.0"], [.2, "30 Hz"], [.4, "−1.5"], [.5, "Wide"], -12.0, -28, 0, 0, 0],
+    ["MX", "Score", [.4, "−3.0"], [.12, "Off"], [.5, "0.0"], [.5, "C"], -10.5, -21, 0, 0, 0],
+    ["VERB", "Return", [.5, "0.0"], [.5, "150 Hz"], [.44, "−1.0"], [.5, "C"], -15.0, -33, 0, 0, 0],
+  ];
+  const dbl = [10, 5, 0, -5, -10, -20, -30, -40, -60];
+  const fdisp = v => (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(1);
+  let html = ch.map(([n, sub, tr, hp, pr, pan, fd, pk, mu, so, sel], i) => `
+    <section class="strip ${sel ? "sel" : ""}" aria-label="Channel ${i + 1}, ${n} ${sub}">
+      <div class="scrib"><b>${n}</b><span>${sub} · ${pk <= -60 ? "no signal" : "pk " + fdisp(pk)}</span></div>
+      <div class="knobs">${knob(tr[0], "Trim", tr[1])}${knob(hp[0], "HPF", hp[1])}${knob(pr[0], "Pres", pr[1])}${knob(pan[0], "Pan", pan[1])}</div>
+      <div class="btns"><button class="btn mute" aria-pressed="${!!mu}">Mute</button><button class="btn solo" aria-pressed="${!!so}">Solo</button></div>
+      <div class="fz">
+        <div class="scale" aria-hidden="true">${dbl.map(d => `<span class="leg" style="top:${fpos(d) * 100}%;letter-spacing:0;font-weight:500">${d > 0 ? "+" + d : String(d).replace("-", "−")}</span>`).join("")}</div>
+        <div class="slot" role="slider" aria-label="${n} fader" aria-valuetext="${fdisp(fd)} dB" tabindex="0"><span class="fcap" style="top:${fpos(fd) * 100}%"></span></div>
+        <div class="meter" aria-hidden="true">${meter(pk)}</div>
+        <div class="dbs ms" aria-hidden="true">${[0, -12, -24, -48].map(d => `<span style="top:calc(3px + ${(-d / 60) * 100}% * (1 - 6 / 100))">${String(d).replace("-", "−")}</span>`).join("")}</div>
+        <div class="ticks" aria-hidden="true">${dbl.map(d => `<i style="top:${fpos(d) * 100}%"></i>`).join("")}</div>
+      </div>
+      <div class="plate"><b>${i + 1}</b><span>${fdisp(fd)} dB</span></div>
+    </section>`).join("");
+
+  // Master: loudness (BS.1770 style readings) + 5.1 bus + master fader.
+  // 60 one-second short-term readings: a scene of dialogue, a quieter beat, then the harbour cue building.
+  const hist = Array.from({length: 60}, (_, i) => -24 + 1.1 * Math.sin(i / 4.2) + 0.6 * Math.sin(i / 1.7 + 1) - (i > 22 && i < 34 ? 1.6 * Math.sin((i - 22) / 12 * Math.PI) : 0) + (i > 48 ? (i - 48) * 0.14 : 0));
+  hist[59] = -22.8;
+  const HW = 392, HH = 104, ly = v => (v - -18) / (-30 - -18) * HH; // -18 at top, -30 at bottom
+  const PW = HW - 34; // plot width; labels sit in a right gutter, clear of the line
+  const pts = hist.map((v, i) => `${(i / (hist.length - 1) * PW).toFixed(1)},${ly(v).toFixed(1)}`).join(" ");
+  const histSvg = `<svg viewBox="0 0 ${HW} ${HH}" role="img" aria-label="Short-term loudness over the last 60 seconds, between -26.1 and -21.9 LKFS, inside the -26 to -22 band for most of it">
+    <rect x="0" y="${ly(-22)}" width="${PW}" height="${ly(-26) - ly(-22)}" fill="var(--lcd)" opacity=".10"/>
+    <line x1="0" x2="${PW}" y1="${ly(-24)}" y2="${ly(-24)}" stroke="var(--lcd-dim)" stroke-dasharray="3 4"/>
+    ${[-20, -24, -28].map(v => `<text x="${HW}" y="${ly(v) + 4}" text-anchor="end" font-size="12" fill="var(--lcd-dim)" font-family="Barlow">${String(v).replace("-", "−")}</text>`).join("")}
+    <polyline points="${pts}" fill="none" stroke="var(--lcd)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+  </svg><div class="row" style="display:flex;justify-content:space-between;margin-top:var(--ds-space-4)"><span class="leg">−60 s</span><span class="leg">Now</span></div>`;
+  const bus = [["L", -14], ["C", -11], ["R", -15], ["Ls", -27], ["Rs", -26], ["LFE", -31]];
+  const dbm = [0, -6, -12, -18, -24, -30, -40, -50, -60];
+  html += `<section class="master" aria-label="Master and loudness">
+    <div class="loud">
+      <div class="row"><span class="leg">Loudness · BS.1770 · dialog gated</span><span class="leg">60 s</span></div>
+      <div class="intg"><b>−24.1</b><span>LKFS integrated</span><span class="spec"><i></i>In spec</span></div>
+      <div class="stats">
+        <div><span class="leg">Short-term</span><b>−22.8<small>LKFS</small></b></div>
+        <div><span class="leg">Momentary</span><b>−21.4<small>LKFS</small></b></div>
+        <div><span class="leg">Range</span><b>6.4<small>LU</small></b></div>
+        <div><span class="leg">True peak</span><b>−3.2<small>dBTP</small></b></div>
+        <div><span class="leg">Peak limit</span><b>−2.0<small>dBTP</small></b></div>
+        <div><span class="leg">Dialog</span><b>61<small>%</small></b></div>
+      </div>
+      <div class="hist">${histSvg}</div>
+    </div>
+    <div class="bus">
+      <div class="busm">
+        <div class="row" style="display:flex;justify-content:space-between"><span class="leg">5.1 bus</span><span class="leg">dBFS</span></div>
+        <div class="cols">
+          <div class="dbs" aria-hidden="true">${dbm.map(d => `<span style="top:${(-d / 60) * 100}%">${String(d).replace("-", "−")}</span>`).join("")}</div>
+          ${bus.map(([n, p]) => `<div class="meter" role="img" aria-label="${n} peak ${p} dBFS">${meter(p)}</div>`).join("")}
+        </div>
+        <div class="lbls"><span></span>${bus.map(([n]) => `<span class="leg">${n}</span>`).join("")}</div>
+      </div>
+      <div class="mfz">
+        <span class="leg" style="text-align:center">Master</span>
+        <div class="fz">
+          <div class="scale" aria-hidden="true">${dbl.map(d => `<span class="leg" style="top:${fpos(d) * 100}%;letter-spacing:0;font-weight:500">${d > 0 ? "+" + d : String(d).replace("-", "−")}</span>`).join("")}</div>
+          <div class="slot" role="slider" aria-label="Master fader" aria-valuetext="0.0 dB" tabindex="0"><span class="fcap" style="top:${fpos(0) * 100}%;width:40px;margin-left:-20px"></span></div>
+          <div class="ticks" aria-hidden="true" style="left:30px;width:auto;right:0">${dbl.map(d => `<i style="top:${fpos(d) * 100}%"></i>`).join("")}</div>
+        </div>
+        <div class="mon"><button class="btn" aria-pressed="false">Dim</button><button class="btn" aria-pressed="false">Mono</button><button class="btn" aria-pressed="true">Ref</button></div>
+        <div class="plate" style="height:36px"><b>M</b><span>0.0 dB</span></div>
+      </div>
+    </div>
+  </section>`;
+  document.getElementById("bay").innerHTML = html;
+  document.addEventListener("click", e => { const b = e.target.closest(".btn,.key"); if (b) b.setAttribute("aria-pressed", String(b.getAttribute("aria-pressed") !== "true")); });
+</script>
+</body>
+</html>

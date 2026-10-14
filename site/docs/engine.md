@@ -19,6 +19,8 @@ python3 path/to/OpenDesigner/skills/opendesigner/scripts/engine.py build
 
 The commands below write `engine.py` for short. If you installed the plugin, the file sits in the plugin's own folder. Every command takes `--dir` to use a different state folder, and `--help` to list its options.
 
+{{figure:engine-commands}}
+
 ## Start a system
 
 - `engine.py init --name "Acme"` creates `state.json` with defaults and applies the house standards that fit.
@@ -48,6 +50,8 @@ The sketch takes these options:
 - `--force`: change a locked value. Use it only with the owner's OK.
 - `--no-doc`: skip refreshing `DESIGN.md` and `PRODUCT.md`.
 
+{{figure:engine-set-why}}
+
 ## Build and check
 
 - `engine.py build` generates the tokens and checks them. If there are no errors, it writes every export, `DESIGN.md`, the overview page and the preview pages. `--force` exports even with errors.
@@ -58,6 +62,8 @@ The sketch takes these options:
 - `engine.py resolve` prints the current dial positions and the values made from them, as JSON.
 
 Run `build` after every change, so the exports and pages are never out of date.
+
+{{figure:engine-build-output}}
 
 ## See the system
 

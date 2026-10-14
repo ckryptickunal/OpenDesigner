@@ -10,87 +10,73 @@
 <link rel="stylesheet" href="opendesigner/build/css/tokens.css">
 <style>
   /* Outside the tokens, on purpose (see notes.md):
-     - the deep navy page and the vignette: the neutral ramp caps the background step at near-zero chroma, so it is grey, not navy
+     - the deep navy page: the neutral ramp caps the background step at near-zero chroma, so it is grey, not navy
      - display weight 300 (Plex Sans Light): the engine's lightest heading weight is 600
-     Two fonts only: IBM Plex Sans for words, IBM Plex Mono for data (owner rule). */
+     Two fonts only: IBM Plex Sans for words, IBM Plex Mono for numbers and coordinates (owner rule). */
   :root {
-    --navy-0: #041120; /* od-ignore: art background, deep end */
-    --navy-1: #082039; /* od-ignore: art background, shallow end */
+    --navy: #041120; /* od-ignore: art background */
+    --panel-bg: #041120; /* od-ignore: navy panel over the map, opaque */
     --line: var(--ds-color-accent-dark-11);
-    --line-hi: var(--ds-color-accent-dark-12);
     --heat: var(--ds-color-danger-dark-11);
     --hair: var(--ds-color-border-subtle);
+    --ink: var(--ds-color-text-primary);
+    --ink-2: var(--ds-color-text-secondary);
+    --ink-3: var(--ds-color-text-tertiary);
   }
   * { box-sizing: border-box; margin: 0; }
   html, body { height: 100%; }
-  body { background: var(--navy-0); color: var(--ds-color-text-primary); font: var(--ds-text-body-md); overflow: hidden; }
+  body { background: var(--navy); color: var(--ink); font: var(--ds-text-body-md); overflow: hidden; }
   a { color: inherit; text-decoration: none; }
   :focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
 
-  .page { position: relative; height: 100vh; height: 100svh; min-height: 820px; overflow: hidden;
-          background: radial-gradient(120% 90% at 60% 35%, var(--navy-1) 0%, var(--navy-0) 70%); }
+  .page { position: relative; height: 100vh; height: 100svh; min-height: 820px; overflow: hidden; background: var(--navy); }
   .scrim { position: absolute; inset: 0; z-index: 1; pointer-events: none;
-           background: radial-gradient(55% 60% at 18% 78%, rgb(4 17 32 / 0.78) 0%, rgb(4 17 32 / 0.5) 45%, transparent 75%), /* od-ignore: navy art scrim */
-                       linear-gradient(90deg, rgb(4 17 32 / 0.35), transparent 30%, transparent 75%, rgb(4 17 32 / 0.45)); } /* od-ignore: navy art scrim */
+           background: linear-gradient(90deg, rgb(4 17 32 / 0.85) 0%, rgb(4 17 32 / 0.6) 30%, transparent 46%); } /* od-ignore: legibility scrim behind the copy */
   canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .mono { font-family: var(--ds-font-family-mono); font-size: var(--ds-font-size-13); }
 
-  .mono { font-family: var(--ds-font-family-mono); font-size: var(--ds-font-size-13); letter-spacing: 0.04em; text-transform: uppercase; }  /* data only */
-  .lab { font-family: var(--ds-font-family-text); font-size: var(--ds-font-size-13); font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; }
-
-  nav { position: relative; z-index: 5; display: flex; align-items: center; justify-content: space-between; height: 80px; padding: 0 var(--ds-space-64);
-        border-bottom: 1px solid var(--hair); }
+  nav { position: relative; z-index: 5; display: flex; align-items: stretch; gap: var(--ds-space-48); height: var(--ds-space-80); padding: 0 var(--ds-space-64); border-bottom: var(--ds-border-width-1) solid var(--hair); background: var(--navy); }
   .wm { display: flex; align-items: center; gap: var(--ds-space-12); font-weight: 600; font-size: var(--ds-font-size-16); letter-spacing: 0.32em; }
-  .wm small { display: block; font-family: var(--ds-font-family-text); font-weight: 400; letter-spacing: 0.14em; font-size: var(--ds-font-size-13); color: var(--ds-color-text-secondary); margin-top: var(--ds-space-2); text-transform: uppercase; }
-  .links { display: flex; gap: var(--ds-space-8); }
-  .links a { font: var(--ds-text-label-lg); color: var(--ds-color-text-secondary); padding: var(--ds-space-8) var(--ds-space-12); min-height: var(--ds-size-control-sm); display: inline-flex; align-items: center; }
-  .links a:hover, .links a.on { color: var(--ds-color-text-primary); }
-  .links a.on { border-bottom: 1px solid var(--line); }
-  .btn { display: inline-flex; align-items: center; gap: var(--ds-space-12); height: var(--ds-size-control-md); padding: 0 var(--ds-space-20);
-         border-radius: var(--ds-radius-control); font: var(--ds-text-label-lg); font-weight: 500; transition: background var(--ds-motion-duration-short) var(--ds-motion-easing-hover); }
-  .btn-line { border: 1px solid var(--ds-color-border-default); }
-  .btn-line:hover { background: rgb(112 182 197 / 0.08); }
-  .btn-solid { background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); }
-  .btn-solid:hover { background: var(--ds-color-bg-action-primary-hover); }
+  .wm small { display: block; font-weight: 400; letter-spacing: 0.14em; font-size: var(--ds-font-size-13); color: var(--ink-2); margin-top: var(--ds-space-2); text-transform: uppercase; }
+  .links { display: flex; gap: var(--ds-space-32); margin-left: auto; }
+  .links a { font: var(--ds-text-label-lg); color: var(--ink-2); display: inline-flex; align-items: center; gap: var(--ds-space-6); border-bottom: var(--ds-border-width-2) solid transparent; margin-bottom: calc(-1 * var(--ds-border-width-1)); }
+  .links a.on { color: var(--ink); border-bottom-color: var(--line); }
+  @media (hover: hover) and (pointer: fine) { .links a:hover { color: var(--ink); } .btn:hover { background: var(--ds-color-bg-action-primary-hover); } }
+  .btn { display: inline-flex; align-items: center; gap: var(--ds-space-12); height: var(--ds-size-control-md); padding: 0 var(--ds-space-20); border-radius: var(--ds-radius-control); font: var(--ds-text-label-lg); font-weight: 500; background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); transition: background var(--ds-motion-duration-short) var(--ds-motion-easing-hover); }
 
-  /* edges: latitude and longitude ticks */
-  .ticks { position: absolute; z-index: 2; color: var(--ds-color-text-tertiary); pointer-events: none; }
+  .copy { position: absolute; z-index: 4; left: var(--ds-space-64); bottom: 112px; width: 520px; } /* od-ignore: copy block position */
+  .eyebrow { color: var(--ink-2); font-size: var(--ds-font-size-16); }
+  h1 { margin-top: var(--ds-space-16); font-family: var(--ds-font-family-display); font-weight: 300; font-size: min(64px, 4.45vw); line-height: 1.06; letter-spacing: -0.022em; text-wrap: balance; } /* od-ignore: display between the 49 and 76 px steps, so the map leads */
+  .lede { margin-top: var(--ds-space-20); font: var(--ds-text-body-lg); color: var(--ink-2); text-wrap: pretty; }
+  .act { margin-top: var(--ds-space-32); }
 
-  .copy { position: absolute; z-index: 4; left: var(--ds-space-64); bottom: 136px; width: 760px; }
-  .eyebrow { color: var(--line); display: flex; gap: var(--ds-space-16); align-items: center; }
-  .eyebrow::before { content: ""; width: 32px; height: 1px; background: currentColor; }
-  h1 { margin-top: var(--ds-space-24); font-family: var(--ds-font-family-display); font-weight: 300; font-size: var(--ds-font-size-95);
-       line-height: 1.02; letter-spacing: -0.03em; color: var(--ds-color-text-primary); text-wrap: balance; }
-  h1 span { display: block; }
-  h1 .h-sub { color: var(--ds-color-text-secondary); }
-  .lede { margin-top: var(--ds-space-24); max-width: 640px; text-wrap: pretty; font: var(--ds-text-body-lg); color: var(--ds-color-text-secondary); }
-  .ctas { margin-top: var(--ds-space-32); display: flex; gap: var(--ds-space-24); align-items: center; }
-  .tlink { font: var(--ds-text-label-lg); color: var(--ds-color-text-primary); display: inline-flex; gap: var(--ds-space-8); align-items: center; min-height: var(--ds-size-control-md);
-           border-bottom: 1px solid var(--ds-color-border-default); }
+  /* map frame labels: latitude on the right edge, longitude under the nav, a scale bar; drawn above the scrim */
+  .frame { position: absolute; inset: 0; z-index: 2; pointer-events: none; font-family: var(--ds-font-family-mono); font-size: var(--ds-font-size-13); color: var(--ink-2); }
+  .frame span { position: absolute; white-space: nowrap; }
 
-  /* readout rail */
-  .rail { position: absolute; z-index: 4; right: var(--ds-space-64); top: 128px; width: 300px;
-          background: rgb(4 17 32 / 0.62); backdrop-filter: blur(6px); border: 1px solid var(--hair); } /* od-ignore: navy art scrim */
-  .rail header { display: flex; justify-content: space-between; align-items: center; padding: var(--ds-space-12) var(--ds-space-16); border-bottom: 1px solid var(--hair); color: var(--ds-color-text-secondary); }
-  .live { display: inline-flex; align-items: center; gap: var(--ds-space-8); color: var(--line); }
-  .live i { width: 8px; height: 8px; border-radius: 50%; background: var(--line); box-shadow: 0 0 0 4px rgb(112 182 197 / 0.18); }
-  .ro { padding: var(--ds-space-16); border-bottom: 1px solid var(--hair); display: grid; grid-template-columns: 1fr auto; gap: var(--ds-space-4) var(--ds-space-12); align-items: end; }
-  .ro:last-child { border-bottom: 0; }
-  .ro .k { grid-column: 1 / -1; color: var(--ds-color-text-secondary); }
-  .ro .v { font-family: var(--ds-font-family-mono); font-size: var(--ds-font-size-25); font-weight: 400; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
-  .ro .v small { font-size: var(--ds-font-size-13); color: var(--ds-color-text-secondary); margin-left: var(--ds-space-4); }
-  .ro .d { grid-column: 1 / -1; font-family: var(--ds-font-family-mono); font-size: var(--ds-font-size-13); color: var(--ds-color-text-tertiary); }
-  .ro .d b { font-weight: 500; }
-  .ro svg { width: 96px; height: 28px; overflow: visible; }
-  .hot { color: var(--heat); }
-  .cool { color: var(--line); }
+  /* the float's own profile, docked to it by a short leader */
+  .prof { position: absolute; z-index: 4; width: 368px; background: var(--panel-bg); border: var(--ds-border-width-1) solid var(--hair); } /* od-ignore: panel width */
+  .prof header { padding: var(--ds-space-12) var(--ds-space-16); border-bottom: var(--ds-border-width-1) solid var(--hair); }
+  .prof header .t { display: flex; justify-content: space-between; font-size: var(--ds-font-size-16); font-weight: 500; }
+  .prof header .t span:last-child { color: var(--ink-2); font-weight: 400; }
+  .prof header .s { display: block; margin-top: var(--ds-space-2); color: var(--ink-2); }
+  .prof figure { margin: 0; padding: var(--ds-space-12) var(--ds-space-16) var(--ds-space-4); }
+  .prof svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .legend { display: flex; gap: var(--ds-space-20); padding: 0 var(--ds-space-16) var(--ds-space-12); color: var(--ink-2); font-size: var(--ds-font-size-13); }
+  .legend i { display: inline-block; width: var(--ds-space-20); height: 0; border-top: var(--ds-border-width-2) solid var(--line); vertical-align: middle; margin-right: var(--ds-space-8); }
+  .legend i.mean { border-top: var(--ds-border-width-1) dashed var(--ink-2); }
+  .reads { display: grid; grid-template-columns: repeat(3, 1fr); border-top: var(--ds-border-width-1) solid var(--hair); }
+  .reads > div { padding: var(--ds-space-12) var(--ds-space-16); border-left: var(--ds-border-width-1) solid var(--hair); }
+  .reads > div:first-child { border-left: 0; }
+  .reads .k { color: var(--ink-2); font-size: var(--ds-font-size-13); }
+  .reads .v { margin-top: var(--ds-space-4); font-family: var(--ds-font-family-mono); font-size: var(--ds-font-size-20); }
+  .reads .v small { font-size: var(--ds-font-size-13); color: var(--ink-2); margin-left: var(--ds-space-4); }
 
-  .status { position: absolute; z-index: 4; left: 0; right: 0; bottom: 0; height: 56px; display: flex; align-items: center; gap: var(--ds-space-40);
-            padding: 0 var(--ds-space-64); border-top: 1px solid var(--hair); color: var(--ds-color-text-secondary); background: rgb(4 17 32 / 0.55); } /* od-ignore: navy art scrim */
-  .status b { color: var(--ds-color-text-primary); font-weight: 500; }
+  .status { position: absolute; z-index: 4; left: 0; right: 0; bottom: 0; height: 56px; display: flex; align-items: center; gap: var(--ds-space-40); /* od-ignore: status bar height */
+            padding: 0 var(--ds-space-64); border-top: var(--ds-border-width-1) solid var(--hair); color: var(--ink-2); background: var(--navy); }
+  .status b { color: var(--ink); font-weight: 500; }
   .status .r { margin-left: auto; }
-
-  .tag { position: absolute; z-index: 3; color: var(--ds-color-text-primary); }
-  .tag .box { padding: var(--ds-space-6) var(--ds-space-8); background: rgb(4 17 32 / 0.7); border: 1px solid currentColor; white-space: nowrap; } /* od-ignore: navy art scrim */
+  .tag { position: absolute; z-index: 3; color: var(--heat); font-size: var(--ds-font-size-13); background: var(--navy); padding: var(--ds-space-2) var(--ds-space-6); white-space: nowrap; }
 
   @media (prefers-reduced-motion: no-preference) {
     canvas { animation: fade var(--ds-motion-duration-reveal) var(--ds-motion-easing-enter) both; }
@@ -102,6 +88,7 @@
 <div class="page">
   <canvas id="sea" aria-hidden="true"></canvas>
   <div class="scrim"></div>
+  <div class="frame" id="frame" aria-hidden="true"></div>
 
   <nav aria-label="Main">
     <a class="wm" href="#" aria-label="Isobath Ocean Observatory, home">
@@ -113,59 +100,42 @@
       <span>ISOBATH<small>Ocean Observatory</small></span>
     </a>
     <div class="links">
-      <a class="on" href="#">Observatory</a><a href="#">Live data</a><a href="#">Expeditions</a><a href="#">Publications</a><a href="#">About</a>
+      <a class="on" href="#">Observatory</a><a href="#">Live data</a><a href="#">Expeditions</a><a href="#">Publications</a><a href="#">Data portal <svg width="12" height="12" viewBox="0 0 14 14" aria-hidden="true"><path d="M4 10L10 4M5 4h5v5" stroke="currentColor" stroke-width="1.4" fill="none"/></svg></a>
     </div>
-    <a class="btn btn-line" href="#">Open data portal <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M4 10L10 4M5 4h5v5" stroke="currentColor" stroke-width="1.4" fill="none"/></svg></a>
   </nav>
 
-  <div class="tag mono" id="tag-heat" style="left: 0; top: 0;" aria-hidden="true"><div class="box hot">Marine heatwave · +1.38 °C</div></div>
-  <div class="tag mono" id="tag-float" style="left: 0; top: 0;" aria-hidden="true"><div class="box">Float 4917-B · 1,640 m ↓</div></div>
+  <div class="tag" id="tag-heat" aria-hidden="true">Surface +1 °C above normal</div>
 
   <section class="copy">
-    <p class="eyebrow lab">North Atlantic · 4,112 instruments at sea</p>
-    <h1><span>The ocean keeps</span> <span>the record.</span></h1>
-    <p class="lede">We read it hourly: floats, moorings and gliders from the surface to 6,000 metres, every reading published openly within the hour.</p>
-    <div class="ctas">
-      <a class="btn btn-solid" href="#">Explore live data <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></a>
-      <a class="tlink" href="#">Read the 2026 Ocean Heat Report</a>
-    </div>
+    <p class="eyebrow">612 instruments at sea · open data</p>
+    <h1>The North Atlantic, from the surface to 6,000&nbsp;metres.</h1>
+    <p class="lede">Floats, moorings and gliders measure temperature, salinity and oxygen around the clock. Every reading is published openly within the hour.</p>
+    <div class="act"><a class="btn" href="#">Explore the data <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></a></div>
   </section>
 
-  <aside class="rail" aria-label="Live readings">
-    <header class="mono"><span class="live"><i></i>Live</span><span>Grid N-12 · 14:06 UTC</span></header>
-    <div class="ro">
-      <span class="k lab">Sea-surface temp. anomaly</span>
-      <span class="v hot">+1.38<small>°C</small></span>
-      <svg viewBox="0 0 96 28" aria-hidden="true"><polyline fill="none" stroke="var(--ds-color-danger-dark-11)" stroke-width="1.5" points="0,24 8,23 16,25 24,21 32,22 40,19 48,20 56,16 64,14 72,15 80,9 88,7 96,3"/></svg>
-      <span class="d">vs 1991–2020 mean · <b class="hot">record high</b></span>
-    </div>
-    <div class="ro">
-      <span class="k lab">Heat content, 0–2,000 m</span>
-      <span class="v">+16.2<small>ZJ</small></span>
-      <svg viewBox="0 0 96 28" aria-hidden="true"><polyline fill="none" stroke="var(--ds-color-accent-dark-11)" stroke-width="1.5" points="0,25 8,24 16,24 24,22 32,21 40,21 48,18 56,17 64,15 72,13 80,12 88,9 96,7"/></svg>
-      <span class="d">since 2016 · rising</span>
-    </div>
-    <div class="ro">
-      <span class="k lab">Dissolved O₂ at 400 m</span>
-      <span class="v">168<small>µmol/kg</small></span>
-      <svg viewBox="0 0 96 28" aria-hidden="true"><polyline fill="none" stroke="var(--ds-color-accent-dark-11)" stroke-width="1.5" points="0,6 8,7 16,6 24,9 32,8 40,11 48,12 56,11 64,14 72,15 80,17 88,18 96,20"/></svg>
-      <span class="d">−2.1% per decade</span>
-    </div>
-    <div class="ro">
-      <span class="k lab">Surface pH</span>
-      <span class="v">8.041</span>
-      <svg viewBox="0 0 96 28" aria-hidden="true"><polyline fill="none" stroke="var(--ds-color-accent-dark-11)" stroke-width="1.5" points="0,5 8,6 16,8 24,8 32,10 40,11 48,13 56,13 64,15 72,17 80,17 88,19 96,21"/></svg>
-      <span class="d">−0.017 per decade</span>
+  <aside class="prof" id="prof" aria-label="Latest profile from float 4917-B: sea temperature from the surface to 2,000 metres against the October mean for 1991 to 2020. The mixed layer, the top 38 metres, is 1.38 degrees warmer than the mean.">
+    <header>
+      <span class="t"><span>Float 4917-B · profile 212</span><span>Latest</span></span>
+      <span class="s mono">Surfaced 13:52 UTC</span>
+    </header>
+    <figure><svg id="profile" viewBox="0 0 336 231" aria-hidden="true"></svg></figure>
+    <div class="legend"><span><i></i>Profile 212</span><span><i class="mean"></i>October mean, 1991–2020</span></div>
+    <div class="reads">
+      <div><div class="k">Salinity, 5 m</div><div class="v">35.62<small>psu</small></div></div>
+      <div><div class="k">O₂ at 400 m</div><div class="v">246<small>µmol/kg</small></div></div>
+      <div><div class="k">Next profile</div><div class="v">10<small>days</small></div></div>
     </div>
   </aside>
 
-  <div class="status mono" aria-label="Current position">
-    <span>Lat <b>47°36′12″N</b></span><span>Lon <b>32°12′44″W</b></span><span>Depth <b>3,412 m</b></span><span>SST <b>14.82 °C</b></span>
+  <div class="status mono" aria-label="Float position">
+    <span>Lat <b>47°36′12″N</b></span><span>Lon <b>32°12′44″W</b></span><span>Sea floor <b id="depth">2,900 m</b></span>
     <span class="r">Data CC BY 4.0 · Updated 14:06:22 UTC</span>
   </div>
 </div>
 
 <script>
+/* The bathymetry: a seeded height field, contoured every 100 m with 500 m index lines.
+   One depth convention: metres below the surface, positive. 1° of latitude = 164 px; 1° of longitude at 47.6° N = 110.6 px. */
 (() => {
   const css = getComputedStyle(document.documentElement);
   const tok = n => css.getPropertyValue(n).trim();
@@ -175,10 +145,9 @@
   const ctx = cv.getContext('2d');
   ctx.scale(dpr, dpr);
 
-  // seeded value noise
   let s = 74;
   const rnd = () => { s |= 0; s = s + 0x6D2B79F5 | 0; let t = Math.imul(s ^ s >>> 15, 1 | s); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
-  const G = 64, grid = Array.from({length: G * G}, rnd);
+  const G = 64, grid = Array.from({ length: G * G }, rnd);
   const sm = t => t * t * (3 - 2 * t);
   const vn = (x, y) => {
     const xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi;
@@ -190,111 +159,146 @@
   const fbm = (x, y) => { let f = 0, a = 0.5, fr = 1; for (let o = 0; o < 5; o++) { f += a * vn(x * fr, y * fr); fr *= 2.02; a *= 0.5; } return f; };
   const gauss = (x, y, cx, cy, r) => Math.exp(-((x - cx) ** 2 + (y - cy) ** 2) / (2 * r * r));
   const lineDist = (x, y, ax, ay, bx, by) => { const dx = bx - ax, dy = by - ay; const t = Math.max(0, Math.min(1, ((x - ax) * dx + (y - ay) * dy) / (dx * dx + dy * dy))); return Math.hypot(x - ax - t * dx, y - ay - t * dy); };
-
   const sx = W / 1440, sy = H / 900;
   const height = (x, y) => {
     const X = x / sx, Y = y / sy;
     let h = fbm(X / 380, Y / 380) * 1.1;
-    h += 1.5 * gauss(X, Y, 820, 360, 150);           // seamount
-    h += 0.7 * gauss(X, Y, 950, 280, 70);            // its shoulder
-    h += 0.5 * Math.exp(-(lineDist(X, Y, 80, 980, 1500, -60) ** 2) / (2 * 110 * 110));   // ridge
-    h -= 0.9 * Math.exp(-(lineDist(X, Y, 1000, 980, 1500, 520) ** 2) / (2 * 80 * 80));  // trench
+    h += 1.5 * gauss(X, Y, 820, 360, 150);
+    h += 0.7 * gauss(X, Y, 950, 280, 70);
+    h += 0.5 * Math.exp(-(lineDist(X, Y, 80, 980, 1500, -60) ** 2) / (2 * 110 * 110));
+    h -= 0.9 * Math.exp(-(lineDist(X, Y, 1000, 980, 1500, 520) ** 2) / (2 * 80 * 80));
     return h;
   };
-
   const C = 5, nx = Math.ceil(W / C) + 1, ny = Math.ceil(H / C) + 1;
   const F = new Float32Array(nx * ny);
   let mn = Infinity, mx = -Infinity;
   for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) { const v = height(i * C, j * C); F[j * nx + i] = v; mn = Math.min(mn, v); mx = Math.max(mx, v); }
+  // depth in metres: 5,600 m on the abyssal plain, the seamount rising to 2,400 m
+  const toDepth = h => 5600 - (h - mn) / (mx - mn) * 3200;
+  const toH = d => mn + (5600 - d) / 3200 * (mx - mn);
+  const depthAt = (x, y) => toDepth(height(x, y));
 
-  // lines go into a white mask, then get colored by position (cyan, warm inside the heatwave)
-  const mask = document.createElement('canvas'); mask.width = cv.width; mask.height = cv.height;
-  const m = mask.getContext('2d'); m.scale(dpr, dpr);
-  const step = 0.075, levels = [];
-  for (let L = Math.ceil(mn / step) * step, k = 0; L < mx; L += step, k++) levels.push([L, k]);
-  const labelAt = [];
-  levels.forEach(([L, k]) => {
-    const index = Math.round(L / step) % 5 === 0;
-    const depthFrac = (L - mn) / (mx - mn);
-    m.strokeStyle = `rgba(255,255,255,${index ? 0.6 : 0.12 + depthFrac * 0.2})`; /* od-ignore: navy art scrim */
-    m.lineWidth = index ? 1.15 : 0.8;
-    m.beginPath();
+  // contours: every 100 m, index lines every 500 m, all in the map's one line colour
+  const segsAt = L => {
+    const out = [];
     for (let j = 0; j < ny - 1; j++) for (let i = 0; i < nx - 1; i++) {
       const a = F[j * nx + i], b = F[j * nx + i + 1], c = F[(j + 1) * nx + i + 1], d = F[(j + 1) * nx + i];
       const idx = (a > L) | (b > L) << 1 | (c > L) << 2 | (d > L) << 3;
       if (idx === 0 || idx === 15) continue;
       const x = i * C, y = j * C;
       const T = [x + C * (L - a) / (b - a), y], R = [x + C, y + C * (L - b) / (c - b)], B = [x + C * (L - d) / (c - d), y + C], Lf = [x, y + C * (L - a) / (d - a)];
-      const segs = {1: [[Lf, T]], 2: [[T, R]], 3: [[Lf, R]], 4: [[R, B]], 5: [[Lf, T], [R, B]], 6: [[T, B]], 7: [[Lf, B]], 8: [[B, Lf]], 9: [[B, T]], 10: [[T, R], [B, Lf]], 11: [[B, R]], 12: [[R, Lf]], 13: [[R, T]], 14: [[T, Lf]]}[idx];
-      for (const [p, q] of segs) { m.moveTo(p[0], p[1]); m.lineTo(q[0], q[1]); if (index && (i + j) % 3 === 0) labelAt.push([p, q, L]); }
+      const sg = { 1: [[Lf, T]], 2: [[T, R]], 3: [[Lf, R]], 4: [[R, B]], 5: [[Lf, T], [R, B]], 6: [[T, B]], 7: [[Lf, B]], 8: [[B, Lf]], 9: [[B, T]], 10: [[T, R], [B, Lf]], 11: [[B, R]], 12: [[R, Lf]], 13: [[R, T]], 14: [[T, Lf]] }[idx];
+      out.push(...sg);
     }
-    m.stroke();
-  });
+    return out;
+  };
+  const line = tok('--ds-color-accent-dark-11');
+  const labelSegs = [];
+  ctx.strokeStyle = line;
+  const dMin = Math.ceil(toDepth(mx) / 100) * 100, dMax = Math.floor(toDepth(mn) / 100) * 100;
+  for (let D = dMin; D <= dMax; D += 100) {
+    const index = D % 500 === 0, segs = segsAt(toH(D));
+    ctx.globalAlpha = index ? 0.62 : 0.22; ctx.lineWidth = index ? 1.2 : 0.8;
+    ctx.beginPath(); segs.forEach(([p, q]) => { ctx.moveTo(p[0], p[1]); ctx.lineTo(q[0], q[1]); }); ctx.stroke();
+    if (index) segs.forEach((sg, k) => { if (k % 3 === 0) labelSegs.push([sg[0], sg[1], D]); });
+  }
+  ctx.globalAlpha = 1;
 
-  const col = document.createElement('canvas'); col.width = cv.width; col.height = cv.height;
-  const c2 = col.getContext('2d'); c2.scale(dpr, dpr);
-  c2.fillStyle = tok('--ds-color-accent-dark-11'); c2.fillRect(0, 0, W, H);
-  const hx = 1010 * sx, hy = 250 * sy;
-  const g = c2.createRadialGradient(hx, hy, 0, hx, hy, 230 * sx);
-  const heat = tok('--ds-color-danger-dark-11');
-  g.addColorStop(0, heat); g.addColorStop(0.55, heat); g.addColorStop(1, 'rgba(0,0,0,0)'); /* od-ignore: navy art scrim */
-  c2.fillStyle = g; c2.fillRect(0, 0, W, H);
-  c2.globalCompositeOperation = 'destination-in';
-  c2.drawImage(mask, 0, 0, W, H);
-
-  // soft heat glow under the lines
-  const glow = ctx.createRadialGradient(hx, hy, 0, hx, hy, 260 * sx);
-  glow.addColorStop(0, 'rgba(237,149,139,0.16)'); glow.addColorStop(1, 'rgba(237,149,139,0)'); /* od-ignore: navy art scrim */
-  ctx.fillStyle = glow; ctx.fillRect(0, 0, W, H);
-
-  // graticule
-  ctx.strokeStyle = 'rgba(152,173,199,0.07)'; ctx.lineWidth = 1; /* od-ignore: navy art scrim */
-  for (let x = 64; x < W; x += 168) { ctx.beginPath(); ctx.moveTo(x + 0.5, 80); ctx.lineTo(x + 0.5, H - 56); ctx.stroke(); }
-  for (let y = 80 + 82; y < H - 56; y += 164) { ctx.beginPath(); ctx.moveTo(0, y + 0.5); ctx.lineTo(W, y + 0.5); ctx.stroke(); }
-
-  ctx.drawImage(col, 0, 0, W, H);
-
-  // depth labels on a few index contours (decorative)
-  ctx.font = `400 13px ${tok('--ds-font-family-mono')}`;
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  const anchors = [[600, 210], [1150, 700], [930, 760]].map(([x, y]) => [x * sx, y * sy]);
-  anchors.forEach(([ax, ay]) => {
-    let best = null, bd = 70;
-    labelAt.forEach(seg => { const [p, q] = seg; const d = Math.hypot((p[0] + q[0]) / 2 - ax, (p[1] + q[1]) / 2 - ay); if (d < bd) { bd = d; best = seg; } });
+  // index labels, exact (2,500 m, 3,000 m ...), on a few index lines away from the copy and the panel
+  ctx.font = `400 13px ${tok('--ds-font-family-mono')}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  [[620, 196], [1010, 168], [880, 740], [700, 600]].map(([x, y]) => [x * sx, y * sy]).forEach(([ax, ay]) => {
+    let best = null, bd = 60;
+    labelSegs.forEach(sg => { const [p, q] = sg; const d = Math.hypot((p[0] + q[0]) / 2 - ax, (p[1] + q[1]) / 2 - ay); if (d < bd) { bd = d; best = sg; } });
     if (!best) return;
-    const [p, q, L] = best;
-    const cx = (p[0] + q[0]) / 2, cy = (p[1] + q[1]) / 2;
+    const [p, q, D] = best, cx = (p[0] + q[0]) / 2, cy = (p[1] + q[1]) / 2;
     let a = Math.atan2(q[1] - p[1], q[0] - p[0]); if (a > Math.PI / 2) a -= Math.PI; if (a < -Math.PI / 2) a += Math.PI;
-    const depth = Math.round((5200 - (L - mn) / (mx - mn) * 4800) / 100) * 100;
     ctx.save(); ctx.translate(cx, cy); ctx.rotate(a);
-    const t = `−${depth.toLocaleString('en')} m`, w = ctx.measureText(t).width + 10;
-    ctx.fillStyle = '#061a30'; ctx.fillRect(-w / 2, -9, w, 18); /* od-ignore: navy art scrim */
-    ctx.fillStyle = tok('--ds-color-accent-dark-11'); ctx.fillText(t, 0, 1);
+    const t = `${D.toLocaleString('en')} m`, w = ctx.measureText(t).width + 10;
+    ctx.fillStyle = tok('--navy'); ctx.fillRect(-w / 2, -9, w, 18);
+    ctx.fillStyle = line; ctx.fillText(t, 0, 1);
     ctx.restore();
   });
 
-  // float track
-  const pts = [[380, 172], [450, 140], [530, 168], [600, 150], [668, 200], [722, 272], [790, 352]].map(([x, y]) => [x * sx, y * sy]);
-  ctx.setLineDash([2, 5]); ctx.strokeStyle = tok('--ds-color-neutral-dark-12'); ctx.globalAlpha = 0.55; ctx.lineWidth = 1.2;
-  ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.stroke();
-  ctx.setLineDash([]); ctx.globalAlpha = 1;
-  pts.forEach(([x, y], i) => { ctx.beginPath(); ctx.arc(x, y, i === pts.length - 1 ? 4 : 2.5, 0, Math.PI * 2); ctx.fillStyle = i === pts.length - 1 ? tok('--ds-color-neutral-dark-12') : tok('--ds-color-neutral-dark-10'); ctx.fill(); });
-  const [fx, fy] = pts[pts.length - 1];
-  ctx.strokeStyle = tok('--ds-color-neutral-dark-12');
-  [12, 22].forEach((r, i) => { ctx.globalAlpha = i ? 0.35 : 0.8; ctx.beginPath(); ctx.arc(fx, fy, r, 0, Math.PI * 2); ctx.stroke(); });
-  ctx.globalAlpha = 0.5; ctx.beginPath(); ctx.moveTo(fx - 40, fy); ctx.lineTo(fx - 26, fy); ctx.moveTo(fx + 26, fy); ctx.lineTo(fx + 40, fy); ctx.moveTo(fx, fy - 40); ctx.lineTo(fx, fy - 26); ctx.moveTo(fx, fy + 26); ctx.lineTo(fx, fy + 40); ctx.stroke(); ctx.globalAlpha = 1;
-  // leader to the float tag
-  ctx.strokeStyle = tok('--ds-color-neutral-dark-12'); ctx.globalAlpha = 0.6; ctx.beginPath(); ctx.moveTo(fx + 18, fy + 18); ctx.lineTo(fx + 56, fy + 96); ctx.stroke(); ctx.globalAlpha = 1;
-  const ft = document.getElementById('tag-float'); ft.style.left = (fx + 40) + 'px'; ft.style.top = (fy + 96) + 'px';
-  // heat tag
-  ctx.strokeStyle = heat; ctx.globalAlpha = 0.8; ctx.beginPath(); ctx.moveTo(hx - 6, hy - 8); ctx.lineTo(hx - 40, hy - 100); ctx.stroke(); ctx.globalAlpha = 1;
-  ctx.beginPath(); ctx.arc(hx, hy, 3, 0, Math.PI * 2); ctx.fillStyle = heat; ctx.fill();
-  const ht = document.getElementById('tag-heat'); ht.style.left = (hx - 40) + 'px'; ht.style.top = (hy - 132) + 'px'; ht.style.transform = 'translateX(-100%)';
+  // the float: on the 47.6° N line, on the seamount's eastern flank, where the sea floor is about 2,900 m
+  const LAT = 47.598, yOf = lat => (162 + (49 - lat) * 164) * sy;
+  const fy = yOf(LAT);
+  let FX = 940, best = Infinity;
+  for (let X = 880; X <= 960; X += 1) { const e = Math.abs(depthAt(X * sx, fy) - 2900); if (e < best) { best = e; FX = X; } }
+  const fx = FX * sx;
+  document.getElementById('depth').textContent = Math.round(depthAt(fx, fy)).toLocaleString('en') + ' m';
 
-  // latitude / longitude ticks on the edges
-  ctx.fillStyle = tok('--ds-color-neutral-dark-10'); ctx.font = `400 13px ${tok('--ds-font-family-mono')}`;
-  ctx.textAlign = 'left';
-  for (let y = 80 + 82, k = 0; y < H - 56; y += 164, k++) { ctx.fillRect(0, y, 10, 1); ctx.fillText(`${49 - k}°N`, 16, y); }
+  // graticule: true degrees. Latitude every 1° (164 px), longitude every 1° (110.6 px at this latitude). Every line drawn is labelled.
+  const LON = 32.2122, pxLon = 164 * Math.cos(LAT * Math.PI / 180) * sx, xOf = lon => fx + (LON - lon) * pxLon;
+  const frame = document.getElementById('frame'), put = (x, y, s, st = '') => frame.insertAdjacentHTML('beforeend', `<span style="left:${x}px;top:${y}px;${st}">${s}</span>`);
+  const prof = document.getElementById('prof'), PW = prof.offsetWidth, PL = W - 64 - PW;
+  const eb = document.querySelector('.eyebrow').getBoundingClientRect(), PT = eb.top, PB = PT + prof.offsetHeight;
+  const GX0 = 640 * sx;   // latitude lines start right of the copy column; their labels sit there, in one column
+  ctx.strokeStyle = tok('--ds-color-neutral-dark-11'); ctx.globalAlpha = 0.14; ctx.lineWidth = 1;
+  for (let lat = 49; lat >= 45; lat--) {
+    const y = Math.round(yOf(lat)) + .5, hidden = y > PT - 4 && y - 24 < PB + 4, x1 = hidden ? PL - 64 : W - 64;
+    ctx.beginPath(); ctx.moveTo(GX0, y); ctx.lineTo(x1, y); ctx.stroke();
+    ctx.globalAlpha = 1; put(GX0 + 4, y - 20, `${lat}°N`); ctx.globalAlpha = 0.14;
+  }
+  for (let lon = 38; lon >= 26; lon--) { const x = Math.round(xOf(lon)) + .5; if (x < GX0 || x > W - 64) continue; ctx.beginPath(); ctx.moveTo(x, 80); ctx.lineTo(x, H - 56); ctx.stroke(); ctx.globalAlpha = 1; put(x + 6, 88, `${lon}°W`); ctx.globalAlpha = 0.14; }
+  ctx.globalAlpha = 1;
+
+  // the marine heatwave: its own outlined area (the +1 °C sea-surface anomaly), not painted onto the sea floor
+  const heat = tok('--ds-color-danger-dark-11');
+  ctx.strokeStyle = heat; ctx.lineWidth = 1.5; ctx.setLineDash([6, 5]);
+  ctx.beginPath();
+  for (let k = 0; k <= 96; k++) { const a = k / 96 * Math.PI * 2, r = 1 + .07 * (2 * vn(Math.cos(a) * 2.2 + 7, Math.sin(a) * 2.2 + 3) - 1) + .04 * Math.sin(3 * a + .7) - .04 * Math.max(0, Math.cos(a)); const x = fx - 84 * sx + Math.cos(a) * 132 * r * sx, y = fy - 40 * sy + Math.sin(a) * 112 * r * sy; k ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }   // the analysed +1 °C contour: the float lies inside it, near its south-east edge
+  ctx.closePath(); ctx.stroke(); ctx.setLineDash([]);
+  const tag = document.getElementById('tag-heat'); tag.style.left = (fx - 194 * sx) + 'px'; tag.style.top = (fy + 4 * sy) + 'px';   // inside the area it names, in its open south-west part
+
+  // float track (dotted) and the float: a dot and one ring
+  const pts = [[700, 214], [770, 188], [846, 206], [900, 252], [(900 + FX) / 2 + 10, 318], [FX, 392]].map(([x, y]) => [x * sx, y * sy]);
+  ctx.setLineDash([2, 5]); ctx.strokeStyle = tok('--ds-color-neutral-dark-12'); ctx.globalAlpha = 0.6; ctx.lineWidth = 1.2;
+  ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha = 1;
+  pts.slice(0, -1).forEach(([x, y]) => { ctx.beginPath(); ctx.arc(x, y, 2.5, 0, Math.PI * 2); ctx.fillStyle = tok('--ds-color-neutral-dark-10'); ctx.fill(); });
+  ctx.beginPath(); ctx.arc(fx, fy, 4.5, 0, Math.PI * 2); ctx.fillStyle = tok('--ds-color-neutral-dark-12'); ctx.fill();
+  ctx.beginPath(); ctx.arc(fx, fy, 12, 0, Math.PI * 2); ctx.strokeStyle = tok('--ds-color-neutral-dark-12'); ctx.lineWidth = 1.2; ctx.stroke();
+
+  // dock the profile panel to the float: its header sits level with the float, a short leader joins them
+  const px0 = PL;
+  prof.style.left = px0 + 'px'; prof.style.top = PT + 'px';
+  ctx.strokeStyle = tok('--navy'); ctx.lineWidth = 5;   // a casing, so the leader reads clean where the outline crosses it
+  ctx.beginPath(); ctx.moveTo(fx + 13, fy); ctx.lineTo(px0, fy); ctx.stroke();
+  ctx.strokeStyle = tok('--ds-color-neutral-dark-12'); ctx.globalAlpha = .7; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(fx + 12, fy); ctx.lineTo(px0, fy); ctx.stroke(); ctx.globalAlpha = 1;
+
+  // scale bar, under the panel on the right margin
+  const km50 = 50 / 111.2 * 164 * sy, sbx = xOf(35) + (pxLon - km50) / 2, sby = yOf(45) - 64;   // centred between 35°W and 34°W, well above 45°N
+  frame.insertAdjacentHTML('beforeend', `<span style="left:${sbx}px;top:${sby}px;width:${km50}px;height:var(--ds-space-6);border:1px solid currentColor;border-top:0"></span>`);
+  put(sbx, sby - 22, '50 km');
+})();
+</script>
+
+<script>
+/* The float's profile: temperature against depth, this cycle against the October mean for 1991-2020.
+   The top 200 m are stretched, as profile plots do, so the warm mixed layer can be read. */
+(function () {
+  const svg = document.getElementById('profile'), NS = 'http://www.w3.org/2000/svg';
+  const el = (n, a, p = svg) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); p.appendChild(e); return e; };
+  const X0 = 44, X1 = 328, T0 = 2, T1 = 18, Y0 = 26, YB = 211;
+  const x = t => X0 + (t - T0) / (T1 - T0) * (X1 - X0);
+  const y = d => d <= 200 ? Y0 + d / 200 * 96 : Y0 + 96 + (d - 200) / 1800 * (YB - Y0 - 96);
+  const txt = (tx, ty, s, o = {}) => { const t = el('text', Object.assign({ x: tx, y: ty, 'font-size': 13, fill: 'var(--ds-color-text-secondary)', 'font-family': 'var(--ds-font-family-mono)' }, o)); t.textContent = s; return t; };
+  // [depth m, °C]: this profile, and the 1991-2020 October mean at this grid cell
+  const now = [[0, 15.98], [10, 15.97], [25, 15.94], [38, 15.88], [50, 15.10], [75, 13.80], [100, 13.05], [150, 12.42], [200, 12.05], [300, 11.32], [400, 10.74], [500, 10.21], [700, 9.30], [900, 8.66], [1100, 7.84], [1300, 6.86], [1500, 5.58], [1750, 4.63], [2000, 3.88]];
+  const mean = [[0, 14.60], [10, 14.59], [25, 14.55], [38, 14.48], [50, 14.20], [75, 13.42], [100, 12.90], [150, 12.38], [200, 12.02], [300, 11.36], [400, 10.70], [500, 10.24], [700, 9.27], [900, 8.70], [1100, 7.81], [1300, 6.90], [1500, 5.61], [1750, 4.60], [2000, 3.91]];
+  // axes: temperature along the top with its unit, depth down the left with its unit
+  [4, 8, 12, 16].forEach(t => { el('line', { x1: x(t), y1: Y0, x2: x(t), y2: YB, stroke: 'var(--hair)', 'stroke-width': 1 }); txt(x(t), 14, String(t), { 'text-anchor': 'middle' }); });
+  txt(X1, 14, '°C', { 'text-anchor': 'end' });
+  [[0, '0 m'], [100, '100'], [200, '200'], [1000, '1,000'], [2000, '2,000']].forEach(([d, s]) => { el('line', { x1: X0, y1: y(d), x2: X1, y2: y(d), stroke: 'var(--hair)', 'stroke-width': 1 }); txt(X0 - 8, y(d) + 4, s, { 'text-anchor': 'end' }); });
+  el('path', { d: `M${X0 - 4},${y(200) + 4} l8,-4 M${X0 - 4},${y(200) + 8} l8,-4`, stroke: 'var(--ds-color-text-secondary)', 'stroke-width': 1 });
+  const pl = (pts, o) => el('polyline', Object.assign({ points: pts.map(([d, t]) => `${x(t)},${y(d)}`).join(' '), fill: 'none', 'stroke-linejoin': 'round' }, o));
+  pl(mean, { stroke: 'var(--ds-color-text-secondary)', 'stroke-width': 1.5, 'stroke-dasharray': '4 4' });
+  pl(now.filter(([d]) => d >= 75), { stroke: 'var(--line)', 'stroke-width': 2 });
+  pl(now.filter(([d]) => d <= 75), { stroke: 'var(--heat)', 'stroke-width': 2.4 });   // the warm mixed layer
+  // the mixed layer: its base, and how much warmer it is, in Sans; numbers stay in the figure
+  el('line', { x1: x(10.4), y1: y(38), x2: x(14.48) - 6, y2: y(38), stroke: 'var(--ds-color-text-secondary)', 'stroke-width': 1, 'stroke-dasharray': '2 3' });
+  txt(X0 + 8, y(38) + 4, 'Mixed layer, 38 m', { 'font-family': 'var(--ds-font-family-text)' });
+  txt(X0 + 8, y(38) + 24, '+1.38 °C at the surface', { fill: 'var(--heat)', 'font-weight': 500, 'font-family': 'var(--ds-font-family-text)' });
 })();
 </script>
 </body>

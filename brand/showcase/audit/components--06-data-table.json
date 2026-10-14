@@ -1,0 +1,71 @@
+{
+  "piece": "components/06-data-table",
+  "title": "06 · Data table · Tarrow Freight",
+  "pattern": "data table",
+  "platform": "web",
+  "industry": "logistics",
+  "style": [
+    "enterprise",
+    "swiss",
+    "industrial"
+  ],
+  "tags": [
+    "data table",
+    "logistics",
+    "dense",
+    "filters",
+    "bulk actions",
+    "status chips",
+    "mono"
+  ],
+  "score": 5,
+  "verdict": "keep",
+  "strengths": [
+    "Would pass as a shipped dispatch tool: 32 px rows, tabular figures right-aligned, status as icon + word, structured filter chips ('Status is any of In transit, Delayed +1 ×'), a bulk bar with the count, '1-10 of 412 · updated 14:06'",
+    "A detail only this product would have: the lane cell (origin, a progress line with the truck marker, destination) coloured amber when late and red on exception, with '+3h' and '-40m' deltas beside the ETA",
+    "Believable data throughout: 'TRW-48213-CH', 'CHI → LAX', 'Northvale Haul', '18,420 lb', 'Oct 16 14:20'; loading, empty and error states shown at real size with data kept during the error"
+  ],
+  "slop_signals": [
+    "The carrier monograms ('NV', 'BL', 'CR') as black squares are the generic initials-avatar device; a real freight tool would show the SCAC code as text",
+    "The faint manifest grid drawn across the whole page background is decoration"
+  ],
+  "fixes": [
+    "Set carrier codes as plain mono text and drop the black squares",
+    "Remove the page-wide background grid or confine it to the sheet margins"
+  ],
+  "references": [
+    {
+      "site": "Shopify",
+      "url": "https://mobbin.com/screens/a02d3d73-8a92-43d5-a848-6871b908b484",
+      "what": "Selected rows with a bulk row ('2 selected · Print · Create shipping labels') and status chips with a dot + word; ours matches and is denser"
+    },
+    {
+      "site": "Square",
+      "url": "https://mobbin.com/screens/14618499-6730-4721-9822-bad566504229",
+      "what": "Filter chips as 'Type All', 'Payment status Paid' with 'Clear all', and a sort arrow in the column header"
+    },
+    {
+      "site": "Deel",
+      "url": "https://mobbin.com/screens/08da5ff8-7f5b-4a06-a706-b5841708afb9",
+      "what": "Order IDs as links, product thumbnails, status chips and 'Total 9 items'; a count above the grid as in our '1,284' pill"
+    },
+    {
+      "site": "Squarespace",
+      "url": "https://mobbin.com/screens/b4b70475-af8a-4eaa-a1e5-1dab7bfdd50c",
+      "what": "Two-line order cells and 'Showing 1-4 out of 4 records'; the same footer language"
+    }
+  ],
+  "audited": "2026-10-14",
+  "owner": {
+    "verdict": "keep",
+    "said": "okay",
+    "date": "2026-10-14"
+  },
+  "round3": {
+    "score": null,
+    "changed": [
+      "Carrier Halden Freight renamed Ostrel Freight (name clash with app-screens/01); re-rendered"
+    ],
+    "note": "Owner verdict keep; not rebuilt, so no fresh score"
+  }
+}

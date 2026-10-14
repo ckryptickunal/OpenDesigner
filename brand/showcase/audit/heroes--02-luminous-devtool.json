@@ -1,0 +1,90 @@
+{
+ "piece": "heroes/02-luminous-devtool",
+ "title": "02 Orrery: luminous dev-tool hero",
+ "pattern": "saas hero",
+ "platform": "web",
+ "industry": "developer tools",
+ "style": [
+  "dark",
+  "glass",
+  "neon"
+ ],
+ "tags": [
+  "saas hero",
+  "developer tools",
+  "dark",
+  "vector database",
+  "code sample",
+  "floating cards",
+  "starfield"
+ ],
+ "score": 3,
+ "verdict": "polish",
+ "strengths": [
+  "The product fragments are believable: a results table with cosine scores and a plausible query, a nine-line code sample with a real-looking API, a P99 latency chip with a sparkline",
+  "Stats row uses mono numbers with small-caps captions (8.7 ms, 99.2%, Apache 2.0) the way engineers read",
+  "Nav is restrained: plain links, 'Sign in', one outlined 'Talk to an engineer'"
+ ],
+ "slop_signals": [
+  "A teal galaxy with orbit rings and a glowing 'query star' fills the top right for atmosphere; the glow has no job once the rings are read as the logo",
+  "Three product cards tilted in perspective with soft shadows at different depths: the Dribbble 'floating UI' move",
+  "'3.2 Hybrid search: dense and sparse vectors in one query ->' pill badge above the headline",
+  "'Used in production by' row of five invented wordmarks (kelvinlabs, FERNWAY, parabola/, Quillmark, Atlas & Ivy)",
+  "Filled teal CTA with a glow halo plus a second terminal-styled button: the two-button stack",
+  "Starfield particles scattered across the whole ground, including behind the body text"
+ ],
+ "fixes": [
+  "Flatten the product: one results panel face-on bleeding off the right edge, the code sample docked to it as a tab, as Supabase and ReadMe do; no perspective tilt",
+  "Keep the orrery as a thin line drawing (rings and a dot) and remove the glow, the stars and the nebula fill",
+  "Replace the fake logo row with one line the company would actually have: a GitHub star count, a benchmark link or a changelog line",
+  "Move the version note into the nav as a small 'v3.2' link and remove the pill",
+  "One CTA; show 'pip install orrery' as plain mono text with a copy icon, not a second button"
+ ],
+ "references": [
+  {
+   "site": "Supabase",
+   "url": "https://mobbin.com/sites/sections/6d6921ce-b43a-4232-9ebd-966b1338c349",
+   "what": "Table and code card overlap flat on a dark ground, no glow, no tilt, two small buttons; the overlap alone gives depth"
+  },
+  {
+   "site": "Supabase",
+   "url": "https://mobbin.com/sites/sections/cbd29673-2003-4001-94a1-957c985817a9",
+   "what": "A vector-product hero on dark with one icon, a faint grid and a few particles; shows how little atmosphere is needed"
+  },
+  {
+   "site": "ReadMe",
+   "url": "https://mobbin.com/sites/sections/6f579ab9-de76-40fe-aac5-06d5891ba595",
+   "what": "Stats, a request table and a side panel on a hairline grid, all face-on; data as the picture"
+  },
+  {
+   "site": "Dovetail",
+   "url": "https://mobbin.com/sites/sections/57c3f21b-b420-47cc-be74-8b45ab45aea5",
+   "what": "Dark dev-tool hero with the product bleeding right and small plain buttons; the grid lines do what our glow tries to do"
+  },
+  {
+   "site": "Webflow",
+   "url": "https://mobbin.com/sites/sections/6d79385e-ebcd-4c5a-a630-e494717d38d0",
+   "what": "Same split (headline left, floating objects right) with two plain buttons and no badge; the floating objects are real app icons, not UI fragments"
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "improve",
+  "said": "okay",
+  "date": "2026-10-14"
+ },
+ "round3": {
+  "score": 4,
+  "changed": [
+   "Renamed Orrery to Nearmost: Embedding Orrery (embedding-orrery.com) is a real open-source embedding search tool, and pip install orrery installs a real unrelated package",
+   "Removed the canvas galaxy, glow, stars, tilted floating cards, the 3.2 pill, the invented logo row, the stat trio and the second button",
+   "The product is the picture: a flat, whole console with a query bar, a UMAP map of the 2,000 nearest vectors (topic regions, query crosshair, numbered results, filtered papers), a results table with an honest hybrid score (0.7 dense + 0.3 sparse, computed per row) and a query-plan trace that adds to 7.9 ms",
+   "The headline is the number: 8.7 ms at 148 px, then the sentence it completes; one button and pip install as plain text; facts and a measurement footnote at the bottom",
+   "Product secondary text raised from 12 to 14 px; the selected row is visible (neutral fill, ink rule); teal marks only the button, the logo dot and the results"
+  ]
+ },
+ "facts": [
+  "mockups/04-browser-cascade/index.html line 71 still captions this piece 'Orrery'",
+  "opendesigner/build/dtcg/orrery.resolver.json is a stale export from before the rename (engine build does not remove it)"
+ ]
+}

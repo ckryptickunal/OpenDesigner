@@ -9,94 +9,93 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,300..500&family=Hanken+Grotesk:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="opendesigner/build/css/tokens.css">
 <style>
-/* Undertow: a podcast player for late listening. Dark theme from the engine; colors, space, radius (0: print edges)
-   and type sizes are --ds-* tokens. Two faces: Newsreader (display) and Hanken Grotesk (everything else, tabular
-   figures for times). The cover art is generated on a canvas from the same tokens. */
+/* Undertow: a podcast player for late listening. Round 3. Dark theme from the engine; colours, space and type sizes are --ds-* tokens.
+   Two faces: Newsreader (display) and Hanken Grotesk (everything else, tabular figures for times).
+   Type roles (iOS): Display 54 (title, Newsreader 300) · Title 2 22 (transcript line, "Chapters") · Body 17 · Subheadline 15 · Footnote 13.
+   Ice blue has one job, "now": played time and the line being spoken. The play button is ice white with a navy glyph. */
 :root {
   --bg: var(--ds-color-accent2-dark-2);   /* a navy-tinted near-black: the neutral dark ramp is nearly grey */
-  --apricot: var(--ds-color-bg-action-primary);
-  --apricot-ink: var(--ds-color-text-accent);
-  --plum: var(--ds-color-accent2-dark-9);
+  --ice: var(--ds-color-bg-action-primary);
+  --ink-on: var(--ds-color-text-on-action);
   --hair: var(--ds-color-border-subtle);
   --serif: var(--ds-font-family-display);
-  --cap: 600 var(--ds-font-size-13)/1.2 var(--ds-font-family-text);   /* label role: 13 pt caps */
-  --tab: tabular-nums;
+  --ds-size-target-min: 44px;   /* touch: the token is 24 under (pointer: fine), which the renderer reports; this is a phone */
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { background: var(--bg); }
 body { width: 390px; height: 844px; overflow: hidden; position: relative; font: var(--ds-text-body-md); color: var(--ds-color-text-primary); -webkit-font-smoothing: antialiased; }
-button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; border-radius: var(--ds-radius-control); }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
 button:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
-.i { width: var(--ds-size-icon-lg); height: var(--ds-size-icon-lg); fill: none; stroke: currentColor; stroke-width: var(--ds-icon-stroke-sm); stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.num { font-variant-numeric: tabular-nums; }
 
-/* cover art: full-bleed, fades into the page */
-.art { position: absolute; left: 0; top: 0; width: 390px; height: 430px; z-index: 0; }
-.art canvas { width: 390px; height: 430px; display: block; }
-.art::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, color-mix(in oklab, var(--bg) 88%, transparent) 0, color-mix(in oklab, var(--bg) 55%, transparent) 13%, transparent 30%, transparent 50%, var(--bg) 92%); }
-
-.status { position: relative; z-index: 3; height: 50px; display: flex; align-items: center; justify-content: space-between; padding: var(--ds-space-6) var(--ds-space-32) 0; color: var(--ds-color-text-primary); }
+.status { height: 54px; display: flex; align-items: center; justify-content: space-between; padding: var(--ds-space-4) var(--ds-space-32) 0 var(--ds-space-40); color: var(--ds-color-text-primary); }
 .status time { font: 600 var(--ds-font-size-17)/1 var(--ds-font-family-text); }
 .status .sys { display: flex; gap: var(--ds-space-6); align-items: center; }
-.fade { position: absolute; z-index: 8; left: 0; right: 0; bottom: 0; height: 64px; background: linear-gradient(to bottom, transparent, var(--bg) 70%); pointer-events: none; }
+.fade { position: absolute; z-index: 8; left: 0; right: 0; bottom: 0; height: 56px; background: linear-gradient(to bottom, transparent, var(--bg) 60%); pointer-events: none; }
 .home-ind { position: absolute; z-index: 9; left: 50%; bottom: 8px; width: 134px; height: 5px; border-radius: var(--ds-radius-full); background: var(--ds-color-text-primary); transform: translateX(-50%); }
 
-main { position: relative; z-index: 2; padding: 0 var(--ds-space-20); }
-.top { display: flex; align-items: center; justify-content: space-between; height: 48px; margin: 0 -10px; }
-.ib { width: var(--ds-size-target-min); height: var(--ds-size-target-min); display: grid; place-items: center; color: var(--ds-color-text-primary); }
-.from { text-align: center; }
-.from small { display: block; font: var(--cap); letter-spacing: .08em; text-transform: uppercase; color: var(--ds-color-text-secondary); }
-.from b { font: 400 var(--ds-font-size-17)/1.3 var(--serif); }
+main { padding: 0 var(--ds-space-20); }
+.top { display: flex; align-items: center; justify-content: space-between; height: 44px; margin: 0 -16px 0 -16px; padding-right: 3px; } /* the chevron and the dots land on 20 and 370 */
+.ib { width: 44px; height: 44px; display: grid; place-items: center; color: var(--ds-color-text-primary); }
 
-.meta { margin-top: 196px; display: flex; align-items: center; gap: var(--ds-space-8); font: var(--cap); letter-spacing: .08em; text-transform: uppercase; color: var(--apricot-ink); }
-.meta .dot { width: 4px; height: 4px; background: currentColor; }
-h1 { margin-top: var(--ds-space-12); font: 300 var(--ds-font-size-54)/1 var(--serif); font-variation-settings: "opsz" 72; letter-spacing: -.025em; text-wrap: balance; /* light on purpose: the engine's 650 heading weight is too heavy for a quiet night title */ }
+/* the show: a square cover (a photograph set as a duotone, the show's name on it) and what this is */
+.show { margin-top: var(--ds-space-8); display: flex; gap: var(--ds-space-16); align-items: center; }
+.cover { position: relative; width: 132px; height: 132px; flex: none; overflow: hidden; isolation: isolate; background: var(--ds-color-accent-dark-9); }
+.cover img { width: 100%; height: 100%; display: block; object-fit: cover; filter: grayscale(1) contrast(1.35) brightness(1.05); mix-blend-mode: multiply; }
+.cover::before { content: ""; position: absolute; inset: 0; z-index: 1; background: var(--ds-color-accent2-dark-3); mix-blend-mode: lighten; } /* duotone: shadows to navy, light to ice */
+.cover b { position: absolute; z-index: 2; left: 10px; top: 9px; right: 10px; text-align: right; font: 500 var(--ds-font-size-20)/1.05 var(--serif); /* the cover art's own type, Title 3 */ font-variation-settings: "opsz" 24; letter-spacing: -0.01em; color: var(--ds-color-accent2-dark-2); }
+.cover::after { content: ""; position: absolute; z-index: 1; inset: 0 0 auto 30%; height: 58%; background: radial-gradient(120% 90% at 100% 0%, rgb(255 255 255 / .28), rgb(255 255 255 / 0) 70%); } /* calms the grass under the cover type */ /* the cover art's own type; the show name is repeated in body text beside it */
+.who b { display: block; font: 600 var(--ds-font-size-17)/1.3 var(--ds-font-family-text); }
+.who span { display: block; margin-top: 2px; font: 400 var(--ds-font-size-15)/1.33 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
 
-.live { margin-top: var(--ds-space-16); padding-left: var(--ds-space-12); border-left: var(--ds-border-width-2) solid var(--apricot); }
-.live small { display: flex; align-items: center; gap: var(--ds-space-6); font: var(--cap); letter-spacing: .08em; text-transform: uppercase; color: var(--ds-color-text-secondary); }
-.live small i { width: 6px; height: 6px; border-radius: 50%; background: var(--apricot); box-shadow: 0 0 0 3px color-mix(in oklab, var(--apricot) 30%, transparent); }
-.live p { margin-top: var(--ds-space-6); font: 400 var(--ds-font-size-23)/1.25 var(--serif); font-variation-settings: "opsz" 24; color: var(--ds-color-text-secondary); }
-.live p mark { background: none; color: var(--ds-color-text-primary); }
-.live p .now { color: var(--ds-color-text-on-action); background: var(--apricot); box-decoration-break: clone; -webkit-box-decoration-break: clone; padding: 0 3px; }
+h1 { margin-top: var(--ds-space-20); font: 300 var(--ds-font-size-54)/1 var(--serif); font-variation-settings: "opsz" 72; letter-spacing: -.025em; text-wrap: balance; }
 
-/* scrubber with chapter segments */
-.scrub { margin-top: var(--ds-space-16); }
-.chap-now { display: flex; justify-content: space-between; align-items: baseline; font: var(--ds-text-label-md); color: var(--ds-color-text-secondary); }
+/* the line being spoken: the fill box carries "now" */
+.tr { margin-top: var(--ds-space-12); }
+.tr small { display: block; font: 400 var(--ds-font-size-15)/1.33 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
+.tr p { margin-top: var(--ds-space-6); font: 400 var(--ds-font-size-22)/1.27 var(--serif); font-variation-settings: "opsz" 24; color: var(--ds-color-text-secondary); }
+.tr p mark { background: none; color: var(--ds-color-text-primary); }
+.tr p .now { color: var(--ink-on); background: var(--ice); box-decoration-break: clone; -webkit-box-decoration-break: clone; padding: 0 3px; }
+
+/* scrubber in chapter segments: all played time in one fill */
+.scrub { margin-top: var(--ds-space-20); }
+.chap-now { font: 400 var(--ds-font-size-15)/1.33 var(--ds-font-family-text); color: var(--ds-color-text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .chap-now b { font-weight: 600; color: var(--ds-color-text-primary); }
 .track { position: relative; margin-top: var(--ds-space-8); height: 24px; display: flex; gap: var(--ds-space-4); align-items: center; }
-.seg { height: 3px; background: var(--ds-color-neutral-dark-7); position: relative; }
-.seg.done { background: var(--ds-color-neutral-dark-11); }
-.seg .fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--apricot); }
-.knob { position: absolute; top: 4px; width: 3px; height: 16px; background: var(--ds-color-text-primary); }
-.times { display: flex; justify-content: space-between; font: 500 var(--ds-font-size-13)/1 var(--ds-font-family-text); color: var(--ds-color-text-secondary); font-variant-numeric: tabular-nums; }
+.seg { height: 4px; background: var(--ds-color-neutral-dark-7); position: relative; }
+.seg.done { background: var(--ice); }
+.seg .fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--ice); }
+.knob { position: absolute; top: 3px; width: 4px; height: 18px; margin-left: -2px; background: var(--ds-color-text-primary); }
+.times { margin-top: 2px; display: flex; justify-content: space-between; font: 500 var(--ds-font-size-13)/1 var(--ds-font-family-text); color: var(--ds-color-text-secondary); font-variant-numeric: tabular-nums; }
 
-/* transport */
-.transport { margin-top: var(--ds-space-8); display: flex; align-items: center; justify-content: space-between; }
-.speed { width: 52px; height: var(--ds-size-target-min); font: 600 var(--ds-font-size-13)/1 var(--ds-font-family-text); font-variant-numeric: tabular-nums; color: var(--ds-color-text-primary); box-shadow: inset 0 0 0 1px var(--ds-color-border-default); }
+/* transport: five 44 pt-or-larger controls, play centred on the screen */
+.transport { margin-top: var(--ds-space-16); display: grid; grid-template-columns: 52px 1fr 68px 1fr 52px; align-items: center; justify-items: center; }
+.transport .sleep { justify-self: end; width: 44px; justify-items: end; padding-right: 0; }
+.transport .sleep svg { width: 26px; height: 26px; }
+.speed { justify-self: start; width: 44px; text-align: left; height: 44px; font: 600 var(--ds-font-size-15)/1 var(--ds-font-family-text); font-variant-numeric: tabular-nums; color: var(--ds-color-text-primary); }
 .skip { width: 56px; height: 56px; display: grid; place-items: center; position: relative; color: var(--ds-color-text-primary); }
-.skip svg { width: 34px; height: 34px; stroke-width: 1.5; }
+.skip svg { width: 34px; height: 34px; stroke-width: 1.6; }
 .skip span { position: absolute; font: 600 var(--ds-font-size-13)/1 var(--ds-font-family-text); font-variant-numeric: tabular-nums; top: 23px; }
-.play { width: 68px; height: 68px; background: var(--apricot); color: var(--ds-color-text-on-action); display: grid; place-items: center; }
-.play svg { width: 28px; height: 28px; fill: currentColor; stroke: none; }
+.play { width: 68px; height: 68px; background: var(--ds-color-text-primary); color: var(--bg); display: grid; place-items: center; }
+.play svg { width: 26px; height: 26px; fill: currentColor; stroke: none; }
 
 /* chapters, set like a table of contents */
-.toc { margin-top: var(--ds-space-12); border-top: 1px solid var(--hair); }
-.toc-h { display: flex; justify-content: space-between; align-items: center; height: 40px; }
-.toc-h h2 { font: 400 var(--ds-font-size-23)/1 var(--serif); font-variation-settings: "opsz" 24; }
-.toc-h a { font: var(--cap); letter-spacing: .08em; text-transform: uppercase; color: var(--ds-color-text-secondary); text-decoration: none; min-height: 24px; display: inline-flex; align-items: center; }
-.row { display: flex; align-items: baseline; gap: var(--ds-space-12); height: var(--ds-size-target-min); padding-top: var(--ds-space-12); color: var(--ds-color-text-secondary); }
+.toc { margin-top: var(--ds-space-20); border-top: 1px solid var(--hair); }
+.toc-h { display: flex; justify-content: space-between; align-items: flex-end; height: 52px; padding-bottom: var(--ds-space-12); border-bottom: 1px solid var(--hair); } /* sticky header with the list scrolled under it */
+.toc-h h2 { font: 400 var(--ds-font-size-22)/1 var(--serif); font-variation-settings: "opsz" 24; }
+.toc-h a { font: 500 var(--ds-font-size-15)/1.33 var(--ds-font-family-text); color: var(--ds-color-text-secondary); text-decoration: none; min-height: 44px; display: inline-flex; align-items: flex-end; padding-bottom: 1px; margin-bottom: -12px; padding-bottom: 13px; }
+.row { display: flex; align-items: baseline; gap: var(--ds-space-12); height: 44px; padding-top: 14px; color: var(--ds-color-text-primary); }
 .row .n { font: 500 var(--ds-font-size-13)/1 var(--ds-font-family-text); font-variant-numeric: tabular-nums; width: 20px; }
-.row .t { font: 500 var(--ds-font-size-17)/1.1 var(--ds-font-family-text); white-space: nowrap; }
-.row .lead { flex: 1; border-bottom: 1px dotted var(--ds-color-neutral-dark-8); transform: translateY(-3px); }
-.row .tm { font: 500 var(--ds-font-size-13)/1 var(--ds-font-family-text); font-variant-numeric: tabular-nums; }
-.row.on { color: var(--ds-color-text-primary); }
-.row.on .n, .row.on .tm { color: var(--apricot-ink); }
+.row .t { font: 400 var(--ds-font-size-17)/1.2 var(--ds-font-family-text); white-space: nowrap; }
+.row .lead { flex: 1; border-bottom: 1px dotted var(--ds-color-neutral-dark-8); }
+.row .tm { width: 44px; flex: none; text-align: right; font: 500 var(--ds-font-size-15)/1 var(--ds-font-family-text); font-variant-numeric: tabular-nums; }
+.row.played .t, .row.played .n, .row.played .tm { color: var(--ds-color-text-tertiary); }
+.row.on .n, .row.on .tm { color: var(--ds-color-text-accent); }
 .row.on .t { font-weight: 600; }
-.row.on .lead { border-color: var(--apricot); }
 </style>
 </head>
 <body>
-<div class="art" aria-hidden="true"><canvas id="cover" width="390" height="430"></canvas></div>
-
 <div class="status" aria-hidden="true">
   <time>9:41</time>
   <div class="sys">
@@ -109,30 +108,33 @@ h1 { margin-top: var(--ds-space-12); font: 300 var(--ds-font-size-54)/1 var(--se
 <main>
   <div class="top">
     <button class="ib" aria-label="Close player"><svg class="i" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
-    <div class="from"><small>Playing from</small><b>Night Cartography</b></div>
-    <button class="ib" aria-label="More"><svg class="i" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><circle cx="19" cy="12" r="1.2" fill="currentColor"/></svg></button>
+    <button class="ib" aria-label="More"><svg class="i" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/><circle cx="19" cy="12" r="1.3" fill="currentColor"/></svg></button>
   </div>
 
-  <p class="meta">Episode 41 <span class="dot"></span> 52 min <span class="dot"></span> 2 days ago</p>
+  <div class="show">
+    <div class="cover"><img src="https://images.unsplash.com/photo-1567475360083-31f83e5e9b0e?rect=946,0,2693,2693&w=396&h=396&fit=crop&q=80&auto=format" alt="Night Cartography cover: a river bending through grassland, seen from above"><b>Night<br>Cartography</b></div>
+    <div class="who"><b>Night Cartography</b><span class="num">Episode 41 · 52 min · 12 Oct</span></div>
+  </div>
+
   <h1>Maps of places that moved</h1>
 
-  <div class="live" aria-label="Transcript">
-    <small><i></i>Transcript · Ines Valcourt</small>
+  <div class="tr" aria-label="Transcript">
+    <small>Transcript · Yusra Quennell</small>
     <p>“The river didn’t flood. <mark>It simply decided <span class="now">to be somewhere</span> else.</mark>”</p>
   </div>
 
   <div class="scrub">
-    <div class="chap-now"><span>Chapter 3 of 6</span><b>The river that changed its mind</b></div>
-    <div class="track" role="slider" aria-label="Position" aria-valuemin="0" aria-valuemax="3120" aria-valuenow="1122" aria-valuetext="18 minutes 42 seconds">
+    <p class="chap-now">Chapter 3 of 6 · <b>The river that changed its mind</b></p>
+    <div class="track" role="slider" aria-label="Position" aria-valuemin="0" aria-valuemax="3120" aria-valuenow="1025" aria-valuetext="17 minutes 5 seconds">
       <span class="seg done" style="flex: 4.1"></span>
       <span class="seg done" style="flex: 8.6"></span>
-      <span class="seg" style="flex: 10.2"><span class="fill" style="width: 54%"></span></span>
+      <span class="seg" style="flex: 10.2"><span class="fill" style="width: 43%"></span></span>
       <span class="seg" style="flex: 9.4"></span>
       <span class="seg" style="flex: 12.1"></span>
       <span class="seg" style="flex: 7.6"></span>
-      <span class="knob" style="left: calc(12.7 / 52 * 100% + 0.54 * 10.2 / 52 * 100% + 6px)"></span>
+      <span class="knob" style="left: calc((100% - 20px) * (12.7 + 0.43 * 10.2) / 52 + 8px)"></span>
     </div>
-    <div class="times"><span>18:42</span><span>−33:18</span></div>
+    <div class="times"><span>17:05</span><span>−34:55</span></div>
   </div>
 
   <div class="transport">
@@ -140,12 +142,12 @@ h1 { margin-top: var(--ds-space-12); font: 300 var(--ds-font-size-54)/1 var(--se
     <button class="skip" aria-label="Back 15 seconds"><svg class="i" viewBox="0 0 34 34"><path d="M9.5 9.2A11 11 0 1 1 6 17"/><path d="M9.5 3.5v6h6"/></svg><span aria-hidden="true">15</span></button>
     <button class="play" aria-label="Pause"><svg viewBox="0 0 28 28"><rect x="6" y="4" width="5" height="20"/><rect x="17" y="4" width="5" height="20"/></svg></button>
     <button class="skip" aria-label="Forward 30 seconds"><svg class="i" viewBox="0 0 34 34"><path d="M24.5 9.2A11 11 0 1 0 28 17"/><path d="M24.5 3.5v6h-6"/></svg><span aria-hidden="true">30</span></button>
-    <button class="ib" aria-label="Sleep timer"><svg class="i" viewBox="0 0 24 24"><path d="M19.5 14.5A8 8 0 0 1 9.5 4.5a8 8 0 1 0 10 10Z"/></svg></button>
+    <button class="ib sleep" aria-label="Sleep timer"><svg class="i" viewBox="0 0 24 24"><path d="M20.5 14.8A8.8 8.8 0 0 1 9.2 3.5a8.8 8.8 0 1 0 11.3 11.3Z"/></svg></button>
   </div>
 
   <section class="toc" aria-label="Chapters">
     <div class="toc-h"><h2>Chapters</h2><a href="#">Full transcript</a></div>
-    <div class="row"><span class="n">02</span><span class="t">A coastline in pencil</span><span class="lead"></span><span class="tm">04:06</span></div>
+    <div class="row played"><span class="n">02</span><span class="t">A coastline in pencil</span><span class="lead"></span><span class="tm">4:06</span></div>
     <div class="row on" aria-current="true"><span class="n">03</span><span class="t">The river that changed its mind</span><span class="lead"></span><span class="tm">12:42</span></div>
     <div class="row"><span class="n">04</span><span class="t">Islands that drift north</span><span class="lead"></span><span class="tm">22:54</span></div>
     <div class="row"><span class="n">05</span><span class="t">Surveyors at night</span><span class="lead"></span><span class="tm">32:18</span></div>
@@ -153,71 +155,5 @@ h1 { margin-top: var(--ds-space-12); font: 300 var(--ds-font-size-54)/1 var(--se
 </main>
 <div class="fade" aria-hidden="true"></div>
 <div class="home-ind" aria-hidden="true"></div>
-
-<script>
-/* Generative duotone cover: a contour map (posterized fractal noise) mapped from plum ink to apricot,
-   with hairline contours, grain, a moon and a dotted river route. Colors come from the token CSS. */
-(() => {
-  const cv = document.getElementById('cover');
-  const dpr = Math.min(3, window.devicePixelRatio || 1);
-  const W = 390, H = 430;
-  cv.width = W * dpr; cv.height = H * dpr;
-  const ctx = cv.getContext('2d');
-  const css = getComputedStyle(document.documentElement);
-  const hex = (v) => { v = css.getPropertyValue(v).trim(); const n = parseInt(v.slice(1), 16); return [n >> 16 & 255, n >> 8 & 255, n & 255]; };
-  const ink = hex('--ds-color-neutral-dark-1'), plum = hex('--ds-color-accent2-dark-5'), plum2 = hex('--ds-color-accent2-dark-9');
-  const apri = hex('--ds-color-brand-seed'), bone = hex('--ds-color-neutral-dark-12');
-
-  // seeded value noise
-  let s = 41; const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
-  const G = 256, grid = new Float32Array(G * G); for (let k = 0; k < G * G; k++) grid[k] = rnd();
-  const sm = (t) => t * t * (3 - 2 * t);
-  const vn = (x, y) => { const xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi;
-    const a = grid[(yi & 255) * G + (xi & 255)], b = grid[(yi & 255) * G + ((xi + 1) & 255)], c = grid[((yi + 1) & 255) * G + (xi & 255)], d = grid[((yi + 1) & 255) * G + ((xi + 1) & 255)];
-    const u = sm(xf), v = sm(yf); return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v; };
-  const fbm = (x, y) => { let f = 0, amp = .55, fr = 1; for (let o = 0; o < 5; o++) { f += amp * vn(x * fr, y * fr); amp *= .5; fr *= 2.03; } return f; };
-
-  const w = cv.width, h = cv.height, img = ctx.createImageData(w, h), px = img.data;
-  const L = 9, lev = new Uint8Array(w * h);
-  const ramp = (t) => { // ink -> plum -> plum2 -> apricot -> bone
-    const ice = hex('--ds-color-accent-dark-11');
-    const stops = [ink, plum, plum2, apri, ice], p = [0, .42, .7, .9, 1];
-    let i = 0; while (i < p.length - 2 && t > p[i + 1]) i++;
-    const u = (t - p[i]) / (p[i + 1] - p[i]); return [0, 1, 2].map((k) => stops[i][k] + (stops[i + 1][k] - stops[i][k]) * u); };
-  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
-    const X = x / dpr, Y = y / dpr;
-    // warped field: a slow ridge running diagonally, broken up by noise
-    const q = fbm(X * .006 + 3.1, Y * .006 + 1.7);
-    let v = fbm(X * .0075 + q * 1.8, Y * .0075 - q * 1.2) * 1.05 + (1 - Math.abs((X * .7 + Y) / 430 - .82)) * .22 - .12;
-    const topDark = Math.max(0, Math.min(1, (150 - Y) / 120)); v -= sm(topDark) * .34; // keep the top quiet under the header
-    v = Math.max(0, Math.min(.999, v));
-    lev[y * w + x] = Math.floor(v * L);
-  }
-  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
-    const k = y * w + x, l = lev[k];
-    let c = ramp(Math.pow(l / (L - 1), 1.25));
-    const edge = (x + 2 < w && lev[k + 2] !== l) || (y + 2 < h && lev[k + 2 * w] !== l);
-    if (edge) c = c.map((ch, j) => ch + (bone[j] - ch) * .42);
-    const g = (rnd() - .5) * 18;
-    px[k * 4] = c[0] + g; px[k * 4 + 1] = c[1] + g; px[k * 4 + 2] = c[2] + g; px[k * 4 + 3] = 255;
-  }
-  ctx.putImageData(img, 0, 0);
-  ctx.scale(dpr, dpr);
-  // moon
-  ctx.globalCompositeOperation = 'screen';
-  ctx.fillStyle = `rgb(${bone.join(',')})`;
-  ctx.globalAlpha = .92; ctx.beginPath(); ctx.arc(292, 126, 34, 0, Math.PI * 2); ctx.fill();
-  ctx.globalAlpha = 1; const glow = ctx.createRadialGradient(292, 126, 30, 292, 126, 96); glow.addColorStop(0, `rgba(${apri.join(',')}, .45)`); glow.addColorStop(1, `rgba(${apri.join(',')}, 0)`); ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(292, 126, 96, 0, Math.PI * 2); ctx.fill();
-  ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1;
-  // river route
-  ctx.strokeStyle = `rgb(${bone.join(',')})`; ctx.lineWidth = 1.4; ctx.setLineDash([2, 5]); ctx.lineCap = 'round';
-  ctx.beginPath(); ctx.moveTo(-10, 300); ctx.bezierCurveTo(70, 250, 110, 330, 170, 268); ctx.bezierCurveTo(220, 214, 250, 250, 300, 196); ctx.bezierCurveTo(330, 164, 370, 190, 400, 160); ctx.stroke();
-  ctx.setLineDash([]);
-  [[170, 268], [300, 196]].forEach(([x, y], i) => { ctx.beginPath(); ctx.arc(x, y, i ? 4 : 3, 0, Math.PI * 2); ctx.fillStyle = i ? `rgb(${apri.join(',')})` : `rgb(${bone.join(',')})`; ctx.fill(); ctx.lineWidth = 1.5; ctx.strokeStyle = `rgb(${ink.join(',')})`; ctx.stroke(); });
-  // tiny cartographic marks (decorative)
-  ctx.fillStyle = `rgba(${bone.join(',')}, .8)`; ctx.font = `600 9px ${css.getPropertyValue('--ds-font-family-text')}`;
-  ctx.fillText('46°12′N', 308, 190);
-})();
-</script>
 </body>
 </html>

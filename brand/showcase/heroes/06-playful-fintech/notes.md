@@ -77,3 +77,5 @@ What helped: the ramps for purple and pink were good straight away, the plum ink
 
   The minimum, 12, is above the 11pt/sp floors.
 - **Color:** a light cream ground with plum ink at 11.4:1. No muddy mid-tones.
+
+Replaced on 2026-10-14 by heroes/11-spend-platform after the Mobbin audit (score 2).

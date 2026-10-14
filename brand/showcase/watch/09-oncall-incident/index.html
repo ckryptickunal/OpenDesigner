@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=205, initial-scale=1">
+<title>Pagewright: paged</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;500;600;700&display=block" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  :root { --display-w: 205px; --display-h: 251px; --display-r: 48px; --sev: var(--ds-color-brand-seed); }  /* hardware shape; sev = the one red, severity only */
+  /* Type roles: watchOS text styles at xLarge (49 mm default). Body/Headline 17 is an engine token; Footnote 2 13,
+     Caption 2 15 and Title 2 30 are HIG values (the engine scale steps 14, 17, 20, 24, 29). Four sizes, one family. */
+  :root { --t-foot: 13px; --t-caption: 15px; --t-body: var(--ds-font-size-17); --t-title2: 30px; }
+  html, body { margin: 0; background: var(--ds-color-black); }
+  .display {
+    position: relative; width: var(--display-w); height: var(--display-h); overflow: hidden; border-radius: var(--display-r);
+    background: var(--ds-color-surface-base); color: var(--ds-color-text-primary); font-family: var(--ds-font-family-text);
+    font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased;
+  }
+  .status { position: absolute; top: var(--ds-space-12); left: 18px; right: 22px; display: flex; justify-content: space-between; align-items: center; }
+  .sev { font: 700 var(--t-caption)/1 var(--ds-font-family-text); letter-spacing: .03em; color: var(--ds-color-black); background: var(--sev); padding: var(--ds-space-2) var(--ds-space-6); border-radius: var(--ds-radius-4); }
+  .clock { font: 500 var(--t-body)/1 var(--ds-font-family-text); color: var(--ds-color-text-primary); }
+
+  .body { position: absolute; left: 18px; right: 14px; top: 36px; }
+  .svc { margin: 0; font: 500 var(--t-title2)/1 var(--ds-font-family-text); letter-spacing: -0.01em; }
+  .what { margin: var(--ds-space-4) 0 0; font: 500 var(--t-caption)/1.27 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
+  .what b { font-weight: 600; color: var(--ds-color-text-primary); }
+  .what span { display: block; }
+  .who { margin-top: var(--ds-space-6); display: flex; align-items: center; gap: var(--ds-space-6); font: 500 var(--t-caption)/1 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
+  .faces { display: flex; }
+  .faces i {
+    font-style: normal; width: 22px; height: 22px; border-radius: var(--ds-radius-full); display: grid; place-items: center;
+    background: var(--ds-color-neutral-dark-6); color: var(--ds-color-text-primary); font: 600 var(--t-foot)/1 var(--ds-font-family-text);
+  }
+  .faces { gap: var(--ds-space-4); }
+
+  .actions { position: absolute; left: 9px; right: 9px; bottom: var(--ds-space-8); display: grid; gap: var(--ds-space-6); }
+  .actions button {
+    all: unset; box-sizing: border-box; height: var(--ds-size-target-touch); border-radius: var(--ds-radius-full);
+    display: grid; place-items: center; font: 600 var(--t-body)/1 var(--ds-font-family-text); cursor: pointer;
+    background: var(--ds-color-neutral-dark-6); color: var(--ds-color-text-primary);
+  }
+  .actions button.primary { background: var(--ds-color-text-primary); color: var(--ds-color-black); }
+  .actions button:focus-visible { outline: 2px solid var(--ds-color-border-focus); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<main class="display" aria-label="Pagewright: severity 1 incident on card-auth, declines at 31 percent, open 14 minutes; Noor and Bastian are on it">
+  <div class="status"><span class="sev">SEV 1</span><span class="clock">3:12</span></div>
+
+  <section class="body">
+    <h1 class="svc">card-auth</h1>
+    <p class="what"><span><b>Declines 31%</b>, usually 4%</span><span>Open 14 min · INC-2291</span></p>
+    <div class="who"><span class="faces" aria-hidden="true"><i>NA</i><i>BL</i></span><span>Noor, Bastian on it</span></div>
+  </section>
+
+  <div class="actions">
+    <button class="primary">Join incident</button>
+    <button>Escalate to tier 2</button>
+  </div>
+</main>
+</body>
+</html>

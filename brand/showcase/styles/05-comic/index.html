@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nightjar Engineering: The case of the three-second timeout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shantell+Sans:ital,wght,BNCE,INFM@0,300..800,-100..100,0..100&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  :root {
+    /* Two inks and paper. Red appears only where something is broken. */
+    --ink: var(--ds-color-black);
+    --paper: var(--ds-color-surface-base);
+    --red: var(--ds-color-accent-light-9);
+    --red-text: var(--ds-color-accent-light-11);
+    --rule: 4px;          /* panel border, from --ds-border-width-4 */
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--paper); }
+  body {
+    margin: 0; color: var(--ink); background: var(--paper);
+    font: var(--ds-text-body-md);
+    font-family: var(--ds-font-family-text);
+    font-variation-settings: "INFM" 0;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  a:focus-visible { outline: var(--ds-focus-ring-width, 2px) solid var(--ds-color-border-focus); outline-offset: 3px; }
+  .wrap { width: min(1312px, calc(100% - 2 * var(--ds-space-32))); margin: 0 auto; }
+  .mono { font-family: var(--ds-font-family-mono); font-variant-numeric: tabular-nums; }
+
+  /* blog chrome */
+  .top { display: flex; align-items: center; justify-content: space-between; height: 72px; border-bottom: 2px solid var(--ink); }
+  .brand { display: flex; align-items: baseline; gap: var(--ds-space-8); text-decoration: none; font-size: var(--ds-font-size-21); }
+  .brand b { font-weight: 800; font-variation-settings: "INFM" 70; }
+  .top nav { display: flex; gap: var(--ds-space-32); }
+  .top nav a { text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; }
+  .top nav a[aria-current] { font-weight: 700; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 6px; }
+
+  /* post header */
+  .head { display: grid; grid-template-columns: 1fr 392px; gap: var(--ds-space-64); padding: var(--ds-space-48) 0 var(--ds-space-40); align-items: end; }
+  .kicker { margin: 0 0 var(--ds-space-16); font-size: var(--ds-font-size-12); letter-spacing: .08em; text-transform: uppercase; }
+  .kicker .sev { background: var(--red); color: var(--ds-color-text-on-accent); padding: var(--ds-space-2) var(--ds-space-6); font-weight: 700; }
+  h1 { margin: 0; font-size: var(--ds-font-size-67); line-height: 1.02; font-weight: 700; letter-spacing: -0.015em; font-variation-settings: "INFM" 60; max-width: 20ch; }
+  .by { margin: var(--ds-space-20) 0 0; font-size: var(--ds-font-size-21); line-height: 1.4; max-width: 44ch; }
+  .facts { margin: 0; border-top: 2px solid var(--ink); }
+  .facts div { display: grid; grid-template-columns: 112px 1fr; gap: var(--ds-space-12); padding: var(--ds-space-8) 0; border-bottom: 1px solid var(--ink); }
+  .facts dt { font-size: var(--ds-font-size-12); text-transform: uppercase; letter-spacing: .08em; padding-top: var(--ds-space-4); }
+  .facts dd { margin: 0; font-size: var(--ds-font-size-16); }
+
+  /* the strip */
+  .strip { display: grid; gap: var(--ds-space-16); }
+  .row { display: grid; gap: var(--ds-space-16); height: 460px; } /* od-ignore: panel height is art */
+  .r1 { grid-template-columns: 560px 400px 320px; }
+  .r2 { grid-template-columns: 288px 520px 232px 224px; }
+  .panel { position: relative; border: var(--rule) solid var(--ink); overflow: hidden; background: var(--paper); }
+  .panel svg { display: block; width: 100%; height: 100%; }
+  svg .lt { font-family: var(--ds-font-family-text); font-variation-settings: "INFM" 100; text-transform: uppercase; font-weight: 600; letter-spacing: .01em; }
+  svg .mo { font-family: var(--ds-font-family-mono); font-variant-numeric: tabular-nums; }
+  svg .sfx { font-family: var(--ds-font-family-text); font-weight: 800; font-variation-settings: "INFM" 100, "BNCE" 60; paint-order: stroke fill; stroke-linejoin: round; }
+
+  /* after the strip */
+  .changed { display: grid; grid-template-columns: 312px 1fr 1fr 1fr; gap: var(--ds-space-32); padding: var(--ds-space-48) 0 var(--ds-space-32); border-bottom: 2px solid var(--ink); }
+  .changed h2 { margin: 0; font-size: var(--ds-font-size-38); line-height: 1.1; font-weight: 700; font-variation-settings: "INFM" 60; }
+  .changed h2 + p { margin: var(--ds-space-12) 0 0; }
+  .fix { border-top: var(--rule) solid var(--ink); padding-top: var(--ds-space-16); }
+  .fix .n { font-size: var(--ds-font-size-12); letter-spacing: .08em; text-transform: uppercase; }
+  .fix p { margin: var(--ds-space-8) 0 var(--ds-space-12); font-size: var(--ds-font-size-21); line-height: 1.33; font-weight: 400; }
+  .fix .meta { font-size: var(--ds-font-size-12); }
+  .foot { display: flex; justify-content: space-between; align-items: center; height: 72px; font-size: var(--ds-font-size-16); }
+  .foot a { min-height: 44px; display: inline-flex; align-items: center; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  /* narrower windows: rows keep their drawn proportions, so every panel in a row shares one height */
+  @media (max-width: 1375px) {
+    .head { grid-template-columns: 1fr; }
+    .row { height: auto; }
+    .r1 { grid-template-columns: 552fr 392fr 312fr; }
+    .r2 { grid-template-columns: 280fr 512fr 224fr 216fr; }
+    .panel svg { height: 100%; }
+    .changed { grid-template-columns: 1fr 1fr; }
+  }
+  /* below 1,280 px a row would shrink the 12 px labels in the art under 11 px: one panel per line, centred, at most 1.25x its drawing */
+  @media (max-width: 1279px) {
+    .r1, .r2 { grid-template-columns: 1fr; justify-items: center; }
+    .panel { width: 100%; max-width: calc(var(--w) * 1.25px); }
+    .panel svg { height: auto; }
+  }
+  /* phones: the three widest panels shrink most, so their text versions show under them */
+  @media (max-width: 720px) {
+    .changed { grid-template-columns: 1fr; }
+    h1 { font-size: var(--ds-font-size-38); }
+    .top { height: auto; flex-wrap: wrap; padding: var(--ds-space-12) 0; }
+    .top nav { gap: var(--ds-space-8) var(--ds-space-16); flex-wrap: wrap; }
+    .top nav a { white-space: nowrap; }
+    .r1 .panel:nth-child(1) figcaption.sr, .r1 .panel:nth-child(2) figcaption.sr, .r2 .panel:nth-child(2) figcaption.sr { position: static; width: auto; height: auto; overflow: visible; clip-path: none; white-space: normal; padding: var(--ds-space-12); border-top: var(--rule) solid var(--ink); font-size: var(--ds-font-size-16); }
+    .foot { flex-direction: column; align-items: flex-start; height: auto; padding: var(--ds-space-16) 0; }
+  }
+</style>
+</head>
+<body>
+<header class="wrap top">
+  <a class="brand" href="#"><b>Nightjar</b><span>Engineering</span></a>
+  <nav aria-label="Blog">
+    <a href="#" aria-current="page">Postmortems</a>
+    <a href="#">On-call notes</a>
+    <a href="#">Runbooks</a>
+    <a href="#">Status</a>
+  </nav>
+</header>
+
+<main class="wrap">
+  <section class="head">
+    <div>
+      <p class="kicker mono"><span class="sev">SEV-2</span>&nbsp; Postmortem · INC-4471 · Tuesday&nbsp;6&nbsp;October&nbsp;2026</p>
+      <h1>The case of the three&#8209;second timeout</h1>
+      <p class="by">A rollback that fixed nothing, a config key nobody read, and the night 1 checkout call turned into 16. Written by Ilse Brandt, on call, and Kwame Mensah, incident lead.</p>
+    </div>
+    <dl class="facts">
+      <div><dt class="mono">Window</dt><dd class="mono">02:06–02:47 UTC · 41&nbsp;min</dd></div>
+      <div><dt class="mono">Impact</dt><dd>4,180 of 33,712 card checkouts failed (12.4%)</dd></div>
+      <div><dt class="mono">Cause</dt><dd>Renamed config key: the ledger timeout fell from 30 s to a 3 s default, and the 02:00 settlement batch pushed latency past it</dd></div>
+      <div><dt class="mono">Status</dt><dd>Resolved · 3 of 3 actions shipped</dd></div>
+    </dl>
+  </section>
+
+  <section class="strip" aria-labelledby="strip-label">
+    <h2 id="strip-label" class="sr">The incident as a seven-panel comic. A text version follows each panel.</h2>
+
+    <div class="row r1">
+      <!-- P1 · the page -->
+      <figure class="panel" style="margin:0;--w:552">
+        <svg id="p1" viewBox="0 0 552 452" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <defs><clipPath id="c1"><rect width="552" height="452"/></clipPath></defs>
+          <g clip-path="url(#c1)">
+            <rect width="552" height="452" fill="var(--ink)"/>
+            <g id="p1-blinds"></g>
+            <!-- nightstand -->
+            <path d="M0 318 L552 286 L552 452 L0 452 Z" fill="var(--ink)"/>
+            <g id="p1-glow"></g>
+            <path d="M0 318 L552 286" stroke="var(--paper)" stroke-width="3"/>
+            <!-- water glass -->
+            <g transform="translate(78 236)" fill="none" stroke="var(--paper)" stroke-width="3" stroke-linejoin="round">
+              <path d="M0 0 L60 0 L52 104 L8 104 Z" fill="var(--ink)"/>
+              <path d="M4 34 L56 34"/>
+              <path d="M14 46 L12 92" stroke-width="2"/>
+            </g>
+            <!-- phone -->
+            <g transform="translate(300 368) rotate(-7)">
+              <rect x="-104" y="-54" width="208" height="108" rx="16" fill="var(--ink)" stroke="var(--paper)" stroke-width="3"/>
+              <rect x="-94" y="-44" width="188" height="88" rx="8" fill="var(--paper)"/>
+              <rect x="-94" y="-44" width="188" height="22" fill="var(--red)"/>
+              <text x="-86" y="-28" class="mo" font-size="12" font-weight="700" fill="var(--paper)">NIGHTJAR · SEV-2</text>
+              <text x="-86" y="-2" class="mo" font-size="16" font-weight="700" fill="var(--ink)">ledger-api 5xx 38%</text>
+              <text x="-86" y="18" class="mo" font-size="12" fill="var(--ink)">checkout · eu-west-1</text>
+              <text x="-86" y="35" class="mo" font-size="12" fill="var(--ink)">02:13 · tap to ack</text>
+              <!-- buzz marks -->
+              <g fill="none" stroke="var(--paper)" stroke-width="3" stroke-linecap="round">
+                <path d="M-122 -30 q-10 30 0 60"/><path d="M-136 -40 q-14 40 0 80"/>
+                <path d="M122 -30 q10 30 0 60"/><path d="M136 -40 q14 40 0 80"/>
+              </g>
+            </g>
+            <text class="sfx" x="318" y="240" font-size="67" fill="var(--red)" stroke="var(--paper)" stroke-width="7" transform="rotate(-9 318 240)">BZZZT</text>
+            <text class="sfx" x="388" y="170" font-size="38" fill="var(--red)" stroke="var(--paper)" stroke-width="5" transform="rotate(-14 388 170)">BZZZT</text>
+            <!-- caption -->
+            <g transform="translate(14 14)">
+              <rect width="278" height="84" fill="var(--paper)" stroke="var(--ink)" stroke-width="3"/>
+              <text class="lt" x="14" y="26" font-size="16" fill="var(--ink)"><tspan x="14">Tuesday, 02:13.</tspan><tspan x="14" dy="22">38% of calls to the ledger</tspan><tspan x="14" dy="22">are failing. Checkout too.</tspan></text>
+            </g>
+          </g>
+        </svg>
+        <figcaption class="sr">Panel 1. Tuesday, 02:13. A phone buzzes on a nightstand in the dark: Nightjar SEV-2, ledger-api 5xx 38%, checkout in eu-west-1. Caption: 38% of calls to the ledger are failing, and checkout with them.</figcaption>
+      </figure>
+
+      <!-- P2 · first suspect -->
+      <figure class="panel" style="margin:0;--w:392">
+        <svg id="p2" viewBox="0 0 392 452" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <defs><clipPath id="c2"><rect width="392" height="452"/></clipPath></defs>
+          <g clip-path="url(#c2)">
+            <rect width="392" height="452" fill="var(--ink)"/>
+            <!-- laptop screen -->
+            <rect x="34" y="116" width="336" height="236" fill="var(--paper)"/>
+            <g id="p2-area"></g>
+            <text x="354" y="140" text-anchor="end" class="mo" font-size="12" font-weight="700" fill="var(--ink)">ledger-api · error rate</text>
+            <g class="mo" font-size="12" fill="var(--ink)">
+              <text x="354" y="196" text-anchor="end">40%</text>
+              <text x="354" y="316" text-anchor="end">0%</text>
+              <text x="50" y="340">01:30</text><text x="210" y="340">02:00 batch</text>
+            </g>
+            <path d="M50 200 H322 M50 320 H322" stroke="var(--ink)" stroke-width="1" stroke-dasharray="2 4"/>
+            <!-- settlement batch at 02:00 (x = 50 + 30 min * 5.55) -->
+            <path d="M216.5 226 V320" stroke="var(--ink)" stroke-width="2" stroke-dasharray="5 4"/>
+            <!-- deploy marker -->
+            <path d="M111 178 V320" stroke="var(--ink)" stroke-width="2" stroke-dasharray="5 4"/>
+            <rect x="111" y="176" width="86" height="22" fill="var(--ink)"/>
+            <text x="117" y="192" class="mo" font-size="12" font-weight="700" fill="var(--paper)">v4.18 01:41</text>
+            <path id="p2-line" d="" fill="none" stroke="var(--red)" stroke-width="4" stroke-linejoin="round"/>
+            <!-- laptop base -->
+            <path d="M18 352 H386 L398 372 H6 Z" fill="var(--ink)" stroke="var(--paper)" stroke-width="3" stroke-linejoin="round"/>
+            <!-- hooded head from behind, rim-lit by the screen -->
+            <!-- shoulders in a hoodie -->
+            <path d="M-40 452 C-30 402 10 380 52 372 L150 372 C196 380 236 404 248 452 Z" fill="var(--ink)" stroke="var(--paper)" stroke-width="3" stroke-linejoin="round"/>
+            <path d="M58 372 C70 400 132 400 146 372" fill="none" stroke="var(--paper)" stroke-width="2"/>
+            <!-- head from behind: hair tufts against the screen, rim light thickest where the screen is nearest -->
+            <path d="M60 374 C50 352 44 326 46 304 C47 288 51 274 58 264 L55 252 L67 257 C72 248 79 243 87 240 L89 229 L98 237 C104 235 112 235 119 237 L127 229 L129 241 C138 245 145 252 149 261 L161 257 L156 272 C160 288 160 310 156 330 C152 350 146 364 140 374 Z" fill="var(--ink)" stroke="var(--paper)" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M129 241 C139 245 147 254 151 266 C156 282 158 300 156 320 L150 318 C151 300 149 284 145 272 C141 261 135 253 127 248 Z" fill="var(--paper)"/>
+            <path d="M89 229 L98 237 C104 235 112 235 119 237 L127 229 L126 236 C117 240 104 240 92 240 Z" fill="var(--paper)"/>
+            <!-- hair from the crown whorl, rim-lit: short clumps, longest on the lit side -->
+            <g fill="none" stroke="var(--paper)" stroke-linecap="round">
+              <path d="M112 268 C106 282 98 296 92 314" stroke-width="1.5"/>
+              <path d="M112 268 C118 284 124 300 128 320" stroke-width="2"/>
+              <path d="M112 268 C102 274 88 286 78 302" stroke-width="1.2"/>
+              <path d="M112 268 C126 274 138 288 144 304" stroke-width="2.5"/>
+              <path d="M112 268 C110 284 110 298 112 312" stroke-width="1.2"/>
+              <path d="M104 264 C108 262 114 262 118 266 C114 270 108 270 106 268" stroke-width="1.5"/>
+            </g>
+            <!-- headphones: a band with thickness and a slider, cups with cushions -->
+            <path d="M40 316 C34 262 64 226 104 226 C146 226 174 262 166 316 L159 314 C165 268 140 234 104 234 C70 234 42 266 47 316 Z" fill="var(--ink)" stroke="var(--paper)" stroke-width="2.5" stroke-linejoin="round"/>
+            <path d="M152 270 l7 -3 M49 268 l-7 -3" stroke="var(--paper)" stroke-width="2"/>
+            <rect x="148" y="298" width="24" height="48" rx="10" fill="var(--ink)" stroke="var(--paper)" stroke-width="3"/>
+            <path d="M151 306 C147 318 147 328 151 338" fill="none" stroke="var(--paper)" stroke-width="1.5"/>
+            <rect x="34" y="300" width="18" height="44" rx="8" fill="var(--ink)" stroke="var(--paper)" stroke-width="2"/>
+            <!-- the hood, bunched at the nape -->
+            <path d="M66 392 C82 402 120 402 136 392" fill="none" stroke="var(--paper)" stroke-width="1.5"/>
+            <!-- caption -->
+            <g transform="translate(302 14)"><rect width="76" height="34" fill="var(--paper)" stroke="var(--ink)" stroke-width="3"/><text class="lt" x="12" y="23" font-size="16" fill="var(--ink)">02:19</text></g>
+            <!-- balloon -->
+            <g id="p2-b"></g>
+          </g>
+        </svg>
+        <figcaption class="sr">Panel 2. 02:19. Ilse, seen from behind in a hoodie and headphones, reads the ledger error-rate chart: flat near zero, then a red line climbing from 02:06 to 38% by 02:13 and holding. Markers show a deploy, v4.18, at 01:41 and the nightly settlement batch at 02:00. Ilse: “A deploy at 01:41. That's suspect number one.”</figcaption>
+      </figure>
+
+      <!-- P3 · rollback -->
+      <figure class="panel" style="margin:0;--w:312">
+        <svg id="p3" viewBox="0 0 312 452" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <defs><clipPath id="c3"><rect width="312" height="452"/></clipPath></defs>
+          <g clip-path="url(#c3)">
+            <rect width="312" height="452" fill="var(--ink)"/>
+            <g class="mo" font-size="12" fill="var(--paper)">
+              <text x="18" y="136">$ nj deploy rollback \</text>
+              <text x="18" y="158">  payments-gw --to v4.17</text>
+              <text x="18" y="188">› draining 48 pods</text>
+              <text x="18" y="210">› v4.17 healthy 48/48</text>
+              <text x="18" y="240" font-weight="700">✓ rolled back in 4m 52s</text>
+            </g>
+            <!-- desk light + keys -->
+            <path d="M0 300 H312 V452 H0 Z" fill="var(--paper)"/>
+            <g id="p3-desk"></g>
+            <!-- keys stand 7px proud; Return is pushed flush -->
+            <g fill="var(--ink)">
+              <rect x="-20" y="325" width="76" height="56" rx="8"/><rect x="64" y="325" width="76" height="56" rx="8"/><rect x="-58" y="391" width="76" height="56" rx="8"/><rect x="24" y="391" width="76" height="56" rx="8"/>
+            </g>
+            <g fill="var(--paper)" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round">
+              <rect x="-20" y="318" width="76" height="56" rx="8"/>
+              <rect x="64" y="318" width="76" height="56" rx="8"/>
+              <rect x="-58" y="384" width="76" height="56" rx="8"/>
+              <rect x="24" y="384" width="76" height="56" rx="8"/>
+              <path d="M150 325 H300 a8 8 0 0 1 8 8 V445 a8 8 0 0 1 -8 8 H120 a8 8 0 0 1 -8 -8 V399 a8 8 0 0 1 8 -8 H142 V333 a8 8 0 0 1 8 -8 Z" stroke-width="4"/>
+            </g>
+            <text x="290" y="432" text-anchor="end" class="lt" font-size="16" fill="var(--ink)">return ⏎</text>
+            <g class="mo" font-size="16" fill="var(--ink)"><text x="2" y="345">[</text><text x="78" y="345">]</text><text x="32" y="411">'</text></g>
+            <!-- impact on the Return key -->
+            <g stroke="var(--ink)" stroke-width="3" stroke-linecap="round"><path d="M226 306 l-10 -14"/><path d="M250 302 v-18"/><path d="M274 306 l10 -14"/><path d="M300 312 l14 -8"/></g>
+            <text class="sfx" x="150" y="290" font-size="38" fill="var(--paper)" stroke="var(--ink)" stroke-width="6" transform="rotate(-6 150 290)">TAK!</text>
+            <g transform="translate(14 14)"><rect width="76" height="34" fill="var(--paper)" stroke="var(--ink)" stroke-width="3"/><text class="lt" x="12" y="23" font-size="16" fill="var(--ink)">02:24</text></g>
+            <g id="p3-b"></g>
+          </g>
+        </svg>
+        <figcaption class="sr">Panel 3. 02:24. A terminal: nj deploy rollback payments-gw to v4.17; draining 48 pods; v4.17 healthy 48 of 48; rolled back in 4 minutes 52 seconds. The Return key she pressed at 02:19 sits flush while the keys beside it stand proud. Ilse: “Rolled back. Back to bed.”</figcaption>
+      </figure>
+    </div>
+
+    <div class="row r2">
+      <!-- P4 · still 29% -->
+      <figure class="panel" style="margin:0;--w:280">
+        <svg id="p4" viewBox="0 0 280 452" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <defs><clipPath id="c4"><rect width="280" height="452"/></clipPath></defs>
+          <g clip-path="url(#c4)">
+            <rect width="280" height="452" fill="var(--paper)"/>
+            <g id="p4-area"></g>
+            <path d="M0 330 H280" stroke="var(--ink)" stroke-width="2"/>
+            <path d="M245 150 V330" stroke="var(--ink)" stroke-width="2" stroke-dasharray="5 4"/>
+            <rect x="133" y="140" width="112" height="22" fill="var(--ink)"/>
+            <text x="140" y="156" class="mo" font-size="12" font-weight="700" fill="var(--paper)">rollback 02:24</text>
+            <path id="p4-line" d="" fill="none" stroke="var(--red)" stroke-width="5" stroke-linejoin="round"/>
+            <text class="mo" x="14" y="352" font-size="12" fill="var(--ink)">02:10</text>
+            <text class="mo" x="266" y="352" font-size="12" fill="var(--ink)" text-anchor="end">02:26</text>
+            <text class="sfx" x="18" y="300" font-size="90" fill="var(--red)" stroke="var(--ink)" stroke-width="6">29%</text>
+            <g id="p4-b"></g>
+            <g transform="translate(0 368)">
+              <rect width="280" height="84" fill="var(--paper)" stroke="var(--ink)" stroke-width="3"/>
+              <text class="lt" x="14" y="28" font-size="16" fill="var(--ink)"><tspan x="14">02:26. The rollback</tspan><tspan x="14" dy="22">worked. The queued</tspan><tspan x="14" dy="22">retries didn't care.</tspan></text>
+            </g>
+          </g>
+        </svg>
+        <figcaption class="sr">Panel 4. 02:26. The error chart from 02:10: the red line climbs to 38% by 02:13, holds there for ten minutes, and after the 02:24 rollback marker falls only to 29%, where it stays. A chat message from Kwame, incident lead: “Rollback is live. Errors 29%. Not fixed.” Caption: the rollback worked; the queued retries didn't care.</figcaption>
+      </figure>
+
+      <!-- P5 · the reveal -->
+      <figure class="panel" style="margin:0;--w:512">
+        <svg id="p5" viewBox="0 0 512 452" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <defs>
+            <clipPath id="c5"><rect width="512" height="452"/></clipPath>
+            <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="var(--ink)"/></marker>
+            <marker id="ahr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="var(--red)"/></marker>
+          </defs>
+          <g clip-path="url(#c5)">
+            <rect width="512" height="452" fill="var(--paper)"/>
+            <g id="p5-bg"></g>
+            <!-- caption -->
+            <g transform="translate(0 0)">
+              <rect width="512" height="84" fill="var(--paper)" stroke="var(--ink)" stroke-width="3"/>
+              <text class="lt" x="14" y="28" font-size="16" fill="var(--ink)"><tspan x="14">02:31. Found it. v4.18 renamed the ledger</tspan><tspan x="14" dy="22">timeout key, so the client used its</tspan><tspan x="14" dy="22">3-second default.</tspan></text>
+            </g>
+            <!-- checkout phone -->
+            <g transform="translate(22 156)">
+              <rect width="52" height="92" rx="9" fill="var(--paper)" stroke="var(--ink)" stroke-width="3"/>
+              <rect x="8" y="12" width="36" height="58" fill="var(--ink)"/>
+              <text x="26" y="47" text-anchor="middle" class="mo" font-size="12" font-weight="700" fill="var(--paper)">PAY</text>
+              <text x="26" y="118" text-anchor="middle" class="mo" font-size="12" fill="var(--ink)">app ×4</text>
+            </g>
+            <!-- gateway -->
+            <g transform="translate(118 146)">
+              <rect width="132" height="112" fill="var(--ink)"/>
+              <text x="12" y="26" class="mo" font-size="12" font-weight="700" fill="var(--paper)">payments-gw</text>
+              <text x="12" y="44" class="mo" font-size="12" fill="var(--paper)">v4.18</text>
+              <rect x="10" y="62" width="112" height="36" fill="var(--red)"/>
+              <text x="66" y="86" text-anchor="middle" class="mo" font-size="16" font-weight="700" fill="var(--paper)">timeout 3 s</text>
+              <text x="66" y="134" text-anchor="middle" class="mo" font-size="12" fill="var(--ink)">gateway ×4</text>
+            </g>
+            <path d="M78 172 H112" stroke="var(--ink)" stroke-width="3" marker-end="url(#ah)"/>
+            <path d="M78 188 H112" stroke="var(--red)" stroke-width="2" marker-end="url(#ahr)"/><path d="M78 204 H112" stroke="var(--red)" stroke-width="2" marker-end="url(#ahr)"/><path d="M78 220 H112" stroke="var(--red)" stroke-width="2" marker-end="url(#ahr)"/>
+            <g id="p5-fan"></g>
+            <!-- ledger -->
+            <g transform="translate(420 140)">
+              <path d="M0 16 C0 -5 76 -5 76 16 V108 C76 129 0 129 0 108 Z" fill="var(--paper)" stroke="var(--ink)" stroke-width="3"/>
+              <path d="M0 16 C0 37 76 37 76 16" fill="none" stroke="var(--ink)" stroke-width="3"/>
+              <text x="38" y="76" text-anchor="middle" class="mo" font-size="12" font-weight="700" fill="var(--ink)">ledger</text>
+              <text x="38" y="152" text-anchor="middle" class="mo" font-size="12" font-weight="700" fill="var(--red-text)">= 16 calls</text>
+            </g>
+            <!-- retry queue counter -->
+            <g transform="translate(22 360)">
+              <text x="0" y="0" class="mo" font-size="12" font-weight="700" fill="var(--ink)">LEDGER RETRY QUEUE <tspan fill="var(--red-text)">▲ climbing</tspan></text>
+              <g id="p5-count" transform="translate(0 12)"></g>
+              <text x="0" y="72" class="mo" font-size="12" fill="var(--ink)">all ledger callers, not just checkout</text>
+            </g>
+            <g id="p5-b"></g>
+          </g>
+        </svg>
+        <figcaption class="sr">Panel 5. 02:31. Found it: v4.18 renamed the ledger timeout key, so the client ignored the 30-second setting and used its 3-second default. A diagram: the app sends a checkout call 4 times, the gateway sends each of those 4 times, so the ledger receives 16 calls. The ledger's retry queue, for all its callers, reads 1,912,407 and climbing. Kwame: “Every slow call came back four times. Then sixteen.”</figcaption>
+      </figure>
+
+      <!-- P6 · breaker -->
+      <figure class="panel" style="margin:0;--w:224">
+        <svg id="p6" viewBox="0 0 224 452" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <defs><clipPath id="c6"><rect width="224" height="452"/></clipPath></defs>
+          <g clip-path="url(#c6)">
+            <rect width="224" height="452" fill="var(--ink)"/>
+            <g id="p6-glow"></g>
+            <text class="sfx" x="6" y="54" font-size="38" fill="var(--paper)" stroke="var(--ink)" stroke-width="9" letter-spacing="-1.5" transform="rotate(-8 6 54)">KA-CHUNK</text>
+            <!-- the breaker plate, labelled once: retry worker breaker, open -->
+            <rect x="30" y="72" width="164" height="190" fill="var(--paper)" stroke="var(--ink)" stroke-width="3"/>
+            <rect x="38" y="80" width="148" height="174" fill="none" stroke="var(--ink)" stroke-width="1.5"/>
+            <g fill="var(--paper)" stroke="var(--ink)" stroke-width="1.5"><circle cx="46" cy="88" r="4"/><circle cx="178" cy="88" r="4"/><circle cx="46" cy="246" r="4"/><circle cx="178" cy="246" r="4"/></g>
+            <g stroke="var(--ink)" stroke-width="1.5"><path d="M43 85 l6 6"/><path d="M175 85 l6 6"/><path d="M43 249 l6 -6"/><path d="M175 249 l6 -6"/></g>
+            <text x="112" y="106" text-anchor="middle" class="mo" font-size="12" font-weight="700" fill="var(--ink)">RETRY WORKER</text>
+            <text x="112" y="122" text-anchor="middle" class="mo" font-size="12" font-weight="700" fill="var(--ink)">BREAKER</text>
+            <!-- slot, the handle's old place (dashed) and the throw -->
+            <rect x="104" y="136" width="16" height="104" rx="8" fill="var(--ink)"/>
+            <rect x="90" y="136" width="44" height="26" rx="5" fill="none" stroke="var(--ink)" stroke-width="2" stroke-dasharray="4 3"/>
+            <path d="M80 152 C62 172 62 206 78 224" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>
+            <path d="M70 218 L80 228 L84 214" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="86" y="210" width="52" height="32" rx="6" fill="var(--paper)" stroke="var(--ink)" stroke-width="4"/>
+            <path d="M98 218 V234 M106 218 V234 M114 218 V234 M122 218 V234" stroke="var(--ink)" stroke-width="2"/>
+            <text x="146" y="232" class="mo" font-size="12" font-weight="700" fill="var(--ink)">OPEN</text>
+            <!-- the queue, drawn draining: 2.0 M at 02:36, empty at 02:44 -->
+            <text x="30" y="290" class="mo" font-size="12" fill="var(--paper)">queue 2.0 M</text>
+            <path d="M30 300 L120 348 H194" fill="none" stroke="var(--paper)" stroke-width="3" stroke-linejoin="round"/>
+            <path d="M30 348 H194" stroke="var(--paper)" stroke-width="1" stroke-dasharray="2 3"/>
+            <text x="194" y="338" text-anchor="end" class="mo" font-size="12" fill="var(--paper)">0 · 02:44</text>
+            <g transform="translate(0 368)">
+              <rect width="224" height="84" fill="var(--paper)" stroke="var(--ink)" stroke-width="3"/>
+              <text class="lt" x="12" y="28" font-size="16" fill="var(--ink)"><tspan x="12">02:36. Breaker open.</tspan><tspan x="12" dy="22">The queue drains at</tspan><tspan x="12" dy="22">4,000 calls a second.</tspan></text>
+            </g>
+          </g>
+        </svg>
+        <figcaption class="sr">Panel 6. 02:36. KA-CHUNK: the retry worker's breaker is thrown. Its handle has dropped from the top of the slot (a dashed outline) to the bottom, next to the word OPEN. Below it, the retry queue falls in a straight line from 2.0 million at 02:36 to zero at 02:44. Caption: breaker open; the queue drains at 4,000 calls a second.</figcaption>
+      </figure>
+
+      <!-- P7 · 02:47, resolved -->
+      <figure class="panel" style="margin:0;--w:216">
+        <svg id="p7" viewBox="0 0 216 452" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <defs><clipPath id="c7"><rect width="216" height="452"/></clipPath></defs>
+          <g clip-path="url(#c7)">
+            <rect width="216" height="452" fill="var(--paper)"/>
+            <g id="p7-blinds"></g>
+            <!-- recovered sparkline -->
+            <g transform="translate(14 72)">
+              <rect width="188" height="92" fill="var(--paper)" stroke="var(--ink)" stroke-width="3"/>
+              <text x="10" y="20" class="mo" font-size="12" font-weight="700" fill="var(--ink)">error rate 0.2%</text>
+              <path d="M10 34 L58 38 L84 52 L104 72 L124 78 L178 80" fill="none" stroke="var(--ink)" stroke-width="4" stroke-linejoin="round"/>
+            </g>
+            <!-- desk + mug -->
+            <path d="M0 394 H216 V452 H0 Z" fill="var(--ink)"/>
+            <path d="M0 394 H216" stroke="var(--paper)" stroke-width="3"/>
+            <g transform="translate(112 322)">
+              <!-- handle, then body, then rim: an ellipse on top, a rounded foot, light from the window on the left -->
+              <path d="M54 16 C78 12 84 50 52 56 L51 47 C70 44 68 24 55 25 Z" fill="var(--ink)" stroke="var(--paper)" stroke-width="2.5" stroke-linejoin="round"/>
+              <path d="M2 4 L6 68 C7 77 16 82 30 82 C44 82 53 77 54 68 L58 4 Z" fill="var(--ink)" stroke="var(--paper)" stroke-width="3" stroke-linejoin="round"/>
+              <path d="M10 14 C10 34 11 52 14 70 L19 72 C16 54 15 34 16 14 Z" fill="var(--paper)"/>
+              <ellipse cx="30" cy="4" rx="28" ry="7" fill="var(--ink)" stroke="var(--paper)" stroke-width="3"/>
+              <ellipse cx="30" cy="5" rx="22" ry="4" fill="none" stroke="var(--paper)" stroke-width="1.5"/>
+              <g fill="none" stroke="var(--ink)" stroke-linecap="round"><path d="M20 -10 c-9 -10 7 -16 -1 -28 c-4 -6 2 -10 4 -12" stroke-width="3"/><path d="M38 -8 c-7 -11 8 -15 1 -27" stroke-width="2"/></g>
+            </g>
+            <g transform="translate(0 0)">
+              <rect width="216" height="56" fill="var(--paper)" stroke="var(--ink)" stroke-width="3"/>
+              <text class="lt" x="12" y="24" font-size="16" fill="var(--ink)"><tspan x="12">02:47. Resolved.</tspan><tspan x="12" dy="22">41 minutes.</tspan></text>
+            </g>
+            <g id="p7-b"></g>
+          </g>
+        </svg>
+        <figcaption class="sr">Panel 7. 02:47. Resolved, after 41 minutes. The wall behind the desk is striped by the blinds again, now pale with dark bands, the inverse of panel 1; the error rate is back to 0.2%; a mug steams on the desk. Ilse: “4,180 failed checkouts. Now, the write-up.”</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="changed" aria-labelledby="changed-h">
+    <div>
+      <h2 id="changed-h">What we changed</h2>
+      <p>Three actions, all shipped within three days. None of them is “be more careful”.</p>
+    </div>
+    <div class="fix"><span class="n mono">Action 1 · shipped 8 Oct</span><p>Unknown config keys now fail the deploy instead of being skipped.</p><span class="meta mono">Schema check in CI · owner: platform</span></div>
+    <div class="fix"><span class="n mono">Action 2 · shipped 9 Oct</span><p>Only the gateway retries, with jitter and a budget of 10% of calls.</p><span class="meta mono">payments-gw 4.19 · owner: payments</span></div>
+    <div class="fix"><span class="n mono">Action 3 · shipped 9 Oct</span><p>The ledger timeout is 10 s, set on purpose, with a page at p99 over 5 s.</p><span class="meta mono">ledger SLO v2 · owner: ledger</span></div>
+  </section>
+
+  <footer class="foot">
+    <span class="mono" style="font-size:var(--ds-font-size-12)">Nightjar · blameless postmortems since 2021</span>
+    <a href="#">Next: INC-4502, the cron job that ran twice →</a>
+  </footer>
+</main>
+
+<script>
+const NS = 'http://www.w3.org/2000/svg';
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const INK = 'var(--ink)', PAPER = 'var(--paper)', RED = 'var(--red)';
+function el(tag, attrs, parent) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
+const $ = id => document.getElementById(id);
+
+/* Halftone: dots on a 45° screen whose radius follows fn(x, y) in 0..1, like a printed tint. */
+function halftone(g, { x = 0, y = 0, w, h, step = 7, angle = 45, fn, fill = INK, max = 0.64 }) {
+  const a = angle * Math.PI / 180, ca = Math.cos(a), sa = Math.sin(a);
+  const cx = x + w / 2, cy = y + h / 2, R = Math.hypot(w, h) / 2 + step;
+  for (let i = -R; i <= R; i += step) for (let j = -R; j <= R; j += step) {
+    const px = cx + i * ca - j * sa, py = cy + i * sa + j * ca;
+    if (px < x - step || px > x + w + step || py < y - step || py > y + h + step) continue;
+    const v = fn(px, py); if (v <= 0.04) continue;
+    el('circle', { cx: px.toFixed(1), cy: py.toFixed(1), r: (Math.min(v, 1) * step * max).toFixed(2), fill }, g);
+  }
+}
+const clamp = v => Math.max(0, Math.min(1, v));
+
+/* Speech balloon: one closed path, an ellipse with its tail, so the outline never breaks. */
+function balloon(g, { cx, cy, rx, ry, tip, lines, size = 16, spread = 0.2, box = false }) {
+  if (box) {
+    const x = cx - rx, y = cy - ry;
+    el('path', { d: `M${x} ${y} H${x + 2 * rx} V${y + 2 * ry} H${tip[2]} L${tip[0]} ${tip[1]} L${tip[3]} ${y + 2 * ry} H${x} Z`, fill: PAPER, stroke: INK, 'stroke-width': 3, 'stroke-linejoin': 'round' }, g);
+  } else {
+    const t = Math.atan2((tip[1] - cy) / ry, (tip[0] - cx) / rx);
+    const P = a => [cx + rx * Math.cos(a), cy + ry * Math.sin(a)];
+    const [x1, y1] = P(t + spread), [x2, y2] = P(t - spread);
+    el('path', { d: `M${x1.toFixed(1)} ${y1.toFixed(1)} A${rx} ${ry} 0 1 1 ${x2.toFixed(1)} ${y2.toFixed(1)} L${tip[0]} ${tip[1]} Z`, fill: PAPER, stroke: INK, 'stroke-width': 3, 'stroke-linejoin': 'round' }, g);
+  }
+  const lh = size * 1.3, top = cy - (lines.length - 1) * lh / 2 + size * 0.36;
+  const tx = el('text', { class: 'lt', 'text-anchor': 'middle', 'font-size': size, fill: INK }, g);
+  lines.forEach((l, i) => { const s = el('tspan', { x: cx, y: (top + i * lh).toFixed(1) }, tx); s.textContent = l; });
+}
+
+/* P1: venetian-blind light from the street, then the phone's own glow on the nightstand */
+(() => {                                     // slanted bands of street light, fading into the room
+  const g = $('p1-blinds');
+  for (let k = 0; k < 6; k++) { const y0 = 6 + k * 46; el('path', { d: `M0 ${y0} L552 ${y0 + 116} L552 ${y0 + 138} L0 ${y0 + 22} Z`, fill: PAPER }, g); }
+  halftone(g, { w: 552, h: 320, step: 5, fn: (x, y) => clamp((x - 150) / 380) * 0.95 });
+})();
+halftone($('p1-glow'), { y: 290, w: 552, h: 162, step: 6, fill: PAPER, fn: (x, y) => {
+  const d = Math.hypot((x - 300) / 1.6, y - 372);
+  return y > 318 - x * 0.058 ? clamp(1 - d / 150) * 0.9 : 0;
+}});
+
+/* P2: the error-rate line, 01:30 to 02:19. x: 50 + min * 4.53; y: 320 - pct * 3 */
+(() => {
+  const pts = [[0, .2], [20, .3], [34, .2], [36, 2], [38, 14], [40, 27], [42, 36], [43, 38], [46, 38], [48, 37], [49, 38]];
+  const X = m => 50 + m * 5.55, Y = p => 320 - p * 3;
+  $('p2-line').setAttribute('d', 'M' + pts.map(([m, p]) => `${X(m).toFixed(1)} ${Y(p).toFixed(1)}`).join(' L'));
+  const g = $('p2-area');
+  halftone(g, { x: 50, y: 200, w: 272, h: 120, step: 5, fill: RED, fn: (x, y) => {
+    const m = (x - 50) / 5.55; let p = 0;
+    for (let i = 1; i < pts.length; i++) if (m <= pts[i][0]) { const [m0, p0] = pts[i - 1], [m1, p1] = pts[i]; p = p0 + (p1 - p0) * (m - m0) / (m1 - m0); break; }
+    if (m > 49) return 0;
+    return (y > Y(p) && y <= 318) ? clamp(0.25 + (y - Y(p)) / 160) * 0.8 : 0;
+  }});
+  balloon($('p2-b'), { cx: 150, cy: 62, rx: 120, ry: 48, tip: [62, 252], spread: 0.12, lines: ['A deploy at 01:41.', "That's suspect", 'number one.'] });
+})();
+
+/* P3: lamp light on the desk */
+halftone($('p3-desk'), { y: 300, w: 312, h: 152, step: 5, fn: (x, y) => clamp((y - 300) / 220 + (312 - x) / 900) * 0.55 });
+balloon($('p3-b'), { cx: 220, cy: 60, rx: 80, ry: 40, tip: [300, 104], lines: ['Rolled back.', 'Back to bed.'] });
+
+/* P4: 02:10 to 02:26, rollback at 02:24 changes nothing */
+(() => {
+  const pts = [[0, 27], [2, 36], [3, 38], [4, 38], [6, 38], [8, 37], [9, 38], [10, 37], [12, 38], [13, 37], [14, 36], [14.8, 29], [16, 29]];
+  const X = m => m * 17.5, Y = p => 330 - p * 4;
+  $('p4-line').setAttribute('d', 'M' + pts.map(([m, p]) => `${X(m).toFixed(1)} ${Y(p).toFixed(1)}`).join(' L'));
+  const at = x => { const m = x / 17.5; for (let i = 1; i < pts.length; i++) if (m <= pts[i][0]) { const [m0, p0] = pts[i - 1], [m1, p1] = pts[i]; return p0 + (p1 - p0) * (m - m0) / (m1 - m0); } return pts[pts.length - 1][1]; };
+  halftone($('p4-area'), { y: 170, w: 280, h: 160, step: 5, fill: RED, fn: (x, y) => (y > Y(at(x)) && y <= 328) ? clamp(0.2 + (y - Y(at(x))) / 200) * 0.75 : 0 });
+  balloon($('p4-b'), { cx: 140, cy: 62, rx: 126, ry: 46, tip: [0, 0, 60, 92], box: true, lines: ['Kwame: rollback is live.', 'Errors 29%. Not fixed.'] });
+  $('p4-b').querySelector('path').setAttribute('d', 'M14 16 H266 V108 H92 L64 132 L66 108 H14 Z');
+  const t = $('p4-b').querySelector('text'); t.setAttribute('text-anchor', 'start');
+  t.querySelectorAll('tspan').forEach((s, i) => { s.setAttribute('x', 28); s.setAttribute('y', 52 + i * 26); });
+})();
+
+/* P5: 1 call becomes 4, becomes 16 */
+(() => {
+  const g = $('p5-fan');
+  const sx = 250, ex = 414;
+  for (let i = 0; i < 4; i++) {           // the app's 4 attempts pass through the gateway
+    const my = 166 + i * 24;
+    el('path', { d: `M${sx} ${my} H${sx + 54}`, fill: 'none', stroke: i ? RED : INK, 'stroke-width': 3 }, g);
+    for (let j = 0; j < 4; j++) {          // each fans into 4 at the ledger
+      const ty = 160 + (i * 4 + j) * 6.4;
+      el('path', { d: `M${sx + 54} ${my} C${sx + 100} ${my} ${ex - 70} ${ty} ${ex} ${ty}`, fill: 'none', stroke: (i || j) ? RED : INK, 'stroke-width': 2, 'marker-end': `url(#${(i || j) ? 'ahr' : 'ah'})` }, g);
+    }
+  }
+  const digits = '1,912,407'.split('');
+  let x = 0; const c = $('p5-count');
+  digits.forEach(d => {
+    if (d === ',') { const t = el('text', { x: x + 1, y: 36, class: 'mo', 'font-size': 21, 'font-weight': 700, fill: INK }, c); t.textContent = ','; x += 13; return; }
+    el('rect', { x, y: 0, width: 26, height: 40, fill: INK }, c);
+    const t = el('text', { x: x + 13, y: 28, 'text-anchor': 'middle', class: 'mo', 'font-size': 21, 'font-weight': 700, fill: PAPER }, c); t.textContent = d; x += 29;
+  });
+  balloon($('p5-b'), { cx: 396, cy: 384, rx: 110, ry: 52, tip: [512, 340], lines: ['Every slow call', 'came back four times.', 'Then sixteen.'] });
+})();
+
+/* P6: action lines from the thrown breaker, upper half only */
+(() => { const g = $('p6-glow');            // speed lines from the thrown lever
+  for (let i = 1; i < 14; i++) { const a = Math.PI + i / 14 * Math.PI, r0 = 128 + (i % 3) * 12;
+    el('path', { d: `M${112 + Math.cos(a) * r0} ${226 + Math.sin(a) * r0} L${112 + Math.cos(a) * 300} ${226 + Math.sin(a) * 300}`, stroke: PAPER, 'stroke-width': 2 + (i % 2) * 2 }, g); } })();
+
+/* P7: 02:47; the blinds now stripe a pale wall with dark bands (the inverse of panel 1) */
+(() => {                                     // crisp shadow bands, tinted with dots
+  const svg = $('p7'), defs = svg.querySelector('defs');
+  const cp = el('clipPath', { id: 'p7-bands' }, defs);
+  for (let k = 0; k < 8; k++) { const y0 = 40 + k * 46; el('path', { d: `M0 ${y0 + 46} L216 ${y0} L216 ${y0 + 20} L0 ${y0 + 66} Z` }, cp); }
+  const g = el('g', { 'clip-path': 'url(#p7-bands)' }, $('p7-blinds'));
+  halftone(g, { y: 56, w: 216, h: 338, step: 5, fn: (x, y) => 0.42 + x / 216 * 0.3 });
+})();
+balloon($('p7-b'), { cx: 104, cy: 216, rx: 96, ry: 46, tip: [0, 290], lines: ['4,180 failed', 'checkouts. Now,', 'the write-up.'] });
+</script>
+</body>
+</html>

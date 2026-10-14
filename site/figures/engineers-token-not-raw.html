@@ -1,0 +1,29 @@
+<figure class="fig">
+<div class="dodont">
+<div class="dont">
+<p class="dd-h">A value typed in by hand</p>
+<p class="dd-why">It looks right today. It skips dark mode, density and the next rebuild, and <span class="mono">engine.py review</span> flags all three.</p>
+<div class="dd-art">
+<pre class="code-lines" style="white-space:pre-wrap;overflow-wrap:anywhere;margin:0">.card {
+  background: <span class="bad">#f3f4f6</span>;
+  border-radius: <span class="bad">7px</span>;
+  padding: <span class="bad">13px</span>;
+}</pre>
+<div style="font-size:13px;line-height:18px;color:var(--ink-muted);margin-top:10px"><span class="num">7</span> is not a radius in the system and <span class="num">13</span> is off the 4px ladder.</div>
+</div>
+</div>
+<div class="do">
+<p class="dd-h">The token for the role</p>
+<p class="dd-why">The value follows the decision. Change the decision and rebuild, and this card changes with every other one.</p>
+<div class="dd-art">
+<pre class="code-lines" style="white-space:pre-wrap;overflow-wrap:anywhere;margin:0">.card {
+  background: <span class="ok">var(--ds-color-surface-sunken)</span>;
+  border-radius: <span class="ok">var(--ds-radius-container)</span>;
+  padding: <span class="ok">var(--ds-space-12)</span>;
+}</pre>
+<div style="font-size:13px;line-height:18px;color:var(--ink-muted);margin-top:10px">The same three tokens review names for the raw values on the left.</div>
+</div>
+</div>
+</div>
+<figcaption>The card from the review example, before and after. Each raw value has a token for its role, and the token keeps working in dark mode, in every density and after every rebuild.</figcaption>
+</figure>

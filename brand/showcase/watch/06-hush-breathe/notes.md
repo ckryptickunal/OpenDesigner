@@ -1,5 +1,7 @@
 # 06 Hush: notes
 
+Replaced on 2026-10-14 by watch/09-oncall-incident after the Mobbin audit (score 2).
+
 Render: `shot.png` (205 x 251 CSS px at 3x, clipped to the display shape by `../render.py`). Page: `index.html`.
 
 ## Direction

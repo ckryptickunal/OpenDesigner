@@ -1,0 +1,65 @@
+{
+ "piece": "watch/02-thrum-heart",
+ "title": "02 Thrum: notes",
+ "pattern": "heart rate",
+ "platform": "watchos",
+ "industry": "fitness",
+ "style": [
+  "dark",
+  "minimal"
+ ],
+ "tags": [
+  "heart rate",
+  "fitness",
+  "zones",
+  "interval",
+  "watch",
+  "dark",
+  "watchos"
+ ],
+ "score": 3,
+ "verdict": "polish",
+ "strengths": [
+  "The right content for 'how hard am I working': zone name, BPM, a five-step bar with the current segment raised, time in zone.",
+  "Pure white numeral on black with one warm accent and no glow after the colour pass."
+ ],
+ "slop_signals": [
+  "The 104 px '162' fills the display width and the heart glyph and 'BPM' are tucked under its last digit, so the hero numeral and its unit collide.",
+  "A heart glyph as decoration beside 'BPM'.",
+  "A tiny zone-coloured trace along the bottom edge with no axis, cropped by the display corners: a sparkline for its own sake.",
+  "The zone bar and the '1 2 3 4 5' row under it say the same thing twice."
+ ],
+ "fixes": [
+  "Set the numeral at about 88 px with 'BPM' on its baseline to the right; drop the heart.",
+  "Remove the bottom trace, or give it a third of the display clear of the corners.",
+  "Keep the zone bar and drop the numeral row under it; the raised segment already says 4."
+ ],
+ "references": [
+  {
+   "site": "Oura",
+   "url": "https://mobbin.com/screens/959c7de6-a50b-48b0-b50c-951b2deef614",
+   "what": "Zone arc, a 'ZONE 0' label and a big number: three things, nothing else."
+  },
+  {
+   "site": "Ultrahuman",
+   "url": "https://mobbin.com/screens/5fad3d2c-5723-4f47-98e1-b72abc2fdf20",
+   "what": "The active zone segment is raised and labelled in words; BPM sits beside the number at its own size."
+  },
+  {
+   "site": "WHOOP",
+   "url": "https://mobbin.com/screens/e43d9740-d2ae-4bf0-bfd8-ba648eeaea92",
+   "what": "Heart rate with a five-band bar under it, bands labelled once."
+  },
+  {
+   "site": "Bevel",
+   "url": "https://mobbin.com/screens/76d28186-5f74-4995-800e-7a0b77546abc",
+   "what": "Z0 to Z5 colour scale with a marker: the heat ramp this piece's bar uses."
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "keep",
+  "said": "most of the watch screens are okay",
+  "date": "2026-10-14"
+ }
+}

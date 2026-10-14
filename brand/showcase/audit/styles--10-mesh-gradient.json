@@ -1,0 +1,76 @@
+{
+ "piece": "styles/10-mesh-gradient",
+ "title": "10 · Mesh gradient · Prill",
+ "pattern": "product hero",
+ "platform": "web",
+ "industry": "AI evaluation (B2B devtools)",
+ "style": [
+  "mesh gradient",
+  "aurora",
+  "minimal"
+ ],
+ "tags": [
+  "mesh gradient",
+  "product hero",
+  "AI evals",
+  "LLM",
+  "eval table",
+  "release gate",
+  "data-driven gradient",
+  "grain",
+  "orange"
+ ],
+ "score": 3,
+ "self_score": 4,
+ "verdict": "polish",
+ "strengths": [
+  "The gradient has a job: it is drawn from run #2,481's own cases (x = score, y = p95 latency, cyan = v13, violet = v14), labelled like a figure with a legend and score ticks, and the 37 regressions are the only cases drawn one by one, matching the table's '37 regressions' footer",
+  "The product is flat, whole and readable in front of a contained, hard-edged plate: an eval table with thresholds, v13/v14 values and coloured deltas, 'Release blocked · 2 of 7 checks below threshold' said once in text",
+  "Light 300 display headline with no highlight, one action, a facts row ('4,012 cases, 6 min') instead of logos or ratings",
+  "All text sits on white or on a solid ground strip; the failing contrast on the field (ticks at 1.75:1) was measured and moved"
+ ],
+ "slop_signals": [
+  "Blue-to-violet glow behind the product, the most common AI tell (rules.md section 10), in the same layout as Cursor's and Vanta's heroes",
+  "A white table card floating on the gradient panel beside a headline, sub-line, dark button and three facts: the default SaaS hero",
+  "The 'field generated from seeded data' cannot be read as data; the cluster of white dots at the bottom reads as sparkles"
+ ],
+ "fixes": [
+  "Move off blue-violet: one hue family tied to pass and fail, or a neutral field with one warm signal for the regressions",
+  "Either make the field a readable chart (axes and labels on the field itself) or drop it and let the table carry the hero",
+  "Fix the check count and the regression count (below)"
+ ],
+ "references": [
+  {
+   "site": "Cursor",
+   "url": "https://mobbin.com/sites/sections/a7f2c059-5d26-466d-9337-33ab8583c3d4",
+   "mobbin_url": "https://mobbin.com/sites/sections/a7f2c059-5d26-466d-9337-33ab8583c3d4",
+   "what": "A multi-colour mesh behind the product screenshot: the recipe this piece repeats"
+  },
+  {
+   "site": "Vanta",
+   "url": "https://mobbin.com/sites/sections/5bc83bbd-b206-40b5-979d-6252fc9e2568",
+   "mobbin_url": "https://mobbin.com/sites/sections/5bc83bbd-b206-40b5-979d-6252fc9e2568",
+   "what": "A purple glow under a floating card, the AI-default look"
+  },
+  {
+   "site": "Dovetail",
+   "url": "https://mobbin.com/sites/sections/57c3f21b-b420-47cc-be74-8b45ab45aea5",
+   "mobbin_url": "https://mobbin.com/sites/sections/57c3f21b-b420-47cc-be74-8b45ab45aea5",
+   "what": "An AI analysis hero with the product shown flat on a dark grid, no gradient"
+  }
+ ],
+ "audited": "2026-10-14",
+ "audited_by": "independent",
+ "facts": [],
+ "polish": {
+  "score": 5,
+  "changed": [
+   "Renamed Assay to Prill (Assay is an open-source LLM-evaluation library); web search found no AI-evaluation product called Prill",
+   "Palette off blue-violet: white page, graphite field, one molten orange signal with an amber core; engine brandColor #F0570A, graphite and amber secondaries, pick Q-dir-01 mesh-gradient builds the gradient tokens",
+   "Gradient rebuilt as a readable chart inside the product: each case by v13 and v14 answer-correctness score, axes 0.2 to 1.0, equal-score line, keyed density; the 117 regressions are the orange cloud and the only dots; plotted means equal the table's 0.861 and 0.893",
+   "No card floating on a plate: headline and lede above, the run flat and whole in the grid; facts row removed; one action",
+   "Gate reads 1 of 6 checks; 117 newly failing and 8 newly passing (3,924 to 3,815 passes); v14 is a new prompt and a smaller model; run time 14:37",
+   "Mark is a flat bead, no gradient"
+  ]
+ }
+}

@@ -1,0 +1,31 @@
+<figure class="fig">
+<div class="dodont">
+<div class="dont"><p class="dd-h">An icon with no padding</p><p class="dd-why">A <span class="num">20</span> px icon drawn as its own button: the tap area is the glyph itself, under the <span class="num">24</span> px floor. That is an error, and the build stops.</p>
+<div class="dd-art">
+<svg viewBox="0 0 280 130" width="100%" aria-hidden="true" font-family="'Source Code Pro', ui-monospace, monospace" font-size="13">
+<rect x="60" y="56" width="40" height="40" fill="var(--bad-soft)" stroke="var(--bad)" stroke-width="1.5"/>
+<path d="M66 76h28M80 62v28" stroke="var(--ink)" stroke-width="4" stroke-linecap="round"/>
+<path d="M60 108h40M60 104v8M100 104v8" stroke="var(--line-strong)" fill="none"/>
+<text x="80" y="124" text-anchor="middle" fill="var(--bad)">20 × 20</text>
+<text x="130" y="80" font-family="'Hanken Grotesk', system-ui, sans-serif" font-size="14" fill="var(--ink)">tap area = the glyph</text>
+<text x="130" y="100" font-family="'Hanken Grotesk', system-ui, sans-serif" font-size="13" fill="var(--bad)">under 24 px: error</text>
+</svg>
+</div></div>
+<div class="do"><p class="dd-h">Padded to the target</p><p class="dd-why">The same <span class="num">20</span> px icon with padding around it: <span class="num">24</span> px for a pointer, <span class="num">44</span> px for touch. A compact density never shrinks these.</p>
+<div class="dd-art">
+<svg viewBox="0 0 280 130" width="100%" aria-hidden="true" font-family="'Source Code Pro', ui-monospace, monospace" font-size="13">
+<rect x="20" y="48" width="48" height="48" rx="6" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 3"/>
+<path d="M30 72h28M44 58v28" stroke="var(--ink)" stroke-width="4" stroke-linecap="round"/>
+<path d="M20 108h48M20 104v8M68 104v8" stroke="var(--line-strong)" fill="none"/>
+<text x="44" y="124" text-anchor="middle" fill="var(--ok)">24 · pointer</text>
+<rect x="120" y="8" width="88" height="88" rx="6" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 3"/>
+<path d="M150 52h28M164 38v28" stroke="var(--ink)" stroke-width="4" stroke-linecap="round"/>
+<path d="M120 108h88M120 104v8M208 104v8" stroke="var(--line-strong)" fill="none"/>
+<text x="164" y="124" text-anchor="middle" fill="var(--ok)">44 · touch</text>
+<text x="236" y="56" font-family="'Hanken Grotesk', system-ui, sans-serif" font-size="12" fill="var(--ink-muted)">icon</text>
+<text x="236" y="72" fill="var(--ink-muted)">20</text>
+</svg>
+</div></div>
+</div>
+<figcaption>Target sizes from the tokens: a 20 px icon needs padding so its tap area reaches 24 by 24 CSS pixels for a pointer and 44 for touch. Drawn as its own 20 px button, the target is under the floor and the engine reports an error.</figcaption>
+</figure>

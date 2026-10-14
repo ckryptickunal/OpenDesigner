@@ -786,3 +786,8 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 ## D-0030 · answers.Q-color-10 = "alpha"
 - set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
 - reason: Hairlines and glass highlights need see-through whites that work over the lit backdrop
+
+## D-0031 · dials.depth = 35
+- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: D-0016 · source_ref: none
+- reason: round 3: the owner found the glass page weak; flat dark columns and one lit plan, no glass over art
+- previous value: 90

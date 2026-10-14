@@ -1,0 +1,29 @@
+<figure class="fig hero-fig">
+<div class="fig-scene" data-scene="blue-gradient">
+<div class="hero-comp">
+<div class="fig-card wide" style="max-width:540px">
+<div class="fig-card-h"><span class="kicker">Decision 5 of 8 · Shape</span><span class="chip accent">Zoom 1 · broad</span></div>
+<div class="fig-card-b">
+<p style="margin:0 0 14px;font-size:17px;line-height:24px;font-weight:500">How soft should corners feel: square, slightly rounded, rounded, or pill?</p>
+<div class="shape-opts">
+<div class="opt"><span class="opt-art" style="border-radius:1px"></span><span class="opt-l">Square</span><span class="opt-s num">0–2 px</span></div>
+<div class="opt is-rec"><span class="opt-art" style="border-radius:5px"></span><span class="opt-l">Subtle</span><span class="opt-s num">4–6 px</span></div>
+<div class="opt"><span class="opt-art" style="border-radius:10px"></span><span class="opt-l">Soft</span><span class="opt-s num">8–12 px</span></div>
+<div class="opt"><span class="opt-art" style="border-radius:999px"></span><span class="opt-l">Pill</span><span class="opt-s num">Round</span></div>
+</div>
+<div class="rec"><span class="chip ok dot">Suggested</span><span>Corners of 4–6 px: businesslike. The safest default across audiences; containers get 8–12 px, and focus rings follow the corners.</span></div>
+</div>
+<div class="fig-card-f" style="display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap"><span>Pick one, or answer in your own words.</span><span class="chip">A suggestion is never recorded as your answer</span></div>
+</div>
+<div class="hero-side">
+<div class="fig-card"><div class="fig-card-h"><span class="kicker">build/css/tokens.css</span><span class="chip ok dot">Built</span></div>
+<pre class="code-lines" style="border:0;border-radius:0;background:var(--surface-raised)"><span class="k">--ds-radius-control</span>: var(--ds-radius-6);
+<span class="k">--ds-radius-container</span>: var(--ds-radius-8);
+<span class="k">--ds-radius-overlay</span>: var(--ds-radius-12);</pre></div>
+<div class="fig-card"><div class="fig-card-h"><span class="kicker">engine.py review</span><span class="chip warn dot">1 drift</span></div>
+<div class="fig-card-b" style="font-size:13px;line-height:20px"><span class="mono">card.css:1</span> <span class="mono" style="color:var(--bad)">border-radius: 7px</span><br>→ use <span class="mono">var(--ds-radius-container)</span></div></div>
+</div>
+</div>
+</div>
+<figcaption>One decision at a time: a real question from the shape stage (the suggestion's reason shortened), its four options drawn as they would look, the suggested one with its reason, then what the engine writes from the answer and what it flags later.</figcaption>
+</figure>

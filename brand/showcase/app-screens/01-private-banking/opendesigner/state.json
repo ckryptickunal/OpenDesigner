@@ -51,10 +51,10 @@
       "decision": "D-0030"
     },
     "depth": {
-      "value": 65,
+      "value": 30,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0019"
+      "decision": "D-0053"
     },
     "colorfulness": {
       "value": 22,
@@ -81,7 +81,7 @@
     "brandColor": "#C9A86A",
     "primaryActionColor": null,
     "focusColor": null,
-    "neutralBase": "#0E2A1F",
+    "neutralBase": "#1C2B24",
     "contrastTarget": "AA",
     "textFace": "Inter",
     "displayFace": "Bodoni Moda",
@@ -150,7 +150,10 @@
     "scripts": [
       "Latn"
     ],
-    "defaultTheme": "system"
+    "defaultTheme": "system",
+    "borderDefault": null,
+    "texture": null,
+    "gradients": null
   },
   "overrides": {
     "motion.duration.instant": {
@@ -440,6 +443,14 @@
         "unit": "em"
       },
       "lineHeight": 1.2059
+    },
+    "font.size.12": {
+      "value": 12,
+      "unit": "px"
+    },
+    "font.size.48": {
+      "value": 48,
+      "unit": "px"
     }
   },
   "answers": {
@@ -655,7 +666,7 @@
     ]
   },
   "hashes": {
-    "DESIGN.md": "80792e73106f83bc",
+    "DESIGN.md": "23591ac0aa4888cb",
     "PRODUCT.md": "8378170895d94bfb"
   },
   "exports": {
@@ -2945,5 +2956,7 @@
       "size.target.min": "dimension"
     },
     "snapshots": "standards-state.json"
-  }
+  },
+  "style": null,
+  "customStyles": {}
 }

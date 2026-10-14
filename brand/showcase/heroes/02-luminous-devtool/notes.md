@@ -67,3 +67,29 @@ Fonts: Geist and Geist Mono (SIL OFL), Google Fonts link.
 4. **Confusing:** secondary colours are ignored silently until `accentCount` is raised.
 5. **Bug:** review calls hairline inset borders shadows; radius suggestions are inconsistent.
 6. **Helped:** `secondaryColors` plus `accentCount 3` gave real violet and indigo ramps that the canvas and syntax colours could read, so the art and the UI share one palette. `darkBase` and `neutralTint` are good levers once found.
+
+## Round 3 (owner review, 2026-10-14 to 15)
+
+**What he said.** "Okay." It had to become clearly better, at the level of the B2B product screens and the Orbika hero. The earlier audit (score 3) listed a teal galaxy with glow, stars and a nebula; three product cards tilted in perspective with soft shadows; a "3.2" pill; a row of five invented customer wordmarks; a glowing filled button beside a second terminal-styled button.
+
+**Renamed: Orrery is now Nearmost.** A web search during this round found Embedding Orrery (embedding-orrery.com), an open-source tool for exploring and searching embeddings, the same field; `pip install orrery` also installs a real, unrelated package. "Nearmost" is a dictionary word for "nearest": PyPI and npm have no such package, GitHub has one 0-star routing repo, and a web search found only dictionary pages. Renamed through the engine (`set name "Nearmost"`, `build`). The old `opendesigner/build/dtcg/orrery.resolver.json` is stale; `build` does not remove it (recorded as engine feedback), and I left it for the orchestrator rather than delete outside my scratch folder.
+
+**What changed.**
+- **The art is gone; the product is the picture.** No canvas, glow, stars, tilt or shadow. A flat, face-on console on columns 5 to 12: collection header (`prod-eu-1 / papers`, Ready, four tabs), the query bar with filter tokens (`year ≥ 2019`, `hybrid 0.7`, `k 8`) and Run, a map, the results and the query plan.
+- **The map: real product data.** A UMAP layout of the 2,000 vectors nearest the query: four labelled topic regions with sub-clusters, a strand and strays (1,989 other papers), the query as a crosshair, the 8 results numbered as in the table, 3 closer papers removed by the year filter. A note says rank follows the score, not map distance.
+- **An honest score.** "score = 0.7 dense + 0.3 sparse" in the header; each row's score is computed from its dense cosine and sparse BM25 values in the source (all 8 match to 3 places).
+- **The query plan as a trace.** Filter 0.4 ms, dense HNSW 4.6 ms and sparse BM25 2.2 ms side by side, fuse 0.3 ms, fetch 2.6 ms: 0.4 + 4.6 + 0.3 + 2.6 = 7.9 ms, shown once. Its time track starts on the map/table divider.
+- **The headline is the number.** "8.7 ms" at 148 px, then "to search 1.05 billion vectors by meaning, at p99, with filters and hybrid ranking built in." One button ("Start building", no glow) and `pip install nearmost` as plain mono text. The pill, the logo row, the stat trio and the nav button are gone; the version sits in the nav (`Changelog v3.2`); a footnote says how the number was measured.
+- **One accent, fewer jobs.** Teal marks the button, the logo's neighbour dot and the 8 results. The selected row is a neutral fill with an ink rule.
+
+**Type scale (round 3).** Display figure 148 px (outside the scale, `od-ignore`) · Title 28 px (the sentence under the figure) · Body 16 px (nav, console rows, scores) · UI small 14 px (console meta, headers, tokens, map labels, plan; outside the 12/16 token scale on purpose, recorded as engine feedback) . Two faces: Geist, and Geist Mono only for code, scores, times and the install command.
+
+**Checks.** `engine.py review`: the code uses the tokens. `preflight.py html`: warnings only (148 and 14 px outside the scale, tracking -0.035em checked at 200%: no glyphs touch). `check_dates.py`: passes.
+
+**Fresh-eyes audit.** A fresh-context subagent scored it against the B2B screens, Orbika and three Mobbin references (Supabase https://mobbin.com/sites/sections/6d6921ce-b43a-4232-9ebd-966b1338c349, ReadMe https://mobbin.com/sites/sections/6f579ab9-de76-40fe-aac5-06d5891ba595, Dovetail https://mobbin.com/sites/sections/57c3f21b-b420-47cc-be74-8b45ab45aea5).
+- Round 1, **3**: the radial "orbit" plot was half decoration (random angles, spokes, a label wedge), the score was labelled cosine but was hybrid, 12 px product text, an invisible selected row, and the name clash.
+- Round 2, **4** (low): a contrast failure in the selected row (3.83:1), score bars that all looked alike, a map of four perfect blobs, a dead band in the left column, teal doing four jobs.
+- Round 3, **4**: all fixed and verified (selected-row year 5.39:1, teal on three things only, the map reads as a real UMAP, scores and counts still add up). A stray mark under "pip" in that render was a capture glitch; re-rendered with a longer font wait, it is gone. The largest empty area left is the band between the button and the facts; with the copy anchored to the console's top and bottom edges it reads as intentional.
+It recomputed every hybrid score, the 2,000 map points, the 7.9 ms plan and the years, and measured contrast on the pixels (tertiary 5.10:1 on the panel, secondary 7.0:1, tokens 5.59:1).
+
+**Still open.** `brand/showcase/mockups/04-browser-cascade/index.html` line 71 still captions this piece "Orrery", and the stale `opendesigner/build/dtcg/orrery.resolver.json` is still in this folder; both are outside what I may edit or delete.

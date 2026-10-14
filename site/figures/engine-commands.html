@@ -1,0 +1,57 @@
+<figure class="fig">
+<div class="fig-panel">
+  <div class="kicker" style="margin-bottom:12px">Eight groups · what each one writes</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px">
+
+    <div style="display:grid;gap:8px;align-content:start;min-width:0;padding:12px;border:1px solid var(--line);border-radius:var(--radius-container);background:var(--surface-raised)">
+      <span class="kicker">Start a system</span>
+      <div class="ui-row"><span class="chip mono">init</span><span class="chip mono">sketch</span><span class="chip mono">feel</span></div>
+      <div style="font-size:13px;line-height:18px;color:var(--ink-muted);overflow-wrap:anywhere"><span class="mono">init</span> writes <span class="mono">state.json</span> and applies the house standards. <span class="mono">sketch</span> also builds a complete first version. <span class="mono">feel</span> only prints.</div>
+    </div>
+
+    <div style="display:grid;gap:8px;align-content:start;min-width:0;padding:12px;border:1px solid var(--line);border-radius:var(--radius-container);background:var(--surface-raised)">
+      <span class="kicker">Record decisions</span>
+      <div class="ui-row"><span class="chip mono">set</span><span class="chip mono">pick</span><span class="chip mono">lock</span><span class="chip mono">unlock</span></div>
+      <div style="font-size:13px;line-height:18px;color:var(--ink-muted);overflow-wrap:anywhere"><span class="mono">decisions.md</span> and <span class="mono">state.json</span>, then a fresh <span class="mono">DESIGN.md</span> and <span class="mono">PRODUCT.md</span> (skip with <span class="mono">--no-doc</span>).</div>
+    </div>
+
+    <div style="display:grid;gap:8px;align-content:start;min-width:0;padding:12px;border:1px solid var(--accent);box-shadow:inset 0 0 0 1px var(--accent);border-radius:var(--radius-container);background:var(--surface-raised)">
+      <span class="kicker" style="color:var(--accent-text)">Build and check</span>
+      <div class="ui-row"><span class="chip accent mono">build</span><span class="chip mono">generate</span><span class="chip mono">validate</span><span class="chip mono">export</span><span class="chip mono">design-md</span><span class="chip mono">resolve</span></div>
+      <div style="font-size:13px;line-height:18px;color:var(--ink-muted);overflow-wrap:anywhere"><span class="mono">tokens/</span>, every export in <span class="mono">build/</span>, <span class="mono">DESIGN.md</span>, <span class="mono">overview.html</span> and the preview pages. <span class="mono">validate</span> and <span class="mono">resolve</span> only print.</div>
+    </div>
+
+    <div style="display:grid;gap:8px;align-content:start;min-width:0;padding:12px;border:1px solid var(--line);border-radius:var(--radius-container);background:var(--surface-raised)">
+      <span class="kicker">See the system</span>
+      <div class="ui-row"><span class="chip mono">overview</span><span class="chip mono">preview</span><span class="chip mono">show</span></div>
+      <div style="font-size:13px;line-height:18px;color:var(--ink-muted);overflow-wrap:anywhere"><span class="mono">overview.html</span>, <span class="mono">preview.html</span>, and one filled template per <span class="mono">show</span>. Add <span class="mono">--open</span> to open it.</div>
+    </div>
+
+    <div style="display:grid;gap:8px;align-content:start;min-width:0;padding:12px;border:1px solid var(--line);border-radius:var(--radius-container);background:var(--surface-raised)">
+      <span class="kicker">Learn from a reference</span>
+      <div class="ui-row"><span class="chip mono">intake</span></div>
+      <div style="font-size:13px;line-height:18px;color:var(--ink-muted);overflow-wrap:anywhere">Reads a measurement file such as <span class="mono">opendesigner/references/site.json</span> and proposes dial positions with a confidence. <span class="mono">--accept</span> records them.</div>
+    </div>
+
+    <div style="display:grid;gap:8px;align-content:start;min-width:0;padding:12px;border:1px solid var(--line);border-radius:var(--radius-container);background:var(--surface-raised)">
+      <span class="kicker">Keep it consistent</span>
+      <div class="ui-row"><span class="chip mono">review</span></div>
+      <div style="font-size:13px;line-height:18px;color:var(--ink-muted);overflow-wrap:anywhere">Reports hard-coded colors, sizes, radii, shadows and durations in your code, and stale <span class="mono">DESIGN.md</span> sections. <span class="mono">--strict</span> fails on any find.</div>
+    </div>
+
+    <div style="display:grid;gap:8px;align-content:start;min-width:0;padding:12px;border:1px solid var(--line);border-radius:var(--radius-container);background:var(--surface-raised)">
+      <span class="kicker">Standards</span>
+      <div class="ui-row"><span class="chip mono">standards</span><span class="chip mono">standard override</span><span class="chip mono">restore</span><span class="chip mono">add</span><span class="chip mono">remove</span></div>
+      <div style="font-size:13px;line-height:18px;color:var(--ink-muted);overflow-wrap:anywhere">Every change goes into the decision log. <span class="mono">standards.md</span> and <span class="mono">standards-state.json</span> list what the system follows.</div>
+    </div>
+
+    <div style="display:grid;gap:8px;align-content:start;min-width:0;padding:12px;border:1px solid var(--line);border-radius:var(--radius-container);background:var(--surface-raised)">
+      <span class="kicker">Feedback</span>
+      <div class="ui-row"><span class="chip mono">feedback</span></div>
+      <div style="font-size:13px;line-height:18px;color:var(--ink-muted);overflow-wrap:anywhere"><span class="mono">opendesigner/feedback.md</span> and a ready-to-file GitHub issue link. Nothing is posted unless you submit it.</div>
+    </div>
+
+  </div>
+</div>
+<figcaption>The engine's commands in eight groups, each with the files it writes. Build is the one to run after every change: it refreshes the tokens, every export and the pages together.</figcaption>
+</figure>

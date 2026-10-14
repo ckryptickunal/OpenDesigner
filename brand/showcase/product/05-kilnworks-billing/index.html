@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Billing and usage · Marlpit Analytics · Kilnworks</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+:root {
+  --ink: var(--ds-color-text-primary);
+  --muted: var(--ds-color-text-secondary);
+  --faint: var(--ds-color-text-tertiary);
+  --sep: var(--ds-color-neutral-light-4);   /* row hairlines: no separator role yet */
+  --edge: var(--ds-color-neutral-light-5);  /* card and control edges */
+  --page: var(--ds-color-surface-raised);
+  --wash: var(--ds-color-surface-nav);
+  --accent: var(--ds-color-bg-action-primary);
+  --mono: var(--ds-font-family-mono);
+  --row: 36px;
+}
+* { box-sizing: border-box; margin: 0; }
+html, body { background: var(--page); }
+body { font: var(--ds-text-body-md); color: var(--ink); -webkit-font-smoothing: antialiased; min-width: 1280px; }
+button, input { font: inherit; color: inherit; }
+button { background: none; border: 0; cursor: pointer; }
+a { color: inherit; }
+:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); border-radius: var(--ds-radius-control-sm); }
+.num { font-variant-numeric: tabular-nums; }
+.mono { font-family: var(--mono); font-size: var(--ds-font-size-12); letter-spacing: 0; }
+.cents { color: var(--faint); }
+svg.i { width: var(--ds-size-icon-sm); height: var(--ds-size-icon-sm); flex: none; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+.app { display: grid; grid-template-columns: 232px 1fr; min-height: 100vh; }
+
+/* Sidebar */
+aside { position: sticky; top: 0; height: 100vh; background: var(--wash); border-right: 1px solid var(--edge); padding: var(--ds-space-12) var(--ds-space-12); display: flex; flex-direction: column; gap: var(--ds-space-2); }
+.org { display: flex; align-items: center; gap: var(--ds-space-8); height: var(--ds-size-control-md); padding: 0 var(--ds-space-8); border-radius: var(--ds-radius-control); font: var(--ds-text-label-lg); margin-bottom: var(--ds-space-8); }
+.org .tile { width: 20px; height: 20px; border-radius: var(--ds-radius-control-sm); background: var(--ds-color-bg-inverse); display: grid; place-items: center; }
+.org .chev { margin-left: auto; color: var(--faint); }
+.navlabel { font: var(--ds-text-label-sm); color: var(--faint); padding: var(--ds-space-16) var(--ds-space-8) var(--ds-space-6); }
+.nav a { display: flex; align-items: center; gap: var(--ds-space-8); height: 30px; padding: 0 var(--ds-space-8); border-radius: var(--ds-radius-control); color: var(--muted); text-decoration: none; }
+.nav a svg { color: var(--faint); }
+.nav a[aria-current] { background: var(--ds-color-bg-neutral-subtle-hover); color: var(--ink); font-weight: 500; }
+.nav a[aria-current] svg { color: var(--ink); }
+.nav a .n { margin-left: auto; font: var(--ds-text-body-sm); color: var(--faint); font-variant-numeric: tabular-nums; }
+.me { margin-top: auto; display: flex; align-items: center; gap: var(--ds-space-8); padding: var(--ds-space-8); border-top: 1px solid var(--edge); }
+.me .av { width: 24px; height: 24px; border-radius: 50%; background: var(--ds-color-neutral-light-5); display: grid; place-items: center; font: var(--ds-text-label-sm); color: var(--muted); }
+.me div { line-height: 1.25; }
+.me small { display: block; font: var(--ds-text-body-sm); color: var(--faint); }
+
+/* Main */
+main { padding: var(--ds-space-20) var(--ds-space-32) 0; min-width: 0; }
+.crumbs { font: var(--ds-text-body-sm); color: var(--faint); display: flex; gap: var(--ds-space-6); }
+.head { display: flex; align-items: flex-end; justify-content: space-between; margin-top: var(--ds-space-4); }
+h1 { font: var(--ds-text-title-lg); letter-spacing: -0.01em; }
+.actions { display: flex; gap: var(--ds-space-8); }
+.btn { height: var(--ds-size-control-md); padding: 0 var(--ds-space-12); display: inline-flex; align-items: center; gap: var(--ds-space-6); border-radius: var(--ds-radius-control); font: var(--ds-text-label-lg); border: 1px solid var(--edge); background: var(--page); white-space: nowrap; }
+.btn.primary { background: var(--accent); border-color: transparent; color: var(--ds-color-text-on-action); }
+.btn.quiet { border-color: transparent; color: var(--muted); font-weight: 400; }
+.tabs { display: flex; gap: var(--ds-space-20); border-bottom: 1px solid var(--edge); margin-top: var(--ds-space-12); }
+.tabs a { position: relative; height: 36px; display: inline-flex; align-items: center; gap: var(--ds-space-6); color: var(--muted); text-decoration: none; }
+.tabs a[aria-current] { color: var(--ink); font-weight: 500; }
+.tabs a[aria-current]::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--ink); }
+
+/* Plan line */
+.plan { display: flex; align-items: center; gap: var(--ds-space-12); padding: var(--ds-space-16) 0; border-bottom: 1px solid var(--sep); }
+.plan .name { font: var(--ds-text-label-lg); font-weight: 600; }
+.badge { display: inline-flex; align-items: center; gap: var(--ds-space-4); height: 20px; padding: 0 var(--ds-space-6); border-radius: var(--ds-radius-control-sm); font: var(--ds-text-label-sm); background: var(--ds-color-bg-neutral-subtle); color: var(--muted); }
+.badge.ok { background: var(--ds-color-bg-success-subtle); color: var(--ds-color-text-success); }
+.facts { display: flex; align-items: center; gap: var(--ds-space-8); color: var(--muted); }
+.facts .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--ds-color-neutral-light-7); }
+.facts b { color: var(--ink); font-weight: 500; }
+.plan .spacer { flex: 1; }
+
+/* Meters strip */
+.meters { display: grid; grid-template-columns: 1.25fr 1fr 1fr; padding: var(--ds-space-16) 0 var(--ds-space-20); }
+.meter + .meter { border-left: 1px solid var(--sep); padding-left: var(--ds-space-24); }
+.meter { padding-right: var(--ds-space-24); }
+.meter .top { display: flex; align-items: baseline; justify-content: space-between; gap: var(--ds-space-8); }
+.meter .label { font: var(--ds-text-label-md); color: var(--muted); }
+.meter .pct { font: var(--ds-text-label-sm); color: var(--muted); font-variant-numeric: tabular-nums; }
+.meter .fig { font: var(--ds-text-title-md); font-weight: 500; margin-top: var(--ds-space-2); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+.meter .fig .of { font: var(--ds-text-body-md); color: var(--muted); letter-spacing: 0; }
+.bar { position: relative; height: 6px; border-radius: 3px; background: var(--ds-color-neutral-light-3); margin-top: var(--ds-space-8); }
+.bar .fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; background: var(--ink); }
+.bar .fc { position: absolute; top: 0; bottom: 0; border-radius: 0 3px 3px 0; background: repeating-linear-gradient(135deg, var(--ds-color-neutral-light-7) 0 1.5px, transparent 1.5px 4px); }
+.bar .tick { position: absolute; top: -3px; bottom: -3px; width: 1px; background: var(--ds-color-neutral-light-8); }
+.meter .sub { margin-top: var(--ds-space-8); font: var(--ds-text-body-sm); color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* Grid */
+.grid { display: grid; grid-template-columns: minmax(0, 1fr) 368px; gap: var(--ds-space-16); align-items: start; }
+.card { border: 1px solid var(--edge); border-radius: var(--ds-radius-container); background: var(--page); }
+.card > header { display: flex; align-items: center; gap: var(--ds-space-8); padding: var(--ds-space-12) var(--ds-space-16); }
+.card h2 { font: var(--ds-text-label-lg); font-weight: 600; }
+.card header .aside { margin-left: auto; font: var(--ds-text-body-sm); color: var(--muted); }
+
+/* Spend chart */
+.spend .figrow { display: flex; align-items: flex-end; gap: var(--ds-space-32); padding: 0 var(--ds-space-16); }
+.spend .big { font: var(--ds-text-headline-sm); font-weight: 500; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.spend .kv { font: var(--ds-text-body-sm); color: var(--muted); padding-bottom: 5px; }
+.spend .kv b { display: block; font: var(--ds-text-label-lg); color: var(--ink); font-variant-numeric: tabular-nums; }
+.plot { position: relative; height: 176px; margin: var(--ds-space-16) var(--ds-space-16) 0; }
+.plot svg { position: absolute; inset: 0; overflow: visible; }
+.axis { display: flex; justify-content: space-between; margin: var(--ds-space-6) var(--ds-space-16) 0; padding-bottom: var(--ds-space-12); font: var(--ds-text-body-sm); color: var(--faint); }
+.legend { display: flex; gap: var(--ds-space-20); padding: var(--ds-space-12) var(--ds-space-16); border-top: 1px solid var(--sep); font: var(--ds-text-body-sm); color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: var(--ds-space-6); white-space: nowrap; }
+.legend .note { margin-left: auto; }
+
+/* Ledger */
+.ledger { padding: 0 var(--ds-space-16) var(--ds-space-12); }
+.ledger .line { display: flex; justify-content: space-between; align-items: baseline; height: 30px; align-items: center; font-variant-numeric: tabular-nums; }
+.ledger .line span:first-child { color: var(--muted); }
+.ledger .line small { font: var(--ds-text-body-sm); color: var(--faint); margin-left: var(--ds-space-6); }
+.ledger .rule { border-top: 1px solid var(--sep); margin: var(--ds-space-4) 0; }
+.ledger .total { font-weight: 600; height: 34px; }
+.ledger .total span:first-child { color: var(--ink); }
+.ledger .foot { margin-top: var(--ds-space-6); font: var(--ds-text-body-sm); color: var(--muted); }
+
+/* Usage table */
+table { width: 100%; border-collapse: collapse; }
+th { font: var(--ds-text-label-md); color: var(--muted); text-align: left; height: 32px; padding: 0 var(--ds-space-16); border-top: 1px solid var(--sep); border-bottom: 1px solid var(--sep); white-space: nowrap; }
+td { height: var(--row); padding: 0 var(--ds-space-16); border-bottom: 1px solid var(--sep); white-space: nowrap; font-variant-numeric: tabular-nums; }
+th.r, td.r { text-align: right; }
+tr.group td { height: 32px; background: var(--ds-color-surface-base); font: var(--ds-text-label-md); color: var(--muted); }
+tr.group td.r { color: var(--ink); font-variant-numeric: tabular-nums; }
+td.prod { padding-left: var(--ds-space-32); }
+td.prod .sku { margin-left: var(--ds-space-8); color: var(--faint); }
+td.use { color: var(--ink); }
+td.use small, td.rate { color: var(--muted); }
+td small { font-size: var(--ds-font-size-12); }
+td.rate small { color: var(--faint); }
+td.spark svg { display: block; }
+.tablefoot { padding: var(--ds-space-12) var(--ds-space-16); font: var(--ds-text-body-sm); color: var(--muted); }
+
+/* Invoices */
+.inv td { height: 52px; }
+.inv td.amt { padding-right: var(--ds-space-8); }
+.inv .amtwrap { display: flex; align-items: center; justify-content: flex-end; gap: var(--ds-space-4); }
+.inv td:first-child { padding-right: 0; }
+.inv td .per { display: block; }
+.inv td .ref { display: block; color: var(--faint); margin-top: 1px; }
+.inv .dl { width: 28px; height: 28px; display: grid; place-items: center; border-radius: var(--ds-radius-control); color: var(--muted); }
+.inv tr:last-child td { border-bottom: 0; }
+.status { display: inline-flex; align-items: center; gap: var(--ds-space-4); font: var(--ds-text-label-sm); color: var(--muted); }
+.status svg { width: 12px; height: 12px; }
+.status.paid { color: var(--ds-color-text-success); }
+.card .more { font: var(--ds-text-body-sm); color: var(--muted); text-decoration: underline; text-decoration-color: var(--ds-color-neutral-light-7); text-underline-offset: 3px; margin-left: auto; }
+.stack { display: flex; flex-direction: column; gap: var(--ds-space-16); }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <pattern id="band" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="4" height="4" fill="var(--ds-color-neutral-light-2)"/><line x1="0" y1="0" x2="0" y2="4" stroke="var(--ds-color-neutral-light-5)" stroke-width="1"/></pattern>
+</defs></svg>
+<div class="app">
+  <aside aria-label="Organization">
+    <div class="org" role="button" tabindex="0">
+      <span class="tile"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 10.5V6a3.5 3.5 0 0 1 7 0v4.5" fill="none" stroke="#fff" stroke-width="1.6"/><path d="M4.75 10.5V7.5h2.5v3" fill="#fff"/></svg></span>
+      Marlpit Analytics
+      <svg class="i chev" viewBox="0 0 16 16"><path d="M5.5 6 8 3.5 10.5 6M5.5 10 8 12.5 10.5 10"/></svg>
+    </div>
+    <nav class="nav" aria-label="Compute">
+      <a href="#"><svg class="i" viewBox="0 0 16 16"><path d="M2.5 7 8 2.5 13.5 7v6.5h-11Z"/></svg>Overview</a>
+      <a href="#"><svg class="i" viewBox="0 0 16 16"><rect x="2.5" y="3" width="11" height="4" rx="1"/><rect x="2.5" y="9" width="11" height="4" rx="1"/></svg>Instances<span class="n">38</span></a>
+      <a href="#"><svg class="i" viewBox="0 0 16 16"><circle cx="5" cy="5" r="2"/><circle cx="11" cy="5" r="2"/><circle cx="8" cy="11" r="2"/></svg>Clusters<span class="n">3</span></a>
+      <a href="#"><svg class="i" viewBox="0 0 16 16"><path d="M3 4.5h10M3 8h7M3 11.5h4"/></svg>Jobs</a>
+      <a href="#"><svg class="i" viewBox="0 0 16 16"><path d="M5 6.5 8 3.5l3 3M8 3.5v7M3 12.5h10"/></svg>Endpoints<span class="n">5</span></a>
+      <a href="#"><svg class="i" viewBox="0 0 16 16"><ellipse cx="8" cy="4.5" rx="5" ry="2"/><path d="M3 4.5v7c0 1.1 2.2 2 5 2s5-.9 5-2v-7"/></svg>Storage</a>
+      <a href="#"><svg class="i" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5"/><path d="M2.5 8h11M8 2.5c2 2.2 2 8.8 0 11M8 2.5c-2 2.2-2 8.8 0 11"/></svg>Networking</a>
+    </nav>
+    <div class="navlabel">Organization</div>
+    <nav class="nav" aria-label="Organization settings">
+      <a href="#"><svg class="i" viewBox="0 0 16 16"><circle cx="6" cy="6" r="2.5"/><path d="M2 13c.5-2.2 2-3.5 4-3.5s3.5 1.3 4 3.5M11 4a2 2 0 1 1 0 4M12 9.5c1.3.4 2 1.6 2.3 3"/></svg>Members<span class="n">8</span></a>
+      <a href="#"><svg class="i" viewBox="0 0 16 16"><circle cx="5.5" cy="10.5" r="2.5"/><path d="m7.5 8.5 5-5M11 5l1.5 1.5"/></svg>API keys</a>
+      <a href="#" aria-current="page"><svg class="i" viewBox="0 0 16 16"><rect x="2" y="3.5" width="12" height="9" rx="1.5"/><path d="M2 6.5h12M4.5 10h2"/></svg>Billing</a>
+      <a href="#"><svg class="i" viewBox="0 0 16 16"><path d="M8 2.5v1.2M8 12.3v1.2M2.5 8h1.2M12.3 8h1.2M4.1 4.1l.9.9M11 11l.9.9M4.1 11.9l.9-.9M11 5l.9-.9"/><circle cx="8" cy="8" r="2.5"/></svg>Settings</a>
+    </nav>
+    <div class="me"><span class="av">JE</span><div>Jonas Ekdahl<small>Billing admin</small></div></div>
+  </aside>
+
+  <main>
+    <div class="crumbs"><span>Marlpit Analytics</span><span>/</span><span>Billing</span></div>
+    <div class="head">
+      <h1>Billing and usage</h1>
+      <div class="actions">
+        <button class="btn"><svg class="i" viewBox="0 0 16 16"><path d="M8 2.5v8M4.5 7 8 10.5 11.5 7M3 13.5h10"/></svg>Export usage CSV</button>
+        <button class="btn primary">Edit budget</button>
+      </div>
+    </div>
+    <nav class="tabs" aria-label="Billing">
+      <a href="#" aria-current="page">Usage</a>
+      <a href="#">Invoices</a>
+      <a href="#">Payment method</a>
+      <a href="#">Tax details</a>
+    </nav>
+
+    <section class="plan" aria-label="Plan">
+      <span class="name">Team</span>
+      <span class="badge ok">Active</span>
+      <div class="facts">
+        <span><b class="num">$480.00</b> per month for 10 seats</span><span class="dot"></span>
+        <span>Includes a $1,000 usage credit</span><span class="dot"></span>
+        <span>Renews <b>Nov 1, 2026</b></span><span class="dot"></span>
+        <span>Card ending <span class="num">2861</span></span>
+      </div>
+      <span class="spacer"></span>
+      <button class="btn">Change plan</button>
+      <button class="btn quiet">Cancel plan</button>
+    </section>
+
+    <section class="meters" aria-label="Limits">
+      <div class="meter">
+        <div class="top"><span class="label">Monthly budget</span><span class="pct" id="m-bud-pct">53% used</span></div>
+        <div class="fig" id="m-bud-fig">$6,412.38 <span class="of">of $12,000.00</span></div>
+        <div class="bar" role="img" aria-label="Budget used and forecast"><span class="fc" id="m-bud-fc"></span><span class="fill" id="m-bud-fill"></span><span class="tick" style="left:50%"></span><span class="tick" style="left:90%"></span></div>
+        <div class="sub" id="m-bud-sub">Alerts at 50% (sent Oct 14) and 90%. Nothing pauses at 100%.</div>
+      </div>
+      <div class="meter">
+        <div class="top"><span class="label">Seats</span><span class="pct">80% used</span></div>
+        <div class="fig">8 <span class="of">of 10 seats</span></div>
+        <div class="bar"><span class="fill" style="width:80%"></span></div>
+        <div class="sub">2 seats free. Extra seats are $48.00 per month each.</div>
+      </div>
+      <div class="meter">
+        <div class="top"><span class="label">Included usage credit</span><span class="pct">100% used</span></div>
+        <div class="fig">$1,000.00 <span class="of">of $1,000.00</span></div>
+        <div class="bar"><span class="fill" style="width:100%"></span></div>
+        <div class="sub" id="m-cred-sub">Used up on Oct 3. Resets Nov 1.</div>
+      </div>
+    </section>
+
+    <div class="grid">
+      <div class="stack">
+        <section class="card spend" aria-label="Spend this period">
+          <header><h2>Spend this period</h2><span class="aside">Oct 1 – Oct 31, 2026 · day 14 of 31 · updated 22:40 UTC</span></header>
+          <div class="figrow">
+            <div class="big" id="sp-big">$6,412<span class="cents">.38</span></div>
+            <div class="kv">Average per day<b id="sp-avg">$458.03</b></div>
+            <div class="kv">Forecast by Oct 31<b id="sp-fc">$14,997.12</b></div>
+            <div class="kv">Budget<b>$12,000.00</b></div>
+          </div>
+          <div class="plot" id="plot"></div>
+          <div class="axis"><span>Oct 1</span><span>Oct 31</span></div>
+          <div class="legend">
+            <span><svg width="14" height="4" aria-hidden="true"><path d="M1 2h12" stroke="var(--ink)" stroke-width="1.5"/></svg>Actual, after credit</span>
+            <span><svg width="14" height="4" aria-hidden="true"><path d="M1 2h12" stroke="var(--ds-color-neutral-light-8)" stroke-width="1.5" stroke-dasharray="1.5 3" stroke-linecap="round"/></svg>Forecast</span>
+            <span><svg width="14" height="10" aria-hidden="true"><rect x="1" y="1" width="12" height="8" rx="2" fill="var(--ds-color-neutral-light-3)"/></svg>Likely range</span>
+            <span><svg width="14" height="4" aria-hidden="true"><path d="M1 2h12" stroke="var(--ds-color-neutral-light-10)" stroke-width="1" stroke-dasharray="4 3"/></svg>Budget</span>
+            <span class="note">Forecast from the last 7 days.</span>
+          </div>
+        </section>
+
+        <section class="card" aria-label="Usage by product">
+          <header><h2>Usage by product</h2><span class="aside">9 products · Oct 1 – Oct 14</span></header>
+          <table>
+            <thead><tr><th>Product</th><th class="r">Usage</th><th class="r">Rate</th><th>Daily</th><th class="r">Charge</th></tr></thead>
+            <tbody id="usage"></tbody>
+          </table>
+        </section>
+      </div>
+
+      <div class="stack">
+        <section class="card" aria-label="Current period">
+          <header><h2>Current period, to date</h2><span class="aside">Oct 1 – Oct 14</span></header>
+          <div class="ledger">
+            <div class="line"><span>Team plan, 10 seats</span><span>$480.00</span></div>
+            <div class="line"><span>Usage charges<small>9 products</small></span><span id="lg-use">$6,932.38</span></div>
+            <div class="line"><span>Included usage credit</span><span>−$1,000.00</span></div>
+            <div class="rule"></div>
+            <div class="line"><span>Subtotal</span><span id="lg-sub">$6,412.38</span></div>
+            <div class="line"><span>Sales tax</span><span style="color:var(--faint)">Calculated on Nov 1</span></div>
+            <div class="rule"></div>
+            <div class="line total"><span>Amount due so far</span><span id="lg-due">$6,412.38 <span style="color:var(--faint);font-weight:400">USD</span></span></div>
+            <p class="foot">Charged to the card ending 2861 on Nov 1. Usage past the credit is billed at the listed rates, with no overage multiplier.</p>
+          </div>
+        </section>
+
+        <section class="card" aria-label="Invoices">
+          <header><h2>Invoices</h2><a class="more" href="#">All 14 invoices</a></header>
+          <table class="inv">
+            <thead><tr><th>Period</th><th>Status</th><th class="r" style="padding-right:44px">Total</th></tr></thead>
+            <tbody>
+              <tr><td><span class="per">Sep 2026</span><span class="ref mono">KW-2783-0926</span></td><td><span class="status paid"><svg class="i" viewBox="0 0 16 16"><path d="m3.5 8.5 3 3 6-7"/></svg>Paid</span></td><td class="r amt"><span class="amtwrap"><span>$11,284.17</span><button class="dl" aria-label="Download September invoice PDF"><svg class="i" viewBox="0 0 16 16"><path d="M8 2.5v8M4.5 7 8 10.5 11.5 7M3 13.5h10"/></svg></button></span></td></tr>
+              <tr><td><span class="per">Aug 2026</span><span class="ref mono">KW-2783-0826</span></td><td><span class="status paid"><svg class="i" viewBox="0 0 16 16"><path d="m3.5 8.5 3 3 6-7"/></svg>Paid</span></td><td class="r amt"><span class="amtwrap"><span>$9,906.42</span><button class="dl" aria-label="Download August invoice PDF"><svg class="i" viewBox="0 0 16 16"><path d="M8 2.5v8M4.5 7 8 10.5 11.5 7M3 13.5h10"/></svg></button></span></td></tr>
+              <tr><td><span class="per">Jul 2026</span><span class="ref mono">KW-2783-0726</span></td><td><span class="status paid"><svg class="i" viewBox="0 0 16 16"><path d="m3.5 8.5 3 3 6-7"/></svg>Paid</span></td><td class="r amt"><span class="amtwrap"><span>$10,412.80</span><button class="dl" aria-label="Download July invoice PDF"><svg class="i" viewBox="0 0 16 16"><path d="M8 2.5v8M4.5 7 8 10.5 11.5 7M3 13.5h10"/></svg></button></span></td></tr>
+              <tr><td><span class="per">Jun 2026</span><span class="ref mono">KW-2783-0626</span></td><td><span class="status"><svg class="i" viewBox="0 0 16 16"><path d="M3 8a5 5 0 1 0 1.5-3.5M3 2.5v2.5h2.5"/></svg>Part refund</span></td><td class="r amt"><span class="amtwrap"><span>$8,738.66</span><button class="dl" aria-label="Download June invoice PDF"><svg class="i" viewBox="0 0 16 16"><path d="M8 2.5v8M4.5 7 8 10.5 11.5 7M3 13.5h10"/></svg></button></span></td></tr>
+            </tbody>
+          </table>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+(() => {
+/* Invented data for a fictional cloud. The product rows add up to the usage line, the usage line minus
+   the credit plus the plan fee is the spend figure, and the chart is built from the same daily values. */
+const PRODUCTS = [
+  {family: "Compute", rows: [
+    ["GPU instances", "g2.large", 1842.5, "GPU-h", 2.10, "per GPU-h", 3869.25, 1.10],
+    ["CPU instances", "c3 family", 21406, "vCPU-h", 0.034, "per vCPU-h", 727.80, 1.0],
+    ["Batch jobs", "", 96214, "job-min", 0.012, "per min", 1154.57, 1.25],
+    ["Inference endpoints", "", 2503900, "requests", 0.10, "per 1K", 250.39, 1.05],
+  ]},
+  {family: "Storage", rows: [
+    ["Block volumes", "", 2840, "GB-mo", 0.10, "per GB-mo", 284.00, 0.4],
+    ["Object storage", "", 11920, "GB-mo", 0.021, "per GB-mo", 250.32, 0.3],
+    ["Snapshots", "", 3105, "GB-mo", 0.05, "per GB-mo", 155.25, 0.35],
+  ]},
+  {family: "Network", rows: [
+    ["Egress", "500 GB included", 4812, "GB", 0.05, "per GB", 215.60, 0.9],
+    ["Load balancers", "6 active", 2016, "LB-h", 0.0125, "per LB-h", 25.20, 0.1],
+  ]},
+];
+const PLAN = 480, CREDIT = 1000, BUDGET = 12000, DAYS = 31, TODAY = 14;
+const money = v => (v < 0 ? "−" : "") + "$" + Math.abs(v).toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+const moneyHTML = v => { const s = money(v), k = s.lastIndexOf("."); return s.slice(0, k) + '<span class="cents">' + s.slice(k) + "</span>"; };
+const fmt = (v, d = 0) => v.toLocaleString("en-US", {minimumFractionDigits: d, maximumFractionDigits: d});
+const dow = d => (3 + d) % 7;              // Oct 1, 2026 is a Thursday (0 = Monday)
+const weekend = d => dow(d) >= 5;
+let seed = 11;
+const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+
+// daily shape per product, scaled so each product's 14 days add up to its charge
+const allRows = PRODUCTS.flatMap(g => g.rows);
+const daily = allRows.map(r => {
+  const raw = Array.from({length: TODAY}, (_, d) => (weekend(d) ? 1 - 0.45 * r[7] : 1) * (1 + 0.012 * d * r[7]) * (0.9 + rnd() * 0.2));
+  const k = r[6] / raw.reduce((a, b) => a + b, 0);
+  return raw.map(v => v * k);
+});
+const usageDay = Array.from({length: TODAY}, (_, d) => daily.reduce((s, p) => s + p[d], 0));
+const USAGE = allRows.reduce((s, r) => s + r[6], 0);
+const net = []; let cum = 0;
+usageDay.forEach(u => { cum += u; net.push(PLAN + Math.max(0, cum - CREDIT)); });
+const creditDay = net.findIndex((v, i) => i > 0 && v > PLAN) ; // first day the credit no longer covers usage
+const spend = net[TODAY - 1];
+
+// forecast: recent weekday and weekend averages, growing slowly; a widening likely range
+const wk = usageDay.filter((_, d) => !weekend(d) && d >= 7), we = usageDay.filter((_, d) => weekend(d) && d >= 7);
+const avgWk = wk.reduce((a, b) => a + b, 0) / wk.length, avgWe = we.reduce((a, b) => a + b, 0) / we.length;
+const fc = [spend], lo = [spend], hi = [spend];
+for (let d = TODAY; d < DAYS; d++) {
+  const u = (weekend(d) ? avgWe : avgWk) * (1 + 0.006 * (d - TODAY));
+  const spread = 0.022 * (d - TODAY + 1);
+  fc.push(fc[fc.length - 1] + u); lo.push(lo[lo.length - 1] + u * (1 - spread)); hi.push(hi[hi.length - 1] + u * (1 + spread));
+}
+const FORECAST = fc[fc.length - 1];
+let cross = null;
+for (let k = 1; k < fc.length; k++) if (fc[k - 1] < BUDGET && fc[k] >= BUDGET) cross = TODAY - 1 + (k - 1) + (BUDGET - fc[k - 1]) / (fc[k] - fc[k - 1]);
+const crossDay = Math.ceil(cross + 1); // calendar day of month
+
+// fill the page from the numbers
+document.getElementById("sp-big").innerHTML = moneyHTML(spend);
+document.getElementById("sp-avg").textContent = money(spend / TODAY);
+document.getElementById("sp-fc").textContent = money(FORECAST);
+document.getElementById("lg-use").textContent = money(USAGE);
+document.getElementById("lg-sub").textContent = money(PLAN + USAGE - CREDIT);
+document.getElementById("lg-due").firstChild.textContent = money(PLAN + USAGE - CREDIT) + " ";
+document.getElementById("m-bud-fig").innerHTML = Math.round(spend / BUDGET * 100) + '% <span class="of">of ' + money(BUDGET) + "</span>";
+document.getElementById("m-bud-pct").textContent = "Forecast " + Math.round(FORECAST / BUDGET * 100) + "% by Oct 31";
+document.getElementById("m-bud-fill").style.width = (spend / BUDGET * 100) + "%";
+document.getElementById("m-bud-fc").style.left = (spend / BUDGET * 100) + "%";
+document.getElementById("m-bud-fc").style.right = "0";
+document.getElementById("m-cred-sub").textContent = "Used up on Oct " + (creditDay + 1) + ". Resets Nov 1.";
+// the 50% alert goes out on the first day the spend passes $6,000 (same daily values as the chart)
+const alertDay = net.findIndex(v => v >= BUDGET * 0.5);
+document.getElementById("m-bud-sub").textContent = "Alerts at 50% (sent Oct " + (alertDay + 1) + ") and 90%. Nothing pauses at 100%.";
+
+// chart
+const NS = "http://www.w3.org/2000/svg";
+const el = (t, a, p) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); p && p.appendChild(e); return e; };
+const host = document.getElementById("plot");
+const W = host.clientWidth, H = host.clientHeight, top = 16, bottom = H - 1, MAX = 18000;
+const svg = el("svg", {width: W, height: H, viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Cumulative spend against budget, with forecast"}, host);
+const x = d => (d / (DAYS - 1)) * W;           // d = 0..30 (end of day d+1)
+const y = v => bottom - (v / MAX) * (bottom - top);
+[MAX, MAX / 2, 0].forEach(v => el("line", {x1: 0, x2: W, y1: Math.round(y(v)) + .5, y2: Math.round(y(v)) + .5, stroke: v ? "var(--sep)" : "var(--ds-color-neutral-light-6)"}, svg));
+el("text", {x: 0, y: Math.round(y(MAX)) - 5, fill: "var(--faint)", "font-size": 12}, svg).textContent = "$18k";
+// likely range band
+const fx = k => x(TODAY - 1 + k);
+let band = "M" + fx(0) + " " + y(hi[0]);
+hi.forEach((v, k) => band += "L" + fx(k).toFixed(1) + " " + y(v).toFixed(1));
+for (let k = lo.length - 1; k >= 0; k--) band += "L" + fx(k).toFixed(1) + " " + y(lo[k]).toFixed(1);
+el("path", {d: band + "Z", fill: "var(--ds-color-neutral-light-3)", "fill-opacity": 0.75}, svg);
+// budget
+const by = Math.round(y(BUDGET)) + .5;
+el("line", {x1: 0, x2: W, y1: by, y2: by, stroke: "var(--ds-color-neutral-light-10)", "stroke-width": 1, "stroke-dasharray": "4 3"}, svg);
+el("text", {x: 0, y: by - 6, fill: "var(--muted)", "font-size": 12}, svg).textContent = "Budget $12,000";
+// today
+const tx = Math.round(x(TODAY - 1)) + .5;
+el("line", {x1: tx, x2: tx, y1: top - 4, y2: bottom, stroke: "var(--ds-color-neutral-light-8)", "stroke-width": 1}, svg);
+el("text", {x: tx + 6, y: top + 6, fill: "var(--muted)", "font-size": 12}, svg).textContent = "Today, Oct 14";
+// forecast median: grey dotted up to the crossing, accent after it
+const path = (pts) => pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join("");
+const fpts = fc.map((v, k) => [fx(k), y(v)]);
+const ck = cross - (TODAY - 1);                 // fractional index into fc
+const cpt = [x(cross), y(BUDGET)];
+const before = fpts.filter((_, k) => k <= Math.floor(ck)).concat([cpt]);
+const after = [cpt].concat(fpts.filter((_, k) => k > ck));
+el("path", {d: path(before), fill: "none", stroke: "var(--ds-color-neutral-light-8)", "stroke-width": 1.5, "stroke-dasharray": "1.5 3.5", "stroke-linecap": "round"}, svg);
+el("path", {d: path(after), fill: "none", stroke: "var(--accent)", "stroke-width": 1.5, "stroke-dasharray": "1.5 3.5", "stroke-linecap": "round"}, svg);
+// actual
+el("path", {d: path(net.map((v, d) => [x(d), y(v)])), fill: "none", stroke: "var(--ink)", "stroke-width": 1.5, "stroke-linejoin": "round"}, svg);
+el("circle", {cx: x(TODAY - 1), cy: y(spend), r: 3, fill: "var(--ink)"}, svg);
+// the crossing, named
+el("circle", {cx: cpt[0], cy: cpt[1], r: 4, fill: "var(--page)", stroke: "var(--accent)", "stroke-width": 1.5}, svg);
+const lab = el("text", {x: cpt[0] - 10, y: cpt[1] - 24, "text-anchor": "end", fill: "var(--ds-color-text-accent)", "font-size": 12, "font-weight": 500}, svg);
+lab.textContent = "Forecast passes budget on Oct " + crossDay;
+el("text", {x: cpt[0] - 10, y: cpt[1] - 9, "text-anchor": "end", fill: "var(--muted)", "font-size": 12}, svg).textContent = "Over by " + money(FORECAST - BUDGET) + " at month end";
+el("text", {x: W, y: y(FORECAST) - 8, "text-anchor": "end", fill: "var(--ink)", "font-size": 12, "font-weight": 500}, svg).textContent = "$" + fmt(Math.round(FORECAST));
+
+// usage table
+const tb = document.getElementById("usage");
+let r = 0;
+PRODUCTS.forEach(g => {
+  const sub = g.rows.reduce((s, x) => s + x[6], 0);
+  tb.insertAdjacentHTML("beforeend", `<tr class="group"><td colspan="4">${g.family}</td><td class="r">${money(sub)}</td></tr>`);
+  g.rows.forEach(row => {
+    const [name, sku, qty, unit, rate, per, charge] = row;
+    const q = unit === "requests" ? (qty / 1e6).toFixed(2) + "M" : fmt(qty, qty % 1 ? 1 : 0);
+    const rt = rate < 0.1 ? "$" + rate.toString().replace(/^0/, "0") : money(rate);
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td class="prod">${name}${sku ? `<span class="sku">${sku}</span>` : ""}</td>
+      <td class="r use">${q} <small>${unit}</small></td>
+      <td class="r rate">${rt} <small>${per}</small></td>
+      <td class="spark"></td>
+      <td class="r">${money(charge)}</td>`;
+    tb.appendChild(tr);
+    const s = daily[r++], mx = Math.max(...s), SW = 110, SH = 20;
+    const sv = el("svg", {width: SW, height: SH, viewBox: `0 0 ${SW} ${SH}`, "aria-hidden": "true"}, tr.querySelector(".spark"));
+    s.forEach((v, d) => { const h = Math.max(2, v / mx * SH); el("rect", {x: d * 8, y: SH - h, width: 5, height: h, rx: 1, fill: weekend(d) ? "var(--ds-color-neutral-light-6)" : "var(--ds-color-neutral-light-9)"}, sv); });
+  });
+});
+tb.insertAdjacentHTML("beforeend", `<tr class="group"><td colspan="4" style="color:var(--ink)">Total usage charges</td><td class="r" style="font-weight:600">${money(USAGE)}</td></tr>`);
+})();
+</script>
+</body>
+</html>

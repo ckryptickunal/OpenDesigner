@@ -1,0 +1,20 @@
+<figure class="fig">
+<div class="fig-scene" data-scene="blue-stripes">
+<div class="fig-card wide" style="background:var(--ink);border-color:var(--ink)">
+<div class="fig-card-h" style="background:var(--ink);border-bottom-color:color-mix(in srgb, var(--surface-raised) 18%, transparent)"><span class="mono" style="font-size:13px;color:var(--surface-raised)"><span style="opacity:.6">$</span> engine.py review --project src</span><span class="chip" style="background:color-mix(in srgb, var(--surface-raised) 14%, transparent);color:var(--surface-raised)">test run</span></div>
+<div class="fig-card-b mono" style="font-size:12.5px;line-height:20px;color:var(--surface-raised);overflow-wrap:anywhere">
+<div>Review of src: <span class="num">1</span> files scanned.</div>
+<div><span class="num">3</span> hard-coded values skip the tokens: <span class="num">1</span> color, <span class="num">1</span> radius, <span class="num">1</span> size.</div>
+<div style="white-space:pre-wrap;padding-left:1.5em;text-indent:-1.5em;margin-top:6px">  card.css:1  #f3f4f6  -&gt;  <span style="color:var(--accent-soft)">use var(--ds-color-surface-sunken)</span></div>
+<div style="white-space:pre-wrap;padding-left:1.5em;text-indent:-1.5em">  card.css:1  border-radius: 7px  -&gt;  <span style="color:var(--accent-soft)">use var(--ds-radius-container)</span> (12px, the container radius)</div>
+<div style="white-space:pre-wrap;padding-left:1.5em;text-indent:-1.5em">  card.css:1  padding: 13px  -&gt;  <span style="color:var(--accent-soft)">use var(--ds-space-12)</span> (13 is off the 4px ladder)</div>
+<div style="white-space:pre-wrap;opacity:.7;margin-top:6px">  To keep a raw value on purpose, add the comment od-ignore on that line.</div>
+<div style="margin-top:10px"><span class="num">1</span> line breaks a standard:</div>
+<div style="white-space:pre-wrap;padding-left:1.5em;text-indent:-1.5em;margin-top:6px">  card.css:1  padding: 13px  -&gt;  <span style="color:var(--warn-soft)">Write spacing in rem or em so the layout scales with the user's text size.</span> (STD-accessibility-motion-13, must)</div>
+<div style="white-space:pre-wrap;opacity:.7;margin-top:6px">  Fix the code. A house standard changes only when the person asks: engine.py standard override &lt;id&gt; --why "&lt;their words&gt;".</div>
+<div style="margin-top:10px;color:var(--ok-soft)">DESIGN.md matches state.json.</div>
+</div>
+</div>
+</div>
+<figcaption>The whole output of engine.py review on a one-line style sheet: three raw values with the token to use for each, one line that breaks a house standard, and a DESIGN.md that is still in step with state.json.</figcaption>
+</figure>

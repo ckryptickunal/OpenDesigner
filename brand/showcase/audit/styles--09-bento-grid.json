@@ -1,0 +1,68 @@
+{
+ "piece": "styles/09-bento-grid",
+ "title": "09 · Bento grid · Holdfast",
+ "pattern": "feature section",
+ "platform": "web",
+ "industry": "customer support (B2B SaaS)",
+ "style": [
+  "bento grid",
+  "minimal",
+  "swiss"
+ ],
+ "tags": [
+  "bento grid",
+  "feature section",
+  "customer support",
+  "help desk",
+  "SLA",
+  "inbox",
+  "macros",
+  "CSAT",
+  "keyboard shortcuts",
+  "yellow"
+ ],
+ "score": 4,
+ "self_score": 4,
+ "verdict": "keep",
+ "strengths": [
+  "Every tile is working product with data that ties together: ticket #48207 is the selected inbox row, the SLA clock ('14:32', 'Enterprise · 1 h first reply') and the snooze menu's subject",
+  "A real tile hierarchy: one 5x2 inbox, a sun-yellow SLA tile, an ink keyboard tile and two white tiles, one gap (16 px) and one radius (24 px); colour does one job each (yellow = time running, ink = keys)",
+  "One grotesk (Schibsted Grotesk) carries it by size and weight: 'Inbox.' in 600 then the sentence in 400; the headline is regular with no highlighted phrase",
+  "The macro card bleeds off its tile's edge, breaking the box-in-box rhythm the way shipped bentos do"
+ ],
+ "slop_signals": [
+  "A generic SaaS headline ('Built around the promises you make customers.') over a structure that Plain and incident.io already ship",
+  "The Satisfaction tile has a dead band above its figure",
+  "Invented data reused across pieces: 'used 312 times' repeats the 312 from styles/08, and customer names echo other pieces (Quarry, Kettle)"
+ ],
+ "fixes": [
+  "Give the headline a fact (a breach rate, a time) instead of a promise",
+  "Tighten the Satisfaction tile so the chart and figure fill it",
+  "Rename 'Quarry & Vale' and 'Kettle Robotics', and change the 312"
+ ],
+ "references": [
+  {
+   "site": "Plain",
+   "url": "https://mobbin.com/sites/sections/9a0639c7-d64d-4486-8d3d-ee4b55f359b9",
+   "mobbin_url": "https://mobbin.com/sites/sections/9a0639c7-d64d-4486-8d3d-ee4b55f359b9",
+   "what": "Support feature tiles including an SLA 'First response time' control"
+  },
+  {
+   "site": "incident.io",
+   "url": "https://mobbin.com/sites/sections/73b24277-7af8-4268-ad64-e1f994fd24c1",
+   "mobbin_url": "https://mobbin.com/sites/sections/73b24277-7af8-4268-ad64-e1f994fd24c1",
+   "what": "Six feature tiles, each holding a real fragment of the product"
+  },
+  {
+   "site": "Intercom",
+   "url": "https://mobbin.com/sites/sections/fe15fe44-d336-4234-9780-e70800155eb1",
+   "mobbin_url": "https://mobbin.com/sites/sections/fe15fe44-d336-4234-9780-e70800155eb1",
+   "what": "A macro with a 'First name' token shown inside the product"
+  }
+ ],
+ "audited": "2026-10-14",
+ "audited_by": "independent",
+ "facts": [
+  "Name and number reuse: 'Quarry' is the brand of app-screens/09 and appears in product/01 ('Quarry Lane Books'); 'Kettle' appears in heroes/11 ('Kettle & Co.'); '312' is also styles/08's connector count"
+ ]
+}

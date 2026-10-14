@@ -1,0 +1,84 @@
+{
+ "piece": "heroes/03-organic-wellness",
+ "title": "03 Lullwort: organic wellness hero",
+ "pattern": "product hero",
+ "platform": "web",
+ "industry": "tea",
+ "style": [
+  "organic",
+  "playful",
+  "editorial"
+ ],
+ "tags": [
+  "product hero",
+  "tea",
+  "wellness",
+  "illustration",
+  "serif",
+  "cream",
+  "organic",
+  "shop"
+ ],
+ "score": 3,
+ "verdict": "polish",
+ "strengths": [
+  "Fraunces for the headline and the tin label with Instrument Sans for everything else is a good pair, and the tin's label (No. 3 Dusk Blend, chamomile, valerian) is drawn with real care",
+  "Copy sounds like a tea company: 'Chamomile, lemon balm and valerian, blended in small batches for the last hour of your evening'",
+  "The paper texture and the pen-and-wash illustration style are consistent across sun, flowers, tin and cup"
+ ],
+ "slop_signals": [
+  "'steep' sits in a sage pill highlight inside the headline; the highlighted-word move",
+  "Cream ground, a large clay/terracotta sun disc and dark-brown text: the brown + orange + cream palette the house rules flag, with the sage pulling it muddier",
+  "Two buttons ('Shop sleep teas' filled terracotta, 'Take the bedtime quiz' outlined) and a three-item dot-separated reassurance row underneath",
+  "The illustration is an assembly (sun, moon, three sparkles, daisies, valerian, tin, cup, hill) rather than one subject; the sparkles by the moon are decoration",
+  "Left text stack / right illustration is the DTC Shopify hero everyone ships"
+ ],
+ "fixes": [
+  "Re-cut the palette: cream and ink plus one accent (sage or clay, not both); make the text near-black, not brown",
+  "Remove the pill behind 'steep' and let the serif carry it, or set 'steep' in italic",
+  "Give the illustration one subject: the tin and cup on the horizon line at the bottom edge, as Yellowbird does, and cut the sun disc, moon and sparkles",
+  "One button; move the quiz to a text link",
+  "Drop the reassurance row or set it as a single quiet line under the nav"
+ ],
+ "references": [
+  {
+   "site": "Yellowbird",
+   "url": "https://mobbin.com/sites/sections/52ad00dc-133b-4d95-8b9a-c3c7bde88887",
+   "what": "Flat yellow ground, one serif headline, thick-outline art as the horizon and nothing else; one idea, no buttons competing"
+  },
+  {
+   "site": "Eat Hungry Tiger",
+   "url": "https://mobbin.com/sites/sections/0a65ae4c-404c-4d2d-bc70-bef248345510",
+   "what": "Warm palette done with strong tonal contrast (orange on deep brown), a pill nav, tiny corner copy, the product held in hands as the subject"
+  },
+  {
+   "site": "Seed",
+   "url": "https://mobbin.com/sites/sections/d3ceaefc-64f9-4093-b082-642389a7bf02",
+   "what": "Product photography as the hero with one button; the cream/green world is clean because the jars are the only warm thing"
+  },
+  {
+   "site": "Calm",
+   "url": "https://mobbin.com/sites/sections/7c6850a8-7a9e-43d8-951a-0232d9cad5b8",
+   "what": "A sleep brand with one photograph, three lines of copy and one button; restraint sells calm"
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "improve",
+  "said": "okay",
+  "date": "2026-10-14"
+ },
+ "round3": {
+  "score": 4,
+  "changed": [
+   "Palette re-cut through the engine: deep sage green brand #3D5A47, cool green-grey paper, chamomile yellow for the flowers only, warmth 85 to 30; no brown, orange or cream",
+   "Layout: one-line 90 px headline, lede and one button left, a 2 x 2 spec strip right (steep, per cup, tin, caffeine); the botanical plate is a horizon along the bottom",
+   "One object: a tea caddy on a shelf in front of the three plants it is made of, each labelled with its share, Latin name and the part used (chamomile 50% flowers, lemon balm 30% leaves, valerian 20% root, shown cut in a dish); the label prints 50 / 30 / 20 as one three-ink bar",
+   "Removed the sage pill behind 'steep', the second button, the reassurance row, the sun disc, moon, sparkles, cup, hill and blurred shadow discs",
+   "Tin redrawn: opaque slip lid, one light from the left, contact and cast shadows, standing on the shelf"
+  ]
+ },
+ "facts": [
+  "Lullwort shares the 'Lull' stem with Lullwater (app-screens/02), another sleep brand in the showcase"
+ ]
+}

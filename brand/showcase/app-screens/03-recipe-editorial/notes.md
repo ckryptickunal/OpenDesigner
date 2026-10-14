@@ -65,3 +65,19 @@ The first version used a still I painted in canvas 2D from `paint.py brief --slo
 3. **Gap: the paint skill has no in-app imagery slot and no still-only path.** Every slot is a 16:9 film size and painting needs an npm project.
 4. **Gap: warm neutrals turn brown with no warning.** The neutral chroma curve is highest at the text steps and lowest at the paper steps, the opposite of "cream paper, neutral ink".
 5. **Helped:** Q-color-14 `alternating` with a warm neutral base gave a real paper page with white cards; the paint brief's palette families were a ready list of in-system pigments.
+
+## Round 3 (owner review, 2026-10-14)
+**What he said:** "better fonts, better spacing."
+
+**What changed:**
+- **Fonts.** Fraunces (its SOFT and WONK axes read quirky) and Libre Franklin are replaced through the engine by **Literata** (display, OFL, optical sizes 7-72) and **Schibsted Grotesk** (text, OFL). Newsreader was tried first and dropped because it is already the serif of `app-screens/08`. Type roles: Large Title 34 (title, Literata 400, `text-wrap: balance`), Title 2 22 (Ingredients, Literata 500), Body 17, Subheadline 15, Footnote 13. Five sizes, nothing under 13, no letterspaced capitals, weights 400-500 except the button (600).
+- **Spacing.** One 20 pt margin for everything (the round buttons' circles, text, rules and the button sit on 20 and 370), 24 pt between groups, 52 pt ingredient rows, the credit 6 pt under the title. The double rule, folio and "Fig. 1" caption are gone.
+- **Photo** edge to edge from under the status bar (0-282 pt), with a black scrim (0.6 to 0 over 110 pt) so the white status bar reads: 5.3:1 for the clock and 3.3:1 for the icons against the brightest 5% of pixels behind them. The crop is tight enough that the knife makers' logos stay out of frame.
+- **One accent, one job.** Tomato red is only the "Start cooking" button. The kicker is secondary ink; ticked rows are a quiet grey-filled circle with tertiary text, no strikethrough. Olive and mustard are gone (`raw.accentCount 1`, `raw.secondaryColors []`), and a near-neutral base (#8C8984) gives a clean off-white page instead of cream with brown ink.
+- **The running timer is gone.** A step 3 timer on the recipe overview contradicted the unticked ingredients. In its place, the method at a glance: "6 steps · 55 min", "470 kcal per serving" and a bar sized by minutes (prep 5, blister 8, beans in 2 hands-on, in ink; simmer 25, grill 10, rest 5 as a 2 pt line), with the legend "Hands-on 15 min / Simmer, grill, rest 40 min". 5 + 8 + 2 = 15, 25 + 10 + 5 = 40, 55 in all.
+- Content: "2 jars, 700 g each"; "Photo: Kerri Leung / Unsplash" (it was "Photograph: Kerri Leung" in a magazine caption); "One pot · p. 32" is gone. Kcal re-estimated from the four main ingredients (about 1,900 kcal for 4): 470 per serving.
+- References this round: Apple News recipe https://mobbin.com/screens/2f5f45a8-5799-4de9-9f70-a5c77675de43 (photo under the status bar with round buttons, a fact line, quantity column), Noom https://mobbin.com/screens/b93dcf56-1078-493d-9977-469355ca45ee (serif title over a plain ingredient list), Blue Apron https://mobbin.com/screens/48abb101-7592-404e-8c4b-5464503eb2d5 (quantity column and one pinned action).
+
+**Fresh-eyes audit** (fresh-context agent, against the B2B product screens and the three references): **3/5** ("a recipe template; the running timer contradicts the page; two accent jobs; wasted top"), then **3/5** after the first rework (fade made an unticked row look ticked; status strip; widowed "and"), then **4/5** after the timeline and full-bleed photo, with three polish items (waiting segments too faint, status-bar margin, "per serving"), all fixed after it.
+
+**Checks:** `engine.py build` passes (1 warning: 12 text sizes from the old formula steps). `preflight.py html`: 1 error, "Literata has no @font-face" (Google Fonts `<link>`). `check_dates.py --year 2026`: passes (no dates on the page).

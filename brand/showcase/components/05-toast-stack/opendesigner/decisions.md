@@ -403,3 +403,18 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 - set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
 - reason: Soft, friendly open grotesk (OFL); one family for the whole piece
 - previous value: "system"
+
+## D-0021 · dials.roundness = 55
+- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: D-0014 · source_ref: none
+- reason: round 3: 24 px pillow toasts read as cards; shipped toasts are 8-12 px
+- previous value: 78
+
+## D-0022 · dials.depth = 45
+- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: D-0015 · source_ref: none
+- reason: round 3: no fog blobs; one quiet shadow on the toast
+- previous value: 72
+
+## D-0023 · name = "Kinroom"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: round 3: renamed; the first name belongs to real products in the same field
+- previous value: (the first name, listed in NAMES.md)

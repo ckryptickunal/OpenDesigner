@@ -1,0 +1,29 @@
+<figure class="fig">
+<div class="fig-panel">
+  <div class="kicker" style="margin-bottom:12px">Which dials follow which, until you move them</div>
+  <div style="display:grid;gap:8px">
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 12px;border:1px solid var(--line);border-radius:var(--radius-container);background:var(--surface-raised)">
+      <span class="chip ink">Expression</span>
+      <svg style="flex:none;width:20px;height:20px;color:var(--line-strong)" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h13M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="chip accent">Energy</span><span class="chip accent">Roundness</span><span class="chip accent">Colorfulness</span><span class="chip accent">Depth</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 12px;border:1px solid var(--line);border-radius:var(--radius-container);background:var(--surface-raised)">
+      <span class="chip ink">Density</span>
+      <svg style="flex:none;width:20px;height:20px;color:var(--line-strong)" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h13M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="chip accent">Roundness</span><span style="font-size:13px;line-height:18px;color:var(--ink-muted)">only when Density is above 50</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 12px;border:1px solid var(--line);border-radius:var(--radius-container);background:var(--surface-raised)">
+      <span class="chip ink">Energy</span>
+      <svg style="flex:none;width:20px;height:20px;color:var(--line-strong)" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h13M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="chip accent">Colorfulness</span>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:14px 0 6px"><span class="kicker">The formulas, from levers.json</span><span class="chip">marked inferred in the source</span></div>
+  <pre class="code-lines" style="white-space:pre-wrap;overflow-wrap:anywhere"><span class="k">energy</span>       = 50 + 0.5 × (expression − 50)
+<span class="k">roundness</span>    = 50 + 0.5 × (expression − 50) − 0.2 × max(0, density − 50)
+<span class="k">colorfulness</span> = 50 + 0.5 × (expression − 50) + 0.3 × (energy − 50)
+<span class="k">depth</span>        = 40 + 0.5 × (expression − 50)</pre>
+  <div style="margin-top:10px;font-size:13px;line-height:18px;color:var(--ink-muted)">Brand presence and Warmth follow nothing. Once you set any dial yourself, it stays where you put it: in OpenDesigner's own brand all eight are set, so none follows.</div>
+</div>
+<figcaption>Four character dials start from Expression, so one answer about how expressive the product is moves the corners, the color and the motion together. Setting a dial yourself detaches it.</figcaption>
+</figure>

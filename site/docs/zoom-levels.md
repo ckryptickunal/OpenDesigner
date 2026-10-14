@@ -9,6 +9,8 @@ updated: 2026-10-14
 
 OpenDesigner has four zoom levels: sketch, broad, defined and detailed. Everyone starts with the sketch, which gives a complete but rough system from up to five questions. After each level you can stop or zoom into one area, and every level leaves working files.
 
+{{figure:zoom-levels-ladder}}
+
 ## The four levels
 
 ### Level 0: sketch
@@ -53,6 +55,8 @@ That's your first version: everything works, and I picked most of the small choi
 Stop here, or go deeper on one part:
 Colors (about 6 min) · Text (about 2 min) · Everything, in 8 quick screens (about 8 min)
 ```
+
+{{figure:zoom-levels-offer}}
 
 - It offers at most three choices.
 - It puts first the areas whose choices change the most, then areas your answers made risky, such as a light brand color or a dense product.

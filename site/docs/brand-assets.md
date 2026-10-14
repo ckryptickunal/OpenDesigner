@@ -36,6 +36,8 @@ An internal tool with no brand may not need sound, haptics, photos, illustration
 
 It asks for one master file and makes the other sizes from it.
 
+{{figure:brand-assets-master}}
+
 - **Logo:** SVG or PDF, with the text turned into outlines.
 - **App icon:** layered files for each platform, and PNG for the app stores.
 - **Icons:** SVG drawn on the icon library's grid.
@@ -95,5 +97,7 @@ The engine makes no network calls. This skill does: it searches and downloads ar
 ## How the status is recorded
 
 Each hook gets a status: have, commissioning, tool, open library, placeholder or not needed. It stays pending until it is asked. The overview page shows how many of the 14 you have provided, and anything missing shows as "Not enough information".
+
+{{figure:brand-assets-board}}
 
 If you share a site you admire as a reference, its logo, art, photos and icons are never copied. They go on your own asset list instead. See [Start from an existing app or brand](/docs/existing-product/).

@@ -7,16 +7,27 @@ Makes small JPEG thumbnails in _thumbs/ so the page stays light. The full-size r
 (brand/.gitignore); each thumbnail links to the piece's live index.html.
 """
 import html
+import json
 import pathlib
 import re
 
 from PIL import Image
 
 HERE = pathlib.Path(__file__).resolve().parent
-CATS = [("heroes", "Hero sections", "1440 × 900"), ("components", "Web components", "1440 × 900"),
+CATS = [("product", "B2B product screens", "1440 × 900"), ("styles", "Style studies", "1440 × 900"),
+        ("heroes", "Hero sections", "1440 × 900"), ("components", "Web components", "1440 × 900"),
         ("app-screens", "App screens", "phone, tablet, desktop"), ("watch", "Watch screens", "49 mm class"),
-        ("footers", "Footer sections", "1440 wide")]  # mockups: add ("mockups", "Mockups", "scenes") back once that set is finished
+        ("footers", "Footer sections", "1440 wide"), ("mockups", "Mockups", "scenes")]
 THUMBS = HERE / "_thumbs"
+
+
+def shown(cat, piece):
+    """False for pieces that were replaced, or that the owner's review removed (audit/<cat>--<piece>.json)."""
+    notes = piece / "notes.md"
+    if notes.exists() and "Replaced on 2026-10-14 by" in notes.read_text():
+        return False
+    audit = HERE / "audit" / f"{cat}--{piece.name}.json"
+    return not (audit.exists() and json.loads(audit.read_text()).get("owner", {}).get("verdict") == "remove")
 
 
 def blurb(piece):
@@ -52,7 +63,7 @@ def main():
         if not d.is_dir():
             continue
         cards = []
-        for piece in sorted(p for p in d.iterdir() if p.is_dir() and (p / "shot.png").exists()):
+        for piece in sorted(p for p in d.iterdir() if p.is_dir() and (p / "shot.png").exists() and shown(cat, p)):
             title, text = blurb(piece)
             shots = sorted(piece.glob("shot*.png"))
             shots = [s for s in shots if "mobile" not in s.name] or shots
@@ -89,6 +100,9 @@ section h2{{font-size:clamp(28px,3vw,44px);font-weight:600;letter-spacing:-.04em
 {"".join(sections)}
 </body></html>"""
     (HERE / "index.html").write_text(page)
+    for old in THUMBS.glob("*.jpg"):  # thumbnails of pieces no longer shown
+        if f"_thumbs/{old.name}" not in page:
+            old.unlink()
     print(f"{total} pieces -> {HERE / 'index.html'}")
 
 

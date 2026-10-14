@@ -1,0 +1,86 @@
+{
+ "piece": "heroes/11-spend-platform",
+ "title": "11 Ferrow: spend management hero",
+ "pattern": "product hero",
+ "platform": "web",
+ "industry": "fintech, B2B spend management",
+ "style": [
+  "minimal",
+  "product-led",
+  "flat"
+ ],
+ "tags": [
+  "product hero",
+  "b2b",
+  "fintech",
+  "spend management",
+  "finance teams",
+  "product screenshot",
+  "data table",
+  "accounting sync",
+  "light"
+ ],
+ "score": 4,
+ "verdict": "keep",
+ "strengths": [
+  "The product is the picture, flat, whole and at 1:1 inside the 12-column grid: an 'October close' screen with '1,284 of 1,302 ready to post', a ledger table of cards and bills, and a drawer whose journal entry ('Dr 6420 Repairs 1,284.50 / Cr 2010 Card clearing') is a detail only a spend platform would show",
+  "One regular-weight headline that says what it does ('Company spend that reaches your ledger already coded.'), a plain kicker naming who it is for, and one button with a human caption ('A 30-minute call, no slides')",
+  "Product craft matches the B2B study: 13 px body, tabular right-aligned amounts with 'amounts in USD' in the table footer, a Source column with a card or bill icon, status as a word with a colored dot only on exceptions, hairline rows, one blue accent; every count reconciles (1,284 of 1,302 = 98.6%, 11 + 5 + 2 = 18 exceptions, 1,206 posted + 78 tonight = 1,284)"
+ ],
+ "slop_signals": [
+  "Conventional SaaS hero layout: eyebrow, two-line headline left, paragraph and one button right, product frame on a pale lavender band",
+  "Generic royal-blue primary and a plain text wordmark; nothing besides the product UI is ownable by this brand",
+  "Brand name 'Ferrow' sits one letter-swap from 'Ferrule' (product/06) in the same B2B set"
+ ],
+ "fixes": [
+  "Rename Ferrow (or Ferrule) so the two B2B brands are not confusable",
+  "Rename reused people and merchants: Mirela Kovač (Quoin has Kovač Structural), Tomás I. (Corvane's Tomás Herrera), Calder Inn (Quoin's Calder & Voss), Kettle & Co. (styles/09 Kettle Robotics), card ••4417 (Kilnworks, app-screens/01)",
+  "Give the brand one owned element (a mark, a typographic detail or an accent with a job) so the page is not only a well-made template"
+ ],
+ "references": [
+  {
+   "site": "Ramp",
+   "url": "https://mobbin.com/sites/sections/aaa4333c-a699-4fbb-9af0-6ec234b82053",
+   "what": "Centered headline with a one-sentence proof and one lime CTA; theirs owns a color, ours uses a generic blue"
+  },
+  {
+   "site": "Ramp",
+   "url": "https://mobbin.com/sites/sections/9436c1a2-ce97-44cf-883d-11b401e62872",
+   "what": "Headline, sub-line, one action, real photo; ours replaces the photo with the actual product"
+  },
+  {
+   "site": "Origin",
+   "url": "https://mobbin.com/sites/sections/7617d355-486e-4c61-88d3-2f42998f3e18",
+   "what": "Product fragment beside a serif headline; ours shows the product flat and whole, which reads more credible"
+  }
+ ],
+ "audited": "2026-10-14",
+ "self_score": 4,
+ "audited_by": "independent",
+ "facts": [
+  "The header is still the stock kicker, two-line headline, paragraph and button",
+  "The brand blue (#2c3fd0) is generic; only its job was narrowed",
+  "check_dates.py flags 'Monday 3 November' in notes.md, which quotes the old error (false positive)"
+ ],
+ "fixed": [
+  "Brand Ferrow (one letter from Ferrule) renamed Purlin across index.html, notes, DESIGN.md, PRODUCT.md and the opendesigner folder (resolver file renamed purlin.resolver.json); web search found no spend-management company called Purlin",
+  "Names: Mirela Kovač / Mirela K. → Petra Szabo / Petra S.; Tomás I. → Arjun D.; Calder Inn → Kingsmere Inn; Kettle & Co. Catering → Harvest Table Catering; Corran Labs → Brindle Food Labs",
+  "Card ••4417 → ••7302; bills #4471/#4468/#4462 → #3871/#3868/#3862",
+  "Selected amount $1,284.50 (same digits as '1,284 of 1,302') → $1,318.40; journal entry still balances",
+  "Re-rendered shot.png at 1440 × 900, 2×"
+ ],
+ "owner": {
+  "verdict": "improve",
+  "said": "okay-ish",
+  "date": "2026-10-14"
+ },
+ "round3": {
+  "score": 4,
+  "changed": [
+   "One owned element made big: a full-width October ledger at the top of the product, one column per night from 1 Oct to the day the books lock, 27 nights adding to 1,206, tonight's 78 as the one blue bar, an ink 'Books lock, Tue 3 Nov' rule",
+   "Blue has one job (what posts tonight); the button and links are ink, the selection neutral",
+   "Finance logic made consistent: rows say Posts tonight, Posted with that night's journal entry (one per night), or are held; 1,206 + 78 + 18 = 1,302; USD books in Eastern time",
+   "A Z-purlin mark; the lavender band removed; cents in a lighter tone; tabs on their own row; ledger settings in the sidebar; the table footer under the last row and Edit coding in the drawer header"
+  ]
+ }
+}

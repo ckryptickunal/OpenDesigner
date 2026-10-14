@@ -4,7 +4,7 @@
   "engine_version": "1.0.0",
   "levers_version": "levers/1.0 2026-09-23",
   "mode": "standard",
-  "name": "Chorus",
+  "name": "Kinroom",
   "summary": "",
   "context": {
     "product": "",
@@ -45,16 +45,16 @@
       "decision": "D-0013"
     },
     "roundness": {
-      "value": 78,
+      "value": 55,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0014"
+      "decision": "D-0021"
     },
     "depth": {
-      "value": 72,
+      "value": 45,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0015"
+      "decision": "D-0022"
     },
     "colorfulness": {
       "value": 55,
@@ -148,7 +148,10 @@
     "scripts": [
       "Latn"
     ],
-    "defaultTheme": "system"
+    "defaultTheme": "system",
+    "borderDefault": null,
+    "texture": null,
+    "gradients": null
   },
   "overrides": {
     "motion.duration.instant": {
@@ -538,8 +541,8 @@
     ]
   },
   "hashes": {
-    "DESIGN.md": "cb0507e246549dfb",
-    "PRODUCT.md": "1f500b9074f57b54"
+    "DESIGN.md": "e3c12758577d730c",
+    "PRODUCT.md": "84b36c5f7100c84f"
   },
   "exports": {
     "prefix": "ds",
@@ -2640,5 +2643,7 @@
       "font.size.input": "dimension"
     },
     "snapshots": "standards-state.json"
-  }
+  },
+  "style": null,
+  "customStyles": {}
 }

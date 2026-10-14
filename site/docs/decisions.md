@@ -21,6 +21,8 @@ OpenDesigner writes every decision into a log with how it was set and why. It tu
 - where it came from, such as a reference;
 - how it was set.
 
+{{figure:decisions-log-entry}}
+
 ### How a value was set
 
 - **Chosen:** you picked it.
@@ -78,6 +80,8 @@ It shows:
 - how the system grew, decision by decision.
 
 Each area is marked **Chosen**, **Picked for you** or **Default**. Anything only you can give, such as a logo, a voice guide or what the product is for, shows as **Not enough information**, next to the question that fills it.
+
+{{figure:decisions-overview-status}}
 
 Two related files sit next to it. `opendesigner/preview.html` shows every token on one page. `opendesigner/preview/` holds seven visual pages filled with your own values: palette, type scale, spacing ruler, radius, elevation, motion and component sheet.
 

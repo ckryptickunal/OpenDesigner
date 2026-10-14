@@ -1,0 +1,76 @@
+{
+ "piece": "styles/06-memphis",
+ "title": "06 Plenary: a Memphis landing section for conference ticketing",
+ "pattern": "product hero",
+ "platform": "web",
+ "industry": "event ticketing (B2B, conference organisers)",
+ "style": [
+  "memphis",
+  "playful",
+  "dark"
+ ],
+ "tags": [
+  "style study",
+  "memphis",
+  "landing section",
+  "ticketing",
+  "product card",
+  "data-sized shapes",
+  "pattern laminates",
+  "B2B"
+ ],
+ "score": 3,
+ "self_score": 4,
+ "verdict": "polish",
+ "strengths": [
+  "The Memphis set is data: each big shape is a ticket type drawn to scale by tickets sold (early bird 400, standard 1,212, workshop 186, comps 64), and the same shapes mark the tiers in the product",
+  "Real organiser UI shown flat and whole: Northfold Design Week 2027, 1,862 of 2,520 sold, a tier bar, four ticket rows with prices and closing dates, EUR 647,360 gross, next payout Fri 13 Nov",
+  "Disciplined palette: lemon, pink and mint on black and white; patterns only on shapes, never behind text; one action plus a price"
+ ],
+ "slop_signals": [
+  "The standard hero recipe: two-line headline with the second line bold ('From early bird to / last badge.'), a sub-line, a filled button plus an underlined link, then three small facts",
+  "A floating product card on the right with shapes around it; the speaker square is almost hidden behind the card and the pink half-disc is cut by the fold, so the 'to scale' idea cannot be seen",
+  "A footnote ('The shapes are the four ticket types, drawn to scale by tickets sold') has to explain the concept; a shipped page would not",
+  "The squiggle and the zigzag are admitted decoration with no data"
+ ],
+ "fixes": [
+  "Set the four shapes side by side, unobstructed and labelled, as the sales chart itself, and drop the footnote",
+  "Remove the squiggle and zigzag; let the ticket shapes be the only Memphis marks",
+  "Break the recipe: one action, and put a real event photograph or the badge itself where the facts row is"
+ ],
+ "references": [
+  {
+   "site": "Eventbrite",
+   "url": "https://mobbin.com/sites/sections/b6b98695-b0de-4a49-a58e-31ae3b3d79d3",
+   "mobbin_url": "https://mobbin.com/sites/sections/b6b98695-b0de-4a49-a58e-31ae3b3d79d3",
+   "what": "Organiser landing page: feature list beside the product on a colour field"
+  },
+  {
+   "site": "Luma",
+   "url": "https://mobbin.com/sites/sections/e9ae7e4b-3538-47fd-9369-6fd7df860b00",
+   "mobbin_url": "https://mobbin.com/sites/sections/e9ae7e4b-3538-47fd-9369-6fd7df860b00",
+   "what": "Ticketing hero with real event cards instead of decoration"
+  },
+  {
+   "site": "beehiiv",
+   "url": "https://mobbin.com/sites/sections/2daedcb5-bb9a-41c2-bfbd-f3676fbe41bc",
+   "mobbin_url": "https://mobbin.com/sites/sections/2daedcb5-bb9a-41c2-bfbd-f3676fbe41bc",
+   "what": "Decorative stars and hexagons around a headline: the scattered-shape version to avoid"
+  }
+ ],
+ "audited": "2026-10-14",
+ "audited_by": "independent",
+ "facts": [],
+ "polish": {
+  "score": 5,
+  "changed": [
+   "Rebuilt around one idea: each ticket type has a shape, printed on every badge for room-door checks, and the same shapes chart sales",
+   "The four shapes stand unobstructed on one floor, labelled, at 50 px² per ticket: filled = issued, dashed open outline = released; equal 56 px gaps; legend in the totals column, no footnote",
+   "Every pattern covers 20% of its shape and stays 3 px off the edges, so the visible colour is to scale",
+   "A flat badge (standard + workshop, Room 3, Fri 10:00) replaces the floating product card; squiggle, zigzag and facts row removed",
+   "Default hero recipe broken: one regular-weight headline, one action, price as text; wordmark, button and focus ring black and white so colour means ticket type only",
+   "1,862 issued of 2,520 released (1,676 people + 186 workshop seats), EUR 647,360 gross; next payout Fri 16 Oct 2026 (was 13 Nov, against 'every Friday')",
+   "Event renamed Kanteel Design Week 2027 in Ghent, Hall 4 (Northfold was the seventh North- name; Rotterdam reused); engine pick Q-dir-01 memphis"
+  ]
+ }
+}

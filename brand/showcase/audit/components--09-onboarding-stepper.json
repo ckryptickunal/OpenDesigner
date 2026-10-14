@@ -1,0 +1,68 @@
+{
+ "piece": "components/09-onboarding-stepper",
+ "title": "09 · Onboarding stepper · Mossby",
+ "pattern": "onboarding stepper",
+ "platform": "mixed",
+ "industry": "plant care",
+ "style": [
+  "playful",
+  "organic",
+  "minimal"
+ ],
+ "tags": [
+  "onboarding stepper",
+  "plant care",
+  "choice cards",
+  "illustration",
+  "pastel",
+  "progress",
+  "mobile"
+ ],
+ "score": 3,
+ "verdict": "polish",
+ "strengths": [
+  "A real idea: the progress line is a vine that sprouts a leaf per finished step, and 'I'm not sure yet' is on every question",
+  "The drawings are real CC0 line art (CocoMaterial) recoloured through the tokens, not emoji; the card copy is specific ('Forgives forgetting', 'Water once a month', 'Search 900+ plants')",
+  "States are complete: six step-node states, four Continue states, a phone variant, the 'tried to skip a required step' message and the step-4 card"
+ ],
+ "slop_signals": [
+  "Line art on a pastel blob inside every card (sage, sand, peach, lilac): the icon-on-coloured-blob template, with a different hue per card so four pastels plus green, butter and terracotta share one screen",
+  "Decorative pastel blob shapes in the page corners (peach bottom-left, sand bottom-centre, lilac top-right, peach bottom-right)",
+  "Green check discs on the card corners and a green pill 'Continue 2' with a counter disc inside: two pill badges for one count",
+  "Fredoka at 56 px for 'Who already lives with you?' pushes the voice toward a children's app"
+ ],
+ "fixes": [
+  "Remove the page-corner blobs; keep the page white or one pale sage",
+  "Use one blob tint for all cards (sage) or no blob at all, letting the ink drawing sit on white as Remote does",
+  "Replace the corner check disc with a 2 px sage border plus a small check in the title row; drop the counter disc inside Continue",
+  "Bring the display size down one step (to 45 px) and set it in Nunito 700 as a test next to Fredoka"
+ ],
+ "references": [
+  {
+   "site": "Remote",
+   "url": "https://mobbin.com/screens/8d6af084-abb1-4f48-b0d2-5cacf5274585",
+   "what": "Illustrated choice cards on white with a single blue; a numbered step strip at the top and 'Skip this' beside Continue"
+  },
+  {
+   "site": "Xero",
+   "url": "https://mobbin.com/screens/7340be91-58c1-4226-858d-597bb1a3f549",
+   "what": "Text choice cards with a sub-line and a checkbox; the illustration lives beside the form, not inside every card"
+  },
+  {
+   "site": "Calendly",
+   "url": "https://mobbin.com/screens/1b1c4a66-365f-453f-8609-64c80055df2b",
+   "what": "'STEP 3 OF 6' as a segmented bar and single-line option cards; the compact pattern our phone variant uses"
+  },
+  {
+   "site": "Bloom",
+   "url": "https://mobbin.com/screens/94f8dff4-bcd9-4f50-87d5-06714e1f1e65",
+   "what": "Image cards with a check in the corner and a Back / Next pair under a 'STEP 2 OF 3' overline"
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "keep",
+  "said": "okay",
+  "date": "2026-10-14"
+ }
+}

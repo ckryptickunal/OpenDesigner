@@ -1,0 +1,76 @@
+{
+ "piece": "styles/11-terminal",
+ "title": "11 · Terminal · coppice",
+ "pattern": "documentation hero",
+ "platform": "web",
+ "industry": "databases (B2B devtools)",
+ "style": [
+  "terminal",
+  "monospace",
+  "minimal"
+ ],
+ "tags": [
+  "terminal",
+  "CLI",
+  "documentation",
+  "man page",
+  "box drawing",
+  "ASCII diagram",
+  "keyboard first",
+  "monospace",
+  "red"
+ ],
+ "score": 4,
+ "self_score": 4,
+ "verdict": "keep",
+ "strengths": [
+  "Terminal conventions used as structure: a BURROW(1) man-page header and footer, NAME and SYNOPSIS with underlined arguments, '$' prompts, inverse video on the selected OS tab",
+  "A session whose numbers add up: 1,084,211 + 81,273 + 38,904 = the 1,204,388 rows the alter table reports; the diff says 41 MB own pages, the diagram says 41 MB own · 98% shared",
+  "One monospaced family (Lilex) chosen because its box-drawing glyphs close a table at 14 px; light 300 headline, ink on white and one red with one job (you and your branch)",
+  "Keyboard first and real: keycaps on every main action, '/' focuses search and 'y' copies the install line"
+ ],
+ "slop_signals": [
+  "A red block cursor after the headline is the stock terminal cliché",
+  "'BURROW(1)' man-page chrome appears three times (two header corners and the footer)"
+ ],
+ "fixes": [
+  "Fix the branch diagram and the own-pages contradiction (below)",
+  "Drop the headline cursor; keep the one in the session where it means 'waiting'",
+  "Consider a different name: LinkedIn's open-source 'Burrow' is a known data-infrastructure tool"
+ ],
+ "references": [
+  {
+   "site": "Shopify Supply",
+   "url": "https://mobbin.com/sites/sections/85479695-55d2-4f92-89bc-1790dda9d9d9",
+   "mobbin_url": "https://mobbin.com/sites/sections/85479695-55d2-4f92-89bc-1790dda9d9d9",
+   "what": "A prompt line and text-drawn type as the hero"
+  },
+  {
+   "site": "Giga",
+   "url": "https://mobbin.com/sites/sections/a2004615-5fee-4e7d-9f84-602f3f1ab1f0",
+   "mobbin_url": "https://mobbin.com/sites/sections/a2004615-5fee-4e7d-9f84-602f3f1ab1f0",
+   "what": "The install command as the primary action, mono on dark"
+  },
+  {
+   "site": "1Password Developer",
+   "url": "https://mobbin.com/sites/sections/16d7f5d6-866e-4db9-ae71-a723dd68d8d4",
+   "mobbin_url": "https://mobbin.com/sites/sections/16d7f5d6-866e-4db9-ae71-a723dd68d8d4",
+   "what": "A conventional developer docs home: the bar this piece clears"
+  }
+ ],
+ "audited": "2026-10-14",
+ "audited_by": "independent",
+ "facts": [],
+ "polish": {
+  "score": 4,
+  "changed": [
+   "Renamed burrow to coppice (Burrow is LinkedIn's Kafka consumer-lag monitor); domain coppicedb.dev",
+   "Branch diagram forks at 4f2a91c, the fifth commit",
+   "Own pages come from an UPDATE of 81,273 pending orders: 81,273 rows changed, 38 MB own, 1.8% of 2.1 GB, 98% shared; own mark is half a cell of 28",
+   "Headline cursor removed; man-page chrome once; SEE ALSO section",
+   "Red only for the branch; prompts and wordmark in ink",
+   "False 96x30 removed; every keycap, the search field, copy button and OS tabs work; query table has a text version",
+   "Engine pick Q-dir-01 terminal; stale burrow resolver removed"
+  ]
+ }
+}

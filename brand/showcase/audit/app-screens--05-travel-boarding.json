@@ -1,0 +1,70 @@
+{
+ "piece": "app-screens/05-travel-boarding",
+ "title": "05 · Aerlo: boarding pass",
+ "pattern": "boarding pass",
+ "platform": "ios",
+ "industry": "travel",
+ "style": [
+  "minimal",
+  "playful"
+ ],
+ "tags": [
+  "boarding pass",
+  "travel",
+  "airline",
+  "ticket",
+  "light",
+  "mono",
+  "ios"
+ ],
+ "score": 4,
+ "verdict": "keep",
+ "strengths": [
+  "Answers the queue question in one glance: KEF → CPH at 52 px, gate D7, boarding 07:05, seat 14A as the second hero, and the status pill 'On time · Gate closes 07:25' above the ticket.",
+  "Label-over-value grid with mono only for codes (AL 214, QX7-R4N), the Apple Wallet rhythm; 'Brightens at the gate' is a real product detail.",
+  "Believable itinerary: Wed 22 Oct, 07:40 to 12:55, 3h 15m nonstop, Mara Lindqvist, group 2, window."
+ ],
+ "slop_signals": [
+  "A dot-matrix map with a route arc and a plane glyph fills a third of the ticket; it is texture, not information (the notes concede it is a diagram, not geography).",
+  "A stock-style 'wing above the clouds' photograph as the header: the airline cliché.",
+  "Punched notches and dashed perforations on a digital pass: skeuomorphism that Delta, Qantas and Apple Wallet no longer use."
+ ],
+ "fixes": [
+  "Shrink the map to a thin route strip (Flighty's dotted line with a plane) or remove it and let the codes lead.",
+  "Replace the wing photo with a flat sky colour or the brand blue.",
+  "Keep one ticket-edge device: the perforation line or the notches, not both."
+ ],
+ "references": [
+  {
+   "site": "Apple Wallet",
+   "url": "https://mobbin.com/screens/fe3800b2-59af-4229-9412-115dcb51c881",
+   "what": "Huge airport codes, a strict label-over-value grid and a QR on a flat white pass with no map or notches."
+  },
+  {
+   "site": "Fly Delta",
+   "url": "https://mobbin.com/screens/a4347970-d0e1-4a7a-93ea-28361d6ea5e4",
+   "what": "QR first, seat and zone large, gate and boarding time as two tiles: the scan comes before the story."
+  },
+  {
+   "site": "Qantas Airways",
+   "url": "https://mobbin.com/screens/1264085c-c8b7-41c9-b3dc-a8670b757795",
+   "what": "Date, flight and seat in one row, airports with times below: a plainer grid that still reads in a queue."
+  },
+  {
+   "site": "FocusFlight",
+   "url": "https://mobbin.com/screens/f06fb631-010c-4715-acb2-6f1305b1607c",
+   "what": "The same map-texture-behind-codes device, here on a focus timer: shows how decorative it is."
+  },
+  {
+   "site": "Flighty",
+   "url": "https://mobbin.com/screens/a315a3cc-6234-4d7c-a3ce-9271f5a10092",
+   "what": "A one-line dotted route with a plane glyph between codes: the route without a map."
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "keep",
+  "said": "great",
+  "date": "2026-10-14"
+ }
+}

@@ -11,6 +11,8 @@ You add OpenDesigner to the AI tool you already use: two commands in Claude Code
 
 OpenDesigner is free and open source (MIT).
 
+{{figure:install-hosts}}
+
 ## Claude Code
 
 Add the repository as a plugin marketplace, then install the plugin:
@@ -20,7 +22,7 @@ Add the repository as a plugin marketplace, then install the plugin:
 /plugin install opendesigner@opendesigner
 ```
 
-The plugin installs five skills: opendesigner, opendesigner-extract, opendesigner-extend, opendesigner-export and opendesigner-illustrate.
+The plugin installs eight skills: opendesigner, opendesigner-extract, opendesigner-extend, opendesigner-export, opendesigner-illustrate, opendesigner-review, opendesigner-paint and opendesigner-preflight.
 
 ## Claude app (claude.ai or Claude Desktop)
 
@@ -66,6 +68,8 @@ python3 path/to/OpenDesigner/skills/opendesigner/scripts/engine.py sketch --name
 ```
 
 It writes `DESIGN.md`, `PRODUCT.md` and an `opendesigner/` folder with tokens, exports and an overview page. See [Engine commands](/docs/engine/) for the rest.
+
+{{figure:install-engine-run}}
 
 ## What you need
 

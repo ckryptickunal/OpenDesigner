@@ -148,7 +148,10 @@
     "scripts": [
       "Latn"
     ],
-    "defaultTheme": "system"
+    "defaultTheme": "system",
+    "borderDefault": null,
+    "texture": null,
+    "gradients": null
   },
   "overrides": {
     "motion.duration.instant": {
@@ -294,6 +297,18 @@
     },
     "size.target.min": {
       "value": 44,
+      "unit": "px"
+    },
+    "font.size.15": {
+      "value": 15,
+      "unit": "px"
+    },
+    "font.size.22": {
+      "value": 22,
+      "unit": "px"
+    },
+    "font.size.20": {
+      "value": 20,
       "unit": "px"
     }
   },
@@ -465,7 +480,7 @@
     ]
   },
   "hashes": {
-    "DESIGN.md": "746836aed6433986",
+    "DESIGN.md": "b175acd93216642b",
     "PRODUCT.md": "4f11692f190267cd"
   },
   "exports": {
@@ -2755,5 +2770,7 @@
       "size.target.min": "dimension"
     },
     "snapshots": "standards-state.json"
-  }
+  },
+  "style": null,
+  "customStyles": {}
 }

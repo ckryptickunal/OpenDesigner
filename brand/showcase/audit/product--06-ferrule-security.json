@@ -1,0 +1,73 @@
+{
+ "piece": "product/06-ferrule-security",
+ "title": "06 · Security settings and audit log · Ferrule",
+ "pattern": "settings: security, SSO and audit log",
+ "platform": "web",
+ "industry": "data platform",
+ "style": [
+  "enterprise",
+  "minimal",
+  "settings"
+ ],
+ "tags": [
+  "settings",
+  "security",
+  "saml",
+  "sso",
+  "scim",
+  "audit log",
+  "switches",
+  "dense",
+  "b2b"
+ ],
+ "score": 5,
+ "verdict": "keep",
+ "strengths": [
+  "An engineer's SAML form in a believable half-done state: 'Verify a domain first' with the last TXT check time and 'Check now', ACS URL and entity ID in mono with Copy, an 'e.g.' metadata placeholder, and separate Turn on / Require switches disabled with their consequences stated",
+  "Every policy names its effect and who it applies to ('Members without it set it up at their next sign-in and can't run queries until then. SAML sign-ins are exempt. 12 members haven't set it up.'); SCIM gated by a quiet 'Available on Enterprise' label, not a banner",
+  "The audit log has realistic actors (people, a service account, an API key, a system bot, vendor support under access grant SA-2291), mono event codes, documentation-range IPs with city and country, UTC times with seconds and a UTC/Local switch, a stated 90-day retention, and one row expanded into a log entry with a before/after diff that matches the Security frame's 'Last changed 13:58 UTC'"
+ ],
+ "slop_signals": [
+  "Saturated plum toggles are the loudest thing on a calm page",
+  "The invented customer 'Kestrel Mutual' reuses the showcase's flagship fictional company name 'Kestrel'"
+ ],
+ "fixes": [
+  "Rename Kestrel Mutual (Kestrel is the showcase's main fictional company, heroes/10 has Kestrel Bay Hospitals, and Kestrel Group is a real listed specialty insurer) and Amara Lindqvist (Lindqvist is in heroes/10 and app-screens/05)",
+  "Rename the 'etl-nightly' API key or move its export to night time; it runs at 13:22 UTC",
+  "Say why 'Email sign-in link' is off while 'Used by 6 members in the last 30 days' (for example 'Turned off Oct 9')"
+ ],
+ "references": [
+  {
+   "site": "Air",
+   "url": "https://mobbin.com/screens/9b416e7d-4e24-4c72-b1d1-7bd806aafa82",
+   "what": "SAML metadata URL plus separate Enable and Enforce toggles with consequences; ours adds the domain prerequisite and copyable SP values"
+  },
+  {
+   "site": "Customer.io",
+   "url": "https://mobbin.com/screens/53808563-634e-480f-ae02-460183581cb2",
+   "what": "Consequence lines per security setting ('This only applies to non-SSO accounts'); ours matches"
+  },
+  {
+   "site": "1Password",
+   "url": "https://mobbin.com/screens/a5632ec1-f072-43e2-8f2b-ad047df4ca04",
+   "what": "Audit log with actor, event, description and IP; ours adds event codes, geo, UTC switch and an expanded key-value entry"
+  }
+ ],
+ "audited": "2026-10-14",
+ "self_score": 4,
+ "audited_by": "independent",
+ "facts": [],
+ "fixed": [
+  "API key 'etl-nightly' (running at 13:22 UTC) renamed 'claims-archive', matching what it does",
+  "Email sign-in link: 'Turned off Oct 9; 6 members used it in the 30 days before.'",
+  "Sign-in methods add up: password is the only method on, so 'All 214 members use it now' (was '31 members', leaving 183 with no way in); 'Require SAML' now says 'Password sign-in stops'",
+  "Names: Kestrel Mutual → Larchfield Mutual (larchfieldmutual.com, tile L); Amara Lindqvist (AL) → Amara Sjöberg (AS); tomas.becker@ → jakob.hensel@",
+  "'1,284 events' (a number also in the hero and Quoin) is now 1,146",
+  "Re-rendered shot.png and shot-audit.png at 1440 × 900, 2×"
+ ],
+ "owner": {
+  "verdict": "keep",
+  "said": "I love the B2B product screens; they look absolutely crazy",
+  "date": "2026-10-14"
+ }
+}

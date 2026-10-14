@@ -510,3 +510,18 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 - set_by: chosen · locked: no · date: 2026-10-14 · supersedes: D-0020 · source_ref: none
 - reason: owner rule: two fonts per piece; times use the text face with tabular figures
 - previous value: "JetBrains Mono"
+
+## D-0035 · overrides.font.size.15 = {"value": 15, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+- reason: Round 3: iOS Dynamic Type step (Subheadline 15, Title 2 22) for sentence-case labels and the transcript line
+- new dimension token in primitives.tokens.json
+
+## D-0036 · overrides.font.size.22 = {"value": 22, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+- reason: Round 3: iOS Dynamic Type step (Subheadline 15, Title 2 22) for sentence-case labels and the transcript line
+- new dimension token in primitives.tokens.json
+
+## D-0037 · overrides.font.size.20 = {"value": 20, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: Round 3: Title 3, the show name set on the cover
+- new dimension token in primitives.tokens.json

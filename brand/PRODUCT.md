@@ -4,14 +4,16 @@
 
 ## Product
 
-Not recorded yet (Q-scope-01).
+Marketing site, Docs or content site
 
 ## Audience
 
-People who use it now and then, often on a phone.
+Design-system teams, product designers and engineers, mostly at work on a desktop, including enterprise and B2B teams.
 
 ## Surfaces
 
+- landing page: Persuade mode (density spacious; one hero line per page; sections, not card grids)
+- documentation: Read mode (density comfortable; no hero; `text.body.lg` for long text; no cards around running text)
 - social cards: Persuade mode (density spacious; one hero line per page; sections, not card grids)
 - readme: Read mode (density comfortable; no hero; `text.body.lg` for long text; no cards around running text)
 
@@ -30,10 +32,10 @@ Not recorded yet (Q-brand-07).
 
 ## Scope
 
-**In:** not recorded yet
+**In:** Marketing site, Docs or content site
 
 **Out:** not recorded yet
 
 ## Team and Governance
 
-Not recorded yet (Q-scope-03, Q-scope-04, Q-gov-01).
+- Is this only for your app, or also your marketing site, docs, emails or in-house tools? **Marketing site, Docs or content site** (Q-scope-01)

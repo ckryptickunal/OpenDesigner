@@ -420,3 +420,38 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 - set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
 - reason: the product is a conversational research assistant
 - also set: components.inventory = ["chat-message", "prompt-input"] (from Q-ai-01)
+
+## D-0025 · raw.brandColor = "#2B4C8C"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0004 · source_ref: none
+- reason: round 3: the owner said the colours need work; cream, terracotta and brown read as the forbidden warm trio and sit close to a real AI brand's clay-on-ivory; an ink blue on white paper keeps the reading-room feel
+- previous value: "#b4532a"
+
+## D-0026 · raw.neutralBase = null
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0023 · source_ref: none
+- reason: round 3: no parchment; neutrals come from the tint
+- previous value: "#e8dcc5"
+
+## D-0027 · raw.neutralTint = "neutral"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: round 3: neutral grey text, no brown
+- previous value: "warm"
+
+## D-0028 · dials.warmth = 20
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0018 · source_ref: none
+- reason: round 3: warmth 88 made the neutrals brown
+- previous value: 88
+
+## D-0029 · raw.neutralTint = "pure"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0027 · source_ref: none
+- reason: round 3: true greys; the neutral tint came out blue and turned the page monochrome blue
+- previous value: "neutral"
+
+## D-0030 · answers.Q-color-09 = "pure"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0022 · source_ref: none
+- reason: round 3: pure greys, matching raw.neutralTint; the warm answer was left from round 1
+- previous value: "warm"
+- also set: raw.neutralTint = "pure" (from Q-color-09)
+
+## D-0031 · raw.focusColor = "#242424"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: round 3: blue means a source; focus and actions are ink

@@ -435,3 +435,12 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 ## D-0027 · raw.accentCount = 1
 - set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
 - reason: monochrome phosphor: one hue only
+
+## D-0028 · raw.domain = "ML infrastructure: GPU servers in a colocation cage"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: round 3: the owner asked who would use it; rackhound is now the console an ML infra team uses for its GPU pools
+
+## D-0029 · dials.depth = 4
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0017 · source_ref: none
+- reason: round 3: no scanlines, glow only on the big readouts
+- previous value: 10

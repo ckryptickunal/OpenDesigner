@@ -1,0 +1,27 @@
+<figure class="fig">
+<div class="dodont">
+<div class="do">
+<p class="dd-h">Lock what must not drift</p>
+<p class="dd-why">Set the brand color with <span class="mono">--lock</span>. From then on the engine refuses to change it.</p>
+<div class="dd-art">
+<pre class="code-lines" style="white-space:pre-wrap;overflow-wrap:anywhere;margin:0 0 10px"><span class="c">$</span> engine.py set raw.brandColor '"#2563eb"' --why "brand team" <span class="k">--lock</span></pre>
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"><span class="chip ink">locked: yes</span><span class="chip">set_by: chosen</span></div>
+<div class="kicker" style="font-size:12px;margin-bottom:4px">A later session tries to change it</div>
+<pre class="code-lines" style="white-space:pre-wrap;overflow-wrap:anywhere;margin:0"><span class="bad">raw.brandColor is locked.</span> Ask the owner before changing it, then run `engine.py unlock raw.brandColor` (or pass --force).</pre>
+</div>
+</div>
+<div class="dont">
+<p class="dd-h">Leave the brand color unlocked</p>
+<p class="dd-why">Every change is logged, but nothing stops it. OpenDesigner's own brand color moved three times in one day.</p>
+<div class="dd-art">
+<div style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 10px;align-items:start">
+<span class="chip mono" style="font-size:12px">D-0004</span><div class="mono" style="font-size:12.5px;line-height:18px"><div>raw.brandColor = "#e4572e"</div><div style="font-size:12px;color:var(--ink-muted)">locked: no</div></div>
+<span class="chip mono" style="font-size:12px">D-0005</span><div class="mono" style="font-size:12.5px;line-height:18px"><div>raw.brandColor = "#d04418"</div><div style="font-size:12px;color:var(--ink-muted)">supersedes: D-0004</div></div>
+<span class="chip mono" style="font-size:12px">D-0025</span><div class="mono" style="font-size:12.5px;line-height:18px"><div>raw.brandColor = "#2338FF"</div><div style="font-size:12px;color:var(--ink-muted)">supersedes: D-0005</div></div>
+</div>
+<div style="font-size:13px;line-height:18px;color:var(--ink-muted);margin-top:12px">Each entry was accepted without asking anyone.</div>
+</div>
+</div>
+</div>
+<figcaption>A locked value is refused with a message that names the owner; an unlocked one is replaced by the next entry. The three entries on the right are from OpenDesigner's own decision log.</figcaption>
+</figure>

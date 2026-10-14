@@ -9,6 +9,8 @@ updated: 2026-10-14
 
 OpenDesigner sets most of a design system's look with eight dials. Each dial is a slider from 0 to 100, and each position maps to concrete values, such as a type scale ratio or a corner radius. Three posture dials set the overall stance, and five character dials tune the details.
 
+{{figure:dials-sliders}}
+
 ## How the dials work
 
 - **50 is a sensible middle** for most dials. Depth starts at 40.
@@ -16,6 +18,8 @@ OpenDesigner sets most of a design system's look with eight dials. Each dial is 
 - **Some dials follow others until you move them.** Energy, Roundness, Colorfulness and Depth follow Expression. Roundness also follows Density, and Colorfulness also follows Energy. Once you set a dial yourself, it stays where you put it.
 - **A few raw inputs sit beside the dials:** your brand color, typeface, base text size, platforms and contrast target.
 - **Style presets are named dial settings.** Examples are flat, tonal, glass and neo-brutalist.
+
+{{figure:dials-coupling}}
 
 You can set a dial directly:
 

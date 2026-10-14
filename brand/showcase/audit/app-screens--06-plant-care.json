@@ -1,0 +1,84 @@
+{
+ "piece": "app-screens/06-plant-care",
+ "title": "06 · Loam: plant care diary (phone, 390×844 @3x)",
+ "pattern": "plant care list",
+ "platform": "ios",
+ "industry": "home",
+ "style": [
+  "organic",
+  "playful",
+  "editorial"
+ ],
+ "tags": [
+  "plant care list",
+  "home",
+  "plants",
+  "diary",
+  "light",
+  "illustration",
+  "serif",
+  "ios"
+ ],
+ "score": 3,
+ "verdict": "polish",
+ "strengths": [
+  "The screen answers one question ('Three plants are thirsty this morning') and the week strip, the hero plant and the 'Also today' list all serve it.",
+  "Specific data: Monstera deliciosa, soil moisture 18% 'Dry' on a ten-step bar, 400 ml, Snake plant in the bedroom, 250 ml."
+ ],
+ "slop_signals": [
+  "The hero plant is a CC0 line-drawing clipart monstera inside an arched window: the arch frame and the outline-illustration style are the generic 'cozy plant app' template.",
+  "Paper-grain texture over the whole page.",
+  "The water drop is drawn three times in one card: in the 'Water today' chip, in the week strip, in the 'Log watering' button.",
+  "Cream page, terracotta pot and chips, moss green: close to the cream + orange-brown combination the house rule forbids.",
+  "Every weekday is its own pill with a drop under it; a plain row of numerals with today filled (Bloom, Fitbit) reads calmer."
+ ],
+ "fixes": [
+  "Replace the clipart with a photograph of the plant (or one commissioned-style drawing) in a plain rounded frame; drop the arch.",
+  "Remove the paper grain.",
+  "Keep the drop once (in the chip) and let the button read 'Log 400 ml'.",
+  "Shift the clay accent away from orange-brown (a deeper rust, or none) and keep the page neutral."
+ ],
+ "references": [
+  {
+   "site": "Greg",
+   "url": "https://mobbin.com/screens/f479a648-a27b-4bd4-9f88-e9f7954928e3",
+   "what": "Today list with a real plant photo thumbnail, name, species, amount and last watered: no illustration needed."
+  },
+  {
+   "site": "Bloom",
+   "url": "https://mobbin.com/screens/a5eded0b-e222-4cf5-81da-0ce80fc7e370",
+   "what": "Serif 'Today', a quiet row of week dots with today filled, one hero card, a soft palette with no clipart."
+  },
+  {
+   "site": "Fitbit",
+   "url": "https://mobbin.com/screens/318ef228-8f35-4782-9683-6ffe48870cd3",
+   "what": "Cards with a week strip of bars and one number: the same calendar idea without pills."
+  },
+  {
+   "site": "Finch",
+   "url": "https://mobbin.com/screens/5badee31-a8e0-448e-a995-13f130ab6412",
+   "what": "The playful checklist-with-icons look this piece edges toward; shows where it would land."
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "improve",
+  "said": "needs better UI",
+  "date": "2026-10-14"
+ },
+ "round3": {
+  "score": 4,
+  "changed": [
+   "Clipart monstera, arch, paper grain and terracotta removed; three free Unsplash plant photos (Kadarius Seegars, feey, Jake Goossen), graded to match",
+   "Title states the job ('3 plants to water'); caption 'Most urgent first · 800 ml in all · sensors read at 08:10'",
+   "Week strip: numerals with today filled and a count of plants due under each day; the weekday bug fixed (14 Oct 2026 is a Wednesday)",
+   "Monty's 18% at Display 48 with a meter showing the healthy band, the 25% watering line and the reading",
+   "Every plant: same fields (Latin name, moisture, own watering line) and the same Log action; list ordered by how far below its line",
+   "One accent (moss); cool neutral page; iOS type roles; 'Coming up' rows end exactly at the tab bar edge",
+   "Fresh-eyes audit: 3/5, 3/5, then 4/5; its last items fixed"
+  ]
+ },
+ "facts": [
+  "art/ (the CC0 line drawings and their CSS) is no longer used by the page; left in place because this session only deletes inside its scratch folder"
+ ]
+}

@@ -39,6 +39,8 @@ Import the file once at the root of your app, then use the variables:
 
 Dark mode follows `prefers-color-scheme`. Set `data-theme="light"` or `data-theme="dark"` to override it. Density switches with `data-density` (spacious, comfortable or compact). Reduced motion follows `prefers-reduced-motion`, with a `data-motion` override. Font sizes are in rem, so browser text zoom works.
 
+{{figure:engineers-token-not-raw}}
+
 ### Tailwind v4
 
 Add two lines to your main CSS file, for example `src/index.css`. Adjust the path to where that file sits:
@@ -97,9 +99,13 @@ card.css:1  padding: 13px  ->  use var(--ds-space-12) (13 is off the 4px ladder)
 
 It also lists code that breaks a standard, and `DESIGN.md` sections that are out of date. Add the comment `od-ignore` to a line to keep a raw value on purpose. `--strict` makes the command fail when it finds anything, and `--json` prints machine-readable output.
 
+{{figure:engineers-review-terminal}}
+
 ## DESIGN.md and AGENTS.md for coding agents
 
 `DESIGN.md` has a section for AI agents. It tells them to read the file and the tokens before changing any screen, to use tokens instead of raw values, and to leave locked decisions alone.
+
+{{figure:engineers-agent-rules}}
 
 At the end of a session, OpenDesigner asks whether to add a short note to your `AGENTS.md`. It adds it only after you say yes. The note tells later agents to:
 

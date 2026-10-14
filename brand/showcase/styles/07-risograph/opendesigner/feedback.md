@@ -1,0 +1,18 @@
+# Feedback
+
+Gaps, bugs, confusing steps and ideas found while using OpenDesigner. Each entry has a ready-to-file issue link. Nothing is posted unless you open the link and submit it yourself.
+
+## F-001 · 2026-10-14 · gap
+Risograph has no answer anywhere: no ink-count or spot-ink concept (two named inks and their overprint), no paper tone (the neutral ramp is a screen grey; warmth moves hue only), no tokens for misregistration, grain or blend mode. The engine's accent2 nudged Riso Fluorescent Pink #FF48B0 to #fb4faf; a spot ink must stay exact.
+
+[File this as an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new?title=%5Bgap%5D%20Risograph%20has%20no%20answer%20anywhere%3A%20no%20ink-count%20or%20spot-ink%20concept%20%28tw...&body=%2A%2AKind%3A%2A%2A%20gap%0A%0A%2A%2AWhat%20happened%20or%20what%20is%20missing%3A%2A%2A%0ARisograph%20has%20no%20answer%20anywhere%3A%20no%20ink-count%20or%20spot-ink%20concept%20%28two%20named%20inks%20and%20their%20overprint%29%2C%20no%20paper%20tone%20%28the%20neutral%20ramp%20is%20a%20screen%20grey%3B%20warmth%20moves%20hue%20only%29%2C%20no%20tokens%20for%20misregistration%2C%20grain%20or%20blend%20mode.%20The%20engine%27s%20accent2%20nudged%20Riso%20Fluorescent%20Pink%20%23FF48B0%20to%20%23fb4faf%3B%20a%20spot%20ink%20must%20stay%20exact.%0A%0A%2A%2AEngine%3A%2A%2A%201.0.0%20%28Python%203.10%29%0A%0A_Filed%20from%20%60engine.py%20feedback%60.%20Please%20remove%20anything%20private%20before%20submitting._&labels=gap%2Cfrom-engine)
+
+## F-002 · 2026-10-14 · confusing
+Feel words 'vivid, focused' gave a rich vs minimal macro conflict with no way out in the sketch command; I had to set macros by hand (engine.py set macros [...]). The sketch could offer the two resolutions.
+
+[File this as an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new?title=%5Bconfusing%5D%20Feel%20words%20%27vivid%2C%20focused%27%20gave%20a%20rich%20vs%20minimal%20macro%20conflict%20with...&body=%2A%2AKind%3A%2A%2A%20confusing%0A%0A%2A%2AWhat%20happened%20or%20what%20is%20missing%3A%2A%2A%0AFeel%20words%20%27vivid%2C%20focused%27%20gave%20a%20rich%20vs%20minimal%20macro%20conflict%20with%20no%20way%20out%20in%20the%20sketch%20command%3B%20I%20had%20to%20set%20macros%20by%20hand%20%28engine.py%20set%20macros%20%5B...%5D%29.%20The%20sketch%20could%20offer%20the%20two%20resolutions.%0A%0A%2A%2AEngine%3A%2A%2A%201.0.0%20%28Python%203.10%29%0A%0A_Filed%20from%20%60engine.py%20feedback%60.%20Please%20remove%20anything%20private%20before%20submitting._&labels=confusing%2Cfrom-engine)
+
+## F-003 · 2026-10-14 · idea
+Print-native styles (risograph, comic, Bauhaus poster) fight STD-visual-details-24: a printed page has one paper. I kept system-light-dark and pinned the page with data-theme=light; a 'print surface' mode that keeps one theme honestly would be clearer.
+
+[File this as an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new?title=%5Bidea%5D%20Print-native%20styles%20%28risograph%2C%20comic%2C%20Bauhaus%20poster%29%20fight%20STD-visua...&body=%2A%2AKind%3A%2A%2A%20idea%0A%0A%2A%2AWhat%20happened%20or%20what%20is%20missing%3A%2A%2A%0APrint-native%20styles%20%28risograph%2C%20comic%2C%20Bauhaus%20poster%29%20fight%20STD-visual-details-24%3A%20a%20printed%20page%20has%20one%20paper.%20I%20kept%20system-light-dark%20and%20pinned%20the%20page%20with%20data-theme%3Dlight%3B%20a%20%27print%20surface%27%20mode%20that%20keeps%20one%20theme%20honestly%20would%20be%20clearer.%0A%0A%2A%2AEngine%3A%2A%2A%201.0.0%20%28Python%203.10%29%0A%0A_Filed%20from%20%60engine.py%20feedback%60.%20Please%20remove%20anything%20private%20before%20submitting._&labels=enhancement%2Cfrom-engine)

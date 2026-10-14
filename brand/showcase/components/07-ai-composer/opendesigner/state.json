@@ -63,10 +63,10 @@
       "decision": "D-0017"
     },
     "warmth": {
-      "value": 88,
+      "value": 20,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0018"
+      "decision": "D-0028"
     }
   },
   "preset": null,
@@ -75,10 +75,10 @@
     "premium"
   ],
   "raw": {
-    "brandColor": "#b4532a",
+    "brandColor": "#2B4C8C",
     "primaryActionColor": null,
-    "focusColor": null,
-    "neutralBase": "#e8dcc5",
+    "focusColor": "#242424",
+    "neutralBase": null,
     "contrastTarget": "AA",
     "textFace": "Instrument Sans",
     "displayFace": "Newsreader",
@@ -110,7 +110,7 @@
     "fontClass": null,
     "accentCount": null,
     "accentHarmony": "triadic",
-    "neutralTint": "warm",
+    "neutralTint": "pure",
     "chartPalette": null,
     "statusSet": "classic-4",
     "stateMethod": "hybrid",
@@ -147,7 +147,10 @@
     "scripts": [
       "Latn"
     ],
-    "defaultTheme": "system"
+    "defaultTheme": "system",
+    "borderDefault": null,
+    "texture": null,
+    "gradients": null
   },
   "overrides": {
     "motion.duration.instant": {
@@ -377,9 +380,9 @@
       "locked": false
     },
     "Q-color-09": {
-      "value": "warm",
+      "value": "pure",
       "set_by": "delegated",
-      "decision": "D-0022",
+      "decision": "D-0030",
       "locked": false
     },
     "Q-ai-01": {
@@ -536,7 +539,7 @@
     ]
   },
   "hashes": {
-    "DESIGN.md": "e396a1595218c295",
+    "DESIGN.md": "f335f2f6e619fdba",
     "PRODUCT.md": "13d42cca09274987"
   },
   "exports": {
@@ -2638,5 +2641,7 @@
       "font.size.input": "dimension"
     },
     "snapshots": "standards-state.json"
-  }
+  },
+  "style": null,
+  "customStyles": {}
 }

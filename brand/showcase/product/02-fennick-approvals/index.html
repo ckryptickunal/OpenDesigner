@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bills to approve · Fennick</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+/* Values the engine has no token for (recorded in notes.md):
+   --row2: two-line row height; --sep: hairline lighter than border.subtle;
+   --float: shadow for floating layers (depth 10 zeroes every elevation). */
+:root {
+  --row2: 56px;
+  --badge: 20px;
+  --sep: var(--ds-color-neutral-light-4);
+  --line: var(--ds-color-neutral-light-5);
+  --float: 0 0 0 1px rgb(37 36 35 / 0.08), 0 4px 8px rgb(37 36 35 / 0.06), 0 12px 32px rgb(37 36 35 / 0.12);
+  --drawer-shadow: -1px 0 0 var(--ds-color-neutral-light-5), -12px 0 32px rgb(37 36 35 / 0.06);
+  --sidebar: 220px;
+  --drawer: 476px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body { font: var(--ds-text-body-md); font-family: var(--ds-font-family-text); color: var(--ds-color-text-primary); background: var(--ds-color-surface-raised); -webkit-font-smoothing: antialiased; overflow: hidden; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+svg.i { width: 16px; height: 16px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+svg.i.s12 { width: 12px; height: 12px; stroke-width: 2; }
+.num { font-variant-numeric: tabular-nums; }
+.mono { font-family: var(--ds-font-family-mono); font-size: var(--ds-font-size-12); }
+.muted { color: var(--ds-color-text-secondary); }
+.meta { font-size: var(--ds-font-size-12); color: var(--ds-color-text-tertiary); }
+
+.app { display: grid; grid-template-columns: var(--sidebar) 1fr; grid-template-rows: 100vh; height: 100vh; overflow: hidden; }
+
+/* Sidebar */
+.side { min-height: 0; background: var(--ds-color-surface-nav); border-right: 1px solid var(--sep); display: flex; flex-direction: column; padding: 12px; gap: 2px; }
+.ws { display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 8px; margin-bottom: 10px; }
+.ws .mark { width: 24px; height: 24px; border-radius: var(--ds-radius-control); background: var(--ds-color-bg-inverse); display: grid; place-items: center; flex: none; }
+.ws .name { font-weight: var(--ds-font-weight-heading); white-space: nowrap; }
+.ws svg.chev { margin-left: auto; color: var(--ds-color-text-tertiary); }
+.nav { display: flex; align-items: center; gap: 10px; height: 32px; padding: 0 8px; border-radius: var(--ds-radius-control); color: var(--ds-color-text-secondary); font-weight: var(--ds-font-weight-label); }
+.nav svg { color: var(--ds-color-icon-subtle); }
+.nav.on { background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); box-shadow: 0 0 0 1px var(--sep); }
+.nav.on svg { color: var(--ds-color-text-primary); }
+.nav .count { margin-left: auto; font-size: var(--ds-font-size-12); color: var(--ds-color-text-tertiary); font-variant-numeric: tabular-nums; }
+.group { font-size: var(--ds-font-size-12); color: var(--ds-color-text-tertiary); padding: 18px 8px 6px; font-weight: var(--ds-font-weight-label); }
+.side .foot { margin-top: auto; }
+
+/* Main */
+.main { display: grid; grid-template-rows: 52px 1fr; min-width: 0; min-height: 0; overflow: hidden; position: relative; }
+.top { display: flex; align-items: center; gap: 12px; padding: 0 20px 0 28px; border-bottom: 1px solid var(--sep); }
+.search { display: flex; align-items: center; gap: 8px; width: 340px; height: var(--ds-size-control-md); padding: 0 8px 0 10px; border-radius: var(--ds-radius-control); background: var(--ds-color-surface-nav); color: var(--ds-color-text-tertiary); }
+.kbd { margin-left: auto; font-size: var(--ds-font-size-12); color: var(--ds-color-text-tertiary); border: 1px solid var(--line); border-radius: var(--ds-radius-control-sm); padding: 0 5px; line-height: 18px; background: var(--ds-color-surface-raised); }
+.top .right { margin-left: auto; display: flex; align-items: center; gap: 4px; }
+.iconbtn { width: 32px; height: 32px; display: grid; place-items: center; border-radius: var(--ds-radius-control); color: var(--ds-color-icon-default); }
+.avatar { width: 28px; height: 28px; border-radius: var(--ds-radius-person); background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-secondary); font-size: var(--ds-font-size-12); font-weight: var(--ds-font-weight-heading); display: grid; place-items: center; margin-left: 8px; }
+
+.body { display: grid; grid-template-columns: 1fr var(--drawer); min-height: 0; }
+.list { min-width: 0; min-height: 0; overflow: hidden; padding: 24px 0 0 28px; position: relative; display: flex; flex-direction: column; }
+.head { display: flex; align-items: center; gap: 8px; padding-right: 24px; margin-bottom: 14px; }
+.head h1 { font: var(--ds-text-headline-sm); letter-spacing: -0.01em; margin-right: auto; }
+.btn { display: inline-flex; align-items: center; gap: 6px; height: var(--ds-size-control-md); padding: 0 12px; border-radius: var(--ds-radius-control); font-weight: var(--ds-font-weight-label); white-space: nowrap; }
+.btn.sec { border: 1px solid var(--line); background: var(--ds-color-surface-raised); }
+.btn.sec svg { color: var(--ds-color-icon-default); }
+.btn.pri { background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); }
+
+.tabs { display: flex; gap: 20px; border-bottom: 1px solid var(--sep); margin-right: 24px; }
+.tab { display: inline-flex; align-items: center; gap: 6px; height: 36px; color: var(--ds-color-text-secondary); font-weight: var(--ds-font-weight-label); border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.tab .c { font-size: var(--ds-font-size-12); color: var(--ds-color-text-tertiary); font-variant-numeric: tabular-nums; }
+.tab.on { color: var(--ds-color-text-primary); border-bottom-color: var(--ds-color-text-primary); }
+.tab.on .c { color: var(--ds-color-text-secondary); }
+
+.tools { display: flex; align-items: center; gap: 8px; padding: 12px 24px 12px 0; }
+.seg { display: inline-flex; padding: 2px; border-radius: var(--ds-radius-control); background: var(--ds-color-bg-neutral-subtle); }
+.seg span { height: 24px; padding: 0 10px; display: inline-flex; align-items: center; gap: 6px; border-radius: var(--ds-radius-control-sm); font-size: var(--ds-font-size-12); font-weight: var(--ds-font-weight-label); color: var(--ds-color-text-secondary); }
+.seg span.on { background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); box-shadow: 0 0 0 1px var(--line); }
+.seg .c { color: var(--ds-color-text-tertiary); font-variant-numeric: tabular-nums; }
+.chip { display: inline-flex; align-items: center; height: 28px; border: 1px solid var(--line); border-radius: var(--ds-radius-control); font-size: var(--ds-font-size-12); font-weight: var(--ds-font-weight-label); color: var(--ds-color-text-secondary); white-space: nowrap; }
+.chip > span { padding: 0 8px; height: 100%; display: inline-flex; align-items: center; gap: 4px; }
+.chip .val { color: var(--ds-color-text-accent); border-left: 1px solid var(--sep); }
+.chip .clr { padding: 0 6px 0 2px; color: var(--ds-color-icon-subtle); }
+.chip.empty { border-style: dashed; border-color: var(--ds-color-neutral-light-7); }
+.tools .total { margin-left: auto; }
+
+table { width: 100%; border-collapse: collapse; table-layout: fixed; font-variant-numeric: tabular-nums; }
+th, td { padding: 0 10px; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-bottom: 1px solid var(--sep); }
+th { height: 32px; font-size: var(--ds-font-size-12); font-weight: var(--ds-font-weight-label); color: var(--ds-color-text-secondary); border-top: 1px solid var(--sep); }
+td { height: var(--row2); }
+th:first-child, td:first-child { padding-left: 4px; }
+th.r, td.r { text-align: right; }
+tr.open td { background: var(--ds-color-bg-accent-subtle); border-bottom-color: var(--ds-color-accent-light-5); }
+tr.open td:first-child { box-shadow: inset 2px 0 0 var(--ds-color-bg-accent-bold); }
+.v { font-weight: var(--ds-font-weight-label); display: block; overflow: hidden; text-overflow: ellipsis; }
+.sub { display: block; font-size: var(--ds-font-size-12); color: var(--ds-color-text-tertiary); margin-top: 1px; }
+.sub .mono { font-size: var(--ds-font-size-12); color: var(--ds-color-text-tertiary); }
+.amt { font-weight: var(--ds-font-weight-label); font-variant-numeric: tabular-nums; }
+.amt .c { color: var(--ds-color-text-tertiary); font-weight: var(--ds-font-weight-body); }
+.due { font-variant-numeric: tabular-nums; }
+.late { color: var(--ds-color-text-danger); }
+.appr { display: inline-flex; align-items: center; gap: 8px; font-size: var(--ds-font-size-12); color: var(--ds-color-text-secondary); font-variant-numeric: tabular-nums; }
+.pips { display: inline-flex; gap: 2px; }
+.pips i { width: 10px; height: 4px; border-radius: 2px; background: var(--ds-color-neutral-light-6); }
+.pips i.y { background: var(--ds-color-bg-accent-bold); }
+.acts { display: inline-flex; gap: 4px; }
+.mini { width: 26px; height: 26px; border-radius: var(--ds-radius-control); display: grid; place-items: center; color: var(--ds-color-icon-subtle); }
+tr.open .mini { border: 1px solid var(--ds-color-accent-light-6); background: var(--ds-color-surface-raised); color: var(--ds-color-icon-default); }
+
+/* Drawer */
+.drawer { position: relative; display: flex; flex-direction: column; min-height: 0; background: var(--ds-color-surface-overlay); box-shadow: var(--drawer-shadow); z-index: 3; }
+.dh { display: flex; align-items: center; gap: 8px; height: 52px; padding: 0 12px 0 20px; border-bottom: 1px solid var(--sep); flex: none; }
+.dh .t { font-weight: var(--ds-font-weight-heading); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dh .pos { margin-left: auto; display: inline-flex; align-items: center; gap: 2px; font-size: var(--ds-font-size-12); color: var(--ds-color-text-tertiary); white-space: nowrap; }
+.dh .pos .iconbtn { width: 28px; height: 28px; }
+.badge { display: inline-flex; align-items: center; gap: 4px; height: var(--badge); padding: 0 6px 0 5px; border-radius: var(--ds-radius-control-sm); font-size: var(--ds-font-size-12); font-weight: var(--ds-font-weight-label); background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-secondary); white-space: nowrap; flex: none; }
+.scroll { flex: 1; min-height: 0; overflow: hidden; padding: 0 20px; }
+.sec { padding: 13px 0; border-bottom: 1px solid var(--sep); }
+.sec:last-child { border-bottom: 0; }
+.sec h3 { font-size: var(--ds-font-size-12); font-weight: var(--ds-font-weight-label); color: var(--ds-color-text-secondary); margin-bottom: 8px; display: flex; justify-content: space-between; }
+.big { font-size: var(--ds-font-size-29); line-height: 1.15; font-weight: var(--ds-font-weight-label); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.big .c { font-size: var(--ds-font-size-20); color: var(--ds-color-text-secondary); letter-spacing: -0.01em; }
+.big .cur { font-size: var(--ds-font-size-12); color: var(--ds-color-text-tertiary); font-weight: var(--ds-font-weight-label); letter-spacing: 0; margin-left: 6px; }
+.amtmeta { margin-top: 4px; color: var(--ds-color-text-secondary); }
+.policy { display: flex; gap: 8px; align-items: flex-start; margin-top: 12px; padding: 8px 10px; border-radius: var(--ds-radius-control); background: var(--ds-color-surface-nav); font-size: var(--ds-font-size-12); color: var(--ds-color-text-secondary); line-height: 1.45; }
+.policy svg { margin-top: 1px; color: var(--ds-color-icon-default); }
+.policy b { color: var(--ds-color-text-primary); font-weight: var(--ds-font-weight-label); }
+
+.tl { list-style: none; position: relative; }
+.tl li { position: relative; display: grid; grid-template-columns: 20px 1fr auto; column-gap: 10px; padding-bottom: 10px; }
+.tl li:last-child { padding-bottom: 0; }
+.tl li::before { content: ""; position: absolute; left: 9.5px; top: 20px; bottom: 0; width: 1px; background: var(--line); }
+.tl li:last-child::before { display: none; }
+.dot { width: 20px; height: 20px; border-radius: var(--ds-radius-person); display: grid; place-items: center; background: var(--ds-color-surface-raised); border: 1px solid var(--line); color: var(--ds-color-icon-subtle); position: relative; z-index: 1; }
+.dot.done { background: var(--ds-color-bg-accent-bold); border-color: var(--ds-color-bg-accent-bold); color: var(--ds-color-text-on-accent); }
+.dot.now { border-color: var(--ds-color-bg-accent-bold); box-shadow: inset 0 0 0 3px var(--ds-color-surface-raised), inset 0 0 0 10px var(--ds-color-bg-accent-bold); }
+.tl .what { line-height: 20px; }
+.tl .what b { font-weight: var(--ds-font-weight-label); }
+.tl .when { font-size: var(--ds-font-size-12); color: var(--ds-color-text-tertiary); line-height: 20px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.tl .note { grid-column: 2 / 4; font-size: var(--ds-font-size-12); color: var(--ds-color-text-secondary); }
+
+.ledger { width: 100%; font-variant-numeric: tabular-nums; }
+.ledger div { display: flex; justify-content: space-between; height: 22px; align-items: center; color: var(--ds-color-text-secondary); }
+.ledger div span:last-child { color: var(--ds-color-text-primary); }
+.ledger .tot { border-top: 1px solid var(--line); margin-top: 4px; padding-top: 4px; height: 30px; color: var(--ds-color-text-primary); font-weight: var(--ds-font-weight-label); }
+.ledger .tot span:last-child { font-weight: var(--ds-font-weight-heading); }
+
+.kv { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 12px; }
+.kv label { display: block; font-size: var(--ds-font-size-12); color: var(--ds-color-text-secondary); font-weight: var(--ds-font-weight-label); margin-bottom: 4px; }
+.field { display: flex; align-items: center; gap: 8px; height: var(--ds-size-control-md); padding: 0 8px 0 10px; border: 1px solid var(--ds-color-border-input); border-radius: var(--ds-radius-control); background: var(--ds-color-bg-field); white-space: nowrap; overflow: hidden; }
+.field svg { margin-left: auto; color: var(--ds-color-icon-subtle); }
+.field .mono { color: var(--ds-color-text-secondary); }
+.kvline { display: flex; gap: 6px; align-items: center; height: 32px; }
+.file { display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 8px 0 10px; border: 1px solid var(--line); border-radius: var(--ds-radius-container); margin-top: 10px; }
+.file .ft { width: 28px; height: 28px; border-radius: var(--ds-radius-control); background: var(--ds-color-surface-nav); display: grid; place-items: center; color: var(--ds-color-icon-default); flex: none; }
+.file .fn { font-weight: var(--ds-font-weight-label); }
+.file .iconbtn { margin-left: auto; width: 28px; height: 28px; }
+.cm { display: grid; grid-template-columns: 24px 1fr; gap: 10px; }
+.cm .av { width: 24px; height: 24px; border-radius: var(--ds-radius-person); background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-secondary); font-size: var(--ds-font-size-12); letter-spacing: -0.02em; font-weight: var(--ds-font-weight-heading); display: grid; place-items: center; }
+.cm b { font-weight: var(--ds-font-weight-label); }
+.cm p { margin-top: 2px; }
+.reply { margin-top: 10px; height: var(--ds-size-control-md); border: 1px solid var(--line); border-radius: var(--ds-radius-control); display: flex; align-items: center; padding: 0 10px; color: var(--ds-color-text-tertiary); }
+
+.df { flex: none; display: flex; align-items: center; gap: 8px; padding: 12px 20px; border-top: 1px solid var(--sep); background: var(--ds-color-surface-overlay); position: relative; }
+.df .note2 { font-size: var(--ds-font-size-12); color: var(--ds-color-text-tertiary); margin-right: auto; }
+.btn.rej { background: var(--ds-color-bg-danger-subtle); color: var(--ds-color-text-danger); }
+.btn.rej .split { margin-left: 2px; padding-left: 8px; border-left: 1px solid rgb(143 62 56 / 0.25); height: 18px; display: inline-flex; align-items: center; }
+.tip { position: absolute; z-index: 6; bottom: 54px; right: 20px; display: flex; align-items: center; gap: 8px; padding: 6px 8px 6px 10px; border-radius: var(--ds-radius-control); background: var(--ds-color-bg-inverse); color: var(--ds-color-text-inverse); font-size: var(--ds-font-size-12); white-space: nowrap; box-shadow: var(--float); }
+.tip .k { border: 1px solid rgb(255 255 255 / 0.24); border-radius: var(--ds-radius-control-sm); padding: 0 4px; line-height: 16px; color: rgb(255 255 255 / 0.8); }
+
+/* Toast */
+/* One temporary state per frame: the main frame shows the review drawer only.
+   ?state=toast shows the confirmation after approving Harlow; ?state=tooltip shows the Approve hover. */
+.toast, .tip { display: none !important; }
+body.st-toast .toast { display: flex !important; }
+body.st-tooltip .tip { display: flex !important; }
+.toast { position: absolute; z-index: 5; left: 28px; right: 24px; bottom: 20px; margin: 0 auto; width: max-content; max-width: calc(100% - 52px); display: flex; align-items: center; gap: 10px; padding: 10px 8px 10px 12px; border-radius: var(--ds-radius-overlay); background: var(--ds-color-bg-inverse); color: var(--ds-color-text-inverse); box-shadow: var(--float); }
+.toast .ok { width: 20px; height: 20px; border-radius: var(--ds-radius-person); background: rgb(255 255 255 / 0.12); display: grid; place-items: center; flex: none; }
+.toast p { line-height: 1.35; white-space: nowrap; margin-right: 8px; }
+.toast p span { color: rgb(255 255 255 / 0.68); }
+.toast button { margin-left: auto; height: 28px; padding: 0 10px; border-radius: var(--ds-radius-control); font-weight: var(--ds-font-weight-label); color: var(--ds-color-text-inverse); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.24); flex: none; }
+.toast .x { box-shadow: none; padding: 0; width: 28px; margin-left: 0; color: rgb(255 255 255 / 0.68); display: grid; place-items: center; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v12h14V9"/></symbol>
+  <symbol id="inbox" viewBox="0 0 24 24"><path d="M3 13.5 5.5 5h13l2.5 8.5V19a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 19z"/><path d="M3 13.5h5l1.5 2.5h5l1.5-2.5h5"/></symbol>
+  <symbol id="file" viewBox="0 0 24 24"><path d="M14 3H6.5A1.5 1.5 0 0 0 5 4.5v15A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></symbol>
+  <symbol id="send" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></symbol>
+  <symbol id="store" viewBox="0 0 24 24"><path d="M4 9.5 5.5 4h13L20 9.5"/><path d="M4 9.5h16v1a3 3 0 0 1-5.3 1.9A3 3 0 0 1 12 13.5a3 3 0 0 1-2.7-1.1A3 3 0 0 1 4 10.5z"/><path d="M5.5 13v7h13v-7"/></symbol>
+  <symbol id="card" viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M2.5 10h19"/></symbol>
+  <symbol id="receipt" viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></symbol>
+  <symbol id="book" viewBox="0 0 24 24"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5z"/><path d="M5 19.5A1.5 1.5 0 0 0 6.5 21H19"/></symbol>
+  <symbol id="cog" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></symbol>
+  <symbol id="search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></symbol>
+  <symbol id="bell" viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 6.5 2.5 8 2.5 8h-17S6 15.5 6 9"/><path d="M10.3 20.5a2 2 0 0 0 3.4 0"/></symbol>
+  <symbol id="help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 0 1 4.9.7c0 1.8-2.4 2.2-2.4 3.8"/><path d="M12 17.2h.01"/></symbol>
+  <symbol id="plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="pluscirc" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 8.5v7M8.5 12h7"/></symbol>
+  <symbol id="upload" viewBox="0 0 24 24"><path d="M12 15V4M7 8.5l5-5 5 5M5 20h14"/></symbol>
+  <symbol id="x" viewBox="0 0 24 24"><path d="M17 7 7 17M7 7l10 10"/></symbol>
+  <symbol id="check" viewBox="0 0 24 24"><path d="M19.5 6.5 9 17l-4.5-4.5"/></symbol>
+  <symbol id="chev" viewBox="0 0 24 24"><path d="m7 10 5 5 5-5"/></symbol>
+  <symbol id="up" viewBox="0 0 24 24"><path d="m7 14 5-5 5 5"/></symbol>
+  <symbol id="down" viewBox="0 0 24 24"><path d="m7 10 5 5 5-5"/></symbol>
+  <symbol id="arrowdown" viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></symbol>
+  <symbol id="scale" viewBox="0 0 24 24"><path d="M12 3v18M5 21h14M5 7h14"/><path d="m5 7-2.5 6a3 3 0 0 0 5 0z"/><path d="m19 7-2.5 6a3 3 0 0 0 5 0z"/></symbol>
+  <symbol id="external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+  <symbol id="copy" viewBox="0 0 24 24"><rect x="8.5" y="8.5" width="11" height="11" rx="1.5"/><path d="M15.5 8.5V6a1.5 1.5 0 0 0-1.5-1.5H6A1.5 1.5 0 0 0 4.5 6v8A1.5 1.5 0 0 0 6 15.5h2.5"/></symbol>
+  <symbol id="link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+  <symbol id="more" viewBox="0 0 24 24"><g fill="currentColor" stroke="none"><circle cx="5.5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="18.5" cy="12" r="1.5"/></g></symbol>
+  <symbol id="clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+  <symbol id="cal" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="1.5"/><path d="M4 10h16M9 3v4M15 3v4"/></symbol>
+  <symbol id="at" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5"/><path d="M15.5 12v1.5a2.5 2.5 0 0 0 5 0V12a8.5 8.5 0 1 0-3.3 6.7"/></symbol>
+</svg>
+
+<div class="app">
+  <aside class="side" aria-label="Workspace navigation">
+    <div class="ws">
+      <span class="mark" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14" fill="#fff"><rect x="6.2" y="1" width="1.6" height="12"/><path d="M6.2 4.2 2 2.4v1.8l4.2 1.8zM7.8 6.6 12 4.8v1.8L7.8 8.4zM6.2 9 2 7.2V9l4.2 1.8z"/></svg></span>
+      <span class="name">Bramblecote Foods</span>
+      <svg class="i chev"><use href="#chev"/></svg>
+    </div>
+    <a class="nav"><svg class="i"><use href="#home"/></svg>Home</a>
+    <a class="nav"><svg class="i"><use href="#inbox"/></svg>Inbox<span class="count">3</span></a>
+    <div class="group">Payables</div>
+    <a class="nav on" aria-current="page"><svg class="i"><use href="#file"/></svg>Bills<span class="count">14</span></a>
+    <a class="nav"><svg class="i"><use href="#send"/></svg>Payments</a>
+    <a class="nav"><svg class="i"><use href="#store"/></svg>Vendors</a>
+    <a class="nav"><svg class="i"><use href="#receipt"/></svg>Reimbursements<span class="count">5</span></a>
+    <a class="nav"><svg class="i"><use href="#card"/></svg>Cards</a>
+    <div class="group">Books</div>
+    <a class="nav"><svg class="i"><use href="#book"/></svg>Accounting</a>
+    <a class="nav"><svg class="i"><use href="#scale"/></svg>Approval policies</a>
+    <div class="foot">
+      <a class="nav"><svg class="i"><use href="#cog"/></svg>Settings</a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="top">
+      <label class="search"><svg class="i"><use href="#search"/></svg><span>Search bills, vendors, amounts</span><span class="kbd">⌘K</span></label>
+      <div class="right">
+        <button class="iconbtn" aria-label="Help"><svg class="i"><use href="#help"/></svg></button>
+        <button class="iconbtn" aria-label="Notifications"><svg class="i"><use href="#bell"/></svg></button>
+        <span class="avatar" aria-label="Gideon Afolabi">GA</span>
+      </div>
+    </header>
+
+    <div class="body">
+      <section class="list" aria-label="Bills">
+        <div class="head">
+          <h1>Bills</h1>
+          <button class="btn sec"><svg class="i"><use href="#upload"/></svg>Upload</button>
+          <button class="btn pri"><svg class="i"><use href="#plus"/></svg>New bill</button>
+        </div>
+        <nav class="tabs" role="tablist">
+          <span class="tab" role="tab">Draft <span class="c">3</span></span>
+          <span class="tab on" role="tab" aria-selected="true">To approve <span class="c">14</span></span>
+          <span class="tab" role="tab">Scheduled <span class="c">22</span></span>
+          <span class="tab" role="tab">Paid <span class="c">318</span></span>
+        </nav>
+        <div class="tools">
+          <span class="seg"><span class="on">All <span class="c">14</span></span><span>Waiting on me <span class="c">4</span></span></span>
+          <span class="chip"><span>Due</span><span class="val">Next 30 days</span><span class="clr"><svg class="i s12"><use href="#x"/></svg></span></span>
+          <span class="chip empty"><span><svg class="i s12"><use href="#pluscirc"/></svg>Vendor</span></span>
+          <span class="meta total num">$92,663.95 total</span>
+        </div>
+        <table aria-label="Bills to approve">
+          <colgroup><col><col style="width:116px"><col style="width:104px"><col style="width:138px"><col style="width:68px"></colgroup>
+          <thead><tr><th>Vendor</th><th class="r">Amount</th><th>Due <svg class="i s12" style="vertical-align:-2px"><use href="#arrowdown"/></svg></th><th>Approvals</th><th class="r"></th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+
+        <div class="toast" role="status">
+          <span class="ok"><svg class="i s12"><use href="#check"/></svg></span>
+          <p>Harlow Print Co. approved. <span>$3,912.08 pays on Fri, Oct 16 from Operating ••4410.</span></p>
+          <button>Undo</button>
+          <button class="x" aria-label="Dismiss"><svg class="i"><use href="#x"/></svg></button>
+        </div>
+      </section>
+
+      <aside class="drawer" aria-label="Bill from Calloway Freight Brokers">
+        <div class="dh">
+          <span class="t">Calloway Freight Brokers</span>
+          <span class="badge"><svg class="i s12"><use href="#clock"/></svg>1/2 approved</span>
+          <span class="pos"><span class="num">7 of 14</span>
+            <button class="iconbtn" aria-label="Previous bill"><svg class="i"><use href="#up"/></svg></button>
+            <button class="iconbtn" aria-label="Next bill"><svg class="i"><use href="#down"/></svg></button>
+            <button class="iconbtn" aria-label="More"><svg class="i"><use href="#more"/></svg></button>
+            <button class="iconbtn" aria-label="Close"><svg class="i"><use href="#x"/></svg></button>
+          </span>
+        </div>
+        <div class="scroll">
+          <div class="sec">
+            <div class="big">$7,418<span class="c">.60</span><span class="cur">USD</span></div>
+            <div class="amtmeta num">Due Oct 21 · in 7 days · Net 30 from Sep 21</div>
+            <div class="policy"><svg class="i"><use href="#scale"/></svg><span><b>Over $5,000: needs CFO approval.</b> The budget owner approved; you are the second and last approver.</span></div>
+          </div>
+          <div class="sec">
+            <h3>Approvals</h3>
+            <ol class="tl">
+              <li><span class="dot done"><svg class="i s12"><use href="#check"/></svg></span><span class="what">Submitted by <b>Priya Raman</b></span><span class="when">Oct 9, 4:12 PM</span>
+                <span class="note">From ap@bramblecote.com · matched to PO-3318</span></li>
+              <li><span class="dot done"><svg class="i s12"><use href="#check"/></svg></span><span class="what">Approved by <b>Lorna Petrakis</b>, Logistics</span><span class="when">Oct 10, 9:03 AM</span></li>
+              <li><span class="dot now"></span><span class="what">Waiting for <b>you</b>, CFO</span><span class="when">4 days</span></li>
+              <li><span class="dot"><svg class="i s12"><use href="#cal"/></svg></span><span class="what muted">ACH payment on Oct 20</span><span class="when">after approval</span></li>
+            </ol>
+          </div>
+          <div class="sec">
+            <h3><span>If you approve</span><span class="meta">Operating ••4410</span></h3>
+            <div class="ledger">
+              <div><span>Balance today</span><span>$63,904.52</span></div>
+              <div><span>6 bills scheduled before Oct 20</span><span>−$15,277.75</span></div>
+              <div><span>This bill</span><span>−$7,418.60</span></div>
+              <div class="tot"><span>Left on Oct 20</span><span>$41,208.17</span></div>
+            </div>
+          </div>
+          <div class="sec">
+            <div class="kv">
+              <div><label>GL account</label><div class="field"><span class="mono">6150</span>Freight &amp; shipping<svg class="i"><use href="#chev"/></svg></div></div>
+              <div><label>Department</label><div class="field">Logistics · Reno DC<svg class="i"><use href="#chev"/></svg></div></div>
+            </div>
+            <div class="file">
+              <span class="ft" aria-hidden="true"><svg class="i"><use href="#file"/></svg></span>
+              <span><span class="fn mono" style="color:var(--ds-color-text-primary)">CFB-118204.pdf</span><span class="sub">Invoice · 2 pages · 184 KB</span></span>
+              <button class="iconbtn" aria-label="Open invoice"><svg class="i"><use href="#external"/></svg></button>
+            </div>
+          </div>
+          <div class="sec">
+            <h3><span>Comments <span class="meta num">1</span></span></h3>
+            <div class="cm"><span class="av">LP</span><div><b>Lorna Petrakis</b> <span class="meta">Oct 10, 9:03 AM</span><p>Includes the fuel surcharge we agreed on Sep 2. Fine to pay.</p></div></div>
+            <div class="reply">Comment, or @mention a teammate</div>
+          </div>
+        </div>
+        <div class="tip" role="tooltip">Approve and schedule payment <span class="k">⌘↵</span></div>
+        <div class="df">
+          <span class="note2">Approving schedules ACH for Oct 20</span>
+          <button class="btn rej">Reject<span class="split"><svg class="i s12"><use href="#chev"/></svg></span></button>
+          <button class="btn pri"><svg class="i"><use href="#check"/></svg>Approve</button>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<script>
+const ST = new URLSearchParams(location.search).get('state');
+if (ST === 'toast' || ST === 'tooltip') document.body.classList.add('st-' + ST);
+/* 14 bills waiting for approval, sorted by due date. Harlow Print Co. was approved a moment ago: it is in "Scheduled 22"
+   and in the drawer's "6 bills scheduled before Oct 20", and ?state=toast shows its confirmation. */
+const B = [
+  ['Mosgrove Commercial Cleaning', 'MCC-0931', '2145.00', 'Oct 12', '2 days overdue', 0, 1, 1],
+  ['Redfern Electrical Services', '4471', '3260.75', 'Oct 15', 'in 1 day', 0, 1],
+  ['Kanbrook Software', 'KS-2026-1009', '1188.00', 'Oct 16', 'in 2 days', 0, 1],
+  ['Seaborne Packaging Ltd', 'SPL-55021', '12904.33', 'Oct 17', 'in 3 days', 0, 2],
+  ['Ember Valley Produce', 'EVP-3390', '5402.88', 'Oct 18', 'in 4 days', 1, 2],
+  ['Sagebrush Water Co.', '00418827', '238.14', 'Oct 19', 'in 5 days', 0, 1],
+  ['Calloway Freight Brokers', 'CFB-118204', '7418.60', 'Oct 21', 'in 7 days', 1, 2, 0, 1],
+  ['Ostler Fleet Maintenance', 'OFM-6620', '1947.52', 'Oct 22', 'in 8 days', 0, 1],
+  ['Carrow Staffing Partners', 'CSP-5518', '22486.40', 'Oct 23', 'in 9 days', 0, 2],
+  ['Workline Uniform Supply', 'WUS-77812', '864.19', 'Oct 24', 'in 10 days', 0, 1],
+  ['Brightline Telecom', 'BT-0098341', '412.36', 'Oct 25', 'in 11 days', 0, 1],
+  ['Halberd Security Group', 'HSG-2207', '6030.00', 'Oct 28', 'in 14 days', 1, 2],
+  ['Tallis & Brook LLP', 'TB-20817', '18750.00', 'Oct 30', 'in 16 days', 1, 2],
+  ['Dunstan Insurance Brokers', 'DIB-11-2026', '9615.78', 'Nov 1', 'in 18 days', 0, 2],
+];
+const use = (id, c = '') => `<svg class="i ${c}"><use href="#${id}"/></svg>`;
+const money = v => { const [w, c] = Number(v).toFixed(2).split('.'); return `$${Number(w).toLocaleString('en-US')}<span class="c">.${c}</span>`; };
+document.getElementById('rows').innerHTML = B.map(([vendor, inv, amt, due, rel, got, need, late, open]) => `
+  <tr${open ? ' class="open" aria-selected="true"' : ''}>
+    <td><span class="v">${vendor}</span><span class="sub"><span class="mono">${inv}</span></span></td>
+    <td class="r"><span class="amt">${money(amt)}</span></td>
+    <td><span class="v due" style="font-weight:400">${due}</span><span class="sub${late ? ' late' : ''}">${rel}</span></td>
+    <td><span class="appr"><span class="pips">${Array.from({ length: need }, (_, i) => `<i class="${i < got ? 'y' : ''}"></i>`).join('')}</span>${got}/${need} approved</span></td>
+    <td class="r"><span class="acts"><button class="mini" aria-label="Approve ${vendor}">${use('check')}</button><button class="mini" aria-label="Reject ${vendor}">${use('x')}</button></span></td>
+  </tr>`).join('');
+</script>
+</body>
+</html>

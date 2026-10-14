@@ -18,6 +18,8 @@ engine.py set dials.roundness 60 --why "softer corners for a friendlier feel"
 engine.py build
 ```
 
+{{figure:export-rebuild-not-edit}}
+
 `build` generates the tokens and checks them. If there are no errors, it writes every export, `DESIGN.md`, the overview page and the preview pages. To write one format only:
 
 ```
@@ -29,6 +31,8 @@ The formats are `css`, `tailwind`, `figma`, `paper`, `swift`, `compose`, `dtcg`,
 ## Code exports
 
 All paths are inside `opendesigner/`.
+
+{{figure:export-fan}}
 
 - **Tokens** (`tokens/`): DTCG sets plus `opendesigner.resolver.json` for the modes. Use them with token tools.
 - **DTCG resolver** (`build/dtcg/`): one resolver file for tools that take a single entry point.
@@ -68,6 +72,8 @@ This server can read a file but not write to it. The skill uses it to compare th
 ### Nothing connected
 
 Use the files in `build/figma/import/`, one per collection and mode, with Figma's variables import. Or use `build/figma/variables.json` with Tokens Studio. Figma imports this token format only in part: one mode per file, sRGB colors, px units, and no composite tokens.
+
+{{figure:export-figma-collections}}
 
 Hands-on Figma research is still an open task, so the Figma steps rest on Figma's own docs.
 

@@ -58,10 +58,10 @@
       "decision": "D-0017"
     },
     "warmth": {
-      "value": 85,
+      "value": 30,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0016"
+      "decision": "D-0028"
     }
   },
   "preset": null,
@@ -71,10 +71,10 @@
     "friendly"
   ],
   "raw": {
-    "brandColor": "#b8643f",
+    "brandColor": "#3D5A47",
     "primaryActionColor": null,
     "focusColor": null,
-    "neutralBase": "#EADBC4",
+    "neutralBase": "#E8ECE4",
     "contrastTarget": "AA",
     "textFace": "Instrument Sans",
     "displayFace": "Fraunces",
@@ -139,13 +139,16 @@
     "minTarget": null,
     "focusWidth": 2,
     "secondaryColors": [
-      "#7E9475"
+      "#E2B23A"
     ],
     "monoFace": "ui-monospace",
     "scripts": [
       "Latn"
     ],
-    "defaultTheme": "system"
+    "defaultTheme": "system",
+    "borderDefault": null,
+    "texture": null,
+    "gradients": null
   },
   "overrides": {
     "motion.duration.instant": {
@@ -515,7 +518,7 @@
     ]
   },
   "hashes": {
-    "DESIGN.md": "39371acefdbadda2",
+    "DESIGN.md": "94e2da82d1343680",
     "PRODUCT.md": "499a60f34d1f5b5a"
   },
   "exports": {
@@ -2617,5 +2620,7 @@
       "font.size.input": "dimension"
     },
     "snapshots": "standards-state.json"
-  }
+  },
+  "style": null,
+  "customStyles": {}
 }

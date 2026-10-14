@@ -1,0 +1,59 @@
+{
+ "piece": "watch/05-nook-home",
+ "title": "05 Nook: notes",
+ "pattern": "home control",
+ "platform": "watchos",
+ "industry": "home",
+ "style": [
+  "playful",
+  "dark",
+  "minimal"
+ ],
+ "tags": [
+  "home control",
+  "home",
+  "scenes",
+  "lights",
+  "watch",
+  "dark",
+  "amber",
+  "watchos"
+ ],
+ "score": 4,
+ "verdict": "keep",
+ "strengths": [
+  "One lit tile and two dark tiles, icon chip top-left and name bottom-left: the Apple Home tile grammar, with a scene detail only this app would say ('4 lamps · 2700 K').",
+  "Three sizes, one family, amber as the only colour, tiles at least 44 px with room for a thumb."
+ ],
+ "slop_signals": [
+  "A radial light gradient inside the amber tile (two highlights) where flat amber would do.",
+  "A toggle inside a tile that is itself a button: two targets in one tile."
+ ],
+ "fixes": [
+  "Flatten the hero tile to one amber.",
+  "Make the whole tile the switch and remove the inner toggle, or make the toggle the only target."
+ ],
+ "references": [
+  {
+   "site": "IKEA Home smart",
+   "url": "https://mobbin.com/screens/b107bb6f-566d-40ed-b98a-ecbec7e612a3",
+   "what": "Big rounded room tiles, one active with a light chip, flat fills."
+  },
+  {
+   "site": "Google Home",
+   "url": "https://mobbin.com/screens/530bf4ff-2843-48dc-ae0c-036e0a2abe66",
+   "what": "A filled tile for the device that is on, grey for the rest; the tile is the control."
+  },
+  {
+   "site": "SmartThings",
+   "url": "https://mobbin.com/screens/15722236-f97e-40f5-9378-ac353d741143",
+   "what": "Scene tiles with an icon top-left and a name below."
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "keep",
+  "said": "most of the watch screens are okay",
+  "date": "2026-10-14"
+ }
+}

@@ -1,0 +1,18 @@
+<figure class="fig">
+<div class="fig-scene" data-scene="forest">
+<div class="fig-card">
+<div class="fig-card-h"><div><div class="kicker" style="font-size:12px">DESIGN.md · For Agents</div><div style="font-weight:600;font-size:15px;line-height:20px">Read this file and the tokens before you change any screen.</div></div></div>
+<div class="fig-card-b" style="display:grid;gap:10px">
+<div style="display:grid;grid-template-columns:22px 1fr;gap:10px;font-size:14px;line-height:20px"><span class="ann-dot">1</span><span>Before any visual work, read this file, <span class="mono" style="font-size:12.5px">PRODUCT.md</span> and <span class="mono" style="font-size:12.5px">opendesigner/tokens/</span>.</span></div>
+<div style="display:grid;grid-template-columns:22px 1fr;gap:10px;font-size:14px;line-height:20px"><span class="ann-dot">2</span><span>Use tokens, never raw values: CSS <span class="mono" style="font-size:12.5px">var(--ds-...)</span>, Tailwind classes from <span class="mono" style="font-size:12.5px">theme.css</span>, <span class="mono" style="font-size:12.5px">DS.*</span> in Swift.</span></div>
+<div style="display:grid;grid-template-columns:22px 1fr;gap:10px;font-size:14px;line-height:20px"><span class="ann-dot">3</span><span>Do not change a locked decision without asking the owner.</span></div>
+<div style="display:grid;grid-template-columns:22px 1fr;gap:10px;font-size:14px;line-height:20px"><span class="ann-dot">4</span><span>To change the system: <span class="mono" style="font-size:12.5px">engine.py set &lt;path&gt; &lt;value&gt; --why "..."</span>, then <span class="mono" style="font-size:12.5px">generate</span>, <span class="mono" style="font-size:12.5px">validate</span> and <span class="mono" style="font-size:12.5px">design-md</span>.</span></div>
+<div style="display:grid;grid-template-columns:22px 1fr;gap:10px;font-size:14px;line-height:20px"><span class="ann-dot">5</span><span>To extend: add a decision, never hand-edit tokens or this file.</span></div>
+<div style="display:grid;grid-template-columns:22px 1fr;gap:10px;font-size:14px;line-height:20px"><span class="ann-dot">6</span><span>After any implementation, run <span class="mono" style="font-size:12.5px">engine.py review</span> and re-read this file.</span></div>
+<div style="display:grid;grid-template-columns:22px 1fr;gap:10px;font-size:14px;line-height:20px"><span class="ann-dot">7</span><span>Follow the Standards section. Change a standard only when the person explicitly asks.</span></div>
+</div>
+<div class="fig-card-f" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span class="chip ok dot">same rules in AGENTS.md</span><span>added only after you say yes</span></div>
+</div>
+</div>
+<figcaption>The For Agents section at the end of DESIGN.md, as OpenDesigner's own brand file has it: read first, tokens only, locks untouched, decisions instead of hand edits, and a review at the end. The optional AGENTS.md note repeats it for every later session.</figcaption>
+</figure>

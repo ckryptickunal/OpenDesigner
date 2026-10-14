@@ -423,3 +423,44 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 - set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
 - reason: Price heat in calendar cells needs a light-to-dark sequential ramp
 - also set: raw.chartPalette = "categorical-8" (from Q-color-19)
+
+## D-0025 · dials.warmth = 22
+- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: D-0018 · source_ref: none
+- reason: round 3: the cream/terracotta/brown palette is a house tell; neutrals go near-neutral so the page is white with ink text
+- previous value: 88
+
+## D-0026 · raw.neutralTint = "neutral"
+- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+- reason: round 3: no brown neutrals
+- previous value: "warm"
+
+## D-0027 · dials.roundness = 60
+- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: D-0015 · source_ref: none
+- reason: round 3: 16 px controls and 32 px cards read as a toy next to shipped booking pages; 8-12 px controls, 16 px popover
+- previous value: 88
+
+## D-0028 · dials.expression = 45
+- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: D-0012 · source_ref: none
+- reason: round 3: a booking page is a tool; one soft serif for titles, the sans does the work
+- previous value: 70
+
+## D-0029 · raw.textFace = "Albert Sans"
+- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: D-0020 · source_ref: none
+- reason: round 3: Nunito's rounded terminals read childish next to shipped booking pages; Albert Sans (OFL) is plain and warm
+- previous value: "Nunito"
+
+## D-0030 · raw.brandColor = "#E4572E"
+- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: D-0005 · source_ref: none
+- reason: round 3: the brand stays as typed (ROUND3-BRIEF rule 1)
+- previous value: "#d04418"
+
+## D-0031 · raw.neutralTint = "pure"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0026 · source_ref: none
+- reason: round 3: the neutral tint came out blue-grey; pure greys sit better with terracotta and green
+- previous value: "neutral"
+
+## D-0032 · answers.Q-color-09 = "pure"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0019 · source_ref: none
+- reason: round 3: match raw.neutralTint
+- previous value: "warm"
+- also set: raw.neutralTint = "pure" (from Q-color-09)

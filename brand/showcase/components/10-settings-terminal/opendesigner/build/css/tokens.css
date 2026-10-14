@@ -44,19 +44,19 @@
   --ds-color-accent-light-11: #875c00;
   --ds-color-accent-light-12: #482f02;
   --ds-color-accent-light-solid-pressed: #d99a29;
-  --ds-color-accent-dark-1: #1b1813;
-  --ds-color-accent-dark-2: #241f18;
-  --ds-color-accent-dark-3: #2f2618;
-  --ds-color-accent-dark-4: #3b2d18;
-  --ds-color-accent-dark-5: #473417;
-  --ds-color-accent-dark-6: #533b14;
-  --ds-color-accent-dark-7: #614208;
-  --ds-color-accent-dark-8: #a67931;
-  --ds-color-accent-dark-9: #eeb763;
-  --ds-color-accent-dark-10: #ffc874;
-  --ds-color-accent-dark-11: #ffd496;
-  --ds-color-accent-dark-12: #f1dfc5;
-  --ds-color-accent-dark-solid-pressed: #ffd79f;
+  --ds-color-accent-dark-1: #1b1812;
+  --ds-color-accent-dark-2: #251f16;
+  --ds-color-accent-dark-3: #312514;
+  --ds-color-accent-dark-4: #3e2c11;
+  --ds-color-accent-dark-5: #4a330a;
+  --ds-color-accent-dark-6: #583a00;
+  --ds-color-accent-dark-7: #634200;
+  --ds-color-accent-dark-8: #ae7700;
+  --ds-color-accent-dark-9: #ffb000;
+  --ds-color-accent-dark-10: #ffc670;
+  --ds-color-accent-dark-11: #ffd291;
+  --ds-color-accent-dark-12: #f3ddbd;
+  --ds-color-accent-dark-solid-pressed: #ffd69b;
   --ds-color-success-light-1: #f9fef9;
   --ds-color-success-light-2: #ebf7ed;
   --ds-color-success-light-3: #d9f1dd;
@@ -548,6 +548,7 @@
   --ds-color-border-input: var(--ds-color-neutral-light-8);
   --ds-color-border-focus: var(--ds-color-accent-light-11);
   --ds-color-border-accent: var(--ds-color-accent-light-8);
+  --ds-color-border-separator: var(--ds-color-neutral-light-4);
   --ds-color-border-success: var(--ds-color-success-light-8);
   --ds-color-border-warning: var(--ds-color-warning-light-8);
   --ds-color-border-danger: var(--ds-color-danger-light-8);
@@ -626,6 +627,7 @@
   --ds-color-border-input: var(--ds-color-neutral-dark-8);
   --ds-color-border-focus: var(--ds-color-accent-dark-11);
   --ds-color-border-accent: var(--ds-color-accent-dark-8);
+  --ds-color-border-separator: var(--ds-color-neutral-dark-5);
   --ds-color-border-success: var(--ds-color-success-dark-8);
   --ds-color-border-warning: var(--ds-color-warning-dark-8);
   --ds-color-border-danger: var(--ds-color-danger-dark-8);
@@ -705,6 +707,7 @@
     --ds-color-border-input: var(--ds-color-neutral-dark-8);
     --ds-color-border-focus: var(--ds-color-accent-dark-11);
     --ds-color-border-accent: var(--ds-color-accent-dark-8);
+    --ds-color-border-separator: var(--ds-color-neutral-dark-5);
     --ds-color-border-success: var(--ds-color-success-dark-8);
     --ds-color-border-warning: var(--ds-color-warning-dark-8);
     --ds-color-border-danger: var(--ds-color-danger-dark-8);
@@ -740,6 +743,10 @@
   --ds-size-control-sm: 40px;
   --ds-size-control-md: 48px;
   --ds-size-control-lg: 56px;
+  --ds-size-row-sm: 52px;
+  --ds-size-row-md: 56px;
+  --ds-size-row-lg: 64px;
+  --ds-size-row-two-line: 80px;
 }
 
 [data-density="comfortable"] {
@@ -762,6 +769,10 @@
   --ds-size-control-sm: 32px;
   --ds-size-control-md: 40px;
   --ds-size-control-lg: 48px;
+  --ds-size-row-sm: 44px;
+  --ds-size-row-md: 48px;
+  --ds-size-row-lg: 56px;
+  --ds-size-row-two-line: 72px;
 }
 
 :root, [data-density="compact"] {
@@ -784,6 +795,10 @@
   --ds-size-control-sm: 24px;
   --ds-size-control-md: 32px;
   --ds-size-control-lg: 40px;
+  --ds-size-row-sm: 36px;
+  --ds-size-row-md: 40px;
+  --ds-size-row-lg: 48px;
+  --ds-size-row-two-line: 64px;
 }
 
 :root, [data-motion="standard"] {
@@ -853,7 +868,9 @@
 @media (color-gamut: p3) {
   :root {
     --ds-color-accent-light-11: color(display-p3 0.5209 0.3589 0);
-    --ds-color-accent-dark-11: color(display-p3 0.996 0.832 0.5642);
+    --ds-color-accent-dark-7: color(display-p3 0.3799 0.2576 0);
+    --ds-color-accent-dark-10: color(display-p3 0.9937 0.7755 0.4056);
+    --ds-color-accent-dark-11: color(display-p3 1 0.823 0.5323);
     --ds-color-success-light-12: color(display-p3 0.0653 0.2396 0.0949);
     --ds-color-success-dark-7: color(display-p3 0.1096 0.3296 0.1453);
     --ds-color-success-dark-9: color(display-p3 0.2333 0.595 0.2898);

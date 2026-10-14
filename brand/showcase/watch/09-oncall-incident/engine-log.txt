@@ -1,0 +1,202 @@
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/09-oncall-incident/opendesigner sketch --name Pagewright --brand #FF3B4E --audience large --platforms watch --feel sober,technical,reliable --delegated feel,audience,platforms
+initialized brand/showcase/watch/09-oncall-incident/opendesigner/state.json
+Applied 194 OpenDesigner house standards (v2) for accessibility, color, components, elevation, layout, motion, platforms, process, tokens, tooling, typography. They are locked; say if you want to change one (`engine.py standards` lists them).
+built brand/showcase/watch/09-oncall-incident/opendesigner: tokens, build/ (css, tailwind, figma, paper, swift, compose, dtcg, artifact), DESIGN.md, PRODUCT.md, preview.html, overview.html
+Passes: no errors. 0 warnings, 5 notes.  (brand/showcase/watch/09-oncall-incident/opendesigner)
+NOTE  Advice only: in dark mode, secondary text on the base surface scores Lc 55 on APCA, a newer reading-contrast score. 60 or more is advised  [APCA advisory only; WCAG 3 contrast is undetermined; S-L01-026, S-L01-021]
+NOTE  Advice only: in dark mode, secondary text on the raised surface scores Lc 54 on APCA, a newer reading-contrast score. 60 or more is advised  [APCA advisory only; WCAG 3 contrast is undetermined; S-L01-026, S-L01-021]
+NOTE  The smallest control is 24px tall. Give it a 44px tap area with padding (size.target.min), never a smaller one  [L14 I-1; DC-L03-12, S-L03-029]
+NOTE  14 scale steps are not used by any named value yet (for example motion.duration.extra, motion.duration.long-exit, radius.12). That is fine if you plan to use them  [Orphan tokens; spec 6.3]
+NOTE  Not asked yet (assets a person must make): logo, wordmark, symbol, lockups; app icon; favicon set; custom icons, pictograms, spot icons; illustration, characters, empty-state art; photography and art direction; brand typeface files; fixed brand colors; motion signature and rich media; graphic devices, patterns, textures, brand gradients, signature shape; UI sounds and sonic logo; custom haptic patterns; voice and tone guide; brand guidelines PDF  [Designer hooks, not designer replacement; BRIEF req. 2, Q-brand-08]
+Checked 164 color pairs in every mode, 12 mode combinations and 406 tokens.
+Feel: sober -> serious + minimal; technical -> modern + serious; reliable -> authoritative.
+Your brand color is not quite dark enough for button text to be easy to read, so buttons use a darker shade of it. Your exact color is kept for the logo.
+This is a sketch: every part works, and most choices are still defaults. Zoom into any area later (see the Zoom lines in DESIGN.md).
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/09-oncall-incident/opendesigner standard override STD-visual-details-24 --why "Brief: smartwatch app, black background edge-to-edge (watch platform convention, OLED); no light mode"
+D-0009 overrode house standard STD-visual-details-24: Make interface colors adapt to light and dark mode: give each color role a light value and a dark value.
+  The person's reason is recorded: "Brief: smartwatch app, black background edge-to-edge (watch platform convention, OLED); no light mode". Unlocked: nothing (it sets no values).
+  To follow it again: engine.py standard restore STD-visual-details-24
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/09-oncall-incident/opendesigner pick Q-theme-01 dark-only --set-by chosen --why "watch app: black edge-to-edge, per the brief"
+D-0010 set answers.Q-theme-01 = "dark-only" (chosen)
+  also set: raw.flags.darkMode = true (from Q-theme-01)
+  also set: raw.defaultTheme = "dark" (from Q-theme-01)
+  tokens: 1 value change (modes). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/09-oncall-incident/opendesigner pick Q-color-21 black --set-by chosen --why "watch: pure black OLED edge-to-edge"
+D-0011 set answers.Q-color-21 = "black" (chosen)
+  also set: raw.darkBase = "black" (from Q-color-21)
+  tokens: 85 values change (color.bg.field, color.shadow.ring, color.surface.base, ...). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/09-oncall-incident/opendesigner pick Q-plat-02 watch --set-by chosen --why "the product surface is a watch app"
+D-0012 set answers.Q-plat-02 = "watch" (chosen)
+  also set: raw.devices = ["watch"] (from Q-plat-02)
+  recorded; the tokens already match this answer.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/09-oncall-incident/opendesigner pick Q-plat-04 watch --set-by chosen --why "read on the wrist in seconds, at 3 a.m."
+D-0013 set answers.Q-plat-04 = "watch" (chosen)
+  also set: raw.situations = ["wrist"] (from Q-plat-04)
+  recorded; the tokens already match this answer.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/09-oncall-incident/opendesigner set raw.textFace "\"Barlow Semi Condensed\"" --set-by chosen --why "semi-condensed DIN-like grotesque (SIL OFL): narrow like the watch's own compact face, reads as an instrument"
+D-0014 set raw.textFace = "Barlow Semi Condensed" (chosen)
+  previous value: "system"
+  tokens: 1 value change (font.family.text). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/09-oncall-incident/opendesigner set raw.fontLicence "{\"web\": true, \"app\": true, \"selfHost\": true}" --set-by chosen --why "Barlow Semi Condensed is SIL OFL, loaded from Google Fonts"
+D-0015 set raw.fontLicence = {"web": true, "app": true, "selfHost": true} (chosen)
+  previous value: {"web": null, "app": null, "selfHost": null}
+  recorded; this changes the files in build/ on the next build, not the tokens.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/09-oncall-incident/opendesigner set raw.baseSize 17 --set-by chosen --why "watchOS Body at the xLarge default for 44/45/49 mm is 17 pt (HIG typography, watchOS Dynamic Type)"
+D-0016 set raw.baseSize = 17 (chosen)
+  tokens: 32 values change (text.body.lg, text.body.md, text.body.sm, ...). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/09-oncall-incident/opendesigner set "dials.expression 30 an_instrument_not_a_poster" --set-by delegated --why ""
+give a value: engine.py set <path> <json-value>  (or path=value)
+(exit 1)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/09-oncall-incident/opendesigner set "dials.brandPresence 30 red_marks_severity_only" --set-by delegated --why ""
+give a value: engine.py set <path> <json-value>  (or path=value)
+(exit 1)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/09-oncall-incident/opendesigner set "dials.density 45 a_page_carries_five_facts_and_two_actions" --set-by delegated --why ""
+give a value: engine.py set <path> <json-value>  (or path=value)
+(exit 1)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/09-oncall-incident/opendesigner set "dials.energy 40 urgent_but_calm;_nothing_moves" --set-by delegated --why ""
+give a value: engine.py set <path> <json-value>  (or path=value)
+(exit 1)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/09-oncall-incident/opendesigner set "dials.roundness 70 watchOS_capsule_buttons" --set-by delegated --why ""
+give a value: engine.py set <path> <json-value>  (or path=value)
+(exit 1)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/09-oncall-incident/opendesigner set "dials.depth 0 flat_OLED_black" --set-by delegated --why ""
+give a value: engine.py set <path> <json-value>  (or path=value)
+(exit 1)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/09-oncall-incident/opendesigner set "dials.colorfulness 15 monochrome_plus_one_red" --set-by delegated --why ""
+give a value: engine.py set <path> <json-value>  (or path=value)
+(exit 1)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/09-oncall-incident/opendesigner set "dials.warmth 30 cool_neutral_greys;_no_brown" --set-by delegated --why ""
+give a value: engine.py set <path> <json-value>  (or path=value)
+(exit 1)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/09-oncall-incident/opendesigner build
+built brand/showcase/watch/09-oncall-incident/opendesigner: tokens, build/ (css, tailwind, figma, paper, swift, compose, dtcg, artifact), DESIGN.md, PRODUCT.md, preview.html, overview.html
+Passes: no errors. 0 warnings, 5 notes.  (brand/showcase/watch/09-oncall-incident/opendesigner)
+NOTE  Advice only: in dark mode, secondary text on the base surface scores Lc 47 on APCA, a newer reading-contrast score. 60 or more is advised  [APCA advisory only; WCAG 3 contrast is undetermined; S-L01-026, S-L01-021]
+NOTE  Advice only: in dark mode, secondary text on the raised surface scores Lc 47 on APCA, a newer reading-contrast score. 60 or more is advised  [APCA advisory only; WCAG 3 contrast is undetermined; S-L01-026, S-L01-021]
+NOTE  The smallest control is 24px tall. Give it a 44px tap area with padding (size.target.min), never a smaller one  [L14 I-1; DC-L03-12, S-L03-029]
+NOTE  14 scale steps are not used by any named value yet (for example motion.duration.extra, motion.duration.long-exit, radius.12). That is fine if you plan to use them  [Orphan tokens; spec 6.3]
+NOTE  Not asked yet (assets a person must make): logo, wordmark, symbol, lockups; app icon; favicon set; custom icons, pictograms, spot icons; illustration, characters, empty-state art; photography and art direction; brand typeface files; fixed brand colors; motion signature and rich media; graphic devices, patterns, textures, brand gradients, signature shape; UI sounds and sonic logo; custom haptic patterns; voice and tone guide; brand guidelines PDF  [Designer hooks, not designer replacement; BRIEF req. 2, Q-brand-08]
+Checked 164 color pairs in every mode, 12 mode combinations and 406 tokens.
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/09-oncall-incident/opendesigner set dials.expression 30 --set-by delegated --why "an instrument, not a poster"
+D-0017 set dials.expression = 30 (delegated)
+  no token changed: the system already had this value.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/09-oncall-incident/opendesigner set dials.brandPresence 30 --set-by delegated --why "red marks severity only"
+D-0018 set dials.brandPresence = 30 (delegated)
+  no token changed: the system already had this value.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/09-oncall-incident/opendesigner set dials.density 45 --set-by delegated --why "a page carries five facts and two actions"
+D-0019 set dials.density = 45 (delegated)
+  previous value: 15
+  tokens: 2 values change (modes, size.icon.default). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/09-oncall-incident/opendesigner set dials.energy 40 --set-by delegated --why "urgent but calm; nothing moves"
+D-0020 set dials.energy = 40 (delegated)
+  tokens: 2 values change (color.surface.nav, motion.duration.extra). Run `engine.py build` to refresh the tokens, exports and preview.
+  note: motion.spring.spatial.dampingRatio stays 1.0: house standard STD-springs-gestures-04 holds it; everything else this dial drives follows the new value
+  note: motion.spring.spatial.stiffness stays 246.7: house standard STD-springs-gestures-04 holds it; everything else this dial drives follows the new value
+  note: motion.easing.standard stays [0.77, 0, 0.175, 1]: house standard STD-easing-duration-02 holds it; everything else this dial drives follows the new value
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/09-oncall-incident/opendesigner set dials.roundness 70 --set-by delegated --why "watchOS capsule buttons"
+D-0021 set dials.roundness = 70 (delegated)
+  tokens: 7 values change (radius.container, radius.control, radius.control-sm, ...). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/09-oncall-incident/opendesigner set dials.depth 0 --set-by delegated --why "flat OLED black"
+D-0022 set dials.depth = 0 (delegated)
+  tokens: 5 values change (color.shadow.ambient, color.shadow.key, elevation.floating, ...). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/09-oncall-incident/opendesigner set dials.colorfulness 15 --set-by delegated --why "monochrome plus one red"
+D-0023 set dials.colorfulness = 15 (delegated)
+  no token changed: the system already had this value.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/09-oncall-incident/opendesigner set dials.warmth 30 --set-by delegated --why "cool neutral greys; no brown"
+D-0024 set dials.warmth = 30 (delegated)
+  tokens: 43 values change (color.info.light.8, color.neutral-alpha.dark.10, color.neutral-alpha.dark.11, ...). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/09-oncall-incident/opendesigner build
+built brand/showcase/watch/09-oncall-incident/opendesigner: tokens, build/ (css, tailwind, figma, paper, swift, compose, dtcg, artifact), DESIGN.md, PRODUCT.md, preview.html, overview.html
+Passes: no errors. 0 warnings, 5 notes.  (brand/showcase/watch/09-oncall-incident/opendesigner)
+NOTE  Advice only: in dark mode, secondary text on the base surface scores Lc 47 on APCA, a newer reading-contrast score. 60 or more is advised  [APCA advisory only; WCAG 3 contrast is undetermined; S-L01-026, S-L01-021]
+NOTE  Advice only: in dark mode, secondary text on the raised surface scores Lc 47 on APCA, a newer reading-contrast score. 60 or more is advised  [APCA advisory only; WCAG 3 contrast is undetermined; S-L01-026, S-L01-021]
+NOTE  The smallest control is 24px tall. Give it a 44px tap area with padding (size.target.min), never a smaller one  [L14 I-1; DC-L03-12, S-L03-029]
+NOTE  10 scale steps are not used by any named value yet (for example motion.duration.extra, motion.duration.long-exit, radius.0). That is fine if you plan to use them  [Orphan tokens; spec 6.3]
+NOTE  Not asked yet (assets a person must make): logo, wordmark, symbol, lockups; app icon; favicon set; custom icons, pictograms, spot icons; illustration, characters, empty-state art; photography and art direction; brand typeface files; fixed brand colors; motion signature and rich media; graphic devices, patterns, textures, brand gradients, signature shape; UI sounds and sonic logo; custom haptic patterns; voice and tone guide; brand guidelines PDF  [Designer hooks, not designer replacement; BRIEF req. 2, Q-brand-08]
+Checked 164 color pairs in every mode, 12 mode combinations and 406 tokens.
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/09-oncall-incident/opendesigner design-md
+wrote /Users/Kunal/Desktop/Design-System/brand/showcase/watch/09-oncall-incident/DESIGN.md
+wrote /Users/Kunal/Desktop/Design-System/brand/showcase/watch/09-oncall-incident/PRODUCT.md
+wrote brand/showcase/watch/09-oncall-incident/opendesigner/standards.md
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/09-oncall-incident/opendesigner feedback "DESIGN.md front matter of a dark-only system (Q-theme-01 dark-only, Q-color-21 black) still lists light colours: surface #fcfdff, on-surface #222428, primary #e0293f with white text. An agent that reads only the front matter builds a light screen. It should list the default (dark) theme's roles." --kind bug
+Saved to brand/showcase/watch/09-oncall-incident/opendesigner/feedback.md.
+To report it, open this link, check it, and submit it yourself (nothing was posted):
+https://github.com/ckryptickunal/OpenDesigner/issues/new?title=%5Bbug%5D%20DESIGN.md%20front%20matter%20of%20a%20dark-only%20system%20%28Q-theme-01%20dark-only%2C%20Q-...&body=%2A%2AKind%3A%2A%2A%20bug%0A%0A%2A%2AWhat%20happened%20or%20what%20is%20missing%3A%2A%2A%0ADESIGN.md%20front%20matter%20of%20a%20dark-only%20system%20%28Q-theme-01%20dark-only%2C%20Q-color-21%20black%29%20still%20lists%20light%20colours%3A%20surface%20%23fcfdff%2C%20on-surface%20%23222428%2C%20primary%20%23e0293f%20with%20white%20text.%20An%20agent%20that%20reads%20only%20the%20front%20matter%20builds%20a%20light%20screen.%20It%20should%20list%20the%20default%20%28dark%29%20theme%27s%20roles.%0A%0A%2A%2AEngine%3A%2A%2A%201.0.0%20%28Python%203.10%29%0A%0A_Filed%20from%20%60engine.py%20feedback%60.%20Please%20remove%20anything%20private%20before%20submitting._&labels=bug%2Cfrom-engine
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/09-oncall-incident/opendesigner feedback "For an incident tool the brand red IS the severity colour, but the engine keeps a separate danger ramp (#c94c44 in dark) and darkens the brand for buttons (#e0293f, assuming white text), so the system has three reds. There is no answer for 'the brand colour is the alert colour' or 'black text on the brand fill'." --kind gap
+Saved to brand/showcase/watch/09-oncall-incident/opendesigner/feedback.md.
+To report it, open this link, check it, and submit it yourself (nothing was posted):
+https://github.com/ckryptickunal/OpenDesigner/issues/new?title=%5Bgap%5D%20For%20an%20incident%20tool%20the%20brand%20red%20IS%20the%20severity%20colour%2C%20but%20the%20eng...&body=%2A%2AKind%3A%2A%2A%20gap%0A%0A%2A%2AWhat%20happened%20or%20what%20is%20missing%3A%2A%2A%0AFor%20an%20incident%20tool%20the%20brand%20red%20IS%20the%20severity%20colour%2C%20but%20the%20engine%20keeps%20a%20separate%20danger%20ramp%20%28%23c94c44%20in%20dark%29%20and%20darkens%20the%20brand%20for%20buttons%20%28%23e0293f%2C%20assuming%20white%20text%29%2C%20so%20the%20system%20has%20three%20reds.%20There%20is%20no%20answer%20for%20%27the%20brand%20colour%20is%20the%20alert%20colour%27%20or%20%27black%20text%20on%20the%20brand%20fill%27.%0A%0A%2A%2AEngine%3A%2A%2A%201.0.0%20%28Python%203.10%29%0A%0A_Filed%20from%20%60engine.py%20feedback%60.%20Please%20remove%20anything%20private%20before%20submitting._&labels=gap%2Cfrom-engine
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/09-oncall-incident/opendesigner feedback "preflight.py html has only --medium video|web. A watch screen is checked against web minimums: watchOS Footnote 2 (13 pt) is flagged as 'text under 14px for web' (M8). It needs a watch/ios medium with the platform's own minimums." --kind gap
+Saved to brand/showcase/watch/09-oncall-incident/opendesigner/feedback.md.
+To report it, open this link, check it, and submit it yourself (nothing was posted):
+https://github.com/ckryptickunal/OpenDesigner/issues/new?title=%5Bgap%5D%20preflight.py%20html%20has%20only%20--medium%20video%7Cweb.%20A%20watch%20screen%20is%20check...&body=%2A%2AKind%3A%2A%2A%20gap%0A%0A%2A%2AWhat%20happened%20or%20what%20is%20missing%3A%2A%2A%0Apreflight.py%20html%20has%20only%20--medium%20video%7Cweb.%20A%20watch%20screen%20is%20checked%20against%20web%20minimums%3A%20watchOS%20Footnote%202%20%2813%20pt%29%20is%20flagged%20as%20%27text%20under%2014px%20for%20web%27%20%28M8%29.%20It%20needs%20a%20watch/ios%20medium%20with%20the%20platform%27s%20own%20minimums.%0A%0A%2A%2AEngine%3A%2A%2A%201.0.0%20%28Python%203.10%29%0A%0A_Filed%20from%20%60engine.py%20feedback%60.%20Please%20remove%20anything%20private%20before%20submitting._&labels=gap%2Cfrom-engine
+(exit 0)
+

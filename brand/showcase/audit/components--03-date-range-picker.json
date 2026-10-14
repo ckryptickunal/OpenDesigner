@@ -1,0 +1,84 @@
+{
+ "piece": "components/03-date-range-picker",
+ "title": "03 · Date range picker (Wayfern)",
+ "pattern": "date range picker",
+ "platform": "web",
+ "industry": "travel",
+ "style": [
+  "playful",
+  "organic",
+  "retro"
+ ],
+ "tags": [
+  "date range picker",
+  "travel",
+  "calendar",
+  "price heat",
+  "booking",
+  "warm",
+  "serif"
+ ],
+ "score": 3,
+ "verdict": "polish",
+ "strengths": [
+  "A price in every night and 'Best price' fern marks is a real idea taken from KAYAK and Kiwi and pushed further; the totals line '4 nights · €101 a night avg' is believable",
+  "Full state coverage: lower/typical/higher, best price, today, sold out, hover, focus, check-in, in range, check-out, past, plus error and loading"
+ ],
+ "slop_signals": [
+  "The palette is cream paper + tan cells + coral cells + terracotta band + warm brown-black ink: exactly the cream/orange/brown combination the house rules forbid; the 'typical' tan and 'higher' pink fills turn both months into a wall of beige and salmon",
+  "'Lower' cells are cream on a white card, so the key's first tier is nearly invisible while 'Typical' (the majority) is the loudest; the heat reads inverted",
+  "The sun and rolling-hills backdrop at the bottom is three overlapping gradient blobs in peach, tan and sand (decorative gradient shapes for no reason)",
+  "Every day number is weight 800, so 60 bold numbers compete with the range band that should own the screen"
+ ],
+ "fixes": [
+  "Cool the page: white card, neutral near-black ink; keep one terracotta for the band and button; give 'typical' no fill at all and mark only cheaper (pale green or the fern) and pricier (one warm tint), as KAYAK's three tiers do",
+  "Day numbers at 600 and prices at 400 in grey; let the band and the ink circles carry the weight",
+  "Remove the hills, or replace them with one flat sand shape with no gradient",
+  "Make the 'Lower' tier visibly lighter than the card (or outline it) so the legend is true"
+ ],
+ "references": [
+  {
+   "site": "KAYAK",
+   "url": "https://mobbin.com/screens/cc893e37-8460-4521-a192-d32a1c15501d",
+   "what": "Three-tier whole-cell heat with a legend; the picked range is near-black so it never shares a colour with the heat"
+  },
+  {
+   "site": "Tripadvisor",
+   "url": "https://mobbin.com/screens/07f4a277-4832-425f-8d34-56dd3fd12e32",
+   "what": "Price under each day in soft round tiles with a 'Cheaper / Average / Higher' key; tiers are green, yellow and pink, not three warm tones"
+  },
+  {
+   "site": "Kiwi.com",
+   "url": "https://mobbin.com/screens/1a7ba6fe-e234-4592-83fb-146d20c5985d",
+   "what": "Prices under days on plain white cells; cheap days are coloured by the price text only, so the grid stays calm"
+  },
+  {
+   "site": "Airbnb",
+   "url": "https://mobbin.com/screens/40cb4148-15dc-414a-8b47-202a039f7e27",
+   "what": "Two months with no fills, range ends as black circles and a light band; the most restrained version of this pattern"
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "improve",
+  "said": "can be better",
+  "date": "2026-10-14"
+ },
+ "round3": {
+  "score": 4,
+  "changed": [
+   "Rebuilt as step 1 of Wayfern's booking flow at real size: a rate calendar in weeks (month gutter, stepped month rule) and a 'Your stay' receipt that lists every night",
+   "Cream/tan/coral/brown palette, gradient hills, bold day numbers and the states panel removed; white page, pure greys, ink logo, terracotta only for the stay and the request",
+   "One cheap signal: green price text for nights at least 10% under the computed usual price (median of open nights, EUR 87); ferns removed",
+   "Booking rules hold: Fri/Sat arrivals stay 2 nights, invalid leave days greyed, 'Leave only' mornings, a real race error (a night booked a minute ago)",
+   "Totals re-added (467, 547, 185); cancellation date computed from the arrival; en-GB dates",
+   "Engine: warmth 88 to 22, roundness 88 to 60, expression 70 to 45, Albert Sans, pure greys, brand #E4572E restored",
+   "Two earlier rebuilds in this round scored 3 (too close to Airbnb); fresh-eyes audit of this one 4/5, all remaining notes fixed"
+  ]
+ },
+ "facts": [
+  "mockups/05-components-board and mockups/08-made-with-opendesigner embed this shot.png; their captions may still describe the old warm price-heat picker; re-check and re-render them",
+  "The cabin thumbnail is a hotlinked Unsplash photo of a real lake (Laghi di Fusine) labelled with the invented Lake Vessa",
+  "mockups/05-components-board (and 08 where it uses this piece) crop this shot.png with fixed background-position offsets set for the old layout; the crops now land on different content and need new offsets"
+ ]
+}

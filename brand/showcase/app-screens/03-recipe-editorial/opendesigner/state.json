@@ -45,10 +45,10 @@
       "decision": "D-0013"
     },
     "roundness": {
-      "value": 20,
+      "value": 45,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0014"
+      "decision": "D-0059"
     },
     "depth": {
       "value": 8,
@@ -78,10 +78,10 @@
     "brandColor": "#c8401f",
     "primaryActionColor": null,
     "focusColor": null,
-    "neutralBase": "#958A78",
+    "neutralBase": "#8C8984",
     "contrastTarget": "AA",
-    "textFace": "Libre Franklin",
-    "displayFace": "Fraunces",
+    "textFace": "Schibsted Grotesk",
+    "displayFace": "Literata",
     "baseSize": 17,
     "spaceUnit": 4,
     "platforms": [
@@ -108,7 +108,7 @@
       "selfHost": true
     },
     "fontClass": null,
-    "accentCount": 3,
+    "accentCount": 1,
     "accentHarmony": "triadic",
     "neutralTint": "warm",
     "chartPalette": null,
@@ -142,15 +142,15 @@
     "domain": null,
     "minTarget": null,
     "focusWidth": 2,
-    "secondaryColors": [
-      "#5F6B2E",
-      "#E2B44C"
-    ],
+    "secondaryColors": [],
     "monoFace": "ui-monospace",
     "scripts": [
       "Latn"
     ],
-    "defaultTheme": "system"
+    "defaultTheme": "system",
+    "borderDefault": null,
+    "texture": null,
+    "gradients": null
   },
   "overrides": {
     "motion.duration.instant": {
@@ -672,7 +672,7 @@
     ]
   },
   "hashes": {
-    "DESIGN.md": "0b0818d99d756703",
+    "DESIGN.md": "186f5cb081349427",
     "PRODUCT.md": "48fc2f32c51eeb5d"
   },
   "exports": {
@@ -2962,5 +2962,7 @@
       "size.target.min": "dimension"
     },
     "snapshots": "standards-state.json"
-  }
+  },
+  "style": null,
+  "customStyles": {}
 }

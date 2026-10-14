@@ -1,0 +1,28 @@
+<figure class="fig">
+<div class="fig-panel">
+<div style="display:grid;justify-items:center;gap:0">
+<div style="width:100%;max-width:420px;border:1px solid var(--accent);box-shadow:inset 0 0 0 1px var(--accent);border-radius:var(--radius-container);background:var(--surface-raised);padding:12px 14px">
+<div class="kicker" style="font-size:12px;color:var(--accent-text)">Source of truth</div>
+<div style="font-weight:600;font-size:15px;line-height:20px">opendesigner/tokens/</div>
+<div style="font-size:13px;line-height:18px;color:var(--ink-muted)">DTCG 2025.10 sets and <span class="mono" style="font-size:12px">opendesigner.resolver.json</span> for the modes: light and dark, three densities, standard and reduced motion</div>
+</div>
+<div style="display:grid;justify-items:center;padding:4px 0">
+<span style="width:1px;height:14px;background:var(--line-strong);display:block"></span>
+<span class="chip ink mono" style="font-size:12px">engine.py build</span>
+<span style="width:1px;height:14px;background:var(--line-strong);display:block"></span>
+<svg width="20" height="12" viewBox="0 0 20 12" aria-hidden="true" style="color:var(--line-strong);margin-top:-6px"><path d="M4 2l6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</div>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px">
+<div style="flex:1 1 150px;min-width:0;border:1px solid var(--line);border-radius:var(--radius-container);background:var(--surface-raised);padding:10px 12px"><div class="kicker" style="font-size:12px">CSS</div><div class="mono" style="font-size:12.5px;line-height:18px">build/<wbr>css/<wbr>tokens.css</div><div style="font-size:13px;line-height:18px;color:var(--ink-muted)">Custom properties, <span class="mono" style="font-size:12px;white-space:nowrap">--ds-...</span></div></div>
+<div style="flex:1 1 150px;min-width:0;border:1px solid var(--line);border-radius:var(--radius-container);background:var(--surface-raised);padding:10px 12px"><div class="kicker" style="font-size:12px">Tailwind v4</div><div class="mono" style="font-size:12.5px;line-height:18px">build/<wbr>tailwind/<wbr>theme.css</div><div style="font-size:13px;line-height:18px;color:var(--ink-muted)">A <span class="mono" style="font-size:12px">@theme</span> that imports tokens.css</div></div>
+<div style="flex:1 1 150px;min-width:0;border:1px solid var(--line);border-radius:var(--radius-container);background:var(--surface-raised);padding:10px 12px"><div class="kicker" style="font-size:12px">Swift</div><div class="mono" style="font-size:12.5px;line-height:18px">build/<wbr>swift/<wbr>DesignTokens.swift</div><div style="font-size:13px;line-height:18px;color:var(--ink-muted)">SwiftUI values under <span class="mono" style="font-size:12px">DS</span></div></div>
+<div style="flex:1 1 150px;min-width:0;border:1px solid var(--line);border-radius:var(--radius-container);background:var(--surface-raised);padding:10px 12px"><div class="kicker" style="font-size:12px">Jetpack Compose</div><div class="mono" style="font-size:12.5px;line-height:18px">build/<wbr>compose/<wbr>DesignTokens.kt</div><div style="font-size:13px;line-height:18px;color:var(--ink-muted)">Light and dark color sets, spacing, type, motion</div></div>
+<div style="flex:1 1 150px;min-width:0;border:1px solid var(--line);border-radius:var(--radius-container);background:var(--surface-raised);padding:10px 12px"><div class="kicker" style="font-size:12px">Figma</div><div class="mono" style="font-size:12.5px;line-height:18px">build/<wbr>figma/<wbr>import/<wbr></div><div style="font-size:13px;line-height:18px;color:var(--ink-muted)">One file per collection and mode, plus <span class="mono" style="font-size:12px">variables.json</span></div></div>
+<div style="flex:1 1 150px;min-width:0;border:1px solid var(--line);border-radius:var(--radius-container);background:var(--surface-raised);padding:10px 12px"><div class="kicker" style="font-size:12px">Paper</div><div class="mono" style="font-size:12.5px;line-height:18px">build/<wbr>paper/<wbr></div><div style="font-size:13px;line-height:18px;color:var(--ink-muted)">Tokens with the dark values as a separate set</div></div>
+<div style="flex:1 1 150px;min-width:0;border:1px solid var(--line);border-radius:var(--radius-container);background:var(--surface-raised);padding:10px 12px"><div class="kicker" style="font-size:12px">DTCG resolver</div><div class="mono" style="font-size:12.5px;line-height:18px">build/<wbr>dtcg/<wbr></div><div style="font-size:13px;line-height:18px;color:var(--ink-muted)">One entry point for token tools</div></div>
+<div style="flex:1 1 150px;min-width:0;border:1px solid var(--line);border-radius:var(--radius-container);background:var(--surface-raised);padding:10px 12px"><div class="kicker" style="font-size:12px">Claude artifact</div><div class="mono" style="font-size:12.5px;line-height:18px">build/<wbr>artifact/<wbr>project/<wbr></div><div style="font-size:13px;line-height:18px;color:var(--ink-muted)">Tokens, a brand book, a cover and a button preview</div></div>
+</div>
+</div>
+<figcaption>One source, many exports. The DTCG token files are the only thing anyone edits, through decisions; one build writes all eight outputs from them, so they can never disagree.</figcaption>
+</figure>

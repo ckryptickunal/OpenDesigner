@@ -3,6 +3,7 @@
 showcase/**/shot*.png
 showcase/**/*.png
 # Gallery thumbnails (showcase/_thumbs/*.jpg) are committed: owner decision 2026-10-14, reviewed by scan_pr.py, not blocked.
+# Brand kit images (kit/**/*.png) are committed too: owner decision 2026-10-15, reviewed by scan_pr.py, not blocked.
 # Each piece's engine outputs can be rebuilt from its state.json; keep only the CSS its index.html loads.
 showcase/*/*/opendesigner/build/*
 !showcase/*/*/opendesigner/build/css/
@@ -10,8 +11,6 @@ showcase/*/*/opendesigner/tokens/
 showcase/*/*/opendesigner/preview/
 showcase/*/*/opendesigner/preview.html
 showcase/*/*/opendesigner/overview.html
-# Unfinished mockups (the builder stopped before finishing).
-showcase/mockups/
 # The first brand kit (warm black, ember, Geist), replaced by the cobalt system; kept locally until the new kit is exported.
 export/
 # Local test renders of the artifact's preview cards.
@@ -21,3 +20,7 @@ __pycache__/
 showcase/*/*/opendesigner/standards-state.json
 showcase/*/*/opendesigner/illustrations/responses/
 showcase/*/*/opendesigner/standards.md
+
+# GTM pack zip: built from the pack folder on demand
+# the GTM pack, its research and zip stay private (owner, 2026-10-14)
+gtm/

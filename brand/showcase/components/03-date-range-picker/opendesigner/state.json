@@ -26,10 +26,10 @@
   },
   "dials": {
     "expression": {
-      "value": 70,
+      "value": 45,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0012"
+      "decision": "D-0028"
     },
     "brandPresence": null,
     "density": {
@@ -45,10 +45,10 @@
       "decision": "D-0014"
     },
     "roundness": {
-      "value": 88,
+      "value": 60,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0015"
+      "decision": "D-0027"
     },
     "depth": {
       "value": 40,
@@ -63,10 +63,10 @@
       "decision": "D-0017"
     },
     "warmth": {
-      "value": 88,
+      "value": 22,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0018"
+      "decision": "D-0025"
     }
   },
   "preset": null,
@@ -75,12 +75,12 @@
     "friendly"
   ],
   "raw": {
-    "brandColor": "#d04418",
+    "brandColor": "#E4572E",
     "primaryActionColor": null,
     "focusColor": null,
     "neutralBase": null,
     "contrastTarget": "AA",
-    "textFace": "Nunito",
+    "textFace": "Albert Sans",
     "displayFace": "Fraunces",
     "baseSize": 16,
     "spaceUnit": 4,
@@ -110,7 +110,7 @@
     "fontClass": null,
     "accentCount": null,
     "accentHarmony": "triadic",
-    "neutralTint": "warm",
+    "neutralTint": "pure",
     "chartPalette": "categorical-8",
     "statusSet": "classic-4",
     "stateMethod": "hybrid",
@@ -147,7 +147,10 @@
     "scripts": [
       "Latn"
     ],
-    "defaultTheme": "system"
+    "defaultTheme": "system",
+    "borderDefault": null,
+    "texture": null,
+    "gradients": null
   },
   "overrides": {
     "motion.duration.instant": {
@@ -380,9 +383,9 @@
       "locked": false
     },
     "Q-color-09": {
-      "value": "warm",
+      "value": "pure",
       "set_by": "delegated",
-      "decision": "D-0019",
+      "decision": "D-0032",
       "locked": false
     },
     "Q-type-08": {
@@ -549,7 +552,7 @@
     ]
   },
   "hashes": {
-    "DESIGN.md": "3b237cb9487f7e65",
+    "DESIGN.md": "80a24418612b9d2b",
     "PRODUCT.md": "678cd3586d0c1135"
   },
   "exports": {
@@ -2651,5 +2654,7 @@
       "font.size.input": "dimension"
     },
     "snapshots": "standards-state.json"
-  }
+  },
+  "style": null,
+  "customStyles": {}
 }

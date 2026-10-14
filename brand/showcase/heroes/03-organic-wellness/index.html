@@ -6,26 +6,25 @@
 <title>Lullwort Sleep Teas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..500,100,1;1,9..144,300..500,100,1&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..500,100,1;1,9..144,300..500,100,1&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="opendesigner/build/css/tokens.css">
 <style>
   :root {
-    --ground: var(--ds-color-bg-neutral-subtle);     /* cream paper (neutral step 3; the base surface is near-white) */
+    --ground: var(--ds-color-bg-neutral-subtle);       /* cool green-grey paper (neutral step 3) */
     --ink: var(--ds-color-text-primary);
     --ink-2: var(--ds-color-text-secondary);
-    --clay: var(--ds-color-brand-seed);
-    --clay-deep: var(--ds-color-accent-light-11);
-    --clay-pale: var(--ds-color-accent-light-6);
-    /* The engine lifts secondary colours to the brand's chroma, so its sage is a bright grass green (#6c9c57, given #7E9475).
-       The art mixes it back toward the warm neutral to get the dried-herb sage the direction asks for. */
-    --sage: color-mix(in oklab, var(--ds-color-accent2-light-9) 62%, var(--ds-color-neutral-light-9));
-    --sage-deep: color-mix(in oklab, var(--ds-color-accent2-light-11) 70%, var(--ds-color-neutral-light-12));
-    --sage-pale: color-mix(in oklab, var(--ds-color-accent2-light-6) 55%, var(--ds-color-neutral-light-5));
-    --paper: var(--ds-color-surface-base);
-    /* Pigments do not invert with the theme: the painting keeps light-ramp paper and ink in both modes. */
+    --rule: var(--ds-color-border-subtle);
+    /* Pigments stay fixed across themes: the painting keeps light-ramp paper, ink and greens in both modes. */
     --art-paper: var(--ds-color-neutral-light-1);
     --art-ink: var(--ds-color-neutral-light-12);
-    --m: var(--ds-space-40);
+    --art-shade: var(--ds-color-neutral-light-5);
+    --green: var(--ds-color-accent-light-9);           /* the brand green: the tin and the one button */
+    --leaf-deep: var(--ds-color-accent-light-11);
+    --leaf: var(--ds-color-accent-light-8);
+    --leaf-pale: var(--ds-color-accent-light-5);
+    --heart: var(--ds-color-accent2-light-9);          /* chamomile yellow: the flowers, and chamomile's share on the label */
+    --heart-deep: var(--ds-color-accent2-light-10);
+    --m: var(--ds-space-32);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
@@ -33,192 +32,228 @@
   a { color: inherit; text-decoration: none; }
   a:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
 
-  .hero { position: relative; height: 100vh; height: 100svh; min-height: 820px; overflow: hidden; isolation: isolate; }
-  .grain { position: absolute; inset: 0; z-index: 5; pointer-events: none; mix-blend-mode: multiply; opacity: .5; }
-
-  /* nav: one soft pill */
-  .nav { position: absolute; z-index: 4; top: var(--ds-space-24); left: var(--m); right: var(--m); height: var(--ds-space-64); display: flex; align-items: center; padding: 0 var(--ds-space-12) 0 var(--ds-space-24); border-radius: var(--ds-radius-full); background: color-mix(in oklab, var(--paper) 70%, transparent); border: var(--ds-border-width-1) solid var(--ds-color-border-subtle); }
+  .page { position: relative; height: 100vh; height: 100svh; min-height: 860px; padding: 0 var(--m); display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--ds-space-16); align-content: start; }
+  .nav { grid-column: 1 / -1; height: var(--ds-space-80); display: flex; align-items: center; gap: var(--ds-space-40); }
   .logo { display: inline-flex; align-items: center; gap: var(--ds-space-8); font: italic 400 var(--ds-font-size-28)/1 var(--ds-font-family-display); font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 72; letter-spacing: -0.01em; min-height: var(--ds-size-target-min); }
-  .logo svg { width: 22px; height: 22px; color: var(--clay); }
-  .links { display: flex; gap: var(--ds-space-32); margin-left: auto; margin-right: auto; font-size: var(--ds-font-size-16); color: var(--ink-2); }
+  .logo svg { width: var(--ds-space-20); height: var(--ds-space-20); }
+  .links { display: flex; gap: var(--ds-space-32); font-size: var(--ds-font-size-16); color: var(--ink-2); }
   .links a { min-height: var(--ds-size-target-min); display: inline-flex; align-items: center; }
-  .navr { display: flex; gap: var(--ds-space-8); align-items: center; font-size: var(--ds-font-size-16); }
-  .pill { display: inline-flex; align-items: center; gap: var(--ds-space-8); min-height: var(--ds-size-control-md); padding: 0 var(--ds-space-20); border-radius: var(--ds-radius-full); font-weight: 500; }
-  .pill.quiet { color: var(--ink-2); }
-  .pill.bag { background: var(--ink); color: var(--ds-color-text-inverse); }
-  .pill.bag i { font-style: normal; display: inline-grid; place-items: center; min-width: 22px; height: 22px; border-radius: var(--ds-radius-full); background: var(--clay-pale); color: var(--clay-deep); font-size: var(--ds-font-size-12); font-weight: 600; }
+  .links a[aria-current] { color: var(--ink); }
+  .bag { margin-left: auto; font-size: var(--ds-font-size-16); min-height: var(--ds-size-target-min); display: inline-flex; align-items: center; gap: var(--ds-space-6); }
+  .bag span { color: var(--ink-2); }
 
-  /* copy */
-  .copy { position: absolute; z-index: 3; left: var(--m); top: 198px; width: 660px; }
-  .kicker { display: inline-flex; align-items: center; gap: var(--ds-space-12); font-size: var(--ds-font-size-16); color: var(--ink-2); }
-  .kicker svg { width: 34px; height: var(--ds-space-12); color: var(--sage); }
-  h1 { margin-top: var(--ds-space-24); font-family: var(--ds-font-family-display); font-weight: 340; font-size: var(--ds-font-size-120); line-height: .95; letter-spacing: -0.03em; font-variation-settings: "SOFT" 100, "WONK" 0, "opsz" 144; }
-  h1 span { display: block; }
-  /* highlight by a fill box, not an italic word: a soft sage blob behind 'steep', echoing the shapes in the art */
-  h1 mark { display: inline-block; line-height: .8; background: color-mix(in oklab, var(--sage) 50%, var(--ground)); color: inherit; border-radius: var(--ds-radius-full); padding: .02em .2em .16em; margin: 0 -.04em 0 -.12em; }
-  .lede { margin-top: var(--ds-space-24); max-width: 27em; font-size: var(--ds-font-size-21); line-height: 1.5; color: var(--ink-2); }
-  .ctas { margin-top: var(--ds-space-40); display: flex; gap: var(--ds-space-12); }
-  .ctas .pill { min-height: var(--ds-size-control-lg); padding: 0 var(--ds-space-32); font-size: var(--ds-font-size-16); }
-  .ctas .primary { background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); }
-  .ctas .secondary { border: var(--ds-border-width-1) solid var(--ds-color-border-strong); }
-  @media (hover: hover) and (pointer: fine) {
-    .ctas .primary:hover { background: var(--ds-color-bg-action-primary-hover); }
-    .ctas .secondary:hover, .links a:hover { color: var(--clay-deep); }
-  }
-  .facts { position: absolute; z-index: 3; left: var(--m); bottom: var(--ds-space-40); display: flex; gap: var(--ds-space-32); font-size: var(--ds-font-size-16); color: var(--ink-2); }
-  .facts span { display: inline-flex; align-items: center; gap: var(--ds-space-8); }
-  .facts span::before { content: ""; width: var(--ds-space-8); height: var(--ds-space-8); border-radius: var(--ds-radius-full); background: var(--sage); }
+  h1 { grid-column: 1 / -1; margin-top: var(--ds-space-32); font-family: var(--ds-font-family-display); font-weight: 340; font-size: var(--ds-font-size-90); line-height: 1; letter-spacing: -0.022em; font-variation-settings: "SOFT" 100, "WONK" 0, "opsz" 144; text-wrap: balance; }
+  .intro { grid-column: 1 / 6; margin-top: var(--ds-space-32); position: relative; z-index: 1; }
+  .lede { font-size: var(--ds-font-size-21); line-height: 1.45; color: var(--ink-2); text-wrap: pretty; }
+  .buy { margin-top: var(--ds-space-24); display: inline-flex; align-items: center; gap: var(--ds-space-12); min-height: var(--ds-size-control-lg); padding: 0 var(--ds-space-32); border-radius: var(--ds-radius-full); background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); font-size: var(--ds-font-size-16); font-weight: 500; transition: background var(--ds-motion-duration-medium) var(--ds-motion-easing-standard); }
+  .buy span { opacity: .8; }
+  @media (hover: hover) and (pointer: fine) { .buy:hover { background: var(--ds-color-bg-action-primary-hover); } .links a:hover { color: var(--ink); } }
+  .spec { grid-column: 8 / -1; margin-top: calc(var(--ds-space-32) - var(--ds-space-4)); display: grid; grid-template-columns: repeat(2, 1fr); column-gap: var(--ds-space-16); align-self: start; position: relative; z-index: 1; }
+  .spec div { padding: var(--ds-space-8) 0 calc(var(--ds-space-8) - var(--ds-border-width-1)); border-top: var(--ds-border-width-1) solid var(--rule); display: flex; justify-content: space-between; gap: var(--ds-space-12); font-size: var(--ds-font-size-16); line-height: var(--ds-font-line-height-24); }
+  .spec div:nth-last-child(-n+2) { border-bottom: var(--ds-border-width-1) solid var(--rule); }
+  .spec dt { color: var(--ink-2); }
 
-  .art { position: absolute; z-index: 2; right: 0; top: 0; width: 820px; height: 100%; }
-  .art svg { width: 100%; height: 100%; display: block; }
+  .plate { position: absolute; left: 0; right: 0; bottom: 0; height: 600px; pointer-events: none; } /* od-ignore: the plate's height, the horizon under the copy */
+  .plate svg { width: 100%; height: 100%; display: block; }
 </style>
 </head>
 <body>
-<main class="hero">
+<main class="page">
   <header class="nav">
     <a class="logo" href="#" aria-label="Lullwort, home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 3.5a8.5 8.5 0 1 0 5 13.9A7 7 0 0 1 15.5 3.5Z" fill="currentColor"/></svg>Lullwort</a>
-    <nav class="links" aria-label="Main"><a href="#">Sleep teas</a><a href="#">The ritual</a><a href="#">Our farms</a><a href="#">Journal</a></nav>
-    <div class="navr"><a class="pill quiet" href="#">Find your blend</a><a class="pill bag" href="#">Bag <i>2</i></a></div>
+    <nav class="links" aria-label="Main"><a href="#" aria-current="page">Sleep teas</a><a href="#">The ritual</a><a href="#">Our farms</a><a href="#">Journal</a></nav>
+    <a class="bag" href="#">Bag <span>(2)</span></a>
   </header>
 
-  <section class="copy">
-    <p class="kicker"><svg viewBox="0 0 34 12" aria-hidden="true"><path d="M1 6c5-6 9 6 16 0s11 6 16 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>Loose-leaf sleep teas, caffeine free</p>
-    <h1><span>Let the day</span><span><mark>steep</mark> out</span><span>of you.</span></h1>
-    <p class="lede">Chamomile, lemon balm and valerian, blended in small batches for the last hour of your evening. Nothing artificial, just a slower way to wind down.</p>
-    <div class="ctas"><a class="pill primary" href="#">Shop sleep teas</a><a class="pill secondary" href="#">Take the bedtime quiz</a></div>
+  <h1>Let the day steep out of you.</h1>
+
+  <section class="intro">
+    <p class="lede">No. 3 Dusk Blend: chamomile, lemon balm and valerian root, blended in small batches for the last hour of your evening.</p>
+    <a class="buy" href="#">Add to bag <span aria-hidden="true">·</span> £14</a>
   </section>
 
-  <div class="facts"><span>Grown on three organic farms</span><span>Compostable tins and bags</span><span>Free delivery over £30</span></div>
+  <dl class="spec">
+    <div><dt>Steep</dt><dd>5 min at 95 °C</dd></div>
+    <div><dt>Per cup</dt><dd>2 g</dd></div>
+    <div><dt>Tin</dt><dd>40 g, about 20 cups</dd></div>
+    <div><dt>Caffeine</dt><dd>None</dd></div>
+  </dl>
 
-  <figure class="art" aria-hidden="true">
-    <svg id="art" viewBox="0 0 820 900" preserveAspectRatio="xMidYMid slice"></svg>
+  <figure class="plate" aria-label="Botanical plate of No. 3 Dusk Blend: a green tea caddy on a shelf, in front of the three plants it is made of. Chamomile flowers are 50 percent of the blend, lemon balm leaves 30 percent and valerian root 20 percent; the dried root lies beside the tin.">
+    <svg id="art" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMax meet" aria-hidden="true"></svg>
   </figure>
-
-  <svg class="grain" aria-hidden="true" width="100%" height="100%"><filter id="paper"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="3" seed="4" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .35  0 0 0 0 .28  0 0 0 0 .2  0 0 0 -.9 .62"/></filter><rect width="100%" height="100%" filter="url(#paper)"/></svg>
 </main>
 
 <script>
-/* Watercolour-and-pen botanical still life, painted in SVG. Seeded and deterministic; every colour is a token. */
+/* A botanical plate, painted in SVG: watercolour washes with a pen line, light from the left.
+   Seeded and deterministic; every colour is a token. Shelf line at y 498 (24 px above the page's bottom margin). */
 (function () {
   const svg = document.getElementById('art'), NS = 'http://www.w3.org/2000/svg';
   const el = (n, a, p = svg) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); p.appendChild(e); return e; };
-  let sd = 11; const rnd = () => (sd = (sd * 16807) % 2147483647) / 2147483647;
+  let sd = 23; const rnd = () => (sd = (sd * 16807) % 2147483647) / 2147483647;
   const V = n => `var(${n})`;
-  const CLAY = V('--clay'), CLAYD = V('--clay-deep'), CLAYP = V('--clay-pale'), SAGE = V('--sage'), SAGED = V('--sage-deep'), SAGEP = V('--sage-pale'), INK = V('--art-ink'), PAPER = V('--art-paper');
+  const PAPER = V('--art-paper'), INK = V('--art-ink'), SHADE = V('--art-shade'), LEAF = V('--leaf'), LEAFD = V('--leaf-deep'), LEAFP = V('--leaf-pale'), HEART = V('--heart'), HEARTD = V('--heart-deep'), GREEN = V('--green');
+  const SHELF = 498, FLOOR = 550, K = 1.2;   // the art is drawn on a 498 shelf, then scaled 1.2 onto the page's shelf at 550
+  const P = (x, y) => [780 + (x - 780) * K, FLOOR + (y - SHELF) * K];
 
   const defs = el('defs', {});
-  // watercolour: wobbly edge, pigment granulation, darker rim where the wash dries
-  const wc = (id, scale, seed, freq = .022) => {
+  const wc = (id, scale, seed, freq) => {               // wobbly edge, light granulation, a darker rim where the wash dries
     const f = el('filter', { id, x: '-20%', y: '-20%', width: '140%', height: '140%' }, defs);
-    el('feTurbulence', { type: 'fractalNoise', baseFrequency: freq, numOctaves: 4, seed, result: 'n' }, f);
+    el('feTurbulence', { type: 'fractalNoise', baseFrequency: freq, numOctaves: 3, seed, result: 'n' }, f);
     el('feDisplacementMap', { in: 'SourceGraphic', in2: 'n', scale, xChannelSelector: 'R', yChannelSelector: 'G', result: 'w' }, f);
-    el('feTurbulence', { type: 'fractalNoise', baseFrequency: .6, numOctaves: 2, seed: seed + 5, result: 'g' }, f);
-    el('feColorMatrix', { in: 'g', type: 'matrix', values: '0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.1 1.35', result: 'ga' }, f);
+    el('feTurbulence', { type: 'fractalNoise', baseFrequency: .7, numOctaves: 2, seed: seed + 5, result: 'g' }, f);
+    el('feColorMatrix', { in: 'g', type: 'matrix', values: '0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -0.4 1.25', result: 'ga' }, f);
     el('feComposite', { in: 'w', in2: 'ga', operator: 'in', result: 't' }, f);
-    el('feMorphology', { in: 'w', operator: 'erode', radius: 2.5, result: 'e' }, f);
+    el('feMorphology', { in: 'w', operator: 'erode', radius: 1.4, result: 'e' }, f);
     el('feComposite', { in: 'w', in2: 'e', operator: 'out', result: 'rim' }, f);
     const m = el('feMerge', {}, f); el('feMergeNode', { in: 't' }, m); el('feMergeNode', { in: 'rim' }, m);
   };
-  wc('wash', 26, 3); wc('wash2', 14, 9, .03); wc('petal', 5, 21, .08);
+  wc('petal', 3.5, 21, .08); wc('wash', 8, 3, .025);
+  const blur = el('filter', { id: 'blur', x: '-30%', y: '-200%', width: '160%', height: '500%' }, defs); el('feGaussianBlur', { stdDeviation: 4 }, blur);
   const pen = el('filter', { id: 'pen' }, defs);
-  el('feTurbulence', { type: 'fractalNoise', baseFrequency: .05, numOctaves: 2, seed: 2, result: 'n' }, pen);
-  el('feDisplacementMap', { in: 'SourceGraphic', in2: 'n', scale: 2.2 }, pen);
+  el('feTurbulence', { type: 'fractalNoise', baseFrequency: .06, numOctaves: 2, seed: 2, result: 'n' }, pen);
+  el('feDisplacementMap', { in: 'SourceGraphic', in2: 'n', scale: 1.4 }, pen);
+  // the tin's round body, lit from the left
+  const lg = (id, stops) => { const g = el('linearGradient', { id, x1: 0, y1: 0, x2: 1, y2: 0 }, defs); stops.forEach(([o, c, op = 1]) => el('stop', { offset: o, 'stop-color': c, 'stop-opacity': op }, g)); };
+  lg('body', [[0, GREEN], [.16, LEAF], [.34, GREEN], [.8, LEAFD], [1, LEAFD]]);
+  lg('paper', [[0, PAPER], [.7, PAPER], [1, SHADE]]);
 
-  const blob = (cx, cy, r, k, n = 9) => {
-    const pts = [];
-    for (let i = 0; i < n; i++) { const a = i / n * Math.PI * 2, rr = r * (1 + (rnd() - .5) * k); pts.push([cx + Math.cos(a) * rr, cy + Math.sin(a) * rr]); }
-    let d = '';
-    for (let i = 0; i < n; i++) {
-      const p0 = pts[(i - 1 + n) % n], p1 = pts[i], p2 = pts[(i + 1) % n], p3 = pts[(i + 2) % n];
-      if (!i) d += `M${p1[0]},${p1[1]}`;
-      const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6], c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
-      d += `C${c1[0]},${c1[1]} ${c2[0]},${c2[1]} ${p2[0]},${p2[1]}`;
+  const back = el('g', {}), lines = el('g', { filter: 'url(#pen)', fill: 'none', stroke: INK, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' });
+  const stem = (d, w = 1.4) => { el('path', { d, stroke: LEAFD, 'stroke-width': w + 1, fill: 'none', opacity: .6, filter: 'url(#petal)' }, back); el('path', { d, 'stroke-width': .7, opacity: .5 }, lines); };
+  const leaf = (x, y, len, ang, w, fill, teeth = 0, veins = 0) => {
+    const a = ang * Math.PI / 180, ux = Math.cos(a), uy = Math.sin(a), nx = -uy, ny = ux, tx = x + ux * len, ty = y + uy * len;
+    let d;
+    if (!teeth) d = `M${x},${y} Q${x + ux * len * .45 + nx * w},${y + uy * len * .45 + ny * w} ${tx},${ty} Q${x + ux * len * .45 - nx * w},${y + uy * len * .45 - ny * w} ${x},${y}Z`;
+    else {                                              // ovate with small rounded teeth (lemon balm)
+      const side = s => { const pts = []; for (let k = 0; k <= teeth; k++) { const t = k / teeth, wv = Math.sin(Math.PI * Math.pow(t, .75)) * w * (k % 2 ? 1.04 : .96); pts.push(`${x + ux * len * t + nx * wv * s},${y + uy * len * t + ny * wv * s}`); } return pts; };
+      d = `M${x},${y} L${side(1).join(' L')} L${side(-1).reverse().join(' L')} Z`;
     }
-    return d + 'Z';
+    const lg = el('g', {}, back);                       // fill, outline and veins in one layer, so a front leaf covers the one behind
+    el('path', { d, fill, filter: 'url(#petal)' }, lg);
+    el('path', { d, fill: 'none', stroke: INK, 'stroke-width': .8, opacity: .5, filter: 'url(#pen)' }, lg);
+    el('path', { d: `M${x},${y} L${tx - ux * 3},${ty - uy * 3}`, fill: 'none', stroke: INK, 'stroke-width': .5, opacity: .45 }, lg);
+    for (let k = 1; k <= veins; k++) { const t = k / (veins + 1), px = x + ux * len * t, py = y + uy * len * t, vl = Math.sin(Math.PI * t) * w * .55; [-1, 1].forEach(s => el('path', { d: `M${px},${py} l${(ux * .5 + nx * s * .85) * vl},${(uy * .5 + ny * s * .85) * vl}`, fill: 'none', stroke: INK, 'stroke-width': .45, opacity: .35 }, lg)); }
   };
-
-  // grounds: a big clay dusk-sun and a sage hill, each in two glazes
-  const g1 = el('g', { filter: 'url(#wash)', opacity: .9 });
-  el('path', { d: blob(470, 400, 300, .16, 10), fill: CLAY, opacity: .32 }, g1);
-  el('path', { d: blob(480, 410, 262, .2, 9), fill: CLAY, opacity: .42 }, g1);
-  el('path', { d: blob(500, 380, 190, .25, 8), fill: CLAYD, opacity: .22 }, g1);
-  const g2 = el('g', { filter: 'url(#wash2)', opacity: .92 });
-  el('path', { d: 'M60,960 C110,820 200,750 330,740 C460,730 560,720 640,700 C720,680 800,660 880,676 L880,960 Z', fill: SAGEP }, g2);
-  el('path', { d: 'M150,960 C200,860 300,800 420,796 C600,790 720,740 880,750 L880,960 Z', fill: SAGE, opacity: .55 }, g2);
-
-  // crescent moon and a few stars
-  el('path', { d: 'M712,118 a46,46 0 1 0 34,76 a38,38 0 0 1 -34,-76 Z', fill: PAPER, filter: 'url(#wash2)' });
-  [[640, 92], [760, 250], [598, 182], [780, 330]].forEach(([x, y], i) => el('path', { d: `M${x},${y - 6} L${x + 1.6},${y - 1.6} L${x + 6},${y} L${x + 1.6},${y + 1.6} L${x},${y + 6} L${x - 1.6},${y + 1.6} L${x - 6},${y} L${x - 1.6},${y - 1.6} Z`, fill: i % 2 ? PAPER : CLAYD, opacity: .85 }));
-
-  const lines = el('g', { filter: 'url(#pen)', fill: 'none', stroke: INK, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' });
-  const leaf = (x, y, len, ang, w, fill, lineP = .55) => {
-    const a = ang * Math.PI / 180, ux = Math.cos(a), uy = Math.sin(a), nx = -uy, ny = ux;
-    const tx = x + ux * len, ty = y + uy * len;
-    const d = `M${x},${y} Q${x + ux * len * .45 + nx * w},${y + uy * len * .45 + ny * w} ${tx},${ty} Q${x + ux * len * .45 - nx * w},${y + uy * len * .45 - ny * w} ${x},${y}Z`;
-    el('path', { d, fill, opacity: .82, filter: 'url(#petal)' });
-    el('path', { d, 'stroke-width': .9, opacity: lineP }, lines);
-    el('path', { d: `M${x},${y} Q${x + ux * len * .5 + nx * w * .15},${y + uy * len * .5 + ny * w * .15} ${tx - ux * 4},${ty - uy * 4}`, 'stroke-width': .6, opacity: lineP * .8 }, lines);
-  };
-  const stem = (pts, w = 1.3) => { el('path', { d: pts, stroke: SAGED, 'stroke-width': w + 1.2, fill: 'none', opacity: .55, filter: 'url(#petal)' }); el('path', { d: pts, 'stroke-width': w * .6, opacity: .5 }, lines); };
-  const chamomile = (x, y, r, tilt = 0) => {
-    const g = el('g', { transform: `translate(${x},${y}) rotate(${tilt}) scale(1,${.72 + rnd() * .2})` });
-    const n = 15;
-    for (let i = 0; i < n; i++) {
-      const a = i / n * 360 + rnd() * 8;
-      const p = el('ellipse', { cx: 0, cy: -r * .95, rx: r * .26, ry: r * .62, transform: `rotate(${a})`, fill: PAPER, filter: 'url(#petal)' }, g);
-      el('ellipse', { cx: 0, cy: -r * .95, rx: r * .26, ry: r * .62, transform: `rotate(${a})`, fill: 'none', stroke: INK, 'stroke-width': .7, opacity: .45 }, g);
+  const shadowUnder = () => {};   // no blurred discs: the white heads read by their outline
+  // chamomile seen from the front: white rays round a domed yellow disc
+  const chamomileFront = (x, y, r, tilt = 0) => {
+    shadowUnder(x, y, r * 1.2, r * .95);
+    const g = el('g', { transform: `translate(${x},${y}) rotate(${tilt}) scale(1,.82)` }, back);
+    for (let i = 0; i < 15; i++) {
+      const a = i / 15 * 360 + rnd() * 7;
+      el('ellipse', { cx: 0, cy: -r * .98, rx: r * .22, ry: r * .58, transform: `rotate(${a})`, fill: PAPER, filter: 'url(#petal)' }, g);
+      el('ellipse', { cx: 0, cy: -r * .98, rx: r * .22, ry: r * .58, transform: `rotate(${a})`, fill: 'none', stroke: INK, 'stroke-width': .7, opacity: .5 }, g);
     }
-    el('circle', { cx: 0, cy: 0, r: r * .42, fill: CLAY, filter: 'url(#petal)' }, g);
-    el('circle', { cx: -r * .1, cy: -r * .1, r: r * .2, fill: CLAYP, opacity: .7 }, g);
-    for (let i = 0; i < 14; i++) { const a = rnd() * 6.28, d = rnd() * r * .36; el('circle', { cx: Math.cos(a) * d, cy: Math.sin(a) * d, r: .9, fill: CLAYD }, g); }
+    el('circle', { cx: 0, cy: 0, r: r * .42, fill: HEART }, g);
+    el('path', { d: `M${-r * .4},${r * .08} A${r * .42},${r * .42} 0 0 0 ${r * .4},${r * .08} A${r * .5},${r * .3} 0 0 1 ${-r * .4},${r * .08}Z`, fill: HEARTD, opacity: .8 }, g);   // the dome's shaded side
+    el('circle', { cx: -r * .14, cy: -r * .16, r: r * .12, fill: PAPER, opacity: .5 }, g);
+    for (let i = 0; i < 18; i++) { const a = rnd() * 6.28, d = rnd() * r * .34; el('circle', { cx: Math.cos(a) * d, cy: Math.sin(a) * d, r: .8, fill: HEARTD }, g); }
   };
-  const umbel = (x, y, r, col) => {
-    for (let i = 0; i < 9; i++) {
-      const a = (-160 + i * 17 + rnd() * 6) * Math.PI / 180, l = r * (.7 + rnd() * .3), ex = x + Math.cos(a) * l, ey = y + Math.sin(a) * l * .8;
-      el('path', { d: `M${x},${y} L${ex},${ey}`, 'stroke-width': .6, opacity: .45 }, lines);
-      for (let j = 0; j < 6; j++) el('circle', { cx: ex + (rnd() - .5) * 12, cy: ey + (rnd() - .5) * 9, r: 2 + rnd() * 1.6, fill: col, opacity: .85, filter: 'url(#petal)' });
+  // chamomile from the side: the rays bend back under a tall yellow cone
+  const chamomileSide = (x, y, r, tilt = 0) => {
+    shadowUnder(x, y + r * .3, r * 1.1, r * .6);
+    const g = el('g', { transform: `translate(${x},${y}) rotate(${tilt})` }, back);
+    for (let i = 0; i < 13; i++) {
+      const a = 112 + i * 11 + rnd() * 5;              // hanging down all round the cone, like a skirt
+      el('ellipse', { cx: 0, cy: r * .62, rx: r * .16, ry: r * .55, transform: `rotate(${a - 180})`, fill: PAPER, filter: 'url(#petal)' }, g);
+      el('ellipse', { cx: 0, cy: r * .62, rx: r * .16, ry: r * .55, transform: `rotate(${a - 180})`, fill: 'none', stroke: INK, 'stroke-width': .6, opacity: .45 }, g);
+    }
+    el('path', { d: `M${-r * .42},${r * .08} Q${-r * .4},${-r * .62} 0,${-r * .7} Q${r * .4},${-r * .62} ${r * .42},${r * .08} Z`, fill: HEART }, g);
+    el('path', { d: `M${r * .05},${-r * .66} Q${r * .4},${-r * .6} ${r * .42},${r * .08} L${r * .1},${r * .08} Z`, fill: HEARTD, opacity: .75 }, g);
+  };
+  const feathery = (x, y, len, ang) => {               // chamomile's finely cut leaves
+    const a = ang * Math.PI / 180, ux = Math.cos(a), uy = Math.sin(a);
+    el('path', { d: `M${x},${y} l${ux * len},${uy * len}`, stroke: LEAFD, 'stroke-width': 1, opacity: .6, fill: 'none' }, back);
+    for (let k = 1; k < 7; k++) { const px = x + ux * len * k / 7, py = y + uy * len * k / 7, l = 11 - k; [-1, 1].forEach(s => el('path', { d: `M${px},${py} q${(ux * .3 - uy * s) * l * .6},${(uy * .3 + ux * s) * l * .6} ${(ux * .8 - uy * s) * l},${(uy * .8 + ux * s) * l}`, stroke: LEAFD, 'stroke-width': .8, opacity: .5, fill: 'none' }, back)); }
+  };
+  // valerian's flower head: a rounded, branching cluster (a cyme) of tiny florets
+  const valerianHead = (x, y, r) => {
+    const g = el('g', {}, back);
+    for (let i = 0; i < 7; i++) {
+      const a = (-158 + i * 22 + (rnd() - .5) * 8) * Math.PI / 180, l = r * (.55 + rnd() * .25);
+      const bx = x + Math.cos(a) * l, by = y + r * .55 + Math.sin(a) * l * .9;
+      el('path', { d: `M${x},${y + r * .75} Q${(x + bx) / 2},${(y + r * .75 + by) / 2 + 6} ${bx},${by}`, fill: 'none', stroke: LEAFD, 'stroke-width': .9, opacity: .7 }, g);
+      for (let j = 0; j < 9; j++) {
+        const fa = rnd() * Math.PI * 2, fd = Math.sqrt(rnd()) * r * .26;
+        el('circle', { cx: bx + Math.cos(fa) * fd, cy: by - Math.abs(Math.sin(fa)) * fd * .8, r: 2.5 + rnd() * .8, fill: PAPER, stroke: INK, 'stroke-width': .5, 'stroke-opacity': .5 }, g);
+      }
     }
   };
+  const pinnate = (x, y, len, ang, n, w) => {           // valerian's leaf: opposite leaflets along a midrib
+    const a = ang * Math.PI / 180, ux = Math.cos(a), uy = Math.sin(a);
+    el('path', { d: `M${x},${y} l${ux * len},${uy * len}`, stroke: LEAFD, 'stroke-width': 1.3, opacity: .7, fill: 'none' }, back);
+    for (let k = 1; k <= n; k++) { const t = k / (n + 1), px = x + ux * len * t, py = y + uy * len * t, l = w * (1.1 - t * .45); [-1, 1].forEach(sg => leaf(px, py, l, ang + sg * 50, l * .24, LEAFP)); }
+    leaf(x + ux * len, y + uy * len, w * .6, ang, w * .15, LEAFP);
+  };
 
-  // a dusk meadow behind the tin: every stem rises from the hill, so nothing grows out of the tin
-  stem('M300,800 C305,640 318,460 330,300', 1.4); chamomile(330, 296, 30, -18);
-  stem('M640,790 C628,620 590,460 560,330', 1.4); chamomile(560, 326, 26, 12);
-  stem('M352,800 C360,680 384,540 410,450', 1.2); chamomile(410, 446, 22, -6);
-  stem('M676,780 C676,640 672,540 664,470', 1.1); umbel(664, 470, 44, CLAYP);
-  stem('M262,800 C258,700 254,600 250,520', 1.1); umbel(250, 520, 36, CLAYP);
-  stem('M610,790 C600,700 560,620 520,560', 1); leaf(520, 560, 70, -110, 14, SAGE);
-  leaf(300, 700, 90, -120, 20, SAGE); leaf(318, 640, 80, -60, 16, SAGEP); leaf(640, 690, 92, -60, 20, SAGE); leaf(660, 620, 70, -118, 15, SAGEP);
-  leaf(262, 640, 70, -150, 14, SAGE); leaf(600, 560, 60, -40, 13, SAGEP); leaf(330, 520, 56, -150, 12, SAGE);
+  // the bouquet behind the tin: every stem goes behind the tin's body
+  stem('M720,430 C716,330 694,190 664,126', 1.7); valerianHead(664, 92, 50);
+  pinnate(716, 350, 118, -158, 5, 38); pinnate(712, 300, 96, -138, 4, 32);
+  stem('M772,430 C780,330 800,230 826,150', 1.3); stem('M790,430 C808,350 846,280 892,232', 1.2);
+  stem('M764,430 C760,350 756,280 752,226', 1.1); stem('M800,430 C830,380 870,330 910,302', 1.0);
+  feathery(784, 330, 52, -150); feathery(806, 300, 46, -28); feathery(820, 370, 44, -20); feathery(770, 380, 40, -165);
+  chamomileFront(828, 144, 27, -8); chamomileFront(894, 226, 22, 12); chamomileFront(742, 196, 18, -14); chamomileSide(640, 238, 17, -14); chamomileSide(956, 180, 16, 12);
+  stem('M700,430 C686,360 654,300 644,236', 1.0); stem('M842,430 C880,330 930,240 954,178', 1.0);
+  stem('M818,436 C860,400 912,350 956,262', 1.5); stem('M832,440 C886,420 946,380 1010,322', 1.3);
+  [[860, 400], [892, 364], [920, 324], [944, 288]].forEach(([x, y], k) => { const s = 1 - k * .13; leaf(x, y, 68 * s, -162 + k * 8, 24 * s, LEAF, 18, 3); leaf(x, y, 64 * s, -12 - k * 10, 23 * s, LEAF, 18, 3); });
+  [[900, 420], [950, 392], [990, 350]].forEach(([x, y], k) => { const s = .92 - k * .12; leaf(x, y, 62 * s, 28 - k * 6, 22 * s, LEAF, 18, 3); leaf(x, y, 58 * s, -66 - k * 6, 20 * s, LEAF, 18, 3); });
 
-  // the tin
-  const tin = el('g', { transform: 'translate(380,500)' });
-  el('path', { d: 'M0,40 L0,272 A95,16 0 0 0 190,272 L190,40 Z', fill: SAGED, filter: 'url(#petal)' }, tin);
-  el('path', { d: 'M-5,12 L-5,52 A100,16 0 0 0 195,52 L195,12 Z', fill: INK, opacity: .9 }, tin);
-  el('ellipse', { cx: 95, cy: 12, rx: 100, ry: 16, fill: V('--ds-color-neutral-light-10') }, tin);
-  el('ellipse', { cx: 95, cy: 13, rx: 84, ry: 10, fill: 'none', stroke: V('--ds-color-neutral-light-8'), 'stroke-width': 1.2 }, tin);
-  el('path', { d: 'M-5,40 A100,16 0 0 0 195,40', fill: 'none', stroke: PAPER, 'stroke-width': .8, opacity: .25 }, tin);
-  el('rect', { x: 0, y: 92, width: 190, height: 132, fill: PAPER, filter: 'url(#petal)' }, tin);
-  el('rect', { x: 14, y: 56, width: 12, height: 212, rx: 6, fill: PAPER, opacity: .16 }, tin); // highlight
-  el('rect', { x: 160, y: 56, width: 20, height: 214, rx: 8, fill: INK, opacity: .12 }, tin); // core shadow
-  const tt = (x, y, s, size, fam, style = 'normal', w = 400, fill = INK, ls = 0) => { const t = el('text', { x, y, 'text-anchor': 'middle', 'font-size': size, 'font-family': fam, 'font-style': style, 'font-weight': w, fill, 'letter-spacing': ls }, tin); t.textContent = s; return t; };
-  tt(95, 150, 'Lullwort', 36, 'Fraunces', 'italic', 400, INK);
-  tt(95, 178, 'NO. 3 · DUSK BLEND', 12, 'Instrument Sans', 'normal', 600, CLAYD, 1.4);
-  tt(95, 204, 'chamomile, valerian', 12, 'Instrument Sans', 'normal', 400, INK, 0);
-  el('path', { d: 'M40,122 C70,112 120,132 150,120', stroke: CLAY, 'stroke-width': 1.2, fill: 'none', opacity: .8 }, tin);
+  // dried valerian root on the shelf, left of the tin: cut pieces heaped in a small dish
+  const root = el('g', {}), DX = 588, DW = 64;
+  el('ellipse', { cx: DX, cy: SHELF, rx: DW + 4, ry: 4, fill: INK, opacity: .25 });                                   // contact shadow
+  for (let k = 0; k < 26; k++) {                                                                                         // the heap, back to front
+    const t = rnd(), px = DX + (t - .5) * DW * 1.5, py = SHELF - 22 - Math.sin(t * Math.PI) * 10 + rnd() * 8, rr = 4 + rnd() * 4;
+    let d = ''; for (let j = 0; j < 6; j++) { const a = j / 6 * Math.PI * 2 + rnd() * .5, q = rr * (.6 + rnd() * .5); d += `${j ? 'L' : 'M'}${px + Math.cos(a) * q},${py + Math.sin(a) * q * .7} `; }
+    el('path', { d: d + 'Z', fill: V(k % 3 ? '--ds-color-neutral-light-9' : '--ds-color-neutral-light-8'), stroke: INK, 'stroke-width': .5, 'stroke-opacity': .55, 'stroke-linejoin': 'round' }, root);
+    if (k % 2) { el('ellipse', { cx: px, cy: py, rx: rr * .45, ry: rr * .3, fill: V('--ds-color-neutral-light-6'), stroke: INK, 'stroke-width': .4, 'stroke-opacity': .5 }, root); el('ellipse', { cx: px, cy: py, rx: rr * .18, ry: rr * .12, fill: 'none', stroke: INK, 'stroke-width': .4, 'stroke-opacity': .5 }, root); }   // the cut face, ringed
+    if (k % 4 === 0) { const ex = px + (rnd() - .5) * 30, ey = py - 4 - rnd() * 6; el('path', { d: `M${px},${py} Q${(px + ex) / 2 + 4},${ey - 6} ${ex},${ey}`, fill: 'none', stroke: INK, 'stroke-width': .45, opacity: .55 }, root); }   // a fine rootlet
+  }
+  const dish = `M${DX - DW},${SHELF - 20} Q${DX - DW + 6},${SHELF - 1} ${DX},${SHELF - 1} Q${DX + DW - 6},${SHELF - 1} ${DX + DW},${SHELF - 20} Z`;
+  el('path', { d: dish, fill: PAPER, stroke: INK, 'stroke-width': .9, 'stroke-opacity': .6 }, root);                    // a shallow white dish
+  el('path', { d: `M${DX - DW},${SHELF - 20} Q${DX},${SHELF - 13} ${DX + DW},${SHELF - 20}`, fill: 'none', stroke: INK, 'stroke-width': .7, opacity: .45 }, root);
 
-  // front leaves over the tin base
-  leaf(350, 770, 110, -170, 24, SAGE); leaf(600, 770, 104, -12, 22, SAGE); leaf(390, 790, 90, -140, 18, SAGEP); leaf(560, 792, 86, -38, 18, SAGEP);
+  // the tin: a tea caddy with a slip lid, standing on the shelf
+  const T = { l: 680, r: 880, top: 236 };
+  const cx = (T.l + T.r) / 2, hw = (T.r - T.l) / 2;
+  el('ellipse', { cx: cx + 70, cy: SHELF + 2, rx: 150, ry: 9, fill: INK, opacity: .14, filter: 'url(#blur)' });   // cast shadow, light from the left
+  el('ellipse', { cx, cy: SHELF, rx: hw + 2, ry: 6, fill: INK, opacity: .35 });                                      // contact shadow
+  el('path', { d: `M${T.l},${T.top + 40} V${SHELF - 6} A${hw},8 0 0 0 ${T.r},${SHELF - 6} V${T.top + 40} Z`, fill: 'url(#body)' });
+  // the label, wrapped round the body
+  el('path', { d: `M${T.l},${T.top + 96} V${T.top + 222} A${hw},8 0 0 0 ${T.r},${T.top + 222} V${T.top + 96} A${hw},8 0 0 1 ${T.l},${T.top + 96} Z`, fill: 'url(#paper)' });
+  // the slip lid: a little wider, the same green, a dark line where it meets the body
+  el('path', { d: `M${T.l - 5},${T.top} V${T.top + 46} A${hw + 5},9 0 0 0 ${T.r + 5},${T.top + 46} V${T.top} Z`, fill: 'url(#body)' });
+  el('path', { d: `M${T.l - 5},${T.top + 46} A${hw + 5},9 0 0 0 ${T.r + 5},${T.top + 46}`, fill: 'none', stroke: INK, 'stroke-width': 1.4, opacity: .45 });
+  el('ellipse', { cx, cy: T.top, rx: hw + 5, ry: 10, fill: LEAF });
+  el('ellipse', { cx: cx - 6, cy: T.top - 1, rx: hw - 14, ry: 6, fill: 'none', stroke: PAPER, 'stroke-width': 1, opacity: .35 });
+  const tt = (x, y, s, size, fam, o = {}) => { const t = el('text', Object.assign({ x, y, 'text-anchor': 'middle', 'font-size': size, 'font-family': fam, fill: INK }, o)); t.textContent = s; return t; };
+  tt(cx, T.top + 140, 'Lullwort', 34, 'Fraunces', { 'font-style': 'italic' });
+  tt(cx, T.top + 162, 'NO. 3 · DUSK BLEND', 10, 'Instrument Sans', { 'font-weight': 600, 'letter-spacing': 1, fill: GREEN });   // 10 here is 12 on the page
+  // the blend on the label: one bar in three inks, its shares printed under it
+  const bx = cx - 70, bw = 140, by = T.top + 176;
+  [[0, .5, HEART, '50'], [.5, .3, LEAF, '30'], [.8, .2, LEAFD, '20']].forEach(([o, w, f, s]) => {
+    el('rect', { x: bx + bw * o, y: by, width: bw * w - 2, height: 7, fill: f });
+    tt(bx + bw * (o + w / 2) - 1, by + 20, s, 10, 'Instrument Sans', { fill: INK });
+  });
+  tt(cx, T.top + 242, '40 g · loose leaf', 10, 'Instrument Sans', { fill: PAPER, 'font-weight': 600 });
 
-  // a cup with steam
-  const cup = el('g', { transform: 'translate(612,668)' });
-  el('path', { d: 'M0,10 L110,10 C108,70 88,98 55,98 C22,98 2,70 0,10 Z', fill: PAPER, filter: 'url(#wash2)' }, cup);
-  el('path', { d: 'M0,10 L110,10 C108,70 88,98 55,98 C22,98 2,70 0,10 Z', fill: 'none', stroke: INK, 'stroke-width': .9, opacity: .55 }, cup);
-  el('ellipse', { cx: 55, cy: 10, rx: 55, ry: 9, fill: CLAY, opacity: .8, filter: 'url(#petal)' }, cup);
-  el('ellipse', { cx: 55, cy: 10, rx: 55, ry: 9, fill: 'none', stroke: INK, 'stroke-width': .9, opacity: .55 }, cup);
-  el('path', { d: 'M108,28 C140,26 140,64 100,66', fill: 'none', stroke: INK, 'stroke-width': 1, opacity: .5 }, cup);
-  el('path', { d: 'M14,40 C30,46 80,46 96,40', fill: 'none', stroke: CLAY, 'stroke-width': 3, opacity: .5 }, cup);
-  const steam = el('g', { fill: 'none', stroke: INK, 'stroke-width': 1.1, opacity: .35, 'stroke-linecap': 'round', filter: 'url(#pen)' }, cup);
-  ['M38,-6 C26,-30 50,-46 38,-74 C30,-92 44,-104 40,-120', 'M62,-10 C74,-34 52,-52 66,-80 C74,-98 60,-112 66,-130', 'M84,-4 C92,-20 78,-34 86,-52'].forEach(d => el('path', { d }, steam));
+  const art = el('g', { transform: `translate(780 ${FLOOR}) scale(${K}) translate(-780 ${-SHELF})` });
+  [...svg.childNodes].filter(n => n !== art && n.nodeName !== 'defs').forEach(n => art.appendChild(n));
+  // the shelf, across the page's grid
+  el('path', { d: `M32,${FLOOR + 1} L1408,${FLOOR + 1}`, stroke: INK, 'stroke-width': 1, opacity: .55 });
+
+  // what the blend is made of: name, share and Latin name, with a leader to the part that goes in the tea
+  const lab = (x, y, anchor, name, pct, latin, tx, ty) => {
+    const ex = anchor === 'start' ? x - 12 : x + 12;
+    el('path', { d: `M${ex},${y - 6} L${tx},${ty}`, stroke: INK, 'stroke-width': .8, opacity: .7, fill: 'none' });
+    el('circle', { cx: tx, cy: ty, r: 2.6, fill: INK });
+    const t1 = el('text', { x, y, 'text-anchor': anchor, 'font-size': 16, 'font-family': 'var(--ds-font-family-text)', fill: INK, 'font-weight': 500 }); t1.textContent = name + ' ';
+    const ts = el('tspan', { 'font-weight': 600 }, t1); ts.textContent = pct;
+    const t2 = el('text', { x, y: y + 20, 'text-anchor': anchor, 'font-size': 12, 'font-family': 'var(--ds-font-family-text)', 'font-style': 'italic', fill: V('--ds-color-text-secondary') }); t2.textContent = latin;
+  };
+    lab(1135, P(0, 150)[1], 'start', 'Chamomile', '50%', 'Matricaria chamomilla, the flowers', ...P(852, 150));
+  lab(1135, P(0, 330)[1], 'start', 'Lemon balm', '30%', 'Melissa officinalis, the leaves', ...P(1000, 326));
+  lab(480, P(0, 420)[1], 'end', 'Valerian', '20%', 'Valeriana officinalis, the root', ...P(584, 478));   // 480: the right edge of grid column 4
+  const cap = el('text', { x: 1408, y: FLOOR + 18, 'text-anchor': 'end', 'font-size': 12, 'font-family': 'var(--ds-font-family-text)', fill: V('--ds-color-text-secondary') }); cap.textContent = 'Plate 3 · Dusk Blend, drawn from the September harvest';
 })();
 </script>
 </body>

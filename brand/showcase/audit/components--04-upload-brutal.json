@@ -1,0 +1,66 @@
+{
+ "piece": "components/04-upload-brutal",
+ "title": "04 · File upload, neo-brutalist (Halftone Yard)",
+ "pattern": "file upload",
+ "platform": "web",
+ "industry": "print",
+ "style": [
+  "brutalist",
+  "industrial",
+  "playful"
+ ],
+ "tags": [
+  "file upload",
+  "print",
+  "neo-brutalist",
+  "cmyk",
+  "dropzone",
+  "progress",
+  "job ticket"
+ ],
+ "score": 4,
+ "verdict": "keep",
+ "strengths": [
+  "Details only a print shop would have: the job ticket bar ('JOB 4471 · 500 BUSINESS CARDS · 350 GSM UNCOATED · DUE THU 16:00'), '4-colour, 300 dpi', the error 'RGB at 150 dpi. Needs CMYK at 300 dpi.', registration marks and a colour control strip",
+  "The rows are a real table: name, size, a fixed-width bar and a status chip line up in every row; four states (passed, uploading 64%, queued, failed with 'Replace file') in context plus button, dropzone, progress and badge sheets",
+  "Palette discipline: newsprint, ink and the three process inks at full strength; the yellow button gets dark text by itself"
+ ],
+ "slop_signals": [
+  "Almost every word is caps at 800 or 900: 'SEND YOUR FILES', 'DROP PRINT FILES HERE', 'WE CHECK EVERY FILE BEFORE IT TOUCHES THE PRESS...', '1 OF 4 READY', 'SEND TO PRESS'; the voice is loud by brief but the body sentence under the title does not need to shout",
+  "Hard offset shadow plus 2 px keyline on every button and row, plus a second keyline around the sheet: stacked borders and shadows, inherited from the genre",
+  "The halftone rosette in the top-right corner and the 'PREFLIGHT PASSED' chip in a green that is not a process ink are off-system decoration"
+ ],
+ "fixes": [
+  "Set the intro sentence ('We check every file...') in sentence case at 500; keep caps for the title, dropzone and buttons only",
+  "Drop the hard shadow from the file rows and keep it on buttons, so the rows read as a list and the buttons as things to press",
+  "Make 'Preflight passed' black-on-newsprint with a check, so the only colours on the sheet are the four inks"
+ ],
+ "references": [
+  {
+   "site": "Proton",
+   "url": "https://mobbin.com/screens/218d53af-5262-4a58-ba33-150cf786437b",
+   "what": "Per-file rows with a thin progress bar, a state word, a greyed cancelled row and All/Active/Completed/Failed tabs; the same row anatomy with no decoration"
+  },
+  {
+   "site": "Amazon Web Services (AWS)",
+   "url": "https://mobbin.com/screens/d0b2a1fa-99a9-4c29-ba83-f77a3f850d40",
+   "what": "'Succeeded / Failed' summary above the file table and a status column with icon + word, like our '1 of 4 ready · 1 file needs fixing'"
+  },
+  {
+   "site": "Fireflies",
+   "url": "https://mobbin.com/screens/0e45d455-f884-44a9-8600-16830793250e",
+   "what": "The dropzone states accepted formats and size limits in one line under the title"
+  },
+  {
+   "site": "AirOps",
+   "url": "https://mobbin.com/screens/3c80b45c-6d21-4bd7-9e60-41ab67ef25e5",
+   "what": "Dropzone with the accepted-format line and a single file row with a full-width bar and '100%'"
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "keep",
+  "said": "okay-ish, you can keep it",
+  "date": "2026-10-14"
+ }
+}
